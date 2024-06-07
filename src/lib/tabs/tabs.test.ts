@@ -83,10 +83,12 @@ describe('Tabs', () => {
 
     await expect(el).to.be.accessible();
     expect(el.disabled).to.be.true;
-    expect(ctx.tabs.every(tab => {
-      const stateLayer = getShadowElement(tab, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
-      return tab.disabled && tab.hasAttribute('disabled') && stateLayer.disabled;
-    })).to.be.true;
+    expect(
+      ctx.tabs.every(tab => {
+        const stateLayer = getShadowElement(tab, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
+        return tab.disabled && tab.hasAttribute('disabled') && stateLayer.disabled;
+      })
+    ).to.be.true;
   });
 
   it('should set stacked', async () => {
@@ -145,7 +147,7 @@ describe('Tabs', () => {
     expect(ctx.tabs[1].selected).to.be.true;
     expect(ctx.selectedTabCount).to.equal(1);
     expect(changeSpy.calledOnce).to.be.true;
-    expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 }}))).to.be.true;
+    expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 } }))).to.be.true;
   });
 
   it('should not select tab if disabled tab clicked', async () => {
@@ -171,14 +173,14 @@ describe('Tabs', () => {
 
     ctx.keydownTab(0, 'ArrowRight');
     await elementUpdated(el);
-    
+
     ctx.keydownTab(1, 'Enter');
     await elementUpdated(el);
 
     expect(ctx.tabs[1].selected).to.be.true;
     expect(ctx.selectedTabCount).to.equal(1);
     expect(changeSpy.calledOnce).to.be.true;
-    expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 }}))).to.be.true;
+    expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 } }))).to.be.true;
   });
 
   it('should select tab with space key', async () => {
@@ -199,7 +201,7 @@ describe('Tabs', () => {
     expect(ctx.tabs[1].selected).to.be.true;
     expect(ctx.selectedTabCount).to.equal(1);
     expect(changeSpy.calledOnce).to.be.true;
-    expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 }}))).to.be.true;
+    expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 } }))).to.be.true;
   });
 
   it('should navigate to next tab when right arrow is pressed', async () => {
@@ -274,7 +276,7 @@ describe('Tabs', () => {
     expect(ctx.tabs[1].selected).to.be.true;
     expect(ctx.selectedTabCount).to.equal(1);
     expect(changeSpy.calledOnce).to.be.true;
-    expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 }}))).to.be.true;
+    expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 } }))).to.be.true;
   });
 
   it('should navigate to last tab when end is pressed', async () => {
@@ -436,7 +438,7 @@ describe('Tabs', () => {
       expect(el.vertical).to.be.false;
 
       await elementUpdated(el);
-      
+
       el.vertical = true;
       await elementUpdated(el);
 
@@ -452,7 +454,7 @@ describe('Tabs', () => {
 
       expect(ctx.backwardScrollButtonIcon.name).to.equal('keyboard_arrow_left');
       expect(ctx.forwardScrollButtonIcon.name).to.equal('keyboard_arrow_right');
-      
+
       el.vertical = true;
       el.style.width = 'auto';
       el.style.height = '1px';
@@ -487,25 +489,25 @@ describe('Tabs', () => {
     it('should select tab when clicked', async () => {
       const el = await createFixture({ vertical: true });
       const ctx = new TabsHarness(el);
-  
+
       const changeSpy = spy();
       el.addEventListener('forge-tab-bar-change', changeSpy);
-  
+
       expect(ctx.selectedTabCount).to.equal(0);
-  
+
       ctx.clickTab(1);
       await elementUpdated(el);
-  
+
       expect(ctx.tabs[1].selected).to.be.true;
       expect(ctx.selectedTabCount).to.equal(1);
       expect(changeSpy.calledOnce).to.be.true;
-      expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 }}))).to.be.true;
+      expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 } }))).to.be.true;
     });
 
     it('should show scroll buttons when scrollable', async () => {
       const el = await createFixture({ vertical: true, scrollButtons: true, height: '1px' });
       const ctx = new TabsHarness(el);
-      
+
       await elementUpdated(el);
 
       expect(el.scrollButtons).to.be.true;
@@ -517,7 +519,7 @@ describe('Tabs', () => {
 
   describe('scroll buttons', () => {
     it('should not show scroll buttons by default', async () => {
-      const el = await createFixture({ width: '9999px'}); // Forcing an unreachable width
+      const el = await createFixture({ width: '9999px' }); // Forcing an unreachable width
       const ctx = new TabsHarness(el);
 
       expect(el.scrollButtons).to.be.false;
@@ -527,7 +529,7 @@ describe('Tabs', () => {
     it('should show scroll buttons when scrollable', async () => {
       const el = await createFixture({ scrollButtons: true, activeTab: 0 });
       const ctx = new TabsHarness(el);
-      
+
       expect(ctx.hasScrollButtons).to.be.false;
 
       el.style.width = '1px';
@@ -546,7 +548,7 @@ describe('Tabs', () => {
 
       await elementUpdated(el);
       expect(ctx.hasScrollButtons).to.be.true;
-      
+
       el.style.width = '9999px';
       await elementUpdated(el);
       expect(ctx.hasScrollButtons).to.be.false;
@@ -555,7 +557,7 @@ describe('Tabs', () => {
     it('should show scroll buttons when scrollable dynamically', async () => {
       const el = await createFixture({ scrollButtons: false });
       const ctx = new TabsHarness(el);
-      
+
       expect(ctx.hasScrollButtons).to.be.false;
 
       el.style.width = '1px';
@@ -572,7 +574,7 @@ describe('Tabs', () => {
     it('should hide scroll buttons dynamically', async () => {
       const el = await createFixture({ scrollButtons: true, width: '1px' });
       const ctx = new TabsHarness(el);
-      
+
       await elementUpdated(el);
       expect(ctx.hasScrollButtons).to.be.true;
 
@@ -595,7 +597,7 @@ describe('Tabs', () => {
       await elementUpdated(el);
 
       const scrollBySpy = spy(ctx.scrollContainer, 'scrollBy');
-      
+
       expect(ctx.scrollContainer.scrollLeft).to.equal(0);
 
       ctx.forwardScrollButton.click();
@@ -646,7 +648,7 @@ class TabsHarness extends TestHarness<ITabBarComponent> {
   }
 
   public get selectedTabCount(): number {
-    return this.tabs.reduce((count, tab) => count += tab.selected ? 1 : 0, 0);
+    return this.tabs.reduce((count, tab) => (count += tab.selected ? 1 : 0), 0);
   }
 
   public clickTab(index: number): void {

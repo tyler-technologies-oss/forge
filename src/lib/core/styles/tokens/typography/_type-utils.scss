@@ -8,7 +8,7 @@ $token: 'scale' !default;
 
 ///
 /// Creates a style value that is relative to the base font size for the given property.
-/// 
+///
 /// This allows for typography styles to be scaled relative to the root font size, or
 /// relative to a specific CSS custom property if optionally applied. This is useful
 /// when embedding Forge in an application that adjusts the root `font-size` to something
@@ -22,11 +22,11 @@ $token: 'scale' !default;
 
 ///
 /// Calculates the letter spacing value for the given tracking and font size.
-/// 
+///
 /// @param {Number} $tracking - The tracking value.
 /// @param {Number} $font-size - The font size value.
 /// @return {String} - The letter spacing value.
-/// 
+///
 @function calc-letter-spacing($tracking, $font-size) {
   @return math.div($tracking, $font-size * 16) * 1em;
 }

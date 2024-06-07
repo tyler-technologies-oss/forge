@@ -29,7 +29,7 @@ export const Dialog = (args: ArgTypes) => {
   const button = document.createElement('forge-button');
   button.variant = 'raised';
   button.innerText = 'Open dialog';
-  button.addEventListener('click', () => dialog.open = true);
+  button.addEventListener('click', () => (dialog.open = true));
   container.appendChild(button);
 
   const dialog = customElementStoryRenderer('forge-dialog', args);
@@ -49,16 +49,16 @@ export const Dialog = (args: ArgTypes) => {
     <forge-scaffold>
       <forge-toolbar slot="header" no-divider>
         <h1 class="forge-typography--heading4" id="dialog-title" slot="start">Title text</h1>
-        <forge-icon-button slot="end" aria-label="Close dialog" @click=${() => dialog.open = false}>
+        <forge-icon-button slot="end" aria-label="Close dialog" @click=${() => (dialog.open = false)}>
           <forge-icon name="close"></forge-icon>
         </forge-icon-button>
       </forge-toolbar>
       <p slot="body" id="dialog-message">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit sed pariatur error repellendus eos! Quas,
-        optio esse ad illum quis blanditiis rerum quia. Corrupti, ad hic velit praesentium voluptatum dolores?
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit sed pariatur error repellendus eos! Quas, optio esse ad illum quis blanditiis rerum quia.
+        Corrupti, ad hic velit praesentium voluptatum dolores?
       </p>
       <forge-toolbar slot="footer" no-divider>
-        <forge-button slot="end" variant="raised" @click=${() => dialog.open = false}>Close</forge-button>
+        <forge-button slot="end" variant="raised" @click=${() => (dialog.open = false)}>Close</forge-button>
       </forge-toolbar>
     </forge-scaffold>
   `;

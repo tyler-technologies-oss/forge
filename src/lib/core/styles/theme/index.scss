@@ -9,7 +9,7 @@
 
 ///
 /// Emits custom property declarations for all default theme tokens.
-/// 
+///
 @mixin properties {
   @each $token-name, $token-value in tokens.$tokens {
     @include utils.declare-var(theme, $token-name, $token-value);
@@ -18,7 +18,7 @@
 
 ///
 /// Emits custom property declarations for all dark theme tokens.
-/// 
+///
 @mixin properties-dark {
   @each $token-name, $token-value in tokens.$tokens-dark {
     @include utils.declare-var(theme, $token-name, $token-value);
@@ -27,7 +27,7 @@
 
 ///
 /// Generates utility classes for each theme token as both `color` and `background-color` styles separately.
-/// 
+///
 @mixin classes {
   @each $token, $value in tokens.$tokens {
     .#{config.$prefix}-color--#{$token} {
@@ -41,24 +41,23 @@
 
 ///
 /// Gets a CSS custom property declaration for a specific theme token, with its token value as the fallback value
-/// 
+///
 @function variable($key, $prefix: config.$prefix) {
   @return utils.variable(theme, tokens.$tokens, $key, $prefix);
 }
 
 ///
 /// Generates CSS custom property declarations for the provided theme tokens.
-/// 
+///
 @mixin provide($tokens, $prefix: config.$prefix) {
   @include utils.provide(tokens.$tokens, $tokens, theme, $prefix);
 }
 
 ///
 /// Gets a theme emphasis value by semantic name.
-/// 
+///
 /// Valid names are `highest`, `higher`, `high`, `medium-high`, `medium`, `medium-low`, `low`, `lower`, and `lowest`.
-/// 
+///
 @function emphasis($emphasis) {
   @return math.div(color-emphasis.value($emphasis), 100%);
 }
-

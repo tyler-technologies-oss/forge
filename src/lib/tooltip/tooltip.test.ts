@@ -162,9 +162,9 @@ describe('Tooltip', () => {
       const harness = await createFixture({ type: 'label' });
 
       expect(harness.anchorElement.getAttribute('aria-labelledby')).to.equal(harness.tooltipElement.id);
-      
+
       harness.tooltipElement.anchorElement = harness.altAnchorElement;
-      
+
       expect(harness.anchorElement.hasAttribute('aria-labelledby')).to.be.false;
       expect(harness.altAnchorElement.getAttribute('aria-labelledby')).to.equal(harness.tooltipElement.id);
       await expect(harness.tooltipElement).to.be.accessible();
@@ -174,9 +174,9 @@ describe('Tooltip', () => {
       const harness = await createFixture({ type: 'label' });
 
       expect(harness.anchorElement.getAttribute('aria-labelledby')).to.equal(harness.tooltipElement.id);
-      
+
       harness.tooltipElement.anchor = harness.altAnchorElement.id;
-      
+
       expect(harness.anchorElement.hasAttribute('aria-labelledby')).to.be.false;
       expect(harness.altAnchorElement.getAttribute('aria-labelledby')).to.equal(harness.tooltipElement.id);
       await expect(harness.tooltipElement).to.be.accessible();
@@ -186,9 +186,9 @@ describe('Tooltip', () => {
       const harness = await createFixture({ type: 'label' });
 
       expect(harness.anchorElement.getAttribute('aria-labelledby')).to.equal(harness.tooltipElement.id);
-      
+
       harness.tooltipElement.remove();
-      
+
       expect(harness.anchorElement.hasAttribute('aria-labelledby')).to.be.false;
     });
 
@@ -196,9 +196,9 @@ describe('Tooltip', () => {
       const harness = await createFixture({ type: 'description' });
 
       expect(harness.anchorElement.getAttribute('aria-describedby')).to.equal(harness.tooltipElement.id);
-      
+
       harness.tooltipElement.anchorElement = harness.altAnchorElement;
-      
+
       expect(harness.anchorElement.hasAttribute('aria-describedby')).to.be.false;
       expect(harness.altAnchorElement.getAttribute('aria-describedby')).to.equal(harness.tooltipElement.id);
       await expect(harness.tooltipElement).to.be.accessible();
@@ -208,9 +208,9 @@ describe('Tooltip', () => {
       const harness = await createFixture({ type: 'description' });
 
       expect(harness.anchorElement.getAttribute('aria-describedby')).to.equal(harness.tooltipElement.id);
-      
+
       harness.tooltipElement.anchor = harness.altAnchorElement.id;
-      
+
       expect(harness.anchorElement.hasAttribute('aria-describedby')).to.be.false;
       expect(harness.altAnchorElement.getAttribute('aria-describedby')).to.equal(harness.tooltipElement.id);
       await expect(harness.tooltipElement).to.be.accessible();
@@ -220,9 +220,9 @@ describe('Tooltip', () => {
       const harness = await createFixture({ type: 'description' });
 
       expect(harness.anchorElement.getAttribute('aria-describedby')).to.equal(harness.tooltipElement.id);
-      
+
       harness.tooltipElement.remove();
-      
+
       expect(harness.anchorElement.hasAttribute('aria-describedby')).to.be.false;
     });
 
@@ -231,9 +231,9 @@ describe('Tooltip', () => {
 
       harness.anchorElement.setAttribute('aria-labelledby', 'test-id');
       harness.anchorElement.setAttribute('aria-describedby', 'test-id');
-      
+
       harness.tooltipElement.remove();
-      
+
       expect(harness.anchorElement.getAttribute('aria-labelledby')).to.equal('test-id');
       expect(harness.anchorElement.getAttribute('aria-describedby')).to.equal('test-id');
     });
@@ -362,7 +362,7 @@ describe('Tooltip', () => {
       harness.tooltipElement.open = true;
 
       expect(harness.tooltipElement.open).to.be.true;
-      expect(harness.tooltipElement.hasAttribute(OVERLAY_CONSTANTS.attributes.OPEN)).to.be.true;;
+      expect(harness.tooltipElement.hasAttribute(OVERLAY_CONSTANTS.attributes.OPEN)).to.be.true;
 
       expect(harness.overlayElement?.open).to.be.true;
     });
@@ -440,7 +440,7 @@ describe('Tooltip', () => {
       await harness.hoverTrigger();
       await timer(harness.tooltipElement.delay + 100);
       expect(harness.isOpen).to.be.true;
-      
+
       await harness.hoverOutside();
 
       expect(harness.isOpen).to.be.false;
@@ -468,7 +468,7 @@ describe('Tooltip', () => {
 
       const customDelay = 100;
       harness.tooltipElement.delay = customDelay;
-      
+
       expect(harness.tooltipElement.delay).to.equal(customDelay);
       expect(harness.isOpen).to.be.false;
 
@@ -570,7 +570,7 @@ describe('Tooltip', () => {
 
       await harness.focusTrigger();
       expect(harness.isOpen).to.be.true;
-      
+
       await harness.blurTrigger();
       expect(harness.isOpen).to.be.false;
     });
@@ -581,12 +581,12 @@ describe('Tooltip', () => {
       harness.tooltipElement.setAttribute(TOOLTIP_CONSTANTS.attributes.TRIGGER_TYPE, 'focus,hover');
 
       expect(harness.tooltipElement.triggerType).to.deep.equal(['focus', 'hover']);
-      
+
       await harness.hoverOutside();
       await harness.hoverTrigger();
       await timer(harness.tooltipElement.delay + 100);
       expect(harness.isOpen).to.be.true;
-      
+
       await harness.hoverOutside();
 
       expect(harness.isOpen).to.be.false;
@@ -671,7 +671,8 @@ class TooltipHarness {
     public tooltipElement: ITooltipComponent,
     public anchorElement: HTMLButtonElement,
     public altAnchorElement: HTMLButtonElement,
-    public containerElement: HTMLElement) {}
+    public containerElement: HTMLElement
+  ) {}
 
   public get contentElement(): HTMLElement {
     return this.tooltipElement.shadowRoot?.querySelector(TOOLTIP_CONSTANTS.selectors.CONTENT) as HTMLElement;
@@ -686,9 +687,7 @@ class TooltipHarness {
   }
 
   public get isOpen(): boolean {
-    return this.tooltipElement.open &&
-           this.tooltipElement.hasAttribute(TOOLTIP_CONSTANTS.attributes.OPEN) &&
-           !!this.overlayElement?.open;
+    return this.tooltipElement.open && this.tooltipElement.hasAttribute(TOOLTIP_CONSTANTS.attributes.OPEN) && !!this.overlayElement?.open;
   }
 
   public async clickOutside(): Promise<void> {
@@ -735,7 +734,7 @@ class TooltipHarness {
   public focusTrigger(): void {
     this.anchorElement.focus();
   }
-  
+
   public blurTrigger(): void {
     this.anchorElement.blur();
   }
@@ -758,12 +757,7 @@ async function createFixture({ open, type, triggerType, delay, offset }: IToolti
     <div>
       <button type="button" id="alt-anchor">Alt Tooltip Anchor</button>
       <button type="button" id="test-anchor">Tooltip Anchor</button>
-      <forge-tooltip
-        ?open=${open}
-        type=${type ?? nothing}
-        trigger-type=${triggerType ?? nothing}
-        delay=${delay ?? nothing}
-        offset=${offset ?? nothing}>
+      <forge-tooltip ?open=${open} type=${type ?? nothing} trigger-type=${triggerType ?? nothing} delay=${delay ?? nothing} offset=${offset ?? nothing}>
         Test tooltip content
       </forge-tooltip>
     </div>

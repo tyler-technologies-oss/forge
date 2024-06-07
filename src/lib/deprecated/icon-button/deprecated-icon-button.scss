@@ -29,7 +29,7 @@
 // Slotted
 //
 
-::slotted(:is(button,a)) {
+::slotted(:is(button, a)) {
   @include base;
 
   font-size: #{token(icon-size)};
@@ -47,9 +47,11 @@
 //
 
 forge-state-layer {
-  @include state-layer.provide-theme((
-    color: #{token(icon-color)}
-  ));
+  @include state-layer.provide-theme(
+    (
+      color: #{token(icon-color)}
+    )
+  );
 }
 
 //
@@ -57,33 +59,38 @@ forge-state-layer {
 //
 
 forge-focus-indicator {
-  @include focus-indicator.provide-theme((
-    outward-offset: 0px, // Requires unit
-    color: #{token(focus-indicator-color)},
-    shape-start-start: #{token(shape-start-start)},
-    shape-start-end: #{token(shape-start-end)},
-    shape-end-start: #{token(shape-end-start)},
-    shape-end-end: #{token(shape-end-end)}
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      outward-offset: 0px,
+      // Requires unit
+      color: #{token(focus-indicator-color)},
+      shape-start-start: #{token(shape-start-start)},
+      shape-start-end: #{token(shape-start-end)},
+      shape-end-start: #{token(shape-end-start)},
+      shape-end-end: #{token(shape-end-end)}
+    )
+  );
 }
 
 //
 // Dense
 //
 
-:host(:is([dense],[density=large]):not(:is([density=medium],[density-level]))) {
+:host(:is([dense], [density='large']):not(:is([density='medium'], [density-level]))) {
   @include density-small;
 
-  @include icon.provide-theme((
-    font-size: #{token(icon-size)}
-  ));
+  @include icon.provide-theme(
+    (
+      font-size: #{token(icon-size)}
+    )
+  );
 }
 
 //
 // Density level
 //
 
-:host([dense]:not([density=large]):not([density=small]):is([density=medium],[density-level])) {
+:host([dense]:not([density='large']):not([density='small']):is([density='medium'], [density-level])) {
   @include density-medium;
 }
 
@@ -103,7 +110,7 @@ forge-focus-indicator {
 // Toggle
 //
 
-:host([toggle]:is([on],[is-on]):not([is-on=false])) {
+:host([toggle]:is([on], [is-on]):not([is-on='false'])) {
   @include toggle-on-icon;
   @include override(background-color, theme.variable(primary-container-low), value);
 }

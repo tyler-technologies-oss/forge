@@ -22,7 +22,7 @@ export class FocusIndicatorAdapter extends BaseAdapter<IFocusIndicatorComponent>
   public destroy(): void {
     this._targetElement = null;
   }
-  
+
   public hasTargetElement(): boolean {
     return !!this._targetElement;
   }

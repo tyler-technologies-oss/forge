@@ -247,10 +247,7 @@ export function defineComponents(): void {
  * Deprecated component registration
  */
 
-const DEPRECATED_CUSTOM_ELEMENTS = [
-  DeprecatedButtonComponent,
-  DeprecatedIconButtonComponent
-];
+const DEPRECATED_CUSTOM_ELEMENTS = [DeprecatedButtonComponent, DeprecatedIconButtonComponent];
 
 export function defineDeprecatedComponents(): void {
   defineCustomElements(DEPRECATED_CUSTOM_ELEMENTS);

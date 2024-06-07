@@ -11,7 +11,7 @@ const meta = {
   render: args => {
     var el = customElementStoryRenderer(component, args);
     el.textContent = 'off/on';
-    return el
+    return el;
   },
   component,
   parameters: {
@@ -24,14 +24,11 @@ const meta = {
       controls: {
         labelPosition: {
           control: 'select',
-          options: ['start', 'end'],
+          options: ['start', 'end']
         }
       }
-    }),
-  },
-  args: {
-
-  },
+    })
+  }
 } satisfies Meta;
 
 export default meta;

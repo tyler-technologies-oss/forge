@@ -59,7 +59,7 @@ export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> imple
 
   public setAvatarIcon(value: string): void {
     if (value) {
-      const iconDelegate = new IconComponentDelegate({ props: { name: value }});
+      const iconDelegate = new IconComponentDelegate({ props: { name: value } });
       this._avatarElement.replaceChildren(iconDelegate.element);
     } else {
       removeAllChildren(this._avatarElement);
@@ -101,7 +101,7 @@ export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> imple
   public setSignOutButtonText(value: string): void {
     this._signOutButton.textContent = value;
   }
-  
+
   public setProfileButtonText(value: string): void {
     this._profileButton.textContent = value;
   }

@@ -18,9 +18,13 @@ export interface IFloatingActionButtonComponentDelegateOptions extends IBaseComp
   density?: FloatingActionButtonDensity;
   elevation?: FloatingActionButtonElevation;
 }
-export interface IFloatingActionButtonComponentDelegateConfig extends IBaseComponentDelegateConfig<IFloatingActionButtonComponent, IFloatingActionButtonComponentDelegateOptions> {}
+export interface IFloatingActionButtonComponentDelegateConfig
+  extends IBaseComponentDelegateConfig<IFloatingActionButtonComponent, IFloatingActionButtonComponentDelegateOptions> {}
 
-export class FloatingActionButtonComponentDelegate extends BaseComponentDelegate<IFloatingActionButtonComponent, IFloatingActionButtonComponentDelegateOptions> {
+export class FloatingActionButtonComponentDelegate extends BaseComponentDelegate<
+  IFloatingActionButtonComponent,
+  IFloatingActionButtonComponentDelegateOptions
+> {
   private _iconElement?: IIconComponent;
 
   constructor(config?: IFloatingActionButtonComponentDelegateConfig) {
@@ -53,7 +57,7 @@ export class FloatingActionButtonComponentDelegate extends BaseComponentDelegate
   protected _configure(): void {
     this._configureIcon();
   }
-  
+
   private _configureIcon(): void {
     if (!this._config.options?.iconName) {
       return;

@@ -25,7 +25,7 @@ export class BannerAdapter extends BaseAdapter<IBannerComponent> implements IBan
     this._iconSlotElement = getShadowElement(component, BANNER_CONSTANTS.selectors.ICON_SLOT) as HTMLSlotElement;
     this._buttonSlotElement = getShadowElement(component, BANNER_CONSTANTS.selectors.BUTTON_SLOT) as HTMLSlotElement;
   }
-  
+
   public initialize(): void {
     this._iconSlotElement.addEventListener('slotchange', this._onIconSlotChange.bind(this));
     this._buttonSlotElement.addEventListener('slotchange', this._onButtonSlotChange.bind(this));

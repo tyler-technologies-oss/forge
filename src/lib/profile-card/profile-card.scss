@@ -33,9 +33,11 @@
   .avatar {
     @include avatar;
 
-    @include avatar.provide-theme((
-      size: #{token(avatar-size)}
-    ));
+    @include avatar.provide-theme(
+      (
+        size: #{token(avatar-size)}
+      )
+    );
   }
 
   .text {
@@ -52,9 +54,11 @@
 }
 
 #action-toolbar {
-  @include toolbar.provide-theme((
-    padding: 8px
-  ));
+  @include toolbar.provide-theme(
+    (
+      padding: 8px
+    )
+  );
 
   forge-button:not(:last-of-type) {
     margin-inline-end: 8px;

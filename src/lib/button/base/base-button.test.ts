@@ -48,7 +48,7 @@ const styles = `
 
 class TestBaseButton extends BaseButton<TestBaseButtonCore> {
   public static get observedAttributes(): string[] {
-    return [...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes) as string[]];
+    return [...(Object.values(BASE_BUTTON_CONSTANTS.observedAttributes) as string[])];
   }
 
   protected readonly _core: TestBaseButtonCore;
@@ -368,7 +368,7 @@ describe('BaseButton', () => {
 
     expect(clickSpy.calledOnce).to.be.false;
   });
-  
+
   it('should not dispatch click event if clicked when disabled', async () => {
     const el = await fixture<IButtonComponent>(html`<forge-test-base-button disabled>Button</forge-test-base-button>`);
     const clickSpy = spy();
@@ -402,7 +402,7 @@ describe('BaseButton', () => {
 
     expect(clickSpy.calledOnce).to.be.false;
   });
-  
+
   it('should detect when <a> is slotted', async () => {
     const el = await fixture<IButtonComponent>(html`<forge-test-base-button><a href="javascript: console.log('test');">Test</a></forge-test-base-button>`);
 
@@ -651,11 +651,11 @@ describe('BaseButton', () => {
     const popoverEl = el.querySelector('[popover]') as HTMLElement;
 
     expect(popoverEl.matches(':popover-open')).to.be.false;
-    
+
     buttonEl.click();
     await elementUpdated(popoverEl);
     expect(popoverEl.matches(':popover-open')).to.be.true;
-    
+
     buttonEl.click();
     await elementUpdated(popoverEl);
     expect(popoverEl.matches(':popover-open')).to.be.false;
@@ -676,7 +676,7 @@ describe('BaseButton', () => {
     await pressKey('Enter');
     await elementUpdated(popoverEl);
     expect(popoverEl.matches(':popover-open')).to.be.true;
-    
+
     buttonEl.focus();
     await pressKey('Enter');
     await elementUpdated(el);
@@ -912,7 +912,7 @@ describe('BaseButton', () => {
     expect(el.getAttribute('value')).to.equal('test-value');
 
     el.name = 'updated-name';
-    el.value = 'updated-value'
+    el.value = 'updated-value';
 
     expect(el.name).to.equal('updated-name');
     expect(el.getAttribute('name')).to.equal('updated-name');
@@ -931,7 +931,7 @@ describe('BaseButton', () => {
     const submitSpy = spy(evt => {
       const { name } = evt.submitter as HTMLButtonElement;
       const formData = new FormData(el);
-      
+
       expect(name).to.equal('test');
       expect(buttonEl.value).to.equal('test-value');
       expect(formData.get('test')).to.equal(buttonEl.value);
@@ -1016,7 +1016,7 @@ describe('BaseButton', () => {
   }
 
   function getStateLayer(btn: IButtonComponent): IStateLayerComponent {
-    return btn.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent
+    return btn.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent;
   }
 
   function getFocusIndicator(btn: IButtonComponent): IFocusIndicatorComponent {

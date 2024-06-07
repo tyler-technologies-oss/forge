@@ -46,7 +46,7 @@ const meta = {
         triggerType: { control: 'multi-select', options: ['hover', 'longpress', 'focus'] },
         fallbackPlacements: { control: 'multi-select', options: OVERLAY_PLACEMENT_OPTIONS }
       }
-    }),
+    })
   },
   args: {
     open: false,

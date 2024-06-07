@@ -5,7 +5,7 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { IAvatarComponent } from './avatar';
 import { AVATAR_CONSTANTS } from './avatar-constants';
 
-import './avatar'
+import './avatar';
 
 describe('Avatar', () => {
   it('should initialize', async () => {

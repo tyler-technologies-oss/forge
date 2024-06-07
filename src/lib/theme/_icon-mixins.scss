@@ -36,7 +36,7 @@
 
 @mixin icon-ext($icon-name: null) {
   @include icon-ext-base;
-  
+
   display: inline-block;
   line-height: 1;
   text-transform: none;

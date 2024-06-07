@@ -39,7 +39,7 @@ export class SelectDropdownAdapter extends BaseSelectAdapter<ISelectDropdownComp
   public addTargetListener(type: string, listener: (evt: Event) => void): void {
     let passive: boolean | undefined;
     let capture: boolean | undefined;
-    
+
     if (type === 'keydown') {
       // We don't use a passive keydown listener because we are preventing default in this event and Angular doesn't like that
       // We need to use capturing to ensure that we get to this event before zone.js does
@@ -78,7 +78,7 @@ export class SelectDropdownAdapter extends BaseSelectAdapter<ISelectDropdownComp
   }
 
   public attach(selector: string): void {
-    const rootNode = this._component.getRootNode() as ShadowRoot || HTMLDocument;
+    const rootNode = (this._component.getRootNode() as ShadowRoot) || HTMLDocument;
     const doc = rootNode || this._component.ownerDocument || document;
     const element = doc.querySelector(selector) as HTMLElement;
     if (element) {
@@ -134,7 +134,7 @@ export class SelectDropdownAdapter extends BaseSelectAdapter<ISelectDropdownComp
   }
 
   private _getRootNode(): ShadowRoot | Document {
-    return this._component.getRootNode() as ShadowRoot | Document ?? this._component.ownerDocument ?? document;
+    return (this._component.getRootNode() as ShadowRoot | Document) ?? this._component.ownerDocument ?? document;
   }
 
   public setAriaControls(): void {

@@ -21,15 +21,18 @@ export default function forgeMemberDenyListPlugin() {
       const classes = moduleDoc?.declarations?.filter(declaration => declaration.kind === 'class' || declaration.kind === 'mixin');
       classes?.forEach(klass => {
         klass.members = klass?.members?.filter(member => {
-          return member.name && !MEMBER_DENY_LIST.some(pattern => {
-            if (typeof pattern === 'string') {
-              return member.name === pattern;
-            } else if (pattern instanceof RegExp) {
-              return pattern.test(member.name);
-            } else {
-              return false;
-            }
-          });
+          return (
+            member.name &&
+            !MEMBER_DENY_LIST.some(pattern => {
+              if (typeof pattern === 'string') {
+                return member.name === pattern;
+              } else if (pattern instanceof RegExp) {
+                return pattern.test(member.name);
+              } else {
+                return false;
+              }
+            })
+          );
         });
       });
     }

@@ -7,7 +7,7 @@ import { IBaseComponent } from '../../base/base-component';
 export interface IWithLabelAwareness extends IBaseComponent {
   /**
    * A callback for when the associated label's text content changes.
-   * 
+   *
    * @param value The new text content of the label, or null if the label was removed or has no
    * text content.
    */
@@ -25,7 +25,7 @@ export declare abstract class WithLabelAwarenessContract {
 
 /**
  * Mixes in Forge label awareness into a base component.
- * 
+ *
  * @param base The base component to mix into.
  * @returns The mixed-in base component.
  */

@@ -16,23 +16,19 @@ $tokens: (
   padding-block: utils.module-ref(button-toggle-group, padding-block, padding),
   padding-inline: utils.module-ref(button-toggle-group, padding-inline, padding),
   height: utils.module-val(button-toggle-group, height, button.get(height)),
-
   // Density - dense
   dense-height: utils.module-val(button-toggle-group, dense-height, button.get(dense-height)),
-
   // Outline
   outline-width: utils.module-val(button-toggle-group, outline-width, border.variable(thin)),
   outline-style: utils.module-val(button-toggle-group, outline-style, solid),
   outline-color: utils.module-val(button-toggle-group, outline-color, theme.variable(outline-low)),
   outline-color-active: utils.module-val(button-toggle-group, outline-color-active, theme.variable(outline-medium)),
-
   // Shape
   shape: utils.module-val(button-toggle-group, shape, shape.variable(medium)),
   shape-start-start: utils.module-ref(button-toggle-group, shape-start-start, shape),
   shape-start-end: utils.module-ref(button-toggle-group, shape-start-end, shape),
   shape-end-start: utils.module-ref(button-toggle-group, shape-end-start, shape),
   shape-end-end: utils.module-ref(button-toggle-group, shape-end-end, shape),
-
   // Animation
   transition-duration: utils.module-val(button-toggle-group, transition-duration, button-toggle.get(transition-duration)),
   transition-timing: utils.module-val(button-toggle-group, transition-timing, button-toggle.get(transition-timing))

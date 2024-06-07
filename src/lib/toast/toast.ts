@@ -52,14 +52,14 @@ declare global {
 
 /**
  * @tag forge-toast
- * 
+ *
  * @summary Toasts are non-modal notifications that appear in response to user interactions.
- * 
+ *
  * @dependency forge-overlay
  * @dependency forge-button
  * @dependency forge-icon-button
  * @dependency forge-icon
- * 
+ *
  * @property {boolean} [open=false] - The open state.
  * @property {number} [duration=2750] - The duration in milliseconds that the toast is displayed.
  * @property {ToastPlacement} [placement="bottom"] - The placement of the toast.
@@ -67,11 +67,11 @@ declare global {
  * @property {boolean} [dismissible=false] - Whether the toast is dismissible (displays a close button).
  * @property {string} dismissLabel - The accessible label for the dismiss button.
  * @property {ToastTheme} [theme="default"] - The theme of the toast.
- * 
+ *
  * @globalconfig duration
  * @globalconfig placement
  * @globalconfig dismissible
- * 
+ *
  * @attribute {boolean} [open=false] - The open state.
  * @attribute {number} [duration=2750] - The duration in milliseconds that the toast is displayed.
  * @attribute {ToastPlacement} placement - The placement of the toast.
@@ -79,10 +79,10 @@ declare global {
  * @attribute {boolean} [dismissible=false] - Whether the toast is dismissible (displays a close button).
  * @attribute {string} dismiss-label - The accessible label for the dismiss button.
  * @attribute {ToastTheme} [theme="default"] - The theme of the toast.
- * 
+ *
  * @event {CustomEvent<void>} forge-toast-action - Dispatched when the action button is clicked.
  * @event {CustomEvent<void>} forge-toast-close - Dispatched when the toast is closed.
- * 
+ *
  * @cssproperty --forge-toast-background - The background color of the toast.
  * @cssproperty --forge-toast-color - The text color of the toast.
  * @cssproperty --forge-toast-offset - The offset of the toast from the edge of the viewport.
@@ -100,7 +100,7 @@ declare global {
  * @cssproperty --forge-toast-exit-duration - The duration of the exit animation.
  * @cssproperty --forge-toast-exit-timing - The timing function of the exit animation.
  * @cssproperty --forge-toast-slide-origin - The origin of the slide animation.
- * 
+ *
  * @csspart surface - The surface container.
  * @csspart message - The message container.
  * @csspart action-button - The action button.
@@ -109,12 +109,7 @@ declare global {
  */
 @customElement({
   name: TOAST_CONSTANTS.elementName,
-  dependencies: [
-    OverlayComponent,
-    ButtonComponent,
-    IconButtonComponent,
-    IconComponent
-  ]
+  dependencies: [OverlayComponent, ButtonComponent, IconButtonComponent, IconComponent]
 })
 export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseComponent)) implements IToastComponent {
   public static get observedAttributes(): string[] {
@@ -152,7 +147,7 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
         this.duration = value && value > 0 ? value : TOAST_CONSTANTS.defaults.DURATION;
         break;
       case TOAST_CONSTANTS.attributes.PLACEMENT:
-        this.placement = newValue as ToastPlacement || TOAST_CONSTANTS.defaults.PLACEMENT;
+        this.placement = (newValue as ToastPlacement) || TOAST_CONSTANTS.defaults.PLACEMENT;
         break;
       case TOAST_CONSTANTS.attributes.ACTION_TEXT:
         this.actionText = newValue;
@@ -241,7 +236,7 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
 
     toast.open = true;
     toast.addEventListener(TOAST_CONSTANTS.events.CLOSE, () => toast.remove());
-  
+
     return toast;
   }
 }

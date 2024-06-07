@@ -51,25 +51,27 @@ const meta = {
     `;
   },
   component,
-  decorators: [storyStyles(`
+  decorators: [
+    storyStyles(`
     .content {
       padding: var(--forge-spacing-medium);
     }
-  `)],
+  `)
+  ],
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
       controls: {
-        mode: { control: 'select', options: ['modal', 'inline-modal', 'nonmodal'] },
+        mode: { control: 'select', options: ['modal', 'inline-modal', 'nonmodal'] }
       }
-    }),
+    })
   },
   args: {
     open: false,
     mode: 'modal',
     persistent: false,
-    fullscreen: false,
-  },
+    fullscreen: false
+  }
 } satisfies Meta;
 
 export default meta;

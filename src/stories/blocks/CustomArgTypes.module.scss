@@ -21,7 +21,8 @@
 }
 
 :is(table:not(.sb-anchor, .sb-unstyled, .sb-unstyled table)) {
-  th, td {
+  th,
+  td {
     text-align: start;
   }
 }

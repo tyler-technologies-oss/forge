@@ -17,17 +17,14 @@ $tokens: (
   max-width: utils.module-val(tooltip, max-width, 320px),
   elevation: utils.module-val(tooltip, elevation, theme.variable(surface-bright-shadow)),
   content-align: utils.module-val(tooltip, content-align, center),
-
   // Border
   border-width: utils.module-val(tooltip, border-width, 0),
   border-style: utils.module-val(tooltip, border-style, solid),
   border-color: utils.module-val(tooltip, border-color, theme.variable(outline)),
-
   // Animation
   animation-timing: utils.module-val(tooltip, animation-timing, animation.variable(easing-decelerate)),
   animation-duration: utils.module-val(tooltip, animation-duration, animation.variable(duration-short3)),
   animation-offset: utils.module-val(tooltip, animation-offset, 24px),
-
   // Arrow
   arrow-size: utils.module-val(tooltip, arrow-size, 8px),
   arrow-height: utils.module-ref(tooltip, arrow-height, arrow-size),
@@ -37,7 +34,7 @@ $tokens: (
   arrow-top-rotation: utils.module-val(tooltip, arrow-top-rotation, 315deg),
   arrow-right-rotation: utils.module-val(tooltip, arrow-right-rotation, 45deg),
   arrow-bottom-rotation: utils.module-val(tooltip, arrow-bottom-rotation, 135deg),
-  arrow-left-rotation: utils.module-val(tooltip, arrow-left-rotation, 225deg),
+  arrow-left-rotation: utils.module-val(tooltip, arrow-left-rotation, 225deg)
 ) !default;
 
 ///

@@ -14,14 +14,7 @@ import '@tylertech/forge/label';
 
 const component = 'forge-icon-button';
 
-IconRegistry.define([
-  tylIconForgeLogo,
-  tylIconFavorite,
-  tylIconFavoriteBorder,
-  tylIconOpenInNew,
-  tylIconNotifications,
-  tylIconSettings
-]);
+IconRegistry.define([tylIconForgeLogo, tylIconFavorite, tylIconFavoriteBorder, tylIconOpenInNew, tylIconNotifications, tylIconSettings]);
 
 const clickAction = action('click');
 
@@ -61,9 +54,9 @@ const meta = {
         variant: { control: { type: 'select' }, options: ['icon', 'outlined', 'filled', 'raised'] },
         theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS },
         shape: { control: { type: 'select' }, options: ['circular', 'squared'] },
-        density: { control: { type: 'select' }, options: ['small', 'medium', 'large'] },
+        density: { control: { type: 'select' }, options: ['small', 'medium', 'large'] }
       }
-    }),
+    })
   },
   args: {
     variant: 'icon',
@@ -75,7 +68,7 @@ const meta = {
     shape: 'circular',
     density: 'large',
     popoverIcon: false
-  },
+  }
 } satisfies Meta;
 
 export default meta;
@@ -109,7 +102,7 @@ export const Variants: Story = {
 
 export const Anchor: Story = {
   parameters: {
-    controls: { include: ['variant'] },
+    controls: { include: ['variant'] }
   },
   render: ({ variant }) => {
     return html`
@@ -124,7 +117,7 @@ export const Anchor: Story = {
 
 export const Themed: Story = {
   parameters: {
-    controls: { include: ['variant'] },
+    controls: { include: ['variant'] }
   },
   render: ({ variant }) => {
     return html`
@@ -155,7 +148,7 @@ export const Themed: Story = {
 
 export const WithBadge: Story = {
   parameters: {
-    controls: { exclude: ['toggle', 'on', 'popoverIcon'] },
+    controls: { exclude: ['toggle', 'on', 'popoverIcon'] }
   },
   render: args => {
     const el = customElementStoryRenderer(component, args);
@@ -176,7 +169,7 @@ export const WithBadge: Story = {
 
 export const WithCircularProgress: Story = {
   parameters: {
-    controls: { include: ['variant', 'theme', 'disabled'] },
+    controls: { include: ['variant', 'theme', 'disabled'] }
   },
   render: ({ variant, theme, disabled }) => {
     return html`

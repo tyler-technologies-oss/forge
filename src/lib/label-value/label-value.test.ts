@@ -96,18 +96,11 @@ describe('Label Value', () => {
   });
 });
 
-function createFixture({
-  empty = false,
-  ellipsis = false,
-  inline = false
-} = {}): Promise<ILabelValueComponent> {
+function createFixture({ empty = false, ellipsis = false, inline = false } = {}): Promise<ILabelValueComponent> {
   return fixture<ILabelValueComponent>(html`
-    <forge-label-value
-      ?empty=${empty}
-      ?ellipsis=${ellipsis}
-      ?inline=${inline}>
+    <forge-label-value ?empty=${empty} ?ellipsis=${ellipsis} ?inline=${inline}>
       <span slot="label">Label</span>
       <span slot="value">Value</span>
     </forge-label-value>
-  `);  
+  `);
 }

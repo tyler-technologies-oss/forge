@@ -13,7 +13,7 @@ $tokens: (
   transition-delay: utils.module-val(mini-drawer, transition-delay, 300ms),
   hover-transition-duration: utils.module-val(mini-drawer, hover-transition-duration, animation.variable(duration-medium2)),
   hover-transition-easing: utils.module-ref(mini-drawer, hover-transition-easing, transition-easing),
-  hover-transition-delay: utils.module-val(mini-drawer, hover-transition-delay, animation.variable(duration-medium2)),
+  hover-transition-delay: utils.module-val(mini-drawer, hover-transition-delay, animation.variable(duration-medium2))
 ) !default;
 
 @function get($key) {

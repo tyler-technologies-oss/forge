@@ -34,7 +34,7 @@ export class CircularProgressAdapter extends BaseAdapter<ICircularProgressCompon
   public setDeterminate(value: boolean): void {
     this._tryResetTemplate();
     this._rootElement.classList.toggle(CIRCULAR_PROGRESS_CONSTANTS.classes.INDETERMINATE, !value);
-    
+
     if (value) {
       this._rootElement.insertAdjacentHTML('beforeend', determinateTemplate);
       this._determinateProgressCircleElement = getShadowElement(this._component, CIRCULAR_PROGRESS_CONSTANTS.selectors.DETERMINATE_PROGRESS_CIRCLE);

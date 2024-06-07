@@ -19,7 +19,7 @@ npm install @tylertech/forge
 Edit your `index.html` file and add the following `<link>` tag to the `<head>` section load the Tyler font:
 
 ```html
-<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css">
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
 ```
 
 This will configure the default font family for your application, and load the required font weights and styles.
@@ -38,14 +38,14 @@ To use Forge components in your Vue application, import the components you need 
 </template>
 
 <script>
-import { defineButtonComponent, defineCardComponent } from '@tylertech/forge';
+  import { defineButtonComponent, defineCardComponent } from '@tylertech/forge';
 
-defineButtonComponent();
-defineCardComponent();
+  defineButtonComponent();
+  defineCardComponent();
 
-export default {
-  name: 'App',
-};
+  export default {
+    name: 'App'
+  };
 </script>
 ```
 

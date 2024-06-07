@@ -22,7 +22,7 @@ export class FloatingActionButtonAdapter extends BaseButtonAdapter<IFloatingActi
     if (!this._extendedObserver) {
       this._startExtendedWatcher();
     }
-    
+
     this._detectExtendedState();
   }
 

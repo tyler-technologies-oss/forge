@@ -7,7 +7,11 @@
 //
 
 :host {
-  @include divider.provide-theme((margin: 4px 0));
+  @include divider.provide-theme(
+    (
+      margin: 4px 0
+    )
+  );
 }
 
 //
@@ -31,7 +35,7 @@
       }
     }
   }
-  
+
   &.right {
     @include right;
   }

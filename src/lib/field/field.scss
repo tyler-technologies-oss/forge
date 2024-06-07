@@ -59,37 +59,35 @@ $variants: (
   //
   // Host
   //
-  
+
   :host {
     @include core.host;
   }
-  
+
   :host([hidden]) {
     display: none;
   }
-  
+
   //
   // Configuration
   //
-  
+
   .forge-field {
     @include core.configuration;
-  } 
+  }
 
   //
   // Root
   //
-  
+
   .forge-field {
     @include core.base;
   }
 }
 
-
 //
 // Theme, variant, shape, and density
 //
-
 
 @layer theme {
   @each $theme, $selector in $themes {
@@ -98,7 +96,7 @@ $variants: (
         @include core.theme($theme);
       }
     }
-  
+
     :host(#{map.get($label-positions, inset)}#{$selector}) {
       .forge-field {
         @include core.inset-label-color($theme);
@@ -286,9 +284,7 @@ $variants: (
     }
   }
 
-  &.has-accessory
-
-  &:not(.has-accessory) {
+  &.has-accessory &:not(.has-accessory) {
     .popover-icon {
       @include core.item-padding(end, outer);
     }
@@ -359,59 +355,59 @@ $variants: (
 // Label alignment
 //
 
-:host(#{map.get($label-positions, inline-start)}[label-alignment=start]),
-:host(#{map.get($label-positions, inline-end)}[label-alignment=start]) {
+:host(#{map.get($label-positions, inline-start)}[label-alignment='start']),
+:host(#{map.get($label-positions, inline-end)}[label-alignment='start']) {
   .label {
     @include core.label-alignment(start, inline);
   }
 }
 
-:host(#{map.get($label-positions, inline-start)}:where([label-alignment=center], [label-alignment=default], :not([label-alignment]))),
-:host(#{map.get($label-positions, inline-end)}:where([label-alignment=center], [label-alignment=default], :not([label-alignment]))) {
+:host(#{map.get($label-positions, inline-start)}:where([label-alignment='center'], [label-alignment='default'], :not([label-alignment]))),
+:host(#{map.get($label-positions, inline-end)}:where([label-alignment='center'], [label-alignment='default'], :not([label-alignment]))) {
   .label {
     @include core.label-alignment(center, inline);
   }
 }
 
-:host(#{map.get($label-positions, inline-start)}[label-alignment=end]),
-:host(#{map.get($label-positions, inline-end)}[label-alignment=end]) {
+:host(#{map.get($label-positions, inline-start)}[label-alignment='end']),
+:host(#{map.get($label-positions, inline-end)}[label-alignment='end']) {
   .label {
     @include core.label-alignment(end, inline);
   }
 }
 
-:host(#{map.get($label-positions, inline-start)}[label-alignment=baseline]),
-:host(#{map.get($label-positions, inline-end)}[label-alignment=baseline]) {
+:host(#{map.get($label-positions, inline-start)}[label-alignment='baseline']),
+:host(#{map.get($label-positions, inline-end)}[label-alignment='baseline']) {
   .label {
     @include core.label-alignment(baseline, inline);
   }
 }
 
-:host(#{map.get($label-positions, block-start)}:where([label-alignment=start], [label-alignment=default], :not([label-alignment]))) {
+:host(#{map.get($label-positions, block-start)}:where([label-alignment='start'], [label-alignment='default'], :not([label-alignment]))) {
   .label {
     @include core.label-alignment(start, block);
   }
 }
 
-:host(#{map.get($label-positions, block-start)}[label-alignment=center]) {
+:host(#{map.get($label-positions, block-start)}[label-alignment='center']) {
   .label {
     @include core.label-alignment(center, block);
   }
 }
 
-:host(#{map.get($label-positions, block-start)}[label-alignment=end]) {
+:host(#{map.get($label-positions, block-start)}[label-alignment='end']) {
   .label {
     @include core.label-alignment(end, block);
   }
 }
 
-:host(#{map.get($label-positions, block-start)}[label-alignment=baseline]:not([variant=plain])) {
+:host(#{map.get($label-positions, block-start)}[label-alignment='baseline']:not([variant='plain'])) {
   .label {
     @include core.label-alignment(baseline, block);
   }
 }
 
-:host(#{map.get($label-positions, block-start)}[label-alignment=baseline][variant=plain]) {
+:host(#{map.get($label-positions, block-start)}[label-alignment='baseline'][variant='plain']) {
   .label {
     @include core.label-alignment(baseline, block, 0px);
   }
@@ -479,19 +475,19 @@ $variants: (
 // Support text
 //
 
-:host([support-text-inset=both]) {
+:host([support-text-inset='both']) {
   .support-text {
     @include core.support-text-inset(both);
   }
 }
 
-:host([support-text-inset=start]) {
+:host([support-text-inset='start']) {
   .support-text {
     @include core.support-text-inset(start);
   }
 }
 
-:host([support-text-inset=end]) {
+:host([support-text-inset='end']) {
   .support-text {
     @include core.support-text-inset(end);
   }
@@ -574,7 +570,7 @@ $variants: (
       }
     }
   }
-  
+
   /* When there is a slotted end element the input uses inner end padding */
   &.has-end {
     .input {
@@ -629,7 +625,8 @@ $variants: (
       }
     }
     .end {
-      @include core.item-padding(end, inner);}
+      @include core.item-padding(end, inner);
+    }
   }
 }
 
@@ -665,20 +662,24 @@ $variants: (
 //
 
 forge-focus-indicator {
-  @include focus-indicator.provide-theme((
-    color: #{token(focus-indicator-color, custom)},
-    outward-offset: 0px,
-    shape: #{token(shape)},
-    width: #{token(focus-indicator-width)}
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(focus-indicator-color, custom)},
+      outward-offset: 0px,
+      shape: #{token(shape)},
+      width: #{token(focus-indicator-width)}
+    )
+  );
 }
 
 /* Provide an inline offset to the focus indicator to separate it from the plain field text */
 :host(#{map.get($variants, plain)}) {
   forge-focus-indicator {
-    @include focus-indicator.provide-theme((
-      offset-inline: -4px
-    ));
+    @include focus-indicator.provide-theme(
+      (
+        offset-inline: -4px
+      )
+    );
   }
 }
 

@@ -36,7 +36,7 @@ declare global {
  * @csspart button - The visually hidden slot for the `<button>` element.
  * @csspart focus-indicator - The focus-indicator indicator element.
  * @csspart state-layer - The state-layer surface element.
- * 
+ *
  * @cssproperty --forge-button-area-cursor - The cursor.
  * @cssproperty --forge-button-area-disabled-cursor - The cursor when in the disabled state.
  *
@@ -45,16 +45,11 @@ declare global {
  */
 @customElement({
   name: BUTTON_AREA_CONSTANTS.elementName,
-  dependencies: [
-    FocusIndicatorComponent,
-    StateLayerComponent
-  ]
+  dependencies: [FocusIndicatorComponent, StateLayerComponent]
 })
 export class ButtonAreaComponent extends HTMLElement implements IButtonAreaComponent {
   public static get observedAttributes(): string[] {
-    return [
-      BUTTON_AREA_CONSTANTS.attributes.DISABLED
-    ];
+    return [BUTTON_AREA_CONSTANTS.attributes.DISABLED];
   }
 
   private _core: ButtonAreaCore;

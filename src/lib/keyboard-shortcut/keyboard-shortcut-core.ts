@@ -28,7 +28,7 @@ export class KeyboardShortcutCore implements IKeyboardShortcutCore {
   private _activateCallback: KeyboardShortcutActivateCallback | null | undefined;
   private _keyCombinations: IKeyCombination[];
   private _keyDownListener: (evt: KeyboardEvent) => void;
-  
+
   constructor(private _adapter: IKeyboardShortcutAdapter) {
     this._keyDownListener = evt => this._onKeyDown(evt);
   }
@@ -46,7 +46,7 @@ export class KeyboardShortcutCore implements IKeyboardShortcutCore {
   private _initializeTargetElement(): void {
     this._disconnectTargetElement();
     this._adapter.setTargetElement(this._target, this._global);
-    
+
     if (!this._adapter.hasTargetElement()) {
       throw new Error('Unable to locate the target element.');
     }
@@ -97,7 +97,7 @@ export class KeyboardShortcutCore implements IKeyboardShortcutCore {
   public get key(): string | null | undefined {
     return this._key;
   }
-  public set key(value: string| null | undefined) {
+  public set key(value: string | null | undefined) {
     if (this._key !== value) {
       this._key = value;
       this._adapter.toggleHostAttribute(KEYBOARD_SHORTCUT_CONSTANTS.attributes.KEY, !!this.key, this._key || '');
@@ -170,7 +170,7 @@ export class KeyboardShortcutCore implements IKeyboardShortcutCore {
   }
 
   /** Gets/sets whether to match codes instead of keys on keyboard events. */
-  public get useCode(): boolean{
+  public get useCode(): boolean {
     return this._useCode;
   }
   public set useCode(value: boolean) {

@@ -18,19 +18,19 @@ declare global {
 
 /**
  * @tag forge-toolbar
- * 
+ *
  * @summary
  * Toolbars allow you to place titles and actions within a container and align them to the start, center, or end of the toolbar.
  * This component is useful as headers and footers within pages, dialogs, sections... etc. to ensure consistent layout and alignment.
- *  
+ *
  * @property {boolean} inverted - Controls whether a bottom divider (default) or top divider (true) is used.
- * 
+ *
  * @attribute {boolean} inverted - Controls whether a bottom divider (default) or top divider (true) is used.
  * @attribute {boolean} no-divider - Hides the internal divider.
  * @attribute {boolean} no-border - Deprecated. Use no-divider instead.
  * @attribute {boolean} no-padding - Sets the internal padding style to 0.
  * @attribute {boolean} auto-height - Forces the internal container to use height: auto for dynamic content that doesn't fit the static height.
- * 
+ *
  * @cssproperty --forge-theme-height - Controls the height.
  * @cssproperty --forge-theme-min-height - Controls the minimum height.
  * @cssproperty --forge-theme-surface - Controls the background-color of the toolbar.
@@ -45,7 +45,7 @@ declare global {
  * @cssproperty --forge-toolbar-padding - Controls the left and right padding using the padding-inline style.
  * @cssproperty --forge-toolbar-padding-block - Controls the top and bottom padding using the padding-block style.
  * @cssproperty --forge-toolbar-padding-inline - Controls the left and right padding using the padding-block style.
- * 
+ *
  * @csspart root - The root container element wrapping all slots and content.
  * @csspart inner - The internal container element for the start, center, and end slots.
  * @csspart before-section-start - The container element for the before-start slot.
@@ -53,7 +53,7 @@ declare global {
  * @csspart section-center - The container element for the center slot.
  * @csspart section-end - The container element for the end slot.
  * @csspart after-section-end - The container element for the after-end slot.
- * 
+ *
  * @slot before-start - The content to place before the start slot.
  * @slot start - The content to place at the start of the toolbar.
  * @slot center - The content to place in the center of the toolbar.
@@ -82,7 +82,7 @@ export class ToolbarComponent extends BaseComponent implements IToolbarComponent
         break;
     }
   }
-  
+
   public get inverted(): boolean {
     return this._inverted;
   }

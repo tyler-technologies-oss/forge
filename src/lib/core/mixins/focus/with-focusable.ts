@@ -2,7 +2,7 @@
  * @license
  * Copyright 2023 Google LLC
  * SPDX-License-Identifier: Apache-2.0
- * 
+ *
  * Adapted and influenced from [Material Web](https://github.com/material-components/material-web).
  * The original source code can be found at: [GitHub](https://github.com/material-components/material-web/blob/main/labs/behaviors/focusable.ts)
  */
@@ -44,7 +44,7 @@ export declare abstract class WithFocusableContract {
  * but a user sets `tabindex="0"`, it will still be focusable.
  *
  * To remove user overrides and restore focus control to the element, remove the `tabindex` attribute.
- * 
+ *
  * @param base The base component to mix into.
  * @returns The mixed-in base component.
  */
@@ -54,10 +54,10 @@ export function WithFocusable<TBase extends MixinBase>(base: TBase) {
     public get [isFocusable](): boolean {
       return this[_privateIsFocusable];
     }
-  
+
     /**
      * Whether or not the element can be focused.
-     * 
+     *
      * Set this from inheriting components **instead** of directly manipulating `tabIndex`.
      */
     public set [isFocusable](value: boolean) {
@@ -67,32 +67,32 @@ export function WithFocusable<TBase extends MixinBase>(base: TBase) {
       this[_privateIsFocusable] = value;
       this[_updateTabIndex]();
     }
-  
+
     private [_privateIsFocusable] = false;
     private [_externalTabIndex]: number | null = null; // Allows for external tabIndex to be stored when internal tabIndex is set to -1
     private [_isUpdatingTabIndex] = false; // Allows for internal tabIndex to be set without triggering attributeChangedCallback
 
     public override connectedCallback(): void {
       super.connectedCallback?.();
-      
+
       // This must be set in the connectedCallback to avoid sprouting a tabindex attribute on the host from the ctor
       this[isFocusable] = true;
     }
-  
+
     public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
       super.attributeChangedCallback?.(name, oldValue, newValue);
 
       if (name !== 'tabindex' || this[_isUpdatingTabIndex]) {
         return;
       }
-  
+
       if (!this.hasAttribute('tabindex')) {
         // User removed the attribute, can now use internal tabIndex
         this[_externalTabIndex] = null;
         this[_updateTabIndex]();
         return;
       }
-  
+
       this[_externalTabIndex] = this.tabIndex;
     }
 
@@ -100,7 +100,7 @@ export function WithFocusable<TBase extends MixinBase>(base: TBase) {
       const internalTabIndex = this[isFocusable] ? 0 : -1;
       const computedTabIndex = this[_externalTabIndex] ?? internalTabIndex;
       // const computedTabIndex = internalTabIndex === 0 ? this[_externalTabIndex] ?? internalTabIndex : internalTabIndex;
-  
+
       this[_isUpdatingTabIndex] = true;
       this.tabIndex = computedTabIndex;
       this[_isUpdatingTabIndex] = false;

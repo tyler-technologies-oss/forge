@@ -70,7 +70,7 @@ describe('BaseField', () => {
         const field = getShadowField(el);
         el.setAttribute('label-position', labelPosition);
         await elementUpdated(el);
-  
+
         expect(field.labelPosition).to.equal(labelPosition);
         expect(el.labelPosition).to.equal(labelPosition);
       });
@@ -82,7 +82,7 @@ describe('BaseField', () => {
         const field = getShadowField(el);
         el.setAttribute('label-alignment', labelAlignment);
         await elementUpdated(el);
-  
+
         expect(field.labelAlignment).to.equal(labelAlignment);
         expect(el.labelAlignment).to.equal(labelAlignment);
       });
@@ -144,7 +144,7 @@ describe('BaseField', () => {
         const field = getShadowField(el);
         el.setAttribute('variant', variant);
         await elementUpdated(el);
-  
+
         expect(field.variant).to.equal(variant);
         expect(el.variant).to.equal(variant);
       });
@@ -156,7 +156,7 @@ describe('BaseField', () => {
         const field = getShadowField(el);
         el.setAttribute('theme', theme);
         await elementUpdated(el);
-  
+
         expect(field.theme).to.equal(theme);
         expect(el.theme).to.equal(theme);
       });
@@ -168,7 +168,7 @@ describe('BaseField', () => {
         const field = getShadowField(el);
         el.setAttribute('shape', shape);
         await elementUpdated(el);
-  
+
         expect(field.shape).to.equal(shape);
         expect(el.shape).to.equal(shape);
       });
@@ -180,7 +180,7 @@ describe('BaseField', () => {
         const field = getShadowField(el);
         el.setAttribute('density', density);
         await elementUpdated(el);
-  
+
         expect(field.density).to.equal(density);
         expect(el.density).to.equal(density);
       });
@@ -212,7 +212,7 @@ describe('BaseField', () => {
         const field = getShadowField(el);
         el.setAttribute('support-text-inset', supportTextInset);
         await elementUpdated(el);
-  
+
         expect(field.supportTextInset).to.equal(supportTextInset);
         expect(el.supportTextInset).to.equal(supportTextInset);
       });

@@ -36,15 +36,15 @@ declare global {
 
 /**
  * @tag forge-checkbox
- * 
+ *
  * @summary Checkboxes select single values for submission in a form.
- * 
+ *
  * @description
  * Use checkboxes to:
  * - Select one or multiple items from a list.
  * - Present a list containing sub-selections.
  * - Turn an option on or off in desktop environment.
- * 
+ *
  * @property {boolean} [checked=false] - Whether the checkbox is checked.
  * @property {boolean} [defaultChecked=false] - Whether the checkbox is checked by default.
  * @property {boolean} [indeterminate=false] - Toggles the indeterminate state. This does not affect whether the checkbox is checked or its form submission.
@@ -54,7 +54,7 @@ declare global {
  * @property {boolean} [readonly=false] = Controls if the checkbox is readonly.
  * @property {boolean} [dense=false] - The density state.
  * @property {SwitchLabelPosition} [labelPosition='end'] - Whether the label appears before or after the checkbox.
- * 
+ *
  * @attribute {string} [checked=false] - Controls whether the checkbox is checked.
  * @attribute {string} [defaultChecked=false] - Controls whether the checkbox is checked by default.
  * @attribute {string} [indeterminate=false] - Controls the indeterminate state.
@@ -64,11 +64,11 @@ declare global {
  * @attribute {string} [readonly=false] - Controls if the switch is readonly.
  * @attribute {string} [dense=false] - Sets the density state.
  * @attribute {string} [label-position='end'] - Sets whether the label appears before or after the switch.
- * 
+ *
  * @method {(force?: boolean) => void} toggle - Toggles whether the checkbox is is checked or forces a checked state.
- *  
+ *
  * @event {Event} change - Dispatches when the checkbox is checked or unchecked.
- * 
+ *
  * @cssproperty --forge-checkbox-background - The color of the checkbox background when unchecked and not indeterminate.
  * @cssproperty --forge-checkbox-width - The inline size of the checkbox.
  * @cssproperty --forge-checkbox-height - The block size of the checkbox.
@@ -96,7 +96,7 @@ declare global {
  * @cssproperty --forge-checkbox-animation-duration - The duration of animations.
  * @cssproperty --forge-checkbox-background-animation-timing - The timing function of the background animations.
  * @cssproperty --forge-checkbox-icon-animation-timing - The timing function of the checked and indeterminate icons animations.
- * 
+ *
  * @csspart root - Styles the root element.
  * @csspart background - Styles the checkbox background element.
  * @csspart checkmark - Styles the checkmark element.
@@ -107,12 +107,12 @@ declare global {
  */
 @customElement({
   name: CHECKBOX_CONSTANTS.elementName,
-  dependencies: [
-    FocusIndicatorComponent,
-    StateLayerComponent
-  ]
+  dependencies: [FocusIndicatorComponent, StateLayerComponent]
 })
-export class CheckboxComponent extends WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent))))) implements ICheckboxComponent {
+export class CheckboxComponent
+  extends WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent)))))
+  implements ICheckboxComponent
+{
   public static get observedAttributes(): string[] {
     return Object.values(CHECKBOX_CONSTANTS.observedAttributes);
   }
@@ -182,10 +182,13 @@ export class CheckboxComponent extends WithFormAssociation(WithLabelAwareness(Wi
   }
 
   public [setValidity](): void {
-    this[internals].setValidity({ valueMissing: this.required && !this.checked }, this[getValidationMessage]({
-      checked: this.checked,
-      required: this.required
-    }));
+    this[internals].setValidity(
+      { valueMissing: this.required && !this.checked },
+      this[getValidationMessage]({
+        checked: this.checked,
+        required: this.required
+      })
+    );
   }
 
   public formResetCallback(): void {
@@ -216,7 +219,7 @@ export class CheckboxComponent extends WithFormAssociation(WithLabelAwareness(Wi
       this.indeterminate = stateValue === 'unchecked-indeterminate' || stateValue === 'checked-indeterminate';
       return;
     }
-    
+
     if (isString(value)) {
       this.checked = !!value;
     } else if (value?.[this.name]) {
@@ -252,7 +255,7 @@ export class CheckboxComponent extends WithFormAssociation(WithLabelAwareness(Wi
 
   @coreProperty()
   public declare labelPosition: CheckboxLabelPosition;
-  
+
   /**
    * Toggles the checkbox checked or unchecked.
    * @param force Whether to set the checkbox checked or unchecked.

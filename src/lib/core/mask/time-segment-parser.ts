@@ -52,7 +52,10 @@ export class TimeSegmentParser {
   }
 
   private _parseSegments(timeStr: string): string[] {
-    const [time, meridiem = ''] = timeStr.trim().replace(/\s+|_/g, '').split(/([AaPp][Mm]?)/);
+    const [time, meridiem = ''] = timeStr
+      .trim()
+      .replace(/\s+|_/g, '')
+      .split(/([AaPp][Mm]?)/);
     const [hours = '', minutes = '', seconds = ''] = time.split(':');
     return [hours, minutes, seconds, meridiem];
   }

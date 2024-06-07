@@ -40,12 +40,7 @@ declare global {
  */
 @customElement({
   name: PROFILE_CARD_CONSTANTS.elementName,
-  dependencies: [
-    ToolbarComponent,
-    ButtonComponent,
-    IconComponent,
-    AvatarComponent
-  ]
+  dependencies: [ToolbarComponent, ButtonComponent, IconComponent, AvatarComponent]
 })
 export class ProfileCardComponent extends BaseComponent implements IProfileCardComponent {
   public static get observedAttributes(): string[] {

@@ -86,12 +86,12 @@ declare global {
 
 /**
  * @tag forge-table
- * 
+ *
  * @dependency forge-expansion-panel
  * @dependency forge-icon
  * @dependency forge-checkbox
  * @dependency forge-tooltip
- * 
+ *
  * @event {CustomEvent<ITableRowClickEventData>} forge-table-row-click - Dispatched when a row is clicked. Only applies when `allow-row-click` is specified.
  * @event {CustomEvent<ITableSelectEventData>} forge-table-select - Dispatched when a row is selected. Only applies when `select` is specified.
  * @event {CustomEvent<ITableSelectDoubleEventData>} forge-table-select-double - Dispatched when a row is double-clicked. Only applies when `select` is specified.
@@ -103,12 +103,7 @@ declare global {
  */
 @customElement({
   name: TABLE_CONSTANTS.elementName,
-  dependencies: [
-    ExpansionPanelComponent,
-    IconComponent,
-    CheckboxComponent,
-    TooltipComponent
-  ]
+  dependencies: [ExpansionPanelComponent, IconComponent, CheckboxComponent, TooltipComponent]
 })
 export class TableComponent extends BaseComponent implements ITableComponent {
   public static get observedAttributes(): string[] {

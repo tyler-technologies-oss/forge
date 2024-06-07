@@ -100,7 +100,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   protected _emitCloseEvent(): void {
     this._adapter.emitHostEvent(DATE_RANGE_PICKER_CONSTANTS.events.CLOSE, undefined, false);
   }
-  
+
   protected _onToday(): void {
     const today = new Date();
     const range = this._open ? new DateRange({ from: this._from || today, to: this._to || undefined }) : new DateRange({ from: today });
@@ -170,7 +170,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
 
     const passesMinDate = (): boolean => this._isDateValueAcceptable(value.from);
     const passesMaxDate = (): boolean => this._isDateValueAcceptable(value.to);
-    const passesDateRange = (): boolean => value?.from && value?.to ? value.from.getTime() <= value.to.getTime() : true;
+    const passesDateRange = (): boolean => (value?.from && value?.to ? value.from.getTime() <= value.to.getTime() : true);
 
     return passesMinDate() && passesMaxDate() && passesDateRange();
   }
@@ -426,7 +426,12 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
       if (this._isInitialized) {
         this._setFormattedInputValue();
         if (this._open) {
-          this._adapter.setCalendarValue(new DateRange({ from: this._coerceDateValue(value) || undefined, to: this._coerceDateValue(this._to) || undefined }));
+          this._adapter.setCalendarValue(
+            new DateRange({
+              from: this._coerceDateValue(value) || undefined,
+              to: this._coerceDateValue(this._to) || undefined
+            })
+          );
         }
       }
     }
@@ -451,7 +456,12 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
       if (this._isInitialized) {
         this._setFormattedToInputValue();
         if (this._open) {
-          this._adapter.setCalendarValue(new DateRange({ to: this._coerceDateValue(value) || undefined, from: this._coerceDateValue(this._from) || undefined }));
+          this._adapter.setCalendarValue(
+            new DateRange({
+              to: this._coerceDateValue(value) || undefined,
+              from: this._coerceDateValue(this._from) || undefined
+            })
+          );
         }
       }
     }

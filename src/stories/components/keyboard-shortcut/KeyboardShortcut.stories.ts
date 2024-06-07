@@ -35,7 +35,7 @@ const meta = {
     ...generateCustomElementArgTypes({
       tagName: component,
       exclude: ['activateCallback', 'target', 'key']
-    }),
+    })
   },
   args: {
     keyBinding: 'a',
@@ -45,7 +45,7 @@ const meta = {
     capture: false,
     useCode: false,
     disabled: false
-  },
+  }
 } satisfies Meta<Partial<IKeyboardShortcutComponent>>;
 
 export default meta;

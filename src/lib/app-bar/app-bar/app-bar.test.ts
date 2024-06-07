@@ -11,7 +11,7 @@ import './app-bar';
 describe('App Bar', () => {
   it('should initialize', async () => {
     const el = await fixture<IAppBarComponent>(html`<forge-app-bar></forge-app-bar>`);
-    
+
     expect(el.shadowRoot).not.to.be.null;
   });
 
@@ -79,7 +79,7 @@ describe('App Bar', () => {
     el.href = '';
     anchorEl = getAnchorEl(el);
     const containerEl = el.shadowRoot?.querySelector(APP_BAR_CONSTANTS.selectors.LOGO_TITLE_CONTAINER) as HTMLElement;
-    
+
     expect(el.href).to.equal('');
     expect(el.hasAttribute(APP_BAR_CONSTANTS.attributes.HREF)).to.be.false;
     expect(containerEl).to.be.ok;
@@ -173,7 +173,7 @@ describe('App Bar', () => {
   }
 
   function getStateLayer(el: IAppBarComponent): IStateLayerComponent {
-    return el.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent
+    return el.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent;
   }
 
   function getFocusIndicator(el: IAppBarComponent): IFocusIndicatorComponent {

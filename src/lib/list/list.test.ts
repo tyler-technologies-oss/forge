@@ -41,7 +41,7 @@ describe('List', () => {
       ctx.listItems[1].querySelector('button')?.focus();
 
       await sendKeys({ press: 'Enter' });
-      
+
       expect(spy).to.have.been.calledOnceWith(sinon.match.has('detail', sinon.match.has('value', '2')));
     });
 
@@ -73,15 +73,15 @@ describe('List', () => {
       const ctx = await createFixture();
       const spy = sinon.spy();
       ctx.list.addEventListener('forge-list-item-select', spy);
-  
+
       const ignoredElement = document.createElement('button');
       ignoredElement.type = 'button';
       ignoredElement.setAttribute('forge-ignore', '');
       ctx.listItems[0].appendChild(ignoredElement);
-  
+
       await elementUpdated(ctx.list);
       ignoredElement.click();
-  
+
       expect(spy).to.not.have.been.called;
     });
   });
@@ -114,9 +114,9 @@ describe('List', () => {
 
     it('should set selected when value matches list selected value', async () => {
       const ctx = await createFixture({ selectedValue: 'some-value' });
-  
+
       expect(ctx.listItems[1].selected).to.be.false;
-      
+
       ctx.listItems[1].value = 'some-value';
       expect(ctx.listItems[1].selected).to.be.true;
     });
@@ -143,7 +143,7 @@ describe('List', () => {
       await elementUpdated(ctx.list);
 
       expect(ctx.hasStateLayer()).to.be.true;
-      expect(ctx.hasFocusIndicator()).to.be.true; 
+      expect(ctx.hasFocusIndicator()).to.be.true;
     });
   });
 
@@ -269,9 +269,9 @@ describe('List', () => {
       ctx.listItems[1].active = true;
       expect(ctx.listItems[1].active).to.be.true;
       expect(ctx.listItems[1].hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).to.be.true;
-      expect(ctx.listItemActive(0)).to.be.false; 
-      expect(ctx.listItemActive(1)).to.be.true; 
-      expect(ctx.listItemActive(0)).to.be.false; 
+      expect(ctx.listItemActive(0)).to.be.false;
+      expect(ctx.listItemActive(1)).to.be.true;
+      expect(ctx.listItemActive(0)).to.be.false;
     });
 
     it('should not activate focus indicator when clicked', async () => {
@@ -632,7 +632,7 @@ describe('List', () => {
       expect(spy).to.have.been.calledOnce;
     });
   });
-  
+
   describe('noninteractive', () => {
     it('should not attach to nested button if noninteractive', async () => {
       const el = await fixture<IListComponent>(html`
@@ -856,17 +856,10 @@ async function createFixture({
   withRadioButton
 }: ListFixtureConfig = {}): Promise<ListHarness> {
   const el = await fixture<IListComponent>(html`
-    <forge-list
-      ?dense=${dense}
-      ?indented=${indented}
-      ?two-line=${twoLine}
-      ?three-line=${threeLine}
-      ?wrap=${wrap}
-      .selectedValue=${selectedValue}>
+    <forge-list ?dense=${dense} ?indented=${indented} ?two-line=${twoLine} ?three-line=${threeLine} ?wrap=${wrap} .selectedValue=${selectedValue}>
       <forge-list-item value="1">
         <button ?disabled=${disabled}>One</button>
-        ${withCheckbox ? html`<input type="checkbox" slot="end" />` : null}
-        ${withRadioButton ? html`<input type="radio" slot="end" />` : null}
+        ${withCheckbox ? html`<input type="checkbox" slot="end" />` : null} ${withRadioButton ? html`<input type="radio" slot="end" />` : null}
       </forge-list-item>
       <forge-list-item value="2"><button>Two</button></forge-list-item>
       <forge-list-item value="3"><button>Three</button></forge-list-item>
@@ -877,7 +870,7 @@ async function createFixture({
 
 class ListHarness {
   constructor(public list: IListComponent) {}
-  
+
   public get listItems(): IListItemComponent[] {
     return Array.from(this.list.querySelectorAll('forge-list-item'));
   }
@@ -924,8 +917,8 @@ class ListHarness {
 
 function clickElement(el: HTMLElement): Promise<void> {
   const { x, y, width, height } = el.getBoundingClientRect();
-  return sendMouse({ type: 'click', position: [
-    Math.floor(x + window.scrollX + width / 2),
-    Math.floor(y + window.scrollY + height / 2),
-  ]});
+  return sendMouse({
+    type: 'click',
+    position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+  });
 }

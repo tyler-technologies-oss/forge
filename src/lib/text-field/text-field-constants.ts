@@ -15,7 +15,8 @@ const selectors = {
   FIELD: '#field',
   CLEAR_BUTTON_SLOT: 'slot[name=clear-button]',
   FORGE_LABEL: LABEL_CONSTANTS.elementName,
-  INPUT: ':where(input:not([type=button], [type=checkbox], [type=color], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit]), textarea)'
+  INPUT:
+    ':where(input:not([type=button], [type=checkbox], [type=color], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit]), textarea)'
 };
 
 const observedInputAttributes = ['disabled', 'placeholder'] as const;
@@ -39,6 +40,6 @@ export const TEXT_FIELD_CONSTANTS = {
   events
 };
 
-export type TextFieldObservedInputAttributes = typeof observedInputAttributes[number];
+export type TextFieldObservedInputAttributes = (typeof observedInputAttributes)[number];
 export type TextFieldInputAttributeObserver = (name: TextFieldObservedInputAttributes, value: string | null) => void;
 export type TextFieldValueChangeListener = (value: string | null) => void;

@@ -6,10 +6,10 @@
 
 ///
 /// Returns a new color with the same hue and saturation as the input color, but with a different lightness value.
-/// 
+///
 /// Example:
 /// scale(#ff0000, 50%) => #ff6060
-/// 
+///
 /// @param {Color} $color - The input color.
 /// @param {Number} $lightness - The desired lightness percentage to scale `$color` by. Specified as a percentage number between 0 and 100.
 /// @return {Color} - The new color with the same hue and saturation as the input color, but with a different lightness value.
@@ -20,29 +20,29 @@
 
 ///
 /// Creates a new color by applying the specified emphasis to the input color via the alpha channel.
-/// 
+///
 /// Example:
 /// emphasized(#ff0000, 50%) => rgba(255, 0, 0, 0.5)
-/// 
+///
 /// @param {Color} $color - The input color.
 /// @param {Number} $alpha - The desired opacity to apply to `$color`.
 /// @return {Color} - The input color, but with an alpha channel value in `rgba()` format.
-/// 
+///
 @function emphasized($color, $emphasis) {
   @return rgba($color, $emphasis);
 }
 
 ///
 /// Computes the contrast color for the provided color.
-/// 
+///
 /// Example:
 /// contrast(#ff0000) => #ffffff
-/// 
+///
 /// @param {Color} $color - The input color.
 /// @param {Color} $light - The light color to use for contrast. Default to `#ffffff`.
 /// @param {Color} $dark - The dark color to use for contrast. Default to `#000000`.
 /// @return {Color} - The contrast color for the provided color.
-/// 
+///
 @function contrast($color, $alpha: null, $light: #ffffff, $dark: #000000) {
   $contrast-color: if(color-utils.contrast-tone($color) == 'dark', $dark, $light);
   @if $alpha != null {
@@ -53,14 +53,14 @@
 
 ///
 /// Converts a color with an opacity value on top of a specific background color to an opaque hex color.
-/// 
+///
 @function hexify($color, $background, $alpha: 100%) {
   @return if($alpha == 100%, color.mix($background, $color, $alpha), color.mix($background, $color, 100 - $alpha));
 }
 
 ///
 /// Determines if the provided value is a `color` type or not.
-/// 
+///
 @function is-color($value) {
   @return meta.type-of($value) == color;
 }

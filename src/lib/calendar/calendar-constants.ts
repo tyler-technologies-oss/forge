@@ -198,7 +198,26 @@ export type CalendarTooltipBuilder = (date: ICalendarDate, content: string) => s
 export type CalendarMode = 'single' | 'multiple' | 'range';
 export type CalendarView = 'date' | 'month' | 'year';
 export type RangeSelectionState = 'none' | 'from' | 'to';
-export type CalendarEventColor = 'primary' | 'secondary' | 'blue' | 'light-green' | 'cyan' | 'teal' | 'orange' | 'blue-grey' | 'grey' | 'red' | 'pink' | 'purple' | 'light-blue' | 'deep-purple' | 'green' | 'lime' | 'yellow' | 'brown' | 'deep-orange';
+export type CalendarEventColor =
+  | 'primary'
+  | 'secondary'
+  | 'blue'
+  | 'light-green'
+  | 'cyan'
+  | 'teal'
+  | 'orange'
+  | 'blue-grey'
+  | 'grey'
+  | 'red'
+  | 'pink'
+  | 'purple'
+  | 'light-blue'
+  | 'deep-purple'
+  | 'green'
+  | 'lime'
+  | 'yellow'
+  | 'brown'
+  | 'deep-orange';
 
 export interface ICalendarDate {
   date: Date;

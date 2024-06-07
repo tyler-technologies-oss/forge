@@ -20,12 +20,12 @@
   align-items: center;
   gap: #{token(gap)};
   z-index: 0;
-  
+
   background: #{token(background)};
   color: #{token(color)};
   cursor: pointer;
   box-shadow: #{token(shadow)};
-  
+
   box-sizing: border-box;
   height: #{token(density-medium-size)};
   min-width: #{token(density-medium-size)};
@@ -37,7 +37,7 @@
   border-top-right-radius: #{token(shape-start-end)};
   border-bottom-left-radius: #{token(shape-end-start)};
   border-bottom-right-radius: #{token(shape-end-end)};
-  
+
   user-select: none;
   white-space: nowrap;
 
@@ -56,7 +56,7 @@
 
 @mixin extended {
   @include override(padding, extended-padding);
-  
+
   min-width: #{token(extended-min-width)};
 }
 
@@ -109,4 +109,3 @@
   pointer-events: none;
   opacity: #{token(disabled-opacity)};
 }
-

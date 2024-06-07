@@ -51,7 +51,7 @@ blockquote {
 // Tables
 //
 
-.sbdocs.sbdocs-content table :is(td,th) {
+.sbdocs.sbdocs-content table :is(td, th) {
   color: var(--forge-theme-text-high);
   border-color: var(--forge-theme-outline);
 }
@@ -75,7 +75,7 @@ blockquote {
 
 .sbdocs code > span {
   font: inherit;
-  
+
   > a {
     font: inherit;
     color: var(--forge-theme-primary);

@@ -120,7 +120,7 @@ describe('Overlay', () => {
       expect(harness.isInlineOpen).to.be.true;
     });
   });
-  
+
   describe('show/hide', () => {
     it('should set open', async () => {
       const harness = await createFixture();
@@ -196,9 +196,9 @@ describe('Overlay', () => {
       harness.overlayElement.addEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, lightDismissSpy);
 
       harness.overlayElement.open = true;
-      
+
       expect(harness.isOpen).to.be.true;
-      
+
       await elementUpdated(harness.overlayElement);
       await harness.clickOverlay();
 
@@ -276,7 +276,7 @@ describe('Overlay', () => {
 
       await harness.clickOutside();
       expect(harness.isOpen).to.be.true;
-      
+
       harness.overlayElement.persistent = false;
       await harness.clickOutside();
 
@@ -394,7 +394,7 @@ describe('Overlay', () => {
 
     it('should set fallback placements via attribute', async () => {
       const harness = await createFixture();
-        harness.overlayElement.setAttribute(OVERLAY_CONSTANTS.attributes.FALLBACK_PLACEMENTS, 'top,bottom');
+      harness.overlayElement.setAttribute(OVERLAY_CONSTANTS.attributes.FALLBACK_PLACEMENTS, 'top,bottom');
 
       expect(harness.overlayElement.fallbackPlacements).to.deep.equal(['top', 'bottom']);
       expect(harness.overlayElement.getAttribute(OVERLAY_CONSTANTS.attributes.FALLBACK_PLACEMENTS)).to.equal('top,bottom');
@@ -464,7 +464,11 @@ describe('Overlay', () => {
 
   describe('flip', () => {
     it('should flip the overlay to the opposite side when not enough room', async () => {
-      const harness = await createFixture({ open: true, placement: 'left', content: 'This is a really long string that should cause the overlay to flip to the right side.' });
+      const harness = await createFixture({
+        open: true,
+        placement: 'left',
+        content: 'This is a really long string that should cause the overlay to flip to the right side.'
+      });
 
       await harness.positionUpdated();
 
@@ -472,7 +476,12 @@ describe('Overlay', () => {
     });
 
     it('should not flip the overlay to the opposite side when not enough room and flip is false', async () => {
-      const harness = await createFixture({ open: true, placement: 'left', flip: 'never', content: 'This is a really long string that should cause the overlay to flip to the right side.' });
+      const harness = await createFixture({
+        open: true,
+        placement: 'left',
+        flip: 'never',
+        content: 'This is a really long string that should cause the overlay to flip to the right side.'
+      });
 
       await harness.positionUpdated();
 
@@ -480,7 +489,12 @@ describe('Overlay', () => {
     });
 
     it('should only flip on main axis', async () => {
-      const harness = await createFixture({ open: true, placement: 'left', flip: 'main', content: 'This is a really long string that should cause the overlay to flip to the right side.' });
+      const harness = await createFixture({
+        open: true,
+        placement: 'left',
+        flip: 'main',
+        content: 'This is a really long string that should cause the overlay to flip to the right side.'
+      });
 
       await harness.positionUpdated();
 
@@ -490,7 +504,7 @@ describe('Overlay', () => {
     it('should fall back to default flip if null value is provided', async () => {
       const harness = await createFixture();
 
-      harness.overlayElement.flip = null as any;      
+      harness.overlayElement.flip = null as any;
 
       expect(harness.overlayElement.flip).to.equal(OVERLAY_CONSTANTS.defaults.FLIP);
       expect(harness.overlayElement.hasAttribute(OVERLAY_CONSTANTS.attributes.FLIP)).to.be.false;
@@ -527,7 +541,7 @@ describe('Overlay', () => {
     it('should fall back to default hide value if null value is provided', async () => {
       const harness = await createFixture();
 
-      harness.overlayElement.hide = null as any;      
+      harness.overlayElement.hide = null as any;
 
       expect(harness.overlayElement.hide).to.equal(OVERLAY_CONSTANTS.defaults.HIDE);
       expect(harness.overlayElement.hasAttribute(OVERLAY_CONSTANTS.attributes.HIDE)).to.be.false;
@@ -602,7 +616,10 @@ describe('Overlay', () => {
 });
 
 class OverlayHarness {
-  constructor(public overlayElement: IOverlayComponent, public anchorElement: HTMLButtonElement) {}
+  constructor(
+    public overlayElement: IOverlayComponent,
+    public anchorElement: HTMLButtonElement
+  ) {}
 
   public get rootElement(): HTMLElement {
     return this.overlayElement.shadowRoot?.querySelector(OVERLAY_CONSTANTS.selectors.ROOT) as HTMLElement;
@@ -705,7 +722,10 @@ async function createFixture({
   return new OverlayHarness(overlay, button);
 }
 
-async function createNestedFixture({ inline = false } = {}): Promise<{ parentHarness: OverlayHarness, nestedHarness: OverlayHarness }> {
+async function createNestedFixture({ inline = false } = {}): Promise<{
+  parentHarness: OverlayHarness;
+  nestedHarness: OverlayHarness;
+}> {
   const container = await fixture(html`
     <div style="display: flex; justify-content: center; align-items: center; height: 300px; width: 300px;" id="test-boundary">
       <button type="button" id="test-anchor">Overlay Anchor</button>

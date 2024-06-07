@@ -7,7 +7,16 @@ import { IListDropdownAware, ListDropdownAware } from '../list-dropdown/list-dro
 import type { IOverlayOffset } from '../overlay/overlay-constants';
 import { PopoverComponent } from '../popover';
 import { MenuAdapter } from './menu-adapter';
-import { IMenuActiveChangeEventData, IMenuOption, IMenuOptionGroup, IMenuSelectEventData, MenuMode, MenuOptionBuilder, MenuOptionFactory, MENU_CONSTANTS } from './menu-constants';
+import {
+  IMenuActiveChangeEventData,
+  IMenuOption,
+  IMenuOptionGroup,
+  IMenuSelectEventData,
+  MenuMode,
+  MenuOptionBuilder,
+  MenuOptionFactory,
+  MENU_CONSTANTS
+} from './menu-constants';
 import { MenuCore } from './menu-core';
 
 import template from './menu.html';
@@ -49,10 +58,7 @@ declare global {
  */
 @customElement({
   name: MENU_CONSTANTS.elementName,
-  dependencies: [
-    PopoverComponent,
-    ListComponent
-  ]
+  dependencies: [PopoverComponent, ListComponent]
 })
 export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   public static get observedAttributes(): string[] {

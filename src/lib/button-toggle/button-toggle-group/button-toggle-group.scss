@@ -55,7 +55,7 @@ $_host-tokens: [display];
 // Density - Dense
 //
 
-:host(:is([dense],[density=dense])) {
+:host(:is([dense], [density='dense'])) {
   .forge-button-toggle-group {
     @include dense;
   }
@@ -112,13 +112,15 @@ $_host-tokens: [display];
 //
 
 @mixin theme($theme) {
-  :host([theme=#{$theme}]) {
+  :host([theme='#{$theme}']) {
     ::slotted(forge-button-toggle) {
-      @include button-toggle.provide-theme((
-        selected-background: #{theme.variable(#{$theme}-container)},
-        selected-color: #{theme.variable(on-#{$theme}-container)},
-        focus-indicator-color: #{theme.variable($theme)}
-      ));
+      @include button-toggle.provide-theme(
+        (
+          selected-background: #{theme.variable(#{$theme}-container)},
+          selected-color: #{theme.variable(on-#{$theme}-container)},
+          focus-indicator-color: #{theme.variable($theme)}
+        )
+      );
     }
   }
 }

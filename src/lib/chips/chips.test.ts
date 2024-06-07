@@ -81,7 +81,7 @@ describe('Chips', () => {
 
       const chips = getChips(el);
       expect(chips.length).to.equal(3);
-      expect(chips.every(chip => chip.type === 'filter')).to.be.true
+      expect(chips.every(chip => chip.type === 'filter')).to.be.true;
     });
 
     it('should apply type attribute to all child chips when set by property', async () => {
@@ -128,7 +128,7 @@ describe('Chips', () => {
       expect(chips.every(chip => chip.disabled)).to.be.true;
       expect(chips.every(chip => chip.hasAttribute(CHIP_CONSTANTS.attributes.DISABLED))).to.be.true;
     });
-    
+
     it('should apply disabled attribute to all child chips when set by property', async () => {
       const el = await fixture<IChipSetComponent>(html`
         <forge-chip-set>
@@ -300,7 +300,7 @@ describe('Chips', () => {
 
       el.href = href;
 
-      triggerEl = getTriggerElement(el);;
+      triggerEl = getTriggerElement(el);
       expect(triggerEl).to.be.instanceOf(HTMLAnchorElement);
       expect(triggerEl?.getAttribute(CHIP_CONSTANTS.attributes.HREF)).to.equal(href);
     });
@@ -313,7 +313,7 @@ describe('Chips', () => {
 
       el.removeAttribute(CHIP_CONSTANTS.attributes.HREF);
 
-      triggerEl = getTriggerElement(el);;
+      triggerEl = getTriggerElement(el);
       expect(triggerEl).to.be.instanceOf(HTMLButtonElement);
     });
 
@@ -328,16 +328,16 @@ describe('Chips', () => {
     it('should update target attribute when setting property', async () => {
       const el = await fixture<IChipComponent>(html`<forge-chip href="javascript: void(0);">Test</forge-chip>`);
       const anchorEl = getTriggerElement(el) as HTMLAnchorElement;
-      
+
       expect(anchorEl.target).to.equal('');
       expect(el.target).to.be.undefined;
-      
+
       el.target = '_blank';
-      
+
       expect(anchorEl.target).to.equal('_blank');
       expect(el.getAttribute(CHIP_CONSTANTS.attributes.TARGET)).to.equal('_blank');
     });
-    
+
     it('should set anchor download via attribute', async () => {
       const el = await fixture<IChipComponent>(html`<forge-chip href="javascript: void(0);" download="test">Test</forge-chip>`);
       const anchorEl = getTriggerElement(el) as HTMLAnchorElement;
@@ -349,12 +349,12 @@ describe('Chips', () => {
     it('should update download attribute when setting property', async () => {
       const el = await fixture<IChipComponent>(html`<forge-chip href="javascript: void(0);">Test</forge-chip>`);
       const anchorEl = getTriggerElement(el) as HTMLAnchorElement;
-      
+
       expect(anchorEl.download).to.equal('');
       expect(el.download).to.be.undefined;
-      
+
       el.download = 'test';
-      
+
       expect(anchorEl.download).to.equal('test');
       expect(el.getAttribute(CHIP_CONSTANTS.attributes.DOWNLOAD)).to.equal('test');
     });
@@ -370,12 +370,12 @@ describe('Chips', () => {
     it('should update rel attribute when setting property', async () => {
       const el = await fixture<IChipComponent>(html`<forge-chip href="javascript: void(0);">Test</forge-chip>`);
       const anchorEl = getTriggerElement(el) as HTMLAnchorElement;
-      
+
       expect(anchorEl.rel).to.equal('');
       expect(el.rel).to.be.undefined;
-      
+
       el.rel = 'noopener';
-      
+
       expect(anchorEl.rel).to.equal('noopener');
       expect(el.getAttribute(CHIP_CONSTANTS.attributes.REL)).to.equal('noopener');
     });
@@ -734,7 +734,7 @@ describe('Chips', () => {
     it('should reflect updated selected state on event target when dispatching select event', async () => {
       const el = await fixture<IChipComponent>(html`<forge-chip type="choice">Test</forge-chip>`);
       let targetSelected = false;
-      const selectSpy = spy(evt => targetSelected = evt.target?.selected);
+      const selectSpy = spy(evt => (targetSelected = evt.target?.selected));
 
       el.addEventListener(CHIP_CONSTANTS.events.SELECT, selectSpy);
 

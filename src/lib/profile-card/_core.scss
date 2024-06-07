@@ -21,7 +21,6 @@
   }
 }
 
-
 @mixin info-container {
   display: flex;
   align-items: center;
@@ -49,7 +48,6 @@
 
 @mixin email {
   @include typography.style(subheading1);
-  
+
   color: #{theme.variable(text-medium)};
 }
-

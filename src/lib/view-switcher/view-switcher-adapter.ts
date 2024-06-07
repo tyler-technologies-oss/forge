@@ -168,7 +168,12 @@ export class ViewSwitcherAdapter extends BaseAdapter<IViewSwitcherComponent> imp
    * @param toIndex The view index to transition to.
    * @param direction The transition animation direction.
    */
-  public async transitionToView(fromIndex: number, toIndex: number, animationType: ViewSwitcherAnimationType, direction?: ViewAnimationDirection): Promise<void> {
+  public async transitionToView(
+    fromIndex: number,
+    toIndex: number,
+    animationType: ViewSwitcherAnimationType,
+    direction?: ViewAnimationDirection
+  ): Promise<void> {
     const views = this._getViews();
     const fromView = views[fromIndex];
     const toView = views[toIndex];

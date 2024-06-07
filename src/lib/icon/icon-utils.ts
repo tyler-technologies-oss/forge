@@ -11,7 +11,7 @@ export function createSanitizedSvg(svgContent: string | undefined, customViewBox
   if (!svgContent || !svgContent.includes('svg')) {
     return null;
   }
-  
+
   if (!customViewBox && !svgContent.includes('viewBox')) {
     customViewBox = `0 0 ${ICON_CONSTANTS.numbers.DEFAULT_WIDTH} ${ICON_CONSTANTS.numbers.DEFAULT_HEIGHT}`;
   }
@@ -46,7 +46,7 @@ export function fetchIconContent(url: string, name: string): Promise<string> {
       // we don't already have a request
       request = fetch(url).then(async response => {
         if (response.ok) {
-          const data = await response.text() || '';
+          const data = (await response.text()) || '';
           IconRegistry.define({ name, data });
           _activeIconRequests.delete(url);
           return data;

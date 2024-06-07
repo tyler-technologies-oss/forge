@@ -33,7 +33,7 @@ declare global {
 
 /**
  * @tag forge-date-range-picker
- * 
+ *
  * @property {Date | string | null | undefined} [from=null] - Gets/sets the "from" date range value.
  * @property {Date | string | null | undefined} [to=null] - Gets/sets the "to" date range value.
  * @property {string | null | undefined} [value=null] - Gets/sets the date range value.
@@ -61,14 +61,12 @@ declare global {
  */
 @customElement({
   name: DATE_RANGE_PICKER_CONSTANTS.elementName,
-  dependencies: [
-    PopoverComponent,
-    CalendarComponent,
-    IconButtonComponent,
-    IconComponent
-  ]
+  dependencies: [PopoverComponent, CalendarComponent, IconButtonComponent, IconComponent]
 })
-export class DateRangePickerComponent extends BaseDatePickerComponent<IDatePickerRange, IDatePickerRange, DateRangePickerCore> implements IDateRangePickerComponent {
+export class DateRangePickerComponent
+  extends BaseDatePickerComponent<IDatePickerRange, IDatePickerRange, DateRangePickerCore>
+  implements IDateRangePickerComponent
+{
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(BASE_DATE_PICKER_CONSTANTS.observedAttributes),

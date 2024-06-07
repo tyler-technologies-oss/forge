@@ -22,13 +22,13 @@ declare global {
 
 /**
  * @tag forge-backdrop
- * 
+ *
  * @property {boolean} [visible=false] - Whether the backdrop is visible.
  * @property {boolean} [fixed=false] - Whether the backdrop uses "fixed" or "relative" positioning.
- * 
+ *
  * @attribute {boolean} [visible=false] - Whether the backdrop is visible.
  * @attribute {boolean} [fixed=false] - Whether the backdrop uses "fixed" or "relative" positioning.
- * 
+ *
  * @cssproperty --forge-backdrop-background - The backdrop background color.
  * @cssproperty --forge-backdrop-opacity - The backdrop opacity.
  * @cssproperty --forge-backdrop-z-index - The backdrop z-index.
@@ -36,7 +36,7 @@ declare global {
  * @cssproperty --forge-backdrop-enter-animation-easing - The animation easing for the enter animation.
  * @cssproperty --forge-backdrop-exit-animation-duration - The animation duration for the exit animation.
  * @cssproperty --forge-backdrop-exit-animation-easing - The animation easing for the exit animation.
- * 
+ *
  * @csspart root - The root element of the backdrop.
  */
 @customElement({
@@ -106,13 +106,17 @@ export class BackdropComponent extends BaseComponent {
     this._animationController = new AbortController();
 
     const animationComplete = new Promise<void>(resolve => {
-      this._rootElement.addEventListener('animationend', () => {
-        if (!isVisible) {
-          this.removeAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE);
-        }
-        this._rootElement.classList.remove(className);
-        resolve();
-      }, { once: true, signal: this._animationController?.signal });
+      this._rootElement.addEventListener(
+        'animationend',
+        () => {
+          if (!isVisible) {
+            this.removeAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE);
+          }
+          this._rootElement.classList.remove(className);
+          resolve();
+        },
+        { once: true, signal: this._animationController?.signal }
+      );
     });
 
     if (isVisible) {

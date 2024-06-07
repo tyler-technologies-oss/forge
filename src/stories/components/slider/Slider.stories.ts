@@ -17,7 +17,7 @@ const meta = {
   title: 'Components/Slider',
   render: args => {
     const el = customElementStoryRenderer(component, args);
-    
+
     if (args.range) {
       el.setAttribute('data-aria-label-start', 'Start');
       el.setAttribute('data-aria-label-end', 'End');
@@ -35,15 +35,15 @@ const meta = {
   component,
   decorators: [storyStyles(styles)],
   parameters: {
-    docs: { source: { transform: removeInlineStyleTag }}
+    docs: { source: { transform: removeInlineStyleTag } }
   },
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
       exclude: ['labelBuilder', 'name', 'nameStart', 'nameEnd', 'form', 'labels'],
       controls: {
-        value: { 
-          if : { arg: 'range', truthy: false },
+        value: {
+          if: { arg: 'range', truthy: false },
           control: { type: 'range', min: 0, max: 100, step: 1 }
         },
         valueStart: {
@@ -54,11 +54,11 @@ const meta = {
           if: { arg: 'range' },
           control: { type: 'range', min: 0, max: 100, step: 1 }
         },
-        label: { if: { arg: 'range', truthy: false }},
-        labelStart: { if: { arg: 'range' }},
-        labelEnd: { if: { arg: 'range' }}
+        label: { if: { arg: 'range', truthy: false } },
+        labelStart: { if: { arg: 'range' } },
+        labelEnd: { if: { arg: 'range' } }
       }
-    }),
+    })
   },
   args: {
     value: 50,

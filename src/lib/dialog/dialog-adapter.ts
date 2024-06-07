@@ -64,12 +64,15 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
     const role = this._component.getAttribute('role');
     if (!role || !['presentation', 'none'].includes(role)) {
-      this._component[setDefaultAria]({
-        role: this._component.type,
-        ariaModal: this._component.mode === 'modal' || this._component.mode === 'inline-modal' ? 'true' : 'false'
-      }, { setAttribute: true });
+      this._component[setDefaultAria](
+        {
+          role: this._component.type,
+          ariaModal: this._component.mode === 'modal' || this._component.mode === 'inline-modal' ? 'true' : 'false'
+        },
+        { setAttribute: true }
+      );
     }
-    
+
     // Show the dialog (and backdrop) based on modal vs non-modal
     const isModal = this._component.mode === 'modal' || this._component.mode === 'inline-modal';
     if (isModal) {
@@ -98,16 +101,22 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   }
 
   private _showBackdropMostRecent(): void {
-    Array.from(DialogComponent[dialogStack]).filter(dialog => dialog.mode === 'modal' || dialog.mode === 'inline-modal').at(-1)?.[showBackdrop]();
+    Array.from(DialogComponent[dialogStack])
+      .filter(dialog => dialog.mode === 'modal' || dialog.mode === 'inline-modal')
+      .at(-1)
+      ?.[showBackdrop]();
   }
 
   public async hide(): Promise<void> {
     const role = this._component.getAttribute('role');
     if (!role || !['presentation', 'none'].includes(role)) {
-      this._component[setDefaultAria]({
-        role: null,
-        ariaModal: null
-      }, { setAttribute: true });
+      this._component[setDefaultAria](
+        {
+          role: null,
+          ariaModal: null
+        },
+        { setAttribute: true }
+      );
     }
 
     const close = (): void => {

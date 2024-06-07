@@ -32,25 +32,29 @@ $_host-tokens: [display];
   @include base;
 
   forge-state-layer {
-    @include state-layer.provide-theme((
-      color: #{token(color)}
-    ));
+    @include state-layer.provide-theme(
+      (
+        color: #{token(color)}
+      )
+    );
   }
 
   forge-focus-indicator {
-    @include focus-indicator.provide-theme((
-      outward-offset: #{token(focus-indicator-offset)},
-      color: #{token(focus-indicator-color)},
-      shape: #{token(shape)},
-      shape-start-start: #{token(shape-start-start)},
-      shape-start-end: #{token(shape-start-end)},
-      shape-end-start: #{token(shape-end-start)},
-      shape-end-end: #{token(shape-end-end)},
-    ));
+    @include focus-indicator.provide-theme(
+      (
+        outward-offset: #{token(focus-indicator-offset)},
+        color: #{token(focus-indicator-color)},
+        shape: #{token(shape)},
+        shape-start-start: #{token(shape-start-start)},
+        shape-start-end: #{token(shape-start-end)},
+        shape-end-start: #{token(shape-end-start)},
+        shape-end-end: #{token(shape-end-end)}
+      )
+    );
   }
 }
 
-::slotted(:is([slot=start],[slot=end])) {
+::slotted(:is([slot='start'], [slot='end'])) {
   font-size: #{token(icon-size)};
 }
 
@@ -71,7 +75,7 @@ $_host-tokens: [display];
 :host([disabled]) {
   @include host-disabled;
   cursor: not-allowed;
-  
+
   .forge-button-toggle {
     @include disabled;
   }

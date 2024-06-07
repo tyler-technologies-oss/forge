@@ -9,7 +9,7 @@ For convenience Forge provides the `<forge-app-bar-profile-button>` component. T
 
 If necessary, you can use the `profileCardBuilder` API to provide custom content within the profile card popup.
 
->It is expected that you place this component in the end slot of the app-bar for consistency and familiarity for users.
+> It is expected that you place this component in the end slot of the app-bar for consistency and familiarity for users.
 
 ## Common
 
@@ -18,11 +18,12 @@ A common usage of the profile button will require you to provide some basic info
 <Canvas of={ProfileStories.Demo} />
 
 ## Custom content
+
 The profile card allows for custom content to be placed within its template. This is provided in the form of a callback that you can use to generate DOM that the component will render for you. You will need to use JavaScript to accomplish this.
 
 The following snippet demonstrates basic usage in vanilla JavaScript. You could alternatively dynamically created an Angular component for instance and return a reference to its host element to render within the profile card. Don't forget to clean up the element to avoid memory leaks in this scenario.
 
-``` typescript
+```typescript
 profileButton.profileCardBuilder = () => {
   const list = document.createElement('forge-list');
   // ...
@@ -35,4 +36,5 @@ profileButton.profileCardBuilder = () => {
 <CustomArgTypes />
 
 ## Accessibility
+
 - The component will handle adding necessary ARIA attributes for you, as well as ensure the proper color contrast ratio is used.

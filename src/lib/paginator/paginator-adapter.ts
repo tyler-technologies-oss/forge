@@ -185,21 +185,15 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   }
 
   public setFocus(options?: FocusOptions): void {
-    this._tryFocus([
-      this._pageSizeSelect,
-      this._firstPageButton,
-      this._previousPageButton,
-      this._nextPageButton,
-      this._lastPageButton
-    ], options);
+    this._tryFocus([this._pageSizeSelect, this._firstPageButton, this._previousPageButton, this._nextPageButton, this._lastPageButton], options);
   }
 
   public tryDisableFields(fieldsToDisable: PaginatorFieldIdentifier[]): void {
     const fieldDisablers = {
-      'first': () => this.setFirstPageButtonEnabled(false),
-      'last': () => this.setLastPageButtonEnabled(false),
-      'previous': () => this.setPreviousPageButtonEnabled(false),
-      'next': () => this.setNextPageButtonEnabled(false)
+      first: () => this.setFirstPageButtonEnabled(false),
+      last: () => this.setLastPageButtonEnabled(false),
+      previous: () => this.setPreviousPageButtonEnabled(false),
+      next: () => this.setNextPageButtonEnabled(false)
     };
     fieldsToDisable.forEach(field => fieldDisablers[field]?.());
   }

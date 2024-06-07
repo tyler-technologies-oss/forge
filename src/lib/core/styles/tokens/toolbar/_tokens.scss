@@ -11,25 +11,21 @@ $tokens: (
   background: utils.module-val(toolbar, background, theme.variable(surface)),
   height: utils.module-val(toolbar, height, 56px),
   min-height: utils.module-ref(toolbar, min-height, height),
-  
   // Divider
   divider-width: utils.module-val(toolbar, divider-width, border.variable(thin)),
   divider-style: utils.module-val(toolbar, divider-style, solid),
   divider-color: utils.module-val(toolbar, divider-color, theme.variable(outline)),
-
   // Shape
   shape: utils.module-val(toolbar, shape, shape.variable(medium)),
   start-start-shape: utils.module-ref(toolbar, start-start-shape, shape),
   start-end-shape: utils.module-ref(toolbar, start-end-shape, shape),
   end-start-shape: utils.module-val(toolbar, end-start-shape, 0),
   end-end-shape: utils.module-val(toolbar, end-end-shape, 0),
-
   // Spacing
   padding: utils.module-val(toolbar, padding, spacing.variable(medium)),
   padding-block: utils.module-val(toolbar, padding-block, 0),
-  padding-inline: utils.module-ref(toolbar, padding-inline, padding),
+  padding-inline: utils.module-ref(toolbar, padding-inline, padding)
 ) !default;
-
 
 @function get($key) {
   @return map.get($tokens, $key);

@@ -33,7 +33,7 @@
 // Title
 //
 
-::slotted([slot=title]) {
+::slotted([slot='title']) {
   @include title;
 }
 
@@ -41,7 +41,7 @@
 // Icon
 //
 
-::slotted([slot=icon]) {
+::slotted([slot='icon']) {
   @include icon;
 }
 
@@ -50,7 +50,7 @@
 //
 
 @each $theme in [primary secondary tertiary success warning] {
-  :host([theme=#{$theme}]) {
+  :host([theme='#{$theme}']) {
     .forge-inline-message {
       @if $theme == 'secondary' {
         @include override(background, theme.variable(secondary-container), value);
@@ -66,7 +66,7 @@
 }
 
 // Map both "error" and "danger" for backwards compatibility with "danger" theme
-:host(:is([theme=error],[theme=danger])) {
+:host(:is([theme='error'], [theme='danger'])) {
   .forge-inline-message {
     @include override(background, theme.variable(error-container-low), value);
     @include override(icon-color, theme.variable(on-error-container-low), value);
@@ -74,7 +74,7 @@
   }
 }
 
-:host([theme=info-secondary]) {
+:host([theme='info-secondary']) {
   .forge-inline-message {
     @include override(background, theme.variable(surface-container-low), value);
     @include override(icon-color, theme.variable(on-surface-container-low), value);

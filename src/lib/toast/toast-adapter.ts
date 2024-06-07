@@ -34,7 +34,7 @@ export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToast
   public show(): void {
     this._overlayElement.open = true;
   }
-  
+
   public async hide(): Promise<void> {
     await playKeyframeAnimation(this._surfaceElement, TOAST_CONSTANTS.classes.EXITING);
     this._overlayElement.open = false;

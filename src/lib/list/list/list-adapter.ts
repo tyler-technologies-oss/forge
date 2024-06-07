@@ -27,7 +27,7 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
   }
 
   public setListItemsProperty<T extends keyof IListItemComponent>(property: T, value: IListItemComponent[T]): void {
-    this._getOwnListItems().forEach(listItem => listItem[property] = value);
+    this._getOwnListItems().forEach(listItem => (listItem[property] = value));
   }
 
   private _getOwnListItems(): IListItemComponent[] {

@@ -36,7 +36,4 @@ export const SELECT_CONSTANTS = {
   events
 };
 
-export {
-  type FieldDensity as SelectDensityType,
-  type FieldShape as SelectShapeType
-} from '../../field/base/base-field-constants';
+export { type FieldDensity as SelectDensityType, type FieldShape as SelectShapeType } from '../../field/base/base-field-constants';

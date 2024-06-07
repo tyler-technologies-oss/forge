@@ -33,7 +33,7 @@ const meta = {
         </forge-stack>
       </div>
     `;
-  },  
+  },
   parameters: {
     actions: { disable: true }
   },
@@ -43,9 +43,9 @@ const meta = {
       controls: {
         alignment: { control: 'select', options: ['start', 'center', 'end'] },
         justify: { control: 'select', options: ['start', 'center', 'end'] },
-        gap: { control: { type: 'range', min: 0, max: 100, step: 1 }},
+        gap: { control: { type: 'range', min: 0, max: 100, step: 1 } }
       }
-    }),
+    })
   },
   args: {
     inline: false,
@@ -53,8 +53,8 @@ const meta = {
     stretch: false,
     gap: 16,
     alignment: 'start',
-    justify: 'start',
-  },
+    justify: 'start'
+  }
 } satisfies Meta;
 
 export default meta;
@@ -62,7 +62,7 @@ export default meta;
 type Story = StoryObj;
 
 export const Demo: Story = {
-  decorators: [storyStyles(styles)],
+  decorators: [storyStyles(styles)]
 };
 
 export const SimpleVerticalForm: Story = {
@@ -107,45 +107,45 @@ export const SimpleVerticalForm: Story = {
 
 export const ComplexForm: Story = {
   ...standaloneStoryParams,
-  render: () => {    
+  render: () => {
     return html`
       <form>
         <forge-stack>
+          <forge-stack>
             <forge-stack>
-              <forge-stack>
+              <forge-text-field>
+                <label for="input-text-01">Text field</label>
+                <input type="text" id="input-text-1" />
+              </forge-text-field>
+              <forge-stack inline stretch>
                 <forge-text-field>
-                  <label for="input-text-01">Text field</label>
-                  <input type="text" id="input-text-1" />
+                  <label for="input-text-2">Text field</label>
+                  <input type="text" id="input-text-2" />
                 </forge-text-field>
-                <forge-stack inline stretch>
-                  <forge-text-field>
-                    <label for="input-text-2">Text field</label>
-                    <input type="text" id="input-text-2" />
-                  </forge-text-field>
-                  <forge-text-field>
-                    <label for="input-text-3">Text field</label>
-                    <input type="text" id="input-text-3" />
-                  </forge-text-field>
-                </forge-stack>
+                <forge-text-field>
+                  <label for="input-text-3">Text field</label>
+                  <input type="text" id="input-text-3" />
+                </forge-text-field>
+              </forge-stack>
+            </forge-stack>
+            <forge-stack inline stretch>
+              <forge-stack inline stretch>
+                <forge-text-field>
+                  <input type="text" id="input-text-4" />
+                  <label for="input-text-4">Text field</label>
+                </forge-text-field>
+                <forge-text-field>
+                  <input type="text" id="input-text-5" />
+                  <label for="input-text-5">Text field</label>
+                </forge-text-field>
               </forge-stack>
               <forge-stack inline stretch>
-                <forge-stack inline stretch>
-                  <forge-text-field>
-                    <input type="text" id="input-text-4" />
-                    <label for="input-text-4">Text field</label>
-                  </forge-text-field>
-                  <forge-text-field>
-                    <input type="text" id="input-text-5" />
-                    <label for="input-text-5">Text field</label>
-                  </forge-text-field>
-                </forge-stack>
-                <forge-stack inline stretch>
-                  <forge-text-field>
-                    <input type="text" id="input-text-6" />
-                    <label for="input-text-6">Text field</label>
-                  </forge-text-field>
-                </forge-stack>
+                <forge-text-field>
+                  <input type="text" id="input-text-6" />
+                  <label for="input-text-6">Text field</label>
+                </forge-text-field>
               </forge-stack>
+            </forge-stack>
           </forge-stack>
         </forge-stack>
       </form>

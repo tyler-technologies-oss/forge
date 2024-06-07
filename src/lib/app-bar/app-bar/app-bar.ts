@@ -27,19 +27,19 @@ declare global {
 
 /**
  * @tag forge-app-bar
- * 
+ *
  * @description App bars are a collection of components placed as a horizontal bar at the top of the screen. They typically contain a logo, title, and optional application-wide actions.
- * 
+ *
  * @property {string} titleText - The text to display in the title.
  * @property {AppBarElevation} elevation - The elevation of the app bar.
  * @property {AppBarTheme} theme - The theme of the app bar.
  * @property {string} href - The href that will be used to make the logo and title area a clickable link.
- * 
+ *
  * @attribute {string} title-text - The text to display in the title.
  * @attribute {string} elevation - The elevation of the app bar.
  * @attribute {string} theme - The theme of the app bar.
  * @attribute {string} href - The href that will be used to make the logo and title area a clickable link
- * 
+ *
  * @cssproperty --forge-app-bar-background - The background color of the app bar.
  * @cssproperty --forge-app-bar-foreground - The text color of the app bar.
  * @cssproperty --forge-app-bar-z-index - The `z-index` of the app bar.
@@ -50,12 +50,12 @@ declare global {
  * @cssproperty --forge-app-bar-title-padding - The padding around the title element.
  * @cssproperty --forge-app-bar-transition-duration - The transition duration for animations.
  * @cssproperty --forge-app-bar-transition-timing - The transition timing function for animations.
- * 
+ *
  * @event {CustomEvent<void>} forge-app-bar-navigate - Fires when the app bar is clicked.
- * 
+ *
  * @csspart root - The root container element.
  * @csspart title - The title element.
- * 
+ *
  * @slot logo - Reserved for the brand logo.
  * @slot title - Reserved for the application title. This will overwrite the `titleText` property/attribute.
  * @slot start - Places content at the beginning of the app bar.

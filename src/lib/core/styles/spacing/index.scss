@@ -5,7 +5,7 @@
 
 ///
 /// Emits custom property declarations for all spacing theme tokens.
-/// 
+///
 @mixin properties {
   @each $token-name, $token-value in tokens.$tokens {
     @include utils.declare-var(spacing, $token-name, $token-value);
@@ -14,28 +14,28 @@
 
 ///
 /// Gets a spacing token value.
-/// 
+///
 @function value($key) {
   @return tokens.get($key);
 }
 
 ///
 /// Gets a CSS custom property declaration for a specific spacing token with its token value as the fallback value.
-/// 
+///
 /// Example:
 /// ```scss
 /// .my-class {
 ///   margin: spacing.variable(medium); // => margin: var(--forge-spacing-medium, 16px);
 /// }
 /// ```
-/// 
+///
 @function variable($key, $prefix: config.$prefix) {
   @return utils.variable(spacing, tokens.$tokens, $key, $prefix);
 }
 
 ///
 /// Generates CSS custom property declarations for the provided spacing tokens.
-/// 
+///
 @mixin provide($tokens, $prefix: config.$prefix) {
   @include utils.provide(tokens.$tokens, $tokens, spacing, $prefix);
 }

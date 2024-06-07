@@ -45,4 +45,3 @@ export const TAB_CONSTANTS = {
   strings,
   numbers
 };
-

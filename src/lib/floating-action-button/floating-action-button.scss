@@ -54,36 +54,40 @@ $host-tokens: [display disabled-cursor];
 //
 
 forge-focus-indicator {
-  @include focus-indicator.provide-theme((
-    color: #{token(background)},
-    shape-start-start: #{token(shape-start-start)},
-    shape-start-end: #{token(shape-start-end)},
-    shape-end-start: #{token(shape-end-start)},
-    shape-end-end: #{token(shape-end-end)}
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(background)},
+      shape-start-start: #{token(shape-start-start)},
+      shape-start-end: #{token(shape-start-end)},
+      shape-end-start: #{token(shape-end-start)},
+      shape-end-end: #{token(shape-end-end)}
+    )
+  );
 }
 
 //
-// State layer 
+// State layer
 //
 
 forge-state-layer {
-  @include state-layer.provide-theme((
-    color: #{token(color)}
-  ));
+  @include state-layer.provide-theme(
+    (
+      color: #{token(color)}
+    )
+  );
 }
 
 //
 // Density (only when not "extended")
 //
 
-:host(:is([dense],[density=small])) {
+:host(:is([dense], [density='small'])) {
   .forge-fab {
     @include density-small;
   }
 }
 
-:host([density=large]) {
+:host([density='large']) {
   .forge-fab {
     @include density-large;
   }
@@ -93,7 +97,7 @@ forge-state-layer {
 // Elevation
 //
 
-:host([elevation=lowered]) {
+:host([elevation='lowered']) {
   .forge-fab {
     @include lowered;
   }
@@ -116,7 +120,7 @@ forge-state-layer {
 //
 
 @mixin theme($theme) {
-  :host([theme=#{$theme}]:not([disabled])) {
+  :host([theme='#{$theme}']:not([disabled])) {
     .forge-fab {
       @include override(background, theme.variable($theme), value);
       @include override(color, theme.variable(on-#{$theme}), value);

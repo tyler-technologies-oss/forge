@@ -22,7 +22,17 @@ import { roundByDPR } from './utils';
 export type PositionPlacement = Placement;
 export type PositionStrategy = Strategy;
 
-export const DEFAULT_FALLBACK_PLACEMENTS: PositionPlacement[] = ['top-start', 'top', 'top-end', 'left-start', 'left', 'left-end', 'right-start', 'right', 'right-end'];
+export const DEFAULT_FALLBACK_PLACEMENTS: PositionPlacement[] = [
+  'top-start',
+  'top',
+  'top-end',
+  'left-start',
+  'left',
+  'left-end',
+  'right-start',
+  'right',
+  'right-end'
+];
 
 export interface IPositionElementResult {
   x: number;
@@ -37,7 +47,8 @@ export class VirtualElement {
     public x: number,
     public y: number,
     public height = 0,
-    public width = 0) {}
+    public width = 0
+  ) {}
 
   public getBoundingClientRect(): DOMRect {
     return {
@@ -147,7 +158,8 @@ export async function positionElementAsync({
   if (hide) {
     middleware.push(hideMiddleware(hideOptions));
   }
-  if (arrowElement) { // Must come before the topLayer middleware
+  if (arrowElement) {
+    // Must come before the topLayer middleware
     middleware.push(arrowMiddleware({ ...arrowOptions, element: arrowElement }));
   }
 

@@ -6,9 +6,9 @@
   * {
     box-sizing: border-box;
   }
-  
+
   .forge-color-picker {
-    @include base;    
+    @include base;
 
     &__input {
       @include input;
@@ -20,7 +20,7 @@
       &-color {
         @include gradient-color;
       }
-      
+
       &-thumb {
         @include gradient-thumb;
       }
@@ -40,7 +40,7 @@
 
     &__slider {
       position: relative;
-      
+
       &-thumb {
         outline: none;
         height: 16px;
@@ -52,7 +52,7 @@
         top: calc(50% - 8px);
         margin-left: -8px;
         transition: left 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
-        
+
         &--active {
           transition: none;
         }
@@ -65,10 +65,12 @@
 
     &__color-preview-container {
       border-radius: 50%;
-      box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.54) inset, 0 0 2px 0 rgba(0, 0, 0, 0.54);
+      box-shadow:
+        0 0 2px 0 rgba(0, 0, 0, 0.54) inset,
+        0 0 2px 0 rgba(0, 0, 0, 0.54);
       overflow: hidden;
     }
-    
+
     &__color-preview {
       height: 32px;
       width: 32px;
@@ -94,8 +96,8 @@
       input {
         @include typography.style(label2);
 
-        &[type=number],
-        &[type=text] {
+        &[type='number'],
+        &[type='text'] {
           border-color: #{theme.variable(outline)};
           color: #{theme.variable(on-surface)};
           background-color: transparent;
@@ -119,7 +121,7 @@
           }
         }
 
-        &[type=number] {
+        &[type='number'] {
           text-align: center;
 
           &::-webkit-inner-spin-button,
@@ -148,7 +150,7 @@
       height: 8px;
       background: linear-gradient(to right, #f00 0, #ff0 16%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 84%, #ff0004 100%);
     }
-    
+
     &__opacity-slider {
       height: 8px;
       margin-top: 16px;
@@ -216,5 +218,7 @@
   position: absolute;
   touch-action: none;
   user-select: none;
-  transition: left 200ms cubic-bezier(0.25, 0.8, 0.25, 1) 0s, top 200ms cubic-bezier(0.25, 0.8, 0.25, 1) 0s;
+  transition:
+    left 200ms cubic-bezier(0.25, 0.8, 0.25, 1) 0s,
+    top 200ms cubic-bezier(0.25, 0.8, 0.25, 1) 0s;
 }

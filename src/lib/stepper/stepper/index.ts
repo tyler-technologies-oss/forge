@@ -9,4 +9,3 @@ export * from './stepper-core';
 export function defineStepperComponent(): void {
   defineCustomElement(StepperComponent);
 }
-

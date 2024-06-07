@@ -125,7 +125,7 @@ export function mergeDateWithTime(date: Date, time: string, useSeconds = false):
   }
 
   let hours = millisToHours(millis);
-  
+
   const twentyThreeHoursInMillis = 82800000;
   if (hours > twentyThreeHoursInMillis) {
     hours = twentyThreeHoursInMillis;

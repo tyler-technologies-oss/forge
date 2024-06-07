@@ -10,10 +10,7 @@ import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs
 import '@tylertech/forge/menu';
 import '@tylertech/forge/split-button';
 
-IconRegistry.define([
-  tylIconScheduleSend,
-  tylIconBookmarkBorder
-]);
+IconRegistry.define([tylIconScheduleSend, tylIconBookmarkBorder]);
 
 const component = 'forge-split-button';
 
@@ -21,11 +18,16 @@ const meta = {
   title: 'Components/Split Button',
   render: args => {
     const options: IMenuOption[] = [
-      { label: 'Schedule send', value: 'schedule', leadingIcon: tylIconScheduleSend.name, leadingIconType: 'component' },
-      { label: 'Save draft', value: 'draft', leadingIcon: tylIconBookmarkBorder.name, leadingIconType: 'component' },
+      {
+        label: 'Schedule send',
+        value: 'schedule',
+        leadingIcon: tylIconScheduleSend.name,
+        leadingIconType: 'component'
+      },
+      { label: 'Save draft', value: 'draft', leadingIcon: tylIconBookmarkBorder.name, leadingIconType: 'component' }
     ];
 
-    const cssVarArgs = getCssVariableArgs(args)
+    const cssVarArgs = getCssVariableArgs(args);
 
     return html`
       <forge-split-button
@@ -51,9 +53,9 @@ const meta = {
       tagName: component,
       controls: {
         variant: { control: { type: 'select' }, options: ['text', 'outlined', 'filled', 'raised'] },
-        theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS },
+        theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS }
       }
-    }),
+    })
   },
   args: {
     variant: 'raised',
@@ -61,7 +63,7 @@ const meta = {
     disabled: false,
     dense: false,
     pill: false
-  },
+  }
 } satisfies Meta;
 
 export default meta;

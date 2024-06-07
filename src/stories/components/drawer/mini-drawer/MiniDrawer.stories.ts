@@ -22,18 +22,13 @@ const component = 'forge-mini-drawer';
 const afterOpenAction = action('forge-drawer-after-open');
 const afterCloseAction = action('forge-drawer-after-close');
 
-IconRegistry.define([
-  tylIconInbox,
-  tylIconSend,
-  tylIconDrafts,
-  tylIconEmail
-]);
+IconRegistry.define([tylIconInbox, tylIconSend, tylIconDrafts, tylIconEmail]);
 
 const meta = {
   title: 'Components/Drawer/Mini Drawer',
   render: args => {
     const drawerRef = createRef<IMiniDrawerComponent>();
-    
+
     function toggleDrawer() {
       const drawer = drawerRef.value as IMiniDrawerComponent;
       drawer.open = !drawer.open;
@@ -75,9 +70,7 @@ const meta = {
 
         <main slot="body" style="padding: 16px; background-color: var(--forge-theme-surface-dim);">
           <forge-card>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
           </forge-card>
         </main>
       </forge-scaffold>
@@ -90,13 +83,13 @@ const meta = {
       controls: {
         direction: { control: 'select', options: ['left', 'right'] }
       }
-    }),
+    })
   },
   args: {
     open: true,
     hover: false,
     direction: 'left'
-  },
+  }
 } satisfies Meta;
 
 export default meta;

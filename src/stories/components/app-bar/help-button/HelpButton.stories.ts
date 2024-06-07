@@ -9,7 +9,7 @@ import '@tylertech/forge/open-icon';
 import { IMenuOption } from '@tylertech/forge';
 
 const component = 'forge-app-bar-help-button';
-const options: IMenuOption[] = [{ label: 'Help', value: 'help'}];
+const options: IMenuOption[] = [{ label: 'Help', value: 'help' }];
 
 const meta = {
   title: 'Components/App Bar/Help Button',
@@ -24,8 +24,7 @@ const meta = {
       exclude: ['options', 'icon']
     })
   },
-  args: {
-  },
+  args: {}
 } satisfies Meta;
 
 export default meta;
@@ -35,10 +34,9 @@ type Story = StoryObj;
 export const Demo: Story = {
   render: () => {
     return html`
-    <forge-app-bar title-text="Help Icon">
-      <forge-app-bar-help-button slot="end" .options=${options}>
-      </forge-app-bar-help-button>
-    </forge-app-bar>
+      <forge-app-bar title-text="Help Icon">
+        <forge-app-bar-help-button slot="end" .options=${options}> </forge-app-bar-help-button>
+      </forge-app-bar>
     `;
   }
 };

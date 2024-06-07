@@ -65,7 +65,7 @@ export class AvatarCore implements IAvatarCore {
       text = value[0].toUpperCase();
     } else {
       const words = value.match(/\S+/g) || [];
-      text = words.slice(0, count).reduce((prev, curr) => prev += curr[0].toUpperCase(), '');
+      text = words.slice(0, count).reduce((prev, curr) => (prev += curr[0].toUpperCase()), '');
     }
 
     return text;

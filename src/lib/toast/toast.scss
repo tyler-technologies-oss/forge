@@ -37,15 +37,19 @@
   }
 
   forge-button.action-button {
-    @include button.provide-theme((
-      primary-color: #{token(action-color)}
-    ));
+    @include button.provide-theme(
+      (
+        primary-color: #{token(action-color)}
+      )
+    );
   }
 
   forge-icon-button.close-button {
-    @include icon-button.provide-theme((
-      focus-indicator-color: #{token(color)}
-    ));
+    @include icon-button.provide-theme(
+      (
+        focus-indicator-color: #{token(color)}
+      )
+    );
   }
 
   :host(:not([dismissible])) {
@@ -67,7 +71,7 @@
 
 @layer theme {
   @each $theme in (primary, secondary, tertiary, success, warning, error, info) {
-    :host([theme=#{$theme}]) {
+    :host([theme='#{$theme}']) {
       .surface {
         @include override(background, theme.variable($theme), value);
         @include override(color, theme.variable(on-#{$theme}), value);
@@ -78,11 +82,10 @@
 }
 
 @layer open {
-
   //
   // Open
   //
- 
+
   forge-overlay[open] {
     .surface {
       @include open;
@@ -99,14 +102,14 @@
   // Placement
   //
 
-  :host([placement=bottom-start]) {
+  :host([placement='bottom-start']) {
     .surface {
       bottom: 0;
       left: 0;
     }
   }
 
-  :host(:is(:not([placement]),[placement=bottom])) {
+  :host(:is(:not([placement]), [placement='bottom'])) {
     .surface {
       bottom: 0;
       left: 50%;
@@ -114,14 +117,14 @@
     }
   }
 
-  :host([placement=bottom-end]) {
+  :host([placement='bottom-end']) {
     .surface {
       bottom: 0;
       right: 0;
     }
   }
 
-  :host([placement=top-start]) {
+  :host([placement='top-start']) {
     .surface {
       @include override(slide-origin, -100%, value);
 
@@ -130,7 +133,7 @@
     }
   }
 
-  :host([placement=top]) {
+  :host([placement='top']) {
     .surface {
       @include override(slide-origin, -100%, value);
 
@@ -140,7 +143,7 @@
     }
   }
 
-  :host([placement=top-end]) {
+  :host([placement='top-end']) {
     .surface {
       @include override(slide-origin, -100%, value);
 
@@ -164,7 +167,7 @@
   }
 
   @include media.phone-only {
-    :host([placement^=top]) {
+    :host([placement^='top']) {
       .surface {
         bottom: auto;
         top: 0;

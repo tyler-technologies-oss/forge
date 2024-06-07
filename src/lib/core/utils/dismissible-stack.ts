@@ -20,7 +20,7 @@ export class DismissibleStack<T extends IDismissible> {
 
   /**
    * A promise that resolves when all elements in the stack have finished dismissing.
-   * 
+   *
    * Resolves immediately if there are no elements in the stack.
    */
   public get dismissing(): Promise<void> {
@@ -29,7 +29,7 @@ export class DismissibleStack<T extends IDismissible> {
 
   /**
    * A set of all elements that are currently eligible for dismissal.
-   * 
+   *
    * Typically used when a user is force dismissing an element, such as when they click
    * an element that triggered it to open.
    */
@@ -38,7 +38,7 @@ export class DismissibleStack<T extends IDismissible> {
   /**
    * A map of all elements that are requesting to be dismissed, and the state that they
    * are requesting to dismiss with.
-   * 
+   *
    * This is used to queue up dismiss requests so that we can wait for all other elements
    * to dispatch their dismiss events, typically used with light dismiss.
    */
@@ -75,9 +75,9 @@ export class DismissibleStack<T extends IDismissible> {
    * Queues an element to be dismissed. This allows for us to asynchronously wait for all
    * other elements to dispatch their dismiss events so that consumers can cancel the dismiss
    * if they want to, without closing their parent dismissible elements.
-   * @param el 
-   * @param dismissState 
-   * @returns 
+   * @param el
+   * @param dismissState
+   * @returns
    */
   public async requestDismiss(el: T, dismissState: IDismissibleStackState): Promise<void> {
     if (!this._deferredDismiss) {
@@ -99,7 +99,7 @@ export class DismissibleStack<T extends IDismissible> {
     // Get all elements that are requesting to be dismissed, and reverse the order so that
     // we can attempt to dismiss them in a top-down order (most recently opened first)
     const elements = Array.from(this._elementsRequestingDismiss).reverse();
-    
+
     // Clear all elements from the stack since we are don't need references to them anymore
     this._elementsRequestingDismiss.clear();
 
@@ -119,7 +119,7 @@ export class DismissibleStack<T extends IDismissible> {
 
   /**
    * Adds an element to the dismissible queue.
-   * 
+   *
    * Use this when an element is opened and should be eligible for dismissal in a stack of other
    * dismissible elements.
    */
@@ -129,7 +129,7 @@ export class DismissibleStack<T extends IDismissible> {
 
   /**
    * Removes an element from the dismissible queue.
-   * 
+   *
    * Use this when an element is closed and should no longer be eligible for dismissal in a stack.
    */
   public remove(el: T): void {
@@ -154,7 +154,7 @@ export class DismissibleStack<T extends IDismissible> {
   /**
    * Checks if an element is the most recent element in the dismissible queue.
    * @param el The element to check.
-   * @returns 
+   * @returns
    */
   public isMostRecent(el: T): boolean {
     const elements = Array.from(this._dismissibleElements);

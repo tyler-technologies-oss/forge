@@ -14,10 +14,7 @@ const component = 'forge-tab-bar';
 const changeAction = action('forge-tab-bar-change');
 const selectAction = action('forge-tab-select');
 
-IconRegistry.define([
-  tylIconFavorite,
-  tylIconForgeLogo
-]);
+IconRegistry.define([tylIconFavorite, tylIconForgeLogo]);
 
 const meta = {
   title: 'Components/Tabs',
@@ -32,12 +29,13 @@ const meta = {
 
     const style = Object.entries(styles).length ? styleMap(styles) : nothing;
 
-    const tabs = Array.from({ length: args.scrollButtons ? 20 : 3 }).map((_, i) =>
-      html`<forge-tab>
-        ${args.startIcon ? html`<forge-icon slot="start" name="favorite"></forge-icon>` : nothing}
-        Tab ${i + 1}
-        ${args.endIcon ? html`<forge-icon slot="end" name="forge_logo"></forge-icon>` : nothing}
-      </forge-tab>`);
+    const tabs = Array.from({ length: args.scrollButtons ? 20 : 3 }).map(
+      (_, i) =>
+        html`<forge-tab>
+          ${args.startIcon ? html`<forge-icon slot="start" name="favorite"></forge-icon>` : nothing} Tab ${i + 1}
+          ${args.endIcon ? html`<forge-icon slot="end" name="forge_logo"></forge-icon>` : nothing}
+        </forge-tab>`
+    );
 
     return html`
       <forge-tab-bar
@@ -59,7 +57,7 @@ const meta = {
   },
   component,
   subcomponents: {
-    'Tab': 'forge-tab',
+    Tab: 'forge-tab'
   },
   argTypes: {
     ...generateCustomElementArgTypes({
@@ -69,7 +67,7 @@ const meta = {
       }
     }),
     startIcon: { control: { type: 'boolean' } },
-    endIcon: { control: { type: 'boolean' } },
+    endIcon: { control: { type: 'boolean' } }
   },
   args: {
     startIcon: false,
@@ -82,8 +80,8 @@ const meta = {
     secondary: false,
     inverted: false,
     autoActivate: false,
-    scrollButtons: false,
-  },
+    scrollButtons: false
+  }
 } satisfies Meta;
 
 export default meta;
@@ -93,7 +91,7 @@ type Story = StoryObj;
 export const Demo: Story = {};
 
 export const Secondary: Story = {
-  args: { 
+  args: {
     secondary: true
   }
 };

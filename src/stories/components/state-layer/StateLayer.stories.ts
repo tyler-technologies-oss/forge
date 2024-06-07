@@ -17,11 +17,7 @@ const meta = {
     return html`
       <div style="position: relative; display: inline flex;">
         <button id="target-btn" style="height: 100px; width: 100px;">Click me</button>
-        <forge-state-layer
-          target="target-btn"
-          .disabled=${args.disabled}
-          style=${style}>
-        </forge-state-layer>
+        <forge-state-layer target="target-btn" .disabled=${args.disabled} style=${style}> </forge-state-layer>
       </div>
     `;
   },
@@ -33,7 +29,7 @@ const meta = {
     ...generateCustomElementArgTypes({
       tagName: component,
       exclude: ['targetElement', 'target']
-    }),
+    })
   },
   args: {
     disabled: false
@@ -60,6 +56,6 @@ export const WithCard: Story = {
         <forge-focus-indicator></forge-focus-indicator>
         <forge-state-layer></forge-state-layer>
       </forge-card>
-    `
+    `;
   }
-}
+};

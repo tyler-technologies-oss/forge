@@ -110,9 +110,9 @@
 
   inline-size: 100%;
   block-size: 100%;
-  
+
   background: #{token(background, custom)};
-  
+
   pointer-events: none;
 }
 
@@ -222,7 +222,7 @@
   @include layout.item-padding(end, inner);
 
   position: relative;
-  
+
   display: flex;
   grid-area: accessory;
   align-items: center;
@@ -239,11 +239,11 @@
     @include layout.item-padding(end, inner);
 
     display: #{token(inner-border-display, custom)};
-    
+
     border-inline-start-style: solid;
     border-inline-start-width: #{token(outline-width)};
     border-inline-start-color: #{token(inner-border-color, custom)};
-    
+
     block-size: #{token(inner-border-block-size, custom)};
 
     content: '';

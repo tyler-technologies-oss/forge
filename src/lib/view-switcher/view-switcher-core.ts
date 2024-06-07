@@ -71,8 +71,8 @@ export class ViewSwitcherCore implements IViewSwitcherCore {
   }
 
   private async _goToView(fromIndex: number, viewCount?: number): Promise<void> {
-    this._viewCount = !isDefined(viewCount) ? this._adapter.getViewCount() : viewCount as number;
-    
+    this._viewCount = !isDefined(viewCount) ? this._adapter.getViewCount() : (viewCount as number);
+
     // If the index that we're trying to transition to is out of range, or is the same index, then we ignore the transition
     const isValidIndex = this._viewIndex >= 0 && this._viewIndex <= this._viewCount - 1;
     if (!isValidIndex || fromIndex === this._clampedViewIndex(this._viewIndex, this._viewCount)) {

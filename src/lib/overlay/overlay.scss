@@ -28,7 +28,7 @@
 // Position strategy - absolute
 //
 
-:host([position-strategy=absolute]) {
+:host([position-strategy='absolute']) {
   .forge-overlay {
     @include absolute;
   }

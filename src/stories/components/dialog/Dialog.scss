@@ -10,7 +10,7 @@ forge-dialog {
       margin: 0;
     }
 
-    > [slot=body] {
+    > [slot='body'] {
       padding: var(--forge-spacing-medium);
     }
   }

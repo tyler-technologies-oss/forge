@@ -19,9 +19,11 @@ $can-animate: '[visible]:not([animation-type=none])';
   :host {
     @include host;
 
-    @include theme.provide((
-      surface: theme.variable(surface-bright)
-    ));
+    @include theme.provide(
+      (
+        surface: theme.variable(surface-bright)
+      )
+    );
   }
 
   :host([hidden]) {
@@ -59,19 +61,21 @@ $can-animate: '[visible]:not([animation-type=none])';
   }
 
   forge-backdrop {
-    @include backdrop.provide-theme((
-      opacity: #{token(backdrop-opacity)},
-      enter-animation-duration: #{token(enter-animation-duration)},
-      enter-animation-easing: #{token(enter-animation-easing)},
-      exit-animation-duration: #{token(exit-animation-duration)},
-      exit-animation-easing: #{token(exit-animation-easing)}
-    ));
+    @include backdrop.provide-theme(
+      (
+        opacity: #{token(backdrop-opacity)},
+        enter-animation-duration: #{token(enter-animation-duration)},
+        enter-animation-easing: #{token(enter-animation-easing)},
+        exit-animation-duration: #{token(exit-animation-duration)},
+        exit-animation-easing: #{token(exit-animation-easing)}
+      )
+    );
   }
 
   //
   // Moveable
   //
-  
+
   :host(:not([moveable])) {
     .move-handle {
       display: none;
@@ -102,13 +106,12 @@ $can-animate: '[visible]:not([animation-type=none])';
 
       .move-handle {
         @include move-handle;
-    
+
         svg {
           fill: currentColor;
         }
       }
     }
-
   }
 
   //
@@ -125,7 +128,7 @@ $can-animate: '[visible]:not([animation-type=none])';
 //
 
 @layer nonmodal {
-  :host([mode=nonmodal]) {
+  :host([mode='nonmodal']) {
     .forge-dialog {
       @include nonmodal-dialog-base;
     }
@@ -162,7 +165,7 @@ $can-animate: '[visible]:not([animation-type=none])';
   }
 
   // Zoom (default)
-  :host(#{$can-animate}:is(:not([animation-type]),[animation-type=zoom])) {
+  :host(#{$can-animate}:is(:not([animation-type]), [animation-type='zoom'])) {
     dialog.forge-dialog[open] {
       .surface {
         animation-name: zoom-in;
@@ -175,7 +178,7 @@ $can-animate: '[visible]:not([animation-type=none])';
   }
 
   // Fade
-  :host(#{$can-animate}[animation-type=fade]) {
+  :host(#{$can-animate}[animation-type='fade']) {
     dialog.forge-dialog[open] {
       .surface {
         animation-name: fade-in;
@@ -188,7 +191,7 @@ $can-animate: '[visible]:not([animation-type=none])';
   }
 
   // Slide
-  :host(#{$can-animate}[animation-type=slide]) {
+  :host(#{$can-animate}[animation-type='slide']) {
     dialog.forge-dialog[open] {
       .surface {
         animation-name: slide-in;
@@ -207,7 +210,7 @@ $can-animate: '[visible]:not([animation-type=none])';
 
 @layer placement {
   @each $placement in ('custom', 'top', 'top-right', 'top-left', 'bottom', 'bottom-right', 'bottom-left') {
-    :host([placement=#{$placement}]) {
+    :host([placement='#{$placement}']) {
       .surface {
         @include placement($placement);
       }
@@ -220,13 +223,13 @@ $can-animate: '[visible]:not([animation-type=none])';
 //
 
 @layer size-strategy {
-  :host([size-strategy=container-inline]) {
+  :host([size-strategy='container-inline']) {
     .surface {
       width: 100%;
     }
   }
 
-  :host([size-strategy=container-block]) {
+  :host([size-strategy='container-block']) {
     .surface {
       height: 100%;
     }
@@ -238,7 +241,7 @@ $can-animate: '[visible]:not([animation-type=none])';
 //
 
 @layer preset {
-  :host(#{$can-animate}:is([preset=left-sheet],[preset=right-sheet],[preset=top-sheet],[preset=bottom-sheet])) {
+  :host(#{$can-animate}:is([preset='left-sheet'], [preset='right-sheet'], [preset='top-sheet'], [preset='bottom-sheet'])) {
     .forge-dialog {
       @include preset-sheet-dialog-base;
     }
@@ -252,13 +255,13 @@ $can-animate: '[visible]:not([animation-type=none])';
     }
   }
 
-  :host(:is([preset=left-sheet],[preset=right-sheet],[preset=top-sheet],[preset=bottom-sheet])) {
+  :host(:is([preset='left-sheet'], [preset='right-sheet'], [preset='top-sheet'], [preset='bottom-sheet'])) {
     .surface {
       @include preset-sheet-surface-base;
     }
   }
 
-  :host([preset=left-sheet]) {
+  :host([preset='left-sheet']) {
     .forge-dialog {
       @include override(slide-translate, -100% 0, value);
     }
@@ -266,10 +269,9 @@ $can-animate: '[visible]:not([animation-type=none])';
     .surface {
       @include preset-left-sheet-surface;
     }
-
   }
 
-  :host([preset=right-sheet]) {
+  :host([preset='right-sheet']) {
     .forge-dialog {
       @include override(slide-translate, 100% 0, value);
     }
@@ -279,7 +281,7 @@ $can-animate: '[visible]:not([animation-type=none])';
     }
   }
 
-  :host([preset=top-sheet]) {
+  :host([preset='top-sheet']) {
     .forge-dialog {
       @include override(slide-translate, 0 -100%, value);
     }
@@ -289,7 +291,7 @@ $can-animate: '[visible]:not([animation-type=none])';
     }
   }
 
-  :host([preset=bottom-sheet]) {
+  :host([preset='bottom-sheet']) {
     .forge-dialog {
       @include override(slide-translate, 0 100%, value);
     }
@@ -325,19 +327,19 @@ $can-animate: '[visible]:not([animation-type=none])';
 //
 
 @layer position-strategy {
-  :host([position-strategy=viewport]) {
+  :host([position-strategy='viewport']) {
     .forge-dialog {
       position: fixed;
     }
   }
 
-  :host([position-strategy=container]) {
+  :host([position-strategy='container']) {
     .forge-dialog {
       position: absolute;
     }
   }
 
-  :host([position-strategy=container][preset$=-sheet]) {
+  :host([position-strategy='container'][preset$='-sheet']) {
     .forge-dialog {
       contain: content;
     }

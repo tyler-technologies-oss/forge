@@ -15,7 +15,7 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
   private _valueChangeListener: TextFieldValueChangeListener = this._onValueChange.bind(this);
   private _inputListener: EventListener = this._onValueChange.bind(this);
   private _clearButtonClickListener: EventListener = (evt: PointerEvent) => this._onClearButtonClick(evt);
-  
+
   constructor(protected _adapter: TextFieldAdapter) {
     super(_adapter);
   }
@@ -62,12 +62,16 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
   }
 
   private _onClearButtonClick(evt: Event): void {
-    const event = new CustomEvent(TEXT_FIELD_CONSTANTS.events.CLEAR, { bubbles: true, cancelable: true, composed: true });
+    const event = new CustomEvent(TEXT_FIELD_CONSTANTS.events.CLEAR, {
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    });
     this._adapter.dispatchHostEvent(event);
     if (!event.defaultPrevented) {
       this._adapter.clearInput();
     }
-  };
+  }
 
   private _onValueChange(): void {
     this._tryFloatLabel();

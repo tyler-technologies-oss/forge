@@ -7,7 +7,7 @@ import { IconRegistry } from './icon-registry';
 import { tylIcon360, tylIconCode, tylIconFace } from '@tylertech/tyler-icons/standard';
 import { ICON_CONSTANTS } from './icon-constants';
 
-import './icon'
+import './icon';
 
 const ICON_NAME = 'code';
 
@@ -169,89 +169,89 @@ describe('Icon', () => {
   describe('name', () => {
     it('should not set content if name is not set', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon></forge-icon>`);
-  
+
       expect(el.shadowRoot?.childElementCount).to.equal(0);
     });
-  
+
     it('should remove icon content if name is removed', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
-  
+
       expect(el.shadowRoot?.querySelector('svg')).to.exist;
-  
+
       el.name = '';
       await elementUpdated(el);
-  
+
       expect(el.shadowRoot?.childElementCount).to.equal(0);
     });
-  
+
     it('should set icon content if exists in registry', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
-  
+
       expect(el.shadowRoot?.querySelector('svg')).to.exist;
     });
-  
+
     it('should set icon content if icon is set dynamically', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon></forge-icon>`);
-  
+
       expect(el.shadowRoot?.childElementCount).to.equal(0);
-  
+
       el.name = ICON_NAME;
       await elementUpdated(el);
-  
+
       expect(el.shadowRoot?.querySelector('svg')).to.exist;
     });
-  
+
     it('should not set icon content if icon is not found in registry', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon name="not-found"></forge-icon>`);
-  
+
       expect(el.shadowRoot?.childElementCount).to.equal(0);
     });
-  
+
     it('should await icon to be registered', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon name=${tylIconFace.name}></forge-icon>`);
-  
+
       expect(el.shadowRoot?.childElementCount).to.equal(0);
-  
+
       await timer(500);
       IconRegistry.define(tylIconFace);
-  
+
       expect(el.shadowRoot?.querySelector('svg')).to.exist;
       IconRegistry.remove(tylIconFace.name);
     });
-  
+
     it('should await icon when set dynamically', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon></forge-icon>`);
-  
+
       expect(el.shadowRoot?.childElementCount).to.equal(0);
-  
+
       el.name = tylIconFace.name;
-  
+
       await timer(500);
       IconRegistry.define(tylIconFace);
-  
+
       expect(el.shadowRoot?.querySelector('svg')).to.exist;
       IconRegistry.remove(tylIconFace.name);
     });
-  
+
     it('should set icon via src property', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon src=${tylIconFace.data}></forge-icon>`);
-  
+
       expect(el.shadowRoot?.querySelector('svg')).to.exist;
     });
-  
+
     it('should set icon via src property dynamically', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon></forge-icon>`);
-  
+
       expect(el.shadowRoot?.childElementCount).to.equal(0);
-  
+
       el.src = tylIconFace.data;
-  
+
       expect(el.shadowRoot?.querySelector('svg')).to.exist;
     });
-  
+
     it('should not set icon if content is not safe', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon></forge-icon>`);
-  
+
       const unsafeSvg = `
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
           <script>console.log('unsafe');</script>
@@ -260,30 +260,30 @@ describe('Icon', () => {
       `;
       el.src = unsafeSvg;
       await elementUpdated(el);
-  
+
       expect(el.shadowRoot?.childElementCount).to.equal(0);
     });
 
     it('should update icon if external type is changed', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
       const loadStub = stub(el['_core'], '_loadIcon');
-  
+
       el.external = true;
       el.name = tylIconCode.name;
-      
+
       // Wait two frames, one for the delayed update and one for flushing the remaining queue
       await elementUpdated(el);
       await elementUpdated(el);
-  
+
       el.externalType = 'custom';
       await elementUpdated(el);
-  
+
       expect(loadStub.calledTwice).to.be.true;
     });
-  
+
     it('should not set icon if content includes inline listeners', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon></forge-icon>`);
-  
+
       const unsafeSvg = `
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" onload="doSomethingUnsafe();">
           <path d="M19.4 8.9h-6.3L17.5 2H9.4L4.6 13.7h5.6L7.3 22z" />
@@ -291,7 +291,7 @@ describe('Icon', () => {
       `;
       el.src = unsafeSvg;
       await elementUpdated(el);
-  
+
       expect(el.shadowRoot?.childElementCount).to.equal(0);
     });
 
@@ -302,9 +302,9 @@ describe('Icon', () => {
       el.name = ICON_NAME;
       el.external = true;
       el.externalType = 'custom';
-  
+
       await elementUpdated(el);
-  
+
       expect(loadStub.calledOnce).to.be.true;
     });
 
@@ -332,7 +332,7 @@ describe('Icon', () => {
     it('should request icon externally if not in registry', async () => {
       const fetchStub = stub(window, 'fetch');
       fetchStub.returns(Promise.resolve(new Response(tylIconFace.data)));
-      
+
       const el = await fixture<IIconComponent>(html`<forge-icon external name="face"></forge-icon>`);
 
       await elementUpdated(el);
@@ -345,7 +345,7 @@ describe('Icon', () => {
     it('should not request icon externally if already available in registry', async () => {
       const fetchStub = stub(window, 'fetch');
       fetchStub.returns(Promise.resolve(new Response(tylIconCode.data)));
-      
+
       const el = await fixture<IIconComponent>(html`<forge-icon external name=${tylIconCode.name}></forge-icon>`);
 
       await elementUpdated(el);
@@ -358,7 +358,7 @@ describe('Icon', () => {
     it('should request icon from custom external URL', async () => {
       const fetchStub = stub(window, 'fetch');
       fetchStub.returns(Promise.resolve(new Response('<svg><title>my-icon</title></svg>')));
-      
+
       const el = await fixture<IIconComponent>(html`<forge-icon name="my-icon"></forge-icon>`);
       el.externalUrlBuilder = name => `custom:://icons/${name}.svg`;
       el.external = true;

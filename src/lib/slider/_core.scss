@@ -40,8 +40,9 @@ $_active-track-end-clip: calc(#{$_active-track-end-offset} + #{$_active-track-ma
   // Clip the inputs to the space left/right of the center point between the
   // values so the right input gets pointer events.
   $_clip-to-start: calc(
-    #{token(state-layer-size)} / 2 + (100% - #{token(state-layer-size)}) *
-    (#{token(start-fraction, custom)} + ((#{token(end-fraction, custom)} - #{token(start-fraction, custom)}) / 2))
+    #{token(state-layer-size)} / 2 + (100% - #{token(state-layer-size)}) * (#{token(start-fraction, custom)} + ((
+                #{token(end-fraction, custom)} - #{token(start-fraction, custom)}
+              ) / 2))
   );
 
   $_clip-to-end: calc(100% - $_clip-to-start);
@@ -327,4 +328,3 @@ $_active-track-end-clip: calc(#{$_active-track-end-offset} + #{$_active-track-ma
     '#{$selector}:dir(rtl)#{$suffix}'
   );
 }
-

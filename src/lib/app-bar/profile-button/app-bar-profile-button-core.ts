@@ -110,7 +110,13 @@ export class AppBarProfileButtonCore implements IAppBarProfileButtonCore {
       avatarLetterCount: this._avatarLetterCount
     };
     const profileCardContent = this._profileCardBuilder ? this._profileCardBuilder() : undefined;
-    this._cancelDismissListener = this._adapter.openPopup(profileCardConfig, this._dismissListener, this._profileButtonListener, this._signOutButtonListener, profileCardContent);
+    this._cancelDismissListener = this._adapter.openPopup(
+      profileCardConfig,
+      this._dismissListener,
+      this._profileButtonListener,
+      this._signOutButtonListener,
+      profileCardContent
+    );
     this._adapter.addDocumentListener('keydown', this._keydownListener);
     this._open = true;
     this._adapter.toggleHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.OPEN, this._open);

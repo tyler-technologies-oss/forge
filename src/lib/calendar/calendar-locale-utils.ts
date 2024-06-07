@@ -9,7 +9,7 @@ export function getLocalizedDayOfWeek(day: DayOfWeek, format: 'long' | 'short' |
     locale = navigator.language;
   }
   // January 2017 starts on a Sunday
-  return new Date(2017, 0, day + 1).toLocaleString(locale, {weekday: format});
+  return new Date(2017, 0, day + 1).toLocaleString(locale, { weekday: format });
 }
 
 /** Returns a localized date of the month. */
@@ -17,7 +17,7 @@ export function getLocalizedDayOfMonth(date: number, format: 'numeric' | '2-digi
   if (!locale) {
     locale = navigator.language;
   }
-  return new Date(1970, 0, date).toLocaleDateString(locale, {day: format});
+  return new Date(1970, 0, date).toLocaleDateString(locale, { day: format });
 }
 
 /** Returns a localized month name. */
@@ -25,7 +25,7 @@ export function getLocalizedMonth(month: number, format: 'long' | 'short' | 'nar
   if (!locale) {
     locale = navigator.language;
   }
-  return new Date(1970, month, 1).toLocaleString(locale, {month: format});
+  return new Date(1970, month, 1).toLocaleString(locale, { month: format });
 }
 
 /** Returns a localized year name. */
@@ -33,7 +33,7 @@ export function getLocalizedYear(year: number, format: 'numeric' | '2-digit' | u
   if (!locale) {
     locale = navigator.language;
   }
-  return new Date(year, 0, 1).toLocaleDateString(locale, {year: format});
+  return new Date(year, 0, 1).toLocaleDateString(locale, { year: format });
 }
 
 /** Returns the first day of week for a locale. */
@@ -113,21 +113,6 @@ export function isRtlLocale(locale?: string): boolean {
   if (!locale) {
     locale = navigator.language;
   }
-  const rtlLocales: string[] = [
-    'ar',
-    'arc',
-    'ckb',
-    'dv',
-    'fa',
-    'ha',
-    'he',
-    'khw',
-    'ks',
-    'ps',
-    'sd',
-    'ur',
-    'uz-AF',
-    'yi'
-  ];
-  return rtlLocales.some(l => locale ? locale.startsWith(l) : false);
+  const rtlLocales: string[] = ['ar', 'arc', 'ckb', 'dv', 'fa', 'ha', 'he', 'khw', 'ks', 'ps', 'sd', 'ur', 'uz-AF', 'yi'];
+  return rtlLocales.some(l => (locale ? locale.startsWith(l) : false));
 }

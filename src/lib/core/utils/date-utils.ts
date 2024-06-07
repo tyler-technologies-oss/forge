@@ -1,6 +1,7 @@
 import { isValidDate } from '@tylertech/forge-core';
 
-export const ISO_8601_REGEX = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
+export const ISO_8601_REGEX =
+  /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
 export const ISO_TIMEZONE_REGEX = /a-z/i;
 const FUTURE_YEAR_COERCION = 10; // The number of years in the future to coerce two-digit years into current century
 
@@ -51,7 +52,7 @@ export function parseDateString(value: string): Date | null {
   if (typeof year === 'string' && year.length === 3) {
     year = year.padStart(4, '0');
   }
-  
+
   if (hasMonthDayYear) {
     const isValidMonthLength = month.length === 1 || month.length === 2;
     const isValidDayLength = day.length === 1 || day.length === 2;
@@ -105,10 +106,10 @@ export function formatDate(date: Date): string {
 
 /**
  * Determines if two date objects are equal.
- * 
+ *
  * Note: Time values are ignored.
  * @param first The date to compare.
- * @param second The date to compare the first date to. 
+ * @param second The date to compare the first date to.
  * @returns A boolean whether the two dates are equivalent.
  */
 export function isSameDate(first?: Date | null, second?: Date | null): boolean {
@@ -122,9 +123,9 @@ export function isSameDate(first?: Date | null, second?: Date | null): boolean {
   return first.setHours(0, 0, 0, 0) === second.setHours(0, 0, 0, 0);
 }
 
-/** 
+/**
  * Returns the last date on a month.
- * 
+ *
  * @param month The month.
  * @param year The year of the month, needed for February otherwise optional.
  * @returns The last date of the given month.
@@ -135,7 +136,7 @@ export function getLastDateOfMonth(month: number, year?: number): Date {
 
 /**
  * Returns the number of days in a month.
- * 
+ *
  * @param month The month to find the length of.
  * @param year The year to check within, needed for February otherwise optional.
  * @returns The number of days in the month.

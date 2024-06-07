@@ -32,7 +32,11 @@ export class BannerCore implements IBannerCore {
     const originalDismissed = this._dismissed;
     this._dismissed = !this._dismissed;
 
-    const evt = new CustomEvent(BANNER_CONSTANTS.events.BEFORE_DISMISS, { bubbles: true, composed: true, cancelable: true });
+    const evt = new CustomEvent(BANNER_CONSTANTS.events.BEFORE_DISMISS, {
+      bubbles: true,
+      composed: true,
+      cancelable: true
+    });
     this._adapter.dispatchHostEvent(evt);
     this._dismissed = originalDismissed;
 

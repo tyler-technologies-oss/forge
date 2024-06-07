@@ -22,9 +22,7 @@ declare global {
 })
 export class OptionGroupComponent extends BaseComponent implements IOptionGroupComponent {
   public static get observedAttributes(): string[] {
-    return [
-      OPTION_GROUP_CONSTANTS.attributes.LABEL
-    ];
+    return [OPTION_GROUP_CONSTANTS.attributes.LABEL];
   }
 
   private _label: string;

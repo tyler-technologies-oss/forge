@@ -30,16 +30,16 @@ declare global {
 
 /**
  * @tag forge-file-picker
- * 
+ *
  * @summary
- * The file-picker component allows for a user to upload files of their own to the system. The component provides a slot for a 
- * button, as well as drag-and-drop functionality to launch the system file chooser dialog. There are visual queues to let the 
- * user know when files they are dragging can be dropped, as well as events that are relayed to the developer to handle files 
+ * The file-picker component allows for a user to upload files of their own to the system. The component provides a slot for a
+ * button, as well as drag-and-drop functionality to launch the system file chooser dialog. There are visual queues to let the
+ * user know when files they are dragging can be dropped, as well as events that are relayed to the developer to handle files
  * that are legal and/or illegal based on the parameters set on the component.
- * 
- * The expectation of this component is that it will be used as a familiar element on the page that will let users upload files, 
+ *
+ * The expectation of this component is that it will be used as a familiar element on the page that will let users upload files,
  * while providing that visual and functional consistency.
- *  
+ *
  * @property {string | null} accept - Gets/sets the allowed file types.
  * @property {string | null} maxSize - Gets/sets the maximum allowed file size.
  * @property {string | null} capture - Gets/sets the camera to use when capturing video or images.
@@ -47,7 +47,7 @@ declare global {
  * @property {boolean} disabled - Gets/sets whether the file picker is disabled.
  * @property {boolean} compact - Gets/sets whether the file picker uses the compact variant.
  * @property {boolean} borderless - Gets and sets whether the file picker is borderless.
- * 
+ *
  * @attribute {string | null} accept - Gets/sets the allowed file types.
  * @attribute {string | null} maxSize - Gets/sets the maximum allowed file size.
  * @attribute {string | null} capture - Gets/sets the camera to use when capturing video or images.
@@ -55,7 +55,7 @@ declare global {
  * @attribute {boolean} disabled - Gets/sets whether the file picker is disabled.
  * @attribute {boolean} compact - Gets/sets whether the file picker uses the compact variant.
  * @attribute {boolean} borderless - Gets and sets whether the file picker is borderless.
- * 
+ *
  * @cssproperty --forge-file-picker-background - Controls the background color.
  * @cssproperty --forge-file-picker-width - Controls the width.
  * @cssproperty --forge-file-picker-height - Controls the height.
@@ -70,7 +70,7 @@ declare global {
  * @cssproperty --forge-file-picker-disabled-opacity - Controls the opacity value of the file picker when it's disabled.
  * @cssproperty --forge-file-picker-highlight-background - Controls the background color of the file picker when dragging files into the form.
  * @cssproperty --forge-file-picker-highlight-border-color - Controls the border color of the file picker when dragging files into the form.
- * 
+ *
  * @csspart form - The <form> element at the root.
  * @csspart primary - The container element around the primary slot.
  * @csspart secondary - The container element around the secondary slot.

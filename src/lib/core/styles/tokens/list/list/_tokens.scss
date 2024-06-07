@@ -7,7 +7,6 @@ $tokens: (
   // Base
   spacing: utils.module-val(list, spacing, 0),
   container-color: utils.module-val(list, container-color, transparent),
-
   // Navlist
   navlist-spacing: utils.module-val(list, navlist-spacing, spacing.variable(xxsmall)),
   navlist-margin: utils.module-val(list, navlist-margin, spacing.variable(xxsmall) spacing.variable(xsmall)),
@@ -15,7 +14,7 @@ $tokens: (
   navlist-padding: utils.module-val(list, navlist-padding, 0 spacing.variable(xsmall)),
   navlist-shape: utils.module-val(list, navlist-shape, shape.variable(medium)),
   navlist-font-size: utils.module-val(list, navlist-font-size, typography.font-size-relative('0875')),
-  navlist-font-weight: utils.module-val(list, navlist-font-weight, 500),
+  navlist-font-weight: utils.module-val(list, navlist-font-weight, 500)
 ) !default;
 
 @function get($key) {

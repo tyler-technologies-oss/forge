@@ -44,9 +44,11 @@
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme((
-      color: #{token(state-layer-checked-color)}
-    ));
+    @include state-layer.provide-theme(
+      (
+        color: #{token(state-layer-checked-color)}
+      )
+    );
   }
 }
 
@@ -80,15 +82,19 @@
 }
 
 forge-focus-indicator {
-  @include focus-indicator.provide-theme((
-    color: #{token(primary-color)},
-    outward-offset: 0px,
-    shape: #{token(state-layer-shape)}
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(primary-color)},
+      outward-offset: 0px,
+      shape: #{token(state-layer-shape)}
+    )
+  );
 }
 
 forge-state-layer {
-  @include state-layer.provide-theme((
-    color: #{token(state-layer-unchecked-color)}
-  ));
+  @include state-layer.provide-theme(
+    (
+      color: #{token(state-layer-unchecked-color)}
+    )
+  );
 }

@@ -18,16 +18,11 @@ const meta = {
 
     return html`
       <div style="width: 100px">
-        <forge-label-value
-        .empty=${args.empty}
-        .ellipsis=${args.ellipsis}
-        .inline=${args.inline}
-        .dense=${args.dense}
-        style=${style}>
+        <forge-label-value .empty=${args.empty} .ellipsis=${args.ellipsis} .inline=${args.inline} .dense=${args.dense} style=${style}>
           <label slot="label">Label</label>
           <span slot="value">A simple value</span>
         </forge-label-value>
-    </div>
+      </div>
     `;
   },
   component,
@@ -36,13 +31,10 @@ const meta = {
   },
   argTypes: {
     ...generateCustomElementArgTypes({
-      tagName: component,
-
-    }),
+      tagName: component
+    })
   },
-  args: {
-
-  },
+  args: {}
 } satisfies Meta;
 
 export default meta;
@@ -56,11 +48,11 @@ export const Icon: Story = {
   render: () => {
     IconRegistry.define([tylIconPerson]);
     return html`
-    <forge-label-value>
-      <forge-icon name="person" slot="icon"></forge-icon>
-          <label slot="label">Label</label>
-          <span slot="value">A simple value</span>
-        </forge-label-value>
-  `;
+      <forge-label-value>
+        <forge-icon name="person" slot="icon"></forge-icon>
+        <label slot="label">Label</label>
+        <span slot="value">A simple value</span>
+      </forge-label-value>
+    `;
   }
-}
+};

@@ -26,13 +26,13 @@ export default {
       tags: {
         dependency: {
           mappedName: 'dependencies',
-          isArray: true,
+          isArray: true
         },
         globalconfig: {
           mappedName: 'globalConfigProperties',
-          isArray: true,
-        },
+          isArray: true
+        }
       }
-    }),
+    })
   ]
 };

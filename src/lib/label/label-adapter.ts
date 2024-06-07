@@ -20,7 +20,7 @@ export interface ILabelAdapter extends IBaseAdapter {
 
 export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabelAdapter {
   private _slotElement: HTMLElement;
-  private _targetElement: ILabelAware & HTMLElement | null = null;
+  private _targetElement: (ILabelAware & HTMLElement) | null = null;
   private _mutationObserver?: MutationObserver;
 
   constructor(component: ILabelComponent) {
@@ -86,7 +86,7 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
 
     // Run the callback once to capture the current state of the label
     callback([], this._mutationObserver);
-  };
+  }
 
   public removeMutationObserver(): void {
     this._mutationObserver?.disconnect();
@@ -97,7 +97,7 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
    * Returns `true` if the provided element is label aware, `false` otherwise. If `false` a warning
    * is logged to the console.
    */
-  private _checkLabelAwareness(el: HTMLElement): el is (ILabelAware & HTMLElement) {
+  private _checkLabelAwareness(el: HTMLElement): el is ILabelAware & HTMLElement {
     if (!isLabelAware(el)) {
       console.warn('Label target element is not label aware.', el);
       return false;
@@ -109,7 +109,7 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
    * Returns a label aware element queried from the provided id or a child element of the
    * component or `null` if none exists.
    */
-  private _locateTargetElement(id: string | null): ILabelAware & HTMLElement | null {
+  private _locateTargetElement(id: string | null): (ILabelAware & HTMLElement) | null {
     let targetEl: HTMLElement | null;
 
     if (id) {

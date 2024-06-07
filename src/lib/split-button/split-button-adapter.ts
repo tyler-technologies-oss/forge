@@ -40,7 +40,7 @@ export class SplitButtonAdapter extends BaseAdapter<ISplitButtonComponent> imple
       if (!addedButtons.length) {
         return;
       }
-     
+
       addedButtons.forEach(button => {
         button.variant = this._component.variant;
         button.theme = this._component.theme;
@@ -60,22 +60,22 @@ export class SplitButtonAdapter extends BaseAdapter<ISplitButtonComponent> imple
 
   public setVariant(variant: SplitButtonVariant): void {
     const buttons = this._getButtons();
-    buttons.forEach(button => button.variant = variant);
+    buttons.forEach(button => (button.variant = variant));
   }
 
   public setTheme(theme: ButtonTheme): void {
     const buttons = this._getButtons();
-    buttons.forEach(button => button.theme = theme);
+    buttons.forEach(button => (button.theme = theme));
   }
 
   public setDisabled(value: boolean): void {
     const buttons = this._getButtons();
-    buttons.forEach(button => button.disabled = value);
+    buttons.forEach(button => (button.disabled = value));
   }
 
   public setDense(value: boolean): void {
     const buttons = this._getButtons();
-    buttons.forEach(button => button.dense = value);
+    buttons.forEach(button => (button.dense = value));
   }
 
   public setPill(value: boolean): void {
@@ -86,7 +86,7 @@ export class SplitButtonAdapter extends BaseAdapter<ISplitButtonComponent> imple
       Array.from(buttons)
         .slice(1, buttons.length - 1)
         .filter(({ pill }) => pill)
-        .forEach(button => button.pill = false);
+        .forEach(button => (button.pill = false));
     }
 
     // Only the first and last buttons need to be pill shaped

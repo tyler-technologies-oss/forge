@@ -22,12 +22,15 @@ export class IconAdapter extends BaseAdapter<IIconComponent> implements IIconAda
   }
 
   public observeVisibility(listener: () => void): void {
-    this._observer = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting)) {
-        this.destroyVisibilityObserver();
-        listener();
-      }
-    }, { rootMargin: `${ICON_CONSTANTS.numbers.LAZY_ROOT_MARGIN}px` });
+    this._observer = new IntersectionObserver(
+      entries => {
+        if (entries.some(entry => entry.isIntersecting)) {
+          this.destroyVisibilityObserver();
+          listener();
+        }
+      },
+      { rootMargin: `${ICON_CONSTANTS.numbers.LAZY_ROOT_MARGIN}px` }
+    );
     this._observer.observe(this._component);
   }
 

@@ -20,7 +20,7 @@ describe('Deprecated Button', () => {
 
     const stateLayer = getStateLayer(el);
     const focusIndicator = getFocusIndicator(el);
-    
+
     expect(el.shadowRoot).not.to.be.null;
     expect(stateLayer.disabled).to.be.false;
     expect(focusIndicator).to.be.ok;
@@ -259,20 +259,20 @@ describe('Deprecated Button', () => {
 
   describe('DeprecatedButtonComponentDelegate', () => {
     it('should create button via delegate', async () => {
-      const delegate = new DeprecatedButtonComponentDelegate({ options: { text: 'Button' }});
+      const delegate = new DeprecatedButtonComponentDelegate({ options: { text: 'Button' } });
 
       expect(delegate.element).to.be.instanceOf(DeprecatedButtonComponent);
       expect(delegate.element.innerText).to.equal('Button');
     });
 
     it('should set type via delegate', async () => {
-      const delegate = new DeprecatedButtonComponentDelegate({ options: { type: 'button' }});
+      const delegate = new DeprecatedButtonComponentDelegate({ options: { type: 'button' } });
 
       expect(delegate.buttonElement?.type).to.equal('button');
     });
 
     it('should set type via delegate', async () => {
-      const delegate = new DeprecatedButtonComponentDelegate({ options: { type: 'submit' }});
+      const delegate = new DeprecatedButtonComponentDelegate({ options: { type: 'submit' } });
 
       expect(delegate.buttonElement?.type).to.equal('submit');
     });
@@ -338,7 +338,7 @@ describe('Deprecated Button', () => {
   });
 
   function getStateLayer(btn: IDeprecatedButtonComponent): IStateLayerComponent {
-    return btn.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent
+    return btn.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent;
   }
 
   function getFocusIndicator(btn: IDeprecatedButtonComponent): IFocusIndicatorComponent {
@@ -350,9 +350,9 @@ describe('Deprecated Button', () => {
       return Promise.resolve();
     }
     const { x, y, width, height } = el.getBoundingClientRect();
-    return sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
+    return sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 });

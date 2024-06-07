@@ -26,13 +26,13 @@ export interface IAppBarNotificationButtonComponent extends IBaseComponent {
 }
 /**
  * @tag forge-app-bar-notification-button
- * 
+ *
  * @property {number | string} [count = 0] - The number to display in the badge.
  * @property {boolean} [dot = false] - Whether to display the dot variant of the badge or not.
  * @property {boolean} [showBadge = false] - Whether to display the badge or not.
  * @property {string} [theme = ""] - The theme to apply to the badge.
  * @property {string} [icon = notifications] - The name of an alternative icon to display.
- * 
+ *
  * @attribute {string} [count = 0] - The number to display in the badge.
  * @attribute {boolean} [dot = false] - Whether to display the dot variant of the badge or not.
  * @attribute {boolean} [show-badge = false] - Whether to display the badge or not.
@@ -43,12 +43,7 @@ export interface IAppBarNotificationButtonComponent extends IBaseComponent {
  */
 @customElement({
   name: APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.elementName,
-  dependencies: [
-    IconButtonComponent,
-    TooltipComponent,
-    BadgeComponent,
-    IconComponent
-  ]
+  dependencies: [IconButtonComponent, TooltipComponent, BadgeComponent, IconComponent]
 })
 export class AppBarNotificationButtonComponent extends BaseComponent implements IAppBarNotificationButtonComponent {
   public static get observedAttributes(): string[] {

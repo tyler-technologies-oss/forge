@@ -24,7 +24,7 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
 
   constructor(component: ISwitchComponent) {
     super(component);
-    
+
     this._rootElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ROOT);
     this._labelElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.LABEL);
     this._iconOnElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_ON);

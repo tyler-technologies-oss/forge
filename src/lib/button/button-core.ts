@@ -31,7 +31,7 @@ export class ButtonCore extends BaseButtonCore<IButtonAdapter> implements IButto
     if (this._variant !== value) {
       const previousVariant = this._variant;
       this._variant = value;
-      
+
       if (this._variant === 'link') {
         this._adapter.toggleStateLayer(false);
       } else if (previousVariant === 'link') {

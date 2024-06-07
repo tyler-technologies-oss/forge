@@ -12,7 +12,10 @@ export interface IFormFieldComponentDelegate<T extends HTMLElement> extends IBas
   onBlur(cb: (evt: Event) => void): void;
 }
 
-export abstract class FormFieldComponentDelegate<T extends HTMLElement, K extends IFormFieldComponentDelegateOptions> extends BaseComponentDelegate<T, K> implements IFormFieldComponentDelegate<T> {
+export abstract class FormFieldComponentDelegate<T extends HTMLElement, K extends IFormFieldComponentDelegateOptions>
+  extends BaseComponentDelegate<T, K>
+  implements IFormFieldComponentDelegate<T>
+{
   public abstract value: unknown;
   public abstract disabled: boolean;
 

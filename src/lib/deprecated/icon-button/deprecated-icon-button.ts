@@ -26,16 +26,12 @@ declare global {
 
 /**
  * @tag forge-deprecated-icon-button
- * 
+ *
  * @deprecated Use the `<forge-icon-button>` element instead.
  */
 @customElement({
   name: DEPRECATED_ICON_BUTTON_CONSTANTS.elementName,
-  dependencies: [
-    IconComponent,
-    FocusIndicatorComponent,
-    StateLayerComponent
-  ]
+  dependencies: [IconComponent, FocusIndicatorComponent, StateLayerComponent]
 })
 export class DeprecatedIconButtonComponent extends BaseComponent implements IDeprecatedIconButtonComponent {
   public static get observedAttributes(): string[] {
@@ -125,7 +121,7 @@ export class DeprecatedIconButtonComponent extends BaseComponent implements IDep
     this._focusIndicator.targetElement = this._buttonOrAnchorElement;
 
     this._buttonOrAnchorElement.addEventListener('keydown', this._keydownListener);
-    
+
     // Sync disabled state
     if (this._buttonOrAnchorElement instanceof HTMLButtonElement && this._disabled && !this._buttonOrAnchorElement.disabled) {
       this._buttonOrAnchorElement.disabled = true;
@@ -144,7 +140,10 @@ export class DeprecatedIconButtonComponent extends BaseComponent implements IDep
           this._syncDisabledState();
         }
       });
-      this._buttonAttrMutationObserver.observe(this._buttonOrAnchorElement, { attributes: true, attributeFilter: ['disabled'] });
+      this._buttonAttrMutationObserver.observe(this._buttonOrAnchorElement, {
+        attributes: true,
+        attributeFilter: ['disabled']
+      });
     }
   }
 
@@ -203,7 +202,7 @@ export class DeprecatedIconButtonComponent extends BaseComponent implements IDep
     value = Boolean(value);
     if (this._toggle !== value) {
       this._toggle = value;
-      
+
       if (this.isConnected) {
         if (this._toggle) {
           this._initializeToggle();

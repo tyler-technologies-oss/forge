@@ -17,18 +17,18 @@ class LabelHarness extends TestHarness<ILabelComponent> {
   public initElementRefs(): void {
     const element = document.createElement(LABEL_CONSTANTS.labelableChildSelectors[0]);
     element.id = 'label-aware';
-    (element as any).labelClickedCallback = () => { };
-    (element as any).labelChangedCallback = () => { };
+    (element as any).labelClickedCallback = () => {};
+    (element as any).labelChangedCallback = () => {};
     this.labelAwareElement = element as any as HTMLElement & ILabelAware;
   }
 
   public async clickElement(el: HTMLElement): Promise<void> {
     const { x, y, width, height } = el.getBoundingClientRect();
 
-    await sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2)
-    ]})
+    await sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 }
 
@@ -107,10 +107,10 @@ describe('Label', () => {
   it('should update manually', async () => {
     const el = await fixture<ILabelComponent>(html`<forge-label>Label</forge-label>`);
     const ctx = new LabelHarness(el);
-    
+
     el.append(ctx.labelAwareElement);
     await elementUpdated(el);
-    
+
     const updatedSpy = spy(ctx.labelAwareElement, 'labelChangedCallback');
     el.update();
 
@@ -120,10 +120,10 @@ describe('Label', () => {
   it('should not update automatically by default', async () => {
     const el = await fixture<ILabelComponent>(html`<forge-label>Label</forge-label>`);
     const ctx = new LabelHarness(el);
-    
+
     el.insertAdjacentElement('afterend', ctx.labelAwareElement);
     el.for = ctx.labelAwareElement.id;
-    
+
     const changedSpy = spy(ctx.labelAwareElement, 'labelChangedCallback');
     el.innerText = 'New Label';
 
@@ -133,10 +133,10 @@ describe('Label', () => {
   it('should update automatically when dynamic', async () => {
     const el = await fixture<ILabelComponent>(html`<forge-label dynamic>Label</forge-label>`);
     const ctx = new LabelHarness(el);
-    
+
     el.insertAdjacentElement('afterend', ctx.labelAwareElement);
     el.for = ctx.labelAwareElement.id;
-    
+
     const changedSpy = spy(ctx.labelAwareElement, 'labelChangedCallback');
     el.innerText = 'New Label';
 
@@ -148,11 +148,11 @@ describe('Label', () => {
   it('should stop updating automatically when dynamic is removed', async () => {
     const el = await fixture<ILabelComponent>(html`<forge-label dynamic>Label</forge-label>`);
     const ctx = new LabelHarness(el);
-    
+
     el.insertAdjacentElement('afterend', ctx.labelAwareElement);
     el.for = ctx.labelAwareElement.id;
     el.innerText = 'New Label';
-    
+
     await elementUpdated(el);
     el.dynamic = false;
 
@@ -165,10 +165,10 @@ describe('Label', () => {
   it('should handle click', async () => {
     const el = await fixture<ILabelComponent>(html`<forge-label>Label</forge-label>`);
     const ctx = new LabelHarness(el);
-    
+
     el.insertAdjacentElement('afterend', ctx.labelAwareElement);
     el.for = ctx.labelAwareElement.id;
-    
+
     const clickedSpy = spy(ctx.labelAwareElement, 'labelClickedCallback');
     await ctx.clickElement(el);
 
@@ -186,4 +186,4 @@ describe('Label', () => {
 
     expect(warnSpy).to.have.been.calledOnce;
   });
-})
+});

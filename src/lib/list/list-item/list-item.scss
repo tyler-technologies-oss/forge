@@ -98,20 +98,20 @@ $_host-tokens: [indent dense-indent disabled-cursor];
   .forge-list-item {
     @include selected;
 
-    ::slotted([slot=start]),
-    ::slotted([slot=end]),
-    ::slotted([slot=leading]),
-    ::slotted([slot=trailing]) {
+    ::slotted([slot='start']),
+    ::slotted([slot='end']),
+    ::slotted([slot='leading']),
+    ::slotted([slot='trailing']) {
       @include start-end-selected;
     }
 
-    ::slotted([slot=start]),
-    ::slotted([slot=leading]) {
+    ::slotted([slot='start']),
+    ::slotted([slot='leading']) {
       @include start-selected;
     }
 
-    ::slotted([slot=end]),
-    ::slotted([slot=trailing]) {
+    ::slotted([slot='end']),
+    ::slotted([slot='trailing']) {
       @include end-selected;
     }
   }
@@ -121,9 +121,11 @@ $_host-tokens: [indent dense-indent disabled-cursor];
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme((
-      color: #{token(selected-color)}
-    ));
+    @include state-layer.provide-theme(
+      (
+        color: #{token(selected-color)}
+      )
+    );
   }
 }
 
@@ -138,8 +140,8 @@ $_host-tokens: [indent dense-indent disabled-cursor];
 }
 
 // Text slotted elements
-slot[name=secondary-text],
-slot[name=tertiary-text] {
+slot[name='secondary-text'],
+slot[name='tertiary-text'] {
   &::slotted(*) {
     @include text;
   }
@@ -150,7 +152,7 @@ slot[name=tertiary-text] {
 }
 
 // Button slotted elements
-::slotted(:is(button, [role=button][tabindex], [forge-list-item-button])) {
+::slotted(:is(button, [role='button'][tabindex], [forge-list-item-button])) {
   @include button;
 }
 
@@ -160,32 +162,40 @@ slot[name=tertiary-text] {
 }
 
 // Start/end slotted elements
-::slotted([slot=start]),
-::slotted([slot=end]),
-::slotted([slot=leading]),
-::slotted([slot=trailing]) {
+::slotted([slot='start']),
+::slotted([slot='end']),
+::slotted([slot='leading']),
+::slotted([slot='trailing']) {
   @include start-end-base;
 }
 
 // Interactive slotted form controls to hide state-layer and focus-indicator
 :host(:not([noninteractive])) {
-  ::slotted(:is(forge-checkbox,forge-radio,forge-switch):is([slot=start],[slot=end],[slot=leading],[slot=trailing]):not([forge-ignore])) {
-    @include focus-indicator.provide-theme(( display: none ));
-    @include state-layer.provide-theme(( display: none ));
+  ::slotted(:is(forge-checkbox, forge-radio, forge-switch):is([slot='start'], [slot='end'], [slot='leading'], [slot='trailing']):not([forge-ignore])) {
+    @include focus-indicator.provide-theme(
+      (
+        display: none
+      )
+    );
+    @include state-layer.provide-theme(
+      (
+        display: none
+      )
+    );
   }
 }
 
 // Start slotted elements
-::slotted([slot=start]),
-::slotted([slot=leading]) {
+::slotted([slot='start']),
+::slotted([slot='leading']) {
   :host([selected]) & {
     @include start-selected;
   }
 }
 
 // End slotted elements
-::slotted([slot=end]),
-::slotted([slot=trailing]) {
+::slotted([slot='end']),
+::slotted([slot='trailing']) {
   :host([selected]) & {
     @include end-selected;
   }
@@ -201,8 +211,8 @@ slot[name=tertiary-text] {
     @include text-container-wrap;
   }
 
-  slot[name=secondary-text],
-  slot[name=tertiary-text] {
+  slot[name='secondary-text'],
+  slot[name='tertiary-text'] {
     &::slotted(*) {
       @include text-wrap;
     }
@@ -212,9 +222,11 @@ slot[name=tertiary-text] {
 forge-focus-indicator {
   z-index: 1; // Fixes an animation artifact in Safari
 
-  @include focus-indicator.provide-theme((
-    shape: shape.variable(medium) // TODO: use list-item token?
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      shape: shape.variable(medium) // TODO: use list-item token?
+    )
+  );
 }
 
 forge-state-layer {

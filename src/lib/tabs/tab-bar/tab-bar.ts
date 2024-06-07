@@ -35,18 +35,18 @@ declare global {
 
 /**
  * @tag forge-tab-bar
- * 
+ *
  * @summary Tabs organize content across different screens and views.
- * 
+ *
  * @description
  * Use tabs to group content into helpful categories. Tabs are typically placed
  * above the content they relate to. Tabs can be used to navigate between screens,
  * or to group related content within a screen.
- * 
+ *
  * @dependency forge-tab
  * @dependency forge-icon-button
  * @dependency forge-icon
- * 
+ *
  * @property {boolean} [disabled=false] - The disabled state of the tab bar.
  * @property {number} [activeTab=null] - The index of the active tab.
  * @property {boolean} [vertical=false] - Controls whether the tab bar is vertical or horizontal.
@@ -56,7 +56,7 @@ declare global {
  * @property {boolean} [inverted=false] - Controls whether the tabs are rendered inverted (tab indicator at top instead of bottom).
  * @property {boolean} [autoActivate=false] - Controls whether the tabs are automatically activated when receiving focus.
  * @property {boolean} [scrollButtons=false] - Controls whether scroll buttons are displayed when the tabs overflow their container.
- * 
+ *
  * @attribute {boolean} [disabled=false] - The disabled state of the tab bar.
  * @attribute {number} [active-tab=null] - The index of the active tab.
  * @attribute {boolean} [vertical=false] - Controls whether the tab bar is vertical or horizontal.
@@ -65,24 +65,20 @@ declare global {
  * @attribute {boolean} [secondary=false] - Controls whether the tabs are styled as secondary tab navigation.
  * @attribute {boolean} [auto-activate=false] - Controls whether the tabs are automatically activated when receiving focus.
  * @attribute {boolean} [scroll-buttons=false] - Controls whether scroll buttons are displayed when the tabs overflow their container.
- * 
+ *
  * @event {CustomEvent<ITabBarChangeEventData>} forge-tab-bar-change - Dispatches when the active tab changes.
- * 
+ *
  * @cssproperty --forge-tab-bar-justify - The `justify-content` value for the tab bar flex container.
  * @cssproperty --forge-tab-bar-stretch - The `flex` value for the child `<forge-tab>` elements.
  * @cssproperty --forge-tab-bar-divider-color - The color of the divider.
  * @cssproperty --forge-tab-bar-divider-thickness - The thickness of the divider.
- * 
+ *
  * @csspart container - The container element.
  * @csspart scroll-container - The scroll container element.
  */
 @customElement({
   name: TAB_BAR_CONSTANTS.elementName,
-  dependencies: [
-    TabComponent,
-    IconButtonComponent,
-    IconComponent
-  ]
+  dependencies: [TabComponent, IconButtonComponent, IconComponent]
 })
 export class TabBarComponent extends BaseComponent implements ITabBarComponent {
   public static get observedAttributes(): string[] {
@@ -93,12 +89,7 @@ export class TabBarComponent extends BaseComponent implements ITabBarComponent {
 
   constructor() {
     super();
-    IconRegistry.define([
-      tylIconKeyboardArrowLeft,
-      tylIconKeyboardArrowRight,
-      tylIconKeyboardArrowUp,
-      tylIconKeyboardArrowDown
-    ]);
+    IconRegistry.define([tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown]);
     attachShadowTemplate(this, template, styles);
     this._core = new TabBarCore(new TabBarAdapter(this));
   }

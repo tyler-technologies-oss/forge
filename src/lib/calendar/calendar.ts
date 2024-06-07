@@ -3,7 +3,21 @@ import { tylIconAdd, tylIconArrowDropDown, tylIconKeyboardArrowLeft, tylIconKeyb
 
 import { CalendarAdapter } from './calendar-adapter';
 import { CalendarCore } from './calendar-core';
-import { CALENDAR_CONSTANTS, CalendarMode, DayOfWeek, ICalendarDateSelectEventData, CalendarDateBuilder, CalendarDayBuilder, CalendarDateSelectCallback, CalendarEventBuilder, ICalendarEvent, ICalendarFocusChangeEventData, ICalendarMonthChangeEventData, CalendarTooltipBuilder, CalendarView } from './calendar-constants';
+import {
+  CALENDAR_CONSTANTS,
+  CalendarMode,
+  DayOfWeek,
+  ICalendarDateSelectEventData,
+  CalendarDateBuilder,
+  CalendarDayBuilder,
+  CalendarDateSelectCallback,
+  CalendarEventBuilder,
+  ICalendarEvent,
+  ICalendarFocusChangeEventData,
+  ICalendarMonthChangeEventData,
+  CalendarTooltipBuilder,
+  CalendarView
+} from './calendar-constants';
 import { DateRange } from './core/date-range';
 import { ButtonComponent } from '../button';
 import { IconButtonComponent } from '../icon-button';
@@ -55,7 +69,7 @@ declare global {
 
 /**
  * @tag forge-calendar
- * 
+ *
  * @property {Date} activeDate - The currently active date in the calendar.
  * @property {boolean} [allowSingleDateRange=true] - Whether to allow a single date range to be selected.
  * @property {boolean} [clearButton=false] - Whether to show a button to clear the selected date(s).
@@ -92,7 +106,7 @@ declare global {
  * @property {DayOfWeek[] | null | undefined} [weekendDays=null] - The days of the week that are considered weekends.
  * @property {number} [year=<today's year>] - The year to display.
  * @property {string} [yearRange='-50:+50'] - The range of years to display.
- * 
+ *
  * @attribute {boolean} [allow-single-date-range] - Whether to allow a single date range to be selected.
  * @attribute {boolean} [clear-button] - Whether to show a button to clear the selected date(s).
  * @attribute {boolean} [constrain-to-enabled] - Whether to constrain the selected date(s) to the enabled dates.
@@ -115,12 +129,12 @@ declare global {
  * @attribute {CalendarView} [view] - The view of the calendar.
  * @attribute {number} [year] - The year to display.
  * @attribute {string} [year-range] - The range of years to display.
- * 
+ *
  * @fires {CustomEvent<ICalendarDateSelectEventData>} forge-calendar-date-select - Event fired when a date is selected.
  * @fires {CustomEvent<ICalendarFocusChangeEventData>} forge-calendar-focus-change - Event fired when the focus changes.
  * @fires {CustomEvent<ICalendarMonthChangeEventData>} forge-calendar-month-change - Event fired when the month changes.
  * @fires {CustomEvent<CalendarView>} forge-calendar-view-change - Event fired when the view changes.
- * 
+ *
  * @method clear - Clears the selected date(s).
  * @method deselectDate - Deselects a date.
  * @method goToDate - Navigates to a specific date.
@@ -133,15 +147,7 @@ declare global {
  */
 @customElement({
   name: CALENDAR_CONSTANTS.elementName,
-  dependencies: [
-    ButtonComponent,
-    CalendarMenuComponent,
-    IconButtonComponent,
-    IconComponent,
-    TooltipComponent,
-    StateLayerComponent,
-    FocusIndicatorComponent
-  ]
+  dependencies: [ButtonComponent, CalendarMenuComponent, IconButtonComponent, IconComponent, TooltipComponent, StateLayerComponent, FocusIndicatorComponent]
 })
 export class CalendarComponent extends HTMLElement implements ICalendarComponent {
   public static get observedAttributes(): string[] {
@@ -267,7 +273,7 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
   }
 
   /** @readonly */
-  @coreProperty({set: false})
+  @coreProperty({ set: false })
   public declare activeDate: Date;
 
   @coreProperty()

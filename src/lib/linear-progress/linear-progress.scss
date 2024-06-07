@@ -30,13 +30,9 @@ $_host-tokens: [track-height];
   // State vars
   #{declare(track-dot-size)}: calc(#{token(track-height)} / 2);
   #{declare(track-background-width)}: calc(#{token(track-dot-size, custom)} * 5);
-  #{declare(track-background)}: 0 / #{token(track-background-width, custom)} 100%
-    radial-gradient(
-      circle at calc(#{token(track-dot-size, custom)} * 2),
-      #{token(track-color)} 0,
-      #{token(track-color)} #{token(track-dot-size, custom)},
-      transparent #{token(track-dot-size, custom)}
-    );
+  #{declare(track-background)}: 0 / #{token(track-background-width, custom)} 100% radial-gradient(circle at calc(#{token(track-dot-size, custom)} * 2), #{token(
+          track-color
+        )} 0, #{token(track-color)} #{token(track-dot-size, custom)}, transparent #{token(track-dot-size, custom)});
 }
 
 .forge-linear-progress {
@@ -99,11 +95,7 @@ $_host-tokens: [track-height];
 }
 
 // RTL styles
-$rtl-selectors: (
-  ':host-context([dir="rtl"]) .forge-linear-progress',
-  ':host([dir="rtl"]) .forge-linear-progress',
-  '.forge-linear-progress:dir(rtl)'
-);
+$rtl-selectors: (':host-context([dir="rtl"]) .forge-linear-progress', ':host([dir="rtl"]) .forge-linear-progress', '.forge-linear-progress:dir(rtl)');
 
 @each $selector in $rtl-selectors {
   #{$selector} {
@@ -111,7 +103,7 @@ $rtl-selectors: (
       transform-origin: right center;
     }
 
-    .track{
+    .track {
       transform-origin: right center;
     }
 
@@ -134,7 +126,7 @@ $rtl-selectors: (
 //
 
 @mixin theme($theme) {
-  :host([theme=#{$theme}]) {
+  :host([theme='#{$theme}']) {
     .forge-linear-progress {
       @include override(indicator-color, theme.variable($theme), value);
       @include override(track-color, theme.variable(#{$theme}-container), value);

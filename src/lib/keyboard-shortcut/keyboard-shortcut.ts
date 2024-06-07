@@ -31,7 +31,7 @@ declare global {
 
 /**
  * @tag forge-keyboard-shortcut
- * 
+ *
  * @event {CustomEvent<KeyboardEvent>} forge-keyboard-shortcut-activate - Event fired when the keyboard shortcut is activated.
  */
 @customElement({
@@ -105,7 +105,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
   /**
    * Alias for key.
    * @attribute key-binding
-   * 
+   *
    */
   public get keyBinding(): string | null | undefined {
     return this.key;
@@ -135,7 +135,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    */
   @coreProperty()
   public declare allowWhileTyping: boolean;
-  
+
   /**
    * Gets/sets whether to prevent default on keyboard events
    * @attribute prevent-default
@@ -143,7 +143,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    */
   @coreProperty()
   public declare preventDefault: boolean;
-  
+
   /**
    * Gets/sets whether to use capturing on keyboard events
    * @attribute
@@ -151,7 +151,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    */
   @coreProperty()
   public declare capture: boolean;
-  
+
   /**
    * Gets/sets whether to match codes instead of keys on keyboard events.
    * @attribute use-code

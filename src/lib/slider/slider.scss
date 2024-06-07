@@ -46,7 +46,7 @@
   &::before,
   &::after {
     content: '';
-    
+
     @include track-dimensions;
   }
 
@@ -143,7 +143,7 @@
   .handle-thumb {
     @include handle-thumb-disabled;
   }
-  
+
   .handle-label {
     @include handle-label-disabled;
   }
@@ -168,7 +168,7 @@
     }
   }
 
-  input[type=range] {
+  input[type='range'] {
     @include input-disabled;
   }
 }
@@ -199,7 +199,7 @@ input.start:focus ~ .handle-container-padded .handle.start > .handle-thumb {
   @include handle-label-visible;
 }
 
-input[type=range] {
+input[type='range'] {
   @include input;
 }
 
@@ -214,14 +214,18 @@ input[type=range] {
 }
 
 forge-focus-indicator {
-  @include focus-indicator.provide-theme((
-    shape: 50%,
-    outward-offset: 0px // Requires unit
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      shape: 50%,
+      outward-offset: 0px // Requires unit
+    )
+  );
 }
 
 forge-state-layer {
-  @include state-layer.provide-theme((
-    color: #{token(handle-color)}
-  ));
+  @include state-layer.provide-theme(
+    (
+      color: #{token(handle-color)}
+    )
+  );
 }

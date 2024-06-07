@@ -38,7 +38,7 @@ describe('Card', () => {
     const el = await fixture<ICardComponent>('<forge-card></forge-card>');
 
     el.raised = true;
-    
+
     expect(el.raised).to.be.true;
     expect(el.hasAttribute(CARD_CONSTANTS.attributes.RAISED)).to.be.true;
   });

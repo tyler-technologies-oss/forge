@@ -19,8 +19,7 @@ const meta = {
       exclude: ['options', 'icon']
     })
   },
-  args: {
-  },
+  args: {}
 } satisfies Meta;
 
 export default meta;
@@ -31,11 +30,11 @@ export const Demo: Story = {
   ...standaloneStoryParams,
   render: () => {
     return html`
-    <forge-app-bar title-text="Search">
-      <forge-app-bar-search slot="center" >
+      <forge-app-bar title-text="Search">
+        <forge-app-bar-search slot="center">
           <input type="text" aria-label="Search for a record" placeholder="Search" />
-      </forge-app-bar-search>
-    </forge-app-bar>
+        </forge-app-bar-search>
+      </forge-app-bar>
     `;
-  },
+  }
 };

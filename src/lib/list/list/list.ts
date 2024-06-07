@@ -31,16 +31,16 @@ declare global {
 
 /**
  * @tag forge-list
- * 
+ *
  * @summary Lists are vertical groupings of related content.
- * 
+ *
  * @csspart root - The component's root container element.
- * 
+ *
  * @slot - The default/unnamed slot for child list items.
  *
  * @cssproperty --forge-list-container-color - The background color of the list surface.
  * @cssproperty --forge-list-spacing - The spacing between the list items.
- * 
+ *
  * @property {boolean} [dense=false] - Whether the list has all dense items or not.
  * @property {boolean} [indented=false] - Whether the list items within this list are indented. Default is false.
  * @property {unknown | unknown[]} selectedValue - The selected list item value(s).
@@ -48,7 +48,7 @@ declare global {
  * @property {boolean} [threeLine=false] - Whether the list has all three-line items or not.
  * @property {boolean} [wrap=false] - Whether the list has all items that wrap their text or not.
  * @property {boolean} [noninteractive=false] - Controls whether the list items will automatically attach themselves to interactive slotted elements or not.
- * 
+ *
  * @attribute {boolean} [dense=false] - Whether the list has all dense items or not.
  * @attribute {string} selected-value - The selected list item value(s).
  * @attribute {boolean} [indented=false] - Whether the list items within this list are indented. Default is false.
@@ -60,9 +60,7 @@ declare global {
  */
 @customElement({
   name: LIST_CONSTANTS.elementName,
-  dependencies: [
-    ListItemComponent
-  ]
+  dependencies: [ListItemComponent]
 })
 export class ListComponent extends WithElementInternals(WithDefaultAria(BaseComponent)) implements IListComponent {
   public static get observedAttributes(): string[] {

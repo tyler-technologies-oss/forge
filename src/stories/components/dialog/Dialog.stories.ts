@@ -30,7 +30,10 @@ const meta = {
         preset: { control: 'select', options: ['dialog', 'left-sheet', 'right-sheet', 'top-sheet', 'bottom-sheet'] },
         sizeStrategy: { control: 'select', options: ['content', 'container-inline', 'container-block'] },
         positionStrategy: { control: 'select', options: ['viewport', 'container'] },
-        placement: { control: 'select', options: ['custom', 'center', 'top', 'right', 'bottom', 'left', 'top-right', 'top-left', 'bottom-right', 'bottom-left'] },
+        placement: {
+          control: 'select',
+          options: ['custom', 'center', 'top', 'right', 'bottom', 'left', 'top-right', 'top-left', 'bottom-right', 'bottom-left']
+        }
       }
     })
   },
@@ -45,7 +48,7 @@ const meta = {
     preset: DIALOG_CONSTANTS.defaults.PRESET,
     sizeStrategy: DIALOG_CONSTANTS.defaults.SIZE_STRATEGY,
     positionStrategy: DIALOG_CONSTANTS.defaults.POSITION_STRATEGY,
-    placement: DIALOG_CONSTANTS.defaults.PLACEMENT,
+    placement: DIALOG_CONSTANTS.defaults.PLACEMENT
   }
 } satisfies Meta<Partial<IDialogProperties>>;
 
@@ -56,21 +59,21 @@ type Story = StoryObj<Partial<IDialogProperties>>;
 export const Demo: Story = {};
 
 export const RightSheet: Story = {
-  args: { preset: 'right-sheet' },
+  args: { preset: 'right-sheet' }
 };
 
 export const LeftSheet: Story = {
-  args: { preset: 'left-sheet' },
+  args: { preset: 'left-sheet' }
 };
 
 export const TopSheet: Story = {
-  args: { preset: 'top-sheet' },
+  args: { preset: 'top-sheet' }
 };
 
 export const BottomSheet: Story = {
-  args: { preset: 'bottom-sheet' },
+  args: { preset: 'bottom-sheet' }
 };
 
 export const Fullscreen: Story = {
-  args: { fullscreen: true },
+  args: { fullscreen: true }
 };

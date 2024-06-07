@@ -2,7 +2,7 @@
  * @license
  * Copyright 2023 Google LLC
  * SPDX-License-Identifier: Apache-2.0
- * 
+ *
  * Adapted and influenced from [Material Web](https://github.com/material-components/material-web).
  * The original source code can be found at: [GitHub](https://github.com/material-components/material-web/blob/main/labs/behaviors/focusable_test.ts)
  */
@@ -15,7 +15,6 @@ import { isFocusable } from '../../../constants';
 import { WithFocusable } from './with-focusable';
 import { BaseComponent } from '../../base/base-component';
 
-
 describe('WithFocusable', () => {
   @customElement({ name: 'test-focusable' })
   class TestFocusable extends WithFocusable(BaseComponent) {
@@ -23,7 +22,7 @@ describe('WithFocusable', () => {
       return ['tabindex'];
     }
   }
-  
+
   async function setupTest(): Promise<TestFocusable> {
     return await fixture<TestFocusable>(html`<test-focusable></test-focusable>`);
   }

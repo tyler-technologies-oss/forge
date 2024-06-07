@@ -46,43 +46,43 @@ $host-tokens: [height width];
   @include slotted-base;
 }
 
-::slotted([slot=left]) {
+::slotted([slot='left']) {
   @include left;
 }
 
-::slotted([slot=right]) {
+::slotted([slot='right']) {
   @include right;
 }
 
-::slotted([slot=body-left]) {
+::slotted([slot='body-left']) {
   @include body-left;
 }
 
-::slotted([slot=body-right]) {
+::slotted([slot='body-right']) {
   @include body-right;
 }
 
-::slotted([slot=body-header]) {
+::slotted([slot='body-header']) {
   @include body-header;
 }
 
-::slotted([slot=body]) {
+::slotted([slot='body']) {
   @include body-inner;
 }
 
-::slotted([slot=body-footer]) {
+::slotted([slot='body-footer']) {
   @include body-footer;
 }
 
-::slotted([slot=footer]) {
+::slotted([slot='footer']) {
   @include footer;
 }
 
-::slotted([slot=left]),
-::slotted([slot=right]),
-::slotted([slot=body-left]),
-::slotted([slot=body]),
-::slotted([slot=body-right]) {
+::slotted([slot='left']),
+::slotted([slot='right']),
+::slotted([slot='body-left']),
+::slotted([slot='body']),
+::slotted([slot='body-right']) {
   @include scrollable;
 }
 

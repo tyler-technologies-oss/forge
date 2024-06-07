@@ -187,20 +187,20 @@ export class OptionCore implements IOptionCore {
   }
 
   /** Gets/sets the leading builder of this option. */
-  public get leadingBuilder(): (() => HTMLElement) {
+  public get leadingBuilder(): () => HTMLElement {
     return this._leadingBuilder;
   }
-  public set leadingBuilder(value: (() => HTMLElement)) {
+  public set leadingBuilder(value: () => HTMLElement) {
     if (this._leadingBuilder !== value) {
       this._leadingBuilder = value;
     }
   }
 
   /** Gets/sets the trailing builder of this option. */
-  public get trailingBuilder(): (() => HTMLElement) {
+  public get trailingBuilder(): () => HTMLElement {
     return this._trailingBuilder;
   }
-  public set trailingBuilder(value: (() => HTMLElement)) {
+  public set trailingBuilder(value: () => HTMLElement) {
     if (this._trailingBuilder !== value) {
       this._trailingBuilder = value;
     }

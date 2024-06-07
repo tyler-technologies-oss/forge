@@ -18,14 +18,14 @@ const meta = {
 
     return html`
       <forge-stepper
-         .alternative=${args.alternative}
-         .layoutMode=${args.layoutMode}
-         .layoutAlign=${args.layoutAlign}
-         .disabled=${args.disabled}
-         .vertical=${args.vertical}
-         .linear=${args.linear}
-         style=${style}
-         @forge-step-select=${selectAction}>
+        .alternative=${args.alternative}
+        .layoutMode=${args.layoutMode}
+        .layoutAlign=${args.layoutAlign}
+        .disabled=${args.disabled}
+        .vertical=${args.vertical}
+        .linear=${args.linear}
+        style=${style}
+        @forge-step-select=${selectAction}>
         <forge-step>Step 1</forge-step>
         <forge-step>
           Step 2
@@ -41,7 +41,7 @@ const meta = {
   },
   component,
   subcomponents: {
-    'Step': 'forge-step'
+    Step: 'forge-step'
   },
   argTypes: {
     ...generateCustomElementArgTypes({
@@ -57,11 +57,11 @@ const meta = {
           options: ['left', 'center', 'right']
         }
       }
-    }),
+    })
   },
   args: {
     layoutMode: 'fixed'
-  },
+  }
 } satisfies Meta;
 
 export default meta;
@@ -72,11 +72,11 @@ export const Demo: Story = {};
 
 export const Vertical: Story = {
   ...standaloneStoryParams,
-  render: (args) => html`
+  render: args => html`
     <forge-stepper vertical="true">
       <forge-step>Step 1</forge-step>
       <forge-step>
-        Step 2 
+        Step 2
         <span slot="optional">Optional</span>
       </forge-step>
       <forge-step>
@@ -86,4 +86,4 @@ export const Vertical: Story = {
       <forge-step>Step 4</forge-step>
     </forge-stepper>
   `
-}
+};

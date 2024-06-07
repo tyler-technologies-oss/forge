@@ -52,36 +52,15 @@ export const REFLECTIVE_ARIA_ATTRIBUTES = [
 /**
  * ARIA attributes typically useful for input elements.
  */
-export const INPUT_ARIA_ATTRIBUTES = [
-  'aria-autocomplete',
-  'aria-description',
-  'aria-invalid',
-  'aria-keyshortcuts',
-  'aria-label'
-];
+export const INPUT_ARIA_ATTRIBUTES = ['aria-autocomplete', 'aria-description', 'aria-invalid', 'aria-keyshortcuts', 'aria-label'];
 /**
  * Property names relevant to input elements.
  */
-export const INPUT_PROPERTIES: (keyof HTMLInputElement)[] = [
-  'checked',
-  'disabled',
-  'indeterminate',
-  'readOnly',
-  'required',
-  'value'
-];
+export const INPUT_PROPERTIES: (keyof HTMLInputElement)[] = ['checked', 'disabled', 'indeterminate', 'readOnly', 'required', 'value'];
 /**
  * Attributes for buttons when used within a form.
  */
-export const BUTTON_FORM_ATTRIBUTES = [
-  'name',
-  'value',
-  'formaction',
-  'formenctype',
-  'formmethod',
-  'formnovalidate',
-  'formtarget'
-];
+export const BUTTON_FORM_ATTRIBUTES = ['name', 'value', 'formaction', 'formenctype', 'formmethod', 'formnovalidate', 'formtarget'];
 
 /**
  * Gets an array of attribute names prefixed by a part name and colon.
@@ -189,7 +168,7 @@ export class SlottedElementAdapter<T extends HTMLElement = HTMLElement> {
 
   /**
    * Clones the specified attributes from one element to another.
-   * 
+   *
    * @param from - The element to clone attributes from.
    * @param to - The element to clone attributes to.
    * @param attributes - The names of the attributes to clone.
@@ -200,17 +179,17 @@ export class SlottedElementAdapter<T extends HTMLElement = HTMLElement> {
 
   /**
    * Clones the input specific properties from one element to another.
-   * 
+   *
    * @param from - The element to clone properties from.
    * @param to - The element to clone properties to.
    */
   public static cloneProperties(from: HTMLElement, to: HTMLElement, properties: (keyof HTMLElement)[]): void {
     cloneProperties(from, to, properties);
   }
-  
+
   /**
    * Clones the validation message from one element to another.
-   * 
+   *
    * @param from - The element to clone the validation message from.
    * @param to - The element to clone the validation message to.
    */
@@ -224,7 +203,7 @@ export class SlottedElementAdapter<T extends HTMLElement = HTMLElement> {
 
   /**
    * Initializes the adapter with an initial element and attach callback.
-   * 
+   *
    * @param el - The element to associate with the adapter.
    * @param attachCallback - The callback to invoke when attaching the element.
    */
@@ -235,7 +214,7 @@ export class SlottedElementAdapter<T extends HTMLElement = HTMLElement> {
 
   /**
    * Replaces the attached element.
-   * 
+   *
    * @param el - The new element to attach.
    */
   public attachElement(el: T): void {

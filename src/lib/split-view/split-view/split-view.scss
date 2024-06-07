@@ -10,10 +10,10 @@
   display: none;
 }
 
-:host([orientation=horizontal]) {
+:host([orientation='horizontal']) {
   @include mixins.horizontal-styles;
 }
 
-:host([orientation=vertical]) {
+:host([orientation='vertical']) {
   @include mixins.vertical-styles;
 }

@@ -4,7 +4,7 @@ import { Meta } from '@storybook/blocks';
 
 # React
 
-Direct support for custom elements in React has been a requested feature for long time. As you can see on 
+Direct support for custom elements in React has been a requested feature for long time. As you can see on
 [Custom Elements Everywhere](https://custom-elements-everywhere.com/#react) React scores quite low.
 
 > As for May 2024, React 19 is in beta now has [support for custom elements](https://custom-elements-everywhere.com/#react-beta) natively.
@@ -25,12 +25,11 @@ event bubbling from custom elements doesn't work, nor does attaching event liste
 To make using Forge with React more seamless, we have created an adapter library that helps with the issues mentioned above.
 
 This adapter library provides a thin wrapper component around all Forge components that allows you to pass data and listen
-to events in a more React-friendly way. 
+to events in a more React-friendly way.
 
 While the adapter is not _required_ to use Forge with React, it is **highly** recommended to make the integration easier.
 
 > You can view source code for the React adapter on [GitHub](https://github.com/tyler-technologies-oss/forge-react)
-
 
 ## Installation
 
@@ -47,7 +46,7 @@ Now that you have Forge and the React adapter installed, let's add the rest of t
 Edit your `index.html` file and add the following `<link>` tag to the `<head>` section load the Tyler font:
 
 ```html
-<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css">
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
 ```
 
 This will configure the default font family for your application, and load the required font weights and styles.

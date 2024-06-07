@@ -22,9 +22,9 @@ const meta = {
       tagName: component,
       exclude: ['rangeLabelCallback'],
       controls: {
-        pageSizeOptions: { control: 'object' },
+        pageSizeOptions: { control: 'object' }
       }
-    }),
+    })
   },
   args: {
     pageIndex: 0,
@@ -36,8 +36,8 @@ const meta = {
     firstLast: false,
     first: false,
     disabled: false,
-    alternative: false,
-  },
+    alternative: false
+  }
 } satisfies Meta<Partial<IPaginatorComponent>>;
 
 export default meta;

@@ -22,21 +22,21 @@ declare global {
 
 /**
  * @tag forge-state-layer
- * 
+ *
  * @summary State layers show the interaction status of an element.
- * 
+ *
  * @description A state layer is a semi-transparent overlay on an element that indicates its interaction
  * state. State layers provide a systematic approach to visualizing states by using opacity.
  * A layer can be applied to an entire element or in a circular shape. Only one state layer
  * can be applied at a given time.
- * 
+ *
  * @property {HTMLElement} targetElement - The element to attach the state layer to.
  * @property {string} target - The id of the element to attach the state layer to.
  * @property {boolean} [disabled=false] - Controls whether the state layer is disabled.
- * 
+ *
  * @attribute {string} target - The id of the element to attach the state layer to.
  * @attribute {boolean} [disabled=false] - Controls whether the state layer is disabled.
- * 
+ *
  * @cssproperty --forge-state-layer-color - The color of the state layer. Defaults to the on-surface theme.
  * @cssproperty --forge-state-layer-hover-color - The color of the state layer when hovered.
  * @cssproperty --forge-state-layer-hover-opacity - The opacity of the state layer when hovered.
@@ -45,7 +45,7 @@ declare global {
  * @cssproperty --forge-state-layer-hover-duration - The duration of the hover animation.
  * @cssproperty --forge-state-layer-animation-duration - The duration of the animation.
  * @cssproperty --forge-state-layer-pressed-duration - The duration of the pressed animation.
- * 
+ *
  * @csspart surface - The surface element.
  */
 @customElement({
@@ -53,10 +53,7 @@ declare global {
 })
 export class StateLayerComponent extends BaseComponent implements IStateLayerComponent {
   public static get observedAttributes(): string[] {
-    return [
-      STATE_LAYER_CONSTANTS.attributes.TARGET,
-      STATE_LAYER_CONSTANTS.attributes.DISABLED
-    ];
+    return [STATE_LAYER_CONSTANTS.attributes.TARGET, STATE_LAYER_CONSTANTS.attributes.DISABLED];
   }
 
   private _core: StateLayerCore;
@@ -97,9 +94,9 @@ export class StateLayerComponent extends BaseComponent implements IStateLayerCom
 
   /**
    * Triggers the animation to run.
-   * 
+   *
    * Note: If coordinates are not provided, the transition will originate from the center of the target element.
-   * 
+   *
    * @param {StateLayerCoords} [coords] - The coordinates to play the animation from.
    */
   public playAnimation(coords?: StateLayerCoords): void {

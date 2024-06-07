@@ -47,10 +47,10 @@ class RadioHarness extends TestHarness<HTMLElement> {
   public async clickElement(el: HTMLElement): Promise<void> {
     const { x, y, width, height } = el.getBoundingClientRect();
 
-    await sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
+    await sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 }
 
@@ -115,12 +115,12 @@ describe('Radio', () => {
       const ctx = new RadioHarness(el);
 
       expect(el.labelPosition).to.equal('start');
-      expect (ctx.getRootElement(el).firstElementChild).to.equal(ctx.getLabelElement(el));
+      expect(ctx.getRootElement(el).firstElementChild).to.equal(ctx.getLabelElement(el));
 
       el.labelPosition = 'end';
 
       expect(el.labelPosition).to.equal('end');
-      expect (ctx.getRootElement(el).lastElementChild).to.equal(ctx.getLabelElement(el));
+      expect(ctx.getRootElement(el).lastElementChild).to.equal(ctx.getLabelElement(el));
     });
 
     it('should set disabled', async () => {
@@ -152,7 +152,9 @@ describe('Radio', () => {
     });
 
     it('should return associated form labels', async () => {
-      const form = await fixture<HTMLFormElement>(html`<form name="test-form"><label for="test-radio">Test label</label><forge-radio id="test-radio"></forge-radio></form>`);
+      const form = await fixture<HTMLFormElement>(
+        html`<form name="test-form"><label for="test-radio">Test label</label><forge-radio id="test-radio"></forge-radio></form>`
+      );
       const ctx = new RadioHarness(form);
       const labelEl = form.querySelector('label') as HTMLLabelElement;
 
@@ -381,7 +383,7 @@ describe('Radio', () => {
 
   describe('label aware', async () => {
     it('should accept forge label click', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`)
+      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
 
       el.labelClickedCallback?.();
       await task();
@@ -896,17 +898,19 @@ describe('Radio', () => {
     });
 
     it('should set properties via the constructor', () => {
-      const delegate = new RadioComponentDelegate({ props: {
-        value: 'value',
-        checked: true,
-        defaultChecked: true,
-        dense: true,
-        disabled: true,
-        required: true,
-        readonly: true,
-        name: 'test-radio',
-        labelPosition: 'start',
-      }});
+      const delegate = new RadioComponentDelegate({
+        props: {
+          value: 'value',
+          checked: true,
+          defaultChecked: true,
+          dense: true,
+          disabled: true,
+          required: true,
+          readonly: true,
+          name: 'test-radio',
+          labelPosition: 'start'
+        }
+      });
       expect(delegate.value).to.equal('value');
       expect(delegate.checked).to.be.true;
       expect(delegate.defaultChecked).to.be.true;

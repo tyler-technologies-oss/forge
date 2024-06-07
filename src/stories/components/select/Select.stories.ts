@@ -58,7 +58,18 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['popoverTargetElement', 'popoverIcon', 'popoverExpanded', 'value', 'selectedIndex', 'options', 'optionBuilder', 'selectedTextBuilder', 'popupElement', 'beforeValueChange'],
+      exclude: [
+        'popoverTargetElement',
+        'popoverIcon',
+        'popoverExpanded',
+        'value',
+        'selectedIndex',
+        'options',
+        'optionBuilder',
+        'selectedTextBuilder',
+        'popupElement',
+        'beforeValueChange'
+      ],
       controls: {
         labelPosition: { control: 'select', options: ['inline-start', 'inline-end', 'block-start', 'inset', 'none'] },
         labelAlignment: { control: 'select', options: ['default', 'center', 'baseline', 'start', 'end'] },
@@ -66,11 +77,11 @@ const meta = {
         theme: { control: 'select', options: [...GLOBAL_THEME_OPTIONS, 'default'] },
         shape: { control: 'select', options: ['default', 'rounded', 'squared'] },
         density: { control: 'select', options: ['default', 'extra-small', 'small', 'medium', 'large', 'extra-large'] },
-        supportTextInset: { control: 'select', options: ['start', 'end', 'both', 'none'] },
-      },
+        supportTextInset: { control: 'select', options: ['start', 'end', 'both', 'none'] }
+      }
     }),
-    supportText: { control: { type: 'text' }},
-    supportTextEnd: { control: { type: 'text' }},
+    supportText: { control: { type: 'text' } },
+    supportTextEnd: { control: { type: 'text' } }
   },
   args: {
     label: 'Label',
@@ -92,8 +103,8 @@ const meta = {
     floatLabel: false,
     supportTextInset: 'none',
     open: false
-  },
-} satisfies Meta<Partial<ISelectComponent> & { supportText: string; supportTextEnd: string; }>;
+  }
+} satisfies Meta<Partial<ISelectComponent> & { supportText: string; supportTextEnd: string }>;
 
 export default meta;
 
@@ -104,20 +115,20 @@ export const Demo: Story = {};
 export const LabelAbove: Story = {
   ...standaloneStoryParams,
   args: {
-    labelPosition: 'block-start',
-  },
+    labelPosition: 'block-start'
+  }
 };
 
 export const LabelInline: Story = {
   ...standaloneStoryParams,
   args: {
-    labelPosition: 'inline-start',
-  },
+    labelPosition: 'inline-start'
+  }
 };
 
 export const Multiple: Story = {
   ...standaloneStoryParams,
   args: {
     multiple: true
-  },
+  }
 };

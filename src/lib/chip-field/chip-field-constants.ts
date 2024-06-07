@@ -44,12 +44,8 @@ export const CHIP_FIELD_CONSTANTS = {
   tagNames
 };
 
+export { type FieldDensity as ChipFieldDensityType, type FieldShape as ChipFieldShapeType } from '../field/base/base-field-constants';
 
-export {
-  type FieldDensity as ChipFieldDensityType,
-  type FieldShape as ChipFieldShapeType
-} from '../field/base/base-field-constants';
-
-export type ChipFieldObservedInputAttributes = typeof observedInputAttributes[number];
+export type ChipFieldObservedInputAttributes = (typeof observedInputAttributes)[number];
 export type ChipFieldInputAttributeObserver = (name: ChipFieldObservedInputAttributes, value: string | null) => void;
 export type ChipFieldValueChangeListener = (value: string | null) => void;

@@ -56,7 +56,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   private _inputElement: HTMLInputElement;
   private _listDropdown?: IListDropdown;
   private _targetElement?: HTMLElement;
-  
+
   constructor(component: IAutocompleteComponent) {
     super(component);
     this.setInputElement();
@@ -319,10 +319,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   }
 
   private _tryGetFieldLikeChild(): IFieldComponent | null {
-    const fieldLikeElements = [
-      TEXT_FIELD_CONSTANTS.elementName,
-      CHIP_FIELD_CONSTANTS.elementName
-    ];
+    const fieldLikeElements = [TEXT_FIELD_CONSTANTS.elementName, CHIP_FIELD_CONSTANTS.elementName];
     return this._component.querySelector(`:is(${fieldLikeElements.join(',')})`) as IFieldComponent;
   }
 }

@@ -7,16 +7,20 @@
 //
 
 :host {
- @include tokens;
+  @include tokens;
 }
 
 :host {
   @include base-core.host;
   @include host;
-  @include divider.provide-theme(( margin: 4px 0 ));
+  @include divider.provide-theme(
+    (
+      margin: 4px 0
+    )
+  );
 }
 
-:host([direction=right]) {
+:host([direction='right']) {
   @include host-right;
 
   .root {

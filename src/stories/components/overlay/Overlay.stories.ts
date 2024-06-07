@@ -11,7 +11,7 @@ import type { IOverlayComponent } from '@tylertech/forge/overlay';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge/overlay';
-import styles from './Overlay.scss?inline'
+import styles from './Overlay.scss?inline';
 import { VirtualElement } from '../../../lib/core/utils/position-utils';
 
 const component = 'forge-overlay';
@@ -61,7 +61,8 @@ const meta = {
             style=${style}
             @forge-overlay-light-dismiss=${lightDismissAction}>
             <div class="overlay-content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui auctor, ultricies nunc nec, ultricies nunc. Nullam in dui auctor, ultricies nunc nec, ultricies nunc.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui auctor, ultricies nunc nec, ultricies nunc. Nullam in dui auctor, ultricies
+              nunc nec, ultricies nunc.
             </div>
           </forge-overlay>
         </div>
@@ -78,11 +79,11 @@ const meta = {
         offset: { control: 'object' },
         hide: { control: 'select', options: ['anchor-hidden', 'never'] },
         flip: { control: 'select', options: ['auto', 'main', 'cross', 'never'] },
-        fallbackPlacements: { control: 'multi-select', options: OVERLAY_PLACEMENT_OPTIONS },
+        fallbackPlacements: { control: 'multi-select', options: OVERLAY_PLACEMENT_OPTIONS }
       }
     }),
-    'useSmallContainer': { control: 'boolean' },
-    'forceContainment': { control: 'boolean' },
+    useSmallContainer: { control: 'boolean' },
+    forceContainment: { control: 'boolean' }
   },
   args: {
     useSmallContainer: false,
@@ -95,29 +96,33 @@ const meta = {
     persistent: false,
     flip: 'auto'
   }
-} satisfies Meta<Partial<IPopoverProperties> & {
-  useSmallContainer: boolean;
-  forceContainment: boolean;
-}>;
+} satisfies Meta<
+  Partial<IPopoverProperties> & {
+    useSmallContainer: boolean;
+    forceContainment: boolean;
+  }
+>;
 
 export default meta;
 
 type Story = StoryObj<Partial<IPopoverProperties>>;
 
 export const Demo: Story = {
-  decorators: [storyStyles(styles)],
+  decorators: [storyStyles(styles)]
 };
 
 export const ContextMenu: Story = {
   ...standaloneStoryParams,
-  decorators: [storyStyles(`
+  decorators: [
+    storyStyles(`
     .context-menu {
       background-color: var(--forge-theme-surface-container);
       border: var(--forge-border-thin) solid var(--forge-theme-outline);
       border-radius: var(--forge-shape-medium);
       padding: var(--forge-spacing-medium);
     }
-  `)],
+  `)
+  ],
   render: () => {
     document.addEventListener('contextmenu', createContextMenu);
     return html`

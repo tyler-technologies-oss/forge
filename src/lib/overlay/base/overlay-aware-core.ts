@@ -110,7 +110,11 @@ export abstract class OverlayAwareCore<T extends IOverlayAwareAdapter> implement
   public set hide(value: OverlayHideState) {
     if (this._adapter.overlayElement.hide !== value) {
       this._adapter.overlayElement.hide = value;
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.HIDE, this._adapter.overlayElement.hide !== OVERLAY_CONSTANTS.defaults.HIDE, String(this._adapter.overlayElement.hide));
+      this._adapter.toggleHostAttribute(
+        OVERLAY_CONSTANTS.attributes.HIDE,
+        this._adapter.overlayElement.hide !== OVERLAY_CONSTANTS.defaults.HIDE,
+        String(this._adapter.overlayElement.hide)
+      );
     }
   }
 
@@ -147,17 +151,25 @@ export abstract class OverlayAwareCore<T extends IOverlayAwareAdapter> implement
   public set flip(value: OverlayFlipState) {
     if (this._adapter.overlayElement.flip !== value) {
       this._adapter.overlayElement.flip = value;
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.FLIP, this._adapter.overlayElement.flip !== OVERLAY_CONSTANTS.defaults.FLIP, String(this._adapter.overlayElement.flip));
+      this._adapter.toggleHostAttribute(
+        OVERLAY_CONSTANTS.attributes.FLIP,
+        this._adapter.overlayElement.flip !== OVERLAY_CONSTANTS.defaults.FLIP,
+        String(this._adapter.overlayElement.flip)
+      );
     }
   }
-  
+
   public get boundary(): string | null {
     return this._adapter.overlayElement.boundary;
   }
   public set boundary(value: string | null) {
     if (this._adapter.overlayElement.boundary !== value) {
       this._adapter.overlayElement.boundary = value;
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.BOUNDARY, !!this._adapter.overlayElement.boundary, this._adapter.overlayElement.boundary as string);
+      this._adapter.toggleHostAttribute(
+        OVERLAY_CONSTANTS.attributes.BOUNDARY,
+        !!this._adapter.overlayElement.boundary,
+        this._adapter.overlayElement.boundary as string
+      );
     }
   }
 

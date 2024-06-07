@@ -10,7 +10,10 @@ export class ColorPickerGradientSlider {
   private _moveListener: (evt: MouseEvent & TouchEvent) => void;
   private _upListener: (evt: MouseEvent & TouchEvent) => void;
 
-  constructor(private _rootElement: HTMLElement, private _changeListener: (x: number, y: number) => void) {
+  constructor(
+    private _rootElement: HTMLElement,
+    private _changeListener: (x: number, y: number) => void
+  ) {
     this._keydownListener = evt => this._onKeydown(evt);
     this._downListener = evt => this._onDown(evt);
     this._moveListener = evt => this._onMove(evt);

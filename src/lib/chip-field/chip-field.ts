@@ -27,30 +27,24 @@ declare global {
 
 /**
  * @tag forge-chip-field
- * 
+ *
  * @property {boolean} [addOnBlur=false] - Whether or not to add chip when blur event
  * @property {boolean} popoverTargetElement - The target element for the popover.
- * 
+ *
  * @attribute {boolean} [add-on-blur=false] - Whether or not to add chip when blur event
- * 
+ *
  * @event {CustomEvent<IButtonToggleSelectEventData>} forge-button-toggle-select - Dispatches when the user toggles the button.
- * 
+ *
  * @cssproperty --forge-chip-field-member-spacing - The spacing between chip members.
  * @cssproperty --forge-chip-field-content-spacing - The spacing around chips group.
  */
 @customElement({
   name: CHIP_FIELD_CONSTANTS.elementName,
-  dependencies: [
-    FieldComponent,
-    ChipComponent
-  ]
+  dependencies: [FieldComponent, ChipComponent]
 })
 export class ChipFieldComponent extends BaseField<ChipFieldCore> implements IChipFieldComponent {
   public static get observedAttributes(): string[] {
-    return [
-      ...Object.values(BASE_FIELD_CONSTANTS.observedAttributes),
-      ...Object.values(CHIP_FIELD_CONSTANTS.observedAttributes)
-    ];
+    return [...Object.values(BASE_FIELD_CONSTANTS.observedAttributes), ...Object.values(CHIP_FIELD_CONSTANTS.observedAttributes)];
   }
 
   protected _core: ChipFieldCore;

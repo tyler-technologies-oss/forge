@@ -59,7 +59,7 @@ export class RadioCore implements IRadioCore {
       this._checked = false;
       return false;
     }
-    
+
     this._adapter.setChecked(this._checked, this._value);
     this._adapter.toggleHostAttribute(RADIO_CONSTANTS.attributes.CHECKED, this._checked);
     return true;
@@ -136,7 +136,7 @@ export class RadioCore implements IRadioCore {
 
   /**
    * Dispatches change and input events.
-   * 
+   *
    * @returns {boolean} - Returns true if neither event was cancelled.
    */
   private _dispatchEvents(): boolean {
@@ -175,7 +175,7 @@ export class RadioCore implements IRadioCore {
   public set value(value: string) {
     if (this._value !== value) {
       this._value = value;
-      this._adapter.setHostAttribute(RADIO_CONSTANTS.attributes.VALUE,  this._value);
+      this._adapter.setHostAttribute(RADIO_CONSTANTS.attributes.VALUE, this._value);
     }
   }
 

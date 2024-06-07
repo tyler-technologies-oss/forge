@@ -82,12 +82,15 @@ export function getDateElement(date: ICalendarDateConfig, locale?: string): HTML
   element.classList.toggle(CALENDAR_CONSTANTS.classes.DATE_OTHER_MONTH, !date.thisMonth);
   element.setAttribute('role', 'gridcell');
   element.setAttribute('aria-disabled', date.disabled.toString());
-  element.setAttribute('aria-label', `${date.today ? 'Today, ' : ''}${date.date.toLocaleDateString(locale ?? navigator.language, {weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'})}`);
+  element.setAttribute(
+    'aria-label',
+    `${date.today ? 'Today, ' : ''}${date.date.toLocaleDateString(locale ?? navigator.language, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}`
+  );
   element.setAttribute('aria-selected', date.selected.toString());
   element.setAttribute(CALENDAR_CONSTANTS.attributes.DATA_DATE, date.date.toDateString());
   element.toggleAttribute('disabled', date.disabled);
   element.setAttribute('part', CALENDAR_CONSTANTS.parts.DATE_WRAPPER);
-  
+
   // Add day of week part
   let dayOfWeekPart = '';
   switch (day) {
@@ -155,7 +158,8 @@ export function getEventElement(event: ICalendarEvent, overflow?: boolean): HTML
     element.classList.add(CALENDAR_CONSTANTS.classes.EVENT_OVERFLOW);
     element.name = 'add';
   } else {
-    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"></path><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="var(--forge-calendar-event-stroke-color)" stroke-width="4px" paint-order="stroke"></path></svg>';
+    const svg =
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"></path><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="var(--forge-calendar-event-stroke-color)" stroke-width="4px" paint-order="stroke"></path></svg>';
     element.src = svg;
     element.setAttribute(CALENDAR_CONSTANTS.attributes.DATA_EVENT_THEME, event.color);
   }

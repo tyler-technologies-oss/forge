@@ -5,7 +5,16 @@ import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { getShadowElement } from '@tylertech/forge-core';
 import { IDialogComponent } from './dialog';
-import { DialogAnimationType, DialogMode, DialogPlacement, DialogPositionStrategy, DialogPreset, DialogSizeStrategy, DialogType, DIALOG_CONSTANTS } from './dialog-constants';
+import {
+  DialogAnimationType,
+  DialogMode,
+  DialogPlacement,
+  DialogPositionStrategy,
+  DialogPreset,
+  DialogSizeStrategy,
+  DialogType,
+  DIALOG_CONSTANTS
+} from './dialog-constants';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
 import { timer } from '@tylertech/forge-testing';
 
@@ -17,7 +26,7 @@ describe('Dialog', () => {
 
     expect(harness.dialogElement.shadowRoot).to.not.be.null;
   });
-  
+
   describe('API', () => {
     it('should have expected default values', async () => {
       const harness = await createFixture();
@@ -69,28 +78,28 @@ describe('Dialog', () => {
 
       expect(harness.dialogElement.type).to.equal('alertdialog');
     });
-  
+
     it('should set type via property', async () => {
       const harness = await createFixture();
-  
+
       harness.dialogElement.type = 'alertdialog';
-  
+
       expect(harness.dialogElement.type).to.equal('alertdialog');
     });
 
     it('should set type via attribute', async () => {
       const harness = await createFixture();
-  
+
       harness.dialogElement.setAttribute(DIALOG_CONSTANTS.attributes.TYPE, 'alertdialog');
-  
+
       expect(harness.dialogElement.type).to.equal('alertdialog');
     });
 
     it('should set to default type if attribute is removed', async () => {
       const harness = await createFixture({ type: 'alertdialog' });
-  
+
       harness.dialogElement.removeAttribute(DIALOG_CONSTANTS.attributes.TYPE);
-  
+
       expect(harness.dialogElement.type).to.equal(DIALOG_CONSTANTS.defaults.TYPE);
     });
 
@@ -444,7 +453,7 @@ describe('Dialog', () => {
 
       expect(submitSpy).to.have.been.calledOnce;
       expect(harness.isOpen).to.be.false;
-    })
+    });
 
     it('should set focus to element with autofocus attribute when opened', async () => {
       const harness = await createFixture({ open: true });
@@ -655,19 +664,19 @@ describe('Dialog', () => {
   describe('trigger', () => {
     it('should be attached to trigger element when trigger attribute is set', async () => {
       const harness = await createFixture();
-  
+
       expect(harness.dialogElement.trigger).to.equal(harness.triggerElement.id);
       expect(harness.dialogElement.triggerElement).to.equal(harness.triggerElement);
     });
 
     it('should dynamically attach to trigger element when trigger property is set', async () => {
       const harness = await createFixture();
-  
+
       harness.dialogElement.trigger = harness.altTriggerElement.id;
-  
+
       expect(harness.dialogElement.trigger).to.equal(harness.altTriggerElement.id);
       expect(harness.dialogElement.triggerElement).to.equal(harness.altTriggerElement);
-    
+
       await harness.clickTrigger(harness.triggerElement);
 
       expect(harness.isOpen).to.be.false;
@@ -679,12 +688,12 @@ describe('Dialog', () => {
 
     it('should dynamically attach to trigger element when new trigger element is set', async () => {
       const harness = await createFixture();
-  
+
       harness.dialogElement.triggerElement = harness.altTriggerElement;
-  
+
       expect(harness.dialogElement.trigger).to.equal('');
       expect(harness.dialogElement.triggerElement).to.equal(harness.altTriggerElement);
-    
+
       await harness.clickTrigger(harness.triggerElement);
 
       expect(harness.isOpen).to.be.false;
@@ -698,9 +707,9 @@ describe('Dialog', () => {
       const harness = await createFixture();
 
       expect(harness.dialogElement.triggerElement).not.to.be.null;
-  
+
       harness.dialogElement.trigger = '';
-  
+
       expect(harness.dialogElement.trigger).to.equal('');
       expect(harness.dialogElement.triggerElement).to.be.null;
     });
@@ -754,10 +763,10 @@ describe('Dialog', () => {
 
       expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVED)).to.be.false;
       expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVING)).to.be.false;
-  
+
       harness.simulateMoveHandleDown();
       harness.simulateMoveHandleMove(handleX + amountToMove, handleY + amountToMove);
-      
+
       expect(moveStartSpy).to.have.been.calledOnce;
       expect(moveSpy).to.have.been.calledOnce;
       expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVED)).to.be.true;
@@ -818,7 +827,8 @@ class DialogHarness {
     public triggerElement: HTMLButtonElement,
     public altTriggerElement: HTMLButtonElement,
     public formCloseButton: HTMLButtonElement,
-    public formSubmitButton: HTMLButtonElement) {}
+    public formSubmitButton: HTMLButtonElement
+  ) {}
 
   public get nativeDialogElement(): HTMLDialogElement {
     return getShadowElement(this.dialogElement, DIALOG_CONSTANTS.selectors.DIALOG) as HTMLDialogElement;
@@ -837,12 +847,14 @@ class DialogHarness {
   }
 
   public get isOpen(): boolean {
-    return this.dialogElement.open &&
-           this.dialogElement.hasAttribute(DIALOG_CONSTANTS.attributes.OPEN) &&
-           this.dialogElement.hasAttribute(DIALOG_CONSTANTS.attributes.VISIBLE) &&
-           this.nativeDialogElement.open &&
-           this.nativeDialogElement.hasAttribute(DIALOG_CONSTANTS.attributes.OPEN) &&
-           getComputedStyle(this.nativeDialogElement).display !== 'none';
+    return (
+      this.dialogElement.open &&
+      this.dialogElement.hasAttribute(DIALOG_CONSTANTS.attributes.OPEN) &&
+      this.dialogElement.hasAttribute(DIALOG_CONSTANTS.attributes.VISIBLE) &&
+      this.nativeDialogElement.open &&
+      this.nativeDialogElement.hasAttribute(DIALOG_CONSTANTS.attributes.OPEN) &&
+      getComputedStyle(this.nativeDialogElement).display !== 'none'
+    );
   }
 
   public showAsync(): Promise<void> {

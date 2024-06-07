@@ -32,9 +32,9 @@ declare global {
 
 /**
  * @tag forge-icon-button
- * 
+ *
  * @summary Icons buttons are used to trigger an action or event.
- * 
+ *
  * @property {boolean} [toggle=false] - Whether or not the icon button can be toggled.
  * @property {boolean} [on=false] - Whether or not the button is on. Only applies when `toggle` is `true`.
  * @property {IconButtonVariant} [variant="icon"] - The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
@@ -48,11 +48,11 @@ declare global {
  * @property {string} name - The name of the button.
  * @property {string} value - The form value of the button.
  * @property {HTMLFormElement | null} form - The form reference of the button if within a `<form>` element.
- * 
+ *
  * @globalconfig variant
  * @globalconfig shape
  * @globalconfig density
- * 
+ *
  * @attribute {boolean} [toggle=false] - Whether or not the icon button can be toggled.
  * @attribute {boolean} [on=false] - Whether or not the button is on. Only applies when `toggle` is `true`.
  * @attribute {IconButtonVariant} [variant="icon"] - The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
@@ -65,10 +65,10 @@ declare global {
  * @attribute {boolean} [dense=false] - Whether or not the button is dense.
  * @attribute {string} name - The name of the button.
  * @attribute {string} value - The form value of the button.
- * 
+ *
  * @event {Event} click - Fires when the button is clicked.
  * @event {CustomEvent<boolean>} forge-icon-button-toggle - Fires when the icon button is toggled. Only applies in `toggle` mode.
- * 
+ *
  * @cssproperty --forge-icon-button-display - The display property of the button.
  * @cssproperty --forge-icon-button-size - The height and min-width of the button.
  * @cssproperty --forge-icon-button-gap - The gap between the icon content.
@@ -118,11 +118,11 @@ declare global {
  * @cssproperty --forge-icon-button-disabled-opacity - The opacity when the button is disabled.
  * @cssproperty --forge-icon-button-popover-icon-padding - The padding of the popover icon.
  * @cssproperty --forge-icon-button-focus-indicator-color - The color of the focus indicator.
- * 
+ *
  * @csspart root - The root container element.
  * @csspart focus-indicator - The focus-indicator indicator element.
  * @csspart state-layer - The state-layer surface element.
- * 
+ *
  * @slot - This is a default/unnamed slot for the icon.
  * @slot on - The icon to show when in `toggle` mode when toggled "on".
  * @slot start - Elements to logically render before the icon.
@@ -131,18 +131,11 @@ declare global {
  */
 @customElement({
   name: ICON_BUTTON_CONSTANTS.elementName,
-  dependencies: [
-    FocusIndicatorComponent,
-    StateLayerComponent,
-    IconComponent
-  ]
+  dependencies: [FocusIndicatorComponent, StateLayerComponent, IconComponent]
 })
 export class IconButtonComponent extends BaseButton<IconButtonCore> implements IIconButtonComponent {
   public static get observedAttributes(): string[] {
-    return [
-      ...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes),
-      ...Object.values(ICON_BUTTON_CONSTANTS.observedAttributes)
-    ];
+    return [...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes), ...Object.values(ICON_BUTTON_CONSTANTS.observedAttributes)];
   }
 
   protected readonly _core: IconButtonCore;

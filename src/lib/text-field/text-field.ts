@@ -29,22 +29,22 @@ declare global {
 
 /**
  * @tag forge-text-field
- * 
+ *
  * @summary The Forge Text Field component wraps and styles an input or textarea element.
- * 
+ *
  * @dependency forge-field
  * @dependency forge-icon-button
  * @dependency forge-tooltip
- * 
+ *
  * @property {boolean} [showClear=false] - Whether the clear button appears when text has been entered.
  * @property {HTMLElement} popoverTargetElement - Gets a reference to the element that the popover should target for best alignment.
- * 
+ *
  * @attribute {boolean} [show-clear=false] - Whether the clear button appears when text has been entered.
- * 
+ *
  * @globalconfig labelPosition
- * 
+ *
  * @event {CustomEvent<void>} forge-text-field-clear - Dispatched when the clear button is clicked.
- * 
+ *
  * @csspart root - The root container element.
  * @csspart label - The label element.
  * @csspart container - The container element surrounding the input.
@@ -57,7 +57,7 @@ declare global {
  * @csspart support-text - The element containing the support text slot.
  * @csspart support-text-end - The element containing the support text end slot.
  * @csspart focus-indicator - The focus indicator element.
- * 
+ *
  * @slot - The default/unnamed slot for the field's input.
  * @slot label - Renders its content as a positioned label.
  * @slot start - Typically reserved for content/icons that render logically before the default slot content.
@@ -71,18 +71,11 @@ declare global {
 
 @customElement({
   name: TEXT_FIELD_CONSTANTS.elementName,
-  dependencies: [
-    FieldComponent,
-    IconButtonComponent,
-    TooltipComponent
-  ]
+  dependencies: [FieldComponent, IconButtonComponent, TooltipComponent]
 })
 export class TextFieldComponent extends BaseField<TextFieldCore> implements ITextFieldComponent {
   public static get observedAttributes(): string[] {
-    return [
-      ...Object.values(BASE_FIELD_CONSTANTS.observedAttributes),
-      ...Object.values(TEXT_FIELD_CONSTANTS.observedAttributes)
-    ];
+    return [...Object.values(BASE_FIELD_CONSTANTS.observedAttributes), ...Object.values(TEXT_FIELD_CONSTANTS.observedAttributes)];
   }
 
   protected readonly _core: TextFieldCore;

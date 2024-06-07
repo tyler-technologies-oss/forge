@@ -18,15 +18,15 @@ const meta = {
 
     return html`
       <forge-checkbox
-      .checked=${args.checked}
-      .indeterminate=${args.indeterminate}
-      .disabled=${args.disabled}
-      .required=${args.required}
-      .readonly=${args.readonly}
-      .dense=${args.dense}
-      .labelPosition=${args.labelPosition}
-      @change=${changeAction}
-      style=${style}>
+        .checked=${args.checked}
+        .indeterminate=${args.indeterminate}
+        .disabled=${args.disabled}
+        .required=${args.required}
+        .readonly=${args.readonly}
+        .dense=${args.dense}
+        .labelPosition=${args.labelPosition}
+        @change=${changeAction}
+        style=${style}>
         ${args.text}
       </forge-checkbox>
     `;
@@ -50,8 +50,8 @@ const meta = {
     required: false,
     readonly: false,
     dense: false,
-    labelPosition: 'end',
-  },
+    labelPosition: 'end'
+  }
 } satisfies Meta;
 
 export default meta;

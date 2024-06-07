@@ -47,10 +47,10 @@ class CheckboxHarness extends TestHarness<ICheckboxComponent> {
   public async clickElement(el: HTMLElement): Promise<void> {
     const { x, y, width, height } = el.getBoundingClientRect();
 
-    await sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
+    await sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 }
 
@@ -125,7 +125,7 @@ describe('Checkbox', () => {
   it('should accept readonly', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox readonly></forge-checkbox>`);
     const changeSpy = spy();
-    
+
     el.addEventListener('change', changeSpy);
 
     expect(el.readonly).to.be.true;
@@ -178,7 +178,7 @@ describe('Checkbox', () => {
 
     expect(el.checked).to.be.true;
     expect(el.indeterminate).to.be.true;
-    
+
     // Set indeterminate while checked
     el.indeterminate = false;
     el.indeterminate = true;
@@ -356,17 +356,19 @@ describe('Checkbox', () => {
     });
 
     it('should set properties via the constructor', () => {
-      const delegate = new CheckboxComponentDelegate({ props: {
-        checked: true,
-        defaultChecked: true,
-        indeterminate: true,
-        value: 'value',
-        dense: true,
-        disabled: true,
-        required: true,
-        readonly: true,
-        labelPosition: 'start'
-      }});
+      const delegate = new CheckboxComponentDelegate({
+        props: {
+          checked: true,
+          defaultChecked: true,
+          indeterminate: true,
+          value: 'value',
+          dense: true,
+          disabled: true,
+          required: true,
+          readonly: true,
+          labelPosition: 'start'
+        }
+      });
       expect(delegate.checked).to.be.true;
       expect(delegate.defaultChecked).to.be.true;
       expect(delegate.indeterminate).to.be.true;

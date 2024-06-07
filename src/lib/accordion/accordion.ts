@@ -17,7 +17,7 @@ declare global {
 
 /**
  * @tag forge-accordion
- * 
+ *
  * @dependency forge-expansion-panel
  */
 @customElement({
@@ -26,9 +26,7 @@ declare global {
 })
 export class AccordionComponent extends BaseComponent implements IAccordionComponent {
   public static get observedAttributes(): string[] {
-    return [
-      ACCORDION_CONSTANTS.attributes.PANEL_SELECTOR
-    ];
+    return [ACCORDION_CONSTANTS.attributes.PANEL_SELECTOR];
   }
 
   private _core: AccordionCore;

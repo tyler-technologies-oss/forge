@@ -31,13 +31,7 @@ export class CheckboxCore implements ICheckboxCore {
     return this._checked ? this._value : null;
   }
   private get _formState(): CheckboxState {
-    return this._checked
-      ? this._indeterminate
-        ? 'checked-indeterminate'
-        : 'checked'
-      : this._indeterminate
-        ? 'unchecked-indeterminate'
-        : 'unchecked';
+    return this._checked ? (this._indeterminate ? 'checked-indeterminate' : 'checked') : this._indeterminate ? 'unchecked-indeterminate' : 'unchecked';
   }
 
   // Listeners
@@ -52,7 +46,7 @@ export class CheckboxCore implements ICheckboxCore {
     this._adapter.addHostListener('keydown', this._keydownListener);
     this._adapter.addHostListener('keyup', this._keyupListener, { capture: true });
     this._adapter.syncValue(this._submittedValue, this._formState);
-  };
+  }
 
   private _handleKeydown(evt: KeyboardEvent): void {
     if (evt.key === ' ') {
@@ -70,7 +64,7 @@ export class CheckboxCore implements ICheckboxCore {
     if (this._readonly) {
       return;
     }
-    
+
     const oldValue = this._checked;
     const newValue = !this._checked;
 

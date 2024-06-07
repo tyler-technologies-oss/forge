@@ -53,11 +53,7 @@ Each icon can then be registered for use with the `<forge-icon>` component using
 ```javascript
 import { IconRegistry } from '@tylertech/forge';
 
-IconRegistry.define([
-  tylIconFavorite,
-  tylIconHeart,
-  tylIconForgeLogo
-]);
+IconRegistry.define([tylIconFavorite, tylIconHeart, tylIconForgeLogo]);
 ```
 
 You can then use the icon in your HTML like so:
@@ -93,7 +89,6 @@ fetch('https://cdn.forge.tylertech.com/v1/icons/svg/standard/cake.svg')
   .then(svg => {
     // Render the SVG in your HTML
   });
-
 ```
 
 ## Contribution
@@ -105,7 +100,7 @@ the repository here: https://github.com/tyler-technologies-oss/tyler-icons
 > self-hosted by Forge to ensure availability and performance. We do not modify the icons in any way, and they are distributed under the
 > original licensing terms.
 >
->The custom icons are created by Tyler Technologies and are licensed under Apache 2.0.
+> The custom icons are created by Tyler Technologies and are licensed under Apache 2.0.
 
 [1]: ?path=/docs/components-icon--docs
 [2]: https://forge.tylertech.com/assets/icon-library/

@@ -32,7 +32,6 @@ export interface IChipAdapter extends IBaseAdapter {
   animateStateLayer(): void;
 }
 
-
 export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAdapter {
   private _rootElement: HTMLElement;
   private _triggerElement: HTMLButtonElement | HTMLAnchorElement;
@@ -157,7 +156,6 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
     } else {
       this._stateLayerElement.remove();
     }
-
   }
 
   public setDeleteButtonVisibility(value: boolean): void {

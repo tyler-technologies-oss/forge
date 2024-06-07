@@ -17,7 +17,7 @@ describe('Banner', () => {
     const el = await fixture<IBannerComponent>(html`<forge-banner><span slot="icon">icon</span>Test</forge-banner>`);
     const iconEl = el.querySelector('[slot=icon]') as HTMLSpanElement;
     const rootEl = el.shadowRoot?.querySelector('.forge-banner');
-    
+
     expect(rootEl?.classList.contains(BANNER_CONSTANTS.classes.HAS_ICON)).to.be.true;
 
     iconEl.remove();
@@ -53,7 +53,7 @@ describe('Banner', () => {
 
     it('should be accessible in all theme colors', async () => {
       const el = await fixture<IBannerComponent>(html`<forge-banner>Test</forge-banner>`);
-      
+
       const themes: BannerTheme[] = ['primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info', 'info-secondary'];
       for (const theme of themes) {
         el.theme = theme;
@@ -122,7 +122,6 @@ describe('Banner', () => {
       expect(dismissButton.hidden).to.be.true;
       expect(dismissSpy.calledOnce).to.be.false;
 
-      
       el.persistent = false;
       dismissButton.click();
       await timer(500);
@@ -134,7 +133,7 @@ describe('Banner', () => {
     it('should dispatch dismissed event when dismiss button is clicked', async () => {
       const el = await fixture<IBannerComponent>(html`<forge-banner></forge-banner>`);
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
-      
+
       const beforeDismissSpy = spy();
       const dismissSpy = spy();
 
@@ -145,9 +144,9 @@ describe('Banner', () => {
       dismissButton.click();
 
       expect(beforeDismissSpy.calledOnce).to.be.true;
-      
+
       await timer(500);
-      
+
       expect(el.dismissed).to.be.true;
       expect(beforeDismissSpy.calledOnce).to.be.true;
       expect(dismissSpy.calledOnce).to.be.true;
@@ -156,7 +155,7 @@ describe('Banner', () => {
     it('should not dismiss when before dismiss event is prevented', async () => {
       const el = await fixture<IBannerComponent>(html`<forge-banner></forge-banner>`);
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
-      
+
       el.addEventListener(BANNER_CONSTANTS.events.BEFORE_DISMISS, (evt: CustomEvent) => evt.preventDefault());
 
       const dismissSpy = spy();
@@ -203,7 +202,7 @@ describe('Banner', () => {
     it('should not dispatch dismissed event when dismiss button is clicked and before dismiss event is prevented', async () => {
       const el = await fixture<IBannerComponent>(html`<forge-banner></forge-banner>`);
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
-      
+
       const beforeDismissSpy = spy(evt => evt.preventDefault());
       el.addEventListener(BANNER_CONSTANTS.events.BEFORE_DISMISS, beforeDismissSpy);
 
@@ -224,11 +223,11 @@ describe('Banner', () => {
       const el = await fixture<IBannerComponent>(html`<forge-banner dismissed></forge-banner>`);
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
       const beforeDismissSpy = spy();
-      const dismissSpy = spy();      
-      
+      const dismissSpy = spy();
+
       el.addEventListener(BANNER_CONSTANTS.events.BEFORE_DISMISS, beforeDismissSpy);
       el.addEventListener(BANNER_CONSTANTS.events.DISMISSED, dismissSpy);
-      
+
       await elementUpdated(el);
       dismissButton.click();
 
@@ -242,11 +241,11 @@ describe('Banner', () => {
       const el = await fixture<IBannerComponent>(html`<forge-banner persistent></forge-banner>`);
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
       const beforeDismissSpy = spy();
-      const dismissSpy = spy();      
-      
+      const dismissSpy = spy();
+
       el.addEventListener(BANNER_CONSTANTS.events.BEFORE_DISMISS, beforeDismissSpy);
       el.addEventListener(BANNER_CONSTANTS.events.DISMISSED, dismissSpy);
-      
+
       await elementUpdated(el);
       dismissButton.click();
 

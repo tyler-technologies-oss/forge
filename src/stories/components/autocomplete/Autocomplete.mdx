@@ -16,7 +16,7 @@ The only requirement in the HTML is to provide a child `<input>` element. While 
 
 The only requirement for integration via JavaScript is that you provide a callback function to the `filter` property to provide options based on the current filter text.
 
->**Note**: the `data-forge-dropdown-icon` attribute being applied to the trailing icon allows the autocomplete to provide the necessary styling to control open state rotation
+> **Note**: the `data-forge-dropdown-icon` attribute being applied to the trailing icon allows the autocomplete to provide the necessary styling to control open state rotation
 
 ## API
 
@@ -24,8 +24,9 @@ The only requirement for integration via JavaScript is that you provide a callba
 
 ## Keyboard Shorcuts
 
-| Name                                | Description
-| :-----------------------------------| :----------
+| Name | Description |
+| :--- | :---------- |
+
 | **Select Opened**
 | `down / arrow down` | Opens the dropdown and activates the first option
 | **Dropdown opened**
@@ -41,6 +42,7 @@ The only requirement for integration via JavaScript is that you provide a callba
 | `delete` | One input.value.length and Single select and not a chipfield: Clears the input.value
 
 ## Accessibility
+
 - Verify that you can tab into the autocomplete component.
 - Verify that you can access the options within the autocomplete component using only the keyboard.
 - The input element will receive the proper ARIA attributes such as aria-role="combobox", aria-live, aria-owns, ... etc.

@@ -113,7 +113,9 @@ export class ButtonAreaCore implements IButtonAreaCore {
 
   private _shouldIgnoreEvent(event: Event): boolean {
     const eventPath = getEventPath(event);
-    return eventPath.some(el => el.nodeType === 1 && (el.hasAttribute(BUTTON_AREA_CONSTANTS.attributes.IGNORE) || el.hasAttribute(BUTTON_AREA_CONSTANTS.attributes.IGNORE_ALT)));
+    return eventPath.some(
+      el => el.nodeType === 1 && (el.hasAttribute(BUTTON_AREA_CONSTANTS.attributes.IGNORE) || el.hasAttribute(BUTTON_AREA_CONSTANTS.attributes.IGNORE_ALT))
+    );
   }
 
   public get disabled(): boolean {

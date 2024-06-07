@@ -47,10 +47,10 @@ class SwitchHarness extends TestHarness<ISwitchComponent> {
   public async clickElement(el: HTMLElement): Promise<void> {
     const { x, y, width, height } = el.getBoundingClientRect();
 
-    await sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
+    await sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 }
 
@@ -137,7 +137,7 @@ describe('Switch', () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch readonly></forge-switch>`);
     const ctx = new SwitchHarness(el);
     const changeSpy = spy();
-    
+
     el.addEventListener('forge-switch-change', changeSpy);
     await ctx.clickElement(el);
 
@@ -154,18 +154,18 @@ describe('Switch', () => {
   it('should accept icon', async () => {
     const offEl = await fixture<ISwitchComponent>(html`<forge-switch icon="off"></forge-switch>`);
     const offCtx = new SwitchHarness(offEl);
-    
+
     expect(offEl.icon).to.equal('off');
     expect(window.getComputedStyle(offCtx.iconOffElement).display).to.not.equal('none');
     expect(window.getComputedStyle(offCtx.iconOnElement).display).to.equal('none');
-    
+
     const bothEl = await fixture<ISwitchComponent>(html`<forge-switch icon="both"></forge-switch>`);
     const bothCtx = new SwitchHarness(bothEl);
-    
+
     expect(bothEl.icon).to.equal('both');
     expect(window.getComputedStyle(bothCtx.iconOffElement).display).to.not.equal('none');
     expect(window.getComputedStyle(bothCtx.iconOnElement).display).to.not.equal('none');
-    
+
     const noneEl = await fixture<ISwitchComponent>(html`<forge-switch icon="none"></forge-switch>`);
     const noneCtx = new SwitchHarness(noneEl);
 
@@ -254,7 +254,7 @@ describe('Switch', () => {
 
   it('should return form element and name', async () => {
     const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
-    
+
     const switchEl = document.createElement('forge-switch');
     switchEl.setAttribute('name', 'test-switch');
     form.appendChild(switchEl);
@@ -272,7 +272,7 @@ describe('Switch', () => {
 
   it('should return associated form labels', async () => {
     const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
-    
+
     const switchEl = document.createElement('forge-switch');
     switchEl.setAttribute('id', 'test-switch');
     form.appendChild(switchEl);
@@ -304,7 +304,7 @@ describe('Switch', () => {
 
   it('should reset value when form is reset', async () => {
     const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
-    
+
     const switchEl = document.createElement('forge-switch');
     switchEl.setAttribute('name', 'test-switch');
     form.appendChild(switchEl);
@@ -326,9 +326,9 @@ describe('Switch', () => {
     const switchEl = document.createElement('forge-switch');
     const setFormValueSpy = spy(switchEl[internals], 'setFormValue');
     switchEl.name = 'test-switch';
-    switchEl.toggleAttribute('on', true)
+    switchEl.toggleAttribute('on', true);
     form.appendChild(switchEl);
-    
+
     const [value, state] = setFormValueSpy.args ?? [null, null];
     const newSwitchEl = document.createElement('forge-switch');
     switchEl.remove();
@@ -351,7 +351,7 @@ describe('Switch', () => {
     expect(el[internals].validationMessage).to.not.be.empty;
     expect(el[internals].checkValidity()).to.be.false;
     expect(el[internals].reportValidity()).to.be.false;
-    
+
     el.on = true;
 
     expect(el[internals].willValidate).to.be.true;

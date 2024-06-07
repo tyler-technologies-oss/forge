@@ -11,7 +11,7 @@ const meta = {
   title: 'Components/Time Picker',
   render: args => {
     return html`
-      <forge-time-picker 
+      <forge-time-picker
         .allowSeconds=${args.allowSeconds}
         .masked=${args.masked}
         .showMaskFormat=${args.showMaskFormat}
@@ -22,10 +22,9 @@ const meta = {
         .allowDropdown=${args.allowDropdown}
         .showNow=${args.showNow}
         .showHourOptions=${args.showHourOptions}
-        .disabled=${args.disabled}
-      >
+        .disabled=${args.disabled}>
         <forge-text-field>
-          <input id="time-picker" type="text"  />
+          <input id="time-picker" type="text" />
           <label for="time-picker">Time</label>
         </forge-text-field>
       </forge-time-picker>
@@ -38,8 +37,20 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      include: ['allowSeconds', 'masked', 'showMaskFormat', 'use24HourTime', 'allowInvalidTime', 'step', 'allowInput', 'allowDropdown', 'showNow', 'showHourOptions', 'disabled'],
-    }),
+      include: [
+        'allowSeconds',
+        'masked',
+        'showMaskFormat',
+        'use24HourTime',
+        'allowInvalidTime',
+        'step',
+        'allowInput',
+        'allowDropdown',
+        'showNow',
+        'showHourOptions',
+        'disabled'
+      ]
+    })
   },
   args: {
     step: 30,
@@ -48,7 +59,7 @@ const meta = {
     masked: true,
     showHourOptions: true,
     allowInput: true
-  },
+  }
 } satisfies Meta;
 
 export default meta;

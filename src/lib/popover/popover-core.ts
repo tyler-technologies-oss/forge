@@ -2,7 +2,15 @@ import { IOverlayAwareCore, OverlayAwareCore } from '../overlay/base/overlay-awa
 import { OverlayLightDismissEventData } from '../overlay/overlay-constants';
 import { WithLongpressListener } from '../core/mixins/interactions/longpress/with-longpress-listener';
 import { IPopoverAdapter } from './popover-adapter';
-import { PopoverAnimationType, IPopoverToggleEventData, PopoverTriggerType, POPOVER_CONSTANTS, PopoverDismissReason, POPOVER_HOVER_TIMEOUT, PopoverPreset } from './popover-constants';
+import {
+  PopoverAnimationType,
+  IPopoverToggleEventData,
+  PopoverTriggerType,
+  POPOVER_CONSTANTS,
+  PopoverDismissReason,
+  POPOVER_HOVER_TIMEOUT,
+  PopoverPreset
+} from './popover-constants';
 import { IDismissibleStackState, DismissibleStack } from '../core/utils/dismissible-stack';
 import { VirtualElement } from '../core/utils/position-utils';
 
@@ -93,7 +101,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
     window.clearTimeout(this._hoverTimeout);
     window.clearTimeout(this._hoverAnchorLeaveTimeout);
     window.clearTimeout(this._popoverMouseleaveTimeout);
-    
+
     this._previouslyFocusedElement = null;
 
     if (this.open) {
@@ -120,7 +128,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
     }
 
     const previousFocusedEl = this._previouslyFocusedElement;
-    
+
     this._closePopover().then(() => {
       this._dispatchToggleEvent();
 
@@ -190,13 +198,15 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
   }
 
   private _dispatchToggleEvent(): void {
-    this._adapter.dispatchHostEvent(new CustomEvent<IPopoverToggleEventData>(POPOVER_CONSTANTS.events.TOGGLE, {
-      detail: {
-        oldState: this.open ? 'closed' : 'open',
-        newState: this.open ? 'open' : 'closed'
-      },
-      bubbles: false
-    }));
+    this._adapter.dispatchHostEvent(
+      new CustomEvent<IPopoverToggleEventData>(POPOVER_CONSTANTS.events.TOGGLE, {
+        detail: {
+          oldState: this.open ? 'closed' : 'open',
+          newState: this.open ? 'open' : 'closed'
+        },
+        bubbles: false
+      })
+    );
   }
 
   private _initializeTriggerListeners(): void {
@@ -282,7 +292,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
   private _requestDismiss(reason: PopoverDismissReason): void {
     DismissibleStack.instance.requestDismiss(this._adapter.hostElement, { reason });
   }
-  
+
   private _requestClose(reason: PopoverDismissReason): void {
     DismissibleStack.instance.dismiss(this._adapter.hostElement, { reason });
   }
@@ -292,12 +302,13 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
     if (!this.open) {
       return;
     }
-    
+
     if (this._currentHoverCoords) {
       const mouseElement = document.elementFromPoint(this._currentHoverCoords.x, this._currentHoverCoords.y) as HTMLElement;
-      const isOwnElement = mouseElement &&
-                           (this._adapter.isChildElement(mouseElement) ||
-                           (!(this._adapter.overlayElement.anchorElement instanceof VirtualElement) && this._adapter.overlayElement.anchorElement?.contains(mouseElement)));
+      const isOwnElement =
+        mouseElement &&
+        (this._adapter.isChildElement(mouseElement) ||
+          (!(this._adapter.overlayElement.anchorElement instanceof VirtualElement) && this._adapter.overlayElement.anchorElement?.contains(mouseElement)));
       /* c8 ignore next 3 */
       if (isOwnElement) {
         return;
@@ -310,7 +321,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
 
   /**
    * Handles `click` events on the anchor element.
-   * 
+   *
    * Only called when using the "click" (default) trigger type.
    */
   private _onAnchorClick(evt: PointerEvent): void {
@@ -334,7 +345,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
 
   /**
    * Handles `mouseenter` events on the anchor element. This is used to determine if the popover should be opened.
-   * 
+   *
    * Only called when using the "hover" trigger type.
    */
   private _onAnchorMouseenter(): void {
@@ -355,9 +366,9 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
 
   /**
    * Handles `mouseleave` events on the anchor element. This is used to determine if the popover should be closed.
-   * 
+   *
    * Only called when using the "hover" trigger type.
-   * 
+   *
    * We use a timeout here to allow for the user to take an indirect path toward the popover.
    */
   private _onAnchorMouseleave(): void {
@@ -371,7 +382,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
   }
 
   /**
-   * Handles `mouseenter` events on the popover element. This is used to determine if the mouse has entered the popover element, 
+   * Handles `mouseenter` events on the popover element. This is used to determine if the mouse has entered the popover element,
    * only after the mouse leaves the anchor element..
    */
   private _onPopoverMouseenter(): void {
@@ -381,9 +392,9 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
 
   /**
    * Handles `mouseleave` events on the popover element. This is used to determine if the mouse has moved outside of the popover.
-   * 
+   *
    * Only called when using the "hover" trigger type.
-   * 
+   *
    * We use a timeout here to allow for the user to take an indirect path toward an open child menu.
    * This allows for the popup to stay open while the user is moving their mouse to it to avoid closing immediately.
    */
@@ -396,15 +407,15 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
 
   /**
    * Handles `mousemove` events on the document. This is used to determine if the mouse has moved outside of the popover.
-   * 
+   *
    * This listener is only initialized once the mouse leaves the anchor element.
-   * 
+   *
    * Only called when using the "hover" trigger type.
    */
   private _onMousemove(evt: MouseEvent): void {
     this._currentHoverCoords = { x: evt.pageX, y: evt.pageY };
   }
-  
+
   /**
    * Handles `focusin` events on the anchor element. This is used to determine if focus has been received on the anchor element when using the "focus" trigger type.
    */
@@ -430,9 +441,10 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
 
   private _onPopoverBlur({ relatedTarget }: FocusEvent): void {
     const popoverHasFocus = this._adapter.hasFocus();
-    const anchorHasFocus = !(this._adapter.overlayElement.anchorElement instanceof VirtualElement) &&
-                           (this._adapter.overlayElement.anchorElement?.matches(':focus-within') ||
-                            this._adapter.overlayElement.anchorElement?.contains(relatedTarget as HTMLElement));
+    const anchorHasFocus =
+      !(this._adapter.overlayElement.anchorElement instanceof VirtualElement) &&
+      (this._adapter.overlayElement.anchorElement?.matches(':focus-within') ||
+        this._adapter.overlayElement.anchorElement?.contains(relatedTarget as HTMLElement));
     if (!popoverHasFocus && !anchorHasFocus) {
       this._requestClose('focus');
     }
@@ -494,7 +506,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
   public override set anchor(value: string | null) {
     if (this._anchor !== value) {
       this._anchor = value;
-      
+
       if (this._adapter.isConnected) {
         this._removeTriggerListeners();
         this._adapter.cleanupAnchorElement();

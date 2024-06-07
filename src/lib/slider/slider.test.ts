@@ -27,11 +27,11 @@ class SliderHarness extends TestHarness<ISliderComponent> {
   public startLabelElement: HTMLElement;
   public startLabelContentElement: HTMLElement;
   public startStateLayer: IStateLayerComponent;
-  
+
   constructor(el: ISliderComponent) {
     super(el);
   }
-  
+
   public initElementRefs(): void {
     this.rootElement = getShadowElement(this.element, SLIDER_CONSTANTS.selectors.ROOT);
     this.trackElement = getShadowElement(this.element, SLIDER_CONSTANTS.selectors.TRACK);
@@ -49,60 +49,60 @@ class SliderHarness extends TestHarness<ISliderComponent> {
     this.startLabelContentElement = getShadowElement(this.element, SLIDER_CONSTANTS.selectors.START_LABEL_CONTENT);
     this.startStateLayer = getShadowElement(this.element, '.handle.start forge-state-layer') as IStateLayerComponent;
   }
-  
+
   public focusStart(): void {
     this.startInputElement.focus();
   }
-  
+
   public focusEnd(): void {
     this.endInputElement.focus();
   }
-  
+
   public async pressArrowKey(key: 'ArrowLeft' | 'ArrowRight'): Promise<void> {
     await sendKeys({ press: key });
   }
-  
+
   public async simulateEndInteraction(type: 'input' | 'change', value: number): Promise<void> {
     this.endInputElement.focus();
     this.endInputElement.valueAsNumber = value;
     this.endInputElement.dispatchEvent(new InputEvent(type, { bubbles: true, composed: true }));
   }
-  
+
   public simulateStartInteraction(type: 'input' | 'change', value: number): void {
     this.endInputElement.focus();
     this.startInputElement.valueAsNumber = value;
     this.startInputElement.dispatchEvent(new InputEvent(type, { bubbles: true, composed: true }));
   }
-  
+
   public simulateStartEnter(): void {
     let { x, y, width, height } = this.startHandleThumbElement.getBoundingClientRect();
-    x = x + (width / 2);
-    y = y + (height / 2);
+    x = x + width / 2;
+    y = y + height / 2;
     this.startInputElement.dispatchEvent(new PointerEvent('pointerenter', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
-  
+
   public simulateStartMove(divisor = 2): void {
     let { x, y, width, height } = this.startInputElement.getBoundingClientRect();
-    x = x + (width / divisor);
-    y = y + (height / divisor);
+    x = x + width / divisor;
+    y = y + height / divisor;
     this.startInputElement.dispatchEvent(new PointerEvent('pointermove', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
 
   public simulateStartLeave(): void {
     this.startInputElement.dispatchEvent(new PointerEvent('pointerleave'));
   }
-  
+
   public simulateEndEnter(): void {
     let { x, y, width, height } = this.endHandleThumbElement.getBoundingClientRect();
-    x = x + (width / 2);
-    y = y + (height / 2);
+    x = x + width / 2;
+    y = y + height / 2;
     this.endInputElement.dispatchEvent(new PointerEvent('pointerenter', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
-  
+
   public simulateEndMove(divisor = 2): void {
     let { x, y, width, height } = this.endInputElement.getBoundingClientRect();
-    x = x + (width / divisor);
-    y = y + (height / divisor);
+    x = x + width / divisor;
+    y = y + height / divisor;
     this.endInputElement.dispatchEvent(new PointerEvent('pointermove', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
 
@@ -116,17 +116,17 @@ describe('Slider', () => {
     const el = await fixture(html`<forge-slider></forge-slider>`);
     expect(el.shadowRoot).not.to.be.null;
   });
-  
+
   it('should be accessible', async () => {
     const el = await fixture(html`<forge-slider data-aria-label="Choose value"></forge-slider>`);
     await expect(el).to.be.accessible();
   });
-  
+
   it('should be accessible with range', async () => {
     const el = await fixture(html`<forge-slider range data-aria-label-start="Choose start value" data-aria-label-end="Choose end value"></forge-slider>`);
     await expect(el).to.be.accessible();
   });
-  
+
   it('should render with correct default values', async () => {
     const el = await fixture<ISliderComponent>(html`<forge-slider></forge-slider>`);
     const ctx = new SliderHarness(el);
@@ -351,8 +351,8 @@ describe('Slider', () => {
     expect(ctx.endInputElement.valueAsNumber).to.equal(51);
     expect(ctx.endInputElement.getAttribute('aria-valuetext')).to.equal('51');
     expect(ctx.endLabelContentElement.textContent).to.equal('51');
-    expect(inputSpy.calledOnceWith(new CustomEvent('forge-slider-input', { detail: { value: 51 }}))).to.be.true;
-    expect(changeSpy.calledOnceWith(new CustomEvent('forge-slider-change', { detail: { value: 51 }}))).to.be.true;
+    expect(inputSpy.calledOnceWith(new CustomEvent('forge-slider-input', { detail: { value: 51 } }))).to.be.true;
+    expect(changeSpy.calledOnceWith(new CustomEvent('forge-slider-change', { detail: { value: 51 } }))).to.be.true;
   });
 
   it('should change value when clicking on input', async () => {
@@ -367,12 +367,14 @@ describe('Slider', () => {
 
     await expect(el).to.be.accessible();
     expect(el.value).to.equal(33);
-    expect(changeSpy.calledOnceWith(new CustomEvent('forge-slider-input', { detail: { value: 33 }}))).to.be.true;
+    expect(changeSpy.calledOnceWith(new CustomEvent('forge-slider-input', { detail: { value: 33 } }))).to.be.true;
     expect(inputSpy.called).to.be.false;
   });
 
   it('should change value when clicking on input with range', async () => {
-    const el = await fixture<ISliderComponent>(html`<forge-slider data-aria-label-start="Choose start value" data-aria-label-end="Choose end value" range></forge-slider>`);
+    const el = await fixture<ISliderComponent>(
+      html`<forge-slider data-aria-label-start="Choose start value" data-aria-label-end="Choose end value" range></forge-slider>`
+    );
     const ctx = new SliderHarness(el);
     const changeSpy = spy();
     const inputSpy = spy();
@@ -392,12 +394,12 @@ describe('Slider', () => {
     expect(el.valueEnd).to.equal(80);
     expect(changeSpy.calledTwice).to.be.true;
     expect(inputSpy.callCount).to.be.equal(4);
-    expect(changeSpy.calledWith(new CustomEvent('forge-slider-range-input', { detail: { valueStart: 25, valueEnd: 67 }}))).to.be.true;
-    expect(changeSpy.calledWith(new CustomEvent('forge-slider-range-input', { detail: { valueStart: 30, valueEnd: 67 }}))).to.be.true;
-    expect(inputSpy.calledWith(new CustomEvent('forge-slider-range-input', { detail: { valueStart: 30, valueEnd: 75 }}))).to.be.true;
-    expect(inputSpy.calledWith(new CustomEvent('forge-slider-range-input', { detail: { valueStart: 30, valueEnd: 80 }}))).to.be.true;
-    expect(changeSpy.calledWith(new CustomEvent('forge-slider-range-change', { detail: { valueStart: 30, valueEnd: 67 }}))).to.be.true;
-    expect(changeSpy.calledWith(new CustomEvent('forge-slider-range-change', { detail: { valueStart: 30, valueEnd: 80 }}))).to.be.true;
+    expect(changeSpy.calledWith(new CustomEvent('forge-slider-range-input', { detail: { valueStart: 25, valueEnd: 67 } }))).to.be.true;
+    expect(changeSpy.calledWith(new CustomEvent('forge-slider-range-input', { detail: { valueStart: 30, valueEnd: 67 } }))).to.be.true;
+    expect(inputSpy.calledWith(new CustomEvent('forge-slider-range-input', { detail: { valueStart: 30, valueEnd: 75 } }))).to.be.true;
+    expect(inputSpy.calledWith(new CustomEvent('forge-slider-range-input', { detail: { valueStart: 30, valueEnd: 80 } }))).to.be.true;
+    expect(changeSpy.calledWith(new CustomEvent('forge-slider-range-change', { detail: { valueStart: 30, valueEnd: 67 } }))).to.be.true;
+    expect(changeSpy.calledWith(new CustomEvent('forge-slider-range-change', { detail: { valueStart: 30, valueEnd: 80 } }))).to.be.true;
   });
 
   it('should show label when hovering end input', async () => {
@@ -406,14 +408,14 @@ describe('Slider', () => {
 
     ctx.simulateEndEnter();
     await elementUpdated(el);
-    
+
     expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.true;
     expect(ctx.endHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.true;
   });
 
   it('should return form element and name', async () => {
     const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
-    
+
     const slider = document.createElement('forge-slider');
     slider.setAttribute('name', 'test-slider');
     form.appendChild(slider);
@@ -431,7 +433,7 @@ describe('Slider', () => {
 
   it('should return associated form labels', async () => {
     const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
-    
+
     const slider = document.createElement('forge-slider');
     slider.setAttribute('id', 'test-slider');
     form.appendChild(slider);
@@ -504,7 +506,7 @@ describe('Slider', () => {
 
   it('should reset value when form is reset', async () => {
     const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
-    
+
     const slider = document.createElement('forge-slider');
     slider.setAttribute('name', 'test-slider');
     form.appendChild(slider);
@@ -522,7 +524,7 @@ describe('Slider', () => {
 
   it('should reset value when form is reset with range', async () => {
     const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
-    
+
     const slider = document.createElement('forge-slider');
     slider.range = true;
     slider.nameStart = 'test-slider-start';
@@ -555,7 +557,7 @@ describe('Slider', () => {
     slider.name = 'test-slider';
     slider.setAttribute('value', '75');
     form.appendChild(slider);
-    
+
     const [value, state] = setFormValueSpy.args ?? [null, null];
     const newSlider = document.createElement('forge-slider');
     slider.remove();
@@ -582,7 +584,7 @@ describe('Slider', () => {
     slider.setAttribute('value-start', '40');
     slider.setAttribute('value', '60');
     form.appendChild(slider);
-    
+
     const [value, state] = setFormValueSpy.args ?? [null, null];
     const newSlider = document.createElement('forge-slider');
     slider.remove();
@@ -738,12 +740,12 @@ describe('Slider', () => {
 
     await ctx.simulateEndEnter();
     await ctx.simulateEndLeave();
-    
+
     expect(ctx.startStateLayer).to.be.ok;
-    
+
     el.range = false;
     ctx.invalidate();
-    
+
     expect(ctx.startStateLayer).not.to.be.ok;
   });
 
@@ -898,15 +900,15 @@ describe('Slider', () => {
     it('should set labels via property', async () => {
       const el = await fixture<ISliderComponent>(html`<forge-slider range label-start="Test start" label-end="Test end"></forge-slider>`);
       const ctx = new SliderHarness(el);
-  
+
       expect(ctx.startLabelContentElement.textContent).to.equal('Test start');
       expect(ctx.endLabelContentElement.textContent).to.equal('Test end');
-  
+
       await ctx.simulateStartInteraction('change', 10);
       await ctx.simulateEndInteraction('change', 90);
       el.labelStart = 'Test: 10';
       el.labelEnd = 'Test: 90';
-  
+
       expect(ctx.startLabelContentElement.textContent).to.equal('Test: 10');
       expect(ctx.endLabelContentElement.textContent).to.equal('Test: 90');
     });

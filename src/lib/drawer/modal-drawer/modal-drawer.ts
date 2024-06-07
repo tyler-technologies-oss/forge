@@ -24,9 +24,9 @@ declare global {
  * @tag forge-modal-drawer
  *
  * @dependency forge-backdrop
- * 
+ *
  * @event {CustomEvent<void>} forge-modal-drawer-close - Dispatched when the modal drawer is closed by clicking the backdrop.
- * 
+ *
  * @cssproperty --forge-drawer-width - The width of the drawer.
  * @cssproperty --forge-drawer-background - The background color of the drawer.
  * @cssproperty --forge-drawer-border-color - The border of the drawer.
@@ -34,11 +34,11 @@ declare global {
  * @cssproperty --forge-drawer-transition-duration - The transition duration of the drawer.
  * @cssproperty --forge-drawer-transition-easing - The transition timing function of the drawer.
  * @cssproperty --forge-drawer-duration-close - The duration of the drawer closing animation.
- * 
+ *
  * @slot - The content to display in the scrollable content container.
  * @slot header - The header content above the main content.
  * @slot footer - The footer content below the main content.
- * 
+ *
  * @csspart root - The component's root element.
  * @csspart content - The content container element.
  * @csspart backdrop - The backdrop root element.

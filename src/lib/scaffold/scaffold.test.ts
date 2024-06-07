@@ -14,7 +14,7 @@ describe('Scaffold', () => {
   it('should reflect viewport attribute when set via property', async () => {
     const el = await fixture<IScaffoldComponent>('<forge-scaffold></forge-scaffold>');
 
-    el.viewport = true
+    el.viewport = true;
 
     expect(el.viewport).to.be.true;
     expect(el.hasAttribute(SCAFFOLD_CONSTANTS.attributes.VIEWPORT)).to.be.true;

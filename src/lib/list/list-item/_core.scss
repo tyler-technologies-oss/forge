@@ -19,7 +19,7 @@
   outline: none;
   text-decoration: none;
   border-radius: #{token(shape)};
-  
+
   -webkit-tap-highlight-color: transparent;
   background-color: #{token(background)};
 
@@ -38,17 +38,17 @@
   padding-inline: 0;
   margin: 0;
   box-sizing: border-box;
-  
+
   background: transparent;
   color: inherit;
   outline: none;
-  
+
   font: inherit;
   user-select: auto;
   text-align: inherit;
   letter-spacing: inherit;
   word-spacing: inherit;
-  
+
   display: inline;
 }
 

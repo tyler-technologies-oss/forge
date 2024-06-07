@@ -13,7 +13,8 @@ export interface IDateRangePickerComponentDelegateOptions extends IFormFieldComp
   required?: boolean;
   density?: FieldDensity;
 }
-export interface IDateRangePickerComponentDelegateConfig extends IBaseComponentDelegateConfig<IDateRangePickerComponent, IDateRangePickerComponentDelegateOptions> {}
+export interface IDateRangePickerComponentDelegateConfig
+  extends IBaseComponentDelegateConfig<IDateRangePickerComponent, IDateRangePickerComponentDelegateOptions> {}
 
 export class DateRangeComponentDelegate extends FormFieldComponentDelegate<IDateRangePickerComponent, IDateRangePickerComponentDelegateOptions> {
   private _textField: ITextFieldComponent;

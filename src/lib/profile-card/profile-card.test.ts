@@ -14,7 +14,6 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
 import { IIconComponent } from '../icon';
 
-
 class ProfileCardHarness extends TestHarness<IProfileCardComponent> {
   private _actionToolbarElement: IToolbarComponent;
   private _signOutButton: IButtonComponent;
@@ -22,11 +21,11 @@ class ProfileCardHarness extends TestHarness<IProfileCardComponent> {
   private _avatarElement: IAvatarComponent;
   private _fullNameElement: HTMLElement;
   private _emailElement: HTMLElement;
-  
+
   constructor(el: IProfileCardComponent) {
     super(el);
   }
-  
+
   public initElementRefs(): void {
     this._actionToolbarElement = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.ACTION_TOOLBAR) as IToolbarComponent;
     this._signOutButton = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.SIGN_OUT_BUTTON) as IButtonComponent;
@@ -73,7 +72,7 @@ class ProfileCardHarness extends TestHarness<IProfileCardComponent> {
   public get isProfileButtonVisible(): boolean {
     return getComputedStyle(this._profileButton).display !== 'none';
   }
-  
+
   public async clickSignOutButton(): Promise<void> {
     await this._clickElement(this._signOutButton);
   }
@@ -84,10 +83,10 @@ class ProfileCardHarness extends TestHarness<IProfileCardComponent> {
 
   private _clickElement(el: HTMLElement): Promise<void> {
     const { x, y, width, height } = el.getBoundingClientRect();
-    return sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
+    return sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 }
 
@@ -136,7 +135,7 @@ describe('Profile Card', () => {
     `);
     return new ProfileCardHarness(el);
   }
-  
+
   it('should be accessible', async () => {
     const harness = await setupTest();
 
@@ -191,7 +190,7 @@ describe('Profile Card', () => {
 
   it('should set avatar text separately from full name', async () => {
     const harness = await setupTest({ avatarText: 'Test Avatar' });
-    
+
     expect(harness.avatarElement.text).to.equal('Test Avatar');
   });
 

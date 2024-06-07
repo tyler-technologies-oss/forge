@@ -11,24 +11,28 @@ const meta = {
   render: args => {
     return html`
       <forge-radio-group name="radios">
-        <forge-radio 
+        <forge-radio
           name="radios"
           value="1"
           .labelPosition=${args.labelPosition}
           .dense=${args.dense}
           .disabled=${args.disabled}
           .defaultChecked=${args.defaultChecked}
-          .readonly=${args.readonly}>Option 1</forge-radio>
-          <forge-radio 
+          .readonly=${args.readonly}
+          >Option 1</forge-radio
+        >
+        <forge-radio
           name="radios"
           value="1"
           .labelPosition=${args.labelPosition}
           .dense=${args.dense}
           .disabled=${args.disabled}
           .defaultChecked=${args.defaultChecked}
-          .readonly=${args.readonly}>Option 2</forge-radio>
-        </forge-radio-group>
-      `;
+          .readonly=${args.readonly}
+          >Option 2</forge-radio
+        >
+      </forge-radio-group>
+    `;
   },
   component,
   parameters: {
@@ -38,11 +42,9 @@ const meta = {
     ...generateCustomElementArgTypes({
       tagName: component,
       exclude: ['form', 'labels', 'name']
-    }),
+    })
   },
-  args: {
-
-  },
+  args: {}
 } satisfies Meta;
 
 export default meta;

@@ -559,7 +559,14 @@ describe('Paginator', () => {
       harness.nextButton.click();
 
       expect(changeSpy).to.have.been.calledOnce;
-      expect(changeSpy).to.have.been.calledWithMatch(sinon.match.has('detail', { type: 'next-page', pageIndex: 1, pageSize: 25, offset: 25 } as IPaginatorChangeEventData));
+      expect(changeSpy).to.have.been.calledWithMatch(
+        sinon.match.has('detail', {
+          type: 'next-page',
+          pageIndex: 1,
+          pageSize: 25,
+          offset: 25
+        } as IPaginatorChangeEventData)
+      );
     });
 
     it('should dispatch change event when clicking previous page button', async () => {
@@ -570,7 +577,14 @@ describe('Paginator', () => {
       harness.previousButton.click();
 
       expect(changeSpy).to.have.been.calledOnce;
-      expect(changeSpy).to.have.been.calledWithMatch(sinon.match.has('detail', { type: 'previous-page', pageIndex: 0, pageSize: 25, offset: 0 } as IPaginatorChangeEventData));
+      expect(changeSpy).to.have.been.calledWithMatch(
+        sinon.match.has('detail', {
+          type: 'previous-page',
+          pageIndex: 0,
+          pageSize: 25,
+          offset: 0
+        } as IPaginatorChangeEventData)
+      );
     });
 
     it('should dispatch change event when clicking first page button', async () => {
@@ -581,7 +595,14 @@ describe('Paginator', () => {
       harness.firstButton?.click();
 
       expect(changeSpy).to.have.been.calledOnce;
-      expect(changeSpy).to.have.been.calledWithMatch(sinon.match.has('detail', { type: 'first-page', pageIndex: 0, pageSize: 25, offset: 0 } as IPaginatorChangeEventData));
+      expect(changeSpy).to.have.been.calledWithMatch(
+        sinon.match.has('detail', {
+          type: 'first-page',
+          pageIndex: 0,
+          pageSize: 25,
+          offset: 0
+        } as IPaginatorChangeEventData)
+      );
     });
 
     it('should dispatch change event when clicking last page button', async () => {
@@ -592,7 +613,14 @@ describe('Paginator', () => {
       harness.lastButton?.click();
 
       expect(changeSpy).to.have.been.calledOnce;
-      expect(changeSpy).to.have.been.calledWithMatch(sinon.match.has('detail', { type: 'last-page', pageIndex: 3, pageSize: 25, offset: 75 } as IPaginatorChangeEventData));
+      expect(changeSpy).to.have.been.calledWithMatch(
+        sinon.match.has('detail', {
+          type: 'last-page',
+          pageIndex: 3,
+          pageSize: 25,
+          offset: 75
+        } as IPaginatorChangeEventData)
+      );
     });
 
     it('should dispatch change event when changing page size select', async () => {
@@ -604,7 +632,14 @@ describe('Paginator', () => {
       harness.pageSizeSelect.dispatchEvent(new CustomEvent('change', { detail: '50' }));
 
       expect(changeSpy).to.have.been.calledOnce;
-      expect(changeSpy).to.have.been.calledWithMatch(sinon.match.has('detail', { type: 'page-size', pageIndex: 0, pageSize: 50, offset: 0 } as IPaginatorChangeEventData));
+      expect(changeSpy).to.have.been.calledWithMatch(
+        sinon.match.has('detail', {
+          type: 'page-size',
+          pageIndex: 0,
+          pageSize: 50,
+          offset: 0
+        } as IPaginatorChangeEventData)
+      );
     });
 
     it('should not update pageSize when cancelling change event', async () => {
@@ -643,7 +678,6 @@ describe('Paginator', () => {
     });
   });
 });
-
 
 class PaginatorHarness {
   constructor(public paginatorElement: IPaginatorComponent) {}
@@ -714,8 +748,7 @@ async function createFixture({
       ?first-last=${firstLast}
       ?first=${first}
       ?disabled=${disabled}
-      ?alternative=${alternative}
-      ></forge-paginator>
+      ?alternative=${alternative}></forge-paginator>
   `);
 
   return new PaginatorHarness(el);

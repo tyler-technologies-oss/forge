@@ -142,7 +142,7 @@
   @if $inset-direction == 'both' or $inset-direction == 'start' {
     @include item-padding(start, outer);
   }
-  
+
   @if $inset-direction == 'both' or $inset-direction == 'end' {
     @include item-padding(end, outer);
   }
@@ -189,24 +189,24 @@ $multiline-input-padding-block-end-base: 8px;
 }
 
 @mixin multiline-inset-label-background {
-    @include animation.floating-animation(multiline-inset-label-background-animation);
-    
-    position: absolute;
-    z-index: -1;
-    inset-inline-start: #{token(outline-width)};
+  @include animation.floating-animation(multiline-inset-label-background-animation);
 
-    transition-duration: #{token(surface-animation-duration)};
-    transition-property: background;
-    transition-timing-function: #{token(surface-animation-timing)};
-    
-    background: #{token(multiline-inset-label-background, custom)};
-    
-    inline-size: 100%;
-    block-size: 3ex;
+  position: absolute;
+  z-index: -1;
+  inset-inline-start: #{token(outline-width)};
 
-    filter: blur(2px);
+  transition-duration: #{token(surface-animation-duration)};
+  transition-property: background;
+  transition-timing-function: #{token(surface-animation-timing)};
 
-    content: '';
+  background: #{token(multiline-inset-label-background, custom)};
+
+  inline-size: 100%;
+  block-size: 3ex;
+
+  filter: blur(2px);
+
+  content: '';
 }
 
 @mixin multiline-slotted-input {

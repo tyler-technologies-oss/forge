@@ -41,11 +41,11 @@ declare global {
 
 /**
  * @tag forge-tooltip
- * 
+ *
  * @summary Tooltips display information related to an element when the user hovers over an element.
  *
  * @dependency forge-overlay
- * 
+ *
  * @property {boolean} [open=false] - Whether or not the tooltip is open.
  * @property {TooltipType} [type="presentation"] - The type of tooltip. Valid values are `presentation` (default), `label`, and `description`.
  * @property {string} anchor - The id of the element that the tooltip is anchored to.
@@ -57,7 +57,7 @@ declare global {
  * @property {HTMLElement | null} boundaryElement - The element that the tooltip should be constrained to.
  * @property {PositionPlacement[] | null} fallbackPlacements - The fallback placements of the tooltip relative to the anchor element.
  * @property {TooltipTriggerType | TooltipTriggerType[]} [triggerType="hover"] - The trigger type(s) that will open the tooltip. Valid values are `hover` (default), `longpress`, and `focus`.
- * 
+ *
  * @globalconfig type
  * @globalconfig delay
  * @globalconfig placement
@@ -66,7 +66,7 @@ declare global {
  * @globalconfig boundaryElement
  * @globalconfig fallbackPlacements
  * @globalconfig triggerType
- * 
+ *
  * @attribute {boolean} [open=false] - Whether or not the tooltip is open.
  * @attribute {TooltipType} [type="presentation"] - The type of tooltip. Valid values are `presentation` (default), `label`, and `description`.
  * @attribute {string} anchor - The id of the element that the tooltip is anchored to.
@@ -77,7 +77,7 @@ declare global {
  * @attribute {string | null} boundary - The id of the element that the tooltip should be constrained to.
  * @attribute {PositionPlacement[]} fallback-placements - The fallback placements of the tooltip relative to the anchor element.
  * @attribute {TooltipTriggerType | TooltipTriggerType[]} [trigger-type="hover"] - The trigger type(s) that will open the tooltip. Valid values are `hover` (default), `longpress`, and `focus`.
- * 
+ *
  * @cssproperty --forge-tooltip-background - The background color of the tooltip surface.
  * @cssproperty --forge-tooltip-color - The text color of the tooltip surface.
  * @cssproperty --forge-tooltip-shape - The shape of the tooltip surface.
@@ -102,18 +102,16 @@ declare global {
  * @cssproperty --forge-tooltip-arrow-right-rotation - The rotation of the tooltip arrow when the tooltip is placed on the right.
  * @cssproperty --forge-tooltip-arrow-bottom-rotation - The rotation of the tooltip arrow when the tooltip is placed on the bottom.
  * @cssproperty --forge-tooltip-arrow-left-rotation - The rotation of the tooltip arrow when the tooltip is placed on the left.
- * 
+ *
  * @slot - The content to display in the tooltip.
- * 
+ *
  * @csspart surface - The tooltip surface.
  * @csspart arrow - The tooltip arrow.
  * @csspart overlay - The overlay surface.
  */
 @customElement({
   name: TOOLTIP_CONSTANTS.elementName,
-  dependencies: [
-    OverlayComponent
-  ]
+  dependencies: [OverlayComponent]
 })
 export class TooltipComponent extends WithDefaultAria(WithElementInternals(BaseComponent)) implements ITooltipComponent {
   public static get observedAttributes(): string[] {
@@ -149,7 +147,7 @@ export class TooltipComponent extends WithDefaultAria(WithElementInternals(BaseC
         this.open = coerceBoolean(newValue);
         break;
       case TOOLTIP_CONSTANTS.observedAttributes.TYPE:
-        this.type = newValue?.trim() ? newValue as TooltipType : TOOLTIP_CONSTANTS.defaults.TYPE;
+        this.type = newValue?.trim() ? (newValue as TooltipType) : TOOLTIP_CONSTANTS.defaults.TYPE;
         break;
       case TOOLTIP_CONSTANTS.observedAttributes.TARGET:
       case TOOLTIP_CONSTANTS.observedAttributes.ANCHOR:

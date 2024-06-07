@@ -1,4 +1,4 @@
-import { Meta, Markdown } from "@storybook/blocks";
+import { Meta, Markdown } from '@storybook/blocks';
 
 import CHANGELOG from '../../../CHANGELOG.md?raw';
 
@@ -7,14 +7,15 @@ import CHANGELOG from '../../../CHANGELOG.md?raw';
 # Changelog
 
 ---
-<br/>
+
+<br />
 
 <Markdown>{CHANGELOG}</Markdown>
 
 <style>
-{`
-  .sbdocs-content ~ div:has(.toc-wrapper) {
-    display: none;
-  }
-`}
+  {`
+    .sbdocs-content ~ div:has(.toc-wrapper) {
+      display: none;
+    }
+  `}
 </style>

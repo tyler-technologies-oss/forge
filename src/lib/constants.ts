@@ -45,7 +45,7 @@ export type MixinBase<TBase = IBaseComponent> = AbstractConstructor<TBase>;
 
 /**
  * The `focusVisible` property is an experimental feature that is not yet supported by all browsers.
- * 
+ *
  * We will use this to allow for setting focus to elements programmatically and showing the focus indicator.
  */
 export type ExperimentalFocusOptions = FocusOptions & { focusVisible?: boolean };

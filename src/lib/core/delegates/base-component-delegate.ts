@@ -54,7 +54,7 @@ export abstract class BaseComponentDelegate<T extends HTMLElement, K extends IBa
     this._applyAttrs();
 
     this._config.options?.parent?.append(this._element);
-    
+
     if (this._config.options?.children) {
       this._applyChildren();
     }

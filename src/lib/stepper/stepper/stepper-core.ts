@@ -211,9 +211,7 @@ export class StepperCore implements IStepperCore {
       return;
     }
     const eventPath = getEventPath(event);
-    const step = eventPath
-      .filter(el => el.nodeType === Node.ELEMENT_NODE)
-      .find(el => el.matches(STEP_CONSTANTS.elementName)) as IStepComponent | undefined;
+    const step = eventPath.filter(el => el.nodeType === Node.ELEMENT_NODE).find(el => el.matches(STEP_CONSTANTS.elementName)) as IStepComponent | undefined;
 
     if (step && !step.selected && !step.disabled && this._adapter.emitHostEvent(STEP_CONSTANTS.events.SELECT, step.index, true, true)) {
       this._adapter.setSelected(step);
@@ -254,14 +252,16 @@ export class StepperCore implements IStepperCore {
       return;
     }
 
-    if ([
-      STEP_CONSTANTS.strings.HOME_KEY,
-      STEP_CONSTANTS.strings.END_KEY,
-      STEP_CONSTANTS.strings.ARROW_DOWN_KEY,
-      STEPPER_CONSTANTS.strings.ARROW_UP_KEY,
-      STEPPER_CONSTANTS.strings.ENTER_KEY,
-      STEPPER_CONSTANTS.strings.SPACE_KEY
-    ].includes(key)) {
+    if (
+      [
+        STEP_CONSTANTS.strings.HOME_KEY,
+        STEP_CONSTANTS.strings.END_KEY,
+        STEP_CONSTANTS.strings.ARROW_DOWN_KEY,
+        STEPPER_CONSTANTS.strings.ARROW_UP_KEY,
+        STEPPER_CONSTANTS.strings.ENTER_KEY,
+        STEPPER_CONSTANTS.strings.SPACE_KEY
+      ].includes(key)
+    ) {
       event.preventDefault();
     }
 

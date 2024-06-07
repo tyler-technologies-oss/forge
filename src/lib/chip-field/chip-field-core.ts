@@ -89,7 +89,7 @@ export class ChipFieldCore extends BaseFieldCore<IChipFieldAdapter> implements I
       case 'member':
         this._adapter.toggleContainerClass(CHIP_FIELD_CONSTANTS.classes.HAS_MEMBERS, target.assignedElements().length > 0);
         this._adapter.tryFloatLabel();
-        this._adapter.getSlottedMemberElements().forEach(x => x.tabIndex = -1);
+        this._adapter.getSlottedMemberElements().forEach(x => (x.tabIndex = -1));
         break;
       case '':
         this._adapter.handleDefaultSlotChange(target, this._inputAttributeListener);

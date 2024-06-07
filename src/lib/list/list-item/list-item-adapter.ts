@@ -142,13 +142,13 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     const assignedElements = this._defaultSlotElement.assignedElements({ flatten: true });
     const slottedAnchor = assignedElements.find(e => e.tagName === 'A') as HTMLAnchorElement | undefined;
     const slottedButtonLike = assignedElements.find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.BUTTON_LIKE)) as HTMLElement | undefined;
-    
+
     // Attempt to remove the internal anchor element if it exists before we attach to a different interactive element
     const internalAnchor = getShadowElement(this._component, LIST_ITEM_CONSTANTS.selectors.INTERNAL_ANCHOR);
     if (internalAnchor) {
       internalAnchor.remove();
     }
-    
+
     // Slotted anchors take precedence over slotted button-like elements
     this._interactiveElement = slottedAnchor ?? slottedButtonLike;
     this._setInteractive(!!this._interactiveElement);
@@ -163,11 +163,11 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   private _attachInteractiveFormControl(element: HTMLElement): void {
     this._interactiveElement = element;
     this._setInteractive(!!this._interactiveElement);
-    
+
     if (this._focusIndicatorElement) {
       this._focusIndicatorElement.targetElement = element;
     }
-    
+
     // Listen for changes to the disabled attribute and aria-disabled attribute to synchronize our disabled state
     this._syncDisabled(element);
     this._disabledAttrObserver = new MutationObserver(() => this._syncDisabled(element as HTMLElement));
@@ -178,7 +178,8 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     // Create an internal (facade) anchor element that covers the entire list item to show the href in the status bar
     // but is not focusable or presented to assistive technology. All clicks on the internal anchor are forwarded to the
     // slotted anchor element.
-    const internalAnchor = getShadowElement(this._component, LIST_ITEM_CONSTANTS.selectors.INTERNAL_ANCHOR) as HTMLAnchorElement | null ?? document.createElement('a');
+    const internalAnchor =
+      (getShadowElement(this._component, LIST_ITEM_CONSTANTS.selectors.INTERNAL_ANCHOR) as HTMLAnchorElement | null) ?? document.createElement('a');
     internalAnchor.href = element.href;
     internalAnchor.tabIndex = -1;
     internalAnchor.id = LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR;
@@ -191,7 +192,7 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     }
 
     // Listen for changes to the href attribute to synchronize our internal anchor's href
-    this._anchorAttrObserver = new MutationObserver(() => internalAnchor.href = element.href);
+    this._anchorAttrObserver = new MutationObserver(() => (internalAnchor.href = element.href));
     this._anchorAttrObserver.observe(element, { attributes: true, attributeFilter: ['href'] });
   }
 
@@ -199,7 +200,7 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     if (this._focusIndicatorElement) {
       this._focusIndicatorElement.targetElement = element;
     }
-    
+
     this._syncDisabled(element);
     this._disabledAttrObserver = new MutationObserver(() => this._syncDisabled(element));
     this._disabledAttrObserver.observe(element, { attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
@@ -207,7 +208,7 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
 
   private _setInteractive(value: boolean): void {
     this._rootElement.classList.toggle(LIST_ITEM_CONSTANTS.classes.INTERACTIVE, value);
-    
+
     // Notify ourselves that the interactive state has changed so we can attach/remove event listeners
     this._interactiveStateChangeListener?.(value);
 

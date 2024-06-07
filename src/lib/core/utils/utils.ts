@@ -15,11 +15,11 @@ export function highlightTextHTML(label: string, highlightText: string): HTMLEle
 
     highlightSpan.style.fontWeight = 'bold';
     highlightSpan.textContent = label.substring(startIndex, endIndex);
-    
+
     wrapperSpan.appendChild(document.createTextNode(label.substring(0, startIndex)));
     wrapperSpan.appendChild(highlightSpan);
     wrapperSpan.appendChild(document.createTextNode(label.substring(endIndex)));
-    
+
     return wrapperSpan;
   }
 
@@ -29,13 +29,16 @@ export function highlightTextHTML(label: string, highlightText: string): HTMLEle
 /**
  * Awaits user interaction on an element in the form of `pointerenter` or `focusin` to let a listener know
  * when the user has attempted to interact with the provided element.
- * 
+ *
  * The listeners are only called once, and the other is removed after one of the listeners is called.
  * @param element The element to listen to.
  * @param capture Whether to use capturing listeners or not.
  * @returns A `Promise` that will be resolved when either of the listeners has executed.
  */
-export function createUserInteractionListener(element: HTMLElement, { capture = true, pointerenter = true, focusin = true } = {}): { userInteraction: Promise<Event>; destroy: () => void } {
+export function createUserInteractionListener(
+  element: HTMLElement,
+  { capture = true, pointerenter = true, focusin = true } = {}
+): { userInteraction: Promise<Event>; destroy: () => void } {
   let destroyFn: () => void;
   const destroy: () => void = () => {
     if (typeof destroyFn === 'function') {
@@ -45,14 +48,14 @@ export function createUserInteractionListener(element: HTMLElement, { capture = 
 
   const userInteraction = new Promise<Event>(resolve => {
     const listenerOpts: EventListenerOptions & { once: boolean } = { once: true, capture };
-  
+
     const handlePointerenter = (evt: Event): void => {
       if (focusin) {
         element.removeEventListener('focusin', handleFocusin, listenerOpts);
       }
       resolve(evt);
     };
-  
+
     const handleFocusin = (evt: Event): void => {
       if (pointerenter) {
         element.removeEventListener('pointerenter', handlePointerenter, listenerOpts);
@@ -90,7 +93,7 @@ export function percentToPixels(amount: number, containerSize: number): number {
   if (containerSize === 0) {
     return 0;
   }
-  return amount / 100 * containerSize;
+  return (amount / 100) * containerSize;
 }
 
 /**
@@ -103,7 +106,7 @@ export function pixelsToPercent(amount: number, containerSize: number): number {
   if (containerSize === 0) {
     return 0;
   }
-  return amount * 100 / containerSize;
+  return (amount * 100) / containerSize;
 }
 
 /**
@@ -121,7 +124,7 @@ export function scaleValue(value: number, fromMin: number, fromMax: number, toMi
   if (!range || !adjustedValue) {
     return toMin;
   }
-  return adjustedValue * toMax / range + toMin;
+  return (adjustedValue * toMax) / range + toMin;
 }
 
 /**
@@ -146,7 +149,7 @@ export function safeMax(...args: (number | undefined)[]): number {
  * Determines if two elements are overlapping.
  * @param elA {Element | null}
  * @param elB {Element | null}
- * @returns 
+ * @returns
  */
 export function elementsOverlapping(elA: Element | null, elB: Element | null): boolean {
   if (!(elA && elB)) {
@@ -161,7 +164,7 @@ export function elementsOverlapping(elA: Element | null, elB: Element | null): b
  * Determines if a pointer event is over an element.
  * @param event {PointerEvent} The pointer event to test.
  * @param element {HTMElement} The element to test against.
- * @returns 
+ * @returns
  */
 export function isPointerOverElement({ x, y }: { x: number; y: number }, element: HTMLElement | null): boolean {
   if (!element) {
@@ -173,7 +176,7 @@ export function isPointerOverElement({ x, y }: { x: number; y: number }, element
 
 /**
  * Attempts to locate a target element based on a heuristic.
- * 
+ *
  * We use the following heuristic for locating the target element:
  *  - If an id is set, we use that value to query the DOM for the target element
  *  - If id is set to `:host`, we use the host element from within a shadow tree (only if the root node is a ShadowRoot instance)
@@ -230,7 +233,7 @@ export function replaceElement<T extends HTMLElement>(oldElement: HTMLElement, n
 }
 
 /**
- * Coerces a string separated by `separator` into an array of strings. 
+ * Coerces a string separated by `separator` into an array of strings.
  * @param value The string to coerce.
  * @params [separator=','] The separator to use when splitting the string.
  * @returns An array of strings.

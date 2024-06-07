@@ -58,35 +58,27 @@ const meta = {
         'dayBuilder',
         'disabledDateBuilder',
         'eventBuilder',
-        'todayCallback', 
+        'todayCallback',
         'tooltipBuilder',
-        'value',
+        'value'
       ],
       controls: {
         activeDate: {
           control: {
-            type: 'date',
-          },
+            type: 'date'
+          }
         },
-        disabledDates : {
+        disabledDates: {
           control: {
-            type: 'object',
-          },
+            type: 'object'
+          }
         },
         disabledDaysOfWeek: {
           control: {
             type: 'multi-select',
-            labels: [
-              'Sunday',
-              'Monday',
-              'Tuesday',
-              'Wednesday',
-              'Thursday',
-              'Friday',
-              'Saturday',
-            ],
+            labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
           },
-          options: [0,1,2,3,4,5,6]
+          options: [0, 1, 2, 3, 4, 5, 6]
         },
         events: {
           control: {
@@ -96,80 +88,38 @@ const meta = {
         firstDayOfWeek: {
           control: {
             type: 'select',
-            labels: [
-              'Default',
-              'Sunday',
-              'Monday',
-              'Tuesday',
-              'Wednesday',
-              'Thursday',
-              'Friday',
-              'Saturday',
-            ],
+            labels: ['Default', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
           },
-          options: [0,1,2,3,4,5,6]
+          options: [0, 1, 2, 3, 4, 5, 6]
         },
         month: {
           control: {
             type: 'select',
-            labels: [
-              'January',
-              'February',
-              'March',
-              'April',
-              'May',
-              'June',
-              'July',
-              'August',
-              'September',
-              'October',
-              'November',
-              'December',
-            ],
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
           },
-          options: [0,1,2,3,4,5,6,7,8,9,10,11]
+          options: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
         },
         weekendDays: {
           control: {
             type: 'multi-select',
-            labels: [
-              'Sunday',
-              'Monday',
-              'Tuesday',
-              'Wednesday',
-              'Thursday',
-              'Friday',
-              'Saturday',
-            ],
+            labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
           },
-          options: [0,1,2,3,4,5,6]
+          options: [0, 1, 2, 3, 4, 5, 6]
         },
         menuAnimation: {
           control: 'select',
-          options: [
-            'scale',
-            'fade',
-            'none',
-          ],
+          options: ['scale', 'fade', 'none']
         },
         mode: {
           control: 'select',
-          options: [
-            'single',
-            'multiple',
-            'range',
-          ],
+          options: ['single', 'multiple', 'range']
         },
         view: {
           control: 'select',
-          options: [
-            'date',
-            'month',
-            'year',
-          ],
-        },
+          options: ['date', 'month', 'year']
+        }
       }
-    }),
+    })
   },
   args: {
     month: new Date().getMonth(),
@@ -192,9 +142,9 @@ const meta = {
     disabledDaysOfWeek: [],
     constrainToEnabled: true,
     events: [],
-    locale: 'en-US',  
-    preventFocus: false,                                                                              
-  },
+    locale: 'en-US',
+    preventFocus: false
+  }
 } satisfies Meta;
 
 export default meta;

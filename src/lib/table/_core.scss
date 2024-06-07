@@ -10,7 +10,6 @@
   display: block;
 }
 
-
 // The base styles for the `<table>` element.
 @mixin base {
   width: 100%;
@@ -74,7 +73,7 @@
 /// The base styles for the cells within the table.
 @mixin cell-base($select-class-name) {
   padding-right: #{spacing.variable(xxxlarge)};
-  
+
   border-bottom-width: #{border.variable(thin)};
   border-bottom-style: solid;
   border-bottom-color: #{theme.variable(outline)};
@@ -163,7 +162,8 @@
 
 /// Removes the border on all `th` and `td` elements.
 @mixin row-no-border {
-  th, td {
+  th,
+  td {
     border-bottom: none;
   }
 }
@@ -267,7 +267,7 @@
   &:active {
     background-color: var(--forge-table-theme-row-active-background, variables.$row-active-background);
   }
-  
+
   &.forge-table-body__row--selected:active {
     background-color: var(--forge-table-theme-row-selected-active-background, variables.$row-selected-active-background);
   }

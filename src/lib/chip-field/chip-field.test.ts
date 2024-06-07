@@ -4,7 +4,18 @@ import { elementUpdated, fixture, html } from '@open-wc/testing';
 import sinon from 'sinon';
 import { nothing } from 'lit';
 import { IChipFieldComponent } from './chip-field';
-import { BASE_FIELD_CONSTANTS, FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, FIELD_CONSTANTS, IFieldComponent } from '../field';
+import {
+  BASE_FIELD_CONSTANTS,
+  FieldDensity,
+  FieldLabelAlignment,
+  FieldLabelPosition,
+  FieldShape,
+  FieldSupportTextInset,
+  FieldTheme,
+  FieldVariant,
+  FIELD_CONSTANTS,
+  IFieldComponent
+} from '../field';
 import { getShadowElement } from '@tylertech/forge-core';
 
 import './chip-field';
@@ -332,7 +343,7 @@ describe('Chip Field', () => {
 
     it('should set required via attribute', async () => {
       const harness = await createFixture({ required: true });
-  
+
       expect(harness.chipField.required).to.be.true;
       expect(harness.chipField.hasAttribute(BASE_FIELD_CONSTANTS.attributes.REQUIRED)).to.be.true;
       expect(harness.fieldElement.required).to.be.true;
@@ -340,9 +351,9 @@ describe('Chip Field', () => {
 
     it('should set required via property', async () => {
       const harness = await createFixture();
-  
+
       harness.chipField.required = true;
-  
+
       expect(harness.chipField.required).to.be.true;
       expect(harness.chipField.hasAttribute(BASE_FIELD_CONSTANTS.attributes.REQUIRED)).to.be.true;
       expect(harness.fieldElement.required).to.be.true;
@@ -368,7 +379,7 @@ describe('Chip Field', () => {
 
     it('should set disabled via attribute', async () => {
       const harness = await createFixture({ disabled: true });
-  
+
       expect(harness.chipField.disabled).to.be.true;
       expect(harness.chipField.hasAttribute(BASE_FIELD_CONSTANTS.attributes.DISABLED)).to.be.true;
       expect(harness.inputElement.disabled).to.be.true;
@@ -377,9 +388,9 @@ describe('Chip Field', () => {
 
     it('should set disabled via property', async () => {
       const harness = await createFixture();
-  
+
       harness.chipField.disabled = true;
-  
+
       expect(harness.chipField.disabled).to.be.true;
       expect(harness.chipField.hasAttribute(BASE_FIELD_CONSTANTS.attributes.DISABLED)).to.be.true;
       expect(harness.inputElement.disabled).to.be.true;
@@ -411,7 +422,7 @@ describe('Chip Field', () => {
       expect(harness.chipField.hasAttribute(BASE_FIELD_CONSTANTS.attributes.VARIANT)).to.be.true;
       expect(harness.fieldElement.variant).to.equal('plain');
     });
-    
+
     it('should set variant via property', async () => {
       const harness = await createFixture();
 
@@ -564,7 +575,7 @@ describe('Chip Field', () => {
 
     it('should add id to input if no id is present', async () => {
       const el = await fixture<IChipFieldComponent>(html`<forge-chip-field></forge-chip-field>`);
-      
+
       const label = document.createElement('label');
       const input = document.createElement('input');
       label.slot = 'label';
@@ -607,7 +618,7 @@ describe('Chip Field', () => {
       el.append(input);
       el.append(label);
       await elementUpdated(el);
-      
+
       label.textContent = 'New label';
       await elementUpdated(el);
 
@@ -616,7 +627,7 @@ describe('Chip Field', () => {
 
     it('should focus text field when forge label is clicked', async () => {
       const el = await fixture<IChipFieldComponent>(html`<forge-chip-field></forge-chip-field>`);
-      
+
       const label = document.createElement(LABEL_CONSTANTS.elementName);
       const input = document.createElement('input');
       label.textContent = 'Label';
@@ -628,7 +639,7 @@ describe('Chip Field', () => {
       await elementUpdated(el);
       label.click();
       await elementUpdated(el);
-      
+
       expect(focusSpy).to.have.been.called;
     });
   });
@@ -638,7 +649,8 @@ class ChipFieldHarness {
   constructor(
     public readonly chipField: IChipFieldComponent,
     public readonly inputElement: HTMLInputElement,
-    public readonly labelElement: HTMLLabelElement) {}
+    public readonly labelElement: HTMLLabelElement
+  ) {}
 
   public get fieldElement(): IFieldComponent {
     return getShadowElement(this.chipField, FIELD_CONSTANTS.elementName) as IFieldComponent;

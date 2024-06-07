@@ -3,9 +3,22 @@ import { IFormFieldComponentDelegate } from '../core/delegates/form-field-compon
 import { TableRow } from './table-row';
 
 export declare type TableViewTemplate = string | HTMLElement | TableViewTemplateBuilder;
-export declare type TableViewTemplateBuilder<T = any> = (rowIndex: number, div: HTMLElement, rowData: T) => HTMLElement | string | ITableViewTemplateBuilderResult | undefined | Promise<HTMLElement | string | undefined | ITableViewTemplateBuilderResult>;
-export declare type TableTemplateBuilder<T = any> = (rowIndex: number, div: HTMLElement, rowData: T, columnIndex: number) => HTMLElement | string | ITableTemplateBuilderResult | undefined | Promise<HTMLElement | string | undefined | ITableTemplateBuilderResult>;
-export declare type TableHeaderTemplateBuilder = (rowIndex: number, div: HTMLElement, columConfig: IColumnConfiguration) => HTMLElement | string | Promise<HTMLElement | string>;
+export declare type TableViewTemplateBuilder<T = any> = (
+  rowIndex: number,
+  div: HTMLElement,
+  rowData: T
+) => HTMLElement | string | ITableViewTemplateBuilderResult | undefined | Promise<HTMLElement | string | undefined | ITableViewTemplateBuilderResult>;
+export declare type TableTemplateBuilder<T = any> = (
+  rowIndex: number,
+  div: HTMLElement,
+  rowData: T,
+  columnIndex: number
+) => HTMLElement | string | ITableTemplateBuilderResult | undefined | Promise<HTMLElement | string | undefined | ITableTemplateBuilderResult>;
+export declare type TableHeaderTemplateBuilder = (
+  rowIndex: number,
+  div: HTMLElement,
+  columConfig: IColumnConfiguration
+) => HTMLElement | string | Promise<HTMLElement | string>;
 export declare type TableHeaderSelectAllTemplate = () => HTMLElement | string | Promise<HTMLElement | string>;
 export declare type TableRowCreatedCallback = (rowElement: HTMLTableRowElement, rowIndex: number, rowData: any) => void;
 export declare type TableSelectTooltipCallback = (rowIndex: number, rowData: any) => string;

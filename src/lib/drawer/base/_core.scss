@@ -11,23 +11,23 @@
 
   .forge-drawer {
     @include base;
-  
-    ::slotted([slot=header]) {
+
+    ::slotted([slot='header']) {
       @include header;
     }
-  
-    ::slotted([slot=footer]) {
+
+    ::slotted([slot='footer']) {
       @include footer;
     }
-  
+
     .content {
       @include content;
     }
-  
+
     &.left {
       @include left;
     }
-  
+
     &.right {
       @include right;
 
@@ -47,7 +47,7 @@
     &.closed {
       @include closed(left);
     }
-  
+
     &.no-transition {
       transition: none !important;
     }
@@ -67,11 +67,11 @@
   height: 100%;
   box-sizing: border-box;
   overflow: hidden;
-  
+
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;
-  
+
   background-color: #{token(background)};
   border-color: #{token(border-color)};
 
@@ -89,7 +89,7 @@
 
   overflow-x: auto;
   -webkit-overflow-scrolling: 'touch';
-  
+
   display: flex;
   flex-direction: column;
   grid-row: 2;
@@ -123,7 +123,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  
+
   transition-duration: #{token(transition-duration-close)};
 }
 

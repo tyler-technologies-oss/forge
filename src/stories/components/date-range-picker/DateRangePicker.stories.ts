@@ -13,25 +13,25 @@ const meta = {
     const max = args.max ? new Date(args.max) : undefined;
 
     return html`
-    <forge-date-range-picker
-      .min=${min}
-      .max=${max}
-      .disabled=${args.disabled}
-      .masked=${args.masked}
-      .showMaskFormat=${args.showMaskFormat}
-      .allowInvalidDate=${args.allowInvalidDate}
-      .showToday=${args.showToday}
-      .showClear=${args.showClear}
-      .disabledDaysOfWeek=${args.disabledDaysOfWeek}
-      .locale=${args.locale}
-      style="width: 263px">
-      <forge-text-field>
-        <label for="input-date-range-picker-01">Date</label>
-        <input type="text" id="input-date-range-picker-01" autocomplete="off" placeholder="mm/dd/yyyy" />
-        <input type="text" id="input-date-range-picker-02" autocomplete="off" placeholder="mm/dd/yyyy" />
-      </forge-text-field>
-    </forge-date-range-picker>
-    `
+      <forge-date-range-picker
+        .min=${min}
+        .max=${max}
+        .disabled=${args.disabled}
+        .masked=${args.masked}
+        .showMaskFormat=${args.showMaskFormat}
+        .allowInvalidDate=${args.allowInvalidDate}
+        .showToday=${args.showToday}
+        .showClear=${args.showClear}
+        .disabledDaysOfWeek=${args.disabledDaysOfWeek}
+        .locale=${args.locale}
+        style="width: 263px">
+        <forge-text-field>
+          <label for="input-date-range-picker-01">Date</label>
+          <input type="text" id="input-date-range-picker-01" autocomplete="off" placeholder="mm/dd/yyyy" />
+          <input type="text" id="input-date-range-picker-02" autocomplete="off" placeholder="mm/dd/yyyy" />
+        </forge-text-field>
+      </forge-date-range-picker>
+    `;
   },
   component,
   parameters: {
@@ -43,23 +43,23 @@ const meta = {
       include: ['min', 'max', 'disabled', 'masked', 'showMaskFormat', 'allowInvalidDate', 'showToday', 'showClear', 'disabledDaysOfWeek'],
       controls: {
         from: {
-          control: 'date',
+          control: 'date'
         },
         min: {
-          control: 'date',
+          control: 'date'
         },
         max: {
-          control: 'date',
+          control: 'date'
         },
         disabledDaysOfWeek: {
           control: {
             type: 'multi-select',
             labels: { 0: 'Sun', 1: 'Mon', 2: 'Tue', 3: 'Wed', 4: 'Thu', 5: 'Fri', 6: 'Sat' }
           },
-          options: [0, 1, 2, 3, 4, 5, 6],
-        },
+          options: [0, 1, 2, 3, 4, 5, 6]
+        }
       }
-    }),
+    })
   },
   args: {
     maskFormat: '0`0{/}`0`0{/}`0`0`0`0',
@@ -70,7 +70,7 @@ const meta = {
     allowInvalidDate: false,
     disabledDaysOfWeek: [0, 6],
     masked: false
-  },
+  }
 } satisfies Meta;
 
 export default meta;

@@ -20,7 +20,10 @@ export class TimeInputMask {
   private _maskOptions: IMask.AnyMaskedOptions;
   private _acceptListener: (evt: InputEvent) => void;
 
-  constructor(private _element: HTMLInputElement, private _options: ITimeInputMaskOptions = {}) {
+  constructor(
+    private _element: HTMLInputElement,
+    private _options: ITimeInputMaskOptions = {}
+  ) {
     this._maskOptions = this._createOptions();
     this._mask = new InputMask(this._element, this._maskOptions);
     if (this._options.onChange) {
@@ -156,7 +159,7 @@ export class TimeInputMask {
       parser.applyValue(newValue, 'minutes-end');
       return ':';
     }
-    
+
     // Attempt to overwrite the minutes (w/leading zero)
     if (parser.canOverwriteMinutesChar) {
       const numNewMins = +`${parser.minutesSegmentNum}${parser.numChar}`;
@@ -176,7 +179,7 @@ export class TimeInputMask {
         parser.applyValue(newValue, 'seconds-end');
         return ':';
       }
-      
+
       // Attempt to overwrite the seconds (w/leading zero)
       if (parser.canOverwriteSecondsChar) {
         const numNewSeconds = +`${parser.secondsSegmentNum}${parser.numChar}`;

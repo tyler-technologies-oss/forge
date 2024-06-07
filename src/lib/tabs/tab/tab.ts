@@ -31,26 +31,26 @@ declare global {
 
 /**
  * @tag forge-tab
- * 
+ *
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
- * 
+ *
  * @property {boolean} [disabled=false] - The disabled state of the tab.
  * @property {boolean} [selected=false] - The selected state of the tab.
  * @property {boolean} [vertical=false] - Controls whether the tab is vertical or horizontal.
  * @property {boolean} [stacked=false] - Controls whether the tab is taller to allow for slotted leading/trailing elements.
  * @property {boolean} [secondary=false] - Controls whether the tab is styled as secondary tab navigation.
  * @property {boolean} [inverted=false] - Controls whether the tab indicator is rendered on the opposite side of the tab.
- * 
+ *
  * @attribute [disabled=false] - The disabled state of the tab.
  * @attribute [selected=false] - The selected state of the tab.
  * @attribute [vertical=false] - Controls whether the tab is vertical or horizontal.
  * @attribute [stacked=false] - Controls whether the tab is taller to allow for slotted leading/trailing elements.
  * @attribute [secondary=false] - Controls whether the tab is styled as secondary tab navigation.
  * @attribute [inverted=false] - Controls whether the tab indicator is rendered on the opposite side of the tab.
- * 
+ *
  * @event {CustomEvent<void>} forge-tab-select - Dispatched when the tab is selected. This event bubbles and it can be useful to capture it on the `<forge-tab-bar>` element.
- * 
+ *
  * @cssproperty --forge-tab-indicator-color - The color of the tab indicator. Defaults to the primary theme.
  * @cssproperty --forge-tab-indicator-height - The height of the tab indicator.
  * @cssproperty --forge-tab-indicator-shape - The shape of the tab indicator.
@@ -75,22 +75,19 @@ declare global {
  * @cssproperty --forge-tab-hover-label-text-color - The color of the label text when the tab is hovered. Defaults to the text-on-background theme.
  * @cssproperty --forge-tab-label-text-color - The color of the label text. Defaults to the text-on-background theme.
  * @cssproperty --forge-tab-pressed-label-text-color - The color of the label text when the tab is pressed. Defaults to the text-on-background theme.
- * 
+ *
  * @csspart container - The tab container.
  * @csspart content - The tab content container.
  * @csspart label - The tab label container.
  * @csspart indicator - The tab active indicator.
- * 
+ *
  * @slot - The tab label.
  * @slot start - Content before the label.
  * @slot end - Content after the label.
  */
 @customElement({
   name: TAB_CONSTANTS.elementName,
-  dependencies: [
-    FocusIndicatorComponent,
-    StateLayerComponent
-  ]
+  dependencies: [FocusIndicatorComponent, StateLayerComponent]
 })
 export class TabComponent extends BaseComponent implements ITabComponent {
   public static get observedAttributes(): string[] {
@@ -134,7 +131,7 @@ export class TabComponent extends BaseComponent implements ITabComponent {
 
   @coreProperty()
   public declare disabled: boolean;
-  
+
   @coreProperty()
   public declare selected: boolean;
 

@@ -1,6 +1,12 @@
 import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate';
 import { ICalendarComponent } from './calendar';
-import { CalendarView, CALENDAR_CONSTANTS, ICalendarDateSelectEventData, ICalendarFocusChangeEventData, ICalendarMonthChangeEventData } from './calendar-constants';
+import {
+  CalendarView,
+  CALENDAR_CONSTANTS,
+  ICalendarDateSelectEventData,
+  ICalendarFocusChangeEventData,
+  ICalendarMonthChangeEventData
+} from './calendar-constants';
 
 export type CalendarComponentDelegateProps = Partial<ICalendarComponent>;
 export interface ICalendarComponentDelegateOptions extends IBaseComponentDelegateOptions {}

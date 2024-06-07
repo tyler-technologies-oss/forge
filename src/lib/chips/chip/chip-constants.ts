@@ -46,7 +46,7 @@ export const CHIP_CONSTANTS = {
 };
 
 export type ChipTheme = Theme;
-export type ChipType =  'choice' | 'filter' | 'action' | 'input' | 'field';
+export type ChipType = 'choice' | 'filter' | 'action' | 'input' | 'field';
 
 export interface IChipSelectEventData<T = any> {
   value: T;

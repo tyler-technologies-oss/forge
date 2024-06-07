@@ -39,8 +39,8 @@ declare global {
 
 /**
  * @tag forge-step
- * 
- * @property {boolean} alternative - Whether the step is in the alternative style. 
+ *
+ * @property {boolean} alternative - Whether the step is in the alternative style.
  * @property {boolean} completed - Whether the step is completed.
  * @property {boolean} editable - Whether the step is editable.
  * @property {boolean} error - Whether the step has an error.
@@ -50,7 +50,7 @@ declare global {
  * @property {boolean} expanded - Whether the step is expanded.
  * @property {boolean} ignoreUserExpansion - Whether the step should ignore user expansion.
  * @property {number} index - The index of the step.
- * 
+ *
  * @attribute {boolean} selected - Whether the step is selected.
  * @attribute {number} index - The index of the step.
  * @attribute {boolean} editable - Whether the step is editable.
@@ -61,7 +61,7 @@ declare global {
  * @attribute {boolean} vertical - Whether the step is in vertical mode.
  * @attribute {boolean} expanded - Whether the step is expanded.
  * @attribute {boolean} ignore-user-expansion - Whether the step should ignore user expansion.
- * 
+ *
  * @cssproperty --forge-step-primary-color - The primary color of the step. Defaults to the primary theme.
  * @cssproperty --forge-step-text-color - The text color of the step. Defaults to the on-primary theme.
  * @cssproperty --forge-step-border-radius - The border radius of the step. Defaults to the extra-large shape.
@@ -88,19 +88,14 @@ declare global {
  * @cssproperty --forge-step-expansion-panel-margin-left - The margin left of the step expansion panel. Defaults to 60px.
  * @cssproperty --forge-step-expansion-panel-margin-top - The margin top of the step expansion panel. Defaults to 4px.
  * @cssproperty --forge-step-expansion-panel-icon-color - The color of the step expansion panel icon. Defaults to the text-medium theme.
- * 
+ *
  * @slot - The content of the step.
  * @slot optional - The optional content of the step.
  * @slot expansion-content - The content of the step expansion.
  */
 @customElement({
   name: STEP_CONSTANTS.elementName,
-  dependencies: [
-    IconComponent,
-    ExpansionPanelComponent,
-    StateLayerComponent,
-    FocusIndicatorComponent
-  ]
+  dependencies: [IconComponent, ExpansionPanelComponent, StateLayerComponent, FocusIndicatorComponent]
 })
 export class StepComponent extends BaseComponent implements IStepComponent {
   public static get observedAttributes(): string[] {
@@ -122,13 +117,7 @@ export class StepComponent extends BaseComponent implements IStepComponent {
 
   constructor() {
     super();
-    IconRegistry.define([
-      tylIconModeEdit,
-      tylIconCheck,
-      tylIconWarning,
-      tylIconBlock,
-      tylIconKeyboardArrowDown
-    ]);
+    IconRegistry.define([tylIconModeEdit, tylIconCheck, tylIconWarning, tylIconBlock, tylIconKeyboardArrowDown]);
     attachShadowTemplate(this, template, styles);
     this._core = new StepCore(new StepAdapter(this));
   }

@@ -44,14 +44,14 @@ declare global {
 
 /**
  * @tag forge-switch
- * 
+ *
  * @summary Switches toggle the state of a single setting on or off.
- * 
+ *
  * @description
  * Use switches to:
  * - Toggle a single item on or off, on mobile and tablet
  * - Immediately activate or deactivate something
- * 
+ *
  * @property {boolean} on - Whether the switch is on the on or off state.
  * @property {boolean} selected - Deprecated. Alias for `on`.
  * @property {boolean} defaultOn - Whether the switch is on or off by default.
@@ -62,7 +62,7 @@ declare global {
  * @property {boolean} readonly - Controls if the switch is readonly.
  * @property {SwitchIconVisibility} icon - Controls the presence of the off and on icons.
  * @property {SwitchLabelPosition} labelPosition - Whether the label appears before or after the switch.
- * 
+ *
  * @attribute {string} on - Controls whether the switch is in the on or off state.
  * @attribute {string} selected - Deprecated. Alias for `on`.
  * @attribute {string} default-on - Controls whether the switch is in the on or off state by default.
@@ -73,11 +73,11 @@ declare global {
  * @attribute {string} readonly - Controls if the switch is readonly.
  * @attribute {string} icon - Controls the presence of the off and on icons.
  * @attribute {string} label-position - Sets whether the label appears before or after the switch.
- * 
+ *
  * @method {(force?: boolean) => void} toggle - Toggles whether the switch is selected or forces a selected state.
- *  
+ *
  * @event {CustomEvent<boolean>} forge-switch-change - Dispatches when the switch's value changes.
- * 
+ *
  * @cssproperty --forge-theme-primary - The primary color of the switch.
  * @cssproperty --forge-theme-on-primary - The color of elements placed on top of the primary color (the handle icons for example).
  * @cssproperty --forge-switch-handle-on-color - The color of the handle in the switch's on state.
@@ -145,7 +145,7 @@ declare global {
  * @cssproperty --forge-switch-animation-duration - The duration of animations.
  * @cssproperty --forge-switch-animation-timing - The timing function used in most animations.
  * @cssproperty --forge-switch-active-animation-timing - The timing function used in active state animations.
- * 
+ *
  * @csspart switch - Styles the switch container element.
  * @csspart track - Styles the track element.
  * @csspart handle - Styles the handle element.
@@ -157,12 +157,12 @@ declare global {
  */
 @customElement({
   name: SWITCH_CONSTANTS.elementName,
-  dependencies: [
-    FocusIndicatorComponent,
-    StateLayerComponent
-  ]
+  dependencies: [FocusIndicatorComponent, StateLayerComponent]
 })
-export class SwitchComponent extends WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent))))) implements ISwitchComponent {
+export class SwitchComponent
+  extends WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent)))))
+  implements ISwitchComponent
+{
   public static get observedAttributes(): string[] {
     return Object.values(SWITCH_CONSTANTS.observedAttributes);
   }
@@ -230,10 +230,13 @@ export class SwitchComponent extends WithFormAssociation(WithLabelAwareness(With
   }
 
   public [setValidity](): void {
-    this[internals].setValidity({ valueMissing: this.required && !this.on }, this[getValidationMessage]({
-      checked: this.on,
-      required: this.required
-    }));
+    this[internals].setValidity(
+      { valueMissing: this.required && !this.on },
+      this[getValidationMessage]({
+        checked: this.on,
+        required: this.required
+      })
+    );
   }
 
   public formResetCallback(): void {

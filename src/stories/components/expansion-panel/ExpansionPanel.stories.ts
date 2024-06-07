@@ -36,9 +36,18 @@ const meta = {
         @forge-expansion-panel-animation-complete=${animationCompleteEventAction}>
         <button ${ref(buttonRef)} slot="header" type="button" aria-expanded=${args.open} aria-controls="content">Toggle</button>
         <div id="content" role="group">
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem nulla quod corporis similique consequuntur facere laborum veniam error eius.</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem nulla quod corporis similique consequuntur facere laborum veniam error eius.</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem nulla quod corporis similique consequuntur facere laborum veniam error eius.</p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem
+            nulla quod corporis similique consequuntur facere laborum veniam error eius.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem
+            nulla quod corporis similique consequuntur facere laborum veniam error eius.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem
+            nulla quod corporis similique consequuntur facere laborum veniam error eius.
+          </p>
         </div>
       </forge-expansion-panel>
     `;
@@ -50,7 +59,7 @@ const meta = {
         orientation: { control: 'select', options: ['horizontal', 'vertical'] },
         animationType: { control: 'select', options: ['default', 'none'] }
       }
-    }),
+    })
   },
   args: {
     open: false,
@@ -74,7 +83,10 @@ export const WithCard: Story = {
             <div>Header text</div>
             <forge-open-icon></forge-open-icon>
           </div>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem nulla quod corporis similique consequuntur facere laborum veniam error eius.</p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem
+            nulla quod corporis similique consequuntur facere laborum veniam error eius.
+          </p>
         </forge-expansion-panel>
       </forge-card>
     `;

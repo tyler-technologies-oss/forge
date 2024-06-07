@@ -55,8 +55,9 @@
   inset: 0;
   will-change: transform;
   background: #{token(track-color)};
-  transition: transform #{token(determinate-duration)} #{token(determinate-easing)},
-              background-color #{token(theme-transition-duration)} #{token(theme-transition-timing)};
+  transition:
+    transform #{token(determinate-duration)} #{token(determinate-easing)},
+    background-color #{token(theme-transition-duration)} #{token(theme-transition-timing)};
   transform-origin: left center;
 }
 

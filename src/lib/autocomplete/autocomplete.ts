@@ -9,7 +9,17 @@ import { PopoverComponent } from '../popover/popover';
 import { SkeletonComponent } from '../skeleton';
 import { TextFieldComponent } from '../text-field';
 import { AutocompleteAdapter } from './autocomplete-adapter';
-import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteForceFilterOptions, IAutocompleteOption, IAutocompleteOptionGroup, IAutocompleteSelectEventData } from './autocomplete-constants';
+import {
+  AutocompleteFilterCallback,
+  AutocompleteMode,
+  AutocompleteOptionBuilder,
+  AutocompleteSelectedTextBuilder,
+  AUTOCOMPLETE_CONSTANTS,
+  IAutocompleteForceFilterOptions,
+  IAutocompleteOption,
+  IAutocompleteOptionGroup,
+  IAutocompleteSelectEventData
+} from './autocomplete-constants';
 import { AutocompleteCore } from './autocomplete-core';
 
 import template from './autocomplete.html';
@@ -179,7 +189,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
 
   /**
    * Gets/sets the filter text.
-   * 
+   *
    * Setting the filter text only applies when allowUnmatched is enabled.
    */
   @coreProperty()

@@ -75,7 +75,7 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
     if (event.type === 'date') {
       this._closeCalendar(true);
     }
-    
+
     if (!this._emitChangeEvent(value)) {
       return;
     }

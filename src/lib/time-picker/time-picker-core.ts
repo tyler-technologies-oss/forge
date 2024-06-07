@@ -13,7 +13,14 @@ import {
   TimePickerPrepareMaskCallback
 } from './time-picker-constants';
 import { IListDropdownConfig, ListDropdownType, IListDropdownOption } from '../list-dropdown/list-dropdown-constants';
-import { timeStringToMillis, millisToTimeString, minutesToMillis, getCurrentTimeOfDayMillis, millisToMinutes, stripSecondsFromMillis } from './time-picker-utils';
+import {
+  timeStringToMillis,
+  millisToTimeString,
+  minutesToMillis,
+  getCurrentTimeOfDayMillis,
+  millisToMinutes,
+  stripSecondsFromMillis
+} from './time-picker-utils';
 
 export interface ITimePickerCore extends ICustomElementCore {
   value: string | null | undefined;
@@ -70,7 +77,7 @@ export class TimePickerCore implements ITimePickerCore {
   private _disabled = false;
   private _popupClasses: string[] = [];
   private _allowDropdown = true;
-  
+
   // Internal state vars
   private _isInitialized = false;
   private _dropdownConfig: IListDropdownConfig<ITimePickerOptionValue> | undefined;
@@ -82,7 +89,7 @@ export class TimePickerCore implements ITimePickerCore {
   private _inputFocusListener: (evt: Event) => void;
   private _inputBlurListener: (evt: Event) => void;
   private _inputMousedownListener: (evt: MouseEvent) => void;
-  
+
   constructor(private _adapter: ITimePickerAdapter) {
     this._identifier = randomChars(); // This is a unique identifier for this instance of the time picker (used for a11y purposes)
 
@@ -97,7 +104,7 @@ export class TimePickerCore implements ITimePickerCore {
 
   public initialize(): void {
     this._adapter.initialize();
-    
+
     // We require an input element to be a child of this component
     if (!this._adapter.hasInputElement()) {
       throw new Error('Unable to locate <input> element to attach to.');
@@ -465,7 +472,7 @@ export class TimePickerCore implements ITimePickerCore {
         millis = null;
       }
     }
-    
+
     // Trap for restricted times
     if (typeof millis === 'number' && this._restrictedTimes.length) {
       if (this._restrictedTimes.includes(millis)) {
@@ -564,15 +571,15 @@ export class TimePickerCore implements ITimePickerCore {
     if (!this.allowDropdown || !options.length) {
       return;
     }
-    
+
     this._formatInputValue();
     this._open = true;
     this._adapter.setHostAttribute(TIME_PICKER_CONSTANTS.attributes.OPEN);
-    
+
     const selectableOptions = options.filter(o => !o.divider && !o.disabled);
     let selectedValues: ITimePickerOptionValue[] = [];
     let visibleStartIndex = 0;
-    
+
     // Find closest match in list of time options and activate/select it
     if (options.length) {
       if (this._value != null) {
@@ -634,21 +641,21 @@ export class TimePickerCore implements ITimePickerCore {
 
   private _findClosestOptionIndex(value: number, options: Array<IListDropdownOption<ITimePickerOptionValue>>): number {
     const closestItem = options.reduce((prev, curr) => {
-                        return Math.abs((curr.value.time || 0) - value) < Math.abs((prev.value.time || 0) - value) ? curr : prev;
-                      });
+      return Math.abs((curr.value.time || 0) - value) < Math.abs((prev.value.time || 0) - value) ? curr : prev;
+    });
     return options.indexOf(closestItem);
   }
 
   private _formatInputValue(emitEvents = true): void {
     const inputValue = this._adapter.getInputValue();
-    
+
     // If we allow invalid times, we can leave the input value as-is (only when unmasked)
     if (this._allowInvalidTime && !this._masked && inputValue && !this._value) {
       return;
     }
 
     const formattedValue = this._formatValue(this._value);
-    
+
     if (inputValue !== formattedValue) {
       this._adapter.setInputValue(formattedValue, emitEvents);
       this._adapter.emitInputEvent(TIME_PICKER_CONSTANTS.events.INPUT, formattedValue);
@@ -657,11 +664,12 @@ export class TimePickerCore implements ITimePickerCore {
 
   private _generateTimeOptions(): Array<IListDropdownOption<ITimePickerOptionValue>> {
     const minMinutes = this._min != null ? Math.max(millisToMinutes(this._min), 0) : 0;
-    const maxMinutes = this._max != null ? Math.min(millisToMinutes(this._max), TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES) : TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES;
+    const maxMinutes =
+      this._max != null ? Math.min(millisToMinutes(this._max), TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES) : TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES;
     const minuteStep = this._step;
     const times: IListDropdownOption[] = [];
     let leadingOptions: IListDropdownOption[] = [];
-    
+
     if (this._showHourOptions) {
       for (let totalMinutes = minMinutes; totalMinutes <= maxMinutes; totalMinutes += minuteStep) {
         if (totalMinutes === TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES) {
@@ -681,7 +689,6 @@ export class TimePickerCore implements ITimePickerCore {
       }
     }
 
-
     // Check if we need to prepend a "Now" option
     if (this._showNow) {
       const value: ITimePickerOptionValue = { time: null, metadata: 'now' };
@@ -691,7 +698,12 @@ export class TimePickerCore implements ITimePickerCore {
     // Check for any custom provided options to prepend
     if (Array.isArray(this._customOptions) && this._customOptions.length) {
       const options = this._customOptions.map(o => {
-        const value: ITimePickerOptionValue = { time: null, metadata: o.value, isCustom: true, customCallback: o.toMilliseconds };
+        const value: ITimePickerOptionValue = {
+          time: null,
+          metadata: o.value,
+          isCustom: true,
+          customCallback: o.toMilliseconds
+        };
         return { label: o.label, value };
       });
       leadingOptions = [...leadingOptions, ...options];
@@ -723,7 +735,9 @@ export class TimePickerCore implements ITimePickerCore {
   }
 
   private _warnInvalidFormat(value: string): void {
-    console.warn(`The specified value "${value}" does not conform to the required format. The format is "HH:mm", "HH:mm:ss" where HH is 00-23, mm is 00-59, and ss is 00-59.`);
+    console.warn(
+      `The specified value "${value}" does not conform to the required format. The format is "HH:mm", "HH:mm:ss" where HH is 00-23, mm is 00-59, and ss is 00-59.`
+    );
   }
 
   public get open(): boolean {
@@ -793,7 +807,7 @@ export class TimePickerCore implements ITimePickerCore {
   public set use24HourTime(value: boolean) {
     if (this._use24HourTime !== value) {
       this._use24HourTime = !!value;
-      
+
       if (this._isInitialized) {
         this._applyMask();
         this._formatInputValue();
@@ -859,7 +873,7 @@ export class TimePickerCore implements ITimePickerCore {
         return;
       }
       this._max = this._convertTimeStringToMillis(value, true, this._allowSeconds);
-      
+
       // Validate and reset our millis to ensure within range
       const millis = this._validateMillis(this._value);
       this._setValue(millis);
@@ -871,18 +885,16 @@ export class TimePickerCore implements ITimePickerCore {
   }
 
   public get restrictedTimes(): string[] {
-    return this._restrictedTimes
-            .map(t => millisToTimeString(t, true, this._allowSeconds))
-            .filter(v => typeof v === 'string') as string[];
+    return this._restrictedTimes.map(t => millisToTimeString(t, true, this._allowSeconds)).filter(v => typeof v === 'string') as string[];
   }
   public set restrictedTimes(value: string[]) {
     if (!Array.isArray(value)) {
       value = [];
     }
     this._restrictedTimes = value
-                              .filter(v => typeof v === 'string')
-                              .map(v => this._convertTimeStringToMillis(v, true, true))
-                              .filter(v => typeof v === 'number') as number[];
+      .filter(v => typeof v === 'string')
+      .map(v => this._convertTimeStringToMillis(v, true, true))
+      .filter(v => typeof v === 'number') as number[];
   }
 
   public get startTime(): string | null {

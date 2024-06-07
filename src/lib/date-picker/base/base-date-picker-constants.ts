@@ -3,7 +3,12 @@ import { DayOfWeek, ICalendarDateSelectEventData } from '../../calendar';
 
 export declare type DatePickerParseCallback = (value: string) => Date | null;
 export declare type DatePickerFormatCallback = (value: Date | null) => string;
-export declare type DatePickerPrepareMaskCallback = (value: string, masked: Masked<string>, flags: IMask.AppendFlags, maskInstance: InputMask<IMask.MaskedPatternOptions>) => string;
+export declare type DatePickerPrepareMaskCallback = (
+  value: string,
+  masked: Masked<string>,
+  flags: IMask.AppendFlags,
+  maskInstance: InputMask<IMask.MaskedPatternOptions>
+) => string;
 export declare type DatePickerValueMode = 'object' | 'string' | 'iso-string';
 
 export interface IDatePickerCalendarDropdownConfig<T> {
@@ -22,7 +27,6 @@ export interface IDatePickerCalendarDropdownConfig<T> {
   clearCallback: () => void;
   disabledDaysOfWeek?: DayOfWeek[] | null;
 }
-
 
 const observedAttributes = {
   MIN: 'min',

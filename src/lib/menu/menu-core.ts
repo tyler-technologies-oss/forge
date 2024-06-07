@@ -1,12 +1,26 @@
 import { ICustomElementCore, isArray, randomChars } from '@tylertech/forge-core';
 import { ICON_CLASS_NAME } from '../constants';
 import { PositionPlacement } from '../core/utils/position-utils';
-import { CascadingListDropdownAwareCore, IListDropdownCascadingElementFactoryConfig, IListDropdownConfig, ListDropdownAsyncStyle, ListDropdownType } from '../list-dropdown';
+import {
+  CascadingListDropdownAwareCore,
+  IListDropdownCascadingElementFactoryConfig,
+  IListDropdownConfig,
+  ListDropdownAsyncStyle,
+  ListDropdownType
+} from '../list-dropdown';
 import { isListDropdownOptionType, ListDropdownOptionType } from '../list-dropdown/list-dropdown-utils';
 import type { IOverlayOffset } from '../overlay/overlay-constants';
 import { IMenuOption } from './index';
 import { IMenuAdapter } from './menu-adapter';
-import { IMenuActiveChangeEventData, IMenuOptionGroup, IMenuSelectEventData, MenuMode, MenuOptionBuilder, MenuOptionFactory, MENU_CONSTANTS } from './menu-constants';
+import {
+  IMenuActiveChangeEventData,
+  IMenuOptionGroup,
+  IMenuSelectEventData,
+  MenuMode,
+  MenuOptionBuilder,
+  MenuOptionFactory,
+  MENU_CONSTANTS
+} from './menu-constants';
 
 export interface IMenuCore extends ICustomElementCore {
   initialize(): void;
@@ -45,7 +59,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
   private _selectListener: (value: any) => void;
   private _keydownListener: (evt: KeyboardEvent) => void;
   private _activeChangeListener: (id: string) => void;
-  
+
   constructor(private _adapter: IMenuAdapter) {
     super({
       popupTimeout: MENU_CONSTANTS.numbers.POPUP_MOUSE_LEAVE_TIMEOUT,
@@ -130,10 +144,9 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
 
   private _flattenOptions(options: Array<IMenuOption | IMenuOptionGroup>): IMenuOption[] {
     if (isListDropdownOptionType(options, ListDropdownOptionType.Group)) {
-      return (options as IMenuOptionGroup[])
-        .reduce((previousValue, currentValue) => {
-          return currentValue.options ? previousValue.concat(currentValue.options) : previousValue;
-        }, [] as IMenuOption[]);
+      return (options as IMenuOptionGroup[]).reduce((previousValue, currentValue) => {
+        return currentValue.options ? previousValue.concat(currentValue.options) : previousValue;
+      }, [] as IMenuOption[]);
     }
     return options as IMenuOption[];
   }
@@ -271,7 +284,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
     }
 
     if (!this._persistSelection) {
-      options.forEach(o => o.selected = false);
+      options.forEach(o => (o.selected = false));
     }
 
     this._mapIconToLeadingIcon();
@@ -300,11 +313,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
       popupPlacement: this._placement,
       popupFallbackPlacements: this._fallbackPlacements,
       activeStartIndex: fromKeyboard ? 0 : undefined,
-      popupClasses: [
-        MENU_CONSTANTS.classes.POPUP,
-        MENU_CONSTANTS.classes.MENU,
-        ...this._popupClasses as string[]
-      ],
+      popupClasses: [MENU_CONSTANTS.classes.POPUP, MENU_CONSTANTS.classes.MENU, ...(this._popupClasses as string[])],
       syncWidth: this._syncPopupWidth,
       activeChangeCallback: this._activeChangeListener,
       selectCallback: this._selectListener,
@@ -320,7 +329,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
       this._adapter.addDropdownListener('mouseenter', this._childPopupMouseEnterListener);
       this._adapter.addDropdownListener('mouseleave', this._childPopupMouseLeaveListener);
     }
-    
+
     this._adapter.addDropdownListener(MENU_CONSTANTS.events.ACTIVE_CHANGE, (evt: CustomEvent<IMenuActiveChangeEventData>) => {
       this._onActiveOptionChanged(evt.detail.id);
     });
@@ -357,7 +366,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
       .then(results => {
         if (!this._persistSelection) {
           const flatResults = this._flattenOptions(results);
-          flatResults.filter(o => o.selected).forEach(o => o.selected = false);
+          flatResults.filter(o => o.selected).forEach(o => (o.selected = false));
         }
 
         if (this._open) {
@@ -407,7 +416,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
     }
 
     this._closeDropdown();
-    
+
     const data: IMenuSelectEventData = { index, value };
     const isCancelled = !this._adapter.emitHostEvent(MENU_CONSTANTS.events.SELECT, data, true, true);
     if (!isCancelled) {
@@ -487,7 +496,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
 
   private _mapIconToLeadingIcon(): void {
     // For backwards compatibility with old API, map the old "icon" property to the new "leadingIcon" property (if exists)
-    this._flatOptions.filter(o => o.icon).forEach(o => o.leadingIcon = o.icon);
+    this._flatOptions.filter(o => o.icon).forEach(o => (o.leadingIcon = o.icon));
   }
 
   public get open(): boolean {
@@ -512,7 +521,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
       this.optionsFactory = undefined;
       // Intentional shallow copy of member properties. These member objects have properties that are references to functions.
       this._options = options.map(o => ({ ...o }));
-      
+
       if (this._open) {
         this._mapIconToLeadingIcon();
         this._adapter.setOptions(this._options as IMenuOption[]);
@@ -601,7 +610,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
     this._adapter.toggleHostAttribute(MENU_CONSTANTS.attributes.PERSIST_SELECTION, this._persistSelection);
 
     if (!this._persistSelection) {
-      this._flatOptions.forEach(o => o.selected = false);
+      this._flatOptions.forEach(o => (o.selected = false));
       this._selectedValue = undefined;
     }
   }

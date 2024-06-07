@@ -1,7 +1,10 @@
 import { isDefined, isObject } from '@tylertech/forge-core';
 import { ISelectOption, ISelectOptionGroup } from './base-select-constants';
 
-export enum SelectOptionType { Option, Group }
+export enum SelectOptionType {
+  Option,
+  Group
+}
 
 /**
  * Determines if the provided options are of the specified type.

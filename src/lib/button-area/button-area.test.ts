@@ -14,7 +14,7 @@ import './button-area';
 describe('Button Area', () => {
   it('should initialize', async () => {
     const { el, root, stateLayer, focusIndicator } = await createFixture({});
-    
+
     expect(el.shadowRoot).not.to.be.null;
     expect(root.getAttribute('part')).to.equal('root');
     expect(root.classList.contains(BUTTON_AREA_CONSTANTS.classes.ROOT)).to.be.true;
@@ -52,7 +52,7 @@ describe('Button Area', () => {
     const { el, button } = await createFixture({});
     const keydownSpy = spy();
     el.addEventListener('keydown', keydownSpy);
-    
+
     button.focus();
     await pressKey('Enter');
     await pressKey(' ');
@@ -63,7 +63,7 @@ describe('Button Area', () => {
     const { button, stateLayer } = await createFixture({});
     const stateLayerSurface = getStateLayerSurfaceEl(stateLayer);
     const animateSpy = spy(stateLayerSurface, 'animate');
-    
+
     button.focus();
     await pressKey('z');
     await timer(TOUCH_DELAY_MS);
@@ -134,7 +134,7 @@ describe('Button Area', () => {
     expect(pointerupSpy.called).to.be.false;
 
     el.disabled = true;
-    
+
     await elementUpdated(el);
 
     ignoredButton.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
@@ -144,7 +144,7 @@ describe('Button Area', () => {
     expect(pointerupSpy.called).to.be.true;
 
     el.disabled = false;
-    
+
     await elementUpdated(el);
 
     button.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
@@ -158,7 +158,7 @@ describe('Button Area', () => {
     const { el, stateLayer } = await createFixture({}, true, true);
     const stateLayerSurface = getStateLayerSurfaceEl(stateLayer);
     const ignoredButton = getIngoredButtonEl(el);
-    
+
     ignoredButton.click();
     await timer(TOUCH_DELAY_MS);
 
@@ -196,7 +196,7 @@ describe('Button Area', () => {
 
   it('should set disabled if the button is disabled and is added after initialize', async () => {
     const { el } = await createFixture({}, false);
-    
+
     expect(el.disabled).to.be.false;
     expect(el.hasAttribute('disabled')).to.be.false;
     await expect(el).to.be.accessible();
@@ -215,10 +215,9 @@ describe('Button Area', () => {
   it('should set button to disabled if element is disabled and button is added after initialize', async () => {
     const { el } = await createFixture({ disabled: true }, false);
     await expect(el).to.be.accessible();
-    
+
     expect(el.disabled).to.be.true;
     expect(el.hasAttribute('disabled')).to.be.true;
-
 
     const button = document.createElement('button') as HTMLButtonElement;
     button.setAttribute('slot', 'button');
@@ -245,30 +244,43 @@ describe('Button Area', () => {
     return sendKeys({ press });
   }
 
-  async function createFixture({ disabled }: Partial<IButtonAreaComponent> = {}, hasButton: boolean = true, hasIgnoredChildren: boolean = false): Promise<{ el: IButtonAreaComponent; root: HTMLElement; focusIndicator: IFocusIndicatorComponent; stateLayer: IStateLayerComponent; button: HTMLButtonElement; content: HTMLSlotElement; }> {
+  async function createFixture(
+    { disabled }: Partial<IButtonAreaComponent> = {},
+    hasButton: boolean = true,
+    hasIgnoredChildren: boolean = false
+  ): Promise<{
+    el: IButtonAreaComponent;
+    root: HTMLElement;
+    focusIndicator: IFocusIndicatorComponent;
+    stateLayer: IStateLayerComponent;
+    button: HTMLButtonElement;
+    content: HTMLSlotElement;
+  }> {
     const buttonTemplate = html`<button slot="button" type="button">Go to detail</button>`;
     const ignoredButton = html`<forge-icon-button data-forge-ignore>
-    <button type="button" aria-label="Favorite">
-      <forge-icon name="favorite"></forge-icon>
-    </button>
-    <forge-tooltip>Favorite</forge-tooltip>
-  </forge-icon-button>`;
-    const el = await fixture<IButtonAreaComponent>(html`<forge-button-area ?disabled=${disabled}>
-    ${ hasButton ? buttonTemplate : null }
-    <div class="content">
-      <div>
-        <span class="heading">Heading</span>
-        <span>Content</span>
-      </div>
-      ${ hasIgnoredChildren ? ignoredButton : null }
-      <forge-icon name="chevron_right"></forge-icon>
-    </div>
-    </forge-button-area>`);
+      <button type="button" aria-label="Favorite">
+        <forge-icon name="favorite"></forge-icon>
+      </button>
+      <forge-tooltip>Favorite</forge-tooltip>
+    </forge-icon-button>`;
+    const el = await fixture<IButtonAreaComponent>(
+      html`<forge-button-area ?disabled=${disabled}>
+        ${hasButton ? buttonTemplate : null}
+        <div class="content">
+          <div>
+            <span class="heading">Heading</span>
+            <span>Content</span>
+          </div>
+          ${hasIgnoredChildren ? ignoredButton : null}
+          <forge-icon name="chevron_right"></forge-icon>
+        </div>
+      </forge-button-area>`
+    );
     const root = el.shadowRoot?.firstElementChild as HTMLElement;
     const stateLayer = el.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent;
     const focusIndicator = el.shadowRoot?.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
     const button = el.querySelector('[slot=button]') as HTMLButtonElement;
     const content = el.shadowRoot?.querySelector('#content') as HTMLSlotElement;
-    return { el, root, focusIndicator, stateLayer, button, content }
+    return { el, root, focusIndicator, stateLayer, button, content };
   }
 });

@@ -25,7 +25,7 @@
 
   background-color: transparent;
   color: inherit;
-  
+
   border: none;
 
   width: auto;
@@ -52,14 +52,14 @@
   inset: 0;
 
   display: flex;
-  
+
   background: #{token(background)};
   box-shadow: #{token(elevation)};
   z-index: #{token(z-index)};
   overflow: hidden;
-  
+
   border-radius: #{token(shape)};
-  
+
   margin-block-start: #{token(block-start-spacing)};
   margin-block-end: #{token(block-end-spacing)};
   margin-inline-start: #{token(inline-start-spacing)};
@@ -218,7 +218,7 @@
 
 @mixin placement-top-left {
   @include override(spacing, 0, value);
-  
+
   top: 0;
   left: 0;
   right: auto;

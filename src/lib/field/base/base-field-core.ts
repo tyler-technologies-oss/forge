@@ -1,6 +1,15 @@
 import { ICustomElementCore } from '@tylertech/forge-core';
 import { IBaseFieldAdapter } from './base-field-adapter';
-import { BASE_FIELD_CONSTANTS, FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base-field-constants';
+import {
+  BASE_FIELD_CONSTANTS,
+  FieldDensity,
+  FieldLabelAlignment,
+  FieldLabelPosition,
+  FieldShape,
+  FieldSupportTextInset,
+  FieldTheme,
+  FieldVariant
+} from './base-field-constants';
 
 export interface IBaseFieldCore extends ICustomElementCore {
   labelPosition: string;
@@ -39,7 +48,7 @@ export abstract class BaseFieldCore<T extends IBaseFieldAdapter> implements IBas
   protected _popoverExpanded = false;
   protected _supportTextInset = BASE_FIELD_CONSTANTS.defaults.DEFAULT_SUPPORT_TEXT_INSET;
   protected _permanentlyFloatLabel = false;
-  
+
   protected get _hasValue(): boolean {
     return this._adapter.hasValue;
   }

@@ -24,15 +24,15 @@ declare global {
 
 /**
  * @tag forge-overlay
- * 
+ *
  * @summary Overlays are used to render content in an element that rendered above all content on the page,
  * and positioned around a specified anchor element.
- * 
+ *
  * @description
  * An overlay is a low-level building block component that does not provide any visual styles. Its only
  * purpose is to render slotted content above all other content on the page. The element is positioned
  * around an anchor element with various positioning options.
- * 
+ *
  * @property {boolean} [open=false] - Whether or not the overlay is open.
  * @property {boolean} [inline=false] - Whether or not the overlay should be rendered inline (not in the :top-layer).
  * @property {HTMLElement} anchorElement - The element to anchor the overlay to.
@@ -50,7 +50,7 @@ declare global {
  * @property {string} boundary - The id of the element to use as the boundary for the overlay.
  * @property {HTMLElement | null} boundaryElement - The element to use as the boundary for the overlay.
  * @property {OverlayPlacement[]} fallbackPlacements - The fallback placements to use when the overlay cannot be placed in the desired placement.
- * 
+ *
  * @globalconfig placement
  * @globalconfig positionStrategy
  * @globalconfig shift
@@ -59,7 +59,7 @@ declare global {
  * @globalconfig boundaryElement
  * @globalconfig fallbackPlacements
  * @globalconfig persistent
- * 
+ *
  * @attribute {string} anchor - The id of the element to anchor the overlay to.
  * @attribute {string} no-anchor - Whether or not the overlay should be rendered without an anchor (centered on page by default).
  * @attribute {string} [open=false] - Whether or not the overlay is open.
@@ -73,9 +73,9 @@ declare global {
  * @attribute {string} position-placement - The placement of the overlay around the anchor element **after** dynamic positioning. This is a read-only attribute that is only available when open.
  * @attribute {string} boundary - The id of the element to use as the boundary for the overlay.
  * @attribute {string} fallback-placements - The fallback placements to use when the overlay cannot be placed in the desired placement. Should be a comma separated list of placements.
- * 
+ *
  * @event {CustomEvent<OverlayToggleEventData>} forge-overlay-light-dismiss - Dispatches when the overlay is light dismissed via the escape key or clicking outside the overlay.
- * 
+ *
  * @cssproperty --forge-overlay-position - The `position` of the overlay.
  * @cssproperty --forge-overlay-z-index - The `z-index` of the overlay. Defaults to the `popup` range.
  * @cssproperty --forge-overlay-height - The `height` of the overlay. Defaults to `min-content`.
@@ -84,9 +84,9 @@ declare global {
  * @cssproperty --forge-overlay-position-block-end - The `block-end` position of the overlay.
  * @cssproperty --forge-overlay-position-inline-start - The `inline-start` position of the overlay.
  * @cssproperty --forge-overlay-position-inline-end - The `inline-end` position of the overlay.
- * 
+ *
  * @slot - The content to render inside the positioned overlay container.
- * 
+ *
  * @csspart root - The component's root element.
  */
 @customElement({

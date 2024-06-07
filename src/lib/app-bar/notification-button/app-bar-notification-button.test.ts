@@ -15,14 +15,18 @@ describe('App Bar Notification Button', () => {
   });
 
   it('should forward aria-label', async () => {
-    const el = await fixture<IAppBarNotificationButtonComponent>(html`<forge-app-bar-notification-button aria-label="foo"></forge-app-bar-notification-button>`);
+    const el = await fixture<IAppBarNotificationButtonComponent>(
+      html`<forge-app-bar-notification-button aria-label="foo"></forge-app-bar-notification-button>`
+    );
     const iconButtonEl = el.querySelector('forge-icon-button') as HTMLElement;
 
     expect(iconButtonEl.getAttribute('aria-label')).to.equal('foo');
   });
 
   it('should remove internal aria-label if aria-label removed', async () => {
-    const el = await fixture<IAppBarNotificationButtonComponent>(html`<forge-app-bar-notification-button aria-label="foo"></forge-app-bar-notification-button>`);
+    const el = await fixture<IAppBarNotificationButtonComponent>(
+      html`<forge-app-bar-notification-button aria-label="foo"></forge-app-bar-notification-button>`
+    );
     const iconButtonEl = el.querySelector('forge-icon-button') as HTMLElement;
 
     expect(iconButtonEl.getAttribute('aria-label')).to.equal('foo');
@@ -34,7 +38,9 @@ describe('App Bar Notification Button', () => {
   });
 
   it('should reset internal aria-labelledby to tooltip id if external aria-labelledby removed', async () => {
-    const el = await fixture<IAppBarNotificationButtonComponent>(html`<forge-app-bar-notification-button aria-labelledby="foo"></forge-app-bar-notification-button>`);
+    const el = await fixture<IAppBarNotificationButtonComponent>(
+      html`<forge-app-bar-notification-button aria-labelledby="foo"></forge-app-bar-notification-button>`
+    );
     const iconButtonEl = el.querySelector('forge-icon-button') as HTMLElement;
     const tooltipEl = el.querySelector('forge-tooltip') as HTMLElement;
 
@@ -93,7 +99,9 @@ describe('App Bar Notification Button', () => {
   });
 
   it('should show badge with count', async () => {
-    const el = await fixture<IAppBarNotificationButtonComponent>(html`<forge-app-bar-notification-button show-badge count="5"></forge-app-bar-notification-button>`);
+    const el = await fixture<IAppBarNotificationButtonComponent>(
+      html`<forge-app-bar-notification-button show-badge count="5"></forge-app-bar-notification-button>`
+    );
     const badgeEl = el.querySelector('forge-badge') as IBadgeComponent;
 
     expect(badgeEl.innerText).to.equal('5');
@@ -125,7 +133,9 @@ describe('App Bar Notification Button', () => {
   });
 
   it('should set badge theme', async () => {
-    const el = await fixture<IAppBarNotificationButtonComponent>(html`<forge-app-bar-notification-button show-badge theme="danger"></forge-app-bar-notification-button>`);
+    const el = await fixture<IAppBarNotificationButtonComponent>(
+      html`<forge-app-bar-notification-button show-badge theme="danger"></forge-app-bar-notification-button>`
+    );
     const badgeEl = el.querySelector('forge-badge') as IBadgeComponent;
 
     expect(badgeEl.getAttribute('theme')).to.equal('danger');

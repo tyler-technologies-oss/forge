@@ -14,10 +14,19 @@ const meta = {
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
-    let options = [{ label: 'Edit', value: 'edit' }, { label: 'Delete', value: 'delete' }] as IMenuOption[];
+    let options = [
+      { label: 'Edit', value: 'edit' },
+      { label: 'Delete', value: 'delete' }
+    ] as IMenuOption[];
 
     if (args.mode === 'cascade') {
-      options[0] = { ...options[0], options: [{ label: 'As New', value: 'asNew' }, { label: 'Overwrite', value: 'overwrite' }] as IOption[] };
+      options[0] = {
+        ...options[0],
+        options: [
+          { label: 'As New', value: 'asNew' },
+          { label: 'Overwrite', value: 'overwrite' }
+        ] as IOption[]
+      };
     }
 
     return html`
@@ -51,15 +60,13 @@ const meta = {
           options: ['click', 'cascade']
         }
       }
-    }),
+    })
   },
-  args: {
-  },
+  args: {}
 } satisfies Meta;
 
 export default meta;
 
 type Story = StoryObj;
 
-export const Demo: Story = {
-};
+export const Demo: Story = {};

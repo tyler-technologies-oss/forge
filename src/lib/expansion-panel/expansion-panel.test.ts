@@ -6,7 +6,7 @@ import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 import { timer } from '@tylertech/forge-testing';
 import { IOpenIconComponent } from '../open-icon/open-icon';
 
-import './expansion-panel'
+import './expansion-panel';
 import '../open-icon/open-icon';
 
 describe('Expansion Panel', () => {
@@ -356,7 +356,7 @@ describe('Expansion Panel', () => {
       await elementUpdated(el);
 
       const openIcon = el.querySelector('forge-open-icon') as IOpenIconComponent;
-    
+
       expect(openIcon.open).to.be.false;
 
       el.toggle();

@@ -60,7 +60,7 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter<T> {
     if (event.bubbles && (event.composed || isFromLightDom)) {
       event.stopPropagation();
     }
-    
+
     const eventCopy = {
       ...event,
       detail: event.detail ?? null,
@@ -144,7 +144,7 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter<T> {
   public tryApplyGlobalConfiguration(properties: Array<keyof T>): void {
     const tagName = this._component.tagName.toLowerCase() as keyof HTMLElementTagNameMap;
     const entry = GlobalConfiguration.get<any>(tagName);
-    
+
     if (!entry) {
       return;
     }

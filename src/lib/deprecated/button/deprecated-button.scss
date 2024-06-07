@@ -24,7 +24,7 @@
 // Base
 //
 
-::slotted(:is(button,a)) {
+::slotted(:is(button, a)) {
   @include base;
 
   --forge-icon-font-size: 1.25em;
@@ -36,38 +36,48 @@
 }
 
 forge-state-layer {
-  @include state-layer.provide-theme(( color: #{token(color)} ));
+  @include state-layer.provide-theme(
+    (
+      color: #{token(color)}
+    )
+  );
 }
 
 forge-focus-indicator {
-  @include focus-indicator.provide-theme((
-    color: #{token(primary-color)},
-    outward-offset: #{token(focus-indicator-offset)}
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(primary-color)},
+      outward-offset: #{token(focus-indicator-offset)}
+    )
+  );
 }
 
 //
 // Types
 //
 
-:host(:is([type*=unelevated],[type*=raised])) {
-  ::slotted(:is(button,a)) {
+:host(:is([type*='unelevated'], [type*='raised'])) {
+  ::slotted(:is(button, a)) {
     @include filled;
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme(( color: #{token(filled-color)} ));
+    @include state-layer.provide-theme(
+      (
+        color: #{token(filled-color)}
+      )
+    );
   }
 }
 
-:host([type*=raised]) {
-  ::slotted(:is(button,a)) {
+:host([type*='raised']) {
+  ::slotted(:is(button, a)) {
     @include raised;
   }
 }
 
-:host([type*=outlined]) {
-  ::slotted(:is(button,a)) {
+:host([type*='outlined']) {
+  ::slotted(:is(button, a)) {
     @include outlined;
   }
 }
@@ -80,13 +90,12 @@ forge-focus-indicator {
   width: 100%;
 }
 
-
 //
 // Dense
 //
 
-:host(:is([dense],[type*=dense])) {
-  ::slotted(:is(button,a)) {
+:host(:is([dense], [type*='dense'])) {
+  ::slotted(:is(button, a)) {
     @include dense;
   }
 }
@@ -103,19 +112,19 @@ forge-focus-indicator {
   }
 }
 
-:host([type*=outlined][disabled]) {
+:host([type*='outlined'][disabled]) {
   ::slotted(button[disabled]) {
     @include outlined-disabled;
   }
 }
 
-:host(:is([type*=unelevated],[type*=raised])[disabled]) {
+:host(:is([type*='unelevated'], [type*='raised'])[disabled]) {
   ::slotted(button[disabled]) {
     @include filled-disabled;
   }
 }
 
-:host([type*=raised][disabled]) {
+:host([type*='raised'][disabled]) {
   ::slotted(button[disabled]) {
     @include raised-disabled;
   }

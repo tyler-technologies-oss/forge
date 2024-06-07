@@ -24,7 +24,7 @@ describe('Inline Message', () => {
         <span>Test content</span>
       </forge-inline-message>
     `);
-    
+
     const themes: InlineMessageTheme[] = ['primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info', 'info-secondary'];
     for (const theme of themes) {
       el.theme = theme;

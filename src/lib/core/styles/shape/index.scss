@@ -5,7 +5,7 @@
 
 ///
 /// Emits custom property declarations for all shape theme tokens.
-/// 
+///
 @mixin properties {
   @each $token-name, $token-value in tokens.$tokens {
     @include utils.declare-var(shape, $token-name, $token-value);
@@ -14,22 +14,21 @@
 
 ///
 /// Creates a `border-radius` style using the provided radius token.
-/// 
+///
 @mixin radius($radius) {
   border-radius: variable($radius);
 }
 
 ///
 /// Gets a CSS custom property declaration for a specific shape token, with its token value as the fallback value.
-/// 
+///
 @function variable($key, $prefix: config.$prefix) {
   @return utils.variable(shape, tokens.$tokens, $key, $prefix);
 }
 
 ///
 /// Generates CSS custom property declarations for the provided shape tokens.
-/// 
+///
 @mixin provide($tokens, $prefix: config.$prefix) {
   @include utils.provide(tokens.$tokens, $tokens, shape, $prefix);
 }
-

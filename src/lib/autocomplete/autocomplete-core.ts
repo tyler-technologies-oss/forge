@@ -1,10 +1,27 @@
 import { debounce, isDefined, isString, Platform, randomChars } from '@tylertech/forge-core';
 import { highlightTextHTML } from '../core';
 import { IListItemComponent } from '../list';
-import { IListDropdownConfig, IListDropdownOption, ListDropdownAsyncStyle, ListDropdownFooterBuilder, ListDropdownHeaderBuilder, ListDropdownOptionBuilder } from '../list-dropdown';
+import {
+  IListDropdownConfig,
+  IListDropdownOption,
+  ListDropdownAsyncStyle,
+  ListDropdownFooterBuilder,
+  ListDropdownHeaderBuilder,
+  ListDropdownOptionBuilder
+} from '../list-dropdown';
 import { IListDropdownAwareCore, ListDropdownAwareCore } from '../list-dropdown/list-dropdown-aware-core';
 import { IAutocompleteAdapter } from './autocomplete-adapter';
-import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteForceFilterOptions, IAutocompleteOption, IAutocompleteOptionGroup, IAutocompleteSelectEventData } from './autocomplete-constants';
+import {
+  AutocompleteFilterCallback,
+  AutocompleteMode,
+  AutocompleteOptionBuilder,
+  AutocompleteSelectedTextBuilder,
+  AUTOCOMPLETE_CONSTANTS,
+  IAutocompleteForceFilterOptions,
+  IAutocompleteOption,
+  IAutocompleteOptionGroup,
+  IAutocompleteSelectEventData
+} from './autocomplete-constants';
 import { getSelectedOption, isOptionType, optionEqualPredicate, OptionType } from './autocomplete-utils';
 
 export interface IAutocompleteCore extends IListDropdownAwareCore {
@@ -123,7 +140,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
 
     // Edge case, but if the consumer has a need to preserve the existing selection if it doesn't exist in the new options, this will support that
     if (preserveValue) {
-      this._options.push(...this._selectedOptions as IAutocompleteOption<any>[] & IAutocompleteOptionGroup[]);
+      this._options.push(...(this._selectedOptions as IAutocompleteOption<any>[] & IAutocompleteOptionGroup[]));
     }
 
     // This will update our current state, but it's expected that consumers will manage their own values so it's likely that this will be called again soon
@@ -166,7 +183,10 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
 
   private get _flatOptions(): IAutocompleteOption[] {
     if (isOptionType(this._options, OptionType.Group)) {
-      return (this._options as IAutocompleteOptionGroup[]).reduce((previousValue, currentValue) => previousValue.concat(currentValue.options), [] as IAutocompleteOption[]);
+      return (this._options as IAutocompleteOptionGroup[]).reduce(
+        (previousValue, currentValue) => previousValue.concat(currentValue.options),
+        [] as IAutocompleteOption[]
+      );
     }
     return this._options as IAutocompleteOption[];
   }
@@ -346,7 +366,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
         const isBackspacingLastChar = value.length === 1 && input.selectionEnd === 1;
         const isDeletingLastChar = value.length === 1 && input.selectionEnd === 0;
         const isEmpty = !value || isRemovingAllChars || isBackspacingLastChar || isDeletingLastChar;
-        
+
         // We only clear the value on empty when not around a chip-field and NOT in multiple mode
         if (!this._adapter.isWrappingChipField() && isEmpty && !this._multiple && this._values.length) {
           this._clearValue();
@@ -667,16 +687,20 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
           return '';
         }
       } else {
-        return this._selectedOptions.filter(o => o && o.label).map(o => o.label).join(' ').trim();
+        return this._selectedOptions
+          .filter(o => o && o.label)
+          .map(o => o.label)
+          .join(' ')
+          .trim();
       }
     }
   }
 
   /**
-     * Handles the user dismissing the dropdown. This is only called if the blur event was triggered
-     * from within the popup element itself (in a custom template most likely).
-     * @param keepFocus Keep focus on the dropdown or not.
-     */
+   * Handles the user dismissing the dropdown. This is only called if the blur event was triggered
+   * from within the popup element itself (in a custom template most likely).
+   * @param keepFocus Keep focus on the dropdown or not.
+   */
   private _onDismiss(): void {
     this._closeDropdown();
   }
@@ -877,7 +901,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
 
   /**
    * Gets/sets the filter text.
-   * 
+   *
    * Setting the filter text only applies when allowUnmatched is enabled.
    */
   public get filterText(): string {

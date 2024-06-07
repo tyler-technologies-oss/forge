@@ -57,7 +57,8 @@
         }
       }
 
-      &--focused, &:focus {
+      &--focused,
+      &:focus {
         @include item-focused;
       }
     }
@@ -195,9 +196,11 @@
   color: #{theme.variable(on-primary)};
 
   forge-focus-indicator {
-    @include focus-indicator.provide-theme((
-      color: #{theme.variable(primary-container)}
-    ));
+    @include focus-indicator.provide-theme(
+      (
+        color: #{theme.variable(primary-container)}
+      )
+    );
   }
 }
 
@@ -233,9 +236,11 @@
   color: #{theme.variable(on-primary)};
 
   forge-focus-indicator {
-    @include focus-indicator.provide-theme((
-      color: var(--forge-theme-primary-container)
-    ));
+    @include focus-indicator.provide-theme(
+      (
+        color: var(--forge-theme-primary-container)
+      )
+    );
   }
 }
 
@@ -255,11 +260,11 @@
   animation-name: scale-open;
   transform-origin: top center;
 
-  &[data-animation=fade] {
+  &[data-animation='fade'] {
     animation-name: fade-in;
   }
 
-  &[data-animation=none] {
+  &[data-animation='none'] {
     animation-duration: 1ms;
   }
 
@@ -273,11 +278,11 @@
   animation-name: scale-closed;
   transform-origin: top center;
 
-  &[data-animation=fade] {
+  &[data-animation='fade'] {
     animation-name: fade-out;
   }
 
-  &[data-animation=none] {
+  &[data-animation='none'] {
     animation-duration: 1ms;
   }
 
@@ -357,7 +362,7 @@
     to {
       opacity: 0;
     }
-  } 
+  }
 
   @keyframes slide-in-from-left {
     from {
@@ -368,7 +373,7 @@
       transform: translateX(0);
     }
   }
-  
+
   @keyframes slide-in-from-right {
     from {
       transform: translateX(100%);
@@ -388,7 +393,7 @@
       transform: translateX(-100%);
     }
   }
-  
+
   @keyframes slide-out-to-right {
     from {
       transform: translateX(0);

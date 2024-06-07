@@ -11,7 +11,7 @@ $tokens: (
   text-low: rgba(#000, color-emphasis.value(medium-low)),
   text-low-inverse: rgba(#fff, color-emphasis.value(medium-low)),
   text-lowest: rgba(#000, color-emphasis.value(lower)),
-  text-lowest-inverse: rgba(#fff, color-emphasis.value(lower)),
+  text-lowest-inverse: rgba(#fff, color-emphasis.value(lower))
 );
 
 // Dark
@@ -23,5 +23,5 @@ $tokens-dark: (
   text-low: rgba(#fff, color-emphasis.value(medium-low)),
   text-low-inverse: rgba(#000, color-emphasis.value(medium-low)),
   text-lowest: rgba(#fff, color-emphasis.value(lower)),
-  text-lowest-inverse: rgba(#000, color-emphasis.value(lower)),
+  text-lowest-inverse: rgba(#000, color-emphasis.value(lower))
 );

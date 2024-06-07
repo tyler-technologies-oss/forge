@@ -1,6 +1,12 @@
 import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { standaloneStoryParams, transformCssPropsToControls, customElementStoryRenderer, generateCustomElementArgTypes, GLOBAL_THEME_OPTIONS } from '../../utils';
+import {
+  standaloneStoryParams,
+  transformCssPropsToControls,
+  customElementStoryRenderer,
+  generateCustomElementArgTypes,
+  GLOBAL_THEME_OPTIONS
+} from '../../utils';
 import { tylIconNotifications } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 
@@ -30,8 +36,8 @@ const meta = {
     })
   },
   args: {
-    text: 'Status',
-  },
+    text: 'Status'
+  }
 } satisfies Meta;
 
 export default meta;
@@ -44,20 +50,20 @@ export const Themed: Story = {
   ...standaloneStoryParams,
   render: () => {
     return html`
-    <div style="display: flex; gap: 8px;">
-      <forge-badge theme="default">default</forge-badge>
-      <forge-badge theme="primary">Primary</forge-badge>
-      <forge-badge theme="secondary">Secondary</forge-badge>
-      <forge-badge theme="tertiary">Tertiary</forge-badge>
-      <forge-badge theme="success">Success</forge-badge>
-      <forge-badge theme="error">Error</forge-badge>
-      <forge-badge theme="warning">Warning</forge-badge>
-      <forge-badge theme="info">Info</forge-badge>
-      <forge-badge theme="info-secondary">Info (secondary)</forge-badge>
-    </div>
+      <div style="display: flex; gap: 8px;">
+        <forge-badge theme="default">default</forge-badge>
+        <forge-badge theme="primary">Primary</forge-badge>
+        <forge-badge theme="secondary">Secondary</forge-badge>
+        <forge-badge theme="tertiary">Tertiary</forge-badge>
+        <forge-badge theme="success">Success</forge-badge>
+        <forge-badge theme="error">Error</forge-badge>
+        <forge-badge theme="warning">Warning</forge-badge>
+        <forge-badge theme="info">Info</forge-badge>
+        <forge-badge theme="info-secondary">Info (secondary)</forge-badge>
+      </div>
     `;
-  },
-}
+  }
+};
 
 export const Strong: Story = {
   ...standaloneStoryParams,
@@ -66,31 +72,30 @@ export const Strong: Story = {
   },
   render: () => {
     return html`
-    <div style="display: flex; gap: 8px;">
-      <forge-badge strong theme="default">default</forge-badge>
-      <forge-badge strong theme="primary">Primary</forge-badge>
-      <forge-badge strong theme="secondary">Secondary</forge-badge>
-      <forge-badge strong theme="tertiary">Tertiary</forge-badge>
-      <forge-badge strong theme="success">Success</forge-badge>
-      <forge-badge strong theme="error">Error</forge-badge>
-      <forge-badge strong theme="warning">Warning</forge-badge>
-      <forge-badge strong theme="info">Info</forge-badge>
-      <forge-badge strong theme="info-secondary">Info (secondary)</forge-badge>
-    </div>
+      <div style="display: flex; gap: 8px;">
+        <forge-badge strong theme="default">default</forge-badge>
+        <forge-badge strong theme="primary">Primary</forge-badge>
+        <forge-badge strong theme="secondary">Secondary</forge-badge>
+        <forge-badge strong theme="tertiary">Tertiary</forge-badge>
+        <forge-badge strong theme="success">Success</forge-badge>
+        <forge-badge strong theme="error">Error</forge-badge>
+        <forge-badge strong theme="warning">Warning</forge-badge>
+        <forge-badge strong theme="info">Info</forge-badge>
+        <forge-badge strong theme="info-secondary">Info (secondary)</forge-badge>
+      </div>
     `;
-  },
-}
+  }
+};
 
 export const WithIconButton: Story = {
   ...standaloneStoryParams,
   render: () => {
     IconRegistry.define(tylIconNotifications);
     return html`
-    <forge-icon-button>
-      <forge-icon name="notifications" style="position: absolute;"></forge-icon>
-      <forge-badge slot="badge">1</forge-badge>
-    </forge-icon-button>
+      <forge-icon-button>
+        <forge-icon name="notifications" style="position: absolute;"></forge-icon>
+        <forge-badge slot="badge">1</forge-badge>
+      </forge-icon-button>
     `;
-  },
+  }
 };
-

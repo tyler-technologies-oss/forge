@@ -1,7 +1,15 @@
 import { ICustomElementCore } from '@tylertech/forge-core';
 import { GlobalConfiguration } from '../core/configuration/global-configuration';
 import { FocusIndicatorFocusMode } from '../focus-indicator';
-import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base/base-field-constants';
+import {
+  FieldDensity,
+  FieldLabelAlignment,
+  FieldLabelPosition,
+  FieldShape,
+  FieldSupportTextInset,
+  FieldTheme,
+  FieldVariant
+} from './base/base-field-constants';
 import { IFieldAdapter } from './field-adapter';
 import { FIELD_CONSTANTS } from './field-constants';
 
@@ -76,7 +84,7 @@ export class FieldCore implements IFieldCore {
       this._adapter.setFloatingLabel(this._floatLabel, true);
       this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL, this._floatLabel);
     }
-  };
+  }
 
   public get labelPosition(): FieldLabelPosition {
     return this._labelPosition;

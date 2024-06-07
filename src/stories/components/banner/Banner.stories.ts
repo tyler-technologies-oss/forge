@@ -33,8 +33,8 @@ const meta = {
   },
   args: {
     theme: BANNER_CONSTANTS.defaults.THEME,
-    text: 'Minim sunt eu laborum labore minim.',
-  },
+    text: 'Minim sunt eu laborum labore minim.'
+  }
 } satisfies Meta;
 
 export default meta;
@@ -47,16 +47,16 @@ export const Themed: Story = {
   ...standaloneStoryParams,
   render: () => {
     return html`
-    <div style="display: flex; gap: 12px; flex-direction: column;">
-      <forge-banner theme="error">Error</forge-banner>
-      <forge-banner theme="warning">Warning</forge-banner>
-      <forge-banner theme="success">Success</forge-banner>
-      <forge-banner theme="info">Info (default)</forge-banner>
-      <forge-banner theme="info-secondary">Info (secondary)</forge-banner>
-    </div>
+      <div style="display: flex; gap: 12px; flex-direction: column;">
+        <forge-banner theme="error">Error</forge-banner>
+        <forge-banner theme="warning">Warning</forge-banner>
+        <forge-banner theme="success">Success</forge-banner>
+        <forge-banner theme="info">Info (default)</forge-banner>
+        <forge-banner theme="info-secondary">Info (secondary)</forge-banner>
+      </div>
     `;
-  },
-}
+  }
+};
 
 export const Combined: Story = {
   ...standaloneStoryParams,
@@ -64,11 +64,11 @@ export const Combined: Story = {
     IconRegistry.define(tylIconNotifications);
 
     return html`
-    <forge-banner>
-      Minim sunt eu laborum labore minim iconium buttonium.
-      <forge-icon slot="icon" name="notifications"></forge-icon>
-      <forge-button slot="button" variant="outlined">Learn more...</forge-button>
-    </forge-banner>
+      <forge-banner>
+        Minim sunt eu laborum labore minim iconium buttonium.
+        <forge-icon slot="icon" name="notifications"></forge-icon>
+        <forge-button slot="button" variant="outlined">Learn more...</forge-button>
+      </forge-banner>
     `;
-  },
-}
+  }
+};

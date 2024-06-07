@@ -53,12 +53,35 @@ export function hsvaToRgba(hsva: IHSVA): IRGBA {
   const t = v * (1 - s * (1 - f));
 
   switch (i) {
-    case 0: r = v; g = t; b = p; break;
-    case 1: r = q; g = v; b = p; break;
-    case 2: r = p; g = v; b = t; break;
-    case 3: r = p; g = q; b = v; break;
-    case 4: r = t; g = p; b = v; break;
-    default: r = v; g = p; b = q;
+    case 0:
+      r = v;
+      g = t;
+      b = p;
+      break;
+    case 1:
+      r = q;
+      g = v;
+      b = p;
+      break;
+    case 2:
+      r = p;
+      g = v;
+      b = t;
+      break;
+    case 3:
+      r = p;
+      g = q;
+      b = v;
+      break;
+    case 4:
+      r = t;
+      g = p;
+      b = v;
+      break;
+    default:
+      r = v;
+      g = p;
+      b = q;
   }
 
   return {
@@ -128,9 +151,15 @@ export function rgbaToHsva(rgba: IRGBA): IHSVA {
     h = 0;
   } else {
     switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
     }
     h /= 6;
   }
@@ -157,11 +186,16 @@ export function isValidHex(value: string): boolean {
   }
 
   switch (value.length) {
-    case 3: return /^[0-9A-F]{3}$/i.test(value);
-    case 4: return /^[0-9A-F]{4}$/i.test(value);
-    case 6: return /^[0-9A-F]{6}$/i.test(value);
-    case 8: return /^[0-9A-F]{8}$/i.test(value);
-    default: return false;
+    case 3:
+      return /^[0-9A-F]{3}$/i.test(value);
+    case 4:
+      return /^[0-9A-F]{4}$/i.test(value);
+    case 6:
+      return /^[0-9A-F]{6}$/i.test(value);
+    case 8:
+      return /^[0-9A-F]{8}$/i.test(value);
+    default:
+      return false;
   }
 }
 
@@ -170,10 +204,20 @@ export function isValidHex(value: string): boolean {
  * @param value The RGBA color values.
  */
 export function isValidRGBA(value: IRGBA): boolean {
-  return isNumber(value.r) && value.r >= 0 && value.r <= 255 &&
-         isNumber(value.g) && value.g >= 0 && value.g <= 255 &&
-         isNumber(value.b) && value.b >= 0 && value.b <= 255 &&
-         isNumber(value.a) && value.a >= 0 && value.a <= 1;
+  return (
+    isNumber(value.r) &&
+    value.r >= 0 &&
+    value.r <= 255 &&
+    isNumber(value.g) &&
+    value.g >= 0 &&
+    value.g <= 255 &&
+    isNumber(value.b) &&
+    value.b >= 0 &&
+    value.b <= 255 &&
+    isNumber(value.a) &&
+    value.a >= 0 &&
+    value.a <= 1
+  );
 }
 
 /**
@@ -181,8 +225,18 @@ export function isValidRGBA(value: IRGBA): boolean {
  * @param value The HSVA color values.
  */
 export function isValidHSVA(value: IHSVA): boolean {
-  return isNumber(value.h) && value.h >= 0 && value.h <= 360 &&
-         isNumber(value.s) && value.s >= 0 && value.s <= 100 &&
-         isNumber(value.v) && value.v >= 0 && value.v <= 100 &&
-         isNumber(value.a) && value.a >= 0 && value.a <= 1;
+  return (
+    isNumber(value.h) &&
+    value.h >= 0 &&
+    value.h <= 360 &&
+    isNumber(value.s) &&
+    value.s >= 0 &&
+    value.s <= 100 &&
+    isNumber(value.v) &&
+    value.v >= 0 &&
+    value.v <= 100 &&
+    isNumber(value.a) &&
+    value.a >= 0 &&
+    value.a <= 1
+  );
 }

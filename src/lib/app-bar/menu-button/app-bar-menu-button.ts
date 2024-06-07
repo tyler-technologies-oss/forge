@@ -21,26 +21,23 @@ declare global {
 
 /**
  * @tag forge-app-bar-menu-button
- * 
+ *
  * @description A utility component with predefined icon and descriptions for use in an app bar `start` slot.
- * 
+ *
  * @property {string} [icon=menu] - The name of an alternative icon to display.
- * 
+ *
  * @attribute {string} [icon=menu] - The name of an alternative icon to display.
  * @attribute {string} [aria-label] - The aria-label to apply to the button.
  * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
  */
 @customElement({
   name: APP_BAR_MENU_BUTTON_CONSTANTS.elementName,
-  dependencies: [
-    IconButtonComponent,
-    TooltipComponent
-  ]
+  dependencies: [IconButtonComponent, TooltipComponent]
 })
 export class AppBarMenuButtonComponent extends BaseComponent implements IAppBarMenuButtonComponent {
   public static get observedAttributes(): string[] {
     return Object.values(APP_BAR_MENU_BUTTON_CONSTANTS.observedAttributes);
-  };
+  }
 
   private _iconButtonElement: IIconButtonComponent;
   private _iconElement: IIconComponent;

@@ -42,7 +42,7 @@ export class CalendarDropdown implements ICalendarDropdown {
     return this._popupClasses;
   }
   public set popupClasses(value: string | string[] | null) {
-    this._popupClasses = !!value ? isArray(value) ? [...value as string[]] : [value as string] : [];
+    this._popupClasses = !!value ? (isArray(value) ? [...(value as string[])] : [value as string]) : [];
   }
 
   public get locale(): string | undefined {
@@ -53,7 +53,7 @@ export class CalendarDropdown implements ICalendarDropdown {
       this.calendar.locale = value;
     }
   }
-  
+
   constructor(targetElement: HTMLElement, id: string) {
     this.targetElement = targetElement;
     this.id = id;

@@ -25,7 +25,7 @@ forge-field {
 
 .container {
   @include container;
-  
+
   &.has-members {
     @include has-members;
 
@@ -48,9 +48,11 @@ forge-field {
 forge-field {
   display: contents;
 
-  @include field.provide-theme((
-    multiline-resize: none
-  ));
+  @include field.provide-theme(
+    (
+      multiline-resize: none
+    )
+  );
 
   &::part(label) {
     &::after {
@@ -65,12 +67,14 @@ forge-field {
 
 $themes: (primary, secondary, tertiary, success, warning, error, info);
 @each $theme in $themes {
-  :host([theme=#{$theme}]) {
-    ::slotted([slot=member]) {
-      @include chip.provide-theme((
-        field-background: theme.variable($theme),
-        field-color: theme.variable(on-#{$theme})
-      ));
+  :host([theme='#{$theme}']) {
+    ::slotted([slot='member']) {
+      @include chip.provide-theme(
+        (
+          field-background: theme.variable($theme),
+          field-color: theme.variable(on-#{$theme})
+        )
+      );
     }
   }
 }

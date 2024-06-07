@@ -32,7 +32,7 @@ $tokens: (
   on-tertiary-container-minimum: #213189,
   on-tertiary-container-low: #213189,
   on-tertiary-container: #213189,
-  on-tertiary-container-high: color-palette.$black,
+  on-tertiary-container-high: color-palette.$black
 );
 
 // Dark
@@ -66,5 +66,5 @@ $tokens-dark: (
   on-tertiary-container-minimum: #ffeebc,
   on-tertiary-container-low: #ffeebc,
   on-tertiary-container: #ffeebc,
-  on-tertiary-container-high: color-palette.$white,
+  on-tertiary-container-high: color-palette.$white
 );

@@ -1,4 +1,3 @@
-
 import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
 import { IIconButtonComponent } from '../../icon-button/icon-button';
 import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
@@ -57,7 +56,7 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
     this._resizeObserver = new ResizeObserver(() => listener());
     this._resizeObserver.observe(this._component);
   }
-  
+
   public initializeScrollObserver(listener: EventListener): void {
     this._scrollContainer.addEventListener('scroll', listener, { passive: true });
   }
@@ -78,7 +77,7 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
   public setScrollBackwardButtonListener(listener: EventListener): void {
     this._backwardScrollButton?.addEventListener('click', listener);
   }
-  
+
   public setScrollForwardButtonListener(listener: EventListener): void {
     this._forwardScrollButton?.addEventListener('click', listener);
   }
@@ -108,7 +107,7 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
     const min = offset - (TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN + scrollContainerOffset);
     const max = offset + extent - hostExtent + (TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN - scrollContainerOffset);
     const to = Math.min(min, Math.max(max, scroll));
-    const behavior = tab.matches(':focus') ? 'smooth' : 'instant' as ScrollBehavior;
+    const behavior = tab.matches(':focus') ? 'smooth' : ('instant' as ScrollBehavior);
 
     this._scrollContainer.scrollTo({
       behavior,

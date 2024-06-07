@@ -14,7 +14,7 @@ import './app-bar-profile-button';
 import { IPopoverComponent } from '../../popover';
 
 // Required by floating-ui library to prevent errors
-globalThis['process'] = { env: { NODE_ENV: 'test' }} as any;
+globalThis['process'] = { env: { NODE_ENV: 'test' } } as any;
 
 describe('App Bar Profile Button', () => {
   const fullName = 'Tyler Forge';
@@ -95,7 +95,9 @@ describe('App Bar Profile Button', () => {
   });
 
   it('should set avatar image url', async () => {
-    const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button avatar-image-url="${avatarImageUrl}"></forge-app-bar-profile-button>`);
+    const el = await fixture<IAppBarProfileButtonComponent>(
+      html`<forge-app-bar-profile-button avatar-image-url="${avatarImageUrl}"></forge-app-bar-profile-button>`
+    );
 
     expect(el.avatarImageUrl).to.equal(avatarImageUrl);
     expect(el.getAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_IMAGE_URL)).to.equal(avatarImageUrl);
@@ -111,7 +113,9 @@ describe('App Bar Profile Button', () => {
   });
 
   it('should set avatar letter count', async () => {
-    const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button avatar-letter-count="${avatarLetterCount}"></forge-app-bar-profile-button>`);
+    const el = await fixture<IAppBarProfileButtonComponent>(
+      html`<forge-app-bar-profile-button avatar-letter-count="${avatarLetterCount}"></forge-app-bar-profile-button>`
+    );
 
     expect(el.avatarLetterCount).to.equal(avatarLetterCount);
     expect(el.getAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_LETTER_COUNT)).to.equal(String(avatarLetterCount));
@@ -198,7 +202,7 @@ describe('App Bar Profile Button', () => {
   describe('Profile Card Popup', () => {
     it('should show profile card popup when clicked', async () => {
       const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button></forge-app-bar-profile-button>`);
-      
+
       const popup = await openPopup(el);
 
       expect(el.open).to.be.true;
@@ -208,9 +212,9 @@ describe('App Bar Profile Button', () => {
 
     it('should close profile card when escape key is pressed', async () => {
       const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button></forge-app-bar-profile-button>`);
-      
+
       const popup = await openPopup(el);
-      
+
       expect(popup).to.be.ok;
       expect(popup.isConnected).to.be.true;
 
@@ -225,7 +229,7 @@ describe('App Bar Profile Button', () => {
 
     it('should close profile card when clicked outside', async () => {
       const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button></forge-app-bar-profile-button>`);
-      
+
       const popup = await openPopup(el);
 
       expect(popup).to.be.ok;
@@ -243,7 +247,7 @@ describe('App Bar Profile Button', () => {
 
     it('should close dropdown when button is clicked', async () => {
       const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button></forge-app-bar-profile-button>`);
-      
+
       const popup = await openPopup(el);
 
       expect(popup).to.be.ok;
@@ -391,7 +395,9 @@ describe('App Bar Profile Button', () => {
     });
 
     it('should set sign out text', async () => {
-      const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button sign-out-button-text="Custom Sign Out"></forge-app-bar-profile-button>`);
+      const el = await fixture<IAppBarProfileButtonComponent>(
+        html`<forge-app-bar-profile-button sign-out-button-text="Custom Sign Out"></forge-app-bar-profile-button>`
+      );
 
       const popup = await openPopup(el);
       const profileCard = popup.querySelector('forge-profile-card') as IProfileCardComponent;
@@ -402,7 +408,9 @@ describe('App Bar Profile Button', () => {
     });
 
     it('should set profile text', async () => {
-      const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button profile-button profile-button-text="Custom Profile"></forge-app-bar-profile-button>`);
+      const el = await fixture<IAppBarProfileButtonComponent>(
+        html`<forge-app-bar-profile-button profile-button profile-button-text="Custom Profile"></forge-app-bar-profile-button>`
+      );
 
       const popup = await openPopup(el);
       const profileCard = popup.querySelector('forge-profile-card') as IProfileCardComponent;
@@ -448,7 +456,7 @@ describe('App Bar Profile Button', () => {
       const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button></forge-app-bar-profile-button>`);
 
       const popup = await openPopup(el);
-      
+
       const profileCard = popup.querySelector('forge-profile-card') as IProfileCardComponent;
       const signOutButton = profileCard.shadowRoot?.querySelector('forge-button#sign-out-button') as HTMLButtonElement;
 
@@ -456,10 +464,12 @@ describe('App Bar Profile Button', () => {
     });
 
     it('should set focus to profile button when opened if not showing sign out button', async () => {
-      const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button sign-out-button="false" profile-button></forge-app-bar-profile-button>`);
+      const el = await fixture<IAppBarProfileButtonComponent>(
+        html`<forge-app-bar-profile-button sign-out-button="false" profile-button></forge-app-bar-profile-button>`
+      );
 
       const popup = await openPopup(el);
-      
+
       const profileCard = popup.querySelector('forge-profile-card') as IProfileCardComponent;
       const profileButton = profileCard.shadowRoot?.querySelector('forge-button#profile-button') as HTMLButtonElement;
 
@@ -467,7 +477,9 @@ describe('App Bar Profile Button', () => {
     });
 
     it('should keep focus on trigger button if not showing sign out or profile buttons', async () => {
-      const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button sign-out-button="false" profile-button="false"></forge-app-bar-profile-button>`);
+      const el = await fixture<IAppBarProfileButtonComponent>(
+        html`<forge-app-bar-profile-button sign-out-button="false" profile-button="false"></forge-app-bar-profile-button>`
+      );
 
       await openPopup(el);
       const iconButton = el.querySelector('forge-icon-button') as IIconButtonComponent;
@@ -487,17 +499,17 @@ describe('App Bar Profile Button', () => {
 
   function clickElement(el: HTMLElement): Promise<void> {
     const { x, y, width, height } = el.getBoundingClientRect();
-    return sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
+    return sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 
   function clickOutsidePopupElement(el: HTMLElement): Promise<void> {
     const { x, y, width, height } = el.getBoundingClientRect();
-    return sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width + 10),
-      Math.floor(y + window.scrollY + height + 10),
-    ]});
+    return sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width + 10), Math.floor(y + window.scrollY + height + 10)]
+    });
   }
 });

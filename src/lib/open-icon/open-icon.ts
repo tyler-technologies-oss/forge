@@ -21,30 +21,30 @@ declare global {
 
 /**
  * @tag forge-open-icon
- * 
+ *
  * @summary Open icons are used to indicate whether a section is open or closed.
- * 
+ *
  * @property {boolean} [open=false] - Whether the icon is open or closed.
  * @property {OpenIconOrientation} [orientation=vertical] - The orientation of the rotation.
  * @property {OpenIconRotation} [rotation=full] - The rotation amount.
- * 
+ *
  * @attribute {boolean} [open=false] - Whether the icon is open or closed.
  * @attribute {OpenIconOrientation} [orientation=vertical] - The orientation of the rotation.
  * @attribute {OpenIconRotation} [rotation=full] - The rotation amount.
- * 
+ *
  * @cssproperty --forge-open-icon-color - The color of the icon.
  * @cssproperty --forge-open-icon-size - The size of the icon.
  * @cssproperty --forge-open-icon-height - The height of the icon. Defaults to `size`.
  * @cssproperty --forge-open-icon-width - The width of the icon. Defaults to `size`.
- * @cssproperty --forge-open-icon-initial-rotation - The initial rotation of the icon. 
+ * @cssproperty --forge-open-icon-initial-rotation - The initial rotation of the icon.
  * @cssproperty --forge-open-icon-open-rotation - The rotation of the icon when open.
  * @cssproperty --forge-open-icon-animation-duration - The duration of the open animation.
  * @cssproperty --forge-open-icon-half-animation-duration - The duration of the open animation when in a half orientation.
  * @cssproperty --forge-open-icon-animation-timing - The timing function of the open animation.
- * 
+ *
  * @csspart root - The root element of the icon.
  * @csspart icon - The icon element.
- * 
+ *
  * @slot - The icon to display when open.
  */
 @customElement({
@@ -62,10 +62,7 @@ export class OpenIconComponent extends BaseComponent implements IOpenIconCompone
 
   constructor() {
     super();
-    IconRegistry.define([
-      tylIconKeyboardArrowRight,
-      tylIconKeyboardArrowDown
-    ]);
+    IconRegistry.define([tylIconKeyboardArrowRight, tylIconKeyboardArrowDown]);
     attachShadowTemplate(this, template, styles);
   }
 

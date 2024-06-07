@@ -7,7 +7,11 @@
 
 :host {
   @include base-core.host;
-  @include divider.provide-theme(( margin: 4px 0 ));
+  @include divider.provide-theme(
+    (
+      margin: 4px 0
+    )
+  );
 }
 
 //
@@ -20,7 +24,7 @@
 // Safari fix for triggering reflow after transition completes (as of Safari 14)
 //
 @media not all and (min-resolution: 0.001dpcm) {
-  @supports (-webkit-appearance:none) and (stroke-color: transparent) {
+  @supports (-webkit-appearance: none) and (stroke-color: transparent) {
     :host([open]) {
       transform: translateZ(0);
     }

@@ -46,7 +46,7 @@ export class StateLayerAdapter extends BaseAdapter<IStateLayerComponent> impleme
     const { userInteraction, destroy } = createUserInteractionListener(this._targetElement);
     this._destroyDeferListener = destroy;
     const evt = await userInteraction;
-    listener(evt.type === 'pointerenter' ? evt as PointerEvent : undefined);
+    listener(evt.type === 'pointerenter' ? (evt as PointerEvent) : undefined);
   }
 
   public addTargetListener(type: string, listener: EventListener): void {
@@ -60,7 +60,7 @@ export class StateLayerAdapter extends BaseAdapter<IStateLayerComponent> impleme
   public setHovered(hovered: boolean): void {
     this._surfaceElement.classList.toggle(STATE_LAYER_CONSTANTS.classes.HOVERED, hovered);
   }
-  
+
   public setPressed(pressed: boolean): void {
     this._surfaceElement.classList.toggle(STATE_LAYER_CONSTANTS.classes.PRESSED, pressed);
   }
@@ -86,7 +86,7 @@ export class StateLayerAdapter extends BaseAdapter<IStateLayerComponent> impleme
     this._rippleAnimation?.cancel();
 
     const { rippleSize, rippleScale, initialSize } = calcRippleSize(this._component);
-    
+
     if (rippleScale === 'Infinity') {
       return;
     }
@@ -101,22 +101,20 @@ export class StateLayerAdapter extends BaseAdapter<IStateLayerComponent> impleme
         left: [0, 0],
         height: [rippleSize, rippleSize],
         width: [rippleSize, rippleSize],
-        transform: [
-          `translate(${translateStart}) scale(1)`,
-          `translate(${translateEnd}) scale(${rippleScale})`
-        ]
+        transform: [`translate(${translateStart}) scale(1)`, `translate(${translateEnd}) scale(${rippleScale})`]
       },
       {
         pseudoElement: PRESS_PSEUDO,
         duration: PRESS_GROW_MS,
         easing: EASING,
         fill: ANIMATION_FILL
-      });
+      }
+    );
   }
 
   public async endAnimation(): Promise<void> {
     const animation = this._rippleAnimation;
-    const pressAnimationPlayState = animation?.currentTime as number ?? Infinity;
+    const pressAnimationPlayState = (animation?.currentTime as number) ?? Infinity;
 
     if (pressAnimationPlayState >= MINIMUM_PRESS_MS) {
       this.setPressed(false);

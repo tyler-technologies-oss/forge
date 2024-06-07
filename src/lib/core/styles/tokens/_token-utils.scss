@@ -5,15 +5,15 @@
 
 ///
 /// Mixin for providing theme tokens to the module using external names.
-/// 
+///
 /// Example:
 /// ```sass
 /// provide-theme(( color: red )); // => --forge-component-name-color: red;
 /// ```
-/// 
+///
 /// @param {String} $module - The module name.
 /// @param {Map} $tokens - The tokens for this module.
-/// @param {Map} $theme - The theme tokens. 
+/// @param {Map} $theme - The theme tokens.
 ///
 @mixin provide-theme($module, $tokens, $theme) {
   @include utils.provide($tokens, $theme, $module);
@@ -23,14 +23,14 @@
 /// Creates an internal token reference variable for the module.
 ///
 /// This function requires that the token exists in the module.
-/// 
+///
 /// Example:
 /// ```sass
 /// color: #{token(color)}; // => color: var(--_component-name-color);
 /// color: #{token(my-color, custom)}; // => color: var(--_component-name-my-color);
 /// ```
-/// 
-/// @param {String} $module - The module name. 
+///
+/// @param {String} $module - The module name.
 /// @param {String} $tokens - The tokens for this module.
 /// @param {String} $token - The token name.
 /// @param {String} $type - The type of token this is. Valid values are `token` and `custom`. Using `custom` will not check if the token exists.
@@ -44,24 +44,24 @@
 
 ///
 /// Declares an internal token reference variable for the module.
-/// 
+///
 /// Example:
 /// ```sass
 /// #{declare(color)}: red; // => --_component-name-color: red;
 /// ```
-/// 
-/// @param {String} $module - The module name. 
+///
+/// @param {String} $module - The module name.
 /// @param {String} $token - The token name.
-/// 
+///
 @function declare($module, $token) {
   @return utils.create-module-var($module, $token);
 }
 
 ///
 /// Creates a token CSS custom property definition to point one token to another.
-/// 
+///
 /// If `$new-token` is not a valid token then the provided value will be used verbatim.
-/// 
+///
 /// Example:
 /// ```sass
 /// #{override(color, new-color)}; // => --_component-name-color: var(--_component-name-new-color);
@@ -72,7 +72,7 @@
 /// @param {String} $token - The token name to override.
 /// @param {String} $token-or-value - The token name (if exists) or value to point to.
 /// @param {Boolean} $type - The type of token this is. Valid values are `token` and `value`.
-/// 
+///
 @mixin override($module, $tokens, $token, $token-or-value, $type: token) {
   @include utils.override($module, $tokens, $token, $token-or-value, $type);
 }
@@ -84,7 +84,7 @@
 /// @param {String} $tokens - The tokens for this module.
 /// @param {List} $includes - An optional list of token names to include from `$tokens`
 /// @param {List} $excludes - An optional list of token names to exclude from `$tokens`
-/// 
+///
 @mixin tokens($module, $tokens, $includes: null, $excludes: null) {
   // Validate that all tokens are generated with matching keys
   @each $key, $var in $tokens {
@@ -120,4 +120,3 @@
     }
   }
 }
-

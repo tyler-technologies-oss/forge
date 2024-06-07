@@ -13,14 +13,14 @@
   grid-template-rows: 1fr;
   overflow: hidden;
   box-sizing: border-box;
-  
+
   transition-property: opacity, grid-template-rows, min-height;
   transition-duration: #{token(transition-duration)};
   transition-timing-function: #{token(transition-easing)};
-  
+
   background: #{token(background)};
   color: #{token(color)};
-  
+
   opacity: 1;
 }
 

@@ -6,7 +6,15 @@ import { sendMouse } from '@web/test-runner-commands';
 import { match, spy } from 'sinon';
 import { FIELD_CONSTANTS, IFieldComponent } from '../field';
 import { TestHarness } from '../../test/utils/test-harness';
-import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base/base-field-constants';
+import {
+  FieldDensity,
+  FieldLabelAlignment,
+  FieldLabelPosition,
+  FieldShape,
+  FieldSupportTextInset,
+  FieldTheme,
+  FieldVariant
+} from './base/base-field-constants';
 
 import './field';
 
@@ -17,99 +25,99 @@ describe('Field', () => {
   });
 
   it('should be accessible', async () => {
-    const harness = await createFixture()
+    const harness = await createFixture();
     await expect(harness.element).to.be.accessible();
   });
 
   describe('properties', () => {
-    (['inline-start', 'inline-end', 'block-start', 'inset', 'none'] as FieldLabelPosition[]).forEach((labelPosition) => {
+    (['inline-start', 'inline-end', 'block-start', 'inset', 'none'] as FieldLabelPosition[]).forEach(labelPosition => {
       it(`should set label position ${labelPosition}`, async () => {
         const harness = await createFixture({ labelPosition });
         expect(harness.element.labelPosition).to.equal(labelPosition);
       });
     });
-  
-    (['default', 'center', 'baseline', 'start', 'end'] as FieldLabelAlignment[]).forEach((labelAlignment) => {
+
+    (['default', 'center', 'baseline', 'start', 'end'] as FieldLabelAlignment[]).forEach(labelAlignment => {
       it(`should set label alignment ${labelAlignment}`, async () => {
         const harness = await createFixture({ labelAlignment });
         expect(harness.element.labelAlignment).to.equal(labelAlignment);
       });
     });
-  
+
     it('should set float label', async () => {
       const harness = await createFixture({ floatLabel: true });
       expect(harness.element.floatLabel).to.be.true;
     });
-  
+
     it('should set invalid', async () => {
       const harness = await createFixture({ invalid: true });
       expect(harness.element.invalid).to.be.true;
     });
-  
+
     it('should set required', async () => {
       const harness = await createFixture({ required: true });
       expect(harness.element.required).to.be.true;
     });
-  
+
     it('should set optional', async () => {
       const harness = await createFixture({ optional: true });
       expect(harness.element.optional).to.be.true;
     });
-  
+
     it('should set disabled', async () => {
       const harness = await createFixture({ disabled: true });
       expect(harness.element.disabled).to.be.true;
     });
-  
-    (['plain', 'outlined', 'tonal', 'filled', 'raised'] as FieldVariant[]).forEach((variant) => {
+
+    (['plain', 'outlined', 'tonal', 'filled', 'raised'] as FieldVariant[]).forEach(variant => {
       it(`should set ${variant} variant`, async () => {
         const harness = await createFixture({ variant });
         expect(harness.element.variant).to.equal(variant);
       });
     });
-  
-    (['default', 'primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'] as FieldTheme[]).forEach((theme) => {
+
+    (['default', 'primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'] as FieldTheme[]).forEach(theme => {
       it(`should set ${theme} theme`, async () => {
         const harness = await createFixture({ theme });
         expect(harness.element.theme).to.equal(theme);
       });
     });
-  
-    (['default', 'rounded', 'squared'] as FieldShape[]).forEach((shape) => {
+
+    (['default', 'rounded', 'squared'] as FieldShape[]).forEach(shape => {
       it(`should set ${shape} shape`, async () => {
         const harness = await createFixture({ shape });
         expect(harness.element.shape).to.equal(shape);
       });
     });
-  
-    (['extra-small', 'small', 'medium', 'large', 'extra-large'] as FieldDensity[]).forEach((density) => {
+
+    (['extra-small', 'small', 'medium', 'large', 'extra-large'] as FieldDensity[]).forEach(density => {
       it(`should set ${density} density`, async () => {
         const harness = await createFixture({ density });
         expect(harness.element.density).to.equal(density);
       });
     });
-  
+
     it('should set dense', async () => {
       const harness = await createFixture({ dense: true });
       expect(harness.element.dense).to.be.true;
     });
-  
+
     it('should set popover icon', async () => {
       const harness = await createFixture({ popoverIcon: true });
       expect(harness.element.popoverIcon).to.be.true;
     });
-  
+
     it('should set popover expanded', async () => {
       const harness = await createFixture({ popoverExpanded: true });
       expect(harness.element.popoverExpanded).to.be.true;
     });
-  
+
     it('should set multiline', async () => {
       const harness = await createFixture({ multiline: true });
       expect(harness.element.multiline).to.be.true;
     });
-  
-    (['none', 'start', 'end', 'both'] as FieldSupportTextInset[]).forEach((supportTextInset) => {
+
+    (['none', 'start', 'end', 'both'] as FieldSupportTextInset[]).forEach(supportTextInset => {
       it(`should set support text inset ${supportTextInset}`, async () => {
         const harness = await createFixture({ supportTextInset });
         expect(harness.element.supportTextInset).to.equal(supportTextInset);
@@ -118,11 +126,11 @@ describe('Field', () => {
   });
 
   describe('attributes', () => {
-    (['inline-start', 'inline-end', 'block-start', 'inset', 'none'] as FieldLabelPosition[]).forEach((labelPosition) => {    
+    (['inline-start', 'inline-end', 'block-start', 'inset', 'none'] as FieldLabelPosition[]).forEach(labelPosition => {
       if (labelPosition === FIELD_CONSTANTS.defaults.DEFAULT_LABEL_POSITION) {
         return;
       }
-      
+
       it(`should set label position ${labelPosition} attribute`, async () => {
         const harness = await createDefaultFixture();
         harness.element.labelPosition = labelPosition;
@@ -130,7 +138,7 @@ describe('Field', () => {
       });
     });
 
-    (['default', 'center', 'baseline', 'start', 'end'] as FieldLabelAlignment[]).forEach((labelAlignment) => {
+    (['default', 'center', 'baseline', 'start', 'end'] as FieldLabelAlignment[]).forEach(labelAlignment => {
       if (labelAlignment === FIELD_CONSTANTS.defaults.DEFAULT_LABEL_ALIGNMENT) {
         return;
       }
@@ -190,7 +198,7 @@ describe('Field', () => {
       expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.MULTILINE)).to.be.true;
     });
 
-    (['none', 'start', 'end', 'both'] as FieldSupportTextInset[]).forEach((supportTextInset) => {
+    (['none', 'start', 'end', 'both'] as FieldSupportTextInset[]).forEach(supportTextInset => {
       if (supportTextInset === FIELD_CONSTANTS.defaults.DEFAULT_SUPPORT_TEXT_INSET) {
         return;
       }
@@ -547,12 +555,12 @@ class FieldHarness extends TestHarness<IFieldComponent> {
   }
 
   public async clickElement(el: HTMLElement): Promise<void> {
-    const { x, y, width, height} = el.getBoundingClientRect();
+    const { x, y, width, height } = el.getBoundingClientRect();
 
-    await sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2)
-    ]});
+    await sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 
   public addSlottedContent(slotName: string): void {
@@ -623,8 +631,7 @@ async function createFixture({
       .popoverIcon=${popoverIcon}
       .popoverExpanded=${popoverExpanded}
       .multiline=${multiline}
-      .supportTextInset=${supportTextInset}
-    ></forge-field>
+      .supportTextInset=${supportTextInset}></forge-field>
   `);
   return new FieldHarness(el);
 }

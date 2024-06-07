@@ -97,7 +97,7 @@ export class ButtonToggleCore implements IButtonToggleCore {
       this._adapter.setHostAttribute(BUTTON_TOGGLE_CONSTANTS.attributes.VALUE, `${this._value}`);
     }
   }
-  
+
   public get selected(): boolean {
     return this._selected;
   }
@@ -109,7 +109,7 @@ export class ButtonToggleCore implements IButtonToggleCore {
       this._adapter.toggleHostAttribute(BUTTON_TOGGLE_CONSTANTS.attributes.SELECTED, this._selected);
     }
   }
-  
+
   public get disabled(): boolean {
     return this._disabled;
   }
@@ -134,7 +134,7 @@ export class ButtonToggleCore implements IButtonToggleCore {
     value = !!value;
     if (this._readonly !== value) {
       this._readonly = value;
-      
+
       if (this._readonly) {
         this._removeListeners();
       } else {

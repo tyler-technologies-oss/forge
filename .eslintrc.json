@@ -14,27 +14,19 @@
   ],
   "overrides": [
     {
-      "files": [
-        "*.js",
-        "*.ts"
-      ],
+      "files": ["*.js", "*.ts"],
       "parserOptions": {
-        "project": [
-          "tsconfig.json"
-        ],
+        "project": ["tsconfig.json"],
         "tsconfigRootDir": ".",
         "createDefaultProgram": true
       },
-      "extends": [
-        "plugin:@tylertech-eslint/recommended"
-      ],
+      "extends": ["plugin:@tylertech-eslint/recommended", "plugin:prettier/recommended"],
       "rules": {
         "@typescript-eslint/indent": "off",
         "@typescript-eslint/no-empty-interface": ["error", { "allowSingleExtends": true }],
         "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
         "@typescript-eslint/comma-dangle": ["error"],
         "@typescript-eslint/comma-spacing": ["error"],
-        "@typescript-eslint/no-extra-parens": ["error", "all", { "nestedBinaryExpressions": false }],
         "@typescript-eslint/explicit-member-accessibility": ["error", { "overrides": { "constructors": "no-public" } }],
         "@typescript-eslint/arrow-body-style": "off",
         "@typescript-eslint/no-require-imports": "error",
@@ -46,7 +38,7 @@
         "no-extra-parens": "off",
         "max-len": "off",
         "arrow-body-style": "off",
-        "eqeqeq": ["error", "always", {"null": "ignore"}]
+        "eqeqeq": ["error", "always", { "null": "ignore" }]
       }
     }
   ]

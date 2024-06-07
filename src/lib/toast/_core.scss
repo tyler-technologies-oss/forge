@@ -25,7 +25,7 @@
   max-width: #{token(max-width)};
   min-height: #{token(min-height)};
   box-sizing: border-box;
-  
+
   background: #{token(background)};
   color: #{token(color)};
   box-shadow: #{token(elevation)};
@@ -35,7 +35,7 @@
   flex-grow: 1;
 
   padding-block: #{token(message-padding)};
-  
+
   text-overflow: ellipsis;
   overflow: hidden;
 }

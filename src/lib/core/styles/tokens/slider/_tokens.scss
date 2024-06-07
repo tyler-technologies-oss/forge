@@ -32,8 +32,10 @@ $tokens: (
   with-overlap-handle-outline-width: utils.module-val(slider, with-overlap-handle-outline-width, 1px),
   with-tick-marks-active-container-color: utils.module-val(slider, with-tick-marks-active-container-color, theme.variable(on-primary)),
   with-tick-marks-container-size: utils.module-val(slider, with-tick-marks-container-size, 2px),
-  with-tick-marks-disabled-active-container-color: utils.module-val(slider, with-tick-marks-disabled-active-container-color, theme.variable(on-surface-container-high)),
-  with-tick-marks-disabled-inactive-container-color: utils.module-val(slider, with-tick-marks-disabled-inactive-container-color, theme.variable(on-surface-container-high)),
+  with-tick-marks-disabled-active-container-color:
+    utils.module-val(slider, with-tick-marks-disabled-active-container-color, theme.variable(on-surface-container-high)),
+  with-tick-marks-disabled-inactive-container-color:
+    utils.module-val(slider, with-tick-marks-disabled-inactive-container-color, theme.variable(on-surface-container-high)),
   with-tick-marks-inactive-container-color: utils.module-val(slider, with-tick-marks-inactive-container-color, theme.variable(primary))
 ) !default;
 

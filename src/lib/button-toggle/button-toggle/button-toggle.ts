@@ -32,19 +32,19 @@ declare global {
 
 /**
  * @tag forge-button-toggle
- * 
+ *
  * @property {unknown} value - The value of the button toggle.
  * @property {boolean} [selected=false] - Whether or not the button is selected.
  * @property {boolean} [disabled=false] - Whether or not the button is disabled.
  * @property {boolean} [readonly=false] - Whether or not the button is readonly.
- * 
+ *
  * @attribute {unknown} value - The value of the button toggle.
  * @attribute {boolean} [selected=false] - Whether or not the button is selected.
  * @attribute {boolean} [disabled=false] - Whether or not the button is disabled.
  * @attribute {boolean} [readonly=false] - Whether or not the button is readonly.
- * 
+ *
  * @event {CustomEvent<IButtonToggleSelectEventData>} forge-button-toggle-select - Dispatches when the user toggles the button.
- * 
+ *
  * @cssproperty --forge-button-toggle-display - The `display` style for the button toggle container element.
  * @cssproperty --forge-button-toggle-min-width - The minimum width.
  * @cssproperty --forge-button-toggle-spacing - The spacing between the button toggle and its content.
@@ -70,21 +70,18 @@ declare global {
  * @cssproperty --forge-button-toggle-disabled-background - The background of the button toggle when disabled.
  * @cssproperty --forge-button-toggle-transition-duration - The transition-duration of various properties.
  * @cssproperty --forge-button-toggle-transition-timing - The transition-timing of various properties.
- * 
+ *
  * @csspart root - The root container element.
  * @csspart focus-indicator - The focus indicator element.
  * @csspart state-layer - The state layer surface element.
- * 
+ *
  * @slot - The default/unnamed slot for the button toggle's content.
  * @slot start - Typically reserved for content/icons that render logically before the default slot content.
  * @slot end - Typically reserved content/icons that render logically after the default slot content.
  */
 @customElement({
   name: BUTTON_TOGGLE_CONSTANTS.elementName,
-  dependencies: [
-    FocusIndicatorComponent,
-    StateLayerComponent
-  ]
+  dependencies: [FocusIndicatorComponent, StateLayerComponent]
 })
 export class ButtonToggleComponent<T = unknown> extends WithDefaultAria(WithElementInternals(WithFocusable(BaseComponent))) implements IButtonToggleComponent {
   public static get observedAttributes(): string[] {

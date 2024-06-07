@@ -31,7 +31,7 @@ export class LinearProgressAdapter extends BaseAdapter<ILinearProgressComponent>
       ariaValueNow: this._component.determinate ? `${this._component.progress}` : null
     });
   }
-  
+
   public setDeterminate(value: boolean): void {
     this._component[setDefaultAria]({ ariaValueNow: value ? `${this._component.progress}` : null });
     if (value) {

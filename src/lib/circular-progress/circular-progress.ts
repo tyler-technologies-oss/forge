@@ -25,30 +25,30 @@ declare global {
 
 /**
  * @tag forge-circular-progress
- * 
+ *
  * @summary
  * Circular progress indicators display progress by animating along a circular track in a clockwise direction.
- * 
+ *
  * @description
  * Progress indicators inform users about the status of ongoing processes.
  * - Determinate indicators display how long a process will take.
  * - Indeterminate indicators express an unspecified amount of wait time.
  *
- * 
+ *
  * @property {boolean} [determinate=false] - Controls the determinate state.
  * @property {number} [progress=0] - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
  * @property {CircularProgressTheme} [theme="primary"] - Controls the theme of the progress indicator.
  * @property {boolean} [track=false] - Controls the visibility of the track background.
- * 
+ *
  * @globalconfig track
- * 
+ *
  * @attribute {boolean} [determinate=false] - Controls the determinate state.
  * @attribute {number} [progress=0] - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
  * @attribute {CircularProgressTheme} [theme="primary"] - Controls the theme of the progress indicator.
  * @attribute {boolean} [track=false] - Controls the visibility of the track background.
- * 
+ *
  * @slot - The is the default/unnamed slot. Renders content at the center of the progress indicator.
- * 
+ *
  * @cssproperty --forge-circular-progress-size - The height and width of the indicator container.
  * @cssproperty --forge-circular-progress-padding - The padding inside the bounding box of the container.
  * @cssproperty --forge-circular-progress-track-width - The track indicator width.
@@ -57,7 +57,7 @@ declare global {
  * @cssproperty --forge-circular-progress-arc-duration - The duration of the arc animation.
  * @cssproperty --forge-circular-progress-theme-transition-duration - The duration of the theme transition.
  * @cssproperty --forge-circular-progress-theme-transition-timing - The easing function to use for the theme transition.
- * 
+ *
  * @csspart progressbar - Styles the progress bar container element
  */
 @customElement({
@@ -101,7 +101,7 @@ export class CircularProgressComponent extends WithDefaultAria(WithElementIntern
         break;
     }
   }
-  
+
   @coreProperty()
   public declare determinate: boolean;
 
