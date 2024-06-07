@@ -73,7 +73,9 @@
 }
 
 @mixin with-anchor {
-  display: block;
+  display: flex;
+  justify-content: stretch;
+  align-items: stretch;
   padding: 0;
 }
 
@@ -82,6 +84,7 @@
   align-items: center;
   justify-content: center;
   gap: #{token(spacing)};
+  width: 100%;
 
   padding: #{token(padding)};
 
