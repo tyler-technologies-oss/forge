@@ -101,7 +101,7 @@
 }
 
 @mixin disabled() {
-  opacity: .38;
+  opacity: 0.38;
 
   pointer-events: none;
 }
