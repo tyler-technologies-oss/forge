@@ -8,7 +8,7 @@ name: Build and Release
 on:
   push:
     branches:
-      - main
+      - version-2
     paths:
       - 'forge.json'
       - 'package.json'
