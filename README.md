@@ -16,6 +16,7 @@ and its broad customer base.
 ## Important links
 
 - [Documentation][4]
+- [Forge 2.x Documentation](https://forge.tylerdev.io/version-2)
 - [Contributing][5]
 - [Changelog][6]
 
