@@ -8,7 +8,6 @@ import { ITabBarComponent } from './tab-bar';
 import { TAB_BAR_CONSTANTS } from './tab-bar-constants';
 
 export interface ITabBarAdapter extends IBaseAdapter {
-  initializeAccessibility(): void;
   initializeContainerSizeObserver(listener: () => void): void;
   destroyContainerSizeObserver(): void;
   initializeScrollObserver(listener: EventListener): void;
@@ -53,12 +52,6 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
     this._scrollContainer = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.SCROLL_CONTAINER);
   }
 
-  public initializeAccessibility(): void {
-    if (!this._component.hasAttribute('role')) {
-      this._component.setAttribute('role', 'tablist');
-    }
-  }
-
   public initializeContainerSizeObserver(listener: () => void): void {
     this._resizeObserver = new ResizeObserver(() => listener());
     this._resizeObserver.observe(this._component);
@@ -78,7 +71,7 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
   }
 
   public setVertical(value: boolean): void {
-    toggleAttribute(this._component, !!value, 'aria-orientation', 'vertical');
+    toggleAttribute(this._scrollContainer, !!value, 'aria-orientation', 'vertical');
   }
 
   public setScrollBackwardButtonListener(listener: EventListener): void {
