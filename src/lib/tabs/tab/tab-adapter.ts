@@ -22,12 +22,11 @@ export interface ITabAdapter extends IBaseAdapter {
   getOffsetWidth(): number;
   getContentOffsetLeft(): number;
   getContentOffsetWidth(): number;
-  focus(): void;
   setTabIndex(value: number): void;
 }
 
 class TabRippleSurface implements ForgeRippleCapableSurface {
-  constructor(private _root: HTMLButtonElement) {}
+  constructor(private _root: ITabComponent) {}
 
   public get root(): Element {
     return this._root;
@@ -43,7 +42,7 @@ class TabRippleSurface implements ForgeRippleCapableSurface {
 }
 
 export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapter {
-  private _buttonElement: HTMLButtonElement;
+  private _rootElement: HTMLButtonElement;
   private _content: HTMLElement;
   private _rippleElement: HTMLElement;
   private _rippleInstance: ForgeRipple | undefined;
@@ -52,18 +51,20 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
 
   constructor(component: ITabComponent) {
     super(component);
-    this._buttonElement = getShadowElement(this._component, TAB_CONSTANTS.selectors.BUTTON) as HTMLButtonElement;
+    this._rootElement = getShadowElement(this._component, TAB_CONSTANTS.selectors.ROOT) as HTMLButtonElement;
     this._content = getShadowElement(this._component, TAB_CONSTANTS.selectors.CONTENT);
     this._rippleElement = getShadowElement(this._component, TAB_CONSTANTS.selectors.RIPPLE);
     this._tabIndicatorElement = getShadowElement(this._component, TAB_CONSTANTS.selectors.INDICATOR);
   }
 
   public initialize(): void {
-    this._component.setAttribute('role', 'tab');
+    if (!this._component.hasAttribute('role')) {
+      this._component.setAttribute('role', 'tab');
+    }
   }
 
   public initializeRipple(): void {
-    const rippleCapableSurface = new TabRippleSurface(this._buttonElement);
+    const rippleCapableSurface = new TabRippleSurface(this._component);
     const rippleAdapter = {
       ...ForgeRipple.createAdapter(rippleCapableSurface),
       addClass: (className: string) => this._rippleElement.classList.add(className),
@@ -71,7 +72,7 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
       updateCssVariable: (varName: string, value: string) => this._rippleElement.style.setProperty(varName, value)
     };
     const rippleFoundation = new ForgeRippleFoundation(rippleAdapter);
-    this._rippleInstance = new ForgeRipple(this._buttonElement, rippleFoundation);
+    this._rippleInstance = new ForgeRipple(this._component, rippleFoundation);
   }
 
   public destroyRipple(): void {
@@ -108,31 +109,31 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
   }
 
   public addButtonListener(type: string, listener: (evt: Event) => void): void {
-    this._buttonElement.addEventListener(type, listener);
+    this._component.addEventListener(type, listener);
   }
 
   public removeButtonListener(type: string, listener: (evt: Event) => void): void {
-    this._buttonElement.removeEventListener(type, listener);
+    this._component.removeEventListener(type, listener);
   }
 
   public setDisabled(value: boolean): void {
-    this._buttonElement.disabled = value;
+    toggleClass(this._rootElement, value, TAB_CONSTANTS.classes.DISABLED);
     this.setTabIndex(!value ? 0 : -1);
     this._component.setAttribute('aria-disabled', value.toString());
   }
 
   public setActive(value: boolean): void {
-    toggleClass(this._buttonElement, value, TAB_CONSTANTS.classes.ACTIVE);
+    toggleClass(this._rootElement, value, TAB_CONSTANTS.classes.ACTIVE);
     this.setTabIndex(value ? 0 : -1);
     this._component.setAttribute('aria-selected', value.toString());
   }
 
   public getOffsetLeft(): number {
-    return this._buttonElement.offsetLeft;
+    return this._rootElement.offsetLeft;
   }
   
   public getOffsetWidth(): number {
-    return this._buttonElement.offsetWidth;
+    return this._rootElement.offsetWidth;
   }
 
   public getContentOffsetLeft(): number {
@@ -143,11 +144,7 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
     return this._content.offsetWidth;
   }
 
-  public focus(): void {
-    this._buttonElement.focus();
-  }
-
   public setTabIndex(value: number): void {
-    this._buttonElement.tabIndex = value;
+    this._component.tabIndex = value;
   }
 }

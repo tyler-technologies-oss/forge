@@ -11,7 +11,6 @@ export interface ITabFoundation extends ICustomElementFoundation {
   deactivate(): void;
   computeIndicatorBounds(): DOMRect | undefined;
   computeDimensions(): ITabDimensions;
-  focus(): void;
   setTabIndex(value: number): void;
 }
 
@@ -41,6 +40,9 @@ export class TabFoundation implements ITabFoundation {
   }
 
   private _onClick(evt: MouseEvent): void {
+    if (this._disabled) {
+      return;
+    }
     if (!this._active) {
       this._adapter.emitHostEvent(TAB_CONSTANTS.events.INTERACTED, undefined, true);
     }
@@ -79,10 +81,6 @@ export class TabFoundation implements ITabFoundation {
       rootLeft,
       rootRight: rootLeft + rootWidth
     };
-  }
-  
-  public focus(): void {
-    this._adapter.focus();
   }
 
   public setTabIndex(value: number): void {

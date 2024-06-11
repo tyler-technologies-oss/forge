@@ -9,7 +9,7 @@ const attributes = {
 };
 
 const selectors = {
-  BUTTON: 'button.forge-tab',
+  ROOT: '.forge-tab',
   RIPPLE: '.forge-tab__ripple',
   INDICATOR: '.mdc-tab-indicator',
   CONTENT: '.forge-tab__content',
@@ -17,6 +17,7 @@ const selectors = {
 };
 
 const classes = {
+  DISABLED: 'forge-tab--disabled',
   ACTIVE: 'forge-tab--active'
 };
 
