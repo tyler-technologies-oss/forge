@@ -78,7 +78,7 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
   }
 
   public setVertical(value: boolean): void {
-    toggleAttribute(this._scrollContainer, !!value, 'aria-orientation', 'vertical');
+    toggleAttribute(this._component, !!value, 'aria-orientation', 'vertical');
   }
 
   public setScrollBackwardButtonListener(listener: EventListener): void {
