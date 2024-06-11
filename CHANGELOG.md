@@ -1,3 +1,29 @@
+# v3.0.0 (Tue Jun 11 2024)
+
+:tada: This release contains work from new contributors! :tada:
+
+Thanks for all your work!
+
+:heart: Jonathan Earl ([@whattheearl](https://github.com/whattheearl))
+
+:heart: Paul Lapczynski ([@tyl-paul-lapczynski](https://github.com/tyl-paul-lapczynski))
+
+#### 💥 Breaking Change
+
+- feat: prepare GA 3.0 release [#624](https://github.com/tyler-technologies-oss/forge/pull/624) ([@DRiFTy17](https://github.com/DRiFTy17) [@samrichardsontylertech](https://github.com/samrichardsontylertech) [@MikeMatusz](https://github.com/MikeMatusz) [@whattheearl](https://github.com/whattheearl) [@nickonometry](https://github.com/nickonometry) [@tyl-paul-lapczynski](https://github.com/tyl-paul-lapczynski) [@derekmoss](https://github.com/derekmoss))
+
+#### Authors: 7
+
+- Derek Moss ([@derekmoss](https://github.com/derekmoss))
+- Jonathan Earl ([@whattheearl](https://github.com/whattheearl))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+- Paul Lapczynski ([@tyl-paul-lapczynski](https://github.com/tyl-paul-lapczynski))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.24.2 (Tue Jun 11 2024)
 
 #### 🐛 Bug Fix
