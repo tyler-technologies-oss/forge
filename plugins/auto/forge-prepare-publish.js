@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const packageJson = require('../../package.json');
 const forgeConfig = require('../../forge.json');
 const ROOT = path.resolve(__dirname, '../../');
 const DIST_PATH = path.join(ROOT, 'dist');
@@ -32,7 +33,7 @@ module.exports = class ForgePreparePublishPlugin {
     }
 
     // Ensure the deployment path exists
-    const deploymentPath = path.join(forgeConfig.build.static.distPath, forgeConfig.packageOrg, forgeConfig.packageName);
+    const deploymentPath = path.join(forgeConfig.build.static.distPath, packageJson.name);
     if (!fs.existsSync(path.join(DIST_PATH, deploymentPath))) {
       auto.logger.log.error(`[${this.name}] Deployment path doesn't exist: ${deploymentPath}`);
       return process.exit(1);
