@@ -92,14 +92,20 @@ endSwitch.addEventListener('forge-switch-change', () => {
 accessorySwitch.addEventListener('forge-switch-change', () => {
   if (accessorySwitch.on) {
     fields.forEach(field => {
+      const button = document.createElement('forge-icon-button');
+      button.slot = 'accessory';
+      button.density = 'medium';
+      button.ariaLabel = 'Favorite';
+
       const icon = document.createElement('forge-icon') as IIconComponent;
       icon.name = 'favorite';
-      icon.slot = 'accessory';
-      field.append(icon);
+
+      button.append(icon);
+      field.append(button);
     });
   } else {
     fields.forEach(field => {
-      const icon = field.querySelector('forge-icon[slot=accessory]');
+      const icon = field.querySelector('forge-icon-button[slot=accessory]');
       icon.remove();
     });
   }
