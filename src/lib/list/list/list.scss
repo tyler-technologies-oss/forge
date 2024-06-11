@@ -1,11 +1,51 @@
-@use './mixins';
+@use './core' as *;
+@use '../list-item';
 
-@include mixins.core-styles;
+//
+// Host
+//
+
+$_host-tokens: [ navlist-spacing navlist-margin navlist-height navlist-padding navlist-shape navlist-font-size navlist-font-weight];
 
 :host {
-  @include mixins.host;
+  @include tokens($includes: $_host-tokens);
+}
+
+:host {
+  display: block;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+:host([navlist]) {
+  margin-block: #{token(navlist-spacing)};
+
+  @include list-item.provide-theme(
+    (
+      height: #{token(navlist-height)},
+      margin: #{token(navlist-margin)},
+      padding: #{token(navlist-padding)},
+      shape: #{token(navlist-shape)},
+      text-font-size: #{token(navlist-font-size)},
+      text-font-weight: #{token(navlist-font-weight)}
+    )
+  );
+}
+
+//
+// Base
+//
+
+.forge-list {
+  @include tokens($excludes: $_host-tokens);
+}
+
+.forge-list {
+  @include base;
+}
+
+.inner {
+  @include inner;
 }

@@ -1,3 +1,5 @@
+import { ICON_REGISTRY_KEY } from './icon-constants';
+
 /** The shape of an SVG icon that can be defined with the icon registry. */
 export interface IIcon {
   /** The unique name of the icon. */
@@ -6,11 +8,21 @@ export interface IIcon {
   data: string;
 }
 
+export interface IIconDescriptor {
+  raw: string;
+  node?: SVGElement;
+}
+
 /**
  * The registry for SVG icon instances being used within the current context.
  */
 export class IconRegistry {
-  private static _icons = new Map<string, string>();
+  private static get _icons(): Map<string, IIconDescriptor> {
+    if (!window[ICON_REGISTRY_KEY]) {
+      window[ICON_REGISTRY_KEY] = new Map<string, IIconDescriptor>();
+    }
+    return window[ICON_REGISTRY_KEY];
+  }
   private static _listeners = new Map<string, Array<() => void>>();
 
   /**
@@ -19,8 +31,7 @@ export class IconRegistry {
    */
   public static define(icon: IIcon | IIcon[] | string, svgData?: string): void {
     if (Array.isArray(icon)) {
-      return icon.filter(i => IconRegistry._isIconObject(i))
-                 .forEach(i => IconRegistry._register(i.name, i.data));
+      return icon.filter(i => IconRegistry._isIconObject(i)).forEach(i => IconRegistry._register(i.name, i.data));
     }
     const { name, data } = IconRegistry._parseIcon(icon, svgData);
     IconRegistry._register(name, data);
@@ -54,8 +65,16 @@ export class IconRegistry {
   }
 
   /** Gets the icon data by its name, or `undefined` if not found. */
-  public static get(name: string): string | undefined {
+  public static get(name: string): IIconDescriptor | undefined {
     return IconRegistry._icons.get(name);
+  }
+
+  /** Sets the icon node for a given icon name. */
+  public static setNode(name: string, node: SVGElement): void {
+    const descriptor = IconRegistry.get(name);
+    if (descriptor) {
+      descriptor.node = node;
+    }
   }
 
   /** Gets the names of registered icons. */
@@ -80,7 +99,7 @@ export class IconRegistry {
 
   /** Registers an icon, and attempts to invalidate any listeners. */
   private static _register(key: string, value: string): void {
-    IconRegistry._icons.set(key, value);
+    IconRegistry._icons.set(key, { raw: value, node: undefined });
     IconRegistry._invalidateListeners(key);
   }
 

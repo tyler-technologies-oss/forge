@@ -1,4 +1,12 @@
-@use '../theme';
-@use './mixins';
+@use '../core/styles/typography';
 
-@include mixins.core-styles;
+// Apply base typography styles to the body element by default
+body {
+  @include typography.base;
+}
+
+// Create helper classes for each Forge typography style/role
+@include typography.classes;
+
+// Automatically apply styles to anchor elements
+@include typography.anchor;

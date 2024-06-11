@@ -3,25 +3,25 @@
     "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
-    "lib": ["es2015", "dom", "es2017"],
+    "lib": ["es2015", "dom", "es2017", "dom.iterable"],
     "noImplicitAny": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "importHelpers": true,
     "noEmitHelpers": true,
+    "ignoreDeprecations": "5.0",
     "suppressImplicitAnyIndexErrors": true,
     "noImplicitThis": true,
     "useDefineForClassFields": false,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
       "@tylertech/forge": ["src/lib"],
       "@tylertech/forge/*": ["src/lib/*"]
-    }
+    },
+    "types": ["node", "mocha", "sinon", "chai"]
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "auto.config.ts",
-    "docs"
-  ]
+  "exclude": ["node_modules", "dist", "auto.config.ts", "docs"]
 }

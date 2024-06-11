@@ -1,18 +1,30 @@
-@use './mixins';
-@use '../base/mixins' as base-mixins;
+@use '../base/core' as base-core;
+@use '../../divider';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include base-mixins.host;
+  @include base-core.host;
+  @include divider.provide-theme(
+    (
+      margin: 4px 0
+    )
+  );
 }
 
-/// 
-/// Safari fix for triggering reflow after transition completes (as of Safari 14)
-///
-// stylelint-disable-next-line unit-allowed-list
+//
+// Base
+//
+
+@include base-core.core-styles;
+
+//
+// Safari fix for triggering reflow after transition completes (as of Safari 14)
+//
 @media not all and (min-resolution: 0.001dpcm) {
-  @supports (-webkit-appearance:none) and (stroke-color: transparent) {
+  @supports (-webkit-appearance: none) and (stroke-color: transparent) {
     :host([open]) {
       transform: translateZ(0);
     }

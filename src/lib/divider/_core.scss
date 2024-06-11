@@ -1,0 +1,34 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host() {
+  display: block;
+  contain: content;
+  margin: #{token(margin)};
+}
+
+@mixin base() {
+  border: none;
+  border-bottom-color: #{token(color)};
+  border-bottom-width: #{token(width)};
+  border-bottom-style: #{token(border-style)};
+
+  height: 0;
+}
+
+@mixin vertical-base() {
+  border: none;
+  border-right-color: #{token(color)};
+  border-right-width: #{token(width)};
+  border-right-style: #{token(border-style)};
+
+  height: 100%;
+  width: 0;
+}
+
+@mixin vertical-host {
+  display: inline-block;
+  // needed for non-flex areas
+  height: 100%;
+}

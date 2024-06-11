@@ -1,4 +1,4 @@
-import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
 
 import {
   SelectOptionBuilder,
@@ -8,10 +8,9 @@ import {
   SelectBeforeValueChangeCallback,
   BASE_SELECT_CONSTANTS
 } from './base-select-constants';
-import { IBaseSelectFoundation } from './base-select-foundation';
+import { IBaseSelectCore } from './base-select-core';
 import { IListDropdownAware, ListDropdownAware } from '../../list-dropdown/list-dropdown-aware';
-import { IPopupComponent } from '../../popup';
-
+import type { IPopoverComponent } from '../../popover/popover';
 
 export interface IBaseSelectComponent extends IListDropdownAware {
   value: any;
@@ -21,59 +20,79 @@ export interface IBaseSelectComponent extends IListDropdownAware {
   open: boolean;
   optionBuilder: SelectOptionBuilder;
   selectedTextBuilder: SelectSelectedTextBuilder;
-  popupElement: IPopupComponent | undefined;
+  popupElement: IPopoverComponent | undefined;
   beforeValueChange: SelectBeforeValueChangeCallback<any>;
   appendOptions(options: ISelectOption[] | ISelectOption[]): void;
   selectAll(): void;
   deselectAll(): void;
 }
 
-export abstract class BaseSelectComponent<T extends IBaseSelectFoundation> extends ListDropdownAware implements IBaseSelectComponent {
-  protected _foundation: T;
+export abstract class BaseSelectComponent<T extends IBaseSelectCore> extends ListDropdownAware implements IBaseSelectComponent {
+  protected _core: T;
 
   constructor() {
     super();
   }
 
-  /** Gets/sets the value. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the value.
+   * @attribute
+   */
+  @coreProperty()
   public declare value: any;
-  
-  /** Gets/sets the selected index. */
-  @FoundationProperty()
+
+  /**
+   * Gets/sets the selected index.
+   * @attribute selected-index
+   */
+  @coreProperty()
   public declare selectedIndex: number | number[];
-  
-  /** Gets/sets the available options. */
-  @FoundationProperty()
+
+  /**
+   * Gets/sets the available options.
+   */
+  @coreProperty()
   public declare options: ISelectOption[] | ISelectOptionGroup[];
 
-  /** Gets/sets the multiple select state. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the multiple select state.
+   * @attribute
+   */
+  @coreProperty()
   public declare multiple: boolean;
-  
-  /** Gets the open state of the dropdown. */
-  @FoundationProperty()
+
+  /**
+   * Gets the open state of the dropdown.
+   * @attribute
+   */
+  @coreProperty()
   public declare open: boolean;
-  
-  /** Sets the option builder callback that will be executed when building the option list in the dropdown. */
-  @FoundationProperty()
+
+  /**
+   * Sets the option builder callback that will be executed when building the option list in the dropdown.
+   */
+  @coreProperty()
   public declare optionBuilder: SelectOptionBuilder;
-  
-  /** Sets the selected text builder callback that will be executed when getting the selected text to display in the field. */
-  @FoundationProperty()
+
+  /**
+   * Sets the selected text builder callback that will be executed when getting the selected text to display in the field.
+   */
+  @coreProperty()
   public declare selectedTextBuilder: SelectSelectedTextBuilder;
 
-  /** Sets the callback to be executed when the user selects a value. */
-  @FoundationProperty()
+  /**
+   * Sets the callback to be executed when the user selects a value.
+   */
+  @coreProperty()
   public declare beforeValueChange: SelectBeforeValueChangeCallback<any>;
 
   /**
    * Gets the popup element (when the dropdown is open).
    * @readonly
    */
-  @FoundationProperty({ set: false })
-  public declare popupElement: IPopupComponent | undefined;
-  
+  @coreProperty({ set: false })
+  public declare popupElement: IPopoverComponent | undefined;
+
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     super.attributeChangedCallback(name, oldValue, newValue);
     switch (name) {
@@ -86,23 +105,26 @@ export abstract class BaseSelectComponent<T extends IBaseSelectFoundation> exten
     }
   }
 
+  /** Dynamically appends options to the dropdown while it's open. */
   public appendOptions(options: ISelectOption[] | ISelectOptionGroup[]): void {
-    this._foundation.appendOptions(options);
+    this._core.appendOptions(options);
   }
 
+  /** Selects all options. */
   public selectAll(): void {
-    this._foundation.selectAll();
+    this._core.selectAll();
   }
-  
+
+  /** Deselects all options. */
   public deselectAll(): void {
-    this._foundation.deselectAll();
+    this._core.deselectAll();
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 }

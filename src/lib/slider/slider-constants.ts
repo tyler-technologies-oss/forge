@@ -3,46 +3,94 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}slider`;
 
 const attributes = {
-  TYPE: 'type',
+  ARIA_LABEL: 'data-aria-label',
+  ARIA_LABEL_START: 'data-aria-label-start',
+  ARIA_LABEL_END: 'data-aria-label-end',
   VALUE: 'value',
   VALUE_START: 'value-start',
+  VALUE_END: 'value-end',
+  LABEL: 'label',
+  LABEL_START: 'label-start',
+  LABEL_END: 'label-end',
   MIN: 'min',
   MAX: 'max',
   STEP: 'step',
+  TICKMARKS: 'tickmarks',
+  LABELED: 'labeled',
+  RANGE: 'range',
   DISABLED: 'disabled',
-  COLOR: 'color'
+  READONLY: 'readonly'
 };
 
 const selectors = {
-  ROOT: '.mdc-slider',
-  THUMB: '.mdc-slider__thumb[part=thumb],.mdc-slider__thumb[part=\'thumb-end\']',
-  THUMB_START: '.mdc-slider__thumb[part=\'thumb-start\']',
-  VALUE_INPUT: 'input[id=\'value-input\']',
-  VALUE_INPUT_START: 'input[id=\'value-input-start\']',
-  TRACK_CONTAINER: '.mdc-slider__track-container',
-  TRACK_ACTIVE_FILL: '.mdc-slider__track--active_fill'
+  ROOT: '.forge-slider',
+  TRACK: '.track',
+  HANDLE_CONTAINER: '.handle-container',
+  START_INPUT: 'input.start',
+  END_INPUT: 'input.end',
+  START_HANDLE: '.handle.start',
+  START_HANDLE_THUMB: '.handle.start .handle-thumb',
+  END_HANDLE: '.handle.end',
+  END_HANDLE_THUMB: '.handle.end .handle-thumb',
+  START_LABEL: '.handle.start .handle-label',
+  START_LABEL_CONTENT: '.handle.start .handle-label-content',
+  END_LABEL: '.handle.end .handle-label',
+  END_LABEL_CONTENT: '.handle.end .handle-label-content',
+  LABEL: '.handle-label',
+  INPUT: 'input[type=range]'
+};
+
+const classes = {
+  RANGE: 'range',
+  TICKMARKS: 'tickmarks',
+  ON_TOP: 'on-top',
+  OVERLAPPING: 'overlapping',
+  HOVER: 'hover',
+  HANDLE: 'handle',
+  HANDLE_THUMB: 'handle-thumb',
+  HANDLE_START: 'start',
+  HANDLE_LABEL: 'handle-label',
+  LABEL: 'handle-label',
+  LABEL_CONTENT: 'handle-label-content'
 };
 
 const events = {
-  MDC_INPUT: 'MDCSlider:input',
-  MDC_CHANGE: 'MDCSlider:change',
-  FORGE_INPUT: 'forge-slider-input',
-  FORGE_CHANGE: 'forge-slider-change'
+  INPUT: 'forge-slider-input',
+  CHANGE: 'forge-slider-change',
+  RANGE_INPUT: 'forge-slider-range-input',
+  RANGE_CHANGE: 'forge-slider-range-change'
+};
+
+const cssCustomProperties = {
+  START_FRACTION: '--_slider-start-fraction',
+  END_FRACTION: '--_slider-end-fraction',
+  TICK_COUNT: '--_slider-tick-count'
+};
+
+const numbers = {
+  DEFAULT_STEP: 1,
+  DEFAULT_VALUE: 50,
+  DEFAULT_START_VALUE: 33,
+  DEFAULT_END_VALUE: 67
 };
 
 export const SLIDER_CONSTANTS = {
   elementName,
   attributes,
   selectors,
-  events
+  classes,
+  events,
+  numbers,
+  cssCustomProperties
 };
 
-export interface ISliderInputEventData {
-  value?: number;
-  valueStart?: number;
-  valueEnd?: number;
+export interface ISliderChangeEventData {
+  value: number;
 }
 
-export interface ISliderChangeEventData extends ISliderInputEventData {}
+export interface ISliderRangeChangeEventData {
+  valueStart: number;
+  valueEnd: number;
+}
 
-export type SliderType = 'continuous' | 'discrete' | 'discrete-markers' | 'continuous-range' | 'discrete-range' | 'discrete-range-markers';
+export type SliderLabelBuilder = (value: number, which?: 'start' | 'end') => string;

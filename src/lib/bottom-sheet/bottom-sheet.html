@@ -1,6 +1,7 @@
 <template>
-  <forge-backdrop hidden part="backdrop"></forge-backdrop>
-  <div class="forge-bottom-sheet" part="root">
-    <slot></slot>
-  </div>
+  <forge-dialog class="dialog" mode="nonmodal" preset="bottom-sheet" exportparts="surface" role="presentation">
+    <div class="surface" part="root">
+      <slot></slot>
+    </div>
+  </forge-dialog>
 </template>

@@ -1,28 +1,231 @@
-@use '@material/slider/styles';
-@use '@material/theme/theme' as mdc-theme;
+@use './core' as *;
+@use '../focus-indicator';
+@use '../state-layer';
+
+//
+// Host
+//
 
 :host {
-  display: block;
+  @include container;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-///
-/// Override default MDC disabled styles
-///
-.mdc-slider.mdc-slider--disabled {
-  cursor: not-allowed;
+//
+// Base
+//
+
+.forge-slider {
+  // Internal state variables
+  #{declare(start-fraction)}: 0;
+  #{declare(end-fraction)}: 0;
+  #{declare(tick-count)}: 100;
+
+  // External state variables
+  @include tokens;
 }
 
-///
-/// Override default MDC value indicator styles (to support theming)
-///
-.mdc-slider .mdc-slider__value-indicator {
-  background-color: var(--mdc-theme-on-surface);
+.forge-slider {
+  @include slider;
+
+  &.range {
+    @include range;
+  }
+}
+
+//
+// Track
+//
+
+.track {
+  @include track;
+
+  &::before,
+  &::after {
+    content: '';
+
+    @include track-dimensions;
+  }
 
   &::before {
-    border-top-color: var(--mdc-theme-on-surface);
+    @include track-inactive;
   }
+
+  &::after {
+    @include track-active;
+  }
+
+  &.tickmarks {
+    &::before {
+      @include tickmarks-inactive;
+    }
+
+    &::after {
+      @include tickmarks-active;
+    }
+  }
+}
+
+//
+// Handle
+//
+
+.handle-container-padded,
+.handle-container-block {
+  @include handle-container-dimensions;
+}
+
+.handle-container-padded {
+  @include handle-container-padded;
+}
+
+.handle-container {
+  @include handle-container;
+}
+
+.handle {
+  @include handle;
+
+  &.start {
+    @include handle-start;
+  }
+
+  &.end {
+    @include handle-end;
+  }
+
+  &-thumb {
+    @include handle-thumb;
+  }
+
+  &-label {
+    @include handle-label;
+
+    &::before,
+    &::after {
+      content: '';
+      @include handle-label-base;
+    }
+
+    &::before {
+      @include handle-label-bottom;
+    }
+
+    &::after {
+      @include handle-label-top;
+    }
+
+    &-content {
+      @include handle-label-content;
+    }
+  }
+}
+
+.handle-container.hover .handle-thumb {
+  @include handle-thumb-hover;
+}
+
+:host(:not([disabled])) {
+  input.end:active ~ .handle-container-padded .handle.end > .handle-thumb,
+  input.start:active ~ .handle-container-padded .handle.start > .handle-thumb {
+    @include handle-thumb-pressed;
+  }
+}
+
+//
+// Disabled
+//
+
+:host([disabled]) {
+  .handle-thumb {
+    @include handle-thumb-disabled;
+  }
+
+  .handle-label {
+    @include handle-label-disabled;
+  }
+
+  .track {
+    &::before {
+      @include track-inactive-disabled;
+    }
+
+    &::after {
+      @include track-active-disabled;
+    }
+
+    &.tickmarks {
+      &::before {
+        @include tickmarks-inactive-disabled;
+      }
+
+      &::after {
+        @include tickmarks-active-disabled;
+      }
+    }
+  }
+
+  input[type='range'] {
+    @include input-disabled;
+  }
+}
+
+// rtl for active track clipping
+@each $_rtl-selectors in get-rtl-selectors('.track', '::after') {
+  #{$_rtl-selectors} {
+    @include rtl-track-clipping;
+  }
+}
+
+input.end:focus ~ .handle-container-padded .handle.end > .handle-thumb,
+input.start:focus ~ .handle-container-padded .handle.start > .handle-thumb {
+  @include handle-thumb-focused;
+}
+
+.on-top.overlapping {
+  .handle-thumb,
+  .handle-label,
+  .handle-label::before {
+    @include handles-overlapping;
+  }
+}
+
+:host(:focus-within) .handle-label,
+.handle-container.hover .handle-label,
+:where(:has(input:active)) .handle-label {
+  @include handle-label-visible;
+}
+
+input[type='range'] {
+  @include input;
+}
+
+.on-top {
+  @include on-top;
+}
+
+@media (prefers-reduced-motion) {
+  .handle-label {
+    transition-duration: 0;
+  }
+}
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme(
+    (
+      shape: 50%,
+      outward-offset: 0px // Requires unit
+    )
+  );
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme(
+    (
+      color: #{token(handle-color)}
+    )
+  );
 }

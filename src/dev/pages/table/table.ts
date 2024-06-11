@@ -3,9 +3,13 @@ import '@tylertech/forge/table';
 import '@tylertech/forge/table/forge-table.scss';
 import './table.scss';
 import { TextFieldComponentDelegate } from '@tylertech/forge/text-field';
-import { ButtonComponentDelegate, CellAlign, IColumnConfiguration, IconRegistry, ISelectComponent, ISortedColumn, ISwitchComponent, ITableComponent, ITableSortMultipleEventData, ITableTemplateBuilderResult, SelectComponentDelegate, SortDirection } from '@tylertech/forge';
 import { PositionPlacement } from '@tylertech/forge-core';
 import { tylIconChevronRight, tylIconDelete, tylIconEdit, tylIconMoreVert } from '@tylertech/tyler-icons/standard';
+import { ITableComponent, IColumnConfiguration, SortDirection, ISortedColumn, CellAlign, ITableTemplateBuilderResult, ITableSortMultipleEventData } from '@tylertech/forge/table';
+import { ButtonComponentDelegate } from '@tylertech/forge/button';
+import { IconRegistry } from '@tylertech/forge/icon';
+import { SelectComponentDelegate, ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 IconRegistry.define([
   tylIconMoreVert,
@@ -101,47 +105,47 @@ table.cellCreated = (cellElement, rowIndex, columnIndex) => {
 };
 
 const selectToggle = document.querySelector('#opt-select') as ISwitchComponent;
-selectToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+selectToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   table.select = selected;
 });
 
 const multiselectToggle = document.querySelector('#opt-multiselect') as ISwitchComponent;
-multiselectToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+multiselectToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   table.multiselect = selected;
 });
 
 const tooltipSelectAllToggle = document.querySelector('#opt-tooltip-select-all') as ISwitchComponent;
-tooltipSelectAllToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+tooltipSelectAllToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   table.tooltipSelectAll = selected ? 'Select all' : undefined;
 });
 
 const tooltipSelectToggle = document.querySelector('#opt-tooltip-select') as ISwitchComponent;
-tooltipSelectToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+tooltipSelectToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   table.tooltipSelect = selected ? 'Select' : undefined;
 });
 
 const denseToggle = document.querySelector('#opt-dense') as ISwitchComponent;
-denseToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+denseToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   table.dense = selected;
 });
 
 const roomyToggle = document.querySelector('#opt-roomy') as ISwitchComponent;
-roomyToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+roomyToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   table.roomy = selected;
 });
 
 const filterToggle = document.querySelector('#opt-filter') as ISwitchComponent;
-filterToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+filterToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   table.filter = selected;
 });
 
 const wrapContentToggle = document.querySelector('#opt-wrap-content') as ISwitchComponent;
-wrapContentToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+wrapContentToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   table.wrapContent = selected;
 });
 
 const fixedHeadersToggle = document.querySelector('#opt-fixed-headers') as ISwitchComponent;
-fixedHeadersToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+fixedHeadersToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   table.fixedHeaders = selected;
 
   if (selected) {
@@ -154,22 +158,22 @@ fixedHeadersToggle.addEventListener('forge-switch-select', ({ detail: selected }
 });
 
 const resizableToggle = document.querySelector('#opt-resizable') as ISwitchComponent;
-resizableToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+resizableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   table.resizable = selected;
 });
 
 const allowRowClickToggle = document.querySelector('#opt-allow-row-click') as ISwitchComponent;
-allowRowClickToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+allowRowClickToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   table.allowRowClick = selected;
 });
 
 const multiColumnSortToggle = document.querySelector('#opt-multi-column-sort') as ISwitchComponent;
-multiColumnSortToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+multiColumnSortToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   table.multiColumnSort = selected;
 });
 
 const customSelectAllToggle = document.querySelector('#opt-custom-select-all') as ISwitchComponent;
-customSelectAllToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+customSelectAllToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     table.selectAllTemplate = getSelectAllTemplate;
     selectAlignmentSelect.style.display = '';
@@ -275,10 +279,9 @@ table.addEventListener('forge-table-filter', ({ detail }) => {
 });
 
 function getMenuColumnTemplate(rowIndex: number): HTMLElement {
-  const forgeButton = document.createElement('forge-icon-button');
-  const button = document.createElement('button');
+  const button = document.createElement('forge-icon-button');
   button.type = 'button';
-  forgeButton.appendChild(button);
+  button.setAttribute('aria-label', `Menu for row ${rowIndex}`);
 
   const icon = document.createElement('forge-icon');
   icon.name = 'more_vert';
@@ -297,17 +300,15 @@ function getMenuColumnTemplate(rowIndex: number): HTMLElement {
       table.data = data;
     }
   });
-  menu.appendChild(forgeButton);
+  menu.appendChild(button);
 
   return menu;
 }
 
 function getExpandRowColumnTemplate(rowIndex: number): ITableTemplateBuilderResult {
-  const iconButton = document.createElement('forge-icon-button');
-
-  const button = document.createElement('button');
+  const button = document.createElement('forge-icon-button');
   button.type = 'button';
-  iconButton.appendChild(button);
+  button.setAttribute('aria-label', `Expand row ${rowIndex}`);
 
   const icon = document.createElement('forge-icon');
   icon.name = 'chevron_right';
@@ -322,7 +323,7 @@ function getExpandRowColumnTemplate(rowIndex: number): ITableTemplateBuilderResu
   });
 
   return {
-    content: iconButton,
+    content: button,
     stopClickPropagation: true
   };
 }
@@ -376,9 +377,7 @@ function getSelectAllTemplate(): string {
       <forge-checkbox>
         <input type="checkbox" />
       </forge-checkbox>
-      <forge-button>
-        <button type="button">Custom</button>
-      </forge-button>
+      <forge-button>Custom</forge-button>
     </div>
   `;
 }

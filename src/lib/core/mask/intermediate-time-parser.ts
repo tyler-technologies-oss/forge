@@ -17,7 +17,8 @@ export class IntermediateTimeParser {
 
   constructor(
     private _char: string,
-    private _mask: InputMask<IMask.AnyMaskedOptions>) {
+    private _mask: InputMask<IMask.AnyMaskedOptions>
+  ) {
     this.segmentParser = new TimeSegmentParser(this._mask.value);
   }
 

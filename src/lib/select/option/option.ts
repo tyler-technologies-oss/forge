@@ -1,10 +1,10 @@
-import { coerceBoolean, CustomElement, FoundationProperty, ICustomElement } from '@tylertech/forge-core';
+import { coerceBoolean, customElement, coreProperty, ICustomElement } from '@tylertech/forge-core';
 import { IIconComponent } from '../../icon';
 import { BaseComponent } from '../../core/base/base-component';
 import { IBaseListDropdownOption, ListDropdownIconType } from '../../list-dropdown/list-dropdown-constants';
 import { OptionAdapter } from './option-adapter';
 import { OPTION_CONSTANTS } from './option-constants';
-import { OptionFoundation } from './option-foundation';
+import { OptionCore } from './option-core';
 
 export interface IOptionComponent extends ICustomElement, Required<IBaseListDropdownOption> {}
 
@@ -15,11 +15,9 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-option>` element.
- * 
  * @tag forge-option
  */
-@CustomElement({
+@customElement({
   name: OPTION_CONSTANTS.elementName
 })
 export class OptionComponent extends BaseComponent implements IOptionComponent {
@@ -40,11 +38,11 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
     ];
   }
 
-  private _foundation: OptionFoundation;
+  private _core: OptionCore;
 
   constructor() {
     super();
-    this._foundation = new OptionFoundation(new OptionAdapter(this));
+    this._core = new OptionCore(new OptionAdapter(this));
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -88,67 +86,115 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
     }
   }
 
-  /** Gets/sets the value of this option. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the value of this option.
+   * @attribute
+   */
+  @coreProperty()
   public declare value: any;
 
-  /** Gets/sets the label of this option. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the label of this option.
+   * @attribute
+   */
+  @coreProperty()
   public declare label: string;
 
-  /** Gets/sets the secondary label of this option. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the secondary label of this option.
+   * @attribute secondary-label
+   */
+  @coreProperty()
   public declare secondaryLabel: string;
 
-  /** Gets/sets the disabled status of this option. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the disabled status of this option.
+   * @default false
+   * @attribute
+   */
+  @coreProperty()
   public declare disabled: boolean;
 
-  /** Gets/sets the whether this option is a divider. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the whether this option is a divider.
+   * @default false
+   * @attribute
+   */
+  @coreProperty()
   public declare divider: boolean;
 
-  /** Gets/sets the classes of this option. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the classes of this option.
+   * @attribute option-class
+   */
+  @coreProperty()
   public declare optionClass: string | string[];
 
-  /** Gets/sets the leading icon of this option. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the leading icon of this option.
+   * @attribute leading-icon
+   */
+  @coreProperty()
   public declare leadingIcon: string;
 
-  /** Gets/sets the leading icon class of this option. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the leading icon class of this option.
+   * @attribute leading-icon-class
+   */
+  @coreProperty()
   public declare leadingIconClass: string;
 
-  /** Gets/sets the leading icon type of this option. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the leading icon type of this option.
+   * @default "font"
+   * @attribute leading-icon-type
+   */
+  @coreProperty()
   public declare leadingIconType: ListDropdownIconType;
 
-  /** Gets/sets properties on leading icon component. */
-  @FoundationProperty()
+  /**
+   * Gets/sets properties on leading icon component.
+   */
+  @coreProperty()
   public declare leadingIconComponentProps: Partial<IIconComponent>;
 
-  /** Gets/sets the trailing icon of this option. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the trailing icon of this option.
+   * @attribute trailing-icon
+   */
+  @coreProperty()
   public declare trailingIcon: string;
 
-  /** Gets/sets the trailing icon class of this option. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the trailing icon class of this option.
+   * @attribute trailing-icon-class
+   */
+  @coreProperty()
   public declare trailingIconClass: string;
 
-  /** Gets/sets the trailing icon type of this option. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the trailing icon type of this option.
+   * @default "font"
+   * @attribute trailing-icon-type
+   */
+  @coreProperty()
   public declare trailingIconType: ListDropdownIconType;
 
-  /** Gets/sets properties on trailing icon component. */
-  @FoundationProperty()
+  /**
+   * Gets/sets properties on trailing icon component.
+   */
+  @coreProperty()
   public declare trailingIconComponentProps: Partial<IIconComponent>;
 
-  /** Gets/sets the leading builder of this option. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the leading builder of this option.
+   */
+  @coreProperty()
   public declare leadingBuilder: () => HTMLElement;
 
-  /** Gets/sets the trailing builder of this option. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the trailing builder of this option.
+   */
+  @coreProperty()
   public declare trailingBuilder: () => HTMLElement;
 }

@@ -1,21 +1,34 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
+import { COMPONENT_NAME_PREFIX, Theme } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}linear-progress`;
 
-const selectors = {
-  ROOT: '.mdc-linear-progress'
+const classes = {
+  INDETERMINATE: 'forge-linear-progress--indeterminate'
 };
 
-const attributes = {
+const selectors = {
+  ROOT: '.forge-linear-progress',
+  TRACK: '.track',
+  PROGRESS: '.primary-bar'
+};
+
+const observedAttributes = {
   DETERMINATE: 'determinate',
   PROGRESS: 'progress',
   BUFFER: 'buffer',
-  VISIBLE: 'visible',
-  PROGRESSBAR_ARIA_LABEL: 'progressbar-aria-label'
+  THEME: 'theme'
+};
+
+const attributes = {
+  ...observedAttributes
 };
 
 export const LINEAR_PROGRESS_CONSTANTS = {
   elementName,
+  classes,
   selectors,
-  attributes
+  attributes,
+  observedAttributes
 };
+
+export type LinearProgressTheme = Theme;

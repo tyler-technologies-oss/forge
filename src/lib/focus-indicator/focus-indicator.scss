@@ -1,0 +1,54 @@
+@use './animations';
+@use './core' as *;
+
+//
+// Host
+//
+
+:host {
+  @include tokens;
+}
+
+:host {
+  @include base;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// States
+//
+
+:host([active]) {
+  @include active;
+}
+
+:host(:not([inward])) {
+  @include outward;
+}
+
+:host([inward]) {
+  @include inward;
+}
+
+:host([circular]) {
+  @include circular;
+}
+
+//
+// Animations
+//
+
+@include animations.keyframes;
+
+//
+// Media Queries
+//
+
+@media (prefers-reduced-motion) {
+  :host {
+    animation: none;
+  }
+}

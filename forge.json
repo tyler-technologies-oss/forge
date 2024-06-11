@@ -1,25 +1,26 @@
 {
-  "$schema": "./node_modules/@tylertech/forge-cli/schema.json",
-  "packageOrg": "@tylertech",
-  "packageName": "forge",
-  "registry": "https://registry.npmjs.org/",
+  "$schema": "./node_modules/@tylertech/forge-cli/config/schema.json",
   "license": {
-    "header": "/**\n * @license\n * Copyright 2023 Tyler Technologies, Inc. \n * License: Apache-2.0\n */\n"
+    "header": "/**\n * @license\n * Copyright Tyler Technologies, Inc. \n * License: Apache-2.0\n */\n"
   },
   "karma": {
-    "stylesheets": [
-      "src/lib/forge.scss"
-    ],
-    "frameworks": [
-      "fixture"
-    ],
-    "plugins": [
-      "karma-fixture"
+    "stylesheets": ["src/lib/forge.scss"]
+  },
+  "packageConfig": {
+    "copyFiles": [
+      {
+        "pattern": "./dist/cem/vscode.*.json",
+        "root": "./dist/cem/",
+        "output": "dist"
+      }
     ]
   },
   "build": {
     "static": {
       "distPath": "cdn/v1/libs/"
     }
+  },
+  "customElementsManifestConfig": {
+    "configFileName": "custom-elements-manifest.config.mjs"
   }
 }

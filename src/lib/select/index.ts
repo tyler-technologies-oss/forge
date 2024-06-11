@@ -5,7 +5,7 @@ export * from './option';
 export * from './option-group';
 export * from './core';
 
-export interface IOption<T = any>  {
+export interface IOption<T = any> {
   value: T;
   label: string;
   disabled?: boolean;

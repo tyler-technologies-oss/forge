@@ -1,16 +1,73 @@
-@use './mixins';
-@use '../icon-button/forge-icon-button';
+@use './core' as *;
+@use '../dialog';
+@use '../utils/mixins-media';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
-
-  forge-backdrop {
-    @include mixins.backdrop;
-  }
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+//
+// Base
+//
+
+.dialog {
+  @include tokens;
+}
+
+.surface {
+  @include surface;
+}
+
+.dialog.dragging {
+  &::part(surface) {
+    transition: none;
+  }
+}
+
+:host([open]) {
+  forge-dialog.fullscreen {
+    @include dialog.provide-theme(
+      (
+        max-height: 100%
+      )
+    );
+
+    // Override the internals of the dialog to add a height transition
+    &::part(surface) {
+      transition: max-height #{token(animation-duration)} #{token(animation-timing)};
+    }
+  }
+}
+
+forge-dialog {
+  @include dialog.provide-theme(
+    (
+      width: #{token(desktop-max-width)},
+      max-height: #{token(desktop-max-height)}
+    )
+  );
+}
+
+//
+// Responsive
+//
+
+@include mixins-media.tablet-portrait-down {
+  forge-dialog {
+    @include dialog.provide-theme(
+      (
+        shape: 0,
+        max-width: 100vw,
+        width: 100vw
+      )
+    );
+  }
 }

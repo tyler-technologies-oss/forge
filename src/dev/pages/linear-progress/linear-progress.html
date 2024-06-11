@@ -6,6 +6,7 @@ include('./src/partials/page.ejs', {
     options: [
       {
         type: 'select',
+        label: 'Mode',
         id: 'opt-mode',
         defaultValue: 'indeterminate',
         options: [
@@ -14,7 +15,21 @@ include('./src/partials/page.ejs', {
           { label: 'Buffer', value: 'buffer' }
         ]
       },
-      { type: 'switch', label: 'Visible', id: 'opt-visible', defaultValue: true }
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'opt-theme',
+        defaultValue: 'tertiary',
+        options: [
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info', value: 'info' }
+        ]
+      }
     ]
   }
 })

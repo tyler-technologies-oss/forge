@@ -1,0 +1,68 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Design Tokens/Typography" />
+
+# Typography Tokens
+
+Typography tokens are used to define a common set of type styles that can be used throughout the design system, component library, and your
+own libraries and applications.
+
+## CSS
+
+Forge provides a CSS stylesheet that includes a set of classes that can be used to apply the Forge typography styles to your content.
+
+See the [typography](?path=/docs/getting-started-typography--docs) page for more information on how to include and use the Forge typography
+styles in your application.
+
+## Font
+
+| Token                                       | Value                  | Description                                                  |
+| ------------------------------------------- | ---------------------- | ------------------------------------------------------------ |
+| `--forge-typography-font-family`            | `"Roboto", sans-serif` | The default font family used in Forge components and styles. |
+| `--forge-typography-font-size`              | `1rem`                 | The base font size used in Forge components and styles.      |
+| `--forge-typography-body-font-size-scale`   | `1`                    | The font size scale used for body text.                      |
+| `--forge-typography-body-line-height-scale` | `1.375`                | The line height scale used for body text.                    |
+
+Each typography style also has its own set of tokens that define the font size, line height, and other properties for that style.
+
+For example, Forge will set the `<body>` element on your page to use the `body2` style by default. This style is defined by the following tokens:
+
+| Token  
+| --------------------------------------------
+| `--forge-typography-body2-font-family`  
+| `--forge-typography-body2-font-size`  
+| `--forge-typography-body2-font-weight`  
+| `--forge-typography-body2-line-height`  
+| `--forge-typography-body2-letter-spacing`  
+| `--forge-typography-body2-text-transform`  
+| `--forge-typography-body2-text-decoration`
+
+Each style has a similar set of tokens that allow for you to granularly customize the font styles used in your application.
+
+## Root Font Size
+
+Forge typography font sizes are all based on the browser default root font size via `rem` units. This allows for the font sizes to scale
+appropriately based on the user's browser settings. Browser's are typically set to `16px` by default for the root font size.
+
+Some developers choose to adjust the root font size of their page, typically to `62.5%` or `10px` to help make the math easier when working with
+`em` and `rem` units in their CSS. This can be done by setting the `font-size` property on the `<html>` element. However, this can cause issues
+with Forge components, as the font sizes are all based on the browser default root font size and will not scale correctly if the root font size
+is adjusted.
+
+To help with this, Forge provides a mechanism to allow for you to adjust the root font size for Forge components only. This is done by setting
+the `--forge-typography-font-size` token on the `:root` selector back to `16px`.
+
+```css
+html {
+  font-size: 62.5%; /* 10px */
+}
+
+:root {
+  --forge-typography-font-size: 16px;
+}
+```
+
+### Caution
+
+Being able to control the root font size for Forge components independently of the rest of your page should only be used as a last resort. It is
+recommended to use the browser default root font size for your page because it allows for the best accessibility and usability for your users.

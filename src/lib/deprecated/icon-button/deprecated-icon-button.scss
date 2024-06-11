@@ -1,0 +1,116 @@
+@use '../../icon-button/core' as *;
+@use '../../state-layer';
+@use '../../focus-indicator';
+@use '../../icon';
+@use '../../core/styles/theme';
+
+//
+// Host
+//
+
+:host {
+  @include tokens;
+}
+
+:host {
+  @include host;
+
+  border-start-start-radius: #{token(shape-start-start)};
+  border-start-end-radius: #{token(shape-start-end)};
+  border-end-start-radius: #{token(shape-end-start)};
+  border-end-end-radius: #{token(shape-end-end)};
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Slotted
+//
+
+::slotted(:is(button, a)) {
+  @include base;
+
+  font-size: #{token(icon-size)};
+  height: #{token(size)};
+  width: #{token(size)};
+}
+
+::slotted(a) {
+  text-decoration: none;
+  color: #{token(icon-color)} !important;
+}
+
+//
+// State layer
+//
+
+forge-state-layer {
+  @include state-layer.provide-theme(
+    (
+      color: #{token(icon-color)}
+    )
+  );
+}
+
+//
+// Focus indicator
+//
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme(
+    (
+      outward-offset: 0px,
+      // Requires unit
+      color: #{token(focus-indicator-color)},
+      shape-start-start: #{token(shape-start-start)},
+      shape-start-end: #{token(shape-start-end)},
+      shape-end-start: #{token(shape-end-start)},
+      shape-end-end: #{token(shape-end-end)}
+    )
+  );
+}
+
+//
+// Dense
+//
+
+:host(:is([dense], [density='large']):not(:is([density='medium'], [density-level]))) {
+  @include density-small;
+
+  @include icon.provide-theme(
+    (
+      font-size: #{token(icon-size)}
+    )
+  );
+}
+
+//
+// Density level
+//
+
+:host([dense]:not([density='large']):not([density='small']):is([density='medium'], [density-level])) {
+  @include density-medium;
+}
+
+//
+// Disabled
+//
+
+:host([disabled]) {
+  @include host-disabled;
+
+  ::slotted(button[disabled]) {
+    @include disabled;
+  }
+}
+
+//
+// Toggle
+//
+
+:host([toggle]:is([on], [is-on]):not([is-on='false'])) {
+  @include toggle-on-icon;
+  @include override(background-color, theme.variable(primary-container-low), value);
+}

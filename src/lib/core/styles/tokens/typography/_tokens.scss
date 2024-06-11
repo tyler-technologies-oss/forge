@@ -1,0 +1,30 @@
+@use 'sass:map';
+@use '../../utils';
+@use './tokens.body' as body;
+@use './tokens.display' as display;
+@use './tokens.heading' as heading;
+@use './tokens.label' as label;
+@use './tokens.subheading' as subheading;
+
+$tokens: utils.flatten(display.$tokens, heading.$tokens, subheading.$tokens, body.$tokens, label.$tokens) !default;
+
+///
+/// Retrieves a typography style token value.
+///
+/// @param {String} $style - The typography style.
+/// @param {String} $token - The token within the provided style.
+/// @return {String} - The value of the style token.
+///
+@function get($style, $token) {
+  $style-tokens: map.get($tokens, $style);
+
+  @if not $style-tokens {
+    @error 'Invalid typography style: "#{$style}"';
+  }
+
+  @if not map.get($style-tokens, $token) {
+    @error 'Invalid typography token for style "#{$style}" using token "#{$token}"';
+  }
+
+  @return map.get($style-tokens, $token);
+}

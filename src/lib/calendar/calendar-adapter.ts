@@ -4,7 +4,25 @@ import { BaseAdapter, IBaseAdapter } from '../core/base';
 import { CALENDAR_CONSTANTS, DayOfWeek, ICalendarDateOptions, ICalendarDayOptions, ICalendarEvent, ICalendarDateConfig } from './calendar-constants';
 import { ICalendarComponent } from './calendar';
 import { splitIntoWeeks } from './calendar-utils';
-import { getAccessibleHeader, getClearButton, getDateElement, getDateId, getDateRow, getDateSpacerElement, getDayElement, getEventElement, getEventWrapperElement, getEventWrapperId, getFooter, getHeader, getMonthButtonContent, getTodayButton, getTooltip, getYearButtonContent, setTabindexOnElement } from './calendar-dom-utils';
+import {
+  getAccessibleHeader,
+  getClearButton,
+  getDateElement,
+  getDateId,
+  getDateRow,
+  getDateSpacerElement,
+  getDayElement,
+  getEventElement,
+  getEventWrapperElement,
+  getEventWrapperId,
+  getFooter,
+  getHeader,
+  getMonthButtonContent,
+  getTodayButton,
+  getTooltip,
+  getYearButtonContent,
+  setTabindexOnElement
+} from './calendar-dom-utils';
 import { getLocalizedMonth, getLocalizedYear } from './calendar-locale-utils';
 import { CalendarDirection, CALENDAR_MENU_CONSTANTS, ICalendarMenuOption, ICalendarMenuComponent, CalendarMenuAnimationType } from './calendar-menu';
 
@@ -534,6 +552,9 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
   }
 
   public openMenuAsGrid(options: ICalendarMenuOption[], setFocus: boolean): void {
+    if (!this._menu.isConnected) {
+      return;
+    }
     this._menu.openAsGrid(options, setFocus);
   }
 

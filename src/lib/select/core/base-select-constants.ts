@@ -29,6 +29,7 @@ const events = {
 };
 
 export const BASE_SELECT_CONSTANTS = {
+  observedAttributes,
   attributes,
   events
 };

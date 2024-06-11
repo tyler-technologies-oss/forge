@@ -1,15 +1,29 @@
-@use './mixins';
+@use './core' as *;
+@use '../base/core' as base-core;
+@use '../../divider';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include tokens;
 }
 
-:host([direction=right]) {
-  @include mixins.host-right;
+:host {
+  @include base-core.host;
+  @include host;
+  @include divider.provide-theme(
+    (
+      margin: 4px 0
+    )
+  );
+}
 
-  .forge-drawer__root {
+:host([direction='right']) {
+  @include host-right;
+
+  .root {
     position: relative;
   }
 }
@@ -19,17 +33,41 @@
 }
 
 :host([hover]) {
-  .forge-drawer--right {
+  .right {
     position: absolute;
     right: 0;
   }
 
   .forge-drawer:hover {
-    @include mixins.hover;
+    @include hover;
 
-    .forge-drawer__content {
+    .content {
       overflow: auto;
       overflow: overlay; // Only supported by Chrome, Safari, Opera
     }
+  }
+}
+
+//
+// Base
+//
+
+@include base-core.core-styles;
+
+.root {
+  @include root;
+}
+
+.forge-drawer {
+  &.mini {
+    @include base;
+
+    .content {
+      overflow: hidden;
+    }
+  }
+
+  &.closed {
+    width: 0;
   }
 }

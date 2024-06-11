@@ -1,0 +1,71 @@
+import { Meta, Title, Primary, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as ListStories from './List.stories';
+
+<Meta of={ListStories} />
+
+<Title />
+
+Lists are used to display a collection of items in a vertical format. They can be used for navigation, selection, or just to display static data.
+
+Lists are semantically equivalent to the HTML `<ul>` and `<li>` elements, can be used in the same way, and are **static by default**. If you want your
+list items to be interactive, see the examples below.
+
+<Canvas of={ListStories.Demo} />
+
+## Interactive
+
+Lists can be made interactive by providing a `<button>` element around your main list item content. This allows the list item to receive focus, and provides
+visual feedback when the item is hovered or pressed.
+
+<Canvas of={ListStories.Interactive} />
+
+## With Anchor
+
+Lists can also be used for navigation by providing a `<a>` element around your main list item content instead. When your list item will navigate to a new page,
+it is recommended to use an `<a>` element to provide the correct semantics and expectations for users.
+
+<Canvas of={ListStories.WithAnchor} />
+
+## Navigation Menu
+
+It is common to provide a list of navigation items in a [drawer](?path=/docs/components-drawer--docs) or other container component. This gives your application
+a consistent location for the central navigation of your site.
+
+### Navlist
+
+When lists are placed within a `<forge-drawer>` or are used for navigation menus, you should add the `navlist` attribute to your `<forge-list>` element so that the
+list items are styled appropriately.
+
+```html
+<forge-list navlist></forge-list>
+```
+
+<Canvas of={ListStories.NavigationMenu} />
+
+When using a list as a navigation menu, it is common to provide a visual indicator of the currently active item. This can be done by providing a `selected`
+attribute to the list item that is currently active, or by using the `selectedValue` attribute on the `<forge-list>` element to indicate the currently active
+item by its matching `value`.
+
+Additionally, you should provide the `aria-current="page"` attribute to the currently active list item to indicate to screen readers that it is the current page.
+
+## With Expandable Items
+
+Lists can also contain expandable items via the [expansion panel](?path=/docs/components-expansion-panel--docs) component, which can be used to show or hide additional
+content and/or sub-lists.
+
+<Canvas of={ListStories.Expandable} />
+
+> **Important:** make note of the adjacent wrapper `<div>` elements that have a `role="listitem"` attribute to ensure that the structure is accessible to screen readers.
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Verify that you can reach each active list item by keyboard navigation.
+  - Ensure a distinct visual style is applied which highlights the currently focused list item.
+- Verify that pressing the space bar or enter key while focused on a list-item will activate the list-item in the same manner as if it had been clicked with a mouse.
+- Be sure to include a role attribute to indicate to screen readers what the list-item is being used for.
+- If the list item contains a checkbox or radio box, ensure that it can be focused and selected/toggled by keyboard.

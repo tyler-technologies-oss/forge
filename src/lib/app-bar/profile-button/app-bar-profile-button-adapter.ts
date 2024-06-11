@@ -1,19 +1,29 @@
-import { getLightElement, notChildEventListener, getActiveElement, removeAllChildren } from '@tylertech/forge-core';
+import { getLightElement, notChildEventListener, removeAllChildren, toggleAttribute } from '@tylertech/forge-core';
 import { IconComponentDelegate } from '../../icon';
 import { AVATAR_CONSTANTS, IAvatarComponent } from '../../avatar';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../../popup';
 import { IProfileCardComponent, PROFILE_CARD_CONSTANTS } from '../../profile-card';
 import { IAppBarProfileButtonComponent } from './app-bar-profile-button';
-import { IAppBarProfileCardConfig, APP_BAR_PROFILE_BUTTON_CONSTANTS } from './app-bar-profile-button-constants';
+import { APP_BAR_PROFILE_BUTTON_CONSTANTS, IAppBarProfileCardConfig } from './app-bar-profile-button-constants';
+import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
+import { forwardAttributes } from '../../core/utils/reflect-utils';
+import { IPopoverComponent } from '../../popover';
 
 export interface IAppBarProfileButtonAdapter extends IBaseAdapter {
+  popupElement: IPopoverComponent | undefined;
   initialize(): void;
+  destroy(): void;
   setClickListener(listener: (evt: MouseEvent) => void): void;
   removeClickListener(listener: (evt: MouseEvent) => void): void;
-  openPopup(profileCardConfig: IAppBarProfileCardConfig, dismissListener: () => void, profileListener: () => void, signOutListener: () => void, profileCardContent?: HTMLElement): () => void;
+  openPopup(
+    profileCardConfig: IAppBarProfileCardConfig,
+    dismissListener: () => void,
+    profileListener: () => void,
+    signOutListener: () => void,
+    profileCardContent?: HTMLElement
+  ): () => void;
   closePopup(): void;
-  requestFocus(): void;
+  focusButtonElement(): void;
   setAvatarText(value: string): void;
   setAvatarIcon(value: string): void;
   setAvatarLetterCount(value: number): void;
@@ -24,17 +34,42 @@ export interface IAppBarProfileButtonAdapter extends IBaseAdapter {
 
 export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButtonComponent> implements IAppBarProfileButtonAdapter {
   private _avatarElement: IAvatarComponent;
-  private _buttonElement: HTMLButtonElement;
-  private _popupElement?: IPopupComponent;
+  private _iconButtonElement: IIconButtonComponent;
+  private _popupElement?: IPopoverComponent;
   private _profileCardElement?: IProfileCardComponent;
+  private _forwardObserver?: MutationObserver;
 
   constructor(component: IAppBarProfileButtonComponent) {
     super(component);
   }
 
+  public get popupElement(): IPopoverComponent | undefined {
+    return this._popupElement;
+  }
+
   public initialize(): void {
     this._avatarElement = getLightElement(this._component, AVATAR_CONSTANTS.elementName) as IAvatarComponent;
-    this._buttonElement = getLightElement(this._component, APP_BAR_PROFILE_BUTTON_CONSTANTS.selectors.BUTTON) as HTMLButtonElement;
+    this._iconButtonElement = getLightElement(this._component, ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
+
+    const originalAriaLabelledBy = this._iconButtonElement.getAttribute('aria-labelledby'); // Set by tooltip
+
+    this._forwardObserver = forwardAttributes(this._component, APP_BAR_PROFILE_BUTTON_CONSTANTS.forwardedAttributes, (name, value) => {
+      if (name === 'aria-labelledby' && !value) {
+        value = originalAriaLabelledBy;
+      }
+      toggleAttribute(this._iconButtonElement, !!value, name, value ?? undefined);
+    });
+  }
+
+  public destroy(): void {
+    this._forwardObserver?.disconnect();
+    this._forwardObserver = undefined;
+
+    if (this._popupElement) {
+      this._popupElement.remove();
+      this._popupElement = undefined;
+      this._profileCardElement = undefined;
+    }
   }
 
   public setClickListener(listener: (evt: MouseEvent) => void): void {
@@ -45,7 +80,17 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
     this._component.removeEventListener('click', listener);
   }
 
-  public openPopup(profileCardConfig: IAppBarProfileCardConfig, dismissListener: () => void, profileListener: () => void, signOutListener: () => void, profileCardContent?: HTMLElement): () => void {
+  public openPopup(
+    profileCardConfig: IAppBarProfileCardConfig,
+    dismissListener: () => void,
+    profileListener: () => void,
+    signOutListener: () => void,
+    profileCardContent?: HTMLElement
+  ): () => void {
+    if (this._popupElement?.isConnected) {
+      this._popupElement.remove();
+    }
+
     this._profileCardElement = document.createElement(PROFILE_CARD_CONSTANTS.elementName);
     this._profileCardElement.fullName = profileCardConfig.fullName;
     this._profileCardElement.email = profileCardConfig.email;
@@ -64,33 +109,43 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
       this._profileCardElement.appendChild(profileCardContent);
     }
 
-    this._popupElement = document.createElement(POPUP_CONSTANTS.elementName);
-    this._popupElement.targetElement = this._component;
+    this._popupElement = document.createElement('forge-popover');
+    this._popupElement.anchorElement = this._iconButtonElement;
     this._popupElement.placement = 'bottom-end';
-    this._popupElement.animationType = PopupAnimationType.Menu;
+    this._popupElement.arrow = true;
+    this._popupElement.persistent = true;
     this._popupElement.appendChild(this._profileCardElement);
+    this._component.ownerDocument.body.appendChild(this._popupElement);
     this._popupElement.open = true;
+    this._profileCardElement.tabIndex = -1;
+    this._profileCardElement.focus();
 
-    return notChildEventListener(this._popupElement, activeElement => {
-      if (!this._popupElement) {
-        return;
-      }
-      if (!this._component.contains(getActiveElement(this._component.ownerDocument))) {
-        dismissListener();
-      }
-    }, true);
+    return notChildEventListener(
+      this._popupElement,
+      () => {
+        if (!this._popupElement) {
+          dismissListener();
+          return;
+        }
+        if (!this._popupElement.matches(':focus-within') && !this._component.matches(':focus-within')) {
+          dismissListener();
+        }
+      },
+      true
+    );
   }
 
-  public closePopup(): void {
+  public async closePopup(): Promise<void> {
     if (this._popupElement) {
-      this._popupElement.open = false;
+      await this._popupElement.hideAsync();
+      this._popupElement.remove();
       this._popupElement = undefined;
       this._profileCardElement = undefined;
     }
   }
 
-  public requestFocus(): void {
-    this._buttonElement.focus();
+  public focusButtonElement(): void {
+    this._iconButtonElement.focus();
   }
 
   public setAvatarText(value: string): void {
@@ -100,7 +155,7 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
 
   public setAvatarIcon(value: string): void {
     if (value) {
-      const iconDelegate = new IconComponentDelegate({ props: { name: value }});
+      const iconDelegate = new IconComponentDelegate({ props: { name: value } });
       this._avatarElement.replaceChildren(iconDelegate.element);
     } else {
       removeAllChildren(this._avatarElement);

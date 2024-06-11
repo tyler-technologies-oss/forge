@@ -2,21 +2,16 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}card`;
 
+const observedAttributes = {
+  RAISED: 'raised'
+};
+
 const attributes = {
-  OUTLINED: 'outlined'
-};
-
-const classes = {
-  OUTLINED: 'forge-card--outlined'
-};
-
-const selectors = {
-  ROOT: '.forge-card'
+  ...observedAttributes
 };
 
 export const CARD_CONSTANTS = {
   elementName,
-  attributes,
-  classes,
-  selectors
+  observedAttributes,
+  attributes
 };

@@ -1,9 +1,10 @@
-import { CustomElement, attachShadowTemplate, coerceBoolean, coerceNumber, FoundationProperty } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coerceBoolean, coerceNumber, coreProperty } from '@tylertech/forge-core';
 import { ProfileCardAdapter } from './profile-card-adapter';
-import { ProfileCardFoundation } from './profile-card-foundation';
+import { ProfileCardCore } from './profile-card-core';
 import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
 import { ButtonComponent } from '../button';
 import { AvatarComponent } from '../avatar';
+import { IconComponent } from '../icon/icon';
 import { ToolbarComponent } from '../toolbar';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
@@ -35,17 +36,11 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-profile-card>` custom element.
- * 
  * @tag forge-profile-card
  */
-@CustomElement({
+@customElement({
   name: PROFILE_CARD_CONSTANTS.elementName,
-  dependencies: [
-    ToolbarComponent,
-    ButtonComponent,
-    AvatarComponent
-  ]
+  dependencies: [ToolbarComponent, ButtonComponent, IconComponent, AvatarComponent]
 })
 export class ProfileCardComponent extends BaseComponent implements IProfileCardComponent {
   public static get observedAttributes(): string[] {
@@ -63,16 +58,16 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
     ];
   }
 
-  private _foundation: ProfileCardFoundation;
+  private _core: ProfileCardCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new ProfileCardFoundation(new ProfileCardAdapter(this));
+    this._core = new ProfileCardCore(new ProfileCardAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -84,16 +79,16 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
         this.email = newValue;
         break;
       case PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT:
-        this.signOut = coerceBoolean(PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT);
+        this.signOut = coerceBoolean(newValue);
         break;
       case PROFILE_CARD_CONSTANTS.attributes.PROFILE:
-        this.profile = coerceBoolean(PROFILE_CARD_CONSTANTS.attributes.PROFILE);
+        this.profile = coerceBoolean(newValue);
         break;
       case PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT:
-        this.signOutText = PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT;
+        this.signOutText = newValue;
         break;
       case PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT:
-        this.profileText = PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT;
+        this.profileText = newValue;
         break;
       case PROFILE_CARD_CONSTANTS.attributes.AVATAR_TEXT:
         this.avatarText = newValue;
@@ -110,33 +105,37 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare fullName: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare email: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare signOut: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare profile: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare signOutText: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare profileText: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare avatarText: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare avatarIcon: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare avatarImageUrl: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare avatarLetterCount: number;
+
+  public override focus(options?: FocusOptions): void {
+    this._core.focus(options);
+  }
 }

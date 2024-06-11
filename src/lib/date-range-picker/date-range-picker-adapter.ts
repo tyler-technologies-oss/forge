@@ -1,9 +1,11 @@
-import { emitEvent, listenOwnProperty, getActiveElement, randomChars } from '@tylertech/forge-core';
+import { emitEvent, listenOwnProperty, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { CalendarDropdown, ICalendarDropdownPopupConfig } from '../calendar/calendar-dropdown';
-import { DateInputMask, IDateInputMaskOptions, setAriaControls, tryCreateAriaControlsPlaceholder } from '../core';
+import { DateInputMask, IDateInputMaskOptions } from '../core/mask/date-input-mask';
+import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
 import { BaseDatePickerAdapter, IBaseDatePickerAdapter } from '../date-picker/base/base-date-picker-adapter';
 import { IDatePickerCalendarDropdownConfig } from '../date-picker/base/base-date-picker-constants';
 import { createToggleElement } from '../date-picker/base/base-date-picker-utils';
+import { FIELD_CONSTANTS } from '../field';
 import { DateRangePickerComponent, IDateRangePickerComponent } from './date-range-picker';
 import { DATE_RANGE_PICKER_CONSTANTS } from './date-range-picker-constants';
 
@@ -42,6 +44,9 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     if (!this._fromInputElement || !this._fromInputElement) {
       throw new Error(`The ${DATE_RANGE_PICKER_CONSTANTS.elementName} requires two inputs`);
     }
+
+    const separator = this._createInputSeparator();
+    this._fromInputElement.insertAdjacentElement('afterend', separator);
   }
 
   protected _initializeCalendarDropdown(): void {
@@ -109,7 +114,7 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
   public removeInputListener(type: string, listener: (event: Event) => void): void {
     this._fromInputElement?.removeEventListener(type, listener);
   }
-  
+
   public removeToInputListener(type: string, listener: (event: Event) => void): void {
     this._toInputElement?.removeEventListener(type, listener);
   }
@@ -154,14 +159,14 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     }
 
     this._fromInputElement.value = value;
-    
+
     if (this._fromInputMask) {
       this._fromInputMask.updateMask();
     }
 
     if (emitEvents) {
       this._fromInputElement.dispatchEvent(new Event('change'));
-      this._fromInputElement.dispatchEvent(new Event('input'));;
+      this._fromInputElement.dispatchEvent(new Event('input'));
     }
   }
 
@@ -171,11 +176,11 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     }
 
     this._toInputElement.value = value;
-    
+
     if (this._toInputMask) {
       this._toInputMask.updateMask();
     }
-    
+
     if (emitEvents) {
       this._toInputElement.dispatchEvent(new Event('change'));
       this._toInputElement.dispatchEvent(new Event('input'));
@@ -187,7 +192,7 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
   }
 
   public isInputFocused(target?: EventTarget | null): boolean {
-    if (target && this._toInputElement === target || this._fromInputElement === target) {
+    if ((target && this._toInputElement === target) || this._fromInputElement === target) {
       return true;
     }
     const activeEl = getActiveElement(this._component.ownerDocument);
@@ -247,5 +252,13 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
 
   private _applyToInputs(action: (input: HTMLInputElement) => void): void {
     [this._fromInputElement, this._toInputElement].forEach(action);
+  }
+
+  private _createInputSeparator(): HTMLElement {
+    const separator = document.createElement('span');
+    toggleAttribute(separator, true, FIELD_CONSTANTS.attributes.MULTI_INPUT_SEPARATOR);
+    separator.setAttribute('aria-hidden', 'true');
+    separator.textContent = '-';
+    return separator;
   }
 }

@@ -1,15 +1,16 @@
 import '$src/shared';
 import '@tylertech/forge/linear-progress';
-import type { ILinearProgressComponent, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
+import { ILinearProgressComponent } from '@tylertech/forge/linear-progress';
+import { ISelectComponent } from '@tylertech/forge/select';
 
 const linearProgress = document.getElementById('linear-progress') as ILinearProgressComponent;
-const modeSelect = document.getElementById('opt-mode') as ISelectComponent;
-const visibleToggle = document.getElementById('opt-visible') as ISwitchComponent;
 
+const modeSelect = document.getElementById('opt-mode') as ISelectComponent;
 modeSelect.addEventListener('change', ({ detail: value }) => {
   if (value === 'determinate' || value === 'indeterminate') {
     linearProgress.determinate = value === 'determinate';
     linearProgress.progress = value === 'indeterminate' ? 0 : 0.25;
+    linearProgress.buffer = 1;
   } else {
     linearProgress.determinate = true;
     linearProgress.progress = 0.50;
@@ -17,4 +18,7 @@ modeSelect.addEventListener('change', ({ detail: value }) => {
   }
 });
 
-visibleToggle.addEventListener('forge-switch-select', ({ detail: selected }) => linearProgress.visible = selected);
+const themeSelect = document.getElementById('opt-theme') as ISelectComponent;
+themeSelect.addEventListener('change', ({ detail }) => {
+  linearProgress.theme = detail;
+});

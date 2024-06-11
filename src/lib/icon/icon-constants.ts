@@ -1,4 +1,4 @@
-import { COMPONENT_NAME_PREFIX, CDN_BASE_URL } from '../constants';
+import { COMPONENT_NAME_PREFIX, CDN_BASE_URL, Theme } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}icon`;
 
@@ -8,7 +8,8 @@ const observedAttributes = {
   LAZY: 'lazy',
   EXTERNAL: 'external',
   EXTERNAL_TYPE: 'external-type',
-  VIEWBOX: 'viewbox'
+  VIEWBOX: 'viewbox',
+  THEME: 'theme'
 };
 
 const attributes = {
@@ -27,6 +28,7 @@ const strings = {
 
 export const ICON_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
   numbers,
   strings
@@ -34,5 +36,6 @@ export const ICON_CONSTANTS = {
 
 export const ICON_REGISTRY_KEY = 'forgeIcons';
 
-export declare type IconUrlBuilder = (name: string, type: IconExternalType) => string;
-export declare type IconExternalType = '' | 'custom' | 'standard' | 'extended';
+export type IconUrlBuilder = (name: string, type: IconExternalType) => string;
+export type IconExternalType = '' | 'custom' | 'standard' | 'extended';
+export type IconTheme = Theme | 'text-medium' | 'text-low';

@@ -6,7 +6,7 @@ import { BaseDatePickerAdapter, IBaseDatePickerAdapter } from './base/base-date-
 import { IDatePickerCalendarDropdownConfig } from './base/base-date-picker-constants';
 import { IDatePickerComponent } from './date-picker';
 import { DATE_PICKER_CONSTANTS } from './date-picker-constants';
-import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core';
+import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
 
 export interface IDatePickerAdapter extends IBaseDatePickerAdapter {}
 
@@ -95,7 +95,7 @@ export class DatePickerAdapter extends BaseDatePickerAdapter<IDatePickerComponen
     }
 
     this._inputElement.value = value;
-    
+
     if (this._inputMask) {
       this._inputMask.updateMask();
     }

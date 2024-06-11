@@ -1,0 +1,47 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as PopoverStories from './Popover.stories';
+
+<Meta of={PopoverStories} />
+
+<Title />
+
+Popovers are used to display content on top of other content. They are used to show additional information related to the content that is currently
+displayed on the screen, and is typically anchored to a specific element or area on the screen that triggered it to open.
+
+<Canvas of={PopoverStories.Demo} />
+
+## Semantics
+
+Popovers do not have any semantic meaning by default. This means that it's up to the developer to ensure that the content inside the popover is
+accessible if it needs to be. This can be done by adding the appropriate ARIA attributes to the popover itself, or the content within it.
+
+## Popovers vs Dialogs
+
+There is a lot of overlap between popovers and dialogs, and it can be difficult to know when to use one over the other. Here are some guidelines to help
+you decide:
+
+- **Popovers** are used to display additional information related to the content that is currently displayed on the screen. They are typically anchored to
+  a specific element or area on the screen. Popovers are transient and non-modal, meaning that they do not block the user from interacting with the rest
+  of the page.
+- **Dialogs** are used to display content that requires the user's immediate attention. They are typically modal (but can be non-modal), meaning that they
+  block the user from interacting with the rest of the page until they are dismissed. Dialogs are typically used for things like confirmation messages,
+  alerts, and forms.
+
+There are some cases where you may need to blur these lines a bit (and you can use either component), especially if the design of your application calls
+for it. Just be sure to consider the user experience and accessibility implications.
+
+## Non-modal Popover/Dialog
+
+If you need to create a popover that behaves like a dialog (i.e. it is non-modal and does not block the user from interacting with the rest of the page),
+you can use the `<forge-popover>` and add the proper ARIA attributes to make it behave like a dialog.
+
+<Canvas of={PopoverStories.NonModal} />
+
+In this example, the popover is presented with the `role="dialog"` and `aria-modal="false"` attributes. This tells screen readers that the popover is a
+dialog, but it is not modal. This specific example will gracefully handle user entry into a form, by ensuring that the user does not lose valuable data
+by accidentally closing the popover.
+
+## API
+
+<CustomArgTypes />

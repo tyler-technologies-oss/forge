@@ -2,24 +2,14 @@ import { COMPONENT_NAME_PREFIX } from '../../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}select`;
 
-const classes = {
-  ROOT: 'forge-select',
-  OPENED: 'forge-select--opened',
-  SELECTED_TEXT: 'forge-select__selected-text',
-  DROPDOWN: 'forge-select__dropdown',
-  LABEL_FLOAT: 'forge-select--label-float',
-  GROUP_WRAPPER: 'forge-select__group-wrapper'
-};
-
 const selectors = {
-  ROOT: `.${classes.ROOT}`,
-  SELECTED_TEXT: `.${classes.SELECTED_TEXT}`,
-  LABEL: 'label#select-label',
-  LEADING_SLOT: 'slot[name=leading]',
-  ADDON_END_SLOT: 'slot[name=addon-end]'
+  FIELD: '#field',
+  SELECTED_TEXT: '#selected-text',
+  LABEL: '#select-label'
 };
 
-const attributes = {
+const observedAttributes = {
+  OPEN: 'open',
   TYPE: 'type',
   VALUE: 'value',
   LABEL: 'label',
@@ -30,20 +20,20 @@ const attributes = {
   OBSERVE_SCROLL_THRESHOLD: 'observe-scroll-threshold'
 };
 
+const attributes = {
+  ...observedAttributes
+};
+
 const events = {
   SCROLLED_BOTTOM: `${elementName}-scrolled-bottom`
 };
 
 export const SELECT_CONSTANTS = {
   elementName,
-  classes,
-  selectors,
+  observedAttributes,
   attributes,
+  selectors,
   events
 };
 
-export {
-  type FieldDensityType as SelectDensityType,
-  type FieldFloatLabelType as SelectFloatLabelType,
-  type FieldShapeType as SelectShapeType
-} from '../../field/field-constants';
+export { type FieldDensity as SelectDensityType, type FieldShape as SelectShapeType } from '../../field/base/base-field-constants';

@@ -1,0 +1,18 @@
+@use 'sass:map';
+@use '../../utils';
+@use '../../elevation';
+
+$tokens: (
+  position: utils.module-val(overlay, position, fixed),
+  z-index: utils.module-val(overlay, z-index, elevation.z-index-variable(popup)),
+  height: utils.module-val(overlay, height, fit-content),
+  width: utils.module-val(overlay, width, fit-content),
+  position-inline-start: utils.module-val(overlay, position-inline-start, auto),
+  position-inline-end: utils.module-val(overlay, position-inline-end, auto),
+  position-block-start: utils.module-val(overlay, position-block-start, auto),
+  position-block-end: utils.module-val(overlay, position-block-end, auto)
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

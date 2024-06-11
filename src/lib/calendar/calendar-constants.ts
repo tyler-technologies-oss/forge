@@ -34,7 +34,7 @@ const attributes = {
   ...observedAttributes,
   DATA_DATE: 'data-date',
   DATA_EVENT_THEME: 'data-event-theme',
-  POPUP_CONTEXT: 'forge-popup-context'
+  POPOVER_CONTEXT: 'forge-popover-context'
 };
 
 const classes = {
@@ -56,7 +56,6 @@ const classes = {
   FIXED_HEIGHT: 'forge-calendar--fixed-height',
   FOOTER: 'forge-calendar__footer',
   HEADER: 'forge-calendar__header',
-  MDC_RIPPLE_UPGRADED_FOCUSED: 'mdc-ripple-upgraded--background-focused',
   MONTH_MENU_OPEN: 'forge-calendar--month-menu-open',
   PREVENT_FOCUS: 'forge-calendar--prevent-focus',
   RANGE: 'forge-calendar__range',
@@ -199,7 +198,26 @@ export type CalendarTooltipBuilder = (date: ICalendarDate, content: string) => s
 export type CalendarMode = 'single' | 'multiple' | 'range';
 export type CalendarView = 'date' | 'month' | 'year';
 export type RangeSelectionState = 'none' | 'from' | 'to';
-export type CalendarEventColor = 'primary' | 'secondary' | 'blue' | 'light-green' | 'cyan' | 'teal' | 'orange' | 'blue-grey' | 'grey' | 'red' | 'pink' | 'purple' | 'light-blue' | 'deep-purple' | 'green' | 'lime' | 'yellow' | 'brown' | 'deep-orange';
+export type CalendarEventColor =
+  | 'primary'
+  | 'secondary'
+  | 'blue'
+  | 'light-green'
+  | 'cyan'
+  | 'teal'
+  | 'orange'
+  | 'blue-grey'
+  | 'grey'
+  | 'red'
+  | 'pink'
+  | 'purple'
+  | 'light-blue'
+  | 'deep-purple'
+  | 'green'
+  | 'lime'
+  | 'yellow'
+  | 'brown'
+  | 'deep-orange';
 
 export interface ICalendarDate {
   date: Date;

@@ -1,83 +1,92 @@
-import { addClass, getShadowElement, removeClass, toggleClass } from '@tylertech/forge-core';
+import { getShadowElement } from '@tylertech/forge-core';
 
-import { BaseAdapter, IBaseAdapter, createUserInteractionListener } from '../core';
-import { ForgeRipple, ForgeRippleAdapter, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../ripple';
+import { BaseAdapter, IBaseAdapter } from '../core';
+import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../focus-indicator';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer';
 import { IButtonAreaComponent } from './button-area';
 import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
 
 export interface IButtonAreaAdapter extends IBaseAdapter {
   destroy(): void;
   setDisabled(value: boolean): void;
-  addListener(type: string, listener: (event: Event) => void): void;
-  removeListener(type: string, listener: (event: Event) => void): void;
-  addSlotChangeListener(listener: () => void): void;
-  removeSlotChangeListener(listener: () => void): void;
+  addListener(type: string, listener: EventListener, capture?: boolean): void;
+  removeListener(type: string, listener: EventListener, capture?: boolean): void;
+  addButtonSlotListener(type: string, listener: EventListener): void;
+  removeButtonSlotListener(type: string, listener: EventListener): void;
+  addContentSlotListener(type: string, listener: EventListener): void;
+  removeContentSlotListener(type: string, listener: EventListener): void;
+  animateStateLayer(): void;
   startButtonObserver(callback: MutationCallback): void;
   stopButtonObserver(): void;
   detectSlottedButton(): void;
-  buttonIsDisabled(): boolean;
+  isButtonDisabled(): boolean;
   requestDisabledButtonFrame(): void;
-  createRipple(): Promise<void>;
 }
 
-export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> implements IButtonAreaAdapter, ForgeRippleCapableSurface {
+export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> implements IButtonAreaAdapter {
   private _rootElement: HTMLElement;
   private _buttonSlotElement: HTMLSlotElement;
+  private _contentSlotElement: HTMLSlotElement;
   private _buttonElement?: HTMLButtonElement;
-  private _rippleInstance?: ForgeRipple;
   private _buttonObserver?: MutationObserver;
-  private _destroyUserInteractionListener: (() => void) | undefined;
+  private _focusIndicatorElement: IFocusIndicatorComponent;
+  private _stateLayerElement: IStateLayerComponent;
 
   constructor(component: IButtonAreaComponent) {
     super(component);
     this._rootElement = getShadowElement(component, BUTTON_AREA_CONSTANTS.selectors.ROOT);
     this._buttonSlotElement = getShadowElement(component, BUTTON_AREA_CONSTANTS.selectors.BUTTON_SLOT) as HTMLSlotElement;
+    this._contentSlotElement = getShadowElement(component, BUTTON_AREA_CONSTANTS.selectors.CONTENT_SLOT) as HTMLSlotElement;
+    this._focusIndicatorElement = getShadowElement(component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
+    this._stateLayerElement = getShadowElement(component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
   }
 
-  public get root(): HTMLElement {
-    return this._rootElement;
-  }
+  public destroy(): void {}
 
-  public get unbounded(): boolean | undefined {
-    return false;
-  }
-
-  public get disabled(): boolean | undefined {
-    return this.buttonIsDisabled();
-  }
-
-  public destroy(): void {
-    if (typeof this._destroyUserInteractionListener === 'function') {
-      this._destroyUserInteractionListener();
-      this._destroyUserInteractionListener = undefined;
+  public setDisabled(value: boolean): void {
+    this._buttonElement?.toggleAttribute(BUTTON_AREA_CONSTANTS.attributes.DISABLED, value);
+    if (value) {
+      this._focusIndicatorElement.remove();
+      this._stateLayerElement.remove();
+    } else {
+      this._rootElement.append(this._focusIndicatorElement, this._stateLayerElement);
     }
   }
 
-  public setDisabled(value: boolean): void {
-    toggleClass(this._rootElement, value, BUTTON_AREA_CONSTANTS.classes.DISABLED);
-    this._buttonElement?.toggleAttribute(BUTTON_AREA_CONSTANTS.attributes.DISABLED, value);
+  public addListener(type: string, listener: EventListener, capture?: boolean): void {
+    this._rootElement.addEventListener(type, listener, { capture });
   }
 
-  public addListener(type: string, listener: (event: Event) => void): void {
-    this._rootElement.addEventListener(type, listener);
+  public removeListener(type: string, listener: EventListener, capture?: boolean): void {
+    this._rootElement.removeEventListener(type, listener, { capture });
   }
 
-  public removeListener(type: string, listener: (event: Event) => void): void {
-    this._rootElement.removeEventListener(type, listener);
+  public addButtonSlotListener(type: string, listener: EventListener): void {
+    this._buttonSlotElement.addEventListener(type, listener);
   }
 
-  public addSlotChangeListener(listener: () => void): void {
-    this._buttonSlotElement.addEventListener('slotchange', listener);
+  public removeButtonSlotListener(type: string, listener: EventListener): void {
+    this._buttonSlotElement.removeEventListener(type, listener);
   }
 
-  public removeSlotChangeListener(listener: () => void): void {
-    this._buttonSlotElement.removeEventListener('slotchange', listener);
+  public addContentSlotListener(type: string, listener: EventListener): void {
+    this._contentSlotElement.addEventListener(type, listener);
+  }
+
+  public removeContentSlotListener(type: string, listener: EventListener): void {
+    this._contentSlotElement.removeEventListener(type, listener);
+  }
+
+  public animateStateLayer(): void {
+    this._stateLayerElement.playAnimation();
   }
 
   public startButtonObserver(callback: MutationCallback): void {
     if (this._buttonElement) {
       this._buttonObserver = new MutationObserver(callback);
-      this._buttonObserver.observe(this._buttonElement, { attributeFilter: [BUTTON_AREA_CONSTANTS.attributes.DISABLED] });
+      this._buttonObserver.observe(this._buttonElement, {
+        attributeFilter: [BUTTON_AREA_CONSTANTS.attributes.DISABLED]
+      });
     }
   }
 
@@ -92,7 +101,7 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
     this._buttonElement = this._buttonSlotElement.assignedElements()[0] as HTMLButtonElement | undefined;
   }
 
-  public buttonIsDisabled(): boolean {
+  public isButtonDisabled(): boolean {
     return this._buttonElement?.disabled ?? true;
   }
 
@@ -100,58 +109,7 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
     if (this._buttonElement) {
       this._buttonElement.disabled = true;
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      requestAnimationFrame(() => this._buttonElement!.disabled = false);
+      requestAnimationFrame(() => (this._buttonElement!.disabled = false));
     }
-  }
-
-  public async createRipple(): Promise<void> {
-    if (!this._rippleInstance) {
-      const { userInteraction, destroy } = await createUserInteractionListener(this._rootElement);
-      this._destroyUserInteractionListener = destroy;
-      const { type } = await userInteraction;
-      this._destroyUserInteractionListener = undefined;
-
-      if (!this.isConnected) {
-        return;
-      }
-
-      if (!this._rippleInstance) {
-        const adapter: ForgeRippleAdapter = {
-          ...ForgeRipple.createAdapter(this),
-          isSurfaceActive: () => this._rootElement.matches(':active') || (this._buttonElement?.matches(':active') ?? false),
-          isSurfaceDisabled: () => this.disabled ?? true,
-          isUnbounded: () => !!this.unbounded,
-          registerInteractionHandler: (evtType, handler) => {
-            if (this._isRootEvent(evtType)) {
-              this._rootElement.addEventListener(evtType, handler, { passive: true });
-            } else {
-              this._buttonElement?.addEventListener(evtType, handler, { passive: true});
-            }
-          },
-          deregisterInteractionHandler: (evtType, handler) => {
-            if (this._isRootEvent(evtType)) {
-              this._rootElement.removeEventListener(evtType, handler, { passive: true } as AddEventListenerOptions);
-            } else {
-              this._buttonElement?.removeEventListener(evtType, handler, { passive: true } as AddEventListenerOptions);
-            }
-          },
-          addClass: (className) => addClass(className, this._rootElement),
-          removeClass: (className) => removeClass(className, this._rootElement),
-          updateCssVariable: (varName, value) => this._rootElement.style.setProperty(varName, value)
-        };
-
-        this._rippleInstance = new ForgeRipple(this._rootElement, new ForgeRippleFoundation(adapter));
-        if (type === 'focusin') {
-          this._rippleInstance.handleFocus();
-        }
-      }
-    } else {
-      this._rippleInstance.destroy();
-      this._rippleInstance = undefined;
-    }
-  }
-
-  private _isRootEvent(evtType: string): boolean {
-    return ['touchstart', 'pointerdown', 'mousedown'].includes(evtType);
   }
 }

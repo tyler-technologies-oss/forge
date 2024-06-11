@@ -1,0 +1,75 @@
+@use './token-utils' as *;
+@use '../core/styles/typography';
+
+@forward './token-utils';
+
+@mixin host {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  container-type: inline-size;
+}
+
+@mixin base {
+  width: #{token(width)};
+  margin-block: #{token(spacing)};
+
+  text-align: center;
+}
+
+@mixin base-mobile {
+  @include override(width, mobile-width);
+}
+
+@mixin graphic-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: #{token(graphic-height)};
+  width: 100%;
+
+  margin-block-end: #{token(graphic-spacing)};
+}
+
+@mixin graphic {
+  height: 100%;
+  width: 100%;
+}
+
+@mixin graphic-container-mobile {
+  @include override(height, mobile-graphic-height);
+}
+
+@mixin title {
+  @include typography.style(heading8);
+
+  color: #{token(title-color)};
+  margin-block: #{token(title-spacing)};
+}
+
+@mixin title-mobile {
+  @include typography.style(heading5);
+}
+
+@mixin message {
+  @include typography.style(body4);
+
+  color: #{token(message-color)};
+  margin-block-end: #{token(message-spacing)};
+}
+
+@mixin message-mobile {
+  @include typography.style(body2);
+}
+
+@mixin actions {
+  display: grid;
+  justify-content: center;
+  grid-auto-flow: column;
+  gap: #{token(actions-spacing)};
+}
+
+@mixin actions-mobile {
+  grid-auto-flow: row;
+}

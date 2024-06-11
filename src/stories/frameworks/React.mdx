@@ -1,0 +1,83 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Frameworks/React" />
+
+# React
+
+Direct support for custom elements in React has been a requested feature for long time. As you can see on
+[Custom Elements Everywhere](https://custom-elements-everywhere.com/#react) React scores quite low.
+
+> As for May 2024, React 19 is in beta now has [support for custom elements](https://custom-elements-everywhere.com/#react-beta) natively.
+>
+> This means that you can use Forge components directly in React without any additional libraries.
+
+## The Problem
+
+React doesn't pass data through the JavaScript API on HTML elements. This means that any Web Components created
+with the Custom Elements API in the browser will suffer from the same issue when trying to pass complex data types
+such as array, objects, and functions through to the underlying HTML element.
+
+Another issue is how event bubbling works in React. Since React uses its own synthetic events system, standard HTML
+event bubbling from custom elements doesn't work, nor does attaching event listeners to these custom elements.
+
+## Forge + React Adapter
+
+To make using Forge with React more seamless, we have created an adapter library that helps with the issues mentioned above.
+
+This adapter library provides a thin wrapper component around all Forge components that allows you to pass data and listen
+to events in a more React-friendly way.
+
+While the adapter is not _required_ to use Forge with React, it is **highly** recommended to make the integration easier.
+
+> You can view source code for the React adapter on [GitHub](https://github.com/tyler-technologies-oss/forge-react)
+
+## Installation
+
+To use Forge in your React application, install the following packages from npm:
+
+```bash
+npm install @tylertech/forge @tylertech/forge-react
+```
+
+Now that you have Forge and the React adapter installed, let's add the rest of the setup to your React application.
+
+## Loading the Tyler Font
+
+Edit your `index.html` file and add the following `<link>` tag to the `<head>` section load the Tyler font:
+
+```html
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+```
+
+This will configure the default font family for your application, and load the required font weights and styles.
+
+## Importing Components
+
+To use Forge components in your React application, import the components you need from the `@tylertech/forge-react` package,
+as well as the definition functions from `@tylertech/forge`.
+
+```jsx
+import { ForgeButton, ForgeCard } from '@tylertech/forge-react';
+import { defineButtonComponent, defineCardComponent } from '@tylertech/forge';
+
+defineButtonComponent();
+defineCardComponent();
+
+function App() {
+  return (
+    <div>
+      <ForgeCard>
+        <ForgeButton>Click me</ForgeButton>
+      </ForgeCard>
+    </div>
+  );
+}
+```
+
+## Importing Styles
+
+To use the default Forge styles in your React application, import the `forge.css` file from the `@tylertech/forge` package.
+
+```jsx
+import '@tylertech/forge/dist/forge.css';
+```

@@ -1,16 +1,57 @@
-@use './mixins';
-@use '../icon-button/forge-icon-button';
+@use './core' as *;
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  display: inline-block;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
+//
+// Base
+//
+
+.forge-paginator {
+  @include base;
+}
+
+.container {
+  @include container;
+}
+
+.label,
+.range-label,
+.alternative-range-label {
+  @include label-base;
+}
+
+.actions {
+  @include actions;
+}
+
+//
+// Alternative
+//
+
+.alternative-range-label {
+  display: none;
+}
+
 :host([alternative]) {
-  @include mixins.alternative-alignment;
+  .alternative-range-label {
+    @include alternative-range-label;
+  }
+
+  .container {
+    display: none;
+  }
+
+  .actions {
+    @include alternative-actions;
+  }
 }

@@ -46,5 +46,4 @@ export const DATE_RANGE_PICKER_CONSTANTS = {
   observedAttributes
 };
 
-
 export interface IDateRangePickerChangeEventData extends DatePickerRange {}

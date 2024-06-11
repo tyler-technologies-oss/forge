@@ -18,11 +18,28 @@ export interface ITableAdapter extends IBaseAdapter {
   setSortedColumn: (tableElement: HTMLTableElement, columnIndex: number, sortDirection: SortDirection) => void;
   removeColumnSort: (tableElement: HTMLTableElement, columnIndex: number) => void;
   setSortDirection: (tableElement: HTMLTableElement, columnIndex: number, sortDirection: SortDirection) => void;
-  setSelectColumnVisibility: (tableElement: HTMLTableElement, isVisible: boolean, selectListener: (evt: Event) => void, selectAllListener?: (evt: Event) => void, selectAllTemplate?: TableHeaderSelectAllTemplate | null, selectCheckboxAlignment?: CellAlign, data?: TableRow[], tooltipSelect?: string | TableSelectTooltipCallback, tooltipSelectAll?: string) => void;
+  setSelectColumnVisibility: (
+    tableElement: HTMLTableElement,
+    isVisible: boolean,
+    selectListener: (evt: Event) => void,
+    selectAllListener?: (evt: Event) => void,
+    selectAllTemplate?: TableHeaderSelectAllTemplate | null,
+    selectCheckboxAlignment?: CellAlign,
+    data?: TableRow[],
+    tooltipSelect?: string | TableSelectTooltipCallback,
+    tooltipSelectAll?: string
+  ) => void;
   setDense: (tableElement: HTMLTableElement, isDense: boolean) => void;
   setRoomy(tableElement: HTMLTableElement, isRoomy: boolean): void;
   setResizable: (configuration: ITableConfiguration) => void;
-  setSelectAllVisibility: (tableElement: HTMLTableElement, isVisible: boolean, listener: ((evt: Event) => void) | null, selectAllTemplate: TableHeaderSelectAllTemplate | null, selectCheckboxAlignment?: CellAlign, tooltipSelectAll?: string) => void;
+  setSelectAllVisibility: (
+    tableElement: HTMLTableElement,
+    isVisible: boolean,
+    listener: ((evt: Event) => void) | null,
+    selectAllTemplate: TableHeaderSelectAllTemplate | null,
+    selectCheckboxAlignment?: CellAlign,
+    tooltipSelectAll?: string
+  ) => void;
   setFilterRow: (configuration: ITableConfiguration) => void;
   expandRow(configuration: ITableConfiguration, rowIndex: number, template: TableViewTemplate): Promise<void>;
   collapseRow(configuration: ITableConfiguration, rowIndex: number): Promise<void>;
@@ -36,7 +53,12 @@ export interface ITableAdapter extends IBaseAdapter {
   setResizeColumnVisibility(configuration: ITableConfiguration, columnIndex: number, isVisible: boolean): void;
   addTableClass(classes: string | string[]): void;
   removeTableClass(classes: string | string[]): void;
-  setRowClickListeners(tableElement: HTMLTableElement, allowClick: boolean, clickListener: (evt: Event) => void, doubleClickListener: (evt: Event) => void): void;
+  setRowClickListeners(
+    tableElement: HTMLTableElement,
+    allowClick: boolean,
+    clickListener: (evt: Event) => void,
+    doubleClickListener: (evt: Event) => void
+  ): void;
   setRowClickAttributes(tableElement: HTMLTableElement, allowClick: boolean): void;
 }
 
@@ -115,7 +137,8 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
     selectCheckboxAlignment?: CellAlign,
     data?: TableRow[],
     tooltipSelect?: string | TableSelectTooltipCallback,
-    tooltipSelectAll?: string): void {
+    tooltipSelectAll?: string
+  ): void {
     TableUtils.setSelectColumnVisibility(
       tableElement,
       isVisible,
@@ -125,7 +148,8 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
       selectCheckboxAlignment || null,
       data || [],
       tooltipSelect || null,
-      tooltipSelectAll || null);
+      tooltipSelectAll || null
+    );
   }
 
   public setDense(tableElement: HTMLTableElement, isDense: boolean): void {
@@ -146,14 +170,9 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
     listener: ((evt: Event) => void) | null,
     selectAllTemplate: TableHeaderSelectAllTemplate | null,
     selectCheckboxAlignment?: CellAlign,
-    tooltipSelectAll: string | null = null): void {
-    TableUtils.setSelectAllVisibility(
-      tableElement,
-      isVisible,
-      listener,
-      selectAllTemplate,
-      selectCheckboxAlignment || null,
-      tooltipSelectAll || null);
+    tooltipSelectAll: string | null = null
+  ): void {
+    TableUtils.setSelectAllVisibility(tableElement, isVisible, listener, selectAllTemplate, selectCheckboxAlignment || null, tooltipSelectAll || null);
   }
 
   public setFilterRow(configuration: ITableConfiguration): void {
@@ -208,7 +227,12 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
     removeClass(classes, this._tableElement);
   }
 
-  public setRowClickListeners(tableElement: HTMLTableElement, allowClick: boolean, clickListener: (evt: Event) => void, doubleClickListener: (evt: Event) => void): void {
+  public setRowClickListeners(
+    tableElement: HTMLTableElement,
+    allowClick: boolean,
+    clickListener: (evt: Event) => void,
+    doubleClickListener: (evt: Event) => void
+  ): void {
     TableUtils.setRowClickListeners(tableElement, allowClick, clickListener, doubleClickListener);
   }
 

@@ -1,0 +1,35 @@
+#tab-panel {
+  margin-block-start: 16px;
+}
+
+.tab-content {
+  padding: 56px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed var(--forge-theme-outline);
+}
+
+.tabs-demo {
+  margin-top: 48px;
+}
+
+.tabs-demo-container--vertical {
+  display: flex;
+  height: 500px;
+
+  #tabs-demo {
+    width: 200px;
+  }
+
+  #tab-panel {
+    margin-block-start: 0;
+    margin-inline-start: 16px;
+    flex: 1;
+  }
+
+  .tab-content {
+    margin-top: 0;
+  }
+}

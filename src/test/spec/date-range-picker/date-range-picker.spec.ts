@@ -9,18 +9,21 @@ import {
   defineDateRangePickerComponent,
   defineTextFieldComponent,
   formatDate,
+  IButtonComponent,
   ICalendarComponent,
   ICON_BUTTON_CONSTANTS,
   IDateRange,
   IDateRangePickerComponent,
-  IPopupComponent,
+  IPopoverComponent,
   ITextFieldComponent,
   parseDateString,
-  POPUP_CONSTANTS,
+  POPOVER_CONSTANTS,
   TEXT_FIELD_CONSTANTS
 } from '@tylertech/forge';
 import { BASE_DATE_PICKER_CONSTANTS } from '@tylertech/forge/date-picker/base/base-date-picker-constants';
-import { tryCleanupPopups } from '../../utils';
+import { tryCleanupPopovers } from '../../utils';
+
+const POPOVER_ANIMATION_DURATION = 200;
 
 interface ITestContext {
   context: ITestDateRangePickerContext;
@@ -60,14 +63,14 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
 
       await tick();
 
-      expect(this.context.component['_foundation']['_isInitialized']).toBe(false);
+      expect(this.context.component['_core']['_isInitialized']).toBe(false);
 
       await timer(100);
       this.context.component.appendChild(createFromElement());
       this.context.component.appendChild(createToElement());
       await tick();
 
-      expect(this.context.component['_foundation']['_isInitialized']).toBe(true);
+      expect(this.context.component['_core']['_isInitialized']).toBe(true);
     });
 
     it('should render with initial date', function(this: ITestContext) {
@@ -98,7 +101,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const toggleButton = this.context.component.querySelector(ICON_BUTTON_CONSTANTS.elementName) as HTMLElement;
 
       expect(toggleButton).not.toBeNull();
-      expect(toggleButton.slot).toBe('trailing');
+      expect(toggleButton.slot).toBe('end');
     });
 
     it('should allow for setting all property values before being placed in DOM', function(this: ITestContext) {
@@ -1398,7 +1401,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       openPopup(this.context.component);
 
       clickTodayButton(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await tick();
 
       const popup = getPopup(this.context.component);
@@ -1420,7 +1423,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       openPopup(this.context.component);
 
       clickClearButton(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await tick();
 
       const popup = getPopup(this.context.component);
@@ -1476,7 +1479,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
 
     it('should set disabled days to an open calendar', async function(this: ITestContext) {
       this.context = setupTestContext(true);
-      const adapterSpy = spyOn(this.context.component['_foundation']['_adapter'], 'setCalendarDisabledDaysOfWeek').and.callThrough();
+      const adapterSpy = spyOn(this.context.component['_core']['_adapter'], 'setCalendarDisabledDaysOfWeek').and.callThrough();
 
       openPopup(this.context.component);
       await tick();
@@ -1574,7 +1577,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       append: () => document.body.appendChild(fixture),
       destroy: () => {
         removeElement(fixture);
-        tryCleanupPopups();
+        tryCleanupPopovers();
       }
     };
   }
@@ -1604,7 +1607,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
   }
 
   function getIdentifier(component: IDateRangePickerComponent): string {
-    return 'forge-date-range-picker-' + component['_foundation']['_adapter']['_identifier'];
+    return 'forge-date-range-picker-' + component['_core']['_adapter']['_identifier'];
   }
 
   function openPopup(component: IDateRangePickerComponent): void {
@@ -1612,8 +1615,8 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     component.open = true;
   }
 
-  function getPopup(component: IDateRangePickerComponent): IPopupComponent {
-    return document.querySelector(`${POPUP_CONSTANTS.elementName}[id=${getIdentifier(component)}]`) as IPopupComponent;
+  function getPopup(component: IDateRangePickerComponent): IPopoverComponent {
+    return document.querySelector(`${POPOVER_CONSTANTS.elementName}[id=${getIdentifier(component)}]`) as IPopoverComponent;
   }
 
   function getCalendar(component: IDateRangePickerComponent): ICalendarComponent {
@@ -1624,7 +1627,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
   function clickActiveDay(component: IDateRangePickerComponent): void {
     const calendar = getCalendar(component);
     const calendarShadow = calendar.shadowRoot as ShadowRoot;
-    const activeCell = calendarShadow.querySelector('.mdc-ripple-upgraded--background-focused') as HTMLTableCellElement;
+    const activeCell = calendarShadow.querySelector('.forge-calendar__date:has(forge-focus-indicator[active])') as HTMLTableCellElement;
     activeCell.click();
   }
 
@@ -1633,32 +1636,30 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     return popup.querySelector('[data-forge-live-announcer]') as HTMLElement;
   }
 
-  function getTodayButton(component: IDateRangePickerComponent): HTMLButtonElement {
+  function getTodayButton(component: IDateRangePickerComponent): IButtonComponent {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return getShadowElement(calendar, '#today-button')?.firstElementChild as HTMLButtonElement ?? null;
+    return getShadowElement(calendar, '#today-button') as IButtonComponent ?? null;
   }
 
-  function getClearButton(component: IDateRangePickerComponent): HTMLButtonElement {
+  function getClearButton(component: IDateRangePickerComponent): IButtonComponent {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return getShadowElement(calendar, '#clear-button')?.firstElementChild as HTMLButtonElement ?? null;
+    return getShadowElement(calendar, '#clear-button') as IButtonComponent ?? null;
   }
 
   function clickTodayButton(component: IDateRangePickerComponent): void {
     const todayButton = getTodayButton(component);
     todayButton.click();
-    todayButton.dispatchEvent(new MouseEvent('click'));
   }
 
   function clickClearButton(component: IDateRangePickerComponent): void {
     const clearButton = getClearButton(component);
     clearButton.click();
-    clearButton.dispatchEvent(new MouseEvent('click'));
   }
 
   async function popupCloseAnimation(): Promise<void> {
-    return timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    return timer(POPOVER_ANIMATION_DURATION);
   }
 
   function expectPopupOpen(component: IDateRangePickerComponent, isOpen: boolean): void {

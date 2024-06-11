@@ -1,0 +1,45 @@
+@use 'sass:map';
+@use '../../elevation';
+@use '../color-palette';
+
+// Light
+$tokens: (
+  surface: color-palette.$neutral-50,
+  surface-inverse: #333333,
+  surface-container: color-palette.$grey-300,
+  surface-container-minimum: color-palette.$grey-100,
+  surface-container-low: #ebebeb,
+  surface-container-medium: #c2c2c2,
+  surface-container-high: color-palette.$grey-500,
+  surface-dim: color-palette.$grey-50,
+  surface-bright: color-palette.$neutral-50,
+  surface-bright-shadow: elevation.value(2),
+  on-surface: color-palette.$black,
+  on-surface-inverse: color-palette.$white,
+  on-surface-container: color-palette.$black,
+  on-surface-container-minimum: color-palette.$black,
+  on-surface-container-low: color-palette.$black,
+  on-surface-container-medium: color-palette.$black,
+  on-surface-container-high: color-palette.$black
+);
+
+// Dark
+$tokens-dark: (
+  surface: color-palette.$neutral-900,
+  surface-inverse: #d5d5d5,
+  surface-container: #454545,
+  surface-container-minimum: #343434,
+  surface-container-low: #3d3d3d,
+  surface-container-medium: #7c7c7c,
+  surface-container-high: color-palette.$grey-500,
+  surface-dim: color-palette.$grey-900,
+  surface-bright: #343434,
+  surface-bright-shadow: elevation.value(16),
+  on-surface: color-palette.$white,
+  on-surface-inverse: color-palette.$black,
+  on-surface-container: color-palette.$white,
+  on-surface-container-minimum: color-palette.$white,
+  on-surface-container-low: color-palette.$white,
+  on-surface-container-medium: color-palette.$white,
+  on-surface-container-high: color-palette.$black
+);

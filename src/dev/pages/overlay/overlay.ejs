@@ -1,0 +1,24 @@
+<div class="clipping-container" id="clipping-container">
+  <div class="scroll-container">
+    <forge-button variant="raised" aria-controls="my-overlay" id="my-btn">Show overlay</forge-button>
+
+    <forge-overlay anchor="my-btn" id="my-overlay">
+      <div class="overlay-content">
+        <div>Overlay content</div>
+
+        <forge-button variant="filled" id="nested-btn" autofocus>Show nested overlay</forge-button>
+        <forge-overlay anchor="nested-btn" id="my-nested-overlay" placement="right" flip="main" hide="off" boundary="clipping-container">
+          <div class="overlay-content">Nested overlay test</div>
+        </forge-overlay>
+      </div>
+    </forge-overlay>
+  </div>
+</div>
+
+<forge-overlay id="context-overlay">
+  <div class="overlay-content">
+    Context menu
+  </div>
+</forge-overlay>
+
+<script type="module" src="overlay.ts"></script>

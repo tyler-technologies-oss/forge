@@ -1,98 +1,56 @@
-import { MDCTabScroller } from '@material/tab-scroller';
-import { getShadowElement, removeClass, isFunction, getActiveElement, toggleClass } from '@tylertech/forge-core';
-
-import { IBaseAdapter, BaseAdapter } from '../../core/base/base-adapter';
-import { ITabBarComponent } from './tab-bar';
-import { TAB_BAR_CONSTANTS, TabBarLayoutMode, TabBarLayoutAlign } from './tab-bar-constants';
+import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
+import { IIconButtonComponent } from '../../icon-button/icon-button';
+import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { ITabComponent } from '../tab/tab';
-import { TAB_CONSTANTS, ITabDimensions } from '../tab/tab-constants';
+import { TAB_CONSTANTS } from '../tab/tab-constants';
+import { ITabBarComponent } from './tab-bar';
+import { TAB_BAR_CONSTANTS } from './tab-bar-constants';
 
 export interface ITabBarAdapter extends IBaseAdapter {
-  initializeTabs(activeTabIndex: number, stretch: boolean): void;
-  initializeTabScroller(): void;
   initializeAccessibility(): void;
-  destroyTabScroller(): void;
-  addTabChangeListener(listener: (evt: Event) => void): void;
-  removeTabChangeListener(listener: (evt: Event) => void): void;
-  addScrollListener(listener: (evt: Event) => void): void;
-  getTabIndex(tab: ITabComponent): number;
-  getTabCount(): number;
-  activateTab(index: number, previousTabBounds?: DOMRect): void;
-  deactivateTab(index: number): void;
-  syncTabIndex(index: number): void;
-  getTabBounds(index: number): DOMRect | undefined;
-  setUnderline(value: boolean): void;
-  setStacked(value: boolean): void;
-  scrollTo(scrollX: number): void;
-  getScrollContentWidth(): number;
-  getScrollPosition(): number;
-  getOffsetWidth(): number;
-  getTabDimensionsAtIndex(index: number): ITabDimensions;
-  incrementScroll(scrollXIncrement: number): void;
-  isScrolled(): boolean;
-  isScrolledEnd(): boolean;
-  getFocusedTabIndex(): number;
-  focusTabAtIndex(index: number): void;
-  setLayoutMode(value: TabBarLayoutMode): void;
-  setLayoutAlign(value: TabBarLayoutAlign): void;
-  setPreviousButtonVisibility(value: boolean): void;
-  setPreviousButtonEnabled(value: boolean): void;
-  setNextButtonVisibility(value: boolean): void;
-  setNextButtonEnabled(value: boolean): void;
-  addScrollPreviousListener(type: string, listener: (evt: MouseEvent) => void): void;
-  addScrollNextListener(type: string, listener: (evt: MouseEvent) => void): void;
-  isTabDisabled(index: number): boolean;
-  ensureFocusableTab(): void;
+  initializeContainerSizeObserver(listener: () => void): void;
+  destroyContainerSizeObserver(): void;
+  initializeScrollObserver(listener: EventListener): void;
+  destroyScrollObserver(listener: EventListener): void;
+  setVertical(value: boolean): void;
+  setScrollBackwardButtonListener(listener: EventListener): void;
+  setScrollForwardButtonListener(listener: EventListener): void;
+  addSlotListener(listener: EventListener): void;
+  getTabs(): ITabComponent[];
+  tryScrollTabIntoView(tab: ITabComponent): Promise<void>;
+  isScrollable(): boolean;
+  getScrollState(): ITabBarScrollInfo;
+  setScrollButtons(value: boolean): void;
+  syncScrollButtons(state: ITabBarScrollButtonState): void;
+  scroll(which: 'backward' | 'forward'): void;
+  updateScrollButtonIcons(vertical: boolean): void;
+}
+
+export interface ITabBarScrollInfo {
+  isScrolledStart: boolean;
+  isScrolledEnd: boolean;
+}
+
+export interface ITabBarScrollButtonState {
+  backwardEnabled: boolean;
+  forwardEnabled: boolean;
 }
 
 export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITabBarAdapter {
-  private _rootElement: HTMLElement;
-  private _defaultSlotElement: HTMLSlotElement;
-  private _tabScrollElement: HTMLElement;
-  private _tabScrollAreaElement: HTMLElement;
-  private _tabScrollContentElement: HTMLElement;
-  private _tabScroller: MDCTabScroller | undefined;
-  private _tabs: ITabComponent[] = [];
-  private _prevButtonContainerElement: HTMLElement;
-  private _nextButtonContainerElement: HTMLElement;
-  private _prevButtonElement: HTMLButtonElement;
-  private _nextButtonElement: HTMLButtonElement;
+  private readonly _defaultSlotElement: HTMLSlotElement;
+  private readonly _rootElement: HTMLElement;
+  private readonly _scrollContainer: HTMLElement;
+  private _resizeObserver: ResizeObserver | undefined;
+  private _backwardScrollButton: IIconButtonComponent | undefined;
+  private _forwardScrollButton: IIconButtonComponent | undefined;
 
   constructor(component: ITabBarComponent) {
     super(component);
+
+    this._defaultSlotElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
     this._rootElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.ROOT);
-    this._tabScrollElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.TAB_SCROLLER);
-    this._tabScrollAreaElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.TAB_SCROLLER_AREA);
-    this._tabScrollContentElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.TAB_SCROLLER_CONTENT);
-    this._defaultSlotElement = getShadowElement(this._component, TAB_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
-    this._prevButtonContainerElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.PREV_BUTTON_CONTAINER);
-    this._prevButtonElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.PREV_BUTTON) as HTMLButtonElement;
-    this._nextButtonContainerElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.NEXT_BUTTON_CONTAINER);
-    this._nextButtonElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.NEXT_BUTTON) as HTMLButtonElement;
-  }
-
-  public initializeTabs(activeTabIndex: number, stretch: boolean): void {
-    this._tabs = this._getTabs();
-
-    if (!this._tabs.length) {
-      return;
-    }
-
-    this._tabs.forEach(tab => {
-      tab.active = false;
-      tab.stretch = stretch;
-    });
-
-    // Set the initial active tab
-    if (activeTabIndex >= 0 && activeTabIndex < this._tabs.length) {
-      this._tabs[activeTabIndex].active = true;
-    } else {
-      this.ensureFocusableTab();
-    }
-  }
-
-  public initializeTabScroller(): void {
-    this._tabScroller = new MDCTabScroller(this._tabScrollElement);
+    this._scrollContainer = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.SCROLL_CONTAINER);
   }
 
   public initializeAccessibility(): void {
@@ -101,208 +59,150 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
     }
   }
 
-  public destroyTabScroller(): void {
-    if (this._tabScroller) {
-      this._tabScroller.destroy();
-    }
+  public initializeContainerSizeObserver(listener: () => void): void {
+    this._resizeObserver = new ResizeObserver(() => listener());
+    this._resizeObserver.observe(this._component);
   }
 
-  public addTabChangeListener(listener: (evt: Event) => void): void {
+  public initializeScrollObserver(listener: EventListener): void {
+    this._scrollContainer.addEventListener('scroll', listener, { passive: true });
+  }
+
+  public destroyContainerSizeObserver(): void {
+    this._resizeObserver?.disconnect();
+    this._resizeObserver = undefined;
+  }
+
+  public destroyScrollObserver(listener: EventListener): void {
+    this._scrollContainer.removeEventListener('scroll', listener, { passive: true } as AddEventListenerOptions);
+  }
+
+  public setVertical(value: boolean): void {
+    toggleAttribute(this._component, !!value, 'aria-orientation', 'vertical');
+  }
+
+  public setScrollBackwardButtonListener(listener: EventListener): void {
+    this._backwardScrollButton?.addEventListener('click', listener);
+  }
+
+  public setScrollForwardButtonListener(listener: EventListener): void {
+    this._forwardScrollButton?.addEventListener('click', listener);
+  }
+
+  public addSlotListener(listener: EventListener): void {
     this._defaultSlotElement.addEventListener('slotchange', listener);
   }
 
-  public removeTabChangeListener(listener: (evt: Event) => void): void {
-    this._defaultSlotElement.removeEventListener('slotchange', listener);
-  }
-
-  public addScrollListener(listener: (evt: Event) => void): void {
-    this._tabScrollAreaElement.addEventListener('scroll', listener);
-  }
-
-  public getTabIndex(tab: ITabComponent): number {
-    return this._tabs.indexOf(tab);
-  }
-
-  public getTabCount(): number {
-    return this._tabs.length;
-  }
-
-  public activateTab(index: number, previousTabBounds?: DOMRect): void {
-    const tab = this._getTabByIndex(index);
-    if (tab) {
-      tab.activate(previousTabBounds);
-    }
-  }
-
-  public deactivateTab(index: number): void {
-    const tab = this._getTabByIndex(index);
-    if (tab) {
-      tab.deactivate();
-    }
-  }
-
-  public syncTabIndex(index: number): void {
-    const tabs = this._getTabs();
-    const activeTab = tabs[index];
-    tabs.filter(t => t !== activeTab)
-        .forEach(t => t.setTabIndex(-1));
-  }
-
-  public getTabBounds(index: number): DOMRect | undefined {
-    const tab = this._getTabByIndex(index);
-    if (tab) {
-      return tab.computeIndicatorBounds();
-    }
-    return undefined;
-  }
-
-  public setUnderline(value: boolean): void {
-    toggleClass(this._rootElement, value, TAB_BAR_CONSTANTS.classes.UNDERLINED);
-  }
-  
-  public setStacked(value: boolean): void {
-    toggleClass(this._rootElement, value, TAB_BAR_CONSTANTS.classes.STACKED);
-  }
-
-  public scrollTo(scrollX: number): void {
-    if (this._tabScroller) {
-      this._tabScroller.scrollTo(scrollX);
-    }
-  }
-
-  public getScrollContentWidth(): number {
-    return this._tabScroller ? this._tabScroller.getScrollContentWidth() : 0;
-  }
-
-  public getScrollPosition(): number {
-    return this._tabScroller ? this._tabScroller.getScrollPosition() : 0;
-  }
-
-  public getOffsetWidth(): number {
-    return this._tabScrollElement.offsetWidth;
-  }
-
-  public getTabDimensionsAtIndex(index: number): ITabDimensions {
-    const tab = this._getTabByIndex(index);
-    if (tab) {
-      return tab.computeDimensions();
-    }
-    return {
-      rootLeft: 0,
-      rootRight: 0,
-      contentLeft: 0,
-      contentRight: 0
-    };
-  }
-
-  public incrementScroll(scrollXIncrement: number): void {
-    if (this._tabScroller) {
-      this._tabScroller.incrementScroll(scrollXIncrement);
-    }
-  }
-
-  public isScrolled(): boolean {
-    const position = this._tabScrollAreaElement.scrollLeft;
-    return position > 0;
-  }
-
-  public isScrolledEnd(): boolean {
-    const position = Math.round(this._tabScrollAreaElement.scrollLeft);
-    const scrollWidth = Math.round(this._tabScrollContentElement.scrollWidth - this._tabScrollElement.offsetWidth);
-    return position >= scrollWidth;
-  }
-
-  public getFocusedTabIndex(): number {
-    const activeElement = getActiveElement(this._component.ownerDocument) as ITabComponent;
-    return this._tabs.findIndex(tab => {
-      if (tab === activeElement) {
-        return true;
-      }
-      return !!(tab.shadowRoot as ShadowRoot).contains(activeElement);
-    });
-  }
-
-  public focusTabAtIndex(index: number): void {
-    const tab = this._getTabByIndex(index);
-    if (tab) {
-      return tab.focus();
-    }
-  }
-
-  public setLayoutMode(value: TabBarLayoutMode): void {
-    const isFixed = value === 'fixed';
-    toggleClass(this._rootElement, isFixed, TAB_BAR_CONSTANTS.classes.FIXED);
-    this._tabs.forEach(tab => tab.stretch = isFixed);
-  }
-
-  public setLayoutAlign(value: TabBarLayoutAlign): void {
-    removeClass([
-      TAB_BAR_CONSTANTS.classes.ALIGN_CENTER,
-      TAB_BAR_CONSTANTS.classes.ALIGN_END
-    ], this._rootElement);
-    switch (value) {
-      case 'center':
-        this._rootElement.classList.add(TAB_BAR_CONSTANTS.classes.ALIGN_CENTER);
-        break;
-      case 'end':
-        this._rootElement.classList.add(TAB_BAR_CONSTANTS.classes.ALIGN_END);
-        break;
-    }
-  }
-
-  public setPreviousButtonVisibility(value: boolean): void {
-    if (value) {
-      this._prevButtonContainerElement.style.removeProperty('display');
-    } else {
-      this._prevButtonContainerElement.style.display = 'none';
-    }
-  }
-
-  public setPreviousButtonEnabled(value: boolean): void {
-    this._prevButtonElement.disabled = !value;
-  }
-
-  public setNextButtonVisibility(value: boolean): void {
-    if (value) {
-      this._nextButtonContainerElement.style.removeProperty('display');
-    } else {
-      this._nextButtonContainerElement.style.display = 'none';
-    }
-  }
-
-  public setNextButtonEnabled(value: boolean): void {
-    this._nextButtonElement.disabled = !value;
-  }
-
-  public addScrollPreviousListener(type: string, listener: (evt: MouseEvent) => void): void {
-    this._prevButtonElement.addEventListener(type, listener);
-  }
-  
-  public addScrollNextListener(type: string, listener: (evt: MouseEvent) => void): void {
-    this._nextButtonElement.addEventListener(type, listener);
-  }
-
-  public isTabDisabled(index: number): boolean {
-    const tab = this._getTabByIndex(index);
-    return tab ? tab.disabled : true;
-  }
-
-  public ensureFocusableTab(): void {
-    const tabs = this._getTabs();
-    const hasActiveTab = tabs.some(tab => tab.active);
-    if (!hasActiveTab && tabs.length) {
-      const firstTab = tabs[0];
-      if (isFunction(firstTab.setTabIndex)) {
-        tabs[0].setTabIndex(0);
-      }
-    }
-  }
-
-  private _getTabs(): ITabComponent[] {
+  public getTabs(): ITabComponent[] {
     return Array.from(this._component.querySelectorAll(TAB_CONSTANTS.elementName));
   }
 
-  private _getTabByIndex(index: number): ITabComponent {
-    return this._tabs[index];
+  public async tryScrollTabIntoView(tab: ITabComponent): Promise<void> {
+    await new Promise(requestAnimationFrame);
+
+    // Due to the async nature of this method, make sure we still need to scroll this tab into view...
+    if (!tab.isConnected || (!tab.selected && !tab.matches(':focus'))) {
+      return;
+    }
+
+    const isVertical = this._component.vertical;
+    const scrollContainerOffset = isVertical ? this._scrollContainer.offsetTop : this._scrollContainer.offsetLeft;
+    const offset = isVertical ? tab.offsetTop : tab.offsetLeft;
+    const extent = isVertical ? tab.offsetHeight : tab.offsetWidth;
+    const scroll = isVertical ? this._scrollContainer.scrollTop : this._scrollContainer.scrollLeft;
+    const hostExtent = isVertical ? this._scrollContainer.offsetHeight : this._scrollContainer.offsetWidth;
+    const min = offset - (TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN + scrollContainerOffset);
+    const max = offset + extent - hostExtent + (TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN - scrollContainerOffset);
+    const to = Math.min(min, Math.max(max, scroll));
+    const behavior = tab.matches(':focus') ? 'smooth' : ('instant' as ScrollBehavior);
+
+    this._scrollContainer.scrollTo({
+      behavior,
+      [isVertical ? 'left' : 'top']: 0,
+      [isVertical ? 'top' : 'left']: to
+    });
+  }
+
+  public getScrollState(): ITabBarScrollInfo {
+    const { scrollHeight, scrollWidth, scrollLeft, scrollTop, clientHeight, clientWidth } = this._scrollContainer;
+    const scrollPosition = this._component.vertical ? clientHeight + scrollTop : clientWidth + scrollLeft;
+    const scrollSize = this._component.vertical ? scrollHeight : scrollWidth;
+    const isScrolledEnd = scrollPosition === scrollSize;
+    const isScrolledStart = (this._component.vertical ? scrollPosition - clientHeight : scrollPosition - clientWidth) === 0;
+    return { isScrolledStart, isScrolledEnd };
+  }
+
+  public isScrollable(): boolean {
+    const { scrollHeight, scrollWidth, clientHeight, clientWidth } = this._scrollContainer;
+    return this._component.vertical ? scrollHeight > clientHeight : scrollWidth > clientWidth;
+  }
+
+  public setScrollButtons(value: boolean): void {
+    if (value) {
+      this._backwardScrollButton = this._createScrollButton(this._component.vertical ? tylIconKeyboardArrowUp.name : tylIconKeyboardArrowLeft.name);
+      this._rootElement.insertAdjacentElement('afterbegin', this._backwardScrollButton);
+
+      this._forwardScrollButton = this._createScrollButton(this._component.vertical ? tylIconKeyboardArrowDown.name : tylIconKeyboardArrowRight.name);
+      this._rootElement.insertAdjacentElement('beforeend', this._forwardScrollButton);
+    } else {
+      this._backwardScrollButton?.remove();
+      this._backwardScrollButton = undefined;
+
+      this._forwardScrollButton?.remove();
+      this._forwardScrollButton = undefined;
+    }
+  }
+
+  public syncScrollButtons({ backwardEnabled, forwardEnabled }: ITabBarScrollButtonState): void {
+    if (this._backwardScrollButton) {
+      const disabled = !backwardEnabled;
+      if (disabled && this._backwardScrollButton.matches(':focus')) {
+        this._forwardScrollButton?.focus();
+      }
+      this._backwardScrollButton.disabled = disabled;
+    }
+
+    if (this._forwardScrollButton) {
+      const disabled = !forwardEnabled;
+      if (disabled && this._forwardScrollButton.matches(':focus')) {
+        this._backwardScrollButton?.focus();
+      }
+      this._forwardScrollButton.disabled = disabled;
+    }
+  }
+
+  public scroll(which: 'backward' | 'forward'): void {
+    const amount = this._component.vertical ? this._scrollContainer.offsetHeight : this._scrollContainer.offsetWidth;
+    this._scrollContainer.scrollBy({
+      behavior: 'smooth',
+      [this._component.vertical ? 'top' : 'left']: amount * (which === 'forward' ? 1 : -1)
+    });
+  }
+
+  public updateScrollButtonIcons(vertical: boolean): void {
+    const backButtonIcon = this._backwardScrollButton?.querySelector('forge-icon');
+    if (backButtonIcon) {
+      backButtonIcon.name = vertical ? tylIconKeyboardArrowUp.name : tylIconKeyboardArrowLeft.name;
+    }
+
+    const nextButtonIcon = this._forwardScrollButton?.querySelector('forge-icon');
+    if (nextButtonIcon) {
+      nextButtonIcon.name = vertical ? tylIconKeyboardArrowDown.name : tylIconKeyboardArrowRight.name;
+    }
+  }
+
+  private _createScrollButton(iconName: string): IIconButtonComponent {
+    const iconButton = document.createElement('forge-icon-button');
+    iconButton.classList.add(TAB_BAR_CONSTANTS.classes.SCROLL_BUTTON);
+    iconButton.shape = 'squared';
+    iconButton.type = 'button';
+    iconButton.tabIndex = -1;
+    iconButton.setAttribute('aria-hidden', 'true');
+
+    const icon = document.createElement('forge-icon');
+    icon.name = iconName;
+    iconButton.appendChild(icon);
+
+    return iconButton;
   }
 }

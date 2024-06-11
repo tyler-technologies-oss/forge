@@ -1,9 +1,9 @@
 import '$src/shared';
-import { ISwitchComponent } from '@tylertech/forge';
 import '@tylertech/forge/time-picker';
 import '@tylertech/forge/label-value';
 import type { ITimePickerComponent, ITimePickerOption } from '@tylertech/forge/time-picker';
 import './time-picker.scss';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const CUSTOM_OPTIONS: ITimePickerOption[] = [
   {
@@ -63,48 +63,48 @@ timePicker.addEventListener('forge-time-picker-input', () => {
   inputValueElement.textContent = timePickerInput.value || '""';
 });
 
-opt24HourToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+opt24HourToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.use24HourTime = selected;
 });
-optSecondsToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optSecondsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.allowSeconds = selected;
 });
-optMaskedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optMaskedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.masked = selected;
 });
-optShowMaskFormatToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optShowMaskFormatToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.showMaskFormat = selected;
 });
-optShowNowToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optShowNowToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.showNow = selected;
 });
-optShowHourOptionsToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optShowHourOptionsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.showHourOptions = selected;
 });
-optUseCustomOptionsToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optUseCustomOptionsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.customOptions = selected ? CUSTOM_OPTIONS : [];
 });
-optUseCustomCallbacksToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optUseCustomCallbacksToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.validationCallback = selected ? validationCallback : null;
   timePicker.parseCallback = selected ? parseCallback : null;
   timePicker.formatCallback = selected ? formatCallback : null;
 });
-optAllowDropdownToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optAllowDropdownToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.allowDropdown = selected;
 });
-optAllowInputToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optAllowInputToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.allowInput = selected;
 });
-optAllowInvalidTimeToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optAllowInvalidTimeToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.allowInvalidTime = selected;
 });
-optUseRestrictedTimesToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optUseRestrictedTimesToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.restrictedTimes = selected ? RESTRICTED_TIMES : [];
 });
-optUseCoercionCallbackToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optUseCoercionCallbackToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.coercionCallback = selected ? coercionCallback : undefined;
 });
-optDisabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optDisabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.disabled = selected;
 });
 optValueTimePicker.addEventListener('forge-time-picker-change', ({ detail }) => {

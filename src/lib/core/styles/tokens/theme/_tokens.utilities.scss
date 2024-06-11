@@ -1,0 +1,18 @@
+@use 'sass:map';
+@use '../color-palette';
+
+// Light
+$tokens: (
+  outline-high: color-palette.$grey-900,
+  outline-medium: color-palette.$grey-600,
+  outline-low: color-palette.$grey-500,
+  outline: color-palette.$grey-300
+);
+
+// Dark
+$tokens-dark: (
+  outline-high: #e4e4e4,
+  outline-medium: color-palette.$grey-500,
+  outline-low: color-palette.$grey-600,
+  outline: color-palette.$grey-800
+);

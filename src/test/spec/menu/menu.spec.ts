@@ -1,17 +1,22 @@
+/// <reference types="jasmine" />
 import {
   defineMenuComponent,
-  IListComponent, IListItemComponent, IMenuAdapter, IMenuComponent,
-  IMenuFoundation,
+  IListComponent,
+  IListItemComponent,
+  IMenuAdapter,
+  IMenuComponent,
+  IMenuCore,
   IMenuOption,
-  IPopupComponent,
+  IPopoverComponent,
+  POPOVER_CONSTANTS,
   LIST_ITEM_CONSTANTS,
   MENU_CONSTANTS,
-  MenuOptionFactory,
-  POPUP_CONSTANTS
+  MenuOptionFactory
 } from '@tylertech/forge';
-import { getShadowElement, removeElement } from '@tylertech/forge-core';
 import { tick, timer } from '@tylertech/forge-testing';
 import { ICON_CLASS_NAME } from '@tylertech/forge/constants';
+
+const POPOVER_ANIMATION_DURATION = 200;
 
 interface ITestContext {
   context: ITestMenuContext;
@@ -19,7 +24,7 @@ interface ITestContext {
 
 interface ITestMenuContext {
   component: IMenuComponent;
-  foundation: IMenuFoundation;
+  core: IMenuCore;
   adapter: IMenuAdapter;
   fixture: HTMLElement;
   getToggleElement(): HTMLElement;
@@ -44,7 +49,7 @@ describe('MenuComponent', function(this: ITestContext) {
         const component = createComponent();
         document.body.appendChild(component);
         expect(this.context.component.isConnected).toBeTrue();
-        removeElement(component);
+        component.remove();
       });
 
       it('should have open set to false', function(this: ITestContext) {
@@ -199,8 +204,8 @@ describe('MenuComponent', function(this: ITestContext) {
       it('should update the options property with factory', async function(this: ITestContext) {
         this.context = setupTestContext();
         this.context.component.options = asyncMenuOptionsFactory(5);
-        expect(this.context.component['_foundation']['_optionsFactory']).not.toBe(undefined, `The options factory should be set in the foundation`);
-        expect(this.context.component.options).toEqual([], `The options factory should be set in the foundation`);
+        expect(this.context.component['_core']['_optionsFactory']).not.toBe(undefined, `The options factory should be set in the core`);
+        expect(this.context.component.options).toEqual([], `The options factory should be set in the core`);
       });
     });
   });
@@ -333,8 +338,8 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.options = options;
       this.context.component.open = true;
       await timer(300);
-      const listItemHost = getShadowElement(getPopupListItem(5), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-      expect(listItemHost.classList.contains(LIST_ITEM_CONSTANTS.classes.DISABLED)).toBe(true);
+
+      expect(getPopupListItem(5).querySelector('button')?.hasAttribute('disabled')).toBe(true);
     });
 
     it(`should have selected class when option is set to selected and persistSelection is true`, async function(this: ITestContext) {
@@ -345,8 +350,8 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.options = options;
       this.context.component.open = true;
       await timer(300);
-      const listItemHost = getShadowElement(getPopupListItem(5), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-      expect(listItemHost.classList.contains(LIST_ITEM_CONSTANTS.classes.SELECTED)).toBe(true);
+
+      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).toBe(true);
     });
 
     it(`should not have selected class when option is set to selected and persistSelection is false`, async function(this: ITestContext) {
@@ -357,8 +362,8 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.options = options;
       this.context.component.open = true;
       await timer(300);
-      const listItemHost = getShadowElement(getPopupListItem(5), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-      expect(listItemHost.classList.contains(LIST_ITEM_CONSTANTS.classes.SELECTED)).toBe(false);
+
+      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).toBe(false);
     });
 
     it(`should not have selected class when option is set to selected and persistSelection is switched from true to false`, async function(this: ITestContext) {
@@ -371,8 +376,8 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.persistSelection = false;
       this.context.component.open = true;
       await timer(300);
-      const listItemHost = getShadowElement(getPopupListItem(5), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-      expect(listItemHost.classList.contains(LIST_ITEM_CONSTANTS.classes.SELECTED)).toBe(false);
+
+      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).toBe(false);
     });
 
     it('should use option builder', async function(this: ITestContext) {
@@ -396,7 +401,7 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.open = true;
       await tick();
 
-      const list = getPopupList(getPopupElement());
+      const list = getPopupList(getPopoverElement());
       const listItems = Array.from(list.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
 
       expect(optionBuilderSpy).toHaveBeenCalledTimes(options.length);
@@ -422,7 +427,7 @@ describe('MenuComponent', function(this: ITestContext) {
 
       await tick();
 
-      const list = getPopupList(getPopupElement());
+      const list = getPopupList(getPopoverElement());
       const listItems = Array.from(list.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
       const leadingIconEl = listItems[0].querySelector('i[slot=leading]');
 
@@ -446,7 +451,7 @@ describe('MenuComponent', function(this: ITestContext) {
       
       await tick();
 
-      const list = getPopupList(getPopupElement());
+      const list = getPopupList(getPopoverElement());
       const listItems = Array.from(list.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
       const leadingIcons = listItems.map(listItem => listItem.querySelector('i[slot=leading]'));
 
@@ -457,9 +462,9 @@ describe('MenuComponent', function(this: ITestContext) {
 
   describe(`events`, function(this: ITestContext) {
     afterEach(function(this: ITestContext) {
-      const pop = document.querySelector(POPUP_CONSTANTS.elementName);
+      const pop = document.querySelector(POPOVER_CONSTANTS.elementName);
       if (pop instanceof HTMLElement) {
-        removeElement(pop);
+        pop.remove();
       }
     });
 
@@ -472,8 +477,7 @@ describe('MenuComponent', function(this: ITestContext) {
         await timer(300);
         this.context.getToggleElement().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
 
-        const listItem = getShadowElement(getPopupListItem(0), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-        expect(listItem.classList.contains(LIST_ITEM_CONSTANTS.classes.ACTIVE)).toBe(true);
+        expect(getPopupListItem(0).hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).toBe(true);
       });
 
       it('arrow up from the start should activate the last list element', async function(this: ITestContext) {
@@ -484,8 +488,7 @@ describe('MenuComponent', function(this: ITestContext) {
         await timer(300);
         this.context.getToggleElement().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
 
-        const listItem = getShadowElement(getPopupListItem(6), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-        expect(listItem.classList.contains(LIST_ITEM_CONSTANTS.classes.ACTIVE)).toBe(true);
+        expect(getPopupListItem(6).hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).toBe(true);
       });
 
       it('enter should select the list element when persistSelection is true', async function(this: ITestContext) {
@@ -532,7 +535,7 @@ describe('MenuComponent', function(this: ITestContext) {
         this.context.component.options = options;
         this.context.component.open = true;
 
-        await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+        await timer(POPOVER_ANIMATION_DURATION);
         const toggleElement = this.context.getToggleElement();
         toggleElement.focus();
         toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Tab' }));
@@ -553,7 +556,7 @@ describe('MenuComponent', function(this: ITestContext) {
         const selectSpy = jasmine.createSpy('select spy');
         this.context.component.addEventListener(MENU_CONSTANTS.events.SELECT, selectSpy);
 
-        await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+        await timer(POPOVER_ANIMATION_DURATION);
 
         toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
         toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Tab' }));
@@ -570,7 +573,7 @@ describe('MenuComponent', function(this: ITestContext) {
         const toggleElement = this.context.getToggleElement();
         toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
 
-        await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+        await timer(POPOVER_ANIMATION_DURATION);
 
         const firstListItem = getPopupListItem(0) as IListItemComponent;
         expect(firstListItem.active).toBeTrue();
@@ -596,7 +599,7 @@ describe('MenuComponent', function(this: ITestContext) {
         this.context.component.open = true;
         await timer(300);
         
-        getShadowElement(getPopupListItem(0), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM).dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+        getPopupListItem(0).querySelector('button')?.click();
 
         await timer(300);
 
@@ -628,7 +631,7 @@ describe('MenuComponent', function(this: ITestContext) {
       expect(childMenuComponent.open).toBeTrue();
       expect(childMenuComponent.mode).toBe('cascade');
 
-      const childMenuListItems = getChildMenuListItems(getPopupElement());
+      const childMenuListItems = getChildMenuListItems(getPopoverElement());
       expect(childMenuListItems.length).toBe(CHILD_MENU_OPTION_COUNT);
     });
 
@@ -708,8 +711,8 @@ describe('MenuComponent', function(this: ITestContext) {
       listItem.dispatchEvent(new MouseEvent('mouseenter'));
       await tick();
 
-      const childMenuListItems = getChildMenuListItems(getPopupElement());
-      childMenuListItems[1].shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.LIST_ITEM)!.dispatchEvent(new MouseEvent('click'));
+      const childMenuListItems = getChildMenuListItems(getPopoverElement());
+      childMenuListItems[1].dispatchEvent(new MouseEvent('click'));
 
       expect(selectSpy).toHaveBeenCalledTimes(1);
       expect(selectSpy).toHaveBeenCalledWith(jasmine.objectContaining({ detail: { index: 1, value: EXPETED_SELECTION_VALUE, parentValue: options[1].value }}));
@@ -770,12 +773,32 @@ describe('MenuComponent', function(this: ITestContext) {
     });
   });
 
+  it('should remove popover when removed from DOM while open', async function(this: ITestContext) {
+    this.context = setupTestContext();
+    const options: IMenuOption[] = [
+      { label: 'One', value: 1 },
+      { label: 'Two', value: 2 },
+      { label: 'Three', value: 3 }
+    ];
+    this.context.component.options = options;
+    this.context.component.open = true;
+    await tick();
+
+    const popover = getPopoverElement();
+    expect(popover).toBeTruthy();
+    
+    this.context.component.remove();
+    await tick();
+
+    expect(popover.isConnected).toBeFalse();
+  });
+
   function setupTestContext(appendToggle = true): ITestMenuContext {
     const fixture = document.createElement('div');
     fixture.id = 'menu-test-fixture';
     const component = document.createElement(MENU_CONSTANTS.elementName);
-    const foundation = component['_foundation'] as IMenuFoundation;
-    const adapter = foundation['_adapter'] as IMenuAdapter;
+    const core = component['_core'] as IMenuCore;
+    const adapter = core['_adapter'] as IMenuAdapter;
     if (appendToggle) {
       component.appendChild(createToggleElement());
     }
@@ -783,11 +806,11 @@ describe('MenuComponent', function(this: ITestContext) {
     document.body.appendChild(fixture);
     return {
       component,
-      foundation,
+      core,
       adapter,
       fixture,
       getToggleElement: () => component.querySelector('button') as HTMLButtonElement,
-      destroy: () => removeElement(fixture)
+      destroy: () => fixture.remove()
     };
   }
   
@@ -820,24 +843,24 @@ describe('MenuComponent', function(this: ITestContext) {
     return document.createElement('forge-menu') as IMenuComponent;
   }
 
-  function getPopupElement(): IPopupComponent {
-    return document.querySelector(POPUP_CONSTANTS.elementName) as IPopupComponent;
+  function getPopoverElement(): IPopoverComponent {
+    return document.querySelector(POPOVER_CONSTANTS.elementName) as IPopoverComponent;
   }
 
-  function getChildPopupElement(childMenu: IMenuComponent): IPopupComponent {
-    return childMenu.popupElement as IPopupComponent;
+  function getChildPopupElement(childMenu: IMenuComponent): IPopoverComponent {
+    return childMenu.popupElement as IPopoverComponent;
   }
 
-  function getPopupList(popup?: IPopupComponent): IListComponent {
-    return (popup || getPopupElement())!.querySelector('forge-list') as IListComponent;
+  function getPopupList(popup?: IPopoverComponent): IListComponent {
+    return (popup || getPopoverElement())!.querySelector('forge-list') as IListComponent;
   }
 
   function getPopupListItem(index: number): HTMLElement {
     return getPopupList().children[index] as HTMLElement;
   }
 
-  function getChildMenuListItems(popup: IPopupComponent): IListItemComponent[] {
-    const childPopup = popup.querySelector(POPUP_CONSTANTS.elementName) as IPopupComponent;
+  function getChildMenuListItems(popup: IPopoverComponent): IListItemComponent[] {
+    const childPopup = popup.querySelector(POPOVER_CONSTANTS.elementName) as IPopoverComponent;
     if (!childPopup) {
       return [];
     }
@@ -846,7 +869,7 @@ describe('MenuComponent', function(this: ITestContext) {
   }
 
   function clearPopups(): void {
-    const popups = Array.from(document.querySelectorAll(POPUP_CONSTANTS.elementName));
+    const popups = Array.from(document.querySelectorAll(POPOVER_CONSTANTS.elementName));
     popups.forEach(p => p.remove());
   }
 });

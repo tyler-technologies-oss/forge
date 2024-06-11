@@ -6,7 +6,8 @@ export interface IIconAdapter extends IBaseAdapter {
   canLazyLoad(): boolean;
   observeVisibility(listener: () => void): void;
   destroyVisibilityObserver(): void;
-  setContent(content: string): void;
+  setContent(content: Node | null): void;
+  setViewBox(viewBox: string): void;
 }
 
 export class IconAdapter extends BaseAdapter<IIconComponent> implements IIconAdapter {
@@ -21,12 +22,15 @@ export class IconAdapter extends BaseAdapter<IIconComponent> implements IIconAda
   }
 
   public observeVisibility(listener: () => void): void {
-    this._observer = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting)) {
-        this.destroyVisibilityObserver();
-        listener();
-      }
-    }, { rootMargin: `${ICON_CONSTANTS.numbers.LAZY_ROOT_MARGIN}px` });
+    this._observer = new IntersectionObserver(
+      entries => {
+        if (entries.some(entry => entry.isIntersecting)) {
+          this.destroyVisibilityObserver();
+          listener();
+        }
+      },
+      { rootMargin: `${ICON_CONSTANTS.numbers.LAZY_ROOT_MARGIN}px` }
+    );
     this._observer.observe(this._component);
   }
 
@@ -37,15 +41,22 @@ export class IconAdapter extends BaseAdapter<IIconComponent> implements IIconAda
     }
   }
 
-  public setContent(content: string): void {
+  public setContent(element: Element | null): void {
     const shadowRoot = this._component.shadowRoot as ShadowRoot;
-    const styleTag = shadowRoot.querySelector('style');
-    shadowRoot.innerHTML = content;
-    if (content) {
-      shadowRoot.firstElementChild?.setAttribute('aria-hidden', 'true');
+
+    shadowRoot.querySelectorAll(':not(style)').forEach(child => child.remove());
+
+    if (element) {
+      if (this._component.viewbox) {
+        element.setAttribute('viewBox', this._component.viewbox);
+      }
+      element.setAttribute('aria-hidden', 'true');
+      shadowRoot.appendChild(element);
     }
-    if (styleTag) {
-      shadowRoot.appendChild(styleTag);
-    }
+  }
+
+  public setViewBox(viewBox: string): void {
+    const svgEl = this._component.shadowRoot?.querySelector('svg');
+    svgEl?.setAttribute('viewBox', viewBox);
   }
 }

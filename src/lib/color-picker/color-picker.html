@@ -10,13 +10,35 @@
         <div class="forge-color-picker__controls" part="controls-container">
           <div class="forge-color-picker__slider-control" part="hue-control-container">
             <div class="forge-color-picker__slider forge-color-picker__hue-slider" part="hue-control-slider">
-              <div class="forge-color-picker__slider-thumb" id="forge-color-picker-hue-thumb" part="hue-control-slider-thumb" tabindex="0" role="slider" aria-label="Change hue" aria-valuemin="0" aria-valuemax="360" aria-valuenow="0" aria-orientation="horizontal" aria-valuetext="0"></div>
+              <div
+                class="forge-color-picker__slider-thumb"
+                id="forge-color-picker-hue-thumb"
+                part="hue-control-slider-thumb"
+                tabindex="0"
+                role="slider"
+                aria-label="Change hue"
+                aria-valuemin="0"
+                aria-valuemax="360"
+                aria-valuenow="0"
+                aria-orientation="horizontal"
+                aria-valuetext="0"></div>
             </div>
           </div>
           <div class="forge-color-picker__slider-control" part="opacity-control-container">
             <div class="forge-color-picker__canvas" part="opacity-control-canvas">
               <div class="forge-color-picker__slider forge-color-picker__opacity-slider" part="opacity-control-slider">
-                <div class="forge-color-picker__slider-thumb" id="forge-color-picker-opacity-thumb" part="opacity-control-slider-thumb" tabindex="0" role="slider" aria-label="Change opacity" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-orientation="horizontal" aria-valuetext="0"></div>
+                <div
+                  class="forge-color-picker__slider-thumb"
+                  id="forge-color-picker-opacity-thumb"
+                  part="opacity-control-slider-thumb"
+                  tabindex="0"
+                  role="slider"
+                  aria-label="Change opacity"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  aria-valuenow="0"
+                  aria-orientation="horizontal"
+                  aria-valuetext="0"></div>
               </div>
             </div>
           </div>
@@ -31,52 +53,124 @@
             <div part="hex-type-label-wrapper">
               <label for="forge-color-picker-hex-input" part="hex-label">HEX</label>
             </div>
-            <input type="text" id="forge-color-picker-hex-input" part="hex-input" style="width: 88px;" maxlength="9" spellcheck="false" autocomplete="off" aria-label="HEX value" />
+            <input
+              type="text"
+              id="forge-color-picker-hex-input"
+              part="hex-input"
+              style="width: 88px"
+              maxlength="9"
+              spellcheck="false"
+              autocomplete="off"
+              aria-label="HEX value" />
           </div>
           <div class="forge-color-picker__color-rgba" part="rgba-type-container">
             <div part="rgba-type-wrapper-r">
               <label for="forge-color-picker-rgba-r-input" part="rgba-type-label-r">R</label>
-              <input type="number" id="forge-color-picker-rgba-r-input" part="rgba-type-input-r" min="0" max="255" maxlength="3" autocomplete="off" aria-label="Red" />
+              <input
+                type="number"
+                id="forge-color-picker-rgba-r-input"
+                part="rgba-type-input-r"
+                min="0"
+                max="255"
+                maxlength="3"
+                autocomplete="off"
+                aria-label="Red" />
             </div>
             <div part="rgba-type-wrapper-g">
               <label for="forge-color-picker-rgba-g-input" part="rgba-type-label-g">G</label>
-              <input type="number" id="forge-color-picker-rgba-g-input" part="rgba-type-input-g" min="0" max="255" maxlength="3" autocomplete="off" aria-label="Green" />
+              <input
+                type="number"
+                id="forge-color-picker-rgba-g-input"
+                part="rgba-type-input-g"
+                min="0"
+                max="255"
+                maxlength="3"
+                autocomplete="off"
+                aria-label="Green" />
             </div>
             <div part="rgba-type-wrapper-b">
               <label for="forge-color-picker-rgba-b-input" part="rgba-type-label-b">B</label>
-              <input type="number" id="forge-color-picker-rgba-b-input" part="rgba-type-input-b" min="0" max="255" maxlength="3" autocomplete="off" aria-label="Blue" />
+              <input
+                type="number"
+                id="forge-color-picker-rgba-b-input"
+                part="rgba-type-input-b"
+                min="0"
+                max="255"
+                maxlength="3"
+                autocomplete="off"
+                aria-label="Blue" />
             </div>
             <div part="rgba-type-wrapper-a">
               <label for="forge-color-picker-rgba-a-input" part="rgba-type-label-a">A</label>
-              <input type="number" id="forge-color-picker-rgba-a-input" part="rgba-type-input-a" min="0" max="1" step="0.1" maxlength="3" autocomplete="off" aria-label="Alpha" />
+              <input
+                type="number"
+                id="forge-color-picker-rgba-a-input"
+                part="rgba-type-input-a"
+                min="0"
+                max="1"
+                step="0.1"
+                maxlength="3"
+                autocomplete="off"
+                aria-label="Alpha" />
             </div>
           </div>
           <div class="forge-color-picker__color-hsva" part="hsva-type-container">
             <div part="hsva-type-wrapper-h">
               <label for="forge-color-picker-hsva-h-input" part="hsva-type-label-h">H</label>
-              <input type="number" id="forge-color-picker-hsva-h-input" part="hsva-type-input-h" min="0" max="360" maxlength="3" autocomplete="off" aria-label="Hue" />
+              <input
+                type="number"
+                id="forge-color-picker-hsva-h-input"
+                part="hsva-type-input-h"
+                min="0"
+                max="360"
+                maxlength="3"
+                autocomplete="off"
+                aria-label="Hue" />
             </div>
             <div part="hsva-type-wrapper-s">
               <label for="forge-color-picker-hsva-s-input" part="hsva-type-label-s">S</label>
-              <input type="number" id="forge-color-picker-hsva-s-input" part="hsva-type-input-s" min="0" max="100" maxlength="3" autocomplete="off" aria-label="Saturation" />
+              <input
+                type="number"
+                id="forge-color-picker-hsva-s-input"
+                part="hsva-type-input-s"
+                min="0"
+                max="100"
+                maxlength="3"
+                autocomplete="off"
+                aria-label="Saturation" />
             </div>
             <div part="hsva-type-wrapper-v">
               <label for="forge-color-picker-hsva-v-input" part="hsva-type-label-v">V</label>
-              <input type="number" id="forge-color-picker-hsva-v-input" part="hsva-type-input-v" min="0" max="100" maxlength="3" autocomplete="off" aria-label="Value" />
+              <input
+                type="number"
+                id="forge-color-picker-hsva-v-input"
+                part="hsva-type-input-v"
+                min="0"
+                max="100"
+                maxlength="3"
+                autocomplete="off"
+                aria-label="Value" />
             </div>
             <div part="hsva-type-wrapper-a">
               <label for="forge-color-picker-hsva-a-input" part="hsva-type-label-a">A</label>
-              <input type="number" id="forge-color-picker-hsva-a-input" part="hsva-type-input-a" min="0" max="1" step="0.1" maxlength="3" autocomplete="off" aria-label="Alpha" />
+              <input
+                type="number"
+                id="forge-color-picker-hsva-a-input"
+                part="hsva-type-input-a"
+                min="0"
+                max="1"
+                step="0.1"
+                maxlength="3"
+                autocomplete="off"
+                aria-label="Alpha" />
             </div>
           </div>
         </div>
         <div class="forge-color-picker__type-button" part="type-container">
-          <forge-icon-button part="type-button">
-            <button type="button" id="forge-color-picker-type-button" aria-labelledby="type-button-tooltip" part="type-button-element">
-              <forge-icon name="unfold_more" part="type-button-icon"></forge-icon>
-            </button>
-            <forge-tooltip delay="500" position="bottom" id="type-button-tooltip">Change color format</forge-tooltip>
+          <forge-icon-button part="type-button" id="forge-color-picker-type-button" aria-labelledby="type-button-tooltip" part="type-button-element">
+            <forge-icon name="unfold_more" part="type-button-icon"></forge-icon>
           </forge-icon-button>
+          <forge-tooltip placement="bottom" id="type-button-tooltip">Change color format</forge-tooltip>
         </div>
       </div>
     </div>

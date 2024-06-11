@@ -2,7 +2,8 @@
   <div class="forge-split-view-panel" id="root" part="root">
     <div class="forge-split-view-panel__handle" id="handle" part="handle" role="separator" aria-controls="content" aria-grabbed="false" tabindex="0">
       <forge-icon class="forge-split-view-panel__icon" id="icon" part="icon"></forge-icon>
-      <forge-ripple id="ripple" part="ripple"></forge-ripple>
+      <forge-state-layer target="handle" id="state-layer" exportparts="surface:state-layer"></forge-state-layer>
+      <forge-focus-indicator inward target="handle" part="focus-indicator"></forge-focus-indicator>
     </div>
     <div class="forge-split-view-panel__content" id="content" part="content" role="group">
       <slot></slot>

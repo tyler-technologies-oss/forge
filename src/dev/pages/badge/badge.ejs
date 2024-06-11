@@ -7,46 +7,57 @@
   </div>
 
   <div class="vert">
-    <forge-icon-button class="forge-icon-button--with-badge">
-      <button type="button">
-        <forge-icon name="notifications" external></forge-icon>
-      </button>
-      <forge-badge dot positioned></forge-badge>
+    <forge-badge>
+      <forge-icon name="heart" slot="start"></forge-icon>
+      w/Start icon
+    </forge-badge>
+    <forge-badge>
+      w/End icon
+      <forge-icon name="heart" slot="end"></forge-icon>
+    </forge-badge>
+  </div>
+
+  <div class="flex">
+    <forge-icon-button>
+      <forge-icon name="notifications"></forge-icon>
+      <forge-badge slot="badge" dot></forge-badge>
     </forge-icon-button>
 
-    <forge-icon-button class="forge-icon-button--with-badge">
-      <button type="button">
-        <forge-icon name="notifications" external></forge-icon>
-      </button>
-      <forge-badge positioned>99</forge-badge>
+    <forge-icon-button>
+      <forge-icon name="notifications"></forge-icon>
+      <forge-badge slot="badge">99</forge-badge>
     </forge-icon-button>
 
-    <forge-icon-button class="forge-icon-button--with-badge">
-      <button type="button">
-        <forge-icon name="notifications" external></forge-icon>
-      </button>
-      <forge-badge positioned>999999+</forge-badge>
+    <forge-icon-button>
+      <forge-icon name="notifications"></forge-icon>
+      <forge-badge slot="badge">999999+</forge-badge>
     </forge-icon-button>
   </div>
 
   <div class="flex">
     <div class="vert">
-      <h3 class="forge-typography--subtitle1-secondary">Theme</h3>
+      <h3 class="forge-typography--heading2">Theme</h3>
       <forge-badge>Default</forge-badge>
-      <forge-badge theme="danger">Danger</forge-badge>
-      <forge-badge theme="warning">Warning</forge-badge>
+      <forge-badge theme="primary">Primary</forge-badge>
+      <forge-badge theme="secondary">Secondary</forge-badge>
+      <forge-badge theme="tertiary">Tertiary</forge-badge>
       <forge-badge theme="success">Success</forge-badge>
-      <forge-badge theme="info-primary">Info (primary)</forge-badge>
+      <forge-badge theme="error">Error</forge-badge>
+      <forge-badge theme="warning">Warning</forge-badge>
+      <forge-badge theme="info">Info</forge-badge>
       <forge-badge theme="info-secondary">Info (secondary)</forge-badge>
     </div>
     <div class="vert">
-      <h3 class="forge-typography--subtitle1-secondary">Strong theme</h3>
+      <h3 class="forge-typography--heading2">Theme (strong)</h3>
       <forge-badge strong>Default</forge-badge>
-      <forge-badge theme="danger" strong>Danger</forge-badge>
-      <forge-badge theme="warning" strong>Warning</forge-badge>
-      <forge-badge theme="success" strong>Success</forge-badge>
-      <forge-badge theme="info-primary" strong>Info (primary)</forge-badge>
-      <forge-badge theme="info-secondary" strong>Info (secondary)</forge-badge>
+      <forge-badge strong theme="primary">Primary</forge-badge>
+      <forge-badge strong theme="secondary">Secondary</forge-badge>
+      <forge-badge strong theme="tertiary">Tertiary</forge-badge>
+      <forge-badge strong theme="success">Success</forge-badge>
+      <forge-badge strong theme="error">Error</forge-badge>
+      <forge-badge strong theme="warning">Warning</forge-badge>
+      <forge-badge strong theme="info">Info</forge-badge>
+      <forge-badge strong theme="info-secondary">Info (secondary)</forge-badge>
     </div>
   </div>
 </div>

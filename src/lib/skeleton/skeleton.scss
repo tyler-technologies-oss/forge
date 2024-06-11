@@ -1,13 +1,64 @@
-@use './mixins';
+@use './core' as *;
+@use './animations';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include tokens;
+}
+
+:host {
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-@include mixins.host-variant-styles;
+//
+// Base
+//
+
+.forge-skeleton {
+  @include base;
+
+  &::after {
+    @include gradient;
+
+    content: '';
+  }
+}
+
+//
+// Variants
+//
+
+:host([avatar]) {
+  @include avatar;
+}
+
+:host([list-item]) {
+  @include list-item;
+}
+
+:host([text]) {
+  @include text;
+}
+
+:host([stretch]) {
+  @include stretch;
+}
+
+:host([chip]) {
+  @include chip;
+}
+
+:host([button]) {
+  @include button;
+}
+
+:host([form-field]) {
+  @include form-field;
+}

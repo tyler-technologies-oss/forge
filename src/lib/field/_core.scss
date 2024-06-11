@@ -1,56 +1,281 @@
-@use 'sass:list';
-@use './selector';
+@use '../core/styles/theme';
+@use '../core/styles/typography';
+@use './token-utils' as *;
+@use './core.animation' as animation;
+@use './core.layout' as layout;
+@forward './core.animation';
+@forward './core.layout';
+@forward './core.shape';
+@forward './core.slotted';
+@forward './core.theme';
 
-@mixin core-styles($component-name, $exclude: ()) {
+@mixin configuration {
+  @include tokens;
+}
 
-  @if list.index($exclude, field) == null {
-    .#{$component-name} {
-      @include selector.field($component-name);
-    }
+@mixin host {
+  display: block;
+}
+
+@mixin base {
+  /* Internal custom properties */
+  @include override(disableable-cursor, unset, value);
+  @include override(disableable-opacity, 1, value);
+  @include override(inner-border-block-size, 100%, value);
+  @include override(inner-border-color, #{token(outline-color, custom)}, value);
+  @include override(inner-border-color-hover, #{token(outline-color-hover, custom)}, value);
+  @include override(inner-border-display, block, value);
+  @include override(label-color, theme.variable(text-high), value);
+  @include override(label-grid-area, 'label', value);
+  @include override(multiline-inset-label-background, theme.variable(surface), value);
+  @include override(multiline-inset-label-background-hover, #{token(multiline-inset-label-background, custom)}, value);
+  @include override(surface-display, block, value);
+
+  position: relative;
+  display: grid;
+}
+
+@mixin disabled {
+  @include override(background, disabled-background);
+  @include override(disableable-cursor, not-allowed, value);
+  @include override(disableable-opacity, #{token(disabled-opacity)}, value);
+}
+
+@mixin disableable($rule: 'both') {
+  @if $rule == 'both' or $rule == 'opacity' {
+    opacity: #{token(disableable-opacity, value)};
   }
-
-  .forge-field {
-    @if list.index($exclude, outline) == null {
-      @include selector.outline($component-name);
-    }
-    @if list.index($exclude, label-input-container) == null {
-      @include selector.label-input-container;
-    }
-    @if list.index($exclude, label) == null {
-      @include selector.label;
-    }
-    @if list.index($exclude, floating-label) == null {
-      @include selector.floating-label;
-    }
-    @if list.index($exclude, floating-label-float-above) == null {
-      @include selector.floating-label-float-above;
-    }
-    @if list.index($exclude, floating-label-float-above-end-keyframe) == null {
-      @include selector.floating-label-float-above-end-keyframe;
-    }
-    @if list.index($exclude, floating-label-unfloat-above-start-keyframe) == null {
-      @include selector.floating-label-unfloat-above-start-keyframe;
-    }
-    @if list.index($exclude, input) == null {
-      @include selector.input;
-    }
-    @if list.index($exclude, helper-text) == null {
-      @include selector.helper-text;
-    }
-    @if list.index($exclude, leading) == null {
-      @include selector.leading;
-    }
-    @if list.index($exclude, leading-font-icon) == null {
-      @include selector.leading-font-icon;
-    }
-    @if list.index($exclude, trailing) == null {
-      @include selector.trailing;
-    }
-    @if list.index($exclude, trailing-font-icon) == null {
-      @include selector.trailing-font-icon;
-    }
-    @if list.index($exclude, addon-end) == null {
-      @include selector.addon-end;
-    }
+  @if $rule == 'both' or $rule == 'cursor' {
+    cursor: #{token(disableable-cursor, value)};
   }
+}
+
+@mixin hover {
+  @include override(outline-color, #{token(outline-color-hover, custom)}, value);
+  @include override(elevation, #{token(elevation-active, custom)}, value);
+  @include override(tonal-background, tonal-background-hover);
+  @include override(multiline-inset-label-tonal-background, #{token(multiline-inset-label-tonal-background-hover, custom)}, value);
+  @include override(inner-border-color, #{token(inner-border-color-hover, custom)}, value);
+}
+
+@mixin focus {
+  @include override(elevation, #{token(elevation-active, custom)}, value);
+}
+
+@mixin outline {
+  @include disableable;
+  @include animation.surface-animation(outline-color);
+
+  position: relative;
+  grid-area: main;
+
+  inline-size: 100%;
+  block-size: 100%;
+
+  box-shadow: #{token(elevation, custom)};
+
+  border-radius: #{token(shape)};
+  outline-style: #{token(outline-style)};
+  outline-width: #{token(outline-width)};
+  outline-color: #{token(outline-color, custom)};
+}
+
+@mixin container {
+  @include typography.style(body2);
+
+  position: relative;
+  display: grid;
+  isolation: isolate;
+
+  grid-area: main;
+  grid-template-areas: 'start center end popover-icon accessory';
+  grid-template-columns: auto 1fr auto auto auto;
+  align-items: center;
+
+  border-radius: #{token(shape)};
+
+  inline-size: 100%;
+  block-size: #{token(height)};
+  overflow: hidden;
+}
+
+@mixin surface {
+  @include disableable;
+  @include animation.surface-animation(background);
+
+  display: #{token(surface-display, custom)};
+
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+
+  inline-size: 100%;
+  block-size: 100%;
+
+  background: #{token(background, custom)};
+
+  pointer-events: none;
+}
+
+@mixin input {
+  @include disableable;
+
+  display: flex;
+  grid-area: center;
+
+  block-size: 100%;
+  inline-size: 100%;
+
+  color: theme.variable(text-high);
+}
+
+@mixin label {
+  @include typography.style(label2);
+  @include disableable;
+
+  position: relative;
+  display: inline-flex;
+  grid-area: #{token(label-grid-area, value)};
+  pointer-events: #{token(label-pointer-events, value)};
+
+  margin-block-end: #{token(label-margin-block-end, value)};
+  margin-inline-start: #{token(label-margin-inline-start, value)};
+  margin-inline-end: #{token(label-margin-inline-end, value)};
+  block-size: fit-content;
+  overflow: hidden;
+
+  color: #{token(label-color, custom)};
+
+  line-height: normal;
+  white-space: #{token(label-white-space, value)};
+}
+
+@mixin label-before {
+  margin-inline-end: #{token(required-padding)};
+
+  color: theme.variable(error);
+  content: #{token(required-content)};
+}
+
+@mixin label-after {
+  margin-inline-start: #{token(optional-padding)};
+
+  color: inherit;
+  content: #{token(optional-content)};
+}
+
+@mixin popover-icon {
+  @include disableable;
+  @include layout.item-padding(end, inner);
+
+  display: flex;
+  align-items: center;
+  grid-area: popover-icon;
+  isolation: isolate;
+
+  block-size: 100%;
+
+  & > * {
+    transition: rotate #{token(popover-icon-transition-duration)} #{token(popover-icon-transition-timing)};
+    fill: #{token(content-color, custom)};
+  }
+}
+
+@mixin popover-icon-arrow {
+  fill: inherit;
+}
+
+@mixin popover-target {
+  position: absolute;
+  inset: calc(#{token(focus-indicator-width)} * -1);
+  pointer-events: none;
+}
+
+@mixin start {
+  @include disableable;
+  @include layout.item-padding(start, outer);
+
+  display: flex;
+  grid-area: start;
+  align-items: center;
+
+  max-block-size: 100%;
+  overflow: hidden;
+
+  color: #{token(content-color, custom)};
+}
+
+@mixin end {
+  @include disableable;
+  @include layout.item-padding(end, outer);
+
+  display: flex;
+  grid-area: end;
+  align-items: center;
+
+  max-block-size: 100%;
+  overflow: hidden;
+
+  color: #{token(content-color, custom)};
+}
+
+@mixin accessory {
+  @include layout.item-padding(end, inner);
+
+  position: relative;
+
+  display: flex;
+  grid-area: accessory;
+  align-items: center;
+
+  block-size: 100%;
+  max-block-size: 100%;
+  overflow: hidden;
+
+  color: #{token(content-color, custom)};
+
+  &::before {
+    @include disableable;
+    @include animation.surface-animation(border-color);
+    @include layout.item-padding(end, inner);
+
+    display: #{token(inner-border-display, custom)};
+
+    border-inline-start-style: solid;
+    border-inline-start-width: #{token(outline-width)};
+    border-inline-start-color: #{token(inner-border-color, custom)};
+
+    block-size: #{token(inner-border-block-size, custom)};
+
+    content: '';
+  }
+}
+
+@mixin support-text {
+  @include typography.style(label1);
+  @include disableable;
+
+  justify-content: space-between;
+
+  display: grid;
+  grid-template-areas: 'start end';
+  grid-template-columns: 1fr auto;
+  grid-area: support-text;
+
+  margin-block-start: #{token(support-text-margin-block)};
+
+  line-height: normal;
+}
+
+@mixin support-text-both {
+  gap: #{token(support-text-gap)};
+}
+
+@mixin support-text-start {
+  display: inline-block;
+  grid-area: start;
+}
+
+@mixin support-text-end {
+  display: inline-block;
+  grid-area: end;
 }

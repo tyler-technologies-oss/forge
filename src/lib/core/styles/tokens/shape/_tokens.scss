@@ -1,0 +1,44 @@
+@use 'sass:math';
+@use 'sass:map';
+
+$base: 4px !default;
+$extra-small: math.div($base, 4) !default; // 1px
+$small: math.div($base, 2) !default; // 2px
+$medium: $base !default; // 4px
+$large: $base * 2 !default; // 8px
+$extra-large: $base * 4 !default; // 16px
+
+$tokens: (
+  extra-small: $extra-small,
+  extra-small-block-start: $extra-small $extra-small 0 0,
+  extra-small-block-end: 0 0 $extra-small $extra-small,
+  extra-small-inline-start: $extra-small 0 0 $extra-small,
+  extra-small-inline-end: 0 $extra-small $extra-small 0,
+  small: $small,
+  small-block-start: $small $small 0 0,
+  small-block-end: 0 0 $small $small,
+  small-inline-start: $small 0 0 $small,
+  small-inline-end: 0 $small $small 0,
+  medium: $medium,
+  medium-block-start: $medium $medium 0 0,
+  medium-block-end: 0 0 $medium $medium,
+  medium-inline-start: $medium 0 0 $medium,
+  medium-inline-end: 0 $medium $medium 0,
+  large: $large,
+  large-block-start: $large $large 0 0,
+  large-block-end: 0 0 $large $large,
+  large-inline-start: $large 0 0 $large,
+  large-inline-end: 0 $large $large 0,
+  extra-large: $extra-large,
+  extra-large-block-start: $extra-large $extra-large 0 0,
+  extra-large-block-end: 0 0 $extra-large $extra-large,
+  extra-large-inline-start: $extra-large 0 0 $extra-large,
+  extra-large-inline-end: 0 $extra-large $extra-large 0,
+  full: 9999px,
+  // Pill shaped
+  round: 50%
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

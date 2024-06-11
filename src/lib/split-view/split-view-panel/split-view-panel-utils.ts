@@ -139,11 +139,11 @@ export function maxResize(adapter: ISplitViewPanelAdapter, state: ISplitViewPane
 }
 
 /**
-   * Sets a panel's sibling's size to reflect changes in the panel's size.
-   * @param adapter The panel's adapter.
-   * @param delta The change in size to apply to the sibling.
-   * @param state The panel's state object.
-   */
+ * Sets a panel's sibling's size to reflect changes in the panel's size.
+ * @param adapter The panel's adapter.
+ * @param delta The change in size to apply to the sibling.
+ * @param state The panel's state object.
+ */
 export function resizeSibling(adapter: ISplitViewPanelAdapter, delta: number, state: ISplitViewPanelState): void {
   if (state.siblingSize !== undefined) {
     const siblingSize = state.siblingSize + delta;
@@ -152,11 +152,11 @@ export function resizeSibling(adapter: ISplitViewPanelAdapter, delta: number, st
 }
 
 /**
-   * Returns a size limited to an allowed range.
-   * @param size The size to try setting this panel to.
-   * @param state The panel's state object.
-   * @returns A pixel value.
-   */
+ * Returns a size limited to an allowed range.
+ * @param size The size to try setting this panel to.
+ * @param state The panel's state object.
+ * @returns A pixel value.
+ */
 export function clampSize(size: number, state: ISplitViewPanelState): number {
   size = Math.max(size, state.min);
   size = safeMin(size, state.max, state.availableSpace);
@@ -164,13 +164,13 @@ export function clampSize(size: number, state: ISplitViewPanelState): number {
 }
 
 /**
-   * Checks whether a panel is at its min or max size while resizing and runs logic related to
-   * that once.
-   * @param adapter The panel's adapter.
-   * @param state The panel's state object.
-   * @param inputDevice The input device responsible for the resize.
-   * @returns Whether the panel is at its min or max size.
-   */
+ * Checks whether a panel is at its min or max size while resizing and runs logic related to
+ * that once.
+ * @param adapter The panel's adapter.
+ * @param state The panel's state object.
+ * @param inputDevice The input device responsible for the resize.
+ * @returns Whether the panel is at its min or max size.
+ */
 export function handleBoundariesDuringResize(adapter: ISplitViewPanelAdapter, state: ISplitViewPanelState, inputDevice?: SplitViewInputDeviceType): boolean {
   if (state.currentSize === undefined) {
     return false;
@@ -180,7 +180,7 @@ export function handleBoundariesDuringResize(adapter: ISplitViewPanelAdapter, st
   if (state.currentSize <= state.min) {
     // Just reached the min
     if (!state.isAtMin) {
-      adapter.activateRipple(inputDevice === 'pointer');
+      adapter.animateStateLayer(inputDevice === 'pointer');
       if (inputDevice === 'pointer') {
         adapter.setBodyCursor(state.orientation, { resizable: state.resizable, boundary: 'min' });
       }
@@ -196,8 +196,8 @@ export function handleBoundariesDuringResize(adapter: ISplitViewPanelAdapter, st
   const max = safeMin(state.max, state.availableSpace);
   if (state.currentSize >= max) {
     // Just reached the max
-    if(!state.isAtMax) {
-      adapter.activateRipple(inputDevice === 'pointer');
+    if (!state.isAtMax) {
+      adapter.animateStateLayer(inputDevice === 'pointer');
       if (inputDevice === 'pointer') {
         adapter.setBodyCursor(state.orientation, { resizable: state.resizable, boundary: 'max' });
       }
@@ -211,18 +211,18 @@ export function handleBoundariesDuringResize(adapter: ISplitViewPanelAdapter, st
   if (inputDevice === 'pointer') {
     adapter.setBodyCursor(state.orientation);
   }
-  
+
   return false;
 }
 
 /**
-   * Checks whether a panel is at its min or max size while not resizing and runs logic related to
-   * that once.
-   * @param adapter The panel's adapter.
-   * @param size The panel's size.
-   * @param state The panel's state object.
-   * @returns Whether the panel is at its min or max size.
-   */
+ * Checks whether a panel is at its min or max size while not resizing and runs logic related to
+ * that once.
+ * @param adapter The panel's adapter.
+ * @param size The panel's size.
+ * @param state The panel's state object.
+ * @returns Whether the panel is at its min or max size.
+ */
 export function handleBoundariesAfterResize(adapter: ISplitViewPanelAdapter, size: number, state: ISplitViewPanelState): boolean {
   if (size <= state.min) {
     adapter.setHandleCursor(state.orientation, { resizable: state.resizable, boundary: 'min' });
@@ -240,10 +240,10 @@ export function handleBoundariesAfterResize(adapter: ISplitViewPanelAdapter, siz
 }
 
 /**
-   * Gets the accessible valuenow of a panel.
-   * @param size The panel's size in pixels.
-   * @param state The panel's state object.
-   */
+ * Gets the accessible valuenow of a panel.
+ * @param size The panel's size in pixels.
+ * @param state The panel's state object.
+ */
 export function getValuenow(size: number, state: ISplitViewPanelState): number {
   if (!state.availableSpace && !state.max) {
     return 100;
@@ -255,7 +255,7 @@ export function getValuenow(size: number, state: ISplitViewPanelState): number {
 
 /**
  * Gets the appropriate cursor for the handle orientation.
- * @param orientation 
+ * @param orientation
  * @returns A CSS cursor keyword value.
  */
 export function getCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): string {
@@ -282,7 +282,7 @@ export function getCursor(orientation: SplitViewOrientation, config?: ISplitView
 
 /**
  * Gets the approporate drag icon for the handle orientation.
- * @param orientation 
+ * @param orientation
  * @returns A Forge icon name.
  */
 export function getHandleIcon(orientation: SplitViewOrientation): string {
@@ -299,7 +299,7 @@ export function getSplitViewPanelSibling(el: ISplitViewPanelComponent): SplitVie
   if (resizable === 'off') {
     return undefined;
   }
-  
+
   let sibling: Element | null = el;
   do {
     sibling = resizable === 'end' ? sibling.nextElementSibling : sibling.previousElementSibling;

@@ -1,10 +1,10 @@
-import { coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconArrowDownward } from '@tylertech/tyler-icons/standard';
 import { ExpansionPanelComponent } from '../expansion-panel';
 import { CheckboxComponent } from '../checkbox';
 import { TableAdapter } from './table-adapter';
 import { TABLE_CONSTANTS } from './table-constants';
-import { TableFoundation } from './table-foundation';
+import { TableCore } from './table-core';
 import { IconRegistry, IconComponent } from '../icon';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import {
@@ -25,6 +25,7 @@ import {
   ITableFilterEventData,
   TableSelectTooltipCallback
 } from './types';
+import { TooltipComponent } from '../tooltip';
 
 export interface ITableComponent extends IBaseComponent {
   data: any[];
@@ -84,17 +85,25 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-table>` component.
- * 
  * @tag forge-table
+ *
+ * @dependency forge-expansion-panel
+ * @dependency forge-icon
+ * @dependency forge-checkbox
+ * @dependency forge-tooltip
+ *
+ * @event {CustomEvent<ITableRowClickEventData>} forge-table-row-click - Dispatched when a row is clicked. Only applies when `allow-row-click` is specified.
+ * @event {CustomEvent<ITableSelectEventData>} forge-table-select - Dispatched when a row is selected. Only applies when `select` is specified.
+ * @event {CustomEvent<ITableSelectDoubleEventData>} forge-table-select-double - Dispatched when a row is double-clicked. Only applies when `select` is specified.
+ * @event {CustomEvent<ITableSelectAllEventData>} forge-table-select-all - Dispatched when the select all checkbox is toggled. Only applies when `select` and `multiselect` is specified.
+ * @event {CustomEvent<ITableSortEventData | ITableSortMultipleEventData>} forge-table-sort - Dispatched when a column is sorted.
+ * @event {CustomEvent<ITableFilterEventData>} forge-table-filter - Dispatched when a column is filtered. Only applies when `filter` is specified.
+ * @event {CustomEvent<void>} forge-table-initialized - Dispatched when the table is initialized in the DOM for the first time.
+ * @event {CustomEvent<ITableColumnResizeEventData>} forge-table-column-resize - Dispatched when a column is resized.
  */
-@CustomElement({
+@customElement({
   name: TABLE_CONSTANTS.elementName,
-  dependencies: [
-    ExpansionPanelComponent,
-    IconComponent,
-    CheckboxComponent
-  ]
+  dependencies: [ExpansionPanelComponent, IconComponent, CheckboxComponent, TooltipComponent]
 })
 export class TableComponent extends BaseComponent implements ITableComponent {
   public static get observedAttributes(): string[] {
@@ -118,24 +127,24 @@ export class TableComponent extends BaseComponent implements ITableComponent {
     ];
   }
 
-  private _foundation: TableFoundation;
+  private _core: TableCore;
 
   constructor() {
     super();
     IconRegistry.define(tylIconArrowDownward);
-    this._foundation = new TableFoundation(new TableAdapter(this));
+    this._core = new TableCore(new TableAdapter(this));
   }
 
   public initializedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public connectedCallback(): void {
-    this._foundation.connect();
+    this._core.connect();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -196,7 +205,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @param columnIndex The index of the column to hide.
    */
   public hideColumn(columnIndex: number): void {
-    this._foundation.hideColumn(columnIndex);
+    this._core.hideColumn(columnIndex);
   }
 
   /**
@@ -204,7 +213,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @param columnIndex The index of the column to show.
    */
   public showColumn(columnIndex: number): void {
-    this._foundation.showColumn(columnIndex);
+    this._core.showColumn(columnIndex);
   }
 
   /**
@@ -213,12 +222,12 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @returns {boolean} `true` if the column is hidden, `false` otherwise.
    */
   public isColumnHidden(columnIndex: number): boolean {
-    return this._foundation.isColumnHidden(columnIndex);
+    return this._core.isColumnHidden(columnIndex);
   }
 
   /** Returns the selected row instances. */
   public getSelectedRows(): any[] {
-    return this._foundation.getSelectedRows();
+    return this._core.getSelectedRows();
   }
 
   /**
@@ -226,7 +235,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @param data The row data behind the row that should be selected.
    */
   public selectRow(data: any): void {
-    this._foundation.selectRows([data], false);
+    this._core.selectRows([data], false);
   }
 
   /**
@@ -235,7 +244,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @param [preserveExisting=false] Should existing row selections be preserved or cleared.
    */
   public selectRows(data: any[], preserveExisting: boolean = false): void {
-    this._foundation.selectRows(data, !preserveExisting);
+    this._core.selectRows(data, !preserveExisting);
   }
 
   /**
@@ -243,7 +252,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @param data The data behind the row that should be deselected.
    */
   public deselectRow(data: any): void {
-    this._foundation.deselectRows([data]);
+    this._core.deselectRows([data]);
   }
 
   /**
@@ -251,21 +260,21 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @param data The data behind the rows that should be deselected.
    */
   public deselectRows(data: any[]): void {
-    this._foundation.deselectRows(data);
+    this._core.deselectRows(data);
   }
 
   /**
    * Clears all selected table rows.
    */
   public clearSelections(): void {
-    this._foundation.clearSelections();
+    this._core.clearSelections();
   }
 
   /**
    * Forces the table to re-render based on its current configuration.
    */
   public render(): void {
-    this._foundation.render();
+    this._core.render();
   }
 
   /**
@@ -273,7 +282,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @param rowIndex The index of the row to expand.
    */
   public expandRow(rowIndex: any, template: TableViewTemplate): Promise<void> {
-    return this._foundation.expandRow(rowIndex, template);
+    return this._core.expandRow(rowIndex, template);
   }
 
   /**
@@ -281,7 +290,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @param rowIndex The index of the row to expand.
    */
   public collapseRow(rowIndex: number): Promise<void> {
-    return this._foundation.collapseRow(rowIndex);
+    return this._core.collapseRow(rowIndex);
   }
 
   /**
@@ -289,7 +298,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @param rowIndex The row index to check.
    */
   public isRowExpanded(rowIndex: number): boolean {
-    return this._foundation.isRowExpanded(rowIndex);
+    return this._core.isRowExpanded(rowIndex);
   }
 
   /**
@@ -298,9 +307,9 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    */
   public selectRowsByIndex(indexes: number | number[], preserveExisting?: boolean): void {
     if (typeof indexes === 'number') {
-      this._foundation.selectRowsByIndex([indexes], preserveExisting);
+      this._core.selectRowsByIndex([indexes], preserveExisting);
     } else if (Array.isArray(indexes)) {
-      this._foundation.selectRowsByIndex(indexes, preserveExisting);
+      this._core.selectRowsByIndex(indexes, preserveExisting);
     }
   }
 
@@ -310,9 +319,9 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    */
   public deselectRowsByIndex(indexes: number | number[]): void {
     if (typeof indexes === 'number') {
-      this._foundation.deselectRowsByIndex([indexes]);
+      this._core.deselectRowsByIndex([indexes]);
     } else if (Array.isArray(indexes)) {
-      this._foundation.deselectRowsByIndex(indexes);
+      this._core.deselectRowsByIndex(indexes);
     }
   }
 
@@ -321,83 +330,163 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @param rowData The row object data to check.
    */
   public isRowSelected(rowData: { [key: string]: any }): boolean {
-    return this._foundation.isRowSelected(rowData);
+    return this._core.isRowSelected(rowData);
   }
 
-  /** The data to be display in the table body. */
-  @FoundationProperty()
+  /**
+   * The data to be display in the table body.
+   * @default []
+   */
+  @coreProperty()
   public declare data: any[];
 
-  /** The column configuration options. */
-  @FoundationProperty()
+  /**
+   * The column configuration options.
+   * @default []
+   */
+  @coreProperty()
   public declare columnConfigurations: IColumnConfiguration[];
 
-  /** Controls the visibility of the select column. */
-  @FoundationProperty()
+  /**
+   * Controls the visibility of the select column.
+   * @default true
+   * @attribute
+   */
+  @coreProperty()
   public declare select: boolean;
 
-  /** Controls the visibility of the select all checkbox (only applied when `select` is `true`). */
-  @FoundationProperty()
+  /**
+   * Controls the visibility of the select all checkbox (only applied when `select` is `true`).
+   * @default true
+   * @attribute
+   */
+  @coreProperty()
   public declare multiselect: boolean;
 
-  /** The row key for matching data to selections. */
-  @FoundationProperty()
+  /**
+   * The row key for matching data to selections.
+   * @attribute select-key
+   */
+  @coreProperty()
   public declare selectKey: string | string[];
 
-  @FoundationProperty()
+  /**
+   * The tooltip to display when hovering over the select column.
+   * @attribute tooltip-select
+   */
+  @coreProperty()
   public declare tooltipSelect: string | TableSelectTooltipCallback;
 
-  @FoundationProperty()
+  /**
+   * The tooltip to display when hovering over the select all checkbox.
+   * @attribute tooltip-select-all
+   */
+  @coreProperty()
   public declare tooltipSelectAll: string;
 
-  /** Controls whether the table is dense or not. False by default. */
-  @FoundationProperty()
+  /**
+   * Controls whether the table is dense or not.
+   * @default false
+   * @attribute
+   */
+  @coreProperty()
   public declare dense: boolean;
 
-  /** Controls whether the table is roomy or not. False by default. */
-  @FoundationProperty()
+  /**
+   * Controls whether the table is roomy or not.
+   * @default false
+   * @attribute
+   */
+  @coreProperty()
   public declare roomy: boolean;
 
-  /** Controls whether the table filters are visible or not. */
-  @FoundationProperty()
+  /**
+   * Controls whether the table shows its column filter row.
+   * @default false
+   * @attribute
+   */
+  @coreProperty()
   public declare filter: boolean;
 
-  /** Controls whether the table applies fixed headers when in scroll containers. */
-  @FoundationProperty()
+  /**
+   * Controls whether the table applies fixed headers when in scroll containers.
+   * @default false
+   * @attribute fixed-headers
+   */
+  @coreProperty()
   public declare fixedHeaders: boolean;
 
-  /** Controls the table layout algorithm. */
-  @FoundationProperty()
+  /**
+   * Controls the table layout algorithm.
+   * @default 'auto'
+   * @attribute layout-type
+   */
+  @coreProperty()
   public declare layoutType: TableLayoutType;
 
-  /** Controls whether the content in each cell wraps or not (true by default). */
-  @FoundationProperty()
+  /**
+   * Controls whether the content in each cell wraps or not (true by default).
+   * @default true
+   * @attribute wrap-content
+   */
+  @coreProperty()
   public declare wrapContent: boolean;
 
-  /** Controls whether the columns are resizable or not. */
-  @FoundationProperty()
+  /**
+   * Controls whether the columns are resizable or not.
+   * @default false
+   * @attribute
+   */
+  @coreProperty()
   public declare resizable: boolean;
 
-  /** Gets/sets the minimum width that a column can be resized to by the user dragging the resize handle. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the minimum width that a column can be resized to by the user dragging the resize handle.
+   * @default 100
+   * @attribute min-resize-width
+   */
+  @coreProperty()
   public declare minResizeWidth: number;
 
-  /** Gets/sets whether the rows respond to (and emit) row click events. */
-  @FoundationProperty()
+  /**
+   * Gets/sets whether the rows respond to (and emit) row click events.
+   * @default false
+   * @attribute allow-row-click
+   */
+  @coreProperty()
   public declare allowRowClick: boolean;
 
-  @FoundationProperty()
+  /**
+   * Gets/sets whether the table supports multi-column sorting.
+   * @default false
+   * @attribute multi-column-sort
+   */
+  @coreProperty()
   public declare multiColumnSort: boolean;
 
-  @FoundationProperty()
+  /**
+   * Callback for when a row is clicked. This allows for custom logic to run after each `<tr>` is created.
+   */
+  @coreProperty()
   public declare rowCreated: TableRowCreatedCallback;
 
-  @FoundationProperty()
+  /**
+   * Callback for when a cell is clicked. This allows for custom logic to run after each `<td>` is created.
+   */
+  @coreProperty()
   public declare cellCreated: TableCellCreatedCallback;
 
-  @FoundationProperty()
+  /**
+   * The template to use for the select all checkbox in the header.
+   */
+  @coreProperty()
   public declare selectAllTemplate: TableHeaderSelectAllTemplate;
 
-  @FoundationProperty()
+  /**
+   * Controls the alignment of the select checkbox.
+   * @default "center"
+   * @attribute select-checkbox-alignment
+   */
+  @coreProperty()
   public declare selectCheckboxAlignment: `${CellAlign}`;
 }

@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconUnfoldMore } from '@tylertech/tyler-icons/standard';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { IconComponent, IconRegistry } from '../icon';
@@ -6,7 +6,7 @@ import { IconButtonComponent } from '../icon-button';
 import { TooltipComponent } from '../tooltip';
 import { ColorPickerAdapter } from './color-picker-adapter';
 import { COLOR_PICKER_CONSTANTS, IColorPickerChangeEventData, IHSVA, IRGBA } from './color-picker-constants';
-import { ColorPickerFoundation } from './color-picker-foundation';
+import { ColorPickerCore } from './color-picker-core';
 
 import template from './color-picker.html';
 import styles from './color-picker.scss';
@@ -30,42 +30,45 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-color-picker>` custom element.
- * 
  * @tag forge-color-picker
+ *
+ * @property {boolean} [allowOpacity=false] Gets/sets whether opacity is displayed and allowed be to changed.
+ * @property {boolean} [debounceChangeEvent=false] Gets/sets whether change event has a debounce applied to avoid successive updates.
+ * @property {string | null | undefined} value Gets/sets the value using hex format only.
+ * @property {IRGBA | null | undefined} rgba Gets/sets the value using rgba format.
+ * @property {IHSVA | null | undefined} hsva Gets/sets the value using hsva format.
+ * @property {number | null | undefined} [opacity=1] Gets/sets the opacity value, if `allowOpacity` is true.
+ *
+ * @attribute {boolean} [allow-opacity=false] Gets/sets whether opacity is displayed and allowed be to changed.
+ * @attribute {boolean} [debounce-change-event=false] Gets/sets whether change event has a debounce applied to avoid successive updates.
+ * @attribute {string | null | undefined} value Gets/sets the value using hex format only.
+ *
+ * @event {CustomEvent<IColorPickerChangeEventData>} forge-color-picker-change - Emits when the color value changed.
  */
-@CustomElement({
+@customElement({
   name: COLOR_PICKER_CONSTANTS.elementName,
-  dependencies: [
-    IconButtonComponent,
-    TooltipComponent,
-    IconComponent
-  ]
+  dependencies: [IconButtonComponent, TooltipComponent, IconComponent]
 })
 export class ColorPickerComponent extends BaseComponent implements IColorPickerComponent {
   public static get observedAttributes(): string[] {
-    return [
-      COLOR_PICKER_CONSTANTS.attributes.VALUE,
-      COLOR_PICKER_CONSTANTS.attributes.ALLOW_OPACITY,
-      COLOR_PICKER_CONSTANTS.attributes.DEBOUNCE_CHANGE_EVENT
-    ];
+    return [COLOR_PICKER_CONSTANTS.attributes.VALUE, COLOR_PICKER_CONSTANTS.attributes.ALLOW_OPACITY, COLOR_PICKER_CONSTANTS.attributes.DEBOUNCE_CHANGE_EVENT];
   }
 
-  private _foundation: ColorPickerFoundation;
+  private _core: ColorPickerCore;
 
   constructor() {
     super();
     IconRegistry.define(tylIconUnfoldMore);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new ColorPickerFoundation(new ColorPickerAdapter(this));
+    this._core = new ColorPickerCore(new ColorPickerAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -83,26 +86,26 @@ export class ColorPickerComponent extends BaseComponent implements IColorPickerC
   }
 
   /** Gets/sets the value using hex format only. */
-  @FoundationProperty()
+  @coreProperty()
   public declare value: string | null | undefined;
 
   /** Gets/sets the value using rgba format. */
-  @FoundationProperty()
+  @coreProperty()
   public declare rgba: IRGBA | null | undefined;
 
   /** Gets/sets the value using hsva format. */
-  @FoundationProperty()
+  @coreProperty()
   public declare hsva: IHSVA | null | undefined;
 
   /** Gets/sets the opacity value, if `allowOpacity` is true. */
-  @FoundationProperty()
+  @coreProperty()
   public declare opacity: number | null | undefined;
 
   /** Gets/sets whether opacity is displayed and allowed be to changed. */
-  @FoundationProperty()
+  @coreProperty()
   public declare allowOpacity: boolean;
 
   /** Gets/sets whether change event has a debounce applied to avoid successive updates. Defaults to `false`. */
-  @FoundationProperty()
+  @coreProperty()
   public declare debounceChangeEvent: boolean;
 }

@@ -1,0 +1,14 @@
+@use 'sass:map';
+@use '../../utils';
+@use './tokens.brand' as brand;
+@use './tokens.core' as core;
+@use './tokens.surface' as surface;
+@use './tokens.text' as text;
+@use './tokens.status' as status;
+@use './tokens.utilities' as utilities;
+
+// Forge default (light) theme
+$tokens: utils.flatten(brand.$tokens, core.$tokens, surface.$tokens, text.$tokens, status.$tokens, utilities.$tokens);
+
+// Forge dark theme
+$tokens-dark: utils.flatten(brand.$tokens-dark, core.$tokens-dark, surface.$tokens-dark, text.$tokens-dark, status.$tokens-dark, utilities.$tokens-dark);

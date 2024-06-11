@@ -1,9 +1,6 @@
 {
-  "$schema": "../../../node_modules/@tylertech/forge-cli/build-schema.json",
+  "$schema": "../../../node_modules/@tylertech/forge-cli/config/build-schema.json",
   "extends": "../build.json",
   "compile": false,
-  "stylesheets": [
-    "./forge-typography.scss",
-    "./forge-form.scss"
-  ]
+  "stylesheets": ["./forge-typography.scss"]
 }

@@ -1,9 +1,9 @@
-import { CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { customElement, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { ExpansionPanelComponent } from '../expansion-panel';
 import { AccordionAdapter } from './accordion-adapter';
 import { ACCORDION_CONSTANTS } from './accordion-constants';
-import { AccordionFoundation } from './accordion-foundation';
+import { AccordionCore } from './accordion-core';
 
 export interface IAccordionComponent extends IBaseComponent {
   panelSelector: string;
@@ -16,37 +16,32 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-accordion>` web component.
- * 
- * This component is intended to wrap and orchestrate child expansion panels
- * so that only one expansion panel is open at a time.
- * 
  * @tag forge-accordion
+ *
+ * @dependency forge-expansion-panel
  */
-@CustomElement({
+@customElement({
   name: ACCORDION_CONSTANTS.elementName,
   dependencies: [ExpansionPanelComponent]
 })
 export class AccordionComponent extends BaseComponent implements IAccordionComponent {
   public static get observedAttributes(): string[] {
-    return [
-      ACCORDION_CONSTANTS.attributes.PANEL_SELECTOR
-    ];
+    return [ACCORDION_CONSTANTS.attributes.PANEL_SELECTOR];
   }
 
-  private _foundation: AccordionFoundation;
+  private _core: AccordionCore;
 
   constructor() {
     super();
-    this._foundation = new AccordionFoundation(new AccordionAdapter(this));
+    this._core = new AccordionCore(new AccordionAdapter(this));
   }
 
   public initializedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -57,7 +52,10 @@ export class AccordionComponent extends BaseComponent implements IAccordionCompo
     }
   }
 
-  /** Gets/sets the selector to use for finding the child expansion panels. Defaults to searching the direct children for `<forge-expansion-panel>` elements. */
-  @FoundationProperty()
+  /**
+   * Gets/sets the selector to use for finding the child expansion panels. Defaults to searching the direct children for `<forge-expansion-panel>` elements.
+   * @attribute panel-selector
+   */
+  @coreProperty()
   public declare panelSelector: string;
 }

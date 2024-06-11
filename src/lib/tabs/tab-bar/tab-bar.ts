@@ -1,27 +1,26 @@
-import { CustomElement, attachShadowTemplate, coerceNumber, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
-import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight } from '@tylertech/tyler-icons/standard';
-import { TabComponent } from '../tab/tab';
-import { IconButtonComponent } from '../../icon-button';
-import { TAB_BAR_CONSTANTS, TabBarLayoutMode, TabBarLayoutAlign, ITabBarActivateEventData } from './tab-bar-constants';
-import { TabBarFoundation } from './tab-bar-foundation';
-import { TabBarAdapter } from './tab-bar-adapter';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
 import { IconComponent, IconRegistry } from '../../icon';
+import { IconButtonComponent } from '../../icon-button';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { TabComponent } from '../tab/tab';
+import { TabBarAdapter } from './tab-bar-adapter';
+import { ITabBarChangeEventData, TAB_BAR_CONSTANTS } from './tab-bar-constants';
+import { TabBarCore } from './tab-bar-core';
+import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
 
 import template from './tab-bar.html';
 import styles from './tab-bar.scss';
 
 export interface ITabBarComponent extends IBaseComponent {
-  activeTab: number;
-  layoutMode: TabBarLayoutMode;
-  layoutAlign: TabBarLayoutAlign;
-  underline: boolean;
-  autoActivate: boolean;
+  disabled: boolean;
+  activeTab: number | null | undefined;
+  vertical: boolean;
+  clustered: boolean;
   stacked: boolean;
+  secondary: boolean;
+  inverted: boolean;
+  autoActivate: boolean;
   scrollButtons: boolean;
-  forceScrollButtons: boolean;
-  activateTab(index: number): void;
-  scrollTabIntoView(index: number): void;
 }
 
 declare global {
@@ -30,128 +29,135 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-tab-bar-activate': CustomEvent<ITabBarActivateEventData>;
+    'forge-tab-bar-change': CustomEvent<ITabBarChangeEventData>;
   }
 }
 
 /**
- * The custom element class behind the `<forge-tab-bar>` element.
- * 
  * @tag forge-tab-bar
+ *
+ * @summary Tabs organize content across different screens and views.
+ *
+ * @description
+ * Use tabs to group content into helpful categories. Tabs are typically placed
+ * above the content they relate to. Tabs can be used to navigate between screens,
+ * or to group related content within a screen.
+ *
+ * @dependency forge-tab
+ * @dependency forge-icon-button
+ * @dependency forge-icon
+ *
+ * @property {boolean} [disabled=false] - The disabled state of the tab bar.
+ * @property {number} [activeTab=null] - The index of the active tab.
+ * @property {boolean} [vertical=false] - Controls whether the tab bar is vertical or horizontal.
+ * @property {boolean} [clustered=false] - Controls whether the tabs stretch the full width of their container or cluster together at their minimum width.
+ * @property {boolean} [stacked=false] - Controls whether the tabs are taller to allow for slotted leading/trailing elements.
+ * @property {boolean} [secondary=false] - Controls whether the tabs are styled as secondary tab navigation.
+ * @property {boolean} [inverted=false] - Controls whether the tabs are rendered inverted (tab indicator at top instead of bottom).
+ * @property {boolean} [autoActivate=false] - Controls whether the tabs are automatically activated when receiving focus.
+ * @property {boolean} [scrollButtons=false] - Controls whether scroll buttons are displayed when the tabs overflow their container.
+ *
+ * @attribute {boolean} [disabled=false] - The disabled state of the tab bar.
+ * @attribute {number} [active-tab=null] - The index of the active tab.
+ * @attribute {boolean} [vertical=false] - Controls whether the tab bar is vertical or horizontal.
+ * @attribute {boolean} [clustered=false] - Controls whether the tabs stretch the full width of their container or cluster together at their minimum width.
+ * @attribute {boolean} [stacked=false] - Controls whether the tabs are taller to allow for slotted leading/trailing elements.
+ * @attribute {boolean} [secondary=false] - Controls whether the tabs are styled as secondary tab navigation.
+ * @attribute {boolean} [auto-activate=false] - Controls whether the tabs are automatically activated when receiving focus.
+ * @attribute {boolean} [scroll-buttons=false] - Controls whether scroll buttons are displayed when the tabs overflow their container.
+ *
+ * @event {CustomEvent<ITabBarChangeEventData>} forge-tab-bar-change - Dispatches when the active tab changes.
+ *
+ * @cssproperty --forge-tab-bar-justify - The `justify-content` value for the tab bar flex container.
+ * @cssproperty --forge-tab-bar-stretch - The `flex` value for the child `<forge-tab>` elements.
+ * @cssproperty --forge-tab-bar-divider-color - The color of the divider.
+ * @cssproperty --forge-tab-bar-divider-thickness - The thickness of the divider.
+ *
+ * @csspart container - The container element.
+ * @csspart scroll-container - The scroll container element.
  */
-@CustomElement({
+@customElement({
   name: TAB_BAR_CONSTANTS.elementName,
-  dependencies: [
-    TabComponent,
-    IconButtonComponent,
-    IconComponent
-  ]
+  dependencies: [TabComponent, IconButtonComponent, IconComponent]
 })
 export class TabBarComponent extends BaseComponent implements ITabBarComponent {
   public static get observedAttributes(): string[] {
-    return [
-      TAB_BAR_CONSTANTS.attributes.ACTIVE_TAB,
-      TAB_BAR_CONSTANTS.attributes.LAYOUT_MODE,
-      TAB_BAR_CONSTANTS.attributes.LAYOUT_ALIGN,
-      TAB_BAR_CONSTANTS.attributes.UNDERLINE,
-      TAB_BAR_CONSTANTS.attributes.AUTO_ACTIVATE,
-      TAB_BAR_CONSTANTS.attributes.STACKED,
-      TAB_BAR_CONSTANTS.attributes.SCROLL_BUTTONS,
-      TAB_BAR_CONSTANTS.attributes.FORCE_SCROLL_BUTTONS
-    ];
+    return Object.values(TAB_BAR_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: TabBarFoundation;
+  private _core: TabBarCore;
 
   constructor() {
     super();
-    IconRegistry.define([tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight]);
+    IconRegistry.define([tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown]);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new TabBarFoundation(new TabBarAdapter(this));
+    this._core = new TabBarCore(new TabBarAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case TAB_BAR_CONSTANTS.attributes.ACTIVE_TAB:
-        this.activeTab = coerceNumber(newValue);
+      case TAB_BAR_CONSTANTS.observedAttributes.DISABLED:
+        this.disabled = coerceBoolean(newValue);
         break;
-      case TAB_BAR_CONSTANTS.attributes.LAYOUT_MODE:
-        this.layoutMode = newValue as TabBarLayoutMode;
+      case TAB_BAR_CONSTANTS.observedAttributes.ACTIVE_TAB:
+        this.activeTab = newValue ? coerceNumber(newValue) : undefined;
         break;
-      case TAB_BAR_CONSTANTS.attributes.LAYOUT_ALIGN:
-        this.layoutAlign = newValue as TabBarLayoutAlign;
+      case TAB_BAR_CONSTANTS.observedAttributes.VERTICAL:
+        this.vertical = coerceBoolean(newValue);
         break;
-      case TAB_BAR_CONSTANTS.attributes.UNDERLINE:
-        this.underline = coerceBoolean(newValue);
+      case TAB_BAR_CONSTANTS.observedAttributes.CLUSTERED:
+        this.clustered = coerceBoolean(newValue);
         break;
-      case TAB_BAR_CONSTANTS.attributes.AUTO_ACTIVATE:
-        this.autoActivate = coerceBoolean(newValue);
-        break;
-      case TAB_BAR_CONSTANTS.attributes.STACKED:
+      case TAB_BAR_CONSTANTS.observedAttributes.STACKED:
         this.stacked = coerceBoolean(newValue);
         break;
-      case TAB_BAR_CONSTANTS.attributes.SCROLL_BUTTONS:
-        this.scrollButtons = coerceBoolean(newValue);
+      case TAB_BAR_CONSTANTS.observedAttributes.SECONDARY:
+        this.secondary = coerceBoolean(newValue);
         break;
-      case TAB_BAR_CONSTANTS.attributes.FORCE_SCROLL_BUTTONS:
-        this.forceScrollButtons = coerceBoolean(newValue);
+      case TAB_BAR_CONSTANTS.observedAttributes.INVERTED:
+        this.inverted = coerceBoolean(newValue);
+        break;
+      case TAB_BAR_CONSTANTS.observedAttributes.AUTO_ACTIVATE:
+        this.autoActivate = coerceBoolean(newValue);
+        break;
+      case TAB_BAR_CONSTANTS.observedAttributes.SCROLL_BUTTONS:
+        this.scrollButtons = coerceBoolean(newValue);
         break;
     }
   }
 
-  /** Gets and sets the active tab index. */
-  @FoundationProperty()
-  public declare activeTab: number;
+  @coreProperty()
+  public declare disabled: boolean;
 
-  /** Gets/sets the layout mode that controls how the tabs are sized and rendered. */
-  @FoundationProperty()
-  public declare layoutMode: TabBarLayoutMode;
+  @coreProperty()
+  public declare activeTab: number | null | undefined;
 
-  /** Gets/sets the layout alignment. Only pertains to non-full width layout modes. */
-  @FoundationProperty()
-  public declare layoutAlign: TabBarLayoutAlign;
+  @coreProperty()
+  public declare vertical: boolean;
 
-  /** Gets/sets whether the component displays an underline or not. Default is `false`. */
-  @FoundationProperty()
-  public declare underline: boolean;
+  @coreProperty()
+  public declare clustered: boolean;
 
-  /** Gets/sets whether tabs are auto-activated when using arrow keys. Default is `true` */
-  @FoundationProperty()
-  public declare autoActivate: boolean;
-
-  /** Gets/sets whether the tabs are displayed with as their stacked variant. Default is `false`. */
-  @FoundationProperty()
+  @coreProperty()
   public declare stacked: boolean;
 
-  /** Gets/sets whether the scroll buttons can be displayed or not. Default is `true`. The component handles visibility automatically. */
-  @FoundationProperty()
+  @coreProperty()
+  public declare secondary: boolean;
+
+  @coreProperty()
+  public declare inverted: boolean;
+
+  @coreProperty()
+  public declare autoActivate: boolean;
+
+  @coreProperty()
   public declare scrollButtons: boolean;
-
-  /** Gets/sets whether the scroll buttons are visible indefinitely or not. Default is `false`. */
-  @FoundationProperty()
-  public declare forceScrollButtons: boolean;
-
-  /**
-   * Activates the tab at the given index.
-   * @param index The index of the tab.
-   */
-  public activateTab(index: number): void {
-    this._foundation.activateTab(index);
-  }
-
-  /**
-   * Scrolls the tab at the given index into view.
-   * @param index The index of the tab.
-   */
-  public scrollTabIntoView(index: number): void {
-    this._foundation.scrollIntoView(index);
-  }
 }

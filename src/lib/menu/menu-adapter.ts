@@ -13,8 +13,9 @@ export interface IMenuAdapter extends IBaseAdapter {
   hasTargetElement(): boolean;
   addTargetListener(event: string, callback: (event: Event) => void, bubbles?: boolean): void;
   removeTargetListener(event: string, callback: (event: Event) => void): void;
+  destroyListDropdown(): void;
   attachMenu(config: IListDropdownConfig): void;
-  detachMenu(): void;
+  detachMenu(): Promise<void>;
   setOptions(options: Array<IMenuOption | IMenuOptionGroup>): void;
   getActiveOptionIndex(): number;
   setActiveOption(index: number): void;
@@ -28,14 +29,20 @@ export interface IMenuAdapter extends IBaseAdapter {
   updateActiveDescendant(id: string): void;
   isOwnElement(element: Element): boolean;
   addDropdownListener(type: string, listener: (evt: any) => void): void;
-  createChildMenu(index: number, parentValue: any, openCb: (index: number) => void, closeCb: (index: number) => void, selectCb: (data: IMenuSelectEventData) => void): IMenuComponent;
+  createChildMenu(
+    index: number,
+    parentValue: any,
+    openCb: (index: number) => void,
+    closeCb: (index: number) => void,
+    selectCb: (data: IMenuSelectEventData) => void
+  ): IMenuComponent;
   closeOtherChildMenus(excludeIndex?: number): void;
   setSelectedValues(values: any[]): void;
 }
 
 export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAdapter {
   private _targetElement: HTMLElement | null;
-  private _listDropdown?: IListDropdown;
+  private _listDropdown: IListDropdown | undefined;
   private _childMenus = new Map<number, IMenuComponent>();
 
   constructor(component: IMenuComponent) {
@@ -99,23 +106,22 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
   }
 
   public setOptions(options: Array<IMenuOption | IMenuOptionGroup>): void {
-    if (this._listDropdown) {
-      this._listDropdown.setOptions(options);
-    }
+    this._listDropdown?.setOptions(options);
   }
 
-  public detachMenu(): void {
-    if (this._targetElement) {
-      this._targetElement.removeAttribute('aria-activedescendant');
-      this._targetElement.removeAttribute('aria-expanded');
-      this._targetElement.removeAttribute('aria-controls');
-    }
+  public destroyListDropdown(): void {
+    this._listDropdown?.destroy();
+    this._listDropdown = undefined;
+  }
 
-    if (this._listDropdown) {
-      this._listDropdown.close();
-      this._listDropdown.destroy();
-      this._listDropdown = undefined;
-    }
+  public async detachMenu(): Promise<void> {
+    this._targetElement?.removeAttribute('aria-activedescendant');
+    this._targetElement?.removeAttribute('aria-expanded');
+    this._targetElement?.removeAttribute('aria-controls');
+
+    await this._listDropdown?.close();
+    this._listDropdown?.destroy();
+    this._listDropdown = undefined;
   }
 
   public setActiveOption(index: number): void {
@@ -138,8 +144,8 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
   }
 
   public focusTarget(): void {
-    if (this._targetElement) {
-      this._targetElement.focus();
+    if (!this._targetElement?.matches(':focus-within')) {
+      this._targetElement?.focus();
     }
   }
 
@@ -200,7 +206,13 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
     }
   }
 
-  public createChildMenu(index: number, parentValue: any, openCb: (index: number) => void, closeCb: (index: number) => void, selectCb: (data: IMenuSelectEventData) => void): IMenuComponent {
+  public createChildMenu(
+    index: number,
+    parentValue: any,
+    openCb: (index: number) => void,
+    closeCb: (index: number) => void,
+    selectCb: (data: IMenuSelectEventData) => void
+  ): IMenuComponent {
     const menu = document.createElement('forge-menu');
     menu.style.display = 'block';
 

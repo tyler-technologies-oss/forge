@@ -4,15 +4,20 @@ export const PARSEABLE_TIME_FORMAT = /^(\d?\d?):?(\d?\d?)(:?(\d?\d?))?\s*([AaPp]
 export const HAS_MERIDIEM_REGEX = /[AaPp][Mm]?/;
 
 export function tokenize24HourTimeString(value: string): { hours: string; minutes: string; seconds: string } {
-  const matches = value.match(TWENTY_FOUR_HOUR_TIME_REGEX) as RegExpMatchArray || [null, 0, 0, null, 0];
+  const matches = (value.match(TWENTY_FOUR_HOUR_TIME_REGEX) as RegExpMatchArray) || [null, 0, 0, null, 0];
   const hours = matches[1];
   const minutes = matches[2];
   const seconds = matches[4];
   return { hours, minutes, seconds };
 }
 
-export function tokenize12HourTimeString(value: string): { hours: string; minutes: string; seconds: string; meridiem: string } {
-  const matches = value.match(TWELVE_HOUR_TIME_REGEX) as RegExpMatchArray || [null, 0, 0, null, 0, 'AM'];
+export function tokenize12HourTimeString(value: string): {
+  hours: string;
+  minutes: string;
+  seconds: string;
+  meridiem: string;
+} {
+  const matches = (value.match(TWELVE_HOUR_TIME_REGEX) as RegExpMatchArray) || [null, 0, 0, null, 0, 'AM'];
   const hours = matches[1];
   const minutes = matches[2];
   const seconds = matches[4];
@@ -21,8 +26,7 @@ export function tokenize12HourTimeString(value: string): { hours: string; minute
 }
 
 export function isSupportedTimeFormat(value: string): boolean {
-  return TWENTY_FOUR_HOUR_TIME_REGEX.test(value) ||
-         TWELVE_HOUR_TIME_REGEX.test(value);
+  return TWENTY_FOUR_HOUR_TIME_REGEX.test(value) || TWELVE_HOUR_TIME_REGEX.test(value);
 }
 
 export function tryCoerceTimeString(str: string, use24HourTime: boolean, allowSeconds: boolean): string {

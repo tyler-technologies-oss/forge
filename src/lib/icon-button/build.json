@@ -1,7 +1,0 @@
-{
-  "$schema": "../../../node_modules/@tylertech/forge-cli/build-schema.json",
-  "extends": "../build.json",
-  "stylesheets": [
-    "./forge-icon-button.scss"
-  ]
-}

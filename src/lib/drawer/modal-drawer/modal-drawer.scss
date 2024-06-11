@@ -1,3 +1,54 @@
-@use './mixins';
+@use './core' as *;
+@use '../base/core' as base-core;
+@use '../../divider';
 
-@include mixins.core-styles;
+//
+// Host
+//
+
+:host {
+  @include divider.provide-theme(
+    (
+      margin: 4px 0
+    )
+  );
+}
+
+//
+// Base
+//
+
+@include base-core.core-styles;
+
+.forge-drawer {
+  &.modal {
+    @include base;
+
+    &.closing,
+    &.closed {
+      @include closed;
+    }
+
+    &.closing {
+      &.right {
+        transform: translateX(100%);
+      }
+    }
+  }
+
+  &.right {
+    @include right;
+  }
+
+  &.display-none {
+    display: none !important;
+  }
+}
+
+.scrim {
+  @include scrim;
+
+  &.closed {
+    display: none;
+  }
+}

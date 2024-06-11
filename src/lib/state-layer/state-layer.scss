@@ -1,0 +1,45 @@
+@use './core' as *;
+
+//
+// Host
+//
+
+$_host-tokens: (display);
+
+:host {
+  @include tokens($includes: $_host-tokens);
+}
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([disabled]) {
+  @include disabled;
+}
+
+.forge-state-layer {
+  @include tokens($excludes: $_host-tokens);
+}
+
+.forge-state-layer {
+  @include surface;
+
+  &--hovered::before {
+    @include hovered;
+  }
+
+  &--pressed::after {
+    @include pressed;
+  }
+}
+
+@media screen and (forced-colors: active) {
+  :host {
+    display: none;
+  }
+}

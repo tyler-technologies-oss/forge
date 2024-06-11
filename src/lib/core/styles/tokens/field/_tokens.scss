@@ -1,0 +1,57 @@
+@use 'sass:map';
+@use '../../animation';
+@use '../../border';
+@use '../../elevation';
+@use '../../shape';
+@use '../../theme';
+@use '../focus-indicator/tokens' as focus-indicator;
+@use '../../utils';
+
+$tokens: (
+  background: utils.module-val(field, background, transparent),
+  tonal-background: utils.module-val(field, tonal-background, theme.variable(surface-container-low)),
+  tonal-background-hover: utils.module-val(field, tonal-background-hover, theme.variable(surface-container-minimum)),
+  filled-background: utils.module-val(field, filled-background, theme.variable(surface-bright)),
+  outline-style: utils.module-val(field, outline-style, solid),
+  outline-width: utils.module-val(field, outline-width, border.variable(thin)),
+  shape: utils.module-val(field, shape, shape.variable(medium)),
+  height: utils.module-val(field, height, 40px),
+  inset-height: utils.module-val(field, inset-height, 48px),
+  padding-inline: utils.module-val(field, padding-inline, 12px),
+  padding-inline-start: utils.module-ref(field, padding-inline-start, padding-inline),
+  padding-inline-end: utils.module-ref(field, padding-inline-end, padding-inline),
+  inner-padding-inline: utils.module-val(field, inner-padding-inline, 8px),
+  rounded-container-padding-inline: utils.module-val(field, rounded-container-padding-inline, calc(utils.module-var(field, height) / 2)),
+  rounded-container-padding-inline-start: utils.module-ref(field, rounded-container-padding-inline-start, rounded-container-padding-inline),
+  rounded-container-padding-inline-end: utils.module-ref(field, rounded-container-padding-inline-end, rounded-container-padding-inline),
+  support-text-margin-block: utils.module-val(field, support-text-margin-block, 4px),
+  support-text-gap: utils.module-val(field, support-text-gap, 8px),
+  support-text-padding-inline: utils.module-ref(field, support-text-padding-inline, padding-inline),
+  support-text-padding-inline-start: utils.module-ref(field, support-text-padding-inline-start, support-text-padding-inline),
+  support-text-padding-inline-end: utils.module-ref(field, support-text-padding-inline-end, support-text-padding-inline),
+  label-margin-inline: utils.module-val(field, label-margin-inline, 8px),
+  label-margin-block: utils.module-val(field, label-margin-block, 4px),
+  required-padding: utils.module-val(field, required-padding, 0.35ch),
+  required-content: utils.module-val(field, required-content, '*'),
+  optional-padding: utils.module-val(field, optional-padding, 0.5ch),
+  optional-content: utils.module-val(field, optional-content, '(optional)'),
+  multiline-resize: utils.module-val(field, multiline-resize, block),
+  multiline-min-inline-size: utils.module-val(field, multiline-min-inline-size, initial),
+  multiline-max-inline-size: utils.module-val(field, multiline-max-inline-size, initial),
+  multiline-min-block-size: utils.module-ref(field, multiline-min-block-size, height),
+  multiline-max-block-size: utils.module-val(field, multiline-max-block-size, initial),
+  popover-icon-transition-duration: utils.module-val(field, popover-icon-transition-duration, animation.variable(duration-short3)),
+  popover-icon-transition-timing: utils.module-val(field, popover-icon-transition-timing, animation.variable(easing-standard)),
+  popover-icon-open-rotation: utils.module-val(field, popover-icon-open-rotation, 180deg),
+  surface-animation-duration: utils.module-val(field, surface-animation-duration, animation.variable(duration-short4)),
+  surface-animation-timing: utils.module-val(field, surface-animation-timing, animation.variable(easing-standard)),
+  floating-animation-duration: utils.module-val(field, floating-animation-duration, animation.variable(duration-short4)),
+  floating-animation-timing: utils.module-val(field, floating-animation-timing, animation.variable(easing-decelerate)),
+  focus-indicator-width: utils.module-val(field, focus-indicator-width, focus-indicator.get(width)),
+  disabled-opacity: utils.module-val(field, disabled-opacity, theme.emphasis(medium-low)),
+  disabled-background: utils.module-val(field, disabled-background, theme.variable(surface-container-low))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

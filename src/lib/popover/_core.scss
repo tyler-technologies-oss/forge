@@ -1,0 +1,91 @@
+@use './token-utils' as *;
+@use '../core/styles/scrollbar';
+
+@forward './token-utils';
+
+@mixin base {
+  @include scrollbar.base;
+
+  position: relative;
+  overflow: #{token(overflow)};
+  box-sizing: border-box;
+
+  background: #{token(background)};
+
+  border-radius: #{token(border-radius)};
+  box-shadow: #{token(box-shadow)};
+  border-width: #{token(border-width)};
+  border-style: #{token(border-style)};
+  border-color: #{token(border-color)};
+
+  width: #{token(width)};
+  height: #{token(height)};
+  min-width: #{token(min-width)};
+  max-width: #{token(max-width)};
+  min-height: #{token(min-height)};
+  max-height: #{token(max-height)};
+}
+
+@mixin arrow {
+  position: absolute;
+
+  background-color: #{token(arrow-background-color)};
+
+  height: #{token(arrow-height)};
+  width: #{token(arrow-width)};
+  box-shadow: #{token(box-shadow)};
+  border-width: #{token(border-width)};
+  border-style: #{token(border-style)};
+  border-color: #{token(border-color)};
+
+  transform: translate(#{token(arrow-translate-x, custom)}, #{token(arrow-translate-y, custom)}) rotate(#{token(arrow-rotation, custom)});
+  clip-path: #{token(arrow-clip-path, custom)};
+}
+
+@mixin preset-dropdown {
+  @include override(max-height, preset-dropdown-max-height);
+  @include override(overflow, preset-dropdown-overflow);
+
+  padding-block: #{token(preset-dropdown-padding-block)};
+}
+
+@mixin preset-list {
+  padding-block: #{token(preset-list-padding-block)};
+}
+
+@mixin zoom-base {
+  animation-duration: #{token(zoom-enter-duration)};
+  animation-timing-function: #{token(zoom-enter-timing)};
+  animation-name: fadein, zoomin;
+  transform-origin: #{token(zoomin-origin, custom)};
+}
+
+@mixin zoom-exit {
+  animation-duration: #{token(zoom-exit-duration)};
+  animation-timing-function: #{token(zoom-exit-timing)};
+  animation-name: fadeout, zoomout;
+}
+
+@mixin slide-base {
+  animation-duration: #{token(slide-enter-duration)};
+  animation-timing-function: #{token(slide-enter-timing)};
+  animation-name: fadein, slidein;
+}
+
+@mixin slide-exit {
+  animation-duration: #{token(slide-exit-duration)};
+  animation-timing-function: #{token(slide-exit-timing)};
+  animation-name: fadeout, slideout;
+}
+
+@mixin fade-base {
+  animation-duration: #{token(fade-enter-duration)};
+  animation-timing-function: #{token(fade-enter-timing)};
+  animation-name: fadein;
+}
+
+@mixin fade-exit {
+  animation-duration: #{token(fade-exit-duration)};
+  animation-timing-function: #{token(fade-exit-timing)};
+  animation-name: fadeout;
+}

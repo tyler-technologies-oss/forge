@@ -1,0 +1,91 @@
+@use 'sass:map';
+@use '../../animation';
+@use '../../elevation';
+@use '../../shape';
+@use '../../theme';
+@use '../../utils';
+
+$tokens: (
+  // Shared
+  handle-size: utils.module-val(switch, handle-size, 20px),
+  handle-scale: utils.module-val(switch, handle-scale, 1),
+  handle-elevation: utils.module-val(switch, handle-elevation, elevation.value(1)),
+  track-border-width: utils.module-val(switch, track-border-width, 0),
+  track-border-color: utils.module-val(switch, track-border-color, transparent),
+  icon-color: utils.module-val(switch, icon-color, theme.variable(on-tertiary)),
+  icon-size: utils.module-val(switch, icon-size, 16px),
+  icon-scale: utils.module-val(switch, icon-scale, 1),
+  state-layer-size: utils.module-val(switch, state-layer-size, 40px),
+  state-layer-dense-size: utils.module-val(switch, state-layer-dense-size, 28px),
+  // Handle
+  handle-on-color: utils.module-val(switch, handle-on-color, theme.variable(tertiary)),
+  handle-off-color: utils.module-val(switch, handle-off-color, theme.variable(surface-container-high)),
+  handle-width: utils.module-ref(switch, handle-width, handle-size),
+  handle-height: utils.module-ref(switch, handle-height, handle-size),
+  handle-on-scale: utils.module-ref(switch, handle-on-scale, handle-scale),
+  handle-off-scale: utils.module-ref(switch, handle-off-scale, handle-scale),
+  handle-shape: utils.module-val(switch, handle-shape, shape.variable(round)),
+  handle-on-elevation: utils.module-ref(switch, handle-on-elevation, handle-elevation),
+  handle-off-elevation: utils.module-ref(switch, handle-off-elevation, handle-elevation),
+  // Track
+  track-on-color: utils.module-val(switch, track-on-color, theme.variable(tertiary-container)),
+  track-off-color: utils.module-val(switch, track-off-color, theme.variable(surface-container)),
+  track-width: utils.module-val(switch, track-width, 36px),
+  track-height: utils.module-val(switch, track-height, 14px),
+  track-shape: utils.module-val(switch, track-shape, shape.variable(full)),
+  track-on-border-width: utils.module-ref(switch, track-on-border-width, track-border-width),
+  track-off-border-width: utils.module-ref(switch, track-off-border-width, track-border-width),
+  track-on-border-color: utils.module-ref(switch, track-on-border-color, track-border-color),
+  track-off-border-color: utils.module-ref(switch, track-off-border-color, track-border-color),
+  // Icon
+  icon-on-color: utils.module-ref(switch, icon-on-color, icon-color),
+  icon-off-color: utils.module-ref(switch, icon-off-color, icon-color),
+  icon-on-size: utils.module-ref(switch, icon-on-size, icon-size),
+  icon-off-size: utils.module-ref(switch, icon-off-size, icon-size),
+  icon-on-scale: utils.module-ref(switch, icon-on-scale, icon-scale),
+  icon-off-scale: utils.module-ref(switch, icon-off-scale, icon-scale),
+  // Label
+  gap: utils.module-val(switch, gap, 0),
+  justify: utils.module-val(switch, justify, start),
+  direction: utils.module-val(switch, direction, initial),
+  // State layer
+  state-layer-width: utils.module-ref(switch, state-layer-width, state-layer-size),
+  state-layer-height: utils.module-ref(switch, state-layer-height, state-layer-size),
+  state-layer-on-color: utils.module-ref(switch, state-layer-on-color, handle-on-color),
+  state-layer-off-color: utils.module-ref(switch, state-layer-off-color, color),
+  // Dense
+  state-layer-dense-width: utils.module-ref(switch, state-layer-dense-width, state-layer-dense-size),
+  state-layer-dense-height: utils.module-ref(switch, state-layer-dense-height, state-layer-dense-size),
+  // Disabled
+  disabled-opacity: utils.module-val(switch, disabled-opacity, theme.emphasis(medium-low)),
+  // Active
+  handle-active-on-color: utils.module-ref(switch, handle-active-on-color, handle-on-color),
+  handle-active-off-color: utils.module-ref(switch, handle-active-off-color, handle-off-color),
+  handle-active-scale: utils.module-val(switch, handle-active-scale, 1.2),
+  handle-active-on-scale: utils.module-ref(switch, handle-active-on-scale, handle-active-scale),
+  handle-active-off-scale: utils.module-ref(switch, handle-active-off-scale, handle-active-scale),
+  handle-active-elevation: utils.module-ref(switch, handle-active-elevation, handle-elevation),
+  handle-active-on-elevation: utils.module-ref(switch, handle-active-on-elevation, handle-active-elevation),
+  handle-active-off-elevation: utils.module-ref(switch, handle-active-off-elevation, handle-active-elevation),
+  track-active-on-color: utils.module-ref(switch, track-active-on-color, track-on-color),
+  track-active-off-color: utils.module-ref(switch, track-active-off-color, track-off-color),
+  track-active-on-border-width: utils.module-ref(switch, track-active-on-border-width, track-on-border-width),
+  track-active-off-border-width: utils.module-ref(switch, track-active-off-border-width, track-off-border-width),
+  track-active-on-border-color: utils.module-ref(switch, track-active-on-border-color, track-on-border-color),
+  track-active-off-border-color: utils.module-ref(switch, track-active-off-border-color, track-off-border-color),
+  icon-active-on-color: utils.module-ref(switch, icon-active-on-color, icon-on-color),
+  icon-active-off-color: utils.module-ref(switch, icon-active-off-color, icon-off-color),
+  icon-active-on-scale: utils.module-ref(switch, icon-active-on-scale, icon-on-scale),
+  icon-active-off-scale: utils.module-ref(switch, icon-active-off-scale, icon-off-scale),
+  // Animation
+  animation-duration: utils.module-val(switch, animation-duration, animation.variable(duration-short2)),
+  animation-timing: utils.module-val(switch, animation-timing, animation.variable(easing-standard)),
+  active-animation-timing: utils.module-val(switch, active-animation-timing, animation.variable(easing-linear))
+) !default;
+
+///
+/// Gets a token from the token map.
+///
+@function get($name) {
+  @return map.get($tokens, $name);
+}

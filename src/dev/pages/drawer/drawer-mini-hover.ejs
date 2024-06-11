@@ -1,30 +1,30 @@
-<h3 class="forge-typography--subtitle1">Mini Hover</h3>
+<h3 class="forge-typography--heading2">Mini Hover</h3>
 <div class="drawer-demo" style="position: relative;">
   <forge-scaffold stretch>
     <forge-app-bar id="drawer-mini-hover-app-bar" title-text="Mini Hover Drawer" slot="header">
       <forge-icon slot="logo" external external-type="custom" name="forge_logo"></forge-icon>
     </forge-app-bar>
     <forge-toolbar slot="body-header">
-      <h2 slot="start" class="forge-typography--title">Toolbar</h2>
+      <h2 slot="start" class="forge-typography--heading2">Toolbar</h2>
     </forge-toolbar>
     <forge-mini-drawer hover slot="body-left">
-      <forge-list>
+      <forge-list navlist>
         <forge-list-item selected id="tooltip-host">
           <forge-icon slot="leading" name="inbox"></forge-icon>
-          Inbox
+          <button>Inbox</button>
         </forge-list-item>
         <forge-list-item>
           <forge-icon slot="leading" name="send"></forge-icon>
-          Outgoing
+          <button>Outgoing</button>
         </forge-list-item>
         <forge-list-item>
           <forge-icon slot="leading" name="drafts"></forge-icon>
-          Drafts
+          <button>Drafts</button>
         </forge-list-item>
       </forge-list>
     </forge-mini-drawer>
     <div slot="body" style="padding: 16px;">
-      <forge-card outlined>
+      <forge-card>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit,
         sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
         enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut

@@ -2,40 +2,46 @@ import { COMPONENT_NAME_PREFIX } from '../../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tab`;
 
-const attributes = {
+const observedAttributes = {
   DISABLED: 'disabled',
-  ACTIVE: 'active',
-  STRETCH: 'stretch'
+  SELECTED: 'selected',
+  VERTICAL: 'vertical',
+  STACKED: 'stacked',
+  SECONDARY: 'secondary',
+  INVERTED: 'inverted'
+};
+
+const attributes = {
+  ...observedAttributes
 };
 
 const selectors = {
-  ROOT: '.forge-tab',
-  RIPPLE: '.forge-tab__ripple',
-  INDICATOR: '.mdc-tab-indicator',
-  CONTENT: '.forge-tab__content',
-  DEFAULT_SLOT: 'slot:not([name])'
+  INDICATOR: '.indicator'
 };
 
 const classes = {
-  DISABLED: 'forge-tab--disabled',
-  ACTIVE: 'forge-tab--active'
+  SELECTED: 'selected'
 };
 
 const events = {
-  INTERACTED: `${elementName}-interacted`
+  SELECT: `${elementName}-select`
+};
+
+const strings = {
+  EASING: 'cubic-bezier(0.4, 0, 0.2, 1)'
+};
+
+const numbers = {
+  ANIMATION_DURATION: 250
 };
 
 export const TAB_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
   selectors,
   classes,
-  events
+  events,
+  strings,
+  numbers
 };
-
-export interface ITabDimensions {
-  rootLeft: number;
-  rootRight: number;
-  contentLeft: number;
-  contentRight: number;
-}

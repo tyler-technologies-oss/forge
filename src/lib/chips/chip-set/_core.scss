@@ -1,0 +1,17 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: inline-block;
+}
+
+@mixin base {
+  display: flex;
+  flex-wrap: wrap;
+  gap: #{token(spacing)};
+}
+
+@mixin vertical {
+  flex-direction: column;
+}

@@ -1,7 +1,9 @@
 import '$src/shared';
-import { IStepperComponent, IStepConfiguration, ISwitchComponent, IStepComponent, ISelectComponent } from '@tylertech/forge';
 import '@tylertech/forge/stepper';
 import './stepper.scss';
+import { IStepperComponent, IStepConfiguration, IStepComponent } from '@tylertech/forge/stepper';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const stepper = document.querySelector('#demo-stepper') as IStepperComponent;
 stepper.selectedIndex = 2;
@@ -42,17 +44,17 @@ layoutAlignSelect.addEventListener('change', () => {
 });
 
 const linearToggle = document.querySelector('#opt-linear') as ISwitchComponent;
-linearToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+linearToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   stepper.linear = selected;
 });
 
 const alternativeToggle = document.querySelector('#opt-alternative') as ISwitchComponent;
-alternativeToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+alternativeToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   stepper.alternative = selected;
 });
 
 const firstStepDisabledToggle = document.querySelector('#opt-first-step-disabled') as ISwitchComponent;
-firstStepDisabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+firstStepDisabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const firstStep = document.querySelector('#stepper-step-one') as IStepComponent;
   firstStep.disabled = selected;
 });

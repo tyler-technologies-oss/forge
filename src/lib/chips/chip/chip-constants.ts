@@ -1,58 +1,52 @@
-import { COMPONENT_NAME_PREFIX } from '../../constants';
+import { COMPONENT_NAME_PREFIX, Theme } from '../../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}chip`;
 
-const attributes = {
+const observedAttributes = {
   TYPE: 'type',
-  SELECTED: 'selected',
   VALUE: 'value',
-  DISABLED: 'disabled',
+  SELECTED: 'selected',
   INVALID: 'invalid',
+  DISABLED: 'disabled',
   DENSE: 'dense',
-  EMULATE_FOCUS: 'emulate-focus'
+  THEME: 'theme',
+  HREF: 'href',
+  TARGET: 'target',
+  DOWNLOAD: 'download',
+  REL: 'rel'
 };
 
-const classes = {
-  ACTION: 'forge-chip--action',
-  CHOICE: 'forge-chip--choice',
-  FILTER: 'forge-chip--filter',
-  INPUT: 'forge-chip--input',
-  FIELD: 'forge-chip--field',
-  INVALID: 'forge-chip--invalid',
-  SELECTED: 'forge-chip--selected',
-  DELETE_BUTTON: 'forge-chip__delete-button',
-  DELETE_BUTTON_TOUCH_TARGET: 'forge-chip__delete-button__touch-target',
-  DENSE: 'forge-chip--dense',
-  DISABLED: 'forge-chip--disabled',
-  LEADING_HIDDEN: 'forge-chip__leading--hidden'
+const attributes = {
+  ...observedAttributes
 };
 
 const selectors = {
   ROOT: '.forge-chip',
-  BUTTON: '[role=button]'
+  TRIGGER: '#trigger'
 };
 
 const events = {
   DELETE: `${elementName}-delete`,
   SELECT: `${elementName}-select`,
-  FOCUS_NEXT: `${elementName}-focus-next`,
-  FOCUS_PREVIOUS: `${elementName}-focus-previous`
+  NAVIGATE: `${elementName}-navigate`
 };
 
 const defaults = {
-  TYPE: 'action'
+  TYPE: 'action' as ChipType,
+  THEME: 'primary' as ChipTheme
 };
 
 export const CHIP_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
-  classes,
   selectors,
   events,
   defaults
 };
 
-export declare type ChipType =  'choice' | 'filter' | 'action' | 'input' | 'field';
+export type ChipTheme = Theme;
+export type ChipType = 'choice' | 'filter' | 'action' | 'input' | 'field';
 
 export interface IChipSelectEventData<T = any> {
   value: T;
@@ -67,4 +61,8 @@ export interface IChipState {
   type: ChipType;
   disabled: boolean;
   dense: boolean;
+}
+
+export interface IChipNavigateEventData {
+  direction: 'previous' | 'next';
 }

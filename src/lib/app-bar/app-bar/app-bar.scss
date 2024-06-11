@@ -1,0 +1,163 @@
+@use 'sass:map';
+@use './core' as *;
+@use '../../focus-indicator';
+@use '../../state-layer';
+@use '../../tabs/tab-bar';
+@use '../../tabs/tab';
+@use '../../core/styles/theme';
+@use '../../core/styles/tokens/theme/color-emphasis';
+
+//
+// Host
+//
+
+$host-tokens: [background foreground];
+
+:host {
+  @include tokens($includes: $host-tokens);
+}
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Default theme
+//
+
+:host(:not([theme])) {
+  @include theme.provide(
+    (
+      primary: #{token(foreground)},
+      on-primary: rgba(black, color-emphasis.value(highest)),
+      text-high: rgba(white, color-emphasis.value(highest)),
+      text-medium: rgba(white, color-emphasis.value(medium)),
+      text-low: rgba(white, color-emphasis.value(medium-low))
+    )
+  );
+}
+
+//
+// Base
+//
+
+.forge-app-bar {
+  @include tokens($excludes: $host-tokens);
+}
+
+.forge-app-bar {
+  @include base;
+
+  .row {
+    @include row;
+  }
+
+  &.no-center {
+    .row {
+      @include row-no-center;
+    }
+  }
+
+  .section {
+    @include section;
+
+    &:not(:last-child):not(:first-child) {
+      @include section-center;
+    }
+
+    &:last-child {
+      @include section-end;
+    }
+  }
+
+  h1 {
+    @include title;
+  }
+
+  a {
+    @include anchor-base;
+
+    forge-state-layer {
+      @include state-layer.provide-theme(
+        (
+          color: #{token(foreground)}
+        )
+      );
+    }
+
+    forge-focus-indicator {
+      @include focus-indicator.provide-theme(
+        (
+          color: #{token(foreground)},
+          shape: 4px,
+          offset-block: 4px
+        )
+      );
+    }
+  }
+
+  .logo-title-container {
+    @include logo-title-container;
+  }
+}
+
+//
+// Elevation
+//
+
+:host(:is(:not([elevation]), [elevation='raised'])) {
+  .forge-app-bar {
+    @include elevation-raised;
+  }
+}
+
+//
+// Slotted - Tab bar
+//
+
+::slotted(forge-tab-bar) {
+  @include tab-bar.provide-theme(
+    (
+      divider-thickness: 0
+    )
+  );
+}
+
+//
+// Slotted - Logo
+//
+
+::slotted([slot='logo']) {
+  @include logo;
+}
+
+//
+// Slotted - Search
+//
+
+::slotted(forge-app-bar-search[slot='center']) {
+  width: 100%;
+}
+
+//
+// White theme
+//
+
+:host([theme='white']) {
+  @include theme.provide(
+    (
+      primary: black,
+      on-primary: rgba(white, color-emphasis.value(highest)),
+      text-medium: rgba(black, color-emphasis.value(medium))
+    )
+  );
+
+  .forge-app-bar {
+    @include override(background, white, value);
+    @include override(foreground, black, value);
+  }
+}

@@ -1,0 +1,35 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../../blocks/CustomArgTypes';
+import * as MiniDrawerStories from './MiniDrawer.stories';
+
+<Meta of={MiniDrawerStories} />
+
+<Title />
+
+Mini drawers are used to display secondary content, and are typically used for navigation menu purposes.
+
+There are two types of mini drawers:
+
+- **dismissible:** can be hidden by the user via a button provided by the developer
+- **permanent:** always visible
+
+The mini drawer component is a variant of the standard [Drawer](?path=/docs/components-drawer--docs) component, but with a smaller width.
+
+<Canvas of={MiniDrawerStories.Demo} />
+
+## Hover
+
+The mini drawer can be configured to open to a larger width when hovered with a pointer. This is useful for desktop applications where the user has a mouse.
+
+<Canvas of={MiniDrawerStories.Hover} />
+
+> **Note:** The hover feature is not available on touch devices.
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+The drawer component does **not** provide any semantics by default. Developers should provide their own `<aside>` for navigation,
+or various ARIA roles in other scenarios.

@@ -1,0 +1,55 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: #{token(display)};
+}
+
+@mixin base {
+  display: flex;
+  align-items: center;
+  gap: #{token(gap)};
+
+  height: #{token(height)};
+
+  border-width: #{token(outline-width)};
+  border-style: #{token(outline-style)};
+  border-color: #{token(outline-color)};
+  border-start-start-radius: #{token(shape-start-start)};
+  border-start-end-radius: #{token(shape-start-end)};
+  border-end-start-radius: #{token(shape-end-start)};
+  border-end-end-radius: #{token(shape-end-end)};
+  padding-block: #{token(padding-block)};
+  padding-inline: #{token(padding-inline)};
+
+  transition-property: border-color;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+}
+
+@mixin active {
+  @include override(outline-color, outline-color-active);
+}
+
+@mixin no-outline {
+  @include override(padding, 0, value);
+  @include override(outline-style, none, value);
+}
+
+@mixin vertical {
+  height: auto;
+  flex-direction: column;
+}
+
+@mixin host-stretch {
+  display: block;
+}
+
+@mixin stretch {
+  width: 100%;
+}
+
+@mixin dense {
+  @include override(height, dense-height);
+}

@@ -1,0 +1,355 @@
+@use './core' as *;
+@use '../core/styles/theme';
+@use '../state-layer';
+@use '../focus-indicator';
+@use '../circular-progress';
+
+//
+// Host
+//
+
+$host-tokens: [display disabled-cursor];
+
+:host {
+  @include tokens($includes: $host-tokens);
+}
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.forge-icon-button {
+  @include tokens($excludes: $host-tokens);
+}
+
+.forge-icon-button {
+  @include base;
+
+  ::slotted(:is([slot='start'], [slot='end'])) {
+    @include slotted-start-end;
+  }
+}
+
+//
+// Anchor
+//
+
+::slotted(a) {
+  @include anchor-base;
+}
+
+//
+// Focus indicator
+//
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(focus-indicator-color)},
+      shape-start-start: #{token(shape-start-start)},
+      shape-start-end: #{token(shape-start-end)},
+      shape-end-start: #{token(shape-end-start)},
+      shape-end-end: #{token(shape-end-end)}
+    )
+  );
+}
+
+:host(:is([variant='icon'], :not([variant]))) {
+  @include focus-indicator.provide-theme(
+    (
+      outward-offset: 0px // Requires unit
+    )
+  );
+}
+
+//
+// State layer
+//
+
+forge-state-layer {
+  @include state-layer.provide-theme(
+    (
+      color: #{token(icon-color)}
+    )
+  );
+}
+
+//
+// Popover icon
+//
+
+:host([popover-icon]) {
+  .forge-icon-button {
+    @include override(padding, popover-icon-padding);
+  }
+}
+
+//
+// Variants
+//
+
+:host([variant='outlined']) {
+  .forge-icon-button {
+    @include outlined;
+  }
+}
+
+:host([variant='tonal']) {
+  .forge-icon-button {
+    @include tonal;
+  }
+}
+
+:host(:is([variant='filled'], [variant='raised'])) {
+  .forge-icon-button {
+    @include filled;
+  }
+}
+
+:host([variant='raised']) {
+  .forge-icon-button {
+    @include raised;
+  }
+}
+
+//
+// Toggle
+//
+
+:host(:is(:not([toggle]), [toggle]:not([on]))) {
+  slot[name='on'] {
+    display: none;
+  }
+}
+
+:host([toggle][on]) {
+  slot:not([name]) {
+    display: none;
+  }
+}
+
+:host([toggle][on]:is(:not([variant]), [variant='icon'])) {
+  .forge-icon-button {
+    @include toggle-on-icon;
+  }
+}
+
+:host([toggle][on][variant='outlined']) {
+  .forge-icon-button {
+    @include toggle-on-outlined;
+  }
+}
+
+:host([toggle]:not([on])[variant='tonal']) {
+  .forge-icon-button {
+    @include toggle-tonal;
+  }
+}
+
+:host([toggle][on][variant='tonal']) {
+  .forge-icon-button {
+    @include toggle-on-tonal;
+  }
+}
+
+:host([toggle]:not([on]):is([variant='filled'], [variant='raised'])) {
+  .forge-icon-button {
+    @include toggle-filled;
+  }
+}
+
+:host([toggle][on]:is([variant='filled'], [variant='raised'])) {
+  .forge-icon-button {
+    @include toggle-on-filled;
+  }
+}
+
+//
+// Badge
+//
+
+::slotted([slot='badge']) {
+  position: absolute;
+  top: 0;
+  left: 60%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+::slotted(forge-badge[slot='badge'][dot]) {
+  top: 8px;
+}
+
+:host(:is([dense], [density='small'], [density='medium'])) {
+  ::slotted(forge-badge[slot='badge']:not([dot])) {
+    top: -25%;
+  }
+
+  ::slotted(forge-badge[slot='badge'][dot]) {
+    top: 0;
+  }
+}
+
+//
+// Circular progress
+//
+
+::slotted(forge-circular-progress) {
+  @include circular-progress.provide-theme(
+    (
+      indicator-color: #{token(icon-color)},
+      track-color: transparent,
+      size: 1em
+    )
+  );
+}
+
+//
+// Density
+//
+
+:host(:is([dense], [density='small'])) {
+  .forge-icon-button {
+    @include density-small;
+  }
+
+  ::slotted(*) {
+    @include density-small-slotted;
+  }
+}
+
+:host([density='medium']) {
+  .forge-icon-button {
+    @include density-medium;
+  }
+}
+
+//
+// Shape
+//
+
+:host([shape='squared']) {
+  .forge-icon-button {
+    @include override(shape, shape-squared);
+  }
+}
+
+//
+// Disabled
+//
+
+:host([disabled]) {
+  @include host-disabled;
+
+  .forge-icon-button {
+    @include disabled;
+  }
+}
+
+:host([disabled][variant='raised']) {
+  .forge-icon-button {
+    @include raised-disabled;
+  }
+}
+
+//
+// Theme
+//
+
+@mixin theme($theme) {
+  // Non-toggle + icon (default) & outlined variants
+  :host(:not([toggle])[theme='#{$theme}']:is(:not([variant]), [variant='icon'], [variant='outlined'])) {
+    .forge-icon-button {
+      @include override(icon-color, theme.variable($theme), value);
+    }
+  }
+
+  // Toggle + icon (default)
+  :host([toggle][theme='#{$theme}']:is(:not([variant]), [variant='icon'])) {
+    .forge-icon-button {
+      @include override(toggle-on-icon-color, theme.variable($theme), value);
+    }
+  }
+
+  // Toggle + outlined
+  :host([toggle][theme='#{$theme}'][variant='outlined']) {
+    .forge-icon-button {
+      @include override(icon-color, theme.variable($theme), value);
+      @include override(outlined-toggle-on-background-color, theme.variable(#{$theme}-container), value);
+      @include override(outlined-toggle-on-icon-color, theme.variable($theme), value);
+    }
+  }
+
+  // Primary theme is the default for filled and tonal variants
+  @if $theme != 'primary' {
+    // Non-toggle + tonal variant
+    :host(:not([toggle])[theme='#{$theme}'][variant='tonal']) {
+      .forge-icon-button {
+        @include override(icon-color, theme.variable(on-#{$theme}-container), value);
+        @include override(background-color, theme.variable(#{$theme}-container), value);
+      }
+    }
+
+    // Toggle + tonal variant
+    :host([toggle]:not([on])[theme='#{$theme}'][variant='tonal']) {
+      .forge-icon-button {
+        @include override(background-color, theme.variable(#{$theme}-container), value);
+      }
+    }
+
+    // Toggle (on) + tonal variant
+    :host([toggle][theme='#{$theme}'][variant='tonal']) {
+      .forge-icon-button {
+        @include override(tonal-toggle-on-background-color, theme.variable(#{$theme}-container), value);
+        @include override(tonal-toggle-on-icon-color, theme.variable(on-#{$theme}-container), value);
+      }
+    }
+
+    // Non-toggle + filled & raised variants
+    :host(:not([toggle])[theme='#{$theme}']:is([variant='filled'], [variant='raised'])) {
+      .forge-icon-button {
+        @include override(icon-color, theme.variable(on-#{$theme}), value);
+        @include override(background-color, theme.variable($theme), value);
+      }
+    }
+
+    // Toggle + filled & raised variants
+    :host([toggle]:not([on])[theme='#{$theme}']:is([variant='filled'], [variant='raised'])) {
+      .forge-icon-button {
+        @include override(icon-color, theme.variable($theme), value);
+        @include override(background-color, theme.variable(#{$theme}-container), value);
+      }
+    }
+
+    // Toggle (on) + filled & raised variants
+    :host([toggle][theme='#{$theme}']:is([variant='filled'], [variant='raised'])) {
+      .forge-icon-button {
+        @include override(filled-toggle-on-background-color, theme.variable($theme), value);
+        @include override(filled-toggle-on-icon-color, theme.variable(on-#{$theme}), value);
+      }
+    }
+  }
+
+  // Focus indicator
+  :host([theme='#{$theme}']) {
+    .forge-icon-button {
+      @include override(focus-indicator-color, theme.variable($theme), value);
+    }
+  }
+}
+
+@include theme(primary);
+@include theme(secondary);
+@include theme(tertiary);
+@include theme(success);
+@include theme(error);
+@include theme(warning);
+@include theme(info);

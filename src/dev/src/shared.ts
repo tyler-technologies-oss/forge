@@ -3,12 +3,7 @@ import { listenThemeChange } from '$src/theme/dark-theme';
 // Styles
 import '$src/shared.scss';
 import '@tylertech/forge/forge-core.scss';
-import '@tylertech/forge/typography/forge-typography.scss';
-import '@tylertech/forge/theme/forge-theme.scss';
-import '@tylertech/forge/button/forge-button.scss';
-import '@tylertech/forge/icon-button/forge-icon-button.scss';
-import '@tylertech/forge/tooltip/forge-tooltip.scss';
-import '@tylertech/forge/ripple/forge-ripple.scss';
+import '@tylertech/forge/forge.scss';
 
 // Components
 import '@tylertech/forge/scaffold';
@@ -27,7 +22,7 @@ import '@tylertech/forge/switch';
 import '@tylertech/forge/text-field';
 import '@tylertech/forge/select';
 import '@tylertech/forge/tooltip';
-import '@tylertech/forge/ripple';
+import '@tylertech/forge/stack';
 
 // Icons
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';

@@ -1,4 +1,4 @@
-import { isDefined, isFunction, removeElement } from '@tylertech/forge-core';
+import { isDefined, removeElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IBaseSelectComponent } from './base-select';
 import { ListDropdown, IListDropdown } from '../../list-dropdown';
@@ -7,9 +7,10 @@ import { IOptionComponent, OPTION_CONSTANTS } from '../option';
 import { IOptionGroupComponent, OPTION_GROUP_CONSTANTS } from '../option-group';
 import { ISelectOption, ISelectOptionGroup, SelectOptionListenerDestructor } from './base-select-constants';
 import { isOptionGroupObject } from './select-utils';
-import { IPopupComponent, POPUP_CONSTANTS } from '../../popup';
+import { IPopoverComponent, POPOVER_CONSTANTS } from '../../popover';
+import { type IBaseComponent } from '../../core/base/base-component';
 
-export interface IBaseSelectAdapter extends IBaseAdapter {
+export interface IBaseSelectAdapter<T extends IBaseComponent = IBaseSelectComponent> extends IBaseAdapter<T> {
   initializeAccessibility(): void;
   addClickListener(listener: (evt: Event) => void): void;
   removeClickListener(listener: (evt: Event) => void): void;
@@ -19,6 +20,7 @@ export interface IBaseSelectAdapter extends IBaseAdapter {
   setOptions(options: ISelectOption[] | ISelectOptionGroup[], clear?: boolean): void;
   open(config: IListDropdownConfig): void;
   close(): void;
+  destroyListDropdown(): void;
   setDismissListener(listener: () => void): void;
   scrollSelectedOptionIntoView(): void;
   activateSelectedOption(): void;
@@ -36,11 +38,11 @@ export interface IBaseSelectAdapter extends IBaseAdapter {
   popupElement: HTMLElement | undefined;
 }
 
-export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent> implements IBaseSelectAdapter {
+export abstract class BaseSelectAdapter<T extends IBaseSelectComponent> extends BaseAdapter<T> implements IBaseSelectAdapter {
   private _listDropdown?: IListDropdown;
   protected _targetElement: HTMLElement;
 
-  constructor(component: IBaseSelectComponent) {
+  constructor(component: T) {
     super(component);
   }
 
@@ -76,26 +78,48 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
 
   private _createOptionsFromElements(optionElements: IOptionComponent[]): ISelectOption[] {
     return optionElements.map(o => {
-      let optionClass = o.hasAttribute(OPTION_CONSTANTS.attributes.OPTION_CLASS) ? o.getAttribute(OPTION_CONSTANTS.attributes.OPTION_CLASS) as string : o.optionClass;
+      let optionClass = o.hasAttribute(OPTION_CONSTANTS.attributes.OPTION_CLASS)
+        ? (o.getAttribute(OPTION_CONSTANTS.attributes.OPTION_CLASS) as string)
+        : o.optionClass;
       if (typeof optionClass === 'string') {
         optionClass = optionClass.split(' ');
       }
 
       return {
         // eslint-disable-next-line @typescript-eslint/no-extra-parens
-        label: o.hasAttribute(OPTION_CONSTANTS.attributes.LABEL) ? o.getAttribute(OPTION_CONSTANTS.attributes.LABEL) as string : (isDefined(o.label) ? o.label : o.innerText),
-        secondaryLabel: o.hasAttribute(OPTION_CONSTANTS.attributes.SECONDARY_LABEL) ? o.getAttribute(OPTION_CONSTANTS.attributes.SECONDARY_LABEL) as string : isDefined(o.secondaryLabel) ? o.secondaryLabel : undefined,
+        label: o.hasAttribute(OPTION_CONSTANTS.attributes.LABEL)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.LABEL) as string)
+          : isDefined(o.label)
+            ? o.label
+            : o.innerText,
+        secondaryLabel: o.hasAttribute(OPTION_CONSTANTS.attributes.SECONDARY_LABEL)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.SECONDARY_LABEL) as string)
+          : isDefined(o.secondaryLabel)
+            ? o.secondaryLabel
+            : undefined,
         value: o.hasAttribute(OPTION_CONSTANTS.attributes.VALUE) ? o.getAttribute(OPTION_CONSTANTS.attributes.VALUE) : o.value,
         disabled: o.hasAttribute(OPTION_CONSTANTS.attributes.DISABLED),
         divider: o.hasAttribute(OPTION_CONSTANTS.attributes.DIVIDER),
         optionClass,
-        leadingIcon: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON) ? o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON) as string : o.leadingIcon,
-        leadingIconClass: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_CLASS) ? o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_CLASS) as string : o.leadingIconClass,
-        leadingIconType: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_TYPE) ? o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_TYPE) as ListDropdownIconType : o.leadingIconType,
+        leadingIcon: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON) as string)
+          : o.leadingIcon,
+        leadingIconClass: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_CLASS)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_CLASS) as string)
+          : o.leadingIconClass,
+        leadingIconType: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_TYPE)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_TYPE) as ListDropdownIconType)
+          : o.leadingIconType,
         leadingIconComponentProps: o.leadingIconComponentProps,
-        trailingIcon: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON) ? o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON) as string : o.trailingIcon,
-        trailingIconClass: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_CLASS) ? o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_CLASS) as string : o.trailingIconClass,
-        trailingIconType: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE) ? o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE) as ListDropdownIconType : o.trailingIconType,
+        trailingIcon: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON) as string)
+          : o.trailingIcon,
+        trailingIconClass: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_CLASS)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_CLASS) as string)
+          : o.trailingIconClass,
+        trailingIconType: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE) as ListDropdownIconType)
+          : o.trailingIconType,
         trailingIconComponentProps: o.trailingIconComponentProps,
         leadingBuilder: o.leadingBuilder,
         trailingBuilder: o.trailingBuilder
@@ -106,24 +130,30 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
   public open(config: IListDropdownConfig): void {
     this._listDropdown = new ListDropdown(this._targetElement, config);
     this._listDropdown.open();
+
+    if (this._component.id) {
+      const listElement = this._listDropdown.dropdownElement?.querySelector('forge-list');
+      listElement?.setAttribute('aria-labelledby', this._component.id);
+    }
   }
 
-  public close(): void {
+  public async close(): Promise<void> {
     if (this._listDropdown) {
-      this._listDropdown.close();
-      this._listDropdown.destroy();
-      this._listDropdown = undefined;
+      await this._listDropdown.close();
+      this.destroyListDropdown();
     }
+  }
+
+  public destroyListDropdown(): void {
+    this._listDropdown?.destroy();
+    this._listDropdown = undefined;
   }
 
   public setDismissListener(listener: () => void): void {
     if (!this._listDropdown || !this._listDropdown.dropdownElement) {
       return;
     }
-    const dropdownElement = this._listDropdown.dropdownElement as IPopupComponent;
-    if (dropdownElement.targetElement) {
-      dropdownElement.targetElement.addEventListener(POPUP_CONSTANTS.events.BLUR, listener);
-    }
+    this._listDropdown.dropdownElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, listener);
   }
 
   public toggleOptionMultiple(index: number, isSelected: boolean): void {
@@ -213,7 +243,7 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
     }
     // We need to wait for the next animation frame to ensure that the layout has been updated
     window.requestAnimationFrame(() => {
-      const dropdownEl = this.popupElement as IPopupComponent | undefined;
+      const dropdownEl = this.popupElement as IPopoverComponent | undefined;
       dropdownEl?.position();
     });
   }

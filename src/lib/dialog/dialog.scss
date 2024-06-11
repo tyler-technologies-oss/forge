@@ -1,11 +1,363 @@
-@use './mixins';
+@use './core' as *;
+@use './animations';
+@use '../backdrop';
+@use '../core/styles/theme';
 
-@include mixins.core-styles;
+$can-animate: '[visible]:not([animation-type=none])';
 
-:host {
-  display: block;
+@layer base, nonmodal, animation, placement, size-strategy, preset, fullscreen, position-strategy, media;
+
+//
+// Base
+//
+
+@layer base {
+  //
+  // Host styles
+  //
+
+  :host {
+    @include host;
+
+    @include theme.provide(
+      (
+        surface: theme.variable(surface-bright)
+      )
+    );
+  }
+
+  :host([hidden]) {
+    display: none;
+  }
+
+  //
+  // Base
+  //
+
+  .forge-dialog {
+    @include tokens;
+  }
+
+  .forge-dialog {
+    @include dialog-base;
+  }
+
+  .container {
+    @include container;
+  }
+
+  .surface {
+    @include surface;
+  }
+
+  //
+  // Backdrop
+  //
+
+  dialog.forge-dialog {
+    &::backdrop {
+      display: none; // Hide the native backdrop
+    }
+  }
+
+  forge-backdrop {
+    @include backdrop.provide-theme(
+      (
+        opacity: #{token(backdrop-opacity)},
+        enter-animation-duration: #{token(enter-animation-duration)},
+        enter-animation-easing: #{token(enter-animation-easing)},
+        exit-animation-duration: #{token(exit-animation-duration)},
+        exit-animation-easing: #{token(exit-animation-easing)}
+      )
+    );
+  }
+
+  //
+  // Moveable
+  //
+
+  :host(:not([moveable])) {
+    .move-handle {
+      display: none;
+    }
+  }
+
+  :host([moveable]:not([fullscreen])) {
+    .surface {
+      @include surface-moveable;
+
+      &:not(:hover) {
+        .move-handle-container {
+          display: none; // Only show the move handle when the dialog surface is hovered
+        }
+      }
+    }
+
+    .surface.moved {
+      @include surface-moved;
+    }
+
+    .surface.moving {
+      @include surface-moving;
+    }
+
+    .move-handle-container {
+      @include move-handle-container;
+
+      .move-handle {
+        @include move-handle;
+
+        svg {
+          fill: currentColor;
+        }
+      }
+    }
+  }
+
+  //
+  // Open
+  //
+
+  :host([visible]) {
+    @include host-open;
+  }
 }
 
-:host([hidden]) {
-  display: none;
+//
+// Non-modal
+//
+
+@layer nonmodal {
+  :host([mode='nonmodal']) {
+    .forge-dialog {
+      @include nonmodal-dialog-base;
+    }
+
+    .container {
+      display: contents;
+    }
+
+    .surface {
+      @include nonmodal-surface;
+    }
+
+    forge-backdrop {
+      display: none;
+    }
+  }
+}
+
+//
+// Animation
+//
+
+@layer animation {
+  :host(#{$can-animate}) {
+    dialog.forge-dialog[open] {
+      .surface {
+        @include enter;
+
+        &.exiting {
+          @include exit;
+        }
+      }
+    }
+  }
+
+  // Zoom (default)
+  :host(#{$can-animate}:is(:not([animation-type]), [animation-type='zoom'])) {
+    dialog.forge-dialog[open] {
+      .surface {
+        animation-name: zoom-in;
+
+        &.exiting {
+          animation-name: zoom-out;
+        }
+      }
+    }
+  }
+
+  // Fade
+  :host(#{$can-animate}[animation-type='fade']) {
+    dialog.forge-dialog[open] {
+      .surface {
+        animation-name: fade-in;
+
+        &.exiting {
+          animation-name: fade-out;
+        }
+      }
+    }
+  }
+
+  // Slide
+  :host(#{$can-animate}[animation-type='slide']) {
+    dialog.forge-dialog[open] {
+      .surface {
+        animation-name: slide-in;
+
+        &.exiting {
+          animation-name: slide-out;
+        }
+      }
+    }
+  }
+}
+
+//
+// Placement
+//
+
+@layer placement {
+  @each $placement in ('custom', 'top', 'top-right', 'top-left', 'bottom', 'bottom-right', 'bottom-left') {
+    :host([placement='#{$placement}']) {
+      .surface {
+        @include placement($placement);
+      }
+    }
+  }
+}
+
+//
+// Size strategy
+//
+
+@layer size-strategy {
+  :host([size-strategy='container-inline']) {
+    .surface {
+      width: 100%;
+    }
+  }
+
+  :host([size-strategy='container-block']) {
+    .surface {
+      height: 100%;
+    }
+  }
+}
+
+//
+// Preset
+//
+
+@layer preset {
+  :host(#{$can-animate}:is([preset='left-sheet'], [preset='right-sheet'], [preset='top-sheet'], [preset='bottom-sheet'])) {
+    .forge-dialog {
+      @include preset-sheet-dialog-base;
+    }
+
+    .surface {
+      animation-name: slide-in;
+
+      &.exiting {
+        animation-name: slide-out;
+      }
+    }
+  }
+
+  :host(:is([preset='left-sheet'], [preset='right-sheet'], [preset='top-sheet'], [preset='bottom-sheet'])) {
+    .surface {
+      @include preset-sheet-surface-base;
+    }
+  }
+
+  :host([preset='left-sheet']) {
+    .forge-dialog {
+      @include override(slide-translate, -100% 0, value);
+    }
+
+    .surface {
+      @include preset-left-sheet-surface;
+    }
+  }
+
+  :host([preset='right-sheet']) {
+    .forge-dialog {
+      @include override(slide-translate, 100% 0, value);
+    }
+
+    .surface {
+      @include preset-right-sheet-surface;
+    }
+  }
+
+  :host([preset='top-sheet']) {
+    .forge-dialog {
+      @include override(slide-translate, 0 -100%, value);
+    }
+
+    .surface {
+      @include preset-top-sheet-surface;
+    }
+  }
+
+  :host([preset='bottom-sheet']) {
+    .forge-dialog {
+      @include override(slide-translate, 0 100%, value);
+    }
+
+    .surface {
+      @include preset-bottom-sheet-surface;
+    }
+  }
+}
+
+//
+// Full screen
+//
+
+@layer fullscreen {
+  :host([fullscreen]) {
+    .forge-dialog {
+      @include fullscreen-dialog-base;
+    }
+
+    .surface {
+      @include fullscreen-surface;
+    }
+
+    forge-backdrop {
+      display: none;
+    }
+  }
+}
+
+//
+// Position strategy
+//
+
+@layer position-strategy {
+  :host([position-strategy='viewport']) {
+    .forge-dialog {
+      position: fixed;
+    }
+  }
+
+  :host([position-strategy='container']) {
+    .forge-dialog {
+      position: absolute;
+    }
+  }
+
+  :host([position-strategy='container'][preset$='-sheet']) {
+    .forge-dialog {
+      contain: content;
+    }
+  }
+}
+
+//
+// Media
+//
+
+@layer media {
+  @media (prefers-reduced-motion: reduce) {
+    .surface {
+      animation-name: fade-in;
+
+      &.exiting {
+        animation-name: fade-out;
+      }
+    }
+  }
 }

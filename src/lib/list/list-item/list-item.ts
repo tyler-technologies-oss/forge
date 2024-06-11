@@ -1,32 +1,29 @@
-import { CustomElement, attachShadowTemplate, requireParent, elementParents, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
 import { ListItemAdapter } from './list-item-adapter';
-import { ListItemFoundation } from './list-item-foundation';
+import { ListItemCore } from './list-item-core';
 import { IListItemSelectEventData, LIST_ITEM_CONSTANTS } from './list-item-constants';
-import { LIST_CONSTANTS } from '../list/list-constants';
-import { IListComponent } from '../list';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { StateLayerComponent } from '../../state-layer';
+import { FocusIndicatorComponent } from '../../focus-indicator';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
+import { BaseComponent } from '../../core/base/base-component';
 
-import defaultTemplate from './list-item.html';
+import template from './list-item.html';
 import styles from './list-item.scss';
 
-export interface IListItemComponent extends IBaseComponent {
-  static: boolean;
+export interface IListItemProperties<T = unknown> {
+  selected: boolean;
+  active: boolean;
+  value: T;
+  dense: boolean;
+  indented: boolean;
   twoLine: boolean;
   threeLine: boolean;
-  active: boolean;
-  selected: boolean;
-  value: any;
-  href: string;
-  target: string;
-  ripple: boolean;
-  disabled: boolean;
-  dense: boolean;
-  propagateClick: boolean;
-  indented: boolean;
   wrap: boolean;
-  focus(): void;
-  deactivateRipple(): void;
+  noninteractive: boolean;
 }
+
+export interface IListItemComponent<T = unknown> extends IListItemProperties<T>, IWithElementInternals, IWithDefaultAria {}
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -39,185 +36,156 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-list-item>` element.
- * 
  * @tag forge-list-item
+ *
+ * @summary List items are individual rows of content inside of a list.
+ *
+ * @property {boolean} [selected=false] - Applies the selected state to the list item.
+ * @property {boolean} [active=false] - Applies the active state to the list item by emulating its focused state.
+ * @property {unknown} value - The unique value of the list item.
+ * @property {boolean} [dense=false] - Applies the dense state to the list item.
+ * @property {boolean} [indented=false] - Applies the indented state by adding margin to the start of the list item.
+ * @property {boolean} [twoLine=false] - Sets the list item height to support at least two lines of text.
+ * @property {boolean} [threeLine=false] - Sets the list item height to support at least three lines of text.
+ * @property {boolean} [wrap=false] - Sets the list item to wrap its text content.
+ * @property {boolean} [noninteractive=false] - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
+ *
+ * @attribute {boolean} [selected=false] - Applies the selected state to the list item.
+ * @attribute {boolean} [active=false] - Applies the active state to the list item by emulating its focused state.
+ * @attribute {unknown} value - The unique value of the list item.
+ * @attribute {boolean} [dense=false] - Applies the dense state to the list item.
+ * @attribute {boolean} [indented=false] - Applies the indented state by adding margin to the start of the list item.
+ * @attribute {boolean} [two-line=false] - Sets the list item height to support at least two lines of text.
+ * @attribute {boolean} [three-line=false] - Sets the list item height to support at least three lines of text.
+ * @attribute {boolean} [wrap=false] - Sets the list item to wrap its text content.
+ * @attribute {boolean} [noninteractive=false] - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
+ *
+ * @event {CustomEvent<IListItemSelectEventData>} forge-list-item-select - Fires when the list item is selected.
+ *
+ * @slot - The primary text.
+ * @slot secondary-text - The secondary text.
+ * @slot tertiary-text - The tertiary text.
+ * @slot start - The start content.
+ * @slot end - The end element.
+ *
+ * @csspart root - The root container element.
+ * @csspart text-container - The container for the text content.
+ * @csspart focus-indicator - The forwarded focus indicator's internal indicator element.
+ * @csspart state-layer - The forwarded state layer's internal surface element.
+ *
+ * @cssproperty --forge-list-item-background - The background color.
+ * @cssproperty --forge-list-item-shape - The shape of the list item.
+ * @cssproperty --forge-list-item-padding - The padding inside of the container element.
+ * @cssproperty --forge-list-item-wrap-padding - The padding inside of the container element when `wrap` is enabled.
+ * @cssproperty --forge-list-item-margin - The margin around the host element.
+ * @cssproperty --forge-list-item-height - The height of the container.
+ * @cssproperty --forge-list-item-indent - The margin inline state when in the indented state.
+ * @cssproperty --forge-list-item-cursor - The cursor when interactive.
+ * @cssproperty --forge-list-item-gap - The gap between the slotted content.
+ * @cssproperty --forge-list-item-text-color - The text color of the text.
+ * @cssproperty --forge-list-item-text-font-size - The font size of the text.
+ * @cssproperty --forge-list-item-text-font-weight - The font weight of the text.
+ * @cssproperty --forge-list-item-text-line-height - The line height of the text.
+ * @cssproperty --forge-list-item-selected-color - The color when in the selected state.
+ * @cssproperty --forge-list-item-selected-opacity - The opacity of the background color when in the selected state.
+ * @cssproperty --forge-list-item-start-selected-color - The color of the start content when in the selected state.
+ * @cssproperty --forge-list-item-end-selected-color - The color of the end content when in the selected state.
+ * @cssproperty --forge-list-item-selected-text-color - The color of the text when in the selected state.
+ * @cssproperty --forge-list-item-disabled-opacity - The opacity of the element when in the disabled state.
+ * @cssproperty --forge-list-item-disabled-cursor - The cursor when in the disabled state.
+ * @cssproperty --forge-list-item-one-line-height - The line height when in the one/single line state.
+ * @cssproperty --forge-list-item-two-line-height - The line height when in the two line state.
+ * @cssproperty --forge-list-item-three-line-height - The line height when in the three line state.
+ * @cssproperty --forge-list-item-dense-one-line-height - The line height when in the dense one/single line state.
+ * @cssproperty --forge-list-item-dense-two-line-height - The line height when in the dense two line state.
+ * @cssproperty --forge-list-item-dense-three-line-height - The line height when in the dense three line state.
+ * @cssproperty --forge-list-item-dense-font-size - The font size when in the dense state.
+ * @cssproperty --forge-list-item-dense-indent - The margin inline state when in the dense indented state.
+ * @cssproperty --forge-list-item-dense-gap - The gap between the slotted content when in the dense state.
  */
-@CustomElement({
-  name: LIST_ITEM_CONSTANTS.elementName
+@customElement({
+  name: LIST_ITEM_CONSTANTS.elementName,
+  dependencies: [StateLayerComponent, FocusIndicatorComponent]
 })
-export class ListItemComponent extends BaseComponent implements IListItemComponent {
+export class ListItemComponent extends WithElementInternals(WithDefaultAria(BaseComponent)) implements IListItemComponent {
   public static get observedAttributes(): string[] {
-    return [
-      LIST_ITEM_CONSTANTS.attributes.STATIC,
-      LIST_ITEM_CONSTANTS.attributes.TWO_LINE,
-      LIST_ITEM_CONSTANTS.attributes.THREE_LINE,
-      LIST_ITEM_CONSTANTS.attributes.ACTIVE,
-      LIST_ITEM_CONSTANTS.attributes.SELECTED,
-      LIST_ITEM_CONSTANTS.attributes.VALUE,
-      LIST_ITEM_CONSTANTS.attributes.HREF,
-      LIST_ITEM_CONSTANTS.attributes.TARGET,
-      LIST_ITEM_CONSTANTS.attributes.RIPPLE,
-      LIST_ITEM_CONSTANTS.attributes.DISABLED,
-      LIST_ITEM_CONSTANTS.attributes.DENSE,
-      LIST_ITEM_CONSTANTS.attributes.PROPAGATE_CLICK,
-      LIST_ITEM_CONSTANTS.attributes.INDENTED,
-      LIST_ITEM_CONSTANTS.attributes.WRAP
-    ];
+    return Object.values(LIST_ITEM_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: ListItemFoundation;
+  private _core: ListItemCore;
+  private _adapter: ListItemAdapter;
 
   constructor() {
     super();
-    attachShadowTemplate(this, defaultTemplate, styles);
-    this._foundation = new ListItemFoundation(new ListItemAdapter(this));
+    attachShadowTemplate(this, template, styles);
+    this._adapter = new ListItemAdapter(this);
+    this._core = new ListItemCore(this._adapter);
   }
 
   public connectedCallback(): void {
-    // To simulate the :host-context() selector for Firefox until they implement it, we need to determine if the
-    // list item is within a drawer for auto-styling the list item when included within a drawer. Check to see if
-    // any of the parents of this element are a drawer.
-    if (!this.hasAttribute(LIST_ITEM_CONSTANTS.attributes.DRAWER_CONTEXT) && elementParents(this).some(el => ['forge-drawer', 'forge-modal-drawer', 'forge-mini-drawer'].includes(el.tagName.toLowerCase()))) {
-      this.setAttribute(LIST_ITEM_CONSTANTS.attributes.DRAWER_CONTEXT, 'true');
-    }
-
-    const list = requireParent<IListComponent>(this, LIST_CONSTANTS.elementName);
-    if (list) {
-      this._inheritParentListProps(list);
-    }
-
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case LIST_ITEM_CONSTANTS.attributes.STATIC:
-        this.static = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.attributes.TWO_LINE:
-        this.twoLine = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.attributes.THREE_LINE:
-        this.threeLine = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.attributes.ACTIVE:
-        this.active = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.attributes.SELECTED:
+      case LIST_ITEM_CONSTANTS.observedAttributes.SELECTED:
         this.selected = coerceBoolean(newValue);
         break;
-      case LIST_ITEM_CONSTANTS.attributes.VALUE:
+      case LIST_ITEM_CONSTANTS.observedAttributes.ACTIVE:
+        this.active = coerceBoolean(newValue);
+        break;
+      case LIST_ITEM_CONSTANTS.observedAttributes.VALUE:
         this.value = newValue;
         break;
-      case LIST_ITEM_CONSTANTS.attributes.HREF:
-        this.href = newValue;
-        break;
-      case LIST_ITEM_CONSTANTS.attributes.TARGET:
-        this.target = newValue;
-        break;
-      case LIST_ITEM_CONSTANTS.attributes.RIPPLE:
-        this.ripple = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.attributes.DISABLED:
-        this.disabled = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.attributes.DENSE:
+      case LIST_ITEM_CONSTANTS.observedAttributes.DENSE:
         this.dense = coerceBoolean(newValue);
         break;
-      case LIST_ITEM_CONSTANTS.attributes.PROPAGATE_CLICK:
-        this.propagateClick = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.attributes.INDENTED:
+      case LIST_ITEM_CONSTANTS.observedAttributes.INDENTED:
         this.indented = coerceBoolean(newValue);
         break;
-      case LIST_ITEM_CONSTANTS.attributes.WRAP:
+      case LIST_ITEM_CONSTANTS.observedAttributes.TWO_LINE:
+        this.twoLine = coerceBoolean(newValue);
+        break;
+      case LIST_ITEM_CONSTANTS.observedAttributes.THREE_LINE:
+        this.threeLine = coerceBoolean(newValue);
+        break;
+      case LIST_ITEM_CONSTANTS.observedAttributes.WRAP:
         this.wrap = coerceBoolean(newValue);
+        break;
+      case LIST_ITEM_CONSTANTS.observedAttributes.NONINTERACTIVE:
+        this.noninteractive = coerceBoolean(newValue);
         break;
     }
   }
 
-  private _inheritParentListProps(list: IListComponent): void {
-    if (list.hasAttribute(LIST_CONSTANTS.attributes.STATIC)) {
-      this.static = true;
-    }
-    if (list.hasAttribute(LIST_CONSTANTS.attributes.DENSE)) {
-      this.dense = true;
-    }
-    if (list.getAttribute(LIST_CONSTANTS.attributes.PROPAGATE_CLICK) === 'false') {
-      this.propagateClick = false;
-    }
-    if (list.hasAttribute(LIST_CONSTANTS.attributes.INDENTED)) {
-      this.indented = true;
-    }
-  }
-
-  /** Gets/sets whether the static state of this list item. */
-  @FoundationProperty()
-  public declare static: boolean;
-
-  /** Gets/sets whether the list item displays two lines of text. */
-  @FoundationProperty()
-  public declare twoLine: boolean;
-
-  /** Gets/sets whether the list item displays three lines of text. */
-  @FoundationProperty()
-  public declare threeLine: boolean;
-
-  /** Gets/sets whether the list item is active or not. */
-  @FoundationProperty()
-  public declare active: boolean;
-
-  /** Gets/sets whether the list item is selected or not. */
-  @FoundationProperty()
+  @coreProperty()
   public declare selected: boolean;
 
-  /** Gets/sets list item value. */
-  @FoundationProperty()
-  public declare value: any;
+  @coreProperty()
+  public declare active: boolean;
 
-  /** Gets/sets the href link that this list item will send the browser to when clicked. */
-  @FoundationProperty()
-  public declare href: string;
+  @coreProperty()
+  public declare value: unknown;
 
-  /** Gets/sets the href link target. Only pertains when `href` is also used. */
-  @FoundationProperty()
-  public declare target: string;
-
-  /** Gets/sets whether the list item has a ripple or not. */
-  @FoundationProperty()
-  public declare ripple: boolean;
-
-  /** Gets/sets whether the list item is disabled or not. */
-  @FoundationProperty()
-  public declare disabled: boolean;
-
-  /** Gets/sets whether the list item is using dense styles or not. */
-  @FoundationProperty()
+  @coreProperty()
   public declare dense: boolean;
 
-  /** Gets/sets whether the list item allows mousedown events through to the underlying list item element. Default is true. */
-  @FoundationProperty()
-  public declare propagateClick: boolean;
-
-  /** Gets/sets whether the list item is indented or not. Default is false. */
-  @FoundationProperty()
+  @coreProperty()
   public declare indented: boolean;
 
-  /** Gets/sets whether the list item content is wrapped or not. Default is true. */
-  @FoundationProperty()
+  @coreProperty()
+  public declare twoLine: boolean;
+
+  @coreProperty()
+  public declare threeLine: boolean;
+
+  @coreProperty()
   public declare wrap: boolean;
 
-  /** Sets focus to this list item. */
-  public override focus(): void {
-    this._foundation.setFocus();
-  }
-
-  public deactivateRipple(): void {
-    this._foundation.deactivateRipple();
-  }
+  @coreProperty()
+  public declare noninteractive: boolean;
 }

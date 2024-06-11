@@ -1,5 +1,7 @@
 import { getShadowElement, removeAllChildren } from '@tylertech/forge-core';
+import { ExperimentalFocusOptions } from '../constants';
 import { IAvatarComponent } from '../avatar';
+import { IButtonComponent } from '../button';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IconComponentDelegate } from '../icon';
 import { IToolbarComponent } from '../toolbar';
@@ -20,10 +22,8 @@ export interface IProfileCardAdapter extends IBaseAdapter {
   setProfileButtonText(value: string): void;
   setProfileButtonListener(listener: (evt: Event) => void): void;
   setSignOutButtonListener(listener: (evt: Event) => void): void;
-  removeProfileButtonListener(listener: (evt: Event) => void): void;
-  removeSignOutButtonListener(listener: (evt: Event) => void): void;
-  requestProfileButtonFocus(): void;
-  requestSignOutButtonFocus(): void;
+  requestProfileButtonFocus(options?: ExperimentalFocusOptions): void;
+  requestSignOutButtonFocus(options?: ExperimentalFocusOptions): void;
 }
 
 export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> implements IProfileCardAdapter {
@@ -31,8 +31,8 @@ export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> imple
   private _emailElement: HTMLElement;
   private _avatarElement: IAvatarComponent;
   private _actionToolbar: IToolbarComponent;
-  private _profileButton: HTMLButtonElement;
-  private _signOutButton: HTMLButtonElement;
+  private _profileButton: IButtonComponent;
+  private _signOutButton: IButtonComponent;
 
   constructor(component: IProfileCardComponent) {
     super(component);
@@ -40,29 +40,26 @@ export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> imple
     this._emailElement = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.EMAIL);
     this._avatarElement = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.AVATAR) as IAvatarComponent;
     this._actionToolbar = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.ACTION_TOOLBAR) as IToolbarComponent;
-    this._profileButton = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.PROFILE_BUTTON) as HTMLButtonElement;
-    this._signOutButton = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.SIGN_OUT_BUTTON) as HTMLButtonElement;
+    this._profileButton = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.PROFILE_BUTTON) as IButtonComponent;
+    this._signOutButton = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.SIGN_OUT_BUTTON) as IButtonComponent;
   }
 
   public setFullName(value: string): void {
-    this._component.setAttribute(PROFILE_CARD_CONSTANTS.attributes.FULL_NAME, value);
     this._fullNameElement.textContent = value;
   }
 
   public setEmail(value: string): void {
-    this._component.setAttribute(PROFILE_CARD_CONSTANTS.attributes.EMAIL, value);
     this._emailElement.textContent = value;
   }
 
   public setAvatarText(value: string): void {
-    this._component.setAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_TEXT, value);
-    this._avatarElement.text = value;
     removeAllChildren(this._avatarElement);
+    this._avatarElement.text = value;
   }
 
   public setAvatarIcon(value: string): void {
     if (value) {
-      const iconDelegate = new IconComponentDelegate({ props: { name: value }});
+      const iconDelegate = new IconComponentDelegate({ props: { name: value } });
       this._avatarElement.replaceChildren(iconDelegate.element);
     } else {
       removeAllChildren(this._avatarElement);
@@ -70,12 +67,10 @@ export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> imple
   }
 
   public setAvatarImageUrl(value: string): void {
-    this._component.setAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_IMAGE_URL, value);
     this._avatarElement.imageUrl = value;
   }
 
   public setAvatarLetterCount(count: number): void {
-    this._component.setAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_LETTER_COUNT, String(count));
     this._avatarElement.letterCount = count;
   }
 
@@ -106,7 +101,7 @@ export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> imple
   public setSignOutButtonText(value: string): void {
     this._signOutButton.textContent = value;
   }
-  
+
   public setProfileButtonText(value: string): void {
     this._profileButton.textContent = value;
   }
@@ -119,19 +114,11 @@ export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> imple
     this._signOutButton.addEventListener('click', listener);
   }
 
-  public removeProfileButtonListener(listener: (evt: Event) => void): void {
-    this._profileButton.removeEventListener('click', listener);
+  public requestProfileButtonFocus(options?: ExperimentalFocusOptions): void {
+    window.requestAnimationFrame(() => this._profileButton.focus(options));
   }
 
-  public removeSignOutButtonListener(listener: (evt: Event) => void): void {
-    this._signOutButton.removeEventListener('click', listener);
-  }
-
-  public requestProfileButtonFocus(): void {
-    window.requestAnimationFrame(() => this._profileButton.focus());
-  }
-
-  public requestSignOutButtonFocus(): void {
-    window.requestAnimationFrame(() => this._signOutButton.focus());
+  public requestSignOutButtonFocus(options?: ExperimentalFocusOptions): void {
+    window.requestAnimationFrame(() => this._signOutButton.focus(options));
   }
 }

@@ -1,0 +1,14 @@
+/* stylelint-disable unit-allowed-list */
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: contents;
+}
+
+@mixin surface {
+  width: 100%;
+  display: inline-flex;
+  flex-direction: column;
+}

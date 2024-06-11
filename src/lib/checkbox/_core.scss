@@ -1,0 +1,144 @@
+@use '../core/styles/typography';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: inline-block;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@mixin checkbox {
+  position: relative;
+  flex-direction: #{token(direction)};
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: #{token(justify)};
+  gap: #{token(gap)};
+
+  display: flex;
+}
+
+@mixin dense {
+  @include override(gap, dense-gap);
+}
+
+@mixin checkbox-disabled {
+  opacity: #{token(disabled-opacity)};
+}
+
+@mixin container {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  display: flex;
+
+  border-radius: #{token(state-layer-shape)};
+  inline-size: #{token(state-layer-width)};
+  block-size: #{token(state-layer-height)};
+
+  cursor: pointer;
+}
+
+@mixin container-dense {
+  inline-size: #{token(state-layer-dense-width)};
+  block-size: #{token(state-layer-dense-height)};
+}
+
+@mixin container-disabled {
+  cursor: not-allowed;
+}
+
+@mixin background {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  display: flex;
+
+  transition-property: background, border-width, border-color;
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(background-animation-timing)};
+
+  box-shadow: #{token(elevation)};
+  border-style: solid;
+  border-width: #{token(unchecked-border-width)};
+  border-color: #{token(unchecked-border-color)};
+  border-radius: #{token(shape)};
+  box-sizing: border-box;
+  block-size: #{token(height)};
+  inline-size: #{token(width)};
+
+  background: #{token(background)};
+}
+
+@mixin background-checked {
+  border-style: solid;
+  border-width: #{token(checked-border-width)};
+  border-color: #{token(checked-border-color)};
+
+  background: #{token(checked-background)};
+}
+
+@mixin icon {
+  position: absolute;
+
+  transition-property: stroke-dashoffset;
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(icon-animation-timing)};
+
+  fill: none;
+  stroke-width: #{token(icon-stroke-width)};
+}
+
+@mixin icon-checked {
+  stroke: #{token(icon-checked-color)};
+  stroke-dasharray: 30;
+}
+
+@mixin icon-checked-hidden {
+  transition-delay: 0s;
+
+  stroke-dashoffset: 30;
+}
+
+@mixin icon-checked-visible {
+  transition-delay: #{token(animation-duration)};
+
+  stroke-dashoffset: 0;
+
+  // Animate from right to left in RTL
+  &:dir(rtl) {
+    stroke-dashoffset: 60;
+  }
+}
+
+@mixin icon-indeterminate {
+  stroke: #{token(icon-indeterminate-color)};
+  stroke-dasharray: 20;
+}
+
+@mixin icon-indeterminate-hidden {
+  transition-delay: 0s;
+
+  stroke-dashoffset: 20;
+}
+
+@mixin icon-indeterminate-visible {
+  transition-delay: #{token(animation-duration)};
+
+  stroke-dashoffset: 0;
+
+  // Animate from right to left in RTL
+  &:dir(rtl) {
+    stroke-dashoffset: 40;
+  }
+}
+
+@mixin label {
+  @include typography.style(label1);
+
+  cursor: default;
+}

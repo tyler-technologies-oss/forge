@@ -1,0 +1,53 @@
+@use './token-utils' as *;
+@use '../core/styles/typography';
+@use '../core/styles/theme';
+@use '../core/styles/spacing';
+@use '../utils/mixins-media';
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+}
+
+@mixin base {
+  min-width: #{token(min-width)};
+  border-radius: #{token(shape)};
+
+  @include mixins-media.phone-small-only {
+    width: 100vw;
+    min-width: unset;
+    overflow: auto;
+  }
+}
+
+@mixin info-container {
+  display: flex;
+  align-items: center;
+
+  padding-block: #{spacing.variable(xsmall)};
+  padding-inline: #{spacing.variable(medium)};
+}
+
+@mixin avatar {
+  display: flex;
+  align-items: center;
+
+  padding: #{spacing.variable(xsmall)};
+  margin-inline-end: #{spacing.variable(medium)};
+}
+
+@mixin text {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin full-name {
+  @include typography.style(heading2);
+}
+
+@mixin email {
+  @include typography.style(subheading1);
+
+  color: #{theme.variable(text-medium)};
+}

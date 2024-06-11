@@ -4,21 +4,34 @@ import { ICON_CLASS_NAME } from '../constants';
 import { IIconComponent } from '../icon';
 import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress';
 import { IListComponent, LIST_CONSTANTS } from '../list/list';
-import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../popup';
+import { POPOVER_CONSTANTS } from '../popover';
+import { IPopoverComponent } from '../popover/popover';
 import { ISkeletonComponent, SKELETON_CONSTANTS } from '../skeleton';
-import { IListDropdownCascadingElementFactoryConfig, IListDropdownOpenConfig, IListDropdownOption, IListDropdownOptionGroup, ListDropdownAsyncStyle, ListDropdownIconType, ListDropdownType, LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants';
+import {
+  IListDropdownCascadingElementFactoryConfig,
+  IListDropdownOpenConfig,
+  IListDropdownOption,
+  IListDropdownOptionGroup,
+  ListDropdownAsyncStyle,
+  ListDropdownIconType,
+  ListDropdownType,
+  LIST_DROPDOWN_CONSTANTS
+} from './list-dropdown-constants';
 import { LIST_ITEM_CONSTANTS } from '../list/list-item';
 
-export enum ListDropdownOptionType { Option, Group }
+export enum ListDropdownOptionType {
+  Option,
+  Group
+}
 
 /**
  * Creates the floating dropdown element container.
- * @param config 
- * @param targetElement 
+ * @param config
+ * @param targetElement
  */
-export function createDropdown(config: IListDropdownOpenConfig, targetElement: HTMLElement): IPopupComponent {
+export function createDropdown(config: IListDropdownOpenConfig, targetElement: HTMLElement): IPopoverComponent {
   const dropdownElement = createPopupDropdown(config, targetElement);
-  const dropdownId =  `list-dropdown-popup-${config.id}`;
+  const dropdownId = `list-dropdown-popup-${config.id}`;
 
   // Prevent mousedown events from changing focus. We keep focus in the target element at all times while open.
   dropdownElement.addEventListener('mousedown', evt => {
@@ -36,19 +49,6 @@ export function createDropdown(config: IListDropdownOpenConfig, targetElement: H
     }
   });
 
-  // Set roles and other attributes based on our type
-  switch (config.type) {
-    case ListDropdownType.Menu:
-      dropdownElement.setAttribute('role', 'menu');
-      dropdownElement.setAttribute('aria-orientation', 'vertical');
-      break;
-    default:
-      dropdownElement.setAttribute('role', 'listbox');
-      if (config.multiple) {
-        dropdownElement.setAttribute('aria-multiselectable', 'true');
-      }
-  }
-
   if (config.id) {
     dropdownElement.id = dropdownId;
   }
@@ -59,56 +59,68 @@ export function createDropdown(config: IListDropdownOpenConfig, targetElement: H
   return dropdownElement;
 }
 
-export function createPopupDropdown(config: IListDropdownOpenConfig, targetElement: HTMLElement): IPopupComponent {
-  const popupElement = document.createElement('forge-popup');
-  popupElement.targetElement = targetElement;
-  popupElement.placement = config.popupPlacement || 'bottom-start';
-  popupElement.manageFocus = false;
-  popupElement.static = !!config.popupStatic;
-
-  if (config?.referenceElement?.id) {
-    popupElement.setAttribute('aria-labelledby', config.referenceElement.id);
-  }
+export function createPopupDropdown(config: IListDropdownOpenConfig, targetElement: HTMLElement): IPopoverComponent {
+  const popoverElement = document.createElement('forge-popover');
+  popoverElement.anchorElement = targetElement;
+  popoverElement.placement = config.popupPlacement || 'bottom-start';
+  popoverElement.persistent = Boolean(config.popupStatic);
 
   if (config.popupFallbackPlacements?.length) {
-    popupElement.fallbackPlacements = config.popupFallbackPlacements;
+    popoverElement.fallbackPlacements = config.popupFallbackPlacements;
   }
 
   if (config.constrainViewportWidth) {
-    popupElement.setAttribute(POPUP_CONSTANTS.attributes.CONSTRAIN_VIEWPORT_WIDTH, '');
+    popoverElement.setAttribute(POPOVER_CONSTANTS.attributes.CONSTRAIN_VIEWPORT_WIDTH, '');
   }
 
   if (config.popupOffset) {
-    popupElement.offset = config.popupOffset;
+    popoverElement.offset = config.popupOffset;
   }
 
   // Set the animations based on our type
-  switch (config.type) {
-    case ListDropdownType.Menu:
-      popupElement.animationType = PopupAnimationType.Menu;
-      break;
-    case ListDropdownType.None:
-      popupElement.animationType = PopupAnimationType.None;
-      break;
-    default:
-      popupElement.animationType = PopupAnimationType.Dropdown;
+  if (config.type === ListDropdownType.None) {
+    popoverElement.animationType = 'none';
   }
-  return popupElement;
+
+  return popoverElement;
 }
 
 export function createList(config: IListDropdownOpenConfig): IListComponent {
   const listElement = document.createElement(LIST_CONSTANTS.elementName) as IListComponent;
   listElement.id = `list-dropdown-list-${config.id}`;
-  listElement.propagateClick = false;
-  listElement.setAttribute('role', 'presentation');
+
+  // Set roles and other attributes based on our type
+  switch (config.type) {
+    case ListDropdownType.Menu:
+      listElement.setAttribute('role', 'menu');
+      listElement.setAttribute('aria-orientation', 'vertical');
+      break;
+    default:
+      listElement.setAttribute('role', 'listbox');
+  }
+
+  if (config.type !== ListDropdownType.Menu && config.multiple) {
+    listElement.setAttribute('aria-multiselectable', 'true');
+  }
+
+  if (config?.referenceElement?.id) {
+    listElement.setAttribute('aria-labelledby', config.referenceElement.id);
+  }
+
   return listElement;
 }
 
 /**
  * Creates the list to place inside of the dropdown.
- * @param config 
+ * @param config
  */
-export function createListItems(config: IListDropdownOpenConfig, listElement: IListComponent, options?: Array<IListDropdownOption | IListDropdownOptionGroup>, startIndex = 0, renderSelected = true): void {
+export function createListItems(
+  config: IListDropdownOpenConfig,
+  listElement: IListComponent,
+  options?: Array<IListDropdownOption | IListDropdownOptionGroup>,
+  startIndex = 0,
+  renderSelected = true
+): void {
   // Ensure the options are provided in the form a group (if no groups provided, then we have one anonymous group of options)
   const groups = getOptionsByGroup(options || config.options);
   const flatOptions = getFlattenedOptions(groups);
@@ -170,7 +182,7 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       if (limitOptions && --optionLimit < 0) {
         break;
       }
-      
+
       // Create and configure the list element
       const isSelected = config.selectedValues ? config.selectedValues.some(v => isDeepEqual(v, option.value)) : false;
 
@@ -181,29 +193,21 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
 
       let listItemElement = document.createElement('forge-list-item');
       listItemElement.value = option.value;
-      listItemElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}`;
-      listItemElement.style.cursor = 'pointer';
-      listItemElement.shadowRoot?.querySelector(LIST_ITEM_CONSTANTS.selectors.LIST_ITEM)?.removeAttribute('tabindex');
-      listItemElement.tabIndex = 0;
+      listItemElement.setAttribute('role', 'presentation');
+
+      const buttonElement = document.createElement('button');
+      buttonElement.type = 'button';
+      buttonElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}`;
+      buttonElement.setAttribute('role', config.type === 'menu' ? 'menuitem' : 'option');
+      listItemElement.appendChild(buttonElement);
 
       if (config.wrapOptionText) {
         listItemElement.wrap = true;
       }
-      
-      // Add any CSS classes to the option list-item
-      if (option.optionClass && (typeof option.optionClass === 'string' || Array.isArray(option.optionClass) && option.optionClass.length)) {
-        addClass(option.optionClass, listItemElement);
-      }
 
-      // Set role based on type
-      switch (config.type) {
-        case ListDropdownType.Menu:
-          listItemElement.setAttribute('role', 'menuitem');
-          break;
-        case ListDropdownType.None:
-          break;
-        default:
-          listItemElement.setAttribute('role', 'option');
+      // Add any CSS classes to the option list-item
+      if (option.optionClass && (typeof option.optionClass === 'string' || (Array.isArray(option.optionClass) && option.optionClass.length))) {
+        addClass(option.optionClass, listItemElement);
       }
 
       if (config.dense) {
@@ -215,20 +219,20 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         const element = config.optionBuilder(option, listItemElement);
         if (element) {
           if (typeof element === 'string') {
-            listItemElement.innerHTML = element;
+            buttonElement.innerHTML = element;
           } else {
-            listItemElement.appendChild(element);
+            buttonElement.appendChild(element);
           }
         }
       } else {
         if (typeof config.transform !== 'function') {
-          listItemElement.textContent = option.label || '';
+          buttonElement.textContent = option.label || '';
         } else {
           const result = config.transform(option.label);
           if (typeof result === 'string') {
-            listItemElement.textContent = result;
+            buttonElement.textContent = result;
           } else if (typeof result === 'object' && (result as HTMLElement).nodeType !== undefined) {
-            listItemElement.appendChild(result);
+            buttonElement.appendChild(result);
           }
         }
       }
@@ -238,16 +242,20 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         const secondaryLabelElement = document.createElement('span');
         secondaryLabelElement.slot = 'subtitle';
         secondaryLabelElement.textContent = option.secondaryLabel;
+        secondaryLabelElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}-secondary`;
         listItemElement.twoLine = true;
         listItemElement.appendChild(secondaryLabelElement);
+        buttonElement.setAttribute('aria-describedby', secondaryLabelElement.id);
       }
 
       // If multiple selections are enabled then we need to create and append a leading checkbox element
       if (config.multiple) {
         const checkboxElement = createCheckboxElement(isSelected);
         listItemElement.appendChild(checkboxElement);
-        listItemElement.setAttribute('aria-selected', `${isSelected}`);
-        listItemElement.setAttribute('aria-checked', `${isSelected}`);
+        if (!option.disabled) {
+          buttonElement.setAttribute('aria-selected', `${isSelected}`);
+        }
+        buttonElement.setAttribute('aria-checked', `${isSelected}`);
       }
 
       if (option.elementAttributes) {
@@ -264,7 +272,12 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
           listItemElement.appendChild(element);
         }
       } else if (option.leadingIcon) {
-        const leadingIconElement = createIconElement(option.leadingIconType, option.leadingIcon, option.leadingIconClass || config.iconClass, option.leadingIconComponentProps);
+        const leadingIconElement = createIconElement(
+          option.leadingIconType,
+          option.leadingIcon,
+          option.leadingIconClass || config.iconClass,
+          option.leadingIconComponentProps
+        );
         leadingIconElement.slot = 'leading';
         listItemElement.appendChild(leadingIconElement);
       }
@@ -277,31 +290,32 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
           listItemElement.appendChild(element);
         }
       } else if (option.trailingIcon) {
-        const trailingIconElement = createIconElement(option.trailingIconType, option.trailingIcon, option.trailingIconClass || config.iconClass, option.trailingIconComponentProps);
+        const trailingIconElement = createIconElement(
+          option.trailingIconType,
+          option.trailingIcon,
+          option.trailingIconClass || config.iconClass,
+          option.trailingIconComponentProps
+        );
         trailingIconElement.slot = 'trailing';
         listItemElement.appendChild(trailingIconElement);
       }
 
       // Update the disabled state
       if (option.disabled) {
-        listItemElement.disabled = option.disabled;
-        listItemElement.setAttribute('aria-disabled', 'true');
-      } else {
-        listItemElement.style.cursor = 'pointer';
-        listItemElement.setAttribute('aria-disabled', 'false');
+        buttonElement.disabled = option.disabled;
       }
 
       // Update the selected state
       if (isSelected) {
         listItemElement.selected = true;
       }
-      if (config.type === ListDropdownType.Standard) {
-        listItemElement.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+      if (config.type !== ListDropdownType.Menu) {
+        buttonElement.setAttribute('aria-selected', isSelected ? 'true' : 'false');
       }
 
       // If we have any child options, we need to render a child menu for this list item
       if (!option.disabled && typeof config.cascadingElementFactory === 'function' && Array.isArray(option.options) && option.options.length) {
-        // Create the trailing indicator icon to show that a child menu exists for this option. 
+        // Create the trailing indicator icon to show that a child menu exists for this option.
         const optionIconElement = document.createElement('forge-icon');
         optionIconElement.name = 'arrow_right';
         optionIconElement.slot = 'trailing';
@@ -336,9 +350,7 @@ export function createCheckboxElement(selected: boolean): HTMLElement {
 }
 
 function createDivider(): HTMLElement {
-  const divider = document.createElement('forge-divider');
-  divider.setAttribute('aria-hidden', 'true');
-  return divider;
+  return document.createElement('forge-divider');
 }
 
 function createIconElement(type: ListDropdownIconType = 'font', iconName: string, iconClass?: string, componentProps?: Partial<IIconComponent>): HTMLElement {
@@ -411,7 +423,9 @@ export function createBusyElement(): ILinearProgressComponent {
 }
 
 function getOptionsByGroup(options: Array<IListDropdownOption | IListDropdownOptionGroup>): IListDropdownOptionGroup[] {
-  return isListDropdownOptionType(options, ListDropdownOptionType.Group) ? (options as IListDropdownOptionGroup[]) : [{ text: '', options }] as IListDropdownOptionGroup[];
+  return isListDropdownOptionType(options, ListDropdownOptionType.Group)
+    ? (options as IListDropdownOptionGroup[])
+    : ([{ text: '', options }] as IListDropdownOptionGroup[]);
 }
 
 /**
@@ -419,9 +433,17 @@ function getOptionsByGroup(options: Array<IListDropdownOption | IListDropdownOpt
  * @param options The options either grouped or individual.
  * @param type The type of option to detect.
  */
-export function isListDropdownOptionType(options: Array<IListDropdownOption | IListDropdownOptionGroup>, type: ListDropdownOptionType): type is ListDropdownOptionType {
-  const isOptionGroups = options.some((o: IListDropdownOption | IListDropdownOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('options') && (o.hasOwnProperty('text') || o.hasOwnProperty('builder')));
-  const isOptionTypes = options.some((o: IListDropdownOption | IListDropdownOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('label') && o.hasOwnProperty('value'));
+export function isListDropdownOptionType(
+  options: Array<IListDropdownOption | IListDropdownOptionGroup>,
+  type: ListDropdownOptionType
+): type is ListDropdownOptionType {
+  const isOptionGroups = options.some(
+    (o: IListDropdownOption | IListDropdownOptionGroup) =>
+      isDefined(o) && isObject(o) && o.hasOwnProperty('options') && (o.hasOwnProperty('text') || o.hasOwnProperty('builder'))
+  );
+  const isOptionTypes = options.some(
+    (o: IListDropdownOption | IListDropdownOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('label') && o.hasOwnProperty('value')
+  );
   return (isOptionGroups && type === ListDropdownOptionType.Group) || (isOptionTypes && type === ListDropdownOptionType.Option);
 }
 
@@ -430,5 +452,5 @@ export function getFlattenedOptions(options: Array<IListDropdownOptionGroup | IL
     const groups = options as IListDropdownOptionGroup[];
     return groups.reduce((flatOpts, group) => flatOpts.concat(group.options), [] as IListDropdownOption[]);
   }
-  return [...options as IListDropdownOption[]];
+  return [...(options as IListDropdownOption[])];
 }

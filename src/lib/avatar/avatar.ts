@@ -1,7 +1,7 @@
-import { CustomElement, attachShadowTemplate, coerceNumber, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coerceNumber, coreProperty } from '@tylertech/forge-core';
 
 import { AvatarAdapter } from './avatar-adapter';
-import { AvatarFoundation } from './avatar-foundation';
+import { AvatarCore } from './avatar-core';
 import { AVATAR_CONSTANTS } from './avatar-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
@@ -9,10 +9,9 @@ import template from './avatar.html';
 import styles from './avatar.scss';
 
 export interface IAvatarComponent extends IBaseComponent {
-  imageUrl: string;
   text: string;
   letterCount: number;
-  autoColor: boolean;
+  imageUrl: string;
 }
 
 declare global {
@@ -22,37 +21,55 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-avatar>` element.
- * 
  * @tag forge-avatar
+ *
+ * @summary Avatars represent an entity via text or image.
+ *
+ * @description The avatar component allows you to provide text or images to display that represent an entity. By default, the
+ * avatar will display textual content as single characters (character count is configurable), or display an image or
+ * icon based on the URL provided to it.
+ *
+ * @property {string} [text=""] - The text to display in the avatar.
+ * @property {number} [letterCount=2] - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
+ * @property {string} imageUrl - The background image URL to use.
+ *
+ * @attribute {string} [text=""] - The text to display in the avatar.
+ * @attribute {string} [letter-count=2] - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
+ * @attribute {string} image-url - The background image URL to use.
+ *
+ * @cssproperty {string} --forge-avatar-background - The background color of the avatar.
+ * @cssproperty {number} --forge-avatar-shape - The border radius of the avatar, defaults to 50%.
+ * @cssproperty {color} --forge-avatar-color - The text color of the avatar.
+ * @cssproperty {number} --forge-avatar-size - The height and width of the avatar.
+ * @cssproperty {number} --forge-avatar-transition-duration - The transition duration for animations.
+ * @cssproperty {string} --forge-avatar-transition-timing - The transition timing function for animations.
+ *
+ * @csspart root - The root container element.
+ *
+ * @slot - The default slot for avatar content if not provided via text/imageUrl.
  */
-@CustomElement({
+@customElement({
   name: AVATAR_CONSTANTS.elementName
 })
 export class AvatarComponent extends BaseComponent implements IAvatarComponent {
   public static get observedAttributes(): string[] {
-    return [
-      AVATAR_CONSTANTS.attributes.TEXT,
-      AVATAR_CONSTANTS.attributes.LETTER_COUNT,
-      AVATAR_CONSTANTS.attributes.IMAGE_URL,
-      AVATAR_CONSTANTS.attributes.AUTO_COLOR
-    ];
+    return [AVATAR_CONSTANTS.attributes.TEXT, AVATAR_CONSTANTS.attributes.LETTER_COUNT, AVATAR_CONSTANTS.attributes.IMAGE_URL];
   }
 
-  private _foundation: AvatarFoundation;
+  private _core: AvatarCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new AvatarFoundation(new AvatarAdapter(this));
+    this._core = new AvatarCore(new AvatarAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -66,25 +83,15 @@ export class AvatarComponent extends BaseComponent implements IAvatarComponent {
       case AVATAR_CONSTANTS.attributes.IMAGE_URL:
         this.imageUrl = newValue;
         break;
-      case AVATAR_CONSTANTS.attributes.AUTO_COLOR:
-        this.autoColor = coerceBoolean(newValue);
-        break;
     }
   }
 
-  /** Gets/sets the text to display. */
-  @FoundationProperty()
+  @coreProperty()
   public declare text: string;
 
-  /** Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used. */
-  @FoundationProperty()
+  @coreProperty()
   public declare letterCount: number;
 
-  /** Sets the background image URL to use. */
-  @FoundationProperty()
+  @coreProperty()
   public declare imageUrl: string;
-
-  /** Controls whether the background color is set automatically based on the text value. Does not have any effect when an image URL is specified. */
-  @FoundationProperty()
-  public declare autoColor: boolean;
 }

@@ -1,0 +1,79 @@
+@use './token-utils' as *;
+@use '../core/styles/typography';
+
+@forward './token-utils';
+
+@mixin host {
+  display: inline-block;
+  min-width: 0;
+}
+
+@mixin base {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'icon label'
+    'icon value';
+}
+
+@mixin container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+@mixin icon {
+  display: inline-flex;
+  grid-area: icon;
+}
+
+@mixin ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin label {
+  @include typography.style(label2);
+
+  grid-area: label;
+  justify-self: #{token(align)};
+  margin-block-start: #{token(label-block-start-spacing)};
+  margin-block-end: #{token(label-block-end-spacing)};
+
+  line-height: normal;
+  text-align: #{token(align)};
+
+  color: #{token(label-color)};
+}
+
+@mixin value {
+  @include typography.style(body2);
+
+  grid-area: value;
+  display: grid;
+  align-items: center;
+  justify-self: #{token(align)};
+
+  line-height: normal;
+  text-align: #{token(align)};
+}
+
+@mixin value-empty {
+  color: #{token(empty-color)};
+  font-style: #{token(empty-style)};
+}
+
+@mixin slotted-icon {
+  margin-inline-end: #{token(icon-spacing)};
+}
+
+@mixin inline {
+  display: flex;
+  align-items: center;
+}
+
+@mixin inline-label {
+  margin-block: 0;
+  margin-inline-end: #{token(inline-label-spacing)};
+}

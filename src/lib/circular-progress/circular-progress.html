@@ -1,30 +1,5 @@
 <template>
-  <div class="mdc-circular-progress mdc-circular-progress--indeterminate" role="progressbar" aria-valuemin="0" aria-valuemax="1" part="root">
-    <slot></slot>
-    <div class="mdc-circular-progress__determinate-container" part="determinate-container">
-      <svg class="mdc-circular-progress__determinate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" part="determinate-svg">
-        <circle class="mdc-circular-progress__determinate-track" cx="24" cy="24" r="18" stroke-width="4" part="determinate-svg-circle-track" />
-        <circle class="mdc-circular-progress__determinate-circle" cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="113.097" stroke-width="4"  part="determinate-svg-circle" />
-      </svg>
-    </div>
-    <div class="mdc-circular-progress__indeterminate-container" part="indeterminate-container">
-      <div class="mdc-circular-progress__spinner-layer" part="spinner-container">
-        <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left" part="spinner-circle-left">
-          <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"  part="spinner-circle-left-svg">
-            <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4" part="spinner-circle-left-svg-circle" />
-          </svg>
-        </div>
-        <div class="mdc-circular-progress__gap-patch" part="spinner-gap">
-          <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" part="spinner-gap-svg">
-            <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="3.2" part="spinner-gap-svg-circle" />
-          </svg>
-        </div>
-        <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right" part="spinner-circle-right">
-          <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" part="spinner-circle-right-svg">
-            <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4" part="spinner-circle-right-svg-circle" />
-          </svg>
-        </div>
-      </div>
-    </div>
+  <div class="forge-circular-progress" part="progressbar">
+    <slot class="center-content"></slot>
   </div>
 </template>

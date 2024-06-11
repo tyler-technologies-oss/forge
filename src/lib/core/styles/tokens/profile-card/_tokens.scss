@@ -1,0 +1,14 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../shape';
+@use '../../utils';
+
+$tokens: (
+  min-width: utils.module-val(profile-card, min-width, 360px),
+  shape: utils.module-val(profile-card, shape, shape.variable(medium)),
+  avatar-size: utils.module-val(profile-card, avatar-size, 56px)
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

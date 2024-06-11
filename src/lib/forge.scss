@@ -1,21 +1,4 @@
-// Theme styles
+@use './forge-tokens';
 @use './theme/forge-theme';
-
-// Typography styles
 @use './typography/forge-typography';
-
-// Required global component styles
-@use './button/forge-button';
-@use './floating-action-button/forge-floating-action-button';
-@use './icon-button/forge-icon-button';
 @use './table/forge-table';
-@use './tooltip/forge-tooltip';
-@use './ripple/forge-ripple';
-@use './quantity-field/forge-quantity-field';
-
-// Supplemental global component styles
-@use './popup/forge-popup';
-@use './busy-indicator/forge-busy-indicator';
-@use './dialog/forge-dialog';
-@use './dialog/forge-dialog-utils';
-@use './expansion-panel/forge-expansion-panel';

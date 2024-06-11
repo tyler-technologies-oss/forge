@@ -1,15 +1,19 @@
 <template>
-  <div class="forge-checkbox-wrapper forge-form-field" part="root">
-    <div class="mdc-checkbox" part="container">
-      <slot name="input"></slot>
-      <div class="mdc-checkbox__background" part="background">
-        <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24" part="checkmark-svg">
-          <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59" part="checkmark-path"></path>
+  <div class="forge-checkbox" part="root">
+    <div id="container" class="container">
+      <div class="background" part="background">
+        <svg class="icon icon--checked" aria-hidden="true" viewBox="0 0 24 24" part="checkmark">
+          <path d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
         </svg>
-        <div class="mdc-checkbox__mixedmark" part="mixedmark"></div>
+        <svg class="icon icon--indeterminate" aria-hidden="true" viewBox="0 0 24 24" part="mixedmark">
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+        </svg>
+        <forge-focus-indicator target=":host" part="focus-indicator"></forge-focus-indicator>
       </div>
-      <div class="mdc-checkbox__ripple" part="ripple-container"></div>
+      <forge-state-layer target=":host" exportparts="surface:state-layer"></forge-state-layer>
     </div>
-    <slot name="label"></slot>
+    <div id="label" class="label" part="label">
+      <slot></slot>
+    </div>
   </div>
 </template>

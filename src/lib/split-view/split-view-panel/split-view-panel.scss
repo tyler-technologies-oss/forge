@@ -1,5 +1,5 @@
 @use './mixins';
-@use '../../ripple/forge-ripple.scss';
+@use '../../focus-indicator';
 
 @include mixins.core-styles;
 @include mixins.horizontal-styles;
@@ -13,6 +13,14 @@
   display: none;
 }
 
-:host(:not([resizable=start], [resizable=end])) {
+:host(:not([resizable='start'], [resizable='end'])) {
   @include mixins.static-styles;
+}
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme(
+    (
+      active-width: 2px
+    )
+  );
 }

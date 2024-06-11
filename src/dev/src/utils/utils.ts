@@ -1,7 +1,7 @@
+import { ToastComponent } from '@tylertech/forge/toast';
+
 export function showToast(message: string): void {
-  const toastEl = document.createElement('forge-toast');
-  toastEl.message = message;
-  document.body.appendChild(toastEl);
+  ToastComponent.present({ message });
 }
 
 export function randomTimeout(min: number, max: number): number {

@@ -1,0 +1,96 @@
+@use '../../core/styles/typography';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+}
+
+@mixin base {
+  background: #{token(background)};
+  color: #{token(foreground)};
+
+  position: relative;
+  z-index: #{token(z-index)};
+
+  display: grid;
+  grid-template-rows: 1fr auto;
+
+  transition-property: box-shadow, background-color;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+
+  box-sizing: border-box;
+  width: 100%;
+}
+
+@mixin row {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
+
+  height: #{token(height)};
+  padding-inline: #{token(row-padding)};
+}
+
+@mixin row-no-center {
+  grid-template-columns: 1fr auto;
+}
+
+@mixin section {
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+
+  box-sizing: border-box;
+  min-width: 0;
+  height: 100%;
+}
+
+@mixin section-center {
+  justify-content: center;
+}
+
+@mixin section-end {
+  justify-self: end;
+}
+
+@mixin title {
+  @include typography.style(heading4);
+
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin anchor-base {
+  outline: none;
+  text-decoration: none;
+  color: inherit;
+
+  box-sizing: border-box;
+  height: 100%;
+}
+
+@mixin logo-title-container {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: #{token(logo-gap)};
+
+  min-width: 0;
+  padding-inline: #{token(title-padding)};
+}
+
+@mixin logo {
+  font-size: #{token(logo-font-size)};
+  height: 1em;
+  width: 1em;
+}
+
+@mixin elevation-raised {
+  box-shadow: #{token(elevation)};
+}

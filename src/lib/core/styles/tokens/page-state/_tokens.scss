@@ -1,0 +1,32 @@
+@use 'sass:map';
+@use '../../utils';
+@use '../../theme';
+@use '../../shape';
+@use '../../spacing';
+@use '../../typography';
+
+$tokens: (
+  // Base
+  width: utils.module-val(page-state, width, 576px),
+  height: utils.module-val(page-state, height, auto),
+  spacing: utils.module-val(page-state, spacing, spacing.variable(xxxlarge)),
+  // Base-mobile
+  mobile-width: utils.module-val(page-state, mobile-width, 70%),
+  // Graphic
+  graphic-height: utils.module-val(page-state, graphic-height, 296px),
+  graphic-spacing: utils.module-val(page-state, graphic-spacing, spacing.variable(xxxlarge)),
+  // Graphic-mobile
+  mobile-graphic-height: utils.module-val(page-state, mobile-graphic-height, auto),
+  // Title
+  title-color: utils.module-val(page-state, title-color, theme.variable(text-medium)),
+  title-spacing: utils.module-val(page-state, title-spacing, spacing.variable(xxxlarge)),
+  // Message
+  message-color: utils.module-val(page-state, message-color, theme.variable(text-high)),
+  message-spacing: utils.module-val(page-state, message-spacing, spacing.variable(xxxlarge)),
+  // Action
+  actions-spacing: utils.module-val(page-state, actions-spacing, 16px)
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

@@ -1,66 +1,66 @@
 import { getShadowElement } from '@tylertech/forge-core';
-
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IIconButtonComponent } from '../icon-button';
-import { IBannerComponent } from './banner';
+import type { IBannerComponent } from './banner';
 import { BANNER_CONSTANTS } from './banner-constants';
 
 export interface IBannerAdapter extends IBaseAdapter {
-  addRootClass(className: string): void;
-  removeRootClass(className: string): void;
-  addDismissButtonAttribute(name: string, value?: string): void;
-  removeDismissButtonAttribute(name: string): void;
-  addDismissEventListener(event: string, callback: (event: Event) => void): void;
-  removeDismissEventListener(event: string, callback: (event: Event) => void): void;
+  initialize(): void;
+  setDismissButtonVisibility(visible: boolean): void;
+  addDismissListener(callback: EventListener): void;
+  removeDismissListener(callback: EventListener): void;
+  startDismissCompleteListener(): Promise<void>;
+  setDismissed(value: boolean): void;
 }
 
 export class BannerAdapter extends BaseAdapter<IBannerComponent> implements IBannerAdapter {
-  private _rootElement: HTMLElement;
-  private _forgeIconButtonDismiss: IIconButtonComponent;
-  private _buttonDismiss: HTMLButtonElement;
+  private _rootElement: HTMLElement = this._component;
+  private _dismissButtonElement: HTMLButtonElement;
+  private _iconSlotElement: HTMLSlotElement;
+  private _buttonSlotElement: HTMLSlotElement;
 
   constructor(component: IBannerComponent) {
     super(component);
-    this._rootElement = getShadowElement(component, BANNER_CONSTANTS.selectors.BANNER);
+    this._rootElement = getShadowElement(component, '.forge-banner');
+    this._dismissButtonElement = getShadowElement(component, BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
+    this._iconSlotElement = getShadowElement(component, BANNER_CONSTANTS.selectors.ICON_SLOT) as HTMLSlotElement;
+    this._buttonSlotElement = getShadowElement(component, BANNER_CONSTANTS.selectors.BUTTON_SLOT) as HTMLSlotElement;
   }
 
-  public addRootClass(name: string): void {
-    this._rootElement.classList.add(name);
+  public initialize(): void {
+    this._iconSlotElement.addEventListener('slotchange', this._onIconSlotChange.bind(this));
+    this._buttonSlotElement.addEventListener('slotchange', this._onButtonSlotChange.bind(this));
+
+    this._onIconSlotChange();
+    this._onButtonSlotChange();
   }
 
-  public removeRootClass(name: string): void {
-    this._rootElement.classList.remove(name);
+  public setDismissButtonVisibility(visible: boolean): void {
+    this._dismissButtonElement.hidden = !visible;
   }
 
-  public addDismissButtonAttribute(name: string, value = ''): void {
-    this.forgeIconButtonDismiss.setAttribute(name, value);
+  public addDismissListener(callback: EventListener): void {
+    this._dismissButtonElement.addEventListener('click', callback);
   }
 
-  public removeDismissButtonAttribute(name: string): void {
-    this.forgeIconButtonDismiss.removeAttribute(name);
+  public removeDismissListener(callback: EventListener): void {
+    this._dismissButtonElement.removeEventListener('click', callback);
   }
 
-  public addDismissEventListener(event: string, callback: (event: Event) => void): void {
-    this.buttonDismiss.addEventListener(event, callback);
+  public setDismissed(value: boolean): void {
+    this._rootElement.inert = value;
   }
 
-  public removeDismissEventListener(event: string, callback: (event: Event) => void): void {
-    this.buttonDismiss.removeEventListener(event, callback);
+  public async startDismissCompleteListener(): Promise<void> {
+    return new Promise<void>(resolve => {
+      this._rootElement.addEventListener('transitionend', () => resolve(), { once: true });
+    });
   }
 
-  public get forgeIconButtonDismiss(): IIconButtonComponent {
-    if (!this._forgeIconButtonDismiss) {
-      this._forgeIconButtonDismiss = getShadowElement(this._component, BANNER_CONSTANTS.selectors.FORGE_DISMISS_BUTTON) as IIconButtonComponent;
-    }
-
-    return this._forgeIconButtonDismiss;
+  private _onIconSlotChange(): void {
+    this._rootElement.classList.toggle(BANNER_CONSTANTS.classes.HAS_ICON, this._iconSlotElement.assignedNodes().length > 0);
   }
 
-  public get buttonDismiss(): HTMLButtonElement {
-    if (!this._buttonDismiss) {
-      this._buttonDismiss = getShadowElement(this._component, BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
-    }
-
-    return this._buttonDismiss;
+  private _onButtonSlotChange(): void {
+    this._rootElement.classList.toggle(BANNER_CONSTANTS.classes.HAS_BUTTON, this._buttonSlotElement.assignedNodes().length > 0);
   }
 }

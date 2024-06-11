@@ -18,10 +18,24 @@ import {
 } from '@tylertech/forge-core';
 import { CHECKBOX_CONSTANTS, ICheckboxComponent } from '../checkbox';
 import { EXPANSION_PANEL_CONSTANTS, IExpansionPanelComponent } from '../expansion-panel';
-import { TooltipComponent, TOOLTIP_CONSTANTS } from '../tooltip';
+import { TooltipComponent, ITooltipComponent } from '../tooltip';
 import { TABLE_CONSTANTS } from './table-constants';
 import { TableRow } from './table-row';
-import { CellAlign, IColumnConfiguration, IColumnData, ITableConfiguration, SortDirection, TableFilterDelegateFactory, TableFilterListener, TableHeaderSelectAllTemplate, TableTemplateBuilder, TableViewTemplate, TableSelectTooltipCallback, ITableTemplateBuilderResult, TableViewTemplateBuilder } from './types';
+import {
+  CellAlign,
+  IColumnConfiguration,
+  IColumnData,
+  ITableConfiguration,
+  SortDirection,
+  TableFilterDelegateFactory,
+  TableFilterListener,
+  TableHeaderSelectAllTemplate,
+  TableTemplateBuilder,
+  TableViewTemplate,
+  TableSelectTooltipCallback,
+  ITableTemplateBuilderResult,
+  TableViewTemplateBuilder
+} from './types';
 import { ICON_CONSTANTS, IIconComponent } from '../icon';
 import { FormFieldComponentDelegate, IFormFieldComponentDelegate } from '../core/delegates/form-field-component-delegate';
 import { BaseComponentDelegate, IBaseComponentDelegate, IBaseComponentDelegateOptions } from '../core';
@@ -74,7 +88,17 @@ export class TableUtils {
 
     // Add the select column
     if (configuration.selectListener) {
-      TableUtils._addSelectColumn(thead, tbody, configuration.selectListener, configuration.selectAllListener, configuration.selectAllTemplate, configuration.selectCheckboxAlignment, configuration.data, configuration.tooltipSelect, configuration.tooltipSelectAll);
+      TableUtils._addSelectColumn(
+        thead,
+        tbody,
+        configuration.selectListener,
+        configuration.selectAllListener,
+        configuration.selectAllTemplate,
+        configuration.selectCheckboxAlignment,
+        configuration.data,
+        configuration.tooltipSelect,
+        configuration.tooltipSelectAll
+      );
     }
 
     if (configuration.resizable || configuration.columnConfigurations.some(c => !!c.sortable)) {
@@ -127,7 +151,13 @@ export class TableUtils {
 
     // Add the select column if necessary
     if (configuration.selectListener) {
-      TableUtils._createBodySelectColumn(tbody, configuration.selectCheckboxAlignment, configuration.data, configuration.tooltipSelect, configuration.tooltipSelectAll);
+      TableUtils._createBodySelectColumn(
+        tbody,
+        configuration.selectCheckboxAlignment,
+        configuration.data,
+        configuration.tooltipSelect,
+        configuration.tooltipSelectAll
+      );
       TableUtils._attachRowSelectListeners(tbody, configuration.selectListener);
     }
 
@@ -145,10 +175,10 @@ export class TableUtils {
   /**
    * Creates a `forge-tooltip` for multi sort column headers
    */
-  private static _createMultisortTooltip(): TooltipComponent {
-    const tooltip = document.createElement(TOOLTIP_CONSTANTS.elementName) as TooltipComponent;
+  private static _createMultisortTooltip(): ITooltipComponent {
+    const tooltip = document.createElement('forge-tooltip');
     tooltip.textContent = 'Ctrl + click to sort multiple columns';
-    tooltip.position = 'bottom';
+    tooltip.placement = 'bottom';
     tooltip.delay = 0;
     return tooltip;
   }
@@ -224,6 +254,10 @@ export class TableUtils {
       const span = document.createElement('span');
       span.classList.add(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_TEXT);
       span.textContent = columnConfig.header && typeof columnConfig.header === 'string' ? columnConfig.header.trim() : '';
+
+      if (span.textContent.trim().length === 0) {
+        th.setAttribute('aria-hidden', 'true');
+      }
 
       // Add the sort icon if this column is sortable
       if (columnConfig.sortable) {
@@ -385,8 +419,13 @@ export class TableUtils {
       if (columnConfig.template && typeof columnConfig.template === 'function') {
         const rowData = configuration.data[rowIndex] ? configuration.data[rowIndex].data : undefined;
         Promise.resolve(columnConfig.template(rowIndex, div, rowData, i)).then(result => {
-          const config = isTemplateResultObject(result) ? result : { content: result, stopClickPropagation: columnConfig.stopCellTemplateClickPropagation } as ITableTemplateBuilderResult;
-          
+          const config = isTemplateResultObject(result)
+            ? result
+            : ({
+                content: result,
+                stopClickPropagation: columnConfig.stopCellTemplateClickPropagation
+              } as ITableTemplateBuilderResult);
+
           if (!config.content) {
             return;
           }
@@ -410,7 +449,7 @@ export class TableUtils {
         div.appendChild(span);
 
         if (columnConfig.transform && typeof columnConfig.transform === 'function') {
-          Promise.resolve(columnConfig.transform(cellData[i])).then(value => span.textContent = value);
+          Promise.resolve(columnConfig.transform(cellData[i])).then(value => (span.textContent = value));
         } else {
           if (cellData[i] == null) {
             span.textContent = '';
@@ -527,7 +566,11 @@ export class TableUtils {
    * @param tbodyElement
    * @param listener
    */
-  private static _attachRowClickListeners(tbodyElement: HTMLTableSectionElement, clickListener: (evt: Event) => void, doubleClickListener: ((evt: Event) => void) | null): void {
+  private static _attachRowClickListeners(
+    tbodyElement: HTMLTableSectionElement,
+    clickListener: (evt: Event) => void,
+    doubleClickListener: ((evt: Event) => void) | null
+  ): void {
     const nonExpandedRows = TableUtils._getNonExpandedRows(tbodyElement.rows);
     nonExpandedRows.forEach(row => {
       row.addEventListener('click', clickListener);
@@ -540,7 +583,7 @@ export class TableUtils {
   /**
    * Sets attributes for each row in the table.
    * @param tbodyElement
-   * @param clickListener 
+   * @param clickListener
    */
   private static _addRowClickAttributes(tbodyElement: HTMLTableSectionElement): void {
     const nonExpandedRows = TableUtils._getNonExpandedRows(tbodyElement.rows);
@@ -552,7 +595,7 @@ export class TableUtils {
   /**
    * Removes attributes for each row in the table.
    * @param tbodyElement
-   * @param clickListener 
+   * @param clickListener
    */
   private static _removeRowClickAttributes(tbodyElement: HTMLTableSectionElement): void {
     const nonExpandedRows = TableUtils._getNonExpandedRows(tbodyElement.rows);
@@ -593,7 +636,11 @@ export class TableUtils {
    * @param tbodyElement The table body element.
    * @param listener The click listener.
    */
-  private static _detachRowClickListeners(tbodyElement: HTMLTableSectionElement, clickListener: (evt: Event) => void, doubleClickListener: (evt: Event) => void): void {
+  private static _detachRowClickListeners(
+    tbodyElement: HTMLTableSectionElement,
+    clickListener: (evt: Event) => void,
+    doubleClickListener: (evt: Event) => void
+  ): void {
     Array.from(tbodyElement.rows).forEach(row => {
       row.removeEventListener('click', clickListener);
       row.removeEventListener('dblclick', doubleClickListener);
@@ -686,7 +733,8 @@ export class TableUtils {
     selectCheckboxAlignment: CellAlign | null,
     data: TableRow[],
     tooltipSelect: string | TableSelectTooltipCallback | null,
-    tooltipSelectAll: string | null): void {
+    tooltipSelectAll: string | null
+  ): void {
     if (theadElement) {
       TableUtils._createHeadSelectColumn(theadElement, showSelectAll, selectAllTemplate, registerListener, selectCheckboxAlignment, tooltipSelectAll);
     }
@@ -705,9 +753,10 @@ export class TableUtils {
     theadElement: HTMLTableSectionElement,
     showSelectAll: boolean,
     selectAllTemplate: TableHeaderSelectAllTemplate | null,
-    registerListener: (() => void),
+    registerListener: () => void,
     selectCheckboxAlignment: CellAlign | null,
-    tooltipSelectAll: string | null): void {
+    tooltipSelectAll: string | null
+  ): void {
     Array.from(theadElement.rows).forEach(row => {
       const th = document.createElement('th');
       addClass([TABLE_CONSTANTS.classes.TABLE_CELL, TABLE_CONSTANTS.classes.TABLE_HEAD_CELL], th);
@@ -739,9 +788,12 @@ export class TableUtils {
     selectCheckboxAlignment: CellAlign | null,
     data: TableRow[],
     tooltipSelect: string | TableSelectTooltipCallback | null,
-    tooltipSelectAll: string | null): void {
+    tooltipSelectAll: string | null
+  ): void {
     const nonExpandedRows = TableUtils._getNonExpandedRows(tbodyElement.rows);
-    nonExpandedRows.forEach((row, rowIndex) => TableUtils._addRowSelectColumn(row, selectCheckboxAlignment, rowIndex, data[rowIndex], tooltipSelect, tooltipSelectAll));
+    nonExpandedRows.forEach((row, rowIndex) =>
+      TableUtils._addRowSelectColumn(row, selectCheckboxAlignment, rowIndex, data[rowIndex], tooltipSelect, tooltipSelectAll)
+    );
 
     // Update the colspan on the expanded rows
     if (tbodyElement.rows.length) {
@@ -758,7 +810,8 @@ export class TableUtils {
     rowIndex: number,
     rowData: TableRow,
     tooltipSelect: string | TableSelectTooltipCallback | null,
-    tooltipSelectAll: string | null): void {
+    tooltipSelectAll: string | null
+  ): void {
     const td = row.insertCell(0);
     addClass([TABLE_CONSTANTS.classes.TABLE_CELL, TABLE_CONSTANTS.classes.TABLE_BODY_CELL, TABLE_CONSTANTS.classes.TABLE_CELL_SELECT], td);
 
@@ -804,7 +857,8 @@ export class TableUtils {
     rowIndex: number | null,
     rowData: TableRow | null,
     tooltipSelect: string | TableSelectTooltipCallback | null,
-    tooltipSelectAll: string | null): HTMLElement {
+    tooltipSelectAll: string | null
+  ): HTMLElement {
     const checkboxContainer = document.createElement('div');
     checkboxContainer.classList.add(TABLE_CONSTANTS.classes.TABLE_CELL_SELECT_CHECKBOX_CONTAINER);
     if (alignment) {
@@ -822,28 +876,39 @@ export class TableUtils {
     }
 
     const checkboxElement = document.createElement(CHECKBOX_CONSTANTS.elementName) as ICheckboxComponent;
-    const checkboxInputElement = document.createElement('input');
-    checkboxInputElement.type = 'checkbox';
+    checkboxElement.setAttribute(TABLE_CONSTANTS.attributes.SELECT_CHECKBOX, '');
+    checkboxContainer.appendChild(checkboxElement);
 
-    let tooltipText = tooltipSelect ? tooltipSelect : '';
-    if (rowData && typeof tooltipSelect === 'function') {
-      tooltipText = tooltipSelect.call(null, rowIndex, rowData.data);
-    }
-
-    const tooltip = document.createElement('forge-tooltip');
-    tooltip.position = 'left';
+    const tooltipFactory = (text: string): ITooltipComponent => {
+      const tooltipEl = document.createElement('forge-tooltip');
+      tooltipEl.placement = 'left';
+      tooltipEl.type = 'label';
+      tooltipEl.textContent = text;
+      return tooltipEl;
+    };
 
     if (isHeader) {
-      tooltip.textContent = tooltipSelectAll ? tooltipSelectAll : '';
+      const hasTooltipText = typeof tooltipSelectAll === 'string' && tooltipSelectAll.length;
+      if (hasTooltipText) {
+        const headerTooltipEl = tooltipFactory(tooltipSelectAll);
+        checkboxContainer.appendChild(headerTooltipEl);
+      } else {
+        checkboxElement.setAttribute('aria-label', 'Select all rows');
+      }
     } else {
-      tooltip.textContent = tooltipText as string;
+      let tooltipText = tooltipSelect ? tooltipSelect : '';
+      if (rowData && typeof tooltipSelect === 'function') {
+        tooltipText = tooltipSelect.call(null, rowIndex, rowData.data);
+      }
+
+      if (typeof tooltipText === 'string' && tooltipText.length) {
+        const rowTooltipEl = tooltipFactory(tooltipText);
+        checkboxContainer.appendChild(rowTooltipEl);
+      } else {
+        checkboxElement.setAttribute('aria-label', 'Select row');
+      }
     }
 
-    checkboxInputElement.setAttribute('aria-label', 'Select row');
-    checkboxElement.appendChild(checkboxInputElement);
-    checkboxContainer.appendChild(tooltip);
-    checkboxContainer.appendChild(checkboxElement);
-    
     return checkboxContainer;
   }
 
@@ -868,8 +933,10 @@ export class TableUtils {
     if (!selectAllCell) {
       return null;
     }
-    return selectAllCell.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLInputElement ||
-           selectAllCell.querySelector(TABLE_CONSTANTS.selectors.SELECT_ALL_TEMPLATE_CHECKBOX_INPUT) as HTMLInputElement;
+    return (
+      (selectAllCell.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLInputElement) ||
+      (selectAllCell.querySelector(TABLE_CONSTANTS.selectors.SELECT_ALL_TEMPLATE_CHECKBOX_INPUT) as HTMLInputElement)
+    );
   }
 
   /**
@@ -1040,7 +1107,12 @@ export class TableUtils {
    * @param columnIndex
    * @param sortOrder
    */
-  public static setMultiSortColumnSortNumber(tableElement: HTMLTableElement, hasMultipleColumnsSorted: boolean, columnIndex: number, sortOrder: number | null): void {
+  public static setMultiSortColumnSortNumber(
+    tableElement: HTMLTableElement,
+    hasMultipleColumnsSorted: boolean,
+    columnIndex: number,
+    sortOrder: number | null
+  ): void {
     const cell = TableUtils._getHeaderCellByIndex(tableElement, columnIndex);
 
     const cellContainer = cell.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_CONTAINER}`) as HTMLElement;
@@ -1113,7 +1185,8 @@ export class TableUtils {
     selectCheckboxAlignment: CellAlign | null,
     data: TableRow[],
     tooltipSelect: string | TableSelectTooltipCallback | null,
-    tooltipSelectAll: string | null): void {
+    tooltipSelectAll: string | null
+  ): void {
     const theadElement = tableElement.tHead;
     const tbodyElement = tableElement.tBodies[0];
 
@@ -1122,7 +1195,17 @@ export class TableUtils {
     }
 
     if (isVisible) {
-      TableUtils._addSelectColumn(theadElement, tbodyElement, selectListener, selectAllListener, selectAllTemplate, selectCheckboxAlignment, data, tooltipSelect, tooltipSelectAll);
+      TableUtils._addSelectColumn(
+        theadElement,
+        tbodyElement,
+        selectListener,
+        selectAllListener,
+        selectAllTemplate,
+        selectCheckboxAlignment,
+        data,
+        tooltipSelect,
+        tooltipSelectAll
+      );
     } else if (TableUtils._hasSelectColumn(theadElement, tbodyElement)) {
       if (selectListener) {
         TableUtils._detachRowSelectListeners(tbodyElement, selectListener);
@@ -1154,11 +1237,21 @@ export class TableUtils {
     tooltipSelect: string | TableSelectTooltipCallback | null,
     tooltipSelectAll: string | null
   ): void {
-    TableUtils._createSelectColumn(theadElement, tbodyElement, !!selectAllListener, selectAllTemplate, () => {
-      if (selectAllListener) {
-        TableUtils._tryAttachSelectAllTemplateListener(theadElement, selectAllListener);
-      }
-    }, selectCheckboxAlignment, data, tooltipSelect, tooltipSelectAll);
+    TableUtils._createSelectColumn(
+      theadElement,
+      tbodyElement,
+      !!selectAllListener,
+      selectAllTemplate,
+      () => {
+        if (selectAllListener) {
+          TableUtils._tryAttachSelectAllTemplateListener(theadElement, selectAllListener);
+        }
+      },
+      selectCheckboxAlignment,
+      data,
+      tooltipSelect,
+      tooltipSelectAll
+    );
 
     if (selectListener) {
       TableUtils._attachRowSelectListeners(tbodyElement, selectListener);
@@ -1272,7 +1365,8 @@ export class TableUtils {
     listener: ((evt: Event) => void) | null,
     selectAllTemplate: TableHeaderSelectAllTemplate | null,
     selectCheckboxAlignment: CellAlign | null,
-    tooltipSelectAll: string | null): void {
+    tooltipSelectAll: string | null
+  ): void {
     const theadElement = tableElement.tHead;
 
     if (!theadElement) {
@@ -1432,7 +1526,9 @@ export class TableUtils {
     // If this is a FormFieldComponentDelegate then we can listen for when the value changes, otherwise we just render the custom delegate element
     if (!!filterListener && delegate instanceof FormFieldComponentDelegate && isFunction(delegate.onChange)) {
       if (!isDefined(columnConfig.filterDebounceTime) || isNumber(columnConfig.filterDebounceTime)) {
-        const debounceTime = isDefined(columnConfig.filterDebounceTime) ? (columnConfig.filterDebounceTime as number) : TABLE_CONSTANTS.numbers.DEFAULT_FILTER_DEBOUNCE_TIME;
+        const debounceTime = isDefined(columnConfig.filterDebounceTime)
+          ? (columnConfig.filterDebounceTime as number)
+          : TABLE_CONSTANTS.numbers.DEFAULT_FILTER_DEBOUNCE_TIME;
         delegate.onChange(debounce((value: any) => filterListener(value, columnIndex), debounceTime));
       } else {
         delegate.onChange((value: any) => filterListener(value, columnIndex));
@@ -1497,7 +1593,7 @@ export class TableUtils {
       TableUtils._setRowTemplate(contentDiv, content);
     }
 
-    window.requestAnimationFrame(() => expansionPanel.open = true);
+    window.requestAnimationFrame(() => (expansionPanel.open = true));
   }
 
   /**
@@ -1532,14 +1628,19 @@ export class TableUtils {
       const expandableRow = tbody.rows[actualRowIndex + 1];
       const expansionPanel = expandableRow.querySelector(EXPANSION_PANEL_CONSTANTS.elementName) as IExpansionPanelComponent;
       if (expansionPanel && expansionPanel.open) {
-        expansionPanel.open = false;
-        return new Promise<void>(resolve => {
-          setTimeout(() => {
-            requestedRow.classList.remove(TABLE_CONSTANTS.classes.TABLE_ROW_EXPANDED);
-            removeElement(expandableRow);
-            resolve();
-          }, EXPANSION_PANEL_CONSTANTS.numbers.COLLAPSE_ANIMATION_DURATION);
+        const promise = new Promise<void>(resolve => {
+          expansionPanel.addEventListener(
+            EXPANSION_PANEL_CONSTANTS.events.ANIMATION_COMPLETE,
+            () => {
+              requestedRow.classList.remove(TABLE_CONSTANTS.classes.TABLE_ROW_EXPANDED);
+              removeElement(expandableRow);
+              resolve();
+            },
+            { once: true }
+          );
         });
+        expansionPanel.open = false;
+        return promise;
       }
     }
 
@@ -1638,7 +1739,12 @@ export class TableUtils {
     }
   }
 
-  public static setRowClickListeners(tableElement: HTMLTableElement, allowClick: boolean, clickListener: (evt: Event) => void, doubleClickListener: (evt: Event) => void): void {
+  public static setRowClickListeners(
+    tableElement: HTMLTableElement,
+    allowClick: boolean,
+    clickListener: (evt: Event) => void,
+    doubleClickListener: (evt: Event) => void
+  ): void {
     const tbodyElement = tableElement.tBodies[0];
 
     if (!tbodyElement) {
@@ -1685,7 +1791,10 @@ export class TableUtils {
     return !!(navigator && navigator.platform && navigator.platform.substr(0, 3) === 'Mac');
   }
 
-  private static _renderSelectAllTemplate(selectAllTemplate: TableHeaderSelectAllTemplate, theadElement: HTMLTableSectionElement): Promise<string | HTMLElement | void> {
+  private static _renderSelectAllTemplate(
+    selectAllTemplate: TableHeaderSelectAllTemplate,
+    theadElement: HTMLTableSectionElement
+  ): Promise<string | HTMLElement | void> {
     return Promise.resolve(selectAllTemplate()).then(element => {
       const lastTheadRow = theadElement.rows.item(theadElement.rows.length - 1);
 

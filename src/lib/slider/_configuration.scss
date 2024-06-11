@@ -1,0 +1,11 @@
+@use './token-utils' as *;
+
+@mixin configuration {
+  // Internal state variables
+  #{declare(start-fraction)}: 0;
+  #{declare(end-fraction)}: 0;
+  #{declare(tick-count)}: 100;
+
+  // External state variables
+  @include tokens;
+}

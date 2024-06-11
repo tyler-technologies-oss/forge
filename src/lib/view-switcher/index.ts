@@ -4,7 +4,7 @@ import { ViewSwitcherComponent } from './view-switcher';
 
 export * from './view-switcher-adapter';
 export * from './view-switcher-constants';
-export * from './view-switcher-foundation';
+export * from './view-switcher-core';
 export * from './view-switcher';
 export * from './view';
 

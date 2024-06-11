@@ -1,0 +1,48 @@
+@use 'sass:map';
+@use '../../../shape';
+@use '../../../theme';
+@use '../../../typography';
+@use '../../../utils';
+@use '../../../animation';
+
+$tokens: (
+  // Shared
+  primary-color: utils.module-val(step, primary-color, theme.variable(primary)),
+  text-color: utils.module-val(step, text-color, theme.variable(on-primary)),
+  // Base
+  border-radius: utils.module-val(step, border-radius, shape.variable(extra-large)),
+  // Vertical
+  border-radius-vertical: utils.module-val(step, border-radius-vertical, shape.variable(medium)),
+  // Disabled
+  disabled-text-color: utils.module-val(step, disabled-text-color, theme.variable(text-low)),
+  disabled-color: utils.module-val(step, disabled-color, theme.variable(surface-container-minimum)),
+  // Icon
+  icon-fill: utils.module-val(step, icon-fill, unset),
+  icon-fill-active: utils.module-ref(step, icon-fill-active, primary-color),
+  icon-text-color: utils.module-val(step, icon-text-color, theme.variable(primary)),
+  icon-text-color-active: utils.module-val(step, icon-text-color-active, theme.variable(on-primary)),
+  icon-content-size: utils.module-val(step, icon-content-size, 24px),
+  icon-size: utils.module-val(step, icon-size, typography.font-size-relative('0875')),
+  icon-transition-duration: utils.module-val(step, icon-transition-duration, animation.variable(duration-medium4)),
+  icon-transition-easing: utils.module-val(step, icon-transition-easing, animation.variable(easing-standard)),
+  // Line
+  line-color: utils.module-val(step, line-color, theme.variable(outline)),
+  line-min-width: utils.module-val(step, line-min-width, 10px),
+  line-min-width-clustered: utils.module-val(step, line-min-width-clustered, 25px),
+  // Label
+  label-color: utils.module-val(step, label-color, theme.variable(text-high)),
+  sub-label-color: utils.module-val(step, sub-label-color, theme.variable(text-medium)),
+  // Error
+  error-color: utils.module-val(step, error-color, theme.variable(error)),
+  error-text-color: utils.module-val(step, error-text-color, theme.variable(on-error)),
+  // Expansion
+  expansion-panel-border-left-width: utils.module-val(step, expansion-panel-border-left-width, 1px),
+  expansion-panel-margin-bottom: utils.module-val(step, expansion-panel-margin-bottom, 4px),
+  expansion-panel-margin-left: utils.module-val(step, expansion-panel-margin-left, 60px),
+  expansion-panel-margin-top: utils.module-val(step, expansion-panel-margin-top, 4px),
+  expansion-panel-icon-color: utils.module-val(step, expansion-panel-icon-color, theme.variable(text-medium))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

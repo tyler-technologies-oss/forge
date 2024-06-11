@@ -1,6 +1,7 @@
 .dialog:not([fullscreen]) {
-  .dialog-container {
-    width: 500px;
+  forge-scaffold {
+    max-width: 500px;
+    height: auto;
   }
 }
 
@@ -14,6 +15,30 @@
   }
 }
 
+forge-dialog[preset$=-sheet] {
+  .dialog-body {
+    max-height: none;
+  }
+}
+
+forge-dialog:is([preset=left-sheet], [preset=right-sheet]) {
+  .dialog-container {
+    height: 100%;
+  }
+}
+
+forge-dialog:not([fullscreen])[size-strategy=container-inline] {
+  .dialog-container {
+    max-width: none;
+  }
+}
+
+forge-dialog:not([fullscreen])[size-strategy=container-block] {
+  .dialog-body {
+    max-height: none;
+  }
+}
+
 .header-toolbar forge-icon-button:last-child {
   margin-right: -8px;
 }
@@ -24,6 +49,6 @@
   overflow-y: auto;
 }
 
-.footer-toolbar forge-button:first-child {
-  margin-right: 8px
+.footer-toolbar forge-button {
+  margin-right: 8px;
 }

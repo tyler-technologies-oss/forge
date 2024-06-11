@@ -1,4 +1,4 @@
-import { CustomElement } from '@tylertech/forge-core';
+import { customElement } from '@tylertech/forge-core';
 import { ListDropdownOptionGroupBuilder } from '../../list-dropdown/list-dropdown-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { ISelectOption, ISelectOptionGroup } from '../core';
@@ -15,18 +15,14 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-option-group>` element.
- * 
  * @tag forge-option-group
  */
-@CustomElement({
+@customElement({
   name: OPTION_GROUP_CONSTANTS.elementName
 })
 export class OptionGroupComponent extends BaseComponent implements IOptionGroupComponent {
   public static get observedAttributes(): string[] {
-    return [
-      OPTION_GROUP_CONSTANTS.attributes.LABEL
-    ];
+    return [OPTION_GROUP_CONSTANTS.attributes.LABEL];
   }
 
   private _label: string;
@@ -60,10 +56,16 @@ export class OptionGroupComponent extends BaseComponent implements IOptionGroupC
   /** The builder function for the group content. */
   public declare builder: ListDropdownOptionGroupBuilder;
 
-  /** Gets/sets the optional group value. */
+  /**
+   * Gets/sets the optional group value.
+   * @attribute
+   */
   public declare value: any;
 
-  /** The text content for the group. */
+  /**
+   * The text content for the group.
+   * @attribute
+   */
   public get text(): string {
     return this._label;
   }

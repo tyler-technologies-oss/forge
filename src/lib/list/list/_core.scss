@@ -1,0 +1,17 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin base {
+  display: grid;
+  gap: #{token(spacing)};
+  outline: none;
+  background-color: #{token(container-color)};
+  margin: 0;
+  border-radius: inherit;
+  min-width: inherit;
+}
+
+@mixin inner {
+  min-width: 0;
+}

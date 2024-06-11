@@ -1,6 +1,7 @@
-import { getShadowElement, emitEvent, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
+import { emitEvent, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { ITimePickerComponent } from './time-picker';
-import { BaseAdapter, setAriaControls, tryCreateAriaControlsPlaceholder } from '../core';
+import { BaseAdapter } from '../core/base/base-adapter';
+import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
 import { TIME_PICKER_CONSTANTS } from './time-picker-constants';
 import { ITimeInputMaskOptions, TimeInputMask } from '../core/mask/time-input-mask';
 import { TEXT_FIELD_CONSTANTS, ITextFieldComponent } from '../text-field';
@@ -31,7 +32,7 @@ export interface ITimePickerAdapter extends BaseAdapter<ITimePickerComponent> {
   isInputFocused(): boolean;
   setDisabled(isDisabled: boolean): void;
   attachDropdown(config: IListDropdownConfig): void;
-  detachDropdown(): void;
+  detachDropdown(options: { destroy?: boolean }): Promise<void>;
   setActiveDescendant(id: string): void;
   propagateKey(key: string): void;
   getTargetElementWidth(selector: string): number;
@@ -131,19 +132,15 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
 
       const iconButtonElement = document.createElement(ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
       iconButtonElement.slot = 'trailing';
-      iconButtonElement.dense = true;
-      iconButtonElement.densityLevel = 3;
+      iconButtonElement.density = 'medium';
+      iconButtonElement.type = 'button';
+      iconButtonElement.tabIndex = -1;
       iconButtonElement.style.marginRight = '4px'; // Override default trailing slot margin in text-field
-
-      const buttonElement = document.createElement('button');
-      buttonElement.type = 'button';
-      buttonElement.tabIndex = -1;
-      buttonElement.setAttribute('aria-label', 'Toggle time dropdown');
+      iconButtonElement.setAttribute('aria-label', 'Toggle time dropdown');
 
       const iconElement = document.createElement(ICON_CONSTANTS.elementName) as IIconComponent;
       iconElement.name = 'clock_outline';
-      buttonElement.appendChild(iconElement);
-      iconButtonElement.appendChild(buttonElement);
+      iconButtonElement.appendChild(iconElement);
 
       textField.appendChild(iconButtonElement);
       this._toggleElement = iconButtonElement;
@@ -201,15 +198,21 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
   }
 
   public attachDropdown(config: IListDropdownConfig): void {
-    this._listDropdown = new ListDropdown(this._inputElement, config);
+    if (!this._targetElement) {
+      this._targetElement = this._getTargetElement(this._component.popupTarget);
+    }
+    this._listDropdown = new ListDropdown(this._targetElement, config);
     this._listDropdown.open();
     this._inputElement.setAttribute('aria-controls', `list-dropdown-popup-${config.id}`);
   }
-  
-  public detachDropdown(): void {
+
+  public async detachDropdown({ destroy = false } = {}): Promise<void> {
     if (this._listDropdown) {
-      this._listDropdown.close();
-      this._listDropdown.destroy();
+      if (destroy) {
+        this._listDropdown.destroy();
+      } else {
+        await this._listDropdown.close();
+      }
       this._listDropdown = undefined;
     }
     setAriaControls(this._inputElement);
@@ -274,19 +277,15 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
     if (this._targetElement) {
       return this._targetElement;
     }
-    this._targetElement = selector ? this._component.querySelector(selector) as HTMLElement || this._getDefaultTargetElement() : this._getDefaultTargetElement();
+    this._targetElement = selector
+      ? (this._component.querySelector(selector) as HTMLElement) || this._getDefaultTargetElement()
+      : this._getDefaultTargetElement();
     return this._targetElement;
   }
 
   private _getDefaultTargetElement(): HTMLElement {
-    // This component is often used with the text-field, if so, let's target our popup around one if its internal elements for proper alignnment
-    const textField = this._component.querySelector(TEXT_FIELD_CONSTANTS.elementName) as HTMLElement;
-    if (textField && textField.shadowRoot) {
-      const textFieldRoot = getShadowElement(textField, TEXT_FIELD_CONSTANTS.selectors.ROOT) as HTMLElement;
-      if (textFieldRoot) {
-        return textFieldRoot;
-      }
-    }
-    return this._component; // Otherwise we just use the time-picker host as the target
+    // This component is often used with the text-field, if so, let's target our popup around one if its internal elements for proper alignment
+    const textField = this._component.querySelector(TEXT_FIELD_CONSTANTS.elementName);
+    return textField?.popoverTargetElement ?? this._component;
   }
 }

@@ -1,0 +1,27 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as SliderStories from './Slider.stories';
+
+<Meta of={SliderStories} />
+
+<Title />
+
+Sliders are used to allow users to select a value from a range of values.
+
+<Canvas of={SliderStories.Demo} />
+
+## Range
+
+The `range` property allows for a start and end value to be set.
+
+<Canvas of={SliderStories.Range} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+- Ensure the slider controls are reachable by the tab key.
+- Ensure each slider control can be updated by pressing the left-arrow and right-arrow keys.

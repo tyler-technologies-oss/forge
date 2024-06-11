@@ -1,5 +1,85 @@
+/* stylelint-disable custom-property-pattern */
 @use '../../src/shared';
+@use '../../../lib/button';
+@use '../../../lib/focus-indicator';
+@use '../../../lib/core/styles/elevation';
 
-button, a {
+.button-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+:is(forge-button,forge-deprecated-button):not([full-width]) {
   width: 256px;
+}
+
+form:has(forge-button) forge-button,
+forge-button.auto-width {
+  width: auto;
+}
+
+#my-popover {
+  max-inline-size: 500px;
+}
+
+.test-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+h3 {
+  margin-block: 16px;
+}
+
+.custom-button {
+  --_custom-button-background: var(--forge-theme-primary);
+
+  @include button.provide-theme((
+    height: 56px,
+    dense-height: 40px,
+    focus-indicator-offset: 4px,
+    shadow: elevation.value(2),
+    hover-shadow: elevation.value(4),
+    active-shadow: elevation.value(8),
+    color: var(--forge-theme-on-primary),
+    background: var(--_custom-button-background),
+    disabled-background: linear-gradient(to right, #aaa 0%, #ccc  51%, #aaa  100%),
+    disabled-shadow: none
+  ));
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: calc(100% - 4px);
+    height: 50%;
+    pointer-events: none;
+    background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2));
+  }
+
+  &[popover-icon] {
+    @include button.provide-theme(( justify: space-between ));
+  }
+
+  &[theme=secondary] {
+    --_custom-button-background: var(--forge-theme-secondary);
+  }
+  &[theme=tertiary] {
+    --_custom-button-background: var(--forge-theme-primary);
+  }
+  &[theme=success] {
+    --_custom-button-background: var(--forge-theme-success);
+  }
+  &[theme=error] {
+    --_custom-button-background: var(--forge-theme-error);
+  }
+  &[theme=warning] {
+    --_custom-button-background: var(--forge-theme-warning);
+  }
+  &[theme=info] {
+    --_custom-button-background: var(--forge-theme-info);
+  }
 }

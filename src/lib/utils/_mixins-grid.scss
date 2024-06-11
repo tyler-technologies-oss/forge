@@ -4,10 +4,10 @@
 @mixin auto-fr-auto($direction: row) {
   display: grid;
 
-  @if ($direction == row) {
+  @if $direction == row {
     grid-template-rows: auto 1fr auto;
   }
-  @if ($direction == column) {
+  @if $direction == column {
     grid-template-columns: auto 1fr auto;
   }
 }
@@ -16,7 +16,7 @@
   overflow: hidden;
   word-break: break-all;
 
-  @if ($columns > 1) {
+  @if $columns > 1 {
     grid-column: span $columns;
   }
 

@@ -10,12 +10,17 @@ const selectors = {
   ROOT: `.${classes.DEFAULT}`
 };
 
-const attributes = {
+const observedAttributes = {
   INLINE: 'inline',
   WRAP: 'wrap',
   STRETCH: 'stretch',
   GAP: 'gap',
-  ALIGNMENT: 'alignment'
+  ALIGNMENT: 'alignment',
+  JUSTIFY: 'justify'
+};
+
+const attributes = {
+  ...observedAttributes
 };
 
 const strings = {
@@ -25,16 +30,10 @@ const strings = {
 export const STACK_CONSTANTS = {
   elementName,
   classes,
+  observedAttributes,
   attributes,
   selectors,
   strings
 };
 
 export type StackAlignment = 'start' | 'center' | 'end';
-
-/** @deprecated Use `StackAlignment` instead. */
-export enum StackAlignMode {
-  Start = 'start',
-  Center = 'center',
-  End = 'end'
-}

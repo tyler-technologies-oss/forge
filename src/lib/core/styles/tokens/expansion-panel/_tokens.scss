@@ -1,0 +1,12 @@
+@use 'sass:map';
+@use '../../animation';
+@use '../../utils';
+
+$tokens: (
+  animation-duration: utils.module-val(expansion-panel, animation-duration, animation.variable(duration-medium4)),
+  animation-easing: utils.module-val(expansion-panel, animation-easing, animation.variable(easing-standard))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

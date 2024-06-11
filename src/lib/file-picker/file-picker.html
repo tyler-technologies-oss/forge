@@ -1,15 +1,15 @@
 <template>
   <form class="forge-file-picker" id="container" part="form">
-    <div class="forge-file-picker__primary" id="primary" part="primary">
+    <div class="primary" id="primary" part="primary">
       <slot name="primary"></slot>
     </div>
     <slot id="button-slot"></slot>
-    <div class="forge-file-picker__secondary" id="secondary" part="secondary">
+    <div class="secondary" id="secondary" part="secondary">
       <slot name="secondary"></slot>
     </div>
-    <input type="file" class="forge-file-picker__input" id="input" part="input" />
+    <input type="file" class="input" id="input" part="input" />
   </form>
-  <div class="forge-file-picker__helper-text" part="helper-text-container">
+  <div class="helper-text" part="helper-text-container">
     <slot name="helper-text"></slot>
   </div>
 </template>

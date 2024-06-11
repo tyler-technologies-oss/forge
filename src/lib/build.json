@@ -1,9 +1,5 @@
 {
-  "$schema": "../../node_modules/@tylertech/forge-cli/build-schema.json",
+  "$schema": "../../node_modules/@tylertech/forge-cli/config/build-schema.json",
   "entry": "./index.ts",
-  "stylesheets": [
-    "./forge.scss",
-    "./forge-dark.scss",
-    "./forge-core.scss"
-  ]
+  "stylesheets": ["./forge.scss", "./forge-dark.scss", "./forge-core.scss", "./forge-tokens.scss"]
 }

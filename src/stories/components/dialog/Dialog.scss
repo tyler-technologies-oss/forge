@@ -1,0 +1,17 @@
+forge-dialog {
+  &:not([fullscreen]) forge-scaffold {
+    --forge-scaffold-width: 500px;
+  }
+
+  forge-scaffold {
+    height: auto;
+
+    h1 {
+      margin: 0;
+    }
+
+    > [slot='body'] {
+      padding: var(--forge-spacing-medium);
+    }
+  }
+}

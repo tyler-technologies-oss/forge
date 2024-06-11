@@ -1,4 +1,12 @@
-import { CalendarDateBuilder, CalendarDateSelectCallback, CalendarDayBuilder, CalendarDisabledDateBuilder, CalendarEventBuilder, DayOfWeek, ICalendarEvent } from '../calendar-constants';
+import {
+  CalendarDateBuilder,
+  CalendarDateSelectCallback,
+  CalendarDayBuilder,
+  CalendarDisabledDateBuilder,
+  CalendarEventBuilder,
+  DayOfWeek,
+  ICalendarEvent
+} from '../calendar-constants';
 import { DateRange } from './date-range';
 
 export interface ICalendarBase {

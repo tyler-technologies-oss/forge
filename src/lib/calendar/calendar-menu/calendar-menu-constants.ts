@@ -7,7 +7,7 @@ const attributes = {
   ANIMATION_TYPE: 'animation-type',
   DATA_ANIMATION: 'data-animation',
   DATA_VALUE: 'data-value',
-  POPUP_CONTEXT: 'forge-popup-context',
+  POPOVER_CONTEXT: 'forge-popover-context',
   PREVENT_FOCUS: 'prevent-focus'
 };
 
@@ -24,7 +24,6 @@ const classes = {
   LIST: 'forge-calendar-menu__list',
   LIST_ITEM: 'forge-calendar-menu__item--list',
   LIST_WRAPPER: 'forge-calendar-menu__list__wrapper',
-  MDC_RIPPLE_UPGRADED_FOCUSED: 'mdc-ripple-upgraded--background-focused',
   OPEN: 'forge-calendar-menu--open',
   REPLACING_VIEW: 'forge-calendar-menu--replacing-view',
   SLIDE_LEFT: 'forge-calendar-menu--slide-left',

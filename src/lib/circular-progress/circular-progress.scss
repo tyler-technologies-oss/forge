@@ -1,4 +1,149 @@
-@use 'mixins';
-@use '../theme';
+@use './core' as *;
+@use './animation';
+@use '../core/styles/theme';
 
-@include mixins.core-styles;
+//
+// Host styles
+//
+
+$_host-tokens: [size];
+
+:host {
+  @include tokens($includes: $_host-tokens);
+}
+
+:host {
+  @include container;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base styles
+//
+
+.forge-circular-progress {
+  @include tokens($excludes: $_host-tokens);
+}
+
+.forge-circular-progress {
+  @include progress;
+
+  &--indeterminate {
+    @include indeterminate;
+  }
+}
+
+.forge-circular-progress,
+.spinner,
+.left,
+.right,
+.circle,
+svg {
+  @include positioned;
+}
+
+.center-content {
+  @include center-content;
+}
+
+//
+// Indeterminate styles
+//
+
+.left {
+  @include indeterminate-left;
+
+  .circle {
+    @include indeterminate-left-circle;
+  }
+}
+
+.right {
+  @include indeterminate-right;
+
+  .circle {
+    @include indeterminate-right-circle;
+  }
+}
+
+.circle {
+  @include indeterminate-circle;
+}
+
+//
+// Determinate styles
+//
+
+svg {
+  @include determinate-svg;
+
+  circle {
+    @include determinate-svg-circle;
+  }
+}
+
+.progress {
+  @include determinate-progress;
+}
+
+.track {
+  @include determinate-track;
+
+  &-background {
+    @include determinate-track-background;
+  }
+}
+
+.spinner {
+  @include determinate-spinner;
+}
+
+//
+// Track
+//
+
+:host(:is([track], [determinate])) {
+  .forge-circular-progress {
+    @include override(track-color, track-fill-color);
+  }
+}
+
+//
+// Theme
+//
+
+@mixin theme($theme) {
+  :host([theme='#{$theme}']) {
+    .forge-circular-progress {
+      @include override(indicator-color, theme.variable($theme), value);
+    }
+  }
+
+  :host([theme='#{$theme}']:is([track], [determinate])) {
+    .forge-circular-progress {
+      @include override(track-color, theme.variable(#{$theme}-container), value);
+    }
+  }
+}
+
+@include theme(primary);
+@include theme(secondary);
+@include theme(success);
+@include theme(error);
+@include theme(warning);
+@include theme(info);
+
+@media screen and (forced-colors: active) {
+  .progress {
+    stroke: CanvasText;
+  }
+
+  .circle {
+    border-color: CanvasText CanvasText Canvas Canvas;
+  }
+}
+
+@include animation.keyframes;

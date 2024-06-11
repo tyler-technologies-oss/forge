@@ -1,12 +1,12 @@
+const fs = require('fs');
 const path = require('path');
-const { rename, existsSync } = require('@tylertech/forge-build-tools');
 const forgeConfig = require('../../forge.json');
 const ROOT = path.resolve(__dirname, '../../');
 const DIST_PATH = path.join(ROOT, 'dist');
 
 /**
  * This plugin is used to hook into the `auto` pipeline after the `shipit` command has completed.
- * 
+ *
  * This hook will allow us to access the new version that was calculated from `Auto` and use that
  * to update any necessary references in the project to complete deployment process, such as
  * ensuring that the exact version is used when publishing any subsequent assets for example.
@@ -33,11 +33,11 @@ module.exports = class ForgePreparePublishPlugin {
 
     // Ensure the deployment path exists
     const deploymentPath = path.join(forgeConfig.build.static.distPath, forgeConfig.packageOrg, forgeConfig.packageName);
-    if (!existsSync(path.join(DIST_PATH, deploymentPath))) {
+    if (!fs.existsSync(path.join(DIST_PATH, deploymentPath))) {
       auto.logger.log.error(`[${this.name}] Deployment path doesn't exist: ${deploymentPath}`);
       return process.exit(1);
     }
-  
+
     // Concatenate the new version number to the existing deployment path
     // For example, this will update a path like "dist/path/to/package" to this "dist/path/to/package@1.0.0"
     const versionNumber = newVersion.replace(/^v?/, ''); // Remove leading "v" if exists
@@ -52,7 +52,11 @@ module.exports = class ForgePreparePublishPlugin {
     // Rename the deployment directory to the new path with the version suffix
     const currentDeploymentPath = path.join(DIST_PATH, deploymentPath);
     const newDeploymentPath = path.join(DIST_PATH, versionPath);
-    await rename(currentDeploymentPath, newDeploymentPath);
+    fs.rename(currentDeploymentPath, newDeploymentPath, () => {
+      if (err) {
+        throw new Error('Unable to rename deployment path');
+      }
+    });
 
     auto.logger.log.success(`Renamed deployment path to: ${versionPath}`);
   }

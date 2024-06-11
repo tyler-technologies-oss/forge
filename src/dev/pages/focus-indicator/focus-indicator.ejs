@@ -1,0 +1,68 @@
+<div class="vert">
+  <!-- Default example with :focus-visible -->
+  <div>
+    <button type="button" class="example-target">
+      Button :focus-visible
+      <forge-focus-indicator></forge-focus-indicator>
+    </button>
+  </div>
+
+  <!-- Default example with :focus-visible -->
+  <div>
+    <button type="button" class="example-target custom-target">
+      Custom :focus-visible
+      <forge-focus-indicator></forge-focus-indicator>
+    </button>
+  </div>
+
+  <!-- Default example with :focus-visible and target -->
+  <div>
+    <div class="example-target">
+      <button id="target-btn" type="button" class="example-target">
+        Button :focus-visible w/target
+      </button>
+      <forge-focus-indicator target="target-btn"></forge-focus-indicator>
+    </div>
+  </div>
+
+  <!-- Example with :focus -->
+  <div>
+    <button type="button" class="example-target">
+      Button :focus
+      <forge-focus-indicator allow-focus></forge-focus-indicator>
+    </button>
+  </div>
+
+  <!-- Circular example-->
+  <div>
+    <div tabindex="0" role="button" class="example-target icon">
+      <forge-icon name="forge_logo"></forge-icon>
+      <forge-focus-indicator circular></forge-focus-indicator>
+      <forge-state-layer></forge-state-layer>
+    </div>
+  </div>
+
+  <!-- Typical card example -->
+  <div tabindex="0" role="button" class="example-target">
+    <forge-card role="presentation" style="border-radius: 4px;">
+      <p style="margin: 0;">
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptate, nihil et sequi similique ad,
+        voluptas quod quisquam iure deleniti voluptatibus pariatur laborum maiores iste omnis ut sapiente!
+        Repellendus, autem delectus.
+      </p>
+    </forge-card>
+    <forge-focus-indicator style="--forge-focus-indicator-inward-offset: 1px; --forge-focus-indicator-shape: 4px;"></forge-focus-indicator>
+    <forge-state-layer></forge-state-layer>
+  </div>
+
+  <!-- Inward example -->
+  <div>
+    <div class="example-target inward-example" tabindex="0" role="button">
+      <span>Inward example</span>
+      <forge-focus-indicator allow-focus inward></forge-focus-indicator>
+      <forge-state-layer></forge-state-layer>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="focus-indicator.ts"></script>

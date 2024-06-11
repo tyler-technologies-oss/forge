@@ -2,25 +2,26 @@ import { COMPONENT_NAME_PREFIX } from '../../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}chip-set`;
 
-const attributes = {
+const observedAttributes = {
   VERTICAL: 'vertical',
   TYPE: 'type',
   DENSE: 'dense',
-  DISABLED: 'disabled'
+  DISABLED: 'disabled',
+  INVALID: 'invalid',
+  THEME: 'theme'
 };
 
-const classes = {
-  ROOT: 'forge-chip-set',
-  VERTICAL: 'forge-chip-set--vertical'
+const attributes = {
+  ...observedAttributes
 };
 
 const selectors = {
-  ROOT: `.${classes.ROOT}`
+  ROOT: '.forge-chip-set'
 };
 
 export const CHIP_SET_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
-  classes,
   selectors
 };

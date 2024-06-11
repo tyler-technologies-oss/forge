@@ -1,0 +1,39 @@
+@use '../core/styles/typography';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host() {
+  contain: content;
+
+  display: inline-block;
+}
+
+@mixin base() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  transition:
+    height #{token(transition-duration)} #{token(transition-timing)},
+    width #{token(transition-duration)} #{token(transition-timing)};
+
+  border-radius: #{token(shape)};
+  box-sizing: border-box;
+  width: #{token(size)};
+  height: #{token(size)};
+
+  background-color: #{token(background)};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  @include typography.style(subheading2);
+  color: #{token(color)};
+}
+
+@mixin base-with-image() {
+  background-color: inherit;
+}

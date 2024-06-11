@@ -4,7 +4,7 @@ import { ICON_CLASS_NAME } from '../constants';
 import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate';
 import { IIconButtonComponent } from './icon-button';
 import { ICON_BUTTON_CONSTANTS } from './icon-button-constants';
-import { PopupPlacement } from '../popup';
+import { TooltipPlacement } from '../tooltip/tooltip-constants';
 
 export type IconButtonComponentDelegateProps = Partial<IIconButtonComponent>;
 export interface IIconButtonComponentDelegateOptions extends IBaseComponentDelegateOptions {
@@ -14,12 +14,11 @@ export interface IIconButtonComponentDelegateOptions extends IBaseComponentDeleg
   iconType?: 'font' | 'component';
   iconClass?: string | string[];
   tooltip?: string;
-  tooltipPosition?: PopupPlacement;
+  tooltipPosition?: TooltipPlacement;
 }
 export interface IIconButtonComponentDelegateConfig extends IBaseComponentDelegateConfig<IIconButtonComponent, IIconButtonComponentDelegateOptions> {}
 
 export class IconButtonComponentDelegate extends BaseComponentDelegate<IIconButtonComponent, IIconButtonComponentDelegateOptions> {
-  private _buttonElement: HTMLButtonElement;
   private _iconElement?: IIconComponent;
 
   constructor(config?: IIconButtonComponentDelegateConfig) {
@@ -28,16 +27,13 @@ export class IconButtonComponentDelegate extends BaseComponentDelegate<IIconButt
 
   protected _build(): IIconButtonComponent {
     const component = document.createElement(ICON_BUTTON_CONSTANTS.elementName);
-    this._buttonElement = document.createElement('button');
-    this._buttonElement.type = 'button';
-    component.appendChild(this._buttonElement);
 
     if (this._config.options?.tooltip) {
       const tooltip = document.createElement('forge-tooltip');
       tooltip.textContent = this._config.options.tooltip;
-      
+
       if (this._config.options.tooltipPosition) {
-        tooltip.position = this._config.options.tooltipPosition;
+        tooltip.placement = this._config.options.tooltipPosition;
       }
 
       component.appendChild(tooltip);
@@ -51,19 +47,10 @@ export class IconButtonComponentDelegate extends BaseComponentDelegate<IIconButt
   }
 
   public get disabled(): boolean {
-    return !!this._buttonElement.disabled;
+    return !!this._element.disabled;
   }
   public set disabled(value: boolean) {
-    this._buttonElement.disabled = value;
-  }
-
-  /** @deprecated Use buttonElement instead. */
-  public get butttonElement(): HTMLButtonElement | undefined {
-    return this._buttonElement;
-  }
-
-  public get buttonElement(): HTMLButtonElement | undefined {
-    return this._buttonElement;
+    this._element.disabled = value;
   }
 
   protected _configure(): void {
@@ -80,8 +67,8 @@ export class IconButtonComponentDelegate extends BaseComponentDelegate<IIconButt
     switch (type) {
       case 'font':
         const classes = Array.isArray(this._config.options.iconClass) ? this._config.options.iconClass : [ICON_CLASS_NAME];
-        addClass(classes, this._buttonElement);
-        this._buttonElement.textContent = this._config.options.iconName;
+        addClass(classes, this._element);
+        this._element.textContent = this._config.options.iconName;
         break;
       case 'component':
         this._iconElement = document.createElement(ICON_CONSTANTS.elementName);
@@ -95,20 +82,20 @@ export class IconButtonComponentDelegate extends BaseComponentDelegate<IIconButt
         if (this._config.options.iconClass) {
           addClass(this._config.options.iconClass, this._iconElement);
         }
-        this._buttonElement.appendChild(this._iconElement);
+        this._element.appendChild(this._iconElement);
         break;
     }
   }
 
   public onClick(listener: (evt: MouseEvent) => void): void {
-    this._buttonElement.addEventListener('click', listener);
+    this._element.addEventListener('click', listener);
   }
 
   public onFocus(listener: (evt: Event) => void): void {
-    this._buttonElement.addEventListener('focus', evt => listener(evt));
+    this._element.addEventListener('focus', evt => listener(evt));
   }
 
   public onBlur(listener: (evt: Event) => void): void {
-    this._buttonElement.addEventListener('blur', evt => listener(evt));
+    this._element.addEventListener('blur', evt => listener(evt));
   }
 }

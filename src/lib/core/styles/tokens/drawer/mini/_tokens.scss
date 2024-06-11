@@ -1,0 +1,21 @@
+@use 'sass:map';
+@use '../../../theme';
+@use '../../../utils';
+@use '../../../border';
+@use '../../../animation';
+@use '../base/tokens' as base-tokens;
+
+$tokens: (
+  width: utils.module-val(mini-drawer, width, 56px),
+  hover-width: utils.module-val(mini-drawer, hover-width, base-tokens.get(width)),
+  transition-duration: utils.module-val(mini-drawer, transition-duration, animation.variable(duration-short4)),
+  transition-easing: utils.module-val(mini-drawer, transition-easing, animation.variable(easing-standard)),
+  transition-delay: utils.module-val(mini-drawer, transition-delay, 300ms),
+  hover-transition-duration: utils.module-val(mini-drawer, hover-transition-duration, animation.variable(duration-medium2)),
+  hover-transition-easing: utils.module-ref(mini-drawer, hover-transition-easing, transition-easing),
+  hover-transition-delay: utils.module-val(mini-drawer, hover-transition-delay, animation.variable(duration-medium2))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

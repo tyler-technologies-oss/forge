@@ -1,0 +1,40 @@
+@use './token-utils' as *;
+@use '../core/styles/typography';
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+}
+
+@mixin base {
+  @include typography.style(body1);
+
+  background: #{token(background)};
+  color: #{token(color)};
+
+  border-radius: #{token(shape)};
+  border-width: #{token(border-width)};
+  border-style: #{token(border-style)};
+  border-color: #{token(border-color)};
+
+  display: flex;
+  gap: #{token(icon-gap)};
+  box-sizing: border-box;
+  padding-inline: #{token(padding-inline)};
+  padding-block: #{token(padding-block)};
+}
+
+@mixin container {
+  display: flex;
+  flex-direction: column;
+  gap: #{token(content-gap)};
+}
+
+@mixin title {
+  @include typography.style(heading1);
+}
+
+@mixin icon {
+  color: #{token(icon-color)};
+}

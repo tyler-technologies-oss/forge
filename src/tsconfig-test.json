@@ -5,18 +5,15 @@
     "noImplicitReturns": true,
     "preserveConstEnums": true,
     "pretty": true,
+    "ignoreDeprecations": "5.0",
     "suppressImplicitAnyIndexErrors": true,
     "useDefineForClassFields": false,
-    "types": [
-      "jasmine",
-      "node",
-      "webpack-env"
-    ],
+    "types": ["jasmine", "node", "webpack-env"],
     "baseUrl": ".",
     "paths": {
       "@tylertech/forge": ["lib"],
       "@tylertech/forge/*": ["lib/*"]
     }
   },
-  "exclude": ["dev", "stories"]
+  "exclude": ["dev", "stories", "**/*.test.ts"]
 }

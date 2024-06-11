@@ -1,16 +1,30 @@
-import { IListDropdownOption, IListDropdownOpenConfig, IListDropdownOptionGroup, LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants';
+import { IListDropdownOption, IListDropdownOpenConfig, IListDropdownOptionGroup, LIST_DROPDOWN_CONSTANTS, ListDropdownType } from './list-dropdown-constants';
 import { createDropdown, createList, createListItems, createAsyncElement, createBusyElement, createCheckboxElement } from './list-dropdown-utils';
-import { IPopupComponent, POPUP_CONSTANTS } from '../popup';
 import { IListComponent } from '../list/list';
-import { LIST_ITEM_CONSTANTS, IListItemComponent, IListItemSelectEventData } from '../list/list-item';
-import { ScrollEvents, getShadowElement, IScrollObserverConfiguration, ScrollAxisObserver, removeAllChildren, isFunction, removeElement, replaceElement, createVisuallyHiddenElement, isDeepEqual, tryScrollIntoView } from '@tylertech/forge-core';
+import { LIST_ITEM_CONSTANTS, IListItemComponent } from '../list/list-item';
+import {
+  ScrollEvents,
+  getShadowElement,
+  IScrollObserverConfiguration,
+  ScrollAxisObserver,
+  removeAllChildren,
+  isFunction,
+  removeElement,
+  replaceElement,
+  createVisuallyHiddenElement,
+  isDeepEqual,
+  tryScrollIntoView,
+  closestElement
+} from '@tylertech/forge-core';
 import { ILinearProgressComponent } from '../linear-progress';
 import { ICON_CONSTANTS, IIconComponent } from '../icon';
+import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover';
 
 export interface IListDropdownAdapter {
   dropdownElement: HTMLElement | undefined;
   open(config: IListDropdownOpenConfig, selectCallback: (value: any, id: string) => void, closeCb: () => void): void;
   close(): void;
+  remove(): void;
   setScrollBottomListener(listener: () => void, scrollThreshold: number): void;
   removeScrollBottomListener(listener: () => void): void;
   getActiveOptionIndex(): number;
@@ -31,7 +45,7 @@ export interface IListDropdownAdapter {
 }
 
 export class ListDropdownAdapter implements IListDropdownAdapter {
-  private _dropdownElement: IPopupComponent | undefined;
+  private _dropdownElement: IPopoverComponent | undefined;
   private _listElement: IListComponent | undefined;
   private _announcerElement: HTMLElement | undefined;
   private _scrollObserver: ScrollAxisObserver | undefined;
@@ -49,6 +63,13 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
   public open(config: IListDropdownOpenConfig, selectCallback: (value: any, id: string) => void, closeCb: () => void): void {
     // Now lets create the popup and append the children
     this._dropdownElement = createDropdown(config, this._targetElement);
+
+    if (config.type !== ListDropdownType.None && config.type !== ListDropdownType.Menu) {
+      this._dropdownElement.preset = 'dropdown';
+    } else if (config.type === ListDropdownType.Menu) {
+      this._dropdownElement.preset = 'list';
+    }
+
     this.syncWidth(!!config.syncWidth, config.targetWidthCallback);
 
     // If we are configured to show a busy indicator (linear progress bar across the top), then create and append it first
@@ -65,7 +86,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
         this._headerElement.setAttribute(LIST_DROPDOWN_CONSTANTS.attributes.DATA_ALLOW_FOCUS, '');
       }
     }
-    
+
     // Create the footer element if a builder exists
     if (config.footerBuilder) {
       this._footerElement = config.footerBuilder();
@@ -78,9 +99,11 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     this._listElement = createList(config);
 
     // Add the listener for when list items are selected from the dropdown
-    this._listElement.addEventListener(LIST_ITEM_CONSTANTS.events.SELECT, (evt: CustomEvent<IListItemSelectEventData>) => {
-      evt.detail.listItem.setAttribute('aria-selected', 'true');
-      selectCallback(evt.detail.value, evt.detail.listItem.id);
+    this._listElement.addEventListener('forge-list-item-select', evt => {
+      const listItem = evt.target as IListItemComponent;
+      const button = listItem.querySelector('button') as HTMLButtonElement;
+      button.setAttribute('aria-selected', 'true');
+      selectCallback(evt.detail.value, button.id);
     });
 
     // Determine if we need to show the list or the async element first
@@ -108,15 +131,26 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     this._announcerElement.id = `${config.id}-activedescendant`;
     this._dropdownElement.appendChild(this._announcerElement);
 
+    // Append to root node
+    const hostDocument = this._targetElement.ownerDocument ?? document;
+    const hostElement = (closestElement(POPOVER_CONSTANTS.selectors.HOST, this._targetElement) as HTMLElement) ?? hostDocument.body;
+    hostElement.appendChild(this._dropdownElement);
+
     // Open the popup
+    this._dropdownElement.setAttribute(POPOVER_CONSTANTS.attributes.HOST, '');
     this._dropdownElement.open = true;
   }
 
-  public close(): void {
+  public async close(): Promise<void> {
     if (!this._dropdownElement) {
       return;
     }
-    this._dropdownElement.open = false;
+    await this._dropdownElement.hideAsync();
+    this.remove();
+  }
+
+  public remove(): void {
+    this._dropdownElement?.remove();
     this._dropdownElement = undefined;
     this._listElement = undefined;
     this._announcerElement = undefined;
@@ -125,9 +159,9 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
   public setScrollBottomListener(listener: () => void, scrollThreshold: number): void {
     if (this._dropdownElement) {
       if (!this._scrollObserver) {
-        const scrollTarget = getShadowElement(this._dropdownElement, POPUP_CONSTANTS.selectors.CONTAINER);
         const scrollConfig: IScrollObserverConfiguration = { scrollThreshold };
-        this._scrollObserver = new ScrollAxisObserver(scrollTarget, scrollConfig);
+        const scrollContainer = getShadowElement(this._dropdownElement, POPOVER_CONSTANTS.selectors.SURFACE) as HTMLElement;
+        this._scrollObserver = new ScrollAxisObserver(scrollContainer, scrollConfig);
         this._scrollObserver.addListener(ScrollEvents.ScrolledEnd, listener);
       }
     }
@@ -159,7 +193,8 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     }
     const listItems = this._getListItemElements();
     const item = listItems[index];
-    return item ? item.id : null;
+    const button = item?.querySelector('button');
+    return button ? button.id : null;
   }
 
   public toggleOptionMultiple(index: number, isSelected: boolean): void {
@@ -189,9 +224,9 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     const listItems = this._getListItemElements();
     if (listItems.length) {
       const activeListItems = listItems.filter(li => li.active);
-      activeListItems.forEach(li => li.active = false);
+      activeListItems.forEach(li => (li.active = false));
     }
-    
+
     const listItem = this._getSelectedListItem();
     if (listItem) {
       this._activateListOption(listItem, config.activeChangeCallback);
@@ -205,7 +240,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     const listItems = this._getListItemElements();
     if (listItems.length) {
       const activeListItems = listItems.filter(li => li.active);
-      activeListItems.forEach(li => li.active = false);
+      activeListItems.forEach(li => (li.active = false));
       this._activateListOption(listItems[index], activeChangeCallback);
       this._scrollListItemIntoView(listItems[index], animate ? 'smooth' : 'auto');
     }
@@ -232,12 +267,13 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
 
   public clearActiveOption(): void {
     const listItems = this._getListItemElements();
-    listItems.forEach(li => li.active = false);
+    listItems.forEach(li => (li.active = false));
   }
 
   public syncWidth(sync: boolean, targetWidthCallback?: () => number): void {
     if (this._dropdownElement) {
-      this._dropdownElement.style[sync ? 'width' : 'minWidth'] = `${this._getTargetElementWidth(targetWidthCallback)}px`;
+      const propertyName = sync ? '--forge-popover-width' : '--forge-popover-min-width';
+      this._dropdownElement.style.setProperty(propertyName, `${this._getTargetElementWidth(targetWidthCallback)}px`);
     }
   }
 
@@ -249,12 +285,12 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
       removeElement(this._asyncElement);
     }
     if (this._busyElement) {
-      this._busyElement.close();
+      this._busyElement.style.display = 'none';
     }
     if (!this._listElement.isConnected) {
       this._dropdownElement.appendChild(this._listElement);
     }
-    
+
     removeAllChildren(this._listElement);
     createListItems(config, this._listElement);
 
@@ -282,9 +318,8 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     }
     if (isVisible) {
       this._busyElement.style.removeProperty('display');
-      this._busyElement.open();
     } else {
-      this._busyElement.close();
+      this._busyElement.style.display = 'none';
     }
   }
 
@@ -293,7 +328,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
   }
 
   private _getListItemElements(): IListItemComponent[] {
-    return this._dropdownElement ? Array.from(this._dropdownElement.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[] : [];
+    return this._dropdownElement ? (Array.from(this._dropdownElement.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[]) : [];
   }
 
   private _toggleSelectedOption(listItem: IListItemComponent, isSelected: boolean): void {
@@ -305,19 +340,15 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     const listItems = this._getListItemElements();
     if (listItems.length) {
       const activeItems = listItems.filter(li => li !== listItem && li.active);
-      if (activeItems.length) {
-        activeItems.forEach(ai => ai.active = false);
-      }
+      activeItems.forEach(ai => (ai.active = false));
     }
 
     // Now we can toggle the selected state and sync the active state
     listItem.selected = isSelected;
-    listItem.setAttribute('aria-selected', `${isSelected}`);
-    listItem.setAttribute('aria-checked', `${isSelected}`);
 
-    if (isSelected) {
-      listItem.active = true;
-    }
+    const button = listItem.querySelector('button') as HTMLButtonElement;
+    button.setAttribute('aria-selected', `${isSelected}`);
+    button.setAttribute('aria-checked', `${isSelected}`);
 
     // Toggle the checkbox icon based on the selected state
     const checkboxElement = listItem.querySelector(`${ICON_CONSTANTS.elementName}[slot=leading]`) as IIconComponent;
@@ -335,17 +366,18 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
   }
 
   private _activateListOption(listItem: IListItemComponent | undefined, activeChangeCallback?: (id: string) => void): void {
-    if (listItem && !listItem.disabled) {
+    const buttonEl = listItem?.querySelector('button');
+    if (listItem && buttonEl && !buttonEl.disabled) {
       listItem.active = true;
       if (activeChangeCallback && isFunction(activeChangeCallback)) {
-        activeChangeCallback(listItem.id);
+        activeChangeCallback(buttonEl.id);
       }
     }
   }
 
   private _scrollListItemIntoView(listItem: HTMLElement | undefined, behavior: 'auto' | 'smooth' = 'auto', block: 'nearest' | 'center' = 'nearest'): void {
     if (listItem && this._dropdownElement && this._dropdownElement.isConnected) {
-      const scrollContainer = getShadowElement(this._dropdownElement, POPUP_CONSTANTS.selectors.CONTAINER);
+      const scrollContainer = getShadowElement(this._dropdownElement, POPOVER_CONSTANTS.selectors.SURFACE) as HTMLElement;
       if (scrollContainer) {
         tryScrollIntoView(scrollContainer, listItem, behavior, block);
       }

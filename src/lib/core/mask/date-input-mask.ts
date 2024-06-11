@@ -16,7 +16,10 @@ export class DateInputMask {
   private _maskOptions: IMask.MaskedPatternOptions;
   private _acceptListener: () => void;
 
-  constructor(private _element: HTMLInputElement, private _options: IDateInputMaskOptions = {}) {
+  constructor(
+    private _element: HTMLInputElement,
+    private _options: IDateInputMaskOptions = {}
+  ) {
     this._maskOptions = this._createOptions();
     this._mask = new InputMask<IMask.MaskedPatternOptions>(this._element, this._maskOptions);
     if (this._options.onChange) {
@@ -128,7 +131,7 @@ export class DateInputMask {
       this._setMaskedValueAdjusted(newValue, 3);
       return '/';
     }
-    
+
     // Attempt to pad a leading zero to the day segment
     const isFirstDayChar = (maskInstance.cursorPos === 3 || maskInstance.cursorPos === 4) && numValue > 3;
     if (isFirstDayChar) {
@@ -137,7 +140,7 @@ export class DateInputMask {
       this._setMaskedValueAdjusted(newValue, 3);
       return '/';
     }
-    
+
     // Attempt to automatically add a slash after the month or day segment is complete and/or move cursor to after slash
     if (!this._options.showMaskFormat) {
       if (maskInstance.cursorPos === 2 || maskInstance.cursorPos === 5) {

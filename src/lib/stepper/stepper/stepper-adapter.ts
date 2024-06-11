@@ -100,12 +100,12 @@ export class StepperAdapter extends BaseAdapter<IStepperComponent> implements IS
   }
   public setAlternativeState(alternative: boolean): void {
     StepperUtils.setAlternativeState(this._rootElement, alternative);
-    this._applyToSteps(step => step.alternative = alternative);
+    this._applyToSteps(step => (step.alternative = alternative));
   }
 
   public setVertical(vertical: boolean): void {
     toggleClass(this._rootElement, vertical, STEPPER_CONSTANTS.classes.VERTICAL);
-    this._applyToSteps(step => step.vertical = vertical);
+    this._applyToSteps(step => (step.vertical = vertical));
   }
 
   public setLinearState(linear: boolean): void {
@@ -140,25 +140,21 @@ export class StepperAdapter extends BaseAdapter<IStepperComponent> implements IS
   }
 
   public tryGetFocusedStep(): IStepComponent | undefined {
-    let focusedStep: IStepComponent = undefined as any;
-    const activeElement = getActiveElement(this._component.ownerDocument);
+    let focusedStep: IStepComponent | undefined;
     this._applyToSteps(step => {
-      if (activeElement === getShadowElement(step, STEP_CONSTANTS.selectors.STEP)) {
+      if (step.matches(':focus-within')) {
         focusedStep = step;
       }
     });
-
     return focusedStep;
   }
 
   public getFocusedOrSelectedStep(): IStepComponent {
     let focusedStep = this.tryGetFocusedStep();
-
     if (!focusedStep) {
       focusedStep = this._getSteps()[0];
       focusedStep.focus();
     }
-
     return focusedStep;
   }
 
@@ -177,10 +173,10 @@ export class StepperAdapter extends BaseAdapter<IStepperComponent> implements IS
   }
 
   public toggleDisabled(disabled: boolean): void {
-    this._applyToSteps(s => s.disabled = disabled);
+    this._applyToSteps(s => (s.disabled = disabled));
   }
 
-  public toggleRootClass(className: string, show: boolean): void{
+  public toggleRootClass(className: string, show: boolean): void {
     toggleClass(this._rootElement, show, className);
   }
 

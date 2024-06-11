@@ -1,11 +1,35 @@
-@use './mixins';
+@use './core' as *;
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+//
+// Base
+//
+
+.forge-chip-set {
+  @include tokens;
+}
+
+.forge-chip-set {
+  @include base;
+}
+
+//
+// Vertical
+//
+
+:host([vertical]) {
+  .forge-chip-set {
+    @include vertical;
+  }
 }

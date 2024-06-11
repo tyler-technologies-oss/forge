@@ -1,17 +1,66 @@
-@use './mixins';
-@use '../ripple/forge-ripple';
-@use '../button/forge-button';
+@use './core' as *;
+@use '../avatar';
+@use '../toolbar';
+@use '../core/styles/theme';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  display: inline;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-forge-toolbar {
-  --mdc-theme-surface: var(--forge-theme-elevated-surface);
+//
+// Base
+//
+
+.forge-profile-card {
+  @include tokens;
+}
+
+.forge-profile-card {
+  @include base;
+
+  .info-container {
+    @include info-container;
+  }
+
+  .avatar {
+    @include avatar;
+
+    @include avatar.provide-theme(
+      (
+        size: #{token(avatar-size)}
+      )
+    );
+  }
+
+  .text {
+    @include text;
+  }
+
+  .full-name {
+    @include full-name;
+  }
+
+  .email {
+    @include email;
+  }
+}
+
+#action-toolbar {
+  @include toolbar.provide-theme(
+    (
+      padding: 8px
+    )
+  );
+
+  forge-button:not(:last-of-type) {
+    margin-inline-end: 8px;
+  }
 }

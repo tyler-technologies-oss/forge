@@ -1,0 +1,694 @@
+@use 'sass:map';
+@use './core';
+@use '../core/styles/shape';
+@use '../core/styles/theme';
+@use '../focus-indicator';
+@use '../state-layer';
+@use '../utils/mixins' as utils;
+@use './token-utils' as *;
+
+$focus: ':not([disabled]):focus-within';
+$hover: ':not([disabled]):hover';
+$invalid: ':not([disabled])[invalid]';
+
+$first-slotted-element: '::slotted(:is([data-forge-field-input], *:first-of-type:is(input, textarea)))';
+$last-slotted-element: '::slotted(:is([data-forge-field-input], *:last-of-type:is(input, textarea)))';
+
+// Maps to look up the selector for a given density, label-position, shape, theme, or variant
+$densities: (
+  default: ':not([dense]):where([density=default], :not([density]))',
+  extra-small: ':where([density=extra-small], [dense])',
+  small: ':not([dense])[density=small]',
+  medium: ':not([dense])[density=medium]',
+  large: ':not([dense])[density=large]',
+  extra-large: ':not([dense])[density=extra-large]'
+);
+$label-positions: (
+  block-start: '[label-position=block-start]',
+  inline-start: '[label-position=inline-start]',
+  inline-end: '[label-position=inline-end]',
+  inset: ':where([label-position=inset], :not([label-position]))',
+  none: '[label-position=none]'
+);
+$shapes: (
+  default: ':where([shape=default], :not([shape]))',
+  squared: '[shape=squared]',
+  rounded: '[shape=rounded]'
+);
+$themes: (
+  default: ':where([theme=default], :not([theme]))',
+  primary: '[theme=primary]',
+  secondary: '[theme=secondary]',
+  tertiary: '[theme=tertiary]',
+  success: '[theme=success]',
+  error: '[theme=error]',
+  warning: '[theme=warning]',
+  info: '[theme=info]'
+);
+$variants: (
+  plain: '[variant=plain]',
+  outlined: ':where([variant=outlined], :not([variant]))',
+  tonal: '[variant=tonal]',
+  filled: '[variant=filled]',
+  raised: '[variant=raised]'
+);
+
+@layer base, theme, variant, shape, density;
+
+@layer base {
+  //
+  // Host
+  //
+
+  :host {
+    @include core.host;
+  }
+
+  :host([hidden]) {
+    display: none;
+  }
+
+  //
+  // Configuration
+  //
+
+  .forge-field {
+    @include core.configuration;
+  }
+
+  //
+  // Root
+  //
+
+  .forge-field {
+    @include core.base;
+  }
+}
+
+//
+// Theme, variant, shape, and density
+//
+
+@layer theme {
+  @each $theme, $selector in $themes {
+    :host(#{$selector}) {
+      .forge-field {
+        @include core.theme($theme);
+      }
+    }
+
+    :host(#{map.get($label-positions, inset)}#{$selector}) {
+      .forge-field {
+        @include core.inset-label-color($theme);
+      }
+    }
+  }
+}
+
+@layer variant {
+  @each $variant, $selector in $variants {
+    :host(#{$selector}) {
+      .forge-field {
+        @include core.variant($variant);
+      }
+    }
+  }
+}
+
+@layer shape {
+  @each $shape, $selector in $shapes {
+    :host(#{$selector}) {
+      .forge-field {
+        @include core.shape($shape);
+      }
+    }
+  }
+}
+
+@layer density {
+  @each $density, $selector in $densities {
+    :host(#{$selector}) {
+      .forge-field {
+        @include core.density($density);
+      }
+    }
+
+    :host(#{map.get($label-positions, inset)}#{$selector}) {
+      .forge-field {
+        @include core.inset-density($density);
+      }
+    }
+
+    @if $density == 'extra-small' {
+      :host(#{map.get($label-positions, inset)}#{$selector}) {
+        .label {
+          @include utils.visually-hidden;
+        }
+      }
+    }
+  }
+}
+
+//
+// State
+//
+
+:host(#{$hover}) {
+  .forge-field {
+    @include core.hover;
+  }
+}
+
+:host([disabled]) {
+  .forge-field {
+    @include core.disabled;
+  }
+}
+
+:host(#{$invalid}) {
+  .forge-field {
+    @include core.theme('error');
+    @include core.invalid-label-color;
+  }
+}
+
+:host(:not([disabled])) {
+  .forge-field:has(.input:focus-within) {
+    @include core.focus;
+  }
+}
+
+//
+// Base
+//
+
+.forge-field {
+  .outline {
+    @include core.outline;
+  }
+
+  .container {
+    @include core.container;
+  }
+
+  .surface {
+    @include core.surface;
+  }
+
+  .input {
+    @include core.input;
+  }
+
+  .label {
+    @include core.label;
+  }
+
+  .popover-target {
+    @include core.popover-target;
+  }
+
+  .popover-icon {
+    display: none;
+
+    &__arrow {
+      @include core.popover-icon-arrow;
+    }
+  }
+
+  .start,
+  .end,
+  .accessory,
+  .support-text,
+  .support-text-start,
+  .support-text-end {
+    display: none;
+  }
+}
+
+//
+// Required
+//
+
+:host([required]) {
+  .label::before {
+    @include core.label-before;
+  }
+}
+
+//
+// Optional
+//
+
+:host([optional]) {
+  .label::after {
+    @include core.label-after;
+  }
+}
+
+//
+// Popover icon
+//
+
+:host([popover-icon]) {
+  .popover-icon {
+    @include core.popover-icon;
+  }
+}
+
+:host([popover-icon][popover-expanded]) {
+  .popover-icon {
+    @include core.popover-icon-expanded;
+  }
+}
+
+//
+// Named slots
+//
+
+.forge-field {
+  &.has-start {
+    .start {
+      @include core.start;
+    }
+  }
+
+  &.has-end {
+    .end {
+      @include core.end;
+    }
+  }
+
+  &.has-accessory {
+    .accessory {
+      @include core.accessory;
+    }
+  }
+
+  &.has-accessory &:not(.has-accessory) {
+    .popover-icon {
+      @include core.item-padding(end, outer);
+    }
+  }
+
+  &.has-support-text-start,
+  &.has-support-text-end {
+    .support-text {
+      @include core.support-text;
+    }
+  }
+
+  &.has-support-text-start.has-support-text-end {
+    .support-text {
+      @include core.support-text-both;
+    }
+  }
+
+  &.has-support-text-start {
+    .support-text-start {
+      @include core.support-text-start;
+    }
+  }
+
+  &.has-support-text-end {
+    .support-text-end {
+      @include core.support-text-end;
+    }
+  }
+}
+
+:host(:not([popover-icon])) {
+  .forge-field:not(.has-accessory) {
+    .end {
+      @include core.item-padding(end, outer);
+    }
+  }
+}
+
+//
+// Label position
+//
+
+@each $label-position, $selector in $label-positions {
+  :host(#{$selector}) {
+    .forge-field {
+      @include core.grid($label-position);
+
+      @if $label-position == inset {
+        @include core.inset-label-root;
+      }
+    }
+
+    .label {
+      @include core.label-position($label-position);
+
+      @if $label-position == inset {
+        @include core.inset-label;
+        @include core.floatable-label;
+      } @else if $label-position == none {
+        @include utils.visually-hidden;
+      }
+    }
+  }
+}
+
+//
+// Label alignment
+//
+
+:host(#{map.get($label-positions, inline-start)}[label-alignment='start']),
+:host(#{map.get($label-positions, inline-end)}[label-alignment='start']) {
+  .label {
+    @include core.label-alignment(start, inline);
+  }
+}
+
+:host(#{map.get($label-positions, inline-start)}:where([label-alignment='center'], [label-alignment='default'], :not([label-alignment]))),
+:host(#{map.get($label-positions, inline-end)}:where([label-alignment='center'], [label-alignment='default'], :not([label-alignment]))) {
+  .label {
+    @include core.label-alignment(center, inline);
+  }
+}
+
+:host(#{map.get($label-positions, inline-start)}[label-alignment='end']),
+:host(#{map.get($label-positions, inline-end)}[label-alignment='end']) {
+  .label {
+    @include core.label-alignment(end, inline);
+  }
+}
+
+:host(#{map.get($label-positions, inline-start)}[label-alignment='baseline']),
+:host(#{map.get($label-positions, inline-end)}[label-alignment='baseline']) {
+  .label {
+    @include core.label-alignment(baseline, inline);
+  }
+}
+
+:host(#{map.get($label-positions, block-start)}:where([label-alignment='start'], [label-alignment='default'], :not([label-alignment]))) {
+  .label {
+    @include core.label-alignment(start, block);
+  }
+}
+
+:host(#{map.get($label-positions, block-start)}[label-alignment='center']) {
+  .label {
+    @include core.label-alignment(center, block);
+  }
+}
+
+:host(#{map.get($label-positions, block-start)}[label-alignment='end']) {
+  .label {
+    @include core.label-alignment(end, block);
+  }
+}
+
+:host(#{map.get($label-positions, block-start)}[label-alignment='baseline']:not([variant='plain'])) {
+  .label {
+    @include core.label-alignment(baseline, block);
+  }
+}
+
+:host(#{map.get($label-positions, block-start)}[label-alignment='baseline'][variant='plain']) {
+  .label {
+    @include core.label-alignment(baseline, block, 0px);
+  }
+}
+
+//
+// Floating label
+//
+
+:host(#{map.get($label-positions, inset)}[float-label]:not(#{map.get($densities, extra-small)})) {
+  .has-label {
+    .label {
+      @include core.floating-label;
+    }
+
+    .input {
+      @include core.floating-input;
+    }
+
+    &.floating-in {
+      .label {
+        @include core.float-in-label;
+      }
+
+      .input {
+        @include core.float-in-input;
+
+        ::slotted(:is(input, [data-forge-field-input], [data-forge-multi-input-separator])) {
+          @include core.default-slot-floating-in;
+        }
+      }
+    }
+
+    &:not(.floating-in) {
+      .input {
+        ::slotted(:is(input, [data-forge-field-input], [data-forge-multi-input-separator])) {
+          @include core.slotted-floating-input;
+        }
+      }
+    }
+  }
+}
+
+:host(#{map.get($label-positions, inset)}:not([float-label])) {
+  .has-label.floating-out {
+    .label {
+      @include core.float-out-label;
+    }
+
+    .input {
+      @include core.float-out-input;
+    }
+  }
+}
+
+:host(#{map.get($label-positions, inset)}[float-label][multiline]) {
+  .has-label:not(.floating-in) {
+    ::slotted(textarea) {
+      @include core.multiline-slotted-floating-input;
+    }
+  }
+}
+
+//
+// Support text
+//
+
+:host([support-text-inset='both']) {
+  .support-text {
+    @include core.support-text-inset(both);
+  }
+}
+
+:host([support-text-inset='start']) {
+  .support-text {
+    @include core.support-text-inset(start);
+  }
+}
+
+:host([support-text-inset='end']) {
+  .support-text {
+    @include core.support-text-inset(end);
+  }
+}
+
+//
+// Multiline
+//
+
+:host([multiline]) {
+  .container {
+    @include core.multiline-container;
+
+    .label,
+    .start,
+    .end,
+    .popover-icon {
+      @include core.multiline-container-child;
+    }
+  }
+}
+
+:host([multiline]#{map.get($label-positions, inset)}[float-label]) {
+  .label {
+    @include core.multiline-inset-label;
+
+    slot {
+      @include core.multiline-inset-label-slot;
+    }
+
+    &::after {
+      @include core.multiline-inset-label-background;
+    }
+  }
+}
+
+//
+// Slotted elements
+//
+
+.forge-field {
+  .input {
+    // TODO: style autofilled input
+
+    ::slotted(*) {
+      @include core.default-slot-content;
+      @include core.disableable(cursor);
+    }
+
+    ::slotted(textarea) {
+      @include core.default-slot-textarea;
+    }
+
+    /* The first default slotted element has start padding */
+    #{$first-slotted-element} {
+      @include core.item-padding(start, outer);
+    }
+
+    /* The last default slotted element has end padding */
+    #{$last-slotted-element} {
+      @include core.item-padding(end, outer);
+    }
+
+    ::slotted([data-forge-multi-input-separator]) {
+      @include core.slotted-multi-input-separator;
+    }
+  }
+
+  .label {
+    ::slotted(forge-label) {
+      @include core.slotted-forge-label;
+    }
+  }
+
+  /* When there is a slotted start element the input uses inner start padding */
+  &.has-start {
+    .input {
+      #{$first-slotted-element} {
+        @include core.item-padding(start, inner);
+      }
+    }
+  }
+
+  /* When there is a slotted end element the input uses inner end padding */
+  &.has-end {
+    .input {
+      #{$last-slotted-element} {
+        @include core.item-padding(end, inner);
+      }
+    }
+  }
+
+  /* When there is a slotted accessory element the end element uses inner end padding */
+  &.has-accessory {
+    .end {
+      @include core.item-padding(end, inner);
+    }
+  }
+}
+
+/* Add padding between the end and accessory elements in the plain variant */
+:host(#{map.get($variants, plain)}) {
+  .forge-field {
+    &.has-accessory {
+      .end {
+        @include core.item-padding(end, inner);
+      }
+    }
+  }
+}
+
+:host(#{map.get($label-positions, inset)}) {
+  /* The label padding should match the input when there is a slotted start element */
+  .forge-field {
+    &.has-start {
+      .label {
+        @include core.item-padding(start, inner);
+      }
+    }
+  }
+
+  .label {
+    ::slotted(*) {
+      @include core.slotted-inset-label;
+    }
+  }
+}
+
+/* When the popover icon is present the input and end element use inner end padding */
+:host([popover-icon]) {
+  .forge-field {
+    .input {
+      #{$last-slotted-element} {
+        @include core.item-padding(end, inner);
+      }
+    }
+    .end {
+      @include core.item-padding(end, inner);
+    }
+  }
+}
+
+/* When the accessory is present the input uses inner end padding */
+:host(:not(popover-icon)) {
+  .forge-field {
+    &.has-accessory:not(:is(.has-end)) {
+      .input {
+        #{$last-slotted-element} {
+          @include core.item-padding(end, inner);
+        }
+      }
+    }
+  }
+}
+
+:host([multiline]) {
+  .input {
+    ::slotted(:is(input, textarea)) {
+      @include core.multiline-slotted-input;
+    }
+  }
+
+  .accessory {
+    slot {
+      @include core.multiline-accessory-slot;
+    }
+  }
+}
+
+//
+// Focus indicator
+//
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(focus-indicator-color, custom)},
+      outward-offset: 0px,
+      shape: #{token(shape)},
+      width: #{token(focus-indicator-width)}
+    )
+  );
+}
+
+/* Provide an inline offset to the focus indicator to separate it from the plain field text */
+:host(#{map.get($variants, plain)}) {
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme(
+      (
+        offset-inline: -4px
+      )
+    );
+  }
+}
+
+//
+// Prefers reduced motion
+//
+
+@media (prefers-reduced-motion: reduce) {
+  .forge-field {
+    @include core.reduced-motion;
+  }
+}

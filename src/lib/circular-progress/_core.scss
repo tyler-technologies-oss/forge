@@ -1,0 +1,124 @@
+@use 'sass:list';
+@use './animation';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+$_cycle-duration: calc(4 * #{token(arc-duration)});
+
+@mixin container {
+  display: inline-flex;
+  vertical-align: middle;
+  min-block-size: #{token(size)};
+  min-inline-size: #{token(size)};
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  transition: background-color #{token(theme-transition-duration)} #{token(theme-transition-timing)};
+
+  // `contain` and `content-visibility` are performance optimizations important here because progress indicators
+  // are often used when a CPU=intensive task is underway so it's especially important to minimize their CPU consumption.
+  contain: strict;
+  content-visibility: auto;
+}
+
+@mixin progress {
+  flex: 1;
+  align-self: stretch;
+  margin: #{token(padding)};
+}
+
+@mixin indeterminate {
+  will-change: transform;
+  animation: #{animation.$indeterminate-animation};
+  animation-duration: calc(#{token(arc-duration)} * 360 / 306);
+}
+
+@mixin indeterminate-left {
+  overflow: hidden;
+  inset: 0 50% 0 0;
+}
+
+@mixin indeterminate-left-circle {
+  rotate: 135deg;
+  inset: 0 -100% 0 0;
+}
+
+@mixin indeterminate-right {
+  overflow: hidden;
+  inset: 0 0 0 50%;
+}
+
+@mixin indeterminate-circle {
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: solid calc(#{token(size)} * #{token(track-width)} / 100);
+  border-color: #{token(indicator-color)} #{token(indicator-color)} transparent transparent;
+  transition: border-color #{token(theme-transition-duration)} #{token(theme-transition-timing)};
+  will-change: transform;
+  animation: #{animation.$indeterminate-circle-animation};
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  animation-duration:
+    #{token(arc-duration)},
+    #{$_cycle-duration};
+  animation-timing-function: #{animation.$indeterminate-easing};
+}
+
+@mixin indeterminate-right-circle {
+  rotate: 100deg;
+  inset: 0 0 0 -100%;
+  animation-delay: calc(-0.5 * #{token(arc-duration)}), 0ms;
+}
+
+@mixin determinate-svg {
+  transform: rotate(-90deg);
+}
+
+@mixin determinate-svg-circle {
+  cx: 50%;
+  cy: 50%;
+  r: calc(50% * (1 - #{token(track-width)} / 100));
+  // match size to indeterminate border width
+  stroke-width: calc(#{token(track-width)} * 1%);
+  // note, pathLength is set so this can be normalized
+  stroke-dasharray: 100;
+  fill: transparent;
+}
+
+@mixin determinate-progress {
+  transition:
+    stroke-dashoffset 500ms #{animation.$determinate-easing},
+    stroke #{token(theme-transition-duration)} #{token(theme-transition-timing)};
+  stroke: #{token(indicator-color)};
+}
+
+@mixin determinate-track {
+  stroke: transparent;
+}
+
+@mixin determinate-track-background {
+  transition: stroke #{token(theme-transition-duration)} #{token(theme-transition-timing)};
+  stroke: #{token(track-color)};
+}
+
+@mixin determinate-spinner {
+  will-change: transform;
+  animation: #{animation.$determinate-animation};
+  animation-duration: #{$_cycle-duration};
+  animation-timing-function: #{animation.$indeterminate-easing};
+}
+
+@mixin positioned {
+  position: absolute;
+  inset: 0;
+}
+
+@mixin center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}

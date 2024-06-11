@@ -1,10 +1,9 @@
-import { CustomElement, attachShadowTemplate, ensureChildren, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
-import { tylIconArrowDropDown, tylIconLanguage, tylIconSearch } from '@tylertech/tyler-icons/standard';
-import { AppBarSearchFoundation } from './app-bar-search-foundation';
+import { customElement, attachShadowTemplate, coerceBoolean, coreProperty, ensureInputElement } from '@tylertech/forge-core';
+import { tylIconSearch } from '@tylertech/tyler-icons/standard';
+import { AppBarSearchCore } from './app-bar-search-core';
 import { AppBarSearchAdapter } from './app-bar-search-adapter';
 import { IAppBarSearchInputEventData, APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants';
-import { IOption } from '../../select';
-import { TooltipComponent } from '../../tooltip';
+import { FocusIndicatorComponent } from '../../focus-indicator';
 import { IconComponent, IconRegistry } from '../../icon';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 
@@ -15,10 +14,6 @@ export interface IAppBarSearchComponent extends IBaseComponent {
   disabled: boolean;
   value: string;
   placeholder: string;
-  combined: boolean;
-  combinedOptions: IOption[];
-  selectedCombinedOption: string;
-  global: boolean;
 }
 
 declare global {
@@ -32,13 +27,19 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-app-bar-search>` custom element.
- * 
  * @tag forge-app-bar-search
- * 
+ *
  * @slot - The default (unnamed) slot is where child `<input>` elements will be placed.
  * @slot action - Places actions at the end of the input.
- * 
+ *
+ * @attribute {boolean} [disabled=false] - A boolean attribute that, if present, indicates that the input should be disabled.
+ * @attribute {string} value - The value of the input.
+ * @attribute {string} placeholder - The placeholder text of the input.
+ *
+ * @property {boolean} [disabled=false] - A boolean property that, if true, indicates that the input should be disabled.
+ * @property {string} value - The value of the input.
+ * @property {string} placeholder - The placeholder text of the input.
+ *
  * @csspart root - The root element
  * @csspart container - The input container element.
  * @csspart icon-container - The icon container element.
@@ -51,57 +52,45 @@ declare global {
  * @csspart global-icon-container - The global icon container element.
  * @csspart global-icon - The global icon <forge-icon> element.
  * @csspart actions-container - The action container element around the slot.
- * 
- * @cssproperty --mdc-theme-on-primary - Controls the border-color of the container outline, the font-color, and icon color.
- * @cssproperty --mdc-theme-on-surface - Controls the font color of the buttons.
- * @cssproperty --mdc-theme-text-secondary-on-background - Controls the placeholder font color.
+ *
+ * @cssproperty --forge-theme-on-primary - Controls the border-color of the container outline, the font-color, and icon color.
+ * @cssproperty --forge-theme-on-surface - Controls the font color of the buttons.
+ * @cssproperty --forge-theme-text-medium - Controls the placeholder font color.
  * @cssproperty --forge-app-bar-search-theme-background - Controls the background-color of the container.
  * @cssproperty --forge-app-bar-search-theme-background-focused - Controls the focused background-color of the container.
  * @cssproperty --forge-app-bar-search-theme-hover-opacity - Controls the hover opacity of the outline.
  * @cssproperty --forge-app-bar-search-theme-disabled-opacity - Controls the disabled opacity of the component.
+ *
+ * @event {CustomEvent<IAppBarSearchInputEventData>} forge-app-bar-search-input - Emits when the users executes the search via pressing the Enter key while the `<input>` has focus.
  */
-@CustomElement({
+@customElement({
   name: APP_BAR_SEARCH_CONSTANTS.elementName,
-  dependencies: [
-    TooltipComponent,
-    IconComponent
-  ]
+  dependencies: [IconComponent, FocusIndicatorComponent]
 })
 export class AppBarSearchComponent extends BaseComponent implements IAppBarSearchComponent {
   public static get observedAttributes(): string[] {
-    return [
-      APP_BAR_SEARCH_CONSTANTS.attributes.DISABLED,
-      APP_BAR_SEARCH_CONSTANTS.attributes.VALUE,
-      APP_BAR_SEARCH_CONSTANTS.attributes.PLACEHOLDER,
-      APP_BAR_SEARCH_CONSTANTS.attributes.COMBINED,
-      APP_BAR_SEARCH_CONSTANTS.attributes.GLOBAL
-    ];
+    return [APP_BAR_SEARCH_CONSTANTS.attributes.DISABLED, APP_BAR_SEARCH_CONSTANTS.attributes.VALUE, APP_BAR_SEARCH_CONSTANTS.attributes.PLACEHOLDER];
   }
 
-  /** The foundation class that handles business logic for this component. */
-  private _foundation: AppBarSearchFoundation;
+  private _core: AppBarSearchCore;
 
   constructor() {
     super();
-    IconRegistry.define([tylIconSearch, tylIconArrowDropDown, tylIconLanguage]);
+    IconRegistry.define(tylIconSearch);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new AppBarSearchFoundation(new AppBarSearchAdapter(this));
+    this._core = new AppBarSearchCore(new AppBarSearchAdapter(this));
   }
 
   public connectedCallback(): void {
-    if (this.children.length) {
-      this._initialize();
+    if (this.querySelector(APP_BAR_SEARCH_CONSTANTS.selectors.INPUT)) {
+      this._core.initialize();
     } else {
-      ensureChildren(this).then(() => this._initialize());
+      ensureInputElement(this).then(() => this._core.initialize());
     }
   }
 
-  private _initialize(): void {
-    this._foundation.initialize();
-  }
-
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -115,41 +104,15 @@ export class AppBarSearchComponent extends BaseComponent implements IAppBarSearc
       case APP_BAR_SEARCH_CONSTANTS.attributes.PLACEHOLDER:
         this.placeholder = newValue;
         break;
-      case APP_BAR_SEARCH_CONSTANTS.attributes.COMBINED:
-        this.combined = coerceBoolean(newValue);
-        break;
-      case APP_BAR_SEARCH_CONSTANTS.attributes.GLOBAL:
-        this.global = coerceBoolean(newValue);
-        break;
     }
   }
 
-  /** Gets/sets the value. */
-  @FoundationProperty()
+  @coreProperty()
   public declare value: string;
 
-  /** Gets/sets the disabled state of the search input. */
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
-  
-  /** Gets/sets whether this is a combined search box with search options. */
-  @FoundationProperty()
-  public declare combined: boolean;
-  
-  /** Gets/sets seelcted option for the combined search dropdown. */
-  @FoundationProperty()
-  public declare combinedOptions: IOption[];
-  
-  /** Gets/sets selected option for the combined search dropdown. */
-  @FoundationProperty()
-  public declare selectedCombinedOption: string;
-  
-  /** Gets/sets whether the global icon is displayed at the end of the input. */
-  @FoundationProperty()
-  public declare global: boolean;
 
-  /** Sets the input placeholder value. */
-  public set placeholder(value: string) {
-    this._foundation.placeholder = value;
-  }
+  @coreProperty()
+  public declare placeholder: string;
 }

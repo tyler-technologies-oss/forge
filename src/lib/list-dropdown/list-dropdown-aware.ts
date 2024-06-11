@@ -1,4 +1,4 @@
-import { FoundationProperty, coerceNumber, coerceBoolean } from '@tylertech/forge-core';
+import { coreProperty, coerceNumber, coerceBoolean } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { ListDropdownHeaderBuilder, ListDropdownFooterBuilder, LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants';
 
@@ -44,43 +44,43 @@ export class ListDropdownAware extends BaseComponent {
         break;
     }
   }
-  
+
   /** Gets/sets the list of classes to apply to the popup element. */
-  @FoundationProperty()
+  @coreProperty()
   public declare popupClasses: string | string[];
 
   /** Gets/sets the callback function for generating header content within the popup. */
-  @FoundationProperty()
+  @coreProperty()
   public declare popupHeaderBuilder: ListDropdownHeaderBuilder;
 
   /** Gets/sets the callback function for generating header content within the popup. */
-  @FoundationProperty()
+  @coreProperty()
   public declare popupFooterBuilder: ListDropdownFooterBuilder;
 
   /** Gets/sets whether the popup width is synchronized with the popup target width. */
-  @FoundationProperty()
+  @coreProperty()
   public declare syncPopupWidth: boolean;
 
   /** Gets/sets the maximum number of options to display in the dropdown. */
-  @FoundationProperty()
+  @coreProperty()
   public declare optionLimit: number;
 
   /** Controls the observation of scroll events on the dropdown. */
-  @FoundationProperty()
+  @coreProperty()
   public declare observeScroll: boolean;
 
   /** The number of pixels from the bottom to trigger the scroll bottom event. Only applicable if `observeScroll` is true. */
-  @FoundationProperty()
+  @coreProperty()
   public declare observeScrollThreshold: number;
 
   /** Gets/sets whether the popup width will be constrained to a max width of the viewport width (default: `100vw`). */
-  @FoundationProperty()
+  @coreProperty()
   public declare constrainPopupWidth: boolean;
 
   /**
    * Gets/sets whether the options will wrap their text or not.
    * This only applies if `constrainPopupWidth` is `true`, if there is an explicit width set via CSS.
    * */
-  @FoundationProperty()
+  @coreProperty()
   public declare wrapOptionText: boolean;
 }

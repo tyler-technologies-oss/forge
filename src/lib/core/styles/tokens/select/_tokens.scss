@@ -1,0 +1,13 @@
+@use 'sass:map';
+@use '../../utils';
+@use '../../theme';
+@use '../../typography';
+
+$tokens: (
+  placeholder-color: utils.module-val(select, placeholder-color, theme.variable(text-low)),
+  dense-font-size: utils.module-val(select, dense-font-size, typography.font-size-relative('0875'))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

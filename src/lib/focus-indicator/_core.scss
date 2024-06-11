@@ -1,0 +1,44 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin base {
+  animation-delay: 0s, calc(#{token(duration)} * 0.25);
+  animation-duration: calc(#{token(duration)} * 0.25), calc(#{token(duration)} * 0.75);
+  animation-timing-function: #{token(easing)};
+  box-sizing: border-box;
+  color: #{token(color)};
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  margin-block: #{token(offset-block)};
+  margin-inline: #{token(offset-inline)};
+}
+
+@mixin active {
+  display: #{token(display)};
+}
+
+@mixin circular {
+  @include override(shape, 50%, value);
+}
+
+@mixin outward {
+  animation-name: outward-grow, outward-shrink;
+  border-end-end-radius: calc(#{token(shape-end-end)} + #{token(outward-offset)});
+  border-end-start-radius: calc(#{token(shape-end-start)} + #{token(outward-offset)});
+  border-start-end-radius: calc(#{token(shape-start-end)} + #{token(outward-offset)});
+  border-start-start-radius: calc(#{token(shape-start-start)} + #{token(outward-offset)});
+  inset: calc(-1 * #{token(outward-offset)});
+  outline: #{token(width)} solid currentColor;
+}
+
+@mixin inward {
+  animation-name: inward-grow, inward-shrink;
+  border-end-end-radius: calc(#{token(shape-end-end)} - #{token(inward-offset)});
+  border-end-start-radius: calc(#{token(shape-end-start)} - #{token(inward-offset)});
+  border-start-end-radius: calc(#{token(shape-start-end)} - #{token(inward-offset)});
+  border-start-start-radius: calc(#{token(shape-start-start)} - #{token(inward-offset)});
+  border: #{token(width)} solid currentColor;
+  inset: #{token(inward-offset)};
+}

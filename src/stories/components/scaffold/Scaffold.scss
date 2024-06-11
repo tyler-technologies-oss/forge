@@ -1,0 +1,15 @@
+.scaffold-example {
+  --forge-scaffold-height: 500px;
+  --forge-scaffold-width: 100%;
+
+  div[slot] {
+    border: 2px dashed var(--forge-theme-outline-low);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: var(--forge-spacing-xsmall);
+    margin: var(--forge-spacing-xsmall);
+    box-sizing: border-box;
+  }
+}

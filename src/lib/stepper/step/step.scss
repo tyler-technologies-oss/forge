@@ -1,159 +1,329 @@
-@use '../../theme';
-@use './mixins';
-@use './variables';
-@use '@material/ripple/mdc-ripple';
+@use './core' as *;
 
-@include mixins.core-styles;
-
-:host(:first-child[alternative]) {
-  &::after {
-    align-self: flex-start;
-    top: 22px;
-    margin: 0;
-  }
-}
-:host(:last-child[alternative]) {
-  &::before {
-    align-self: flex-start;
-    top: 22px;
-    margin: 0;
-  }
-}
-
-:host(:not(:first-child):not(:last-child)[alternative]) {
-  &::before,
-  &::after {
-    align-self: flex-start;
-    top: 22px;
-    min-width: 7px;
-    margin: 0;
-  }
-}
-
-:host(:not(:last-child)[alternative]) {
-  .after {
-    align-self: flex-start;
-    top: 22px;
-    position: absolute;
-    width: calc(50% - 18px);
-    left: calc(50% + 18px);
-    height: 0;
-    right: 0;
-    
-    &::after {
-      content: '';
-      flex: 1;
-      flex-basis: 0.000000001px;
-      position: absolute;
-      right: 0;
-      left: 0;
-      min-width: 0;
-      width: 100%;
-
-      @include mixins.line();
-    }
-  }
-}
-
-:host(:not(:first-child)[alternative]) {
-  .before {
-    align-self: flex-start;
-    top: 22px;
-    position: absolute;
-    left: 0;
-    width: calc(50% - 18px);
-    height: 0;
-
-    &::before {
-      content: '';
-      left: 0;
-      min-width: 0;
-      width: 100%;
-      flex: 1;
-      flex-basis: 0.000000001px;
-      position: absolute;
-
-      @include mixins.line();
-    }
-  }
-}
-
-:host(:not(:first-child):not(:last-child)):host(:not([vertical])) {
-  &::before,
-  &::after {
-    @include mixins.step-line;
-    
-    margin: 0 -10px;
-  }
-}
-
-:host(:last-child):host(:not([vertical])) {
-  &::before {
-    @include mixins.step-line;
-    
-    margin: 0 -10px 0 0;
-  }
-}
-
-:host(:not(:last-child)):host(:not([vertical])) {
-  &::after {
-    @include mixins.step-line;
-    
-    margin: 0 0 0 -10px;
-  }
+:host {
+  @include tokens;
 }
 
 :host(:focus) {
   outline: none;
 }
 
-:host([vertical]) {
-  @include mixins.vertical-host;
-  
+:host([error]) {
+  @include state-layer-error;
+}
+
+:host(:first-child[alternative]) {
   &::after {
-    content: none;
+    @include psudo-line-begin-alternate;
+  }
+}
+:host(:last-child[alternative]) {
+  &::before {
+    @include psudo-line-end-alternate;
+  }
+}
+
+:host(:not(:first-child):not(:last-child)[alternative]) {
+  &::before,
+  &::after {
+    @include psudo-line-alternate;
+  }
+}
+
+:host(:not(:last-child)[alternative]) {
+  .after {
+    @include after-container-alternate;
+  }
+}
+
+:host(:not(:first-child)[alternative]) {
+  .before {
+    @include before-container-alternate;
+  }
+}
+
+:host(:not(:first-child):not(:last-child)):host(:not([vertical])) {
+  &::before,
+  &::after {
+    @include step-line;
+    @include psudo-line-between-inset;
+  }
+}
+
+:host(:last-child):host(:not([vertical])) {
+  &::before {
+    @include step-line;
+    @include psudo-line-end-inset;
+  }
+}
+
+:host(:is(:first-child)):host(:not([vertical])) {
+  &::after {
+    @include step-line;
+    @include psudo-line-start-inset;
+  }
+}
+
+:host([vertical]) {
+  @include vertical-host;
+
+  &::after {
+    @include vertical-psudo-line;
   }
 
   &::before {
-    content: none;
+    @include vertical-psudo-line;
   }
 
   .forge-step {
-    @include mixins.vertical-base;
+    @include vertical-base;
 
-    &__text-container {
-      white-space: normal;
+    .text-container {
+      @include vertical-text-container;
     }
   }
 
-  .forge-step__icon-container {
-    .forge-step-icon-content {
-      margin: variables.$vertical-icon-margin;
+  .icon-container {
+    .icon-content {
+      @include vertical-icon-container-content;
     }
+  }
+}
+
+:host([vertical]) {
+  .expansion-panel {
+    @include expansion-panel-base;
+  }
+
+  .expanded-icon {
+    @include expansion-panel-icon;
   }
 }
 
 :host([vertical][expandable]) {
-  .forge-step__expansion-panel {
-    display: block;
+  .expansion-panel {
+    @include veritcal-expansion-panel;
   }
 }
 
 :host([ignore-user-expansion]) {
-  @include mixins.forge-ignore-user-expansion;
+  @include forge-ignore-user-expansion;
 }
 
 forge-expansion-panel {
   &::part(root) {
-    @include mixins.expansion-panel-styles;
+    @include expansion-panel-styles;
   }
 }
 
-@include mixins.border-psudo-styles('[clustered]') {
-  min-width: variables.$clusetered-border-min-width;
+forge-focus-indicator {
+  @include focus-indicator-base;
 }
 
-@include mixins.border-psudo-styles('[safari][alternative]') {
-  top: 24px;
-  margin: 0 -5px;
+.container {
+  display: contents;
+}
+
+.forge-step {
+  @include base;
+  @include forge-interactable;
+
+  &.error {
+    forge-focus-indicator {
+      @include focus-indicator-error;
+    }
+  }
+
+  &.vertical {
+    forge-focus-indicator {
+      @include focus-indicator-vertical;
+    }
+  }
+
+  &.selected:not(.disabled) {
+    @include state-layer-active;
+    &::before {
+      @include background-selected;
+    }
+
+    &.error {
+      @include background-selected-error;
+    }
+  }
+
+  .title {
+    @include label;
+  }
+
+  .subtitle {
+    @include optional-label-slot-wrapper;
+
+    ::slotted(*) {
+      @include optional-label;
+    }
+  }
+
+  .icon-container {
+    .icon-content {
+      @include icon-content;
+    }
+  }
+
+  &.disabled {
+    @include disabled-base;
+
+    &.forge-step {
+      .icon-container {
+        .icon-content {
+          @include icon-content-disabled;
+        }
+      }
+    }
+
+    .text-container {
+      .title {
+        @include title-disabled;
+      }
+
+      .subtitle {
+        ::slotted(*) {
+          @include subtitle-disabled;
+        }
+      }
+    }
+  }
+
+  &.alternative {
+    @include alternate;
+
+    .icon-container {
+      .icon-content {
+        @include icon-content-alternate;
+      }
+    }
+    .text-container {
+      @include text-container-alternate;
+    }
+  }
+
+  &:not(.selected):not(.disabled) {
+    &:not(.editable):not(.completed),
+    &.editable:not(.completed) {
+      &:not(.error) {
+        .icon-content {
+          @include icon-content-default-theme;
+
+          .index {
+            @include icon-content-default-theme-index;
+          }
+        }
+      }
+    }
+  }
+
+  &.selected {
+    &.disabled {
+      .icon-content {
+        @include icon-content-disabled;
+      }
+    }
+
+    &:not(.disabled) {
+      .icon-container {
+        .icon-content {
+          @include icon-content-selected;
+        }
+      }
+    }
+
+    &:not(.disabled) {
+      .title {
+        @include label-selected;
+      }
+
+      .subtitle {
+        ::slotted(*) {
+          @include optional-label-selected;
+        }
+      }
+    }
+  }
+
+  &.error {
+    &:not(.disabled) {
+      .title {
+        @include label-error;
+      }
+
+      .subtitle {
+        ::slotted(*) {
+          @include optional-label-error;
+        }
+      }
+
+      .icon-container {
+        .icon-content {
+          @include icon-content-error;
+        }
+      }
+    }
+  }
+
+  &.completed {
+    &:not(.disabled) {
+      &:not(.error) {
+        &:not(.editable) {
+          .icon-content {
+            @include icon-content-completed;
+          }
+        }
+        &.editable {
+          .icon-content {
+            @include icon-content-completed;
+          }
+        }
+      }
+    }
+  }
+
+  &.expandable {
+    .expanded-icon {
+      @include expandable-icon-base;
+    }
+
+    &.expanded {
+      .expanded-icon {
+        @include expandable-icon-animation;
+      }
+    }
+
+    .icon-container {
+      .icon-content {
+        @include expandable-icon-content;
+      }
+    }
+  }
+
+  .text-container {
+    @include text-container;
+  }
+}
+
+:host(:not(:last-child)[clustered]) {
+  &::after {
+    @include line-clustered;
+  }
+}
+
+:host(:last-child[clustered]) {
+  &::before {
+    @include line-clustered;
+  }
+}
+
+:host(:not(:first-child):not(:last-child)[clustered]) {
+  &::before,
+  &::after {
+    @include line-clustered;
+  }
 }

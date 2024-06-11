@@ -26,7 +26,7 @@ export class BaseDrawerAdapter extends BaseAdapter<IBaseDrawerComponent> impleme
   public proxyScrollEvent(): void {
     // We proxy the scroll event because our internal scroll container does not dispatch this event outside of the shadow root to any listeners.
     // This is a problem because if we have any components that need to react to the scroll event, such as our popup elements, they will not be
-    // notified. This will ensure we always proxy this event out from the host. 
+    // notified. This will ensure we always proxy this event out from the host.
     this.tryUnproxyScrollEvent();
     this._unproxyScrollEventCb = proxyShadowScrollEvent(this._component.shadowRoot as ShadowRoot, this._component);
   }

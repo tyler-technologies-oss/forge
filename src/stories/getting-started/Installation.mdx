@@ -1,0 +1,113 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Getting Started/Installation" />
+
+# Installation
+
+Before we get into the details, you first need to determine what kind of installation you need. Forge is available in two formats:
+
+- **NPM Package**: This is the recommended way to install Forge. It allows you to easily manage your dependencies and keep your project up-to-date.
+- **CDN**: If you're just experimenting with Forge, or if you're working on a project that doesn't use a package manager, you can use the CDN version.
+
+## NPM Package
+
+To install Forge as an NPM package, run the following command:
+
+```bash
+npm install @tylertech/forge
+```
+
+### Package Format
+
+The `@tylertech/forge` package follows the following format:
+
+- `dist/`: Contains all pre-built static distribution sources.
+  - `<component-name>/`: pre-built CSS stylesheets for specific components.
+    - Ex. `table/forge-table.css`: Contains the pre-built CSS classes to support the `<forge-table>` component.
+  - `esm/`: Contains the bundled and code-split ESM JavaScript sources (includes dependencies). This is for distribution on the Forge CDN, or for self-hosting Forge.
+  - `forge-core.css`: The optional Forge core stylesheet. Typically useful when using the `<forge-scaffold>` for your outer page layout.
+  - `forge-tokens.css`: The optional Forge tokens stylesheet. Contains all design tokens used in the Forge components so your application has access to them as well.
+  - `forge-dark.css`: The default Forge dark theme (must be loaded after `forge.css`).
+  - `forge.css`: The pre-built Forge global stylesheet. Contains all global stylesheets. You should prefer to load individual stylesheets instead of this global stylesheet in production.
+  - `lib.js`: The pre-built Forge JavaScript library. Contains all Forge components and utilities in a single bundle (including dependencies).
+- `esm/`: Contains the unbundled ESM JavaScript sources as the main entry to the package (uses bare module specifiers).
+- `sass/`: Contains all Sass stylesheets as a copy directly from the library. This allows you to utilize the same Sass utilities that Forge does within your own application and/or library.
+- `custom-elements.json`: This is the custom elements manifest that describes the custom elements in the package. We use this to generate the docs and Angular adapters.
+- `LICENSE`: The Apache 2.0 license.
+- `package.json`: The package specification.
+- `README.md`: This README.md file.
+
+> You can inspect the package contents by navigating to the `node_modules/@tylertech/forge` directory in your project.
+
+### Framework Installation
+
+If you're using a framework, you should jump to the framework-specific guide:
+
+- [Angular](?path=/docs/frameworks-angular--docs)
+- [React](?path=/docs/frameworks-react--docs)
+- [Vue](?path=/docs/frameworks-vue--docs)
+- [Svelte](?path=/docs/frameworks-svelte--docs)
+- [Blazor](?path=/docs/frameworks-blazor--docs)
+
+### Define Components
+
+You will then need to import and define the components you are using within your application in the browser's custom element registry.
+
+```javascript
+import { defineButtonComponent, defineTextFieldComponent } from '@tylertech/forge';
+
+// These functions should be called as early as possible when your application is bootstrapping
+defineButtonComponent();
+defineTextFieldComponent();
+```
+
+If you're prototyping, it can be handy to pull in all components:
+
+```javascript
+import { defineComponents } from '@tylertech/forge';
+
+defineComponents();
+```
+
+> Note: make sure to call the definition functions as early as possible in your application bootstrapping process to ensure they are
+> defined with the browser before your application is rendered to avoid FOUC (Flash of Unstyled Content).
+
+## CDN
+
+To use Forge via CDN, include the following script tag in your HTML:
+
+```html
+<script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@<version>/index.js"></script>
+```
+
+> Replace `<version>` with the version of Tyler Forge you want to use.
+
+> Note: The CDN distributes Forge components as ES modules. This means you need to use the `type="module"` attribute in your script tag.
+
+Using the above `<script>` will automatically load **all** components into your page. You can then use them anywhere in your HTML. While this is easy,
+it is not recommended for production use as it will load all components, even if you only use a few. For production use, you should load only the components
+you need. You can do this by referencing the individual component files directly:
+
+```html
+<script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@<version>/<component>/index.js"></script>
+```
+
+> Replace `<component>` with the name of the component you want to use.
+
+For example, to use `<forge-button>`, you would include the following script tag:
+
+```html
+<script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@<version>/button/index.js"></script>
+```
+
+You will also need to load required global styles. You can do this by including the following link tag in your HTML:
+
+```html
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@<version>/forge.css" />
+```
+
+Additionally, you can use the JSDelivr CDN to load Forge components if you prefer.
+
+```html
+<script type="module" src="https://cdn.jsdelivr.net/npm/@tylertech/forge@<version>/dist/esm/index.js">
+```

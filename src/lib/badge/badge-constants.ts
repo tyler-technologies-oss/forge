@@ -1,26 +1,32 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
+import { COMPONENT_NAME_PREFIX, Theme } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}badge`;
 
 const attributes = {
   DOT: 'dot',
-  OPEN: 'open',
+  HIDE: 'hide',
   THEME: 'theme',
   STRONG: 'strong'
 };
 
 const classes = {
-  DOT: 'forge-badge--dot',
-  OPEN: 'forge-badge--open'
+  OPEN: 'open'
 };
 
 const selectors = {
   ROOT: '.forge-badge'
 };
 
+const defaults = {
+  THEME: 'default' as BadgeTheme
+};
+
 export const BADGE_CONSTANTS = {
   elementName,
   attributes,
+  selectors,
   classes,
-  selectors
+  defaults
 };
+
+export type BadgeTheme = Theme | 'default' | 'info-primary' | 'info-secondary' | 'danger';

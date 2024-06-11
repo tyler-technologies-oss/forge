@@ -1,0 +1,24 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../animation';
+@use '../../utils';
+
+$tokens: (
+  // Dimensions
+  size: utils.module-val(circular-progress, size, 48px),
+  padding: utils.module-val(circular-progress, padding, 0),
+  // Track
+  track-width: utils.module-val(circular-progress, track-width, 12),
+  track-color: utils.module-val(circular-progress, track-color, transparent),
+  track-fill-color: utils.module-val(circular-progress, track-fill-color, theme.variable(tertiary-container)),
+  // Indicator
+  indicator-color: utils.module-val(circular-progress, indicator-color, theme.variable(tertiary)),
+  // Animation
+  arc-duration: utils.module-val(circular-progress, arc-duration, 1333ms),
+  theme-transition-duration: utils.module-val(circular-progress, theme-transition-duration, animation.variable(duration-short3)),
+  theme-transition-timing: utils.module-val(circular-progress, theme-transition-timing, animation.variable(easing-standard))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

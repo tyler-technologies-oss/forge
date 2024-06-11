@@ -1,21 +1,36 @@
-@use './mixins';
+@use './core' as *;
+@use '../core/styles/theme';
+
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include tokens;
+}
 
-  > svg {
-    @include mixins.svg;
-  }
+:host {
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-@include mixins.theme('primary');
-@include mixins.theme('secondary');
-@include mixins.theme('warning');
-@include mixins.theme('danger');
-@include mixins.theme('success');
-@include mixins.theme('info');
-@include mixins.theme('tertiary');
+//
+// Base
+//
+
+svg {
+  @include svg;
+}
+
+//
+// Theme
+//
+
+@each $theme in [primary secondary tertiary success error warning text-medium text-low] {
+  :host([theme='#{$theme}']) {
+    @include override(color, theme.variable($theme), value);
+  }
+}

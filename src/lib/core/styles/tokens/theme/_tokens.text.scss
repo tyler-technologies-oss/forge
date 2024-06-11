@@ -1,0 +1,27 @@
+@use 'sass:map';
+@use './color-emphasis';
+@use './tokens.surface' as surface;
+
+// Light
+$tokens: (
+  text-high: rgba(#000, color-emphasis.value(highest)),
+  text-high-inverse: rgba(#fff, color-emphasis.value(highest)),
+  text-medium: rgba(#000, color-emphasis.value(medium-high)),
+  text-medium-inverse: rgba(#fff, color-emphasis.value(medium-high)),
+  text-low: rgba(#000, color-emphasis.value(medium-low)),
+  text-low-inverse: rgba(#fff, color-emphasis.value(medium-low)),
+  text-lowest: rgba(#000, color-emphasis.value(lower)),
+  text-lowest-inverse: rgba(#fff, color-emphasis.value(lower))
+);
+
+// Dark
+$tokens-dark: (
+  text-high: rgba(#fff, color-emphasis.value(highest)),
+  text-high-inverse: rgba(#000, color-emphasis.value(highest)),
+  text-medium: rgba(#fff, color-emphasis.value(medium-high)),
+  text-medium-inverse: rgba(#000, color-emphasis.value(medium-high)),
+  text-low: rgba(#fff, color-emphasis.value(medium-low)),
+  text-low-inverse: rgba(#000, color-emphasis.value(medium-low)),
+  text-lowest: rgba(#fff, color-emphasis.value(lower)),
+  text-lowest-inverse: rgba(#000, color-emphasis.value(lower))
+);

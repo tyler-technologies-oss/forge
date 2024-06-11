@@ -1,4 +1,4 @@
-import { IAccordionComponent, ACCORDION_CONSTANTS, defineAccordionComponent, IAccordionFoundation } from '@tylertech/forge/accordion';
+import { IAccordionComponent, ACCORDION_CONSTANTS, defineAccordionComponent, IAccordionCore } from '@tylertech/forge/accordion';
 import { EXPANSION_PANEL_CONSTANTS, IExpansionPanelComponent } from '@tylertech/forge/expansion-panel';
 import { removeElement, getShadowElement } from '@tylertech/forge-core';
 import { tick, timer } from '@tylertech/forge-testing';
@@ -10,7 +10,7 @@ interface ITestContext {
 interface ITestAccordionContext {
   fixture: HTMLElement;
   component: IAccordionComponent;
-  foundation: IAccordionFoundation;
+  core: IAccordionCore;
   expansionPanelElements: IExpansionPanelComponent[];
   destroy(): void;
 }
@@ -37,7 +37,7 @@ describe('AccordionComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.panelSelector = '.test-selector';
       expect(this.context.component.panelSelector).toBe('.test-selector');
-      const hostInteractionSpy = spyOn(this.context.component['_foundation'], '_hostInteraction');
+      const hostInteractionSpy = spyOn(this.context.component['_core'], '_hostInteraction');
       
       expect(hostInteractionSpy.calls.count()).toBe(0);
 
@@ -95,7 +95,7 @@ describe('AccordionComponent', function(this: ITestContext) {
       // Click the first child panel to expand it
       clickPanel(firstPanel);
       await tick();
-      await timer(EXPANSION_PANEL_CONSTANTS.numbers.COLLAPSE_ANIMATION_DURATION);
+      await timer(500);
       
       // Ensure we're in the proper state to run the test from here
       expect(firstPanel.open).toBe(true, 'Expected the first panel to be open before testing inner panel');
@@ -104,7 +104,7 @@ describe('AccordionComponent', function(this: ITestContext) {
       clickPanel(nestedPanel);
 
       await tick();
-      await timer(EXPANSION_PANEL_CONSTANTS.numbers.COLLAPSE_ANIMATION_DURATION);
+      await timer(500);
 
       expect(firstPanel.open).toBe(true, 'Expected the first panel to still be open after clicking nested panel');
     });
@@ -147,7 +147,7 @@ describe('AccordionComponent', function(this: ITestContext) {
     return {
       fixture,
       component,
-      foundation: component['_foundation'] as IAccordionFoundation,
+      core: component['_core'] as IAccordionCore,
       expansionPanelElements,
       destroy: () => removeElement(fixture)
     };

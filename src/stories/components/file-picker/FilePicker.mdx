@@ -1,0 +1,23 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as FilePickerStories from './FilePicker.stories';
+
+<Meta of={FilePickerStories} />
+
+<Title />
+
+The file-picker component allows for a user to upload files of their own to the system. The component provides a slot for a button, as well as drag-and-drop functionality to launch the system file chooser dialog. There are visual queues to let the user know when files they are dragging can be dropped, as well as events that are relayed to the developer to handle files that are legal and/or illegal based on the parameters set on the component.
+
+The expectation of this component is that it will be used as a familiar element on the page that will let users upload files, while providing that visual and functional consistency.
+
+<Canvas of={FilePickerStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- The file-picker button should have text or a label that accurately describes the action of the button.
+- After the system file picker dialog closes, focus should remain on the element that triggered the action.
+- Always use type="button" on the `<button>` element to ensure that any parent forms are not submitted when clicking the button.

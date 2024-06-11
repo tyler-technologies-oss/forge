@@ -1,6 +1,5 @@
-import { removeElement } from '@tylertech/forge-core';
+import { getShadowElement, removeElement } from '@tylertech/forge-core';
 import { tick, timer } from '@tylertech/forge-testing';
-import { cssClasses as MDC_LINEAR_PROGRESS_CLASSES } from '@material/linear-progress';
 import {
   defineAutocompleteComponent,
   IAutocompleteComponent,
@@ -15,7 +14,6 @@ import {
   IAutocompleteComponentDelegateConfig,
   IAutocompleteComponentDelegateOptions
 } from '@tylertech/forge/autocomplete';
-import { POPUP_CONSTANTS } from '@tylertech/forge/popup';
 import { LIST_ITEM_CONSTANTS, IListItemComponent, LIST_CONSTANTS } from '@tylertech/forge/list';
 import { IOption, IOptionComponent, OPTION_CONSTANTS } from '@tylertech/forge/select';
 import { SKELETON_CONSTANTS, ISkeletonComponent } from '@tylertech/forge/skeleton';
@@ -24,7 +22,8 @@ import { TEXT_FIELD_CONSTANTS, ITextFieldComponent, ITextFieldComponentDelegateO
 import { AVATAR_CONSTANTS, IAvatarComponent } from '@tylertech/forge/avatar';
 import { ICON_CONSTANTS, IconComponent } from '@tylertech/forge/icon';
 import { LIST_DROPDOWN_CONSTANTS } from '@tylertech/forge/list-dropdown';
-import { tryCleanupPopups } from '../../utils';
+import { POPOVER_CONSTANTS } from '@tylertech/forge/popover';
+import { tryCleanupPopovers } from '../../utils';
 
 const DEFAULT_FILTER_OPTIONS = [
   { label: 'One', value: 1 },
@@ -55,6 +54,8 @@ const DEFAULT_AUTOCOMPLETE_TEXTFIELD_DELEGATE_CONFIG: IAutocompleteComponentDele
     }
   }
 };
+
+const POPOVER_ANIMATION_DURATION = 200;
 
 interface ITestContext {
   context: ITestAutocompleteContext 
@@ -134,6 +135,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.component.filter = () => [];
       _triggerDropdownClick(this.context.input);
       await tick();
+      await timer(POPOVER_ANIMATION_DURATION);
 
       expect(this.context.component.popupElement).toBeNull();
     });
@@ -163,7 +165,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.component.openDropdown();
       await timer();
       this.context.component.closeDropdown();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       expect(this.context.component.open).toBe(false);
       expect(this.context.component.popupElement).toBeNull();
     });
@@ -417,7 +419,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(this.context.component.popupElement).not.toBeNull();
 
       this.context.input.dispatchEvent(new Event('blur'));
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       expect(this.context.component.popupElement).toBeNull();
     });
@@ -436,7 +438,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       _triggerDropdownClick(this.context.input);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
@@ -449,7 +451,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       _triggerDropdownClick(this.context.input);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // 0
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // 1
@@ -465,7 +467,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       _triggerDropdownClick(this.context.input);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
@@ -478,7 +480,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       
       _triggerDropdownClick(this.context.input);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       // We have 3 options
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // Index 0
@@ -496,7 +498,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       _triggerDropdownClick(this.context.input);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'End' }));
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
@@ -509,7 +511,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       _triggerDropdownClick(this.context.input);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home' }));
@@ -524,10 +526,10 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       _triggerDropdownClick(this.context.input);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       expect(this.context.component.popupElement).toBeNull();
     });
@@ -587,7 +589,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       _triggerDropdownClick(this.context.input);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
@@ -612,7 +614,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       _triggerDropdownClick(this.context.input);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       _sendInputValue(this.context.input, 'other');
       await timer(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
@@ -632,7 +634,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       _triggerDropdownClick(this.context.input);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       this.context.input.blur();
 
       expect(changeSpy).not.toHaveBeenCalled();
@@ -648,7 +650,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       _triggerDropdownClick(this.context.input);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
       await tick();
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
@@ -668,7 +670,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       _triggerDropdownClick(this.context.input);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       this.context.input.blur();
 
       expect(changeSpy).not.toHaveBeenCalled();
@@ -684,7 +686,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.component.addEventListener(AUTOCOMPLETE_CONSTANTS.events.CHANGE, changeSpy);
       _triggerDropdownClick(this.context.input);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
@@ -751,7 +753,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       expect(this.context.component.popupElement).not.toBeNull();
     });
@@ -763,7 +765,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
       expect(activeListItemIndex).toBe(0);
@@ -778,7 +780,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
       expect(activeListItemIndex).toBe(expectedSelectedIndex);
@@ -790,7 +792,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.input.focus();
       this.context.component.openDropdown();
 
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       this.context.input.value = 'o';
       this.context.input.dispatchEvent(new Event('input'));
@@ -808,7 +810,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.input.focus();
       this.context.component.openDropdown();
 
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       this.context.input.value = 'o';
       this.context.input.dispatchEvent(new Event('input'));
@@ -831,7 +833,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.input.dispatchEvent(new Event('input'));
 
       await timer(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await tick();
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
@@ -856,11 +858,12 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
       this.context.component.openDropdown();
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
-      const popup = this.context.component.popupElement;
+      await timer(POPOVER_ANIMATION_DURATION);
+      const popup = this.context.component.popupElement as HTMLElement;
+      const container = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
 
       expect(this.context.component.syncPopupWidth).toBe(true);
-      expect(popup!.getBoundingClientRect().width).toBe(this.context.input.getBoundingClientRect().width);
+      expect(container!.getBoundingClientRect().width).toBe(this.context.input.getBoundingClientRect().width);
     });
 
     it('should set popup target', async function(this: ITestContext) {
@@ -875,8 +878,8 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       this.context.component.openDropdown();
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
-      const targetElement = this.context.component['_foundation']['_adapter']['_targetElement'];
+      await timer(POPOVER_ANIMATION_DURATION);
+      const targetElement = this.context.component['_core']['_adapter']['_targetElement'];
 
       expect(targetElement).toBe(expectedTargetElement);
     });
@@ -896,7 +899,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await tick();
       const listItems = _getListItems(this.context.component.popupElement);
       const allOptionsUseBuilder = listItems.every((li, index) => {
-        const div = li.firstElementChild;
+        const div = li.querySelector('button')?.firstElementChild;
         return div && div.id === `custom-option-${li.value}`;
       });
       expect(builderSpy).toHaveBeenCalledTimes(3);
@@ -918,8 +921,8 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       const scrolledBottomSpy = jasmine.createSpy('scrolled bottom');
       this.context.component.addEventListener(AUTOCOMPLETE_CONSTANTS.events.SCROLLED_BOTTOM, scrolledBottomSpy);
       await tick();
-      const popup = this.context.component.popupElement;
-      const scrollElement = popup!.shadowRoot!.querySelector(POPUP_CONSTANTS.selectors.CONTAINER) as HTMLElement;
+      const popup = this.context.component.popupElement as HTMLElement;
+      const scrollElement = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
       scrollElement.scrollTop = scrollElement.scrollHeight - this.context.component.observeScrollThreshold;
       await tick();
       expect(scrolledBottomSpy).toHaveBeenCalledTimes(1);
@@ -940,8 +943,8 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.component.addEventListener(AUTOCOMPLETE_CONSTANTS.events.SCROLLED_BOTTOM, scrolledBottomSpy);
       await tick();
 
-      const popup = this.context.component.popupElement;
-      const scrollElement = popup!.shadowRoot!.querySelector(POPUP_CONSTANTS.selectors.CONTAINER) as HTMLElement;
+      const popup = this.context.component.popupElement as HTMLElement;
+      const scrollElement = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
       scrollElement.scrollTop = scrollElement.scrollHeight;
 
       await tick();
@@ -1034,14 +1037,12 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       const popup = this.context.component.popupElement;
       const skeletons = Array.from(popup!.querySelectorAll(SKELETON_CONSTANTS.elementName)) as ISkeletonComponent[];
       const linearProgress = popup!.querySelector(LINEAR_PROGRESS_CONSTANTS.elementName) as ILinearProgressComponent;
-      const linearProgressContainer = linearProgress.shadowRoot!.querySelector(LINEAR_PROGRESS_CONSTANTS.selectors.ROOT) as HTMLElement;
 
       expect(skeletons.length).toBe(0);
       expect(getComputedStyle(linearProgress).display).not.toBe('none');
-      expect(linearProgressContainer.classList.contains(MDC_LINEAR_PROGRESS_CLASSES.CLOSED_CLASS)).toBe(false);
 
       await timer(timeout);
-      expect(linearProgressContainer.classList.contains(MDC_LINEAR_PROGRESS_CLASSES.CLOSED_CLASS)).toBe(true);
+      expect(getComputedStyle(linearProgress).display).toBe('none');
     });
 
     it('should handle multiple filter requests in proper order', async function(this: ITestContext) {
@@ -1099,7 +1100,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await timer(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
 
       this.context.input.dispatchEvent(new Event('blur'));
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       expect(this.context.component.popupElement).toBeNull();
     });
@@ -1115,7 +1116,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       _clickListItem(2, this.context.component.popupElement);
 
       this.context.component.closeDropdown();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       this.context.component.openDropdown();
       await tick();
@@ -1135,15 +1136,15 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
       this.context.component.openDropdown();
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       _sendInputValue(this.context.input, 'a');
       this.context.input.dispatchEvent(new Event('blur'));
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await tick();
 
       expect(this.context.component.popupElement).toBeNull();
-      expect(this.context.component['_foundation']._pendingFilterPromises).toEqual([]);
+      expect(this.context.component['_core']._pendingFilterPromises).toEqual([]);
     });
 
     it('should cancel all pending filters if an exception is thrown in filter callback', async function(this: ITestContext) {
@@ -1156,11 +1157,11 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await tick();
       _sendInputValue(this.context.input, 'a');
       await timer(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await tick();
 
       expect(this.context.component.popupElement).toBeNull();
-      expect(this.context.component['_foundation']._pendingFilterPromises).toEqual([]);
+      expect(this.context.component['_core']._pendingFilterPromises).toEqual([]);
     });
 
     it('should handle subsequent out of order filters', async function(this: ITestContext) {
@@ -1239,7 +1240,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       };
       this.context.component.open = true;
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       const popupGroups = _getPopupGroups(this.context.component.popupElement);
       expect(popupGroups.length).toBe(2);
@@ -1315,6 +1316,18 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       expect(this.context.component.isConnected).toBe(true, 'Expected component to be connected to the DOM');
       expect(this.context.component instanceof AutocompleteComponent).toBe(true, 'Expected component to be instance of AutocompleteComponent');
+    });
+
+    it('should remove popover when removed from DOM while open', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.open = true;
+      await tick();
+
+      this.context.component.remove();
+      await tick();
+
+      expect(this.context.component.popupElement).toBeNull();
     });
   });
 
@@ -1517,7 +1530,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
         _triggerDropdownClick(this.context.input);
 
-        await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+        await timer(POPOVER_ANIMATION_DURATION);
         await tick();
         const listItems = _getListItems(this.context.component.popupElement);
         _clickListItem(2, this.context.component.popupElement);
@@ -1646,7 +1659,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
         document.body.appendChild(fixture);
       },
       destroy: () => {
-        tryCleanupPopups();
+        tryCleanupPopovers();
         removeElement(fixture);
       }
     };
@@ -1668,7 +1681,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       input,
       optionElements,
       destroy: () => {
-        tryCleanupPopups();
+        tryCleanupPopovers();
         removeElement(fixture);
       }
     }
@@ -1717,7 +1730,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       label,
       iconElement,
       destroy: () => {
-        tryCleanupPopups();
+        tryCleanupPopovers();
         removeElement(fixture);
       }
     }
@@ -1738,7 +1751,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       component,
       input,
       destroy: () => {
-        tryCleanupPopups();
+        tryCleanupPopovers();
         removeElement(fixture);
       }
     };
@@ -1756,11 +1769,11 @@ describe('AutocompleteComponent', function(this: ITestContext) {
     return options.map(({ label, value }) => ({ label, value }));
   }
 
-  function _getListItems(popupElement: HTMLElement | null): IListItemComponent[] {
+  function _getListItems(popupElement: HTMLElement | null): IListItemComponent<any>[] {
     if (!popupElement) {
       return [];
     }
-    return Array.from(popupElement.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
+    return Array.from(popupElement.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent<any>[];
   }
 
   function _triggerDropdownClick(input: HTMLInputElement): void {

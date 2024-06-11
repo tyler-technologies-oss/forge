@@ -1,0 +1,70 @@
+///
+/// Adapted and influenced from [Material Web](https://github.com/material-components/material-web).
+/// The original source code can be found at [GitHub](https://github.com/material-components/material-web/blob/main/circularprogress/lib/_circular-progress.scss)
+///
+
+$indeterminate-animation: linear infinite linear-rotate !default;
+$indeterminate-circle-animation: expand-arc !default;
+$determinate-animation: infinite both rotate-arc !default;
+$indeterminate-easing: cubic-bezier(0.4, 0, 0.2, 1) !default;
+$determinate-easing: cubic-bezier(0, 0, 0.2, 1) !default;
+
+@mixin keyframes {
+  // Indeterminate mode is 3 animations composed together:
+  // 1. expand-arc: an arc is expanded/contracted between 10deg and 270deg.
+  // 2. rotate-arc: at the same time, the arc is rotated in increments of 270deg.
+  // 3. linear-rotate: that rotating arc is then linearly rotated to produce a spinning expanding/contracting arc.
+
+  // 1. expand-arc
+  // This is used on 2 divs which each represent half the desired 270deg arc with one offset by 50%. This creates an arc which expands from 10deg to 270deg.
+  @keyframes expand-arc {
+    0% {
+      transform: rotate(265deg);
+    }
+    50% {
+      transform: rotate(130deg);
+    }
+    100% {
+      transform: rotate(265deg);
+    }
+  }
+
+  // 2. rotate-arc
+  // The arc seamlessly travels around the circle indefinitely so it needs to end at a full rotation of the circle. This rotates the 270 deg
+  // (270/360 = 3/4) arc 4x (4 * 3/4 = 3) so it ends at (3 * 360 = 1080). This is sub-divided into increments of 135deg since the arc is
+  // rendered with 2 divs acting together.
+  @keyframes rotate-arc {
+    12.5% {
+      transform: rotate(135deg);
+    }
+    25% {
+      transform: rotate(270deg);
+    }
+    37.5% {
+      transform: rotate(405deg);
+    }
+    50% {
+      transform: rotate(540deg);
+    }
+    62.5% {
+      transform: rotate(675deg);
+    }
+    75% {
+      transform: rotate(810deg);
+    }
+    87.5% {
+      transform: rotate(945deg);
+    }
+    100% {
+      transform: rotate(1080deg);
+    }
+  }
+
+  // 3. linear-rotate
+  // The traveling expanding arc is linearly rotated to produce the spinner effect.
+  @keyframes linear-rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

@@ -1,16 +1,33 @@
-@use 'sass:map';
-@use './mixins';
-@use '../theme';
+@use './core' as *;
+@use './animations';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  display: block;
+  display: contents;
 }
 
 :host([hidden]) {
   display: none;
 }
+
+//
+// Base
+//
+
+.forge-backdrop {
+  @include tokens;
+}
+
+.forge-backdrop {
+  @include base;
+}
+
+//
+// Fixed
+//
 
 :host([fixed]) {
   .forge-backdrop {
@@ -18,10 +35,20 @@
   }
 }
 
-:host([appearance='light']) {
-  --forge-backdrop-theme-background: #{map.get(map.get(theme.$text-colors, light), secondary-alternative)};
-}
+//
+// Animation
+//
 
-:host([appearance='dark']) {
-  --forge-backdrop-theme-background: #{map.get(map.get(theme.$text-colors, dark), secondary)};
+:host([visible]) {
+  .forge-backdrop {
+    @include visible;
+
+    &.entering {
+      @include entering;
+    }
+
+    &.exiting {
+      @include exiting;
+    }
+  }
 }

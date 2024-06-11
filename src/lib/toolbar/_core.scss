@@ -1,0 +1,68 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin _grid {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+}
+
+@mixin host {
+  display: block;
+  contain: layout;
+}
+
+@mixin base {
+  @include _grid;
+
+  height: #{token(height)};
+  min-height: #{token(min-height)};
+  box-sizing: border-box;
+
+  padding-inline: 0;
+
+  border-block-end-width: #{token(divider-width)};
+  border-block-end-style: #{token(divider-style)};
+  border-block-end-color: #{token(divider-color)};
+  border-start-start-radius: #{token(start-start-shape)};
+  border-start-end-radius: #{token(start-end-shape)};
+  border-end-start-radius: #{token(end-start-shape)};
+  border-end-end-radius: #{token(end-end-shape)};
+
+  background: #{token(background)};
+}
+
+@mixin inner {
+  @include _grid;
+
+  padding-inline: #{token(padding-inline)};
+  padding-block: #{token(padding-block)};
+  box-sizing: border-box;
+}
+
+@mixin section {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@mixin center {
+  justify-content: center;
+}
+
+@mixin end {
+  justify-content: end;
+}
+
+@mixin inverted {
+  @include override(start-start-shape, 0, value);
+  @include override(start-end-shape, 0, value);
+  @include override(end-start-shape, shape);
+  @include override(end-end-shape, shape);
+
+  border-block-end: none;
+  border-block-start-width: #{token(divider-width)};
+  border-block-start-style: #{token(divider-style)};
+  border-block-start-color: #{token(divider-color)};
+}

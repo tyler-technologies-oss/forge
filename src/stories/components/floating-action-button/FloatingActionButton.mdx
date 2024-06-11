@@ -1,0 +1,48 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as FloatingActionButtonStories from './FloatingActionButton.stories';
+
+<Meta of={FloatingActionButtonStories} />
+
+<Title />
+
+Use floating action buttons to represent the primary action on a screen within an application. It's recommended to only use one floating action button per screen.
+
+<Canvas of={FloatingActionButtonStories.Demo} />
+
+## Positioning
+
+Typically you will position floating action buttons manually on the screen, for example to apply a fixed position in the bottom-right you could use this CSS:
+
+```css
+.bottom-right {
+  position: fixed;
+  bottom: var(--forge-spacing-medium);
+  right: var(--forge-spacing-medium);
+}
+```
+
+## Extended
+
+Extended floating action buttons are larger and have a text label.
+
+<Canvas of={FloatingActionButtonStories.Extended} />
+
+## With Anchor
+
+You can nest an `<a>` element inside the floating action button to create a link.
+
+<Canvas of={FloatingActionButtonStories.WithAnchor} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Buttons containing only icons should be given a meaningful label via `aria-label` or `aria-labelledby`.
+- Avoid using capitalized text because screen readers will read the text character-by-character. Instead use `text-transform: uppercase`.
+- Ensure the FAB can be reached by keyboard navigation.
+- Ensure that there is a distinct visual cue when the FAB is in focus.
+- Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
+- Ensure that buttons placed above other content on the page have proper contrast ratio.

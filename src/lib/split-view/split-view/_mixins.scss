@@ -1,5 +1,3 @@
-@use '../../theme/theme';
-
 @mixin core-styles() {
   .forge-split-view {
     @include base;

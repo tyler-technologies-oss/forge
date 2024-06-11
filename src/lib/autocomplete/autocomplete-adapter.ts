@@ -1,12 +1,14 @@
-import { getShadowElement, deepQuerySelectorAll, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
+import { deepQuerySelectorAll, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IAutocompleteComponent } from './autocomplete';
 import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants';
-import { TEXT_FIELD_CONSTANTS } from '../text-field';
+import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
 import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdown';
-import { CHIP_FIELD_CONSTANTS } from '../chip-field';
-import { IPopupComponent, POPUP_CONSTANTS } from '../popup';
-import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core';
+import { CHIP_FIELD_CONSTANTS, IChipFieldComponent } from '../chip-field';
+import { IPopoverComponent } from '../popover/popover';
+import { POPOVER_CONSTANTS } from '../popover';
+import type { IFieldComponent } from '../field/field';
+import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
 
 export interface IAutocompleteAdapter extends IBaseAdapter {
   readonly inputElement: HTMLInputElement;
@@ -17,7 +19,7 @@ export interface IAutocompleteAdapter extends IBaseAdapter {
   initializeInputAccessibility(identifier: string): void;
   isWrappingChipField(): boolean;
   show(config: IListDropdownConfig, popupTarget: string): void;
-  hide(listener: () => void): void;
+  hide(listener: () => void, options: { destroy?: boolean }): Promise<void>;
   focus(): void;
   setOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
@@ -54,7 +56,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   private _inputElement: HTMLInputElement;
   private _listDropdown?: IListDropdown;
   private _targetElement?: HTMLElement;
-  
+
   constructor(component: IAutocompleteComponent) {
     super(component);
     this.setInputElement();
@@ -112,21 +114,30 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     this._tryToggleDropdownIconRotation(true);
   }
 
-  public hide(listener: () => void): void {
+  public async hide(listener: () => void, { destroy = false } = {}): Promise<void> {
+    this.setBusyVisibility(false);
+    this._tryToggleDropdownIconRotation(false);
+    this._inputElement?.removeAttribute('aria-activedescendant');
+    this._inputElement?.removeAttribute('aria-controls');
+    this._inputElement?.setAttribute('aria-expanded', 'false');
+
     if (!this._listDropdown) {
       return;
     }
-    const { targetElement } = this._listDropdown.dropdownElement as IPopupComponent;
-    targetElement.removeEventListener(POPUP_CONSTANTS.events.BLUR, listener);
-    this.setBusyVisibility(false);
-    this._tryToggleDropdownIconRotation(false);
-    this._inputElement.removeAttribute('aria-activedescendant');
-    this._inputElement.removeAttribute('aria-controls');
-    this._inputElement.setAttribute('aria-expanded', 'false');
-    this._listDropdown.close();
+
+    const { anchorElement } = this._listDropdown.dropdownElement as IPopoverComponent;
+    if (anchorElement && anchorElement instanceof HTMLElement) {
+      anchorElement?.removeEventListener(POPOVER_CONSTANTS.events.TOGGLE, listener);
+    }
+
+    if (destroy) {
+      this._listDropdown.destroy();
+    } else {
+      await this._listDropdown.close();
+    }
+
     this._listDropdown = undefined;
   }
-
 
   public setBusyVisibility(isVisible: boolean): void {
     this._listDropdown?.setBusyVisibility(isVisible);
@@ -136,9 +147,9 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     if (!this._listDropdown || !this._listDropdown.dropdownElement) {
       return;
     }
-    const dropdownElement = this._listDropdown.dropdownElement as IPopupComponent;
-    if (dropdownElement.targetElement) {
-      dropdownElement.targetElement.addEventListener(POPUP_CONSTANTS.events.BLUR, listener);
+    const dropdownElement = this._listDropdown.dropdownElement as IPopoverComponent;
+    if (dropdownElement.anchorElement && dropdownElement.anchorElement instanceof HTMLElement) {
+      dropdownElement.anchorElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, listener);
     }
   }
 
@@ -273,7 +284,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     }
     // We need to wait for the next animation frame to ensure that the layout has been updated
     window.requestAnimationFrame(() => {
-      const dropdownEl = this.getPopupElement() as IPopupComponent | undefined;
+      const dropdownEl = this.getPopupElement() as IPopoverComponent | undefined;
       dropdownEl?.position();
     });
   }
@@ -283,31 +294,32 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   }
 
   private _getDefaultTargetElement(): HTMLElement {
-    // This component is often used with the text-field, if so, let's target our popup around one if its internal elements for proper alignnment
-    const textField = this._component.querySelector('forge-text-field');
-    if (textField && textField.shadowRoot) {
-      const textFieldRoot = getShadowElement(textField, TEXT_FIELD_CONSTANTS.selectors.ROOT) as HTMLElement;
-      if (textFieldRoot) {
-        return textFieldRoot;
-      }
+    // This component is often used with the field-like Forge elements, if so, let's target our popup
+    // around one if its internal elements for proper alignment
+    const fieldLike = this._tryGetFieldLikeChild() as ITextFieldComponent | IChipFieldComponent | null;
+    if (fieldLike?.popoverTargetElement) {
+      return fieldLike.popoverTargetElement;
     }
-
-    // This component is often used with the chip-field, if so, let's target our popup around one if its internal elements for proper alignnment
-    const chipField = this._component.querySelector('forge-chip-field');
-    if (chipField && chipField.shadowRoot) {
-      const chipFieldRoot = getShadowElement(chipField, CHIP_FIELD_CONSTANTS.selectors.ROOT) as HTMLElement;
-      if (chipFieldRoot) {
-        return chipFieldRoot;
-      }
-    }
-
     return this._component.querySelector('input') || this._component;
   }
 
   private _tryToggleDropdownIconRotation(state: boolean): void {
+    const fieldLike = this._tryGetFieldLikeChild();
+    if (fieldLike?.popoverIcon) {
+      fieldLike.popoverExpanded = state;
+    }
+
+    // Deprecated/legacy support
+    // TODO: Remove in a future release
     const dropdownIcon = this._component.querySelector(AUTOCOMPLETE_CONSTANTS.selectors.DROPDOWN_ICON) as HTMLElement;
     if (dropdownIcon) {
-      toggleAttribute(dropdownIcon, state, AUTOCOMPLETE_CONSTANTS.attributes.DROPDOWN_ICON_OPEN);
+      dropdownIcon.style.transition = 'transform 120ms linear';
+      dropdownIcon.style.transform = state ? 'rotateZ(180deg)' : '';
     }
+  }
+
+  private _tryGetFieldLikeChild(): IFieldComponent | null {
+    const fieldLikeElements = [TEXT_FIELD_CONSTANTS.elementName, CHIP_FIELD_CONSTANTS.elementName];
+    return this._component.querySelector(`:is(${fieldLikeElements.join(',')})`) as IFieldComponent;
   }
 }

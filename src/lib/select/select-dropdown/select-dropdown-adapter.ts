@@ -1,8 +1,10 @@
 import { ISelectDropdownComponent } from './select-dropdown';
 import { BaseSelectAdapter, IBaseSelectAdapter } from '../core/base-select-adapter';
 import { IListDropdownConfig } from '../../list-dropdown/list-dropdown-constants';
+import { randomChars } from '@tylertech/forge-core';
+import { type IBaseComponent } from '../../core/base/base-component';
 
-export interface ISelectDropdownAdapter extends IBaseSelectAdapter {
+export interface ISelectDropdownAdapter<T extends IBaseComponent = ISelectDropdownComponent> extends IBaseSelectAdapter<T> {
   attach(selector: string): void;
   detach(): void;
   setTargetDisconnectedListener(cb: () => void): () => void;
@@ -11,16 +13,17 @@ export interface ISelectDropdownAdapter extends IBaseSelectAdapter {
   getTargetText(selector: string): string;
 }
 
-export class SelectDropdownAdapter extends BaseSelectAdapter implements ISelectDropdownAdapter {
+export class SelectDropdownAdapter extends BaseSelectAdapter<ISelectDropdownComponent> implements ISelectDropdownAdapter {
   constructor(component: ISelectDropdownComponent) {
     super(component);
   }
 
   public initializeAccessibility(): void {
-    this._targetElement.setAttribute('role', 'listbox');
+    this._targetElement.setAttribute('role', 'combobox');
     this._targetElement.setAttribute('aria-live', 'polite');
     this._targetElement.setAttribute('aria-haspopup', 'true');
     this._targetElement.setAttribute('aria-expanded', 'false');
+    this.setAriaControls();
   }
 
   public addClickListener(listener: (evt: Event) => void): void {
@@ -36,7 +39,7 @@ export class SelectDropdownAdapter extends BaseSelectAdapter implements ISelectD
   public addTargetListener(type: string, listener: (evt: Event) => void): void {
     let passive: boolean | undefined;
     let capture: boolean | undefined;
-    
+
     if (type === 'keydown') {
       // We don't use a passive keydown listener because we are preventing default in this event and Angular doesn't like that
       // We need to use capturing to ensure that we get to this event before zone.js does
@@ -67,15 +70,15 @@ export class SelectDropdownAdapter extends BaseSelectAdapter implements ISelectD
     this._targetElement.setAttribute('aria-expanded', 'true');
   }
 
-  public close(): void {
+  public close(): Promise<void> {
     this._targetElement.setAttribute('aria-expanded', 'false');
     this._targetElement.removeAttribute('aria-activedescendant');
-    this._targetElement.removeAttribute('aria-controls');
-    super.close();
+    this.setAriaControls();
+    return super.close();
   }
 
   public attach(selector: string): void {
-    const rootNode = this._component.getRootNode() as ShadowRoot || HTMLDocument;
+    const rootNode = (this._component.getRootNode() as ShadowRoot) || HTMLDocument;
     const doc = rootNode || this._component.ownerDocument || document;
     const element = doc.querySelector(selector) as HTMLElement;
     if (element) {
@@ -130,7 +133,20 @@ export class SelectDropdownAdapter extends BaseSelectAdapter implements ISelectD
     return this._targetElement.querySelector(selector) || this._getRootNode().querySelector(selector);
   }
 
-  private _getRootNode(): ShadowRoot | HTMLDocument {
-    return (this._component.getRootNode() as ShadowRoot | HTMLDocument) || this._component.ownerDocument || document;
+  private _getRootNode(): ShadowRoot | Document {
+    return (this._component.getRootNode() as ShadowRoot | Document) ?? this._component.ownerDocument ?? document;
+  }
+
+  public setAriaControls(): void {
+    let placeholderDiv = this._component.querySelector('[data-forge-aria-controls-placeholder]');
+    if (placeholderDiv) {
+      this._targetElement.setAttribute('aria-controls', placeholderDiv.id);
+      return;
+    }
+    placeholderDiv = document.createElement('div');
+    placeholderDiv.id = `forge-select-dropdown-temp-${randomChars(10)}`;
+    placeholderDiv.setAttribute('data-forge-aria-controls-placeholder', '');
+    this._targetElement.setAttribute('aria-controls', placeholderDiv.id);
+    this._component.appendChild(placeholderDiv);
   }
 }

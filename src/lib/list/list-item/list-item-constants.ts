@@ -1,67 +1,58 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
-import { IListItemComponent } from './list-item';
 
-const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}list-item`;
+const elementName = `${COMPONENT_NAME_PREFIX}list-item`;
 
-const attributes = {
-  STATIC: 'static',
+const observedAttributes = {
+  SELECTED: 'selected',
+  ACTIVE: 'active',
+  VALUE: 'value',
+  DENSE: 'dense',
+  INDENTED: 'indented',
   TWO_LINE: 'two-line',
   THREE_LINE: 'three-line',
-  ACTIVE: 'active',
-  SELECTED: 'selected',
-  VALUE: 'value',
-  HREF: 'href',
-  TARGET: 'target',
-  RIPPLE: 'ripple',
-  DISABLED: 'disabled',
-  DENSE: 'dense',
-  PROPAGATE_CLICK: 'propagate-click',
-  INDENTED: 'indented',
   WRAP: 'wrap',
-  DRAWER_CONTEXT: 'forge-drawer-context',
-  IGNORE: 'forge-ignore'
+  NONINTERACTIVE: 'noninteractive'
+};
+
+const attributes = {
+  ...observedAttributes
 };
 
 const classes = {
-  LIST_ITEM: 'forge-list-item',
-  STATIC: 'forge-list-item--static',
-  TEXT: 'forge-list-item__text',
-  TWO_LINE: 'forge-list-item--two-line',
-  THREE_LINE: 'forge-list-item--three-line',
-  ACTIVE: 'forge-list-item--active',
-  ACTIVATED: 'forge-list-item--activated',
-  SELECTED: 'forge-list-item--selected',
-  DISABLED: 'forge-list-item--disabled',
-  DENSE: 'forge-list-item--dense',
-  INDENTED: 'forge-list-item--indented',
-  WRAP: 'forge-list-item--wrap'
+  ROOT: 'forge-list-item',
+  DISABLED: 'disabled',
+  INTERACTIVE: 'interactive',
+  INTERNAL_ANCHOR: 'anchor'
+};
+
+const ids = {
+  INTERNAL_ANCHOR: 'forge-list-item-anchor'
 };
 
 const selectors = {
-  LIST_ITEM: `.${classes.LIST_ITEM}`,
-  DEFAULT_SLOT: `.${classes.TEXT} > slot`,
-  CHECKBOX_RADIO_SELECTOR: 'input[type=checkbox]:not(:disabled):not([forge-ignore]),input[type=radio]:not(:disabled):not([forge-ignore])'
+  ROOT: `.${classes.ROOT}`,
+  FORM_CONTROL_LIKE:
+    ':is([forge-list-item-interactive],forge-radio,forge-checkbox,forge-switch,input[type=checkbox],input[type=radio]):is([slot=start],[slot=end],[slot=leading],[slot=trailing]):not([forge-ignore])',
+  BUTTON_LIKE: ':is(button,[role=button][tabindex]:not([tabindex=-1]),[forge-list-item-interactive]):not([forge-ignore])',
+  IGNORE: '[forge-ignore],[data-forge-ignore]',
+  INTERNAL_ANCHOR: `#${ids.INTERNAL_ANCHOR}`,
+  SLOTTED_START_END: ':is([slot=start],[slot=end],[slot=leading],[slot=trailing])'
 };
 
 const events = {
   SELECT: `${elementName}-select`
 };
 
-const roles = {
-  LINK: 'link',
-  LIST_ITEM: 'listitem'
-};
-
 export const LIST_ITEM_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
   classes,
   selectors,
-  events,
-  roles
+  ids,
+  events
 };
 
-export interface IListItemSelectEventData {
-  value: any;
-  listItem: IListItemComponent;
+export interface IListItemSelectEventData<T = any> {
+  value: T;
 }

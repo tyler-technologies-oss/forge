@@ -1,8 +1,10 @@
 import '$src/shared';
-import { IDatePickerComponent, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
 import '@tylertech/forge/date-picker';
 import '@tylertech/forge/label-value';
 import './date-picker.scss';
+import { IDatePickerComponent } from '@tylertech/forge/date-picker';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const datePicker = document.querySelector('forge-date-picker#demo-date-picker') as IDatePickerComponent;
 const datePickerInput = datePicker.querySelector('input');
@@ -46,47 +48,47 @@ disabledDaysSelect.addEventListener('change', () => {
 });
 
 const maskedToggle = document.getElementById('opt-masked') as ISwitchComponent;
-maskedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+maskedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   datePicker.masked = selected;
 });
 
 const showMaskFormat = document.getElementById('opt-show-mask-format') as ISwitchComponent;
-showMaskFormat.addEventListener('forge-switch-select', ({ detail: selected }) => {
+showMaskFormat.addEventListener('forge-switch-change', ({ detail: selected }) => {
   datePicker.showMaskFormat = selected;
 });
 
 const minDateToggle = document.getElementById('opt-min-date') as ISwitchComponent;
-minDateToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+minDateToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   datePicker.min = selected ? new Date(Date.now() - 86400000) : null;
 });
 
 const maxDateToggle = document.getElementById('opt-max-date') as ISwitchComponent;
-maxDateToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+maxDateToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   datePicker.max = selected ? new Date(Date.now() + 86400000) : null;
 });
 
 const disabledToggle = document.getElementById('opt-disabled') as ISwitchComponent;
-disabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   datePicker.disabled = selected;
 });
 
 const allowInvalidDateToggle = document.getElementById('opt-allow-invalid-date') as ISwitchComponent;
-allowInvalidDateToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+allowInvalidDateToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   datePicker.allowInvalidDate = selected;
 });
 
 const showTodayToggle = document.getElementById('opt-show-today') as ISwitchComponent;
-showTodayToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+showTodayToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   datePicker.showToday = selected;
 });
 
 const showClearToggle = document.getElementById('opt-show-clear') as ISwitchComponent;
-showClearToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+showClearToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   datePicker.showClear = selected;
 });
 
 const disableDayCallbackToggle = document.getElementById('opt-disable-day-callback') as ISwitchComponent;
-disableDayCallbackToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+disableDayCallbackToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     datePicker.disableDayCallback = (date) => date.toLocaleDateString() === new Date().toLocaleDateString();
   } else {
@@ -100,7 +102,7 @@ toggleDropdownOpenButton.addEventListener('click', () => {
 });
 
 const customCallbackToggle = document.getElementById('opt-custom-callbacks') as ISwitchComponent;
-customCallbackToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+customCallbackToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     datePickerInput.placeholder = 'yyyy-mm-dd';
     datePicker.maskFormat = 'YYYY-MM-DD';

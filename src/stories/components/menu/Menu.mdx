@@ -1,0 +1,38 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as MenuStories from './Menu.stories';
+
+<Meta of={MenuStories} />
+
+<Title />
+
+The menu component is a wrapper component that can be placed around any content. It will listen for a click event on its children and toggle a popup menu around the target element.
+
+The popup menu is simply a list of items that allows a user to choose an option to perform a task.
+
+<Canvas of={MenuStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Keyboard shortcuts
+
+| Menu open             | Description                                           |
+| --------------------- | ----------------------------------------------------- |
+| `space / escape`      | Closes the menu.                                      |
+| `enter / arrow right` | Opens and closes child menu of the focused menu item. |
+| `arrow left`          | **Mode is Cascade**: Closes the menu.                 |
+
+| Menu closed  | Description                                                              |
+| ------------ | ------------------------------------------------------------------------ |
+| `space`      | Opens the menu.                                                          |
+| `enter`      | Opens the menu and Opens and closes child menu of the focused menu item. |
+| `arrow down` | Opens the menu and focuses the first menu item.                          |
+
+## Accessibility
+
+- Verify that the trigger element used to open and close the menu can be focused and activated by keyboard.
+  - Ensure that there is a visual cue that the trigger element is currently in focus.
+- Verify that pressing the space bar or enter key while focused on the trigger element will activate the menu in the same manner as if it had been clicked with a mouse.
+- Ensure each menu item can be selected by using arrow-up and arrow-down.

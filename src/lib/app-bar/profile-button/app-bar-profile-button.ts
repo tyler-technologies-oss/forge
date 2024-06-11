@@ -1,14 +1,13 @@
-import { CustomElement, attachLightTemplate, coerceNumber, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { customElement, attachLightTemplate, coerceNumber, coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { AppBarProfileButtonAdapter } from './app-bar-profile-button-adapter';
-import { AppBarProfileButtonFoundation } from './app-bar-profile-button-foundation';
+import { AppBarProfileButtonCore } from './app-bar-profile-button-core';
 import { APP_BAR_PROFILE_BUTTON_CONSTANTS, AppBarProfileButtonProfileCardBuilder } from './app-bar-profile-button-constants';
 import { ProfileCardComponent } from '../../profile-card';
 import { IconButtonComponent } from '../../icon-button';
 import { AvatarComponent } from '../../avatar';
-import { PopupComponent } from '../../popup';
 import { TooltipComponent } from '../../tooltip';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { IconComponent } from '../../icon';
+import { IPopoverComponent, PopoverComponent } from '../../popover/popover';
 
 import template from './app-bar-profile-button.html';
 
@@ -24,6 +23,7 @@ export interface IAppBarProfileButtonComponent extends IBaseComponent {
   signOutButtonText: string;
   profileButtonText: string;
   open: boolean;
+  popupElement: IPopoverComponent | undefined;
   profileCardBuilder: (fn: AppBarProfileButtonProfileCardBuilder) => void;
 }
 
@@ -34,20 +34,42 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-app-bar-profile-button>` custom element.
- * 
  * @tag forge-app-bar-profile-button
+ *
+ * @property {string} avatarImageUrl - The url of the avatar image to display.
+ * @property {number} [avatarLetterCount=2] - The number of letters to display in the avatar.
+ * @property {string} avatarText - The text to display in the avatar.
+ * @property {string} avatarIcon - The name of an alternative icon to display in the avatar.
+ * @property {string} fullName - The full name.
+ * @property {string} email - The email address.
+ * @property {boolean} [signOutButton=true] - Whether to display the sign out button or not. Defaults to `true`.
+ * @property {boolean} [profileButton=false] - Whether to display the profile button or not.
+ * @property {string} [signOutButtonText="Sign out"] - The text to display in the sign out button.
+ * @property {string} [profileButtonText="Profile"] - The text to display in the profile button.
+ * @property {boolean} [open=false] - Whether the profile card is open or not.
+ * @property {IPopoverComponent | undefined} popupElement - The popup element when open.
+ * @property {AppBarProfileButtonProfileCardBuilder} profileCardBuilder - Sets the profile card builder callback that will be used to add extra content to the profile card.
+ *
+ * @attribute {string} [avatar-image-url] - The url of the avatar image to display.
+ * @attribute {number} [avatar-letter-count=2] - The number of letters to display in the avatar.
+ * @attribute {string} [avatar-text] - The text to display in the avatar.
+ * @attribute {string} [avatar-icon] - The name of an alternative icon to display in the avatar.
+ * @attribute {string} [full-name] - The full name.
+ * @attribute {string} [email] - The email address.
+ * @attribute {boolean} [sign-out-button=true] - Whether to display the sign out button or not. Defaults to `true`.
+ * @attribute {boolean} [profile-button=false] - Whether to display the profile button or not.
+ * @attribute {string} [sign-out-button-text="Sign Out"] - The text to display in the sign out button.
+ * @attribute {string} [profile-button-text="Profile"] - The text to display in the profile button.
+ * @attribute {boolean} [open=false] - Whether the profile card is open or not.
+ * @attribute {string} [aria-label] - The aria-label to apply to the button.
+ * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
+ *
+ * @event {CustomEvent} forge-profile-card-sign-out - Fires when the sign out button is clicked.
+ * @event {CustomEvent} forge-profile-card-profile - Fires when the profile button is clicked.
  */
-@CustomElement({
+@customElement({
   name: APP_BAR_PROFILE_BUTTON_CONSTANTS.elementName,
-  dependencies: [
-    PopupComponent,
-    ProfileCardComponent,
-    IconButtonComponent,
-    IconComponent,
-    AvatarComponent,
-    TooltipComponent
-  ]
+  dependencies: [PopoverComponent, ProfileCardComponent, IconButtonComponent, AvatarComponent, TooltipComponent]
 })
 export class AppBarProfileButtonComponent extends BaseComponent implements IAppBarProfileButtonComponent {
   public static get observedAttributes(): string[] {
@@ -66,11 +88,11 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
     ];
   }
 
-  private _foundation: AppBarProfileButtonFoundation;
+  private _core: AppBarProfileButtonCore;
 
   constructor() {
     super();
-    this._foundation = new AppBarProfileButtonFoundation(new AppBarProfileButtonAdapter(this));
+    this._core = new AppBarProfileButtonCore(new AppBarProfileButtonAdapter(this));
   }
 
   public initializedCallback(): void {
@@ -78,11 +100,11 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -123,40 +145,44 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare fullName: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare email: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare avatarImageUrl: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare avatarLetterCount: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare avatarText: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare avatarIcon: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare signOutButton: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare profileButton: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare signOutButtonText: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare profileButtonText: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare open: boolean;
 
+  public get popupElement(): IPopoverComponent | undefined {
+    return this._core.popupElement;
+  }
+
   /** Sets the profile card builder callback that will be used to add extra content to the profile card. */
-  @FoundationProperty()
+  @coreProperty()
   public declare profileCardBuilder: AppBarProfileButtonProfileCardBuilder;
 }

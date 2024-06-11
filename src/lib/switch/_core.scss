@@ -1,0 +1,251 @@
+@use '../core/styles/typography';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+// The tallest element may be absolutely positioned so the container needs to
+// be manually sized to match.
+$_container-block-size: max(#{token(handle-height)}, #{token(track-height)}, #{token(current-state-layer-height, custom)});
+
+// The effective track border radius, for use in other calculations.
+$_track-border-radius: calc(#{token(track-height)} / 2);
+
+// Returns the wider of the handle width and state layer width.
+$_max-handle-inline-size: max(#{token(handle-width)}, #{token(current-state-layer-width, custom)});
+
+// Offsets the track to place the center of its border caps at the center of
+// the handle's off and on positions.
+$_track-margin-inline: calc(#{$_max-handle-inline-size} / 2 - #{$_track-border-radius});
+
+// The x translation of the handle in its on state.
+$_handle-on-translate: calc(#{token(track-width)} - #{$_track-border-radius} * 2);
+
+@mixin host {
+  display: inline-block;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@mixin switch {
+  display: flex;
+  position: relative;
+
+  flex-direction: #{token(direction)};
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: #{token(justify)};
+  gap: #{token(gap)};
+}
+
+@mixin switch-disabled {
+  opacity: #{token(disabled-opacity)};
+}
+
+@mixin input {
+  position: absolute;
+  z-index: 1;
+
+  appearance: none;
+
+  outline: none;
+  margin: 0;
+  inline-size: 100%;
+  block-size: 100%;
+
+  cursor: unset;
+}
+
+@mixin container {
+  position: relative;
+  align-items: center;
+
+  display: flex;
+
+  block-size: #{$_container-block-size};
+
+  cursor: pointer;
+}
+
+@mixin container-disabled {
+  cursor: not-allowed;
+}
+
+@mixin track {
+  transition-property: background-color, border-color, border-width;
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(animation-timing)};
+
+  box-sizing: border-box;
+  margin-inline: #{$_track-margin-inline};
+  border-width: #{token(track-off-border-width)};
+  border-color: #{token(track-off-border-color)};
+  border-style: solid;
+  border-radius: #{token(track-shape)};
+  inline-size: #{token(track-width)};
+  block-size: #{token(track-height)};
+
+  background-color: #{token(track-off-color)};
+}
+
+@mixin track-on {
+  border-width: #{token(track-on-border-width)};
+  border-color: #{token(track-on-border-color)};
+
+  background-color: #{token(track-on-color)};
+}
+
+@mixin track-active {
+  border-width: #{token(track-active-off-border-width)};
+  border-color: #{token(track-active-off-border-color)};
+
+  background-color: #{token(track-active-off-color)};
+}
+
+@mixin track-active-on {
+  border-width: #{token(track-active-on-border-width)};
+  border-color: #{token(track-active-on-border-color)};
+
+  background-color: #{token(track-active-on-color)};
+}
+
+@mixin handle {
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+
+  display: flex;
+
+  transition-property: translate;
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(animation-timing)};
+
+  border-radius: #{token(handle-shape)};
+  inline-size: #{token(current-state-layer-width, custom)};
+  block-size: #{token(current-state-layer-height, custom)};
+
+  &::before {
+    content: '';
+
+    position: relative;
+
+    display: block;
+    scale: #{token(handle-off-scale)};
+
+    transition:
+      background-color #{token(animation-duration)} #{token(animation-timing)},
+      box-shadow #{token(animation-duration)} #{token(animation-timing)},
+      scale #{token(animation-duration)} #{token(active-animation-timing)};
+
+    box-shadow: #{token(handle-off-elevation)};
+    border-radius: #{token(handle-shape)};
+    inline-size: #{token(handle-width)};
+    block-size: #{token(handle-height)};
+
+    background-color: #{token(handle-off-color)};
+  }
+}
+
+@mixin handle-on {
+  translate: #{$_handle-on-translate};
+
+  &::before {
+    scale: #{token(handle-on-scale)};
+
+    box-shadow: #{token(handle-on-elevation)};
+
+    background-color: #{token(handle-on-color)};
+  }
+}
+
+@mixin handle-active {
+  &::before {
+    scale: #{token(handle-active-off-scale)};
+
+    box-shadow: #{token(handle-active-off-elevation)};
+
+    background-color: #{token(handle-active-off-color)};
+  }
+}
+
+@mixin handle-active-on {
+  &::before {
+    scale: #{token(handle-active-on-scale)};
+
+    box-shadow: #{token(handle-active-on-elevation)};
+
+    background-color: #{token(handle-active-on-color)};
+  }
+}
+
+@mixin handle-disabled {
+  &::before {
+    box-shadow: none;
+  }
+}
+
+@mixin icon {
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+
+  display: flex;
+
+  transition-property: opacity, scale;
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(animation-timing)};
+
+  inline-size: #{token(icon-off-size)};
+  block-size: #{token(icon-off-size)};
+
+  color: #{token(icon-off-color)};
+  fill: #{token(icon-off-color)};
+
+  font-size: #{token(icon-off-size)};
+}
+
+@mixin icon-on {
+  inline-size: #{token(icon-on-size)};
+  block-size: #{token(icon-on-size)};
+
+  color: #{token(icon-on-color)};
+  fill: #{token(icon-on-color)};
+
+  font-size: #{token(icon-on-size)};
+}
+
+@mixin icon-active {
+  scale: #{token(icon-active-off-scale)};
+
+  color: #{token(icon-active-off-color)};
+  fill: #{token(icon-active-off-color)};
+}
+
+@mixin icon-active-on {
+  scale: #{token(icon-active-on-scale)};
+
+  color: #{token(icon-active-on-color)};
+  fill: #{token(icon-active-on-color)};
+}
+
+@mixin icon-on-shown {
+  opacity: 1;
+  scale: #{token(icon-on-scale)};
+}
+
+@mixin icon-off-shown {
+  opacity: 1;
+  scale: #{token(icon-off-scale)};
+}
+
+@mixin icon-hidden {
+  opacity: 0;
+  scale: 0.4;
+}
+
+@mixin label {
+  @include typography.style(label1);
+
+  &:empty {
+    display: none;
+  }
+}

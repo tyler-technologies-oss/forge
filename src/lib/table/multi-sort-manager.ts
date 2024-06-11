@@ -5,11 +5,11 @@ export class MultiSortManager {
   private _sortedColumns: ISortedItem[] = [];
 
   public get sortedColumns(): ISortedItem[] {
-    return [...this._sortedColumns.map(c => ({...c}))];
+    return [...this._sortedColumns.map(c => ({ ...c }))];
   }
 
   public addSortColumn(column: ISortedItem): void {
-    this._sortedColumns.push({...column});
+    this._sortedColumns.push({ ...column });
     this._updateSortNumbers();
   }
 
@@ -31,7 +31,7 @@ export class MultiSortManager {
   }
 
   public setSortColumns(columns: ISortedItem[]): void {
-    this._sortedColumns = [...columns.map(c => ({...c}))];
+    this._sortedColumns = [...columns.map(c => ({ ...c }))];
   }
 
   public removeSortColumn(columnOrIndex: ISortedItem | number): void {
@@ -63,9 +63,9 @@ export class MultiSortManager {
   private _updateSortNumbers(): void {
     // only do a real sort if every sortNumber is actually a number
     if (this._sortedColumns.every(c => typeof c.sortOrder === 'number')) {
-      this._sortedColumns.sort((col1, col2) => col1.sortOrder as number - (col2.sortOrder as number));
+      this._sortedColumns.sort((col1, col2) => (col1.sortOrder as number) - (col2.sortOrder as number));
     }
 
-    this._sortedColumns.forEach((column, index) => column.sortOrder = index + 1);
+    this._sortedColumns.forEach((column, index) => (column.sortOrder = index + 1));
   }
 }

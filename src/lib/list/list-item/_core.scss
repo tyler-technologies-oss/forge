@@ -1,0 +1,188 @@
+@use '../../core/styles/typography';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin container {
+  display: block;
+  outline: none;
+}
+
+@mixin base {
+  position: relative;
+
+  display: flex;
+  gap: #{token(gap)};
+  align-items: center;
+
+  box-sizing: border-box;
+  outline: none;
+  text-decoration: none;
+  border-radius: #{token(shape)};
+
+  -webkit-tap-highlight-color: transparent;
+  background-color: #{token(background)};
+
+  height: #{token(height)};
+  min-height: #{token(height)};
+  padding: #{token(padding)};
+  margin: #{token(margin)};
+}
+
+@mixin button {
+  appearance: none;
+  cursor: #{token(cursor)};
+
+  border: none;
+  padding-block: 0;
+  padding-inline: 0;
+  margin: 0;
+  box-sizing: border-box;
+
+  background: transparent;
+  color: inherit;
+  outline: none;
+
+  font: inherit;
+  user-select: auto;
+  text-align: inherit;
+  letter-spacing: inherit;
+  word-spacing: inherit;
+
+  display: inline;
+}
+
+@mixin anchor {
+  outline: none;
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+@mixin anchor-internal {
+  position: absolute;
+  inset: 0;
+}
+
+@mixin text-container {
+  @include typography.style(body2, $exclude: [font-size font-weight line-height]);
+  @include typography.ellipse;
+
+  box-sizing: border-box;
+
+  font-size: #{token(text-font-size)};
+  font-weight: #{token(text-font-weight)};
+  line-height: #{token(text-line-height)};
+
+  flex: 1;
+}
+
+@mixin selected {
+  color: #{token(selected-color)};
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: #{token(selected-opacity)};
+    background-color: #{token(selected-color)};
+  }
+}
+
+@mixin start-selected {
+  color: #{token(start-selected-color)};
+}
+
+@mixin end-selected {
+  color: #{token(end-selected-color)};
+}
+
+@mixin text-container-selected {
+  color: #{token(selected-color)};
+}
+
+@mixin start-end-selected {
+  color: #{token(selected-color)};
+}
+
+@mixin text {
+  @include typography.style(body1);
+  @include typography.ellipse;
+
+  color: #{token(text-color)};
+  display: block;
+}
+
+@mixin text-selected {
+  color: #{token(selected-text-color)};
+}
+
+@mixin two-line {
+  height: #{token(two-line-height)};
+  min-height: #{token(two-line-height)};
+}
+
+@mixin three-line {
+  height: #{token(three-line-height)};
+  min-height: #{token(three-line-height)};
+}
+
+@mixin dense {
+  @include override(gap, dense-gap);
+
+  height: #{token(dense-one-line-height)};
+  min-height: #{token(dense-one-line-height)};
+}
+
+@mixin dense-text {
+  font-size: #{token(dense-font-size)};
+}
+
+@mixin dense-two-line {
+  height: #{token(dense-two-line-height)};
+  min-height: #{token(dense-two-line-height)};
+}
+
+@mixin dense-three-line {
+  height: #{token(dense-three-line-height)};
+  min-height: #{token(dense-three-line-height)};
+}
+
+@mixin indented {
+  margin-inline-start: #{token(indent)};
+}
+
+@mixin dense-indented {
+  margin-inline-start: #{token(dense-indent)};
+}
+
+@mixin start-end-base {
+  color: #{token(text-color)};
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  fill: currentColor;
+}
+
+@mixin wrap {
+  @include override(padding, wrap-padding);
+
+  height: auto;
+}
+
+@mixin text-container-wrap {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: normal;
+}
+
+@mixin text-wrap {
+  @include text-container-wrap;
+}
+
+@mixin disabled {
+  cursor: #{token(disabled-cursor)};
+  opacity: #{token(disabled-opacity)};
+}

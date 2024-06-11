@@ -1,0 +1,44 @@
+@mixin base {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@mixin base-slotted {
+  display: flex;
+  align-items: center;
+  position: relative;
+  min-width: 112px;
+}
+
+@mixin fixed-slotted {
+  flex: 1;
+}
+
+@mixin alternative-slotted {
+  min-width: 160px;
+}
+
+@mixin alternative-base {
+  align-items: flex-start;
+}
+
+@mixin vertical-base {
+  display: unset;
+  align-items: unset;
+  white-space: unset;
+  overflow: unset;
+}
+
+@mixin align-left {
+  justify-content: flex-start;
+}
+
+@mixin align-center {
+  justify-content: center;
+}
+
+@mixin align-right {
+  justify-content: flex-end;
+}

@@ -1,0 +1,33 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../spacing';
+@use '../../shape';
+@use '../../elevation';
+@use '../../animation';
+@use '../../utils';
+
+$tokens: (
+  // Base
+  background: utils.module-val(toast, background, theme.variable(surface-inverse)),
+  color: utils.module-val(toast, color, theme.variable(on-surface-inverse)),
+  offset: utils.module-val(toast, offset, spacing.variable(medium)),
+  shape: utils.module-val(toast, shape, shape.variable(medium)),
+  elevation: utils.module-val(toast, elevation, elevation.value(6)),
+  action-color: utils.module-val(toast, action-color, theme.variable(secondary)),
+  min-width: utils.module-val(toast, min-width, 344px),
+  max-width: utils.module-val(toast, max-width, 672px),
+  min-height: utils.module-val(toast, min-height, 48px),
+  inline-padding: utils.module-val(toast, inline-padding, spacing.variable(medium)),
+  spacing: utils.module-val(toast, spacing, spacing.variable(xsmall)),
+  message-padding: utils.module-val(toast, message-padding, spacing.variable(xsmall)),
+  // Animation
+  enter-duration: utils.module-val(toast, enter-duration, animation.variable(duration-medium1)),
+  enter-timing: utils.module-val(toast, enter-timing, animation.variable(easing-decelerate)),
+  exit-duration: utils.module-val(toast, exit-duration, animation.variable(duration-short4)),
+  exit-timing: utils.module-val(toast, exit-timing, animation.variable(easing-emphasized-accelerate)),
+  slide-origin: utils.module-val(toast, slide-origin, 100%)
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

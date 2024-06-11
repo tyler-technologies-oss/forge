@@ -2,24 +2,27 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}open-icon`;
 
-const classes = {
-  ICON: 'forge-open-icon',
-  ICON_OPEN: 'forge-open-icon--open'
+const observedAttributes = {
+  OPEN: 'open',
+  ORIENTATION: 'orientation',
+  ROTATION: 'rotation'
 };
 
 const attributes = {
-  OPEN: 'open',
-  ORIENTATION: 'orientation'
+  ...observedAttributes
 };
 
-const strings = {
-  ORIENTATION_VERTICAL: 'vertical',
-  ORIENTATION_HORIZONTAL: 'horizontal'
+const defaults = {
+  ORIENTATION: 'vertical' as OpenIconOrientation,
+  ROTATION: 'full' as OpenIconRotation
 };
 
 export const OPEN_ICON_CONSTANTS = {
   elementName,
-  classes,
+  observedAttributes,
   attributes,
-  strings
+  defaults
 };
+
+export type OpenIconOrientation = 'vertical' | 'horizontal' | 'vertical-half' | 'horizontal-half';
+export type OpenIconRotation = 'full' | 'half';

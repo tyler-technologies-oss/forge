@@ -1,224 +1,205 @@
-import { deepQuerySelectorAll, getActiveElement, getShadowElement, removeElement, toggleClass } from '@tylertech/forge-core';
+import { getShadowElement, playKeyframeAnimation } from '@tylertech/forge-core';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
-import { CHECKBOX_CONSTANTS } from '../checkbox/checkbox-constants';
+import { setDefaultAria } from '../constants';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { ICON_BUTTON_CONSTANTS } from '../icon-button/icon-button-constants';
-import { RADIO_CONSTANTS } from '../radio/radio-constants';
-import { SWITCH_CONSTANTS } from '../switch/switch-constants';
-import { IDialogComponent } from './dialog';
-import { DialogPositionType, DIALOG_CONSTANTS } from './dialog-constants';
+import { DialogComponent, IDialogComponent } from './dialog';
+import { dialogStack, DIALOG_CONSTANTS, hideBackdrop, showBackdrop } from './dialog-constants';
 
-export interface IDialogAdapter extends IBaseAdapter {
-  initializeAccessibility(): void;
-  setAnimating(animating: boolean): void;
-  setVisibility(visible: boolean): void;
-  attach(): void;
-  detach(): void;
-  setDocumentListener(type: string, listener: (evt: Event) => void): void;
-  removeDocumentListener(type: string, listener: (evt: Event) => void): void;
-  registerTransitionEndHandler: (handler: (evt: TransitionEvent) => void) => void;
-  deregisterTransitionEndHandler: (handler: (evt: TransitionEvent) => void) => void;
-  registerBackdropClickHandler: (handler: (evt: CustomEvent) => void) => void;
-  deregisterBackdropClickHandler: (handler: (evt: CustomEvent) => void) => void;
-  getOpenDialogs: (selector: string) => NodeListOf<HTMLElement>;
-  setBodyAttribute: (name: string, value: string) => void;
-  removeBodyAttribute: (name: string) => void;
-  trySetInitialFocus: () => void;
-  isScrollable(): boolean;
-  addRootClass(name: string): void;
-  setFullscreen(value: boolean): void;
-  setMoveable(value: boolean): void;
-  tryLayoutRippleChildren(): void;
-  setMoveTarget(selector: string): boolean;
-  setMoveTargetHandler(type: string, listener: (evt: MouseEvent) => void): void;
-  removeDragTargetHandler(type: string, listener: (evt: MouseEvent) => void): void;
-  getSurfaceBounds(): DOMRect;
-  setSurfacePosition(x: string | null, y: string | null, positionType: DialogPositionType): void;
-  captureActiveElement(): void;
-  tryRestoreActiveElement(): void;
+export interface IDialogAdapter extends IBaseAdapter<IDialogComponent> {
+  readonly hostElement: IDialogComponent;
+  readonly moveHandleElement: HTMLElement;
+  readonly surfaceElement: HTMLElement;
+  triggerElement: HTMLElement | null;
+  show(): void;
+  hide(): Promise<void>;
+  addDialogFormSubmitListener(listener: EventListener): void;
+  removeDialogFormSubmitListener(listener: EventListener): void;
+  addDialogCancelListener(listener: EventListener): void;
+  removeDialogCancelListener(listener: EventListener): void;
+  addBackdropDismissListener(listener: EventListener): void;
+  removeBackdropDismissListener(listener: EventListener): void;
+  tryAutofocus(): void;
+  tryLocateTriggerElement(id: string | null): void;
+  addTriggerInteractionListener(listener: EventListener): void;
+  removeTriggerInteractionListener(listener: EventListener): void;
+  hideBackdrop(): void;
+  showBackdrop(): void;
+  addSurfaceClass(className: string): void;
+  removeSurfaceClass(className: string): void;
 }
 
-/**
- * Provides facilities for interacting with the internal DOM of `DialogComponent`.
- */
 export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDialogAdapter {
+  private _dialogElement: HTMLDialogElement;
+  private _surfaceElement: HTMLDivElement;
   private _backdropElement: IBackdropComponent;
-  private _containerElement: HTMLElement;
-  private _surfaceElement: HTMLElement;
-  private _moveTargetElement: HTMLElement | null;
-  private _activeElement: HTMLElement | undefined;
+  private _moveHandleElement: HTMLElement;
+
+  public triggerElement: HTMLElement | null;
+
+  public get moveHandleElement(): HTMLElement {
+    return this._moveHandleElement;
+  }
+
+  public get surfaceElement(): HTMLElement {
+    return this._surfaceElement;
+  }
 
   constructor(component: IDialogComponent) {
     super(component);
-    this._backdropElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.BACKDROP) as IBackdropComponent;
-    this._containerElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.CONTAINER);
-    this._surfaceElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.SURFACE);
-  }
+    this._dialogElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.DIALOG) as HTMLDialogElement;
+    this._surfaceElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.SURFACE) as HTMLDivElement;
+    this._moveHandleElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.MOVE_HANDLE) as HTMLElement;
 
-  public initializeAccessibility(): void {
-    if (!this._component.hasAttribute('role')) {
-      this._component.setAttribute('role', 'dialog');
-    }
-    this._component.setAttribute('aria-modal', 'true');
-  }
-
-  public setAnimating(animating: boolean): void {
-    if (animating) {
-      this._containerElement.classList.add(DIALOG_CONSTANTS.classes.ANIMATING);
-    } else {
-      this._containerElement.classList.remove(DIALOG_CONSTANTS.classes.ANIMATING);
+    this._backdropElement = getShadowElement(component, BACKDROP_CONSTANTS.elementName) as IBackdropComponent;
+    if (!this._backdropElement.shadowRoot) {
+      window.customElements.upgrade(this._backdropElement);
     }
   }
 
-  public setVisibility(visible: boolean): void {
-    if (visible) {
-      this._containerElement.classList.add(DIALOG_CONSTANTS.classes.OPEN);
-    } else {
-      this._containerElement.classList.remove(DIALOG_CONSTANTS.classes.OPEN);
+  public show(): void {
+    /* c8 ignore next 3 */
+    if (this._dialogElement.open) {
+      return;
     }
-  }
 
-  public attach(): void {
-    document.body.appendChild(this._component);
-  }
-
-  public detach(): void {
-    if (this._activeElement) {
-      this._activeElement = undefined;
+    const role = this._component.getAttribute('role');
+    if (!role || !['presentation', 'none'].includes(role)) {
+      this._component[setDefaultAria](
+        {
+          role: this._component.type,
+          ariaModal: this._component.mode === 'modal' || this._component.mode === 'inline-modal' ? 'true' : 'false'
+        },
+        { setAttribute: true }
+      );
     }
-    removeElement(this._component);
-  }
 
-  public registerTransitionEndHandler(handler: (evt: TransitionEvent) => void): void {
-    this._surfaceElement.addEventListener('transitionend', handler);
-  }
-
-  public deregisterTransitionEndHandler(handler: (evt: TransitionEvent) => void): void {
-    this._surfaceElement.removeEventListener('transitionend', handler);
-  }
-
-  public setDocumentListener(type: string, listener: (evt: Event) => void): void {
-    document.addEventListener(type, listener);
-  }
-
-  public removeDocumentListener(type: string, listener: (evt: Event) => void): void {
-    document.removeEventListener(type, listener);
-  }
-
-  public registerBackdropClickHandler(handler: (evt: CustomEvent) => void): void {
-    this._backdropElement.addEventListener(BACKDROP_CONSTANTS.events.BACKDROP_CLICK, handler);
-  }
-
-  public deregisterBackdropClickHandler(handler: (evt: CustomEvent) => void): void {
-    this._backdropElement.removeEventListener(BACKDROP_CONSTANTS.events.BACKDROP_CLICK, handler);
-  }
-
-  public getOpenDialogs(selector: string): NodeListOf<HTMLElement> {
-    return document.querySelectorAll(selector);
-  }
-
-  public setBodyAttribute(name: string, value: string): void {
-    document.body.setAttribute(name, value);
-  }
-
-  public removeBodyAttribute(name: string): void {
-    document.body.removeAttribute(name);
-  }
-
-  public trySetInitialFocus(): void {
-    const elements = deepQuerySelectorAll(this._component, DIALOG_CONSTANTS.selectors.INITIAL_FOCUS);
-    if (elements && elements.length) {
-      const initialElement = elements[elements.length - 1] as HTMLElement;
-      initialElement.focus();
-    }
-  }
-
-  public isScrollable(): boolean {
-    const contentElement = this._component.querySelector(DIALOG_CONSTANTS.selectors.CONTENT) as HTMLElement;
-    if (contentElement) {
-      return contentElement.scrollHeight > contentElement.offsetHeight;
-    }
-    return false;
-  }
-
-  public addRootClass(name: string): void {
-    this._component.classList.add(name);
-  }
-
-  public setFullscreen(value: boolean): void {
-    if (value) {
-      this._containerElement.classList.add(DIALOG_CONSTANTS.classes.FULLSCREEN);
-    } else {
-      this._containerElement.classList.remove(DIALOG_CONSTANTS.classes.FULLSCREEN);
-    }
-  }
-
-  public setMoveable(value: boolean): void {
-    toggleClass(this._containerElement, value, DIALOG_CONSTANTS.classes.MOVEABLE);
-  }
-
-  public tryLayoutRippleChildren(): void {
-    const selectors = [
-      ICON_BUTTON_CONSTANTS.elementName,
-      SWITCH_CONSTANTS.elementName,
-      CHECKBOX_CONSTANTS.elementName,
-      RADIO_CONSTANTS.elementName
-    ];
-    const rippleChildren = deepQuerySelectorAll(this._component, selectors.join(':focus-within,')) as Array<HTMLElement & { layout(): void }>;
-    rippleChildren.filter(el => typeof el.layout === 'function').forEach(el => el.layout());
-  }
-
-  public setMoveTarget(selector: string): boolean {
-    if (!selector) {
-      return false;
-    }
-    this._moveTargetElement = this._component.querySelector(selector);
-    return !!this._moveTargetElement;
-  }
-
-  public setMoveTargetHandler(type: string, listener: (evt: MouseEvent) => void): void {
-    if (this._moveTargetElement) {
-      this._moveTargetElement.addEventListener(type, listener);
-    }
-  }
-
-  public removeDragTargetHandler(type: string, listener: (evt: MouseEvent) => void): void {
-    if (this._moveTargetElement) {
-      this._moveTargetElement.removeEventListener(type, listener);
-    }
-  }
-
-  public getSurfaceBounds(): DOMRect {
-    return this._surfaceElement.getBoundingClientRect() as DOMRect;
-  }
-
-  public setSurfacePosition(x: string | null, y: string | null, positionType: DialogPositionType): void {
-    this._surfaceElement.style.position = positionType === 'absolute' ? positionType : 'relative';
-    if (y != null) {
-      this._surfaceElement.style.top = y;
-    } else {
-      this._surfaceElement.style.removeProperty('top');
-    }
-    if (x != null) {
-      this._surfaceElement.style.left = x;
-    } else {
-      this._surfaceElement.style.removeProperty('left');
-    }
-  }
-
-  public captureActiveElement(): void {
-    this._activeElement = getActiveElement(this._component.ownerDocument) as HTMLElement;
-    if (this._activeElement) {
-      this._activeElement.blur();
-    }
-  }
-
-  public tryRestoreActiveElement(): void {
-    if (this._activeElement) {
-      if (this._activeElement.isConnected) {
-        this._activeElement.focus();
+    // Show the dialog (and backdrop) based on modal vs non-modal
+    const isModal = this._component.mode === 'modal' || this._component.mode === 'inline-modal';
+    if (isModal) {
+      if (this._component.animationType === 'none') {
+        this._backdropElement.show();
+      } else {
+        this._backdropElement.fadeIn();
       }
-      this._activeElement = undefined;
     }
+
+    if (this._component.mode === 'modal') {
+      this._dialogElement.showModal();
+    } else {
+      this._dialogElement.show();
+    }
+
+    if (isModal) {
+      this._hideBackdrops();
+    }
+
+    DialogComponent[dialogStack].add(this._component);
+  }
+
+  private _hideBackdrops(): void {
+    DialogComponent[dialogStack].forEach(dialog => dialog[hideBackdrop]());
+  }
+
+  private _showBackdropMostRecent(): void {
+    Array.from(DialogComponent[dialogStack])
+      .filter(dialog => dialog.mode === 'modal' || dialog.mode === 'inline-modal')
+      .at(-1)
+      ?.[showBackdrop]();
+  }
+
+  public async hide(): Promise<void> {
+    const role = this._component.getAttribute('role');
+    if (!role || !['presentation', 'none'].includes(role)) {
+      this._component[setDefaultAria](
+        {
+          role: null,
+          ariaModal: null
+        },
+        { setAttribute: true }
+      );
+    }
+
+    const close = (): void => {
+      this._surfaceElement.classList.remove(BACKDROP_CONSTANTS.classes.EXITING);
+      this._dialogElement.close();
+      DialogComponent[dialogStack].delete(this._component);
+      this._showBackdropMostRecent();
+    };
+
+    if (this._component.animationType === 'none') {
+      return Promise.resolve(close());
+    }
+
+    this._backdropElement.fadeOut();
+    await playKeyframeAnimation(this._surfaceElement, BACKDROP_CONSTANTS.classes.EXITING);
+    close();
+  }
+
+  public addDialogFormSubmitListener(listener: EventListener): void {
+    this._dialogElement.addEventListener('submit', listener);
+  }
+
+  public removeDialogFormSubmitListener(listener: EventListener): void {
+    this._dialogElement.removeEventListener('submit', listener);
+  }
+
+  public addDialogCancelListener(listener: EventListener): void {
+    this._dialogElement.addEventListener('cancel', listener);
+  }
+
+  public removeDialogCancelListener(listener: EventListener): void {
+    this._dialogElement.removeEventListener('cancel', listener);
+  }
+
+  public addBackdropDismissListener(listener: EventListener): void {
+    this._backdropElement.addEventListener('click', listener);
+  }
+
+  public removeBackdropDismissListener(listener: EventListener): void {
+    this._backdropElement.removeEventListener('click', listener);
+  }
+
+  public tryAutofocus(): void {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        if (this._component.open && this._dialogElement.isConnected && !this._component.matches(':focus-within')) {
+          const autofocusElement = this._component.querySelector<HTMLElement>(DIALOG_CONSTANTS.selectors.AUTOFOCUS);
+          autofocusElement?.focus();
+        }
+      });
+    });
+  }
+
+  public tryLocateTriggerElement(id: string | null): void {
+    if (!id) {
+      this.triggerElement = null;
+      return;
+    }
+    const rootNode = this._component.getRootNode() as Document | ShadowRoot;
+    this.triggerElement = rootNode.querySelector<HTMLElement>(`#${id}`);
+  }
+
+  public addTriggerInteractionListener(listener: EventListener): void {
+    this.triggerElement?.addEventListener('click', listener);
+  }
+
+  public removeTriggerInteractionListener(listener: EventListener): void {
+    this.triggerElement?.removeEventListener('click', listener);
+  }
+
+  public hideBackdrop(): void {
+    this._backdropElement.fadeOut();
+  }
+
+  public showBackdrop(): void {
+    this._backdropElement.fadeIn();
+  }
+
+  public addSurfaceClass(className: string): void {
+    this._surfaceElement.classList.add(className);
+  }
+
+  public removeSurfaceClass(className: string): void {
+    this._surfaceElement.classList.remove(className);
   }
 }

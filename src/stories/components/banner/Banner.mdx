@@ -1,0 +1,39 @@
+import { Meta, Title, Primary, Canvas, ArgTypes } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as BannerStories from './Banner.stories';
+
+<Meta of={BannerStories} />
+
+<Title />
+
+The banner component is intended to be used as a way to deliver a short but important message to the user. It has a high degree of emphasis and should not be used for general messaging. If you need to show less important messages, or messages scoped to a more specific section of your page, you should consider using the inline message component. instead.
+
+This component supports built-in predefined themes. It can be configured to be either static or dismissible. It can contain a button to trigger whatever action you need.
+
+## Default
+
+<Canvas of={BannerStories.Default} />
+
+## Themed
+
+<Canvas of={BannerStories.Themed} />
+
+## Combined
+
+Here is an example usage combined with a forge-button component:
+
+<Canvas of={BannerStories.Combined} />
+
+> **Note:** The design for the banner specifically requests that the button's background be white. Due to
+> limitations in how deep a css selector can drill into a slotted element, you will need to add that
+> background color yourself.
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- If the banner is used to display an important notification to a user, use the `role="alert"` attribute on the `<forge-banner>` element.
+  - This is equivalent to using `aria-live="assertive"`.
+  - If the banner is less urgent, you can use `aria-live="polite"` to wait until the user is finished with their current task.

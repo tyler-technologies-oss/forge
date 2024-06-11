@@ -1,0 +1,365 @@
+@use '../../core/styles/typography';
+@use '../../state-layer';
+@use '../../focus-indicator';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin base() {
+  -webkit-tap-highlight-color: transparent;
+  padding: 12px 16px;
+  outline: none;
+  background: none;
+  border: none;
+  border-radius: #{token(border-radius)};
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  z-index: 1;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-moz-focus-inner,
+  &::-moz-focus-outer {
+    padding: 0;
+    border: 0;
+  }
+}
+
+@mixin disabled-base {
+  color: #{token(disabled-text-color)};
+
+  cursor: not-allowed;
+}
+
+@mixin title-disabled {
+  color: #{token(disabled-text-color)};
+}
+
+@mixin subtitle-disabled {
+  color: #{token(disabled-text-color)};
+}
+
+@mixin forge-interactable() {
+  cursor: pointer;
+}
+
+@mixin icon-content-default-theme {
+  border-color: #{token(primary-color)};
+}
+
+@mixin icon-content-default-theme-index {
+  color: #{token(primary-color)};
+}
+
+@mixin icon-content() {
+  color: #{token(icon-text-color)};
+  background-color: #{token(icon-fill)};
+  height: #{token(icon-content-size)};
+  width: #{token(icon-content-size)};
+
+  border-style: solid;
+  border-width: 2px;
+  border-color: transparent;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color #{token(icon-transition-duration)} #{token(icon-transition-easing)};
+  margin: 0 8px 0 0;
+  flex: none;
+
+  forge-icon {
+    font-size: #{token(icon-size)};
+  }
+}
+
+@mixin icon-content-selected() {
+  @include override(icon-fill, icon-fill-active);
+  @include override(icon-text-color, icon-text-color-active);
+}
+
+@mixin icon-content-completed() {
+  @include icon-content-selected;
+}
+
+@mixin icon-content-error {
+  @include override(icon-fill, error-color);
+  @include override(icon-text-color, error-text-color);
+}
+
+@mixin icon-content-disabled {
+  @include override(icon-fill, disabled-color);
+  @include override(icon-text-color, disabled-text-color);
+}
+
+@mixin line() {
+  border-color: #{token(line-color)};
+
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-radius: 1px 0 0 1px;
+}
+
+@mixin step-line() {
+  border-color: #{token(line-color)};
+  min-width: #{token(line-min-width)};
+
+  content: '';
+  position: relative;
+  height: 0;
+  flex: 1;
+  flex-basis: 0.000000001px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-radius: 1px 0 0 1px;
+}
+
+@mixin text-container() {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-container-alternate {
+  margin-top: 8px;
+  place-items: center;
+}
+
+@mixin label {
+  @include typography.style(body1);
+
+  color: #{token(label-color)};
+
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin label-selected {
+  color: #{token(primary-color)};
+
+  font-weight: 500;
+}
+
+@mixin label-error {
+  color: #{token(error-color)};
+}
+
+@mixin optional-label {
+  color: #{token(sub-label-color)};
+
+  @include typography.style(label1);
+}
+
+@mixin optional-label-slot-wrapper {
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin optional-label-selected {
+  color: #{token(primary-color)};
+
+  font-weight: 500;
+}
+
+@mixin optional-label-error {
+  color: #{token(error-color)};
+}
+
+@mixin line-clustered {
+  @include override(line-min-width, line-min-width-clustered);
+}
+
+@mixin vertical-base {
+  @include override(border-radius, border-radius-vertical);
+
+  width: 100%;
+  min-height: 52px;
+}
+
+@mixin vertical-host {
+  flex-direction: column;
+}
+
+@mixin expansion-panel-styles {
+  border-color: #{token(line-color)};
+  margin-left: #{token(expansion-panel-margin-left)};
+  margin-top: #{token(expansion-panel-margin-top)};
+  margin-bottom: #{token(expansion-panel-margin-bottom)};
+  border-left-width: #{token(expansion-panel-border-left-width)};
+
+  border-left-style: solid;
+}
+
+@mixin forge-ignore-user-expansion {
+  .forge-step {
+    .expanded-icon {
+      display: none;
+    }
+  }
+}
+
+@mixin expandable-icon-base {
+  display: inline-block;
+  transition: transform 300ms ease-in-out;
+}
+
+@mixin expandable-icon-animation {
+  transform: rotate(180deg);
+}
+
+@mixin expandable-icon-content {
+  margin: 0 16px 0 0;
+}
+
+@mixin selected {
+  background-color: #{token(active-surface-color)};
+}
+
+@mixin background-selected {
+  background-color: #{token(primary-color)};
+
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  height: 100%;
+  width: 100%;
+}
+
+@mixin background-selected-error {
+  @include override(primary-color, error-color);
+}
+
+@mixin state-layer-active {
+  @include state-layer.provide-theme(
+    (
+      color: #{token(primary-color)}
+    )
+  );
+}
+
+@mixin state-layer-error {
+  @include state-layer.provide-theme(
+    (
+      color: #{token(error-color)}
+    )
+  );
+}
+
+@mixin focus-indicator-base {
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(primary-color)},
+      shape: 16px
+    )
+  );
+}
+
+@mixin focus-indicator-vertical {
+  @include focus-indicator.provide-theme(
+    (
+      shape: 4px
+    )
+  );
+}
+
+@mixin focus-indicator-error {
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(error-color)}
+    )
+  );
+}
+
+@mixin alternate {
+  flex-direction: column;
+}
+
+@mixin icon-content-alternate {
+  margin: 0;
+}
+
+@mixin psudo-line-begin-alternate {
+  align-self: flex-start;
+  top: 22px;
+  margin: 0;
+}
+
+@mixin psudo-line-end-alternate {
+  align-self: flex-start;
+  top: 22px;
+  margin: 0;
+}
+
+@mixin psudo-line-alternate {
+  align-self: flex-start;
+  top: 22px;
+  min-width: 7px;
+  margin: 0;
+}
+
+@mixin after-container-alternate {
+  align-self: flex-start;
+  top: 22px;
+  position: absolute;
+  width: calc(50% - 18px);
+  left: calc(50% + 18px);
+  height: 0;
+  right: 0;
+}
+
+@mixin before-container-alternate {
+  align-self: flex-start;
+  top: 22px;
+  position: absolute;
+  left: 0;
+  width: calc(50% - 18px);
+  height: 0;
+}
+
+@mixin psudo-line-start-inset {
+  margin: 0 -10px;
+}
+
+@mixin psudo-line-between-inset {
+  margin: 0 -10px;
+}
+
+@mixin psudo-line-end-inset {
+  margin: 0 -10px 0 0;
+}
+
+@mixin vertical-psudo-line {
+  content: none;
+}
+
+@mixin vertical-text-container {
+  white-space: normal;
+}
+
+@mixin vertical-icon-container-content {
+  margin: 0 16px 0 0;
+}
+
+@mixin veritcal-expansion-panel {
+  display: block;
+}
+
+@mixin expansion-panel-base {
+  display: none;
+}
+
+@mixin expansion-panel-icon {
+  color: #{token(expansion-panel-icon-color)};
+  display: none;
+  margin-left: auto;
+}

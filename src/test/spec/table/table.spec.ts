@@ -6,18 +6,18 @@ import {
   IColumnConfiguration,
   ITableAdapter,
   ITableComponent,
-  ITableFoundation,
+  ITableCore,
   ITableConfiguration,
   ITableFilterEventData,
   SortDirection,
-  TableFoundation,
+  TableCore,
   TableLayoutType,
   TABLE_CONSTANTS,
   ITableSortMultipleEventData,
   TableSelectTooltipCallback
 } from '@tylertech/forge/table';
 import { TextFieldComponentDelegate } from '@tylertech/forge/text-field';
-import { ITooltipComponent } from '@tylertech/forge';
+import { ICheckboxComponent, ITooltipComponent } from '@tylertech/forge';
 
 const columns: IColumnConfiguration[] = [
   { header: 'Name', property: 'Name' },
@@ -46,7 +46,7 @@ interface ITestContext {
 
 interface ITestTableContext {
   component: ITableComponent;
-  foundation: ITableFoundation;
+  core: ITableCore;
   getTableElement(): HTMLTableElement;
   destroy(): void;
   tooltipSelectCallback?: TableSelectTooltipCallback;
@@ -64,7 +64,7 @@ describe('TableComponent', function(this: ITestContext) {
   describe('with default property values', function(this: ITestContext) {
     it('should load with attribute values default in properly', function(this: ITestContext) {
       this.context = setupTestContext(true);
-      const tableFoundation = this.context.component['_foundation'];
+      const tableCore = this.context.component['_core'];
 
       expect(this.context.component.select).toBe(true, 'Expected select to be on');
       expect(this.context.component.multiselect).toBe(true, 'Expected multiselect to be on');
@@ -78,17 +78,17 @@ describe('TableComponent', function(this: ITestContext) {
       expect(this.context.component.minResizeWidth).toBe(10, 'Expected minResizeWidth to be 10');
       expect(this.context.component.allowRowClick).toBe(true, 'Expected allowRowClick to be on');
 
-      expect(tableFoundation['select']).toBe(true);
-      expect(tableFoundation['multiselect']).toBe(true);
-      expect(tableFoundation['selectKey']).toEqual(['Id']);
-      expect(tableFoundation['dense']).toBe(true);
-      expect(tableFoundation['filter']).toBe(true);
-      expect(tableFoundation['fixedHeaders']).toBe(true);
-      expect(tableFoundation['layoutType']).toBe('auto');
-      expect(tableFoundation['wrapContent']).toBe(true);
-      expect(tableFoundation['resizable']).toBe(true);
-      expect(tableFoundation['minResizeWidth']).toBe(10);
-      expect(tableFoundation['allowRowClick']).toBe(true);
+      expect(tableCore['select']).toBe(true);
+      expect(tableCore['multiselect']).toBe(true);
+      expect(tableCore['selectKey']).toEqual(['Id']);
+      expect(tableCore['dense']).toBe(true);
+      expect(tableCore['filter']).toBe(true);
+      expect(tableCore['fixedHeaders']).toBe(true);
+      expect(tableCore['layoutType']).toBe('auto');
+      expect(tableCore['wrapContent']).toBe(true);
+      expect(tableCore['resizable']).toBe(true);
+      expect(tableCore['minResizeWidth']).toBe(10);
+      expect(tableCore['allowRowClick']).toBe(true);
 
       expect(this.context.component.getAttribute(TABLE_CONSTANTS.attributes.SELECT)).toBe('true');
       expect(this.context.component.getAttribute(TABLE_CONSTANTS.attributes.MULTISELECT)).toBe('true');
@@ -119,7 +119,7 @@ describe('TableComponent', function(this: ITestContext) {
 
     it('should have proper default values', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableFoundation = this.context.component['_foundation'];
+      const tableCore = this.context.component['_core'];
 
       expect(this.context.component.data).toEqual([], 'Expected data to be empty');
       expect(this.context.component.columnConfigurations).toEqual([], 'Expect column configurations to be empty');
@@ -137,19 +137,19 @@ describe('TableComponent', function(this: ITestContext) {
       expect(this.context.component.minResizeWidth).toBe(100, 'Expected minResizeWidth to be 10');
       expect(this.context.component.allowRowClick).toBe(false, 'Expected allowRowClick to be on');
 
-      expect(tableFoundation['data']).toEqual([]);
-      expect(tableFoundation['columnConfigurations']).toEqual([]);
-      expect(tableFoundation['select']).toBe(false);
-      expect(tableFoundation['multiselect']).toBe(true);
-      expect(tableFoundation['selectKey']).toBeUndefined();
-      expect(tableFoundation['tooltipSelect']).toBeUndefined();
-      expect(tableFoundation['tooltipSelectAll']).toBeUndefined();
-      expect(tableFoundation['dense']).toBe(false);
-      expect(tableFoundation['filter']).toBe(false);
-      expect(tableFoundation['fixedHeaders']).toBe(false);
-      expect(tableFoundation['layoutType']).toBe('auto');
-      expect(tableFoundation['wrapContent']).toBe(true);
-      expect(tableFoundation['resizable']).toBe(false);
+      expect(tableCore['data']).toEqual([]);
+      expect(tableCore['columnConfigurations']).toEqual([]);
+      expect(tableCore['select']).toBe(false);
+      expect(tableCore['multiselect']).toBe(true);
+      expect(tableCore['selectKey']).toBeUndefined();
+      expect(tableCore['tooltipSelect']).toBeUndefined();
+      expect(tableCore['tooltipSelectAll']).toBeUndefined();
+      expect(tableCore['dense']).toBe(false);
+      expect(tableCore['filter']).toBe(false);
+      expect(tableCore['fixedHeaders']).toBe(false);
+      expect(tableCore['layoutType']).toBe('auto');
+      expect(tableCore['wrapContent']).toBe(true);
+      expect(tableCore['resizable']).toBe(false);
     });
     
     it('should have tooltip string', function(this: ITestContext) {
@@ -287,7 +287,7 @@ describe('TableComponent', function(this: ITestContext) {
 
       this.context.component.columnConfigurations = testColumns;
 
-      expect(this.context.foundation['_sortedColumnIndex']).withContext('sorted column index should account for hidden columns').toBe(1);
+      expect(this.context.core['_sortedColumnIndex']).withContext('sorted column index should account for hidden columns').toBe(1);
     });
 
     it('should not set data until columns are set', function(this: ITestContext) {
@@ -358,8 +358,8 @@ describe('TableComponent', function(this: ITestContext) {
       this.context.component.data = data;
       this.context.component.columnConfigurations = columns;
       this.context.component.multiselect = false;
-      const tableFoundation = this.context.component['_foundation'];
-      const tableConfig: ITableConfiguration = tableFoundation['_tableConfiguration'];
+      const tableCore = this.context.component['_core'];
+      const tableConfig: ITableConfiguration = tableCore['_tableConfiguration'];
       expect(tableConfig.selectAllListener).toBeNull();
     });
 
@@ -419,14 +419,14 @@ describe('TableComponent', function(this: ITestContext) {
 
     it('should reattach click listeners on data set', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableFoundation: TableFoundation = this.context.component['_foundation'];
-      const tableAdapter: ITableAdapter = tableFoundation['_adapter'];
+      const tableCore: TableCore = this.context.component['_core'];
+      const tableAdapter: ITableAdapter = tableCore['_adapter'];
       const recreateBodySpy = spyOn(tableAdapter, 'recreateTableBody');
       this.context.component.allowRowClick = true;
       this.context.component.data = data;
       this.context.component.columnConfigurations = columns;
       this.context.component.data = this.context.component.data = [data[0], data[1], data[2]];
-      expect(tableFoundation['_tableConfiguration'].clickListener).toBeDefined();
+      expect(tableCore['_tableConfiguration'].clickListener).toBeDefined();
       expect(recreateBodySpy.calls.count()).toBeGreaterThan(0);
     });
 
@@ -436,10 +436,10 @@ describe('TableComponent', function(this: ITestContext) {
       this.context.component.data = data;
       this.context.component.columnConfigurations = columns;
       this.context.component.select = true;
-      const tableFoundation = this.context.component['_foundation'];
+      const tableCore = this.context.component['_core'];
 
       const clickListener = jasmine.createSpy('callback');
-      const rowClickSpy = spyOn(tableFoundation, '_onRowClick').and.callThrough();
+      const rowClickSpy = spyOn(tableCore, '_onRowClick').and.callThrough();
       this.context.component.addEventListener(TABLE_CONSTANTS.events.ROW_CLICK, clickListener);
 
       const rows = getTableBodyRows(this.context.getTableElement());
@@ -461,10 +461,10 @@ describe('TableComponent', function(this: ITestContext) {
       this.context.component.allowRowClick = true;
       this.context.component.data = data;
       this.context.component.columnConfigurations = columns;
-      const tableFoundation = this.context.component['_foundation'];
+      const tableCore = this.context.component['_core'];
 
       const clickListener = jasmine.createSpy('callback');
-      const rowClickSpy = spyOn(tableFoundation, '_onRowClick').and.callThrough();
+      const rowClickSpy = spyOn(tableCore, '_onRowClick').and.callThrough();
       this.context.component.addEventListener(TABLE_CONSTANTS.events.ROW_CLICK, clickListener);
 
       await tick();
@@ -485,10 +485,10 @@ describe('TableComponent', function(this: ITestContext) {
       this.context.component.allowRowClick = true;
       this.context.component.data = data;
       this.context.component.columnConfigurations = columns;
-      const tableFoundation = this.context.component['_foundation'];
+      const tableCore = this.context.component['_core'];
 
       const clickListener = jasmine.createSpy('callback');
-      const rowClickSpy = spyOn(tableFoundation, '_onRowClick').and.callThrough();
+      const rowClickSpy = spyOn(tableCore, '_onRowClick').and.callThrough();
       this.context.component.addEventListener(TABLE_CONSTANTS.events.ROW_CLICK, clickListener);
 
       await tick();
@@ -505,10 +505,10 @@ describe('TableComponent', function(this: ITestContext) {
       this.context.component.data = data;
       this.context.component.columnConfigurations = columns;
       this.context.component.select = true;
-      const tableFoundation = this.context.component['_foundation'];
+      const tableCore = this.context.component['_core'];
 
       const dblclickListener = jasmine.createSpy('callback');
-      const rowClickSpy = spyOn(tableFoundation, '_onRowDoubleClick').and.callThrough();
+      const rowClickSpy = spyOn(tableCore, '_onRowDoubleClick').and.callThrough();
       this.context.component.addEventListener(TABLE_CONSTANTS.events.ROW_CLICK, dblclickListener);
 
       const rows = getTableBodyRows(this.context.getTableElement());
@@ -661,18 +661,18 @@ describe('TableComponent', function(this: ITestContext) {
       this.context.component.columnConfigurations = columns;
       this.context.component.select = true;
       this.context.component.selectKey = 'Id';
-      const tableFoundation = this.context.component['_foundation'];
+      const tableCore = this.context.component['_core'];
 
       const allButLastRows = data.filter((d, i) => i + 1 < data.length);
       this.context.component.selectRows([...allButLastRows], false);
 
       expect(this.context.component.getSelectedRows().length).toBeLessThan(data.length, `Expected selected rows to be ${data.length - 1}`);
-      expect(tableFoundation['_isAllSelected']).toBe(false);
+      expect(tableCore['_isAllSelected']).toBe(false);
 
       this.context.component.selectRows([data[data.length - 1]], true);
 
       expect(this.context.component.getSelectedRows().length).toEqual(data.length, `Expected selected rows to be ${data.length}`);
-      expect(tableFoundation['_isAllSelected']).toBe(true);
+      expect(tableCore['_isAllSelected']).toBe(true);
     });
 
     it('should not update select all state if a row selection completes all selected rows and multiselect is off', async function(this: ITestContext) {
@@ -681,7 +681,7 @@ describe('TableComponent', function(this: ITestContext) {
       this.context.component.columnConfigurations = columns;
       this.context.component.select = true;
       this.context.component.selectKey = 'Id';
-      const tableFoundation = this.context.component['_foundation'];
+      const tableCore = this.context.component['_core'];
 
       const allButLastRows = data.filter((d, i) => i + 1 < data.length);
       this.context.component.selectRows([...allButLastRows], false);
@@ -691,89 +691,89 @@ describe('TableComponent', function(this: ITestContext) {
       this.context.component.multiselect = false;
 
       expect(this.context.component.getSelectedRows().length).toBeLessThan(data.length, `Expected selected rows to be ${data.length - 1}`);
-      expect(tableFoundation['_isAllSelected']).toBe(false);
+      expect(tableCore['_isAllSelected']).toBe(false);
 
       await tick();
 
       this.context.component.selectRows([data[data.length - 1]], true);
 
       expect(this.context.component.getSelectedRows().length).toEqual(1, `Expected selected rows to be 1`);
-      expect(tableFoundation['_isAllSelected']).toBe(false);
+      expect(tableCore['_isAllSelected']).toBe(false);
     });
 
     it('should set layout type', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableFoundation: TableFoundation = this.context.component['_foundation'];
+      const tableCore: TableCore = this.context.component['_core'];
 
       this.context.component.layoutType = 'fixed' as TableLayoutType;
       this.context.component.render();
       expect(this.context.getTableElement().classList.contains(TABLE_CONSTANTS.classes.TABLE_LAYOUT_FIXED)).toBe(true, 'Expected table should have the layout fixed class');
-      expect(tableFoundation['_tableConfiguration'].layoutType).toBe('fixed', 'Expected table config layoutType should be fixed');
+      expect(tableCore['_tableConfiguration'].layoutType).toBe('fixed', 'Expected table config layoutType should be fixed');
 
       this.context.component.layoutType = 'auto' as TableLayoutType;
       this.context.component.render();
       expect(this.context.getTableElement().classList.contains(TABLE_CONSTANTS.classes.TABLE_LAYOUT_FIXED)).toBe(false, 'Expected table should not have the layout fixed class');
-      expect(tableFoundation['_tableConfiguration'].layoutType).toBe('auto', 'Expected table config layoutType should be auto');
+      expect(tableCore['_tableConfiguration'].layoutType).toBe('auto', 'Expected table config layoutType should be auto');
     });
  
     it('should set dense state', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableFoundation: TableFoundation = this.context.component['_foundation'];
+      const tableCore: TableCore = this.context.component['_core'];
       
       this.context.component.dense = true;
       this.context.component.render();
       expect(this.context.getTableElement().classList.contains(TABLE_CONSTANTS.classes.TABLE_DENSE)).toBe(true);
       expect(this.context.component.getAttribute(TABLE_CONSTANTS.attributes.DENSE)).toBe('true');
-      expect(tableFoundation['_tableConfiguration'].dense).toBe(true, 'Expected table config dense should be true');
+      expect(tableCore['_tableConfiguration'].dense).toBe(true, 'Expected table config dense should be true');
 
       this.context.component.dense = false;
       this.context.component.render();
       expect(this.context.getTableElement().classList.contains(TABLE_CONSTANTS.classes.TABLE_DENSE)).toBe(false);
       expect(this.context.component.getAttribute(TABLE_CONSTANTS.attributes.DENSE)).toBe('false');
-      expect(tableFoundation['_tableConfiguration'].dense).toBe(false, 'Expected table config dense should be false');
+      expect(tableCore['_tableConfiguration'].dense).toBe(false, 'Expected table config dense should be false');
     });
 
     it('should set resizable', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableFoundation: TableFoundation = this.context.component['_foundation'];
+      const tableCore: TableCore = this.context.component['_core'];
 
       this.context.component.resizable = false;
       this.context.component.render();
       expect(this.context.getTableElement().classList.contains(TABLE_CONSTANTS.classes.TABLE_RESIZABLE)).toBe(false);
-      expect(tableFoundation['_tableConfiguration'].resizable).toBe(false, 'Expected table config resizable should be false');
+      expect(tableCore['_tableConfiguration'].resizable).toBe(false, 'Expected table config resizable should be false');
       this.context.component.resizable = true;
       this.context.component.render();
       expect(this.context.getTableElement().classList.contains(TABLE_CONSTANTS.classes.TABLE_RESIZABLE)).toBe(true);
-      expect(tableFoundation['_tableConfiguration'].resizable).toBe(true, 'Expected table config resizable should be true');
+      expect(tableCore['_tableConfiguration'].resizable).toBe(true, 'Expected table config resizable should be true');
     });
 
     it('should set fixed headers state', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableFoundation: TableFoundation = this.context.component['_foundation'];   
+      const tableCore: TableCore = this.context.component['_core'];   
     
       this.context.component.fixedHeaders = false;
       this.context.component.render();
       expect(this.context.getTableElement().classList.contains(TABLE_CONSTANTS.classes.TABLE_FIXED)).toBe(false);
-      expect(tableFoundation['_tableConfiguration'].fixedHeaders).toBe(false, 'Expected table config fixedHeaders should be false');
+      expect(tableCore['_tableConfiguration'].fixedHeaders).toBe(false, 'Expected table config fixedHeaders should be false');
 
       this.context.component.fixedHeaders = true;
       this.context.component.render();
       expect(this.context.getTableElement().classList.contains(TABLE_CONSTANTS.classes.TABLE_FIXED)).toBe(true);
-      expect(tableFoundation['_tableConfiguration'].fixedHeaders).toBe(true, 'Expected table config fixedHeaders should be true');
+      expect(tableCore['_tableConfiguration'].fixedHeaders).toBe(true, 'Expected table config fixedHeaders should be true');
     });
 
     it('should set wrap content', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableFoundation: TableFoundation = this.context.component['_foundation'];
+      const tableCore: TableCore = this.context.component['_core'];
 
       this.context.component.wrapContent = true;
       this.context.component.render();
       expect(this.context.getTableElement().classList.contains(TABLE_CONSTANTS.classes.TABLE_NO_WRAP_CONTENT)).toBe(false);
-      expect(tableFoundation['_tableConfiguration'].wrapContent).toBe(true, 'Expected table config fixedHeaders should be true');
+      expect(tableCore['_tableConfiguration'].wrapContent).toBe(true, 'Expected table config fixedHeaders should be true');
       this.context.component.wrapContent = false;
       this.context.component.render();
       expect(this.context.getTableElement().classList.contains(TABLE_CONSTANTS.classes.TABLE_NO_WRAP_CONTENT)).toBe(true);
-      expect(tableFoundation['_tableConfiguration'].wrapContent).toBe(false, 'Expected table config fixedHeaders should be false');
+      expect(tableCore['_tableConfiguration'].wrapContent).toBe(false, 'Expected table config fixedHeaders should be false');
     });
 
     it('should set min resize width state', function(this: ITestContext) {
@@ -796,16 +796,16 @@ describe('TableComponent', function(this: ITestContext) {
 
     it('should set filter', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableFoundation: TableFoundation = this.context.component['_foundation'];
+      const tableCore: TableCore = this.context.component['_core'];
 
       this.context.component.filter = true;
       this.context.component.render();
       expect(this.context.getTableElement().classList.contains(TABLE_CONSTANTS.classes.TABLE_FILTER_VISIBLE)).toBe(true);
-      expect(tableFoundation['_tableConfiguration'].filter).toBe(true, 'Expected table config filter should be true');
+      expect(tableCore['_tableConfiguration'].filter).toBe(true, 'Expected table config filter should be true');
       this.context.component.filter = false;
       this.context.component.render();
       expect(this.context.getTableElement().classList.contains(TABLE_CONSTANTS.classes.TABLE_FILTER_VISIBLE)).toBe(false);
-      expect(tableFoundation['_tableConfiguration'].filter).toBe(false, 'Expected table config filter should be false');
+      expect(tableCore['_tableConfiguration'].filter).toBe(false, 'Expected table config filter should be false');
     });
 
     it('should set allow row click', function(this: ITestContext) {
@@ -1241,14 +1241,14 @@ describe('TableComponent', function(this: ITestContext) {
       testColumns[1].sortable = true;
 
       this.context.component.columnConfigurations = testColumns;
-      const tableFoundation = this.context.component['_foundation'];
+      const tableCore = this.context.component['_core'];
       const headerRow = getTableHeaderRow(this.context.getTableElement());
       const firstCell = headerRow.cells.item(0) as HTMLTableCellElement;
 
       clickTableCell(firstCell);
-      expect(tableFoundation['_sortedColumnIndex']).toBeGreaterThan(-1);
+      expect(tableCore['_sortedColumnIndex']).toBeGreaterThan(-1);
       this.context.component.hideColumn(0);
-      expect(tableFoundation['_sortedColumnIndex']).toBe(-1);
+      expect(tableCore['_sortedColumnIndex']).toBe(-1);
     });
 
     it('should not create column config if config alreaady exist on column hide', function(this: ITestContext) {
@@ -1258,13 +1258,13 @@ describe('TableComponent', function(this: ITestContext) {
       testColumns[1].sortable = true;
 
       this.context.component.columnConfigurations = testColumns;
-      const tableFoundation = this.context.component['_foundation'];
+      const tableCore = this.context.component['_core'];
 
-      expect(tableFoundation['_hiddenColumnManager'].count()).toEqual(0);
+      expect(tableCore['_hiddenColumnManager'].count()).toEqual(0);
       this.context.component.hideColumn(0);
-      expect(tableFoundation['_hiddenColumnManager'].count()).toEqual(1);
+      expect(tableCore['_hiddenColumnManager'].count()).toEqual(1);
       this.context.component.hideColumn(0);
-      expect(tableFoundation['_hiddenColumnManager'].count()).toEqual(1);
+      expect(tableCore['_hiddenColumnManager'].count()).toEqual(1);
     });
 
     it('should show column', function(this: ITestContext) {
@@ -1287,14 +1287,14 @@ describe('TableComponent', function(this: ITestContext) {
       testColumns[1].sortable = true;
 
       this.context.component.columnConfigurations = testColumns;
-      const tableFoundation = this.context.component['_foundation'];
+      const tableCore = this.context.component['_core'];
 
       this.context.component.hideColumn(0);
-      expect(tableFoundation['_hiddenColumnManager'].count()).toEqual(1);
+      expect(tableCore['_hiddenColumnManager'].count()).toEqual(1);
       this.context.component.showColumn(0);
-      expect(tableFoundation['_hiddenColumnManager'].count()).toEqual(0);
+      expect(tableCore['_hiddenColumnManager'].count()).toEqual(0);
       this.context.component.showColumn(0);
-      expect(tableFoundation['_hiddenColumnManager'].count()).toEqual(0);
+      expect(tableCore['_hiddenColumnManager'].count()).toEqual(0);
     });
 
     it('should get selected rows', function(this: ITestContext) {
@@ -1315,8 +1315,8 @@ describe('TableComponent', function(this: ITestContext) {
       this.context.component.columnConfigurations = columns;
       this.context.component.select = true;
       this.context.component.selectKey = 'Id';
-      // let tableFoundation = this.context.component['_foundation'];
-      // let tableAdapter = tableFoundation['_adapter'] as TableAdapter;
+      // let tableCore = this.context.component['_core'];
+      // let tableAdapter = tableCore['_adapter'] as TableAdapter;
 
       // await tick();
 
@@ -1409,13 +1409,13 @@ describe('TableComponent', function(this: ITestContext) {
 
     it('should not collapse an expanded row if the table has not rendered', async function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableFoundation = this.context.component['_foundation'];
-      expect(tableFoundation['_rendered']).toBe(false);
+      const tableCore = this.context.component['_core'];
+      expect(tableCore['_rendered']).toBe(false);
       let resolved = false;
       this.context.component.collapseRow(0).then(() => (resolved = true));
 
       await tick();
-      expect(tableFoundation['_rendered']).toBe(false);
+      expect(tableCore['_rendered']).toBe(false);
       expect(resolved).toBe(true);
     });
 
@@ -1656,7 +1656,7 @@ describe('TableComponent', function(this: ITestContext) {
       this.context.component.resizable = true;
       this.context.component.columnConfigurations = resizableColumns;
       this.context.component.data = data;
-      const tableFoundation = this.context.component['_foundation'];
+      const tableCore = this.context.component['_core'];
 
       const firstCell = getTableHeaderRow(this.context.getTableElement()).cells.item(0) as HTMLTableCellElement;
       let resizeHandle = getTableResizeHandle(this.context.getTableElement());
@@ -1675,7 +1675,7 @@ describe('TableComponent', function(this: ITestContext) {
       this.context.component.resizable = true;
       this.context.component.columnConfigurations = resizableColumns;
       this.context.component.data = data;
-      const tableFoundation = this.context.component['_foundation'];
+      const tableCore = this.context.component['_core'];
 
       const firstCell = getTableHeaderRow(this.context.getTableElement()).cells.item(0) as HTMLTableCellElement;
       const resizeHandle = getTableResizeHandle(this.context.getTableElement());
@@ -1685,9 +1685,9 @@ describe('TableComponent', function(this: ITestContext) {
       await timer(TABLE_CONSTANTS.numbers.RESIZE_HOVER_DURATION);
 
       expect(resizeHandle.classList.contains(TABLE_CONSTANTS.classes.TABLE_RESIZE_HANDLE)).toBe(true, 'Expected table resize handle to have css class');
-      const mousedownSpy = spyOn(tableFoundation, '_onHeadRowMouseDown').and.callThrough();
-      const mousemoveSpy = spyOn(tableFoundation, '_onMouseMove').and.callThrough();
-      const mouseupSpy = spyOn(tableFoundation, '_onMouseUp').and.callThrough();
+      const mousedownSpy = spyOn(tableCore, '_onHeadRowMouseDown').and.callThrough();
+      const mousemoveSpy = spyOn(tableCore, '_onMouseMove').and.callThrough();
+      const mouseupSpy = spyOn(tableCore, '_onMouseUp').and.callThrough();
       resizeHandle.dispatchEvent(
         new MouseEvent('mousedown', {
           clientX: firstCell.clientWidth,
@@ -1782,11 +1782,11 @@ describe('TableComponent', function(this: ITestContext) {
       await timer(TABLE_CONSTANTS.numbers.RESIZE_HOVER_DURATION);
 
       const { width, left } = firstCell.getBoundingClientRect();
-      const newWidth = left + width - 14;
+      const newWidth = left + width + 20;
 
       resizeHandle.dispatchEvent(
         new MouseEvent('mousedown', {
-          clientX: left + width - 4,
+          clientX: left + width - 10,
           clientY: 0,
           bubbles: true
         } as any)
@@ -2175,7 +2175,7 @@ describe('TableComponent', function(this: ITestContext) {
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
         const checkbox = selectAllCell.querySelector('input') as HTMLInputElement;
-        const rowCheckbox = this.context.getTableElement().querySelector('tbody > tr > td input');
+        const rowCheckbox = this.context.getTableElement().querySelector('tbody > tr > td forge-checkbox');
         rowCheckbox!.dispatchEvent(new MouseEvent('click'));
         // this.context.component.selectRows([data[1]], true);
         await tick();
@@ -2196,7 +2196,7 @@ describe('TableComponent', function(this: ITestContext) {
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
         const checkbox = selectAllCell.querySelector('input') as HTMLInputElement;
-        const rowCheckboxs = this.context.getTableElement().querySelectorAll('tbody input');
+        const rowCheckboxs = this.context.getTableElement().querySelectorAll('tbody forge-checkbox');
         rowCheckboxs.forEach(c => {
           c.dispatchEvent(new MouseEvent('click'));
         });
@@ -2219,7 +2219,7 @@ describe('TableComponent', function(this: ITestContext) {
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
         const checkbox = selectAllCell.querySelector('input') as HTMLInputElement;
-        const rowCheckboxs = this.context.getTableElement().querySelectorAll('tbody input');
+        const rowCheckboxs = this.context.getTableElement().querySelectorAll('tbody forge-checkbox');
         rowCheckboxs.forEach(c => {
           c.dispatchEvent(new MouseEvent('click'));
         });
@@ -2333,7 +2333,7 @@ function setupTestContext(hasAttrs = false, hasChildren = false): ITestTableCont
   document.body.appendChild(fixture);
   return {
     component,
-    foundation: component['_foundation'] as ITableFoundation,
+    core: component['_core'] as ITableCore,
     getTableElement: () => component.querySelector('table') as HTMLTableElement,
     destroy: () => removeElement(fixture)
   };
@@ -2351,7 +2351,7 @@ function setupTooltipTestContextWithString(): ITestTableContext {
   document.body.appendChild(fixture);
   return {
     component,
-    foundation: component['_foundation'] as ITableFoundation,
+    core: component['_core'] as ITableCore,
     getTableElement: () => component.querySelector('table') as HTMLTableElement,
     destroy: () => removeElement(fixture)
   };
@@ -2370,7 +2370,7 @@ function setupTooltipTestContextWithCallback(): ITestTableContext {
   document.body.appendChild(fixture);
   return {
     component,
-    foundation: component['_foundation'] as ITableFoundation,
+    core: component['_core'] as ITableCore,
     getTableElement: () => component.querySelector('table') as HTMLTableElement,
     destroy: () => removeElement(fixture),
     tooltipSelectCallback

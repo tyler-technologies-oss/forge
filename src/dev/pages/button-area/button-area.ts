@@ -1,6 +1,8 @@
-import { IButtonAreaComponent, IExpansionPanelComponent, ISwitchComponent, IconRegistry } from '@tylertech/forge';
 import { tylIconChevronRight, tylIconFavorite } from '@tylertech/tyler-icons/standard';
-
+import { IButtonAreaComponent } from '@tylertech/forge/button-area';
+import { IExpansionPanelComponent } from '@tylertech/forge/expansion-panel';
+import { IconRegistry } from '@tylertech/forge/icon';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 import '$src/shared';
 import '@tylertech/forge/button-area';
 import './button-area.scss';
@@ -22,7 +24,7 @@ expansionPanel.addEventListener('forge-expansion-panel-toggle', (event: CustomEv
 
 
 const disabledToggle = document.querySelector('#disabled-switch') as ISwitchComponent;
-disabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   buttonArea.disabled = selected;
   expansionPanelButtonArea.disabled = selected;
 });

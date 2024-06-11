@@ -1,0 +1,33 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as TabsStories from './Tabs.stories';
+
+<Meta of={TabsStories} />
+
+<Title />
+
+Tabs are used to quickly navigate between different views, and group related content any level of hierarchy. They may be used as primary
+or secondary navigation within a page.
+
+<Canvas of={TabsStories.Demo} />
+
+## Secondary
+
+Secondary tabs are used within the main content of your page.
+
+<Canvas of={TabsStories.Secondary} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+- Ensure each control can be updated or activated by the keyboard.
+- Ensure that only the selected tab content is reachable by keyboard.
+
+It's expected that you will need to provide the `tablist` and `tabpanel` roles to your elements to indicate to assistive technologies
+which elements are responsible for the tabs and tab content respectively. Each tab should contain an `aria-controls` property identifying
+its corresponding tab content. In addition, each tab content element should be labelled by a tab. These elements need to be wrapped in an
+element containing a `tablist` role:

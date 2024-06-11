@@ -1,63 +1,33 @@
 import '$src/shared';
 import '@tylertech/forge/bottom-sheet';
-import { IBottomSheetComponent } from '@tylertech/forge/bottom-sheet';
+import { BOTTOM_SHEET_CONSTANTS, IBottomSheetComponent } from '@tylertech/forge/bottom-sheet';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
-import '@tylertech/forge/dialog/forge-dialog-utils.scss';
 import './bottom-sheet.scss';
 
+const standardBottomSheet = document.getElementById('standard-bottom-sheet') as IBottomSheetComponent;
 const showStandardButton = document.getElementById('show-standard-bottom-sheet-button');
-showStandardButton.addEventListener('click', () => openStandardBottomSheet());
+showStandardButton.addEventListener('click', () => standardBottomSheet.open = !standardBottomSheet.open);
 
-const showStandardScrollableSheet = document.getElementById('show-standard-scrollable-sheet-button');
-showStandardScrollableSheet.addEventListener('click', () => openScrollableBottomSheet());
+const scrollableBottomSheet = document.getElementById('scrollable-bottom-sheet') as IBottomSheetComponent;
+const showStandardScrollableSheet = document.getElementById('show-scrollable-bottom-sheet-button');
+showStandardScrollableSheet.addEventListener('click', () => scrollableBottomSheet.open = true);
 
-const scrollablelBottomSheetTemplate = document.getElementById('forge-scrollable-bottom-sheet-template') as HTMLTemplateElement;
-const standardBottomSheetTemplate = document.getElementById('forge-standard-bottom-sheet-template') as HTMLTemplateElement;
+const standardCloseButton = standardBottomSheet.querySelector('#standard-close-button');
+standardCloseButton.addEventListener('click', () => standardBottomSheet.open = false);
 
-function openScrollableBottomSheet(): void {
-  const bottomSheetElement = document.createElement('forge-bottom-sheet');
-  bottomSheetElement.showBackdrop = true;
+const scrollableCloseButton = scrollableBottomSheet.querySelector('#scrollable-close-button');
+scrollableCloseButton.addEventListener('click', () =>  scrollableBottomSheet.open = false);
 
-  const content = scrollablelBottomSheetTemplate.content.cloneNode(true);
-  bottomSheetElement.appendChild(content);
-
-  bottomSheetElement.addEventListener('forge-bottom-sheet-close', (evt) => {
-    console.log('close', evt);
-  });
-
-  // Handle the accept button being clicked	  
-  const acceptButton = bottomSheetElement.querySelector('#accept-button');
-  acceptButton.addEventListener('click', () => {
-    console.log('[bottom-sheet] Accept button clicked');
-    bottomSheetElement.open = false;
-  });
-
-  // bottomSheetElement.beforeCloseCallback = () => false;
-
-  // Handle the cancel button being clicked
-  const cancelButton = bottomSheetElement.querySelector('#cancel-button');
-  cancelButton.addEventListener('click', () => bottomSheetElement.open = false);
-
-  // Shows the bottom sheet by appending it to the body and starting its animations
-  bottomSheetElement.open = true;
-}
-
-const events = [`forge-bottom-sheet-before-close`, `forge-bottom-sheet-close`, `forge-bottom-sheet-open`, `forge-bottom-sheet-ready`];
+const events = [
+  BOTTOM_SHEET_CONSTANTS.events.BEFORE_CLOSE,
+  BOTTOM_SHEET_CONSTANTS.events.CLOSE,
+  BOTTOM_SHEET_CONSTANTS.events.OPEN,
+  BOTTOM_SHEET_CONSTANTS.events.READY
+];
 
 function logEvents(bottomSheet: IBottomSheetComponent): void {
-  events.forEach(eventType => bottomSheet.addEventListener(eventType, console.log));
+  events.forEach(type => bottomSheet.addEventListener(type, console.log));
 }
 
-function openStandardBottomSheet(): void {
-  const bottomSheetElement = document.createElement('forge-bottom-sheet');
-
-  const content = standardBottomSheetTemplate.content.cloneNode(true);
-  bottomSheetElement.appendChild(content);
-  logEvents(bottomSheetElement);
-
-  const closeButton = bottomSheetElement.querySelector('#close-button');
-  closeButton.addEventListener('click', () => bottomSheetElement.open = false);
-
-  bottomSheetElement.open = true;
-}
+logEvents(standardBottomSheet);
+logEvents(scrollableBottomSheet);

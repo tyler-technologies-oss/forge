@@ -2,7 +2,18 @@
 include('./src/partials/page.ejs', {
   page: {
     title: 'Slider',
-    includePath: './pages/slider/slider.ejs'
+    includePath: './pages/slider/slider.ejs',
+    options: [
+      { type: 'text-field', inputType: 'number', label: 'Min', id: 'slider-min', defaultValue: 0 },
+      { type: 'text-field', inputType: 'number', label: 'Max', id: 'slider-max', defaultValue: 100 },
+      { type: 'text-field', inputType: 'number', label: 'Step', id: 'slider-step', defaultValue: 1 },
+      { type: 'switch', label: 'Range', id: 'slider-range' },
+      { type: 'switch', label: 'Tickmarks', id: 'slider-tickmarks' },
+      { type: 'switch', label: 'Disabled', id: 'slider-disabled' },
+      { type: 'switch', label: 'Readonly', id: 'slider-readonly' },
+      { type: 'switch', label: 'Labeled', id: 'slider-labeled', defaultValue: true },
+      { type: 'switch', label: 'Label builder', id: 'slider-label-builder' }
+    ]
   }
 })
 %>

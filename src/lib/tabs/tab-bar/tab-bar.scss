@@ -1,14 +1,109 @@
-@use './mixins';
-@use '../../icon-button/forge-icon-button';
-@use '@material/tab-scroller/mdc-tab-scroller';
+@use './core' as *;
+@use '../../icon-button';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
+//
+// Base styles
+//
+
+.forge-tab-bar {
+  @include tokens;
+}
+
+.forge-tab-bar {
+  @include container;
+}
+
+.scroll-container {
+  @include base;
+}
+
+::slotted(*) {
+  @include slotted-base;
+}
+
+::slotted([selected]) {
+  @include slotted-selected;
+}
+
+forge-icon-button {
+  @include icon-button.provide-theme(
+    (
+      shape-squared: 0px // Requires unit
+    )
+  );
+}
+
+//
+// Vertical
+//
+
+:host([vertical]) {
+  .forge-tab-bar {
+    @include container-vertical;
+  }
+
+  .scroll-container {
+    @include vertical;
+  }
+
+  .scroll-button {
+    @include vertical-scroll-button;
+  }
+}
+
+//
+// Inverted
+//
+
+:host([inverted]:not([vertical])) {
+  .forge-tab-bar {
+    @include inverted;
+  }
+}
+
+:host([inverted][vertical]) {
+  .forge-tab-bar {
+    @include vertical-inverted;
+  }
+}
+
+//
+// Clustered
+//
+
+:host([clustered]) {
+  .forge-tab-bar {
+    @include override(justify, flex-start, value);
+    @include override(stretch, 0, value);
+  }
+}
+
+:host([clustered='start']) {
+  .forge-tab-bar {
+    @include override(justify, flex-start, value);
+  }
+}
+
+:host([clustered='center']) {
+  .forge-tab-bar {
+    @include override(justify, center, value);
+  }
+}
+
+:host([clustered='end']) {
+  .forge-tab-bar {
+    @include override(justify, flex-end, value);
+  }
+}

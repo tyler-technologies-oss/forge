@@ -4,7 +4,7 @@ import { KeyboardShortcutComponent } from './keyboard-shortcut';
 
 export * from './keyboard-shortcut-adapter';
 export * from './keyboard-shortcut-constants';
-export * from './keyboard-shortcut-foundation';
+export * from './keyboard-shortcut-core';
 export * from './keyboard-shortcut-utils';
 export * from './keyboard-shortcut';
 

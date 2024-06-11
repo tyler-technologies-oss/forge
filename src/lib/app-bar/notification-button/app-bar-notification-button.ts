@@ -1,4 +1,4 @@
-import { attachLightTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachLightTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconNotifications } from '@tylertech/tyler-icons/standard';
 import { BadgeComponent } from '../../badge';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
@@ -7,7 +7,7 @@ import { IconButtonComponent } from '../../icon-button';
 import { TooltipComponent } from '../../tooltip';
 import { AppBarNotificationButtonAdapter } from './app-bar-notification-button-adapter';
 import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants';
-import { AppBarNotificationButtonFoundation } from './app-bar-notification-button-foundation';
+import { AppBarNotificationButtonCore } from './app-bar-notification-button-core';
 
 import template from './app-bar-notification-button.html';
 
@@ -25,18 +25,25 @@ export interface IAppBarNotificationButtonComponent extends IBaseComponent {
   icon: string;
 }
 /**
- * The web component class behind the `<forge-app-bar-notification-button>` custom element.
- * 
  * @tag forge-app-bar-notification-button
+ *
+ * @property {number | string} [count = 0] - The number to display in the badge.
+ * @property {boolean} [dot = false] - Whether to display the dot variant of the badge or not.
+ * @property {boolean} [showBadge = false] - Whether to display the badge or not.
+ * @property {string} [theme = ""] - The theme to apply to the badge.
+ * @property {string} [icon = notifications] - The name of an alternative icon to display.
+ *
+ * @attribute {string} [count = 0] - The number to display in the badge.
+ * @attribute {boolean} [dot = false] - Whether to display the dot variant of the badge or not.
+ * @attribute {boolean} [show-badge = false] - Whether to display the badge or not.
+ * @attribute {string} [theme = ""] - The theme to apply to the badge.
+ * @attribute {string} [icon = notifications] - The name of an alternative icon to display.
+ * @attribute {string} [aria-label] - The aria-label to apply to the button.
+ * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
  */
-@CustomElement({
+@customElement({
   name: APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.elementName,
-  dependencies: [
-    IconButtonComponent,
-    TooltipComponent,
-    BadgeComponent,
-    IconComponent
-  ]
+  dependencies: [IconButtonComponent, TooltipComponent, BadgeComponent, IconComponent]
 })
 export class AppBarNotificationButtonComponent extends BaseComponent implements IAppBarNotificationButtonComponent {
   public static get observedAttributes(): string[] {
@@ -49,12 +56,12 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
     ];
   }
 
-  private _foundation: AppBarNotificationButtonFoundation;
+  private _core: AppBarNotificationButtonCore;
 
   constructor() {
     super();
     IconRegistry.define(tylIconNotifications);
-    this._foundation = new AppBarNotificationButtonFoundation(new AppBarNotificationButtonAdapter(this));
+    this._core = new AppBarNotificationButtonCore(new AppBarNotificationButtonAdapter(this));
   }
 
   public initializedCallback(): void {
@@ -62,7 +69,11 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
+  }
+
+  public disconnectedCallback(): void {
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -85,18 +96,18 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare count: string | number | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dot: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare icon: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare showBadge: boolean;
 }

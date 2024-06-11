@@ -1,50 +1,38 @@
 <div class="vert demo">
-  <forge-button type="raised" id="show-standard-bottom-sheet-button">
-    <button type="button">Show standard bottom sheet</button>
-  </forge-button>
-
-  <forge-button type="raised" id="show-standard-scrollable-sheet-button">
-    <button type="button">Show scrollable bottom sheet</button>
-  </forge-button>
-</div>
-
-<forge-drawer id="side-sheet" direction="right" open="false"></forge-drawer>
-
-<!-- Standard template-->
-<template id="forge-standard-bottom-sheet-template">
-  <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px;">
-    Standard bottom sheet
-    <forge-button type="outlined">
-      <button type="button" id="close-button">Close</button>
-    </forge-button>
+  <div>
+    <forge-button variant="raised" id="show-standard-bottom-sheet-button">Show standard bottom sheet</forge-button>
+    <forge-button variant="raised" id="show-scrollable-bottom-sheet-button">Show scrollable bottom sheet</forge-button>
   </div>
-</template>
 
-<!-- Scrollable template-->
-<template id="forge-scrollable-bottom-sheet-template">
-  <header class="forge-dialog__header" forge-dialog-move-target>
-    <h2 class="forge-dialog__title">Modal bottom sheet</h2>
-  </header>
-  <section class="forge-dialog__body" forge-bottom-sheet-body>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
-  </section>
-  <footer class="forge-dialog__footer">
-    <forge-button type="outlined">
-      <button type="button" id="cancel-button">Disagree</button>
-    </forge-button>
-    <forge-button type="raised">
-      <button type="button" id="accept-button" forge-bottom-sheet-focus>Agree</button>
-    </forge-button>
-  </footer>
-</template>
+  <forge-bottom-sheet id="standard-bottom-sheet">
+    <div class="standard-bottom-sheet-content">
+      Standard bottom sheet
+      <forge-button variant="outlined" id="standard-close-button">Close</forge-button>
+    </div>
+  </forge-bottom-sheet>
+
+  <forge-bottom-sheet mode="modal" id="scrollable-bottom-sheet" aria-labelledby="scrollable-bottom-sheet-title" aria-describedby="scrollable-bottom-sheet-message">
+    <forge-scaffold>
+      <forge-toolbar no-border slot="header" forge-dialog-move-target>
+        <h1 slot="start" id="scrollable-bottom-sheet-title" class="forge-typography--heading4">Modal bottom sheet</h1>
+      </forge-toolbar>
+      <section slot="body" class="scrollable-body" id="scrollable-bottom-sheet-message" forge-bottom-sheet-body>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia deleniti id sint recusandae minus ullam aliquam voluptatibus sunt consequuntur, ab laborum nesciunt enim dolorem! Quas corrupti itaque est accusantium rerum.</p>
+      </section>
+      <forge-toolbar no-border slot="footer">
+        <forge-button slot="end" variant="raised" id="scrollable-close-button" autofocus>Close</forge-button>
+      </forge-toolbar>
+    </forge-scaffold>
+  </forge-bottom-sheet>
+</div>
 
 <script type="module" src="bottom-sheet.ts"></script>

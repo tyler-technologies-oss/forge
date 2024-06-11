@@ -1,8 +1,8 @@
-import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean, coerceNumber } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumber } from '@tylertech/forge-core';
 
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { SplitViewAdapter } from './split-view-adapter';
-import { SplitViewFoundation } from './split-view-foundation';
+import { SplitViewCore } from './split-view-core';
 import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
 import { ISplitViewPanelComponent, SplitViewPanelComponent } from '../split-view-panel';
 import { ISplitViewBase } from '../core/split-view-base';
@@ -25,15 +25,11 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-split-view>` element.
- * 
  * @tag forge-split-view
  */
-@CustomElement({
+@customElement({
   name: SPLIT_VIEW_CONSTANTS.elementName,
-  dependencies: [
-    SplitViewPanelComponent
-  ]
+  dependencies: [SplitViewPanelComponent]
 })
 export class SplitViewComponent extends BaseComponent implements ISplitViewComponent {
   public static get observedAttributes(): string[] {
@@ -46,20 +42,20 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
     ];
   }
 
-  private _foundation: SplitViewFoundation;
+  private _core: SplitViewCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new SplitViewFoundation(new SplitViewAdapter(this));
+    this._core = new SplitViewCore(new SplitViewAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -84,32 +80,42 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
 
   /**
    * Whether child split view panels are laid out and resize horizontally or vertically.
+   * @attribute
+   * @default "horizontal"
    */
-  @FoundationProperty()
+  @coreProperty()
   public orientation: SplitViewOrientation;
 
   /**
    * Whether child split view panels have resize interactions disabled or enabled.
+   * @attribute
+   * @default false
    */
-  @FoundationProperty()
+  @coreProperty()
   public disabled: boolean;
 
   /**
    * Whether child split view panels can be closed via keyboard interaction.
+   * @attribute allow-close
+   * @default false
    */
-  @FoundationProperty()
+  @coreProperty()
   public allowClose: boolean;
 
   /**
    * Whether child split view panels automatically close when they reach a size of 0.
+   * @attribute auto-close
+   * @default false
    */
-  @FoundationProperty()
+  @coreProperty()
   public autoClose: boolean;
 
   /**
    * The size at which panels auto close.
+   * @attribute auto-close-threshold
+   * @default 0
    */
-  @FoundationProperty()
+  @coreProperty()
   public autoCloseThreshold: number;
 
   /**
@@ -117,14 +123,14 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
    * @param target The originating split view panel component.
    */
   public layerSlottedPanels(target: ISplitViewPanelComponent): void {
-    this._foundation.layerSlottedPanels(target);
+    this._core.layerSlottedPanels(target);
   }
 
   /**
    * Removes presentation data set during an animation.
    */
   public unlayerSlottedPanels(): void {
-    this._foundation.unlayerSlottedPanels();
+    this._core.unlayerSlottedPanels();
   }
 
   /**
@@ -132,13 +138,13 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
    * @param config An update configuration.
    */
   public update(config: ISplitViewUpdateConfig): void {
-    this._foundation.update(config);
+    this._core.update(config);
   }
 
   /**
    * Resizes panels within the split view to avoid overflow.
    */
   public refit(): void {
-    this._foundation.refitSlottedPanels();
+    this._core.refitSlottedPanels();
   }
 }

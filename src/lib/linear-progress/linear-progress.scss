@@ -1,35 +1,157 @@
-@use '@material/linear-progress/mdc-linear-progress';
-@use '@material/linear-progress/mixins' as mdc-linear-progress-mixins;
-@use '../theme';
-@use './variables';
+@use '../core/styles/theme';
+@use './animations';
+@use './core' as *;
+
+//
+// Host styles
+//
+
+$_host-tokens: [track-height];
 
 :host {
-  display: block;
+  @include tokens($includes: $_host-tokens);
+}
+
+:host {
+  @include container;
 }
 
 :host([hidden]) {
   display: none;
 }
 
+//
+// Base
+//
 
-///
-/// Custom Tyler theming below
-///
+.forge-linear-progress {
+  @include tokens($excludes: $_host-tokens);
 
-@include mdc-linear-progress-mixins.buffer-color(variables.$buffer-color);
+  // State vars
+  #{declare(track-dot-size)}: calc(#{token(track-height)} / 2);
+  #{declare(track-background-width)}: calc(#{token(track-dot-size, custom)} * 5);
+  #{declare(track-background)}: 0 / #{token(track-background-width, custom)} 100% radial-gradient(circle at calc(#{token(track-dot-size, custom)} * 2), #{token(
+          track-color
+        )} 0, #{token(track-color)} #{token(track-dot-size, custom)}, transparent #{token(track-dot-size, custom)});
+}
 
-.mdc-linear-progress {
-  @include theme.css-custom-property(border-radius, --forge-linear-progress-border-radius, inherit);
-  
-  &__bar-inner {
-    @include theme.property(border-color, tertiary);
+.forge-linear-progress {
+  @include progress;
+}
+
+.dots,
+.forge-linear-progress,
+.track,
+.bar,
+.bar-inner {
+  position: absolute;
+}
+
+.dots {
+  @include dots;
+}
+
+.bar {
+  @include bar;
+}
+
+.secondary-bar {
+  @include secondary-bar;
+}
+
+.bar-inner {
+  @include bar-inner;
+}
+
+.track {
+  @include track;
+}
+
+// Indeterminate styles
+.forge-linear-progress--indeterminate {
+  .bar {
+    @include indeterminate-bar;
   }
 
-  &__buffer-bar {
-    @include theme.css-custom-property(background-color, --forge-linear-progress-theme-buffer, variables.$buffer-color);
+  .primary-bar {
+    @include indeterminate-primary-bar;
   }
 
-  &__buffer-dots {
-    @include theme.css-custom-property(filter, --forge-linear-progress-theme-buffer-dots, variables.$buffer-dots-color);
+  .secondary-bar {
+    @include indeterminate-secondary-bar;
+  }
+
+  .dots {
+    @include indeterminate-dots;
+  }
+
+  .primary-bar > .bar-inner {
+    @include indeterminate-primary-bar-inner;
+  }
+
+  .secondary-bar > .bar-inner {
+    @include indeterminate-secondary-bar-inner;
   }
 }
+
+// RTL styles
+$rtl-selectors: (':host-context([dir="rtl"]) .forge-linear-progress', ':host([dir="rtl"]) .forge-linear-progress', '.forge-linear-progress:dir(rtl)');
+
+@each $selector in $rtl-selectors {
+  #{$selector} {
+    .bar {
+      transform-origin: right center;
+    }
+
+    .track {
+      transform-origin: right center;
+    }
+
+    .dots {
+      animation-name: buffering-rtl;
+    }
+
+    &.forge-linear-progress--indeterminate .primary-bar {
+      animation-name: primary-indeterminate-translate-rtl;
+    }
+
+    &.forge-linear-progress--indeterminate .secondary-bar {
+      animation-name: secondary-indeterminate-translate-rtl;
+    }
+  }
+}
+
+//
+// Theme
+//
+
+@mixin theme($theme) {
+  :host([theme='#{$theme}']) {
+    .forge-linear-progress {
+      @include override(indicator-color, theme.variable($theme), value);
+      @include override(track-color, theme.variable(#{$theme}-container), value);
+    }
+  }
+}
+
+@include theme(primary);
+@include theme(secondary);
+@include theme(success);
+@include theme(error);
+@include theme(warning);
+@include theme(info);
+
+@media screen and (forced-colors: active) {
+  .forge-linear-progress {
+    @include override(indicator-color, CanvasText, value);
+    @include override(track-color, GrayText, value);
+
+    border: 1px solid CanvasText;
+
+    &.forge-linear-progress--indeterminate {
+      @include override(track-color, Canvas, value);
+    }
+  }
+}
+
+@include animations.keyframes;

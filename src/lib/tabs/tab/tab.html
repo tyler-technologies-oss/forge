@@ -1,19 +1,18 @@
 <template>
-  <div class="forge-tab" part="button">
-    <slot name="top"></slot>
-    
-    <span class="forge-tab__content" part="content">
-      <slot name="leading"></slot>
-      <span class="forge-tab__text" part="text">
+  <div class="forge-tab" part="container">
+    <span class="content" part="content">
+      <slot name="start">
+        <slot name="leading"></slot>
+      </slot>
+      <span class="label" part="label">
         <slot></slot>
       </span>
-      <slot name="trailing"></slot>
+      <slot name="end">
+        <slot name="trailing"></slot>
+      </slot>
+      <span class="indicator" part="indicator"></span>
     </span>
-
-    <span class="mdc-tab-indicator" part="indicator-container">
-      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline" part="indicator"></span>
-    </span>
-
-    <span class="forge-tab__ripple" part="ripple-container"></span>
+    <forge-state-layer exportparts="surface:state-layer" target=":host"></forge-state-layer>
+    <forge-focus-indicator part="focus-indicator" target=":host" inward></forge-focus-indicator>
   </div>
 </template>

@@ -1,30 +1,88 @@
-@use './mixins';
-@use '../../ripple/forge-ripple';
+@use './core' as *;
+@use '../../state-layer';
+@use '../../focus-indicator';
 
-@include mixins.core-styles;
+//
+// Host
+//
+
+$_host-tokens: [display];
 
 :host {
-  @include mixins.host;
+  @include tokens($includes: $_host-tokens);
+}
+
+:host {
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-:host([stretch]) {
-  width: 100%;
-  flex: 1;
+//
+// Base
+//
+
+.forge-button-toggle {
+  @include tokens($excludes: $_host-tokens);
 }
 
-:host([selected-adjacent]) {
-  .forge-button-toggle {
-    border-left-color: var(--mdc-theme-text-primary-on-dark);
+.forge-button-toggle {
+  @include base;
+
+  forge-state-layer {
+    @include state-layer.provide-theme(
+      (
+        color: #{token(color)}
+      )
+    );
+  }
+
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme(
+      (
+        outward-offset: #{token(focus-indicator-offset)},
+        color: #{token(focus-indicator-color)},
+        shape: #{token(shape)},
+        shape-start-start: #{token(shape-start-start)},
+        shape-start-end: #{token(shape-start-end)},
+        shape-end-start: #{token(shape-end-start)},
+        shape-end-end: #{token(shape-end-end)}
+      )
+    );
   }
 }
 
-:host([selected-adjacent-vertical]) {
+::slotted(:is([slot='start'], [slot='end'])) {
+  font-size: #{token(icon-size)};
+}
+
+//
+// Selected
+//
+
+:host([selected]) {
   .forge-button-toggle {
-    border-top-color: var(--mdc-theme-text-primary-on-dark);
+    @include selected;
   }
 }
 
+//
+// Disabled
+//
+
+:host([disabled]) {
+  @include host-disabled;
+  cursor: not-allowed;
+
+  .forge-button-toggle {
+    @include disabled;
+  }
+}
+
+:host([disabled][selected]) {
+  .forge-button-toggle {
+    @include selected-disabled;
+  }
+}

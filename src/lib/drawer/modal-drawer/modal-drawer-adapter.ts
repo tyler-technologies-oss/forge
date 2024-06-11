@@ -4,8 +4,8 @@ import { BaseDrawerAdapter, IBaseDrawerAdapter } from '../base';
 import { IModalDrawerComponent } from './modal-drawer';
 
 export interface IModalDrawerAdapter extends IBaseDrawerAdapter {
-  setBackdropCloseListener(listener: (evt: Event) => void): void;
-  setBackdropVisibility(visible: boolean): Promise<void>;
+  setBackdropCloseListener(listener: EventListener): void;
+  setBackdropVisibility(visible: boolean, options?: { immediate?: boolean }): Promise<void>;
   toggleBackdropClass(hasClass: boolean, className: string): void;
 }
 
@@ -17,17 +17,24 @@ export class ModalDrawerAdapter extends BaseDrawerAdapter implements IModalDrawe
     this._backdropElement = getShadowElement(this._component, BACKDROP_CONSTANTS.elementName) as IBackdropComponent;
   }
 
-  public setBackdropCloseListener(listener: (evt: Event) => void): void {
-    this._backdropElement.addEventListener(BACKDROP_CONSTANTS.events.BACKDROP_CLICK, listener);
+  public setBackdropCloseListener(listener: EventListener): void {
+    this._backdropElement.addEventListener('click', listener);
   }
 
-  public setBackdropVisibility(visible: boolean): Promise<void> {
-    if (this._backdropElement.hasAttribute('hidden')) {
-      this._backdropElement.removeAttribute('hidden');
-    }
+  public setBackdropVisibility(visible: boolean, { immediate }: { immediate?: boolean }): Promise<void> {
+    this._backdropElement.toggleAttribute('hidden', !visible);
+
     if (!this._backdropElement.fadeIn || !this._backdropElement.fadeOut) {
+      if (immediate) {
+        this._backdropElement.toggleAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE, visible);
+      }
       return Promise.resolve();
     }
+
+    if (immediate) {
+      return Promise.resolve(visible ? this._backdropElement.show() : this._backdropElement.hide());
+    }
+
     return visible ? this._backdropElement.fadeIn() : this._backdropElement.fadeOut();
   }
 

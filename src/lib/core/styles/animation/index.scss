@@ -1,0 +1,33 @@
+@use '../core/config';
+@use '../utils';
+@use '../tokens/animation/tokens';
+
+///
+/// Emits custom property declarations for all animation theme tokens.
+///
+@mixin properties {
+  @each $token-name, $token-value in tokens.$tokens {
+    @include utils.declare-var(animation, $token-name, $token-value);
+  }
+}
+
+///
+/// Gets a CSS custom property declaration for a specific animation token with its token value as the fallback value.
+///
+/// Example:
+/// ```scss
+/// .my-class {
+///   animation-duration: #{animation.variable(duration-short4)}; // => animation-duration: var(--forge-animation-duration-short4, 200ms);
+/// }
+/// ```
+///
+@function variable($key, $prefix: config.$prefix) {
+  @return utils.variable(animation, tokens.$tokens, $key, $prefix);
+}
+
+///
+/// Generates CSS custom property declarations for the provided animation tokens.
+///
+@function provide($tokens, $prefix: config.$prefix) {
+  @return utils.provide(tokens.$tokens, $tokens, animation, $prefix);
+}

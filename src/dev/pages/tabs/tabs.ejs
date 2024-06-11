@@ -1,0 +1,78 @@
+<div class="tabs-demo-container">
+  <forge-tab-bar id="tabs-demo" active-tab="0">
+    <forge-tab id="tab-1" aria-controls="panel-1">Tab one</forge-tab>
+    <forge-tab id="tab-2" aria-controls="panel-2">Tab two</forge-tab>
+    <forge-tab id="tab-3" aria-controls="panel-3">Tab three</forge-tab>
+    <forge-tab id="tab-4" aria-controls="panel-4">Tab four</forge-tab>
+  </forge-tab-bar>
+  <forge-view-switcher id="tab-panel" index="0" animation-type="slide">
+    <forge-view>
+      <div id="panel-1" role="tabpanel" aria-labelledby="tab-1" class="tab-content">Content for tab index: 1</div>
+    </forge-view>
+    <forge-view>
+      <div id="panel-2" role="tabpanel" aria-labelledby="tab-2" class="tab-content">Content for tab index: 2</div>
+    </forge-view>
+    <forge-view>
+      <div id="panel-3" role="tabpanel" aria-labelledby="tab-3" class="tab-content">Content for tab index: 3</div>
+    </forge-view>
+    <forge-view>
+      <div id="panel-4" role="tabpanel" aria-labelledby="tab-4" class="tab-content">Content for tab index: 4</div>
+    </forge-view>
+  </forge-view-switcher>
+</div>
+
+<div class="tabs-demo">
+  <h2 class="forge-typography--heading2">Scrollable tabs</h2>
+  <forge-tab-bar id="demo-scrollable-tabs" active-tab="9" scroll-buttons>
+    <forge-tab>Tab one</forge-tab>
+    <forge-tab>Tab two</forge-tab>
+    <forge-tab>Tab three</forge-tab>
+    <forge-tab>Tab four</forge-tab>
+    <forge-tab>Tab five</forge-tab>
+    <forge-tab>Tab six</forge-tab>
+    <forge-tab>Tab seven</forge-tab>
+    <forge-tab>Tab eight</forge-tab>
+    <forge-tab>Tab nine</forge-tab>
+    <forge-tab>Tab ten</forge-tab>
+    <forge-tab>Tab eleven</forge-tab>
+    <forge-tab>Tab twelve</forge-tab>
+    <forge-tab>Tab thirteen</forge-tab>
+    <forge-tab>Tab fourteen</forge-tab>
+    <forge-tab>Tab fifteen</forge-tab>
+    <forge-tab>Tab sixteen</forge-tab>
+    <forge-tab>Tab seventeen</forge-tab>
+    <forge-tab>Tab eighteen</forge-tab>
+    <forge-tab>Tab nineteen</forge-tab>
+    <forge-tab>Tab twenty</forge-tab>
+  </forge-tab-bar>
+</div>
+
+<div class="tabs-demo">
+  <h2 class="forge-typography--heading2">Primary tabs w/icons</h2>
+  <forge-tab-bar stacked active-tab="0" style="max-width: 512px;">
+    <forge-tab>
+      <forge-icon slot="leading" name="videocam"></forge-icon>
+      Video
+    </forge-tab>
+    <forge-tab>
+      <forge-icon slot="leading" name="insert_photo"></forge-icon>
+      Photos
+    </forge-tab>
+    <forge-tab>
+      <forge-icon slot="leading" name="audiotrack"></forge-icon>
+      Audio
+    </forge-tab>
+  </forge-tab-bar>
+</div>
+
+<div class="tabs-demo">
+  <h2 class="forge-typography--heading2">Secondary tabs</h2>
+  <forge-tab-bar secondary active-tab="0">
+    <forge-tab>Overview</forge-tab>
+    <forge-tab>Specs</forge-tab>
+    <forge-tab>Guidelines</forge-tab>
+    <forge-tab>Accessibility</forge-tab>
+  </forge-tab-bar>
+</div>
+
+<script type="module" src="tabs.ts"></script>

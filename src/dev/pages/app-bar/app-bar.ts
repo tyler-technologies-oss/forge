@@ -8,6 +8,7 @@ import '@tylertech/forge/tabs';
 
 // Icons
 import type {
+  AppBarElevation,
   IAppBarComponent,
   IAppBarHelpButtonComponent,
   IAppBarMenuButtonComponent,
@@ -28,8 +29,10 @@ import {
   tylIconSettings,
   tylIconStars,
   tylIconWarning,
-  tylIconWorkOutline
+  tylIconWorkOutline,
+  tylIconKeyboardVoice
 } from '@tylertech/tyler-icons/standard';
+import { ToastComponent } from '@tylertech/forge/toast';
 
 IconRegistry.define([
   tylIconForgeLogo,
@@ -40,10 +43,10 @@ IconRegistry.define([
   tylIconAssignment,
   tylIconWorkOutline,
   tylIconWarning,
-  tylIconSettings
+  tylIconSettings,
+  tylIconKeyboardVoice
 ]);
 
-const pageAppBar = document.querySelector('forge-app-bar#page-app-bar') as IAppBarComponent;
 const appBar = document.querySelector('forge-app-bar#forge-app-bar-example') as IAppBarComponent;
 const appBarSearch = appBar.querySelector('forge-app-bar-search#app-bar-search') as IAppBarSearchComponent;
 const appBarProfileButton = appBar.querySelector('forge-app-bar-profile-button') as IAppBarProfileButtonComponent;
@@ -63,22 +66,45 @@ appBarHelpButton.addEventListener('forge-menu-select', ({ detail }) => {
 const appBarMenuButton = appBar.querySelector('#forge-app-bar-example-menu-button') as IAppBarMenuButtonComponent;
 appBarMenuButton.addEventListener('click', ({ detail }) => {
   console.log('[app-bar-menu-button] click', detail);
-
-  const toast = document.createElement('forge-toast');
-  toast.message = 'Menu clicked';
-  document.body.appendChild(toast);
+  ToastComponent.present({ message: 'Menu clicked' });
 });
 
 appBarSearch.addEventListener('forge-app-bar-search-input', ({ detail }) => {
   console.log('[forge-app-bar-search] ', detail);
-
-  const toast = document.createElement('forge-toast');
-  toast.message = 'Search text: ' + detail.value;
-  document.body.appendChild(toast);
+  ToastComponent.present({ message: `Search text: ${detail.value}` });
 });
 
-const useProfileCardBuilderToggle = document.querySelector('#app-bar-profile-card-builder-toggle') as ISwitchComponent;
-useProfileCardBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+const themeSelect = document.querySelector('#opt-theme') as ISelectComponent;
+themeSelect.addEventListener('change', () => {
+  appBar.theme = themeSelect.value || '';
+});
+
+const elevationSelect = document.querySelector('#opt-elevation') as ISelectComponent;
+elevationSelect.addEventListener('change', ({ detail }) => {
+  appBar.elevation = detail as AppBarElevation;
+});
+
+const titleInput = document.querySelector('#opt-title-text') as HTMLInputElement;
+titleInput.addEventListener('input', () => {
+  appBar.titleText = titleInput.value;
+});
+
+const hrefToggle = document.querySelector('#opt-href') as ISwitchComponent;
+hrefToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  appBar.href = selected ? 'javascript: void(0);' : undefined;
+});
+
+const showTabsToggle = document.querySelector('#opt-show-tabs') as ISwitchComponent;
+showTabsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  if (selected) {
+    appBar.appendChild(appBarTabs);
+  } else {
+    appBarTabs.remove();
+  }
+});
+
+const useProfileCardBuilderToggle = document.querySelector('#opt-profile-card-builder') as ISwitchComponent;
+useProfileCardBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   appBarProfileButton.profileCardBuilder = selected ? profileCardBuilder : undefined;
 });
 
@@ -111,35 +137,3 @@ function profileCardBuilder(): HTMLElement {
   listElement.appendChild(buildListItemElement('My Preferences', 'settings', 'preferences'));
   return listElement;
 }
-
-const appBarRaisedToggle = document.querySelector('#app-bar-raised-toggle') as ISwitchComponent;
-appBarRaisedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
-  appBar.raised = selected;
-  pageAppBar.raised = selected;
-});
-
-const appBarTitleInput = document.querySelector('#app-bar-title-input') as HTMLInputElement;
-appBarTitleInput.addEventListener('input', () => {
-  appBar.titleText = appBarTitleInput.value;
-});
-
-const appBarThemeSelect = document.querySelector('#app-bar-theme-select') as ISelectComponent;
-appBarThemeSelect.addEventListener('change', () => {
-  if (appBarThemeSelect.value) {
-    appBar.setAttribute('theme', appBarThemeSelect.value);
-    pageAppBar.setAttribute('theme', appBarThemeSelect.value);
-  } else {
-    appBar.removeAttribute('theme');
-    pageAppBar.removeAttribute('theme');
-  }
-});
-
-const showAppBarTabsToggle = document.querySelector('#app-bar-show-tabs-toggle') as ISwitchComponent;
-showAppBarTabsToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
-  if (selected) {
-    appBarTabs.style.removeProperty('display');
-  } else {
-    appBarTabs.style.display = 'none';
-  }
-});
-

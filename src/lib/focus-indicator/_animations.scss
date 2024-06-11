@@ -1,0 +1,33 @@
+@use './token-utils' as *;
+
+@mixin keyframes {
+  @keyframes outward-grow {
+    from {
+      outline-width: 0;
+    }
+    to {
+      outline-width: #{token(active-width)};
+    }
+  }
+
+  @keyframes outward-shrink {
+    from {
+      outline-width: #{token(active-width)};
+    }
+  }
+
+  @keyframes inward-grow {
+    from {
+      border-width: 0;
+    }
+    to {
+      border-width: #{token(active-width)};
+    }
+  }
+
+  @keyframes inward-shrink {
+    from {
+      border-width: #{token(active-width)};
+    }
+  }
+}

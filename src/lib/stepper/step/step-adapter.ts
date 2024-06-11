@@ -4,19 +4,14 @@ import { IStepComponent } from './step';
 import { StepIcons, STEP_CONSTANTS } from './step-constants';
 import { IIconComponent } from '../../icon';
 import { IExpansionPanelComponent } from '../../expansion-panel';
-import { ForgeRipple, ForgeRippleAdapter, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../../ripple';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 
 export interface IStepAdapter extends IBaseAdapter {
   component: IStepComponent;
   toggleDisabled(disabled: boolean): void;
-  focusButton(): void;
-  attachRipple: () => void;
-  detatchRipple: () => void;
   setIndex(value: number): void;
   initialize(): void;
   toggleRootClass(className: string, on: boolean): void;
-  setRootAttribute(attribute: string, value: string): void;
-  setRootTabIndex(value: number): void;
   toggleIcon(name: StepIcons, show: boolean): void;
   setClickListener(listener: (evt: MouseEvent) => void): void;
   removeClickListener(listener: (evt: MouseEvent) => void): void;
@@ -34,79 +29,47 @@ export interface IStepAdapter extends IBaseAdapter {
   isExpandedContentInFocus(checkElement?: HTMLElement): boolean;
 }
 
-export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAdapter, ForgeRippleCapableSurface {
-  private _buttonElement: HTMLButtonElement;
+export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAdapter {
+  private _stepContainer: HTMLElement;
   private _container: HTMLElement;
-  private _rippleInstance: ForgeRipple;
   private _expansionSlot: HTMLSlotElement;
   private _expansionPanel: IExpansionPanelComponent;
+  private readonly _stateLayerElement: IStateLayerComponent;
 
   constructor(_component: IStepComponent) {
     super(_component);
-    this._buttonElement = getShadowElement(_component, STEP_CONSTANTS.selectors.STEP) as HTMLButtonElement;
+    this._stepContainer = getShadowElement(_component, STEP_CONSTANTS.selectors.STEP);
     this._container = getShadowElement(_component, STEP_CONSTANTS.selectors.STEP_CONTAINER) as HTMLElement;
-  }
-
-  // ForgeRippleCapableSurface
-  public get root(): HTMLElement {
-    return this._buttonElement;
-  }
-  public unbounded = false;
-  public get disabled(): boolean {
-    return this._buttonElement.disabled;
+    this._stateLayerElement = getShadowElement(this._component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
   }
 
   public get component(): IStepComponent {
     return this._component;
   }
 
-  public setRootTabIndex(value: number): void {
-    this._buttonElement.tabIndex = value;
-  }
-
   public initialize(): void {
-    this._component.setAttribute('role', 'tab');
-  }
-
-  public attachRipple(): void {
-    this._rippleInstance = this.initializeRipple();
-  }
-
-  public detatchRipple(): void {
-    if (this._rippleInstance) {
-      this._rippleInstance.destroy();
+    if (!this._component.hasAttribute('role')) {
+      this._component.setAttribute('role', 'tab');
     }
   }
 
-  public initializeRipple(): ForgeRipple {
-    return this._createRipple();
-  }
-
   public setIndex(value: number): void {
-    (this._buttonElement.querySelector(STEP_CONSTANTS.selectors.INDEX) as HTMLElement).innerHTML = (value + 1 || '').toString();
+    (this._stepContainer.querySelector(STEP_CONSTANTS.selectors.INDEX) as HTMLElement).innerHTML = (value + 1 || '').toString();
   }
 
   public toggleRootClass(className: string, on: boolean): void {
-    toggleClass(this._buttonElement, on, className);
-  }
-
-  public setRootAttribute(attribute: string, value: string): void {
-    this._buttonElement.setAttribute(attribute, value);
-  }
-
-  public focusButton(): void {
-    this._buttonElement.focus();
+    toggleClass(this._stepContainer, on, className);
   }
 
   public toggleDisabled(disabled: boolean): void {
-    toggleClass(this._buttonElement, disabled, STEP_CONSTANTS.classes.DISABLED);
-    toggleAttribute(this._buttonElement, disabled, 'aria-disabled');
-    this._buttonElement.disabled = disabled;
+    toggleClass(this._stepContainer, disabled, STEP_CONSTANTS.classes.DISABLED);
+    toggleAttribute(this._component, disabled, 'aria-disabled');
+    this._stateLayerElement.disabled = disabled;
   }
 
   public toggleIcon(name: StepIcons, show: boolean): void {
-    const index = this._buttonElement.querySelector(STEP_CONSTANTS.selectors.INDEX) as HTMLElement;
-    const icon = this._buttonElement.querySelector(STEP_CONSTANTS.selectors.ICON) as IIconComponent;
+    const index = this._stepContainer.querySelector(STEP_CONSTANTS.selectors.INDEX) as HTMLElement;
+    const icon = this._stepContainer.querySelector(STEP_CONSTANTS.selectors.ICON) as IIconComponent;
     if (!show) {
       index.style.display = 'inherit';
       icon.style.display = 'none';
@@ -123,11 +86,11 @@ export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAda
   }
 
   public setClickListener(listener: (evt: MouseEvent) => void): void {
-    this._buttonElement.addEventListener('click', listener);
+    this._component.addEventListener('click', listener);
   }
 
   public removeClickListener(listener: (evt: MouseEvent) => void): void {
-    this._buttonElement.removeEventListener('click', listener);
+    this._component.removeEventListener('click', listener);
   }
 
   public setSlotListener(listener: (evt: MouseEvent) => void): void {
@@ -146,11 +109,11 @@ export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAda
       toggleAttribute(this._expansionPanel, !expanded, 'tabindex', '-1');
     }
 
-    toggleClass(this._buttonElement, expanded, STEP_CONSTANTS.classes.EXPANDED);
+    toggleClass(this._stepContainer, expanded, STEP_CONSTANTS.classes.EXPANDED);
   }
 
   public setExpansionPanelAnimations(animate: boolean): void {
-    this._expansionPanel.useAnimations = animate;
+    this._expansionPanel.animationType = animate ? 'default' : 'none';
   }
 
   public addExpansionPanel(): void {
@@ -173,20 +136,20 @@ export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAda
   }
 
   public addExpansionIcon(): void {
-    const icon = this._buttonElement.querySelector(STEP_CONSTANTS.selectors.EXPANSION_ICON);
+    const icon = this._stepContainer.querySelector(STEP_CONSTANTS.selectors.EXPANSION_ICON);
 
     if (icon) {
       return;
     }
 
-    this._buttonElement.appendChild(this._createExpansionIcon());
+    this._stepContainer.appendChild(this._createExpansionIcon());
   }
 
   public removeExpansionIcon(): void {
-    const icon = this._buttonElement.querySelector(STEP_CONSTANTS.selectors.EXPANSION_ICON);
+    const icon = this._stepContainer.querySelector(STEP_CONSTANTS.selectors.EXPANSION_ICON);
 
     if (icon) {
-      this._buttonElement.removeChild(icon);
+      this._stepContainer.removeChild(icon);
     }
   }
 
@@ -204,18 +167,9 @@ export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAda
     return this._expansionSlot.assignedElements().some(element => element.contains(checkElement || document.activeElement));
   }
 
-  private _createRipple(): ForgeRipple {
-    const adapter: ForgeRippleAdapter = {
-      ...ForgeRipple.createAdapter(this),
-      isSurfaceDisabled: () => this._buttonElement.disabled
-    };
-    const ripple = new ForgeRipple(this._buttonElement, new ForgeRippleFoundation(adapter));
-    return ripple;
-  }
-
   private _createExpansionPanel(): IExpansionPanelComponent {
     const panel = document.createElement('forge-expansion-panel');
-    panel.useAnimations = false;
+    panel.animationType = 'none';
     panel.setAttribute('part', 'expansion-panel');
     addClass(STEP_CONSTANTS.classes.EXPANSION_PANEL, panel);
 

@@ -1,0 +1,309 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+//
+// Host
+//
+
+@mixin host {
+  display: none;
+}
+
+@mixin host-open {
+  display: contents;
+}
+
+//
+// Host
+//
+
+@mixin dialog-base {
+  position: fixed;
+  inset: 0;
+  z-index: #{token(z-index)};
+
+  background-color: transparent;
+  color: inherit;
+
+  border: none;
+
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  max-width: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
+}
+
+@mixin container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+}
+
+@mixin surface {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+
+  background: #{token(background)};
+  box-shadow: #{token(elevation)};
+  z-index: #{token(z-index)};
+  overflow: hidden;
+
+  border-radius: #{token(shape)};
+
+  margin-block-start: #{token(block-start-spacing)};
+  margin-block-end: #{token(block-end-spacing)};
+  margin-inline-start: #{token(inline-start-spacing)};
+  margin-inline-end: #{token(inline-end-spacing)};
+  padding: #{token(padding)};
+  width: #{token(width)};
+  height: #{token(height)};
+  min-width: #{token(min-width)};
+  max-width: #{token(max-width)};
+  min-height: #{token(min-height)};
+  max-height: #{token(max-height)};
+  box-sizing: border-box;
+}
+
+//
+// Non-modal
+//
+
+@mixin nonmodal-dialog-base {
+  pointer-events: none;
+}
+
+@mixin nonmodal-surface {
+  @include override(elevation, nonmodal-elevation);
+
+  pointer-events: all;
+}
+
+//
+// Fullscreen
+//
+
+@mixin fullscreen-dialog-base {
+  @include override(enter-animation-duration, fullscreen-enter-animation-duration);
+  @include override(exit-animation-duration, fullscreen-exit-animation-duration);
+}
+
+@mixin fullscreen-surface {
+  height: 100%;
+  width: 100%;
+  max-width: none;
+  max-height: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+//
+// Moveable
+//
+
+@mixin surface-moveable {
+  user-select: none;
+
+  transition-property: opacity;
+  transition-duration: #{token(move-transition-duration)};
+  transition-timing-function: #{token(move-transition-easing)};
+}
+
+@mixin surface-moved {
+  margin: 0;
+}
+
+@mixin surface-moving {
+  opacity: #{token(moving-opacity)};
+}
+
+@mixin move-handle-container {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+@mixin move-handle {
+  fill: #{token(move-handle-color)};
+
+  height: #{token(move-handle-size)};
+  width: #{token(move-handle-size)};
+  margin: #{token(move-handle-spacing)};
+
+  touch-action: none;
+
+  &:hover {
+    cursor: #{token(move-handle-hover-cursor)};
+  }
+
+  &:active {
+    cursor: #{token(move-handle-active-cursor)};
+  }
+}
+
+//
+// Animation
+//
+
+@mixin enter {
+  animation-duration: #{token(enter-animation-duration)};
+  animation-timing-function: #{token(enter-animation-easing)};
+}
+
+@mixin exit {
+  animation-duration: #{token(exit-animation-duration)};
+  animation-timing-function: #{token(exit-animation-easing)};
+}
+
+//
+// Placement
+//
+
+@mixin placement($placement) {
+  @if $placement == top {
+    @include placement-top;
+  } @else if $placement == top-right {
+    @include placement-top-right;
+  } @else if $placement == top-left {
+    @include placement-top-left;
+  } @else if $placement == bottom {
+    @include placement-bottom;
+  } @else if $placement == bottom-right {
+    @include placement-bottom-right;
+  } @else if $placement == bottom-left {
+    @include placement-bottom-left;
+  } @else if $placement == left {
+    @include placement-left;
+  } @else if $placement == right {
+    @include placement-right;
+  } @else if $placement == custom {
+    @include placement-custom;
+  }
+}
+
+@mixin placement-custom {
+  margin: 0;
+  top: #{token(position-x)};
+  left: #{token(position-y)};
+}
+
+@mixin placement-top {
+  @include override(block-start-spacing, 0, value);
+
+  top: 0;
+  bottom: auto;
+}
+
+@mixin placement-top-right {
+  @include override(spacing, 0, value);
+
+  top: 0;
+  left: auto;
+  right: 0;
+  bottom: auto;
+}
+
+@mixin placement-top-left {
+  @include override(spacing, 0, value);
+
+  top: 0;
+  left: 0;
+  right: auto;
+  bottom: auto;
+}
+
+@mixin placement-bottom {
+  @include override(block-end-spacing, 0, value);
+
+  top: auto;
+  bottom: 0;
+}
+
+@mixin placement-bottom-right {
+  @include override(spacing, 0, value);
+
+  top: auto;
+  left: auto;
+  right: 0;
+  bottom: 0;
+}
+
+@mixin placement-bottom-left {
+  @include override(spacing, 0, value);
+
+  top: auto;
+  left: 0;
+  right: auto;
+  bottom: 0;
+}
+
+//
+// Preset
+//
+
+@mixin preset-sheet-dialog-base {
+  @include override(enter-animation-duration, preset-sheet-enter-animation-duration);
+  @include override(exit-animation-duration, preset-sheet-exit-animation-duration);
+}
+
+@mixin preset-sheet-surface-base {
+  @include override(max-width, none, value);
+  @include override(max-height, none, value);
+
+  inset: auto;
+
+  display: inline-flex;
+}
+
+@mixin preset-left-sheet-surface {
+  left: 0;
+  bottom: 0;
+  top: 0;
+
+  height: 100%;
+
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+@mixin preset-right-sheet-surface {
+  right: 0;
+  bottom: 0;
+  top: 0;
+
+  height: 100%;
+
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+@mixin preset-top-sheet-surface {
+  top: 0;
+  left: 0;
+  right: 0;
+
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+@mixin preset-bottom-sheet-surface {
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
