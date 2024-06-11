@@ -1,3 +1,16 @@
+# v2.24.2 (Tue Jun 11 2024)
+
+#### 🐛 Bug Fix
+
+- Origin/fix tab accessibility issues [#621](https://github.com/tyler-technologies-oss/forge/pull/621) ([@nickonometry](https://github.com/nickonometry))
+- fix: fixed accessibility issues with popups [#616](https://github.com/tyler-technologies-oss/forge/pull/616) ([@nickonometry](https://github.com/nickonometry))
+
+#### Authors: 1
+
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+
+---
+
 # v2.24.1 (Tue May 21 2024)
 
 #### 🐛 Bug Fix
