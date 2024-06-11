@@ -13,11 +13,15 @@ assignees: ''
 <!-- A clear and concise description of how this component will be used and where it originated from. -->
 
 **Required features:**
+<!--
 - This component **must** do X...
 - This component **must** do Y...
+-->
 
 **Nice-to-have features:**
+<!--
 - Ideally this component would also do Z... but is not required initially
+-->
 
 **Screenshots:**
 <!--
@@ -27,10 +31,10 @@ assignees: ''
 -->
 
 **Please complete the following information:**
- - Will this be a contribution by you or your team? [Y/N]
- - What platforms will this component be used on? [mobile|desktop|all]
- - Does this component require a responsive design? [Y/N]
- - I have searched existing issues before creating this request? [Y/N]
+ - Will this be a contribution by you or your team? <!-- [Y/N] -->
+ - What platforms will this component be used on? <!-- [mobile|desktop|all] -->
+ - Does this component require a responsive design? <!-- [Y/N] -->
+ - I have searched existing issues before creating this request? <!-- [Y/N] -->
 
 **Additional context:**
 <!-- Add any other context about the component here. -->

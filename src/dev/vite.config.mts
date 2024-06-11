@@ -17,7 +17,7 @@ export default defineConfig({
     ViteTransformForgeInlineStyleImports,
     ViteEjsPlugin({
       site: {
-        title: 'Tyler Forge™ Dev (@next)'
+        title: 'Tyler Forge™ Dev'
       }
     }),
     ViteFullReload(['./**/*.ejs'])

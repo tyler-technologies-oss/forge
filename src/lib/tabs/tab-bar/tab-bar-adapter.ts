@@ -8,6 +8,7 @@ import { ITabBarComponent } from './tab-bar';
 import { TAB_BAR_CONSTANTS } from './tab-bar-constants';
 
 export interface ITabBarAdapter extends IBaseAdapter {
+  initializeAccessibility(): void;
   initializeContainerSizeObserver(listener: () => void): void;
   destroyContainerSizeObserver(): void;
   initializeScrollObserver(listener: EventListener): void;
@@ -50,6 +51,12 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
     this._defaultSlotElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
     this._rootElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.ROOT);
     this._scrollContainer = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.SCROLL_CONTAINER);
+  }
+
+  public initializeAccessibility(): void {
+    if (!this._component.hasAttribute('role')) {
+      this._component.setAttribute('role', 'tablist');
+    }
   }
 
   public initializeContainerSizeObserver(listener: () => void): void {

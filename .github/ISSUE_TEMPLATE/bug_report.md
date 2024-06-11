@@ -27,11 +27,11 @@ Steps to reproduce the behavior:
 -->
 
 **Please complete the following information:**
- - Forge version: [e.g. v2.0.0]
- - I have searched existing issues before creating this report? [Y/N]
- - Browser: [e.g. Chrome, Firefox, Safari, All]
- - Platform: [e.g. desktop, mobile, All]
- - OS: [e.g. Windows, Mac, Linux, iOS, Android, All]
+ - Forge version: <!-- [e.g. v2.0.0] -->
+ - I have searched existing issues before creating this report? <!-- [Y/N] -->
+ - Browser: <!-- [e.g. Chrome, Firefox, Safari, All] -->
+ - Platform: <!-- [e.g. desktop, mobile, All] -->
+ - OS: <!-- [e.g. Windows, Mac, Linux, iOS, Android, All] -->
 
 **Additional context:**
 <!-- Add any other context about the problem here. -->

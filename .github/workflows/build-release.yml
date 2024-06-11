@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     branches:
-      - next
+      - main
     paths:
       - 'forge.json'
       - 'package.json'
@@ -63,7 +63,7 @@ jobs:
           ## We use `auto version` to calculate whether this is a release build or not
           VERSION_RESULT=$(npx auto version)
           echo "Version calculation result: ${VERSION_RESULT}"
-          if [[ "${VERSION_RESULT}" =~ ^(premajor|preminor|prepatch)$ ]]; then
+          if [[ "${VERSION_RESULT}" =~ ^(major|minor|patch|release)$ ]]; then
             echo "Release: true"
             echo "release=true" >> $GITHUB_OUTPUT
           else
@@ -127,6 +127,22 @@ jobs:
       GITHUB_APP_ID: ${{ secrets.FORGE_AUTOBOT_ID }}
       GITHUB_APP_KEY: ${{ secrets.FORGE_AUTOBOT_SECRET }}
       NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
+
+  
+  ## This job will run only on release builds
+  publish-cdn:
+    name: Publish Components to CDN
+    needs: [wf-config, build-and-release]
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v2.10.3
+    if: ${{ needs.wf-config.outputs.is-release == 'true' }}
+    with:
+      AWS_REGION: "us-east-1"
+      MAX_CLOUDFRONT_INVALIDATIONS: 25
+      INVALIDATE: false # We do not invalidate the CloudFront cache because we're only pushing new assets
+    secrets:
+      AWS_IAM_ROLE: ${{ secrets.AWS_IAM_ROLE }}
+      AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
+      AWS_CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
 
   ## We run this job only when files that effect Storybook are found in the changed files
   deploy-storybook:
