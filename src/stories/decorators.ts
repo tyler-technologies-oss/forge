@@ -1,5 +1,6 @@
 import { Decorator } from '@storybook/web-components';
 import { html } from 'lit';
+import cssbeautify from 'cssbeautify';
 
 export function storyStyles(styles: string): Decorator {
   return story => {
@@ -7,7 +8,7 @@ export function storyStyles(styles: string): Decorator {
       ${story()}
 
       <style>
-        ${styles}
+        ${cssbeautify(styles, { indent: '  ' })}
       </style>
     `;
   };

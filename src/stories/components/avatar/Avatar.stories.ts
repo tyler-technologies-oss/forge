@@ -37,7 +37,7 @@ export const WithImage: Story = {
     controls: { include: /^--|imageUrl/ }
   },
   args: {
-    imageUrl: '/ruby.jpg'
+    imageUrl: './ruby.jpg'
   },
   render: ({ imageUrl }) => {
     return html` <forge-avatar image-url=${imageUrl}></forge-avatar> `;
