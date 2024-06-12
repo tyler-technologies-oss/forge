@@ -24,6 +24,19 @@ describe('Tabs', () => {
     await expect(el).to.be.accessible();
   });
 
+  it('should forward aria-label to internal tablist element', async () => {
+    const el = await createFixture();
+    const scrollContainerEl = getShadowElement(el, TAB_BAR_CONSTANTS.selectors.SCROLL_CONTAINER);
+
+    expect(scrollContainerEl.hasAttribute('aria-label')).to.be.false;
+
+    el.setAttribute('data-aria-label', 'Test');
+    await elementUpdated(el);
+
+    expect(scrollContainerEl.getAttribute('aria-label')).to.equal('Test');
+    await expect(el).to.be.accessible();
+  });
+
   it('should set default active tab', async () => {
     const el = await createFixture({ activeTab: 1 });
     const ctx = new TabsHarness(el);
@@ -535,9 +548,7 @@ describe('Tabs', () => {
       el.style.width = '1px';
       await elementUpdated(el);
 
-      // TODO: fix nested scroll buttons within tab role
-      // await expect(el).to.be.accessible();
-
+      await expect(el).to.be.accessible();
       expect(el.scrollButtons).to.be.true;
       expect(ctx.hasScrollButtons).to.be.true;
       expect(ctx.backwardScrollButton).to.be.ok;

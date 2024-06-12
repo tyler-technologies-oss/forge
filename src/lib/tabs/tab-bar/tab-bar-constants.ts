@@ -18,6 +18,10 @@ const attributes = {
   ...observedAttributes
 };
 
+const forwardedAttributes = {
+  'data-aria-label': 'aria-label'
+};
+
 const selectors = {
   ROOT: '.forge-tab-bar',
   SCROLL_CONTAINER: '.scroll-container',
@@ -40,6 +44,7 @@ export const TAB_BAR_CONSTANTS = {
   elementName,
   observedAttributes,
   attributes,
+  forwardedAttributes,
   events,
   selectors,
   classes,

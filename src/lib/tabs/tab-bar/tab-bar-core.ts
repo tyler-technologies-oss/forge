@@ -55,7 +55,7 @@ export class TabBarCore implements ITabBarCore {
   }
 
   public initialize(): void {
-    this._adapter.initializeAccessibility();
+    this._adapter.initialize();
     this._adapter.addSlotListener(this._tabsChangedListener);
     this._adapter.addHostListener(TAB_CONSTANTS.events.SELECT, this._tabSelectedListener);
     this._adapter.addHostListener('keydown', this._keydownListener);
@@ -72,6 +72,7 @@ export class TabBarCore implements ITabBarCore {
   }
 
   public destroy(): void {
+    this._adapter.destroy();
     this._adapter.destroyContainerSizeObserver();
     this._adapter.destroyScrollObserver(this._scrollListener);
     this._isInitialized = false;
