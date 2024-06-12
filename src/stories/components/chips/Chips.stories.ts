@@ -115,15 +115,15 @@ export const Avatar: Story = {
         .theme=${args.theme}
         style=${style}>
         <forge-chip value="ruby">
-          <forge-avatar slot=${args.avatarSlot} size="small" image-url="/ruby-side.jpg"></forge-avatar>
+          <forge-avatar slot=${args.avatarSlot} size="small" image-url="./ruby-side.jpg"></forge-avatar>
           Ruby
         </forge-chip>
         <forge-chip value="leo">
-          <forge-avatar slot=${args.avatarSlot} size="small" image-url="/leo.png"></forge-avatar>
+          <forge-avatar slot=${args.avatarSlot} size="small" image-url="./leo.png"></forge-avatar>
           Leo
         </forge-chip>
         <forge-chip value="harley">
-          <forge-avatar slot=${args.avatarSlot} size="small" image-url="/harley.jpg"></forge-avatar>
+          <forge-avatar slot=${args.avatarSlot} size="small" image-url="./harley.jpg"></forge-avatar>
           Harley
         </forge-chip>
       </forge-chip-set>
