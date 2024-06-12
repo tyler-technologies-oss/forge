@@ -39,6 +39,7 @@ const meta = {
 
     return html`
       <forge-tab-bar
+        data-aria-label="Demo tabs"
         .disabled=${args.disabled}
         .activeTab=${args.activeTab}
         .vertical=${args.vertical}

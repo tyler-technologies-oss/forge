@@ -30,7 +30,7 @@ describe('Tabs', () => {
 
     expect(scrollContainerEl.hasAttribute('aria-label')).to.be.false;
 
-    el.setAttribute('aria-label', 'Test');
+    el.setAttribute('data-aria-label', 'Test');
     await elementUpdated(el);
 
     expect(scrollContainerEl.getAttribute('aria-label')).to.equal('Test');

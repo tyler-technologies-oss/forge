@@ -57,8 +57,8 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
   }
 
   public initialize(): void {
-    this._forwardObserver = forwardAttributes(this._component, TAB_BAR_CONSTANTS.forwardedAttributes, (name, value) => {
-      toggleAttribute(this._scrollContainer, !!value, name, value ?? undefined);
+    this._forwardObserver = forwardAttributes(this._component, Object.keys(TAB_BAR_CONSTANTS.forwardedAttributes), (name, value) => {
+      toggleAttribute(this._scrollContainer, !!value, TAB_BAR_CONSTANTS.forwardedAttributes[name], value ?? undefined);
     });
   }
 

@@ -18,7 +18,9 @@ const attributes = {
   ...observedAttributes
 };
 
-const forwardedAttributes = ['aria-label'];
+const forwardedAttributes = {
+  'data-aria-label': 'aria-label'
+};
 
 const selectors = {
   ROOT: '.forge-tab-bar',
