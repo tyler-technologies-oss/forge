@@ -6,8 +6,11 @@ import { ITabComponent } from '../tab/tab';
 import { TAB_CONSTANTS } from '../tab/tab-constants';
 import { ITabBarComponent } from './tab-bar';
 import { TAB_BAR_CONSTANTS } from './tab-bar-constants';
+import { forwardAttributes } from '../../core/utils/reflect-utils';
 
 export interface ITabBarAdapter extends IBaseAdapter {
+  initialize(): void;
+  destroy(): void;
   initializeContainerSizeObserver(listener: () => void): void;
   destroyContainerSizeObserver(): void;
   initializeScrollObserver(listener: EventListener): void;
@@ -43,6 +46,7 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
   private _resizeObserver: ResizeObserver | undefined;
   private _backwardScrollButton: IIconButtonComponent | undefined;
   private _forwardScrollButton: IIconButtonComponent | undefined;
+  private _forwardObserver?: MutationObserver;
 
   constructor(component: ITabBarComponent) {
     super(component);
@@ -50,6 +54,17 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
     this._defaultSlotElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
     this._rootElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.ROOT);
     this._scrollContainer = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.SCROLL_CONTAINER);
+  }
+
+  public initialize(): void {
+    this._forwardObserver = forwardAttributes(this._component, TAB_BAR_CONSTANTS.forwardedAttributes, (name, value) => {
+      toggleAttribute(this._scrollContainer, !!value, name, value ?? undefined);
+    });
+  }
+
+  public destroy(): void {
+    this._forwardObserver?.disconnect();
+    this._forwardObserver = undefined;
   }
 
   public initializeContainerSizeObserver(listener: () => void): void {
