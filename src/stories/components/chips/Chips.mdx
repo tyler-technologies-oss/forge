@@ -1,0 +1,38 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as ChipsStories from './Chips.stories';
+
+<Meta of={ChipsStories} />
+
+<Title />
+
+Chips allow users to enter information, make selections, filter content, or trigger actions. Chips should appear dynamically
+as a group of multiple interactive elements, unlike buttons, which should be a consistent and familiar call to action.
+
+<Canvas of={ChipsStories.Demo} />
+
+## Anchor
+
+Chips can be used as an anchor by providing the `href` attribute. This will render the chip as an anchor tag.
+
+<Canvas of={ChipsStories.Anchor} />
+
+## Avatar
+
+Chips also work well with avatars. You can add an avatar to the left or right of the chip with the [&lt;forge-avatar&gt;](?path=/docs/components-avatar--docs) component.
+
+<Canvas of={ChipsStories.Avatar} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Verify that you can tab to each chip component.
+  - Ensure that there is a visual cue that the chip component is active or inactive, and/or currently focused.
+- Verify that pressing the space bar or enter key while focusing on a chip will toggle it in the same manner as if it had been clicked by a mouse.
+- If a chip has a delete icon, ensure it can be focused and activated independently of the chip itself.
+- Be sure to include a role attribute to indicate to screen readers what the chip is being used for.
+- Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
+- If color conveys important information, provide additional cues for users with color perception deficiencies.

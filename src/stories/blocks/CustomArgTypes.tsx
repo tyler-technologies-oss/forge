@@ -1,11 +1,28 @@
 import { HeaderMdx, Markdown, useOf } from '@storybook/blocks';
-import { Code } from '@storybook/components';
+import { Code as StorybookCode } from '@storybook/components';
 import { TagItem, getBranchName, getCustomElementType, getCustomElementsTagDeclaration, getCustomElementsTagModule, htmlEncode } from '../utils';
 
 import styles from './CustomArgTypes.module.scss';
 import GitHubLogo from './GitHubLogo';
 
 const BASE_GITHUB_URL = `https://github.com/tyler-technologies-oss/forge/tree`;
+
+// TODO: temporary workaround to fix typings issue with `children` prop
+const Code = StorybookCode as (props: { children: React.ReactNode }) => JSX.Element;
+
+const STORY_KIND_PATH_SEPARATOR = /\s*\/\s*/;
+
+export const extractTitle = (title: string) => {
+  const groups = title.trim().split(STORY_KIND_PATH_SEPARATOR);
+  return groups?.[groups?.length - 1] || title;
+};
+
+export const titleFromTagName = (tagName: string) => {
+  return tagName
+    .replace(/^forge-/gi, '')
+    .replace(/-/g, ' ')
+    .replace(/(?:^|\s)\S/g, a => a.toUpperCase());
+};
 
 function UsageLink({ text, href }: { text: string; href: string }) {
   return (
@@ -197,7 +214,6 @@ function sortByName(items: TagItem[]): TagItem[] {
 }
 
 function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; headingLevel: 'h3' | 'h4' }) {
-  const module = getCustomElementsTagModule(tagName);
   const declaration = getCustomElementsTagDeclaration(tagName);
   const properties = declaration.members?.filter(member => member.kind === 'field' && member.privacy === 'public');
   const attributes = declaration.attributes;
@@ -214,17 +230,9 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
     }) ?? [];
   const cssProperties = declaration.cssProperties;
   const cssParts = declaration.cssParts;
-  const branch = getBranchName();
-  const modulePath = module.path;
 
   return (
-    <div className={(styles as any).container}>
-      {modulePath ? (
-        <a href={`${BASE_GITHUB_URL}/${branch}/${modulePath}`} rel="noreferrer noopener" target="_blank" className={(styles as any).codeLink}>
-          <GitHubLogo />
-        </a>
-      ) : null}
-
+    <div>
       {!!properties?.length && (
         <Section title="Properties" name={tagName} headingLevel={headingLevel}>
           <PropsAttrsTable items={sortByName(properties)} globalConfigProperties={globalConfigProperties} />
@@ -284,20 +292,6 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
   );
 }
 
-const STORY_KIND_PATH_SEPARATOR = /\s*\/\s*/;
-
-export const extractTitle = (title: string) => {
-  const groups = title.trim().split(STORY_KIND_PATH_SEPARATOR);
-  return groups?.[groups?.length - 1] || title;
-};
-
-export const titleFromTagName = (tagName: string) => {
-  return tagName
-    .replace(/^forge-/gi, '')
-    .replace(/-/g, ' ')
-    .replace(/(?:^|\s)\S/g, a => a.toUpperCase());
-};
-
 export default function CustomArgTypes() {
   const resolvedOf = useOf('story', ['story']);
   const tagName = resolvedOf.story.component as string;
@@ -308,9 +302,22 @@ export default function CustomArgTypes() {
 
   const subcomponents = resolvedOf.story.subcomponents as Record<string, string>;
   const hasSubcomponents = Boolean(subcomponents) && Object.keys(subcomponents).length > 0;
+  const branch = getBranchName();
+
+  const GitHubLink = ({ modulePath, className }: { modulePath: string; className?: string }) => (
+    <a href={`${BASE_GITHUB_URL}/${branch}/${modulePath}`} rel="noreferrer noopener" target="_blank" className={className}>
+      <GitHubLogo />
+    </a>
+  );
 
   if (!hasSubcomponents) {
-    return <ComponentArgTypes tagName={tagName} headingLevel="h3" />;
+    const module = getCustomElementsTagModule(tagName);
+    return (
+      <div className={(styles as any).container}>
+        {module?.path ? <GitHubLink modulePath={module.path} className={(styles as any).codeLink} /> : null}
+        <ComponentArgTypes tagName={tagName} headingLevel="h3" />
+      </div>
+    );
   }
 
   const tagNames = [tagName, ...Object.values(subcomponents)];
@@ -319,11 +326,15 @@ export default function CustomArgTypes() {
     <div>
       {tagNames.map(tagName => {
         const headerId = `${tagName.toLowerCase().replace(/[^a-z0-9]/gi, '-')}-api`;
+        const module = getCustomElementsTagModule(tagName);
         return (
           <div key={tagName} style={{ marginBlockStart: '24px' }}>
-            <HeaderMdx as="h3" id={headerId}>
-              {titleFromTagName(tagName)}
-            </HeaderMdx>
+            <div className={(styles as any).subcomponentHeader}>
+              <HeaderMdx as="h3" id={headerId}>
+                {titleFromTagName(tagName)}
+              </HeaderMdx>
+              {module.path ? <GitHubLink modulePath={module.path} /> : null}
+            </div>
             <ComponentArgTypes tagName={tagName} headingLevel="h4" />
           </div>
         );
