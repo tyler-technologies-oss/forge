@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
+import { generateCustomElementArgTypes } from '../../utils';
 
 import '@tylertech/forge/autocomplete';
 import { AutocompleteFilterCallback } from '@tylertech/forge/autocomplete';
