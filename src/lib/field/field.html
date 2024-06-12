@@ -3,9 +3,6 @@
     <div id="label" class="label" part="label">
       <slot name="label"></slot>
     </div>
-    <div class="outline">
-      <forge-focus-indicator target="input" part="focus-indicator"></forge-focus-indicator>
-    </div>
     <div id="container" class="container">
       <div class="popover-target" aria-hidden="true"></div>
       <div id="surface" class="surface" part="surface"></div>
@@ -35,6 +32,9 @@
       <div class="support-text-end" part="support-text-end">
         <slot name="support-text-end"></slot>
       </div>
+    </div>
+    <div class="outline">
+      <forge-focus-indicator target="input" part="focus-indicator"></forge-focus-indicator>
     </div>
   </div>
 </template>
