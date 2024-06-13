@@ -1,0 +1,25 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../../blocks/CustomArgTypes';
+import * as SkipToMainContent from './SkipToMainContent.stories';
+
+<Meta of={SkipToMainContent} />
+
+# Recipe: Skip To Main Content
+
+Use a "skip to main content" element to meet [WCAG 2 Criteria 2.4.1: Bypass Blocks](https://www.w3.org/WAI/WCAG21/Understanding/bypass-blocks.html).
+This allows users to skip repeated content blocks in order to get more direct access to the primary content of a web page.
+
+> Recommended for public facing (community) applications.
+
+Meets needs for:
+
+- Sighted keyboard users
+- Users with visual impairments
+
+<Canvas of={SkipToMainContent.Demo} />
+
+The important aspect of this recipe is to ensure that the skip link is visible when focused, and that it is the first focusable element on the page.
+This allows users to quickly navigate to the main content of the page without having to tab through all of the other interactive elements.
+
+You should always use an `<a>` element, and ensure that you prevent the default action when the link is clicked to avoid reloading the page. Use a
+hash link to the `id` of the main content element to ensure that the user is taken directly to the main content.
