@@ -36,12 +36,8 @@ export class AccordionComponent extends BaseComponent implements IAccordionCompo
     this._core = new AccordionCore(new AccordionAdapter(this));
   }
 
-  public initializedCallback(): void {
+  public connectedCallback(): void {
     this._core.initialize();
-  }
-
-  public disconnectedCallback(): void {
-    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -54,6 +50,7 @@ export class AccordionComponent extends BaseComponent implements IAccordionCompo
 
   /**
    * Gets/sets the selector to use for finding the child expansion panels. Defaults to searching the direct children for `<forge-expansion-panel>` elements.
+   * Use this if you need to scope this accordion to a specific set of expansion panels, or your expansion panels are not direct children of the accordion.
    * @attribute panel-selector
    */
   @coreProperty()
