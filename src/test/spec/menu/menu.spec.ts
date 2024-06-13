@@ -13,7 +13,7 @@ import {
   MENU_CONSTANTS,
   MenuOptionFactory
 } from '@tylertech/forge';
-import { tick, timer } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 import { ICON_CLASS_NAME } from '@tylertech/forge/constants';
 
 const POPOVER_ANIMATION_DURATION = 200;
@@ -146,9 +146,9 @@ describe('MenuComponent', function(this: ITestContext) {
       it('should update the matching attribute', async function(this: ITestContext) {
         this.context = setupTestContext();
         this.context.component.persistSelection = false;
-        await tick();
+        await frame();
         this.context.component.persistSelection = true;
-        await tick();
+        await frame();
         
         expect(this.context.component.persistSelection).toBe(true);
         expect(this.context.component.hasAttribute(MENU_CONSTANTS.attributes.PERSIST_SELECTION)).toBe(true);
@@ -159,9 +159,9 @@ describe('MenuComponent', function(this: ITestContext) {
       it('should update the matching property', async function(this: ITestContext) {
         this.context = setupTestContext();
         this.context.component.removeAttribute(MENU_CONSTANTS.attributes.PERSIST_SELECTION);
-        await tick();
+        await frame();
         this.context.component.setAttribute(MENU_CONSTANTS.attributes.PERSIST_SELECTION, '');
-        await tick();
+        await frame();
 
         expect(this.context.component.persistSelection).toBe(true);
         expect(this.context.component.hasAttribute(MENU_CONSTANTS.attributes.PERSIST_SELECTION)).toBe(true);
@@ -214,12 +214,12 @@ describe('MenuComponent', function(this: ITestContext) {
     it('should await dynamic toggle element', async function(this: ITestContext) {
       this.context = setupTestContext(false);
 
-      await tick();
+      await frame();
       expect(this.context.adapter.hasTargetElement()).toBeFalse();
 
       const toggleElement = createToggleElement();
       this.context.component.appendChild(toggleElement);
-      await tick();
+      await frame();
 
       expect(this.context.adapter.hasTargetElement()).toBeTrue();
     });
@@ -230,14 +230,14 @@ describe('MenuComponent', function(this: ITestContext) {
       // Create and append an empty child element
       const emptyContainer = document.createElement('div');
       this.context.component.appendChild(emptyContainer);
-      await tick();
+      await frame();
 
       expect(this.context.adapter.hasTargetElement()).toBeFalse();
       
       // Create the toggle element and append to the empty child element
       const toggleElement = createToggleElement();
       emptyContainer.appendChild(toggleElement);
-      await tick();
+      await frame();
 
       expect(this.context.adapter.hasTargetElement()).toBeTrue();
     });
@@ -247,11 +247,11 @@ describe('MenuComponent', function(this: ITestContext) {
 
       const emptyContainer = document.createElement('div');
       this.context.component.appendChild(emptyContainer);
-      await tick();
+      await frame();
 
       const toggleElement = createToggleElement();
       emptyContainer.appendChild(toggleElement);
-      await tick();
+      await frame();
 
       toggleElement.focus();
       toggleElement.click();
@@ -300,7 +300,7 @@ describe('MenuComponent', function(this: ITestContext) {
     it(`should load async when factory`, async function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.component.options = menuOptionsFactory();
-      await tick();
+      await frame();
 
       this.context.component.open = true;
       expect(this.context.component.open).toBe(true);
@@ -309,10 +309,10 @@ describe('MenuComponent', function(this: ITestContext) {
     it(`should close menu if no options`, async function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.component.options = () => [];
-      await tick();
+      await frame();
 
       this.context.component.open = true;
-      await tick();
+      await frame();
       expect(this.context.component.open).toBe(false);
     });
 
@@ -322,12 +322,12 @@ describe('MenuComponent', function(this: ITestContext) {
 
       options[6].leadingBuilder = () => document.createElement('a');
 
-      await tick();
+      await frame();
 
       this.context.component.options = options;
       this.context.component.open = true;
 
-      await tick();
+      await frame();
       expect(this.context.component.open).toBe(true);
     });
 
@@ -337,7 +337,7 @@ describe('MenuComponent', function(this: ITestContext) {
       options[5].disabled = true;
       this.context.component.options = options;
       this.context.component.open = true;
-      await timer(300);
+      await task(300);
 
       expect(getPopupListItem(5).querySelector('button')?.hasAttribute('disabled')).toBe(true);
     });
@@ -349,7 +349,7 @@ describe('MenuComponent', function(this: ITestContext) {
       options[5].selected = true;
       this.context.component.options = options;
       this.context.component.open = true;
-      await timer(300);
+      await task(300);
 
       expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).toBe(true);
     });
@@ -361,7 +361,7 @@ describe('MenuComponent', function(this: ITestContext) {
       options[5].selected = true;
       this.context.component.options = options;
       this.context.component.open = true;
-      await timer(300);
+      await task(300);
 
       expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).toBe(false);
     });
@@ -372,10 +372,10 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.persistSelection = true;
       options[5].selected = true;
       this.context.component.options = options;
-      await tick();
+      await frame();
       this.context.component.persistSelection = false;
       this.context.component.open = true;
-      await timer(300);
+      await task(300);
 
       expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).toBe(false);
     });
@@ -399,7 +399,7 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.optionBuilder = optionBuilderSpy;
 
       this.context.component.open = true;
-      await tick();
+      await frame();
 
       const list = getPopupList(getPopoverElement());
       const listItems = Array.from(list.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
@@ -414,18 +414,18 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context = setupTestContext();
       const options = generateMenuOptions(1);
 
-      await tick();
+      await frame();
 
       this.context.component.options = options;
       this.context.component.open = true;
 
-      await tick();
+      await frame();
 
       const newOptions = generateMenuOptions(1);
       newOptions[0].icon = 'code';
       this.context.component.options = newOptions;
 
-      await tick();
+      await frame();
 
       const list = getPopupList(getPopoverElement());
       const listItems = Array.from(list.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
@@ -444,12 +444,12 @@ describe('MenuComponent', function(this: ITestContext) {
         ];
       }
 
-      await tick();
+      await frame();
 
       this.context.component.options = options;
       this.context.component.open = true;
       
-      await tick();
+      await frame();
 
       const list = getPopupList(getPopoverElement());
       const listItems = Array.from(list.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
@@ -474,7 +474,7 @@ describe('MenuComponent', function(this: ITestContext) {
         const options = generateMenuOptions(7);
         this.context.component.options = options;
         this.context.getToggleElement().click();
-        await timer(300);
+        await task(300);
         this.context.getToggleElement().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
 
         expect(getPopupListItem(0).hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).toBe(true);
@@ -485,7 +485,7 @@ describe('MenuComponent', function(this: ITestContext) {
         const options = generateMenuOptions(7);
         this.context.component.options = options;
         this.context.getToggleElement().click();
-        await timer(300);
+        await task(300);
         this.context.getToggleElement().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
 
         expect(getPopupListItem(6).hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).toBe(true);
@@ -497,7 +497,7 @@ describe('MenuComponent', function(this: ITestContext) {
         this.context.component.persistSelection = true;
         this.context.component.options = options;
         this.context.getToggleElement().click();
-        await timer(300);
+        await task(300);
 
         this.context.getToggleElement().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
         this.context.getToggleElement().dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
@@ -510,7 +510,7 @@ describe('MenuComponent', function(this: ITestContext) {
         this.context.component.persistSelection = false;
         this.context.component.options = options;
         this.context.getToggleElement().click();
-        await timer(300);
+        await task(300);
 
         this.context.getToggleElement().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
         this.context.getToggleElement().dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
@@ -535,12 +535,12 @@ describe('MenuComponent', function(this: ITestContext) {
         this.context.component.options = options;
         this.context.component.open = true;
 
-        await timer(POPOVER_ANIMATION_DURATION);
+        await task(POPOVER_ANIMATION_DURATION);
         const toggleElement = this.context.getToggleElement();
         toggleElement.focus();
         toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Tab' }));
         toggleElement.blur();
-        await tick();
+        await frame();
 
         expect(this.context.component.open).toBeFalse();
       });
@@ -556,11 +556,11 @@ describe('MenuComponent', function(this: ITestContext) {
         const selectSpy = jasmine.createSpy('select spy');
         this.context.component.addEventListener(MENU_CONSTANTS.events.SELECT, selectSpy);
 
-        await timer(POPOVER_ANIMATION_DURATION);
+        await task(POPOVER_ANIMATION_DURATION);
 
         toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
         toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Tab' }));
-        await tick();
+        await frame();
 
         expect(selectSpy).not.toHaveBeenCalled();
       });
@@ -573,7 +573,7 @@ describe('MenuComponent', function(this: ITestContext) {
         const toggleElement = this.context.getToggleElement();
         toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
 
-        await timer(POPOVER_ANIMATION_DURATION);
+        await task(POPOVER_ANIMATION_DURATION);
 
         const firstListItem = getPopupListItem(0) as IListItemComponent;
         expect(firstListItem.active).toBeTrue();
@@ -588,7 +588,7 @@ describe('MenuComponent', function(this: ITestContext) {
         toggleElement.click();
 
         toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Escape' }));
-        await tick();
+        await frame();
         expect(this.context.component.open).toBe(false, 'Escape should close the popup');
       });
 
@@ -597,11 +597,11 @@ describe('MenuComponent', function(this: ITestContext) {
         const options = generateMenuOptions(7);
         this.context.component.options = options;
         this.context.component.open = true;
-        await timer(300);
+        await task(300);
         
         getPopupListItem(0).querySelector('button')?.click();
 
-        await timer(300);
+        await task(300);
 
         expect(this.context.component.open).toBe(false);
       });
@@ -617,7 +617,7 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.options = options;
       this.context.component.open = true;
 
-      await tick();
+      await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
       expect(childMenuComponent.tagName.toLowerCase()).toBe(MENU_CONSTANTS.elementName);
@@ -626,7 +626,7 @@ describe('MenuComponent', function(this: ITestContext) {
       expect(listItem.tagName.toLowerCase()).toBe(LIST_ITEM_CONSTANTS.elementName);
       
       listItem.dispatchEvent(new MouseEvent('mouseenter'));
-      await tick();
+      await frame();
 
       expect(childMenuComponent.open).toBeTrue();
       expect(childMenuComponent.mode).toBe('cascade');
@@ -643,18 +643,18 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.options = options;
       this.context.component.open = true;
 
-      await tick();
+      await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
       const listItem = childMenuComponent.firstElementChild as IListItemComponent;
       
       listItem.dispatchEvent(new MouseEvent('mouseenter'));
-      await tick();
+      await frame();
       expect(childMenuComponent.open).toBeTrue();
       
       listItem.dispatchEvent(new MouseEvent('mouseleave'));
-      await timer(MENU_CONSTANTS.numbers.CHILD_MOUSE_LEAVE_TIMEOUT);
-      await tick();
+      await task(MENU_CONSTANTS.numbers.CHILD_MOUSE_LEAVE_TIMEOUT);
+      await frame();
       expect(childMenuComponent.open).toBeFalse();
     });
 
@@ -666,27 +666,27 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.options = options;
       this.context.component.open = true;
 
-      await tick();
+      await frame();
       
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
       const listItem = childMenuComponent.firstElementChild as IListItemComponent;
       
       listItem.dispatchEvent(new MouseEvent('mouseenter'));
       
-      await tick();
+      await frame();
       
       const childMenuPopup = getChildPopupElement(childMenuComponent);
       childMenuPopup.dispatchEvent(new MouseEvent('mouseenter'));
       expect(childMenuComponent.open).toBeTrue();
 
-      await tick();
+      await frame();
       
       listItem.dispatchEvent(new MouseEvent('mouseleave'));
       document.dispatchEvent(new MouseEvent('mousemove', { pageX: 0, pageY: 0 } as MouseEventInit));
       childMenuPopup.dispatchEvent(new MouseEvent('mouseleave'));
 
-      await timer(MENU_CONSTANTS.numbers.POPUP_MOUSE_LEAVE_TIMEOUT * 2);
-      await tick();
+      await task(MENU_CONSTANTS.numbers.POPUP_MOUSE_LEAVE_TIMEOUT * 2);
+      await frame();
 
       expect(childMenuComponent.open).toBeFalse();
     });
@@ -703,13 +703,13 @@ describe('MenuComponent', function(this: ITestContext) {
       const selectSpy = jasmine.createSpy('select spy');
       this.context.component.addEventListener(MENU_CONSTANTS.events.SELECT, selectSpy);
 
-      await tick();
+      await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
       const listItem = childMenuComponent.firstElementChild as IListItemComponent;
       
       listItem.dispatchEvent(new MouseEvent('mouseenter'));
-      await tick();
+      await frame();
 
       const childMenuListItems = getChildMenuListItems(getPopoverElement());
       childMenuListItems[1].dispatchEvent(new MouseEvent('click'));
@@ -725,18 +725,18 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.options = options;
       this.context.component.open = true;
 
-      await tick();
+      await frame();
       const toggleElement = this.context.getToggleElement();
       toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
       toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
       toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowRight' }));
-      await tick();
+      await frame();
       
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
       expect(childMenuComponent.open).toBeTrue();
       
       toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowLeft' }));
-      await tick();
+      await frame();
 
       expect(childMenuComponent.open).toBeFalse();
     });
@@ -752,19 +752,19 @@ describe('MenuComponent', function(this: ITestContext) {
       const selectSpy = jasmine.createSpy('select spy');
       this.context.component.addEventListener(MENU_CONSTANTS.events.SELECT, selectSpy);
 
-      await tick();
+      await frame();
       
       const toggleElement = this.context.getToggleElement();
       toggleElement.focus();
       toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
       toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
       toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowRight' }));
-      await tick();
+      await frame();
       
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
       expect(childMenuComponent.open).toBeTrue();
       
-      await tick();
+      await frame();
       toggleElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
 
       expect(this.context.component.open).toBeFalse();
@@ -782,13 +782,13 @@ describe('MenuComponent', function(this: ITestContext) {
     ];
     this.context.component.options = options;
     this.context.component.open = true;
-    await tick();
+    await frame();
 
     const popover = getPopoverElement();
     expect(popover).toBeTruthy();
     
     this.context.component.remove();
-    await tick();
+    await frame();
 
     expect(popover.isConnected).toBeFalse();
   });

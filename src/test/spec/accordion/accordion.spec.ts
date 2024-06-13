@@ -1,7 +1,7 @@
 import { IAccordionComponent, ACCORDION_CONSTANTS, defineAccordionComponent, IAccordionCore } from '@tylertech/forge/accordion';
 import { EXPANSION_PANEL_CONSTANTS, IExpansionPanelComponent } from '@tylertech/forge/expansion-panel';
 import { removeElement, getShadowElement } from '@tylertech/forge-core';
-import { tick, timer } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 
 interface ITestContext {
   context: ITestAccordionContext;
@@ -44,7 +44,7 @@ describe('AccordionComponent', function(this: ITestContext) {
       const panels = getPanels(this.context.component);
       const firstPanel = panels[0];
 
-      await tick();
+      await frame();
       (<HTMLElement>firstPanel.querySelector('[slot=header]')).click();
       expect(hostInteractionSpy.calls.count()).toBeGreaterThan(0);
       expect(firstPanel.open).toBe(true);
@@ -90,12 +90,12 @@ describe('AccordionComponent', function(this: ITestContext) {
       const nestedPanel = _createPanel();
       const firstPanel = getPanels(this.context.component)[0];
       firstPanel.appendChild(nestedPanel);
-      await tick();
+      await frame();
 
       // Click the first child panel to expand it
       clickPanel(firstPanel);
-      await tick();
-      await timer(500);
+      await frame();
+      await task(500);
       
       // Ensure we're in the proper state to run the test from here
       expect(firstPanel.open).toBe(true, 'Expected the first panel to be open before testing inner panel');
@@ -103,8 +103,8 @@ describe('AccordionComponent', function(this: ITestContext) {
       // Click the inner panel and evaluate result
       clickPanel(nestedPanel);
 
-      await tick();
-      await timer(500);
+      await frame();
+      await task(500);
 
       expect(firstPanel.open).toBe(true, 'Expected the first panel to still be open after clicking nested panel');
     });

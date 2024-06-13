@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { stub } from 'sinon';
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../core/utils/utils';
 import type { IIconComponent } from './icon';
 import { IconRegistry } from './icon-registry';
 import { tylIcon360, tylIconCode, tylIconFace } from '@tylertech/tyler-icons/standard';
@@ -212,7 +212,7 @@ describe('Icon', () => {
 
       expect(el.shadowRoot?.childElementCount).to.equal(0);
 
-      await timer(500);
+      await task(500);
       IconRegistry.define(tylIconFace);
 
       expect(el.shadowRoot?.querySelector('svg')).to.exist;
@@ -226,7 +226,7 @@ describe('Icon', () => {
 
       el.name = tylIconFace.name;
 
-      await timer(500);
+      await task(500);
       IconRegistry.define(tylIconFace);
 
       expect(el.shadowRoot?.querySelector('svg')).to.exist;

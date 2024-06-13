@@ -1,4 +1,4 @@
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../utils/utils';
 
 export function simulateHover(targetEl: HTMLElement, { pointerType = 'mouse', isPrimary = true } = {}): void {
   targetEl.dispatchEvent(new PointerEvent('pointerenter', { ...createMouseEventInit(targetEl), isPrimary, pointerType }));
@@ -14,7 +14,7 @@ export async function simulatePressed(targetEl: HTMLElement, { pointerType = 'mo
     pointerType
   };
   targetEl.dispatchEvent(new PointerEvent('pointerenter', evtInit));
-  await timer();
+  await task();
   targetEl.dispatchEvent(new PointerEvent('pointerdown', evtInit));
   targetEl.dispatchEvent(new PointerEvent('pointerup', evtInit));
   targetEl.dispatchEvent(new MouseEvent('click', evtInit));
@@ -26,7 +26,7 @@ export async function simulatePressAndHold(container: HTMLElement, { pointerType
     pointerType
   };
   container.dispatchEvent(new PointerEvent('pointerenter', evtInit));
-  await timer();
+  await task();
   container.dispatchEvent(new PointerEvent('pointerdown', evtInit));
 }
 

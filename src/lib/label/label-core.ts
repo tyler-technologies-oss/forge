@@ -1,5 +1,5 @@
 import { ICustomElementCore } from '@tylertech/forge-core';
-import { task } from '../core/utils/event-utils';
+import { task } from '../core/utils/utils';
 import { ILabelAdapter } from './label-adapter';
 import { LABEL_CONSTANTS } from './label-constants';
 

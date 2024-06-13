@@ -24,6 +24,9 @@ jobs:
   wf-config:
     name: Workflow Configuration
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20]
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -44,14 +47,14 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - name: Setup Node
+      - name: Use Node ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: ${{ matrix.node-version }}
 
       - name: Install
         id: install
-        run: npm ci --ignore-scripts
+        run: npm ci
 
       ## Determine if this is a release build or not, which will affect which dependent jobs run below
       - name: Detect Release Status
@@ -63,7 +66,7 @@ jobs:
           ## We use `auto version` to calculate whether this is a release build or not
           VERSION_RESULT=$(npx auto version)
           echo "Version calculation result: ${VERSION_RESULT}"
-          if [[ "${VERSION_RESULT}" =~ ^(major|minor|patch|release)$ ]]; then
+          if [[ "${VERSION_RESULT}" =~ (major|minor|patch|release)$ ]]; then
             echo "Release: true"
             echo "release=true" >> $GITHUB_OUTPUT
           else

@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../core/utils/utils';
 import { TestHarness } from '../../test/utils/test-harness';
 import { TAB_CONSTANTS } from './tab/tab-constants';
 import { TAB_BAR_CONSTANTS } from './tab-bar';
@@ -614,7 +614,7 @@ describe('Tabs', () => {
       expect(ctx.scrollContainer.scrollLeft).to.equal(0);
 
       ctx.forwardScrollButton.click();
-      await timer(500);
+      await task(500);
       await elementUpdated(el);
 
       expect(scrollBySpy.calledOnce).to.be.true;
@@ -634,7 +634,7 @@ describe('Tabs', () => {
       expect(ctx.scrollContainer.scrollLeft).to.be.greaterThan(0);
 
       ctx.backwardScrollButton.click();
-      await timer(500);
+      await task(500);
       await elementUpdated(el);
 
       expect(scrollBySpy.calledOnce).to.be.true;

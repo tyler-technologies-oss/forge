@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { tick } from '@tylertech/forge-testing';
+import { frame } from '../../core/utils/utils';
 import type { IAppBarSearchComponent } from './app-bar-search';
 import { APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants';
 
@@ -52,7 +52,7 @@ describe('App Bar Search', () => {
     let value = 'test';
     const el = await fixture<IAppBarSearchComponent>(html`<forge-app-bar-search value="${value}"><input type="text" /></forge-app-bar-search>`);
 
-    await tick();
+    await frame();
 
     const inputEl = el.querySelector('input') as HTMLInputElement;
 
@@ -70,7 +70,7 @@ describe('App Bar Search', () => {
     let placeholder = 'Search';
     const el = await fixture<IAppBarSearchComponent>(html`<forge-app-bar-search placeholder="${placeholder}"><input type="text" /></forge-app-bar-search>`);
 
-    await tick();
+    await frame();
 
     const inputEl = el.querySelector('input') as HTMLInputElement;
 

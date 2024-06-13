@@ -1,5 +1,5 @@
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
-import { dispatchNativeEvent, tick, timer } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '@tylertech/forge';
 import { BASE_DRAWER_CONSTANTS, defineModalDrawerComponent, IModalDrawerComponent, MODAL_DRAWER_CONSTANTS } from '@tylertech/forge/drawer';
 
@@ -28,7 +28,7 @@ describe('ModalDrawerComponent', function(this: ITestContext) {
     this.context.append();
     const backdrop = getShadowElement(this.context.component, BACKDROP_CONSTANTS.elementName);
     
-    await tick();
+    await frame();
 
     expect(backdrop).toBeTruthy();
     expect(backdrop.hasAttribute('hidden')).toBeFalse();
@@ -38,10 +38,10 @@ describe('ModalDrawerComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.component.open = true;
     this.context.append();
-    await timer(100);
+    await task(100);
     const backdrop = getShadowElement(this.context.component, BACKDROP_CONSTANTS.elementName);
-    dispatchNativeEvent(backdrop, 'click');
-    await tick();
+    backdrop.dispatchEvent(new PointerEvent('click'));
+    await frame();
     expect(this.context.component.open).toBe(false);
   });
 
@@ -52,10 +52,10 @@ describe('ModalDrawerComponent', function(this: ITestContext) {
 
     const callback = jasmine.createSpy('close callback');
     this.context.component.addEventListener(MODAL_DRAWER_CONSTANTS.events.CLOSE, callback);
-    await timer(100);
+    await task(100);
     const backdrop = getShadowElement(this.context.component, BACKDROP_CONSTANTS.elementName);
-    dispatchNativeEvent(backdrop, 'click');
-    await tick();
+    backdrop.dispatchEvent(new PointerEvent('click'));
+    await frame();
 
     expect(this.context.component.open).toBe(false);
     expect(callback).toHaveBeenCalledTimes(1);
@@ -66,12 +66,12 @@ describe('ModalDrawerComponent', function(this: ITestContext) {
     this.context.component.open = true;
     this.context.append();
     this.context.component.addEventListener(MODAL_DRAWER_CONSTANTS.events.CLOSE, evt => evt.preventDefault());
-    await timer(100);
-    await tick();
+    await task(100);
+    await frame();
 
     const backdrop = getShadowElement(this.context.component, BACKDROP_CONSTANTS.elementName);
-    dispatchNativeEvent(backdrop, 'click');
-    await tick();
+    backdrop.dispatchEvent(new PointerEvent('click'));
+    await frame();
 
     expect(this.context.component.open).toBe(true);
   });
@@ -80,7 +80,7 @@ describe('ModalDrawerComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.append();
 
-    await tick();
+    await frame();
     const backdrop = getShadowElement(this.context.component, BACKDROP_CONSTANTS.elementName) as IBackdropComponent;
 
     expect(backdrop.hasAttribute('hidden')).toBeTrue();
@@ -91,7 +91,7 @@ describe('ModalDrawerComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.component.open = false;
     this.context.append();
-    await tick();
+    await frame();
 
     expect(this.context.component.open).toBe(false);
 

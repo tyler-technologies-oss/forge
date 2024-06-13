@@ -1,6 +1,6 @@
 import { ICustomElementCore } from '@tylertech/forge-core';
 import { ExperimentalFocusOptions } from '../../constants';
-import { task } from '../../core/utils/event-utils';
+import { task } from '../../core/utils/utils';
 import { IBaseButtonAdapter } from './base-button-adapter';
 import { BASE_BUTTON_CONSTANTS, ButtonClickOptions, ButtonType } from './base-button-constants';
 import { IBaseButton } from './base-button';

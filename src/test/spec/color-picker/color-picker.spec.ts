@@ -1,5 +1,5 @@
 import { getShadowElement, removeElement, getActiveElement } from '@tylertech/forge-core';
-import { tick, timer } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 import { COLOR_PICKER_CONSTANTS, DEFAULT_COLOR, defineColorPickerComponent, IColorPickerComponent, IHSVA, IRGBA, IColorPickerChangeEventData } from '@tylertech/forge';
 import { formatHex, rgbaToHex, rgbaToHsva } from '@tylertech/forge/color-picker/color-picker-utils';
 
@@ -350,57 +350,57 @@ describe('ColorPickerComponent', function(this: ITestContext) {
 
     it('when gradient slider changes it should update the value', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
 
       getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 360, clientY: 0 }));
       document.dispatchEvent(new MouseEvent('mouseup', { clientX: 360, clientY: 0 }));
-      await tick();
+      await frame();
 
       getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 160, clientY: 0 }));
       document.dispatchEvent(new MouseEvent('mouseup', { clientX: 160, clientY: 0 }));
-      await tick();
+      await frame();
 
       getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 555, clientY: 300 }));
       document.dispatchEvent(new MouseEvent('mouseup', { clientX: 555, clientY: 300 }));
-      await tick();
+      await frame();
 
       getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 1000, clientY: 0 }));
       document.dispatchEvent(new MouseEvent('mouseup', { clientX: 1000, clientY: 0 }));
-      await tick();
+      await frame();
 
       expect(this.context.component.value).toBe('#ff0000');
     });
 
     it('when hue slider changes it should update the value', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
 
       getHueSliderElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
       document.dispatchEvent(new MouseEvent('mousemove', { pageX: 1000, pageY: 0 } as any));
       document.dispatchEvent(new MouseEvent('mouseup', { clientY: 0, clientX: 1000 }));
-      await tick();
+      await frame();
 
       getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 10000, clientY: 0 }));
       document.dispatchEvent(new MouseEvent('mouseup', { clientX: 10000, clientY: 0 }));
 
-      await tick();
+      await frame();
 
       expect(this.context.component.value).toBe('#ff00ff');
     });
 
     it('when opacity slider changes it should update the color preview', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
 
       getOpacitySliderElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
       document.dispatchEvent(new MouseEvent('mousemove', { pageX: 1000, pageY: 0 } as any));
       document.dispatchEvent(new MouseEvent('mouseup', { clientY: 0, clientX: 1000 }));
-      await tick();
+      await frame();
 
       getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 10000, clientY: 0 }));
       document.dispatchEvent(new MouseEvent('mouseup', { clientX: 10000, clientY: 0 }));
 
-      await tick();
+      await frame();
 
       expect(this.context.component.value).toBe('#ff0000');
     });
@@ -413,13 +413,13 @@ describe('ColorPickerComponent', function(this: ITestContext) {
 
       getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 360, clientY: 0 }));
       getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousemove', { clientX: 361, clientY: 0 }));
-      await timer(COLOR_PICKER_CONSTANTS.numbers.CHANGE_EVENT_DEBOUNCE_THRESHOLD / 2);
+      await task(COLOR_PICKER_CONSTANTS.numbers.CHANGE_EVENT_DEBOUNCE_THRESHOLD / 2);
 
       getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 362, clientY: 0 }));
       getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousemove', { clientX: 363, clientY: 0 }));
       document.dispatchEvent(new MouseEvent('mouseup', { clientX: 363, clientY: 0 }));
-      await tick();
-      await timer(COLOR_PICKER_CONSTANTS.numbers.CHANGE_EVENT_DEBOUNCE_THRESHOLD * 2);
+      await frame();
+      await task(COLOR_PICKER_CONSTANTS.numbers.CHANGE_EVENT_DEBOUNCE_THRESHOLD * 2);
 
       expect(changeEventSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({ detail: jasmine.objectContaining({ type: 'slider', source: 'gradient' }) }));
     });
@@ -427,7 +427,7 @@ describe('ColorPickerComponent', function(this: ITestContext) {
     describe('gradient keyboard events', function(this: ITestContext) {
       it('when key right gets pressed it should change color', async function(this: ITestContext) {
         this.context = setupTestContext();
-        await tick();
+        await frame();
 
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
@@ -438,7 +438,7 @@ describe('ColorPickerComponent', function(this: ITestContext) {
 
       it('when enter key gets pressed it should do nothing (currently)', async function(this: ITestContext) {
         this.context = setupTestContext();
-        await tick();
+        await frame();
 
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
@@ -449,7 +449,7 @@ describe('ColorPickerComponent', function(this: ITestContext) {
 
       it('when key left gets pressed after key right it should go back to white', async function(this: ITestContext) {
         this.context = setupTestContext();
-        await tick();
+        await frame();
 
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
@@ -461,7 +461,7 @@ describe('ColorPickerComponent', function(this: ITestContext) {
 
       it('when key down gets pressed it should change color', async function(this: ITestContext) {
         this.context = setupTestContext();
-        await tick();
+        await frame();
 
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
@@ -472,7 +472,7 @@ describe('ColorPickerComponent', function(this: ITestContext) {
 
       it('when key up gets pressed after down it should change back to white', async function(this: ITestContext) {
         this.context = setupTestContext();
-        await tick();
+        await frame();
 
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
@@ -484,7 +484,7 @@ describe('ColorPickerComponent', function(this: ITestContext) {
 
       it('when arrow left is pressed on edge it should stay at white', async function(this: ITestContext) {
         this.context = setupTestContext();
-        await tick();
+        await frame();
 
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
@@ -497,7 +497,7 @@ describe('ColorPickerComponent', function(this: ITestContext) {
 
       it('when moved around then back to 0 it should end up to be white', async function(this: ITestContext) {
         this.context = setupTestContext();
-        await tick();
+        await frame();
 
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
         document.dispatchEvent(new MouseEvent('mousemove', { clientX: 0, clientY: 100 }));
@@ -509,7 +509,7 @@ describe('ColorPickerComponent', function(this: ITestContext) {
 
       it('when other key pressed it should not affect the color', async function(this: ITestContext) {
         this.context = setupTestContext();
-        await tick();
+        await frame();
 
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));

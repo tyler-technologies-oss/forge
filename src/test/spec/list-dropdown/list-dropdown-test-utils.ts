@@ -1,5 +1,4 @@
-import { timer } from '@tylertech/forge-testing';
-
+import { task } from '@tylertech/forge/core/utils/utils';
 import { ListDropdown, IListDropdownConfig, IListDropdown, IListDropdownCore, LIST_DROPDOWN_CONSTANTS, IListDropdownOption } from '@tylertech/forge/list-dropdown';
 import { IListItemComponent, LIST_ITEM_CONSTANTS } from '@tylertech/forge/list';
 import { ISelectOption } from '@tylertech/forge/select';
@@ -47,7 +46,7 @@ export function getListDropdownPopup(): IPopoverComponent {
 }
 
 export function delayPopupAnimation(): Promise<void> {
-  return timer(POPOVER_ANIMATION_DURATION);
+  return task(POPOVER_ANIMATION_DURATION);
 }
 
 export function getPopupOptions(): ISelectOption[] {

@@ -1,6 +1,6 @@
 import { CALENDAR_CONSTANTS, defineCalendarComponent, ICalendarComponent, ICalendarEvent, CALENDAR_MENU_CONSTANTS, CalendarView, ICalendarDateSelectEventData } from '@tylertech/forge/calendar';
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
-import { timer, tick } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 import { getDateId } from '@tylertech/forge/calendar/calendar-dom-utils';
 import { isSameDate } from '@tylertech/forge';
 
@@ -480,9 +480,9 @@ describe('CalendarComponent', function(this: ITestContext) {
     it('should show the date view when the menu is closed', async function(this: ITestContext) {
       const yearButton = getYearButton(this.context.component);
       yearButton.click();
-      await tick();
+      await frame();
       yearButton.click();
-      await timer(300);
+      await task(300);
 
       expect(getMenu(this.context.component).hasAttribute('hidden')).toBeTrue();
     });
@@ -500,7 +500,7 @@ describe('CalendarComponent', function(this: ITestContext) {
       this.context.component.dateSelectCallback = () => true;
 
       getFirstDate(this.context.component).click();
-      await timer();
+      await task();
 
       const firstDate = getFirstDate(this.context.component);
       expect(firstDate.classList.contains(CALENDAR_CONSTANTS.classes.DATE_SELECTED)).toBeTrue();
@@ -510,7 +510,7 @@ describe('CalendarComponent', function(this: ITestContext) {
       this.context.component.dateSelectCallback = () => false;
 
       getFirstDate(this.context.component).click();
-      await timer();
+      await task();
 
       expect(this.context.component.value).toBeNull();
     });
@@ -543,7 +543,7 @@ describe('CalendarComponent', function(this: ITestContext) {
     it('should prevent focus when clicking on internal elements', async function(this: ITestContext) {
       const mousedownSpy = spyOn(this.context.component['_core'], '_preventFocusListener' as any).and.callThrough();
       this.context.component.preventFocus = true;
-      await tick();
+      await frame();
       getRootElement(this.context.component).dispatchEvent(new Event('mousedown', { bubbles: true }));
 
       expect(this.context.component.preventFocus).toBe(true);
@@ -553,10 +553,10 @@ describe('CalendarComponent', function(this: ITestContext) {
     it('should toggle prevent focus', async function(this: ITestContext) {
       const mousedownSpy = spyOn(this.context.component['_core'], '_preventFocusListener' as any).and.callThrough();
       this.context.component.preventFocus = true;
-      await tick();
+      await frame();
 
       this.context.component.preventFocus = false;
-      await tick();
+      await frame();
       getRootElement(this.context.component).dispatchEvent(new Event('mousedown', { bubbles: true }));
 
       expect(this.context.component.preventFocus).toBe(false);
@@ -693,13 +693,13 @@ describe('CalendarComponent', function(this: ITestContext) {
       this.context.component.goToDate(date);
       this.context.component.disabledDates = [new Date('01/31/2020')];
       
-      await tick();
+      await frame();
       this.context.component.handleKey(new KeyboardEvent('keydown', { key: 'End', shiftKey: true }));
-      await tick();
+      await frame();
       const previousMonth = this.context.component.month;
-      await tick();
+      await frame();
       this.context.component.handleKey(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
-      await tick();
+      await frame();
 
       expect(this.context.component.month).toBe((previousMonth + 1) % 12);
     });

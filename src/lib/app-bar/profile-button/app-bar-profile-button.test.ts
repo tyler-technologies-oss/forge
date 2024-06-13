@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../../core/utils/utils';
 import { sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
@@ -219,7 +219,7 @@ describe('App Bar Profile Button', () => {
       expect(popup.isConnected).to.be.true;
 
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-      await timer(POPOVER_ANIMATION_DURATION);
+      await task(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(el.open).to.be.false;
@@ -236,7 +236,7 @@ describe('App Bar Profile Button', () => {
       expect(popup.isConnected).to.be.true;
 
       await clickOutsidePopupElement(popup);
-      await timer(POPOVER_ANIMATION_DURATION);
+      await task(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
       await elementUpdated(el);
 
@@ -255,7 +255,7 @@ describe('App Bar Profile Button', () => {
 
       const iconButton = el.querySelector('forge-icon-button') as IIconButtonComponent;
       await clickElement(iconButton);
-      await timer(POPOVER_ANIMATION_DURATION);
+      await task(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(el.open).to.be.false;
@@ -267,7 +267,7 @@ describe('App Bar Profile Button', () => {
       const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button></forge-app-bar-profile-button>`);
 
       el.open = true;
-      await timer(POPOVER_ANIMATION_DURATION);
+      await task(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(el.open).to.be.true;
@@ -278,14 +278,14 @@ describe('App Bar Profile Button', () => {
       const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button></forge-app-bar-profile-button>`);
 
       el.open = true;
-      await timer(POPOVER_ANIMATION_DURATION);
+      await task(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(el.open).to.be.true;
       expect(el.popupElement).to.be.ok;
 
       el.open = false;
-      await timer(POPOVER_ANIMATION_DURATION);
+      await task(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(el.open).to.be.false;
@@ -303,7 +303,7 @@ describe('App Bar Profile Button', () => {
       const signOutButton = profileCard.shadowRoot?.querySelector('forge-button#sign-out-button') as HTMLElement;
       signOutButton.click();
 
-      await timer(POPOVER_ANIMATION_DURATION);
+      await task(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(signOutSpy).to.have.been.calledOnce;
@@ -320,7 +320,7 @@ describe('App Bar Profile Button', () => {
       const profileButton = profileCard.shadowRoot?.querySelector('forge-button#profile-button') as HTMLElement;
       profileButton.click();
 
-      await timer(POPOVER_ANIMATION_DURATION);
+      await task(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(profileSpy).to.have.been.calledOnce;
@@ -491,7 +491,7 @@ describe('App Bar Profile Button', () => {
       const iconButton = el.querySelector('forge-icon-button') as IIconButtonComponent;
       iconButton.focus();
       await clickElement(iconButton);
-      await timer(POPOVER_ANIMATION_DURATION);
+      await task(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
       return el['_core']['_adapter']['_popupElement'];
     }

@@ -1,5 +1,5 @@
 import { ICustomElementCore } from '@tylertech/forge-core';
-import { task } from '../../core/utils/event-utils';
+import { task } from '../../core/utils/utils';
 import { ExperimentalFocusOptions } from '../../constants';
 import { IButtonToggleAdapter } from './button-toggle-adapter';
 import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from './button-toggle-constants';

@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../core/utils/utils';
 import { getShadowElement } from '@tylertech/forge-core';
 import { IAvatarComponent } from './avatar';
 import { AVATAR_CONSTANTS } from './avatar-constants';
@@ -50,7 +50,7 @@ describe('Avatar', () => {
     el.setAttribute(AVATAR_CONSTANTS.attributes.IMAGE_URL, url);
     const root = getRootEl(el);
     // Give enough time for the image to load
-    await timer(1800);
+    await task(1800);
 
     expect(root.hasAttribute('style')).to.be.true;
     expect(root.style.backgroundImage).to.equal(`url("${url}")`);
@@ -68,7 +68,7 @@ describe('Avatar', () => {
     const el = await fixture<IAvatarComponent>(html`<forge-avatar image-url="https://httpstat.us/500" text="Invalid Url"></forge-avatar>`);
     const root = getRootEl(el);
 
-    await timer(300);
+    await task(300);
 
     expect(getDefaultSlotEl(el).textContent).to.equal('IU');
     expect(root.hasAttribute('style')).to.be.false;
@@ -78,7 +78,7 @@ describe('Avatar', () => {
     const el = await fixture<IAvatarComponent>(html`<forge-avatar image-url="https://httpstat.us/404" text="Invalid Url"></forge-avatar>`);
     const root = getRootEl(el);
 
-    await timer(300);
+    await task(300);
 
     expect(getDefaultSlotEl(el).textContent).to.equal('IU');
     expect(root.hasAttribute('style')).to.be.false;

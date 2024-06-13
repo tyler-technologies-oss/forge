@@ -1,5 +1,5 @@
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
-import { dispatchNativeEvent, tick, timer } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 import {
   CALENDAR_CONSTANTS,
   DatePickerRange,
@@ -61,14 +61,14 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     it('should wait for input element to initialize', async function(this: ITestContext) {
       this.context = setupTestContext(true, false, false);
 
-      await tick();
+      await frame();
 
       expect(this.context.component['_core']['_isInitialized']).toBe(false);
 
-      await timer(100);
+      await task(100);
       this.context.component.appendChild(createFromElement());
       this.context.component.appendChild(createToElement());
-      await tick();
+      await frame();
 
       expect(this.context.component['_core']['_isInitialized']).toBe(true);
     });
@@ -209,23 +209,23 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
 
     it('should emit open event when popup opened by user pressing arrow down key on from input', async function(this: ITestContext) {
       this.context = setupTestContext(true);
-      await tick();
+      await frame();
       const openSpy = jasmine.createSpy('open');
       this.context.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.OPEN, openSpy);
       getFromElement(this.context.component).focus();
       getFromElement(this.context.component).dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
-      await tick();
+      await frame();
       expect(openSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should emit open event when popup opened by user pressing arrow down key on to input', async function(this: ITestContext) {
       this.context = setupTestContext(true);
-      await tick();
+      await frame();
       const openSpy = jasmine.createSpy('open');
       this.context.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.OPEN, openSpy);
       getToElement(this.context.component).focus();
       getToElement(this.context.component).dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
-      await tick();
+      await frame();
       expect(openSpy).toHaveBeenCalledTimes(1);
     });
 
@@ -233,8 +233,8 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const openSpy = jasmine.createSpy('open spy');
       this.context.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.OPEN, openSpy);
-      dispatchNativeEvent(getToggleElement(this.context.component), 'mousedown');
-      await tick();
+      getToggleElement(this.context.component).dispatchEvent(new PointerEvent('mousedown'));
+      await frame();
       expect(openSpy).toHaveBeenCalledTimes(1);
     });
 
@@ -272,7 +272,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const closeSpy = jasmine.createSpy('close spy');
       this.context.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CLOSE, closeSpy);
       openPopup(this.context.component);
-      dispatchNativeEvent(getToggleElement(this.context.component), 'mousedown');
+      getToggleElement(this.context.component).dispatchEvent(new PointerEvent('mousedown'));
 
       expect(closeSpy).toHaveBeenCalledTimes(1);
     });
@@ -284,11 +284,11 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       openPopup(this.context.component);
       const fromElement = getFromElement(this.context.component);
       fromElement.focus();
-      await tick();
+      await frame();
       fromElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
       fromElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
       fromElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
-      await tick();
+      await frame();
 
       expect(closeSpy).toHaveBeenCalledTimes(1);
     });
@@ -300,12 +300,12 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       openPopup(this.context.component);
       const fromElement = getFromElement(this.context.component);
       fromElement.focus();
-      await tick();
+      await frame();
 
       clickActiveDay(this.context.component);
       fromElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
       fromElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
-      await tick();
+      await frame();
 
       expect(closeSpy).toHaveBeenCalledTimes(1);
     });
@@ -325,20 +325,20 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const fromElement = getFromElement(this.context.component);
       fromElement.focus();
       fromElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
-      await tick();
+      await frame();
       expectPopupOpen(this.context.component, true);
     });
 
     it('should open when clicking toggle element', async function(this: ITestContext) {
       this.context = setupTestContext(true);
-      dispatchNativeEvent(getToggleElement(this.context.component), 'mousedown');
-      await tick();
+      getToggleElement(this.context.component).dispatchEvent(new PointerEvent('mousedown'));
+      await frame();
       expectPopupOpen(this.context.component, true);
     });
 
     it('should set focus to input when clicking toggle element', function(this: ITestContext) {
       this.context = setupTestContext(true);
-      dispatchNativeEvent(getToggleElement(this.context.component), 'mousedown');
+      getToggleElement(this.context.component).dispatchEvent(new PointerEvent('mousedown'));
       expect(document.activeElement).toBe(getFromElement(this.context.component));
     });
 
@@ -417,7 +417,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       clickActiveDay(this.context.component);
 
       await popupCloseAnimation();
-      await tick();
+      await frame();
       expectPopupOpen(this.context.component, false);
       expect(changeSpy).toHaveBeenCalledTimes(2);
       expect(changeSpy).toHaveBeenCalledWith(jasmine.any(CustomEvent));
@@ -884,12 +884,12 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       openPopup(this.context.component);
 
-      await tick();
+      await frame();
       expectPopupOpen(this.context.component, true);
       getFromElement(this.context.component).blur();
       getFromElement(this.context.component).dispatchEvent(new Event('blur'));
       await popupCloseAnimation();
-      await tick();
+      await frame();
 
       expectPopupOpen(this.context.component, false);
     });
@@ -897,7 +897,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     it('should not open via toggle if disabled', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.disabled = true;
-      dispatchNativeEvent(getToggleElement(this.context.component), 'mousedown');
+      getToggleElement(this.context.component).dispatchEvent(new PointerEvent('mousedown'));
 
       expectPopupOpen(this.context.component, false);
     });
@@ -1401,8 +1401,8 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       openPopup(this.context.component);
 
       clickTodayButton(this.context.component);
-      await timer(POPOVER_ANIMATION_DURATION);
-      await tick();
+      await task(POPOVER_ANIMATION_DURATION);
+      await frame();
 
       const popup = getPopup(this.context.component);
 
@@ -1423,8 +1423,8 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       openPopup(this.context.component);
 
       clickClearButton(this.context.component);
-      await timer(POPOVER_ANIMATION_DURATION);
-      await tick();
+      await task(POPOVER_ANIMATION_DURATION);
+      await frame();
 
       const popup = getPopup(this.context.component);
 
@@ -1437,14 +1437,14 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     it('should coerce no square bracket string correctly into an array of DayOfWeek', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.DISABLED_DAYS_OF_WEEK, '1,2,3,4,5');
-      await tick();
+      await frame();
       expect(this.context.component.disabledDaysOfWeek).toEqual([1, 2, 3, 4, 5]);
     });
 
     it('should coerce string correctly into an array of DayOfWeek', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.DISABLED_DAYS_OF_WEEK, '[1,2,3,4,5]');
-      await tick();
+      await frame();
       expect(this.context.component.disabledDaysOfWeek).toEqual([1, 2, 3, 4, 5]);
     });
 
@@ -1461,7 +1461,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const date = new Date();
       this.context.component.from = date;
-      await tick();
+      await frame();
       this.context.component.disabledDaysOfWeek = [date.getDay()];
 
       expect(this.context.component.from).toBeNull();
@@ -1471,7 +1471,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const date = new Date();
       this.context.component.to = date;
-      await tick();
+      await frame();
       this.context.component.disabledDaysOfWeek = [date.getDay()];
 
       expect(this.context.component.to).toBeNull();
@@ -1482,7 +1482,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const adapterSpy = spyOn(this.context.component['_core']['_adapter'], 'setCalendarDisabledDaysOfWeek').and.callThrough();
 
       openPopup(this.context.component);
-      await tick();
+      await frame();
       this.context.component.disabledDaysOfWeek = [1];
       expect(adapterSpy).toHaveBeenCalled();
     });
@@ -1491,7 +1491,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.disabledDaysOfWeek = [0];
       openPopup(this.context.component);
-      await tick();
+      await frame();
 
       const allSundays = getAllTdElementsForSundays(this.context.component);
       const thatAllSundaysAreDisabled = allSundays.every(td => td!.getAttribute('aria-disabled') === 'true');
@@ -1501,9 +1501,9 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     it('should set sundays disabled in calendar popup', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       openPopup(this.context.component);
-      await tick();
+      await frame();
       this.context.component.disabledDaysOfWeek = [0];
-      await tick();
+      await frame();
 
       const allSundays = getAllTdElementsForSundays(this.context.component);
       const thatAllSundaysAreDisabled = allSundays.every(td => td!.getAttribute('aria-disabled') === 'true');
@@ -1524,7 +1524,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const today = new Date();
       openPopup(this.context.component);
-      await tick();
+      await frame();
       this.context.component.disableDayCallback = (date: Date) => date.toLocaleDateString() === today.toLocaleDateString();
       
       const todayElement = getCalendarShadow(this.context.component).querySelector(CALENDAR_CONSTANTS.selectors.DATE_TODAY);
@@ -1659,7 +1659,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
   }
 
   async function popupCloseAnimation(): Promise<void> {
-    return timer(POPOVER_ANIMATION_DURATION);
+    return task(POPOVER_ANIMATION_DURATION);
   }
 
   function expectPopupOpen(component: IDateRangePickerComponent, isOpen: boolean): void {

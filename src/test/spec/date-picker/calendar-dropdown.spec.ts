@@ -1,5 +1,5 @@
 import { removeElement } from '@tylertech/forge-core';
-import { tick, timer } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 import { defineCalendarComponent } from '@tylertech/forge/calendar';
 import { CalendarDropdown, ICalendarDropdown } from '@tylertech/forge/calendar';
 import { definePopoverComponent, IPopoverComponent, POPOVER_CONSTANTS } from '@tylertech/forge/popover';
@@ -42,8 +42,8 @@ describe('CalendarDropdown', function(this: ITestContext) {
     this.context.calendarDropdown.open({ id: DEFAULT_ID });
     this.context.calendarDropdown.destroy();
 
-    await tick();
-    await timer(POPOVER_ANIMATION_DURATION);
+    await frame();
+    await task(POPOVER_ANIMATION_DURATION);
     const popup = getPopup(DEFAULT_ID);
 
     expect(this.context.calendarDropdown.isOpen).toBeFalse();
