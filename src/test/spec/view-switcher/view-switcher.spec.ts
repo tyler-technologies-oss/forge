@@ -9,7 +9,7 @@ import {
   defineViewComponent
 } from '@tylertech/forge/view-switcher';
 import { removeElement, removeAllChildren, Platform, getShadowElement } from '@tylertech/forge-core';
-import { tick, timer } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 
 interface ITestContext {
   context: IViewSwitcherTestContext;
@@ -63,7 +63,7 @@ describe('ViewSwitcherComponent', function(this: ITestContext) {
       removeAllChildren(this.context.viewSwitcher);
       document.body.appendChild(this.context.viewSwitcher);
 
-      await tick();
+      await frame();
 
       // Add all views and make sure first view is visible
       this.context.viewSwitcher.appendChild(this.context.views[0]);
@@ -76,42 +76,42 @@ describe('ViewSwitcherComponent', function(this: ITestContext) {
     it('should handle views being removed while using slide animation type', async function(this: ITestContext) {
       this.context = setupTestContext(false, { index: 0, animationType: ViewSwitcherAnimationType.Slide });
       document.body.appendChild(this.context.viewSwitcher);
-      await tick();
+      await frame();
 
       this.context.viewSwitcher.index = 2;
-      await timer(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
+      await task(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
 
       removeElement(this.context.views[2]);
-      await timer(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
+      await task(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
       expect(this.context.viewSwitcher.index).toBe(1);
 
       removeElement(this.context.views[1]);
-      await timer(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
+      await task(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
       expect(this.context.viewSwitcher.index).toBe(0);
 
       removeElement(this.context.views[0]);
-      await timer(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
+      await task(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
       expect(this.context.viewSwitcher.index).toBe(0);
     });
 
     it('should handle views being removed while using fade animation type', async function(this: ITestContext) {
       this.context = setupTestContext(false, { index: 0, animationType: ViewSwitcherAnimationType.Fade });
       document.body.appendChild(this.context.viewSwitcher);
-      await tick();
+      await frame();
 
       this.context.viewSwitcher.index = 2;
-      await timer(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
+      await task(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
 
       removeElement(this.context.views[2]);
-      await timer(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
+      await task(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
       expect(this.context.viewSwitcher.index).toBe(1);
 
       removeElement(this.context.views[1]);
-      await timer(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
+      await task(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
       expect(this.context.viewSwitcher.index).toBe(0);
 
       removeElement(this.context.views[0]);
-      await timer(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
+      await task(VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION);
       expect(this.context.viewSwitcher.index).toBe(0);
     });
 
@@ -119,11 +119,11 @@ describe('ViewSwitcherComponent', function(this: ITestContext) {
       // Start with last view visible
       this.context = setupTestContext(true, { index: 2, animationType: ViewSwitcherAnimationType.None });
 
-      await tick();
+      await frame();
       // Remove the last view so that the view switcher will transition to the new last view (view 2);
       this.context.viewSwitcher.removeChild(this.context.views[2]);
       this.context.views.splice(2, 1);
-      await tick();
+      await frame();
 
       expectVisibleView(this.context.viewSwitcher, this.context.views, 1, ViewSwitcherAnimationType.None);
     });
@@ -132,7 +132,7 @@ describe('ViewSwitcherComponent', function(this: ITestContext) {
       this.context = setupTestContext(true, { animationType: ViewSwitcherAnimationType.Slide });
       const rootElement = getShadowElement(this.context.viewSwitcher, VIEW_SWITCHER_CONSTANTS.selectors.ROOT);
       
-      await tick();
+      await frame();
 
       // Store original height of first view
       const originalRootHeight = rootElement.getBoundingClientRect().height;
@@ -159,7 +159,7 @@ describe('ViewSwitcherComponent', function(this: ITestContext) {
 
     it('should instantiate properly with default values', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       expect(this.context.viewSwitcher.isConnected).toBe(true);
       expect(this.context.viewSwitcher instanceof ViewSwitcherComponent).toBe(true);
@@ -169,14 +169,14 @@ describe('ViewSwitcherComponent', function(this: ITestContext) {
 
     it('should show first view by default', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       expectVisibleView(this.context.viewSwitcher, this.context.views, 0, ViewSwitcherAnimationType.None);
     });
 
     it('should change view', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       this.context.viewSwitcher.index = 1;
       expectVisibleView(this.context.viewSwitcher, this.context.views, 1, ViewSwitcherAnimationType.None);
@@ -184,7 +184,7 @@ describe('ViewSwitcherComponent', function(this: ITestContext) {
 
     it('should change view using slide animation', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       this.context.viewSwitcher.animationType = ViewSwitcherAnimationType.Slide;
       await transitionToView(this.context.viewSwitcher, 1);
@@ -193,7 +193,7 @@ describe('ViewSwitcherComponent', function(this: ITestContext) {
 
     it('should skip views when sliding in both directions', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       this.context.viewSwitcher.animationType = ViewSwitcherAnimationType.Slide;
       await transitionToView(this.context.viewSwitcher, 2);
@@ -203,7 +203,7 @@ describe('ViewSwitcherComponent', function(this: ITestContext) {
 
     it('should change view using fade animation', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       this.context.viewSwitcher.animationType = ViewSwitcherAnimationType.Fade;
       await transitionToView(this.context.viewSwitcher, 1);
@@ -212,7 +212,7 @@ describe('ViewSwitcherComponent', function(this: ITestContext) {
 
     it('should toggle views', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       this.context.viewSwitcher.animationType = ViewSwitcherAnimationType.Fade;
       await transitionToView(this.context.viewSwitcher, 1);
@@ -222,7 +222,7 @@ describe('ViewSwitcherComponent', function(this: ITestContext) {
 
     it('should toggle views synchronously', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       this.context.viewSwitcher.animationType = ViewSwitcherAnimationType.Fade;
       this.context.viewSwitcher.index = 1;
@@ -232,72 +232,72 @@ describe('ViewSwitcherComponent', function(this: ITestContext) {
 
     it('should toggle views synchronously without a transition', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       this.context.viewSwitcher.index = 1;
-      await tick();
+      await frame();
       this.context.viewSwitcher.index = 0;
-      await tick();
+      await frame();
       expectVisibleView(this.context.viewSwitcher, this.context.views, 0, ViewSwitcherAnimationType.None);
     });
 
     it('should set view via next() method', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       this.context.viewSwitcher.next();
-      await tick();
+      await frame();
       expectVisibleView(this.context.viewSwitcher, this.context.views, 1, ViewSwitcherAnimationType.None);
     });
 
     it('should set view via previous() method', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       this.context.viewSwitcher.index = 1;
-      await tick();
+      await frame();
       this.context.viewSwitcher.previous();
-      await tick();
+      await frame();
       expectVisibleView(this.context.viewSwitcher, this.context.views, 0, ViewSwitcherAnimationType.None);
     });
 
     it('should go to last view', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       this.context.viewSwitcher.goToEnd();
-      await tick();
+      await frame();
       expectVisibleView(this.context.viewSwitcher, this.context.views, 2, ViewSwitcherAnimationType.None);
     });
 
     it('should go to first view', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       this.context.viewSwitcher.goToEnd();
-      await tick();
+      await frame();
       this.context.viewSwitcher.goToStart();
-      await tick();
+      await frame();
       expectVisibleView(this.context.viewSwitcher, this.context.views, 0, ViewSwitcherAnimationType.None);
     });
 
     it('should not change view if index outside bounds is specified', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       this.context.viewSwitcher.index = 10;
-      await tick();
+      await frame();
       expectVisibleView(this.context.viewSwitcher, this.context.views, 0, ViewSwitcherAnimationType.None, 10);
     });
 
     it('should not change view if negative index is specified', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       
       this.context.viewSwitcher.index = 1;
-      await tick();
+      await frame();
       this.context.viewSwitcher.index = -10;
-      await tick();
+      await frame();
       expectVisibleView(this.context.viewSwitcher, this.context.views, 1, ViewSwitcherAnimationType.None, -10);
     });
   });
@@ -346,11 +346,11 @@ describe('ViewSwitcherComponent', function(this: ITestContext) {
   }
 
   async function transitionToView(viewSwitcher: IViewSwitcherComponent, index: number, duration = VIEW_SWITCHER_CONSTANTS.numbers.DEFAULT_TRANSITION_DURATION): Promise<void> {
-    await tick();
+    await frame();
     viewSwitcher.index = index;
-    await tick();
+    await frame();
     // TODO(kieran.nichols): This is brittle, use transitionend listener instead?
-    await timer(duration + 500);
+    await task(duration + 500);
   }
 
   function expectVisibleView(viewSwitcher: IViewSwitcherComponent, views: IViewComponent[], index: number, animationType: ViewSwitcherAnimationType, expectedViewIndex?: number): void {

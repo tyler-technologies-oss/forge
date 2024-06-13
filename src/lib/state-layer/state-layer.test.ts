@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../core/utils/utils';
 import type { IStateLayerComponent } from './state-layer';
 import { MINIMUM_PRESS_MS, PRESS_GROW_MS, STATE_LAYER_CONSTANTS, TOUCH_DELAY_MS } from './state-layer-constants';
 import { createMouseEventInit, simulateHover, simulateLeave, simulatePressAndHold, simulatePressed } from '../core/testing/pointer';
@@ -100,7 +100,7 @@ describe('StateLayer', () => {
     const animateSpy = spy(surface, 'animate');
 
     simulatePressed(container);
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.true;
     expect(animateSpy).to.have.been.calledOnce;
@@ -112,7 +112,7 @@ describe('StateLayer', () => {
     const animateSpy = spy(surface, 'animate');
 
     simulatePressed(container);
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.false;
     expect(animateSpy).not.to.have.been.called;
@@ -126,7 +126,7 @@ describe('StateLayer', () => {
     await elementUpdated(stateLayer);
 
     simulatePressed(container);
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.false;
     expect(animateSpy).not.to.have.been.called;
@@ -138,7 +138,7 @@ describe('StateLayer', () => {
     const animateSpy = spy(surface, 'animate');
 
     simulatePressed(container, { pointerType: 'touch' });
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.true;
     expect(animateSpy).to.have.been.called;
@@ -148,11 +148,11 @@ describe('StateLayer', () => {
     const { container, surface } = await createFixture();
 
     simulatePressed(container);
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.true;
 
-    await timer(PRESS_GROW_MS);
+    await task(PRESS_GROW_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.false;
   });
@@ -162,12 +162,12 @@ describe('StateLayer', () => {
     const animateSpy = spy(surface, 'animate');
 
     await simulatePressAndHold(container);
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.true;
 
     simulateHover(container);
-    await timer(PRESS_GROW_MS);
+    await task(PRESS_GROW_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.true;
     expect(animateSpy).to.have.been.calledOnce;
@@ -191,13 +191,13 @@ describe('StateLayer', () => {
     const animateSpy = spy(surface, 'animate');
 
     simulatePressed(container);
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.true;
 
     const evtInit = createMouseEventInit(container);
     container.dispatchEvent(new PointerEvent('pointercancel', evtInit));
-    await timer(MINIMUM_PRESS_MS);
+    await task(MINIMUM_PRESS_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.false;
     expect(animateSpy).to.have.been.calledOnce;
@@ -209,12 +209,12 @@ describe('StateLayer', () => {
     const animateSpy = spy(surface, 'animate');
 
     simulatePressed(container);
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.true;
 
     container.dispatchEvent(new MouseEvent('contextmenu'));
-    await timer(MINIMUM_PRESS_MS);
+    await task(MINIMUM_PRESS_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.false;
     expect(animateSpy).to.have.been.calledOnce;
@@ -228,7 +228,7 @@ describe('StateLayer', () => {
     stateLayer.targetElement = null;
 
     simulatePressed(container);
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.false;
     expect(stateLayer.targetElement).to.be.null;
@@ -244,13 +244,13 @@ describe('StateLayer', () => {
     expect(stateLayer.targetElement).to.equal(sibling);
 
     simulatePressed(container);
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.false;
     expect(animateSpy).not.to.have.been.called;
 
     simulatePressed(sibling);
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.true;
     expect(animateSpy).to.have.been.calledOnce;
@@ -265,7 +265,7 @@ describe('StateLayer', () => {
     await elementUpdated(surface);
 
     container.click();
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.true;
     expect(animateSpy).to.have.been.calledOnce;
@@ -292,7 +292,7 @@ describe('StateLayer', () => {
     expect(stateLayer.targetElement).to.equal(container);
 
     simulatePressed(container);
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(animateSpy).to.have.been.called;
 
@@ -300,7 +300,7 @@ describe('StateLayer', () => {
     await elementUpdated(stateLayer);
 
     simulatePressed(sibling);
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(animateSpy).to.have.been.calledTwice;
   });

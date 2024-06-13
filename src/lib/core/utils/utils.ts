@@ -315,3 +315,21 @@ export function setAriaControls(component: HTMLElement): void {
     component.setAttribute('aria-controls', placeholderDiv.id);
   }
 }
+
+/**
+ * Converts `setTimeout()` to a `Promise` that resolves after a specified delay.
+ *
+ * Useful for delay some code until the next event loop cycle.
+ */
+export function task(duration = 0): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, duration));
+}
+
+/**
+ * Converts `requestAnimationFrame()` to a `Promise`.
+ *
+ * Useful for delaying some code until the next animation frame is rendered by the browser.
+ */
+export function frame(): Promise<void> {
+  return new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+}

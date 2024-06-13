@@ -3,11 +3,11 @@ import { elementUpdated, fixture, html } from '@open-wc/testing';
 import sinon from 'sinon';
 import { IToastComponent, ToastComponent } from './toast';
 import { TOAST_CONSTANTS } from './toast-constants';
-import { timer } from '@tylertech/forge-testing';
-
-import './toast';
+import { task } from '../core/utils/utils';
 import { IOverlayComponent } from '../overlay';
 import { IIconComponent } from '../icon';
+
+import './toast';
 
 const TOAST_ANIMATION_DURATION = 400;
 
@@ -91,7 +91,7 @@ describe('Toast', () => {
       expect(el.open).to.be.true;
 
       el.open = false;
-      await timer(TOAST_ANIMATION_DURATION);
+      await task(TOAST_ANIMATION_DURATION);
 
       expect(el.open).to.be.false;
       expect(el.hasAttribute(TOAST_CONSTANTS.attributes.OPEN)).to.be.false;
@@ -106,7 +106,7 @@ describe('Toast', () => {
       expect(el.open).to.be.true;
 
       el.open = false;
-      await timer(TOAST_ANIMATION_DURATION);
+      await task(TOAST_ANIMATION_DURATION);
 
       expect(el.open).to.be.false;
       expect(closeSpy.called).to.be.false;
@@ -119,7 +119,7 @@ describe('Toast', () => {
 
       expect(el.open).to.be.true;
 
-      await timer(TOAST_ANIMATION_DURATION + TOAST_CONSTANTS.defaults.DURATION);
+      await task(TOAST_ANIMATION_DURATION + TOAST_CONSTANTS.defaults.DURATION);
 
       expect(el.open).to.be.false;
       expect(el.hasAttribute(TOAST_CONSTANTS.attributes.OPEN)).to.be.false;
@@ -131,7 +131,7 @@ describe('Toast', () => {
 
       expect(el.open).to.be.true;
 
-      await timer(TOAST_ANIMATION_DURATION + 500);
+      await task(TOAST_ANIMATION_DURATION + 500);
 
       expect(el.open).to.be.false;
       expect(el.hasAttribute(TOAST_CONSTANTS.attributes.OPEN)).to.be.false;
@@ -144,7 +144,7 @@ describe('Toast', () => {
 
       expect(el.open).to.be.true;
 
-      await timer(TOAST_ANIMATION_DURATION + 100);
+      await task(TOAST_ANIMATION_DURATION + 100);
 
       expect(el.open).to.be.true;
       expect(closeSpy.called).to.be.false;
@@ -156,7 +156,7 @@ describe('Toast', () => {
       expect(el.open).to.be.true;
 
       el.duration = 0;
-      await timer(TOAST_ANIMATION_DURATION + 100);
+      await task(TOAST_ANIMATION_DURATION + 100);
 
       expect(el.open).to.be.true;
     });
@@ -167,7 +167,7 @@ describe('Toast', () => {
       expect(el.open).to.be.true;
 
       el.duration = 500;
-      await timer(TOAST_ANIMATION_DURATION + 500);
+      await task(TOAST_ANIMATION_DURATION + 500);
 
       expect(el.open).to.be.false;
     });
@@ -187,7 +187,7 @@ describe('Toast', () => {
       expect(el.open).to.be.true;
 
       el.hide();
-      await timer(TOAST_ANIMATION_DURATION);
+      await task(TOAST_ANIMATION_DURATION);
 
       expect(el.open).to.be.false;
       expect(el.hasAttribute(TOAST_CONSTANTS.attributes.OPEN)).to.be.false;
@@ -217,7 +217,7 @@ describe('Toast', () => {
       expect(el.open).to.be.true;
 
       getCloseButton(el).click();
-      await timer(TOAST_ANIMATION_DURATION);
+      await task(TOAST_ANIMATION_DURATION);
 
       expect(el.open).to.be.false;
       expect(el.hasAttribute(TOAST_CONSTANTS.attributes.OPEN)).to.be.false;
@@ -229,7 +229,7 @@ describe('Toast', () => {
       el.addEventListener(TOAST_CONSTANTS.events.CLOSE, closeSpy);
 
       getCloseButton(el).click();
-      await timer(TOAST_ANIMATION_DURATION);
+      await task(TOAST_ANIMATION_DURATION);
 
       expect(closeSpy.calledOnce).to.be.true;
     });
@@ -270,7 +270,7 @@ describe('Toast', () => {
       await elementUpdated(el);
 
       getCloseButton(el).click();
-      await timer(TOAST_ANIMATION_DURATION);
+      await task(TOAST_ANIMATION_DURATION);
 
       expect(el.open).to.be.true;
       expect(closeSpy.called).to.be.false;
@@ -310,7 +310,7 @@ describe('Toast', () => {
       expect(el.open).to.be.true;
 
       getActionButton(el).click();
-      await timer(TOAST_ANIMATION_DURATION);
+      await task(TOAST_ANIMATION_DURATION);
 
       expect(el.open).to.be.true;
     });
@@ -393,7 +393,7 @@ describe('Toast', () => {
 
       expect(toast.open).to.be.true;
 
-      await timer(TOAST_ANIMATION_DURATION + 500);
+      await task(TOAST_ANIMATION_DURATION + 500);
 
       expect(toast.open).to.be.false;
       expect(toast.hasAttribute(TOAST_CONSTANTS.attributes.OPEN)).to.be.false;

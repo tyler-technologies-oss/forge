@@ -1,5 +1,5 @@
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
-import { tick } from '@tylertech/forge-testing';
+import { frame } from '@tylertech/forge/core/utils/utils';
 import { IExpansionPanelComponent, IIconComponent } from '@tylertech/forge';
 import {
   defineStepComponent,
@@ -146,7 +146,7 @@ describe('StepperComponent', function (this: ITestContext) {
     this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
 
     this.context.component.layoutAlign = 'left';
-    await tick();
+    await frame();
     expect(this.context.getRootElement().classList.contains(STEPPER_CONSTANTS.classes.ALIGN_LEFT)).toBe(true, 'did not correctly set alignment class');
   });
 
@@ -154,7 +154,7 @@ describe('StepperComponent', function (this: ITestContext) {
     this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
 
     this.context.component.layoutAlign = 'center';
-    await tick();
+    await frame();
     expect(this.context.getRootElement().classList.contains(STEPPER_CONSTANTS.classes.ALIGN_CENTER)).toBe(true, 'did not correctly set alignment class');
   });
 
@@ -162,7 +162,7 @@ describe('StepperComponent', function (this: ITestContext) {
     this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
 
     this.context.component.layoutAlign = 'right';
-    await tick();
+    await frame();
     expect(this.context.getRootElement().classList.contains(STEPPER_CONSTANTS.classes.ALIGN_RIGHT)).toBe(true, 'did not correctly set alignment class');
   });
 
@@ -173,7 +173,7 @@ describe('StepperComponent', function (this: ITestContext) {
     this.context.component.layoutAlign = 'center';
     this.context.component.layoutAlign = 'left';
     this.context.component.layoutAlign = 'right';
-    await tick();
+    await frame();
     expect(this.context.getRootElement().classList.contains(STEPPER_CONSTANTS.classes.ALIGN_RIGHT)).toBe(true, 'did not correctly set alignment class');
   });
 
@@ -183,7 +183,7 @@ describe('StepperComponent', function (this: ITestContext) {
     this.context.component.layoutMode = 'clustered';
     this.context.component.layoutMode = 'fixed';
     this.context.component.layoutMode = 'clustered';
-    await tick();
+    await frame();
     expect(this.context.getRootElement().classList.contains(STEPPER_CONSTANTS.classes.CLUSTERED)).toBe(true, 'did not correctly set layout class');
   });
 
@@ -191,11 +191,11 @@ describe('StepperComponent', function (this: ITestContext) {
     this.context = setupTestContext(false, DEFAULT_STEP_COUNT);
     this.context.component.linear = true;
     this.context.append();
-    await tick();
+    await frame();
     const originalSelectedIndex = this.context.component.selectedIndex;
     const stepOne = this.context.getSteps()[1];
     stepOne.click();
-    await tick();
+    await frame();
 
     expect(stepOne.selected).toBe(false, 'should not be selected when stepper is set to linear');
     expect(this.context.component.selectedIndex).toBe(originalSelectedIndex, 'expected stepper selected index to not have changed');
@@ -204,7 +204,7 @@ describe('StepperComponent', function (this: ITestContext) {
   it('should disable all steps if stepper set to disabled by property', async function (this: ITestContext) {
     this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
 
-    await tick();
+    await frame();
     this.context.component.disabled = true;
     expect(this.context.getSteps().map(s => s.disabled).reduce((next, previous) => next && previous)).toBe(true, 'not all steps are disabled')
   });
@@ -212,9 +212,9 @@ describe('StepperComponent', function (this: ITestContext) {
   it('should enable all steps if stepper set to disabled by property', async function (this: ITestContext) {
     this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
 
-    await tick();
+    await frame();
     this.context.component.setAttribute('disabled', '');
-    await tick();
+    await frame();
     this.context.component.removeAttribute('disabled');
 
     expect(this.context.getSteps().map(s => s.disabled).reduce((next, previous) => next && previous)).toBe(false, 'all steps are still disabled')
@@ -225,7 +225,7 @@ describe('StepperComponent', function (this: ITestContext) {
     this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
     this.context.component.addEventListener(STEP_CONSTANTS.events.SELECT, spy);
 
-    await tick();
+    await frame();
     const stepOne = this.context.getSteps()[1];
     stepOne.disabled = true;
 
@@ -239,7 +239,7 @@ describe('StepperComponent', function (this: ITestContext) {
   describe('events', function (this: ITestContext) {
     it('should set selected by default when step is clicked', async function (this: ITestContext) {
       this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
-      await tick();
+      await frame();
 
       const stepElements = this.context.getSteps();
       const stepOne = stepElements[0];
@@ -249,7 +249,7 @@ describe('StepperComponent', function (this: ITestContext) {
 
     it('should focus next step when arrow right keys are used', async function (this: ITestContext) {
       this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
-      await tick();
+      await frame();
 
       const stepElements = this.context.getSteps();
       const stepOne = stepElements[0];
@@ -257,14 +257,14 @@ describe('StepperComponent', function (this: ITestContext) {
       stepOne.focus();
       stepOne.click();
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.ARROW_RIGHT_KEY }));
-      await tick();
+      await frame();
 
       expect(stepTwo.matches(':focus-within')).toBeTrue();
     });
 
     it('should focus the last step when arrow left key is used at the start', async function (this: ITestContext) {
       this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
-      await tick();
+      await frame();
 
       const stepElements = this.context.getSteps();
       const stepOne = stepElements[0];
@@ -272,14 +272,14 @@ describe('StepperComponent', function (this: ITestContext) {
       stepOne.focus();
       stepOne.click();
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.ARROW_LEFT_KEY }));
-      await tick();
+      await frame();
 
       expect(lastStep.matches(':focus-within')).toBeTrue();
     });
 
     it('should focus the last step when end key is used at the start', async function (this: ITestContext) {
       this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
-      await tick();
+      await frame();
 
       const stepElements = this.context.getSteps();
       const stepOne = stepElements[0];
@@ -287,14 +287,14 @@ describe('StepperComponent', function (this: ITestContext) {
       stepOne.focus();
       stepOne.click();
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.END_KEY }));
-      await tick();
+      await frame();
 
       expect(lastStep.matches(':focus-within')).toBeTrue();
     });
 
     it('should focus the last step when home key is used at the start', async function (this: ITestContext) {
       this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
-      await tick();
+      await frame();
 
       const stepElements = this.context.getSteps();
       const stepOne = stepElements[0];
@@ -302,21 +302,21 @@ describe('StepperComponent', function (this: ITestContext) {
       stepThree.focus();
       stepThree.click();
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.HOME_KEY }));
-      await tick();
+      await frame();
 
       expect(stepOne.matches(':focus-within')).toBeTrue();
     });
 
     it('should only allow keys from the accepted list', async function (this: ITestContext) {
       this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
-      await tick();
+      await frame();
 
       const stepElements = this.context.getSteps();
       const stepThree = stepElements[2];
       stepThree.click();
       stepThree.focus();
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrorUp' }));
-      await tick();
+      await frame();
 
       expect(stepThree.matches(':focus-within')).toBeTrue();
     });
@@ -325,7 +325,7 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context = setupTestContext(false, DEFAULT_STEP_COUNT);
       this.context.component.linear = true;
       this.context.append();
-      await tick();
+      await frame();
 
       const stepElements = this.context.getSteps();
       const stepThree = stepElements[2];
@@ -334,7 +334,7 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.ARROW_RIGHT_KEY }));
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.ARROW_RIGHT_KEY }));
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.ARROW_RIGHT_KEY }));
-      await tick();
+      await frame();
 
       expect(stepThree.matches(':focus-within')).toBeTrue();
     });
@@ -352,7 +352,7 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context.component.appendChild(step2);
       this.context.append();
 
-      await tick();
+      await frame();
 
       expect(step1.hasAttribute(STEP_CONSTANTS.attributes.FIRST)).toBe(true, 'Did not get the attribute "first" when initialized');
       expect(step2.hasAttribute(STEP_CONSTANTS.attributes.LAST)).toBe(true, 'Did not get the attribute "last" when initialized');
@@ -362,7 +362,7 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context = setupTestContext(false, DEFAULT_STEP_COUNT);
       this.context.component.selectedIndex = 1;
       this.context.append();
-      await tick();
+      await frame();
       const stepTwo = this.context.getSteps()[1];
       expect(stepTwo.selected).toBe(true, ' was not auto selected by the stepper selected index');
     });
@@ -371,7 +371,7 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context = setupTestContext(false, DEFAULT_STEP_COUNT);
       this.context.component.selectedIndex = undefined as any;
       this.context.append();
-      await tick();
+      await frame();
       const stepTwo = this.context.getSteps()[1];
       expect(stepTwo.selected).toBe(false, 'step two should not have been selected');
     });
@@ -379,7 +379,7 @@ describe('StepperComponent', function (this: ITestContext) {
     it('should unselect any selected steps when a new step is selected', async function (this: ITestContext) {
       this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
       this.context.component.selectedIndex = 1;
-      await tick();
+      await frame();
       this.context.component.selectedIndex = 2;
       const stepElements = this.context.getSteps();
       expect(stepElements[1].selected).toBe(false, 'should have deselected step two');
@@ -391,7 +391,7 @@ describe('StepperComponent', function (this: ITestContext) {
     it('should render steps', async function (this: ITestContext) {
       this.context = setupTestContext(true, DEFAULT_STEPS.length);
       this.context.component.steps = DEFAULT_STEPS;
-      await tick();
+      await frame();
       expect(this.context.getSteps().length).toBe(DEFAULT_STEPS.length, 'should overwrite any existing steps');
       expect(this.context.getSteps()[0].textContent).toBe('Step one', 'should have the correct label configuration');
       expect(this.context.getSteps()[0].completed).toBe(true, 'should have the correct completed configuration');
@@ -402,11 +402,11 @@ describe('StepperComponent', function (this: ITestContext) {
     it('should not render steps if not an array or is empty', async function (this: ITestContext) {
       this.context = setupTestContext(true, DEFAULT_STEP_COUNT);
       this.context.component.steps = undefined as any;
-      await tick();
+      await frame();
       expect(this.context.getSteps().length).toBe(DEFAULT_STEP_COUNT, 'should not overwrite any existing steps');
 
       this.context.component.steps = [];
-      await tick();
+      await frame();
       expect(this.context.getSteps().length).toBe(DEFAULT_STEP_COUNT, 'should not overwrite any existing steps');
     });
 
@@ -416,7 +416,7 @@ describe('StepperComponent', function (this: ITestContext) {
       newSteps[0].error = true;
       this.context.component.steps = newSteps;
       this.context.append();
-      await tick();
+      await frame();
       const stepOne = this.context.getSteps()[0];
       expect(stepOne.error).toBe(true, 'did not correctly get set as an error state');
     });
@@ -427,7 +427,7 @@ describe('StepperComponent', function (this: ITestContext) {
       newSteps[0].completed = true;
       this.context.component.steps = newSteps;
       this.context.append();
-      await tick();
+      await frame();
       const stepOne = this.context.getSteps()[0];
       const icon = getShadowElement(stepOne, STEP_CONSTANTS.selectors.STEP).querySelector('forge-icon') as IIconComponent;
 
@@ -442,7 +442,7 @@ describe('StepperComponent', function (this: ITestContext) {
       newSteps[0].editable = true;
       this.context.component.steps = newSteps;
       this.context.append();
-      await tick();
+      await frame();
       const stepOne = this.context.getSteps()[0];
       const icon = getShadowElement(stepOne, STEP_CONSTANTS.selectors.STEP).querySelector('forge-icon') as IIconComponent;
 
@@ -456,7 +456,7 @@ describe('StepperComponent', function (this: ITestContext) {
       newSteps[0].disabled = true;
       this.context.component.steps = newSteps;
       this.context.append();
-      await tick();
+      await frame();
       const stepOne = this.context.getSteps()[0];
       const icon = getShadowElement(stepOne, STEP_CONSTANTS.selectors.STEP).querySelector('forge-icon') as IIconComponent;
 
@@ -470,10 +470,10 @@ describe('StepperComponent', function (this: ITestContext) {
       newSteps[0].completed = false;
       this.context.component.steps = newSteps;
       this.context.append();
-      await tick();
+      await frame();
       const stepOne = this.context.getSteps()[0];
       const icon = getShadowElement(stepOne, STEP_CONSTANTS.selectors.STEP).querySelector('forge-icon') as IIconComponent;
-      await tick();
+      await frame();
 
       expect(icon.name).toBe('block', 'Should have a block when disabled');
     });
@@ -486,10 +486,10 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context.component.selectedIndex = 0;
       this.context.component.steps = newSteps;
       this.context.append();
-      await tick();
+      await frame();
       const stepOne = this.context.getSteps()[0];
       const icon = getShadowElement(stepOne, STEP_CONSTANTS.selectors.STEP).querySelector('forge-icon') as IIconComponent;
-      await tick();
+      await frame();
 
       expect(icon.name).toBe('mode_edit', 'Should have a edit when selected and editable');
     });
@@ -498,7 +498,7 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context = setupTestContext(true, DEFAULT_STEPS.length);
       this.context.component.vertical = true;
       this.context.component.steps = DEFAULT_STEPS;
-      await tick();
+      await frame();
 
       this.context.component.steps = [...DEFAULT_STEPS];
 
@@ -519,7 +519,7 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context.component.appendChild(step2);
       this.context.append();
 
-      await tick();
+      await frame();
       const root = getShadowElement(this.context.component, STEPPER_CONSTANTS.selectors.STEPPER);
       expect(this.context.component.vertical).toBe(true);
       expect(root.classList.contains(STEPPER_CONSTANTS.classes.VERTICAL)).toBe(true);
@@ -536,8 +536,8 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context.component.appendChild(step1);
       this.context.append();
 
-      await tick();
-      await tick();
+      await frame();
+      await frame();
 
       const expander = getShadowElement(this.context.component.querySelector('forge-step') as HTMLElement, STEP_CONSTANTS.selectors.EXPANSION_PANEL) as IExpansionPanelComponent;
       expect(expander.open).toBe(true);
@@ -554,8 +554,8 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context.component.appendChild(step1);
       this.context.append();
 
-      await tick();
-      await tick();
+      await frame();
+      await frame();
 
       step1.click();
 
@@ -574,8 +574,8 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context.component.appendChild(step1);
       this.context.append();
 
-      await tick();
-      await tick();
+      await frame();
+      await frame();
 
       step1.click();
 
@@ -593,7 +593,7 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context.component.appendChild(step1);
       this.context.append();
 
-      await tick();
+      await frame();
 
       const expander = getShadowElement(this.context.component.querySelector('forge-step') as HTMLElement, STEP_CONSTANTS.selectors.EXPANSION_PANEL) as IExpansionPanelComponent;
       expect(getComputedStyle(expander).display).toBe('none');
@@ -608,7 +608,7 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context.component.appendChild(step1);
       this.context.append();
 
-      await tick();
+      await frame();
 
       const expander = getShadowElement(this.context.component.querySelector('forge-step') as HTMLElement, STEP_CONSTANTS.selectors.EXPANSION_PANEL) as IExpansionPanelComponent;
       expect(expander).toBeFalsy();
@@ -623,11 +623,11 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context.component.appendChild(step1);
       this.context.append();
 
-      await tick();
+      await frame();
       this.context.component.vertical = true;
-      await tick();
+      await frame();
       this.context.component.vertical = false;
-      await tick();
+      await frame();
 
       const expander = getShadowElement(this.context.component.querySelector('forge-step') as HTMLElement, STEP_CONSTANTS.selectors.EXPANSION_PANEL) as IExpansionPanelComponent;
       expect(expander).toBeFalsy();
@@ -642,11 +642,11 @@ describe('StepperComponent', function (this: ITestContext) {
       this.context.component.appendChild(step1);
       this.context.append();
 
-      await tick();
+      await frame();
       this.context.component.vertical = true;
-      await tick();
+      await frame();
       this.context.component.vertical = false;
-      await tick();
+      await frame();
 
       const icon = getShadowElement(this.context.component.querySelector('forge-step') as HTMLElement, STEP_CONSTANTS.selectors.EXPANSION_ICON) as HTMLElement;
       expect(icon).toBeFalsy();

@@ -6,9 +6,9 @@ import { LABEL_CONSTANTS } from '../../label';
 import { IRadioComponent, RADIO_CONSTANTS } from '../radio';
 import { IRadioGroupComponent } from './radio-group';
 import { RADIO_GROUP_CONSTANTS } from './radio-group-constants';
+import { frame } from '../../core/utils/utils';
 
 import './radio-group';
-import { tick } from '@tylertech/forge-testing';
 
 class RadioGroupHarness extends TestHarness<HTMLElement> {
   public radioElements: IRadioComponent[];
@@ -98,7 +98,7 @@ describe('Radio group', () => {
       label.innerText = 'Label';
       radioGroupEl.appendChild(label);
 
-      await tick();
+      await frame();
 
       expect(connectedSpy).not.to.have.been.called;
     });

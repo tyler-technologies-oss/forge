@@ -16,7 +16,7 @@ import {
   DIALOG_CONSTANTS
 } from './dialog-constants';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../core/utils/utils';
 
 import './dialog';
 
@@ -623,14 +623,14 @@ describe('Dialog', () => {
       const nestedDialog = el.querySelector('forge-dialog') as IDialogComponent;
 
       parentDialog.show();
-      await timer(400);
+      await task(400);
 
       nestedDialog.show();
-      await timer(400);
+      await task(400);
 
       sendKeys({ press: 'Escape' });
 
-      await timer(400);
+      await task(400);
 
       expect(parentDialog.open).to.be.true;
       expect(nestedDialog.open).to.be.false;
@@ -916,11 +916,11 @@ class DialogHarness {
   }
 
   public enterAnimation(): Promise<void> {
-    return timer(500);
+    return task(500);
   }
 
   public exitAnimation(): Promise<void> {
-    return timer(500);
+    return task(500);
   }
 }
 

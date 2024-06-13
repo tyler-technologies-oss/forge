@@ -1,5 +1,5 @@
 import { getValidationMessage, internals, isFocusable, setDefaultAria } from '../../constants';
-import { task } from '../../core/utils/event-utils';
+import { task } from '../../core/utils/utils';
 import { IRadioComponent, RADIO_CONSTANTS, tryCheck } from '../radio';
 
 /**

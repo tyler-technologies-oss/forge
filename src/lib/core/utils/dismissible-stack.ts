@@ -1,5 +1,5 @@
 import { Deferred } from './deferred';
-import { task } from './event-utils';
+import { task } from './utils';
 
 // The symbol to use for the tryDismiss method on dismissible elements
 export const tryDismiss = Symbol('tryDismiss');

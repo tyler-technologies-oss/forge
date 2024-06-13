@@ -1,5 +1,5 @@
 import { removeElement } from '@tylertech/forge-core';
-import { tick } from '@tylertech/forge-testing';
+import { frame } from '@tylertech/forge/core/utils/utils';
 import { IKeyboardShortcutComponent, KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback, defineKeyboardShortcutComponent } from '@tylertech/forge/keyboard-shortcut';
 
 interface ITestContext {
@@ -595,7 +595,7 @@ describe('KeyboardShortcutComponent', function(this: ITestContext) {
       spyOn(event, 'preventDefault');
       this.context.targetElement.dispatchEvent(event);
 
-      await tick();
+      await frame();
       expect(event.preventDefault).not.toHaveBeenCalled();
     });
 

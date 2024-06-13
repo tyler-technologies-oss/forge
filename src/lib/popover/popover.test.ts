@@ -3,7 +3,7 @@ import { spy } from 'sinon';
 import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../core/utils/utils';
 import {
   IPopoverToggleEventData,
   PopoverAnimationType,
@@ -680,7 +680,7 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
 
       await harness.hoverOutside();
-      await timer(POPOVER_HOVER_TIMEOUT + EXIT_ANIMATION_DURATION);
+      await task(POPOVER_HOVER_TIMEOUT + EXIT_ANIMATION_DURATION);
 
       expect(harness.isOpen).to.be.false;
     });
@@ -694,10 +694,10 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
 
       await harness.hoverOutside();
-      await timer(POPOVER_HOVER_TIMEOUT / 4);
+      await task(POPOVER_HOVER_TIMEOUT / 4);
       await harness.hoverTrigger();
       await harness.hoverSurface();
-      await timer(POPOVER_HOVER_TIMEOUT + 100);
+      await task(POPOVER_HOVER_TIMEOUT + 100);
 
       expect(harness.isOpen).to.be.true;
     });
@@ -739,7 +739,7 @@ describe('Popover', () => {
       await harness.hoverSurface();
       await elementUpdated(harness.popoverElement);
       await harness.hoverOutside();
-      await timer(POPOVER_HOVER_TIMEOUT + 100);
+      await task(POPOVER_HOVER_TIMEOUT + 100);
       await harness.exitAnimation();
 
       expect(harness.isOpen).to.be.false;
@@ -758,7 +758,7 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
 
       await harness.hoverOutside();
-      await timer(customDelay + 100);
+      await task(customDelay + 100);
       await harness.exitAnimation();
 
       expect(harness.isOpen).to.be.false;
@@ -770,7 +770,7 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.false;
 
       await harness.hoverTrigger();
-      await timer(harness.popoverElement.hoverDelay + 100);
+      await task(harness.popoverElement.hoverDelay + 100);
 
       expect(harness.isOpen).to.be.true;
     });
@@ -796,7 +796,7 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
 
       await harness.hoverOutside();
-      await timer(POPOVER_HOVER_TIMEOUT + 100);
+      await task(POPOVER_HOVER_TIMEOUT + 100);
 
       expect(harness.isOpen).to.be.true;
     });
@@ -811,7 +811,7 @@ describe('Popover', () => {
 
       harness.popoverElement.persistentHover = true;
       await harness.hoverOutside();
-      await timer(POPOVER_HOVER_TIMEOUT + 100);
+      await task(POPOVER_HOVER_TIMEOUT + 100);
 
       expect(harness.isOpen).to.be.true;
     });
@@ -1076,7 +1076,7 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
 
       await harness.hoverOutside();
-      await timer(POPOVER_HOVER_TIMEOUT + 100);
+      await task(POPOVER_HOVER_TIMEOUT + 100);
       await harness.exitAnimation();
 
       expect(harness.isOpen).to.be.false;
@@ -1500,7 +1500,7 @@ class PopoverHarness {
   public async longpressTrigger(delay = LONGPRESS_TRIGGER_DELAY): Promise<void> {
     await this.hoverTrigger();
     await sendMouse({ type: 'down', button: 'left' });
-    await timer(delay);
+    await task(delay);
     await sendMouse({ type: 'up', button: 'left' });
     await this.hoverOutside();
   }
@@ -1508,7 +1508,7 @@ class PopoverHarness {
   public async longpressStopBeforeDelay(): Promise<void> {
     await this.hoverTrigger();
     await sendMouse({ type: 'down', button: 'left' });
-    await timer(LONGPRESS_TRIGGER_DELAY / 2);
+    await task(LONGPRESS_TRIGGER_DELAY / 2);
     await sendMouse({ type: 'up', button: 'left' });
     await this.hoverOutside();
   }

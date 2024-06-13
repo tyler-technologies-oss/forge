@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { dispatchNativeEvent, tick } from '@tylertech/forge-testing';
+import { frame } from '../core/utils/utils';
 import { sendMouse } from '@web/test-runner-commands';
 import { match, spy } from 'sinon';
 import { FIELD_CONSTANTS, IFieldComponent } from '../field';
@@ -309,7 +309,7 @@ describe('Field', () => {
       const clickSpy = spy();
       harness.element.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK, clickSpy);
 
-      dispatchNativeEvent(harness.popoverIconElement, 'click');
+      harness.popoverIconElement.dispatchEvent(new PointerEvent('click'));
 
       expect(clickSpy.called).to.be.false;
     });
@@ -320,7 +320,7 @@ describe('Field', () => {
       harness.element.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK, clickSpy);
       harness.element.popoverIcon = false;
 
-      dispatchNativeEvent(harness.popoverIconElement, 'click');
+      harness.popoverIconElement.dispatchEvent(new PointerEvent('click'));
 
       expect(clickSpy.called).to.be.false;
     });
@@ -330,126 +330,126 @@ describe('Field', () => {
     it('should add class when start slot has content', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('start');
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_START)).to.be.true;
     });
 
     it('should not add class when start slot has no content', async () => {
       const harness = await createDefaultFixture();
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_START)).to.be.false;
     });
 
     it('should remove class when start slot content is removed', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('start');
-      await tick();
+      await frame();
       harness.removeSlottedContent('start');
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_START)).to.be.false;
     });
 
     it('should add class when end slot has content', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('end');
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_END)).to.be.true;
     });
 
     it('should not add class when end slot has no content', async () => {
       const harness = await createDefaultFixture();
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_END)).to.be.false;
     });
 
     it('should remove class when end slot content is removed', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('end');
-      await tick();
+      await frame();
       harness.removeSlottedContent('end');
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_END)).to.be.false;
     });
 
     it('should add class when accessory slot has content', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('accessory');
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_ACCESSORY)).to.be.true;
     });
 
     it('should not add class when accessory slot has no content', async () => {
       const harness = await createDefaultFixture();
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_ACCESSORY)).to.be.false;
     });
 
     it('should remove class when accessory slot content is removed', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('accessory');
-      await tick();
+      await frame();
       harness.removeSlottedContent('accessory');
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_ACCESSORY)).to.be.false;
     });
 
     it('should add class when support text slot has content', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('support-text');
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).to.be.true;
     });
 
     it('should not add class when support text slot has no content', async () => {
       const harness = await createDefaultFixture();
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).to.be.false;
     });
 
     it('should remove class when support text slot content is removed', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('support-text');
-      await tick();
+      await frame();
       harness.removeSlottedContent('support-text');
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).to.be.false;
     });
 
     it('should add class when support text end slot has content', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('support-text-end');
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_END)).to.be.true;
     });
 
     it('should not add class when support text end slot has no content', async () => {
       const harness = await createDefaultFixture();
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_END)).to.be.false;
     });
 
     it('should remove class when support text end slot content is removed', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('support-text-end');
-      await tick();
+      await frame();
       harness.removeSlottedContent('support-text-end');
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_END)).to.be.false;
     });
 
     it('should add class when label slot has content and label position is inset', async () => {
       const harness = await createFixture({ labelPosition: 'inset' });
       harness.addSlottedContent('label');
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_LABEL)).to.be.true;
     });
 
     it('should remove class when label slot content is removed and label position is inset', async () => {
       const harness = await createFixture({ labelPosition: 'inset' });
       harness.addSlottedContent('label');
-      await tick();
+      await frame();
       harness.removeSlottedContent('label');
-      await tick();
+      await frame();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_LABEL)).to.be.false;
     });
   });
@@ -494,7 +494,7 @@ describe('Field', () => {
       harness.addSlottedContent('label');
       harness.element.floatLabel = true;
 
-      await tick();
+      await frame();
 
       expect(animationSpy.calledWithMatch(match({ animationName: FIELD_CONSTANTS.animations.FLOAT_IN_LABEL }))).to.be.true;
     });
@@ -506,7 +506,7 @@ describe('Field', () => {
       harness.addSlottedContent('label');
       harness.element.floatLabel = false;
 
-      await tick();
+      await frame();
 
       expect(animationSpy.calledWithMatch(match({ animationName: FIELD_CONSTANTS.animations.FLOAT_OUT_LABEL }))).to.be.true;
     });
@@ -518,7 +518,7 @@ describe('Field', () => {
       harness.addSlottedContent('label');
       harness.element.floatLabelWithoutAnimation(true);
 
-      await tick();
+      await frame();
 
       expect(animationSpy.called).to.be.false;
     });
@@ -530,7 +530,7 @@ describe('Field', () => {
       harness.addSlottedContent('label');
       harness.element.floatLabelWithoutAnimation(false);
 
-      await tick();
+      await frame();
 
       expect(animationSpy.called).to.be.false;
     });

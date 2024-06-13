@@ -1,15 +1,11 @@
 import { HeaderMdx, Markdown, useOf } from '@storybook/blocks';
-import { Code as StorybookCode } from '@storybook/components';
+import { Code } from '@storybook/components';
 import { TagItem, getBranchName, getCustomElementType, getCustomElementsTagDeclaration, getCustomElementsTagModule, htmlEncode } from '../utils';
 
 import styles from './CustomArgTypes.module.scss';
 import GitHubLogo from './GitHubLogo';
 
 const BASE_GITHUB_URL = `https://github.com/tyler-technologies-oss/forge/tree`;
-
-// TODO: temporary workaround to fix typings issue with `children` prop
-const Code = StorybookCode as (props: { children: React.ReactNode }) => JSX.Element;
-
 const STORY_KIND_PATH_SEPARATOR = /\s*\/\s*/;
 
 export const extractTitle = (title: string) => {

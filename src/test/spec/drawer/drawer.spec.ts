@@ -1,6 +1,5 @@
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
-import { tick } from '@tylertech/forge-testing';
-import { IBackdropComponent } from '@tylertech/forge';
+import { frame } from '@tylertech/forge/core/utils/utils';
 import { defineDrawerComponent, IDrawerComponent, BASE_DRAWER_CONSTANTS } from '@tylertech/forge/drawer';
 
 interface ITestContext {
@@ -36,14 +35,14 @@ describe('MiniDrawerComponent', function(this: ITestContext) {
 
   it('should open the drawer when closed', async function (this: ITestContext) {
     this.context = setupTestContext();
-    await tick();
+    await frame();
     this.context.component.open = false;
     this.context.append();
 
     expect(this.context.component.open).toBe(false);
 
     this.context.component.open = true;
-    await tick();
+    await frame();
 
     expect(this.context.component.open).toBe(true);
   });
@@ -74,7 +73,7 @@ describe('MiniDrawerComponent', function(this: ITestContext) {
     this.context = setupTestContext(true);
 
     const root = getShadowElement(this.context.component, BASE_DRAWER_CONSTANTS.selectors.DRAWER);
-    await tick();
+    await frame();
     this.context.component.direction = 'right';
 
     expect(root.classList.contains(BASE_DRAWER_CONSTANTS.classes.LEFT)).toBe(false);
@@ -101,9 +100,9 @@ describe('MiniDrawerComponent', function(this: ITestContext) {
     this.context = setupTestContext(true);
     const root = getShadowElement(this.context.component, BASE_DRAWER_CONSTANTS.selectors.DRAWER);
 
-    await tick();
+    await frame();
     this.context.component.open = true;
-    await tick();
+    await frame();
 
     expect(this.context.component.open).toBe(true);
     expect(root.classList.contains(BASE_DRAWER_CONSTANTS.classes.CLOSED)).toBe(false);
@@ -115,7 +114,7 @@ describe('MiniDrawerComponent', function(this: ITestContext) {
     this.context.append();
 
     const root = getShadowElement(this.context.component, BASE_DRAWER_CONSTANTS.selectors.DRAWER);
-    await tick();
+    await frame();
     this.context.component.open = false;
 
     expect(root.classList.contains(BASE_DRAWER_CONSTANTS.classes.CLOSING)).toBe(true);

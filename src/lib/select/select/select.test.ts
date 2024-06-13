@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { nothing } from 'lit-html';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { tick } from '@tylertech/forge-testing';
+import { frame } from '../../core/utils/utils';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { ISelectComponent } from './select';
@@ -123,7 +123,7 @@ describe('Select', () => {
 
       const scrollElement = harness.element.popupElement!.shadowRoot!.querySelector(POPOVER_CONSTANTS.selectors.SURFACE) as HTMLElement;
       scrollElement.scrollTop = scrollElement.scrollHeight;
-      await tick();
+      await frame();
 
       expect(spyScrolledBottom.calledOnce).to.be.true;
     });
@@ -145,7 +145,7 @@ describe('Select', () => {
       const harness = await createFixture();
 
       harness.element.open = true;
-      await tick();
+      await frame();
 
       expect(harness.element.hasAttribute('open')).to.be.true;
       expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
@@ -157,7 +157,7 @@ describe('Select', () => {
       const harness = await createFixture();
 
       harness.element.open = true;
-      await tick();
+      await frame();
 
       expect(harness.element.hasAttribute('aria-activedescendant')).to.be.false;
 
@@ -174,12 +174,12 @@ describe('Select', () => {
       const harness = await createFixture();
 
       harness.element.open = true;
-      await tick();
+      await frame();
 
       expect(harness.element.hasAttribute('aria-activedescendant')).to.be.false;
 
       harness.element.focus();
-      await tick();
+      await frame();
 
       await harness.pressKey('ArrowDown');
 
@@ -212,7 +212,7 @@ describe('Select', () => {
       const harness = await createFixture({ multiple: true });
 
       harness.element.open = true;
-      await tick();
+      await frame();
 
       expect(harness.element.hasAttribute('open')).to.be.true;
       expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
@@ -239,7 +239,7 @@ describe('Select', () => {
       const harness = await createFixture();
 
       harness.element.open = true;
-      await tick();
+      await frame();
 
       await harness.clickElement(harness.element);
       await harness.popoverToggleAnimation;
@@ -253,7 +253,7 @@ describe('Select', () => {
       const harness = await createFixture();
 
       harness.element.open = true;
-      await tick();
+      await frame();
 
       await harness.clickOutside();
       await harness.popoverToggleAnimation;
@@ -690,7 +690,7 @@ describe('Select', () => {
 
       harness.element.labelPosition = 'inset';
       harness.element.value = 'one';
-      await tick();
+      await frame();
 
       expect(harness.fieldElement.floatLabel).to.be.true;
     });
@@ -700,7 +700,7 @@ describe('Select', () => {
 
       harness.element.labelPosition = 'inset';
       harness.element.placeholder = 'test';
-      await tick();
+      await frame();
 
       expect(harness.fieldElement.floatLabel).to.be.true;
     });
@@ -709,7 +709,7 @@ describe('Select', () => {
       const harness = await createFixture();
 
       harness.element.labelPosition = 'inset';
-      await tick();
+      await frame();
 
       expect(harness.fieldElement.floatLabel).to.be.false;
     });
@@ -719,7 +719,7 @@ describe('Select', () => {
 
       harness.element.labelPosition = 'inset';
       harness.element.floatLabel = true;
-      await tick();
+      await frame();
 
       expect(harness.fieldElement.floatLabel).to.be.true;
     });

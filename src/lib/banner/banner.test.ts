@@ -3,7 +3,7 @@ import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { IBannerComponent } from './banner';
 import { BannerTheme, BANNER_CONSTANTS } from './banner-constants';
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../core/utils/utils';
 
 import './banner';
 
@@ -117,14 +117,14 @@ describe('Banner', () => {
 
       el.persistent = true;
       dismissButton.click();
-      await timer(500);
+      await task(500);
 
       expect(dismissButton.hidden).to.be.true;
       expect(dismissSpy.calledOnce).to.be.false;
 
       el.persistent = false;
       dismissButton.click();
-      await timer(500);
+      await task(500);
 
       expect(dismissButton.hidden).to.be.false;
       expect(dismissSpy.calledOnce).to.be.true;
@@ -145,7 +145,7 @@ describe('Banner', () => {
 
       expect(beforeDismissSpy.calledOnce).to.be.true;
 
-      await timer(500);
+      await task(500);
 
       expect(el.dismissed).to.be.true;
       expect(beforeDismissSpy.calledOnce).to.be.true;
@@ -194,7 +194,7 @@ describe('Banner', () => {
 
       expect(dismissSpy.called).to.be.false;
 
-      await timer(500); // Transition duration defaults to 200ms
+      await task(500); // Transition duration defaults to 200ms
 
       expect(dismissSpy.calledOnce).to.be.true;
     });
@@ -214,7 +214,7 @@ describe('Banner', () => {
 
       expect(beforeDismissSpy.calledOnce).to.be.true;
 
-      await timer(500);
+      await task(500);
 
       expect(dismissSpy.called).to.be.false;
     });
@@ -231,7 +231,7 @@ describe('Banner', () => {
       await elementUpdated(el);
       dismissButton.click();
 
-      await timer(500);
+      await task(500);
 
       expect(beforeDismissSpy.called).to.be.false;
       expect(dismissSpy.called).to.be.false;
@@ -249,7 +249,7 @@ describe('Banner', () => {
       await elementUpdated(el);
       dismissButton.click();
 
-      await timer(500);
+      await task(500);
 
       expect(beforeDismissSpy.called).to.be.false;
       expect(dismissSpy.called).to.be.false;

@@ -1,5 +1,5 @@
 import { getShadowElement, removeElement, getActiveElement } from '@tylertech/forge-core';
-import { dispatchKeyEvent, tick, timer } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 import { BACKDROP_CONSTANTS } from '@tylertech/forge/backdrop/backdrop-constants';
 import { BOTTOM_SHEET_CONSTANTS, defineBottomSheetComponent, IBottomSheetComponent } from '@tylertech/forge/bottom-sheet';
 import { IBackdropComponent, IDialogComponent } from '@tylertech/forge';
@@ -107,7 +107,7 @@ describe('BottomSheetComponent', function(this: ITestContext) {
     const closeSpy = jasmine.createSpy('close');
     this.context.component.addEventListener(BOTTOM_SHEET_CONSTANTS.events.CLOSE, closeSpy);
     this.context.clickBackdrop();
-    await timer(500);
+    await task(500);
 
     expect(closeSpy).toHaveBeenCalled();
   });
@@ -122,7 +122,7 @@ describe('BottomSheetComponent', function(this: ITestContext) {
 
     this.context.clickBackdrop();
 
-    await timer(500);
+    await task(500);
     expect(spy).not.toHaveBeenCalled();
     expect(this.context.component.isConnected).toBe(true);
   });
@@ -138,9 +138,9 @@ describe('BottomSheetComponent', function(this: ITestContext) {
 
     this.context.component.mode = 'modal';
     await this.context.open();
-    await timer(500);
+    await task(500);
     this.context.nativeDialog.dispatchEvent(new Event('cancel'));
-    await timer(500);
+    await task(500);
 
     expect(beforeCloseSpy).toHaveBeenCalled();
     expect(closeSpy).not.toHaveBeenCalled();
@@ -158,8 +158,8 @@ describe('BottomSheetComponent', function(this: ITestContext) {
     this.context.component.addEventListener(BOTTOM_SHEET_CONSTANTS.events.BEFORE_CLOSE, beforeCloseSpy);
     await this.context.open();
     this.context.clickBackdrop();
-    await timer(500);
-    await tick();
+    await task(500);
+    await frame();
 
     expect(beforeCloseSpy).toHaveBeenCalled();
     expect(closeCallback).not.toHaveBeenCalled();
@@ -174,7 +174,7 @@ describe('BottomSheetComponent', function(this: ITestContext) {
     expect(this.context.component.persistent).toBe(false);
 
     this.context.nativeDialog.dispatchEvent(new Event('cancel'));
-    await timer(500);
+    await task(500);
 
     expect(this.context.component.isConnected).toBe(true);
     expect(this.context.component.open).toBe(false);
@@ -185,8 +185,8 @@ describe('BottomSheetComponent', function(this: ITestContext) {
     this.context.component.persistent = true;
     await this.context.open();
 
-    dispatchKeyEvent(this.context.backdrop, 'keydown', 'Escape');
-    await timer(500);
+    this.context.backdrop.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    await task(500);
 
     expect(this.context.component.isConnected).toBe(true);
   });
@@ -225,8 +225,8 @@ describe('BottomSheetComponent', function(this: ITestContext) {
     button.setAttribute('autofocus', '');
     this.context.component.appendChild(button);
     await this.context.open();
-    await tick();
-    await tick();
+    await frame();
+    await frame();
 
     expect(getActiveElement()).toBe(button);
   });
@@ -300,8 +300,8 @@ describe('BottomSheetComponent', function(this: ITestContext) {
       open: async () => {
         document.body.appendChild(component);
         component.open = true;
-        await timer(DIALOG_ANIMATION_DURATION);
-        return tick();
+        await task(DIALOG_ANIMATION_DURATION);
+        return frame();
       },
       clickBackdrop: function() {
         this.backdrop.click();

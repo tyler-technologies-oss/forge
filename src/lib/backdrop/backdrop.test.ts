@@ -1,10 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { nothing } from 'lit';
-import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { sendMouse } from '@web/test-runner-commands';
+import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
+import { sendMouse } from '@web/test-runner-commands';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../core/utils/utils';
 
 import './backdrop';
 
@@ -150,11 +149,11 @@ class BackdropHarness {
   }
 
   public enterAnimation(): Promise<void> {
-    return timer(300);
+    return task(300);
   }
 
   public exitAnimation(): Promise<void> {
-    return timer(300);
+    return task(300);
   }
 }
 

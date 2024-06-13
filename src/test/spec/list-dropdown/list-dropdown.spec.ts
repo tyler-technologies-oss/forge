@@ -1,4 +1,4 @@
-import { tick, timer } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 import { getShadowElement } from '@tylertech/forge-core';
 import { IListDropdownTestContext, createListDropdown, getListItems, getListDropdownPopup, clickListItem, delayPopupAnimation, getBusyVisibility, generateScrollableOptions } from './list-dropdown-test-utils';
 import { IListDropdownConfig, IListDropdownOption, ListDropdownAsyncStyle, ListDropdownHeaderBuilder, IListDropdownOptionGroup, LIST_DROPDOWN_CONSTANTS, ListDropdownFooterBuilder, ListDropdownType, ListDropdownOptionBuilder, ListDropdownTransformCallback } from '@tylertech/forge/list-dropdown';
@@ -65,8 +65,8 @@ describe('ListDropdown', function(this: ITestContext) {
   it('should display options', async function(this: ITestContext) {
     this.context = createListDropdown(DEFAULT_CONFIG);
     this.context.listDropdown.open();
-    await timer(POPOVER_ANIMATION_DURATION);
-    await tick();
+    await task(POPOVER_ANIMATION_DURATION);
+    await frame();
 
     const listItems = getListItems();
     expect(listItems.length).toBe(BASIC_OPTIONS.length, 'Expected same number of options to be displayed');
@@ -80,7 +80,7 @@ describe('ListDropdown', function(this: ITestContext) {
     const selectCallback = jasmine.createSpy('selectCallback') as any;
     this.context = createListDropdown({ ...DEFAULT_CONFIG, selectCallback });
     this.context.listDropdown.open();
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     clickListItem(0);
 
@@ -465,8 +465,8 @@ describe('ListDropdown', function(this: ITestContext) {
 
     this.context.listDropdown.setSelectedValues(selectedValue);
     this.context.listDropdown.scrollSelectedOptionIntoView(false);
-    await timer(1000);
-    await tick();
+    await task(1000);
+    await frame();
 
     expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).toBeTrue();
   });
@@ -481,7 +481,7 @@ describe('ListDropdown', function(this: ITestContext) {
     const popup = this.context.listDropdown.dropdownElement as HTMLElement;
     const scrollContainer = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
     scrollContainer.scrollTop = scrollContainer.scrollHeight;
-    await timer(1000); // Wait for scroll animation (flaky?)
+    await task(1000); // Wait for scroll animation (flaky?)
 
     expect(scrollEndListener).toHaveBeenCalledTimes(1);
   });
@@ -498,7 +498,7 @@ describe('ListDropdown', function(this: ITestContext) {
     const popup = this.context.listDropdown.dropdownElement as HTMLElement;
     const scrollContainer = getShadowElement(this.context.listDropdown.dropdownElement!, POPOVER_CONSTANTS.selectors.SURFACE);
     scrollContainer.scrollTop = scrollContainer.scrollHeight;
-    await timer(1000); // Wait for scroll animation (flaky?)
+    await task(1000); // Wait for scroll animation (flaky?)
 
     expect(scrollEndListener).toHaveBeenCalledTimes(1);
   });
@@ -516,7 +516,7 @@ describe('ListDropdown', function(this: ITestContext) {
     const popup = this.context.listDropdown.dropdownElement as HTMLElement;
     const scrollContainer = getShadowElement(this.context.listDropdown.dropdownElement!, POPOVER_CONSTANTS.selectors.SURFACE);
     scrollContainer.scrollTop = scrollContainer.scrollHeight;
-    await timer(1000); // Wait for scroll animation (flaky?)
+    await task(1000); // Wait for scroll animation (flaky?)
 
     expect(scrollEndListener).not.toHaveBeenCalled();
   });
@@ -651,7 +651,7 @@ describe('ListDropdown', function(this: ITestContext) {
     const targetWidthCallback = jasmine.createSpy('target width callback', () => width).and.callThrough();
     this.context = createListDropdown({ ...DEFAULT_CONFIG, targetWidthCallback, syncWidth: true });
     this.context.listDropdown.open();
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const popup = getListDropdownPopup();
     const container = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
@@ -663,7 +663,7 @@ describe('ListDropdown', function(this: ITestContext) {
   it('should sync width with default target element width', async function(this: ITestContext) {
     this.context = createListDropdown({ ...DEFAULT_CONFIG, syncWidth: true });
     this.context.listDropdown.open();
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const targetElementWidth = getComputedStyle(this.context.targetElement).width;
     const popup = getListDropdownPopup();
@@ -735,7 +735,7 @@ describe('ListDropdown', function(this: ITestContext) {
 
     this.context.targetElement.focus();
     this.context.listDropdown.dropdownElement!.dispatchEvent(new MouseEvent('mousedown'));
-    await tick();
+    await frame();
 
     expect(document.activeElement).toBe(this.context.targetElement);
   });
@@ -853,7 +853,7 @@ describe('ListDropdown', function(this: ITestContext) {
     ];
     this.context = createListDropdown({ ...DEFAULT_CONFIG, options });
     this.context.listDropdown.open();
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const listItems = getListItems();
     const leadingElement = listItems[0].querySelector('#list-dropdown-leading');
@@ -875,7 +875,7 @@ describe('ListDropdown', function(this: ITestContext) {
     ];
     this.context = createListDropdown({ ...DEFAULT_CONFIG, options });
     this.context.listDropdown.open();
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const listItems = getListItems();
     const trailingElement = listItems[1].querySelector('#list-dropdown-trailing');
@@ -958,8 +958,8 @@ describe('ListDropdown', function(this: ITestContext) {
   it('should set element attributes on options', async function(this: ITestContext) {
     this.context = createListDropdown(DEFAULT_CONFIG);
     this.context.listDropdown.open();
-    await timer(POPOVER_ANIMATION_DURATION);
-    await tick();
+    await task(POPOVER_ANIMATION_DURATION);
+    await frame();
 
     const listItems = getListItems();
     const attrValue = listItems[2].getAttribute('data-test-attr');
@@ -973,8 +973,8 @@ describe('ListDropdown', function(this: ITestContext) {
     ];
     this.context = createListDropdown({ ...DEFAULT_CONFIG, options: opts });
     this.context.listDropdown.open();
-    await timer(POPOVER_ANIMATION_DURATION);
-    await tick();
+    await task(POPOVER_ANIMATION_DURATION);
+    await frame();
 
     const listItems = getListItems();
     expect(listItems[0].querySelector('span[slot=subtitle]')?.textContent).toBe('Secondary label');
