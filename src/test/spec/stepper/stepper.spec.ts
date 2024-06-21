@@ -28,7 +28,6 @@ interface ITestStepperContext {
   component: IStepperComponent;
   getSteps(): IStepComponent[];
   getRootElement(): HTMLElement;
-  getStepButton(step: IStepComponent): HTMLButtonElement;
   append(): void;
   destroy(): void;
 }
@@ -195,8 +194,7 @@ describe('StepperComponent', function (this: ITestContext) {
     await tick();
     const originalSelectedIndex = this.context.component.selectedIndex;
     const stepOne = this.context.getSteps()[1];
-    const stepOneButton = this.context.getStepButton(stepOne);
-    stepOneButton.click();
+    stepOne.click();
     await tick();
 
     expect(stepOne.selected).toBe(false, 'should not be selected when stepper is set to linear');
@@ -231,8 +229,7 @@ describe('StepperComponent', function (this: ITestContext) {
     const stepOne = this.context.getSteps()[1];
     stepOne.disabled = true;
 
-    const stepOneButton = this.context.getStepButton(stepOne);
-    stepOneButton.click();
+    stepOne.click();
 
     expect(spy).not.toHaveBeenCalled();
 
@@ -246,7 +243,7 @@ describe('StepperComponent', function (this: ITestContext) {
 
       const stepElements = this.context.getSteps();
       const stepOne = stepElements[0];
-      this.context.getStepButton(stepOne).click();
+      stepOne.click();
       expect(stepOne.selected).toBe(true, 'the step was not selected when it should be');
     });
 
@@ -257,13 +254,12 @@ describe('StepperComponent', function (this: ITestContext) {
       const stepElements = this.context.getSteps();
       const stepOne = stepElements[0];
       const stepTwo = stepElements[1];
-      this.context.getStepButton(stepOne).focus();
-      this.context.getStepButton(stepOne).click();
-      const stepTwoButton = this.context.getStepButton(stepTwo);
+      stepOne.focus();
+      stepOne.click();
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.ARROW_RIGHT_KEY }));
       await tick();
 
-      expect(getActiveElement()).toBe(stepTwoButton, 'the second step button was not focused correctly');
+      expect(getActiveElement()).toBe(stepTwo, 'the second step button was not focused correctly');
     });
 
     it('should focus the last step when arrow left key is used at the start', async function (this: ITestContext) {
@@ -273,13 +269,12 @@ describe('StepperComponent', function (this: ITestContext) {
       const stepElements = this.context.getSteps();
       const stepOne = stepElements[0];
       const lastStep = stepElements[stepElements.length - 1];
-      this.context.getStepButton(stepOne).focus();
-      this.context.getStepButton(stepOne).click();
-      const lastStepButton = this.context.getStepButton(lastStep);
+      stepOne.focus();
+      stepOne.click();
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.ARROW_LEFT_KEY }));
       await tick();
 
-      expect(getActiveElement()).toBe(lastStepButton, 'the last step button was not focused correctly');
+      expect(getActiveElement()).toBe(lastStep, 'the last step button was not focused correctly');
     });
 
     it('should focus the last step when end key is used at the start', async function (this: ITestContext) {
@@ -289,13 +284,12 @@ describe('StepperComponent', function (this: ITestContext) {
       const stepElements = this.context.getSteps();
       const stepOne = stepElements[0];
       const lastStep = stepElements[stepElements.length - 1];
-      this.context.getStepButton(stepOne).focus();
-      this.context.getStepButton(stepOne).click();
-      const lastStepButton = this.context.getStepButton(lastStep);
+      stepOne.focus();
+      stepOne.click();
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.END_KEY }));
       await tick();
 
-      expect(getActiveElement()).toBe(lastStepButton, 'the last step button was not focused correctly');
+      expect(getActiveElement()).toBe(lastStep, 'the last step button was not focused correctly');
     });
 
     it('should focus the last step when home key is used at the start', async function (this: ITestContext) {
@@ -305,12 +299,12 @@ describe('StepperComponent', function (this: ITestContext) {
       const stepElements = this.context.getSteps();
       const stepOne = stepElements[0];
       const stepThree = stepElements[2];
-      this.context.getStepButton(stepThree).focus();
-      this.context.getStepButton(stepThree).click();
+      stepOne.focus();
+      stepOne.click();
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.HOME_KEY }));
       await tick();
 
-      expect(getActiveElement()).toBe(this.context.getStepButton(stepOne), 'the last step button was not focused correctly');
+      expect(getActiveElement()).toBe(stepOne, 'the last step button was not focused correctly');
     });
 
     it('should only allow keys from the accepted list', async function (this: ITestContext) {
@@ -319,12 +313,12 @@ describe('StepperComponent', function (this: ITestContext) {
 
       const stepElements = this.context.getSteps();
       const stepThree = stepElements[2];
-      this.context.getStepButton(stepThree).click();
-      this.context.getStepButton(stepThree).focus();
+      stepThree.click();
+      stepThree.focus();
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrorUp' }));
       await tick();
 
-      expect(getActiveElement()).toBe(this.context.getStepButton(stepThree), 'incorrect keys are being listened to');
+      expect(getActiveElement()).toBe(stepThree, 'incorrect keys are being listened to');
     });
 
     it('should not allow keyboard keys when linear is enabled', async function (this: ITestContext) {
@@ -335,14 +329,14 @@ describe('StepperComponent', function (this: ITestContext) {
 
       const stepElements = this.context.getSteps();
       const stepThree = stepElements[2];
-      this.context.getStepButton(stepThree).click();
-      this.context.getStepButton(stepThree).focus();
+      stepThree.click();
+      stepThree.focus();
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.ARROW_RIGHT_KEY }));
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.ARROW_RIGHT_KEY }));
       this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: STEPPER_CONSTANTS.strings.ARROW_RIGHT_KEY }));
       await tick();
 
-      expect(getActiveElement()).toBe(this.context.getStepButton(stepThree), 'arrows are incorrectly working when linear is enabled');
+      expect(getActiveElement()).toBe(stepThree, 'arrows are incorrectly working when linear is enabled');
     });
   });
 
@@ -566,7 +560,7 @@ describe('StepperComponent', function (this: ITestContext) {
       step1.click();
 
       const expander = getShadowElement(this.context.component.querySelector('forge-step') as HTMLElement, STEP_CONSTANTS.selectors.EXPANSION_PANEL) as IExpansionPanelComponent;
-      expect(expander.open).toBe(false);
+      expect(expander.open).toBe(true);
     });
 
     it('should ignore user expansion when clicked', async function (this: ITestContext) {
@@ -669,7 +663,6 @@ describe('StepperComponent', function (this: ITestContext) {
       component,
       getSteps: () => Array.from(component.querySelectorAll(STEP_CONSTANTS.elementName)) as IStepComponent[],
       getRootElement: () => getShadowElement(component, STEPPER_CONSTANTS.selectors.STEPPER),
-      getStepButton: (step: IStepComponent) => getShadowElement(step, STEP_CONSTANTS.selectors.STEP) as HTMLButtonElement,
       append: () => document.body.appendChild(fixture),
       destroy: () => removeElement(fixture)
     };

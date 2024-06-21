@@ -21,7 +21,6 @@ export interface IStepComponent extends IBaseComponent {
   vertical: boolean;
   expanded: boolean;
   ignoreUserExpansion: boolean;
-  setStepTabIndex(index: number): void;
 }
 
 declare global {
@@ -151,12 +150,4 @@ export class StepComponent extends BaseComponent implements IStepComponent {
   
   @FoundationProperty()
   public declare ignoreUserExpansion: boolean;
-
-  public override focus(): void {
-    this._foundation.focus();
-  }
-
-  public setStepTabIndex(index: number): void {
-    this._foundation.setStepTabIndex(index);
-  }
 }

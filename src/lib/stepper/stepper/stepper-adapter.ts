@@ -141,9 +141,8 @@ export class StepperAdapter extends BaseAdapter<IStepperComponent> implements IS
 
   public tryGetFocusedStep(): IStepComponent | undefined {
     let focusedStep: IStepComponent = undefined as any;
-    const activeElement = getActiveElement(this._component.ownerDocument);
     this._applyToSteps(step => {
-      if (activeElement === getShadowElement(step, STEP_CONSTANTS.selectors.STEP)) {
+      if (step.matches(':focus-within')) {
         focusedStep = step;
       }
     });

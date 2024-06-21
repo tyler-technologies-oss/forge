@@ -8,7 +8,6 @@
 @mixin core-styles() {
   .forge-step {
     @include base();
-    @include forge-interactable();
 
     &__container {
       display: contents;
@@ -35,6 +34,18 @@
       ::slotted(*) {
         @include optional-label();
       }
+    }
+
+    &__ripple {
+      @include forge-interactable();
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: inherit;
     }
 
     &__icon-container {
