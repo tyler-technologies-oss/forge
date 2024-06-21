@@ -1,3 +1,21 @@
+# v2.24.3 (Fri Jun 21 2024)
+
+#### 🐛 Bug Fix
+
+- fix(stepper): fixed nested interactive element accessibility issue [#631](https://github.com/tyler-technologies-oss/forge/pull/631) ([@nickonometry](https://github.com/nickonometry))
+
+#### ⚠️ Pushed to `main`
+
+- chore: deploy `version-2` storybook ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: prepare version-2 release workflow ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+
+---
+
 # v2.24.2 (Tue Jun 11 2024)
 
 #### 🐛 Bug Fix
