@@ -149,12 +149,17 @@ export interface IConfirmDialogData {
 
 @Component({
   selector: 'app-my-dialog',
+  styles: ['
+    .container {
+      width: 500px;
+    }
+  '],
   template: `
-    <forge-dialog>
+    <div class="container">
       <h2 id="dialog-title">{{ data.title }}</h2>
       <p id="dialog-description">{{ data.description }}</p>
       <button (click)="onClose()">Close</button>
-    </forge-dialog>
+    </div>
   `
 })
 export class MyDialogComponent {
