@@ -53,7 +53,8 @@ const selectors = {
   ICON_CONTENT: `.${classes.ICON_CONTENT}`,
   EXPANSION_SLOT: `slot[name="expansion-content"]`,
   EXPANSION_PANEL: `.${classes.EXPANSION_PANEL}`,
-  EXPANSION_ICON: `.${classes.EXPANSION_ICON}`
+  EXPANSION_ICON: `.${classes.EXPANSION_ICON}`,
+  STEP_RIPPLE: `.forge-step__ripple`
 };
 
 const strings = {

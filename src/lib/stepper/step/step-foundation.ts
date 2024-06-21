@@ -11,7 +11,6 @@ export interface IStepFoundation extends ICustomElementFoundation {
   selected: boolean;
   alternative: boolean;
   vertical: boolean;
-  setStepTabIndex(index: number): void;
 }
 
 export class StepFoundation implements IStepFoundation {
@@ -186,9 +185,6 @@ export class StepFoundation implements IStepFoundation {
     }
   }
 
-  public setStepTabIndex(index: number): void {
-    this._adapter.setRootTabIndex(index);
-  }
 
   private _applyExpanded(): void {
     this._adapter.setExpanded(this._expanded);
@@ -199,10 +195,6 @@ export class StepFoundation implements IStepFoundation {
     this._adapter.toggleRootClass(STEP_CONSTANTS.classes.VERTICAL, this._vertical);
   }
 
-  public focus(): void {
-    this._adapter.focusButton();
-  }
-
   private _applyAlternative(): void {
     this._adapter.toggleRootClass(STEP_CONSTANTS.classes.ALTERNATIVE, this._alternative);
   }
@@ -210,7 +202,7 @@ export class StepFoundation implements IStepFoundation {
   private _applySelected(): void {
     this._adapter.toggleRootClass(STEP_CONSTANTS.classes.SELECTED, this._selected);
     this._adapter.setHostAttribute(STEP_CONSTANTS.attributes.ARIA_SELECTED, (this._selected || false).toString());
-    this._adapter.setRootTabIndex(this._selected ? 0 : -1);
+    this._adapter.hostElement.tabIndex = this._selected ? 0 : -1;
     this._toggleIcon();
   }
 

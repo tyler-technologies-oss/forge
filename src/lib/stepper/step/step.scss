@@ -1,7 +1,7 @@
 @use '../../theme';
 @use './mixins';
 @use './variables';
-@use '@material/ripple/mdc-ripple';
+@use '../../ripple/forge-ripple';
 
 @include mixins.core-styles;
 
