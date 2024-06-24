@@ -1,3 +1,16 @@
+# v2.24.4 (Mon Jun 24 2024)
+
+#### 🐛 Bug Fix
+
+- fix(forge-step): correct select event name for proper typing [#632](https://github.com/tyler-technologies-oss/forge/pull/632) ([@MikeMatusz](https://github.com/MikeMatusz) [@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+
+---
+
 # v2.24.3 (Fri Jun 21 2024)
 
 #### 🐛 Bug Fix
