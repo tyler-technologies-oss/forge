@@ -29,7 +29,7 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-step-selected': CustomEvent<number>;
+    'forge-step-select': CustomEvent<number>;
     'forge-step-expanded-content-focusin': CustomEvent<IStepComponent>;
     'forge-step-expanded-content-focusout': CustomEvent<IStepComponent>;
   }

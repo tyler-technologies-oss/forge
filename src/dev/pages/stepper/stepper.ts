@@ -6,9 +6,9 @@ import './stepper.scss';
 const stepper = document.querySelector('#demo-stepper') as IStepperComponent;
 stepper.selectedIndex = 2;
 
-stepper.addEventListener('forge-step-selected', ({ detail }) => {
+stepper.addEventListener('forge-step-select', ({ detail }) => {
   stepper.selectedIndex = detail;
-  console.log('[forge-step-selected]: ', detail);
+  console.log('[forge-step-select]: ', detail);
 });
 
 const steps: IStepConfiguration[] = [
