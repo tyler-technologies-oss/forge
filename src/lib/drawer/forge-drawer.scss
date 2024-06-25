@@ -1,0 +1,35 @@
+@use './base/core' as base;
+@use './mini-drawer/core' as mini;
+
+.forge-drawer {
+  @include base.tokens;
+}
+
+.forge-drawer {
+  @include base.base;
+  @include base.left;
+
+  &--closing {
+    @include base.closing(left);
+  }
+
+  &--closed {
+    @include base.closed(left);
+  }
+
+  &--right {
+    @include base.right;
+
+    &.forge-drawer--closing {
+      @include base.closing(right);
+    }
+
+    &.forge-drawer--closed {
+      @include base.closed(right);
+    }
+  }
+
+  &--mini {
+    @include mini.base;
+  }
+}

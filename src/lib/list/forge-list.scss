@@ -1,0 +1,131 @@
+@use './list/core' as list-core;
+@use './list-item/core' as list-item-core;
+@use '../focus-indicator';
+@use '../state-layer';
+@use '../core/styles/shape';
+
+//
+// List
+//
+
+.forge-list {
+  @include list-core.tokens;
+}
+
+.forge-list {
+  @include list-core.base;
+}
+
+ul.forge-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+//
+// List Item
+//
+
+.forge-list-item {
+  @include list-item-core.tokens;
+}
+
+.forge-list-item {
+  @include list-item-core.base;
+  @include list-item-core.text-container;
+
+  display: block;
+  align-content: center;
+
+  button {
+    @include list-item-core.button;
+  }
+
+  a {
+    @include list-item-core.anchor;
+  }
+
+  &--interactive:not(.forge-list-item--disabled),
+  button:not(:disabled),
+  a {
+    @include state-layer.standalone;
+  }
+
+  &:has(button:not(:disabled), a, .forge-list-item--interactive:not(.forge-list-item--disabled)) {
+    a,
+    button,
+    .forge-list-item--interactive {
+      cursor: pointer;
+
+      @include focus-indicator.keyframes;
+      @include focus-indicator.standalone($type: 'inward');
+      @include focus-indicator.provide-theme(
+        (
+          shape: shape.variable(medium) // TODO: use list-item token?
+        )
+      );
+    }
+  }
+
+  &--text {
+    @include list-item-core.text;
+  }
+
+  &--two-line {
+    @include list-item-core.two-line;
+
+    flex-direction: column;
+    align-items: start;
+    gap: 0;
+    justify-content: center;
+  }
+
+  &--three-line {
+    @include list-item-core.three-line;
+
+    flex-direction: column;
+    align-items: start;
+    gap: 0;
+    justify-content: center;
+  }
+
+  &--indented {
+    @include list-item-core.indented;
+  }
+
+  &--dense {
+    @include list-item-core.dense;
+    @include list-item-core.dense-text;
+
+    &.forge-list-item--two-line {
+      @include list-item-core.dense-two-line;
+    }
+
+    &.forge-list-item--three-line {
+      @include list-item-core.dense-three-line;
+    }
+
+    &--indented {
+      @include list-item-core.dense-indented;
+    }
+  }
+
+  &--selected {
+    @include list-item-core.selected;
+
+    > * {
+      @include list-item-core.text-selected;
+    }
+
+    @include state-layer.provide-theme(
+      (
+        color: #{list-item-core.token(selected-color)}
+      )
+    );
+  }
+
+  &--disabled,
+  button:disabled {
+    @include list-item-core.disabled;
+  }
+}

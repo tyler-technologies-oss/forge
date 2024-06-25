@@ -1,21 +1,27 @@
-#demo-content forge-card.demo-card {
-  width: 320px;
-  --forge-card-padding: 0;
-
-  forge-toolbar {
-    --forge-toolbar-padding: 0;
+#demo-content {
+  section:not(:last-of-type) {
+    margin-block-end: 56px;
   }
 
-  forge-toolbar h3 {
-    margin-left: 1rem;
-  }
+  .demo-card {
+    width: 320px;
+    --forge-card-padding: 0;
 
-  .card-body {
-    padding: 0 16px;
-    margin: 0;
-  }
+    forge-toolbar {
+      --forge-toolbar-padding: 0;
+    }
 
-  .card-footer-buttons > * {
-    margin-right: 16px;
+    forge-toolbar h3 {
+      margin-left: 1rem;
+    }
+
+    .card-body {
+      padding: 0 16px;
+      margin: 0;
+    }
+
+    .card-footer-buttons > * {
+      margin-right: 16px;
+    }
   }
 }

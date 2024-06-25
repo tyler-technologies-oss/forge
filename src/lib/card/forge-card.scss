@@ -1,0 +1,13 @@
+@use './core';
+
+.forge-card {
+  @include core.tokens;
+}
+
+.forge-card {
+  @include core.base;
+
+  &--raised {
+    @include core.raised;
+  }
+}

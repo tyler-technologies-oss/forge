@@ -6,6 +6,7 @@ import '@tylertech/forge/icon';
 import '@tylertech/forge/divider';
 import '@tylertech/forge/expansion-panel';
 import '@tylertech/forge/drawer';
+import '@tylertech/forge/list/forge-list.scss';
 import './list.scss';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconBluetooth, tylIconCode, tylIconDataUsage, tylIconFace, tylIconInfo, tylIconWifi, tylIconOpenInNew } from '@tylertech/tyler-icons/standard';

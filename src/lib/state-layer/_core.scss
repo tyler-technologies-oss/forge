@@ -110,3 +110,29 @@
   position: relative;
   overflow: hidden;
 }
+
+///
+/// Creates the styles for a visual-only state layer without the use of JavaScript.
+///
+@mixin standalone($pseudo: '::before') {
+  @include tokens;
+
+  &#{$pseudo} {
+    @include layer-base;
+    @include hover-base;
+    @include override(hover-duration, 100ms, value);
+
+    content: '';
+    opacity: 0;
+    border-radius: inherit;
+  }
+
+  &:hover#{$pseudo} {
+    @include hovered;
+  }
+
+  &:active#{$pseudo} {
+    @include pressed;
+    @include override(pressed-opacity, 0.18, value);
+  }
+}

@@ -1,0 +1,35 @@
+@use './core';
+@use './animations';
+
+.forge-focus-indicator {
+  &__target {
+    position: relative;
+    outline: none;
+  }
+
+  &__target:focus-visible,
+  &:focus-visible {
+    @include animations.keyframes;
+
+    .forge-focus-indicator::before,
+    &::before {
+      @include core.tokens;
+    }
+
+    .forge-focus-indicator::before,
+    &::before {
+      @include core.base;
+      @include core.outward;
+
+      content: '';
+      display: block;
+    }
+  }
+
+  &--inward {
+    .forge-focus-indicator::before,
+    &:focus-visible::before {
+      @include core.inward;
+    }
+  }
+}

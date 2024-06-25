@@ -1,0 +1,10 @@
+@use './core';
+
+.forge-avatar {
+  @include core.tokens;
+}
+
+.forge-avatar {
+  @include core.host;
+  @include core.base;
+}

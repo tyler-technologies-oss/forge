@@ -1,0 +1,115 @@
+@use './core';
+@use './token-utils' as *;
+@use '../core/styles/theme';
+@use '../core/styles/spacing';
+@use '../focus-indicator';
+
+.forge-field {
+  @include tokens(
+    $includes: (
+      shape,
+      outline-style,
+      outline-width,
+      height,
+      background,
+      disabled-background,
+      disabled-opacity
+    )
+  );
+}
+
+.forge-field {
+  position: relative;
+  display: grid;
+  border-radius: #{token(shape)};
+  outline-style: #{token(outline-style)};
+  outline-width: #{token(outline-width)};
+  outline-color: #{theme.variable(outline-low)};
+  background: #{token(background)};
+
+  @include core.disableable;
+
+  &:hover:not(:has(input:disabled, textarea:disabled)) {
+    outline-color: #{theme.variable(outline-high)};
+  }
+
+  input {
+    @include core.default-slot-content;
+
+    padding-inline: #{spacing.variable(small)};
+  }
+
+  textarea {
+    @include core.default-slot-content;
+  }
+
+  input,
+  textarea {
+    display: flex;
+    block-size: #{token(height)};
+    overflow: hidden;
+    inline-size: 100%;
+    color: #{theme.variable(text-high)};
+    background: transparent;
+  }
+
+  &:has(input:disabled, textarea:disabled) {
+    @include core.disabled;
+  }
+
+  @include focus-indicator.keyframes;
+
+  &:has(input:focus, textarea:focus) {
+    outline: none;
+
+    &::after {
+      @include focus-indicator.tokens;
+      @include focus-indicator.base;
+      @include focus-indicator.outward;
+
+      content: '';
+      display: block;
+      border-radius: inherit;
+    }
+
+    @include focus-indicator.provide-theme(
+      (
+        color: #{theme.variable(primary)},
+        outward-offset: 0px
+      )
+    );
+  }
+
+  &__start,
+  &__end {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__start {
+    padding-inline-start: #{spacing.variable(small)};
+  }
+
+  &__end {
+    padding-inline-end: #{spacing.variable(small)};
+  }
+
+  &:has(.forge-field__start):not(:has(.forge-field__end)) {
+    grid-template-columns: auto 1fr;
+  }
+
+  &:has(.forge-field__end):not(:has(.forge-field__start)) {
+    grid-template-columns: 1fr auto;
+  }
+
+  &:has(.forge-field__start):has(.forge-field__end) {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  &__label,
+  &__support-text {
+    @include core.disableable;
+    @include core.label;
+  }
+}

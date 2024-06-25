@@ -1,6 +1,7 @@
 import '$src/shared';
 import '@tylertech/forge/field';
 import '@tylertech/forge/label';
+import '@tylertech/forge/field/forge-field.scss';
 import './field.scss';
 import { FieldLabelAlignment, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, IFieldComponent } from '@tylertech/forge/field';
 import { IIconComponent, IconRegistry } from '@tylertech/forge/icon';
