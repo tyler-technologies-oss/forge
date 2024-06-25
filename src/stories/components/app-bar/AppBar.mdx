@@ -6,27 +6,19 @@ import * as AppBarStories from './AppBar.stories';
 
 <Title />
 
-The app-bar should be used as the header for every page in your application to ensure consistency across our Tyler products and applications. It's the one constant across all applications that helps ensure our applications are perceived as being connected and familiar.
+App bars are a common component used in web applications to provide a consistent location for branding, navigation, and other common elements.
 
-The app-bar itself is nothing more than a container for other add-on components, but it does provide named slots and a common location for branding logo and title.
-
-> For API details regarding any of the app-bar sub-components please see one of the following pages:
->
-> - App Bar help button
-> - App Bar menu button
-> - App Bar notifications
-> - App Bar profile
-> - App Bar search
+The `<forge-app-bar>` is nothing more than a container for other add-on components, but it provides named slots and a common location for branding logo, title, and other actions.
 
 ## Default
 
-A basic app-bar just contains a title with no other elements.
+A basic app bar just contains a title with no other elements.
 
 <Canvas of={AppBarStories.Demo} />
 
 ## Full
 
-The following example shows the usage of all of the common app-bar elements placed in their corresponding slots.
+The following example shows the usage of all of the common app bar elements placed in their corresponding slots.
 
 <Canvas of={AppBarStories.Full} />
 

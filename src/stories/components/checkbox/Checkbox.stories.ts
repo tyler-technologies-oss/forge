@@ -27,7 +27,7 @@ const meta = {
         .labelPosition=${args.labelPosition}
         @change=${changeAction}
         style=${style}>
-        ${args.text}
+        ${args.label}
       </forge-checkbox>
     `;
   },
@@ -35,15 +35,15 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['defaultChecked', 'value'],
+      exclude: ['defaultChecked', 'value', 'form', 'labels', 'name'],
       controls: {
         labelPosition: { control: 'select', options: ['start', 'end'] }
       }
     }),
-    text: { control: 'text' }
+    label: { control: 'text' }
   },
   args: {
-    text: 'Label',
+    label: 'Label',
     checked: false,
     indeterminate: false,
     disabled: false,

@@ -6,6 +6,12 @@ import * as CalendarStories from './Calendar.stories';
 
 <Title />
 
+The calendar component is used for selecting dates or displaying data related to dates in a small calendar format. It is commonly used in date pickers, date range pickers,
+as well as standalone.
+
+This is not a full-featured calendar component and it's not intended to be. The goal of this component is to be used in simple scenarios to allow for users to select dates or
+data ranges, or for displaying basic events on important dates. For more complex scenarios, consider using a library such as [FullCalendar](https://fullcalendar.io/).
+
 <Canvas of={CalendarStories.Demo} />
 
 ## API
@@ -13,3 +19,6 @@ import * as CalendarStories from './Calendar.stories';
 <CustomArgTypes />
 
 ## Accessibility
+
+- Ensure that the days can be navigated by keyboard.
+- Ensure that each day is properly announced via screen reader, including its selected state.
