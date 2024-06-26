@@ -69,6 +69,7 @@ export class RadioGroupComponent extends WithLabelAwareness(WithDefaultAria(With
   }
 
   public connectedCallback(): void {
+    super.connectedCallback();
     this[setDefaultAria]({
       role: 'radiogroup',
       ariaDisabled: this.disabled ? 'true' : null

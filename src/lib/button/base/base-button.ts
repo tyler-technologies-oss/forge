@@ -64,6 +64,7 @@ export abstract class BaseButton<T extends BaseButtonCore<IBaseButtonAdapter<IBa
   }
 
   public connectedCallback(): void {
+    super.connectedCallback();
     this._core.initialize();
   }
 
