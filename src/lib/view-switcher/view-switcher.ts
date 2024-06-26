@@ -1,4 +1,4 @@
-import { customElement, attachShadowTemplate, coerceNumber, coreProperty, upgradeProperty } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coerceNumber, coreProperty } from '@tylertech/forge-core';
 import { ViewSwitcherAdapter } from './view-switcher-adapter';
 import { ViewSwitcherCore } from './view-switcher-core';
 import { VIEW_SWITCHER_CONSTANTS, ViewSwitcherAnimationType } from './view-switcher-constants';
@@ -25,6 +25,8 @@ declare global {
 
 /**
  * @tag forge-view-switcher
+ *
+ * @dependency forge-view
  */
 @customElement({
   name: VIEW_SWITCHER_CONSTANTS.elementName,
@@ -44,7 +46,6 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
   }
 
   public connectedCallback(): void {
-    // upgradeProperty(this, 'index');
     this._core.initialize();
   }
 
@@ -63,11 +64,19 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
     }
   }
 
-  /** Gets/sets the currently visible view index. */
+  /**
+   * Gets/sets the currently visible view index.
+   * @default 0
+   * @attribute
+   */
   @coreProperty()
   public declare index: number;
 
-  /** Gets/sets the animation type. */
+  /**
+   * Gets/sets the animation type.
+   * @default "None"
+   * @attribute
+   */
   @coreProperty()
   public declare animationType: `${ViewSwitcherAnimationType}`;
 

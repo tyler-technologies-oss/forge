@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import { action } from '@storybook/addon-actions';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { tylIconNotifications } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
@@ -12,20 +13,23 @@ import { BANNER_CONSTANTS } from '@tylertech/forge/banner';
 
 const component = 'forge-banner';
 
+const dismissedAction = action('forge-banner-dismissed');
+const beforeDismissAction = action('forge-banner-before-dismiss');
+
 const meta = {
   title: 'Components/Banner',
   render: args => {
     const el = customElementStoryRenderer('forge-banner', args);
+    el.addEventListener('forge-banner-dismissed', dismissedAction);
+    el.addEventListener('forge-banner-before-dismiss', beforeDismissAction);
     el.innerHTML = args.text;
     return el;
   },
   component,
-  parameters: {
-    actions: { disable: true }
-  },
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
+      exclude: ['canDismiss'],
       controls: {
         theme: { control: 'select', options: [...GLOBAL_THEME_OPTIONS, 'info-secondary'] }
       }
@@ -33,7 +37,9 @@ const meta = {
   },
   args: {
     theme: BANNER_CONSTANTS.defaults.THEME,
-    text: 'Minim sunt eu laborum labore minim.'
+    text: 'Minim sunt eu laborum labore minim.',
+    dismissed: false,
+    persistent: false
   }
 } satisfies Meta;
 

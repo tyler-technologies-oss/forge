@@ -6,11 +6,19 @@ import * as ViewSwitcherStories from './ViewSwitcher.stories';
 
 <Title />
 
-The view switcher component allows you to wrap a `<forge-view>` element around any HTML content to control transitions between adjecent content. By default the view switcher is set to no transition, with options to either `fade` or `slide` as a transition.
+The view switcher component allows users to toggle between different views of content. This component is often used in conjunction with tabs to control which view actively displayed.
 
 > **Note**: Content hidden by this component is still present in the DOM unless you control it manually.
 
 <Canvas of={ViewSwitcherStories.Demo} />
+
+## Animations
+
+The view switcher can animate between views using the views via the `animationType` property/attribute. The following animations are available:
+
+- `slide`: The new view slides in from the right while the old view slides out to the left.
+- `fade`: The new view fades in while the old view fades out.
+- `none`: The new view replaces the old view without any animation. This is the default.
 
 ## API
 
@@ -19,5 +27,4 @@ The view switcher component allows you to wrap a `<forge-view>` element around a
 ## Accessibility
 
 - Verify that you can tab into the `<forge-view>` content.
-- Verify that you can access controls withing the `<forge-view>` content using only the keyboard.
-- You should ensure that you have the correct hierarchy of header tags. ie: `<h1>`, `<h2>`, `<h3>`, etc...
+- Verify that you can access elements within `<forge-view>` content using only the keyboard.

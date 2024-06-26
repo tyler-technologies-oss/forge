@@ -6,15 +6,17 @@ import * as LabelValueStories from './LabelValue.stories';
 
 <Title />
 
-Use the label-value component when you have data that needs to be displayed, but cannot be edited. This is generally ideal for a read-only screen, or toggling between viewing and editing data values on a form.
+Label values are used to display data in a structured format. They are typically used to display key-value pairs, where the key is a label and the value is the data
+associated with that label.
 
-This component is simple, but it provides consistency and ease of use through slotted content to remove the need for developers to worry about CSS styles. It also matches the dimensions of other field field elements such as text-field and select to enable them to live next to each other on a page without adjustments.
-
-## Basic
+Label values are a simple layout component the provides consistency through structure, spacing, typography, and alignment. It is not intended to be used for
+complex data structures, user interaction, or layouts, but rather for simply displaying readonly information.
 
 <Canvas of={LabelValueStories.Demo} />
 
 ## Icon
+
+Label values can also include an icon to the left of the label. This is useful for providing additional context or visual cues to the user.
 
 <Canvas of={LabelValueStories.Icon} />
 
@@ -24,6 +26,4 @@ This component is simple, but it provides consistency and ease of use through sl
 
 ## Accessibility
 
-> **Note**: This component does not currently automatically add any ARIA attributes for you.
-
-- It is up to a developer to ensure that the content within this component is accessible as we cannot make any assumptions on your behalf.
+The label value component is a simple layout component and does not have any specific accessibility requirements.

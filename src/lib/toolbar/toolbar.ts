@@ -23,13 +23,13 @@ declare global {
  * Toolbars allow you to place titles and actions within a container and align them to the start, center, or end of the toolbar.
  * This component is useful as headers and footers within pages, dialogs, sections... etc. to ensure consistent layout and alignment.
  *
- * @property {boolean} inverted - Controls whether a bottom divider (default) or top divider (true) is used.
+ * @property {boolean} [inverted=false] - Controls whether a bottom divider (default) or top divider (true) is used.
  *
- * @attribute {boolean} inverted - Controls whether a bottom divider (default) or top divider (true) is used.
+ * @attribute {boolean} [inverted=false] - Controls whether a bottom divider (default) or top divider (true) is used.
  * @attribute {boolean} no-divider - Hides the internal divider.
- * @attribute {boolean} no-border - Deprecated. Use no-divider instead.
+ * @attribute {boolean} no-border - Deprecated. Use `no-divider` instead.
  * @attribute {boolean} no-padding - Sets the internal padding style to 0.
- * @attribute {boolean} auto-height - Forces the internal container to use height: auto for dynamic content that doesn't fit the static height.
+ * @attribute {boolean} auto-height - Forces the internal container to use `height: auto` for dynamic content that doesn't fit the static height.
  *
  * @cssproperty --forge-theme-height - Controls the height.
  * @cssproperty --forge-theme-min-height - Controls the minimum height.

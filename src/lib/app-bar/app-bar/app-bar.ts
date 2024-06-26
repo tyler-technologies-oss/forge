@@ -31,12 +31,12 @@ declare global {
  * @description App bars are a collection of components placed as a horizontal bar at the top of the screen. They typically contain a logo, title, and optional application-wide actions.
  *
  * @property {string} titleText - The text to display in the title.
- * @property {AppBarElevation} elevation - The elevation of the app bar.
+ * @property {AppBarElevation} [elevation="raised"] - The elevation of the app bar.
  * @property {AppBarTheme} theme - The theme of the app bar.
  * @property {string} href - The href that will be used to make the logo and title area a clickable link.
  *
  * @attribute {string} title-text - The text to display in the title.
- * @attribute {string} elevation - The elevation of the app bar.
+ * @attribute {string} [elevation="raised"] - The elevation of the app bar.
  * @attribute {string} theme - The theme of the app bar.
  * @attribute {string} href - The href that will be used to make the logo and title area a clickable link
  *

@@ -6,10 +6,60 @@ import * as DatePickerStories from './DatePicker.stories';
 
 <Title />
 
+Date pickers are used to allow users to select a date from a calendar.
+
 <Canvas of={DatePickerStories.Demo} />
+
+## Custom Date Format
+
+Input masking is enabled by default to ensure the user enters the date in the correct format, but you can also customize the date format via the `parseCallback`, `formatCallback`,
+and `maskFormat` properties.
+
+<Canvas of={DatePickerStories.CustomFormat} />
+
+In the example above, the `parseCallback` function is used to parse the date string into a `Date` object, and the `formatCallback` function is used to format the date object into a string
+using the `YYYY-MM-DD` format. You will also need to set the `mask-format` attribute to `YYYY-MM-DD` to enable input masking support.
+
+```typescript
+function parseCallback(str: string): Date | null {
+  if (!str) {
+    return null;
+  }
+
+  const split = str.split('-');
+
+  if (split.length !== 3) {
+    return null;
+  }
+
+  const yyyy = +split[0];
+  const mm = +split[1];
+  const dd = split[2].indexOf('T') ? +split[2].split('T')[0] : +split[2];
+
+  if (!yyyy || isNaN(yyyy) || !mm || isNaN(mm) || !dd || isNaN(dd)) {
+    return null;
+  }
+
+  return new Date(yyyy, mm - 1, dd, 0, 0, 0, 0);
+}
+
+function formatCallback(date: Date): string | null {
+  return date ? date.toISOString().split('T')[0] : null;
+}
+```
 
 ## API
 
 <CustomArgTypes />
 
 ## Accessibility
+
+- When using a screen reader, ensure keyboard navigation in the calendar is announced.
+- Be sure that you add the proper aria-label to the `<input>` element if necessary.
+- The date picker component will add the following ARIA attributes to the `<input>` element for you:
+  - `aria-live`
+  - `aria-atomic`
+  - `aria-haspopup`
+  - `aria-expanded`
+  - `aria-owns`
+  - `aria-disabled`
