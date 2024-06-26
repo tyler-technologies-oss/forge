@@ -26,7 +26,9 @@ const meta = {
       tagName: component
     })
   },
-  args: {}
+  args: {
+    inverted: false
+  }
 } satisfies Meta;
 
 export default meta;

@@ -6,10 +6,30 @@ import * as ChipFieldStories from './ChipField.stories';
 
 <Title />
 
+Chip fields are a specialized variant of text field that allows users to input multiple values in a single field and represent them as chips.
+
 <Canvas of={ChipFieldStories.Demo} />
+
+## Deprecation Notice
+
+The `<forge-chip-field>` component is deprecated and will be removed in a future release. Existing components such as `<forge-text-field>` and
+`<forge-select>` will be able to be used to create similar functionality which removes the current need for this specialized component.
+
+## With Autocomplete
+
+It is common to use an autocomplete component with a chip field to provide suggestions to the user as they type.
+
+<Canvas of={ChipFieldStories.WithAutocomplete} />
 
 ## API
 
 <CustomArgTypes />
 
 ## Accessibility
+
+- Add an `id` to your `<input>` element and bind it to your `<label>` element using the for attribute on the `<label>`.
+- Ensure that the chips that are added to the field have descriptive `aria-label` or `aria-labelledby` attributes.
+- Make sure that the member chips that are added can be accessed via the keyboard left and right arrows.
+  - There should be a distinct visual cue that indicates which chip is focused
+- Similarly, make sure that when a chip is focused using the arrow keys, that the backspace and delete keys do remove them.
+- Ensure that when disabled, the entire field as well as the member chips all appear visually and interactively disabled.

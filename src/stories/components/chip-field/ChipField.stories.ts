@@ -2,11 +2,69 @@ import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { action } from '@storybook/addon-actions';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { IOption } from '@tylertech/forge/select';
+import { IAutocompleteSelectEventData } from '@tylertech/forge/autocomplete';
+import { ref, createRef } from 'lit/directives/ref.js';
+import { IChipFieldComponent } from '@tylertech/forge/chip-field';
 
 import '@tylertech/forge/chip-field';
+import '@tylertech/forge/autocomplete';
 
 const component = 'forge-chip-field';
+
+const US_STATES: IOption[] = [
+  { label: 'Alabama', value: 'AL' },
+  { label: 'Alaska', value: 'AK' },
+  { label: 'Arizona', value: 'AZ' },
+  { label: 'Arkansas', value: 'AR' },
+  { label: 'California', value: 'CA' },
+  { label: 'Colorado', value: 'CO' },
+  { label: 'Connecticut', value: 'CT' },
+  { label: 'Delaware', value: 'DE' },
+  { label: 'Florida', value: 'FL' },
+  { label: 'Georgia', value: 'GA' },
+  { label: 'Hawaii', value: 'HI' },
+  { label: 'Idaho', value: 'ID' },
+  { label: 'Illinois', value: 'IL' },
+  { label: 'Indiana', value: 'IN' },
+  { label: 'Iowa', value: 'IA' },
+  { label: 'Kansas', value: 'KS' },
+  { label: 'Kentucky', value: 'KY' },
+  { label: 'Louisiana', value: 'LA' },
+  { label: 'Maine', value: 'ME' },
+  { label: 'Maryland', value: 'MD' },
+  { label: 'Massachusetts', value: 'MA' },
+  { label: 'Michigan', value: 'MI' },
+  { label: 'Minnesota', value: 'MN' },
+  { label: 'Mississippi', value: 'MS' },
+  { label: 'Missouri', value: 'MO' },
+  { label: 'Montana', value: 'MT' },
+  { label: 'Nebraska', value: 'NE' },
+  { label: 'Nevada', value: 'NV' },
+  { label: 'New Hampshire', value: 'H' },
+  { label: 'New Jersey', value: 'J' },
+  { label: 'New Mexico', value: 'NM' },
+  { label: 'New York', value: 'NY' },
+  { label: 'North Carolina', value: 'NC' },
+  { label: 'North Dakota', value: 'ND' },
+  { label: 'Ohio', value: 'OH' },
+  { label: 'Oklahoma', value: 'OK' },
+  { label: 'Oregon', value: 'OR' },
+  { label: 'Pennsylvania', value: 'PA' },
+  { label: 'Rhode Island', value: 'RI' },
+  { label: 'South Carolina', value: 'C' },
+  { label: 'South Dakota', value: 'SD' },
+  { label: 'Tennessee', value: 'TN' },
+  { label: 'Texas', value: 'TX' },
+  { label: 'Utah', value: 'UT' },
+  { label: 'Vermont', value: 'VT' },
+  { label: 'Virginia', value: 'VA' },
+  { label: 'Washington', value: 'WA' },
+  { label: 'West Virginia', value: 'WV' },
+  { label: 'Wisconsin', value: 'WI' },
+  { label: 'Wyoming', value: 'WY' }
+];
 
 const addedAction = action('forge-chip-field-member-added');
 const removedAction = action('forge-chip-field-member-removed');
@@ -68,7 +126,7 @@ const meta = {
         style=${style}>
         <label slot="label" for="tag-input">Tags</label>
         <input type="text" id="tag-input" />
-        <div slot="helper-text">Press enter to create a tag</div>
+        <div slot="support-text">Press enter to create a tag</div>
       </forge-chip-field>
     `;
   },
@@ -99,6 +157,7 @@ const meta = {
     required: false,
     optional: false,
     disabled: false,
+    density: 'default',
     dense: false,
     popoverIcon: false,
     popoverExpanded: false
@@ -110,3 +169,49 @@ export default meta;
 type Story = StoryObj;
 
 export const Demo: Story = {};
+
+export const WithAutocomplete: Story = {
+  ...standaloneStoryParams,
+  render: () => {
+    const chipFieldRef = createRef<IChipFieldComponent>();
+    const selectedAutocompleteValues: string[] = [];
+
+    const filter = (filterText: string) => {
+      const remainingStates = US_STATES.filter(({ value }) => !selectedAutocompleteValues.includes(value));
+      return remainingStates.filter(({ label }) => label.toLowerCase().includes(filterText.toLowerCase()));
+    };
+
+    const onSelect = (evt: CustomEvent<IAutocompleteSelectEventData>) => {
+      const exists = selectedAutocompleteValues.includes(evt.detail.value);
+      if (!exists) {
+        addMember(evt.detail.value);
+        selectedAutocompleteValues.push(evt.detail.value);
+      }
+    };
+
+    function addMember(value: string): void {
+      const newChip = document.createElement('forge-chip');
+      newChip.setAttribute('slot', 'member');
+      newChip.type = 'field';
+      newChip.dense = true;
+      newChip.value = value;
+      newChip.textContent = value;
+
+      newChip.addEventListener('forge-chip-delete', () => {
+        newChip.remove();
+        selectedAutocompleteValues.splice(selectedAutocompleteValues.indexOf(value), 1);
+      });
+
+      chipFieldRef.value?.appendChild(newChip);
+    }
+
+    return html`
+      <forge-autocomplete .filter=${filter} mode="stateless" @forge-autocomplete-select=${onSelect}>
+        <forge-chip-field ${ref(chipFieldRef)} popover-icon show-clear>
+          <label slot="label" for="tag-input">Tags</label>
+          <input type="text" id="tag-input" />
+        </forge-chip-field>
+      </forge-autocomplete>
+    `;
+  }
+};

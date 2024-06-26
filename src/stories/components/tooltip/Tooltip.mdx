@@ -10,6 +10,24 @@ Tooltips display informative text when users hover over an element.
 
 <Canvas of={TooltipStories.Demo} />
 
+## Anchor
+
+Tooltips are intended to be "anchored" to another element. This is typically done by setting the `anchor` property/attribute to the `id` of the element that the tooltip should be anchored to.
+
+{/* prettier-ignore */}
+```html
+<button id="button">Hover over me</button>
+<forge-tooltip anchor="button">This is a tooltip</forge-tooltip>
+```
+
+## Type
+
+You can set the `type` property/attribute to one of the following values to control its association to the anchor element.
+
+- `presentation`: A tooltip that is purely presentational and has no accessible meaning to its anchor.
+- `label`: The tooltip will be interpreted as the accessible label for the anchor element.
+- `description`: The tooltip will be interpreted as the accessible description for the anchor element.
+
 ## API
 
 <CustomArgTypes />

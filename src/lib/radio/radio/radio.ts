@@ -38,23 +38,23 @@ declare global {
  * @summary The Forge Radio component is used to create a form input where only one out of a set of
  * values should be selected.
  *
- * @property {boolean} checked - Indicates whether the radio button is checked.
- * @property {boolean} defaultChecked - Indicates whether the radio button is checked by default.
+ * @property {boolean} [checked=false] - Indicates whether the radio button is checked.
+ * @property {boolean} [defaultChecked=false] - Indicates whether the radio button is checked by default.
  * @property {string} value - The value of the radio button when submitted.
- * @property {boolean} dense - Indicates whether the radio button should be displayed in a dense layout.
- * @property {boolean} disabled - Indicates whether the radio button is disabled.
- * @property {boolean} required - Indicates whether the radio button is required.
- * @property {boolean} readonly - Indicates whether the radio button is read-only.
- * @property {RadioLabelPosition} labelPosition - The position of the radio button's label.
+ * @property {boolean} [dense=false] - Indicates whether the radio button should be displayed in a dense layout.
+ * @property {boolean} [disabled=false] - Indicates whether the radio button is disabled.
+ * @property {boolean} [required=false] - Indicates whether the radio button is required.
+ * @property {boolean} [readonly=false] - Indicates whether the radio button is read-only.
+ * @property {RadioLabelPosition} [labelPosition="end"] - The position of the radio button's label.
  *
- * @attribute {boolean} checked - Indicates whether the radio button is checked.
- * @attribute {boolean} default-checked - Indicates whether the radio button is checked by default.
+ * @attribute {boolean} [checked=false] - Indicates whether the radio button is checked.
+ * @attribute {boolean} [default-checked=false] - Indicates whether the radio button is checked by default.
  * @attribute {string} value - The value of the radio button when submitted.
- * @attribute {boolean} dense - Indicates whether the radio button should be displayed in a dense layout.
- * @attribute {boolean} disabled - Indicates whether the radio button is disabled.
- * @attribute {boolean} required - Indicates whether the radio button is required.
- * @attribute {boolean} readonly - Indicates whether the radio button is read-only.
- * @attribute {RadioLabelPosition} label-position - The position of the radio button's label.
+ * @attribute {boolean} [dense=false] - Indicates whether the radio button should be displayed in a dense layout.
+ * @attribute {boolean} [disabled=false] - Indicates whether the radio button is disabled.
+ * @attribute {boolean} [required=false] - Indicates whether the radio button is required.
+ * @attribute {boolean} [readonly=false] - Indicates whether the radio button is read-only.
+ * @attribute {RadioLabelPosition} [label-position="end"] - The position of the radio button's label.
  *
  * @cssproperty --forge-radio-primary-color - The primary color of the radio button when checked.
  * @cssproperty --forge-radio-inactive-color - The color of the radio button when unchecked.

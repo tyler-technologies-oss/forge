@@ -15,6 +15,14 @@ IconRegistry.define(tylIconSettings);
 const meta = {
   title: 'Components/Label',
   component,
+  decorators: [
+    storyStyles(`
+    .align {
+      display: flex;
+      align-items: center;
+    }
+  `)
+  ],
   parameters: {
     controls: { disable: true },
     actions: { disable: true }
@@ -28,8 +36,10 @@ type Story = StoryObj;
 export const IDAssociated: Story = {
   render: () => {
     return html`
-      <forge-label for="my-checkbox">Label</forge-label>
-      <forge-checkbox id="my-checkbox"></forge-checkbox>
+      <div class="align">
+        <forge-label for="my-checkbox">Label</forge-label>
+        <forge-checkbox id="my-checkbox"></forge-checkbox>
+      </div>
     `;
   }
 };
@@ -37,7 +47,7 @@ export const IDAssociated: Story = {
 export const Nested: Story = {
   render: () => {
     return html`
-      <forge-label>
+      <forge-label class="align">
         <span>Label</span>
         <forge-checkbox></forge-checkbox>
       </forge-label>
@@ -48,7 +58,7 @@ export const Nested: Story = {
 export const Legend: Story = {
   render: () => {
     return html`
-      <forge-radio-group>
+      <forge-radio-group class="align">
         <forge-label legend>Choose an option</forge-label>
         <forge-radio name="default">Option 1</forge-radio>
         <forge-radio name="default">Option 2</forge-radio>

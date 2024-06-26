@@ -20,9 +20,9 @@ declare global {
  *
  * @summary Divider is used to separate elements.
  *
- * @property {boolean} vertical - Controls if the divider is displayed vertically or horizontally.
+ * @property {boolean} [vertical=false] - Controls if the divider is displayed vertically or horizontally.
  *
- * @attribute {boolean} vertical - Controls if the divider is displayed vertically or horizontally.
+ * @attribute {boolean} [vertical=false] - Controls if the divider is displayed vertically or horizontally.
  *
  * @cssproperty --forge-divider-color - The color of the divider.
  * @cssproperty --forge-divider-width - The width of the divider.

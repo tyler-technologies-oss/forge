@@ -22,9 +22,9 @@ const meta = {
         .disabled=${args.disabled}
         .defaultChecked=${args.defaultChecked}
         .readonly=${args.readonly}
-        style=${style}
-        >Option 1</forge-radio
-      >
+        style=${style}>
+        Option 1
+      </forge-radio>
       <forge-radio
         name="radios"
         value="1"
@@ -33,9 +33,20 @@ const meta = {
         .disabled=${args.disabled}
         .defaultChecked=${args.defaultChecked}
         .readonly=${args.readonly}
-        style=${style}
-        >Option 2</forge-radio
-      >
+        style=${style}>
+        Option 2
+      </forge-radio>
+      <forge-radio
+        name="radios"
+        value="1"
+        .labelPosition=${args.labelPosition}
+        .dense=${args.dense}
+        .disabled=${args.disabled}
+        .defaultChecked=${args.defaultChecked}
+        .readonly=${args.readonly}
+        style=${style}>
+        Option 3
+      </forge-radio>
     `;
   },
   component,
@@ -45,7 +56,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['value', 'checked', 'required'],
+      exclude: ['value', 'defaultChecked', 'checked', 'required', 'name', 'labels', 'form'],
       controls: {
         labelPosition: {
           control: 'select',
@@ -54,7 +65,12 @@ const meta = {
       }
     })
   },
-  args: {}
+  args: {
+    dense: false,
+    disabled: false,
+    readonly: false,
+    labelPosition: 'end'
+  }
 } satisfies Meta;
 
 export default meta;

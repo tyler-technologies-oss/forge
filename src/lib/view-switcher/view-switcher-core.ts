@@ -1,4 +1,4 @@
-import { ICustomElementCore, Platform, isDefined } from '@tylertech/forge-core';
+import { ICustomElementCore, isDefined } from '@tylertech/forge-core';
 
 import { IViewSwitcherAdapter } from './view-switcher-adapter';
 import { VIEW_SWITCHER_CONSTANTS, ViewAnimationDirection, ViewSwitcherAnimationType } from './view-switcher-constants';

@@ -1,4 +1,4 @@
-import { getEventPath, getShadowElement, ICustomElementCore, isDefined, isNumber, Platform } from '@tylertech/forge-core';
+import { getEventPath, ICustomElementCore, isDefined, isNumber, Platform } from '@tylertech/forge-core';
 import { STEP_CONSTANTS } from '../step/step-constants';
 import { StepperUtils } from '../core/stepper-utils';
 import { IStepComponent } from '../step/step';

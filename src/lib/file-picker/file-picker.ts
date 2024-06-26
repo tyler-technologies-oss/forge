@@ -40,21 +40,21 @@ declare global {
  * The expectation of this component is that it will be used as a familiar element on the page that will let users upload files,
  * while providing that visual and functional consistency.
  *
- * @property {string | null} accept - Gets/sets the allowed file types.
- * @property {string | null} maxSize - Gets/sets the maximum allowed file size.
- * @property {string | null} capture - Gets/sets the camera to use when capturing video or images.
- * @property {boolean} multiple - Gets/sets whether multiple files are allowed.
- * @property {boolean} disabled - Gets/sets whether the file picker is disabled.
- * @property {boolean} compact - Gets/sets whether the file picker uses the compact variant.
- * @property {boolean} borderless - Gets and sets whether the file picker is borderless.
+ * @property {string | null} [accept=null] - Gets/sets the allowed file types.
+ * @property {string | null} [maxSize=null] - Gets/sets the maximum allowed file size.
+ * @property {string | null} [capture=null] - Gets/sets the camera to use when capturing video or images.
+ * @property {boolean} [multiple=false] - Gets/sets whether multiple files are allowed.
+ * @property {boolean} [disabled=false] - Gets/sets whether the file picker is disabled.
+ * @property {boolean} [compact=false] - Gets/sets whether the file picker uses the compact variant.
+ * @property {boolean} [borderless=false] - Gets and sets whether the file picker is borderless.
  *
- * @attribute {string | null} accept - Gets/sets the allowed file types.
- * @attribute {string | null} maxSize - Gets/sets the maximum allowed file size.
- * @attribute {string | null} capture - Gets/sets the camera to use when capturing video or images.
- * @attribute {boolean} multiple - Gets/sets whether multiple files are allowed.
- * @attribute {boolean} disabled - Gets/sets whether the file picker is disabled.
- * @attribute {boolean} compact - Gets/sets whether the file picker uses the compact variant.
- * @attribute {boolean} borderless - Gets and sets whether the file picker is borderless.
+ * @attribute {string | null} [accept=null] - Gets/sets the allowed file types.
+ * @attribute {string | null} [maxSize=null] - Gets/sets the maximum allowed file size.
+ * @attribute {string | null} [capture=null] - Gets/sets the camera to use when capturing video or images.
+ * @attribute {boolean} [multiple=false] - Gets/sets whether multiple files are allowed.
+ * @attribute {boolean} [disabled=false] - Gets/sets whether the file picker is disabled.
+ * @attribute {boolean} [compact=false] - Gets/sets whether the file picker uses the compact variant.
+ * @attribute {boolean} [borderless=false] - Gets and sets whether the file picker is borderless.
  *
  * @cssproperty --forge-file-picker-background - Controls the background color.
  * @cssproperty --forge-file-picker-width - Controls the width.
@@ -71,10 +71,12 @@ declare global {
  * @cssproperty --forge-file-picker-highlight-background - Controls the background color of the file picker when dragging files into the form.
  * @cssproperty --forge-file-picker-highlight-border-color - Controls the border color of the file picker when dragging files into the form.
  *
- * @csspart form - The <form> element at the root.
+ * @event {CustomEvent<IFilePickerChangeEventData>} forge-file-picker-change - Dispatched when a file is chosen.
+ *
+ * @csspart form - The `<form>` element at the root.
  * @csspart primary - The container element around the primary slot.
  * @csspart secondary - The container element around the secondary slot.
- * @csspart input - The <input type="file"> element.
+ * @csspart input - The `<input type="file">` element.
  * @csspart helper-text-container - The container around the helper-text slot.
  */
 @customElement({

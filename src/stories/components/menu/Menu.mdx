@@ -6,11 +6,21 @@ import * as MenuStories from './Menu.stories';
 
 <Title />
 
-The menu component is a wrapper component that can be placed around any content. It will listen for a click event on its children and toggle a popup menu around the target element.
+Menus are used to provide a list of options/actions to a user, and are typically anchored dynamically to a button or other similar trigger element.
 
-The popup menu is simply a list of items that allows a user to choose an option to perform a task.
+The `<forge-menu>` component is a decorator style component which means it wraps around a trigger element and will attach itself to automatically open
+and close when the trigger element is interacted with.
+
+Menus can be used in a variety of ways, such as a simple list of options, a list of actions, or a hierarchical/cascading list of options. Menus do not
+hold selection state.
 
 <Canvas of={MenuStories.Demo} />
+
+## Cascading
+
+Cascading menus are used to display a hierarchical list of options. When a menu item is hovered, a child menu will open next of the parent menu item.
+
+<Canvas of={MenuStories.Cascading} />
 
 ## API
 

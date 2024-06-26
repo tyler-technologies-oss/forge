@@ -6,10 +6,28 @@ import * as ColorPickerStories from './ColorPicker.stories';
 
 <Title />
 
+The color picker component allows users to select a color from a canvas as well as adjust the color's hue, saturation, lightness, and opacity.
+
+This component can be used inline on the page, or within a popover, but there is not currently an associated "field" component for this.
+
 <Canvas of={ColorPickerStories.Demo} />
 
 ## API
 
 <CustomArgTypes />
 
+## Keyboard Shortcuts
+
+| Name          | Description                     |
+| ------------- | ------------------------------- |
+| `arrow up`    | Moves the thumb position up.    |
+| `arrow down`  | Moves the thumb position down.  |
+| `arrow left`  | Moves the thumb position left.  |
+| `arrow right` | Moves the thumb position right. |
+
 ## Accessibility
+
+- Verify that you can tab to the hex input field and the “change color format” button.
+  - Change the color format to RGBA and HSVA and ensure those input fields are accessible by keyboard.
+  - Ensure that there is a visual cue when any of the color value input fields are focused.
+- Verify that pressing the space bar or enter key while focusing on the "change color format" button will cycle through the color input formats.

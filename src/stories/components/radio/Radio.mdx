@@ -6,11 +6,52 @@ import * as RadioStories from './Radio.stories';
 
 <Title />
 
-The radio component acts like the native `<input type="radio">` element. It provides some minor functionality, but its primary purpose is to handle the styling of the element.
-
-While this component can be used on its own, it's typically part of a radio group, and care should be taken to account for accessibility concerns when creating a radio group. See the Accessibility tab for more information.
+Radios are used when a user must select one option from a set of options. They are used when there are two or more options that are mutually exclusive and the user must select exactly one.
 
 <Canvas of={RadioStories.Demo} />
+
+## Grouping
+
+Radio buttons should be part of a radio group and interpreted as such by assistive technologies such as screen readers. By default, radios will form an implicit group
+based on their `name` attribute. If you want to group radios explicitly you can either provide a `role="radiogroup"` attribute to an ancestor element, or use the
+`<forge-radio-group>` element.
+
+### Name
+
+This example shows how radios are grouped implicitly by their `name` attribute.
+
+```html
+<forge-radio name="default">Option 1</forge-radio>
+<forge-radio name="default">Option 2</forge-radio>
+<forge-radio name="default">Option 3</forge-radio>
+```
+
+### Role
+
+This example shows how radios are grouped explicitly by their `name` and the ancestor element's `role="radiogroup"` attribute to provide a label for the group.
+
+```html
+<div role="radiogroup" aria-label="Choose a radio option">
+  <forge-radio name="default">Option 1</forge-radio>
+  <forge-radio name="default">Option 2</forge-radio>
+  <forge-radio name="default">Option 3</forge-radio>
+</div>
+```
+
+### Radio Group
+
+This example shows how radios are grouped explicitly by the `<forge-radio-group>` element.
+
+```html
+<forge-radio-group>
+  <forge-label legend>Choose an option</forge-label>
+  <forge-radio value="option1">Option 1</forge-radio>
+  <forge-radio value="option2">Option 2</forge-radio>
+  <forge-radio value="option3">Option 3</forge-radio>
+</forge-radio-group>
+```
+
+> **Note:** Take note of the `<forge-label>` element with the `legend` attribute. This is used to provide an accessible label for the radio group.
 
 ## API
 
