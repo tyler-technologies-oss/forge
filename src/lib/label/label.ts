@@ -1,6 +1,8 @@
-import { customElement, coreProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
+import { updateTarget } from '../constants';
 import { BaseComponent, IBaseComponent } from '../core';
 import { LabelAdapter } from './label-adapter';
+import { ILabelAware } from './label-aware';
 import { LABEL_CONSTANTS } from './label-constants';
 import { LabelCore } from './label-core';
 
@@ -14,6 +16,7 @@ export interface ILabelComponent extends IBaseComponent {
   nonInteractive: boolean;
   legend: boolean;
   update(): void;
+  [updateTarget](target: HTMLElement & ILabelAware): boolean;
 }
 
 declare global {
@@ -103,5 +106,15 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
    */
   public update(): void {
     this._core.update();
+  }
+
+  /**
+   * Attempts to locate and connect to the target element.
+   *
+   * @internal
+   * @returns Whether the target element was located.
+   */
+  public [updateTarget](target: HTMLElement & ILabelAware): boolean {
+    return this._core.updateTarget(target);
   }
 }

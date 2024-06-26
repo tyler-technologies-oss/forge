@@ -1,11 +1,12 @@
-import { getShadowElement, randomChars, toggleAttribute } from '@tylertech/forge-core';
-import { ISelectComponent } from './select';
-import { SELECT_CONSTANTS } from './select-constants';
-import { IBaseSelectAdapter, BaseSelectAdapter } from '../core';
-import { IListDropdownConfig } from '../../list-dropdown/list-dropdown-constants';
+import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
+import { isFocusable, setValidity } from '../../constants';
+import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../../core/utils/utils';
 import type { IFieldComponent } from '../../field/field';
 import { FIELD_CONSTANTS } from '../../field/field-constants';
-import { tryCreateAriaControlsPlaceholder, setAriaControls } from '../../core/utils/utils';
+import { IListDropdownConfig } from '../../list-dropdown/list-dropdown-constants';
+import { BaseSelectAdapter, IBaseSelectAdapter } from '../core';
+import { ISelectComponent } from './select';
+import { SELECT_CONSTANTS } from './select-constants';
 
 export type OptionListenerDestructor = () => void;
 
@@ -16,6 +17,8 @@ export interface ISelectAdapter extends IBaseSelectAdapter<ISelectComponent> {
   setPlaceholderText(value: string): void;
   setSelectedText(value: string): void;
   setDisabled(value: boolean): void;
+  setRequired(): void;
+  syncValue(value: unknown | null): void;
 }
 
 export class SelectAdapter extends BaseSelectAdapter<ISelectComponent> implements ISelectAdapter {
@@ -54,9 +57,7 @@ export class SelectAdapter extends BaseSelectAdapter<ISelectComponent> implement
       this.setHostAttribute('aria-invalid', 'true');
     }
 
-    if (!this._component.hasAttribute('tabindex')) {
-      this._component.tabIndex = this._component.disabled ? -1 : 0;
-    }
+    this._component[isFocusable] = !this._component.disabled;
   }
 
   public setLabel(value: string): void {
@@ -114,8 +115,12 @@ export class SelectAdapter extends BaseSelectAdapter<ISelectComponent> implement
   }
 
   public setDisabled(value: boolean): void {
-    this._component.tabIndex = value ? -1 : 0;
+    this._component[isFocusable] = !value;
     toggleAttribute(this._component, value, 'aria-disabled', 'true');
+  }
+
+  public setRequired(): void {
+    this._component[setValidity]();
   }
 
   public addClickListener(listener: (evt: Event) => void): void {
@@ -132,5 +137,17 @@ export class SelectAdapter extends BaseSelectAdapter<ISelectComponent> implement
 
   public removeTargetListener(type: string, listener: (evt: Event) => void): void {
     this._component.removeEventListener(type, listener);
+  }
+
+  public syncValue(value: unknown | null): void {
+    // If the value is an empty or entirely null array, the form value should be null
+    const isEmpty = Array.isArray(value) ? !value.length || !value.some(entry => entry != null) : value == null;
+    const data = isEmpty ? null : new FormData();
+    const stringValue = JSON.stringify(value);
+    if (data && value) {
+      data.append(this._component.name, stringValue);
+    }
+    this._component.setFormValue(data, stringValue);
+    this._component[setValidity]();
   }
 }

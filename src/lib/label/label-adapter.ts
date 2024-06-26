@@ -1,4 +1,5 @@
 import { getShadowElement } from '@tylertech/forge-core';
+import { DEFERRED_LABEL_TARGET, forgeLabelRef } from '../constants';
 import { BaseAdapter, IBaseAdapter } from '../core';
 import { ILabelComponent } from './label';
 import { ILabelAware, isLabelAware } from './label-aware';
@@ -13,7 +14,7 @@ export interface ILabelAdapter extends IBaseAdapter {
   clickTarget(): void;
   updateTargetLabel(): void;
   addSlotChangeListener(callback: EventListener): void;
-  removerSlotChangeListener(callback: EventListener): void;
+  removeSlotChangeListener(callback: EventListener): void;
   addMutationObserver(callback: MutationCallback): void;
   removeMutationObserver(): void;
 }
@@ -64,15 +65,27 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
    * Computes the text content of the label then passes it to the target's `labelChangedCallback`.
    */
   public updateTargetLabel(): void {
-    const value = this._component.textContent?.trim() ?? '';
-    this._targetElement?.labelChangedCallback(value);
+    if (!this._targetElement) {
+      return;
+    }
+
+    let textContent = this._component.textContent ?? '';
+
+    // If the target element is a child of the label, remove its text content from the label text
+    if (this._component.contains(this._targetElement)) {
+      const targetTextContent = this._targetElement.textContent ?? '';
+      textContent = textContent.replace(targetTextContent, '');
+    }
+
+    const value = textContent.trim();
+    this._targetElement.labelChangedCallback(value);
   }
 
   public addSlotChangeListener(callback: EventListener): void {
     this._slotElement.addEventListener('slotchange', callback);
   }
 
-  public removerSlotChangeListener(callback: EventListener): void {
+  public removeSlotChangeListener(callback: EventListener): void {
     this._slotElement.removeEventListener('slotchange', callback);
   }
 
@@ -119,6 +132,13 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
       // Used for nested elements within the label component
       const selector = LABEL_CONSTANTS.labelableChildSelectors.join(',');
       targetEl = this._component.querySelector(selector);
+    }
+
+    if (targetEl && !targetEl.shadowRoot) {
+      // If the target element has not been updgraded, mark it to connect later
+      targetEl.setAttribute(DEFERRED_LABEL_TARGET, '');
+      targetEl[forgeLabelRef] = this._component;
+      return null;
     }
 
     if (targetEl && !this._checkLabelAwareness(targetEl)) {

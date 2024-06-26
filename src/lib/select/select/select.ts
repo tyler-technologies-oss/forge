@@ -1,27 +1,43 @@
-import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, toggleAttribute } from '@tylertech/forge-core';
-import { tylIconArrowDropDown, tylIconCheckBoxOutlineBlank, tylIconCheckBox } from '@tylertech/tyler-icons/standard';
-import { SelectAdapter } from './select-adapter';
-import { SelectCore } from './select-core';
-import { SELECT_CONSTANTS } from './select-constants';
-import { OptionComponent } from '../option';
-import { ListComponent, ListItemComponent } from '../../list';
-import { OptionGroupComponent } from '../option-group';
-import { IconComponent, IconRegistry } from '../../icon';
-import { BaseSelectComponent, BASE_SELECT_CONSTANTS, IBaseSelectComponent } from '../core';
+import { attachShadowTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
+import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
 import { CircularProgressComponent } from '../../circular-progress';
+import { getFormValue, getValidationMessage, inputType, internals, setDefaultAria, setValidity } from '../../constants';
+import { FormValue } from '../../core';
+import { IWithFocusable, WithFocusable } from '../../core/mixins/focus/with-focusable';
+import { IWithFormAssociation, WithFormAssociation } from '../../core/mixins/form/with-form-associated';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
+import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware';
+import { BASE_FIELD_CONSTANTS, FIELD_CONSTANTS, FieldComponent, FieldDensity, FieldLabelPosition } from '../../field';
+import { IWithBaseField, WithBaseField } from '../../field/base/with-base-field';
+import { IconComponent, IconRegistry } from '../../icon';
+import { IconButtonComponent } from '../../icon-button';
+import { ListComponent, ListItemComponent } from '../../list';
+import { PopoverComponent } from '../../popover';
 import { ScaffoldComponent } from '../../scaffold';
 import { ToolbarComponent } from '../../toolbar';
-import { IconButtonComponent } from '../../icon-button';
-import { PopoverComponent } from '../../popover';
-import { BASE_FIELD_CONSTANTS, FieldComponent, FieldDensity, FieldLabelPosition, FIELD_CONSTANTS } from '../../field';
-import { IWithBaseField, WithBaseField } from '../../field/base/with-base-field';
+import { BASE_SELECT_CONSTANTS, BaseSelectComponent, IBaseSelectComponent } from '../core';
+import { OptionComponent } from '../option';
+import { OptionGroupComponent } from '../option-group';
+import { SelectAdapter } from './select-adapter';
+import { SELECT_CONSTANTS } from './select-constants';
+import { SelectCore } from './select-core';
 
 import template from './select.html';
 import styles from './select.scss';
 
-export interface ISelectComponent extends IWithBaseField, IBaseSelectComponent {
+export interface ISelectComponent
+  extends IWithFormAssociation,
+    IWithFocusable,
+    IWithLabelAwareness,
+    IWithElementInternals,
+    IWithDefaultAria,
+    IWithBaseField,
+    IBaseSelectComponent {
   label: string;
   placeholder: string;
+  setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void;
+  [setValidity](): void;
 }
 
 declare global {
@@ -154,7 +170,10 @@ declare global {
     IconButtonComponent
   ]
 })
-export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectCore>) implements ISelectComponent {
+export class SelectComponent
+  extends WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(WithBaseField(BaseSelectComponent<SelectCore>))))))
+  implements ISelectComponent
+{
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(BASE_FIELD_CONSTANTS.observedAttributes),
@@ -165,14 +184,24 @@ export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectCor
 
   constructor() {
     super();
-    IconRegistry.define([tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank]);
+    IconRegistry.define([tylIconCheckBox, tylIconCheckBoxOutlineBlank]);
     attachShadowTemplate(this, template, styles);
 
     // Needed by WithBaseField mixin to proxy state to the field component
     const fieldEl = this.shadowRoot?.querySelector(FIELD_CONSTANTS.elementName) as FieldComponent;
     this.initializeFieldInstance(fieldEl);
 
+    this[inputType] = 'select';
     this._core = new SelectCore(new SelectAdapter(this));
+  }
+
+  public override connectedCallback(): void {
+    super.connectedCallback();
+    this[setDefaultAria]({
+      role: 'combobox',
+      ariaDisabled: this.disabled ? 'true' : 'false',
+      ariaRequired: this.required ? 'true' : 'false'
+    });
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -190,11 +219,50 @@ export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectCor
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
+  public [getFormValue](): FormValue | null {
+    return this.value;
+  }
+
+  public [setValidity](): void {
+    this[internals].setValidity(
+      { valueMissing: this.required && !this.value },
+      this[getValidationMessage]({
+        required: this.required,
+        value: this.value
+      })
+    );
+  }
+
+  public formResetCallback(): void {
+    this.value = null;
+  }
+
+  public formStateRestoreCallback(state: string): void {
+    this.value = JSON.parse(state);
+  }
+
+  public labelClickedCallback(): void {
+    this.click();
+    // TODO: use `{ focusVisble: false }` when supported.
+    this.focus();
+  }
+
+  public labelChangedCallback(value: string | null): void {
+    this[setDefaultAria]({ ariaLabel: value });
+  }
+
+  public setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void {
+    this[internals].setFormValue(value, state);
+  }
+
   @coreProperty()
   public declare label: string;
 
   @coreProperty()
   public declare placeholder: string;
+
+  @coreProperty()
+  public declare readonly;
 
   public override get floatLabel(): boolean {
     return super.floatLabel;
@@ -225,6 +293,14 @@ export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectCor
   public override set disabled(value: boolean) {
     super.disabled = value;
     this._core.setDisabled(value);
+  }
+
+  public override get required(): boolean {
+    return super.required;
+  }
+  public override set required(value: boolean) {
+    super.required = value;
+    this._core.required = value;
   }
 
   public override get labelPosition(): FieldLabelPosition {
