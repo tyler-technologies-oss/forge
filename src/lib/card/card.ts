@@ -22,7 +22,7 @@ declare global {
  *
  * @property {boolean} [raised=false] - Whether the card has elevation or not.
  *
- * @attribute {boolean} [raised=false] - Whether the card has an raised or not.
+ * @attribute {boolean} [raised=false] - Whether the card has elevation or not.
  * @attribute {boolean} [no-padding=false] - Removes the default padding from the card.
  *
  * @cssproperty --forge-card-background - The background color of the card.
