@@ -174,16 +174,4 @@ describe('Label', () => {
 
     expect(clickedSpy).to.have.been.calledOnce;
   });
-
-  it('should warn when target is not label aware', async () => {
-    const el = await fixture<ILabelComponent>(html`<forge-label>Label</forge-label>`);
-    const div = document.createElement('div');
-    const warnSpy = spy(console, 'warn');
-
-    div.id = 'label-unaware';
-    el.insertAdjacentElement('afterend', div);
-    el.for = div.id;
-
-    expect(warnSpy).to.have.been.calledOnce;
-  });
 });

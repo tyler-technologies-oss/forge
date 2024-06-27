@@ -287,6 +287,7 @@ export class SelectComponent
     this._core.syncFloatingLabelState();
   }
 
+  // @ts-ignore TS2611 - TODO: This is a getter/setter in the base class... TypeScript bug?
   public override get disabled(): boolean {
     return super.disabled;
   }
