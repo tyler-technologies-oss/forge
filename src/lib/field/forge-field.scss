@@ -88,10 +88,12 @@
   }
 
   &__start {
+    grid-column: 1;
     padding-inline-start: #{spacing.variable(small)};
   }
 
   &__end {
+    grid-column: -1;
     padding-inline-end: #{spacing.variable(small)};
   }
 
@@ -111,5 +113,37 @@
   &__support-text {
     @include core.disableable;
     @include core.label;
+  }
+
+  &__label {
+    padding-block-end: #{spacing.variable(xxsmall)};
+
+    &--invalid {
+      color: #{theme.variable(error)};
+    }
+  }
+
+  &--invalid {
+    outline-color: #{theme.variable(error)};
+
+    &:hover:not(:has(input:disabled, textarea:disabled)) {
+      outline-color: #{theme.variable(on-error-container)};
+    }
+
+    .forge-field {
+      &__start,
+      &__end {
+        color: #{theme.variable(on-error-container)};
+      }
+    }
+
+    /* Use a complex selector to ensure the specificity is high enough to take effect. */
+    &.forge-field:has(input:focus, textarea:focus) {
+      @include focus-indicator.provide-theme(
+        (
+          color: #{theme.variable(error)}
+        )
+      );
+    }
   }
 }
