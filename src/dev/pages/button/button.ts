@@ -15,6 +15,11 @@ IconRegistry.define([tylIconForgeLogo, tylIconFavorite, tylIconOpenInNew]);
 
 const formPreventToggle = document.querySelector('#opt-form-prevent') as ISwitchComponent;
 
+const form = document.getElementById('test-btn-form') as HTMLFormElement;
+form.addEventListener('submit', evt => {
+  console.log('form submit', evt);
+});
+
 const submitBtn = document.querySelector('#submit-btn') as HTMLButtonElement;
 submitBtn.addEventListener('click', evt => {
   if (formPreventToggle.on) {

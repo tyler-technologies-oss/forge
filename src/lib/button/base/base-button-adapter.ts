@@ -4,7 +4,7 @@ import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 import { IBaseButton } from './base-button';
-import { BASE_BUTTON_CONSTANTS } from './base-button-constants';
+import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants';
 import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflect-utils';
 import { internals, setDefaultAria } from '../../constants';
 import { supportsPopover } from '../../core/utils/feature-detection';
@@ -22,6 +22,8 @@ export interface IBaseButtonAdapter<T extends IBaseComponent> extends IBaseAdapt
   toggleDefaultPopoverIcon(value: boolean): void;
   animateStateLayer(): void;
   addDefaultSlotChangeListener(listener: EventListener): void;
+  addNativeButton(type: Exclude<ButtonType, 'button'>): void;
+  removeNativeButton(): void;
 }
 
 export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapter<T> implements IBaseButtonAdapter<T> {
@@ -30,6 +32,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
   protected readonly _stateLayerElement: IStateLayerComponent;
   protected readonly _defaultSlotElement: HTMLSlotElement;
   protected readonly _endSlotElement: HTMLSlotElement;
+  protected _nativeButton?: HTMLButtonElement;
 
   constructor(component: T) {
     super(component);
@@ -104,7 +107,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
   }
 
   public clickFormButton(type: string): void {
-    if (!this._component.form) {
+    if (!this._component.form || !this._nativeButton) {
       return; // Nothing for us to do if there is no form element associated to us
     }
 
@@ -113,11 +116,9 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
       this._component[internals].setFormValue(this._component.value);
 
       // We don't use a real <button> since the host is the semantic button, so for
-      // the "submit" button type we need to create a temporary button and click it
+      // the "submit" button type we need to clone attibutes to a native button and click it
       // to trigger the form submission
-      const tempBtn = document.createElement('button');
-      tempBtn.type = type;
-      cloneAttributes(this._component, tempBtn, BUTTON_FORM_ATTRIBUTES);
+      cloneAttributes(this._component, this._nativeButton, BUTTON_FORM_ATTRIBUTES);
 
       // form.requestSubmit(submitter) does not work with form associated custom
       // elements. This patches the dispatched submit event to add the correct `submitter`.
@@ -133,10 +134,6 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
         },
         { capture: true, once: true }
       );
-
-      this._component.insertAdjacentElement('afterend', tempBtn);
-      tempBtn.click();
-      tempBtn.remove();
     } else if (type === 'reset') {
       this._component.form?.reset();
     }
@@ -233,6 +230,23 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
 
   public addDefaultSlotChangeListener(listener: EventListener): void {
     this._defaultSlotElement.addEventListener('slotchange', listener);
+  }
+
+  public addNativeButton(type: Exclude<ButtonType, 'button'>): void {
+    if (this._nativeButton) {
+      this._nativeButton.type = type;
+      return;
+    }
+
+    this._nativeButton = document.createElement('button');
+    this._nativeButton.type = type;
+    this._nativeButton.style.display = 'none';
+    this._component.prepend(this._nativeButton);
+  }
+
+  public removeNativeButton(): void {
+    this._nativeButton?.remove();
+    this._nativeButton = undefined;
   }
 
   private _locatePopoverTargetElement(): HTMLElement | null {
