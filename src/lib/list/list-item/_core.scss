@@ -68,6 +68,7 @@
   @include typography.ellipse;
 
   box-sizing: border-box;
+  isolation: isolate;
 
   font-size: #{token(text-font-size)};
   font-weight: #{token(text-font-weight)};
@@ -85,7 +86,7 @@
     inset: 0;
     border-radius: inherit;
     opacity: #{token(selected-opacity)};
-    background-color: #{token(selected-color)};
+    background-color: #{token(selected-background)};
   }
 }
 
