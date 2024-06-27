@@ -29,8 +29,8 @@ export abstract class BaseButtonCore<T extends IBaseButtonAdapter<IBaseButton>> 
   public initialize(): void {
     this._detectSlottedAnchor();
     this._adapter.addDefaultSlotChangeListener(this._slotChangeListener);
-    if (this._type !== 'button') {
-      this._adapter.addNativeButton(this._type as 'submit' | 'reset');
+    if (this._type === 'submit') {
+      this._adapter.addNativeSubmitButton();
     }
   }
 
@@ -131,10 +131,10 @@ export abstract class BaseButtonCore<T extends IBaseButtonAdapter<IBaseButton>> 
       this._type = type;
       this._adapter.setHostAttribute(BASE_BUTTON_CONSTANTS.attributes.TYPE, type);
 
-      if (this.type !== 'button') {
-        this._adapter.addNativeButton(type as 'submit' | 'reset');
+      if (this.type === 'submit') {
+        this._adapter.addNativeSubmitButton();
       } else {
-        this._adapter.removeNativeButton();
+        this._adapter.removeNativeSubmitButton();
       }
     }
   }

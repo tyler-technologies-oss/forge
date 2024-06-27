@@ -22,8 +22,8 @@ export interface IBaseButtonAdapter<T extends IBaseComponent> extends IBaseAdapt
   toggleDefaultPopoverIcon(value: boolean): void;
   animateStateLayer(): void;
   addDefaultSlotChangeListener(listener: EventListener): void;
-  addNativeButton(type: Exclude<ButtonType, 'button'>): void;
-  removeNativeButton(): void;
+  addNativeSubmitButton(): void;
+  removeNativeSubmitButton(): void;
 }
 
 export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapter<T> implements IBaseButtonAdapter<T> {
@@ -32,7 +32,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
   protected readonly _stateLayerElement: IStateLayerComponent;
   protected readonly _defaultSlotElement: HTMLSlotElement;
   protected readonly _endSlotElement: HTMLSlotElement;
-  protected _nativeButton?: HTMLButtonElement;
+  protected _nativeSubmitButton?: HTMLButtonElement;
 
   constructor(component: T) {
     super(component);
@@ -106,19 +106,22 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
     this._focusIndicatorElement.active = true;
   }
 
-  public clickFormButton(type: string): void {
-    if (!this._component.form || !this._nativeButton) {
+  public clickFormButton(type: ButtonType): void {
+    if (!this._component.form || type === 'button') {
       return; // Nothing for us to do if there is no form element associated to us
     }
 
     if (type === 'submit') {
+      // Add a native submit button to the DOM if it doesn't already exist
+      this.addNativeSubmitButton();
+
       // We need to set the form value to the button value before submitting the form
       this._component[internals].setFormValue(this._component.value);
 
       // We don't use a real <button> since the host is the semantic button, so for
       // the "submit" button type we need to clone attibutes to a native button and click it
       // to trigger the form submission
-      cloneAttributes(this._component, this._nativeButton, BUTTON_FORM_ATTRIBUTES);
+      cloneAttributes(this._component, this._nativeSubmitButton as HTMLButtonElement, BUTTON_FORM_ATTRIBUTES);
 
       // form.requestSubmit(submitter) does not work with form associated custom
       // elements. This patches the dispatched submit event to add the correct `submitter`.
@@ -232,21 +235,20 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
     this._defaultSlotElement.addEventListener('slotchange', listener);
   }
 
-  public addNativeButton(type: Exclude<ButtonType, 'button'>): void {
-    if (this._nativeButton) {
-      this._nativeButton.type = type;
+  public addNativeSubmitButton(): void {
+    if (this._nativeSubmitButton) {
       return;
     }
 
-    this._nativeButton = document.createElement('button');
-    this._nativeButton.type = type;
-    this._nativeButton.style.display = 'none';
-    this._component.prepend(this._nativeButton);
+    this._nativeSubmitButton = document.createElement('button');
+    this._nativeSubmitButton.type = 'submit';
+    this._nativeSubmitButton.style.display = 'none';
+    this._component.prepend(this._nativeSubmitButton);
   }
 
-  public removeNativeButton(): void {
-    this._nativeButton?.remove();
-    this._nativeButton = undefined;
+  public removeNativeSubmitButton(): void {
+    this._nativeSubmitButton?.remove();
+    this._nativeSubmitButton = undefined;
   }
 
   private _locatePopoverTargetElement(): HTMLElement | null {
