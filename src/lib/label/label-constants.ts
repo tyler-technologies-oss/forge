@@ -29,11 +29,12 @@ const events = {
 
 const labelableChildSelectors: Array<keyof HTMLElementTagNameMap> = [
   BUTTON_CONSTANTS.elementName,
+  BUTTON_TOGGLE_GROUP_CONSTANTS.elementName,
   CHECKBOX_CONSTANTS.elementName,
   ICON_BUTTON_CONSTANTS.elementName,
   RADIO_CONSTANTS.elementName,
-  SWITCH_CONSTANTS.elementName,
-  BUTTON_TOGGLE_GROUP_CONSTANTS.elementName
+  'forge-select',
+  SWITCH_CONSTANTS.elementName
 ];
 
 export const LABEL_CONSTANTS = {

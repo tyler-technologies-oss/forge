@@ -1,4 +1,4 @@
-import { AbstractConstructor, MixinBase } from '../../../constants';
+import { AbstractConstructor, DEFERRED_LABEL_TARGET, MixinBase, forgeLabelRef, updateTarget } from '../../../constants';
 import { IBaseComponent } from '../../base/base-component';
 
 /**
@@ -20,6 +20,8 @@ export interface IWithLabelAwareness extends IBaseComponent {
 }
 
 export declare abstract class WithLabelAwarenessContract {
+  public connectedCallback(): void;
+
   public abstract labelChangedCallback(value: string | null): void;
 }
 
@@ -32,6 +34,15 @@ export declare abstract class WithLabelAwarenessContract {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function WithLabelAwareness<TBase extends MixinBase>(base: TBase) {
   abstract class LabelAwareComponent extends base implements WithLabelAwarenessContract {
+    public override connectedCallback(): void {
+      super.connectedCallback?.();
+      if (this.hasAttribute(DEFERRED_LABEL_TARGET) && this[forgeLabelRef]) {
+        this[forgeLabelRef][updateTarget](this);
+      }
+      this.removeAttribute(DEFERRED_LABEL_TARGET);
+      delete this[forgeLabelRef];
+    }
+
     public abstract labelChangedCallback(value: string | null): void;
   }
 
