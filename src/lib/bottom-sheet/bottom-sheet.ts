@@ -1,5 +1,5 @@
-import { attachShadowTemplate, customElement, coreProperty, ICustomElement, coerceBoolean } from '@tylertech/forge-core';
-import { BaseComponent } from '../core/base/base-component';
+import { attachShadowTemplate, customElement, coreProperty, coerceBoolean } from '@tylertech/forge-core';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 import { WithElementInternals } from '../core/mixins/internals/with-element-internals';
 import { DialogComponent } from '../dialog/dialog';
@@ -10,7 +10,7 @@ import { BottomSheetCore } from './bottom-sheet-core';
 import template from './bottom-sheet.html';
 import styles from './bottom-sheet.scss';
 
-export interface IBottomSheetComponent extends ICustomElement {
+export interface IBottomSheetComponent extends IBaseComponent {
   mode: BottomSheetMode;
   persistent: boolean;
   open: boolean;

@@ -1,13 +1,13 @@
-import { customElement, attachShadowTemplate, ICustomElement, coerceBoolean, coreProperty } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { StackAdapter } from './stack-adapter';
 import { StackCore } from './stack-core';
 import { STACK_CONSTANTS, StackAlignment } from './stack-constants';
-import { BaseComponent } from '../core/base/base-component';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './stack.html';
 import styles from './stack.scss';
 
-export interface IStackComponent extends ICustomElement {
+export interface IStackComponent extends IBaseComponent {
   inline: boolean;
   wrap: boolean;
   stretch: boolean;
