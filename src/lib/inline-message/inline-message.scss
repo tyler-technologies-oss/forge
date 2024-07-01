@@ -29,6 +29,10 @@
   }
 }
 
+::slotted(*) {
+  margin: 0;
+}
+
 //
 // Title
 //

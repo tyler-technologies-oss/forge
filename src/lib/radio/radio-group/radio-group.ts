@@ -28,11 +28,13 @@ declare global {
 /**
  * @tag forge-radio-group
  *
+ * @dependency forge-radio
+ *
  * @summary The Forge Radio Group component groups a set of radio buttons together.
  *
- * @property {boolean} disabled - Whether or not the radio group is disabled.
+ * @property {boolean} [disabled=false] - Whether or not the radio group is disabled.
  *
- * @attribute {boolean} disabled - Whether or not the radio group is disabled.
+ * @attribute {boolean} [disabled=false] - Whether or not the radio group is disabled.
  */
 @customElement({
   name: RADIO_GROUP_CONSTANTS.elementName,
@@ -69,6 +71,7 @@ export class RadioGroupComponent extends WithLabelAwareness(WithDefaultAria(With
   }
 
   public connectedCallback(): void {
+    super.connectedCallback();
     this[setDefaultAria]({
       role: 'radiogroup',
       ariaDisabled: this.disabled ? 'true' : null

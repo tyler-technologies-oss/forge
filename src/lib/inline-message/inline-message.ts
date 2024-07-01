@@ -20,9 +20,9 @@ declare global {
  *
  * @summary Inline messages are used to provide feedback to the user about a specific action or state.
  *
- * @property {InlineMessageTheme} theme - The theme to apply. Defaults to `"info"`.
+ * @property {InlineMessageTheme} [theme="info"] - The theme to apply.
  *
- * @attribute {InlineMessageTheme} theme - The theme to apply. Defaults to `"info"`.
+ * @attribute {InlineMessageTheme} [theme="info"] - The theme to apply.
  *
  * @cssproperty --forge-inline-message-background - The background color.
  * @cssproperty --forge-inline-message-color - The text color.

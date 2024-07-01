@@ -215,6 +215,11 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
 
   public setClearButtonListener(type: string, listener: EventListener): void {
     window.requestAnimationFrame(() => {
+      const textField = this._component.querySelector(TEXT_FIELD_CONSTANTS.elementName);
+      if (textField && (textField.showClear || textField.hasAttribute(TEXT_FIELD_CONSTANTS.attributes.SHOW_CLEAR))) {
+        this._component.addEventListener(TEXT_FIELD_CONSTANTS.events.CLEAR, listener);
+      }
+
       const clearButton = this._component.querySelector(AUTOCOMPLETE_CONSTANTS.selectors.CLEAR_BUTTON);
       if (clearButton) {
         clearButton.addEventListener(type, listener);
@@ -223,10 +228,9 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   }
 
   public removeClearButtonListener(type: string, listener: EventListener): void {
+    this._component.removeEventListener(TEXT_FIELD_CONSTANTS.events.CLEAR, listener);
     const clearButton = this._component.querySelector(AUTOCOMPLETE_CONSTANTS.selectors.CLEAR_BUTTON);
-    if (clearButton) {
-      clearButton.removeEventListener(type, listener);
-    }
+    clearButton?.removeEventListener(type, listener);
   }
 
   public propagateKey(key: string): void {

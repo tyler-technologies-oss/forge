@@ -112,6 +112,7 @@ export class ButtonToggleGroupComponent
   }
 
   public connectedCallback(): void {
+    super.connectedCallback();
     this[setDefaultAria]({ role: 'group' }, { setAttribute: !this.hasAttribute('role') });
     this._core.initialize();
   }

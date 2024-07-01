@@ -73,25 +73,25 @@ declare global {
  * @property {Date} activeDate - The currently active date in the calendar.
  * @property {boolean} [allowSingleDateRange=true] - Whether to allow a single date range to be selected.
  * @property {boolean} [clearButton=false] - Whether to show a button to clear the selected date(s).
- * @property {() => void | undefined} [clearCallback=undefined] - Callback function to call when the clear button is clicked.
+ * @property {() => void | undefined} clearCallback - Callback function to call when the clear button is clicked.
  * @property {boolean} [constrainToEnabled=true] - Whether to constrain the selected date(s) to the enabled dates.
- * @property {CalendarDateBuilder | undefined} [dateBuilder=undefined] - Function to build the date content.
- * @property {CalendarDateSelectCallback | undefined} [dateSelectCallback=undefined] - Callback function to call when a date is selected.
- * @property {CalendarDayBuilder | undefined} [dayBuilder=undefined] - Function to build the day content.
- * @property {(date: Date) => boolean | undefined} [disabledDateBuilder=undefined] - Function to determine if a date is disabled.
+ * @property {CalendarDateBuilder | undefined} dateBuilder - Function to build the date content.
+ * @property {CalendarDateSelectCallback | undefined} dateSelectCallback - Callback function to call when a date is selected.
+ * @property {CalendarDayBuilder | undefined} dayBuilder - Function to build the day content.
+ * @property {(date: Date) => boolean | undefined} disabledDateBuilder - Function to determine if a date is disabled.
  * @property {Date | Date[] | null | undefined} [disabledDates=[]] - Dates that are disabled from being selected.
  * @property {DayOfWeek | DayOfWeek[] | null | undefined} [disabledDaysOfWeek=[]] - Days of the week that are disabled from being selected.
- * @property {CalendarEventBuilder | undefined} [eventBuilder=undefined] - Function to build the event content.
+ * @property {CalendarEventBuilder | undefined} eventBuilder - Function to build the event content.
  * @property {ICalendarEvent[] | null | undefined} [events=[]] - Events to display on the calendar.
- * @property {DayOfWeek | undefined} [firstDayOfWeek=undefined] - The first day of the week.
+ * @property {DayOfWeek | undefined} firstDayOfWeek - The first day of the week.
  * @property {boolean} [fixedHeight=false] - Whether to fix the height of the calendar.
  * @property {boolean} [listYears=true] - Whether to list the years in the year view.
- * @property {string | undefined} [locale=undefined] - The locale to use for formatting dates.
- * @property {Date | string | null | undefined} [max=undefined] - The maximum date that can be selected.
- * @property {CalendarMenuAnimationType} [menuAnimation='scale'] - The animation to use for the menu.
- * @property {Date | string | null | undefined} [min=undefined] - The minimum date that can be selected.
- * @property {CalendarMode} [mode='single'] - The mode of the calendar.
- * @property {number} [month=<today's month>] - The month to display.
+ * @property {string | undefined} locale - The locale to use for formatting dates.
+ * @property {Date | string | null | undefined} max - The maximum date that can be selected.
+ * @property {CalendarMenuAnimationType} [menuAnimation="scale"] - The animation to use for the menu.
+ * @property {Date | string | null | undefined} min - The minimum date that can be selected.
+ * @property {CalendarMode} [mode="single"] - The mode of the calendar.
+ * @property {number} [month=<current month>] - The month to display.
  * @property {boolean} [preventFocus=false] - Whether to prevent the calendar from taking focus.
  * @property {boolean} [readonly=false] - Whether the calendar is readonly.
  * @property {boolean} [selectionFollowsMonth=false] - Whether the selection follows the month.
@@ -99,51 +99,41 @@ declare global {
  * @property {boolean} [showOtherMonths=false] - Whether to show days from other months.
  * @property {boolean} [showToday=true] - Whether to show the today button.
  * @property {boolean} [todayButton=false] - Whether to show a button to select today.
- * @property {() => void | undefined} [todayCallback=undefined] - Callback function to call when the today button is clicked.
- * @property {CalendarTooltipBuilder | undefined} [tooltipBuilder=undefined] - Function to build the tooltip content.
+ * @property {() => void | undefined} todayCallback - Callback function to call when the today button is clicked.
+ * @property {CalendarTooltipBuilder | undefined} tooltipBuilder - Function to build the tooltip content.
  * @property {Date | Date[] | DateRange | null | undefined} [value=[]] - The selected date(s).
- * @property {CalendarView} [view='date'] - The view of the calendar.
- * @property {DayOfWeek[] | null | undefined} [weekendDays=null] - The days of the week that are considered weekends.
- * @property {number} [year=<today's year>] - The year to display.
- * @property {string} [yearRange='-50:+50'] - The range of years to display.
+ * @property {CalendarView} [view="date"] - The view of the calendar.
+ * @property {DayOfWeek[] | null | undefined} weekendDays - The days of the week that are considered weekends.
+ * @property {number} [year=<current year>] - The year to display.
+ * @property {string} [yearRange="-50:+50"] - The range of years to display.
  *
- * @attribute {boolean} [allow-single-date-range] - Whether to allow a single date range to be selected.
- * @attribute {boolean} [clear-button] - Whether to show a button to clear the selected date(s).
- * @attribute {boolean} [constrain-to-enabled] - Whether to constrain the selected date(s) to the enabled dates.
- * @attribute {DayOfWeek} [first-day-of-week] - The first day of the week.
- * @attribute {boolean} [fixed-height] - Whether to fix the height of the calendar.
- * @attribute {boolean} [list-years] - Whether to list the years in the year view.
- * @attribute {string} [locale] - The locale to use for formatting dates.
- * @attribute {Date | string | null} [max] - The maximum date that can be selected.
- * @attribute {CalendarMenuAnimationType} [menu-animation] - The animation to use for the menu.
- * @attribute {Date | string | null} [min] - The minimum date that can be selected.
- * @attribute {CalendarMode} [mode] - The mode of the calendar.
- * @attribute {number} [month] - The month to display.
- * @attribute {boolean} [prevent-focus] - Whether to prevent the calendar from taking focus.
- * @attribute {boolean} [readonly] - Whether the calendar is readonly.
- * @attribute {boolean} [selection-follows-month] - Whether the selection follows the month.
- * @attribute {boolean} [show-header] - Whether to show the header.
- * @attribute {boolean} [show-other-months] - Whether to show days from other months.
- * @attribute {boolean} [show-today] - Whether to show the today button.
- * @attribute {boolean} [today-button] - Whether to show a button to select today.
- * @attribute {CalendarView} [view] - The view of the calendar.
- * @attribute {number} [year] - The year to display.
- * @attribute {string} [year-range] - The range of years to display.
+ * @attribute {boolean} [allow-single-date-range=true] - Whether to allow a single date range to be selected.
+ * @attribute {boolean} [clear-button=false] - Whether to show a button to clear the selected date(s).
+ * @attribute {boolean} [constrain-to-enabled=true] - Whether to constrain the selected date(s) to the enabled dates.
+ * @attribute {DayOfWeek} first-day-of-week - The first day of the week.
+ * @attribute {boolean} [fixed-height=false] - Whether to fix the height of the calendar.
+ * @attribute {boolean} [list-years=true] - Whether to list the years in the year view.
+ * @attribute {string} locale - The locale to use for formatting dates.
+ * @attribute {Date | string | null} max - The maximum date that can be selected.
+ * @attribute {CalendarMenuAnimationType} [menu-animation="scale"] - The animation to use for the menu.
+ * @attribute {Date | string | null} min - The minimum date that can be selected.
+ * @attribute {CalendarMode} [mode="single"] - The mode of the calendar.
+ * @attribute {number} [month=<current month>] - The month to display.
+ * @attribute {boolean} [prevent-focus=false] - Whether to prevent the calendar from taking focus.
+ * @attribute {boolean} [readonly=false] - Whether the calendar is readonly.
+ * @attribute {boolean} [selection-follows-month=false] - Whether the selection follows the month.
+ * @attribute {boolean} [show-header=true] - Whether to show the header.
+ * @attribute {boolean} [show-other-months=false] - Whether to show days from other months.
+ * @attribute {boolean} [show-today=true] - Whether to show the today button.
+ * @attribute {boolean} [today-button=fakse] - Whether to show a button to select today.
+ * @attribute {CalendarView} [view="date"] - The view of the calendar.
+ * @attribute {number} [year=<current year>] - The year to display.
+ * @attribute {string} [year-range="-50:+50"] - The range of years to display.
  *
  * @fires {CustomEvent<ICalendarDateSelectEventData>} forge-calendar-date-select - Event fired when a date is selected.
  * @fires {CustomEvent<ICalendarFocusChangeEventData>} forge-calendar-focus-change - Event fired when the focus changes.
  * @fires {CustomEvent<ICalendarMonthChangeEventData>} forge-calendar-month-change - Event fired when the month changes.
  * @fires {CustomEvent<CalendarView>} forge-calendar-view-change - Event fired when the view changes.
- *
- * @method clear - Clears the selected date(s).
- * @method deselectDate - Deselects a date.
- * @method goToDate - Navigates to a specific date.
- * @method handleKey - Handles a keyboard event.
- * @method layout - Lays out the calendar.
- * @method selectDate - Selects a date.
- * @method setActiveDate - Sets the active date.
- * @method today - Sets the calendar to today.
- * @method toggleDate - Toggles a date.
  */
 @customElement({
   name: CALENDAR_CONSTANTS.elementName,
@@ -381,38 +371,65 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
   @coreProperty()
   public declare yearRange: string;
 
+  /**
+   * Clears the selected date(s).
+   */
   public clear(): void {
     this._core.clear();
   }
 
+  /**
+   * Deselects a date.
+   */
   public deselectDate(date: Date): void {
     this._core.deselectDate(new Date(date));
   }
 
+  /**
+   * Navigates to a specific date.
+   */
   public goToDate(date: Date, setFocus?: boolean): void {
     this._core.goToDate(new Date(date), setFocus);
   }
 
+  /**
+   * Handles a keyboard event.
+   */
   public handleKey(evt: KeyboardEvent): void {
     this._core.handleExternalKeyEvent(evt);
   }
 
+  /**
+   * Lays out the calendar.
+   */
   public layout(): void {
     this._core.layout();
   }
 
+  /**
+   * Selects a date.
+   */
   public selectDate(date: Date): void {
     this._core.selectDate(new Date(date));
   }
 
+  /**
+   * Sets the active date.
+   */
   public setActiveDate(date: Date, setFocus?: boolean): boolean {
     return this._core.setActiveDate(new Date(date), setFocus);
   }
 
+  /**
+   * Sets the calendar to today.
+   */
   public today(): void {
     this._core.today();
   }
 
+  /**
+   * Toggles a date selection.
+   */
   public toggleDate(date: Date, force?: boolean): void {
     this._core.toggleDate(new Date(date), force);
   }

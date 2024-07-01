@@ -1,6 +1,6 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 
 import '@tylertech/forge/label-value';
 import '@tylertech/forge/icon';
@@ -16,13 +16,15 @@ const meta = {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
 
+    if (args.ellipsis) {
+      style['width'] = '100px';
+    }
+
     return html`
-      <div style="width: 100px">
-        <forge-label-value .empty=${args.empty} .ellipsis=${args.ellipsis} .inline=${args.inline} .dense=${args.dense} style=${style}>
-          <label slot="label">Label</label>
-          <span slot="value">A simple value</span>
-        </forge-label-value>
-      </div>
+      <forge-label-value .empty=${args.empty} .ellipsis=${args.ellipsis} .inline=${args.inline} style=${style}>
+        <label slot="label">Label</label>
+        ${args.empty ? html`<span slot="value">n/a</span>` : html`<span slot="value">A simple value</span>`}
+      </forge-label-value>
     `;
   },
   component,
@@ -31,10 +33,15 @@ const meta = {
   },
   argTypes: {
     ...generateCustomElementArgTypes({
-      tagName: component
+      tagName: component,
+      exclude: ['dense']
     })
   },
-  args: {}
+  args: {
+    empty: false,
+    ellipsis: false,
+    inline: false
+  }
 } satisfies Meta;
 
 export default meta;
@@ -50,8 +57,8 @@ export const Icon: Story = {
     return html`
       <forge-label-value>
         <forge-icon name="person" slot="icon"></forge-icon>
-        <label slot="label">Label</label>
-        <span slot="value">A simple value</span>
+        <label slot="label">Name</label>
+        <span slot="value">John Doe</span>
       </forge-label-value>
     `;
   }

@@ -55,6 +55,9 @@ declare global {
 
 /**
  * @tag forge-menu
+ *
+ * @dependency forge-popover
+ * @dependency forge-list
  */
 @customElement({
   name: MENU_CONSTANTS.elementName,
@@ -130,35 +133,64 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
     this._core.disconnect();
   }
 
-  /** Gets/sets the open state. */
+  /**
+   * Gets/sets the open state.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare open: boolean;
 
-  /** Gets/sets the array of options to display in the menu. */
+  /**
+   * Gets/sets the array of options to display in the menu.
+   * @default []
+   */
   @coreProperty()
   public declare options: Array<IMenuOption | IMenuOptionGroup> | MenuOptionFactory;
 
-  /** Gets/sets the selected option to the index. Does not support cascading menus. */
+  /**
+   * Gets/sets the selected option to the index. Does not support cascading menus.
+   * @attribute selected-index
+   * @deprecated Do not use menus for selection. Consider a `<forge-select>` instead.
+   */
   @coreProperty()
   public declare selectedIndex: number;
 
-  /** Gets/sets the value of the option to select. */
+  /**
+   * Gets/sets the value of the option to select.
+   * @deprecated Do not use menus for selection. Consider a `<forge-select>` instead.
+   * @attribute selected-value
+   */
   @coreProperty()
   public declare selectedValue: any;
 
-  /** Gets/sets the menu placement (default is bottom-left). */
+  /**
+   * Gets/sets the menu placement (default is bottom-left).
+   * @default "bottom-start"
+   * @attribute
+   */
   @coreProperty()
   public declare placement: `${PositionPlacement}`;
 
-  /** Gets/sets the fallback menu placement for overriding the default of any side. */
+  /**
+   * Gets/sets the fallback menu placement for overriding the default of any side.
+   * @attribute fallback-placements
+   */
   @coreProperty()
   public declare fallbackPlacements: `${PositionPlacement}`[];
 
-  /** Gets/sets dense state of the list options used in the menu popup. */
+  /**
+   * Gets/sets dense state of the list options used in the menu popup.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare dense: boolean;
 
-  /** Gets/sets the class name to use for option icons. */
+  /**
+   * Gets/sets the class name to use for option icons.
+   * @attribute icon-class
+   */
   @coreProperty()
   public declare iconClass: string;
 
@@ -169,15 +201,23 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   @coreProperty()
   public declare persistSelection: boolean;
 
-  /** Gets/sets the mode that this menu is using. */
+  /**
+   * Gets/sets the mode that this menu is using.
+   * @default "click"
+   * @attribute
+   */
   @coreProperty()
   public declare mode: MenuMode;
 
-  /** Sets the position adjustment on the internal popup element. */
+  /**
+   * Sets the position adjustment on the internal popup element.
+   */
   @coreProperty()
   public declare popupOffset: IOverlayOffset;
 
-  /** Sets the callback that will be executed for each option in the dropdown for producing custom option templates. */
+  /**
+   * Sets the callback that will be executed for each option in the dropdown for producing custom option templates.
+   */
   @coreProperty()
   public declare optionBuilder: MenuOptionBuilder;
 
@@ -188,11 +228,16 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   @coreProperty({ set: false })
   public declare popupElement: HTMLElement | undefined;
 
-  /** Force propagates the key event from another element this component. */
+  /**
+   * Force propagates the key event from another element to this component.
+   */
   public propagateKeyEvent(evt: KeyboardEvent): void {
     this._core.onKeydown(evt);
   }
 
+  /**
+   * Activates the first option in the menu when open.
+   */
   public activateFirstOption(): void {
     this._core.activateFirstOption();
   }

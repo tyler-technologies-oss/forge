@@ -39,6 +39,28 @@
     <forge-option divider></forge-option>
     <forge-option value="6">Six</forge-option>
   </forge-select-dropdown>
+
+  <h3>Label aware</h3>
+  <forge-label>
+    <span>Label</span>
+    <forge-select>
+      <forge-option value="">None</forge-option>
+      <forge-option value="grains">Bread, Cereal, Rice, and Pasta</forge-option>
+      <forge-option value="vegetables" disabled>Vegetables (disabled)</forge-option>
+      <forge-option value="fruit">Fruit</forge-option>
+    </forge-select>
+  </forge-label>
+
+  <h3>Form associated</h3>
+  <form name="form" id="form">
+    <forge-select label="Form associated" name="select">
+      <forge-option value="">None</forge-option>
+      <forge-option value="grains">Bread, Cereal, Rice, and Pasta</forge-option>
+      <forge-option value="vegetables" disabled>Vegetables (disabled)</forge-option>
+      <forge-option value="fruit">Fruit</forge-option>
+    </forge-select>
+    <button type="reset">Reset</button>
+  </form>
 </div>
 
 <script type="module" src="select.ts"></script>

@@ -29,9 +29,9 @@ declare global {
  * @property {boolean} [inline=false] - If true, the label and value will be displayed on the same line.
  * @property {boolean} [dense=false] - Deprecated. Use `inline` instead.
  *
- * @attribute {boolean} empty - If present, the value will be displayed in an alternative emphasized style.
- * @attribute {boolean} ellipsis - If present, the value will be truncated with an ellipsis if it overflows its container.
- * @attribute {boolean} inline - If present, the label and value will be displayed on the same line.
+ * @attribute {boolean} [empty=false] - If present, the value will be displayed in an alternative emphasized style.
+ * @attribute {boolean} [ellipsis=false] - If present, the value will be truncated with an ellipsis if it overflows its container.
+ * @attribute {boolean} [inline=false] - If present, the label and value will be displayed on the same line.
  *
  * @cssproperty --forge-label-value-align - Aligns the label and value. Possible values: `start` (default), `center`, `end`.
  * @cssproperty --forge-label-value-label-spacing - The spacing between the label and value.

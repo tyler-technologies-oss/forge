@@ -6,18 +6,27 @@ import * as LinearProgressStories from './LinearProgress.stories';
 
 <Title />
 
+Linear progress indicators display progress by animating an indicator along a fixed path.
+
+There are two types of linear progress indicators:
+
+- **Determinate**: Indicates how long an operation will take when the percentage complete is known.
+- **Indeterminate**: Indicates that an operation is ongoing with an unknown percentage complete. This is the default.
+
 <Canvas of={LinearProgressStories.Demo} />
 
 ### Determinate
 
+Determinate linear progress indicators fill from 0% to 100%, representing the percentage complete.
+
 <Canvas of={LinearProgressStories.Determinate} />
 
 ### Buffer
+
+Buffer linear progress indicators are sub-variant of determinate indicators, and fill from 0% to 100% while a secondary indicator fills from 0% to 100% as well to represent the buffer.
 
 <Canvas of={LinearProgressStories.Buffer} />
 
 ## API
 
 <CustomArgTypes />
-
-## Accessibility

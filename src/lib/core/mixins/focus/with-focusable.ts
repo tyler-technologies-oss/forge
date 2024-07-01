@@ -73,10 +73,10 @@ export function WithFocusable<TBase extends MixinBase>(base: TBase) {
     private [_isUpdatingTabIndex] = false; // Allows for internal tabIndex to be set without triggering attributeChangedCallback
 
     public override connectedCallback(): void {
-      super.connectedCallback?.();
-
       // This must be set in the connectedCallback to avoid sprouting a tabindex attribute on the host from the ctor
       this[isFocusable] = true;
+
+      super.connectedCallback?.();
     }
 
     public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
