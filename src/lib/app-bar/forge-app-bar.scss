@@ -1,0 +1,43 @@
+@use './app-bar/core';
+@use '../core/styles/theme';
+@use '../core/styles/tokens/theme/color-emphasis';
+
+.forge-app-bar {
+  @include core.tokens;
+  @include theme.provide(
+    (
+      primary: #{core.token(foreground)},
+      on-primary: rgba(black, color-emphasis.value(highest)),
+      text-high: rgba(white, color-emphasis.value(highest)),
+      text-medium: rgba(white, color-emphasis.value(medium)),
+      text-low: rgba(white, color-emphasis.value(medium-low))
+    )
+  );
+}
+
+.forge-app-bar {
+  @include core.base;
+  @include core.row;
+
+  &--raised {
+    @include core.elevation-raised;
+  }
+
+  &__logo {
+    @include core.logo;
+
+    margin-inline-end: #{core.token(logo-gap)};
+  }
+
+  &__section {
+    @include core.section;
+
+    &:not(:first-of-type):not(:last-of-type) {
+      justify-content: center;
+    }
+
+    &:last-of-type {
+      justify-content: end;
+    }
+  }
+}

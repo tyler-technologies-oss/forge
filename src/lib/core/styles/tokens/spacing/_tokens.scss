@@ -3,26 +3,26 @@
 $base: 16px !default; // The Forge spacing system scales in multiples of 8
 
 $values: (
-  '0125': $base * 0.125,
   // 2px
-  '025': $base * 0.25,
+  '0125': $base * 0.125,
   // 4px
-  '050': $base * 0.5,
+  '025': $base * 0.25,
   // 8px
-  '075': $base * 0.75,
+  '050': $base * 0.5,
   // 12px
-  '100': $base,
+  '075': $base * 0.75,
   // 16px
-  '125': $base * 1.25,
+  '100': $base,
   // 20px
-  '150': $base * 1.5,
+  '125': $base * 1.25,
   // 24px
-  '200': $base * 2,
+  '150': $base * 1.5,
   // 32px
-  '300': $base * 3,
+  '200': $base * 2,
   // 48px
-  '350': $base * 3.5,
+  '300': $base * 3,
   // 56px
+  '350': $base * 3.5
 ) !default;
 
 $tokens: (

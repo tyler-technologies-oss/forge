@@ -1,7 +1,7 @@
 @use './token-utils' as *;
 
 @mixin keyframes {
-  @keyframes outward-grow {
+  @keyframes forge-focus-indicator-outward-grow {
     from {
       outline-width: 0;
     }
@@ -10,13 +10,13 @@
     }
   }
 
-  @keyframes outward-shrink {
+  @keyframes forge-focus-indicator-outward-shrink {
     from {
       outline-width: #{token(active-width)};
     }
   }
 
-  @keyframes inward-grow {
+  @keyframes forge-focus-indicator-inward-grow {
     from {
       border-width: 0;
     }
@@ -25,7 +25,7 @@
     }
   }
 
-  @keyframes inward-shrink {
+  @keyframes forge-focus-indicator-inward-shrink {
     from {
       border-width: #{token(active-width)};
     }

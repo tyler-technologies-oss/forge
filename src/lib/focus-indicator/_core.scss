@@ -24,7 +24,7 @@
 }
 
 @mixin outward {
-  animation-name: outward-grow, outward-shrink;
+  animation-name: forge-focus-indicator-outward-grow, forge-focus-indicator-outward-shrink;
   border-end-end-radius: calc(#{token(shape-end-end)} + #{token(outward-offset)});
   border-end-start-radius: calc(#{token(shape-end-start)} + #{token(outward-offset)});
   border-start-end-radius: calc(#{token(shape-start-end)} + #{token(outward-offset)});
@@ -34,11 +34,34 @@
 }
 
 @mixin inward {
-  animation-name: inward-grow, inward-shrink;
+  animation-name: forge-focus-indicator-inward-grow, forge-focus-indicator-inward-shrink;
   border-end-end-radius: calc(#{token(shape-end-end)} - #{token(inward-offset)});
   border-end-start-radius: calc(#{token(shape-end-start)} - #{token(inward-offset)});
   border-start-end-radius: calc(#{token(shape-start-end)} - #{token(inward-offset)});
   border-start-start-radius: calc(#{token(shape-start-start)} - #{token(inward-offset)});
   border: #{token(width)} solid currentColor;
   inset: #{token(inward-offset)};
+}
+
+@mixin standalone($type: 'outward', $pseudo-element: '::after', $pseudo-class: ':focus-visible') {
+  outline: none;
+
+  &#{$pseudo-class} {
+    &#{$pseudo-element} {
+      @include tokens;
+    }
+
+    &#{$pseudo-element} {
+      @include base;
+
+      @if $type == 'inward' {
+        @include inward;
+      } @else {
+        @include outward;
+      }
+
+      content: '';
+      display: block;
+    }
+  }
 }

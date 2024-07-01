@@ -3,7 +3,6 @@ import '@tylertech/forge/table';
 import '@tylertech/forge/table/forge-table.scss';
 import './table.scss';
 import { TextFieldComponentDelegate } from '@tylertech/forge/text-field';
-import { PositionPlacement } from '@tylertech/forge-core';
 import { tylIconChevronRight, tylIconDelete, tylIconEdit, tylIconMoreVert } from '@tylertech/tyler-icons/standard';
 import { ITableComponent, IColumnConfiguration, SortDirection, ISortedColumn, CellAlign, ITableTemplateBuilderResult, ITableSortMultipleEventData } from '@tylertech/forge/table';
 import { ButtonComponentDelegate } from '@tylertech/forge/button';
@@ -288,7 +287,7 @@ function getMenuColumnTemplate(rowIndex: number): HTMLElement {
   button.appendChild(icon);
 
   const menu = document.createElement('forge-menu');
-  menu.placement = 'bottom-right' as PositionPlacement;
+  menu.placement = 'bottom-end';
   menu.options = [
     { value: 'delete', label: 'Delete', leadingIcon: 'delete', leadingIconType: 'component' },
     { value: 'edit', label: 'Edit', leadingIcon: 'edit', leadingIconType: 'component' }

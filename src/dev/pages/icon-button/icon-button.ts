@@ -16,6 +16,7 @@ import {
   tylIconSettings,
   tylIconNotifications
 } from '@tylertech/tyler-icons/standard';
+import '@tylertech/forge/icon-button/forge-icon-button.scss';
 import './icon-button.scss';
 
 IconRegistry.define([

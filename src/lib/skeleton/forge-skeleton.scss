@@ -1,0 +1,41 @@
+@use './core';
+@use './animations';
+
+.forge-skeleton {
+  @include core.tokens;
+}
+
+.forge-skeleton {
+  @include core.host;
+  @include core.base;
+
+  &::after {
+    @include core.gradient;
+
+    content: '';
+  }
+
+  &--avatar {
+    @include core.avatar;
+  }
+
+  &--list-item {
+    @include core.list-item;
+  }
+
+  &--text {
+    @include core.text;
+  }
+
+  &--chip {
+    @include core.chip;
+  }
+
+  &--button {
+    @include core.button;
+  }
+
+  &--form-field {
+    @include core.form-field;
+  }
+}

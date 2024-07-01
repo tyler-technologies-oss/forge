@@ -43,6 +43,7 @@ declare global {
  * @slot footer - The footer content below the main content.
  *
  * @csspart root - The component's root element.
+ * @csspart container - The container element around the content.
  * @csspart content - The content container element.
  */
 @customElement({
