@@ -1,0 +1,69 @@
+@use './core';
+@use '../utils/mixins-container';
+
+.forge-page-state {
+  @include core.tokens;
+}
+
+.forge-page-state {
+  @include core.host;
+  @include core.base;
+
+  width: auto;
+  margin-inline: auto;
+  flex-direction: column;
+
+  &__graphic {
+    @include core.graphic;
+
+    height: #{core.token(graphic-height)};
+    width: 100%;
+    margin-block-end: #{core.token(graphic-spacing)};
+  }
+
+  &__title,
+  &__message {
+    max-width: #{core.token(width)};
+  }
+
+  &__title {
+    @include core.title;
+  }
+
+  &__message {
+    @include core.message;
+  }
+
+  &__actions {
+    @include core.actions;
+  }
+}
+
+@include mixins-container.phone-only {
+  .forge-page-state {
+    &__graphic {
+      @include core.graphic-container-mobile;
+
+      width: #{core.token(mobile-width)};
+      height: auto;
+      margin-block-end: 0;
+    }
+
+    &__title,
+    &__message {
+      @include core.base-mobile;
+    }
+
+    &__title {
+      @include core.title-mobile;
+    }
+
+    &__message {
+      @include core.message-mobile;
+    }
+
+    &__actions {
+      @include core.actions-mobile;
+    }
+  }
+}

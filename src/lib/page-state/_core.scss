@@ -5,8 +5,11 @@
 
 @mixin host {
   display: flex;
-  width: 100%;
   justify-content: center;
+  align-items: center;
+
+  width: 100%;
+
   container-type: inline-size;
 }
 
@@ -38,11 +41,13 @@
 }
 
 @mixin graphic-container-mobile {
-  @include override(height, mobile-graphic-height);
+  @include override(graphic-height, mobile-graphic-height);
+  @include override(graphic-spacing, 0, value);
 }
 
 @mixin title {
   @include typography.style(heading8);
+  @include override(title-spacing, title-spacing-mobile);
 
   color: #{token(title-color)};
   margin-block: #{token(title-spacing)};
@@ -54,6 +59,7 @@
 
 @mixin message {
   @include typography.style(body4);
+  @include override(message-spacing, message-spacing-mobile);
 
   color: #{token(message-color)};
   margin-block-end: #{token(message-spacing)};
