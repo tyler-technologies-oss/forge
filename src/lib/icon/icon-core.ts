@@ -1,10 +1,9 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IIconAdapter } from './icon-adapter';
 import { ICON_CONSTANTS, IconUrlBuilder, IconExternalType, IconTheme } from './icon-constants';
 import { IconRegistry, IIconDescriptor } from './icon-registry';
 import { createSanitizedSvg, fetchIconContent, getCachedIcon, sanitizeExternalType, awaitIconDefinition, removeIconListener } from './icon-utils';
 
-export interface IIconCore extends ICustomElementCore {
+export interface IIconCore {
   name: string | undefined;
   src: string | undefined;
   lazy: boolean;

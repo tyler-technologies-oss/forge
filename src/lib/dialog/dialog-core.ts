@@ -1,4 +1,3 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { MoveController } from '../core/controllers/move-controller';
 import { DismissibleStack } from '../core/utils/dismissible-stack';
 import { IDialogAdapter } from './dialog-adapter';
@@ -14,7 +13,7 @@ import {
   IDialogMoveEventData
 } from './dialog-constants';
 
-export interface IDialogCore extends ICustomElementCore {
+export interface IDialogCore {
   open: boolean;
   mode: DialogMode;
   type: DialogType;

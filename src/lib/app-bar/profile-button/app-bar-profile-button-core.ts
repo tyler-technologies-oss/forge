@@ -1,11 +1,11 @@
-import { ICustomElementCore, isFunction } from '@tylertech/forge-core';
+import { isFunction } from '@tylertech/forge-core';
 import { AVATAR_CONSTANTS } from '../../avatar';
 import { PROFILE_CARD_CONSTANTS } from '../../profile-card';
 import { IAppBarProfileButtonAdapter } from './app-bar-profile-button-adapter';
 import { IAppBarProfileCardConfig, AppBarProfileButtonProfileCardBuilder, APP_BAR_PROFILE_BUTTON_CONSTANTS } from './app-bar-profile-button-constants';
 import { IPopoverComponent } from '../../popover/popover';
 
-export interface IAppBarProfileButtonCore extends ICustomElementCore {
+export interface IAppBarProfileButtonCore {
   fullName: string;
   email: string;
   avatarImageUrl: string;

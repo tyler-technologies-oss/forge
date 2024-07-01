@@ -1,11 +1,10 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { ITabBarChangeEventData, NAVIGATION_KEYS, TAB_BAR_CONSTANTS } from './tab-bar-constants';
 import { ITabComponent } from '../tab/tab';
 import { TAB_CONSTANTS } from '../tab/tab-constants';
 
 import { ITabBarAdapter, ITabBarScrollButtonState } from './tab-bar-adapter';
 
-export interface ITabBarCore extends ICustomElementCore {
+export interface ITabBarCore {
   disabled: boolean;
   activeTab: number | null | undefined;
   vertical: boolean;

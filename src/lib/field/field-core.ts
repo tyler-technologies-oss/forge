@@ -1,5 +1,3 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-import { GlobalConfiguration } from '../core/configuration/global-configuration';
 import { FocusIndicatorFocusMode } from '../focus-indicator';
 import {
   FieldDensity,
@@ -13,7 +11,7 @@ import {
 import { IFieldAdapter } from './field-adapter';
 import { FIELD_CONSTANTS } from './field-constants';
 
-export interface IFieldCore extends ICustomElementCore {
+export interface IFieldCore {
   labelPosition: FieldLabelPosition;
   labelAlignment: FieldLabelAlignment;
   floatLabel: boolean;

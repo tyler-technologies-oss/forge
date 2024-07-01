@@ -1,9 +1,8 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-import { IMenuOption } from '../../menu';
+import type { IMenuOption } from '../../menu/menu-constants';
 import { IAppBarHelpButtonAdapter } from './app-bar-help-button-adapter';
 import { APP_BAR_HELP_BUTTON_CONSTANTS } from './app-bar-help-button-constants';
 
-export interface IAppBarHelpButtonCore extends ICustomElementCore {
+export interface IAppBarHelpButtonCore {
   options: IMenuOption[];
   icon: string;
 }
@@ -22,7 +21,7 @@ export class AppBarHelpButtonCore implements IAppBarHelpButtonCore {
     this._isInitialized = true;
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.destroy();
     this._isInitialized = false;
   }

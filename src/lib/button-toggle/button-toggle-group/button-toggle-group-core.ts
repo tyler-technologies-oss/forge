@@ -1,10 +1,8 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-import { IButtonToggleComponent } from '../button-toggle/button-toggle';
 import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from '../button-toggle/button-toggle-constants';
 import { IButtonToggleGroupAdapter } from './button-toggle-group-adapter';
 import { ButtonToggleGroupTheme, BUTTON_TOGGLE_GROUP_CONSTANTS, IButtonToggleGroupChangeEventData } from './button-toggle-group-constants';
 
-export interface IButtonToggleGroupCore extends ICustomElementCore {
+export interface IButtonToggleGroupCore {
   value: unknown;
   multiple: boolean;
   stretch: boolean;

@@ -1,11 +1,11 @@
-import { ICustomElementCore, isDefined } from '@tylertech/forge-core';
+import { isDefined } from '@tylertech/forge-core';
 
 import { IViewSwitcherAdapter } from './view-switcher-adapter';
-import { VIEW_SWITCHER_CONSTANTS, ViewAnimationDirection, ViewSwitcherAnimationType } from './view-switcher-constants';
+import { VIEW_SWITCHER_CONSTANTS, ViewAnimationDirection, ViewSwitcherAnimation } from './view-switcher-constants';
 
-export interface IViewSwitcherCore extends ICustomElementCore {
+export interface IViewSwitcherCore {
   index: number;
-  animationType: ViewSwitcherAnimationType;
+  animationType: ViewSwitcherAnimation;
   next(): void;
   previous(): void;
   goToStart(): void;
@@ -15,7 +15,7 @@ export interface IViewSwitcherCore extends ICustomElementCore {
 export class ViewSwitcherCore implements IViewSwitcherCore {
   private _viewCount = 0;
   private _viewIndex = 0;
-  private _animationType = ViewSwitcherAnimationType.None;
+  private _animationType: ViewSwitcherAnimation = 'none';
   private _viewsChangedListener: () => void;
 
   constructor(private _adapter: IViewSwitcherAdapter) {
@@ -32,19 +32,19 @@ export class ViewSwitcherCore implements IViewSwitcherCore {
     }
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.stopViewObserver();
   }
 
   private _initializeAnimationType(): void {
     switch (this._animationType) {
-      case ViewSwitcherAnimationType.Slide:
+      case 'slide':
         this._adapter.initializeSlideViews(this._viewIndex);
         break;
-      case ViewSwitcherAnimationType.Fade:
+      case 'fade':
         this._adapter.initializeFadeViews(this._viewIndex);
         break;
-      case ViewSwitcherAnimationType.None:
+      case 'none':
       default:
         this._adapter.hideInactiveViews(this._viewIndex);
         break;
@@ -80,16 +80,16 @@ export class ViewSwitcherCore implements IViewSwitcherCore {
     }
 
     switch (this._animationType) {
-      case ViewSwitcherAnimationType.Slide:
+      case 'slide':
         const animationDirection = this._viewIndex > fromIndex ? ViewAnimationDirection.Left : ViewAnimationDirection.Right;
-        await this._adapter.transitionToView(fromIndex, this._viewIndex, ViewSwitcherAnimationType.Slide, animationDirection);
+        await this._adapter.transitionToView(fromIndex, this._viewIndex, 'slide', animationDirection);
         this._adapter.initializeSlideViews(this._viewIndex);
         break;
-      case ViewSwitcherAnimationType.Fade:
-        await this._adapter.transitionToView(fromIndex, this._viewIndex, ViewSwitcherAnimationType.Fade);
+      case 'fade':
+        await this._adapter.transitionToView(fromIndex, this._viewIndex, 'fade');
         this._adapter.initializeFadeViews(this._viewIndex);
         break;
-      case ViewSwitcherAnimationType.None:
+      case 'none':
       default:
         this._adapter.setActiveView(this._viewIndex);
         break;
@@ -133,10 +133,10 @@ export class ViewSwitcherCore implements IViewSwitcherCore {
     }
   }
 
-  public get animationType(): ViewSwitcherAnimationType {
+  public get animationType(): ViewSwitcherAnimation {
     return this._animationType;
   }
-  public set animationType(value: ViewSwitcherAnimationType) {
+  public set animationType(value: ViewSwitcherAnimation) {
     if (this._animationType !== value) {
       this._animationType = value;
       this._initializeAnimationType();

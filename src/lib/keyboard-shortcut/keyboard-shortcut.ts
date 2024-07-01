@@ -19,7 +19,6 @@ export interface IKeyboardShortcutComponent extends IBaseComponent {
 }
 
 declare global {
-  // tslint:disable-next-line: interface-name
   interface HTMLElementTagNameMap {
     'forge-keyboard-shortcut': IKeyboardShortcutComponent;
   }
@@ -39,16 +38,7 @@ declare global {
 })
 export class KeyboardShortcutComponent extends BaseComponent implements IKeyboardShortcutComponent {
   public static get observedAttributes(): string[] {
-    return [
-      KEYBOARD_SHORTCUT_CONSTANTS.attributes.KEY,
-      KEYBOARD_SHORTCUT_CONSTANTS.attributes.TARGET,
-      KEYBOARD_SHORTCUT_CONSTANTS.attributes.GLOBAL,
-      KEYBOARD_SHORTCUT_CONSTANTS.attributes.ALLOW_WHILE_TYPING,
-      KEYBOARD_SHORTCUT_CONSTANTS.attributes.PREVENT_DEFAULT,
-      KEYBOARD_SHORTCUT_CONSTANTS.attributes.CAPTURE,
-      KEYBOARD_SHORTCUT_CONSTANTS.attributes.USE_CODE,
-      KEYBOARD_SHORTCUT_CONSTANTS.attributes.DISABLED
-    ];
+    return Object.values(KEYBOARD_SHORTCUT_CONSTANTS.observedAttributes);
   }
 
   private _core: KeyboardShortcutCore;
@@ -63,33 +53,33 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case KEYBOARD_SHORTCUT_CONSTANTS.attributes.KEY:
+      case KEYBOARD_SHORTCUT_CONSTANTS.observedAttributes.KEY:
         this.key = newValue;
         break;
-      case KEYBOARD_SHORTCUT_CONSTANTS.attributes.TARGET:
+      case KEYBOARD_SHORTCUT_CONSTANTS.observedAttributes.TARGET:
         this.target = newValue;
         break;
-      case KEYBOARD_SHORTCUT_CONSTANTS.attributes.GLOBAL:
+      case KEYBOARD_SHORTCUT_CONSTANTS.observedAttributes.GLOBAL:
         this.global = coerceBoolean(newValue);
         break;
-      case KEYBOARD_SHORTCUT_CONSTANTS.attributes.ALLOW_WHILE_TYPING:
+      case KEYBOARD_SHORTCUT_CONSTANTS.observedAttributes.ALLOW_WHILE_TYPING:
         this.allowWhileTyping = coerceBoolean(newValue);
         break;
-      case KEYBOARD_SHORTCUT_CONSTANTS.attributes.PREVENT_DEFAULT:
+      case KEYBOARD_SHORTCUT_CONSTANTS.observedAttributes.PREVENT_DEFAULT:
         this.preventDefault = coerceBoolean(newValue);
         break;
-      case KEYBOARD_SHORTCUT_CONSTANTS.attributes.CAPTURE:
+      case KEYBOARD_SHORTCUT_CONSTANTS.observedAttributes.CAPTURE:
         this.capture = coerceBoolean(newValue);
         break;
-      case KEYBOARD_SHORTCUT_CONSTANTS.attributes.USE_CODE:
+      case KEYBOARD_SHORTCUT_CONSTANTS.observedAttributes.USE_CODE:
         this.useCode = coerceBoolean(newValue);
         break;
-      case KEYBOARD_SHORTCUT_CONSTANTS.attributes.DISABLED:
+      case KEYBOARD_SHORTCUT_CONSTANTS.observedAttributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
     }

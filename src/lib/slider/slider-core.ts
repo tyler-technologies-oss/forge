@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { ISliderAdapter } from './slider-adapter';
 import { SLIDER_CONSTANTS, SliderLabelBuilder } from './slider-constants';
 
-export interface ISliderCore extends ICustomElementCore {
+export interface ISliderCore {
   ariaLabel: string | null;
   ariaLabelStart: string | null;
   ariaLabelEnd: string | null;

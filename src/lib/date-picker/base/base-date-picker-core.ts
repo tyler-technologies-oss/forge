@@ -1,4 +1,4 @@
-import { ICustomElementCore, isValidDate, Platform } from '@tylertech/forge-core';
+import { isValidDate, Platform } from '@tylertech/forge-core';
 import { ICalendarComponent, ICalendarDropdownPopupConfig } from '../../calendar';
 import { CALENDAR_CONSTANTS, CalendarMode, DayOfWeek, ICalendarDateSelectEventData, ICalendarMonthChangeEventData } from '../../calendar/calendar-constants';
 import { DateRange } from '../../calendar/core/date-range';
@@ -13,7 +13,7 @@ import {
   DatePickerValueMode
 } from './base-date-picker-constants';
 
-export interface IBaseDatePickerCore<TValue> extends ICustomElementCore {
+export interface IBaseDatePickerCore<TValue> {
   value: TValue | null | undefined;
   min: Date | string | null | undefined;
   max: Date | string | null | undefined;
@@ -133,7 +133,7 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
     this._isInitialized = true;
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._isInitialized = false;
     this._destroyListeners();
 

@@ -1,10 +1,8 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-
 import { IKeyboardShortcutAdapter } from './keyboard-shortcut-adapter';
 import { IKeyCombination, KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback } from './keyboard-shortcut-constants';
 import { elementAcceptsTextInput, matchKeyCombination, parseKeyCombinations } from './keyboard-shortcut-utils';
 
-export interface IKeyboardShortcutCore extends ICustomElementCore {
+export interface IKeyboardShortcutCore {
   key: string | null | undefined;
   target: string;
   global: boolean;
@@ -26,7 +24,7 @@ export class KeyboardShortcutCore implements IKeyboardShortcutCore {
   private _useCode = false;
   private _disabled = false;
   private _activateCallback: KeyboardShortcutActivateCallback | null | undefined;
-  private _keyCombinations: IKeyCombination[];
+  private _keyCombinations: IKeyCombination[] = [];
   private _keyDownListener: (evt: KeyboardEvent) => void;
 
   constructor(private _adapter: IKeyboardShortcutAdapter) {
@@ -38,7 +36,7 @@ export class KeyboardShortcutCore implements IKeyboardShortcutCore {
     this._adapter.setHostStyles();
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._disconnectTargetElement();
     this._adapter.destroy();
   }

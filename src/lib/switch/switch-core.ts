@@ -1,9 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-
 import { ISwitchAdapter } from './switch-adapter';
 import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants';
 
-export interface ISwitchCore extends ICustomElementCore {
+export interface ISwitchCore {
   on: boolean;
   defaultOn: boolean;
   value: string;

@@ -1,7 +1,7 @@
 import { customElement, attachShadowTemplate, coerceNumber, coreProperty } from '@tylertech/forge-core';
 import { ViewSwitcherAdapter } from './view-switcher-adapter';
 import { ViewSwitcherCore } from './view-switcher-core';
-import { VIEW_SWITCHER_CONSTANTS, ViewSwitcherAnimationType } from './view-switcher-constants';
+import { VIEW_SWITCHER_CONSTANTS, ViewSwitcherAnimation, ViewSwitcherAnimationType } from './view-switcher-constants';
 import { ViewComponent } from './view/view';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
@@ -10,7 +10,7 @@ import styles from './view-switcher.scss';
 
 export interface IViewSwitcherComponent extends IBaseComponent {
   index: number;
-  animationType: `${ViewSwitcherAnimationType}`;
+  animationType: `${ViewSwitcherAnimationType}` | ViewSwitcherAnimation;
   next(): void;
   previous(): void;
   goToStart(): void;
@@ -50,7 +50,7 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -74,11 +74,11 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
 
   /**
    * Gets/sets the animation type.
-   * @default "None"
+   * @default "none"
    * @attribute
    */
   @coreProperty()
-  public declare animationType: `${ViewSwitcherAnimationType}`;
+  public declare animationType: `${ViewSwitcherAnimationType}` | ViewSwitcherAnimation;
 
   /** Transitions to the next view. */
   public next(): void {

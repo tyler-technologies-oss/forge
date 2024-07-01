@@ -1,4 +1,4 @@
-import { ICustomElementCore, isDefined } from '@tylertech/forge-core';
+import { isDefined } from '@tylertech/forge-core';
 
 import { safeMin, scaleValue } from '../../core/utils/utils';
 import { eventIncludesArrowKey } from '../../core/utils/event-utils';
@@ -27,7 +27,7 @@ import {
   setState
 } from './split-view-panel-utils';
 
-export interface ISplitViewPanelCore extends Partial<ISplitViewBase>, ICustomElementCore {
+export interface ISplitViewPanelCore extends Partial<ISplitViewBase> {
   resizable: SplitViewPanelResizable;
   size: number | string;
   min: number | string;
@@ -138,7 +138,7 @@ export class SplitViewPanelCore implements ISplitViewPanelCore {
     this._isInitialized = true;
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.tryRemoveOverlay();
     this._adapter.removePointerupListener(this._pointerupListener);
     this._adapter.removePointermoveListener(this._pointermoveListener);

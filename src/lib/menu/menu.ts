@@ -130,7 +130,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   /**

@@ -1,9 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-
 import { ICircularProgressAdapter } from './circular-progress-adapter';
 import { CircularProgressTheme, CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
 
-export interface ICircularProgressCore extends ICustomElementCore {
+export interface ICircularProgressCore {
   determinate: boolean;
   progress: number;
   theme: CircularProgressTheme;

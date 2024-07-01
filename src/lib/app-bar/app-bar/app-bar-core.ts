@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IAppBarAdapter } from './app-bar-adapter';
 import { AppBarElevation, AppBarTheme, APP_BAR_CONSTANTS } from './app-bar-constants';
 
-export interface IAppBarCore extends ICustomElementCore {
+export interface IAppBarCore {
   titleText: string;
   elevation: AppBarElevation;
   theme: string;

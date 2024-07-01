@@ -1,16 +1,15 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { task } from '../core/utils/utils';
 import { ILabelAdapter } from './label-adapter';
 import { ILabelAware } from './label-aware';
 import { LABEL_CONSTANTS } from './label-constants';
 
-export interface ILabelCore extends ICustomElementCore {
+export interface ILabelCore {
   for: string | null | undefined;
   forElement: HTMLElement | null | undefined;
   dynamic: boolean;
   nonInteractive: boolean;
   legend: boolean;
-  disconnect(): void;
+  destroy(): void;
   update(): void;
   updateTarget(target: HTMLElement & ILabelAware): boolean;
 }
@@ -44,7 +43,7 @@ export class LabelCore implements ILabelCore {
     }
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._disconnect();
     this._adapter.destroy();
   }

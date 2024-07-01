@@ -1,4 +1,4 @@
-import { ICustomElementCore, Platform, debounce, randomChars } from '@tylertech/forge-core';
+import { Platform, debounce, randomChars } from '@tylertech/forge-core';
 import { ITimePickerAdapter } from './time-picker-adapter';
 import { ITimeInputMaskOptions } from '../core/mask/time-input-mask';
 import { isSupportedTimeFormat, TWENTY_FOUR_HOUR_TIME_REGEX, tryCoerceTimeString } from '../core/utils/time-utils';
@@ -22,7 +22,7 @@ import {
   stripSecondsFromMillis
 } from './time-picker-utils';
 
-export interface ITimePickerCore extends ICustomElementCore {
+export interface ITimePickerCore {
   value: string | null | undefined;
   open: boolean;
   allowSeconds: boolean;
@@ -138,7 +138,7 @@ export class TimePickerCore implements ITimePickerCore {
     this._isInitialized = true;
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._isInitialized = false;
 
     // Remove listeners

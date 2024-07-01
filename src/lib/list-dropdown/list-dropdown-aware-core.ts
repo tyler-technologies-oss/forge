@@ -1,8 +1,6 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-
 import { ListDropdownHeaderBuilder, ListDropdownFooterBuilder } from './list-dropdown-constants';
 
-export interface IListDropdownAwareCore extends ICustomElementCore {
+export interface IListDropdownAwareCore {
   popupClasses: string | string[];
   popupHeaderBuilder: ListDropdownHeaderBuilder;
   popupFooterBuilder: ListDropdownHeaderBuilder;

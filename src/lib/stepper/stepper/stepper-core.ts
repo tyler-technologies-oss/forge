@@ -1,11 +1,11 @@
-import { getEventPath, ICustomElementCore, isDefined, isNumber, Platform } from '@tylertech/forge-core';
+import { getEventPath, isDefined, isNumber, Platform } from '@tylertech/forge-core';
 import { STEP_CONSTANTS } from '../step/step-constants';
 import { StepperUtils } from '../core/stepper-utils';
 import { IStepComponent } from '../step/step';
 import { IStepperAdapter } from './stepper-adapter';
 import { STEPPER_CONSTANTS, IStepConfiguration, StepperLayoutAlign, StepperLayoutMode } from './stepper-constants';
 
-export interface IStepperCore extends ICustomElementCore {
+export interface IStepperCore {
   steps: IStepConfiguration[];
   selectedIndex: number;
   linear: boolean;
@@ -66,7 +66,7 @@ export class StepperCore implements IStepperCore {
     this._initialize = true;
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.removeRootListener('click', this._clickListener);
     this._adapter.removeHostListener('keydown', this._keyListener);
     this._adapter.removeSlotChangeListener(this._slotChangeListener);
@@ -230,7 +230,7 @@ export class StepperCore implements IStepperCore {
       linear: this._linear
     });
 
-    this.disconnect();
+    this.destroy();
     this._adapter.applyConfiguredSteps(steps);
     this.initialize();
   }
@@ -327,7 +327,7 @@ export class StepperCore implements IStepperCore {
   }
 
   private _onSlotChange(event: Event): void {
-    this.disconnect();
+    this.destroy();
     this.initialize();
   }
 

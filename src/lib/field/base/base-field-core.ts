@@ -1,4 +1,3 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IBaseFieldAdapter } from './base-field-adapter';
 import {
   BASE_FIELD_CONSTANTS,
@@ -11,7 +10,7 @@ import {
   FieldVariant
 } from './base-field-constants';
 
-export interface IBaseFieldCore extends ICustomElementCore {
+export interface IBaseFieldCore {
   labelPosition: string;
   labelAlignment: string;
   invalid: boolean;

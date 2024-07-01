@@ -122,7 +122,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
     this._isInitialized = true;
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     if (this._isInitialized) {
       this._detachListeners();
       this._isInitialized = false;

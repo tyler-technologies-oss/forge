@@ -2,7 +2,7 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}keyboard-shortcut`;
 
-const attributes = {
+const observedAttributes = {
   KEY: 'key',
   TARGET: 'target',
   GLOBAL: 'global',
@@ -13,16 +13,21 @@ const attributes = {
   DISABLED: 'disabled'
 };
 
+const attributes = {
+  ...observedAttributes
+};
+
 const selectors = {
   TOOLTIP: 'forge-tooltip'
 };
 
 const events = {
-  ACTIVATE: `forge-keyboard-shortcut-activate`
+  ACTIVATE: `${elementName}-activate`
 };
 
 export const KEYBOARD_SHORTCUT_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
   selectors,
   events

@@ -1,11 +1,10 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { ExperimentalFocusOptions } from '../../constants';
 import { task } from '../../core/utils/utils';
 import { IBaseButtonAdapter } from './base-button-adapter';
 import { BASE_BUTTON_CONSTANTS, ButtonClickOptions, ButtonType } from './base-button-constants';
 import { IBaseButton } from './base-button';
 
-export interface IBaseButtonCore extends ICustomElementCore {
+export interface IBaseButtonCore {
   type: ButtonType;
   disabled: boolean;
   popoverIcon: boolean;

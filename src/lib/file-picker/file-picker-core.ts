@@ -1,9 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-
 import { IFilePickerAdapter } from './file-picker-adapter';
 import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants';
 
-export interface IFilePickerCore extends ICustomElementCore {
+export interface IFilePickerCore {
   accept: string | null | undefined;
   maxSize: number | null | undefined;
   capture: string | null | undefined;

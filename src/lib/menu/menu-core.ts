@@ -1,4 +1,4 @@
-import { ICustomElementCore, isArray, randomChars } from '@tylertech/forge-core';
+import { isArray, randomChars } from '@tylertech/forge-core';
 import { ICON_CLASS_NAME } from '../constants';
 import { PositionPlacement } from '../core/utils/position-utils';
 import {
@@ -22,9 +22,9 @@ import {
   MENU_CONSTANTS
 } from './menu-constants';
 
-export interface IMenuCore extends ICustomElementCore {
+export interface IMenuCore {
   initialize(): void;
-  disconnect(): void;
+  destroy(): void;
   onKeydown(evt: KeyboardEvent): void;
   open: boolean;
   options: Array<IMenuOption | IMenuOptionGroup>;
@@ -79,7 +79,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
     this._initializeInteractionListeners();
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._closeMenu({ destroy: true });
     this._destroyInteractionListeners();
   }

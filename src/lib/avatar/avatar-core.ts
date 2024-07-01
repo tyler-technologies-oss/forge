@@ -1,8 +1,8 @@
-import { ICustomElementCore, isDefined, isString } from '@tylertech/forge-core';
+import { isDefined, isString } from '@tylertech/forge-core';
 import { IAvatarAdapter } from './avatar-adapter';
 import { AVATAR_CONSTANTS } from './avatar-constants';
 
-export interface IAvatarCore extends ICustomElementCore {
+export interface IAvatarCore {
   imageUrl: string;
   text: string;
   letterCount: number;
@@ -21,7 +21,7 @@ export class AvatarCore implements IAvatarCore {
     this._initialized = true;
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._initialized = false;
   }
 

@@ -1,4 +1,4 @@
-import { ICustomElementCore, isArray, isDefined, isValidDate } from '@tylertech/forge-core';
+import { isArray, isDefined, isValidDate } from '@tylertech/forge-core';
 
 import {
   ICalendarDate,
@@ -56,7 +56,7 @@ import { ICalendarBase } from './core/calendar-base';
 import { CalendarMenuAnimationType, ICalendarMenuOption } from './calendar-menu';
 import { getLastDateOfMonth, getMonthLength, isSameDate } from '../core/utils/date-utils';
 
-export interface ICalendarCore extends ICalendarBase, ICustomElementCore {
+export interface ICalendarCore extends ICalendarBase {
   mode: CalendarMode;
   view: CalendarView;
   preventFocus: boolean;
@@ -205,7 +205,7 @@ export class CalendarCore implements ICalendarCore {
     this._isInitialized = true;
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._isInitialized = false;
   }
 

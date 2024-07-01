@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IProfileCardAdapter } from './profile-card-adapter';
 import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
 
-export interface IProfileCardCore extends ICustomElementCore {
+export interface IProfileCardCore {
   fullName: string;
   email: string;
   signOut: boolean;

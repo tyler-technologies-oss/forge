@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IStepAdapter } from './step-adapter';
 import { StepIcons, STEP_CONSTANTS } from './step-constants';
 
-export interface IStepCore extends ICustomElementCore {
+export interface IStepCore {
   index: number;
   editable: boolean;
   completed: boolean;
@@ -53,7 +52,7 @@ export class StepCore implements IStepCore {
     this._initialized = true;
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.removeClickListener(this._clickListener);
     this._adapter.removeSlotListener(this._expansionContentSlotChangeListener);
     this._adapter.removeExpansionPanelListener('focusin', this._onExpansionContentFocusIn);

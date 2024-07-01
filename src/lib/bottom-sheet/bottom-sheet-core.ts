@@ -1,9 +1,9 @@
-import { getEventPath, ICustomElementCore } from '@tylertech/forge-core';
+import { getEventPath } from '@tylertech/forge-core';
 import { DIALOG_CONSTANTS } from '../dialog';
 import { IBottomSheetAdapter } from './bottom-sheet-adapter';
 import { BottomSheetMode, BOTTOM_SHEET_CONSTANTS, IBottomSheetDragContext } from './bottom-sheet-constants';
 
-export interface IBottomSheetCore extends ICustomElementCore {
+export interface IBottomSheetCore {
   mode: BottomSheetMode;
   open: boolean;
   persistent: boolean;
@@ -12,7 +12,7 @@ export interface IBottomSheetCore extends ICustomElementCore {
 
 export class BottomSheetCore implements IBottomSheetCore {
   private _open = false;
-  private _mode: BottomSheetMode = 'nonmodal';
+  private _mode: BottomSheetMode = BOTTOM_SHEET_CONSTANTS.defaults.mode;
   private _persistent = false;
   private _fullscreen = false;
   private _isDragging = false;
@@ -30,6 +30,9 @@ export class BottomSheetCore implements IBottomSheetCore {
 
   public initialize(): void {
     this._adapter.initialize();
+    this._adapter.setDialogProperty('persistent', this._persistent);
+    this._adapter.setDialogProperty('mode', this._mode);
+    this._adapter.setDialogProperty('fullscreen', this._fullscreen);
     if (this._open) {
       this._openBottomSheet();
     }
@@ -231,9 +234,14 @@ export class BottomSheetCore implements IBottomSheetCore {
     return this._mode;
   }
   public set mode(value: BottomSheetMode) {
+    if (!value) {
+      value = BOTTOM_SHEET_CONSTANTS.defaults.mode;
+    }
     if (this._mode !== value) {
       this._mode = value;
       this._adapter.setDialogProperty('mode', this._mode);
+      const hasModeAttr = this._mode !== BOTTOM_SHEET_CONSTANTS.defaults.mode;
+      this._adapter.toggleHostAttribute(BOTTOM_SHEET_CONSTANTS.attributes.MODE, hasModeAttr, this._mode);
     }
   }
 

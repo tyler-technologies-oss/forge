@@ -1,11 +1,11 @@
-import { ForgeResizeObserverCallback, ICustomElementCore, throttle } from '@tylertech/forge-core';
+import { ForgeResizeObserverCallback, throttle } from '@tylertech/forge-core';
 
 import { ISplitViewBase } from '../core/split-view-base';
 import { ISplitViewPanelComponent, SplitViewAnimatingLayer } from '../split-view-panel';
 import { ISplitViewAdapter } from './split-view-adapter';
 import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
 
-export interface ISplitViewCore extends ISplitViewBase, ICustomElementCore {
+export interface ISplitViewCore extends ISplitViewBase {
   orientation: SplitViewOrientation;
   layerSlottedPanels(target: ISplitViewPanelComponent): void;
   unlayerSlottedPanels(): void;
@@ -42,7 +42,7 @@ export class SplitViewCore implements ISplitViewCore {
     this._isInitialized = true;
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.unobserveResize();
   }
 

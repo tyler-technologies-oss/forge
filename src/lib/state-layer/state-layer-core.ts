@@ -1,9 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-
 import { IStateLayerAdapter } from './state-layer-adapter';
 import { PointerState, StateLayerCoords, STATE_LAYER_CONSTANTS, TOUCH_DELAY_MS } from './state-layer-constants';
 
-export interface IStateLayerCore extends ICustomElementCore {
+export interface IStateLayerCore {
   targetElement: HTMLElement | null;
   target: string | null;
   disabled: boolean;
@@ -53,7 +51,7 @@ export class StateLayerCore implements IStateLayerCore {
     this._deferInitialization();
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._pointerStartEvent = undefined;
     this._pointerState = PointerState.INACTIVE;
     this._adapter.setHovered(false);
