@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { ILinearProgressAdapter } from './linear-progress-adapter';
 import { LinearProgressTheme, LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
 
-export interface ICircularProgressCore extends ICustomElementCore {
+export interface ICircularProgressCore {
   determinate: boolean;
   progress: number;
   buffer: number;

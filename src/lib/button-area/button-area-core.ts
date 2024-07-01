@@ -1,9 +1,9 @@
-import { ICustomElementCore, getEventPath } from '@tylertech/forge-core';
+import { getEventPath } from '@tylertech/forge-core';
 
 import { IButtonAreaAdapter } from './button-area-adapter';
 import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
 
-export interface IButtonAreaCore extends ICustomElementCore {
+export interface IButtonAreaCore {
   disabled: boolean;
 }
 
@@ -27,7 +27,7 @@ export class ButtonAreaCore implements IButtonAreaCore {
     this._adapter.addButtonSlotListener('slotchange', this._slotListener);
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.removeListener('click', this._clickListener);
     this._adapter.removeListener('keydown', this._keydownListener);
     this._adapter.removeListener('pointerdown', this._pointerdownListener);

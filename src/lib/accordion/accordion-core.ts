@@ -1,10 +1,9 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IAccordionAdapter } from './accordion-adapter';
 import { EXPANSION_PANEL_CONSTANTS } from '../expansion-panel/expansion-panel-constants';
 import { IExpansionPanelComponent } from '../expansion-panel';
 import { ACCORDION_CONSTANTS } from './accordion-constants';
 
-export interface IAccordionCore extends ICustomElementCore {
+export interface IAccordionCore {
   panelSelector: string;
 }
 

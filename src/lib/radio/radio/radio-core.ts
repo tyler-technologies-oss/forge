@@ -1,9 +1,8 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { task } from '../../core/utils/utils';
 import { IRadioAdapter } from './radio-adapter';
 import { RadioLabelPosition, RADIO_CONSTANTS } from './radio-constants';
 
-export interface IRadioCore extends ICustomElementCore {
+export interface IRadioCore {
   checked: boolean;
   defaultChecked: boolean;
   value: string;

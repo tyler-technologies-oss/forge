@@ -1,24 +1,50 @@
-@use './mixins';
+@use './core';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include core.host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-:host(.forge-view-switcher--slide) {
-  ::slotted(forge-view) {
-    @include mixins.view-slidable;
+//
+// Base
+//
+
+.forge-view-switcher {
+  @include core.tokens;
+}
+
+.forge-view-switcher {
+  @include core.base;
+
+  ::slotted(.forge-view-switcher__view--hidden) {
+    @include core.view-hidden;
   }
 }
 
-:host(.forge-view-switcher--fade) {
+//
+// Slide
+//
+
+:host(.slide) {
   ::slotted(forge-view) {
-    @include mixins.view-fadeable;
+    @include core.view-slidable;
+  }
+}
+
+//
+// Fade
+//
+
+:host(.fade) {
+  ::slotted(forge-view) {
+    @include core.view-fadeable;
   }
 
   ::slotted(.forge-view-switcher__view--hidden) {

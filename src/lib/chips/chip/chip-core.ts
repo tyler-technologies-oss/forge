@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IChipAdapter } from './chip-adapter';
 import { ChipTheme, ChipType, CHIP_CONSTANTS, IChipDeleteEventData, IChipNavigateEventData, IChipSelectEventData } from './chip-constants';
 
-export interface IChipCore extends ICustomElementCore {
+export interface IChipCore {
   type: ChipType;
   value: unknown;
   selected: boolean;

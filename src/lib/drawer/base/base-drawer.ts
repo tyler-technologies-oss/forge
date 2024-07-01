@@ -27,11 +27,11 @@ export abstract class BaseDrawerComponent<T extends BaseDrawerCore> extends Base
   protected abstract _core: T;
 
   public connectedCallback(): void {
-    this._core.connect();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
