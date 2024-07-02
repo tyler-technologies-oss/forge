@@ -22,7 +22,7 @@ export class AppBarNotificationButtonFoundation implements IAppBarNotificationBu
 
   public initialize(): void {
     this._adapter.initialize();
-    this._adapter.setCount(this._count);
+    this._adapter.setCount(this._dot ? null : this._count);
     this._adapter.setBadgeType(this._dot);
     this._adapter.setBadgeTheme(this._theme);
     this._adapter.setBadgeVisible(this._showBadge);
@@ -54,7 +54,9 @@ export class AppBarNotificationButtonFoundation implements IAppBarNotificationBu
     if (this._count !== value) {
       this._count = value;
       if (this._isInitialized) {
-        if (!this._dot) {
+        if (this._dot) {
+          this._adapter.setCount(null);
+        } else {
           this._adapter.setCount(this._count);
         }
 
