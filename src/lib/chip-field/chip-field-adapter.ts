@@ -28,11 +28,11 @@ export class ChipFieldAdapter extends FieldAdapter implements IChipFieldAdapter 
   protected _inputContainerElement: HTMLElement;
 
   constructor(component: IChipFieldComponent) {
-    super(component);
+    super(component, CHIP_FIELD_CONSTANTS.selectors.ROOT);
   }
 
   public initialize(): void {
-    super.initialize(CHIP_FIELD_CONSTANTS.selectors.ROOT);
+    super.initialize();
     this._memberSlot = getShadowElement(this._component, CHIP_FIELD_CONSTANTS.selectors.MEMBER_SLOT) as HTMLSlotElement;
     this._inputContainerElement = getShadowElement(this._component, CHIP_FIELD_CONSTANTS.selectors.INPUT_CONTAINER) as HTMLElement;
   }
