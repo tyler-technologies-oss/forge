@@ -1,3 +1,16 @@
+# v2.24.5 (Tue Jul 02 2024)
+
+#### 🐛 Bug Fix
+
+- [field] fix initialization of internal element references to occur in constructor instead of connectedCallback [#643](https://github.com/tyler-technologies-oss/forge/pull/643) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(app-bar-notification-button): fixed a bug where the count could incorrectly display when in dot mode if not changed from default [#637](https://github.com/tyler-technologies-oss/forge/pull/637) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.24.4 (Mon Jun 24 2024)
 
 #### 🐛 Bug Fix
