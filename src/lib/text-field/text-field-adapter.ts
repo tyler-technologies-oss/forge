@@ -13,11 +13,11 @@ export class TextFieldAdapter extends FieldAdapter implements ITextFieldAdapter 
   protected _inputMutationObserverInstances: MutationObserver[] = [];
 
   constructor(component: ITextFieldComponent) {
-    super(component);
+    super(component, TEXT_FIELD_CONSTANTS.selectors.ROOT);
   }
 
   public initialize(): void {
-    super.initialize(TEXT_FIELD_CONSTANTS.selectors.ROOT);
+    super.initialize();
     this._inputElements = Array.from(this._component.querySelectorAll('input:not([type=checkbox]):not([type=radio]), textarea'));
     if (this._inputElements.length > 1) {
       this._handleMultiInputs();

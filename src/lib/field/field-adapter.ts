@@ -49,7 +49,7 @@ export interface IFieldAdapter extends IBaseAdapter {
   getLabelWidth(fontSize: number, fontFamily: string): number;
 
   // state actions
-  initialize(rootSelector: string): void;
+  initialize(): void;
   initializeFloatingLabel(): IFloatingLabel;
   ensureSlottedLabel(): void;
   destroy(): void;
@@ -72,16 +72,16 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   protected _inputMutationObserver: MutationObserver;
   protected _valueChangeListeners: Array<() => void> = [];
 
-  constructor(component: IFieldComponent) {
+  constructor(component: IFieldComponent, rootSelector: string) {
     super(component);
-  }
-
-  public initialize(rootSelector: string): void {
     this._rootElement = getShadowElement(this._component, rootSelector);
     this._labelSlot = getShadowElement(this._component, 'slot[name=label]') as HTMLSlotElement;
     this._leadingSlot = getShadowElement(this._component, 'slot[name=leading]') as HTMLSlotElement;
     this._trailingSlot = getShadowElement(this._component, 'slot[name=trailing]') as HTMLSlotElement;
     this._addonEndSlot = getShadowElement(this._component, 'slot[name=addon-end]') as HTMLSlotElement;
+  }
+
+  public initialize(): void {
     this._inputElement = this._component.querySelector('input:not([type=checkbox]):not([type=radio])') as HTMLInputElement;
     this.detectLabel();
   }

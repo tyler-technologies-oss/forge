@@ -45,7 +45,7 @@ export class FieldFoundation {
   //
 
   public initialize(): void {
-    this._adapter.initialize('');
+    this._adapter.initialize();
 
     if (this._adapter.hasLabel()) {
       this._adapter.ensureSlottedLabel();
