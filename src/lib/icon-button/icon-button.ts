@@ -38,7 +38,7 @@ declare global {
  * @property {boolean} [toggle=false] - Whether or not the icon button can be toggled.
  * @property {boolean} [on=false] - Whether or not the button is on. Only applies when `toggle` is `true`.
  * @property {IconButtonVariant} [variant="icon"] - The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
- * @property {IconButtonTheme} [theme="primary"] - The theme of the button. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
+ * @property {IconButtonTheme} [theme="default"] - The theme of the button. Valid values are `default`, `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
  * @property {string} [shape="circular"] - The shape of the button. Valid values are `circular` and `squared`.
  * @property {IconButtonDensity} [density="large"] - The density of the button. Valid values are `small`, `medium`, and `large`.
  * @property {string} [type="button"] - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
@@ -56,7 +56,7 @@ declare global {
  * @attribute {boolean} [toggle=false] - Whether or not the icon button can be toggled.
  * @attribute {boolean} [on=false] - Whether or not the button is on. Only applies when `toggle` is `true`.
  * @attribute {IconButtonVariant} [variant="icon"] - The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
- * @attribute {IconButtonTheme} [theme="primary"] - The theme of the button. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
+ * @attribute {IconButtonTheme} [theme="default"] - The theme of the button. Valid values are `default`, `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
  * @attribute {string} [shape="circular"] - The shape of the button. Valid values are `circular` and `squared`.
  * @attribute {IconButtonDensity} [density="large"] - The density of the button. Valid values are `small`, `medium`, and `large`.
  * @attribute {string} [type="button"] - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.

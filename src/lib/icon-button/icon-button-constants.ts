@@ -22,7 +22,7 @@ const events = {
 
 const defaults = {
   DEFAULT_VARIANT: 'icon' as IconButtonVariant,
-  DEFAULT_THEME: 'primary' as IconButtonTheme,
+  DEFAULT_THEME: 'default' as IconButtonTheme,
   DEFAULT_SHAPE: 'circular' as IconButtonShape,
   DEFAULT_DENSITY: 'large' as IconButtonDensity
 };
@@ -36,6 +36,6 @@ export const ICON_BUTTON_CONSTANTS = {
 };
 
 export type IconButtonVariant = 'icon' | 'outlined' | 'tonal' | 'filled' | 'raised';
-export type IconButtonTheme = Theme;
+export type IconButtonTheme = Theme | 'default';
 export type IconButtonShape = 'circular' | 'squared';
 export type IconButtonDensity = Density;

@@ -62,7 +62,7 @@ describe('Icon Button', () => {
   it('should have default theme', async () => {
     const el = await fixture<IIconButtonComponent>(html`<forge-icon-button>${DEFAULT_ICON}</forge-icon-button>`);
 
-    expect(el.theme).to.equal('primary');
+    expect(el.theme).to.equal('default');
   });
 
   it('should set theme', async () => {
@@ -86,7 +86,7 @@ describe('Icon Button', () => {
 
     el.removeAttribute(ICON_BUTTON_CONSTANTS.attributes.THEME);
 
-    expect(el.theme).to.equal('primary');
+    expect(el.theme).to.equal('default');
     expect(el.hasAttribute(ICON_BUTTON_CONSTANTS.attributes.THEME)).to.be.false;
   });
 

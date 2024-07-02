@@ -24,7 +24,7 @@ const meta = {
       tagName: component,
       exclude: ['form', 'name', 'value'],
       controls: {
-        variant: { control: { type: 'select' }, options: ['text', 'outlined', 'filled', 'raised', 'link'] },
+        variant: { control: { type: 'select' }, options: ['text', 'outlined', 'tonal', 'filled', 'raised', 'link'] },
         theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS }
       }
     }),
@@ -55,6 +55,7 @@ export const Variants: Story = {
     return html`
       <forge-button>Text</forge-button>
       <forge-button variant="outlined">Outlined</forge-button>
+      <forge-button variant="tonal">Tonal</forge-button>
       <forge-button variant="filled">Filled</forge-button>
       <forge-button variant="raised">Raised</forge-button>
       <forge-button variant="link">Link</forge-button>
