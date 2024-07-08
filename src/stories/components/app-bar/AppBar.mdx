@@ -22,6 +22,29 @@ The following example shows the usage of all of the common app bar elements plac
 
 <Canvas of={AppBarStories.Full} />
 
+## Themed
+
+The app bar can be themed by providing a `theme` attribute. By default it will automatically use the "brand" theme and apply the appropriate colors
+to itself and all slotted elements by overriding the global theme colors within the context of the app bar itself only.
+
+> **Important:** This means that if you adjust the global theme variables for colors, the app bar will not be affected by those changes because it
+> has its own theming context.
+
+### White Theme
+
+The app bar provides a built-in "white" theme that can be applied by setting the `theme="white"` attribute. This will change the background color to
+white and the contrast/text color to black.
+
+<Canvas of={AppBarStories.WhiteTheme} />
+
+### Custom Theme
+
+You can also provide a custom theme by setting the `theme="custom"` attribute. This will disable any global auto-theming that is built-in to the app bar
+and allow you to provide your own fully custom styling. This also allows the global theme variables to cascade down into the app bar as they normally would
+because the app bar is no longer overriding the global theme variables.
+
+<Canvas of={AppBarStories.CustomTheme} />
+
 ## API
 
 <CustomArgTypes />
