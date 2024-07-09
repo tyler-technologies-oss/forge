@@ -86,7 +86,8 @@ declare global {
  * @cssproperty --forge-list-item-text-font-size - The font size of the text.
  * @cssproperty --forge-list-item-text-font-weight - The font weight of the text.
  * @cssproperty --forge-list-item-text-line-height - The line height of the text.
- * @cssproperty --forge-list-item-selected-color - The color when in the selected state.
+ * @cssproperty --forge-list-item-selected-color - The foreground color when in the selected state.
+ * @cssproperty --forge-list-item-selected-background - The background color when in the selected state.
  * @cssproperty --forge-list-item-selected-opacity - The opacity of the background color when in the selected state.
  * @cssproperty --forge-list-item-start-selected-color - The color of the start content when in the selected state.
  * @cssproperty --forge-list-item-end-selected-color - The color of the end content when in the selected state.
