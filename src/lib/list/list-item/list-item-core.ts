@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IListItemAdapter } from './list-item-adapter';
 import { IListItemSelectEventData, LIST_ITEM_CONSTANTS } from './list-item-constants';
 
-export interface IListItemCore extends ICustomElementCore {
+export interface IListItemCore {
   selected: boolean;
   active: boolean;
   value: unknown;
@@ -42,7 +41,7 @@ export class ListItemCore implements IListItemCore {
     }
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.destroy();
   }
 

@@ -1,14 +1,15 @@
-import { customElement, attachShadowTemplate, ICustomElement, coreProperty, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
 import { ButtonAreaAdapter } from './button-area-adapter';
 import { ButtonAreaCore } from './button-area-core';
 import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
 import { FocusIndicatorComponent } from '../focus-indicator';
 import { StateLayerComponent } from '../state-layer';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './button-area.html';
 import styles from './button-area.scss';
 
-export interface IButtonAreaComponent extends ICustomElement {
+export interface IButtonAreaComponent extends IBaseComponent {
   disabled: boolean;
 }
 
@@ -47,7 +48,7 @@ declare global {
   name: BUTTON_AREA_CONSTANTS.elementName,
   dependencies: [FocusIndicatorComponent, StateLayerComponent]
 })
-export class ButtonAreaComponent extends HTMLElement implements IButtonAreaComponent {
+export class ButtonAreaComponent extends BaseComponent implements IButtonAreaComponent {
   public static get observedAttributes(): string[] {
     return [BUTTON_AREA_CONSTANTS.attributes.DISABLED];
   }
@@ -65,7 +66,7 @@ export class ButtonAreaComponent extends HTMLElement implements IButtonAreaCompo
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

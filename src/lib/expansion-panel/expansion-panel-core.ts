@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IExpansionPanelAdapter } from './expansion-panel-adapter';
 import { ExpansionPanelAnimationType, ExpansionPanelOrientation, EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 
-export interface IExpansionPanelCore extends ICustomElementCore {
+export interface IExpansionPanelCore {
   open: boolean;
   orientation: ExpansionPanelOrientation;
   animationType: ExpansionPanelAnimationType;

@@ -138,7 +138,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

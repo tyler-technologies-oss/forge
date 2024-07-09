@@ -26,7 +26,7 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
     this._adapter.addRootListener('input', this._inputListener);
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.removeRootListener('slotchange', this._slotChangeListener);
     this._adapter.removeRootListener('input', this._inputListener);
     this._adapter.removeValueChangeListener();

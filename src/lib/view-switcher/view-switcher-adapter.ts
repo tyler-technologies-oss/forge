@@ -1,7 +1,7 @@
 import { getShadowElement, removeClass } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IViewSwitcherComponent } from './view-switcher';
-import { ViewAnimationDirection, ViewSwitcherAnimationType, VIEW_SWITCHER_CONSTANTS } from './view-switcher-constants';
+import { ViewAnimationDirection, VIEW_SWITCHER_CONSTANTS, ViewSwitcherAnimation } from './view-switcher-constants';
 
 export interface IViewSwitcherAdapter extends IBaseAdapter {
   getViewCount(): number;
@@ -11,14 +11,14 @@ export interface IViewSwitcherAdapter extends IBaseAdapter {
   initializeFadeViews(index: number): void;
   setActiveView(index: number): void;
   hideInactiveViews(index: number): void;
-  transitionToView(fromIndex: number, toIndex: number, animationType: ViewSwitcherAnimationType, direction?: ViewAnimationDirection): Promise<void>;
-  setAnimationType(type: ViewSwitcherAnimationType): void;
+  transitionToView(fromIndex: number, toIndex: number, animationType: ViewSwitcherAnimation, direction?: ViewAnimationDirection): Promise<void>;
+  setAnimationType(type: ViewSwitcherAnimation): void;
 }
 
 export class ViewSwitcherAdapter extends BaseAdapter<IViewSwitcherComponent> implements IViewSwitcherAdapter {
   private _rootElement: HTMLElement;
   private _slotElement: HTMLSlotElement;
-  private _viewObserver: MutationObserver;
+  private _viewObserver?: MutationObserver;
 
   constructor(component: IViewSwitcherComponent) {
     super(component);
@@ -36,9 +36,7 @@ export class ViewSwitcherAdapter extends BaseAdapter<IViewSwitcherComponent> imp
   }
 
   public stopViewObserver(): void {
-    if (this._viewObserver) {
-      this._viewObserver.disconnect();
-    }
+    this._viewObserver?.disconnect();
   }
 
   /**
@@ -168,12 +166,7 @@ export class ViewSwitcherAdapter extends BaseAdapter<IViewSwitcherComponent> imp
    * @param toIndex The view index to transition to.
    * @param direction The transition animation direction.
    */
-  public async transitionToView(
-    fromIndex: number,
-    toIndex: number,
-    animationType: ViewSwitcherAnimationType,
-    direction?: ViewAnimationDirection
-  ): Promise<void> {
+  public async transitionToView(fromIndex: number, toIndex: number, animationType: ViewSwitcherAnimation, direction?: ViewAnimationDirection): Promise<void> {
     const views = this._getViews();
     const fromView = views[fromIndex];
     const toView = views[toIndex];
@@ -185,11 +178,11 @@ export class ViewSwitcherAdapter extends BaseAdapter<IViewSwitcherComponent> imp
       window.requestAnimationFrame(() => {
         let transitionProp: string;
         switch (animationType) {
-          case ViewSwitcherAnimationType.Slide:
+          case 'slide':
             this._slideToView(fromView, toView, direction as ViewAnimationDirection);
             transitionProp = 'transform';
             break;
-          case ViewSwitcherAnimationType.Fade:
+          case 'fade':
             this._fadeToView(fromView, toView);
             transitionProp = 'opacity';
             break;
@@ -288,14 +281,14 @@ export class ViewSwitcherAdapter extends BaseAdapter<IViewSwitcherComponent> imp
    * Resets the animation type on the root element.
    * @param type The animation type.
    */
-  public setAnimationType(type: ViewSwitcherAnimationType): void {
+  public setAnimationType(type: ViewSwitcherAnimation): void {
     removeClass([VIEW_SWITCHER_CONSTANTS.classes.VIEW_SWITCHER_SLIDE, VIEW_SWITCHER_CONSTANTS.classes.VIEW_SWITCHER_FADE], this._component);
 
     switch (type) {
-      case ViewSwitcherAnimationType.Slide:
+      case 'slide':
         this._component.classList.add(VIEW_SWITCHER_CONSTANTS.classes.VIEW_SWITCHER_SLIDE);
         break;
-      case ViewSwitcherAnimationType.Fade:
+      case 'fade':
         this._component.classList.add(VIEW_SWITCHER_CONSTANTS.classes.VIEW_SWITCHER_FADE);
         break;
     }

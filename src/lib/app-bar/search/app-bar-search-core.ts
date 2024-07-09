@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IAppBarSearchAdapter } from './app-bar-search-adapter';
 import { APP_BAR_SEARCH_CONSTANTS, IAppBarSearchInputEventData } from './app-bar-search-constants';
 
-export interface IAppBarSearchCore extends ICustomElementCore {
+export interface IAppBarSearchCore {
   disabled: boolean;
   value: string;
   placeholder: string;
@@ -46,7 +45,7 @@ export class AppBarSearchCore implements IAppBarSearchCore {
     }
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.removeInputEventListener('keydown', this._keydownListener);
   }
 

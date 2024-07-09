@@ -30,8 +30,8 @@ export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelec
     this._adapter.addTargetListener('mousedown', this._mousedownListener);
   }
 
-  public disconnect(): void {
-    super.disconnect();
+  public destroy(): void {
+    super.destroy();
     this._adapter.removeTargetListener('mousedown', this._mousedownListener);
   }
 

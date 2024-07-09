@@ -1,4 +1,4 @@
-import { ICustomElementCore, debounce } from '@tylertech/forge-core';
+import { debounce } from '@tylertech/forge-core';
 import { IColorPickerAdapter } from './color-picker-adapter';
 import {
   ColorPickerValueType,
@@ -14,7 +14,7 @@ import { ColorPickerGradientSlider } from './color-picker-gradient-slider';
 import { ColorPickerSlider } from './color-picker-slider';
 import { formatHex, formatRgba, hexToRgba, hsvaToRgba, isValidHex, isValidHSVA, isValidRGBA, rgbaToHex, rgbaToHsva } from './color-picker-utils';
 
-export interface IColorPickerCore extends ICustomElementCore {
+export interface IColorPickerCore {
   value: string | null | undefined;
   rgba: IRGBA | null | undefined;
   hsva: IHSVA | null | undefined;
@@ -70,7 +70,7 @@ export class ColorPickerCore implements IColorPickerCore {
     this._adapter.setActiveValueType(this._valueType);
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.removeTypeClickListener(this._typeClickListener);
     this._adapter.removeHexInputListener('input', this._hexInputChangedListener);
     this._adapter.removeRgbaInputListener('input', this._hexInputChangedListener);

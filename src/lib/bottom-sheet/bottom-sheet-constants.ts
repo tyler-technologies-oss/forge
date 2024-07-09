@@ -38,13 +38,18 @@ const events = {
   FULLSCREEN: 'forge-bottom-sheet-fullscreen'
 };
 
+const defaults = {
+  mode: 'nonmodal' as BottomSheetMode
+};
+
 export const BOTTOM_SHEET_CONSTANTS = {
   elementName,
   observedAttributes,
   attributes,
   classes,
   selectors,
-  events
+  events,
+  defaults
 };
 
 export interface IBottomSheetDragEventData {

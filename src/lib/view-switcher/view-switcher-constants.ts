@@ -5,8 +5,8 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}view-s
 const classes = {
   ROOT: 'forge-view-switcher',
   VIEW_HIDDEN: 'forge-view-switcher__view--hidden',
-  VIEW_SWITCHER_SLIDE: 'forge-view-switcher--slide',
-  VIEW_SWITCHER_FADE: 'forge-view-switcher--fade'
+  VIEW_SWITCHER_SLIDE: 'slide',
+  VIEW_SWITCHER_FADE: 'fade'
 };
 
 const selectors = {
@@ -41,8 +41,11 @@ export enum ViewAnimationDirection {
   Right = 'right'
 }
 
+/** @deprecated Use `ViewSwitcherAnimation` type instead. */
 export enum ViewSwitcherAnimationType {
   None = 'none',
   Slide = 'slide',
   Fade = 'fade'
 }
+
+export type ViewSwitcherAnimation = 'none' | 'slide' | 'fade';
