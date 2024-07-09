@@ -243,6 +243,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
     this._nativeSubmitButton = document.createElement('button');
     this._nativeSubmitButton.type = 'submit';
     this._nativeSubmitButton.style.display = 'none';
+    this._nativeSubmitButton.ariaHidden = 'true';
     this._component.prepend(this._nativeSubmitButton);
   }
 
