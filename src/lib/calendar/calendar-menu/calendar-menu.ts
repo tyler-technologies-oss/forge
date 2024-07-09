@@ -1,15 +1,16 @@
-import { customElement, attachShadowTemplate, ICustomElement, coreProperty, coerceBoolean, elementParents } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, elementParents } from '@tylertech/forge-core';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../../state-layer/state-layer';
 
 import { CalendarMenuAdapter } from './calendar-menu-adapter';
 import { CalendarDirection, CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS, ICalendarMenuOption } from './calendar-menu-constants';
 import { CalendarMenuCore } from './calendar-menu-core';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 
 import template from './calendar-menu.html';
 import styles from './calendar-menu.scss';
 
-export interface ICalendarMenuComponent extends ICustomElement {
+export interface ICalendarMenuComponent extends IBaseComponent {
   animationType: CalendarMenuAnimationType;
   preventFocus: boolean;
   animateIn(options: ICalendarMenuOption[], direction: CalendarDirection, setFocus?: boolean): void;
@@ -42,7 +43,7 @@ declare global {
   name: CALENDAR_MENU_CONSTANTS.elementName,
   dependencies: [StateLayerComponent, FocusIndicatorComponent]
 })
-export class CalendarMenuComponent extends HTMLElement implements ICalendarMenuComponent {
+export class CalendarMenuComponent extends BaseComponent implements ICalendarMenuComponent {
   public static get observedAttributes(): string[] {
     return [CALENDAR_MENU_CONSTANTS.attributes.ANIMATION_TYPE, CALENDAR_MENU_CONSTANTS.attributes.PREVENT_FOCUS];
   }
@@ -70,7 +71,7 @@ export class CalendarMenuComponent extends HTMLElement implements ICalendarMenuC
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

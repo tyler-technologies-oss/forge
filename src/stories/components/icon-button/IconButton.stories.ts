@@ -51,7 +51,7 @@ const meta = {
       tagName: component,
       exclude: ['form', 'name', 'value', 'type'],
       controls: {
-        variant: { control: { type: 'select' }, options: ['icon', 'outlined', 'filled', 'raised'] },
+        variant: { control: { type: 'select' }, options: ['icon', 'outlined', 'tonal', 'filled', 'raised'] },
         theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS },
         shape: { control: { type: 'select' }, options: ['circular', 'squared'] },
         density: { control: { type: 'select' }, options: ['small', 'medium', 'large'] }
@@ -60,7 +60,7 @@ const meta = {
   },
   args: {
     variant: 'icon',
-    theme: 'primary',
+    theme: 'default',
     disabled: false,
     dense: false,
     toggle: false,
@@ -86,6 +86,10 @@ export const Variants: Story = {
       </forge-icon-button>
 
       <forge-icon-button variant="outlined" aria-label="Outlined icon button">
+        <forge-icon name="favorite"></forge-icon>
+      </forge-icon-button>
+
+      <forge-icon-button variant="tonal" aria-label="Tonal icon button">
         <forge-icon name="favorite"></forge-icon>
       </forge-icon-button>
 
@@ -121,25 +125,28 @@ export const Themed: Story = {
   },
   render: ({ variant }) => {
     return html`
-      <forge-icon-button variant=${variant}>
+      <forge-icon-button variant=${variant} aria-label="Default theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="secondary">
+      <forge-icon-button variant=${variant} theme="primary" aria-label="Primary theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="tertiary">
+      <forge-icon-button variant=${variant} theme="secondary" aria-label="Secondary theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="success">
+      <forge-icon-button variant=${variant} theme="tertiary" aria-label="Tertiary theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="warning">
+      <forge-icon-button variant=${variant} theme="success" aria-label="Success theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="error">
+      <forge-icon-button variant=${variant} theme="warning" aria-label="Warning theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="info">
+      <forge-icon-button variant=${variant} theme="error" aria-label="Error theme icon button">
+        <forge-icon name="forge_logo"></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button variant=${variant} theme="info" aria-label="Info theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
     `;

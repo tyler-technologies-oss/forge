@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IBannerAdapter } from './banner-adapter';
 import { BannerTheme, BANNER_CONSTANTS } from './banner-constants';
 
-export interface IBannerCore extends ICustomElementCore {
+export interface IBannerCore {
   dismissed: boolean;
   persistent: boolean;
   theme: BannerTheme;

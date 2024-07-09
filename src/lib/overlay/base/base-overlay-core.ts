@@ -1,9 +1,8 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IBaseAdapter } from '../../core';
 import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
 import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy } from '../overlay-constants';
 
-export interface IBaseOverlayCore extends ICustomElementCore {
+export interface IBaseOverlayCore {
   initialize(): void;
   destroy(): void;
   position(): void;

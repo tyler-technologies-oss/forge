@@ -26,8 +26,8 @@ export class SelectDropdownCore extends BaseSelectCore<ISelectDropdownAdapter> i
     super.initialize();
   }
 
-  public disconnect(): void {
-    super.disconnect();
+  public destroy(): void {
+    super.destroy();
     if (this._adapter.isAttached()) {
       this._detach();
     }

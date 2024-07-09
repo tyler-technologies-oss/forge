@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IAppBarNotificationButtonAdapter } from './app-bar-notification-button-adapter';
 import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants';
 
-export interface IAppBarNotificationButtonCore extends ICustomElementCore {
+export interface IAppBarNotificationButtonCore {
   count: string | number | null | undefined;
   dot: boolean;
   theme: string;
@@ -23,9 +22,7 @@ export class AppBarNotificationButtonCore implements IAppBarNotificationButtonCo
   public initialize(): void {
     this._adapter.initialize();
     this._adapter.setBadgeType(this._dot);
-    if (!this._dot) {
-      this._adapter.setCount(this._count);
-    }
+    this._adapter.setCount(this._dot ? null : this._count);
     this._adapter.setBadgeTheme(this._theme);
     this._adapter.setBadgeVisible(this._showBadge);
     this._adapter.setIcon(this._icon);
@@ -57,7 +54,9 @@ export class AppBarNotificationButtonCore implements IAppBarNotificationButtonCo
     if (this._count !== value) {
       this._count = value;
       if (this._isInitialized) {
-        if (!this._dot) {
+        if (this._dot) {
+          this._adapter.setCount(null);
+        } else {
           this._adapter.setCount(this._count);
         }
 

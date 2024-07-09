@@ -1,0 +1,43 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  height: #{token(height)};
+  width: #{token(width)};
+
+  display: block;
+}
+
+@mixin base {
+  height: #{token(height)};
+  width: #{token(width)};
+
+  position: relative;
+  overflow: hidden;
+  transition-property: height;
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(animation-easing)};
+}
+
+@mixin view-slidable {
+  transition-property: transform;
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(animation-easing)};
+  will-change: transform;
+}
+
+@mixin view-fadeable {
+  transition-property: opacity;
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(animation-easing)};
+  will-change: opacity;
+}
+
+@mixin view-hidden {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

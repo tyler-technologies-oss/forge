@@ -14,23 +14,23 @@ export class ModalDrawerCore extends BaseDrawerCore implements IModalDrawerCore 
     super(_adapter);
   }
 
-  public override connect(): void {
-    super.connect();
+  public override initialize(): void {
+    super.initialize();
     this._adapter.setBackdropCloseListener(this._backdropClickListener);
     this._setBackdrop(this._open, { immediate: true });
   }
 
-  protected _triggerDrawerOpen(): void {
+  protected async _triggerDrawerOpen(): Promise<void> {
     super._triggerDrawerOpen();
     this._setBackdrop(true);
   }
 
-  protected _triggerDrawerClose(): void {
+  protected async _triggerDrawerClose(): Promise<void> {
     super._triggerDrawerClose();
     this._setBackdrop(false);
   }
 
-  private _onBackdropClick(evt: Event): void {
+  private _onBackdropClick(_evt: Event): void {
     const canClose = this._adapter.emitHostEvent(MODAL_DRAWER_CONSTANTS.events.CLOSE, undefined, true, true);
     if (canClose) {
       this.open = false;

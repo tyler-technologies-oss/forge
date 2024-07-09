@@ -1,4 +1,4 @@
-import { customElement, attachShadowTemplate, ICustomElement, coreProperty, coerceNumber, coerceBoolean, elementParents } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty, coerceNumber, coerceBoolean, elementParents } from '@tylertech/forge-core';
 import { tylIconAdd, tylIconArrowDropDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconLens } from '@tylertech/tyler-icons/standard';
 
 import { CalendarAdapter } from './calendar-adapter';
@@ -27,11 +27,12 @@ import { ICalendarBase } from './core/calendar-base';
 import { CalendarMenuAnimationType, CalendarMenuComponent } from './calendar-menu';
 import { StateLayerComponent } from '../state-layer';
 import { FocusIndicatorComponent } from '../focus-indicator';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './calendar.html';
 import styles from './calendar.scss';
 
-export interface ICalendarComponent extends ICalendarBase, ICustomElement {
+export interface ICalendarComponent extends ICalendarBase, IBaseComponent {
   mode: CalendarMode;
   view: CalendarView;
   preventFocus: boolean;
@@ -139,7 +140,7 @@ declare global {
   name: CALENDAR_CONSTANTS.elementName,
   dependencies: [ButtonComponent, CalendarMenuComponent, IconButtonComponent, IconComponent, TooltipComponent, StateLayerComponent, FocusIndicatorComponent]
 })
-export class CalendarComponent extends HTMLElement implements ICalendarComponent {
+export class CalendarComponent extends BaseComponent implements ICalendarComponent {
   public static get observedAttributes(): string[] {
     return [
       CALENDAR_CONSTANTS.attributes.ALLOW_SINGLE_DATE_RANGE,
@@ -188,7 +189,7 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

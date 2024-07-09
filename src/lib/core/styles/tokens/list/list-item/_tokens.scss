@@ -23,6 +23,7 @@ $tokens: (
   text-line-height: utils.module-val(list-item, text-line-height, typography.scale('1500')),
   // Selected
   selected-color: utils.module-val(list-item, selected-color, theme.variable(primary)),
+  selected-background: utils.module-ref(list-item, selected-background, selected-color),
   selected-opacity: utils.module-val(list-item, selected-opacity, theme.emphasis(lowest)),
   selected-start-color: utils.module-ref(list-item, selected-start-color, selected-color),
   selected-end-color: utils.module-ref(list-item, selected-end-color, selected-color),

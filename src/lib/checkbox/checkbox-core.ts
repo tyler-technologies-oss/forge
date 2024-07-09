@@ -1,9 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-
 import { ICheckboxAdapter } from './checkbox-adapter';
 import { CHECKBOX_CONSTANTS, CheckboxLabelPosition, CheckboxState } from './checkbox-constants';
 
-export interface ICheckboxCore extends ICustomElementCore {
+export interface ICheckboxCore {
   checked: boolean;
   defaultChecked: boolean;
   indeterminate: boolean;

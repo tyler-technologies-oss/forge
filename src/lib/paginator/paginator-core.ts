@@ -1,9 +1,9 @@
-import { coerceNumber, ICustomElementCore, isArray, isDefined } from '@tylertech/forge-core';
+import { coerceNumber, isArray, isDefined } from '@tylertech/forge-core';
 import { IPaginatorAdapter, PaginatorFieldIdentifier } from './paginator-adapter';
 import { PAGINATOR_CONSTANTS, IPaginatorChangeEventData, PaginatorRangeLabelBuilder, IPaginatorRangeState } from './paginator-constants';
 import { ISelectOption } from '../select';
 
-export interface IPaginatorCore extends ICustomElementCore {
+export interface IPaginatorCore {
   pageIndex: number;
   pageSize: number;
   offset: number;
