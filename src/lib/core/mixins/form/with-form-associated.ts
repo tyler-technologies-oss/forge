@@ -113,9 +113,6 @@ export declare abstract class WithFormAssociationContract {
   public get name(): string;
   public set name(value: string);
 
-  public abstract get disabled(): boolean;
-  public abstract set disabled(value: boolean);
-
   public abstract get readonly(): boolean;
   public abstract set readonly(value: boolean);
 

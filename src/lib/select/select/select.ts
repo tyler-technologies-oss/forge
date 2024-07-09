@@ -262,7 +262,7 @@ export class SelectComponent
   public declare placeholder: string;
 
   @coreProperty()
-  public declare readonly;
+  public declare readonly: boolean;
 
   public override get floatLabel(): boolean {
     return super.floatLabel;
@@ -287,7 +287,6 @@ export class SelectComponent
     this._core.syncFloatingLabelState();
   }
 
-  // @ts-ignore TS2611 - TODO: This is a getter/setter in the base class... TypeScript bug?
   public override get disabled(): boolean {
     return super.disabled;
   }
