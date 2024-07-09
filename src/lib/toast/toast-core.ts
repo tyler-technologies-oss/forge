@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IToastAdapter } from './toast-adapter';
 import { TOAST_CONSTANTS, ToastPlacement, ToastTheme } from './toast-constants';
 
-export interface IToastCore extends ICustomElementCore {
+export interface IToastCore {
   duration: number;
   placement: ToastPlacement;
   actionText: string;

@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IStackAdapter } from './stack-adapter';
 import { StackAlignment, STACK_CONSTANTS } from './stack-constants';
 
-export interface IStackCore extends ICustomElementCore {
+export interface IStackCore {
   inline: boolean;
   wrap: boolean;
   stretch: boolean;

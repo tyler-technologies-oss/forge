@@ -1,9 +1,8 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { LABEL_CONSTANTS, LabelComponent } from '../../label';
 import { IRadioGroupAdapter } from './radio-group-adapter';
 import { RADIO_GROUP_CONSTANTS } from './radio-group-constants';
 
-export interface IRadioGroupCore extends ICustomElementCore {
+export interface IRadioGroupCore {
   disabled: boolean;
 }
 

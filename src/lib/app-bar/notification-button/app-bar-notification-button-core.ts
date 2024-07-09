@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IAppBarNotificationButtonAdapter } from './app-bar-notification-button-adapter';
 import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants';
 
-export interface IAppBarNotificationButtonCore extends ICustomElementCore {
+export interface IAppBarNotificationButtonCore {
   count: string | number | null | undefined;
   dot: boolean;
   theme: string;

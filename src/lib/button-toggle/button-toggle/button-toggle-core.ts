@@ -1,10 +1,9 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { task } from '../../core/utils/utils';
 import { ExperimentalFocusOptions } from '../../constants';
 import { IButtonToggleAdapter } from './button-toggle-adapter';
 import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from './button-toggle-constants';
 
-export interface IButtonToggleCore extends ICustomElementCore {
+export interface IButtonToggleCore {
   value: unknown;
   selected: boolean;
   disabled: boolean;

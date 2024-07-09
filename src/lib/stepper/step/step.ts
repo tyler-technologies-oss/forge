@@ -141,7 +141,7 @@ export class StepComponent extends BaseComponent implements IStepComponent {
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

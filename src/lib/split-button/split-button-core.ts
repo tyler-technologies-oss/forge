@@ -1,9 +1,8 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { ButtonTheme } from '../button/button-constants';
 import { ISplitButtonAdapter } from './split-button-adapter';
 import { SplitButtonVariant, SPLIT_BUTTON_CONSTANTS } from './split-button-constants';
 
-export interface ISplitButtonCore extends ICustomElementCore {
+export interface ISplitButtonCore {
   variant: SplitButtonVariant;
   theme: ButtonTheme;
   disabled: boolean;

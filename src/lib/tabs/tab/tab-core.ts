@@ -1,9 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-
 import { ITabAdapter } from './tab-adapter';
 import { TAB_CONSTANTS } from './tab-constants';
 
-export interface ITabCore extends ICustomElementCore {
+export interface ITabCore {
   disabled: boolean;
   selected: boolean;
   vertical: boolean;

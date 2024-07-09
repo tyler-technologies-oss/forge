@@ -128,7 +128,7 @@ export class ListItemComponent extends WithElementInternals(WithDefaultAria(Base
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

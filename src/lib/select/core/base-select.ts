@@ -125,6 +125,6 @@ export abstract class BaseSelectComponent<T extends IBaseSelectCore> extends Lis
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 }

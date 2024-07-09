@@ -1,15 +1,15 @@
-import { ICustomElementCore, isDefined } from '@tylertech/forge-core';
+import { isDefined } from '@tylertech/forge-core';
 import { IBaseDrawerAdapter } from './base-drawer-adapter';
 import { DrawerDirection, BASE_DRAWER_CONSTANTS } from './base-drawer-constants';
+import { frame } from '../../core/utils/utils';
 
-export interface IBaseDrawerCore extends ICustomElementCore {
+export interface IBaseDrawerCore {
   direction: DrawerDirection;
 }
 
 export class BaseDrawerCore implements IBaseDrawerCore {
   protected _open = true;
   protected _direction: DrawerDirection = 'left';
-  private _hasInitialized = false;
   private _openAnimationListener: () => void;
   private _closeAnimationListener: () => void;
 
@@ -18,7 +18,7 @@ export class BaseDrawerCore implements IBaseDrawerCore {
     this._closeAnimationListener = () => this._onCloseComplete();
   }
 
-  public connect(): void {
+  public initialize(): void {
     if (this._open) {
       this._setOpened();
     } else {
@@ -27,12 +27,10 @@ export class BaseDrawerCore implements IBaseDrawerCore {
 
     this._applyDirection();
     this._adapter.proxyScrollEvent();
-    this._hasInitialized = true;
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.tryUnproxyScrollEvent();
-    this._hasInitialized = false;
   }
 
   private _applyDirection(): void {
@@ -45,7 +43,8 @@ export class BaseDrawerCore implements IBaseDrawerCore {
       return;
     }
     this._setOpened();
-    this._adapter.emitHostEvent(BASE_DRAWER_CONSTANTS.events.AFTER_OPEN);
+    const event = new CustomEvent(BASE_DRAWER_CONSTANTS.events.AFTER_OPEN, { bubbles: true, composed: true });
+    this._adapter.dispatchHostEvent(event);
   }
 
   private _onCloseComplete(): void {
@@ -53,7 +52,8 @@ export class BaseDrawerCore implements IBaseDrawerCore {
       return;
     }
     this._setClosed();
-    this._adapter.emitHostEvent(BASE_DRAWER_CONSTANTS.events.AFTER_CLOSE);
+    const event = new CustomEvent(BASE_DRAWER_CONSTANTS.events.AFTER_CLOSE, { bubbles: true, composed: true });
+    this._adapter.dispatchHostEvent(event);
   }
 
   private _setOpened(): void {
@@ -77,13 +77,15 @@ export class BaseDrawerCore implements IBaseDrawerCore {
     }
   }
 
-  protected _triggerDrawerOpen(): void {
+  protected async _triggerDrawerOpen(): Promise<void> {
     this._adapter.listenTransitionComplete(this._openAnimationListener);
+    await frame();
     this._adapter.removeDrawerClass([BASE_DRAWER_CONSTANTS.classes.CLOSED, BASE_DRAWER_CONSTANTS.classes.CLOSING]);
   }
 
-  protected _triggerDrawerClose(): void {
+  protected async _triggerDrawerClose(): Promise<void> {
     this._adapter.listenTransitionComplete(this._closeAnimationListener);
+    await frame();
     this._adapter.setDrawerClass(BASE_DRAWER_CONSTANTS.classes.CLOSING);
   }
 
@@ -91,9 +93,10 @@ export class BaseDrawerCore implements IBaseDrawerCore {
     return this._open;
   }
   public set open(value: boolean) {
+    value = Boolean(value);
     if (this._open !== value) {
       this._open = value;
-      if (this._hasInitialized) {
+      if (this._adapter.isConnected) {
         this._applyOpen();
       }
     }
@@ -105,7 +108,7 @@ export class BaseDrawerCore implements IBaseDrawerCore {
   public set direction(value: DrawerDirection) {
     if (this._direction !== value) {
       this._direction = value;
-      if (this._hasInitialized) {
+      if (this._adapter.isConnected) {
         this._applyDirection();
       }
     }

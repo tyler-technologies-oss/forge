@@ -120,7 +120,7 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
