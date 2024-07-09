@@ -100,9 +100,15 @@ forge-focus-indicator {
     }
   }
 
-  :host([theme='#{$theme}']:is([variant='filled'], [variant='raised'])) {
+  :host([theme='#{$theme}'][variant='filled']) {
     .forge-button {
       @include override(filled-color, theme.variable(on-#{$theme}), value);
+    }
+  }
+
+  :host([theme='#{$theme}'][variant='raised']) {
+    .forge-button {
+      @include override(raised-color, theme.variable(on-#{$theme}), value);
     }
   }
 
@@ -125,7 +131,7 @@ forge-focus-indicator {
 // Variants
 //
 
-:host(:is([variant='filled'], [variant='raised'])) {
+:host([variant='filled']) {
   .forge-button {
     @include filled;
   }
@@ -142,6 +148,14 @@ forge-focus-indicator {
 :host([variant='raised']) {
   .forge-button {
     @include raised;
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme(
+      (
+        color: #{token(raised-color)}
+      )
+    );
   }
 }
 
@@ -231,7 +245,7 @@ forge-focus-indicator {
   }
 }
 
-:host(:not([anchor]):is([variant='filled'], [variant='raised'])[disabled]) {
+:host(:not([anchor])[variant='filled'][disabled]) {
   .forge-button {
     @include filled-disabled;
   }

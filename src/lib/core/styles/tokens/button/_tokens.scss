@@ -58,6 +58,10 @@ $tokens: (
   filled-color: utils.module-val(button, filled-color, theme.variable(on-primary)),
   filled-disabled-color: utils.module-ref(button, filled-disabled-color, disabled-text-color),
   // Raised
+  raised-background: utils.module-ref(button, raised-background, primary-color),
+  raised-disabled-background: utils.module-ref(button, raised-disabled-background, disabled-color),
+  raised-color: utils.module-val(button, raised-color, theme.variable(on-primary)),
+  raised-disabled-color: utils.module-ref(button, raised-disabled-color, disabled-text-color),
   raised-shadow: utils.module-val(button, raised-shadow, elevation.value(2)),
   raised-hover-shadow: utils.module-val(button, raised-hover-shadow, elevation.value(4)),
   raised-active-shadow: utils.module-val(button, raised-active-shadow, elevation.value(8)),
