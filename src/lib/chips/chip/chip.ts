@@ -65,8 +65,8 @@ declare global {
  * @attribute {string} download - The download of the chip.
  * @attribute {string} rel - The rel of the chip.
  *
- * @fires {IChipDeleteEventData} forge-chip-delete - Event fired when the chip is deleted.
- * @fires {IChipSelectEventData} forge-chip-select - Event fired when the chip is selected.
+ * @fires {CustomEvent<IChipDeleteEventData>} forge-chip-delete - Event fired when the chip is deleted.
+ * @fires {CustomEvent<IChipSelectEventData>} forge-chip-select - Event fired when the chip is selected.
  *
  * @cssproperty --forge-chip-background - The background color of the chip.
  * @cssproperty --forge-chip-color - The background color of the chip.
