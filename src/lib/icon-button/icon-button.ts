@@ -66,7 +66,7 @@ declare global {
  * @attribute {string} name - The name of the button.
  * @attribute {string} value - The form value of the button.
  *
- * @event {Event} click - Fires when the button is clicked.
+ * @event {PointerEvent} click - Fires when the button is clicked.
  * @event {CustomEvent<boolean>} forge-icon-button-toggle - Fires when the icon button is toggled. Only applies in `toggle` mode.
  *
  * @cssproperty --forge-icon-button-display - The display property of the button.
