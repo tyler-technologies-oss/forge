@@ -57,6 +57,7 @@ const meta = {
   render: args => {
     const tableEl = customElementStoryRenderer(component, args);
 
+    tableEl.selectKey = 'id';
     tableEl.addEventListener('forge-table-row-click', rowClickAction);
     tableEl.addEventListener('forge-table-select', selectAction);
     tableEl.addEventListener('forge-table-select-double', selectDoubleAction);
@@ -117,7 +118,6 @@ const meta = {
     data: DATA,
     columnConfigurations: COLUMNS,
     select: true,
-    selectKey: 'id',
     multiselect: true,
     tooltipSelect: 'Select row',
     tooltipSelectAll: 'Select all rows',
