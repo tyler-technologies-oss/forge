@@ -18,11 +18,11 @@ const initializedAction = action('forge-table-initialized');
 const columnResizeAction = action('forge-table-column-resize');
 
 const DATA = [
-  { firstName: 'Alice', lastName: 'Smith', age: 25 },
-  { firstName: 'Bob', lastName: 'Johnson', age: 35 },
-  { firstName: 'Charlie', lastName: 'Brown', age: 45 },
-  { firstName: 'David', lastName: 'Miller', age: 55 },
-  { firstName: 'Eve', lastName: 'Williams', age: 65 }
+  { id: 0, firstName: 'Alice', lastName: 'Smith', age: 25 },
+  { id: 1, firstName: 'Bob', lastName: 'Johnson', age: 35 },
+  { id: 2, firstName: 'Charlie', lastName: 'Brown', age: 45 },
+  { id: 3, firstName: 'David', lastName: 'Miller', age: 55 },
+  { id: 4, firstName: 'Eve', lastName: 'Williams', age: 65 }
 ];
 
 const COLUMNS: IColumnConfiguration[] = [
@@ -117,6 +117,7 @@ const meta = {
     data: DATA,
     columnConfigurations: COLUMNS,
     select: true,
+    selectKey: 'id',
     multiselect: true,
     tooltipSelect: 'Select row',
     tooltipSelectAll: 'Select all rows',
