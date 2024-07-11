@@ -1,0 +1,104 @@
+@use './core';
+@use '../focus-indicator';
+@use '../state-layer';
+
+$svg-styles: '<style>svg, path { fill: none; stroke-width: 4px; stroke: rgb(255, 255, 255); }</style>';
+$checkmark-svg: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">#{$svg-styles}<path d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>');
+$mixedmark-svg: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">#{$svg-styles}<line x1="2" y1="12" x2="22" y2="12"></line></svg>');
+
+.forge-checkbox {
+  @include core.tokens;
+}
+
+.forge-checkbox {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: #{core.token(state-layer-shape)};
+  inline-size: #{core.token(state-layer-width)};
+  block-size: #{core.token(state-layer-height)};
+
+  input[type='checkbox'] {
+    @include core.host;
+    @include core.background;
+
+    appearance: none;
+    margin: 0;
+
+    cursor: pointer;
+
+    &:checked {
+      @include core.background-checked;
+    }
+
+    &:indeterminate {
+      @include core.background-checked;
+    }
+
+    &:disabled {
+      @include core.checkbox-disabled;
+      @include core.container-disabled;
+    }
+
+    &:not(:disabled) {
+      @include focus-indicator.standalone;
+      @include focus-indicator.provide-theme((/* Requires unit */ shape: 0px, outward-offset: 8px));
+
+      &:focus-visible {
+        @include focus-indicator.keyframes;
+      }
+    }
+  }
+
+  &::before {
+    /* Position the state layer above the checkbox input */
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  &::after {
+    $icon-width: calc(#{core.token(width)} - 2 * #{core.token(checked-border-width)});
+
+    position: absolute;
+    /* Hardcoded inset block start to adjust for off-center svg */
+    inset-block-start: 9.7px;
+
+    block-size: calc(#{core.token(height)} - 2 * #{core.token(checked-border-width)});
+    inline-size: calc(#{$icon-width});
+    pointer-events: none;
+  }
+
+  &:has(input[type='checkbox']:not(:disabled)) {
+    @include state-layer.standalone;
+  }
+
+  &:has(input[type='checkbox']:checked) {
+    @include state-layer.provide-theme(
+      (
+        color: #{core.token(state-layer-checked-color)}
+      )
+    );
+
+    &::after {
+      @include core.icon-checked;
+      @include core.icon-checked-visible;
+
+      content: #{$checkmark-svg};
+    }
+  }
+
+  &:has(input[type='checkbox']:indeterminate) {
+    &::after {
+      @include core.icon-indeterminate;
+      @include core.icon-indeterminate-visible;
+
+      content: #{$mixedmark-svg};
+    }
+  }
+
+  &--dense {
+    @include core.container-dense;
+  }
+}
