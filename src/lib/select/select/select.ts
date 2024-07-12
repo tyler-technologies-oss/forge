@@ -148,8 +148,6 @@ declare global {
  * @slot label - Renders its content as a positioned label.
  * @slot start - Typically reserved for content/icons that render logically before the default slot content.
  * @slot end - Typically reserved content/icons that render logically after the default slot content.
- * @slot clear-button - Content slotted here replaces the default clear button.
- * @slot clear-button-tooltip - Sets the text content of the clear button's tooltip and accessible label.
  * @slot accessory - Used for content such as a button that is logically connected to the field but should appear distinct from the input.
  * @slot support-text - Used for content that provides additional information about the field. Aligns to the inline start of the field.
  * @slot support-text-end - Used for content that provides additional information about the field. Aligns to the inline end of the field.
