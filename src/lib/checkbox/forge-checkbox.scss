@@ -3,7 +3,7 @@
 @use '../state-layer';
 
 /* stylelint-disable scss/operator-no-unspaced */
-$svg-styles: '<style>svg, path { fill: none; stroke-width: 4px; stroke: rgb(255, 255, 255); }</style>';
+$svg-styles: '<style>line, path { fill: none; stroke-width: 4px; stroke: rgb(255, 255, 255); }</style>';
 $checkmark-svg: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">#{$svg-styles}<path d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>');
 $mixedmark-svg: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">#{$svg-styles}<line x1="2" y1="12" x2="22" y2="12"></line></svg>');
 /* stylelint-enable scss/operator-no-unspaced */
@@ -13,102 +13,98 @@ $mixedmark-svg: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" 
 }
 
 .forge-checkbox {
-  display: inline-flex;
+  @include focus-indicator.standalone($focus-target: 'input[type=checkbox]');
+  @include focus-indicator.provide-theme(
+    (
+      shape: 0px,
+      outward-offset: 8px
+    )
+  );
+
+  display: inline grid;
   position: relative;
   align-items: center;
-  justify-content: center;
+  justify-items: center;
 
-  border-radius: #{core.token(state-layer-shape)};
   inline-size: #{core.token(state-layer-width)};
   block-size: #{core.token(state-layer-height)};
 
   input[type='checkbox'] {
-    @include core.host;
-    @include core.background;
-
     appearance: none;
+
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 20;
+
+    outline: none;
     margin: 0;
 
     cursor: pointer;
 
-    &:checked {
-      @include core.background-checked;
-    }
-
+    &:checked,
     &:indeterminate {
-      @include core.background-checked;
-    }
-
-    &:disabled {
-      @include core.checkbox-disabled;
-      @include core.container-disabled;
+      @include state-layer.provide-theme(
+        (
+          color: #{core.token(state-layer-checked-color)}
+        )
+      );
     }
 
     &:not(:disabled) {
-      @include focus-indicator.standalone;
-      @include focus-indicator.provide-theme(
-        (
-          shape: 0px,
-          outward-offset: 8px
-        )
-      );
+      @include state-layer.standalone('');
 
-      &:focus-visible {
-        @include focus-indicator.keyframes;
-      }
+      border-radius: #{core.token(state-layer-shape)} !important;
     }
   }
 
   &::before {
-    /* Position the state layer above the checkbox input */
-    z-index: 10;
-    pointer-events: none;
-  }
+    @include core.background;
 
-  &::after {
-    $icon-width: calc(#{core.token(width)} - 2 * #{core.token(checked-border-width)});
+    display: block;
+    grid-column: 1;
+    grid-row: 1;
 
-    position: absolute;
+    line-height: 0;
 
-    /* Hardcoded inset block start to adjust for off-center svg */
-    inset-block-start: 9.7px;
-
-    block-size: calc(#{core.token(height)} - 2 * #{core.token(checked-border-width)});
-    inline-size: calc(#{$icon-width});
-    pointer-events: none;
-  }
-
-  &:has(input[type='checkbox']:not(:disabled)) {
-    @include state-layer.standalone;
+    content: '';
   }
 
   &:has(input[type='checkbox']:checked) {
-    @include state-layer.provide-theme(
-      (
-        color: #{core.token(state-layer-checked-color)}
-      )
-    );
-
-    &::after {
-      @include core.icon-checked;
-      @include core.icon-checked-visible;
+    &::before {
+      @include core.background-checked;
 
       content: #{$checkmark-svg};
     }
   }
 
   &:has(input[type='checkbox']:indeterminate) {
-    @include state-layer.provide-theme(
-      (
-        color: #{core.token(state-layer-checked-color)}
-      )
-    );
-
-    &::after {
-      @include core.icon-indeterminate;
-      @include core.icon-indeterminate-visible;
+    &::before {
+      @include core.background-checked;
 
       content: #{$mixedmark-svg};
+    }
+  }
+
+  &:has(input[type='checkbox']:disabled) {
+    @include core.checkbox-disabled;
+    @include core.container-disabled;
+  }
+
+  &:has(input[type='checkbox']:focus-visible) {
+    @include focus-indicator.keyframes;
+
+    &::after {
+      position: relative;
+      grid-column: 1;
+      grid-row: 1;
+      inset: 0;
+
+      /* 
+        We "fake" the pseudo-element's dimensions here to size the focus indicator without
+        overriding any of its calculations, taking the width of its outline into account
+      */
+      padding-inline: calc(#{core.token(width)} - #{focus-indicator.token(width)});
+      padding-block: calc(#{core.token(height)} - #{focus-indicator.token(width)});
     }
   }
 

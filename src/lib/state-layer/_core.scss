@@ -114,24 +114,27 @@
 ///
 /// Creates the styles for a visual-only state layer without the use of JavaScript.
 ///
-@mixin standalone($pseudo: '::before') {
+@mixin standalone($selector: '::before') {
   @include tokens;
 
-  &#{$pseudo} {
+  &#{$selector} {
     @include layer-base;
     @include hover-base;
     @include override(hover-duration, 100ms, value);
 
-    content: '';
+    @if $selector == '::before' or $selector == '::after' {
+      content: '';
+    }
+
     opacity: 0;
     border-radius: inherit;
   }
 
-  &:hover#{$pseudo} {
+  &:hover#{$selector} {
     @include hovered;
   }
 
-  &:active#{$pseudo} {
+  &:active#{$selector} {
     @include pressed;
     @include override(pressed-opacity, 0.18, value);
   }
