@@ -1,8 +1,14 @@
+@use './core/styles/theme';
 @use './core/styles/animation';
 @use './core/styles/border';
 @use './core/styles/elevation';
 @use './core/styles/shape';
 @use './core/styles/spacing';
+
+// Color emphasis tokens
+:root {
+  @include theme.color-emphasis-properties;
+}
 
 // Animation
 :root {
