@@ -144,8 +144,7 @@ declare global {
  * @csspart support-text-end - The element containing the support text end slot.
  * @csspart focus-indicator - The focus indicator element.
  *
- * @slot - The default/unnamed slot for the field's input.
- * @slot label - Renders its content as a positioned label.
+ * @slot value - The selected text to display
  * @slot start - Typically reserved for content/icons that render logically before the default slot content.
  * @slot end - Typically reserved content/icons that render logically after the default slot content.
  * @slot accessory - Used for content such as a button that is logically connected to the field but should appear distinct from the input.
