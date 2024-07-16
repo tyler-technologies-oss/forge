@@ -5,6 +5,7 @@ import { customJSDocTagsPlugin } from 'cem-plugin-custom-jsdoc-tags';
 import forgeMemberDenyListPlugin from './plugins/cem/member-deny-list.mjs';
 import forgePublicMemberPrivacyPlugin from './plugins/cem/public-member-privacy.mjs';
 import forgeTypePathsPlugin from './plugins/cem/type-paths.mjs';
+import forgeReactTypesPlugin from './plugins/cem/react-types.mjs';
 import forgeBranchNamePlugin from './plugins/cem/branch-name.mjs';
 import forgeFilterIgnored from './plugins/cem/filter-ignored.mjs';
 
@@ -17,6 +18,9 @@ export default {
     forgeMemberDenyListPlugin(),
     forgePublicMemberPrivacyPlugin(),
     forgeTypePathsPlugin(),
+    forgeReactTypesPlugin({
+      outDir: path.resolve('./dist/cem')
+    }),
     customElementVsCodePlugin({
       hideLogs: true,
       outdir: path.resolve('dist/cem')
