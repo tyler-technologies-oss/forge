@@ -43,10 +43,12 @@ function createTypingsFromComponents(components, allTypes) {
     type ReactHTMLElementProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
 
     ${components.map(component => {
+      const attrs = getComponentAttributes(component);
+      const props = getComponentProperties(component);
+      const propsAndAttrs = Array.from(new Set([...attrs, ...props])).join('\n');
       return `
         type IForge${component.name}Props = {
-          ${getComponentAttributes(component)}
-          ${getComponentProperties(component)}
+          ${propsAndAttrs}
           ${getComponentEvents(component)}
         }
       `;
@@ -85,24 +87,20 @@ function createTypingsFromComponents(components, allTypes) {
 
 function getComponentAttributes(component) {
   return (
-    component.attributes
-      ?.map(attr => {
-        const type = attr.type?.text ?? 'string';
-        return `'${attr.name}'?: ${type};`;
-      })
-      .join('\n') ?? ''
+    component.attributes?.map(attr => {
+      const type = attr.type?.text ?? 'string';
+      return `'${attr.name}'?: ${type};`;
+    }) ?? []
   );
 }
 
 export function getComponentProperties(component) {
   const publicProps = getPublicMembers(component);
   return (
-    publicProps
-      ?.map(prop => {
-        const type = prop.type?.text ?? 'string';
-        return `'${prop.name}'?: ${type};`;
-      })
-      .join('\n') ?? ''
+    publicProps?.map(prop => {
+      const type = prop.type?.text ?? 'string';
+      return `'${prop.name}'?: ${type};`;
+    }) ?? []
   );
 }
 
