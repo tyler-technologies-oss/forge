@@ -21,6 +21,7 @@ const beforeCloseEventAction = action('forge-dialog-before-close');
 const moveStartEventAction = action('forge-dialog-move-start');
 const moveEventAction = action('forge-dialog-move');
 const moveEndEventAction = action('forge-dialog-move-end');
+const fullscreenChangeAction = action('forge-dialog-fullscreen-change');
 
 export const Dialog = (args: ArgTypes) => {
   IconRegistry.define(tylIconClose);
@@ -43,6 +44,7 @@ export const Dialog = (args: ArgTypes) => {
   dialog.addEventListener('forge-dialog-move-start', moveStartEventAction);
   dialog.addEventListener('forge-dialog-move', moveEventAction);
   dialog.addEventListener('forge-dialog-move-end', moveEndEventAction);
+  dialog.addEventListener('forge-dialog-fullscreen-change', fullscreenChangeAction);
   container.appendChild(dialog);
 
   const content = html`

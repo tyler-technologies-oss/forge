@@ -51,6 +51,18 @@ forge-scaffold {
 }
 ```
 
+### Fullscreen
+
+Dialogs can be displayed in fullscreen mode by setting the `fullscreen` property or attribute. This will cause the dialog to fit the viewport height and width, and is
+typically used on smaller viewports and mobile devices.
+
+Additionally, the dialog will automatically adjust itself to be fullscreen when the viewport width is less than `600px`. This is to ensure that the dialog is always usable
+on smaller screens, and to alleviate the burden for developers to manage this manually since it is a common desired behavior.
+
+If you need to adjust the breakpoint at which the dialog switches to fullscreen mode, you can use the `fullscreenThreshold` property to set a custom breakpoint in pixels. Or
+if you'd like to disable the automatic fullscreen functionality entirely, you can set the `fullscreenThreshold` property to `0` and the dialog will never automatically switch
+to fullscreen unless you explicitly set the `fullscreen` attribute.
+
 ### Focus Trap
 
 The `<forge-dialog>` uses the native [&lt;dialog&gt;](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog) element under the hood, which

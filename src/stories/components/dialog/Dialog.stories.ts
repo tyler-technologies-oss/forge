@@ -33,7 +33,8 @@ const meta = {
         placement: {
           control: 'select',
           options: ['custom', 'center', 'top', 'right', 'bottom', 'left', 'top-right', 'top-left', 'bottom-right', 'bottom-left']
-        }
+        },
+        fullscreenThreshold: { control: 'number' }
       }
     })
   },
@@ -41,6 +42,7 @@ const meta = {
     open: false,
     persistent: false,
     fullscreen: false,
+    fullscreenThreshold: DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD,
     moveable: false,
     mode: DIALOG_CONSTANTS.defaults.MODE,
     type: DIALOG_CONSTANTS.defaults.TYPE,

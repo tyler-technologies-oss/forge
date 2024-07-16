@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty, coerceNumber } from '@tylertech/forge-core';
 import { BackdropComponent } from '../backdrop';
 import { BaseComponent } from '../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
@@ -33,6 +33,7 @@ export interface IDialogProperties {
   preset: DialogPreset;
   persistent: boolean;
   fullscreen: boolean;
+  fullscreenThreshold: number;
   trigger: string;
   triggerElement: HTMLElement | null;
   positionStrategy: DialogPositionStrategy;
@@ -58,6 +59,7 @@ declare global {
     'forge-dialog-move-start': CustomEvent<IDialogMoveStartEventData>;
     'forge-dialog-move': CustomEvent<IDialogMoveEventData>;
     'forge-dialog-move-end': CustomEvent<void>;
+    'forge-dialog-fullscreen-change': CustomEvent<boolean>;
   }
 }
 
@@ -75,6 +77,7 @@ declare global {
  * @property {DialogPreset} [preset="dialog"] - The preset design that the dialog will apply.
  * @property {boolean} [persistent=false] - Indicates whether the dialog is dismissible via escape and backdrop click or not.
  * @property {boolean} [fullscreen=false] - Indicates whether the dialog is fullscreen or not.
+ * @property {number} [fullscreenThreshold=599] - The screen width at which the dialog will switch to fullscreen.
  * @property {string} trigger - The selector of the element that triggers the dialog.
  * @property {HTMLElement | null} [triggerElement=null] - The element that triggers the dialog.
  * @property {boolean} [moveable=false] - Indicates whether the dialog is moveable or not.
@@ -87,6 +90,7 @@ declare global {
  * @globalconfig sizeStrategy
  * @globalconfig persistent
  * @globalconfig moveable
+ * @globalconfig fullscreenThreshold
  *
  * @attribute {boolean} [open=false] - Indicates whether the dialog is open.
  * @attribute {DialogMode} [mode="modal"] - The mode of the dialog.
@@ -95,6 +99,7 @@ declare global {
  * @attribute {DialogPreset} [preset="dialog"] - The preset design that the dialog will apply.
  * @attribute {boolean} [persistent=false] - Indicates whether the dialog is dismissible via escape and backdrop click or not.
  * @attribute {boolean} [fullscreen=false] - Indicates whether the dialog is fullscreen or not.
+ * @attribute {number} [fullscreen-threshold=599] - The screen width at which the dialog will switch to fullscreen.
  * @attribute {string} trigger - The selector of the element that triggers the dialog.
  * @attribute {boolean} [moveable=false] - Indicates whether the dialog is moveable or not.
  * @attribute {DialogPositionStrategy} [positionStrategy="viewport"] - Controls whether the dialog is rendered relative to the viewport its nearest containing block.
@@ -107,6 +112,7 @@ declare global {
  * @event {CustomEvent<IDialogMoveStartEventData>} forge-dialog-move-start - Dispatched when the dialog is first moved.
  * @event {CustomEvent<IDialogMoveEventData>} forge-dialog-move - Dispatched when the dialog is being moved.
  * @event {CustomEvent<void>} forge-dialog-move-end - Dispatched when the dialog is done being moved.
+ * @event {CustomEvent<boolean>} forge-dialog-fullscreen-change - Dispatched when the dialog's fullscreen state changes.
  *
  * @cssproperty --forge-dialog-background - The background color of the dialog.
  * @cssproperty --forge-dialog-shape - The shape of the dialog.
@@ -228,6 +234,9 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
       case DIALOG_CONSTANTS.observedAttributes.FULLSCREEN:
         this.fullscreen = coerceBoolean(newValue);
         break;
+      case DIALOG_CONSTANTS.observedAttributes.FULLSCREEN_THRESHOLD:
+        this.fullscreenThreshold = newValue == null ? DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD : coerceNumber(newValue);
+        break;
       case DIALOG_CONSTANTS.observedAttributes.TRIGGER:
         this.trigger = newValue;
         break;
@@ -266,6 +275,9 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
 
   @coreProperty()
   public declare fullscreen: boolean;
+
+  @coreProperty()
+  public declare fullscreenThreshold: number;
 
   @coreProperty()
   public declare trigger: string;

@@ -31,6 +31,7 @@ inlineDialog.addEventListener('forge-dialog-close', evt => console.log('[forge-d
 inlineDialog.addEventListener('forge-dialog-move-start', evt => console.log('[forge-dialog]', evt));
 inlineDialog.addEventListener('forge-dialog-move', evt => console.log('[forge-dialog]', evt));
 inlineDialog.addEventListener('forge-dialog-move-end', evt => console.log('[forge-dialog]', evt));
+inlineDialog.addEventListener('forge-dialog-fullscreen-change', evt => console.log('[forge-dialog]', evt));
 
 const showDynamicDialogButton = document.getElementById('show-dynamic-dialog-button');
 showDynamicDialogButton.addEventListener('click', () => openDynamicDialog());

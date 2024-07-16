@@ -11,6 +11,7 @@ const observedAttributes = {
   PRESET: 'preset',
   PERSISTENT: 'persistent',
   FULLSCREEN: 'fullscreen',
+  FULLSCREEN_THRESHOLD: 'fullscreen-threshold',
   TRIGGER: 'trigger',
   MOVEABLE: 'moveable',
   MOVE_TARGET: 'move-target',
@@ -41,7 +42,8 @@ const events = {
   CLOSE: `${elementName}-close`,
   MOVE_START: `${elementName}-move-start`,
   MOVE: `${elementName}-move`,
-  MOVE_END: `${elementName}-move-end`
+  MOVE_END: `${elementName}-move-end`,
+  FULLSCREEN_CHANGE: `${elementName}-fullscreen-change`
 };
 
 const defaults = {
@@ -51,7 +53,8 @@ const defaults = {
   PRESET: 'dialog' as DialogPreset,
   SIZE_STRATEGY: 'content' as DialogSizeStrategy,
   POSITION_STRATEGY: 'viewport' as DialogPositionStrategy,
-  PLACEMENT: 'center' as DialogPlacement
+  PLACEMENT: 'center' as DialogPlacement,
+  FULLSCREEN_THRESHOLD: 599
 };
 
 export const DIALOG_CONSTANTS = {
