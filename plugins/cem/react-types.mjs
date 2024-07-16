@@ -4,6 +4,11 @@ import prettier from 'prettier';
 import { getCustomElements, getPublicMembers } from './utils.mjs';
 
 /**
+ * Types that should be converted to `any` in the generated typings file.
+ */
+const IGNORED_ANY_TYPES = ['TValue'];
+
+/**
  * This plugin generates a .d.ts file for ambient TypeScript type definitions for all Forge custom elements on `JSX.IntrinsicElements`.
  */
 export default function forgeJSXTypesPlugin({ outDir = './', fileName = 'react-types.d.ts' } = {}) {
@@ -43,12 +48,9 @@ function createTypingsFromComponents(components, allTypes) {
     type ReactHTMLElementProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
 
     ${components.map(component => {
-      const attrs = getComponentAttributes(component);
-      const props = getComponentProperties(component);
-      const propsAndAttrs = Array.from(new Set([...attrs, ...props])).join('\n');
       return `
         type IForge${component.name}Props = {
-          ${propsAndAttrs}
+          ${getComponentPropertiesAndAttributes(component)}
           ${getComponentEvents(component)}
         }
       `;
@@ -85,23 +87,16 @@ function createTypingsFromComponents(components, allTypes) {
   return declaration.replace(REFERENCED_TYPES_PLACEHOLDER, typeImport);
 }
 
-function getComponentAttributes(component) {
-  return (
-    component.attributes?.map(attr => {
+function getComponentPropertiesAndAttributes(component) {
+  const properties = getPublicMembers(component);
+  const attributes = (component.attributes ?? []).filter(attr => !properties.find(prop => prop.name === attr.name));
+  const uniquePropsAndAttrs = [...properties, ...attributes];
+  return uniquePropsAndAttrs
+    .map(attr => {
       const type = attr.type?.text ?? 'string';
-      return `'${attr.name}'?: ${type};`;
-    }) ?? []
-  );
-}
-
-export function getComponentProperties(component) {
-  const publicProps = getPublicMembers(component);
-  return (
-    publicProps?.map(prop => {
-      const type = prop.type?.text ?? 'string';
-      return `'${prop.name}'?: ${type};`;
-    }) ?? []
-  );
+      return `'${attr.name}'?: ${IGNORED_ANY_TYPES.includes(type) ? 'any' : type};`;
+    })
+    .join('\n');
 }
 
 function getComponentEvents(component) {
