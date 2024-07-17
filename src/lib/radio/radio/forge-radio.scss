@@ -61,12 +61,14 @@
     &::before {
       @include core.background-checked;
 
+      // We use a radial gradient to create the circular mark, applying blur to anti-alias the edge
       $mark-radius: calc(#{core.token(mark-size)} / 2);
+      $mark-blur: 0.2px;
       background: radial-gradient(
         circle,
         #{core.token(mark-checked-color)} 0%,
-        #{core.token(mark-checked-color)} #{$mark-radius},
-        transparent #{$mark-radius},
+        #{core.token(mark-checked-color)} calc(#{$mark-radius} - #{$mark-blur}),
+        transparent calc(#{$mark-radius} + #{$mark-blur}),
         transparent 100%
       );
     }
