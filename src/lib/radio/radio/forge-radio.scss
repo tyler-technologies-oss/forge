@@ -1,0 +1,87 @@
+@use './core';
+@use '../../focus-indicator';
+@use '../../state-layer';
+
+.forge-radio {
+  @include core.tokens;
+}
+
+.forge-radio {
+  @include focus-indicator.standalone($focus-target: 'input[type=radio]');
+  @include focus-indicator.provide-theme(
+    (
+      color: #{core.token(primary-color)},
+      outward-offset: 0px,
+      shape: #{core.token(state-layer-shape)}
+    )
+  );
+
+  display: inline flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  inline-size: #{core.token(state-layer-width)};
+  block-size: #{core.token(state-layer-height)};
+
+  input[type='radio'] {
+    position: absolute;
+    appearance: none;
+
+    outline: none;
+    margin: 0;
+    inline-size: 100%;
+    block-size: 100%;
+
+    cursor: pointer;
+
+    &:checked {
+      @include state-layer.provide-theme(
+        (
+          color: #{core.token(state-layer-checked-color)}
+        )
+      );
+    }
+
+    &:not(:disabled) {
+      @include state-layer.standalone('');
+
+      border-radius: #{core.token(state-layer-shape)} !important;
+    }
+  }
+
+  &::before {
+    @include core.container;
+    @include core.background;
+
+    content: '';
+  }
+
+  &:has(input[type='radio']:checked) {
+    &::before {
+      @include core.background-checked;
+
+      $mark-radius: calc(#{core.token(mark-size)} / 2);
+      background: radial-gradient(
+        circle,
+        #{core.token(mark-checked-color)} 0%,
+        #{core.token(mark-checked-color)} #{$mark-radius},
+        transparent #{$mark-radius},
+        transparent 100%
+      );
+    }
+  }
+
+  &:has(input[type='radio']:disabled) {
+    @include core.container-disabled;
+    @include core.radio-disabled;
+  }
+
+  &:has(input[type='radio']:focus-visible) {
+    @include focus-indicator.keyframes;
+  }
+
+  &--dense {
+    @include core.container-dense;
+  }
+}
