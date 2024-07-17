@@ -43,6 +43,10 @@
       );
     }
 
+    &:disabled {
+      @include core.container-disabled;
+    }
+
     &:not(:disabled) {
       @include state-layer.standalone('');
 
@@ -75,7 +79,6 @@
   }
 
   &:has(input[type='radio']:disabled) {
-    @include core.container-disabled;
     @include core.radio-disabled;
   }
 
