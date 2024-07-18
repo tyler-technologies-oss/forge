@@ -4,146 +4,150 @@
 @use '../core/styles/spacing';
 @use '../focus-indicator';
 
-.forge-field {
-  @include tokens(
-    $includes: (
-      shape,
-      outline-style,
-      outline-width,
-      height,
-      background,
-      disabled-background,
-      disabled-opacity
-    )
-  );
-}
+$_input-selector: ':where(input, textarea, select, .forge-field__input)';
 
-.forge-field {
-  position: relative;
-  display: grid;
-  border-radius: #{token(shape)};
-  outline-style: #{token(outline-style)};
-  outline-width: #{token(outline-width)};
-  outline-color: #{theme.variable(outline-low)};
-  background: #{token(background)};
+@layer base, textarea, invalid, disabled;
 
-  @include core.disableable;
-
-  &:hover:not(:has(input:disabled, textarea:disabled)) {
-    outline-color: #{theme.variable(outline-high)};
-  }
-
-  input {
-    @include core.default-slot-content;
-
-    padding-inline: #{spacing.variable(small)};
-  }
-
-  textarea {
-    @include core.default-slot-content;
-  }
-
-  input,
-  textarea {
-    display: flex;
-    block-size: #{token(height)};
-    overflow: hidden;
-    inline-size: 100%;
-    color: #{theme.variable(text-high)};
-    background: transparent;
-  }
-
-  &:has(input:disabled, textarea:disabled) {
-    @include core.disabled;
-  }
-
-  @include focus-indicator.keyframes;
-
-  &:has(input:focus, textarea:focus) {
-    outline: none;
-
-    &::after {
-      @include focus-indicator.tokens;
-      @include focus-indicator.base;
-      @include focus-indicator.outward;
-
-      content: '';
-      display: block;
-      border-radius: inherit;
-    }
-
-    @include focus-indicator.provide-theme(
-      (
-        color: #{theme.variable(primary)},
-        outward-offset: 0px
+@layer base {
+  .forge-field {
+    @include tokens(
+      $includes: (
+        shape,
+        outline-style,
+        outline-width,
+        height,
+        background,
+        padding-inline,
+        disabled-background,
+        disabled-opacity
       )
     );
   }
 
-  &__start,
-  &__end {
+  .forge-field {
+    position: relative;
+
     display: flex;
     align-items: center;
-    justify-content: center;
-  }
+    gap: #{spacing.variable(xsmall)};
 
-  &__start {
-    grid-column: 1;
-    padding-inline-start: #{spacing.variable(small)};
-  }
+    padding-inline: #{token(padding-inline)};
+    border-radius: #{token(shape)};
+    outline-style: #{token(outline-style)};
+    outline-width: #{token(outline-width)};
+    outline-color: #{theme.variable(outline-low)};
 
-  &__end {
-    grid-column: -1;
-    padding-inline-end: #{spacing.variable(small)};
-  }
+    background: #{token(background)};
 
-  &:has(.forge-field__start):not(:has(.forge-field__end)) {
-    grid-template-columns: auto 1fr;
-  }
-
-  &:has(.forge-field__end):not(:has(.forge-field__start)) {
-    grid-template-columns: 1fr auto;
-  }
-
-  &:has(.forge-field__start):has(.forge-field__end) {
-    grid-template-columns: auto 1fr auto;
-  }
-
-  &__label,
-  &__support-text {
     @include core.disableable;
-    @include core.label;
-  }
 
-  &__label {
-    padding-block-end: #{spacing.variable(xxsmall)};
-
-    &--invalid {
-      color: #{theme.variable(error)};
-    }
-  }
-
-  &--invalid {
-    outline-color: #{theme.variable(error)};
-
-    &:hover:not(:has(input:disabled, textarea:disabled)) {
-      outline-color: #{theme.variable(on-error-container)};
+    &:hover:not(:has(#{$_input-selector}:disabled)) {
+      outline-color: #{theme.variable(outline-high)};
     }
 
-    .forge-field {
-      &__start,
-      &__end {
-        color: #{theme.variable(on-error-container)};
+    #{$_input-selector} {
+      @include core.default-slot-content;
+
+      display: flex;
+
+      block-size: #{token(height)};
+      inline-size: 100%;
+
+      overflow: hidden;
+
+      color: #{theme.variable(text-high)};
+      background: transparent;
+      appearance: none;
+    }
+
+    //
+    // Focus indicator
+    //
+
+    @include focus-indicator.keyframes;
+
+    &:has(#{$_input-selector}:focus) {
+      outline: none;
+
+      &::after {
+        @include focus-indicator.tokens;
+        @include focus-indicator.base;
+        @include focus-indicator.outward;
+
+        content: '';
+
+        display: block;
+        border-radius: inherit;
+      }
+
+      @include focus-indicator.provide-theme(
+        (
+          color: #{theme.variable(primary)},
+          outward-offset: 0px
+        )
+      );
+    }
+  }
+}
+
+@layer textarea {
+  .forge-field {
+    &:has(textarea:only-child) {
+      padding-inline: 0;
+
+      textarea {
+        padding-inline: #{token(padding-inline)};
       }
     }
 
-    /* Use a complex selector to ensure the specificity is high enough to take effect. */
-    &.forge-field:has(input:focus, textarea:focus) {
-      @include focus-indicator.provide-theme(
-        (
-          color: #{theme.variable(error)}
-        )
-      );
+    &:has(textarea) {
+      align-items: start;
+      block-size: fit-content;
+
+      textarea {
+        @include core.multiline-slotted-input;
+
+        resize: vertical;
+        block-size: fit-content;
+      }
+
+      *:not(textarea) {
+        margin-block-start: #{spacing.variable(xsmall)};
+      }
+    }
+  }
+}
+
+@layer disabled {
+  .forge-field {
+    &:has(#{$_input-selector}:disabled) {
+      @include core.disabled;
+    }
+  }
+}
+
+@layer invalid {
+  .forge-field {
+    &--invalid,
+    &:has(#{$_input-selector}:invalid) {
+      outline-color: #{theme.variable(error)};
+
+      // TODO: enable after design review determines theme color and interaction
+      // &:hover:not(:has(#{$_input-selector}):disabled) {
+      //   outline-color: #{theme.variable(error-container-high)};
+      // }
+
+      :not(#{$_input-selector}) {
+        color: #{theme.variable(on-error-container)};
+      }
+
+      &.forge-field:has(#{$_input-selector}:focus) {
+        @include focus-indicator.provide-theme(
+          (
+            color: #{theme.variable(error)}
+          )
+        );
+      }
     }
   }
 }
