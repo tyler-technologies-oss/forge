@@ -1,7 +1,7 @@
 import '$src/shared';
 import '@tylertech/forge/radio';
 import '@tylertech/forge/label';
-import '@tylertech/forge/radio/radio/forge-radio.scss';
+import '@tylertech/forge/radio/forge-radio.scss';
 import './radio.scss';
 
 const form = document.getElementById('radio-form') as HTMLFormElement;

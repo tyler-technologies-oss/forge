@@ -1,6 +1,6 @@
-@use './core';
-@use '../../focus-indicator';
-@use '../../state-layer';
+@use './radio/core';
+@use '../focus-indicator';
+@use '../state-layer';
 
 .forge-radio {
   @include core.tokens;
