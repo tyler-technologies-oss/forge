@@ -64,8 +64,8 @@ declare global {
  * @attribute {string} [aria-label] - The aria-label to apply to the button.
  * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
  *
- * @event {CustomEvent} forge-profile-card-sign-out - Fires when the sign out button is clicked.
- * @event {CustomEvent} forge-profile-card-profile - Fires when the profile button is clicked.
+ * @event {CustomEvent<void>} forge-profile-card-sign-out - Fires when the sign out button is clicked.
+ * @event {CustomEvent<void>} forge-profile-card-profile - Fires when the profile button is clicked.
  */
 @customElement({
   name: APP_BAR_PROFILE_BUTTON_CONSTANTS.elementName,

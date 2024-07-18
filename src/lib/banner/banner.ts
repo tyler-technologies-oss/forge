@@ -43,8 +43,8 @@ declare global {
  * @attribute {boolean} [persistent=false] - Controls the visibility of the built-in dismiss button.
  * @attribute {BannerTheme} [theme="info"] - The theme of the banner.
  *
- * @event {CustomEvent} forge-banner-before-dismiss - Dispatched before the banner is dismissed. Cancelable to prevent dismissal.
- * @event {CustomEvent} forge-banner-dismissed - Dispatched when the banner is dismissed.
+ * @event {CustomEvent<void>} forge-banner-before-dismiss - Dispatched before the banner is dismissed. Cancelable to prevent dismissal.
+ * @event {CustomEvent<void>} forge-banner-dismissed - Dispatched when the banner is dismissed.
  *
  * @cssproperty --forge-banner-background - The background color of the banner.
  * @cssproperty --forge-banner-color - The text color of the banner.

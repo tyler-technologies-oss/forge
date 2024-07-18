@@ -22,6 +22,12 @@
       },
       "extends": ["plugin:@tylertech-eslint/recommended", "plugin:prettier/recommended"],
       "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "endOfLine": "auto"
+          }
+        ],
         "@typescript-eslint/indent": "off",
         "@typescript-eslint/no-empty-interface": ["error", { "allowSingleExtends": true }],
         "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],

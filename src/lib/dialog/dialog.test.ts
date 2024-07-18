@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { sendKeys, sendMouse } from '@web/test-runner-commands';
+import { sendKeys, sendMouse, setViewport } from '@web/test-runner-commands';
 import { getShadowElement } from '@tylertech/forge-core';
 import { IDialogComponent } from './dialog';
 import {
@@ -37,6 +37,7 @@ describe('Dialog', () => {
       expect(harness.dialogElement.preset).to.equal(DIALOG_CONSTANTS.defaults.PRESET);
       expect(harness.dialogElement.persistent).to.be.false;
       expect(harness.dialogElement.fullscreen).to.be.false;
+      expect(harness.dialogElement.fullscreenThreshold).to.equal(DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD);
       expect(harness.dialogElement.positionStrategy).to.equal(DIALOG_CONSTANTS.defaults.POSITION_STRATEGY);
       expect(harness.dialogElement.sizeStrategy).to.equal(DIALOG_CONSTANTS.defaults.SIZE_STRATEGY);
       expect(harness.dialogElement.placement).to.equal(DIALOG_CONSTANTS.defaults.PLACEMENT);
@@ -205,6 +206,36 @@ describe('Dialog', () => {
       harness.dialogElement.setAttribute(DIALOG_CONSTANTS.attributes.FULLSCREEN, '');
 
       expect(harness.dialogElement.fullscreen).to.be.true;
+    });
+
+    it('should set fullscreen threshold by default', async () => {
+      const harness = await createFixture({ fullscreenThreshold: 800 });
+
+      expect(harness.dialogElement.fullscreenThreshold).to.equal(800);
+    });
+
+    it('should set fullscreen threshold via property', async () => {
+      const harness = await createFixture();
+
+      harness.dialogElement.fullscreenThreshold = 800;
+
+      expect(harness.dialogElement.fullscreenThreshold).to.equal(800);
+    });
+
+    it('should set fullscreen threshold via attribute', async () => {
+      const harness = await createFixture();
+
+      harness.dialogElement.setAttribute(DIALOG_CONSTANTS.attributes.FULLSCREEN_THRESHOLD, '800');
+
+      expect(harness.dialogElement.fullscreenThreshold).to.equal(800);
+    });
+
+    it('should set to default fullscreen threshold if attribute is removed', async () => {
+      const harness = await createFixture({ fullscreenThreshold: 800 });
+
+      harness.dialogElement.removeAttribute(DIALOG_CONSTANTS.attributes.FULLSCREEN_THRESHOLD);
+
+      expect(harness.dialogElement.fullscreenThreshold).to.equal(DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD);
     });
 
     it('should set position strategy by default', async () => {
@@ -819,6 +850,114 @@ describe('Dialog', () => {
       expect(harness.surfaceElement.getBoundingClientRect().y).to.equal(origY);
     });
   });
+
+  describe('fullscreen', () => {
+    it('should set fullscreen when opened if threshold is already reached', async () => {
+      const harness = await createFixture();
+
+      await setViewport({ width: DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD - 1, height: 1000 });
+      await harness.showAsync();
+
+      expect(harness.dialogElement.fullscreen).to.be.true;
+    });
+
+    it('should set full screen when threshold is reached', async () => {
+      const harness = await createFixture({ open: true });
+
+      await setViewport({ width: DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD - 1, height: 1000 });
+
+      expect(harness.dialogElement.fullscreen).to.be.true;
+    });
+
+    it('should unset full screen when threshold is no longer reached', async () => {
+      const harness = await createFixture();
+
+      await setViewport({ width: DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD - 1, height: 1000 });
+
+      await harness.showAsync();
+
+      expect(harness.dialogElement.fullscreen).to.be.true;
+
+      await setViewport({ width: DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD + 1, height: 1000 });
+
+      expect(harness.dialogElement.fullscreen).to.be.false;
+    });
+
+    it('should fire fullscreen-change event when fullscreen threshold changes', async () => {
+      const harness = await createFixture({ open: true });
+
+      expect(harness.dialogElement.fullscreen).to.be.false;
+
+      const fullscreenChangeSpy = spy();
+      harness.dialogElement.addEventListener(DIALOG_CONSTANTS.events.FULLSCREEN_CHANGE, fullscreenChangeSpy);
+
+      await setViewport({ width: DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD - 1, height: 1000 });
+      await elementUpdated(harness.dialogElement);
+
+      expect(harness.dialogElement.fullscreen).to.be.true;
+      expect(fullscreenChangeSpy).to.have.been.calledOnce;
+      expect(fullscreenChangeSpy).to.have.been.calledWithMatch({ detail: true });
+
+      await setViewport({ width: DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD + 1, height: 1000 });
+      await elementUpdated(harness.dialogElement);
+
+      expect(harness.dialogElement.fullscreen).to.be.false;
+      expect(fullscreenChangeSpy).to.have.been.calledTwice;
+      expect(fullscreenChangeSpy).to.have.been.calledWithMatch({ detail: false });
+    });
+
+    it('should not fire fullscreen-change event when fullscreen property is set already when opened', async () => {
+      const harness = await createFixture({ fullscreen: true });
+
+      const fullscreenChangeSpy = spy();
+      harness.dialogElement.addEventListener(DIALOG_CONSTANTS.events.FULLSCREEN_CHANGE, fullscreenChangeSpy);
+
+      await setViewport({ width: DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD - 1, height: 1000 });
+
+      await harness.showAsync();
+
+      expect(harness.dialogElement.fullscreen).to.be.true;
+      expect(fullscreenChangeSpy).to.not.have.been.called;
+    });
+
+    it('should not listen for fullscreen change if threshold is set to 0', async () => {
+      const harness = await createFixture({ fullscreenThreshold: 0 });
+
+      await harness.showAsync();
+
+      const fullscreenChangeSpy = spy();
+      harness.dialogElement.addEventListener(DIALOG_CONSTANTS.events.FULLSCREEN_CHANGE, fullscreenChangeSpy);
+
+      expect(harness.dialogElement.fullscreen).to.be.false;
+
+      await setViewport({ width: DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD - 1, height: 1000 });
+      await elementUpdated(harness.dialogElement);
+
+      expect(harness.dialogElement.fullscreen).to.be.false;
+      expect(fullscreenChangeSpy).to.not.have.been.called;
+
+      await setViewport({ width: DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD + 1, height: 1000 });
+      await elementUpdated(harness.dialogElement);
+
+      expect(harness.dialogElement.fullscreen).to.be.false;
+      expect(fullscreenChangeSpy).to.not.have.been.called;
+    });
+
+    it('should reset fullscreen value to original value dialog opened with if media query changes while open', async () => {
+      const harness = await createFixture();
+
+      expect(harness.dialogElement.fullscreen).to.be.false;
+
+      await harness.showAsync();
+      await setViewport({ width: DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD - 1, height: 1000 });
+
+      expect(harness.dialogElement.fullscreen).to.be.true;
+
+      await harness.hideAsync();
+
+      expect(harness.dialogElement.fullscreen).to.be.false;
+    });
+  });
 });
 
 class DialogHarness {
@@ -932,6 +1071,7 @@ interface IDialogFixtureConfig {
   preset?: DialogPreset;
   persistent?: boolean;
   fullscreen?: boolean;
+  fullscreenThreshold?: number;
   positionStrategy?: DialogPositionStrategy;
   sizeStrategy?: DialogSizeStrategy;
   placement?: DialogPlacement;
@@ -946,6 +1086,7 @@ async function createFixture({
   preset,
   persistent,
   fullscreen,
+  fullscreenThreshold,
   positionStrategy,
   sizeStrategy,
   placement,
@@ -966,6 +1107,7 @@ async function createFixture({
         preset=${preset ?? nothing}
         ?persistent=${persistent}
         ?fullscreen=${fullscreen}
+        fullscreen-threshold=${fullscreenThreshold ?? nothing}
         position-strategy=${positionStrategy ?? nothing}
         size-strategy=${sizeStrategy ?? nothing}
         placement=${placement ?? nothing}
