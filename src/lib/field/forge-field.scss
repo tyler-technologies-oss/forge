@@ -1,0 +1,153 @@
+@use './core';
+@use './token-utils' as *;
+@use '../core/styles/theme';
+@use '../core/styles/spacing';
+@use '../focus-indicator';
+
+$_input-selector: ':where(input, textarea, select, .forge-field__input)';
+
+@layer base, textarea, invalid, disabled;
+
+@layer base {
+  .forge-field {
+    @include tokens(
+      $includes: (
+        shape,
+        outline-style,
+        outline-width,
+        height,
+        background,
+        padding-inline,
+        disabled-background,
+        disabled-opacity
+      )
+    );
+  }
+
+  .forge-field {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: #{spacing.variable(xsmall)};
+
+    padding-inline: #{token(padding-inline)};
+    border-radius: #{token(shape)};
+    outline-style: #{token(outline-style)};
+    outline-width: #{token(outline-width)};
+    outline-color: #{theme.variable(outline-low)};
+
+    background: #{token(background)};
+
+    @include core.disableable;
+
+    &:hover:not(:has(#{$_input-selector}:disabled)) {
+      outline-color: #{theme.variable(outline-high)};
+    }
+
+    #{$_input-selector} {
+      @include core.default-slot-content;
+
+      display: flex;
+
+      block-size: #{token(height)};
+      inline-size: 100%;
+
+      overflow: hidden;
+
+      color: #{theme.variable(text-high)};
+      background: transparent;
+      appearance: none;
+    }
+
+    //
+    // Focus indicator
+    //
+
+    @include focus-indicator.keyframes;
+
+    &:has(#{$_input-selector}:focus) {
+      outline: none;
+
+      &::after {
+        @include focus-indicator.tokens;
+        @include focus-indicator.base;
+        @include focus-indicator.outward;
+
+        content: '';
+
+        display: block;
+        border-radius: inherit;
+      }
+
+      @include focus-indicator.provide-theme(
+        (
+          color: #{theme.variable(primary)},
+          outward-offset: 0px
+        )
+      );
+    }
+  }
+}
+
+@layer textarea {
+  .forge-field {
+    &:has(textarea:only-child) {
+      padding-inline: 0;
+
+      textarea {
+        padding-inline: #{token(padding-inline)};
+      }
+    }
+
+    &:has(textarea) {
+      align-items: start;
+      block-size: fit-content;
+
+      textarea {
+        @include core.multiline-slotted-input;
+
+        resize: vertical;
+        block-size: fit-content;
+      }
+
+      *:not(textarea) {
+        margin-block-start: #{spacing.variable(xsmall)};
+      }
+    }
+  }
+}
+
+@layer disabled {
+  .forge-field {
+    &:has(#{$_input-selector}:disabled) {
+      @include core.disabled;
+    }
+  }
+}
+
+@layer invalid {
+  .forge-field {
+    &--invalid,
+    &:has(#{$_input-selector}:invalid) {
+      outline-color: #{theme.variable(error)};
+
+      // TODO: enable after design review determines theme color and interaction
+      // &:hover:not(:has(#{$_input-selector}):disabled) {
+      //   outline-color: #{theme.variable(error-container-high)};
+      // }
+
+      :not(#{$_input-selector}) {
+        color: #{theme.variable(on-error-container)};
+      }
+
+      &.forge-field:has(#{$_input-selector}:focus) {
+        @include focus-indicator.provide-theme(
+          (
+            color: #{theme.variable(error)}
+          )
+        );
+      }
+    }
+  }
+}

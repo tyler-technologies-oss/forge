@@ -1,0 +1,28 @@
+@use './core';
+
+.forge-inline-message {
+  @include core.tokens;
+}
+
+.forge-inline-message {
+  @include core.host;
+  @include core.base;
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+
+  &:not(:has(.forge-inline-message__icon)) {
+    grid-template-columns: 1fr;
+  }
+
+  &__title {
+    @include core.title;
+  }
+
+  &__icon {
+    @include core.icon;
+
+    grid-row: 1 / span 2;
+  }
+}

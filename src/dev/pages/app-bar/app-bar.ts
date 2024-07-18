@@ -1,5 +1,6 @@
 import '$src/shared';
 import './app-bar.scss';
+import '@tylertech/forge/app-bar/forge-app-bar.scss';
 
 // Components
 import '@tylertech/forge/app-bar';

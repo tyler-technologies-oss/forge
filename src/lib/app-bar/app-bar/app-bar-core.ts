@@ -46,7 +46,8 @@ export class AppBarCore implements IAppBarCore {
     if (this._titleText !== value) {
       this._titleText = value ?? '';
       this._adapter.setTitleText(this._titleText);
-      this._adapter.setHostAttribute(APP_BAR_CONSTANTS.attributes.TITLE_TEXT, value);
+      const hasTitleText = !!this._titleText?.trim().length;
+      this._adapter.toggleHostAttribute(APP_BAR_CONSTANTS.attributes.TITLE_TEXT, hasTitleText, value);
     }
   }
 

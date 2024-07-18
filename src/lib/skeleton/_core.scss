@@ -33,7 +33,7 @@
   background-repeat: no-repeat;
   background-image: linear-gradient(90deg, transparent, #{token(gradient-color)}, transparent);
 
-  animation: loading #{token(animation-duration)} ease-in infinite;
+  animation: forge-skeleton-loading #{token(animation-duration)} ease-in infinite;
 }
 
 @mixin avatar {

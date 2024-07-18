@@ -21,11 +21,20 @@ describe('App Bar', () => {
     await expect(el).to.be.accessible();
   });
 
+  it('should not have title element if no title text is set', async () => {
+    const el = await fixture<IAppBarComponent>(html`<forge-app-bar></forge-app-bar>`);
+
+    const titleEl = getTitleEl(el);
+    expect(el.titleText).to.equal('');
+    expect(titleEl).to.be.null;
+  });
+
   it('should set title', async () => {
     const el = await fixture<IAppBarComponent>(html`<forge-app-bar title-text="Test"></forge-app-bar>`);
 
     const titleEl = getTitleEl(el);
     expect(el.titleText).to.equal('Test');
+    expect(titleEl).to.be.ok;
     expect(titleEl.innerText).to.equal('Test');
   });
 
@@ -35,7 +44,7 @@ describe('App Bar', () => {
     const titleEl = getTitleEl(el);
 
     expect(el.titleText).to.equal('');
-    expect(titleEl.innerText).to.equal('');
+    expect(titleEl).to.be.null;
     await expect(el).to.be.accessible();
   });
 

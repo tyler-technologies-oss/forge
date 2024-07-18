@@ -1,6 +1,5 @@
 import '$src/shared';
 import '@tylertech/forge/stack';
-import '@tylertech/forge/stack/stack.scss';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { IStackComponent } from '@tylertech/forge/stack';
 import type { ISwitchComponent } from '@tylertech/forge/switch';

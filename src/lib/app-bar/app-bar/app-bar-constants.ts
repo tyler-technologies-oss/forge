@@ -16,12 +16,12 @@ const attributes = {
 
 const classes = {
   NO_CENTER: 'no-center',
-  LOGO_TITLE_CONTAINER: 'logo-title-container'
+  LOGO_TITLE_CONTAINER: 'logo-title-container',
+  TITLE: 'title'
 };
 
 const selectors = {
   ROOT: '.forge-app-bar',
-  TITLE: '.title',
   LOGO_TITLE_CONTAINER: '.logo-title-container',
   CENTER_SLOT: 'slot[name=center]',
   CENTER_SECTION: '#center-section'

@@ -1,0 +1,10 @@
+@use './core';
+
+.forge-divider {
+  @include core.tokens;
+}
+
+.forge-divider {
+  @include core.host;
+  @include core.base;
+}

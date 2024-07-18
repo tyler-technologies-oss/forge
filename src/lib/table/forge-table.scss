@@ -219,3 +219,7 @@ forge-table {
     }
   }
 }
+
+.forge-data-table {
+  @include forge-table;
+}
