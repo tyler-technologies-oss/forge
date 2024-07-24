@@ -56,13 +56,13 @@
     &#{$selector} {
       @include base;
 
-      @if $type== 'inward' {
+      @if $type == 'inward' {
         @include inward;
       } @else {
         @include outward;
       }
 
-      @if $selector== '::before' or $selector== '::after' {
+      @if $selector == '::before' or $selector == '::after' {
         content: '';
       }
 

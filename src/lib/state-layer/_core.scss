@@ -119,7 +119,7 @@
     @include hover-base;
     @include override(hover-duration, 100ms, value);
 
-    @if $selector== '::before' or $selector== '::after' {
+    @if $selector == '::before' or $selector == '::after' {
       content: '';
     }
 
