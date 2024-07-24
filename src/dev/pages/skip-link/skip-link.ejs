@@ -1,0 +1,16 @@
+<div class="skip-link-demo">
+  <section>
+    <h3>Default</h3>
+    <div tabindex="0">Tab past this</div>
+    <forge-skip-link id="skip-link" target="main"></forge-skip-link>
+    <div tabindex="-1" id="main" class="target-content">Main content</div>
+  </section>
+  <section>
+    <h3>CSS only</h3>
+    <div tabindex="0">Tab past this</div>
+    <a class="forge-skip-link" href="#main-css">Skip to content</a>
+    <div tabindex="-1" id="main-css" class="target-content">Main content</div>
+  </section>
+</div>
+
+<script type="module" src="skip-link.ts"></script>

@@ -110,3 +110,29 @@
   position: relative;
   overflow: hidden;
 }
+
+@mixin standalone($selector: '::before') {
+  @include tokens;
+
+  &#{$selector} {
+    @include layer-base;
+    @include hover-base;
+    @include override(hover-duration, 100ms, value);
+
+    @if $selector== '::before' or $selector== '::after' {
+      content: '';
+    }
+
+    opacity: 0;
+    border-radius: inherit;
+  }
+
+  &:hover#{$selector} {
+    @include hovered;
+  }
+
+  &:active#{$selector} {
+    @include pressed;
+    @include override(pressed-opacity, 0.18, value);
+  }
+}

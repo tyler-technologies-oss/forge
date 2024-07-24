@@ -42,3 +42,31 @@
   border: #{token(width)} solid currentColor;
   inset: #{token(inward-offset)};
 }
+
+@mixin standalone($type: 'outward', $selector: '::after', $pseudo-class: ':focus-visible', $focus-target: null) {
+  outline: none;
+
+  $conditional-selector: if($focus-target, ':has(#{$focus-target}#{$pseudo-class})', #{$pseudo-class});
+
+  &#{$conditional-selector} {
+    &#{$selector} {
+      @include tokens;
+    }
+
+    &#{$selector} {
+      @include base;
+
+      @if $type== 'inward' {
+        @include inward;
+      } @else {
+        @include outward;
+      }
+
+      @if $selector== '::before' or $selector== '::after' {
+        content: '';
+      }
+
+      display: block;
+    }
+  }
+}

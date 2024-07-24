@@ -1,0 +1,60 @@
+@use './token-utils' as *;
+@use '../core/styles/theme';
+@use '../core/styles/typography';
+
+@forward './token-utils';
+
+@mixin host {
+  @include transition;
+
+  display: block;
+  position: fixed;
+  inset: #{token(inset)};
+  z-index: #{token(z-index)};
+
+  block-size: fit-content;
+  inline-size: fit-content;
+
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+@mixin base {
+  @include typography.style(body2);
+
+  display: block;
+
+  outline: none;
+  box-shadow: #{token(elevation)};
+  border-radius: #{token(shape)};
+  background: #{token(background)};
+  padding-block: #{token(padding-block)};
+  padding-inline: #{token(padding-inline)};
+  cursor: pointer;
+
+  color: #{token(color)};
+  text-decoration: underline;
+}
+
+@mixin focused {
+  @include transition;
+
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@mixin theme($theme, $muted: false) {
+  @if $muted {
+    @include override(background, theme.variable(#{$theme}-container-high), value);
+    @include override(color, theme.variable(on-#{$theme}-container-high), value);
+  } @else {
+    @include override(background, theme.variable($theme), value);
+    @include override(color, theme.variable(on-#{$theme}), value);
+  }
+}
+
+@mixin transition {
+  transition-property: opacity, transform;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing-function)};
+}
