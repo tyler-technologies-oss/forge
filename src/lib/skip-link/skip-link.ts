@@ -27,15 +27,33 @@ declare global {
  *
  * @summary The Forge Skip Link component is used to provide a way for users to skip repetitive content and navigate directly to a section of the page.
  *
- * @prop {string} [target] - The IDREF of the element to which the skip link should navigate.
- * @property {SkipLinkTheme} [theme] - The theme applied to the skip link.
+ * @prop {string} [target=''] - The IDREF of the element to which the skip link should navigate.
+ * @property {SkipLinkTheme} [theme='default'] - The theme applied to the skip link.
  * @property {boolean} [muted=false] - Whether or not the skip link uses a muted color scheme.
  * @property {boolean} [persistent=false] - Whether or not the skip link should remain visible when not focused.
  *
- * @attribute {string} [target] - The IDREF of the element to which the skip link should navigate.
- * @attribute {SkipLinkTheme} [theme] - The theme applied to the skip link.
+ * @attribute {string} [target=''] - The IDREF of the element to which the skip link should navigate.
+ * @attribute {SkipLinkTheme} [theme='default'] - The theme applied to the skip link.
  * @attribute {boolean} [muted=false] - Whether or not the skip link uses a muted color scheme.
  * @attribute {boolean} [persistent=false] - Whether or not the skip link should remain visible when not focused.
+ *
+ * @cssproperty --forge-skip-link-background - The background color of the skip link.
+ * @cssproperty --forge-skip-link-color - The text color of the skip link.
+ * @cssproperty --forge-skip-link-shape - The border radius of the skip link.
+ * @cssproperty --forge-skip-link-inset - The skip link's inset from the edge of the viewport.
+ * @cssproperty --forge-skip-link-z-index - The z-index of the skip link.
+ * @cssproperty --forge-skip-link-elevation - The box shadow of the skip link.
+ * @cssproperty --forge-skip-link-padding-block - The interior padding of the skip link along the block axis.
+ * @cssproperty --forge-skip-link-padding-inline - The interior padding of the skip link along the inline axis.
+ * @cssproperty --forge-skip-link-focus-indicator-color - The color of the focus indicator.
+ * @cssproperty --forge-skip-link-transition-duration - The duration of the skip link's animations.
+ * @cssproperty --forge-skip-link-transition-timing-function - The timing function of the skip link's animations.
+ *
+ * @csspart root - The root anchor element.
+ * @csspart focus-indicator - The focus indicator element.
+ * @csspart state-layer - The state layer element.
+ *
+ * @slot - The default/unnamed slot for link text.
  */
 @customElement({
   name: SKIP_LINK_CONSTANTS.elementName,

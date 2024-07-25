@@ -1,0 +1,29 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as SkipLinkStories from './SkipLink.stories';
+
+<Meta of={SkipLinkStories} />
+
+<Title />
+
+Skip links are used at the beginning of a page to allow users to skip over repetitive content.
+
+<Canvas of={SkipLinkStories.Demo} />
+
+## Accessibility
+
+Always include the skip link as the as the first element under the `<body>` and not anywhere else on the page. Any page with
+content, navigation or otherwise, that repeats across the start of multiple pages should include a skip link. You may use more
+than one to link to multiple areas of the page, but be judicious because too many skip links can become frustrating to navigate
+in themselves. Remember, users of assistive technology have their own methods to navigate between landmarks on a page and may not
+appreciate the extra "help."
+
+The target element should always have `tabindex="-1"` set as an attribute if it is not otherwise focusable. This allows the
+browser to focus it after navigation without including it in the tab order.
+
+> In Safari, the skip link component does not behave the same as in other browsers because anchor links are never included in the
+> tab order. Screen reader users can still perceive the skip link and use it to navigate the page.
+
+## API
+
+<CustomArgTypes />
