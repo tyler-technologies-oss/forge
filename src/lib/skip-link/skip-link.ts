@@ -1,10 +1,8 @@
-import { attachShadowTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, getShadowElement } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core';
 import { FocusIndicatorComponent } from '../focus-indicator';
 import { StateLayerComponent } from '../state-layer';
-import { SkipLinkAdapter } from './skip-link-adapter';
 import { SKIP_LINK_CONSTANTS, SkipLinkTheme } from './skip-link-constants';
-import { SkipLinkCore } from './skip-link-core';
 
 import template from './skip-link.html';
 import style from './skip-link.scss';
@@ -27,7 +25,7 @@ declare global {
  *
  * @summary The Forge Skip Link component is used to provide a way for users to skip repetitive content and navigate directly to a section of the page.
  *
- * @prop {string} [target=''] - The IDREF of the element to which the skip link should navigate.
+ * @property {string} [target=''] - The IDREF of the element to which the skip link should navigate.
  * @property {SkipLinkTheme} [theme='default'] - The theme applied to the skip link.
  * @property {boolean} [muted=false] - Whether or not the skip link uses a muted color scheme.
  * @property {boolean} [persistent=false] - Whether or not the skip link should remain visible when not focused.
@@ -49,11 +47,14 @@ declare global {
  * @cssproperty --forge-skip-link-transition-duration - The duration of the skip link's animations.
  * @cssproperty --forge-skip-link-transition-timing-function - The timing function of the skip link's animations.
  *
- * @csspart root - The root anchor element.
+ * @csspart anchor - The root anchor element.
  * @csspart focus-indicator - The focus indicator element.
  * @csspart state-layer - The state layer element.
  *
  * @slot - The default/unnamed slot for link text.
+ *
+ * @dependency forge-focus-indicator
+ * @dependency forge-state-layer
  */
 @customElement({
   name: SKIP_LINK_CONSTANTS.elementName,
@@ -64,12 +65,16 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
     return Object.values(SKIP_LINK_CONSTANTS.observedAttributes);
   }
 
-  private _core: SkipLinkCore;
+  private _target = '';
+  private _theme: SkipLinkTheme = 'default';
+  private _muted = false;
+  private _persistent = false;
+  private _anchorElement: HTMLAnchorElement;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, style);
-    this._core = new SkipLinkCore(new SkipLinkAdapter(this));
+    this._anchorElement = getShadowElement(this, SKIP_LINK_CONSTANTS.selectors.ANCHOR) as HTMLAnchorElement;
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -89,15 +94,45 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
     }
   }
 
-  @coreProperty()
-  public declare target: string;
+  public get target(): string {
+    return this._target;
+  }
+  public set target(value: string) {
+    if (this._target !== value) {
+      this._target = value;
+      this.setAttribute(SKIP_LINK_CONSTANTS.attributes.TARGET, this._target);
 
-  @coreProperty()
-  public declare theme: SkipLinkTheme;
+      this._anchorElement.href = `#${this._target}`;
+    }
+  }
 
-  @coreProperty()
-  public declare muted: boolean;
+  public get theme(): SkipLinkTheme {
+    return this._theme;
+  }
+  public set theme(value: SkipLinkTheme) {
+    if (this._theme !== value) {
+      this._theme = value;
+      this.setAttribute(SKIP_LINK_CONSTANTS.attributes.THEME, this._theme);
+    }
+  }
 
-  @coreProperty()
-  public declare persistent: boolean;
+  public get muted(): boolean {
+    return this._muted;
+  }
+  public set muted(value: boolean) {
+    if (this._muted !== value) {
+      this._muted = value;
+      this.toggleAttribute(SKIP_LINK_CONSTANTS.attributes.MUTED, this._muted);
+    }
+  }
+
+  public get persistent(): boolean {
+    return this._persistent;
+  }
+  public set persistent(value: boolean) {
+    if (this._persistent !== value) {
+      this._persistent = value;
+      this.toggleAttribute(SKIP_LINK_CONSTANTS.attributes.PERSISTENT, this._persistent);
+    }
+  }
 }
