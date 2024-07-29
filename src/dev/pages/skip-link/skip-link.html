@@ -1,0 +1,28 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Skip link',
+    includePath: './pages/skip-link/skip-link.ejs',
+    options: [
+      { type: 'switch', label: 'Persistent', id: 'opt-persistent' },
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'opt-theme',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default'},
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info', value: 'info' }
+        ]
+      },
+      { type: 'switch', label: 'Muted', id: 'opt-muted' }
+    ]
+  }
+})
+%>
