@@ -12,6 +12,11 @@
         "pattern": "./dist/cem/vscode.*.json",
         "root": "./dist/cem/",
         "output": "dist"
+      },
+      {
+        "pattern": "./dist/cem/react-types.d.ts",
+        "root": "./dist/cem/",
+        "output": "types"
       }
     ]
   },
