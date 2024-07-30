@@ -2,11 +2,10 @@
 @use '../focus-indicator';
 @use '../state-layer';
 
-/* stylelint-disable scss/operator-no-unspaced */
-$svg-styles: '<style>line, path { fill: none; stroke-width: 4px; stroke: rgb(255, 255, 255); }</style>';
-$checkmark-svg: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">#{$svg-styles}<path d="M1.73,12.91 8.1,19.28 22.79,4.59"></path></svg>');
-$mixedmark-svg: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">#{$svg-styles}<line x1="2" y1="12" x2="22" y2="12"></line></svg>');
-/* stylelint-enable scss/operator-no-unspaced */
+// Transforms a scalar coordinate value into a percentage of 24 as used by Tyler icons
+@function ctp($coord) {
+  @return calc(4.167% * $coord);
+}
 
 .forge-checkbox {
   @include core.tokens;
@@ -57,6 +56,17 @@ $mixedmark-svg: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" 
     }
   }
 
+  &__icon {
+    display: none;
+    grid-column: 1;
+    grid-row: 1;
+
+    block-size: calc(#{core.token(height)} - 2 * #{core.token(checked-border-width)});
+    inline-size: calc(#{core.token(width)} - 2 * #{core.token(checked-border-width)});
+    background-color: #{core.token(icon-checked-color)};
+    pointer-events: none;
+  }
+
   &::before {
     @include core.background;
 
@@ -72,16 +82,29 @@ $mixedmark-svg: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" 
   &:has(input[type='checkbox']:checked) {
     &::before {
       @include core.background-checked;
+    }
 
-      content: #{$checkmark-svg};
+    .forge-checkbox__icon {
+      display: block;
+      clip-path: polygon(
+        ctp(3.144) ctp(11.496),
+        ctp(0.316) ctp(14.324),
+        ctp(8.1) ctp(22.28),
+        ctp(24.204) ctp(6.004),
+        ctp(21.376) ctp(3.176),
+        ctp(8.1) ctp(16.4)
+      );
     }
   }
 
   &:has(input[type='checkbox']:indeterminate) {
     &::before {
       @include core.background-checked;
+    }
 
-      content: #{$mixedmark-svg};
+    .forge-checkbox__icon {
+      display: block;
+      clip-path: polygon(ctp(2) ctp(10), ctp(2) ctp(14), ctp(22) ctp(14), ctp(22) ctp(10));
     }
   }
 
