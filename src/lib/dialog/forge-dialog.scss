@@ -1,0 +1,216 @@
+@use './core';
+@use './animations';
+@use '../backdrop';
+@use '../core/styles/theme';
+
+@mixin animation-fade {
+  &.forge-dialog {
+    transition-property: display, opacity, overlay;
+
+    &[open] {
+      @starting-style {
+        opacity: #{core.token(fade-opacity)};
+      }
+    }
+
+    &:not([open]) {
+      opacity: #{core.token(fade-opacity)};
+      scale: 1;
+    }
+  }
+}
+
+@mixin animation-slide {
+  &.forge-dialog {
+    transition-property: display, opacity, overlay, translate;
+
+    &[open] {
+      translate: 0 0;
+
+      @starting-style {
+        opacity: #{core.token(slide-opacity)};
+        translate: #{core.token(slide-translate)};
+      }
+    }
+
+    &:not([open]) {
+      opacity: #{core.token(slide-opacity)};
+      scale: 1;
+      translate: #{core.token(slide-translate)};
+    }
+  }
+}
+
+@mixin animation-none {
+  @include core.override(enter-animation-duration, 0s, value);
+  @include core.override(exit-animation-duration, 0s, value);
+  @include backdrop.override(enter-animation-duration, 0s, value);
+  @include backdrop.override(exit-animation-duration, 0s, value);
+}
+
+.forge-dialog {
+  @include core.tokens;
+  @include backdrop.tokens;
+  @include theme.provide(
+    (
+      surface: theme.variable(surface-bright)
+    )
+  );
+}
+
+.forge-dialog {
+  @include core.dialog-base;
+  @include core.surface;
+  @include core.exit;
+
+  transition-property: display, opacity, overlay, scale;
+  transition-behavior: allow-discrete;
+
+  &--fullscreen {
+    @include core.fullscreen-dialog-base;
+    @include core.fullscreen-surface;
+  }
+
+  &--non-modal {
+    @include core.nonmodal-surface;
+  }
+
+  // Moveable
+
+  &--moveable {
+    @include core.surface-moveable;
+  }
+
+  &--moved {
+    @include core.surface-moved;
+  }
+
+  &--moving {
+    @include core.surface-moving;
+  }
+
+  &__move-handle {
+    @include core.move-handle;
+
+    &-container {
+      @include core.move-handle-container;
+    }
+  }
+
+  // Placement
+
+  @each $placement in 'top', 'top-right', 'top-left', 'bottom', 'bottom-right', 'bottom-left', 'right', 'left', 'custom' {
+    &--#{$placement} {
+      @include core.placement($placement);
+    }
+  }
+
+  // Presets
+
+  &--bottom-sheet {
+    @include core.preset-sheet-dialog-base;
+    @include core.preset-sheet-surface-base;
+    @include core.preset-bottom-sheet-surface;
+    @include core.override(slide-translate, 0 100%, value);
+    @include animation-slide;
+  }
+
+  &--left-sheet {
+    @include core.preset-sheet-dialog-base;
+    @include core.preset-sheet-surface-base;
+    @include core.preset-left-sheet-surface;
+    @include core.override(slide-translate, -100% 0, value);
+    @include animation-slide;
+  }
+
+  &--right-sheet {
+    @include core.preset-sheet-dialog-base;
+    @include core.preset-sheet-surface-base;
+    @include core.preset-right-sheet-surface;
+    @include core.override(slide-translate, 100% 0, value);
+    @include animation-slide;
+  }
+
+  &--top-sheet {
+    @include core.preset-sheet-dialog-base;
+    @include core.preset-sheet-surface-base;
+    @include core.preset-top-sheet-surface;
+    @include core.override(slide-translate, 0 -100%, value);
+    @include animation-slide;
+  }
+
+  // Backdrop & animation
+
+  &::backdrop {
+    @include backdrop.provide-theme(
+      (
+        opacity: #{backdrop.token(opacity)},
+        enter-animation-duration: #{backdrop.token(enter-animation-duration)},
+        enter-animation-easing: #{backdrop.token(enter-animation-easing)},
+        exit-animation-duration: #{backdrop.token(exit-animation-duration)},
+        exit-animation-easing: #{backdrop.token(exit-animation-easing)}
+      )
+    );
+    @include backdrop.base;
+
+    transition-property: display, opacity, overlay;
+  }
+
+  &[open] {
+    opacity: 1;
+    scale: 1;
+
+    transition-duration: #{core.token(enter-animation-duration)};
+    transition-timing-function: #{core.token(enter-animation-easing)};
+
+    @starting-style {
+      opacity: #{core.token(zoom-opacity)};
+      scale: #{core.token(zoom-scale)};
+    }
+
+    &::backdrop {
+      @include backdrop.visible;
+
+      transition-duration: #{backdrop.token(enter-animation-duration)};
+      transition-timing-function: #{backdrop.token(enter-animation-easing)};
+
+      @starting-style {
+        opacity: 0;
+      }
+    }
+  }
+
+  &:not([open]) {
+    @include core.enter;
+
+    display: none;
+    opacity: #{core.token(zoom-opacity)};
+    scale: #{core.token(zoom-scale)};
+
+    transition-duration: #{core.token(exit-animation-duration)};
+    transition-timing-function: #{core.token(exit-animation-easing)};
+
+    &::backdrop {
+      transition-duration: #{backdrop.token(exit-animation-duration)};
+      transition-timing-function: #{backdrop.token(exit-animation-easing)};
+    }
+  }
+
+  &--animation {
+    &-fade {
+      @include animation-fade;
+    }
+
+    &-slide {
+      @include animation-slide;
+    }
+
+    &-none {
+      @include animation-none;
+    }
+  }
+
+  @media (prefers-reduced-motion) {
+    @include animation-fade;
+  }
+}

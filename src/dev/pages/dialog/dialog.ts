@@ -3,6 +3,7 @@ import '@tylertech/forge/dialog';
 import '@tylertech/forge/toolbar';
 import '@tylertech/forge/scaffold';
 import '@tylertech/forge/button';
+import '@tylertech/forge/dialog/forge-dialog.scss';
 import './dialog.scss';
 import { tylIconClose } from '@tylertech/tyler-icons/standard';
 import { IDialogComponent, IDialogMoveEventData } from '@tylertech/forge/dialog';
@@ -16,6 +17,8 @@ IconRegistry.define([
 
 const dialogTemplate = document.getElementById('forge-dialog-template') as HTMLTemplateElement;
 const preventCloseToggle = document.getElementById('opt-prevent-close') as ISwitchComponent;
+
+const cssDialog = document.getElementById('css-only-dialog') as HTMLDialogElement;
 
 const inlineDialog = document.getElementById('inline-dialog') as IDialogComponent;
 inlineDialog.addEventListener('forge-dialog-before-close', evt => {
@@ -57,33 +60,49 @@ closeButton.addEventListener('click', () => inlineDialog.hide());
 const typeSelect = document.getElementById('opt-type') as ISelectComponent;
 typeSelect.addEventListener('change', ({ detail: selected }) => {
   inlineDialog.type = selected;
+  cssDialog.role = selected;
 });
 
 const modeSelect = document.getElementById('opt-mode') as ISelectComponent;
 modeSelect.addEventListener('change', ({ detail: selected }) => {
   inlineDialog.mode = selected;
+  cssDialog.classList.toggle('forge-dialog--non-modal', selected === 'nonmodal');
 });
 
 const animationTypeSelect = document.getElementById('opt-animation-type') as ISelectComponent;
 animationTypeSelect.addEventListener('change', ({ detail: selected }) => {
   inlineDialog.animationType = selected;
+  cssDialog.classList.remove('forge-dialog--animation-fade', 'forge-dialog--animation-none', 'forge-dialog--animation-slide');
+  if (selected !== 'zoom') {
+    cssDialog.classList.add(`forge-dialog--animation-${selected}`);
+  }
 });
 
 const presetSelect = document.getElementById('opt-preset') as ISelectComponent;
 presetSelect.addEventListener('change', ({ detail: selected }) => {
   inlineDialog.preset = selected;
+  cssDialog.classList.remove('forge-dialog--bottom-sheet', 'forge-dialog--left-sheet', 'forge-dialog--right-sheet', 'forge-dialog--top-sheet');
+  if (selected !== 'dialog') {
+    cssDialog.classList.add(`forge-dialog--${selected}`);
+  }
 });
 
 const placementSelect = document.getElementById('opt-placement') as ISelectComponent;
 placementSelect.addEventListener('change', ({ detail: selected }) => {
   inlineDialog.placement = selected;
+  cssDialog.classList.remove('forge-dialog--custom', 'forge-dialog--top-left', 'forge-dialog--top', 'forge-dialog--top-right', 'forge-dialog--center', 'forge-dialog--bottom-left', 'forge-dialog--bottom', 'forge-dialog--bottom-right');
+  cssDialog.classList.add(`forge-dialog--${selected}`);
 
   if (selected === 'custom') {
     inlineDialog.style.setProperty('--forge-dialog-position-x', '100px');
     inlineDialog.style.setProperty('--forge-dialog-position-y', '100px');
+    cssDialog.style.setProperty('--forge-dialog-position-x', '100px');
+    cssDialog.style.setProperty('--forge-dialog-position-y', '100px');
   } else {
     inlineDialog.style.removeProperty('--forge-dialog-position-x');
     inlineDialog.style.removeProperty('--forge-dialog-position-y');
+    cssDialog.style.removeProperty('--forge-dialog-position-x');
+    cssDialog.style.removeProperty('--forge-dialog-position-y');
   }
 });
 
@@ -189,4 +208,18 @@ function openDynamicDialog(): void {
   // Shows the dialog by appending it to the body and toggling its open state
   document.body.appendChild(dialogElement);
   dialogElement.open = true;
+}
+
+const cssDialogButton = document.getElementById('show-css-dialog-button');
+cssDialogButton.addEventListener('click', () => openCssOnlyDialog());
+
+function openCssOnlyDialog(): void {
+  if (cssDialog.classList.contains('forge-dialog--non-modal')) {
+    cssDialog.show();
+  } else {
+    cssDialog.showModal();
+  }
+  cssDialog.querySelector('#close-button').addEventListener('click', () => cssDialog.close(), { once: true });
+  cssDialog.querySelector('#cancel-button').addEventListener('click', () => cssDialog.close(), { once: true });
+  cssDialog.querySelector('#save-button').addEventListener('click', () => cssDialog.close(), { once: true });
 }

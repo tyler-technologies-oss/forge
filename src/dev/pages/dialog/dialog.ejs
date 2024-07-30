@@ -1,6 +1,7 @@
 <div class="flex">
   <forge-button variant="raised" id="show-inline-dialog-button">Show inline dialog</forge-button>
   <forge-button variant="raised" id="show-dynamic-dialog-button">Show dynamic dialog</forge-button>
+  <forge-button variant="raised" id="show-css-dialog-button">Show CSS-only dialog</forge-button>
 </div>
 
 <forge-dialog trigger="show-inline-dialog-button" id="inline-dialog" class="dialog" aria-labelledby="dialog-title" aria-describedby="dialog-desc">
@@ -10,5 +11,9 @@
 <template id="forge-dialog-template">
   <%- include('./dialog-template-basic.ejs') %>
 </template>
+
+<dialog class="forge-dialog" id="css-only-dialog">
+  <%- include('./dialog-template-basic.ejs') %>
+</dialog>
 
 <script type="module" src="dialog.ts"></script>
