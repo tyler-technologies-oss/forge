@@ -101,7 +101,10 @@
       content: '';
 
       translate: -100% 0;
-      transition: translate #{core.token(animation-duration)} #{core.token(icon-animation-timing)};
+      transition-property: translate;
+      transition-duration: #{core.token(animation-duration)};
+      transition-timing-function: #{core.token(icon-animation-timing)};
+      transition-delay: #{core.token(animation-duration)};
     }
   }
 
