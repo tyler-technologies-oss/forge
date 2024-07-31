@@ -7,6 +7,24 @@
   @return calc(4.167% * $coord);
 }
 
+@mixin icon-background-checked {
+  &::before {
+    translate: 0;
+
+    @starting-style {
+      translate: -100% 0;
+    }
+  }
+}
+
+@mixin custom-icon {
+  clip-path: none;
+
+  &::before {
+    content: none;
+  }
+}
+
 .forge-checkbox {
   @include core.tokens;
 }
@@ -63,8 +81,28 @@
 
     block-size: calc(#{core.token(height)} - 2 * #{core.token(checked-border-width)});
     inline-size: calc(#{core.token(width)} - 2 * #{core.token(checked-border-width)});
-    background-color: #{core.token(icon-checked-color)};
     pointer-events: none;
+
+    &--checked {
+      background-color: none;
+    }
+
+    &--indeterminate {
+      background-color: none;
+    }
+
+    &::before {
+      display: block;
+
+      block-size: 100%;
+      inline-size: 100%;
+      background-color: #{core.token(icon-checked-color)};
+
+      content: '';
+
+      translate: -100% 0;
+      transition: translate #{core.token(animation-duration)} #{core.token(icon-animation-timing)};
+    }
   }
 
   &::before {
@@ -85,6 +123,8 @@
     }
 
     .forge-checkbox__icon {
+      @include icon-background-checked;
+
       display: block;
       clip-path: polygon(
         ctp(3.144) ctp(11.496),
@@ -94,6 +134,10 @@
         ctp(21.376) ctp(3.176),
         ctp(8.1) ctp(16.4)
       );
+
+      &--checked {
+        @include custom-icon;
+      }
     }
   }
 
@@ -103,8 +147,14 @@
     }
 
     .forge-checkbox__icon {
+      @include icon-background-checked;
+
       display: block;
       clip-path: polygon(ctp(2) ctp(10), ctp(2) ctp(14), ctp(22) ctp(14), ctp(22) ctp(10));
+
+      &--indeterminate {
+        @include custom-icon;
+      }
     }
   }
 
