@@ -1,0 +1,22 @@
+import { COMPONENT_NAME_PREFIX } from '../constants';
+
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}{{dashCase name}}`;
+
+const observedAttributes = {
+  
+};
+
+const attributes = {
+  ...observedAttributes
+};
+
+const selectors = {
+  ROOT: `.${elementName}`
+};
+
+export const {{constantCase name}}_CONSTANTS = {
+  elementName,
+  observedAttributes,
+  attributes,
+  selectors
+};

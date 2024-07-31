@@ -9,6 +9,7 @@
     "src/stories/**/*",
     "web-test-runner.*",
     "custom-elements-manifest.config.mjs",
+    "plopfile.mjs",
     "*.spec.ts",
     "*.test.ts"
   ],

@@ -1,0 +1,12 @@
+import { defineCustomElement } from '@tylertech/forge-core';
+
+import { {{pascalCase name}}Component } from './{{dashCase name}}';
+
+export * from './{{dashCase name}}-adapter';
+export * from './{{dashCase name}}-constants';
+export * from './{{dashCase name}}-core';
+export * from './{{dashCase name}}';
+
+export function define{{pascalCase name}}Component(): void {
+  defineCustomElement({{pascalCase name}}Component);
+}
