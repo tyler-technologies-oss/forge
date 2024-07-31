@@ -190,3 +190,11 @@ insetMultilineField.floatLabel = !!insetMultilineField.querySelector('textarea')
 fields.forEach(field => {
   field.addEventListener('forge-field-popover-icon-click', () => console.log('popover icon clicked'));
 });
+
+// CSS only examples
+
+const cssOnlyInsetInput = document.getElementById('my-css-only-input-inset') as HTMLInputElement;
+cssOnlyInsetInput.addEventListener('input', (event: InputEvent) => {
+  const field = cssOnlyInsetInput.parentElement;;
+  field.classList.toggle('forge-field--float-label', !!cssOnlyInsetInput.value);
+});

@@ -1,12 +1,16 @@
 @use './core';
 @use './token-utils' as *;
-@use '../core/styles/theme';
 @use '../core/styles/spacing';
+@use '../core/styles/theme';
+@use '../core/styles/typography';
 @use '../focus-indicator';
 
 $_input-selector: ':where(input, textarea, select, .forge-field__input)';
 
-@layer base, textarea, invalid, disabled;
+@layer base,
+textarea,
+invalid,
+disabled;
 
 @layer base {
   .forge-field {
@@ -58,6 +62,52 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
       color: #{theme.variable(text-high)};
       background: transparent;
       appearance: none;
+    }
+
+    //
+    // Inset label
+    //
+
+    &:has(label) {
+      @include core.floatable-label;
+
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0;
+
+      label {
+        position: absolute;
+        grid-column: 2;
+        pointer-events: none;
+
+        color: theme.variable(text-medium);
+      }
+
+      &.forge-field--float-label {
+        label {
+          @include core.floating-label;
+        }
+
+        #{$_input-selector} {
+          @include core.slotted-floating-input;
+        }
+      }
+
+      #{$_input-selector} {
+        grid-column: 2;
+
+        // Place everything after the input in the last column
+        ~ * {
+          grid-column: 3;
+          margin-inline-start: #{spacing.variable(xsmall)};
+        }
+      }
+
+      // Place everything before the input in the last column
+      > :not(#{$_input-selector} ~ *, #{$_input-selector}, label) {
+        grid-column: 1;
+        margin-inline-end: #{spacing.variable(xsmall)};
+      }
     }
 
     //
