@@ -84,7 +84,8 @@ disabled;
         color: theme.variable(text-medium);
       }
 
-      &.forge-field--float-label {
+      &.forge-field--float-label,
+      &:has(#{$_input-selector}:placeholder-shown) {
         label {
           @include core.floating-label;
         }
