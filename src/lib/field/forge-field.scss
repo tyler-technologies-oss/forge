@@ -20,6 +20,7 @@ disabled;
         outline-style,
         outline-width,
         height,
+        inset-height,
         background,
         padding-inline,
         disabled-background,
@@ -95,6 +96,7 @@ disabled;
 
       #{$_input-selector} {
         grid-column: 2;
+        block-size: #{token(inset-height)};
 
         // Place everything after the input in the last column
         ~ * {
