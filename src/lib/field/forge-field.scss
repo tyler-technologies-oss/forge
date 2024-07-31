@@ -106,7 +106,7 @@ disabled;
         }
       }
 
-      // Place everything before the input in the last column
+      // Place everything before the input in the first column
       > :not(#{$_input-selector} ~ *, #{$_input-selector}, label) {
         grid-column: 1;
         margin-inline-end: #{spacing.variable(xsmall)};
