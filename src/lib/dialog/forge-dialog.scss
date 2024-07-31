@@ -71,7 +71,7 @@
     @include core.fullscreen-surface;
   }
 
-  &--non-modal {
+  &:not(:modal) {
     @include core.nonmodal-surface;
   }
 
