@@ -35,7 +35,9 @@
     "cem": "custom-elements-manifest analyze --config custom-elements-manifest.config.mjs --outdir dist/cem",
     "postversion": "cd dist/release/@tylertech/forge && npm version $npm_package_version --no-git-tag-version --no-commit-hooks --ignore-scripts",
     "prettier": "prettier --write \"**/*.{ts,js,html,md,mdx,css,scss,yaml,json}\"",
-    "prettier:check": "prettier --check \"**/*.{ts,js,html,md,mdx,css,scss,yaml,json}\""
+    "prettier:check": "prettier --check \"**/*.{ts,js,html,md,mdx,css,scss,yaml,json}\"",
+    "generate:component": "plop component",
+    "generate:tokens": "plop tokens"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.6.5",
@@ -92,9 +94,11 @@
     "karma-fixture": "^0.2.6",
     "lint-staged": "^15.2.5",
     "lit": "^3.1.4",
+    "plop": "^4.0.1",
     "prettier": "3.3.1",
     "remark-gfm": "^4.0.0",
     "rollup-plugin-scss": "^4.0.0",
+    "sass": "1.77.6",
     "sinon": "^15.2.0",
     "storybook": "^8.1.7",
     "storybook-dark-mode": "^4.0.1",
@@ -107,7 +111,8 @@
     "vite-tsconfig-paths": "^4.3.2"
   },
   "overrides": {
-    "@typescript-eslint/typescript-estree": "^7.12.0"
+    "@typescript-eslint/typescript-estree": "^7.12.0",
+    "sass": "1.77.6"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
