@@ -2,7 +2,6 @@
 @use './token-utils' as *;
 @use '../core/styles/spacing';
 @use '../core/styles/theme';
-@use '../core/styles/typography';
 @use '../focus-indicator';
 
 $_input-selector: ':where(input, textarea, select, .forge-field__input)';
