@@ -12,9 +12,11 @@
 // Base
 //
 
+{{#if hasTokens}}
 .forge-{{dashCase name}} {
   @include core.tokens;
 }
+{{/if}}
 
 .forge-{{dashCase name}} {
   @include core.base;

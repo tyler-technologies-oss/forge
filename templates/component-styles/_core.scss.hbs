@@ -1,6 +1,8 @@
+{{#if hasTokens}}
 @use './token-utils' as *;
 
 @forward './token-utils';
+{{/if}}
 
 @mixin host() {
   // Styles for the host element
@@ -9,8 +11,10 @@
 
 @mixin base() {
   // Base styles for the internal root element
+  {{#if hasTokens}}
   background: #{token(background)};
   color: #{token(color)};
   border-radius: #{token(shape)};
   padding: #{token(padding)}
+  {{/if}}
 }
