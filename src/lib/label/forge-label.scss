@@ -8,16 +8,17 @@
     @include typography.style(label1);
 
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: start;
     align-items: center;
+    gap: #{spacing.variable(xsmall)};
 
     inline-size: fit-content;
   }
 
-  &-inline {
-    flex-direction: row;
-    gap: #{spacing.variable(xsmall)};
+  &-block {
+    flex-direction: column;
+    gap: 0;
   }
 
   &--large {
