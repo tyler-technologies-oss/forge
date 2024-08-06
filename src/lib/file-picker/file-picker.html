@@ -1,5 +1,5 @@
 <template>
-  <form class="forge-file-picker" id="container" part="form">
+  <div class="forge-file-picker" id="container" part="container form">
     <div class="primary" id="primary" part="primary">
       <slot name="primary"></slot>
     </div>
@@ -7,9 +7,10 @@
     <div class="secondary" id="secondary" part="secondary">
       <slot name="secondary"></slot>
     </div>
-    <input type="file" class="input" id="input" part="input" />
-  </form>
-  <div class="helper-text" part="helper-text-container">
+    <input type="file" class="input" id="input" part="input" aria-hidden="true" />
+  </div>
+  <div class="support-text" part="helper-text-container support-text">
     <slot name="helper-text"></slot>
+    <slot name="support-text"></slot>
   </div>
 </template>

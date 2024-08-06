@@ -7,6 +7,7 @@ import { ISwitchComponent } from '@tylertech/forge/switch';
 const filePicker = document.querySelector('#file-picker-default') as IFilePickerComponent;
 const filePickerCompact = document.querySelector('#file-picker-compact') as IFilePickerComponent;
 const filePickerBorderless = document.querySelector('#file-picker-borderless') as IFilePickerComponent;
+const filePickerFormAssociated = document.querySelector('#file-picker-form-associated') as IFilePickerComponent;
 const filePickerHelperText = document.querySelector('#file-picker-helper-text') as HTMLElement;
 const list = document.querySelector('#file-picker-list');
 const listCompact = document.querySelector('#file-picker-list-compact');
@@ -49,23 +50,46 @@ filePickerBorderless.addEventListener('forge-file-picker-change', ({ detail }) =
   }
 });
 
-acceptTextField.addEventListener('chainputnge', () => {
+acceptTextField.addEventListener('input', () => {
   filePicker.accept = acceptTextField.value;
   filePickerCompact.accept = acceptTextField.value;
+  filePickerFormAssociated.accept = acceptTextField.value;
 });
 
 maxSizeTextField.addEventListener('input', () => {
   filePicker.maxSize = +maxSizeTextField.value;
   filePickerCompact.maxSize = +maxSizeTextField.value;
+  filePickerFormAssociated.maxSize = +maxSizeTextField.value;
 });
 
 
 multipleCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => {
   filePicker.multiple = selected;
   filePickerCompact.multiple = selected;
+  filePickerFormAssociated.multiple = selected;
 });
 
 disabledCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => {
   filePicker.disabled = selected;
   filePickerCompact.disabled = selected;
+  filePickerFormAssociated.disabled = selected;
+});
+
+const nativeInput = document.getElementById('native-input') as HTMLInputElement;
+nativeInput.addEventListener('change', evt => {
+  console.log('change', evt);
+});
+nativeInput.addEventListener('input', evt => {
+  console.log('input', evt);
+  console.log('value', nativeInput.value);
+});
+
+filePickerFormAssociated.addEventListener('change', evt => {
+  console.log('change', evt);
+});
+filePickerFormAssociated.addEventListener('input', evt => {
+  console.log('input', evt);
+});
+filePickerFormAssociated.addEventListener('forge-file-picker-error', evt => {
+  console.log('forge-file-picker-error', evt);
 });

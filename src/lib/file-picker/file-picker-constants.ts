@@ -1,15 +1,16 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
+import { BASE_FILE_PICKER_CONSTANTS } from './base/base-file-picker-constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}file-picker`;
 
-const attributes = {
-  ACCEPT: 'accept',
-  MAX_SIZE: 'max-size',
-  CAPTURE: 'capture',
-  MULTIPLE: 'multiple',
-  DISABLED: 'disabled',
+const observedAttributes = {
+  ...BASE_FILE_PICKER_CONSTANTS.observedAttributes,
   COMPACT: 'compact',
   BORDERLESS: 'borderless'
+};
+
+const attributes = {
+  ...observedAttributes
 };
 
 const classes = {
@@ -33,19 +34,17 @@ const selectors = {
 };
 
 const events = {
+  ...BASE_FILE_PICKER_CONSTANTS.events,
+  ERROR: `${elementName}-error`,
   FILES_CHANGED: `${elementName}-change`
 };
 
 export const FILE_PICKER_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
   classes,
   ids,
   selectors,
   events
 };
-
-export interface IFilePickerChangeEventData {
-  legalFiles?: File[];
-  illegalFiles?: File[];
-}

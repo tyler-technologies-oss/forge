@@ -12,10 +12,6 @@
   display: none;
 }
 
-:host([compact]) {
-  display: inline-block;
-}
-
 .forge-file-picker {
   @include tokens;
 }
@@ -25,10 +21,6 @@
 
   &[disabled] {
     @include base-disabled;
-  }
-
-  &:not(.compact).highlight {
-    @include base-highlight;
   }
 }
 
@@ -44,33 +36,53 @@
   display: none;
 }
 
-.helper-text {
-  ::slotted([slot='helper-text']) {
+.support-text {
+  ::slotted(:where([slot='helper-text'], [slot='support-text'])) {
     @include helper-text;
   }
 }
 
-.borderless {
-  @include base-borderless;
+// Highlight
 
-  &:not(.compact).highlight {
-    border: none;
-  }
-
-  + .helper-text {
-    display: none;
+:host(:not([compact])) {
+  .forge-file-picker.highlight {
+    @include base-highlight;
   }
 }
 
-.compact {
-  @include base-compact;
+// Borderless
 
-  .primary,
-  .secondary {
-    display: none;
+:host([borderless]) {
+  .forge-file-picker {
+    @include base-borderless;
+
+    + .helper-text {
+      display: none;
+    }
   }
+}
 
-  .button {
-    @include button-compact;
+:host([borderless]:not([compact])) {
+  .forge-file-picker {
+    border: none;
+  }
+}
+
+// Compact
+
+:host([compact]) {
+  display: inline-block;
+
+  .forge-file-picker {
+    @include base-compact;
+
+    .primary,
+    .secondary {
+      display: none;
+    }
+
+    .button {
+      @include button-compact;
+    }
   }
 }

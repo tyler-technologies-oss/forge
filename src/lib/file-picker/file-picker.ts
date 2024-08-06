@@ -1,19 +1,14 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
 import { ButtonComponent } from '../button';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { BaseFilePicker, IBaseFilePicker } from './base';
 import { FilePickerAdapter } from './file-picker-adapter';
-import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants';
+import { FILE_PICKER_CONSTANTS } from './file-picker-constants';
 import { FilePickerCore } from './file-picker-core';
 
 import template from './file-picker.html';
 import styles from './file-picker.scss';
 
-export interface IFilePickerComponent extends IBaseComponent {
-  accept: string | null | undefined;
-  maxSize: number | null | undefined;
-  capture: string | null | undefined;
-  multiple: boolean;
-  disabled: boolean;
+export interface IFilePickerComponent extends IBaseFilePicker {
   compact: boolean;
   borderless: boolean;
 }
@@ -21,10 +16,6 @@ export interface IFilePickerComponent extends IBaseComponent {
 declare global {
   interface HTMLElementTagNameMap {
     'forge-file-picker': IFilePickerComponent;
-  }
-
-  interface HTMLElementEventMap {
-    'forge-file-picker-change': CustomEvent<IFilePickerChangeEventData>;
   }
 }
 
@@ -40,6 +31,8 @@ declare global {
  * The expectation of this component is that it will be used as a familiar element on the page that will let users upload files,
  * while providing that visual and functional consistency.
  *
+ * @property {string} [value=''] - Gets the path of the first selected file.
+ * @property {File[] | null} [files=new FileList()] - Gets the files that have been selected.
  * @property {string | null} [accept=null] - Gets/sets the allowed file types.
  * @property {string | null} [maxSize=null] - Gets/sets the maximum allowed file size.
  * @property {string | null} [capture=null] - Gets/sets the camera to use when capturing video or images.
@@ -71,32 +64,26 @@ declare global {
  * @cssproperty --forge-file-picker-highlight-background - Controls the background color of the file picker when dragging files into the form.
  * @cssproperty --forge-file-picker-highlight-border-color - Controls the border color of the file picker when dragging files into the form.
  *
+ * @event {Event} change - Dispatched when a valid file is chosen.
+ * @event {Input} input - Dispatched when a valid file is chosen.
+ * @event {CustomEvent<File[]>} forge-file-picker-error - Dispatched when an invalid file is chosen.
  * @event {CustomEvent<IFilePickerChangeEventData>} forge-file-picker-change - Dispatched when a file is chosen.
  *
- * @csspart form - The `<form>` element at the root.
+ * @csspart container - The root element comprising the click and drop target.
  * @csspart primary - The container element around the primary slot.
  * @csspart secondary - The container element around the secondary slot.
- * @csspart input - The `<input type="file">` element.
- * @csspart helper-text-container - The container around the helper-text slot.
+ * @csspart support-text - The container around the supprt-text slot.
  */
 @customElement({
   name: FILE_PICKER_CONSTANTS.elementName,
   dependencies: [ButtonComponent]
 })
-export class FilePickerComponent extends BaseComponent implements IFilePickerComponent {
+export class FilePickerComponent extends BaseFilePicker<FilePickerCore> implements IFilePickerComponent {
   public static get observedAttributes(): string[] {
-    return [
-      FILE_PICKER_CONSTANTS.attributes.ACCEPT,
-      FILE_PICKER_CONSTANTS.attributes.MAX_SIZE,
-      FILE_PICKER_CONSTANTS.attributes.CAPTURE,
-      FILE_PICKER_CONSTANTS.attributes.MULTIPLE,
-      FILE_PICKER_CONSTANTS.attributes.DISABLED,
-      FILE_PICKER_CONSTANTS.attributes.COMPACT,
-      FILE_PICKER_CONSTANTS.attributes.BORDERLESS
-    ];
+    return [...Object.values(FILE_PICKER_CONSTANTS.observedAttributes)];
   }
 
-  private _core: FilePickerCore;
+  protected _core: FilePickerCore;
 
   constructor() {
     super();
@@ -104,31 +91,10 @@ export class FilePickerComponent extends BaseComponent implements IFilePickerCom
     this._core = new FilePickerCore(new FilePickerAdapter(this));
   }
 
-  public connectedCallback(): void {
-    this._core.initialize();
-  }
+  public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    super.attributeChangedCallback(name, oldValue, newValue);
 
-  public disconnectedCallback(): void {
-    this._core.destroy();
-  }
-
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case FILE_PICKER_CONSTANTS.attributes.ACCEPT:
-        this.accept = newValue;
-        break;
-      case FILE_PICKER_CONSTANTS.attributes.MAX_SIZE:
-        this.maxSize = coerceNumber(newValue);
-        break;
-      case FILE_PICKER_CONSTANTS.attributes.CAPTURE:
-        this.capture = newValue;
-        break;
-      case FILE_PICKER_CONSTANTS.attributes.MULTIPLE:
-        this.multiple = coerceBoolean(newValue);
-        break;
-      case FILE_PICKER_CONSTANTS.attributes.DISABLED:
-        this.disabled = coerceBoolean(newValue);
-        break;
       case FILE_PICKER_CONSTANTS.attributes.COMPACT:
         this.compact = coerceBoolean(newValue);
         break;
@@ -137,26 +103,6 @@ export class FilePickerComponent extends BaseComponent implements IFilePickerCom
         break;
     }
   }
-
-  /** Gets and sets the allowed file types */
-  @coreProperty()
-  public declare accept: string | null | undefined;
-
-  /** Gets and sets the maximum allowed file size */
-  @coreProperty()
-  public declare maxSize: number | null | undefined;
-
-  /** Gets and sets the camera to use when capturing video or images */
-  @coreProperty()
-  public declare capture: string | null | undefined;
-
-  /** Gets and sets whether multiple files are allowed */
-  @coreProperty()
-  public declare multiple: boolean;
-
-  /** Gets and sets whether the file picker is disabled */
-  @coreProperty()
-  public declare disabled: boolean;
 
   /** Gets and sets whether the file picker is compact */
   @coreProperty()
