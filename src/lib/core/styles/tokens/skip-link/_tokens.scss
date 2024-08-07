@@ -9,8 +9,8 @@
 $tokens: (
   background: utils.module-val(skip-link, background, theme.variable(secondary)),
   color: utils.module-val(skip-link, color, theme.variable(on-secondary)),
-  shape: utils.module-val(skip-link, shape, shape.variable(medium-block-end)),
-  inset: utils.module-val(skip-link, inset, 0 spacing.variable(medium)),
+  shape: utils.module-val(skip-link, shape, shape.variable(medium)),
+  inset: utils.module-val(skip-link, inset, spacing.variable(xsmall) spacing.variable(medium)),
   z-index: utils.module-val(skip-link, z-index, elevation.z-index-variable(popup)),
   elevation: utils.module-val(skip-link, elevation, elevation.value(6)),
   padding-block: utils.module-val(skip-link, padding-block, spacing.variable(xsmall)),
