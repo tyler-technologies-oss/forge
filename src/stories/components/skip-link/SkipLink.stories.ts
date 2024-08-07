@@ -1,11 +1,9 @@
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { html, nothing, render } from 'lit';
+import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
-import { storyStyles } from '../../decorators';
+import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 
 import '@tylertech/forge/skip-link';
-import styles from './SkipLink.scss?inline';
 
 const component = 'forge-skip-link';
 
@@ -16,7 +14,13 @@ const meta = {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
     return html`
-      <forge-skip-link .target=${args.target} .theme=${args.theme} .muted=${args.muted} .persistent=${args.persistent} style=${style}></forge-skip-link>
+      <forge-skip-link
+        .target=${args.target}
+        .theme=${args.theme}
+        .muted=${args.muted}
+        .persistent=${args.persistent}
+        .inline=${args.inline}
+        style=${style}></forge-skip-link>
     `;
   },
   parameters: {
@@ -29,7 +33,8 @@ const meta = {
         target: { control: 'text' },
         theme: { control: 'select', options: ['default', 'primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info'] },
         muted: { control: 'boolean' },
-        persistent: { control: 'boolean' }
+        persistent: { control: 'boolean' },
+        inline: { control: 'boolean' }
       }
     })
   },
@@ -37,7 +42,8 @@ const meta = {
     target: 'main-content',
     theme: 'default',
     muted: false,
-    persistent: false
+    persistent: false,
+    inline: false
   }
 } satisfies Meta;
 

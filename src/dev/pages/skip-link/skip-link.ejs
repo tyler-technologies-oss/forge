@@ -11,6 +11,12 @@
     <a class="forge-skip-link" href="#main-css">Skip to main content</a>
     <div tabindex="-1" id="main-css" class="target-content">Main content</div>
   </section>
+  <section style="position: relative;">
+    <h3>Inline</h3>
+    <div tabindex="0">Tab past this</div>
+    <forge-skip-link target="section" inline>Skip to section content</forge-skip-link>
+    <div tabindex="-1" id="section" class="target-content">Section content</div>
+  </section>
 </div>
 
 <script type="module" src="skip-link.ts"></script>

@@ -6,7 +6,8 @@ const observedAttributes = {
   TARGET: 'target',
   THEME: 'theme',
   MUTED: 'muted',
-  PERSISTENT: 'persistent'
+  PERSISTENT: 'persistent',
+  INLINE: 'inline'
 };
 
 const attributes = {

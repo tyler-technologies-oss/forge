@@ -36,6 +36,11 @@
   text-decoration: underline;
 }
 
+@mixin inline-host {
+  position: absolute;
+  transform: none;
+}
+
 @mixin focused {
   @include transition;
 

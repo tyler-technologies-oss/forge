@@ -12,11 +12,15 @@ Skip links are used at the beginning of a page to allow users to skip over repet
 
 ## Accessibility
 
-Always include the skip link as the first child of the `<body>` element and not anywhere else on the page. Any page with content,
-navigation or otherwise, that repeats across the start of multiple pages should include a skip link. You may use more than one to
-link to multiple areas of the page, but be judicious because too many skip links can become frustrating to navigate in
-themselves. Remember, users of assistive technology have their own methods to navigate between landmarks on a page and may not
+Always include a skip link as the first child of the `<body>` element that targets the main content of the page. Any page with
+content, navigation or otherwise, that repeats across the start of multiple pages should include a skip link. You may use more
+than one to link to multiple areas of the page, but be judicious because too many skip links can themselves become frustrating
+to navigate. Remember, users of assistive technology have their own methods to navigate between landmarks on a page and may not
 appreciate the extra "help."
+
+You may also include an inline skip link within a page to skip to relevant content. For example, a skip link could be used to
+bypass search filters and go directly to the list of results. Ensure that the text of the skip link clearly indicates what it
+navigates to.
 
 The target element should always have `tabindex="-1"` set as an attribute if it is not otherwise focusable. This allows the
 browser to focus it after navigation without including it in the tab order.

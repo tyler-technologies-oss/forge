@@ -48,10 +48,15 @@ $host-tokens: [inset z-index transition-duration transition-timing-function];
   }
 }
 
+:host([inline]) {
+  @include inline-host;
+}
+
 forge-focus-indicator {
   @include focus-indicator.provide-theme(
     (
-      color: #{token(focus-indicator-color)}
+      color: #{token(focus-indicator-color)},
+      shape: #{token(shape)}
     )
   );
 }

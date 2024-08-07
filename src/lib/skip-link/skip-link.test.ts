@@ -49,6 +49,12 @@ describe('SkipLink', () => {
     expect(el.hasAttribute(SKIP_LINK_CONSTANTS.attributes.PERSISTENT)).to.be.true;
   });
 
+  it('should update the inline attribute when the property is set', async () => {
+    const el = await fixture<ISkipLinkComponent>(html`<forge-skip-link></forge-skip-link>`);
+    el.inline = true;
+    expect(el.hasAttribute(SKIP_LINK_CONSTANTS.attributes.INLINE)).to.be.true;
+  });
+
   it('should change the target property when set via attribute', async () => {
     const el = await fixture<ISkipLinkComponent>(html`<forge-skip-link></forge-skip-link>`);
     el.setAttribute(SKIP_LINK_CONSTANTS.attributes.TARGET, 'main');
@@ -72,6 +78,12 @@ describe('SkipLink', () => {
     const el = await fixture<ISkipLinkComponent>(html`<forge-skip-link></forge-skip-link>`);
     el.setAttribute(SKIP_LINK_CONSTANTS.attributes.PERSISTENT, '');
     expect(el.persistent).to.be.true;
+  });
+
+  it('should change the inline property when set via attribute', async () => {
+    const el = await fixture<ISkipLinkComponent>(html`<forge-skip-link></forge-skip-link>`);
+    el.setAttribute(SKIP_LINK_CONSTANTS.attributes.INLINE, '');
+    expect(el.inline).to.be.true;
   });
 
   function getAnchorEl(el: ISkipLinkComponent): HTMLAnchorElement {
