@@ -20,7 +20,7 @@ interface IComponentIdentifier {
 const componentGroups: IComponentGroup[] = createComponentGroups(componentsJson); // Group components alphabetically
 const listElement = document.getElementById('component-list') as ListComponent;
 const searchField = document.getElementById('search-field') as HTMLInputElement;
-const clearButton = document.getElementById('clear-button') as HTMLButtonElement;
+const searchFieldInput = searchField.querySelector('input');
 const contentTitleElement = document.querySelector('#content-title');
 const originalComponentCount = updateContentTitle(componentGroups);
 
@@ -30,7 +30,7 @@ const existingFilter = url.searchParams.get('q');
 // Check if we have an existing filter set via URL
 if (existingFilter) {
   // Execute filter using value from URL
-  searchField.value = existingFilter;
+  searchFieldInput.value = existingFilter;
   onSearch(existingFilter);
 } else {
   // Render full list of components
@@ -38,9 +38,9 @@ if (existingFilter) {
 }
 
 // Filter listeners
-searchField.addEventListener('input', ({ target }) => onSearch((target as HTMLInputElement).value));
-clearButton.addEventListener('click', () => {
-  searchField.value = '';
+searchFieldInput.addEventListener('input', ({ target }) => onSearch((target as HTMLInputElement).value));
+searchField.addEventListener('forge-text-field-clear', () => {
+  searchFieldInput.value = '';
   onSearch('');
 });
 
