@@ -22,13 +22,9 @@
 @mixin placeholder {
   content: attr(placeholder);
   color: #{token(placeholder-color)};
-  font-size: 0.875rem;
+  font-size: inherit;
 }
 
 @mixin field {
   display: contents;
-}
-
-@mixin dense-selected-text {
-  font-size: #{token(dense-font-size)};
 }
