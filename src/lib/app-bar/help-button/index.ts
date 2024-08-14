@@ -9,5 +9,5 @@ export * from './app-bar-help-button';
 
 export function defineAppBarHelpButtonComponent(): void {
   defineCustomElement(AppBarHelpButtonComponent);
+  defineCustomElement(AppBarHelpButtonComponent);
 }
- 
