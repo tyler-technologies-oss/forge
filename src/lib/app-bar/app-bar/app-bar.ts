@@ -81,6 +81,7 @@ export class AppBarComponent extends BaseComponent implements IAppBarComponent {
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
+    
     this._core = new AppBarCore(new AppBarAdapter(this));
   }
 
