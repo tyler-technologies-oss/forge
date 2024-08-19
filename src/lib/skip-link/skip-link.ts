@@ -95,6 +95,9 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
       case SKIP_LINK_CONSTANTS.observedAttributes.PERSISTENT:
         this.persistent = coerceBoolean(newValue);
         break;
+      case SKIP_LINK_CONSTANTS.observedAttributes.INLINE:
+        this.inline = coerceBoolean(newValue);
+        break;
     }
   }
 
