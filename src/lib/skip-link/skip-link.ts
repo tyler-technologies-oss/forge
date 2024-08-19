@@ -12,6 +12,7 @@ export interface ISkipLinkComponent extends IBaseComponent {
   theme: SkipLinkTheme;
   muted: boolean;
   persistent: boolean;
+  inline: boolean;
 }
 
 declare global {
@@ -29,11 +30,13 @@ declare global {
  * @property {SkipLinkTheme} [theme='default'] - The theme applied to the skip link.
  * @property {boolean} [muted=false] - Whether or not the skip link uses a muted color scheme.
  * @property {boolean} [persistent=false] - Whether or not the skip link should remain visible when not focused.
+ * @property {boolean} [inline=false] - Whether or not the skip link renders within its container.
  *
  * @attribute {string} [target=''] - The IDREF of the element to which the skip link should navigate.
  * @attribute {SkipLinkTheme} [theme='default'] - The theme applied to the skip link.
  * @attribute {boolean} [muted=false] - Whether or not the skip link uses a muted color scheme.
  * @attribute {boolean} [persistent=false] - Whether or not the skip link should remain visible when not focused.
+ * @attribute {boolean} [inline=false] - Whether or not the skip link renders within its container.
  *
  * @cssproperty --forge-skip-link-background - The background color of the skip link.
  * @cssproperty --forge-skip-link-color - The text color of the skip link.
@@ -69,6 +72,7 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
   private _theme: SkipLinkTheme = 'default';
   private _muted = false;
   private _persistent = false;
+  private _inline = false;
   private _anchorElement: HTMLAnchorElement;
 
   constructor() {
@@ -90,6 +94,9 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
         break;
       case SKIP_LINK_CONSTANTS.observedAttributes.PERSISTENT:
         this.persistent = coerceBoolean(newValue);
+        break;
+      case SKIP_LINK_CONSTANTS.observedAttributes.INLINE:
+        this.inline = coerceBoolean(newValue);
         break;
     }
   }
@@ -133,6 +140,16 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
     if (this._persistent !== value) {
       this._persistent = value;
       this.toggleAttribute(SKIP_LINK_CONSTANTS.attributes.PERSISTENT, this._persistent);
+    }
+  }
+
+  public get inline(): boolean {
+    return this._inline;
+  }
+  public set inline(value: boolean) {
+    if (this._inline !== value) {
+      this._inline = value;
+      this.toggleAttribute(SKIP_LINK_CONSTANTS.attributes.INLINE, this._inline);
     }
   }
 }
