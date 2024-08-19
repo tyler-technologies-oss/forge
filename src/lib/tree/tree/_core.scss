@@ -1,0 +1,26 @@
+@use './token-utils' as *;
+@use '../tree-item/token-utils' as tree-item-token-utils;
+
+@forward './token-utils';
+
+@mixin host() {
+  display: block;
+}
+
+@mixin base() {
+  @include tree-item-token-utils.override(check-display, none, value);
+  @include tree-item-token-utils.override(indent-line-display, none, value);
+
+  display: flex;
+  flex-direction: column;
+  gap: #{tree-item-token-utils.token(gap)};
+}
+
+@mixin multiple {
+  @include tree-item-token-utils.override(check-display, block, value);
+  --forge-tree-item-selected-background: transparent;
+}
+
+@mixin with-indent-lines() {
+  --_tree-item-indent-line-display: block;
+}

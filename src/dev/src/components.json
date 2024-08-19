@@ -61,6 +61,7 @@
   { "label": "Toast", "path": "/pages/toast/toast.html" },
   { "label": "Toolbar", "path": "/pages/toolbar/toolbar.html" },
   { "label": "Tooltip", "path": "/pages/tooltip/tooltip.html" },
+  { "label": "Tree", "path": "/pages/tree/tree.html" },
   { "label": "Typography", "path": "/pages/typography/typography.html" },
   { "label": "View switcher", "path": "/pages/view-switcher/view-switcher.html", "tags": ["tabs"] }
 ]

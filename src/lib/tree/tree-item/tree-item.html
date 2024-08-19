@@ -1,0 +1,22 @@
+<template>
+  <div class="forge-tree-item" part="root">
+    <div class="header" part="header">
+      <span class="expand-icon" part="expand-icon">
+        <slot name="expand-icon">
+          <forge-open-icon orientation="horizontal" rotation="half"></forge-open-icon>
+        </slot>
+      </span>
+      <forge-icon id="checkbox" class="checkbox" part="checkbox"></forge-icon>
+      <slot name="start"></slot>
+      <div class="content" part="content">
+        <slot></slot>
+      </div>
+      <slot name="end"></slot>
+      <forge-state-layer></forge-state-layer>
+      <forge-focus-indicator target=":host" focus-mode="focus"></forge-focus-indicator>
+    </div>
+    <div role="group" class="children" part="children">
+      <slot name="children"></slot>
+    </div>
+  </div>
+</template>
