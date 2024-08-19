@@ -22,5 +22,5 @@
 }
 
 @mixin with-indent-lines() {
-  --_tree-item-indent-line-display: block;
+  @include tree-item-token-utils.override(indent-line-display, block, value);
 }
