@@ -1,0 +1,46 @@
+@use './core';
+
+.forge-label-value {
+  @include core.tokens;
+}
+
+.forge-label-value {
+  @include core.host;
+  @include core.base;
+
+  &--inline {
+    @include core.inline;
+
+    .forge-label-value__label {
+      @include core.inline-label;
+    }
+  }
+
+  &--empty {
+    .forge-label-value__value {
+      @include core.value-empty;
+    }
+  }
+
+  &--ellipsis {
+    .forge-label-value__value {
+      @include core.ellipsis;
+
+      display: block;
+      justify-self: auto;
+    }
+  }
+
+  &__icon {
+    @include core.icon;
+    @include core.slotted-icon;
+  }
+
+  &__label {
+    @include core.label;
+  }
+
+  &__value {
+    @include core.value;
+  }
+}
