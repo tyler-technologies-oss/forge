@@ -42,5 +42,5 @@ export const BUTTON_TOGGLE_GROUP_CONSTANTS = {
   events
 };
 
-export type IButtonToggleGroupChangeEventData<T = unknown> = T;
+export type IButtonToggleGroupChangeEventData<T = any> = T;
 export type ButtonToggleGroupTheme = Theme;

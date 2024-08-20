@@ -25,7 +25,7 @@ export const BUTTON_TOGGLE_CONSTANTS = {
   events
 };
 
-export interface IButtonToggleSelectEventData<T = unknown> {
+export interface IButtonToggleSelectEventData<T = any> {
   value: T;
   selected: boolean;
 }
