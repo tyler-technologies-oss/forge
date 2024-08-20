@@ -89,6 +89,7 @@ declare global {
  * @attribute {boolean} multiple - Gets/sets the multiple select state.
  * @attribute {boolean} open - Gets/sets the open state.
  *
+ * @cssproperty --forge-select-placeholder-color - The color of the placeholder text.
  * @cssproperty --forge-field-background - The background of the field surface.
  * @cssproperty --forge-field-tonal-background - The background of the field surface in the tonal variant.
  * @cssproperty --forge-field-tonal-background-hover - The background of the field surface in the tonal variant on hover.

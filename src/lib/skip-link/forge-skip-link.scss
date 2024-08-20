@@ -1,0 +1,42 @@
+@use './core';
+@use '../focus-indicator';
+@use '../state-layer';
+
+a.forge-skip-link {
+  @include core.tokens;
+}
+
+a.forge-skip-link {
+  @include state-layer.standalone;
+  @include focus-indicator.standalone;
+  @include focus-indicator.provide-theme(
+    (
+      color: #{core.token(background)}
+    )
+  );
+
+  @include core.host;
+  @include core.base;
+
+  &:where(:focus-within, .forge-skip-link--persistent) {
+    @include core.focused;
+  }
+
+  &:focus-visible {
+    @include focus-indicator.keyframes;
+  }
+
+  @each $theme in 'primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info' {
+    &.forge-skip-link--#{$theme} {
+      @include core.theme($theme);
+    }
+
+    &.forge-skip-link--#{$theme}-muted {
+      @include core.theme($theme, true);
+    }
+  }
+
+  &.forge-skip-link--muted {
+    @include core.theme('secondary', true);
+  }
+}

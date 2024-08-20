@@ -1,0 +1,15 @@
+import { I{{pascalCase name}}Adapter } from './{{dashCase name}}-adapter';
+
+export interface I{{pascalCase name}}Core {}
+
+export class {{pascalCase name}}Core implements I{{pascalCase name}}Core {
+  constructor(private _adapter: I{{pascalCase name}}Adapter) {}
+
+  public initialize(): void {
+    // Initialization logic here
+  }
+
+  public destroy(): void {
+    // Cleanup logic here
+  }
+}

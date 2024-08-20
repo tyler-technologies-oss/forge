@@ -63,6 +63,7 @@ import { ScaffoldComponent } from './scaffold';
 import { OptionComponent, OptionGroupComponent, SelectComponent } from './select';
 import { SelectDropdownComponent } from './select/select-dropdown';
 import { SkeletonComponent } from './skeleton';
+import { SkipLinkComponent } from './skip-link';
 import { SliderComponent } from './slider';
 import { SplitViewComponent } from './split-view';
 import { StackComponent } from './stack';
@@ -132,6 +133,7 @@ export * from './radio';
 export * from './scaffold';
 export * from './select';
 export * from './skeleton';
+export * from './skip-link';
 export * from './slider';
 export * from './split-button';
 export * from './split-view';
@@ -217,6 +219,7 @@ const CUSTOM_ELEMENTS = [
   SelectComponent,
   SelectDropdownComponent,
   SkeletonComponent,
+  SkipLinkComponent,
   SliderComponent,
   SplitViewComponent,
   StackComponent,

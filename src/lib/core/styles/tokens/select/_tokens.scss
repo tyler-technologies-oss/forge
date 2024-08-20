@@ -1,11 +1,9 @@
 @use 'sass:map';
 @use '../../utils';
-@use '../../theme';
-@use '../../typography';
+@use '../../tokens/field/tokens' as field;
 
 $tokens: (
-  placeholder-color: utils.module-val(select, placeholder-color, theme.variable(text-low)),
-  dense-font-size: utils.module-val(select, dense-font-size, typography.font-size-relative('0875'))
+  placeholder-color: utils.module-val(select, placeholder-color, field.get(placeholder-color))
 ) !default;
 
 @function get($key) {

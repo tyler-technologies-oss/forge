@@ -1,0 +1,68 @@
+@use 'sass:list';
+@use './core' as *;
+@use '../focus-indicator';
+
+$host-tokens: [inset z-index transition-duration transition-timing-function];
+
+:host {
+  @include tokens($includes: $host-tokens);
+}
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host(:where(:focus-within, [persistent])) {
+  @include focused;
+}
+
+.forge-skip-link {
+  @include tokens($excludes: $host-tokens);
+}
+
+.forge-skip-link {
+  @include base;
+}
+
+@each $theme in 'primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info' {
+  :host([theme='#{$theme}']) {
+    .forge-skip-link {
+      @include theme($theme);
+    }
+  }
+
+  :host([theme='#{$theme}'][muted]) {
+    .forge-skip-link {
+      @include theme($theme, true);
+    }
+  }
+}
+
+:host(:where(:not([theme]), [theme='default'])[muted]) {
+  .forge-skip-link {
+    @include theme('secondary', true);
+  }
+}
+
+:host([inline]) {
+  @include inline-host;
+}
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(focus-indicator-color)},
+      shape: #{token(shape)}
+    )
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    @include override(transition-duration, 0s, value);
+  }
+}
