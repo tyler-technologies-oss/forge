@@ -11,6 +11,16 @@
   @include core.host;
   @include core.base;
 
+  img,
+  svg {
+    height: #{core.token(icon-size)};
+    width: #{core.token(icon-size)};
+  }
+
+  svg {
+    fill: currentColor;
+  }
+
   &:not(:disabled) {
     @include state-layer.standalone;
     @include state-layer.provide-theme(
