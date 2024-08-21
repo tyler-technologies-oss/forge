@@ -1,0 +1,27 @@
+@use './core';
+@use '../core/styles/theme';
+
+.forge-icon {
+  @include core.tokens;
+}
+
+img.forge-icon,
+svg.forge-icon {
+  @include core.host;
+
+  display: inline-block;
+}
+
+img.forge-icon {
+  @include core.base;
+}
+
+svg {
+  @include core.svg;
+
+  @each $theme in [primary secondary tertiary success error warning text-medium text-low] {
+    &[forge-icon-theme='#{$theme}'] {
+      @include core.override(color, theme.variable($theme), value);
+    }
+  }
+}
