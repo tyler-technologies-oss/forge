@@ -18,10 +18,4 @@ img.forge-icon {
 
 svg {
   @include core.svg;
-
-  @each $theme in [primary secondary tertiary success error warning text-medium text-low] {
-    &[forge-icon-theme='#{$theme}'] {
-      @include core.override(color, theme.variable($theme), value);
-    }
-  }
 }
