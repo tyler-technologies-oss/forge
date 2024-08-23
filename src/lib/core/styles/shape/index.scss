@@ -23,7 +23,8 @@
 /// Gets a CSS custom property declaration for a specific shape token, with its token value as the fallback value.
 ///
 @function variable($key, $prefix: config.$prefix) {
-  @return utils.variable(shape, tokens.$tokens, $key, $prefix);
+  $shape-factor-var: utils.create-var(shape, factor, 1);
+  @return calc(utils.variable(shape, tokens.$tokens, $key, $prefix) * $shape-factor-var);
 }
 
 ///
