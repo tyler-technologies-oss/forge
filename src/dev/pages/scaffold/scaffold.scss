@@ -1,14 +1,35 @@
 .demo-container {
-  height: 750px;
-  border: 1px solid var(--forge-theme-outline);
+  --forge-scaffold-height: 750px;
 }
 
 .placeholder-container {
-  margin: 16px;
-  border: 2px dashed var(--forge-theme-outline);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  border: 2px dashed var(--forge-theme-outline);
+  margin: 16px;
   padding: 16px;
+  
+  transition: border-color var(--forge-animation-duration-medium4) var(--forge-animation-easing-standard);
+
+  &:hover {
+    border-color: var(--forge-theme-primary);
+  }
 }
+
+//
+// CSS-only styles for the scaffold
+//
+
+.forge-scaffold {
+  gap: 16px;
+
+  .placeholder-container {
+    display: grid;
+    margin: 0;
+    height: 100%;
+  }
+}
+
