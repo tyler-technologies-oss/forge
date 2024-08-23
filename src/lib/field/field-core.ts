@@ -60,7 +60,7 @@ export class FieldCore implements IFieldCore {
 
   public initialize(): void {
     this._adapter.addRootListener('slotchange', this._slotChangeListener);
-    this._adapter.tryApplyGlobalConfiguration(['labelPosition']);
+    this._adapter.tryApplyGlobalConfiguration(['labelPosition', 'variant']);
     this._adapter.setLabelPosition(this._labelPosition);
 
     if (this._popoverIcon) {
