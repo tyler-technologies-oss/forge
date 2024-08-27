@@ -16,7 +16,7 @@
   display: grid;
   grid-template-rows: 0fr;
 
-  transition-property: opacity, grid-template-rows;
+  transition-property: visibility, opacity, grid-template-rows;
   transition-duration: #{token(animation-duration)};
   transition-timing-function: #{token(animation-easing)};
 
