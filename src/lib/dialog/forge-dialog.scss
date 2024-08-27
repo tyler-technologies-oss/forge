@@ -63,6 +63,8 @@
   @include core.surface;
   @include core.exit;
 
+  position: fixed;
+
   transition-property: display, opacity, overlay, scale;
   transition-behavior: allow-discrete;
 

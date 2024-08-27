@@ -3,6 +3,7 @@
   align-items: start;
 }
 
+dialog.forge-dialog:not(.forge-dialog--fullscreen),
 .dialog:not([fullscreen]) {
   forge-scaffold {
     max-width: 500px;
