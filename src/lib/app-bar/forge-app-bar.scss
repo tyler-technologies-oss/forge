@@ -19,24 +19,69 @@
   @include core.base;
   @include core.row;
 
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: 'start';
+
+  &:has(.forge-app-bar__section-center),
+  &:has(.forge-app-bar__section-end) {
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-areas: 'start center end';
+  }
+
+  &:has(.forge-app-bar__section-end):not(:has(.forge-app-bar__section-center)) {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 'start end';
+  }
+
   &--raised {
     @include core.elevation-raised;
   }
 
   &__logo {
     @include core.logo;
+  }
 
-    margin-inline-end: #{core.token(logo-gap)};
+  &__title,
+  .forge-app-bar__title h1 {
+    @include core.title;
+  }
+
+  &__title {
+    display: grid;
+    align-items: center;
+  }
+
+  a.forge-app-bar__title {
+    @include core.anchor-base;
+  }
+
+  &__logo-title-container {
+    @include core.logo-title-container;
   }
 
   &__section {
     @include core.section;
+  }
 
-    &:not(:first-of-type):not(:last-of-type) {
+  &__section-start,
+  &__section-center,
+  &__section-end {
+    @include core.section;
+  }
+
+  &__section {
+    &-start {
+      grid-area: start;
+    }
+
+    &-center {
+      grid-area: center;
       justify-content: center;
     }
 
-    &:last-of-type {
+    &-end {
+      grid-area: end;
       justify-content: end;
     }
   }
