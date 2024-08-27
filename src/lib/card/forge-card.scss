@@ -2,6 +2,8 @@
 
 .forge-card {
   @include core.tokens;
+  @include core.override(height, auto, value);
+  @include core.override(width, auto, value);
 }
 
 .forge-card {
