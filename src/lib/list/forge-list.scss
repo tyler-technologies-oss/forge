@@ -4,128 +4,225 @@
 @use '../state-layer';
 @use '../core/styles/shape';
 
-//
-// List
-//
+@layer list, list-item, navlist, with-start-end, two-line, three-line, dense, wrap, selected, indented, disabled;
 
-.forge-list {
-  @include list-core.tokens;
-}
-
-.forge-list {
-  @include list-core.base;
-}
-
-ul.forge-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-//
-// List Item
-//
-
-.forge-list-item {
-  @include list-item-core.tokens;
-}
-
-.forge-list-item {
-  @include list-item-core.base;
-  @include list-item-core.text-container;
-
-  display: block;
-  align-content: center;
-
-  button {
-    @include list-item-core.button;
+@layer list {
+  .forge-list {
+    @include list-core.tokens;
   }
 
-  a {
-    @include list-item-core.anchor;
+  .forge-list {
+    @include list-core.base;
+
+    &--dense {
+      .forge-list-item {
+        @include list-item-core.dense;
+      }
+    }
   }
 
-  &--interactive:not(.forge-list-item--disabled),
-  button:not(:disabled),
-  a {
-    @include state-layer.standalone;
+  .forge-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
+}
 
-  &:has(button:not(:disabled), a, .forge-list-item--interactive:not(.forge-list-item--disabled)) {
-    a,
-    button,
-    .forge-list-item--interactive {
-      cursor: pointer;
+@layer navlist {
+  .forge-list--navlist {
+    margin-block: #{list-core.token(navlist-spacing)};
 
-      @include focus-indicator.keyframes;
-      @include focus-indicator.standalone($type: 'inward');
-      @include focus-indicator.provide-theme(
+    .forge-list-item {
+      @include list-item-core.provide-theme(
         (
-          shape: shape.variable(medium) // TODO: use list-item token?
+          height: #{list-core.token(navlist-height)},
+          margin: #{list-core.token(navlist-margin)},
+          padding: #{list-core.token(navlist-padding)},
+          shape: #{list-core.token(navlist-shape)},
+          text-font-size: #{list-core.token(navlist-font-size)},
+          text-font-weight: #{list-core.token(navlist-font-weight)}
         )
       );
     }
   }
+}
 
-  &--text {
-    @include list-item-core.text;
+@layer with-start-end {
+  .forge-list-item:has(.forge-list-item__start, .forge-list-item__end) {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
   }
 
-  &--two-line {
+  .forge-list-item:has(.forge-list-item__start):not(:has(.forge-list-item__end)) {
+    grid-template-columns: auto 1fr;
+  }
+
+  .forge-list-item:has(.forge-list-item__end):not(:has(.forge-list-item__start)) {
+    grid-template-columns: 1fr auto;
+  }
+
+  .forge-list-item:has(.forge-list-item__start ~ .forge-list-item__end) {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .forge-list-item__start,
+  .forge-list-item__end {
+    @include list-item-core.start-end-base;
+  }
+}
+
+@layer list-item {
+  .forge-list-item {
+    @include list-item-core.tokens;
+  }
+
+  .forge-list-item {
+    @include list-item-core.base;
+    @include list-item-core.text-container;
+
+    display: block;
+    align-content: center;
+
+    button {
+      @include list-item-core.button;
+    }
+
+    a {
+      @include list-item-core.anchor;
+    }
+
+    &--interactive:not(.forge-list-item--disabled),
+    button:not(:disabled),
+    a,
+    label {
+      @include state-layer.standalone;
+    }
+
+    :is(forge-checkbox, forge-radio, forge-switch, input):is(.forge-list-item__start, .forge-list-item__end):not([forge-ignore]) {
+      @include focus-indicator.provide-theme(
+        (
+          display: none
+        )
+      );
+      @include state-layer.provide-theme(
+        (
+          display: none
+        )
+      );
+    }
+
+    &:has(
+        button:not(:disabled),
+        a,
+        label,
+        .forge-list-item--interactive:not(.forge-list-item--disabled),
+        :is(forge-checkbox, forge-radio, forge-switch, input):not([disabled])
+      ) {
+      a,
+      button,
+      label,
+      :is(forge-checkbox, forge-radio, forge-switch, input):not([disabled]),
+      .forge-list-item--interactive {
+        cursor: pointer;
+
+        @include focus-indicator.keyframes;
+        @include focus-indicator.standalone($type: 'inward');
+        @include focus-indicator.provide-theme(
+          (
+            shape: shape.variable(medium) // TODO: use list-item token?
+          )
+        );
+      }
+    }
+
+    &__text {
+      @include list-item-core.text;
+    }
+  }
+}
+
+@layer two-line {
+  .forge-list--two-line .forge-list-item,
+  .forge-list-item--two-line {
     @include list-item-core.two-line;
-
-    flex-direction: column;
-    align-items: start;
-    gap: 0;
-    justify-content: center;
   }
 
-  &--three-line {
+  .forge-list--three-line .forge-list-item,
+  .forge-list-item--three-line {
     @include list-item-core.three-line;
-
-    flex-direction: column;
-    align-items: start;
-    gap: 0;
-    justify-content: center;
   }
+}
 
-  &--indented {
-    @include list-item-core.indented;
-  }
-
-  &--dense {
+@layer dense {
+  .forge-list--dense .forge-list-item,
+  .forge-list-item--dense {
     @include list-item-core.dense;
     @include list-item-core.dense-text;
-
-    &.forge-list-item--two-line {
-      @include list-item-core.dense-two-line;
-    }
-
-    &.forge-list-item--three-line {
-      @include list-item-core.dense-three-line;
-    }
-
-    &--indented {
-      @include list-item-core.dense-indented;
-    }
   }
 
-  &--selected {
-    @include list-item-core.selected;
+  .forge-list--dense.forge-list--two-line .forge-list-item,
+  .forge-list--dense .forge-list-item--two-line,
+  .forge-list-item--dense.forge-list-item--two-line {
+    @include list-item-core.dense-two-line;
+  }
 
-    > * {
-      @include list-item-core.text-selected;
+  .forge-list--dense.forge-list--three-line .forge-list-item,
+  .forge-list--dense .forge-list-item--three-line,
+  .forge-list-item--dense.forge-list-item--three-line {
+    @include list-item-core.dense-three-line;
+  }
+
+  .forge-list-dense.forge-list--indented .forge-list-item,
+  .forge-list--dense .forge-list-item--indented,
+  .forge-list-item--dense.forge-list-item--indented {
+    @include list-item-core.dense-indented;
+  }
+}
+
+@layer wrap {
+  .forge-list--wrap .forge-list-item,
+  .forge-list-item--wrap {
+    @include list-item-core.wrap;
+    @include list-item-core.text-container-wrap;
+
+    .forge-list-item__text {
+      @include list-item-core.text-container-wrap;
     }
+  }
+}
+
+@layer selected {
+  .forge-list-item--selected {
+    @include list-item-core.selected;
 
     @include state-layer.provide-theme(
       (
         color: #{list-item-core.token(selected-color)}
       )
     );
-  }
 
-  &--disabled,
-  button:disabled {
+    .forge-list-item__start {
+      @include list-item-core.start-selected;
+    }
+
+    .forge-list-item__end {
+      @include list-item-core.end-selected;
+    }
+  }
+}
+
+@layer indented {
+  .forge-list--indented .forge-list-item,
+  .forge-list-item--indented {
+    @include list-item-core.indented;
+  }
+}
+
+@layer disabled {
+  .forge-list--disabled .forge-list-item,
+  .forge-list-item--disabled,
+  .forge-list-item button:disabled {
     @include list-item-core.disabled;
   }
 }
