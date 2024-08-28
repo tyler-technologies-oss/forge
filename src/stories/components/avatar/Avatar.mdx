@@ -32,7 +32,21 @@ Avatars can be composed within other components, such as icon buttons.
 
 <Canvas of={AvatarStories.WithIconButton} />
 
-> Note: Be sure to provide an accessible label for the icon button.
+> **Important:** Be sure to provide an accessible label for the icon button.
+
+## CSS-Only
+
+The avatar component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={AvatarStories.CSSOnly} />
+
+To use the CSS-only avatar component, include the following CSS file in your project:
+
+```scss
+@use '@tylertech/forge/dist/avatar/forge-avatar.css';
+```
+
+> For more information on CSS-only components, see the [CSS-Only Components](?path=/docs/getting-started-css-only-components--docs) guide.
 
 ## API
 
