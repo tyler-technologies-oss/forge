@@ -1,10 +1,12 @@
-import { html, nothing } from 'lit';
-import { styleMap } from 'lit/directives/style-map.js';
-import { type Meta, type StoryObj } from '@storybook/web-components';
 import { action } from '@storybook/addon-actions';
+import { type Meta, type StoryObj } from '@storybook/web-components';
+import { html, nothing } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 
 import '@tylertech/forge/checkbox';
+import '@tylertech/forge/checkbox/forge-checkbox.scss';
 
 const component = 'forge-checkbox';
 
@@ -59,3 +61,30 @@ export default meta;
 type Story = StoryObj;
 
 export const Demo: Story = {};
+
+export const CSSOnly: Story = {
+  parameters: {
+    controls: { include: ['checked', 'indeterminate', 'disabled', 'dense'] }
+  },
+  args: {
+    checked: false,
+    indeterminate: false,
+    disabled: false,
+    dense: false
+  },
+  render: ({ checked, indeterminate, disabled, dense }) => {
+    const classes = classMap({
+      'forge-checkbox': true,
+      'forge-checkbox--dense': dense
+    });
+    return html`
+      <label class="forge-typography--label1" style="display: flex; align-items: center;">
+        <div class=${classes}>
+          <input type="checkbox" .checked=${checked} .indeterminate=${indeterminate} ?disabled=${disabled} />
+          <div class="forge-checkbox__icon"></div>
+        </div>
+        <span>Check me</span>
+      </label>
+    `;
+  }
+};
