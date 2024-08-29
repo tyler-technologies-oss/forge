@@ -1,6 +1,9 @@
 @use './app-bar/core';
 @use '../core/styles/theme';
 @use '../core/styles/tokens/theme/color-emphasis';
+@use '../focus-indicator';
+@use '../state-layer';
+@use '../icon';
 
 .forge-app-bar {
   @include core.tokens;
@@ -10,7 +13,10 @@
       on-primary: rgba(black, color-emphasis.value(highest)),
       text-high: rgba(white, color-emphasis.value(highest)),
       text-medium: rgba(white, color-emphasis.value(medium)),
-      text-low: rgba(white, color-emphasis.value(medium-low))
+      text-low: rgba(white, color-emphasis.value(medium-low)),
+      outline-high: rgba(white, color-emphasis.value(highest)),
+      outline-medium: rgba(white, color-emphasis.value(medium)),
+      outline-low: rgba(white, color-emphasis.value(medium-low))
     )
   );
 }
@@ -40,6 +46,12 @@
 
   &__logo {
     @include core.logo;
+
+    @include icon.provide-theme(
+      (
+        font-size: #{core.token(logo-font-size)}
+      )
+    );
   }
 
   &__title,
@@ -54,10 +66,32 @@
 
   a.forge-app-bar__title {
     @include core.anchor-base;
+
+    @include focus-indicator.keyframes;
+    @include focus-indicator.standalone($type: inward);
+    @include focus-indicator.provide-theme(
+      (
+        color: currentColor,
+        inward-offset: 2px,
+        shape: var(--forge-shape-medium)
+      )
+    );
   }
 
   &__logo-title-container {
     @include core.logo-title-container;
+
+    &:has(a.forge-app-bar__title) {
+      cursor: pointer;
+      height: 100%;
+
+      @include state-layer.standalone;
+      @include state-layer.provide-theme(
+        (
+          color: currentColor
+        )
+      );
+    }
   }
 
   &__section {
@@ -68,6 +102,15 @@
   &__section-center,
   &__section-end {
     @include core.section;
+  }
+
+  &__section-start,
+  &__section-end {
+    @include focus-indicator.provide-theme(
+      (
+        outward-offset: 0px // Required unit
+      )
+    );
   }
 
   &__section {
