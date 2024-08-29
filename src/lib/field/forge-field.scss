@@ -23,7 +23,8 @@ disabled;
         background,
         padding-inline,
         disabled-background,
-        disabled-opacity
+        disabled-opacity,
+        placeholder-color
       )
     );
   }
@@ -62,6 +63,10 @@ disabled;
       color: #{theme.variable(text-high)};
       background: transparent;
       appearance: none;
+
+      &::placeholder {
+        @include core.slotted-placeholder;
+      }
     }
 
     //
@@ -199,6 +204,10 @@ disabled;
             color: #{theme.variable(error)}
           )
         );
+      }
+
+      label {
+        color: #{theme.variable(error)};
       }
     }
   }
