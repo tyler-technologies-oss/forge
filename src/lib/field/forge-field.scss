@@ -89,7 +89,7 @@ disabled;
       }
 
       &.forge-field--float-label,
-      &:has(#{$_input-selector}:placeholder-shown) {
+      &:has(:where(#{$_input-selector}:autofill, #{$_input-selector}:placeholder-shown)) {
         label {
           @include core.floating-label;
         }
