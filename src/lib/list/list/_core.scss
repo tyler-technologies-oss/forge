@@ -3,8 +3,6 @@
 @forward './token-utils';
 
 @mixin base {
-  display: grid;
-  gap: #{token(spacing)};
   outline: none;
   background-color: #{token(container-color)};
   margin: 0;
@@ -13,5 +11,7 @@
 }
 
 @mixin inner {
+  display: grid;
+  gap: #{token(spacing)};
   min-width: 0;
 }
