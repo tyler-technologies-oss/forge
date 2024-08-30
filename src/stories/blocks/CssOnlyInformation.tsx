@@ -2,12 +2,20 @@ import { Source, useOf } from '@storybook/blocks';
 import { getCustomElementsTagDeclaration, TagItem } from '../utils';
 import { NameDescriptionTable, Section, UsageLink } from './Shared';
 
-function CssFilePath({ name, path }: { name: string; path?: string }) {
-  if (!path) {
-    return null;
-  }
+function friendlyNameFromTagName(tagName: string) {
+  return tagName
+    .toLowerCase()
+    .replace(/^forge-/g, '')
+    .replace(/-/g, ' ');
+}
 
-  const codeSnippet = `@use '${path}';`;
+function cssFilePathFromTagName(tagName: string) {
+  const extractedName = tagName.replace(/^forge-/g, '');
+  return `${extractedName}/forge-${extractedName}.css`;
+}
+
+function CssFilePath({ name, path }: { name: string; path: string }) {
+  const codeSnippet = `@use '@tylertech/forge/dist/${path}';`;
   return (
     <>
       <p>To use the CSS-only {name} component, include the following CSS file in your project:</p>
@@ -28,7 +36,7 @@ function CssClassTable({ items }: { items?: TagItem[] }) {
   );
 }
 
-export default function CssOnlyInformation({ name }: { name: string }) {
+export default function CssOnlyInformation() {
   const resolvedOf = useOf('story', ['story']);
   const tagName = resolvedOf.story.component as string;
 
@@ -37,7 +45,7 @@ export default function CssOnlyInformation({ name }: { name: string }) {
   }
 
   const declaration = getCustomElementsTagDeclaration(tagName);
-  const cssFilePath = declaration.cssFilePath?.name.replace(/^\\/, '');
+  const cssFilePath = declaration.cssFilePath?.name ?? cssFilePathFromTagName(tagName);
   const cssClasses = declaration.cssClasses;
 
   if (!cssClasses) {
@@ -46,7 +54,7 @@ export default function CssOnlyInformation({ name }: { name: string }) {
 
   return (
     <>
-      <CssFilePath name={name} path={cssFilePath} />
+      <CssFilePath name={friendlyNameFromTagName(tagName)} path={cssFilePath} />
       <UsageLink text="CSS-Only Components" href="?path=/docs/getting-started-css-only-components--docs" />
       <CssClassTable items={cssClasses} />
     </>
