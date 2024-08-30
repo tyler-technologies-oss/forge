@@ -40,4 +40,4 @@ export const APP_BAR_CONSTANTS = {
 };
 
 export type AppBarElevation = 'none' | 'raised';
-export type AppBarTheme = 'white' | '';
+export type AppBarTheme = 'white' | 'custom' | '';

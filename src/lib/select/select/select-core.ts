@@ -22,7 +22,7 @@ export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelec
   }
 
   public initialize(): void {
-    this._adapter.tryApplyGlobalConfiguration(['labelPosition']);
+    this._adapter.tryApplyGlobalConfiguration(['labelPosition', 'variant']);
     super.initialize();
     super.initializeTarget();
     this._initializeLabel();
