@@ -1,4 +1,4 @@
-import { html, nothing, render } from 'lit';
+import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, removeSourceStyleTagParams, standaloneStoryParams } from '../../utils';
 import { IconRegistry } from '@tylertech/forge/icon';
