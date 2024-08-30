@@ -40,6 +40,17 @@
         shape: #{core.token(shape)}
       )
     );
+
+    &:where(
+        .forge-icon-button--text,
+        :not(:where(.forge-icon-button--outlined, .forge-icon-button--tonal, .forge-icon-button--filled, .forge-icon-button--raised))
+      ) {
+      @include focus-indicator.provide-theme(
+        (
+          outward-offset: 0px // Requires unit
+        )
+      );
+    }
   }
 
   &--outlined {

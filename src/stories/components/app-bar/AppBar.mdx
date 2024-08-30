@@ -45,6 +45,20 @@ because the app bar is no longer overriding the global theme variables.
 
 <Canvas of={AppBarStories.CustomTheme} />
 
+## CSS-Only
+
+The app-bar component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={AppBarStories.CSSOnly} />
+
+To use the CSS-only app-bar component, include the following CSS file in your project:
+
+```scss
+@use '@tylertech/forge/dist/app-bar/forge-app-bar.css';
+```
+
+> For more information on CSS-only components, see the [CSS-Only Components](?path=/docs/getting-started-css-only-components--docs) guide.
+
 ## API
 
 <CustomArgTypes />

@@ -1,8 +1,11 @@
 @use './app-bar/core';
 @use '../core/styles/theme';
+@use '../core/styles/spacing';
+@use '../core/styles/shape';
 @use '../core/styles/tokens/theme/color-emphasis';
 @use '../focus-indicator';
 @use '../state-layer';
+@use '../field';
 @use '../icon';
 
 .forge-app-bar {
@@ -72,8 +75,8 @@
     @include focus-indicator.provide-theme(
       (
         color: currentColor,
-        inward-offset: 2px,
-        shape: var(--forge-shape-medium)
+        offset-block: #{spacing.variable(xxsmall)},
+        shape: #{shape.variable(medium)}
       )
     );
   }
@@ -104,15 +107,6 @@
     @include core.section;
   }
 
-  &__section-start,
-  &__section-end {
-    @include focus-indicator.provide-theme(
-      (
-        outward-offset: 0px // Required unit
-      )
-    );
-  }
-
   &__section {
     &-start {
       grid-area: start;
@@ -121,6 +115,22 @@
     &-center {
       grid-area: center;
       justify-content: center;
+
+      .forge-field {
+        @include field.provide-theme(
+          (
+            background: rgba(white, color-emphasis.value(lowest))
+          )
+        );
+
+        &:hover {
+          @include field.provide-theme(
+            (
+              background: rgba(white, color-emphasis.value(lower))
+            )
+          );
+        }
+      }
     }
 
     &-end {
