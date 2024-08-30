@@ -77,6 +77,7 @@ declare global {
  * @property {boolean} [focusIndicatorAllowFocus=false] - Whether the focus indicator should render when the target element matches `:focus` instead of `:focus-visible`.
  *
  * @globalconfig labelPosition
+ * @globalconfig variant
  *
  * @attribute {FieldLabelPosition} [label-position="inset"] - The position of the label relative to the input area.
  * @attribute {FieldLabelAlignment} [label-alignment="start"] - The alignment of the label relative to the input area.
