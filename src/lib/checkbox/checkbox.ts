@@ -106,7 +106,7 @@ declare global {
  * @csspart state-layer - Styles the state layer element.
  * @csspart focus-indicator - Styles the focus indicator element.
  *
- * @cssfilepath \@tylertech/forge/dist/checkbox/forge-checkbox.css
+ * @cssfilepath checkbox/forge-checkbox.css
  *
  * @cssclass forge-checkbox - Apply to the root element _(required)_.
  * @cssclass forge-checkbox--dense - Makes the checkbox dense.
