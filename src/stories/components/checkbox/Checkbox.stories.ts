@@ -6,7 +6,6 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 
 import '@tylertech/forge/checkbox';
-import '@tylertech/forge/checkbox/forge-checkbox.scss';
 
 const component = 'forge-checkbox';
 

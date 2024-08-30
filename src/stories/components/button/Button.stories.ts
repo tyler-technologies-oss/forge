@@ -7,7 +7,6 @@ import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 import { tylIconOpenInNew } from '@tylertech/tyler-icons/standard';
 
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import '@tylertech/forge/icon';
 import '@tylertech/forge/circular-progress';
 

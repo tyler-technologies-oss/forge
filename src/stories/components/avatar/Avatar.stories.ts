@@ -5,7 +5,6 @@ import { tylIconPerson } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 
 import '@tylertech/forge/avatar';
-import '@tylertech/forge/avatar/forge-avatar.scss';
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/icon';
 
