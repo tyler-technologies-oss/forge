@@ -28,6 +28,20 @@ Here is an example usage combined with a forge-button component:
 > limitations in how deep a css selector can drill into a slotted element, you will need to add that
 > background color yourself.
 
+## CSS-Only
+
+The banner component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={BannerStories.CSSOnly} />
+
+To use the CSS-only banner component, include the following CSS file in your project:
+
+```scss
+@use '@tylertech/forge/dist/banner/forge-banner.css';
+```
+
+> For more information on CSS-only components, see the [CSS-Only Components](?path=/docs/getting-started-css-only-components--docs) guide.
+
 ## API
 
 <CustomArgTypes />
