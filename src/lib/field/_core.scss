@@ -132,7 +132,6 @@
 
 @mixin label {
   @include typography.style(label2);
-  @include disableable;
 
   position: relative;
   display: inline-flex;
@@ -256,7 +255,6 @@
 
 @mixin support-text {
   @include typography.style(label1);
-  @include disableable;
 
   justify-content: space-between;
 
