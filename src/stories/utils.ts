@@ -260,6 +260,8 @@ export interface Declaration {
   cssProperties?: TagItem[];
   cssParts?: TagItem[];
   dependencies?: DependencyItem[];
+  cssFilePath?: TagItem;
+  cssClasses?: TagItem[];
   globalConfigProperties?: GlobalConfigPropertyItem[];
 }
 
