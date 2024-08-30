@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as AvatarStories from './Avatar.stories';
 
 <Meta of={AvatarStories} />
@@ -34,20 +35,6 @@ Avatars can be composed within other components, such as icon buttons.
 
 > **Important:** Be sure to provide an accessible label for the icon button.
 
-## CSS-Only
-
-The avatar component is also available as a CSS-only component without the need for JavaScript.
-
-<Canvas of={AvatarStories.CSSOnly} />
-
-To use the CSS-only avatar component, include the following CSS file in your project:
-
-```scss
-@use '@tylertech/forge/dist/avatar/forge-avatar.css';
-```
-
-> For more information on CSS-only components, see the [CSS-Only Components](?path=/docs/getting-started-css-only-components--docs) guide.
-
 ## API
 
 <CustomArgTypes />
@@ -59,3 +46,11 @@ To use the CSS-only avatar component, include the following CSS file in your pro
 - Avoid using the avatar component for any essential navigation.
 - If color conveys important information, provide additional cues for users with color perception deficiencies.
 - Verify that there is sufficient contrast between the foreground text and background to meet WCAG 2.2 requirements.
+
+## CSS-Only
+
+The avatar component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={AvatarStories.CSSOnly} />
+
+<CssOnlyInformation />

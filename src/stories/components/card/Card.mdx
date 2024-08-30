@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as CardStories from './Card.stories';
 
 <Meta of={CardStories} />
@@ -18,20 +19,6 @@ Cards are used to group related content and actions together in a single contain
 
 <Canvas of={CardStories.Styled} />
 
-## CSS-Only
-
-The card component is also available as a CSS-only component without the need for JavaScript.
-
-<Canvas of={CardStories.CSSOnly} />
-
-To use the CSS-only card component, include the following CSS file in your project:
-
-```scss
-@use '@tylertech/forge/dist/card/forge-card.css';
-```
-
-> For more information on CSS-only components, see the [CSS-Only Components](?path=/docs/getting-started-css-only-components--docs) guide.
-
 ## API
 
 <CustomArgTypes />
@@ -41,3 +28,11 @@ To use the CSS-only card component, include the following CSS file in your proje
 - The card component should not interfere with tab flow.
 - Add a `role` attribute if this card has any applicable role that should be known to screen readers.
 - Consider using the `"group"` role on the `<forge-card>` element if the content is related and separate from other surrounding items.
+
+## CSS-Only
+
+The card component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={CardStories.CSSOnly} />
+
+<CssOnlyInformation />

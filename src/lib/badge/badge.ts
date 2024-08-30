@@ -46,6 +46,10 @@ declare global {
  * @slot - Default content placed inside the badge.
  * @slot start - Content placed before the default content.
  * @slot end - Content placed after the default content.
+ *
+ * @cssclass forge-badge - The badge class _(required)_.
+ * @cssclass forge-badge--dot - Renders the badge as a dot.
+ * @cssclass forge-badge__icon - Styles a child element as an icon.
  */
 @customElement({
   name: BADGE_CONSTANTS.elementName

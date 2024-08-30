@@ -1,5 +1,6 @@
 import { Meta, Title, Primary, Canvas, ArgTypes } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as BannerStories from './Banner.stories';
 
 <Meta of={BannerStories} />
@@ -28,20 +29,6 @@ Here is an example usage combined with a forge-button component:
 > limitations in how deep a css selector can drill into a slotted element, you will need to add that
 > background color yourself.
 
-## CSS-Only
-
-The banner component is also available as a CSS-only component without the need for JavaScript.
-
-<Canvas of={BannerStories.CSSOnly} />
-
-To use the CSS-only banner component, include the following CSS file in your project:
-
-```scss
-@use '@tylertech/forge/dist/banner/forge-banner.css';
-```
-
-> For more information on CSS-only components, see the [CSS-Only Components](?path=/docs/getting-started-css-only-components--docs) guide.
-
 ## API
 
 <CustomArgTypes />
@@ -51,3 +38,11 @@ To use the CSS-only banner component, include the following CSS file in your pro
 - If the banner is used to display an important notification to a user, use the `role="alert"` attribute on the `<forge-banner>` element.
   - This is equivalent to using `aria-live="assertive"`.
   - If the banner is less urgent, you can use `aria-live="polite"` to wait until the user is finished with their current task.
+
+## CSS-Only
+
+The banner component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={BannerStories.CSSOnly} />
+
+<CssOnlyInformation />
