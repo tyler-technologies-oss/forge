@@ -1,6 +1,7 @@
 import { HeaderMdx, Markdown, useOf } from '@storybook/blocks';
 import { Code } from '@storybook/components';
 import { TagItem, getBranchName, getCustomElementType, getCustomElementsTagDeclaration, getCustomElementsTagModule, htmlEncode } from '../utils';
+import { NameDescriptionTable, Section, UsageLink } from './Shared';
 
 import styles from './CustomArgTypes.module.scss';
 import GitHubLogo from './GitHubLogo';
@@ -19,29 +20,6 @@ export const titleFromTagName = (tagName: string) => {
     .replace(/-/g, ' ')
     .replace(/(?:^|\s)\S/g, a => a.toUpperCase());
 };
-
-function UsageLink({ text, href }: { text: string; href: string }) {
-  return (
-    <p>
-      <i>
-        Learn more about <a href={`./${href}`}>{text}</a>.
-      </i>
-    </p>
-  );
-}
-
-function Section({ title, name, children, headingLevel = 'h3' }: { title: string; name: string; headingLevel?: 'h3' | 'h4'; children: React.ReactNode }) {
-  const headingId = headingLevel === 'h3' ? title : `${name}-${title}`;
-  const tagID = headingId.toLowerCase().replace(/[^a-z0-9]/gi, '-');
-  return (
-    <section className={(styles as any).section}>
-      <HeaderMdx as={headingLevel} id={tagID}>
-        {title}
-      </HeaderMdx>
-      {children}
-    </section>
-  );
-}
 
 function ForgeTypeLinks({ typeText }: { typeText: string }) {
   // Encode the type text to preserve special characters such as generic type parameters
@@ -93,30 +71,6 @@ function PropsAttrsTable({ items, globalConfigProperties }: { items: TagItem[]; 
               <Markdown>{item.description}</Markdown>
             </td>
             {!!globalConfigProperties?.length ? <td style={{ textAlign: 'center' }}>{globalConfigProperties.includes(item.name) ? '✅' : ''}</td> : null}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
-
-const TEXT_NAMES = ['(default)'];
-function NameDescriptionTable({ items }: { items: TagItem[] }) {
-  return (
-    <table className={(styles as any).table}>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        {items?.map((property, index) => (
-          <tr key={`${property.name}-${index}`}>
-            <td>{!TEXT_NAMES.includes(property.name) ? <Code>{property.name}</Code> : <i>{property.name}</i>}</td>
-            <td>
-              <Markdown>{property.description}</Markdown>
-            </td>
           </tr>
         ))}
       </tbody>
