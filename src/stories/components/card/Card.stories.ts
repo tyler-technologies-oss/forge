@@ -1,8 +1,11 @@
-import { html, render } from 'lit';
+import { html, nothing, render } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, removeSourceStyleTagParams, standaloneStoryParams } from '../../utils';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconMoreVert } from '@tylertech/tyler-icons/standard';
+import { storyStyles } from '../../decorators';
+import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 import '@tylertech/forge/card';
 import '@tylertech/forge/icon-button';
@@ -12,7 +15,6 @@ import '@tylertech/forge/scaffold';
 import '@tylertech/forge/toolbar';
 
 import styles from './Card.scss?inline';
-import { storyStyles } from '../../decorators';
 
 const component = 'forge-card';
 
@@ -101,5 +103,18 @@ export const Scaffold: Story = {
         </forge-scaffold>
       </forge-card>
     `;
+  }
+};
+
+export const CSSOnly: Story = {
+  ...removeSourceStyleTagParams,
+  render: ({ text, raised, ...args }) => {
+    const cssVarArgs = getCssVariableArgs(args);
+    const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
+    const classes = {
+      'forge-card': true,
+      'forge-card--raised': raised
+    };
+    return html` <div class="forge-card" class=${classMap(classes)} style=${style}>${text}</div> `;
   }
 };
