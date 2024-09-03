@@ -1,4 +1,5 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Canvas, Meta, Title } from '@storybook/blocks';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as RadioStories from './Radio.stories';
 
@@ -64,3 +65,11 @@ This example shows how radios are grouped explicitly by the `<forge-radio-group>
   - Ensure each control can be updated or activated by the keyboard.
 - Radio buttons should be part of a radio group and interpreted as such by assistive technologies such as screen readers.
   - Ensure that your radio group also has an `aria-label` attribute describing its purpose.
+
+## CSS-Only
+
+The radio component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={RadioStories.CSSOnly} />
+
+<CssOnlyInformation />
