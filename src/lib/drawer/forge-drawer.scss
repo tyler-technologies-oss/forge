@@ -20,6 +20,8 @@
   &--right {
     @include base.right;
 
+    border-right: none;
+
     &.forge-drawer--closing {
       @include base.closing(right);
     }
