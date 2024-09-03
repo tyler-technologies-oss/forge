@@ -76,6 +76,12 @@ declare global {
  * @csspart focus-indicator - The focus-indicator indicator element.
  * @csspart state-layer - The state-layer surface element.
  *
+ * @cssclass forge-fab - Apply to the interactive button element.
+ * @cssclass forge-fab--extended - Modifies the button to match the extended variant.
+ * @cssclass forge-fab--small - Renders a more dense/small variant.
+ * @cssclass forge-fab--large - Renders a larger variant.
+ * @cssclass forge-fab--flat - Removes the raised shadow.
+ *
  * @slot - This is a default/unnamed slot. Typically used for icon-only or label-only FABs. If the content forces the width to be large than the height, then the FAB will be in extended mode.
  * @slot start - An element to logically render at the start of the button content.
  * @slot label - Reserved specifically for label text. This forces the button into extended mode.
