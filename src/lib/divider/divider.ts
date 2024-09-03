@@ -30,6 +30,8 @@ declare global {
  * @cssproperty --forge-divider-margin - The margin of divider.
  *
  * @csspart root - The root container element.
+ *
+ * @cssclass forge-divider - The divider class.
  */
 @customElement({
   name: DIVIDER_CONSTANTS.elementName
