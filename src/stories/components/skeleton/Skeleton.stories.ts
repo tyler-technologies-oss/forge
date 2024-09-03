@@ -1,6 +1,8 @@
-import { html, render } from 'lit';
+import { html, nothing, render } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 import '@tylertech/forge/skeleton';
 
@@ -81,4 +83,30 @@ export const FormField = {
       <forge-skeleton form-field></forge-skeleton>
     </div>
   `
+};
+
+export const CSSOnly: Story = {
+  argTypes: {
+    type: {
+      options: ['default', 'avatar', 'list-item', 'text', 'chip', 'button', 'form-field'],
+      control: { type: 'select' }
+    }
+  },
+  args: {
+    type: 'default'
+  },
+  render: ({ type, ...args }) => {
+    const cssVarArgs = getCssVariableArgs(args);
+    const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
+    const classes = {
+      'forge-skeleton': true,
+      'forge-skeleton--avatar': type === 'avatar',
+      'forge-skeleton--list-item': type === 'list-tem',
+      'forge-skeleton--text': type === 'text',
+      'forge-skeleton--chip': type === 'chip',
+      'forge-skeleton--button': type === 'button',
+      'forge-skeleton--form-field': type === 'form-field'
+    };
+    return html` <div class=${classMap(classes)} style=${style}></div> `;
+  }
 };
