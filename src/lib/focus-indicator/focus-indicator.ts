@@ -60,6 +60,11 @@ declare global {
  * @cssproperty --forge-focus-indicator-offset-inline - The inline offset.
  *
  * @csspart indicator - The focus indicator element.
+ *
+ * @cssclass forge-focus-indicator - The element to render the focus indicator on.
+ * @cssclass forge-focus-indicator__target - The element to trigger the focus indicator from when focused.
+ * @cssclass forge-focus-indicator--active - Forces the focus indicator to be visible.
+ * @cssclass forge-focus-indicator--inward - Renders the focus inside the target element.
  */
 @customElement({
   name: FOCUS_INDICATOR_CONSTANTS.elementName

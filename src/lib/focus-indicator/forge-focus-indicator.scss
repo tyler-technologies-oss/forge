@@ -32,4 +32,11 @@
       @include core.inward;
     }
   }
+
+  &--active {
+    .forge-focus-indicator::before,
+    &:focus-visible::before {
+      @include core.active;
+    }
+  }
 }
