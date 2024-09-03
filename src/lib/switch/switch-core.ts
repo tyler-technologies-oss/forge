@@ -22,7 +22,7 @@ export class SwitchCore implements ISwitchCore {
   private _disabled = false;
   private _required = false;
   private _readonly = false;
-  private _icon: SwitchIconVisibility = 'on';
+  private _icon: SwitchIconVisibility = 'both';
   private _labelPosition: SwitchLabelPosition = 'end';
 
   private get _submittedValue(): string | null {
