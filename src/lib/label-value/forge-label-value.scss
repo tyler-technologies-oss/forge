@@ -31,7 +31,9 @@
     }
   }
 
-  &__icon {
+  &__icon,
+  .forge-icon,
+  forge-icon {
     @include core.icon;
     @include core.slotted-icon;
   }
