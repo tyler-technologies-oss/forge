@@ -46,7 +46,6 @@ declare global {
  * - Turn an option on or off in desktop environment.
  *
  * @event {Event} change - Dispatches when the checkbox is checked or unchecked.
- * @event {Event} input - Dispatches when the checkbox is checked or unchecked.
  *
  * @cssproperty --forge-checkbox-background - The color of the checkbox background when unchecked and not indeterminate.
  * @cssproperty --forge-checkbox-width - The inline size of the checkbox.
