@@ -48,6 +48,10 @@ declare global {
  * @csspart header - The header of the panel.
  * @csspart content - The content of the panel.
  *
+ * @cssclass forge-expansion-panel - The expandable element content container (required).
+ * @cssclass forge-expansion-panel__content - The expandable content within the panel container.
+ * @cssclass forge-expansion-panel--open - The open state of the panel.
+ *
  * @slot - The content of the panel.
  * @slot header - The header of the panel.
  */

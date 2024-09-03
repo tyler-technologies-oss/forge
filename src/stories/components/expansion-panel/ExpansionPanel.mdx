@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as ExpansionPanelStories from './ExpansionPanel.stories';
 
 <Meta of={ExpansionPanelStories} />
@@ -43,3 +44,30 @@ The button can also be placed elsewhere in the document, outside the expansion p
   <div id="expandable-content" role="group">Expandable content</div>
 </forge-expansion-panel>
 ```
+
+## CSS-Only
+
+The expansion-panel component is also available as a CSS-only component, but it does require a small amount of JavaScript to toggle the expanded state.
+
+<Canvas of={ExpansionPanelStories.CSSOnly} />
+
+Below is an example JavaScript snippet that toggles the expanded state of the CSS-only expansion panel:
+
+```js
+// Get the button element
+const button = expansionPanel.querySelector('#my-button');
+
+// Get the expansion panel element
+const expansionPanel = document.querySelector('#my-button + .forge-expansion-panel');
+
+// Toggle the expanded state when the button is clicked
+button.addEventListener('click', () => {
+  const expanded = button.getAttribute('aria-expanded') === 'true';
+  button.setAttribute('aria-expanded', !expanded);
+  expandableContent.classList.toggle('forge-expansion-panel--open', !expanded);
+});
+```
+
+> **Note:** This is a simple example. You may need to adjust the JavaScript to fit your specific use case, or to fit framework-specific usage.
+
+<CssOnlyInformation />
