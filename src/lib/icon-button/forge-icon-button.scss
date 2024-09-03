@@ -88,6 +88,9 @@
 
   &:disabled {
     @include core.disabled;
+
+    pointer-events: auto;
+    cursor: not-allowed;
   }
 
   forge-circular-progress {
