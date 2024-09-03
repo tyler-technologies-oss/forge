@@ -24,11 +24,7 @@ function CssFilePath({ name, path }: { name: string; path: string }) {
   );
 }
 
-function CssClassTable({ items }: { items?: TagItem[] }) {
-  if (!items) {
-    return null;
-  }
-
+function CssClassTable({ items }: { items: TagItem[] }) {
   return (
     <Section title="CSS Classes" name="css-classes">
       <NameDescriptionTable items={items} />
@@ -48,15 +44,11 @@ export default function CssOnlyInformation() {
   const cssFilePath = declaration.cssFilePath?.name ?? cssFilePathFromTagName(tagName);
   const cssClasses = declaration.cssClasses;
 
-  if (!cssClasses) {
-    return null;
-  }
-
   return (
     <>
       <CssFilePath name={friendlyNameFromTagName(tagName)} path={cssFilePath} />
       <UsageLink text="CSS-Only Components" href="?path=/docs/getting-started-css-only-components--docs" />
-      <CssClassTable items={cssClasses} />
+      {cssClasses?.length ? <CssClassTable items={cssClasses} /> : null}
     </>
   );
 }
