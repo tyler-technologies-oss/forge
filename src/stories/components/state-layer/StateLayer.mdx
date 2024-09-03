@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as StateLayerStories from './StateLayer.stories';
 
 <Meta of={StateLayerStories} />
@@ -30,3 +31,11 @@ A common design pattern is an interactive card with a state layer and focus indi
 ## API
 
 <CustomArgTypes />
+
+## CSS-Only
+
+The state-layer component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={StateLayerStories.CSSOnly} />
+
+<CssOnlyInformation />
