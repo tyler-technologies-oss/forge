@@ -1,6 +1,7 @@
 import { Source, useOf } from '@storybook/blocks';
 import { getCustomElementsTagDeclaration, TagItem } from '../utils';
 import { NameDescriptionTable, Section, UsageLink } from './Shared';
+import { css } from 'lit';
 
 function friendlyNameFromTagName(tagName: string) {
   return tagName
@@ -42,13 +43,23 @@ export default function CssOnlyInformation() {
 
   const declaration = getCustomElementsTagDeclaration(tagName);
   const cssFilePath = declaration.cssFilePath?.name ?? cssFilePathFromTagName(tagName);
-  const cssClasses = declaration.cssClasses;
+  const cssClasses = declaration.cssClasses ?? [];
+
+  const subcomponents = (resolvedOf.story.subcomponents as Record<string, string>) ?? {};
+  if (Object.keys(subcomponents).length) {
+    Object.values(subcomponents).forEach(subTagName => {
+      const subDeclaration = getCustomElementsTagDeclaration(subTagName);
+      if (subDeclaration?.cssClasses?.length) {
+        cssClasses.push(...subDeclaration.cssClasses);
+      }
+    });
+  }
 
   return (
     <>
       <CssFilePath name={friendlyNameFromTagName(tagName)} path={cssFilePath} />
       <UsageLink text="CSS-Only Components" href="?path=/docs/getting-started-css-only-components--docs" />
-      {cssClasses?.length ? <CssClassTable items={cssClasses} /> : null}
+      {cssClasses.length ? <CssClassTable items={cssClasses} /> : null}
     </>
   );
 }

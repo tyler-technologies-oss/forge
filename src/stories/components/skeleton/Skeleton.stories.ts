@@ -1,4 +1,4 @@
-import { html, nothing, render } from 'lit';
+import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 import { classMap } from 'lit/directives/class-map.js';

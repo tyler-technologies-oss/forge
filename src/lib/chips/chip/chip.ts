@@ -121,6 +121,12 @@ declare global {
  * @csspart focus-indicator - The focus indicator of the chip.
  * @csspart state-layer - The state layer surface.
  *
+ * @cssclass forge-chip - The interactive button-like element.
+ * @cssclass forge-chip--invalid - Invalid chips.
+ * @cssclass forge-chip--selected - Selected chips.
+ * @cssclass forge-chip--field - Renders a chip in its field variant (for use within inputs).
+ * @cssclass forge-chip--dense - Uses a smaller font size and height.
+ *
  * @slot - The content of the chip.
  * @slot start - The start content of the chip.
  * @slot end - The end content of the chip.

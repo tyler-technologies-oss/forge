@@ -56,12 +56,18 @@
     @include chip-core.field;
   }
 
-  &--invalid {
+  &--invalid:not(:disabled) {
     @include chip-core.invalid;
   }
 
-  &--selected {
+  &--selected:not(:disabled) {
     @include chip-core.selected;
+
+    @include focus-indicator.provide-theme(
+      (
+        color: #{chip-core.token(background)}
+      )
+    );
 
     &.forge-chip--invalid {
       @include chip-core.invalid-selected;
