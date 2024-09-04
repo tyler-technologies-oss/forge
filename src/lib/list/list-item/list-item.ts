@@ -103,6 +103,19 @@ declare global {
  * @cssproperty --forge-list-item-dense-font-size - The font size when in the dense state.
  * @cssproperty --forge-list-item-dense-indent - The margin inline state when in the dense indented state.
  * @cssproperty --forge-list-item-dense-gap - The gap between the slotted content when in the dense state.
+ *
+ * @cssclass forge-list-item - The list item element (required).
+ * @cssclass forge-list-item--disabled - The disabled state.
+ * @cssclass forge-list-item--dense - The dense state.
+ * @cssclass forge-list-item--interactive - Manually forces the list item to appear interactive with hover/focus states. This will happen automatically if there is a child `<button>` or `<a>` element.
+ * @cssclass forge-list-item--two-line - Uses the two-line style.
+ * @cssclass forge-list-item--three-line - Uses the three-line style.
+ * @cssclass forge-list-item--indented - Indents the list item.
+ * @cssclass forge-list-item--wrap - Wraps the text content.
+ * @cssclass forge-list-item--selected - The selected state.
+ * @cssclass forge-list-item__text - Styles the text content. Apply this to the primary, secondary, and tertiary text content.
+ * @cssclass forge-list-item__start - Styles the start content (typically an icon).
+ * @cssclass forge-list-item__end - Styles the end content (typically an icon).
  */
 @customElement({
   name: LIST_ITEM_CONSTANTS.elementName,
