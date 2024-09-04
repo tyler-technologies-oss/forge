@@ -81,7 +81,7 @@ describe('Switch', () => {
     expect(el.disabled).to.be.false;
     expect(el.required).to.be.false;
     expect(el.readonly).to.be.false;
-    expect(el.icon).to.equal('on');
+    expect(el.icon).to.equal('both');
     expect(el.labelPosition).to.equal('end');
     expect(window.getComputedStyle(ctx.iconOffElement).display).to.equal('none');
     expect(window.getComputedStyle(ctx.iconOnElement).display).to.not.equal('none');
@@ -159,11 +159,11 @@ describe('Switch', () => {
     expect(window.getComputedStyle(offCtx.iconOffElement).display).to.not.equal('none');
     expect(window.getComputedStyle(offCtx.iconOnElement).display).to.equal('none');
 
-    const bothEl = await fixture<ISwitchComponent>(html`<forge-switch icon="both"></forge-switch>`);
+    const bothEl = await fixture<ISwitchComponent>(html`<forge-switch icon="on"></forge-switch>`);
     const bothCtx = new SwitchHarness(bothEl);
 
-    expect(bothEl.icon).to.equal('both');
-    expect(window.getComputedStyle(bothCtx.iconOffElement).display).to.not.equal('none');
+    expect(bothEl.icon).to.equal('on');
+    expect(window.getComputedStyle(bothCtx.iconOffElement).display).to.equal('none');
     expect(window.getComputedStyle(bothCtx.iconOnElement).display).to.not.equal('none');
 
     const noneEl = await fixture<ISwitchComponent>(html`<forge-switch icon="none"></forge-switch>`);
