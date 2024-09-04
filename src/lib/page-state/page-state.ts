@@ -37,6 +37,12 @@ declare global {
  * @csspart message-container - The message container element.
  * @csspart actions-container - The actions container element.
  *
+ * @cssclass forge-page-state - The page state layout container.
+ * @cssclass forge-page-state__graphic - The graphic to display.
+ * @cssclass forge-page-state__title - The title to display.
+ * @cssclass forge-page-state__message - The message to display.
+ * @cssclass forge-page-state__actions - The container element for optional actions.
+ *
  * @slot graphic - The slot where the graphic will be rendered.
  * @slot title - The slot where the title will be rendered.
  * @slot message - The slot where the message will be rendered.

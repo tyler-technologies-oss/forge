@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as PageStateStories from './PageState.stories';
 
 <Meta of={PageStateStories} />
@@ -23,3 +24,11 @@ These states will typically be the only content on the page or container, and th
 
 - If the graphic is important to the communication of the page state, ensure it has an `alt` attribute which describes the graphic, otherwise include an `alt` attribute with an empty value (`alt=""`)
 - If any action buttons are included, verify that they have a [role](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques) attribute set.
+
+## CSS-Only
+
+The page-state component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={PageStateStories.CSSOnly} />
+
+<CssOnlyInformation />
