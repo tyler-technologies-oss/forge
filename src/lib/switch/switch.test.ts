@@ -83,7 +83,7 @@ describe('Switch', () => {
     expect(el.readonly).to.be.false;
     expect(el.icon).to.equal('both');
     expect(el.labelPosition).to.equal('end');
-    expect(window.getComputedStyle(ctx.iconOffElement).display).to.equal('none');
+    expect(window.getComputedStyle(ctx.iconOffElement).display).to.equal('flex');
     expect(window.getComputedStyle(ctx.iconOnElement).display).to.not.equal('none');
     expect(ctx.rootElement.lastElementChild).to.equal(ctx.labelElement);
   });
