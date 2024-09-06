@@ -64,7 +64,7 @@ const expansionPanel = document.querySelector('#my-button + .forge-expansion-pan
 button.addEventListener('click', () => {
   const expanded = button.getAttribute('aria-expanded') === 'true';
   button.setAttribute('aria-expanded', !expanded);
-  expandableContent.classList.toggle('forge-expansion-panel--open', !expanded);
+  expansionPanel.classList.toggle('forge-expansion-panel--open', !expanded);
 });
 ```
 

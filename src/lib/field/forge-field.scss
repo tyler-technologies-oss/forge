@@ -2,14 +2,12 @@
 @use './token-utils' as *;
 @use '../core/styles/spacing';
 @use '../core/styles/theme';
+@use '../core/styles/animation';
 @use '../focus-indicator';
 
 $_input-selector: ':where(input, textarea, select, .forge-field__input)';
 
-@layer base,
-textarea,
-invalid,
-disabled;
+@layer base, textarea, density, invalid, disabled;
 
 @layer base {
   .forge-field {
@@ -35,6 +33,8 @@ disabled;
     display: flex;
     align-items: center;
     gap: #{spacing.variable(xsmall)};
+
+    box-shadow: #{token(elevation, custom)};
 
     padding-inline: #{token(padding-inline)};
     border-radius: #{token(shape)};
@@ -69,6 +69,43 @@ disabled;
       }
     }
 
+    &--plain {
+      @include core.variant(plain);
+
+      outline-width: 0;
+    }
+
+    &--tonal {
+      @include core.variant(tonal);
+
+      outline-width: 0;
+      background: #{theme.variable(primary-container-low)};
+
+      &:hover:not(:has(#{$_input-selector}:disabled)) {
+        background: #{theme.variable(surface-container-minimum)};
+      }
+    }
+
+    &--filled {
+      @include core.variant(filled);
+
+      background: #{theme.variable(surface-bright)};
+    }
+
+    &--raised {
+      @include core.variant(raised);
+
+      outline-width: 0;
+
+      &:hover:not(:has(#{$_input-selector}:disabled)) {
+        box-shadow: #{token(elevation-active, custom)};
+      }
+    }
+
+    &--rounded {
+      @include core.shape(rounded);
+    }
+
     //
     // Inset label
     //
@@ -79,6 +116,9 @@ disabled;
       display: grid;
       grid-template-columns: auto 1fr auto;
       gap: 0;
+      block-size: #{token(height)};
+
+      @include core.inset-density(medium);
 
       label {
         position: absolute;
@@ -88,20 +128,60 @@ disabled;
         color: theme.variable(text-medium);
       }
 
+      &.forge-field--rounded {
+        padding-inline: #{spacing.variable(large)};
+      }
+
+      &.forge-field--float-label-in {
+        label {
+          @keyframes forge-field-float-label-in {
+            from {
+              transform: translateY(15%);
+              opacity: 0;
+            }
+
+            to {
+              transform: translateY(0);
+              opacity: 1;
+            }
+          }
+
+          animation: forge-field-float-label-in #{animation.variable(duration-short4)} #{animation.variable(easing-accelerate)} forwards;
+        }
+      }
+
+      &.forge-field--float-label-out {
+        @keyframes forge-field-float-label-out {
+          from {
+            opacity: 0;
+          }
+
+          to {
+            opacity: 1;
+          }
+        }
+
+        label {
+          animation: forge-field-float-label-out #{animation.variable(duration-short4)} #{animation.variable(easing-accelerate)} forwards;
+        }
+      }
+
       &.forge-field--float-label,
       &:has(:where(#{$_input-selector}:autofill, #{$_input-selector}:placeholder-shown)) {
         label {
           @include core.floating-label;
         }
 
-        #{$_input-selector} {
-          @include core.slotted-floating-input;
+        &:not(.forge-field--extra-small) {
+          #{$_input-selector} {
+            @include core.slotted-floating-input;
+          }
         }
       }
 
       #{$_input-selector} {
         grid-column: 2;
-        block-size: #{token(inset-height)};
+        block-size: #{token(height)};
 
         // Place everything after the input in the last column
         ~ * {
@@ -175,10 +255,53 @@ disabled;
   }
 }
 
+@layer density {
+  .forge-field {
+    &--dense,
+    &--extra-small {
+      @include core.density(extra-small);
+
+      &:has(label) {
+        label {
+          display: none;
+        }
+      }
+    }
+
+    &--small {
+      @include core.density(small);
+
+      &:has(label) {
+        @include core.inset-density(small);
+      }
+    }
+
+    &--large {
+      @include core.density(large);
+
+      &:has(label) {
+        @include core.inset-density(large);
+      }
+    }
+
+    &--extra-large {
+      @include core.density(extra-large);
+
+      &:has(label) {
+        @include core.inset-density(extra-large);
+      }
+    }
+  }
+}
+
 @layer disabled {
   .forge-field {
     &:has(#{$_input-selector}:disabled) {
       @include core.disabled;
+
+      #{$_input-selector}:disabled {
+        cursor: not-allowed;
+      }
     }
   }
 }
@@ -208,6 +331,14 @@ disabled;
 
       label {
         color: #{theme.variable(error)};
+      }
+
+      &.forge-field--tonal {
+        background: #{theme.variable(error-container-low)};
+
+        &:hover:not(:has(#{$_input-selector}:disabled)) {
+          background: #{theme.variable(error-container-minimum)};
+        }
       }
     }
   }
