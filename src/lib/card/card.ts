@@ -39,6 +39,9 @@ declare global {
  * @cssproperty --forge-card-raised-outline-width - The outline width of the card when raised.
  *
  * @csspart root - The root container element.
+ *
+ * @cssclass forge-card - The card container element _(required)_.
+ * @cssclass forge-card--raised - The card container element when raised _(required)_.
  */
 @customElement({
   name: CARD_CONSTANTS.elementName

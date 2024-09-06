@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as AvatarStories from './Avatar.stories';
 
 <Meta of={AvatarStories} />
@@ -32,7 +33,7 @@ Avatars can be composed within other components, such as icon buttons.
 
 <Canvas of={AvatarStories.WithIconButton} />
 
-> Note: Be sure to provide an accessible label for the icon button.
+> **Important:** Be sure to provide an accessible label for the icon button.
 
 ## API
 
@@ -45,3 +46,11 @@ Avatars can be composed within other components, such as icon buttons.
 - Avoid using the avatar component for any essential navigation.
 - If color conveys important information, provide additional cues for users with color perception deficiencies.
 - Verify that there is sufficient contrast between the foreground text and background to meet WCAG 2.2 requirements.
+
+## CSS-Only
+
+The avatar component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={AvatarStories.CSSOnly} />
+
+<CssOnlyInformation />

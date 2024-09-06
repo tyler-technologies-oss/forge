@@ -47,6 +47,9 @@ declare global {
  * @cssproperty --forge-state-layer-pressed-duration - The duration of the pressed animation.
  *
  * @csspart surface - The surface element.
+ *
+ * @cssclass forge-state-layer - The element to render the state layer on.
+ * @cssclass forge-state-layer__target - The target element container to render the state layer within.
  */
 @customElement({
   name: STATE_LAYER_CONSTANTS.elementName

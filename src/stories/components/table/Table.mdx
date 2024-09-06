@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as TableStories from './Table.stories';
 
 <Meta of={TableStories} />
@@ -198,3 +199,11 @@ export class TableExampleComponent implements OnInit {
 - Avoid using tables for layout, as this can make it difficult for users who are using screen readers.
 - The checkbox element will receive the proper ARIA attributes such as `aria-label="Select row"`
 - If the table uses any interactive controls, ensure that any controls that are reachable by the mouse can also be reached and updated by keyboard.
+
+## CSS-Only
+
+The table component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={TableStories.CSSOnly} />
+
+<CssOnlyInformation />

@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as FieldStories from './Field.stories';
 
 <Meta of={FieldStories} />
@@ -40,3 +41,38 @@ This example is just some static HTML that is not focusable, but still uses the 
 
 The field does not provide any semantics for assistive technologies. If you are using the field component for a form field that requires user input, you should ensure
 that the field has the appropriate ARIA attributes to provide context to screen readers and other assistive technologies.
+
+## CSS-Only
+
+The field component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={FieldStories.CSSOnly} />
+
+### Inset Label
+
+If you're using the "inset" variant of the field (nesting a `<label>` within), you will need to use JavaScript to control when the label floats and if you want it to animate,
+there are a few classes that you can toggle to achieve this effect properly.
+
+```js
+const field = document.querySelector('.forge-field');
+
+// Respond to user input to control the floating label state
+field.addEventListener('input', () => floatLabel());
+
+// When the page first loads, float the label if the input has a value (without animation)
+floatLabel({ animate: false });
+
+function floatLabel({ animate = true } = {}) {
+  const input = field.querySelector('input');
+  const hasValue = !!input.value.length;
+
+  field.classList.toggle('forge-field--float-label', hasValue);
+
+  if (animate) {
+    field.classList.toggle('forge-field--float-label-in', hasValue);
+    field.classList.toggle('forge-field--float-label-out', !hasValue);
+  }
+}
+```
+
+<CssOnlyInformation />

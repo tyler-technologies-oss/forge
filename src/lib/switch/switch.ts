@@ -52,30 +52,7 @@ declare global {
  * - Toggle a single item on or off, on mobile and tablet
  * - Immediately activate or deactivate something
  *
- * @property {boolean} on - Whether the switch is on the on or off state.
- * @property {boolean} selected - Deprecated. Alias for `on`.
- * @property {boolean} defaultOn - Whether the switch is on or off by default.
- * @property {string} value - The value of the switch.
- * @property {boolean} dense - The density state.
- * @property {boolean} disabled - Controls if the switch is disabled.
- * @property {boolean} required - Controls if the switch is required.
- * @property {boolean} readonly - Controls if the switch is readonly.
- * @property {SwitchIconVisibility} icon - Controls the presence of the off and on icons.
- * @property {SwitchLabelPosition} labelPosition - Whether the label appears before or after the switch.
- *
- * @attribute {string} on - Controls whether the switch is in the on or off state.
- * @attribute {string} selected - Deprecated. Alias for `on`.
- * @attribute {string} default-on - Controls whether the switch is in the on or off state by default.
- * @attribute {string} value - The value of the switch.
- * @attribute {string} dense - Sets the density state.
- * @attribute {string} disabled - Controls if the switch is disabled.
- * @attribute {string} required - Controls if the switch is required.
- * @attribute {string} readonly - Controls if the switch is readonly.
- * @attribute {string} icon - Controls the presence of the off and on icons.
- * @attribute {string} label-position - Sets whether the label appears before or after the switch.
- *
- * @method {(force?: boolean) => void} toggle - Toggles whether the switch is selected or forces a selected state.
- *
+ * @event {Event} change - Dispatches when the switch's value changes.
  * @event {CustomEvent<boolean>} forge-switch-change - Dispatches when the switch's value changes.
  *
  * @cssproperty --forge-theme-primary - The primary color of the switch.
@@ -154,6 +131,13 @@ declare global {
  * @csspart label - Styles the label element.
  * @csspart state-layer - Styles the state layer root element.
  * @csspart focus-indicator - Styles the focus indicator root element.
+ *
+ * @cssclass forge-switch - Apply to the root element _(required)_.
+ * @cssclass forge-switch--dense - Makes the switch dense.
+ * @cssclass forge-switch__thumb - Apply to a child of the root element to render the thumb _(required)_.
+ * @cssclass forge-switch__icon - Apply to one or more children of the thumb element to style them as icons.
+ * @cssclass forge-switch__icon--on - Apply to the the icon representing the switch's "on" state. It will be hidden when the switch is off.
+ * @cssclass forge-switch__icon--off - Apply to the the icon representing the switch's "off" state. It will be hidden when the switch is on.
  */
 @customElement({
   name: SWITCH_CONSTANTS.elementName,
@@ -257,6 +241,7 @@ export class SwitchComponent
     this[setDefaultAria]({ ariaLabel: value });
   }
 
+  /** @ignore */
   public setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void {
     this[internals].setFormValue(value, state);
 
@@ -275,36 +260,84 @@ export class SwitchComponent
     }
   }
 
+  /**
+   * Gets/sets whether the switch is on or off.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare on: boolean;
 
   /**
+   * Alias for `on` _(deprecated)_.
    * @deprecated use `on` instead
+   * @default false
+   * @attribute
    */
   @coreProperty({ name: 'on' })
   public declare selected: boolean;
 
+  /**
+   * Gets/sets whether the switch is on or off by default.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare defaultOn: boolean;
 
+  /**
+   * Gets/sets the value of the switch.
+   * @default 'on'
+   * @attribute
+   */
   @coreProperty()
   public declare value: string;
 
+  /**
+   * Controls whether the switch is dense.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare dense: boolean;
 
+  /**
+   * Controls whether the switch is disabled.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare disabled: boolean;
 
+  /**
+   * Controls whether the switch is required.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare required: boolean;
 
+  /**
+   * Controls whether the switch is readonly.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare readonly: boolean;
 
+  /**
+   * Controls the presence of the off and on icons.
+   * @default 'both'
+   * @attribute
+   */
   @coreProperty()
   public declare icon: SwitchIconVisibility;
 
+  /**
+   * Controls whether the label appears before or after the switch.
+   * @default 'end'
+   * @attribute
+   */
   @coreProperty()
   public declare labelPosition: SwitchLabelPosition;
 

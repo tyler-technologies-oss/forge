@@ -4,6 +4,7 @@ import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 import { tylIconAdjust, tylIconOpenInNew, tylIconPayment, tylIconPayments } from '@tylertech/tyler-icons/standard';
 import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 
 import '@tylertech/forge/avatar';
@@ -127,6 +128,36 @@ export const Avatar: Story = {
           Harley
         </forge-chip>
       </forge-chip-set>
+    `;
+  }
+};
+
+export const CSSOnly: Story = {
+  parameters: {
+    controls: { include: /^--|dense|disabled|invalid|vertical/ }
+  },
+  args: {
+    disabled: false,
+    invalid: false,
+    dense: false,
+    vertical: false
+  },
+  render: ({ disabled, invalid, dense, vertical }) => {
+    const classes = {
+      'forge-chip': true,
+      'forge-chip--invalid': invalid,
+      'forge-chip--dense': dense
+    };
+    return html`
+      <div
+        class=${classMap({
+          'forge-chip-set': true,
+          'forge-chip-set--vertical': vertical
+        })}>
+        <button class=${classMap(classes)} .disabled=${disabled}>Small</button>
+        <button class=${classMap({ ...classes, 'forge-chip--selected': true })} .disabled=${disabled}>Medium</button>
+        <button class=${classMap(classes)} .disabled=${disabled}>Large</button>
+      </div>
     `;
   }
 };

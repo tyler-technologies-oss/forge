@@ -77,6 +77,7 @@ declare global {
  * @property {boolean} [focusIndicatorAllowFocus=false] - Whether the focus indicator should render when the target element matches `:focus` instead of `:focus-visible`.
  *
  * @globalconfig labelPosition
+ * @globalconfig variant
  *
  * @attribute {FieldLabelPosition} [label-position="inset"] - The position of the label relative to the input area.
  * @attribute {FieldLabelAlignment} [label-alignment="start"] - The alignment of the label relative to the input area.
@@ -150,6 +151,22 @@ declare global {
  * @csspart support-text - The element containing the support text slot.
  * @csspart support-text-end - The element containing the support text end slot.
  * @csspart focus-indicator - The focus indicator element.
+ *
+ * @cssclass forge-field - The field container that wraps an `<input>` or `<textarea>`.
+ * @cssclass forge-field--plain - The plain variant doesn't have a border or background.
+ * @cssclass forge-field--tonal - The tonal variant has a shaded background color and no border.
+ * @cssclass forge-field--filled - The filled variant has a solid background color using the surface theme by default.
+ * @cssclass forge-field--raised - The raised variant has a solid background color using the surface theme by default and a shadow, but no outline.
+ * @cssclass forge-field--rounded - Uses a pill-shaped/round shape.
+ * @cssclass forge-field--float-label - Floats the label to the top of the field.
+ * @cssclass forge-field--float-label-in - Starts the floating label animation from its resting state to its floating state.
+ * @cssclass forge-field--float-label-out - Starts the floating label animation from its floating state to its resting state.
+ * @cssclass forge-field--invalid - Uses the error theme on the field.
+ * @cssclass forge-field--dense - Uses the extra-small density on the field.
+ * @cssclass forge-field--extra-small - Uses the extra-small density on the field.
+ * @cssclass forge-field--small - Uses the small density on the field.
+ * @cssclass forge-field--large - Uses the large density on the field.
+ * @cssclass forge-field--extra-large - Uses the extra-large density on the field.
  *
  * @slot - The default/unnamed slot for the field's input.
  * @slot label - Renders its content as a positioned label.

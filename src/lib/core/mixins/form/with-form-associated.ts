@@ -146,17 +146,21 @@ export function WithFormAssociation<TBase extends MixinBase>(base: TBase) {
 
     private _inputElement?: HTMLInputElement | HTMLSelectElement;
 
+    /** @ignore */
     public get form(): HTMLFormElement | null {
       return this[internals].form;
     }
 
+    /** @ignore */
     public get labels(): NodeList {
       return this[internals].labels;
     }
 
+    /** @ignore */
     public get name(): string {
       return this.getAttribute('name') ?? '';
     }
+    /** @ignore */
     public set name(value: string) {
       toggleAttribute(this, !!value, 'name', value);
     }

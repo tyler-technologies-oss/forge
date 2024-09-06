@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as FocusIndicatorStories from './FocusIndicator.stories';
 
 <Meta of={FocusIndicatorStories} />
@@ -23,3 +24,11 @@ A common design pattern is an interactive card with a focus indicator that highl
 ## API
 
 <CustomArgTypes />
+
+## CSS-Only
+
+The focus-indicator component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={FocusIndicatorStories.CSSOnly} />
+
+<CssOnlyInformation />

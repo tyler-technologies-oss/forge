@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as FloatingActionButtonStories from './FloatingActionButton.stories';
 
 <Meta of={FloatingActionButtonStories} />
@@ -46,3 +47,11 @@ You can nest an `<a>` element inside the floating action button to create a link
 - Ensure that there is a distinct visual cue when the FAB is in focus.
 - Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
 - Ensure that buttons placed above other content on the page have proper contrast ratio.
+
+## CSS-Only
+
+The floating action button component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={FloatingActionButtonStories.CSSOnly} />
+
+<CssOnlyInformation />

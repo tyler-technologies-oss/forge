@@ -1,0 +1,26 @@
+@use './core';
+
+.forge-expansion-panel {
+  @include core.tokens;
+}
+
+.forge-expansion-panel {
+  @include core.content;
+
+  &:not(.forge-expansion-panel--open) {
+    @include core.hidden;
+  }
+
+  &--open {
+    @include core.open-base;
+    @include core.open-vertical;
+  }
+
+  &__content {
+    @include core.inner;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}

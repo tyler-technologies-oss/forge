@@ -4,6 +4,7 @@ import { type Meta, type StoryObj } from '@storybook/web-components';
 import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 import { styleMap } from 'lit/directives/style-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
+import { classMap } from 'lit/directives/class-map.js';
 
 import '@tylertech/forge/expansion-panel';
 import '@tylertech/forge/card';
@@ -89,6 +90,39 @@ export const WithCard: Story = {
           </p>
         </forge-expansion-panel>
       </forge-card>
+    `;
+  }
+};
+
+export const CSSOnly: Story = {
+  parameters: {
+    controls: { include: ['open'] }
+  },
+  render: ({ open }) => {
+    const panelRef = createRef();
+    return html`
+      <button
+        type="button"
+        aria-expanded=${open}
+        id="my-button"
+        @click=${(evt: PointerEvent) => {
+          const expanded = !panelRef.value?.classList.contains('forge-expansion-panel--open');
+          (evt.target as HTMLButtonElement).setAttribute('aria-expanded', `${expanded}`);
+          panelRef.value?.classList.toggle('forge-expansion-panel--open', expanded);
+        }}>
+        Toggle
+      </button>
+      <div
+        ${ref(panelRef)}
+        class=${classMap({
+          'forge-expansion-panel': true,
+          'forge-expansion-panel--open': open
+        })}>
+        <div class="forge-expansion-panel__content">
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quae recusandae ullam facilis ipsa deleniti temporibus modi nam, eveniet, dolore aut rem,
+          tempore excepturi! Porro corporis culpa quis modi ab corrupti?
+        </div>
+      </div>
     `;
   }
 };

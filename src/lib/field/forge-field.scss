@@ -1,0 +1,345 @@
+@use './core';
+@use './token-utils' as *;
+@use '../core/styles/spacing';
+@use '../core/styles/theme';
+@use '../core/styles/animation';
+@use '../focus-indicator';
+
+$_input-selector: ':where(input, textarea, select, .forge-field__input)';
+
+@layer base, textarea, density, invalid, disabled;
+
+@layer base {
+  .forge-field {
+    @include tokens(
+      $includes: (
+        shape,
+        outline-style,
+        outline-width,
+        height,
+        inset-height,
+        background,
+        padding-inline,
+        disabled-background,
+        disabled-opacity,
+        placeholder-color
+      )
+    );
+  }
+
+  .forge-field {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: #{spacing.variable(xsmall)};
+
+    box-shadow: #{token(elevation, custom)};
+
+    padding-inline: #{token(padding-inline)};
+    border-radius: #{token(shape)};
+    outline-style: #{token(outline-style)};
+    outline-width: #{token(outline-width)};
+    outline-color: #{theme.variable(outline-low)};
+
+    background: #{token(background)};
+
+    @include core.disableable;
+
+    &:hover:not(:has(#{$_input-selector}:disabled)) {
+      outline-color: #{theme.variable(outline-high)};
+    }
+
+    #{$_input-selector} {
+      @include core.default-slot-content;
+
+      display: flex;
+
+      block-size: #{token(height)};
+      inline-size: 100%;
+
+      overflow: hidden;
+
+      color: #{theme.variable(text-high)};
+      background: transparent;
+      appearance: none;
+
+      &::placeholder {
+        @include core.slotted-placeholder;
+      }
+    }
+
+    &--plain {
+      @include core.variant(plain);
+
+      outline-width: 0;
+    }
+
+    &--tonal {
+      @include core.variant(tonal);
+
+      outline-width: 0;
+      background: #{theme.variable(primary-container-low)};
+
+      &:hover:not(:has(#{$_input-selector}:disabled)) {
+        background: #{theme.variable(surface-container-minimum)};
+      }
+    }
+
+    &--filled {
+      @include core.variant(filled);
+
+      background: #{theme.variable(surface-bright)};
+    }
+
+    &--raised {
+      @include core.variant(raised);
+
+      outline-width: 0;
+
+      &:hover:not(:has(#{$_input-selector}:disabled)) {
+        box-shadow: #{token(elevation-active, custom)};
+      }
+    }
+
+    &--rounded {
+      @include core.shape(rounded);
+    }
+
+    //
+    // Inset label
+    //
+
+    &:has(label) {
+      @include core.floatable-label;
+
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0;
+      block-size: #{token(height)};
+
+      @include core.inset-density(medium);
+
+      label {
+        position: absolute;
+        grid-column: 2;
+        pointer-events: none;
+
+        color: theme.variable(text-medium);
+      }
+
+      &.forge-field--rounded {
+        padding-inline: #{spacing.variable(large)};
+      }
+
+      &.forge-field--float-label-in {
+        label {
+          @keyframes forge-field-float-label-in {
+            from {
+              transform: translateY(15%);
+              opacity: 0;
+            }
+
+            to {
+              transform: translateY(0);
+              opacity: 1;
+            }
+          }
+
+          animation: forge-field-float-label-in #{animation.variable(duration-short4)} #{animation.variable(easing-accelerate)} forwards;
+        }
+      }
+
+      &.forge-field--float-label-out {
+        @keyframes forge-field-float-label-out {
+          from {
+            opacity: 0;
+          }
+
+          to {
+            opacity: 1;
+          }
+        }
+
+        label {
+          animation: forge-field-float-label-out #{animation.variable(duration-short4)} #{animation.variable(easing-accelerate)} forwards;
+        }
+      }
+
+      &.forge-field--float-label,
+      &:has(:where(#{$_input-selector}:autofill, #{$_input-selector}:placeholder-shown)) {
+        label {
+          @include core.floating-label;
+        }
+
+        &:not(.forge-field--extra-small) {
+          #{$_input-selector} {
+            @include core.slotted-floating-input;
+          }
+        }
+      }
+
+      #{$_input-selector} {
+        grid-column: 2;
+        block-size: #{token(height)};
+
+        // Place everything after the input in the last column
+        ~ * {
+          grid-column: 3;
+          margin-inline-start: #{spacing.variable(xsmall)};
+        }
+      }
+
+      // Place everything before the input in the first column
+      > :not(#{$_input-selector} ~ *, #{$_input-selector}, label) {
+        grid-column: 1;
+        margin-inline-end: #{spacing.variable(xsmall)};
+      }
+    }
+
+    //
+    // Focus indicator
+    //
+
+    @include focus-indicator.keyframes;
+
+    &:has(#{$_input-selector}:focus) {
+      outline: none;
+
+      &::after {
+        @include focus-indicator.tokens;
+        @include focus-indicator.base;
+        @include focus-indicator.outward;
+
+        content: '';
+
+        display: block;
+        border-radius: inherit;
+      }
+
+      @include focus-indicator.provide-theme(
+        (
+          color: #{theme.variable(primary)},
+          outward-offset: 0px
+        )
+      );
+    }
+  }
+}
+
+@layer textarea {
+  .forge-field {
+    &:has(textarea:only-child) {
+      padding-inline: 0;
+
+      textarea {
+        padding-inline: #{token(padding-inline)};
+      }
+    }
+
+    &:has(textarea) {
+      align-items: start;
+      block-size: fit-content;
+
+      textarea {
+        @include core.multiline-slotted-input;
+
+        resize: vertical;
+        block-size: fit-content;
+      }
+
+      *:not(textarea) {
+        margin-block-start: #{spacing.variable(xsmall)};
+      }
+    }
+  }
+}
+
+@layer density {
+  .forge-field {
+    &--dense,
+    &--extra-small {
+      @include core.density(extra-small);
+
+      &:has(label) {
+        label {
+          display: none;
+        }
+      }
+    }
+
+    &--small {
+      @include core.density(small);
+
+      &:has(label) {
+        @include core.inset-density(small);
+      }
+    }
+
+    &--large {
+      @include core.density(large);
+
+      &:has(label) {
+        @include core.inset-density(large);
+      }
+    }
+
+    &--extra-large {
+      @include core.density(extra-large);
+
+      &:has(label) {
+        @include core.inset-density(extra-large);
+      }
+    }
+  }
+}
+
+@layer disabled {
+  .forge-field {
+    &:has(#{$_input-selector}:disabled) {
+      @include core.disabled;
+
+      #{$_input-selector}:disabled {
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+@layer invalid {
+  .forge-field {
+    &--invalid,
+    &:has(#{$_input-selector}:invalid) {
+      outline-color: #{theme.variable(error)};
+
+      // TODO: enable after design review determines theme color and interaction
+      // &:hover:not(:has(#{$_input-selector}):disabled) {
+      //   outline-color: #{theme.variable(error-container-high)};
+      // }
+
+      :not(#{$_input-selector}) {
+        color: #{theme.variable(on-error-container)};
+      }
+
+      &.forge-field:has(#{$_input-selector}:focus) {
+        @include focus-indicator.provide-theme(
+          (
+            color: #{theme.variable(error)}
+          )
+        );
+      }
+
+      label {
+        color: #{theme.variable(error)};
+      }
+
+      &.forge-field--tonal {
+        background: #{theme.variable(error-container-low)};
+
+        &:hover:not(:has(#{$_input-selector}:disabled)) {
+          background: #{theme.variable(error-container-minimum)};
+        }
+      }
+    }
+  }
+}

@@ -67,6 +67,7 @@ declare global {
  * @dependency forge-icon-button
  *
  * @globalconfig labelPosition
+ * @globalconfig variant
  *
  * @event {CustomEvent<void>} forge-select-scrolled-bottom - Dispatched when the dropdown list has scrolled to the bottom.
  * @event {CustomEvent<any>} change - Dispatched when the user selects a value.

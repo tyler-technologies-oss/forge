@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as BadgeStories from './Badge.stories';
 
 <Meta of={BadgeStories} />
@@ -36,3 +37,11 @@ Badges are commonly composed together with the [icon button](/?path=/docs/compon
 
 - Verify that there is sufficient contrast between the foreground text and background to meet WCAG 2.2 requirements.
 - If color conveys important information, provide additional cues for users with color perception deficiencies such as an icon.
+
+## CSS-Only
+
+The badge component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={BadgeStories.CSSOnly} />
+
+<CssOnlyInformation />

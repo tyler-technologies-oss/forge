@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as DrawerStories from './Drawer.stories';
 
 <Meta of={DrawerStories} />
@@ -23,3 +24,11 @@ There are two types of drawers:
 
 The drawer component does **not** provide any semantics by default. Developers should provide their own `<aside>` for navigation,
 or various ARIA roles in other scenarios.
+
+## CSS-Only
+
+The drawer component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={DrawerStories.CSSOnly} />
+
+<CssOnlyInformation />

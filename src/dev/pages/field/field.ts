@@ -1,6 +1,7 @@
 import '$src/shared';
 import '@tylertech/forge/field';
 import '@tylertech/forge/label';
+import '@tylertech/forge/field/forge-field.scss';
 import './field.scss';
 import { FieldLabelAlignment, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, IFieldComponent } from '@tylertech/forge/field';
 import { IIconComponent, IconRegistry } from '@tylertech/forge/icon';
@@ -188,4 +189,12 @@ insetMultilineField.floatLabel = !!insetMultilineField.querySelector('textarea')
 
 fields.forEach(field => {
   field.addEventListener('forge-field-popover-icon-click', () => console.log('popover icon clicked'));
+});
+
+// CSS only examples
+
+const cssOnlyInsetInput = document.getElementById('my-css-only-input-inset') as HTMLInputElement;
+cssOnlyInsetInput.addEventListener('input', (event: InputEvent) => {
+  const field = cssOnlyInsetInput.parentElement;;
+  field.classList.toggle('forge-field--float-label', !!cssOnlyInsetInput.value);
 });

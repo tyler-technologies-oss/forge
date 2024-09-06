@@ -10,7 +10,7 @@
   gap: 16px;
 }
 
-:is(forge-button,forge-deprecated-button):not([full-width]) {
+:is(forge-button,forge-deprecated-button,.forge-button:not(.forge-button--link)):not([full-width]) {
   width: 256px;
 }
 
@@ -36,18 +36,20 @@ h3 {
 .custom-button {
   --_custom-button-background: var(--forge-theme-primary);
 
-  @include button.provide-theme((
-    height: 56px,
-    dense-height: 40px,
-    focus-indicator-offset: 4px,
-    shadow: elevation.value(2),
-    hover-shadow: elevation.value(4),
-    active-shadow: elevation.value(8),
-    color: var(--forge-theme-on-primary),
-    background: var(--_custom-button-background),
-    disabled-background: linear-gradient(to right, #aaa 0%, #ccc  51%, #aaa  100%),
-    disabled-shadow: none
-  ));
+  @include button.provide-theme(
+    (
+      height: 56px,
+      dense-height: 40px,
+      focus-indicator-offset: 4px,
+      shadow: elevation.value(2),
+      hover-shadow: elevation.value(4),
+      active-shadow: elevation.value(8),
+      color: var(--forge-theme-on-primary),
+      background: var(--_custom-button-background),
+      disabled-background: linear-gradient(to right, #aaa 0%, #ccc 51%, #aaa 100%),
+      disabled-shadow: none
+    )
+  );
 
   &::after {
     content: '';
@@ -61,25 +63,29 @@ h3 {
   }
 
   &[popover-icon] {
-    @include button.provide-theme(( justify: space-between ));
+    @include button.provide-theme(
+      (
+        justify: space-between
+      )
+    );
   }
 
-  &[theme=secondary] {
+  &[theme='secondary'] {
     --_custom-button-background: var(--forge-theme-secondary);
   }
-  &[theme=tertiary] {
+  &[theme='tertiary'] {
     --_custom-button-background: var(--forge-theme-primary);
   }
-  &[theme=success] {
+  &[theme='success'] {
     --_custom-button-background: var(--forge-theme-success);
   }
-  &[theme=error] {
+  &[theme='error'] {
     --_custom-button-background: var(--forge-theme-error);
   }
-  &[theme=warning] {
+  &[theme='warning'] {
     --_custom-button-background: var(--forge-theme-warning);
   }
-  &[theme=info] {
+  &[theme='info'] {
     --_custom-button-background: var(--forge-theme-info);
   }
 }

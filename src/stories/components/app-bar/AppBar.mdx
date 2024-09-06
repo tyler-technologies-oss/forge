@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as AppBarStories from './AppBar.stories';
 
 <Meta of={AppBarStories} />
@@ -55,3 +56,11 @@ because the app bar is no longer overriding the global theme variables.
 - The app bar component will use an `<h1>` for the title by default. If you override the title slot content, be sure to use the proper heading element.
   - Only **one** `<h1>` should be on a page at any given time (unless a new heading hierarchy is created as a sibling).
 - A `<header>` element is built-in to the app bar component.
+
+## CSS-Only
+
+The app-bar component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={AppBarStories.CSSOnly} />
+
+<CssOnlyInformation />

@@ -8,13 +8,34 @@ import * as MenuStories from './Menu.stories';
 
 Menus are used to provide a list of options/actions to a user, and are typically anchored dynamically to a button or other similar trigger element.
 
-The `<forge-menu>` component is a decorator style component which means it wraps around a trigger element and will attach itself to automatically open
+The `<forge-menu>` component is a "decorator" style component which means it wraps around a trigger element and will attach itself to automatically open
 and close when the trigger element is interacted with.
 
 Menus can be used in a variety of ways, such as a simple list of options, a list of actions, or a hierarchical/cascading list of options. Menus do not
 hold selection state.
 
 <Canvas of={MenuStories.Demo} />
+
+## JavaScript
+
+The `<forge-menu>` currently requires the use of JavaScript to set the options to display in the menu dropdown. The `options` property is an array of objects
+where each object represents a menu item, and each object can have various configuration supplied for things like the label, icon, custom templates, and more.
+
+Below is an example of a basic array of menu options:
+
+```javascript
+const options: IMenuOption[] = [
+  { label: 'Option 1', value: 'option-1' },
+  { label: 'Option 2', value: 'option-2' },
+  { label: 'Option 3', value: 'option-3' }
+];
+```
+
+This options array can then be set (or bound via framework) to the `options` property of the `<forge-menu>` component.
+
+> **Note:** If you need to render icons in the menu, you can use the `icon`/`leadingIcon` and/or `trailingIcon` properties on the menu option object.
+> There are also corresponding `leadingIconType` and `trailingIconType` properties to specify the element type that will be rendered. Set these
+> to `'component'` to render a `<forge-icon>` element.
 
 ## Cascading
 

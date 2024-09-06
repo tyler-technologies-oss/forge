@@ -1,0 +1,59 @@
+@use './core';
+
+.forge-stack {
+  @include core.tokens;
+
+  &:not(.forge-stack--inline) {
+    @include core.override(height, 100%, value);
+  }
+
+  > * {
+    @include core.stretch;
+  }
+}
+
+.forge-stack {
+  @include core.base;
+
+  &--inline {
+    @include core.inline;
+  }
+
+  &--wrap {
+    @include core.wrap;
+  }
+
+  &--stretch {
+    > * {
+      @include core.override(stretch, 1, value);
+    }
+  }
+
+  &--align-start {
+    @include core.override(alignment, start, value);
+  }
+
+  &--align-center {
+    @include core.override(alignment, center, value);
+  }
+
+  &--align-end {
+    @include core.override(alignment, end, value);
+  }
+
+  &--justify-start {
+    @include core.override(justify, start, value);
+  }
+
+  &--justify-center {
+    @include core.override(justify, center, value);
+  }
+
+  &--justify-end {
+    @include core.override(justify, end, value);
+  }
+
+  &--justify-space-between {
+    @include core.override(justify, space-between, value);
+  }
+}

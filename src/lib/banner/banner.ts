@@ -58,6 +58,8 @@ declare global {
  * @slot - The content of the banner.
  * @slot icon - The icon to display.
  * @slot button - The optional button to display.
+ *
+ * @cssclass forge-banner - The banner class _(required)_.
  */
 @customElement({
   name: BANNER_CONSTANTS.elementName,

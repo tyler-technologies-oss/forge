@@ -1,5 +1,6 @@
 import '$src/shared';
 import '@tylertech/forge/toolbar';
+import '@tylertech/forge/toolbar/forge-toolbar.scss';
 import './toolbar.scss';
 import { toggleAttribute } from '@tylertech/forge-core';
 import { IToolbarComponent } from '@tylertech/forge/toolbar';

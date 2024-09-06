@@ -91,7 +91,7 @@ describe('FocusIndicator', () => {
 
     const style = getComputedStyle(focusIndicator);
 
-    expect(style.animationName).to.equal('inward-grow, inward-shrink');
+    expect(style.animationName).to.equal('forge-focus-indicator-inward-grow, forge-focus-indicator-inward-shrink');
     expect(button.matches(':focus-visible')).to.be.true;
     expect(focusIndicator.active).to.be.true;
   });

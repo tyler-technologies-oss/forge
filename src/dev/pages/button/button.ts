@@ -7,6 +7,7 @@ import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconFavorite, tylIconOpenInNew } from '@tylertech/tyler-icons/standard';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import '@tylertech/forge/button';
+import '@tylertech/forge/button/forge-button.scss';
 import '@tylertech/forge/deprecated/button';
 import '@tylertech/forge/label';
 import './button.scss';
@@ -38,7 +39,8 @@ testForm.addEventListener('submit', evt => {
 
 const popoverBtn = document.querySelector('#popover-button') as HTMLButtonElement;
 const popoverEl = document.querySelector('#my-popover') as HTMLElement;
-popoverEl.addEventListener('toggle', ({ newState }: any) => { // TODO: remove `any` when TypeScript version is upgraded for latest DOM typings
+popoverEl.addEventListener('toggle', ({ newState }: any) => {
+  // TODO: remove `any` when TypeScript version is upgraded for latest DOM typings
   popoverBtn.setAttribute('aria-expanded', `${newState === 'open'}`);
 });
 
@@ -60,7 +62,7 @@ disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) =>
 
 const denseToggle = document.querySelector('#opt-dense') as ISwitchComponent;
 denseToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  allButtons.forEach(btn => btn.dense = selected);
+  allButtons.forEach(btn => (btn.dense = selected));
   allDeprecatedButtons.forEach(btn => {
     btn.type = btn.type ? btn.type.replace(/(?:-?dense)?$/, selected ? '-dense' : '') : selected ? 'dense' : '';
   });
@@ -68,18 +70,18 @@ denseToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
 
 const pillToggle = document.querySelector('#opt-pill') as ISwitchComponent;
 pillToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  allButtons.forEach(btn => btn.pill = selected);
+  allButtons.forEach(btn => (btn.pill = selected));
 });
 
 const fullWidthToggle = document.querySelector('#opt-full-width') as ISwitchComponent;
 fullWidthToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  allButtons.forEach(btn => btn.fullWidth = selected);
+  allButtons.forEach(btn => (btn.fullWidth = selected));
   allDeprecatedButtons.forEach(btn => btn.toggleAttribute('full-width', selected));
 });
 
 const popoverIconToggle = document.querySelector('#opt-popover-icon') as ISwitchComponent;
 popoverIconToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  allButtons.filter(btn => btn.id !== 'popover-button').forEach(btn => btn.popoverIcon = selected);
+  allButtons.filter(btn => btn.id !== 'popover-button').forEach(btn => (btn.popoverIcon = selected));
 });
 
 const themeSelect = document.querySelector('#opt-theme') as ISelectComponent;

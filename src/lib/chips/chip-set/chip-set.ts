@@ -45,6 +45,10 @@ declare global {
  *
  * @csspart root - The component's root element.
  *
+ * @cssfilepath chips/forge-chips.css
+ * @cssclass forge-chip-set - The chip container element.
+ * @cssclass forge-chip-set--vertical - Renders the chips vertically.
+ *
  * @slot - The chips to display in the chip set.
  */
 @customElement({

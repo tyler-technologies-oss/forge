@@ -33,6 +33,13 @@ declare global {
  * @csspart header - The header of the scaffold.
  * @csspart body - The body of the scaffold.
  *
+ * @cssclass forge-scaffold - The scaffold container (required).
+ * @cssclass forge-scaffold--viewport - Sizes the scaffold to match the viewport dimensions.
+ * @cssclass forge-scaffold__left - The content to display in the "left" area.
+ * @cssclass forge-scaffold__header - The content to display in the "header" area.
+ * @cssclass forge-scaffold__body - The content to display in the "body" area.
+ * @cssclass forge-scaffold__footer - The content to display in the "footer" area.
+ *
  * @slot header - Places content in the header.
  * @slot body - Places content in the body.
  * @slot footer - Places content in the footer.
