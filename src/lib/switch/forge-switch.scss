@@ -1,0 +1,140 @@
+@use './core';
+@use '../focus-indicator';
+@use '../state-layer';
+
+.forge-switch {
+  @include core.tokens;
+}
+
+.forge-switch {
+  @include core.container;
+  @include focus-indicator.standalone($focus-target: 'input[type=checkbox][switch]');
+  @include focus-indicator.provide-theme(
+    (
+      shape: #{core.token(track-shape)},
+      outward-offset: 0px
+    )
+  );
+
+  #{core.declare(current-state-layer-width)}: #{core.token(state-layer-width)};
+  #{core.declare(current-state-layer-height)}: #{core.token(state-layer-height)};
+
+  display: inline flex;
+
+  input[type='checkbox'][switch] {
+    display: block;
+    position: absolute;
+    appearance: none;
+
+    outline: none;
+    margin: 0;
+    block-size: 100%;
+    inline-size: 100%;
+
+    cursor: inherit;
+  }
+
+  &__thumb {
+    @include core.handle;
+  }
+
+  &__icon {
+    @include core.icon;
+
+    &--on {
+      @include core.icon-on;
+      @include core.icon-hidden;
+    }
+
+    &--off {
+      @include core.icon-off-shown;
+    }
+  }
+
+  &::before {
+    @include core.track;
+
+    display: block;
+    content: '';
+  }
+
+  &:has(input[type='checkbox'][switch]:checked) {
+    @include state-layer.provide-theme(
+      (
+        color: #{core.token(state-layer-on-color)}
+      )
+    );
+
+    .forge-switch__thumb {
+      @include core.handle-on;
+    }
+
+    .forge-switch__icon {
+      &--on {
+        @include core.icon-on-shown;
+      }
+
+      &--off {
+        @include core.icon-hidden;
+      }
+    }
+
+    &::before {
+      @include core.track-on;
+    }
+  }
+
+  &:has(input[type='checkbox'][switch]:disabled) {
+    @include core.switch-disabled;
+    @include core.container-disabled;
+  }
+
+  &:has(input[type='checkbox'][switch]:not(:disabled)) {
+    .forge-switch__thumb {
+      @include state-layer.standalone('::after');
+    }
+
+    &:active {
+      .forge-switch__thumb {
+        @include core.handle-active;
+      }
+
+      .forge-switch__icon {
+        &--off {
+          @include core.icon-active;
+        }
+      }
+
+      &::before {
+        @include core.track-active;
+      }
+    }
+
+    &:has(input[type='checkbox'][switch]:checked) {
+      &:active {
+        .forge-switch__thumb {
+          @include core.handle-active-on;
+        }
+
+        .forge-switch__icon {
+          &--on {
+            @include core.icon-active-on;
+          }
+        }
+
+        &::before {
+          @include core.track-active-on;
+        }
+      }
+    }
+  }
+
+  &:has(input[type='checkbox'][switch]:focus-visible) {
+    @include focus-indicator.keyframes;
+  }
+
+  &--dense {
+    #{core.declare(current-state-layer-width)}: #{core.token(state-layer-dense-width)};
+    #{core.declare(current-state-layer-height)}: #{core.token(state-layer-dense-height)};
+  }
+}

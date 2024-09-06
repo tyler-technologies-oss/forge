@@ -33,6 +33,16 @@ export const standaloneStoryParams: StoryObj = {
   }
 };
 
+export const removeSourceStyleTagParams: StoryObj = {
+  parameters: {
+    docs: {
+      source: {
+        transform: (source: string) => source.replace(/=""/g, '').replace(/<style[\s\S]*<\/style>/, '')
+      }
+    }
+  }
+};
+
 /**
  * Transforms the CSS properties of a custom element into controls for Storybook.
  * @param tagName {string} - The tag name of the custom element
@@ -250,6 +260,8 @@ export interface Declaration {
   cssProperties?: TagItem[];
   cssParts?: TagItem[];
   dependencies?: DependencyItem[];
+  cssFilePath?: TagItem;
+  cssClasses?: TagItem[];
   globalConfigProperties?: GlobalConfigPropertyItem[];
 }
 

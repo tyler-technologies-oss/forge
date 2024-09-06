@@ -20,9 +20,11 @@ $tokens: (
   // Title
   title-color: utils.module-val(page-state, title-color, theme.variable(text-medium)),
   title-spacing: utils.module-val(page-state, title-spacing, spacing.variable(xxxlarge)),
+  title-spacing-mobile: utils.module-val(page-state, title-spacing-mobile, spacing.variable(large)),
   // Message
   message-color: utils.module-val(page-state, message-color, theme.variable(text-high)),
   message-spacing: utils.module-val(page-state, message-spacing, spacing.variable(xxxlarge)),
+  message-spacing-mobile: utils.module-val(page-state, message-spacing-mobile, spacing.variable(large)),
   // Action
   actions-spacing: utils.module-val(page-state, actions-spacing, 16px)
 ) !default;

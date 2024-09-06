@@ -1,0 +1,21 @@
+@use './core';
+@use '../core/styles/theme';
+
+.forge-icon {
+  @include core.tokens;
+}
+
+img.forge-icon,
+svg.forge-icon {
+  @include core.host;
+
+  display: inline-block;
+}
+
+img.forge-icon {
+  @include core.base;
+}
+
+svg {
+  @include core.svg;
+}

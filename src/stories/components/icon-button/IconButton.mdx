@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as IconButtonStories from './IconButton.stories';
 
 <Meta of={IconButtonStories} />
@@ -57,3 +58,11 @@ Icons buttons can be composed with the `<forge-label>` element to provide an acc
   - Ensure that there is an `aria-label` or `aria-labelledby` attribute indicating the purpose of the button.
 - Verify that pressing the space bar or enter key while focused on a button will activate the button in the same manner as if it had been clicked with a mouse.
 - If color conveys important information, provide additional cues for users with color perception deficiencies.
+
+## CSS-Only
+
+The icon-button component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={IconButtonStories.CSSOnly} />
+
+<CssOnlyInformation />

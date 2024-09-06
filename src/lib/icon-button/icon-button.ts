@@ -123,6 +123,15 @@ declare global {
  * @csspart focus-indicator - The focus-indicator indicator element.
  * @csspart state-layer - The state-layer surface element.
  *
+ * @cssclass forge-icon-button - Apply to the interactive button element.
+ * @cssclass forge-icon-button--outlined - The outlined variant.
+ * @cssclass forge-icon-button--tonal - The tonal variant.
+ * @cssclass forge-icon-button--filled - The filled variant.
+ * @cssclass forge-icon-button--raised - The raised variant.
+ * @cssclass forge-icon-button--small - The small density.
+ * @cssclass forge-icon-button--medium - The medium density.
+ * @cssclass forge-icon-button--squared - The squared shape.
+ *
  * @slot - This is a default/unnamed slot for the icon.
  * @slot on - The icon to show when in `toggle` mode when toggled "on".
  * @slot start - Elements to logically render before the icon.

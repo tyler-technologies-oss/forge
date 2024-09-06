@@ -1,0 +1,85 @@
+@use './chip/core' as chip-core;
+@use './chip-set/core' as chip-set-core;
+@use '../focus-indicator';
+@use '../state-layer';
+
+//
+// Chip Set
+//
+
+.forge-chip-set {
+  @include chip-set-core.tokens;
+}
+
+.forge-chip-set {
+  @include chip-set-core.base;
+
+  &--vertical {
+    @include chip-set-core.vertical;
+  }
+}
+
+//
+// Chip
+//
+
+.forge-chip {
+  @include chip-core.tokens;
+}
+
+.forge-chip {
+  @include chip-core.trigger;
+  @include chip-core.base;
+
+  &:not(:disabled) {
+    @include state-layer.standalone;
+    @include state-layer.provide-theme(
+      (
+        color: #{chip-core.token(color)}
+      )
+    );
+
+    &:focus-visible {
+      @include focus-indicator.keyframes;
+    }
+
+    @include focus-indicator.standalone;
+    @include focus-indicator.provide-theme(
+      (
+        color: #{chip-core.token(color)},
+        shape: #{chip-core.token(shape)}
+      )
+    );
+  }
+
+  &--field {
+    @include chip-core.field;
+  }
+
+  &--invalid:not(:disabled) {
+    @include chip-core.invalid;
+  }
+
+  &--selected:not(:disabled) {
+    @include chip-core.selected;
+
+    @include focus-indicator.provide-theme(
+      (
+        color: #{chip-core.token(background)}
+      )
+    );
+
+    &.forge-chip--invalid {
+      @include chip-core.invalid-selected;
+    }
+  }
+
+  &--dense {
+    @include chip-core.dense;
+  }
+
+  &:disabled {
+    @include chip-core.trigger-disabled;
+    @include chip-core.disabled;
+  }
+}

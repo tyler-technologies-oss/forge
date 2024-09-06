@@ -57,6 +57,15 @@ declare global {
  * @attribute {boolean} [wrap=false] - Whether the list has all items that wrap their text or not.
  * @attribute {boolean} [navlist=false] - Controls whether the list is styled a navigation list or not.
  * @attribute {boolean} [noninteractive=false] - Controls whether the list items will automatically attach themselves to interactive slotted elements or not.
+ *
+ * @cssclass forge-list - The list container element.
+ * @cssclass forge-list--dense - Applies a dense style to the list items.
+ * @cssclass forge-list--navlist - Applies a navigation style to the list items. Use this when placed in a drawer or other side-navigation.
+ * @cssclass forge-list--two-line - Applies a two-line style to the list items.
+ * @cssclass forge-list--three-line - Applies a three-line style to the list items.
+ * @cssclass forge-list--indented - Indents the list items.
+ * @cssclass forge-list--wrap - Wraps the text of the list items.
+ * @cssclass forge-list--disabled - Applies a disabled style to the list items.
  */
 @customElement({
   name: LIST_CONSTANTS.elementName,

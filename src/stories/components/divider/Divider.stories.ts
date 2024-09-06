@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
+import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
 
 import '@tylertech/forge/divider';
 
@@ -33,3 +33,10 @@ export default meta;
 type Story = StoryObj;
 
 export const Demo: Story = {};
+
+export const CSSOnly: Story = {
+  ...standaloneStoryParams,
+  render: () => {
+    return html`<hr class="forge-divider" />`;
+  }
+};

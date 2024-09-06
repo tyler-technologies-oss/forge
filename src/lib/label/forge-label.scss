@@ -1,0 +1,33 @@
+@use '../core/styles/typography';
+@use '../core/styles/spacing';
+
+.forge-label {
+  &,
+  &-block,
+  &-inline {
+    @include typography.style(label1);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    gap: #{spacing.variable(xsmall)};
+
+    inline-size: fit-content;
+  }
+
+  &-block {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  &--large {
+    @include typography.style(label2);
+  }
+}
+
+.forge-support-text {
+  @include typography.style(label1);
+
+  margin-block-start: #{spacing.variable(xsmall)};
+}

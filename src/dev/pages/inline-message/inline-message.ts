@@ -2,6 +2,7 @@ import '$src/shared';
 import '@tylertech/forge/icon';
 import { IconRegistry } from '@tylertech/forge/icon';
 import '@tylertech/forge/inline-message';
+import '@tylertech/forge/inline-message/forge-inline-message.scss';
 import { INLINE_MESSAGE_CONSTANTS } from '@tylertech/forge/inline-message';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import { tylIconInfo } from '@tylertech/tyler-icons/standard';

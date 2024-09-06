@@ -1,5 +1,6 @@
 import '$src/shared';
 import '@tylertech/forge/state-layer';
+import '@tylertech/forge/state-layer/forge-state-layer.scss';
 import '@tylertech/forge/focus-indicator';
 import './state-layer.scss';
 import type { ISwitchComponent } from '@tylertech/forge/switch';

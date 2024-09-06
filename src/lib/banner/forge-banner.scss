@@ -1,0 +1,30 @@
+@use './core';
+@use '../button';
+@use '../icon-button';
+
+.forge-banner {
+  @include core.tokens;
+}
+
+.forge-banner {
+  @include core.host;
+  @include core.base;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: #{core.token(gap)};
+  padding-block: #{core.token(padding-block)};
+
+  @include button.provide-theme(
+    (
+      primary-color: #{token(color)}
+    )
+  );
+
+  @include icon-button.provide-theme(
+    (
+      focus-indicator-color: #{token(color)}
+    )
+  );
+}

@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as ToolbarStories from './Toolbar.stories';
 
 <Meta of={ToolbarStories} />
@@ -12,7 +13,8 @@ This component is useful headers and footers within pages, dialogs, sections... 
 
 <Canvas of={ToolbarStories.Demo} />
 
-> **Tip**: If you need the toolbar to expand vertically when its contents wrap, set: `--forge-toolbar-height: 'auto'` to disable the fixed height.
+> **Tip**: If you need the toolbar to expand vertically when its contents wrap, set either the `auto-height` attribute or the
+> `--forge-toolbar-height: auto` CSS custom properties to override the static/fixed height.
 
 ## Inverted
 
@@ -29,3 +31,11 @@ You can use the `inverted` attribute for footers to move the border to the top.
 - Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
 - Ensure the controls are reachable by the tab key.
 - Ensure each control can be updated or activated by the keyboard.
+
+## CSS-Only
+
+This toolbar is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={ToolbarStories.CSSOnly} />
+
+<CssOnlyInformation />

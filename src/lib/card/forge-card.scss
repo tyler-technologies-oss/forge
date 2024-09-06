@@ -1,0 +1,15 @@
+@use './core';
+
+.forge-card {
+  @include core.tokens;
+  @include core.override(height, auto, value);
+  @include core.override(width, auto, value);
+}
+
+.forge-card {
+  @include core.base;
+
+  &--raised {
+    @include core.raised;
+  }
+}

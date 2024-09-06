@@ -1,0 +1,662 @@
+<!-- Default -->
+<div>
+  <h3 class="forge-typography--heading2">Default</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-list-item>List Item One</forge-list-item>
+      <forge-list-item>List Item Two</forge-list-item>
+      <forge-list-item>List Item Three</forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Disabled -->
+<div>
+  <h3 class="forge-typography--heading2">Disabled</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-list-item>
+        <button disabled type="button">List Item One</button>
+      </forge-list-item>
+      <forge-list-item>
+        <button disabled type="button">List Item Two</button>
+      </forge-list-item>
+      <forge-list-item>
+        <button disabled type="button">List Item Three</button>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Single-line -->
+<div>
+  <h3 class="forge-typography--heading2">Single-Line</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-list-item>
+        <button type="button">List Item One</button>
+      </forge-list-item>
+      <forge-list-item>
+        <button type="button">List Item Two</button>
+      </forge-list-item>
+      <forge-list-item>
+        <button type="button">List Item Three</button>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Two-Line -->
+<div>
+  <h3 class="forge-typography--heading2">Two-Line</h3>
+  <div class="list-demo">
+    <forge-list two-line>
+      <forge-list-item>
+        <button type="button" aria-describedby="two-line-desc-1">Primary Text</button>
+        <span id="two-line-desc-1" slot="secondary-text">Secondary Text</span>
+      </forge-list-item>
+      <forge-list-item>
+        <button type="button" aria-describedby="two-line-desc-2">Primary Text</button>
+        <span id="two-line-desc-2" slot="secondary-text">Secondary Text</span>
+      </forge-list-item>
+      <forge-list-item>
+        <button type="button" aria-describedby="two-line-desc-3">Primary Text</button>
+        <span id="two-line-desc-3" slot="secondary-text">Secondary Text</span>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Three-Line -->
+<div>
+  <h3 class="forge-typography--heading2">Three-Line</h3>
+  <div class="list-demo">
+    <forge-list three-line>
+      <forge-list-item>
+        <button type="button" aria-describedby="three-line-secondary-text-1 three-line-tertiary-text-1">Primary Text</button>
+        <span id="three-line-secondary-text-1" slot="secondary-text">Secondary Text</span>
+        <span id="three-line-tertiary-text-1" slot="tertiary-text">Tertiary Text</span>
+      </forge-list-item>
+      <forge-list-item>
+        <button type="button" aria-describedby="three-line-secondary-text-2 three-line-tertiary-text-2">Primary Text</button>
+        <span id="three-line-secondary-text-2" slot="secondary-text">Secondary Text</span>
+        <span id="three-line-tertiary-text-2" slot="tertiary-text">Tertiary Text</span>
+      </forge-list-item>
+      <forge-list-item>
+        <button type="button" aria-describedby="three-line-secondary-text-3 three-line-tertiary-text-3">Primary Text</button>
+        <span id="three-line-secondary-text-3" slot="secondary-text">Secondary Text</span>
+        <span id="three-line-tertiary-text-3" slot="tertiary-text">Tertiary Text</span>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Single-line long text -->
+<div>
+  <h3 class="forge-typography--heading2">Single-Line (long text)</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-list-item>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</forge-list-item>
+      <forge-list-item>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</forge-list-item>
+      <forge-list-item>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Single-line long text w/wrap -->
+<div>
+  <h3 class="forge-typography--heading2">Single-Line (long text w/wrap)</h3>
+  <div class="list-demo">
+    <forge-list wrap>
+      <forge-list-item>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</forge-list-item>
+      <forge-list-item>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</forge-list-item>
+      <forge-list-item>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Two-line long text w/wrap -->
+<div>
+  <h3 class="forge-typography--heading2">Two-Line (long text w/wrap)</h3>
+  <div class="list-demo">
+    <forge-list two-line wrap>
+      <forge-list-item>
+        <span>List Item</span>
+        <span slot="secondary-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</span>
+      </forge-list-item>
+      <forge-list-item>
+        <span>List Item</span>
+        <span slot="secondary-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</span>
+      </forge-list-item>
+      <forge-list-item>
+        <span>List Item</span>
+        <span slot="secondary-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</span>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Three-line long text w/wrap -->
+<div>
+  <h3 class="forge-typography--heading2">Three-Line (long text w/wrap)</h3>
+  <div class="list-demo">
+    <forge-list three-line wrap>
+      <forge-list-item>
+        <span>List Item</span>
+        <span slot="secondary-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</span>
+        <span slot="tertiary-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</span>
+      </forge-list-item>
+      <forge-list-item>
+        <span>List Item</span>
+        <span slot="secondary-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</span>
+        <span slot="tertiary-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</span>
+      </forge-list-item>
+      <forge-list-item>
+        <span>List Item</span>
+        <span slot="secondary-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</span>
+        <span slot="tertiary-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, libero nemo. Similique suscipit ipsam ab veritatis excepturi repellendus ipsa labore! Accusantium, sint ex. Illum architecto rerum, voluptates consectetur cum quaerat.</span>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Single-line (dense) -->
+<div>
+  <h3 class="forge-typography--heading2">Single-Line (dense)</h3>
+  <div class="list-demo">
+    <forge-list dense>
+      <forge-list-item>
+        <button>List Item One</button>
+      </forge-list-item>
+      <forge-list-item>
+        <button>List Item Two</button>
+      </forge-list-item>
+      <forge-list-item>
+        <button>List Item Three</button>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Two-line (dense) -->
+<div>
+  <h3 class="forge-typography--heading2">Two-Line (dense)</h3>
+  <div class="list-demo">
+    <forge-list dense two-line>
+      <forge-list-item>
+        <button>Primary Text</button>
+        <span slot="secondary-text">Secondary Text</span>
+      </forge-list-item>
+      <forge-list-item>
+        <button>Primary Text</button>
+        <span slot="secondary-text">Secondary Text</span>
+      </forge-list-item>
+      <forge-list-item>
+        <button>Primary Text</button>
+        <span slot="secondary-text">Secondary Text</span>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Three-line (dense) -->
+<div>
+  <h3 class="forge-typography--heading2">Three-Line (dense)</h3>
+  <div class="list-demo">
+    <forge-list dense three-line>
+      <forge-list-item>
+        <button>Primary Text</button>
+        <span slot="secondary-text">Secondary Text</span>
+        <span slot="tertiary-text">Tertiary Text</span>
+      </forge-list-item>
+      <forge-list-item>
+        <button>Primary Text</button>
+        <span slot="secondary-text">Secondary Text</span>
+        <span slot="tertiary-text">Tertiary Text</span>
+      </forge-list-item>
+      <forge-list-item>
+        <button>Primary Text</button>
+        <span slot="secondary-text">Secondary Text</span>
+        <span slot="tertiary-text">Tertiary Text</span>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- List with Selected Item -->
+<div>
+  <h3 class="forge-typography--heading2">List with Selected Item</h3>
+  <div class="list-demo">
+    <forge-list three-line selected-value="wifi">
+      <forge-list-item value="wifi">
+        <forge-icon slot="start" name="wifi"></forge-icon>  
+        <button>Wifi</button>
+        <span slot="secondary-text">Secondary Text</span>
+        <span slot="tertiary-text">Tertiary Text</span>
+        <forge-icon slot="end" name="info"></forge-icon>
+      </forge-list-item>
+      <forge-list-item value="bluetooth">
+        <forge-icon slot="start" name="bluetooth"></forge-icon>  
+        <button>Bluetooth</button>
+        <span slot="secondary-text">Secondary Text</span>
+        <span slot="tertiary-text">Tertiary Text</span>
+        <forge-icon slot="end" name="info"></forge-icon>
+      </forge-list-item>
+      <forge-list-item value="date-usage">
+        <forge-icon slot="start" name="data_usage"></forge-icon>  
+        <button>Data Usage</button>
+        <span slot="secondary-text">Secondary Text</span>
+        <span slot="tertiary-text">Tertiary Text</span>
+        <forge-icon slot="end" name="info"></forge-icon>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Start Icon -->
+<div>
+  <h3 class="forge-typography--heading2">Start Icon</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-list-item>
+        <forge-icon slot="start" name="wifi"></forge-icon>
+        <button>List Item</button>
+      </forge-list-item>
+      <forge-list-item>
+        <forge-icon slot="start" name="bluetooth"></forge-icon>
+        <button>List Item</button>
+      </forge-list-item>
+      <forge-list-item>
+        <forge-icon slot="start" name="data_usage"></forge-icon>
+        <button>List Item</button>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- End Icon -->
+<div>
+  <h3 class="forge-typography--heading2">End Icon</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-list-item>
+        <button>List Item</button>
+        <forge-icon slot="end" name="info"></forge-icon>
+      </forge-list-item>
+      <forge-list-item>
+        <button>List Item</button>
+        <forge-icon slot="end" name="info"></forge-icon>
+      </forge-list-item>
+      <forge-list-item>
+        <button>List Item</button>
+        <forge-icon slot="end" name="info"></forge-icon>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Two-Line with Start and End Icon and Divider -->
+<div>
+  <h3 class="forge-typography--heading2">Two-Line with Start and End Icon and Divider</h3>
+  <div class="list-demo" style="--forge-avatar-background: var(--forge-theme-text-medium);">
+    <forge-list two-line>
+      <forge-list-item>
+        <forge-avatar slot="start">
+          <forge-icon  external name="folder"></forge-icon>
+        </forge-avatar>
+        <button type="button">Dog Photos</button>
+        <span slot="secondary-text">9 Jan 2018</span>
+        <forge-icon slot="end" name="info"></forge-icon>
+      </forge-list-item>
+      <forge-list-item>
+        <forge-avatar slot="start">
+          <forge-icon  external name="folder"></forge-icon>
+        </forge-avatar>
+        <button type="button">Cat Photos</button>
+        <span slot="secondary-text">22 Dec 2017</span>
+        <forge-icon slot="end" name="info"></forge-icon>
+      </forge-list-item>
+      <forge-divider aria-hidden="true"></forge-divider>
+      <forge-list-item>
+        <forge-avatar slot="start">
+          <forge-icon  external name="folder"></forge-icon>
+        </forge-avatar>
+        <button type="button">Potatoes</button>
+        <span slot="secondary-text">30 Nov 2017</span>
+        <forge-icon slot="end" name="info"></forge-icon>
+      </forge-list-item>
+      <forge-list-item>
+        <forge-avatar slot="start">
+          <forge-icon  external name="folder"></forge-icon>
+        </forge-avatar>
+        <button type="button">Carrots</button>
+        <span slot="secondary-text">17 Oct 2017</span>
+        <forge-icon slot="end" name="info"></forge-icon>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- List with Dividers and Expandable Items -->
+<div>
+  <h3 class="forge-typography--heading2">List with Dividers and Expandable Items</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-expansion-panel>
+        <forge-list-item slot="header">
+          <forge-icon slot="start" name="code"></forge-icon>
+          <button type="button">List Item One</button>
+          <forge-open-icon slot="end"></forge-open-icon>
+        </forge-list-item>
+        <div role="listitem">
+          <forge-list indented>
+            <forge-list-item>
+              <button type="button">List Item One</button>
+            </forge-list-item>
+            <forge-list-item>
+              <button type="button">List Item Two</button>
+            </forge-list-item>
+            <forge-list-item>
+              <button type="button">List Item Three</button>
+            </forge-list-item>
+          </forge-list>
+        </div>
+      </forge-expansion-panel>
+      <forge-divider role="presentation"></forge-divider>
+      <forge-expansion-panel>
+        <forge-list-item slot="header">
+          <forge-icon slot="start" name="face"></forge-icon>
+          <button type="button">List Item Two</button>
+          <forge-open-icon slot="end"></forge-open-icon>
+        </forge-list-item>
+        <div role="listitem">
+          <forge-list indented>
+            <forge-list-item>
+              <button type="button">List Item One</button>
+            </forge-list-item>
+            <forge-list-item>
+              <button type="button">List Item Two</button>
+            </forge-list-item>
+            <forge-list-item>
+              <button type="button">List Item Three</button>
+            </forge-list-item>
+          </forge-list>
+        </div>
+      </forge-expansion-panel>
+      <forge-divider role="presentation"></forge-divider>
+      <forge-list-item>
+        <button type="button">List Item Three</button>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- List with Start Checkbox -->
+<div>
+  <h3 class="forge-typography--heading2">List with Start Checkbox</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-list-item>
+        <span id="start-checkbox-1">List Item One</span>
+        <forge-checkbox slot="start" checked aria-labelledby="start-checkbox-1"></forge-checkbox>
+      </forge-list-item>
+      <forge-list-item>
+        <span id="start-checkbox-2">List Item Two</span>
+        <forge-checkbox slot="start" aria-labelledby="start-checkbox-2"></forge-checkbox>
+      </forge-list-item>
+      <forge-list-item>
+        <span id="start-checkbox-3">List Item Three</span>
+        <forge-checkbox slot="start" aria-labelledby="start-checkbox-3"></forge-checkbox>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- List with End Checkbox -->
+<div>
+  <h3 class="forge-typography--heading2">List with End Checkbox</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-list-item>
+        <label for="end-checkbox-3">List Item</label>
+        <forge-checkbox id="end-checkbox-3" slot="end" checked aria-label="Select list item one with end"></forge-checkbox>
+      </forge-list-item>
+      <forge-list-item>
+        <label for="end-checkbox-4">List Item</label>
+        <forge-checkbox id="end-checkbox-4" slot="end" aria-label="Select list item two with end"></forge-checkbox>
+      </forge-list-item>
+      <forge-list-item>
+        <label for="end-checkbox-5">List Item</label>
+        <forge-checkbox id="end-checkbox-5" slot="end" aria-label="Select list item three with end"></forge-checkbox>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- List with Start Radio Buttons -->
+<div>
+  <h3 class="forge-typography--heading2">List with Start Radio Buttons</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-list-item>
+        <forge-radio slot="start" name="list-with-start-radios" aria-labelledby="start-radio-1"></forge-radio>
+        <span id="start-radio-1">List Item</span>
+      </forge-list-item>
+      <forge-list-item>
+        <forge-radio slot="start" name="list-with-start-radios" aria-labelledby="start-radio-2" checked></forge-radio>
+        <span id="start-radio-2">List Item</span>
+      </forge-list-item>
+      <forge-list-item>
+        <forge-radio slot="start" name="list-with-start-radios" aria-labelledby="start-radio-3"></forge-radio>
+        <span id="start-radio-3">List Item</span>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- List with End Radio Buttons -->
+<div>
+  <h3 class="forge-typography--heading2">List with End Radio Buttons</h3>
+  <div class="list-demo">
+    <forge-list aria-label="Choose radio option">
+      <forge-list-item>
+        <label for="end-radio-1">List Item</label>
+        <forge-radio id="end-radio-1" slot="end" name="list-radio-end" aria-label="Select list item one with end radio"></forge-radio>
+      </forge-list-item>
+      <forge-list-item>
+        <label for="end-radio-2">List Item</label>
+        <forge-radio id="end-radio-2" slot="end" name="list-radio-end" checked aria-label="Select list item two with end radio"></forge-radio>
+      </forge-list-item>
+      <forge-list-item>
+        <label for="end-radio-3">List Item</label>
+        <forge-radio id="end-radio-3" slot="end" name="list-radio-end" aria-label="Select list item three with end radio"></forge-radio>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+  
+<!-- List with End Switch -->
+<div>
+  <h3 class="forge-typography--heading2">List with End Switch</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-list-item>
+        <label for="end-switch-1">List Item</label>
+        <forge-switch id="end-switch-1" slot="end" aria-label="Toggle list item"></forge-switch>
+      </forge-list-item>
+      <forge-list-item>
+        <label for="end-switch-2">List Item</label>
+        <forge-switch id="end-switch-2" slot="end" checked aria-label="Toggle list item"></forge-switch>
+      </forge-list-item>
+      <forge-list-item>
+        <label for="end-switch-3">List Item</label>
+        <forge-switch id="end-switch-3" slot="end" aria-label="Toggle list item"></forge-switch>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- List with multiple Checkboxes (requires use of forge-ignore attribute) -->
+<div>
+  <h3 class="forge-typography--heading2">List with multiple Checkboxes (requires use of forge-ignore attribute)</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-list-item>
+        <forge-checkbox tabindex="-1" slot="start" checked aria-label="Select list item one with ignored end checkbox"></forge-checkbox>
+        <button>List Item</button>
+        <forge-checkbox tabindex="-1" slot="end" forge-ignore aria-label="Select list item with end checkbox and ignored start checkbox"></forge-checkbox>
+      </forge-list-item>
+      <forge-list-item>
+        <forge-checkbox tabindex="-1" slot="start" aria-label="Select list item with start checkbox and ignored end checkbox"></forge-checkbox>
+        <button>List Item</button>
+        <forge-checkbox tabindex="-1" slot="end" forge-ignore aria-label="Select list item two with ignored end checkbox"></forge-checkbox>
+      </forge-list-item>
+      <forge-list-item>
+        <forge-checkbox tabindex="-1" slot="start" aria-label="Select list item"></forge-checkbox>
+        <button>List Item</button>
+        <forge-checkbox tabindex="-1" slot="end" forge-ignore aria-label="Select list item three with ignored end checkbox"></forge-checkbox>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- List Inside of Drawer -->
+<div>
+  <h3 class="forge-typography--heading2">List Inside of Drawer</h3>
+  <div class="list-demo">
+    <forge-drawer static open>
+      <aside>
+        <forge-list navlist>
+          <forge-list-item>
+            <button type="button">Home</button>
+          </forge-list-item>
+          <forge-divider role="presentation"></forge-divider>
+          <forge-list-item selected>
+            <button type="button">About</button>
+          </forge-list-item>
+          <forge-divider role="presentation"></forge-divider>
+          <forge-list-item>
+            <button type="button">Contact</button>
+          </forge-list-item>
+        </forge-list>
+      </aside>
+    </forge-drawer>
+  </div>
+</div>
+
+<!-- With nested buttons -->
+<div>
+  <h3 class="forge-typography--heading2">With nested buttons</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-list-item>
+        <button type="button">List Item (ignore start)</button>
+        <forge-checkbox slot="start" tabindex="-1" forge-ignore aria-label="Select list item with ignored start checkbox"></forge-checkbox>
+      </forge-list-item>
+      <forge-list-item>
+        List Item w/switch
+        <forge-switch slot="end" aria-label="Toggle list item with end switch"></forge-switch>
+      </forge-list-item>
+
+      <forge-list-item>
+        <button>List Item ignore switch</button>
+        <forge-switch slot="end" tabindex="-1" aria-label="Toggle list item with ignored end switch" forge-ignore></forge-switch>
+      </forge-list-item>
+
+      <forge-list-item>
+        <button type="button" aria-labelledby="li-3"></button>
+        <span id="li-3">List Item (ignore end)</span>
+        <forge-checkbox slot="end" tabindex="-1" forge-ignore aria-label="Select list item with ignored end checkbox"></forge-checkbox>
+      </forge-list-item>
+
+      <forge-list-item>
+        List Item w/start
+        <forge-checkbox slot="start" aria-label="Select list item with start labeled button"></forge-checkbox>
+      </forge-list-item>
+
+      <forge-list-item>
+        List Item Two w/end
+        <forge-checkbox slot="end" aria-label="Select list item with checkable end checkbox"></forge-checkbox>
+      </forge-list-item>
+
+      <forge-list-item>
+        <button type="button">List Item</button>
+      </forge-list-item>
+
+      <forge-list-item>Default (non-interactive) List Item</forge-list-item>
+      
+      <forge-list-item>
+        <button disabled>List Item Disabled</button>
+      </forge-list-item>
+
+      <forge-list-item>
+        <forge-icon-button slot="start" aria-label="Test start button">
+          <forge-icon name="forge_logo"></forge-icon>
+        </forge-icon-button>
+
+        <button type="button">List Item w/icon button</button>
+        
+        <forge-icon-button slot="end" aria-label="Test end button">
+          <forge-icon name="forge_logo"></forge-icon>
+        </forge-icon-button>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Listbox -->
+<div>
+  <h3 class="forge-typography--heading2">Listbox role</h3>
+  <div class="list-demo">
+    <forge-list role="listbox" tabindex="0" aria-label="Listbox label">
+      <forge-list-item role="presentation">
+        <button role="option">List Item One</button>
+      </forge-list-item>
+      <forge-list-item role="presentation">
+        <button role="option">List Item Two</button>
+      </forge-list-item>
+      <forge-list-item role="presentation">
+        <button role="option">List Item Three</button>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- Menu -->
+<div>
+  <h3 class="forge-typography--heading2">Menu role</h3>
+  <div class="list-demo">
+    <forge-list role="menu" tabindex="0" aria-label="Menu label">
+      <forge-list-item role="presentation">
+        <button role="menuitem">List Item One</button>
+      </forge-list-item>
+      <forge-list-item role="presentation">
+        <button role="menuitem">List Item Two</button>
+      </forge-list-item>
+      <forge-list-item role="presentation">
+        <button role="menuitem">List Item Three</button>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>
+
+<!-- List with anchor links -->
+<div>
+  <h3 class="forge-typography--heading2">List with anchor links</h3>
+  <div class="list-demo">
+    <forge-list>
+      <forge-list-item>
+        <a href="javascript: console.log('https://www.google.com/');">Google</a>
+        <forge-icon slot="end"  name="open_in_new"></forge-icon>
+      </forge-list-item>
+      <forge-list-item>
+        <a href="javascript: console.log('https://www.bing.com/');">Bing</a>
+        <forge-icon slot="end"  name="open_in_new"></forge-icon>
+      </forge-list-item>
+      <forge-list-item>
+        <a href="javascript: console.log('https://www.yahoo.com/');">Yahoo</a>
+        <forge-icon slot="end" name="open_in_new"></forge-icon>
+      </forge-list-item>
+    </forge-list>
+  </div>
+</div>

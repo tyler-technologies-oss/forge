@@ -16,12 +16,6 @@
     'icon value';
 }
 
-@mixin container {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
 @mixin icon {
   display: inline-flex;
   grid-area: icon;

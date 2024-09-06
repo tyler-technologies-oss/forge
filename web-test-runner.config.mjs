@@ -30,7 +30,8 @@ export const directoryGroup = source =>
  * @type {import('@web/test-runner').TestRunnerConfig}
  */
 export default {
-  concurrentBrowsers: 3,
+  concurrentBrowsers: 1,
+  concurrency: 1,
   nodeResolve: true,
   testsFinishTimeout: 60000,
   testFramework: {

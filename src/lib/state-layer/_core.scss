@@ -111,6 +111,9 @@
   overflow: hidden;
 }
 
+///
+/// Creates the styles for a visual-only state layer without the use of JavaScript.
+///
 @mixin standalone($selector: '::before') {
   @include tokens;
 

@@ -1,7 +1,8 @@
 import { html, nothing } from 'lit-html';
 import { styleMap } from 'lit/directives/style-map.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 
 import '@tylertech/forge/focus-indicator';
 import '@tylertech/forge/card';
@@ -78,6 +79,44 @@ export const WithCard: Story = {
           style=${style}>
         </forge-focus-indicator>
       </forge-card>
+    `;
+  }
+};
+
+export const CSSOnly: Story = {
+  parameters: {
+    controls: { include: /^--|active|inward/ }
+  },
+  render: ({ active, inward, ...args }) => {
+    const cssVarArgs = getCssVariableArgs(args);
+    const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
+    const classes = {
+      'forge-focus-indicator': true,
+      'forge-focus-indicator__target': true,
+      'forge-focus-indicator--active': active,
+      'forge-focus-indicator--inward': inward
+    };
+    return html` <button type="button" class=${classMap(classes)} style=${style}>CSS-only Button</button> `;
+  }
+};
+
+export const CSSOnlyWithSentinel: Story = {
+  parameters: {
+    controls: { include: /^--|active|inward/ }
+  },
+  render: ({ active, inward, ...args }) => {
+    const cssVarArgs = getCssVariableArgs(args);
+    const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
+    const classes = {
+      'forge-focus-indicator': true,
+      'forge-focus-indicator--active': active,
+      'forge-focus-indicator--inward': inward
+    };
+    return html`
+      <button type="button" class="forge-focus-indicator__target">
+        CSS-only Button w/Sentinel Element
+        <div class=${classMap(classes)} style=${style}></div>
+      </button>
     `;
   }
 };

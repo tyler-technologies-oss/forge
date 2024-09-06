@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as DialogStories from './Dialog.stories';
 
 <Meta of={DialogStories} />
@@ -199,3 +200,11 @@ export class MyDialogComponent {
 - The dialog component will add the `role="dialog"` and `aria-modal="true"` attribute for you.
 - Be sure to set the `aria-labelledby` and `aria-describedby` attributes on the `<forge-dialog>` element.
   - This will allow for a screen reader to properly announce the dialog title and description when it opens.
+
+## CSS-Only
+
+The dialog component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={DialogStories.CSSOnly} />
+
+<CssOnlyInformation />

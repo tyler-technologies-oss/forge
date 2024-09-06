@@ -61,6 +61,16 @@ declare global {
  * @slot start - Places content at the beginning of the app bar.
  * @slot center - Places content in the center of the app bar.
  * @slot end - Places content at the end of the app bar.
+ *
+ * @cssclass forge-app-bar - The app bar container element _(required)_.
+ * @cssclass forge-app-bar--raised - The app bar container element when raised.
+ * @cssclass forge-app-bar__logo - The logo container element.
+ * @cssclass forge-app-bar__title - The title container element.
+ * @cssclass forge-app-bar__logo-title-container - The container for the logo and title.
+ * @cssclass forge-app-bar__section - A section of the app bar.
+ * @cssclass forge-app-bar__section-start - The start section of the app bar.
+ * @cssclass forge-app-bar__section-center - The center section of the app bar.
+ * @cssclass forge-app-bar__section-end - The end section of the app bar.
  */
 @customElement({
   name: APP_BAR_CONSTANTS.elementName

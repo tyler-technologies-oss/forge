@@ -17,7 +17,7 @@ export interface IAppBarAdapter extends IBaseAdapter {
 
 export class AppBarAdapter extends BaseAdapter<IAppBarComponent> implements IAppBarAdapter {
   private _rootElement: HTMLElement;
-  private _titleElement: HTMLElement;
+  private _titleElement: HTMLElement | undefined;
   private _logoTitleContainerElement: HTMLElement | HTMLAnchorElement;
   private _centerSectionElement: HTMLElement;
   private _centerSlotElement: HTMLSlotElement;
@@ -25,7 +25,6 @@ export class AppBarAdapter extends BaseAdapter<IAppBarComponent> implements IApp
   constructor(component: IAppBarComponent) {
     super(component);
     this._rootElement = getShadowElement(component, APP_BAR_CONSTANTS.selectors.ROOT);
-    this._titleElement = getShadowElement(component, APP_BAR_CONSTANTS.selectors.TITLE);
     this._logoTitleContainerElement = getShadowElement(component, APP_BAR_CONSTANTS.selectors.LOGO_TITLE_CONTAINER);
     this._centerSectionElement = getShadowElement(component, APP_BAR_CONSTANTS.selectors.CENTER_SECTION);
     this._centerSlotElement = getShadowElement(component, APP_BAR_CONSTANTS.selectors.CENTER_SLOT) as HTMLSlotElement;
@@ -38,7 +37,17 @@ export class AppBarAdapter extends BaseAdapter<IAppBarComponent> implements IApp
   }
 
   public setTitleText(value: string): void {
-    this._titleElement.textContent = value;
+    if (value?.trim().length) {
+      if (!this._titleElement) {
+        this._titleElement = this._createTitleElement();
+        const titleSlot = this._logoTitleContainerElement.querySelector('slot[name=title]');
+        titleSlot?.append(this._titleElement);
+      }
+      this._titleElement.textContent = value;
+    } else {
+      this._titleElement?.remove();
+      this._titleElement = undefined;
+    }
   }
 
   public setHref(value: string, listener: EventListener): void {
@@ -87,5 +96,12 @@ export class AppBarAdapter extends BaseAdapter<IAppBarComponent> implements IApp
     focusIndicator.inward = true;
 
     this._logoTitleContainerElement.append(stateLayer, focusIndicator);
+  }
+
+  private _createTitleElement(): HTMLElement {
+    const el = document.createElement('h1');
+    el.classList.add(APP_BAR_CONSTANTS.classes.TITLE);
+    el.setAttribute('part', 'title');
+    return el;
   }
 }

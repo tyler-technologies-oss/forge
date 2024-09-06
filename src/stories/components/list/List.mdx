@@ -1,5 +1,6 @@
 import { Meta, Title, Primary, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as ListStories from './List.stories';
 
 <Meta of={ListStories} />
@@ -69,3 +70,11 @@ content and/or sub-lists.
 - Verify that pressing the space bar or enter key while focused on a list-item will activate the list-item in the same manner as if it had been clicked with a mouse.
 - Be sure to include a role attribute to indicate to screen readers what the list-item is being used for.
 - If the list item contains a checkbox or radio box, ensure that it can be focused and selected/toggled by keyboard.
+
+## CSS-Only
+
+The list component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={ListStories.CSSOnly} />
+
+<CssOnlyInformation />

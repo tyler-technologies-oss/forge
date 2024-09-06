@@ -91,3 +91,8 @@
   min-width: 0;
   min-height: 0;
 }
+
+@mixin viewport {
+  @include override(height, 100dvh, value);
+  @include override(width, 100dvw, value);
+}

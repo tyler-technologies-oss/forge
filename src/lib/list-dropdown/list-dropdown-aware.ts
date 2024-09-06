@@ -45,7 +45,10 @@ export class ListDropdownAware extends BaseComponent {
     }
   }
 
-  /** Gets/sets the list of classes to apply to the popup element. */
+  /**
+   * Gets/sets the list of classes to apply to the popup element.
+   * @attribute popup-classes
+   */
   @coreProperty()
   public declare popupClasses: string | string[];
 
@@ -57,30 +60,52 @@ export class ListDropdownAware extends BaseComponent {
   @coreProperty()
   public declare popupFooterBuilder: ListDropdownFooterBuilder;
 
-  /** Gets/sets whether the popup width is synchronized with the popup target width. */
+  /**
+   * Gets/sets whether the popup width is synchronized with the popup target width.
+   * @default false
+   * @attribute sync-popup-width
+   */
   @coreProperty()
   public declare syncPopupWidth: boolean;
 
-  /** Gets/sets the maximum number of options to display in the dropdown. */
+  /**
+   * Gets/sets the maximum number of options to display in the dropdown.
+   * @default 0
+   * @attribute option-limit
+   */
   @coreProperty()
   public declare optionLimit: number;
 
-  /** Controls the observation of scroll events on the dropdown. */
+  /**
+   * Controls the observation of scroll events on the dropdown.
+   * @default false
+   * @attribute observe-scroll
+   */
   @coreProperty()
   public declare observeScroll: boolean;
 
-  /** The number of pixels from the bottom to trigger the scroll bottom event. Only applicable if `observeScroll` is true. */
+  /**
+   * The number of pixels from the bottom to trigger the scroll bottom event. Only applicable if `observeScroll` is true.
+   * @default 0
+   * @attribute observe-scroll-threshold
+   */
   @coreProperty()
   public declare observeScrollThreshold: number;
 
-  /** Gets/sets whether the popup width will be constrained to a max width of the viewport width (default: `100vw`). */
+  /**
+   * Gets/sets whether the popup width will be constrained to a max width of the viewport width (default: `100vw`).
+   * @default true
+   * @attribute constrain-popup-width
+   */
   @coreProperty()
   public declare constrainPopupWidth: boolean;
 
   /**
    * Gets/sets whether the options will wrap their text or not.
    * This only applies if `constrainPopupWidth` is `true`, if there is an explicit width set via CSS.
-   * */
+   * @default false
+   * @attribute wrap-option-text
+   */
   @coreProperty()
   public declare wrapOptionText: boolean;
 }

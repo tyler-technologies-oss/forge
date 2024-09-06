@@ -31,6 +31,13 @@ export default {
         globalconfig: {
           mappedName: 'globalConfigProperties',
           isArray: true
+        },
+        cssfilepath: {
+          mappedName: 'cssFilePath'
+        },
+        cssclass: {
+          mappedName: 'cssClasses',
+          isArray: true
         }
       }
     })

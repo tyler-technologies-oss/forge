@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as LabelValueStories from './LabelValue.stories';
 
 <Meta of={LabelValueStories} />
@@ -27,3 +28,11 @@ Label values can also include an icon to the left of the label. This is useful f
 ## Accessibility
 
 The label value component is a simple layout component and does not have any specific accessibility requirements.
+
+## CSS-Only
+
+The label-value component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={LabelValueStories.CSSOnly} />
+
+<CssOnlyInformation />
