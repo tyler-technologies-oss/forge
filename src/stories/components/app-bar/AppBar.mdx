@@ -63,4 +63,16 @@ The app-bar component is also available as a CSS-only component without the need
 
 <Canvas of={AppBarStories.CSSOnly} />
 
+You may need to customize the layout and styles to fit your specific needs. While there are built-in "section" classes for you to use, these are very
+specific to the default app bar layout and may not work for _all_ use cases. In these scenarios, you can always create your own layout within the app bar element,
+and use your own HTML/CSS to style the content within while still using the standard app bar design for the overall container.
+
+```html
+<header class="forge-app-bar">
+  <div class="my-custom-layout">
+    <!-- Custom layout content -->
+  </div>
+</header>
+```
+
 <CssOnlyInformation />
