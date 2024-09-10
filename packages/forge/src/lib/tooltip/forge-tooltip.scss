@@ -1,0 +1,76 @@
+@use './core' as *;
+@use './animations';
+@use '../core/styles/typography';
+
+.forge-tooltip {
+  @include tokens;
+  #{declare(slidein-x)}: -10px;
+  #{declare(slidein-y)}: -50%;
+  #{declare(slideout-y)}: -50%;
+  #{declare(right-margin)}: calc(100% + 6px);
+  #{declare(arrow-clip-path)}: polygon(0 0, 0 100%, 100% 100%);
+  position: relative;
+
+  &::before {
+    @include typography.style(body1);
+    content: attr(data-text);
+    position: absolute;
+    top: 50%;
+    left: #{token(right-margin, custom)};
+    margin-left: calc(#{token(arrow-width)}/ 2 + #{token(border-width)});
+    display: none;
+
+    background: #{token(background)};
+    color: #{token(color)};
+
+    width: #{token(width)};
+    max-width: #{token(max-width)};
+    pointer-events: none;
+    text-align: #{token(content-align)};
+    line-height: normal;
+    white-space: normal;
+
+    border-radius: #{token(shape)};
+    border-width: #{token(border-width)};
+    border-style: #{token(border-style)};
+    border-color: #{token(border-color)};
+    padding-block: #{token(padding-block)};
+    padding-inline: #{token(padding-inline)};
+    box-shadow: #{token(elevation)};
+  }
+
+  &:hover::before {
+    display: block;
+    animation-duration: #{token(animation-duration)};
+    animation-timing-function: #{token(animation-timing)};
+    animation-name: slidein;
+    animation-fill-mode: forwards;
+  }
+
+  &:hover::after {
+    display: block;
+    animation-duration: #{token(animation-duration)};
+    animation-timing-function: #{token(animation-timing)};
+    animation-name: slidein-arrow;
+    animation-fill-mode: forwards;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: #{token(right-margin, custom)};
+    height: #{token(arrow-height)};
+    width: #{token(arrow-width)};
+    border-width: #{token(border-width)};
+    border-style: #{token(border-style)};
+    border-color: #{token(border-color)};
+    background: #{token(background)};
+    color: #{token(color)};
+    display: none;
+    border-end-start-radius: #{token(arrow-shape)};
+    clip-path: #{token(arrow-clip-path, custom)};
+
+    @include arrow-placement-right;
+  }
+}
