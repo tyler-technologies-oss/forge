@@ -29,9 +29,9 @@ declare global {
  * @property {boolean} [inline=false] - If true, the label and value will be displayed on the same line.
  * @property {boolean} [dense=false] - Deprecated. Use `inline` instead.
  *
- * @attribute {boolean} empty - If present, the value will be displayed in an alternative emphasized style.
- * @attribute {boolean} ellipsis - If present, the value will be truncated with an ellipsis if it overflows its container.
- * @attribute {boolean} inline - If present, the label and value will be displayed on the same line.
+ * @attribute {boolean} [empty=false] - If present, the value will be displayed in an alternative emphasized style.
+ * @attribute {boolean} [ellipsis=false] - If present, the value will be truncated with an ellipsis if it overflows its container.
+ * @attribute {boolean} [inline=false] - If present, the label and value will be displayed on the same line.
  *
  * @cssproperty --forge-label-value-align - Aligns the label and value. Possible values: `start` (default), `center`, `end`.
  * @cssproperty --forge-label-value-label-spacing - The spacing between the label and value.
@@ -47,6 +47,14 @@ declare global {
  * @csspart label - The label container element.
  * @csspart value - The value container element.
  * @csspart icon - The icon container element.
+ *
+ * @cssclass forge-label-value - The container element for the label and value elements.
+ * @cssclass forge-label-value--inline - Applied to the container element when the label and value are displayed inline next to each other.
+ * @cssclass forge-label-value--empty - Applied to the container element when the value is empty.
+ * @cssclass forge-label-value--ellipsis - Applied to the container element when the value is truncated with an ellipsis if overflowing
+ * @cssclass forge-label-value__label - The label element.
+ * @cssclass forge-label-value__value - The value element.
+ * @cssclass forge-label-value__icon - The icon element.
  *
  * @slot label - The label to display.
  * @slot value - The value to display.

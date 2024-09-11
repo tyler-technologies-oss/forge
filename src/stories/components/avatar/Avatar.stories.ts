@@ -37,7 +37,7 @@ export const WithImage: Story = {
     controls: { include: /^--|imageUrl/ }
   },
   args: {
-    imageUrl: '/ruby.jpg'
+    imageUrl: './ruby.jpg'
   },
   render: ({ imageUrl }) => {
     return html` <forge-avatar image-url=${imageUrl}></forge-avatar> `;
@@ -62,5 +62,12 @@ export const WithIconButton: Story = {
   ...standaloneStoryParams,
   render: args => {
     return html` <forge-icon-button aria-label="Icon button with avatar"> ${customElementStoryRenderer(component, args)} </forge-icon-button> `;
+  }
+};
+
+export const CSSOnly: Story = {
+  ...standaloneStoryParams,
+  render: () => {
+    return html`<div class="forge-avatar">A</div>`;
   }
 };

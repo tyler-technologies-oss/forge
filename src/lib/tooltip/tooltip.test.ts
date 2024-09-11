@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../core/utils/utils';
 import { LONGPRESS_TRIGGER_DELAY } from '../core/mixins/interactions/longpress/with-longpress-listener';
 import type { ITooltipComponent } from './tooltip';
 import type { IOverlayComponent } from '../overlay/overlay';
@@ -429,7 +429,7 @@ describe('Tooltip', () => {
       expect(harness.isOpen).to.be.false;
 
       await harness.hoverTrigger();
-      await timer(harness.tooltipElement.delay + 100);
+      await task(harness.tooltipElement.delay + 100);
 
       expect(harness.isOpen).to.be.true;
     });
@@ -438,7 +438,7 @@ describe('Tooltip', () => {
       const harness = await createFixture({ triggerType: 'hover' });
 
       await harness.hoverTrigger();
-      await timer(harness.tooltipElement.delay + 100);
+      await task(harness.tooltipElement.delay + 100);
       expect(harness.isOpen).to.be.true;
 
       await harness.hoverOutside();
@@ -452,13 +452,13 @@ describe('Tooltip', () => {
       expect(harness.isOpen).to.be.false;
 
       await harness.hoverTrigger();
-      await timer(harness.tooltipElement.delay + 100);
+      await task(harness.tooltipElement.delay + 100);
       expect(harness.isOpen).to.be.true;
 
       await harness.hoverOutside();
-      await timer(harness.tooltipElement.delay / 2);
+      await task(harness.tooltipElement.delay / 2);
       await harness.hoverTrigger();
-      await timer(harness.tooltipElement.delay + 100);
+      await task(harness.tooltipElement.delay + 100);
 
       expect(harness.isOpen).to.be.true;
     });
@@ -473,7 +473,7 @@ describe('Tooltip', () => {
       expect(harness.isOpen).to.be.false;
 
       await harness.hoverTrigger();
-      await timer(harness.tooltipElement.delay + 100);
+      await task(harness.tooltipElement.delay + 100);
       expect(harness.isOpen).to.be.true;
 
       await harness.hoverOutside();
@@ -523,7 +523,7 @@ describe('Tooltip', () => {
       await harness.longpressTrigger();
       expect(harness.isOpen).to.be.true;
 
-      await timer(TOOLTIP_CONSTANTS.numbers.LONGPRESS_VISIBILITY_DURATION + 100);
+      await task(TOOLTIP_CONSTANTS.numbers.LONGPRESS_VISIBILITY_DURATION + 100);
       expect(harness.isOpen).to.be.false;
     });
   });
@@ -584,7 +584,7 @@ describe('Tooltip', () => {
 
       await harness.hoverOutside();
       await harness.hoverTrigger();
-      await timer(harness.tooltipElement.delay + 100);
+      await task(harness.tooltipElement.delay + 100);
       expect(harness.isOpen).to.be.true;
 
       await harness.hoverOutside();
@@ -718,7 +718,7 @@ class TooltipHarness {
   public async longpressTrigger(delay = LONGPRESS_TRIGGER_DELAY): Promise<void> {
     await this.hoverTrigger();
     await sendMouse({ type: 'down', button: 'left' });
-    await timer(delay);
+    await task(delay);
     await sendMouse({ type: 'up', button: 'left' });
     await this.hoverOutside();
   }
@@ -726,7 +726,7 @@ class TooltipHarness {
   public async longpressStopBeforeDelay(): Promise<void> {
     await this.hoverTrigger();
     await sendMouse({ type: 'down', button: 'left' });
-    await timer(LONGPRESS_TRIGGER_DELAY / 2);
+    await task(LONGPRESS_TRIGGER_DELAY / 2);
     await sendMouse({ type: 'up', button: 'left' });
     await this.hoverOutside();
   }

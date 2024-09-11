@@ -35,8 +35,8 @@ declare global {
 
   interface HTMLElementEventMap {
     'forge-split-view-panel-will-resize': CustomEvent<ISplitViewPanelWillResizeEvent>;
-    'forge-split-view-panel-resize-start': CustomEvent<null>;
-    'forge-split-view-panel-resize-end': CustomEvent<null>;
+    'forge-split-view-panel-resize-start': CustomEvent<number>;
+    'forge-split-view-panel-resize-end': CustomEvent<number>;
     'forge-split-view-panel-resize': CustomEvent<number>;
     'forge-split-view-panel-will-open': CustomEvent<ISplitViewPanelOpenEvent>;
     'forge-split-view-panel-will-close': CustomEvent<ISplitViewPanelOpenEvent>;
@@ -75,8 +75,8 @@ declare global {
  * @attribute {number} [auto-close-threshold=0] - The size at which the panel auto closes.
  *
  * @event {CustomEvent<ISplitViewPanelWillResizeEvent>} forge-split-view-panel-will-resize - Emitted before the panel resizes.
- * @event {CustomEvent<null>} forge-split-view-panel-resize-start - Emitted when the panel starts resizing.
- * @event {CustomEvent<null>} forge-split-view-panel-resize-end - Emitted when the panel stops resizing.
+ * @event {CustomEvent<number>} forge-split-view-panel-resize-start - Emitted when the panel starts resizing.
+ * @event {CustomEvent<number>} forge-split-view-panel-resize-end - Emitted when the panel stops resizing.
  * @event {CustomEvent<number>} forge-split-view-panel-resize - Emitted when the panel resizes.
  * @event {CustomEvent<ISplitViewPanelOpenEvent>} forge-split-view-panel-will-open - Emitted before the panel opens.
  * @event {CustomEvent<ISplitViewPanelOpenEvent>} forge-split-view-panel-will-close - Emitted before the panel closes.
@@ -120,7 +120,7 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

@@ -102,6 +102,8 @@
 }
 
 @mixin raised {
+  @include override(background, raised-background);
+  @include override(color, raised-color);
   @include override(shadow, raised-shadow);
 
   &:hover {
@@ -164,6 +166,8 @@
 }
 
 @mixin raised-disabled {
+  @include override(background, raised-disabled-background);
+  @include override(color, raised-disabled-color);
   @include override(shadow, raised-disabled-shadow);
 }
 

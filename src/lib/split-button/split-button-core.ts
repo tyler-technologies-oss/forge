@@ -1,9 +1,8 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { ButtonTheme } from '../button/button-constants';
 import { ISplitButtonAdapter } from './split-button-adapter';
 import { SplitButtonVariant, SPLIT_BUTTON_CONSTANTS } from './split-button-constants';
 
-export interface ISplitButtonCore extends ICustomElementCore {
+export interface ISplitButtonCore {
   variant: SplitButtonVariant;
   theme: ButtonTheme;
   disabled: boolean;
@@ -13,7 +12,7 @@ export interface ISplitButtonCore extends ICustomElementCore {
 
 export class SplitButtonCore implements ISplitButtonCore {
   private _variant: SplitButtonVariant = SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_VARIANT;
-  public _theme: ButtonTheme = SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_THEME;
+  private _theme: ButtonTheme = SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_THEME;
   private _disabled = false;
   private _dense = false;
   private _pill = false;

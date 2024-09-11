@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { tick } from '@tylertech/forge-testing';
+import { frame } from '../core/utils/utils';
 import { sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
@@ -68,7 +68,7 @@ describe('Text field', () => {
     it('should enable input when disabled is false', async () => {
       const harness = await createFixture();
       harness.inputElement.disabled = true;
-      await tick();
+      await frame();
       harness.element.disabled = false;
       expect(harness.inputElement.disabled).to.be.false;
     });
@@ -77,14 +77,14 @@ describe('Text field', () => {
       const harness = await createFixture();
       harness.element.disabled = true;
       harness.inputElement.disabled = false;
-      await tick();
+      await frame();
       expect(harness.element.disabled).to.be.false;
     });
 
     it('should disable text field when input is disabled', async () => {
       const harness = await createFixture();
       harness.inputElement.disabled = true;
-      await tick();
+      await frame();
       expect(harness.element.disabled).to.be.true;
     });
   });
@@ -110,7 +110,7 @@ describe('Text field', () => {
       const harness = await createFixture({ showClear: true });
       harness.element.disabled = true;
       harness.inputElement.value = 'test';
-      await tick();
+      await frame();
       expect(harness.clearButtonElement).to.be.null;
     });
 
@@ -118,7 +118,7 @@ describe('Text field', () => {
       const harness = await createFixture({ showClear: true });
       harness.inputElement.value = 'test';
       harness.clearButtonElement!.click();
-      await tick();
+      await frame();
       expect(harness.inputElement.value).to.equal('');
     });
 
@@ -128,7 +128,7 @@ describe('Text field', () => {
       const eventSpy = spy();
       harness.element.addEventListener(TEXT_FIELD_CONSTANTS.events.CLEAR, eventSpy);
       harness.clearButtonElement!.click();
-      await tick();
+      await frame();
       expect(eventSpy).to.have.been.called;
     });
 
@@ -137,7 +137,7 @@ describe('Text field', () => {
       harness.inputElement.value = 'test';
       harness.element.addEventListener(TEXT_FIELD_CONSTANTS.events.CLEAR, evt => evt.preventDefault());
       harness.clearButtonElement!.click();
-      await tick();
+      await frame();
       expect(harness.inputElement.value).to.equal('test');
     });
   });
@@ -151,7 +151,7 @@ describe('Text field', () => {
       input.id = 'input';
       harness.element.append(input);
       harness.element.append(label);
-      await tick();
+      await frame();
       expect(label.htmlFor).to.equal(input.id);
       await expect(harness.element).to.be.accessible();
     });
@@ -163,7 +163,7 @@ describe('Text field', () => {
       label.slot = 'label';
       harness.element.append(input);
       harness.element.append(label);
-      await tick();
+      await frame();
       const id = input.id;
       expect(id).to.not.be.undefined;
       expect(label.htmlFor).to.equal(id);
@@ -178,7 +178,7 @@ describe('Text field', () => {
       label.slot = 'label';
       harness.element.append(input);
       harness.element.append(label);
-      await tick();
+      await frame();
       expect(label.forElement).to.equal(harness.element);
       expect(input.ariaLabel).to.equal(label.textContent);
       await expect(harness.element).to.be.accessible();
@@ -193,9 +193,9 @@ describe('Text field', () => {
       label.dynamic = true;
       harness.element.append(input);
       harness.element.append(label);
-      await tick();
+      await frame();
       label.textContent = 'New label';
-      await tick();
+      await frame();
       expect(input.ariaLabel).to.equal(label.textContent);
     });
 
@@ -209,9 +209,9 @@ describe('Text field', () => {
       harness.element.append(label);
 
       const focusSpy = spy(harness.inputElement, 'focus');
-      await tick();
+      await frame();
       label.click();
-      await tick();
+      await frame();
       expect(focusSpy).to.have.been.called;
     });
   });
@@ -221,7 +221,7 @@ describe('Text field', () => {
       const harness = await createFixture();
       harness.element.labelPosition = 'inset';
       harness.inputElement.value = 'test';
-      await tick();
+      await frame();
       expect(harness.fieldElement.floatLabel).to.be.true;
     });
 
@@ -229,7 +229,7 @@ describe('Text field', () => {
       const harness = await createFixture();
       harness.element.labelPosition = 'inset';
       harness.inputElement.placeholder = 'test';
-      await tick();
+      await frame();
       expect(harness.fieldElement.floatLabel).to.be.true;
     });
 

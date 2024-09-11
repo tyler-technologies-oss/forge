@@ -51,30 +51,47 @@ declare global {
  *
  * @event {CustomEvent<void>} forge-tab-select - Dispatched when the tab is selected. This event bubbles and it can be useful to capture it on the `<forge-tab-bar>` element.
  *
- * @cssproperty --forge-tab-indicator-color - The color of the tab indicator. Defaults to the primary theme.
- * @cssproperty --forge-tab-indicator-height - The height of the tab indicator.
- * @cssproperty --forge-tab-indicator-shape - The shape of the tab indicator.
- * @cssproperty --forge-tab-container-color - The color of the tab container. Defaults to the surface theme.
+ * @cssproperty --forge-tab-active-color - The primary color of the contents when active.
+ * @cssproperty --forge-tab-inactive-color - The primary color of the contents when inactive.
  * @cssproperty --forge-tab-height - The height of the tab.
- * @cssproperty --forge-tab-shape - The shape of the tab.
+ * @cssproperty --forge-tab-stacked-height - The height of the tab when stacked.
+ * @cssproperty --forge-tab-padding-block - The block space between the tab contents and the bounds of the tab.
+ * @cssproperty --forge-tab-padding-inline - The inline space between the tab contents and the bounds of the tab.
  * @cssproperty --forge-tab-disabled-opacity - The opacity of the tab when disabled.
- * @cssproperty --forge-tab-active-focus-icon-color - The color of the icon when the tab is active and focused. Defaults to the primary theme.
- * @cssproperty --forge-tab-active-hover-icon-color - The color of the icon when the tab is active and hovered. Defaults to the primary theme.
- * @cssproperty --forge-tab-active-icon-color - The color of the icon when the tab is active. Defaults to the primary theme.
- * @cssproperty --forge-tab-active-pressed-icon-color - The color of the icon when the tab is active and pressed. Defaults to the primary theme.
+ * @cssproperty --forge-tab-indicator-color - The color of the active tab indicator.
+ * @cssproperty --forge-tab-indicator-height - The height of the active tab indicator.
+ * @cssproperty --forge-tab-indicator-shape - The shape of the active tab indicator.
+ * @cssproperty --forge-tab-vertical-indicator-shape - The shape of the active tab indicator when vertical.
+ * @cssproperty --forge-tab-secondary-indicator-height - The height of the secondary tab indicator.
+ * @cssproperty --forge-tab-secondary-indicator-shape - The shape of the secondary tab indicator.
+ * @cssproperty --forge-tab-inverted-indicator-shape - The shape of the active tab indicator when inverted.
+ * @cssproperty --forge-tab-vertical-inverted-indicator-shape - The shape of the active tab indicator when vertical and inverted.
+ * @cssproperty --forge-tab-container-color - The color of the tab container.
+ * @cssproperty --forge-tab-container-height - The height of the tab container.
+ * @cssproperty --forge-tab-container-shape - The shape of the tab container.
+ * @cssproperty --forge-tab-content-height - The height of the tab content.
+ * @cssproperty --forge-tab-content-spacing - The spacing between tab contents.
+ * @cssproperty --forge-tab-content-padding - The padding value for both block and inline of the tab content.
+ * @cssproperty --forge-tab-content-padding-block - The block padding of the tab content.
+ * @cssproperty --forge-tab-content-padding-inline - The inline padding of the tab content.
+ * @cssproperty --forge-tab-content-padding-inline-secondary - The inline padding of the tab content when secondary.
+ * @cssproperty --forge-tab-active-focus-icon-color - The color of the icon when the tab is active and focused.
+ * @cssproperty --forge-tab-active-hover-icon-color - The color of the icon when the tab is active and hovered.
+ * @cssproperty --forge-tab-active-icon-color - The color of the icon when the tab is active.
+ * @cssproperty --forge-tab-active-pressed-icon-color - The color of the icon when the tab is active and pressed.
  * @cssproperty --forge-tab-icon-size - The size of the icon.
- * @cssproperty --forge-tab-focus-icon-color - The color of the icon when the tab is focused. Defaults to the text-on-background theme.
- * @cssproperty --forge-tab-hover-icon-color - The color of the icon when the tab is hovered. Defaults to the text-on-background theme.
- * @cssproperty --forge-tab-icon-color - The color of the icon. Defaults to the text-on-background theme.
- * @cssproperty --forge-tab-pressed-icon-color - The color of the icon when the tab is pressed. Defaults to the text-on-background theme.
- * @cssproperty --forge-tab-active-focus-label-text-color - The color of the label text when the tab is active and focused. Defaults to the primary theme.
- * @cssproperty --forge-tab-active-hover-label-text-color - The color of the label text when the tab is active and hovered. Defaults to the primary theme.
- * @cssproperty --forge-tab-active-label-text-color - The color of the label text when the tab is active. Defaults to the primary theme.
- * @cssproperty --forge-tab-active-pressed-label-text-color - The color of the label text when the tab is active and pressed. Defaults to the primary theme.
- * @cssproperty --forge-tab-focus-label-text-color - The color of the label text when the tab is focused. Defaults to the text-on-background theme.
- * @cssproperty --forge-tab-hover-label-text-color - The color of the label text when the tab is hovered. Defaults to the text-on-background theme.
- * @cssproperty --forge-tab-label-text-color - The color of the label text. Defaults to the text-on-background theme.
- * @cssproperty --forge-tab-pressed-label-text-color - The color of the label text when the tab is pressed. Defaults to the text-on-background theme.
+ * @cssproperty --forge-tab-focus-icon-color - The color of the icon when the tab is focused.
+ * @cssproperty --forge-tab-hover-icon-color - The color of the icon when the tab is hovered.
+ * @cssproperty --forge-tab-icon-color - The color of the icon.
+ * @cssproperty --forge-tab-pressed-icon-color - The color of the icon when the tab is pressed.
+ * @cssproperty --forge-tab-active-focus-label-text-color - The color of the label text when the tab is active and focused.
+ * @cssproperty --forge-tab-active-hover-label-text-color - The color of the label text when the tab is active and hovered.
+ * @cssproperty --forge-tab-active-label-text-color - The color of the label text when the tab is active.
+ * @cssproperty --forge-tab-active-pressed-label-text-color - The color of the label text when the tab is active and pressed.
+ * @cssproperty --forge-tab-focus-label-text-color - The color of the label text when the tab is focused.
+ * @cssproperty --forge-tab-hover-label-text-color - The color of the label text when the tab is hovered.
+ * @cssproperty --forge-tab-label-text-color - The color of the label text.
+ * @cssproperty --forge-tab-pressed-label-text-color - The color of the label text when the tab is pressed.
  *
  * @csspart container - The tab container.
  * @csspart content - The tab content container.

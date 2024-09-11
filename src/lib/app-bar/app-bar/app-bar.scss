@@ -36,7 +36,10 @@ $host-tokens: [background foreground];
       on-primary: rgba(black, color-emphasis.value(highest)),
       text-high: rgba(white, color-emphasis.value(highest)),
       text-medium: rgba(white, color-emphasis.value(medium)),
-      text-low: rgba(white, color-emphasis.value(medium-low))
+      text-low: rgba(white, color-emphasis.value(medium-low)),
+      outline-high: rgba(white, color-emphasis.value(highest)),
+      outline-medium: rgba(white, color-emphasis.value(medium)),
+      outline-low: rgba(white, color-emphasis.value(medium-low))
     )
   );
 }

@@ -1,16 +1,18 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as PageStateStories from './PageState.stories';
 
 <Meta of={PageStateStories} />
 
 <Title />
 
-The page-state component is a layout design component that was created to ensure consistency, and provide structure for pages that need to display a state such as empty, error, 404... etc. This will allow us to keep all of our pages that are using this pattern the same.
+The page-state component is a layout component that ensures consistent spacing, alignment, and structure for pages or containers that need to display a state such as empty,
+error, 404... etc.
 
-These states will typically be the only content on the page, and they provide a clear description, with optional actions to take when the user reaches the state.
+These states will typically be the only content on the page or container, and they provide a clear description, with optional actions to take when the user reaches the state.
 
-> The page-state component has built-in margins, and support for mobile layouts.
+> This component uses `@container` queries to adapt to the width of its parent container.
 
 <Canvas of={PageStateStories.Demo} />
 
@@ -22,3 +24,11 @@ These states will typically be the only content on the page, and they provide a 
 
 - If the graphic is important to the communication of the page state, ensure it has an `alt` attribute which describes the graphic, otherwise include an `alt` attribute with an empty value (`alt=""`)
 - If any action buttons are included, verify that they have a [role](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques) attribute set.
+
+## CSS-Only
+
+The page-state component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={PageStateStories.CSSOnly} />
+
+<CssOnlyInformation />

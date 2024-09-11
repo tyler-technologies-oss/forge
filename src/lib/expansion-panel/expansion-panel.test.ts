@@ -3,7 +3,7 @@ import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { IExpansionPanelComponent } from './expansion-panel';
 import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../core/utils/utils';
 import { IOpenIconComponent } from '../open-icon/open-icon';
 
 import './expansion-panel';
@@ -122,7 +122,7 @@ describe('Expansion Panel', () => {
 
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPENING)).to.be.true;
 
-    await timer(500);
+    await task(500);
 
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPENING)).to.be.false;
   });
@@ -136,7 +136,7 @@ describe('Expansion Panel', () => {
 
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPENING)).to.be.false;
 
-    await timer(500);
+    await task(500);
 
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPENING)).to.be.false;
   });
@@ -151,7 +151,7 @@ describe('Expansion Panel', () => {
 
     el.toggle();
 
-    await timer(500);
+    await task(500);
 
     expect(animationCompleteSpy.calledOnce).to.be.true;
   });
@@ -166,7 +166,7 @@ describe('Expansion Panel', () => {
 
     el.toggle();
 
-    await timer(500);
+    await task(500);
 
     expect(animationCompleteSpy.called).to.be.false;
   });
@@ -179,7 +179,7 @@ describe('Expansion Panel', () => {
 
     el.toggle();
 
-    await timer(500);
+    await task(500);
 
     expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).to.be.true;
   });

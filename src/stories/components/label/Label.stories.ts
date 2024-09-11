@@ -1,11 +1,12 @@
-import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { tylIconSettings } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
+import { tylIconSettings } from '@tylertech/tyler-icons/standard';
+import { html } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
 
-import '@tylertech/forge/label';
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/icon-button';
+import '@tylertech/forge/label';
 import { storyStyles } from '../../decorators';
 
 const component = 'forge-label';
@@ -15,6 +16,14 @@ IconRegistry.define(tylIconSettings);
 const meta = {
   title: 'Components/Label',
   component,
+  decorators: [
+    storyStyles(`
+    .align {
+      display: flex;
+      align-items: center;
+    }
+  `)
+  ],
   parameters: {
     controls: { disable: true },
     actions: { disable: true }
@@ -28,8 +37,10 @@ type Story = StoryObj;
 export const IDAssociated: Story = {
   render: () => {
     return html`
-      <forge-label for="my-checkbox">Label</forge-label>
-      <forge-checkbox id="my-checkbox"></forge-checkbox>
+      <div class="align">
+        <forge-label for="my-checkbox">Label</forge-label>
+        <forge-checkbox id="my-checkbox"></forge-checkbox>
+      </div>
     `;
   }
 };
@@ -37,7 +48,7 @@ export const IDAssociated: Story = {
 export const Nested: Story = {
   render: () => {
     return html`
-      <forge-label>
+      <forge-label class="align">
         <span>Label</span>
         <forge-checkbox></forge-checkbox>
       </forge-label>
@@ -48,7 +59,7 @@ export const Nested: Story = {
 export const Legend: Story = {
   render: () => {
     return html`
-      <forge-radio-group>
+      <forge-radio-group class="align">
         <forge-label legend>Choose an option</forge-label>
         <forge-radio name="default">Option 1</forge-radio>
         <forge-radio name="default">Option 2</forge-radio>
@@ -109,6 +120,30 @@ export const WithIconButton: Story = {
         </forge-icon-button>
         <span>Settings</span>
       </forge-label>
+    `;
+  }
+};
+
+export const CSSOnly: Story = {
+  parameters: {
+    controls: { include: ['block', 'large'] }
+  },
+  args: {
+    block: false,
+    large: false
+  },
+  render: ({ block, large }) => {
+    const classes = classMap({
+      'forge-label': true,
+      'forge-label-block': block,
+      'forge-label--large': large
+    });
+    return html`
+      <label class=${classes}>
+        <span>Check me</span>
+        <forge-checkbox></forge-checkbox>
+      </label>
+      <span class="forge-support-text">Support text</span>
     `;
   }
 };

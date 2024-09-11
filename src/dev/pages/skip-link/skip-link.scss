@@ -1,0 +1,20 @@
+.skip-link-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+h3 {
+  margin-block: 16px;
+}
+
+.target-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 8px;
+  padding: 16px;
+}

@@ -100,6 +100,8 @@ declare global {
  * @event {CustomEvent<ITableFilterEventData>} forge-table-filter - Dispatched when a column is filtered. Only applies when `filter` is specified.
  * @event {CustomEvent<void>} forge-table-initialized - Dispatched when the table is initialized in the DOM for the first time.
  * @event {CustomEvent<ITableColumnResizeEventData>} forge-table-column-resize - Dispatched when a column is resized.
+ *
+ * @cssclass forge-data-table - The base table class.
  */
 @customElement({
   name: TABLE_CONSTANTS.elementName,
@@ -140,11 +142,11 @@ export class TableComponent extends BaseComponent implements ITableComponent {
   }
 
   public connectedCallback(): void {
-    this._core.connect();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

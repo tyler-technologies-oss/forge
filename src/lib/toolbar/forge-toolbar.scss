@@ -1,0 +1,61 @@
+@use './core';
+
+.forge-toolbar {
+  @include core.tokens;
+}
+
+.forge-toolbar {
+  @include core.base;
+
+  grid-template-columns: 1fr;
+  grid-template-areas: 'start';
+
+  &:has(.forge-toolbar__center),
+  &:has(.forge-toolbar__end) {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: 'start center end';
+  }
+
+  &:has(.forge-toolbar__end):not(:has(.forge-toolbar__center)) {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 'start end';
+  }
+
+  &--inverted {
+    @include core.inverted;
+  }
+
+  &--no-divider {
+    border: none;
+  }
+
+  &--auto-height {
+    @include core.override(height, auto, value);
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    margin: 0;
+  }
+
+  &__start,
+  &__center,
+  &__end {
+    @include core.section;
+  }
+
+  &__start {
+    grid-area: start;
+  }
+
+  &__center {
+    @include core.center;
+
+    grid-area: center;
+  }
+
+  &__end {
+    @include core.end;
+
+    grid-area: end;
+  }
+}

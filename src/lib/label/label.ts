@@ -1,6 +1,8 @@
-import { customElement, coreProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
+import { updateTarget } from '../constants';
 import { BaseComponent, IBaseComponent } from '../core';
 import { LabelAdapter } from './label-adapter';
+import { ILabelAware } from './label-aware';
 import { LABEL_CONSTANTS } from './label-constants';
 import { LabelCore } from './label-core';
 
@@ -14,6 +16,7 @@ export interface ILabelComponent extends IBaseComponent {
   nonInteractive: boolean;
   legend: boolean;
   update(): void;
+  [updateTarget](target: HTMLElement & ILabelAware): boolean;
 }
 
 declare global {
@@ -27,17 +30,11 @@ declare global {
  *
  * @summary The Forge Label component is used to associate a text label with a compatible Forge component.
  *
- * @property {string | null | undefined} for - The id of the associated element.
- * @property {HTMLElement | null | undefined} forElement - The associated element.
- * @property {HTMLElement | null | undefined} clickTarget - The element that a click should be simulated on. If not defined clicks act on the associated element.
- * @property {boolean} [dynamic=false] - Propagates changes in the label's text content to the associated element.
- * @property {boolean} [nonInteractive=false] - Removes click handling from the label.
- * @property {boolean} [legend=false] - Whether or not the label should be associated with an ancestor element.
- *
- * @attribute {string} for - The id of the associated form component.
- * @attribute {boolean} [dynamic=false] - Propagates changes in the label's text content to the associated element.
- * @attribute {boolean} [non-interactive=false] - Removes click handling from the label.
- * @attribute {boolean} [legend=false] - Whether or not the label should be associated with an ancestor element.
+ * @cssclass forge-label - Apply to the root element of the label to align the label and associated element horizontally.
+ * @cssclass forge-label-block - Apply to the root element instead of `forge-label` to align the label and associated element vertically.
+ * @cssclass forge-label-inline - Alias for `forge-label`.
+ * @cssclass forge-label--large - Uses the large typography style typically applied to inset field labels.
+ * @cssclass forge-support-text - Applies the support text typography style and a top margin.
  */
 @customElement({
   name: LABEL_CONSTANTS.elementName
@@ -60,7 +57,7 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -80,21 +77,49 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
     }
   }
 
+  /**
+   * The id of the associated element.
+   * @default null
+   * @attribute
+   */
   @coreProperty()
   public declare for: string | null | undefined;
 
+  /**
+   * The associated element.
+   * @default null
+   */
   @coreProperty()
   public declare forElement: HTMLElement | null | undefined;
 
+  /**
+   * The element that a click should be simulated on. If not defined clicks act on the associated element.
+   * @default null
+   */
   @coreProperty()
   public declare clickTarget: HTMLElement | null | undefined;
 
+  /**
+   * Propagates changes in the label's text content to the associated element.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare dynamic: boolean;
 
+  /**
+   * Removes click handling from the label.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare nonInteractive: boolean;
 
+  /**
+   * Whether or not the label should be associated with an ancestor element.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare legend: boolean;
 
@@ -103,5 +128,15 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
    */
   public update(): void {
     this._core.update();
+  }
+
+  /**
+   * Attempts to locate and connect to the target element.
+   *
+   * @internal
+   * @returns Whether the target element was located.
+   */
+  public [updateTarget](target: HTMLElement & ILabelAware): boolean {
+    return this._core.updateTarget(target);
   }
 }

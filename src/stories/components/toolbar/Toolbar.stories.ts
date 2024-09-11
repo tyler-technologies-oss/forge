@@ -1,6 +1,9 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import { storyStyles } from '../../decorators';
 
 import '@tylertech/forge/toolbar';
 
@@ -26,7 +29,9 @@ const meta = {
       tagName: component
     })
   },
-  args: {}
+  args: {
+    inverted: false
+  }
 } satisfies Meta;
 
 export default meta;
@@ -45,4 +50,34 @@ export const Inverted: Story = {
       <div slot="after-end">After end</div>
     </forge-toolbar>
   `
+};
+
+export const CSSOnly: Story = {
+  decorators: [
+    storyStyles(`
+.placeholder-container {
+    border: 2px dashed var(--forge-theme-outline);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-block: 8px;
+    margin-block: 4px;
+}
+  `)
+  ],
+  render: ({ inverted, ...args }) => {
+    const cssVarArgs = getCssVariableArgs(args);
+    const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
+    const classes = {
+      'forge-toolbar': true,
+      'forge-toolbar--inverted': inverted
+    };
+    return html`<div class=${classMap(classes)} style=${style}>
+      <div class="forge-toolbar__start placeholder-container">Start</div>
+      <div class="forge-toolbar__center placeholder-container">Center</div>
+      <div class="forge-toolbar__end placeholder-container">End</div>
+    </div>`;
+  }
 };

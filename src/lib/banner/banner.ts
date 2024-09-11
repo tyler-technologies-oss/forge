@@ -35,16 +35,16 @@ declare global {
  *
  * @summary Banners are used to inform users of important information, such as errors, warnings, or success messages.
  *
- * @property {boolean} dismissed - Controls the visibility of the banner.
- * @property {boolean} persistent - Controls the visibility of the built-in dismiss button.
- * @property {BannerTheme} theme - The theme of the banner.
+ * @property {boolean} [dismissed=false] - Controls the visibility of the banner.
+ * @property {boolean} [persistent=false] - Controls the visibility of the built-in dismiss button.
+ * @property {BannerTheme} [theme="info"] - The theme of the banner.
  *
- * @attribute {boolean} dismissed - Controls the visibility of the banner.
- * @attribute {boolean} persistent - Controls the visibility of the built-in dismiss button.
- * @attribute {BannerTheme} theme - The theme of the banner.
+ * @attribute {boolean} [dismissed=false] - Controls the visibility of the banner.
+ * @attribute {boolean} [persistent=false] - Controls the visibility of the built-in dismiss button.
+ * @attribute {BannerTheme} [theme="info"] - The theme of the banner.
  *
- * @event {CustomEvent} forge-banner-before-dismiss - Dispatched before the banner is dismissed. Cancelable to prevent dismissal.
- * @event {CustomEvent} forge-banner-dismissed - Dispatched when the banner is dismissed.
+ * @event {CustomEvent<void>} forge-banner-before-dismiss - Dispatched before the banner is dismissed. Cancelable to prevent dismissal.
+ * @event {CustomEvent<void>} forge-banner-dismissed - Dispatched when the banner is dismissed.
  *
  * @cssproperty --forge-banner-background - The background color of the banner.
  * @cssproperty --forge-banner-color - The text color of the banner.
@@ -58,6 +58,8 @@ declare global {
  * @slot - The content of the banner.
  * @slot icon - The icon to display.
  * @slot button - The optional button to display.
+ *
+ * @cssclass forge-banner - The banner class _(required)_.
  */
 @customElement({
   name: BANNER_CONSTANTS.elementName,

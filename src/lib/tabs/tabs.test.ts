@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../core/utils/utils';
 import { TestHarness } from '../../test/utils/test-harness';
 import { TAB_CONSTANTS } from './tab/tab-constants';
 import { TAB_BAR_CONSTANTS } from './tab-bar';
@@ -21,6 +21,19 @@ describe('Tabs', () => {
 
   it('should be accessible', async () => {
     const el = await createFixture();
+    await expect(el).to.be.accessible();
+  });
+
+  it('should forward aria-label to internal tablist element', async () => {
+    const el = await createFixture();
+    const scrollContainerEl = getShadowElement(el, TAB_BAR_CONSTANTS.selectors.SCROLL_CONTAINER);
+
+    expect(scrollContainerEl.hasAttribute('aria-label')).to.be.false;
+
+    el.setAttribute('data-aria-label', 'Test');
+    await elementUpdated(el);
+
+    expect(scrollContainerEl.getAttribute('aria-label')).to.equal('Test');
     await expect(el).to.be.accessible();
   });
 
@@ -535,9 +548,7 @@ describe('Tabs', () => {
       el.style.width = '1px';
       await elementUpdated(el);
 
-      // TODO: fix nested scroll buttons within tab role
-      // await expect(el).to.be.accessible();
-
+      await expect(el).to.be.accessible();
       expect(el.scrollButtons).to.be.true;
       expect(ctx.hasScrollButtons).to.be.true;
       expect(ctx.backwardScrollButton).to.be.ok;
@@ -603,7 +614,7 @@ describe('Tabs', () => {
       expect(ctx.scrollContainer.scrollLeft).to.equal(0);
 
       ctx.forwardScrollButton.click();
-      await timer(500);
+      await task(500);
       await elementUpdated(el);
 
       expect(scrollBySpy.calledOnce).to.be.true;
@@ -623,7 +634,7 @@ describe('Tabs', () => {
       expect(ctx.scrollContainer.scrollLeft).to.be.greaterThan(0);
 
       ctx.backwardScrollButton.click();
-      await timer(500);
+      await task(500);
       await elementUpdated(el);
 
       expect(scrollBySpy.calledOnce).to.be.true;

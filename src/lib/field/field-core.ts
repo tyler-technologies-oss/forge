@@ -1,5 +1,3 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-import { GlobalConfiguration } from '../core/configuration/global-configuration';
 import { FocusIndicatorFocusMode } from '../focus-indicator';
 import {
   FieldDensity,
@@ -13,7 +11,7 @@ import {
 import { IFieldAdapter } from './field-adapter';
 import { FIELD_CONSTANTS } from './field-constants';
 
-export interface IFieldCore extends ICustomElementCore {
+export interface IFieldCore {
   labelPosition: FieldLabelPosition;
   labelAlignment: FieldLabelAlignment;
   floatLabel: boolean;
@@ -62,7 +60,7 @@ export class FieldCore implements IFieldCore {
 
   public initialize(): void {
     this._adapter.addRootListener('slotchange', this._slotChangeListener);
-    this._adapter.tryApplyGlobalConfiguration(['labelPosition']);
+    this._adapter.tryApplyGlobalConfiguration(['labelPosition', 'variant']);
     this._adapter.setLabelPosition(this._labelPosition);
 
     if (this._popoverIcon) {
@@ -75,7 +73,7 @@ export class FieldCore implements IFieldCore {
   }
 
   private _onPopoverIconClick(): void {
-    this._adapter.dispatchHostEvent(new CustomEvent(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK, { bubbles: true }));
+    this._adapter.dispatchHostEvent(new CustomEvent(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK, { bubbles: true, composed: true }));
   }
 
   public floatLabelWithoutAnimation(value: boolean): void {

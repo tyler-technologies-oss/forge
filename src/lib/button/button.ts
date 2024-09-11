@@ -94,6 +94,10 @@ declare global {
  * @cssproperty --forge-button-hover-shadow - The shadow of the button on hover.
  * @cssproperty --forge-button-active-shadow - The shadow of the button on active state.
  * @cssproperty --forge-button-cursor - The cursor type of the button.
+ * @cssproperty --forge-button-filled-background - The background color of the filled button.
+ * @cssproperty --forge-button-filled-disabled-background - The background color of the disabled filled button.
+ * @cssproperty --forge-button-filled-color - The text color of the filled button.
+ * @cssproperty --forge-button-filled-disabled-color - The text color of the disabled filled button.
  * @cssproperty --forge-button-raised-background - The background color of the raised button.
  * @cssproperty --forge-button-raised-disabled-background - The background color of the disabled raised button.
  * @cssproperty --forge-button-raised-color - The text color of the raised button.
@@ -102,8 +106,6 @@ declare global {
  * @cssproperty --forge-button-raised-hover-shadow - The shadow of the raised button on hover.
  * @cssproperty --forge-button-raised-active-shadow - The shadow of the raised button on active state.
  * @cssproperty --forge-button-raised-disabled-shadow - The shadow of the disabled raised button.
- * @cssproperty --forge-button-raised-transition-duration - The transition duration of the raised button.
- * @cssproperty --forge-button-raised-transition-timing - The transition timing of the raised button.
  * @cssproperty --forge-button-flat-background - The background color of the flat button.
  * @cssproperty --forge-button-flat-disabled-background - The background color of the disabled flat button.
  * @cssproperty --forge-button-flat-color - The text color of the flat button.
@@ -139,6 +141,16 @@ declare global {
  * @slot - This is a default/unnamed slot for the label text.
  * @slot start - Elements to logically render before the label text.
  * @slot end - Elements to logically render after the label text.
+ *
+ * @cssclass forge-button - Base button class (required).
+ * @cssclass forge-button--text - Text button variant.
+ * @cssclass forge-button--outlined - Outlined button variant.
+ * @cssclass forge-button--tonal - Tonal button variant.
+ * @cssclass forge-button--filled - Filled button variant.
+ * @cssclass forge-button--raised - Raised button variant.
+ * @cssclass forge-button--link - Link button variant.
+ * @cssclass forge-button--dense - Dense height.
+ * @cssclass forge-button--pill - Pill shape.
  */
 @customElement({
   name: BUTTON_CONSTANTS.elementName,

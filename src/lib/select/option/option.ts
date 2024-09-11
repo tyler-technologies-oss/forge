@@ -1,12 +1,12 @@
-import { coerceBoolean, customElement, coreProperty, ICustomElement } from '@tylertech/forge-core';
+import { coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { IIconComponent } from '../../icon';
-import { BaseComponent } from '../../core/base/base-component';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IBaseListDropdownOption, ListDropdownIconType } from '../../list-dropdown/list-dropdown-constants';
 import { OptionAdapter } from './option-adapter';
 import { OPTION_CONSTANTS } from './option-constants';
 import { OptionCore } from './option-core';
 
-export interface IOptionComponent extends ICustomElement, Required<IBaseListDropdownOption> {}
+export interface IOptionComponent extends IBaseComponent, Required<IBaseListDropdownOption> {}
 
 declare global {
   interface HTMLElementTagNameMap {

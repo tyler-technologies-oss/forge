@@ -1,0 +1,50 @@
+import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
+
+import { {{constantCase name}}_CONSTANTS } from './{{dashCase name}}-constants';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+
+import template from './{{dashCase name}}.html';
+{{#if hasStyles}}
+import styles from './{{dashCase name}}.scss';
+{{/if}}
+
+export interface I{{pascalCase name}}Component extends IBaseComponent {}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-{{dashCase name}}': I{{pascalCase name}}Component;
+  }
+}
+
+/**
+ * @tag forge-{{dashCase name}}
+ */
+@customElement({
+  name: {{constantCase name}}_CONSTANTS.elementName
+})
+export class {{pascalCase name}}Component extends BaseComponent implements I{{pascalCase name}}Component {
+  public static get observedAttributes(): string[] {
+    return Object.values({{constantCase name}}_CONSTANTS.observedAttributes);
+  }
+
+  constructor() {
+    super();
+    {{#if hasStyles}}
+    attachShadowTemplate(this, template, styles);
+    {{else}}
+    attachShadowTemplate(this, template);
+    {{/if}}
+  }
+
+  public connectedCallback(): void {
+     
+  }
+
+  public disconnectedCallback(): void {
+    
+  }
+
+  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+
+  }
+}

@@ -10,11 +10,15 @@
   font-size: #{token(font-size)};
 }
 
-@mixin svg() {
-  display: block;
-
+@mixin base {
   width: #{token(width)};
   height: #{token(height)};
+}
+
+@mixin svg {
+  @include base;
+
+  display: block;
 
   fill: #{token(color)};
   stroke: #{token(color)};

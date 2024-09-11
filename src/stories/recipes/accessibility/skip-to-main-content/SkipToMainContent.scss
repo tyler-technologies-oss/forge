@@ -1,0 +1,24 @@
+.container {
+  position: relative;
+  overflow: hidden;
+}
+
+.skip-to-main-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 16px;
+  background: var(--forge-theme-secondary);
+  color: var(--forge-theme-on-secondary);
+  height: 24px;
+  padding: 8px;
+  transform: translateY(-100%);
+  transition: transform var(--forge-animation-duration-short4) var(--forge-animation-easing-standard);
+  z-index: var(--forge-z-index-tooltip);
+  border-radius: 0 0 var(--forge-shape-medium) var(--forge-shape-medium);
+}
+
+.skip-to-main-content:focus {
+  transform: translateY(0%);
+}

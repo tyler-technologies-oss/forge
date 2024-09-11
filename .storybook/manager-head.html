@@ -15,4 +15,52 @@
   .sidebar-header img {
     max-width: 100%;
   }
+
+  .forge-docs-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    background-color: #d1d5ed;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 16px;
+  }
+
+  .dark .forge-docs-banner {
+    background-color: #5f5741;
+    color: white;
+  }
+
+  .forge-docs-banner p {
+    margin: 0;
+    text-align: center;
+  }
+
+  div[id=root] {
+    position: fixed;
+    inset: 0;
+    inset-block-start: 32px;
+  }
+
+  div[id=root] > div {
+    height: calc(100dvh - 32px);
+  }
+
+  @media (max-width: 630px) {
+    div[id=root] {
+      inset-block-start: 56px;
+    }
+
+    div[id=root] > div {
+    height: calc(100dvh - 56px);
+  }
+
+    .forge-docs-banner {
+      height: 56px;
+    }
+  }
 </style>

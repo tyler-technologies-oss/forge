@@ -91,6 +91,5 @@ $host-tokens: [height width];
 //
 
 :host([viewport]) {
-  @include override(height, 100dvh, value);
-  @include override(width, 100dvw, value);
+  @include viewport;
 }

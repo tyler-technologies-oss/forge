@@ -13,13 +13,13 @@ export const SEGMENT_CURSOR_POSITION = {
 };
 
 export class IntermediateTimeParser {
-  private segmentParser: TimeSegmentParser;
+  private _segmentParser: TimeSegmentParser;
 
   constructor(
     private _char: string,
     private _mask: InputMask<IMask.AnyMaskedOptions>
   ) {
-    this.segmentParser = new TimeSegmentParser(this._mask.value);
+    this._segmentParser = new TimeSegmentParser(this._mask.value);
   }
 
   public get value(): string {
@@ -59,67 +59,67 @@ export class IntermediateTimeParser {
 
   /** Determines if this is the first minutes char being entered */
   public get isFirstMinutesChar(): boolean {
-    return [3, 4].includes(this._mask.cursorPos) && this.segmentParser.minutes.length !== 2;
+    return [3, 4].includes(this._mask.cursorPos) && this._segmentParser.minutes.length !== 2;
   }
 
   public get isFirstSecondsChar(): boolean {
-    return [6, 7].includes(this._mask.cursorPos) && this.segmentParser.seconds.length !== 2;
+    return [6, 7].includes(this._mask.cursorPos) && this._segmentParser.seconds.length !== 2;
   }
 
   public get isFinalHoursChar(): boolean {
-    return this._mask.cursorPos === 3 && this.segmentParser.hours.length === 2;
+    return this._mask.cursorPos === 3 && this._segmentParser.hours.length === 2;
   }
 
   public get isFinalMinutesChar(): boolean {
-    return this._mask.cursorPos === 6 && this.segmentParser.minutes.length === 2;
+    return this._mask.cursorPos === 6 && this._segmentParser.minutes.length === 2;
   }
 
   public get isFinalSecondsChar(): boolean {
-    return this._mask.cursorPos === 9 && this.segmentParser.seconds.length === 2;
+    return this._mask.cursorPos === 9 && this._segmentParser.seconds.length === 2;
   }
 
   public get isInitialHoursEntry(): boolean {
-    return this.segmentParser.hours.length === 0;
+    return this._segmentParser.hours.length === 0;
   }
 
   public get hasOnlyHoursSegment(): boolean {
-    return !!this.segmentParser.hours && !this.segmentParser.minutes && !this.segmentParser.seconds;
+    return !!this._segmentParser.hours && !this._segmentParser.minutes && !this._segmentParser.seconds;
   }
 
   public get hoursSegmentNum(): number {
-    return Number(this.segmentParser.hours);
+    return Number(this._segmentParser.hours);
   }
 
   public get minutesSegmentNum(): number {
-    return Number(this.segmentParser.minutes);
+    return Number(this._segmentParser.minutes);
   }
 
   public get secondsSegmentNum(): number {
-    return Number(this.segmentParser.seconds);
+    return Number(this._segmentParser.seconds);
   }
 
   public get canOverwriteHoursChar(): boolean {
-    return this._mask.cursorPos === 3 && !!this.segmentParser.hours.length && this.hoursSegmentNum < 3;
+    return this._mask.cursorPos === 3 && !!this._segmentParser.hours.length && this.hoursSegmentNum < 3;
   }
 
   public get canOverwriteMinutesChar(): boolean {
-    return [5, 6].includes(this._mask.cursorPos) && !!this.segmentParser.minutes.length && this.minutesSegmentNum < 60;
+    return [5, 6].includes(this._mask.cursorPos) && !!this._segmentParser.minutes.length && this.minutesSegmentNum < 60;
   }
 
   public get canOverwriteSecondsChar(): boolean {
-    return [8, 9].includes(this._mask.cursorPos) && !!this.segmentParser.seconds.length && this.secondsSegmentNum < 60;
+    return [8, 9].includes(this._mask.cursorPos) && !!this._segmentParser.seconds.length && this.secondsSegmentNum < 60;
   }
 
   public reset(): void {
-    this.segmentParser.applyValue('');
+    this._segmentParser.applyValue('');
   }
 
   public patchSegmentValue(type: TimeSegmentType, value: string, { overwrite = false } = {}): string {
     if (overwrite) {
       this.reset();
     }
-    this.segmentParser.patchSegmentValue(type, value);
-    return this.segmentParser.toString();
+    this._segmentParser.patchSegmentValue(type, value);
+    return this._segmentParser.toString();
   }
 
   public applyValue(value: string, cursorPos?: keyof typeof SEGMENT_CURSOR_POSITION): void {

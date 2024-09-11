@@ -1,9 +1,10 @@
-import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { html, nothing } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 
 import '@tylertech/forge/radio';
-import { styleMap } from 'lit/directives/style-map.js';
 
 const component = 'forge-radio';
 
@@ -22,9 +23,9 @@ const meta = {
         .disabled=${args.disabled}
         .defaultChecked=${args.defaultChecked}
         .readonly=${args.readonly}
-        style=${style}
-        >Option 1</forge-radio
-      >
+        style=${style}>
+        Option 1
+      </forge-radio>
       <forge-radio
         name="radios"
         value="1"
@@ -33,9 +34,20 @@ const meta = {
         .disabled=${args.disabled}
         .defaultChecked=${args.defaultChecked}
         .readonly=${args.readonly}
-        style=${style}
-        >Option 2</forge-radio
-      >
+        style=${style}>
+        Option 2
+      </forge-radio>
+      <forge-radio
+        name="radios"
+        value="1"
+        .labelPosition=${args.labelPosition}
+        .dense=${args.dense}
+        .disabled=${args.disabled}
+        .defaultChecked=${args.defaultChecked}
+        .readonly=${args.readonly}
+        style=${style}>
+        Option 3
+      </forge-radio>
     `;
   },
   component,
@@ -45,7 +57,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['value', 'checked', 'required'],
+      exclude: ['value', 'defaultChecked', 'checked', 'required', 'name', 'labels', 'form'],
       controls: {
         labelPosition: {
           control: 'select',
@@ -54,7 +66,12 @@ const meta = {
       }
     })
   },
-  args: {}
+  args: {
+    dense: false,
+    disabled: false,
+    readonly: false,
+    labelPosition: 'end'
+  }
 } satisfies Meta;
 
 export default meta;
@@ -62,3 +79,38 @@ export default meta;
 type Story = StoryObj;
 
 export const Demo: Story = {};
+
+export const CSSOnly: Story = {
+  parameters: {
+    controls: { include: ['dense', 'disabled'] }
+  },
+  args: {
+    dense: false,
+    disabled: false
+  },
+  render: ({ dense, disabled }) => {
+    const classes = {
+      'forge-radio': true,
+      'forge-radio--dense': dense
+    };
+    return html`
+      <div
+        role="radiogroup"
+        aria-label="Select an option"
+        style="display: grid; grid-template-columns: auto auto; inline-size: fit-content; align-items: center;">
+        <div class=${classMap(classes)}>
+          <input type="radio" name="css-radio" ?disabled=${disabled} id="css-radio-1" />
+        </div>
+        <label class="forge-typography--label1" for="css-radio-1">Option 1</label>
+        <div class=${classMap(classes)}>
+          <input type="radio" name="css-radio" ?disabled=${disabled} id="css-radio-2" />
+        </div>
+        <label class="forge-typography--label1" for="css-radio-2">Option 2</label>
+        <div class=${classMap(classes)}>
+          <input type="radio" name="css-radio" ?disabled=${disabled} id="css-radio-3" />
+        </div>
+        <label class="forge-typography--label1" for="css-radio-3">Option 3</label>
+      </div>
+    `;
+  }
+};

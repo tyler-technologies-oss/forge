@@ -1,11 +1,15 @@
 import '$src/shared';
 import '@tylertech/forge/switch';
-import { tylIconEmoticonHappy, tylIconEmoticonSad } from '@tylertech/tyler-icons/extended';
+import { tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconCheck, tylIconEmoticonHappy, tylIconEmoticonSad } from '@tylertech/tyler-icons/extended';
+import '@tylertech/forge/switch/forge-switch.scss';
 import './switch.scss';
 import { ISwitchComponent } from '@tylertech/forge/switch';
 import { IconRegistry } from '@tylertech/forge/icon';
 
 IconRegistry.define([
+  tylIconCheck,
+  tylIconClose,
   tylIconEmoticonHappy,
   tylIconEmoticonSad
 ]);

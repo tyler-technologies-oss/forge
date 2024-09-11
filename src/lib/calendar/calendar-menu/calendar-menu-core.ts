@@ -1,10 +1,10 @@
-import { getEventPath, ICustomElementCore, isDefined } from '@tylertech/forge-core';
+import { getEventPath, isDefined } from '@tylertech/forge-core';
 
 import { CalendarDirection, CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS } from './calendar-menu-constants';
 import { ICalendarMenuAdapter } from './calendar-menu-adapter';
 import { ICalendarMenuOption } from './calendar-menu-constants';
 
-export interface ICalendarMenuCore extends ICustomElementCore {
+export interface ICalendarMenuCore {
   animationType: CalendarMenuAnimationType;
   preventFocus: boolean;
   animateIn(options: ICalendarMenuOption[], direction: CalendarDirection, setFocus: boolean): void;
@@ -45,7 +45,7 @@ export class CalendarMenuCore implements ICalendarMenuCore {
     this._adapter.registerClickListener(this._clickListener);
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.unregisterClickListener(this._clickListener);
     this._adapter.unregisterIntersectionObserver();
   }

@@ -174,8 +174,7 @@ forge-state-layer {
 
 :host([secondary]) {
   .forge-tab {
-    @include override(indicator-height, secondary-indicator-height);
-    @include override(indicator-shape, secondary-indicator-shape);
+    @include tab-secondary;
   }
 
   .content {

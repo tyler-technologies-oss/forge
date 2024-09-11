@@ -1,47 +1,54 @@
 <div class="vert">
-  <div>
-    <h3 class="forge-typography--heading2">w/Image URL</h3>
-    <div>
-      <forge-avatar image-url="https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg"></forge-avatar>
-    </div>
-  </div>
-  
-  <div>
+  <section>
     <h3 class="forge-typography--heading2">w/Text</h3>
     <div>
       <forge-avatar text="Tyler Forge"></forge-avatar>
     </div>
-  </div>
-  
-  <div>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">CSS-based</h3>
+    <div>
+      <div class="forge-avatar">TF</div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">w/Image URL</h3>
+    <div>
+      <forge-avatar image-url="https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg"></forge-avatar>
+    </div>
+  </section>
+
+  <section>
     <h3 class="forge-typography--heading2">w/Custom Radius (10px)</h3>
     <div>
       <forge-avatar text="Tyler Forge" style="--forge-avatar-shape: 10px;"></forge-avatar>
     </div>
-  </div>
+  </section>
   
-  <div>
+  <section>
     <h3 class="forge-typography--heading2">w/Icon</h3>
     <div>
       <forge-avatar>
         <forge-icon name="face" external></forge-icon>
       </forge-avatar>
     </div>
-  </div>
+  </section>
 
-  <div>
+  <section>
     <h3 class="forge-typography--heading2">w/Custom Slotted Content and CSS Variable</h3>
     <div>
       <forge-avatar style="--forge-avatar-background: #ff0000; --forge-avatar-size: 24px; --forge-avatar-font-size: 16px;">A</forge-avatar>
     </div>
-  </div>
+  </section>
 
-  <div>
+  <section>
     <h3 class="forge-typography--heading2">w/Invalid url</h3>
     <div>
       <forge-avatar image-url="https://httpstat.us/500" text="Invalid Url"></forge-avatar>
     </div>
-  </div>
+  </section>
 </div>
 
 <script type="module" src="avatar.ts"></script>

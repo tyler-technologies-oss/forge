@@ -1,5 +1,5 @@
 import { removeElement } from '@tylertech/forge-core';
-import { deepCopy, doubleClick, tick, timer } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 import {
   CellAlign,
   defineTableComponent,
@@ -17,7 +17,7 @@ import {
   TableSelectTooltipCallback
 } from '@tylertech/forge/table';
 import { TextFieldComponentDelegate } from '@tylertech/forge/text-field';
-import { ICheckboxComponent, ITooltipComponent } from '@tylertech/forge';
+import { ITooltipComponent } from '@tylertech/forge';
 
 const columns: IColumnConfiguration[] = [
   { header: 'Name', property: 'Name' },
@@ -203,14 +203,14 @@ describe('TableComponent', function(this: ITestContext) {
 
     it('should set columns properly', async function(this: ITestContext) {
       this.context = setupTestContext();
-      await tick();
+      await frame();
       this.context.component.columnConfigurations = columns;
 
       const tableElement = this.context.getTableElement();
       expect(this.context.component.columnConfigurations.length).toBe(columns.length);
       expect((tableElement.tHead as HTMLTableSectionElement).rows.length)!.toBe(1);
       expect((tableElement.tHead as HTMLTableSectionElement).rows.item(0)!.cells.length).toBe(columns.length);
-      await tick();
+      await frame();
       this.context.component.resizable = true;
       this.context.component.columnConfigurations = resizableColumns;
       expect((tableElement.tHead as HTMLTableSectionElement).rows.length)!.toBe(1);
@@ -392,7 +392,7 @@ describe('TableComponent', function(this: ITestContext) {
       this.context.component.addEventListener(TABLE_CONSTANTS.events.SELECT, selectCallback);
 
       const rows = getTableBodyRows(this.context.getTableElement());
-      doubleClick(rows[0]);
+      rows[0].dispatchEvent(new MouseEvent('dblclick'));
 
       expect(selectDoubleCallback).toHaveBeenCalled();
       expect(selectCallback).not.toHaveBeenCalled();
@@ -467,7 +467,7 @@ describe('TableComponent', function(this: ITestContext) {
       const rowClickSpy = spyOn(tableCore, '_onRowClick').and.callThrough();
       this.context.component.addEventListener(TABLE_CONSTANTS.events.ROW_CLICK, clickListener);
 
-      await tick();
+      await frame();
 
       button.dispatchEvent(new Event('click', { bubbles: true }));
 
@@ -491,7 +491,7 @@ describe('TableComponent', function(this: ITestContext) {
       const rowClickSpy = spyOn(tableCore, '_onRowClick').and.callThrough();
       this.context.component.addEventListener(TABLE_CONSTANTS.events.ROW_CLICK, clickListener);
 
-      await tick();
+      await frame();
 
       button.dispatchEvent(new Event('click', { bubbles: true }));
 
@@ -686,14 +686,14 @@ describe('TableComponent', function(this: ITestContext) {
       const allButLastRows = data.filter((d, i) => i + 1 < data.length);
       this.context.component.selectRows([...allButLastRows], false);
 
-      await tick();
+      await frame();
 
       this.context.component.multiselect = false;
 
       expect(this.context.component.getSelectedRows().length).toBeLessThan(data.length, `Expected selected rows to be ${data.length - 1}`);
       expect(tableCore['_isAllSelected']).toBe(false);
 
-      await tick();
+      await frame();
 
       this.context.component.selectRows([data[data.length - 1]], true);
 
@@ -1208,7 +1208,7 @@ describe('TableComponent', function(this: ITestContext) {
       let selectedRows = getTableBodyRows(this.context.getTableElement()).filter(r => r.classList.contains(TABLE_CONSTANTS.classes.TABLE_BODY_ROW_SELECTED));
       expect(selectedRows.length).toBe(1, 'Expected selected row count to be 1');
 
-      await tick();
+      await frame();
 
       this.context.component.selectRows([data[1]], true);
       selectedRows = getTableBodyRows(this.context.getTableElement()).filter(r => r.classList.contains(TABLE_CONSTANTS.classes.TABLE_BODY_ROW_SELECTED));
@@ -1318,7 +1318,7 @@ describe('TableComponent', function(this: ITestContext) {
       // let tableCore = this.context.component['_core'];
       // let tableAdapter = tableCore['_adapter'] as TableAdapter;
 
-      // await tick();
+      // await frame();
 
       // (derek.moss): not sure how to capture the undefined selectAllListener
       // const setSelectColumnVisibilitySpy = spyOn(tableAdapter, 'setSelectColumnVisibility');
@@ -1414,7 +1414,7 @@ describe('TableComponent', function(this: ITestContext) {
       let resolved = false;
       this.context.component.collapseRow(0).then(() => (resolved = true));
 
-      await tick();
+      await frame();
       expect(tableCore['_rendered']).toBe(false);
       expect(resolved).toBe(true);
     });
@@ -1428,7 +1428,7 @@ describe('TableComponent', function(this: ITestContext) {
 
       this.context.component.collapseRow(-1).then(() => (resolved = true));
 
-      await tick();
+      await frame();
       expect(resolved).toBe(true);
     });
 
@@ -1442,7 +1442,7 @@ describe('TableComponent', function(this: ITestContext) {
 
       this.context.component.collapseRow(rows.length + 1).then(() => (resolved = true));
 
-      await tick();
+      await frame();
       expect(resolved).toBe(true);
     });
 
@@ -1544,7 +1544,7 @@ describe('TableComponent', function(this: ITestContext) {
 
       const rows = getTableBodyRows(this.context.getTableElement());
 
-      await tick();
+      await frame();
       const everyRowCellContainsTemplate = rows.every(r => r.cells.item(0)!.querySelector('button') !== null);
       expect(everyRowCellContainsTemplate).toBe(true);
     });
@@ -1560,7 +1560,7 @@ describe('TableComponent', function(this: ITestContext) {
 
       const rows = getTableBodyRows(this.context.getTableElement());
 
-      await tick();
+      await frame();
       const everyRowCellContainsTemplate = rows.every(r => r.cells.item(0)!.querySelector('button') !== null);
       expect(everyRowCellContainsTemplate).toBe(true);
     });
@@ -1575,7 +1575,7 @@ describe('TableComponent', function(this: ITestContext) {
 
       const rows = getTableBodyRows(this.context.getTableElement());
 
-      await tick();
+      await frame();
       const everyRowCellUppercase = rows.every((r, index) => (r.cells.item(0)!.firstElementChild as HTMLElement).innerText === 'transformed');
       expect(everyRowCellUppercase).toBe(true);
     });
@@ -1646,7 +1646,7 @@ describe('TableComponent', function(this: ITestContext) {
       filterInputElement.value = 'a';
       filterInputElement.dispatchEvent(new Event('input'));
 
-      await timer(filterDebounceTime);
+      await task(filterDebounceTime);
 
       expect(filterCallback).toHaveBeenCalled();
     });
@@ -1664,7 +1664,7 @@ describe('TableComponent', function(this: ITestContext) {
 
       this.context.component.resizable = false;
 
-      await tick();
+      await frame();
 
       resizeHandle = getTableResizeHandle(this.context.getTableElement());
       expect(resizeHandle).toBeNull();
@@ -1679,10 +1679,10 @@ describe('TableComponent', function(this: ITestContext) {
 
       const firstCell = getTableHeaderRow(this.context.getTableElement()).cells.item(0) as HTMLTableCellElement;
       const resizeHandle = getTableResizeHandle(this.context.getTableElement());
-      await tick();
+      await frame();
       firstCell.dispatchEvent(new MouseEvent('mouseover'));
-      await tick();
-      await timer(TABLE_CONSTANTS.numbers.RESIZE_HOVER_DURATION);
+      await frame();
+      await task(TABLE_CONSTANTS.numbers.RESIZE_HOVER_DURATION);
 
       expect(resizeHandle.classList.contains(TABLE_CONSTANTS.classes.TABLE_RESIZE_HANDLE)).toBe(true, 'Expected table resize handle to have css class');
       const mousedownSpy = spyOn(tableCore, '_onHeadRowMouseDown').and.callThrough();
@@ -1717,10 +1717,10 @@ describe('TableComponent', function(this: ITestContext) {
 
       const firstCell = getTableHeaderRow(this.context.getTableElement()).cells.item(0) as HTMLTableCellElement;
       const resizeHandle = getTableResizeHandle(this.context.getTableElement());
-      await tick();
+      await frame();
       firstCell.dispatchEvent(new MouseEvent('mouseover'));
-      await tick();
-      await timer(TABLE_CONSTANTS.numbers.RESIZE_HOVER_DURATION);
+      await frame();
+      await task(TABLE_CONSTANTS.numbers.RESIZE_HOVER_DURATION);
       resizeHandle.dispatchEvent(
         new MouseEvent('mousedown', {
           clientX: firstCell.clientWidth,
@@ -1746,10 +1746,10 @@ describe('TableComponent', function(this: ITestContext) {
 
       const firstCell = getTableHeaderRow(this.context.getTableElement()).cells.item(0) as HTMLTableCellElement;
       const resizeHandle = getTableResizeHandle(this.context.getTableElement());
-      await tick();
+      await frame();
       firstCell.dispatchEvent(new MouseEvent('mouseover'));
-      await tick();
-      await timer(TABLE_CONSTANTS.numbers.RESIZE_HOVER_DURATION);
+      await frame();
+      await task(TABLE_CONSTANTS.numbers.RESIZE_HOVER_DURATION);
 
       resizeHandle.dispatchEvent(
         new MouseEvent('mousedown', {
@@ -1776,10 +1776,10 @@ describe('TableComponent', function(this: ITestContext) {
 
       const firstCell = getTableHeaderRow(this.context.getTableElement()).cells.item(0) as HTMLTableCellElement;
       const resizeHandle = getTableResizeHandle(this.context.getTableElement());
-      await tick();
+      await frame();
       firstCell.dispatchEvent(new MouseEvent('mouseover'));
-      await tick();
-      await timer(TABLE_CONSTANTS.numbers.RESIZE_HOVER_DURATION);
+      await frame();
+      await task(TABLE_CONSTANTS.numbers.RESIZE_HOVER_DURATION);
 
       const { width, left } = firstCell.getBoundingClientRect();
       const newWidth = left + width + 20;
@@ -2001,7 +2001,7 @@ describe('TableComponent', function(this: ITestContext) {
       testColumns[0].headerTemplate = () => '<span>Hello Goodbye</span>';
 
       this.context.component.columnConfigurations = testColumns;
-      await tick();
+      await frame();
 
       const callback = jasmine.createSpy('callback');
       this.context.component.addEventListener(TABLE_CONSTANTS.events.SORT, callback);
@@ -2024,7 +2024,7 @@ describe('TableComponent', function(this: ITestContext) {
 
       const headerRow = getTableHeaderRow(this.context.getTableElement());
       const firstCell = headerRow.cells.item(0) as HTMLTableCellElement;
-      await tick();
+      await frame();
       clickTableCell(firstCell);
       expect(firstCell.innerHTML).toContain('Hello Goodbye');
       expect(callback).toHaveBeenCalled();
@@ -2049,7 +2049,7 @@ describe('TableComponent', function(this: ITestContext) {
 
       const headerRow = getTableHeaderRow(this.context.getTableElement());
       const firstCell = headerRow.cells.item(0) as HTMLTableCellElement;
-      await tick();
+      await frame();
       clickTableCell(firstCell);
       expect(callback).toHaveBeenCalled();
       expect(Array.isArray(emitedResult)).toBe(true, 'did not properly emit an array of sort rules');
@@ -2074,7 +2074,7 @@ describe('TableComponent', function(this: ITestContext) {
       const headerRow = getTableHeaderRow(this.context.getTableElement());
       const firstCell = headerRow.cells.item(0) as HTMLTableCellElement;
       const secondCell = headerRow.cells.item(2) as HTMLTableCellElement;
-      await tick();
+      await frame();
       clickTableCell(firstCell);
       clickTableCell(secondCell, true);
       expect(callback).toHaveBeenCalled();
@@ -2114,7 +2114,7 @@ describe('TableComponent', function(this: ITestContext) {
 
         const testColumns = deepCopy(columns) as IColumnConfiguration[];
         this.context.component.columnConfigurations = testColumns;
-        await tick();
+        await frame();
 
         const header = getTableHeaderRow(this.context.getTableElement());
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
@@ -2131,7 +2131,7 @@ describe('TableComponent', function(this: ITestContext) {
 
         const testColumns = deepCopy(columns) as IColumnConfiguration[];
         this.context.component.columnConfigurations = testColumns;
-        await tick();
+        await frame();
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
 
@@ -2151,7 +2151,7 @@ describe('TableComponent', function(this: ITestContext) {
 
         const testColumns = deepCopy(columns) as IColumnConfiguration[];
         this.context.component.columnConfigurations = testColumns;
-        await tick();
+        await frame();
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
 
@@ -2171,14 +2171,14 @@ describe('TableComponent', function(this: ITestContext) {
 
         const testColumns = deepCopy(columns) as IColumnConfiguration[];
         this.context.component.columnConfigurations = testColumns;
-        await tick();
+        await frame();
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
         const checkbox = selectAllCell.querySelector('input') as HTMLInputElement;
         const rowCheckbox = this.context.getTableElement().querySelector('tbody > tr > td forge-checkbox');
         rowCheckbox!.dispatchEvent(new MouseEvent('click'));
         // this.context.component.selectRows([data[1]], true);
-        await tick();
+        await frame();
 
         expect(checkbox.indeterminate).toBe(true);
       });
@@ -2192,7 +2192,7 @@ describe('TableComponent', function(this: ITestContext) {
 
         const testColumns = deepCopy(columns) as IColumnConfiguration[];
         this.context.component.columnConfigurations = testColumns;
-        await tick();
+        await frame();
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
         const checkbox = selectAllCell.querySelector('input') as HTMLInputElement;
@@ -2201,7 +2201,7 @@ describe('TableComponent', function(this: ITestContext) {
           c.dispatchEvent(new MouseEvent('click'));
         });
 
-        await tick();
+        await frame();
 
         expect(checkbox.checked).toBe(true);
       });
@@ -2215,7 +2215,7 @@ describe('TableComponent', function(this: ITestContext) {
 
         const testColumns = deepCopy(columns) as IColumnConfiguration[];
         this.context.component.columnConfigurations = testColumns;
-        await tick();
+        await frame();
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
         const checkbox = selectAllCell.querySelector('input') as HTMLInputElement;
@@ -2224,7 +2224,7 @@ describe('TableComponent', function(this: ITestContext) {
           c.dispatchEvent(new MouseEvent('click'));
         });
 
-        await tick();
+        await frame();
 
         expect(checkbox.checked).toBe(true);
       });
@@ -2239,11 +2239,11 @@ describe('TableComponent', function(this: ITestContext) {
         const testColumns = deepCopy(columns) as IColumnConfiguration[];
         this.context.component.columnConfigurations = testColumns;
 
-        await tick();
+        await frame();
         this.context.component.multiselect = false;
-        await tick();
+        await frame();
         this.context.component.multiselect = true;
-        await tick();
+        await frame();
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
 
@@ -2261,7 +2261,7 @@ describe('TableComponent', function(this: ITestContext) {
         const testColumns = deepCopy(columns) as IColumnConfiguration[];
         this.context.component.columnConfigurations = testColumns;
         const checkboxContainer = this.context.getTableElement().querySelector('tbody .forge-table-cell__select-checkbox-container') as HTMLElement;
-        await tick();
+        await frame();
         expect(this.context.component.selectCheckboxAlignment).toBe(CellAlign.Left);
         expect(checkboxContainer.classList.contains(TABLE_CONSTANTS.classes.TABLE_CELL_SELECT_CHECKBOX_CONTAINER_ALIGN_LEFT)).toBeTrue();
       });
@@ -2438,4 +2438,8 @@ function customSelectAllTemplate(options?: { forgeIgnore?: boolean, type?: 'html
       resolve(htmlString);
     }
   });
+}
+
+function deepCopy(obj: any): any {
+  return JSON.parse(JSON.stringify(obj));
 }

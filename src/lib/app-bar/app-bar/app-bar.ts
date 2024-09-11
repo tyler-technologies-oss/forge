@@ -31,12 +31,12 @@ declare global {
  * @description App bars are a collection of components placed as a horizontal bar at the top of the screen. They typically contain a logo, title, and optional application-wide actions.
  *
  * @property {string} titleText - The text to display in the title.
- * @property {AppBarElevation} elevation - The elevation of the app bar.
+ * @property {AppBarElevation} [elevation="raised"] - The elevation of the app bar.
  * @property {AppBarTheme} theme - The theme of the app bar.
  * @property {string} href - The href that will be used to make the logo and title area a clickable link.
  *
  * @attribute {string} title-text - The text to display in the title.
- * @attribute {string} elevation - The elevation of the app bar.
+ * @attribute {string} [elevation="raised"] - The elevation of the app bar.
  * @attribute {string} theme - The theme of the app bar.
  * @attribute {string} href - The href that will be used to make the logo and title area a clickable link
  *
@@ -61,6 +61,16 @@ declare global {
  * @slot start - Places content at the beginning of the app bar.
  * @slot center - Places content in the center of the app bar.
  * @slot end - Places content at the end of the app bar.
+ *
+ * @cssclass forge-app-bar - The app bar container element _(required)_.
+ * @cssclass forge-app-bar--raised - The app bar container element when raised.
+ * @cssclass forge-app-bar__logo - The logo container element.
+ * @cssclass forge-app-bar__title - The title container element.
+ * @cssclass forge-app-bar__logo-title-container - The container for the logo and title.
+ * @cssclass forge-app-bar__section - A section of the app bar.
+ * @cssclass forge-app-bar__section-start - The start section of the app bar.
+ * @cssclass forge-app-bar__section-center - The center section of the app bar.
+ * @cssclass forge-app-bar__section-end - The end section of the app bar.
  */
 @customElement({
   name: APP_BAR_CONSTANTS.elementName

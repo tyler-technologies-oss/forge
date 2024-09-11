@@ -1,0 +1,15 @@
+import { getShadowElement } from '@tylertech/forge-core';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
+import { I{{pascalCase name}}Component } from './{{dashCase name}}';
+import { {{constantCase name}}_CONSTANTS } from './{{dashCase name}}-constants';
+
+export interface I{{pascalCase name}}Adapter extends IBaseAdapter {}
+
+export class {{pascalCase name}}Adapter extends BaseAdapter<I{{pascalCase name}}Component> implements I{{pascalCase name}}Adapter {
+  private _root: HTMLElement;
+
+  constructor(component: I{{pascalCase name}}Component) {
+    super(component);
+    this._root = getShadowElement(this._component, {{constantCase name}}_CONSTANTS.selectors.ROOT);
+  }
+}

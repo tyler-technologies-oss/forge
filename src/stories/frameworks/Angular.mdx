@@ -91,7 +91,7 @@ To include any of these styles, you can import them from the `@tylertech/forge` 
 
 The `forge-typography.css` stylesheet provides a set of CSS classes that can be used to apply font styles to text content within your app.
 
-```scss
+```css
 @use '@tylertech/forge/dist/typography/forge-typography';
 ```
 
@@ -99,13 +99,13 @@ The `forge-typography.css` stylesheet provides a set of CSS classes that can be 
 
 The `forge-theme.css` stylesheet provides a set of CSS variables that define the colors used throughout the design system.
 
-```scss
+```css
 @use '@tylertech/forge/dist/theme/forge-theme';
 ```
 
 The tokens are all defined at the `:root` selector on your `<html>` element, so you can use them in your stylesheets like this:
 
-```scss
+```css
 .my-custom-class {
   background-color: var(--forge-theme-primary);
   color: var(--forge-theme-on-primary);
@@ -123,13 +123,13 @@ See the [Theming](?path=/docs/guides-theming--docs) guide for more information o
 The `forge-tokens.css` stylesheet provides a set of CSS variables that define various utility tokens used throughout the design system such
 as spacing, border, animation, elevation... etc.
 
-```scss
+```css
 @use '@tylertech/forge/dist/forge-tokens';
 ```
 
 This will allow you to use the tokens in your stylesheets like this:
 
-```scss
+```css
 .my-custom-class {
   padding: var(--forge-spacing-medium);
   border-radius: var(--forge-shape-medium);
@@ -150,13 +150,13 @@ All Forge components are designed to be used as standalone elements, and they en
 
 To include the global styles for the `<forge-table>` component, you can import the following stylesheet:
 
-```scss
+```css
 @use '@tylertech/forge/dist/table/forge-table';
 ```
 
 If you're loading this stylesheet within a component that uses Angular's style encapsulation you will need to use `::ng-deep` to apply the styles globally:
 
-```scss
+```css
 ::ng-deep {
   @import '@tylertech/forge/dist/table/forge-table';
 }
@@ -168,7 +168,7 @@ Using `::ng-deep` just ensures that the selectors in this stylesheet aren't scop
 
 The `forge.css` stylesheet includes everything listed below for convenience.
 
-```scss
+```css
 @use '@tylertech/forge/dist/forge';
 ```
 

@@ -47,6 +47,9 @@ declare global {
  * @cssproperty --forge-state-layer-pressed-duration - The duration of the pressed animation.
  *
  * @csspart surface - The surface element.
+ *
+ * @cssclass forge-state-layer - The element to render the state layer on.
+ * @cssclass forge-state-layer__target - The target element container to render the state layer within.
  */
 @customElement({
   name: STATE_LAYER_CONSTANTS.elementName
@@ -69,7 +72,7 @@ export class StateLayerComponent extends BaseComponent implements IStateLayerCom
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

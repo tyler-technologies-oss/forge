@@ -1,5 +1,6 @@
 import '$src/shared';
 import '@tylertech/forge/chips';
+import '@tylertech/forge/chips/forge-chips.scss';
 import '@tylertech/forge/icon-button';
 import { tylIconAlarm, tylIconBookmark, tylIconDirections, tylIconEvent, tylIconOpenInNew, tylIconPlace, tylIconRefresh } from '@tylertech/tyler-icons/standard';
 import { tylIconAccount, tylIconAlert } from '@tylertech/tyler-icons/extended';

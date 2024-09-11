@@ -9,6 +9,7 @@
     "src/stories/**/*",
     "web-test-runner.*",
     "custom-elements-manifest.config.mjs",
+    "plopfile.mjs",
     "*.spec.ts",
     "*.test.ts"
   ],
@@ -22,11 +23,17 @@
       },
       "extends": ["plugin:@tylertech-eslint/recommended", "plugin:prettier/recommended"],
       "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "endOfLine": "auto"
+          }
+        ],
         "@typescript-eslint/indent": "off",
         "@typescript-eslint/no-empty-interface": ["error", { "allowSingleExtends": true }],
         "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
         "@typescript-eslint/comma-dangle": ["error"],
-        "@typescript-eslint/comma-spacing": ["error"],
+        "@typescript-eslint/comma-spacing": "error",
         "@typescript-eslint/explicit-member-accessibility": ["error", { "overrides": { "constructors": "no-public" } }],
         "@typescript-eslint/arrow-body-style": "off",
         "@typescript-eslint/no-require-imports": "error",

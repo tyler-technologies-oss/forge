@@ -1,0 +1,190 @@
+@use './core';
+@use '../focus-indicator';
+@use '../state-layer';
+
+// Transforms a scalar coordinate value into a percentage of 24 as used by Tyler icons
+@function ctp($coord) {
+  @return calc(4.167% * $coord);
+}
+
+@mixin icon-background-checked {
+  &::before {
+    translate: 0;
+
+    @starting-style {
+      translate: -100% 0;
+    }
+  }
+}
+
+@mixin custom-icon {
+  clip-path: none;
+
+  &::before {
+    content: none;
+  }
+}
+
+.forge-checkbox {
+  @include core.tokens;
+}
+
+.forge-checkbox {
+  @include focus-indicator.standalone($focus-target: 'input[type=checkbox]');
+  @include focus-indicator.provide-theme(
+    (
+      shape: 0px,
+      outward-offset: 8px
+    )
+  );
+
+  display: inline grid;
+  position: relative;
+  align-items: center;
+  justify-items: center;
+
+  inline-size: #{core.token(state-layer-width)};
+  block-size: #{core.token(state-layer-height)};
+
+  input[type='checkbox'] {
+    appearance: none;
+
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 20;
+
+    outline: none;
+    margin: 0;
+
+    cursor: pointer;
+
+    &:checked,
+    &:indeterminate {
+      @include state-layer.provide-theme(
+        (
+          color: #{core.token(state-layer-checked-color)}
+        )
+      );
+    }
+
+    &:not(:disabled) {
+      @include state-layer.standalone('');
+
+      border-radius: #{core.token(state-layer-shape)} !important;
+    }
+  }
+
+  &__icon {
+    display: none;
+    grid-column: 1;
+    grid-row: 1;
+
+    block-size: calc(#{core.token(height)} - 2 * #{core.token(checked-border-width)});
+    inline-size: calc(#{core.token(width)} - 2 * #{core.token(checked-border-width)});
+    pointer-events: none;
+
+    &--checked {
+      background-color: none;
+    }
+
+    &--indeterminate {
+      background-color: none;
+    }
+
+    &::before {
+      display: block;
+
+      block-size: 100%;
+      inline-size: 100%;
+      background-color: #{core.token(icon-checked-color)};
+
+      content: '';
+
+      translate: -100% 0;
+      transition-property: translate;
+      transition-duration: #{core.token(animation-duration)};
+      transition-timing-function: #{core.token(icon-animation-timing)};
+      transition-delay: #{core.token(animation-duration)};
+    }
+  }
+
+  &::before {
+    @include core.background;
+
+    display: block;
+    grid-column: 1;
+    grid-row: 1;
+
+    line-height: 0;
+
+    content: '';
+  }
+
+  &:has(input[type='checkbox']:checked) {
+    &::before {
+      @include core.background-checked;
+    }
+
+    .forge-checkbox__icon {
+      @include icon-background-checked;
+
+      display: block;
+      clip-path: polygon(
+        ctp(3.144) ctp(11.496),
+        ctp(0.316) ctp(14.324),
+        ctp(8.1) ctp(22.28),
+        ctp(24.204) ctp(6.004),
+        ctp(21.376) ctp(3.176),
+        ctp(8.1) ctp(16.4)
+      );
+
+      &--checked {
+        @include custom-icon;
+      }
+    }
+  }
+
+  &:has(input[type='checkbox']:indeterminate) {
+    &::before {
+      @include core.background-checked;
+    }
+
+    .forge-checkbox__icon {
+      @include icon-background-checked;
+
+      display: block;
+      clip-path: polygon(ctp(2) ctp(10), ctp(2) ctp(14), ctp(22) ctp(14), ctp(22) ctp(10));
+
+      &--indeterminate {
+        @include custom-icon;
+      }
+    }
+  }
+
+  &:has(input[type='checkbox']:disabled) {
+    @include core.checkbox-disabled;
+    @include core.container-disabled;
+  }
+
+  &:has(input[type='checkbox']:focus-visible) {
+    @include focus-indicator.keyframes;
+
+    &::after {
+      position: relative;
+      grid-column: 1;
+      grid-row: 1;
+      inset: 0;
+
+      /* 
+        We "fake" the pseudo-element's dimensions here to size the focus indicator without
+        overriding any of its calculations, taking the width of its outline into account
+      */
+      padding-inline: calc(#{core.token(width)} - #{focus-indicator.token(width)});
+      padding-block: calc(#{core.token(height)} - #{focus-indicator.token(width)});
+    }
+  }
+
+  &--dense {
+    @include core.container-dense;
+  }
+}

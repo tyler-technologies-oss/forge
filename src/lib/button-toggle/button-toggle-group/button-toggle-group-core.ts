@@ -1,10 +1,8 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-import { IButtonToggleComponent } from '../button-toggle/button-toggle';
 import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from '../button-toggle/button-toggle-constants';
 import { IButtonToggleGroupAdapter } from './button-toggle-group-adapter';
 import { ButtonToggleGroupTheme, BUTTON_TOGGLE_GROUP_CONSTANTS, IButtonToggleGroupChangeEventData } from './button-toggle-group-constants';
 
-export interface IButtonToggleGroupCore extends ICustomElementCore {
+export interface IButtonToggleGroupCore {
   value: unknown;
   multiple: boolean;
   stretch: boolean;
@@ -123,7 +121,8 @@ export class ButtonToggleGroupCore implements IButtonToggleGroupCore {
     // Combine the selected toggle values with our current state to ensure we always return the latest value
     // even if our state doesn't match a selected toggle.
     const values = Array.from(new Set(this._adapter.getSelectedValues().concat(this._values)));
-    return this._multiple ? Array.from(values) : values[0] ?? null;
+    // eslint-disable-next-line prettier/prettier
+    return this._multiple ? Array.from(values) : (values[0] ?? null);
   }
   public set value(value: any) {
     this._applyValue(value);

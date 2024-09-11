@@ -1,3 +1,9 @@
+.flex {
+  flex-direction: column;
+  align-items: start;
+}
+
+dialog.forge-dialog:not(.forge-dialog--fullscreen),
 .dialog:not([fullscreen]) {
   forge-scaffold {
     max-width: 500px;
@@ -51,4 +57,8 @@ forge-dialog:not([fullscreen])[size-strategy=container-block] {
 
 .footer-toolbar forge-button {
   margin-right: 8px;
+}
+
+dialog.forge-dialog:not(.forge-dialog--fullscreen) {
+  max-width: 500px;
 }

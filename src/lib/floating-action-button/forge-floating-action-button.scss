@@ -1,0 +1,55 @@
+@use './core';
+@use '../state-layer';
+@use '../focus-indicator';
+
+.forge-fab {
+  @include core.tokens;
+}
+
+.forge-fab {
+  @include core.base;
+
+  &:not(:disabled) {
+    @include state-layer.standalone;
+
+    &:focus-visible {
+      @include focus-indicator.keyframes;
+    }
+
+    @include focus-indicator.standalone;
+    @include focus-indicator.provide-theme(
+      (
+        color: #{core.token(background)},
+        shape-start-start: #{core.token(shape-start-start)},
+        shape-start-end: #{core.token(shape-start-end)},
+        shape-end-start: #{core.token(shape-end-start)},
+        shape-end-end: #{core.token(shape-end-end)}
+      )
+    );
+  }
+
+  &--extended {
+    @include core.extended;
+  }
+
+  &:disabled {
+    @include core.host-disabled;
+    @include core.disabled;
+
+    pointer-events: auto;
+    cursor: not-allowed;
+  }
+
+  &--dense,
+  &--small {
+    @include core.density-small;
+  }
+
+  &--large {
+    @include core.density-large;
+  }
+
+  &--flat {
+    @include core.lowered;
+  }
+}

@@ -1,10 +1,9 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-import { IIconComponent } from '../../icon';
+import type { IIconComponent } from '../../icon/icon';
 import { IBaseListDropdownOption, ListDropdownIconType } from '../../list-dropdown/list-dropdown-constants';
 import { IOptionAdapter } from './option-adapter';
 import { OPTION_CONSTANTS } from './option-constants';
 
-export interface IOptionCore extends ICustomElementCore, Required<IBaseListDropdownOption> {}
+export interface IOptionCore extends Required<IBaseListDropdownOption> {}
 
 export class OptionCore implements IOptionCore {
   private _value: any;

@@ -1,4 +1,3 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { MoveController } from '../core/controllers/move-controller';
 import { DismissibleStack } from '../core/utils/dismissible-stack';
 import { IDialogAdapter } from './dialog-adapter';
@@ -14,7 +13,7 @@ import {
   IDialogMoveEventData
 } from './dialog-constants';
 
-export interface IDialogCore extends ICustomElementCore {
+export interface IDialogCore {
   open: boolean;
   mode: DialogMode;
   type: DialogType;
@@ -22,6 +21,7 @@ export interface IDialogCore extends ICustomElementCore {
   preset: DialogPreset;
   persistent: boolean;
   fullscreen: boolean;
+  fullscreenThreshold: number;
   trigger: string;
   triggerElement: HTMLElement | null;
   positionStrategy: DialogPositionStrategy;
@@ -41,6 +41,8 @@ export class DialogCore implements IDialogCore {
   private _preset: DialogPreset = DIALOG_CONSTANTS.defaults.PRESET;
   private _persistent = false;
   private _fullscreen = false;
+  private _fullscreenThreshold = DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD;
+  private _originalFullscreenValue: boolean | undefined;
   private _trigger = '';
   private _moveable = false;
   private _sizeStrategy: DialogSizeStrategy = DIALOG_CONSTANTS.defaults.SIZE_STRATEGY;
@@ -52,11 +54,12 @@ export class DialogCore implements IDialogCore {
   private _backdropDismissListener: EventListener = this._onBackdropDismiss.bind(this);
   private _dialogFormSubmitListener: EventListener = this._onDialogFormSubmit.bind(this);
   private _triggerClickListener: EventListener = this._onTriggerClick.bind(this);
+  private _fullscreenListener: (value: boolean) => void = this._onFullscreenChange.bind(this);
 
   constructor(public _adapter: IDialogAdapter) {}
 
   public initialize(): void {
-    this._adapter.tryApplyGlobalConfiguration(['animationType', 'positionStrategy', 'sizeStrategy', 'persistent', 'moveable']);
+    this._adapter.tryApplyGlobalConfiguration(['animationType', 'positionStrategy', 'sizeStrategy', 'persistent', 'moveable', 'fullscreenThreshold']);
 
     if (this._trigger && !this._adapter.triggerElement) {
       this._adapter.tryLocateTriggerElement(this._trigger);
@@ -122,6 +125,11 @@ export class DialogCore implements IDialogCore {
       this._initializeMoveController();
     }
 
+    if (!this._fullscreen && this._fullscreenThreshold > 0) {
+      this._originalFullscreenValue = this._fullscreen;
+      this._adapter.addFullscreenListener(this._fullscreenThreshold, this._fullscreenListener);
+    }
+
     this._adapter.dispatchHostEvent(new CustomEvent(DIALOG_CONSTANTS.events.OPEN, { bubbles: true, composed: true }));
   }
 
@@ -133,6 +141,12 @@ export class DialogCore implements IDialogCore {
     DismissibleStack.instance.remove(this._adapter.hostElement);
 
     await this._adapter.hide();
+
+    // Reset the fullscreen value to the original value if it was changed internally by our media query listener
+    if (typeof this._originalFullscreenValue === 'boolean') {
+      this.fullscreen = this._originalFullscreenValue;
+    }
+    this._originalFullscreenValue = undefined;
 
     if (this._moveController) {
       this._destroyMoveController();
@@ -178,6 +192,12 @@ export class DialogCore implements IDialogCore {
     if (isDialogSubmitter) {
       this._tryClose();
     }
+  }
+
+  private _onFullscreenChange(value: boolean): void {
+    this.fullscreen = value;
+    const event = new CustomEvent(DIALOG_CONSTANTS.events.FULLSCREEN_CHANGE, { bubbles: true, composed: true, detail: value });
+    this._adapter.dispatchHostEvent(event);
   }
 
   private _tryClose(): void {
@@ -299,6 +319,22 @@ export class DialogCore implements IDialogCore {
     if (this._fullscreen !== value) {
       this._fullscreen = value;
       this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.FULLSCREEN, this._fullscreen);
+    }
+  }
+
+  public get fullscreenThreshold(): number {
+    return this._fullscreenThreshold;
+  }
+  public set fullscreenThreshold(value: number) {
+    if (this._fullscreenThreshold !== value) {
+      this._fullscreenThreshold = value;
+
+      if (this._adapter.isConnected && this._open && !this._fullscreen && this._fullscreenThreshold > 0) {
+        this._adapter.removeFullscreenListener(this._fullscreenListener);
+        this._adapter.addFullscreenListener(this._fullscreenThreshold, this._fullscreenListener);
+      }
+
+      this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.FULLSCREEN_THRESHOLD, this._fullscreenThreshold.toString());
     }
   }
 

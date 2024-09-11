@@ -1,14 +1,27 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as InlineMessageStories from './InlineMessage.stories';
 
 <Meta of={InlineMessageStories} />
 
 <Title />
 
+Inline messages are used to provide feedback to users about their actions or to display important information related to the page content.
+
 <Canvas of={InlineMessageStories.Demo} />
 
+## With Title
+
+You can use the `title` slot to provide a title for the inline message.
+
+<Canvas of={InlineMessageStories.WithTitle} />
+
 ## Themed
+
+There are several built-in themes that can be used to style the inline message via the `theme` property/attribute. Themes should not be the _only_
+indicator of the message's importance, it is recommended to also use an icon or other visual indicator to assist with users who may have difficulty
+distinguishing between colors.
 
 <Canvas of={InlineMessageStories.Themed} />
 
@@ -18,6 +31,14 @@ import * as InlineMessageStories from './InlineMessage.stories';
 
 ## Accessibility
 
-- If the inline-message is used to display an important notification to a user, use the role="alert" attribute on the `<forge-inline-message>`element.
-  - This is equivalent to using aria-live="assertive".
-  - If the message is less urgent, you can use aria-live="polite" to wait until the user is finished with their current task.
+- If the inline-message is used to display an important notification to a user, use the `role="alert"` attribute on the `<forge-inline-message>`element.
+  - This is equivalent to using `aria-live="assertive"`.
+  - If the message is less urgent, you can use `aria-live="polite"` to wait until the user is finished with their current task.
+
+## CSS-Only
+
+The inline-message component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={InlineMessageStories.CSSOnly} />
+
+<CssOnlyInformation />

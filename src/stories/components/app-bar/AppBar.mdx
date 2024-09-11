@@ -1,34 +1,50 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as AppBarStories from './AppBar.stories';
 
 <Meta of={AppBarStories} />
 
 <Title />
 
-The app-bar should be used as the header for every page in your application to ensure consistency across our Tyler products and applications. It's the one constant across all applications that helps ensure our applications are perceived as being connected and familiar.
+App bars are a common component used in web applications to provide a consistent location for branding, navigation, and other common elements.
 
-The app-bar itself is nothing more than a container for other add-on components, but it does provide named slots and a common location for branding logo and title.
-
-> For API details regarding any of the app-bar sub-components please see one of the following pages:
->
-> - App Bar help button
-> - App Bar menu button
-> - App Bar notifications
-> - App Bar profile
-> - App Bar search
+The `<forge-app-bar>` is nothing more than a container for other add-on components, but it provides named slots and a common location for branding logo, title, and other actions.
 
 ## Default
 
-A basic app-bar just contains a title with no other elements.
+A basic app bar just contains a title with no other elements.
 
 <Canvas of={AppBarStories.Demo} />
 
 ## Full
 
-The following example shows the usage of all of the common app-bar elements placed in their corresponding slots.
+The following example shows the usage of all of the common app bar elements placed in their corresponding slots.
 
 <Canvas of={AppBarStories.Full} />
+
+## Themed
+
+The app bar can be themed by providing a `theme` attribute. By default it will automatically use the "brand" theme and apply the appropriate colors
+to itself and all slotted elements by overriding the global theme colors within the context of the app bar itself only.
+
+> **Important:** This means that if you adjust the global theme variables for colors, the app bar will not be affected by those changes because it
+> has its own theming context.
+
+### White Theme
+
+The app bar provides a built-in "white" theme that can be applied by setting the `theme="white"` attribute. This will change the background color to
+white and the contrast/text color to black.
+
+<Canvas of={AppBarStories.WhiteTheme} />
+
+### Custom Theme
+
+You can also provide a custom theme by setting the `theme="custom"` attribute. This will disable any global auto-theming that is built-in to the app bar
+and allow you to provide your own fully custom styling. This also allows the global theme variables to cascade down into the app bar as they normally would
+because the app bar is no longer overriding the global theme variables.
+
+<Canvas of={AppBarStories.CustomTheme} />
 
 ## API
 
@@ -40,3 +56,23 @@ The following example shows the usage of all of the common app-bar elements plac
 - The app bar component will use an `<h1>` for the title by default. If you override the title slot content, be sure to use the proper heading element.
   - Only **one** `<h1>` should be on a page at any given time (unless a new heading hierarchy is created as a sibling).
 - A `<header>` element is built-in to the app bar component.
+
+## CSS-Only
+
+The app-bar component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={AppBarStories.CSSOnly} />
+
+You may need to customize the layout and styles to fit your specific needs. While there are built-in "section" classes for you to use, these are very
+specific to the default app bar layout and may not work for _all_ use cases. In these scenarios, you can always create your own layout within the app bar element,
+and use your own HTML/CSS to style the content within while still using the standard app bar design for the overall container.
+
+```html
+<header class="forge-app-bar">
+  <div class="my-custom-layout">
+    <!-- Custom layout content -->
+  </div>
+</header>
+```
+
+<CssOnlyInformation />

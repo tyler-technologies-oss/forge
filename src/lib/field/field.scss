@@ -144,6 +144,10 @@ $variants: (
         .label {
           @include utils.visually-hidden;
         }
+
+        ::slotted(:where(input, textarea, [data-forge-field-input])) {
+          @include override(font-size, dense-font-size);
+        }
       }
     }
   }
@@ -510,7 +514,7 @@ $variants: (
   }
 }
 
-:host([multiline]#{map.get($label-positions, inset)}[float-label]) {
+:host([multiline]#{map.get($label-positions, inset)}[float-label]:not(#{map.get($densities, extra-small)})) {
   .label {
     @include core.multiline-inset-label;
 
@@ -530,11 +534,13 @@ $variants: (
 
 .forge-field {
   .input {
-    // TODO: style autofilled input
-
     ::slotted(*) {
       @include core.default-slot-content;
       @include core.disableable(cursor);
+
+      &::placeholder {
+        @include core.slotted-placeholder;
+      }
     }
 
     ::slotted(textarea) {

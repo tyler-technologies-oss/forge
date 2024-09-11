@@ -18,6 +18,18 @@
     <span slot="helper-text">Please choose a food group</span>
   </forge-select>
 
+  <!-- CSS-only -->
+  <h3>CSS-only</h3>
+  <div class="forge-field">
+    <forge-icon name="forge_logo"></forge-icon>
+    <select>
+      <option>Option 1</option>
+      <option>Option 2</option>
+      <option>Option 3</option>
+    </select>
+    <forge-icon name="arrow_drop_down"></forge-icon>
+  </div>
+
   <!-- Select dropdown -->
   <h3>Select dropdown</h3>
   <forge-button variant="raised" style="width: 256px;" id="select-dropdown-target" aria-label="Choose an option">
@@ -39,6 +51,28 @@
     <forge-option divider></forge-option>
     <forge-option value="6">Six</forge-option>
   </forge-select-dropdown>
+
+  <h3>Label aware</h3>
+  <forge-label>
+    <span>Label</span>
+    <forge-select>
+      <forge-option value="">None</forge-option>
+      <forge-option value="grains">Bread, Cereal, Rice, and Pasta</forge-option>
+      <forge-option value="vegetables" disabled>Vegetables (disabled)</forge-option>
+      <forge-option value="fruit">Fruit</forge-option>
+    </forge-select>
+  </forge-label>
+
+  <h3>Form associated</h3>
+  <form name="form" id="form">
+    <forge-select label="Form associated" name="select">
+      <forge-option value="">None</forge-option>
+      <forge-option value="grains">Bread, Cereal, Rice, and Pasta</forge-option>
+      <forge-option value="vegetables" disabled>Vegetables (disabled)</forge-option>
+      <forge-option value="fruit">Fruit</forge-option>
+    </forge-select>
+    <button type="reset">Reset</button>
+  </form>
 </div>
 
 <script type="module" src="select.ts"></script>

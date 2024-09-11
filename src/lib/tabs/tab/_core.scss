@@ -34,7 +34,8 @@
   text-decoration: none;
   width: 100%;
   position: relative;
-  padding: 0;
+  padding-block: #{token(padding-block)};
+  padding-inline: #{token(padding-inline)};
   margin: 0;
   z-index: 0; // Ensure this is a stacking context so the indicator displays
   background-color: #{token(container-color)};
@@ -69,6 +70,12 @@
       color: #{token(hover-icon-color)};
     }
   }
+}
+
+@mixin tab-secondary {
+  @include override(indicator-height, secondary-indicator-height);
+  @include override(indicator-shape, secondary-indicator-shape);
+  @include override(padding-inline, 0, value);
 }
 
 @mixin focus {
@@ -117,10 +124,11 @@
   justify-content: center;
   white-space: nowrap;
   transition: 150ms color linear;
-  max-height: calc(#{token(content-height)} + 2 * #{token(content-padding)});
+  max-height: calc(#{token(content-height)} + 2 * #{token(content-padding-block)});
   min-height: #{token(content-height)};
-  padding: #{token(content-padding)} calc(2 * #{token(content-padding)});
-  gap: #{token(content-padding)};
+  padding-block: #{token(content-padding-block)};
+  padding-inline: #{token(content-padding-inline)};
+  gap: #{token(content-spacing)};
 }
 
 @mixin label {
@@ -141,6 +149,8 @@
 }
 
 @mixin content-secondary {
+  @include override(content-padding-inline, content-padding-inline-secondary);
+
   width: 100%;
 }
 
@@ -149,6 +159,8 @@
 }
 
 @mixin vertical {
+  @include override(padding-inline, 0, value);
+
   width: 100%;
   flex-direction: row;
   border-bottom: none;

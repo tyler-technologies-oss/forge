@@ -1,13 +1,13 @@
-import { customElement, attachShadowTemplate, ICustomElement, coerceBoolean, coreProperty } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { StackAdapter } from './stack-adapter';
 import { StackCore } from './stack-core';
 import { STACK_CONSTANTS, StackAlignment } from './stack-constants';
-import { BaseComponent } from '../core/base/base-component';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './stack.html';
 import styles from './stack.scss';
 
-export interface IStackComponent extends ICustomElement {
+export interface IStackComponent extends IBaseComponent {
   inline: boolean;
   wrap: boolean;
   stretch: boolean;
@@ -43,6 +43,18 @@ declare global {
  * @csspart root - The root container element.
  *
  * @slot - The default/unnamed slot for stack content.
+ *
+ * @cssclass forge-stack - The base stack container class.
+ * @cssclass forge-stack--inline - Renders the stack in the inline (horizontal) direction.
+ * @cssclass forge-stack--wrap - Allows the stack to wrap to a new line in inline mode.
+ * @cssclass forge-stack--stretch - Stretches the children to take up the maximum amount of space.
+ * @cssclass forge-stack--align-start - Aligns the children to the start of the stack.
+ * @cssclass forge-stack--align-center - Aligns the children to the center of the stack.
+ * @cssclass forge-stack--align-end - Aligns the children to the end of the stack.
+ * @cssclass forge-stack--justify-start - Justifies the children to the start of the stack.
+ * @cssclass forge-stack--justify-center - Justifies the children to the center of the stack.
+ * @cssclass forge-stack--justify-end - Justifies the children to the end of the stack.
+ * @cssclass forge-stack--justify-space-between - Justifies the children with equal space between them.
  */
 @customElement({
   name: STACK_CONSTANTS.elementName

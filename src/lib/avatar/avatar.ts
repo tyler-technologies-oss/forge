@@ -47,6 +47,8 @@ declare global {
  * @csspart root - The root container element.
  *
  * @slot - The default slot for avatar content if not provided via text/imageUrl.
+ *
+ * @cssclass forge-avatar - The avatar class _(required)_.
  */
 @customElement({
   name: AVATAR_CONSTANTS.elementName
@@ -69,7 +71,7 @@ export class AvatarComponent extends BaseComponent implements IAvatarComponent {
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

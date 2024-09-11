@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendKeys } from '@web/test-runner-commands';
-import { timer } from '@tylertech/forge-testing';
+import { task } from '../core/utils/utils';
 import { getShadowElement } from '@tylertech/forge-core';
 import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
 import { IButtonAreaComponent } from './button-area';
@@ -66,12 +66,12 @@ describe('Button Area', () => {
 
     button.focus();
     await pressKey('z');
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
     expect(animateSpy).to.not.have.been.called;
     expect(stateLayerSurface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.false;
 
     await pressKey('Enter');
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(animateSpy).to.have.been.called;
     expect(stateLayerSurface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.true;
@@ -160,7 +160,7 @@ describe('Button Area', () => {
     const ignoredButton = getIngoredButtonEl(el);
 
     ignoredButton.click();
-    await timer(TOUCH_DELAY_MS);
+    await task(TOUCH_DELAY_MS);
 
     expect(stateLayerSurface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.false;
   });

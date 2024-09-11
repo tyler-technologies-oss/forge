@@ -40,27 +40,27 @@ declare global {
 /**
  * @tag forge-step
  *
- * @property {boolean} alternative - Whether the step is in the alternative style.
- * @property {boolean} completed - Whether the step is completed.
- * @property {boolean} editable - Whether the step is editable.
- * @property {boolean} error - Whether the step has an error.
- * @property {boolean} selected - Whether the step is selected.
- * @property {boolean} disabled - Whether the step is disabled.
- * @property {boolean} vertical - Whether the step is in vertical mode.
- * @property {boolean} expanded - Whether the step is expanded.
- * @property {boolean} ignoreUserExpansion - Whether the step should ignore user expansion.
- * @property {number} index - The index of the step.
+ * @property {boolean} [alternative=false] - Whether the step is in the alternative style.
+ * @property {boolean} [completed=false] - Whether the step is completed.
+ * @property {boolean} [editable=false] - Whether the step is editable.
+ * @property {boolean} [error=false] - Whether the step has an error.
+ * @property {boolean} [selected=false] - Whether the step is selected.
+ * @property {boolean} [disabled=false] - Whether the step is disabled.
+ * @property {boolean} [vertical=false] - Whether the step is in vertical mode.
+ * @property {boolean} [expanded=false] - Whether the step is expanded.
+ * @property {boolean} [ignoreUserExpansion=false] - Whether the step should ignore user expansion.
+ * @property {number} [index=undefined] - The index of the step.
  *
- * @attribute {boolean} selected - Whether the step is selected.
- * @attribute {number} index - The index of the step.
- * @attribute {boolean} editable - Whether the step is editable.
- * @attribute {boolean} completed - Whether the step is completed.
- * @attribute {boolean} error - Whether the step has an error.
- * @attribute {boolean} alternative - Whether the step is in alternative mode.
- * @attribute {boolean} disabled - Whether the step is disabled.
- * @attribute {boolean} vertical - Whether the step is in vertical mode.
- * @attribute {boolean} expanded - Whether the step is expanded.
- * @attribute {boolean} ignore-user-expansion - Whether the step should ignore user expansion.
+ * @attribute {boolean} [alternative=false] - Whether the step is in alternative mode.
+ * @attribute {boolean} [completed=false] - Whether the step is completed.
+ * @attribute {boolean} [editable=false] - Whether the step is editable.
+ * @attribute {boolean} [error=false] - Whether the step has an error.
+ * @attribute {boolean} [selected=false] - Whether the step is selected.
+ * @attribute {boolean} [disabled=false] - Whether the step is disabled.
+ * @attribute {boolean} [vertical=false] - Whether the step is in vertical mode.
+ * @attribute {boolean} [expanded=false] - Whether the step is expanded.
+ * @attribute {boolean} [ignore-user-expansion=false] - Whether the step should ignore user expansion.
+ * @attribute {number} [index=undefined] - The index of the step.
  *
  * @cssproperty --forge-step-primary-color - The primary color of the step. Defaults to the primary theme.
  * @cssproperty --forge-step-text-color - The text color of the step. Defaults to the on-primary theme.
@@ -92,6 +92,20 @@ declare global {
  * @slot - The content of the step.
  * @slot optional - The optional content of the step.
  * @slot expansion-content - The content of the step expansion.
+ *
+ * @csspart root - The root element.
+ * @csspart step - The step container element.
+ * @csspart before - The line before the step.
+ * @csspart after - The line after the step.
+ * @csspart icon-container - The icon container element.
+ * @csspart icon-content - The icon content element.
+ * @csspart icon - The icon element.
+ * @csspart index - The index content container.
+ * @csspart text-container - The text container element.
+ * @csspart title-container - The title container element.
+ * @csspart subtitle-container - The subtitle container element.
+ * @csspart state-layer - The state layer surface element.
+ * @csspart focus-indicator - The focus indicator element.
  */
 @customElement({
   name: STEP_CONSTANTS.elementName,
@@ -127,7 +141,7 @@ export class StepComponent extends BaseComponent implements IStepComponent {
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

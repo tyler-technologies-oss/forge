@@ -1,16 +1,17 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
-import { task } from '../core/utils/event-utils';
+import { task } from '../core/utils/utils';
 import { ILabelAdapter } from './label-adapter';
+import { ILabelAware } from './label-aware';
 import { LABEL_CONSTANTS } from './label-constants';
 
-export interface ILabelCore extends ICustomElementCore {
+export interface ILabelCore {
   for: string | null | undefined;
   forElement: HTMLElement | null | undefined;
   dynamic: boolean;
   nonInteractive: boolean;
   legend: boolean;
-  disconnect(): void;
+  destroy(): void;
   update(): void;
+  updateTarget(target: HTMLElement & ILabelAware): boolean;
 }
 
 export class LabelCore implements ILabelCore {
@@ -42,13 +43,22 @@ export class LabelCore implements ILabelCore {
     }
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._disconnect();
     this._adapter.destroy();
   }
 
   public update(): void {
     this._adapter.updateTargetLabel();
+  }
+
+  public updateTarget(target: HTMLElement & ILabelAware): boolean {
+    this._adapter.setTargetElement(target);
+    if (this._adapter.hasTargetElement()) {
+      this._connect();
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -196,7 +206,7 @@ export class LabelCore implements ILabelCore {
       this._adapter.toggleHostAttribute(LABEL_CONSTANTS.attributes.LEGEND, this._legend);
 
       if (this._legend) {
-        this._adapter.removerSlotChangeListener(this._slotChangeListener);
+        this._adapter.removeSlotChangeListener(this._slotChangeListener);
         this._adapter.dispatchHostEvent(new CustomEvent(LABEL_CONSTANTS.events.CONNECTED, { bubbles: true }));
         return;
       }

@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { standaloneStoryParams, customElementStoryRenderer, generateCustomElementArgTypes, GLOBAL_THEME_OPTIONS } from '../../utils';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
@@ -24,7 +25,7 @@ const meta = {
       tagName: component,
       exclude: ['form', 'name', 'value'],
       controls: {
-        variant: { control: { type: 'select' }, options: ['text', 'outlined', 'filled', 'raised', 'link'] },
+        variant: { control: { type: 'select' }, options: ['text', 'outlined', 'tonal', 'filled', 'raised', 'link'] },
         theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS }
       }
     }),
@@ -55,6 +56,7 @@ export const Variants: Story = {
     return html`
       <forge-button>Text</forge-button>
       <forge-button variant="outlined">Outlined</forge-button>
+      <forge-button variant="tonal">Tonal</forge-button>
       <forge-button variant="filled">Filled</forge-button>
       <forge-button variant="raised">Raised</forge-button>
       <forge-button variant="link">Link</forge-button>
@@ -141,5 +143,30 @@ export const WithCircularProgress: Story = {
         <forge-circular-progress slot="end" aria-label="Loading something important"></forge-circular-progress>
       </forge-button>
     `;
+  }
+};
+
+export const CSSOnly: Story = {
+  parameters: {
+    controls: { include: ['variant', 'dense', 'disabled', 'pill'] }
+  },
+  args: {
+    variant: 'text',
+    pill: false,
+    dense: false,
+    disabled: false
+  },
+  render: ({ variant, dense, pill, disabled }) => {
+    const classes = classMap({
+      'forge-button': true,
+      'forge-button--outlined': variant === 'outlined',
+      'forge-button--tonal': variant === 'tonal',
+      'forge-button--filled': variant === 'filled',
+      'forge-button--raised': variant === 'raised',
+      'forge-button--link': variant === 'link',
+      'forge-button--dense': dense,
+      'forge-button--pill': pill
+    });
+    return html`<button class=${classes} ?disabled=${disabled}>Click me</button>`;
   }
 };

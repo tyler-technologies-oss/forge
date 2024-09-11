@@ -1,4 +1,5 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Canvas, Meta, Title } from '@storybook/blocks';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as SwitchStories from './Switch.stories';
 
@@ -26,3 +27,11 @@ Use switches to:
 - Ensure each control can be updated or activated by the keyboard.
 - The input element will receive the proper ARIA attribute aria-checked.
 - The input element will receive the proper role attribute role="switch".
+
+## CSS-Only
+
+The switch component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={SwitchStories.CSSOnly} />
+
+<CssOnlyInformation />

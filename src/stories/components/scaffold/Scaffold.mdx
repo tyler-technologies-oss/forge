@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as ScaffoldStories from './Scaffold.stories';
 
 <Meta of={ScaffoldStories} />
@@ -33,3 +34,11 @@ Using a scaffold will help you place elements in pre-defined locations within a 
 - Use the proper semantic elements for content (if applicable) such as `<header>`, `<main>`, `<aside>`... etc..
   - The scaffold component itself has no semantic meaning.
   - The scaffold component does not make any assumptions about the content you provide so it's up to you to provide the proper landmark elements.
+
+## CSS-Only
+
+The scaffold component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={ScaffoldStories.CSSOnly} />
+
+<CssOnlyInformation />

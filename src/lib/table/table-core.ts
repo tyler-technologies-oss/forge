@@ -1,4 +1,4 @@
-import { createPredicate, getEventPath, ICustomElementCore, isNumber, isObject, ItemManager, matchesPredicate } from '@tylertech/forge-core';
+import { createPredicate, getEventPath, isNumber, isObject, ItemManager, matchesPredicate } from '@tylertech/forge-core';
 import { MultiSortManager } from './multi-sort-manager';
 import { ITableAdapter } from './table-adapter';
 import { TABLE_CONSTANTS } from './table-constants';
@@ -28,7 +28,7 @@ import {
   TableSelectTooltipCallback
 } from './types';
 
-export interface ITableCore extends ICustomElementCore {
+export interface ITableCore {
   data: any[];
   columnConfigurations: IColumnConfiguration[];
   dense: boolean;
@@ -45,7 +45,7 @@ export interface ITableCore extends ICustomElementCore {
   rowCreated: TableRowCreatedCallback;
   cellCreated: TableCellCreatedCallback;
   initialize(): void;
-  connect(): void;
+  initialize(): void;
   hideColumn(columnIndex: number): void;
   showColumn(columnIndex: number): void;
   isColumnHidden(columnIndex: number): boolean;
@@ -144,7 +144,7 @@ export class TableCore implements ITableCore {
 
   /** Called when the component is connected to the DOM. */
   public initialize(): void {
-    this.connect();
+    this._adapter.initialize();
     this._adapter.setHostAttribute(TABLE_CONSTANTS.attributes.SELECT, this._select.toString());
     this._adapter.setHostAttribute(TABLE_CONSTANTS.attributes.MULTISELECT, this._multiselect.toString());
     this._adapter.setHostAttribute(TABLE_CONSTANTS.attributes.DENSE, this._dense.toString());
@@ -153,11 +153,7 @@ export class TableCore implements ITableCore {
     this._adapter.emitHostEvent(TABLE_CONSTANTS.events.INITIALIZED, undefined, false);
   }
 
-  public connect(): void {
-    this._adapter.initialize();
-  }
-
-  public disconnect(): void {
+  public destroy(): void {
     this._resizeDescriptor = undefined;
     this._adapter.removeDocumentListener('mousemove', this._documentMouseMoveListener);
     this._adapter.removeDocumentListener('mouseup', this._documentMouseUpListener);

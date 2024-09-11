@@ -65,6 +65,7 @@ declare global {
  * @attribute {boolean} [secondary=false] - Controls whether the tabs are styled as secondary tab navigation.
  * @attribute {boolean} [auto-activate=false] - Controls whether the tabs are automatically activated when receiving focus.
  * @attribute {boolean} [scroll-buttons=false] - Controls whether scroll buttons are displayed when the tabs overflow their container.
+ * @attribute {string} [data-aria-label] - The ARIA label to forward to the internal tablist element.
  *
  * @event {CustomEvent<ITabBarChangeEventData>} forge-tab-bar-change - Dispatches when the active tab changes.
  *

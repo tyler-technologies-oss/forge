@@ -1,10 +1,16 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as CheckboxStories from './Checkbox.stories';
 
 <Meta of={CheckboxStories} />
 
 <Title />
+
+Checkboxes are used when a user can select one or more options from a list. They are commonly used in forms and settings pages, but can be used in many other contexts
+to allow users to toggle between a checked and unchecked state.
+
+Checkboxes can also have an indeterminate state, which is useful when the state of the checkbox is dependent on the state of its children or is not yet known.
 
 <Canvas of={CheckboxStories.Demo} />
 
@@ -13,3 +19,17 @@ import * as CheckboxStories from './Checkbox.stories';
 <CustomArgTypes />
 
 ## Accessibility
+
+- Verify that you can tab to each checkbox.
+  - Ensure there is a distinct visual cue that a checkbox is checked or unchecked.
+  - Ensure that there is a distinct visual cue that a checkbox is focused.
+  - Ensure that there is a distinct visual cue when a checkbox is disabled.
+- Verify that pressing the space bar key, while focused on a checkbox, will toggle it checked and unchecked in the same manner as it would be with a mouse click.
+
+## CSS-Only
+
+The checkbox component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={CheckboxStories.CSSOnly} />
+
+<CssOnlyInformation />

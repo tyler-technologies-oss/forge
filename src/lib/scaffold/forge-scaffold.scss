@@ -1,0 +1,49 @@
+@use './core';
+
+.forge-scaffold {
+  @include core.tokens;
+}
+
+.forge-scaffold {
+  @include core.base;
+
+  &--viewport {
+    @include core.viewport;
+  }
+
+  &__left {
+    @include core.left;
+  }
+
+  &__right {
+    @include core.right;
+  }
+
+  &__header {
+    @include core.header;
+  }
+
+  &__body {
+    position: #{core.token(body-position)};
+    grid-area: body;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+
+    > * {
+      @include core.scrollable;
+    }
+  }
+
+  &__footer {
+    @include core.footer;
+  }
+
+  &__left > *,
+  &__right > *,
+  &__header > *,
+  &__body > *,
+  &__footer > * {
+    @include core.slotted-base;
+  }
+}

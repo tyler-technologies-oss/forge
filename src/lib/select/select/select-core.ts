@@ -1,10 +1,11 @@
-import { IBaseSelectCore, ISelectOption, BaseSelectCore, BASE_SELECT_CONSTANTS } from '../core';
-import { SELECT_CONSTANTS } from './select-constants';
+import { BaseSelectCore, IBaseSelectCore, ISelectOption } from '../core';
 import { ISelectAdapter } from './select-adapter';
+import { SELECT_CONSTANTS } from './select-constants';
 
 export interface ISelectCore extends IBaseSelectCore {
   label: string;
   placeholder: string;
+  readonly required: boolean;
   syncFloatingLabelState(opts: { force?: boolean }): void;
   setDisabled(value: boolean): void;
 }
@@ -12,6 +13,7 @@ export interface ISelectCore extends IBaseSelectCore {
 export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelectCore {
   private _label = '';
   private _placeholder: string;
+  private readonly _required = false;
   private _permanentlyFloatLabel = false;
   private _mousedownListener: EventListener = this._onMouseDown.bind(this);
 
@@ -20,7 +22,7 @@ export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelec
   }
 
   public initialize(): void {
-    this._adapter.tryApplyGlobalConfiguration(['labelPosition']);
+    this._adapter.tryApplyGlobalConfiguration(['labelPosition', 'variant']);
     super.initialize();
     super.initializeTarget();
     this._initializeLabel();
@@ -28,8 +30,8 @@ export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelec
     this._adapter.addTargetListener('mousedown', this._mousedownListener);
   }
 
-  public disconnect(): void {
-    super.disconnect();
+  public destroy(): void {
+    super.destroy();
     this._adapter.removeTargetListener('mousedown', this._mousedownListener);
   }
 
@@ -114,6 +116,7 @@ export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelec
       }
     }
     this._tryFloatLabel();
+    this._adapter.syncValue(this._value);
     return result;
   }
 
@@ -140,6 +143,8 @@ export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelec
 
   protected _applyValue(value: string | string[]): void {
     super._applyValue(value);
+
+    this._adapter.syncValue(this._value);
 
     // Update the state of the component based on the existence of a selected value
     const text = this._getSelectedText();
@@ -182,6 +187,13 @@ export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelec
     if (this._multiple !== value) {
       super.multiple = value;
       this._adapter.toggleHostAttribute(SELECT_CONSTANTS.attributes.MULTIPLE, value);
+    }
+  }
+
+  /** Sets whether the select is required. */
+  public set required(value: boolean) {
+    if (this._required !== value) {
+      this._adapter.setRequired();
     }
   }
 }

@@ -28,7 +28,7 @@ export interface IBaseSelectCore extends IListDropdownAwareCore {
   deselectAll(): void;
   initialize(): void;
   initializeTarget(): void;
-  disconnect(): void;
+  destroy(): void;
 }
 
 export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListDropdownAwareCore implements IBaseSelectCore {
@@ -89,7 +89,7 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
     this._adapter.addTargetListener('keydown', this._keydownListener);
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.removeClickListener(this._clickListener);
     this._adapter.removeTargetListener('blur', this._blurListener);
     this._adapter.removeTargetListener('focus', this._focusListener);

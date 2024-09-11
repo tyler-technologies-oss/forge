@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body,
 .sbdocs .sb-bar,
 .sbdocs .sbdocs-preview,
@@ -102,4 +108,35 @@ blockquote {
 
 div:has(> .toc-wrapper) {
   width: auto;
+}
+
+//
+// Warning banner
+//
+
+div.banner {
+  border-radius: var(--forge-shape-medium);
+  padding-block: var(--forge-spacing-xxxsmall);
+  padding-inline: var(--forge-spacing-medium);
+  margin-block-start: var(--forge-spacing-large);
+
+  &--warn {
+    background-color: var(--forge-theme-warning-container);
+    color: var(--forge-theme-on-warning-container);
+  }
+
+  &--info {
+    background-color: var(--forge-theme-info-container);
+    color: var(--forge-theme-on-info-container);
+  }
+
+  &--success {
+    background-color: var(--forge-theme-success-container);
+    color: var(--forge-theme-on-success-container);
+  }
+
+  &--error {
+    background-color: var(--forge-theme-error-container);
+    color: var(--forge-theme-on-error-container);
+  }
 }

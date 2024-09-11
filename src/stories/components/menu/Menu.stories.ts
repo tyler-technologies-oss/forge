@@ -1,11 +1,11 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { OVERLAY_PLACEMENT_OPTIONS, customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { IMenuOption, IOption } from '@tylertech/forge';
+import { styleMap } from 'lit/directives/style-map.js';
 
 import '@tylertech/forge/menu';
 import '@tylertech/forge/button';
-import { IMenuComponent, IMenuOption, IOption } from '@tylertech/forge';
-import { styleMap } from 'lit/directives/style-map.js';
 
 const component = 'forge-menu';
 
@@ -15,16 +15,26 @@ const meta = {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
     let options = [
+      { label: 'Save', value: 'save' },
       { label: 'Edit', value: 'edit' },
       { label: 'Delete', value: 'delete' }
     ] as IMenuOption[];
 
     if (args.mode === 'cascade') {
-      options[0] = {
-        ...options[0],
+      options[1] = {
+        ...options[1],
         options: [
           { label: 'As New', value: 'asNew' },
-          { label: 'Overwrite', value: 'overwrite' }
+          { label: 'Overwrite', value: 'overwrite' },
+          {
+            label: 'More',
+            value: 'more',
+            options: [
+              { label: 'Option 1', value: 'option1' },
+              { label: 'Option 2', value: 'option2' },
+              { label: 'Option 3', value: 'option3' }
+            ]
+          }
         ] as IOption[]
       };
     }
@@ -62,7 +72,12 @@ const meta = {
       }
     })
   },
-  args: {}
+  args: {
+    open: false,
+    placement: 'bottom-start',
+    persistSelection: false,
+    mode: 'click'
+  }
 } satisfies Meta;
 
 export default meta;
@@ -70,3 +85,7 @@ export default meta;
 type Story = StoryObj;
 
 export const Demo: Story = {};
+
+export const Cascading: Story = {
+  args: { mode: 'cascade' }
+};

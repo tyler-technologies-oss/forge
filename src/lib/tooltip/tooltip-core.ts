@@ -1,4 +1,3 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { ITooltipAdapter } from './tooltip-adapter';
 import { TOOLTIP_CONSTANTS, TooltipPlacement, TooltipTriggerType, TooltipType } from './tooltip-constants';
 import { WithLongpressListener } from '../core/mixins/interactions/longpress/with-longpress-listener';
@@ -7,7 +6,7 @@ import { OverlayFlipState } from '../overlay/overlay-constants';
 import { PositionPlacement } from '../core/utils/position-utils';
 import { DismissibleStack } from '../core/utils/dismissible-stack';
 
-export interface ITooltipCore extends ICustomElementCore {
+export interface ITooltipCore {
   open: boolean;
   type: TooltipType;
   placement: `${TooltipPlacement}`;

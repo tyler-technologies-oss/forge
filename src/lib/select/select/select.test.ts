@@ -1,13 +1,14 @@
 import { expect } from '@esm-bundle/chai';
-import { nothing } from 'lit-html';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { tick } from '@tylertech/forge-testing';
-import { sendMouse, sendKeys } from '@web/test-runner-commands';
+import { sendKeys, sendMouse } from '@web/test-runner-commands';
+import { nothing } from 'lit-html';
 import { spy } from 'sinon';
-import { ISelectComponent } from './select';
 import { TestHarness } from '../../../test/utils/test-harness';
+import { internals } from '../../constants';
+import { frame } from '../../core/utils/utils';
 import {
+  FIELD_CONSTANTS,
   FieldDensity,
   FieldLabelAlignment,
   FieldLabelPosition,
@@ -15,11 +16,11 @@ import {
   FieldSupportTextInset,
   FieldTheme,
   FieldVariant,
-  FIELD_CONSTANTS,
   IFieldComponent
 } from '../../field';
-import { BASE_SELECT_CONSTANTS } from '../core';
 import { IPopoverComponent, POPOVER_CONSTANTS } from '../../popover';
+import { BASE_SELECT_CONSTANTS } from '../core';
+import { ISelectComponent } from './select';
 import { SELECT_CONSTANTS } from './select-constants';
 
 import './select';
@@ -112,7 +113,6 @@ describe('Select', () => {
 
       harness.element.observeScroll = true;
       harness.element.options = Array.from({ length: 10 }, (_, i) => ({ value: `option-${i}`, label: `Option ${i}` }));
-
       const spyScrolledBottom = spy();
       harness.element.addEventListener(SELECT_CONSTANTS.events.SCROLLED_BOTTOM, spyScrolledBottom);
 
@@ -123,7 +123,7 @@ describe('Select', () => {
 
       const scrollElement = harness.element.popupElement!.shadowRoot!.querySelector(POPOVER_CONSTANTS.selectors.SURFACE) as HTMLElement;
       scrollElement.scrollTop = scrollElement.scrollHeight;
-      await tick();
+      await frame();
 
       expect(spyScrolledBottom.calledOnce).to.be.true;
     });
@@ -132,7 +132,6 @@ describe('Select', () => {
   describe('accessibility', () => {
     it('should be accessible', async () => {
       const harness = await createFixture();
-
       expect(harness.element.getAttribute('role')).to.equal('combobox');
       expect(harness.element.getAttribute('aria-haspopup')).to.equal('true');
       expect(harness.element.getAttribute('aria-expanded')).to.equal('false');
@@ -145,7 +144,7 @@ describe('Select', () => {
       const harness = await createFixture();
 
       harness.element.open = true;
-      await tick();
+      await frame();
 
       expect(harness.element.hasAttribute('open')).to.be.true;
       expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
@@ -157,7 +156,7 @@ describe('Select', () => {
       const harness = await createFixture();
 
       harness.element.open = true;
-      await tick();
+      await frame();
 
       expect(harness.element.hasAttribute('aria-activedescendant')).to.be.false;
 
@@ -165,7 +164,6 @@ describe('Select', () => {
       harness.pressKey('ArrowDown');
       await elementUpdated(harness.element);
       await harness.popoverToggleAnimation;
-
       expect(harness.element.getAttribute('aria-activedescendant')).to.equal(harness.getListItems()[0].querySelector('button')?.id);
       await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
     });
@@ -174,12 +172,12 @@ describe('Select', () => {
       const harness = await createFixture();
 
       harness.element.open = true;
-      await tick();
+      await frame();
 
       expect(harness.element.hasAttribute('aria-activedescendant')).to.be.false;
 
       harness.element.focus();
-      await tick();
+      await frame();
 
       await harness.pressKey('ArrowDown');
 
@@ -190,21 +188,18 @@ describe('Select', () => {
 
     it('should be accessible when required', async () => {
       const harness = await createFixture({ required: true });
-
       expect(harness.element.getAttribute('aria-required')).to.equal('true');
       await expect(harness.element).to.be.accessible();
     });
 
     it('should be accessible when invalid', async () => {
       const harness = await createFixture({ invalid: true });
-
       expect(harness.element.getAttribute('aria-invalid')).to.equal('true');
       await expect(harness.element).to.be.accessible();
     });
 
     it('should be accessible when multiple', async () => {
       const harness = await createFixture({ multiple: true });
-
       await expect(harness.element).to.be.accessible();
     });
 
@@ -212,7 +207,7 @@ describe('Select', () => {
       const harness = await createFixture({ multiple: true });
 
       harness.element.open = true;
-      await tick();
+      await frame();
 
       expect(harness.element.hasAttribute('open')).to.be.true;
       expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
@@ -239,7 +234,7 @@ describe('Select', () => {
       const harness = await createFixture();
 
       harness.element.open = true;
-      await tick();
+      await frame();
 
       await harness.clickElement(harness.element);
       await harness.popoverToggleAnimation;
@@ -253,7 +248,7 @@ describe('Select', () => {
       const harness = await createFixture();
 
       harness.element.open = true;
-      await tick();
+      await frame();
 
       await harness.clickOutside();
       await harness.popoverToggleAnimation;
@@ -287,13 +282,11 @@ describe('Select', () => {
   describe('selection state', () => {
     it('should select an option', async () => {
       const harness = await createFixture();
-
       await harness.clickElement(harness.element);
 
       expect(harness.element.value).not.to.be.ok;
 
       await harness.clickElement(harness.getListItems()[0]);
-
       expect(harness.element.value).to.equal('one');
     });
 
@@ -309,14 +302,12 @@ describe('Select', () => {
 
     it('should deselect an option when multiple is true', async () => {
       const harness = await createFixture({ multiple: true });
-
       await harness.clickElement(harness.element);
       await harness.clickElement(harness.getListItems()[0]);
 
       expect(harness.element.value).to.deep.equal(['one']);
 
       await harness.clickElement(harness.getListItems()[0]);
-
       expect(harness.element.value).to.deep.equal([]);
     });
 
@@ -638,7 +629,6 @@ describe('Select', () => {
 
     it('should change label dynamically', async () => {
       const harness = await createFixture({ label: 'Test label' });
-
       expect(harness.labelElement?.textContent).to.equal('Test label');
 
       harness.element.label = 'New label';
@@ -690,7 +680,7 @@ describe('Select', () => {
 
       harness.element.labelPosition = 'inset';
       harness.element.value = 'one';
-      await tick();
+      await frame();
 
       expect(harness.fieldElement.floatLabel).to.be.true;
     });
@@ -700,7 +690,7 @@ describe('Select', () => {
 
       harness.element.labelPosition = 'inset';
       harness.element.placeholder = 'test';
-      await tick();
+      await frame();
 
       expect(harness.fieldElement.floatLabel).to.be.true;
     });
@@ -709,7 +699,7 @@ describe('Select', () => {
       const harness = await createFixture();
 
       harness.element.labelPosition = 'inset';
-      await tick();
+      await frame();
 
       expect(harness.fieldElement.floatLabel).to.be.false;
     });
@@ -719,7 +709,7 @@ describe('Select', () => {
 
       harness.element.labelPosition = 'inset';
       harness.element.floatLabel = true;
-      await tick();
+      await frame();
 
       expect(harness.fieldElement.floatLabel).to.be.true;
     });
@@ -756,6 +746,125 @@ describe('Select', () => {
 
       harness.element.dense = false;
       expect(harness.labelElement).to.be.ok;
+    });
+  });
+
+  describe('form association', () => {
+    it('should return form element and name', async () => {
+      const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
+
+      const selectEl = document.createElement('forge-select');
+      selectEl.setAttribute('name', 'test-select');
+      form.appendChild(selectEl);
+
+      expect(selectEl.form).to.equal(form);
+      expect(selectEl.name).to.equal('test-select');
+      expect(selectEl.labels).to.be.empty;
+
+      selectEl.name = 'new-name';
+      expect(selectEl.name).to.equal('new-name');
+
+      selectEl.name = null as any;
+      expect(selectEl.name).to.be.empty;
+    });
+
+    it('should return associated form labels', async () => {
+      const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
+
+      const selectEl = document.createElement('forge-select');
+      selectEl.setAttribute('id', 'test-select');
+      form.appendChild(selectEl);
+
+      const labelText = 'Test label';
+      const labelEl = document.createElement('label');
+      labelEl.setAttribute('for', 'test-select');
+      labelEl.textContent = labelText;
+      form.appendChild(labelEl);
+
+      expect(selectEl.labels).to.have.lengthOf(1);
+      expect(selectEl.labels[0]).to.equal(labelEl);
+    });
+
+    it('should set form value when value is set', async () => {
+      const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
+
+      const selectEl = document.createElement('forge-select');
+      selectEl.setAttribute('name', 'test-select');
+      form.appendChild(selectEl);
+
+      let formData = new FormData(form);
+      expect(formData.get('test-select')).to.be.null;
+
+      selectEl.value = 'one';
+      formData = new FormData(form);
+      expect(formData.get('test-select')).to.equal('["one"]');
+    });
+
+    it('should reset value when form is reset', async () => {
+      const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
+
+      const selectEl = document.createElement('forge-select');
+      selectEl.setAttribute('name', 'test-select');
+      form.appendChild(selectEl);
+
+      selectEl.value = 'one';
+      let formData = new FormData(form);
+      expect(formData.get('test-select')).to.equal('["one"]');
+
+      form.reset();
+      formData = new FormData(form);
+      expect(formData.get('test-select')).to.be.null;
+    });
+
+    it('should restore form state', async () => {
+      const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
+
+      const selectEl = document.createElement('forge-select');
+      const setFormValueSpy = spy(selectEl, 'setFormValue');
+      selectEl.name = 'test-select';
+      selectEl.value = 'one';
+      form.appendChild(selectEl);
+
+      const [value, state] = setFormValueSpy.args[0] ?? [null, null];
+      const newSelectEl = document.createElement('forge-select');
+      newSelectEl.name = 'test-select';
+      selectEl.remove();
+      form.appendChild(newSelectEl);
+
+      let restoreState: any = state ?? value;
+      if (restoreState instanceof FormData) {
+        restoreState = Array.from(restoreState.entries());
+      }
+
+      newSelectEl.formStateRestoreCallback(restoreState, 'restore');
+
+      expect(newSelectEl.value).to.equal('one');
+    });
+
+    it('should validate', async () => {
+      const el = await fixture<ISelectComponent>(html`<forge-select required></forge-select>`);
+
+      expect(el[internals].validity.valid).to.be.false;
+      expect(el[internals].validationMessage).not.to.be.empty;
+      expect(el[internals].checkValidity()).to.be.false;
+      expect(el[internals].reportValidity()).to.be.false;
+
+      el.value = 'one';
+
+      expect(el[internals].willValidate).to.be.true;
+      expect(el[internals].validity.valid).to.be.true;
+      expect(el[internals].validationMessage).to.be.empty;
+      expect(el[internals].checkValidity()).to.be.true;
+      expect(el[internals].reportValidity()).to.be.true;
+    });
+
+    it('should set custom validity', async () => {
+      const el = await fixture<ISelectComponent>(html`<forge-select required></forge-select>`);
+      const message = 'Custom error message';
+
+      el[internals].setValidity({ customError: true }, message);
+
+      expect(el[internals].validationMessage).to.equal('Custom error message');
     });
   });
 });

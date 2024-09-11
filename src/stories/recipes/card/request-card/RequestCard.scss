@@ -1,0 +1,31 @@
+forge-card {
+  --forge-card-padding: 0;
+  max-width: 768px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--forge-spacing-medium);
+  align-items: center;
+  border-left: 4px solid var(--forge-theme-primary);
+  padding: 8px;
+}
+
+.illustration-container {
+  display: flex;
+
+  img {
+    max-width: 64px;
+    grid-column: 1 / 2;
+  }
+}
+
+.date-request {
+  grid-column: 2 / 9;
+}
+
+.view-all {
+  grid-column: 9 / 13;
+  justify-self: end;
+}

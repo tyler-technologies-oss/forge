@@ -20,9 +20,9 @@ declare global {
  *
  * @summary Inline messages are used to provide feedback to the user about a specific action or state.
  *
- * @property {InlineMessageTheme} theme - The theme to apply. Defaults to `"info"`.
+ * @property {InlineMessageTheme} [theme="info"] - The theme to apply.
  *
- * @attribute {InlineMessageTheme} theme - The theme to apply. Defaults to `"info"`.
+ * @attribute {InlineMessageTheme} [theme="info"] - The theme to apply.
  *
  * @cssproperty --forge-inline-message-background - The background color.
  * @cssproperty --forge-inline-message-color - The text color.
@@ -40,6 +40,10 @@ declare global {
  *
  * @csspart root - The root layout element.
  * @csspart container - The container element for the title and message content.
+ *
+ * @cssclass forge-inline-message - The inline message container element.
+ * @cssclass forge-inline-message__title - The title element.
+ * @cssclass forge-inline-message__icon - The icon element.
  *
  * @slot - The message text.
  * @slot title - The title of the inline message.

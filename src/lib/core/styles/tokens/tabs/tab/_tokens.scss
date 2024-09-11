@@ -9,6 +9,8 @@ $tokens: (
   inactive-color: utils.module-val(tab, inactive-color, theme.variable(text-medium)),
   height: utils.module-val(tab, height, 48px),
   stacked-height: utils.module-val(tab, stacked-height, 64px),
+  padding-block: utils.module-val(tab, padding-block, 0),
+  padding-inline: utils.module-val(tab, padding-inline, spacing.variable(medium)),
   // Disabled
   disabled-opacity: utils.module-val(tab, disabled-opacity, 0.38),
   // Indicator
@@ -29,7 +31,11 @@ $tokens: (
   container-shape: utils.module-val(tab, container-shape, 0),
   // Content
   content-height: utils.module-ref(tab, content-height, height),
+  content-spacing: utils.module-val(tab, content-spacing, spacing.variable(xxsmall)),
   content-padding: utils.module-val(tab, content-padding, spacing.variable(xxsmall)),
+  content-padding-block: utils.module-ref(tab, content-padding-block, content-padding),
+  content-padding-inline: utils.module-ref(tab, content-padding-inline, content-padding),
+  content-padding-inline-secondary: utils.module-val(tab, content-padding-inline-secondary, spacing.variable(medium)),
   // Icon
   active-focus-icon-color: utils.module-ref(tab, active-focus-icon-color, active-color),
   active-hover-icon-color: utils.module-ref(tab, active-hover-icon-color, active-color),

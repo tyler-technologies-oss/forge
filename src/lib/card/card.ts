@@ -22,8 +22,8 @@ declare global {
  *
  * @property {boolean} [raised=false] - Whether the card has elevation or not.
  *
- * @attribute {boolean} [raised=false] - Whether the card has an raised or not.
- * @attribute {boolean} no-padding - Removes the default padding from the card.
+ * @attribute {boolean} [raised=false] - Whether the card has elevation or not.
+ * @attribute {boolean} [no-padding=false] - Removes the default padding from the card.
  *
  * @cssproperty --forge-card-background - The background color of the card.
  * @cssproperty --forge-card-height - The height of the card.
@@ -39,6 +39,9 @@ declare global {
  * @cssproperty --forge-card-raised-outline-width - The outline width of the card when raised.
  *
  * @csspart root - The root container element.
+ *
+ * @cssclass forge-card - The card container element _(required)_.
+ * @cssclass forge-card--raised - The card container element when raised _(required)_.
  */
 @customElement({
   name: CARD_CONSTANTS.elementName

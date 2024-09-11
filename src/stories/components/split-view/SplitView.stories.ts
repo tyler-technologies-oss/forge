@@ -2,12 +2,12 @@ import { html } from 'lit';
 import { action } from '@storybook/addon-actions';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { generateCustomElementArgTypes } from '../../utils';
+import { storyStyles } from 'src/stories/decorators';
 
 import '@tylertech/forge/split-view/split-view-panel';
 import '@tylertech/forge/split-view/split-view';
 
-import style from './SplitView.scss';
-import { storyStyles } from 'src/stories/decorators';
+import styles from './SplitView.scss?inline';
 
 const component = 'forge-split-view';
 
@@ -51,7 +51,7 @@ const meta = {
   subcomponents: {
     'Split View Panel': 'forge-split-view-panel'
   },
-  decorators: [storyStyles(style)],
+  decorators: [storyStyles(styles)],
   parameters: {
     actions: { disable: true }
   },

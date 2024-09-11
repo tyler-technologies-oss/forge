@@ -1,8 +1,7 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { IListAdapter } from './list-adapter';
 import { LIST_CONSTANTS } from './list-constants';
 
-export interface IListCore extends ICustomElementCore {
+export interface IListCore {
   dense: boolean;
   indented: boolean;
   selectedValue: unknown | unknown[];

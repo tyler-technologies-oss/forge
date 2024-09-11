@@ -2,6 +2,7 @@ import '$src/shared';
 import '@tylertech/forge/button';
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/select';
+import '@tylertech/forge/field/forge-field.scss';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconFood } from '@tylertech/tyler-icons/extended';
 import './select.scss';

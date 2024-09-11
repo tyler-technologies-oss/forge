@@ -1,6 +1,6 @@
 import { defineTimePickerComponent, ITimePickerComponent, ITimePickerCore, TIME_PICKER_CONSTANTS, ITimePickerOptionValue, ITimePickerAdapter, ITimePickerOption } from '@tylertech/forge/time-picker';
 import { IPopoverComponent, IListItemComponent, LIST_ITEM_CONSTANTS, ICON_BUTTON_CONSTANTS, IIconButtonComponent, TEXT_FIELD_CONSTANTS, defineTextFieldComponent } from '@tylertech/forge';
-import { timer, tick } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 import { getCurrentTimeOfDayMillis, millisToTimeString, hoursToMillis, timeStringToMillis, mergeDateWithTime } from '@tylertech/forge/time-picker/time-picker-utils';
 
 const POPOVER_ANIMATION_DURATION = 200;
@@ -205,7 +205,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.disabled = true;
     document.body.appendChild(this.context.component);
 
-    await tick();
+    await frame();
     this.context.component.disabled = false;
 
     expect(this.context.component.disabled).toBeFalse();
@@ -230,9 +230,9 @@ describe('TimePickerComponent', function(this: ITestContext) {
     const expectedTimeString = '08:07 PM';
     this.context.component.value = expectedTimeValue;
 
-    await tick();
+    await frame();
     this.context.component.masked = false;
-    await tick();
+    await frame();
 
     expect(this.context.component.value).toBe(expectedTimeValue);
     expect(this.context.inputElement.value).toBe(expectedTimeString);
@@ -397,10 +397,10 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.toggleElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
     expect(this.context.getPopup()).toBeTruthy();
 
-    await tick();
+    await frame();
     this.context.toggleElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
-    await tick();
-    await timer(POPOVER_ANIMATION_DURATION);
+    await frame();
+    await task(POPOVER_ANIMATION_DURATION);
     
     expect(this.context.getPopup()).toBeFalsy();
   });
@@ -417,11 +417,11 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
     expect(this.context.getPopup()).toBeTruthy();
 
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Escape' }));
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     expect(this.context.getPopup()).toBeFalsy();
   });
@@ -618,7 +618,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.value = timeString;
     this.context.component.open = true;
 
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
     const matchingListItem = listItems.find(li => li.selected) as IListItemComponent<ITimePickerOptionValue>;
@@ -630,7 +630,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
 
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
     const activeListItemIndex = listItems.findIndex(li => li.active);
@@ -642,13 +642,13 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
     this.context.component.open = true;
 
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
     
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Tab' }));
     this.context.inputElement.blur();
 
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     expect(this.context.component.value).not.toBeNull();
   });
@@ -663,7 +663,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.startTime = startTime;
     this.context.component.open = true;
 
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
     const activeListItem = listItems.find(li => li.selected) as IListItemComponent<ITimePickerOptionValue>;
@@ -675,13 +675,13 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     expect(this.context.getPopup()).toBeTruthy();
     expect(this.context.component.open).toBe(true);
 
     this.context.component.open = false;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     expect(this.context.getPopup()).toBeFalsy();
     expect(this.context.component.open).toBe(false);
@@ -697,7 +697,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(this.context.component.restrictedTimes).toEqual(restrictedTimes);
 
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
     const restrictedListItem = listItems.find((li: IListItemComponent<ITimePickerOptionValue>) => li.value.time === firstRestrictedTimeMillis) as IListItemComponent;
@@ -743,7 +743,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.appendChild(textField);
     document.body.appendChild(this.context.component);
 
-    await tick();
+    await frame();
 
     const iconButton = this.context.component.querySelector(ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
     expect(iconButton).toBeTruthy();
@@ -762,7 +762,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     textField.appendChild(button);
 
     document.body.appendChild(this.context.component);
-    await tick();
+    await frame();
 
     expect(this.context.adapter['_toggleElement']).toBe(button);
   });
@@ -776,10 +776,10 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.appendChild(textField);
     document.body.appendChild(this.context.component);
 
-    await tick();
+    await frame();
 
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     expect(this.context.adapter['_targetElement']).toBe(textField.popoverTargetElement);
   });
@@ -795,10 +795,10 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     this.context.component.popupTarget = TEXT_FIELD_CONSTANTS.elementName;
 
-    await tick();
+    await frame();
 
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     expect(this.context.component.popupTarget).toBe(TEXT_FIELD_CONSTANTS.elementName);
     expect(this.context.adapter['_targetElement']).toBe(textField);
@@ -808,7 +808,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
     let activeListItemIndex = listItems.findIndex(li => li.active);
@@ -825,7 +825,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
     const originalActiveListItemIndex = listItems.findIndex(li => li.active);
@@ -842,7 +842,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
 
@@ -863,7 +863,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.addEventListener(TIME_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
 
@@ -881,7 +881,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.component.value = '08:00';
-    await tick();
+    await frame();
 
     expect(this.context.inputElement.value).toBeTruthy();
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Delete', shiftKey: true }));
@@ -893,7 +893,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.component.value = '08:00';
-    await tick();
+    await frame();
 
     expect(this.context.inputElement.value).toBeTruthy();
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Backspace', shiftKey: true }));
@@ -906,9 +906,9 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     expect(this.context.component['_core']['_isInitialized']).toBe(false);
 
-    await timer(100);
+    await task(100);
     this.context.component.appendChild(this.context.inputElement);
-    await tick();
+    await frame();
 
     expect(this.context.component['_core']['_isInitialized']).toBe(true);
   });
@@ -918,7 +918,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     this.context.component.showNow = true;
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
     const listItem = listItems[0] as IListItemComponent<ITimePickerOptionValue>;
@@ -935,7 +935,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.showHourOptions = false;
     this.context.component.customOptions = [];
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
     const firstListItem = listItems[0] as IListItemComponent<ITimePickerOptionValue>;
@@ -953,7 +953,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.showHourOptions = false;
     this.context.component.customOptions = [];
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     expect(this.context.getPopup()).toBeFalsy();
   });
@@ -967,7 +967,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     ];
     this.context.component.customOptions = customOptions;
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
 
@@ -995,7 +995,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     const toMillisSpy = spyOn<any>(customOptions[0], 'toMilliseconds').and.callThrough();
     this.context.component.customOptions = customOptions;
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Home' })); // Custom options are displayed first
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
@@ -1011,7 +1011,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.min = min;
     this.context.component.max = max;
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const firstListItemMillis = timeStringToMillis(min, true, false);
     const lastListItemMillis = timeStringToMillis(max, true, false);
@@ -1140,7 +1140,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     this.context.component.value = '08:00';
 
-    await tick();
+    await frame();
 
     expect(this.context.component.masked).toBeFalse();
     expect(validateCbSpy).toHaveBeenCalled();
@@ -1164,7 +1164,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     this.context.component.allowInput = false;
     this.context.inputElement.dispatchEvent(new MouseEvent('mousedown'));
-    await tick();
+    await frame();
 
     expect(this.context.component.open).toBeTrue();
   });
@@ -1183,13 +1183,13 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.component.disabled = true;
-    await tick();
+    await frame();
 
     expect(this.context.component.disabled).toBeTrue();
     expect(this.context.inputElement.disabled).toBeTrue();
 
     this.context.component.disabled = false;
-    await tick();
+    await frame();
 
     expect(this.context.component.disabled).toBeFalse();
     expect(this.context.inputElement.disabled).toBeFalse();
@@ -1199,10 +1199,10 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.component.open = true;
-    await tick();
+    await frame();
 
     this.context.component.allowDropdown = false;
-    await tick();
+    await frame();
 
     expect(this.context.component.open).toBeFalse();
   });
@@ -1212,12 +1212,12 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     this.context.component.masked = false;
     this.context.component.open = true;
-    await tick();
+    await frame();
     
     this.context.inputElement.value = '1';
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
-    await timer(POPOVER_ANIMATION_DURATION);
-    await tick();
+    await task(POPOVER_ANIMATION_DURATION);
+    await frame();
     
     expect(this.context.component.open).toBeFalse();
     expect(this.context.getPopup()).toBeFalsy();
@@ -1248,7 +1248,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     this.context.inputElement.value = '9';
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
-    await tick();
+    await frame();
 
     expect(this.context.inputElement.value).toBe('09:');
   });
@@ -1257,11 +1257,11 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.component.masked = false;
-    await tick();
+    await frame();
 
     this.context.inputElement.value = '9';
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
-    await tick();
+    await frame();
     
     expect(this.context.inputElement.value).toBe('9');
     this.context.inputElement.value = '';
@@ -1269,7 +1269,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.masked = true;
     this.context.inputElement.value = '9';
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
-    await tick();
+    await frame();
 
     expect(this.context.inputElement.value).toBe('09:');
   });
@@ -1296,7 +1296,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.allowSeconds = true;
     this.context.component.value = timeValueWithSeconds;
     document.body.appendChild(this.context.component);
-    await tick();
+    await frame();
 
     expect(this.context.component.value).toBe(timeValueWithSeconds);
     expect(this.context.inputElement.value).toBe(timeInputValue);
@@ -1340,12 +1340,12 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.inputElement.focus();
     this.context.inputElement.value = value;
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
-    await tick();
+    await frame();
 
     expect(this.context.component.value).toBe('12:00');
 
     this.context.inputElement.dispatchEvent(new Event('blur'));
-    await tick();
+    await frame();
 
     expect(this.context.inputElement.value).toBe(expectedValue);
   });
@@ -1463,7 +1463,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     expect(this.context.getPopup()).toBeTruthy();
 
@@ -1513,13 +1513,13 @@ describe('TimePickerComponent', function(this: ITestContext) {
   async function setInputValue(inputElement: HTMLInputElement, value: string): Promise<void> {
     inputElement.value = value;
     inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
-    await tick();
+    await frame();
   }
 
   async function setCursorPos(inputElement: HTMLInputElement, pos: number): Promise<void> {
     inputElement.focus();
     inputElement.setSelectionRange(pos, pos);
-    await tick();
+    await frame();
   }
 
   function setCharAtPos(str: string, char: string, pos: number, replace: boolean) {

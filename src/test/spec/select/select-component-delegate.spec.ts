@@ -1,6 +1,6 @@
 import { ISelectComponent, ISelectComponentDelegateOptions, SelectComponentDelegate, defineSelectComponent, ISelectOption, SelectComponentDelegateProps, ISelectComponentDelegateConfig } from '@tylertech/forge';
 import { removeElement } from '@tylertech/forge-core';
-import { dispatchKeyEvent } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 
 interface ITestContext {
   context: ITestSelectComponentDelegateContext;
@@ -120,8 +120,8 @@ describe('SelectComponentDelegate', function(this: ITestContext) {
     const value = `${DEFAULT_OPTIONS[0].value}`;
     this.context.component.open = true;
 
-    dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
-    dispatchKeyEvent(this.context.component, 'keydown', 'Enter');
+    this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    this.context.component.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
     expect(changeSpy).toHaveBeenCalledOnceWith(value);
   });

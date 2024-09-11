@@ -1,11 +1,10 @@
-import { ICustomElementCore } from '@tylertech/forge-core';
 import { ITabBarChangeEventData, NAVIGATION_KEYS, TAB_BAR_CONSTANTS } from './tab-bar-constants';
 import { ITabComponent } from '../tab/tab';
 import { TAB_CONSTANTS } from '../tab/tab-constants';
 
 import { ITabBarAdapter, ITabBarScrollButtonState } from './tab-bar-adapter';
 
-export interface ITabBarCore extends ICustomElementCore {
+export interface ITabBarCore {
   disabled: boolean;
   activeTab: number | null | undefined;
   vertical: boolean;
@@ -55,7 +54,7 @@ export class TabBarCore implements ITabBarCore {
   }
 
   public initialize(): void {
-    this._adapter.initializeAccessibility();
+    this._adapter.initialize();
     this._adapter.addSlotListener(this._tabsChangedListener);
     this._adapter.addHostListener(TAB_CONSTANTS.events.SELECT, this._tabSelectedListener);
     this._adapter.addHostListener('keydown', this._keydownListener);
@@ -72,6 +71,7 @@ export class TabBarCore implements ITabBarCore {
   }
 
   public destroy(): void {
+    this._adapter.destroy();
     this._adapter.destroyContainerSizeObserver();
     this._adapter.destroyScrollObserver(this._scrollListener);
     this._isInitialized = false;

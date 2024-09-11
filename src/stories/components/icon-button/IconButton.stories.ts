@@ -5,6 +5,7 @@ import { standaloneStoryParams, customElementStoryRenderer, generateCustomElemen
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 import { tylIconFavorite, tylIconFavoriteBorder, tylIconNotifications, tylIconOpenInNew, tylIconSettings } from '@tylertech/tyler-icons/standard';
+import { classMap } from 'lit/directives/class-map.js';
 
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/icon';
@@ -51,7 +52,7 @@ const meta = {
       tagName: component,
       exclude: ['form', 'name', 'value', 'type'],
       controls: {
-        variant: { control: { type: 'select' }, options: ['icon', 'outlined', 'filled', 'raised'] },
+        variant: { control: { type: 'select' }, options: ['icon', 'outlined', 'tonal', 'filled', 'raised'] },
         theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS },
         shape: { control: { type: 'select' }, options: ['circular', 'squared'] },
         density: { control: { type: 'select' }, options: ['small', 'medium', 'large'] }
@@ -60,7 +61,7 @@ const meta = {
   },
   args: {
     variant: 'icon',
-    theme: 'primary',
+    theme: 'default',
     disabled: false,
     dense: false,
     toggle: false,
@@ -86,6 +87,10 @@ export const Variants: Story = {
       </forge-icon-button>
 
       <forge-icon-button variant="outlined" aria-label="Outlined icon button">
+        <forge-icon name="favorite"></forge-icon>
+      </forge-icon-button>
+
+      <forge-icon-button variant="tonal" aria-label="Tonal icon button">
         <forge-icon name="favorite"></forge-icon>
       </forge-icon-button>
 
@@ -121,25 +126,28 @@ export const Themed: Story = {
   },
   render: ({ variant }) => {
     return html`
-      <forge-icon-button variant=${variant}>
+      <forge-icon-button variant=${variant} aria-label="Default theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="secondary">
+      <forge-icon-button variant=${variant} theme="primary" aria-label="Primary theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="tertiary">
+      <forge-icon-button variant=${variant} theme="secondary" aria-label="Secondary theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="success">
+      <forge-icon-button variant=${variant} theme="tertiary" aria-label="Tertiary theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="warning">
+      <forge-icon-button variant=${variant} theme="success" aria-label="Success theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="error">
+      <forge-icon-button variant=${variant} theme="warning" aria-label="Warning theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="info">
+      <forge-icon-button variant=${variant} theme="error" aria-label="Error theme icon button">
+        <forge-icon name="forge_logo"></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button variant=${variant} theme="info" aria-label="Info theme icon button">
         <forge-icon name="forge_logo"></forge-icon>
       </forge-icon-button>
     `;
@@ -191,5 +199,37 @@ export const WithLabel: Story = {
         <span>Settings</span>
       </forge-label>
     `;
+  }
+};
+
+export const CSSOnly: Story = {
+  parameters: {
+    controls: { include: ['variant', 'density', 'disabled', 'shape'] }
+  },
+  args: {
+    variant: 'icon',
+    density: 'large',
+    disabled: false,
+    shape: 'circular'
+  },
+  render: ({ variant, density, disabled, shape }) => {
+    const classes = {
+      'forge-icon-button': true,
+      'forge-icon-button--outlined': variant === 'outlined',
+      'forge-icon-button--tonal': variant === 'tonal',
+      'forge-icon-button--filled': variant === 'filled',
+      'forge-icon-button--raised': variant === 'raised',
+      'forge-icon-button--small': density === 'small',
+      'forge-icon-button--medium': density === 'medium',
+      'forge-icon-button--large': density === 'large',
+      'forge-icon-button--squared': shape === 'squared'
+    };
+    return html`<button class=${classMap(classes)} ?disabled=${disabled} aria-label="My CSS-only icon button">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none" />
+        <path
+          d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+      </svg>
+    </button>`;
   }
 };

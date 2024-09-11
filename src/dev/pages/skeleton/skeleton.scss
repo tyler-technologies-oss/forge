@@ -2,6 +2,6 @@
   width: 256px;
 }
 
-table forge-skeleton {
+table :where(forge-skeleton,.forge-skeleton) {
   --forge-skeleton-margin: 4px;
 }

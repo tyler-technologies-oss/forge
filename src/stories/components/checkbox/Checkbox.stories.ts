@@ -1,7 +1,8 @@
-import { html, nothing } from 'lit';
-import { styleMap } from 'lit/directives/style-map.js';
-import { type Meta, type StoryObj } from '@storybook/web-components';
 import { action } from '@storybook/addon-actions';
+import { type Meta, type StoryObj } from '@storybook/web-components';
+import { html, nothing } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 
 import '@tylertech/forge/checkbox';
@@ -27,7 +28,7 @@ const meta = {
         .labelPosition=${args.labelPosition}
         @change=${changeAction}
         style=${style}>
-        ${args.text}
+        ${args.label}
       </forge-checkbox>
     `;
   },
@@ -35,15 +36,15 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['defaultChecked', 'value'],
+      exclude: ['defaultChecked', 'value', 'form', 'labels', 'name'],
       controls: {
         labelPosition: { control: 'select', options: ['start', 'end'] }
       }
     }),
-    text: { control: 'text' }
+    label: { control: 'text' }
   },
   args: {
-    text: 'Label',
+    label: 'Label',
     checked: false,
     indeterminate: false,
     disabled: false,
@@ -59,3 +60,30 @@ export default meta;
 type Story = StoryObj;
 
 export const Demo: Story = {};
+
+export const CSSOnly: Story = {
+  parameters: {
+    controls: { include: ['checked', 'indeterminate', 'disabled', 'dense'] }
+  },
+  args: {
+    checked: false,
+    indeterminate: false,
+    disabled: false,
+    dense: false
+  },
+  render: ({ checked, indeterminate, disabled, dense }) => {
+    const classes = classMap({
+      'forge-checkbox': true,
+      'forge-checkbox--dense': dense
+    });
+    return html`
+      <label class="forge-typography--label1" style="display: flex; align-items: center;">
+        <div class=${classes}>
+          <input type="checkbox" .checked=${checked} .indeterminate=${indeterminate} ?disabled=${disabled} />
+          <div class="forge-checkbox__icon"></div>
+        </div>
+        <span>Check me</span>
+      </label>
+    `;
+  }
+};

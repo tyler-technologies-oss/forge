@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as DividerStories from './Divider.stories';
 
 <Meta of={DividerStories} />
@@ -20,5 +21,13 @@ Using this component is very simple, use in place of the `<hr>` element like the
 
 ## Accessibility
 
-- The `<forge-divider>` component automatically provides a role="separator" attribute.
+- The `<forge-divider>` component automatically provides a `role="separator"` attribute.
   - If you would like to remove the divider from the accessibility tree, add `aria-hidden="true"` to the element.
+
+## CSS-Only
+
+The divider component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={DividerStories.CSSOnly} />
+
+<CssOnlyInformation />

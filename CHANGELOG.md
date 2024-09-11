@@ -1,3 +1,70 @@
+# v3.1.0 (Mon Sep 09 2024)
+
+:tada: This release contains work from new contributors! :tada:
+
+Thanks for all your work!
+
+:heart: null[@Ross-Blakeney](https://github.com/Ross-Blakeney)
+
+:heart: Scott Shirley ([@ScottTylerTech](https://github.com/ScottTylerTech))
+
+#### 🚀 Enhancement
+
+- feat: bump to latest Forge CLI [#681](https://github.com/tyler-technologies-oss/forge/pull/681) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(shape): enable use of `--forge-shape-factor` to uniformly control shape tokens via multiplier [#675](https://github.com/tyler-technologies-oss/forge/pull/675) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat: opt-in global stylesheets to allow for CSS-only component styling [#633](https://github.com/tyler-technologies-oss/forge/pull/633) ([@DRiFTy17](https://github.com/DRiFTy17) [@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- feat: allow for `variant` property on field, text-field, and select to be globally configurable [#674](https://github.com/tyler-technologies-oss/forge/pull/674) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(skip-link): add inline variant and style tweaks [#665](https://github.com/tyler-technologies-oss/forge/pull/665) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- feat(skip-link): create skip link component [#661](https://github.com/tyler-technologies-oss/forge/pull/661) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- feat(dialog): automatically switch to fullscreen at the new `fullscreenThreshold` property value [#658](https://github.com/tyler-technologies-oss/forge/pull/658) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(tokens): include color-emphasis tokens as part of the `forge-tokens.css` stylesheet [#657](https://github.com/tyler-technologies-oss/forge/pull/657) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(select): native form association and label awareness [#636](https://github.com/tyler-technologies-oss/forge/pull/636) ([@samrichardsontylertech](https://github.com/samrichardsontylertech) [@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix(autocomplete): focus `<input>` popover icon is clicked if composed with a `<forge-text-field popover-icon>` [#680](https://github.com/tyler-technologies-oss/forge/pull/680) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list): fix spacing token [#672](https://github.com/tyler-technologies-oss/forge/pull/672) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(app-bar): add "custom" to `AppBarTheme` type to fix typings compatibility with docs [#676](https://github.com/tyler-technologies-oss/forge/pull/676) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(checkbox, radio, switch, field): remove opacity on field labels when disabled [#678](https://github.com/tyler-technologies-oss/forge/pull/678) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: updated `@tylertech-eslint/eslint-plugin` to latest [#673](https://github.com/tyler-technologies-oss/forge/pull/673) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(button-toggle): relax the generic type on the event data interfaces to `any` [#667](https://github.com/tyler-technologies-oss/forge/pull/667) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): reduce font size when dense/extra-small [#666](https://github.com/tyler-technologies-oss/forge/pull/666) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: add `generate:component` npm script for scaffolding a new component [#663](https://github.com/tyler-technologies-oss/forge/pull/663) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(tab): add missing inline padding [#660](https://github.com/tyler-technologies-oss/forge/pull/660) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(select): update incorrect slot docs [#654](https://github.com/tyler-technologies-oss/forge/pull/654) ([@Ross-Blakeney](https://github.com/Ross-Blakeney))
+- fix(theme): use correct error theme color in dark theme [#656](https://github.com/tyler-technologies-oss/forge/pull/656) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: fix compatibility with windows systems to use normalized file paths in CLI and build-tools deps as well as line endings in eslint [#655](https://github.com/tyler-technologies-oss/forge/pull/655) ([@DRiFTy17](https://github.com/DRiFTy17))
+- refactor: add unique identifier to table data items [#652](https://github.com/tyler-technologies-oss/forge/pull/652) ([@ScottTylerTech](https://github.com/ScottTylerTech))
+- fix(select): temp fix to remove disabled property from form associated mixin for TS2611 until TypeScript fixes accessor union bug [#649](https://github.com/tyler-technologies-oss/forge/pull/649) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat: readopt constructed stylesheets [#641](https://github.com/tyler-technologies-oss/forge/pull/641) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: migrate legacy tests and clean up [#642](https://github.com/tyler-technologies-oss/forge/pull/642) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list-item): separate the foreground and background selected state tokens [#638](https://github.com/tyler-technologies-oss/forge/pull/638) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(app-bar-notification-button): fixed a bug where the count could incorrectly display when in dot mode if not changed from default [#639](https://github.com/tyler-technologies-oss/forge/pull/639) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(icon-button): fix to properly default `theme` to "default" to allow for "primary" to be used like other themes [#644](https://github.com/tyler-technologies-oss/forge/pull/644) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(button): fix to properly wire up raised variant-specific tokens [#645](https://github.com/tyler-technologies-oss/forge/pull/645) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: remove legacy `@tylertech/forge-testing` dependency [#629](https://github.com/tyler-technologies-oss/forge/pull/629) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(tab-bar): move ARIA attributes to internal scroll container for tab bar [#626](https://github.com/tyler-technologies-oss/forge/pull/626) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): slotted elements can fill entire block size of field [#625](https://github.com/tyler-technologies-oss/forge/pull/625) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### 📝 Documentation
+
+- docs(menu): add note/code snippet about using JS to set options [#677](https://github.com/tyler-technologies-oss/forge/pull/677) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs: fix event types [#650](https://github.com/tyler-technologies-oss/forge/pull/650) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs: add temporary banner with link to v2.x docs [#646](https://github.com/tyler-technologies-oss/forge/pull/646) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(app-bar): add content and demo regarding custom theming support [#647](https://github.com/tyler-technologies-oss/forge/pull/647) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs: improve API docs, content, and demos [#634](https://github.com/tyler-technologies-oss/forge/pull/634) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs: fix image paths and CSS formatting in doc block code snippets [#628](https://github.com/tyler-technologies-oss/forge/pull/628) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs: add chips docs [#627](https://github.com/tyler-technologies-oss/forge/pull/627) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 4
+
+- [@Ross-Blakeney](https://github.com/Ross-Blakeney)
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- Scott Shirley ([@ScottTylerTech](https://github.com/ScottTylerTech))
+
+---
+
 # v3.0.0 (Tue Jun 11 2024)
 
 :tada: This release contains work from new contributors! :tada:

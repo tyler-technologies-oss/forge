@@ -1,6 +1,6 @@
 import { IStateLayerComponent } from '@tylertech/forge';
 import { removeElement } from '@tylertech/forge-core';
-import { tick, timer } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 import { clearState, defineSplitViewComponent, getCursor, getHandleIcon, getPixelDimension, getSplitViewPanelSibling, handleBoundariesDuringResize, initState, ISplitViewComponent, ISplitViewPanelAdapter, ISplitViewPanelComponent, ISplitViewPanelState, keyboardResize, parseSize, pointerResize, setState, SplitViewPanelComponent, SPLIT_VIEW_PANEL_CONSTANTS } from '@tylertech/forge/split-view';
 
 interface ITestContext {
@@ -821,7 +821,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE, spy);
       this.context.component.open = false;
       this.context.getPart('root')!.dispatchEvent(new TransitionEvent('animationend'));
-      await tick();
+      await frame();
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -835,7 +835,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_OPEN, spy);
       this.context.component.open = true;
       this.context.getPart('root')!.dispatchEvent(new TransitionEvent('animationend'));
-      await tick();
+      await frame();
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
@@ -910,7 +910,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       this.context.component.size = 200;
       this.context.pointerEvent('pointerdown', 0, 0);
       this.context.pointerEvent('pointermove', 10, 0, true, 1);
-      await timer(SPLIT_VIEW_PANEL_CONSTANTS.numbers.STATE_LAYER_ACTIVATION_WAIT);
+      await task(SPLIT_VIEW_PANEL_CONSTANTS.numbers.STATE_LAYER_ACTIVATION_WAIT);
       expect(spy).toHaveBeenCalledTimes(2);
     });
 
@@ -924,7 +924,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       this.context.component.size = 5;
       this.context.pointerEvent('pointerdown', 10, 0);
       this.context.pointerEvent('pointermove', 0, 0, true, 1);
-      await timer(SPLIT_VIEW_PANEL_CONSTANTS.numbers.STATE_LAYER_ACTIVATION_WAIT);
+      await task(SPLIT_VIEW_PANEL_CONSTANTS.numbers.STATE_LAYER_ACTIVATION_WAIT);
       expect(spy).toHaveBeenCalledTimes(2);
     });
   });

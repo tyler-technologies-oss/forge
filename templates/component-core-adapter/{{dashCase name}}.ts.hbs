@@ -1,0 +1,61 @@
+import { customElement, attachShadowTemplate, coreProperty } from '@tylertech/forge-core';
+
+import { {{pascalCase name}}Adapter } from './{{dashCase name}}-adapter';
+import { {{pascalCase name}}Core } from './{{dashCase name}}-core';
+import { {{constantCase name}}_CONSTANTS } from './{{dashCase name}}-constants';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+
+import template from './{{dashCase name}}.html';
+{{#if hasStyles}}
+import styles from './{{dashCase name}}.scss';
+{{/if}}
+
+export interface I{{pascalCase name}}Component extends IBaseComponent {}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-{{dashCase name}}': I{{pascalCase name}}Component;
+  }
+}
+
+/**
+ * @tag forge-{{dashCase name}}
+ */
+@customElement({
+  name: {{constantCase name}}_CONSTANTS.elementName
+})
+export class {{pascalCase name}}Component extends BaseComponent implements I{{pascalCase name}}Component {
+  public static get observedAttributes(): string[] {
+    return Object.values({{constantCase name}}_CONSTANTS.observedAttributes);
+  }
+
+  private _core: {{pascalCase name}}Core;
+
+  constructor() {
+    super();
+    {{#if hasStyles}}
+    attachShadowTemplate(this, template, styles);
+    {{else}}
+    attachShadowTemplate(this, template);
+    {{/if}}
+    this._core = new {{pascalCase name}}Core(new {{pascalCase name}}Adapter(this));
+  }
+
+  public connectedCallback(): void {
+    this._core.initialize();
+  }
+
+  public disconnectedCallback(): void {
+    this._core.destroy();
+  }
+
+  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    /*
+    switch (name) {
+      case {{constantCase name}}_CONSTANTS.observedAttributes.SOME_ATTR:
+        this.someProp = newValue;
+        break;
+    }
+    */
+  }
+}

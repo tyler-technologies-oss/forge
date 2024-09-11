@@ -1,5 +1,5 @@
 import { removeElement } from '@tylertech/forge-core';
-import { tick } from '@tylertech/forge-testing';
+import { frame } from '@tylertech/forge/core/utils/utils';;
 import { defineSplitViewComponent, ISplitViewComponent, ISplitViewPanelComponent, SplitViewAnimatingLayer, SPLIT_VIEW_CONSTANTS, SPLIT_VIEW_PANEL_CONSTANTS, ISplitViewAdapter } from '@tylertech/forge/split-view';
 
 interface ITestContext {
@@ -124,7 +124,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
 
     it('should layout when all have resizable set to off', async function(this: ITestContext) {
       this.context = setupTestContext(true, 3);
-      await tick();
+      await frame();
       expect(this.context.panels![0].resizable).toBe('off');
       expect(this.context.panels![1].resizable).toBe('start');
       expect(this.context.panels![2].resizable).toBe('start');
@@ -135,7 +135,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
       this.context.panels![0].resizable = 'end';
       this.context.panels![2].resizable = 'start';
       this.context.append();
-      await tick();
+      await frame();
       expect(this.context.panels![0].resizable).toBe('end');
       expect(this.context.panels![1].resizable).toBe('off');
       expect(this.context.panels![2].resizable).toBe('start');
@@ -144,7 +144,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
     it('should not layout one or fewer panels', async function(this: ITestContext) {
       this.context = setupTestContext(false, 1);
       this.context.append();
-      await tick();
+      await frame();
       expect(this.context.panels![0].resizable).toBe('off');
     });
 
@@ -158,24 +158,24 @@ describe('SplitViewComponent', function(this: ITestContext) {
 
     it('should update accessibility on resize', async function(this: ITestContext) {
       this.context = setupTestContext(true, 2);
-      await tick();
+      await frame();
       const spy = spyOn(this.context.panels![0], 'update');
       this.context.panels![0].resizable = 'end';
       this.context.component.style.width = '100%';
       this.context.component.parentElement!.style.width = '400px';
-      await tick();
+      await frame();
       expect(spy).toHaveBeenCalled();
     });
 
     it('should not update size of closed panels on resize', async function(this: ITestContext) {
       this.context = setupTestContext(true, 2);
-      await tick();
+      await frame();
       this.context.component.style.width = '400px';
       this.context.panels![1].size = '50%'
       this.context.panels![1].open = false;
-      await tick();
+      await frame();
       this.context.component.style.width = '200px';
-      await tick();
+      await frame();
       const size = this.context.panels![1].style.getPropertyValue(SPLIT_VIEW_PANEL_CONSTANTS.customCssProperties.SIZE);
       expect(size).not.toBe('0px');
     });

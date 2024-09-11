@@ -63,6 +63,10 @@ declare global {
 
 /**
  * @tag forge-autocomplete
+ *
+ * @event {CustomEvent<any>} forge-autocomplete-change - Fired when the value changes.
+ * @event {CustomEvent<IAutocompleteSelectEventData>} forge-autocomplete-select -  Fired when an option is selected. Only applies when in "stateless" `mode`.
+ * @event {CustomEvent<void>} forge-autocomplete-scrolled-bottom - Fired when the dropdown is scrolled to the bottom. Only applies when `observe-scroll` is enabled.
  */
 @customElement({
   name: AUTOCOMPLETE_CONSTANTS.elementName,
@@ -116,7 +120,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -155,35 +159,64 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
     }
   }
 
-  /** Gets/sets the interaction mode. */
+  /**
+   * Gets/sets the interaction mode.
+   * @default 'default'
+   * @attribute
+   */
   @coreProperty()
   public declare mode: `${AutocompleteMode}`;
 
-  /** Gets/sets the multi-select state. */
+  /**
+   * Gets/sets the multi-select state.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare multiple: boolean;
 
-  /** Gets/sets the value. */
+  /**
+   * Gets/sets the value.
+   */
   @coreProperty()
   public declare value: any;
 
-  /** Gets/sets the debounce delay (milliseconds) for keyboard events. */
+  /**
+   * Gets/sets the debounce delay (milliseconds) for keyboard events.
+   * @default 500
+   * @attribute
+   */
   @coreProperty()
   public declare debounce: number;
 
-  /** Gets/sets filter on focus settings which controls whether the dropdown displays automatically when focused. */
+  /**
+   * Gets/sets filter on focus settings which controls whether the dropdown displays automatically when focused.
+   * @default true
+   * @attribute filter-on-focus
+   */
   @coreProperty()
   public declare filterOnFocus: boolean;
 
-  /** Gets/sets whether the first option in the dropdown will be focused automatically when opened or not. */
+  /**
+   * Gets/sets whether the first option in the dropdown will be focused automatically when opened or not.
+   * @default true
+   * @attribute filter-focus-first
+   */
   @coreProperty()
   public declare filterFocusFirst: boolean;
 
-  /** Controls whether unmatched text entered by the user will stay visible an option in the dropdown is not found. */
+  /**
+   * Controls whether unmatched text entered by the user will stay visible an option in the dropdown is not found.
+   * @default false
+   * @attribute allow-unmatched
+   */
   @coreProperty()
   public declare allowUnmatched: boolean;
 
-  /** Gets/sets the selector that will be used to find an element to attach the popup to. Defaults to the input element. */
+  /**
+   * Gets/sets the selector that will be used to find an element to attach the popup to. Defaults to the input element.
+   * @attribute popup-target
+   */
   @coreProperty()
   public declare popupTarget: string;
 
@@ -207,11 +240,18 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
   @coreProperty()
   public declare selectedTextBuilder: AutocompleteSelectedTextBuilder;
 
-  /** Controls the open state of the dropdown. */
+  /**
+   * Controls the open state of the dropdown.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare open: boolean;
 
-  /** Gets/sets the property key to match the value to an option. */
+  /**
+   * Gets/sets the property key to match the value to an option.
+   * @attribute match-key
+   */
   @coreProperty()
   public declare matchKey: string | null | undefined;
 
@@ -250,7 +290,6 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
 
   /**
    * Forces the filter callback to be executed to update the current selection state with new options.
-   * @param opts
    */
   public forceFilter(opts: IAutocompleteForceFilterOptions = { preserveValue: false }): void {
     this._core.forceFilter(opts);

@@ -78,6 +78,7 @@
   outline-style: #{token(outline-style)};
   outline-width: #{token(outline-width)};
   outline-color: #{token(outline-color, custom)};
+  pointer-events: none;
 }
 
 @mixin container {
@@ -108,6 +109,7 @@
   grid-column: 1 / -1;
   grid-row: 1 / -1;
 
+  border-radius: #{token(shape)};
   inline-size: 100%;
   block-size: 100%;
 
@@ -130,7 +132,6 @@
 
 @mixin label {
   @include typography.style(label2);
-  @include disableable;
 
   position: relative;
   display: inline-flex;
@@ -198,8 +199,9 @@
   grid-area: start;
   align-items: center;
 
+  block-size: 100%;
   max-block-size: 100%;
-  overflow: hidden;
+  min-block-size: 0;
 
   color: #{token(content-color, custom)};
 }
@@ -212,8 +214,9 @@
   grid-area: end;
   align-items: center;
 
+  block-size: 100%;
   max-block-size: 100%;
-  overflow: hidden;
+  min-block-size: 0;
 
   color: #{token(content-color, custom)};
 }
@@ -229,7 +232,7 @@
 
   block-size: 100%;
   max-block-size: 100%;
-  overflow: hidden;
+  min-block-size: 0;
 
   color: #{token(content-color, custom)};
 
@@ -252,7 +255,6 @@
 
 @mixin support-text {
   @include typography.style(label1);
-  @include disableable;
 
   justify-content: space-between;
 

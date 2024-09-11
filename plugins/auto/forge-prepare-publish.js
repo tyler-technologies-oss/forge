@@ -53,7 +53,7 @@ module.exports = class ForgePreparePublishPlugin {
     // Rename the deployment directory to the new path with the version suffix
     const currentDeploymentPath = path.join(DIST_PATH, deploymentPath);
     const newDeploymentPath = path.join(DIST_PATH, versionPath);
-    fs.rename(currentDeploymentPath, newDeploymentPath, () => {
+    fs.rename(currentDeploymentPath, newDeploymentPath, err => {
       if (err) {
         throw new Error('Unable to rename deployment path');
       }

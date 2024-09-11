@@ -10,6 +10,12 @@
   left: 54px;
 }
 
+.subcomponentHeader {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .section {
   margin-block: 24px 32px;
 }

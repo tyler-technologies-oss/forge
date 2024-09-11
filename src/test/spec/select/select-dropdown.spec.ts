@@ -1,4 +1,4 @@
-import { tick, timer } from '@tylertech/forge-testing';
+import { task, frame } from '@tylertech/forge/core/utils/utils';
 import {
   SELECT_DROPDOWN_CONSTANTS,
   defineSelectDropdownComponent,
@@ -67,7 +67,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
   it('should change target after initializing without a target set', async function(this: ITestContext) {
     this.context = setupTestContext(true, false);
 
-    await tick();
+    await frame();
     this.context.component.target = '#select-dropdown-target';
     
     expect(this.context.isAttached()).toBeTrue();
@@ -104,7 +104,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context = setupTestContext();
 
     removeElement(this.context.targetElement);
-    await tick();
+    await frame();
 
     expect(this.context.isAttached()).toBeFalse();
   });
@@ -114,7 +114,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
 
     this.context.component.target = '#invalid-selector';
     this.context.append();
-    await tick();
+    await frame();
 
     expect(this.context.isAttached()).toBeFalse();
   });
@@ -124,7 +124,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
 
     this.context.component.target = undefined as any;
     this.context.append();
-    await tick();
+    await frame();
 
     expect(this.context.isAttached()).toBeFalse();
   });
@@ -143,13 +143,13 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context.component.observeScrollThreshold = 100;
     this.context.component.addEventListener(SELECT_DROPDOWN_CONSTANTS.events.SCROLLED_BOTTOM, callback);
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
-    await tick();
+    await task(POPOVER_ANIMATION_DURATION);
+    await frame();
     
     const popup = _getPopup();
     const scrollElement = popup.shadowRoot!.querySelector(POPOVER_CONSTANTS.selectors.SURFACE) as HTMLElement;
     scrollElement.scrollTop = scrollElement.scrollHeight;
-    await tick();
+    await frame();
     
     expect(callback).toHaveBeenCalledTimes(1);
   });
@@ -158,8 +158,8 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context = setupTestContext();
 
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
-    await tick();
+    await task(POPOVER_ANIMATION_DURATION);
+    await frame();
     _clickListItem(0);
 
     expect(this.context.component.value).toBe(DEFAULT_OPTIONS[0].value);
@@ -171,8 +171,8 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
 
     this.context.component.multiple = true;
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
-    await tick();
+    await task(POPOVER_ANIMATION_DURATION);
+    await frame();
     _clickListItem(1);
     _clickListItem(2);
 
@@ -184,7 +184,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
 
     this.context.component.syncSelectedText = true;
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
     _clickListItem(0);
 
     expect(this.context.targetElement.innerText).toBe(DEFAULT_OPTIONS[0].label);
@@ -205,8 +205,8 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context.component.syncSelectedText = true;
     this.context.component.selectedTextBuilder = options => `Chose: ${options[0].label}`;
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
-    await tick();
+    await task(POPOVER_ANIMATION_DURATION);
+    await frame();
     _clickListItem(0);
 
     expect(this.context.targetElement.innerText).toBe(`Chose: ${DEFAULT_OPTIONS[0].label}`);
@@ -222,8 +222,8 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context.component.syncSelectedText = true;
     this.context.component.selectedTextTarget = `#${someEle.id}`;
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
-    await tick();
+    await task(POPOVER_ANIMATION_DURATION);
+    await frame();
     _clickListItem(1);
 
     expect(someEle.innerText).toBe(DEFAULT_OPTIONS[1].label);
@@ -233,7 +233,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context = setupTestContext();
 
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
     this.context.targetElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
 
     expect(this.context.targetElement.hasAttribute('aria-activedescendant')).toBeTrue();
@@ -244,7 +244,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context = setupTestContext();
 
     this.context.component.open = true;
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
 
     const originalValue = this.context.targetElement.getAttribute('aria-activedescendant');
     this.context.targetElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
@@ -258,7 +258,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.component.open = true;
 
-    await timer(POPOVER_ANIMATION_DURATION);
+    await task(POPOVER_ANIMATION_DURATION);
     expect(_getPopup()).toBeTruthy();
     
     this.context.fixture.remove();

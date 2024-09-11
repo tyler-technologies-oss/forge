@@ -29,6 +29,8 @@ declare global {
 /**
  * @tag forge-stepper
  *
+ * @dependency forge-step
+ *
  * @event {CustomEvent<number>} forge-step-select - Emits the index when a step is selected.
  * @event {CustomEvent<IStepComponent>} forge-step-expanded-content-focusin - Emits the step component when the expanded content is focused.
  * @event {CustomEvent<IStepComponent>} forge-step-expanded-content-focusout - Emits the step component when the expanded content is blurred.
@@ -65,7 +67,7 @@ export class StepperComponent extends BaseComponent implements IStepperComponent
   }
 
   public disconnectedCallback(): void {
-    this._core.disconnect();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -94,33 +96,66 @@ export class StepperComponent extends BaseComponent implements IStepperComponent
     }
   }
 
-  /** The step configurations. */
+  /**
+   * The step configurations.
+   * @default []
+   */
   @coreProperty()
   public declare steps: IStepConfiguration[];
 
-  /** The active step index. */
+  /**
+   * The active step index.
+   * @default 0
+   * @attribute selected-index
+   */
   @coreProperty()
   public declare selectedIndex: number;
 
-  /** Whether the stepper is linear or non-linear. */
+  /**
+   * Whether the stepper is linear or non-linear.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare linear: boolean;
 
-  /** Whether the stepper uses the default or alternative label layout mode. */
+  /**
+   * Whether the stepper uses the default or alternative label layout mode.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare alternative: boolean;
 
-  /** The layout mode of the stepper. */
+  /**
+   * The layout mode of the stepper.
+   * @default "fixed"
+   * @attribute layout-mode
+   */
   @coreProperty()
   public declare layoutMode: StepperLayoutMode;
 
-  /** The layout alignment of the stepper. */
+  /**
+   * The layout alignment of the stepper.
+   * @default "center"
+   * @attribute layout-align
+   */
   @coreProperty()
   public declare layoutAlign: StepperLayoutAlign;
 
+  /**
+   * Whether the stepper is disabled.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare disabled: boolean;
 
+  /**
+   * Whether the stepper is vertical.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare vertical: boolean;
 }
