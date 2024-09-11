@@ -139,7 +139,6 @@ const meta = {
     observeScroll: true,
     allowUnmatched: false,
     multiple: false,
-    popupClasses: '',
     syncPopupWidth: false,
     observeScrollThreshold: 100,
     constrainPopupWidth: true,
