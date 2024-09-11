@@ -1,4 +1,4 @@
-import { Story } from '@storybook/blocks';
+import { Story, Meta } from '@storybook/blocks';
 import * as Accordion from '../accordion/Accordion.stories';
 import * as AppBar from '../app-bar/AppBar.stories';
 import * as Autocomplete from '../autocomplete/Autocomplete.stories';
@@ -49,6 +49,8 @@ import * as Toast from '../toast/Toast.stories';
 import * as Toolbar from '../toolbar/Toolbar.stories';
 import * as Tooltip from '../tooltip/Tooltip.stories';
 import * as ViewSwitcher from '../view-switcher/ViewSwitcher.stories';
+
+<Meta tags={['hidden']} />
 
 <div style={{ display: 'grid', gap: '32px' }}>
   <Story of={Accordion.Demo} />
