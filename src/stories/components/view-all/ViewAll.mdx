@@ -1,5 +1,4 @@
 import { Story } from '@storybook/blocks';
-import { containerStyles } from './AllComponents.stories';
 import * as Accordion from '../accordion/Accordion.stories';
 import * as AppBar from '../app-bar/AppBar.stories';
 import * as Autocomplete from '../autocomplete/Autocomplete.stories';
@@ -31,7 +30,6 @@ import * as Menu from '../menu/Menu.stories';
 import * as OpenIcon from '../open-icon/OpenIcon.stories';
 import * as PageState from '../page-state/PageState.stories';
 import * as Paginator from '../paginator/Paginator.stories';
-import * as ProfileCard from '../profile-card/ProfileCard.stories';
 import * as Radio from '../radio/Radio.stories';
 import * as RadioGroup from '../radio/radio-group/RadioGroup.stories';
 import * as Scaffold from '../scaffold/Scaffold.stories';
@@ -52,7 +50,7 @@ import * as Toolbar from '../toolbar/Toolbar.stories';
 import * as Tooltip from '../tooltip/Tooltip.stories';
 import * as ViewSwitcher from '../view-switcher/ViewSwitcher.stories';
 
-<div style={containerStyles}>
+<div style={{ display: 'grid', gap: '32px' }}>
   <Story of={Accordion.Demo} />
   <Story of={AppBar.Demo} />
   <Story of={Autocomplete.Demo} />
@@ -112,7 +110,6 @@ import * as ViewSwitcher from '../view-switcher/ViewSwitcher.stories';
   <Story of={OpenIcon.Demo} />
   <Story of={PageState.Demo} />
   <Story of={Paginator.Demo} />
-  <Story of={ProfileCard.Demo} />
   <Story of={Radio.Demo} />
   <Story of={RadioGroup.Demo} />
   <Story of={Scaffold.Demo} />
