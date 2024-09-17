@@ -125,6 +125,8 @@ export class DatePickerAdapter extends BaseDatePickerAdapter<IDatePickerComponen
       this._toggleElement.setAttribute('aria-disabled', value.toString());
       if (this._toggleElement.hasOwnProperty('disabled')) {
         (this._toggleElement as HTMLButtonElement).disabled = value;
+        // The toggle element should never be in the tab order
+        this._toggleElement.tabIndex = -1;
       }
     }
   }
