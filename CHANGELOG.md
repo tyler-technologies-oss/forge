@@ -1,3 +1,18 @@
+# v3.1.1 (Wed Sep 18 2024)
+
+#### 🐛 Bug Fix
+
+- feat: handle non-string values in checkbox, switch, and radio [#687](https://github.com/tyler-technologies-oss/forge/pull/687) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix(date-picker): prevent toggle from being added to tab order after enabling the date picker [#686](https://github.com/tyler-technologies-oss/forge/pull/686) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- Origin/feat/create view all stories page [#684](https://github.com/tyler-technologies-oss/forge/pull/684) ([@nickonometry](https://github.com/nickonometry))
+
+#### Authors: 2
+
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v3.1.0 (Mon Sep 09 2024)
 
 :tada: This release contains work from new contributors! :tada:
