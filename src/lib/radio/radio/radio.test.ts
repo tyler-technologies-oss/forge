@@ -133,6 +133,14 @@ describe('Radio', () => {
       const el = await fixture<IRadioComponent>(html`<forge-radio readonly></forge-radio>`);
       expect(el.readonly).to.be.true;
     });
+
+    it('should not set non-string value as attribute', async () => {
+      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
+      const value = { value: 'value' } as any;
+      el.value = value;
+      expect(el.value).to.equal(value);
+      expect(el.getAttribute('value')).to.be.null;
+    });
   });
 
   describe('form association', async () => {
