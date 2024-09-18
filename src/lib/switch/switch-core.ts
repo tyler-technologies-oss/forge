@@ -117,7 +117,10 @@ export class SwitchCore implements ISwitchCore {
     if (this._value !== value) {
       this._value = value;
       this._adapter.syncValue(this._submittedValue);
-      this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.VALUE, true, this._value);
+
+      if (typeof this._value === 'string' || this._value == null) {
+        this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.VALUE, true, this._value);
+      }
     }
   }
 
