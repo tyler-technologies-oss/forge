@@ -92,7 +92,7 @@ function KeyboardShortcutsTable({ items }: { items: TagItem[] }) {
 function A11yCard({ children, title, icon, theme }: { children: React.ReactNode; title?: string; icon: React.ReactNode; theme?: string }) {
   const backgroundColor = theme ? `var(--forge-theme-${theme}-container-low)` : 'var(--forge-theme-surface-container-low)';
   const borderColor = theme ? `var(--forge-theme-${theme}-container)` : 'var(--forge-theme-outline)';
-  const textColor = theme ? `var(--forge-theme-on-${theme}-container-low)` : 'var(--forge-theme-on-surface-container-low)';
+  const textColor = theme ? `var(--forge-theme-on-${theme}-container-low)` : 'var(--forge-theme-text-medium)';
   const cardStyles = {
     background: backgroundColor,
     borderColor: borderColor,
