@@ -240,7 +240,7 @@ export function createListItems(
       // Check for secondary (subtitle) text
       if (option.secondaryLabel) {
         const secondaryLabelElement = document.createElement('span');
-        secondaryLabelElement.slot = 'subtitle';
+        secondaryLabelElement.slot = 'secondary-text';
         secondaryLabelElement.textContent = option.secondaryLabel;
         secondaryLabelElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}-secondary`;
         listItemElement.twoLine = true;
