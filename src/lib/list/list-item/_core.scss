@@ -75,6 +75,8 @@
   line-height: #{token(text-line-height)};
 
   flex: 1;
+
+  contain: layout;
 }
 
 @mixin selected {
