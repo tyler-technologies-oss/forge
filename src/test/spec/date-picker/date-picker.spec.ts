@@ -78,6 +78,17 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect((<Date>calendar.value).toDateString()).toEqual(date.toDateString());
     });
 
+    it('should preserve timestamp from date value after initialization', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const dateStr = '2024-01-01T10:17:23.000Z';
+      const date = new Date(dateStr);
+      this.context.component.value = date;
+      this.context.append();
+      await frame();
+
+      expect(this.context.component.value.toISOString()).toEqual(dateStr);
+    });
+
     it('should open calendar in month of min date if min is after current month', function(this: ITestContext) {
       this.context = setupTestContext(false);
       const date = new Date();
@@ -1218,13 +1229,12 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
       const popup = getPopup(this.context.component);
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
 
       expect(changeSpy).toHaveBeenCalledTimes(1);
       expect(this.context.component.open).toBeFalse();
       expect(popup).toBeNull('Expected popup to be removed');
       expect(this.context.component.value).toBeInstanceOf(Date);
-      expect((this.context.component.value as Date)).toEqual(today);
+      expect((this.context.component.value as Date).toDateString()).toEqual(today.toDateString());
     });
 
     it('should set date to todays date when clicking today button a second time', async function(this: ITestContext) {
@@ -1240,13 +1250,12 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
       const popup = getPopup(this.context.component);
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
 
       expect(changeSpy).toHaveBeenCalledTimes(1);
       expect(this.context.component.open).toBeFalse();
       expect(popup).toBeNull('Expected popup to be removed');
       expect(this.context.component.value).toBeInstanceOf(Date);
-      expect((this.context.component.value as Date)).toEqual(today);
+      expect((this.context.component.value as Date).toDateString()).toEqual(today.toDateString());
       
       openPopup(this.context.component);
       
@@ -1258,7 +1267,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(this.context.component.open).toBeFalse();
       expect(popup).toBeNull('Expected popup to be removed');
       expect(this.context.component.value).toBeInstanceOf(Date);
-      expect((this.context.component.value as Date)).toEqual(today);
+      expect((this.context.component.value as Date).toDateString()).toEqual(today.toDateString());
     });
 
     it('should remove value when clicking clear button', async function(this: ITestContext) {
