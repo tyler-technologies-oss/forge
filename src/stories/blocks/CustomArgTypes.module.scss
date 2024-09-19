@@ -32,3 +32,57 @@
     text-align: start;
   }
 }
+
+.cardContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-block-start: 24px !important;
+  padding-block-end: 8px;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 16px;
+  align-items: center;
+  padding-block: 8px;
+  padding-inline: 16px;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.cardIcon {
+  grid-column: 1;
+}
+
+.cardTitle {
+  grid-column: 2;
+  font-size: 14px !important;
+}
+
+.cardValue {
+  grid-column: 2;
+  font-weight: bold;
+}
+
+.cardLink {
+  display: block;
+  color: var(--forge-theme-primary) !important;
+  font-size: 13px !important;
+  font-style: italic;
+  font-weight: normal;
+}
+
+.key {
+  display: inline-block;
+  padding-inline: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--forge-theme-outline);
+  border-bottom-width: 2px;
+  background-color: var(--forge-theme-surface-bright);
+  color: var(--forge-theme-on-surface-bright);
+  font-family: ui-monospace, Menlo, Monaco, 'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro', 'Droid Sans Mono', 'Courier New', monospace !important;
+  font-size: 13px !important;
+}

@@ -88,6 +88,18 @@ declare global {
  * @cssclass forge-checkbox - Apply to the root element _(required)_.
  * @cssclass forge-checkbox--dense - Makes the checkbox dense.
  * @cssclass forge-checkbox__icon - Apply to a child of the root element to render the check and indeterminate icons _(required)_.
+ *
+ * @role checkbox
+ *
+ * @aria aria-checked - Indicates whether the checkbox is checked.
+ * @aria aria-disabled - Indicates whether the checkbox is disabled.
+ * @aria aria-required - Indicates whether the checkbox is required.
+ *
+ * @focusable
+ *
+ * @formassociated
+ *
+ * @keycontrol space - Toggles the checkbox checked or unchecked.
  */
 @customElement({
   name: CHECKBOX_CONSTANTS.elementName,
