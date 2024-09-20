@@ -1,3 +1,28 @@
+# v3.1.2 (Fri Sep 20 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Sriram Danturthi ([@sriramasdanturthi](https://github.com/sriramasdanturthi)), for all your work!
+
+#### 🐛 Bug Fix
+
+- fix(date-picker): ensure that time portion of `Date` value is preserved during initial render and dropdown calendar selection [#688](https://github.com/tyler-technologies-oss/forge/pull/688) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list-item): use `layout` containment on the text-container part to ensure that slotted elements (specifically tooltips) do no affect the layout [#692](https://github.com/tyler-technologies-oss/forge/pull/692) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(stepper): remove the internal `z-index` style and fix overflowing content [#691](https://github.com/tyler-technologies-oss/forge/pull/691) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list-dropdown): restore display of secondaryLabel [#690](https://github.com/tyler-technologies-oss/forge/pull/690) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### 📝 Documentation
+
+- docs: removed DialogConfig [#693](https://github.com/tyler-technologies-oss/forge/pull/693) ([@sriramasdanturthi](https://github.com/sriramasdanturthi))
+
+#### Authors: 3
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sriram Danturthi ([@sriramasdanturthi](https://github.com/sriramasdanturthi))
+
+---
+
 # v3.1.1 (Wed Sep 18 2024)
 
 #### 🐛 Bug Fix
