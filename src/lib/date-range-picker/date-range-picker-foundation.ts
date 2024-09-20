@@ -103,6 +103,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
   
   protected _onToday(): void {
     const today = new Date();
+    this._tryMergeCurrentTime({ from: today });
     const range = this._open ? new DateRange({ from: this._from || today, to: this._to || undefined }) : new DateRange({ from: today });
     if (!this._isDateRangeAcceptable(range)) {
       return;
@@ -204,6 +205,8 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
       this._closeCalendar(true);
     }
 
+    this._tryMergeCurrentTime(value);
+
     if (!this._emitChangeEvent(value ?? null)) {
       return;
     }
@@ -300,6 +303,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
   protected _handleInput(value: string): void {
     const sanitizedValue = this._getSanitizedDateString(value);
     const date = this._coerceDateValue(sanitizedValue);
+    this._tryMergeCurrentTime({ from: date as Date | undefined });
     if (this._masked) {
       this._adapter.emitInputEvent(DATE_RANGE_PICKER_CONSTANTS.events.INPUT, sanitizedValue);
     }
@@ -311,6 +315,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
   private _handleToInput(value: string): void {
     const sanitizedValue = this._getSanitizedDateString(value);
     const date = this._coerceDateValue(sanitizedValue);
+    this._tryMergeCurrentTime({ to: date as Date | undefined });
     if (this._masked) {
       this._adapter.emitToInputEvent(DATE_RANGE_PICKER_CONSTANTS.events.INPUT, sanitizedValue);
     }
@@ -382,6 +387,20 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     if (!isSameDate(date, this._to)) {
       this.to = date;
       this._emitChangeEvent(new DateRange({ from: this._from || undefined, to: date || undefined }));
+    }
+  }
+
+  private _tryMergeCurrentTime(range: Partial<DateRange> | null | undefined): void {
+    if (!range || !this._value || (!this._value.from && !this._value.to)) {
+      return;
+    }
+
+    if (range.from && this._value.from && this._value.from instanceof Date) {
+      range.from.setHours(this._value.from.getHours(), this._value.from.getMinutes(), this._value.from.getSeconds(), this._value.from.getMilliseconds());
+    }
+
+    if (range.to && this._value.to && this._value.to instanceof Date) {
+      range.to.setHours(this._value.to.getHours(), this._value.to.getMinutes(), this._value.to.getSeconds(), this._value.to.getMilliseconds());
     }
   }
 

@@ -40,7 +40,7 @@ export class DatePickerFoundation extends BaseDatePickerFoundation<IDatePickerAd
 
   protected _onToday(): void {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    this._tryMergeCurrentTime(today);
     this._onDateSelected({ date: today, selected: true, type: 'date' });
   }
 
@@ -75,7 +75,9 @@ export class DatePickerFoundation extends BaseDatePickerFoundation<IDatePickerAd
     if (event.type === 'date') {
       this._closeCalendar(true);
     }
-    
+
+    this._tryMergeCurrentTime(value);
+
     if (!this._emitChangeEvent(value)) {
       return;
     }
@@ -132,6 +134,7 @@ export class DatePickerFoundation extends BaseDatePickerFoundation<IDatePickerAd
   protected _handleInput(value: string): void {
     const sanitizedValue = this._getSanitizedDateString(value);
     const date = this._coerceDateValue(sanitizedValue);
+    this._tryMergeCurrentTime(date);
     if (this._masked) {
       this._adapter.emitInputEvent(DATE_PICKER_CONSTANTS.events.INPUT, sanitizedValue);
     }
@@ -152,6 +155,13 @@ export class DatePickerFoundation extends BaseDatePickerFoundation<IDatePickerAd
       this.value = date;
       this._emitChangeEvent(this._value);
     }
+  }
+
+  private _tryMergeCurrentTime(date: Date | null | undefined): void {
+    if (!date || !this._value) {
+      return;
+    }
+    date.setHours(this._value.getHours(), this._value.getMinutes(), this._value.getSeconds(), this._value.getMilliseconds());
   }
 
   private _applyValue(): void {
