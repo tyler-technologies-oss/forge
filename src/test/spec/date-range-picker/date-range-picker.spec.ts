@@ -86,6 +86,20 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect((calendar.value as IDateRange).from).toEqual(date);
     });
 
+    it('should preserve timestamp from date value after initialization', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      const fromStr = '2024-01-01T10:17:23.000Z';
+      const from = new Date(fromStr);
+      const toStr = '2024-01-05T07:15:43.000Z';
+      const to = new Date(toStr);
+      this.context.component.value = { from, to };
+      this.context.append();
+      await tick();
+
+      expect((this.context.component.value.from as Date).toISOString()).toEqual(fromStr);
+      expect((this.context.component.value.to as Date).toISOString()).toEqual(toStr);
+    });
+
     it('should automatically render a toggle button with a Forge text-field component', function(this: ITestContext) {
       this.context = setupTestContext(false, false, false, false);
 
