@@ -120,7 +120,7 @@ export function isSameDate(first?: Date | null, second?: Date | null): boolean {
   } else if (!isValidDate(first) || !isValidDate(second)) {
     return false;
   }
-  return first.setHours(0, 0, 0, 0) === second.setHours(0, 0, 0, 0);
+  return new Date(first).setHours(0, 0, 0, 0) === new Date(second).setHours(0, 0, 0, 0);
 }
 
 /**
