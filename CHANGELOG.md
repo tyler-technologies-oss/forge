@@ -1,3 +1,16 @@
+# v2.24.6 (Fri Sep 20 2024)
+
+#### 🐛 Bug Fix
+
+- fix: use more reliable regex to determine release status ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(date-picker): ensure that time portion of `Date` value is preserved during initial render and dropdown calendar selection [#694](https://github.com/tyler-technologies-oss/forge/pull/694) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.24.5 (Tue Jul 02 2024)
 
 #### 🐛 Bug Fix
