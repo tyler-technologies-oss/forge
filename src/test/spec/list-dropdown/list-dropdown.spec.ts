@@ -977,6 +977,6 @@ describe('ListDropdown', function(this: ITestContext) {
     await frame();
 
     const listItems = getListItems();
-    expect(listItems[0].querySelector('span[slot=subtitle]')?.textContent).toBe('Secondary label');
+    expect(listItems[0].querySelector('span[slot=secondary-text]')?.textContent).toBe('Secondary label');
   });
 });
