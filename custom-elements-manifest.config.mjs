@@ -38,6 +38,18 @@ export default {
         cssclass: {
           mappedName: 'cssClasses',
           isArray: true
+        },
+        role: {},
+        aria: {
+          isArray: true
+        },
+        focusable: {},
+        formassociated: {
+          mappedName: 'formAssociated'
+        },
+        keycontrol: {
+          mappedName: 'keyControls',
+          isArray: true
         }
       }
     })

@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import A11yInformation from '../../blocks/A11yInformation';
 import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as CheckboxStories from './Checkbox.stories';
 
@@ -20,11 +21,18 @@ Checkboxes can also have an indeterminate state, which is useful when the state 
 
 ## Accessibility
 
-- Verify that you can tab to each checkbox.
-  - Ensure there is a distinct visual cue that a checkbox is checked or unchecked.
-  - Ensure that there is a distinct visual cue that a checkbox is focused.
-  - Ensure that there is a distinct visual cue when a checkbox is disabled.
-- Verify that pressing the space bar key, while focused on a checkbox, will toggle it checked and unchecked in the same manner as it would be with a mouse click.
+<A11yInformation>
+Always provide a label for your checkbox to ensure that it is accessible to all users. Any text
+provided in the default slot functions as a label, but an HTML `<label>` element, `<forge-label>`
+component, `aria-label`, or `aria-labelledby` attribute can also be used for this purpose. Of these
+alternatives, `<label>` and `<forge-label>` are preferred because they also extend the clickable
+area of your checkbox. Use visible labels instead of the ARIA attributes whenever possible.
+
+If your checkbox is part of a group, you can use an HTML `<fieldset>` element component to group the
+checkboxes together and provide a legend for the group. This will help users understand the
+relationship between the checkboxes and the group they belong to.
+
+</A11yInformation>
 
 ## CSS-Only
 

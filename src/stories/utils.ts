@@ -263,6 +263,11 @@ export interface Declaration {
   cssFilePath?: TagItem;
   cssClasses?: TagItem[];
   globalConfigProperties?: GlobalConfigPropertyItem[];
+  role?: TagItem;
+  aria?: TagItem[];
+  focusable?: TagItem;
+  formAssociated?: TagItem;
+  keyControls?: TagItem[];
 }
 
 export interface DependencyItem {

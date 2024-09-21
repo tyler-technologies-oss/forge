@@ -1,7 +1,7 @@
 import { HeaderMdx, Markdown, useOf } from '@storybook/blocks';
 import { Code } from '@storybook/components';
 import { TagItem, getBranchName, getCustomElementType, getCustomElementsTagDeclaration, getCustomElementsTagModule, htmlEncode } from '../utils';
-import { NameDescriptionTable, Section, UsageLink } from './Shared';
+import { Checkmark, NameDescriptionTable, Section, UsageLink } from './Shared';
 
 import styles from './CustomArgTypes.module.scss';
 import GitHubLogo from './GitHubLogo';
@@ -70,7 +70,11 @@ function PropsAttrsTable({ items, globalConfigProperties }: { items: TagItem[]; 
             <td>
               <Markdown>{item.description}</Markdown>
             </td>
-            {!!globalConfigProperties?.length ? <td style={{ textAlign: 'center' }}>{globalConfigProperties.includes(item.name) ? '✅' : ''}</td> : null}
+            {!!globalConfigProperties?.length ? (
+              <td style={{ textAlign: 'center' }}>
+                {globalConfigProperties.includes(item.name) ? <Checkmark alt="Yes" color="var(--forge-theme-success)" /> : ''}
+              </td>
+            ) : null}
           </tr>
         ))}
       </tbody>
