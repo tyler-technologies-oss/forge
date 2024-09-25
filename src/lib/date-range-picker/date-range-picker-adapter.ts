@@ -45,8 +45,10 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
       throw new Error(`The ${DATE_RANGE_PICKER_CONSTANTS.elementName} requires two inputs`);
     }
 
-    const separator = this._createInputSeparator();
-    this._fromInputElement.insertAdjacentElement('afterend', separator);
+    if (!this._component.querySelector(`[${FIELD_CONSTANTS.attributes.MULTI_INPUT_SEPARATOR}]`)) {
+      const separator = this._createInputSeparator();
+      this._fromInputElement.insertAdjacentElement('afterend', separator);
+    }
   }
 
   protected _initializeCalendarDropdown(): void {
