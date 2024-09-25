@@ -61,7 +61,7 @@ declare global {
  * @attribute {boolean} [three-line=false] - Sets the list item height to support at least three lines of text.
  * @attribute {boolean} [wrap=false] - Sets the list item to wrap its text content.
  * @attribute {boolean} [noninteractive=false] - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
- * @attribute {boolean} [no-focus-propagation=true] - Disables focus propagation to the interactive element when a non-interactive element is clicked within the list item.
+ * @attribute {boolean} [no-focus-propagation=false] - Disables focus propagation to the interactive element when a non-interactive element is clicked within the list item.
  *
  * @event {CustomEvent<IListItemSelectEventData>} forge-list-item-select - Fires when the list item is selected.
  *
