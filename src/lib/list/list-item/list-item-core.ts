@@ -11,6 +11,7 @@ export interface IListItemCore {
   threeLine: boolean;
   wrap: boolean;
   noninteractive: boolean;
+  allowFocusPropagation: boolean;
 }
 
 export class ListItemCore implements IListItemCore {
@@ -23,6 +24,7 @@ export class ListItemCore implements IListItemCore {
   private _threeLine = false;
   private _wrap = false;
   private _noninteractive = false;
+  private _allowFocusPropagation = true;
 
   private _interactiveStateChangeListener: (value: boolean) => void = this._onInteractiveStateChange.bind(this);
   private _mousedownListener: EventListener = this._onMousedown.bind(this);
@@ -132,7 +134,9 @@ export class ListItemCore implements IListItemCore {
   }
 
   private _clickInteractiveElement(): void {
-    this._adapter.interactiveElement?.focus();
+    if (this._allowFocusPropagation) {
+      this._adapter.interactiveElement?.focus();
+    }
     this._adapter.tempDeactivateFocusIndicator(); // Workaround until we can call `focus({ focusVisible: false })` to prevent focus ring from showing
     this._adapter.interactiveElement?.click();
   }
@@ -264,6 +268,17 @@ export class ListItemCore implements IListItemCore {
       }
 
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.NONINTERACTIVE, this._noninteractive);
+    }
+  }
+
+  public get allowFocusPropagation(): boolean {
+    return this._allowFocusPropagation;
+  }
+  public set allowFocusPropagation(value: boolean) {
+    value = Boolean(value);
+    if (this._allowFocusPropagation !== value) {
+      this._allowFocusPropagation = value;
+      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.NO_FOCUS_PROPAGATION, !this._allowFocusPropagation);
     }
   }
 }

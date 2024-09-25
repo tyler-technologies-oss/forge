@@ -11,7 +11,8 @@ const observedAttributes = {
   TWO_LINE: 'two-line',
   THREE_LINE: 'three-line',
   WRAP: 'wrap',
-  NONINTERACTIVE: 'noninteractive'
+  NONINTERACTIVE: 'noninteractive',
+  NO_FOCUS_PROPAGATION: 'no-focus-propagation'
 };
 
 const attributes = {
