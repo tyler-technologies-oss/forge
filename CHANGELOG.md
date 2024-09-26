@@ -1,3 +1,15 @@
+# v2.24.7 (Thu Sep 26 2024)
+
+#### 🐛 Bug Fix
+
+- fix(text-field): fixed a bug where multiple input separators could be added [#696](https://github.com/tyler-technologies-oss/forge/pull/696) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.24.6 (Fri Sep 20 2024)
 
 #### 🐛 Bug Fix
