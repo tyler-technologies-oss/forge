@@ -1,7 +1,7 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
 import { ListItemAdapter } from './list-item-adapter';
 import { ListItemCore } from './list-item-core';
-import { IListItemSelectEventData, LIST_ITEM_CONSTANTS } from './list-item-constants';
+import { IListItemSelectEventData, LIST_ITEM_CONSTANTS, ListItemFocusPropagation } from './list-item-constants';
 import { StateLayerComponent } from '../../state-layer';
 import { FocusIndicatorComponent } from '../../focus-indicator';
 import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
@@ -21,7 +21,7 @@ export interface IListItemProperties<T = unknown> {
   threeLine: boolean;
   wrap: boolean;
   noninteractive: boolean;
-  allowFocusPropagation: boolean;
+  focusPropagation: ListItemFocusPropagation;
 }
 
 export interface IListItemComponent<T = unknown> extends IListItemProperties<T>, IWithElementInternals, IWithDefaultAria {}
@@ -50,7 +50,7 @@ declare global {
  * @property {boolean} [threeLine=false] - Sets the list item height to support at least three lines of text.
  * @property {boolean} [wrap=false] - Sets the list item to wrap its text content.
  * @property {boolean} [noninteractive=false] - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
- * @property {boolean} [allowFocusPropagation=true] - Controls whether the interactive element will receive focus if a non-interactive element is clicked within the list item.
+ * @property {boolean} [focusPropagation="allow"] - Controls whether the interactive element will receive focus if a non-interactive element is clicked within the list item.
  *
  * @attribute {boolean} [selected=false] - Applies the selected state to the list item.
  * @attribute {boolean} [active=false] - Applies the active state to the list item by emulating its focused state.
@@ -61,7 +61,7 @@ declare global {
  * @attribute {boolean} [three-line=false] - Sets the list item height to support at least three lines of text.
  * @attribute {boolean} [wrap=false] - Sets the list item to wrap its text content.
  * @attribute {boolean} [noninteractive=false] - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
- * @attribute {boolean} [no-focus-propagation=false] - Disables focus propagation to the interactive element when a non-interactive element is clicked within the list item.
+ * @attribute {boolean} [focus-propagation="allow"] - Controls whether the interactive element will receive focus if a non-interactive element is clicked within the list item.
  *
  * @event {CustomEvent<IListItemSelectEventData>} forge-list-item-select - Fires when the list item is selected.
  *
@@ -176,8 +176,8 @@ export class ListItemComponent extends WithElementInternals(WithDefaultAria(Base
       case LIST_ITEM_CONSTANTS.observedAttributes.NONINTERACTIVE:
         this.noninteractive = coerceBoolean(newValue);
         break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.NO_FOCUS_PROPAGATION:
-        this.allowFocusPropagation = !coerceBoolean(newValue);
+      case LIST_ITEM_CONSTANTS.observedAttributes.FOCUS_PROPAGATION:
+        this.focusPropagation = newValue as ListItemFocusPropagation;
         break;
     }
   }
@@ -210,5 +210,5 @@ export class ListItemComponent extends WithElementInternals(WithDefaultAria(Base
   public declare noninteractive: boolean;
 
   @coreProperty()
-  public declare allowFocusPropagation: boolean;
+  public declare focusPropagation: ListItemFocusPropagation;
 }

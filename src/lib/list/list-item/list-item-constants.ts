@@ -12,7 +12,7 @@ const observedAttributes = {
   THREE_LINE: 'three-line',
   WRAP: 'wrap',
   NONINTERACTIVE: 'noninteractive',
-  NO_FOCUS_PROPAGATION: 'no-focus-propagation'
+  FOCUS_PROPAGATION: 'focus-propagation'
 };
 
 const attributes = {
@@ -44,6 +44,10 @@ const events = {
   SELECT: `${elementName}-select`
 };
 
+const defaults = {
+  FOCUS_PROPAGATION: 'allow' as ListItemFocusPropagation
+};
+
 export const LIST_ITEM_CONSTANTS = {
   elementName,
   observedAttributes,
@@ -51,9 +55,12 @@ export const LIST_ITEM_CONSTANTS = {
   classes,
   selectors,
   ids,
-  events
+  events,
+  defaults
 };
 
 export interface IListItemSelectEventData<T = any> {
   value: T;
 }
+
+export type ListItemFocusPropagation = 'allow' | 'off';
