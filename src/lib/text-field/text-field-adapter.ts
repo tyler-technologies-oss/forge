@@ -106,7 +106,7 @@ export class TextFieldAdapter extends FieldAdapter implements ITextFieldAdapter 
     addClass(TEXT_FIELD_CONSTANTS.classes.MULTI_INPUT, this._rootElement);
     this._applyToInputs((input, index) => {
       input.setAttribute(`${TEXT_FIELD_CONSTANTS.attributes.MULTI_INPUT}-${index}`, '');
-      if (index % 2 !== 1) {
+      if (index % 2 !== 1 && !this._component.querySelector(`[${TEXT_FIELD_CONSTANTS.attributes.MULTI_INPUT_SEPARATOR}]`)) {
         Promise.resolve().then(() => input.insertAdjacentElement('afterend', this._createSeperatorElement()));
       }
     });
