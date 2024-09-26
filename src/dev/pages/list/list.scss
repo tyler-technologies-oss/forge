@@ -2,6 +2,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--forge-spacing-large);
+
+  & > div {
+    min-width: 0;
+  }
 }
 
 .list-demo {

@@ -193,6 +193,7 @@ export function createListItems(
 
       let listItemElement = document.createElement('forge-list-item');
       listItemElement.value = option.value;
+      listItemElement.focusPropagation = 'off';
       listItemElement.setAttribute('role', 'presentation');
 
       const buttonElement = document.createElement('button');
