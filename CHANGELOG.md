@@ -1,3 +1,16 @@
+# v3.1.3 (Thu Sep 26 2024)
+
+#### 🐛 Bug Fix
+
+- fix(list-item): fixed a bug where focus was being forced to propagate to the interactive element when used within a list dropdown [#698](https://github.com/tyler-technologies-oss/forge/pull/698) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(date-range-picker): fixed a bug where multiple input separators could be added [#697](https://github.com/tyler-technologies-oss/forge/pull/697) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.1.2 (Fri Sep 20 2024)
 
 :tada: This release contains work from a new contributor! :tada:
