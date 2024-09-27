@@ -167,6 +167,17 @@ const events = {
   VIEW_CHANGE: `${elementName}-view-change`
 } as const;
 
+const strings = {
+  DEFAULT_PREVIOUS_MONTH_BUTTON_TEXT: 'Previous month',
+  DEFAULT_NEXT_MONTH_BUTTON_TEXT: 'Next month',
+  DEFAULT_PREVIOUS_YEAR_BUTTON_TEXT: 'Previous year',
+  DEFAULT_NEXT_YEAR_BUTTON_TEXT: 'Next year',
+  DEFAULT_PREVIOUS_YEARS_BUTTON_TEXT: 'Previous years',
+  DEFAULT_NEXT_YEARS_BUTTON_TEXT: 'Next years',
+  DEFAULT_TODAY_BUTTON_TEXT: 'Today',
+  DEFAULT_CLEAR_BUTTON_TEXT: 'Clear'
+};
+
 const numbers = {
   DEFAULT_MAX_YEAR_OFFSET: 50,
   DEFAULT_MIN_YEAR_OFFSET: 50,
@@ -185,6 +196,7 @@ export const CALENDAR_CONSTANTS = {
   parts,
   selectors,
   events,
+  strings,
   numbers
 };
 
@@ -291,6 +303,17 @@ export interface ICalendarMenuMonthConfig {
   min: Date | null;
   selectedMonth: number;
   selectedYear: number;
+}
+
+export interface ICalendarUIText {
+  clear: string;
+  nextMonth: string;
+  nextYear: string;
+  nextYears: string;
+  previousMonth: string;
+  previousYear: string;
+  previousYears: string;
+  today: string;
 }
 
 export interface ICalendarMenuYearConfig {

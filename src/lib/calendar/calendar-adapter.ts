@@ -35,6 +35,7 @@ export interface ICalendarAdapter extends IBaseAdapter {
   moveMenuFocusUp(): void;
   openMenuAsGrid(options: ICalendarMenuOption[], setFocus: boolean): void;
   openMenuAsList(options: ICalendarMenuOption[], setFocus: boolean): void;
+  registerSlotChangeListener(listener: EventListener): void;
   registerClearButtonListener(listener: (evt: Event) => void): void;
   registerDateClickListener(listener: (evt: Event) => void): void;
   registerHoverListener(listener: (evt: Event) => void): void;
@@ -55,7 +56,7 @@ export interface ICalendarAdapter extends IBaseAdapter {
   replaceDateWithSpacer(date: Date): void;
   selectFocusedMenuItem(): void;
   setAllDatesUnfocusable(): void;
-  setClearButton(): void;
+  setClearButton(content: string): void;
   setContainerClass(name: string, value: boolean): void;
   setDateDisabled(date: Date, value: boolean): void;
   setDateDescription(date: Date, value?: string): void;
@@ -81,7 +82,7 @@ export interface ICalendarAdapter extends IBaseAdapter {
   setRangeEnd(date: Date | null): void;
   setRangeStart(date: Date | null): void;
   setActiveDate(date: Date, setFocus: boolean, preventFocus?: boolean): void;
-  setTodayButton(): void;
+  setTodayButton(content: string): void;
   setWeekend(date: Date, value: boolean): void;
   setYear(year: number, locale?: string): void;
   setYearButtonPressed(value: boolean): void;
@@ -117,6 +118,10 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
 
   public toggleContainerAttribute(hasAttribute: boolean, name: string, value?: string): void {
     toggleAttribute(this._container, hasAttribute, name, value);
+  }
+
+  public registerSlotChangeListener(listener: EventListener): void {
+    this._container.addEventListener('slotchange', listener);
   }
 
   public registerMonthButtonListener(listener: (evt: Event) => void): void {
@@ -337,7 +342,7 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
     footer?.parentNode?.removeChild(footer);
   }
 
-  public setClearButton(): void {
+  public setClearButton(content: string): void {
     const footer = this._container.querySelector(CALENDAR_CONSTANTS.selectors.FOOTER);
     if (!footer) {
       return;
@@ -345,7 +350,9 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
 
     const clearButton = footer.querySelector(CALENDAR_CONSTANTS.selectors.CLEAR_BUTTON);
     if (!clearButton) {
-      footer.prepend(getClearButton());
+      footer.prepend(getClearButton(content));
+    } else {
+      clearButton.textContent = content;
     }
   }
 
@@ -354,7 +361,7 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
     clearButton?.parentNode?.removeChild(clearButton);
   }
 
-  public setTodayButton(): void {
+  public setTodayButton(content: string): void {
     const footer = this._container.querySelector(CALENDAR_CONSTANTS.selectors.FOOTER);
     if (!footer) {
       return;
@@ -362,7 +369,9 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
 
     const todayButton = footer.querySelector(CALENDAR_CONSTANTS.selectors.TODAY_BUTTON);
     if (!todayButton) {
-      footer.appendChild(getTodayButton());
+      footer.appendChild(getTodayButton(content));
+    } else {
+      todayButton.textContent = content;
     }
   }
 

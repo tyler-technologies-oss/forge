@@ -21,7 +21,8 @@ import {
   CalendarDateSelectCallback,
   ICalendarEvent,
   CalendarTooltipBuilder,
-  ICalendarDateConfig
+  ICalendarDateConfig,
+  ICalendarUIText
 } from './calendar-constants';
 import {
   isDisabled,
@@ -142,11 +143,24 @@ export class CalendarCore implements ICalendarCore {
   private _localeWeekendDays: DayOfWeek[] = [];
   private _rtl = false;
 
+  // UI text
+  private _uiText: ICalendarUIText = {
+    previousMonth: CALENDAR_CONSTANTS.strings.DEFAULT_PREVIOUS_MONTH_BUTTON_TEXT,
+    nextMonth: CALENDAR_CONSTANTS.strings.DEFAULT_NEXT_MONTH_BUTTON_TEXT,
+    previousYear: CALENDAR_CONSTANTS.strings.DEFAULT_PREVIOUS_YEAR_BUTTON_TEXT,
+    nextYear: CALENDAR_CONSTANTS.strings.DEFAULT_NEXT_YEAR_BUTTON_TEXT,
+    previousYears: CALENDAR_CONSTANTS.strings.DEFAULT_PREVIOUS_YEARS_BUTTON_TEXT,
+    nextYears: CALENDAR_CONSTANTS.strings.DEFAULT_NEXT_YEARS_BUTTON_TEXT,
+    today: CALENDAR_CONSTANTS.strings.DEFAULT_TODAY_BUTTON_TEXT,
+    clear: CALENDAR_CONSTANTS.strings.DEFAULT_CLEAR_BUTTON_TEXT
+  };
+
   // Core
   private _preventFocus = false;
   private _isInitialized = false;
 
   // Listeners
+  private _slotChangeListener: EventListener = (evt: Event) => this._onSlotChange(evt);
   private _clearButtonListener: (evt: Event) => void;
   private _dateClickListener: (evt: Event) => void;
   private _hoverListener: (evt: Event) => void;
@@ -176,6 +190,7 @@ export class CalendarCore implements ICalendarCore {
   }
 
   public initialize(): void {
+    this._adapter.registerSlotChangeListener(this._slotChangeListener);
     this._adapter.registerMenuListener(this._menuListener);
     this._adapter.registerMenuFocusChangeEventListener(this._menuFocusChangeListener);
     this._adapter.registerKeydownListener(this._keydownListener);
@@ -207,6 +222,45 @@ export class CalendarCore implements ICalendarCore {
 
   public destroy(): void {
     this._isInitialized = false;
+  }
+
+  private _onSlotChange(evt: Event): void {
+    const name = (evt.target as HTMLSlotElement).name;
+    const nodes = (evt.target as HTMLSlotElement).assignedNodes({ flatten: true });
+    const textContent = nodes.map(node => node.textContent).join('');
+    switch (name) {
+      case 'previous-month-button-text':
+        this._uiText.previousMonth = textContent || CALENDAR_CONSTANTS.strings.DEFAULT_PREVIOUS_MONTH_BUTTON_TEXT;
+        break;
+      case 'next-month-button-text':
+        this._uiText.nextMonth = textContent || CALENDAR_CONSTANTS.strings.DEFAULT_NEXT_MONTH_BUTTON_TEXT;
+        break;
+      case 'previous-year-button-text':
+        this._uiText.previousYear = textContent || CALENDAR_CONSTANTS.strings.DEFAULT_PREVIOUS_YEAR_BUTTON_TEXT;
+        break;
+      case 'next-year-button-text':
+        this._uiText.nextYear = textContent || CALENDAR_CONSTANTS.strings.DEFAULT_NEXT_YEAR_BUTTON_TEXT;
+        break;
+      case 'previous-years-button-text':
+        this._uiText.previousYears = textContent || CALENDAR_CONSTANTS.strings.DEFAULT_PREVIOUS_YEARS_BUTTON_TEXT;
+        break;
+      case 'next-years-button-text':
+        this._uiText.nextYears = textContent || CALENDAR_CONSTANTS.strings.DEFAULT_NEXT_YEARS_BUTTON_TEXT;
+        break;
+      case 'today-button-text':
+        this._uiText.today = textContent || CALENDAR_CONSTANTS.strings.DEFAULT_TODAY_BUTTON_TEXT;
+        if (this._showToday) {
+          this._adapter.setTodayButton(this._uiText.today);
+        }
+        return;
+      case 'clear-button-text':
+        this._uiText.clear = textContent || CALENDAR_CONSTANTS.strings.DEFAULT_CLEAR_BUTTON_TEXT;
+        if (this._clearButton) {
+          this._adapter.setClearButton(this._uiText.clear);
+        }
+        return;
+    }
+    this._setNavButtonLabels();
   }
 
   private _onMonthButtonClicked(): void {
@@ -1035,16 +1089,16 @@ export class CalendarCore implements ICalendarCore {
   private _setNavButtonLabels(): void {
     switch (this._view) {
       case 'date':
-        this._adapter.setPreviousButtonLabel('Previous month');
-        this._adapter.setNextButtonLabel('Next month');
+        this._adapter.setPreviousButtonLabel(this._uiText.previousMonth);
+        this._adapter.setNextButtonLabel(this._uiText.nextMonth);
         break;
       case 'month':
-        this._adapter.setPreviousButtonLabel('Previous year');
-        this._adapter.setNextButtonLabel('Next year');
+        this._adapter.setPreviousButtonLabel(this._uiText.previousYear);
+        this._adapter.setNextButtonLabel(this._uiText.nextYear);
         break;
       case 'year':
-        this._adapter.setPreviousButtonLabel('Previous years');
-        this._adapter.setNextButtonLabel('Next years');
+        this._adapter.setPreviousButtonLabel(this._uiText.previousYears);
+        this._adapter.setNextButtonLabel(this._uiText.nextYears);
         break;
     }
   }
@@ -1556,7 +1610,7 @@ export class CalendarCore implements ICalendarCore {
       }
     } else {
       this._adapter.setFooter();
-      this._adapter.setClearButton();
+      this._adapter.setClearButton(this._uiText.clear);
       this._adapter.registerClearButtonListener(this._clearButtonListener);
     }
   }
@@ -1897,7 +1951,7 @@ export class CalendarCore implements ICalendarCore {
       }
     } else {
       this._adapter.setFooter();
-      this._adapter.setTodayButton();
+      this._adapter.setTodayButton(this._uiText.today);
       this._adapter.registerTodayButtonListener(this._todayButtonListener);
     }
   }
