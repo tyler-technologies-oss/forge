@@ -239,11 +239,17 @@ describe('DatePickerComponent', function(this: ITestContext) {
       };
       this.context.append();
       openPopup(this.context.component);
+
+      const calendar = getCalendar(this.context.component);
+      const previousButtonTextSpan = calendar.querySelector(`span[slot=${CALENDAR_CONSTANTS.slots.PREVIOUS_MONTH_BUTTON_TEXT}]`);
+      const nextButtonTextSpan = calendar.querySelector(`span[slot=${CALENDAR_CONSTANTS.slots.NEXT_MONTH_BUTTON_TEXT}]`);
+      const todayButtonTextSpan = calendar.querySelector(`span[slot=${CALENDAR_CONSTANTS.slots.TODAY_BUTTON_TEXT}]`);
+      const clearButtonTextSpan = calendar.querySelector(`span[slot=${CALENDAR_CONSTANTS.slots.CLEAR_BUTTON_TEXT}]`);
       
-      expect(getPreviousMonthButton(getCalendar(this.context.component)).textContent).toBe('1');
-      expect(getNextMonthButton(getCalendar(this.context.component)).textContent).toBe('2');
-      expect(getTodayButton(this.context.component).textContent).toBe('3');
-      expect(getClearButton(this.context.component).textContent).toBe('4');
+      expect(previousButtonTextSpan?.textContent).toBe('1');
+      expect(nextButtonTextSpan?.textContent).toBe('2');
+      expect(todayButtonTextSpan?.textContent).toBe('3');
+      expect(clearButtonTextSpan?.textContent).toBe('4');
     });
   });
 
