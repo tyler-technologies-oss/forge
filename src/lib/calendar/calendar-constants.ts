@@ -90,6 +90,17 @@ const ids = {
   YEAR_BUTTON: 'year-button'
 };
 
+const slots = {
+  PREVIOUS_MONTH_BUTTON_TEXT: 'previous-month-button-text',
+  NEXT_MONTH_BUTTON_TEXT: 'next-month-button-text',
+  PREVIOUS_YEAR_BUTTON_TEXT: 'previous-year-button-text',
+  NEXT_YEAR_BUTTON_TEXT: 'next-year-button-text',
+  PREVIOUS_YEARS_BUTTON_TEXT: 'previous-years-button-text',
+  NEXT_YEARS_BUTTON_TEXT: 'next-years-button-text',
+  TODAY_BUTTON_TEXT: 'today-button-text',
+  CLEAR_BUTTON_TEXT: 'clear-button-text'
+};
+
 const weekdayParts = {
   SUNDAY: 'sunday',
   MONDAY: 'monday',
@@ -193,6 +204,7 @@ export const CALENDAR_CONSTANTS = {
   attributes,
   classes,
   ids,
+  slots,
   parts,
   selectors,
   events,
@@ -303,17 +315,6 @@ export interface ICalendarMenuMonthConfig {
   min: Date | null;
   selectedMonth: number;
   selectedYear: number;
-}
-
-export interface ICalendarUIText {
-  clear: string;
-  nextMonth: string;
-  nextYear: string;
-  nextYears: string;
-  previousMonth: string;
-  previousYear: string;
-  previousYears: string;
-  today: string;
 }
 
 export interface ICalendarMenuYearConfig {

@@ -278,22 +278,28 @@ export function getFooter(): HTMLElement {
 }
 
 /** Returns a clear button. */
-export function getClearButton(content: string): HTMLElement {
+export function getClearButton(): HTMLElement {
   const clearButton = document.createElement('forge-button');
   clearButton.id = CALENDAR_CONSTANTS.ids.CLEAR_BUTTON;
   clearButton.setAttribute('part', CALENDAR_CONSTANTS.parts.CLEAR_BUTTON);
   clearButton.type = 'button';
-  clearButton.innerText = content;
+  const slot = document.createElement('slot');
+  slot.name = CALENDAR_CONSTANTS.slots.CLEAR_BUTTON_TEXT;
+  slot.innerText = CALENDAR_CONSTANTS.strings.DEFAULT_CLEAR_BUTTON_TEXT;
+  clearButton.appendChild(slot);
   return clearButton;
 }
 
 /** Returns a today button. */
-export function getTodayButton(content: string): HTMLElement {
+export function getTodayButton(): HTMLElement {
   const todayButton = document.createElement('forge-button');
   todayButton.id = CALENDAR_CONSTANTS.ids.TODAY_BUTTON;
   todayButton.setAttribute('part', CALENDAR_CONSTANTS.parts.TODAY_BUTTON);
   todayButton.type = 'button';
-  todayButton.innerText = content;
+  const slot = document.createElement('slot');
+  slot.name = CALENDAR_CONSTANTS.slots.TODAY_BUTTON_TEXT;
+  slot.innerText = CALENDAR_CONSTANTS.strings.DEFAULT_TODAY_BUTTON_TEXT;
+  todayButton.appendChild(slot);
   return todayButton;
 }
 
