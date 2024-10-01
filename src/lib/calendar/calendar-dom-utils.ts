@@ -186,10 +186,10 @@ export function getHeader(): HTMLElement {
   previousButton.setAttribute('part', CALENDAR_CONSTANTS.parts.PREVIOUS_BUTTON);
   previousButton.id = CALENDAR_CONSTANTS.ids.PREVIOUS_BUTTON;
   previousButton.type = 'button';
-  previousButton.setAttribute('aria-label', 'Previous');
   previousIcon.setAttribute('name', 'keyboard_arrow_left');
   previousTooltip.id = CALENDAR_CONSTANTS.ids.PREVIOUS_BUTTON_TOOLTIP;
   previousTooltip.setAttribute('aria-hidden', 'true');
+  previousTooltip.type = 'label';
   previousTooltip.innerText = 'Previous';
   previousButton.appendChild(previousTooltip);
   previousButton.appendChild(previousIcon);
@@ -200,10 +200,10 @@ export function getHeader(): HTMLElement {
   nextButton.setAttribute('part', CALENDAR_CONSTANTS.parts.NEXT_BUTTON);
   nextButton.id = CALENDAR_CONSTANTS.ids.NEXT_BUTTON;
   nextButton.type = 'button';
-  nextButton.setAttribute('aria-label', 'Next');
   nextIcon.setAttribute('name', 'keyboard_arrow_right');
   nextTooltip.id = CALENDAR_CONSTANTS.ids.NEXT_BUTTON_TOOLTIP;
   nextTooltip.setAttribute('aria-hidden', 'true');
+  nextTooltip.type = 'label';
   nextTooltip.innerText = 'Next';
   nextButton.appendChild(nextTooltip);
   nextButton.appendChild(nextIcon);

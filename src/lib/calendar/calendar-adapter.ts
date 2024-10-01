@@ -287,9 +287,6 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
         break;
     }
 
-    const nextButton = this._container.querySelector(CALENDAR_CONSTANTS.selectors.NEXT_BUTTON);
-    nextButton?.setAttribute('aria-label', label);
-
     const nextTooltip = this._container.querySelector(CALENDAR_CONSTANTS.selectors.NEXT_BUTTON_TOOLTIP);
     if (nextTooltip) {
       const slot = document.createElement('slot');
@@ -316,9 +313,6 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
         slotName = CALENDAR_CONSTANTS.slots.PREVIOUS_YEARS_BUTTON_TEXT;
         break;
     }
-
-    const previousButton = this._container.querySelector(CALENDAR_CONSTANTS.selectors.PREVIOUS_BUTTON);
-    previousButton?.setAttribute('aria-label', label);
 
     const previousTooltip = this._container.querySelector(CALENDAR_CONSTANTS.selectors.PREVIOUS_BUTTON_TOOLTIP);
     if (previousTooltip) {
