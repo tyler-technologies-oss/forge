@@ -28,6 +28,17 @@ export interface IDatePickerCalendarDropdownConfig<T> {
   disabledDaysOfWeek?: DayOfWeek[] | null;
 }
 
+export interface IDatePickerCalendarDropdownText {
+  today?: string;
+  clear?: string;
+  previousMonth?: string;
+  nextMonth?: string;
+  previousYear?: string;
+  nextYear?: string;
+  previousYears?: string;
+  nextYears?: string;
+}
+
 const observedAttributes = {
   MIN: 'min',
   MAX: 'max',
@@ -43,7 +54,8 @@ const observedAttributes = {
   SHOW_CLEAR: 'show-clear',
   DISABLED_DAYS_OF_WEEK: 'disabled-days-of-week',
   YEAR_RANGE: 'year-range',
-  LOCALE: 'locale'
+  LOCALE: 'locale',
+  CALENDAR_TEXT: 'calendar-text'
 };
 
 const attributes = {

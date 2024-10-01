@@ -10,7 +10,8 @@ import {
   DatePickerFormatCallback,
   DatePickerParseCallback,
   DatePickerPrepareMaskCallback,
-  DatePickerValueMode
+  DatePickerValueMode,
+  IDatePickerCalendarDropdownText
 } from './base-date-picker-constants';
 
 export interface IBaseDatePickerCore<TValue> {
@@ -63,6 +64,7 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
   protected _disabledDaysOfWeek: DayOfWeek[];
   protected _yearRange = '-50:+50';
   protected _locale: string | undefined;
+  protected _calendarText: IDatePickerCalendarDropdownText = {};
   protected _isInitialized = false;
 
   // Listeners
@@ -221,7 +223,8 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
     const dropdownConfig: ICalendarDropdownPopupConfig = {
       popupClasses: this._popupClasses,
       closeCallback: this._dropdownCloseListener,
-      activeChangeCallback: this._activeChangeListener
+      activeChangeCallback: this._activeChangeListener,
+      calendarText: this._calendarText
     };
 
     // If the max date is in the past, set the calendar to the min date
@@ -775,6 +778,17 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
       if (this._isInitialized && this._open) {
         this._adapter.setCalendarLocale(this._locale);
       }
+    }
+  }
+
+  public get calendarText(): IDatePickerCalendarDropdownText {
+    return { ...this._calendarText };
+  }
+  public set calendarText(value: IDatePickerCalendarDropdownText) {
+    if (JSON.stringify(this._calendarText) !== JSON.stringify(value)) {
+      this._calendarText = { ...value };
+      this._adapter.setCalendarText(this._calendarText);
+      this._adapter.setHostAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.CALENDAR_TEXT, JSON.stringify(this._calendarText));
     }
   }
 }
