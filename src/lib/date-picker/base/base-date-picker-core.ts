@@ -788,7 +788,6 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
     if (JSON.stringify(this._calendarText) !== JSON.stringify(value)) {
       this._calendarText = { ...value };
       this._adapter.setCalendarText(this._calendarText);
-      this._adapter.setHostAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.CALENDAR_TEXT, JSON.stringify(this._calendarText));
     }
   }
 }
