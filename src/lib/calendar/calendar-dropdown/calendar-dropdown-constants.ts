@@ -1,4 +1,4 @@
-import { IDatePickerCalendarDropdownText } from '@tylertech/forge/date-picker/base/base-date-picker-constants';
+import { IDatePickerCalendarDropdownText } from '../../date-picker/base/base-date-picker-constants';
 
 export interface ICalendarDropdownPopupConfig {
   activeChangeCallback?: (id: string) => void;
