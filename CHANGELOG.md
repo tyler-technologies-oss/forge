@@ -1,3 +1,20 @@
+# v3.2.0 (Wed Oct 02 2024)
+
+#### 🚀 Enhancement
+
+- feat(calendar): enable UI text customization [#701](https://github.com/tyler-technologies-oss/forge/pull/701) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### 🐛 Bug Fix
+
+- fix(chip): remove attribute syncing to prevent value being forced to string [#700](https://github.com/tyler-technologies-oss/forge/pull/700) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 2
+
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v3.1.3 (Thu Sep 26 2024)
 
 #### 🐛 Bug Fix
