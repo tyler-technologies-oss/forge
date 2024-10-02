@@ -228,6 +228,29 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
       expect(valueChangeSpy).toHaveBeenCalled();
     });
+
+    it('should accept custom calendar text', async function (this: ITestContext) {
+      this.context = setupTestContext(false, true, true);
+      this.context.component.calendarText = {
+        previousMonth: '1',
+        nextMonth: '2',
+        today: '3',
+        clear: '4'
+      };
+      this.context.append();
+      openPopup(this.context.component);
+
+      const calendar = getCalendar(this.context.component);
+      const previousButtonTextSpan = calendar.querySelector(`span[slot=${CALENDAR_CONSTANTS.slots.PREVIOUS_MONTH_BUTTON_TEXT}]`);
+      const nextButtonTextSpan = calendar.querySelector(`span[slot=${CALENDAR_CONSTANTS.slots.NEXT_MONTH_BUTTON_TEXT}]`);
+      const todayButtonTextSpan = calendar.querySelector(`span[slot=${CALENDAR_CONSTANTS.slots.TODAY_BUTTON_TEXT}]`);
+      const clearButtonTextSpan = calendar.querySelector(`span[slot=${CALENDAR_CONSTANTS.slots.CLEAR_BUTTON_TEXT}]`);
+      
+      expect(previousButtonTextSpan?.textContent).toBe('1');
+      expect(nextButtonTextSpan?.textContent).toBe('2');
+      expect(todayButtonTextSpan?.textContent).toBe('3');
+      expect(clearButtonTextSpan?.textContent).toBe('4');
+    });
   });
 
   describe('with static HTML', function(this: ITestContext) {
@@ -1708,6 +1731,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
     expect(component.showMaskFormat).toBeFalse();
     expect(component.valueMode).toBe('object');
     expect(component.hasAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.OPEN)).toBeFalse();
+    expect(component.calendarText).toEqual({});
   }
 
   function expectDisabled(component: IDatePickerComponent, isDisabled: boolean): void {

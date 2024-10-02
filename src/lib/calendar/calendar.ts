@@ -135,6 +135,15 @@ declare global {
  * @fires {CustomEvent<ICalendarFocusChangeEventData>} forge-calendar-focus-change - Event fired when the focus changes.
  * @fires {CustomEvent<ICalendarMonthChangeEventData>} forge-calendar-month-change - Event fired when the month changes.
  * @fires {CustomEvent<CalendarView>} forge-calendar-view-change - Event fired when the view changes.
+ *
+ * @slot today-button-text - Text to display in the today button.
+ * @slot clear-button-text - Text to display in the clear button.
+ * @slot next-month-button-text - Text to display in the next month button's tooltip.
+ * @slot previous-month-button-text - Text to display in the previous month button's tooltip.
+ * @slot next-year-button-text - Text to display in the next year button's tooltip.
+ * @slot previous-year-button-text - Text to display in the previous year button's tooltip.
+ * @slot next-years-button-text - Text to display in the next years button's tooltip.
+ * @slot previous-years-button-text - Text to display in the previous years button's tooltip.
  */
 @customElement({
   name: CALENDAR_CONSTANTS.elementName,

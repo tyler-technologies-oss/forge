@@ -186,10 +186,10 @@ export function getHeader(): HTMLElement {
   previousButton.setAttribute('part', CALENDAR_CONSTANTS.parts.PREVIOUS_BUTTON);
   previousButton.id = CALENDAR_CONSTANTS.ids.PREVIOUS_BUTTON;
   previousButton.type = 'button';
-  previousButton.setAttribute('aria-label', 'Previous');
   previousIcon.setAttribute('name', 'keyboard_arrow_left');
   previousTooltip.id = CALENDAR_CONSTANTS.ids.PREVIOUS_BUTTON_TOOLTIP;
   previousTooltip.setAttribute('aria-hidden', 'true');
+  previousTooltip.type = 'label';
   previousTooltip.innerText = 'Previous';
   previousButton.appendChild(previousTooltip);
   previousButton.appendChild(previousIcon);
@@ -200,10 +200,10 @@ export function getHeader(): HTMLElement {
   nextButton.setAttribute('part', CALENDAR_CONSTANTS.parts.NEXT_BUTTON);
   nextButton.id = CALENDAR_CONSTANTS.ids.NEXT_BUTTON;
   nextButton.type = 'button';
-  nextButton.setAttribute('aria-label', 'Next');
   nextIcon.setAttribute('name', 'keyboard_arrow_right');
   nextTooltip.id = CALENDAR_CONSTANTS.ids.NEXT_BUTTON_TOOLTIP;
   nextTooltip.setAttribute('aria-hidden', 'true');
+  nextTooltip.type = 'label';
   nextTooltip.innerText = 'Next';
   nextButton.appendChild(nextTooltip);
   nextButton.appendChild(nextIcon);
@@ -283,7 +283,10 @@ export function getClearButton(): HTMLElement {
   clearButton.id = CALENDAR_CONSTANTS.ids.CLEAR_BUTTON;
   clearButton.setAttribute('part', CALENDAR_CONSTANTS.parts.CLEAR_BUTTON);
   clearButton.type = 'button';
-  clearButton.innerText = 'Clear';
+  const slot = document.createElement('slot');
+  slot.name = CALENDAR_CONSTANTS.slots.CLEAR_BUTTON_TEXT;
+  slot.innerText = CALENDAR_CONSTANTS.strings.DEFAULT_CLEAR_BUTTON_TEXT;
+  clearButton.appendChild(slot);
   return clearButton;
 }
 
@@ -293,7 +296,10 @@ export function getTodayButton(): HTMLElement {
   todayButton.id = CALENDAR_CONSTANTS.ids.TODAY_BUTTON;
   todayButton.setAttribute('part', CALENDAR_CONSTANTS.parts.TODAY_BUTTON);
   todayButton.type = 'button';
-  todayButton.innerText = 'Today';
+  const slot = document.createElement('slot');
+  slot.name = CALENDAR_CONSTANTS.slots.TODAY_BUTTON_TEXT;
+  slot.innerText = CALENDAR_CONSTANTS.strings.DEFAULT_TODAY_BUTTON_TEXT;
+  todayButton.appendChild(slot);
   return todayButton;
 }
 

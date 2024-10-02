@@ -1,7 +1,10 @@
+import { IDatePickerCalendarDropdownText } from '../../date-picker/base/base-date-picker-constants';
+
 export interface ICalendarDropdownPopupConfig {
   activeChangeCallback?: (id: string) => void;
   closeCallback?: () => void;
   popupClasses?: string | string[] | null;
+  calendarText?: IDatePickerCalendarDropdownText;
 }
 
 const classes = {

@@ -1,9 +1,16 @@
-import { getShadowElement, removeAllChildren, appendToAttribute, toggleAttribute, toggleOnAttribute } from '@tylertech/forge-core';
+import { appendToAttribute, getShadowElement, removeAllChildren, toggleAttribute, toggleOnAttribute } from '@tylertech/forge-core';
 
 import { BaseAdapter, IBaseAdapter } from '../core/base';
-import { CALENDAR_CONSTANTS, DayOfWeek, ICalendarDateOptions, ICalendarDayOptions, ICalendarEvent, ICalendarDateConfig } from './calendar-constants';
 import { ICalendarComponent } from './calendar';
-import { splitIntoWeeks } from './calendar-utils';
+import {
+  CALENDAR_CONSTANTS,
+  CalendarView,
+  DayOfWeek,
+  ICalendarDateConfig,
+  ICalendarDateOptions,
+  ICalendarDayOptions,
+  ICalendarEvent
+} from './calendar-constants';
 import {
   getAccessibleHeader,
   getClearButton,
@@ -24,7 +31,8 @@ import {
   setTabindexOnElement
 } from './calendar-dom-utils';
 import { getLocalizedMonth, getLocalizedYear } from './calendar-locale-utils';
-import { CalendarDirection, CALENDAR_MENU_CONSTANTS, ICalendarMenuOption, ICalendarMenuComponent, CalendarMenuAnimationType } from './calendar-menu';
+import { CALENDAR_MENU_CONSTANTS, CalendarDirection, CalendarMenuAnimationType, ICalendarMenuComponent, ICalendarMenuOption } from './calendar-menu';
+import { splitIntoWeeks } from './calendar-utils';
 
 export interface ICalendarAdapter extends IBaseAdapter {
   animateIntoSelectionMenu(options: ICalendarMenuOption[], direction: CalendarDirection, setFocus: boolean): void;
@@ -73,10 +81,10 @@ export interface ICalendarAdapter extends IBaseAdapter {
   setMonthButtonPressed(value: boolean): void;
   setMultiple(value: boolean): void;
   setNextButtonDisabled(value: boolean): void;
-  setNextButtonLabel(label: string): void;
+  setNextButtonLabel(view: CalendarView): void;
   setPreventFocusOnMenu(value: boolean): void;
   setPreviousButtonDisabled(value: boolean): void;
-  setPreviousButtonLabel(label: string): void;
+  setPreviousButtonLabel(view: CalendarView): void;
   setRange(dates: Date[] | null): void;
   setRangeEnd(date: Date | null): void;
   setRangeStart(date: Date | null): void;
@@ -261,23 +269,57 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
     previousButton?.toggleAttribute('disabled', value);
   }
 
-  public setNextButtonLabel(label: string): void {
-    const nextButton = this._container.querySelector(CALENDAR_CONSTANTS.selectors.NEXT_BUTTON);
-    nextButton?.setAttribute('aria-label', label);
+  public setNextButtonLabel(view: CalendarView): void {
+    let label = '';
+    let slotName = '';
+    switch (view) {
+      case 'date':
+        label = CALENDAR_CONSTANTS.strings.DEFAULT_NEXT_MONTH_BUTTON_TEXT;
+        slotName = CALENDAR_CONSTANTS.slots.NEXT_MONTH_BUTTON_TEXT;
+        break;
+      case 'month':
+        label = CALENDAR_CONSTANTS.strings.DEFAULT_NEXT_YEAR_BUTTON_TEXT;
+        slotName = CALENDAR_CONSTANTS.slots.NEXT_YEAR_BUTTON_TEXT;
+        break;
+      case 'year':
+        label = CALENDAR_CONSTANTS.strings.DEFAULT_NEXT_YEARS_BUTTON_TEXT;
+        slotName = CALENDAR_CONSTANTS.slots.NEXT_YEARS_BUTTON_TEXT;
+        break;
+    }
 
     const nextTooltip = this._container.querySelector(CALENDAR_CONSTANTS.selectors.NEXT_BUTTON_TOOLTIP);
     if (nextTooltip) {
-      nextTooltip.innerHTML = label;
+      const slot = document.createElement('slot');
+      slot.name = slotName;
+      slot.innerText = label;
+      nextTooltip.innerHTML = slot.outerHTML;
     }
   }
 
-  public setPreviousButtonLabel(label: string): void {
-    const previousButton = this._container.querySelector(CALENDAR_CONSTANTS.selectors.PREVIOUS_BUTTON);
-    previousButton?.setAttribute('aria-label', label);
+  public setPreviousButtonLabel(view: CalendarView): void {
+    let label = '';
+    let slotName = '';
+    switch (view) {
+      case 'date':
+        label = CALENDAR_CONSTANTS.strings.DEFAULT_PREVIOUS_MONTH_BUTTON_TEXT;
+        slotName = CALENDAR_CONSTANTS.slots.PREVIOUS_MONTH_BUTTON_TEXT;
+        break;
+      case 'month':
+        label = CALENDAR_CONSTANTS.strings.DEFAULT_PREVIOUS_YEAR_BUTTON_TEXT;
+        slotName = CALENDAR_CONSTANTS.slots.PREVIOUS_YEAR_BUTTON_TEXT;
+        break;
+      case 'year':
+        label = CALENDAR_CONSTANTS.strings.DEFAULT_PREVIOUS_YEARS_BUTTON_TEXT;
+        slotName = CALENDAR_CONSTANTS.slots.PREVIOUS_YEARS_BUTTON_TEXT;
+        break;
+    }
 
     const previousTooltip = this._container.querySelector(CALENDAR_CONSTANTS.selectors.PREVIOUS_BUTTON_TOOLTIP);
     if (previousTooltip) {
-      previousTooltip.innerHTML = label;
+      const slot = document.createElement('slot');
+      slot.name = slotName;
+      slot.innerText = label;
+      previousTooltip.innerHTML = slot.outerHTML;
     }
   }
 

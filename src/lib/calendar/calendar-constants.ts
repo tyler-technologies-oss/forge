@@ -90,6 +90,17 @@ const ids = {
   YEAR_BUTTON: 'year-button'
 };
 
+const slots = {
+  PREVIOUS_MONTH_BUTTON_TEXT: 'previous-month-button-text',
+  NEXT_MONTH_BUTTON_TEXT: 'next-month-button-text',
+  PREVIOUS_YEAR_BUTTON_TEXT: 'previous-year-button-text',
+  NEXT_YEAR_BUTTON_TEXT: 'next-year-button-text',
+  PREVIOUS_YEARS_BUTTON_TEXT: 'previous-years-button-text',
+  NEXT_YEARS_BUTTON_TEXT: 'next-years-button-text',
+  TODAY_BUTTON_TEXT: 'today-button-text',
+  CLEAR_BUTTON_TEXT: 'clear-button-text'
+};
+
 const weekdayParts = {
   SUNDAY: 'sunday',
   MONDAY: 'monday',
@@ -167,6 +178,17 @@ const events = {
   VIEW_CHANGE: `${elementName}-view-change`
 } as const;
 
+const strings = {
+  DEFAULT_PREVIOUS_MONTH_BUTTON_TEXT: 'Previous month',
+  DEFAULT_NEXT_MONTH_BUTTON_TEXT: 'Next month',
+  DEFAULT_PREVIOUS_YEAR_BUTTON_TEXT: 'Previous year',
+  DEFAULT_NEXT_YEAR_BUTTON_TEXT: 'Next year',
+  DEFAULT_PREVIOUS_YEARS_BUTTON_TEXT: 'Previous years',
+  DEFAULT_NEXT_YEARS_BUTTON_TEXT: 'Next years',
+  DEFAULT_TODAY_BUTTON_TEXT: 'Today',
+  DEFAULT_CLEAR_BUTTON_TEXT: 'Clear'
+};
+
 const numbers = {
   DEFAULT_MAX_YEAR_OFFSET: 50,
   DEFAULT_MIN_YEAR_OFFSET: 50,
@@ -182,9 +204,11 @@ export const CALENDAR_CONSTANTS = {
   attributes,
   classes,
   ids,
+  slots,
   parts,
   selectors,
   events,
+  strings,
   numbers
 };
 

@@ -1,31 +1,35 @@
 import { isArray, isDefined, isValidDate } from '@tylertech/forge-core';
 
+import { getLastDateOfMonth, getMonthLength, isSameDate } from '../core/utils/date-utils';
+import { ICalendarAdapter } from './calendar-adapter';
 import {
-  ICalendarDate,
-  ICalendarDisabledDateParams,
-  ICalendarFocusChangeEventData,
-  ICalendarMenuMonthConfig,
-  ICalendarMenuYearConfig,
-  ICalendarNumberRange,
   CALENDAR_CONSTANTS,
+  CalendarDateBuilder,
+  CalendarDateSelectCallback,
+  CalendarDayBuilder,
   CalendarDisabledDateBuilder,
   CalendarEventBuilder,
   CalendarMode,
   CalendarMonthFocus,
+  CalendarTooltipBuilder,
   CalendarView,
   DayOfWeek,
+  ICalendarDate,
+  ICalendarDateConfig,
   ICalendarDateSelectEventData,
-  RangeSelectionState,
-  CalendarDateBuilder,
-  CalendarDayBuilder,
-  CalendarDateSelectCallback,
+  ICalendarDisabledDateParams,
   ICalendarEvent,
-  CalendarTooltipBuilder,
-  ICalendarDateConfig
+  ICalendarFocusChangeEventData,
+  ICalendarMenuMonthConfig,
+  ICalendarMenuYearConfig,
+  ICalendarNumberRange,
+  RangeSelectionState
 } from './calendar-constants';
+import { eventIncludesDate } from './calendar-dom-utils';
+import { getFirstDayOfWeekForLocale, getLocalizedMonth, getLocalizedYear, getWeekendDaysForLocale, isRtlLocale } from './calendar-locale-utils';
+import { CalendarMenuAnimationType, ICalendarMenuOption } from './calendar-menu';
 import {
-  isDisabled,
-  isSelected,
+  coerceDateFromValue,
   getAllYearOptions,
   getDateRangeFromDates,
   getDatesFromDateRange,
@@ -41,20 +45,16 @@ import {
   getMultipleFromRange,
   getSortedDaysOfWeek,
   getYearOptions,
+  isDisabled,
   isInMonth,
+  isSelected,
   isToday,
   parseYearRange,
-  sortDates,
-  coerceDateFromValue,
-  shouldHandleEvent
+  shouldHandleEvent,
+  sortDates
 } from './calendar-utils';
-import { getFirstDayOfWeekForLocale, getLocalizedMonth, getLocalizedYear, getWeekendDaysForLocale, isRtlLocale } from './calendar-locale-utils';
-import { eventIncludesDate } from './calendar-dom-utils';
-import { ICalendarAdapter } from './calendar-adapter';
-import { DateRange } from './core/date-range';
 import { ICalendarBase } from './core/calendar-base';
-import { CalendarMenuAnimationType, ICalendarMenuOption } from './calendar-menu';
-import { getLastDateOfMonth, getMonthLength, isSameDate } from '../core/utils/date-utils';
+import { DateRange } from './core/date-range';
 
 export interface ICalendarCore extends ICalendarBase {
   mode: CalendarMode;
@@ -1033,20 +1033,8 @@ export class CalendarCore implements ICalendarCore {
    * Sets the labels on the previous and next buttons appropriate for the view.
    */
   private _setNavButtonLabels(): void {
-    switch (this._view) {
-      case 'date':
-        this._adapter.setPreviousButtonLabel('Previous month');
-        this._adapter.setNextButtonLabel('Next month');
-        break;
-      case 'month':
-        this._adapter.setPreviousButtonLabel('Previous year');
-        this._adapter.setNextButtonLabel('Next year');
-        break;
-      case 'year':
-        this._adapter.setPreviousButtonLabel('Previous years');
-        this._adapter.setNextButtonLabel('Next years');
-        break;
-    }
+    this._adapter.setPreviousButtonLabel(this._view);
+    this._adapter.setNextButtonLabel(this._view);
   }
 
   /**
