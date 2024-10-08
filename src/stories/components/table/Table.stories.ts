@@ -140,7 +140,15 @@ export default meta;
 
 type Story = StoryObj;
 
-export const Demo: Story = {};
+export const Demo: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<forge-table></forge-table>`
+      }
+    }
+  }
+};
 
 export const CSSOnly: Story = {
   ...standaloneStoryParams,
