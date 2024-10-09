@@ -1,14 +1,12 @@
-import { customElement, attachShadowTemplate, coerceNumber, coreProperty } from '@tylertech/forge-core';
-
-import { AvatarAdapter } from './avatar-adapter';
-import { AvatarCore } from './avatar-core';
+import { LitElement, PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { AVATAR_CONSTANTS } from './avatar-constants';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
-import template from './avatar.html';
 import styles from './avatar.scss';
 
-export interface IAvatarComponent extends IBaseComponent {
+export interface IAvatarComponent extends LitElement {
   text: string;
   letterCount: number;
   imageUrl: string;
@@ -19,6 +17,15 @@ declare global {
     'forge-avatar': IAvatarComponent;
   }
 }
+
+const charsByLetterCount = (text: string, count: number): string => {
+  if (count === 1) {
+    return text[0].toUpperCase();
+  } else {
+    const words = text.match(/\S+/g) ?? [];
+    return words.slice(0, count).reduce((prev, curr) => (prev += curr[0].toUpperCase()), '');
+  }
+};
 
 /**
  * @tag forge-avatar
@@ -50,50 +57,42 @@ declare global {
  *
  * @cssclass forge-avatar - The avatar class _(required)_.
  */
-@customElement({
-  name: AVATAR_CONSTANTS.elementName
-})
-export class AvatarComponent extends BaseComponent implements IAvatarComponent {
-  public static get observedAttributes(): string[] {
-    return [AVATAR_CONSTANTS.attributes.TEXT, AVATAR_CONSTANTS.attributes.LETTER_COUNT, AVATAR_CONSTANTS.attributes.IMAGE_URL];
-  }
+@customElement('forge-avatar')
+export class AvatarComponent extends LitElement implements IAvatarComponent {
+  public static styles = unsafeCSS(styles);
 
-  private _core: AvatarCore;
+  @property({ type: String, reflect: true }) public text = '';
+  @property({ type: Number, reflect: true, attribute: 'letter-count' }) public letterCount = AVATAR_CONSTANTS.numbers.DEFAULT_LETTER_COUNT;
+  @property({ type: String, reflect: true, attribute: 'image-url' }) public imageUrl = '';
 
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new AvatarCore(new AvatarAdapter(this));
-  }
+  @state() private _image: HTMLImageElement | undefined;
 
-  public connectedCallback(): void {
-    this._core.initialize();
-  }
-
-  public disconnectedCallback(): void {
-    this._core.destroy();
-  }
-
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case AVATAR_CONSTANTS.attributes.TEXT:
-        this.text = newValue;
-        break;
-      case AVATAR_CONSTANTS.attributes.LETTER_COUNT:
-        this.letterCount = coerceNumber(newValue);
-        break;
-      case AVATAR_CONSTANTS.attributes.IMAGE_URL:
-        this.imageUrl = newValue;
-        break;
+  public willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('imageUrl')) {
+      this._tryLoadImage();
     }
   }
 
-  @coreProperty()
-  public declare text: string;
+  public render(): TemplateResult {
+    return html`
+      <div
+        aria-hidden="true"
+        part="root"
+        class=${classMap({ 'forge-avatar': true, 'forge-avatar--image': !!this._image })}
+        style=${this._image ? styleMap({ backgroundImage: `url(${this._image.src})` }) : nothing}>
+        <slot>${charsByLetterCount(this.text, this.letterCount)}</slot>
+      </div>
+    `;
+  }
 
-  @coreProperty()
-  public declare letterCount: number;
-
-  @coreProperty()
-  public declare imageUrl: string;
+  private async _tryLoadImage(): Promise<void> {
+    if (this.imageUrl) {
+      const image = new Image();
+      image.onload = () => (this._image = image);
+      image.onerror = () => (this._image = undefined);
+      image.src = this.imageUrl;
+    } else {
+      this._image = undefined;
+    }
+  }
 }
