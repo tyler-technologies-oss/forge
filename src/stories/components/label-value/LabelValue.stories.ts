@@ -65,6 +65,13 @@ export const Icon: Story = {
   }
 };
 
+export const Inline: Story = {
+  ...standaloneStoryParams,
+  args: {
+    inline: true
+  }
+};
+
 export const CSSOnly: Story = {
   args: {
     withIcon: false
