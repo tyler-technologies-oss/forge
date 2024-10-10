@@ -36,6 +36,7 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
 
     box-shadow: #{token(elevation, custom)};
 
+    margin: #{token(outline-width)};
     padding-inline: #{token(padding-inline)};
     border-radius: #{token(shape)};
     outline-style: #{token(outline-style)};
@@ -72,12 +73,14 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
     &--plain {
       @include core.variant(plain);
 
+      margin: 0;
       outline-width: 0;
     }
 
     &--tonal {
       @include core.variant(tonal);
 
+      margin: 0;
       outline-width: 0;
       background: #{theme.variable(primary-container-low)};
 
@@ -95,6 +98,7 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
     &--raised {
       @include core.variant(raised);
 
+      margin: 0;
       outline-width: 0;
 
       &:hover:not(:has(#{$_input-selector}:disabled)) {

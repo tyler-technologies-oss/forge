@@ -88,6 +88,7 @@ $elevations: (
     @include override(tonal-background, map.get($tonal-backgrounds, $theme), value);
     @include override(tonal-background-hover, map.get($tonal-backgrounds-hover, $theme), value);
   }
+
   @include override(content-color, map.get($content-colors, $theme), value);
   @include override(inner-border-color, map.get($outline-colors, $theme), value);
   @include override(inner-border-color-hover, map.get($outline-colors-hover, $theme), value);
@@ -106,6 +107,7 @@ $elevations: (
     @include override(padding-inline, 0, value);
     @include override(surface-display, none, value);
   } @else if $variant == outlined {
+    @include with-outline;
     @include hidden-background;
   } @else if $variant == tonal {
     @include no-outline;
@@ -113,6 +115,7 @@ $elevations: (
     @include visible-background(tonal);
     @include override(multiline-inset-label-background, #{token(multiline-inset-label-tonal-background, custom)}, value);
   } @else if $variant == filled {
+    @include with-outline;
     @include visible-background(filled);
   } @else if $variant == raised {
     @include elevated;
@@ -120,6 +123,10 @@ $elevations: (
     @include unoutlined-variant-inner-border;
     @include visible-background(filled);
   }
+}
+
+@mixin with-outline {
+  padding: #{token(outline-width)};
 }
 
 @mixin no-outline($no-inner: false) {
