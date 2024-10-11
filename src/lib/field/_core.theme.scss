@@ -107,7 +107,6 @@ $elevations: (
     @include override(padding-inline, 0, value);
     @include override(surface-display, none, value);
   } @else if $variant == outlined {
-    @include with-outline;
     @include hidden-background;
   } @else if $variant == tonal {
     @include no-outline;
@@ -115,7 +114,6 @@ $elevations: (
     @include visible-background(tonal);
     @include override(multiline-inset-label-background, #{token(multiline-inset-label-tonal-background, custom)}, value);
   } @else if $variant == filled {
-    @include with-outline;
     @include visible-background(filled);
   } @else if $variant == raised {
     @include elevated;
@@ -123,10 +121,6 @@ $elevations: (
     @include unoutlined-variant-inner-border;
     @include visible-background(filled);
   }
-}
-
-@mixin with-outline {
-  padding: #{token(outline-width)};
 }
 
 @mixin no-outline($no-inner: false) {

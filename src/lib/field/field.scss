@@ -671,7 +671,7 @@ forge-focus-indicator {
   @include focus-indicator.provide-theme(
     (
       color: #{token(focus-indicator-color, custom)},
-      outward-offset: 0px,
+      outward-offset: calc(#{token(outline-width)} * -1),
       shape: #{token(shape)},
       width: #{token(focus-indicator-width)}
     )

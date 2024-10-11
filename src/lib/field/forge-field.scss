@@ -36,12 +36,12 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
 
     box-shadow: #{token(elevation, custom)};
 
-    margin: #{token(outline-width)};
     padding-inline: #{token(padding-inline)};
     border-radius: #{token(shape)};
     outline-style: #{token(outline-style)};
     outline-width: #{token(outline-width)};
     outline-color: #{theme.variable(outline-low)};
+    outline-offset: calc(#{token(outline-width)} * -1);
 
     background: #{token(background)};
 
@@ -328,7 +328,8 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
       &.forge-field:has(#{$_input-selector}:focus) {
         @include focus-indicator.provide-theme(
           (
-            color: #{theme.variable(error)}
+            color: #{theme.variable(error)},
+            outward-offset: calc(#{token(outline-width)} * -1)
           )
         );
       }
