@@ -88,7 +88,6 @@ $elevations: (
     @include override(tonal-background, map.get($tonal-backgrounds, $theme), value);
     @include override(tonal-background-hover, map.get($tonal-backgrounds-hover, $theme), value);
   }
-
   @include override(content-color, map.get($content-colors, $theme), value);
   @include override(inner-border-color, map.get($outline-colors, $theme), value);
   @include override(inner-border-color-hover, map.get($outline-colors-hover, $theme), value);
