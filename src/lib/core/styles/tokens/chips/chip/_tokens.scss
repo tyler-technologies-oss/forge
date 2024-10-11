@@ -17,6 +17,7 @@ $tokens: (
   padding-block: utils.module-val(chip, padding-block, 0),
   cursor: utils.module-val(chip, cursor, pointer),
   icon-font-size: utils.module-val(chip, icon-font-size, 1.5rem),
+  focus-indicator-color: utils.module-ref(chip, focus-indicator-color, color),
   // Disabled
   disabled-opacity: utils.module-val(chip, disabled-opacity, theme.emphasis(medium-low)),
   disabled-cursor: utils.module-val(chip, disabled-cursor, not-allowed),
