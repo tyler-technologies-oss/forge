@@ -15,12 +15,7 @@ const meta = {
   title: 'Components/Label Value',
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);
-    const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
-
-    if (args.ellipsis) {
-      style['width'] = '100px';
-    }
-
+    const style = styleMap({ ...cssVarArgs, width: args.ellipsis ? '100px' : null });
     return html`
       <forge-label-value .empty=${args.empty} .ellipsis=${args.ellipsis} .inline=${args.inline} style=${style}>
         <label slot="label">Label</label>
