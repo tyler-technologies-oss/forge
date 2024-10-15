@@ -145,13 +145,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   }
 
   public setDismissListener(listener: () => void): void {
-    if (!this._listDropdown || !this._listDropdown.dropdownElement) {
-      return;
-    }
-    const dropdownElement = this._listDropdown.dropdownElement as IPopoverComponent;
-    if (dropdownElement.anchorElement && dropdownElement.anchorElement instanceof HTMLElement) {
-      dropdownElement.anchorElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, listener);
-    }
+    this._listDropdown?.dropdownElement?.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, listener);
   }
 
   public focus(): void {
