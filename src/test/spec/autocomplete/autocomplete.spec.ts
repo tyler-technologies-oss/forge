@@ -22,7 +22,7 @@ import { TEXT_FIELD_CONSTANTS, ITextFieldComponent, ITextFieldComponentDelegateO
 import { AVATAR_CONSTANTS, IAvatarComponent } from '@tylertech/forge/avatar';
 import { ICON_CONSTANTS, IconComponent } from '@tylertech/forge/icon';
 import { LIST_DROPDOWN_CONSTANTS } from '@tylertech/forge/list-dropdown';
-import { POPOVER_CONSTANTS } from '@tylertech/forge/popover';
+import { IPopoverComponent, POPOVER_CONSTANTS } from '@tylertech/forge/popover';
 import { tryCleanupPopovers } from '../../utils';
 
 const DEFAULT_FILTER_OPTIONS = [
@@ -1633,6 +1633,17 @@ describe('AutocompleteComponent', function(this: ITestContext) {
         expect(this.context.component.value).toBe(DEFAULT_FILTER_OPTIONS[2].value);
       });
     });
+  });
+
+  it('should update open status if popup dismissed via click inside the anchor element', async function(this: ITestContext) {
+    this.context = setupTestContext(true);
+    this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+    this.context.component.openDropdown();
+    await task();
+    this.context.input.click();
+    await task(POPOVER_ANIMATION_DURATION);
+    expect(this.context.component.open).toBe(false);
+    expect(this.context.component.popupElement).toBeNull();
   });
 
   interface ITestAutocompleteGroup {
