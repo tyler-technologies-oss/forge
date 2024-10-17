@@ -19,6 +19,7 @@
   border-color: #{token(border-color)};
 
   display: flex;
+  align-items: center;
   gap: #{token(icon-gap)};
   box-sizing: border-box;
   padding-inline: #{token(padding-inline)};
@@ -37,4 +38,5 @@
 
 @mixin icon {
   color: #{token(icon-color)};
+  align-self: start;
 }
