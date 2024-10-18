@@ -13,6 +13,7 @@ export interface IFieldAdapter extends IBaseAdapter<IFieldComponent> {
   setLabelPosition(value: FieldLabelPosition): void;
   setFloatingLabel(value: boolean, skipAnimation?: boolean): void;
   handleSlotChange(slot: HTMLSlotElement): void;
+  initializeSlots(): void;
 }
 
 export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IFieldAdapter {
@@ -112,6 +113,11 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     if (slot.name in classMap) {
       toggleClass(this._rootElement, !!slot.assignedNodes({ flatten: true }).length, classMap[slot.name]);
     }
+  }
+
+  public initializeSlots(): void {
+    const slotElements = this._rootElement.querySelectorAll<HTMLSlotElement>('slot');
+    slotElements.forEach(slotElement => this.handleSlotChange(slotElement));
   }
 
   /**
