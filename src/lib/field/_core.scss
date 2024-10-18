@@ -78,6 +78,7 @@
   outline-style: #{token(outline-style)};
   outline-width: #{token(outline-width)};
   outline-color: #{token(outline-color, custom)};
+  outline-offset: calc(#{token(outline-width)} * -1);
   pointer-events: none;
 }
 
