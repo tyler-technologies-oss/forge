@@ -1,0 +1,22 @@
+@use 'sass:map';
+@use '../../animation';
+@use '../../elevation';
+@use '../../shape';
+@use '../../spacing';
+@use '../../theme';
+@use '../../utils';
+
+$tokens: (
+  background: utils.module-val(meter, background, theme.variable(primary-container-low)),
+  color: utils.module-val(meter, color, theme.variable(primary)),
+  height: utils.module-val(meter, height, spacing.variable(large)),
+  transition-duration: utils.module-val(meter, transition-duration, animation.variable(duration-short4)),
+  transition-timing: utils.module-val(meter, transition-timing, animation.variable(easing-standard)),
+  shape: utils.module-val(meter, shape, shape.variable(medium)),
+  inner-shape: utils.module-val(meter, inner-shape, 0),
+  inner-elevation: utils.module-val(meter, inner-elevation, elevation.value(4))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

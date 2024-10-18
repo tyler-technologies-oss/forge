@@ -1,0 +1,50 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  // Styles for the host element
+  display: inline;
+}
+
+@mixin base {
+  // Base styles for the internal root element
+  position: relative;
+  block-size: #{token(height)};
+  border-radius: #{token(shape)};
+  overflow: hidden;
+  background: #{token(background)};
+}
+
+@mixin base-segmented {
+  background: var(--forge-theme-surface-container);
+}
+
+@mixin bar {
+  position: absolute;
+  inset-inline-start: -100%;
+  block-size: 100%;
+  inline-size: 100%;
+  border-start-end-radius: #{token(inner-shape)};
+  border-end-end-radius: #{token(inner-shape)};
+  box-shadow: #{token(inner-elevation)};
+
+  background: #{token(color)};
+
+  translate: var(--percentage) 0;
+  transition-property: translate;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+}
+
+@mixin bar-low {
+  background: var(--forge-theme-error);
+}
+
+@mixin bar-normal {
+  background: var(--forge-theme-warning);
+}
+
+@mixin bar-high {
+  background: var(--forge-theme-success);
+}
