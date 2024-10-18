@@ -96,7 +96,6 @@ describe('Tabs', () => {
 
     await expect(el).to.be.accessible();
     expect(el.disabled).to.be.true;
-    // expect(el.className).to.contain(TAB_CONSTANTS.classes.DISABLED);
     expect(
       ctx.tabs.every(tab => {
         const stateLayer = getShadowElement(tab, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
