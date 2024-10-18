@@ -35,14 +35,14 @@ export class TabCore implements ITabCore {
   }
 
   private _onClick(): void {
-    if (this._disabled || this._selected) {
+    if (this._disabled || this._adapter.isParentDisabled() || this._selected) {
       return;
     }
     this._dispatchSelectEvent();
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
-    if (this._disabled || this._selected) {
+    if (this._disabled || this._adapter.isParentDisabled() || this._selected) {
       return;
     }
 
@@ -67,6 +67,10 @@ export class TabCore implements ITabCore {
       this._adapter.setDisabled(this._disabled);
       this._adapter.toggleHostAttribute(TAB_CONSTANTS.attributes.DISABLED, this._disabled);
     }
+  }
+
+  public syncTabDisabledState(): void {
+    this._adapter.setDisabled(this._disabled);
   }
 
   public get selected(): boolean {

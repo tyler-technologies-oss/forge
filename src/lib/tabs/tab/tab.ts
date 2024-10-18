@@ -17,6 +17,8 @@ export interface ITabComponent extends IBaseComponent {
   stacked: boolean;
   secondary: boolean;
   inverted: boolean;
+
+  syncTabDisabledState(): void;
 }
 
 declare global {
@@ -163,4 +165,9 @@ export class TabComponent extends BaseComponent implements ITabComponent {
 
   @coreProperty()
   public declare inverted: boolean;
+
+  /** Called when parent tab-bar disabled state changes. */
+  public syncTabDisabledState(): void {
+    this._core.syncTabDisabledState();
+  }
 }

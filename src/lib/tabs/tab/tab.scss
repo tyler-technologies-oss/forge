@@ -80,7 +80,7 @@ forge-state-layer {
 // Disabled
 //
 
-:host([disabled]) {
+:host(.forge-tab--disabled) {
   @include host-disabled;
 
   .forge-tab {

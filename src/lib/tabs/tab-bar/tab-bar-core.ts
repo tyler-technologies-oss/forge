@@ -180,11 +180,11 @@ export class TabBarCore implements ITabBarCore {
   private _syncTabState(): void {
     this._tabs.forEach((tab, index) => {
       tab.selected = index === this._activeTab;
-      tab.disabled = this._disabled;
       tab.vertical = this._vertical;
       tab.stacked = this._stacked;
       tab.secondary = this._secondary;
       tab.inverted = this._inverted;
+      tab.syncTabDisabledState();
     });
   }
 
@@ -263,7 +263,7 @@ export class TabBarCore implements ITabBarCore {
     value = Boolean(value);
     if (this._disabled !== value) {
       this._disabled = value;
-      this._tabs.forEach(tab => (tab.disabled = this._disabled));
+      this._tabs.forEach(tab => tab.syncTabDisabledState());
       this._adapter.toggleHostAttribute(TAB_BAR_CONSTANTS.attributes.DISABLED, this._disabled);
     }
   }

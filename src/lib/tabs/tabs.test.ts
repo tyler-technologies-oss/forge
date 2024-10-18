@@ -90,7 +90,7 @@ describe('Tabs', () => {
     expect(el.hasAttribute(TAB_BAR_CONSTANTS.attributes.ACTIVE_TAB)).to.be.false;
   });
 
-  it('should set disabled', async () => {
+  it('should set disabled class', async () => {
     const el = await createFixture({ disabled: true });
     const ctx = new TabsHarness(el);
 
@@ -99,7 +99,7 @@ describe('Tabs', () => {
     expect(
       ctx.tabs.every(tab => {
         const stateLayer = getShadowElement(tab, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
-        return tab.disabled && tab.hasAttribute('disabled') && stateLayer.disabled;
+        return tab.classList.contains(TAB_CONSTANTS.classes.DISABLED) && stateLayer.disabled;
       })
     ).to.be.true;
   });
@@ -396,7 +396,7 @@ describe('Tabs', () => {
     ctx.clickTab(0);
 
     expect(ctx.tabs[0].selected).to.be.true;
-    expect(ctx.tabs[0].disabled).to.be.true;
+    expect(ctx.tabs[0].className).to.contain(TAB_CONSTANTS.classes.DISABLED);
     expect(ctx.selectedTabCount).to.equal(1);
     expect(selectSpy.called).to.be.false;
     expect(changeSpy.called).to.be.false;
