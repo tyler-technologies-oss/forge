@@ -9,8 +9,8 @@ $_cycle-duration: calc(4 * #{token(arc-duration)});
 @mixin container {
   display: inline-flex;
   vertical-align: middle;
-  min-block-size: #{token(size)};
-  min-inline-size: #{token(size)};
+  block-size: #{token(size)};
+  inline-size: #{token(size)};
   position: relative;
   align-items: center;
   justify-content: center;
