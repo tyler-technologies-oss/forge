@@ -13,6 +13,7 @@ export interface ITabAdapter extends IBaseAdapter {
   setSelected(value: boolean): void;
   animateSelected(): void;
   animateStateLayer(): void;
+  isParentDisabled(): boolean;
 }
 
 export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapter {
@@ -35,15 +36,18 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
     this._component.addEventListener(type, listener);
   }
 
+  public isParentDisabled(): boolean {
+    return requireParent<TabBarComponent>(this._component, TAB_BAR_CONSTANTS.elementName)?.disabled ?? false;
+  }
+
   public setDisabled(value: boolean): void {
-    const parentDisabled = requireParent<TabBarComponent>(this._component, TAB_BAR_CONSTANTS.elementName)?.disabled ?? false;
-    const disabled = value || parentDisabled;
+    const disabled = value || this.isParentDisabled();
     this._stateLayerElement.disabled = disabled;
     this._component.tabIndex = disabled ? -1 : this._component.selected ? 0 : -1;
     this._component.setAttribute('aria-disabled', String(disabled));
     // Attribute should match individual tab disabled state, not be overwritten by parent state.
     toggleAttribute(this._component, value, TAB_CONSTANTS.attributes.DISABLED, String(value));
-    toggleClass(this._component, disabled, 'forge-tab--disabled');
+    toggleClass(this._component, disabled, TAB_CONSTANTS.classes.DISABLED);
   }
 
   public setSelected(value: boolean): void {

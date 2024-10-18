@@ -35,14 +35,14 @@ export class TabCore implements ITabCore {
   }
 
   private _onClick(): void {
-    if (this._disabled || this._selected) {
+    if (this._disabled || this._adapter.isParentDisabled() || this._selected) {
       return;
     }
     this._dispatchSelectEvent();
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
-    if (this._disabled || this._selected) {
+    if (this._disabled || this._adapter.isParentDisabled() || this._selected) {
       return;
     }
 
