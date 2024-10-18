@@ -69,6 +69,10 @@ export class TabCore implements ITabCore {
     }
   }
 
+  public syncTabDisabledState(): void {
+    this._adapter.setDisabled(this._disabled);
+  }
+
   public get selected(): boolean {
     return this._selected;
   }

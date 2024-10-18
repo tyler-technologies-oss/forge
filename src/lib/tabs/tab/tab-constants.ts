@@ -20,7 +20,7 @@ const selectors = {
 };
 
 const classes = {
-  SELECTED: 'selected'
+  DISABLED: `${elementName}--disabled`
 };
 
 const events = {
