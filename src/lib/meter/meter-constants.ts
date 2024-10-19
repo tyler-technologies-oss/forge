@@ -11,7 +11,8 @@ const observedAttributes = {
   DENSITY: 'density',
   THEME: 'theme',
   MUTED: 'muted',
-  SHAPE: 'shape'
+  SHAPE: 'shape',
+  INNER_SHAPE: 'inner-shape'
 };
 
 const attributes = {
@@ -35,5 +36,6 @@ export const METER_CONSTANTS = {
 
 export type MeterDensity = 'small' | 'medium' | 'large';
 export type MeterShape = 'default' | 'round' | 'squared';
+export type MeterInnerShape = 'default' | 'inherit';
 export type MeterStatus = 'normal' | 'low' | 'high';
 export type MeterTheme = Theme | 'default';

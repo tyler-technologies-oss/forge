@@ -21,25 +21,31 @@
 .forge-meter {
   @include core.base;
 
-  &--segmented {
-    @include core.base-segmented;
+  &.segmented {
+    @include core.segmented;
+    @include core.segmented-animation;
+
+    &.low {
+      @include core.low;
+    }
+
+    &.high {
+      @include core.high;
+    }
 
     .bar {
-      @include core.bar-normal;
-
-      &--low {
-        @include core.bar-low;
-      }
-
-      &--high {
-        @include core.bar-high;
-      }
+      @include core.segmented-bar-animation;
     }
+  }
+
+  &.lowest {
+    @include core.lowest;
   }
 }
 
 .bar {
   @include core.bar;
+  @include core.bar-animation;
 }
 
 //
@@ -66,6 +72,12 @@
   }
 }
 
+:host([inner-shape='inherit']) {
+  .forge-meter {
+    @include core.override(inner-shape, shape);
+  }
+}
+
 //
 // Theme
 //
@@ -75,19 +87,15 @@
     @include core.override(background, var(--forge-theme-primary-container-minimum), value);
     @include core.override(color, var(--forge-theme-primary-container-high), value);
 
-    &--segmented {
-      @include core.override(background, var(--forge-theme-surface-container-minimum), value);
+    &.segmented {
+      @include core.segmented($muted: true);
 
-      .bar {
-        background: var(--forge-theme-warning-container-high);
+      &.low {
+        @include core.low($muted: true);
+      }
 
-        &--low {
-          background: var(--forge-theme-error-container-high);
-        }
-
-        &--high {
-          background: var(--forge-theme-success-container-high);
-        }
+      &.high {
+        @include core.high($muted: true);
       }
     }
   }
@@ -95,16 +103,34 @@
 
 @each $value in ('primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info') {
   :host([theme='#{$value}']:not([muted])) {
-    .forge-meter:not(.forge-meter--segmented) {
-      @include core.override(background, var(--forge-theme-#{$value}-container-low), value);
-      @include core.override(color, var(--forge-theme-#{$value}), value);
+    .forge-meter:not(.segmented) {
+      @include core.theme($value);
     }
   }
 
   :host([theme='#{$value}'][muted]) {
-    .forge-meter:not(.forge-meter--segmented) {
-      @include core.override(background, var(--forge-theme-#{$value}-container-minimum), value);
-      @include core.override(color, var(--forge-theme-#{$value}-container-high), value);
+    .forge-meter:not(.segmented) {
+      @include core.theme($value, $muted: true);
+    }
+  }
+}
+
+//
+// Media
+//
+
+@media (prefers-reduced-motion: reduce) {
+  .forge-meter {
+    @include core.override(transition-duration, 0, value);
+  }
+}
+
+@media (forced-colors: active) {
+  .forge-meter {
+    border: 1px solid CanvasText;
+
+    .bar {
+      background: CanvasText;
     }
   }
 }

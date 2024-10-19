@@ -2,7 +2,7 @@ import { LitElement, PropertyValues, TemplateResult, html, unsafeCSS } from 'lit
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { METER_CONSTANTS, MeterDensity, MeterShape, MeterStatus, MeterTheme } from './meter-constants';
+import { METER_CONSTANTS, MeterDensity, MeterInnerShape, MeterShape, MeterStatus, MeterTheme } from './meter-constants';
 
 import styles from './meter.scss';
 
@@ -14,6 +14,7 @@ export interface IMeterComponent extends LitElement {
   high: number;
   density: MeterDensity;
   shape: MeterShape;
+  innerShape: MeterInnerShape;
   theme: MeterTheme;
   muted: boolean;
 }
@@ -73,6 +74,12 @@ export class MeterComponent extends LitElement implements IMeterComponent {
    */
   @property({ reflect: true }) public shape: MeterShape = 'default';
   /**
+   * The shape of the bar.
+   * @default 'default'
+   * @attribute
+   */
+  @property({ reflect: true, attribute: 'inner-shape' }) public innerShape: MeterInnerShape = 'default';
+  /**
    * The density of the meter.
    * @default 'medium'
    * @attribute
@@ -107,11 +114,16 @@ export class MeterComponent extends LitElement implements IMeterComponent {
 
   public render(): TemplateResult {
     return html`
-      <div part="root" class=${classMap({ 'forge-meter': true, 'forge-meter--segmented': this._segmented })}>
-        <div
-          part="bar"
-          class=${classMap({ bar: true, 'bar--low': this._status === 'low', 'bar--high': this._status === 'high' })}
-          style=${styleMap({ '--percentage': this._percentage + '%' })}></div>
+      <div
+        part="root"
+        class=${classMap({
+          'forge-meter': true,
+          segmented: this._segmented,
+          low: this._status === 'low',
+          high: this._status === 'high',
+          lowest: this._percentage === 0
+        })}>
+        <div part="bar" class="bar" style=${styleMap({ '--percentage': this._percentage + '%' })}></div>
       </div>
     `;
   }

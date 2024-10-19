@@ -9,6 +9,7 @@
 
 @mixin base {
   // Base styles for the internal root element
+  box-sizing: border-box;
   position: relative;
   block-size: #{token(height)};
   border-radius: #{token(shape)};
@@ -16,35 +17,57 @@
   background: #{token(background)};
 }
 
-@mixin base-segmented {
-  background: var(--forge-theme-surface-container);
-}
-
 @mixin bar {
   position: absolute;
   inset-inline-start: -100%;
   block-size: 100%;
   inline-size: 100%;
-  border-start-end-radius: #{token(inner-shape)};
-  border-end-end-radius: #{token(inner-shape)};
+  border-radius: #{token(inner-shape)};
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
   box-shadow: #{token(inner-elevation)};
-
   background: #{token(color)};
-
   translate: var(--percentage) 0;
+}
+
+@mixin theme($theme, $muted: false) {
+  @include override(background, var(--forge-theme-#{$theme}-container-#{if($muted, 'minimum', 'low')}), value);
+  @include override(color, var(--forge-theme-#{$theme}#{if($muted, '-container-high', '')}), value);
+}
+
+@mixin segmented($muted: false) {
+  @include override(background, var(--forge-theme-warning-container-#{if($muted, 'minimum', 'low')}), value);
+  @include override(color, var(--forge-theme-warning#{if($muted, '-container-high', '')}), value);
+}
+
+@mixin low($muted: false) {
+  @include override(background, var(--forge-theme-error-container-#{if($muted, 'minimum', 'low')}), value);
+  @include override(color, var(--forge-theme-error#{if($muted, '-container-high', '')}), value);
+}
+
+@mixin high($muted: false) {
+  @include override(background, var(--forge-theme-success-container-#{if($muted, 'minimum', 'low')}), value);
+  @include override(color, var(--forge-theme-success#{if($muted, '-container-high', '')}), value);
+}
+
+@mixin lowest {
+  @include override(inner-elevation, 0, value);
+}
+
+@mixin bar-animation {
   transition-property: translate;
   transition-duration: #{token(transition-duration)};
   transition-timing-function: #{token(transition-timing)};
 }
 
-@mixin bar-low {
-  background: var(--forge-theme-error);
+@mixin segmented-animation {
+  transition-property: background;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
 }
 
-@mixin bar-normal {
-  background: var(--forge-theme-warning);
-}
-
-@mixin bar-high {
-  background: var(--forge-theme-success);
+@mixin segmented-bar-animation {
+  transition-property: translate, background;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
 }

@@ -15,16 +15,21 @@ const innerShapeSelect = document.getElementById('opt-inner-shape') as ISelectCo
 const themeSelect = document.getElementById('opt-theme') as ISelectComponent;
 const mutedSwitch = document.getElementById('opt-muted') as ISwitchComponent;
 
+valueInput.min = minInput.value;
+valueInput.max = maxInput.value;
+
 valueInput.addEventListener('input', () => {
   meter.value = parseFloat(valueInput.value);
 });
 
 minInput.addEventListener('input', () => {
   meter.min = parseFloat(minInput.value);
+  valueInput.min = minInput.value;
 });
 
 maxInput.addEventListener('input', () => {
   meter.max = parseFloat(maxInput.value);
+  valueInput.max = maxInput.value;
 });
 
 lowInput.addEventListener('input', () => {
@@ -40,8 +45,7 @@ shapeSelect.addEventListener('change', () => {
 });
 
 innerShapeSelect.addEventListener('change', () => {
-  const value = innerShapeSelect.value === 'rounded' ? '9999px' : '0';
-  meter.style.setProperty('--forge-meter-inner-shape', value);
+  meter.innerShape = innerShapeSelect.value as any;
 });
 
 densitySelect.addEventListener('change', () => {
