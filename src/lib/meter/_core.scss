@@ -71,7 +71,7 @@
     #{token(background)} 1px,
     #{token(background)} 2px,
     transparent 2px,
-    transparent calc(100% / #{token(tickmarks)} + 0px)
+    transparent calc(100% / (#{token(tickmarks)} + 1) + 0px)
   );
   background-position-x: -#{$background-offset};
   opacity: #{token(tickmark-opacity)};
