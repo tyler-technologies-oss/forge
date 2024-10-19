@@ -55,11 +55,15 @@
 }
 
 @mixin tickmarks {
+  // We add an inline margin and offset the background to hide tickmarks right at the edge of the meter
+  $background-offset: 2px;
+
   content: '';
   position: relative;
   display: block;
   block-size: 100%;
   inline-size: 100%;
+  margin-inline-start: $background-offset;
   background: repeating-linear-gradient(
     90deg,
     #{token(color)} 0px,
@@ -69,6 +73,7 @@
     transparent 2px,
     transparent calc(100% / #{token(tickmarks)} + 0px)
   );
+  background-position-x: -#{$background-offset};
   opacity: #{token(tickmark-opacity)};
 }
 
