@@ -9,6 +9,7 @@ const minInput = document.getElementById('opt-min') as HTMLInputElement;
 const maxInput = document.getElementById('opt-max') as HTMLInputElement;
 const lowInput = document.getElementById('opt-low') as HTMLInputElement;
 const highInput = document.getElementById('opt-high') as HTMLInputElement;
+const optimumInput = document.getElementById('opt-optimum') as HTMLInputElement;
 const tickmarksInput = document.getElementById('opt-tickmarks') as HTMLInputElement;
 const densitySelect = document.getElementById('opt-density') as ISelectComponent;
 const shapeSelect = document.getElementById('opt-shape') as ISelectComponent;
@@ -39,6 +40,10 @@ lowInput.addEventListener('input', () => {
 
 highInput.addEventListener('input', () => {
   meter.high = parseFloat(highInput.value);
+});
+
+optimumInput.addEventListener('input', () => {
+  meter.optimum = parseFloat(optimumInput.value);
 });
 
 tickmarksInput.addEventListener('input', () => {

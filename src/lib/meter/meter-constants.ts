@@ -8,6 +8,7 @@ const observedAttributes = {
   MAX: 'max',
   LOW: 'low',
   HIGH: 'high',
+  OPTIMUM: 'optimum',
   TICKMARKS: 'tickmarks',
   DENSITY: 'density',
   THEME: 'theme',
@@ -25,7 +26,8 @@ const numbers = {
   DEFAULT_MIN: 0,
   DEFAULT_MAX: 1,
   DEFAULT_LOW: 0,
-  DEFAULT_HIGH: 1
+  DEFAULT_HIGH: 1,
+  DEFAULT_OPTIMUM: 1
 };
 
 export const METER_CONSTANTS = {
@@ -38,5 +40,5 @@ export const METER_CONSTANTS = {
 export type MeterDensity = 'default' | 'small' | 'medium' | 'large';
 export type MeterShape = 'default' | 'round' | 'squared';
 export type MeterInnerShape = 'default' | 'inherit';
-export type MeterStatus = 'low' | 'middle' | 'high';
+export type MeterStatus = 'optimal' | 'suboptimal' | 'least-optimal';
 export type MeterTheme = Theme | 'default';

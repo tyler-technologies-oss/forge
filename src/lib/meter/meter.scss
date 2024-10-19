@@ -25,12 +25,12 @@
     @include core.segmented;
     @include core.segmented-animation;
 
-    &.low {
-      @include core.low;
+    &.least-optimal {
+      @include core.least-optimal;
     }
 
-    &.high {
-      @include core.high;
+    &.optimal {
+      @include core.optimal;
     }
 
     .bar {
@@ -95,12 +95,12 @@
     &.segmented {
       @include core.segmented($muted: true);
 
-      &.low {
-        @include core.low($muted: true);
+      &.least-optimal {
+        @include core.least-optimal($muted: true);
       }
 
-      &.high {
-        @include core.high($muted: true);
+      &.optimal {
+        @include core.optimal($muted: true);
       }
     }
   }

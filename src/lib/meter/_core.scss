@@ -40,12 +40,12 @@
   @include override(color, var(--forge-theme-warning#{if($muted, '-container-high', '')}), value);
 }
 
-@mixin low($muted: false) {
+@mixin least-optimal($muted: false) {
   @include override(background, var(--forge-theme-error-container-#{if($muted, 'minimum', 'low')}), value);
   @include override(color, var(--forge-theme-error#{if($muted, '-container-high', '')}), value);
 }
 
-@mixin high($muted: false) {
+@mixin optimal($muted: false) {
   @include override(background, var(--forge-theme-success-container-#{if($muted, 'minimum', 'low')}), value);
   @include override(color, var(--forge-theme-success#{if($muted, '-container-high', '')}), value);
 }
