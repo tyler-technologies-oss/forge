@@ -37,5 +37,5 @@ export const METER_CONSTANTS = {
 export type MeterDensity = 'small' | 'medium' | 'large';
 export type MeterShape = 'default' | 'round' | 'squared';
 export type MeterInnerShape = 'default' | 'inherit';
-export type MeterStatus = 'normal' | 'low' | 'high';
+export type MeterStatus = 'low' | 'middle' | 'high';
 export type MeterTheme = Theme | 'default';
