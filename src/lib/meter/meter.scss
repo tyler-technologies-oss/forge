@@ -41,6 +41,11 @@
   &.lowest {
     @include core.lowest;
   }
+
+  &.tickmarks::after {
+    @include core.tickmarks;
+    @include core.tickmarks-animation;
+  }
 }
 
 .bar {

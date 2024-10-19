@@ -13,6 +13,7 @@ export interface IMeterComponent extends LitElement {
   max: number;
   low: number;
   high: number;
+  tickmarks: boolean;
   density: MeterDensity;
   shape: MeterShape;
   innerShape: MeterInnerShape;
@@ -69,6 +70,12 @@ export class MeterComponent extends LitElement implements IMeterComponent {
    * @attribute
    */
   @property({ type: Number, reflect: true }) public high = METER_CONSTANTS.numbers.DEFAULT_HIGH;
+  /**
+   * Whether to display tickmarks.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true }) public tickmarks = false;
   /**
    * The shape of the meter.
    * @default 'default'
@@ -163,7 +170,8 @@ export class MeterComponent extends LitElement implements IMeterComponent {
           segmented: this._segmented,
           low: this._status === 'low',
           high: this._status === 'high',
-          lowest: this._percentage === 0
+          lowest: this._percentage === 0,
+          tickmarks: this.tickmarks
         })}>
         <div part="bar" class="bar" style=${styleMap({ '--percentage': this._percentage + '%' })}></div>
       </div>

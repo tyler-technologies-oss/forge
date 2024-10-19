@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use '../theme/color-emphasis';
 @use '../../animation';
 @use '../../elevation';
 @use '../../shape';
@@ -14,8 +15,10 @@ $tokens: (
   transition-timing: utils.module-val(meter, transition-timing, animation.variable(easing-standard)),
   shape: utils.module-val(meter, shape, shape.variable(medium)),
   inner-shape: utils.module-val(meter, inner-shape, 0),
-  inner-elevation: utils.module-val(meter, inner-elevation, elevation.value(4))
-) !default;
+  inner-elevation: utils.module-val(meter, inner-elevation, elevation.value(4)),
+  tickmarks: utils.module-val(meter, tickmarks, 10),
+  tickmark-opacity: utils.module-val(meter, tickmark-opacity, color-emphasis.value(medium))
+);
 
 @function get($key) {
   @return map.get($tokens, $key);

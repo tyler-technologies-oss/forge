@@ -8,6 +8,7 @@ const observedAttributes = {
   MAX: 'max',
   LOW: 'low',
   HIGH: 'high',
+  TICKMARKS: 'tickmarks',
   DENSITY: 'density',
   THEME: 'theme',
   MUTED: 'muted',
@@ -34,7 +35,7 @@ export const METER_CONSTANTS = {
   numbers
 };
 
-export type MeterDensity = 'small' | 'medium' | 'large';
+export type MeterDensity = 'default' | 'small' | 'medium' | 'large';
 export type MeterShape = 'default' | 'round' | 'squared';
 export type MeterInnerShape = 'default' | 'inherit';
 export type MeterStatus = 'low' | 'middle' | 'high';
