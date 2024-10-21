@@ -19,6 +19,7 @@ const mutedSwitch = document.getElementById('opt-muted') as ISwitchComponent;
 
 valueInput.min = minInput.value;
 valueInput.max = maxInput.value;
+tickmarksInput.min = '0';
 
 valueInput.addEventListener('input', () => {
   meter.value = parseFloat(valueInput.value);

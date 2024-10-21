@@ -123,7 +123,7 @@ export class MeterComponent extends LitElement implements IMeterComponent {
   }
 
   @state() private _percentage = 0;
-  @state() private _status2: MeterStatus = 'optimal';
+  @state() private _status: MeterStatus = 'optimal';
   @state() private _segmented = false;
 
   private _internals: ElementInternals;
@@ -148,7 +148,7 @@ export class MeterComponent extends LitElement implements IMeterComponent {
     if (keys.some(key => ['value', 'min', 'max', 'low', 'high', 'optimum'].includes(key.toString()))) {
       this._getStatus();
     }
-    if (keys.some(key => ['min', 'max', 'low', 'high'].includes(key.toString()))) {
+    if (keys.some(key => ['low', 'high'].includes(key.toString()))) {
       this._getSegmented();
     }
 
@@ -175,9 +175,9 @@ export class MeterComponent extends LitElement implements IMeterComponent {
         class=${classMap({
           'forge-meter': true,
           segmented: this._segmented,
-          optimal: this._status2 === 'optimal',
-          suboptimal: this._status2 === 'suboptimal',
-          'least-optimal': this._status2 === 'least-optimal',
+          optimal: this._status === 'optimal',
+          suboptimal: this._status === 'suboptimal',
+          'least-optimal': this._status === 'least-optimal',
           lowest: this._percentage === 0,
           tickmarks: this.tickmarks
         })}>
@@ -193,19 +193,28 @@ export class MeterComponent extends LitElement implements IMeterComponent {
   private _getStatus(): void {
     const range = this.max - this.min;
     this._percentage = range ? ((this.value - this.min) / range) * 100 : 0;
-    this._percentage = Math.max(0, Math.min(100, this._percentage));
+
+    // Clamp the percentage between 0 and 100 and round to 3 decimal places to avoid floating point errors.
+    this._percentage = +Math.max(0, Math.min(100, this._percentage)).toFixed(3);
+
+    // Fallback to 0 if the percentage is NaN.
+    if (isNaN(this._percentage)) {
+      this._percentage = 0;
+    }
 
     // Use working values in case the properties are not set.
     const _optimum = this.optimum ?? this.max;
     const _low = this.low ?? this.min;
     const _high = this.high ?? this.max;
 
+    // The region that contains the optimum value is optimal. A region is suboptimal if it
+    // neighbors the optimal region and least-optimal otherwise.
     if (_optimum < _low) {
-      this._status2 = this.value < _low ? 'optimal' : this.value < _high ? 'suboptimal' : 'least-optimal';
+      this._status = this.value < _low ? 'optimal' : this.value < _high ? 'suboptimal' : 'least-optimal';
     } else if (_optimum > _high) {
-      this._status2 = this.value > _high ? 'optimal' : this.value > _low ? 'suboptimal' : 'least-optimal';
+      this._status = this.value > _high ? 'optimal' : this.value > _low ? 'suboptimal' : 'least-optimal';
     } else {
-      this._status2 = this.value < _low ? 'suboptimal' : this.value > _high ? 'suboptimal' : 'optimal';
+      this._status = this.value < _low ? 'suboptimal' : this.value > _high ? 'suboptimal' : 'optimal';
     }
   }
 
