@@ -8,8 +8,8 @@
 @use '../../utils';
 
 $tokens: (
-  background: utils.module-val(meter, background, theme.variable(primary-container-low)),
-  color: utils.module-val(meter, color, theme.variable(primary)),
+  background: utils.module-val(meter, background, theme.variable(tertiary-container-low)),
+  color: utils.module-val(meter, color, theme.variable(tertiary)),
   height: utils.module-val(meter, height, spacing.variable(large)),
   transition-duration: utils.module-val(meter, transition-duration, animation.variable(duration-short4)),
   transition-timing: utils.module-val(meter, transition-timing, animation.variable(easing-standard)),
