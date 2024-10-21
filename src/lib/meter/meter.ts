@@ -33,6 +33,16 @@ declare global {
  *
  * @summary Meters display a scalar value within a defined range.
  *
+ * @cssproperty --forge-meter-background - The background color of the meter.
+ * @cssproperty --forge-meter-color - The color of the meter's bar.
+ * @cssproperty --forge-meter-height - The block size of the meter.
+ * @cssproperty --forge-meter-shape - The border radius of the meter.
+ * @cssproperty --forge-meter-bar-inner-shape - The border radius of the meter's bar.
+ * @cssproperty --forge-meter-tickmarks - The number of tickmarks to display.
+ * @cssproperty --forge-meter-tickmark-opacity - The opacity of the tickmarks.
+ * @cssproperty --forge-meter-transition-duration - The duration of transitions.
+ * @cssproperty --forge-meter-transition-timing - The timing function of transitions.
+ *
  * @csspart root - The root container element.
  * @csspart bar - The bar representing the value.
  */

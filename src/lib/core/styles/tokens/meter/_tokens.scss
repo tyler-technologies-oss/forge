@@ -11,13 +11,13 @@ $tokens: (
   background: utils.module-val(meter, background, theme.variable(tertiary-container-low)),
   color: utils.module-val(meter, color, theme.variable(tertiary)),
   height: utils.module-val(meter, height, spacing.variable(medium)),
-  transition-duration: utils.module-val(meter, transition-duration, animation.variable(duration-short4)),
-  transition-timing: utils.module-val(meter, transition-timing, animation.variable(easing-standard)),
   shape: utils.module-val(meter, shape, shape.variable(medium)),
   inner-shape: utils.module-val(meter, inner-shape, 0),
   inner-elevation: utils.module-val(meter, inner-elevation, elevation.value(4)),
   tickmarks: utils.module-val(meter, tickmarks, 10),
-  tickmark-opacity: utils.module-val(meter, tickmark-opacity, color-emphasis.value(medium))
+  tickmark-opacity: utils.module-val(meter, tickmark-opacity, color-emphasis.value(medium)),
+  transition-duration: utils.module-val(meter, transition-duration, animation.variable(duration-short4)),
+  transition-timing: utils.module-val(meter, transition-timing, animation.variable(easing-standard))
 );
 
 @function get($key) {
