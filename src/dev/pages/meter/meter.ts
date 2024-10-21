@@ -35,14 +35,26 @@ maxInput.addEventListener('input', () => {
 });
 
 lowInput.addEventListener('input', () => {
+  if (!lowInput.value) {
+    meter.low = null;
+    return;
+  }
   meter.low = parseFloat(lowInput.value);
 });
 
 highInput.addEventListener('input', () => {
+  if (!highInput.value) {
+    meter.high = null;
+    return;
+  }
   meter.high = parseFloat(highInput.value);
 });
 
 optimumInput.addEventListener('input', () => {
+  if (!optimumInput.value) {
+    meter.optimum = null;
+    return;
+  }
   meter.optimum = parseFloat(optimumInput.value);
 });
 

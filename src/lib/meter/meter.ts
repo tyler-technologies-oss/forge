@@ -11,9 +11,9 @@ export interface IMeterComponent extends LitElement {
   value: number;
   min: number;
   max: number;
-  low: number;
-  high: number;
-  optimum: number;
+  low: number | null | undefined;
+  high: number | null | undefined;
+  optimum: number | null | undefined;
   tickmarks: boolean;
   density: MeterDensity;
   shape: MeterShape;
@@ -64,19 +64,19 @@ export class MeterComponent extends LitElement implements IMeterComponent {
    * @default 0
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public low = METER_CONSTANTS.numbers.DEFAULT_LOW;
+  @property({ type: Number, reflect: true }) public low: number | null | undefined;
   /**
    * The high value threshold.
    * @default 1
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public high = METER_CONSTANTS.numbers.DEFAULT_HIGH;
+  @property({ type: Number, reflect: true }) public high: number | null | undefined;
   /**
    * Indicates the region of the optimum value.
    * @default 1
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public optimum = METER_CONSTANTS.numbers.DEFAULT_OPTIMUM;
+  @property({ type: Number, reflect: true }) public optimum: number | null | undefined;
   /**
    * Whether to display tickmarks.
    * @default false
@@ -195,23 +195,28 @@ export class MeterComponent extends LitElement implements IMeterComponent {
     this._percentage = range ? ((this.value - this.min) / range) * 100 : 0;
     this._percentage = Math.max(0, Math.min(100, this._percentage));
 
-    if (this.optimum < this.low) {
-      this._status2 = this.value < this.low ? 'optimal' : this.value < this.high ? 'suboptimal' : 'least-optimal';
-    } else if (this.optimum > this.high) {
-      this._status2 = this.value > this.high ? 'optimal' : this.value > this.low ? 'suboptimal' : 'least-optimal';
+    // Use working values in case the properties are not set.
+    const _optimum = this.optimum ?? this.max;
+    const _low = this.low ?? this.min;
+    const _high = this.high ?? this.max;
+
+    if (_optimum < _low) {
+      this._status2 = this.value < _low ? 'optimal' : this.value < _high ? 'suboptimal' : 'least-optimal';
+    } else if (_optimum > _high) {
+      this._status2 = this.value > _high ? 'optimal' : this.value > _low ? 'suboptimal' : 'least-optimal';
     } else {
-      this._status2 = this.value < this.low ? 'suboptimal' : this.value > this.high ? 'suboptimal' : 'optimal';
+      this._status2 = this.value < _low ? 'suboptimal' : this.value > _high ? 'suboptimal' : 'optimal';
     }
   }
 
   /**
    * Determines whether low and high ranges are set. The meter is segmented if either the low or
-   * high property is within the range of possible values.
+   * high property is defined.
    *
    * When the meter is segmented the default or themed color scheme is replaced by semantic colors
    * corresponding to optimal, suboptimal, and least optimal values.
    */
   private _getSegmented(): void {
-    this._segmented = this.low > this.min || this.high < this.max;
+    this._segmented = this.low != null || this.high != null;
   }
 }

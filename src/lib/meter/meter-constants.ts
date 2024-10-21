@@ -24,10 +24,7 @@ const attributes = {
 const numbers = {
   DEFAULT_VALUE: 0,
   DEFAULT_MIN: 0,
-  DEFAULT_MAX: 1,
-  DEFAULT_LOW: 0,
-  DEFAULT_HIGH: 1,
-  DEFAULT_OPTIMUM: 1
+  DEFAULT_MAX: 1
 };
 
 export const METER_CONSTANTS = {
