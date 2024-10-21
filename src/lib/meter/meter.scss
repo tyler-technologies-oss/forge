@@ -89,8 +89,8 @@
 
 :host([muted]) {
   .forge-meter {
-    @include core.override(background, var(--forge-theme-primary-container-minimum), value);
-    @include core.override(color, var(--forge-theme-primary-container-high), value);
+    @include core.override(background, var(--forge-theme-tertiary-container-minimum), value);
+    @include core.override(color, var(--forge-theme-tertiary-container-high), value);
 
     &.segmented {
       @include core.segmented($muted: true);

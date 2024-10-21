@@ -33,7 +33,7 @@ declare global {
  *
  * @summary Meters display a scalar value within a defined range.
  *
- * @attribute aria-valuetext - Defines a text alternative for the current value. Set this if it would be inaccurate to read the value as a percentage.
+ * @attribute {string} aria-valuetext - Defines a text alternative for the current value. Set this if it would be inaccurate to read the value as a percentage.
  *
  * @cssproperty --forge-meter-background - The background color of the meter.
  * @cssproperty --forge-meter-color - The color of the meter's bar.
@@ -127,10 +127,12 @@ export class MeterComponent extends LitElement implements IMeterComponent {
    */
   @property({ type: Boolean, reflect: true }) public muted = false;
 
+  /* @ignore */
   public get labels(): NodeList {
     return this._internals.labels;
   }
 
+  /* @ignore */
   public get form(): HTMLFormElement | null {
     return this._internals.form;
   }
@@ -139,6 +141,7 @@ export class MeterComponent extends LitElement implements IMeterComponent {
   @state() private _status: MeterStatus = 'optimal';
   @state() private _segmented = false;
 
+  /* @ignore */
   private _internals: ElementInternals;
 
   constructor() {
@@ -181,6 +184,7 @@ export class MeterComponent extends LitElement implements IMeterComponent {
     });
   }
 
+  /* @internal */
   public render(): TemplateResult {
     return html`
       <div

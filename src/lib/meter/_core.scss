@@ -78,7 +78,7 @@
 }
 
 @mixin bar-animation {
-  transition-property: translate;
+  transition-property: translate, box-shadow;
   transition-duration: #{token(transition-duration)};
   transition-timing-function: #{token(transition-timing)};
 }
@@ -90,7 +90,7 @@
 }
 
 @mixin segmented-bar-animation {
-  transition-property: translate, background;
+  transition-property: translate, box-shadow, background;
   transition-duration: #{token(transition-duration)};
   transition-timing-function: #{token(transition-timing)};
 }

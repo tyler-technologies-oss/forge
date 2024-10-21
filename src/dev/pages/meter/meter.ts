@@ -17,12 +17,15 @@ const innerShapeSelect = document.getElementById('opt-inner-shape') as ISelectCo
 const themeSelect = document.getElementById('opt-theme') as ISelectComponent;
 const mutedSwitch = document.getElementById('opt-muted') as ISwitchComponent;
 
+const valueSpan = document.getElementById('value');
+
 valueInput.min = minInput.value;
 valueInput.max = maxInput.value;
 tickmarksInput.min = '0';
 
 valueInput.addEventListener('input', () => {
   meter.value = parseFloat(valueInput.value);
+  valueSpan.textContent = valueInput.value + '%';
 });
 
 minInput.addEventListener('input', () => {
