@@ -1,0 +1,141 @@
+@use '../core/styles/shape';
+@use '../core/styles/spacing';
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+//
+// Base
+//
+
+.forge-meter {
+  @include core.tokens;
+}
+
+.forge-meter {
+  @include core.base;
+
+  &.segmented {
+    @include core.segmented;
+    @include core.segmented-animation;
+
+    &.least-optimal {
+      @include core.least-optimal;
+    }
+
+    &.optimal {
+      @include core.optimal;
+    }
+
+    .bar {
+      @include core.segmented-bar-animation;
+    }
+  }
+
+  &.lowest {
+    @include core.lowest;
+  }
+
+  &.tickmarks::after {
+    @include core.tickmarks;
+    @include core.tickmarks-animation;
+  }
+}
+
+.bar {
+  @include core.bar;
+  @include core.bar-animation;
+}
+
+//
+// Density
+//
+
+@each $key, $value in ('small': 'xsmall', 'medium': 'medium', 'large': 'large') {
+  :host([density='#{$key}']) {
+    .forge-meter {
+      @include core.override(height, spacing.variable($value), value);
+    }
+  }
+}
+
+//
+// Shape
+//
+
+@each $key, $value in ('default': shape.variable(medium), 'rounded': shape.variable(full), 'squared': 0) {
+  :host([shape='#{$key}']) {
+    .forge-meter {
+      @include core.override(shape, $value, value);
+    }
+  }
+}
+
+:host([inner-shape='inherit']) {
+  .forge-meter {
+    @include core.override(inner-shape, shape);
+  }
+}
+
+//
+// Theme
+//
+
+:host([muted]) {
+  .forge-meter {
+    @include core.override(background, var(--forge-theme-tertiary-container-minimum), value);
+    @include core.override(color, var(--forge-theme-tertiary-container-high), value);
+
+    &.segmented {
+      @include core.segmented($muted: true);
+
+      &.least-optimal {
+        @include core.least-optimal($muted: true);
+      }
+
+      &.optimal {
+        @include core.optimal($muted: true);
+      }
+    }
+  }
+}
+
+@each $value in ('primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info') {
+  :host([theme='#{$value}']:not([muted])) {
+    .forge-meter:not(.segmented) {
+      @include core.theme($value);
+    }
+  }
+
+  :host([theme='#{$value}'][muted]) {
+    .forge-meter:not(.segmented) {
+      @include core.theme($value, $muted: true);
+    }
+  }
+}
+
+//
+// Media
+//
+
+@media (prefers-reduced-motion: reduce) {
+  .forge-meter {
+    @include core.override(transition-duration, 0, value);
+  }
+}
+
+@media (forced-colors: active) {
+  .forge-meter {
+    border: 1px solid CanvasText;
+
+    .bar {
+      background: CanvasText;
+    }
+  }
+}

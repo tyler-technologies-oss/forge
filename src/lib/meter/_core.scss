@@ -1,0 +1,102 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  // Styles for the host element
+  display: inline;
+}
+
+@mixin base {
+  // Base styles for the internal root element
+  box-sizing: border-box;
+  position: relative;
+  block-size: #{token(height)};
+  border-radius: #{token(shape)};
+  overflow: hidden;
+  background: #{token(background)};
+}
+
+@mixin bar {
+  position: absolute;
+  inset-inline-start: -100%;
+  block-size: 100%;
+  inline-size: 100%;
+  border-radius: #{token(inner-shape)};
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  box-shadow: #{token(inner-elevation)};
+  background: #{token(color)};
+  translate: var(--percentage) 0;
+}
+
+@mixin theme($theme, $muted: false) {
+  @include override(background, var(--forge-theme-#{$theme}-container-#{if($muted, 'minimum', 'low')}), value);
+  @include override(color, var(--forge-theme-#{$theme}#{if($muted, '-container-high', '')}), value);
+}
+
+@mixin segmented($muted: false) {
+  @include override(background, var(--forge-theme-warning-container-#{if($muted, 'minimum', 'low')}), value);
+  @include override(color, var(--forge-theme-warning#{if($muted, '-container-high', '')}), value);
+}
+
+@mixin least-optimal($muted: false) {
+  @include override(background, var(--forge-theme-error-container-#{if($muted, 'minimum', 'low')}), value);
+  @include override(color, var(--forge-theme-error#{if($muted, '-container-high', '')}), value);
+}
+
+@mixin optimal($muted: false) {
+  @include override(background, var(--forge-theme-success-container-#{if($muted, 'minimum', 'low')}), value);
+  @include override(color, var(--forge-theme-success#{if($muted, '-container-high', '')}), value);
+}
+
+@mixin lowest {
+  @include override(inner-elevation, 0, value);
+}
+
+@mixin tickmarks {
+  // We add an inline margin and offset the background to hide tickmarks right at the edge of the meter
+  $background-offset: 2px;
+
+  content: '';
+  position: relative;
+  display: block;
+  block-size: 100%;
+  inline-size: 100%;
+  margin-inline-start: $background-offset;
+  background: repeating-linear-gradient(
+    90deg,
+    #{token(color)} 0px,
+    #{token(color)} 1px,
+    #{token(background)} 1px,
+    #{token(background)} 2px,
+    transparent 2px,
+    transparent calc(100% / (#{token(tickmarks)} + 1) + 0px)
+  );
+  background-position-x: -#{$background-offset};
+  opacity: #{token(tickmark-opacity)};
+}
+
+@mixin bar-animation {
+  transition-property: translate, box-shadow;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+}
+
+@mixin segmented-animation {
+  transition-property: background;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+}
+
+@mixin segmented-bar-animation {
+  transition-property: translate, box-shadow, background;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+}
+
+@mixin tickmarks-animation {
+  transition-property: background;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+}
