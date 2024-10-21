@@ -33,6 +33,8 @@ declare global {
  *
  * @summary Meters display a scalar value within a defined range.
  *
+ * @attribute aria-valuetext - Defines a text alternative for the current value. Set this if it would be inaccurate to read the value as a percentage.
+ *
  * @cssproperty --forge-meter-background - The background color of the meter.
  * @cssproperty --forge-meter-color - The color of the meter's bar.
  * @cssproperty --forge-meter-height - The block size of the meter.
@@ -48,6 +50,7 @@ declare global {
  */
 @customElement(METER_CONSTANTS.elementName)
 export class MeterComponent extends LitElement implements IMeterComponent {
+  /* @ignore */
   public static styles = unsafeCSS(styles);
   public static formAssociated = true;
 
@@ -56,19 +59,19 @@ export class MeterComponent extends LitElement implements IMeterComponent {
    * @default 0
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public value = METER_CONSTANTS.numbers.DEFAULT_VALUE;
+  @property({ type: Number, reflect: true }) public value: number = METER_CONSTANTS.numbers.DEFAULT_VALUE;
   /**
    * The minimum value of the meter.
    * @default 0
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public min = METER_CONSTANTS.numbers.DEFAULT_MIN;
+  @property({ type: Number, reflect: true }) public min: number = METER_CONSTANTS.numbers.DEFAULT_MIN;
   /**
    * The maximum value of the meter.
    * @default 1
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public max = METER_CONSTANTS.numbers.DEFAULT_MAX;
+  @property({ type: Number, reflect: true }) public max: number = METER_CONSTANTS.numbers.DEFAULT_MAX;
   /**
    * The low value threshold.
    * @default 0
@@ -204,7 +207,7 @@ export class MeterComponent extends LitElement implements IMeterComponent {
     const range = this.max - this.min;
     this._percentage = range ? ((this.value - this.min) / range) * 100 : 0;
 
-    // Clamp the percentage between 0 and 100 and round to 3 decimal places to avoid floating point errors.
+    // Clamp the percentage between 0 and 100. Round to 3 decimal places to avoid floating point errors.
     this._percentage = +Math.max(0, Math.min(100, this._percentage)).toFixed(3);
 
     // Fallback to 0 if the percentage is NaN.
@@ -213,18 +216,18 @@ export class MeterComponent extends LitElement implements IMeterComponent {
     }
 
     // Use working values in case the properties are not set.
-    const _optimum = this.optimum ?? this.max;
-    const _low = this.low ?? this.min;
-    const _high = this.high ?? this.max;
+    const low = this.low ?? this.min;
+    const high = this.high ?? this.max;
+    const optimum = this.optimum ?? this.max;
 
     // The region that contains the optimum value is optimal. A region is suboptimal if it
     // neighbors the optimal region and least-optimal otherwise.
-    if (_optimum < _low) {
-      this._status = this.value < _low ? 'optimal' : this.value < _high ? 'suboptimal' : 'least-optimal';
-    } else if (_optimum > _high) {
-      this._status = this.value > _high ? 'optimal' : this.value > _low ? 'suboptimal' : 'least-optimal';
+    if (optimum < low) {
+      this._status = this.value < low ? 'optimal' : this.value < high ? 'suboptimal' : 'least-optimal';
+    } else if (optimum > high) {
+      this._status = this.value > high ? 'optimal' : this.value > low ? 'suboptimal' : 'least-optimal';
     } else {
-      this._status = this.value < _low ? 'suboptimal' : this.value > _high ? 'suboptimal' : 'optimal';
+      this._status = this.value < low ? 'suboptimal' : this.value > high ? 'suboptimal' : 'optimal';
     }
   }
 
