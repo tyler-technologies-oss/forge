@@ -74,7 +74,7 @@ declare global {
  * @attribute {string} boundary - The id of the element to use as the boundary for the overlay.
  * @attribute {string} fallback-placements - The fallback placements to use when the overlay cannot be placed in the desired placement. Should be a comma separated list of placements.
  *
- * @event {CustomEvent<OverlayToggleEventData>} forge-overlay-light-dismiss - Dispatches when the overlay is light dismissed via the escape key or clicking outside the overlay.
+ * @event {CustomEvent<OverlayLightDismissEventData>} forge-overlay-light-dismiss - Dispatches when the overlay is light dismissed via the escape key or clicking outside the overlay.
  *
  * @cssproperty --forge-overlay-position - The `position` of the overlay.
  * @cssproperty --forge-overlay-z-index - The `z-index` of the overlay. Defaults to the `popup` range.
