@@ -35,7 +35,7 @@ declare global {
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
  *
- * @property {boolean} [disabled=false] - The disabled state of the tab.
+ * @property {boolean} [disabled=false] - The disabled state of the tab. Should not be set if using the disabled property on `forge-tab-bar`.
  * @property {boolean} [selected=false] - The selected state of the tab.
  * @property {boolean} [vertical=false] - Controls whether the tab is vertical or horizontal.
  * @property {boolean} [stacked=false] - Controls whether the tab is taller to allow for slotted leading/trailing elements.

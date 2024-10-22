@@ -47,7 +47,7 @@ declare global {
  * @dependency forge-icon-button
  * @dependency forge-icon
  *
- * @property {boolean} [disabled=false] - The disabled state of the tab bar.
+ * @property {boolean} [disabled=false] - Sets the disabled state of all child tabs.  If true, any new tabs added to the DOM will be disabled by default. This can be used instead of setting individual tab disabled properties, mixing the two methods of disabling is not supported.
  * @property {number} [activeTab=null] - The index of the active tab.
  * @property {boolean} [vertical=false] - Controls whether the tab bar is vertical or horizontal.
  * @property {boolean} [clustered=false] - Controls whether the tabs stretch the full width of their container or cluster together at their minimum width.

@@ -104,6 +104,20 @@ describe('Tabs', () => {
     ).to.be.true;
   });
 
+  it('should not override tab disabled if disabled is false', async () => {
+    const el = await createFixture({ disabled: false, tabDisabled: [true, true, true] });
+    const ctx = new TabsHarness(el);
+
+    await expect(el).to.be.accessible();
+    expect(el.disabled).to.be.false;
+    expect(
+      ctx.tabs.every(tab => {
+        const stateLayer = getShadowElement(tab, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
+        return tab.disabled && tab.hasAttribute('disabled') && stateLayer.disabled;
+      })
+    ).to.be.true;
+  });
+
   it('should set stacked', async () => {
     const el = await createFixture({ stacked: true });
     const ctx = new TabsHarness(el);
@@ -705,6 +719,7 @@ interface TabsFixtureConfig {
   autoActivate?: boolean;
   width?: string;
   height?: string;
+  tabDisabled?: [boolean, boolean, boolean];
 }
 
 async function createFixture({
@@ -718,12 +733,13 @@ async function createFixture({
   scrollButtons,
   autoActivate,
   width,
-  height
+  height,
+  tabDisabled
 }: TabsFixtureConfig = {}): Promise<ITabBarComponent> {
   return fixture(html`
     <forge-tab-bar
       .activeTab=${activeTab}
-      .disabled=${disabled}
+      ?disabled=${disabled}
       .vertical=${vertical}
       .clustered=${clustered}
       .stacked=${stacked}
@@ -732,9 +748,9 @@ async function createFixture({
       .autoActivate=${autoActivate}
       .scrollButtons=${scrollButtons}
       style="width: ${width ?? 'auto'}; height: ${height ?? 'auto'}">
-      <forge-tab>First</forge-tab>
-      <forge-tab>Second</forge-tab>
-      <forge-tab>Third</forge-tab>
+      <forge-tab ?disabled=${tabDisabled?.[0]}>First</forge-tab>
+      <forge-tab ?disabled=${tabDisabled?.[1]}>Second</forge-tab>
+      <forge-tab ?disabled=${tabDisabled?.[2]}>Third</forge-tab>
     </forge-tab-bar>
   `);
 }
