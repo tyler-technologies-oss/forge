@@ -64,9 +64,8 @@
 // Disabled
 :host([disabled]) {
   .forge-radio {
-    @include radio-disabled;
-
     .container {
+      @include radio-disabled;
       @include container-disabled;
     }
   }

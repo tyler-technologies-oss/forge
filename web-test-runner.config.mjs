@@ -1,6 +1,6 @@
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import { fromRollup } from '@web/dev-server-rollup';
-import { sendKeysPlugin, sendMousePlugin } from '@web/test-runner-commands/plugins';
+import { sendKeysPlugin, sendMousePlugin, setViewportPlugin } from '@web/test-runner-commands/plugins';
 import { fileURLToPath } from 'url';
 import { readdirSync } from 'fs';
 import { compileString } from 'sass';
@@ -30,7 +30,8 @@ export const directoryGroup = source =>
  * @type {import('@web/test-runner').TestRunnerConfig}
  */
 export default {
-  concurrentBrowsers: 3,
+  concurrentBrowsers: 1,
+  concurrency: 1,
   nodeResolve: true,
   testsFinishTimeout: 60000,
   testFramework: {
@@ -64,6 +65,7 @@ export default {
   plugins: [
     sendKeysPlugin(),
     sendMousePlugin(),
+    setViewportPlugin(),
     inlineScss(),
     esbuildPlugin({
       ts: true,

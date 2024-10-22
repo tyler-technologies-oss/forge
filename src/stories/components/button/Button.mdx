@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as ButtonStories from './Button.stories';
 
 <Meta of={ButtonStories} />
@@ -62,3 +63,11 @@ Forge buttons can include a circular progress indicator to provide feedback to t
   - Alternatively, use an `aria-label` attribute to provide a descriptive label for the button.
 - Verify that pressing the space bar or enter key while focused on a button will activate the button in the same manner as if it had been clicked with a mouse.
 - Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
+
+## CSS-Only
+
+The button component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={ButtonStories.CSSOnly} />
+
+<CssOnlyInformation />

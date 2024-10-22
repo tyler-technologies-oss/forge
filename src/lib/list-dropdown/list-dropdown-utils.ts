@@ -193,6 +193,7 @@ export function createListItems(
 
       let listItemElement = document.createElement('forge-list-item');
       listItemElement.value = option.value;
+      listItemElement.focusPropagation = 'off';
       listItemElement.setAttribute('role', 'presentation');
 
       const buttonElement = document.createElement('button');
@@ -240,7 +241,7 @@ export function createListItems(
       // Check for secondary (subtitle) text
       if (option.secondaryLabel) {
         const secondaryLabelElement = document.createElement('span');
-        secondaryLabelElement.slot = 'subtitle';
+        secondaryLabelElement.slot = 'secondary-text';
         secondaryLabelElement.textContent = option.secondaryLabel;
         secondaryLabelElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}-secondary`;
         listItemElement.twoLine = true;

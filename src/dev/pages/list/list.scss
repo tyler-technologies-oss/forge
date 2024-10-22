@@ -1,3 +1,13 @@
+#list-demo-root {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--forge-spacing-large);
+
+  & > div {
+    min-width: 0;
+  }
+}
+
 .list-demo {
   max-width: 600px;
   border: 1px solid var(--forge-theme-outline);

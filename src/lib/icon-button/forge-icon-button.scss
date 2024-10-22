@@ -1,0 +1,105 @@
+@use './core';
+@use '../focus-indicator';
+@use '../state-layer';
+@use '../circular-progress';
+
+.forge-icon-button {
+  @include core.tokens;
+}
+
+.forge-icon-button {
+  @include core.host;
+  @include core.base;
+
+  img,
+  svg {
+    height: #{core.token(icon-size)};
+    width: #{core.token(icon-size)};
+  }
+
+  svg {
+    fill: currentColor;
+  }
+
+  &:not(:disabled) {
+    @include state-layer.standalone;
+    @include state-layer.provide-theme(
+      (
+        color: #{core.token(icon-color)}
+      )
+    );
+
+    &:focus-visible {
+      @include focus-indicator.keyframes;
+    }
+
+    @include focus-indicator.standalone;
+    @include focus-indicator.provide-theme(
+      (
+        color: #{core.token(focus-indicator-color)},
+        shape: #{core.token(shape)}
+      )
+    );
+
+    &:where(
+        .forge-icon-button--text,
+        :not(:where(.forge-icon-button--outlined, .forge-icon-button--tonal, .forge-icon-button--filled, .forge-icon-button--raised))
+      ) {
+      @include focus-indicator.provide-theme(
+        (
+          outward-offset: 0px // Requires unit
+        )
+      );
+    }
+  }
+
+  &--outlined {
+    @include core.outlined;
+  }
+
+  &--tonal {
+    @include core.tonal;
+  }
+
+  &--filled,
+  &--raised {
+    @include core.filled;
+  }
+
+  &--raised {
+    @include core.raised;
+  }
+
+  &--squared {
+    @include core.override(shape, shape-squared);
+  }
+
+  &--small {
+    @include core.density-small;
+
+    > * {
+      @include core.density-small-slotted;
+    }
+  }
+
+  &--medium {
+    @include core.density-medium;
+  }
+
+  &:disabled {
+    @include core.disabled;
+
+    pointer-events: auto;
+    cursor: not-allowed;
+  }
+
+  forge-circular-progress {
+    @include circular-progress.provide-theme(
+      (
+        indicator-color: #{core.token(icon-color)},
+        track-color: transparent,
+        size: 1em
+      )
+    );
+  }
+}

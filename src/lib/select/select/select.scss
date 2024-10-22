@@ -49,10 +49,4 @@ forge-field {
 
 forge-field {
   @include field;
-
-  &:is([dense], [density='extra-small']) {
-    .selected-text {
-      @include dense-selected-text;
-    }
-  }
 }

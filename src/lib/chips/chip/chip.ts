@@ -65,8 +65,8 @@ declare global {
  * @attribute {string} download - The download of the chip.
  * @attribute {string} rel - The rel of the chip.
  *
- * @fires {IChipDeleteEventData} forge-chip-delete - Event fired when the chip is deleted.
- * @fires {IChipSelectEventData} forge-chip-select - Event fired when the chip is selected.
+ * @fires {CustomEvent<IChipDeleteEventData>} forge-chip-delete - Event fired when the chip is deleted.
+ * @fires {CustomEvent<IChipSelectEventData>} forge-chip-select - Event fired when the chip is selected.
  *
  * @cssproperty --forge-chip-background - The background color of the chip.
  * @cssproperty --forge-chip-color - The background color of the chip.
@@ -77,6 +77,7 @@ declare global {
  * @cssproperty --forge-chip-padding-block - The block padding of the chip.
  * @cssproperty --forge-chip-cursor - The cursor style of the chip.
  * @cssproperty --forge-chip-icon-font-size - The font size of the chip icon.
+ * @cssproperty --forge-chip-focus-indicator-color - The color of the focus indicator.
  * @cssproperty --forge-chip-disabled-opacity - The opacity of the disabled chip.
  * @cssproperty --forge-chip-disabled-cursor - The cursor style of the disabled chip.
  * @cssproperty --forge-chip-dense-height - The height of the dense chip.
@@ -120,6 +121,12 @@ declare global {
  * @csspart trigger - The trigger element of the chip.
  * @csspart focus-indicator - The focus indicator of the chip.
  * @csspart state-layer - The state layer surface.
+ *
+ * @cssclass forge-chip - The interactive button-like element.
+ * @cssclass forge-chip--invalid - Invalid chips.
+ * @cssclass forge-chip--selected - Selected chips.
+ * @cssclass forge-chip--field - Renders a chip in its field variant (for use within inputs).
+ * @cssclass forge-chip--dense - Uses a smaller font size and height.
  *
  * @slot - The content of the chip.
  * @slot start - The start content of the chip.

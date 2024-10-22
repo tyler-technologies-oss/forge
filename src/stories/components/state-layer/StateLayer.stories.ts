@@ -59,3 +59,10 @@ export const WithCard: Story = {
     `;
   }
 };
+
+export const CSSOnly: Story = {
+  ...standaloneStoryParams,
+  render: () => {
+    return html` <button class="forge-state-layer forge-state-layer__target" style="height: 100px; width: 100px;">CSS-only</button> `;
+  }
+};

@@ -47,6 +47,14 @@ declare global {
  * @cssproperty --forge-skeleton-avatar-shape - The shape of the avatar skeleton.
  *
  * @csspart root - The root element of the skeleton.
+ *
+ * @cssclass forge-skeleton - The skeleton element.
+ * @cssclass forge-skeleton--avatar - The avatar skeleton element.
+ * @cssclass forge-skeleton--text - The text skeleton element.
+ * @cssclass forge-skeleton--list-item - The list item skeleton element.
+ * @cssclass forge-skeleton--chip - The chip skeleton element.
+ * @cssclass forge-skeleton--button - The button skeleton element.
+ * @cssclass forge-skeleton--form-field - The form field skeleton element.
  */
 @customElement({
   name: SKELETON_CONSTANTS.elementName

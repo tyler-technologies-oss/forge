@@ -1,5 +1,5 @@
 import { IListItemAdapter } from './list-item-adapter';
-import { IListItemSelectEventData, LIST_ITEM_CONSTANTS } from './list-item-constants';
+import { IListItemSelectEventData, LIST_ITEM_CONSTANTS, ListItemFocusPropagation } from './list-item-constants';
 
 export interface IListItemCore {
   selected: boolean;
@@ -11,6 +11,7 @@ export interface IListItemCore {
   threeLine: boolean;
   wrap: boolean;
   noninteractive: boolean;
+  focusPropagation: ListItemFocusPropagation;
 }
 
 export class ListItemCore implements IListItemCore {
@@ -23,6 +24,7 @@ export class ListItemCore implements IListItemCore {
   private _threeLine = false;
   private _wrap = false;
   private _noninteractive = false;
+  private _focusPropagation: ListItemFocusPropagation = LIST_ITEM_CONSTANTS.defaults.FOCUS_PROPAGATION;
 
   private _interactiveStateChangeListener: (value: boolean) => void = this._onInteractiveStateChange.bind(this);
   private _mousedownListener: EventListener = this._onMousedown.bind(this);
@@ -48,7 +50,7 @@ export class ListItemCore implements IListItemCore {
   private _onMousedown(evt: MouseEvent): void {
     const composedElements = evt.composedPath().filter((el: Element) => el.nodeType === Node.ELEMENT_NODE);
     const fromInteractiveElement = composedElements.some(el => el === this._adapter.interactiveElement);
-    if (!fromInteractiveElement) {
+    if (this._focusPropagation === 'off' || !fromInteractiveElement) {
       evt.preventDefault();
     }
   }
@@ -132,7 +134,9 @@ export class ListItemCore implements IListItemCore {
   }
 
   private _clickInteractiveElement(): void {
-    this._adapter.interactiveElement?.focus();
+    if (this._focusPropagation === 'allow') {
+      this._adapter.interactiveElement?.focus();
+    }
     this._adapter.tempDeactivateFocusIndicator(); // Workaround until we can call `focus({ focusVisible: false })` to prevent focus ring from showing
     this._adapter.interactiveElement?.click();
   }
@@ -264,6 +268,23 @@ export class ListItemCore implements IListItemCore {
       }
 
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.NONINTERACTIVE, this._noninteractive);
+    }
+  }
+
+  public get focusPropagation(): ListItemFocusPropagation {
+    return this._focusPropagation;
+  }
+  public set focusPropagation(value: ListItemFocusPropagation) {
+    if (!['allow', 'off'].includes(value)) {
+      value = LIST_ITEM_CONSTANTS.defaults.FOCUS_PROPAGATION;
+    }
+    if (this._focusPropagation !== value) {
+      this._focusPropagation = value;
+      this._adapter.toggleHostAttribute(
+        LIST_ITEM_CONSTANTS.attributes.FOCUS_PROPAGATION,
+        this._focusPropagation !== LIST_ITEM_CONSTANTS.defaults.FOCUS_PROPAGATION,
+        this._focusPropagation
+      );
     }
   }
 }

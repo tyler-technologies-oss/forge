@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as IconStories from './Icon.stories';
 
 <Meta of={IconStories} />
@@ -99,3 +100,11 @@ Decorative icons are typically hidden from assistive technology, but there are s
 - Treat icons as any other text on the page and use proper color contrast ratios.
 - If using an SVG icon, hook up the `<title>` element (if applicable) to an `aria-labelledby` attribute on the `<svg>` element.
   - If no `<title>` element exists, use an alternative approach such as `aria-label` or `title` attribute.
+
+## CSS-Only
+
+The icon component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={IconStories.CSSOnly} />
+
+<CssOnlyInformation />

@@ -33,9 +33,14 @@ declare global {
  * @cssproperty --forge-drawer-transition-easing - The transition timing function of the drawer.
  * @cssproperty --forge-drawer-duration-close - The duration of the drawer closing animation.
  *
- *
  * @csspart root - The component's root element.
  * @csspart content - The content container element.
+ *
+ * @cssclass forge-drawer - The drawer element.
+ * @cssclass forge-drawer--right - The drawer element when positioned to the right.
+ * @cssclass forge-drawer--mini - Renders a smaller width variant of the drawer for rail navigation.
+ * @cssclass forge-drawer--closing - Triggers the drawer dismiss animation.
+ * @cssclass forge-drawer--closed - Applied when the drawer is dismissed.
  */
 @customElement({
   name: DRAWER_CONSTANTS.elementName

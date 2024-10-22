@@ -122,7 +122,10 @@ export class CheckboxCore implements ICheckboxCore {
     if (this._value !== value) {
       this._value = value;
       this._adapter.syncValue(this._submittedValue, this._formState);
-      this._adapter.setHostAttribute(CHECKBOX_CONSTANTS.attributes.VALUE, this._value);
+
+      if (typeof this._value === 'string' || this._value == null) {
+        this._adapter.setHostAttribute(CHECKBOX_CONSTANTS.attributes.VALUE, this._value);
+      }
     }
   }
 

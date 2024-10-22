@@ -1,11 +1,12 @@
-import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { tylIconSettings } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
+import { tylIconSettings } from '@tylertech/tyler-icons/standard';
+import { html } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
 
-import '@tylertech/forge/label';
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/icon-button';
+import '@tylertech/forge/label';
 import { storyStyles } from '../../decorators';
 
 const component = 'forge-label';
@@ -119,6 +120,30 @@ export const WithIconButton: Story = {
         </forge-icon-button>
         <span>Settings</span>
       </forge-label>
+    `;
+  }
+};
+
+export const CSSOnly: Story = {
+  parameters: {
+    controls: { include: ['block', 'large'] }
+  },
+  args: {
+    block: false,
+    large: false
+  },
+  render: ({ block, large }) => {
+    const classes = classMap({
+      'forge-label': true,
+      'forge-label-block': block,
+      'forge-label--large': large
+    });
+    return html`
+      <label class=${classes}>
+        <span>Check me</span>
+        <forge-checkbox></forge-checkbox>
+      </label>
+      <span class="forge-support-text">Support text</span>
     `;
   }
 };

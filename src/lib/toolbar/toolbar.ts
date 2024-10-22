@@ -59,6 +59,14 @@ declare global {
  * @slot center - The content to place in the center of the toolbar.
  * @slot end - The content to place at the end of the toolbar.
  * @slot after-end - The content to place after the end slot.
+ *
+ * @cssclass forge-toolbar - Apply to the root element _(required)_.
+ * @cssclass forge-toolbar--inverted - Inverts the toolbar so the divider is at the top.
+ * @cssclass forge-toolbar--no-divider - Hides the internal divider.
+ * @cssclass forge-toolbar--auto-height - Forces the internal container to use `height: auto` for dynamic content that doesn't fit the static/default height.
+ * @cssclass forge-toolbar__start - Renders content in the start area within the toolbar.
+ * @cssclass forge-toolbar__center - Renders content in the center area within the toolbar.
+ * @cssclass forge-toolbar__end - Renders content in the end area within the toolbar.
  */
 @customElement({
   name: TOOLBAR_CONSTANTS.elementName

@@ -7,7 +7,7 @@ import '@tylertech/forge/autocomplete';
 import '@tylertech/forge/label-value';
 
 // Icons
-import type { AutocompleteFilterCallback, IAutocompleteComponent } from '@tylertech/forge/autocomplete';
+import type { AutocompleteFilterCallback, IAutocompleteComponent, IAutocompleteOption } from '@tylertech/forge/autocomplete';
 import type { IListItemComponent } from '@tylertech/forge/list/list-item';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { IOption, IOptionGroup } from '@tylertech/forge/select';
@@ -24,7 +24,7 @@ const autocomplete = document.querySelector('#autocomplete') as IAutocompleteCom
 autocomplete.filter = filterOptions as AutocompleteFilterCallback<string>;
 
 // State
-const states = data as IOption[];
+let states = data as IAutocompleteOption[];
 let asyncFilter = false;
 let useGroupedData = false;
 let useGroupHeaderBuilder = false;
@@ -114,6 +114,11 @@ groupToggle.addEventListener('forge-switch-change', ({ detail: selected }) => us
 
 const groupHeaderBuilderToggle = document.querySelector('#autocomplete-group-header-builder') as HTMLInputElement;
 groupHeaderBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => useGroupHeaderBuilder = selected);
+
+const secondaryLabelToggle = document.querySelector('#autocomplete-secondary-label') as HTMLInputElement;
+secondaryLabelToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  states = selected ? data.map(state => ({...state, secondaryLabel: state.value})) : data;
+});
 
 
 function itemBuilder(option: IListDropdownOption, filterText: string, _listItem: IListItemComponent): HTMLElement {

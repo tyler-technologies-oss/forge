@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as SkeletonStories from './Skeleton.stories';
 
 <Meta of={SkeletonStories} />
@@ -41,3 +42,11 @@ There are a few built-in variants that can be used by adding an attribute to the
 ## Accessibility
 
 Ensure that the skeleton component does not interfere with screen readers by including the `aria-hidden="true"` attribute.
+
+## CSS-Only
+
+The skeleton component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={SkeletonStories.CSSOnly} />
+
+<CssOnlyInformation />

@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty, coerceNumber } from '@tylertech/forge-core';
 import { BackdropComponent } from '../backdrop';
 import { BaseComponent } from '../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
@@ -33,6 +33,7 @@ export interface IDialogProperties {
   preset: DialogPreset;
   persistent: boolean;
   fullscreen: boolean;
+  fullscreenThreshold: number;
   trigger: string;
   triggerElement: HTMLElement | null;
   positionStrategy: DialogPositionStrategy;
@@ -58,6 +59,7 @@ declare global {
     'forge-dialog-move-start': CustomEvent<IDialogMoveStartEventData>;
     'forge-dialog-move': CustomEvent<IDialogMoveEventData>;
     'forge-dialog-move-end': CustomEvent<void>;
+    'forge-dialog-fullscreen-change': CustomEvent<boolean>;
   }
 }
 
@@ -68,38 +70,12 @@ declare global {
  *
  * @dependency forge-backdrop
  *
- * @property {boolean} [open=false] - Indicates whether the dialog is open.
- * @property {DialogMode} [mode="modal"] - The mode of the dialog.
- * @property {DialogType} [type="dialog"] - The type of the dialog.
- * @property {DialogAnimationType} [animationType="zoom"] - The animation type of the dialog.
- * @property {DialogPreset} [preset="dialog"] - The preset design that the dialog will apply.
- * @property {boolean} [persistent=false] - Indicates whether the dialog is dismissible via escape and backdrop click or not.
- * @property {boolean} [fullscreen=false] - Indicates whether the dialog is fullscreen or not.
- * @property {string} trigger - The selector of the element that triggers the dialog.
- * @property {HTMLElement | null} [triggerElement=null] - The element that triggers the dialog.
- * @property {boolean} [moveable=false] - Indicates whether the dialog is moveable or not.
- * @property {DialogPositionStrategy} [positionStrategy="viewport"] - Controls whether the dialog is rendered relative to the viewport its nearest containing block.
- * @property {DialogSizeStrategy} [sizeStrategy="content"] - Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
- * @property {DialogPlacement} [placement="center"] - The placement of the dialog.
- *
  * @globalconfig animationType
  * @globalconfig positionStrategy
  * @globalconfig sizeStrategy
  * @globalconfig persistent
  * @globalconfig moveable
- *
- * @attribute {boolean} [open=false] - Indicates whether the dialog is open.
- * @attribute {DialogMode} [mode="modal"] - The mode of the dialog.
- * @attribute {DialogType} [type="dialog"] - The type of the dialog.
- * @attribute {DialogAnimationType} [animationType="zoom"] - The animation type of the dialog.
- * @attribute {DialogPreset} [preset="dialog"] - The preset design that the dialog will apply.
- * @attribute {boolean} [persistent=false] - Indicates whether the dialog is dismissible via escape and backdrop click or not.
- * @attribute {boolean} [fullscreen=false] - Indicates whether the dialog is fullscreen or not.
- * @attribute {string} trigger - The selector of the element that triggers the dialog.
- * @attribute {boolean} [moveable=false] - Indicates whether the dialog is moveable or not.
- * @attribute {DialogPositionStrategy} [positionStrategy="viewport"] - Controls whether the dialog is rendered relative to the viewport its nearest containing block.
- * @attribute {DialogSizeStrategy} [sizeStrategy="content"] - Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
- * @attribute {DialogPlacement} [placement="center"] - The placement of the dialog.
+ * @globalconfig fullscreenThreshold
  *
  * @event {CustomEvent<void>} forge-dialog-open - Dispatched when the dialog is opened.
  * @event {CustomEvent<void>} forge-dialog-close - Dispatched when the dialog is closed.
@@ -107,6 +83,7 @@ declare global {
  * @event {CustomEvent<IDialogMoveStartEventData>} forge-dialog-move-start - Dispatched when the dialog is first moved.
  * @event {CustomEvent<IDialogMoveEventData>} forge-dialog-move - Dispatched when the dialog is being moved.
  * @event {CustomEvent<void>} forge-dialog-move-end - Dispatched when the dialog is done being moved.
+ * @event {CustomEvent<boolean>} forge-dialog-fullscreen-change - Dispatched when the dialog's fullscreen state changes.
  *
  * @cssproperty --forge-dialog-background - The background color of the dialog.
  * @cssproperty --forge-dialog-shape - The shape of the dialog.
@@ -159,6 +136,30 @@ declare global {
  *
  * @slot - The content of the dialog.
  * @slot move-handle - The move handle content.
+ *
+ * @cssclass forge-dialog - Apply to the root `<dialog>` element _(required)_.
+ * @cssclass forge-dialog--fullscreen - Renders the dialog in fullscreen mode.
+ * @cssclass forge-dialog--top - Places the dialog at the top of the screen.
+ * @cssclass forge-dialog--top-right - Places the dialog at the top right of the screen.
+ * @cssclass forge-dialog--top-left - Places the dialog at the top left of the screen.
+ * @cssclass forge-dialog--right - Places the dialog at the right of the screen.
+ * @cssclass forge-dialog--left - Places the dialog at the left of the screen.
+ * @cssclass forge-dialog--bottom - Places the dialog at the bottom of the screen.
+ * @cssclass forge-dialog--bottom-right - Places the dialog at the bottom right of the screen.
+ * @cssclass forge-dialog--bottom-left - Places the dialog at the bottom left of the screen.
+ * @cssclass forge-dialog--custom - Allows for custom placement of the dialog.
+ * @cssclass forge-dialog--bottom-sheet - Renders the dialog as a bottom sheet.
+ * @cssclass forge-dialog--top-sheet - Renders the dialog as a top sheet.
+ * @cssclass forge-dialog--left-sheet - Renders the dialog as a left sheet.
+ * @cssclass forge-dialog--right-sheet - Renders the dialog as a right sheet.
+ * @cssclass forge-dialog--animation-fade - Sets to dialog to open and close with a fade animation.
+ * @cssclass forge-dialog--animation-slide - Sets to dialog to open and close with a slide animation.
+ * @cssclass forge-dialog--animation-none - Sets to dialog to open and close without any animation.
+ * @cssclass forge-dialog--moveable - Applies moveable dialog styles.
+ * @cssclass forge-dialog--moving - Apply to the dialog when it is being moved.
+ * @cssclass forge-dialog--moved - Apply to the dialog after it has been moved.
+ * @cssclass forge-dialog__move-handle - Apply to the move handle element.
+ * @cssclass forge-dialog__move-handle-container - Apply to the parent of the move handle element.
  */
 @customElement({
   name: DIALOG_CONSTANTS.elementName,
@@ -228,6 +229,9 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
       case DIALOG_CONSTANTS.observedAttributes.FULLSCREEN:
         this.fullscreen = coerceBoolean(newValue);
         break;
+      case DIALOG_CONSTANTS.observedAttributes.FULLSCREEN_THRESHOLD:
+        this.fullscreenThreshold = newValue == null ? DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD : coerceNumber(newValue);
+        break;
       case DIALOG_CONSTANTS.observedAttributes.TRIGGER:
         this.trigger = newValue;
         break;
@@ -246,42 +250,114 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
     }
   }
 
+  /**
+   * Indicates whether the dialog is open.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare open: boolean;
 
+  /**
+   * The mode of the dialog.
+   * @default 'modal'
+   * @attribute
+   */
   @coreProperty()
   public declare mode: DialogMode;
 
+  /**
+   * The type of the dialog.
+   * @default 'dialog'
+   * @attribute
+   */
   @coreProperty()
   public declare type: DialogType;
 
+  /**
+   * The animation type of the dialog.
+   * @default 'zoom'
+   * @attribute
+   */
   @coreProperty()
   public declare animationType: DialogAnimationType;
 
+  /**
+   * The preset design that the dialog will apply.
+   * @default 'dialog'
+   * @attribute
+   */
   @coreProperty()
   public declare preset: DialogPreset;
 
+  /**
+   * Indicates whether the dialog is dismissible via escape and backdrop click or not.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare persistent: boolean;
 
+  /**
+   * Indicates whether the dialog is fullscreen or not.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare fullscreen: boolean;
 
+  /**
+   * The screen width at which the dialog will switch to fullscreen.
+   * @default 599
+   * @attribute
+   */
+  @coreProperty()
+  public declare fullscreenThreshold: number;
+
+  /**
+   * The selector of the element that triggers the dialog.
+   * @default ''
+   * @attribute
+   */
   @coreProperty()
   public declare trigger: string;
 
+  /**
+   * The element that triggers the dialog.
+   * @default null
+   */
   @coreProperty()
   public declare triggerElement: HTMLElement | null;
 
+  /**
+   * Indicates whether the dialog is moveable or not.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare moveable: boolean;
 
+  /**
+   * Controls whether the dialog is rendered relative to the viewport or its nearest containing block.
+   * @default 'viewport'
+   * @attribute
+   */
   @coreProperty()
   public declare positionStrategy: DialogPositionStrategy;
 
+  /**
+   * Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
+   * @default 'content'
+   * @attribute
+   */
   @coreProperty()
   public declare sizeStrategy: DialogSizeStrategy;
 
+  /**
+   * The placement of the dialog.
+   * @default 'center'
+   * @attribute
+   */
   @coreProperty()
   public declare placement: DialogPlacement;
 

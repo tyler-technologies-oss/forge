@@ -227,7 +227,6 @@ export class ChipCore implements IChipCore {
   public set value(value: unknown) {
     if (this._value !== value) {
       this._value = value;
-      this._adapter.setHostAttribute(CHIP_CONSTANTS.attributes.VALUE, String(this._value));
     }
   }
 

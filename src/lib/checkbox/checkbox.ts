@@ -45,28 +45,6 @@ declare global {
  * - Present a list containing sub-selections.
  * - Turn an option on or off in desktop environment.
  *
- * @property {boolean} [checked=false] - Whether the checkbox is checked.
- * @property {boolean} [defaultChecked=false] - Whether the checkbox is checked by default.
- * @property {boolean} [indeterminate=false] - Toggles the indeterminate state. This does not affect whether the checkbox is checked or its form submission.
- * @property {string} value - The value of the checkbox when checked.
- * @property {boolean} [disabled=false] - Controls if the checkbix is disabled.
- * @property {boolean} [required=false] = Controls if the checkbox is required.
- * @property {boolean} [readonly=false] = Controls if the checkbox is readonly.
- * @property {boolean} [dense=false] - The density state.
- * @property {SwitchLabelPosition} [labelPosition='end'] - Whether the label appears before or after the checkbox.
- *
- * @attribute {string} [checked=false] - Controls whether the checkbox is checked.
- * @attribute {string} [defaultChecked=false] - Controls whether the checkbox is checked by default.
- * @attribute {string} [indeterminate=false] - Controls the indeterminate state.
- * @attribute {string} value - The value of the checkbox when checked.
- * @attribute {string} [disabled=false] - Controls if the switch is disabled.
- * @attribute {string} [required=false] - Controls if the switch is required.
- * @attribute {string} [readonly=false] - Controls if the switch is readonly.
- * @attribute {string} [dense=false] - Sets the density state.
- * @attribute {string} [label-position='end'] - Sets whether the label appears before or after the switch.
- *
- * @method {(force?: boolean) => void} toggle - Toggles whether the checkbox is is checked or forces a checked state.
- *
  * @event {Event} change - Dispatches when the checkbox is checked or unchecked.
  *
  * @cssproperty --forge-checkbox-background - The color of the checkbox background when unchecked and not indeterminate.
@@ -104,6 +82,12 @@ declare global {
  * @csspart label - Styles the label element.
  * @csspart state-layer - Styles the state layer element.
  * @csspart focus-indicator - Styles the focus indicator element.
+ *
+ * @cssfilepath checkbox/forge-checkbox.css
+ *
+ * @cssclass forge-checkbox - Apply to the root element _(required)_.
+ * @cssclass forge-checkbox--dense - Makes the checkbox dense.
+ * @cssclass forge-checkbox__icon - Apply to a child of the root element to render the check and indeterminate icons _(required)_.
  */
 @customElement({
   name: CHECKBOX_CONSTANTS.elementName,
@@ -210,6 +194,7 @@ export class CheckboxComponent
     this[setDefaultAria]({ ariaLabel: value });
   }
 
+  /** @ignore */
   public setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void {
     this[internals].setFormValue(value, state);
 
@@ -229,30 +214,75 @@ export class CheckboxComponent
     }
   }
 
+  /**
+   * Gets/sets whether the checkbox is checked.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare checked: boolean;
 
+  /**
+   * Gets/sets whether the checkbox is checked by default.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare defaultChecked: boolean;
 
+  /**
+   * Gets/sets the indeterminate state.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare indeterminate: boolean;
 
+  /**
+   * Controls the value submitted with a form when checked.
+   * @default 'on'
+   * @attribute
+   */
   @coreProperty()
   public declare value: string;
 
+  /**
+   * Controls whether the checkbox is dense.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare dense: boolean;
 
+  /**
+   * Controls whether the checkbox is disabled.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare disabled: boolean;
 
+  /**
+   * Controls whether the checkbox is required.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare required: boolean;
 
+  /**
+   * Controls whether the checkbox is readonly.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare readonly: boolean;
 
+  /**
+   * Controls whether the label appears before or after the checkbox.
+   * @default 'end'
+   * @attribute
+   */
   @coreProperty()
   public declare labelPosition: CheckboxLabelPosition;
 

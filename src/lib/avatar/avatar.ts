@@ -47,6 +47,8 @@ declare global {
  * @csspart root - The root container element.
  *
  * @slot - The default slot for avatar content if not provided via text/imageUrl.
+ *
+ * @cssclass forge-avatar - The avatar class _(required)_.
  */
 @customElement({
   name: AVATAR_CONSTANTS.elementName

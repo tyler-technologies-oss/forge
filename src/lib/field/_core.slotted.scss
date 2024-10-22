@@ -17,6 +17,7 @@
 
   color: inherit;
   font: inherit;
+  font-size: #{token(font-size)};
   text-overflow: ellipsis;
 }
 
@@ -52,4 +53,8 @@
   padding-inline: 4px;
   block-size: fit-content;
   inline-size: fit-content;
+}
+
+@mixin slotted-placeholder {
+  color: #{token(placeholder-color)};
 }

@@ -1,11 +1,11 @@
 import { randomChars } from '@tylertech/forge-core';
-import { DateRange, DayOfWeek, ICalendarComponent } from '../../calendar';
+import { CALENDAR_CONSTANTS, DateRange, DayOfWeek, ICalendarComponent } from '../../calendar';
 import { ICalendarDropdown, ICalendarDropdownPopupConfig } from '../../calendar/calendar-dropdown';
 import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions } from '../../core';
 import { BaseComponent } from '../../core/base/base-component';
 import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
 import { TEXT_FIELD_CONSTANTS } from '../../text-field';
-import { BASE_DATE_PICKER_CONSTANTS } from './base-date-picker-constants';
+import { BASE_DATE_PICKER_CONSTANTS, IDatePickerCalendarDropdownText } from './base-date-picker-constants';
 import { createToggleElement } from './base-date-picker-utils';
 
 export interface IBaseDatePickerAdapter extends IBaseAdapter {
@@ -54,6 +54,7 @@ export interface IBaseDatePickerAdapter extends IBaseAdapter {
   getCalendarActiveDate(): Date | undefined;
   setCalendarYearRange(value: string): void;
   setCalendarLocale(locale: string | undefined): void;
+  setCalendarText(text: IDatePickerCalendarDropdownText): void;
   propagateCalendarKey(evt: KeyboardEvent): void;
 }
 export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends BaseAdapter<T> implements IBaseDatePickerAdapter {
@@ -131,6 +132,8 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
     this._calendarDropdown.open(calendarConfig);
     this._calendarDropdown.dropdownElement?.style.setProperty('--forge-calendar-width', '320px');
     this._calendarDropdown.calendar?.style.setProperty('margin', '8px');
+
+    this.setCalendarText(dropdownConfig?.calendarText || {});
   }
 
   public detachCalendar(): void {
@@ -204,6 +207,63 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
   public setCalendarLocale(locale: string | undefined): void {
     if (this._calendarDropdown?.calendar) {
       this._calendarDropdown.locale = locale;
+    }
+  }
+
+  public setCalendarText(text: IDatePickerCalendarDropdownText): void {
+    const calendar = this._calendarDropdown?.calendar;
+
+    if (!calendar) {
+      return;
+    }
+
+    if (text.today) {
+      const el = document.createElement('span');
+      el.slot = CALENDAR_CONSTANTS.slots.TODAY_BUTTON_TEXT;
+      el.textContent = text.today;
+      calendar.append(el);
+    }
+    if (text.clear) {
+      const el = document.createElement('span');
+      el.slot = CALENDAR_CONSTANTS.slots.CLEAR_BUTTON_TEXT;
+      el.textContent = text.clear;
+      calendar.append(el);
+    }
+    if (text.nextMonth) {
+      const el = document.createElement('span');
+      el.slot = CALENDAR_CONSTANTS.slots.NEXT_MONTH_BUTTON_TEXT;
+      el.textContent = text.nextMonth;
+      calendar.append(el);
+    }
+    if (text.previousMonth) {
+      const el = document.createElement('span');
+      el.slot = CALENDAR_CONSTANTS.slots.PREVIOUS_MONTH_BUTTON_TEXT;
+      el.textContent = text.previousMonth;
+      calendar.append(el);
+    }
+    if (text.nextYear) {
+      const el = document.createElement('span');
+      el.slot = CALENDAR_CONSTANTS.slots.NEXT_YEAR_BUTTON_TEXT;
+      el.textContent = text.nextYear;
+      calendar.append(el);
+    }
+    if (text.previousYear) {
+      const el = document.createElement('span');
+      el.slot = CALENDAR_CONSTANTS.slots.PREVIOUS_YEAR_BUTTON_TEXT;
+      el.textContent = text.previousYear;
+      calendar.append(el);
+    }
+    if (text.nextYears) {
+      const el = document.createElement('span');
+      el.slot = CALENDAR_CONSTANTS.slots.NEXT_YEARS_BUTTON_TEXT;
+      el.textContent = text.nextYears;
+      calendar.append(el);
+    }
+    if (text.previousYears) {
+      const el = document.createElement('span');
+      el.slot = CALENDAR_CONSTANTS.slots.PREVIOUS_YEARS_BUTTON_TEXT;
+      el.textContent = text.previousYears;
+      calendar.append(el);
     }
   }
 

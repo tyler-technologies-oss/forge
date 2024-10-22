@@ -41,6 +41,10 @@ declare global {
  * @csspart root - The root layout element.
  * @csspart container - The container element for the title and message content.
  *
+ * @cssclass forge-inline-message - The inline message container element.
+ * @cssclass forge-inline-message__title - The title element.
+ * @cssclass forge-inline-message__icon - The icon element.
+ *
  * @slot - The message text.
  * @slot title - The title of the inline message.
  * @slot icon - The icon to display.

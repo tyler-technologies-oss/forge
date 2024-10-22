@@ -2,13 +2,13 @@
 
 @forward './token-utils';
 
-@mixin host() {
+@mixin host {
   display: block;
   contain: content;
   margin: #{token(margin)};
 }
 
-@mixin base() {
+@mixin base {
   border: none;
   border-bottom-color: #{token(color)};
   border-bottom-width: #{token(width)};
@@ -17,7 +17,7 @@
   height: 0;
 }
 
-@mixin vertical-base() {
+@mixin vertical-base {
   border: none;
   border-right-color: #{token(color)};
   border-right-width: #{token(width)};

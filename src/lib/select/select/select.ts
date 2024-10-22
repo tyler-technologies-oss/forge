@@ -67,6 +67,7 @@ declare global {
  * @dependency forge-icon-button
  *
  * @globalconfig labelPosition
+ * @globalconfig variant
  *
  * @event {CustomEvent<void>} forge-select-scrolled-bottom - Dispatched when the dropdown list has scrolled to the bottom.
  * @event {CustomEvent<any>} change - Dispatched when the user selects a value.
@@ -89,6 +90,7 @@ declare global {
  * @attribute {boolean} multiple - Gets/sets the multiple select state.
  * @attribute {boolean} open - Gets/sets the open state.
  *
+ * @cssproperty --forge-select-placeholder-color - The color of the placeholder text.
  * @cssproperty --forge-field-background - The background of the field surface.
  * @cssproperty --forge-field-tonal-background - The background of the field surface in the tonal variant.
  * @cssproperty --forge-field-tonal-background-hover - The background of the field surface in the tonal variant on hover.
@@ -144,12 +146,9 @@ declare global {
  * @csspart support-text-end - The element containing the support text end slot.
  * @csspart focus-indicator - The focus indicator element.
  *
- * @slot - The default/unnamed slot for the field's input.
- * @slot label - Renders its content as a positioned label.
+ * @slot value - The selected text to display
  * @slot start - Typically reserved for content/icons that render logically before the default slot content.
  * @slot end - Typically reserved content/icons that render logically after the default slot content.
- * @slot clear-button - Content slotted here replaces the default clear button.
- * @slot clear-button-tooltip - Sets the text content of the clear button's tooltip and accessible label.
  * @slot accessory - Used for content such as a button that is logically connected to the field but should appear distinct from the input.
  * @slot support-text - Used for content that provides additional information about the field. Aligns to the inline start of the field.
  * @slot support-text-end - Used for content that provides additional information about the field. Aligns to the inline end of the field.
@@ -262,7 +261,7 @@ export class SelectComponent
   public declare placeholder: string;
 
   @coreProperty()
-  public declare readonly;
+  public declare readonly: boolean;
 
   public override get floatLabel(): boolean {
     return super.floatLabel;
@@ -287,7 +286,6 @@ export class SelectComponent
     this._core.syncFloatingLabelState();
   }
 
-  // @ts-ignore TS2611 - TODO: This is a getter/setter in the base class... TypeScript bug?
   public override get disabled(): boolean {
     return super.disabled;
   }

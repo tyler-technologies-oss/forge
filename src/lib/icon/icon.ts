@@ -57,6 +57,8 @@ declare global {
  * @cssproperty --forge-icon-font-size - The font size of the icon.
  *
  * @csspart svg - The internal SVG element.
+ *
+ * @cssclass forge-icon - The icon element.
  */
 @customElement({
   name: ICON_CONSTANTS.elementName

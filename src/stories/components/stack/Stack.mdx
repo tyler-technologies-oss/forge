@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as StackStories from './Stack.stories';
 
 <Meta of={StackStories} />
@@ -34,3 +35,11 @@ You can also use the stack to create a more complex form layout with different s
 ## API
 
 <CustomArgTypes />
+
+## CSS-Only
+
+The stack component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={StackStories.CSSOnly} />
+
+<CssOnlyInformation />

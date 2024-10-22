@@ -60,7 +60,7 @@ export class FieldCore implements IFieldCore {
 
   public initialize(): void {
     this._adapter.addRootListener('slotchange', this._slotChangeListener);
-    this._adapter.tryApplyGlobalConfiguration(['labelPosition']);
+    this._adapter.tryApplyGlobalConfiguration(['labelPosition', 'variant']);
     this._adapter.setLabelPosition(this._labelPosition);
 
     if (this._popoverIcon) {
@@ -73,7 +73,7 @@ export class FieldCore implements IFieldCore {
   }
 
   private _onPopoverIconClick(): void {
-    this._adapter.dispatchHostEvent(new CustomEvent(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK, { bubbles: true }));
+    this._adapter.dispatchHostEvent(new CustomEvent(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK, { bubbles: true, composed: true }));
   }
 
   public floatLabelWithoutAnimation(value: boolean): void {

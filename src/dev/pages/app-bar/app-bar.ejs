@@ -1,48 +1,79 @@
-<forge-app-bar id="forge-app-bar-example" title-text="App Bar" href="javascript: void(0);" aria-label="Demo app bar">
-  <forge-icon slot="logo" external external-type="custom" name="forge_logo"></forge-icon>
+<section>
+  <h2 class="forge-typography--subheading3">Component-based App Bar</h2>
 
-  <forge-app-bar-menu-button slot="start" id="forge-app-bar-example-menu-button"></forge-app-bar-menu-button>
+  <forge-app-bar id="forge-app-bar-example" title-text="App Bar" href="javascript: void(0);" aria-label="Demo app bar">
+    <forge-icon slot="logo" name="forge_logo"></forge-icon>
 
-  <forge-app-bar-search id="app-bar-search" slot="center">
-    <input type="text" placeholder="Search" aria-label="Search" />
-  </forge-app-bar-search>
-  
-  <forge-app-bar-help-button slot="end"></forge-app-bar-help-button>
-  <forge-app-bar-notification-button slot="end"></forge-app-bar-notification-button>
-  <forge-app-bar-app-launcher-button slot="end"></forge-app-bar-app-launcher-button>
-  
-  <forge-button slot="end">Sign in</forge-button>
-  
-  <forge-app-bar-profile-button
-    slot="end"
-    full-name="First Last"
-    email="first.last@tylerforge.io"
-    profile-button
-    profile-button-text="View profile">
-  </forge-app-bar-profile-button>
+    <forge-app-bar-menu-button slot="start" id="forge-app-bar-example-menu-button"></forge-app-bar-menu-button>
 
-  <forge-tab-bar slot="bottom" active-tab="0" clustered scroll-buttons>
-    <forge-tab>Tab 1</forge-tab>
-    <forge-tab>Tab 2</forge-tab>
-    <forge-tab>Tab 3</forge-tab>
-    <forge-tab>Tab 4</forge-tab>
-    <forge-tab>Tab 5</forge-tab>
-    <forge-tab>Tab 6</forge-tab>
-    <forge-tab>Tab 7</forge-tab>
-    <forge-tab>Tab 8</forge-tab>
-    <forge-tab>Tab 9</forge-tab>
-    <forge-tab>Tab 10</forge-tab>
-    <forge-tab>Tab 11</forge-tab>
-    <forge-tab>Tab 12</forge-tab>
-    <forge-tab>Tab 13</forge-tab>
-    <forge-tab>Tab 14</forge-tab>
-    <forge-tab>Tab 15</forge-tab>
-    <forge-tab>Tab 16</forge-tab>
-    <forge-tab>Tab 17</forge-tab>
-    <forge-tab>Tab 18</forge-tab>
-    <forge-tab>Tab 19</forge-tab>
-    <forge-tab>Tab 20</forge-tab>
-  </forge-tab-bar>
-</forge-app-bar>
+    <forge-app-bar-search id="app-bar-search" slot="center">
+      <input type="text" placeholder="Search" aria-label="Search" />
+    </forge-app-bar-search>
+
+    <forge-app-bar-help-button slot="end"></forge-app-bar-help-button>
+    <forge-app-bar-notification-button slot="end"></forge-app-bar-notification-button>
+    <forge-app-bar-app-launcher-button slot="end"></forge-app-bar-app-launcher-button>
+
+    <forge-button slot="end">Sign in</forge-button>
+
+    <forge-app-bar-profile-button slot="end" full-name="First Last" email="first.last@tylerforge.io" profile-button profile-button-text="View profile">
+    </forge-app-bar-profile-button>
+
+    <forge-tab-bar slot="bottom" active-tab="0" clustered scroll-buttons>
+      <forge-tab>Tab 1</forge-tab>
+      <forge-tab>Tab 2</forge-tab>
+      <forge-tab>Tab 3</forge-tab>
+      <forge-tab>Tab 4</forge-tab>
+      <forge-tab>Tab 5</forge-tab>
+      <forge-tab>Tab 6</forge-tab>
+      <forge-tab>Tab 7</forge-tab>
+      <forge-tab>Tab 8</forge-tab>
+      <forge-tab>Tab 9</forge-tab>
+      <forge-tab>Tab 10</forge-tab>
+      <forge-tab>Tab 11</forge-tab>
+      <forge-tab>Tab 12</forge-tab>
+      <forge-tab>Tab 13</forge-tab>
+      <forge-tab>Tab 14</forge-tab>
+      <forge-tab>Tab 15</forge-tab>
+      <forge-tab>Tab 16</forge-tab>
+      <forge-tab>Tab 17</forge-tab>
+      <forge-tab>Tab 18</forge-tab>
+      <forge-tab>Tab 19</forge-tab>
+      <forge-tab>Tab 20</forge-tab>
+    </forge-tab-bar>
+  </forge-app-bar>
+</section>
+
+<section>
+  <h2 class="forge-typography--subheading3">CSS-based App Bar</h2>
+  <header class="forge-app-bar forge-app-bar--raised">
+    <div class="forge-app-bar__section-start">
+      <forge-app-bar-menu-button id="forge-app-bar-example-menu-button"></forge-app-bar-menu-button>
+      <div class="forge-app-bar__logo-title-container">
+        <forge-icon name="forge_logo" class="forge-app-bar__logo"></forge-icon>
+        <a href="javascript: void(0);" class="forge-app-bar__title">
+          <h1>App Bar</h1>
+        </a>
+      </div>
+    </div>
+
+    <div class="forge-app-bar__section-center">
+      <forge-app-bar-search id="app-bar-search" style="width: 100%">
+        <input type="text" placeholder="Search" aria-label="Search" />
+      </forge-app-bar-search>
+    </div>
+
+    <div class="forge-app-bar__section-end">
+      <forge-app-bar-help-button></forge-app-bar-help-button>
+      <forge-app-bar-notification-button></forge-app-bar-notification-button>
+      <forge-app-bar-app-launcher-button></forge-app-bar-app-launcher-button>
+
+      <forge-button>Sign in</forge-button>
+
+      <forge-app-bar-profile-button full-name="First Last" email="first.last@tylerforge.io" profile-button profile-button-text="View profile">
+      </forge-app-bar-profile-button>
+    </div>
+  </header>
+</section>
 
 <script type="module" src="app-bar.ts"></script>

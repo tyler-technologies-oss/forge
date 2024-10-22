@@ -1,7 +1,8 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Canvas, Meta, Title } from '@storybook/blocks';
+import { LABEL_CONSTANTS } from '../../../lib/label/label-constants';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as LabelStories from './Label.stories';
-import { LABEL_CONSTANTS } from '../../../lib/label/label-constants';
 
 <Meta of={LabelStories} />
 
@@ -55,3 +56,11 @@ You can also label icon buttons, and provide some custom styling to create a com
 ## API
 
 <CustomArgTypes />
+
+## CSS-Only
+
+The label component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={LabelStories.CSSOnly} />
+
+<CssOnlyInformation />

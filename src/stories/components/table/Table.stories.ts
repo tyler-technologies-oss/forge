@@ -1,11 +1,12 @@
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { action } from '@storybook/addon-actions';
-import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
+import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
 import { SortDirection, type IColumnConfiguration, type ITableComponent, type ITableSortEventData } from '@tylertech/forge/table';
 import { TextFieldComponentDelegate } from '@tylertech/forge/text-field';
 
 import '@tylertech/forge/table';
 import '@tylertech/forge/text-field';
+import { html } from 'lit';
 
 const component = 'forge-table';
 
@@ -18,11 +19,11 @@ const initializedAction = action('forge-table-initialized');
 const columnResizeAction = action('forge-table-column-resize');
 
 const DATA = [
-  { firstName: 'Alice', lastName: 'Smith', age: 25 },
-  { firstName: 'Bob', lastName: 'Johnson', age: 35 },
-  { firstName: 'Charlie', lastName: 'Brown', age: 45 },
-  { firstName: 'David', lastName: 'Miller', age: 55 },
-  { firstName: 'Eve', lastName: 'Williams', age: 65 }
+  { id: 0, firstName: 'Alice', lastName: 'Smith', age: 25 },
+  { id: 1, firstName: 'Bob', lastName: 'Johnson', age: 35 },
+  { id: 2, firstName: 'Charlie', lastName: 'Brown', age: 45 },
+  { id: 3, firstName: 'David', lastName: 'Miller', age: 55 },
+  { id: 4, firstName: 'Eve', lastName: 'Williams', age: 65 }
 ];
 
 const COLUMNS: IColumnConfiguration[] = [
@@ -57,6 +58,7 @@ const meta = {
   render: args => {
     const tableEl = customElementStoryRenderer(component, args);
 
+    tableEl.selectKey = 'id';
     tableEl.addEventListener('forge-table-row-click', rowClickAction);
     tableEl.addEventListener('forge-table-select', selectAction);
     tableEl.addEventListener('forge-table-select-double', selectDoubleAction);
@@ -138,4 +140,50 @@ export default meta;
 
 type Story = StoryObj;
 
-export const Demo: Story = {};
+export const Demo: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<forge-table></forge-table>`
+      }
+    }
+  }
+};
+
+export const CSSOnly: Story = {
+  ...standaloneStoryParams,
+  render: () => {
+    return html`
+      <table class="forge-data-table">
+        <thead>
+          <tr>
+            <th>Column 1</th>
+            <th>Column 2</th>
+            <th>Column 3</th>
+            <th>Column 4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Row 1, Col 1</td>
+            <td>Row 1, Col 2</td>
+            <td>Row 1, Col 3</td>
+            <td>Row 1, Col 4</td>
+          </tr>
+          <tr>
+            <td>Row 2, Col 1</td>
+            <td>Row 2, Col 2</td>
+            <td>Row 2, Col 3</td>
+            <td>Row 2, Col 4</td>
+          </tr>
+          <tr>
+            <td>Row 3, Col 1</td>
+            <td>Row 3, Col 2</td>
+            <td>Row 3, Col 3</td>
+            <td>Row 3, Col 4</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+  }
+};

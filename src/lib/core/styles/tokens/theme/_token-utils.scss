@@ -15,8 +15,6 @@
     @error 'The value for "#{$name}" must be a color type.';
   }
 
-  $surface-tone: color-utils.tone($surface);
-
   // The container colors are the provided color mixed with the surface color at lower emphasis levels
   $container-high: theme-utils.hexify($color, $surface, color-emphasis.value(medium-low));
   $container: theme-utils.hexify($color, $surface, color-emphasis.value(low));

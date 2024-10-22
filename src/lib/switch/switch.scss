@@ -152,9 +152,8 @@
 // Disabled
 :host([disabled]) {
   .forge-switch {
-    @include switch-disabled;
-
     .container {
+      @include switch-disabled;
       @include container-disabled;
     }
 

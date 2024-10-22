@@ -48,4 +48,8 @@ $_host-tokens: [ navlist-spacing navlist-margin navlist-height navlist-padding n
 
 .inner {
   @include inner;
+
+  ::slotted(*) {
+    min-width: 0;
+  }
 }

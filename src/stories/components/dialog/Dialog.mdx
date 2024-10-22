@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as DialogStories from './Dialog.stories';
 
 <Meta of={DialogStories} />
@@ -50,6 +51,18 @@ forge-scaffold {
   min-width: 500px;
 }
 ```
+
+### Fullscreen
+
+Dialogs can be displayed in fullscreen mode by setting the `fullscreen` property or attribute. This will cause the dialog to fit the viewport height and width, and is
+typically used on smaller viewports and mobile devices.
+
+Additionally, the dialog will automatically adjust itself to be fullscreen when the viewport width is less than `600px`. This is to ensure that the dialog is always usable
+on smaller screens, and to alleviate the burden for developers to manage this manually since it is a common desired behavior.
+
+If you need to adjust the breakpoint at which the dialog switches to fullscreen mode, you can use the `fullscreenThreshold` property to set a custom breakpoint in pixels. Or
+if you'd like to disable the automatic fullscreen functionality entirely, you can set the `fullscreenThreshold` property to `0` and the dialog will never automatically switch
+to fullscreen unless you explicitly set the `fullscreen` attribute.
 
 ### Focus Trap
 
@@ -103,7 +116,7 @@ adapter library provides the `DialogService` to make this easy.
 ```typescript
 import { Component, Inject } from '@angular/core';
 import { DialogService } from '@tylertech/forge-angular';
-import { DIALOG_DATA, DialogConfig, DialogRef } from '@tylertech/forge-angular';
+import { DIALOG_DATA, DialogRef } from '@tylertech/forge-angular';
 
 @Component({
   selector: 'app-my-component',
@@ -187,3 +200,11 @@ export class MyDialogComponent {
 - The dialog component will add the `role="dialog"` and `aria-modal="true"` attribute for you.
 - Be sure to set the `aria-labelledby` and `aria-describedby` attributes on the `<forge-dialog>` element.
   - This will allow for a screen reader to properly announce the dialog title and description when it opens.
+
+## CSS-Only
+
+The dialog component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={DialogStories.CSSOnly} />
+
+<CssOnlyInformation />

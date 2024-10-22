@@ -152,3 +152,39 @@ export const ComplexForm: Story = {
     `;
   }
 };
+
+export const CSSOnly: Story = {
+  ...standaloneStoryParams,
+  render: () => {
+    return html`
+      <div class="forge-stack">
+        <div class="forge-field">
+          <input type="text" placeholder="Text field" />
+        </div>
+        <div class="forge-stack forge-stack--inline forge-stack--stretch">
+          <div class="forge-field">
+            <input type="text" placeholder="Text field" />
+          </div>
+          <div class="forge-field">
+            <input type="text" placeholder="Text field" />
+          </div>
+        </div>
+        <div class="forge-stack forge-stack--inline forge-stack--stretch">
+          <div class="forge-stack forge-stack--inline forge-stack--stretch">
+            <div class="forge-field">
+              <input type="text" placeholder="Text field" />
+            </div>
+            <div class="forge-field">
+              <input type="text" placeholder="Text field" />
+            </div>
+          </div>
+          <div class="forge-stack forge-stack--inline forge-stack--stretch">
+            <div class="forge-field">
+              <input type="text" placeholder="Text field" />
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+};

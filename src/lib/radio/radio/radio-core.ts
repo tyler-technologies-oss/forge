@@ -174,7 +174,10 @@ export class RadioCore implements IRadioCore {
   public set value(value: string) {
     if (this._value !== value) {
       this._value = value;
-      this._adapter.setHostAttribute(RADIO_CONSTANTS.attributes.VALUE, this._value);
+
+      if (typeof this._value === 'string' || this._value == null) {
+        this._adapter.setHostAttribute(RADIO_CONSTANTS.attributes.VALUE, this._value);
+      }
     }
   }
 

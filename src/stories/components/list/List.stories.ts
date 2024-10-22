@@ -16,6 +16,7 @@ import {
 } from '@tylertech/tyler-icons/standard';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import { styleMap } from 'lit/directives/style-map.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { storyStyles } from '../../decorators';
 
 import '@tylertech/forge/list';
@@ -241,6 +242,134 @@ export const Expandable: Story = {
           <button type="button">List Item Three</button>
         </forge-list-item>
       </forge-list>
+    `;
+  }
+};
+
+export const CSSOnly: Story = {
+  render: ({
+    variant,
+    indented,
+    wrap,
+    dense,
+    disabled,
+    twoLine,
+    threeLine,
+    withStartIcon,
+    withEndIcon,
+    withAvatar,
+    withStartCheckbox,
+    withEndCheckbox,
+    withStartRadio,
+    withEndRadio,
+    withStartSwitch,
+    withEndSwitch,
+    selectedValue,
+    ...args
+  }) => {
+    const cssVarArgs = getCssVariableArgs(args);
+    const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
+    const listClasses = {
+      'forge-list': true,
+      'forge-list--indented': indented,
+      'forge-list--wrap': wrap,
+      'forge-list--dense': dense,
+      'forge-list--two-line': twoLine,
+      'forge-list--three-line': threeLine
+    };
+
+    // prettier-ignore
+    const forgeIcon = ({ area }: { area: 'start' | 'end' }) => html`<svg class=${classMap({ 'forge-icon': true, 'forge-list-item__start': area === 'start', 'forge-list-item__end': area === 'end' })} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Forge design system logo</title><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20.9 3.2h-7.5c-.4 0-.7.2-.9.5l-1.6 2.9c-.3.5-.1 1.2.4 1.5.2.1.4.1.5.1h7.5c.4 0 .7-.2.9-.5l1.6-2.9c.3-.5.1-1.2-.4-1.5-.1-.1-.3-.1-.5-.1zm-3.6 6.2H9.8c-.4 0-.8.2-1 .6l-1.6 2.7c-.2.3-.2.8 0 1.1l3.8 6.5c.3.5 1 .7 1.5.4.2-.1.3-.2.4-.4l5.3-9.2c.3-.5.1-1.2-.4-1.5-.1-.1-.3-.2-.5-.2zm-6.9-4.6c.3-.5.1-1.2-.4-1.5-.2-.1-.4-.1-.6-.1H3c-.6 0-1.1.5-1.1 1.1 0 .2.1.4.1.5l2.7 4.6.5.9c.3.5 1 .7 1.5.4.2-.1.3-.2.4-.4l3.3-5.5z"/></svg>`;
+    const checkbox = ({ area, id }: { area: 'start' | 'end'; id: string }) =>
+      html`<div class=${classMap({ 'forge-checkbox': true, 'forge-list-item__start': area === 'start', 'forge-list-item__end': area === 'end' })}>
+        <input type="checkbox" id=${id} />
+        <div class="forge-checkbox__icon"></div>
+      </div>`;
+    const radio = ({ area, id }: { area: 'start' | 'end'; id: string }) =>
+      html`<div class=${classMap({ 'forge-radio': true, 'forge-list-item__start': area === 'start', 'forge-list-item__end': area === 'end' })}>
+        <input type="radio" id=${id} name="radios" />
+      </div>`;
+    const switchEl = ({ area, id }: { area: 'start' | 'end'; id: string }) =>
+      html`<div class=${classMap({ 'forge-switch': true, 'forge-list-item__start': area === 'start', 'forge-list-item__end': area === 'end' })}>
+        <input type="checkbox" switch id=${id} />
+        <div class="forge-switch__thumb">
+          <svg class="forge-icon forge-switch__icon forge-switch__icon--off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+          </svg>
+          <svg class="forge-icon forge-switch__icon forge-switch__icon--on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+          </svg>
+        </div>
+      </div>`;
+
+    // prettier-ignore
+    return html`
+      <div class="list-demo" style=${style}>
+        <ul class=${classMap(listClasses)}>
+          <li class=${classMap({ 'forge-list-item': true, 'forge-list-item--selected': selectedValue === 'list-item-1' })}>
+            ${withStartIcon ? forgeIcon({ area: 'start' }) : nothing}
+            ${withStartCheckbox ? checkbox({ area: 'start', id: 'li-cb-1' }) : nothing}
+            ${withStartRadio ? radio({ area: 'start', id: 'li-rb-1' }) : nothing}
+            ${withStartSwitch ? switchEl({ area: 'start', id: 'li-sw-1' }) : nothing}
+            ${variant === 'static' ? html`<span>List Item One</span>` : nothing}
+            ${variant === 'button' ? html`<button type="button" .disabled=${disabled}>List Item One</button>` : nothing}
+            ${variant === 'anchor' ? html`<a href="javascript: void(0);">List Item One</a>` : nothing}
+            ${twoLine || threeLine ? html`<span class="forge-list-item__text">Secondary text</span>` : nothing}
+            ${threeLine ? html`<span class="forge-list-item__text">Tertiary text</span>` : nothing}
+            ${withEndIcon ? forgeIcon({ area: 'end' }) : nothing}
+            ${withEndCheckbox ? checkbox({ area: 'end', id: 'li-cb-1' }) : nothing}
+            ${withEndRadio ? radio({ area: 'end', id: 'li-rb-1' }) : nothing}
+            ${withEndSwitch ? switchEl({ area: 'end', id: 'li-sw-1' }) : nothing}
+          </li>
+          <li class=${classMap({ 'forge-list-item': true, 'forge-list-item--selected': selectedValue === 'list-item-2' })}>
+            ${withStartIcon ? forgeIcon({ area: 'start' }) : nothing}
+            ${withStartCheckbox ? checkbox({ area: 'start', id: 'li-cb-2' }) : nothing}
+            ${withStartRadio ? radio({ area: 'start', id: 'li-rb-2' }) : nothing}
+            ${withStartSwitch ? switchEl({ area: 'start', id: 'li-sw-2' }) : nothing}
+            ${variant === 'static' ? html`<span>List Item Two</span>` : nothing}
+            ${variant === 'button' ? html`<button type="button" .disabled=${disabled}>List Item Two</button>` : nothing}
+            ${variant === 'anchor' ? html`<a href="javascript: void(0);">List Item Two</a>` : nothing}
+            ${twoLine || threeLine ? html`<span class="forge-list-item__text">Secondary text</span>` : nothing}
+            ${threeLine ? html`<span class="forge-list-item__text">Tertiary text</span>` : nothing}
+            ${withEndIcon ? forgeIcon({ area: 'end' }) : nothing}
+            ${withEndCheckbox ? checkbox({ area: 'end', id: 'li-cb-2' }) : nothing}
+            ${withEndRadio ? radio({ area: 'end', id: 'li-rb-2' }) : nothing}
+            ${withEndSwitch ? switchEl({ area: 'end', id: 'li-sw-2' }) : nothing}
+          </li>
+          <li class=${classMap({ 'forge-list-item': true, 'forge-list-item--selected': selectedValue === 'list-item-3' })}>
+            ${withStartIcon ? forgeIcon({ area: 'start' }) : nothing}
+            ${withStartCheckbox ? checkbox({ area: 'start', id: 'li-cb-3' }) : nothing}
+            ${withStartRadio ? radio({ area: 'start', id: 'li-rb-3' }) : nothing}
+            ${withStartSwitch ? switchEl({ area: 'start', id: 'li-sw-3' }) : nothing}
+            ${variant === 'static' ? html`<span>List Item Three</span>` : nothing}
+            ${variant === 'button' ? html`<button type="button" .disabled=${disabled}>List Item Three</button>` : nothing}
+            ${variant === 'anchor' ? html`<a href="javascript: void(0);">List Item Three</a>` : nothing}
+            ${twoLine || threeLine ? html`<span class="forge-list-item__text">Secondary text</span>` : nothing}
+            ${threeLine ? html`<span class="forge-list-item__text">Tertiary text</span>` : nothing}
+            ${withEndIcon ? forgeIcon({ area: 'end' }) : nothing}
+            ${withEndCheckbox ? checkbox({ area: 'end', id: 'li-cb-3' }) : nothing}
+            ${withEndRadio ? radio({ area: 'end', id: 'li-rb-3' }) : nothing}
+            ${withEndSwitch ? switchEl({ area: 'end', id: 'li-sw-3' }) : nothing}
+          </li>
+          <li class=${classMap({ 'forge-list-item': true, 'forge-list-item--selected': selectedValue === 'list-item-4' })}>
+            ${withStartIcon ? forgeIcon({ area: 'start' }) : nothing}
+            ${withStartCheckbox ? checkbox({ area: 'start', id: 'li-cb-4' }) : nothing}
+            ${withStartRadio ? radio({ area: 'start', id: 'li-rb-4' }) : nothing}
+            ${withStartSwitch ? switchEl({ area: 'start', id: 'li-sw-4' }) : nothing}
+            ${variant === 'static' ? html`<span>List Item Four</span>` : nothing}
+            ${variant === 'button' ? html`<button type="button" .disabled=${disabled}>List Item Four</button>` : nothing}
+            ${variant === 'anchor' ? html`<a href="javascript: void(0);">List Item Four</a>` : nothing}
+            ${twoLine || threeLine ? html`<span class="forge-list-item__text">Secondary text</span>` : nothing}
+            ${threeLine ? html`<span class="forge-list-item__text">Tertiary text</span>` : nothing}
+            ${withEndIcon ? forgeIcon({ area: 'end' }) : nothing}
+            ${withEndCheckbox ? checkbox({ area: 'end', id: 'li-cb-4' }) : nothing}
+            ${withEndRadio ? radio({ area: 'end', id: 'li-rb-4' }) : nothing}
+            ${withEndSwitch ? switchEl({ area: 'end', id: 'li-sw-4' }) : nothing}
+          </li>
+        </ul>
+      </div>
     `;
   }
 };

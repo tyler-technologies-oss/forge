@@ -1,0 +1,9 @@
+@use './core';
+
+.forge-state-layer {
+  @include core.standalone;
+
+  &__target {
+    @include core.states-target;
+  }
+}

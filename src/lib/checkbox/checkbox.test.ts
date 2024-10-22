@@ -145,6 +145,14 @@ describe('Checkbox', () => {
     expect(ctx.rootElement.lastElementChild).to.equal(ctx.labelElement);
   });
 
+  it('should not set non-string value as attribute', async () => {
+    const el = await fixture<ICheckboxComponent>(html`<forge-checkbox></forge-checkbox>`);
+    const value = { value: 'value' } as any;
+    el.value = value;
+    expect(el.value).to.equal(value);
+    expect(el.getAttribute('value')).to.be.null;
+  });
+
   it('should toggle', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox></forge-checkbox>`);
 

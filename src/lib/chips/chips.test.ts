@@ -263,13 +263,6 @@ describe('Chips', () => {
       expect(el.value).to.equal('test');
     });
 
-    it('should set value attribute when setting property', async () => {
-      const el = await fixture<IChipComponent>(html`<forge-chip>Test</forge-chip>`);
-      el.value = 'test';
-
-      expect(el.getAttribute(CHIP_CONSTANTS.attributes.VALUE)).to.equal('test');
-    });
-
     it('should set selected attribute', async () => {
       const el = await fixture<IChipComponent>(html`<forge-chip selected>Test</forge-chip>`);
       expect(el.selected).to.be.true;

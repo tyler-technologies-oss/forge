@@ -113,9 +113,6 @@ export declare abstract class WithFormAssociationContract {
   public get name(): string;
   public set name(value: string);
 
-  public abstract get disabled(): boolean;
-  public abstract set disabled(value: boolean);
-
   public abstract get readonly(): boolean;
   public abstract set readonly(value: boolean);
 
@@ -149,17 +146,21 @@ export function WithFormAssociation<TBase extends MixinBase>(base: TBase) {
 
     private _inputElement?: HTMLInputElement | HTMLSelectElement;
 
+    /** @ignore */
     public get form(): HTMLFormElement | null {
       return this[internals].form;
     }
 
+    /** @ignore */
     public get labels(): NodeList {
       return this[internals].labels;
     }
 
+    /** @ignore */
     public get name(): string {
       return this.getAttribute('name') ?? '';
     }
+    /** @ignore */
     public set name(value: string) {
       toggleAttribute(this, !!value, 'name', value);
     }

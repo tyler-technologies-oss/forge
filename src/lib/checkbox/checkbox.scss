@@ -108,9 +108,8 @@
 
 :host([disabled]) {
   .forge-checkbox {
-    @include checkbox-disabled;
-
     .container {
+      @include checkbox-disabled;
       @include container-disabled;
     }
   }

@@ -26,6 +26,8 @@ export interface IDialogAdapter extends IBaseAdapter<IDialogComponent> {
   showBackdrop(): void;
   addSurfaceClass(className: string): void;
   removeSurfaceClass(className: string): void;
+  addFullscreenListener(breakpoint: number, listener: (value: boolean) => void): void;
+  removeFullscreenListener(listener: (value: boolean) => void): void;
 }
 
 export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDialogAdapter {
@@ -33,6 +35,7 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   private _surfaceElement: HTMLDivElement;
   private _backdropElement: IBackdropComponent;
   private _moveHandleElement: HTMLElement;
+  private _fullscreenMediaQuery: MediaQueryList | undefined;
 
   public triggerElement: HTMLElement | null;
 
@@ -201,5 +204,19 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
   public removeSurfaceClass(className: string): void {
     this._surfaceElement.classList.remove(className);
+  }
+
+  public addFullscreenListener(breakpoint: number, listener: (value: boolean) => void): void {
+    this._fullscreenMediaQuery = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    this._fullscreenMediaQuery.addEventListener('change', event => listener(event.matches));
+
+    if (!this._component.fullscreen && this._fullscreenMediaQuery.matches) {
+      listener(true);
+    }
+  }
+
+  public removeFullscreenListener(listener: (value: boolean) => void): void {
+    this._fullscreenMediaQuery?.removeEventListener('change', event => listener(event.matches));
+    this._fullscreenMediaQuery = undefined;
   }
 }

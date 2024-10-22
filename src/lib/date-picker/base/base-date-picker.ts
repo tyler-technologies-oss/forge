@@ -6,7 +6,8 @@ import {
   DatePickerFormatCallback,
   DatePickerParseCallback,
   DatePickerPrepareMaskCallback,
-  DatePickerValueMode
+  DatePickerValueMode,
+  IDatePickerCalendarDropdownText
 } from './base-date-picker-constants';
 import { BaseDatePickerCore } from './base-date-picker-core';
 import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
@@ -34,10 +35,12 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
   disabledDaysOfWeek: DayOfWeek[];
   yearRange: string;
   locale: string | undefined;
+  calendarText: IDatePickerCalendarDropdownText;
 }
 
 /**
  * @property {boolean} [allowInvalidDate=false] - Whether to allow an invalid date to be input. When true, the date picker will not clear out the value of the input if the date was invalid (i.e. could not be parsed).
+ * @property {DatePickerCalendarDropdownText} calendarText - Customized strings to display in the calendar dropdown UI.
  * @property {boolean} [disabled=false] - Whether the date picker is disabled or not.
  * @property {(date: Date) => boolean} disableDayCallback - The callback to use for testing whether a specific date should be disabled or not.
  * @property {Date | Date[] | null | undefined} disabledDates - The dates that are restricted from being selected.
@@ -61,6 +64,7 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
  * @property {string} yearRange - The year range.
  *
  * @attribute {boolean} [allow-invalid-date=false] - Whether to allow an invalid date to be input. When true, the date picker will not clear out the value of the input if the date was invalid (i.e. could not be parsed).
+ * @attribute {DatePickerCalendarDropdownText} [calendar-text] - Customized strings to display in the calendar dropdown UI.
  * @attribute {boolean} [disabled=false] - Whether the date picker is disabled or not.
  * @attribute {string} [disabled-days-of-week] - The days of the week to disable from selection.
  * @attribute {string} [locale] - The locale to use.
@@ -151,6 +155,9 @@ export abstract class BaseDatePickerComponent<
       case BASE_DATE_PICKER_CONSTANTS.observedAttributes.LOCALE:
         this.locale = newValue;
         break;
+      case BASE_DATE_PICKER_CONSTANTS.observedAttributes.CALENDAR_TEXT:
+        this.calendarText = JSON.parse(newValue);
+        break;
     }
   }
 
@@ -219,4 +226,7 @@ export abstract class BaseDatePickerComponent<
 
   @coreProperty()
   public declare locale: string | undefined;
+
+  @coreProperty()
+  public declare calendarText: IDatePickerCalendarDropdownText;
 }

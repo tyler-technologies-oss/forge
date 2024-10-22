@@ -12,7 +12,7 @@ export interface ISplitButtonCore {
 
 export class SplitButtonCore implements ISplitButtonCore {
   private _variant: SplitButtonVariant = SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_VARIANT;
-  public _theme: ButtonTheme = SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_THEME;
+  private _theme: ButtonTheme = SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_THEME;
   private _disabled = false;
   private _dense = false;
   private _pill = false;

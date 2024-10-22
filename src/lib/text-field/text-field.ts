@@ -42,6 +42,7 @@ declare global {
  * @attribute {boolean} [show-clear=false] - Whether the clear button appears when text has been entered.
  *
  * @globalconfig labelPosition
+ * @globalconfig variant
  *
  * @event {CustomEvent<void>} forge-text-field-clear - Dispatched when the clear button is clicked.
  *

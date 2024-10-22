@@ -70,3 +70,22 @@ When the select is in multiple mode, the `value` property/attribute should be an
 - Verify that the select list can be toggled open or closed by pressing the space or enter key.
 - Verify that each active item in the select list can be reached by the up-arrow and down-arrow keys.
 - Verify that in multiple-select mode, the Enter key can toggle an item as selected or un-selected.
+
+## CSS-Only
+
+The select component is also available as a CSS-only component. This is a variant of the "field" component.
+
+See the [field documentation](?path=/docs/components-field--docs#css-only) for more information on how to create
+a CSS-only select.
+
+> **Note:** The only difference is that the select will use a native `<select>` element instead of an `<input>` element.
+
+```html
+<div class="forge-field">
+  <select>
+    <option value="1">Option 1</option>
+    <option value="2">Option 2</option>
+    <option value="3">Option 3</option>
+  </select>
+</div>
+```

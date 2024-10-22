@@ -1,14 +1,10 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import {
-  standaloneStoryParams,
-  transformCssPropsToControls,
-  customElementStoryRenderer,
-  generateCustomElementArgTypes,
-  GLOBAL_THEME_OPTIONS
-} from '../../utils';
+import { standaloneStoryParams, customElementStoryRenderer, generateCustomElementArgTypes, GLOBAL_THEME_OPTIONS, getCssVariableArgs } from '../../utils';
 import { tylIconNotifications } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
+import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 import '@tylertech/forge/badge';
 import '@tylertech/forge/icon-button';
@@ -96,6 +92,37 @@ export const WithIconButton: Story = {
         <forge-icon name="notifications" style="position: absolute;"></forge-icon>
         <forge-badge slot="badge">1</forge-badge>
       </forge-icon-button>
+    `;
+  }
+};
+
+export const CSSOnly: Story = {
+  parameters: {
+    controls: { exclude: ['hide', 'strong'] }
+  },
+  args: {
+    dot: false,
+    showIcon: false
+  },
+  render: ({ text, dot, showIcon, ...args }) => {
+    const cssVarArgs = getCssVariableArgs(args);
+    const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
+    const classes = {
+      'forge-badge': true,
+      'forge-badge--dot': dot
+    };
+    return html`
+      <div class=${classMap(classes)} style=${style}>
+        ${showIcon && !dot
+          ? html`<svg class="forge-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <title>Forge design system logo</title>
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path
+                d="M20.9 3.2h-7.5c-.4 0-.7.2-.9.5l-1.6 2.9c-.3.5-.1 1.2.4 1.5.2.1.4.1.5.1h7.5c.4 0 .7-.2.9-.5l1.6-2.9c.3-.5.1-1.2-.4-1.5-.1-.1-.3-.1-.5-.1zm-3.6 6.2H9.8c-.4 0-.8.2-1 .6l-1.6 2.7c-.2.3-.2.8 0 1.1l3.8 6.5c.3.5 1 .7 1.5.4.2-.1.3-.2.4-.4l5.3-9.2c.3-.5.1-1.2-.4-1.5-.1-.1-.3-.2-.5-.2zm-6.9-4.6c.3-.5.1-1.2-.4-1.5-.2-.1-.4-.1-.6-.1H3c-.6 0-1.1.5-1.1 1.1 0 .2.1.4.1.5l2.7 4.6.5.9c.3.5 1 .7 1.5.4.2-.1.3-.2.4-.4l3.3-5.5z" />
+            </svg>`
+          : ''}
+        ${dot ? nothing : text}
+      </div>
     `;
   }
 };

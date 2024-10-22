@@ -66,7 +66,7 @@ declare global {
  * @attribute {string} name - The name of the button.
  * @attribute {string} value - The form value of the button.
  *
- * @event {Event} click - Fires when the button is clicked.
+ * @event {PointerEvent} click - Fires when the button is clicked.
  * @event {CustomEvent<boolean>} forge-icon-button-toggle - Fires when the icon button is toggled. Only applies in `toggle` mode.
  *
  * @cssproperty --forge-icon-button-display - The display property of the button.
@@ -122,6 +122,15 @@ declare global {
  * @csspart root - The root container element.
  * @csspart focus-indicator - The focus-indicator indicator element.
  * @csspart state-layer - The state-layer surface element.
+ *
+ * @cssclass forge-icon-button - Apply to the interactive button element.
+ * @cssclass forge-icon-button--outlined - The outlined variant.
+ * @cssclass forge-icon-button--tonal - The tonal variant.
+ * @cssclass forge-icon-button--filled - The filled variant.
+ * @cssclass forge-icon-button--raised - The raised variant.
+ * @cssclass forge-icon-button--small - The small density.
+ * @cssclass forge-icon-button--medium - The medium density.
+ * @cssclass forge-icon-button--squared - The squared shape.
  *
  * @slot - This is a default/unnamed slot for the icon.
  * @slot on - The icon to show when in `toggle` mode when toggled "on".

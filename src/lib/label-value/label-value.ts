@@ -48,6 +48,14 @@ declare global {
  * @csspart value - The value container element.
  * @csspart icon - The icon container element.
  *
+ * @cssclass forge-label-value - The container element for the label and value elements.
+ * @cssclass forge-label-value--inline - Applied to the container element when the label and value are displayed inline next to each other.
+ * @cssclass forge-label-value--empty - Applied to the container element when the value is empty.
+ * @cssclass forge-label-value--ellipsis - Applied to the container element when the value is truncated with an ellipsis if overflowing
+ * @cssclass forge-label-value__label - The label element.
+ * @cssclass forge-label-value__value - The value element.
+ * @cssclass forge-label-value__icon - The icon element.
+ *
  * @slot label - The label to display.
  * @slot value - The value to display.
  * @slot icon - An icon to display next to the label.

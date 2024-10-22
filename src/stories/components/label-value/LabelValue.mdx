@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as LabelValueStories from './LabelValue.stories';
 
 <Meta of={LabelValueStories} />
@@ -20,6 +21,14 @@ Label values can also include an icon to the left of the label. This is useful f
 
 <Canvas of={LabelValueStories.Icon} />
 
+## Inline
+
+Label values can also be displayed inline.
+
+<Canvas of={LabelValueStories.Inline} />
+
+> **Note:** When using multiple inline label values, it's common practice to set a fixed width on the label to ensure that the values are aligned.
+
 ## API
 
 <CustomArgTypes />
@@ -27,3 +36,11 @@ Label values can also include an icon to the left of the label. This is useful f
 ## Accessibility
 
 The label value component is a simple layout component and does not have any specific accessibility requirements.
+
+## CSS-Only
+
+The label-value component is also available as a CSS-only component without the need for JavaScript.
+
+<Canvas of={LabelValueStories.CSSOnly} />
+
+<CssOnlyInformation />

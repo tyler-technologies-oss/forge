@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as ChipsStories from './Chips.stories';
 
 <Meta of={ChipsStories} />
@@ -36,3 +37,11 @@ Chips also work well with avatars. You can add an avatar to the left or right of
 - Be sure to include a role attribute to indicate to screen readers what the chip is being used for.
 - Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
 - If color conveys important information, provide additional cues for users with color perception deficiencies.
+
+## CSS-Only
+
+Chips are also available as CSS-only components without the need for JavaScript.
+
+<Canvas of={ChipsStories.CSSOnly} />
+
+<CssOnlyInformation />

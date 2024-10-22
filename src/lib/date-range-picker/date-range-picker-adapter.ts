@@ -45,8 +45,10 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
       throw new Error(`The ${DATE_RANGE_PICKER_CONSTANTS.elementName} requires two inputs`);
     }
 
-    const separator = this._createInputSeparator();
-    this._fromInputElement.insertAdjacentElement('afterend', separator);
+    if (!this._component.querySelector(`[${FIELD_CONSTANTS.attributes.MULTI_INPUT_SEPARATOR}]`)) {
+      const separator = this._createInputSeparator();
+      this._fromInputElement.insertAdjacentElement('afterend', separator);
+    }
   }
 
   protected _initializeCalendarDropdown(): void {
@@ -218,6 +220,8 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
       this._toggleElement.setAttribute('aria-disabled', isDisabled.toString());
       if (this._toggleElement.hasOwnProperty('disabled')) {
         (this._toggleElement as HTMLButtonElement).disabled = isDisabled;
+        // The toggle element should never be in the tab order
+        this._toggleElement.tabIndex = -1;
       }
     }
   }
