@@ -173,6 +173,10 @@ $variants: (
   .forge-field {
     @include core.theme('error');
     @include core.invalid-label-color;
+
+    .support-text {
+      @include core.invalid-support-text-color;
+    }
   }
 }
 
