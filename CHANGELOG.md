@@ -1,3 +1,34 @@
+# v3.3.0 (Tue Oct 22 2024)
+
+#### 🚀 Enhancement
+
+- fix(skip-link): allow focusing without url navigation [#704](https://github.com/tyler-technologies-oss/forge/pull/704) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### 🐛 Bug Fix
+
+- fix(tab-bar): allow individually disabled tabs with enabled tab-bar [#717](https://github.com/tyler-technologies-oss/forge/pull/717) ([@MikeMatusz](https://github.com/MikeMatusz))
+- fix(field): fixed a rare bug where the inset label state was not initializing properly based on the existence of slotted content [#710](https://github.com/tyler-technologies-oss/forge/pull/710) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): extend box to include outline [#703](https://github.com/tyler-technologies-oss/forge/pull/703) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix(autocomplete): properly reflect dropdown open state if dismissed by anchor click [#706](https://github.com/tyler-technologies-oss/forge/pull/706) ([@MikeMatusz](https://github.com/MikeMatusz))
+- fix(base-button): fixed a bug where calling `.click()` on a button before it's connected would result in an exception [#713](https://github.com/tyler-technologies-oss/forge/pull/713) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(paginator): append select popover to shadow root to attach IDREFs [#718](https://github.com/tyler-technologies-oss/forge/pull/718) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(circular-progress): updated the host element to set `block-size` and `inline-size` explicitly [#711](https://github.com/tyler-technologies-oss/forge/pull/711) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(inline-message): fix content alignment [#708](https://github.com/tyler-technologies-oss/forge/pull/708) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chip-field): add `focus-indicator-color` token to chips to fix themed "field" chips [#705](https://github.com/tyler-technologies-oss/forge/pull/705) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(app-bar): add missing description for `target` property & attribute [#714](https://github.com/tyler-technologies-oss/forge/pull/714) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(page-state): apply CSS var controls to default demo story [#719](https://github.com/tyler-technologies-oss/forge/pull/719) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 3
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v3.2.0 (Wed Oct 02 2024)
 
 #### 🚀 Enhancement
