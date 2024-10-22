@@ -161,3 +161,7 @@ $elevations: (
 @mixin invalid-label-color {
   @include override(label-color, theme.variable(error), value);
 }
+
+@mixin invalid-support-text-color {
+  color: #{theme.variable(error)};
+}
