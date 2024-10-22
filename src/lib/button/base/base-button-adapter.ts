@@ -225,7 +225,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
   }
 
   public animateStateLayer(): void {
-    if (this._stateLayerElement.disabled) {
+    if (this._stateLayerElement.disabled || !this._stateLayerElement.isConnected) {
       return;
     }
     this._stateLayerElement?.playAnimation();
