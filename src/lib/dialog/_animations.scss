@@ -4,7 +4,7 @@
 // Zoom (default)
 //
 
-@keyframes zoom-in {
+@keyframes forge-dialog-zoom-in {
   from {
     opacity: #{token(zoom-opacity)};
     scale: #{token(zoom-scale)};
@@ -15,7 +15,7 @@
   }
 }
 
-@keyframes zoom-out {
+@keyframes forge-dialog-zoom-out {
   from {
     opacity: 1;
     scale: 1;
@@ -30,7 +30,7 @@
 // Fade
 //
 
-@keyframes fade-in {
+@keyframes forge-dialog-fade-in {
   from {
     opacity: #{token(fade-opacity)};
   }
@@ -39,7 +39,7 @@
   }
 }
 
-@keyframes fade-out {
+@keyframes forge-dialog-fade-out {
   from {
     opacity: 1;
   }
@@ -52,7 +52,7 @@
 // Slide
 //
 
-@keyframes slide-in {
+@keyframes forge-dialog-slide-in {
   from {
     opacity: #{token(slide-opacity)};
     translate: #{token(slide-translate)};
@@ -64,7 +64,7 @@
   }
 }
 
-@keyframes slide-out {
+@keyframes forge-dialog-slide-out {
   from {
     opacity: 1;
     translate: 0 0;
