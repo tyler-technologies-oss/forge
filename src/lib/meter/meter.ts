@@ -1,5 +1,5 @@
 import { LitElement, PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { setDefaultAria } from '../core/utils/a11y-utils';
@@ -46,7 +46,11 @@ declare global {
  * @cssproperty --forge-meter-transition-timing - The timing function of transitions.
  *
  * @csspart root - The root container element.
+ * @csspart track - The element comprising the meter's background.
  * @csspart bar - The bar representing the value.
+ *
+ * @slot - The default slot for the meter's label.
+ * @slot value - A textual representation of the meter's value.
  */
 @customElement(METER_CONSTANTS.elementName)
 export class MeterComponent extends LitElement implements IMeterComponent {
@@ -140,6 +144,10 @@ export class MeterComponent extends LitElement implements IMeterComponent {
   @state() private _percentage = 0;
   @state() private _status: MeterStatus = 'optimal';
   @state() private _segmented = false;
+  @state() private _hasSlottedContent = false;
+
+  @queryAssignedNodes() private _defaultNodes: Node[];
+  @queryAssignedNodes({ slot: 'value' }) private _valueNodes: Node[];
 
   /* @ignore */
   private _internals: ElementInternals;
@@ -187,18 +195,24 @@ export class MeterComponent extends LitElement implements IMeterComponent {
   /* @internal */
   public render(): TemplateResult {
     return html`
-      <div
-        part="root"
-        class=${classMap({
-          'forge-meter': true,
-          segmented: this._segmented,
-          optimal: this._status === 'optimal',
-          suboptimal: this._status === 'suboptimal',
-          'least-optimal': this._status === 'least-optimal',
-          lowest: this._percentage === 0,
-          tickmarks: this.tickmarks
-        })}>
-        <div part="bar" class="bar" style=${styleMap({ '--percentage': this._percentage + '%' })}></div>
+      <div part="root" class="forge-meter">
+        <div class=${classMap({ heading: true, 'not-empty': this._hasSlottedContent })} @slotchange=${this._handleSlotChange}>
+          <div class="label"><slot></slot></div>
+          <div class="value"><slot name="value"></slot></div>
+        </div>
+        <div
+          part="track"
+          class=${classMap({
+            track: true,
+            segmented: this._segmented,
+            optimal: this._status === 'optimal',
+            suboptimal: this._status === 'suboptimal',
+            'least-optimal': this._status === 'least-optimal',
+            lowest: this._percentage === 0,
+            tickmarks: this.tickmarks
+          })}>
+          <div part="bar" class="bar" style=${styleMap({ '--percentage': this._percentage + '%' })}></div>
+        </div>
       </div>
     `;
   }
@@ -244,5 +258,13 @@ export class MeterComponent extends LitElement implements IMeterComponent {
    */
   private _getSegmented(): void {
     this._segmented = this.low != null || this.high != null;
+  }
+
+  /**
+   * Checks whether the meter has any slotted content.
+   */
+  private _handleSlotChange(): void {
+    const nodes = [...this._defaultNodes, ...this._valueNodes].filter(node => !!node.textContent?.trim());
+    this._hasSlottedContent = !!nodes.length;
   }
 }

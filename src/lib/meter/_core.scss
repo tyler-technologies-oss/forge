@@ -1,15 +1,40 @@
+@use '../core/styles/spacing';
+@use '../core/styles/typography';
 @use './token-utils' as *;
 
 @forward './token-utils';
 
 @mixin host {
-  // Styles for the host element
   display: inline;
 }
 
 @mixin base {
-  // Base styles for the internal root element
   box-sizing: border-box;
+}
+
+@mixin heading {
+  @include typography.style(heading2);
+
+  display: flex;
+  align-items: center;
+}
+
+@mixin heading-with-content {
+  margin-block-end: #{spacing.variable(xxsmall)};
+}
+
+@mixin label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin value {
+  margin-inline-start: auto;
+  color: var(--forge-theme-text-medium);
+}
+
+@mixin track {
   position: relative;
   block-size: #{token(height)};
   border-radius: #{token(shape)};

@@ -21,30 +21,50 @@
 .forge-meter {
   @include core.base;
 
-  &.segmented {
-    @include core.segmented;
-    @include core.segmented-animation;
+  .heading {
+    @include core.heading;
 
-    &.least-optimal {
-      @include core.least-optimal;
-    }
-
-    &.optimal {
-      @include core.optimal;
-    }
-
-    .bar {
-      @include core.segmented-bar-animation;
+    &.not-empty {
+      @include core.heading-with-content;
     }
   }
 
-  &.lowest {
-    @include core.lowest;
+  .label {
+    @include core.label;
   }
 
-  &.tickmarks::after {
-    @include core.tickmarks;
-    @include core.tickmarks-animation;
+  .value {
+    @include core.value;
+  }
+
+  .track {
+    @include core.track;
+
+    &.segmented {
+      @include core.segmented;
+      @include core.segmented-animation;
+
+      &.least-optimal {
+        @include core.least-optimal;
+      }
+
+      &.optimal {
+        @include core.optimal;
+      }
+
+      .bar {
+        @include core.segmented-bar-animation;
+      }
+    }
+
+    &.lowest {
+      @include core.lowest;
+    }
+
+    &.tickmarks::after {
+      @include core.tickmarks;
+      @include core.tickmarks-animation;
+    }
   }
 }
 
@@ -59,7 +79,7 @@
 
 @each $key, $value in ('small': 'xsmall', 'medium': 'medium', 'large': 'large') {
   :host([density='#{$key}']) {
-    .forge-meter {
+    .track {
       @include core.override(height, spacing.variable($value), value);
     }
   }
@@ -71,14 +91,14 @@
 
 @each $key, $value in ('default': shape.variable(medium), 'rounded': shape.variable(full), 'squared': 0) {
   :host([shape='#{$key}']) {
-    .forge-meter {
+    .track {
       @include core.override(shape, $value, value);
     }
   }
 }
 
 :host([inner-shape='inherit']) {
-  .forge-meter {
+  .track {
     @include core.override(inner-shape, shape);
   }
 }
@@ -88,7 +108,7 @@
 //
 
 :host([muted]) {
-  .forge-meter {
+  .track {
     @include core.override(background, var(--forge-theme-tertiary-container-minimum), value);
     @include core.override(color, var(--forge-theme-tertiary-container-high), value);
 
@@ -108,13 +128,13 @@
 
 @each $value in ('primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info') {
   :host([theme='#{$value}']:not([muted])) {
-    .forge-meter:not(.segmented) {
+    .track:not(.segmented) {
       @include core.theme($value);
     }
   }
 
   :host([theme='#{$value}'][muted]) {
-    .forge-meter:not(.segmented) {
+    .track:not(.segmented) {
       @include core.theme($value, $muted: true);
     }
   }
@@ -125,13 +145,13 @@
 //
 
 @media (prefers-reduced-motion: reduce) {
-  .forge-meter {
+  .track {
     @include core.override(transition-duration, 0, value);
   }
 }
 
 @media (forced-colors: active) {
-  .forge-meter {
+  .track {
     border: 1px solid CanvasText;
 
     .bar {
