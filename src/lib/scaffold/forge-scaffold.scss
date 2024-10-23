@@ -28,7 +28,7 @@
     grid-area: body;
     min-width: 0;
     min-height: 0;
-    overflow: hidden;
+    overflow: #{core.token(overflow)};
 
     > * {
       @include core.scrollable;

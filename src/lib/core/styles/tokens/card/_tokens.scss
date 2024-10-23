@@ -16,7 +16,7 @@ $tokens: (
   elevation: utils.module-val(card, elevation, none),
   padding: utils.module-val(card, padding, spacing.variable(medium)),
   shape: utils.module-val(card, shape, shape.variable(medium)),
-  overflow: utils.module-val(card, overflow, hidden),
+  overflow: utils.module-val(card, overflow, initial),
   // Raised
   raised-elevation: utils.module-val(card, raised-elevation, elevation.value(1)),
   raised-outline-width: utils.module-val(card, raised-outline-width, 0)
