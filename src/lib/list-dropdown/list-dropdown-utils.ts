@@ -64,6 +64,7 @@ export function createPopupDropdown(config: IListDropdownOpenConfig, targetEleme
   popoverElement.anchorElement = targetElement;
   popoverElement.placement = config.popupPlacement || 'bottom-start';
   popoverElement.persistent = Boolean(config.popupStatic);
+  popoverElement.triggerType = 'manual';
 
   if (config.popupFallbackPlacements?.length) {
     popoverElement.fallbackPlacements = config.popupFallbackPlacements;

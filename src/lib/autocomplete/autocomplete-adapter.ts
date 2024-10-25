@@ -1,15 +1,15 @@
-import { deepQuerySelectorAll, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IAutocompleteComponent } from './autocomplete';
-import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants';
-import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
-import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdown';
+import { getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { CHIP_FIELD_CONSTANTS, IChipFieldComponent } from '../chip-field';
-import { IPopoverComponent } from '../popover/popover';
-import { POPOVER_CONSTANTS } from '../popover';
-import type { IFieldComponent } from '../field/field';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
 import { FIELD_CONSTANTS } from '../field';
+import type { IFieldComponent } from '../field/field';
+import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdown';
+import { POPOVER_CONSTANTS } from '../popover';
+import { IPopoverComponent } from '../popover/popover';
+import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
+import { IAutocompleteComponent } from './autocomplete';
+import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants';
 
 export interface IAutocompleteAdapter extends IBaseAdapter {
   readonly inputElement: HTMLInputElement;
@@ -68,7 +68,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   }
 
   public setInputElement(): HTMLInputElement {
-    const inputElements = deepQuerySelectorAll(this._component, AUTOCOMPLETE_CONSTANTS.selectors.INPUT, false);
+    const inputElements = this._component.querySelectorAll(AUTOCOMPLETE_CONSTANTS.selectors.INPUT);
     if (inputElements.length) {
       this._inputElement = inputElements[0] as HTMLInputElement;
     }
