@@ -38,6 +38,11 @@
     pointer-events: initial;
   }
 
+  &:where(:not(.forge-button--outlined, .forge-button--tonal, .forge-button--filled, .forge-button--raised, .forge-button--link)),
+  &--text {
+    @include core.text;
+  }
+
   &--outlined {
     @include core.outlined;
 
