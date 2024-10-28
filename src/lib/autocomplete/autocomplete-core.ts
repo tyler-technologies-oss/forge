@@ -191,9 +191,11 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
     return this._options as IAutocompleteOption[];
   }
 
-  private _onClick(evt: MouseEvent): void {
+  private _onClick(_evt: MouseEvent): void {
     if (!this._isDropdownOpen && this._filterOnFocus) {
       this._showDropdown();
+    } else {
+      this._closeDropdown();
     }
   }
 

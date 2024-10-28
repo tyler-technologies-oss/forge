@@ -25,10 +25,6 @@ export class AppBarSearchAdapter extends BaseAdapter<IAppBarSearchComponent> imp
     if (inputElement) {
       this._inputElement = inputElement as HTMLInputElement;
 
-      if (!this._inputElement.hasAttribute('slot')) {
-        this._inputElement.slot = 'input';
-      }
-
       const focusIndicator = document.createElement('forge-focus-indicator');
       focusIndicator.targetElement = this._inputElement;
       this._rootElement.appendChild(focusIndicator);
