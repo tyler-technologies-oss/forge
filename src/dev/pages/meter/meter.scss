@@ -1,0 +1,24 @@
+h4 {
+  margin-block-end: 8px;
+  padding-inline-start: 16px;
+}
+
+forge-list-item {
+  forge-meter {
+    display: inline-block;
+    width: 48px;
+  }
+}
+
+.flex-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  white-space: nowrap;
+}
+
+#form-meter {
+  --forge-meter-tickmarks: 2;
+
+  width: 100%;
+}
