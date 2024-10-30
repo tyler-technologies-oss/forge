@@ -13,7 +13,7 @@ $tokens: (
   primary-color: utils.module-val(button, primary-color, theme.variable(primary)),
   text-color: utils.module-ref(button, text-color, primary-color),
   disabled-color: utils.module-val(button, disabled-color, theme.variable(surface-container)),
-  padding: utils.module-val(button, padding, 8px),
+  padding: utils.module-val(button, padding, spacing.variable(medium)),
   display: utils.module-val(button, display, inline-flex),
   justify: utils.module-val(button, justify, center),
   shape: utils.module-val(button, shape, shape.variable(medium)),
@@ -41,6 +41,8 @@ $tokens: (
   cursor: utils.module-val(button, cursor, pointer),
   transition-duration: utils.module-val(button, transition-duration, animation.variable(duration-short3)),
   transition-timing: utils.module-val(button, transition-timing, animation.variable(easing-standard)),
+  // Text
+  text-padding-inline: utils.module-val(button, text-padding-inline, spacing.variable(xsmall)),
   // Outlined
   outlined-background: utils.module-val(button, outlined-background, transparent),
   outlined-color: utils.module-ref(button, outlined-color, primary-color),
