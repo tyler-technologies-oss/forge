@@ -1,3 +1,23 @@
+# v3.3.1 (Wed Oct 30 2024)
+
+#### 🐛 Bug Fix
+
+- fix(field): use error color for support text when field is invalid [#720](https://github.com/tyler-technologies-oss/forge/pull/720) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix: fixed a composition/initialization bug for `<forge-autocomplete>` and `<forge-app-bar-search>` [#725](https://github.com/tyler-technologies-oss/forge/pull/725) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(dialog): expose CSS-only stylesheet [#721](https://github.com/tyler-technologies-oss/forge/pull/721) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(button): fixed inline padding on all non-text variants [#727](https://github.com/tyler-technologies-oss/forge/pull/727) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(expansion-panel): added the "With Card" story to the "Docs" page to allow for viewing the HTML used [#726](https://github.com/tyler-technologies-oss/forge/pull/726) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v3.3.0 (Tue Oct 22 2024)
 
 #### 🚀 Enhancement
