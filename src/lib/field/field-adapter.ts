@@ -19,6 +19,7 @@ export interface IFieldAdapter extends IBaseAdapter<IFieldComponent> {
 export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IFieldAdapter {
   private readonly _rootElement: HTMLElement;
   private readonly _containerElement: HTMLElement;
+  private readonly _inputContainerElement: HTMLElement;
   private readonly _labelElement: HTMLElement;
   private readonly _popoverIconElement: HTMLElement;
   private readonly _focusIndicatorElement: IFocusIndicatorComponent;
@@ -31,6 +32,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     super(component);
     this._rootElement = getShadowElement(component, FIELD_CONSTANTS.selectors.ROOT);
     this._containerElement = getShadowElement(component, FIELD_CONSTANTS.selectors.CONTAINER);
+    this._inputContainerElement = getShadowElement(component, FIELD_CONSTANTS.selectors.INPUT_CONTAINER);
     this._labelElement = getShadowElement(component, FIELD_CONSTANTS.selectors.LABEL);
     this._popoverIconElement = getShadowElement(component, FIELD_CONSTANTS.selectors.POPOVER_ICON);
     this._focusIndicatorElement = getShadowElement(component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
@@ -70,11 +72,18 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
       return;
     }
 
+    // Temporarily lock the input container element width to its current width before the animation starts
+    // to ensure that the element cannot collapse while the animation is executing. The width will be
+    // removed after the animation completes.
+    const { width: inputContainerWidth } = this._inputContainerElement.getBoundingClientRect();
+    this._inputContainerElement.style.setProperty('width', `${inputContainerWidth}px`);
+
     const className = value ? FIELD_CONSTANTS.classes.FLOATING_IN : FIELD_CONSTANTS.classes.FLOATING_OUT;
     const animationName = value ? FIELD_CONSTANTS.animations.FLOAT_IN_LABEL : FIELD_CONSTANTS.animations.FLOAT_OUT_LABEL;
     const animationEndListener: EventListener = (evt: AnimationEvent) => {
       if (evt.animationName === animationName) {
         removeClass(className, this._rootElement);
+        this._inputContainerElement.style.removeProperty('width');
         this._rootElement.removeEventListener('animationend', animationEndListener);
       }
     };

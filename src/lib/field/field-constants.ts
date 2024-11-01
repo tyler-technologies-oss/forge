@@ -30,6 +30,7 @@ const classes = {
 const selectors = {
   ROOT: '#root',
   CONTAINER: '#container',
+  INPUT_CONTAINER: '#input',
   LABEL: '#label',
   POPOVER_ICON: '#popover-icon',
   LABEL_ELEMENTS: `:where(label, ${LABEL_CONSTANTS.elementName})`,
