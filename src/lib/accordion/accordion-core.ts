@@ -41,7 +41,7 @@ export class AccordionCore implements IAccordionCore {
       }
     });
 
-    this._adapter.dispatchHostEvent(new CustomEvent(ACCORDION_CONSTANTS.events.TOGGLE, { detail: evt.target }));
+    this._adapter.dispatchHostEvent(new CustomEvent(ACCORDION_CONSTANTS.events.TOGGLE, { detail: evt.target, bubbles: true, composed: true }));
   }
 
   public get panelSelector(): string {
