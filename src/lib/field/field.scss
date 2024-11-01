@@ -141,7 +141,8 @@ $variants: (
 
     @if $density == 'extra-small' {
       :host(#{map.get($label-positions, inset)}#{$selector}) {
-        .label {
+        .label,
+        .label::before {
           @include utils.visually-hidden;
         }
 
