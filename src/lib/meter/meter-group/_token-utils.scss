@@ -1,7 +1,7 @@
-@use '../core/styles/tokens/meter/tokens';
-@use '../core/styles/tokens/token-utils';
+@use '../../core/styles/tokens/meter/meter-group/tokens';
+@use '../../core/styles/tokens/token-utils';
 
-$_module: meter;
+$_module: meter-group;
 $_tokens: tokens.$tokens;
 
 @mixin provide-theme($theme) {

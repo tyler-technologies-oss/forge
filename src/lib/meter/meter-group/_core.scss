@@ -1,0 +1,56 @@
+@use '../../core/styles/spacing';
+@use '../../core/styles/theme';
+@use '../meter/core' as meter;
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: inline;
+}
+
+@mixin base {
+  box-sizing: border-box;
+}
+
+@mixin heading {
+  @include meter.heading;
+}
+
+@mixin heading-with-content {
+  @include meter.heading-with-content;
+}
+
+@mixin label {
+  @include meter.label;
+}
+
+@mixin value {
+  @include meter.value;
+}
+
+@mixin track {
+  position: relative;
+  block-size: #{token(height)};
+  border-radius: #{token(shape)};
+  overflow: hidden;
+  background: #{token(background)};
+}
+
+@mixin tickmarks {
+  content: '';
+  position: relative;
+  display: block;
+  z-index: 9999;
+  block-size: 100%;
+  inline-size: 100%;
+  margin-inline-start: -1px;
+  background: meter.tickmarks-background(#{token(tickmarks)}, #{token(tickmark-color)});
+  opacity: #{token(tickmark-opacity)};
+  pointer-events: none;
+}
+
+@mixin muted {
+  @include override(background, theme.variable(surface-container-minimum), value);
+  @include override(tickmark-color, theme.variable(outline-medium), value);
+}

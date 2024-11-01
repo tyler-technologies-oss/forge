@@ -2,7 +2,8 @@ import { LitElement, PropertyValues, TemplateResult, html, unsafeCSS } from 'lit
 import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { setDefaultAria } from '../core/utils/a11y-utils';
+import { setDefaultAria } from '../../core/utils/a11y-utils';
+import { METER_GROUP_CONSTANTS } from '../meter-group/meter-group-constants';
 import { METER_CONSTANTS, MeterDensity, MeterInnerShape, MeterShape, MeterStatus, MeterTheme } from './meter-constants';
 
 import styles from './meter.scss';
@@ -20,6 +21,7 @@ export interface IMeterComponent extends LitElement {
   innerShape: MeterInnerShape;
   theme: MeterTheme;
   muted: boolean;
+  readonly percentage: number;
 }
 
 declare global {
@@ -132,6 +134,11 @@ export class MeterComponent extends LitElement implements IMeterComponent {
   @property({ type: Boolean, reflect: true }) public muted = false;
 
   /* @ignore */
+  public get percentage(): number {
+    return this._percentage;
+  }
+
+  /* @ignore */
   public get labels(): NodeList {
     return this._internals.labels;
   }
@@ -144,6 +151,7 @@ export class MeterComponent extends LitElement implements IMeterComponent {
   @state() private _percentage = 0;
   @state() private _status: MeterStatus = 'optimal';
   @state() private _segmented = false;
+  @state() private _grouped = false;
   @state() private _hasSlottedContent = false;
 
   @queryAssignedNodes() private _defaultNodes: Node[];
@@ -165,6 +173,7 @@ export class MeterComponent extends LitElement implements IMeterComponent {
       ariaValueMin: `${this.min}`,
       ariaValueMax: `${this.max}`
     });
+    this._getGrouped();
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
@@ -194,27 +203,29 @@ export class MeterComponent extends LitElement implements IMeterComponent {
 
   /* @internal */
   public render(): TemplateResult {
-    return html`
-      <div part="root" class="forge-meter">
-        <div class=${classMap({ heading: true, 'not-empty': this._hasSlottedContent })} @slotchange=${this._handleSlotChange}>
-          <div class="label"><slot></slot></div>
-          <div class="value"><slot name="value"></slot></div>
-        </div>
-        <div
-          part="track"
-          class=${classMap({
-            track: true,
-            segmented: this._segmented,
-            optimal: this._status === 'optimal',
-            suboptimal: this._status === 'suboptimal',
-            'least-optimal': this._status === 'least-optimal',
-            lowest: this._percentage === 0,
-            tickmarks: this.tickmarks
-          })}>
-          <div part="bar" class="bar" style=${styleMap({ '--percentage': this._percentage + '%' })}></div>
-        </div>
-      </div>
-    `;
+    return this._grouped
+      ? html` <div part="root" class="forge-meter grouped" style=${styleMap({ '--percentage': this._percentage + '%' })}></div> `
+      : html`
+          <div part="root" class="forge-meter">
+            <div class=${classMap({ heading: true, 'not-empty': this._hasSlottedContent })} @slotchange=${this._handleSlotChange}>
+              <div class="label"><slot></slot></div>
+              <div class="value"><slot name="value"></slot></div>
+            </div>
+            <div
+              part="track"
+              class=${classMap({
+                track: true,
+                segmented: this._segmented,
+                optimal: this._status === 'optimal',
+                suboptimal: this._status === 'suboptimal',
+                'least-optimal': this._status === 'least-optimal',
+                lowest: this._percentage === 0,
+                tickmarks: this.tickmarks
+              })}>
+              <div part="bar" class="bar" style=${styleMap({ '--percentage': this._percentage + '%' })}></div>
+            </div>
+          </div>
+        `;
   }
 
   /**
@@ -231,6 +242,12 @@ export class MeterComponent extends LitElement implements IMeterComponent {
     // Fallback to 0 if the percentage is NaN.
     if (isNaN(this._percentage)) {
       this._percentage = 0;
+    }
+
+    // Dispatch an event to the parent group.
+    if (this._grouped) {
+      const event = new Event(METER_CONSTANTS.events.CHANGE, { bubbles: true, composed: true });
+      this.dispatchEvent(event);
     }
 
     // Use working values in case the properties are not set.
@@ -258,6 +275,20 @@ export class MeterComponent extends LitElement implements IMeterComponent {
    */
   private _getSegmented(): void {
     this._segmented = this.low != null || this.high != null;
+  }
+
+  /**
+   * Checks if the meter is part of a group and inherits the min and max values.
+   */
+  private async _getGrouped(): Promise<void> {
+    const group = this.closest(METER_GROUP_CONSTANTS.elementName);
+    this._grouped = !!group;
+
+    if (group) {
+      await group.updateComplete;
+      this.min = group.min;
+      this.max = group.max;
+    }
   }
 
   /**

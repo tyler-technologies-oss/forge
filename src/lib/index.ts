@@ -53,6 +53,7 @@ import { LinearProgressComponent } from './linear-progress';
 import { ListComponent } from './list';
 import { ListItemComponent } from './list/list-item';
 import { MenuComponent } from './menu';
+import { MeterComponent, MeterGroupComponent } from './meter';
 import { OpenIconComponent } from './open-icon';
 import { OverlayComponent } from './overlay';
 import { PageStateComponent } from './page-state';
@@ -124,6 +125,7 @@ export * from './label-value';
 export * from './linear-progress';
 export * from './list';
 export * from './menu';
+export * from './meter';
 export * from './open-icon';
 export * from './overlay';
 export * from './page-state';
@@ -203,6 +205,8 @@ const CUSTOM_ELEMENTS = [
   ListComponent,
   ListItemComponent,
   MenuComponent,
+  MeterComponent,
+  MeterGroupComponent,
   MiniDrawerComponent,
   ModalDrawerComponent,
   OpenIconComponent,

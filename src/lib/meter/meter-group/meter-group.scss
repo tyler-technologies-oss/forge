@@ -1,0 +1,97 @@
+@use '../../core/styles/shape';
+@use '../../core/styles/spacing';
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+//
+// Base
+//
+
+.forge-meter-group {
+  @include core.tokens;
+}
+
+.forge-meter-group {
+  @include core.base;
+
+  .heading {
+    @include core.heading;
+
+    &.not-empty {
+      @include core.heading-with-content;
+    }
+  }
+
+  .label {
+    @include core.label;
+  }
+
+  .value {
+    @include core.value;
+  }
+
+  .track {
+    @include core.track;
+
+    ::slotted(forge-meter) {
+      position: static !important;
+    }
+
+    &.tickmarks::after {
+      @include core.tickmarks;
+    }
+  }
+}
+
+:host([muted]) {
+  .forge-meter-group {
+    @include core.muted;
+  }
+}
+
+//
+// Density
+//
+
+@each $key, $value in ('small': 'xsmall', 'medium': 'medium', 'large': 'large') {
+  :host([density='#{$key}']) {
+    .track {
+      @include core.override(height, spacing.variable($value), value);
+    }
+  }
+}
+
+//
+// Shape
+//
+
+@each $key, $value in ('default': shape.variable(medium), 'rounded': shape.variable(full), 'squared': 0) {
+  :host([shape='#{$key}']) {
+    .track {
+      @include core.override(shape, $value, value);
+    }
+  }
+}
+
+:host([inner-shape='inherit']) {
+  .track {
+    @include core.override(inner-shape, shape);
+  }
+}
+
+//
+// Media
+//
+
+@media (forced-colors: active) {
+  .track {
+    border: 1px solid CanvasText;
+  }
+}

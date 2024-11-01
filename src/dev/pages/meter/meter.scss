@@ -4,6 +4,8 @@ h4 {
 }
 
 forge-list-item {
+  max-width: 400px;
+  
   forge-meter {
     display: inline-block;
     width: 48px;
@@ -21,4 +23,48 @@ forge-list-item {
   --forge-meter-tickmarks: 2;
 
   width: 100%;
+}
+
+forge-meter-group {
+  --forge-meter-group-tickmarks: 9;
+}
+
+.key-item {
+  --forge-icon-font-size: 1.5em;
+
+  display: inline grid;
+  grid-template: 
+    "icon label"
+    "icon value";
+  column-gap: 8px;
+  align-items: start;
+  margin-block-start: 8px;
+  margin-inline-end: 16px;
+  line-height: normal;
+
+  forge-icon {
+    grid-area: icon;
+  }
+
+  div:first-of-type {
+    padding-block-start: 2px;
+  }
+
+  :last-child {
+    color: var(--forge-theme-text-medium);
+  }
+}
+
+.theme {
+  &-info {
+    color: var(--forge-theme-info);
+  }
+
+  &-secondary {
+    color: var(--forge-theme-secondary);
+  }
+
+  &-success {
+    color: var(--forge-theme-success);
+  }
 }

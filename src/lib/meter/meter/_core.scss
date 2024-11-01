@@ -1,5 +1,5 @@
-@use '../core/styles/spacing';
-@use '../core/styles/typography';
+@use '../../core/styles/spacing';
+@use '../../core/styles/typography';
 @use './token-utils' as *;
 
 @forward './token-utils';
@@ -13,7 +13,7 @@
 }
 
 @mixin heading {
-  @include typography.style(heading2);
+  @include typography.style(label1);
 
   display: flex;
   align-items: center;
@@ -79,6 +79,17 @@
   @include override(inner-elevation, 0, value);
 }
 
+@function tickmarks-background($count, $color, $secondary-color: null) {
+  $transparent-start: if($secondary-color, 2px, 1px);
+  @return repeating-linear-gradient(
+    90deg,
+    $color 0px,
+    $color 1px,
+    if($secondary-color, #{$secondary-color} + ' 1px,', null) if($secondary-color, #{$secondary-color} + ' 2px,', null) transparent $transparent-start,
+    transparent calc(100% / ($count + 1) + 0px)
+  );
+}
+
 @mixin tickmarks {
   // We add an inline margin and offset the background to hide tickmarks right at the edge of the meter
   $background-offset: 2px;
@@ -89,17 +100,10 @@
   block-size: 100%;
   inline-size: 100%;
   margin-inline-start: $background-offset;
-  background: repeating-linear-gradient(
-    90deg,
-    #{token(color)} 0px,
-    #{token(color)} 1px,
-    #{token(background)} 1px,
-    #{token(background)} 2px,
-    transparent 2px,
-    transparent calc(100% / (#{token(tickmarks)} + 1) + 0px)
-  );
+  background: tickmarks-background(token(tickmarks), token(color), token(background));
   background-position-x: -#{$background-offset};
   opacity: #{token(tickmark-opacity)};
+  pointer-events: none;
 }
 
 @mixin bar-animation {
@@ -124,4 +128,19 @@
   transition-property: background;
   transition-duration: #{token(transition-duration)};
   transition-timing-function: #{token(transition-timing)};
+}
+
+@mixin grouped {
+  display: block;
+  position: absolute;
+  z-index: var(--z-index);
+  inset-block-start: 0;
+  inset-inline-start: var(--inset-inline-start, 0);
+  block-size: 100%;
+  inline-size: var(--percentage);
+  border-radius: #{token(inner-shape)};
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  background: #{token(color)};
+  box-shadow: #{token(inner-elevation)};
 }

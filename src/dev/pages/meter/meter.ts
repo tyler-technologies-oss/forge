@@ -1,12 +1,12 @@
 import '$src/shared';
-import '@tylertech/forge/meter';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconAdd } from '@tylertech/tyler-icons/standard';
+import '@tylertech/forge/meter';
 import { ISelectComponent } from '@tylertech/forge/select';
 import { ISwitchComponent } from '@tylertech/forge/switch';
+import { tylIconLens } from '@tylertech/tyler-icons/standard';
 import './meter.scss';
 
-IconRegistry.define([tylIconAdd]);
+IconRegistry.define([tylIconLens]);
 
 const meter = document.querySelector('forge-meter');
 const valueInput = document.getElementById('opt-value') as HTMLInputElement;

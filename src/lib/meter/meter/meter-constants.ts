@@ -1,4 +1,4 @@
-import { COMPONENT_NAME_PREFIX, Theme } from '../constants';
+import { COMPONENT_NAME_PREFIX, Theme } from '../../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}meter`;
 
@@ -27,11 +27,16 @@ const numbers = {
   DEFAULT_MAX: 1
 };
 
+const events = {
+  CHANGE: 'change'
+};
+
 export const METER_CONSTANTS = {
   elementName,
   observedAttributes,
   attributes,
-  numbers
+  numbers,
+  events
 };
 
 export type MeterDensity = 'default' | 'small' | 'medium' | 'large';

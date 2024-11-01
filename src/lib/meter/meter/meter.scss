@@ -1,5 +1,5 @@
-@use '../core/styles/shape';
-@use '../core/styles/spacing';
+@use '../../core/styles/shape';
+@use '../../core/styles/spacing';
 @use './core';
 
 //
@@ -66,11 +66,15 @@
       @include core.tickmarks-animation;
     }
   }
-}
 
-.bar {
-  @include core.bar;
-  @include core.bar-animation;
+  .bar {
+    @include core.bar;
+    @include core.bar-animation;
+  }
+
+  &.grouped {
+    @include core.grouped;
+  }
 }
 
 //
@@ -124,6 +128,10 @@
       }
     }
   }
+
+  .grouped {
+    @include core.override(color, var(--forge-theme-tertiary-container-high), value);
+  }
 }
 
 @each $value in ('primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info') {
@@ -131,10 +139,18 @@
     .track:not(.segmented) {
       @include core.theme($value);
     }
+
+    .grouped {
+      @include core.theme($value);
+    }
   }
 
   :host([theme='#{$value}'][muted]) {
     .track:not(.segmented) {
+      @include core.theme($value, $muted: true);
+    }
+
+    .grouped {
       @include core.theme($value, $muted: true);
     }
   }
@@ -157,5 +173,10 @@
     .bar {
       background: CanvasText;
     }
+  }
+
+  .grouped {
+    border-inline-end: 1px solid Canvas !important;
+    background: CanvasText !important;
   }
 }
