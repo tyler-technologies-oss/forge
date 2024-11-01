@@ -19,6 +19,8 @@ declare global {
  * @tag forge-accordion
  *
  * @dependency forge-expansion-panel
+ *
+ * @fires {CustomEvent<IExpansionPanelComponent>} forge-accordion-toggle - Dispatched when a child expansion panel is toggled. Includes the related expansion panel element in the event detail.
  */
 @customElement({
   name: ACCORDION_CONSTANTS.elementName,

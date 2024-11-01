@@ -1,5 +1,5 @@
 import { IAccordionAdapter } from './accordion-adapter';
-import { EXPANSION_PANEL_CONSTANTS } from '../expansion-panel/expansion-panel-constants';
+import { EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from '../expansion-panel/expansion-panel-constants';
 import { IExpansionPanelComponent } from '../expansion-panel';
 import { ACCORDION_CONSTANTS } from './accordion-constants';
 
@@ -35,9 +35,13 @@ export class AccordionCore implements IAccordionCore {
     const panels = this._adapter.getChildPanels(this._panelSelector);
     panels.forEach(panel => {
       if (evt.target !== panel && !this._adapter.isNestedPanel(panel)) {
-        panel.open = false;
+        if (panel.open) {
+          panel[emulateUserToggle](false);
+        }
       }
     });
+
+    this._adapter.dispatchHostEvent(new CustomEvent(ACCORDION_CONSTANTS.events.TOGGLE, { detail: evt.target }));
   }
 
   public get panelSelector(): string {
