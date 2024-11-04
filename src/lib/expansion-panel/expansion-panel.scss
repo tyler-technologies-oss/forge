@@ -46,6 +46,12 @@
 // Open
 //
 
+:host(:not([open])) {
+  .inner {
+    overflow: hidden;
+  }
+}
+
 :host([open]) {
   .content {
     @include open-base;

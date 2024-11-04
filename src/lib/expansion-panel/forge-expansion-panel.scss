@@ -18,6 +18,8 @@
 
   &__content {
     @include core.inner;
+
+    overflow: hidden;
   }
 
   @media (prefers-reduced-motion: reduce) {
