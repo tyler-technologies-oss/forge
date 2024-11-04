@@ -1,0 +1,77 @@
+import { Meta, Canvas, Story } from '@storybook/blocks';
+import * as FocusIndicatorClippingStories from './FocusIndicatorClipping.stories';
+
+<Meta title="FAQ/Focus Indicator Clipping" />
+
+# Focus Indicator Clipping
+
+Focus indicators (or "focus rings") are a [crucial part of web accessibility](https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible). They help users who navigate with a keyboard to understand where they are on the page.
+
+However, sometimes focus indicators can be clipped or hidden by various CSS styles:
+
+- **Overflow**: The parent element has `overflow: hidden` or `overflow: auto` set, which clips the focus indicators at the padding box level if they are touching the edge of the parent element.
+- **Containment**: The parent element has `contain: content` set, which clips the focus indicators at the content box level.
+- **z-index**: Other elements using `z-index` to position themselves above the focus indicator, causing it to be clipped.
+
+While there are many other scenarios, the most common reason for focus indicators being clipped is due to the `overflow` property.
+
+This can happen when the focus indicator is drawn outside the element's box dimensions, and the parent element has styles that clip the focus indicator at its edges.
+
+<Story of={FocusIndicatorClippingStories.ClippingExample} />
+
+> In this example, the focus indicator for the button and text-field will be clipped by the `overflow: auto` set on the `<forge-scaffold>` component. Try tabbing through the elements to see the issue.
+
+<br />
+
+## Focus indicator types
+
+There are two types of focus indicators:
+
+1. **Outward**: These are the default focus indicators that are drawn around the element. They are a solid color and are drawn outside the element's box dimensions using the CSS `outline` property.
+2. **Inward**: These are focus indicators that are drawn inside the element. They are also a solid color, but are drawn inside the element's box dimensions.
+
+The issue with focus indicators being clipped typically occurs with the **outward** type due to the component not reserving enough space for the focus indicator outside of its own box dimensions.
+
+To learn more about focus indicators, check out the [focus indicator component documentation](?path=/docs/components-focus-indicator--docs).
+
+## Forge components
+
+Tyler Forge™ components are designed to be accessible by default, but there are some common issues that can cause focus indicators to be clipped based on how they are used and
+composed together.
+
+Most commonly the `<forge-scaffold>` component can cause focus indicators to be clipped due to its usage of `overflow: auto` around its content areas if no `padding` is present.
+It can be common to nest form elements and buttons inside of the scaffold body content, which creates an invisible "edge" that clips outward focus indicators.
+
+> This is not necessarily a bug, or even specific to the `<forge-scaffold>`, as it can happen on any element that has `overflow: hidden` or `overflow: auto`.
+
+To handle this situation, you can either set `overflow: visible` on the element with the `slot="body"` attribute (which means you'd need to handle scrolling yourself), or add padding
+to the element to ensure the focus indicator has enough space to be drawn (which means you may run into alignment issues with other related content on your page).
+
+See the below examples for a demonstration of how to fix this issue in common layouts.
+
+## Examples
+
+Here is an example of a focus indicator being clipped due to the parent element having `overflow: auto` set:
+
+<Canvas of={FocusIndicatorClippingStories.ClippingExample} />
+
+In this example, the focus indicator for the button will be clipped by the `overflow: auto` set on the `<forge-scaffold>`'s `<div slot="body">` element. To fix this, you can
+add padding to the element with the `slot="body"` attribute:
+
+<Canvas of={FocusIndicatorClippingStories.NoClippingExample} />
+
+While this does work, it presents a new problem due to the outer `<forge-card>` also having its own built-in padding resulting in misalignment of the content and duplicate spacing.
+
+To avoid this, you can remove the default card padding and add it to the body content instead:
+
+<Canvas of={FocusIndicatorClippingStories.NoClippingFixExample} />
+
+This essentially just changes where the padding is applied, but it's important to preserve space around your interactive elements for focus indicators to be drawn correctly.
+
+## Takeaways
+
+The main takeaway is that focus indicators can be clipped by various CSS styles, and this is not necessarily specific to Tyler Forge™. However, it is important to be aware of this issue
+when using the Forge components in your own projects, and make sure you are accounting for the space required for focus indicators outside of interactive elements.
+
+The examples above will likely be the most common, but if you run into problems that you can't solve or if you have any questions about focus indicators, feel free to reach out to us
+for assistance and we'll be glad to help!
