@@ -1,5 +1,5 @@
 import { LitElement, TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils';
@@ -41,6 +41,10 @@ export class KeyItemComponent extends LitElement implements IKeyItemComponent {
    */
   @property({ type: Boolean, reflect: true }) public inline = false;
 
+  @state() private _hasValue = false;
+
+  @queryAssignedNodes({ slot: 'value' }) private _valueNodes: Node[];
+
   /* @ignore */
   private _internals: ElementInternals;
 
@@ -54,6 +58,7 @@ export class KeyItemComponent extends LitElement implements IKeyItemComponent {
     setDefaultAria(this, this._internals, {
       role: 'listitem'
     });
+    this._handleSlotChange();
   }
 
   /* @internal */
@@ -61,7 +66,7 @@ export class KeyItemComponent extends LitElement implements IKeyItemComponent {
     return html`
       <div
         part="root"
-        class=${classMap({ 'forge-key-item': true, inline: this.inline })}
+        class=${classMap({ 'forge-key-item': true, inline: this.inline, 'no-value': !this._hasValue })}
         style=${styleMap({ [KEY_ITEM_CONSTANTS.cssCustomProperties.ICON_COLOR]: this.color })}>
         <div part="icon" class="icon">
           <slot name="icon">
@@ -71,10 +76,15 @@ export class KeyItemComponent extends LitElement implements IKeyItemComponent {
         <div part="label" class="label">
           <slot></slot>
         </div>
-        <div part="value" class="value">
+        <div part="value" class="value" @slotchange=${this._handleSlotChange}>
           <slot name="value"></slot>
         </div>
       </div>
     `;
+  }
+
+  private _handleSlotChange(): void {
+    const nodes = this._valueNodes.filter(node => !!node.textContent?.trim());
+    this._hasValue = !!nodes.length;
   }
 }

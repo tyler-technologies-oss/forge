@@ -22,6 +22,20 @@
   &.inline {
     @include core.inline;
   }
+
+  &.no-value {
+    @include core.no-value;
+
+    .value {
+      display: none;
+    }
+  }
+
+  &:not(.inline, .no-value) {
+    .label {
+      padding-block-start: 1px;
+    }
+  }
 }
 
 .icon {
