@@ -46,6 +46,7 @@ import { FocusIndicatorComponent } from './focus-indicator';
 import { IconComponent } from './icon';
 import { IconButtonComponent } from './icon-button';
 import { InlineMessageComponent } from './inline-message';
+import { KeyComponent, KeyItemComponent } from './key';
 import { KeyboardShortcutComponent } from './keyboard-shortcut';
 import { LabelComponent } from './label';
 import { LabelValueComponent } from './label-value';
@@ -119,6 +120,7 @@ export * from './focus-indicator';
 export * from './icon';
 export * from './icon-button';
 export * from './inline-message';
+export * from './key';
 export * from './keyboard-shortcut';
 export * from './label';
 export * from './label-value';
@@ -198,7 +200,9 @@ const CUSTOM_ELEMENTS = [
   IconButtonComponent,
   IconComponent,
   InlineMessageComponent,
+  KeyComponent,
   KeyboardShortcutComponent,
+  KeyItemComponent,
   LabelComponent,
   LabelValueComponent,
   LinearProgressComponent,

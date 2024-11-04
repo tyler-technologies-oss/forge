@@ -1,0 +1,41 @@
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+//
+// Base
+//
+
+.forge-key-item {
+  @include core.tokens;
+}
+
+.forge-key-item {
+  @include core.base;
+
+  &.inline {
+    @include core.inline;
+  }
+}
+
+.icon {
+  @include core.icon;
+}
+
+.label {
+  @include core.label;
+}
+
+.value {
+  @include core.value;
+}
+
+.default-icon {
+  @include core.default-icon;
+}
