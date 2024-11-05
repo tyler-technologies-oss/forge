@@ -68,8 +68,11 @@ export class ChipFieldCore extends BaseFieldCore<IChipFieldAdapter> implements I
     }
   }
 
-  private _onClick(_evt: MouseEvent): void {
+  private _onClick(evt: MouseEvent): void {
     if (this._disabled) {
+      return;
+    }
+    if (evt.target === this._adapter.inputElement) {
       return;
     }
     this._adapter.focusInput();
