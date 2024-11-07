@@ -9,11 +9,14 @@ export interface IExpansionPanelAdapter extends IBaseAdapter {
   addHeaderListener(type: keyof HTMLElementEventMap, listener: EventListener): void;
   tryToggleOpenIcon(value: boolean): void;
   setContentVisibility(visible: boolean): void;
+  animationStart(): void;
+  animationEnd(): void;
 }
 
 export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent> implements IExpansionPanelAdapter {
   private _headerElement: HTMLElement;
   private _contentElement: HTMLElement;
+  private _innerElement: HTMLElement;
 
   private _transitionStartListener: EventListener = this._onTransitionStart.bind(this);
   private _transitionEndListener: EventListener = this._onTransitionEnd.bind(this);
@@ -23,6 +26,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
     super(component);
     this._headerElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.HEADER);
     this._contentElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.CONTENT);
+    this._innerElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.INNER);
   }
 
   public setAnimationCompleteListener(listener: () => void): void {
@@ -57,5 +61,13 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
       this.toggleHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPENING, false);
       this._transitionCompleteListener();
     }
+  }
+
+  public animationStart(): void {
+    this._innerElement.style.overflow = 'hidden';
+  }
+
+  public animationEnd(): void {
+    this._innerElement.style.removeProperty('overflow');
   }
 }

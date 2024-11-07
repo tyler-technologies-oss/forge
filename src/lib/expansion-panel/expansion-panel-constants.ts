@@ -21,6 +21,7 @@ const classes = {
 const selectors = {
   HEADER: '.header',
   CONTENT: '.content',
+  INNER: '.inner',
   IGNORE: ':is([data-forge-ignore],[forge-ignore])',
   OPEN_ICON: `:is([slot=header] ${OPEN_ICON_CONSTANTS.elementName}, ${OPEN_ICON_CONSTANTS.elementName}[slot^=header])`
 };

@@ -49,6 +49,8 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   private _onAnimationComplete(): void {
     if (!this._open) {
       this._adapter.setContentVisibility(false);
+    } else if (this._animationType !== 'none') {
+      this._adapter.animationEnd();
     }
     this._adapter.dispatchHostEvent(new CustomEvent(EXPANSION_PANEL_CONSTANTS.events.ANIMATION_COMPLETE, { detail: this._open }));
   }
@@ -57,6 +59,9 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
     this._adapter.toggleHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN, this._open);
     this._adapter.tryToggleOpenIcon(this._open);
     if (this._open) {
+      if (this._animationType !== 'none') {
+        this._adapter.animationStart();
+      }
       this._adapter.setContentVisibility(true);
     }
   }
