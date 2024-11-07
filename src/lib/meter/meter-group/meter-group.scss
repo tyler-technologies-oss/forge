@@ -1,5 +1,6 @@
 @use '../../core/styles/shape';
 @use '../../core/styles/spacing';
+@use '../meter';
 @use './core';
 
 //
@@ -82,7 +83,11 @@
 
 :host([inner-shape='inherit']) {
   .track {
-    @include core.override(inner-shape, shape);
+    @include meter.provide-theme(
+      (
+        inner-shape: #{core.token(shape)}
+      )
+    );
   }
 }
 

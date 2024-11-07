@@ -11,8 +11,6 @@ $tokens: (
   background: utils.module-val(meter-group, background, theme.variable(surface-container-low)),
   height: utils.module-val(meter-group, height, spacing.variable(medium)),
   shape: utils.module-val(meter-group, shape, shape.variable(medium)),
-  inner-shape: utils.module-val(meter-group, inner-shape, 0),
-  inner-elevation: utils.module-val(meter-group, inner-elevation, elevation.value(4)),
   tickmarks: utils.module-val(meter-group, tickmarks, 10),
   tickmark-color: utils.module-val(meter-group, tickmark-color, theme.variable(outline-high)),
   tickmark-opacity: utils.module-val(meter-group, tickmark-opacity, color-emphasis.value(medium))

@@ -130,6 +130,10 @@
   transition-timing-function: #{token(transition-timing)};
 }
 
+// Manually reference the height of the meter group to avoid a circular dependency. Use half the
+// meter group's height to extend the meter behind the radius of the preceding meter.
+$leading: calc(var(--_meter-group-height) * 0.5);
+
 @mixin grouped {
   display: block;
   position: absolute;
@@ -137,10 +141,11 @@
   inset-block-start: 0;
   inset-inline-start: var(--inset-inline-start, 0);
   block-size: 100%;
-  inline-size: var(--percentage);
+  inline-size: calc(var(--percentage) + $leading);
   border-radius: #{token(inner-shape)};
   border-start-start-radius: 0;
   border-end-start-radius: 0;
+  margin-inline-start: calc(-1 * $leading);
   background: #{token(color)};
   box-shadow: #{token(inner-elevation)};
 }

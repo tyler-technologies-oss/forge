@@ -1,13 +1,13 @@
+import { debounce } from '@tylertech/forge-core';
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedElements, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils';
 import { IMeterComponent } from '../meter/meter';
-import { METER_CONSTANTS, MeterDensity, MeterShape } from '../meter/meter-constants';
+import { METER_CONSTANTS, MeterDensity, MeterInnerShape, MeterShape } from '../meter/meter-constants';
 import { METER_GROUP_CONSTANTS } from './meter-group-constants';
 
 import styles from './meter-group.scss';
-import { debounce } from '@tylertech/forge-core';
 
 export interface IMeterGroupComponent extends LitElement {
   min: number;
@@ -15,6 +15,7 @@ export interface IMeterGroupComponent extends LitElement {
   tickmarks: boolean;
   density: MeterDensity;
   shape: MeterShape;
+  innerShape: MeterInnerShape;
 }
 
 declare global {
@@ -26,19 +27,17 @@ declare global {
 /**
  * @tag forge-meter-group
  *
- * @cssproperty --forge-meter-background - The background color of the meter.
- * @cssproperty --forge-meter-color - The color of the meter's bar.
- * @cssproperty --forge-meter-height - The block size of the meter.
- * @cssproperty --forge-meter-shape - The border radius of the meter.
- * @cssproperty --forge-meter-bar-inner-shape - The border radius of the meter's bar.
- * @cssproperty --forge-meter-tickmarks - The number of tickmarks to display.
- * @cssproperty --forge-meter-tickmark-opacity - The opacity of the tickmarks.
- * @cssproperty --forge-meter-transition-duration - The duration of transitions.
- * @cssproperty --forge-meter-transition-timing - The timing function of transitions.
+ * @summary Meter groups display several meters together on one track.
+ *
+ * @cssproperty --forge-meter-group-background - The background color of the meter group.
+ * @cssproperty --forge-meter-group-height - The block size of the meter group.
+ * @cssproperty --forge-meter-group-shape - The border radius of the meter group.
+ * @cssproperty --forge-meter-group-tickmarks - The number of tickmarks to display.
+ * @cssproperty --forge-meter-group-tickmark-color - The color of the tickmarks.
+ * @cssproperty --forge-meter-group-tickmark-opacity - The opacity of the tickmarks.
  *
  * @csspart root - The root container element.
- * @csspart track - The element comprising the meter's background.
- * @csspart bar - The bar representing the value.
+ * @csspart track - The element comprising the meter group's background.
  *
  * @slot - The default slot for grouped `<forge-meter>` elements.
  * @slot label - Positions a label above the meter group.
@@ -50,11 +49,42 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
   public static styles = unsafeCSS(styles);
   public static formAssociated = true;
 
+  /**
+   * The minimum value of each meter in the group.
+   * @default 0
+   * @attribute
+   */
   @property({ type: Number, reflect: true }) public min = METER_CONSTANTS.numbers.DEFAULT_MIN;
+  /**
+   * The maximum value of each meter in the group.
+   * @default 1
+   * @attribute
+   */
   @property({ type: Number, reflect: true }) public max = METER_CONSTANTS.numbers.DEFAULT_MAX;
+  /**
+   * Whether to display tickmarks.
+   * @default false
+   * @attribute
+   */
   @property({ type: Boolean, reflect: true }) public tickmarks = false;
+  /**
+   * The density of the meter group.
+   * @default 'default'
+   * @attribute
+   */
   @property({ reflect: true }) public density: MeterDensity = 'default';
+  /**
+   * The shape of the meter group.
+   * @default 'default'
+   * @attribute
+   */
   @property({ reflect: true }) public shape: MeterShape = 'default';
+  /**
+   * The shape of each meter in the group.
+   * @default 'default'
+   * @attribute
+   */
+  @property({ reflect: true, attribute: 'inner-shape' }) public innerShape: MeterInnerShape = 'default';
 
   /* @ignore */
   public get labels(): NodeList {
@@ -108,7 +138,7 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
   }
 
   /**
-   * Apply the min and max values to each meter in the group. These should always be set on the
+   * Applies the min and max values to each meter in the group. These should always be set on the
    * meter group component to ensure that all meters are in sync.
    */
   private _syncMeters(): void {
@@ -126,7 +156,7 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
    * */
   private _debounceMeterChange = debounce(this._handleMeterChange.bind(this), 0);
   /**
-   * Handle changes to the meters in the group, updating their arrangement relative to each other.
+   * Handles changes to the meters in the group, updating their arrangement relative to each other.
    */
   private _handleMeterChange(): void {
     // Iterate through each slotted meter, applying z-indices based on their order and setting an
