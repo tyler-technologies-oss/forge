@@ -41,6 +41,7 @@ const preview: Preview = {
             'Forms',
             'Sass Library'
           ],
+          'FAQ',
           'Frameworks',
           [
             'Angular',
