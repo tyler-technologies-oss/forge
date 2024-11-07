@@ -130,9 +130,11 @@
   transition-timing-function: #{token(transition-timing)};
 }
 
+/* stylelint-disable custom-property-pattern */
 // Manually reference the height of the meter group to avoid a circular dependency. Use half the
 // meter group's height to extend the meter behind the radius of the preceding meter.
 $leading: calc(var(--_meter-group-height) * 0.5);
+/* stylelint-enable custom-property-pattern */
 
 @mixin grouped {
   display: block;
