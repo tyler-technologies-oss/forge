@@ -42,3 +42,4 @@ export const EXPANSION_PANEL_CONSTANTS = {
 
 export type ExpansionPanelOrientation = 'horizontal' | 'vertical';
 export type ExpansionPanelAnimationType = 'default' | 'none';
+export const emulateUserToggle = Symbol('emulateUserToggle');
