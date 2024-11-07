@@ -1,3 +1,25 @@
+# v3.3.2 (Thu Nov 07 2024)
+
+#### 🐛 Bug Fix
+
+- fix(accordion): always dispatch `forge-expansion-panel-toggle` event on panels that are closing in response to a user toggling another panel [#733](https://github.com/tyler-technologies-oss/forge/pull/733) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: allow overflowing content in card, scaffold, and expansion panel [#736](https://github.com/tyler-technologies-oss/forge/pull/736) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): fixed a bug where the width could collapse while the inset label animation is executing [#730](https://github.com/tyler-technologies-oss/forge/pull/730) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): hide required asterisk at extra-small density [#731](https://github.com/tyler-technologies-oss/forge/pull/731) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(TextFieldComponentDelegate): fix duplicate `id` being set when provided via options [#732](https://github.com/tyler-technologies-oss/forge/pull/732) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chip-field): fixed a bug where the dropdown would close immediately if clicking directly on the `<input>` element [#738](https://github.com/tyler-technologies-oss/forge/pull/738) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(toolbar): fixed "after-section-end" part name [#739](https://github.com/tyler-technologies-oss/forge/pull/739) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(FAQ): added a new FAQ page describing how to handle focus indicator clipping [#737](https://github.com/tyler-technologies-oss/forge/pull/737) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.3.1 (Wed Oct 30 2024)
 
 #### 🐛 Bug Fix
