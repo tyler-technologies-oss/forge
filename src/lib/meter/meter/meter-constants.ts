@@ -18,6 +18,7 @@ export const METER_CONSTANTS = {
   events
 };
 
+export type MeterDirection = 'inline' | 'block';
 export type MeterDensity = 'default' | 'small' | 'medium' | 'large';
 export type MeterShape = 'default' | 'round' | 'squared';
 export type MeterInnerShape = 'default' | 'inherit';

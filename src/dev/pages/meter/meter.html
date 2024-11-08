@@ -13,12 +13,22 @@ include('./src/partials/page.ejs', {
       { type: 'text-field', inputType: 'number', label: 'Tickmarks', id: 'opt-tickmarks', defaultValue: 0 },
       {
         type: 'select',
+        label: 'Direction',
+        id: 'opt-direction',
+        defaultValue: 'inline',
+        options: [
+          { label: 'Inline (default)', value: 'inline'},
+          { label: 'Block', value: 'block' }
+        ]
+      },
+      {
+        type: 'select',
         label: 'Density',
         id: 'opt-density',
         defaultValue: 'medium',
         options: [
           { label: 'Small', value: 'small'},
-          { label: 'Medium', value: 'medium' },
+          { label: 'Medium (default)', value: 'medium' },
           { label: 'Large', value: 'large' }
         ]
       },

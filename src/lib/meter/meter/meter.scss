@@ -78,6 +78,42 @@
 }
 
 //
+// Vertical
+//
+
+:host([direction='block']) {
+  @include core.vertical-host;
+
+  .forge-meter {
+    @include core.vertical-base;
+
+    .heading {
+      @include core.vertical-heading;
+
+      &.not-empty {
+        @include core.vertical-heading-with-content;
+      }
+    }
+
+    .track {
+      @include core.vertical-track;
+
+      &.tickmarks::after {
+        @include core.vertical-tickmarks;
+      }
+    }
+
+    .bar {
+      @include core.vertical-bar;
+    }
+
+    &.grouped {
+      @include core.vertical-grouped;
+    }
+  }
+}
+
+//
 // Density
 //
 
@@ -178,5 +214,12 @@
   .grouped {
     border-inline-end: 1px solid Canvas !important;
     background: CanvasText !important;
+  }
+
+  :host([direction='block']) {
+    .grouped {
+      border-block-start: 1px solid CanvasText !important;
+      border-inline-end: initial !important;
+    }
   }
 }

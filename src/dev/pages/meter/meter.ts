@@ -16,6 +16,7 @@ const lowInput = document.getElementById('opt-low') as HTMLInputElement;
 const highInput = document.getElementById('opt-high') as HTMLInputElement;
 const optimumInput = document.getElementById('opt-optimum') as HTMLInputElement;
 const tickmarksInput = document.getElementById('opt-tickmarks') as HTMLInputElement;
+const directionSelect = document.getElementById('opt-direction') as ISelectComponent;
 const densitySelect = document.getElementById('opt-density') as ISelectComponent;
 const shapeSelect = document.getElementById('opt-shape') as ISelectComponent;
 const innerShapeSelect = document.getElementById('opt-inner-shape') as ISelectComponent;
@@ -71,6 +72,10 @@ tickmarksInput.addEventListener('input', () => {
   const value = parseFloat(tickmarksInput.value);
   meter.tickmarks = value > 0;
   meter.style.setProperty('--forge-meter-tickmarks', value.toString());
+});
+
+directionSelect.addEventListener('change', () => {
+  meter.direction = directionSelect.value as any;
 });
 
 shapeSelect.addEventListener('change', () => {

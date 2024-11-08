@@ -4,7 +4,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils';
 import { METER_GROUP_CONSTANTS } from '../meter-group/meter-group-constants';
-import { METER_CONSTANTS, MeterDensity, MeterInnerShape, MeterShape, MeterStatus, MeterTheme } from './meter-constants';
+import { METER_CONSTANTS, MeterDensity, MeterDirection, MeterInnerShape, MeterShape, MeterStatus, MeterTheme } from './meter-constants';
 
 import styles from './meter.scss';
 
@@ -16,6 +16,7 @@ export interface IMeterComponent extends LitElement {
   high: number | null | undefined;
   optimum: number | null | undefined;
   tickmarks: boolean;
+  direction: MeterDirection;
   density: MeterDensity;
   shape: MeterShape;
   innerShape: MeterInnerShape;
@@ -102,6 +103,12 @@ export class MeterComponent extends LitElement implements IMeterComponent {
    * @attribute
    */
   @property({ type: Boolean, reflect: true }) public tickmarks = false;
+  /**
+   * Whether the meter is oriented in the inline or block direction.
+   * @default 'inline'
+   * @attribute
+   */
+  @property({ reflect: true }) public direction: MeterDirection = 'inline';
   /**
    * The shape of the meter.
    * @default 'default'
@@ -286,6 +293,7 @@ export class MeterComponent extends LitElement implements IMeterComponent {
 
     if (group) {
       await group.updateComplete;
+      this.direction = group.direction;
       this.min = group.min;
       this.max = group.max;
     }

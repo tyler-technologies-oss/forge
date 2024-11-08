@@ -3,6 +3,14 @@
     <label for="meter">Capacity</label>
     <span slot="value" id="value">50%</span>
   </forge-meter>
+
+  <div>
+    <h3 class="forge-typography--heading2">Vertical</h3>
+    <forge-meter id="meter" value="50" max="100" direction="block">
+      <label for="meter">Capacity</label>
+      <span slot="value" id="value">50%</span>
+    </forge-meter>
+  </div>
   
   <div>
     <h3 class="forge-typography--heading2">In List</h3>
@@ -36,18 +44,37 @@
     </forge-list>
   </div>
 
-  <form>
-    <h3 class="forge-typography--heading2">Form Associated</h3>
-    <label class="flex-row">
-      <span class="forge-typography--label1">Complexity</span>
-      <forge-meter id="form-meter" value="1" min="0" max="3" low="1" high="3" optimum="0" shape="rounded" tickmarks aria-valuetext="Somewhat complex"></forge-meter>
-      <forge-tooltip position="bottom">Somewhat complex</forge-tooltip>
-    </label>
-  </form>
-
   <div>
     <h3 class="forge-typography--heading2">Grouped</h3>
     <forge-meter-group id="meter-group" max="100">
+      <label slot="label" for="meter-group">Birds</label>
+      <span slot="value">75%</span>
+      <forge-meter value="25" theme="info" aria-label="Peregrine"></forge-meter>
+      <forge-meter value="35" theme="secondary" aria-label="Collared Dove"></forge-meter>
+      <forge-meter value="15" theme="success" aria-label="Golden Pheasant"></forge-meter>
+    </forge-meter-group>
+    <div class="key forge-typography--label1">
+      <span class="key-item">
+        <forge-icon class="theme-info" name="lens"></forge-icon>
+        <div>Peregrine</div>
+        <div>25%</div>
+      </span>
+      <span class="key-item">
+        <forge-icon class="theme-secondary" name="lens"></forge-icon>
+        <div>Collared Dove</div>
+        <div>35%</div>
+      </span>
+      <span class="key-item">
+        <forge-icon class="theme-success" name="lens"></forge-icon>
+        <div>Golden Pheasant</div>
+        <div>15%</div>
+      </span>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Grouped (vertical)</h3>
+    <forge-meter-group id="meter-group" max="100" direction="block">
       <label slot="label" for="meter-group">Birds</label>
       <span slot="value">75%</span>
       <forge-meter value="25" theme="info" aria-label="Peregrine"></forge-meter>

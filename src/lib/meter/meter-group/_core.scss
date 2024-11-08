@@ -9,16 +9,32 @@
   display: inline;
 }
 
+@mixin vertical-host {
+  display: block;
+}
+
 @mixin base {
   box-sizing: border-box;
+}
+
+@mixin vertical-base {
+  @include meter.vertical-base;
 }
 
 @mixin heading {
   @include meter.heading;
 }
 
+@mixin vertical-heading {
+  @include meter.vertical-heading;
+}
+
 @mixin heading-with-content {
   @include meter.heading-with-content;
+}
+
+@mixin vertical-heading-with-content {
+  @include meter.vertical-heading-with-content;
 }
 
 @mixin label {
@@ -37,6 +53,11 @@
   background: #{token(background)};
 }
 
+@mixin vertical-track {
+  inline-size: #{token(height)};
+  block-size: 100%;
+}
+
 @mixin tickmarks {
   content: '';
   position: relative;
@@ -48,6 +69,12 @@
   background: meter.tickmarks-background(#{token(tickmarks)}, #{token(tickmark-color)});
   opacity: #{token(tickmark-opacity)};
   pointer-events: none;
+}
+
+@mixin vertical-tickmarks {
+  margin-block-start: 1px;
+  margin-inline-start: 0;
+  background: meter.tickmarks-background(#{token(tickmarks)}, #{token(tickmark-color), null, true});
 }
 
 @mixin muted {

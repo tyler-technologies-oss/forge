@@ -4,7 +4,7 @@ import { customElement, property, queryAssignedElements, queryAssignedNodes, sta
 import { classMap } from 'lit/directives/class-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils';
 import { IMeterComponent } from '../meter/meter';
-import { METER_CONSTANTS, MeterDensity, MeterInnerShape, MeterShape } from '../meter/meter-constants';
+import { METER_CONSTANTS, MeterDensity, MeterDirection, MeterInnerShape, MeterShape } from '../meter/meter-constants';
 import { METER_GROUP_CONSTANTS } from './meter-group-constants';
 
 import styles from './meter-group.scss';
@@ -13,6 +13,7 @@ export interface IMeterGroupComponent extends LitElement {
   min: number;
   max: number;
   tickmarks: boolean;
+  direction: MeterDirection;
   density: MeterDensity;
   shape: MeterShape;
   innerShape: MeterInnerShape;
@@ -68,6 +69,12 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
    */
   @property({ type: Boolean, reflect: true }) public tickmarks = false;
   /**
+   * Whether the meter is oriented in the inline or block direction.
+   * @default 'inline'
+   * @attribute
+   */
+  @property({ reflect: true }) public direction: MeterDirection = 'inline';
+  /**
    * The density of the meter group.
    * @default 'default'
    * @attribute
@@ -117,7 +124,7 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
     const keys = Array.from(changedProperties.keys());
-    if (keys.some(key => ['min', 'max'].includes(key.toString()))) {
+    if (keys.some(key => ['direction', 'min', 'max'].includes(key.toString()))) {
       this._syncMeters();
     }
   }
@@ -143,6 +150,7 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
    */
   private _syncMeters(): void {
     this._meters.forEach(meter => {
+      meter.direction = this.direction;
       meter.min = this.min;
       meter.max = this.max;
     });
@@ -158,12 +166,14 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
   /**
    * Handles changes to the meters in the group, updating their arrangement relative to each other.
    */
-  private _handleMeterChange(): void {
+  private _handleMeterChange(evt: Event): void {
+    evt.stopPropagation();
+
     // Iterate through each slotted meter, applying z-indices based on their order and setting an
     // inset equal to the widths of all preceding meters.
     this._meters.reduce((inset, meter, index, meters) => {
       meter.style.setProperty('--z-index', `${meters.length - index}`);
-      meter.style.setProperty('--inset-inline-start', `${inset}%`);
+      meter.style.setProperty('--inset', `${inset}%`);
       return inset + meter.percentage;
     }, 0);
   }

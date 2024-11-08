@@ -58,6 +58,34 @@
 }
 
 //
+// Vertical
+//
+
+:host([direction='block']) {
+  @include core.vertical-host;
+
+  .forge-meter-group {
+    @include core.vertical-base;
+
+    .heading {
+      @include core.vertical-heading;
+
+      &.not-empty {
+        @include core.vertical-heading-with-content;
+      }
+    }
+
+    .track {
+      @include core.vertical-track;
+
+      &.tickmarks::after {
+        @include core.vertical-tickmarks;
+      }
+    }
+  }
+}
+
+//
 // Density
 //
 
