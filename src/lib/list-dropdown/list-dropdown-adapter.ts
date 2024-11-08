@@ -1,24 +1,24 @@
-import { IListDropdownOption, IListDropdownOpenConfig, IListDropdownOptionGroup, LIST_DROPDOWN_CONSTANTS, ListDropdownType } from './list-dropdown-constants';
-import { createDropdown, createList, createListItems, createAsyncElement, createBusyElement, createCheckboxElement } from './list-dropdown-utils';
-import { IListComponent } from '../list/list';
-import { LIST_ITEM_CONSTANTS, IListItemComponent } from '../list/list-item';
 import {
-  ScrollEvents,
-  getShadowElement,
   IScrollObserverConfiguration,
   ScrollAxisObserver,
-  removeAllChildren,
+  ScrollEvents,
+  closestElement,
+  createVisuallyHiddenElement,
+  getShadowElement,
+  isDeepEqual,
   isFunction,
+  removeAllChildren,
   removeElement,
   replaceElement,
-  createVisuallyHiddenElement,
-  isDeepEqual,
-  tryScrollIntoView,
-  closestElement
+  tryScrollIntoView
 } from '@tylertech/forge-core';
-import { ILinearProgressComponent } from '../linear-progress';
 import { ICON_CONSTANTS, IIconComponent } from '../icon';
+import { ILinearProgressComponent } from '../linear-progress';
+import { IListComponent } from '../list/list';
+import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/list-item';
 import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover';
+import { IListDropdownOpenConfig, IListDropdownOption, IListDropdownOptionGroup, LIST_DROPDOWN_CONSTANTS, ListDropdownType } from './list-dropdown-constants';
+import { createAsyncElement, createBusyElement, createCheckboxElement, createDropdown, createList, createListItems } from './list-dropdown-utils';
 
 export interface IListDropdownAdapter {
   dropdownElement: HTMLElement | undefined;
@@ -70,8 +70,6 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
       this._dropdownElement.preset = 'list';
     }
 
-    this.syncWidth(!!config.syncWidth, config.targetWidthCallback);
-
     // If we are configured to show a busy indicator (linear progress bar across the top), then create and append it first
     if (config.allowBusy) {
       this._busyElement = createBusyElement();
@@ -97,6 +95,9 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
 
     // Create the list from our config
     this._listElement = createList(config);
+
+    // We apply width styles to the list so we need to make sure to do this after the list is created
+    this.syncWidth(!!config.syncWidth, config.targetWidthCallback);
 
     // Add the listener for when list items are selected from the dropdown
     this._listElement.addEventListener('forge-list-item-select', evt => {
@@ -270,11 +271,11 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     listItems.forEach(li => (li.active = false));
   }
 
-  public syncWidth(sync: boolean, targetWidthCallback?: () => number): void {
-    if (this._dropdownElement) {
-      const propertyName = sync ? '--forge-popover-width' : '--forge-popover-min-width';
-      this._dropdownElement.style.setProperty(propertyName, `${this._getTargetElementWidth(targetWidthCallback)}px`);
-    }
+  public async syncWidth(sync: boolean, targetWidthCallback?: () => number): Promise<void> {
+    const propertyName = sync ? '--forge-popover-width' : '--forge-popover-min-width';
+    const targetWidth = this._getTargetElementWidth(targetWidthCallback);
+    this._dropdownElement?.style.setProperty(propertyName, `${targetWidth}px`);
+    this._listElement?.style.setProperty('min-width', `calc(${targetWidth}px - var(--forge-scrollbar-width, 16px))`);
   }
 
   public setOptions(config: IListDropdownOpenConfig): void {
@@ -362,7 +363,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     if (cb && isFunction(cb)) {
       return cb();
     }
-    return this._targetElement.getBoundingClientRect().width;
+    return this._targetElement.clientWidth;
   }
 
   private _activateListOption(listItem: IListItemComponent | undefined, activeChangeCallback?: (id: string) => void): void {
