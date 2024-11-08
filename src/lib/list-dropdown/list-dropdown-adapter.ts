@@ -363,7 +363,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     if (cb && isFunction(cb)) {
       return cb();
     }
-    return this._targetElement.clientWidth;
+    return this._targetElement.getBoundingClientRect().width;
   }
 
   private _activateListOption(listItem: IListItemComponent | undefined, activeChangeCallback?: (id: string) => void): void {
