@@ -68,7 +68,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
    * Adds or removes animation classes on the root element.
    */
   public setFloatingLabel(value: boolean, skipAnimation = false): void {
-    if (skipAnimation) {
+    if (skipAnimation || !this._labelElement) {
       return;
     }
 
@@ -76,7 +76,9 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     // to ensure that the element cannot collapse while the animation is executing. The width will be
     // removed after the animation completes.
     const { width: inputContainerWidth } = this._inputContainerElement.getBoundingClientRect();
-    this._inputContainerElement.style.setProperty('width', `${inputContainerWidth}px`);
+    if (inputContainerWidth > 0) {
+      this._inputContainerElement.style.setProperty('width', `${inputContainerWidth}px`);
+    }
 
     const className = value ? FIELD_CONSTANTS.classes.FLOATING_IN : FIELD_CONSTANTS.classes.FLOATING_OUT;
     const animationName = value ? FIELD_CONSTANTS.animations.FLOAT_IN_LABEL : FIELD_CONSTANTS.animations.FLOAT_OUT_LABEL;
