@@ -1,3 +1,16 @@
+# v3.3.3 (Tue Nov 12 2024)
+
+#### 🐛 Bug Fix
+
+- fix(text-field): fixed a regression where the input container `width` could be set to `0px` if hidden while attempting to float the label or set a value [#741](https://github.com/tyler-technologies-oss/forge/pull/741) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(popover): gracefully handle how popovers are positioned when their dimensions are clipped by the viewport to ensure access to the content [#740](https://github.com/tyler-technologies-oss/forge/pull/740) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.3.2 (Thu Nov 07 2024)
 
 #### 🐛 Bug Fix
