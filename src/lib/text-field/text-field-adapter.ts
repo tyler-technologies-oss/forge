@@ -200,7 +200,10 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     if (!this._inputElements.length) {
       return;
     }
-    this._inputElements.forEach(el => (el.value = ''));
+    this._inputElements.forEach(el => {
+      el.value = '';
+      el.dispatchEvent(new Event('input'));
+    });
     this._inputElements[0].focus();
   }
 
