@@ -83,11 +83,11 @@ export class VirtualizerComponent extends LitElement implements IVirtualizerComp
   @property() public getItemKey: GetItemKeyCallback = (index: number) => index;
   @property() public itemBuilder: (row: any) => HTMLElement;
 
-  @provide({ context: VIRTUALIZER_CONTEXT }) public context: IVirtualizerContext;
-
   public get items(): VirtualItem[] {
     return this._virtualizerController.getVirtualizer().getVirtualItems();
   }
+
+  @provide({ context: VIRTUALIZER_CONTEXT }) private _context: IVirtualizerContext;
 
   private _scrollElementRef: Ref<HTMLElement> = createRef();
   private _virtualizerController: VirtualizerController<Element, Element>;
@@ -183,7 +183,7 @@ export class VirtualizerComponent extends LitElement implements IVirtualizerComp
   }
 
   private _updateContext(): void {
-    this.context = {
+    this._context = {
       virtualizer: this._virtualizerController.getVirtualizer(),
       direction: this.direction
     };
