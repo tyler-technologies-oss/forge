@@ -1,3 +1,15 @@
+# v3.3.5 (Thu Nov 14 2024)
+
+#### 🐛 Bug Fix
+
+- fix(text-field): fixed a bug where the input container would lock its width if there is no floating label to animate [#744](https://github.com/tyler-technologies-oss/forge/pull/744) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.3.4 (Thu Nov 14 2024)
 
 #### 🐛 Bug Fix
