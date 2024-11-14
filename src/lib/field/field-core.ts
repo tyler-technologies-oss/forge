@@ -80,7 +80,6 @@ export class FieldCore implements IFieldCore {
   public floatLabelWithoutAnimation(value: boolean): void {
     if (this._floatLabel !== value) {
       this._floatLabel = value;
-      this._adapter.setFloatingLabel(this._floatLabel, true);
       this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL, this._floatLabel);
     }
   }
@@ -117,7 +116,9 @@ export class FieldCore implements IFieldCore {
   public set floatLabel(value: boolean) {
     if (this._floatLabel !== value) {
       this._floatLabel = value;
-      this._adapter.setFloatingLabel(this._floatLabel);
+      if (this._adapter.hasSlottedLabel) {
+        this._adapter.setFloatingLabel(this._floatLabel);
+      }
       this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL, this._floatLabel);
     }
   }
