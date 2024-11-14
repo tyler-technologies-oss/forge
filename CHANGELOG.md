@@ -1,3 +1,15 @@
+# v3.3.4 (Thu Nov 14 2024)
+
+#### 🐛 Bug Fix
+
+- fix(text-field): clear button not emitting input event [#742](https://github.com/tyler-technologies-oss/forge/pull/742) ([@conner-fallone](https://github.com/conner-fallone))
+
+#### Authors: 1
+
+- Conner Fallone ([@conner-fallone](https://github.com/conner-fallone))
+
+---
+
 # v3.3.3 (Tue Nov 12 2024)
 
 #### 🐛 Bug Fix
