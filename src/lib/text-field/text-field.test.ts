@@ -114,12 +114,15 @@ describe('Text field', () => {
       expect(harness.clearButtonElement).to.be.null;
     });
 
-    it('should clear input when clear button is clicked', async () => {
+    it('should clear input and dispatch an input event when clear button is clicked', async () => {
       const harness = await createFixture({ showClear: true });
       harness.inputElement.value = 'test';
+      const eventSpy = spy();
+      harness.inputElement.addEventListener('input', eventSpy);
       harness.clearButtonElement!.click();
       await frame();
       expect(harness.inputElement.value).to.equal('');
+      expect(eventSpy).to.have.been.called;
     });
 
     it('should emit event when clear button is pressed', async () => {
