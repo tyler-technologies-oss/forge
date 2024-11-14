@@ -19,6 +19,7 @@ export type VirtualizerDirection = 'horizontal' | 'vertical';
 export type VirtualItemKey = string | number | bigint;
 export type EstimateSizeCallback = (index: number) => number;
 export type GetItemKeyCallback = (index: number) => VirtualItemKey;
+export type VirtualItemBuilder = (item: VirtualItem) => Element;
 
 export interface VirtualItem extends Omit<TanStackVirtualItem, 'key'> {
   key: VirtualItemKey;
@@ -27,4 +28,5 @@ export interface VirtualItem extends Omit<TanStackVirtualItem, 'key'> {
 export interface IVirtualizerContext {
   virtualizer: Virtualizer<Element, Element>;
   direction: VirtualizerDirection;
+  dynamic: boolean;
 }

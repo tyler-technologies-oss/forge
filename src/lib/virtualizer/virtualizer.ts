@@ -13,6 +13,7 @@ import {
   GetItemKeyCallback,
   IVirtualizerContext,
   VirtualItem,
+  VirtualItemBuilder,
   VIRTUALIZER_CONSTANTS,
   VIRTUALIZER_CONTEXT,
   VirtualizerDirection
@@ -30,9 +31,10 @@ export interface IVirtualizerComponent extends LitElement {
   scrollPaddingEnd: number;
   gap: number;
   disabled: boolean;
+  dynamic: boolean;
   estimateSize: EstimateSizeCallback;
   getItemKey: GetItemKeyCallback;
-  itemBuilder: (row: any) => HTMLElement;
+  itemBuilder: VirtualItemBuilder;
   readonly items: VirtualItem[];
 }
 
@@ -65,24 +67,97 @@ declare global {
  * @summary Virtualizers are used to performantly present large collections of repeated elements by rendering only those in view.
  *
  * @event {Event} change - Emits when the set of rendered items changes.
+ *
+ * @part root - The root element of the virtualizer.
+ * @part scroller - The scroller element of the virtualizer.
+ *
+ * @slot - The default (unnamed) slot for the virtual items.
+ * @slot header - A slot for content to be placed at the start of the virtualizer.
+ * @slot footer - A slot for content to be placed at the end of the virtualizer.
+ *
+ * @dependency forge-virtual-item
  */
 @customElement(VIRTUALIZER_CONSTANTS.elementName)
 export class VirtualizerComponent extends LitElement implements IVirtualizerComponent {
   public static styles = unsafeCSS(styles);
 
+  /**
+   * The number of items in the virtualizer.
+   * @default 0
+   * @attribute
+   */
   @property({ type: Number, reflect: true }) public count = 0;
+  /**
+   * The number of items to render outside the visible area.
+   * @default 5
+   * @attribute
+   */
   @property({ type: Number, reflect: true }) public buffer = 5;
+  /**
+   * The scroll direction of the virtualizer.
+   * @default 'vertical'
+   * @attribute
+   */
   @property({ reflect: true }) public direction: VirtualizerDirection = 'vertical';
+  /**
+   * The padding in pixels applied to the start of the virtualizer.
+   * @default 0
+   * @attribute
+   */
   @property({ type: Number, reflect: true, attribute: 'padding-start' }) public paddingStart = 0;
+  /**
+   * The padding in pixels applied to the end of the virtualizer.
+   * @default 0
+   * @attribute
+   */
   @property({ type: Number, reflect: true, attribute: 'padding-end' }) public paddingEnd = 0;
+  /**
+   * The padding in pixels applied to the start of the virtualizer when scrolling.
+   * @default 0
+   * @attribute
+   */
   @property({ type: Number, reflect: true, attribute: 'scroll-padding-start' }) public scrollPaddingStart = 0;
+  /**
+   * The padding in pixels applied to the end of the virtualizer when scrolling.
+   * @default 0
+   * @attribute
+   */
   @property({ type: Number, reflect: true, attribute: 'scroll-padding-end' }) public scrollPaddingEnd = 0;
+  /**
+   * The space in pixels between items.
+   * @default 0
+   * @attribute
+   */
   @property({ type: Number, reflect: true }) public gap = 0;
+  /**
+   * Disables the virtualizer.
+   * @default false
+   * @attribute
+   */
   @property({ type: Boolean, reflect: true }) public disabled = false;
+  /**
+   * Enables dynamic sizing of items.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true }) public dynamic = false;
+  /**
+   * A function used byt he virtualizer to estimate the size of an item.
+   * @default () => 0
+   */
   @property() public estimateSize: EstimateSizeCallback = () => 0;
+  /**
+   * A function used by the virtualizer to associate each item with a unique key.
+   */
   @property() public getItemKey: GetItemKeyCallback = (index: number) => index;
-  @property() public itemBuilder: (row: any) => HTMLElement;
+  /**
+   * A function used to impertively render the content of each virtual item.
+   */
+  @property() public itemBuilder: VirtualItemBuilder;
 
+  /**
+   * The items currently rendered in the virtualizer.
+   */
   public get items(): VirtualItem[] {
     return this._virtualizerController.getVirtualizer().getVirtualItems();
   }
@@ -171,9 +246,7 @@ export class VirtualizerComponent extends LitElement implements IVirtualizerComp
     });
   }
 
-  /**
-   * Use a debounce to batch multiple options changes into one re-render.
-   */
+  // Use a debounce to batch multiple options changes into one re-render.
   private _debounceMeasure = (): void => {
     debounce(() => this._virtualizerController.getVirtualizer().measure(), 0);
   };
@@ -185,7 +258,8 @@ export class VirtualizerComponent extends LitElement implements IVirtualizerComp
   private _updateContext(): void {
     this._context = {
       virtualizer: this._virtualizerController.getVirtualizer(),
-      direction: this.direction
+      direction: this.direction,
+      dynamic: this.dynamic
     };
   }
 
