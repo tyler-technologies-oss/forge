@@ -1,0 +1,21 @@
+.vert>* {
+  min-width: 0;
+}
+
+forge-virtualizer {
+  block-size: 200px;
+  border: 1px solid var(--forge-theme-outline);
+  border-radius: 4px;
+
+  &[horizontal] {
+    inline-size: 100%;
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  block-size: 100%;
+  inline-size: 100%;
+  padding-inline: 16px;
+}

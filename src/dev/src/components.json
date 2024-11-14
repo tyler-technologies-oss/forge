@@ -62,5 +62,6 @@
   { "label": "Toolbar", "path": "/pages/toolbar/toolbar.html" },
   { "label": "Tooltip", "path": "/pages/tooltip/tooltip.html" },
   { "label": "Typography", "path": "/pages/typography/typography.html" },
-  { "label": "View switcher", "path": "/pages/view-switcher/view-switcher.html", "tags": ["tabs"] }
+  { "label": "View switcher", "path": "/pages/view-switcher/view-switcher.html", "tags": ["tabs"] },
+  { "label": "Virtualizer", "path": "/pages/virtualizer/virtualizer.html" }
 ]

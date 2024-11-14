@@ -1,0 +1,17 @@
+@use './core';
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none !important;
+}
+
+.forge-virtual-item {
+  @include core.root;
+
+  &.horizontal {
+    @include core.horizontal;
+  }
+}

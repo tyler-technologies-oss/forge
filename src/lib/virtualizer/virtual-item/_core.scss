@@ -1,0 +1,16 @@
+@mixin host {
+  display: contents !important;
+}
+
+@mixin root {
+  position: absolute;
+  translate: 0 var(--start);
+  block-size: var(--size);
+  inline-size: 100%;
+}
+
+@mixin horizontal {
+  translate: var(--start) 0;
+  block-size: 100%;
+  inline-size: var(--size);
+}
