@@ -100,6 +100,7 @@ declare global {
  * @attribute {boolean} [focus-indicator-allow-focus=false] - Whether the focus indicator should render when the target element matches `:focus` instead of `:focus-visible`.
  *
  * @event {CustomEvent<void>} forge-field-popover-icon-click - Dispatches when the user clicks the popover icon.
+ * @event {CustomEvent<void>} forge-field-popover-icon-mousedown - Dispatches when the user presses the mouse button over the popover icon. Cancelable to prevent focus loss.
  *
  * @cssproperty --forge-field-background - The background of the field surface.
  * @cssproperty --forge-field-tonal-background - The background of the field surface in the tonal variant.
