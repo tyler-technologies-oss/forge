@@ -19,3 +19,26 @@ forge-virtualizer {
   inline-size: 100%;
   padding-inline: 16px;
 }
+
+.headless {
+  &-virtualizer {
+    position: relative;
+    overflow: auto;
+    block-size: 200px;
+    inline-size: 100%;
+    border: 1px solid var(--forge-theme-outline);
+    border-radius: 4px;
+  }
+
+  &-scroller {
+    position: relative;
+    inline-size: 100%;
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+    padding-inline: 16px;
+  }
+}

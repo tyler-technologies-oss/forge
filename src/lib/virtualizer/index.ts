@@ -5,6 +5,7 @@ import { VirtualizerComponent } from './virtualizer';
 export * from './virtualizer-constants';
 export * from './virtualizer';
 export * from './virtual-item';
+export * from './utils';
 
 export function defineVirtualizerComponent(): void {
   defineCustomElement(VirtualizerComponent);

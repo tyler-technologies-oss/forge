@@ -1,21 +1,18 @@
 import '$src/shared';
 import '@tylertech/forge/virtualizer';
 import './virtualizer.scss';
-import { memo, VirtualItem } from '@tanstack/virtual-core';
-import { IVirtualItemComponent, IVirtualizerComponent } from '@tylertech/forge/virtualizer';
+import { VirtualItem } from '@tanstack/virtual-core';
+import { IVirtualItemComponent, IVirtualizerComponent, Virtualizer } from '@tylertech/forge/virtualizer';
 import { throttle } from '@tylertech/forge-core';
 
-const virtualizer = document.getElementById('virtualizer') as IVirtualizerComponent;
-const declarativeVirtualizer = document.getElementById('declarative-virtualizer') as IVirtualizerComponent;
-const horizontalVirtualizer = document.getElementById('horizontal-virtualizer') as IVirtualizerComponent;
-const dynamicVirtualizer = document.getElementById('dynamic-virtualizer') as IVirtualizerComponent;
 
-const data = Array.from({ length: 1000 }, (_, index) => {
+const data = Array.from({ length: 10000 }, (_, index) => {
   const randomWord = Math.random().toString(36).substring(7);
   return { index, value: randomWord }
 });
 
 // Imperative
+const virtualizer = document.getElementById('virtualizer') as IVirtualizerComponent;
 virtualizer.count = data.length;
 virtualizer.estimateSize = () => 48;
 virtualizer.itemBuilder = memoize((row: VirtualItem): HTMLElement => {
@@ -32,6 +29,7 @@ virtualizer.itemBuilder = memoize((row: VirtualItem): HTMLElement => {
 });
 
 // Declarative
+const declarativeVirtualizer = document.getElementById('declarative-virtualizer') as IVirtualizerComponent;
 const throttleChangeHandler = throttle((evt: Event) => {
   const target = evt.target as IVirtualizerComponent;
   const items = target.items;
@@ -52,6 +50,7 @@ declarativeVirtualizer.estimateSize = () => 48;
 declarativeVirtualizer.addEventListener('change', throttleChangeHandler, { passive: true });
 
 // Horizontal
+const horizontalVirtualizer = document.getElementById('horizontal-virtualizer') as IVirtualizerComponent;
 horizontalVirtualizer.count = data.length;
 horizontalVirtualizer.estimateSize = () => 48;
 horizontalVirtualizer.itemBuilder = memoize((row: VirtualItem): HTMLElement => {
@@ -69,6 +68,7 @@ horizontalVirtualizer.itemBuilder = memoize((row: VirtualItem): HTMLElement => {
 });
 
 // Dynamic
+const dynamicVirtualizer = document.getElementById('dynamic-virtualizer') as IVirtualizerComponent;
 const dynamicData = data.map(item => ({ ...item, size: Math.floor(Math.random() * 80) + 20 }));
 dynamicVirtualizer.count = dynamicData.length;
 dynamicVirtualizer.estimateSize = () => 100;
@@ -84,6 +84,28 @@ dynamicVirtualizer.itemBuilder = memoize((row: VirtualItem): HTMLElement => {
   div.style.paddingInline = '16px';
   div.style.borderBlockEnd = '1px solid var(--forge-theme-outline)';
   return div;
+});
+
+// Headless
+const headlessVirtualizerEl = document.getElementById('headless-virtualizer') as HTMLElement;
+const headlessScrollerEl = document.getElementById('headless-scroller') as HTMLElement;
+const onChange = (v: Virtualizer): void => {
+  headlessScrollerEl.style.blockSize = v.totalSize + 'px';
+  const items = v.items.map(item => {
+    const div = document.createElement('div');
+    const dataItem = data[item.index];
+    div.textContent = `${dataItem.index + 1}: ${dataItem.value}`;
+    div.classList.add('headless-item');
+    Virtualizer.positionItem(item, div, v.direction);
+    return div;
+  });
+  headlessScrollerEl.replaceChildren(...items);
+};
+new Virtualizer({
+  scrollElement: headlessVirtualizerEl,
+  count: data.length,
+  estimateSize: () => 48,
+  onChange
 });
 
 // Memoize utility
