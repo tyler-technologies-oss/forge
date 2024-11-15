@@ -568,7 +568,7 @@ export class TimePickerCore implements ITimePickerCore {
   private _openDropdown(): void {
     const options = this._generateTimeOptions();
 
-    if (!this.allowDropdown || !options.length) {
+    if (!this.allowDropdown || !options.length || !this._adapter.inputElement) {
       return;
     }
 
