@@ -109,42 +109,50 @@ export class IconComponent extends BaseComponent implements IIconComponent {
     }
   }
 
-  /** The name of the icon within the icon registry to be used. */
+  /**
+   * The name of the icon within the icon registry to be used. */
   @coreProperty()
   public declare name: string | undefined;
 
-  /** Provides the ability to set the SVG string content directly. */
+  /**
+   * Provides the ability to set the SVG string content directly. */
   @coreProperty()
   public declare src: string | undefined;
 
-  /** Controls whether the icon will be loaded dynamically when it comes into view. False by default. */
+  /**
+   * Controls whether the icon will be loaded dynamically when it comes into view. False by default. */
   @coreProperty()
   public declare lazy: boolean;
 
-  /** Controls whether external network requests are allowed for this icon. Only pertains for icons that aren't defined in the registry. */
+  /**
+   * Controls whether external network requests are allowed for this icon. Only pertains for icons that aren't defined in the registry. */
   @coreProperty()
   public declare external: boolean;
 
-  /** The type of icon to load externally. Possible values: "standard", "extended", "custom".
+  /**
+   * The type of icon to load externally. Possible values: "standard", "extended", "custom".
    * @attribute external-type
    */
   @coreProperty()
   public declare externalType: IconExternalType;
 
-  /** A callback that can be provided to generate a URL that will be used to fetch an SVG icon.
+  /**
+   * A callback that can be provided to generate a URL that will be used to fetch an SVG icon.
    * @attribute external-url-builder
    */
   @coreProperty()
   public declare externalUrlBuilder: IconUrlBuilder;
 
-  /** A custom value to apply to the `viewBox` attribute on the internal `<svg>` element. */
+  /**
+   * A custom value to apply to the `viewBox` attribute on the internal `<svg>` element. */
   @coreProperty()
   public declare viewbox: string;
 
   @coreProperty()
   public declare theme: IconTheme;
 
-  /** Forces a reload of the icon. */
+  /**
+   * Forces a reload of the icon. */
   public layout(): void {
     this._core.layout();
   }

@@ -35,7 +35,6 @@ declare global {
  *
  * @summary Banners are used to inform users of important information, such as errors, warnings, or success messages.
  *
- * @property {boolean} [canDismiss=false] - Determines if a banner can be dismissed.
  * @property {boolean} [dismissed=false] - Controls the visibility of the banner.
  * @property {boolean} [persistent=false] - Controls the visibility of the built-in dismiss button.
  * @property {BannerTheme} [theme="info"] - The theme of the banner.

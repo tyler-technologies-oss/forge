@@ -65,33 +65,6 @@ declare global {
 
 /**
  * @tag forge-time-picker
- *
- * @property {string | null | undefined} [value=undefined] - The current value of the time picker.
- * @property {boolean} [open=false] - Whether or not the time picker is open.
- * @property {boolean} [allowSeconds=false] - Whether or not to allow seconds in the time picker.
- * @property {boolean} [masked=false] - Whether or not the time picker input should be masked.
- * @property {boolean} [showMaskFormat=false] - Whether or not to show the mask format in the input.
- * @property {boolean} [use24HourTime=false] - Whether or not to use 24-hour time.
- * @property {boolean} [allowInvalidTime=false] - Whether or not to allow invalid times.
- * @property {string | null | undefined} [min=undefined] - The minimum time that can be selected.
- * @property {string | null | undefined} [max=undefined] - The maximum time that can be selected.
- * @property {string[]} [restrictedTimes=[]] - An array of times that cannot be selected.
- * @property {string | null | undefined} [startTime=undefined] - The time to start the time picker at.
- * @property {number} [step=undefined] - The step interval for the time picker.
- * @property {boolean} [allowInput=false] - Whether or not to allow manual input of the time.
- * @property {boolean} [showNow=false] - Whether or not to show a "Now" button.
- * @property {boolean} [showHourOptions=false] - Whether or not to display hour options in dropdown.
- * @property {ITimePickerOption[]} [customOptions=[]] - An array of custom time picker options.
- * @property {TimePickerValidationCallback} [validationCallback=undefined] - A callback function to validate the time.
- * @property {TimePickerParseCallback} [parseCallback=undefined] - A callback function to parse the time.
- * @property {TimePickerFormatCallback} [formatCallback=undefined] - A callback function to format the time.
- * @property {TimePickerCoercionCallback} [coercionCallback=undefined] - A callback function to coerce the time.
- * @property {TimePickerPrepareMaskCallback} [prepareMaskCallback=undefined] - A callback function to prepare the mask.
- * @property {boolean} [disabled=false] - Whether or not the time picker is disabled.
- * @property {string | string[]} [popupClasses=undefined] - The classes to apply to the time picker popup.
- * @property {boolean} [allowDropdown=false] - Whether or not to allow the time picker to be a dropdown.
- * @property {string} [popupTarget=undefined] - The target element to attach the popup to.
- *
  */
 @customElement({
   name: TIME_PICKER_CONSTANTS.elementName,
