@@ -176,7 +176,7 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
   /**
    * Sets the skip link to skip browser navigation and scroll to the target element.
    * @default false
-   * @attribute
+   * @attribute skip-url-change
    */
   public get skipUrlChange(): boolean {
     return this._skipUrlChange;

@@ -46,7 +46,6 @@ declare global {
  * @attribute {string} src - Provides the ability to set the SVG string content directly.
  * @attribute {boolean} [lazy=false] - Controls whether the icon will be loaded dynamically when it comes into view. False by default.
  * @attribute {boolean} [external=false] - Controls whether external network requests are allowed for this icon. Only pertains for icons that aren't already defined in the registry.
- * @attribute {IconExternalType} [externalType="standard"] - The type of icon to load externally. Possible values: "standard" (default), "extended", "custom".
  * @attribute {string} viewbox - A custom value to apply to the `viewBox` attribute on the internal `<svg>` element.
  * @attribute {IconTheme} theme - The theme to apply to the icon.
  *
@@ -126,11 +125,15 @@ export class IconComponent extends BaseComponent implements IIconComponent {
   @coreProperty()
   public declare external: boolean;
 
-  /** The type of icon to load externally. Possible values: "standard", "extended", "custom". */
+  /** The type of icon to load externally. Possible values: "standard", "extended", "custom".
+   * @attribute external-type
+   */
   @coreProperty()
   public declare externalType: IconExternalType;
 
-  /** A callback that can be provided to generate a URL that will be used to fetch an SVG icon. */
+  /** A callback that can be provided to generate a URL that will be used to fetch an SVG icon.
+   * @attribute external-url-builder
+   */
   @coreProperty()
   public declare externalUrlBuilder: IconUrlBuilder;
 

@@ -75,7 +75,7 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
   /**
    * Gets/sets the animation type.
    * @default "none"
-   * @attribute
+   * @attribute animation-type
    */
   @coreProperty()
   public declare animationType: `${ViewSwitcherAnimationType}` | ViewSwitcherAnimation;
