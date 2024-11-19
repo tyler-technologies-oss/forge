@@ -39,7 +39,6 @@ declare global {
  * @property {boolean} [persistent=false] - Controls the visibility of the built-in dismiss button.
  * @property {BannerTheme} [theme="info"] - The theme of the banner.
  *
- * @attribute {boolean} [can-dismiss=false] - Determines if a banner can be dismissed.
  * @attribute {boolean} [dismissed=false] - Controls the visibility of the banner.
  * @attribute {boolean} [persistent=false] - Controls the visibility of the built-in dismiss button.
  * @attribute {BannerTheme} [theme="info"] - The theme of the banner.
