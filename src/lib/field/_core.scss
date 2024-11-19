@@ -127,6 +127,7 @@
 
   block-size: 100%;
   inline-size: 100%;
+  min-inline-size: 0;
 
   color: theme.variable(text-high);
 }
