@@ -196,7 +196,8 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     window.requestAnimationFrame(() => {
       const textField = this._component.querySelector(TEXT_FIELD_CONSTANTS.elementName);
       if (textField && (textField.popoverIcon || textField.hasAttribute(FIELD_CONSTANTS.attributes.POPOVER_ICON))) {
-        this._component.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK, listener);
+        const eventType = type === 'mousedown' ? FIELD_CONSTANTS.events.POPOVER_ICON_MOUSEDOWN : FIELD_CONSTANTS.events.POPOVER_ICON_CLICK;
+        this._component.addEventListener(eventType, listener);
       }
 
       const dropdownIcon = this._component.querySelector(AUTOCOMPLETE_CONSTANTS.selectors.DROPDOWN_ICON);

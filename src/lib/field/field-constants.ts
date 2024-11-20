@@ -53,7 +53,8 @@ const parts = {
 };
 
 const events = {
-  POPOVER_ICON_CLICK: `${elementName}-popover-icon-click`
+  POPOVER_ICON_CLICK: `${elementName}-popover-icon-click`,
+  POPOVER_ICON_MOUSEDOWN: `${elementName}-popover-icon-mousedown`
 };
 
 const defaults = {
