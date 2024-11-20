@@ -2,8 +2,14 @@
   <section>
     <h3>Default</h3>
     <div tabindex="0">Tab past this</div>
-    <forge-skip-link id="skip-link" target="main"></forge-skip-link>
-    <div tabindex="-1" id="main" class="target-content">Main content</div>
+    <forge-skip-link></forge-skip-link>
+    <div class="target-content">Note: when the skip-link comp does not specify a target, it targets the first main element. So this is a pickle to demo since this app already has a main element. Look for that main element to gain focus.</div>
+  </section>
+  <section>
+    <h3>Specified target ID (side-panel controls pertain to this instance)</h3>
+    <div tabindex="0">Tab past this</div>
+    <forge-skip-link id="skip-link" target="main-specified-target"></forge-skip-link>
+    <div id="main-specified-target" class="target-content">Main content</div>
   </section>
   <section>
     <h3>CSS only</h3>
@@ -14,8 +20,8 @@
   <section style="position: relative;">
     <h3>Inline</h3>
     <div tabindex="0">Tab past this</div>
-    <forge-skip-link target="section" inline>Skip to section content</forge-skip-link>
-    <div tabindex="-1" id="section" class="target-content">Section content</div>
+    <forge-skip-link target="main-inline" inline>Skip to section content</forge-skip-link>
+    <div id="main-inline" class="target-content">Section content</div>
   </section>
 </div>
 

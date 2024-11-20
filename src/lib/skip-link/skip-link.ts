@@ -71,6 +71,7 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
     super();
     attachShadowTemplate(this, template, style);
     this._anchorElement = getShadowElement(this, SKIP_LINK_CONSTANTS.selectors.ANCHOR) as HTMLAnchorElement;
+    this._setTarget(undefined);
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -97,7 +98,7 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
   }
 
   /**
-   * The IDREF of the element to which the skip link should navigate.
+   * The IDREF of the element to which the skip link should navigate. If not provided, the skip link will use the first main element found.
    * @default ''
    * @attribute
    */
@@ -105,12 +106,7 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
     return this._target;
   }
   public set target(value: string) {
-    if (this._target !== value) {
-      this._target = value;
-      this.setAttribute(SKIP_LINK_CONSTANTS.attributes.TARGET, this._target);
-
-      this._anchorElement.href = `#${this._target}`;
-    }
+    this._setTarget(value);
   }
 
   /**
@@ -200,5 +196,45 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
     const targetElement = document.getElementById(this._target);
     targetElement?.focus();
     targetElement?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  private _setTarget(value: string | undefined): void {
+    if (this._target !== value) {
+      if (!value || value.trim().length < 1) {
+        value = undefined;
+      }
+
+      let elementToFocus: HTMLElement | null = null;
+
+      // If no target is provided, default to the first main element found and use it's ID as the target.
+      if (value === undefined) {
+        elementToFocus = document.querySelector('main');
+        if (!elementToFocus) {
+          throw new Error('No target provided and no main element found in the document. forge-skip-link requires a target to function.');
+        }
+
+        // If the main element does not have an ID, set one to ensure it can be targeted.
+        if (!!elementToFocus.id && elementToFocus.id.trim().length > 0) {
+          value = elementToFocus.id.trim();
+        } else {
+          value = SKIP_LINK_CONSTANTS.defaultMainContentId;
+          elementToFocus.setAttribute('id', value);
+        }
+      } else {
+        elementToFocus = document.getElementById(value);
+        if (!elementToFocus) {
+          throw new Error(`No element found with ID '${value}'. forge-skip-link requires a valid target to function.`);
+        }
+      }
+
+      // If the main element does not have a tabindex attribute, add it to ensure it can be focused.
+      if (!elementToFocus.hasAttribute('tabindex')) {
+        elementToFocus.setAttribute('tabindex', '-1');
+      }
+
+      this._target = value;
+      this.setAttribute(SKIP_LINK_CONSTANTS.attributes.TARGET, this._target);
+      this._anchorElement.href = `#${this._target}`;
+    }
   }
 }

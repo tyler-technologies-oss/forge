@@ -19,11 +19,14 @@ const selectors = {
   ANCHOR: 'a'
 };
 
+const defaultMainContentId = 'main-content';
+
 export const SKIP_LINK_CONSTANTS = {
   elementName,
   observedAttributes,
   attributes,
-  selectors
+  selectors,
+  defaultMainContentId
 };
 
 export type SkipLinkTheme = Theme | 'default';
