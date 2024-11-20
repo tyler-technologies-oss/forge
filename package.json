@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.6.10",
-    "@tylertech/forge-core": "^3.0.1",
+    "@tylertech/forge-core": "^3.1.0",
     "@tylertech/tyler-icons": "^1.12.0",
     "imask": "^6.6.1",
     "tslib": "^2.7.0"
