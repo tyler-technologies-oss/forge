@@ -247,6 +247,14 @@ export class DialogCore implements IDialogCore {
     this._moveController = undefined;
   }
 
+  private _applyMoveable({ enabled } = { enabled: this._moveable }): void {
+    if (enabled) {
+      this._initializeMoveController();
+    } else {
+      this._destroyMoveController();
+    }
+  }
+
   public get open(): boolean {
     return this._open;
   }
@@ -318,6 +326,7 @@ export class DialogCore implements IDialogCore {
     value = Boolean(value);
     if (this._fullscreen !== value) {
       this._fullscreen = value;
+      this._applyMoveable({ enabled: !this._fullscreen });
       this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.FULLSCREEN, this._fullscreen);
     }
   }
@@ -385,11 +394,7 @@ export class DialogCore implements IDialogCore {
       this._moveable = value;
 
       if (this._adapter.isConnected && this._open) {
-        if (this._moveable) {
-          this._initializeMoveController();
-        } else {
-          this._destroyMoveController();
-        }
+        this._applyMoveable();
       }
 
       this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.MOVEABLE, this._moveable);
