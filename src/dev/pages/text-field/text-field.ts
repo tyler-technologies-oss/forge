@@ -42,8 +42,19 @@ const optLabelAlignment = document.getElementById('opt-label-alignment') as ISel
 const optSupportTextInset = document.getElementById('opt-support-text-inset') as ISwitchComponent;
 
 optLabel.addEventListener('input', () => {
+  const hasValue = optLabel.value.length > 0;
   textFields.forEach(textField => {
-    textField.querySelector(':is(label, span, forge-label)').textContent = optLabel.value;
+    const labelEl = textField.querySelector(':is(label, span, forge-label)');
+    if (hasValue) {
+      if (!labelEl) {
+        const label = document.createElement('label');
+        label.textContent = optLabel.value;
+        textField.prepend(label);
+      }
+      textField.querySelector(':is(label, span, forge-label)').textContent = optLabel.value;
+    } else {
+      labelEl?.remove();
+    }
   });
 });
 
