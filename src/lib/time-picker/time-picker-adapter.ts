@@ -11,7 +11,7 @@ import { IListDropdownConfig, IListDropdownOption } from '../list-dropdown/list-
 import { IListDropdown, ListDropdown } from '../list-dropdown';
 
 export interface ITimePickerAdapter extends BaseAdapter<ITimePickerComponent> {
-  readonly inputElement: HTMLInputElement;
+  readonly inputElement: HTMLInputElement | undefined;
   initialize(): void;
   initializeMask(options: ITimeInputMaskOptions): void;
   destroy(): void;
@@ -46,7 +46,7 @@ export interface ITimePickerAdapter extends BaseAdapter<ITimePickerComponent> {
 }
 
 export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> implements ITimePickerAdapter {
-  private _inputElement: HTMLInputElement;
+  private _inputElement: HTMLInputElement | undefined;
   private _toggleElement?: HTMLElement;
   private _inputMask?: TimeInputMask;
   private _listDropdown?: IListDropdown;
@@ -56,7 +56,7 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
     super(component);
   }
 
-  public get inputElement(): HTMLInputElement {
+  public get inputElement(): HTMLInputElement | undefined {
     return this._inputElement;
   }
 
@@ -66,7 +66,9 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
 
   public initializeMask(options: ITimeInputMaskOptions): void {
     this.destroyMask();
-    this._inputMask = new TimeInputMask(this._inputElement, options);
+    if (this._inputElement) {
+      this._inputMask = new TimeInputMask(this._inputElement, options);
+    }
   }
 
   public destroy(): void {
@@ -81,27 +83,27 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
   }
 
   public initializeAccessibility(identifier: string): void {
-    this._inputElement.setAttribute('autocomplete', 'off');
-    this._inputElement.setAttribute('autocorrect', 'off');
-    this._inputElement.setAttribute('autocapitalize', 'off');
-    this._inputElement.setAttribute('spellcheck', 'false');
-    this._inputElement.setAttribute('role', 'combobox');
-    this._inputElement.setAttribute('aria-live', 'assertive');
-    this._inputElement.setAttribute('aria-atomic', 'true');
-    this._inputElement.setAttribute('aria-haspopup', 'true');
-    this._inputElement.setAttribute('aria-expanded', 'false');
+    this._inputElement?.setAttribute('autocomplete', 'off');
+    this._inputElement?.setAttribute('autocorrect', 'off');
+    this._inputElement?.setAttribute('autocapitalize', 'off');
+    this._inputElement?.setAttribute('spellcheck', 'false');
+    this._inputElement?.setAttribute('role', 'combobox');
+    this._inputElement?.setAttribute('aria-live', 'assertive');
+    this._inputElement?.setAttribute('aria-atomic', 'true');
+    this._inputElement?.setAttribute('aria-haspopup', 'true');
+    this._inputElement?.setAttribute('aria-expanded', 'false');
     tryCreateAriaControlsPlaceholder();
-    setAriaControls(this._inputElement);
+    if (this._inputElement) {
+      setAriaControls(this._inputElement);
+    }
   }
 
   public addInputListener(type: string, listener: (event: Event) => void, capture?: boolean): void {
-    this._inputElement.addEventListener(type, listener, { capture });
+    this._inputElement?.addEventListener(type, listener, { capture });
   }
 
   public removeInputListener(type: string, listener: (event: Event) => void, capture?: boolean): void {
-    if (this._inputElement) {
-      this._inputElement.removeEventListener(type, listener, { capture });
-    }
+    this._inputElement?.removeEventListener(type, listener, { capture });
   }
 
   public addToggleListener(type: string, listener: (event: Event) => void): void {
@@ -150,19 +152,19 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
   }
 
   public tryFocusInput(): void {
-    this._inputElement.select();
+    this._inputElement?.select();
   }
 
   public tryBlurInput(): void {
-    this._inputElement.blur();
+    this._inputElement?.blur();
   }
 
   public selectInputText(): void {
-    this._inputElement.select();
+    this._inputElement?.select();
   }
 
   public isInputDisabled(): boolean {
-    return this._inputElement.disabled;
+    return this._inputElement?.disabled ?? false;
   }
 
   public isInputFocused(): boolean {
@@ -171,11 +173,13 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
   }
 
   public setInputValue(value: string, emitEvents: boolean): void {
-    if (this._inputElement.value === value) {
+    if (this._inputElement?.value === value) {
       return;
     }
 
-    this._inputElement.value = value;
+    if (this._inputElement) {
+      this._inputElement.value = value;
+    }
 
     if (this._inputMask) {
       this._inputMask.update();
@@ -188,12 +192,14 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
   }
 
   public getInputValue(): string {
-    return this._inputMask ? this._inputMask.maskedValue : this._inputElement.value;
+    return this._inputMask ? this._inputMask.maskedValue : (this._inputElement?.value ?? '');
   }
 
   public setDisabled(isDisabled: boolean): void {
-    this._inputElement.disabled = isDisabled;
-    this._inputElement.setAttribute('aria-disabled', isDisabled.toString());
+    if (this._inputElement) {
+      this._inputElement.disabled = isDisabled;
+      this._inputElement.setAttribute('aria-disabled', isDisabled.toString());
+    }
     this.setToggleDisabled(isDisabled);
   }
 
@@ -203,7 +209,7 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
     }
     this._listDropdown = new ListDropdown(this._targetElement, config);
     this._listDropdown.open();
-    this._inputElement.setAttribute('aria-controls', `list-dropdown-popup-${config.id}`);
+    this._inputElement?.setAttribute('aria-controls', `list-dropdown-popup-${config.id}`);
   }
 
   public async detachDropdown({ destroy = false } = {}): Promise<void> {
@@ -215,7 +221,7 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
       }
       this._listDropdown = undefined;
     }
-    if (this._inputElement?.isConnected) {
+    if (this._inputElement) {
       setAriaControls(this._inputElement);
     }
   }
@@ -225,7 +231,9 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
   }
 
   public setActiveDescendant(id: string): void {
-    toggleAttribute(this._inputElement, !!id, 'aria-activedescendant', id);
+    if (this._inputElement) {
+      toggleAttribute(this._inputElement, !!id, 'aria-activedescendant', id);
+    }
   }
 
   public getTargetElementWidth(selector: string): number {
@@ -234,15 +242,19 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
   }
 
   private _emitInputEvent(type: string): void {
-    this._inputElement.dispatchEvent(new Event(type));
+    this._inputElement?.dispatchEvent(new Event(type));
   }
 
   public emitInputEvent(type: string, data?: any): void {
-    emitEvent(this._inputElement, type, data);
+    if (this._inputElement) {
+      emitEvent(this._inputElement, type, data);
+    }
   }
 
   public setInputReadonly(value: boolean): void {
-    this._inputElement.readOnly = value;
+    if (this._inputElement) {
+      this._inputElement.readOnly = value;
+    }
   }
 
   public setToggleDisabled(value: boolean): void {
