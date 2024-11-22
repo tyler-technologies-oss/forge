@@ -9,6 +9,7 @@ const component = 'forge-skip-link';
 
 const meta = {
   title: 'Components/Skip Link',
+  tags: ['new'],
   component,
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);
