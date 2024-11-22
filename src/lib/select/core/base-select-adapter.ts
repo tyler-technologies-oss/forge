@@ -268,6 +268,11 @@ export abstract class BaseSelectAdapter<T extends IBaseSelectComponent> extends 
     const optionElement = document.createElement('forge-option');
     Object.assign(optionElement, option);
     optionElement.textContent = option.label;
+    if (option.elementAttributes) {
+      option.elementAttributes.forEach((value: string, key: string) => {
+        optionElement.setAttribute(key, value);
+      });
+    }
     return optionElement;
   }
 }
