@@ -1203,6 +1203,24 @@ describe('SelectComponent', function(this: ITestContext) {
       
       expect(this.context.component.observeScroll).toBeTrue();
     });
+
+    it('should set custom option attributes via elementAttributes', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      await tick();
+
+      const opts = [
+        { label: 'Option 1', value: 'new-1', elementAttributes: new Map([['data-testid', 'some-id']])},
+        { label: 'Option 2', value: 'new-2', elementAttributes: new Map([['data-testid', 'some-other-id'], ['data-test-attr', 'some-value']])}
+      ];
+      this.context.component.options = opts;
+      await tick();
+
+      const optionElements = this.context.component.querySelectorAll('forge-option');
+      expect(optionElements[0].label).toBe('Option 1');
+      expect(optionElements[0].getAttribute('data-testid')).toBe('some-id');
+      expect(optionElements[1].getAttribute('data-testid')).toBe('some-other-id');
+      expect(optionElements[1].getAttribute('data-test-attr')).toBe('some-value');
+    });
   });
 
   describe('static with default value', function(this: ITestContext) {
