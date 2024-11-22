@@ -1,3 +1,35 @@
+# v3.3.6 (Fri Nov 22 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Anthony Hancock ([@geraltofrivendell](https://github.com/geraltofrivendell)), for all your work!
+
+#### 🐛 Bug Fix
+
+- perf: update forge-core to optimize attachShadowTemplate [#757](https://github.com/tyler-technologies-oss/forge/pull/757) ([@MikeMatusz](https://github.com/MikeMatusz) [@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): fix input size/animation when floating label with inset variant [#763](https://github.com/tyler-technologies-oss/forge/pull/763) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(popover): fixed a bug where the popover would stay connected if hidden at time of exit animation [#760](https://github.com/tyler-technologies-oss/forge/pull/760) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(time-picker): gracefully handle input element reference being undefined [#748](https://github.com/tyler-technologies-oss/forge/pull/748) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): constrain input to grid area to prevent icons from being pushed out of view [#754](https://github.com/tyler-technologies-oss/forge/pull/754) ([@MikeMatusz](https://github.com/MikeMatusz))
+- fix(dialog): fixed a bug where the dialog surface would render incorrectly if set to fullscreen after moving [#761](https://github.com/tyler-technologies-oss/forge/pull/761) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(select): elementAttributes are now applied to select options [#759](https://github.com/tyler-technologies-oss/forge/pull/759) ([@geraltofrivendell](https://github.com/geraltofrivendell))
+- fix(autocomplete): preventDefault on popover-icon mousedown instead of click [#746](https://github.com/tyler-technologies-oss/forge/pull/746) ([@MikeMatusz](https://github.com/MikeMatusz))
+- fix(field): set `aria-hidden="true"` on popover icon `<svg>` [#747](https://github.com/tyler-technologies-oss/forge/pull/747) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs: upgrade Storybook and other dependencies [#764](https://github.com/tyler-technologies-oss/forge/pull/764) ([@DRiFTy17](https://github.com/DRiFTy17))
+- Origin/fix docs component attrs [#753](https://github.com/tyler-technologies-oss/forge/pull/753) ([@nickonometry](https://github.com/nickonometry))
+
+#### Authors: 4
+
+- Anthony Hancock ([@geraltofrivendell](https://github.com/geraltofrivendell))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+
+---
+
 # v3.3.5 (Thu Nov 14 2024)
 
 #### 🐛 Bug Fix
