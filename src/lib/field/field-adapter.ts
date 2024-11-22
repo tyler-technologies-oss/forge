@@ -9,8 +9,8 @@ export interface IFieldAdapter extends IBaseAdapter<IFieldComponent> {
   readonly focusIndicator: IFocusIndicatorComponent;
   readonly hasSlottedLabel: boolean;
   addRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void;
-  addPopoverIconClickListener(listener: EventListener): void;
-  removePopoverIconClickListener(listener: EventListener): void;
+  addPopoverIconListener(type: string, listener: EventListener): void;
+  removePopoverIconListener(type: string, listener: EventListener): void;
   setLabelPosition(value: FieldLabelPosition): void;
   setFloatingLabel(value: boolean): void;
   handleSlotChange(slot: HTMLSlotElement): void;
@@ -49,12 +49,12 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     this._rootElement.addEventListener(name, listener);
   }
 
-  public addPopoverIconClickListener(listener: EventListener): void {
-    this._popoverIconElement.addEventListener('click', listener);
+  public addPopoverIconListener(type: string, listener: EventListener): void {
+    this._popoverIconElement.addEventListener(type, listener);
   }
 
-  public removePopoverIconClickListener(listener: EventListener): void {
-    this._popoverIconElement.removeEventListener('click', listener);
+  public removePopoverIconListener(type: string, listener: EventListener): void {
+    this._popoverIconElement.removeEventListener(type, listener);
   }
 
   /**

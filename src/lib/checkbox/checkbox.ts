@@ -217,7 +217,7 @@ export class CheckboxComponent
   /**
    * Gets/sets whether the checkbox is checked.
    * @default false
-   * @attribute
+   * @attribute checked
    */
   @coreProperty()
   public declare checked: boolean;
@@ -225,7 +225,7 @@ export class CheckboxComponent
   /**
    * Gets/sets whether the checkbox is checked by default.
    * @default false
-   * @attribute
+   * @attribute default-checked
    */
   @coreProperty()
   public declare defaultChecked: boolean;
@@ -281,7 +281,7 @@ export class CheckboxComponent
   /**
    * Controls whether the label appears before or after the checkbox.
    * @default 'end'
-   * @attribute
+   * @attribute label-position
    */
   @coreProperty()
   public declare labelPosition: CheckboxLabelPosition;

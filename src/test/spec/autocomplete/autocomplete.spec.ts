@@ -1,28 +1,29 @@
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
-import { task, frame } from '@tylertech/forge/core/utils/utils';
 import {
-  defineAutocompleteComponent,
-  IAutocompleteComponent,
   AUTOCOMPLETE_CONSTANTS,
   AutocompleteComponent,
-  AutocompleteMode,
-  AutocompleteOptionBuilder,
   AutocompleteComponentDelegate,
   AutocompleteComponentDelegateProps,
   AutocompleteFilterCallback,
-  IAutocompleteOptionGroup,
+  AutocompleteMode,
+  AutocompleteOptionBuilder,
+  defineAutocompleteComponent,
+  IAutocompleteComponent,
   IAutocompleteComponentDelegateConfig,
-  IAutocompleteComponentDelegateOptions
+  IAutocompleteComponentDelegateOptions,
+  IAutocompleteOptionGroup
 } from '@tylertech/forge/autocomplete';
-import { LIST_ITEM_CONSTANTS, IListItemComponent, LIST_CONSTANTS } from '@tylertech/forge/list';
-import { IOption, IOptionComponent, OPTION_CONSTANTS } from '@tylertech/forge/select';
-import { SKELETON_CONSTANTS, ISkeletonComponent } from '@tylertech/forge/skeleton';
-import { LINEAR_PROGRESS_CONSTANTS, ILinearProgressComponent } from '@tylertech/forge/linear-progress';
-import { TEXT_FIELD_CONSTANTS, ITextFieldComponent, ITextFieldComponentDelegateOptions } from '@tylertech/forge/text-field';
 import { AVATAR_CONSTANTS, IAvatarComponent } from '@tylertech/forge/avatar';
+import { frame, task } from '@tylertech/forge/core/utils/utils';
+import { FIELD_CONSTANTS } from '@tylertech/forge/field';
 import { ICON_CONSTANTS, IconComponent } from '@tylertech/forge/icon';
+import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '@tylertech/forge/linear-progress';
+import { IListItemComponent, LIST_CONSTANTS, LIST_ITEM_CONSTANTS } from '@tylertech/forge/list';
 import { LIST_DROPDOWN_CONSTANTS } from '@tylertech/forge/list-dropdown';
-import { IPopoverComponent, POPOVER_CONSTANTS } from '@tylertech/forge/popover';
+import { POPOVER_CONSTANTS } from '@tylertech/forge/popover';
+import { IOption, IOptionComponent, OPTION_CONSTANTS } from '@tylertech/forge/select';
+import { ISkeletonComponent, SKELETON_CONSTANTS } from '@tylertech/forge/skeleton';
+import { ITextFieldComponent, ITextFieldComponentDelegateOptions, TEXT_FIELD_CONSTANTS } from '@tylertech/forge/text-field';
 import { tryCleanupPopovers } from '../../utils';
 
 const DEFAULT_FILTER_OPTIONS = [
@@ -1383,6 +1384,41 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(document.activeElement).toBe(this.context.input);
       expect(this.context.component.popupElement).not.toBeNull();
     });
+
+    it('should open dropdown if popover icon clicked', async function(this: ITestContext) {
+      const context = setupTextFieldTestContext(true, false); 
+      this.context = context;
+      context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      await frame();
+      const popoverIcon = getPopoverIcon(context.component);
+      expect(popoverIcon).toBeDefined();
+
+      context.input.focus();
+      const mousedownEvent = new MouseEvent('mousedown', {cancelable: true});
+      popoverIcon?.dispatchEvent(mousedownEvent);
+      popoverIcon?.dispatchEvent(new MouseEvent('click'));
+      expect(mousedownEvent.defaultPrevented).toBeTrue();
+
+      await frame();
+      expect(document.activeElement).toBe(context.input);
+      expect(context.component.popupElement).not.toBeNull();
+    });
+
+    it('should close dropdown if popover icon clicked while open', async function(this: ITestContext) {
+      const context = setupTextFieldTestContext(true, false); 
+      this.context = context;
+      context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      _triggerDropdownClick(this.context.input);
+      await frame();
+      expect(context.component.popupElement).not.toBeNull();
+      const popoverIcon = getPopoverIcon(context.component);
+      expect(popoverIcon).toBeDefined();
+    
+      popoverIcon?.dispatchEvent(new MouseEvent('click'));      
+
+      await task(POPOVER_ANIMATION_DURATION);
+      expect(context.component.popupElement).toBeNull();
+    });
   });
 
   describe('AutocompleteComponentDelegate', function(this: ITestContext) {
@@ -1699,7 +1735,8 @@ describe('AutocompleteComponent', function(this: ITestContext) {
   }
 
   function setupTextFieldTestContext(
-    append = false
+    append = false,
+    includeIconElement = true
   ): ITestAutocompleteTextFieldContext {
     const fixture = document.createElement('div');
     fixture.id = 'autocomplete-test-fixture';
@@ -1710,6 +1747,10 @@ describe('AutocompleteComponent', function(this: ITestContext) {
     input.id = 'autocomplete-id';
     const label = document.createElement('label') as HTMLLabelElement;
     label.setAttribute('for', input.id);
+    textFieldElement.appendChild(input);
+    textFieldElement.appendChild(label);
+
+    textFieldElement.popoverIcon = !includeIconElement;
     const iconElement = document.createElement('i') as HTMLElement;
     iconElement.slot = 'trailing';
     iconElement.classList.add('tyler-icons');
@@ -1717,9 +1758,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
     iconElement.setAttribute('data-forge-dropdown-icon', '');
     iconElement.setAttribute('aria-hidden', 'true');
     iconElement.textContent = 'arrow_drop_down';
-    textFieldElement.appendChild(input);
-    textFieldElement.appendChild(label);
-    textFieldElement.appendChild(iconElement);
+    if (includeIconElement) textFieldElement.appendChild(iconElement);
     component.appendChild(textFieldElement);
     const optionElements: IOptionComponent[] = [];
     DEFAULT_FILTER_OPTIONS.forEach(o => {
@@ -1766,6 +1805,10 @@ describe('AutocompleteComponent', function(this: ITestContext) {
         removeElement(fixture);
       }
     };
+  }
+
+  function getPopoverIcon(component: IAutocompleteComponent): HTMLElement | null | undefined {
+    return component.querySelector(TEXT_FIELD_CONSTANTS.elementName)?.shadowRoot?.querySelector(FIELD_CONSTANTS.elementName)?.shadowRoot?.querySelector(FIELD_CONSTANTS.selectors.POPOVER_ICON);
   }
 
   function _getPopupOptions(popupElement: HTMLElement | null): (IOption & { selected?: boolean })[] {
