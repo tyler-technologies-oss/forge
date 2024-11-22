@@ -215,7 +215,9 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
       }
       this._listDropdown = undefined;
     }
-    setAriaControls(this._inputElement);
+    if (this._inputElement?.isConnected) {
+      setAriaControls(this._inputElement);
+    }
   }
 
   public propagateKey(key: string): void {
