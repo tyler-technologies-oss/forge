@@ -69,7 +69,7 @@
 /// Computes the hue, saturation, lightness (and optionally alpha) values for the provided color and returns a string in HSL format.
 ///
 @function hsl-values($color, $with-alpha: false) {
-  $value: utils.round(color.hue($color), 2) utils.round(color.saturation($color), 2) utils.round(color.lightness($color), 2);
+  $value: utils.round-fraction(color.hue($color), 2) utils.round-fraction(color.saturation($color), 2) utils.round-fraction(color.lightness($color), 2);
   @if $with-alpha {
     $value: string.unquote($value + ' / ' + alpha($color));
   }
