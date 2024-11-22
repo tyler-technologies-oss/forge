@@ -256,7 +256,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
     /**
      * Whether the label floats above the field.
      * @default false
-     * @attribute
+     * @attribute float-label
      */
     public get floatLabel(): boolean {
       return this._fieldElement.floatLabel;
@@ -346,7 +346,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
     /**
      * Whether the popover icon is displayed.
      * @default false
-     * @attribute
+     * @attribute popover-icon
      */
     public get popoverIcon(): boolean {
       return this._fieldElement.popoverIcon;

@@ -280,7 +280,7 @@ export class SwitchComponent
   /**
    * Gets/sets whether the switch is on or off by default.
    * @default false
-   * @attribute
+   * @attribute default-on
    */
   @coreProperty()
   public declare defaultOn: boolean;
@@ -336,7 +336,7 @@ export class SwitchComponent
   /**
    * Controls whether the label appears before or after the switch.
    * @default 'end'
-   * @attribute
+   * @attribute label-position
    */
   @coreProperty()
   public declare labelPosition: SwitchLabelPosition;
