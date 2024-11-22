@@ -92,6 +92,12 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
       return Promise.resolve();
     }
 
+    if (!this._surfaceElement.checkVisibility()) {
+      this._overlayElement.open = false;
+      this._updateAnchorExpandedState(false);
+      return Promise.resolve();
+    }
+
     return new Promise(resolve => {
       this._surfaceElement.addEventListener(
         'animationend',
