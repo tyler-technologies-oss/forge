@@ -70,7 +70,7 @@ export class CalendarDropdown implements ICalendarDropdown {
       await this.dropdownElement.hideAsync();
     }
 
-    this.dropdownElement.remove();
+    this.dropdownElement?.remove();
     this.dropdownElement = undefined;
     this.calendar = undefined;
   }

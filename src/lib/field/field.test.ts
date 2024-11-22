@@ -324,6 +324,37 @@ describe('Field', () => {
 
       expect(clickSpy.called).to.be.false;
     });
+
+    it('should dispatch popover icon mousedown event when popover icon receives mousedown event', async () => {
+      const harness = await createFixture({ popoverIcon: true });
+      const mousedownSpy = spy();
+      harness.element.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_MOUSEDOWN, mousedownSpy);
+
+      harness.popoverIconElement.dispatchEvent(new MouseEvent('mousedown'));
+
+      expect(mousedownSpy.called).to.be.true;
+    });
+
+    it('should not dispatch popover icon mousedown event when popover icon is removed', async () => {
+      const harness = await createFixture({ popoverIcon: true });
+      const mousedownSpy = spy();
+      harness.element.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_MOUSEDOWN, mousedownSpy);
+      harness.element.popoverIcon = false;
+
+      harness.popoverIconElement.dispatchEvent(new MouseEvent('mousedown'));
+
+      expect(mousedownSpy.called).to.be.false;
+    });
+
+    it('should prevent default on the original mousedown event if default prevented on popover icon mousedown event', async () => {
+      const harness = await createFixture({ popoverIcon: true });
+      harness.element.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_MOUSEDOWN, evt => evt.preventDefault());
+
+      const mousedownEvent = new MouseEvent('mousedown', { cancelable: true });
+      harness.popoverIconElement.dispatchEvent(mousedownEvent);
+
+      expect(mousedownEvent.defaultPrevented).to.be.true;
+    });
   });
 
   describe('slots', () => {
@@ -533,43 +564,6 @@ describe('Field', () => {
       await frame();
 
       expect(animationSpy.called).to.be.false;
-    });
-
-    it('should lock input container width during float label animation', async () => {
-      const harness = await createFixture({ labelPosition: 'inset' });
-      harness.addSlottedContent('label');
-      harness.element.floatLabel = true;
-
-      const { width } = harness.inputContainerElement.getBoundingClientRect();
-      expect(harness.inputContainerElement.style.width).to.equal(`${width}px`);
-    });
-
-    it('should unlock input container width after float label animation', async () => {
-      const harness = await createFixture({ labelPosition: 'inset', floatLabel: true });
-      harness.addSlottedContent('label');
-
-      expect(harness.inputContainerElement.style.width).to.equal('');
-
-      let animationComplete: Promise<void> = new Promise<void>(resolve => {
-        harness.rootElement.addEventListener('animationend', () => resolve());
-      });
-
-      harness.element.floatLabel = false;
-
-      const { width } = harness.inputContainerElement.getBoundingClientRect();
-      expect(harness.inputContainerElement.style.width).to.equal(`${width}px`);
-
-      await animationComplete;
-      await frame();
-
-      expect(harness.inputContainerElement.style.width).to.equal('');
-    });
-
-    it('should not lock input container width when no label is present', async () => {
-      const harness = await createFixture({ labelPosition: 'inset' });
-      harness.element.floatLabel = true;
-
-      expect(harness.inputContainerElement.style.width).to.equal('');
     });
   });
 });

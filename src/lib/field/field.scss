@@ -442,10 +442,8 @@ $variants: (
       }
 
       .input {
-        @include core.float-in-input;
-
         ::slotted(:is(input, [data-forge-field-input], [data-forge-multi-input-separator])) {
-          @include core.default-slot-floating-in;
+          @include core.float-in-input;
         }
       }
     }
@@ -465,15 +463,11 @@ $variants: (
     .label {
       @include core.float-out-label;
     }
-
-    .input {
-      @include core.float-out-input;
-    }
   }
 }
 
 :host(#{map.get($label-positions, inset)}[float-label][multiline]) {
-  .has-label:not(.floating-in) {
+  .has-label {
     ::slotted(textarea) {
       @include core.multiline-slotted-floating-input;
     }
@@ -529,6 +523,12 @@ $variants: (
 
     &::after {
       @include core.multiline-inset-label-background;
+    }
+  }
+
+  .forge-field:not(.has-label) {
+    .label::after {
+      display: none;
     }
   }
 }

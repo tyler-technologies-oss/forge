@@ -19,18 +19,14 @@
   font: inherit;
   font-size: #{token(font-size)};
   text-overflow: ellipsis;
+
+  padding-block-start: 0;
+  padding-block-end: 0;
+  transition: padding-block #{token(floating-animation-duration)} #{token(floating-animation-timing)};
 }
 
 @mixin default-slot-textarea {
   resize: none;
-}
-
-@mixin default-slot-floating-in {
-  position: absolute;
-  inset-block-start: calc(#{token(height)} * -0.5);
-
-  block-size: 100%;
-  padding-block: #{token(height)};
 }
 
 @mixin slotted-inset-label {
