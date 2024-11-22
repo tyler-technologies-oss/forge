@@ -25,6 +25,7 @@ const config: StorybookConfig = {
         },
       },
     },
+    'storybook-addon-tag-badges',
   ],
   staticDirs: ['../src/stories/assets'],
   framework: {

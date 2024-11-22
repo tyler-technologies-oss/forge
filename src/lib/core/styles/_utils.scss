@@ -159,7 +159,7 @@
 ///
 /// Rounds a number to the specified number of decimal places.
 ///
-@function round($value, $fractionDigits: 0) {
+@function round-fraction($value, $fractionDigits: 0) {
   $power: math.pow(10, $fractionDigits);
   @return math.div(math.round($power * $value), $power);
 }
