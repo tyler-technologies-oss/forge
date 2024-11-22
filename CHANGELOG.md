@@ -1,3 +1,19 @@
+# v2.24.8 (Fri Nov 22 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Anthony Hancock ([@geraltofrivendell](https://github.com/geraltofrivendell)), for all your work!
+
+#### 🐛 Bug Fix
+
+- fix(select): elementAttributes are now applied to select options [#762](https://github.com/tyler-technologies-oss/forge/pull/762) ([@geraltofrivendell](https://github.com/geraltofrivendell))
+
+#### Authors: 1
+
+- Anthony Hancock ([@geraltofrivendell](https://github.com/geraltofrivendell))
+
+---
+
 # v2.24.7 (Thu Sep 26 2024)
 
 #### 🐛 Bug Fix
