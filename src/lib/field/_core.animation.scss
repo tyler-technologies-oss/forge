@@ -36,26 +36,6 @@
       opacity: 100%;
     }
   }
-
-  @keyframes float-in-input-animation {
-    from {
-      translate: 0;
-    }
-
-    to {
-      translate: 0 $offset;
-    }
-  }
-
-  @keyframes float-out-input-animation {
-    from {
-      translate: 0 $offset;
-    }
-
-    to {
-      translate: 0;
-    }
-  }
 }
 
 @mixin multiline-inset-label-background-animation-keyframes {

@@ -153,7 +153,6 @@
 //
 
 $multiline-input-offset-base: calc((token(height, custom) - typography.variable(body2, line-height)) / 2);
-$multiline-input-padding-block-end-base: 8px;
 
 @mixin multiline-container {
   align-items: start;
@@ -211,12 +210,12 @@ $multiline-input-padding-block-end-base: 8px;
 
 @mixin multiline-slotted-input {
   padding-block-start: $multiline-input-offset-base;
-  padding-block-end: calc($floating-offset + $multiline-input-padding-block-end-base);
+  padding-block-end: calc($floating-offset + $multiline-input-offset-base);
 }
 
 @mixin multiline-slotted-floating-input {
   padding-block-start: calc($floating-offset + ($multiline-input-offset-base)) !important; // TODO: find a way to remove this !important
-  padding-block-end: #{$multiline-input-padding-block-end-base} !important;
+  padding-block-end: #{$multiline-input-offset-base} !important;
 }
 
 //
@@ -253,11 +252,7 @@ $floating-offset: #{calc($floating-offset-base + $floating-offset-adjustment)};
 }
 
 @mixin float-in-input {
-  @include animation.floating-animation(float-in-input-animation);
-}
-
-@mixin float-out-input {
-  @include animation.floating-animation(float-out-input-animation);
+  padding-block-start: calc($floating-offset * 2) !important;
 }
 
 @mixin slotted-floating-input {

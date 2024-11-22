@@ -565,43 +565,6 @@ describe('Field', () => {
 
       expect(animationSpy.called).to.be.false;
     });
-
-    it('should lock input container width during float label animation', async () => {
-      const harness = await createFixture({ labelPosition: 'inset' });
-      harness.addSlottedContent('label');
-      harness.element.floatLabel = true;
-
-      const { width } = harness.inputContainerElement.getBoundingClientRect();
-      expect(harness.inputContainerElement.style.width).to.equal(`${width}px`);
-    });
-
-    it('should unlock input container width after float label animation', async () => {
-      const harness = await createFixture({ labelPosition: 'inset', floatLabel: true });
-      harness.addSlottedContent('label');
-
-      expect(harness.inputContainerElement.style.width).to.equal('');
-
-      let animationComplete: Promise<void> = new Promise<void>(resolve => {
-        harness.rootElement.addEventListener('animationend', () => resolve());
-      });
-
-      harness.element.floatLabel = false;
-
-      const { width } = harness.inputContainerElement.getBoundingClientRect();
-      expect(harness.inputContainerElement.style.width).to.equal(`${width}px`);
-
-      await animationComplete;
-      await frame();
-
-      expect(harness.inputContainerElement.style.width).to.equal('');
-    });
-
-    it('should not lock input container width when no label is present', async () => {
-      const harness = await createFixture({ labelPosition: 'inset' });
-      harness.element.floatLabel = true;
-
-      expect(harness.inputContainerElement.style.width).to.equal('');
-    });
   });
 });
 
