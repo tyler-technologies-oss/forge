@@ -1,0 +1,21 @@
+@use './core';
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-virtualizer {
+  @include core.root;
+}
+
+.scroller {
+  @include core.scroller;
+
+  &.horizontal {
+    @include core.horizontal;
+  }
+}

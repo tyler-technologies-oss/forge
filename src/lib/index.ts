@@ -78,6 +78,7 @@ import { ToastComponent } from './toast';
 import { ToolbarComponent } from './toolbar';
 import { TooltipComponent } from './tooltip';
 import { ViewComponent, ViewSwitcherComponent } from './view-switcher';
+import { VirtualItemComponent, VirtualizerComponent } from './virtualizer';
 
 /**
  * Deprecated imports
@@ -150,6 +151,7 @@ export * from './toolbar';
 export * from './tooltip';
 export * from './utils';
 export * from './view-switcher';
+export * from './virtualizer';
 
 /**
  * Deprecated exports
@@ -236,7 +238,9 @@ const CUSTOM_ELEMENTS = [
   ToolbarComponent,
   TooltipComponent,
   ViewComponent,
-  ViewSwitcherComponent
+  ViewSwitcherComponent,
+  VirtualItemComponent,
+  VirtualizerComponent
 ];
 
 /**

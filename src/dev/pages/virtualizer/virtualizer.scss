@@ -1,0 +1,44 @@
+.vert>* {
+  min-width: 0;
+}
+
+forge-virtualizer {
+  block-size: 200px;
+  border: 1px solid var(--forge-theme-outline);
+  border-radius: 4px;
+
+  &[horizontal] {
+    inline-size: 100%;
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  block-size: 100%;
+  inline-size: 100%;
+  padding-inline: 16px;
+}
+
+.headless {
+  &-virtualizer {
+    position: relative;
+    overflow: auto;
+    block-size: 200px;
+    inline-size: 100%;
+    border: 1px solid var(--forge-theme-outline);
+    border-radius: 4px;
+  }
+
+  &-scroller {
+    position: relative;
+    inline-size: 100%;
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+    padding-inline: 16px;
+  }
+}

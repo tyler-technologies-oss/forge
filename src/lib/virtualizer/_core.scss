@@ -1,0 +1,21 @@
+@mixin host {
+  display: block;
+}
+
+@mixin root {
+  position: relative;
+  block-size: 100%;
+  inline-size: 100%;
+  overflow: auto;
+}
+
+@mixin scroller {
+  position: relative;
+  block-size: var(--size);
+  inline-size: 100%;
+}
+
+@mixin horizontal {
+  block-size: 100%;
+  inline-size: var(--size);
+}
