@@ -26,10 +26,12 @@ export class Virtualizer implements IVirtualizer {
     style.top = '0';
     style.left = '0';
     style.transform = `translate${direction === 'horizontal' ? 'X' : 'Y'}(${item.start}px)`;
+
     if (dynamic) {
-      style.width = 'initial';
-      style.height = 'initial';
-    } else if (direction === 'horizontal') {
+      return;
+    }
+
+    if (direction === 'horizontal') {
       style.width = `${item.size}px`;
     } else {
       style.height = `${item.size}px`;
