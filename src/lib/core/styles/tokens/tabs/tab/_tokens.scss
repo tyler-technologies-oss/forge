@@ -31,7 +31,7 @@ $tokens: (
   container-shape: utils.module-val(tab, container-shape, 0),
   // Content
   content-height: utils.module-ref(tab, content-height, height),
-  content-spacing: utils.module-val(tab, content-spacing, spacing.variable(xxsmall)),
+  content-spacing: utils.module-val(tab, content-spacing, spacing.variable(xsmall)),
   content-padding: utils.module-val(tab, content-padding, spacing.variable(xxsmall)),
   content-padding-block: utils.module-ref(tab, content-padding-block, content-padding),
   content-padding-inline: utils.module-val(tab, content-padding-inline, spacing.variable(medium)),

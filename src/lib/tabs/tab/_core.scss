@@ -168,7 +168,9 @@
 }
 
 @mixin content-stacked {
+  max-height: none;
   flex-direction: column;
+  height: 100%;
 }
 
 @mixin inverted-indicator {
