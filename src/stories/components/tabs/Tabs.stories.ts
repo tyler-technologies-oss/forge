@@ -1,7 +1,7 @@
 import { html, nothing } from 'lit';
 import { action } from '@storybook/addon-actions';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 import { styleMap } from 'lit/directives/style-map.js';
 import { tylIconFavorite } from '@tylertech/tyler-icons/standard';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
@@ -45,7 +45,6 @@ const meta = {
         .vertical=${args.vertical}
         .clustered=${args.clustered}
         .stacked=${args.stacked}
-        .secondary=${args.secondary}
         .inverted=${args.inverted}
         .autoActivate=${args.autoActivate}
         .scrollButtons=${args.scrollButtons}
@@ -78,7 +77,6 @@ const meta = {
     vertical: false,
     clustered: false,
     stacked: false,
-    secondary: false,
     inverted: false,
     autoActivate: false,
     scrollButtons: false
@@ -91,8 +89,30 @@ type Story = StoryObj;
 
 export const Demo: Story = {};
 
-export const Secondary: Story = {
+export const Vertical: Story = {
+  ...standaloneStoryParams,
   args: {
-    secondary: true
+    vertical: true
+  }
+};
+
+export const Clustered: Story = {
+  ...standaloneStoryParams,
+  args: {
+    clustered: true
+  }
+};
+
+export const Scrolling: Story = {
+  ...standaloneStoryParams,
+  args: {
+    scrollButtons: true
+  }
+};
+
+export const WithIcons: Story = {
+  ...standaloneStoryParams,
+  args: {
+    startIcon: true
   }
 };
