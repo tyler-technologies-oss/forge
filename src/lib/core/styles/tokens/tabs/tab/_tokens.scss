@@ -10,7 +10,7 @@ $tokens: (
   height: utils.module-val(tab, height, 48px),
   stacked-height: utils.module-val(tab, stacked-height, 64px),
   padding-block: utils.module-val(tab, padding-block, 0),
-  padding-inline: utils.module-val(tab, padding-inline, spacing.variable(medium)),
+  padding-inline: utils.module-val(tab, padding-inline, 0),
   // Disabled
   disabled-opacity: utils.module-val(tab, disabled-opacity, 0.38),
   // Indicator

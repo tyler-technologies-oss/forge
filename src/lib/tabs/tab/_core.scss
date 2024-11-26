@@ -72,12 +72,6 @@
   }
 }
 
-@mixin tab-secondary {
-  @include override(indicator-height, secondary-indicator-height);
-  @include override(indicator-shape, secondary-indicator-shape);
-  @include override(padding-inline, 0, value);
-}
-
 @mixin focus {
   color: #{token(focus-label-text-color)};
 
@@ -126,6 +120,7 @@
   transition: 150ms color linear;
   max-height: calc(#{token(content-height)} + 2 * #{token(content-padding-block)});
   min-height: #{token(content-height)};
+  width: 100%;
   padding-block: #{token(content-padding-block)};
   padding-inline: #{token(content-padding-inline)};
   gap: #{token(content-spacing)};
@@ -144,18 +139,9 @@
   background: #{token(indicator-color)};
   border-radius: #{token(indicator-shape)};
   height: #{token(indicator-height)};
+  min-width: 100%;
   inset: auto 0 0;
   opacity: 0;
-}
-
-@mixin content-secondary {
-  @include override(content-padding-inline, content-padding-inline-secondary);
-
-  width: 100%;
-}
-
-@mixin indicator-secondary {
-  min-width: 100%;
 }
 
 @mixin vertical {
@@ -168,9 +154,6 @@
 
 @mixin vertical-content {
   width: 100%;
-}
-
-@mixin vertical-secondary-content {
   min-height: 100%;
 }
 
