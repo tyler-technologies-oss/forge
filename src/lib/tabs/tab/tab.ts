@@ -6,6 +6,7 @@ import { TAB_CONSTANTS } from './tab-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../../state-layer/state-layer';
+import { ExperimentalFocusOptions } from '../../constants';
 
 import template from './tab.html';
 import styles from './tab.scss';
@@ -18,6 +19,7 @@ export interface ITabComponent extends IBaseComponent {
   /** @deprecated This will be removed in a future version */
   secondary: boolean;
   inverted: boolean;
+  focus(options?: ExperimentalFocusOptions): void;
 }
 
 declare global {
@@ -162,4 +164,9 @@ export class TabComponent extends BaseComponent implements ITabComponent {
 
   @coreProperty()
   public declare inverted: boolean;
+
+  public override focus(options?: ExperimentalFocusOptions): void {
+    super.focus(options);
+    this._core.setFocus(options);
+  }
 }
