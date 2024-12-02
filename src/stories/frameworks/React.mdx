@@ -7,9 +7,26 @@ import { Meta } from '@storybook/blocks';
 Direct support for custom elements in React has been a requested feature for long time. As you can see on
 [Custom Elements Everywhere](https://custom-elements-everywhere.com/#react) React scores quite low.
 
-> As of May 2024, React 19 is in beta and now [better supports custom elements](https://custom-elements-everywhere.com/#react-beta) natively.
+> As of May 2024, React v19 is in beta and now [better supports custom elements](https://custom-elements-everywhere.com/#react-beta) natively.
 >
 > This means that you can use Forge components directly in React more seamlessly without any additional libraries! 🎉
+
+## Ambient Typings
+
+When using Forge components in React, you can reference ambient typings for the `<forge-*>` custom elements. This is useful when using TypeScript
+to avoid errors when using the components in JSX.
+
+Forge provides ambient typings that you can use in your React application. To reference these typings, add the following code to your project:
+
+```ts
+import type { ForgeCustomElements } from '@tylertech/forge/types/react-types';
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements extends ForgeCustomElements {}
+  }
+}
+```
 
 ## The Problem
 
