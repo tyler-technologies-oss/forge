@@ -77,6 +77,7 @@ import { TimePickerComponent } from './time-picker';
 import { ToastComponent } from './toast';
 import { ToolbarComponent } from './toolbar';
 import { TooltipComponent } from './tooltip';
+import { TreeComponent, TreeItemComponent } from './tree';
 import { ViewComponent, ViewSwitcherComponent } from './view-switcher';
 
 /**
@@ -148,6 +149,7 @@ export * from './time-picker';
 export * from './toast';
 export * from './toolbar';
 export * from './tooltip';
+export * from './tree';
 export * from './utils';
 export * from './view-switcher';
 
@@ -235,6 +237,8 @@ const CUSTOM_ELEMENTS = [
   ToastComponent,
   ToolbarComponent,
   TooltipComponent,
+  TreeComponent,
+  TreeItemComponent,
   ViewComponent,
   ViewSwitcherComponent
 ];
