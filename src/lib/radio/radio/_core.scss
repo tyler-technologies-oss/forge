@@ -111,7 +111,7 @@
 }
 
 @mixin label {
-  @include typography.style(label1);
+  @include typography.style(label2);
 
   cursor: default;
 
