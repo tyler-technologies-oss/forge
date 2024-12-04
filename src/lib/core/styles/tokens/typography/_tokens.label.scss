@@ -22,6 +22,15 @@ $label2: utils.inherit-map(
   )
 ) !default;
 
+$label3: utils.inherit-map(
+  core.$base,
+  (
+    font-size: type-utils.font-size-relative(label, font-size, '0875'),
+    line-height: type-utils.font-size-relative(label, line-height, '1250'),
+    letter-spacing: type-utils.calc-letter-spacing(0.125, scale.value('0875'))
+  )
+) !default;
+
 $button: utils.inherit-map(
   core.$base,
   (
@@ -45,6 +54,7 @@ $overline: utils.inherit-map(
 $tokens: (
   label1: $label1,
   label2: $label2,
+  label3: $label3,
   button: $button,
   overline: $overline
 ) !default;
