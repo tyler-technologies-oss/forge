@@ -1502,7 +1502,7 @@ export class CalendarCore implements ICalendarCore {
 
   /**
    * Sets the year text and attribute in the adapter.
-   * @param userSelected Whether the year was explicilty selected by the user (optional)
+   * @param userSelected Whether the year was explicity selected by the user (optional)
    * */
   private _setYear(userSelected?: boolean): void {
     this._adapter.setYear(this._year, this._locale);
