@@ -121,6 +121,7 @@
 }
 
 @mixin toggle-on-icon {
+  @include override(background-color, toggle-on-background-color);
   @include override(icon-color, toggle-on-icon-color);
 }
 

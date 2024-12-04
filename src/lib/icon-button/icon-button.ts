@@ -104,6 +104,7 @@ declare global {
  * @cssproperty --forge-icon-button-density-medium-size - The size of the button when in the medium density.
  * @cssproperty --forge-icon-button-density-medium-padding - The padding of the button when in the medium density.
  * @cssproperty --forge-icon-button-density-large-size - The size of the button when in the large density.
+ * @cssproperty --forge-icon-button-toggle-on-background-color - The background color of the when in toggle mode and toggled on.
  * @cssproperty --forge-icon-button-toggle-on-icon-color - The color of the icon when in toggle mode and toggled on.
  * @cssproperty --forge-icon-button-outlined-toggle-on-background-color - The background color when in the outlined variant and toggled on.
  * @cssproperty --forge-icon-button-outlined-toggle-on-icon-color - The icon color when in the outlined variant and toggled on.

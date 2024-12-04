@@ -54,6 +54,7 @@ $tokens: (
   // Density - large (default)
   density-large-size: utils.module-ref(icon-button, density-large-size, size),
   // Toggle (on)
+  toggle-on-background-color: utils.module-val(icon-button, toggle-on-background-color, theme.variable(primary-container)),
   toggle-on-icon-color: utils.module-val(icon-button, toggle-on-icon-color, theme.variable(primary)),
   // Toggle (on) outlined
   outlined-toggle-on-background-color: utils.module-val(icon-button, outlined-toggle-on-background-color, theme.variable(primary-container)),
