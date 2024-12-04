@@ -28,7 +28,7 @@
 @mixin row {
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: #{token(columns)};
 
   height: #{token(height)};
   padding-inline: #{token(row-padding)};

@@ -50,6 +50,7 @@ declare global {
  * @cssproperty --forge-app-bar-row-padding - The inline padding of the app bar.
  * @cssproperty --forge-app-bar-logo-gap - The space between the logo and title.
  * @cssproperty --forge-app-bar-title-padding - The padding around the title element.
+ * @cssproperty --forge-app-bar-columns - The grid column track sizes.
  * @cssproperty --forge-app-bar-transition-duration - The transition duration for animations.
  * @cssproperty --forge-app-bar-transition-timing - The transition timing function for animations.
  *
