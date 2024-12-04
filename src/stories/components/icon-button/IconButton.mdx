@@ -17,6 +17,16 @@ Icon buttons can be styled in different ways to indicate their purpose and empha
 
 <Canvas of={IconButtonStories.Variants} />
 
+## Toggle
+
+Icon buttons can be toggled on and off to indicate a state change.
+
+When using a toggle icon button, ensure that you have provided an "off" icon in the default slot, and a "on" icon placed in the `on` slot.
+The "on" icon should be visually distinct from the "off" icon to indicate the current state of the button. Typically an outlined-style icon
+is used for the "off" state and a filled-style icon is used for the "on" state, but any icons can be used.
+
+<Canvas of={IconButtonStories.Toggle} />
+
 ## Themed
 
 Icon buttons can be themed to match the color scheme of the application. The following example shows a themed icon button using the `theme` attribute:
