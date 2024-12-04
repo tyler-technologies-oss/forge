@@ -24,7 +24,8 @@ $tokens: (
   // Spacing
   padding: utils.module-val(toolbar, padding, spacing.variable(medium)),
   padding-block: utils.module-val(toolbar, padding-block, 0),
-  padding-inline: utils.module-ref(toolbar, padding-inline, padding)
+  padding-inline: utils.module-ref(toolbar, padding-inline, padding),
+  columns: utils.module-val(toolbar, columns, auto 1fr auto)
 ) !default;
 
 @function get($key) {
