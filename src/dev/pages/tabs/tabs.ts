@@ -31,11 +31,6 @@ verticalToggle.addEventListener('forge-switch-change', ({ detail: selected }) =>
   container.classList.toggle('tabs-demo-container--vertical', selected);
 });
 
-const secondaryToggle = document.getElementById('opt-secondary') as ISwitchComponent;
-secondaryToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  tabBar.secondary = selected;
-});
-
 const clusteredToggle = document.getElementById('opt-clustered') as ISwitchComponent;
 clusteredToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {

@@ -128,7 +128,7 @@ export class TabBarCore implements ITabBarCore {
     if (this._autoActivate) {
       this._selectTab(this._tabs[index]);
     } else {
-      this._tabs[index].focus({ preventScroll: true });
+      this._tabs[index].focus({ preventScroll: true, focusVisible: true });
       await this._adapter.tryScrollTabIntoView(this._tabs[index]);
     }
   }

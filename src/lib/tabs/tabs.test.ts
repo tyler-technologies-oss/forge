@@ -127,15 +127,6 @@ describe('Tabs', () => {
     expect(ctx.tabs.every(tab => tab.stacked && tab.hasAttribute(TAB_CONSTANTS.attributes.STACKED))).to.be.true;
   });
 
-  it('should set secondary', async () => {
-    const el = await createFixture({ secondary: true });
-    const ctx = new TabsHarness(el);
-
-    expect(el.secondary).to.be.true;
-    expect(el.hasAttribute(TAB_BAR_CONSTANTS.attributes.SECONDARY)).to.be.true;
-    expect(ctx.tabs.every(tab => tab.secondary && tab.hasAttribute(TAB_CONSTANTS.attributes.SECONDARY))).to.be.true;
-  });
-
   it('should set clustered', async () => {
     const el = await createFixture({ clustered: true });
 
@@ -713,7 +704,6 @@ interface TabsFixtureConfig {
   clustered?: boolean;
   vertical?: boolean;
   stacked?: boolean;
-  secondary?: boolean;
   inverted?: boolean;
   scrollButtons?: boolean;
   autoActivate?: boolean;
@@ -728,7 +718,6 @@ async function createFixture({
   clustered,
   vertical,
   stacked,
-  secondary,
   inverted,
   scrollButtons,
   autoActivate,
@@ -740,13 +729,12 @@ async function createFixture({
     <forge-tab-bar
       .activeTab=${activeTab}
       ?disabled=${disabled}
-      .vertical=${vertical}
-      .clustered=${clustered}
-      .stacked=${stacked}
-      .secondary=${secondary}
-      .inverted=${inverted}
-      .autoActivate=${autoActivate}
-      .scrollButtons=${scrollButtons}
+      .vertical=${!!vertical}
+      .clustered=${!!clustered}
+      .stacked=${!!stacked}
+      .inverted=${!!inverted}
+      .autoActivate=${!!autoActivate}
+      .scrollButtons=${!!scrollButtons}
       style="width: ${width ?? 'auto'}; height: ${height ?? 'auto'}">
       <forge-tab ?disabled=${tabDisabled?.[0]}>First</forge-tab>
       <forge-tab ?disabled=${tabDisabled?.[1]}>Second</forge-tab>

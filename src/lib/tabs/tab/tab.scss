@@ -169,24 +169,6 @@ forge-state-layer {
 }
 
 //
-// Secondary
-//
-
-:host([secondary]) {
-  .forge-tab {
-    @include tab-secondary;
-  }
-
-  .content {
-    @include content-secondary;
-  }
-
-  .indicator {
-    @include indicator-secondary;
-  }
-}
-
-//
 // Vertical
 //
 
@@ -212,13 +194,7 @@ forge-state-layer {
   }
 }
 
-:host([vertical][secondary]) {
-  .content {
-    @include vertical-secondary-content;
-  }
-}
-
-:host([vertical]:not([secondary])) {
+:host([vertical]) {
   .forge-tab {
     @include override(indicator-shape, vertical-indicator-shape);
   }

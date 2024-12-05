@@ -25,6 +25,7 @@
 
 @mixin slotted-base {
   flex: #{token(stretch)};
+  align-self: stretch;
 }
 
 @mixin slotted-selected {

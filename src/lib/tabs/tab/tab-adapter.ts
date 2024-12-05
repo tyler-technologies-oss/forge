@@ -4,9 +4,11 @@ import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { TAB_BAR_CONSTANTS } from '../tab-bar/tab-bar-constants';
 import type { ITabComponent } from './tab';
 import { TAB_CONSTANTS } from './tab-constants';
+import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
 
 export interface ITabAdapter extends IBaseAdapter {
   initialize(): void;
+  activateFocusIndicator(): void;
   addInteractionListener(type: string, listener: EventListener): void;
   setDisabled(value: boolean): void;
   setSelected(value: boolean): void;
@@ -16,11 +18,13 @@ export interface ITabAdapter extends IBaseAdapter {
 
 export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapter {
   private readonly _tabIndicatorElement: HTMLElement;
+  private readonly _focusIndicatorElement: IFocusIndicatorComponent;
   private readonly _stateLayerElement: IStateLayerComponent;
 
   constructor(component: ITabComponent) {
     super(component);
     this._tabIndicatorElement = getShadowElement(this._component, TAB_CONSTANTS.selectors.INDICATOR);
+    this._focusIndicatorElement = getShadowElement(this._component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
     this._stateLayerElement = getShadowElement(this._component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
   }
 
@@ -28,6 +32,10 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
     this._component.tabIndex = this._component.selected ? 0 : -1;
     this._component.setAttribute('role', 'tab');
     this._component.setAttribute('aria-selected', this._component.selected ? 'true' : 'false');
+  }
+
+  public activateFocusIndicator(): void {
+    this._focusIndicatorElement.active = true;
   }
 
   public addInteractionListener(type: string, listener: EventListener): void {

@@ -9,13 +9,49 @@ import * as TabsStories from './Tabs.stories';
 Tabs are used to quickly navigate between different views, and group related content any level of hierarchy. They may be used as primary
 or secondary navigation within a page.
 
+## Variants
+
+Tabs can be displayed in a number of different ways, including horizontal, vertical, and clustered layouts. The default layout is horizontal.
+
+### Default
+
+By default tabs are displayed in a horizontal layout. This is the most common use case for tabs:
+
 <Canvas of={TabsStories.Demo} />
 
-## Secondary
+### Clustered
 
-Secondary tabs are used within the main content of your page.
+Clustered tabs are displayed in a horizontal orientation, but instead of spanning the full width of their container, they are grouped together
+and can be aligned to the left, center, or right of the container:
 
-<Canvas of={TabsStories.Secondary} />
+<Canvas of={TabsStories.Clustered} />
+
+### Vertical
+
+Vertical tabs are displayed in a vertical orientation. This is useful when you have a large number of tabs, or when you want to save horizontal
+space:
+
+<Canvas of={TabsStories.Vertical} />
+
+### With Icons
+
+Tabs can also include icons to help users quickly identify the content of each tab. Icons can be displayed to the left (start) or right (end) of the tab label:
+
+<Canvas of={TabsStories.WithIcons} />
+
+## Scrolling
+
+The `<forge-tab-bar>` element supports scrolling when the tabs overflow the container. This is useful when you have a large number of tabs and
+want to ensure that all tabs are accessible to the user. The tabs will automatically scroll when the user switches tabs, or when the
+user clicks on the scroll buttons.
+
+<Canvas of={TabsStories.Scrolling} />
+
+## Disabled State
+
+When disabling tabs you should either choose to disable all tabs together through the `<forge-tab-bar>` element, or disable individual tabs for
+each `<forge-tab>` element. Do not mix the two approaches. This is recommended because if you attempt to use both at the same time, the two
+disabled states can conflict with each other leading to unexpected behavior.
 
 ## API
 

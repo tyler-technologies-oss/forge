@@ -6,6 +6,7 @@ import { TAB_CONSTANTS } from './tab-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../../state-layer/state-layer';
+import { ExperimentalFocusOptions } from '../../constants';
 
 import template from './tab.html';
 import styles from './tab.scss';
@@ -15,8 +16,10 @@ export interface ITabComponent extends IBaseComponent {
   selected: boolean;
   vertical: boolean;
   stacked: boolean;
+  /** @deprecated This will be removed in a future version */
   secondary: boolean;
   inverted: boolean;
+  focus(options?: ExperimentalFocusOptions): void;
 }
 
 declare global {
@@ -46,7 +49,7 @@ declare global {
  * @attribute [selected=false] - The selected state of the tab.
  * @attribute [vertical=false] - Controls whether the tab is vertical or horizontal.
  * @attribute [stacked=false] - Controls whether the tab is taller to allow for slotted leading/trailing elements.
- * @attribute [secondary=false] - Controls whether the tab is styled as secondary tab navigation.
+ * @attribute [secondary=false] - Deprecated. Controls whether the tab is styled as secondary tab navigation.
  * @attribute [inverted=false] - Controls whether the tab indicator is rendered on the opposite side of the tab.
  *
  * @event {CustomEvent<void>} forge-tab-select - Dispatched when the tab is selected. This event bubbles and it can be useful to capture it on the `<forge-tab-bar>` element.
@@ -62,8 +65,6 @@ declare global {
  * @cssproperty --forge-tab-indicator-height - The height of the active tab indicator.
  * @cssproperty --forge-tab-indicator-shape - The shape of the active tab indicator.
  * @cssproperty --forge-tab-vertical-indicator-shape - The shape of the active tab indicator when vertical.
- * @cssproperty --forge-tab-secondary-indicator-height - The height of the secondary tab indicator.
- * @cssproperty --forge-tab-secondary-indicator-shape - The shape of the secondary tab indicator.
  * @cssproperty --forge-tab-inverted-indicator-shape - The shape of the active tab indicator when inverted.
  * @cssproperty --forge-tab-vertical-inverted-indicator-shape - The shape of the active tab indicator when vertical and inverted.
  * @cssproperty --forge-tab-container-color - The color of the tab container.
@@ -74,7 +75,6 @@ declare global {
  * @cssproperty --forge-tab-content-padding - The padding value for both block and inline of the tab content.
  * @cssproperty --forge-tab-content-padding-block - The block padding of the tab content.
  * @cssproperty --forge-tab-content-padding-inline - The inline padding of the tab content.
- * @cssproperty --forge-tab-content-padding-inline-secondary - The inline padding of the tab content when secondary.
  * @cssproperty --forge-tab-active-focus-icon-color - The color of the icon when the tab is active and focused.
  * @cssproperty --forge-tab-active-hover-icon-color - The color of the icon when the tab is active and hovered.
  * @cssproperty --forge-tab-active-icon-color - The color of the icon when the tab is active.
@@ -158,9 +158,15 @@ export class TabComponent extends BaseComponent implements ITabComponent {
   @coreProperty()
   public declare stacked: boolean;
 
+  /** @deprecated This will be removed in a future version */
   @coreProperty()
   public declare secondary: boolean;
 
   @coreProperty()
   public declare inverted: boolean;
+
+  public override focus(options?: ExperimentalFocusOptions): void {
+    super.focus(options);
+    this._core.setFocus(options);
+  }
 }

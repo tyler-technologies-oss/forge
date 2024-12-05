@@ -1,3 +1,4 @@
+import { ExperimentalFocusOptions } from '../../constants';
 import { ITabAdapter } from './tab-adapter';
 import { TAB_CONSTANTS } from './tab-constants';
 
@@ -8,6 +9,7 @@ export interface ITabCore {
   stacked: boolean;
   secondary: boolean;
   inverted: boolean;
+  setFocus(options?: ExperimentalFocusOptions): void;
 }
 
 export class TabCore implements ITabCore {
@@ -32,6 +34,12 @@ export class TabCore implements ITabCore {
     this._adapter.initialize();
     this._adapter.addInteractionListener('click', this._clickListener);
     this._adapter.addInteractionListener('keydown', this._keydownListener);
+  }
+
+  public setFocus(options?: ExperimentalFocusOptions): void {
+    if (options?.focusVisible) {
+      this._adapter.activateFocusIndicator();
+    }
   }
 
   private _onClick(): void {

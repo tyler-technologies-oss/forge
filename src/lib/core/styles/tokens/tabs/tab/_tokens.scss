@@ -10,7 +10,7 @@ $tokens: (
   height: utils.module-val(tab, height, 48px),
   stacked-height: utils.module-val(tab, stacked-height, 64px),
   padding-block: utils.module-val(tab, padding-block, 0),
-  padding-inline: utils.module-val(tab, padding-inline, spacing.variable(medium)),
+  padding-inline: utils.module-val(tab, padding-inline, 0),
   // Disabled
   disabled-opacity: utils.module-val(tab, disabled-opacity, 0.38),
   // Indicator
@@ -20,8 +20,8 @@ $tokens: (
   // Indicator (vertical)
   vertical-indicator-shape: utils.module-val(tab, vertical-indicator-shape, 3px 0 0 3px),
   // Indicator (secondary)
-  secondary-indicator-height: utils.module-val(tab, secondary-indicator-height, 2px),
-  secondary-indicator-shape: utils.module-val(tab, secondary-indicator-shape, 0),
+  /** @deprecated */ secondary-indicator-height: utils.module-val(tab, secondary-indicator-height, 2px),
+  /** @deprecated */ secondary-indicator-shape: utils.module-val(tab, secondary-indicator-shape, 0),
   // Indicator (inverted)
   inverted-indicator-shape: utils.module-val(tab, inverted-indicator-shape, 0 0 3px 3px),
   vertical-inverted-indicator-shape: utils.module-val(tab, vertical-inverted-indicator-shape, 0 3px 3px 0),
@@ -31,11 +31,11 @@ $tokens: (
   container-shape: utils.module-val(tab, container-shape, 0),
   // Content
   content-height: utils.module-ref(tab, content-height, height),
-  content-spacing: utils.module-val(tab, content-spacing, spacing.variable(xxsmall)),
+  content-spacing: utils.module-val(tab, content-spacing, spacing.variable(xsmall)),
   content-padding: utils.module-val(tab, content-padding, spacing.variable(xxsmall)),
   content-padding-block: utils.module-ref(tab, content-padding-block, content-padding),
-  content-padding-inline: utils.module-ref(tab, content-padding-inline, content-padding),
-  content-padding-inline-secondary: utils.module-val(tab, content-padding-inline-secondary, spacing.variable(medium)),
+  content-padding-inline: utils.module-val(tab, content-padding-inline, spacing.variable(medium)),
+  /** @deprecated */ content-padding-inline-secondary: utils.module-val(tab, content-padding-inline-secondary, spacing.variable(medium)),
   // Icon
   active-focus-icon-color: utils.module-ref(tab, active-focus-icon-color, active-color),
   active-hover-icon-color: utils.module-ref(tab, active-hover-icon-color, active-color),
