@@ -101,15 +101,15 @@ export const CSSOnly: Story = {
         <div class=${classMap(classes)}>
           <input type="radio" name="css-radio" ?disabled=${disabled} id="css-radio-1" />
         </div>
-        <label class="forge-typography--label1" for="css-radio-1">Option 1</label>
+        <label class="forge-typography--label2" for="css-radio-1">Option 1</label>
         <div class=${classMap(classes)}>
           <input type="radio" name="css-radio" ?disabled=${disabled} id="css-radio-2" />
         </div>
-        <label class="forge-typography--label1" for="css-radio-2">Option 2</label>
+        <label class="forge-typography--label2" for="css-radio-2">Option 2</label>
         <div class=${classMap(classes)}>
           <input type="radio" name="css-radio" ?disabled=${disabled} id="css-radio-3" />
         </div>
-        <label class="forge-typography--label1" for="css-radio-3">Option 3</label>
+        <label class="forge-typography--label2" for="css-radio-3">Option 3</label>
       </div>
     `;
   }
