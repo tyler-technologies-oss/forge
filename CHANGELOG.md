@@ -1,3 +1,25 @@
+# v3.4.0 (Tue Dec 10 2024)
+
+#### 🚀 Enhancement
+
+- feat(tabs): deprecate `secondary` prop/attr and update default design to use full width tab indicator [#766](https://github.com/tyler-technologies-oss/forge/pull/766) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(typography): add new `label3` style [#770](https://github.com/tyler-technologies-oss/forge/pull/770) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(app-bar): make columns customizable [#768](https://github.com/tyler-technologies-oss/forge/pull/768) ([@samrichardsontylertech](https://github.com/samrichardsontylertech) [@DRiFTy17](https://github.com/DRiFTy17))
+- feat(toolbar): make columns customizable [#771](https://github.com/tyler-technologies-oss/forge/pull/771) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- [icon-button] improve docs for toggle mode + background color for "icon" variant when toggled on [#767](https://github.com/tyler-technologies-oss/forge/pull/767) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix: update checkbox, radio, switch label typography to use `label2` (13px) typography by default [#769](https://github.com/tyler-technologies-oss/forge/pull/769) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(popover): delay visibility check when hiding by a frame to ensure style calculation has enough time to execute [#765](https://github.com/tyler-technologies-oss/forge/pull/765) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v3.3.6 (Fri Nov 22 2024)
 
 :tada: This release contains work from a new contributor! :tada:
