@@ -22,27 +22,13 @@ const charsByLetterCount = (text: string, count: number): string => {
   if (count === 1) {
     return text[0].toUpperCase();
   } else {
-    const words = text.match(/\S+/g) ?? [];
+    const words = text?.match(/\S+/g) ?? [];
     return words.slice(0, count).reduce((prev, curr) => (prev += curr[0].toUpperCase()), '');
   }
 };
 
 /**
  * @tag forge-avatar
- *
- * @summary Avatars represent an entity via text or image.
- *
- * @description The avatar component allows you to provide text or images to display that represent an entity. By default, the
- * avatar will display textual content as single characters (character count is configurable), or display an image or
- * icon based on the URL provided to it.
- *
- * @property {string} [text=""] - The text to display in the avatar.
- * @property {number} [letterCount=2] - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
- * @property {string} imageUrl - The background image URL to use.
- *
- * @attribute {string} [text=""] - The text to display in the avatar.
- * @attribute {string} [letter-count=2] - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
- * @attribute {string} image-url - The background image URL to use.
  *
  * @cssproperty {string} --forge-avatar-background - The background color of the avatar.
  * @cssproperty {number} --forge-avatar-shape - The border radius of the avatar, defaults to 50%.
@@ -61,8 +47,25 @@ const charsByLetterCount = (text: string, count: number): string => {
 export class AvatarComponent extends LitElement implements IAvatarComponent {
   public static styles = unsafeCSS(styles);
 
+  /**
+   * The text to display in the avatar.
+   * @default ''
+   * @attribute
+   */
   @property({ type: String, reflect: true }) public text = '';
-  @property({ type: Number, reflect: true, attribute: 'letter-count' }) public letterCount = AVATAR_CONSTANTS.numbers.DEFAULT_LETTER_COUNT;
+
+  /**
+   * Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
+   * @default 2
+   * @attribute letter-count
+   */
+  @property({ type: Number, reflect: true, attribute: 'letter-count' }) public letterCount: number = AVATAR_CONSTANTS.numbers.DEFAULT_LETTER_COUNT;
+
+  /**
+   * The background image URL to use.
+   * @default ''
+   * @attribute image-url
+   */
   @property({ type: String, reflect: true, attribute: 'image-url' }) public imageUrl = '';
 
   @state() private _image: HTMLImageElement | undefined;
@@ -78,9 +81,9 @@ export class AvatarComponent extends LitElement implements IAvatarComponent {
       <div
         aria-hidden="true"
         part="root"
-        class=${classMap({ 'forge-avatar': true, 'forge-avatar--image': !!this._image })}
+        class=${classMap({ 'forge-avatar': true, image: !!this._image })}
         style=${this._image ? styleMap({ backgroundImage: `url(${this._image.src})` }) : nothing}>
-        <slot>${charsByLetterCount(this.text, this.letterCount)}</slot>
+        <slot>${this.text ? charsByLetterCount(this.text, this.letterCount) : nothing}</slot>
       </div>
     `;
   }

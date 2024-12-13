@@ -1,5 +1,4 @@
 import { defineCustomElement } from '@tylertech/forge-core';
-
 import { AvatarComponent } from './avatar';
 
 export * from './avatar-constants';
