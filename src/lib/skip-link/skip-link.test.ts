@@ -55,6 +55,12 @@ describe('SkipLink', () => {
     expect(el.hasAttribute(SKIP_LINK_CONSTANTS.attributes.INLINE)).to.be.true;
   });
 
+  it('should update the skip-url-change attribute when the property is set', async () => {
+    const el = await fixture<ISkipLinkComponent>(html`<forge-skip-link></forge-skip-link>`);
+    el.skipUrlChange = true;
+    expect(el.hasAttribute(SKIP_LINK_CONSTANTS.attributes.SKIP_URL_CHANGE)).to.be.true;
+  });
+
   it('should change the target property when set via attribute', async () => {
     const el = await fixture<ISkipLinkComponent>(html`<forge-skip-link></forge-skip-link>`);
     el.setAttribute(SKIP_LINK_CONSTANTS.attributes.TARGET, 'main');
@@ -84,6 +90,28 @@ describe('SkipLink', () => {
     const el = await fixture<ISkipLinkComponent>(html`<forge-skip-link></forge-skip-link>`);
     el.setAttribute(SKIP_LINK_CONSTANTS.attributes.INLINE, '');
     expect(el.inline).to.be.true;
+  });
+
+  it('should change the skipUrlChange property when set via attribute', async () => {
+    const el = await fixture<ISkipLinkComponent>(html`<forge-skip-link></forge-skip-link>`);
+    el.setAttribute(SKIP_LINK_CONSTANTS.attributes.SKIP_URL_CHANGE, '');
+    expect(el.skipUrlChange).to.be.true;
+  });
+
+  it('should focus the target element when clicked and skipUrlChange is true', async () => {
+    const el = await fixture<ISkipLinkComponent>(html`
+      <div>
+        <forge-skip-link target="main" skip-url-change></forge-skip-link>
+        <div id="main" tabindex="-1"></div>
+      </div>
+    `);
+    const skipLink = el.querySelector('forge-skip-link');
+    const target = el.querySelector('#main');
+    const anchor = getAnchorEl(skipLink!);
+
+    anchor.click();
+
+    expect(document.activeElement).to.equal(target);
   });
 
   function getAnchorEl(el: ISkipLinkComponent): HTMLAnchorElement {

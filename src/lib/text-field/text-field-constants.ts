@@ -13,6 +13,8 @@ const attributes = {
 
 const selectors = {
   FIELD: '#field',
+  DEFAULT_SLOT: 'slot:not([name])',
+  LABEL_SLOT: 'slot[name=label]',
   CLEAR_BUTTON_SLOT: 'slot[name=clear-button]',
   FORGE_LABEL: LABEL_CONSTANTS.elementName,
   INPUT:

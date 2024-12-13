@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { IExpansionPanelComponent } from './expansion-panel';
-import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
+import { EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from './expansion-panel-constants';
 import { task } from '../core/utils/utils';
 import { IOpenIconComponent } from '../open-icon/open-icon';
 
@@ -338,6 +338,19 @@ describe('Expansion Panel', () => {
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).to.be.true;
       expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).to.be.false;
       expect(toggleSpy.calledOnce).to.be.true;
+    });
+
+    it('should dispatch toggle event when calling internal emulateUserToggle symbol method', async () => {
+      const el = await fixture<IExpansionPanelComponent>(html`<forge-expansion-panel></forge-expansion-panel>`);
+
+      const toggleSpy = spy();
+      el.addEventListener(EXPANSION_PANEL_CONSTANTS.events.TOGGLE, toggleSpy);
+
+      el[emulateUserToggle](true);
+      expect(toggleSpy.calledOnce).to.be.true;
+
+      el[emulateUserToggle](false);
+      expect(toggleSpy.calledTwice).to.be.true;
     });
   });
 

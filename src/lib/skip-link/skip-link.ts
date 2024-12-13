@@ -13,6 +13,7 @@ export interface ISkipLinkComponent extends IBaseComponent {
   muted: boolean;
   persistent: boolean;
   inline: boolean;
+  skipUrlChange: boolean;
 }
 
 declare global {
@@ -25,18 +26,6 @@ declare global {
  * @tag forge-skip-link
  *
  * @summary The Forge Skip Link component is used to provide a way for users to skip repetitive content and navigate directly to a section of the page.
- *
- * @property {string} [target=''] - The IDREF of the element to which the skip link should navigate.
- * @property {SkipLinkTheme} [theme='default'] - The theme applied to the skip link.
- * @property {boolean} [muted=false] - Whether or not the skip link uses a muted color scheme.
- * @property {boolean} [persistent=false] - Whether or not the skip link should remain visible when not focused.
- * @property {boolean} [inline=false] - Whether or not the skip link renders within its container.
- *
- * @attribute {string} [target=''] - The IDREF of the element to which the skip link should navigate.
- * @attribute {SkipLinkTheme} [theme='default'] - The theme applied to the skip link.
- * @attribute {boolean} [muted=false] - Whether or not the skip link uses a muted color scheme.
- * @attribute {boolean} [persistent=false] - Whether or not the skip link should remain visible when not focused.
- * @attribute {boolean} [inline=false] - Whether or not the skip link renders within its container.
  *
  * @cssproperty --forge-skip-link-background - The background color of the skip link.
  * @cssproperty --forge-skip-link-color - The text color of the skip link.
@@ -73,7 +62,10 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
   private _muted = false;
   private _persistent = false;
   private _inline = false;
+  private _skipUrlChange = false;
   private _anchorElement: HTMLAnchorElement;
+
+  private _clickListener: EventListener = (evt: Event) => this._handleClick(evt);
 
   constructor() {
     super();
@@ -98,9 +90,17 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
       case SKIP_LINK_CONSTANTS.observedAttributes.INLINE:
         this.inline = coerceBoolean(newValue);
         break;
+      case SKIP_LINK_CONSTANTS.observedAttributes.SKIP_URL_CHANGE:
+        this.skipUrlChange = coerceBoolean(newValue);
+        break;
     }
   }
 
+  /**
+   * The IDREF of the element to which the skip link should navigate.
+   * @default ''
+   * @attribute
+   */
   public get target(): string {
     return this._target;
   }
@@ -113,6 +113,11 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
     }
   }
 
+  /**
+   * The theme applied to the skip link.
+   * @default 'default'
+   * @attribute
+   */
   public get theme(): SkipLinkTheme {
     return this._theme;
   }
@@ -123,6 +128,11 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
     }
   }
 
+  /**
+   * Whether or not the skip link uses a muted color scheme.
+   * @default false
+   * @attribute
+   */
   public get muted(): boolean {
     return this._muted;
   }
@@ -133,6 +143,11 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
     }
   }
 
+  /**
+   * Whether or not the skip link should remain visible when not focused.
+   * @default false
+   * @attribute
+   */
   public get persistent(): boolean {
     return this._persistent;
   }
@@ -143,6 +158,11 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
     }
   }
 
+  /**
+   * Whether or not the skip link renders within its container.
+   * @default false
+   * @attribute
+   */
   public get inline(): boolean {
     return this._inline;
   }
@@ -151,5 +171,34 @@ export class SkipLinkComponent extends BaseComponent implements ISkipLinkCompone
       this._inline = value;
       this.toggleAttribute(SKIP_LINK_CONSTANTS.attributes.INLINE, this._inline);
     }
+  }
+
+  /**
+   * Sets the skip link to skip browser navigation and scroll to the target element.
+   * @default false
+   * @attribute skip-url-change
+   */
+  public get skipUrlChange(): boolean {
+    return this._skipUrlChange;
+  }
+  public set skipUrlChange(value: boolean) {
+    if (this._skipUrlChange !== value) {
+      this._skipUrlChange = value;
+      this.toggleAttribute(SKIP_LINK_CONSTANTS.attributes.SKIP_URL_CHANGE, this._skipUrlChange);
+
+      if (this._skipUrlChange) {
+        this._anchorElement.addEventListener('click', this._clickListener);
+        return;
+      }
+
+      this._anchorElement.removeEventListener('click', this._clickListener);
+    }
+  }
+
+  private _handleClick(evt: Event): void {
+    evt.preventDefault();
+    const targetElement = document.getElementById(this._target);
+    targetElement?.focus();
+    targetElement?.scrollIntoView({ behavior: 'smooth' });
   }
 }

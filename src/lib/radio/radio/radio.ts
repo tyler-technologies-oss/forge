@@ -198,7 +198,7 @@ export class RadioComponent
   /**
    * Gets/sets whether the radio is checked by default.
    * @default false
-   * @attribute
+   * @attribute default-checked
    */
   @coreProperty()
   public declare defaultChecked: boolean;
@@ -246,7 +246,7 @@ export class RadioComponent
   /**
    * Controls whether the label appears before or after the radio.
    * @default 'end'
-   * @attribute
+   * @attribute label-position
    */
   @coreProperty()
   public declare labelPosition: RadioLabelPosition;

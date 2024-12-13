@@ -5,6 +5,7 @@ export interface IExpansionPanelCore {
   open: boolean;
   orientation: ExpansionPanelOrientation;
   animationType: ExpansionPanelAnimationType;
+  dispatchToggleEvent(): void;
 }
 
 export class ExpansionPanelCore implements IExpansionPanelCore {
@@ -34,7 +35,7 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
 
     evt.stopPropagation();
     this._toggle();
-    this._dispatchToggleEvent();
+    this.dispatchToggleEvent();
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
@@ -42,13 +43,15 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
       evt.stopPropagation();
       evt.preventDefault();
       this._toggle();
-      this._dispatchToggleEvent();
+      this.dispatchToggleEvent();
     }
   }
 
   private _onAnimationComplete(): void {
     if (!this._open) {
       this._adapter.setContentVisibility(false);
+    } else if (this._animationType !== 'none') {
+      this._adapter.animationEnd();
     }
     this._adapter.dispatchHostEvent(new CustomEvent(EXPANSION_PANEL_CONSTANTS.events.ANIMATION_COMPLETE, { detail: this._open }));
   }
@@ -57,11 +60,14 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
     this._adapter.toggleHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN, this._open);
     this._adapter.tryToggleOpenIcon(this._open);
     if (this._open) {
+      if (this._animationType !== 'none') {
+        this._adapter.animationStart();
+      }
       this._adapter.setContentVisibility(true);
     }
   }
 
-  private _dispatchToggleEvent(): void {
+  public dispatchToggleEvent(): void {
     const evt = new CustomEvent<boolean>(EXPANSION_PANEL_CONSTANTS.events.TOGGLE, {
       detail: this._open,
       bubbles: true,

@@ -11,6 +11,7 @@ const skipLink = document.getElementById('skip-link') as SkipLinkComponent;
 const persistentSwitch = document.getElementById('opt-persistent') as SwitchComponent;
 const themeSelect = document.getElementById('opt-theme') as SelectComponent;
 const mutedSwitch = document.getElementById('opt-muted') as SwitchComponent;
+const skipUrlChangeSwitch = document.getElementById('opt-skip-url-change') as SwitchComponent;
 
 persistentSwitch.addEventListener('forge-switch-change', ({ detail }) => {
   skipLink.persistent = detail;
@@ -22,4 +23,8 @@ themeSelect.addEventListener('change', ({ detail }) => {
 
 mutedSwitch.addEventListener('forge-switch-change', ({ detail }) => {
   skipLink.muted = detail;
+});
+
+skipUrlChangeSwitch.addEventListener('forge-switch-change', ({ detail }) => {
+  skipLink.skipUrlChange = detail;
 });

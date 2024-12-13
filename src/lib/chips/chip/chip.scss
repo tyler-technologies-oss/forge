@@ -59,7 +59,7 @@
 forge-focus-indicator {
   @include focus-indicator.provide-theme(
     (
-      color: #{token(color)},
+      color: #{token(focus-indicator-color)},
       shape: #{token(shape)}
     )
   );

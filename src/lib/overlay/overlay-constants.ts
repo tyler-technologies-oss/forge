@@ -21,7 +21,9 @@ const observedAttributes = {
 
 const attributes = {
   ...observedAttributes,
-  POSITION_PLACEMENT: 'position-placement'
+  POSITION_PLACEMENT: 'position-placement',
+  CLIPPED_X: 'clipped-x',
+  CLIPPED_Y: 'clipped-y'
 } as const;
 
 const classes = {

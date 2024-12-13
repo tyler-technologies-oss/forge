@@ -1,7 +1,7 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { ExpansionPanelAdapter } from './expansion-panel-adapter';
-import { ExpansionPanelAnimationType, ExpansionPanelOrientation, EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
+import { ExpansionPanelAnimationType, ExpansionPanelOrientation, EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from './expansion-panel-constants';
 import { ExpansionPanelCore } from './expansion-panel-core';
 
 import template from './expansion-panel.html';
@@ -103,5 +103,18 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
    */
   public toggle(): void {
     this.open = !this.open;
+  }
+
+  /**
+   * @internal
+   *
+   * Emulates a user toggle of the panel, by also dispatching the toggle event.
+   */
+  public [emulateUserToggle](open: boolean): void {
+    if (this.open === open) {
+      return;
+    }
+    this.open = open;
+    this._core.dispatchToggleEvent();
   }
 }

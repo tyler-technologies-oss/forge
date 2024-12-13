@@ -30,7 +30,9 @@ const classes = {
 const selectors = {
   ROOT: '#root',
   CONTAINER: '#container',
+  INPUT_CONTAINER: '#input',
   LABEL: '#label',
+  LABEL_SLOT: 'slot[name=label]',
   POPOVER_ICON: '#popover-icon',
   LABEL_ELEMENTS: `:where(label, ${LABEL_CONSTANTS.elementName})`,
   POPOVER_TARGET: '.popover-target'
@@ -51,7 +53,8 @@ const parts = {
 };
 
 const events = {
-  POPOVER_ICON_CLICK: `${elementName}-popover-icon-click`
+  POPOVER_ICON_CLICK: `${elementName}-popover-icon-click`,
+  POPOVER_ICON_MOUSEDOWN: `${elementName}-popover-icon-mousedown`
 };
 
 const defaults = {

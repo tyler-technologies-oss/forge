@@ -7,18 +7,22 @@ import { FIELD_CONSTANTS } from './field-constants';
 
 export interface IFieldAdapter extends IBaseAdapter<IFieldComponent> {
   readonly focusIndicator: IFocusIndicatorComponent;
+  readonly hasSlottedLabel: boolean;
   addRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void;
-  addPopoverIconClickListener(listener: EventListener): void;
-  removePopoverIconClickListener(listener: EventListener): void;
+  addPopoverIconListener(type: string, listener: EventListener): void;
+  removePopoverIconListener(type: string, listener: EventListener): void;
   setLabelPosition(value: FieldLabelPosition): void;
-  setFloatingLabel(value: boolean, skipAnimation?: boolean): void;
+  setFloatingLabel(value: boolean): void;
   handleSlotChange(slot: HTMLSlotElement): void;
+  initializeSlots(): void;
 }
 
 export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IFieldAdapter {
   private readonly _rootElement: HTMLElement;
   private readonly _containerElement: HTMLElement;
+  private readonly _inputContainerElement: HTMLElement;
   private readonly _labelElement: HTMLElement;
+  private readonly _labelSlotElement: HTMLSlotElement;
   private readonly _popoverIconElement: HTMLElement;
   private readonly _focusIndicatorElement: IFocusIndicatorComponent;
 
@@ -26,11 +30,17 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     return this._focusIndicatorElement;
   }
 
+  public get hasSlottedLabel(): boolean {
+    return !!this._labelSlotElement.assignedNodes({ flatten: true }).length;
+  }
+
   constructor(component: IFieldComponent) {
     super(component);
     this._rootElement = getShadowElement(component, FIELD_CONSTANTS.selectors.ROOT);
     this._containerElement = getShadowElement(component, FIELD_CONSTANTS.selectors.CONTAINER);
+    this._inputContainerElement = getShadowElement(component, FIELD_CONSTANTS.selectors.INPUT_CONTAINER);
     this._labelElement = getShadowElement(component, FIELD_CONSTANTS.selectors.LABEL);
+    this._labelSlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.LABEL_SLOT) as HTMLSlotElement;
     this._popoverIconElement = getShadowElement(component, FIELD_CONSTANTS.selectors.POPOVER_ICON);
     this._focusIndicatorElement = getShadowElement(component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
   }
@@ -39,12 +49,12 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     this._rootElement.addEventListener(name, listener);
   }
 
-  public addPopoverIconClickListener(listener: EventListener): void {
-    this._popoverIconElement.addEventListener('click', listener);
+  public addPopoverIconListener(type: string, listener: EventListener): void {
+    this._popoverIconElement.addEventListener(type, listener);
   }
 
-  public removePopoverIconClickListener(listener: EventListener): void {
-    this._popoverIconElement.removeEventListener('click', listener);
+  public removePopoverIconListener(type: string, listener: EventListener): void {
+    this._popoverIconElement.removeEventListener(type, listener);
   }
 
   /**
@@ -64,11 +74,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   /**
    * Adds or removes animation classes on the root element.
    */
-  public setFloatingLabel(value: boolean, skipAnimation = false): void {
-    if (skipAnimation) {
-      return;
-    }
-
+  public setFloatingLabel(value: boolean): void {
     const className = value ? FIELD_CONSTANTS.classes.FLOATING_IN : FIELD_CONSTANTS.classes.FLOATING_OUT;
     const animationName = value ? FIELD_CONSTANTS.animations.FLOAT_IN_LABEL : FIELD_CONSTANTS.animations.FLOAT_OUT_LABEL;
     const animationEndListener: EventListener = (evt: AnimationEvent) => {
@@ -112,6 +118,11 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     if (slot.name in classMap) {
       toggleClass(this._rootElement, !!slot.assignedNodes({ flatten: true }).length, classMap[slot.name]);
     }
+  }
+
+  public initializeSlots(): void {
+    const slotElements = this._rootElement.querySelectorAll<HTMLSlotElement>('slot');
+    slotElements.forEach(slotElement => this.handleSlotChange(slotElement));
   }
 
   /**

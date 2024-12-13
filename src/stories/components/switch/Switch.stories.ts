@@ -58,7 +58,7 @@ export const CSSOnly: Story = {
       'forge-switch--dense': dense
     };
     return html`
-      <label class="forge-typography--label1" style="display: flex; align-items: center;">
+      <label class="forge-typography--label2" style="display: flex; align-items: center;">
         <div class=${classMap(classes)}>
           <input type="checkbox" switch .checked=${on} ?disabled=${disabled} />
           <div class="forge-switch__thumb">

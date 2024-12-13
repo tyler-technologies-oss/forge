@@ -128,7 +128,7 @@ export class TabBarCore implements ITabBarCore {
     if (this._autoActivate) {
       this._selectTab(this._tabs[index]);
     } else {
-      this._tabs[index].focus({ preventScroll: true });
+      this._tabs[index].focus({ preventScroll: true, focusVisible: true });
       await this._adapter.tryScrollTabIntoView(this._tabs[index]);
     }
   }
@@ -180,7 +180,7 @@ export class TabBarCore implements ITabBarCore {
   private _syncTabState(): void {
     this._tabs.forEach((tab, index) => {
       tab.selected = index === this._activeTab;
-      tab.disabled = this._disabled;
+      if (this._disabled) tab.disabled = this._disabled;
       tab.vertical = this._vertical;
       tab.stacked = this._stacked;
       tab.secondary = this._secondary;

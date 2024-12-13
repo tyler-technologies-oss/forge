@@ -77,6 +77,7 @@ declare global {
  * @cssproperty --forge-chip-padding-block - The block padding of the chip.
  * @cssproperty --forge-chip-cursor - The cursor style of the chip.
  * @cssproperty --forge-chip-icon-font-size - The font size of the chip icon.
+ * @cssproperty --forge-chip-focus-indicator-color - The color of the focus indicator.
  * @cssproperty --forge-chip-disabled-opacity - The opacity of the disabled chip.
  * @cssproperty --forge-chip-disabled-cursor - The cursor style of the disabled chip.
  * @cssproperty --forge-chip-dense-height - The height of the dense chip.

@@ -19,9 +19,7 @@ const selectors = {
   INDICATOR: '.indicator'
 };
 
-const classes = {
-  SELECTED: 'selected'
-};
+const classes = {};
 
 const events = {
   SELECT: `${elementName}-select`

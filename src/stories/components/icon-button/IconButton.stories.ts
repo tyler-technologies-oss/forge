@@ -105,6 +105,38 @@ export const Variants: Story = {
   }
 };
 
+export const Toggle: Story = {
+  ...standaloneStoryParams,
+  render: () => {
+    return html`
+      <forge-icon-button toggle aria-label="Default toggle icon button">
+        <forge-icon name="favorite_border"></forge-icon>
+        <forge-icon slot="on" name="favorite"></forge-icon>
+      </forge-icon-button>
+
+      <forge-icon-button toggle variant="outlined" aria-label="Outlined toggle icon button">
+        <forge-icon name="favorite_border"></forge-icon>
+        <forge-icon slot="on" name="favorite"></forge-icon>
+      </forge-icon-button>
+
+      <forge-icon-button toggle variant="tonal" aria-label="Tonal toggle icon button">
+        <forge-icon name="favorite_border"></forge-icon>
+        <forge-icon slot="on" name="favorite"></forge-icon>
+      </forge-icon-button>
+
+      <forge-icon-button toggle variant="filled" aria-label="Filled toggle icon button">
+        <forge-icon name="favorite_border"></forge-icon>
+        <forge-icon slot="on" name="favorite"></forge-icon>
+      </forge-icon-button>
+
+      <forge-icon-button toggle variant="raised" aria-label="Raised toggle icon button">
+        <forge-icon name="favorite_border"></forge-icon>
+        <forge-icon slot="on" name="favorite"></forge-icon>
+      </forge-icon-button>
+    `;
+  }
+};
+
 export const Anchor: Story = {
   parameters: {
     controls: { include: ['variant'] }

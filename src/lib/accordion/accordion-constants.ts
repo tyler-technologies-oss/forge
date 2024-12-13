@@ -6,7 +6,12 @@ const attributes = {
   PANEL_SELECTOR: 'panel-selector'
 };
 
+const events = {
+  TOGGLE: `${elementName}-toggle`
+};
+
 export const ACCORDION_CONSTANTS = {
   elementName,
-  attributes
+  attributes,
+  events
 };

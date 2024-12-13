@@ -9,18 +9,22 @@ const component = 'forge-skip-link';
 
 const meta = {
   title: 'Components/Skip Link',
+  tags: ['new'],
   component,
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
     return html`
-      <forge-skip-link
-        .target=${args.target}
-        .theme=${args.theme}
-        .muted=${args.muted}
-        .persistent=${args.persistent}
-        .inline=${args.inline}
-        style=${style}></forge-skip-link>
+      <div>
+        <forge-skip-link
+          target="main-content"
+          .theme=${args.theme}
+          .muted=${args.muted}
+          .persistent=${args.persistent}
+          .inline=${args.inline}
+          style=${style}></forge-skip-link>
+        <div id="main-content" tabindex="0">Target</div>
+      </div>
     `;
   },
   parameters: {
@@ -30,7 +34,6 @@ const meta = {
     ...generateCustomElementArgTypes({
       tagName: component,
       controls: {
-        target: { control: 'text' },
         theme: { control: 'select', options: ['default', 'primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info'] },
         muted: { control: 'boolean' },
         persistent: { control: 'boolean' },
@@ -39,7 +42,6 @@ const meta = {
     })
   },
   args: {
-    target: 'main-content',
     theme: 'default',
     muted: false,
     persistent: false,

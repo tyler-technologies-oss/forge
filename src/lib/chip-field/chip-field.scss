@@ -72,7 +72,8 @@ $themes: (primary, secondary, tertiary, success, warning, error, info);
       @include chip.provide-theme(
         (
           field-background: theme.variable($theme),
-          field-color: theme.variable(on-#{$theme})
+          field-color: theme.variable(on-#{$theme}),
+          focus-indicator-color: theme.variable($theme)
         )
       );
     }

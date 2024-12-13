@@ -16,6 +16,7 @@ $tokens: (
   logo-gap: utils.module-val(app-bar, logo-gap, spacing.variable(medium)),
   logo-font-size: utils.module-val(app-bar, logo-font-size, typography.font-size-relative('2500')),
   title-padding: utils.module-val(app-bar, title-padding, spacing.variable(xsmall)),
+  columns: utils.module-val(app-bar, columns, 1fr 1fr 1fr),
   transition-duration: utils.module-val(app-bar, transition-duration, animation.variable(duration-short4)),
   transition-timing: utils.module-val(app-bar, transition-timing, animation.variable(easing-standard))
 ) !default;
