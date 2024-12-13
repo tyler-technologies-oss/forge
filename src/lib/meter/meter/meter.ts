@@ -57,7 +57,6 @@ declare global {
  */
 @customElement(METER_CONSTANTS.elementName)
 export class MeterComponent extends LitElement implements IMeterComponent {
-  /* @ignore */
   public static styles = unsafeCSS(styles);
   public static formAssociated = true;
 
@@ -140,17 +139,14 @@ export class MeterComponent extends LitElement implements IMeterComponent {
    */
   @property({ type: Boolean, reflect: true }) public muted = false;
 
-  /* @ignore */
   public get percentage(): number {
     return this._percentage;
   }
 
-  /* @ignore */
   public get labels(): NodeList {
     return this._internals.labels;
   }
 
-  /* @ignore */
   public get form(): HTMLFormElement | null {
     return this._internals.form;
   }
@@ -164,7 +160,6 @@ export class MeterComponent extends LitElement implements IMeterComponent {
   @queryAssignedNodes() private _defaultNodes: Node[];
   @queryAssignedNodes({ slot: 'value' }) private _valueNodes: Node[];
 
-  /* @ignore */
   private _internals: ElementInternals;
 
   constructor() {
@@ -208,7 +203,6 @@ export class MeterComponent extends LitElement implements IMeterComponent {
     });
   }
 
-  /* @internal */
   public render(): TemplateResult {
     return this._grouped
       ? html` <div part="root" class="forge-meter grouped" style=${styleMap({ '--percentage': this._percentage + '%' })}></div> `
