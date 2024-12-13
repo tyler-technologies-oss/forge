@@ -66,72 +66,84 @@ export class MeterComponent extends LitElement implements IMeterComponent {
    * @attribute
    */
   @property({ type: Number, reflect: true }) public value: number = METER_CONSTANTS.numbers.DEFAULT_VALUE;
+
   /**
    * The minimum value of the meter.
    * @default 0
    * @attribute
    */
   @property({ type: Number, reflect: true }) public min: number = METER_CONSTANTS.numbers.DEFAULT_MIN;
+
   /**
    * The maximum value of the meter.
    * @default 1
    * @attribute
    */
   @property({ type: Number, reflect: true }) public max: number = METER_CONSTANTS.numbers.DEFAULT_MAX;
+
   /**
    * The low value threshold.
    * @default 0
    * @attribute
    */
   @property({ type: Number, reflect: true }) public low: number | null | undefined;
+
   /**
    * The high value threshold.
    * @default 1
    * @attribute
    */
   @property({ type: Number, reflect: true }) public high: number | null | undefined;
+
   /**
    * Indicates the region of the optimum value.
    * @default 1
    * @attribute
    */
   @property({ type: Number, reflect: true }) public optimum: number | null | undefined;
+
   /**
    * Whether to display tickmarks.
    * @default false
    * @attribute
    */
   @property({ type: Boolean, reflect: true }) public tickmarks = false;
+
   /**
    * Whether the meter is oriented in the inline or block direction.
    * @default 'inline'
    * @attribute
    */
   @property({ reflect: true }) public direction: MeterDirection = 'inline';
+
   /**
    * The shape of the meter.
    * @default 'default'
    * @attribute
    */
   @property({ reflect: true }) public shape: MeterShape = 'default';
+
   /**
    * The shape of the bar.
    * @default 'default'
-   * @attribute
+   * @attribute inner-shape
    */
   @property({ reflect: true, attribute: 'inner-shape' }) public innerShape: MeterInnerShape = 'default';
+
   /**
    * The density of the meter.
    * @default 'medium'
    * @attribute
    */
   @property({ reflect: true }) public density: MeterDensity = 'medium';
+
   /**
    * The theme of the meter.
    * @default 'default'
    * @attribute
    */
   @property({ reflect: true }) public theme: MeterTheme = 'default';
+
   /**
    * Whether the theme is muted.
    * @default false
@@ -139,6 +151,9 @@ export class MeterComponent extends LitElement implements IMeterComponent {
    */
   @property({ type: Boolean, reflect: true }) public muted = false;
 
+  /**
+   * Gets the percentage of the meter that's filled.
+   */
   public get percentage(): number {
     return this._percentage;
   }

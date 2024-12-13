@@ -55,50 +55,53 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
    * @default 0
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public min = METER_CONSTANTS.numbers.DEFAULT_MIN;
+  @property({ type: Number, reflect: true }) public min: number = METER_CONSTANTS.numbers.DEFAULT_MIN;
+
   /**
    * The maximum value of each meter in the group.
    * @default 1
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public max = METER_CONSTANTS.numbers.DEFAULT_MAX;
+  @property({ type: Number, reflect: true }) public max: number = METER_CONSTANTS.numbers.DEFAULT_MAX;
   /**
    * Whether to display tickmarks.
    * @default false
    * @attribute
    */
   @property({ type: Boolean, reflect: true }) public tickmarks = false;
+
   /**
    * Whether the meter is oriented in the inline or block direction.
    * @default 'inline'
    * @attribute
    */
   @property({ reflect: true }) public direction: MeterDirection = 'inline';
+
   /**
    * The density of the meter group.
    * @default 'default'
    * @attribute
    */
   @property({ reflect: true }) public density: MeterDensity = 'default';
+
   /**
    * The shape of the meter group.
    * @default 'default'
    * @attribute
    */
   @property({ reflect: true }) public shape: MeterShape = 'default';
+
   /**
    * The shape of each meter in the group.
    * @default 'default'
-   * @attribute
+   * @attribute inner-shape
    */
   @property({ reflect: true, attribute: 'inner-shape' }) public innerShape: MeterInnerShape = 'default';
 
-  /* @ignore */
   public get labels(): NodeList {
     return this._internals.labels;
   }
 
-  /* @ignore */
   public get form(): HTMLFormElement | null {
     return this._internals.form;
   }
@@ -109,7 +112,6 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
   @queryAssignedNodes({ slot: 'value' }) private _valueNodes: Node[];
   @queryAssignedElements({ selector: 'forge-meter' }) private _meters: IMeterComponent[];
 
-  /* @ignore */
   private _internals: ElementInternals;
 
   constructor() {
@@ -129,7 +131,6 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
     }
   }
 
-  /* @internal */
   public render(): TemplateResult {
     return html`
       <div part="root" class="forge-meter-group" @change=${this._debounceMeterChange}>
@@ -159,10 +160,9 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
   /**
    * Debounce the handler to reduce the number of times it's called during rapid changes,
    * especially when the component is first connected.
-   *
-   * @internal
-   * */
+   */
   private _debounceMeterChange = debounce(this._handleMeterChange.bind(this), 0);
+
   /**
    * Handles changes to the meters in the group, updating their arrangement relative to each other.
    */
