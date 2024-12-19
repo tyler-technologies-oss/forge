@@ -37,48 +37,48 @@ export class MeterGroupComponent extends LitElement {
    * @default 0
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public min = 0;
+  @property({ type: Number }) public min = 0;
 
   /**
    * The maximum value of each meter in the group.
    * @default 1
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public max = 1;
+  @property({ type: Number }) public max = 1;
   /**
    * Whether to display tickmarks.
    * @default false
    * @attribute
    */
-  @property({ type: Boolean, reflect: true }) public tickmarks = false;
+  @property({ type: Boolean }) public tickmarks = false;
 
   /**
    * Whether the meter is oriented in the inline or block direction.
    * @default 'inline'
    * @attribute
    */
-  @property({ reflect: true }) public direction: MeterDirection = 'inline';
+  @property() public direction: MeterDirection = 'inline';
 
   /**
    * The density of the meter group.
    * @default 'default'
    * @attribute
    */
-  @property({ reflect: true }) public density: MeterDensity = 'default';
+  @property() public density: MeterDensity = 'default';
 
   /**
    * The shape of the meter group.
    * @default 'default'
    * @attribute
    */
-  @property({ reflect: true }) public shape: MeterShape = 'default';
+  @property() public shape: MeterShape = 'default';
 
   /**
    * The shape of each meter in the group.
    * @default 'default'
    * @attribute inner-shape
    */
-  @property({ reflect: true, attribute: 'inner-shape' }) public innerShape: MeterInnerShape = 'default';
+  @property({ attribute: 'inner-shape' }) public innerShape: MeterInnerShape = 'default';
 
   public get labels(): NodeList {
     return this._internals.labels;
