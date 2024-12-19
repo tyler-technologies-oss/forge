@@ -3,27 +3,9 @@ import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit
 import { customElement, property, queryAssignedElements, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils';
-import { IMeterComponent } from '../meter/meter';
-import { METER_CONSTANTS, MeterDensity, MeterDirection, MeterInnerShape, MeterShape } from '../meter/meter-constants';
-import { METER_GROUP_CONSTANTS } from './meter-group-constants';
+import { MeterComponent, MeterDensity, MeterDirection, MeterInnerShape, MeterShape } from '../meter/meter';
 
 import styles from './meter-group.scss';
-
-export interface IMeterGroupComponent extends LitElement {
-  min: number;
-  max: number;
-  tickmarks: boolean;
-  direction: MeterDirection;
-  density: MeterDensity;
-  shape: MeterShape;
-  innerShape: MeterInnerShape;
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-meter-group': IMeterGroupComponent;
-  }
-}
 
 /**
  * @tag forge-meter-group
@@ -44,8 +26,8 @@ declare global {
  * @slot label - Positions a label above the meter group.
  * @slot value - A textual representation of the meter's value.
  */
-@customElement(METER_GROUP_CONSTANTS.elementName)
-export class MeterGroupComponent extends LitElement implements IMeterGroupComponent {
+@customElement('forge-meter-group')
+export class MeterGroupComponent extends LitElement {
   /* @ignore */
   public static styles = unsafeCSS(styles);
   public static formAssociated = true;
@@ -55,14 +37,14 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
    * @default 0
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public min: number = METER_CONSTANTS.numbers.DEFAULT_MIN;
+  @property({ type: Number, reflect: true }) public min = 0;
 
   /**
    * The maximum value of each meter in the group.
    * @default 1
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public max: number = METER_CONSTANTS.numbers.DEFAULT_MAX;
+  @property({ type: Number, reflect: true }) public max = 1;
   /**
    * Whether to display tickmarks.
    * @default false
@@ -110,7 +92,7 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
 
   @queryAssignedNodes() private _labelNodes: Node[];
   @queryAssignedNodes({ slot: 'value' }) private _valueNodes: Node[];
-  @queryAssignedElements({ selector: 'forge-meter' }) private _meters: IMeterComponent[];
+  @queryAssignedElements({ selector: 'forge-meter' }) private _meters: MeterComponent[];
 
   private _internals: ElementInternals;
 
@@ -184,5 +166,11 @@ export class MeterGroupComponent extends LitElement implements IMeterGroupCompon
   private _handleHeadingSlotChange(): void {
     const nodes = [...this._labelNodes, ...this._valueNodes].filter(node => !!node.textContent?.trim());
     this._hasSlottedHeadingContent = !!nodes.length;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-meter-group': MeterGroupComponent;
   }
 }

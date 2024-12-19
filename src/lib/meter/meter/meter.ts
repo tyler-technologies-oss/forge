@@ -2,34 +2,17 @@ import { LitElement, PropertyValues, TemplateResult, html, unsafeCSS } from 'lit
 import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
+import { Theme } from '../../constants';
 import { setDefaultAria } from '../../core/utils/a11y-utils';
-import { METER_GROUP_CONSTANTS } from '../meter-group/meter-group-constants';
-import { METER_CONSTANTS, MeterDensity, MeterDirection, MeterInnerShape, MeterShape, MeterStatus, MeterTheme } from './meter-constants';
 
 import styles from './meter.scss';
 
-export interface IMeterComponent extends LitElement {
-  value: number;
-  min: number;
-  max: number;
-  low: number | null | undefined;
-  high: number | null | undefined;
-  optimum: number | null | undefined;
-  tickmarks: boolean;
-  direction: MeterDirection;
-  density: MeterDensity;
-  shape: MeterShape;
-  innerShape: MeterInnerShape;
-  theme: MeterTheme;
-  muted: boolean;
-  readonly percentage: number;
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-meter': IMeterComponent;
-  }
-}
+export type MeterDirection = 'inline' | 'block';
+export type MeterDensity = 'default' | 'small' | 'medium' | 'large';
+export type MeterShape = 'default' | 'round' | 'squared';
+export type MeterInnerShape = 'default' | 'inherit';
+export type MeterStatus = 'optimal' | 'suboptimal' | 'least-optimal';
+export type MeterTheme = Theme | 'default';
 
 /**
  * @tag forge-meter
@@ -55,8 +38,8 @@ declare global {
  * @slot - The default slot for the meter's label.
  * @slot value - A textual representation of the meter's value.
  */
-@customElement(METER_CONSTANTS.elementName)
-export class MeterComponent extends LitElement implements IMeterComponent {
+@customElement('forge-meter')
+export class MeterComponent extends LitElement {
   public static styles = unsafeCSS(styles);
   public static formAssociated = true;
 
@@ -65,91 +48,91 @@ export class MeterComponent extends LitElement implements IMeterComponent {
    * @default 0
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public value: number = METER_CONSTANTS.numbers.DEFAULT_VALUE;
+  @property({ type: Number }) public value = 0;
 
   /**
    * The minimum value of the meter.
    * @default 0
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public min: number = METER_CONSTANTS.numbers.DEFAULT_MIN;
+  @property({ type: Number }) public min = 0;
 
   /**
    * The maximum value of the meter.
    * @default 1
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public max: number = METER_CONSTANTS.numbers.DEFAULT_MAX;
+  @property({ type: Number }) public max = 1;
 
   /**
    * The low value threshold.
    * @default 0
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public low: number | null | undefined;
+  @property({ type: Number }) public low: number | null | undefined;
 
   /**
    * The high value threshold.
    * @default 1
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public high: number | null | undefined;
+  @property({ type: Number }) public high: number | null | undefined;
 
   /**
    * Indicates the region of the optimum value.
    * @default 1
    * @attribute
    */
-  @property({ type: Number, reflect: true }) public optimum: number | null | undefined;
+  @property({ type: Number }) public optimum: number | null | undefined;
 
   /**
    * Whether to display tickmarks.
    * @default false
    * @attribute
    */
-  @property({ type: Boolean, reflect: true }) public tickmarks = false;
+  @property({ type: Boolean }) public tickmarks = false;
 
   /**
    * Whether the meter is oriented in the inline or block direction.
    * @default 'inline'
    * @attribute
    */
-  @property({ reflect: true }) public direction: MeterDirection = 'inline';
+  @property() public direction: MeterDirection = 'inline';
 
   /**
    * The shape of the meter.
    * @default 'default'
    * @attribute
    */
-  @property({ reflect: true }) public shape: MeterShape = 'default';
+  @property() public shape: MeterShape = 'default';
 
   /**
    * The shape of the bar.
    * @default 'default'
    * @attribute inner-shape
    */
-  @property({ reflect: true, attribute: 'inner-shape' }) public innerShape: MeterInnerShape = 'default';
+  @property({ attribute: 'inner-shape' }) public innerShape: MeterInnerShape = 'default';
 
   /**
    * The density of the meter.
    * @default 'medium'
    * @attribute
    */
-  @property({ reflect: true }) public density: MeterDensity = 'medium';
+  @property() public density: MeterDensity = 'medium';
 
   /**
    * The theme of the meter.
    * @default 'default'
    * @attribute
    */
-  @property({ reflect: true }) public theme: MeterTheme = 'default';
+  @property() public theme: MeterTheme = 'default';
 
   /**
    * Whether the theme is muted.
    * @default false
    * @attribute
    */
-  @property({ type: Boolean, reflect: true }) public muted = false;
+  @property({ type: Boolean }) public muted = false;
 
   /**
    * Gets the percentage of the meter that's filled.
@@ -262,7 +245,7 @@ export class MeterComponent extends LitElement implements IMeterComponent {
 
     // Dispatch an event to the parent group.
     if (this._grouped) {
-      const event = new Event(METER_CONSTANTS.events.CHANGE, { bubbles: true, composed: true });
+      const event = new Event('change', { bubbles: true, composed: true });
       this.dispatchEvent(event);
     }
 
@@ -297,7 +280,7 @@ export class MeterComponent extends LitElement implements IMeterComponent {
    * Checks if the meter is part of a group and inherits the min and max values.
    */
   private async _getGrouped(): Promise<void> {
-    const group = this.closest(METER_GROUP_CONSTANTS.elementName);
+    const group = this.closest('forge-meter-group');
     this._grouped = !!group;
 
     if (group) {
@@ -314,5 +297,11 @@ export class MeterComponent extends LitElement implements IMeterComponent {
   private _handleSlotChange(): void {
     const nodes = [...this._defaultNodes, ...this._valueNodes].filter(node => !!node.textContent?.trim());
     this._hasSlottedContent = !!nodes.length;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-meter': MeterComponent;
   }
 }
