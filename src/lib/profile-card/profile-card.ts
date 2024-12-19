@@ -3,13 +3,14 @@ import { ProfileCardAdapter } from './profile-card-adapter';
 import { ProfileCardCore } from './profile-card-core';
 import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
 import { ButtonComponent } from '../button';
-import { AvatarComponent } from '../avatar';
 import { IconComponent } from '../icon/icon';
 import { ToolbarComponent } from '../toolbar';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './profile-card.html';
 import styles from './profile-card.scss';
+
+import '../avatar/avatar';
 
 export interface IProfileCardComponent extends IBaseComponent {
   fullName: string;
@@ -40,7 +41,7 @@ declare global {
  */
 @customElement({
   name: PROFILE_CARD_CONSTANTS.elementName,
-  dependencies: [ToolbarComponent, ButtonComponent, IconComponent, AvatarComponent]
+  dependencies: [ToolbarComponent, ButtonComponent, IconComponent]
 })
 export class ProfileCardComponent extends BaseComponent implements IProfileCardComponent {
   public static get observedAttributes(): string[] {

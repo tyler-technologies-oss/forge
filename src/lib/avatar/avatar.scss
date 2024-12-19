@@ -23,7 +23,7 @@
 .forge-avatar {
   @include base;
 
-  &--image {
+  .image {
     @include base-with-image;
   }
 }

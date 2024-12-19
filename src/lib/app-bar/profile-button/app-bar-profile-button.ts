@@ -4,12 +4,13 @@ import { AppBarProfileButtonCore } from './app-bar-profile-button-core';
 import { APP_BAR_PROFILE_BUTTON_CONSTANTS, AppBarProfileButtonProfileCardBuilder } from './app-bar-profile-button-constants';
 import { ProfileCardComponent } from '../../profile-card';
 import { IconButtonComponent } from '../../icon-button';
-import { AvatarComponent } from '../../avatar';
 import { TooltipComponent } from '../../tooltip';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IPopoverComponent, PopoverComponent } from '../../popover/popover';
 
 import template from './app-bar-profile-button.html';
+
+import '../../avatar/avatar';
 
 export interface IAppBarProfileButtonComponent extends IBaseComponent {
   avatarImageUrl: string;
@@ -69,7 +70,7 @@ declare global {
  */
 @customElement({
   name: APP_BAR_PROFILE_BUTTON_CONSTANTS.elementName,
-  dependencies: [PopoverComponent, ProfileCardComponent, IconButtonComponent, AvatarComponent, TooltipComponent]
+  dependencies: [PopoverComponent, ProfileCardComponent, IconButtonComponent, TooltipComponent]
 })
 export class AppBarProfileButtonComponent extends BaseComponent implements IAppBarProfileButtonComponent {
   public static get observedAttributes(): string[] {

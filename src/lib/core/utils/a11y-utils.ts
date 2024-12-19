@@ -128,6 +128,7 @@ export type ARIARole =
   | 'menuitemradio'
   | 'option'
   | 'progressbar'
+  | 'meter'
   | 'radio'
   | 'scrollbar'
   | 'searchbox'
