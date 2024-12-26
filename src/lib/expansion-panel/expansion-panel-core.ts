@@ -5,6 +5,7 @@ export interface IExpansionPanelCore {
   open: boolean;
   orientation: ExpansionPanelOrientation;
   animationType: ExpansionPanelAnimationType;
+  targetButton: string;
   dispatchToggleEvent(): void;
 }
 
@@ -12,6 +13,7 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   private _open = false;
   private _orientation: ExpansionPanelOrientation = 'vertical';
   private _animationType: ExpansionPanelAnimationType = 'default';
+  private _targetButton = '';
 
   private _clickListener: EventListener = this._onClick.bind(this);
   private _keydownListener: EventListener = this._onKeydown.bind(this);
@@ -22,7 +24,16 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   public initialize(): void {
     this._adapter.addHeaderListener('click', this._clickListener);
     this._adapter.addHeaderListener('keydown', this._keydownListener);
+    this._adapter.tryLocateTargetButton(this._targetButton);
+    this._adapter.addTargetButtonListener('click', this._clickListener);
+    this._adapter.addTargetButtonListener('keydown', this._keydownListener);
     this._adapter.setAnimationCompleteListener(this._animationCompleteListener);
+    this._adapter.initializeAccessibility();
+    this._adapter.updateAriaExpanded(this._open);
+  }
+
+  public destroy(): void {
+    this._adapter.detachAria();
   }
 
   private _onClick(evt: MouseEvent): void {
@@ -59,6 +70,7 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   private _togglePanel(): void {
     this._adapter.toggleHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN, this._open);
     this._adapter.tryToggleOpenIcon(this._open);
+    this._adapter.updateAriaExpanded(this._open);
     if (this._open) {
       if (this._animationType !== 'none') {
         this._adapter.animationStart();
@@ -108,6 +120,16 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
     if (this._animationType !== value) {
       this._animationType = value;
       this._adapter.setHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.ANIMATION_TYPE, this._animationType);
+    }
+  }
+
+  public get targetButton(): string {
+    return this._targetButton;
+  }
+  public set targetButton(value: string) {
+    if (this._targetButton !== value) {
+      this._targetButton = value;
+      this._adapter.setHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.TARGET_BUTTON, this._targetButton);
     }
   }
 }
