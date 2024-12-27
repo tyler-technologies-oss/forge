@@ -16,7 +16,7 @@ describe('Expansion Panel', () => {
     expect(el.shadowRoot).not.to.be.null;
   });
 
-  it('should should be accessible', async () => {
+  it('should be accessible', async () => {
     const el = await fixture<IExpansionPanelComponent>(html`<forge-expansion-panel></forge-expansion-panel>`);
 
     await expect(el).to.be.accessible();
@@ -24,22 +24,38 @@ describe('Expansion Panel', () => {
 
   it('should be accessible with expected structure and ARIA attributes', async () => {
     const el = await fixture<IExpansionPanelComponent>(html`
-      <forge-expansion-panel>
-        <button slot="header" aria-controls="content" aria-labelledby="label" aria-expanded="false">
+      <forge-expansion-panel target-button="button-id">
+        <button slot="header" id="button-id" aria-labelledby="label">
           <span id="label">Header</span>
         </button>
-        <div id="content">Content</div>
+        <div>Content</div>
       </forge-expansion-panel>
     `);
-
     await expect(el).shadowDom.to.be.accessible();
 
-    const header = el.querySelector('button') as HTMLButtonElement;
-
+    const button = el.querySelector('button') as HTMLElement;
+    const content = el.querySelector('forge-expansion-panel>div') as HTMLElement;
+    expect(button.getAttribute('aria-controls')).to.not.be.null;
+    expect(button.getAttribute('aria-controls')).to.equal(content?.getAttribute('id'));
+    expect(button.getAttribute('aria-expanded')).to.equal('false');
     el.open = true;
-    header.setAttribute('aria-expanded', 'true');
-
+    expect(button.getAttribute('aria-expanded')).to.equal('true');
     await expect(el).shadowDom.to.be.accessible();
+    el.open = false;
+    expect(button.getAttribute('aria-expanded')).to.equal('false');
+  });
+
+  it('should not overwrite existing id of slotted content', async () => {
+    const el = await fixture<IExpansionPanelComponent>(html`
+      <forge-expansion-panel target-button="button-id">
+        <button slot="header" id="button-id"></button>
+        <div id="foo">Content</div>
+      </forge-expansion-panel>
+    `);
+    const button = el.querySelector('button') as HTMLElement;
+    const content = el.querySelector('#foo') as HTMLElement;
+    expect(content.getAttribute('id')).to.equal('foo');
+    expect(button.getAttribute('aria-controls')).to.equal(content.getAttribute('id'));
   });
 
   it('should have expected default values', async () => {
@@ -416,6 +432,62 @@ describe('Expansion Panel', () => {
       expect(el.open).to.be.true;
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).to.be.true;
       expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).to.be.false;
+    });
+  });
+
+  describe('target button', () => {
+    it('should be toggled by detached target button', async () => {
+      const el = await fixture<IExpansionPanelComponent>(html`
+        <div>
+          <button id="button-id"></button>
+          <forge-expansion-panel target-button="button-id">
+            <div>Content</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const targetButton = el.querySelector('#button-id') as HTMLElement;
+      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      targetButton.click();
+      expect(expansionPanel.open).to.be.true;
+      targetButton.click();
+      expect(expansionPanel.open).to.be.false;
+    });
+
+    it('should manage ARIA attributes when using detached target button', async () => {
+      const el = await fixture<IExpansionPanelComponent>(html`
+        <div>
+          <button id="button-id"></button>
+          <forge-expansion-panel target-button="button-id">
+            <div id="content">Content</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const targetButton = el.querySelector('#button-id') as HTMLElement;
+      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const content = el.querySelector('#content') as HTMLElement;
+      expect(targetButton.getAttribute('aria-controls')).to.not.be.null;
+      expect(targetButton.getAttribute('aria-controls')).to.equal(content.getAttribute('id'));
+      expect(targetButton.getAttribute('aria-expanded')).to.equal('false');
+      expansionPanel.open = true;
+      expect(targetButton.getAttribute('aria-expanded')).to.equal('true');
+      expansionPanel.open = false;
+      expect(targetButton.getAttribute('aria-expanded')).to.equal('false');
+      expansionPanel.remove();
+      expect(targetButton.getAttribute('aria-controls')).to.be.null;
+      expect(targetButton.getAttribute('aria-expanded')).to.be.null;
+    });
+
+    it('should not error if no slotted content', async () => {
+      await fixture<IExpansionPanelComponent>(html`
+        <div>
+          <button id="button-id"></button>
+          <forge-expansion-panel target-button="button-id"></forge-expansion-panel>
+        </div>
+      `);
+    });
+
+    it('should not error if target button not found', async () => {
+      await fixture<IExpansionPanelComponent>(html`<forge-expansion-panel target-button="button-id"></forge-expansion-panel>`);
     });
   });
 
