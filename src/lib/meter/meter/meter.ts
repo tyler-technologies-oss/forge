@@ -3,7 +3,7 @@ import { customElement, property, queryAssignedNodes, state } from 'lit/decorato
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { Theme } from '../../constants';
-import { setDefaultAria } from '../../core/utils/a11y-utils';
+import { setDefaultAria, toggleState } from '../../core/utils/a11y-utils';
 
 import styles from './meter.scss';
 
@@ -14,12 +14,23 @@ export type MeterInnerShape = 'default' | 'inherit';
 export type MeterStatus = 'optimal' | 'suboptimal' | 'least-optimal';
 export type MeterTheme = Theme | 'default';
 
+const VALUE_STATE_MAP = new Map<MeterStatus, string>([
+  ['optimal', 'optimum-value'],
+  ['suboptimal', 'suboptimum-value'],
+  ['least-optimal', 'least-optimum-value']
+]);
+
 /**
  * @tag forge-meter
  *
  * @summary Meters display a scalar value within a defined range.
  *
  * @attribute {string} aria-valuetext - Defines a text alternative for the current value. Set this if it would be inaccurate to read the value as a percentage.
+ *
+ * @state vertical - Applied when the meter is oriented in the block direction.
+ * @state optimum-value - Applied when the value is within the optimum range.
+ * @state suboptimum-value - Applied when the value is within the suboptimum range.
+ * @state least-optimum-value - Applied when the value is within the least optimum range.
  *
  * @cssproperty --forge-meter-background - The background color of the meter.
  * @cssproperty --forge-meter-color - The color of the meter's bar.
@@ -185,7 +196,8 @@ export class MeterComponent extends LitElement {
       this._getSegmented();
     }
 
-    // Update default ARIA when the current, min, or max value changes.
+    // Update default ARIA when the current, min, or max value changes. Set the state when the
+    // direction changes.
     changedProperties.forEach((_, key) => {
       switch (key) {
         case 'value':
@@ -197,15 +209,30 @@ export class MeterComponent extends LitElement {
         case 'max':
           setDefaultAria(this, this._internals, { ariaValueMax: `${this.max}` });
           break;
+        case 'direction':
+          toggleState(this._internals, 'vertical', this.direction === 'block');
+          break;
       }
     });
   }
 
   public render(): TemplateResult {
+    const classes = {
+      'inner-shape--inherit': this.innerShape === 'inherit',
+      muted: this.muted,
+      [`density--${this.density}`]: true,
+      [`shape--${this.shape}`]: true,
+      [`theme--${this.theme}`]: true
+    };
     return this._grouped
-      ? html` <div part="root" class="forge-meter grouped" style=${styleMap({ '--percentage': this._percentage + '%' })}></div> `
+      ? html`
+          <div
+            part="root"
+            class=${classMap({ 'forge-meter': true, grouped: true, ...classes })}
+            style=${styleMap({ '--_meter-percentage': this._percentage + '%' })}></div>
+        `
       : html`
-          <div part="root" class="forge-meter">
+          <div part="root" class=${classMap({ 'forge-meter': true, ...classes })}>
             <div class=${classMap({ heading: true, 'not-empty': this._hasSlottedContent })} @slotchange=${this._handleSlotChange}>
               <div class="label"><slot></slot></div>
               <div class="value"><slot name="value"></slot></div>
@@ -221,7 +248,7 @@ export class MeterComponent extends LitElement {
                 lowest: this._percentage === 0,
                 tickmarks: this.tickmarks
               })}>
-              <div part="bar" class="bar" style=${styleMap({ '--percentage': this._percentage + '%' })}></div>
+              <div part="bar" class="bar" style=${styleMap({ '--_meter-percentage': this._percentage + '%' })}></div>
             </div>
           </div>
         `;
@@ -263,6 +290,7 @@ export class MeterComponent extends LitElement {
     } else {
       this._status = this.value < low ? 'suboptimal' : this.value > high ? 'suboptimal' : 'optimal';
     }
+    this._setValueState();
   }
 
   /**
@@ -297,6 +325,13 @@ export class MeterComponent extends LitElement {
   private _handleSlotChange(): void {
     const nodes = [...this._defaultNodes, ...this._valueNodes].filter(node => !!node.textContent?.trim());
     this._hasSlottedContent = !!nodes.length;
+  }
+
+  /**
+   * Updates the internal state of the meter based on the current status.
+   */
+  private _setValueState(): void {
+    VALUE_STATE_MAP.forEach((value, status) => toggleState(this._internals, value, this._status === status));
   }
 }
 

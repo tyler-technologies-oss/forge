@@ -74,6 +74,45 @@
 
   &.grouped {
     @include core.grouped;
+
+    &.muted {
+      @include core.override(color, var(--forge-theme-tertiary-container-high), value);
+    }
+  }
+
+  @each $key, $value in ('small': 'xsmall', 'medium': 'medium', 'large': 'large') {
+    &.density--#{$key} {
+      @include core.override(height, spacing.variable($value), value);
+    }
+  }
+
+  @each $key, $value in ('default': shape.variable(medium), 'rounded': shape.variable(full), 'squared': 0) {
+    &.shape--#{$key} {
+      @include core.override(shape, $value, value);
+    }
+  }
+
+  &.inner-shape--inherit {
+    @include core.override(inner-shape, shape);
+  }
+
+  &.muted {
+    .track {
+      @include core.override(background, var(--forge-theme-tertiary-container-minimum), value);
+      @include core.override(color, var(--forge-theme-tertiary-container-high), value);
+
+      &.segmented {
+        @include core.segmented($muted: true);
+
+        &.least-optimal {
+          @include core.least-optimal($muted: true);
+        }
+
+        &.optimal {
+          @include core.optimal($muted: true);
+        }
+      }
+    }
   }
 }
 
@@ -81,7 +120,7 @@
 // Vertical
 //
 
-:host([direction='block']) {
+:host(:is(:state(vertical), :--vertical)) {
   @include core.vertical-host;
 
   .forge-meter {
@@ -114,80 +153,29 @@
 }
 
 //
-// Density
-//
-
-@each $key, $value in ('small': 'xsmall', 'medium': 'medium', 'large': 'large') {
-  :host([density='#{$key}']) {
-    .track {
-      @include core.override(height, spacing.variable($value), value);
-    }
-  }
-}
-
-//
-// Shape
-//
-
-@each $key, $value in ('default': shape.variable(medium), 'rounded': shape.variable(full), 'squared': 0) {
-  :host([shape='#{$key}']) {
-    .track {
-      @include core.override(shape, $value, value);
-    }
-  }
-}
-
-:host([inner-shape='inherit']) {
-  .track {
-    @include core.override(inner-shape, shape);
-  }
-}
-
-//
 // Theme
 //
 
-:host([muted]) {
-  .track {
-    @include core.override(background, var(--forge-theme-tertiary-container-minimum), value);
-    @include core.override(color, var(--forge-theme-tertiary-container-high), value);
-
-    &.segmented {
-      @include core.segmented($muted: true);
-
-      &.least-optimal {
-        @include core.least-optimal($muted: true);
-      }
-
-      &.optimal {
-        @include core.optimal($muted: true);
-      }
-    }
-  }
-
-  .grouped {
-    @include core.override(color, var(--forge-theme-tertiary-container-high), value);
-  }
-}
-
 @each $value in ('primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info') {
-  :host([theme='#{$value}']:not([muted])) {
-    .track:not(.segmented) {
-      @include core.theme($value);
+  .theme--#{$value} {
+    &:not(.muted) {
+      .track:not(.segmented) {
+        @include core.theme($value);
+      }
+
+      &.grouped {
+        @include core.theme($value);
+      }
     }
 
-    .grouped {
-      @include core.theme($value);
-    }
-  }
+    &.muted {
+      .track:not(.segmented) {
+        @include core.theme($value, $muted: true);
+      }
 
-  :host([theme='#{$value}'][muted]) {
-    .track:not(.segmented) {
-      @include core.theme($value, $muted: true);
-    }
-
-    .grouped {
-      @include core.theme($value, $muted: true);
+      .grouped {
+        @include core.theme($value, $muted: true);
+      }
     }
   }
 }
@@ -216,7 +204,7 @@
     background: CanvasText !important;
   }
 
-  :host([direction='block']) {
+  :host(:is(:state(vertical), :--vertical)) {
     .grouped {
       border-block-start: 1px solid CanvasText !important;
       border-inline-end: initial !important;

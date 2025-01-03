@@ -48,12 +48,26 @@
     &.tickmarks::after {
       @include core.tickmarks;
     }
-  }
-}
 
-:host([muted]) {
-  .forge-meter-group {
-    @include core.muted;
+    &.inner-shape--inherit {
+      @include meter.provide-theme(
+        (
+          inner-shape: #{core.token(shape)}
+        )
+      );
+    }
+
+    @each $key, $value in ('default': shape.variable(medium), 'rounded': shape.variable(full), 'squared': 0) {
+      &.shape--#{$key} {
+        @include core.override(shape, $value, value);
+      }
+    }
+
+    @each $key, $value in ('small': 'xsmall', 'medium': 'medium', 'large': 'large') {
+      &.density--#{$key} {
+        @include core.override(height, spacing.variable($value), value);
+      }
+    }
   }
 }
 
@@ -61,7 +75,7 @@
 // Vertical
 //
 
-:host([direction='block']) {
+:host(:is(:state(vertical), :--vertical)) {
   @include core.vertical-host;
 
   .forge-meter-group {
@@ -82,40 +96,6 @@
         @include core.vertical-tickmarks;
       }
     }
-  }
-}
-
-//
-// Density
-//
-
-@each $key, $value in ('small': 'xsmall', 'medium': 'medium', 'large': 'large') {
-  :host([density='#{$key}']) {
-    .track {
-      @include core.override(height, spacing.variable($value), value);
-    }
-  }
-}
-
-//
-// Shape
-//
-
-@each $key, $value in ('default': shape.variable(medium), 'rounded': shape.variable(full), 'squared': 0) {
-  :host([shape='#{$key}']) {
-    .track {
-      @include core.override(shape, $value, value);
-    }
-  }
-}
-
-:host([inner-shape='inherit']) {
-  .track {
-    @include meter.provide-theme(
-      (
-        inner-shape: #{core.token(shape)}
-      )
-    );
   }
 }
 

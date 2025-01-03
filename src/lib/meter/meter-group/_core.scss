@@ -76,8 +76,3 @@
   margin-inline-start: 0;
   background: meter.tickmarks-background(#{token(tickmarks)}, #{token(tickmark-color), null, true});
 }
-
-@mixin muted {
-  @include override(background, theme.variable(surface-container-minimum), value);
-  @include override(tickmark-color, theme.variable(outline-medium), value);
-}

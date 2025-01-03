@@ -2,7 +2,7 @@ import { debounce } from '@tylertech/forge-core';
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedElements, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { setDefaultAria } from '../../core/utils/a11y-utils';
+import { setDefaultAria, toggleState } from '../../core/utils/a11y-utils';
 import { MeterComponent, MeterDensity, MeterDirection, MeterInnerShape, MeterShape } from '../meter/meter';
 
 import styles from './meter-group.scss';
@@ -11,6 +11,8 @@ import styles from './meter-group.scss';
  * @tag forge-meter-group
  *
  * @summary Meter groups display several meters together on one track.
+ *
+ * @state vertical - Applied when the meter group is oriented in the block direction.
  *
  * @cssproperty --forge-meter-group-background - The background color of the meter group.
  * @cssproperty --forge-meter-group-height - The block size of the meter group.
@@ -25,6 +27,8 @@ import styles from './meter-group.scss';
  * @slot - The default slot for grouped `<forge-meter>` elements.
  * @slot label - Positions a label above the meter group.
  * @slot value - A textual representation of the meter's value.
+ *
+ * @state vertical - Applied when the meter group is oriented in the block direction.
  */
 @customElement('forge-meter-group')
 export class MeterGroupComponent extends LitElement {
@@ -108,6 +112,9 @@ export class MeterGroupComponent extends LitElement {
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
     const keys = Array.from(changedProperties.keys());
+    if (keys.includes('direction')) {
+      toggleState(this._internals, 'vertical', this.direction === 'block');
+    }
     if (keys.some(key => ['direction', 'min', 'max'].includes(key.toString()))) {
       this._syncMeters();
     }
@@ -120,7 +127,15 @@ export class MeterGroupComponent extends LitElement {
           <div class="label"><slot name="label"></slot></div>
           <div class="value"><slot name="value"></slot></div>
         </div>
-        <div part="track" class=${classMap({ track: true, tickmarks: this.tickmarks })}>
+        <div
+          part="track"
+          class=${classMap({
+            track: true,
+            tickmarks: this.tickmarks,
+            [`density--${this.density}`]: true,
+            [`inner-shape--${this.innerShape}`]: true,
+            [`shape--${this.shape}`]: true
+          })}>
           <slot @slotchange=${this._debounceMeterChange}></slot>
         </div>
       </div>
@@ -154,8 +169,8 @@ export class MeterGroupComponent extends LitElement {
     // Iterate through each slotted meter, applying z-indices based on their order and setting an
     // inset equal to the widths of all preceding meters.
     this._meters.reduce((inset, meter, index, meters) => {
-      meter.style.setProperty('--z-index', `${meters.length - index}`);
-      meter.style.setProperty('--inset', `${inset}%`);
+      meter.style.setProperty('--_meter-z-index', `${meters.length - index}`);
+      meter.style.setProperty('--_meter-inset', `${inset}%`);
       return inset + meter.percentage;
     }, 0);
   }

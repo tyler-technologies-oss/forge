@@ -79,13 +79,13 @@
   border-radius: #{token(inner-shape)};
   box-shadow: #{token(inner-elevation)};
   background: #{token(color)};
-  translate: var(--percentage) 0;
+  translate: var(--_meter-percentage) 0;
 }
 
 @mixin vertical-bar {
   inset-inline-start: initial;
   inset-block-start: 100%;
-  translate: 0 calc(-1 * var(--percentage));
+  translate: 0 calc(-1 * var(--_meter-percentage));
 }
 
 @mixin theme($theme, $muted: false) {
@@ -183,11 +183,11 @@ $leading: calc(var(--_meter-group-height) * 0.5);
 @mixin grouped {
   display: block;
   position: absolute;
-  z-index: var(--z-index);
+  z-index: var(--_meter-z-index);
   inset-block-start: 0;
-  inset-inline-start: var(--inset, 0);
+  inset-inline-start: var(--_meter-inset, 0);
   block-size: 100%;
-  inline-size: calc(var(--percentage) + $leading);
+  inline-size: calc(var(--_meter-percentage) + $leading);
   border-radius: #{token(inner-shape)};
   border-start-start-radius: 0;
   border-end-start-radius: 0;
@@ -198,9 +198,9 @@ $leading: calc(var(--_meter-group-height) * 0.5);
 
 @mixin vertical-grouped {
   display: block;
-  inset-block-start: calc(100% - var(--percentage) - (var(--inset, 0)));
+  inset-block-start: calc(100% - var(--_meter-percentage) - (var(--_meter-inset, 0)));
   inset-inline-start: 0;
-  block-size: calc(var(--percentage) + $leading);
+  block-size: calc(var(--_meter-percentage) + $leading);
   inline-size: 100%;
   max-inline-size: initial;
   border-radius: #{token(inner-shape)};
