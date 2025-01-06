@@ -5,7 +5,7 @@ export interface IExpansionPanelCore {
   open: boolean;
   orientation: ExpansionPanelOrientation;
   animationType: ExpansionPanelAnimationType;
-  targetButton: string;
+  trigger: string;
   dispatchToggleEvent(): void;
 }
 
@@ -13,7 +13,7 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   private _open = false;
   private _orientation: ExpansionPanelOrientation = 'vertical';
   private _animationType: ExpansionPanelAnimationType = 'default';
-  private _targetButton = '';
+  private _trigger = '';
 
   private _clickListener: EventListener = this._onClick.bind(this);
   private _keydownListener: EventListener = this._onKeydown.bind(this);
@@ -24,9 +24,9 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   public initialize(): void {
     this._adapter.addHeaderListener('click', this._clickListener);
     this._adapter.addHeaderListener('keydown', this._keydownListener);
-    this._adapter.tryLocateTargetButton(this._targetButton);
-    this._adapter.addTargetButtonListener('click', this._clickListener);
-    this._adapter.addTargetButtonListener('keydown', this._keydownListener);
+    this._adapter.tryLocateTriggerElement(this._trigger);
+    this._adapter.addTriggerListener('click', this._clickListener);
+    this._adapter.addTriggerListener('keydown', this._keydownListener);
     this._adapter.setAnimationCompleteListener(this._animationCompleteListener);
     this._adapter.initializeAccessibility();
     this._adapter.updateAriaExpanded(this._open);
@@ -123,13 +123,13 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
     }
   }
 
-  public get targetButton(): string {
-    return this._targetButton;
+  public get trigger(): string {
+    return this._trigger;
   }
-  public set targetButton(value: string) {
-    if (this._targetButton !== value) {
-      this._targetButton = value;
-      this._adapter.setHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.TARGET_BUTTON, this._targetButton);
+  public set trigger(value: string) {
+    if (this._trigger !== value) {
+      this._trigger = value;
+      this._adapter.setHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.TRIGGER, this._trigger);
     }
   }
 }

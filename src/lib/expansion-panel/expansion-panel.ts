@@ -11,7 +11,7 @@ export interface IExpansionPanelComponent extends IBaseComponent {
   open: boolean;
   orientation: ExpansionPanelOrientation;
   animationType: ExpansionPanelAnimationType;
-  targetButton: string;
+  trigger: string;
   toggle(): void;
 }
 
@@ -34,12 +34,12 @@ declare global {
  * @property {boolean} [open=false] - Whether the panel is open or closed.
  * @property {ExpansionPanelOrientation} [orientation="vertical"] - The orientation of the panel.
  * @property {ExpansionPanelAnimationType} [animationType="default"] - The type of animation to use when opening/closing the panel.
- * @property {string} targetButton - The id of the button that the expansion panel is associated with.
+ * @property {string} trigger - The id of the button that the expansion panel is associated with.
  *
  * @attribute {boolean} [open=false] - Whether the panel is open or closed.
  * @attribute {ExpansionPanelOrientation} [orientation="vertical"] - The orientation of the panel.
  * @attribute {ExpansionPanelAnimationType} [animation-type="default"] - The type of animation to use when opening/closing the panel.
- * @attribute {string} [target-button] - The id of the button that the expansion panel is associated with.
+ * @attribute {string} [trigger] - The id of the button that the expansion panel is associated with.
  *
  * @fires {CustomEvent<boolean>} forge-expansion-panel-toggle - Event fired when the panel is toggled open or closed.
  * @fires {CustomEvent<boolean>} forge-expansion-panel-animation-complete - Event fired when the panel has finished animating when toggling.
@@ -93,8 +93,8 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
       case EXPANSION_PANEL_CONSTANTS.observedAttributes.ANIMATION_TYPE:
         this.animationType = newValue as ExpansionPanelAnimationType;
         break;
-      case EXPANSION_PANEL_CONSTANTS.observedAttributes.TARGET_BUTTON:
-        this.targetButton = newValue;
+      case EXPANSION_PANEL_CONSTANTS.observedAttributes.TRIGGER:
+        this.trigger = newValue;
     }
   }
 
@@ -108,7 +108,7 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
   public declare animationType: ExpansionPanelAnimationType;
 
   @coreProperty()
-  public declare targetButton: string;
+  public declare trigger: string;
 
   /**
    * Toggles the open state of the panel.

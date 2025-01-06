@@ -23,8 +23,8 @@ It's common to compose an expansion panel with a card component to provide a mor
 ## Target Button
 
 A button in the header slot of the expansion panel will automatically control toggling the `open` state of the panel.
-Setting the `target-button` attribute/property of the expansion panel to the button's `id` will also manage its `aria-expanded` and `aria-controls` attributes.
-You can also set the `target-button` to the `id` of a button elsewhere in the document to add the toggling and ARIA attribute functionality to it.
+Setting the `trigger` attribute/property of the expansion panel to the button's `id` will also manage its `aria-expanded` and `aria-controls` attributes.
+You can also set the `trigger` to the `id` of a button elsewhere in the document to add the toggling and ARIA attribute functionality to it.
 
 <Canvas of={ExpansionPanelStories.WithUnslottedButton} />
 
@@ -44,7 +44,7 @@ You can also set the `target-button` to the `id` of a button elsewhere in the do
 - Here is an example of a properly marked up expansion panel:
 
 ```html
-<forge-expansion-panel target-button="button-id">
+<forge-expansion-panel trigger="button-id">
   <button slot="header" id="button-id">Toggle panel</button>
   <div id="expandable-content" role="group">Expandable content</div>
 </forge-expansion-panel>
@@ -55,7 +55,7 @@ The button can also be placed elsewhere in the document, outside the expansion p
 ```html
 <button id="button-id">Toggle panel</button>
 
-<forge-expansion-panel target-button="button-id">
+<forge-expansion-panel trigger="button-id">
   <div role="group">Expandable content</div>
 </forge-expansion-panel>
 ```

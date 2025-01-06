@@ -1,3 +1,4 @@
+import { triggerAsyncId } from 'async_hooks';
 import { COMPONENT_NAME_PREFIX } from '../constants';
 import { OPEN_ICON_CONSTANTS } from '../open-icon';
 
@@ -7,7 +8,7 @@ const observedAttributes = {
   OPEN: 'open',
   ORIENTATION: 'orientation',
   ANIMATION_TYPE: 'animation-type',
-  TARGET_BUTTON: 'target-button'
+  TRIGGER: 'trigger'
 };
 
 const attributes = {

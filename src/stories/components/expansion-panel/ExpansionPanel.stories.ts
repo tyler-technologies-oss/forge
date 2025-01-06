@@ -100,7 +100,7 @@ export const WithUnslottedButton: Story = {
   render: () => {
     return html`<button id="button-id">Toggle</button>
       <forge-card>
-        <forge-expansion-panel target-button="button-id">
+        <forge-expansion-panel trigger="button-id">
           <div slot="header" role="button" tabindex="0" style="display: flex; justify-content: space-between;">
             <div>Header text</div>
             <forge-open-icon></forge-open-icon>
