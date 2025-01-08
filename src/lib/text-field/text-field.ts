@@ -92,6 +92,10 @@ export class TextFieldComponent extends BaseField<TextFieldCore> implements ITex
     this._core.initialize();
   }
 
+  public disconnectedCallback(): void {
+    this._core.destroy();
+  }
+
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     super.attributeChangedCallback(name, oldValue, newValue);
     switch (name) {

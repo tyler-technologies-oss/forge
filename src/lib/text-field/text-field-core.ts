@@ -82,8 +82,15 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
     }
   }
 
-  private _onValueChange(): void {
-    this._tryFloatLabel();
+  private _onValueChange(evt: InputEvent): void {
+    let force;
+
+    // Handle the special case where a number input allows invalid characters
+    if ((evt.target as HTMLInputElement | undefined)?.type === 'number' && (evt.data != null || (evt.target as HTMLInputElement).validity.badInput)) {
+      force = true;
+    }
+
+    this._tryFloatLabel(force);
     this._toggleClearButtonVisibility();
   }
 
