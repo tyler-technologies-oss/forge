@@ -58,6 +58,11 @@ declare global {
  * @property {DayOfWeek[]} [disabledDaysOfWeek=[]] - Gets/sets the disabled days of the week.
  * @property {string} [yearRange=''] - Gets/sets the year range for the date range picker.
  * @property {string | undefined} [locale=undefined] - Gets/sets the locale for the date range picker.
+ *
+ * @event {CustomEvent<IDateRangePickerChangeEventData>} forge-date-range-picker-change - Emits when the value of the date range picker changes.
+ * @event {CustomEvent<void>} forge-date-range-picker-open - Emits when the date range picker calendar opens.
+ * @event {CustomEvent<void>} forge-date-range-picker-close - Emits when the date range picker calendar closes.
+ * @event {CustomEvent<string>} forge-date-range-picker-input - Emits when the user inputs a value into the date range picker.
  */
 @customElement({
   name: DATE_RANGE_PICKER_CONSTANTS.elementName,
