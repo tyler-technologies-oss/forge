@@ -52,11 +52,7 @@
 
 @mixin background {
   position: relative;
-  align-items: center;
-  justify-content: center;
-
-  display: flex;
-
+  display: inline block;
   overflow: hidden;
 
   transition-duration: #{token(animation-duration)};
@@ -79,6 +75,10 @@
 
     position: absolute;
 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transform-origin: top left;
     transition-duration: #{token(animation-duration)};
     transition-delay: #{token(animation-delay)};
     transition-timing-function: #{token(animation-timing-function)};
