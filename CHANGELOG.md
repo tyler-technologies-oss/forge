@@ -1,3 +1,24 @@
+# v3.4.1 (Wed Jan 08 2025)
+
+#### 🐛 Bug Fix
+
+- fix(tooltip): fixed a bug where visually hidden content could cause inadvertent page scrolling [#780](https://github.com/tyler-technologies-oss/forge/pull/780) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(radio): simplify check animation to reduce jitter [#773](https://github.com/tyler-technologies-oss/forge/pull/773) ([@samrichardsontylertech](https://github.com/samrichardsontylertech) [@DRiFTy17](https://github.com/DRiFTy17))
+- fix(text-field): label will now float when invalid chars are entered in number inputs [#778](https://github.com/tyler-technologies-oss/forge/pull/778) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): adjust input transition to avoid jittery movement when decelerating [#777](https://github.com/tyler-technologies-oss/forge/pull/777) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(text-field): ensure cleanup logic runs when element is disconnected [#776](https://github.com/tyler-technologies-oss/forge/pull/776) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- Docs fixes [#779](https://github.com/tyler-technologies-oss/forge/pull/779) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v3.4.0 (Tue Dec 10 2024)
 
 #### 🚀 Enhancement
