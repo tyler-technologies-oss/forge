@@ -20,9 +20,9 @@
   display: flex;
   flex-direction: row-reverse;
   align-items: end;
-  block-size: 100%;
-  inline-size: fit-content;
-  max-inline-size: 100%;
+  width: fit-content;
+  height: 100%;
+  max-width: 100%;
 }
 
 @mixin heading {
@@ -40,12 +40,12 @@
 }
 
 @mixin heading-with-content {
-  margin-block-end: #{spacing.variable(xxsmall)};
+  margin-bottom: #{spacing.variable(xxsmall)};
 }
 
 @mixin vertical-heading-with-content {
-  margin-block-end: 0;
-  margin-inline-start: #{spacing.variable(xsmall)};
+  margin-bottom: 0;
+  margin-left: #{spacing.variable(xsmall)};
 }
 
 @mixin label {
@@ -67,15 +67,15 @@
 }
 
 @mixin vertical-track {
-  inline-size: #{token(height)};
-  block-size: 100%;
+  width: #{token(height)};
+  height: 100%;
 }
 
 @mixin bar {
   position: absolute;
-  inset-inline-start: -100%;
-  block-size: 100%;
-  inline-size: 100%;
+  left: -100%;
+  width: 100%;
+  height: 100%;
   border-radius: #{token(inner-shape)};
   box-shadow: #{token(inner-elevation)};
   background: #{token(color)};
@@ -83,8 +83,8 @@
 }
 
 @mixin vertical-bar {
-  inset-inline-start: initial;
-  inset-block-start: 100%;
+  left: initial;
+  top: 100%;
   translate: 0 calc(-1 * var(--_meter-percentage));
 }
 
@@ -130,9 +130,9 @@
   content: '';
   position: relative;
   display: block;
-  block-size: 100%;
-  inline-size: 100%;
-  margin-inline-start: $background-offset;
+  width: 100%;
+  height: 100%;
+  margin-left: $background-offset;
   background: tickmarks-background(token(tickmarks), token(color), token(background));
   background-position-x: -$background-offset;
   opacity: #{token(tickmark-opacity)};
@@ -143,8 +143,8 @@
   // Use a background offset same as the horizontal mixin but in the block direction
   $background-offset: 2px;
 
-  margin-block-start: -$background-offset;
-  margin-inline-start: 0;
+  margin-top: -$background-offset;
+  margin-left: 0;
   background: tickmarks-background(token(tickmarks), token(color), token(background), true);
   background-position-x: 0;
   background-position-y: $background-offset;
@@ -184,28 +184,28 @@ $leading: calc(var(--_meter-group-height) * 0.5);
   display: block;
   position: absolute;
   z-index: var(--_meter-z-index);
-  inset-block-start: 0;
-  inset-inline-start: var(--_meter-inset, 0);
-  block-size: 100%;
-  inline-size: calc(var(--_meter-percentage) + $leading);
+  top: 0;
+  left: var(--_meter-inset, 0);
+  width: calc(var(--_meter-percentage) + $leading);
+  height: 100%;
   border-radius: #{token(inner-shape)};
-  border-start-start-radius: 0;
-  border-end-start-radius: 0;
-  margin-inline-start: calc(-1 * $leading);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: calc(-1 * $leading);
   background: #{token(color)};
   box-shadow: #{token(inner-elevation)};
 }
 
 @mixin vertical-grouped {
   display: block;
-  inset-block-start: calc(100% - var(--_meter-percentage) - (var(--_meter-inset, 0)));
-  inset-inline-start: 0;
-  block-size: calc(var(--_meter-percentage) + $leading);
-  inline-size: 100%;
-  max-inline-size: initial;
+  top: calc(100% - var(--_meter-percentage) - (var(--_meter-inset, 0)));
+  left: 0;
+  width: 100%;
+  height: calc(var(--_meter-percentage) + $leading);
+  max-width: initial;
   border-radius: #{token(inner-shape)};
-  border-end-start-radius: 0;
-  border-end-end-radius: 0;
-  margin-block-end: calc(-1 * $leading);
-  margin-inline-start: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-left: 0;
+  margin-bottom: calc(-1 * $leading);
 }

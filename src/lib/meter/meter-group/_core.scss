@@ -47,15 +47,15 @@
 
 @mixin track {
   position: relative;
-  block-size: #{token(height)};
+  height: #{token(height)};
   border-radius: #{token(shape)};
   overflow: hidden;
   background: #{token(background)};
 }
 
 @mixin vertical-track {
-  inline-size: #{token(height)};
-  block-size: 100%;
+  width: #{token(height)};
+  height: 100%;
 }
 
 @mixin tickmarks {
@@ -63,16 +63,16 @@
   position: relative;
   display: block;
   z-index: 9999;
-  block-size: 100%;
-  inline-size: 100%;
-  margin-inline-start: -1px;
+  width: 100%;
+  height: 100%;
+  margin-left: -1px;
   background: meter.tickmarks-background(#{token(tickmarks)}, #{token(tickmark-color)});
   opacity: #{token(tickmark-opacity)};
   pointer-events: none;
 }
 
 @mixin vertical-tickmarks {
-  margin-block-start: 1px;
-  margin-inline-start: 0;
+  margin-top: 1px;
+  margin-left: 0;
   background: meter.tickmarks-background(#{token(tickmarks)}, #{token(tickmark-color), null, true});
 }
