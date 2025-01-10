@@ -12,7 +12,7 @@ import styles from './meter-group.scss';
  *
  * @summary Meter groups display several meters together on one track.
  *
- * @state vertical - Applied when the meter group is oriented in the block direction.
+ * @state vertical - Applied when the meter group is oriented vertically.
  *
  * @cssproperty --forge-meter-group-background - The background color of the meter group.
  * @cssproperty --forge-meter-group-height - The block size of the meter group.
@@ -27,8 +27,6 @@ import styles from './meter-group.scss';
  * @slot - The default slot for grouped `<forge-meter>` elements.
  * @slot label - Positions a label above the meter group.
  * @slot value - A textual representation of the meter's value.
- *
- * @state vertical - Applied when the meter group is oriented in the block direction.
  */
 @customElement('forge-meter-group')
 export class MeterGroupComponent extends LitElement {
@@ -57,11 +55,11 @@ export class MeterGroupComponent extends LitElement {
   @property({ type: Boolean }) public tickmarks = false;
 
   /**
-   * Whether the meter is oriented in the inline or block direction.
-   * @default 'inline'
+   * Whether the meter is oriented horizontally or vertically.
+   * @default 'horizontal'
    * @attribute
    */
-  @property() public direction: MeterDirection = 'inline';
+  @property() public direction: MeterDirection = 'horizontal';
 
   /**
    * The density of the meter group.
@@ -113,7 +111,7 @@ export class MeterGroupComponent extends LitElement {
   public willUpdate(changedProperties: PropertyValues<this>): void {
     const keys = Array.from(changedProperties.keys());
     if (keys.includes('direction')) {
-      toggleState(this._internals, 'vertical', this.direction === 'block');
+      toggleState(this._internals, 'vertical', this.direction === 'vertical');
     }
     if (keys.some(key => ['direction', 'min', 'max'].includes(key.toString()))) {
       this._syncMeters();

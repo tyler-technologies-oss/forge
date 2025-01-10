@@ -7,7 +7,7 @@ import { setDefaultAria, toggleState } from '../../core/utils/a11y-utils';
 
 import styles from './meter.scss';
 
-export type MeterDirection = 'inline' | 'block';
+export type MeterDirection = 'horizontal' | 'vertical';
 export type MeterDensity = 'default' | 'small' | 'medium' | 'large';
 export type MeterShape = 'default' | 'round' | 'squared';
 export type MeterInnerShape = 'default' | 'inherit';
@@ -27,7 +27,7 @@ const VALUE_STATE_MAP = new Map<MeterStatus, string>([
  *
  * @attribute {string} aria-valuetext - Defines a text alternative for the current value. Set this if it would be inaccurate to read the value as a percentage.
  *
- * @state vertical - Applied when the meter is oriented in the block direction.
+ * @state vertical - Applied when the meter is oriented vertically.
  * @state optimum-value - Applied when the value is within the optimum range.
  * @state suboptimum-value - Applied when the value is within the suboptimum range.
  * @state least-optimum-value - Applied when the value is within the least optimum range.
@@ -104,11 +104,11 @@ export class MeterComponent extends LitElement {
   @property({ type: Boolean }) public tickmarks = false;
 
   /**
-   * Whether the meter is oriented in the inline or block direction.
-   * @default 'inline'
+   * Whether the meter is oriented horizontally or vertically.
+   * @default 'horizontal'
    * @attribute
    */
-  @property() public direction: MeterDirection = 'inline';
+  @property() public direction: MeterDirection = 'horizontal';
 
   /**
    * The shape of the meter.
@@ -210,7 +210,7 @@ export class MeterComponent extends LitElement {
           setDefaultAria(this, this._internals, { ariaValueMax: `${this.max}` });
           break;
         case 'direction':
-          toggleState(this._internals, 'vertical', this.direction === 'block');
+          toggleState(this._internals, 'vertical', this.direction === 'vertical');
           break;
       }
     });
