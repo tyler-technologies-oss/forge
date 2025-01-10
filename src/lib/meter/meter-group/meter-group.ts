@@ -92,7 +92,7 @@ export class MeterGroupComponent extends LitElement {
 
   @state() private _hasSlottedHeadingContent = false;
 
-  @queryAssignedNodes() private _labelNodes: Node[];
+  @queryAssignedNodes({ slot: 'label' }) private _labelNodes: Node[];
   @queryAssignedNodes({ slot: 'value' }) private _valueNodes: Node[];
   @queryAssignedElements({ selector: 'forge-meter' }) private _meters: MeterComponent[];
 

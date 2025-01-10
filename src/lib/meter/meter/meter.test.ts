@@ -18,7 +18,7 @@ describe('Meter', () => {
   });
 
   it('should recieve label', async () => {
-    const el = await fixture<MeterComponent>(html`
+    const el = await fixture<HTMLLabelElement>(html`
       <label>
         <span>Test</span>
         <forge-meter></forge-meter>
@@ -38,7 +38,7 @@ describe('Meter', () => {
 
   it('should set percentage to 0 in case of an error', async () => {
     const el = await fixture<MeterComponent>(html`<forge-meter></forge-meter>`);
-    el.max = 'char' as any as number;
+    el.value = 'char' as any as number;
     await expect(el.percentage).to.equal(0);
   });
 
@@ -100,6 +100,7 @@ describe('Meter', () => {
 
     el.removeChild(label);
     const value = document.createElement('span');
+    value.slot = 'value';
     value.textContent = '0';
     el.appendChild(value);
 
@@ -107,7 +108,7 @@ describe('Meter', () => {
     expect(el.shadowRoot?.querySelector('.heading.not-empty')).to.not.be.null;
   });
 
-  it('should correctly have vertical state', async () => {
+  it('should correctly set vertical state', async () => {
     const el = await fixture<MeterComponent>(html`<forge-meter></forge-meter>`);
     expect(el.matches(':state(vertical)')).to.be.false;
 
