@@ -3,13 +3,13 @@ h4 {
   padding-inline-start: 16px;
 }
 
-div>forge-meter[direction="block"] {
+div>forge-meter:state(vertical) {
   height: 100px;
 }
 
 forge-list-item {
   max-width: 400px;
-  
+
   forge-meter {
     display: inline-block;
     width: 24px;
@@ -32,7 +32,7 @@ forge-list-item {
 forge-meter-group {
   --forge-meter-group-tickmarks: 9;
 
-  &[direction=block] {
+  &:state(vertical) {
     height: 200px;
   }
 }
@@ -41,7 +41,7 @@ forge-meter-group {
   --forge-icon-font-size: 1.5em;
 
   display: inline grid;
-  grid-template: 
+  grid-template:
     "icon label"
     "icon value";
   column-gap: 8px;
