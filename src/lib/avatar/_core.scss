@@ -4,8 +4,6 @@
 @forward './token-utils';
 
 @mixin host() {
-  contain: content;
-
   display: inline-block;
 }
 
