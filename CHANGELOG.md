@@ -1,3 +1,15 @@
+# v2.24.9 (Thu Jan 16 2025)
+
+#### 🐛 Bug Fix
+
+- fix(drawer): fixed a bug where the drawer would not repaint after transitioning in Safari [#786](https://github.com/tyler-technologies-oss/forge/pull/786) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.24.8 (Fri Nov 22 2024)
 
 :tada: This release contains work from a new contributor! :tada:
