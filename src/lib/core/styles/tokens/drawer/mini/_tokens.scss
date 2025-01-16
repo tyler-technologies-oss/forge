@@ -7,6 +7,7 @@
 
 $tokens: (
   width: utils.module-val(mini-drawer, width, 56px),
+  min-width: utils.module-ref(mini-drawer, min-width, width),
   hover-width: utils.module-val(mini-drawer, hover-width, base-tokens.get(width)),
   transition-duration: utils.module-val(mini-drawer, transition-duration, animation.variable(duration-short4)),
   transition-easing: utils.module-val(mini-drawer, transition-easing, animation.variable(easing-standard)),
