@@ -1,3 +1,4 @@
+@use 'sass:string';
 @use '../../core/styles/animation';
 @use '../../core/styles/theme';
 @use './variables';
@@ -208,7 +209,7 @@
 @mixin closing-animation($direction: right) {
   @include animating-position($direction);
 
-  $animation-name: unique-id;
+  $animation-name: string.unique-id();
 
   animation-name: $animation-name;
   animation-duration: #{animation.variable(duration-medium2)};
