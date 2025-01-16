@@ -9,7 +9,6 @@
 @mixin base {
   position: absolute;
   inset: 0;
-  contain: content;
 
   z-index: #{token(z-index)};
 
