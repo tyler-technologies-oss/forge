@@ -50,8 +50,7 @@
 }
 
 @mixin host() {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   box-sizing: border-box;
   height: 100%;
   overflow: hidden !important; // Using important to ensure that it overrides the scaffold overflow style
