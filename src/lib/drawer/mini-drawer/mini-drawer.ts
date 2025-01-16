@@ -23,6 +23,7 @@ declare global {
  * @attribute {boolean} [hover=false] - The drawer will expand open when hovered.
  *
  * @cssproperty --forge-mini-drawer-width - The width of the drawer.
+ * @cssproperty --forge-mini-drawer-min-width - The minimum width of the drawer. Defaults to match the width.
  * @cssproperty --forge-mini-drawer-hover-width - The width of the drawer when hovered.
  * @cssproperty --forge-mini-drawer-transition-duration - The transition duration of the drawer.
  * @cssproperty --forge-mini-drawer-transition-easing - The transition timing function of the drawer.
