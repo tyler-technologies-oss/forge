@@ -3,7 +3,6 @@
 @use '../../../utils';
 
 $tokens: (
-  // Base
   gap: utils.module-val(key, gap, spacing.variable(medium)),
   direction: utils.module-val(key, direction, row)
 ) !default;
