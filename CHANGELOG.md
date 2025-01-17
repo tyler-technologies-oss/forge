@@ -1,3 +1,22 @@
+# v3.4.2 (Fri Jan 17 2025)
+
+#### 🐛 Bug Fix
+
+- fix(split-view-panel): fixed a bug relating to the open animation direction [#787](https://github.com/tyler-technologies-oss/forge/pull/787) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: reduce usage of `contain` style to only required instances [#785](https://github.com/tyler-technologies-oss/forge/pull/785) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(drawer): fixed a bug where the drawer would not repaint after transitioning in Safari [#784](https://github.com/tyler-technologies-oss/forge/pull/784) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore(eslint): remove duplicate eslint rules [#782](https://github.com/tyler-technologies-oss/forge/pull/782) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(toolbar): fix token names [#781](https://github.com/tyler-technologies-oss/forge/pull/781) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.4.1 (Wed Jan 08 2025)
 
 #### 🐛 Bug Fix
