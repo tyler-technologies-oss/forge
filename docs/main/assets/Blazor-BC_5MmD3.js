@@ -1,3 +1,0 @@
-import{ae as t,af as a}from"./index-Dz5uHEEn.js";import{u as n}from"./index-CzE89Jll.js";import"./iframe-DHEDKeDi.js";import"../sb-preview/runtime.js";import"./_commonjsHelpers-Cpj98o6Y.js";import"./index-D-8MO0q_.js";import"./index-BHYIh-Xd.js";import"./index-DrFu-skq.js";function e(r){const o={h1:"h1",p:"p",...n(),...r.components};return t.jsxs(t.Fragment,{children:[t.jsx(a,{title:"Frameworks/Blazor"}),`
-`,t.jsx(o.h1,{id:"blazor",children:"Blazor"}),`
-`,t.jsx(o.p,{children:"We are currently working on the Blazor adapter for Forge, stay tuned for updates!"})]})}function x(r={}){const{wrapper:o}={...n(),...r.components};return o?t.jsx(o,{...r,children:t.jsx(e,{...r})}):e(r)}export{x as default};
