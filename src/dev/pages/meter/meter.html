@@ -13,6 +13,17 @@ include('./src/partials/page.ejs', {
       { type: 'text-field', inputType: 'number', label: 'Tickmarks', id: 'opt-tickmarks', defaultValue: 0 },
       {
         type: 'select',
+        label: 'Value mode',
+        id: 'opt-value-mode',
+        defaultValue: 'manual',
+        options: [
+          { label: 'Manual', value: 'manual'},
+          { label: 'Percentage', value: 'percentage' },
+          { label: 'Value', value: 'value' }
+        ]
+      },
+      {
+        type: 'select',
         label: 'Direction',
         id: 'opt-direction',
         defaultValue: 'horizontal',

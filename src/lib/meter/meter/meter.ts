@@ -13,6 +13,7 @@ export type MeterShape = 'default' | 'round' | 'squared';
 export type MeterInnerShape = 'default' | 'inherit';
 export type MeterStatus = 'optimal' | 'suboptimal' | 'least-optimal';
 export type MeterTheme = Theme | 'default';
+export type MeterValueMode = 'manual' | 'percentage' | 'value';
 
 const VALUE_STATE_MAP = new Map<MeterStatus, string>([
   ['optimal', 'optimum-value'],
@@ -41,6 +42,12 @@ const VALUE_STATE_MAP = new Map<MeterStatus, string>([
  * @cssproperty --forge-meter-tickmark-opacity - The opacity of the tickmarks.
  * @cssproperty --forge-meter-transition-duration - The duration of transitions.
  * @cssproperty --forge-meter-transition-timing - The timing function of transitions.
+ * @cssproperty --forge-theme-success - The color of the bar when the value is optimal.
+ * @cssproperty --forge-theme-success-container-low - The color of the track when the value is optimal.
+ * @cssproperty --forge-theme-warning - The color of the bar when the value is suboptimal.
+ * @cssproperty --forge-theme-warning-container-low - The color of the track when the value is suboptimal.
+ * @cssproperty --forge-theme-error - The color of the bar when the value is least optimal.
+ * @cssproperty --forge-theme-error-container-low - The color of the track when the value is least optimal.
  *
  * @csspart root - The root container element.
  * @csspart track - The element comprising the meter's background.
@@ -104,6 +111,15 @@ export class MeterComponent extends LitElement {
   @property({ type: Boolean }) public tickmarks = false;
 
   /**
+   * Whether the value text reflects the current value as a percentage or raw value. When set to
+   * `'manual'` the value text is not shown automatically but can still be set manually via the
+   * value slot.
+   * @default 'manual'
+   * @attribute value-mode
+   */
+  @property({ attribute: 'value-mode' }) public valueMode: MeterValueMode = 'manual';
+
+  /**
    * Whether the meter is oriented horizontally or vertically.
    * @default 'horizontal'
    * @attribute
@@ -147,6 +163,7 @@ export class MeterComponent extends LitElement {
 
   /**
    * Gets the percentage of the meter that's filled.
+   * @readonly
    */
   public get percentage(): number {
     return this._percentage;
@@ -235,7 +252,9 @@ export class MeterComponent extends LitElement {
           <div part="root" class=${classMap({ 'forge-meter': true, ...classes })}>
             <div class=${classMap({ heading: true, 'not-empty': this._hasSlottedContent })} @slotchange=${this._handleSlotChange}>
               <div class="label"><slot></slot></div>
-              <div class="value"><slot name="value"></slot></div>
+              <div class="value">
+                <slot name="value">${this.valueMode !== 'manual' ? html`${this.valueMode === 'percentage' ? `${this._percentage}%` : this.value}` : ''}</slot>
+              </div>
             </div>
             <div
               part="track"
