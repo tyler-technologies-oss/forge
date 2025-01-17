@@ -1,0 +1,64 @@
+@use '../../core/styles/theme';
+@use '../../core/styles/typography';
+@use '../../icon';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: inline;
+}
+
+@mixin base {
+  @include typography.style(label1);
+
+  box-sizing: border-box;
+  display: grid;
+  grid-template:
+    'icon label'
+    'icon value';
+  column-gap: #{token(gap)};
+  inline-size: fit-content;
+  line-height: normal;
+}
+
+@mixin icon {
+  @include icon.provide-theme(
+    (
+      size: #{token(icon-size)}
+    )
+  );
+
+  grid-area: icon;
+  color: #{token(icon-color)};
+}
+
+@mixin label {
+  grid-area: label;
+  color: #{token(label-color)};
+}
+
+@mixin value {
+  grid-area: value;
+  color: #{token(value-color)};
+}
+
+@mixin default-icon {
+  // Subtract a pixel from the default icon's size to better match the size of a slotted icon
+  block-size: calc(#{token(icon-size)} - 1px);
+  inline-size: calc(#{token(icon-size)} - 1px);
+  border-radius: 50%;
+  background: currentColor;
+}
+
+@mixin inline {
+  grid-template: 'icon label value';
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  inline-size: auto;
+}
+
+@mixin no-value {
+  grid-template: 'icon label';
+  align-items: center;
+}

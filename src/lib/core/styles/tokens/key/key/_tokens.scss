@@ -1,0 +1,13 @@
+@use 'sass:map';
+@use '../../../spacing';
+@use '../../../utils';
+
+$tokens: (
+  // Base
+  gap: utils.module-val(key, gap, spacing.variable(medium)),
+  direction: utils.module-val(key, direction, row)
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}
