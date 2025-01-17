@@ -8,8 +8,11 @@
   position: relative;
   min-inline-size: 80px;
   block-size: #{token(track-height)};
-  content-visibility: auto;
+
+  // `contain` and `content-visibility` are performance optimizations important here because progress indicators
+  // are often used when a CPU=intensive task is underway so it's especially important to minimize their CPU consumption.
   contain: strict;
+  content-visibility: auto;
 }
 
 @mixin progress {

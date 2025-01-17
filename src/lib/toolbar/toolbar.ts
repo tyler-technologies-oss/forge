@@ -31,8 +31,8 @@ declare global {
  * @attribute {boolean} no-padding - Sets the internal padding style to 0.
  * @attribute {boolean} auto-height - Forces the internal container to use `height: auto` for dynamic content that doesn't fit the static height.
  *
- * @cssproperty --forge-theme-height - Controls the height.
- * @cssproperty --forge-theme-min-height - Controls the minimum height.
+ * @cssproperty --forge-toolbar-height - Controls the height.
+ * @cssproperty --forge-toolbar-min-height - Controls the minimum height. Defaults to the toolbar height.
  * @cssproperty --forge-theme-surface - Controls the background-color of the toolbar.
  * @cssproperty --forge-toolbar-divider-width - Controls the divider width.
  * @cssproperty --forge-toolbar-divider-style - Controls the divider style.
