@@ -45,19 +45,6 @@ describe('Expansion Panel', () => {
     expect(button.getAttribute('aria-expanded')).to.equal('false');
   });
 
-  it('should not overwrite existing id of slotted content', async () => {
-    const el = await fixture<IExpansionPanelComponent>(html`
-      <forge-expansion-panel trigger="button-id">
-        <button slot="header" id="button-id"></button>
-        <div id="foo">Content</div>
-      </forge-expansion-panel>
-    `);
-    const button = el.querySelector('button') as HTMLElement;
-    const content = el.querySelector('#foo') as HTMLElement;
-    expect(content.getAttribute('id')).to.equal('foo');
-    expect(button.getAttribute('aria-controls')).to.equal(content.getAttribute('id'));
-  });
-
   it('should have expected default values', async () => {
     const el = await fixture<IExpansionPanelComponent>(html`<forge-expansion-panel></forge-expansion-panel>`);
 
@@ -435,9 +422,26 @@ describe('Expansion Panel', () => {
     });
   });
 
-  describe('target button', () => {
-    it('should be toggled by detached target button', async () => {
-      const el = await fixture<IExpansionPanelComponent>(html`
+  describe('trigger', () => {
+    it('should be toggled by nested trigger', async () => {
+      const el = await fixture<HTMLElement>(html`
+        <div>
+          <forge-expansion-panel trigger="button-id">
+            <button id="button-id"></button>
+            <div>Content</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const trigger = el.querySelector('#button-id') as HTMLElement;
+      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      trigger.click();
+      expect(expansionPanel.open).to.be.true;
+      trigger.click();
+      expect(expansionPanel.open).to.be.false;
+    });
+
+    it('should be toggled by detached trigger', async () => {
+      const el = await fixture<HTMLElement>(html`
         <div>
           <button id="button-id"></button>
           <forge-expansion-panel trigger="button-id">
@@ -453,8 +457,8 @@ describe('Expansion Panel', () => {
       expect(expansionPanel.open).to.be.false;
     });
 
-    it('should manage ARIA attributes when using detached target button', async () => {
-      const el = await fixture<IExpansionPanelComponent>(html`
+    it('should manage ARIA attributes of trigger button', async () => {
+      const el = await fixture<HTMLElement>(html`
         <div>
           <button id="button-id"></button>
           <forge-expansion-panel trigger="button-id">
@@ -477,8 +481,82 @@ describe('Expansion Panel', () => {
       expect(trigger.getAttribute('aria-expanded')).to.be.null;
     });
 
+    it('should not overwrite existing id of slotted content', async () => {
+      const el = await fixture<IExpansionPanelComponent>(html`
+        <forge-expansion-panel trigger="button-id">
+          <button slot="header" id="button-id"></button>
+          <div id="foo">Content</div>
+        </forge-expansion-panel>
+      `);
+      const button = el.querySelector('button') as HTMLElement;
+      const content = el.querySelector('#foo') as HTMLElement;
+      expect(content.getAttribute('id')).to.equal('foo');
+      expect(button.getAttribute('aria-controls')).to.equal(content.getAttribute('id'));
+    });
+
+    it('should update old and new triggers on trigger change', async () => {
+      const el = await fixture<HTMLElement>(html`
+        <div>
+          <button id="button-id1"></button>
+          <button id="button-id2"></button>
+          <forge-expansion-panel trigger="button-id1">
+            <div id="content">Content</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const trigger1 = el.querySelector('#button-id1') as HTMLElement;
+      const trigger2 = el.querySelector('#button-id2') as HTMLElement;
+      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const content = el.querySelector('#content') as HTMLElement;
+
+      trigger1.click();
+      expect(expansionPanel.open).to.be.true;
+
+      expansionPanel.trigger = 'button-id2';
+      expect(trigger1.getAttribute('aria-controls')).to.be.null;
+      expect(trigger1.getAttribute('aria-expanded')).to.be.null;
+      trigger1.click();
+      expect(expansionPanel.open).to.be.true;
+      expect(trigger2.getAttribute('aria-controls')).to.not.be.null;
+      expect(trigger2.getAttribute('aria-controls')).to.equal(content.getAttribute('id'));
+      expect(trigger2.getAttribute('aria-expanded')).to.equal('true');
+      trigger2.click();
+      expect(trigger2.getAttribute('aria-expanded')).to.equal('false');
+      expect(expansionPanel.open).to.be.false;
+    });
+
+    it('should update trigger aria on content change', async () => {
+      const el = await fixture<HTMLElement>(html`
+        <div>
+          <div>
+            <button id="button-id"></button>
+            <forge-expansion-panel trigger="button-id">
+              <div id="content1">Content 1</div>
+            </forge-expansion-panel>
+          </div>
+
+          <div id="content2">Content 2</div>
+        </div>
+      `);
+      const trigger = el.querySelector('#button-id') as HTMLElement;
+      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const content1 = el.querySelector('#content1') as HTMLElement;
+      const content2 = el.querySelector('#content2') as HTMLElement;
+
+      expect(trigger.getAttribute('aria-controls')).to.equal(content1.getAttribute('id'));
+      expect(trigger.getAttribute('aria-expanded')).to.equal('false');
+      content1.remove();
+      await elementUpdated(el);
+      expect(trigger.getAttribute('aria-controls')).to.be.null;
+      expect(trigger.getAttribute('aria-expanded')).to.equal('false');
+      expansionPanel.appendChild(content2);
+      await elementUpdated(el);
+      expect(trigger.getAttribute('aria-controls')).to.equal(content2.getAttribute('id'));
+      expect(trigger.getAttribute('aria-expanded')).to.equal('false');
+    });
+
     it('should not error if no slotted content', async () => {
-      await fixture<IExpansionPanelComponent>(html`
+      await fixture<HTMLElement>(html`
         <div>
           <button id="button-id"></button>
           <forge-expansion-panel trigger="button-id"></forge-expansion-panel>
@@ -486,7 +564,7 @@ describe('Expansion Panel', () => {
       `);
     });
 
-    it('should not error if target button not found', async () => {
+    it('should not error if trigger not found', async () => {
       await fixture<IExpansionPanelComponent>(html`<forge-expansion-panel trigger="button-id"></forge-expansion-panel>`);
     });
   });
