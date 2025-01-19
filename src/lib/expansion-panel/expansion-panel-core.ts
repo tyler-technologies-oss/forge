@@ -18,22 +18,37 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   private _clickListener: EventListener = this._onClick.bind(this);
   private _keydownListener: EventListener = this._onKeydown.bind(this);
   private _animationCompleteListener = this._onAnimationComplete.bind(this);
+  private _slotListener = this._handleContentSlotChange.bind(this);
 
   constructor(private _adapter: IExpansionPanelAdapter) {}
 
   public initialize(): void {
     this._adapter.addHeaderListener('click', this._clickListener);
     this._adapter.addHeaderListener('keydown', this._keydownListener);
-    this._adapter.tryLocateTriggerElement(this._trigger);
-    this._adapter.addTriggerListener('click', this._clickListener);
-    this._adapter.addTriggerListener('keydown', this._keydownListener);
     this._adapter.setAnimationCompleteListener(this._animationCompleteListener);
-    this._adapter.initializeAccessibility();
-    this._adapter.updateAriaExpanded(this._open);
+    this._adapter.addContentSlotListener(this._slotListener);
+    this._adapter.setContentId();
+    requestAnimationFrame(() => {
+      this._syncTrigger();
+    });
   }
 
   public destroy(): void {
-    this._adapter.detachAria();
+    this._adapter.detachTriggerAria();
+    this._adapter.removeTriggerListeners();
+  }
+
+  private _handleContentSlotChange(): void {
+    this._adapter.setContentId();
+    this._syncTrigger();
+  }
+
+  private _syncTrigger(): void {
+    this._adapter.updateAriaControls();
+    this._adapter.updateAriaExpanded(this._open);
+    this._adapter.removeTriggerListeners(true);
+    this._adapter.addTriggerListener('click', this._clickListener);
+    this._adapter.addTriggerListener('keydown', this._keydownListener);
   }
 
   private _onClick(evt: MouseEvent): void {
@@ -128,7 +143,9 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   }
   public set trigger(value: string) {
     if (this._trigger !== value) {
+      this._adapter.detachTriggerAria();
       this._trigger = value;
+      this._syncTrigger();
       this._adapter.setHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.TRIGGER, this._trigger);
     }
   }

@@ -1,4 +1,4 @@
-import { getShadowElement, randomChars } from '@tylertech/forge-core';
+import { getShadowElement, randomChars, toggleAttribute } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { OpenIconComponent } from '../open-icon';
 import { IExpansionPanelComponent } from './expansion-panel';
@@ -6,16 +6,18 @@ import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 
 export interface IExpansionPanelAdapter extends IBaseAdapter {
   setAnimationCompleteListener(listener: () => void): void;
+  addContentSlotListener(listener: EventListener): void;
   addHeaderListener(type: keyof HTMLElementEventMap, listener: EventListener): void;
+  removeTriggerListeners(reset?: boolean): void;
   addTriggerListener(type: keyof HTMLElementEventMap, listener: EventListener): void;
   tryToggleOpenIcon(value: boolean): void;
   setContentVisibility(visible: boolean): void;
   animationStart(): void;
   animationEnd(): void;
-  tryLocateTriggerElement(id: string): void;
-  initializeAccessibility(): void;
+  setContentId(): void;
+  updateAriaControls(): void;
   updateAriaExpanded(open: boolean): void;
-  detachAria(): void;
+  detachTriggerAria(): void;
 }
 
 export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent> implements IExpansionPanelAdapter {
@@ -24,7 +26,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   private _innerElement: HTMLElement;
   private _headerSlotElement: HTMLSlotElement;
   private _defaultSlotElement: HTMLSlotElement;
-  private _triggerElement: HTMLElement | null;
+  private _triggerListenerController: AbortController;
 
   private _transitionStartListener: EventListener = this._onTransitionStart.bind(this);
   private _transitionEndListener: EventListener = this._onTransitionEnd.bind(this);
@@ -39,20 +41,45 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
     this._defaultSlotElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
   }
 
+  private get _triggerElement(): HTMLElement | null {
+    return this._tryLocateTriggerElement(this._component.trigger);
+  }
+
+  private get _slottedContentElement(): Element | undefined {
+    return this._defaultSlotElement.assignedElements()[0];
+  }
+
+  private set _slottedContentId(id: string) {
+    this._slottedContentElement?.setAttribute('id', id);
+  }
+
+  private get _slottedContentId(): string {
+    return this._slottedContentElement?.getAttribute('id') ?? '';
+  }
+
   public setAnimationCompleteListener(listener: () => void): void {
     this._transitionCompleteListener = listener;
     this._contentElement.addEventListener('transitionstart', this._transitionStartListener);
     this._contentElement.addEventListener('transitionend', this._transitionEndListener);
   }
 
+  public addContentSlotListener(listener: EventListener): void {
+    this._defaultSlotElement.addEventListener('slotchange', listener);
+  }
+
   public addHeaderListener(type: keyof HTMLElementEventMap, listener: EventListener): void {
     this._headerElement.addEventListener(type, listener);
   }
 
-  public addTriggerListener(type: keyof HTMLElementEventMap, listener: EventListener): void {
-    if (this._triggerElement) {
-      this._triggerElement.addEventListener(type, listener);
+  public removeTriggerListeners(reset = false): void {
+    this._triggerListenerController?.abort();
+    if (reset) {
+      this._triggerListenerController = new AbortController();
     }
+  }
+
+  public addTriggerListener(type: keyof HTMLElementEventMap, listener: EventListener): void {
+    this._triggerElement?.addEventListener(type, listener, { signal: this._triggerListenerController.signal });
   }
 
   public tryToggleOpenIcon(value: boolean): void {
@@ -87,40 +114,32 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
     this._innerElement.style.removeProperty('overflow');
   }
 
-  public tryLocateTriggerElement(id: string): void {
-    this._triggerElement = this._tryFindTriggerElement(id);
+  public setContentId(): void {
+    if (!this._slottedContentId) {
+      this._slottedContentId = `forge-expansion-panel-content-${randomChars()}`;
+    }
   }
 
-  public initializeAccessibility(): void {
-    const slottedContent = this._defaultSlotElement.assignedElements()[0] as Element | undefined;
-    if (this._triggerElement && slottedContent) {
-      const contentElementId = slottedContent.getAttribute('id') ?? `forge-expansion-panel-content-${randomChars()}`;
-      slottedContent.setAttribute('id', contentElementId);
-      this._triggerElement.setAttribute('aria-controls', contentElementId);
+  public updateAriaControls(): void {
+    if (this._triggerElement) {
+      toggleAttribute(this._triggerElement, !!this._slottedContentId, 'aria-controls', this._slottedContentId);
     }
   }
 
   public updateAriaExpanded(open: boolean): void {
     if (this._triggerElement) {
-      if (open) {
-        this._triggerElement.setAttribute('aria-expanded', 'true');
-      } else {
-        this._triggerElement.setAttribute('aria-expanded', 'false');
-      }
+      toggleAttribute(this._triggerElement, true, 'aria-expanded', open.toString());
     }
   }
 
-  public detachAria(): void {
-    if (this._triggerElement) {
-      this._triggerElement.removeAttribute('aria-controls');
-      this._triggerElement.removeAttribute('aria-expanded');
-    }
+  public detachTriggerAria(): void {
+    this._triggerElement?.removeAttribute('aria-controls');
+    this._triggerElement?.removeAttribute('aria-expanded');
   }
 
-  private _tryFindTriggerElement(id: string): HTMLElement | null {
+  private _tryLocateTriggerElement(id: string): HTMLElement | null {
     if (id) {
-      const rootNode = this._component.getRootNode() as Document | ShadowRoot;
-      const triggerEl = rootNode.getElementById(id);
+      const triggerEl = document.getElementById(id);
       return triggerEl;
     } else {
       return null;
