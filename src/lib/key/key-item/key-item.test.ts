@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { elementUpdated, fixture, html } from '@open-wc/testing';
+import { fixture, html } from '@open-wc/testing';
 import { KeyItemComponent } from './key-item';
 
 import './key-item';
