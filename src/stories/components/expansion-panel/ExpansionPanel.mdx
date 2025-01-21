@@ -43,6 +43,8 @@ You can also set the `trigger` to the `id` of a button elsewhere in the document
 - Ensure that the expansion panel can be activated by keyboard.
 - Here is an example of a properly marked up expansion panel:
 
+> **Tip:** A button associated with the expansion panel via `trigger` will automatically have its `aria-expanded` and `aria-controls` values managed.
+
 ```html
 <forge-expansion-panel trigger="button-id">
   <button slot="header" id="button-id">Toggle panel</button>
