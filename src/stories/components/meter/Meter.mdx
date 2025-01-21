@@ -27,6 +27,9 @@ is in the same region as the optimum, the value is _optimal_ and colored green. 
 adjecent region it's _suboptimal_ and colored yellow. Otherwise, its _least optimal_ and colored
 red.
 
+> When set, `low` must be greater than or equal to `min` and less than `high`. Likewise, `high`
+> must be less than or equal to `max` and greater than `low`.
+
 <Canvas of={MeterStories.Segmented} />
 
 ### Grouped
@@ -35,8 +38,8 @@ Multiple related meters representing parts of a whole can be grouped together to
 same track. Each meter in the group must have the same min and max values, which are managed by
 the `<forge-meter-group>` element, and can't be segmented.
 
-Grouped meters are typically accompanied by keys that label each meter align with its color and an
-optional value.
+Grouped meters are typically accompanied by keys that label each meter with its color and
+optionally its value.
 
 <Canvas of={MeterStories.Grouped} />
 

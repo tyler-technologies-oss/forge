@@ -4,6 +4,7 @@ import { html } from 'lit';
 import { applyArgs, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
 
 import '@tylertech/forge/meter';
+import '@tylertech/forge/key';
 
 const component = 'forge-meter';
 
@@ -127,6 +128,20 @@ export const Grouped: Story = {
         <forge-meter aria-label="Second" value="0.15" style="--forge-meter-color: #FDD835;"></forge-meter>
         <forge-meter aria-label="Third" value="0.35" style="--forge-meter-color: #43A047;"></forge-meter>
       </forge-meter-group>
+      <forge-key style="margin-block-start: 8px;">
+        <forge-key-item style="--forge-key-item-icon-color: #1E88E5;">
+          <span>First</span>
+          <span slot="value">25%</span>
+        </forge-key-item>
+        <forge-key-item style="--forge-key-item-icon-color: #FDD835;">
+          <span>Second</span>
+          <span slot="value">15%</span>
+        </forge-key-item>
+        <forge-key-item style="--forge-key-item-icon-color: #43A047;">
+          <span>Third</span>
+          <span slot="value">35%</span
+        </forge-key-item>
+      </forge-key>
     `;
   }
 };
