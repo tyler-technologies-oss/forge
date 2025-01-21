@@ -18,6 +18,7 @@ const meta = {
     applyArgs(key, args);
     items.forEach(item => {
       const el = document.createElement('forge-key-item');
+      el.inline = args.inline;
       el.style.setProperty('--forge-key-item-icon-color', item.color);
 
       const label = document.createElement('span');
@@ -39,8 +40,15 @@ const meta = {
   },
   argTypes: {
     ...generateCustomElementArgTypes({
+      tagName: 'forge-key-item',
+      exclude: ['--forge-key-item-icon-color']
+    }),
+    ...generateCustomElementArgTypes({
       tagName: component
     })
+  },
+  args: {
+    inline: false
   }
 } satisfies Meta;
 
