@@ -49,6 +49,7 @@ export class FilePickerCore implements IFilePickerCore {
   }
 
   public destroy(): void {
+    this._adapter.destroy();
     this._isInitialized = false;
   }
 
