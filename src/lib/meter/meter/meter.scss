@@ -1,5 +1,6 @@
 @use '../../core/styles/shape';
 @use '../../core/styles/spacing';
+@use '../../core/styles/theme';
 @use './core';
 
 //
@@ -41,15 +42,15 @@
     @include core.track;
 
     &.segmented {
-      @include core.segmented;
+      @include core.theme(warning);
       @include core.segmented-animation;
 
       &.least-optimal {
-        @include core.least-optimal;
+        @include core.theme(error);
       }
 
       &.optimal {
-        @include core.optimal;
+        @include core.theme(success);
       }
 
       .bar {
@@ -76,7 +77,7 @@
     @include core.grouped;
 
     &.muted {
-      @include core.override(color, var(--forge-theme-tertiary-container-high), value);
+      @include core.override(color, #{theme.variable(tertiary-container-high)}, value);
     }
   }
 
@@ -98,18 +99,17 @@
 
   &.muted {
     .track {
-      @include core.override(background, var(--forge-theme-tertiary-container-minimum), value);
-      @include core.override(color, var(--forge-theme-tertiary-container-high), value);
+      @include core.theme(tertiary, $muted: true);
 
       &.segmented {
-        @include core.segmented($muted: true);
+        @include core.theme(warning, $muted: true);
 
         &.least-optimal {
-          @include core.least-optimal($muted: true);
+          @include core.theme(error, $muted: true);
         }
 
         &.optimal {
-          @include core.optimal($muted: true);
+          @include core.theme(success, $muted: true);
         }
       }
     }

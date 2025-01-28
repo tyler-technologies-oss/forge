@@ -41,10 +41,6 @@
   .track {
     @include core.track;
 
-    ::slotted(forge-meter) {
-      position: static !important;
-    }
-
     &.tickmarks::after {
       @include core.tickmarks;
     }

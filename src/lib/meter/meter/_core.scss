@@ -1,5 +1,7 @@
 @use '../../core/styles/spacing';
+@use '../../core/styles/theme';
 @use '../../core/styles/typography';
+@use '../meter-group/token-utils' as meter-group;
 @use './token-utils' as *;
 
 @forward './token-utils';
@@ -55,7 +57,7 @@
 }
 
 @mixin value {
-  color: var(--forge-theme-text-medium);
+  color: #{theme.variable(text-medium)};
 }
 
 @mixin track {
@@ -79,33 +81,21 @@
   border-radius: #{token(inner-shape)};
   box-shadow: #{token(inner-elevation)};
   background: #{token(color)};
-  translate: var(--_meter-percentage) 0;
+  translate: #{token(percentage, custom)} 0;
 }
 
 @mixin vertical-bar {
   left: initial;
   top: 100%;
-  translate: 0 calc(-1 * var(--_meter-percentage));
+  translate: 0 calc(-1 * #{token(percentage, custom)});
 }
 
 @mixin theme($theme, $muted: false) {
-  @include override(background, var(--forge-theme-#{$theme}-container-#{if($muted, 'minimum', 'low')}), value);
-  @include override(color, var(--forge-theme-#{$theme}#{if($muted, '-container-high', '')}), value);
-}
+  $background: "#{$theme}-container-#{if($muted, 'minimum', 'low')}";
+  $color: "#{$theme}#{if($muted, '-container-high', '')}";
 
-@mixin segmented($muted: false) {
-  @include override(background, var(--forge-theme-warning-container-#{if($muted, 'minimum', 'low')}), value);
-  @include override(color, var(--forge-theme-warning#{if($muted, '-container-high', '')}), value);
-}
-
-@mixin least-optimal($muted: false) {
-  @include override(background, var(--forge-theme-error-container-#{if($muted, 'minimum', 'low')}), value);
-  @include override(color, var(--forge-theme-error#{if($muted, '-container-high', '')}), value);
-}
-
-@mixin optimal($muted: false) {
-  @include override(background, var(--forge-theme-success-container-#{if($muted, 'minimum', 'low')}), value);
-  @include override(color, var(--forge-theme-success#{if($muted, '-container-high', '')}), value);
+  @include override(background, #{theme.variable($background)}, value);
+  @include override(color, #{theme.variable($color)}, value);
 }
 
 @mixin lowest {
@@ -177,16 +167,16 @@
 /* stylelint-disable custom-property-pattern */
 // Manually reference the height of the meter group to avoid a circular dependency. Use half the
 // meter group's height to extend the meter behind the radius of the preceding meter.
-$leading: calc(var(--_meter-group-height) * 0.5);
+$leading: calc(#{meter-group.token(height)} * 0.5);
 /* stylelint-enable custom-property-pattern */
 
 @mixin grouped {
   display: block;
   position: absolute;
-  z-index: var(--_meter-z-index);
+  z-index: #{token(z-index, custom)};
   top: 0;
-  left: var(--_meter-inset, 0);
-  width: calc(var(--_meter-percentage) + $leading);
+  left: #{token(inset, custom)};
+  width: calc(#{token(percentage, custom)} + $leading);
   height: 100%;
   border-radius: #{token(inner-shape)};
   border-top-left-radius: 0;
@@ -198,10 +188,10 @@ $leading: calc(var(--_meter-group-height) * 0.5);
 
 @mixin vertical-grouped {
   display: block;
-  top: calc(100% - var(--_meter-percentage) - (var(--_meter-inset, 0)));
+  top: calc(100% - #{token(percentage, custom)} - #{token(inset, custom)});
   left: 0;
   width: 100%;
-  height: calc(var(--_meter-percentage) + $leading);
+  height: calc(#{token(percentage, custom)} + $leading);
   max-width: initial;
   border-radius: #{token(inner-shape)};
   border-bottom-left-radius: 0;
