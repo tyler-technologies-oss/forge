@@ -124,21 +124,21 @@ export const Grouped: Story = {
         .shape=${args.shape}
         .innerShape=${args.innerShape}>
         <label slot="label" for="meter-group">Label</label>
-        <forge-meter aria-label="First" value="0.25" style="--forge-meter-color: #1E88E5;"></forge-meter>
-        <forge-meter aria-label="Second" value="0.15" style="--forge-meter-color: #FDD835;"></forge-meter>
-        <forge-meter aria-label="Third" value="0.35" style="--forge-meter-color: #43A047;"></forge-meter>
+        <forge-meter id="meter-1" value="0.25" style="--forge-meter-color: #1E88E5;"></forge-meter>
+        <forge-meter id="meter-2" value="0.15" style="--forge-meter-color: #FDD835;"></forge-meter>
+        <forge-meter id="meter-3" value="0.35" style="--forge-meter-color: #43A047;"></forge-meter>
       </forge-meter-group>
       <forge-key style="margin-block-start: 8px;">
         <forge-key-item style="--forge-key-item-icon-color: #1E88E5;">
-          <span>First</span>
+          <label for="meter-1">First</label>
           <span slot="value">25%</span>
         </forge-key-item>
         <forge-key-item style="--forge-key-item-icon-color: #FDD835;">
-          <span>Second</span>
+          <label for="meter-2">Second</label>
           <span slot="value">15%</span>
         </forge-key-item>
         <forge-key-item style="--forge-key-item-icon-color: #43A047;">
-          <span>Third</span>
+          <label for="meter-3">Third</label>
           <span slot="value">35%</span>
         </forge-key-item>
       </forge-key>

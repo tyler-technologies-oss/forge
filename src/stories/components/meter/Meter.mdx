@@ -1,5 +1,6 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Canvas, Meta, Title } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import { UsageLink } from '../../blocks/Shared';
 import * as MeterStories from './Meter.stories';
 
 <Meta of={MeterStories} />
@@ -29,6 +30,8 @@ red.
 
 > When set, `low` must be greater than or equal to `min` and less than `high`. Likewise, `high`
 > must be less than or equal to `max` and greater than `low`.
+
+<UsageLink text="the key component" href="?path=/docs/components-key--docs" />
 
 <Canvas of={MeterStories.Segmented} />
 

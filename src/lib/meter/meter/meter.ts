@@ -111,9 +111,8 @@ export class MeterComponent extends LitElement {
   @property({ type: Boolean }) public tickmarks = false;
 
   /**
-   * Whether the value text reflects the current value as a percentage or raw value. When set to
-   * `'manual'` the value text is not shown automatically but can still be set manually via the
-   * value slot.
+   * Whether the current value is displayed as a percentage or raw value. When set to `'manual'`
+   * the value text is not shown automatically but can still be set manually via the value slot.
    * @default 'manual'
    * @attribute value-mode
    */
