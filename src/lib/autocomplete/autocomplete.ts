@@ -84,6 +84,7 @@ declare global {
 export class AutocompleteComponent extends ListDropdownAware implements IAutocompleteComponent {
   public static get observedAttributes(): string[] {
     return [
+      ...ListDropdownAware.observedAttributes,
       AUTOCOMPLETE_CONSTANTS.attributes.MODE,
       AUTOCOMPLETE_CONSTANTS.attributes.MULTIPLE,
       AUTOCOMPLETE_CONSTANTS.attributes.DEBOUNCE,
@@ -91,11 +92,6 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
       AUTOCOMPLETE_CONSTANTS.attributes.FILTER_FOCUS_FIRST,
       AUTOCOMPLETE_CONSTANTS.attributes.ALLOW_UNMATCHED,
       AUTOCOMPLETE_CONSTANTS.attributes.POPUP_TARGET,
-      AUTOCOMPLETE_CONSTANTS.attributes.POPUP_CLASSES,
-      AUTOCOMPLETE_CONSTANTS.attributes.OBSERVE_SCROLL,
-      AUTOCOMPLETE_CONSTANTS.attributes.OBSERVE_SCROLL_THRESHOLD,
-      AUTOCOMPLETE_CONSTANTS.attributes.OPTION_LIMIT,
-      AUTOCOMPLETE_CONSTANTS.attributes.SYNC_POPUP_WIDTH,
       AUTOCOMPLETE_CONSTANTS.attributes.OPEN,
       AUTOCOMPLETE_CONSTANTS.attributes.MATCH_KEY,
       AUTOCOMPLETE_CONSTANTS.attributes.FILTER_TEXT

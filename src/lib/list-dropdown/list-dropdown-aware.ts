@@ -15,6 +15,18 @@ export interface IListDropdownAware extends IBaseComponent {
 }
 
 export class ListDropdownAware extends BaseComponent {
+  public static get observedAttributes(): string[] {
+    return [
+      LIST_DROPDOWN_CONSTANTS.attributes.POPUP_CLASSES,
+      LIST_DROPDOWN_CONSTANTS.attributes.OPTION_LIMIT,
+      LIST_DROPDOWN_CONSTANTS.attributes.OBSERVE_SCROLL,
+      LIST_DROPDOWN_CONSTANTS.attributes.OBSERVE_SCROLL_THRESHOLD,
+      LIST_DROPDOWN_CONSTANTS.attributes.SYNC_POPUP_WIDTH,
+      LIST_DROPDOWN_CONSTANTS.attributes.CONSTRAIN_POPUP_WIDTH,
+      LIST_DROPDOWN_CONSTANTS.attributes.WRAP_OPTION_TEXT
+    ];
+  }
+
   constructor() {
     super();
   }
