@@ -29,9 +29,10 @@ const meta = {
     return html`
       <forge-card>
         <forge-button-area ?disabled=${args.disabled} @click=${clickAction} style=${style}>
+          <button slot="button" aria-labelledby="button-heading"></button>
           <div class="content">
             <div>
-              <div>Heading</div>
+              <div id="button-heading">Heading</div>
               <div>Content</div>
             </div>
             <forge-icon-button>
