@@ -11,6 +11,19 @@ import { toggleAttribute } from '@tylertech/forge-core';
 import { supportsElementInternalsAria } from './feature-detection';
 
 /**
+ * Augment ElementInternals to support `CustomStateSet`.
+ */
+declare global {
+  interface CustomStateSet extends Set<string> {
+    forEach(callbackfn: (value: string, key: string, parent: CustomStateSet) => void, thisArg?: any): void;
+  }
+
+  interface ElementInternals {
+    readonly states: CustomStateSet;
+  }
+}
+
+/**
  * Reflective ARIA property name types.
  */
 export type ARIAProperty = Exclude<keyof ARIAMixin, 'role'>;
