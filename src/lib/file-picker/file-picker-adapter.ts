@@ -6,6 +6,7 @@ import { BaseAdapter, IBaseAdapter } from '../core';
 import { IButtonComponent } from '../button';
 
 export interface IFilePickerAdapter extends IBaseAdapter {
+  destroy(): void;
   registerButtonSlotListener(listener: (evt: Event) => void): void;
   registerInputChangeListener(listener: (evt: Event) => void): void;
   registerDragEnterListener(listener: (evt: DragEvent) => void): void;
@@ -31,7 +32,7 @@ export class FilePickerAdapter extends BaseAdapter<IFilePickerComponent> impleme
   private _buttonSlot: HTMLSlotElement;
   private _button: IButtonComponent | undefined;
   private _input: HTMLInputElement;
-  private _inputEventListener: () => void;
+  private _inputEventListener: EventListener | undefined;
 
   constructor(component: IFilePickerComponent) {
     super(component);
@@ -46,6 +47,13 @@ export class FilePickerAdapter extends BaseAdapter<IFilePickerComponent> impleme
     };
 
     this._container.addEventListener('click', this._inputEventListener);
+  }
+
+  public destroy(): void {
+    if (this._inputEventListener) {
+      this._container.removeEventListener('click', this._inputEventListener);
+      this._inputEventListener = undefined;
+    }
   }
 
   public registerButtonSlotListener(listener: (evt: Event) => void): void {
@@ -145,11 +153,11 @@ export class FilePickerAdapter extends BaseAdapter<IFilePickerComponent> impleme
    */
   public setDisabled(value: boolean): void {
     if (value) {
-      this._container.removeEventListener('click', this._inputEventListener);
+      this._container.removeEventListener('click', this._inputEventListener as EventListener);
       this._button?.setAttribute('disabled', '');
       this._container.setAttribute('disabled', '');
     } else {
-      this._container.addEventListener('click', this._inputEventListener);
+      this._container.addEventListener('click', this._inputEventListener as EventListener);
       this._button?.removeAttribute('disabled');
       this._container.removeAttribute('disabled');
     }
