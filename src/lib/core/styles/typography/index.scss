@@ -161,7 +161,7 @@
     @if not map.get($style-tokens, $key) {
       @error 'Invalid token "#{$key}" for style "#{$style}"';
     }
-    --#{config.$prefix}-typography-#{$key}: #{$value};
+    --#{config.$prefix}-typography-#{$style}-#{$key}: #{$value};
   }
 }
 
