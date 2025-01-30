@@ -1,3 +1,31 @@
+# v3.5.0 (Thu Jan 30 2025)
+
+#### 🚀 Enhancement
+
+- feat(meter): add meter component [#795](https://github.com/tyler-technologies-oss/forge/pull/795) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### 🐛 Bug Fix
+
+- fix(button-toggle): no longer reflects the `value` attribute to allow for non-string values to be set via JS property [#788](https://github.com/tyler-technologies-oss/forge/pull/788) ([@DRiFTy17](https://github.com/DRiFTy17))
+- Fix/icon button badge dense [#791](https://github.com/tyler-technologies-oss/forge/pull/791) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(label-value): allow for content to wrap long words without overflowing [#790](https://github.com/tyler-technologies-oss/forge/pull/790) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(file-picker): cleanup callback to avoid reference being held which can leak [#792](https://github.com/tyler-technologies-oss/forge/pull/792) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(autocomplete): fixed a bug where the `wrapOptionText` property was not being set on the list dropdown [#794](https://github.com/tyler-technologies-oss/forge/pull/794) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(app-bar-search): fixed a color contrast issue by increasing the color emphasis on the placeholder text due to the transparent background [#798](https://github.com/tyler-technologies-oss/forge/pull/798) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(design-tokens): add elevation tokens page [#789](https://github.com/tyler-technologies-oss/forge/pull/789) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(table): add action logging for `forge-table-select-all` event [#793](https://github.com/tyler-technologies-oss/forge/pull/793) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(button-area): add required slotted button to demo [#797](https://github.com/tyler-technologies-oss/forge/pull/797) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v3.4.2 (Fri Jan 17 2025)
 
 #### 🐛 Bug Fix
