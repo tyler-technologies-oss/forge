@@ -1,0 +1,12 @@
+@use 'sass:map';
+@use '../../../animation';
+@use '../../../shape';
+@use '../../../spacing';
+@use '../../../theme';
+@use '../../../utils';
+
+$tokens: () !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

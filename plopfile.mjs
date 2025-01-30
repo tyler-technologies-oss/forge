@@ -89,7 +89,7 @@ export default function (plop) {
         if (answers.hasTokens) {
           actions.push({
             type: 'add',
-            path: 'src/lib/{{dashCase name}}/_tokens-utils.scss',
+            path: 'src/lib/{{dashCase name}}/_token-utils.scss',
             templateFile: 'templates/tokens/_token-utils.scss.hbs'
           });
           actions.push({
