@@ -63,6 +63,18 @@ describe('Button Toggle', () => {
     expect(harness.buttonToggles[1].getAttribute('aria-pressed')).to.equal('true');
   });
 
+  it('should default value with non-string type', async () => {
+    const harness = await createFixture();
+    harness.buttonToggles[2].value = 2;
+    harness.element.value = 2;
+
+    await elementUpdated(harness.element);
+
+    expect(harness.element.value).to.equal(2);
+    expect(harness.buttonToggles[2].selected).to.be.true;
+    expect(harness.buttonToggles[2].getAttribute('aria-pressed')).to.equal('true');
+  });
+
   it('should set value via attribute', async () => {
     const harness = await createFixture();
 
@@ -530,7 +542,7 @@ class ButtonToggleGroupHarness extends TestHarness<IButtonToggleGroupComponent> 
 }
 
 interface ButtonToggleGroupFixtureConfig {
-  value?: string | string[] | null;
+  value?: unknown | unknown[] | null;
   outlined?: boolean;
   multiple?: boolean;
   stretch?: boolean;
@@ -560,16 +572,16 @@ async function createFixture({
     <forge-button-toggle-group
       aria-label="Choose an option"
       .value=${value}
-      .multiple=${multiple}
-      .outlined=${outlined}
-      .stretch=${stretch}
-      .mandatory=${mandatory}
-      .vertical=${vertical}
-      .disabled=${disabled}
-      .required=${required}
-      .readonly=${readonly}
-      .dense=${dense}
-      .theme=${theme}>
+      ?multiple=${multiple}
+      .outlined=${!!outlined}
+      ?stretch=${stretch}
+      ?mandatory=${mandatory}
+      ?vertical=${vertical}
+      ?disabled=${disabled}
+      ?required=${required}
+      ?readonly=${readonly}
+      ?dense=${dense}
+      .theme=${theme as ButtonToggleGroupTheme}>
       <forge-button-toggle value="one">One</forge-button-toggle>
       <forge-button-toggle value="two" aria-label="Label for Two">Two</forge-button-toggle>
       <forge-button-toggle value="three">Three</forge-button-toggle>
