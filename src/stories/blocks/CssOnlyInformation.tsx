@@ -1,7 +1,6 @@
 import { Source, useOf } from '@storybook/blocks';
 import { getCustomElementsTagDeclaration, TagItem } from '../utils';
 import { NameDescriptionTable, Section, UsageLink } from './Shared';
-import { css } from 'lit';
 
 function friendlyNameFromTagName(tagName: string) {
   return tagName
