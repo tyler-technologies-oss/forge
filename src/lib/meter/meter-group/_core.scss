@@ -1,0 +1,78 @@
+@use '../../core/styles/spacing';
+@use '../../core/styles/theme';
+@use '../meter/core' as meter;
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: inline;
+}
+
+@mixin vertical-host {
+  display: block;
+}
+
+@mixin base {
+  box-sizing: border-box;
+}
+
+@mixin vertical-base {
+  @include meter.vertical-base;
+}
+
+@mixin heading {
+  @include meter.heading;
+}
+
+@mixin vertical-heading {
+  @include meter.vertical-heading;
+}
+
+@mixin heading-with-content {
+  @include meter.heading-with-content;
+}
+
+@mixin vertical-heading-with-content {
+  @include meter.vertical-heading-with-content;
+}
+
+@mixin label {
+  @include meter.label;
+}
+
+@mixin value {
+  @include meter.value;
+}
+
+@mixin track {
+  position: relative;
+  height: #{token(height)};
+  border-radius: #{token(shape)};
+  overflow: hidden;
+  background: #{token(background)};
+}
+
+@mixin vertical-track {
+  width: #{token(height)};
+  height: 100%;
+}
+
+@mixin tickmarks {
+  content: '';
+  position: relative;
+  display: block;
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  margin-left: -1px;
+  background: meter.tickmarks-background(#{token(tickmarks)}, #{token(tickmark-color)});
+  opacity: #{token(tickmark-opacity)};
+  pointer-events: none;
+}
+
+@mixin vertical-tickmarks {
+  margin-top: 1px;
+  margin-left: 0;
+  background: meter.tickmarks-background(#{token(tickmarks)}, #{token(tickmark-color), null, true});
+}

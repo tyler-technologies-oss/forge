@@ -14,6 +14,7 @@ const rowClickAction = action('forge-table-row-click');
 const filterAction = action('forge-table-filter');
 const sortAction = action('forge-table-sort');
 const selectAction = action('forge-table-select');
+const selectAllAction = action('forge-table-select-all');
 const selectDoubleAction = action('forge-table-select-double');
 const initializedAction = action('forge-table-initialized');
 const columnResizeAction = action('forge-table-column-resize');
@@ -61,6 +62,7 @@ const meta = {
     tableEl.selectKey = 'id';
     tableEl.addEventListener('forge-table-row-click', rowClickAction);
     tableEl.addEventListener('forge-table-select', selectAction);
+    tableEl.addEventListener('forge-table-select-all', selectAllAction);
     tableEl.addEventListener('forge-table-select-double', selectDoubleAction);
     tableEl.addEventListener('forge-table-initialized', initializedAction);
     tableEl.addEventListener('forge-table-column-resize', columnResizeAction);

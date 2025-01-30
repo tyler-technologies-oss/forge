@@ -38,6 +38,10 @@ export default {
         cssclass: {
           mappedName: 'cssClasses',
           isArray: true
+        },
+        state: {
+          mappedName: 'states',
+          isArray: true
         }
       }
     })

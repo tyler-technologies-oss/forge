@@ -37,6 +37,7 @@
 
   line-height: normal;
   text-align: #{token(align)};
+  overflow-wrap: anywhere;
 
   color: #{token(label-color)};
 }
@@ -51,6 +52,7 @@
 
   line-height: normal;
   text-align: #{token(align)};
+  overflow-wrap: anywhere;
 }
 
 @mixin value-empty {
