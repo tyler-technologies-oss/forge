@@ -1,0 +1,103 @@
+<div class="vert">
+  <forge-meter id="meter" value="50" max="100">
+    <label for="meter">Capacity</label>
+  </forge-meter>
+
+  <div>
+    <h3 class="forge-typography--heading2">Vertical</h3>
+    <forge-meter id="meter" value="50" max="100" direction="vertical">
+      <label for="meter">Capacity</label>
+      <span slot="value" id="value">50%</span>
+    </forge-meter>
+  </div>
+  
+  <div>
+    <h3 class="forge-typography--heading2">In List</h3>
+    <h4 class="forge-typography--heading1">Bird Sightings</h4>
+    <forge-list dense>
+      <forge-list-item>
+        <label for="session-one-meter">Whimbrel</label>
+        <forge-meter slot="end" id="session-one-meter" value="5" min="0" max="10" low="3" high="5" density="small"></forge-meter>
+        <span slot="end" class="forge-typography--label1">5/10</span>
+      </forge-list-item>
+      <forge-list-item>
+        <label for="session-two-meter">Sanderling</label>
+        <forge-meter slot="end" id="session-two-meter" value="3" min="0" max="10" low="2" high="5" density="small"></forge-meter>
+        <span slot="end" class="forge-typography--label1">3/10</span>
+      </forge-list-item>
+      <forge-list-item>
+        <label for="session-three-meter">Snipe</label>
+        <forge-meter slot="end" id="session-three-meter" value="2" min="0" max="10" low="2" high="5" density="small"></forge-meter>
+        <span slot="end" class="forge-typography--label1">2/10</span>
+      </forge-list-item>
+      <forge-list-item>
+        <label for="session-four-meter">Arctic Skua</label>
+        <forge-meter slot="end" id="session-four-meter" value="6" min="0" max="10" low="2" high="5" density="small"></forge-meter>
+        <span slot="end" class="forge-typography--label1">6/10</span>
+      </forge-list-item>
+      <forge-list-item>
+        <label for="session-five-meter">Nightingale</label>
+        <forge-meter slot="end" id="session-five-meter" value="9" min="0" max="10" low="2" high="5" density="small"></forge-meter>
+        <span slot="end" class="forge-typography--label1">9/10</span>
+      </forge-list-item>
+    </forge-list>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Grouped</h3>
+    <forge-meter-group id="meter-group" max="100">
+      <label slot="label" for="meter-group">Birds</label>
+      <span slot="value">75%</span>
+      <forge-meter value="25" theme="info" aria-label="Peregrine"></forge-meter>
+      <forge-meter value="35" theme="secondary" aria-label="Collared Dove"></forge-meter>
+      <forge-meter value="15" theme="success" aria-label="Golden Pheasant"></forge-meter>
+    </forge-meter-group>
+    <div class="key forge-typography--label1">
+      <span class="key-item">
+        <forge-icon class="theme-info" name="lens"></forge-icon>
+        <div>Peregrine</div>
+        <div>25%</div>
+      </span>
+      <span class="key-item">
+        <forge-icon class="theme-secondary" name="lens"></forge-icon>
+        <div>Collared Dove</div>
+        <div>35%</div>
+      </span>
+      <span class="key-item">
+        <forge-icon class="theme-success" name="lens"></forge-icon>
+        <div>Golden Pheasant</div>
+        <div>15%</div>
+      </span>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Grouped (vertical)</h3>
+    <forge-meter-group id="meter-group" max="100" direction="vertical">
+      <label slot="label" for="meter-group">Birds</label>
+      <span slot="value">75%</span>
+      <forge-meter value="25" theme="info" aria-label="Peregrine"></forge-meter>
+      <forge-meter value="35" theme="secondary" aria-label="Collared Dove"></forge-meter>
+      <forge-meter value="15" theme="success" aria-label="Golden Pheasant"></forge-meter>
+    </forge-meter-group>
+    <div class="key forge-typography--label1">
+      <span class="key-item">
+        <forge-icon class="theme-info" name="lens"></forge-icon>
+        <div>Peregrine</div>
+        <div>25%</div>
+      </span>
+      <span class="key-item">
+        <forge-icon class="theme-secondary" name="lens"></forge-icon>
+        <div>Collared Dove</div>
+        <div>35%</div>
+      </span>
+      <span class="key-item">
+        <forge-icon class="theme-success" name="lens"></forge-icon>
+        <div>Golden Pheasant</div>
+        <div>15%</div>
+      </span>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="meter.ts"></script>

@@ -1,0 +1,201 @@
+@use '../../core/styles/spacing';
+@use '../../core/styles/theme';
+@use '../../core/styles/typography';
+@use '../meter-group/token-utils' as meter-group;
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: inline;
+}
+
+@mixin vertical-host {
+  display: block;
+}
+
+@mixin base {
+  box-sizing: border-box;
+}
+
+@mixin vertical-base {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: end;
+  width: fit-content;
+  height: 100%;
+  max-width: 100%;
+}
+
+@mixin heading {
+  @include typography.style(label1);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: normal;
+}
+
+@mixin vertical-heading {
+  flex-direction: column;
+  align-items: start;
+}
+
+@mixin heading-with-content {
+  margin-bottom: #{spacing.variable(xxsmall)};
+}
+
+@mixin vertical-heading-with-content {
+  margin-bottom: 0;
+  margin-left: #{spacing.variable(xsmall)};
+}
+
+@mixin label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin value {
+  color: #{theme.variable(text-medium)};
+}
+
+@mixin track {
+  position: relative;
+  block-size: #{token(height)};
+  border-radius: #{token(shape)};
+  overflow: hidden;
+  background: #{token(background)};
+}
+
+@mixin vertical-track {
+  width: #{token(height)};
+  height: 100%;
+}
+
+@mixin bar {
+  position: absolute;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  border-radius: #{token(inner-shape)};
+  box-shadow: #{token(inner-elevation)};
+  background: #{token(color)};
+  translate: #{token(percentage, custom)} 0;
+}
+
+@mixin vertical-bar {
+  left: initial;
+  top: 100%;
+  translate: 0 calc(-1 * #{token(percentage, custom)});
+}
+
+@mixin theme($theme, $muted: false) {
+  $background: "#{$theme}-container-#{if($muted, 'minimum', 'low')}";
+  $color: "#{$theme}#{if($muted, '-container-high', '')}";
+
+  @include override(background, #{theme.variable($background)}, value);
+  @include override(color, #{theme.variable($color)}, value);
+}
+
+@mixin lowest {
+  @include override(inner-elevation, 0, value);
+}
+
+@function tickmarks-background($count, $color, $secondary-color: null, $vertical: false) {
+  $transparent-start: if($secondary-color, 2px, 1px);
+  @return repeating-linear-gradient(
+    if($vertical, 0, 90deg),
+    $color 0px,
+    $color 1px,
+    if($secondary-color, #{$secondary-color} + ' 1px,', null) if($secondary-color, #{$secondary-color} + ' 2px,', null) transparent $transparent-start,
+    transparent calc(100% / ($count + 1) + 0px)
+  );
+}
+
+@mixin tickmarks {
+  // We add an inline margin and offset the background to hide tickmarks right at the edge of the meter
+  $background-offset: 2px;
+
+  content: '';
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin-left: $background-offset;
+  background: tickmarks-background(token(tickmarks), token(color), token(background));
+  background-position-x: -$background-offset;
+  opacity: #{token(tickmark-opacity)};
+  pointer-events: none;
+}
+
+@mixin vertical-tickmarks {
+  // Use a background offset same as the horizontal mixin but in the block direction
+  $background-offset: 2px;
+
+  margin-top: -$background-offset;
+  margin-left: 0;
+  background: tickmarks-background(token(tickmarks), token(color), token(background), true);
+  background-position-x: 0;
+  background-position-y: $background-offset;
+}
+
+@mixin bar-animation {
+  transition-property: translate, box-shadow;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+}
+
+@mixin segmented-animation {
+  transition-property: background;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+}
+
+@mixin segmented-bar-animation {
+  transition-property: translate, box-shadow, background;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+}
+
+@mixin tickmarks-animation {
+  transition-property: background;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+}
+
+/* stylelint-disable custom-property-pattern */
+// Manually reference the height of the meter group to avoid a circular dependency. Use half the
+// meter group's height to extend the meter behind the radius of the preceding meter.
+$leading: calc(#{meter-group.token(height)} * 0.5);
+/* stylelint-enable custom-property-pattern */
+
+@mixin grouped {
+  display: block;
+  position: absolute;
+  z-index: #{token(z-index, custom)};
+  top: 0;
+  left: #{token(inset, custom)};
+  width: calc(#{token(percentage, custom)} + $leading);
+  height: 100%;
+  border-radius: #{token(inner-shape)};
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: calc(-1 * $leading);
+  background: #{token(color)};
+  box-shadow: #{token(inner-elevation)};
+}
+
+@mixin vertical-grouped {
+  display: block;
+  top: calc(100% - #{token(percentage, custom)} - #{token(inset, custom)});
+  left: 0;
+  width: 100%;
+  height: calc(#{token(percentage, custom)} + $leading);
+  max-width: initial;
+  border-radius: #{token(inner-shape)};
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-left: 0;
+  margin-bottom: calc(-1 * $leading);
+}

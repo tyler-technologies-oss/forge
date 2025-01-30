@@ -1,0 +1,213 @@
+@use '../../core/styles/shape';
+@use '../../core/styles/spacing';
+@use '../../core/styles/theme';
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+//
+// Base
+//
+
+.forge-meter {
+  @include core.tokens;
+}
+
+.forge-meter {
+  @include core.base;
+
+  .heading {
+    @include core.heading;
+
+    &.not-empty {
+      @include core.heading-with-content;
+    }
+  }
+
+  .label {
+    @include core.label;
+  }
+
+  .value {
+    @include core.value;
+  }
+
+  .track {
+    @include core.track;
+
+    &.segmented {
+      @include core.theme(warning);
+      @include core.segmented-animation;
+
+      &.least-optimal {
+        @include core.theme(error);
+      }
+
+      &.optimal {
+        @include core.theme(success);
+      }
+
+      .bar {
+        @include core.segmented-bar-animation;
+      }
+    }
+
+    &.lowest {
+      @include core.lowest;
+    }
+
+    &.tickmarks::after {
+      @include core.tickmarks;
+      @include core.tickmarks-animation;
+    }
+  }
+
+  .bar {
+    @include core.bar;
+    @include core.bar-animation;
+  }
+
+  &.grouped {
+    @include core.grouped;
+
+    &.muted {
+      @include core.override(color, #{theme.variable(tertiary-container-high)}, value);
+    }
+  }
+
+  @each $key, $value in ('small': 'xsmall', 'medium': 'medium', 'large': 'large') {
+    &.density--#{$key} {
+      @include core.override(height, spacing.variable($value), value);
+    }
+  }
+
+  @each $key, $value in ('default': shape.variable(medium), 'rounded': shape.variable(full), 'squared': 0) {
+    &.shape--#{$key} {
+      @include core.override(shape, $value, value);
+    }
+  }
+
+  &.inner-shape--inherit {
+    @include core.override(inner-shape, shape);
+  }
+
+  &.muted {
+    .track {
+      @include core.theme(tertiary, $muted: true);
+
+      &.segmented {
+        @include core.theme(warning, $muted: true);
+
+        &.least-optimal {
+          @include core.theme(error, $muted: true);
+        }
+
+        &.optimal {
+          @include core.theme(success, $muted: true);
+        }
+      }
+    }
+  }
+}
+
+//
+// Vertical
+//
+
+:host(:is(:state(vertical), :--vertical)) {
+  @include core.vertical-host;
+
+  .forge-meter {
+    @include core.vertical-base;
+
+    .heading {
+      @include core.vertical-heading;
+
+      &.not-empty {
+        @include core.vertical-heading-with-content;
+      }
+    }
+
+    .track {
+      @include core.vertical-track;
+
+      &.tickmarks::after {
+        @include core.vertical-tickmarks;
+      }
+    }
+
+    .bar {
+      @include core.vertical-bar;
+    }
+
+    &.grouped {
+      @include core.vertical-grouped;
+    }
+  }
+}
+
+//
+// Theme
+//
+
+@each $value in ('primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info') {
+  .theme--#{$value} {
+    &:not(.muted) {
+      .track:not(.segmented) {
+        @include core.theme($value);
+      }
+
+      &.grouped {
+        @include core.theme($value);
+      }
+    }
+
+    &.muted {
+      .track:not(.segmented) {
+        @include core.theme($value, $muted: true);
+      }
+
+      .grouped {
+        @include core.theme($value, $muted: true);
+      }
+    }
+  }
+}
+
+//
+// Media
+//
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    @include core.override(transition-duration, 0, value);
+  }
+}
+
+@media (forced-colors: active) {
+  .track {
+    border: 1px solid CanvasText;
+
+    .bar {
+      background: CanvasText;
+    }
+  }
+
+  .grouped {
+    border-inline-end: 1px solid Canvas !important;
+    background: CanvasText !important;
+  }
+
+  :host(:is(:state(vertical), :--vertical)) {
+    .grouped {
+      border-block-start: 1px solid CanvasText !important;
+      border-inline-end: initial !important;
+    }
+  }
+}
