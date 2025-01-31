@@ -1,3 +1,16 @@
+# v3.5.1 (Fri Jan 31 2025)
+
+#### 🐛 Bug Fix
+
+- fix(defineComponents): fixed an exception caused by lit-based components being incompatible with internal Forge API during element definition [#800](https://github.com/tyler-technologies-oss/forge/pull/800) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list-item): fixed a bug where the selected state overlay could render on top of slotted elements [#799](https://github.com/tyler-technologies-oss/forge/pull/799) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.5.0 (Thu Jan 30 2025)
 
 #### 🚀 Enhancement
