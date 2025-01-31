@@ -255,7 +255,7 @@ export class TableUtils {
       span.classList.add(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_TEXT);
       span.textContent = columnConfig.header && typeof columnConfig.header === 'string' ? columnConfig.header.trim() : '';
 
-      if (span.textContent.trim().length === 0) {
+      if (span.textContent.trim().length === 0 && typeof columnConfig.headerTemplate !== 'function') {
         th.setAttribute('aria-hidden', 'true');
       }
 
