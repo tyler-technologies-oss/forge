@@ -89,6 +89,7 @@
     border-radius: inherit;
     opacity: #{token(selected-opacity)};
     background-color: #{token(selected-background)};
+    pointer-events: none;
   }
 }
 
@@ -106,6 +107,8 @@
 
 @mixin start-end-selected {
   color: #{token(selected-color)};
+
+  isolation: isolate;
 }
 
 @mixin text {
