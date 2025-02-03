@@ -109,6 +109,7 @@ declare global {
  * @cssproperty --forge-switch-icon-active-off-scale - The scale transformation applied to the handle icons when the switch is active (pressed) in its off state.
  * @cssproperty --forge-switch-gap - The space between the switch and label.
  * @cssproperty --forge-switch-justify - How the switch and label are distributed along their main axis.
+ * @cssproperty --forge-switch-align - How the switch and label are distributed along their cross axis.
  * @cssproperty --forge-switch-direction - Whether the switch and label are arranged along the inline or block axis.
  * @cssproperty --forge-switch-state-layer-size - The inline and block size of the handle's state layer.
  * @cssproperty --forge-switch-state-layer-width - The inline size of the handle's state layer.

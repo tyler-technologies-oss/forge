@@ -56,6 +56,7 @@ declare global {
  * @cssproperty --forge-checkbox-elevation - The shadow of the checkbox.
  * @cssproperty --forge-checkbox-gap - The space between the checkbox and label.
  * @cssproperty --forge-checkbox-justify - How the checkbox and label are distributed along their main axis.
+ * @cssproperty --forge-checkbox-align - How the checkbox and label are distributed along their cross axis.
  * @cssproperty --forge-checkbox-direction - Whether the checkbox and label are arranged along the inline or block axis.
  * @cssproperty --forge-checkbox-checked-background - The color of the checkbox background when checked or indeterminate.
  * @cssproperty --forge-checkbox-checked-border-width - The width of the checkbox border when checked or indeterminate.

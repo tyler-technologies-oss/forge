@@ -11,8 +11,7 @@
 @mixin radio {
   position: relative;
   flex-direction: #{token(direction)};
-  flex-shrink: 0;
-  align-items: center;
+  align-items: #{token(align)};
   justify-content: #{token(justify)};
   gap: #{token(gap)};
 
@@ -29,6 +28,7 @@
   justify-content: center;
 
   display: flex;
+  flex-shrink: 0;
 
   border-radius: #{token(shape)};
   inline-size: #{token(state-layer-width)};

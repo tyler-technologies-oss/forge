@@ -31,8 +31,7 @@ $_handle-on-translate: calc(#{token(track-width)} - #{$_track-border-radius} * 2
   position: relative;
 
   flex-direction: #{token(direction)};
-  flex-shrink: 0;
-  align-items: center;
+  align-items: #{token(align)};
   justify-content: #{token(justify)};
   gap: #{token(gap)};
 }
@@ -60,6 +59,7 @@ $_handle-on-translate: calc(#{token(track-width)} - #{$_track-border-radius} * 2
   align-items: center;
 
   display: flex;
+  flex-shrink: 0;
 
   block-size: #{$_container-block-size};
 
