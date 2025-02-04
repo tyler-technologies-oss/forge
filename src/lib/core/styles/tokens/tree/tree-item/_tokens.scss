@@ -1,0 +1,31 @@
+@use 'sass:map';
+@use '../../../animation';
+@use '../../../border';
+@use '../../../shape';
+@use '../../../spacing';
+@use '../../../theme';
+@use '../../../utils';
+
+$tokens: (
+  // Color
+  selected-background: utils.module-val(tree-item, selected-background, theme.variable(primary-container-low)),
+  // Size and shape
+  min-block-size: utils.module-val(tree-item, min-block-size, spacing.variable(large)),
+  shape: utils.module-val(tree-item, shape, shape.variable(medium)),
+  // Spacing
+  padding-inline: utils.module-val(tree-item, padding-inline, spacing.variable(xxsmall)),
+  padding-inline-start: utils.module-ref(tree-item, padding-inline-start, padding-inline),
+  padding-inline-end: utils.module-ref(tree-item, padding-inline-end, padding-inline),
+  gap: utils.module-val(tree-item, gap, spacing.variable(xxxsmall)),
+  header-inline-gap: utils.module-val(tree-item, header-inline-gap, spacing.variable(xsmall)),
+  indent-size: utils.module-val(tree-item, indent-size, spacing.variable(xlarge)),
+  // Indent lines
+  indent-line-style: utils.module-val(tree-item, indent-line-style, solid),
+  indent-line-width: utils.module-val(tree-item, indent-line-width, border.variable(thin)),
+  indent-line-color: utils.module-val(tree-item, indent-line-color, theme.variable(outline)),
+  indent-line-offset: utils.module-val(tree-item, indent-line-offset, 11.5px)
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

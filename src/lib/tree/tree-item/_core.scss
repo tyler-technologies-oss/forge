@@ -1,0 +1,83 @@
+@use './token-utils' as *;
+@use '../../core/styles/typography';
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+  outline: none;
+}
+
+@mixin base {
+  @include override(checkbox-color, var(--forge-theme-text-low), value);
+}
+
+@mixin header {
+  @include typography.style(body2);
+
+  display: flex;
+  align-items: center;
+  gap: #{token(header-inline-gap)};
+  position: relative;
+
+  border-radius: #{token(shape)};
+  min-block-size: #{token(min-block-size)};
+  padding-inline-start: calc(#{token(indent-size)} * #{token(level, custom)} + #{token(padding-inline-start)});
+  padding-inline-end: #{token(padding-inline-end)};
+}
+
+@mixin interactive-header {
+  cursor: pointer;
+}
+
+@mixin content {
+  overflow: hidden;
+  margin-inline-end: auto;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@mixin expand-icon {
+  display: flex;
+}
+
+@mixin checkbox {
+  --forge-icon-color: #{token(checkbox-color, custom)};
+
+  display: #{token(check-display, custom)};
+}
+
+@mixin selected {
+  @include override(checkbox-color, var(--forge-theme-tertiary), value);
+
+  background: #{token(selected-background)};
+}
+
+@mixin indeterminate {
+  @include override(checkbox-color, var(--forge-theme-tertiary), value);
+}
+
+@mixin children {
+  display: flex;
+  flex-direction: column;
+  gap: #{token(gap)};
+  position: relative;
+
+  margin-block-start: #{token(gap)};
+}
+
+@mixin indent-line {
+  display: #{token(indent-line-display, custom)};
+  position: absolute;
+  left: calc(#{token(indent-size)} * #{token(level, custom)} + #{token(indent-line-offset)} + #{token(padding-inline-start)});
+
+  block-size: 100%;
+  inline-size: #{token(indent-line-width)};
+  border-inline-start-style: #{token(indent-line-style)};
+  border-inline-start-width: #{token(indent-line-width)};
+  border-inline-start-color: #{token(indent-line-color)};
+  pointer-events: none;
+
+  content: '';
+}

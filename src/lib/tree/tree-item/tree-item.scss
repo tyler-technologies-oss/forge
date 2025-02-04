@@ -1,0 +1,123 @@
+@use './core' as *;
+@use '../../focus-indicator';
+@use '../../state-layer';
+
+//
+// Host
+//
+
+:host {
+  @include host;
+}
+
+//
+// Base
+//
+
+.forge-tree-item {
+  @include tokens;
+}
+
+.forge-tree-item {
+  @include base;
+
+  .header {
+    @include header;
+  }
+
+  .content {
+    @include content;
+  }
+
+  .expand-icon {
+    @include expand-icon;
+  }
+
+  .checkbox {
+    @include checkbox;
+  }
+
+  .children {
+    @include children;
+
+    &::after {
+      @include indent-line;
+    }
+  }
+
+  &.interactive {
+    .header {
+      @include interactive-header;
+    }
+  }
+
+  &.indeterminate {
+    @include indeterminate;
+  }
+}
+
+//
+// Leaf
+//
+:host(:is(:state(leaf), :--leaf)) {
+  .expand-icon {
+    display: none;
+  }
+
+  .children {
+    display: none;
+  }
+}
+
+//
+// Collapsed
+//
+
+:host(:not(:is(:state(open), :--open))) {
+  .children {
+    display: none;
+  }
+}
+
+//
+// Selected
+//
+
+:host(:is(:state(selected), :--selected)) {
+  .header {
+    @include selected;
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme(
+      (
+        color: var(--forge-theme-primary)
+      )
+    );
+  }
+}
+
+//
+// Indeterminate
+//
+
+:host(:is(:state(indeterminate), :--indeterminate)) {
+  .header {
+    @include indeterminate;
+  }
+}
+
+//
+// Focus indicator
+//
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme(
+    (
+      shape: #{token(shape)}
+    )
+  );
+
+  // Ensure the focus indicator appears above sibling items
+  z-index: 1;
+}
