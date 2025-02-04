@@ -4,8 +4,8 @@ import ReactGA from 'react-ga4';
 
 addons.register('storybook/google-analytics', (api) => {
   // Do not do anything if running in localhost
-  if (globalThis.location.hostname === 'localhost') {
-    console.warn('Google Analytics is disabled for localhost');
+  if (window.CONFIG_TYPE === 'DEVELOPMENT' || window.location.hostname === 'localhost') {
+    console.warn('Google Analytics is disabled during development');
     return;
   }
 
