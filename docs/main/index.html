@@ -74,17 +74,10 @@
     
     <link href="./sb-addons/tag-badges-13/manager-bundle.js" rel="modulepreload" />
     
-    <link href="./sb-addons/storybook-14/manager-bundle.js" rel="modulepreload" />
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136930168-4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'UA-136930168-4');
-</script>
-
-<style>
+    <link href="./sb-addons/storybook-addons-google-analytics-14/register-bundle.js" rel="modulepreload" />
+    
+    <link href="./sb-addons/storybook-15/manager-bundle.js" rel="modulepreload" />
+      <style>
   body {
     font-family: 'Roboto', sans-serif !important;
   }
@@ -250,7 +243,9 @@
       
         import './sb-addons/tag-badges-13/manager-bundle.js';
       
-        import './sb-addons/storybook-14/manager-bundle.js';
+        import './sb-addons/storybook-addons-google-analytics-14/register-bundle.js';
+      
+        import './sb-addons/storybook-15/manager-bundle.js';
       
       
       import './sb-manager/runtime.js';
