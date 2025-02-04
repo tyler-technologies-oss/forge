@@ -51,6 +51,17 @@ export function getTreeItemFromEvent(evt: Event): TreeItemComponent | null {
 }
 
 /**
+ * Gets all tree item components in an event path.
+ *
+ * @param evt An event dispatched from a tree item.
+ * @returns The dispatching tree item and all tree item ancestors.
+ */
+export function getTreeItemsInEventPath(evt: Event): TreeItemComponent[] {
+  const path = evt.composedPath();
+  return path.filter((el): el is TreeItemComponent => el instanceof HTMLElement && isTreeItem(el));
+}
+
+/**
  * Returns whether an event includes a tree item header.
  *
  * @param evt An event dispatched from a tree item.
@@ -332,4 +343,12 @@ export function searchItems(from: TreeItemComponent, query: string): TreeItemCom
  */
 export function isIndeterminate(el: TreeItemComponent): boolean {
   return getChildItems(el).some((child, _, children) => child.indeterminate || child.selected !== children[0].selected);
+}
+
+/**
+ * Closes all descendant items of a tree or tree item component.
+ * @param el The tree or tree item component to close the descendants of.
+ */
+export function closeDescendants(el: TreeComponent | TreeItemComponent): void {
+  getChildItems(el, true).forEach(item => (item.open = false));
 }

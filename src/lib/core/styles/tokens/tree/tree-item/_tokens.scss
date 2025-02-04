@@ -10,7 +10,7 @@ $tokens: (
   // Color
   selected-background: utils.module-val(tree-item, selected-background, theme.variable(primary-container-low)),
   // Size and shape
-  min-block-size: utils.module-val(tree-item, min-block-size, spacing.variable(large)),
+  min-block-size: utils.module-val(tree-item, min-block-size, spacing.variable(xlarge)),
   shape: utils.module-val(tree-item, shape, shape.variable(medium)),
   // Spacing
   padding-inline: utils.module-val(tree-item, padding-inline, spacing.variable(xxsmall)),
@@ -18,7 +18,8 @@ $tokens: (
   padding-inline-end: utils.module-ref(tree-item, padding-inline-end, padding-inline),
   gap: utils.module-val(tree-item, gap, spacing.variable(xxxsmall)),
   header-inline-gap: utils.module-val(tree-item, header-inline-gap, spacing.variable(xsmall)),
-  indent-size: utils.module-val(tree-item, indent-size, spacing.variable(xlarge)),
+  indent-size: utils.module-val(tree-item, indent-size, spacing.variable(medium)),
+  leaf-inset: utils.module-val(tree-item, leaf-inset, spacing.variable(large)),
   // Indent lines
   indent-line-style: utils.module-val(tree-item, indent-line-style, solid),
   indent-line-width: utils.module-val(tree-item, indent-line-width, border.variable(thin)),

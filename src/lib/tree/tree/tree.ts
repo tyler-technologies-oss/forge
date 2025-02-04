@@ -6,6 +6,7 @@ import { setDefaultAria } from '../../core/utils/a11y-utils';
 import { KeyActionController } from '../../core/utils/key-action';
 import { TreeItemComponent } from '../tree-item';
 import {
+  closeDescendants,
   eventPathIncludesTreeItemExpandIcon,
   eventPathIncludesTreeItemHeader,
   getFirstChildItem,
@@ -15,6 +16,7 @@ import {
   getPreviousItem,
   getSiblingItems,
   getTreeItemFromEvent,
+  getTreeItemsInEventPath,
   getTreeItemTarget,
   isTreeItem,
   searchItems
@@ -94,7 +96,7 @@ export class TreeComponent extends LitElement {
         ],
         handler: this._handleA.bind(this)
       },
-      { key: 'Enter', handler: this._handleEnter.bind(this) }
+      { key: ['Enter', ' '], handler: this._handleEnterOrSpace.bind(this) }
     ],
     searchHandler: this._search.bind(this)
   });
@@ -118,6 +120,9 @@ export class TreeComponent extends LitElement {
   }
 
   public willUpdate(_changedProperties: PropertyValues): void {
+    if (_changedProperties.has('accordion')) {
+      closeDescendants(this);
+    }
     if (_changedProperties.has('indentLines') || _changedProperties.has('mode')) {
       this._updateContext();
     }
@@ -175,17 +180,13 @@ export class TreeComponent extends LitElement {
 
     // If in leaf or off mode a click anywhere toggles the open state
     if (this.mode === 'leaf' || this.mode === 'off') {
-      this._toggleOpen(item);
+      this._toggleOpen(item, evt.altKey && item.open);
       return;
     }
 
     // Otherwise only a click on the expand icon toggles the open state
     if (eventPathIncludesTreeItemExpandIcon(evt)) {
-      // If the alt key is pressed recursively close all descendant items
-      if (evt.altKey) {
-        console.log('close all children');
-      }
-      this._toggleOpen(item);
+      this._toggleOpen(item, evt.altKey && item.open);
       return;
     }
 
@@ -226,7 +227,7 @@ export class TreeComponent extends LitElement {
         this._focusItem(parent);
       }
     }
-    this._toggleOpen(target, false);
+    this._toggleOpen(target, false, false);
   }
 
   /**
@@ -243,7 +244,7 @@ export class TreeComponent extends LitElement {
         this._focusItem(firstChild);
       }
     }
-    this._toggleOpen(target, true);
+    this._toggleOpen(target, false, true);
   }
 
   /**
@@ -309,7 +310,7 @@ export class TreeComponent extends LitElement {
     if (!target) {
       return;
     }
-    getSiblingItems(target, true).forEach(item => this._toggleOpen(item, true));
+    getSiblingItems(target, true).forEach(item => this._toggleOpen(item, false, true));
   }
 
   /**
@@ -325,7 +326,7 @@ export class TreeComponent extends LitElement {
   /**
    * Toggles the open or selected state of the focused item.
    */
-  private _handleEnter(evt: KeyboardEvent): void {
+  private _handleEnterOrSpace(evt: KeyboardEvent): void {
     const target = getTreeItemFromEvent(evt);
     if (!target) {
       return;
@@ -338,8 +339,13 @@ export class TreeComponent extends LitElement {
         this._selectionController.extend(target);
       }
       this._selectionController.toggle(target);
+      return;
     }
-    this._toggleOpen(target);
+    if (evt.key === 'Enter') {
+      this._toggleOpen(target, evt.altKey && target.open);
+    } else {
+      this._selectionController.toggle(target);
+    }
   }
 
   private _handleFocusIn(evt: FocusEvent): void {
@@ -374,8 +380,22 @@ export class TreeComponent extends LitElement {
     }
   }
 
-  private _handleOpen(evt: CustomEvent): void {
-    console.log(evt);
+  private _handleOpen(evt: Event): void {
+    // Do nothing if accordion isn't enabled
+    if (!this.accordion) {
+      return;
+    }
+
+    // Do nothing if the target is missing or closed
+    const target = getTreeItemFromEvent(evt);
+    if (!target || !target.open) {
+      return;
+    }
+
+    // If accordion is enabled, close all the items outside the target's path
+    const items = getTreeItemsInEventPath(evt);
+    closeDescendants(this);
+    items.forEach(item => (item.open = true));
   }
 
   private _handleUpdate(evt: CustomEvent): void {
@@ -394,15 +414,17 @@ export class TreeComponent extends LitElement {
     }
   }
 
-  private _toggleOpen(item: TreeItemComponent, force?: boolean): void {
-    const initialOpen = item.open;
+  private _toggleOpen(item: TreeItemComponent, flatten = false, force?: boolean): void {
     item.open = force ?? !item.open;
+    if (!item.open && flatten) {
+      closeDescendants(item);
+    }
 
     // Dispatch an open event from the item
     const event = new CustomEvent('forge-tree-item-open', { bubbles: true, composed: true });
     item.dispatchEvent(event);
     if (event.defaultPrevented) {
-      item.open = initialOpen;
+      return;
     }
   }
 

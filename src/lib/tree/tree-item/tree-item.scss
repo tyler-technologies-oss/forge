@@ -25,6 +25,10 @@
     @include header;
   }
 
+  .leaf-spacer {
+    @include leaf-spacer;
+  }
+
   .content {
     @include content;
   }

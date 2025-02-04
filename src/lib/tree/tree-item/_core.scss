@@ -42,6 +42,11 @@
   display: flex;
 }
 
+@mixin leaf-spacer {
+  // TODO: Use a token and match it to the width of the expand icon
+  inline-size: #{token(leaf-inset)};
+}
+
 @mixin checkbox {
   --forge-icon-color: #{token(checkbox-color, custom)};
 

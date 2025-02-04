@@ -131,7 +131,7 @@ export class TreeItemComponent extends LitElement {
                   </slot>
                 </span>
               `
-            : nothing}
+            : html`<span class="leaf-spacer"></span>`}
           ${this._context.mode === 'multiple'
             ? html`<forge-icon id="checkbox" class="checkbox" part="checkbox" .name="${this._checkboxIcon}"></forge-icon>`
             : nothing}
@@ -141,7 +141,7 @@ export class TreeItemComponent extends LitElement {
           </div>
           <slot name="end"></slot>
           ${this._context.mode !== 'off' || !this._leaf ? html`<forge-state-layer></forge-state-layer>` : nothing}
-          <forge-focus-indicator target=":host" focus-mode="focus"></forge-focus-indicator>
+          <forge-focus-indicator target=":host" focus-mode="focus" inward></forge-focus-indicator>
         </div>
         <div role="group" class="children" part="children">
           <slot name="children" @slotchange="${this._setLeaf}"></slot>
