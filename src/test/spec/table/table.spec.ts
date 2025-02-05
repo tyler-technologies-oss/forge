@@ -2011,6 +2011,23 @@ describe('TableComponent', function(this: ITestContext) {
       expect(firstCell.innerHTML).toContain('Hello Goodbye');
     });
 
+    it('should contain custom header template without a aria-hidden attribute', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      const testColumns = deepCopy(columns);
+      testColumns[0].sortable = true;
+      testColumns[0].headerTemplate = () => '<span>Hello Goodbye</span>';
+
+      this.context.component.columnConfigurations = testColumns;
+      await frame();
+
+      const callback = jasmine.createSpy('callback');
+      this.context.component.addEventListener(TABLE_CONSTANTS.events.SORT, callback);
+
+      const headerRow = getTableHeaderRow(this.context.getTableElement());
+      const firstCell = headerRow.cells.item(0) as HTMLTableCellElement;
+      expect(firstCell.hasAttribute('aria-hidden')).toBeFalse();
+    });
+
     it('should contain custom header template with sort arrow', async function(this: ITestContext) {
       this.context = setupTestContext();
       const testColumns = deepCopy(columns);
