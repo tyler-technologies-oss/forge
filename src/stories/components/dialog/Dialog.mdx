@@ -21,6 +21,9 @@ When creating a dialog it is important to consider the following:
 - **Content**: The content of the dialog should be clear and concise. Use semantic elements to structure the content.
 - **Actions**: Provide clear actions for the user to take. Use buttons to provide actions such as "Cancel" or "Save".
 - **Accessibility**: Ensure that the dialog is accessible to all users. Use the `label` and `description` attributes to provide context to screen readers.
+  - You can not use the standard `aria-labelledby` and `aria-describedby` attributes on the `<forge-dialog>` element as they cannot be set on the internal native `<dialog>` element
+    due to browser limitations. Instead, use the `label` and `description` attributes to provide the same functionality and we'll add the necessary ARIA attributes for you.
+  - When the browsers support ARIA attributes across shadow boundaries in the future, we will update the component to use the standard attributes and make an announcement.
 
 The `<forge-dialog>` will size itself based on the content that it contains. You should always use a single root element within the dialog to ensure proper sizing. It is
 common to compose the `<forge-dialog>` together with the `<forge-scaffold>` to provide a consistent layout.
