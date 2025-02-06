@@ -23,7 +23,9 @@ const observedAttributes = {
 };
 
 const attributes = {
-  ...observedAttributes
+  ...observedAttributes,
+  ARIA_LABEL_ID: 'forge-dialog-label',
+  ARIA_DESCIPTION_ID: 'forge-dialog-description'
 };
 
 const classes = {

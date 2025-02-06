@@ -217,7 +217,7 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
   public setAccessibleLabel(label: string): void {
     if (label?.trim()) {
-      this._accessibleLabelElement = this._createVisuallyHiddenElement('forge-dialog-label', label);
+      this._accessibleLabelElement = this._createVisuallyHiddenElement(DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID, label);
       this._dialogElement.appendChild(this._accessibleLabelElement);
       this._dialogElement.setAttribute('aria-labelledby', this._accessibleLabelElement.id);
     } else {
@@ -228,7 +228,7 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
   public setAccessibleDescription(description: string): void {
     if (description?.trim()) {
-      this._accessibleDescriptionElement = this._createVisuallyHiddenElement('forge-dialog-description', description);
+      this._accessibleDescriptionElement = this._createVisuallyHiddenElement(DIALOG_CONSTANTS.attributes.ARIA_DESCIPTION_ID, description);
       this._dialogElement.appendChild(this._accessibleDescriptionElement);
       this._dialogElement.setAttribute('aria-describedby', this._accessibleDescriptionElement.id);
     } else {
