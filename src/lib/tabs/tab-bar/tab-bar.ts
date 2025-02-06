@@ -7,11 +7,14 @@ import { TabBarAdapter } from './tab-bar-adapter';
 import { ITabBarChangeEventData, TAB_BAR_CONSTANTS } from './tab-bar-constants';
 import { TabBarCore } from './tab-bar-core';
 import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
+import { setDefaultAria } from '../../constants';
 
 import template from './tab-bar.html';
 import styles from './tab-bar.scss';
 
-export interface ITabBarComponent extends IBaseComponent {
+export interface ITabBarComponent extends IBaseComponent, IWithDefaultAria, IWithElementInternals {
   disabled: boolean;
   activeTab: number | null | undefined;
   vertical: boolean;
@@ -66,7 +69,6 @@ declare global {
  * @attribute {boolean} [secondary=false] - Deprecated. Controls whether the tabs are styled as secondary tab navigation.
  * @attribute {boolean} [auto-activate=false] - Controls whether the tabs are automatically activated when receiving focus.
  * @attribute {boolean} [scroll-buttons=false] - Controls whether scroll buttons are displayed when the tabs overflow their container.
- * @attribute {string} [data-aria-label] - The ARIA label to forward to the internal tablist element.
  *
  * @event {CustomEvent<ITabBarChangeEventData>} forge-tab-bar-change - Dispatches when the active tab changes.
  *
@@ -82,7 +84,7 @@ declare global {
   name: TAB_BAR_CONSTANTS.elementName,
   dependencies: [TabComponent, IconButtonComponent, IconComponent]
 })
-export class TabBarComponent extends BaseComponent implements ITabBarComponent {
+export class TabBarComponent extends WithDefaultAria(WithElementInternals(BaseComponent)) implements ITabBarComponent {
   public static get observedAttributes(): string[] {
     return Object.values(TAB_BAR_CONSTANTS.observedAttributes);
   }
@@ -97,6 +99,7 @@ export class TabBarComponent extends BaseComponent implements ITabBarComponent {
   }
 
   public connectedCallback(): void {
+    this[setDefaultAria]({ role: 'tablist' }, { setAttribute: true });
     this._core.initialize();
   }
 
