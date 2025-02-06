@@ -1098,8 +1098,8 @@ async function createFixture({
       <button type="button" id="alt-test-trigger">Dialog Trigger</button>
       <forge-dialog
         trigger="test-trigger"
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-desc"
+        label="My dialog title"
+        description="My dialog description"
         ?open=${open}
         type=${type ?? nothing}
         mode=${mode ?? nothing}

@@ -17,7 +17,9 @@ const observedAttributes = {
   MOVE_TARGET: 'move-target',
   POSITION_STRATEGY: 'position-strategy',
   PLACEMENT: 'placement',
-  SIZE_STRATEGY: 'size-strategy'
+  SIZE_STRATEGY: 'size-strategy',
+  LABEL: 'label',
+  DESCRIPTION: 'description'
 };
 
 const attributes = {

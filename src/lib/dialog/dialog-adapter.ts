@@ -1,9 +1,8 @@
 import { getShadowElement, playKeyframeAnimation } from '@tylertech/forge-core';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
-import { setDefaultAria } from '../constants';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { DialogComponent, IDialogComponent } from './dialog';
-import { dialogStack, DIALOG_CONSTANTS, hideBackdrop, showBackdrop } from './dialog-constants';
+import { DIALOG_CONSTANTS, dialogStack, hideBackdrop, showBackdrop } from './dialog-constants';
 
 export interface IDialogAdapter extends IBaseAdapter<IDialogComponent> {
   readonly hostElement: IDialogComponent;
@@ -28,6 +27,8 @@ export interface IDialogAdapter extends IBaseAdapter<IDialogComponent> {
   removeSurfaceClass(className: string): void;
   addFullscreenListener(breakpoint: number, listener: (value: boolean) => void): void;
   removeFullscreenListener(listener: (value: boolean) => void): void;
+  setAccessibleLabel(label: string): void;
+  setAccessibleDescription(description: string): void;
 }
 
 export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDialogAdapter {
@@ -36,6 +37,8 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   private _backdropElement: IBackdropComponent;
   private _moveHandleElement: HTMLElement;
   private _fullscreenMediaQuery: MediaQueryList | undefined;
+  private _accessibleLabelElement: HTMLElement;
+  private _accessibleDescriptionElement: HTMLElement;
 
   public triggerElement: HTMLElement | null;
 
@@ -65,19 +68,17 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
       return;
     }
 
-    const role = this._component.getAttribute('role');
-    if (!role || !['presentation', 'none'].includes(role)) {
-      this._component[setDefaultAria](
-        {
-          role: this._component.type,
-          ariaModal: this._component.mode === 'modal' || this._component.mode === 'inline-modal' ? 'true' : 'false'
-        },
-        { setAttribute: true }
-      );
+    if (this._component.type !== 'dialog') {
+      this._dialogElement.setAttribute('role', this._component.type);
+    }
+
+    const isModal = this._component.mode === 'modal' || this._component.mode === 'inline-modal';
+
+    if (!isModal) {
+      this._dialogElement.setAttribute('aria-modal', 'false');
     }
 
     // Show the dialog (and backdrop) based on modal vs non-modal
-    const isModal = this._component.mode === 'modal' || this._component.mode === 'inline-modal';
     if (isModal) {
       if (this._component.animationType === 'none') {
         this._backdropElement.show();
@@ -111,17 +112,6 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   }
 
   public async hide(): Promise<void> {
-    const role = this._component.getAttribute('role');
-    if (!role || !['presentation', 'none'].includes(role)) {
-      this._component[setDefaultAria](
-        {
-          role: null,
-          ariaModal: null
-        },
-        { setAttribute: true }
-      );
-    }
-
     const close = (): void => {
       this._surfaceElement.classList.remove(BACKDROP_CONSTANTS.classes.EXITING);
       this._dialogElement.close();
@@ -165,9 +155,14 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   public tryAutofocus(): void {
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
-        if (this._component.open && this._dialogElement.isConnected && !this._component.matches(':focus-within')) {
-          const autofocusElement = this._component.querySelector<HTMLElement>(DIALOG_CONSTANTS.selectors.AUTOFOCUS);
-          autofocusElement?.focus();
+        const alreadyHasFocus = this._component.matches(':focus-within');
+        if (!alreadyHasFocus) {
+          this._dialogElement.focus();
+
+          if (this._component.open && this._dialogElement.isConnected) {
+            const autofocusElement = this._component.querySelector<HTMLElement>(DIALOG_CONSTANTS.selectors.AUTOFOCUS);
+            autofocusElement?.focus();
+          }
         }
       });
     });
@@ -218,5 +213,35 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   public removeFullscreenListener(listener: (value: boolean) => void): void {
     this._fullscreenMediaQuery?.removeEventListener('change', event => listener(event.matches));
     this._fullscreenMediaQuery = undefined;
+  }
+
+  public setAccessibleLabel(label: string): void {
+    if (label?.trim()) {
+      this._accessibleLabelElement = this._createVisuallyHiddenElement('forge-dialog-label', label);
+      this._dialogElement.appendChild(this._accessibleLabelElement);
+      this._dialogElement.setAttribute('aria-labelledby', this._accessibleLabelElement.id);
+    } else {
+      this._dialogElement.removeAttribute('aria-labelledby');
+      this._accessibleLabelElement?.remove();
+    }
+  }
+
+  public setAccessibleDescription(description: string): void {
+    if (description?.trim()) {
+      this._accessibleDescriptionElement = this._createVisuallyHiddenElement('forge-dialog-description', description);
+      this._dialogElement.appendChild(this._accessibleDescriptionElement);
+      this._dialogElement.setAttribute('aria-describedby', this._accessibleDescriptionElement.id);
+    } else {
+      this._dialogElement.removeAttribute('aria-describedby');
+      this._accessibleDescriptionElement?.remove();
+    }
+  }
+
+  private _createVisuallyHiddenElement(id: string, text: string): HTMLElement {
+    const element = document.createElement('div');
+    element.classList.add('visually-hidden');
+    element.id = id;
+    element.textContent = text.trim();
+    return element;
   }
 }

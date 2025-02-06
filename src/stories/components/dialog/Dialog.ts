@@ -34,8 +34,8 @@ export const Dialog = (args: ArgTypes) => {
   container.appendChild(button);
 
   const dialog = customElementStoryRenderer('forge-dialog', args);
-  dialog.setAttribute('aria-labelledby', 'dialog-title');
-  dialog.setAttribute('aria-describedby', 'dialog-message');
+  dialog.label = 'My dialog title';
+  dialog.description = 'My dialog description';
   dialog.addEventListener('forge-dialog-close', evt => {
     closeEventAction(evt);
     dialog.open = false;
