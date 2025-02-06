@@ -27,7 +27,7 @@ describe('Avatar', () => {
     expect(getDefaultSlotEl(el).textContent).to.equal('TF');
   });
 
-  it('should set restrict letter count when attribute set', async () => {
+  it('should set letter count when attribute set', async () => {
     const el = await fixture<IAvatarComponent>(html`<forge-avatar text="Tyler Forge" letter-count="2"></forge-avatar>`);
 
     el.setAttribute(AVATAR_CONSTANTS.attributes.LETTER_COUNT, '1');
@@ -36,13 +36,13 @@ describe('Avatar', () => {
     expect(getDefaultSlotEl(el).textContent).to.equal('T');
   });
 
-  it('should update the letter count attribute when the property is set ', async () => {
-    const el = await fixture<IAvatarComponent>(html`<forge-avatar text="Tyler Forge"></forge-avatar>`);
+  it('should set letter count when the property is set ', async () => {
+    const el = await fixture<IAvatarComponent>(html`<forge-avatar text="Tyler Forge Avatar"></forge-avatar>`);
 
     el.letterCount = 3;
     await elementUpdated(el);
 
-    expect(el.getAttribute(AVATAR_CONSTANTS.attributes.LETTER_COUNT)).to.equal('3');
+    expect(getDefaultSlotEl(el).textContent).to.equal('TFA');
   });
 
   it('should change background image when set via attribute', async () => {
