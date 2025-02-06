@@ -1,12 +1,9 @@
-import { defineCustomElement } from '@tylertech/forge-core';
+import { tryDefine } from '@tylertech/forge-core';
+import { AVATAR_TAG_NAME, AvatarComponent } from './avatar';
 
-import { AvatarComponent } from './avatar';
-
-export * from './avatar-adapter';
-export * from './avatar-constants';
-export * from './avatar-core';
 export * from './avatar';
+export * from './avatar-constants';
 
 export function defineAvatarComponent(): void {
-  defineCustomElement(AvatarComponent);
+  tryDefine(AVATAR_TAG_NAME, AvatarComponent);
 }
