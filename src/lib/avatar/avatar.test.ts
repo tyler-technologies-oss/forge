@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { task } from '../core/utils/utils';
 import { getShadowElement } from '@tylertech/forge-core';
 import { IAvatarComponent } from './avatar';
@@ -27,20 +27,22 @@ describe('Avatar', () => {
     expect(getDefaultSlotEl(el).textContent).to.equal('TF');
   });
 
-  it('should set restrict letter count when attribute set', async () => {
+  it('should set letter count when attribute set', async () => {
     const el = await fixture<IAvatarComponent>(html`<forge-avatar text="Tyler Forge" letter-count="2"></forge-avatar>`);
 
     el.setAttribute(AVATAR_CONSTANTS.attributes.LETTER_COUNT, '1');
+    await elementUpdated(el);
 
     expect(getDefaultSlotEl(el).textContent).to.equal('T');
   });
 
-  it('should update the letter count attribute when the property is set ', async () => {
-    const el = await fixture<IAvatarComponent>(html`<forge-avatar text="Tyler Forge"></forge-avatar>`);
+  it('should set letter count when the property is set ', async () => {
+    const el = await fixture<IAvatarComponent>(html`<forge-avatar text="Tyler Forge Avatar"></forge-avatar>`);
 
     el.letterCount = 3;
+    await elementUpdated(el);
 
-    expect(el.getAttribute(AVATAR_CONSTANTS.attributes.LETTER_COUNT)).to.equal('3');
+    expect(getDefaultSlotEl(el).textContent).to.equal('TFA');
   });
 
   it('should change background image when set via attribute', async () => {
@@ -60,6 +62,7 @@ describe('Avatar', () => {
     const el = await fixture<IAvatarComponent>(html`<forge-avatar text="Tyler Forge"></forge-avatar>`);
 
     el.setAttribute(AVATAR_CONSTANTS.attributes.TEXT, 'New Value');
+    await elementUpdated(el);
 
     expect(getDefaultSlotEl(el).textContent).to.equal('NV');
   });
@@ -89,7 +92,7 @@ describe('Avatar', () => {
 
     expect(el.text).to.equal('');
     expect(el.letterCount).to.equal(AVATAR_CONSTANTS.numbers.DEFAULT_LETTER_COUNT);
-    expect(el.imageUrl).to.be.undefined;
+    expect(el.imageUrl).to.equal('');
   });
 
   it('should have not have any content by default', async () => {
@@ -117,6 +120,6 @@ describe('Avatar', () => {
     return el.shadowRoot?.firstElementChild as HTMLElement;
   }
   function getDefaultSlotEl(el: IAvatarComponent): HTMLSlotElement {
-    return getShadowElement(el, AVATAR_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
+    return getShadowElement(el, 'slot:not([name])') as HTMLSlotElement;
   }
 });
