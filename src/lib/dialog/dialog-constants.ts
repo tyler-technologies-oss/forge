@@ -17,11 +17,15 @@ const observedAttributes = {
   MOVE_TARGET: 'move-target',
   POSITION_STRATEGY: 'position-strategy',
   PLACEMENT: 'placement',
-  SIZE_STRATEGY: 'size-strategy'
+  SIZE_STRATEGY: 'size-strategy',
+  LABEL: 'label',
+  DESCRIPTION: 'description'
 };
 
 const attributes = {
-  ...observedAttributes
+  ...observedAttributes,
+  ARIA_LABEL_ID: 'forge-dialog-label',
+  ARIA_DESCIPTION_ID: 'forge-dialog-description'
 };
 
 const classes = {

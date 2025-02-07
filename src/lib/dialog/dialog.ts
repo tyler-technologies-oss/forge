@@ -40,6 +40,8 @@ export interface IDialogProperties {
   sizeStrategy: DialogSizeStrategy;
   placement: DialogPlacement;
   moveable: boolean;
+  label: string;
+  description: string;
 }
 
 export interface IDialogComponent extends IDialogProperties, IWithDefaultAria, IWithElementInternals, IDismissible {
@@ -247,6 +249,12 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
       case DIALOG_CONSTANTS.observedAttributes.PLACEMENT:
         this.placement = (newValue as DialogPlacement) ?? DIALOG_CONSTANTS.defaults.PLACEMENT;
         break;
+      case DIALOG_CONSTANTS.observedAttributes.LABEL:
+        this.label = newValue;
+        break;
+      case DIALOG_CONSTANTS.observedAttributes.DESCRIPTION:
+        this.description = newValue;
+        break;
     }
   }
 
@@ -360,6 +368,22 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    */
   @coreProperty()
   public declare placement: DialogPlacement;
+
+  /**
+   * The accessible label of the dialog.
+   * @default ''
+   * @attribute
+   */
+  @coreProperty()
+  public declare label: string;
+
+  /**
+   * The accessible description of the dialog.
+   * @default ''
+   * @attribute
+   */
+  @coreProperty()
+  public declare description: string;
 
   /** Shows the dialog. */
   public show(): void {

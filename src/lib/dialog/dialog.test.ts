@@ -371,23 +371,47 @@ describe('Dialog', () => {
 
       await harness.showAsync();
 
+      expect(harness.nativeDialogElement.role).to.equal('alertdialog');
       await expect(harness.dialogElement).to.be.accessible();
     });
 
-    it('should not set role when role="presentation" is set', async () => {
-      const el = await fixture(html`<forge-dialog role="presentation"></forge-dialog>`);
+    it('should be accessible when mode is set to nonmodal', async () => {
+      const harness = await createFixture({ mode: 'nonmodal' });
 
-      expect(el.getAttribute('role')).to.equal('presentation');
-      expect(el.hasAttribute('aria-modal')).to.be.false;
-      await expect(el).to.be.accessible();
+      await harness.showAsync();
+
+      expect(harness.nativeDialogElement.getAttribute('aria-modal')).to.equal('false');
+      await expect(harness.dialogElement).to.be.accessible();
     });
 
-    it('should not set role when role="none" is set', async () => {
-      const el = await fixture(html`<forge-dialog role="none"></forge-dialog>`);
+    it('should be accessible when label is set', async () => {
+      const harness = await createFixture();
 
-      expect(el.getAttribute('role')).to.equal('none');
-      expect(el.hasAttribute('aria-modal')).to.be.false;
-      await expect(el).to.be.accessible();
+      await harness.showAsync();
+
+      const labelElement = harness.nativeDialogElement.querySelector(`[id="${DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID}"]`) as HTMLElement;
+
+      expect(labelElement).to.be.ok;
+      expect(labelElement.isConnected).to.be.true;
+      expect(labelElement.textContent).to.equal('My dialog title');
+      expect(labelElement.id).to.equal(DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID);
+      expect(harness.nativeDialogElement.getAttribute('aria-labelledby')).to.equal(DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID);
+      await expect(harness.dialogElement).to.be.accessible();
+    });
+
+    it('should be accessible when description is set', async () => {
+      const harness = await createFixture();
+
+      await harness.showAsync();
+
+      const descriptionElement = harness.nativeDialogElement.querySelector(`[id="${DIALOG_CONSTANTS.attributes.ARIA_DESCIPTION_ID}"]`) as HTMLElement;
+
+      expect(descriptionElement).to.be.ok;
+      expect(descriptionElement.isConnected).to.be.true;
+      expect(descriptionElement.textContent).to.equal('My dialog description');
+      expect(descriptionElement.id).to.equal(DIALOG_CONSTANTS.attributes.ARIA_DESCIPTION_ID);
+      expect(harness.nativeDialogElement.getAttribute('aria-describedby')).to.equal(DIALOG_CONSTANTS.attributes.ARIA_DESCIPTION_ID);
+      await expect(harness.dialogElement).to.be.accessible();
     });
   });
 
@@ -1098,8 +1122,8 @@ async function createFixture({
       <button type="button" id="alt-test-trigger">Dialog Trigger</button>
       <forge-dialog
         trigger="test-trigger"
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-desc"
+        label="My dialog title"
+        description="My dialog description"
         ?open=${open}
         type=${type ?? nothing}
         mode=${mode ?? nothing}

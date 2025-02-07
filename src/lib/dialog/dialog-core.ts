@@ -28,6 +28,8 @@ export interface IDialogCore {
   sizeStrategy: DialogSizeStrategy;
   placement: DialogPlacement;
   moveable: boolean;
+  label: string;
+  description: string;
   hideBackdrop(): void;
   showBackdrop(): void;
   dispatchBeforeCloseEvent(): boolean;
@@ -45,6 +47,8 @@ export class DialogCore implements IDialogCore {
   private _originalFullscreenValue: boolean | undefined;
   private _trigger = '';
   private _moveable = false;
+  private _label = '';
+  private _description = '';
   private _sizeStrategy: DialogSizeStrategy = DIALOG_CONSTANTS.defaults.SIZE_STRATEGY;
   private _placement: DialogPlacement = DIALOG_CONSTANTS.defaults.PLACEMENT;
   private _positionStrategy: DialogPositionStrategy = DIALOG_CONSTANTS.defaults.POSITION_STRATEGY;
@@ -398,6 +402,26 @@ export class DialogCore implements IDialogCore {
       }
 
       this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.MOVEABLE, this._moveable);
+    }
+  }
+
+  public get label(): string {
+    return this._label;
+  }
+  public set label(value: string) {
+    if (this._label !== value) {
+      this._label = value;
+      this._adapter.setAccessibleLabel(this._label);
+    }
+  }
+
+  public get description(): string {
+    return this._description;
+  }
+  public set description(value: string) {
+    if (this._description !== value) {
+      this._description = value;
+      this._adapter.setAccessibleDescription(this._description);
     }
   }
 
