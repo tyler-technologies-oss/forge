@@ -22,6 +22,14 @@ export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchC
     this._element.value = value;
   }
 
+  public get checked(): boolean {
+    return this._element.checked;
+  }
+  public set checked(value: boolean) {
+    this._element.checked = value;
+  }
+
+  /** @deprecated Use `checked` instead */
   public get on(): boolean {
     return this._element.on;
   }
@@ -29,6 +37,7 @@ export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchC
     this._element.on = value;
   }
 
+  /** @deprecated Use `checked` instead */
   public get selected(): boolean {
     return this._element.selected;
   }
@@ -36,6 +45,14 @@ export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchC
     this._element.selected = value;
   }
 
+  public get defaultChecked(): boolean {
+    return this._element.defaultChecked;
+  }
+  public set defaultChecked(value: boolean) {
+    this._element.defaultChecked = value;
+  }
+
+  /** @deprecated Use `defaultChecked` instead */
   public get defaultOn(): boolean {
     return this._element.defaultOn;
   }
