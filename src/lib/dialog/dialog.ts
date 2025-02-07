@@ -70,6 +70,7 @@ declare global {
  *
  * @dependency forge-backdrop
  *
+ * @globalconfig mode
  * @globalconfig animationType
  * @globalconfig positionStrategy
  * @globalconfig sizeStrategy
