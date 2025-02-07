@@ -1,15 +1,15 @@
-import { deepQuerySelectorAll, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IAutocompleteComponent } from './autocomplete';
-import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants';
-import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
-import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdown';
+import { getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { CHIP_FIELD_CONSTANTS, IChipFieldComponent } from '../chip-field';
-import { IPopoverComponent } from '../popover/popover';
-import { POPOVER_CONSTANTS } from '../popover';
-import type { IFieldComponent } from '../field/field';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
 import { FIELD_CONSTANTS } from '../field';
+import type { IFieldComponent } from '../field/field';
+import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdown';
+import { POPOVER_CONSTANTS } from '../popover';
+import { IPopoverComponent } from '../popover/popover';
+import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
+import { IAutocompleteComponent } from './autocomplete';
+import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants';
 
 export interface IAutocompleteAdapter extends IBaseAdapter {
   readonly inputElement: HTMLInputElement;
@@ -68,7 +68,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   }
 
   public setInputElement(): HTMLInputElement {
-    const inputElements = deepQuerySelectorAll(this._component, AUTOCOMPLETE_CONSTANTS.selectors.INPUT, false);
+    const inputElements = this._component.querySelectorAll(AUTOCOMPLETE_CONSTANTS.selectors.INPUT);
     if (inputElements.length) {
       this._inputElement = inputElements[0] as HTMLInputElement;
     }
@@ -145,13 +145,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   }
 
   public setDismissListener(listener: () => void): void {
-    if (!this._listDropdown || !this._listDropdown.dropdownElement) {
-      return;
-    }
-    const dropdownElement = this._listDropdown.dropdownElement as IPopoverComponent;
-    if (dropdownElement.anchorElement && dropdownElement.anchorElement instanceof HTMLElement) {
-      dropdownElement.anchorElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, listener);
-    }
+    this._listDropdown?.dropdownElement?.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, listener);
   }
 
   public focus(): void {
@@ -202,7 +196,8 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     window.requestAnimationFrame(() => {
       const textField = this._component.querySelector(TEXT_FIELD_CONSTANTS.elementName);
       if (textField && (textField.popoverIcon || textField.hasAttribute(FIELD_CONSTANTS.attributes.POPOVER_ICON))) {
-        this._component.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK, listener);
+        const eventType = type === 'mousedown' ? FIELD_CONSTANTS.events.POPOVER_ICON_MOUSEDOWN : FIELD_CONSTANTS.events.POPOVER_ICON_CLICK;
+        this._component.addEventListener(eventType, listener);
       }
 
       const dropdownIcon = this._component.querySelector(AUTOCOMPLETE_CONSTANTS.selectors.DROPDOWN_ICON);

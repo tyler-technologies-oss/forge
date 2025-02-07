@@ -7,7 +7,8 @@ const observedAttributes = {
   THEME: 'theme',
   MUTED: 'muted',
   PERSISTENT: 'persistent',
-  INLINE: 'inline'
+  INLINE: 'inline',
+  SKIP_URL_CHANGE: 'skip-url-change'
 };
 
 const attributes = {

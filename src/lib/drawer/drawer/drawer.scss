@@ -20,13 +20,7 @@
 
 @include base-core.core-styles;
 
-//
-// Safari fix for triggering reflow after transition completes (as of Safari 14)
-//
-@media not all and (min-resolution: 0.001dpcm) {
-  @supports (-webkit-appearance: none) and (stroke-color: transparent) {
-    :host([open]) {
-      transform: translateZ(0);
-    }
-  }
+:host([open]) {
+  // Safari fix for triggering reflow after transition completes (as of Safari 17.6)
+  transform: translateZ(0);
 }

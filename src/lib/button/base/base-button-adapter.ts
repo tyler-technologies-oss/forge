@@ -89,7 +89,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
     } else {
       if (value) {
         this._component.removeAttribute('tabindex');
-      } else {
+      } else if (!this._component.hasAttribute('tabindex')) {
         this._component.setAttribute('tabindex', '0');
       }
       this._component[setDefaultAria]({ ariaDisabled: value ? 'true' : null });
@@ -225,7 +225,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
   }
 
   public animateStateLayer(): void {
-    if (this._stateLayerElement.disabled) {
+    if (this._stateLayerElement.disabled || !this._stateLayerElement.isConnected) {
       return;
     }
     this._stateLayerElement?.playAnimation();

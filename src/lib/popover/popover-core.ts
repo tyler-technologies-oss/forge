@@ -324,7 +324,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
    *
    * Only called when using the "click" (default) trigger type.
    */
-  private _onAnchorClick(evt: PointerEvent): void {
+  private _onAnchorClick(_evt: PointerEvent): void {
     if (!this.open) {
       this._openPopover();
     } else {

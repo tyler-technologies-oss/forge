@@ -25,6 +25,8 @@ const config: StorybookConfig = {
         },
       },
     },
+    'storybook-addon-tag-badges',
+    './addons/google-analytics/register.js',
   ],
   staticDirs: ['../src/stories/assets'],
   framework: {

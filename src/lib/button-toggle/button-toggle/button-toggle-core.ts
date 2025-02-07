@@ -93,7 +93,6 @@ export class ButtonToggleCore implements IButtonToggleCore {
   public set value(value: unknown) {
     if (this._value !== value) {
       this._value = value;
-      this._adapter.setHostAttribute(BUTTON_TOGGLE_CONSTANTS.attributes.VALUE, `${this._value}`);
     }
   }
 

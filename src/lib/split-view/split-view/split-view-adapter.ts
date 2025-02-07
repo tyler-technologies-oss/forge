@@ -78,6 +78,7 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
     panels
       .slice()
       .reverse()
+      .filter(panel => panel.open)
       .forEach(panel => {
         if (diff <= 0) {
           return;

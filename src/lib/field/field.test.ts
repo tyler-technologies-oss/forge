@@ -324,6 +324,37 @@ describe('Field', () => {
 
       expect(clickSpy.called).to.be.false;
     });
+
+    it('should dispatch popover icon mousedown event when popover icon receives mousedown event', async () => {
+      const harness = await createFixture({ popoverIcon: true });
+      const mousedownSpy = spy();
+      harness.element.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_MOUSEDOWN, mousedownSpy);
+
+      harness.popoverIconElement.dispatchEvent(new MouseEvent('mousedown'));
+
+      expect(mousedownSpy.called).to.be.true;
+    });
+
+    it('should not dispatch popover icon mousedown event when popover icon is removed', async () => {
+      const harness = await createFixture({ popoverIcon: true });
+      const mousedownSpy = spy();
+      harness.element.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_MOUSEDOWN, mousedownSpy);
+      harness.element.popoverIcon = false;
+
+      harness.popoverIconElement.dispatchEvent(new MouseEvent('mousedown'));
+
+      expect(mousedownSpy.called).to.be.false;
+    });
+
+    it('should prevent default on the original mousedown event if default prevented on popover icon mousedown event', async () => {
+      const harness = await createFixture({ popoverIcon: true });
+      harness.element.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_MOUSEDOWN, evt => evt.preventDefault());
+
+      const mousedownEvent = new MouseEvent('mousedown', { cancelable: true });
+      harness.popoverIconElement.dispatchEvent(mousedownEvent);
+
+      expect(mousedownEvent.defaultPrevented).to.be.true;
+    });
   });
 
   describe('slots', () => {
@@ -541,6 +572,7 @@ class FieldHarness extends TestHarness<IFieldComponent> {
   public rootElement: HTMLElement;
   public labelElement: HTMLElement;
   public containerElement: HTMLElement;
+  public inputContainerElement: HTMLElement;
   public popoverIconElement: HTMLElement;
 
   constructor(el: IFieldComponent) {
@@ -551,6 +583,7 @@ class FieldHarness extends TestHarness<IFieldComponent> {
     this.rootElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.ROOT);
     this.labelElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.LABEL);
     this.containerElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.CONTAINER);
+    this.inputContainerElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.INPUT_CONTAINER);
     this.popoverIconElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.POPOVER_ICON);
   }
 

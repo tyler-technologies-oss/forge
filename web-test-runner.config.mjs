@@ -26,6 +26,8 @@ export const directoryGroup = source =>
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name);
 
+export const FILTERED_LOGS = ['Lit is in dev mode'];
+
 /**
  * @type {import('@web/test-runner').TestRunnerConfig}
  */
@@ -33,6 +35,14 @@ export default {
   concurrentBrowsers: 1,
   concurrency: 1,
   nodeResolve: true,
+  filterBrowserLogs: ({ args }) => {
+    for (const arg of args) {
+      if (typeof arg === 'string' && FILTERED_LOGS.some(l => arg.includes(l))) {
+        return false;
+      }
+    }
+    return true;
+  },
   testsFinishTimeout: 60000,
   testFramework: {
     config: {

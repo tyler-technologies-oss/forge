@@ -10,7 +10,7 @@ $tokens: (
   primary-color: utils.module-val(radio, primary-color, theme.variable(tertiary)),
   inactive-color: utils.module-val(radio, inactive-color, theme.variable(surface-container-high)),
   size: utils.module-val(radio, size, 20px),
-  mark-size: utils.module-val(radio, mark-size, 12px),
+  mark-size: utils.module-val(radio, mark-size, 75%),
   state-layer-size: utils.module-val(radio, state-layer-size, 40px),
   state-layer-dense-size: utils.module-val(radio, state-layer-dense-size, 24px),
   // Radio
@@ -24,13 +24,11 @@ $tokens: (
   // Mark
   mark-width: utils.module-ref(radio, mark-width, mark-size),
   mark-height: utils.module-ref(radio, mark-height, mark-size),
-  mark-unchecked-color: utils.module-ref(radio, mark-unchecked-color, inactive-color),
-  mark-checked-color: utils.module-ref(radio, mark-checked-color, primary-color),
-  mark-unchecked-background: utils.module-val(radio, mark-unchecked-background, transparent),
-  mark-checked-background: utils.module-val(radio, mark-checked-background, transparent),
+  mark-color: utils.module-ref(radio, mark-color, primary-color),
   // Label
   gap: utils.module-val(radio, gap, 0),
   justify: utils.module-val(radio, justify, start),
+  align: utils.module-val(radio, align, center),
   direction: utils.module-val(radio, direction, initial),
   // State layer
   state-layer-width: utils.module-ref(radio, state-layer-width, state-layer-size),

@@ -3,7 +3,7 @@ import { ProfileCardAdapter } from './profile-card-adapter';
 import { ProfileCardCore } from './profile-card-core';
 import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
 import { ButtonComponent } from '../button';
-import { AvatarComponent } from '../avatar';
+import { defineAvatarComponent } from '../avatar';
 import { IconComponent } from '../icon/icon';
 import { ToolbarComponent } from '../toolbar';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
@@ -40,9 +40,13 @@ declare global {
  */
 @customElement({
   name: PROFILE_CARD_CONSTANTS.elementName,
-  dependencies: [ToolbarComponent, ButtonComponent, IconComponent, AvatarComponent]
+  dependencies: [ToolbarComponent, ButtonComponent, IconComponent]
 })
 export class ProfileCardComponent extends BaseComponent implements IProfileCardComponent {
+  static {
+    defineAvatarComponent();
+  }
+
   public static get observedAttributes(): string[] {
     return [
       PROFILE_CARD_CONSTANTS.attributes.FULL_NAME,

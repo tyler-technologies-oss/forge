@@ -19,7 +19,7 @@ import {
   IFieldComponent
 } from '../../field';
 import { IPopoverComponent, POPOVER_CONSTANTS } from '../../popover';
-import { BASE_SELECT_CONSTANTS } from '../core';
+import { BASE_SELECT_CONSTANTS, ISelectOption } from '../core';
 import { ISelectComponent } from './select';
 import { SELECT_CONSTANTS } from './select-constants';
 
@@ -126,6 +126,18 @@ describe('Select', () => {
       await frame();
 
       expect(spyScrolledBottom.calledOnce).to.be.true;
+    });
+
+    it('should set element attributes on options', async () => {
+      const options: ISelectOption[] = [
+        { label: 'One', value: 1 },
+        { label: 'Two', value: 2 },
+        { label: 'Three', value: 3, elementAttributes: new Map<string, string>([['data-test-attr', 'test-value']]) }
+      ];
+      const harness = await createFixture();
+      harness.element.options = options;
+      console.log('hello options', harness.element.children[2].getAttribute('data-test-attr'));
+      expect(harness.element.children[2].getAttribute('data-test-attr')).to.equal('test-value');
     });
   });
 

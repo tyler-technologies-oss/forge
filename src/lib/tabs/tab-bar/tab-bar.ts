@@ -7,16 +7,20 @@ import { TabBarAdapter } from './tab-bar-adapter';
 import { ITabBarChangeEventData, TAB_BAR_CONSTANTS } from './tab-bar-constants';
 import { TabBarCore } from './tab-bar-core';
 import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
+import { setDefaultAria } from '../../constants';
 
 import template from './tab-bar.html';
 import styles from './tab-bar.scss';
 
-export interface ITabBarComponent extends IBaseComponent {
+export interface ITabBarComponent extends IBaseComponent, IWithDefaultAria, IWithElementInternals {
   disabled: boolean;
   activeTab: number | null | undefined;
   vertical: boolean;
   clustered: boolean;
   stacked: boolean;
+  /** @deprecated This will be removed in a future version */
   secondary: boolean;
   inverted: boolean;
   autoActivate: boolean;
@@ -47,12 +51,12 @@ declare global {
  * @dependency forge-icon-button
  * @dependency forge-icon
  *
- * @property {boolean} [disabled=false] - The disabled state of the tab bar.
+ * @property {boolean} [disabled=false] - Sets the disabled state of all child tabs.  If true, any new tabs added to the DOM will be disabled by default. This can be used instead of setting individual tab disabled properties, mixing the two methods of disabling is not supported.
  * @property {number} [activeTab=null] - The index of the active tab.
  * @property {boolean} [vertical=false] - Controls whether the tab bar is vertical or horizontal.
  * @property {boolean} [clustered=false] - Controls whether the tabs stretch the full width of their container or cluster together at their minimum width.
  * @property {boolean} [stacked=false] - Controls whether the tabs are taller to allow for slotted leading/trailing elements.
- * @property {boolean} [secondary=false] - Controls whether the tabs are styled as secondary tab navigation.
+ * @property {boolean} [secondary=false] - Deprecated. Controls whether the tabs are styled as secondary tab navigation.
  * @property {boolean} [inverted=false] - Controls whether the tabs are rendered inverted (tab indicator at top instead of bottom).
  * @property {boolean} [autoActivate=false] - Controls whether the tabs are automatically activated when receiving focus.
  * @property {boolean} [scrollButtons=false] - Controls whether scroll buttons are displayed when the tabs overflow their container.
@@ -62,10 +66,9 @@ declare global {
  * @attribute {boolean} [vertical=false] - Controls whether the tab bar is vertical or horizontal.
  * @attribute {boolean} [clustered=false] - Controls whether the tabs stretch the full width of their container or cluster together at their minimum width.
  * @attribute {boolean} [stacked=false] - Controls whether the tabs are taller to allow for slotted leading/trailing elements.
- * @attribute {boolean} [secondary=false] - Controls whether the tabs are styled as secondary tab navigation.
+ * @attribute {boolean} [secondary=false] - Deprecated. Controls whether the tabs are styled as secondary tab navigation.
  * @attribute {boolean} [auto-activate=false] - Controls whether the tabs are automatically activated when receiving focus.
  * @attribute {boolean} [scroll-buttons=false] - Controls whether scroll buttons are displayed when the tabs overflow their container.
- * @attribute {string} [data-aria-label] - The ARIA label to forward to the internal tablist element.
  *
  * @event {CustomEvent<ITabBarChangeEventData>} forge-tab-bar-change - Dispatches when the active tab changes.
  *
@@ -81,7 +84,7 @@ declare global {
   name: TAB_BAR_CONSTANTS.elementName,
   dependencies: [TabComponent, IconButtonComponent, IconComponent]
 })
-export class TabBarComponent extends BaseComponent implements ITabBarComponent {
+export class TabBarComponent extends WithDefaultAria(WithElementInternals(BaseComponent)) implements ITabBarComponent {
   public static get observedAttributes(): string[] {
     return Object.values(TAB_BAR_CONSTANTS.observedAttributes);
   }
@@ -96,6 +99,7 @@ export class TabBarComponent extends BaseComponent implements ITabBarComponent {
   }
 
   public connectedCallback(): void {
+    this[setDefaultAria]({ role: 'tablist' }, { setAttribute: true });
     this._core.initialize();
   }
 
@@ -150,6 +154,7 @@ export class TabBarComponent extends BaseComponent implements ITabBarComponent {
   @coreProperty()
   public declare stacked: boolean;
 
+  /** @deprecated This will be removed in a future version */
   @coreProperty()
   public declare secondary: boolean;
 

@@ -51,12 +51,10 @@ declare global {
  * @cssproperty --forge-radio-mark-size - The size of the radio button's mark in the inline and block directions.
  * @cssproperty --forge-radio-mark-width - The width of the radio button's mark.
  * @cssproperty --forge-radio-mark-height - The height of the radio button's mark.
- * @cssproperty --forge-radio-mark-unchecked-color - The color of the radio button's mark when unchecked.
- * @cssproperty --forge-radio-mark-checked-color - The color of the radio button's mark when checked.
- * @cssproperty --forge-radio-mark-unchecked-background - The background of the radio button's mark when unchecked.
- * @cssproperty --forge-radio-mark-checked-background - The background of the radio button's mark when checked.
+ * @cssproperty --forge-radio-mark-color - The color of the radio button's mark.
  * @cssproperty --forge-radio-gap - The gap between the radio button and its label.
  * @cssproperty --forge-radio-justify - The alignment of the radio button and its label in the inline direction.
+ * @cssproperty --forge-radio-align - The alignment of the radio button and its label in the block direction.
  * @cssproperty --forge-radio-direction - The direction of the radio button and its label.
  * @cssproperty --forge-radio-state-layer-size - The size of the radio button's state layer in the inline and block directions.
  * @cssproperty --forge-radio-state-layer-width - The width of the radio button's state layer.
@@ -198,7 +196,7 @@ export class RadioComponent
   /**
    * Gets/sets whether the radio is checked by default.
    * @default false
-   * @attribute
+   * @attribute default-checked
    */
   @coreProperty()
   public declare defaultChecked: boolean;
@@ -246,7 +244,7 @@ export class RadioComponent
   /**
    * Controls whether the label appears before or after the radio.
    * @default 'end'
-   * @attribute
+   * @attribute label-position
    */
   @coreProperty()
   public declare labelPosition: RadioLabelPosition;

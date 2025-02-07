@@ -24,19 +24,6 @@ describe('Tabs', () => {
     await expect(el).to.be.accessible();
   });
 
-  it('should forward aria-label to internal tablist element', async () => {
-    const el = await createFixture();
-    const scrollContainerEl = getShadowElement(el, TAB_BAR_CONSTANTS.selectors.SCROLL_CONTAINER);
-
-    expect(scrollContainerEl.hasAttribute('aria-label')).to.be.false;
-
-    el.setAttribute('data-aria-label', 'Test');
-    await elementUpdated(el);
-
-    expect(scrollContainerEl.getAttribute('aria-label')).to.equal('Test');
-    await expect(el).to.be.accessible();
-  });
-
   it('should set default active tab', async () => {
     const el = await createFixture({ activeTab: 1 });
     const ctx = new TabsHarness(el);
@@ -56,6 +43,27 @@ describe('Tabs', () => {
     expect(el.activeTab).to.equal(1);
     expect(ctx.tabs[1].selected).to.be.true;
     expect(ctx.selectedTabCount).to.be.equal(1);
+  });
+
+  it('should not set focus on tab when active tab is set', async () => {
+    const el = await createFixture({ activeTab: 0 });
+    const ctx = new TabsHarness(el);
+
+    expect(ctx.tabs[0].matches(':focus')).to.be.false;
+
+    el.activeTab = 1;
+
+    expect(ctx.tabs[1].matches(':focus')).to.be.false;
+  });
+
+  it('should set focus on tab when user clicks on tab', async () => {
+    const el = await createFixture();
+    const ctx = new TabsHarness(el);
+
+    ctx.clickTab(0);
+    await elementUpdated(el);
+
+    expect(ctx.tabs[0].matches(':focus')).to.be.true;
   });
 
   it('should deselect tab when active tab set to undefined', async () => {
@@ -104,6 +112,20 @@ describe('Tabs', () => {
     ).to.be.true;
   });
 
+  it('should not override tab disabled if disabled is false', async () => {
+    const el = await createFixture({ disabled: false, tabDisabled: [true, true, true] });
+    const ctx = new TabsHarness(el);
+
+    await expect(el).to.be.accessible();
+    expect(el.disabled).to.be.false;
+    expect(
+      ctx.tabs.every(tab => {
+        const stateLayer = getShadowElement(tab, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
+        return tab.disabled && tab.hasAttribute('disabled') && stateLayer.disabled;
+      })
+    ).to.be.true;
+  });
+
   it('should set stacked', async () => {
     const el = await createFixture({ stacked: true });
     const ctx = new TabsHarness(el);
@@ -111,15 +133,6 @@ describe('Tabs', () => {
     expect(el.stacked).to.be.true;
     expect(el.hasAttribute(TAB_BAR_CONSTANTS.attributes.STACKED)).to.be.true;
     expect(ctx.tabs.every(tab => tab.stacked && tab.hasAttribute(TAB_CONSTANTS.attributes.STACKED))).to.be.true;
-  });
-
-  it('should set secondary', async () => {
-    const el = await createFixture({ secondary: true });
-    const ctx = new TabsHarness(el);
-
-    expect(el.secondary).to.be.true;
-    expect(el.hasAttribute(TAB_BAR_CONSTANTS.attributes.SECONDARY)).to.be.true;
-    expect(ctx.tabs.every(tab => tab.secondary && tab.hasAttribute(TAB_CONSTANTS.attributes.SECONDARY))).to.be.true;
   });
 
   it('should set clustered', async () => {
@@ -699,12 +712,12 @@ interface TabsFixtureConfig {
   clustered?: boolean;
   vertical?: boolean;
   stacked?: boolean;
-  secondary?: boolean;
   inverted?: boolean;
   scrollButtons?: boolean;
   autoActivate?: boolean;
   width?: string;
   height?: string;
+  tabDisabled?: [boolean, boolean, boolean];
 }
 
 async function createFixture({
@@ -713,28 +726,27 @@ async function createFixture({
   clustered,
   vertical,
   stacked,
-  secondary,
   inverted,
   scrollButtons,
   autoActivate,
   width,
-  height
+  height,
+  tabDisabled
 }: TabsFixtureConfig = {}): Promise<ITabBarComponent> {
   return fixture(html`
     <forge-tab-bar
       .activeTab=${activeTab}
-      .disabled=${disabled}
-      .vertical=${vertical}
-      .clustered=${clustered}
-      .stacked=${stacked}
-      .secondary=${secondary}
-      .inverted=${inverted}
-      .autoActivate=${autoActivate}
-      .scrollButtons=${scrollButtons}
+      ?disabled=${disabled}
+      .vertical=${!!vertical}
+      .clustered=${!!clustered}
+      .stacked=${!!stacked}
+      .inverted=${!!inverted}
+      .autoActivate=${!!autoActivate}
+      .scrollButtons=${!!scrollButtons}
       style="width: ${width ?? 'auto'}; height: ${height ?? 'auto'}">
-      <forge-tab>First</forge-tab>
-      <forge-tab>Second</forge-tab>
-      <forge-tab>Third</forge-tab>
+      <forge-tab ?disabled=${tabDisabled?.[0]}>First</forge-tab>
+      <forge-tab ?disabled=${tabDisabled?.[1]}>Second</forge-tab>
+      <forge-tab ?disabled=${tabDisabled?.[2]}>Third</forge-tab>
     </forge-tab-bar>
   `);
 }

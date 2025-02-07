@@ -21,7 +21,6 @@
   transition-timing-function: #{token(animation-easing)};
 
   min-height: 0;
-  overflow: hidden;
 
   opacity: 0;
 }
@@ -29,7 +28,6 @@
 @mixin inner {
   display: grid;
   grid-template-rows: 1fr;
-  overflow: hidden;
 }
 
 @mixin orientation-horizontal-base {

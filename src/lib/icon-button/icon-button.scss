@@ -1,7 +1,9 @@
 @use './core' as *;
-@use '../core/styles/theme';
+@use '../theme';
+@use '../typography';
 @use '../state-layer';
 @use '../focus-indicator';
+@use '../badge';
 @use '../circular-progress';
 
 //
@@ -195,6 +197,23 @@ forge-state-layer {
 
   ::slotted(forge-badge[slot='badge'][dot]) {
     top: 0;
+  }
+}
+
+:host(:is([dense], [density='small'])) {
+  // We reduce the size of the badge when the density is small
+  ::slotted(forge-badge[slot='badge']) {
+    @include typography.provide(
+      label1,
+      (
+        line-height: normal
+      )
+    );
+    @include badge.provide-theme(
+      (
+        height: auto
+      )
+    );
   }
 }
 

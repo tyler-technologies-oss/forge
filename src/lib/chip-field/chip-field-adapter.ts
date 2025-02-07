@@ -10,6 +10,7 @@ export interface IChipFieldAdapter extends IBaseFieldAdapter {
   readonly popoverTargetElement: HTMLElement;
   readonly hasInputValue: boolean;
   readonly inputHasFocus: boolean;
+  readonly inputElement: HTMLInputElement | undefined;
   initialize(): void;
   addRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void;
   removeRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void;
@@ -50,6 +51,10 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
 
   public get inputHasFocus(): boolean {
     return !!this._inputElement?.matches(':focus');
+  }
+
+  public get inputElement(): HTMLInputElement | undefined {
+    return this._inputElement;
   }
 
   public get popoverTargetElement(): HTMLElement {

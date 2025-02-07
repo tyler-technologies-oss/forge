@@ -110,7 +110,7 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
   /**
    * Removes click handling from the label.
    * @default false
-   * @attribute
+   * @attribute non-interactive
    */
   @coreProperty()
   public declare nonInteractive: boolean;

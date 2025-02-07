@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import { frame } from '../core/utils/utils';
-import { sendMouse } from '@web/test-runner-commands';
+import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
 import { TestHarness } from '../../test/utils/test-harness';
@@ -114,12 +114,15 @@ describe('Text field', () => {
       expect(harness.clearButtonElement).to.be.null;
     });
 
-    it('should clear input when clear button is clicked', async () => {
+    it('should clear input and dispatch an input event when clear button is clicked', async () => {
       const harness = await createFixture({ showClear: true });
       harness.inputElement.value = 'test';
+      const eventSpy = spy();
+      harness.inputElement.addEventListener('input', eventSpy);
       harness.clearButtonElement!.click();
       await frame();
       expect(harness.inputElement.value).to.equal('');
+      expect(eventSpy).to.have.been.called;
     });
 
     it('should emit event when clear button is pressed', async () => {
@@ -233,6 +236,16 @@ describe('Text field', () => {
       expect(harness.fieldElement.floatLabel).to.be.true;
     });
 
+    it('should float label when input type number has non-numeric characters', async () => {
+      const harness = await createFixture({ type: 'number' });
+      harness.element.labelPosition = 'inset';
+      harness.inputElement.focus();
+      await sendKeys({ press: 'e' });
+      await frame();
+      expect(harness.inputElement.value).to.be.empty;
+      expect(harness.fieldElement.floatLabel).to.be.true;
+    });
+
     it('should not float label when input has no value or placeholder', async () => {
       const harness = await createFixture();
       harness.element.labelPosition = 'inset';
@@ -288,14 +301,15 @@ class TextFieldHarness extends TestHarness<ITextFieldComponent> {
 }
 
 interface TextFieldFixtureConfig {
+  type?: string;
   showClear?: boolean;
 }
 
-async function createFixture({ showClear }: TextFieldFixtureConfig = {}): Promise<TextFieldHarness> {
+async function createFixture({ type = 'text', showClear }: TextFieldFixtureConfig = {}): Promise<TextFieldHarness> {
   const el = await fixture<ITextFieldComponent>(html`
-    <forge-text-field .showClear=${showClear}>
+    <forge-text-field .showClear=${!!showClear}>
       <label slot="label" for="input">Label</label>
-      <input id="input" type="text" />
+      <input id="input" .type=${type} />
     </forge-text-field>
   `);
   return new TextFieldHarness(el);

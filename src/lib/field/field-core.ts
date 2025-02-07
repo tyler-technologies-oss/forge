@@ -55,16 +55,19 @@ export class FieldCore implements IFieldCore {
 
   private _slotChangeListener: EventListener = this._onSlotChange.bind(this);
   private _popoverIconClickListener: EventListener = this._onPopoverIconClick.bind(this);
+  private _popoverIconMousedownListener: EventListener = this._onPopoverIconMousedown.bind(this);
 
   constructor(private _adapter: IFieldAdapter) {}
 
   public initialize(): void {
     this._adapter.addRootListener('slotchange', this._slotChangeListener);
+    this._adapter.initializeSlots();
     this._adapter.tryApplyGlobalConfiguration(['labelPosition', 'variant']);
     this._adapter.setLabelPosition(this._labelPosition);
 
     if (this._popoverIcon) {
-      this._adapter.addPopoverIconClickListener(this._popoverIconClickListener);
+      this._adapter.addPopoverIconListener('click', this._popoverIconClickListener);
+      this._adapter.addPopoverIconListener('mousedown', this._popoverIconMousedownListener);
     }
   }
 
@@ -76,10 +79,15 @@ export class FieldCore implements IFieldCore {
     this._adapter.dispatchHostEvent(new CustomEvent(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK, { bubbles: true, composed: true }));
   }
 
+  private _onPopoverIconMousedown(evt: Event): void {
+    const popoverEvent = new CustomEvent(FIELD_CONSTANTS.events.POPOVER_ICON_MOUSEDOWN, { bubbles: true, composed: true, cancelable: true });
+    this._adapter.dispatchHostEvent(popoverEvent);
+    if (popoverEvent.defaultPrevented) evt.preventDefault();
+  }
+
   public floatLabelWithoutAnimation(value: boolean): void {
     if (this._floatLabel !== value) {
       this._floatLabel = value;
-      this._adapter.setFloatingLabel(this._floatLabel, true);
       this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL, this._floatLabel);
     }
   }
@@ -116,7 +124,9 @@ export class FieldCore implements IFieldCore {
   public set floatLabel(value: boolean) {
     if (this._floatLabel !== value) {
       this._floatLabel = value;
-      this._adapter.setFloatingLabel(this._floatLabel);
+      if (this._adapter.hasSlottedLabel) {
+        this._adapter.setFloatingLabel(this._floatLabel);
+      }
       this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL, this._floatLabel);
     }
   }
@@ -225,9 +235,11 @@ export class FieldCore implements IFieldCore {
       }
 
       if (this._popoverIcon) {
-        this._adapter.addPopoverIconClickListener(this._popoverIconClickListener);
+        this._adapter.addPopoverIconListener('click', this._popoverIconClickListener);
+        this._adapter.addPopoverIconListener('mousedown', this._popoverIconMousedownListener);
       } else {
-        this._adapter.removePopoverIconClickListener(this._popoverIconClickListener);
+        this._adapter.removePopoverIconListener('click', this._popoverIconClickListener);
+        this._adapter.removePopoverIconListener('mousedown', this._popoverIconMousedownListener);
       }
     }
   }

@@ -263,6 +263,7 @@ export interface Declaration {
   cssFilePath?: TagItem;
   cssClasses?: TagItem[];
   globalConfigProperties?: GlobalConfigPropertyItem[];
+  states?: TagItem[];
 }
 
 export interface DependencyItem {

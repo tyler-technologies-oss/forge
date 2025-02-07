@@ -191,9 +191,11 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
     return this._options as IAutocompleteOption[];
   }
 
-  private _onClick(evt: MouseEvent): void {
+  private _onClick(_evt: MouseEvent): void {
     if (!this._isDropdownOpen && this._filterOnFocus) {
       this._showDropdown();
+    } else {
+      this._closeDropdown();
     }
   }
 
@@ -447,8 +449,6 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
       selectedValues: [...this._values],
       id: `forge-autocomplete-${this._identifier}`,
       asyncStyle: ListDropdownAsyncStyle.Skeleton,
-      optionLimit: this._optionLimit,
-      popupClasses: this._popupClasses,
       headerBuilder: this._popupHeaderBuilder,
       footerBuilder: this._popupFooterBuilder,
       transform: label => {
@@ -463,7 +463,11 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
       },
       allowBusy: true,
       optionBuilder: listOptionBuilder,
+      optionLimit: this._optionLimit,
+      popupClasses: this._popupClasses,
       syncWidth: this._syncPopupWidth,
+      constrainViewportWidth: this._constrainPopupWidth,
+      wrapOptionText: this._wrapOptionText,
       observeScroll: this._observeScroll,
       observeScrollThreshold: this._observeScrollThreshold,
       scrollEndListener: this._dropdownScrollEndListener,

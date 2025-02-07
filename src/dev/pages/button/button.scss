@@ -4,14 +4,14 @@
 @use '../../../lib/focus-indicator';
 @use '../../../lib/core/styles/elevation';
 
+.content > .card {
+  max-width: 1024px;
+}
+
 .button-demo {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-:is(forge-button,forge-deprecated-button,.forge-button:not(.forge-button--link)):not([full-width]) {
-  width: 256px;
 }
 
 form:has(forge-button) forge-button,

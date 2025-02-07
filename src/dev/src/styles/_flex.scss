@@ -2,4 +2,8 @@
   display: flex;
   gap: 16px;
   align-items: center;
+
+  &--wrap {
+    flex-wrap: wrap;
+  }
 }

@@ -251,14 +251,6 @@ export class TableUtils {
         Object.assign(cellContainer.style, columnConfig.headerCellStyle);
       }
 
-      const span = document.createElement('span');
-      span.classList.add(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_TEXT);
-      span.textContent = columnConfig.header && typeof columnConfig.header === 'string' ? columnConfig.header.trim() : '';
-
-      if (span.textContent.trim().length === 0) {
-        th.setAttribute('aria-hidden', 'true');
-      }
-
       // Add the sort icon if this column is sortable
       if (columnConfig.sortable) {
         th.classList.add(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTABLE);
@@ -309,6 +301,12 @@ export class TableUtils {
           }
         });
       } else {
+        const span = document.createElement('span');
+        span.classList.add(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_TEXT);
+        span.textContent = columnConfig.header && typeof columnConfig.header === 'string' ? columnConfig.header.trim() : '';
+        if (span.textContent.trim().length === 0) {
+          th.setAttribute('aria-hidden', 'true');
+        }
         TableUtils._prepend(span, cellContainer);
       }
 

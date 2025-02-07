@@ -24,6 +24,7 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
     this._adapter.tryApplyGlobalConfiguration(['labelPosition', 'variant']);
     this._adapter.addRootListener('slotchange', this._slotChangeListener);
     this._adapter.addRootListener('input', this._inputListener);
+    this._initializeSlots();
   }
 
   public destroy(): void {
@@ -36,14 +37,22 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
     return this._adapter.popoverTargetElement;
   }
 
+  private _initializeSlots(): void {
+    this._adapter.getAllSlotElements().forEach(slot => this._handleSlotChange(slot.name));
+  }
+
   private _onSlotChange(evt: Event): void {
     const target = evt.target as HTMLSlotElement;
-    switch (target.name) {
+    this._handleSlotChange(target.name);
+  }
+
+  private _handleSlotChange(name: string): void {
+    switch (name) {
       case 'label':
-        this._adapter.tryConnectSlottedLabel(target);
+        this._adapter.tryConnectSlottedLabel();
         break;
       case '':
-        this._adapter.handleDefaultSlotChange(target, this._inputAttributeListener);
+        this._adapter.handleDefaultSlotChange(this._inputAttributeListener);
         this._adapter.tryAddValueChangeListener(this, this._valueChangeListener);
         this._tryFloatLabel();
         break;
@@ -73,8 +82,15 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
     }
   }
 
-  private _onValueChange(): void {
-    this._tryFloatLabel();
+  private _onValueChange(evt: InputEvent): void {
+    let force;
+
+    // Handle the special case where a number input allows invalid characters
+    if ((evt.target as HTMLInputElement | undefined)?.type === 'number' && (evt.data != null || (evt.target as HTMLInputElement).validity.badInput)) {
+      force = true;
+    }
+
+    this._tryFloatLabel(force);
     this._toggleClearButtonVisibility();
   }
 

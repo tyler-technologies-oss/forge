@@ -34,11 +34,13 @@ declare global {
  * @property {AppBarElevation} [elevation="raised"] - The elevation of the app bar.
  * @property {AppBarTheme} theme - The theme of the app bar.
  * @property {string} href - The href that will be used to make the logo and title area a clickable link.
+ * @property {string} target - The `<a>` target of the logo + title area link when `href` is set.
  *
  * @attribute {string} title-text - The text to display in the title.
  * @attribute {string} [elevation="raised"] - The elevation of the app bar.
  * @attribute {string} theme - The theme of the app bar.
  * @attribute {string} href - The href that will be used to make the logo and title area a clickable link
+ * @attribute {string} target - The `<a>` target of the logo + title area link when `href` is set.
  *
  * @cssproperty --forge-app-bar-background - The background color of the app bar.
  * @cssproperty --forge-app-bar-foreground - The text color of the app bar.
@@ -48,6 +50,7 @@ declare global {
  * @cssproperty --forge-app-bar-row-padding - The inline padding of the app bar.
  * @cssproperty --forge-app-bar-logo-gap - The space between the logo and title.
  * @cssproperty --forge-app-bar-title-padding - The padding around the title element.
+ * @cssproperty --forge-app-bar-columns - The grid column track sizes.
  * @cssproperty --forge-app-bar-transition-duration - The transition duration for animations.
  * @cssproperty --forge-app-bar-transition-timing - The transition timing function for animations.
  *

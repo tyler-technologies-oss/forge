@@ -31,8 +31,8 @@ declare global {
  * @attribute {boolean} no-padding - Sets the internal padding style to 0.
  * @attribute {boolean} auto-height - Forces the internal container to use `height: auto` for dynamic content that doesn't fit the static height.
  *
- * @cssproperty --forge-theme-height - Controls the height.
- * @cssproperty --forge-theme-min-height - Controls the minimum height.
+ * @cssproperty --forge-toolbar-height - Controls the height.
+ * @cssproperty --forge-toolbar-min-height - Controls the minimum height. Defaults to the toolbar height.
  * @cssproperty --forge-theme-surface - Controls the background-color of the toolbar.
  * @cssproperty --forge-toolbar-divider-width - Controls the divider width.
  * @cssproperty --forge-toolbar-divider-style - Controls the divider style.
@@ -45,6 +45,7 @@ declare global {
  * @cssproperty --forge-toolbar-padding - Controls the left and right padding using the padding-inline style.
  * @cssproperty --forge-toolbar-padding-block - Controls the top and bottom padding using the padding-block style.
  * @cssproperty --forge-toolbar-padding-inline - Controls the left and right padding using the padding-block style.
+ * @cssproperty --forge-toolbar-columns - The grid column track sizes.
  *
  * @csspart root - The root container element wrapping all slots and content.
  * @csspart inner - The internal container element for the start, center, and end slots.

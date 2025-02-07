@@ -1,10 +1,12 @@
+import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendKeys } from '@web/test-runner-commands';
 import { IAccordionComponent } from './accordion';
+import { IExpansionPanelComponent } from '../expansion-panel';
+import { ACCORDION_CONSTANTS } from './accordion-constants';
 
 import './accordion';
-import { IExpansionPanelComponent } from '../expansion-panel';
 
 describe('Accordion', () => {
   it('should not have shadow root', async () => {
@@ -120,6 +122,21 @@ describe('Accordion', () => {
     expect(secondPanel.open).to.be.false;
     expect(thirdPanel.open).to.be.true;
   });
+
+  it('should dispatch toggle event', async () => {
+    const harness = await createFixture();
+
+    const [panel] = harness.expansionPanels;
+    const button = panel.querySelector('button');
+
+    const toggleSpy = sinon.spy();
+    harness.accordionElement.addEventListener(ACCORDION_CONSTANTS.events.TOGGLE, toggleSpy);
+
+    button?.click();
+    await elementUpdated(panel);
+
+    expect(toggleSpy).to.have.been.calledOnce;
+  });
 });
 
 class AccordionHarness {
@@ -136,7 +153,7 @@ interface IAccordionFixtureConfig {
 
 async function createFixture({ panelSelector }: IAccordionFixtureConfig = {}): Promise<AccordionHarness> {
   const accordion = await fixture<IAccordionComponent>(html`
-    <forge-accordion .panelSelector=${panelSelector}>
+    <forge-accordion .panelSelector=${panelSelector as string}>
       <forge-expansion-panel class="test-class">
         <button type="button" slot="header"></button>
         <div slot="content">Content</div>

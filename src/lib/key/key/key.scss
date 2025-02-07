@@ -1,0 +1,21 @@
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+//
+// Base
+//
+
+.forge-key {
+  @include core.tokens;
+}
+
+.forge-key {
+  @include core.base;
+}

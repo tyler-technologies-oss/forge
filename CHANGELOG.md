@@ -1,3 +1,248 @@
+# v3.5.1 (Fri Jan 31 2025)
+
+#### 🐛 Bug Fix
+
+- fix(defineComponents): fixed an exception caused by lit-based components being incompatible with internal Forge API during element definition [#800](https://github.com/tyler-technologies-oss/forge/pull/800) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list-item): fixed a bug where the selected state overlay could render on top of slotted elements [#799](https://github.com/tyler-technologies-oss/forge/pull/799) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v3.5.0 (Thu Jan 30 2025)
+
+#### 🚀 Enhancement
+
+- feat(meter): add meter component [#795](https://github.com/tyler-technologies-oss/forge/pull/795) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### 🐛 Bug Fix
+
+- fix(button-toggle): no longer reflects the `value` attribute to allow for non-string values to be set via JS property [#788](https://github.com/tyler-technologies-oss/forge/pull/788) ([@DRiFTy17](https://github.com/DRiFTy17))
+- Fix/icon button badge dense [#791](https://github.com/tyler-technologies-oss/forge/pull/791) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(label-value): allow for content to wrap long words without overflowing [#790](https://github.com/tyler-technologies-oss/forge/pull/790) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(file-picker): cleanup callback to avoid reference being held which can leak [#792](https://github.com/tyler-technologies-oss/forge/pull/792) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(autocomplete): fixed a bug where the `wrapOptionText` property was not being set on the list dropdown [#794](https://github.com/tyler-technologies-oss/forge/pull/794) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(app-bar-search): fixed a color contrast issue by increasing the color emphasis on the placeholder text due to the transparent background [#798](https://github.com/tyler-technologies-oss/forge/pull/798) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(design-tokens): add elevation tokens page [#789](https://github.com/tyler-technologies-oss/forge/pull/789) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(table): add action logging for `forge-table-select-all` event [#793](https://github.com/tyler-technologies-oss/forge/pull/793) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(button-area): add required slotted button to demo [#797](https://github.com/tyler-technologies-oss/forge/pull/797) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
+# v3.4.2 (Fri Jan 17 2025)
+
+#### 🐛 Bug Fix
+
+- fix(split-view-panel): fixed a bug relating to the open animation direction [#787](https://github.com/tyler-technologies-oss/forge/pull/787) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: reduce usage of `contain` style to only required instances [#785](https://github.com/tyler-technologies-oss/forge/pull/785) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(drawer): fixed a bug where the drawer would not repaint after transitioning in Safari [#784](https://github.com/tyler-technologies-oss/forge/pull/784) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore(eslint): remove duplicate eslint rules [#782](https://github.com/tyler-technologies-oss/forge/pull/782) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(toolbar): fix token names [#781](https://github.com/tyler-technologies-oss/forge/pull/781) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v3.4.1 (Wed Jan 08 2025)
+
+#### 🐛 Bug Fix
+
+- fix(tooltip): fixed a bug where visually hidden content could cause inadvertent page scrolling [#780](https://github.com/tyler-technologies-oss/forge/pull/780) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(radio): simplify check animation to reduce jitter [#773](https://github.com/tyler-technologies-oss/forge/pull/773) ([@samrichardsontylertech](https://github.com/samrichardsontylertech) [@DRiFTy17](https://github.com/DRiFTy17))
+- fix(text-field): label will now float when invalid chars are entered in number inputs [#778](https://github.com/tyler-technologies-oss/forge/pull/778) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): adjust input transition to avoid jittery movement when decelerating [#777](https://github.com/tyler-technologies-oss/forge/pull/777) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(text-field): ensure cleanup logic runs when element is disconnected [#776](https://github.com/tyler-technologies-oss/forge/pull/776) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- Docs fixes [#779](https://github.com/tyler-technologies-oss/forge/pull/779) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
+# v3.4.0 (Tue Dec 10 2024)
+
+#### 🚀 Enhancement
+
+- feat(tabs): deprecate `secondary` prop/attr and update default design to use full width tab indicator [#766](https://github.com/tyler-technologies-oss/forge/pull/766) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(typography): add new `label3` style [#770](https://github.com/tyler-technologies-oss/forge/pull/770) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(app-bar): make columns customizable [#768](https://github.com/tyler-technologies-oss/forge/pull/768) ([@samrichardsontylertech](https://github.com/samrichardsontylertech) [@DRiFTy17](https://github.com/DRiFTy17))
+- feat(toolbar): make columns customizable [#771](https://github.com/tyler-technologies-oss/forge/pull/771) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- [icon-button] improve docs for toggle mode + background color for "icon" variant when toggled on [#767](https://github.com/tyler-technologies-oss/forge/pull/767) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix: update checkbox, radio, switch label typography to use `label2` (13px) typography by default [#769](https://github.com/tyler-technologies-oss/forge/pull/769) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(popover): delay visibility check when hiding by a frame to ensure style calculation has enough time to execute [#765](https://github.com/tyler-technologies-oss/forge/pull/765) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
+# v3.3.6 (Fri Nov 22 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Anthony Hancock ([@geraltofrivendell](https://github.com/geraltofrivendell)), for all your work!
+
+#### 🐛 Bug Fix
+
+- perf: update forge-core to optimize attachShadowTemplate [#757](https://github.com/tyler-technologies-oss/forge/pull/757) ([@MikeMatusz](https://github.com/MikeMatusz) [@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): fix input size/animation when floating label with inset variant [#763](https://github.com/tyler-technologies-oss/forge/pull/763) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(popover): fixed a bug where the popover would stay connected if hidden at time of exit animation [#760](https://github.com/tyler-technologies-oss/forge/pull/760) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(time-picker): gracefully handle input element reference being undefined [#748](https://github.com/tyler-technologies-oss/forge/pull/748) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): constrain input to grid area to prevent icons from being pushed out of view [#754](https://github.com/tyler-technologies-oss/forge/pull/754) ([@MikeMatusz](https://github.com/MikeMatusz))
+- fix(dialog): fixed a bug where the dialog surface would render incorrectly if set to fullscreen after moving [#761](https://github.com/tyler-technologies-oss/forge/pull/761) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(select): elementAttributes are now applied to select options [#759](https://github.com/tyler-technologies-oss/forge/pull/759) ([@geraltofrivendell](https://github.com/geraltofrivendell))
+- fix(autocomplete): preventDefault on popover-icon mousedown instead of click [#746](https://github.com/tyler-technologies-oss/forge/pull/746) ([@MikeMatusz](https://github.com/MikeMatusz))
+- fix(field): set `aria-hidden="true"` on popover icon `<svg>` [#747](https://github.com/tyler-technologies-oss/forge/pull/747) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs: upgrade Storybook and other dependencies [#764](https://github.com/tyler-technologies-oss/forge/pull/764) ([@DRiFTy17](https://github.com/DRiFTy17))
+- Origin/fix docs component attrs [#753](https://github.com/tyler-technologies-oss/forge/pull/753) ([@nickonometry](https://github.com/nickonometry))
+
+#### Authors: 4
+
+- Anthony Hancock ([@geraltofrivendell](https://github.com/geraltofrivendell))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+
+---
+
+# v3.3.5 (Thu Nov 14 2024)
+
+#### 🐛 Bug Fix
+
+- fix(text-field): fixed a bug where the input container would lock its width if there is no floating label to animate [#744](https://github.com/tyler-technologies-oss/forge/pull/744) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v3.3.4 (Thu Nov 14 2024)
+
+#### 🐛 Bug Fix
+
+- fix(text-field): clear button not emitting input event [#742](https://github.com/tyler-technologies-oss/forge/pull/742) ([@conner-fallone](https://github.com/conner-fallone))
+
+#### Authors: 1
+
+- Conner Fallone ([@conner-fallone](https://github.com/conner-fallone))
+
+---
+
+# v3.3.3 (Tue Nov 12 2024)
+
+#### 🐛 Bug Fix
+
+- fix(text-field): fixed a regression where the input container `width` could be set to `0px` if hidden while attempting to float the label or set a value [#741](https://github.com/tyler-technologies-oss/forge/pull/741) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(popover): gracefully handle how popovers are positioned when their dimensions are clipped by the viewport to ensure access to the content [#740](https://github.com/tyler-technologies-oss/forge/pull/740) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v3.3.2 (Thu Nov 07 2024)
+
+#### 🐛 Bug Fix
+
+- fix(accordion): always dispatch `forge-expansion-panel-toggle` event on panels that are closing in response to a user toggling another panel [#733](https://github.com/tyler-technologies-oss/forge/pull/733) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: allow overflowing content in card, scaffold, and expansion panel [#736](https://github.com/tyler-technologies-oss/forge/pull/736) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): fixed a bug where the width could collapse while the inset label animation is executing [#730](https://github.com/tyler-technologies-oss/forge/pull/730) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): hide required asterisk at extra-small density [#731](https://github.com/tyler-technologies-oss/forge/pull/731) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(TextFieldComponentDelegate): fix duplicate `id` being set when provided via options [#732](https://github.com/tyler-technologies-oss/forge/pull/732) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chip-field): fixed a bug where the dropdown would close immediately if clicking directly on the `<input>` element [#738](https://github.com/tyler-technologies-oss/forge/pull/738) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(toolbar): fixed "after-section-end" part name [#739](https://github.com/tyler-technologies-oss/forge/pull/739) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(FAQ): added a new FAQ page describing how to handle focus indicator clipping [#737](https://github.com/tyler-technologies-oss/forge/pull/737) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v3.3.1 (Wed Oct 30 2024)
+
+#### 🐛 Bug Fix
+
+- fix(field): use error color for support text when field is invalid [#720](https://github.com/tyler-technologies-oss/forge/pull/720) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix: fixed a composition/initialization bug for `<forge-autocomplete>` and `<forge-app-bar-search>` [#725](https://github.com/tyler-technologies-oss/forge/pull/725) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(dialog): expose CSS-only stylesheet [#721](https://github.com/tyler-technologies-oss/forge/pull/721) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(button): fixed inline padding on all non-text variants [#727](https://github.com/tyler-technologies-oss/forge/pull/727) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(expansion-panel): added the "With Card" story to the "Docs" page to allow for viewing the HTML used [#726](https://github.com/tyler-technologies-oss/forge/pull/726) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
+# v3.3.0 (Tue Oct 22 2024)
+
+#### 🚀 Enhancement
+
+- fix(skip-link): allow focusing without url navigation [#704](https://github.com/tyler-technologies-oss/forge/pull/704) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### 🐛 Bug Fix
+
+- fix(tab-bar): allow individually disabled tabs with enabled tab-bar [#717](https://github.com/tyler-technologies-oss/forge/pull/717) ([@MikeMatusz](https://github.com/MikeMatusz))
+- fix(field): fixed a rare bug where the inset label state was not initializing properly based on the existence of slotted content [#710](https://github.com/tyler-technologies-oss/forge/pull/710) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): extend box to include outline [#703](https://github.com/tyler-technologies-oss/forge/pull/703) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix(autocomplete): properly reflect dropdown open state if dismissed by anchor click [#706](https://github.com/tyler-technologies-oss/forge/pull/706) ([@MikeMatusz](https://github.com/MikeMatusz))
+- fix(base-button): fixed a bug where calling `.click()` on a button before it's connected would result in an exception [#713](https://github.com/tyler-technologies-oss/forge/pull/713) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(paginator): append select popover to shadow root to attach IDREFs [#718](https://github.com/tyler-technologies-oss/forge/pull/718) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(circular-progress): updated the host element to set `block-size` and `inline-size` explicitly [#711](https://github.com/tyler-technologies-oss/forge/pull/711) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(inline-message): fix content alignment [#708](https://github.com/tyler-technologies-oss/forge/pull/708) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chip-field): add `focus-indicator-color` token to chips to fix themed "field" chips [#705](https://github.com/tyler-technologies-oss/forge/pull/705) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(app-bar): add missing description for `target` property & attribute [#714](https://github.com/tyler-technologies-oss/forge/pull/714) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(page-state): apply CSS var controls to default demo story [#719](https://github.com/tyler-technologies-oss/forge/pull/719) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 3
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v3.2.0 (Wed Oct 02 2024)
 
 #### 🚀 Enhancement

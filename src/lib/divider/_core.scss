@@ -4,7 +4,6 @@
 
 @mixin host {
   display: block;
-  contain: content;
   margin: #{token(margin)};
 }
 

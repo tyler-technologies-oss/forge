@@ -1,0 +1,106 @@
+@use '../../core/styles/shape';
+@use '../../core/styles/spacing';
+@use '../meter';
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+//
+// Base
+//
+
+.forge-meter-group {
+  @include core.tokens;
+}
+
+.forge-meter-group {
+  @include core.base;
+
+  .heading {
+    @include core.heading;
+
+    &.not-empty {
+      @include core.heading-with-content;
+    }
+  }
+
+  .label {
+    @include core.label;
+  }
+
+  .value {
+    @include core.value;
+  }
+
+  .track {
+    @include core.track;
+
+    &.tickmarks::after {
+      @include core.tickmarks;
+    }
+
+    &.inner-shape--inherit {
+      @include meter.provide-theme(
+        (
+          inner-shape: #{core.token(shape)}
+        )
+      );
+    }
+
+    @each $key, $value in ('default': shape.variable(medium), 'rounded': shape.variable(full), 'squared': 0) {
+      &.shape--#{$key} {
+        @include core.override(shape, $value, value);
+      }
+    }
+
+    @each $key, $value in ('small': 'xsmall', 'medium': 'medium', 'large': 'large') {
+      &.density--#{$key} {
+        @include core.override(height, spacing.variable($value), value);
+      }
+    }
+  }
+}
+
+//
+// Vertical
+//
+
+:host(:is(:state(vertical), :--vertical)) {
+  @include core.vertical-host;
+
+  .forge-meter-group {
+    @include core.vertical-base;
+
+    .heading {
+      @include core.vertical-heading;
+
+      &.not-empty {
+        @include core.vertical-heading-with-content;
+      }
+    }
+
+    .track {
+      @include core.vertical-track;
+
+      &.tickmarks::after {
+        @include core.vertical-tickmarks;
+      }
+    }
+  }
+}
+
+//
+// Media
+//
+
+@media (forced-colors: active) {
+  .track {
+    border: 1px solid CanvasText;
+  }
+}

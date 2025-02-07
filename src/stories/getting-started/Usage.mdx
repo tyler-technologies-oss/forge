@@ -131,6 +131,20 @@ In the example above, the `forge-app-bar` component is placed in the `header` sl
 and the `forge-footer` component is placed in the `footer` slot. Note that the content placed within the `<forge-card>` component is placed
 in the default (unnamed) slot.
 
+## States
+
+Some Tyler Forge components provide [custom states](https://developer.mozilla.org/en-US/docs/Web/CSS/:state) that enable targeting the component
+in CSS under certain conditions using the `:state()` pseudo-class.
+
+```css
+forge-meter:state(optimum-value) {
+  outline: 1px solid green;
+}
+```
+
+> States provide a more reliable way to find and style components based on their current state than similar features such as attributes, which are
+> not guaranteed to always represent the current state of a component.
+
 ## CSS Custom Properties
 
 Many Tyler Forge components support design tokens, which are implemented as [CSS custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)

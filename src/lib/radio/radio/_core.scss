@@ -11,8 +11,7 @@
 @mixin radio {
   position: relative;
   flex-direction: #{token(direction)};
-  flex-shrink: 0;
-  align-items: center;
+  align-items: #{token(align)};
   justify-content: #{token(justify)};
   gap: #{token(gap)};
 
@@ -29,6 +28,7 @@
   justify-content: center;
 
   display: flex;
+  flex-shrink: 0;
 
   border-radius: #{token(shape)};
   inline-size: #{token(state-layer-width)};
@@ -52,11 +52,7 @@
 
 @mixin background {
   position: relative;
-  align-items: center;
-  justify-content: center;
-
-  display: flex;
-
+  display: inline block;
   overflow: hidden;
 
   transition-duration: #{token(animation-duration)};
@@ -79,22 +75,23 @@
 
     position: absolute;
 
-    // Using containment here should mitigate the hit to performance from animating the size
-    contain: strict;
-
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transform-origin: top left;
     transition-duration: #{token(animation-duration)};
     transition-delay: #{token(animation-delay)};
     transition-timing-function: #{token(animation-timing-function)};
-    transition-property: inline-size, block-size, border-color;
+    transition-property: opacity, scale;
 
     border-radius: #{token(shape)};
-    border-width: calc(#{token(mark-height)} / 2) calc(#{token(mark-width)} / 2);
-    border-color: #{token(mark-unchecked-color)};
-    border-style: solid;
-    inline-size: calc(#{token(width)} - 2 * #{token(border-width)});
-    block-size: calc(#{token(height)} - 2 * #{token(border-width)});
+    inline-size: #{token(mark-width)};
+    block-size: #{token(mark-height)};
 
-    background: #{token(mark-unchecked-background)};
+    background: #{token(mark-color)};
+
+    scale: 0.5;
+    opacity: 0;
   }
 }
 
@@ -102,16 +99,13 @@
   border-color: #{token(checked-border-color)};
 
   &::after {
-    border-color: #{token(mark-checked-color)};
-    inline-size: 0px;
-    block-size: 0px;
-
-    background: #{token(mark-checked-background)};
+    scale: 1;
+    opacity: 1;
   }
 }
 
 @mixin label {
-  @include typography.style(label1);
+  @include typography.style(label2);
 
   cursor: default;
 

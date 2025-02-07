@@ -277,7 +277,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
   /**
    * The animation type of the dialog.
    * @default 'zoom'
-   * @attribute
+   * @attribute animation-type
    */
   @coreProperty()
   public declare animationType: DialogAnimationType;
@@ -309,7 +309,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
   /**
    * The screen width at which the dialog will switch to fullscreen.
    * @default 599
-   * @attribute
+   * @attribute fullscreen-threshold
    */
   @coreProperty()
   public declare fullscreenThreshold: number;
@@ -340,7 +340,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
   /**
    * Controls whether the dialog is rendered relative to the viewport or its nearest containing block.
    * @default 'viewport'
-   * @attribute
+   * @attribute position-strategy
    */
   @coreProperty()
   public declare positionStrategy: DialogPositionStrategy;
@@ -348,7 +348,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
   /**
    * Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
    * @default 'content'
-   * @attribute
+   * @attribute size-strategy
    */
   @coreProperty()
   public declare sizeStrategy: DialogSizeStrategy;

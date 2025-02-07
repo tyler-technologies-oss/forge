@@ -42,9 +42,6 @@ export class TextFieldComponentDelegate extends FormFieldComponentDelegate<IText
   }
 
   protected override _configure(): void {
-    if (this._config.options?.id) {
-      this._element.id = this._config.options.id;
-    }
     if (this._config.options?.label) {
       this._createLabel(this._config.options.label);
     }

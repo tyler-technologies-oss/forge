@@ -94,6 +94,9 @@ declare global {
  * @cssproperty --forge-button-hover-shadow - The shadow of the button on hover.
  * @cssproperty --forge-button-active-shadow - The shadow of the button on active state.
  * @cssproperty --forge-button-cursor - The cursor type of the button.
+ * @cssproperty --forge-button-transition-duration - The transition duration of the button.
+ * @cssproperty --forge-button-transition-timing - The transition timing of the button.
+ * @cssproperty --forge-button-text-padding-inline - The inline padding of the button when using the text variant.
  * @cssproperty --forge-button-filled-background - The background color of the filled button.
  * @cssproperty --forge-button-filled-disabled-background - The background color of the disabled filled button.
  * @cssproperty --forge-button-filled-color - The text color of the filled button.

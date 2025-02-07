@@ -10,20 +10,23 @@ export interface ITextFieldAdapter extends IBaseFieldAdapter {
   addRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void;
   removeRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void;
   disableInput(disabled: boolean): void;
-  handleDefaultSlotChange(slot: HTMLSlotElement, listener: TextFieldInputAttributeObserver): void;
+  handleDefaultSlotChange(listener: TextFieldInputAttributeObserver): void;
   tryAddValueChangeListener(context: unknown, listener: TextFieldValueChangeListener): void;
   removeValueChangeListener(): void;
   tryFloatLabel(force?: boolean): void;
-  tryConnectSlottedLabel(slot: HTMLSlotElement): void;
+  tryConnectSlottedLabel(): void;
   connectClearButton(listener: EventListener): void;
   disconnectClearButton(listener: EventListener): void;
   toggleClearButtonVisibility(visible: boolean): void;
   clearInput(): void;
+  getAllSlotElements(): HTMLSlotElement[];
 }
 
 export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdapter {
   protected readonly _fieldElement: IFieldComponent;
   private readonly _clearButtonSlotElement: HTMLSlotElement;
+  private readonly _defaultSlotElement: HTMLSlotElement;
+  private readonly _labelSlotElement: HTMLSlotElement;
   private _popoverTargetElement: HTMLElement;
   private _inputElements: (HTMLInputElement | HTMLTextAreaElement)[] = [];
   private _inputMutationObserver?: MutationObserver;
@@ -48,6 +51,8 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     super(component);
     this._fieldElement = getShadowElement(component, TEXT_FIELD_CONSTANTS.selectors.FIELD) as IFieldComponent;
     this._clearButtonSlotElement = getShadowElement(component, TEXT_FIELD_CONSTANTS.selectors.CLEAR_BUTTON_SLOT) as HTMLSlotElement;
+    this._defaultSlotElement = getShadowElement(component, TEXT_FIELD_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
+    this._labelSlotElement = getShadowElement(component, TEXT_FIELD_CONSTANTS.selectors.LABEL_SLOT) as HTMLSlotElement;
     this._fieldElement.setAttribute('exportparts', Object.values(FIELD_CONSTANTS.parts).join(', '));
     this._clearButtonSlotElement.remove();
   }
@@ -78,12 +83,12 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     });
   }
 
-  public handleDefaultSlotChange(slot: HTMLSlotElement, listener: TextFieldInputAttributeObserver): void {
+  public handleDefaultSlotChange(listener: TextFieldInputAttributeObserver): void {
     // Destroy the mutation observer if it exists
     this._inputMutationObserver?.disconnect();
 
     // If there are no assigned elements, return
-    const assignedElements = slot.assignedElements();
+    const assignedElements = this._defaultSlotElement.assignedElements();
     if (!assignedElements.length) {
       return;
     }
@@ -146,7 +151,7 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     this._fieldElement.floatLabel = this.hasValue || this.hasPlaceholder;
   }
 
-  public tryConnectSlottedLabel(slot: HTMLSlotElement): void {
+  public tryConnectSlottedLabel(): void {
     // Only one input can be automatically connected to a label, return if there are no or more
     // than one inputs or if the input is already labelled
     if (this._inputElements.length !== 1 || this._inputElements[0].labels?.length) {
@@ -154,7 +159,7 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     }
 
     const inputElement = this._inputElements[0];
-    const elements = slot.assignedElements({ flatten: true });
+    const elements = this._labelSlotElement.assignedElements({ flatten: true });
 
     // Attempt to find and connect a `<forge-label>` element
     const forgeLabel = elements.find(el => el.matches(TEXT_FIELD_CONSTANTS.selectors.FORGE_LABEL)) as LabelComponent | undefined;
@@ -195,7 +200,14 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     if (!this._inputElements.length) {
       return;
     }
-    this._inputElements.forEach(el => (el.value = ''));
+    this._inputElements.forEach(el => {
+      el.value = '';
+      el.dispatchEvent(new Event('input'));
+    });
     this._inputElements[0].focus();
+  }
+
+  public getAllSlotElements(): HTMLSlotElement[] {
+    return Array.from(this._component.shadowRoot?.querySelectorAll('slot') ?? []);
   }
 }

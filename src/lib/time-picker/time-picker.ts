@@ -65,33 +65,6 @@ declare global {
 
 /**
  * @tag forge-time-picker
- *
- * @property {string | null | undefined} [value=undefined] - The current value of the time picker.
- * @property {boolean} [open=false] - Whether or not the time picker is open.
- * @property {boolean} [allowSeconds=false] - Whether or not to allow seconds in the time picker.
- * @property {boolean} [masked=false] - Whether or not the time picker input should be masked.
- * @property {boolean} [showMaskFormat=false] - Whether or not to show the mask format in the input.
- * @property {boolean} [use24HourTime=false] - Whether or not to use 24-hour time.
- * @property {boolean} [allowInvalidTime=false] - Whether or not to allow invalid times.
- * @property {string | null | undefined} [min=undefined] - The minimum time that can be selected.
- * @property {string | null | undefined} [max=undefined] - The maximum time that can be selected.
- * @property {string[]} [restrictedTimes=[]] - An array of times that cannot be selected.
- * @property {string | null | undefined} [startTime=undefined] - The time to start the time picker at.
- * @property {number} [step=undefined] - The step interval for the time picker.
- * @property {boolean} [allowInput=false] - Whether or not to allow manual input of the time.
- * @property {boolean} [showNow=false] - Whether or not to show a "Now" button.
- * @property {boolean} [showHourOptions=false] - Whether or not to display hour options in dropdown.
- * @property {ITimePickerOption[]} [customOptions=[]] - An array of custom time picker options.
- * @property {TimePickerValidationCallback} [validationCallback=undefined] - A callback function to validate the time.
- * @property {TimePickerParseCallback} [parseCallback=undefined] - A callback function to parse the time.
- * @property {TimePickerFormatCallback} [formatCallback=undefined] - A callback function to format the time.
- * @property {TimePickerCoercionCallback} [coercionCallback=undefined] - A callback function to coerce the time.
- * @property {TimePickerPrepareMaskCallback} [prepareMaskCallback=undefined] - A callback function to prepare the mask.
- * @property {boolean} [disabled=false] - Whether or not the time picker is disabled.
- * @property {string | string[]} [popupClasses=undefined] - The classes to apply to the time picker popup.
- * @property {boolean} [allowDropdown=false] - Whether or not to allow the time picker to be a dropdown.
- * @property {string} [popupTarget=undefined] - The target element to attach the popup to.
- *
  */
 @customElement({
   name: TIME_PICKER_CONSTANTS.elementName,
@@ -197,79 +170,203 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
     }
   }
 
+  /**
+   * The current value of the time picker.
+   * @default undefined
+   * @attribute
+   */
   @coreProperty()
   public declare value: string | null | undefined;
 
+  /**
+   * Whether or not the time picker is open.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare open: boolean;
 
+  /**
+   * Whether or not to allow seconds in the time picker.
+   * @default false
+   * @attribute allow-seconds
+   */
   @coreProperty()
   public declare allowSeconds: boolean;
 
+  /**
+   * Whether or not the time picker input should be masked.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   public declare masked: boolean;
 
+  /**
+   * Whether or not to show the mask format in the input.
+   * @default false
+   * @attribute show-mask-format
+   */
   @coreProperty()
   public declare showMaskFormat: boolean;
 
+  /**
+   * Whether or not to use 24-hour time.
+   * @default false
+   * @attribute use-24-hour-time
+   */
   @coreProperty()
   public declare use24HourTime: boolean;
 
+  /**
+   * Whether or not to allow invalid times.
+   * @default false
+   * @attribute allow-invalid-time
+   */
   @coreProperty()
   public declare allowInvalidTime: boolean;
 
+  /**
+   * The minimum time that can be selected.
+   * @default undefined
+   * @attribute
+   */
   @coreProperty()
   public declare min: string | null | undefined;
 
+  /**
+   * The maximum time that can be selected.
+   * @default undefined
+   * @attribute
+   */
   @coreProperty()
   public declare max: string | null | undefined;
 
+  /**
+   * An array of times that cannot be selected.
+   * @default []
+   * @attribute restricted-times
+   */
   @coreProperty()
   public declare restrictedTimes: string[];
 
+  /**
+   * The time to start the time picker at.
+   * @default undefined
+   * @attribute start-time
+   */
   @coreProperty()
   public declare startTime: string | null | undefined;
 
+  /**
+   * The step interval for the time picker.
+   * @default undefined
+   * @attribute
+   */
   @coreProperty()
   public declare step: number;
 
+  /**
+   * Whether or not to allow manual input of the time.
+   * @default false
+   * @attribute allow-input
+   */
   @coreProperty()
   public declare allowInput: boolean;
 
+  /**
+   * Whether or not to show a "Now" button.
+   * @default false
+   * @attribute show-now
+   */
   @coreProperty()
   public declare showNow: boolean;
 
-  /** Whether or not to display hour options in dropdown */
+  /**
+   * Whether or not to display hour options in dropdown.
+   * @default false
+   * @attribute show-hour-options
+   */
   @coreProperty()
   public declare showHourOptions: boolean;
 
+  /**
+   * An array of custom time picker options.
+   * @default []
+   * @attribute custom-options
+   */
   @coreProperty()
   public declare customOptions: ITimePickerOption[];
 
+  /**
+   * A callback function to validate the time.
+   * @default undefined
+   * @attribute validation-callback
+   */
   @coreProperty()
   public declare validationCallback: TimePickerValidationCallback;
 
+  /**
+   * A callback function to parse the time.
+   * @default undefined
+   * @attribute parse-callback
+   */
   @coreProperty()
   public declare parseCallback: TimePickerParseCallback;
 
+  /**
+   * A callback function to format the time.
+   * @default undefined
+   * @attribute format-callback
+   */
   @coreProperty()
   public declare formatCallback: TimePickerFormatCallback;
 
+  /**
+   * A callback function to coerce the time.
+   * @default undefined
+   * @attribute coercion-callback
+   */
   @coreProperty()
   public declare coercionCallback: TimePickerCoercionCallback;
 
+  /**
+   * A callback function to prepare the mask.
+   * @default undefined
+   * @attribute prepare-mask-callback
+   */
   @coreProperty()
   public declare prepareMaskCallback: TimePickerPrepareMaskCallback;
 
+  /**
+   * Whether or not the time picker is disabled.
+   * @default false
+   * @attribute disabled
+   */
   @coreProperty()
   public declare disabled: boolean;
 
+  /**
+   * The classes to apply to the time picker popup.
+   * @default undefined
+   * @attribute popup-classes
+   */
   @coreProperty()
   public declare popupClasses: string | string[];
 
+  /**
+   * Whether or not to allow the time picker to be a dropdown.
+   * @default false
+   * @attribute allow-dropdown
+   */
   @coreProperty()
   public declare allowDropdown: boolean;
 
+  /**
+   * The target element to attach the popup to.
+   * @default undefined
+   * @attribute popup-target
+   */
   @coreProperty()
   public declare popupTarget: string;
 }

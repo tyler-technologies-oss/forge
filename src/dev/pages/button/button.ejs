@@ -1,53 +1,56 @@
 <div class="button-demo">
-  <section class="vert">
+  <section>
     <h3 class="forge-typography--heading2">Variants</h3>
-    <forge-button>Text button</forge-button>
-    <forge-button variant="outlined">Outlined button</forge-button>
-    <forge-button variant="tonal">Tonal button</forge-button>
-    <forge-button variant="filled">Filled button</forge-button>
-    <forge-button variant="raised">Raised button</forge-button>
-    <forge-button variant="link">Link button</forge-button>
+    <div>
+      <forge-button>Text button</forge-button>
+      <forge-button variant="outlined">Outlined button</forge-button>
+      <forge-button variant="tonal">Tonal button</forge-button>
+      <forge-button variant="filled">Filled button</forge-button>
+      <forge-button variant="raised">Raised button</forge-button>
+      <forge-button variant="link">Link button</forge-button>
+    </div>
   </section>
 
-  <section class="vert">
+  <section>
     <h3 class="forge-typography--heading2">CSS only</h3>
-    <button class="forge-button">Text button</button>
-    <button class="forge-button forge-button--outlined">
-      <forge-icon name="favorite"></forge-icon>
-      Outlined button
-    </button>
-    <button class="forge-button forge-button--tonal">
-      Tonal button
-      <forge-icon name="favorite"></forge-icon>
-    </button>
-    <button class="forge-button forge-button--filled">Filled button</button>
-    <button class="forge-button forge-button--raised">Raised button</button>
     <div>
+      <button class="forge-button">Text button</button>
+      <button class="forge-button forge-button--outlined">
+        <forge-icon name="favorite"></forge-icon>
+        Outlined button
+      </button>
+      <button class="forge-button forge-button--tonal">
+        Tonal button
+        <forge-icon name="favorite"></forge-icon>
+      </button>
+      <button class="forge-button forge-button--filled">Filled button</button>
+      <button class="forge-button forge-button--raised">Raised button</button>
       <button class="forge-button forge-button--link">Link button</button>
     </div>
   </section>
 
-  <section class="vert">
+  <section>
     <h3 class="forge-typography--heading2">Slots</h3>
+    <div>
+      <forge-button variant="outlined">
+        <span>w/&lt;span&gt; text container</span>
+      </forge-button>
 
-    <forge-button variant="outlined">
-      <span>w/&lt;span&gt; text container</span>
-    </forge-button>
+      <forge-button variant="outlined">
+        <forge-icon slot="start" name="favorite"></forge-icon>
+        w/Start icon
+      </forge-button>
 
-    <forge-button variant="outlined">
-      <forge-icon slot="start" name="favorite"></forge-icon>
-      w/Start icon
-    </forge-button>
-
-    <forge-button variant="outlined">
-      w/End icon
-      <forge-icon slot="end" name="favorite"></forge-icon>
-    </forge-button>
+      <forge-button variant="outlined">
+        w/End icon
+        <forge-icon slot="end" name="favorite"></forge-icon>
+      </forge-button>
+    </div>
   </section>
 
   <section>
     <h3 class="forge-typography--heading2">Anchor</h3>
-    <div class="vert">
+    <div>
       <forge-button>
         <a href="javascript: console.log('Anchor button clicked');">
           Anchor button
@@ -94,7 +97,7 @@
 
   <section>
     <h3 class="forge-typography--heading2">Label aware</h3>
-    <forge-label class="vert">
+    <forge-label class="flex">
       <forge-button variant="outlined">
         <forge-icon name="favorite"></forge-icon>
       </forge-button>
@@ -178,38 +181,40 @@
     </dialog>
   </section>
 
-  <section class="vert">
+  <section>
     <h3 class="forge-typography--heading2">Deprecated (legacy) button</h3>
-    <forge-deprecated-button>
-      <button type="button">Default button</button>
-    </forge-deprecated-button>
-    <forge-deprecated-button type="outlined">
-      <button type="button">Outlined button</button>
-    </forge-deprecated-button>
-    <forge-deprecated-button type="unelevated">
-      <button type="button">Unelevated button</button>
-    </forge-deprecated-button>
-    <forge-deprecated-button type="raised">
-      <button type="button">Raised button</button>
-    </forge-deprecated-button>
-    <forge-deprecated-button type="outlined">
-      <button type="button">
-        <forge-icon name="favorite"></forge-icon>
-        <span>w/Leading Icon</span>
-      </button>
-    </forge-deprecated-button>
-    <forge-deprecated-button type="outlined">
-      <button type="button">
-        <span>w/Trailing icon</span>
-        <forge-icon name="favorite"></forge-icon>
-      </button>
-    </forge-deprecated-button>
-    <forge-deprecated-button type="outlined">
-      <a href="javascript: alert('Anchor link button works!');">
-        <span>w/anchor tag</span>
-        <forge-icon name="open_in_new"></forge-icon>
-      </a>
-    </forge-deprecated-button>
+    <div class="flex flex--wrap">
+      <forge-deprecated-button>
+        <button type="button">Default button</button>
+      </forge-deprecated-button>
+      <forge-deprecated-button type="outlined">
+        <button type="button">Outlined button</button>
+      </forge-deprecated-button>
+      <forge-deprecated-button type="unelevated">
+        <button type="button">Unelevated button</button>
+      </forge-deprecated-button>
+      <forge-deprecated-button type="raised">
+        <button type="button">Raised button</button>
+      </forge-deprecated-button>
+      <forge-deprecated-button type="outlined">
+        <button type="button">
+          <forge-icon name="favorite"></forge-icon>
+          <span>w/Leading Icon</span>
+        </button>
+      </forge-deprecated-button>
+      <forge-deprecated-button type="outlined">
+        <button type="button">
+          <span>w/Trailing icon</span>
+          <forge-icon name="favorite"></forge-icon>
+        </button>
+      </forge-deprecated-button>
+      <forge-deprecated-button type="outlined">
+        <a href="javascript: alert('Anchor link button works!');">
+          <span>w/anchor tag</span>
+          <forge-icon name="open_in_new"></forge-icon>
+        </a>
+      </forge-deprecated-button>
+    </div>
   </section>
 </div>
 

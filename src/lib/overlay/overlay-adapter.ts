@@ -2,7 +2,7 @@ import { autoUpdate, Boundary } from '@floating-ui/dom';
 import { getShadowElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { DEFAULT_FALLBACK_PLACEMENTS, positionElementAsync, PositionPlacement, VirtualElement } from '../core/utils/position-utils';
-import { locateElementById } from '../core/utils/utils';
+import { locateElementById, roundByDPR } from '../core/utils/utils';
 import { IOverlayComponent, OverlayComponent } from './overlay';
 import {
   IOverlayOffset,
@@ -73,12 +73,15 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     // Remove inline positioning styles
     this._rootElement.style.removeProperty('top');
     this._rootElement.style.removeProperty('left');
+    this._rootElement.style.removeProperty('translate');
     this._rootElement.style.removeProperty('display');
 
     this._component.arrowElement?.removeAttribute('style');
 
-    // Remove dynamic position attribute
+    // Remove dynamic positioning-based attributes
     this._component.removeAttribute(OVERLAY_CONSTANTS.attributes.POSITION_PLACEMENT);
+    this._component.removeAttribute(OVERLAY_CONSTANTS.attributes.CLIPPED_X);
+    this._component.removeAttribute(OVERLAY_CONSTANTS.attributes.CLIPPED_Y);
 
     OverlayComponent[overlayStack].delete(this._component);
   }
@@ -165,6 +168,26 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
           bottom: '',
           [staticSide as string]: `${-arrowLen / 2 - arrowBoxAdjust}px`
         });
+      }
+
+      // Check if the overlay is clipped by the viewport after positioning
+      const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
+      const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+      const overlayRect = this._rootElement.getBoundingClientRect();
+      const isClippedX = overlayRect.right > viewportWidth || overlayRect.left < 0;
+      const isClippedY = overlayRect.bottom > viewportHeight || overlayRect.top < 0;
+
+      // Update the clipped attributes to allow for state-based clipping adjustments by consumers
+      this._component.toggleAttribute(OVERLAY_CONSTANTS.attributes.CLIPPED_X, isClippedX);
+      this._component.toggleAttribute(OVERLAY_CONSTANTS.attributes.CLIPPED_Y, isClippedY);
+
+      // If clipped, adjust the position by the clipping delta on each axis
+      if (isClippedX || isClippedY) {
+        const { x, y } = result;
+        const { height, width } = overlayRect;
+        const clippedDeltaX = isClippedX ? x + width - viewportWidth : 0;
+        const clippedDeltaY = isClippedY ? y + height - viewportHeight : 0;
+        this._rootElement.style.translate = `${roundByDPR(x - clippedDeltaX)}px ${roundByDPR(y - clippedDeltaY)}px`;
       }
     });
   }
