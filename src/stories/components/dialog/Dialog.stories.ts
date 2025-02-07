@@ -53,6 +53,8 @@ const meta = {
     moveable: false,
     mode: DIALOG_CONSTANTS.defaults.MODE,
     type: DIALOG_CONSTANTS.defaults.TYPE,
+    label: 'My dialog title',
+    description: 'My dialog description',
     animationType: DIALOG_CONSTANTS.defaults.ANIMATION_TYPE,
     preset: DIALOG_CONSTANTS.defaults.PRESET,
     sizeStrategy: DIALOG_CONSTANTS.defaults.SIZE_STRATEGY,
