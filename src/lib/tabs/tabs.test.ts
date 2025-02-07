@@ -45,6 +45,27 @@ describe('Tabs', () => {
     expect(ctx.selectedTabCount).to.be.equal(1);
   });
 
+  it('should not set focus on tab when active tab is set', async () => {
+    const el = await createFixture({ activeTab: 0 });
+    const ctx = new TabsHarness(el);
+
+    expect(ctx.tabs[0].matches(':focus')).to.be.false;
+
+    el.activeTab = 1;
+
+    expect(ctx.tabs[1].matches(':focus')).to.be.false;
+  });
+
+  it('should set focus on tab when user clicks on tab', async () => {
+    const el = await createFixture();
+    const ctx = new TabsHarness(el);
+
+    ctx.clickTab(0);
+    await elementUpdated(el);
+
+    expect(ctx.tabs[0].matches(':focus')).to.be.true;
+  });
+
   it('should deselect tab when active tab set to undefined', async () => {
     const el = await createFixture({ activeTab: 0 });
     const ctx = new TabsHarness(el);
