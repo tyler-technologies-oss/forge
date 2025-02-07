@@ -14,6 +14,31 @@ To use Forge in your Vue application, install the following package from npm:
 npm install @tylertech/forge
 ```
 
+## Configure Vue
+
+To make sure Vue plays nice with custom elements, you need to configure the compiler to allow certain elements. The Vue
+documentation has a section on [using custom elements in Vue](https://vuejs.org/guide/extras/web-components.html#using-custom-elements-in-vue)
+that explains what you need to do.
+
+If you're using the Vue plugin with Vite, you can use the following in your Vite config:
+
+```js
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+
+export default defineConfig({
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: tag => tag.startsWith('forge-')
+        }
+      }
+    })
+  ]
+});
+```
+
 ## Loading the Tyler Font
 
 Edit your `index.html` file and add the following `<link>` tag to the `<head>` section load the Tyler font:
@@ -31,21 +56,21 @@ To use Forge components in your Vue application, import the components you need 
 ```html
 <template>
   <div>
-    <forge-card>
-      <forge-button>Click me</forge-button>
-    </forge-card>
+    <forge-scaffold>
+      <forge-card slot="body">
+        <forge-button>Click me</forge-button>
+      </forge-card>
+    </forge-scaffold>
   </div>
 </template>
 
-<script>
-  import { defineButtonComponent, defineCardComponent } from '@tylertech/forge';
+<script setup>
+  import { defineScaffoldComponent, defineButtonComponent, defineCardComponent } from '@tylertech/forge';
 
+  // Only import the components you need
+  defineScaffoldComponent();
   defineButtonComponent();
   defineCardComponent();
-
-  export default {
-    name: 'App'
-  };
 </script>
 ```
 
@@ -55,6 +80,17 @@ To use the default Forge styles in your Vue application, import the `forge.css` 
 
 ```vue
 <style>
+@import '@tylertech/forge/dist/forge-core.css';
 @import '@tylertech/forge/dist/forge.css';
+</style>
+```
+
+### Dark Theme
+
+If you want to use the dark theme, import the `forge-dark.css` file:
+
+```vue
+<style>
+@import '@tylertech/forge/dist/forge-dark.css';
 </style>
 ```
