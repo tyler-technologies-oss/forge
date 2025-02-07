@@ -33,6 +33,7 @@ $tokens: (
   // Label
   gap: utils.module-val(checkbox, gap, 0),
   justify: utils.module-val(checkbox, justify, start),
+  align: utils.module-val(checkbox, align, center),
   direction: utils.module-val(checkbox, direction, initial),
   // State layer
   state-layer-width: utils.module-ref(checkbox, state-layer-width, state-layer-size),
