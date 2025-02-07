@@ -153,6 +153,7 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
         this._forwardScrollButton?.focus();
       }
       this._backwardScrollButton.disabled = disabled;
+      this._backwardScrollButton.tabIndex = -1;
     }
 
     if (this._forwardScrollButton) {
@@ -161,6 +162,7 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
         this._backwardScrollButton?.focus();
       }
       this._forwardScrollButton.disabled = disabled;
+      this._forwardScrollButton.tabIndex = -1;
     }
   }
 

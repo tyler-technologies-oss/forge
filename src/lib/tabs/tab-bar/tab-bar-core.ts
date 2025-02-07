@@ -82,7 +82,7 @@ export class TabBarCore implements ITabBarCore {
   }
 
   private _onTabSelected(evt: CustomEvent<void>): void {
-    this._selectTab(evt.target as ITabComponent);
+    this._selectTab({ tab: evt.target as ITabComponent, focusTab: true });
   }
 
   private async _onKeydown(evt: KeyboardEvent): Promise<void> {
@@ -124,14 +124,14 @@ export class TabBarCore implements ITabBarCore {
     }
 
     if (this._autoActivate) {
-      this._selectTab(this._tabs[index]);
+      this._selectTab({ tab: this._tabs[index], focusTab: true });
     } else {
       this._tabs[index].focus({ preventScroll: true, focusVisible: true });
       await this._adapter.tryScrollTabIntoView(this._tabs[index]);
     }
   }
 
-  private async _selectTab(tab: ITabComponent, emitEvent = true): Promise<void> {
+  private async _selectTab({ tab, emitEvent = true, focusTab = false }: { tab: ITabComponent; emitEvent?: boolean; focusTab?: boolean }): Promise<void> {
     if (!tab || tab.disabled) {
       return;
     }
@@ -157,7 +157,9 @@ export class TabBarCore implements ITabBarCore {
 
     // Selecting a tab causes an animation of the indicator to start relative to the currently selected tab
     tab.selected = true;
-    tab.focus({ preventScroll: true });
+    if (focusTab) {
+      tab.focus({ preventScroll: true });
+    }
     await this._adapter.tryScrollTabIntoView(tab);
 
     // Always deselect the currently selected tab after selecting a new tab to allow
@@ -275,7 +277,7 @@ export class TabBarCore implements ITabBarCore {
 
       if (typeof this._activeTab === 'number') {
         const newSelectedTab = this._tabs[this._activeTab];
-        this._selectTab(newSelectedTab, false);
+        this._selectTab({ tab: newSelectedTab, emitEvent: false, focusTab: false });
         this._adapter.setHostAttribute(TAB_BAR_CONSTANTS.attributes.ACTIVE_TAB, String(this._activeTab));
       } else {
         this._tabs.forEach(tab => (tab.selected = false));

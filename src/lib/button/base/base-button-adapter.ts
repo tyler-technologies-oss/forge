@@ -86,7 +86,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
     } else {
       if (value) {
         this._component.removeAttribute('tabindex');
-      } else {
+      } else if (!this._component.hasAttribute('tabindex')) {
         this._component.setAttribute('tabindex', '0');
       }
       this._component[setDefaultAria]({ ariaDisabled: value ? 'true' : null });
