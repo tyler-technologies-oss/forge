@@ -63,7 +63,7 @@ export class DialogCore implements IDialogCore {
   constructor(public _adapter: IDialogAdapter) {}
 
   public initialize(): void {
-    this._adapter.tryApplyGlobalConfiguration(['animationType', 'positionStrategy', 'sizeStrategy', 'persistent', 'moveable', 'fullscreenThreshold']);
+    this._adapter.tryApplyGlobalConfiguration(['mode', 'animationType', 'positionStrategy', 'sizeStrategy', 'persistent', 'moveable', 'fullscreenThreshold']);
 
     if (this._trigger && !this._adapter.triggerElement) {
       this._adapter.tryLocateTriggerElement(this._trigger);
