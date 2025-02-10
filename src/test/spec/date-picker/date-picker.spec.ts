@@ -464,7 +464,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(this.context.component.value).toEqual(theEvent!.detail);
     });
 
-    fit('should emit forge-calendar-month-change event when next month button is clicked', async function(this: ITestContext) {
+    it('should emit forge-calendar-month-change event when next month button is clicked', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       openPopup(this.context.component);
       let theEvent: CustomEvent;
