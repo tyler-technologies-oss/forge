@@ -13,6 +13,8 @@ import styles from './icon-button.scss';
 
 export interface IIconButtonComponent extends IBaseButton {
   toggle: boolean;
+  pressed: boolean;
+  /** @deprecated use `pressed` instead. */
   on: boolean;
   variant: IconButtonVariant;
   theme: IconButtonTheme;
@@ -33,38 +35,9 @@ declare global {
 /**
  * @tag forge-icon-button
  *
- * @summary Icons buttons are used to trigger an action or event.
- *
- * @property {boolean} [toggle=false] - Whether or not the icon button can be toggled.
- * @property {boolean} [on=false] - Whether or not the button is on. Only applies when `toggle` is `true`.
- * @property {IconButtonVariant} [variant="icon"] - The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
- * @property {IconButtonTheme} [theme="default"] - The theme of the button. Valid values are `default`, `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
- * @property {string} [shape="circular"] - The shape of the button. Valid values are `circular` and `squared`.
- * @property {IconButtonDensity} [density="large"] - The density of the button. Valid values are `small`, `medium`, and `large`.
- * @property {string} [type="button"] - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
- * @property {boolean} [disabled=false] - Whether or not the button is disabled.
- * @property {boolean} [popoverIcon=false] - Whether or not the button shows a built-in popover icon.
- * @property {boolean} [dense=false] - Whether or not the button is dense.
- * @property {string} name - The name of the button.
- * @property {string} value - The form value of the button.
- * @property {HTMLFormElement | null} form - The form reference of the button if within a `<form>` element.
- *
  * @globalconfig variant
  * @globalconfig shape
  * @globalconfig density
- *
- * @attribute {boolean} [toggle=false] - Whether or not the icon button can be toggled.
- * @attribute {boolean} [on=false] - Whether or not the button is on. Only applies when `toggle` is `true`.
- * @attribute {IconButtonVariant} [variant="icon"] - The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
- * @attribute {IconButtonTheme} [theme="default"] - The theme of the button. Valid values are `default`, `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
- * @attribute {string} [shape="circular"] - The shape of the button. Valid values are `circular` and `squared`.
- * @attribute {IconButtonDensity} [density="large"] - The density of the button. Valid values are `small`, `medium`, and `large`.
- * @attribute {string} [type="button"] - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
- * @attribute {boolean} [disabled=false] - Whether or not the button is disabled.
- * @attribute {boolean} [popover-icon=false] - Whether or not the button shows a built-in popover icon.
- * @attribute {boolean} [dense=false] - Whether or not the button is dense.
- * @attribute {string} name - The name of the button.
- * @attribute {string} value - The form value of the button.
  *
  * @event {PointerEvent} click - Fires when the button is clicked.
  * @event {CustomEvent<boolean>} forge-icon-button-toggle - Fires when the icon button is toggled. Only applies in `toggle` mode.
@@ -161,8 +134,9 @@ export class IconButtonComponent extends BaseButton<IconButtonCore> implements I
       case ICON_BUTTON_CONSTANTS.attributes.TOGGLE:
         this.toggle = coerceBoolean(newValue);
         break;
+      case ICON_BUTTON_CONSTANTS.attributes.PRESSED:
       case ICON_BUTTON_CONSTANTS.attributes.ON:
-        this.on = coerceBoolean(newValue);
+        this.pressed = coerceBoolean(newValue);
         break;
       case ICON_BUTTON_CONSTANTS.attributes.VARIANT:
         this.variant = newValue as IconButtonVariant;
@@ -180,21 +154,53 @@ export class IconButtonComponent extends BaseButton<IconButtonCore> implements I
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
+  /**
+   * Whether or not the icon button can be toggled.
+   * @default false
+   */
   @coreProperty()
   public declare toggle: boolean;
 
+  /**
+   * Whether or not the toggle button is pressed. Only applies when `toggle` is `true`.
+   * @default false
+   */
   @coreProperty()
+  public declare pressed: boolean;
+
+  /**
+   * Alias for `pressed` _(deprecated)_. Whether or not the toggle button is pressed. Only applies when `toggle` is `true`.
+   * @default false
+   * @deprecated Use `pressed` instead.
+   */
+  @coreProperty({ name: 'pressed' })
   public declare on: boolean;
 
+  /**
+   * The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
+   * @default "default"
+   */
   @coreProperty()
   public declare theme: IconButtonTheme;
 
+  /**
+   * The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
+   * @default "icon"
+   */
   @coreProperty()
   public declare variant: IconButtonVariant;
 
+  /**
+   * The shape of the button. Valid values are `circular` and `squared`.
+   * @default "circular"
+   */
   @coreProperty()
   public declare shape: IconButtonShape;
 
+  /**
+   * The density of the button. Valid values are `small`, `medium`, and `large`.
+   * @default "large"
+   */
   @coreProperty()
   public declare density: IconButtonDensity;
 }

@@ -50,7 +50,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['form', 'name', 'value', 'type'],
+      exclude: ['form', 'name', 'value', 'type', 'on'],
       controls: {
         variant: { control: { type: 'select' }, options: ['icon', 'outlined', 'tonal', 'filled', 'raised'] },
         theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS },
@@ -65,7 +65,7 @@ const meta = {
     disabled: false,
     dense: false,
     toggle: false,
-    on: false,
+    pressed: false,
     shape: 'circular',
     density: 'large',
     popoverIcon: false
