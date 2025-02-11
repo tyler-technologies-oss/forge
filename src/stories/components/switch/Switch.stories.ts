@@ -26,7 +26,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['icon', 'form', 'labels', 'name'],
+      exclude: ['icon', 'form', 'labels', 'name', 'on', 'defaultOn', 'selected'],
       controls: {
         labelPosition: {
           control: 'select',
@@ -48,11 +48,11 @@ export const CSSOnly: Story = {
     controls: { include: ['on', 'dense', 'disabled'] }
   },
   args: {
-    on: false,
+    checked: false,
     dense: false,
     disabled: false
   },
-  render: ({ on, dense, disabled }) => {
+  render: ({ checked, dense, disabled }) => {
     const classes = {
       'forge-switch': true,
       'forge-switch--dense': dense
@@ -60,7 +60,7 @@ export const CSSOnly: Story = {
     return html`
       <label class="forge-typography--label2" style="display: flex; align-items: center;">
         <div class=${classMap(classes)}>
-          <input type="checkbox" switch .checked=${on} ?disabled=${disabled} />
+          <input type="checkbox" switch .checked=${checked} ?disabled=${disabled} />
           <div class="forge-switch__thumb">
             <forge-icon name="close" class="forge-switch__icon forge-switch__icon--off"></forge-icon>
             <forge-icon name="check" class="forge-switch__icon forge-switch__icon--on"></forge-icon>

@@ -2,8 +2,8 @@ import { ISwitchAdapter } from './switch-adapter';
 import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants';
 
 export interface ISwitchCore {
-  on: boolean;
-  defaultOn: boolean;
+  checked: boolean;
+  defaultChecked: boolean;
   value: string;
   dense: boolean;
   disabled: boolean;
@@ -15,8 +15,8 @@ export interface ISwitchCore {
 
 export class SwitchCore implements ISwitchCore {
   // State
-  private _on = false;
-  private _defaultOn = false;
+  private _checked = false;
+  private _defaultChecked = false;
   private _value = 'on';
   private _dense = false;
   private _disabled = false;
@@ -26,7 +26,7 @@ export class SwitchCore implements ISwitchCore {
   private _labelPosition: SwitchLabelPosition = 'end';
 
   private get _submittedValue(): string | null {
-    return this._on ? this._value : null;
+    return this._checked ? this._value : null;
   }
 
   // Listeners
@@ -61,10 +61,10 @@ export class SwitchCore implements ISwitchCore {
       return;
     }
 
-    const oldValue = this._on;
-    const newValue = !this._on;
+    const oldValue = this._checked;
+    const newValue = !this._checked;
 
-    this._on = newValue;
+    this._checked = newValue;
 
     const event = new Event('change', { cancelable: true, bubbles: true });
     const forgeEvent = new CustomEvent(SWITCH_CONSTANTS.events.CHANGE, {
@@ -74,39 +74,40 @@ export class SwitchCore implements ISwitchCore {
     });
     this._adapter.dispatchHostEvent(event);
     this._adapter.dispatchHostEvent(forgeEvent);
-    this._on = oldValue;
+    this._checked = oldValue;
     if (event.defaultPrevented || forgeEvent.defaultPrevented) {
       return;
     }
 
-    this.on = newValue;
+    this.checked = newValue;
   }
 
-  private _setOnAttribute(): void {
-    this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.ON, this._on);
-    // Also set selected for backwards compatibility
-    this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.SELECTED, this._on);
+  private _setCheckedAttribute(): void {
+    this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.CHECKED, this._checked);
+    // Also set the following for backwards compatibility
+    this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.ON, this._checked);
+    this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.SELECTED, this._checked);
   }
 
-  public get on(): boolean {
-    return this._on;
+  public get checked(): boolean {
+    return this._checked;
   }
-  public set on(value: boolean) {
-    if (this._on !== value) {
-      this._on = value;
-      this._adapter.setOn(this._on);
+  public set checked(value: boolean) {
+    if (this._checked !== value) {
+      this._checked = value;
+      this._adapter.setChecked(this._checked);
       this._adapter.syncValue(this._submittedValue);
-      this._setOnAttribute();
+      this._setCheckedAttribute();
     }
   }
 
-  public get defaultOn(): boolean {
-    return this._defaultOn;
+  public get defaultChecked(): boolean {
+    return this._defaultChecked;
   }
-  public set defaultOn(value: boolean) {
-    if (this._defaultOn !== value) {
-      this._defaultOn = value;
-      this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.DEFAULT_ON, this._defaultOn);
+  public set defaultChecked(value: boolean) {
+    if (this._defaultChecked !== value) {
+      this._defaultChecked = value;
+      this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.DEFAULT_CHECKED, this._defaultChecked);
     }
   }
 

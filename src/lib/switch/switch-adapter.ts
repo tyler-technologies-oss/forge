@@ -1,12 +1,12 @@
 import { getShadowElement, toggleClass } from '@tylertech/forge-core';
-import { internals, isFocusable, setDefaultAria, setValidity } from '../constants';
+import { isFocusable, setDefaultAria, setValidity } from '../constants';
 import { BaseAdapter, IBaseAdapter } from '../core';
 import { StateLayerComponent } from '../state-layer';
 import { ISwitchComponent } from './switch';
 import { SwitchIconVisibility, SwitchLabelPosition, SWITCH_CONSTANTS } from './switch-constants';
 
 export interface ISwitchAdapter extends IBaseAdapter {
-  setOn(value: boolean): void;
+  setChecked(value: boolean): void;
   setDisabled(value: boolean): void;
   setRequired(value: boolean): void;
   setReadonly(value: boolean): void;
@@ -18,8 +18,8 @@ export interface ISwitchAdapter extends IBaseAdapter {
 export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwitchAdapter {
   private readonly _rootElement: HTMLElement;
   private readonly _labelElement: HTMLElement;
-  private readonly _iconOnElement: HTMLElement;
-  private readonly _iconOffElement: HTMLElement;
+  private readonly _iconCheckedElement: HTMLElement;
+  private readonly _iconUncheckedElement: HTMLElement;
   private readonly _stateLayerElement: StateLayerComponent;
 
   constructor(component: ISwitchComponent) {
@@ -27,12 +27,12 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
 
     this._rootElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ROOT);
     this._labelElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.LABEL);
-    this._iconOnElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_ON);
-    this._iconOffElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_OFF);
+    this._iconCheckedElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_ON);
+    this._iconUncheckedElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_OFF);
     this._stateLayerElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.STATE_LAYER) as StateLayerComponent;
   }
 
-  public setOn(value: boolean): void {
+  public setChecked(value: boolean): void {
     this._component[setValidity]();
     this._component[setDefaultAria]({ ariaChecked: value ? 'true' : 'false' });
   }
@@ -56,8 +56,8 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
   public setIconVisibility(value: SwitchIconVisibility): void {
     const hideOn = value === 'none' || value === 'off';
     const hideOff = value === 'none' || value === 'on';
-    toggleClass(this._iconOnElement, hideOn, SWITCH_CONSTANTS.classes.HIDDEN);
-    toggleClass(this._iconOffElement, hideOff, SWITCH_CONSTANTS.classes.HIDDEN);
+    toggleClass(this._iconCheckedElement, hideOn, SWITCH_CONSTANTS.classes.HIDDEN);
+    toggleClass(this._iconUncheckedElement, hideOff, SWITCH_CONSTANTS.classes.HIDDEN);
   }
 
   public setLabelPosition(value: SwitchLabelPosition): void {
