@@ -1,3 +1,41 @@
+# v3.6.0 (Tue Feb 11 2025)
+
+#### 🚀 Enhancement
+
+- feat(icon-button): add new `pressed` property/attribute and deprecate `on` property [#817](https://github.com/tyler-technologies-oss/forge/pull/817) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(switch): add new `checked` property/attribute and deprecate `on` property [#815](https://github.com/tyler-technologies-oss/forge/pull/815) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(dialog): add `mode` to global configuration [#816](https://github.com/tyler-technologies-oss/forge/pull/816) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(dialog): adjust default a11y semantics and add new `label` and `description` APIs for providing ARIA info [#810](https://github.com/tyler-technologies-oss/forge/pull/810) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(avatar): convert to Lit [#812](https://github.com/tyler-technologies-oss/forge/pull/812) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix(tab-bar): setting `activeTab` property will no longer focus the tab [#814](https://github.com/tyler-technologies-oss/forge/pull/814) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(button-area): force root element to match size of host [#809](https://github.com/tyler-technologies-oss/forge/pull/809) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix(split-view): skip attempting to refit closed panels [#807](https://github.com/tyler-technologies-oss/forge/pull/807) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix: exposed `align` token and fixed layout bug with long labels for checkbox, radio, and switch [#803](https://github.com/tyler-technologies-oss/forge/pull/803) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(toolbar): move internal `tablist` role to host element [#811](https://github.com/tyler-technologies-oss/forge/pull/811) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(table): only apply `aria-hidden` on `<th>` elements if `headerTemplate` is not used [#801](https://github.com/tyler-technologies-oss/forge/pull/801) ([@nickonometry](https://github.com/nickonometry))
+- docs: fix google analytics tracking for preview pages [#806](https://github.com/tyler-technologies-oss/forge/pull/806) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(vue): add compiler config [#813](https://github.com/tyler-technologies-oss/forge/pull/813) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(view-all): fix exception in view-all hidden docs page [#804](https://github.com/tyler-technologies-oss/forge/pull/804) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🧪 Tests
+
+- chore: remove unintentional `fit` usage [#818](https://github.com/tyler-technologies-oss/forge/pull/818) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore(test): filter Lit dev mode warning from test output [#802](https://github.com/tyler-technologies-oss/forge/pull/802) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 3
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v3.5.1 (Fri Jan 31 2025)
 
 #### 🐛 Bug Fix
