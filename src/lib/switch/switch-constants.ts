@@ -3,8 +3,13 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}switch`;
 
 const observedAttributes = {
+  CHECKED: 'checked',
+  /** @deprecated use `CHECKED` instead. */
   ON: 'on',
+  /** @deprecated use `CHECKED` instead. */
   SELECTED: 'selected',
+  DEFAULT_CHECKED: 'default-checked',
+  /** @deprecated use `DEFAULT_CHECKED` instead. */
   DEFAULT_ON: 'default-on',
   VALUE: 'value',
   DENSE: 'dense',

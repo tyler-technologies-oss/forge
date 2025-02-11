@@ -17,11 +17,13 @@ import styles from './switch.scss';
 
 export interface ISwitchComponent extends IWithFormAssociation, IWithFocusable, IWithLabelAwareness, IWithElementInternals, IWithDefaultAria {
   value: string;
+  checked: boolean;
+  /** @deprecated use `checked` instead */
   on: boolean;
-  /**
-   * @deprecated use `on` instead
-   */
+  /** @deprecated use `on` instead */
   selected: boolean;
+  defaultChecked: boolean;
+  /** @deprecated use `defaultChecked` instead */
   defaultOn: boolean;
   required: boolean;
   dense: boolean;
@@ -165,7 +167,7 @@ export class SwitchComponent
     super.connectedCallback();
     this[setDefaultAria]({
       role: 'switch',
-      ariaChecked: this.on ? 'true' : 'false',
+      ariaChecked: this.checked ? 'true' : 'false',
       ariaDisabled: this.disabled ? 'true' : 'false',
       ariaRequired: this.required ? 'true' : 'false'
     });
@@ -174,12 +176,14 @@ export class SwitchComponent
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
+      case SWITCH_CONSTANTS.observedAttributes.CHECKED:
       case SWITCH_CONSTANTS.observedAttributes.ON:
       case SWITCH_CONSTANTS.observedAttributes.SELECTED:
-        this.on = coerceBoolean(newValue);
+        this.checked = coerceBoolean(newValue);
         break;
+      case SWITCH_CONSTANTS.observedAttributes.DEFAULT_CHECKED:
       case SWITCH_CONSTANTS.observedAttributes.DEFAULT_ON:
-        this.defaultOn = coerceBoolean(newValue);
+        this.defaultChecked = coerceBoolean(newValue);
         break;
       case SWITCH_CONSTANTS.observedAttributes.VALUE:
         this.value = newValue;
@@ -207,29 +211,29 @@ export class SwitchComponent
   }
 
   public override [getFormValue](): FormValue | null {
-    return this.on ? this.value : null;
+    return this.checked ? this.value : null;
   }
 
   public override [getFormState](): string {
-    return this.on ? SWITCH_CONSTANTS.state.ON : SWITCH_CONSTANTS.state.OFF;
+    return this.checked ? SWITCH_CONSTANTS.state.ON : SWITCH_CONSTANTS.state.OFF;
   }
 
   public [setValidity](): void {
     this[internals].setValidity(
-      { valueMissing: this.required && !this.on },
+      { valueMissing: this.required && !this.checked },
       this[getValidationMessage]({
-        checked: this.on,
+        checked: this.checked,
         required: this.required
       })
     );
   }
 
   public formResetCallback(): void {
-    this.on = this.defaultOn;
+    this.checked = this.defaultChecked;
   }
 
   public formStateRestoreCallback(state: string): void {
-    this.on = state === SWITCH_CONSTANTS.state.ON;
+    this.checked = state === SWITCH_CONSTANTS.state.ON;
   }
 
   public labelClickedCallback(): void {
@@ -248,42 +252,59 @@ export class SwitchComponent
 
     if (state) {
       const stateValue = isString(state) ? state : state[this.name];
-      this.on = stateValue === SWITCH_CONSTANTS.state.ON;
+      this.checked = stateValue === SWITCH_CONSTANTS.state.ON;
       return;
     }
 
     if (isString(value)) {
-      this.on = !!value;
+      this.checked = !!value;
     } else if (value?.[this.name]) {
-      this.on = !!value[this.name];
+      this.checked = !!value[this.name];
     } else {
-      this.on = false;
+      this.checked = false;
     }
   }
 
   /**
-   * Gets/sets whether the switch is on or off.
+   * Gets/sets whether the switch is checked or not.
    * @default false
    * @attribute
    */
   @coreProperty()
+  public declare checked: boolean;
+
+  /**
+   * Alias for `checked` _(deprecated)_. Gets/sets whether the switch is checked or not.
+   * @deprecated use `checked` instead.
+   * @default false
+   * @attribute
+   */
+  @coreProperty({ name: 'checked' })
   public declare on: boolean;
 
   /**
-   * Alias for `on` _(deprecated)_.
-   * @deprecated use `on` instead
+   * Alias for `checked` _(deprecated)_.
+   * @deprecated use `checked` instead
    * @default false
    * @attribute
    */
-  @coreProperty({ name: 'on' })
+  @coreProperty({ name: 'checked' })
   public declare selected: boolean;
 
   /**
-   * Gets/sets whether the switch is on or off by default.
+   * Gets/sets whether the switch is checked by default.
+   * @default false
+   * @attribute default-checked
+   */
+  @coreProperty()
+  public declare defaultChecked: boolean;
+
+  /**
+   * Alias for `defaultChecked` _(deprecated)_. Gets/sets whether the switch is checked by default.
    * @default false
    * @attribute default-on
    */
-  @coreProperty()
+  @coreProperty({ name: 'defaultChecked' })
   public declare defaultOn: boolean;
 
   /**
@@ -348,9 +369,9 @@ export class SwitchComponent
    */
   public toggle(force?: boolean): void {
     if (isDefined(force)) {
-      this._core.on = force as boolean;
+      this._core.checked = force as boolean;
     } else {
-      this._core.on = !this._core.on;
+      this._core.checked = !this._core.checked;
     }
   }
 }
