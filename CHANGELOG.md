@@ -1,3 +1,16 @@
+# v3.6.1 (Wed Feb 12 2025)
+
+#### 🐛 Bug Fix
+
+- fix(autocomplete): traverse composed slots when locating input element [#819](https://github.com/tyler-technologies-oss/forge/pull/819) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(dialog): reuse internal accessible elements if `label` or `description` change dynamically [#820](https://github.com/tyler-technologies-oss/forge/pull/820) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.6.0 (Tue Feb 11 2025)
 
 #### 🚀 Enhancement
