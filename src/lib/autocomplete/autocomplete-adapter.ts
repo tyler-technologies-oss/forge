@@ -1,4 +1,4 @@
-import { getActiveElement, toggleAttribute } from '@tylertech/forge-core';
+import { deepQuerySelectorAll, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { CHIP_FIELD_CONSTANTS, IChipFieldComponent } from '../chip-field';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
@@ -68,7 +68,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   }
 
   public setInputElement(): HTMLInputElement {
-    const inputElements = this._component.querySelectorAll(AUTOCOMPLETE_CONSTANTS.selectors.INPUT);
+    const inputElements = deepQuerySelectorAll(this._component, AUTOCOMPLETE_CONSTANTS.selectors.INPUT, false);
     if (inputElements.length) {
       this._inputElement = inputElements[0] as HTMLInputElement;
     }
