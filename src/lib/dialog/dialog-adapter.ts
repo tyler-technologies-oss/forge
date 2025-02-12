@@ -9,12 +9,11 @@ export interface IDialogAdapter extends IBaseAdapter<IDialogComponent> {
   readonly moveHandleElement: HTMLElement;
   readonly surfaceElement: HTMLElement;
   triggerElement: HTMLElement | null;
+  destroy(): void;
   show(): void;
   hide(): Promise<void>;
   addDialogFormSubmitListener(listener: EventListener): void;
   removeDialogFormSubmitListener(listener: EventListener): void;
-  addDialogCancelListener(listener: EventListener): void;
-  removeDialogCancelListener(listener: EventListener): void;
   addBackdropDismissListener(listener: EventListener): void;
   removeBackdropDismissListener(listener: EventListener): void;
   tryAutofocus(): void;
@@ -60,6 +59,10 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
     if (!this._backdropElement.shadowRoot) {
       window.customElements.upgrade(this._backdropElement);
     }
+  }
+
+  public destroy(): void {
+    this._forceClose();
   }
 
   public show(): void {
@@ -112,20 +115,14 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   }
 
   public async hide(): Promise<void> {
-    const close = (): void => {
-      this._surfaceElement.classList.remove(BACKDROP_CONSTANTS.classes.EXITING);
-      this._dialogElement.close();
-      DialogComponent[dialogStack].delete(this._component);
-      this._showBackdropMostRecent();
-    };
-
     if (this._component.animationType === 'none') {
-      return Promise.resolve(close());
+      this._forceClose();
+      return Promise.resolve();
     }
 
     this._backdropElement.fadeOut();
     await playKeyframeAnimation(this._surfaceElement, BACKDROP_CONSTANTS.classes.EXITING);
-    close();
+    this._forceClose();
   }
 
   public addDialogFormSubmitListener(listener: EventListener): void {
@@ -134,14 +131,6 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
   public removeDialogFormSubmitListener(listener: EventListener): void {
     this._dialogElement.removeEventListener('submit', listener);
-  }
-
-  public addDialogCancelListener(listener: EventListener): void {
-    this._dialogElement.addEventListener('cancel', listener);
-  }
-
-  public removeDialogCancelListener(listener: EventListener): void {
-    this._dialogElement.removeEventListener('cancel', listener);
   }
 
   public addBackdropDismissListener(listener: EventListener): void {
@@ -259,5 +248,12 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
     element.id = id;
     element.textContent = content;
     return element;
+  }
+
+  private _forceClose(): void {
+    this._surfaceElement.classList.remove(BACKDROP_CONSTANTS.classes.EXITING);
+    this._dialogElement.close();
+    DialogComponent[dialogStack].delete(this._component);
+    this._showBackdropMostRecent();
   }
 }

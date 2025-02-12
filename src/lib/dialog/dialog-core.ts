@@ -87,9 +87,9 @@ export class DialogCore implements IDialogCore {
       this._destroyMoveController();
     }
 
-    if (this._open) {
-      this._hide();
-    }
+    this._release();
+    this._tryResetFullscreenValue();
+    this._adapter.destroy();
   }
 
   public dispatchBeforeCloseEvent(): boolean {
@@ -115,9 +115,7 @@ export class DialogCore implements IDialogCore {
     this._adapter.addDialogFormSubmitListener(this._dialogFormSubmitListener);
     DismissibleStack.instance.add(this._adapter.hostElement);
 
-    if (this._mode === 'modal') {
-      this._adapter.addDialogCancelListener(this._escapeDismissListener);
-    } else if (this._mode === 'inline-modal') {
+    if (this._mode === 'modal' || this._mode === 'inline-modal') {
       this._adapter.addDocumentListener('keydown', this._escapeDismissListener);
     }
 
@@ -138,25 +136,31 @@ export class DialogCore implements IDialogCore {
   }
 
   private async _hide(): Promise<void> {
-    this._adapter.removeDialogFormSubmitListener(this._dialogFormSubmitListener);
-    this._adapter.removeDialogCancelListener(this._escapeDismissListener);
-    this._adapter.removeDocumentListener('keydown', this._escapeDismissListener);
-    this._adapter.removeBackdropDismissListener(this._backdropDismissListener);
-    DismissibleStack.instance.remove(this._adapter.hostElement);
-
+    this._release();
     await this._adapter.hide();
 
     // Reset the fullscreen value to the original value if it was changed internally by our media query listener
-    if (typeof this._originalFullscreenValue === 'boolean') {
-      this.fullscreen = this._originalFullscreenValue;
-    }
-    this._originalFullscreenValue = undefined;
+    this._tryResetFullscreenValue();
 
     if (this._moveController) {
       this._destroyMoveController();
     }
 
     this._adapter.dispatchHostEvent(new CustomEvent(DIALOG_CONSTANTS.events.CLOSE, { bubbles: true, composed: true }));
+  }
+
+  private _release(): void {
+    this._adapter.removeDialogFormSubmitListener(this._dialogFormSubmitListener);
+    this._adapter.removeDocumentListener('keydown', this._escapeDismissListener);
+    this._adapter.removeBackdropDismissListener(this._backdropDismissListener);
+    DismissibleStack.instance.remove(this._adapter.hostElement);
+  }
+
+  private _tryResetFullscreenValue(): void {
+    if (typeof this._originalFullscreenValue === 'boolean') {
+      this.fullscreen = this._originalFullscreenValue;
+    }
+    this._originalFullscreenValue = undefined;
   }
 
   private async _applyOpen(): Promise<void> {
@@ -171,15 +175,12 @@ export class DialogCore implements IDialogCore {
     this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.OPEN, this._open);
   }
 
-  private _onEscapeDismiss(evt: Event): void {
-    if (evt.type === 'keydown') {
-      const key = (evt as KeyboardEvent).key;
-      if (key !== 'Escape' || !DismissibleStack.instance.isMostRecent(this._adapter.hostElement)) {
-        return;
-      }
-    } else if (evt.type === 'cancel') {
-      evt.preventDefault();
+  private _onEscapeDismiss(evt: KeyboardEvent): void {
+    if (evt.key !== 'Escape' || !DismissibleStack.instance.isMostRecent(this._adapter.hostElement)) {
+      return;
     }
+
+    evt.preventDefault();
 
     if (!this._persistent) {
       this._tryClose();
