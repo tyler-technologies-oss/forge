@@ -1506,7 +1506,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(inputElement.value).toBe(`01/01/${currentCentury - 1}${year}`);
     });
 
-    it('should clear the value when the input is cleared programmatically', function(this: ITestContext) {
+    it('should update/clear the value when the input is cleared programmatically', function (this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.value = new Date();
 
@@ -1515,6 +1515,35 @@ describe('DatePickerComponent', function(this: ITestContext) {
       input.dispatchEvent(new Event('input'));
 
       expect(this.context.component.value).toBeNull();
+    });
+
+    it('should update/clear the value when the input is updated/cleared programmatically, when the component is disconnected from DOM', function (this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.value = new Date();
+
+      this.context.component.remove(); // disconnect from the DOM
+
+      const input = getInputElement(this.context.component);
+      input.value = '';
+      input.dispatchEvent(new Event('input'));
+
+      expect(this.context.component.value).toBeNull();
+    });
+
+    it('should not reset the input value, when the component is reconnected to the DOM', function (this: ITestContext) {
+      this.context = setupTestContext(true);
+      const fixtureElement = getFixtureElement(this.context.component);
+      this.context.component.value = new Date();
+
+      this.context.component.remove(); // disconnect from the DOM
+
+      const input = getInputElement(this.context.component);
+      input.value = '';
+      input.dispatchEvent(new Event('input'));
+
+      fixtureElement.append(this.context.component); // reconnect to the DOM
+
+      expect(input.value).toEqual('');
     });
 
     it('should update value and mask properly when backspacing after focused', function(this: ITestContext) {
@@ -1623,6 +1652,10 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
   function getInputElement(component: IDatePickerComponent): HTMLInputElement {
     return component.querySelector('#date-picker-input') as HTMLInputElement;
+  }
+
+  function getFixtureElement(component: IDatePickerComponent): HTMLElement {
+    return component.parentElement as HTMLElement;
   }
 
   function getToggleElement(component: IDatePickerComponent): HTMLInputElement {
