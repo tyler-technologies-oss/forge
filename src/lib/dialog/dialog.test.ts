@@ -404,14 +404,41 @@ describe('Dialog', () => {
 
       await harness.showAsync();
 
-      const descriptionElement = harness.nativeDialogElement.querySelector(`[id="${DIALOG_CONSTANTS.attributes.ARIA_DESCIPTION_ID}"]`) as HTMLElement;
+      const descriptionElement = harness.nativeDialogElement.querySelector(`[id="${DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID}"]`) as HTMLElement;
 
       expect(descriptionElement).to.be.ok;
       expect(descriptionElement.isConnected).to.be.true;
       expect(descriptionElement.textContent).to.equal('My dialog description');
-      expect(descriptionElement.id).to.equal(DIALOG_CONSTANTS.attributes.ARIA_DESCIPTION_ID);
-      expect(harness.nativeDialogElement.getAttribute('aria-describedby')).to.equal(DIALOG_CONSTANTS.attributes.ARIA_DESCIPTION_ID);
+      expect(descriptionElement.id).to.equal(DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID);
+      expect(harness.nativeDialogElement.getAttribute('aria-describedby')).to.equal(DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID);
       await expect(harness.dialogElement).to.be.accessible();
+    });
+
+    it('should not add multiple visually hidden elements when label or description is updated dynamically', async () => {
+      const harness = await createFixture();
+
+      await harness.showAsync();
+
+      const labelElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(`[id="${DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID}"]`);
+      const descriptionElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(`[id="${DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID}"]`);
+
+      expect(labelElements.length).to.equal(1);
+      expect(descriptionElements.length).to.equal(1);
+      expect(labelElements[0].textContent).to.equal('My dialog title');
+      expect(descriptionElements[0].textContent).to.equal('My dialog description');
+
+      harness.dialogElement.label = 'My new dialog title';
+      harness.dialogElement.description = 'My new dialog description';
+
+      await elementUpdated(harness.dialogElement);
+
+      const newLabelElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(`[id="${DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID}"]`);
+      const newDescriptionElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(`[id="${DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID}"]`);
+
+      expect(newLabelElements.length).to.equal(1);
+      expect(newDescriptionElements.length).to.equal(1);
+      expect(newLabelElements[0].textContent).to.equal('My new dialog title');
+      expect(newDescriptionElements[0].textContent).to.equal('My new dialog description');
     });
   });
 

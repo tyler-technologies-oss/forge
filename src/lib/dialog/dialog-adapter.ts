@@ -37,8 +37,8 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   private _backdropElement: IBackdropComponent;
   private _moveHandleElement: HTMLElement;
   private _fullscreenMediaQuery: MediaQueryList | undefined;
-  private _accessibleLabelElement: HTMLElement;
-  private _accessibleDescriptionElement: HTMLElement;
+  private _accessibleLabelElement: HTMLElement | undefined;
+  private _accessibleDescriptionElement: HTMLElement | undefined;
 
   public triggerElement: HTMLElement | null;
 
@@ -217,31 +217,47 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
   public setAccessibleLabel(label: string): void {
     if (label?.trim()) {
-      this._accessibleLabelElement = this._createVisuallyHiddenElement(DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID, label);
+      this._accessibleLabelElement = this._createOrUpdateVisuallyHiddenElement(DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID, label);
+      if (this._accessibleLabelElement.isConnected) {
+        return;
+      }
       this._dialogElement.appendChild(this._accessibleLabelElement);
       this._dialogElement.setAttribute('aria-labelledby', this._accessibleLabelElement.id);
-    } else {
+    } else if (this._accessibleLabelElement?.isConnected) {
       this._dialogElement.removeAttribute('aria-labelledby');
       this._accessibleLabelElement?.remove();
+      this._accessibleLabelElement = undefined;
     }
   }
 
   public setAccessibleDescription(description: string): void {
     if (description?.trim()) {
-      this._accessibleDescriptionElement = this._createVisuallyHiddenElement(DIALOG_CONSTANTS.attributes.ARIA_DESCIPTION_ID, description);
+      this._accessibleDescriptionElement = this._createOrUpdateVisuallyHiddenElement(DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID, description);
+      if (this._accessibleDescriptionElement.isConnected) {
+        return;
+      }
       this._dialogElement.appendChild(this._accessibleDescriptionElement);
       this._dialogElement.setAttribute('aria-describedby', this._accessibleDescriptionElement.id);
-    } else {
+    } else if (this._accessibleDescriptionElement?.isConnected) {
       this._dialogElement.removeAttribute('aria-describedby');
       this._accessibleDescriptionElement?.remove();
+      this._accessibleDescriptionElement = undefined;
     }
   }
 
-  private _createVisuallyHiddenElement(id: string, text: string): HTMLElement {
-    const element = document.createElement('div');
+  private _createOrUpdateVisuallyHiddenElement(id: string, text: string): HTMLElement {
+    const content = text.trim();
+
+    let element = this._dialogElement.querySelector<HTMLElement>(`#${id}`);
+    if (element) {
+      element.textContent = content;
+      return element;
+    }
+
+    element = document.createElement('div');
     element.classList.add('visually-hidden');
     element.id = id;
-    element.textContent = text.trim();
+    element.textContent = content;
     return element;
   }
 }
