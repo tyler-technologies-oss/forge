@@ -1,3 +1,16 @@
+# v3.6.2 (Fri Feb 14 2025)
+
+#### 🐛 Bug Fix
+
+- fix(text-field): fixed a bug where the internal value change listener was not safely guarding types [#824](https://github.com/tyler-technologies-oss/forge/pull/824) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(dialog): fixed escape key bug when persistent and improved destroy logic [#823](https://github.com/tyler-technologies-oss/forge/pull/823) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.6.1 (Wed Feb 12 2025)
 
 #### 🐛 Bug Fix
