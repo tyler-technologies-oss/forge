@@ -333,3 +333,13 @@ export function task(duration = 0): Promise<void> {
 export function frame(): Promise<void> {
   return new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
 }
+
+/**
+ * Determines if an object is an instance of a specific type.
+ * @param obj The object to test.
+ * @param name The name of the type to test against.
+ * @returns `true` if the object is an instance of the type, otherwise `false`.
+ */
+export function isInstanceOf<T>(obj: any, name: string): obj is T {
+  return Object.prototype.toString.call(obj) === `[object ${name}]`;
+}

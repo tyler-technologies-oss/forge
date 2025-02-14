@@ -1,3 +1,4 @@
+import { isInstanceOf } from '../core/utils/utils';
 import { FieldLabelPosition, FIELD_CONSTANTS } from '../field';
 import { BaseFieldCore, IBaseFieldCore } from '../field/base/base-field-core';
 import { ITextFieldAdapter, TextFieldAdapter } from './text-field-adapter';
@@ -13,7 +14,7 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
   private _slotChangeListener: EventListener = this._onSlotChange.bind(this);
   private _inputAttributeListener: TextFieldInputAttributeObserver = this._onInputAttributeChange.bind(this);
   private _valueChangeListener: TextFieldValueChangeListener = this._onValueChange.bind(this);
-  private _inputListener: EventListener = this._onValueChange.bind(this);
+  private _inputListener: EventListener = this._onInputChange.bind(this);
   private _clearButtonClickListener: EventListener = (evt: PointerEvent) => this._onClearButtonClick(evt);
 
   constructor(protected _adapter: TextFieldAdapter) {
@@ -82,15 +83,26 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
     }
   }
 
-  private _onValueChange(evt: InputEvent): void {
-    let force;
+  /** Responds to the `input` event from the <input> element. */
+  private _onInputChange(evt: InputEvent & { target: HTMLInputElement }): void {
+    let floatLabel;
 
-    // Handle the special case where a number input allows invalid characters
-    if ((evt.target as HTMLInputElement | undefined)?.type === 'number' && (evt.data != null || (evt.target as HTMLInputElement).validity.badInput)) {
-      force = true;
+    // Handle the special case where a number input allows invalid characters to be entered.
+    // In this case, we need to force the label to float.
+    if (isInstanceOf<InputEvent>(evt, InputEvent.name) && evt.target.type === 'number' && (evt.data != null || evt.target.validity.badInput)) {
+      floatLabel = true;
     }
 
-    this._tryFloatLabel(force);
+    this._syncValueChange({ floatLabel });
+  }
+
+  /** Called from the `value` property setter on the <input> element. */
+  private _onValueChange(): void {
+    this._syncValueChange();
+  }
+
+  private _syncValueChange({ floatLabel = undefined }: { floatLabel?: boolean } = {}): void {
+    this._tryFloatLabel(floatLabel);
     this._toggleClearButtonVisibility();
   }
 
