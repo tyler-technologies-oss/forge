@@ -19,8 +19,7 @@ const observedAttributes = {
   PLACEMENT: 'placement',
   SIZE_STRATEGY: 'size-strategy',
   LABEL: 'label',
-  DESCRIPTION: 'description',
-  FOCUS_MODE: 'focus-mode'
+  DESCRIPTION: 'description'
 };
 
 const attributes = {
@@ -93,7 +92,6 @@ export type DialogPositionStrategy = 'viewport' | 'container';
 export type DialogPlacement = 'custom' | 'center' | 'top' | 'right' | 'bottom' | 'left' | 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 export type DialogSizeStrategy = 'content' | 'container-inline' | 'container-block';
 export type DialogPreset = 'dialog' | 'bottom-sheet' | 'top-sheet' | 'left-sheet' | 'right-sheet';
-export type DialogFocusMode = 'auto' | 'manual';
 
 export const hideBackdrop = Symbol('hideBackdrop');
 export const showBackdrop = Symbol('showBackdrop');

@@ -1,24 +1,22 @@
 import { expect } from '@esm-bundle/chai';
-import { spy } from 'sinon';
-import { nothing } from 'lit';
-import { ifDefined } from 'lit/directives/if-defined.js';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { sendKeys, sendMouse, setViewport } from '@web/test-runner-commands';
 import { getShadowElement } from '@tylertech/forge-core';
+import { sendKeys, sendMouse, setViewport } from '@web/test-runner-commands';
+import { nothing } from 'lit';
+import { spy } from 'sinon';
+import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
+import { frame, task } from '../core/utils/utils';
 import { IDialogComponent } from './dialog';
 import {
+  DIALOG_CONSTANTS,
   DialogAnimationType,
   DialogMode,
   DialogPlacement,
   DialogPositionStrategy,
   DialogPreset,
   DialogSizeStrategy,
-  DialogType,
-  DIALOG_CONSTANTS,
-  DialogFocusMode
+  DialogType
 } from './dialog-constants';
-import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
-import { frame, task } from '../core/utils/utils';
 
 import './dialog';
 
@@ -539,7 +537,7 @@ describe('Dialog', () => {
       expect(harness.isOpen).to.be.false;
     });
 
-    it('should set focus to element with autofocus attribute when opened', async () => {
+    it('should set focus to element with autofocus attribute when modal', async () => {
       const harness = await createFixture({ open: true, autofocus: true });
 
       await elementUpdated(harness.dialogElement);
@@ -547,7 +545,23 @@ describe('Dialog', () => {
       expect(harness.formCloseButton).to.equal(document.activeElement);
     });
 
-    it('should set focus to <dialog> element when opened and no autofocus element is present', async () => {
+    it('should set focus to element with autofocus attribute when inline-modal', async () => {
+      const harness = await createFixture({ open: true, mode: 'inline-modal', autofocus: true });
+
+      await elementUpdated(harness.dialogElement);
+
+      expect(harness.formCloseButton).to.equal(document.activeElement);
+    });
+
+    it('should set focus to element with autofocus attribute when nonmodal', async () => {
+      const harness = await createFixture({ open: true, mode: 'nonmodal', autofocus: true });
+
+      await elementUpdated(harness.dialogElement);
+
+      expect(harness.formCloseButton).to.equal(document.activeElement);
+    });
+
+    it('should set focus to <dialog> element when modal and no autofocus element is present', async () => {
       const harness = await createFixture({ open: true });
 
       await elementUpdated(harness.dialogElement);
@@ -555,8 +569,16 @@ describe('Dialog', () => {
       expect(harness.dialogElement.matches(':focus-within')).to.be.true;
     });
 
-    it('should not set focus to dialog when focus mode is "manual"', async () => {
-      const harness = await createFixture({ open: true, focusMode: 'manual' });
+    it('should not set focus to dialog when inline-modal', async () => {
+      const harness = await createFixture({ open: true, mode: 'inline-modal' });
+
+      await harness.focusDelay();
+
+      expect(harness.dialogElement.matches(':focus-within')).to.be.false;
+    });
+
+    it('should not set focus to dialog when nonmodal', async () => {
+      const harness = await createFixture({ open: true, mode: 'nonmodal' });
 
       await harness.focusDelay();
 
@@ -1151,7 +1173,6 @@ interface IDialogFixtureConfig {
   sizeStrategy?: DialogSizeStrategy;
   placement?: DialogPlacement;
   moveable?: boolean;
-  focusMode?: DialogFocusMode;
   autofocus?: boolean;
 }
 
@@ -1168,7 +1189,6 @@ async function createFixture({
   sizeStrategy,
   placement,
   moveable,
-  focusMode,
   autofocus
 }: IDialogFixtureConfig = {}): Promise<DialogHarness> {
   const container = await fixture(html`
@@ -1190,8 +1210,7 @@ async function createFixture({
         position-strategy=${positionStrategy ?? nothing}
         size-strategy=${sizeStrategy ?? nothing}
         placement=${placement ?? nothing}
-        ?moveable=${moveable}
-        focus-mode=${ifDefined(focusMode)}>
+        ?moveable=${moveable}>
         <h1 id="dialog-title">Dialog Title</h1>
         <p id="dialog-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         <form>

@@ -1,27 +1,26 @@
-import { attachShadowTemplate, coerceBoolean, customElement, coreProperty, coerceNumber } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, coreProperty, customElement } from '@tylertech/forge-core';
 import { BackdropComponent } from '../backdrop';
 import { BaseComponent } from '../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
+import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
 import { DialogAdapter } from './dialog-adapter';
-import { DialogCore } from './dialog-core';
 import {
+  DIALOG_CONSTANTS,
   DialogAnimationType,
   DialogMode,
   DialogPlacement,
   DialogPositionStrategy,
   DialogPreset,
   DialogSizeStrategy,
-  dialogStack,
   DialogType,
-  DIALOG_CONSTANTS,
-  hideBackdrop,
   IDialogMoveEventData,
   IDialogMoveStartEventData,
-  showBackdrop,
-  DialogFocusMode
+  dialogStack,
+  hideBackdrop,
+  showBackdrop
 } from './dialog-constants';
-import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
+import { DialogCore } from './dialog-core';
 
 import template from './dialog.html';
 import styles from './dialog.scss';
@@ -43,7 +42,6 @@ export interface IDialogProperties {
   moveable: boolean;
   label: string;
   description: string;
-  focusMode: DialogFocusMode;
 }
 
 export interface IDialogComponent extends IDialogProperties, IWithDefaultAria, IWithElementInternals, IDismissible {
@@ -258,9 +256,6 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
       case DIALOG_CONSTANTS.observedAttributes.DESCRIPTION:
         this.description = newValue;
         break;
-      case DIALOG_CONSTANTS.observedAttributes.FOCUS_MODE:
-        this.focusMode = newValue as DialogFocusMode;
-        break;
     }
   }
 
@@ -390,16 +385,6 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    */
   @coreProperty()
   public declare description: string;
-
-  /**
-   * Configures how the dialog manages focus.
-   * - `auto`: The dialog will automatically capture focus.
-   * - `manual`: The dialog will not manage focus.
-   * @default 'auto'
-   * @attribute focus-mode
-   */
-  @coreProperty()
-  public declare focusMode: DialogFocusMode;
 
   /** Shows the dialog. */
   public show(): void {
