@@ -10,7 +10,8 @@ import {
   DialogSizeStrategy,
   DialogType,
   DIALOG_CONSTANTS,
-  IDialogMoveEventData
+  IDialogMoveEventData,
+  DialogFocusMode
 } from './dialog-constants';
 
 export interface IDialogCore {
@@ -30,6 +31,7 @@ export interface IDialogCore {
   moveable: boolean;
   label: string;
   description: string;
+  focusMode: DialogFocusMode;
   hideBackdrop(): void;
   showBackdrop(): void;
   dispatchBeforeCloseEvent(): boolean;
@@ -49,6 +51,7 @@ export class DialogCore implements IDialogCore {
   private _moveable = false;
   private _label = '';
   private _description = '';
+  private _focusMode: DialogFocusMode = 'auto';
   private _sizeStrategy: DialogSizeStrategy = DIALOG_CONSTANTS.defaults.SIZE_STRATEGY;
   private _placement: DialogPlacement = DIALOG_CONSTANTS.defaults.PLACEMENT;
   private _positionStrategy: DialogPositionStrategy = DIALOG_CONSTANTS.defaults.POSITION_STRATEGY;
@@ -166,7 +169,9 @@ export class DialogCore implements IDialogCore {
   private async _applyOpen(): Promise<void> {
     if (this._open) {
       this._show();
-      this._adapter.tryAutofocus();
+      if (this._focusMode === 'auto') {
+        this._adapter.tryAutofocus();
+      }
     } else {
       await this._hide();
     }
@@ -453,6 +458,15 @@ export class DialogCore implements IDialogCore {
     if (this._placement !== value) {
       this._placement = value;
       this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.PLACEMENT, this._placement);
+    }
+  }
+
+  public get focusMode(): DialogFocusMode {
+    return this._focusMode;
+  }
+  public set focusMode(value: DialogFocusMode) {
+    if (this._focusMode !== value) {
+      this._focusMode = value;
     }
   }
 }

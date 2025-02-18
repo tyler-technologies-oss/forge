@@ -18,7 +18,8 @@ import {
   hideBackdrop,
   IDialogMoveEventData,
   IDialogMoveStartEventData,
-  showBackdrop
+  showBackdrop,
+  DialogFocusMode
 } from './dialog-constants';
 import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
 
@@ -42,6 +43,7 @@ export interface IDialogProperties {
   moveable: boolean;
   label: string;
   description: string;
+  focusMode: DialogFocusMode;
 }
 
 export interface IDialogComponent extends IDialogProperties, IWithDefaultAria, IWithElementInternals, IDismissible {
@@ -256,6 +258,9 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
       case DIALOG_CONSTANTS.observedAttributes.DESCRIPTION:
         this.description = newValue;
         break;
+      case DIALOG_CONSTANTS.observedAttributes.FOCUS_MODE:
+        this.focusMode = newValue as DialogFocusMode;
+        break;
     }
   }
 
@@ -385,6 +390,16 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    */
   @coreProperty()
   public declare description: string;
+
+  /**
+   * Configures how the dialog manages focus.
+   * - `auto`: The dialog will automatically capture focus.
+   * - `manual`: The dialog will not manage focus.
+   * @default 'auto'
+   * @attribute focus-mode
+   */
+  @coreProperty()
+  public declare focusMode: DialogFocusMode;
 
   /** Shows the dialog. */
   public show(): void {
