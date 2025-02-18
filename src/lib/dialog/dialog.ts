@@ -1,26 +1,26 @@
-import { attachShadowTemplate, coerceBoolean, customElement, coreProperty, coerceNumber } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, coreProperty, customElement } from '@tylertech/forge-core';
 import { BackdropComponent } from '../backdrop';
 import { BaseComponent } from '../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
+import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
 import { DialogAdapter } from './dialog-adapter';
-import { DialogCore } from './dialog-core';
 import {
+  DIALOG_CONSTANTS,
   DialogAnimationType,
   DialogMode,
   DialogPlacement,
   DialogPositionStrategy,
   DialogPreset,
   DialogSizeStrategy,
-  dialogStack,
   DialogType,
-  DIALOG_CONSTANTS,
-  hideBackdrop,
   IDialogMoveEventData,
   IDialogMoveStartEventData,
+  dialogStack,
+  hideBackdrop,
   showBackdrop
 } from './dialog-constants';
-import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
+import { DialogCore } from './dialog-core';
 
 import template from './dialog.html';
 import styles from './dialog.scss';
