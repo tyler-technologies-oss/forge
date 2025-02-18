@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
-import { nothing } from 'lit-html';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { spy } from 'sinon';
 import { TestHarness } from '../../../test/utils/test-harness';
 import { internals } from '../../constants';
@@ -136,7 +136,6 @@ describe('Select', () => {
       ];
       const harness = await createFixture();
       harness.element.options = options;
-      console.log('hello options', harness.element.children[2].getAttribute('data-test-attr'));
       expect(harness.element.children[2].getAttribute('data-test-attr')).to.equal('test-value');
     });
   });
@@ -969,21 +968,21 @@ async function createFixture({
       id="my-test-id"
       style="margin-top: 10px;"
       label=${label}
-      placeholder=${placeholder}
+      placeholder=${ifDefined(placeholder)}
       ?multiple=${multiple}
-      .labelPosition=${labelPosition ?? nothing}
-      .labelAlignment=${labelAlignment ?? nothing}
+      label-position=${ifDefined(labelPosition)}
+      label-alignment=${ifDefined(labelAlignment)}
       ?invalid=${invalid}
       ?required=${required}
       ?optional=${optional}
       ?disabled=${disabled}
       ?float-label=${floatLabel}
-      .variant=${variant ?? nothing}
-      .theme=${theme ?? nothing}
-      .shape=${shape ?? nothing}
-      .density=${density ?? nothing}
+      variant=${ifDefined(variant)}
+      theme=${ifDefined(theme)}
+      shape=${ifDefined(shape)}
+      density=${ifDefined(density)}
       ?dense=${dense}
-      .supportTextInset=${supportTextInset ?? nothing}>
+      support-text-inset=${ifDefined(supportTextInset)}>
       <forge-option value="one">Option 1</forge-option>
       <forge-option value="two">Option 2</forge-option>
       <forge-option value="three">Option 3</forge-option>
