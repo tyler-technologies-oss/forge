@@ -968,7 +968,7 @@ async function createFixture({
       id="my-test-id"
       style="margin-top: 10px;"
       label=${label}
-      placeholder=${ifDefined(placeholder)}
+      placeholder=${placeholder ?? ''}
       ?multiple=${multiple}
       label-position=${ifDefined(labelPosition)}
       label-alignment=${ifDefined(labelAlignment)}
