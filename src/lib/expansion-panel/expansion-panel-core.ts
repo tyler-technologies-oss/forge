@@ -146,7 +146,6 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
       this._adapter.detachTriggerAria();
       this._trigger = value;
       this._syncTrigger();
-      this._adapter.setHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.TRIGGER, this._trigger);
     }
   }
 }
