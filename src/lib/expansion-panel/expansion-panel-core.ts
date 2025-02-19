@@ -46,7 +46,7 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   private _syncTrigger(): void {
     this._adapter.updateAriaControls();
     this._adapter.updateAriaExpanded(this._open);
-    this._adapter.removeTriggerListeners(true);
+    this._adapter.removeTriggerListeners({ reset: true });
     this._adapter.addTriggerListener('click', this._clickListener);
     this._adapter.addTriggerListener('keydown', this._keydownListener);
   }

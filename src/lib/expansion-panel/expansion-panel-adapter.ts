@@ -8,7 +8,7 @@ export interface IExpansionPanelAdapter extends IBaseAdapter {
   setAnimationCompleteListener(listener: () => void): void;
   addContentSlotListener(listener: EventListener): void;
   addHeaderListener(type: keyof HTMLElementEventMap, listener: EventListener): void;
-  removeTriggerListeners(reset?: boolean): void;
+  removeTriggerListeners(options?: { reset: boolean }): void;
   addTriggerListener(type: keyof HTMLElementEventMap, listener: EventListener): void;
   tryToggleOpenIcon(value: boolean): void;
   setContentVisibility(visible: boolean): void;
@@ -71,9 +71,9 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
     this._headerElement.addEventListener(type, listener);
   }
 
-  public removeTriggerListeners(reset = false): void {
+  public removeTriggerListeners(options = { reset: false }): void {
     this._triggerListenerController?.abort();
-    if (reset) {
+    if (options?.reset) {
       this._triggerListenerController = new AbortController();
     }
   }
