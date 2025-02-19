@@ -20,11 +20,13 @@ It's common to compose an expansion panel with a card component to provide a mor
 
 > **Tip:** You can provide a `<forge-open-icon>` to show the open state of the expansion panel, and the icon will be rotated when the panel is opened/closed.
 
-## Target Button
+## Trigger Button
 
 A button in the header slot of the expansion panel will automatically control toggling the `open` state of the panel.
 Setting the `trigger` attribute/property of the expansion panel to the button's `id` will also manage its `aria-expanded` and `aria-controls` attributes.
-You can also set the `trigger` to the `id` of a button elsewhere in the document to add the toggling and ARIA attribute functionality to it.
+You can also set `trigger` to the `id` of a button elsewhere in the document to add the toggling and ARIA attribute functionality to it.
+
+> **Tip:** Make sure the intended trigger element is present in the DOM at the same time the expansion panel initializes or has `trigger` set. Alternatively, use the `triggerElement` property to directly pass in the trigger element reference.
 
 <Canvas of={ExpansionPanelStories.WithUnslottedButton} />
 
