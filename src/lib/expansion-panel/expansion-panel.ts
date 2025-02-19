@@ -12,6 +12,7 @@ export interface IExpansionPanelComponent extends IBaseComponent {
   orientation: ExpansionPanelOrientation;
   animationType: ExpansionPanelAnimationType;
   trigger: string;
+  triggerElement: HTMLElement | null;
   toggle(): void;
 }
 
@@ -34,7 +35,8 @@ declare global {
  * @property {boolean} [open=false] - Whether the panel is open or closed.
  * @property {ExpansionPanelOrientation} [orientation="vertical"] - The orientation of the panel.
  * @property {ExpansionPanelAnimationType} [animationType="default"] - The type of animation to use when opening/closing the panel.
- * @property {string} trigger - The id of the button that the expansion panel is associated with.
+ * @property {string} trigger - The id of the element that the expansion panel should be toggled by.
+ * @property {HTMLElement | null} triggerElement - The element that the expansion panel should be toggled by.
  *
  * @attribute {boolean} [open=false] - Whether the panel is open or closed.
  * @attribute {ExpansionPanelOrientation} [orientation="vertical"] - The orientation of the panel.
@@ -109,6 +111,9 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
 
   @coreProperty()
   public declare trigger: string;
+
+  @coreProperty()
+  public declare triggerElement: HTMLElement | null;
 
   /**
    * Toggles the open state of the panel.

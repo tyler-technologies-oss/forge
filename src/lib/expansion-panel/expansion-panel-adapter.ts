@@ -5,6 +5,7 @@ import { IExpansionPanelComponent } from './expansion-panel';
 import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 
 export interface IExpansionPanelAdapter extends IBaseAdapter {
+  readonly triggerElementRef: HTMLElement | null;
   setAnimationCompleteListener(listener: () => void): void;
   addContentSlotListener(listener: EventListener): void;
   addHeaderListener(type: keyof HTMLElementEventMap, listener: EventListener): void;
@@ -14,6 +15,7 @@ export interface IExpansionPanelAdapter extends IBaseAdapter {
   setContentVisibility(visible: boolean): void;
   animationStart(): void;
   animationEnd(): void;
+  setTriggerElement(el: HTMLElement | null): void;
   setContentId(): void;
   updateAriaControls(): void;
   updateAriaExpanded(open: boolean): void;
@@ -27,6 +29,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   private _headerSlotElement: HTMLSlotElement;
   private _defaultSlotElement: HTMLSlotElement;
   private _triggerListenerController: AbortController;
+  private _triggerElementRef: HTMLElement | null;
 
   private _transitionStartListener: EventListener = this._onTransitionStart.bind(this);
   private _transitionEndListener: EventListener = this._onTransitionEnd.bind(this);
@@ -42,7 +45,11 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   }
 
   private get _triggerElement(): HTMLElement | null {
-    return this._tryLocateTriggerElement(this._component.trigger);
+    return this._triggerElementRef ?? this._tryLocateTriggerElement(this._component.trigger);
+  }
+
+  public get triggerElementRef(): HTMLElement | null {
+    return this._triggerElementRef;
   }
 
   private get _slottedContentElement(): Element | undefined {
@@ -112,6 +119,10 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
 
   public animationEnd(): void {
     this._innerElement.style.removeProperty('overflow');
+  }
+
+  public setTriggerElement(el: HTMLElement | null): void {
+    this._triggerElementRef = el;
   }
 
   public setContentId(): void {
