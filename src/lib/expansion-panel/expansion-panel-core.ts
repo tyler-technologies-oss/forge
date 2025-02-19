@@ -1,3 +1,4 @@
+import { frame } from '../core';
 import { IExpansionPanelAdapter } from './expansion-panel-adapter';
 import { ExpansionPanelAnimationType, ExpansionPanelOrientation, EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 
@@ -22,15 +23,14 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
 
   constructor(private _adapter: IExpansionPanelAdapter) {}
 
-  public initialize(): void {
+  public async initialize(): Promise<void> {
     this._adapter.addHeaderListener('click', this._clickListener);
     this._adapter.addHeaderListener('keydown', this._keydownListener);
     this._adapter.setAnimationCompleteListener(this._animationCompleteListener);
     this._adapter.addContentSlotListener(this._slotListener);
     this._adapter.setContentId();
-    requestAnimationFrame(() => {
-      this._syncTrigger();
-    });
+    await frame();
+    this._syncTrigger();
   }
 
   public destroy(): void {
