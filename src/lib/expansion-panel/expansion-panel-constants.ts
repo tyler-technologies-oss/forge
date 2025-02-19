@@ -1,4 +1,3 @@
-import { triggerAsyncId } from 'async_hooks';
 import { COMPONENT_NAME_PREFIX } from '../constants';
 import { OPEN_ICON_CONSTANTS } from '../open-icon';
 
