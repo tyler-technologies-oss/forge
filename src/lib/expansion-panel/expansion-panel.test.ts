@@ -555,17 +555,110 @@ describe('Expansion Panel', () => {
       expect(trigger.getAttribute('aria-expanded')).to.equal('false');
     });
 
+    it('should set trigger by element reference', async () => {
+      const el = await fixture<HTMLElement>(html`
+        <div>
+          <button id="button-id"></button>
+          <forge-expansion-panel>
+            <div>Content</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const trigger = el.querySelector('#button-id') as HTMLElement;
+      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      expansionPanel.triggerElement = trigger;
+      trigger.click();
+      expect(expansionPanel.open).to.be.true;
+      trigger.click();
+      expect(expansionPanel.open).to.be.false;
+    });
+
+    it('should handle null trigger element reference'),
+      async () => {
+        const el = await fixture<HTMLElement>(html`
+          <div>
+            <button id="button-id"></button>
+            <forge-expansion-panel>
+              <div>Content</div>
+            </forge-expansion-panel>
+          </div>
+        `);
+        let trigger = el.querySelector('#button-id') as HTMLElement;
+        const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+
+        expansionPanel.triggerElement = null;
+
+        expansionPanel.triggerElement = trigger;
+        trigger.click();
+        expect(expansionPanel.open).to.be.true;
+        trigger.click();
+        expect(expansionPanel.open).to.be.false;
+
+        expansionPanel.triggerElement = null;
+        trigger.click();
+        expect(expansionPanel.open).to.be.false;
+      };
+
     it('should not error if no slotted content', async () => {
-      await fixture<HTMLElement>(html`
+      const el = await fixture<HTMLElement>(html`
         <div>
           <button id="button-id"></button>
           <forge-expansion-panel trigger="button-id"></forge-expansion-panel>
         </div>
       `);
+      let trigger = el.querySelector('#button-id') as HTMLElement;
+      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+
+      trigger.click();
+      expect(expansionPanel.open).to.be.true;
+      trigger.click();
+      expect(expansionPanel.open).to.be.false;
     });
 
-    it('should not error if trigger not found', async () => {
-      await fixture<IExpansionPanelComponent>(html`<forge-expansion-panel trigger="button-id"></forge-expansion-panel>`);
+    it('should handle trigger element not found by id', async () => {
+      const el = await fixture<IExpansionPanelComponent>(html`
+        <div>
+          <button id="button-id"></button>
+          <forge-expansion-panel trigger="foo"></forge-expansion-panel>
+        </div>
+      `);
+      let trigger = el.querySelector('#button-id') as HTMLElement;
+      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+
+      trigger.click();
+      expect(expansionPanel.open).to.be.false;
+
+      expansionPanel.trigger = 'button-id';
+      trigger.click();
+      expect(expansionPanel.open).to.be.true;
+      trigger.click();
+      expect(expansionPanel.open).to.be.false;
+    });
+
+    it('should error if both trigger and triggerElement are set', async () => {
+      const el = await fixture<HTMLElement>(html`
+        <div>
+          <button id="button-id"></button>
+          <forge-expansion-panel>
+            <div id="content">Content</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const triggerElement = el.querySelector('#button-id') as HTMLElement;
+      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const setTriggerId = () => {
+        expansionPanel.trigger = 'foo';
+      };
+      const setTriggerEl = () => {
+        expansionPanel.triggerElement = triggerElement;
+      };
+
+      setTriggerId();
+      expect(setTriggerEl).to.throw();
+
+      expansionPanel.trigger = '';
+      setTriggerEl();
+      expect(setTriggerId).to.throw();
     });
   });
 
