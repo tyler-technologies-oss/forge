@@ -1,3 +1,23 @@
+# v3.6.3 (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
+- fix(dialog): only force-capture focus when modal [#825](https://github.com/tyler-technologies-oss/forge/pull/825) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): only apply hover state when cursor is over container [#842](https://github.com/tyler-technologies-oss/forge/pull/842) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix(field): apply default min height to slotted support text elements [#840](https://github.com/tyler-technologies-oss/forge/pull/840) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore(select): fix test syntax [#826](https://github.com/tyler-technologies-oss/forge/pull/826) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(badge): remove unnecessary style in demo code snippet [#841](https://github.com/tyler-technologies-oss/forge/pull/841) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v3.6.2 (Fri Feb 14 2025)
 
 #### 🐛 Bug Fix
