@@ -8,7 +8,6 @@
 @use './token-utils' as *;
 
 $focus: ':not([disabled]):focus-within';
-$hover: ':not([disabled]):hover';
 $invalid: ':not([disabled])[invalid]';
 
 $first-slotted-element: '::slotted(:is([data-forge-field-input], *:first-of-type:is(input, textarea)))';
@@ -158,12 +157,6 @@ $variants: (
 // State
 //
 
-:host(#{$hover}) {
-  .forge-field {
-    @include core.hover;
-  }
-}
-
 :host([disabled]) {
   .forge-field {
     @include core.disabled;
@@ -182,6 +175,10 @@ $variants: (
 }
 
 :host(:not([disabled])) {
+  .forge-field:has(.container:hover) {
+    @include core.hover;
+  }
+
   .forge-field:has(.input:focus-within) {
     @include core.focus;
   }
@@ -596,6 +593,10 @@ $variants: (
     .end {
       @include core.item-padding(end, inner);
     }
+  }
+
+  ::slotted(:where([slot='support-text'], [slot='helper-text'])) {
+    @include core.slotted-support-text;
   }
 }
 
