@@ -143,9 +143,6 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
     return this._trigger;
   }
   public set trigger(value: string) {
-    if (this.triggerElement) {
-      this._throwTriggerError();
-    }
     if (this._trigger !== value) {
       this._adapter.detachTriggerAria();
       this._trigger = value;
@@ -157,17 +154,10 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
     return this._adapter.triggerElementRef;
   }
   public set triggerElement(el: HTMLElement | null) {
-    if (this.trigger) {
-      this._throwTriggerError();
-    }
     if (this._adapter.triggerElementRef !== el) {
       this._adapter.detachTriggerAria();
       this._adapter.setTriggerElement(el);
       this._syncTrigger();
     }
-  }
-
-  private _throwTriggerError(): void {
-    throw new Error('trigger and triggerElement cannot both be set.');
   }
 }

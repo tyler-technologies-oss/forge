@@ -635,30 +635,44 @@ describe('Expansion Panel', () => {
       expect(expansionPanel.open).to.be.false;
     });
 
-    it('should error if both trigger and triggerElement are set', async () => {
+    it('should have triggerElement take precedence over trigger if both are set', async () => {
       const el = await fixture<HTMLElement>(html`
         <div>
-          <button id="button-id"></button>
-          <forge-expansion-panel>
+          <button id="button-id1"></button>
+          <button id="button-id2"></button>
+          <forge-expansion-panel trigger="button-id1">
             <div id="content">Content</div>
           </forge-expansion-panel>
         </div>
       `);
-      const triggerElement = el.querySelector('#button-id') as HTMLElement;
+      const trigger1 = el.querySelector('#button-id1') as HTMLElement;
+      const trigger2 = el.querySelector('#button-id2') as HTMLElement;
       const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
-      const setTriggerId = () => {
-        expansionPanel.trigger = 'foo';
-      };
-      const setTriggerEl = () => {
-        expansionPanel.triggerElement = triggerElement;
-      };
 
-      setTriggerId();
-      expect(setTriggerEl).to.throw();
+      trigger1.click();
+      expect(expansionPanel.open).to.be.true;
+      trigger1.click();
+      expect(expansionPanel.open).to.be.false;
 
-      expansionPanel.trigger = '';
-      setTriggerEl();
-      expect(setTriggerId).to.throw();
+      expansionPanel.triggerElement = trigger2;
+
+      trigger1.click();
+      expect(expansionPanel.open).to.be.false;
+
+      trigger2.click();
+      expect(expansionPanel.open).to.be.true;
+      trigger2.click();
+      expect(expansionPanel.open).to.be.false;
+
+      expansionPanel.triggerElement = null;
+
+      trigger2.click();
+      expect(expansionPanel.open).to.be.false;
+
+      trigger1.click();
+      expect(expansionPanel.open).to.be.true;
+      trigger1.click();
+      expect(expansionPanel.open).to.be.false;
     });
   });
 
