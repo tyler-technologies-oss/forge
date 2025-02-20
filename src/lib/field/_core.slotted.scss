@@ -54,3 +54,8 @@
 @mixin slotted-placeholder {
   color: #{token(placeholder-color)};
 }
+
+@mixin slotted-support-text {
+  display: block;
+  min-height: 0.875rem;
+}

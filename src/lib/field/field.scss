@@ -597,6 +597,10 @@ $variants: (
       @include core.item-padding(end, inner);
     }
   }
+
+  ::slotted(:where([slot='support-text'], [slot='helper-text'])) {
+    @include core.slotted-support-text;
+  }
 }
 
 /* Add padding between the end and accessory elements in the plain variant */
