@@ -51,7 +51,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   }
 
   private get _slottedContentElement(): Element | undefined {
-    return this._defaultSlotElement.assignedElements()[0];
+    return this._defaultSlotElement.assignedElements({ flatten: true })[0];
   }
 
   private set _slottedContentId(id: string) {
