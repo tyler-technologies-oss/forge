@@ -26,7 +26,6 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   private _headerElement: HTMLElement;
   private _contentElement: HTMLElement;
   private _innerElement: HTMLElement;
-  private _headerSlotElement: HTMLSlotElement;
   private _defaultSlotElement: HTMLSlotElement;
   private _triggerListenerController: AbortController;
   private _triggerElementRef: HTMLElement | null;
@@ -40,7 +39,6 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
     this._headerElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.HEADER);
     this._contentElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.CONTENT);
     this._innerElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.INNER);
-    this._headerSlotElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.HEADER_SLOT) as HTMLSlotElement;
     this._defaultSlotElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
   }
 
