@@ -2,6 +2,7 @@ import { MoveController } from '../core/controllers/move-controller';
 import { DismissibleStack } from '../core/utils/dismissible-stack';
 import { IDialogAdapter } from './dialog-adapter';
 import {
+  DIALOG_CONSTANTS,
   DialogAnimationType,
   DialogMode,
   DialogPlacement,
@@ -9,7 +10,6 @@ import {
   DialogPreset,
   DialogSizeStrategy,
   DialogType,
-  DIALOG_CONSTANTS,
   IDialogMoveEventData
 } from './dialog-constants';
 

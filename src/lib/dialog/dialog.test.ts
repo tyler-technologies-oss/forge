@@ -1,22 +1,22 @@
 import { expect } from '@esm-bundle/chai';
-import { spy } from 'sinon';
-import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { sendKeys, sendMouse, setViewport } from '@web/test-runner-commands';
 import { getShadowElement } from '@tylertech/forge-core';
+import { sendKeys, sendMouse, setViewport } from '@web/test-runner-commands';
+import { nothing } from 'lit';
+import { spy } from 'sinon';
+import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
+import { frame, task } from '../core/utils/utils';
 import { IDialogComponent } from './dialog';
 import {
+  DIALOG_CONSTANTS,
   DialogAnimationType,
   DialogMode,
   DialogPlacement,
   DialogPositionStrategy,
   DialogPreset,
   DialogSizeStrategy,
-  DialogType,
-  DIALOG_CONSTANTS
+  DialogType
 } from './dialog-constants';
-import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
-import { task } from '../core/utils/utils';
 
 import './dialog';
 
@@ -537,12 +537,52 @@ describe('Dialog', () => {
       expect(harness.isOpen).to.be.false;
     });
 
-    it('should set focus to element with autofocus attribute when opened', async () => {
-      const harness = await createFixture({ open: true });
+    it('should set focus to element with autofocus attribute when modal', async () => {
+      const harness = await createFixture({ open: true, autofocus: true });
 
       await elementUpdated(harness.dialogElement);
 
       expect(harness.formCloseButton).to.equal(document.activeElement);
+    });
+
+    it('should set focus to element with autofocus attribute when inline-modal', async () => {
+      const harness = await createFixture({ open: true, mode: 'inline-modal', autofocus: true });
+
+      await elementUpdated(harness.dialogElement);
+
+      expect(harness.formCloseButton).to.equal(document.activeElement);
+    });
+
+    it('should set focus to element with autofocus attribute when nonmodal', async () => {
+      const harness = await createFixture({ open: true, mode: 'nonmodal', autofocus: true });
+
+      await elementUpdated(harness.dialogElement);
+
+      expect(harness.formCloseButton).to.equal(document.activeElement);
+    });
+
+    it('should set focus to <dialog> element when modal and no autofocus element is present', async () => {
+      const harness = await createFixture({ open: true });
+
+      await elementUpdated(harness.dialogElement);
+
+      expect(harness.dialogElement.matches(':focus-within')).to.be.true;
+    });
+
+    it('should not set focus to dialog when inline-modal', async () => {
+      const harness = await createFixture({ open: true, mode: 'inline-modal' });
+
+      await harness.focusDelay();
+
+      expect(harness.dialogElement.matches(':focus-within')).to.be.false;
+    });
+
+    it('should not set focus to dialog when nonmodal', async () => {
+      const harness = await createFixture({ open: true, mode: 'nonmodal' });
+
+      await harness.focusDelay();
+
+      expect(harness.dialogElement.matches(':focus-within')).to.be.false;
     });
 
     it('should open immediately when animation type is set to none', async () => {
@@ -1112,6 +1152,12 @@ class DialogHarness {
   public exitAnimation(): Promise<void> {
     return task(500);
   }
+
+  public async focusDelay(): Promise<void> {
+    // Wait two frames for focus to be set
+    await frame();
+    await frame();
+  }
 }
 
 interface IDialogFixtureConfig {
@@ -1127,6 +1173,7 @@ interface IDialogFixtureConfig {
   sizeStrategy?: DialogSizeStrategy;
   placement?: DialogPlacement;
   moveable?: boolean;
+  autofocus?: boolean;
 }
 
 async function createFixture({
@@ -1141,7 +1188,8 @@ async function createFixture({
   positionStrategy,
   sizeStrategy,
   placement,
-  moveable
+  moveable,
+  autofocus
 }: IDialogFixtureConfig = {}): Promise<DialogHarness> {
   const container = await fixture(html`
     <div>
@@ -1166,7 +1214,7 @@ async function createFixture({
         <h1 id="dialog-title">Dialog Title</h1>
         <p id="dialog-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         <form>
-          <button id="form-close-button" type="submit" formmethod="dialog" autofocus>Form button close</button>
+          <button id="form-close-button" type="submit" formmethod=${'dialog' as any} ?autofocus=${autofocus}>Form button close</button>
         </form>
         <form method="dialog">
           <button id="form-submit-button" type="submit">Form close</button>
