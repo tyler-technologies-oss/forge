@@ -674,6 +674,38 @@ describe('Expansion Panel', () => {
       trigger1.click();
       expect(expansionPanel.open).to.be.false;
     });
+
+    it('should detect if triggerElement is removed from DOM (todo)', async () => {
+      const el = await fixture<HTMLElement>(html`
+        <div>
+          <button id="button-id1"></button>
+          <button id="button-id2"></button>
+          <forge-expansion-panel>
+            <div id="content">Content</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+
+      const trigger1 = el.querySelector('#button-id1') as HTMLElement;
+      const trigger2 = el.querySelector('#button-id2') as HTMLElement;
+      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+
+      expansionPanel.triggerElement = trigger2;
+
+      trigger2.click();
+      expect(expansionPanel.open).to.be.true;
+      trigger2.click();
+      expect(expansionPanel.open).to.be.false;
+
+      document.getElementById('button-id2')!.remove();
+      expansionPanel.trigger = 'button-id1'; //todo this will fail when something like this isn't called that syncs trigger again
+
+      trigger2.click();
+      expect(expansionPanel.open).to.be.false;
+
+      trigger1.click();
+      expect(expansionPanel.open).to.be.true;
+    });
   });
 
   function getContentElement(el: IExpansionPanelComponent): HTMLElement {

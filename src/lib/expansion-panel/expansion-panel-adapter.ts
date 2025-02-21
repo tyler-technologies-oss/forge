@@ -43,6 +43,9 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   }
 
   private get _triggerElement(): HTMLElement | null {
+    if (this._triggerElementRef && !document.contains(this._triggerElementRef)) {
+      this._triggerElementRef = null;
+    }
     return this._triggerElementRef ?? this._tryLocateTriggerElement(this._component.trigger);
   }
 
