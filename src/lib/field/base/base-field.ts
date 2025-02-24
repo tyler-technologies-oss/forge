@@ -117,6 +117,7 @@ export interface IBaseField extends IWithLabelAwareness {
  * @csspart accessory - The element containing the accessory slot.
  * @csspart support-text - The support text element.
  * @csspart support-text-end - The element containing the support text end slot.
+ * @csspart outline - The element containing the forge-focus-indicator element.
  * @csspart focus-indicator - The focus indicator element.
  *
  * @slot - The default/unnamed slot for the field's input.
