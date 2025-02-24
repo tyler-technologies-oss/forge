@@ -49,6 +49,7 @@ const parts = {
   ACCESSORY: 'accessory',
   SUPPORT_TEXT: 'support-text',
   SUPPORT_TEXT_END: 'support-text-end',
+  OUTLINE: 'outline',
   FOCUS_INDICATOR: 'focus-indicator'
 };
 
