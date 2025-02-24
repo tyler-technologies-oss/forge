@@ -1,3 +1,15 @@
+# v3.6.4 (Mon Feb 24 2025)
+
+#### 🐛 Bug Fix
+
+- fix(expansion-panel): fixed a rendering artifact caused by CSS animation [#844](https://github.com/tyler-technologies-oss/forge/pull/844) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.6.3 (Thu Feb 20 2025)
 
 #### 🐛 Bug Fix
