@@ -6,7 +6,8 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}expans
 const observedAttributes = {
   OPEN: 'open',
   ORIENTATION: 'orientation',
-  ANIMATION_TYPE: 'animation-type'
+  ANIMATION_TYPE: 'animation-type',
+  TRIGGER: 'trigger'
 };
 
 const attributes = {
@@ -22,6 +23,8 @@ const selectors = {
   HEADER: '.header',
   CONTENT: '.content',
   INNER: '.inner',
+  HEADER_SLOT: 'slot[name=header]',
+  DEFAULT_SLOT: 'slot:not([name])',
   IGNORE: ':is([data-forge-ignore],[forge-ignore])',
   OPEN_ICON: `:is([slot=header] ${OPEN_ICON_CONSTANTS.elementName}, ${OPEN_ICON_CONSTANTS.elementName}[slot^=header])`
 };

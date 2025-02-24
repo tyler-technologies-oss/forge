@@ -1,13 +1,14 @@
 import { html, nothing } from 'lit';
 import { action } from '@storybook/addon-actions';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 import { styleMap } from 'lit/directives/style-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { classMap } from 'lit/directives/class-map.js';
 
 import '@tylertech/forge/expansion-panel';
 import '@tylertech/forge/card';
+import '@tylertech/forge/open-icon';
 
 const component = 'forge-expansion-panel';
 
@@ -91,6 +92,22 @@ export const WithCard: Story = {
         </forge-expansion-panel>
       </forge-card>
     `;
+  }
+};
+
+export const WithUnslottedButton: Story = {
+  ...standaloneStoryParams,
+  render: () => {
+    return html`<button id="button-id">Toggle</button>
+      <forge-card>
+        <forge-expansion-panel trigger="button-id">
+          <div slot="header" role="button" tabindex="0" style="display: flex; justify-content: space-between;">
+            <div>Header text</div>
+            <forge-open-icon></forge-open-icon>
+          </div>
+          <p>Content text</p>
+        </forge-expansion-panel>
+      </forge-card>`;
   }
 };
 
