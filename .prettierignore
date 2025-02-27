@@ -8,6 +8,7 @@ docs/
 node_modules/
 src/dev/
 src/test/
+src/stories/**/*.mdx
 templates/
 package-lock.json
 CONTRIBUTING.md
