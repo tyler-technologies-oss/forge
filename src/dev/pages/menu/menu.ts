@@ -73,7 +73,7 @@ const complexOptions: IMenuOption[] = [
 ];
 const simpleOptions: IMenuOption[] = [
   { value: 'back', label: 'Back' },
-  { value: 'forward', label: 'Forward' },
+  { value: 'forward', label: 'Forward', tooltip: { text: 'Custom option tooltip!', type: 'label' } },
   { value: 'reload', label: 'Reload' },
   { value: 'help', label: 'Help & Feedback' },
   { value: 'settings', label: 'Settings' }
@@ -83,7 +83,7 @@ menu.options = simpleOptions;
 menu.placement = 'bottom-start';
 
 menu.addEventListener('forge-menu-select', evt => {
-  if (cancelSelectToggle.selected) {
+  if (cancelSelectToggle.checked) {
     console.log('[forge-menu-select] default prevented', evt.detail);
     evt.preventDefault();
     return;

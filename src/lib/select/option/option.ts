@@ -1,7 +1,7 @@
 import { coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { IIconComponent } from '../../icon';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { IBaseListDropdownOption, ListDropdownIconType } from '../../list-dropdown/list-dropdown-constants';
+import { IBaseListDropdownOption, ListDropdownIconType, ListDropdownTooltipConfig } from '../../list-dropdown/list-dropdown-constants';
 import { OptionAdapter } from './option-adapter';
 import { OPTION_CONSTANTS } from './option-constants';
 import { OptionCore } from './option-core';
@@ -34,7 +34,8 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
       OPTION_CONSTANTS.attributes.LEADING_ICON_TYPE,
       OPTION_CONSTANTS.attributes.TRAILING_ICON,
       OPTION_CONSTANTS.attributes.TRAILING_ICON_CLASS,
-      OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE
+      OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE,
+      OPTION_CONSTANTS.attributes.TOOLTIP
     ];
   }
 
@@ -82,6 +83,9 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
         break;
       case OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE:
         this.trailingIconType = newValue as ListDropdownIconType;
+        break;
+      case OPTION_CONSTANTS.attributes.TOOLTIP:
+        this.tooltip = newValue ? { text: newValue } : (undefined as any);
         break;
     }
   }
@@ -197,4 +201,10 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
    */
   @coreProperty()
   public declare trailingBuilder: () => HTMLElement;
+
+  /**
+   * Gets/sets the tooltip configuration for this option.
+   */
+  @coreProperty()
+  public declare tooltip: ListDropdownTooltipConfig;
 }
