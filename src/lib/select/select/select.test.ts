@@ -706,6 +706,21 @@ describe('Select', () => {
       expect(harness.fieldElement.floatLabel).to.be.true;
     });
 
+    it('should float label when value is set while dropdown is open', async () => {
+      const harness = await createFixture();
+
+      harness.element.labelPosition = 'inset';
+      await harness.clickElement(harness.element);
+
+      expect(harness.element.open).to.be.true;
+      expect(harness.fieldElement.floatLabel).to.be.false;
+
+      harness.element.value = 'one';
+      await frame();
+
+      expect(harness.fieldElement.floatLabel).to.be.true;
+    });
+
     it('should not float label when select has no value or placeholder', async () => {
       const harness = await createFixture();
 
