@@ -10,23 +10,61 @@ Tooltips display informative text when users hover over an element.
 
 <Canvas of={TooltipStories.Demo} />
 
-## Anchor
-
-Tooltips are intended to be "anchored" to another element. This is typically done by setting the `anchor` property/attribute to the `id` of the element that the tooltip should be anchored to.
-
-{/* prettier-ignore */}
-```html
-<button id="button">Hover over me</button>
-<forge-tooltip anchor="button">This is a tooltip</forge-tooltip>
-```
-
 ## Type
 
 You can set the `type` property/attribute to one of the following values to control its association to the anchor element.
 
-- `presentation`: A tooltip that is purely presentational and has no accessible meaning to its anchor.
-- `label`: The tooltip will be interpreted as the accessible label for the anchor element.
-- `description`: The tooltip will be interpreted as the accessible description for the anchor element.
+- `presentation` _(default)_: A tooltip that is purely presentational and has no accessible meaning to its anchor.
+- `label`: The tooltip will be interpreted as the accessible label for the anchor element via `aria-labelledby`.
+- `description`: The tooltip will be interpreted as the accessible description for the anchor element via `aria-describedby`.
+
+## Anchor Heuristic
+
+The tooltip uses the following heuristic to locate the anchor element that it should attach to when added to the DOM.
+
+1. If the `anchor` property is set, it will find and attach to the element with the corresponding `id`.
+2. If the `anchorElement` property is set, it will take precedence and use that element instance directly.
+3. If neither `anchor` nor `anchorElement` are set, it will attempt to locate a previous element sibling in the DOM.
+4. If no previous sibling element is found, it will fall back to its parent element.
+
+This is important to understand when using the tooltip in a dynamic context, such as a list of items, where tooltips may be rendered multiple times or when a tooltip is
+rendered asynchronously. This can lead to unexpected results. **In these cases, it's recommended to use the `anchor` or `anchorElement` properties to explicitly set the
+element that the tooltip should be anchored to for more predictable behavior.**
+
+## Anchor
+
+Tooltips are intended to be "anchored" to another element. This is typically done by setting the `anchor` property/attribute to the `id` of the element that the
+tooltip should be anchored to.
+
+```html
+<forge-button id="my-button">Hover over me</forge-button>
+<forge-tooltip anchor="my-button">This is a tooltip</forge-tooltip>
+```
+
+## Anchor Element
+
+You can also explicitly set the `anchorElement` property to an element instance directly. This is useful when you need more control over the timing of when the tooltip
+and its anchor element are rendered in the DOM.
+
+This is very common in frameworks like Angular, where the tooltip and its anchor element may be rendered asynchronously via incremental rendering, or if you have a conditional
+expression on your anchor element and you want to ensure that the tooltip is rendered and attached at the same time.
+
+### Angular Example
+
+In Angular, it's common to use `<ng-container>` to conditionally render a "group" of elements. In this case, you can use the `anchorElement` property to ensure that the
+tooltip is rendered at the same time as the anchor element, and attached via a template reference variable.
+
+```html
+<ng-container *ngIf="showTooltip">
+  <!-- Set a template reference variable on the button element -->
+  <forge-icon-button #myButton>
+    <forge-icon name="forge_logo"></forge-icon>
+  </forge-icon-button>
+
+  <!-- Make sure to use the `nativeElement` property to pass the actual DOM element -->
+  <forge-tooltip type="label" [anchorElement]="myButton.nativeElement">This is a tooltip</forge-tooltip>
+</ng-container>
+```
 
 ## API
 
