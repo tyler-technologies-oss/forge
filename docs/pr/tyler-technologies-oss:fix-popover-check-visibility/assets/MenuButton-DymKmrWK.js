@@ -1,0 +1,17 @@
+import{j as t,M as n,T as s,C as p}from"./index-DQkJAOqJ.js";import{useMDXComponents as r}from"./index-BOWymNru.js";import{C as m}from"./CustomArgTypes-nOU-1JrQ.js";import{M as c,D as a}from"./MenuButton.stories-DVcBLoj5.js";import"./iframe-Dn0_c5e7.js";import"./_commonjsHelpers-Cpj98o6Y.js";import"./index-BHYIh-Xd.js";import"./index-DrFu-skq.js";import"./utils-Dm6iQleG.js";import"./lit-element-JplMEnZc.js";import"./lit-html-paDGiEfB.js";import"./feature-detection-DRCh51Sa.js";import"./app-bar-profile-button-Dkt2yknz.js";import"./constants-9n5_0r7k.js";import"./base-adapter-B6TJxM93.js";import"./focus-indicator-COi7jdIi.js";import"./index-BmocOEUj.js";import"./state-layer-Bf3rUq66.js";import"./index-ByifSpfC.js";import"./icon-DB7kP3Ec.js";import"./icon-button-DxiF-tf5.js";import"./base-button-adapter-BiKAydtT.js";import"./with-label-aware-OEbK3wHg.js";import"./with-default-aria-B0dk5gj8.js";import"./a11y-utils-DJ_tX8xT.js";import"./tooltip-rAGXZlY6.js";import"./overlay-D0uIIChk.js";import"./with-longpress-listener-BdUe1dXe.js";import"./dismissible-stack-BWoWS1Vy.js";import"./badge-Dp1fyGkw.js";import"./menu-CYOw_Alz.js";import"./list-CHxmoizQ.js";import"./list-dropdown-aware-core-Cutda2HB.js";import"./list-dropdown-DS_wqevJ.js";import"./event-utils-C1SDeUaq.js";import"./linear-progress-CqfIuBkR.js";import"./popover-DHJf1hjV.js";import"./skeleton-D2S3-1Sc.js";import"./a11y-BxM9_46k.js";import"./base-component-delegate-DxN3g8BM.js";import"./avatar-D_XGi29H.js";import"./state-_w7_zNwI.js";import"./style-map-C9nPWcxA.js";import"./directive-CF8sV3Lr.js";import"./class-map-D55lQyt8.js";import"./button-CTEnnZLo.js";import"./toolbar-DrgqBcwu.js";import"./expansion-panel-BXopW1U2.js";import"./divider-75u-P60s.js";function e(i){const o={blockquote:"blockquote",code:"code",h2:"h2",li:"li",p:"p",ul:"ul",...r(),...i.components};return t.jsxs(t.Fragment,{children:[t.jsx(n,{of:c}),`
+`,t.jsx(s,{}),`
+`,t.jsxs(o.p,{children:["For convenience Forge provides the ",t.jsx(o.code,{children:"<forge-app-bar-menu-button>"})," component. This component uses an icon-button with a predefined icon. The power of this component is that it will ensure a consistent experience for users across all applications that consume it."]}),`
+`,t.jsxs(o.blockquote,{children:[`
+`,t.jsxs(o.p,{children:["It is expected that you place this component in the ",t.jsx(o.code,{children:"start"})," slot of the app-bar."]}),`
+`]}),`
+`,t.jsx(o.h2,{id:"default",children:"Default"}),`
+`,t.jsx(p,{of:a}),`
+`,t.jsxs(o.blockquote,{children:[`
+`,t.jsxs(o.p,{children:["You will listen for click events on the ",t.jsx(o.code,{children:"<forge-app-bar-menu-button>"})," element as if it were a native ",t.jsx(o.code,{children:"<button>"}),". You can then react to that event to toggle the navigation drawer visibility."]}),`
+`]}),`
+`,t.jsx(o.h2,{id:"api",children:"API"}),`
+`,t.jsx(m,{}),`
+`,t.jsx(o.h2,{id:"accessibility",children:"Accessibility"}),`
+`,t.jsxs(o.ul,{children:[`
+`,t.jsx(o.li,{children:"The component will handle adding necessary ARIA attributes for you, as well as ensure the proper color contrast ratio is used."}),`
+`]})]})}function st(i={}){const{wrapper:o}={...r(),...i.components};return o?t.jsx(o,{...i,children:t.jsx(e,{...i})}):e(i)}export{st as default};
