@@ -1,8 +1,10 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
-import { IMenuOption, IOption } from '@tylertech/forge';
+import { IMenuComponent, IMenuOption, IMenuOptionGroup, IOption, IOptionGroup } from '@tylertech/forge';
 import { styleMap } from 'lit/directives/style-map.js';
+import { createRef, ref } from 'lit/directives/ref.js';
+import { standaloneStoryParams } from '../../utils';
 
 import '@tylertech/forge/menu';
 import '@tylertech/forge/button';
@@ -88,4 +90,36 @@ export const Demo: Story = {};
 
 export const Cascading: Story = {
   args: { mode: 'cascade' }
+};
+
+export const Grouped: Story = {
+  ...standaloneStoryParams,
+  render: () => {
+    const menuRef = createRef<IMenuComponent>();
+
+    window.requestAnimationFrame(() => {
+      menuRef.value!.options = [
+        {
+          text: 'Group 1',
+          options: [
+            { label: 'Option 1', value: 'option1' },
+            { label: 'Option 2', value: 'option2' }
+          ]
+        },
+        {
+          text: 'Group 2',
+          options: [
+            { label: 'Option 3', value: 'option3' },
+            { label: 'Option 4', value: 'option4' }
+          ]
+        }
+      ] as IMenuOptionGroup[];
+    });
+
+    return html`
+      <forge-menu ${ref(menuRef)}>
+        <forge-button type="button" variant="raised">Menu</forge-button>
+      </forge-menu>
+    `;
+  }
 };
