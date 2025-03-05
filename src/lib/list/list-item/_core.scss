@@ -38,6 +38,7 @@
   padding-inline: 0;
   margin: 0;
   box-sizing: border-box;
+  width: 100%;
 
   background: transparent;
   color: inherit;
@@ -48,8 +49,11 @@
   text-align: inherit;
   letter-spacing: inherit;
   word-spacing: inherit;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 
-  display: inline;
+  display: block;
 }
 
 @mixin anchor {
