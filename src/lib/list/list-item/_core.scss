@@ -56,6 +56,10 @@
   display: block;
 }
 
+@mixin button-wrap {
+  white-space: normal;
+}
+
 @mixin anchor {
   outline: none;
   color: inherit !important;

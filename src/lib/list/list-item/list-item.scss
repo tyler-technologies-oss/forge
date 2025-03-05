@@ -211,6 +211,10 @@ slot[name='tertiary-text'] {
     @include text-container-wrap;
   }
 
+  ::slotted(:is(button, [role='button'][tabindex], [forge-list-item-button])) {
+    @include button-wrap;
+  }
+
   slot[name='secondary-text'],
   slot[name='tertiary-text'] {
     &::slotted(*) {
