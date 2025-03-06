@@ -313,7 +313,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
       popupPlacement: this._placement,
       popupFallbackPlacements: this._fallbackPlacements,
       activeStartIndex: fromKeyboard ? 0 : undefined,
-      popupClasses: [MENU_CONSTANTS.classes.POPUP, MENU_CONSTANTS.classes.MENU, ...(this._popupClasses as string[])],
+      popupClasses: [MENU_CONSTANTS.classes.POPUP, ...(this._popupClasses as string[])],
       syncWidth: this._syncPopupWidth,
       activeChangeCallback: this._activeChangeListener,
       selectCallback: this._selectListener,

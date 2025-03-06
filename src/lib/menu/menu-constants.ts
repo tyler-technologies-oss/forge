@@ -4,8 +4,7 @@ import { IListDropdownOption, IListDropdownOptionGroup } from '../list-dropdown'
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}menu`;
 
 const classes = {
-  POPUP: 'forge-menu__popup',
-  MENU: 'mdc-menu'
+  POPUP: 'forge-menu__popup'
 };
 
 const selectors = {
