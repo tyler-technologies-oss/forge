@@ -1,7 +1,7 @@
 import { getShadowElement } from '@tylertech/forge-core';
 import { prefersReducedMotion } from '../core/utils/feature-detection';
 import { VirtualElement } from '../core/utils/position-utils';
-import { frame } from '../core/utils/utils';
+import { checkVisibility, frame } from '../core/utils/utils';
 import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
 import { IOverlayAwareAdapter, OverlayAwareAdapter } from '../overlay/base/overlay-aware-adapter';
 import { IPopoverComponent } from './popover';
@@ -95,7 +95,7 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
 
     await frame();
 
-    if (!this._surfaceElement.checkVisibility()) {
+    if (!checkVisibility(this._surfaceElement)) {
       this._overlayElement.open = false;
       this._updateAnchorExpandedState(false);
       return Promise.resolve();

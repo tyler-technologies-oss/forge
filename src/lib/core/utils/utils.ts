@@ -343,3 +343,25 @@ export function frame(): Promise<void> {
 export function isInstanceOf<T>(obj: any, name: string): obj is T {
   return Object.prototype.toString.call(obj) === `[object ${name}]`;
 }
+
+/**
+ * Determines if an element is visible based on its computed styles.
+ * @param element The element to check.
+ * @returns `true` if the element is visible, otherwise `false`.
+ */
+export function checkVisibility(element: HTMLElement): boolean {
+  // Use the `checkVisibility()` method on the element if available
+  if (typeof element.checkVisibility === 'function') {
+    return element.checkVisibility();
+  }
+
+  // Fall back to computed styles on older browsers
+  const style = window.getComputedStyle(element);
+  return (
+    style.display !== 'none' &&
+    style.visibility !== 'hidden' &&
+    style.visibility !== 'collapse' &&
+    style.opacity !== '0' &&
+    style.getPropertyValue('content-visibility') !== 'hidden'
+  );
+}
