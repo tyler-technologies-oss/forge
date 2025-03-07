@@ -635,47 +635,7 @@ describe('Expansion Panel', () => {
       expect(expansionPanel.open).to.be.false;
     });
 
-    it('should have triggerElement take precedence over trigger if both are set', async () => {
-      const el = await fixture<HTMLElement>(html`
-        <div>
-          <button id="button-id1"></button>
-          <button id="button-id2"></button>
-          <forge-expansion-panel trigger="button-id1">
-            <div id="content">Content</div>
-          </forge-expansion-panel>
-        </div>
-      `);
-      const trigger1 = el.querySelector('#button-id1') as HTMLElement;
-      const trigger2 = el.querySelector('#button-id2') as HTMLElement;
-      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
-
-      trigger1.click();
-      expect(expansionPanel.open).to.be.true;
-      trigger1.click();
-      expect(expansionPanel.open).to.be.false;
-
-      expansionPanel.triggerElement = trigger2;
-
-      trigger1.click();
-      expect(expansionPanel.open).to.be.false;
-
-      trigger2.click();
-      expect(expansionPanel.open).to.be.true;
-      trigger2.click();
-      expect(expansionPanel.open).to.be.false;
-
-      expansionPanel.triggerElement = null;
-
-      trigger2.click();
-      expect(expansionPanel.open).to.be.false;
-
-      trigger1.click();
-      expect(expansionPanel.open).to.be.true;
-      trigger1.click();
-      expect(expansionPanel.open).to.be.false;
-    });
-
-    it('should detect if triggerElement is removed from DOM (todo)', async () => {
+    it('should remove a disconnected triggerElement', async () => {
       const el = await fixture<HTMLElement>(html`
         <div>
           <button id="button-id1"></button>
@@ -698,13 +658,32 @@ describe('Expansion Panel', () => {
       expect(expansionPanel.open).to.be.false;
 
       document.getElementById('button-id2')!.remove();
-      expansionPanel.trigger = 'button-id1'; //todo this will fail when something like this isn't called that syncs trigger again
-
+      expansionPanel.triggerElement = null;
+      expansionPanel.triggerElement = trigger2; //note: component will only detect if triggerElement is disconnected if a trigger or triggerElement are set again
       trigger2.click();
       expect(expansionPanel.open).to.be.false;
+      expect(trigger2.getAttribute('aria-controls')).to.be.null;
+      expect(expansionPanel['_core']['_adapter']._triggerElement).to.be.undefined;
+    });
 
-      trigger1.click();
-      expect(expansionPanel.open).to.be.true;
+    it('should remove triggerElement on disconnect', async () => {
+      const el = await fixture<HTMLElement>(html`
+        <div>
+          <button id="button-id"></button>
+          <forge-expansion-panel trigger="button-id">
+            <div id="content">Content</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+
+      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const button = el.querySelector('#button-id') as HTMLElement;
+
+      expect(button.getAttribute('aria-controls')).to.not.be.null;
+      expect(expansionPanel['_core']['_adapter']._triggerElement).to.not.be.undefined;
+      expansionPanel.remove();
+      expect(button.getAttribute('aria-controls')).to.be.null;
+      expect(expansionPanel['_core']['_adapter']._triggerElement).to.be.undefined;
     });
   });
 

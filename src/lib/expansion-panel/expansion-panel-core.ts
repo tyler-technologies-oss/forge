@@ -7,7 +7,7 @@ export interface IExpansionPanelCore {
   orientation: ExpansionPanelOrientation;
   animationType: ExpansionPanelAnimationType;
   trigger: string;
-  triggerElement: HTMLElement | null;
+  triggerElement?: HTMLElement | null;
   dispatchToggleEvent(): void;
 }
 
@@ -37,6 +37,7 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   public destroy(): void {
     this._adapter.detachTriggerAria();
     this._adapter.removeTriggerListeners();
+    this._adapter.setTriggerElement(undefined);
   }
 
   private _handleContentSlotChange(): void {
@@ -44,7 +45,21 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
     this._syncTrigger();
   }
 
+  private _clearTrigger(): void {
+    this._adapter.removeTriggerListeners({ reset: true });
+    this._adapter.detachTriggerAria();
+  }
+
   private _syncTrigger(): void {
+    if (!this._adapter.triggerElement?.isConnected) {
+      this._clearTrigger();
+      if (this._trigger) {
+        this._adapter.setTriggerElementById(this._trigger);
+      } else {
+        this._adapter.setTriggerElement(undefined);
+      }
+    }
+
     this._adapter.updateAriaControls();
     this._adapter.updateAriaExpanded(this._open);
     this._adapter.removeTriggerListeners({ reset: true });
@@ -144,20 +159,29 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   }
   public set trigger(value: string) {
     if (this._trigger !== value) {
-      this._adapter.detachTriggerAria();
+      this._clearTrigger();
+
       this._trigger = value;
-      this._syncTrigger();
+
+      this._adapter.setTriggerElementById(this._trigger);
+      if (this._adapter.isConnected) {
+        this._syncTrigger();
+      }
     }
   }
 
-  public get triggerElement(): HTMLElement | null {
-    return this._adapter.triggerElementRef;
+  public get triggerElement(): HTMLElement | null | undefined {
+    return this._adapter.triggerElement;
   }
-  public set triggerElement(el: HTMLElement | null) {
-    if (this._adapter.triggerElementRef !== el) {
-      this._adapter.detachTriggerAria();
+  public set triggerElement(el: HTMLElement | null | undefined) {
+    if (this._adapter.triggerElement !== el) {
+      this._clearTrigger();
+
       this._adapter.setTriggerElement(el);
-      this._syncTrigger();
+
+      if (this._adapter.isConnected) {
+        this._syncTrigger();
+      }
     }
   }
 }

@@ -5,7 +5,7 @@ import { IExpansionPanelComponent } from './expansion-panel';
 import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 
 export interface IExpansionPanelAdapter extends IBaseAdapter {
-  readonly triggerElementRef: HTMLElement | null;
+  readonly triggerElement?: HTMLElement | null;
   setAnimationCompleteListener(listener: () => void): void;
   addContentSlotListener(listener: EventListener): void;
   addHeaderListener(type: keyof HTMLElementEventMap, listener: EventListener): void;
@@ -15,7 +15,8 @@ export interface IExpansionPanelAdapter extends IBaseAdapter {
   setContentVisibility(visible: boolean): void;
   animationStart(): void;
   animationEnd(): void;
-  setTriggerElement(el: HTMLElement | null): void;
+  setTriggerElementById(id: string): void;
+  setTriggerElement(el?: HTMLElement | null): void;
   setContentId(): void;
   updateAriaControls(): void;
   updateAriaExpanded(open: boolean): void;
@@ -28,7 +29,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   private _innerElement: HTMLElement;
   private _defaultSlotElement: HTMLSlotElement;
   private _triggerListenerController: AbortController;
-  private _triggerElementRef: HTMLElement | null;
+  private _triggerElement?: HTMLElement | null;
 
   private _transitionStartListener: EventListener = this._onTransitionStart.bind(this);
   private _transitionEndListener: EventListener = this._onTransitionEnd.bind(this);
@@ -42,15 +43,8 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
     this._defaultSlotElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
   }
 
-  private get _triggerElement(): HTMLElement | null {
-    if (this._triggerElementRef && !document.contains(this._triggerElementRef)) {
-      this._triggerElementRef = null;
-    }
-    return this._triggerElementRef ?? this._tryLocateTriggerElement(this._component.trigger);
-  }
-
-  public get triggerElementRef(): HTMLElement | null {
-    return this._triggerElementRef;
+  public get triggerElement(): HTMLElement | null | undefined {
+    return this._triggerElement;
   }
 
   private get _slottedContentElement(): Element | undefined {
@@ -63,6 +57,10 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
 
   private get _slottedContentId(): string {
     return this._slottedContentElement?.getAttribute('id') ?? '';
+  }
+
+  public setTriggerElementById(id: string): void {
+    this._triggerElement = this._getTriggerElementById(id);
   }
 
   public setAnimationCompleteListener(listener: () => void): void {
@@ -123,7 +121,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   }
 
   public setTriggerElement(el: HTMLElement | null): void {
-    this._triggerElementRef = el;
+    this._triggerElement = el;
   }
 
   public setContentId(): void {
@@ -149,10 +147,10 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
     this._triggerElement?.removeAttribute('aria-expanded');
   }
 
-  private _tryLocateTriggerElement(id: string): HTMLElement | null {
+  private _getTriggerElementById(id: string): HTMLElement | null {
     if (id) {
-      const triggerEl = document.getElementById(id);
-      return triggerEl;
+      const rootNode = this._component.getRootNode() as Document | ShadowRoot;
+      return rootNode.getElementById(id);
     } else {
       return null;
     }
