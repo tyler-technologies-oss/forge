@@ -236,7 +236,7 @@ $variants: (
 //
 
 :host([required]) {
-  .label::before {
+  .has-label .label::before {
     @include core.label-before;
   }
 }
