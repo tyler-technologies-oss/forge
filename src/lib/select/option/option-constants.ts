@@ -14,6 +14,7 @@ const attributes = {
   TRAILING_ICON_CLASS: 'trailing-icon-class',
   TRAILING_ICON_TYPE: 'trailing-icon-type',
   TRAILING_ICON: 'trailing-icon',
+  TOOLTIP: 'tooltip',
   VALUE: 'value'
 };
 

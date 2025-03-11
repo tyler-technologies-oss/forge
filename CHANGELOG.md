@@ -1,3 +1,77 @@
+# v3.7.0 (Fri Mar 07 2025)
+
+:tada: This release contains work from new contributors! :tada:
+
+Thanks for all your work!
+
+:heart: John Bowen ([@jm-boop](https://github.com/jm-boop))
+
+:heart: Scott Shirley ([@ScottTylerTech](https://github.com/ScottTylerTech))
+
+#### 🚀 Enhancement
+
+- feat(field): expose `class="outline"` element as a CSS part [#846](https://github.com/tyler-technologies-oss/forge/pull/846) ([@jm-boop](https://github.com/jm-boop))
+- feat(menu): added support for option tooltips [#851](https://github.com/tyler-technologies-oss/forge/pull/851) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs: add support for grouped menu options in documentation and stories [#858](https://github.com/tyler-technologies-oss/forge/pull/858) ([@ScottTylerTech](https://github.com/ScottTylerTech))
+
+#### 🐛 Bug Fix
+
+- fix(tabs): fixed a bug where the scroll buttons were not being shown/hidden when tabs are dynamically added/removed [#859](https://github.com/tyler-technologies-oss/forge/pull/859) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list-item): improve overflow handling on slotted `<button>` elements [#860](https://github.com/tyler-technologies-oss/forge/pull/860) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): do not show required asterisk if no label is present [#861](https://github.com/tyler-technologies-oss/forge/pull/861) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): ensure that enabled field inputs use the text cursor [#856](https://github.com/tyler-technologies-oss/forge/pull/856) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix(popover): enable compatibility with older browsers if `checkVisibility()` API is not available [#857](https://github.com/tyler-technologies-oss/forge/pull/857) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(select): fixed a bug where the inset label would not float if the value was set while the dropdown is open [#849](https://github.com/tyler-technologies-oss/forge/pull/849) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(time-picker): remove extra icon margin [#853](https://github.com/tyler-technologies-oss/forge/pull/853) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- chore: make storybook deployment dependent on release succeeding [#843](https://github.com/tyler-technologies-oss/forge/pull/843) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(design-tokens): rename "Theme" tokens page to "Color" [#854](https://github.com/tyler-technologies-oss/forge/pull/854) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(tooltip): improve anchoring docs [#850](https://github.com/tyler-technologies-oss/forge/pull/850) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs: upgrade storybook to v8.6.0 [#848](https://github.com/tyler-technologies-oss/forge/pull/848) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 4
+
+- John Bowen ([@jm-boop](https://github.com/jm-boop))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- Scott Shirley ([@ScottTylerTech](https://github.com/ScottTylerTech))
+
+---
+
+# v3.6.4 (Mon Feb 24 2025)
+
+#### 🐛 Bug Fix
+
+- fix(expansion-panel): fixed a rendering artifact caused by CSS animation [#844](https://github.com/tyler-technologies-oss/forge/pull/844) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v3.6.3 (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
+- fix(dialog): only force-capture focus when modal [#825](https://github.com/tyler-technologies-oss/forge/pull/825) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(field): only apply hover state when cursor is over container [#842](https://github.com/tyler-technologies-oss/forge/pull/842) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix(field): apply default min height to slotted support text elements [#840](https://github.com/tyler-technologies-oss/forge/pull/840) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore(select): fix test syntax [#826](https://github.com/tyler-technologies-oss/forge/pull/826) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(badge): remove unnecessary style in demo code snippet [#841](https://github.com/tyler-technologies-oss/forge/pull/841) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v3.6.2 (Fri Feb 14 2025)
 
 #### 🐛 Bug Fix

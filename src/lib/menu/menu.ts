@@ -18,6 +18,7 @@ import {
   MENU_CONSTANTS
 } from './menu-constants';
 import { MenuCore } from './menu-core';
+import { TooltipComponent } from '../tooltip';
 
 import template from './menu.html';
 import styles from './menu.scss';
@@ -61,7 +62,7 @@ declare global {
  */
 @customElement({
   name: MENU_CONSTANTS.elementName,
-  dependencies: [PopoverComponent, ListComponent]
+  dependencies: [PopoverComponent, ListComponent, TooltipComponent]
 })
 export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   public static get observedAttributes(): string[] {

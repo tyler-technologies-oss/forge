@@ -20,7 +20,7 @@ export interface ISwitchComponent extends IWithFormAssociation, IWithFocusable, 
   checked: boolean;
   /** @deprecated use `checked` instead */
   on: boolean;
-  /** @deprecated use `on` instead */
+  /** @deprecated use `checked` instead */
   selected: boolean;
   defaultChecked: boolean;
   /** @deprecated use `defaultChecked` instead */

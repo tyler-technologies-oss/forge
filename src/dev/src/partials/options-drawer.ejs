@@ -1,9 +1,7 @@
 <aside slot="body-left">
   <forge-drawer>
-    <forge-toolbar slot="header">
-      <h2 slot="start" class="forge-typography--heading1">Options</h2>
-    </forge-toolbar>
     <div class="options-container">
+      <h2 class="forge-typography--overline">Options</h2>
       <% controls.forEach(control => { %>
         <% if (control.type === 'checkbox') { %>
           <%- include('controls/checkbox.ejs', { control }); %>

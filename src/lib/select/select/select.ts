@@ -144,6 +144,7 @@ declare global {
  * @csspart support-text - The support text element.
  * @csspart support-text - The element containing the support text slot.
  * @csspart support-text-end - The element containing the support text end slot.
+ * @csspart outline - The element containing the forge-focus-indicator element.
  * @csspart focus-indicator - The focus indicator element.
  *
  * @slot value - The selected text to display

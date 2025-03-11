@@ -78,6 +78,9 @@ export class TabBarCore implements ITabBarCore {
   private async _onTabsChanged(): Promise<void> {
     this._tabs = this._adapter.getTabs();
     this._syncTabState();
+    if (this._scrollButtons) {
+      this._detectScrollableStatus();
+    }
     this._tryScrollActiveTabIntoView();
   }
 

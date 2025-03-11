@@ -151,6 +151,7 @@ declare global {
  * @csspart accessory - The element containing the accessory slot.
  * @csspart support-text - The element containing the support text slot.
  * @csspart support-text-end - The element containing the support text end slot.
+ * @csspart outline - The element containing the forge-focus-indicator element.
  * @csspart focus-indicator - The focus indicator element.
  *
  * @cssclass forge-field - The field container that wraps an `<input>` or `<textarea>`.

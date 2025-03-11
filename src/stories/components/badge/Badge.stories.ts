@@ -89,7 +89,7 @@ export const WithIconButton: Story = {
     IconRegistry.define(tylIconNotifications);
     return html`
       <forge-icon-button>
-        <forge-icon name="notifications" style="position: absolute;"></forge-icon>
+        <forge-icon name="notifications"></forge-icon>
         <forge-badge slot="badge">1</forge-badge>
       </forge-icon-button>
     `;

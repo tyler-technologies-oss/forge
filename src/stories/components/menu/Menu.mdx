@@ -43,6 +43,32 @@ Cascading menus are used to display a hierarchical list of options. When a menu 
 
 <Canvas of={MenuStories.Cascading} />
 
+## Menu Groups
+
+Grouping menu items can be useful to visually separate different types of options. The menu options use the `IMenuOptionGroup` interface to define the group
+and its options.
+
+Below is an example of a basic array of menu options with groups:
+
+```javascript
+let optionGroup: IMenuOptionGroup[] = [
+      {
+        text: 'Group 1',
+        options: [
+          { label: 'Option 1', value: 'option1' },
+          { label: 'Option 2', value: 'option2' },
+        ]
+      },
+      {
+        text: 'Group 2',
+        options: [
+          { label: 'Option 3', value: 'option3' },
+          { label: 'Option 4', value: 'option4' }
+        ]
+      }
+    ];
+```
+<Canvas of={MenuStories.Grouped} />
 ## API
 
 <CustomArgTypes />

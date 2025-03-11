@@ -239,6 +239,28 @@ export function createListItems(
         }
       }
 
+      // Check for a tooltip configuration
+      if (option.tooltip) {
+        const { text, type = 'presentation', ...restConfig } = option.tooltip;
+        const tooltipElement = document.createElement('forge-tooltip');
+        tooltipElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}-tooltip`;
+        tooltipElement.textContent = option.tooltip.text;
+
+        // We always anchor to the list item element unless an anchor element is provided
+        if (!option.tooltip.anchor && !option.tooltip.anchorElement) {
+          tooltipElement.anchorElement = listItemElement;
+        }
+
+        // We need to attach the tooltip ARIA attributes to the button element, not the anchor element
+        if (type === 'label' || type === 'description') {
+          const a11yAttr = type === 'label' ? 'aria-labelledby' : 'aria-describedby';
+          buttonElement.setAttribute(a11yAttr, tooltipElement.id);
+        }
+
+        Object.assign(tooltipElement, restConfig);
+        listItemElement.appendChild(tooltipElement);
+      }
+
       // Check for secondary (subtitle) text
       if (option.secondaryLabel) {
         const secondaryLabelElement = document.createElement('span');
