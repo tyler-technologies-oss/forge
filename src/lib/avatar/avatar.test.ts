@@ -48,7 +48,7 @@ describe('Avatar', () => {
   it('should change background image when set via attribute', async () => {
     const el = await fixture<IAvatarComponent>(html`<forge-avatar text="Tyler Forge"></forge-avatar>`);
 
-    const url = 'https://empower.tylertech.com/rs/015-NUU-525/images/tyler-logo-color.svg';
+    const url = 'https://cdn.forge.tylertech.com/v1/images/branding/tyler/talking-t-logo.svg';
     el.setAttribute(AVATAR_CONSTANTS.attributes.IMAGE_URL, url);
     const root = getRootEl(el);
     // Give enough time for the image to load
@@ -56,6 +56,22 @@ describe('Avatar', () => {
 
     expect(root.hasAttribute('style')).to.be.true;
     expect(root.style.backgroundImage).to.equal(`url("${url}")`);
+  });
+
+  it('should hide text when image url is set', async () => {
+    const el = await fixture<IAvatarComponent>(
+      html`<forge-avatar text="Tyler Forge" image-url="https://cdn.forge.tylertech.com/v1/images/branding/tyler/talking-t-logo.svg"></forge-avatar>`
+    );
+
+    // Give enough time for the image to load
+    await task(1800);
+
+    expect(getDefaultSlotEl(el).textContent).to.equal('');
+
+    el.imageUrl = '';
+    await elementUpdated(el);
+
+    expect(getDefaultSlotEl(el).textContent).to.equal('TF');
   });
 
   it('should change text when set via attribute', async () => {

@@ -91,7 +91,7 @@ export class AvatarComponent extends LitElement implements IAvatarComponent {
         part="root"
         class=${classMap({ 'forge-avatar': true, 'forge-avatar--image': !!this._image })}
         style=${this._image ? styleMap({ backgroundImage: `url(${this._image.src})` }) : nothing}>
-        <slot>${charsByLetterCount(this.text, this.letterCount ?? AVATAR_CONSTANTS.numbers.DEFAULT_LETTER_COUNT)}</slot>
+        <slot>${this._image ? nothing : charsByLetterCount(this.text, this.letterCount ?? AVATAR_CONSTANTS.numbers.DEFAULT_LETTER_COUNT)}</slot>
       </div>
     `;
   }
