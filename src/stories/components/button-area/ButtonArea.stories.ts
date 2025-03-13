@@ -35,7 +35,7 @@ const meta = {
               <div id="button-heading">Heading</div>
               <div>Content</div>
             </div>
-            <forge-icon-button>
+            <forge-icon-button forge-ignore>
               <forge-icon role="img" name="favorite" aria-label="A heart graphic"></forge-icon>
             </forge-icon-button>
             <forge-tooltip>Favorite</forge-tooltip>
