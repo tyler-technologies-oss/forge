@@ -25,7 +25,7 @@ import { TreeSelectionController } from './tree-selection-controller';
 
 import styles from './tree.scss';
 
-export type TreeMode = 'single' | 'multiple' | 'leaf' | 'off';
+export type TreeMode = 'single' | 'multiple' | 'leaf' | 'list';
 
 export interface ITreeContext {
   indentLines: boolean;
@@ -37,7 +37,17 @@ export const TREE_CONTEXT = createContext<ITreeContext>('forge-tree');
 /**
  * @tag forge-tree
  *
+ * @summary Trees are interactive lists that allow users to navigate through hierarchical data.
+ *
  * @dependency forge-tree-item
+ *
+ * @event {CustomEvent<void>} forge-tree-select-all - Dispatched when the user selects all items.
+ *
+ * @csspart root - The root tree element.
+ *
+ * @slot - The default slot for tree items.
+ * @slot expand-icon - A custom expand icon to show when an item is closed.
+ * @slot collapse-icon - A custom collapse icon to show when an item is open.
  */
 @customElement('forge-tree')
 export class TreeComponent extends LitElement {
@@ -76,7 +86,13 @@ export class TreeComponent extends LitElement {
    * @default []
    * @attribute
    */
-  @property({ type: Array }) public value: unknown[] = [];
+  @property({ type: Array })
+  public get value(): unknown[] {
+    return this._selectionController.value;
+  }
+  public set value(value: unknown[]) {
+    this._selectionController.value = value;
+  }
 
   @provide({ context: TREE_CONTEXT }) private _context: ITreeContext;
 
@@ -126,6 +142,9 @@ export class TreeComponent extends LitElement {
     if (_changedProperties.has('indentLines') || _changedProperties.has('mode')) {
       this._updateContext();
     }
+    if (_changedProperties.has('mode')) {
+      this._selectionController.cleanup();
+    }
   }
 
   public render(): TemplateResult {
@@ -167,8 +186,8 @@ export class TreeComponent extends LitElement {
 
     // If the item is a leaf node toggle the selected state
     if (item.leaf) {
-      // Do nothing if the mode is off
-      if (this.mode === 'off') {
+      // Do nothing if the mode is list
+      if (this.mode === 'list') {
         return;
       }
       if (evt.shiftKey) {
@@ -178,8 +197,8 @@ export class TreeComponent extends LitElement {
       return;
     }
 
-    // If in leaf or off mode a click anywhere toggles the open state
-    if (this.mode === 'leaf' || this.mode === 'off') {
+    // If in leaf or list mode a click anywhere toggles the open state
+    if (this.mode === 'leaf' || this.mode === 'list') {
       this._toggleOpen(item, evt.altKey && item.open);
       return;
     }
@@ -332,7 +351,7 @@ export class TreeComponent extends LitElement {
       return;
     }
     if (target.leaf) {
-      if (this.mode === 'off') {
+      if (this.mode === 'list') {
         return;
       }
       if (evt.shiftKey) {

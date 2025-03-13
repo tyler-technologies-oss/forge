@@ -31,7 +31,7 @@ export class TreeItemComponent extends LitElement {
    * @default undefined
    * @attribute
    */
-  @property({ type: Object }) public value: unknown;
+  @property() public value: unknown;
 
   /**
    * Whether the tree item is selected.
@@ -120,7 +120,7 @@ export class TreeItemComponent extends LitElement {
     return html`
       <div
         part="root"
-        class=${classMap({ 'forge-tree-item': true, interactive: !this._leaf || this._context.mode !== 'off' })}
+        class=${classMap({ 'forge-tree-item': true, interactive: !this._leaf || this._context.mode !== 'list' })}
         style=${styleMap({ '--_tree-item-level': this.level })}>
         <div part="header" class="header">
           ${!this._leaf
@@ -140,7 +140,7 @@ export class TreeItemComponent extends LitElement {
             <slot></slot>
           </div>
           <slot name="end"></slot>
-          ${this._context.mode !== 'off' || !this._leaf ? html`<forge-state-layer></forge-state-layer>` : nothing}
+          ${this._context.mode !== 'list' || !this._leaf ? html`<forge-state-layer></forge-state-layer>` : nothing}
           <forge-focus-indicator target=":host" focus-mode="focus" inward></forge-focus-indicator>
         </div>
         <div role="group" class="children" part="children">
