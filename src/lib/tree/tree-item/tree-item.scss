@@ -109,6 +109,14 @@
   .header {
     @include indeterminate;
   }
+
+  forge-state-layer {
+    @include state-layer.provide-theme(
+      (
+        color: var(--forge-theme-primary)
+      )
+    );
+  }
 }
 
 //
