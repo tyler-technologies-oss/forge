@@ -20,6 +20,7 @@ const selectionFollowsFocusSwitch = document.getElementById('opt-selection-follo
 const accordionSwitch = document.getElementById('opt-accordion') as ISwitchComponent;
 const indentLinesSwitch = document.getElementById('opt-indent-lines') as ISwitchComponent;
 const preventSelectionSwitch = document.getElementById('opt-prevent-selection') as ISwitchComponent;
+const disabledSwitch = document.getElementById('opt-disabled') as ISwitchComponent;
 const valueButton = document.getElementById('btn-value') as HTMLButtonElement;
 
 const preventSelectionListener: EventListener = (evt: CustomEvent) => evt.preventDefault();
@@ -60,6 +61,12 @@ preventSelectionSwitch.addEventListener('change', () => {
     } else {
       tree.removeEventListener('forge-tree-item-select', preventSelectionListener);
     }
+  });
+});
+
+disabledSwitch.addEventListener('change', () => {
+  trees.forEach(tree => {
+    tree.disabled = disabledSwitch.on;
   });
 });
 

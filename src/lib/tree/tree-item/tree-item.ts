@@ -53,6 +53,20 @@ export class TreeItemComponent extends LitElement {
   @property({ type: Boolean }) public open = false;
 
   /**
+   * Whether the tree item is disabled.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean }) public disabled = false;
+
+  /**
+   * Whether opening the tree item is disabled.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, attribute: 'open-disabled' }) public openDisabled = false;
+
+  /**
    * Whether the selected value is indeterminate. This is a symbol property to avoid being set from
    * outside the library.
    * @ignore
@@ -81,7 +95,7 @@ export class TreeItemComponent extends LitElement {
     return this[indeterminate];
   }
 
-  @consume({ context: TREE_CONTEXT, subscribe: true }) private _context: ITreeContext;
+  @state() @consume({ context: TREE_CONTEXT, subscribe: true }) private _context: ITreeContext;
 
   @state() private _level = 0;
   @state() private _leaf = true;
@@ -115,7 +129,10 @@ export class TreeItemComponent extends LitElement {
     this._dispatchUpdate('removed');
   }
 
-  public willUpdate(changedProperties: PropertyValues): void {
+  public willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('disabled')) {
+      this._setDisabled();
+    }
     if (changedProperties.has('open')) {
       this._setOpen();
     }
@@ -134,7 +151,7 @@ export class TreeItemComponent extends LitElement {
     return html`
       <div
         part="root"
-        class=${classMap({ 'forge-tree-item': true, interactive: !this._leaf || this._context.mode !== 'list' })}
+        class=${classMap({ 'forge-tree-item': true, interactive: !this._leaf || this._context.mode !== 'list', 'open-disabled': this.openDisabled })}
         style=${styleMap({ '--_tree-item-level': this.level })}>
         <div part="header" class="header">
           ${!this._leaf
@@ -175,6 +192,11 @@ export class TreeItemComponent extends LitElement {
     this._leaf = this.leaf;
     this._setOpen();
     toggleState(this._internals, 'leaf', this._leaf);
+  }
+
+  private _setDisabled(): void {
+    setDefaultAria(this, this._internals, { ariaDisabled: this.disabled ? 'true' : 'false' });
+    toggleState(this._internals, 'disabled', this.disabled);
   }
 
   private _setOpen(): void {

@@ -58,6 +58,12 @@
   &.indeterminate {
     @include indeterminate;
   }
+
+  &.open-disabled {
+    .expand-icon {
+      @include expand-icon-disabled;
+    }
+  }
 }
 
 //
@@ -117,6 +123,13 @@
       )
     );
   }
+}
+
+//
+// Disabled
+//
+
+:host(:is(:state(disabled), :--disabled)) {
 }
 
 //

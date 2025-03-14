@@ -42,6 +42,10 @@
   display: flex;
 }
 
+@mixin expand-icon-disabled {
+  opacity: #{token(disabled-opacity)};
+}
+
 @mixin leaf-spacer {
   // TODO: Use a token and match it to the width of the expand icon
   inline-size: #{token(leaf-inset)};

@@ -28,6 +28,7 @@ import styles from './tree.scss';
 export type TreeMode = 'single' | 'multiple' | 'multiple-discrete' | 'leaf' | 'list';
 
 export interface ITreeContext {
+  disabled: boolean;
   indentLines: boolean;
   mode: TreeMode;
 }
@@ -80,6 +81,13 @@ export class TreeComponent extends LitElement {
    * @attribute
    */
   @property({ type: Boolean, attribute: 'selection-follows-focus' }) public selectionFollowsFocus = false;
+
+  /**
+   * Whether selecting items is disabled.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean }) public disabled = false;
 
   /**
    * The value of all selected items.
@@ -138,7 +146,7 @@ export class TreeComponent extends LitElement {
     this.addEventListener('forge-tree-item-update', this._handleUpdate.bind(this));
   }
 
-  public willUpdate(_changedProperties: PropertyValues): void {
+  public willUpdate(_changedProperties: PropertyValues<this>): void {
     if (_changedProperties.has('accordion')) {
       closeDescendants(this);
     }
@@ -165,6 +173,7 @@ export class TreeComponent extends LitElement {
 
   private _updateContext(): void {
     this._context = {
+      disabled: this.disabled,
       indentLines: this.indentLines,
       mode: this.mode
     };
@@ -205,7 +214,7 @@ export class TreeComponent extends LitElement {
     }
 
     // Otherwise only a click on the expand icon toggles the open state
-    if (eventPathIncludesTreeItemExpandIcon(evt)) {
+    if (!item.openDisabled && eventPathIncludesTreeItemExpandIcon(evt)) {
       this._toggleOpen(item, evt.altKey && item.open);
       return;
     }
@@ -434,6 +443,10 @@ export class TreeComponent extends LitElement {
   }
 
   private _toggleOpen(item: TreeItemComponent, flatten = false, force?: boolean): void {
+    if (item.openDisabled) {
+      return;
+    }
+
     item.open = force ?? !item.open;
     if (!item.open && flatten) {
       closeDescendants(item);

@@ -24,7 +24,9 @@ $tokens: (
   indent-line-style: utils.module-val(tree-item, indent-line-style, solid),
   indent-line-width: utils.module-val(tree-item, indent-line-width, border.variable(thin)),
   indent-line-color: utils.module-val(tree-item, indent-line-color, theme.variable(outline)),
-  indent-line-offset: utils.module-val(tree-item, indent-line-offset, 11.5px)
+  indent-line-offset: utils.module-val(tree-item, indent-line-offset, 11.5px),
+  // Disabled
+  disabled-opacity: utils.module-val(tree-item, disabled-opacity, theme.emphasis(medium-low))
 ) !default;
 
 @function get($key) {
