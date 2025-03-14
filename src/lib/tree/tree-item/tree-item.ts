@@ -105,7 +105,7 @@ export class TreeItemComponent extends LitElement {
 
   private _internals: ElementInternals;
 
-  // This is used to avoid dispatching an deselected update event when the tree item is first rendered.
+  // This is used to avoid dispatching a deselected update event when the tree item is first rendered.
   private _hasBeenSelected = false;
 
   constructor() {
@@ -136,6 +136,9 @@ export class TreeItemComponent extends LitElement {
     }
     if (changedProperties.has('open')) {
       this._setOpen();
+    }
+    if (changedProperties.has('openDisabled')) {
+      this._setOpenDisabled();
     }
     if (changedProperties.has('selected')) {
       this._setSelected();
@@ -208,11 +211,15 @@ export class TreeItemComponent extends LitElement {
   }
 
   private _setOpen(): void {
-    setDefaultAria(this, this._internals, { ariaExpanded: this.leaf ? null : this.open ? 'true' : 'false' });
+    setDefaultAria(this, this._internals, { ariaExpanded: this.leaf || this.openDisabled ? null : this.open ? 'true' : 'false' });
     toggleState(this._internals, 'open', !this.leaf && this.open);
     if (this.open) {
       this._dispatchUpdate('opened');
     }
+  }
+
+  private _setOpenDisabled(): void {
+    setDefaultAria(this, this._internals, { ariaExpanded: this.leaf || this.openDisabled ? null : this.open ? 'true' : 'false' });
   }
 
   private _setSelected(): void {
