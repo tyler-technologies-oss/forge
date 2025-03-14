@@ -15,12 +15,17 @@ import '../../open-icon';
 import styles from './tree-item.scss';
 
 export type TreeItemCheckboxIcon = 'check_box_outline_blank' | 'check_box' | 'indeterminate_check_box';
+export type TreeItemUpdateReason = 'added' | 'deselected' | 'opened' | 'removed' | 'selected';
 
 /**
  * @tag forge-tree-item
  *
  * @dependency forge-icon
  * @dependency forge-open-icon
+ *
+ * @event {CustomEvent<unknown>} forge-tree-item-select - Dispatched when the user selects a tree item.
+ * @event {CustomEvent<void>} forge-tree-item-open - Dispatched when the user opens a tree item.
+ * @event {CustomEvent<void>} forge-tree-item-close - Dispatched when the user closes a tree item.
  */
 @customElement('forge-tree-item')
 export class TreeItemComponent extends LitElement {
@@ -86,6 +91,9 @@ export class TreeItemComponent extends LitElement {
 
   private _internals: ElementInternals;
 
+  // This is used to avoid dispatching an deselected update event when the tree item is first rendered.
+  private _hasBeenSelected = false;
+
   constructor() {
     super();
     this._internals = this.attachInternals();
@@ -97,8 +105,14 @@ export class TreeItemComponent extends LitElement {
     setDefaultAria(this, this._internals, { role: 'treeitem' });
     this.tabIndex = -1;
     this._level = getLevel(this);
-    this._placeInParent();
-    this._setLeaf();
+    this._slotInParent();
+    this._checkIfLeaf();
+    this._dispatchUpdate('added');
+  }
+
+  public disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this._dispatchUpdate('removed');
   }
 
   public willUpdate(changedProperties: PropertyValues): void {
@@ -144,20 +158,20 @@ export class TreeItemComponent extends LitElement {
           <forge-focus-indicator target=":host" focus-mode="focus" inward></forge-focus-indicator>
         </div>
         <div role="group" class="children" part="children">
-          <slot name="children" @slotchange="${this._setLeaf}"></slot>
+          <slot name="children" @slotchange="${this._checkIfLeaf}"></slot>
         </div>
       </div>
     `;
   }
 
-  private _placeInParent(): void {
+  private _slotInParent(): void {
     const parent = this.parentElement;
     if (parent?.tagName.toLowerCase() === 'forge-tree-item') {
       this.slot = 'children';
     }
   }
 
-  private _setLeaf(): void {
+  private _checkIfLeaf(): void {
     this._leaf = this.leaf;
     this._setOpen();
     toggleState(this._internals, 'leaf', this._leaf);
@@ -166,11 +180,24 @@ export class TreeItemComponent extends LitElement {
   private _setOpen(): void {
     setDefaultAria(this, this._internals, { ariaExpanded: this.leaf ? null : this.open ? 'true' : 'false' });
     toggleState(this._internals, 'open', !this.leaf && this.open);
+    if (this.open) {
+      this._dispatchUpdate('opened');
+    }
   }
 
   private _setSelected(): void {
+    if (!this._hasBeenSelected && this.selected) {
+      this._hasBeenSelected = true;
+    }
     setDefaultAria(this, this._internals, { ariaSelected: this.selected ? 'true' : 'false' });
     toggleState(this._internals, 'selected', this.selected);
+    if (this._hasBeenSelected) {
+      this._dispatchUpdate(this.selected ? 'selected' : 'deselected');
+    }
+  }
+
+  private _dispatchUpdate(reason: TreeItemUpdateReason): void {
+    this.dispatchEvent(new CustomEvent('forge-tree-item-update', { bubbles: true, detail: { reason } }));
   }
 }
 

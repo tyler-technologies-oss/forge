@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils';
 import { KeyActionController } from '../../core/utils/key-action';
-import { TreeItemComponent } from '../tree-item';
+import { TreeItemComponent, TreeItemUpdateReason } from '../tree-item';
 import {
   closeDescendants,
   eventPathIncludesTreeItemExpandIcon,
@@ -25,7 +25,7 @@ import { TreeSelectionController } from './tree-selection-controller';
 
 import styles from './tree.scss';
 
-export type TreeMode = 'single' | 'multiple' | 'leaf' | 'list';
+export type TreeMode = 'single' | 'multiple' | 'multiple-discrete' | 'leaf' | 'list';
 
 export interface ITreeContext {
   indentLines: boolean;
@@ -133,6 +133,9 @@ export class TreeComponent extends LitElement {
     // Listen for focus events on the host element
     this.addEventListener('focusin', this._handleFocusIn.bind(this));
     this.addEventListener('focusout', this._handleFocusOut.bind(this));
+
+    // Listen for item update events on the host element
+    this.addEventListener('forge-tree-item-update', this._handleUpdate.bind(this));
   }
 
   public willUpdate(_changedProperties: PropertyValues): void {
@@ -152,9 +155,7 @@ export class TreeComponent extends LitElement {
       <div
         part="root"
         class=${classMap({ 'forge-tree': true, 'indent-lines': this.indentLines, multiple: this.mode === 'multiple' })}
-        @click=${this._handleClick}
-        @forge-tree-item-open=${this._handleOpen}
-        @forge-tree-item-update=${this._handleUpdate}>
+        @click=${this._handleClick}>
         <slot></slot>
         <slot name="expand-icon"></slot>
         <slot name="collapse-icon"></slot>
@@ -399,27 +400,26 @@ export class TreeComponent extends LitElement {
     }
   }
 
-  private _handleOpen(evt: Event): void {
-    // Do nothing if accordion isn't enabled
-    if (!this.accordion) {
-      return;
-    }
-
-    // Do nothing if the target is missing or closed
-    const target = getTreeItemFromEvent(evt);
-    if (!target || !target.open) {
-      return;
-    }
-
-    // If accordion is enabled, close all the items outside the target's path
-    const items = getTreeItemsInEventPath(evt);
-    closeDescendants(this);
-    items.forEach(item => (item.open = true));
-  }
-
-  private _handleUpdate(evt: CustomEvent): void {
+  private _handleUpdate(evt: CustomEvent<{ reason: TreeItemUpdateReason }>): void {
     evt.stopPropagation();
-    console.log(evt);
+
+    if (evt.detail.reason === 'opened') {
+      // Do nothing if accordion isn't enabled
+      if (!this.accordion) {
+        return;
+      }
+
+      // Do nothing if the target is missing or closed
+      const target = getTreeItemFromEvent(evt);
+      if (!target || !target.open) {
+        return;
+      }
+
+      // If accordion is enabled, close all the items outside the target's path
+      const items = getTreeItemsInEventPath(evt);
+      closeDescendants(this);
+      items.forEach(item => (item.open = true));
+    }
   }
 
   private _search(searchString: string, evt: KeyboardEvent): void {
@@ -440,7 +440,7 @@ export class TreeComponent extends LitElement {
     }
 
     // Dispatch an open event from the item
-    const event = new CustomEvent('forge-tree-item-open', { bubbles: true, composed: true });
+    const event = new CustomEvent(`forge-tree-item-${item.open ? 'open' : 'close'}`, { bubbles: true, composed: true });
     item.dispatchEvent(event);
     if (event.defaultPrevented) {
       return;

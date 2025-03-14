@@ -1,5 +1,5 @@
 import { ReactiveController } from 'lit';
-import { TreeItemComponent } from '../tree-item';
+import { TreeItemComponent, TreeItemUpdateReason } from '../tree-item';
 import {
   getChildItems,
   getFirstChildItem,
@@ -44,7 +44,7 @@ export class TreeSelectionController implements ReactiveController {
     if (this.host.mode !== 'multiple') {
       const singleItem = allItems.find(item => item.value === value[0]);
       if (singleItem) {
-        singleItem.selected = true;
+        this._selectItem(singleItem, true);
         this.items.push(singleItem);
       }
       this._clearIndeterminate(allItems);
@@ -60,7 +60,7 @@ export class TreeSelectionController implements ReactiveController {
       if (willSelect === item.selected) {
         return;
       }
-      item.selected = value.includes(item.value);
+      this._selectItem(item, willSelect);
       if (item.selected) {
         this.items.push(item);
       }
@@ -72,7 +72,10 @@ export class TreeSelectionController implements ReactiveController {
     changedItems.forEach(item => this._updateAncestorSelections(item));
   }
 
-  private _selectListener: EventListener = () => {};
+  // A set of items that are currently being selected or deselected to distinguish between
+  // user-initiated and programmatic toggles and prevent user events from being handled twice
+  private _itemsBeingToggled: WeakSet<TreeItemComponent> = new WeakSet();
+  private _updateListener: EventListener = (evt: CustomEvent<{ reason: TreeItemUpdateReason }>) => this._handleUpdateEvent(evt);
 
   constructor(host: TreeComponent) {
     this.host = host;
@@ -80,15 +83,15 @@ export class TreeSelectionController implements ReactiveController {
   }
 
   public hostConnected(): void {
-    this.host.addEventListener('forge-tree-item-select', this._selectListener);
+    this.host.addEventListener('forge-tree-item-update', this._updateListener);
   }
 
   public hostDisconnected(): void {
-    this.host.removeEventListener('forge-tree-item-select', this._selectListener);
+    this.host.removeEventListener('forge-tree-item-update', this._updateListener);
   }
 
   /**
-   * Removes items that are not allowed for a given selection mode
+   * Deselects items that are not allowed for a given selection mode
    */
   public cleanup(): void {
     if (!this.items.length) {
@@ -98,30 +101,34 @@ export class TreeSelectionController implements ReactiveController {
     let changedItems: TreeItemComponent[] = [];
     switch (this.host.mode) {
       case 'single':
+        // The last selected item is the only one that should remain
         if (this.items.length === 1) {
           return;
         }
         const singleItem = this.items.splice(-1, 0);
         changedItems = [...this.items];
-        this.items.forEach(item => (item.selected = false));
+        this.items.forEach(item => this._selectItem(item, false));
         this.items = singleItem;
         break;
       case 'leaf':
+        // The last selected leaf item is the only one that should remain
         const index = this.items.reverse().findIndex(item => item.leaf); // TODO: replace with findLastIndex()
         const leafItem = index > -1 ? this.items.splice(index, 1) : null;
         changedItems = [...this.items];
-        this.items.forEach(item => (item.selected = false));
+        this.items.forEach(item => this._selectItem(item, false));
         if (leafItem) {
           this.items = leafItem;
         }
         break;
       case 'multiple':
+        // No items should be deselected but descendent items should be updated
         changedItems = this.items;
         changedItems.forEach(item => this._updateDescendentSelections(item));
         break;
       case 'list':
+        // All items should be deselected
         changedItems = [...this.items];
-        this.items.forEach(item => (item.selected = false));
+        this.items.forEach(item => this._selectItem(item, false));
         break;
     }
 
@@ -140,7 +147,7 @@ export class TreeSelectionController implements ReactiveController {
     this._addToSnapshot(item, snapshot);
 
     const selected = force ?? !item.selected;
-    item.selected = selected;
+    this._selectItem(item, selected);
 
     // Save the current selected items in case the event is canceled
     const oldSelectedItems = this.items.slice();
@@ -148,13 +155,13 @@ export class TreeSelectionController implements ReactiveController {
     // Update the selected items array and deselect items if necessary
     snapshot = this._updateSelectionsFromItem(item, snapshot);
 
-    // Cascade the changes in multiple mode
-    if (this.host.mode === 'multiple') {
-      snapshot = this._updateDescendentSelections(item, snapshot);
+    // // Cascade the changes in multiple mode
+    // if (this.host.mode === 'multiple') {
+    //   snapshot = this._updateDescendentSelections(item, snapshot);
 
-      // Update the parent items
-      snapshot = this._updateAncestorSelections(item, snapshot);
-    }
+    //   // Update the parent items
+    //   snapshot = this._updateAncestorSelections(item, snapshot);
+    // }
 
     // Dispatch a select event from the item
     const event = new CustomEvent('forge-tree-item-select', { bubbles: true, composed: true, detail: item.value });
@@ -212,25 +219,39 @@ export class TreeSelectionController implements ReactiveController {
    */
   public selectAll(): void {
     this.items = [];
-    const children = getChildItems(this.host, true);
-    children.forEach(child => {
-      child.selected = true;
+    const allItems = getChildItems(this.host, true);
+    allItems.forEach(child => {
+      this._selectItem(child, true);
       this.items.push(child);
     });
-    children.reverse().forEach(child => {
+    allItems.reverse().forEach(child => {
       this._updateAncestorSelections(child);
     });
     this.host.dispatchEvent(new CustomEvent('forge-tree-select-all', { bubbles: true, composed: true }));
   }
 
   /**
-   * Updates other selected items when an item is selected or deselected outside of the tree.
-   * @param event The select event emitted from a tree item.
+   * Updates other items when an item is updated outside of the tree's interaction handlers.
+   * @param evt The update event emitted from a tree item.
    */
-  private _handleSelectEvent(evt: Event): void {
-    const target = getTreeItemFromEvent(evt);
-    if (!target) {
+  private _handleUpdateEvent(evt: CustomEvent<{ reason: TreeItemUpdateReason }>): void {
+    const item = getTreeItemFromEvent(evt);
+    if (!item) {
       return;
+    }
+
+    switch (evt.detail.reason) {
+      case 'deselected':
+      case 'selected':
+        if (!this._itemsBeingToggled.has(item)) {
+          this._updateSelectionsFromItem(item);
+        }
+        this._itemsBeingToggled.delete(item);
+        break;
+      case 'added':
+      case 'removed':
+        this._updateAncestorSelections(item);
+        break;
     }
   }
 
@@ -238,31 +259,38 @@ export class TreeSelectionController implements ReactiveController {
    * Selects or deselects the given tree item and updates the list of selected items to reflect
    * the change.
    * @param item The item to select or deselect.
+   * @param changes The original state of all changed tree items.
    */
-  private _updateSelectionsFromItem(item: TreeItemComponent, changes: ITreeItemSnapshot[]): ITreeItemSnapshot[] {
+  private _updateSelectionsFromItem(item: TreeItemComponent, changes: ITreeItemSnapshot[] = []): ITreeItemSnapshot[] {
     // Remove a deselected item from the array
     if (!item.selected) {
       const index = this.items.indexOf(item);
       if (index !== -1) {
         this.items.splice(index, 1);
       }
-      return changes;
-    }
-
-    // Deselect all other items if an item was selected and the mode is not multiple
-    if (this.host.mode !== 'multiple') {
+      if (this.host.mode === 'multiple') {
+        // Update descendants and ancestors
+        changes = this._updateDescendentSelections(item, changes);
+        changes = this._updateAncestorSelections(item, changes);
+      }
+    } else if (this.host.mode !== 'multiple') {
+      // Deselect all other items if an item was selected and the mode is not multiple
       this.items.forEach(selectedItem => {
         if (selectedItem !== item) {
           this._addToSnapshot(selectedItem, changes);
-          selectedItem.selected = false;
+          this._selectItem(selectedItem, false);
         }
       });
       this.items = [item];
       return changes;
+    } else if (item.selected) {
+      // If the item was selected in multiple mode just add the item to the array
+      this.items.push(item);
     }
 
-    // In multiple mode just add the item to the array
-    this.items.push(item);
+    // Update descendants and ancestors
+    changes = this._updateDescendentSelections(item, changes);
+    changes = this._updateAncestorSelections(item, changes);
 
     return changes;
   }
@@ -283,7 +311,9 @@ export class TreeSelectionController implements ReactiveController {
     const children = getChildItems(item, true);
     children.forEach(child => {
       this._addToSnapshot(child, changes);
-      child.selected = item.selected;
+      if (child.selected !== item.selected) {
+        this._selectItem(child, item.selected);
+      }
       const index = this.items.indexOf(child);
       if (item.selected && index === -1) {
         this.items.push(child);
@@ -324,7 +354,10 @@ export class TreeSelectionController implements ReactiveController {
       // If the parent item is not indetermine, set the selected state from the first child
       if (!parentItem.indeterminate) {
         const firstChild = getFirstChildItem(parentItem);
-        parentItem.selected = firstChild?.selected ?? false;
+        const willSelect = firstChild?.selected ?? false;
+        if (parentItem.selected !== willSelect) {
+          this._selectItem(parentItem, willSelect);
+        }
 
         // Add or remove the parent item from the selected items array
         const index = this.items.indexOf(parentItem);
@@ -375,9 +408,9 @@ export class TreeSelectionController implements ReactiveController {
    */
   private _restoreSnapshot(snapshot: ITreeItemSnapshot[]): void {
     snapshot.forEach(state => {
-      state.el[indeterminate] = state.indeterminate;
-      state.el.selected = state.selected;
       state.el.open = state.open;
+      state.el[indeterminate] = state.indeterminate;
+      this._selectItem(state.el, state.selected);
     });
   }
 
@@ -389,5 +422,16 @@ export class TreeSelectionController implements ReactiveController {
     (items ?? getChildItems(this.host)).forEach(item => {
       item[indeterminate] = false;
     });
+  }
+
+  /**
+   * Sets a tree item's selected state and adds it to the set of items being toggled to prevent the
+   * event from being handled twice.
+   * @param item The item to select or deselect.
+   * @param force If true, the item will be selected. If false, the item will be deselected.
+   */
+  private _selectItem(item: TreeItemComponent, force: boolean): void {
+    this._itemsBeingToggled.add(item);
+    item.selected = force;
   }
 }

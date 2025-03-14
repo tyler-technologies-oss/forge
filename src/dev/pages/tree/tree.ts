@@ -24,8 +24,10 @@ const valueButton = document.getElementById('btn-value') as HTMLButtonElement;
 
 const preventSelectionListener: EventListener = (evt: CustomEvent) => evt.preventDefault();
 
-// window.addEventListener('forge-tree-item-select', console.log);
+window.addEventListener('forge-tree-item-select', console.log);
 window.addEventListener('forge-tree-select-all', console.log);
+window.addEventListener('forge-tree-item-open', console.log);
+window.addEventListener('forge-tree-item-close', console.log);
 
 modeSelect.addEventListener('change', () => {
   trees.forEach(tree => {
