@@ -142,6 +142,10 @@ export class TreeSelectionController implements ReactiveController {
    * @param force If true, the item will be selected. If false, the item will be deselected.
    */
   public toggle(item: TreeItemComponent, force?: boolean): void {
+    if (item.disabled) {
+      return;
+    }
+
     // Save a snapshot of the current state in case the event is canceled
     let snapshot: ITreeItemSnapshot[] = [];
     this._addToSnapshot(item, snapshot);
@@ -179,6 +183,10 @@ export class TreeSelectionController implements ReactiveController {
    * @param item The end item to extend the selection to.
    */
   public extend(item: TreeItemComponent): void {
+    if (item.disabled) {
+      return;
+    }
+
     if (this.host.mode !== 'multiple') {
       return;
     }

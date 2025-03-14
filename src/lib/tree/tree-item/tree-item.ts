@@ -130,7 +130,8 @@ export class TreeItemComponent extends LitElement {
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
-    if (changedProperties.has('disabled')) {
+    const contextDisabledChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.disabled !== this._context.disabled;
+    if (changedProperties.has('disabled') || contextDisabledChanged) {
       this._setDisabled();
     }
     if (changedProperties.has('open')) {
@@ -148,6 +149,7 @@ export class TreeItemComponent extends LitElement {
   }
 
   public render(): TemplateResult {
+    const disabled = this.disabled || this._context.disabled;
     return html`
       <div
         part="root"
@@ -160,18 +162,23 @@ export class TreeItemComponent extends LitElement {
                   <slot name="expand-icon">
                     <forge-open-icon orientation="horizontal" rotation="half" .open="${this.open}"></forge-open-icon>
                   </slot>
+                  ${disabled && !this.openDisabled ? html`<forge-state-layer></forge-state-layer>` : nothing}
                 </span>
               `
             : html`<span class="leaf-spacer"></span>`}
           ${this._context.mode === 'multiple'
             ? html`<forge-icon id="checkbox" class="checkbox" part="checkbox" .name="${this._checkboxIcon}"></forge-icon>`
             : nothing}
-          <slot name="start"></slot>
+          <div class="start">
+            <slot name="start"></slot>
+          </div>
           <div class="content" part="content">
             <slot></slot>
           </div>
-          <slot name="end"></slot>
-          ${this._context.mode !== 'list' || !this._leaf ? html`<forge-state-layer></forge-state-layer>` : nothing}
+          <div class="end">
+            <slot name="end"></slot>
+          </div>
+          ${this._context.mode === 'list' || this._leaf || disabled ? nothing : html`<forge-state-layer></forge-state-layer>`}
           <forge-focus-indicator target=":host" focus-mode="focus" inward></forge-focus-indicator>
         </div>
         <div role="group" class="children" part="children">
@@ -195,8 +202,9 @@ export class TreeItemComponent extends LitElement {
   }
 
   private _setDisabled(): void {
-    setDefaultAria(this, this._internals, { ariaDisabled: this.disabled ? 'true' : 'false' });
-    toggleState(this._internals, 'disabled', this.disabled);
+    const disabled = this.disabled || this._context.disabled;
+    setDefaultAria(this, this._internals, { ariaDisabled: disabled ? 'true' : 'false' });
+    toggleState(this._internals, 'disabled', disabled);
   }
 
   private _setOpen(): void {

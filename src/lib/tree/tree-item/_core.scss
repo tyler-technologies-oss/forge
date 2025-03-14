@@ -40,6 +40,8 @@
 
 @mixin expand-icon {
   display: flex;
+  position: relative;
+  border-radius: #{token(shape)};
 }
 
 @mixin expand-icon-disabled {
@@ -89,4 +91,17 @@
   pointer-events: none;
 
   content: '';
+}
+
+@mixin disabled-header {
+  cursor: auto;
+}
+
+// Use this in conjunction with disabled-header to apply the pointer only to the expand icon
+@mixin enabled-expand-icon {
+  cursor: pointer;
+}
+
+@mixin disabled-header-content {
+  opacity: #{token(disabled-opacity)};
 }

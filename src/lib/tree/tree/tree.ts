@@ -2,7 +2,7 @@ import { createContext, provide } from '@lit/context';
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { setDefaultAria } from '../../core/utils/a11y-utils';
+import { setDefaultAria, toggleState } from '../../core/utils/a11y-utils';
 import { KeyActionController } from '../../core/utils/key-action';
 import { TreeItemComponent, TreeItemUpdateReason } from '../tree-item';
 import {
@@ -150,7 +150,10 @@ export class TreeComponent extends LitElement {
     if (_changedProperties.has('accordion')) {
       closeDescendants(this);
     }
-    if (_changedProperties.has('indentLines') || _changedProperties.has('mode')) {
+    if (_changedProperties.has('disabled')) {
+      this._setDisabled();
+    }
+    if (_changedProperties.has('disabled') || _changedProperties.has('indentLines') || _changedProperties.has('mode')) {
       this._updateContext();
     }
     if (_changedProperties.has('mode')) {
@@ -466,6 +469,11 @@ export class TreeComponent extends LitElement {
     if (this.mode !== 'multiple' && this.selectionFollowsFocus) {
       this._selectionController.toggle(item, true);
     }
+  }
+
+  private _setDisabled(): void {
+    setDefaultAria(this, this._internals, { ariaDisabled: this.disabled ? 'true' : 'false' });
+    toggleState(this._internals, 'disabled', this.disabled);
   }
 }
 

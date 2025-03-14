@@ -130,6 +130,22 @@
 //
 
 :host(:is(:state(disabled), :--disabled)) {
+  .header {
+    @include disabled-header;
+  }
+
+  .checkbox,
+  .start,
+  .content,
+  .end {
+    @include disabled-header-content;
+  }
+
+  .forge-tree-item:not(.open-disabled) {
+    .expand-icon {
+      @include enabled-expand-icon;
+    }
+  }
 }
 
 //
