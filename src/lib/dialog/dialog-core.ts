@@ -116,7 +116,7 @@ export class DialogCore implements IDialogCore {
     DismissibleStack.instance.add(this._adapter.hostElement);
 
     if (this._mode === 'modal' || this._mode === 'inline-modal') {
-      this._adapter.addDocumentListener('keydown', this._escapeDismissListener);
+      this._adapter.addDocumentListener('keydown', this._escapeDismissListener, { capture: true });
     }
 
     if (!this._persistent) {
@@ -151,7 +151,7 @@ export class DialogCore implements IDialogCore {
 
   private _release(): void {
     this._adapter.removeDialogFormSubmitListener(this._dialogFormSubmitListener);
-    this._adapter.removeDocumentListener('keydown', this._escapeDismissListener);
+    this._adapter.removeDocumentListener('keydown', this._escapeDismissListener, { capture: true });
     this._adapter.removeBackdropDismissListener(this._backdropDismissListener);
     DismissibleStack.instance.remove(this._adapter.hostElement);
   }
