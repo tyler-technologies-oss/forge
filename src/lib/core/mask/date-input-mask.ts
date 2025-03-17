@@ -1,19 +1,19 @@
-import IMask, { InputMask, createMask, Masked, MaskedRange } from 'imask';
 import { isNumeric } from '@tylertech/forge-core';
+import { InputMask, MaskedRange, createMask, type AppendFlags, type FactoryArg, type Masked } from 'imask';
 
 export interface IDateInputMaskOptions {
   showMaskFormat?: boolean;
   pattern?: string;
   useBlockCharPlaceholder?: boolean;
-  prepareCallback?: (value: string, masked: Masked<string>, flags: IMask.AppendFlags, maskInstance: InputMask<IMask.MaskedPatternOptions>) => string;
+  prepareCallback?: (value: string, masked: Masked<string>, flags: AppendFlags, maskInstance: InputMask<FactoryArg>) => string;
   onChange?: (value: string) => void;
 }
 
 export const DEFAULT_DATE_MASK = '0`0{/}`0`0{/}`0`0`0`0';
 
 export class DateInputMask {
-  private _mask: InputMask<IMask.MaskedPatternOptions>;
-  private _maskOptions: IMask.MaskedPatternOptions;
+  private _mask: InputMask<FactoryArg>;
+  private _maskOptions: FactoryArg;
   private _acceptListener: () => void;
 
   constructor(
@@ -21,7 +21,7 @@ export class DateInputMask {
     private _options: IDateInputMaskOptions = {}
   ) {
     this._maskOptions = this._createOptions();
-    this._mask = new InputMask<IMask.MaskedPatternOptions>(this._element, this._maskOptions);
+    this._mask = new InputMask(this._element, this._maskOptions);
     if (this._options.onChange) {
       this._acceptListener = () => this._onAccept();
       this._mask.on('accept', this._acceptListener);
@@ -35,9 +35,9 @@ export class DateInputMask {
     this._mask.destroy();
   }
 
-  public resolve(value: string): string {
+  public resolve(value: string): void {
     const masked = createMask(this._maskOptions);
-    return masked.resolve(value);
+    masked.resolve(value);
   }
 
   private _onAccept(): void {
@@ -50,12 +50,12 @@ export class DateInputMask {
     return this._options.pattern === DEFAULT_DATE_MASK;
   }
 
-  private _createOptions(): IMask.MaskedPatternOptions {
-    const options: IMask.MaskedRangeOptions & IMask.AnyMaskedOptions = {
+  private _createOptions(): FactoryArg {
+    return {
       mask: this._options.pattern || DEFAULT_DATE_MASK,
       lazy: this._options.showMaskFormat === undefined ? false : !this._options.showMaskFormat,
       overwrite: true,
-      prepare: (value: string, masked: IMask.Masked<string>, flags: IMask.AppendFlags) => this._prepare(value, masked, flags, this._mask),
+      prepareChar: (value: string, masked: Masked<string>, flags: AppendFlags) => this._prepare(value, masked, flags, this._mask),
       blocks: {
         MM: {
           mask: MaskedRange,
@@ -63,34 +63,33 @@ export class DateInputMask {
           from: 1,
           to: 12,
           maxLength: 2
-        } as IMask.AnyMaskedOptions,
+        },
         DD: {
           mask: MaskedRange,
           autofix: true,
           from: 1,
           to: 31,
           maxLength: 2
-        } as IMask.AnyMaskedOptions,
+        },
         YYYY: {
           mask: MaskedRange,
           autofix: true,
           from: 0,
           to: 9999,
           maxLength: 4
-        } as IMask.AnyMaskedOptions
+        }
       }
-    } as IMask.MaskedRangeOptions;
-    return options;
+    };
   }
 
-  private _prepare(value: string, masked: Masked<string>, flags: IMask.AppendFlags, maskInstance: InputMask<IMask.MaskedPatternOptions>): string {
+  private _prepare(value: string, masked: Masked<string>, flags: AppendFlags, maskInstance: InputMask<FactoryArg>): string {
     if (typeof this._options.prepareCallback === 'function') {
       return this._options.prepareCallback.call(null, value, masked, flags, this._mask);
     }
     return this._isDefaultMask ? this._prepareDefault(value, masked, flags, maskInstance) : value;
   }
 
-  private _prepareDefault(value: string, masked: Masked<string>, flags: IMask.AppendFlags, maskInstance: InputMask<IMask.MaskedPatternOptions>): string {
+  private _prepareDefault(value: string, masked: Masked<string>, flags: AppendFlags, maskInstance: InputMask<FactoryArg>): string {
     if (!flags.input || !value.length || !maskInstance) {
       return value;
     }

@@ -1,14 +1,9 @@
-import IMask, { Masked, InputMask } from 'imask';
+import { Masked, InputMask, type AppendFlags, type FactoryArg } from 'imask';
 import { DayOfWeek, ICalendarDateSelectEventData } from '../../calendar';
 
 export declare type DatePickerParseCallback = (value: string) => Date | null;
 export declare type DatePickerFormatCallback = (value: Date | null) => string;
-export declare type DatePickerPrepareMaskCallback = (
-  value: string,
-  masked: Masked<string>,
-  flags: IMask.AppendFlags,
-  maskInstance: InputMask<IMask.MaskedPatternOptions>
-) => string;
+export declare type DatePickerPrepareMaskCallback = (value: string, masked: Masked<string>, flags: AppendFlags, maskInstance: InputMask<FactoryArg>) => string;
 export declare type DatePickerValueMode = 'object' | 'string' | 'iso-string';
 
 export interface IDatePickerCalendarDropdownConfig<T> {
