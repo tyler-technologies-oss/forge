@@ -152,11 +152,15 @@ export class TreeItemComponent extends LitElement {
   }
 
   public render(): TemplateResult {
+    const interactive = this._context.mode === 'list' ? !this.openDisabled : !this._leaf;
     const disabled = this.disabled || this._context.disabled;
+    const showExpandIconStateLayer = this._context.mode !== 'list' && disabled && !this.openDisabled;
+    const hideHeaderStateLayer = this._leaf || disabled || (this._context.mode === 'list' && this.openDisabled);
+
     return html`
       <div
         part="root"
-        class=${classMap({ 'forge-tree-item': true, interactive: !this._leaf || this._context.mode !== 'list', 'open-disabled': this.openDisabled })}
+        class=${classMap({ 'forge-tree-item': true, interactive, 'open-disabled': this.openDisabled })}
         style=${styleMap({ '--_tree-item-level': this.level })}>
         <div part="header" class="header">
           ${!this._leaf
@@ -165,7 +169,7 @@ export class TreeItemComponent extends LitElement {
                   <slot name="expand-icon">
                     <forge-open-icon orientation="horizontal" rotation="half" .open="${this.open}"></forge-open-icon>
                   </slot>
-                  ${disabled && !this.openDisabled ? html`<forge-state-layer></forge-state-layer>` : nothing}
+                  ${showExpandIconStateLayer ? html`<forge-state-layer></forge-state-layer>` : nothing}
                 </span>
               `
             : html`<span class="leaf-spacer"></span>`}
@@ -181,7 +185,7 @@ export class TreeItemComponent extends LitElement {
           <div class="end">
             <slot name="end"></slot>
           </div>
-          ${this._context.mode === 'list' || this._leaf || disabled ? nothing : html`<forge-state-layer></forge-state-layer>`}
+          ${hideHeaderStateLayer ? nothing : html`<forge-state-layer></forge-state-layer>`}
           <forge-focus-indicator target=":host" focus-mode="focus" inward></forge-focus-indicator>
         </div>
         <div role="group" class="children" part="children">
