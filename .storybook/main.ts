@@ -27,6 +27,7 @@ const config: StorybookConfig = {
     },
     'storybook-addon-tag-badges',
     './addons/google-analytics/register.js',
+    './addons/decorator-dialog-closer',
   ],
   staticDirs: ['../src/stories/assets'],
   framework: {
