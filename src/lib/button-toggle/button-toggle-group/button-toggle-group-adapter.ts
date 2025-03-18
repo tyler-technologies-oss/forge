@@ -52,7 +52,6 @@ export class ButtonToggleGroupAdapter extends BaseAdapter<IButtonToggleGroupComp
   }
 
   public setDisabled(value: boolean): void {
-    this._component[isFocusable] = !value;
     const toggles = this._getButtonToggleElements();
     toggles.forEach(t => (t.disabled = value));
   }

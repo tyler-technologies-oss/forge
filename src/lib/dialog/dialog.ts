@@ -42,6 +42,8 @@ export interface IDialogProperties {
   moveable: boolean;
   label: string;
   description: string;
+  [showBackdrop](): void;
+  [hideBackdrop](): void;
 }
 
 export interface IDialogComponent extends IDialogProperties, IWithDefaultAria, IWithElementInternals, IDismissible {

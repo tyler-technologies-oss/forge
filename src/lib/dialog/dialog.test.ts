@@ -17,6 +17,8 @@ import {
   DialogSizeStrategy,
   DialogType
 } from './dialog-constants';
+import { type DialogCore } from './dialog-core';
+import { type MoveController } from '../core/controllers/move-controller';
 
 import './dialog';
 
@@ -1051,9 +1053,12 @@ describe('Dialog', () => {
   });
 });
 
+type DialogCoreInternal = DialogCore & { _moveController: MoveController };
+type DialogComponentWithCore = IDialogComponent & { _core: DialogCoreInternal };
+
 class DialogHarness {
   constructor(
-    public dialogElement: IDialogComponent,
+    public dialogElement: DialogComponentWithCore,
     public triggerElement: HTMLButtonElement,
     public altTriggerElement: HTMLButtonElement,
     public formCloseButton: HTMLButtonElement,
@@ -1223,7 +1228,7 @@ async function createFixture({
     </div>
   `);
 
-  const dialogEl = container.querySelector('forge-dialog') as IDialogComponent;
+  const dialogEl = container.querySelector('forge-dialog') as DialogComponentWithCore;
   const triggerEl = container.querySelector('#test-trigger') as HTMLButtonElement;
   const altTriggerEl = container.querySelector('#alt-test-trigger') as HTMLButtonElement;
   const formCloseButton = container.querySelector('#form-close-button') as HTMLButtonElement;

@@ -1,16 +1,16 @@
-import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { IWithFormAssociation, WithFormAssociation } from '../../core/mixins/form/with-form-associated';
-import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware';
-import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
-import { IWithFormValidity, WithFormValidity } from '../../core/mixins/form/with-form-validity';
+import { attachShadowTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
+import { getFormState, getFormValue, inputType, setDefaultAria } from '../../constants';
 import { BaseComponent } from '../../core/base/base-component';
+import { IWithFormAssociation, WithFormAssociation } from '../../core/mixins/form/with-form-associated';
+import { IWithFormValidity, WithFormValidity } from '../../core/mixins/form/with-form-validity';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
+import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware';
+import { FormRestoreReason, FormRestoreState, FormValue } from '../../core/utils/form-utils';
 import { ButtonToggleComponent } from '../button-toggle/button-toggle';
 import { ButtonToggleGroupAdapter } from './button-toggle-group-adapter';
-import { ButtonToggleGroupTheme, BUTTON_TOGGLE_GROUP_CONSTANTS, IButtonToggleGroupChangeEventData } from './button-toggle-group-constants';
+import { BUTTON_TOGGLE_GROUP_CONSTANTS, ButtonToggleGroupTheme, IButtonToggleGroupChangeEventData } from './button-toggle-group-constants';
 import { ButtonToggleGroupCore } from './button-toggle-group-core';
-import { getFormState, getFormValue, inputType, setDefaultAria } from '../../constants';
-import { FormValue, FormRestoreState, FormRestoreReason } from '../../core/utils/form-utils';
-import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 
 import template from './button-toggle-group.html';
 import styles from './button-toggle-group.scss';

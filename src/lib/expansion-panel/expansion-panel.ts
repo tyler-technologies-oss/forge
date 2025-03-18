@@ -12,6 +12,7 @@ export interface IExpansionPanelComponent extends IBaseComponent {
   orientation: ExpansionPanelOrientation;
   animationType: ExpansionPanelAnimationType;
   toggle(): void;
+  [emulateUserToggle](open: boolean): void;
 }
 
 declare global {

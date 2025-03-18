@@ -196,11 +196,11 @@ export class CheckboxComponent
   }
 
   /** @ignore */
-  public setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void {
+  public setFormValue(value: (FormValue & { [key: string]: any }) | null, state?: (FormValue & { [key: string]: any }) | null | undefined): void {
     this[internals].setFormValue(value, state);
 
     if (state) {
-      const stateValue = isString(state) ? state : state[this.name];
+      const stateValue = isString(state) ? state : (state as Record<string, any>)[this.name];
       this.checked = stateValue === 'checked' || stateValue === 'checked-indeterminate';
       this.indeterminate = stateValue === 'unchecked-indeterminate' || stateValue === 'checked-indeterminate';
       return;
