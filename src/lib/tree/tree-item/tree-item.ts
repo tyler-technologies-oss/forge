@@ -159,10 +159,10 @@ export class TreeItemComponent extends LitElement {
   }
 
   public render(): TemplateResult {
-    const interactive = this._context.mode === 'list' ? !this.openDisabled : !this._leaf;
+    const interactive = this._context.mode !== 'list' || !this.openDisabled;
     const disabled = this._context.mode !== 'list' && (this.disabled || this._context.disabled);
     const showExpandIconStateLayer = this._context.mode !== 'list' && disabled && !this.openDisabled;
-    const hideHeaderStateLayer = this._context.mode === 'list' ? this.openDisabled : this._leaf || disabled;
+    const hideHeaderStateLayer = this._context.mode === 'list' ? this.openDisabled : disabled;
 
     return html`
       <div
