@@ -4,12 +4,14 @@ import { ISwitchComponent } from '@tylertech/forge/switch';
 import '@tylertech/forge/tree/tree';
 import '@tylertech/forge/tree/tree-item';
 import { tylIconBird, tylIconTree, tylIconWater } from '@tylertech/tyler-icons/extended';
-import { tylIconGrass } from '@tylertech/tyler-icons/standard';
+import { tylIconAddBox, tylIconGrass, tylIconIndeterminateCheckBox } from '@tylertech/tyler-icons/standard';
 import './tree.scss';
 
 IconRegistry.define([
+  tylIconAddBox,
   tylIconBird,
   tylIconGrass,
+  tylIconIndeterminateCheckBox,
   tylIconTree,
   tylIconWater
 ]);

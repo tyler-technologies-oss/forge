@@ -12,6 +12,7 @@ $tokens: (
   // Size and shape
   min-block-size: utils.module-val(tree-item, min-block-size, spacing.variable(xlarge)),
   shape: utils.module-val(tree-item, shape, shape.variable(medium)),
+  expand-icon-inline-size: utils.module-val(tree-item, expand-icon-inline-size, spacing.variable(large)),
   // Spacing
   padding-inline: utils.module-val(tree-item, padding-inline, spacing.variable(xxsmall)),
   padding-inline-start: utils.module-ref(tree-item, padding-inline-start, padding-inline),
@@ -19,7 +20,6 @@ $tokens: (
   gap: utils.module-val(tree-item, gap, spacing.variable(xxxsmall)),
   header-inline-gap: utils.module-val(tree-item, header-inline-gap, spacing.variable(xsmall)),
   indent-size: utils.module-val(tree-item, indent-size, spacing.variable(medium)),
-  leaf-inset: utils.module-val(tree-item, leaf-inset, spacing.variable(large)),
   // Indent lines
   indent-line-style: utils.module-val(tree-item, indent-line-style, solid),
   indent-line-width: utils.module-val(tree-item, indent-line-width, border.variable(thin)),

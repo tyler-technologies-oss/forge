@@ -40,8 +40,13 @@
 
 @mixin expand-icon {
   display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
+
   border-radius: #{token(shape)};
+  inline-size: #{token(expand-icon-inline-size)};
+  min-block-size: #{token(min-block-size)};
 }
 
 @mixin expand-icon-disabled {
@@ -49,8 +54,7 @@
 }
 
 @mixin leaf-spacer {
-  // TODO: Use a token and match it to the width of the expand icon
-  inline-size: #{token(leaf-inset)};
+  inline-size: #{token(expand-icon-inline-size)};
 }
 
 @mixin checkbox {

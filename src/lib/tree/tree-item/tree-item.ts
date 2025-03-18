@@ -99,8 +99,12 @@ export class TreeItemComponent extends LitElement {
 
   @state() private _level = 0;
   @state() private _leaf = true;
+  @state() private _hasSlottedExpandIcon = false;
+  @state() private _hasSlottedCollapseIcon = false;
   @state() private _checkboxIcon: TreeItemCheckboxIcon = 'check_box_outline_blank';
 
+  @queryAssignedNodes({ slot: 'expand-icon' }) private _expandIcon: NodeListOf<HTMLElement>;
+  @queryAssignedNodes({ slot: 'collapse-icon' }) private _collapseIcon: NodeListOf<HTMLElement>;
   @queryAssignedNodes({ slot: 'children', flatten: true }) private _children: NodeListOf<HTMLElement>;
 
   private _internals: ElementInternals;
@@ -120,7 +124,7 @@ export class TreeItemComponent extends LitElement {
     this.tabIndex = -1;
     this._level = getLevel(this);
     this._slotInParent();
-    this._checkIfLeaf();
+    this._detectChildren();
     this._dispatchUpdate('added');
   }
 
@@ -161,6 +165,7 @@ export class TreeItemComponent extends LitElement {
   public render(): TemplateResult {
     const interactive = this._context.mode !== 'list' || !this.openDisabled;
     const disabled = this._context.mode !== 'list' && (this.disabled || this._context.disabled);
+    const showDefaultExpandIcon = !this._hasSlottedExpandIcon && !this._hasSlottedCollapseIcon;
     const showExpandIconStateLayer = this._context.mode !== 'list' && disabled && !this.openDisabled;
     const hideHeaderStateLayer = this._context.mode === 'list' ? this.openDisabled : disabled;
 
@@ -172,10 +177,18 @@ export class TreeItemComponent extends LitElement {
         <div part="header" class="header">
           ${!this._leaf
             ? html`
-                <span part="expand-icon" class="expand-icon">
-                  <forge-open-icon orientation="horizontal" rotation="half" .open="${this.open}"></forge-open-icon>
-                  <slot name="expand-icon"> </slot>
-                  <slot name="collapse-icon"></slot>
+                <span
+                  part="expand-icon"
+                  class=${classMap({
+                    'expand-icon': true,
+                    'has-custom-expand-icon': this._hasSlottedExpandIcon,
+                    'has-custom-collapse-icon': this._hasSlottedCollapseIcon
+                  })}>
+                  ${showDefaultExpandIcon
+                    ? html`<forge-open-icon class="default-expand-icon" orientation="horizontal" rotation="half" .open="${this.open}"></forge-open-icon>`
+                    : nothing}
+                  <slot name="expand-icon" @slotchange="${this._detectSlottedExpandIcon}"></slot>
+                  <slot name="collapse-icon" @slotchange="${this._detectSlottedCollapseIcon}"></slot>
                   ${showExpandIconStateLayer ? html`<forge-state-layer></forge-state-layer>` : nothing}
                 </span>
               `
@@ -196,7 +209,7 @@ export class TreeItemComponent extends LitElement {
           <forge-focus-indicator target=":host" focus-mode="focus" inward></forge-focus-indicator>
         </div>
         <div role="${this._context.mode === 'list' ? 'list' : 'group'}" class="children" part="children">
-          <slot name="children" @slotchange="${this._checkIfLeaf}"></slot>
+          <slot name="children" @slotchange="${this._detectChildren}"></slot>
         </div>
       </div>
     `;
@@ -209,10 +222,18 @@ export class TreeItemComponent extends LitElement {
     }
   }
 
-  private _checkIfLeaf(): void {
+  private _detectChildren(): void {
     this._leaf = this.leaf;
     this._setOpen();
     toggleState(this._internals, 'leaf', this._leaf);
+  }
+
+  private _detectSlottedExpandIcon(): void {
+    this._hasSlottedExpandIcon = !!this._expandIcon.length;
+  }
+
+  private _detectSlottedCollapseIcon(): void {
+    this._hasSlottedCollapseIcon = !!this._collapseIcon.length;
   }
 
   private _setDisabled(): void {

@@ -35,6 +35,16 @@
 
   .expand-icon {
     @include expand-icon;
+
+    &.has-custom-collapse-icon {
+      slot[name='expand-icon'] {
+        display: none;
+      }
+
+      slot[name='collapse-icon'] {
+        display: contents;
+      }
+    }
   }
 
   .checkbox {
@@ -89,10 +99,6 @@
 // Leaf
 //
 :host(:is(:state(leaf), :--leaf)) {
-  .expand-icon {
-    display: none;
-  }
-
   .children {
     display: none;
   }
@@ -103,6 +109,16 @@
 //
 
 :host(:not(:is(:state(open), :--open))) {
+  .expand-icon {
+    slot[name='expand-icon'] {
+      display: contents;
+    }
+
+    slot[name='collapse-icon'] {
+      display: none;
+    }
+  }
+
   .children {
     display: none;
   }

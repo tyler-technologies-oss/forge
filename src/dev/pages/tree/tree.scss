@@ -1,3 +1,22 @@
 forge-tree {
   max-width: 256px;
 }
+
+forge-tree-item {
+  &:state(open) {
+    forge-icon.animate {
+      transform: rotate(45deg);
+    }
+  }
+}
+
+forge-icon {
+  &[slot=expand-icon],
+  &[slot=collapse-icon] {
+    --forge-icon-font-size: 18px;
+  }
+  
+  &.animate {
+    transition: transform 0.2s;
+  }
+}
