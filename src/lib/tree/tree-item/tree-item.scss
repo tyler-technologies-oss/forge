@@ -59,6 +59,25 @@
     @include indeterminate;
   }
 
+  &.disabled {
+    .header {
+      @include disabled-header;
+    }
+
+    .checkbox,
+    .start,
+    .content,
+    .end {
+      @include disabled-header-content;
+    }
+
+    &:not(.open-disabled) {
+      .expand-icon {
+        @include enabled-expand-icon;
+      }
+    }
+  }
+
   &.open-disabled {
     .expand-icon {
       @include expand-icon-disabled;
@@ -130,22 +149,6 @@
 //
 
 :host(:is(:state(disabled), :--disabled)) {
-  .header {
-    @include disabled-header;
-  }
-
-  .checkbox,
-  .start,
-  .content,
-  .end {
-    @include disabled-header-content;
-  }
-
-  .forge-tree-item:not(.open-disabled) {
-    .expand-icon {
-      @include enabled-expand-icon;
-    }
-  }
 }
 
 //

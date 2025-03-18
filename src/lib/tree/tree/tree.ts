@@ -157,6 +157,7 @@ export class TreeComponent extends LitElement {
       this._updateContext();
     }
     if (_changedProperties.has('mode')) {
+      this._setDisabled();
       this._setMode();
       this._selectionController.cleanup();
     }
@@ -473,12 +474,15 @@ export class TreeComponent extends LitElement {
   }
 
   private _setDisabled(): void {
-    setDefaultAria(this, this._internals, { ariaDisabled: this.disabled ? 'true' : 'false' });
-    toggleState(this._internals, 'disabled', this.disabled);
+    setDefaultAria(this, this._internals, { ariaDisabled: this.mode === 'list' ? null : this.disabled ? 'true' : 'false' });
+    toggleState(this._internals, 'disabled', this.mode !== 'list' && this.disabled);
   }
 
   private _setMode(): void {
-    setDefaultAria(this, this._internals, { ariaMultiSelectable: this.mode === 'multiple' || this.mode === 'multiple-discrete' ? 'true' : 'false' });
+    setDefaultAria(this, this._internals, {
+      role: this.mode === 'list' ? 'list' : 'tree',
+      ariaMultiSelectable: this.mode === 'list' ? null : this.mode === 'multiple' || this.mode === 'multiple-discrete' ? 'true' : 'false'
+    });
   }
 }
 

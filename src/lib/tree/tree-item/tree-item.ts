@@ -131,8 +131,18 @@ export class TreeItemComponent extends LitElement {
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
     const contextDisabledChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.disabled !== this._context.disabled;
+    const modeChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.mode !== this._context.mode;
+
     if (changedProperties.has('disabled') || contextDisabledChanged) {
       this._setDisabled();
+    }
+    if (changedProperties.has(indeterminate)) {
+      toggleState(this._internals, 'indeterminate', this.indeterminate);
+    }
+    if (modeChanged) {
+      this._setDisabled();
+      this._setMode();
+      this._setOpen();
     }
     if (changedProperties.has('open')) {
       this._setOpen();
@@ -143,9 +153,6 @@ export class TreeItemComponent extends LitElement {
     if (changedProperties.has('selected')) {
       this._setSelected();
     }
-    if (changedProperties.has(indeterminate)) {
-      toggleState(this._internals, 'indeterminate', this.indeterminate);
-    }
     if (changedProperties.has('selected') || changedProperties.has(indeterminate)) {
       this._checkboxIcon = this.indeterminate ? 'indeterminate_check_box' : this.selected ? 'check_box' : 'check_box_outline_blank';
     }
@@ -153,22 +160,22 @@ export class TreeItemComponent extends LitElement {
 
   public render(): TemplateResult {
     const interactive = this._context.mode === 'list' ? !this.openDisabled : !this._leaf;
-    const disabled = this.disabled || this._context.disabled;
+    const disabled = this._context.mode !== 'list' && (this.disabled || this._context.disabled);
     const showExpandIconStateLayer = this._context.mode !== 'list' && disabled && !this.openDisabled;
-    const hideHeaderStateLayer = this._leaf || disabled || (this._context.mode === 'list' && this.openDisabled);
+    const hideHeaderStateLayer = this._context.mode === 'list' ? this.openDisabled : this._leaf || disabled;
 
     return html`
       <div
         part="root"
-        class=${classMap({ 'forge-tree-item': true, interactive, 'open-disabled': this.openDisabled })}
+        class=${classMap({ 'forge-tree-item': true, interactive, disabled, 'open-disabled': this.openDisabled })}
         style=${styleMap({ '--_tree-item-level': this.level })}>
         <div part="header" class="header">
           ${!this._leaf
             ? html`
                 <span part="expand-icon" class="expand-icon">
-                  <slot name="expand-icon">
-                    <forge-open-icon orientation="horizontal" rotation="half" .open="${this.open}"></forge-open-icon>
-                  </slot>
+                  <forge-open-icon orientation="horizontal" rotation="half" .open="${this.open}"></forge-open-icon>
+                  <slot name="expand-icon"> </slot>
+                  <slot name="collapse-icon"></slot>
                   ${showExpandIconStateLayer ? html`<forge-state-layer></forge-state-layer>` : nothing}
                 </span>
               `
@@ -188,7 +195,7 @@ export class TreeItemComponent extends LitElement {
           ${hideHeaderStateLayer ? nothing : html`<forge-state-layer></forge-state-layer>`}
           <forge-focus-indicator target=":host" focus-mode="focus" inward></forge-focus-indicator>
         </div>
-        <div role="group" class="children" part="children">
+        <div role="${this._context.mode === 'list' ? 'list' : 'group'}" class="children" part="children">
           <slot name="children" @slotchange="${this._checkIfLeaf}"></slot>
         </div>
       </div>
@@ -209,13 +216,29 @@ export class TreeItemComponent extends LitElement {
   }
 
   private _setDisabled(): void {
+    // List items can't be disabled
+    if (this._context.mode === 'list') {
+      setDefaultAria(this, this._internals, { ariaDisabled: null });
+      toggleState(this._internals, 'disabled', false);
+      return;
+    }
+
     const disabled = this.disabled || this._context.disabled;
     setDefaultAria(this, this._internals, { ariaDisabled: disabled ? 'true' : 'false' });
     toggleState(this._internals, 'disabled', disabled);
   }
 
+  private _setMode(): void {
+    setDefaultAria(this, this._internals, {
+      role: this._context.mode === 'list' ? 'listitem' : 'treeitem',
+      ariaSelected: this._context.mode === 'list' ? null : this.selected ? 'true' : 'false'
+    });
+  }
+
   private _setOpen(): void {
-    setDefaultAria(this, this._internals, { ariaExpanded: this.leaf || this.openDisabled ? null : this.open ? 'true' : 'false' });
+    setDefaultAria(this, this._internals, {
+      ariaExpanded: this._context.mode === 'list' || this.leaf || this.openDisabled ? null : this.open ? 'true' : 'false'
+    });
     toggleState(this._internals, 'open', !this.leaf && this.open);
     if (this.open) {
       this._dispatchUpdate('opened');
@@ -230,7 +253,7 @@ export class TreeItemComponent extends LitElement {
     if (!this._hasBeenSelected && this.selected) {
       this._hasBeenSelected = true;
     }
-    setDefaultAria(this, this._internals, { ariaSelected: this.selected ? 'true' : 'false' });
+    setDefaultAria(this, this._internals, { ariaSelected: this._context.mode === 'list' ? null : this.selected ? 'true' : 'false' });
     toggleState(this._internals, 'selected', this.selected);
     if (this._hasBeenSelected) {
       this._dispatchUpdate(this.selected ? 'selected' : 'deselected');
