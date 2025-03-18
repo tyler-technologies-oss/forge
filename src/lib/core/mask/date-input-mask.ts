@@ -94,7 +94,7 @@ export class DateInputMask {
       return value;
     }
 
-    const maskInstanceWithSelection = maskInstance as InputMask<IMask.MaskedPatternOptions> & { _selection: { start: number; end: number } };
+    const maskInstanceWithSelection = maskInstance as InputMask<FactoryArg>;
     const isAllSelected = maskInstanceWithSelection._selection && maskInstanceWithSelection._selection.end === 10;
     const currentValue = isAllSelected ? '' : maskInstance.value;
 

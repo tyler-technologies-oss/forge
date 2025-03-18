@@ -47,7 +47,7 @@ export class IntermediateTimeParser {
   }
 
   public get isAllSelected(): boolean {
-    const { start, end } = (this._mask as InputMask<IMask.AnyMaskedOptions> & { _selection: { start: number; end: number } })._selection;
+    const { start, end } = this._mask._selection;
     return start === 0 && end > 0 && end === this._mask.value.length;
   }
 

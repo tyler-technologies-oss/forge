@@ -84,7 +84,7 @@ export class TimeInputMask {
 
     // Whenever we paste text we don't care to send it through our custom prepare logic,
     // so just return the character being processed.
-    if ((maskInstance as InputMask<IMask.AnyMaskedOptions> & { _inputEvent: any })._inputEvent?.inputType !== 'insertText') {
+    if (maskInstance._inputEvent?.inputType !== 'insertText') {
       return value;
     }
 
