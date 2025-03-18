@@ -17,6 +17,8 @@ export interface IWithLabelAwareness extends IBaseComponent {
    * A callback for when the associated label is clicked.
    */
   labelClickedCallback?(): void;
+
+  [forgeLabelRef]?: { [updateTarget](target: HTMLElement): boolean };
 }
 
 export declare abstract class WithLabelAwarenessContract {
@@ -44,6 +46,7 @@ export function WithLabelAwareness<TBase extends MixinBase>(base: TBase) {
     }
 
     public abstract labelChangedCallback(value: string | null): void;
+    public abstract [forgeLabelRef]?: HTMLElement & { [updateTarget](target: HTMLElement): boolean };
   }
 
   return LabelAwareComponent as AbstractConstructor<WithLabelAwarenessContract> & TBase;

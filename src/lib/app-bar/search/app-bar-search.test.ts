@@ -6,6 +6,7 @@ import type { IAppBarSearchComponent } from './app-bar-search';
 import { APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants';
 
 import './app-bar-search';
+import { IAppBarSearchCore } from './app-bar-search-core';
 
 describe('App Bar Search', () => {
   it('should initialize', async () => {
@@ -21,7 +22,9 @@ describe('App Bar Search', () => {
   });
 
   it('should not initialize until input is available', async () => {
-    const el = await fixture<IAppBarSearchComponent>(html`<forge-app-bar-search></forge-app-bar-search>`);
+    const el = await fixture<IAppBarSearchComponent & { _core: IAppBarSearchCore & { initialize: () => void } }>(
+      html`<forge-app-bar-search></forge-app-bar-search>`
+    );
     const initializeSpy = spy(el['_core'], 'initialize');
 
     expect(initializeSpy.called).to.be.false;

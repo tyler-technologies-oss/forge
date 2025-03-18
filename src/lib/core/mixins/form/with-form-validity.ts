@@ -67,6 +67,8 @@ export function WithFormValidity<TBase extends MixinBase>(base: TBase) {
       this._hasCustomValidityError = error !== '';
       this[internals].setCustomValidity({ customError: this._hasCustomValidityError }, error);
     }
+
+    public abstract [internals]: ElementInternals & { setCustomValidity(error: string | object, message?: string): void };
   }
 
   return FormValidity as AbstractConstructor<WithFormValidityContract> & TBase;

@@ -9,8 +9,6 @@
     "strictNullChecks": true,
     "importHelpers": true,
     "noEmitHelpers": true,
-    "ignoreDeprecations": "5.0",
-    "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
     "useDefineForClassFields": false,
     "skipLibCheck": true

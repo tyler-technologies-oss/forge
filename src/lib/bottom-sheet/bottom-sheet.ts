@@ -1,7 +1,7 @@
 import { attachShadowTemplate, customElement, coreProperty, coerceBoolean } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { WithDefaultAria } from '../core/mixins/internals/with-default-aria';
-import { WithElementInternals } from '../core/mixins/internals/with-element-internals';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
 import { DialogComponent } from '../dialog/dialog';
 import { BottomSheetAdapter } from './bottom-sheet-adapter';
 import { BottomSheetMode, BOTTOM_SHEET_CONSTANTS, IBottomSheetDragEventData, IBottomSheetDragStartEventData } from './bottom-sheet-constants';
@@ -10,7 +10,7 @@ import { BottomSheetCore } from './bottom-sheet-core';
 import template from './bottom-sheet.html';
 import styles from './bottom-sheet.scss';
 
-export interface IBottomSheetComponent extends IBaseComponent {
+export interface IBottomSheetComponent extends IBaseComponent, IWithDefaultAria, IWithElementInternals {
   mode: BottomSheetMode;
   persistent: boolean;
   open: boolean;

@@ -3,7 +3,7 @@ import { removeAllChildren, removeElement } from '@tylertech/forge-core';
 export type BaseComponentDelegateProps<T extends HTMLElement> = Partial<T>;
 
 export interface IBaseComponentDelegateOptions {
-  style?: Partial<CSSStyleDeclaration> | { [key: string]: string };
+  style?: Partial<CSSStyleDeclaration> & { [key: string]: string };
   attributes?: { [key: string]: string } | Map<string, string>;
   parent?: HTMLElement;
   children?: HTMLElement | string;

@@ -13,7 +13,7 @@ import { task, frame } from '@tylertech/forge/core/utils/utils';
 import { tryCleanupPopovers } from '../../utils';
 import { BASE_DATE_PICKER_CONSTANTS } from '@tylertech/forge/date-picker/base/base-date-picker-constants';
 import type { IButtonComponent } from '@tylertech/forge/button';
-import { FIELD_CONSTANTS, IFieldComponent, IPopoverComponent, POPOVER_CONSTANTS } from '@tylertech/forge';
+import { FIELD_CONSTANTS, IDialogAdapter, IFieldComponent, IPopoverComponent, POPOVER_CONSTANTS } from '@tylertech/forge';
 
 const POPOVER_ANIMATION_DURATION = 200;
 
@@ -21,8 +21,10 @@ interface ITestContext {
   context: ITestDatePickerContext;
 }
 
+type DatePickerComponentTest = IDatePickerComponent & { _core: IDatePickerCore & { _onInputValueChanged: () => void; initialize: () => void; _isInitialized: boolean; _adapter: IDialogAdapter & { setCalendarDisabledDaysOfWeek: () => void; _identifier: string } } };
+
 interface ITestDatePickerContext {
-  component: IDatePickerComponent;
+  component: DatePickerComponentTest;
   append(): void;
   destroy(): void;
 }
@@ -1582,7 +1584,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
   function setupTestContext(append = false, hasInput = true, hasToggle = true): ITestDatePickerContext {
     const fixture = document.createElement('div');
     fixture.id = 'date-picker-test-fixture';
-    const component = document.createElement('forge-date-picker');
+    const component = document.createElement('forge-date-picker') as DatePickerComponentTest;
     if (hasInput) {
       component.appendChild(createInputElement());
     }
@@ -1617,7 +1619,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
     return toggleElement;
   }
 
-  function getIdentifier(core: IDatePickerCore): string {
+  function getIdentifier(core: DatePickerComponentTest['_core']): string {
     return 'forge-date-picker-' + core['_adapter']['_identifier'];
   }
 
@@ -1634,16 +1636,16 @@ describe('DatePickerComponent', function(this: ITestContext) {
     component.open = true;
   }
 
-  function getPopup(component: IDatePickerComponent): IPopoverComponent {
+  function getPopup(component: DatePickerComponentTest): IPopoverComponent {
     return document.querySelector(`${POPOVER_CONSTANTS.elementName}[id=${getIdentifier(component['_core'])}]`) as IPopoverComponent;
   }
 
-  function getCalendar(component: IDatePickerComponent): ICalendarComponent {
+  function getCalendar(component: DatePickerComponentTest): ICalendarComponent {
     const popup = getPopup(component);
     return popup.querySelector('forge-calendar') as ICalendarComponent;
   }
 
-  function getCalendarShadow(component: IDatePickerComponent): ShadowRoot {
+  function getCalendarShadow(component: DatePickerComponentTest): ShadowRoot {
     const calendar = getCalendar(component);
     return calendar.shadowRoot as ShadowRoot;
   }
@@ -1664,35 +1666,35 @@ describe('DatePickerComponent', function(this: ITestContext) {
     return getShadowElement(component, '#month-button')?.firstElementChild as HTMLButtonElement ?? null;
   }
 
-  function clickActiveDay(component: IDatePickerComponent): void {
+  function clickActiveDay(component: DatePickerComponentTest): void {
     const calendarShadow = getCalendarShadow(component);
     const activeCell = calendarShadow.querySelector('.forge-calendar__date:has(forge-focus-indicator[active])') as HTMLTableCellElement;
     activeCell.click();
   }
 
-  function getTodayButton(component: IDatePickerComponent): IButtonComponent {
+  function getTodayButton(component: DatePickerComponentTest): IButtonComponent {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
     return getShadowElement(calendar, '#today-button') as IButtonComponent ?? null;
   }
 
-  function getClearButton(component: IDatePickerComponent): IButtonComponent {
+  function getClearButton(component: DatePickerComponentTest): IButtonComponent {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
     return getShadowElement(calendar, '#clear-button') as IButtonComponent ?? null;
   }
 
-  function clickTodayButton(component: IDatePickerComponent): void {
+  function clickTodayButton(component: DatePickerComponentTest): void {
     const todayButton = getTodayButton(component);
     todayButton.click();
   }
 
-  function clickClearButton(component: IDatePickerComponent): void {
+  function clickClearButton(component: DatePickerComponentTest): void {
     const clearButton = getClearButton(component);
     clearButton.click();
   }
 
-  function getAnnouncerElement(component: IDatePickerComponent): HTMLElement {
+  function getAnnouncerElement(component: DatePickerComponentTest): HTMLElement {
     const popup = getPopup(component);
     return popup.querySelector('[data-forge-live-announcer]') as HTMLElement;
   }
@@ -1701,7 +1703,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
     return task(POPOVER_ANIMATION_DURATION);
   }
 
-  function expectPopupOpen(component: IDatePickerComponent, isOpen: boolean): void {
+  function expectPopupOpen(component: DatePickerComponentTest, isOpen: boolean): void {
     const popup = getPopup(component);
     expect(component.hasAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.OPEN)).toBe(isOpen);
     if (isOpen) {
@@ -1742,7 +1744,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
     }
   }
 
-  function getAllTdElementsForSundays(component: IDatePickerComponent) {
+  function getAllTdElementsForSundays(component: DatePickerComponentTest) {
     return Array.from(getCalendarShadow(component).querySelectorAll('tbody tr')).map(tr => tr.querySelector('td')).filter(td => td!.hasAttribute('data-date'));
   }
 

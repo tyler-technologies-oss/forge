@@ -493,7 +493,8 @@ describe('App Bar Profile Button', () => {
       await clickElement(iconButton);
       await task(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
-      return el['_core']['_adapter']['_popupElement'];
+      type ComponentWithCore = IAppBarProfileButtonComponent & { _core: { _adapter: { _popupElement: IPopoverComponent } } };
+      return (el as ComponentWithCore)['_core']['_adapter']['_popupElement'];
     }
   });
 

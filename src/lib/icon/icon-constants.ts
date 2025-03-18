@@ -34,7 +34,7 @@ export const ICON_CONSTANTS = {
   strings
 };
 
-export const ICON_REGISTRY_KEY = 'forgeIcons';
+export const ICON_REGISTRY_KEY = 'forgeIcons' as const;
 
 export type IconUrlBuilder = (name: string, type: IconExternalType) => string;
 export type IconExternalType = '' | 'custom' | 'standard' | 'extended';

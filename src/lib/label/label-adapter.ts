@@ -123,7 +123,7 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
    * component or `null` if none exists.
    */
   private _locateTargetElement(id: string | null): (ILabelAware & HTMLElement) | null {
-    let targetEl: HTMLElement | null;
+    let targetEl: (HTMLElement & { [forgeLabelRef]: HTMLElement }) | null;
 
     if (id) {
       const rootNode = this._component.getRootNode() as Document | ShadowRoot;
@@ -135,7 +135,7 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
     }
 
     if (targetEl && !targetEl.shadowRoot) {
-      // If the target element has not been updgraded, mark it to connect later
+      // If the target element has not been upgraded, mark it to connect later
       targetEl.setAttribute(DEFERRED_LABEL_TARGET, '');
       targetEl[forgeLabelRef] = this._component;
       return null;

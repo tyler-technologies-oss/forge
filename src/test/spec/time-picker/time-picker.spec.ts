@@ -9,10 +9,14 @@ interface ITestContext {
   context: ITimePickerTestContext;
 }
 
+type TimePickerAdapterInternal = ITimePickerAdapter & { _targetElement: HTMLElement; _toggleElement: HTMLElement };
+type TimePickerCoreInternal = ITimePickerCore & { _adapter: TimePickerAdapterInternal; _isInitialized: boolean; _identifier: string; _dropdownConfig: { visibleStartIndex: number }; _onSelect(value: ITimePickerOptionValue): void; _handleInput(value: string): void };
+type TimePickerWithCore = ITimePickerComponent & { _core: TimePickerCoreInternal };
+
 interface ITimePickerTestContext {
-  component: ITimePickerComponent;
-  core: ITimePickerCore;
-  adapter: ITimePickerAdapter;
+  component: TimePickerWithCore;
+  core: TimePickerCoreInternal;
+  adapter: TimePickerAdapterInternal;
   inputElement: HTMLInputElement;
   toggleElement: HTMLButtonElement;
   identifier: string;
@@ -1473,7 +1477,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
   });
 
   function _createTimePickerContext(append = true, hasInput = true): ITimePickerTestContext {
-    const component = document.createElement('forge-time-picker');
+    const component = document.createElement('forge-time-picker') as TimePickerWithCore;
 	  const inputElement = document.createElement('input');
     if (hasInput) {
       component.appendChild(inputElement);

@@ -247,7 +247,7 @@ export class SwitchComponent
   }
 
   /** @ignore */
-  public setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void {
+  public setFormValue(value: (FormValue & { [key: string]: any }) | null, state?: (FormValue & { [key: string]: any }) | null | undefined): void {
     this[internals].setFormValue(value, state);
 
     if (state) {
