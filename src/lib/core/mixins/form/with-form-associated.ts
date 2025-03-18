@@ -144,7 +144,7 @@ export function WithFormAssociation<TBase extends MixinBase>(base: TBase) {
   abstract class FormAssociatedComponent extends base implements IWithFormAssociation {
     public static readonly formAssociated = true;
 
-    private _inputElement?: HTMLInputElement | HTMLSelectElement;
+    private _inputElement?: (HTMLInputElement | HTMLSelectElement) & { [key: string]: any };
 
     /** @ignore */
     public get form(): HTMLFormElement | null {

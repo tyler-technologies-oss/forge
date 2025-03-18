@@ -15,6 +15,12 @@ export interface IDismissible {
   [tryDismiss](state?: IDismissibleStackState): boolean;
 }
 
+declare global {
+  interface Window {
+    [DISMISSIBLE_STACK_INSTANCE_KEY]: DismissibleStack<IDismissible>;
+  }
+}
+
 export class DismissibleStack<T extends IDismissible> {
   private _deferredDismiss: Deferred | undefined;
 

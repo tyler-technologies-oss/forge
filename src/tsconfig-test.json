@@ -5,8 +5,6 @@
     "noImplicitReturns": true,
     "preserveConstEnums": true,
     "pretty": true,
-    "ignoreDeprecations": "5.0",
-    "suppressImplicitAnyIndexErrors": true,
     "useDefineForClassFields": false,
     "types": ["jasmine", "node", "webpack-env"],
     "baseUrl": ".",

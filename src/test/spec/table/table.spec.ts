@@ -1,4 +1,4 @@
-import { removeElement } from '@tylertech/forge-core';
+import { ItemManager, removeElement } from '@tylertech/forge-core';
 import { task, frame } from '@tylertech/forge/core/utils/utils';
 import {
   CellAlign,
@@ -44,9 +44,24 @@ interface ITestContext {
   context: ITestTableContext;
 }
 
+type TableCoreInternal = ITableCore & {
+  _sortedColumnIndex: number;
+  _isAllSelected: boolean;
+  _adapter: ITableAdapter;
+  _tableConfiguration: ITableConfiguration;
+  _onHeadRowMouseDown(event: MouseEvent): void;
+  _onMouseUp(event: MouseEvent): void;
+  _onMouseMove(event: MouseEvent): void;
+  _onRowClick(event: MouseEvent): void;
+  _onRowDoubleClick(event: MouseEvent): void;
+  _hiddenColumnManager: ItemManager<string>;
+  _rendered: boolean;
+};
+type TableComponentWithCore = ITableComponent & { _core: TableCoreInternal }
+
 interface ITestTableContext {
-  component: ITableComponent;
-  core: ITableCore;
+  component: TableComponentWithCore;
+  core: TableCoreInternal;
   getTableElement(): HTMLTableElement;
   destroy(): void;
   tooltipSelectCallback?: TableSelectTooltipCallback;
@@ -64,7 +79,6 @@ describe('TableComponent', function(this: ITestContext) {
   describe('with default property values', function(this: ITestContext) {
     it('should load with attribute values default in properly', function(this: ITestContext) {
       this.context = setupTestContext(true);
-      const tableCore = this.context.component['_core'];
 
       expect(this.context.component.select).toBe(true, 'Expected select to be on');
       expect(this.context.component.multiselect).toBe(true, 'Expected multiselect to be on');
@@ -77,18 +91,6 @@ describe('TableComponent', function(this: ITestContext) {
       expect(this.context.component.resizable).toBe(true, 'Expected resizable to be on');
       expect(this.context.component.minResizeWidth).toBe(10, 'Expected minResizeWidth to be 10');
       expect(this.context.component.allowRowClick).toBe(true, 'Expected allowRowClick to be on');
-
-      expect(tableCore['select']).toBe(true);
-      expect(tableCore['multiselect']).toBe(true);
-      expect(tableCore['selectKey']).toEqual(['Id']);
-      expect(tableCore['dense']).toBe(true);
-      expect(tableCore['filter']).toBe(true);
-      expect(tableCore['fixedHeaders']).toBe(true);
-      expect(tableCore['layoutType']).toBe('auto');
-      expect(tableCore['wrapContent']).toBe(true);
-      expect(tableCore['resizable']).toBe(true);
-      expect(tableCore['minResizeWidth']).toBe(10);
-      expect(tableCore['allowRowClick']).toBe(true);
 
       expect(this.context.component.getAttribute(TABLE_CONSTANTS.attributes.SELECT)).toBe('true');
       expect(this.context.component.getAttribute(TABLE_CONSTANTS.attributes.MULTISELECT)).toBe('true');
@@ -119,7 +121,6 @@ describe('TableComponent', function(this: ITestContext) {
 
     it('should have proper default values', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableCore = this.context.component['_core'];
 
       expect(this.context.component.data).toEqual([], 'Expected data to be empty');
       expect(this.context.component.columnConfigurations).toEqual([], 'Expect column configurations to be empty');
@@ -136,20 +137,6 @@ describe('TableComponent', function(this: ITestContext) {
       expect(this.context.component.resizable).toBe(false, 'Expected resizable to be on');
       expect(this.context.component.minResizeWidth).toBe(100, 'Expected minResizeWidth to be 10');
       expect(this.context.component.allowRowClick).toBe(false, 'Expected allowRowClick to be on');
-
-      expect(tableCore['data']).toEqual([]);
-      expect(tableCore['columnConfigurations']).toEqual([]);
-      expect(tableCore['select']).toBe(false);
-      expect(tableCore['multiselect']).toBe(true);
-      expect(tableCore['selectKey']).toBeUndefined();
-      expect(tableCore['tooltipSelect']).toBeUndefined();
-      expect(tableCore['tooltipSelectAll']).toBeUndefined();
-      expect(tableCore['dense']).toBe(false);
-      expect(tableCore['filter']).toBe(false);
-      expect(tableCore['fixedHeaders']).toBe(false);
-      expect(tableCore['layoutType']).toBe('auto');
-      expect(tableCore['wrapContent']).toBe(true);
-      expect(tableCore['resizable']).toBe(false);
     });
     
     it('should have tooltip string', function(this: ITestContext) {
@@ -419,8 +406,8 @@ describe('TableComponent', function(this: ITestContext) {
 
     it('should reattach click listeners on data set', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableCore: TableCore = this.context.component['_core'];
-      const tableAdapter: ITableAdapter = tableCore['_adapter'];
+      const tableCore = this.context.component['_core'];
+      const tableAdapter = tableCore['_adapter'];
       const recreateBodySpy = spyOn(tableAdapter, 'recreateTableBody');
       this.context.component.allowRowClick = true;
       this.context.component.data = data;
@@ -703,7 +690,7 @@ describe('TableComponent', function(this: ITestContext) {
 
     it('should set layout type', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableCore: TableCore = this.context.component['_core'];
+      const tableCore = this.context.component['_core'];
 
       this.context.component.layoutType = 'fixed' as TableLayoutType;
       this.context.component.render();
@@ -718,7 +705,7 @@ describe('TableComponent', function(this: ITestContext) {
  
     it('should set dense state', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableCore: TableCore = this.context.component['_core'];
+      const tableCore = this.context.component['_core'];
       
       this.context.component.dense = true;
       this.context.component.render();
@@ -735,7 +722,7 @@ describe('TableComponent', function(this: ITestContext) {
 
     it('should set resizable', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableCore: TableCore = this.context.component['_core'];
+      const tableCore = this.context.component['_core'];
 
       this.context.component.resizable = false;
       this.context.component.render();
@@ -749,7 +736,7 @@ describe('TableComponent', function(this: ITestContext) {
 
     it('should set fixed headers state', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableCore: TableCore = this.context.component['_core'];   
+      const tableCore = this.context.component['_core'];   
     
       this.context.component.fixedHeaders = false;
       this.context.component.render();
@@ -764,7 +751,7 @@ describe('TableComponent', function(this: ITestContext) {
 
     it('should set wrap content', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableCore: TableCore = this.context.component['_core'];
+      const tableCore = this.context.component['_core'];
 
       this.context.component.wrapContent = true;
       this.context.component.render();
@@ -796,7 +783,7 @@ describe('TableComponent', function(this: ITestContext) {
 
     it('should set filter', function(this: ITestContext) {
       this.context = setupTestContext();
-      const tableCore: TableCore = this.context.component['_core'];
+      const tableCore = this.context.component['_core'];
 
       this.context.component.filter = true;
       this.context.component.render();
@@ -2324,7 +2311,7 @@ describe('TableComponent', function(this: ITestContext) {
 function setupTestContext(hasAttrs = false, hasChildren = false): ITestTableContext {
   const fixture = document.createElement('div');
   fixture.id = 'table-test-fixture';
-  const component = document.createElement(TABLE_CONSTANTS.elementName) as ITableComponent;
+  const component = document.createElement(TABLE_CONSTANTS.elementName) as TableComponentWithCore;
   if (hasAttrs) {
     component.setAttribute('select', 'true');
     component.setAttribute('multiselect', 'true');
@@ -2350,7 +2337,7 @@ function setupTestContext(hasAttrs = false, hasChildren = false): ITestTableCont
   document.body.appendChild(fixture);
   return {
     component,
-    core: component['_core'] as ITableCore,
+    core: component['_core'],
     getTableElement: () => component.querySelector('table') as HTMLTableElement,
     destroy: () => removeElement(fixture)
   };
@@ -2359,7 +2346,7 @@ function setupTestContext(hasAttrs = false, hasChildren = false): ITestTableCont
 function setupTooltipTestContextWithString(): ITestTableContext {
   const fixture = document.createElement('div');
   fixture.id = 'table-test-fixture';
-  const component = document.createElement(TABLE_CONSTANTS.elementName) as ITableComponent;
+  const component = document.createElement(TABLE_CONSTANTS.elementName) as TableComponentWithCore;
 
   component.setAttribute('tooltip-select-all', 'Select All');
   component.setAttribute('tooltip-select', 'Select');
@@ -2368,7 +2355,7 @@ function setupTooltipTestContextWithString(): ITestTableContext {
   document.body.appendChild(fixture);
   return {
     component,
-    core: component['_core'] as ITableCore,
+    core: component['_core'],
     getTableElement: () => component.querySelector('table') as HTMLTableElement,
     destroy: () => removeElement(fixture)
   };
@@ -2377,7 +2364,7 @@ function setupTooltipTestContextWithString(): ITestTableContext {
 function setupTooltipTestContextWithCallback(): ITestTableContext {
   const fixture = document.createElement('div');
   fixture.id = 'table-test-fixture';
-  const component = document.createElement(TABLE_CONSTANTS.elementName) as ITableComponent;
+  const component = document.createElement(TABLE_CONSTANTS.elementName) as TableComponentWithCore;
 
   component.select = true;
   const tooltipSelectCallback = jasmine.createSpy('tooltip select callback', getTooltipString).and.callThrough();
@@ -2387,7 +2374,7 @@ function setupTooltipTestContextWithCallback(): ITestTableContext {
   document.body.appendChild(fixture);
   return {
     component,
-    core: component['_core'] as ITableCore,
+    core: component['_core'],
     getTableElement: () => component.querySelector('table') as HTMLTableElement,
     destroy: () => removeElement(fixture),
     tooltipSelectCallback

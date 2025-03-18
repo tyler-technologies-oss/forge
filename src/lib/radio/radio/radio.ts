@@ -24,6 +24,7 @@ export interface IRadioComponent extends IWithFormAssociation, IWithFocusable, I
   required: boolean;
   dense: boolean;
   labelPosition: RadioLabelPosition;
+  [tryCheck](): boolean;
 }
 
 declare global {

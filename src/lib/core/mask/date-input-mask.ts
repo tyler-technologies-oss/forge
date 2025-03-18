@@ -94,8 +94,8 @@ export class DateInputMask {
       return value;
     }
 
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    const isAllSelected = maskInstance['_selection'] && maskInstance['_selection'].end === 10;
+    const maskInstanceWithSelection = maskInstance as InputMask<IMask.MaskedPatternOptions> & { _selection: { start: number; end: number } };
+    const isAllSelected = maskInstanceWithSelection._selection && maskInstanceWithSelection._selection.end === 10;
     const currentValue = isAllSelected ? '' : maskInstance.value;
 
     if (!isNumeric(value)) {

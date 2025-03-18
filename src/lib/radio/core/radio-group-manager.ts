@@ -1,6 +1,7 @@
 import { getValidationMessage, internals, isFocusable, setDefaultAria } from '../../constants';
 import { task } from '../../core/utils/utils';
 import { IRadioComponent, RADIO_CONSTANTS, tryCheck } from '../radio';
+import { IRadioGroupComponent } from '../radio-group';
 
 /**
  * A class for coordinating the states of radio components within a radio group.
@@ -104,7 +105,7 @@ export class RadioGroupManager {
    * @param el A radio component within the group.
    * @returns The radio group element containing the given radio component or null if there is none.
    */
-  public static getRadioGroupElement(el: IRadioComponent): HTMLElement | null {
+  public static getRadioGroupElement(el: IRadioComponent): IRadioGroupComponent | null {
     return el.closest(`:is(fieldset, [role=radiogroup], forge-radio-group)`);
   }
 

@@ -107,7 +107,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
       return;
     }
 
-    const classMap = {
+    const classMap: Record<string, string> = {
       label: FIELD_CONSTANTS.classes.HAS_LABEL,
       start: FIELD_CONSTANTS.classes.HAS_START,
       end: FIELD_CONSTANTS.classes.HAS_END,
