@@ -32,4 +32,8 @@
   &.multiple {
     @include core.multiple;
   }
+
+  .icons {
+    display: none;
+  }
 }

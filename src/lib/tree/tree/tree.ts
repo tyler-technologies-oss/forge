@@ -1,6 +1,6 @@
 import { createContext, provide } from '@lit/context';
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, queryAssignedNodes } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { setDefaultAria, toggleState } from '../../core/utils/a11y-utils';
 import { KeyActionController } from '../../core/utils/key-action';
@@ -28,7 +28,9 @@ import styles from './tree.scss';
 export type TreeMode = 'single' | 'multiple' | 'multiple-discrete' | 'leaf' | 'list';
 
 export interface ITreeContext {
+  collapseIcon?: HTMLElement;
   disabled: boolean;
+  expandIcon?: HTMLElement;
   indentLines: boolean;
   mode: TreeMode;
 }
@@ -126,6 +128,8 @@ export class TreeComponent extends LitElement {
   });
   private _selectionController = new TreeSelectionController(this);
   private _lastFocusedItem?: TreeItemComponent;
+  private _expandIcon?: HTMLElement;
+  private _collapseIcon?: HTMLElement;
 
   constructor() {
     super();
@@ -170,15 +174,19 @@ export class TreeComponent extends LitElement {
         class=${classMap({ 'forge-tree': true, 'indent-lines': this.indentLines, multiple: this.mode === 'multiple' })}
         @click=${this._handleClick}>
         <slot></slot>
-        <slot name="expand-icon"></slot>
-        <slot name="collapse-icon"></slot>
+        <div class="icons" @slotchange="${this._detectSlottedIcon}">
+          <slot name="expand-icon"></slot>
+          <slot name="collapse-icon"></slot>
+        </div>
       </div>
     `;
   }
 
   private _updateContext(): void {
     this._context = {
+      collapseIcon: this._collapseIcon,
       disabled: this.disabled,
+      expandIcon: this._expandIcon,
       indentLines: this.indentLines,
       mode: this.mode
     };
@@ -471,6 +479,39 @@ export class TreeComponent extends LitElement {
     if (this.mode !== 'multiple' && this.selectionFollowsFocus) {
       this._selectionController.toggle(item, true);
     }
+  }
+
+  private _detectSlottedIcon(evt: Event): void {
+    // Get the slot and clone the first assigned element
+    const slot = evt.target as HTMLSlotElement;
+    const assignedElement = slot.assignedElements()[0];
+
+    console.log(assignedElement);
+
+    // If the assigned element is removed, remove the icon and update the context
+    if (!assignedElement) {
+      if (slot.name === 'expand-icon') {
+        this._expandIcon = undefined;
+      } else if (slot.name === 'collapse-icon') {
+        this._collapseIcon = undefined;
+      }
+      this._updateContext();
+      return;
+    }
+
+    // Clone the element and remove any ids
+    const clone = assignedElement?.cloneNode(true) as HTMLElement;
+    [clone, ...clone.querySelectorAll('[id]')].forEach(el => el.removeAttribute('id'));
+
+    // Set the slot, save the clone to the appropriate property, and update the context
+    if (slot.name === 'expand-icon') {
+      clone.slot = 'context-expand-icon';
+      this._expandIcon = clone;
+    } else if (slot.name === 'collapse-icon') {
+      clone.slot = 'context-collapse-icon';
+      this._collapseIcon = clone;
+    }
+    this._updateContext();
   }
 
   private _setDisabled(): void {

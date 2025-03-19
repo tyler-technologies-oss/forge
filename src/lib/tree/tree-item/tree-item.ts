@@ -103,8 +103,6 @@ export class TreeItemComponent extends LitElement {
   @state() private _hasSlottedCollapseIcon = false;
   @state() private _checkboxIcon: TreeItemCheckboxIcon = 'check_box_outline_blank';
 
-  @queryAssignedNodes({ slot: 'expand-icon' }) private _expandIcon: NodeListOf<HTMLElement>;
-  @queryAssignedNodes({ slot: 'collapse-icon' }) private _collapseIcon: NodeListOf<HTMLElement>;
   @queryAssignedNodes({ slot: 'children', flatten: true }) private _children: NodeListOf<HTMLElement>;
 
   private _internals: ElementInternals;
@@ -136,9 +134,18 @@ export class TreeItemComponent extends LitElement {
   public willUpdate(changedProperties: PropertyValues<this>): void {
     const contextDisabledChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.disabled !== this._context.disabled;
     const modeChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.mode !== this._context.mode;
+    const collapseIconChanged =
+      changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.collapseIcon !== this._context.collapseIcon;
+    const expandIconChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.expandIcon !== this._context.expandIcon;
 
+    if (collapseIconChanged) {
+      this._setIconFromContext('collapse');
+    }
     if (changedProperties.has('disabled') || contextDisabledChanged) {
       this._setDisabled();
+    }
+    if (expandIconChanged) {
+      this._setIconFromContext('expand');
     }
     if (changedProperties.has(indeterminate)) {
       toggleState(this._internals, 'indeterminate', this.indeterminate);
@@ -183,12 +190,17 @@ export class TreeItemComponent extends LitElement {
                     'expand-icon': true,
                     'has-custom-expand-icon': this._hasSlottedExpandIcon,
                     'has-custom-collapse-icon': this._hasSlottedCollapseIcon
-                  })}>
+                  })}
+                  @slotchange="${this._detectSlottedExpandOrCollapseIcon}">
                   ${showDefaultExpandIcon
                     ? html`<forge-open-icon class="default-expand-icon" orientation="horizontal" rotation="half" .open="${this.open}"></forge-open-icon>`
                     : nothing}
-                  <slot name="expand-icon" @slotchange="${this._detectSlottedExpandIcon}"></slot>
-                  <slot name="collapse-icon" @slotchange="${this._detectSlottedCollapseIcon}"></slot>
+                  <slot name="expand-icon">
+                    <slot name="context-expand-icon"></slot>
+                  </slot>
+                  <slot name="collapse-icon">
+                    <slot name="context-collapse-icon"></slot>
+                  </slot>
                   ${showExpandIconStateLayer ? html`<forge-state-layer></forge-state-layer>` : nothing}
                 </span>
               `
@@ -228,12 +240,27 @@ export class TreeItemComponent extends LitElement {
     toggleState(this._internals, 'leaf', this._leaf);
   }
 
-  private _detectSlottedExpandIcon(): void {
-    this._hasSlottedExpandIcon = !!this._expandIcon.length;
+  private _detectSlottedExpandOrCollapseIcon(evt: Event): void {
+    const slot = evt.target as HTMLSlotElement;
+    const assignedElements = slot.assignedElements();
+
+    if (slot.name === 'expand-icon' || slot.name === 'context-expand-icon') {
+      this._hasSlottedExpandIcon = !!assignedElements.length;
+    } else if (slot.name === 'collapse-icon' || slot.name === 'context-collapse-icon') {
+      this._hasSlottedCollapseIcon = !!assignedElements.length;
+    }
   }
 
-  private _detectSlottedCollapseIcon(): void {
-    this._hasSlottedCollapseIcon = !!this._collapseIcon.length;
+  private _setIconFromContext(icon: 'expand' | 'collapse'): void {
+    // Remove any old icons in this slot
+    const oldIcons = Array.from(this.children).filter(el => el.slot === `context-${icon}-icon`);
+    oldIcons.forEach(i => i.remove());
+
+    // Add the new icon if it exists
+    const newIcon = this._context[`${icon}Icon`];
+    if (newIcon) {
+      this.append(newIcon.cloneNode(true));
+    }
   }
 
   private _setDisabled(): void {

@@ -6,17 +6,22 @@ forge-tree-item {
   &:state(open) {
     forge-icon.animate {
       transform: rotate(45deg);
+      color: var(--forge-theme-warning);
     }
   }
 }
 
 forge-icon {
   &[slot=expand-icon],
-  &[slot=collapse-icon] {
+  &[slot=collapse-icon],
+  &[slot=context-expand-icon],
+  &[slot=context-collapse-icon]
+  {
     --forge-icon-font-size: 18px;
   }
   
   &.animate {
-    transition: transform 0.2s;
+    transition: transform 0.2s, color 0.2s;
+    color: var(--forge-theme-success);
   }
 }
