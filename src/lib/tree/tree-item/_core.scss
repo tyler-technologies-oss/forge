@@ -49,7 +49,7 @@
   min-block-size: #{token(min-block-size)};
 }
 
-@mixin expand-icon-disabled {
+@mixin disabled-expand-icon {
   opacity: #{token(disabled-opacity)};
 }
 
@@ -95,10 +95,6 @@
   pointer-events: none;
 
   content: '';
-}
-
-@mixin disabled-header {
-  cursor: auto;
 }
 
 // Use this in conjunction with disabled-header to apply the pointer only to the expand icon

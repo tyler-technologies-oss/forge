@@ -70,10 +70,6 @@
   }
 
   &.disabled {
-    .header {
-      @include disabled-header;
-    }
-
     .checkbox,
     .start,
     .content,
@@ -90,7 +86,7 @@
 
   &.open-disabled {
     .expand-icon {
-      @include expand-icon-disabled;
+      @include disabled-expand-icon;
     }
   }
 }
@@ -98,7 +94,7 @@
 //
 // Leaf
 //
-:host(:is(:state(leaf), :--leaf)) {
+:host(:state(leaf)) {
   .children {
     display: none;
   }
@@ -108,7 +104,7 @@
 // Collapsed
 //
 
-:host(:not(:is(:state(open), :--open))) {
+:host(:not(:state(open))) {
   .expand-icon {
     slot[name='expand-icon'] {
       display: contents;
@@ -128,7 +124,7 @@
 // Selected
 //
 
-:host(:is(:state(selected), :--selected)) {
+:host(:state(selected)) {
   .header {
     @include selected;
   }
@@ -146,7 +142,7 @@
 // Indeterminate
 //
 
-:host(:is(:state(indeterminate), :--indeterminate)) {
+:host(:state(indeterminate)) {
   .header {
     @include indeterminate;
   }

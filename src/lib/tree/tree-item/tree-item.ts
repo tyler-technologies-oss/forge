@@ -132,6 +132,7 @@ export class TreeItemComponent extends LitElement {
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
+    // Keep track of changed properties with the tree's context object.
     const contextDisabledChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.disabled !== this._context.disabled;
     const modeChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.mode !== this._context.mode;
     const collapseIconChanged =
@@ -170,11 +171,27 @@ export class TreeItemComponent extends LitElement {
   }
 
   public render(): TemplateResult {
-    const interactive = this._context.mode !== 'off' || !this.openDisabled;
+    // An item can individually disabled or inherit the disabled state from the tree.
     const disabled = this.disabled || this._context.disabled;
-    const showDefaultExpandIcon = !this._hasSlottedExpandIcon && !this._hasSlottedCollapseIcon;
+
+    // An item is interactive if a click anywhere in the header can select or open it. Interactive
+    // items show a pointer cursor.
+    const interactive =
+      this._context.mode === 'off'
+        ? !this._leaf && !this.openDisabled
+        : this._context.mode === 'leaf'
+          ? (this._leaf && !disabled) || (!this._leaf && !this.openDisabled)
+          : !disabled;
+
+    // The header state layer is removed when the item is not interactive.
+    const hideHeaderStateLayer = !interactive;
+
+    // When an item is not interactive the expand icon may still be enabled and should show its
+    // own state layer.
     const showExpandIconStateLayer = this._context.mode !== 'leaf' && this._context.mode !== 'off' && disabled && !this.openDisabled;
-    const hideHeaderStateLayer = this._context.mode === 'leaf' || this._context.mode === 'off' ? this.openDisabled : disabled;
+
+    // The default expand icon is shown when no custom expand or collapse icons are provided.
+    const showDefaultExpandIcon = !this._hasSlottedExpandIcon && !this._hasSlottedCollapseIcon;
 
     return html`
       <div
