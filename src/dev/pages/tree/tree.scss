@@ -25,3 +25,12 @@ forge-icon {
     color: var(--forge-theme-success);
   }
 }
+
+[slot=children-header] {
+  margin-block: 8px 4px;
+  color: var(--forge-theme-text-medium);
+}
+
+[slot=children-footer] {
+  margin-inline-start: -16px;
+}

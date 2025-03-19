@@ -26,6 +26,15 @@
   padding-inline-end: #{token(padding-inline-end)};
 }
 
+@mixin children-header-footer {
+  position: relative;
+
+  padding-inline-start: calc(
+    #{token(indent-size)} * (#{token(level, custom)} + 1) + #{token(padding-inline-start)} + #{token(expand-icon-inline-size)} + #{token(header-inline-gap)} * 2
+  );
+  padding-inline-end: calc(#{token(padding-inline-end)} + #{token(header-inline-gap)});
+}
+
 @mixin interactive-header {
   cursor: pointer;
 }

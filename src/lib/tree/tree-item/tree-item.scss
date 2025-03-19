@@ -59,6 +59,11 @@
     }
   }
 
+  .children-header,
+  .children-footer {
+    @include children-header-footer;
+  }
+
   &.interactive {
     .header {
       @include interactive-header;

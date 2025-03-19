@@ -238,7 +238,13 @@ export class TreeItemComponent extends LitElement {
           <forge-focus-indicator target=":host" focus-mode="focus" inward></forge-focus-indicator>
         </div>
         <div role="group" class="children" part="children">
+          <div class="children-header" part="children-header">
+            <slot name="children-header"></slot>
+          </div>
           <slot name="children" @slotchange="${this._detectChildren}"></slot>
+          <div class="children-footer" part="children-footer">
+            <slot name="children-footer"></slot>
+          </div>
         </div>
       </div>
     `;

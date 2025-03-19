@@ -148,6 +148,27 @@
      </forge-tree>
    </div>
 
+   <div>
+      <h3 class="forge-typography--heading2">Children header and footer</h3>
+      <forge-tree>
+        <forge-tree-item value="passerines">
+          <span>Passerines</span>
+          <div slot="children-header" class="forge-typography--subheading1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+          <forge-tree-item value="corvids">
+            <span>Corvids</span>
+          </forge-tree-item>
+          <forge-tree-item value="finches">
+            <span>Finches</span>
+          </forge-tree-item>
+          <forge-tree-item value="bird-of-paradise">Bird of paradise</forge-tree-item>
+          <forge-tree-item value="chickadee">Chickadee</forge-tree-item>
+          <div slot="children-footer">
+            <forge-button variant="plain">Load more</forge-button>
+          </div>
+        </forge-tree-item>
+      </forge-tree>
+    </div>
+
    <!-- <div>
      <h3 class="forge-typography--heading2">Start and end slots</h3>
      <forge-tree>
