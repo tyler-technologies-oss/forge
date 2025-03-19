@@ -1,14 +1,21 @@
 import { removeElement } from '@tylertech/forge-core';
-import { frame } from '@tylertech/forge/core/utils/utils';;
-import { defineSplitViewComponent, ISplitViewComponent, ISplitViewPanelComponent, SplitViewAnimatingLayer, SPLIT_VIEW_CONSTANTS, SPLIT_VIEW_PANEL_CONSTANTS, ISplitViewAdapter } from '@tylertech/forge/split-view';
+import { frame } from '@tylertech/forge/core/utils/utils';
+import { defineSplitViewComponent, ISplitViewAdapter, ISplitViewComponent, ISplitViewCore, ISplitViewPanelComponent, SPLIT_VIEW_CONSTANTS, SPLIT_VIEW_PANEL_CONSTANTS, SplitViewAnimatingLayer } from '@tylertech/forge/split-view';
+;
 
 interface ITestContext {
   context: ITestSplitViewContext;
 }
 
+type SplitViewCoreInternal = ISplitViewCore & { _adapter: ISplitViewAdapter };
+type SplitViewComponentInternal = ISplitViewComponent & { _core: SplitViewCoreInternal };
+
+type SplitViewPanelCoreInternal = { _adapter: ISplitViewAdapter, _orientation: string };
+type SplitViewPanelComponentInternal = ISplitViewPanelComponent & { _core: SplitViewPanelCoreInternal };
+
 interface ITestSplitViewContext {
-  component: ISplitViewComponent;
-  panels?: ISplitViewPanelComponent[];
+  component: SplitViewComponentInternal;
+  panels?: SplitViewPanelComponentInternal[];
   append(): void;
   destroy(): void;
 }
@@ -193,12 +200,12 @@ describe('SplitViewComponent', function(this: ITestContext) {
   });
 
   function setupTestContext(append = false, numberOfPanels = 0): ITestSplitViewContext {
-    const component = document.createElement('forge-split-view');
+    const component = document.createElement('forge-split-view') as SplitViewComponentInternal;
 
-    let panels: ISplitViewPanelComponent[] | undefined = undefined;
+    let panels: SplitViewPanelComponentInternal[] | undefined = undefined;
     if (numberOfPanels) {
       panels = new Array(numberOfPanels).fill(undefined).map(() => {
-        const panel = document.createElement('forge-split-view-panel');
+        const panel = document.createElement('forge-split-view-panel') as SplitViewPanelComponentInternal;
         component.appendChild(panel);
         return panel;
       });

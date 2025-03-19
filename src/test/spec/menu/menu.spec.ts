@@ -22,6 +22,13 @@ interface ITestContext {
   context: ITestMenuContext;
 }
 
+interface MenuComponentWithCore extends IMenuComponent {
+  _core: IMenuCore & {
+    _optionsFactory: MenuOptionFactory;
+    _adapter: IMenuAdapter;
+  };
+}
+
 interface ITestMenuContext {
   component: IMenuComponent;
   core: IMenuCore;
@@ -204,7 +211,7 @@ describe('MenuComponent', function(this: ITestContext) {
       it('should update the options property with factory', async function(this: ITestContext) {
         this.context = setupTestContext();
         this.context.component.options = asyncMenuOptionsFactory(5);
-        expect(this.context.component['_core']['_optionsFactory']).not.toBe(undefined, `The options factory should be set in the core`);
+        expect((this.context.component as MenuComponentWithCore)['_core']['_optionsFactory']).not.toBe(undefined, `The options factory should be set in the core`);
         expect(this.context.component.options).toEqual([], `The options factory should be set in the core`);
       });
     });
@@ -796,8 +803,8 @@ describe('MenuComponent', function(this: ITestContext) {
   function setupTestContext(appendToggle = true): ITestMenuContext {
     const fixture = document.createElement('div');
     fixture.id = 'menu-test-fixture';
-    const component = document.createElement(MENU_CONSTANTS.elementName);
-    const core = component['_core'] as IMenuCore;
+    const component = document.createElement(MENU_CONSTANTS.elementName) as MenuComponentWithCore;
+    const core = component['_core'];
     const adapter = core['_adapter'] as IMenuAdapter;
     if (appendToggle) {
       component.appendChild(createToggleElement());

@@ -110,12 +110,12 @@ describe('Button Toggle', () => {
   /**
    * Execute the same tests for all boolean state attributes.
    */
-  ['vertical', 'stretch', 'mandatory', 'disabled', 'required', 'readonly', 'dense'].forEach(attr => {
+  (['vertical', 'stretch', 'mandatory', 'disabled', 'required', 'readonly', 'dense'] as const).forEach(attr => {
     it(`should set ${attr}`, async () => {
       const harness = await createFixture({ [attr]: true });
 
       expect(harness.element[attr]).to.be.true;
-      expect(harness.element.hasAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes[attr.toUpperCase()])).to.be.true;
+      expect(harness.element.hasAttribute((BUTTON_TOGGLE_GROUP_CONSTANTS.attributes as { [key: string]: string })[attr.toUpperCase()])).to.be.true;
     });
 
     it(`should set ${attr} via attribute`, async () => {
@@ -124,12 +124,12 @@ describe('Button Toggle', () => {
       harness.element.setAttribute(attr, '');
 
       expect(harness.element[attr]).to.be.true;
-      expect(harness.element.hasAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes[attr.toUpperCase()])).to.be.true;
+      expect(harness.element.hasAttribute((BUTTON_TOGGLE_GROUP_CONSTANTS.attributes as { [key: string]: string })[attr.toUpperCase()])).to.be.true;
 
       harness.element.removeAttribute(attr);
 
       expect(harness.element[attr]).to.be.false;
-      expect(harness.element.hasAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes[attr.toUpperCase()])).to.be.false;
+      expect(harness.element.hasAttribute((BUTTON_TOGGLE_GROUP_CONSTANTS.attributes as { [key: string]: string })[attr.toUpperCase()])).to.be.false;
     });
   });
 

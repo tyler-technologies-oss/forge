@@ -14,6 +14,7 @@ export interface IExpansionPanelComponent extends IBaseComponent {
   trigger: string;
   triggerElement: HTMLElement | null;
   toggle(): void;
+  [emulateUserToggle](open: boolean): void;
 }
 
 declare global {

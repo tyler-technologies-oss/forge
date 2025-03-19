@@ -5,9 +5,10 @@ import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { IOverlayComponent, OverlayComponent } from './overlay';
 import { OverlayFlipState, OverlayHideState, overlayStack, OVERLAY_CONSTANTS } from './overlay-constants';
-import { IOverlayAdapter } from './overlay-adapter';
+import { IOverlayAdapter, OverlayAdapter } from './overlay-adapter';
 
 import './overlay';
+import { OverlayCore } from './overlay-core';
 
 describe('Overlay', () => {
   describe('defaults', () => {
@@ -615,9 +616,11 @@ describe('Overlay', () => {
   });
 });
 
+type OverlayComponentInternal = IOverlayComponent & { _core: OverlayCore & { _adapter: OverlayAdapter } };
+
 class OverlayHarness {
   constructor(
-    public overlayElement: IOverlayComponent,
+    public overlayElement: OverlayComponentInternal,
     public anchorElement: HTMLButtonElement
   ) {}
 
@@ -717,7 +720,7 @@ async function createFixture({
   `);
 
   const button = container.querySelector('button') as HTMLButtonElement;
-  const overlay = container.querySelector('forge-overlay') as IOverlayComponent;
+  const overlay = container.querySelector('forge-overlay') as OverlayComponentInternal;
 
   return new OverlayHarness(overlay, button);
 }
@@ -744,8 +747,8 @@ async function createNestedFixture({ inline = false } = {}): Promise<{
 
   const parentAnchor = container.querySelector('#test-anchor') as HTMLButtonElement;
   const nestedAnchor = container.querySelector('#test-nested-anchor') as HTMLButtonElement;
-  const parentOverlay = container.querySelector('forge-overlay') as IOverlayComponent;
-  const nestedOverlay = parentOverlay.querySelector('forge-overlay') as IOverlayComponent;
+  const parentOverlay = container.querySelector('forge-overlay') as OverlayComponentInternal;
+  const nestedOverlay = parentOverlay.querySelector('forge-overlay') as OverlayComponentInternal;
 
   return {
     parentHarness: new OverlayHarness(parentOverlay, parentAnchor),

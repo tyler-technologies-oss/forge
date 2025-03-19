@@ -7,9 +7,12 @@ interface ITestContext {
   context: ITestSplitViewPanelContext;
 }
 
+type SplitViewPanelCoreInternal = { _adapter: ISplitViewPanelAdapter };
+type SplitViewPanelComponentInternal = ISplitViewPanelComponent & { _core: SplitViewPanelCoreInternal };
+
 interface ITestSplitViewPanelContext {
-  component: ISplitViewPanelComponent;
-  panels: ISplitViewPanelComponent[];
+  component: SplitViewPanelComponentInternal;
+  panels: SplitViewPanelComponentInternal[];
   parent: ISplitViewComponent;
   adapter: ISplitViewPanelAdapter;
   getPart(part: string): HTMLElement | null;
@@ -1133,15 +1136,15 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should return the next panel sibling when resizable is end', function(this: ITestContext) {
         this.context = setupTestContext(false, 1);
         this.context.component.resizable = 'end';
-        const sibling = getSplitViewPanelSibling(this.context.component);
-        expect(sibling).toBe(this.context.panels[1] as SplitViewPanelComponent);
+        const sibling = getSplitViewPanelSibling(this.context.component) as any;
+        expect(sibling).toBe(this.context.panels[1]);
       });
   
       it('should return the previous panel sibling when resizable is start', function(this: ITestContext) {
         this.context = setupTestContext(false, 1, 1);
         this.context.component.resizable = 'start';
-        const sibling = getSplitViewPanelSibling(this.context.component);
-        expect(sibling).toBe(this.context.panels[0] as SplitViewPanelComponent);
+        const sibling = getSplitViewPanelSibling(this.context.component) as any;
+        expect(sibling).toBe(this.context.panels[0]);
       });
   
       it('should return undefined when resizable is off', function(this: ITestContext) {
@@ -1155,8 +1158,8 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
         this.context = setupTestContext(false, 2);
         this.context.component.resizable = 'end';
         this.context.panels[1].open = false;
-        const sibling = getSplitViewPanelSibling(this.context.component);
-        expect(sibling).toBe(this.context.panels[2] as SplitViewPanelComponent);
+        const sibling = getSplitViewPanelSibling(this.context.component) as any;
+        expect(sibling).toBe(this.context.panels[2]);
       });
   
       it('should skip non-panel siblings', function(this: ITestContext) {
@@ -1231,7 +1234,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
     fixture.id = 'split-view-panel-test-fixture';
 
     const panels = new Array(numberOfSiblings + 1).fill(undefined).map(() => {
-      const panel = document.createElement('forge-split-view-panel');
+      const panel = document.createElement('forge-split-view-panel') as SplitViewPanelComponentInternal;
       fixture.appendChild(panel);
       return panel;
     });

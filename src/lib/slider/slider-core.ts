@@ -184,7 +184,7 @@ export class SliderCore implements ISliderCore {
       this._value = input.valueAsNumber;
     }
 
-    const eventMap = {
+    const eventMap: Record<'range' | 'default', { [key: string]: string }> = {
       default: {
         change: SLIDER_CONSTANTS.events.CHANGE,
         input: SLIDER_CONSTANTS.events.INPUT
