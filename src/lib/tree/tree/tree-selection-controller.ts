@@ -125,7 +125,7 @@ export class TreeSelectionController implements ReactiveController {
         changedItems = this.items;
         changedItems.forEach(item => this._updateDescendentSelections(item));
         break;
-      case 'list':
+      case 'off':
         // All items should be deselected
         changedItems = [...this.items];
         this.items.forEach(item => this._selectItem(item, false));
@@ -158,14 +158,6 @@ export class TreeSelectionController implements ReactiveController {
 
     // Update the selected items array and deselect items if necessary
     snapshot = this._updateSelectionsFromItem(item, snapshot);
-
-    // // Cascade the changes in multiple mode
-    // if (this.host.mode === 'multiple') {
-    //   snapshot = this._updateDescendentSelections(item, snapshot);
-
-    //   // Update the parent items
-    //   snapshot = this._updateAncestorSelections(item, snapshot);
-    // }
 
     // Dispatch a select event from the item
     const event = new CustomEvent('forge-tree-item-select', { bubbles: true, composed: true, detail: item.value });

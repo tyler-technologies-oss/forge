@@ -25,7 +25,7 @@ import { TreeSelectionController } from './tree-selection-controller';
 
 import styles from './tree.scss';
 
-export type TreeMode = 'single' | 'multiple' | 'multiple-discrete' | 'leaf' | 'list';
+export type TreeMode = 'single' | 'multiple' | 'multiple-discrete' | 'leaf' | 'off';
 
 export interface ITreeContext {
   collapseIcon?: HTMLElement;
@@ -209,8 +209,8 @@ export class TreeComponent extends LitElement {
 
     // If the item is a leaf node toggle the selected state
     if (item.leaf) {
-      // Do nothing if the mode is list
-      if (this.mode === 'list') {
+      // Do nothing if selection is off
+      if (this.mode === 'off') {
         return;
       }
       if (evt.shiftKey) {
@@ -220,8 +220,8 @@ export class TreeComponent extends LitElement {
       return;
     }
 
-    // If in leaf or list mode a click anywhere toggles the open state
-    if (this.mode === 'leaf' || this.mode === 'list') {
+    // If in leaf or off mode a click anywhere toggles the open state
+    if (this.mode === 'leaf' || this.mode === 'off') {
       this._toggleOpen(item, evt.altKey && item.open);
       return;
     }
@@ -374,7 +374,7 @@ export class TreeComponent extends LitElement {
       return;
     }
     if (target.leaf) {
-      if (this.mode === 'list') {
+      if (this.mode === 'off') {
         return;
       }
       if (evt.shiftKey) {
@@ -385,7 +385,7 @@ export class TreeComponent extends LitElement {
     }
     if (evt.key === 'Enter') {
       this._toggleOpen(target, evt.altKey && target.open);
-    } else {
+    } else if (this.mode !== 'off') {
       this._selectionController.toggle(target);
     }
   }
@@ -515,14 +515,13 @@ export class TreeComponent extends LitElement {
   }
 
   private _setDisabled(): void {
-    setDefaultAria(this, this._internals, { ariaDisabled: this.mode === 'list' ? null : this.disabled ? 'true' : 'false' });
-    toggleState(this._internals, 'disabled', this.mode !== 'list' && this.disabled);
+    setDefaultAria(this, this._internals, { ariaDisabled: this.disabled ? 'true' : 'false' });
+    toggleState(this._internals, 'disabled', this.disabled);
   }
 
   private _setMode(): void {
     setDefaultAria(this, this._internals, {
-      role: this.mode === 'list' ? 'list' : 'tree',
-      ariaMultiSelectable: this.mode === 'list' ? null : this.mode === 'multiple' || this.mode === 'multiple-discrete' ? 'true' : 'false'
+      ariaMultiSelectable: this.mode === 'multiple' || this.mode === 'multiple-discrete' ? 'true' : 'false'
     });
   }
 }
