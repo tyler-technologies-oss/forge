@@ -159,7 +159,7 @@ export class DateInputMask {
 
   private _setMaskedValueAdjusted(value: string, position: number): void {
     this._mask.unmaskedValue = value;
-    window.requestAnimationFrame(() => this._mask.updateCursor(this._mask.cursorPos + position));
+    this._mask.updateCursor(this._mask.cursorPos + position);
   }
 
   public updateMask(): void {

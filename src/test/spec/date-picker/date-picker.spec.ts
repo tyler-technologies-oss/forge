@@ -616,6 +616,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       const expectedDate = new Date(date);
       const inputElement = getInputElement(this.context.component);
       inputElement.value = date;
+      inputElement.dispatchEvent(new Event('input'));
       inputElement.dispatchEvent(new Event('blur'));
 
       expect(this.context.component.value).toEqual(expectedDate);
@@ -625,6 +626,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const inputElement = getInputElement(this.context.component);
       inputElement.value = '01012020';
+      inputElement.dispatchEvent(new Event('input'));
       inputElement.dispatchEvent(new Event('blur'));
 
       expect(getInputElement(this.context.component).value).toBe('01/01/2020');

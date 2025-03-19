@@ -124,7 +124,7 @@ export class IntermediateTimeParser {
   public applyValue(value: string, cursorPos?: keyof typeof SEGMENT_CURSOR_POSITION): void {
     this._mask.unmaskedValue = value;
     if (cursorPos !== undefined) {
-      window.requestAnimationFrame(() => this._mask.updateCursor(SEGMENT_CURSOR_POSITION[cursorPos]));
+      this._mask.updateCursor(SEGMENT_CURSOR_POSITION[cursorPos]);
     }
   }
 }
