@@ -543,6 +543,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const expectedDate = new Date(date);
       const inputElement = getToElement(this.context.component);
       inputElement.value = date;
+      inputElement.dispatchEvent(new Event('input'));
       inputElement.dispatchEvent(new Event('blur'));
 
       expect(this.context.component.to).toEqual(expectedDate);
