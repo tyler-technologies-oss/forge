@@ -1,0 +1,1 @@
+function o(r,n){const e=()=>n.dispatchEvent(new Event("scroll"));return r.addEventListener("scroll",e,!0),()=>r.removeEventListener("scroll",e,!0)}function t(r){return r.key==="ArrowLeft"||r.key==="ArrowRight"||r.key==="ArrowUp"||r.key==="ArrowDown"}export{t as e,o as p};
