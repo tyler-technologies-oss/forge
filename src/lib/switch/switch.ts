@@ -271,7 +271,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty()
-  public declare checked: boolean;
+  declare public checked: boolean;
 
   /**
    * Alias for `checked` _(deprecated)_. Gets/sets whether the switch is checked or not.
@@ -280,7 +280,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty({ name: 'checked' })
-  public declare on: boolean;
+  declare public on: boolean;
 
   /**
    * Alias for `checked` _(deprecated)_.
@@ -289,7 +289,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty({ name: 'checked' })
-  public declare selected: boolean;
+  declare public selected: boolean;
 
   /**
    * Gets/sets whether the switch is checked by default.
@@ -297,7 +297,7 @@ export class SwitchComponent
    * @attribute default-checked
    */
   @coreProperty()
-  public declare defaultChecked: boolean;
+  declare public defaultChecked: boolean;
 
   /**
    * Alias for `defaultChecked` _(deprecated)_. Gets/sets whether the switch is checked by default.
@@ -305,7 +305,7 @@ export class SwitchComponent
    * @attribute default-on
    */
   @coreProperty({ name: 'defaultChecked' })
-  public declare defaultOn: boolean;
+  declare public defaultOn: boolean;
 
   /**
    * Gets/sets the value of the switch.
@@ -313,7 +313,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty()
-  public declare value: string;
+  declare public value: string;
 
   /**
    * Controls whether the switch is dense.
@@ -321,7 +321,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   /**
    * Controls whether the switch is disabled.
@@ -329,7 +329,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   /**
    * Controls whether the switch is required.
@@ -337,7 +337,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty()
-  public declare required: boolean;
+  declare public required: boolean;
 
   /**
    * Controls whether the switch is readonly.
@@ -345,7 +345,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty()
-  public declare readonly: boolean;
+  declare public readonly: boolean;
 
   /**
    * Controls the presence of the off and on icons.
@@ -353,7 +353,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty()
-  public declare icon: SwitchIconVisibility;
+  declare public icon: SwitchIconVisibility;
 
   /**
    * Controls whether the label appears before or after the switch.
@@ -361,7 +361,7 @@ export class SwitchComponent
    * @attribute label-position
    */
   @coreProperty()
-  public declare labelPosition: SwitchLabelPosition;
+  declare public labelPosition: SwitchLabelPosition;
 
   /**
    * Toggles the switch on or off.

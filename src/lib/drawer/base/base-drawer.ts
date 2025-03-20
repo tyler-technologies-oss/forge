@@ -51,7 +51,7 @@ export abstract class BaseDrawerComponent<T extends BaseDrawerCore> extends Base
    * @attribute
    */
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   /**
    * Controls the layout and animation direction of the drawer for positioning on the left vs. right side of the screen when toggling the `open` attribute.
@@ -59,5 +59,5 @@ export abstract class BaseDrawerComponent<T extends BaseDrawerCore> extends Base
    * @attribute
    */
   @coreProperty()
-  public declare direction: DrawerDirection;
+  declare public direction: DrawerDirection;
 }

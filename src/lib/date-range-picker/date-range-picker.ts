@@ -101,9 +101,9 @@ export class DateRangePickerComponent
 
   /** Gets/sets the "from" date range value. */
   @coreProperty()
-  public declare from: Date | string | null | undefined;
+  declare public from: Date | string | null | undefined;
 
   /** Gets/sets the "to" date range value. */
   @coreProperty()
-  public declare to: Date | string | null | undefined;
+  declare public to: Date | string | null | undefined;
 }

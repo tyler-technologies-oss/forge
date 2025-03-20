@@ -5,6 +5,7 @@
     "noImplicitReturns": true,
     "preserveConstEnums": true,
     "pretty": true,
+    "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "types": ["jasmine", "node", "webpack-env"],
     "baseUrl": ".",

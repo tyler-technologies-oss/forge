@@ -101,13 +101,13 @@ export class BannerComponent extends BaseComponent implements IBannerComponent {
   }
 
   @coreProperty()
-  public declare dismissed: boolean;
+  declare public dismissed: boolean;
 
   @coreProperty()
-  public declare persistent: boolean;
+  declare public persistent: boolean;
 
   @coreProperty()
-  public declare theme: BannerTheme;
+  declare public theme: BannerTheme;
 
   /** @deprecated Use `persistent` instead. */
   public get canDismiss(): boolean {

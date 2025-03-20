@@ -124,11 +124,11 @@ export class FloatingActionButtonComponent extends BaseButton<FloatingActionButt
   }
 
   @coreProperty()
-  public declare theme: ButtonTheme;
+  declare public theme: ButtonTheme;
 
   @coreProperty()
-  public declare density: FloatingActionButtonDensity;
+  declare public density: FloatingActionButtonDensity;
 
   @coreProperty()
-  public declare elevation: FloatingActionButtonElevation;
+  declare public elevation: FloatingActionButtonElevation;
 }

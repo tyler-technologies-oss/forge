@@ -74,8 +74,8 @@ export class AppBarHelpButtonComponent extends BaseComponent implements IAppBarH
   }
 
   @coreProperty()
-  public declare options: IMenuOption[];
+  declare public options: IMenuOption[];
 
   @coreProperty()
-  public declare icon: string;
+  declare public icon: string;
 }

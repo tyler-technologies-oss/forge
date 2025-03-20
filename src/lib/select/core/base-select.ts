@@ -39,59 +39,59 @@ export abstract class BaseSelectComponent<T extends IBaseSelectCore> extends Lis
    * @attribute
    */
   @coreProperty()
-  public declare value: any;
+  declare public value: any;
 
   /**
    * Gets/sets the selected index.
    * @attribute selected-index
    */
   @coreProperty()
-  public declare selectedIndex: number | number[];
+  declare public selectedIndex: number | number[];
 
   /**
    * Gets/sets the available options.
    */
   @coreProperty()
-  public declare options: ISelectOption[] | ISelectOptionGroup[];
+  declare public options: ISelectOption[] | ISelectOptionGroup[];
 
   /**
    * Gets/sets the multiple select state.
    * @attribute
    */
   @coreProperty()
-  public declare multiple: boolean;
+  declare public multiple: boolean;
 
   /**
    * Gets the open state of the dropdown.
    * @attribute
    */
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   /**
    * Sets the option builder callback that will be executed when building the option list in the dropdown.
    */
   @coreProperty()
-  public declare optionBuilder: SelectOptionBuilder;
+  declare public optionBuilder: SelectOptionBuilder;
 
   /**
    * Sets the selected text builder callback that will be executed when getting the selected text to display in the field.
    */
   @coreProperty()
-  public declare selectedTextBuilder: SelectSelectedTextBuilder;
+  declare public selectedTextBuilder: SelectSelectedTextBuilder;
 
   /**
    * Sets the callback to be executed when the user selects a value.
    */
   @coreProperty()
-  public declare beforeValueChange: SelectBeforeValueChangeCallback<any>;
+  declare public beforeValueChange: SelectBeforeValueChangeCallback<any>;
 
   /**
    * Gets the popup element (when the dropdown is open).
    * @readonly
    */
   @coreProperty({ set: false })
-  public declare popupElement: IPopoverComponent | undefined;
+  declare public popupElement: IPopoverComponent | undefined;
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     super.attributeChangedCallback(name, oldValue, newValue);

@@ -150,37 +150,37 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
   }
 
   @coreProperty()
-  public declare fullName: string;
+  declare public fullName: string;
 
   @coreProperty()
-  public declare email: string;
+  declare public email: string;
 
   @coreProperty()
-  public declare avatarImageUrl: string;
+  declare public avatarImageUrl: string;
 
   @coreProperty()
-  public declare avatarLetterCount: number;
+  declare public avatarLetterCount: number;
 
   @coreProperty()
-  public declare avatarText: string;
+  declare public avatarText: string;
 
   @coreProperty()
-  public declare avatarIcon: string;
+  declare public avatarIcon: string;
 
   @coreProperty()
-  public declare signOutButton: boolean;
+  declare public signOutButton: boolean;
 
   @coreProperty()
-  public declare profileButton: boolean;
+  declare public profileButton: boolean;
 
   @coreProperty()
-  public declare signOutButtonText: string;
+  declare public signOutButtonText: string;
 
   @coreProperty()
-  public declare profileButtonText: string;
+  declare public profileButtonText: string;
 
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   public get popupElement(): IPopoverComponent | undefined {
     return this._core.popupElement;
@@ -188,5 +188,5 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
 
   /** Sets the profile card builder callback that will be used to add extra content to the profile card. */
   @coreProperty()
-  public declare profileCardBuilder: AppBarProfileButtonProfileCardBuilder;
+  declare public profileCardBuilder: AppBarProfileButtonProfileCardBuilder;
 }

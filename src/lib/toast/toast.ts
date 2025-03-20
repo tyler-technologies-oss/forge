@@ -165,25 +165,25 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
   }
 
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   @coreProperty()
-  public declare duration: number;
+  declare public duration: number;
 
   @coreProperty()
-  public declare placement: ToastPlacement;
+  declare public placement: ToastPlacement;
 
   @coreProperty()
-  public declare actionText: string;
+  declare public actionText: string;
 
   @coreProperty()
-  public declare dismissible: boolean;
+  declare public dismissible: boolean;
 
   @coreProperty()
-  public declare dismissLabel: string;
+  declare public dismissLabel: string;
 
   @coreProperty()
-  public declare theme: ToastTheme;
+  declare public theme: ToastTheme;
 
   /**
    * Shows the toast.

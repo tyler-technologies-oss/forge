@@ -98,47 +98,47 @@ export abstract class OverlayAware<T extends IOverlayAwareCore> extends BaseComp
   }
 
   @coreProperty()
-  public declare anchorElement: HTMLElement | VirtualElement | null;
+  declare public anchorElement: HTMLElement | VirtualElement | null;
 
   @coreProperty()
-  public declare anchor: string | null;
+  declare public anchor: string | null;
 
   @coreProperty()
-  public declare noAnchor: boolean;
+  declare public noAnchor: boolean;
 
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   @coreProperty()
-  public declare inline: boolean;
+  declare public inline: boolean;
 
   @coreProperty()
-  public declare placement: OverlayPlacement;
+  declare public placement: OverlayPlacement;
 
   @coreProperty()
-  public declare positionStrategy: OverlayPositionStrategy;
+  declare public positionStrategy: OverlayPositionStrategy;
 
   @coreProperty()
-  public declare offset: IOverlayOffset;
+  declare public offset: IOverlayOffset;
 
   @coreProperty()
-  public declare shift: boolean;
+  declare public shift: boolean;
 
   @coreProperty()
-  public declare hide: OverlayHideState;
+  declare public hide: OverlayHideState;
 
   @coreProperty()
-  public declare persistent: boolean;
+  declare public persistent: boolean;
 
   @coreProperty()
-  public declare flip: OverlayFlipState;
+  declare public flip: OverlayFlipState;
 
   @coreProperty()
-  public declare boundary: string | null;
+  declare public boundary: string | null;
 
   @coreProperty()
-  public declare boundaryElement: HTMLElement | null;
+  declare public boundaryElement: HTMLElement | null;
 
   @coreProperty()
-  public declare fallbackPlacements: PositionPlacement[] | null;
+  declare public fallbackPlacements: PositionPlacement[] | null;
 }

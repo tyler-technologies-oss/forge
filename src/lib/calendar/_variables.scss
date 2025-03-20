@@ -5,8 +5,9 @@ $row-gap: 2px;
 $date-gap: 2px;
 $today-border-width: 1px;
 $event-dot-size: 12px;
-$theme-base-strings: primary, secondary, blue, light-green, cyan, teal, orange, blue-grey, grey, red, pink, purple, light-blue, deep-purple, green, lime, yellow,
-  brown, deep-orange;
+$theme-base-strings:
+  primary, secondary, blue, light-green, cyan, teal, orange, blue-grey, grey, red, pink, purple, light-blue, deep-purple, green, lime, yellow, brown,
+  deep-orange;
 $theme-values: (
   // primary theme
   event-primary-background: material-color-palette.$indigo-100,

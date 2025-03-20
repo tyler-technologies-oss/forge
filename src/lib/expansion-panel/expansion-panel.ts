@@ -102,19 +102,19 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
   }
 
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   @coreProperty()
-  public declare orientation: ExpansionPanelOrientation;
+  declare public orientation: ExpansionPanelOrientation;
 
   @coreProperty()
-  public declare animationType: ExpansionPanelAnimationType;
+  declare public animationType: ExpansionPanelAnimationType;
 
   @coreProperty()
-  public declare trigger: string;
+  declare public trigger: string;
 
   @coreProperty()
-  public declare triggerElement: HTMLElement | null;
+  declare public triggerElement: HTMLElement | null;
 
   /**
    * Toggles the open state of the panel.

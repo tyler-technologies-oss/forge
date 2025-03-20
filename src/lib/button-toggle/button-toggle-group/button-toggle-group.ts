@@ -206,35 +206,35 @@ export class ButtonToggleGroupComponent
   }
 
   @coreProperty()
-  public declare value: any;
+  declare public value: any;
 
   @coreProperty()
-  public declare outlined: boolean;
+  declare public outlined: boolean;
 
   @coreProperty()
-  public declare multiple: boolean;
+  declare public multiple: boolean;
 
   @coreProperty()
-  public declare mandatory: boolean;
+  declare public mandatory: boolean;
 
   @coreProperty()
-  public declare vertical: boolean;
+  declare public vertical: boolean;
 
   @coreProperty()
-  public declare stretch: boolean;
+  declare public stretch: boolean;
 
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare required: boolean;
+  declare public required: boolean;
 
   @coreProperty()
-  public declare readonly: boolean;
+  declare public readonly: boolean;
 
   @coreProperty()
-  public declare theme: ButtonToggleGroupTheme;
+  declare public theme: ButtonToggleGroupTheme;
 }

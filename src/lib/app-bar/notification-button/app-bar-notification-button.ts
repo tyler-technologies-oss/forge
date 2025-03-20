@@ -97,17 +97,17 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
   }
 
   @coreProperty()
-  public declare count: string | number | null | undefined;
+  declare public count: string | number | null | undefined;
 
   @coreProperty()
-  public declare dot: boolean;
+  declare public dot: boolean;
 
   @coreProperty()
-  public declare theme: string;
+  declare public theme: string;
 
   @coreProperty()
-  public declare icon: string;
+  declare public icon: string;
 
   @coreProperty()
-  public declare showBadge: boolean;
+  declare public showBadge: boolean;
 }

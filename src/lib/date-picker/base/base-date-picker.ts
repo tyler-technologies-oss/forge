@@ -162,71 +162,71 @@ export abstract class BaseDatePickerComponent<
   }
 
   @coreProperty()
-  public declare value: TPublicValue | null | undefined;
+  declare public value: TPublicValue | null | undefined;
 
   @coreProperty()
-  public declare min: Date | string | null | undefined;
+  declare public min: Date | string | null | undefined;
 
   @coreProperty()
-  public declare max: Date | string | null | undefined;
+  declare public max: Date | string | null | undefined;
 
   @coreProperty()
-  public declare disabledDates: Date | Date[] | null | undefined;
+  declare public disabledDates: Date | Date[] | null | undefined;
 
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   @coreProperty()
-  public declare popupClasses: string | string[];
+  declare public popupClasses: string | string[];
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare masked: boolean;
+  declare public masked: boolean;
 
   @coreProperty()
-  public declare maskFormat: string;
+  declare public maskFormat: string;
 
   @coreProperty()
-  public declare showMaskFormat: boolean;
+  declare public showMaskFormat: boolean;
 
   @coreProperty()
-  public declare valueMode: DatePickerValueMode;
+  declare public valueMode: DatePickerValueMode;
 
   @coreProperty()
-  public declare notifyInputValueChanges: boolean;
+  declare public notifyInputValueChanges: boolean;
 
   @coreProperty()
-  public declare allowInvalidDate: boolean;
+  declare public allowInvalidDate: boolean;
 
   @coreProperty()
-  public declare showToday: boolean;
+  declare public showToday: boolean;
 
   @coreProperty()
-  public declare showClear: boolean;
+  declare public showClear: boolean;
 
   @coreProperty()
-  public declare parseCallback: DatePickerParseCallback;
+  declare public parseCallback: DatePickerParseCallback;
 
   @coreProperty()
-  public declare formatCallback: DatePickerFormatCallback;
+  declare public formatCallback: DatePickerFormatCallback;
 
   @coreProperty()
-  public declare prepareMaskCallback: DatePickerPrepareMaskCallback;
+  declare public prepareMaskCallback: DatePickerPrepareMaskCallback;
 
   @coreProperty()
-  public declare disabledDaysOfWeek: DayOfWeek[];
+  declare public disabledDaysOfWeek: DayOfWeek[];
 
   @coreProperty()
-  public declare disableDayCallback: (date: Date) => boolean;
+  declare public disableDayCallback: (date: Date) => boolean;
 
   @coreProperty()
-  public declare yearRange: string;
+  declare public yearRange: string;
 
   @coreProperty()
-  public declare locale: string | undefined;
+  declare public locale: string | undefined;
 
   @coreProperty()
-  public declare calendarText: IDatePickerCalendarDropdownText;
+  declare public calendarText: IDatePickerCalendarDropdownText;
 }
