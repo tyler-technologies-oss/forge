@@ -55,6 +55,14 @@ forge-scaffold {
 }
 ```
 
+### Prevent Close
+
+You can prevent the dialog from closing by listening for the `forge-dialog-before-close` event and calling `event.preventDefault()`.
+This can be useful when you need to validate user input before closing the dialog, or show a progress indicator while an async operation completes
+before closing the dialog.
+
+> **Note:** The `forge-dialog-before-close` event is only dispatched in response to light dismiss actions, such as clicking the backdrop or pressing the `Escape` key.
+
 ### Fullscreen
 
 Dialogs can be displayed in fullscreen mode by setting the `fullscreen` property or attribute. This will cause the dialog to fit the viewport height and width, and is
@@ -146,10 +154,13 @@ export class MyComponent {
     const dialogRef = this.dialogService.open(MyDialogComponent, { options, data });
 
     // Listen to dialog lifecycle events
-    dialogRef.beforeClose.pipe(takeUntil(dialogRef.afterClosed)).subscribe(() => {
+    // This observable will emit when the forge-dialog-before-close event is dispatched 
+    dialogRef.beforeClose.pipe(takeUntil(dialogRef.afterClosed)).subscribe(evt => {
+      evt.preventDefault(); // Prevent the dialog from closing, if needed
       console.log('Dialog closing');
     });
 
+    // This observable will emit when the forge-dialog-close event is dispatched
     dialogRef.afterClosed.subscribe(() => {
       console.log('Dialog closed');
     });

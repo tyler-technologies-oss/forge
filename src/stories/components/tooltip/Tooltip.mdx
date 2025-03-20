@@ -18,6 +18,35 @@ You can set the `type` property/attribute to one of the following values to cont
 - `label`: The tooltip will be interpreted as the accessible label for the anchor element via `aria-labelledby`.
 - `description`: The tooltip will be interpreted as the accessible description for the anchor element via `aria-describedby`.
 
+## Usage within slots
+
+When the `<forge-tooltip>` element is placed in the DOM as a sibling of its anchor element, if the anchor element is using a `slot` attribute
+(or is within a slotted DOM tree not containing the tooltip) the tooltip should also use the same `slot` attribute.
+
+If not, the tooltip may not render properly (or at all). A common example of this is when using a tooltip with icon buttons in the app bar:
+
+```html
+<forge-app-bar>
+  <!-- Icon button placed within the end slot -->
+  <forge-icon-button slot="end" id="my-button">
+    <forge-icon name="forge_logo"></forge-icon>
+  </forge-icon-button>
+
+  <!-- The tooltip needs the same `slot` attribute as the icon button or it won't render -->
+  <forge-tooltip slot="end" type="label" anchor="my-button">This is a tooltip</forge-tooltip>
+</forge-app-bar>
+```
+
+## Style inheritance
+
+It's important to understand that even though the tooltip you see on screen is rendered above all content within the
+[top layer](https://developer.mozilla.org/en-US/docs/Glossary/Top_layer) of the DOM, the tooltip element itself is still an inline element in the DOM.
+This means that the tooltip can inherit styles from its ancestor elements. Most of the time this is fine, because the tooltip handles setting its own
+styles, but in some cases you may find that CSS variables can cascade down to the tooltip and affect its appearance inadvertently.
+
+If you run into this scenario, move the tooltip outside of the parent element that is setting the CSS variable. The `anchor` attribute or `anchorElement` property
+can be used to attach the tooltip to the desired element in the DOM.
+
 ## Anchor Heuristic
 
 The tooltip uses the following heuristic to locate the anchor element that it should attach to when added to the DOM.

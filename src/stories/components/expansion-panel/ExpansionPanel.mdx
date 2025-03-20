@@ -30,6 +30,30 @@ You can also set `trigger` to the `id` of a button elsewhere in the document to 
 
 <Canvas of={ExpansionPanelStories.WithUnslottedButton} />
 
+## Using the `forge-ignore` attribute
+
+It is common to place multiple interactive elements within an expansion panel "header" slot. However, you may want to prevent the expansion panel from expanding/collapsing
+when a specific element is clicked. To do this you can either listen for the click event yourself on the specific elements you care about and call `stopPropagation()`
+on the event, or you can use the `forge-ignore` attribute for convenience. This attribute is used to prevent the expansion panel from expanding/collapsing when the
+element (or any children of the element) is clicked.
+
+```html
+<forge-expansion-panel>
+  <div slot="header" style="display: flex; justify-content: space-between;">
+    <button type="button">Toggle Panel</button>
+
+    <!--
+      Using the forge-ignore attribute allows this element to be placed within the
+      expansion panel header without causing the panel to expand/collapse when clicked.
+    -->
+    <forge-icon-button forge-ignore>
+      <forge-icon name="forge_logo"></forge-icon>
+    </forge-icon-button>
+  </div>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+</forge-expansion-panel>
+```
+
 ## API
 
 <CustomArgTypes />
