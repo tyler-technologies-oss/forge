@@ -1,6 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
 import { IListDropdownOption } from '../list-dropdown/list-dropdown-constants';
-import IMask, { Masked, InputMask } from 'imask';
+import { Masked, InputMask, type FactoryArg, type AppendFlags } from 'imask';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}time-picker`;
 
@@ -56,12 +56,7 @@ export type TimePickerParseCallback = (time: string) => number | null;
 export type TimePickerFormatCallback = (value: number | null) => string;
 export type TimePickerCustomOptionCallback<T> = (value: T, use24HourTime: boolean, allowSeconds: boolean) => number;
 export type TimePickerCoercionCallback = (rawValue: string, coercedValue: string, allowSeconds: boolean) => string;
-export type TimePickerPrepareMaskCallback = (
-  value: string,
-  masked: Masked<string>,
-  flags: IMask.AppendFlags,
-  maskInstance: InputMask<IMask.AnyMaskedOptions>
-) => string;
+export type TimePickerPrepareMaskCallback = (value: string, masked: Masked<string>, flags: AppendFlags, maskInstance: InputMask<FactoryArg>) => string;
 
 export interface ITimePickerOption<T = any> extends IListDropdownOption<T> {
   toMilliseconds: TimePickerCustomOptionCallback<T>;

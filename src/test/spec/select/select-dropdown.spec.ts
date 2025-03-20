@@ -5,7 +5,8 @@ import {
   ISelectDropdownComponent,
   ISelectDropdownCore,
   IOptionComponent,
-  OPTION_CONSTANTS
+  OPTION_CONSTANTS,
+  ISelectDropdownAdapter
 } from '@tylertech/forge/select';
 import { ISelectOption, BASE_SELECT_CONSTANTS } from '@tylertech/forge/select/core';
 import { removeElement } from '@tylertech/forge-core';
@@ -24,11 +25,15 @@ const POPOVER_ANIMATION_DURATION = 200;
 interface ITestContext {
   context: ITestSelectDropdownContext;
 }
+
+type SelectDropdownCoreInternal = ISelectDropdownCore & { _adapter: ISelectDropdownAdapter, _identifier: string };
+type SelectDropdownComponentInternal = ISelectDropdownComponent & { _core: SelectDropdownCoreInternal };
+
 interface ITestSelectDropdownContext {
   fixture: HTMLElement;
-  component: ISelectDropdownComponent;
+  component: SelectDropdownComponentInternal;
   targetElement: HTMLElement;
-  core: ISelectDropdownCore;
+  core: SelectDropdownCoreInternal;
   optionElements: IOptionComponent[];
   isAttached(): boolean;
   append(): void;
@@ -279,7 +284,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     targetElement.id = 'select-dropdown-target';
     targetElement.textContent = 'Choose...';
 
-    const component = document.createElement('forge-select-dropdown');
+    const component = document.createElement('forge-select-dropdown') as SelectDropdownComponentInternal;
     if (setTarget) {
       component.target = `#${targetElement.id}`;
     }
@@ -303,7 +308,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
       fixture,
       component,
       targetElement,
-      core: component['_core'] as ISelectDropdownCore,
+      core: component['_core'],
       optionElements,
       isAttached: () => component['_core']['_adapter'].isAttached(),
       append: () => document.body.appendChild(fixture),

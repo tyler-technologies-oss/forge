@@ -1,5 +1,5 @@
 import { isNumeric } from '@tylertech/forge-core';
-import IMask, { createMask, InputMask, Masked, MaskedEnum } from 'imask';
+import { FactoryArg, InputMask, MaskedEnum, createMask, type AppendFlags, type Masked } from 'imask';
 import { IntermediateTimeParser } from './intermediate-time-parser';
 
 export interface ITimeInputMaskOptions {
@@ -7,7 +7,7 @@ export interface ITimeInputMaskOptions {
   use24HourTime?: boolean;
   showSeconds?: boolean;
   onChange?: (value: string) => void;
-  prepareCallback?: (value: string, masked: Masked<string>, flags: IMask.AppendFlags, maskInstance: InputMask<IMask.AnyMaskedOptions>) => string;
+  prepareCallback?: (value: string, masked: Masked<string>, flags: AppendFlags, maskInstance: InputMask<FactoryArg>) => string;
 }
 
 export const TWELVE_HOUR_TIME_MASK = '0`0{:}`0`0 `AM';
@@ -16,8 +16,8 @@ export const TWENTY_FOUR_HOUR_TIME_MASK = '0`0{:}`0`0';
 export const TWENTY_FOUR_HOUR_TIME_MASK_WITH_SECONDS = '0`0{:}`0`0{:}`0`0';
 
 export class TimeInputMask {
-  private _mask: InputMask<IMask.AnyMaskedOptions>;
-  private _maskOptions: IMask.AnyMaskedOptions;
+  private _mask: InputMask<FactoryArg>;
+  private _maskOptions: FactoryArg;
   private _acceptListener: (evt: InputEvent) => void;
 
   constructor(
@@ -39,9 +39,9 @@ export class TimeInputMask {
     this._mask.destroy();
   }
 
-  public resolve(value: string): string {
+  public resolve(value: string): void {
     const masked = createMask(this._maskOptions);
-    return masked.resolve(value);
+    masked.resolve(value);
   }
 
   public update(): void {
@@ -54,12 +54,12 @@ export class TimeInputMask {
     }
   }
 
-  private _createOptions(): IMask.AnyMaskedOptions {
+  private _createOptions(): FactoryArg {
     return {
       mask: this._getMaskFormat(),
       overwrite: true,
       lazy: !this._options.showMaskFormat,
-      prepare: (value, masked, flags) => this._prepare(value, masked, flags, this._mask),
+      prepareChar: (value, masked, flags) => this._prepare(value, masked, flags, this._mask),
       blocks: {
         A: {
           mask: MaskedEnum,
@@ -70,10 +70,10 @@ export class TimeInputMask {
           enum: ['m', 'M']
         }
       }
-    } as IMask.MaskedPatternOptions & IMask.MaskedEnumOptions;
+    };
   }
 
-  private _prepare(value: string, masked: Masked<string>, flags: IMask.AppendFlags, maskInstance: InputMask<IMask.AnyMaskedOptions>): string {
+  private _prepare(value: string, masked: Masked<string>, flags: AppendFlags, maskInstance: InputMask<FactoryArg>): string {
     if (typeof this._options.prepareCallback === 'function') {
       return this._options.prepareCallback.call(null, value, masked, flags, this._mask);
     }
@@ -84,15 +84,14 @@ export class TimeInputMask {
 
     // Whenever we paste text we don't care to send it through our custom prepare logic,
     // so just return the character being processed.
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    if (maskInstance['_inputEvent']?.inputType !== 'insertText') {
+    if (maskInstance._inputEvent?.inputType !== 'insertText') {
       return value;
     }
 
     return this._prepareDefault(value, maskInstance).toUpperCase();
   }
 
-  private _prepareDefault(char: string, maskInstance: InputMask<IMask.AnyMaskedOptions>): string {
+  private _prepareDefault(char: string, maskInstance: InputMask<FactoryArg>): string {
     const parser = new IntermediateTimeParser(char, maskInstance);
 
     // Handle non-numeric character entry here

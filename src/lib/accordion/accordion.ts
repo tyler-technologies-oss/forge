@@ -56,5 +56,5 @@ export class AccordionComponent extends BaseComponent implements IAccordionCompo
    * @attribute panel-selector
    */
   @coreProperty()
-  public declare panelSelector: string;
+  declare public panelSelector: string;
 }

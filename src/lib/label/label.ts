@@ -83,21 +83,21 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
    * @attribute
    */
   @coreProperty()
-  public declare for: string | null | undefined;
+  declare public for: string | null | undefined;
 
   /**
    * The associated element.
    * @default null
    */
   @coreProperty()
-  public declare forElement: HTMLElement | null | undefined;
+  declare public forElement: HTMLElement | null | undefined;
 
   /**
    * The element that a click should be simulated on. If not defined clicks act on the associated element.
    * @default null
    */
   @coreProperty()
-  public declare clickTarget: HTMLElement | null | undefined;
+  declare public clickTarget: HTMLElement | null | undefined;
 
   /**
    * Propagates changes in the label's text content to the associated element.
@@ -105,7 +105,7 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
    * @attribute
    */
   @coreProperty()
-  public declare dynamic: boolean;
+  declare public dynamic: boolean;
 
   /**
    * Removes click handling from the label.
@@ -113,7 +113,7 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
    * @attribute non-interactive
    */
   @coreProperty()
-  public declare nonInteractive: boolean;
+  declare public nonInteractive: boolean;
 
   /**
    * Whether or not the label should be associated with an ancestor element.
@@ -121,7 +121,7 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
    * @attribute
    */
   @coreProperty()
-  public declare legend: boolean;
+  declare public legend: boolean;
 
   /**
    * Updates the targeted element with the label's current text content.

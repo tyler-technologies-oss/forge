@@ -147,23 +147,23 @@ export class TabComponent extends BaseComponent implements ITabComponent {
   }
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare selected: boolean;
+  declare public selected: boolean;
 
   @coreProperty()
-  public declare vertical: boolean;
+  declare public vertical: boolean;
 
   @coreProperty()
-  public declare stacked: boolean;
+  declare public stacked: boolean;
 
   /** @deprecated This will be removed in a future version */
   @coreProperty()
-  public declare secondary: boolean;
+  declare public secondary: boolean;
 
   @coreProperty()
-  public declare inverted: boolean;
+  declare public inverted: boolean;
 
   public override focus(options?: ExperimentalFocusOptions): void {
     super.focus(options);

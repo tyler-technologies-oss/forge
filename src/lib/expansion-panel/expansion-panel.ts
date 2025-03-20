@@ -11,7 +11,10 @@ export interface IExpansionPanelComponent extends IBaseComponent {
   open: boolean;
   orientation: ExpansionPanelOrientation;
   animationType: ExpansionPanelAnimationType;
+  trigger: string;
+  triggerElement: HTMLElement | null;
   toggle(): void;
+  [emulateUserToggle](open: boolean): void;
 }
 
 declare global {
@@ -33,10 +36,13 @@ declare global {
  * @property {boolean} [open=false] - Whether the panel is open or closed.
  * @property {ExpansionPanelOrientation} [orientation="vertical"] - The orientation of the panel.
  * @property {ExpansionPanelAnimationType} [animationType="default"] - The type of animation to use when opening/closing the panel.
+ * @property {string} trigger - The id of the element that the expansion panel should be toggled by.
+ * @property {HTMLElement | null} triggerElement - The element that the expansion panel should be toggled by.
  *
  * @attribute {boolean} [open=false] - Whether the panel is open or closed.
  * @attribute {ExpansionPanelOrientation} [orientation="vertical"] - The orientation of the panel.
  * @attribute {ExpansionPanelAnimationType} [animation-type="default"] - The type of animation to use when opening/closing the panel.
+ * @attribute {string} [trigger] - The id of the button that the expansion panel is associated with.
  *
  * @fires {CustomEvent<boolean>} forge-expansion-panel-toggle - Event fired when the panel is toggled open or closed.
  * @fires {CustomEvent<boolean>} forge-expansion-panel-animation-complete - Event fired when the panel has finished animating when toggling.
@@ -75,6 +81,10 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
     this._core.initialize();
   }
 
+  public disconnectedCallback(): void {
+    this._core.destroy();
+  }
+
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case EXPANSION_PANEL_CONSTANTS.observedAttributes.OPEN:
@@ -86,17 +96,25 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
       case EXPANSION_PANEL_CONSTANTS.observedAttributes.ANIMATION_TYPE:
         this.animationType = newValue as ExpansionPanelAnimationType;
         break;
+      case EXPANSION_PANEL_CONSTANTS.observedAttributes.TRIGGER:
+        this.trigger = newValue;
     }
   }
 
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   @coreProperty()
-  public declare orientation: ExpansionPanelOrientation;
+  declare public orientation: ExpansionPanelOrientation;
 
   @coreProperty()
-  public declare animationType: ExpansionPanelAnimationType;
+  declare public animationType: ExpansionPanelAnimationType;
+
+  @coreProperty()
+  declare public trigger: string;
+
+  @coreProperty()
+  declare public triggerElement: HTMLElement | null;
 
   /**
    * Toggles the open state of the panel.

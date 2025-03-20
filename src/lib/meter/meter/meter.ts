@@ -3,7 +3,8 @@ import { customElement, property, queryAssignedNodes, state } from 'lit/decorato
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { Theme } from '../../constants';
-import { setDefaultAria, toggleState } from '../../core/utils/a11y-utils';
+import { setDefaultAria } from '../../core/utils/a11y-utils';
+import { toggleState } from '../../core/utils/utils';
 
 import styles from './meter.scss';
 

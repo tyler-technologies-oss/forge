@@ -108,11 +108,11 @@ export class AppBarSearchComponent extends BaseComponent implements IAppBarSearc
   }
 
   @coreProperty()
-  public declare value: string;
+  declare public value: string;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare placeholder: string;
+  declare public placeholder: string;
 }

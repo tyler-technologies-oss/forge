@@ -32,6 +32,14 @@ $can-animate: '[visible]:not([animation-type=none])';
   }
 
   //
+  // Slotted
+  //
+
+  ::slotted(forge-scaffold) {
+    height: auto;
+  }
+
+  //
   // Base
   //
 

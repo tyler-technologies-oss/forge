@@ -8,9 +8,11 @@ import {
   AutocompleteMode,
   AutocompleteOptionBuilder,
   defineAutocompleteComponent,
+  IAutocompleteAdapter,
   IAutocompleteComponent,
   IAutocompleteComponentDelegateConfig,
   IAutocompleteComponentDelegateOptions,
+  IAutocompleteCore,
   IAutocompleteOptionGroup
 } from '@tylertech/forge/autocomplete';
 import { AVATAR_CONSTANTS, IAvatarComponent } from '@tylertech/forge/avatar';
@@ -65,21 +67,25 @@ interface ITestContext {
   | ITestAutoCompleteDelegateContext;
 }
 
+type AutocompleteAdapterInternal = IAutocompleteAdapter & { _component: AutocompleteComponentInternal, _targetElement: HTMLElement };
+type AutocompleteCoreInternal = IAutocompleteCore & { _adapter: AutocompleteAdapterInternal, _pendingFilterPromises: Promise<IOption[]>[] };
+type AutocompleteComponentInternal = IAutocompleteComponent & { _core: AutocompleteCoreInternal };
+
 interface ITestAutocompleteContext {
-  component: IAutocompleteComponent;
+  component: AutocompleteComponentInternal;
   input: HTMLInputElement;
   optionElements: IOptionComponent[];
   destroy(): void;
 }
 
 interface ITestAutocompleteDynamicContext {
-  component: IAutocompleteComponent;
+  component: AutocompleteComponentInternal;
   input: HTMLInputElement;
   destroy(): void;
 }
 
 interface ITestAutocompleteTextFieldContext {
-  component: IAutocompleteComponent;
+  component: AutocompleteComponentInternal;
   label: HTMLLabelElement;
   input: HTMLInputElement;
   iconElement: HTMLElement;
@@ -1715,7 +1721,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
   function setupTestContext(append = false): ITestAutocompleteContext {
     const fixture = document.createElement('div');
     fixture.id = 'autocomplete-test-fixture';
-    const component = document.createElement(AUTOCOMPLETE_CONSTANTS.elementName) as IAutocompleteComponent;
+    const component = document.createElement(AUTOCOMPLETE_CONSTANTS.elementName) as AutocompleteComponentInternal;
     const input = document.createElement('input') as HTMLInputElement;
     component.appendChild(input);
     const optionElements: IOptionComponent[] = [];
@@ -1740,7 +1746,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
   ): ITestAutocompleteTextFieldContext {
     const fixture = document.createElement('div');
     fixture.id = 'autocomplete-test-fixture';
-    const component = document.createElement(AUTOCOMPLETE_CONSTANTS.elementName) as IAutocompleteComponent;
+    const component = document.createElement(AUTOCOMPLETE_CONSTANTS.elementName) as AutocompleteComponentInternal;
     const textFieldElement = document.createElement(TEXT_FIELD_CONSTANTS.elementName) as ITextFieldComponent;
     const input = document.createElement('input') as HTMLInputElement;
     input.type = 'text';
@@ -1791,7 +1797,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
   ): ITestAutocompleteDynamicContext {
     const fixture = document.createElement('div');
     fixture.id = 'autocomplete-test-fixture';
-    const component = document.createElement(AUTOCOMPLETE_CONSTANTS.elementName) as IAutocompleteComponent;
+    const component = document.createElement(AUTOCOMPLETE_CONSTANTS.elementName) as AutocompleteComponentInternal;
     const input = document.createElement('input') as HTMLInputElement;
     fixture.appendChild(component);
     if (append) {

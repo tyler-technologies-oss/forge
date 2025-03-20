@@ -26,6 +26,10 @@ horizontalOrientationToggle.addEventListener('forge-switch-change', ({ detail: s
   setPanelProperty('orientation', selected ? 'horizontal' : 'vertical');
 });
 
+getAllPanels().forEach(panel => {
+  panel.addEventListener('forge-expansion-panel-toggle', (evt) => console.log(evt));
+})
+
 function setPanelProperty<T extends keyof IExpansionPanelComponent>(property: T, value: IExpansionPanelComponent[T]): void {
   getAllPanels().forEach(p => p[property] = value);
 }

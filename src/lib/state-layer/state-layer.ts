@@ -87,13 +87,13 @@ export class StateLayerComponent extends BaseComponent implements IStateLayerCom
   }
 
   @coreProperty()
-  public declare targetElement: HTMLElement | null;
+  declare public targetElement: HTMLElement | null;
 
   @coreProperty()
-  public declare target: string | null;
+  declare public target: string | null;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   /**
    * Triggers the animation to run.

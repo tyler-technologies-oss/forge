@@ -33,6 +33,8 @@ export function WithDefaultAria<TBase extends MixinBase>(base: TBase) {
     public [setDefaultAria](properties: Partial<ARIAMixinStrict>, options?: DefaultAriaOptions): void {
       setDefaultAriaUtil(this, this[internals], properties, options);
     }
+
+    public abstract [internals]: ElementInternals;
   }
 
   return DefaultAria as AbstractConstructor<WithDefaultAriaContract> & TBase;

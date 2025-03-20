@@ -205,35 +205,35 @@ export class ChipComponent extends BaseComponent implements IChipComponent {
   }
 
   @coreProperty()
-  public declare type: ChipType;
+  declare public type: ChipType;
 
   @coreProperty()
-  public declare value: unknown;
+  declare public value: unknown;
 
   @coreProperty()
-  public declare selected: boolean;
+  declare public selected: boolean;
 
   @coreProperty()
-  public declare invalid: boolean;
+  declare public invalid: boolean;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   @coreProperty()
-  public declare theme: ChipTheme;
+  declare public theme: ChipTheme;
 
   @coreProperty()
-  public declare href: string;
+  declare public href: string;
 
   @coreProperty()
-  public declare target: string;
+  declare public target: string;
 
   @coreProperty()
-  public declare download: string;
+  declare public download: string;
 
   @coreProperty()
-  public declare rel: string;
+  declare public rel: string;
 }

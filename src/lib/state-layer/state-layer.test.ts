@@ -9,6 +9,7 @@ import { createMouseEventInit, simulateHover, simulateLeave, simulatePressAndHol
 import { StateLayerCore } from './state-layer-core';
 
 import './state-layer';
+import { nothing } from 'lit';
 
 describe('StateLayer', () => {
   it('should contain shadow root', async () => {
@@ -24,7 +25,7 @@ describe('StateLayer', () => {
   it('should defer attaching event listeners', async () => {
     const { container, stateLayer } = await createFixture();
 
-    const core = stateLayer['_core'] as StateLayerCore;
+    const core = (stateLayer as IStateLayerComponent & { _core: StateLayerCore })._core;
     await elementUpdated(stateLayer);
     expect(core.isAttached).to.be.false;
 
@@ -315,7 +316,7 @@ async function createFixture({ target, disabled }: Partial<IStateLayerComponent>
   const el = await fixture<HTMLElement>(html`
     <div style="position: relative; overflow: hidden; height: 100px; width: 100px;">
       <div id="sibling"></div>
-      <forge-state-layer target=${target} ?disabled=${disabled}></forge-state-layer>
+      <forge-state-layer target=${target ?? nothing} ?disabled=${disabled}></forge-state-layer>
     </div>
   `);
   const container = el as HTMLDivElement;

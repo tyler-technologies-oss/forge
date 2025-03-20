@@ -176,7 +176,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute
    */
   @coreProperty()
-  public declare value: string | null | undefined;
+  declare public value: string | null | undefined;
 
   /**
    * Whether or not the time picker is open.
@@ -184,7 +184,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute
    */
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   /**
    * Whether or not to allow seconds in the time picker.
@@ -192,7 +192,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute allow-seconds
    */
   @coreProperty()
-  public declare allowSeconds: boolean;
+  declare public allowSeconds: boolean;
 
   /**
    * Whether or not the time picker input should be masked.
@@ -200,7 +200,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute
    */
   @coreProperty()
-  public declare masked: boolean;
+  declare public masked: boolean;
 
   /**
    * Whether or not to show the mask format in the input.
@@ -208,7 +208,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute show-mask-format
    */
   @coreProperty()
-  public declare showMaskFormat: boolean;
+  declare public showMaskFormat: boolean;
 
   /**
    * Whether or not to use 24-hour time.
@@ -216,7 +216,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute use-24-hour-time
    */
   @coreProperty()
-  public declare use24HourTime: boolean;
+  declare public use24HourTime: boolean;
 
   /**
    * Whether or not to allow invalid times.
@@ -224,7 +224,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute allow-invalid-time
    */
   @coreProperty()
-  public declare allowInvalidTime: boolean;
+  declare public allowInvalidTime: boolean;
 
   /**
    * The minimum time that can be selected.
@@ -232,7 +232,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute
    */
   @coreProperty()
-  public declare min: string | null | undefined;
+  declare public min: string | null | undefined;
 
   /**
    * The maximum time that can be selected.
@@ -240,7 +240,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute
    */
   @coreProperty()
-  public declare max: string | null | undefined;
+  declare public max: string | null | undefined;
 
   /**
    * An array of times that cannot be selected.
@@ -248,7 +248,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute restricted-times
    */
   @coreProperty()
-  public declare restrictedTimes: string[];
+  declare public restrictedTimes: string[];
 
   /**
    * The time to start the time picker at.
@@ -256,7 +256,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute start-time
    */
   @coreProperty()
-  public declare startTime: string | null | undefined;
+  declare public startTime: string | null | undefined;
 
   /**
    * The step interval for the time picker.
@@ -264,7 +264,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute
    */
   @coreProperty()
-  public declare step: number;
+  declare public step: number;
 
   /**
    * Whether or not to allow manual input of the time.
@@ -272,7 +272,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute allow-input
    */
   @coreProperty()
-  public declare allowInput: boolean;
+  declare public allowInput: boolean;
 
   /**
    * Whether or not to show a "Now" button.
@@ -280,7 +280,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute show-now
    */
   @coreProperty()
-  public declare showNow: boolean;
+  declare public showNow: boolean;
 
   /**
    * Whether or not to display hour options in dropdown.
@@ -288,7 +288,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute show-hour-options
    */
   @coreProperty()
-  public declare showHourOptions: boolean;
+  declare public showHourOptions: boolean;
 
   /**
    * An array of custom time picker options.
@@ -296,7 +296,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute custom-options
    */
   @coreProperty()
-  public declare customOptions: ITimePickerOption[];
+  declare public customOptions: ITimePickerOption[];
 
   /**
    * A callback function to validate the time.
@@ -304,7 +304,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute validation-callback
    */
   @coreProperty()
-  public declare validationCallback: TimePickerValidationCallback;
+  declare public validationCallback: TimePickerValidationCallback;
 
   /**
    * A callback function to parse the time.
@@ -312,7 +312,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute parse-callback
    */
   @coreProperty()
-  public declare parseCallback: TimePickerParseCallback;
+  declare public parseCallback: TimePickerParseCallback;
 
   /**
    * A callback function to format the time.
@@ -320,7 +320,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute format-callback
    */
   @coreProperty()
-  public declare formatCallback: TimePickerFormatCallback;
+  declare public formatCallback: TimePickerFormatCallback;
 
   /**
    * A callback function to coerce the time.
@@ -328,7 +328,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute coercion-callback
    */
   @coreProperty()
-  public declare coercionCallback: TimePickerCoercionCallback;
+  declare public coercionCallback: TimePickerCoercionCallback;
 
   /**
    * A callback function to prepare the mask.
@@ -336,7 +336,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute prepare-mask-callback
    */
   @coreProperty()
-  public declare prepareMaskCallback: TimePickerPrepareMaskCallback;
+  declare public prepareMaskCallback: TimePickerPrepareMaskCallback;
 
   /**
    * Whether or not the time picker is disabled.
@@ -344,7 +344,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute disabled
    */
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   /**
    * The classes to apply to the time picker popup.
@@ -352,7 +352,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute popup-classes
    */
   @coreProperty()
-  public declare popupClasses: string | string[];
+  declare public popupClasses: string | string[];
 
   /**
    * Whether or not to allow the time picker to be a dropdown.
@@ -360,7 +360,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute allow-dropdown
    */
   @coreProperty()
-  public declare allowDropdown: boolean;
+  declare public allowDropdown: boolean;
 
   /**
    * The target element to attach the popup to.
@@ -368,5 +368,5 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute popup-target
    */
   @coreProperty()
-  public declare popupTarget: string;
+  declare public popupTarget: string;
 }

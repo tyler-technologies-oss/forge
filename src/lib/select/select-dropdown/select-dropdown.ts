@@ -89,13 +89,13 @@ export class SelectDropdownComponent extends BaseSelectComponent<SelectDropdownC
 
   /** Sets the target element CSS selector */
   @coreProperty()
-  public declare target: string;
+  declare public target: string;
 
   /** Sets the selected text element CSS selector */
   @coreProperty()
-  public declare selectedTextTarget: string;
+  declare public selectedTextTarget: string;
 
   /** Controls whether the selected text is synchronized to the target elements' text content. Default is false. */
   @coreProperty()
-  public declare syncSelectedText: boolean;
+  declare public syncSelectedText: boolean;
 }

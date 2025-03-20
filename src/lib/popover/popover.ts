@@ -175,28 +175,28 @@ export class PopoverComponent extends OverlayAware<IPopoverCore> implements IPop
   }
 
   @coreProperty()
-  public declare arrow: boolean;
+  declare public arrow: boolean;
 
   @coreProperty()
-  public declare animationType: PopoverAnimationType;
+  declare public animationType: PopoverAnimationType;
 
   @coreProperty()
-  public declare triggerType: PopoverTriggerType | PopoverTriggerType[];
+  declare public triggerType: PopoverTriggerType | PopoverTriggerType[];
 
   @coreProperty()
-  public declare longpressDelay: number;
+  declare public longpressDelay: number;
 
   @coreProperty()
-  public declare persistentHover: boolean;
+  declare public persistentHover: boolean;
 
   @coreProperty()
-  public declare hoverDelay: number;
+  declare public hoverDelay: number;
 
   @coreProperty()
-  public declare hoverDismissDelay: number;
+  declare public hoverDismissDelay: number;
 
   @coreProperty()
-  public declare preset: PopoverPreset;
+  declare public preset: PopoverPreset;
 
   /**
    * Hides the popover, and returns a `Promise` that resolves when the hide animation is complete.

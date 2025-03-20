@@ -386,7 +386,7 @@ describe('Keyboard Shortcut', () => {
       const el = document.createElement('forge-keyboard-shortcut');
 
       const action = () => {
-        el['_core']['_initializeTargetElement']();
+        (el as any)['_core']['_initializeTargetElement']();
       };
 
       expect(action).to.throw();
@@ -451,7 +451,7 @@ async function createFixture({
         target=${target ?? nothing}
         ?global=${global ?? nothing}
         ?allow-while-typing=${allowWhileTyping ?? nothing}
-        prevent-default=${preventDefault}
+        .preventDefault=${!!preventDefault}
         ?capture=${capture ?? nothing}
         ?use-code=${useCode ?? nothing}
         ?disabled=${disabled ?? nothing}

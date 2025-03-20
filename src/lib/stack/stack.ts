@@ -101,7 +101,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @attribute
    */
   @coreProperty()
-  public declare inline: boolean;
+  declare public inline: boolean;
 
   /**
    * Controls if items wrap to a new line in inline mode
@@ -109,7 +109,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @attribute
    */
   @coreProperty()
-  public declare wrap: boolean;
+  declare public wrap: boolean;
 
   /**
    * Controls if items stretch and take up the maximum amount of space
@@ -117,7 +117,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @attribute
    */
   @coreProperty()
-  public declare stretch: boolean;
+  declare public stretch: boolean;
 
   /**
    * Controls the gap between the children within the stack
@@ -125,7 +125,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @attribute
    */
   @coreProperty()
-  public declare gap: string;
+  declare public gap: string;
 
   /**
    * Controls the align-items property of a row or column
@@ -133,7 +133,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @attribute
    */
   @coreProperty()
-  public declare alignment: StackAlignment;
+  declare public alignment: StackAlignment;
 
   /**
    * Controls the justify-content property of a row or column
@@ -141,5 +141,5 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @attribute
    */
   @coreProperty()
-  public declare justify: StackAlignment;
+  declare public justify: StackAlignment;
 }

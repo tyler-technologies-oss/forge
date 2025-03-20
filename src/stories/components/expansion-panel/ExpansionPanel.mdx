@@ -20,6 +20,16 @@ It's common to compose an expansion panel with a card component to provide a mor
 
 > **Tip:** You can provide a `<forge-open-icon>` to show the open state of the expansion panel, and the icon will be rotated when the panel is opened/closed.
 
+## Trigger Button
+
+A button in the header slot of the expansion panel will automatically control toggling the `open` state of the panel.
+Setting the `trigger` attribute/property of the expansion panel to the button's `id` will also manage its `aria-expanded` and `aria-controls` attributes.
+You can also set `trigger` to the `id` of a button elsewhere in the document to add the toggling and ARIA attribute functionality to it.
+
+> **Tip:** Make sure the intended trigger element is present in the DOM at the same time the expansion panel initializes or has `trigger` set. Alternatively, use the `triggerElement` property to directly pass in the trigger element reference, which is less prone to errors related to incremental rendering.
+
+<Canvas of={ExpansionPanelStories.WithUnslottedButton} />
+
 ## Using the `forge-ignore` attribute
 
 It is common to place multiple interactive elements within an expansion panel "header" slot. However, you may want to prevent the expansion panel from expanding/collapsing
@@ -51,29 +61,30 @@ element (or any children of the element) is clicked.
 ## Accessibility
 
 - If the user is able to click the expansion panel to toggle its state, ensure that a `<button>` element is present and clearly labeled to serve as an accessible point of interaction.
-  - Set the `aria-expanded` attribute on the button to reflect the state of the component. Update it when the panel opens or closes.
-  - Enclose the expandable content in an element with `role="group"` or another non-generic role.
-  - Set `aria-controls` on the button to reference the id of the expandable content.
   - Do not place complex or interactive elements within a button. If your design requires such content in the expansion panel header, place a button in the header alongside that content instead of enclosing it.
-  - Ensure that the user can focus on the element which activates and deactivates the expansion panel.
+- Ensure that the user can focus on the element which activates and deactivates the expansion panel.
+- Ensure `aria-expanded` is set on the button to reflect the state of the component. Update it when the panel opens or closes.
+- Ensure `aria-controls` is set on the button to reference the id of the expandable content.
+- Enclose the expandable content in an element with `role="group"` or another non-generic role.
 - Ensure that the expansion panel can be activated by keyboard.
-  - Here is an example of a properly marked up expansion panel:
+- Here is an example of a properly marked up expansion panel:
+
+> **Tip:** A button associated with the expansion panel via `trigger` will automatically have its `aria-expanded` and `aria-controls` values managed.
 
 ```html
-<!-- aria-expanded will be toggled via script to reflect the state of the component -->
-<forge-expansion-panel>
-  <button slot="header" aria-controls="expandable-content" aria-expanded="false">Toggle panel</button>
+<forge-expansion-panel trigger="button-id">
+  <button slot="header" id="button-id">Toggle panel</button>
   <div id="expandable-content" role="group">Expandable content</div>
 </forge-expansion-panel>
 ```
 
-The button can also be placed elsewhere in the document, outside the expansion panel, with the same attributes set:
+The button can also be placed elsewhere in the document, outside the expansion panel:
 
 ```html
-<button slot="header" aria-controls="expandable-content" aria-expanded="false">Toggle panel</button>
+<button id="button-id">Toggle panel</button>
 
-<forge-expansion-panel>
-  <div id="expandable-content" role="group">Expandable content</div>
+<forge-expansion-panel trigger="button-id">
+  <div role="group">Expandable content</div>
 </forge-expansion-panel>
 ```
 

@@ -84,10 +84,13 @@ export const ARIA_PROPERTIES: ARIAProperty[] = [
 const ARIA_ATTRIBUTES_TO_PROPERTIES: Record<ARIAAttribute, ARIAProperty | 'role'> = {
   'aria-atomic': 'ariaAtomic',
   'aria-autocomplete': 'ariaAutoComplete',
+  'aria-braillelabel': 'ariaBrailleLabel',
+  'aria-brailleroledescription': 'ariaBrailleRoleDescription',
   'aria-busy': 'ariaBusy',
   'aria-checked': 'ariaChecked',
   'aria-colcount': 'ariaColCount',
   'aria-colindex': 'ariaColIndex',
+  'aria-colindextext': 'ariaColIndexText',
   'aria-colspan': 'ariaColSpan',
   'aria-current': 'ariaCurrent',
   'aria-description': 'ariaDescription',
@@ -108,10 +111,12 @@ const ARIA_ATTRIBUTES_TO_PROPERTIES: Record<ARIAAttribute, ARIAProperty | 'role'
   'aria-posinset': 'ariaPosInSet',
   'aria-pressed': 'ariaPressed',
   'aria-readonly': 'ariaReadOnly',
+  'aria-relevant': 'ariaRelevant',
   'aria-required': 'ariaRequired',
   'aria-roledescription': 'ariaRoleDescription',
   'aria-rowcount': 'ariaRowCount',
   'aria-rowindex': 'ariaRowIndex',
+  'aria-rowindextext': 'ariaRowIndexText',
   'aria-rowspan': 'ariaRowSpan',
   'aria-selected': 'ariaSelected',
   'aria-setsize': 'ariaSetSize',
@@ -370,27 +375,4 @@ export function setDefaultAria(
       toggleAttribute(element, value != null, attribute, value as string);
     }
   });
-}
-
-/**
- * Adds or removes a state from an element's custom state set.
- *
- * @param internals - The element's internals object.
- * @param state - The name of the custom state to toggle.
- * @param value - Whether to add or remove the state.
- */
-export function toggleState(internals: ElementInternals, state: string, value: boolean): void {
-  if (value) {
-    try {
-      internals.states.add(state);
-    } catch {
-      internals.states.add(`--${state}`);
-    }
-  } else {
-    try {
-      internals.states.delete(state);
-    } catch {
-      internals.states.delete(`--${state}`);
-    }
-  }
 }

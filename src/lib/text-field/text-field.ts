@@ -111,5 +111,5 @@ export class TextFieldComponent extends BaseField<TextFieldCore> implements ITex
   }
 
   @coreProperty()
-  public declare showClear: boolean;
+  declare public showClear: boolean;
 }

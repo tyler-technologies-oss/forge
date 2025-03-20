@@ -86,10 +86,10 @@ export class CalendarMenuComponent extends BaseComponent implements ICalendarMen
   }
 
   @coreProperty()
-  public declare animationType: CalendarMenuAnimationType;
+  declare public animationType: CalendarMenuAnimationType;
 
   @coreProperty()
-  public declare preventFocus: boolean;
+  declare public preventFocus: boolean;
 
   public animateIn(options: ICalendarMenuOption[], direction: CalendarDirection, setFocus = false): void {
     this._core.animateIn(options, direction, setFocus);

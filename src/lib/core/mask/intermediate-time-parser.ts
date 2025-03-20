@@ -1,4 +1,4 @@
-import { InputMask } from 'imask';
+import { InputMask, type FactoryArg } from 'imask';
 import { TimeSegmentParser, TimeSegmentType } from './time-segment-parser';
 
 export const SEGMENT_CURSOR_POSITION = {
@@ -17,7 +17,7 @@ export class IntermediateTimeParser {
 
   constructor(
     private _char: string,
-    private _mask: InputMask<IMask.AnyMaskedOptions>
+    private _mask: InputMask<FactoryArg>
   ) {
     this._segmentParser = new TimeSegmentParser(this._mask.value);
   }
@@ -47,8 +47,7 @@ export class IntermediateTimeParser {
   }
 
   public get isAllSelected(): boolean {
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    const { start, end } = this._mask['_selection'];
+    const { start, end } = this._mask._selection;
     return start === 0 && end > 0 && end === this._mask.value.length;
   }
 
@@ -125,7 +124,7 @@ export class IntermediateTimeParser {
   public applyValue(value: string, cursorPos?: keyof typeof SEGMENT_CURSOR_POSITION): void {
     this._mask.unmaskedValue = value;
     if (cursorPos !== undefined) {
-      window.requestAnimationFrame(() => this._mask.updateCursor(SEGMENT_CURSOR_POSITION[cursorPos]));
+      this._mask.updateCursor(SEGMENT_CURSOR_POSITION[cursorPos]);
     }
   }
 }

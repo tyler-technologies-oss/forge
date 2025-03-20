@@ -2,7 +2,8 @@ import { debounce } from '@tylertech/forge-core';
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedElements, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { setDefaultAria, toggleState } from '../../core/utils/a11y-utils';
+import { setDefaultAria } from '../../core/utils/a11y-utils';
+import { toggleState } from '../../core/utils/utils';
 import { MeterComponent, MeterDensity, MeterDirection, MeterInnerShape, MeterShape } from '../meter/meter';
 
 import styles from './meter-group.scss';

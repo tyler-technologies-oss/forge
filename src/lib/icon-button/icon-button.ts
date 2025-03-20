@@ -159,14 +159,14 @@ export class IconButtonComponent extends BaseButton<IconButtonCore> implements I
    * @default false
    */
   @coreProperty()
-  public declare toggle: boolean;
+  declare public toggle: boolean;
 
   /**
    * Whether or not the toggle button is pressed. Only applies when `toggle` is `true`.
    * @default false
    */
   @coreProperty()
-  public declare pressed: boolean;
+  declare public pressed: boolean;
 
   /**
    * Alias for `pressed` _(deprecated)_. Whether or not the toggle button is pressed. Only applies when `toggle` is `true`.
@@ -174,33 +174,33 @@ export class IconButtonComponent extends BaseButton<IconButtonCore> implements I
    * @deprecated Use `pressed` instead.
    */
   @coreProperty({ name: 'pressed' })
-  public declare on: boolean;
+  declare public on: boolean;
 
   /**
    * The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
    * @default "default"
    */
   @coreProperty()
-  public declare theme: IconButtonTheme;
+  declare public theme: IconButtonTheme;
 
   /**
    * The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
    * @default "icon"
    */
   @coreProperty()
-  public declare variant: IconButtonVariant;
+  declare public variant: IconButtonVariant;
 
   /**
    * The shape of the button. Valid values are `circular` and `squared`.
    * @default "circular"
    */
   @coreProperty()
-  public declare shape: IconButtonShape;
+  declare public shape: IconButtonShape;
 
   /**
    * The density of the button. Valid values are `small`, `medium`, and `large`.
    * @default "large"
    */
   @coreProperty()
-  public declare density: IconButtonDensity;
+  declare public density: IconButtonDensity;
 }

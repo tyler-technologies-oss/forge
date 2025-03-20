@@ -13,6 +13,12 @@ export interface IIconDescriptor {
   node?: SVGElement;
 }
 
+declare global {
+  interface Window {
+    [ICON_REGISTRY_KEY]: Map<string, IIconDescriptor>;
+  }
+}
+
 /**
  * The registry for SVG icon instances being used within the current context.
  */
