@@ -109,14 +109,14 @@ export class BottomSheetComponent extends WithElementInternals(WithDefaultAria(B
   }
 
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   @coreProperty()
-  public declare mode: BottomSheetMode;
+  declare public mode: BottomSheetMode;
 
   @coreProperty()
-  public declare persistent: boolean;
+  declare public persistent: boolean;
 
   @coreProperty()
-  public declare fullscreen: boolean;
+  declare public fullscreen: boolean;
 }

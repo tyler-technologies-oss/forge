@@ -122,17 +122,17 @@ export class AppBarComponent extends BaseComponent implements IAppBarComponent {
   }
 
   @coreProperty()
-  public declare titleText: string;
+  declare public titleText: string;
 
   @coreProperty()
-  public declare elevation: AppBarElevation;
+  declare public elevation: AppBarElevation;
 
   @coreProperty()
-  public declare theme: AppBarTheme;
+  declare public theme: AppBarTheme;
 
   @coreProperty()
-  public declare href: string;
+  declare public href: string;
 
   @coreProperty()
-  public declare target: string;
+  declare public target: string;
 }

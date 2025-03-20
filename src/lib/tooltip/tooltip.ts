@@ -179,46 +179,46 @@ export class TooltipComponent extends WithDefaultAria(WithElementInternals(BaseC
   }
 
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   @coreProperty()
-  public declare type: TooltipType;
+  declare public type: TooltipType;
 
   @coreProperty()
-  public declare anchor: string;
+  declare public anchor: string;
 
   @coreProperty()
-  public declare anchorElement: HTMLElement | null;
+  declare public anchorElement: HTMLElement | null;
 
   /** @deprecated use `anchor` instead */
   @coreProperty({ name: 'anchor' })
-  public declare target: string;
+  declare public target: string;
 
   @coreProperty()
-  public declare placement: `${TooltipPlacement}`;
+  declare public placement: `${TooltipPlacement}`;
 
   /** @deprecated use `placement` instead */
   @coreProperty({ name: 'placement' })
-  public declare position: `${TooltipPlacement}`;
+  declare public position: `${TooltipPlacement}`;
 
   @coreProperty()
-  public declare delay: number;
+  declare public delay: number;
 
   @coreProperty()
-  public declare offset: number;
+  declare public offset: number;
 
   @coreProperty()
-  public declare flip: OverlayFlipState;
+  declare public flip: OverlayFlipState;
 
   @coreProperty()
-  public declare boundary: string | null;
+  declare public boundary: string | null;
 
   @coreProperty()
-  public declare boundaryElement: HTMLElement | null;
+  declare public boundaryElement: HTMLElement | null;
 
   @coreProperty()
-  public declare fallbackPlacements: PositionPlacement[] | null;
+  declare public fallbackPlacements: PositionPlacement[] | null;
 
   @coreProperty()
-  public declare triggerType: TooltipTriggerType | TooltipTriggerType[];
+  declare public triggerType: TooltipTriggerType | TooltipTriggerType[];
 }

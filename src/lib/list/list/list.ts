@@ -116,23 +116,23 @@ export class ListComponent extends WithElementInternals(WithDefaultAria(BaseComp
   }
 
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   @coreProperty()
-  public declare indented: boolean;
+  declare public indented: boolean;
 
   @coreProperty()
-  public declare selectedValue: any;
+  declare public selectedValue: any;
 
   @coreProperty()
-  public declare twoLine: boolean;
+  declare public twoLine: boolean;
 
   @coreProperty()
-  public declare threeLine: boolean;
+  declare public threeLine: boolean;
 
   @coreProperty()
-  public declare wrap: boolean;
+  declare public wrap: boolean;
 
   @coreProperty()
-  public declare noninteractive: boolean;
+  declare public noninteractive: boolean;
 }

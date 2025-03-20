@@ -256,13 +256,13 @@ export class SelectComponent
   }
 
   @coreProperty()
-  public declare label: string;
+  declare public label: string;
 
   @coreProperty()
-  public declare placeholder: string;
+  declare public placeholder: string;
 
   @coreProperty()
-  public declare readonly: boolean;
+  declare public readonly: boolean;
 
   public override get floatLabel(): boolean {
     return super.floatLabel;

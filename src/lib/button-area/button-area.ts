@@ -79,5 +79,5 @@ export class ButtonAreaComponent extends BaseComponent implements IButtonAreaCom
 
   /** Controls whether the component and associated button element are disabled. */
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 }

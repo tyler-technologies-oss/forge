@@ -192,7 +192,7 @@ export class RadioComponent
    * @attribute
    */
   @coreProperty()
-  public declare checked: boolean;
+  declare public checked: boolean;
 
   /**
    * Gets/sets whether the radio is checked by default.
@@ -200,7 +200,7 @@ export class RadioComponent
    * @attribute default-checked
    */
   @coreProperty()
-  public declare defaultChecked: boolean;
+  declare public defaultChecked: boolean;
 
   /**
    * Gets/sets the value of the radio when submitted as part of a form.
@@ -208,7 +208,7 @@ export class RadioComponent
    * @attribute
    */
   @coreProperty()
-  public declare value: string;
+  declare public value: string;
 
   /**
    * Controls whether the radio is dense.
@@ -216,7 +216,7 @@ export class RadioComponent
    * @attribute
    */
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   /**
    * Controls whether the radio is disabled.
@@ -224,7 +224,7 @@ export class RadioComponent
    * @attribute
    */
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   /**
    * Controls whether the radio is required.
@@ -232,7 +232,7 @@ export class RadioComponent
    * @attribute
    */
   @coreProperty()
-  public declare required: boolean;
+  declare public required: boolean;
 
   /**
    * Controls whether the radio is read-only.
@@ -240,7 +240,7 @@ export class RadioComponent
    * @attribute
    */
   @coreProperty()
-  public declare readonly: boolean;
+  declare public readonly: boolean;
 
   /**
    * Controls whether the label appears before or after the radio.
@@ -248,7 +248,7 @@ export class RadioComponent
    * @attribute label-position
    */
   @coreProperty()
-  public declare labelPosition: RadioLabelPosition;
+  declare public labelPosition: RadioLabelPosition;
 
   public [tryCheck](): boolean {
     return this._core.tryCheck();

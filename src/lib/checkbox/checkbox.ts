@@ -221,7 +221,7 @@ export class CheckboxComponent
    * @attribute checked
    */
   @coreProperty()
-  public declare checked: boolean;
+  declare public checked: boolean;
 
   /**
    * Gets/sets whether the checkbox is checked by default.
@@ -229,7 +229,7 @@ export class CheckboxComponent
    * @attribute default-checked
    */
   @coreProperty()
-  public declare defaultChecked: boolean;
+  declare public defaultChecked: boolean;
 
   /**
    * Gets/sets the indeterminate state.
@@ -237,7 +237,7 @@ export class CheckboxComponent
    * @attribute
    */
   @coreProperty()
-  public declare indeterminate: boolean;
+  declare public indeterminate: boolean;
 
   /**
    * Controls the value submitted with a form when checked.
@@ -245,7 +245,7 @@ export class CheckboxComponent
    * @attribute
    */
   @coreProperty()
-  public declare value: string;
+  declare public value: string;
 
   /**
    * Controls whether the checkbox is dense.
@@ -253,7 +253,7 @@ export class CheckboxComponent
    * @attribute
    */
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   /**
    * Controls whether the checkbox is disabled.
@@ -261,7 +261,7 @@ export class CheckboxComponent
    * @attribute
    */
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   /**
    * Controls whether the checkbox is required.
@@ -269,7 +269,7 @@ export class CheckboxComponent
    * @attribute
    */
   @coreProperty()
-  public declare required: boolean;
+  declare public required: boolean;
 
   /**
    * Controls whether the checkbox is readonly.
@@ -277,7 +277,7 @@ export class CheckboxComponent
    * @attribute
    */
   @coreProperty()
-  public declare readonly: boolean;
+  declare public readonly: boolean;
 
   /**
    * Controls whether the label appears before or after the checkbox.
@@ -285,7 +285,7 @@ export class CheckboxComponent
    * @attribute label-position
    */
   @coreProperty()
-  public declare labelPosition: CheckboxLabelPosition;
+  declare public labelPosition: CheckboxLabelPosition;
 
   /**
    * Toggles the checkbox checked or unchecked.

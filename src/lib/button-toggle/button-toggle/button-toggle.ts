@@ -123,16 +123,16 @@ export class ButtonToggleComponent<T = unknown> extends WithDefaultAria(WithElem
   }
 
   @coreProperty()
-  public declare value: T;
+  declare public value: T;
 
   @coreProperty()
-  public declare selected: boolean;
+  declare public selected: boolean;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare readonly: boolean;
+  declare public readonly: boolean;
 
   public override focus(options?: ExperimentalFocusOptions): void {
     this._core.focus(options);

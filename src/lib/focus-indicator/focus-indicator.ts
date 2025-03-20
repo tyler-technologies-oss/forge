@@ -114,23 +114,23 @@ export class FocusIndicatorComponent extends BaseComponent implements IFocusIndi
   }
 
   @coreProperty()
-  public declare targetElement: HTMLElement;
+  declare public targetElement: HTMLElement;
 
   @coreProperty()
-  public declare target: string | null;
+  declare public target: string | null;
 
   @coreProperty()
-  public declare active: boolean;
+  declare public active: boolean;
 
   @coreProperty()
-  public declare inward: boolean;
+  declare public inward: boolean;
 
   @coreProperty()
-  public declare circular: boolean;
+  declare public circular: boolean;
 
   @coreProperty()
-  public declare allowFocus: boolean;
+  declare public allowFocus: boolean;
 
   @coreProperty()
-  public declare focusMode: FocusIndicatorFocusMode;
+  declare public focusMode: FocusIndicatorFocusMode;
 }

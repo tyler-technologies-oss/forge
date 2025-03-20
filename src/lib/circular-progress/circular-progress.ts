@@ -103,14 +103,14 @@ export class CircularProgressComponent extends WithDefaultAria(WithElementIntern
   }
 
   @coreProperty()
-  public declare determinate: boolean;
+  declare public determinate: boolean;
 
   @coreProperty()
-  public declare progress: number;
+  declare public progress: number;
 
   @coreProperty()
-  public declare theme: CircularProgressTheme;
+  declare public theme: CircularProgressTheme;
 
   @coreProperty()
-  public declare track: boolean;
+  declare public track: boolean;
 }

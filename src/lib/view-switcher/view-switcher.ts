@@ -70,7 +70,7 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
    * @attribute
    */
   @coreProperty()
-  public declare index: number;
+  declare public index: number;
 
   /**
    * Gets/sets the animation type.
@@ -78,7 +78,7 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
    * @attribute animation-type
    */
   @coreProperty()
-  public declare animationType: `${ViewSwitcherAnimationType}` | ViewSwitcherAnimation;
+  declare public animationType: `${ViewSwitcherAnimationType}` | ViewSwitcherAnimation;
 
   /** Transitions to the next view. */
   public next(): void {

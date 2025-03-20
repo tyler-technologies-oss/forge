@@ -118,8 +118,8 @@ export class OverlayComponent extends BaseOverlay<OverlayCore> implements IOverl
   }
 
   @coreProperty()
-  public declare arrowElement: HTMLElement;
+  declare public arrowElement: HTMLElement;
 
   @coreProperty()
-  public declare arrowElementOffset: number;
+  declare public arrowElementOffset: number;
 }

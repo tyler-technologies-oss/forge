@@ -94,14 +94,14 @@ export class LinearProgressComponent extends WithElementInternals(WithDefaultAri
   }
 
   @coreProperty()
-  public declare determinate: boolean;
+  declare public determinate: boolean;
 
   @coreProperty()
-  public declare progress: number;
+  declare public progress: number;
 
   @coreProperty()
-  public declare buffer: number;
+  declare public buffer: number;
 
   @coreProperty()
-  public declare theme: LinearProgressTheme;
+  declare public theme: LinearProgressTheme;
 }

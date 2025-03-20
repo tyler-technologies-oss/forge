@@ -267,7 +267,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   /**
    * The mode of the dialog.
@@ -275,7 +275,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare mode: DialogMode;
+  declare public mode: DialogMode;
 
   /**
    * The type of the dialog.
@@ -283,7 +283,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare type: DialogType;
+  declare public type: DialogType;
 
   /**
    * The animation type of the dialog.
@@ -291,7 +291,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute animation-type
    */
   @coreProperty()
-  public declare animationType: DialogAnimationType;
+  declare public animationType: DialogAnimationType;
 
   /**
    * The preset design that the dialog will apply.
@@ -299,7 +299,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare preset: DialogPreset;
+  declare public preset: DialogPreset;
 
   /**
    * Indicates whether the dialog is dismissible via escape and backdrop click or not.
@@ -307,7 +307,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare persistent: boolean;
+  declare public persistent: boolean;
 
   /**
    * Indicates whether the dialog is fullscreen or not.
@@ -315,7 +315,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare fullscreen: boolean;
+  declare public fullscreen: boolean;
 
   /**
    * The screen width at which the dialog will switch to fullscreen.
@@ -323,7 +323,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute fullscreen-threshold
    */
   @coreProperty()
-  public declare fullscreenThreshold: number;
+  declare public fullscreenThreshold: number;
 
   /**
    * The selector of the element that triggers the dialog.
@@ -331,14 +331,14 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare trigger: string;
+  declare public trigger: string;
 
   /**
    * The element that triggers the dialog.
    * @default null
    */
   @coreProperty()
-  public declare triggerElement: HTMLElement | null;
+  declare public triggerElement: HTMLElement | null;
 
   /**
    * Indicates whether the dialog is moveable or not.
@@ -346,7 +346,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare moveable: boolean;
+  declare public moveable: boolean;
 
   /**
    * Controls whether the dialog is rendered relative to the viewport or its nearest containing block.
@@ -354,7 +354,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute position-strategy
    */
   @coreProperty()
-  public declare positionStrategy: DialogPositionStrategy;
+  declare public positionStrategy: DialogPositionStrategy;
 
   /**
    * Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
@@ -362,7 +362,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute size-strategy
    */
   @coreProperty()
-  public declare sizeStrategy: DialogSizeStrategy;
+  declare public sizeStrategy: DialogSizeStrategy;
 
   /**
    * The placement of the dialog.
@@ -370,7 +370,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare placement: DialogPlacement;
+  declare public placement: DialogPlacement;
 
   /**
    * The accessible label of the dialog.
@@ -378,7 +378,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare label: string;
+  declare public label: string;
 
   /**
    * The accessible description of the dialog.
@@ -386,7 +386,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare description: string;
+  declare public description: string;
 
   /** Shows the dialog. */
   public show(): void {

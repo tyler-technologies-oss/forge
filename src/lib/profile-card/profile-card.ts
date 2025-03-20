@@ -110,34 +110,34 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
   }
 
   @coreProperty()
-  public declare fullName: string;
+  declare public fullName: string;
 
   @coreProperty()
-  public declare email: string;
+  declare public email: string;
 
   @coreProperty()
-  public declare signOut: boolean;
+  declare public signOut: boolean;
 
   @coreProperty()
-  public declare profile: boolean;
+  declare public profile: boolean;
 
   @coreProperty()
-  public declare signOutText: string;
+  declare public signOutText: string;
 
   @coreProperty()
-  public declare profileText: string;
+  declare public profileText: string;
 
   @coreProperty()
-  public declare avatarText: string;
+  declare public avatarText: string;
 
   @coreProperty()
-  public declare avatarIcon: string;
+  declare public avatarIcon: string;
 
   @coreProperty()
-  public declare avatarImageUrl: string;
+  declare public avatarImageUrl: string;
 
   @coreProperty()
-  public declare avatarLetterCount: number;
+  declare public avatarLetterCount: number;
 
   public override focus(options?: FocusOptions): void {
     this._core.focus(options);
