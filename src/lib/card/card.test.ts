@@ -3,7 +3,6 @@ import { fixture } from '@open-wc/testing';
 import type { ICardComponent } from './card';
 import { TestHarness } from '../../test/utils/test-harness';
 import { getShadowElement } from '@tylertech/forge-core';
-import { CARD_CONSTANTS } from './card-constants';
 
 import './card';
 
@@ -24,7 +23,7 @@ describe('Card', () => {
     const el = await fixture<ICardComponent>('<forge-card></forge-card>');
 
     expect(el.raised).to.be.false;
-    expect(el.hasAttribute(CARD_CONSTANTS.attributes.RAISED)).to.be.false;
+    expect(el.hasAttribute('raised')).to.be.false;
   });
 
   it('should have padding by default', async () => {
@@ -38,16 +37,17 @@ describe('Card', () => {
     const el = await fixture<ICardComponent>('<forge-card></forge-card>');
 
     el.raised = true;
+    await el.updateComplete;
 
     expect(el.raised).to.be.true;
-    expect(el.hasAttribute(CARD_CONSTANTS.attributes.RAISED)).to.be.true;
+    expect(el.hasAttribute('raised')).to.be.true;
   });
 
   it('should set raised by default via attribute', async () => {
     const el = await fixture<ICardComponent>('<forge-card raised></forge-card>');
 
     expect(el.raised).to.be.true;
-    expect(el.hasAttribute(CARD_CONSTANTS.attributes.RAISED)).to.be.true;
+    expect(el.hasAttribute('raised')).to.be.true;
   });
 
   it('should unset raised', async () => {
@@ -56,9 +56,10 @@ describe('Card', () => {
     expect(el.raised).to.be.true;
 
     el.raised = false;
+    await el.updateComplete;
 
     expect(el.raised).to.be.false;
-    expect(el.hasAttribute(CARD_CONSTANTS.attributes.RAISED)).to.be.false;
+    expect(el.hasAttribute('raised')).to.be.false;
   });
 
   it('should project content into default slot', async () => {

@@ -30,7 +30,7 @@ const charsByLetterCount = (text: string, count: number): string => {
   }
 };
 
-export const AVATAR_TAG_NAME = 'forge-avatar';
+export const AVATAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-avatar';
 
 /**
  * @tag forge-avatar

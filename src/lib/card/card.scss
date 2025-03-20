@@ -28,7 +28,7 @@
 // Raised
 //
 
-:host([raised]) {
+:host(:where([raised], :state(raised), :--raised)) {
   .forge-card {
     @include raised;
   }
