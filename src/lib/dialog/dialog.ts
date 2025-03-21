@@ -14,6 +14,7 @@ import {
   DialogPreset,
   DialogSizeStrategy,
   DialogType,
+  IDialogBeforeCloseEventData,
   IDialogMoveEventData,
   IDialogMoveStartEventData,
   dialogStack,
@@ -59,7 +60,7 @@ declare global {
   interface HTMLElementEventMap {
     'forge-dialog-open': CustomEvent<void>;
     'forge-dialog-close': CustomEvent<void>;
-    'forge-dialog-before-close': CustomEvent<void>;
+    'forge-dialog-before-close': CustomEvent<IDialogBeforeCloseEventData>;
     'forge-dialog-move-start': CustomEvent<IDialogMoveStartEventData>;
     'forge-dialog-move': CustomEvent<IDialogMoveEventData>;
     'forge-dialog-move-end': CustomEvent<void>;
@@ -84,7 +85,7 @@ declare global {
  *
  * @event {CustomEvent<void>} forge-dialog-open - Dispatched when the dialog is opened.
  * @event {CustomEvent<void>} forge-dialog-close - Dispatched when the dialog is closed.
- * @event {CustomEvent<void>} forge-dialog-before-close - Dispatched before the dialog is closed. This event is cancelable.
+ * @event {CustomEvent<IDialogBeforeCloseEventData>} forge-dialog-before-close - Dispatched before the dialog is closed. This event is cancelable.
  * @event {CustomEvent<IDialogMoveStartEventData>} forge-dialog-move-start - Dispatched when the dialog is first moved.
  * @event {CustomEvent<IDialogMoveEventData>} forge-dialog-move - Dispatched when the dialog is being moved.
  * @event {CustomEvent<void>} forge-dialog-move-end - Dispatched when the dialog is done being moved.
@@ -194,7 +195,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
   }
 
   public [tryDismiss](_state?: IDismissibleStackState<string> | undefined): boolean {
-    return this._core.dispatchBeforeCloseEvent();
+    return this._core.dispatchBeforeCloseEvent('dismiss');
   }
 
   constructor() {

@@ -4,6 +4,7 @@ import { IDialogAdapter } from './dialog-adapter';
 import {
   DIALOG_CONSTANTS,
   DialogAnimationType,
+  DialogCloseReason,
   DialogMode,
   DialogPlacement,
   DialogPositionStrategy,
@@ -32,7 +33,7 @@ export interface IDialogCore {
   description: string;
   hideBackdrop(): void;
   showBackdrop(): void;
-  dispatchBeforeCloseEvent(): boolean;
+  dispatchBeforeCloseEvent(reason: DialogCloseReason): boolean;
 }
 
 export class DialogCore implements IDialogCore {
@@ -92,11 +93,12 @@ export class DialogCore implements IDialogCore {
     this._adapter.destroy();
   }
 
-  public dispatchBeforeCloseEvent(): boolean {
+  public dispatchBeforeCloseEvent(reason: DialogCloseReason): boolean {
     const evt = new CustomEvent(DIALOG_CONSTANTS.events.BEFORE_CLOSE, {
       cancelable: true,
       bubbles: true,
-      composed: true
+      composed: true,
+      detail: { reason }
     });
     this._adapter.dispatchHostEvent(evt);
     return !evt.defaultPrevented;
@@ -183,19 +185,19 @@ export class DialogCore implements IDialogCore {
     evt.preventDefault();
 
     if (!this._persistent) {
-      this._tryClose();
+      this._tryClose('escape');
     }
   }
 
   private _onBackdropDismiss(): void {
-    this._tryClose();
+    this._tryClose('backdrop');
   }
 
   private _onDialogFormSubmit(evt: SubmitEvent): void {
     evt.stopPropagation();
     const isDialogSubmitter = evt.submitter?.getAttribute('formmethod') === 'dialog' || (evt.target as HTMLFormElement)?.getAttribute('method') === 'dialog';
     if (isDialogSubmitter) {
-      this._tryClose();
+      this._tryClose('submit');
     }
   }
 
@@ -205,8 +207,8 @@ export class DialogCore implements IDialogCore {
     this._adapter.dispatchHostEvent(event);
   }
 
-  private _tryClose(): void {
-    if (this.dispatchBeforeCloseEvent()) {
+  private _tryClose(reason: DialogCloseReason): void {
+    if (this.dispatchBeforeCloseEvent(reason)) {
       this.open = false;
     }
   }
