@@ -24,6 +24,7 @@ describe('Card', () => {
 
     expect(el.raised).to.be.false;
     expect(el.hasAttribute('raised')).to.be.false;
+    expect(el.matches(':state(raised)')).to.be.false;
   });
 
   it('should have padding by default', async () => {
@@ -41,6 +42,7 @@ describe('Card', () => {
 
     expect(el.raised).to.be.true;
     expect(el.hasAttribute('raised')).to.be.true;
+    expect(el.matches(':state(raised)')).to.be.true;
   });
 
   it('should set raised by default via attribute', async () => {
@@ -48,6 +50,7 @@ describe('Card', () => {
 
     expect(el.raised).to.be.true;
     expect(el.hasAttribute('raised')).to.be.true;
+    expect(el.matches(':state(raised)')).to.be.true;
   });
 
   it('should unset raised', async () => {
@@ -60,6 +63,7 @@ describe('Card', () => {
 
     expect(el.raised).to.be.false;
     expect(el.hasAttribute('raised')).to.be.false;
+    expect(el.matches(':state(raised)')).to.be.false;
   });
 
   it('should project content into default slot', async () => {

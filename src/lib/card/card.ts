@@ -47,9 +47,7 @@ export class CardComponent extends LitElement implements ICardComponent {
 
   #internals: ElementInternals;
 
-  /**
-   * Whether the card has elevation or not.
-   */
+  /** Whether the card has elevation or not. */
   @property({ type: Boolean, reflect: true }) public raised = false; // TODO: remove reflect in v4 in favor of :state
 
   constructor() {
