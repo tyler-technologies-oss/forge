@@ -1,6 +1,5 @@
 import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate';
 import { IBadgeComponent } from './badge';
-import { BADGE_CONSTANTS } from './badge-constants';
 
 export type BadgeComponentDelegateProps = Partial<IBadgeComponent>;
 export interface IBadgeComponentDelegateOptions extends IBaseComponentDelegateOptions {}
@@ -12,6 +11,6 @@ export class BadgeComponentDelegate extends BaseComponentDelegate<IBadgeComponen
   }
 
   protected _build(): IBadgeComponent {
-    return document.createElement(BADGE_CONSTANTS.elementName);
+    return document.createElement('forge-badge');
   }
 }

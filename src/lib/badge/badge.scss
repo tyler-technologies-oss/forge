@@ -41,7 +41,7 @@
 // Hide
 //
 
-:host([hide]) {
+:host(:where([hide], :state(hidden))) {
   .forge-badge {
     @include hide;
   }
@@ -51,12 +51,12 @@
 // Dot
 //
 
-:host([dot]) {
+:host(:where([dot], :state(dot))) {
   .forge-badge {
     @include dot;
   }
 
-  .forge-badge > slot {
+  .content > slot {
     display: none;
   }
 }
@@ -74,7 +74,7 @@
     }
   }
 
-  :host([strong][theme='#{$theme}']) {
+  :host(:where([strong], :state(strong))[theme='#{$theme}']) {
     .forge-badge {
       @include override(background, theme.variable($theme), value);
       @include override(color, theme.variable(on-#{$theme}), value);
@@ -83,13 +83,13 @@
 }
 
 // Map both "error" and "danger" for backwards compatibility with legacy "danger" theme
-:host(:not([strong]):is([theme='error'], [theme='danger'])) {
+:host(:not(:where([strong], :state(strong))):is([theme='error'], [theme='danger'])) {
   .forge-badge {
     @include override(background, theme.variable(error-container-low), value);
     @include override(color, theme.variable(error), value);
   }
 }
-:host([strong]:is([theme='error'], [theme='danger'])) {
+:host(:where([strong], :state(strong)):is([theme='error'], [theme='danger'])) {
   .forge-badge {
     @include override(background, theme.variable(error), value);
     @include override(color, theme.variable(on-error), value);
@@ -97,13 +97,13 @@
 }
 
 // Map both "info" and "info-primary" for backwards compatibility with "info" theme
-:host(:not([strong]):is([theme='info'], [theme='info-primary'])) {
+:host(:not(:where([strong], :state(strong))):is([theme='info'], [theme='info-primary'])) {
   .forge-badge {
     @include override(background, theme.variable(info-container), value);
     @include override(color, theme.variable(on-info-container), value);
   }
 }
-:host([strong]:is([theme='info'], [theme='info-primary'])) {
+:host(:where([strong], :state(strong)):is([theme='info'], [theme='info-primary'])) {
   .forge-badge {
     @include override(background, theme.variable(info), value);
     @include override(color, theme.variable(on-info), value);
@@ -111,13 +111,13 @@
 }
 
 // Support "info-secondary" separately since it is not a core theme
-:host(:not([strong])[theme='info-secondary']) {
+:host(:not(:where([strong], :state(strong)))[theme='info-secondary']) {
   .forge-badge {
     @include override(background, theme.variable(surface-container-low), value);
     @include override(color, theme.variable(on-surface-container-low), value);
   }
 }
-:host([strong][theme='info-secondary']) {
+:host(:where([strong], :state(strong))[theme='info-secondary']) {
   .forge-badge {
     @include override(background, theme.variable(surface-inverse), value);
     @include override(color, theme.variable(on-surface-inverse), value);

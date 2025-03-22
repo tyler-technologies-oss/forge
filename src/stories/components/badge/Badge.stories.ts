@@ -32,7 +32,11 @@ const meta = {
     })
   },
   args: {
-    text: 'Status'
+    text: 'Status',
+    dot: false,
+    theme: 'default',
+    strong: false,
+    hide: false
   }
 } satisfies Meta;
 
