@@ -323,9 +323,26 @@ describe('TableComponent', function(this: ITestContext) {
       const firstCell = firstRow.cells.item(0) as HTMLTableCellElement;
       const selectCheckboxElement = firstCell.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
 
-      selectCheckboxElement.click();
+      selectCheckboxElement.dispatchEvent(new PointerEvent('pointerdown'));
 
       expect(firstRow.classList.contains(TABLE_CONSTANTS.classes.TABLE_BODY_ROW_SELECTED)).toBe(true, 'Expected clicked row to have selected class');
+    });
+
+    it('should select row when pressing space key', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.data = data;
+      this.context.component.columnConfigurations = columns;
+      this.context.component.select = true;
+      this.context.component.selectKey = 'Id';
+
+      const rows = getTableBodyRows(this.context.getTableElement());
+      const firstRow = rows[0] as HTMLTableRowElement;
+      const firstCell = firstRow.cells.item(0) as HTMLTableCellElement;
+      const selectCheckboxElement = firstCell.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
+
+      selectCheckboxElement.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+
+      expect(firstRow.classList.contains(TABLE_CONSTANTS.classes.TABLE_BODY_ROW_SELECTED)).toBe(true, 'Expected row to have selected class');
     });
 
     it('should not select row when clicking non-checkbox element', function(this: ITestContext) {
@@ -361,7 +378,7 @@ describe('TableComponent', function(this: ITestContext) {
 
       const rows = getTableBodyRows(this.context.getTableElement());
       const selectCheckboxElement = rows[0].cells.item(0)!.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
-      selectCheckboxElement.click();
+      selectCheckboxElement.dispatchEvent(new PointerEvent('pointerdown'));
 
       expect(callback).toHaveBeenCalled();
     });
@@ -535,7 +552,7 @@ describe('TableComponent', function(this: ITestContext) {
       const rows = getTableBodyRows(this.context.getTableElement());
       data.forEach((item, index) => {
         const selectCheckboxElement = rows[index].cells.item(0)!.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
-        selectCheckboxElement.click();
+        selectCheckboxElement.dispatchEvent(new PointerEvent('pointerdown'));
       });
 
       expect(callback).toHaveBeenCalled();
@@ -556,8 +573,8 @@ describe('TableComponent', function(this: ITestContext) {
       const firstRowSelectCheckboxElement = firstRowfirstCell.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
       const secondRowSelectCheckboxElement = secondRowfirstCell.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
 
-      firstRowSelectCheckboxElement.click();
-      secondRowSelectCheckboxElement.click();
+      firstRowSelectCheckboxElement.dispatchEvent(new PointerEvent('pointerdown'));
+      secondRowSelectCheckboxElement.dispatchEvent(new PointerEvent('pointerdown'));
 
       expect(firstRow.classList.contains(TABLE_CONSTANTS.classes.TABLE_BODY_ROW_SELECTED)).toBe(true, 'Expected first clicked row to have selected class');
 
@@ -580,8 +597,8 @@ describe('TableComponent', function(this: ITestContext) {
       const firstRowSelectCheckboxElement = firstRowfirstCell.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
       const secondRowSelectCheckboxElement = secondRowfirstCell.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
 
-      firstRowSelectCheckboxElement.click();
-      secondRowSelectCheckboxElement.click();
+      firstRowSelectCheckboxElement.dispatchEvent(new PointerEvent('pointerdown'));
+      secondRowSelectCheckboxElement.dispatchEvent(new PointerEvent('pointerdown'));
 
       expect(firstRow.classList.contains(TABLE_CONSTANTS.classes.TABLE_BODY_ROW_SELECTED)).toBe(false, 'Expected first clicked row to have selected class');
 
@@ -603,15 +620,15 @@ describe('TableComponent', function(this: ITestContext) {
       const firstRowSelectCheckboxElement = firstRowfirstCell.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
       const secondRowSelectCheckboxElement = secondRowfirstCell.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
 
-      firstRowSelectCheckboxElement.click();
-      secondRowSelectCheckboxElement.click();
+      firstRowSelectCheckboxElement.dispatchEvent(new PointerEvent('pointerdown'));
+      secondRowSelectCheckboxElement.dispatchEvent(new PointerEvent('pointerdown'));
 
       expect(firstRow.classList.contains(TABLE_CONSTANTS.classes.TABLE_BODY_ROW_SELECTED)).toBe(true, 'Expected first clicked row to have selected class');
 
       expect(secondRow.classList.contains(TABLE_CONSTANTS.classes.TABLE_BODY_ROW_SELECTED)).toBe(true, 'Expected second clicked row to have selected class');
 
-      firstRowSelectCheckboxElement.click();
-      secondRowSelectCheckboxElement.click();
+      firstRowSelectCheckboxElement.dispatchEvent(new PointerEvent('pointerdown'));
+      secondRowSelectCheckboxElement.dispatchEvent(new PointerEvent('pointerdown'));
 
       expect(firstRow.classList.contains(TABLE_CONSTANTS.classes.TABLE_BODY_ROW_SELECTED)).toBe(false, 'Expected first clicked row to have selected class');
 
@@ -1797,8 +1814,8 @@ describe('TableComponent', function(this: ITestContext) {
       const checkbox1 = rows[0].cells.item(0)!.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
       const checkbox2 = rows[3].cells.item(0)!.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
 
-      checkbox1.dispatchEvent(new MouseEvent('click'));
-      checkbox2.dispatchEvent(new MouseEvent('click', { shiftKey: true }));
+      checkbox1.dispatchEvent(new PointerEvent('pointerdown'));
+      checkbox2.dispatchEvent(new PointerEvent('pointerdown', { shiftKey: true }));
 
       const selectedRows = this.context.component.getSelectedRows();
 
@@ -1820,8 +1837,8 @@ describe('TableComponent', function(this: ITestContext) {
       const checkboxRow1 = rows[0].cells.item(0)!.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
       const checkboxRow4 = rows[3].cells.item(0)!.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
 
-      checkboxRow1.dispatchEvent(new MouseEvent('click'));
-      checkboxRow4.dispatchEvent(new MouseEvent('click', { shiftKey: true }));
+      checkboxRow1.dispatchEvent(new PointerEvent('pointerdown'));
+      checkboxRow4.dispatchEvent(new PointerEvent('pointerdown', { shiftKey: true }));
 
       expect(callback).toHaveBeenCalledTimes(4);
     });
@@ -1839,9 +1856,9 @@ describe('TableComponent', function(this: ITestContext) {
       const checkbox2 = rows[2].cells.item(0)!.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
       const checkbox3 = rows[3].cells.item(0)!.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLElement;
 
-      checkbox1.dispatchEvent(new MouseEvent('click'));
-      checkbox3.dispatchEvent(new MouseEvent('click', { shiftKey: true }));
-      checkbox2.dispatchEvent(new MouseEvent('click', { shiftKey: true }));
+      checkbox1.dispatchEvent(new PointerEvent('pointerdown'));
+      checkbox3.dispatchEvent(new PointerEvent('pointerdown', { shiftKey: true }));
+      checkbox2.dispatchEvent(new PointerEvent('pointerdown', { shiftKey: true }));
 
       const selectedRows = this.context.component.getSelectedRows();
 
@@ -2180,8 +2197,7 @@ describe('TableComponent', function(this: ITestContext) {
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
         const checkbox = selectAllCell.querySelector('input') as HTMLInputElement;
         const rowCheckbox = this.context.getTableElement().querySelector('tbody > tr > td forge-checkbox');
-        rowCheckbox!.dispatchEvent(new MouseEvent('click'));
-        // this.context.component.selectRows([data[1]], true);
+        rowCheckbox!.dispatchEvent(new PointerEvent('pointerdown'));
         await frame();
 
         expect(checkbox.indeterminate).toBe(true);
@@ -2200,9 +2216,9 @@ describe('TableComponent', function(this: ITestContext) {
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
         const checkbox = selectAllCell.querySelector('input') as HTMLInputElement;
-        const rowCheckboxs = this.context.getTableElement().querySelectorAll('tbody forge-checkbox');
-        rowCheckboxs.forEach(c => {
-          c.dispatchEvent(new MouseEvent('click'));
+        const rowCheckboxes = this.context.getTableElement().querySelectorAll('tbody forge-checkbox');
+        rowCheckboxes.forEach(c => {
+          c.dispatchEvent(new PointerEvent('pointerdown'));
         });
 
         await frame();
@@ -2223,9 +2239,9 @@ describe('TableComponent', function(this: ITestContext) {
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
         const checkbox = selectAllCell.querySelector('input') as HTMLInputElement;
-        const rowCheckboxs = this.context.getTableElement().querySelectorAll('tbody forge-checkbox');
-        rowCheckboxs.forEach(c => {
-          c.dispatchEvent(new MouseEvent('click'));
+        const rowCheckboxes = this.context.getTableElement().querySelectorAll('tbody forge-checkbox');
+        rowCheckboxes.forEach(c => {
+          c.dispatchEvent(new PointerEvent('pointerdown'));
         });
 
         await frame();
