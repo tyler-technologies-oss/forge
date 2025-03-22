@@ -612,9 +612,11 @@ export class TableUtils {
     nonExpandedRows.forEach(row => TableUtils._attachRowSelectListener(row, clickListener));
   }
 
-  private static _attachRowSelectListener(row: HTMLTableRowElement, clickListener: (evt: Event) => void): void {
+  private static _attachRowSelectListener(row: HTMLTableRowElement, listener: (evt: Event) => void): void {
     const checkboxElement = TableUtils._getCheckboxElement(row);
-    checkboxElement?.addEventListener('click', clickListener);
+    checkboxElement?.addEventListener('change', listener);
+    checkboxElement?.addEventListener('keydown', listener);
+    checkboxElement?.addEventListener('pointerdown', listener);
   }
 
   /**
@@ -622,10 +624,12 @@ export class TableUtils {
    * @param tbodyElement The table body element.
    * @param listener The click listener.
    */
-  private static _detachRowSelectListeners(tbodyElement: HTMLTableSectionElement, clickListener: (evt: Event) => void): void {
+  private static _detachRowSelectListeners(tbodyElement: HTMLTableSectionElement, listener: (evt: Event) => void): void {
     Array.from(tbodyElement.rows).forEach(row => {
       const checkboxElement = TableUtils._getCheckboxElement(row);
-      checkboxElement?.removeEventListener('click', clickListener);
+      checkboxElement?.removeEventListener('change', listener);
+      checkboxElement?.removeEventListener('keydown', listener);
+      checkboxElement?.removeEventListener('pointerdown', listener);
     });
   }
 
