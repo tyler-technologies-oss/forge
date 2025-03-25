@@ -311,7 +311,7 @@ export function tryCreateAriaControlsPlaceholder(): void {
  */
 export function setAriaControls(component: HTMLElement): void {
   const placeholderDiv = document.getElementById(ARIA_CONTROLS_PLACEHOLDER_ID);
-  if (placeholderDiv) {
+  if (placeholderDiv && component) {
     component.setAttribute('aria-controls', placeholderDiv.id);
   }
 }
