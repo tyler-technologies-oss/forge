@@ -1,4 +1,5 @@
 @use './core' as *;
+@use '../../circular-progress';
 @use '../../focus-indicator';
 @use '../../state-layer';
 
@@ -174,4 +175,20 @@ forge-focus-indicator {
 
   // Ensure the focus indicator appears above sibling items
   z-index: 1;
+}
+
+//
+// Circular progress
+//
+
+.expand-icon {
+  forge-circular-progress {
+    @include circular-progress.provide-theme(
+      (
+        indicator-color: currentColor,
+        size: 16px,
+        track-width: 16
+      )
+    );
+  }
 }

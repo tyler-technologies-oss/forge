@@ -486,8 +486,6 @@ export class TreeComponent extends LitElement {
     const slot = evt.target as HTMLSlotElement;
     const assignedElement = slot.assignedElements()[0];
 
-    console.log(assignedElement);
-
     // If the assigned element is removed, remove the icon and update the context
     if (!assignedElement) {
       if (slot.name === 'expand-icon') {

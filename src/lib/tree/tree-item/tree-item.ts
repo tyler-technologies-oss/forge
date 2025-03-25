@@ -20,6 +20,7 @@ export type TreeItemUpdateReason = 'added' | 'deselected' | 'opened' | 'removed'
 /**
  * @tag forge-tree-item
  *
+ * @dependency forge-circular-progress
  * @dependency forge-icon
  * @dependency forge-open-icon
  *
@@ -51,6 +52,13 @@ export class TreeItemComponent extends LitElement {
    * @attribute
    */
   @property({ type: Boolean }) public open = false;
+
+  /**
+   * Whether the tree item supports lazy loading.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean }) public lazy = false;
 
   /**
    * Whether the tree item is disabled.
@@ -85,7 +93,7 @@ export class TreeItemComponent extends LitElement {
    * Whether the tree item has no child items.
    */
   public get leaf(): boolean {
-    return !this._children.length;
+    return !this._children.length && !this.lazy;
   }
 
   /**
@@ -99,6 +107,7 @@ export class TreeItemComponent extends LitElement {
 
   @state() private _level = 0;
   @state() private _leaf = true;
+  @state() private _loading = false;
   @state() private _hasSlottedExpandIcon = false;
   @state() private _hasSlottedCollapseIcon = false;
   @state() private _checkboxIcon: TreeItemCheckboxIcon = 'check_box_outline_blank';
@@ -132,41 +141,56 @@ export class TreeItemComponent extends LitElement {
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
-    // Keep track of changed properties with the tree's context object.
-    const contextDisabledChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.disabled !== this._context.disabled;
-    const modeChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.mode !== this._context.mode;
-    const collapseIconChanged =
-      changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.collapseIcon !== this._context.collapseIcon;
-    const expandIconChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.expandIcon !== this._context.expandIcon;
+    changedProperties.forEach((_, prop) => {
+      switch (prop) {
+        case 'selected':
+          this._setSelected();
+          this._checkboxIcon = this.indeterminate ? 'indeterminate_check_box' : this.selected ? 'check_box' : 'check_box_outline_blank';
+          break;
+        case indeterminate:
+          toggleState(this._internals, 'indeterminate', this.indeterminate);
+          this._checkboxIcon = this.indeterminate ? 'indeterminate_check_box' : this.selected ? 'check_box' : 'check_box_outline_blank';
+          break;
+        case 'open':
+          this._setOpen();
+          break;
+        case 'lazy':
+          this._loading = this.lazy;
+          this._detectChildren();
+          this._setOpen();
+          break;
+        case 'loading':
+          this._setLoading();
+          break;
+        case 'disabled':
+          this._setDisabled();
+          break;
+        case 'openDisabled':
+          this._setOpenDisabled();
+          break;
+      }
+    });
 
-    if (collapseIconChanged) {
-      this._setIconFromContext('collapse');
-    }
-    if (changedProperties.has('disabled') || contextDisabledChanged) {
-      this._setDisabled();
-    }
-    if (expandIconChanged) {
-      this._setIconFromContext('expand');
-    }
-    if (changedProperties.has(indeterminate)) {
-      toggleState(this._internals, 'indeterminate', this.indeterminate);
-    }
+    // Keep track of changed properties within the tree's context object.
+    const modeChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.mode !== this._context.mode;
+    const rootDisabledChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.disabled !== this._context.disabled;
+    const rootExpandIconChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.expandIcon !== this._context.expandIcon;
+    const rootCollapseIconChanged =
+      changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.collapseIcon !== this._context.collapseIcon;
+
     if (modeChanged) {
       this._setDisabled();
       this._setMode();
       this._setOpen();
     }
-    if (changedProperties.has('open')) {
-      this._setOpen();
+    if (rootExpandIconChanged) {
+      this._setIconFromContext('expand');
     }
-    if (changedProperties.has('openDisabled')) {
-      this._setOpenDisabled();
+    if (rootCollapseIconChanged) {
+      this._setIconFromContext('collapse');
     }
-    if (changedProperties.has('selected')) {
-      this._setSelected();
-    }
-    if (changedProperties.has('selected') || changedProperties.has(indeterminate)) {
-      this._checkboxIcon = this.indeterminate ? 'indeterminate_check_box' : this.selected ? 'check_box' : 'check_box_outline_blank';
+    if (rootDisabledChanged) {
+      this._setDisabled();
     }
   }
 
@@ -186,42 +210,13 @@ export class TreeItemComponent extends LitElement {
     // The header state layer is removed when the item is not interactive.
     const hideHeaderStateLayer = !interactive;
 
-    // When an item is not interactive the expand icon may still be enabled and should show its
-    // own state layer.
-    const showExpandIconStateLayer = this._context.mode !== 'leaf' && this._context.mode !== 'off' && disabled && !this.openDisabled;
-
-    // The default expand icon is shown when no custom expand or collapse icons are provided.
-    const showDefaultExpandIcon = !this._hasSlottedExpandIcon && !this._hasSlottedCollapseIcon;
-
     return html`
       <div
         part="root"
         class=${classMap({ 'forge-tree-item': true, interactive, disabled, 'open-disabled': this.openDisabled })}
         style=${styleMap({ '--_tree-item-level': this.level })}>
         <div part="header" class="header">
-          ${!this._leaf
-            ? html`
-                <span
-                  part="expand-icon"
-                  class=${classMap({
-                    'expand-icon': true,
-                    'has-custom-expand-icon': this._hasSlottedExpandIcon,
-                    'has-custom-collapse-icon': this._hasSlottedCollapseIcon
-                  })}
-                  @slotchange="${this._detectSlottedExpandOrCollapseIcon}">
-                  ${showDefaultExpandIcon
-                    ? html`<forge-open-icon class="default-expand-icon" orientation="horizontal" rotation="half" .open="${this.open}"></forge-open-icon>`
-                    : nothing}
-                  <slot name="expand-icon">
-                    <slot name="context-expand-icon"></slot>
-                  </slot>
-                  <slot name="collapse-icon">
-                    <slot name="context-collapse-icon"></slot>
-                  </slot>
-                  ${showExpandIconStateLayer ? html`<forge-state-layer></forge-state-layer>` : nothing}
-                </span>
-              `
-            : html`<span class="leaf-spacer"></span>`}
+          ${!this._leaf ? this._expandIconTemplate() : html`<span class="leaf-spacer"></span>`}
           ${this._context.mode === 'multiple'
             ? html`<forge-icon id="checkbox" class="checkbox" part="checkbox" .name="${this._checkboxIcon}"></forge-icon>`
             : nothing}
@@ -247,6 +242,46 @@ export class TreeItemComponent extends LitElement {
           </div>
         </div>
       </div>
+    `;
+  }
+
+  private _expandIconTemplate(): TemplateResult {
+    // When an item is not interactive the expand icon may still be enabled and should show its
+    // own state layer.
+    const showStateLayer = this._context.mode !== 'leaf' && this._context.mode !== 'off' && (this.disabled || this._context.disabled) && !this.openDisabled;
+
+    if (this._loading) {
+      return html`
+        <span part="expand-icon" class="expand-icon" aria-hidden="true">
+          <forge-circular-progress class="loading" part="loading-indicator"></forge-circular-progress>
+        </span>
+      `;
+    }
+
+    // The default expand icon is shown when no custom expand or collapse icons are provided.
+    const showDefaultIcon = !this._hasSlottedExpandIcon && !this._hasSlottedCollapseIcon;
+
+    return html`
+      <span
+        part="expand-icon"
+        class=${classMap({
+          'expand-icon': true,
+          'has-custom-expand-icon': this._hasSlottedExpandIcon,
+          'has-custom-collapse-icon': this._hasSlottedCollapseIcon
+        })}
+        aria-hidden="true"
+        @slotchange="${this._detectSlottedExpandOrCollapseIcon}">
+        ${showDefaultIcon
+          ? html`<forge-open-icon class="default-expand-icon" orientation="horizontal" rotation="half" .open="${this.open}"></forge-open-icon>`
+          : nothing}
+        <slot name="expand-icon">
+          <slot name="context-expand-icon"></slot>
+        </slot>
+        <slot name="collapse-icon">
+          <slot name="context-collapse-icon"></slot>
+        </slot>
+        ${showStateLayer ? html`<forge-state-layer></forge-state-layer>` : nothing}
+      </span>
     `;
   }
 
@@ -290,6 +325,10 @@ export class TreeItemComponent extends LitElement {
     const disabled = this.disabled || this._context.disabled;
     setDefaultAria(this, this._internals, { ariaDisabled: disabled ? 'true' : 'false' });
     toggleState(this._internals, 'disabled', disabled);
+  }
+
+  private _setLoading(): void {
+    setDefaultAria(this, this._internals, { ariaBusy: this._loading ? 'true' : 'false' });
   }
 
   private _setMode(): void {
