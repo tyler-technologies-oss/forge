@@ -370,13 +370,13 @@ function sortMultiColumnData(columns: ITableSortMultipleEventData): IData[] {
   return displayData;
 }
 
-function getSelectAllTemplate(): string {
-  return `
-    <div style="display: flex; flex-direction: row; align-items: center;">
-      <forge-checkbox>
-        <input type="checkbox" />
-      </forge-checkbox>
-      <forge-button>Custom</forge-button>
-    </div>
-  `;
+function getSelectAllTemplate(): HTMLElement {
+  const checkbox = document.createElement('forge-checkbox');
+  checkbox.setAttribute('aria-label', 'Detached select all');
+  checkbox.setAttribute('forge-ignore', '');
+  checkbox.addEventListener('change', () => {
+    // Do something custom when checked
+    console.log('Custom select all checked:', checkbox.checked);
+  });
+  return checkbox;
 }
