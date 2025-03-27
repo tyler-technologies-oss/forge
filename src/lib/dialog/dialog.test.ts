@@ -512,6 +512,9 @@ describe('Dialog', () => {
     it('should close when button with formmethod="dialog" is clicked', async () => {
       const harness = await createFixture({ open: true });
 
+      const beforeCloseSpy = spy();
+      harness.dialogElement.addEventListener(DIALOG_CONSTANTS.events.BEFORE_CLOSE, beforeCloseSpy);
+
       const submitSpy = spy();
       const formEl = harness.dialogElement.querySelector('form') as HTMLFormElement;
       formEl.addEventListener('submit', submitSpy);
@@ -522,6 +525,8 @@ describe('Dialog', () => {
 
       expect(submitSpy).to.have.been.calledOnce;
       expect(harness.isOpen).to.be.false;
+      expect(beforeCloseSpy).to.have.been.calledOnce;
+      expect(beforeCloseSpy).to.have.been.calledWithMatch({ detail: { reason: 'submit' } });
     });
 
     it('should close when submit button is clicked within a form that has method="dialog"', async () => {
@@ -647,6 +652,7 @@ describe('Dialog', () => {
       await harness.pressEscapeKey();
 
       expect(beforeCloseSpy).to.have.been.calledOnce;
+      expect(beforeCloseSpy).to.have.been.calledWithMatch({ detail: { reason: 'escape' } });
     });
   });
 
@@ -701,6 +707,18 @@ describe('Dialog', () => {
       await harness.clickSurface();
 
       expect(harness.isOpen).to.be.true;
+    });
+
+    it('should fire before close event when closed via backdrop', async () => {
+      const harness = await createFixture({ open: true });
+
+      const beforeCloseSpy = spy();
+      harness.dialogElement.addEventListener(DIALOG_CONSTANTS.events.BEFORE_CLOSE, beforeCloseSpy);
+
+      await harness.clickOutside();
+
+      expect(beforeCloseSpy).to.have.been.calledOnce;
+      expect(beforeCloseSpy).to.have.been.calledWithMatch({ detail: { reason: 'backdrop' } });
     });
   });
 
