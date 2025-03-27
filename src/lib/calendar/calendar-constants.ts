@@ -25,6 +25,8 @@ const observedAttributes = {
   SHOW_OTHER_MONTHS: 'show-other-months',
   SHOW_TODAY: 'show-today',
   TODAY_BUTTON: 'today-button',
+  SHOW_YESTERDAY: 'show-yesterday',
+  YESTERDAY_BUTTON: 'yesterday-button',
   VIEW: 'view',
   YEAR: 'year',
   YEAR_RANGE: 'year-range'
@@ -46,6 +48,7 @@ const classes = {
   DATE_SPACER: 'forge-calendar__date-spacer',
   DATE_SELECTED: 'forge-calendar__date--selected',
   DATE_TODAY: 'forge-calendar__date--today',
+  DATE_YESTERDAY: 'forge-calendar__date--yesterday',
   DATE_VIEW: 'forge-calendar__date-view',
   DATE_VIEW_ROW: 'forge-calendar__date-view__row',
   DATE_WRAPPER: 'forge-calendar__date-wrapper',
@@ -66,6 +69,7 @@ const classes = {
   RTL: 'forge-calendar--rtl',
   SHOW_OTHER_MONTHS: 'forge-calendar--show-other-months',
   SHOW_TODAY: 'forge-calendar--show-today',
+  SHOW_YESTERDAY: 'forge-calendar--show-yesterday',
   VIEW: 'forge-calendar__view',
   YEAR_MENU_OPEN: 'forge-calendar--year-menu-open'
 };
@@ -87,6 +91,7 @@ const ids = {
   PREVIOUS_BUTTON: 'previous-button',
   PREVIOUS_BUTTON_TOOLTIP: 'previous-button-tooltip',
   TODAY_BUTTON: 'today-button',
+  YESTERDAY_BUTTON: 'yesterday-button',
   YEAR_BUTTON: 'year-button'
 };
 
@@ -98,6 +103,7 @@ const slots = {
   PREVIOUS_YEARS_BUTTON_TEXT: 'previous-years-button-text',
   NEXT_YEARS_BUTTON_TEXT: 'next-years-button-text',
   TODAY_BUTTON_TEXT: 'today-button-text',
+  YESTERDAY_BUTTON_TEXT: 'yesterday-button-text',
   CLEAR_BUTTON_TEXT: 'clear-button-text'
 };
 
@@ -132,6 +138,8 @@ const parts = {
   RANGE_START: 'range-start',
   TODAY: 'today',
   TODAY_BUTTON: 'today-button',
+  YESTERDAY: 'yesterday',
+  YESTERDAY_BUTTON: 'yesterday-button',
   WEEKEND: 'weekend',
   YEAR_BUTTON: 'year-button',
   YEAR_BUTTON_ELEMENT: 'year-button-element'
@@ -150,6 +158,7 @@ const selectors = {
   DATE_SPACER: `.${classes.DATE_SPACER}`,
   DATE_SELECTED: `.${classes.DATE_SELECTED}`,
   DATE_TODAY: `.${classes.DATE_TODAY}`,
+  DATE_YESTERDAY: `.${classes.DATE_YESTERDAY}`,
   DATE_VIEW: `#${ids.DATE_VIEW}`,
   DATE_WRAPPER: `.${classes.DATE_WRAPPER}`,
   DAY_ROW: `#${ids.DAY_ROW}`,
@@ -166,6 +175,7 @@ const selectors = {
   RANGE_END: `.${classes.RANGE_END}`,
   RANGE_START: `.${classes.RANGE_START}`,
   TODAY_BUTTON: `#${ids.TODAY_BUTTON}`,
+  YESTERDAY_BUTTON: `#${ids.YESTERDAY_BUTTON}`,
   TOOLTIP: TOOLTIP_CONSTANTS.elementName,
   VIEW: '#view',
   YEAR_BUTTON: `#${ids.YEAR_BUTTON}`
@@ -186,6 +196,7 @@ const strings = {
   DEFAULT_PREVIOUS_YEARS_BUTTON_TEXT: 'Previous years',
   DEFAULT_NEXT_YEARS_BUTTON_TEXT: 'Next years',
   DEFAULT_TODAY_BUTTON_TEXT: 'Today',
+  DEFAULT_YESTERDAY_BUTTON_TEXT: 'Yesterday',
   DEFAULT_CLEAR_BUTTON_TEXT: 'Clear'
 };
 

@@ -17,7 +17,7 @@ include('./src/partials/page.ejs', {
       },
       {
         type: 'select',
-        label: 'First day of weeek',
+        label: 'First day of week',
         id: 'calendar-first-day',
         defaultValue: '0',
         options: [
@@ -31,6 +31,7 @@ include('./src/partials/page.ejs', {
         ]
       },
       { type: 'switch', label: 'Show today', id: 'calendar-today', defaultValue: true },
+      { type: 'switch', label: 'Show yesterday', id: 'calendar-yesterday', defaultValue: true },
       { type: 'switch', label: 'Readonly', id: 'calendar-readonly' }
     ]
   }

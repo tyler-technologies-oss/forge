@@ -41,11 +41,14 @@ export interface ICalendarComponent extends ICalendarBase, IBaseComponent {
   menuAnimation: CalendarMenuAnimationType;
   clearButton: boolean;
   todayButton: boolean;
+  yesterdayButton: boolean;
   clearCallback: (() => void) | undefined;
   todayCallback: (() => void) | undefined;
+  yesterdayCallback: (() => void) | undefined;
   tooltipBuilder: CalendarTooltipBuilder | undefined;
   clear(): void;
   today(): void;
+  yesterday(): void;
   selectDate(date: Date, setFocus?: boolean): void;
   deselectDate(date: Date): void;
   toggleDate(date: Date, force?: boolean): void;
@@ -101,6 +104,9 @@ declare global {
  * @property {boolean} [showToday=true] - Whether to show the today button.
  * @property {boolean} [todayButton=false] - Whether to show a button to select today.
  * @property {() => void | undefined} todayCallback - Callback function to call when the today button is clicked.
+ * @property {boolean} [showYesterday=true] - Whether to show the yesterday button.
+ * @property {boolean} [yesterdayButton=false] - Whether to show a button to select yesterday.
+ * @property {() => void | undefined} yesterdayCallback - Callback function to call when the yesterday button is clicked.
  * @property {CalendarTooltipBuilder | undefined} tooltipBuilder - Function to build the tooltip content.
  * @property {Date | Date[] | DateRange | null | undefined} [value=[]] - The selected date(s).
  * @property {CalendarView} [view="date"] - The view of the calendar.
@@ -126,7 +132,9 @@ declare global {
  * @attribute {boolean} [show-header=true] - Whether to show the header.
  * @attribute {boolean} [show-other-months=false] - Whether to show days from other months.
  * @attribute {boolean} [show-today=true] - Whether to show the today button.
- * @attribute {boolean} [today-button=fakse] - Whether to show a button to select today.
+ * @attribute {boolean} [today-button=false] - Whether to show a button to select today.
+ * @attribute {boolean} [show-yesterday=true] - Whether to show the yesterday button.
+ * @attribute {boolean} [yesterday-button=false] - Whether to show a button to select yesterday.
  * @attribute {CalendarView} [view="date"] - The view of the calendar.
  * @attribute {number} [year=<current year>] - The year to display.
  * @attribute {string} [year-range="-50:+50"] - The range of years to display.
@@ -137,6 +145,7 @@ declare global {
  * @fires {CustomEvent<CalendarView>} forge-calendar-view-change - Event fired when the view changes.
  *
  * @slot today-button-text - Text to display in the today button.
+ * @slot yesterday-button-text - Text to display in the yesterday button.
  * @slot clear-button-text - Text to display in the clear button.
  * @slot next-month-button-text - Text to display in the next month button's tooltip.
  * @slot previous-month-button-text - Text to display in the previous month button's tooltip.
@@ -171,6 +180,8 @@ export class CalendarComponent extends BaseComponent implements ICalendarCompone
       CALENDAR_CONSTANTS.attributes.SHOW_OTHER_MONTHS,
       CALENDAR_CONSTANTS.attributes.SHOW_TODAY,
       CALENDAR_CONSTANTS.attributes.TODAY_BUTTON,
+      CALENDAR_CONSTANTS.attributes.SHOW_YESTERDAY,
+      CALENDAR_CONSTANTS.attributes.YESTERDAY_BUTTON,
       CALENDAR_CONSTANTS.attributes.VIEW,
       CALENDAR_CONSTANTS.attributes.YEAR,
       CALENDAR_CONSTANTS.attributes.YEAR_RANGE
@@ -259,6 +270,12 @@ export class CalendarComponent extends BaseComponent implements ICalendarCompone
         break;
       case CALENDAR_CONSTANTS.attributes.TODAY_BUTTON:
         this.todayButton = coerceBoolean(newValue);
+        break;
+      case CALENDAR_CONSTANTS.attributes.SHOW_YESTERDAY:
+        this.showYesterday = coerceBoolean(newValue);
+        break;
+      case CALENDAR_CONSTANTS.attributes.YESTERDAY_BUTTON:
+        this.yesterdayButton = coerceBoolean(newValue);
         break;
       case CALENDAR_CONSTANTS.attributes.VIEW:
         this.view = newValue as CalendarView;
@@ -362,6 +379,15 @@ export class CalendarComponent extends BaseComponent implements ICalendarCompone
 
   @coreProperty()
   declare public todayCallback: (() => void) | undefined;
+
+  @coreProperty()
+  declare public showYesterday: boolean;
+
+  @coreProperty()
+  declare public yesterdayButton: boolean;
+
+  @coreProperty()
+  declare public yesterdayCallback: (() => void) | undefined;
 
   @coreProperty()
   declare public tooltipBuilder: CalendarTooltipBuilder | undefined;

@@ -303,6 +303,19 @@ export function getTodayButton(): HTMLElement {
   return todayButton;
 }
 
+/** Returns a yesterday button. */
+export function getYesterdayButton(): HTMLElement {
+  const yesterdayButton = document.createElement('forge-button');
+  yesterdayButton.id = CALENDAR_CONSTANTS.ids.YESTERDAY_BUTTON;
+  yesterdayButton.setAttribute('part', CALENDAR_CONSTANTS.parts.YESTERDAY_BUTTON);
+  yesterdayButton.type = 'button';
+  const slot = document.createElement('slot');
+  slot.name = CALENDAR_CONSTANTS.slots.YESTERDAY_BUTTON_TEXT;
+  slot.innerText = CALENDAR_CONSTANTS.strings.DEFAULT_YESTERDAY_BUTTON_TEXT;
+  yesterdayButton.appendChild(slot);
+  return yesterdayButton;
+}
+
 /** Checks whether an event originated from a date element, returning the element if it did. */
 export function eventIncludesDate(evt: Event, includeDisabled?: boolean): HTMLElement | null {
   const element = getEventPath(evt).find(p => p.classList && p.classList.contains(CALENDAR_CONSTANTS.classes.DATE));

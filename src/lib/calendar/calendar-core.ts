@@ -65,11 +65,14 @@ export interface ICalendarCore extends ICalendarBase {
   menuAnimation: CalendarMenuAnimationType;
   clearButton: boolean;
   todayButton: boolean;
+  yesterdayButton: boolean;
   clearCallback: (() => void) | undefined;
   todayCallback: (() => void) | undefined;
+  yesterdayCallback: (() => void) | undefined;
   tooltipBuilder: CalendarTooltipBuilder | undefined;
   clear(): void;
   today(): void;
+  yesterday(): void;
   selectDate(date: Date, setFocus?: boolean): void;
   deselectDate(date: Date, setFocus?: boolean): void;
   toggleDate(date: Date, force?: boolean): void;
@@ -86,6 +89,7 @@ export class CalendarCore implements ICalendarCore {
   private _year: number = new Date().getFullYear();
   private _focusedDate: Date;
   private _showToday = true;
+  private _showYesterday = true;
   private _showOtherMonths = false;
   private _fixedHeight = false;
   private _events: ICalendarEvent[] = [];
@@ -120,8 +124,10 @@ export class CalendarCore implements ICalendarCore {
   private _showHeader = true;
   private _clearButton = false;
   private _todayButton = false;
+  private _yesterdayButton = false;
   private _clearCallback: (() => void) | undefined;
   private _todayCallback: (() => void) | undefined;
+  private _yesterdayCallback: (() => void) | undefined;
 
   // Menu
   private _view: CalendarView = 'date';
@@ -158,6 +164,7 @@ export class CalendarCore implements ICalendarCore {
   private _preventFocusListener: (evt: Event) => void;
   private _previousButtonListener: (evt: Event) => void;
   private _todayButtonListener: (evt: Event) => void;
+  private _yesterdayButtonListener: (evt: Event) => void;
   private _yearButtonListener: (evt: Event) => void;
 
   constructor(private _adapter: ICalendarAdapter) {
@@ -172,6 +179,7 @@ export class CalendarCore implements ICalendarCore {
     this._preventFocusListener = evt => evt.preventDefault();
     this._previousButtonListener = () => this._onPreviousButtonClicked();
     this._todayButtonListener = () => this._onTodayClicked();
+    this._yesterdayButtonListener = () => this._onYesterdayClicked();
     this._yearButtonListener = () => this._onYearButtonClicked();
   }
 
@@ -184,6 +192,7 @@ export class CalendarCore implements ICalendarCore {
     this._applyFixedHeight();
     this._applyReadOnly();
     this._applyShowToday();
+    this._applyShowYesterday();
     this._applyPreventFocus();
     this._applyShowHeader();
     this._applyMonth();
@@ -193,6 +202,7 @@ export class CalendarCore implements ICalendarCore {
     this._applyLocale();
     this._applyClearButton();
     this._applyTodayButton();
+    this._applyYesterdayButton();
     this._applyFirstDayOfWeek();
     this._applyShowOtherMonths();
     this._createDateView();
@@ -525,6 +535,10 @@ export class CalendarCore implements ICalendarCore {
 
   private _onTodayClicked(): void {
     this.today();
+  }
+
+  private _onYesterdayClicked(): void {
+    this.yesterday();
   }
 
   /** Attempts to the month and year of the value in single mode, then emits a selection event  */
@@ -1539,7 +1553,8 @@ export class CalendarCore implements ICalendarCore {
       this._adapter.unregisterClearButtonListener(this._clearButtonListener);
       this._adapter.removeClearButton();
 
-      if (!this._todayButton) {
+      // christina - is any button selected?
+      if (!this._todayButton && !this._yesterdayButton) {
         this._adapter.removeFooter();
       }
     } else {
@@ -1887,6 +1902,28 @@ export class CalendarCore implements ICalendarCore {
       this._adapter.setFooter();
       this._adapter.setTodayButton();
       this._adapter.registerTodayButtonListener(this._todayButtonListener);
+    }
+  }
+
+  private _applyShowYesterday(): void {
+    this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.SHOW_YESTERDAY, this._showYesterday);
+    this._adapter.setContainerClass(CALENDAR_CONSTANTS.classes.SHOW_YESTERDAY, this._showYesterday);
+  }
+
+  private _applyYesterdayButton(): void {
+    this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.YESTERDAY_BUTTON, true, this._yesterdayButton.toString());
+
+    if (!this._yesterdayButton) {
+      this._adapter.unregisterYesterdayButtonListener(this._yesterdayButtonListener);
+      this._adapter.removeYesterdayButton();
+
+      if (!this._clearButton) {
+        this._adapter.removeFooter();
+      }
+    } else {
+      this._adapter.setFooter();
+      this._adapter.setYesterdayButton();
+      this._adapter.registerYesterdayButtonListener(this._yesterdayButtonListener);
     }
   }
 
@@ -2350,6 +2387,42 @@ export class CalendarCore implements ICalendarCore {
     this._todayCallback = value;
   }
 
+  /** Get/set show yesterday */
+  public get showYesterday(): boolean {
+    return this._showYesterday;
+  }
+  public set showYesterday(value: boolean) {
+    if (this._showYesterday !== value) {
+      this._showYesterday = value;
+
+      if (this._isInitialized) {
+        this._applyShowYesterday();
+      }
+    }
+  }
+
+  /** Get/set whether to show the yesterday button */
+  public get yesterdayButton(): boolean {
+    return this._yesterdayButton;
+  }
+  public set yesterdayButton(value: boolean) {
+    if (this._yesterdayButton !== value) {
+      this._yesterdayButton = value;
+
+      if (this._isInitialized) {
+        this._applyYesterdayButton();
+      }
+    }
+  }
+
+  /* Get/set the yesterday button callback */
+  public get yesterdayCallback(): (() => void) | undefined {
+    return this._yesterdayCallback;
+  }
+  public set yesterdayCallback(value: (() => void) | undefined) {
+    this._yesterdayCallback = value;
+  }
+
   /** Get/set the tooltip builder */
   public get tooltipBuilder(): CalendarTooltipBuilder | undefined {
     return this._tooltipBuilder;
@@ -2520,6 +2593,17 @@ export class CalendarCore implements ICalendarCore {
     this._goToDate(today, true);
     if (this._todayCallback) {
       this._todayCallback();
+    }
+  }
+
+  /** Go to yesterday */
+  public yesterday(): void {
+    const today = new Date();
+    const yesterday = new Date(today.setDate(today.getDate() - 1));
+    yesterday.setHours(0, 0, 0, 0);
+    this._goToDate(yesterday, true);
+    if (this._yesterdayCallback) {
+      this._yesterdayCallback();
     }
   }
 

@@ -22,6 +22,7 @@ const meta = {
       .readonly=${args.readonly}
       .allowSingleDateRange=${args.allowSingleDateRange}
       .showToday=${args.showToday}
+      .showYesterday=${args.showYesterday}
       .showOtherMonths=${args.showOtherMonths}
       .fixedHeight=${args.fixedHeight}
       .view=${args.view}
@@ -32,6 +33,7 @@ const meta = {
       .menuAnimation=${args.menuAnimation}
       .clearButton=${args.clearButton}
       .todayButton=${args.todayButton}
+      .yesterdayButton=${args.yesterdayButton}
       .min=${args.min}
       .max=${args.max}
       .disabledDates=${args.disabledDates}
@@ -138,6 +140,7 @@ const meta = {
     menuAnimation: 'scale',
     clearButton: false,
     todayButton: false,
+    yesterdayButton: false,
     disabledDates: [],
     disabledDaysOfWeek: [],
     constrainToEnabled: true,

@@ -21,6 +21,7 @@ const meta = {
         .showMaskFormat=${args.showMaskFormat}
         .allowInvalidDate=${args.allowInvalidDate}
         .showToday=${args.showToday}
+        .showYesterday=${args.showYesterday}
         .showClear=${args.showClear}
         .disabledDaysOfWeek=${args.disabledDaysOfWeek}
         .locale=${args.locale}
@@ -40,7 +41,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      include: ['min', 'max', 'disabled', 'masked', 'showMaskFormat', 'allowInvalidDate', 'showToday', 'showClear', 'disabledDaysOfWeek'],
+      include: ['min', 'max', 'disabled', 'masked', 'showMaskFormat', 'allowInvalidDate', 'showToday', 'showYesterday', 'showClear', 'disabledDaysOfWeek'],
       controls: {
         from: {
           control: 'date'
@@ -66,6 +67,7 @@ const meta = {
     disabled: false,
     showClear: true,
     showToday: true,
+    showYesterday: true,
     showMaskFormat: true,
     allowInvalidDate: false,
     disabledDaysOfWeek: [0, 6],

@@ -29,6 +29,7 @@ const meta = {
         .showClear=${args.showClear}
         .showMaskFormat=${args.showMaskFormat}
         .showToday=${args.showToday}
+        .showYesterday=${args.showYesterday}
         .yearRange=${args.yearRange}
         @forge-date-picker-change=${changeAction}
         @forge-date-picker-open=${openAction}
@@ -80,6 +81,7 @@ const meta = {
     showClear: false,
     showMaskFormat: false,
     showToday: false,
+    showYesterday: false,
     yearRange: '-50:+50'
   }
 } satisfies Meta;

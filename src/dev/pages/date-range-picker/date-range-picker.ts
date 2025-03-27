@@ -85,6 +85,11 @@ dateRangePickerShowTodayToggle.addEventListener('forge-switch-change', ({ detail
   dateRangePicker.showToday = selected;
 });
 
+const dateRangePickerShowYesterdayToggle = document.querySelector('#opt-show-yesterday') as ISwitchComponent;
+dateRangePickerShowYesterdayToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  dateRangePicker.showYesterday = selected;
+});
+
 const dateRangePickerShowClearToggle = document.querySelector('#opt-show-clear') as ISwitchComponent;
 dateRangePickerShowClearToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   dateRangePicker.showClear = selected;

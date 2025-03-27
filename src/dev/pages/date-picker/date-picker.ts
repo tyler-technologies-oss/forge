@@ -82,6 +82,11 @@ showTodayToggle.addEventListener('forge-switch-change', ({ detail: selected }) =
   datePicker.showToday = selected;
 });
 
+const showYesterdayToggle = document.getElementById('opt-show-yesterday') as ISwitchComponent;
+showYesterdayToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  datePicker.showYesterday = selected;
+});
+
 const showClearToggle = document.getElementById('opt-show-clear') as ISwitchComponent;
 showClearToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   datePicker.showClear = selected;
