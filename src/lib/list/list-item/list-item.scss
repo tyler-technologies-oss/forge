@@ -152,7 +152,7 @@ slot[name='tertiary-text'] {
 }
 
 // Button slotted elements
-::slotted(:is(button, [role='button'][tabindex], [forge-list-item-button])) {
+::slotted(:is(button:not([slot]), [forge-list-item-button])) {
   @include button;
 }
 

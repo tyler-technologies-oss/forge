@@ -1,12 +1,12 @@
 import { getLightElement, toggleAttribute } from '@tylertech/forge-core';
-import { BADGE_CONSTANTS, IBadgeComponent } from '../../badge';
+import { IBadgeComponent } from '../../badge';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IAppBarNotificationButtonComponent } from './app-bar-notification-button';
-import { ICON_CONSTANTS, IIconComponent } from '../../icon';
-import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants';
 import { forwardAttributes } from '../../core/utils/reflect-utils';
-import { ICON_BUTTON_CONSTANTS } from '../../icon-button/icon-button-constants';
+import { ICON_CONSTANTS, IIconComponent } from '../../icon';
 import { IIconButtonComponent } from '../../icon-button/icon-button';
+import { ICON_BUTTON_CONSTANTS } from '../../icon-button/icon-button-constants';
+import { IAppBarNotificationButtonComponent } from './app-bar-notification-button';
+import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants';
 
 export interface IAppBarNotificationButtonAdapter extends IBaseAdapter {
   initialize(): void;
@@ -34,7 +34,7 @@ export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotifica
 
   public initialize(): void {
     this._iconButtonElement = getLightElement(this._component, ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
-    this._badgeElement = getLightElement(this._component, BADGE_CONSTANTS.elementName) as IBadgeComponent;
+    this._badgeElement = getLightElement(this._component, 'forge-badge') as IBadgeComponent;
     this._iconElement = getLightElement(this._component, ICON_CONSTANTS.elementName) as IIconComponent;
 
     const originalAriaLabelledby = this._iconButtonElement.getAttribute('aria-labelledby');
@@ -61,7 +61,7 @@ export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotifica
   }
 
   public setBadgeTheme(theme: string): void {
-    toggleAttribute(this._badgeElement, !!theme, BADGE_CONSTANTS.attributes.THEME, theme);
+    toggleAttribute(this._badgeElement, !!theme, 'theme', theme);
   }
 
   public setBadgeVisible(isVisible: boolean): void {

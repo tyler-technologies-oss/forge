@@ -5,6 +5,7 @@ import { generateCustomElementArgTypes, standaloneStoryParams } from '../../util
 import { AutocompleteFilterCallback, AutocompleteOptionBuilder, IAutocompleteComponent } from '@tylertech/forge/autocomplete';
 import { IOption } from '@tylertech/forge/select';
 import { createRef, ref } from 'lit/directives/ref.js';
+import { storyStyles } from '../../decorators';
 
 import '@tylertech/forge/autocomplete';
 import '@tylertech/forge/avatar';
@@ -71,6 +72,13 @@ const states = [
 
 const meta = {
   title: 'Components/Autocomplete',
+  decorators: [
+    storyStyles(`
+      forge-autocomplete {
+        width: 256px;
+      }
+    `)
+  ],
   render: args => {
     const filterCb: AutocompleteFilterCallback = (filterText, value) => {
       filterCallbackAction(filterText, value);

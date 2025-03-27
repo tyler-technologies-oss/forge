@@ -119,8 +119,8 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     this.setBusyVisibility(false);
     this._tryToggleDropdownIconRotation(false);
     this._inputElement?.removeAttribute('aria-activedescendant');
-    this._inputElement?.removeAttribute('aria-controls');
     this._inputElement?.setAttribute('aria-expanded', 'false');
+    setAriaControls(this._inputElement);
 
     if (!this._listDropdown) {
       return;
