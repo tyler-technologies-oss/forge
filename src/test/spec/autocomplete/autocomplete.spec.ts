@@ -177,6 +177,19 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(this.context.component.popupElement).toBeNull();
     });
 
+    it('aria-controls attribute should be present when the popup is opened and closed', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      expect(this.context.input.hasAttribute('aria-controls')).toBe(true);
+      this.context.component.openDropdown();
+      await task();
+      this.context.component.closeDropdown();
+      await task(POPOVER_ANIMATION_DURATION);
+      expect(this.context.component.open).toBe(false);
+      expect(this.context.component.popupElement).toBeNull();
+      expect(this.context.input.hasAttribute('aria-controls')).toBe(true);
+    });
+
     it('should not highlight first option in popup by default', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
