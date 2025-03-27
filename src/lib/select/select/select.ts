@@ -22,6 +22,7 @@ import { OptionGroupComponent } from '../option-group';
 import { SelectAdapter } from './select-adapter';
 import { SELECT_CONSTANTS } from './select-constants';
 import { SelectCore } from './select-core';
+import { IListDropdownAware } from '../../list-dropdown/list-dropdown-aware';
 
 import template from './select.html';
 import styles from './select.scss';
@@ -33,7 +34,8 @@ export interface ISelectComponent
     IWithElementInternals,
     IWithDefaultAria,
     IWithBaseField,
-    IBaseSelectComponent {
+    IBaseSelectComponent,
+    IListDropdownAware {
   label: string;
   placeholder: string;
   setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void;

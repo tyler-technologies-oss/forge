@@ -1,9 +1,9 @@
 import type { IIconComponent } from '../icon';
-import type { IOverlayOffset } from '../overlay/overlay-constants';
+import type { IOverlayOffset, OverlayFlipState, OverlayShiftState } from '../overlay/overlay-constants';
 import { PositionPlacement } from '../core/utils/position-utils';
 import { TooltipPlacement, TooltipType } from '../tooltip';
 
-const attributes = {
+const observedAttributes = {
   POPUP_CLASSES: 'popup-classes',
   OPTION_LIMIT: 'option-limit',
   OBSERVE_SCROLL: 'observe-scroll',
@@ -11,6 +11,14 @@ const attributes = {
   SYNC_POPUP_WIDTH: 'sync-popup-width',
   CONSTRAIN_POPUP_WIDTH: 'constrain-popup-width',
   WRAP_OPTION_TEXT: 'wrap-option-text',
+  POPOVER_PLACEMENT: 'popover-placement',
+  POPOVER_OFFSET: 'popover-offset',
+  POPOVER_FLIP: 'popover-flip',
+  POPOVER_SHIFT: 'popover-shift'
+};
+
+const attributes = {
+  ...observedAttributes,
 
   // Internal
   CHECKBOX_ELEMENT: 'data-list-dropdown-checkbox',
@@ -22,6 +30,7 @@ const classes = {
 };
 
 export const LIST_DROPDOWN_CONSTANTS = {
+  observedAttributes,
   attributes,
   classes
 };
@@ -95,7 +104,9 @@ export interface IListDropdownConfig<T = any> {
   popupOffset?: IOverlayOffset;
   popupStatic?: boolean;
   popupPlacement?: PositionPlacement;
-  popupFallbackPlacements?: PositionPlacement[];
+  popupFlip?: OverlayFlipState;
+  popupShift?: OverlayShiftState;
+  popupFallbackPlacements?: PositionPlacement[] | null;
   optionLimit?: number;
   optionBuilder?: ListDropdownOptionBuilder;
   observeScroll?: boolean;
