@@ -748,6 +748,13 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
   public get showToday(): boolean {
     return this._showToday;
   }
+  public set showToday(value: boolean) {
+    this._showToday = value;
+  }
+
+  public get showYesterday(): boolean {
+    return this._showYesterday;
+  }
   public set showYesterday(value: boolean) {
     this._showYesterday = value;
   }

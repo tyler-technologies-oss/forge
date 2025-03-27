@@ -1895,7 +1895,7 @@ export class CalendarCore implements ICalendarCore {
       this._adapter.unregisterTodayButtonListener(this._todayButtonListener);
       this._adapter.removeTodayButton();
 
-      if (!this._clearButton) {
+      if (!this._clearButton && !this._yesterdayButton) {
         this._adapter.removeFooter();
       }
     } else {
@@ -1917,7 +1917,7 @@ export class CalendarCore implements ICalendarCore {
       this._adapter.unregisterYesterdayButtonListener(this._yesterdayButtonListener);
       this._adapter.removeYesterdayButton();
 
-      if (!this._clearButton) {
+      if (!this._clearButton && !this._todayButton) {
         this._adapter.removeFooter();
       }
     } else {
