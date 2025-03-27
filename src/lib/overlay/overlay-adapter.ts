@@ -1,18 +1,18 @@
 import { autoUpdate, Boundary } from '@floating-ui/dom';
 import { getShadowElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { DEFAULT_FALLBACK_PLACEMENTS, positionElementAsync, PositionPlacement, VirtualElement } from '../core/utils/position-utils';
-import { locateElementById, roundByDPR } from '../core/utils/utils';
+import { positionElementAsync, PositionPlacement, VirtualElement } from '../core/utils/position-utils';
+import { locateElementById } from '../core/utils/utils';
 import { IOverlayComponent, OverlayComponent } from './overlay';
 import {
   IOverlayOffset,
+  OVERLAY_CONSTANTS,
   OverlayFlipState,
   OverlayHideState,
   OverlayLightDismissReason,
   OverlayPositionStrategy,
+  OverlayShiftState,
   overlayStack,
-  OVERLAY_CONSTANTS,
-  OVERLAY_FALLBACK_PLACEMENT_MAP,
   SUPPORTS_POPOVER
 } from './overlay-constants';
 
@@ -34,7 +34,7 @@ export interface IPositionElementConfig {
   placement: PositionPlacement;
   hide: OverlayHideState;
   offset: IOverlayOffset;
-  shift: boolean;
+  shift: OverlayShiftState;
   flip: OverlayFlipState;
   boundary: string | null;
   boundaryElement: HTMLElement | null;
@@ -132,14 +132,14 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
         strategy,
         placement,
         hide: hide !== 'never',
-        shift,
+        shift: shift !== 'never',
         shiftOptions: {
           boundary: boundaryEl
         },
         flip: flip !== 'never',
         flipOptions: {
-          fallbackStrategy: 'bestFit',
-          fallbackPlacements: fallbackPlacements ?? OVERLAY_FALLBACK_PLACEMENT_MAP[placement] ?? DEFAULT_FALLBACK_PLACEMENTS,
+          boundary: boundaryEl,
+          fallbackPlacements,
           crossAxis: flip === 'cross' || flip === 'auto',
           mainAxis: flip === 'main' || flip === 'auto'
         },
@@ -180,15 +180,6 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
       // Update the clipped attributes to allow for state-based clipping adjustments by consumers
       this._component.toggleAttribute(OVERLAY_CONSTANTS.attributes.CLIPPED_X, isClippedX);
       this._component.toggleAttribute(OVERLAY_CONSTANTS.attributes.CLIPPED_Y, isClippedY);
-
-      // If clipped, adjust the position by the clipping delta on each axis
-      if (isClippedX || isClippedY) {
-        const { x, y } = result;
-        const { height, width } = overlayRect;
-        const clippedDeltaX = isClippedX ? x + width - viewportWidth : 0;
-        const clippedDeltaY = isClippedY ? y + height - viewportHeight : 0;
-        this._rootElement.style.translate = `${roundByDPR(x - clippedDeltaX)}px ${roundByDPR(y - clippedDeltaY)}px`;
-      }
     });
   }
 
