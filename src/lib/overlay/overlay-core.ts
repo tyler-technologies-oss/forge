@@ -10,7 +10,8 @@ import {
   OVERLAY_CONSTANTS,
   OverlayFlipState,
   OverlayHideState,
-  OverlayLightDismissReason
+  OverlayLightDismissReason,
+  OverlayShiftState
 } from './overlay-constants';
 
 export interface IOverlayCore extends IBaseOverlayCore {
@@ -27,7 +28,7 @@ export class OverlayCore extends BaseOverlayCore<IOverlayAdapter> implements IOv
   private _placement: OverlayPlacement = 'bottom';
   private _positionStrategy: OverlayPositionStrategy = 'fixed';
   private _offset: IOverlayOffset = {};
-  private _shift = false;
+  private _shift = OVERLAY_CONSTANTS.defaults.SHIFT as OverlayShiftState;
   private _hide = OVERLAY_CONSTANTS.defaults.HIDE as OverlayHideState;
   private _flip = OVERLAY_CONSTANTS.defaults.FLIP as OverlayFlipState;
   private _boundary: string | null;
@@ -257,17 +258,26 @@ export class OverlayCore extends BaseOverlayCore<IOverlayAdapter> implements IOv
     }
   }
 
-  public get shift(): boolean {
+  public get shift(): OverlayShiftState {
     return this._shift;
   }
-  public set shift(value: boolean) {
-    value = Boolean(value);
+  public set shift(value: OverlayShiftState) {
+    // Handle legacy boolean values for shift by converting them to the corresponding type value
+    // TODO: Remove support for boolean values in v4
+    if (value === true) {
+      value = 'auto';
+    } else if (value === false) {
+      value = 'never';
+    } else if (!['auto', 'never'].includes(value as any)) {
+      value = OVERLAY_CONSTANTS.defaults.SHIFT;
+    }
+
     if (this._shift !== value) {
       this._shift = value;
       if (this._open) {
         this.position();
       }
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.SHIFT, this._shift);
+      this._adapter.setHostAttribute(OVERLAY_CONSTANTS.attributes.SHIFT, this._shift);
     }
   }
 

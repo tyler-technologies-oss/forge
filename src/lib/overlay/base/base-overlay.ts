@@ -1,7 +1,15 @@
 import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IBaseOverlayCore } from './base-overlay-core';
-import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
+import {
+  IOverlayOffset,
+  OverlayFlipState,
+  OverlayHideState,
+  OverlayPlacement,
+  OverlayPositionStrategy,
+  OVERLAY_CONSTANTS,
+  OverlayShiftState
+} from '../overlay-constants';
 import { coerceStringToArray } from '../../core/utils';
 import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
 
@@ -14,7 +22,7 @@ export interface IBaseOverlay extends IBaseComponent {
   placement: OverlayPlacement;
   positionStrategy: OverlayPositionStrategy;
   offset: IOverlayOffset;
-  shift: boolean;
+  shift: OverlayShiftState;
   hide: OverlayHideState;
   persistent: boolean;
   flip: OverlayFlipState;
@@ -62,7 +70,15 @@ export abstract class BaseOverlay<T extends IBaseOverlayCore> extends BaseCompon
         this.persistent = coerceBoolean(newValue);
         break;
       case OVERLAY_CONSTANTS.observedAttributes.SHIFT:
-        this.shift = coerceBoolean(newValue);
+        // Handle legacy boolean attributes for shift by converting to corresponding type values
+        // TODO: Remove support for boolean attribute conversion in v4
+        if (newValue === '' || newValue?.trim() === 'true') {
+          this.shift = 'auto';
+        } else if (newValue == null || newValue?.trim() === 'false') {
+          this.shift = 'never';
+        } else {
+          this.shift = newValue as OverlayShiftState;
+        }
         break;
       case OVERLAY_CONSTANTS.observedAttributes.FLIP:
         this.flip = newValue as OverlayFlipState;
@@ -101,7 +117,7 @@ export abstract class BaseOverlay<T extends IBaseOverlayCore> extends BaseCompon
   declare public offset: IOverlayOffset;
 
   @coreProperty()
-  declare public shift: boolean;
+  declare public shift: OverlayShiftState;
 
   @coreProperty()
   declare public hide: OverlayHideState;
