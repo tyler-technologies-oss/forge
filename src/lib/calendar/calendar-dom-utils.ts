@@ -316,6 +316,19 @@ export function getYesterdayButton(): HTMLElement {
   return yesterdayButton;
 }
 
+/** Returns a last seven days button. */
+export function getLastSevenDaysButton(): HTMLElement {
+  const lastSevenDaysButton = document.createElement('forge-button');
+  lastSevenDaysButton.id = CALENDAR_CONSTANTS.ids.LAST_SEVEN_DAYS_BUTTON;
+  lastSevenDaysButton.setAttribute('part', CALENDAR_CONSTANTS.parts.LAST_SEVEN_DAYS_BUTTON);
+  lastSevenDaysButton.type = 'button';
+  const slot = document.createElement('slot');
+  slot.name = CALENDAR_CONSTANTS.slots.LAST_SEVEN_DAYS_BUTTON_TEXT;
+  slot.innerText = CALENDAR_CONSTANTS.strings.DEFAULT_LAST_SEVEN_DAYS_BUTTON_TEXT;
+  lastSevenDaysButton.appendChild(slot);
+  return lastSevenDaysButton;
+}
+
 /** Checks whether an event originated from a date element, returning the element if it did. */
 export function eventIncludesDate(evt: Event, includeDisabled?: boolean): HTMLElement | null {
   const element = getEventPath(evt).find(p => p.classList && p.classList.contains(CALENDAR_CONSTANTS.classes.DATE));

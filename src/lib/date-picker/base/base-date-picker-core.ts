@@ -95,6 +95,7 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
     this._monthChangeListener = evt => this._onMonthChanged(evt);
     this._activeChangeListener = id => this._onActiveDescendantChanged(id);
     this._todayListener = () => this._onToday();
+    this._yesterdayListener = () => this._onYesterday();
     this._clearListener = () => this._onClear();
   }
 
@@ -104,6 +105,7 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
   protected abstract _emitOpenEvent(): void;
   protected abstract _emitCloseEvent(): void;
   protected abstract _onToday(): void;
+  protected abstract _onYesterday(): void;
   protected abstract _onClear(): void;
   protected abstract _getCurrentValue(): TPrivateValue | null | undefined;
   protected abstract _setFormattedInputValue(suppressValueChanges?: boolean): void;

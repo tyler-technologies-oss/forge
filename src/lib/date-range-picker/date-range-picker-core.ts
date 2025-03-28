@@ -104,13 +104,32 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   protected _onToday(): void {
     const today = new Date();
     this._tryMergeCurrentTime({ from: today });
-    const range = this._open ? new DateRange({ from: this._from || today, to: this._to || undefined }) : new DateRange({ from: today });
+    const range = this._open ? new DateRange({ from: this._from || today, to: this._to || today }) : new DateRange({ from: today, to: today });
     if (!this._isDateRangeAcceptable(range)) {
       return;
     }
     this.value = range;
     this._onDateSelected({ date: today, range, selected: true, type: 'date' });
     this._adapter.setCalendarActiveDate(today);
+  }
+
+  protected _onYesterday(): void {
+    const today = new Date();
+    const yesterdayFrom = new Date(today.setDate(today.getDate() - 1));
+    yesterdayFrom.setHours(0, 0, 0, 0);
+    const yesterdayTo = new Date(yesterdayFrom);
+    yesterdayTo.setHours(23, 59, 59, 0);
+
+    this._tryMergeCurrentTime({ from: yesterdayFrom, to: yesterdayTo });
+    const range = this._open
+      ? new DateRange({ from: this._from || yesterdayFrom, to: this._to || yesterdayTo })
+      : new DateRange({ from: yesterdayFrom, to: yesterdayTo });
+    if (!this._isDateRangeAcceptable(range)) {
+      return;
+    }
+    this.value = range;
+    this._onDateSelected({ date: yesterdayFrom, range, selected: true, type: 'date' });
+    this._adapter.setCalendarActiveDate(yesterdayFrom);
   }
 
   protected _onClear(): void {

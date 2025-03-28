@@ -27,6 +27,8 @@ const observedAttributes = {
   TODAY_BUTTON: 'today-button',
   SHOW_YESTERDAY: 'show-yesterday',
   YESTERDAY_BUTTON: 'yesterday-button',
+  SHOW_LAST_SEVEN_DAYS: 'show-last-seven-days',
+  LAST_SEVEN_DAYS_BUTTON: 'last-seven-days-button',
   VIEW: 'view',
   YEAR: 'year',
   YEAR_RANGE: 'year-range'
@@ -65,11 +67,13 @@ const classes = {
   RANGE_END: 'forge-calendar__range--end',
   RANGE_START: 'forge-calendar__range--start',
   RANGE_TARGET: 'forge-calendar__range__target',
+  RANGE_LAST_SEVEN_DAYS: 'forge-calendar__range__last-seven-days',
   READONLY: 'forge-calendar--readonly',
   RTL: 'forge-calendar--rtl',
   SHOW_OTHER_MONTHS: 'forge-calendar--show-other-months',
   SHOW_TODAY: 'forge-calendar--show-today',
   SHOW_YESTERDAY: 'forge-calendar--show-yesterday',
+  SHOW_LAST_SEVEN_DAYS: 'forge-calendar--show-last-seven-days',
   VIEW: 'forge-calendar__view',
   YEAR_MENU_OPEN: 'forge-calendar--year-menu-open'
 };
@@ -92,6 +96,7 @@ const ids = {
   PREVIOUS_BUTTON_TOOLTIP: 'previous-button-tooltip',
   TODAY_BUTTON: 'today-button',
   YESTERDAY_BUTTON: 'yesterday-button',
+  LAST_SEVEN_DAYS_BUTTON: 'last-seven-days-button',
   YEAR_BUTTON: 'year-button'
 };
 
@@ -104,6 +109,7 @@ const slots = {
   NEXT_YEARS_BUTTON_TEXT: 'next-years-button-text',
   TODAY_BUTTON_TEXT: 'today-button-text',
   YESTERDAY_BUTTON_TEXT: 'yesterday-button-text',
+  LAST_SEVEN_DAYS_BUTTON_TEXT: 'last-seven-days-button-text',
   CLEAR_BUTTON_TEXT: 'clear-button-text'
 };
 
@@ -140,6 +146,8 @@ const parts = {
   TODAY_BUTTON: 'today-button',
   YESTERDAY: 'yesterday',
   YESTERDAY_BUTTON: 'yesterday-button',
+  LAST_SEVEN_DAYS: 'last-seven-days',
+  LAST_SEVEN_DAYS_BUTTON: 'last-seven-days-button',
   WEEKEND: 'weekend',
   YEAR_BUTTON: 'year-button',
   YEAR_BUTTON_ELEMENT: 'year-button-element'
@@ -174,8 +182,10 @@ const selectors = {
   RANGE: `.${classes.RANGE}`,
   RANGE_END: `.${classes.RANGE_END}`,
   RANGE_START: `.${classes.RANGE_START}`,
+  RANGE_LAST_SEVEN_DAYS: `.${classes.RANGE_LAST_SEVEN_DAYS}`,
   TODAY_BUTTON: `#${ids.TODAY_BUTTON}`,
   YESTERDAY_BUTTON: `#${ids.YESTERDAY_BUTTON}`,
+  LAST_SEVEN_DAYS_BUTTON: `#${ids.LAST_SEVEN_DAYS_BUTTON}`,
   TOOLTIP: TOOLTIP_CONSTANTS.elementName,
   VIEW: '#view',
   YEAR_BUTTON: `#${ids.YEAR_BUTTON}`
@@ -197,6 +207,7 @@ const strings = {
   DEFAULT_NEXT_YEARS_BUTTON_TEXT: 'Next years',
   DEFAULT_TODAY_BUTTON_TEXT: 'Today',
   DEFAULT_YESTERDAY_BUTTON_TEXT: 'Yesterday',
+  DEFAULT_LAST_SEVEN_DAYS_BUTTON_TEXT: 'Last 7 days',
   DEFAULT_CLEAR_BUTTON_TEXT: 'Clear'
 };
 
@@ -291,6 +302,12 @@ export interface ICalendarDateSelectEventData {
   range?: DateRange;
   rangeSelectionState?: RangeSelectionState;
   type: CalendarView;
+}
+
+export interface ICalendarPredefinedDateRangeSelectEventData {
+  fromDate: Date;
+  toDate: Date;
+  rangeName: string;
 }
 
 export interface ICalendarMonthChangeEventData {
