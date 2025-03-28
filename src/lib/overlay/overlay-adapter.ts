@@ -174,12 +174,17 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
       const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
       const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
       const overlayRect = this._rootElement.getBoundingClientRect();
-      const isClippedX = overlayRect.right > viewportWidth || overlayRect.left < 0;
-      const isClippedY = overlayRect.bottom > viewportHeight || overlayRect.top < 0;
+      const isClippedX = overlayRect.right > viewportWidth;
+      const isClippedY = overlayRect.bottom > viewportHeight;
 
       // Update the clipped attributes to allow for state-based clipping adjustments by consumers
-      this._component.toggleAttribute(OVERLAY_CONSTANTS.attributes.CLIPPED_X, isClippedX);
-      this._component.toggleAttribute(OVERLAY_CONSTANTS.attributes.CLIPPED_Y, isClippedY);
+      // We only set these attributes once to avoid it triggering an auto-reposition loop. The attributes will be removed when the dropdown is closed.
+      if (isClippedX) {
+        this._component.setAttribute(OVERLAY_CONSTANTS.attributes.CLIPPED_X, '');
+      }
+      if (isClippedY) {
+        this._component.setAttribute(OVERLAY_CONSTANTS.attributes.CLIPPED_Y, '');
+      }
     });
   }
 
