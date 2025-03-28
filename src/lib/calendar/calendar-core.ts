@@ -2676,7 +2676,7 @@ export class CalendarCore implements ICalendarCore {
     const yesterdayTo = new Date(yesterdayFrom);
     yesterdayTo.setHours(23, 59, 59, 0);
 
-    var dateRange = [yesterdayFrom, yesterdayTo];
+    const dateRange = [yesterdayFrom, yesterdayTo];
     this._adapter.setRange(dateRange);
     this._goToDate(today, true);
 
@@ -2693,9 +2693,9 @@ export class CalendarCore implements ICalendarCore {
     const lastSevenDaysTo = new Date();
     lastSevenDaysTo.setHours(23, 59, 59, 0);
 
-    var dateRange = [lastSevenDaysFrom, lastSevenDaysTo];
+    const dateRange = [lastSevenDaysFrom, lastSevenDaysTo];
     this._adapter.setRange(dateRange);
-    //this._goToDate(today, true);
+    // this._goToDate(today, true);
 
     if (this._lastSevenDaysCallback) {
       this._lastSevenDaysCallback();
