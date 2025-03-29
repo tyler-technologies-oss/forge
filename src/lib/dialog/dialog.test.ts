@@ -391,13 +391,13 @@ describe('Dialog', () => {
 
       await harness.showAsync();
 
-      const labelElement = harness.nativeDialogElement.querySelector(`[id="${DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID}"]`) as HTMLElement;
+      const labelElement = harness.nativeDialogElement.querySelector(DIALOG_CONSTANTS.selectors.ACCESSIBLE_LABEL) as HTMLElement;
 
       expect(labelElement).to.be.ok;
       expect(labelElement.isConnected).to.be.true;
       expect(labelElement.textContent).to.equal('My dialog title');
-      expect(labelElement.id).to.equal(DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID);
-      expect(harness.nativeDialogElement.getAttribute('aria-labelledby')).to.equal(DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID);
+      expect(labelElement.id).to.equal('forge-dialog-label');
+      expect(harness.nativeDialogElement.getAttribute('aria-labelledby')).to.equal('forge-dialog-label');
       await expect(harness.dialogElement).to.be.accessible();
     });
 
@@ -406,13 +406,13 @@ describe('Dialog', () => {
 
       await harness.showAsync();
 
-      const descriptionElement = harness.nativeDialogElement.querySelector(`[id="${DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID}"]`) as HTMLElement;
+      const descriptionElement = harness.nativeDialogElement.querySelector(DIALOG_CONSTANTS.selectors.ACCESSIBLE_DESCRIPTION) as HTMLElement;
 
       expect(descriptionElement).to.be.ok;
       expect(descriptionElement.isConnected).to.be.true;
       expect(descriptionElement.textContent).to.equal('My dialog description');
-      expect(descriptionElement.id).to.equal(DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID);
-      expect(harness.nativeDialogElement.getAttribute('aria-describedby')).to.equal(DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID);
+      expect(descriptionElement.id).to.equal('forge-dialog-description');
+      expect(harness.nativeDialogElement.getAttribute('aria-describedby')).to.equal('forge-dialog-description');
       await expect(harness.dialogElement).to.be.accessible();
     });
 
@@ -421,8 +421,8 @@ describe('Dialog', () => {
 
       await harness.showAsync();
 
-      const labelElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(`[id="${DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID}"]`);
-      const descriptionElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(`[id="${DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID}"]`);
+      const labelElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(DIALOG_CONSTANTS.selectors.ACCESSIBLE_LABEL);
+      const descriptionElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(DIALOG_CONSTANTS.selectors.ACCESSIBLE_DESCRIPTION);
 
       expect(labelElements.length).to.equal(1);
       expect(descriptionElements.length).to.equal(1);
@@ -434,8 +434,8 @@ describe('Dialog', () => {
 
       await elementUpdated(harness.dialogElement);
 
-      const newLabelElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(`[id="${DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID}"]`);
-      const newDescriptionElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(`[id="${DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID}"]`);
+      const newLabelElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(DIALOG_CONSTANTS.selectors.ACCESSIBLE_LABEL);
+      const newDescriptionElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(DIALOG_CONSTANTS.selectors.ACCESSIBLE_DESCRIPTION);
 
       expect(newLabelElements.length).to.equal(1);
       expect(newDescriptionElements.length).to.equal(1);

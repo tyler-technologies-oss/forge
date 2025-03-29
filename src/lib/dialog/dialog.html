@@ -1,5 +1,7 @@
 <template>
-  <dialog class="forge-dialog" part="root">
+  <dialog class="forge-dialog" part="root" aria-labelledby="forge-dialog-label" aria-describedby="forge-dialog-description">
+    <div id="forge-dialog-label" class="visually-hidden"></div>
+    <div id="forge-dialog-description" class="visually-hidden"></div>
     <forge-backdrop exportparts="root:backdrop"></forge-backdrop>
     <div class="surface" part="surface">
       <div class="move-handle-container" part="move-handle-container">

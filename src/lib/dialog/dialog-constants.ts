@@ -23,9 +23,7 @@ const observedAttributes = {
 };
 
 const attributes = {
-  ...observedAttributes,
-  ARIA_LABEL_ID: 'forge-dialog-label',
-  ARIA_DESCRIPTION_ID: 'forge-dialog-description'
+  ...observedAttributes
 };
 
 const classes = {
@@ -37,7 +35,9 @@ const selectors = {
   DIALOG: '.forge-dialog',
   SURFACE: '.surface',
   MOVE_HANDLE: '.move-handle',
-  AUTOFOCUS: ':is([autofocus],[forge-dialog-focus])'
+  AUTOFOCUS: ':is([autofocus],[forge-dialog-focus])',
+  ACCESSIBLE_LABEL: '#forge-dialog-label',
+  ACCESSIBLE_DESCRIPTION: '#forge-dialog-description'
 };
 
 const events = {
