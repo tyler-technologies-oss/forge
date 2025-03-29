@@ -1,8 +1,8 @@
 import { tryDefine } from '@tylertech/forge-core';
-import { KeyItemComponent } from './key-item';
+import { KEY_ITEM_TAG_NAME, KeyItemComponent } from './key-item';
 
 export * from './key-item';
 
 export function defineKeyItemComponent(): void {
-  tryDefine('forge-key-item', KeyItemComponent);
+  tryDefine(KEY_ITEM_TAG_NAME, KeyItemComponent);
 }

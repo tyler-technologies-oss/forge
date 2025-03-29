@@ -1,9 +1,10 @@
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BadgeTheme } from './badge-constants';
+import { toggleState } from '../core/utils/utils';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 import styles from './badge.scss';
-import { toggleState } from '../core';
 
 export interface IBadgeComponent extends LitElement {
   dot: boolean;
@@ -48,6 +49,9 @@ export const BADGE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-badge';
 @customElement(BADGE_TAG_NAME)
 export class BadgeComponent extends LitElement implements IBadgeComponent {
   public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  static [CUSTOM_ELEMENT_NAME_PROPERTY] = BADGE_TAG_NAME;
 
   #internals: ElementInternals;
 
