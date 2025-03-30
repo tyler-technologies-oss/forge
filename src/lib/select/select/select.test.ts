@@ -900,7 +900,7 @@ class SelectHarness extends TestHarness<ISelectComponent> {
   public selectedTextElement: HTMLElement;
 
   public get labelElement(): HTMLLabelElement | null {
-    return getShadowElement(this.element, 'label') as HTMLLabelElement;
+    return getShadowElement(this.element, SELECT_CONSTANTS.selectors.LABEL) as HTMLLabelElement;
   }
 
   constructor(el: ISelectComponent) {
