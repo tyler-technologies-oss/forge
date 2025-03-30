@@ -1,0 +1,16 @@
+import{j as t,M as n,T as p,C as s}from"./index-BEnRDuC1.js";import{useMDXComponents as r}from"./index-BI0A2j9o.js";import{C as m}from"./CustomArgTypes-7kxJvyfR.js";import{H as c,D as a}from"./HelpButton.stories-dXtnkhOT.js";import"./iframe-CD4TsQrR.js";import"./_commonjsHelpers-CqkleIqs.js";import"./index-CfOrKyLd.js";import"./index-DrFu-skq.js";import"./utils-Do5MGSMS.js";import"./lit-element-B3QVTycr.js";import"./lit-html-CuBe1DX_.js";import"./feature-detection-C61kIZu7.js";import"./app-bar-profile-button-Db9vmw9L.js";import"./constants-DHnR0122.js";import"./base-adapter-B_B1W7NX.js";import"./utils-CRxrUqQD.js";import"./state-layer-Y8UVngaT.js";import"./focus-indicator-DydcbRnf.js";import"./index-CiLSBptl.js";import"./index-RsKXMDm2.js";import"./icon-DNSPAaK0.js";import"./icon-button-DJSm0po0.js";import"./base-button-adapter-BvyEvlN7.js";import"./with-label-aware-CbEUrhML.js";import"./with-default-aria-COlelyab.js";import"./a11y-utils-CCSbmmS7.js";import"./tooltip-Cafnl2Xo.js";import"./overlay-C2J-mFMD.js";import"./with-longpress-listener-D4mCqU-o.js";import"./dismissible-stack-BOibH_v8.js";import"./badge-B8aS-qp1.js";import"./property-2VT-dgmE.js";import"./menu-BIp0gSDi.js";import"./list-BEAQdsdb.js";import"./list-dropdown-aware-core-DGLK3WC5.js";import"./list-dropdown-BxzSJ6qG.js";import"./event-utils-C1SDeUaq.js";import"./linear-progress-Brg7kVg_.js";import"./popover-DlgaZ2F2.js";import"./skeleton-Cfb12itF.js";import"./a11y-BxM9_46k.js";import"./base-component-delegate-DDa44nSf.js";import"./avatar-CawfXDqL.js";import"./state-3jnPnrDt.js";import"./style-map-CeP1Mntv.js";import"./directive-CJw_OlP2.js";import"./class-map-CuXcqkpw.js";import"./button-7EoU3XJS.js";import"./toolbar-CM1YCrRV.js";import"./expansion-panel-tM2gL5Km.js";import"./divider-B48YHESn.js";function e(i){const o={blockquote:"blockquote",code:"code",h2:"h2",li:"li",p:"p",ul:"ul",...r(),...i.components};return t.jsxs(t.Fragment,{children:[t.jsx(n,{of:c}),`
+`,t.jsx(p,{}),`
+`,t.jsxs(o.p,{children:["For convenience Forge provides the ",t.jsx(o.code,{children:"<forge-app-bar-help-button>"})," component. This component uses an icon-button (with a predefined icon), and is wrapped in a Forge menu component. The power of this component is that it will ensure a consistent experience for users across all applications that consume it."]}),`
+`,t.jsxs(o.blockquote,{children:[`
+`,t.jsxs(o.p,{children:["It is expected that you place this component in the ",t.jsx(o.code,{children:"end"})," slot of the app-bar."]}),`
+`]}),`
+`,t.jsx(o.h2,{id:"default",children:"Default"}),`
+`,t.jsx(o.p,{children:"The following example shows the help button being used in the Forge app-bar."}),`
+`,t.jsx(s,{of:a}),`
+`,t.jsx(o.h2,{id:"api",children:"API"}),`
+`,t.jsx(m,{}),`
+`,t.jsx(o.h2,{id:"accessibility",children:"Accessibility"}),`
+`,t.jsxs(o.ul,{children:[`
+`,t.jsxs(o.li,{children:["The ",t.jsx(o.code,{children:"<forge-app-bar-help-button>"})," component handles all accessibility attributes for you, but if you implement this yourself be sure to add the proper aria-label."]}),`
+`,t.jsx(o.li,{children:"Ensure that the proper color contrast ratio is met, especially if using a custom theme."}),`
+`]})]})}function mt(i={}){const{wrapper:o}={...r(),...i.components};return o?t.jsx(o,{...i,children:t.jsx(e,{...i})}):e(i)}export{mt as default};
