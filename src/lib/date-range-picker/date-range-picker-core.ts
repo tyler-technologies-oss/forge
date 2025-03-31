@@ -102,9 +102,12 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   }
 
   protected _onToday(): void {
+    this._onClear();
     const today = new Date();
+    const todayFrom = new Date();
+    todayFrom.setHours(0, 0, 0, 0);
     this._tryMergeCurrentTime({ from: today });
-    const range = this._open ? new DateRange({ from: this._from || today, to: this._to || today }) : new DateRange({ from: today, to: today });
+    const range = this._open ? new DateRange({ from: this._from || todayFrom, to: this._to || today }) : new DateRange({ from: todayFrom, to: today });
     if (!this._isDateRangeAcceptable(range)) {
       return;
     }
@@ -114,6 +117,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   }
 
   protected _onYesterday(): void {
+    this._onClear();
     const today = new Date();
     const yesterdayFrom = new Date(today.setDate(today.getDate() - 1));
     yesterdayFrom.setHours(0, 0, 0, 0);
@@ -133,6 +137,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   }
 
   protected _onLastSevenDays(): void {
+    this._onClear();
     const today = new Date();
     const lastSevenDaysFrom = new Date(today.setDate(today.getDate() - 7));
     lastSevenDaysFrom.setHours(0, 0, 0, 0);
@@ -152,6 +157,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   }
 
   protected _onLastThirtyDays(): void {
+    this._onClear();
     const today = new Date();
     const lastThirtyDaysFrom = new Date(today.setDate(today.getDate() - 30));
     lastThirtyDaysFrom.setHours(0, 0, 0, 0);
