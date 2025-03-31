@@ -151,6 +151,25 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     this._onDateSelected({ date: lastSevenDaysTo, range, selected: true, rangeSelectionState: 'to', type: 'date' });
   }
 
+  protected _onLastThirtyDays(): void {
+    const today = new Date();
+    const lastThirtyDaysFrom = new Date(today.setDate(today.getDate() - 30));
+    lastThirtyDaysFrom.setHours(0, 0, 0, 0);
+    const lastThirtyDaysTo = new Date();
+    lastThirtyDaysTo.setHours(23, 59, 59, 0);
+
+    this._tryMergeCurrentTime({ from: lastThirtyDaysFrom, to: lastThirtyDaysTo });
+    const range = this._open
+      ? new DateRange({ from: this._from || lastThirtyDaysFrom, to: this._to || lastThirtyDaysTo })
+      : new DateRange({ from: lastThirtyDaysFrom, to: lastThirtyDaysTo });
+    if (!this._isDateRangeAcceptable(range)) {
+      return;
+    }
+    this.value = range;
+    this._onDateSelected({ date: lastThirtyDaysFrom, range, selected: true, rangeSelectionState: 'from', type: 'date' });
+    this._onDateSelected({ date: lastThirtyDaysTo, range, selected: true, rangeSelectionState: 'to', type: 'date' });
+  }
+
   protected _onClear(): void {
     this._onDateSelected({ date: null, range: new DateRange(), selected: false, type: 'date' });
     this._closeCalendar(true);

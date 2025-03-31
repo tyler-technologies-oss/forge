@@ -23,6 +23,7 @@ const meta = {
         .showToday=${args.showToday}
         .showYesterday=${args.showYesterday}
         .showLastSevenDays=${args.showLastSevenDays}
+        .showLastThirtyDays=${args.showLastThirtyDays}
         .showClear=${args.showClear}
         .disabledDaysOfWeek=${args.disabledDaysOfWeek}
         .locale=${args.locale}
@@ -52,6 +53,7 @@ const meta = {
         'showToday',
         'showYesterday',
         'showLastSevenDays',
+        'showLastThirtyDays',
         'showClear',
         'disabledDaysOfWeek'
       ],
@@ -82,6 +84,7 @@ const meta = {
     showToday: true,
     showYesterday: true,
     showLastSevenDays: true,
+    showLastThirtyDays: true,
     showMaskFormat: true,
     allowInvalidDate: false,
     disabledDaysOfWeek: [0, 6],

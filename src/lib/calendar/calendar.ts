@@ -43,15 +43,18 @@ export interface ICalendarComponent extends ICalendarBase, IBaseComponent {
   todayButton: boolean;
   yesterdayButton: boolean;
   lastSevenDaysButton: boolean;
+  lastThirtyDaysButton: boolean;
   clearCallback: (() => void) | undefined;
   todayCallback: (() => void) | undefined;
   yesterdayCallback: (() => void) | undefined;
   lastSevenDaysCallback: (() => void) | undefined;
+  lastThirtyDaysCallback: (() => void) | undefined;
   tooltipBuilder: CalendarTooltipBuilder | undefined;
   clear(): void;
   today(): void;
   yesterday(): void;
   lastSevenDays(): void;
+  lastThirtyDays(): void;
   selectDate(date: Date, setFocus?: boolean): void;
   deselectDate(date: Date): void;
   toggleDate(date: Date, force?: boolean): void;
@@ -113,6 +116,9 @@ declare global {
  * @property {boolean} [showLastSevenDays=true] - Whether to show the last seven days button.
  * @property {boolean} [lastSevenDaysButton=false] - Whether to show a button to select last seven days.
  * @property {() => void | undefined} lastSevenDaysCallback - Callback function to call when the last seven days button is clicked.
+ * @property {boolean} [showLastThirtyDays=true] - Whether to show the last thirty days button.
+ * @property {boolean} [lastThirtyDaysButton=false] - Whether to show a button to select last thirty days.
+ * @property {() => void | undefined} lastThirtyDaysCallback - Callback function to call when the last thirty days button is clicked.
  * @property {CalendarTooltipBuilder | undefined} tooltipBuilder - Function to build the tooltip content.
  * @property {Date | Date[] | DateRange | null | undefined} [value=[]] - The selected date(s).
  * @property {CalendarView} [view="date"] - The view of the calendar.
@@ -143,6 +149,8 @@ declare global {
  * @attribute {boolean} [yesterday-button=false] - Whether to show a button to select yesterday.
  * @attribute {boolean} [show-last-seven-days=true] - Whether to show the last seven days button.
  * @attribute {boolean} [last-seven-days-button=false] - Whether to show a button to select last seven days.
+ * @attribute {boolean} [show-last-thirty-days=true] - Whether to show the last thirty days button.
+ * @attribute {boolean} [last-thirty-days-button=false] - Whether to show a button to select last thirty days.
  * @attribute {CalendarView} [view="date"] - The view of the calendar.
  * @attribute {number} [year=<current year>] - The year to display.
  * @attribute {string} [year-range="-50:+50"] - The range of years to display.
@@ -155,6 +163,7 @@ declare global {
  * @slot today-button-text - Text to display in the today button.
  * @slot yesterday-button-text - Text to display in the yesterday button.
  * @slot last-seven-days-button-text - Text to display in the last seven days button.
+ * @slot last-thirty-days-button-text - Text to display in the last thirty days button.
  * @slot clear-button-text - Text to display in the clear button.
  * @slot next-month-button-text - Text to display in the next month button's tooltip.
  * @slot previous-month-button-text - Text to display in the previous month button's tooltip.
@@ -193,6 +202,8 @@ export class CalendarComponent extends BaseComponent implements ICalendarCompone
       CALENDAR_CONSTANTS.attributes.YESTERDAY_BUTTON,
       CALENDAR_CONSTANTS.attributes.SHOW_LAST_SEVEN_DAYS,
       CALENDAR_CONSTANTS.attributes.LAST_SEVEN_DAYS_BUTTON,
+      CALENDAR_CONSTANTS.attributes.SHOW_LAST_THIRTY_DAYS,
+      CALENDAR_CONSTANTS.attributes.LAST_THIRTY_DAYS_BUTTON,
       CALENDAR_CONSTANTS.attributes.VIEW,
       CALENDAR_CONSTANTS.attributes.YEAR,
       CALENDAR_CONSTANTS.attributes.YEAR_RANGE
@@ -293,6 +304,12 @@ export class CalendarComponent extends BaseComponent implements ICalendarCompone
         break;
       case CALENDAR_CONSTANTS.attributes.LAST_SEVEN_DAYS_BUTTON:
         this.lastSevenDaysButton = coerceBoolean(newValue);
+        break;
+      case CALENDAR_CONSTANTS.attributes.SHOW_LAST_THIRTY_DAYS:
+        this.showLastThirtyDays = coerceBoolean(newValue);
+        break;
+      case CALENDAR_CONSTANTS.attributes.LAST_THIRTY_DAYS_BUTTON:
+        this.lastThirtyDaysButton = coerceBoolean(newValue);
         break;
       case CALENDAR_CONSTANTS.attributes.VIEW:
         this.view = newValue as CalendarView;
@@ -414,6 +431,15 @@ export class CalendarComponent extends BaseComponent implements ICalendarCompone
 
   @coreProperty()
   declare public lastSevenDaysCallback: (() => void) | undefined;
+
+  @coreProperty()
+  declare public showLastThirtyDays: boolean;
+
+  @coreProperty()
+  declare public lastThirtyDaysButton: boolean;
+
+  @coreProperty()
+  declare public lastThirtyDaysCallback: (() => void) | undefined;
 
   @coreProperty()
   declare public tooltipBuilder: CalendarTooltipBuilder | undefined;

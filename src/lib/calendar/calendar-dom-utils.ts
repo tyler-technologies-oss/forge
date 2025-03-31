@@ -329,6 +329,19 @@ export function getLastSevenDaysButton(): HTMLElement {
   return lastSevenDaysButton;
 }
 
+/** Returns a last thirty days button. */
+export function getLastThirtyDaysButton(): HTMLElement {
+  const lastThirtyDaysButton = document.createElement('forge-button');
+  lastThirtyDaysButton.id = CALENDAR_CONSTANTS.ids.LAST_THIRTY_DAYS_BUTTON;
+  lastThirtyDaysButton.setAttribute('part', CALENDAR_CONSTANTS.parts.LAST_THIRTY_DAYS_BUTTON);
+  lastThirtyDaysButton.type = 'button';
+  const slot = document.createElement('slot');
+  slot.name = CALENDAR_CONSTANTS.slots.LAST_THIRTY_DAYS_BUTTON_TEXT;
+  slot.innerText = CALENDAR_CONSTANTS.strings.DEFAULT_LAST_THIRTY_DAYS_BUTTON_TEXT;
+  lastThirtyDaysButton.appendChild(slot);
+  return lastThirtyDaysButton;
+}
+
 /** Checks whether an event originated from a date element, returning the element if it did. */
 export function eventIncludesDate(evt: Event, includeDisabled?: boolean): HTMLElement | null {
   const element = getEventPath(evt).find(p => p.classList && p.classList.contains(CALENDAR_CONSTANTS.classes.DATE));

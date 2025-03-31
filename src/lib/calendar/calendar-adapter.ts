@@ -28,6 +28,7 @@ import {
   getTodayButton,
   getYesterdayButton,
   getLastSevenDaysButton,
+  getLastThirtyDaysButton,
   getTooltip,
   getYearButtonContent,
   setTabindexOnElement
@@ -58,6 +59,7 @@ export interface ICalendarAdapter extends IBaseAdapter {
   registerTodayButtonListener(listener: (evt: Event) => void): void;
   registerYesterdayButtonListener(listener: (evt: Event) => void): void;
   registerLastSevenDaysButtonListener(listener: (evt: Event) => void): void;
+  registerLastThirtyDaysButtonListener(listener: (evt: Event) => void): void;
   registerYearButtonListener(listener: (evt: Event) => void): void;
   removeClearButton(): void;
   removeFooter(): void;
@@ -65,6 +67,7 @@ export interface ICalendarAdapter extends IBaseAdapter {
   removeTodayButton(): void;
   removeYesterdayButton(): void;
   removeLastSevenDaysButton(): void;
+  removeLastThirtyDaysButton(): void;
   replaceDate(date: ICalendarDateConfig, options?: ICalendarDateOptions): void;
   replaceDateWithSpacer(date: Date): void;
   selectFocusedMenuItem(): void;
@@ -98,6 +101,7 @@ export interface ICalendarAdapter extends IBaseAdapter {
   setTodayButton(): void;
   setYesterdayButton(): void;
   setLastSevenDaysButton(): void;
+  setLastThirtyDaysButton(): void;
   setWeekend(date: Date, value: boolean): void;
   setYear(year: number, locale?: string): void;
   setYearButtonPressed(value: boolean): void;
@@ -114,6 +118,7 @@ export interface ICalendarAdapter extends IBaseAdapter {
   unregisterTodayButtonListener(listener: (evt: Event) => void): void;
   unregisterYesterdayButtonListener(listener: (evt: Event) => void): void;
   unregisterLastSevenDaysButtonListener(listener: (evt: Event) => void): void;
+  unregisterLastThirtyDaysButtonListener(listener: (evt: Event) => void): void;
   unregisterYearButtonListener(listener: (evt: Event) => void): void;
 }
 
@@ -231,6 +236,16 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
   public unregisterLastSevenDaysButtonListener(listener: (evt: Event) => void): void {
     const lastSevenDaysButton = this._container.querySelector(CALENDAR_CONSTANTS.selectors.LAST_SEVEN_DAYS_BUTTON);
     lastSevenDaysButton?.removeEventListener('click', listener);
+  }
+
+  public registerLastThirtyDaysButtonListener(listener: (evt: Event) => void): void {
+    const lastThirtyDaysButton = this._container.querySelector(CALENDAR_CONSTANTS.selectors.LAST_THIRTY_DAYS_BUTTON);
+    lastThirtyDaysButton?.addEventListener('click', listener);
+  }
+
+  public unregisterLastThirtyDaysButtonListener(listener: (evt: Event) => void): void {
+    const lastThirtyDaysButton = this._container.querySelector(CALENDAR_CONSTANTS.selectors.LAST_THIRTY_DAYS_BUTTON);
+    lastThirtyDaysButton?.removeEventListener('click', listener);
   }
 
   public registerDateClickListener(listener: (evt: Event) => void): void {
@@ -475,6 +490,23 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
   public removeLastSevenDaysButton(): void {
     const lastSevenDaysButton = this._container.querySelector(CALENDAR_CONSTANTS.selectors.LAST_SEVEN_DAYS_BUTTON);
     lastSevenDaysButton?.parentNode?.removeChild(lastSevenDaysButton);
+  }
+
+  public setLastThirtyDaysButton(): void {
+    const footer = this._container.querySelector(CALENDAR_CONSTANTS.selectors.FOOTER);
+    if (!footer) {
+      return;
+    }
+
+    const lastThirtyDaysButton = footer.querySelector(CALENDAR_CONSTANTS.selectors.LAST_THIRTY_DAYS_BUTTON);
+    if (!lastThirtyDaysButton) {
+      footer.appendChild(getLastThirtyDaysButton());
+    }
+  }
+
+  public removeLastThirtyDaysButton(): void {
+    const lastThirtyDaysButton = this._container.querySelector(CALENDAR_CONSTANTS.selectors.LAST_THIRTY_DAYS_BUTTON);
+    lastThirtyDaysButton?.parentNode?.removeChild(lastThirtyDaysButton);
   }
 
   public setDays(days: DayOfWeek[], options?: ICalendarDayOptions): void {

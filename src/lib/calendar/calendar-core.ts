@@ -67,15 +67,18 @@ export interface ICalendarCore extends ICalendarBase {
   todayButton: boolean;
   yesterdayButton: boolean;
   lastSevenDaysButton: boolean;
+  lastThirtyDaysButton: boolean;
   clearCallback: (() => void) | undefined;
   todayCallback: (() => void) | undefined;
   yesterdayCallback: (() => void) | undefined;
   lastSevenDaysCallback: (() => void) | undefined;
+  lastThirtyDaysCallback: (() => void) | undefined;
   tooltipBuilder: CalendarTooltipBuilder | undefined;
   clear(): void;
   today(): void;
   yesterday(): void;
   lastSevenDays(): void;
+  lastThirtyDays(): void;
   selectDate(date: Date, setFocus?: boolean): void;
   deselectDate(date: Date, setFocus?: boolean): void;
   toggleDate(date: Date, force?: boolean): void;
@@ -94,6 +97,7 @@ export class CalendarCore implements ICalendarCore {
   private _showToday = true;
   private _showYesterday = true;
   private _showLastSevenDays = true;
+  private _showLastThirtyDays = true;
   private _showOtherMonths = false;
   private _fixedHeight = false;
   private _events: ICalendarEvent[] = [];
@@ -130,10 +134,12 @@ export class CalendarCore implements ICalendarCore {
   private _todayButton = false;
   private _yesterdayButton = false;
   private _lastSevenDaysButton = false;
+  private _lastThirtyDaysButton = false;
   private _clearCallback: (() => void) | undefined;
   private _todayCallback: (() => void) | undefined;
   private _yesterdayCallback: (() => void) | undefined;
   private _lastSevenDaysCallback: (() => void) | undefined;
+  private _lastThirtyDaysCallback: (() => void) | undefined;
 
   // Menu
   private _view: CalendarView = 'date';
@@ -172,6 +178,7 @@ export class CalendarCore implements ICalendarCore {
   private _todayButtonListener: (evt: Event) => void;
   private _yesterdayButtonListener: (evt: Event) => void;
   private _lastSevenDaysButtonListener: (evt: Event) => void;
+  private _lastThirtyDaysButtonListener: (evt: Event) => void;
   private _yearButtonListener: (evt: Event) => void;
 
   constructor(private _adapter: ICalendarAdapter) {
@@ -188,6 +195,7 @@ export class CalendarCore implements ICalendarCore {
     this._todayButtonListener = () => this._onTodayClicked();
     this._yesterdayButtonListener = () => this._onYesterdayClicked();
     this._lastSevenDaysButtonListener = () => this._onLastSevenDaysClicked();
+    this._lastThirtyDaysButtonListener = () => this._onLastThirtyDaysClicked();
     this._yearButtonListener = () => this._onYearButtonClicked();
   }
 
@@ -202,6 +210,7 @@ export class CalendarCore implements ICalendarCore {
     this._applyShowToday();
     this._applyShowYesterday();
     this._applyShowLastSevenDays();
+    this._applyShowLastThirtyDays();
     this._applyPreventFocus();
     this._applyShowHeader();
     this._applyMonth();
@@ -213,6 +222,7 @@ export class CalendarCore implements ICalendarCore {
     this._applyTodayButton();
     this._applyYesterdayButton();
     this._applyLastSevenDaysButton();
+    this._applyLastThirtyDaysButton();
     this._applyFirstDayOfWeek();
     this._applyShowOtherMonths();
     this._createDateView();
@@ -553,6 +563,10 @@ export class CalendarCore implements ICalendarCore {
 
   private _onLastSevenDaysClicked(): void {
     this.lastSevenDays();
+  }
+
+  private _onLastThirtyDaysClicked(): void {
+    this.lastThirtyDays();
   }
 
   /** Attempts to the month and year of the value in single mode, then emits a selection event  */
@@ -1568,7 +1582,7 @@ export class CalendarCore implements ICalendarCore {
       this._adapter.removeClearButton();
 
       // christina - make is any button selected? function
-      if (!this._todayButton && !this._yesterdayButton && !this._lastSevenDaysButton) {
+      if (!this._todayButton && !this._yesterdayButton && !this._lastSevenDaysButton && !this._lastThirtyDaysButton) {
         this._adapter.removeFooter();
       }
     } else {
@@ -1909,7 +1923,7 @@ export class CalendarCore implements ICalendarCore {
       this._adapter.unregisterTodayButtonListener(this._todayButtonListener);
       this._adapter.removeTodayButton();
 
-      if (!this._clearButton && !this._yesterdayButton && !this._lastSevenDaysButton) {
+      if (!this._clearButton && !this._yesterdayButton && !this._lastSevenDaysButton && !this._lastThirtyDaysButton) {
         this._adapter.removeFooter();
       }
     } else {
@@ -1931,7 +1945,7 @@ export class CalendarCore implements ICalendarCore {
       this._adapter.unregisterYesterdayButtonListener(this._yesterdayButtonListener);
       this._adapter.removeYesterdayButton();
 
-      if (!this._clearButton && !this._todayButton && !this._lastSevenDaysButton) {
+      if (!this._clearButton && !this._todayButton && !this._lastSevenDaysButton && !this._lastThirtyDaysButton) {
         this._adapter.removeFooter();
       }
     } else {
@@ -1960,6 +1974,28 @@ export class CalendarCore implements ICalendarCore {
       this._adapter.setFooter();
       this._adapter.setLastSevenDaysButton();
       this._adapter.registerLastSevenDaysButtonListener(this._lastSevenDaysButtonListener);
+    }
+  }
+
+  private _applyShowLastThirtyDays(): void {
+    this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.SHOW_LAST_THIRTY_DAYS, this._showLastThirtyDays);
+    this._adapter.setContainerClass(CALENDAR_CONSTANTS.classes.SHOW_LAST_THIRTY_DAYS, this._showLastThirtyDays);
+  }
+
+  private _applyLastThirtyDaysButton(): void {
+    this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.LAST_THIRTY_DAYS_BUTTON, true, this._lastThirtyDaysButton.toString());
+
+    if (!this._lastThirtyDaysButton) {
+      this._adapter.unregisterLastThirtyDaysButtonListener(this._lastThirtyDaysButtonListener);
+      this._adapter.removeLastThirtyDaysButton();
+
+      if (!this._clearButton && !this._todayButton && !this._yesterdayButton && !this.lastSevenDaysButton) {
+        this._adapter.removeFooter();
+      }
+    } else {
+      this._adapter.setFooter();
+      this._adapter.setLastThirtyDaysButton();
+      this._adapter.registerLastThirtyDaysButtonListener(this._lastThirtyDaysButtonListener);
     }
   }
 
@@ -2495,6 +2531,42 @@ export class CalendarCore implements ICalendarCore {
     this._lastSevenDaysCallback = value;
   }
 
+  /** Get/set show last thirty days */
+  public get showLastThirtyDays(): boolean {
+    return this._showLastThirtyDays;
+  }
+  public set showLastThirtyDays(value: boolean) {
+    if (this._showLastThirtyDays !== value) {
+      this._showLastThirtyDays = value;
+
+      if (this._isInitialized) {
+        this._applyShowLastThirtyDays();
+      }
+    }
+  }
+
+  /** Get/set whether to show the last thirty days button */
+  public get lastThirtyDaysButton(): boolean {
+    return this._lastThirtyDaysButton;
+  }
+  public set lastThirtyDaysButton(value: boolean) {
+    if (this._lastThirtyDaysButton !== value) {
+      this._lastThirtyDaysButton = value;
+
+      if (this._isInitialized) {
+        this._applyLastThirtyDaysButton();
+      }
+    }
+  }
+
+  /* Get/set the last thirty days button callback */
+  public get lastThirtyDaysCallback(): (() => void) | undefined {
+    return this._lastThirtyDaysCallback;
+  }
+  public set lastThirtyDaysCallback(value: (() => void) | undefined) {
+    this._lastThirtyDaysCallback = value;
+  }
+
   /** Get/set the tooltip builder */
   public get tooltipBuilder(): CalendarTooltipBuilder | undefined {
     return this._tooltipBuilder;
@@ -2699,6 +2771,23 @@ export class CalendarCore implements ICalendarCore {
 
     if (this._lastSevenDaysCallback) {
       this._lastSevenDaysCallback();
+    }
+  }
+
+  /** Go to last thirty days */
+  public lastThirtyDays(): void {
+    const today = new Date();
+    const lastThirtyDaysFrom = new Date(today.setDate(today.getDate() - 30));
+    lastThirtyDaysFrom.setHours(0, 0, 0, 0);
+    const lastThirtyDaysTo = new Date();
+    lastThirtyDaysTo.setHours(23, 59, 59, 0);
+
+    const dateRange = [lastThirtyDaysFrom, lastThirtyDaysTo];
+    this._adapter.setRange(dateRange);
+    this._applyValue(dateRange);
+
+    if (this._lastThirtyDaysCallback) {
+      this._lastThirtyDaysCallback();
     }
   }
 

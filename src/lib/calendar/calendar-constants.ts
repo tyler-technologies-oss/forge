@@ -29,6 +29,8 @@ const observedAttributes = {
   YESTERDAY_BUTTON: 'yesterday-button',
   SHOW_LAST_SEVEN_DAYS: 'show-last-seven-days',
   LAST_SEVEN_DAYS_BUTTON: 'last-seven-days-button',
+  SHOW_LAST_THIRTY_DAYS: 'show-last-thirty-days',
+  LAST_THIRTY_DAYS_BUTTON: 'last-thirty-days-button',
   VIEW: 'view',
   YEAR: 'year',
   YEAR_RANGE: 'year-range'
@@ -68,12 +70,14 @@ const classes = {
   RANGE_START: 'forge-calendar__range--start',
   RANGE_TARGET: 'forge-calendar__range__target',
   RANGE_LAST_SEVEN_DAYS: 'forge-calendar__range__last-seven-days',
+  RANGE_LAST_THIRTY_DAYS: 'forge-calendar__range__last-thirty-days',
   READONLY: 'forge-calendar--readonly',
   RTL: 'forge-calendar--rtl',
   SHOW_OTHER_MONTHS: 'forge-calendar--show-other-months',
   SHOW_TODAY: 'forge-calendar--show-today',
   SHOW_YESTERDAY: 'forge-calendar--show-yesterday',
   SHOW_LAST_SEVEN_DAYS: 'forge-calendar--show-last-seven-days',
+  SHOW_LAST_THIRTY_DAYS: 'forge-calendar--show-last-thirty-days',
   VIEW: 'forge-calendar__view',
   YEAR_MENU_OPEN: 'forge-calendar--year-menu-open'
 };
@@ -97,6 +101,7 @@ const ids = {
   TODAY_BUTTON: 'today-button',
   YESTERDAY_BUTTON: 'yesterday-button',
   LAST_SEVEN_DAYS_BUTTON: 'last-seven-days-button',
+  LAST_THIRTY_DAYS_BUTTON: 'last-thirty-days-button',
   YEAR_BUTTON: 'year-button'
 };
 
@@ -110,6 +115,7 @@ const slots = {
   TODAY_BUTTON_TEXT: 'today-button-text',
   YESTERDAY_BUTTON_TEXT: 'yesterday-button-text',
   LAST_SEVEN_DAYS_BUTTON_TEXT: 'last-seven-days-button-text',
+  LAST_THIRTY_DAYS_BUTTON_TEXT: 'last-thirty-days-button-text',
   CLEAR_BUTTON_TEXT: 'clear-button-text'
 };
 
@@ -148,6 +154,8 @@ const parts = {
   YESTERDAY_BUTTON: 'yesterday-button',
   LAST_SEVEN_DAYS: 'last-seven-days',
   LAST_SEVEN_DAYS_BUTTON: 'last-seven-days-button',
+  LAST_THIRTY_DAYS: 'last-thirty-days',
+  LAST_THIRTY_DAYS_BUTTON: 'last-thirty-days-button',
   WEEKEND: 'weekend',
   YEAR_BUTTON: 'year-button',
   YEAR_BUTTON_ELEMENT: 'year-button-element'
@@ -183,9 +191,11 @@ const selectors = {
   RANGE_END: `.${classes.RANGE_END}`,
   RANGE_START: `.${classes.RANGE_START}`,
   RANGE_LAST_SEVEN_DAYS: `.${classes.RANGE_LAST_SEVEN_DAYS}`,
+  RANGE_LAST_THIRTY_DAYS: `.${classes.RANGE_LAST_THIRTY_DAYS}`,
   TODAY_BUTTON: `#${ids.TODAY_BUTTON}`,
   YESTERDAY_BUTTON: `#${ids.YESTERDAY_BUTTON}`,
   LAST_SEVEN_DAYS_BUTTON: `#${ids.LAST_SEVEN_DAYS_BUTTON}`,
+  LAST_THIRTY_DAYS_BUTTON: `#${ids.LAST_THIRTY_DAYS_BUTTON}`,
   TOOLTIP: TOOLTIP_CONSTANTS.elementName,
   VIEW: '#view',
   YEAR_BUTTON: `#${ids.YEAR_BUTTON}`
@@ -208,6 +218,7 @@ const strings = {
   DEFAULT_TODAY_BUTTON_TEXT: 'Today',
   DEFAULT_YESTERDAY_BUTTON_TEXT: 'Yesterday',
   DEFAULT_LAST_SEVEN_DAYS_BUTTON_TEXT: 'Last 7 days',
+  DEFAULT_LAST_THIRTY_DAYS_BUTTON_TEXT: 'Last 30 days',
   DEFAULT_CLEAR_BUTTON_TEXT: 'Clear'
 };
 
