@@ -1931,7 +1931,7 @@ export class CalendarCore implements ICalendarCore {
       this._adapter.unregisterYesterdayButtonListener(this._yesterdayButtonListener);
       this._adapter.removeYesterdayButton();
 
-      if (!this._clearButton && !this._todayButton) {
+      if (!this._clearButton && !this._todayButton && !this._lastSevenDaysButton) {
         this._adapter.removeFooter();
       }
     } else {
@@ -2695,7 +2695,7 @@ export class CalendarCore implements ICalendarCore {
 
     const dateRange = [lastSevenDaysFrom, lastSevenDaysTo];
     this._adapter.setRange(dateRange);
-    // this._goToDate(today, true);
+    this._applyValue(dateRange);
 
     if (this._lastSevenDaysCallback) {
       this._lastSevenDaysCallback();

@@ -32,6 +32,7 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
   allowInvalidDate: boolean;
   showToday: boolean;
   showYesterday: boolean;
+  showLastSevenDays: boolean;
   showClear: boolean;
   disabledDaysOfWeek: DayOfWeek[];
   yearRange: string;
@@ -61,6 +62,7 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
  * @property {boolean} [showMaskFormat=false] - Whether the mask format is displayed in the input or not. Only applies if `masked` is `true`.
  * @property {boolean} [showToday=false] - Whether the today button is visible in the popup.
  * @property {boolean} [showYesterday=false] - Whether the yesterday button is visible in the popup.
+ * @property {boolean} [showLastSevenDays=false] - Whether the last seven days button is visible in the popup.
  * @property {TValue} value - The value of the date picker.
  * @property {DatePickerValueMode} valueMode - The type for the `value` property and `forge-date-picker-change` event.
  * @property {string} yearRange - The year range.
@@ -80,6 +82,7 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
  * @attribute {boolean} [show-mask-format=false] - Whether the mask format is displayed in the input or not. Only applies if `masked` is `true`.
  * @attribute {boolean} [show-today=false] - Whether the today button is visible in the popup.
  * @attribute {boolean} [show-yesterday=false] - Whether the yesterday button is visible in the popup.
+ * @attribute {boolean} [show-last-seven-days=false] - Whether the last seven days button is visible in the popup.
  * @attribute {DatePickerValueMode} [value-mode=string] - The type for the `value` property and `forge-date-picker-change` event.
  * @attribute {string} [year-range] - The year range.
  */
@@ -149,6 +152,9 @@ export abstract class BaseDatePickerComponent<
       case BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_YESTERDAY:
         this.showYesterday = coerceBoolean(newValue);
         break;
+      case BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_LAST_SEVEN_DAYS:
+        this.showLastSevenDays = coerceBoolean(newValue);
+        break;
       case BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_CLEAR:
         this.showClear = coerceBoolean(newValue);
         break;
@@ -211,6 +217,9 @@ export abstract class BaseDatePickerComponent<
 
   @coreProperty()
   declare public showYesterday: boolean;
+
+  @coreProperty()
+  declare public showLastSevenDays: boolean;
 
   @coreProperty()
   declare public showClear: boolean;

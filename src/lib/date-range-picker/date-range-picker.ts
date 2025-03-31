@@ -55,6 +55,7 @@ declare global {
  * @property {boolean} [allowInvalidDate=false] - Gets/sets the state of whether to allow invalid dates.
  * @property {boolean} [showToday=true] - Gets/sets the state of whether to show the "Today" button.
  * @property {boolean} [showYesterday=true] - Gets/sets the state of whether to show the "Yesterday" button.
+ * @property {boolean} [showLastSevenDays=true] Gets/sets the state of whether to show the "Last 7 days" button.
  * @property {boolean} [showClear=true] - Gets/sets the state of whether to show the "Clear" button.
  * @property {DayOfWeek[]} [disabledDaysOfWeek=[]] - Gets/sets the disabled days of the week.
  * @property {string} [yearRange=''] - Gets/sets the year range for the date range picker.

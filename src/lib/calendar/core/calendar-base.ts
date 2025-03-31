@@ -27,6 +27,7 @@ export interface ICalendarBase {
   showOtherMonths: boolean;
   showToday: boolean;
   showYesterday: boolean;
+  showLastSevenDays: boolean;
   value: Date | Date[] | DateRange | null | undefined;
   weekendDays: DayOfWeek[] | null | undefined;
   year: number;

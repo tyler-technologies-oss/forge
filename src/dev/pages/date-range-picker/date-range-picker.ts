@@ -90,6 +90,11 @@ dateRangePickerShowYesterdayToggle.addEventListener('forge-switch-change', ({ de
   dateRangePicker.showYesterday = selected;
 });
 
+const dateRangePickerShowLastSevenDaysToggle = document.querySelector('#opt-show-last-seven-days') as ISwitchComponent;
+dateRangePickerShowLastSevenDaysToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  dateRangePicker.showLastSevenDays = selected;
+});
+
 const dateRangePickerShowClearToggle = document.querySelector('#opt-show-clear') as ISwitchComponent;
 dateRangePickerShowClearToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   dateRangePicker.showClear = selected;
