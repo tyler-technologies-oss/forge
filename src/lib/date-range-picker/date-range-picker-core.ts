@@ -147,8 +147,8 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
       return;
     }
     this.value = range;
-    this._onDateSelected({ date: lastSevenDaysFrom, range, selected: true, type: 'date' });
-    this._adapter.setCalendarActiveDate(lastSevenDaysTo);
+    this._onDateSelected({ date: lastSevenDaysFrom, range: range, selected: true, rangeSelectionState: 'from', type: 'date' });
+    this._onDateSelected({ date: lastSevenDaysTo, range: range, selected: true, rangeSelectionState: 'to', type: 'date' });
   }
 
   protected _onClear(): void {
