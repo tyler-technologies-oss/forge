@@ -47,7 +47,7 @@ export class CardComponent extends LitElement implements ICardComponent {
   public static styles = unsafeCSS(styles);
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  static [CUSTOM_ELEMENT_NAME_PROPERTY] = CARD_TAG_NAME;
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = CARD_TAG_NAME;
 
   #internals: ElementInternals;
 

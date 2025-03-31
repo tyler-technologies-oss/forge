@@ -38,7 +38,7 @@ export class MeterGroupComponent extends LitElement {
   public static formAssociated = true;
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  static [CUSTOM_ELEMENT_NAME_PROPERTY] = METER_GROUP_TAG_NAME;
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = METER_GROUP_TAG_NAME;
 
   /**
    * The minimum value of each meter in the group.

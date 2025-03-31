@@ -24,7 +24,7 @@ export class KeyComponent extends LitElement {
   public static styles = unsafeCSS(styles);
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  static [CUSTOM_ELEMENT_NAME_PROPERTY] = KEY_TAG_NAME;
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = KEY_TAG_NAME;
 
   private _internals: ElementInternals;
 

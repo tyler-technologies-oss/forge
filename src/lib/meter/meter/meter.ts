@@ -65,7 +65,8 @@ export class MeterComponent extends LitElement {
   public static styles = unsafeCSS(styles);
   public static formAssociated = true;
 
-  static [CUSTOM_ELEMENT_NAME_PROPERTY] = METER_TAG_NAME;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = METER_TAG_NAME;
 
   /**
    * The current value of the meter.

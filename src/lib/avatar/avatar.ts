@@ -57,7 +57,7 @@ export class AvatarComponent extends LitElement implements IAvatarComponent {
   public static styles = unsafeCSS(styles);
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  static [CUSTOM_ELEMENT_NAME_PROPERTY] = AVATAR_TAG_NAME;
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = AVATAR_TAG_NAME;
 
   /**
    * The text to display in the avatar.
