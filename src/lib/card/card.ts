@@ -1,6 +1,7 @@
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { toggleState } from '../core/utils/utils';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 import styles from './card.scss';
 
@@ -44,6 +45,9 @@ export const CARD_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-card';
 @customElement(CARD_TAG_NAME)
 export class CardComponent extends LitElement implements ICardComponent {
   public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = CARD_TAG_NAME;
 
   #internals: ElementInternals;
 

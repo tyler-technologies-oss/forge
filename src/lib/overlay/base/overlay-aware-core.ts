@@ -1,8 +1,17 @@
 import { IBaseOverlayCore } from './base-overlay-core';
 import { IOverlayComponent } from '../overlay';
 import { IOverlayAwareAdapter } from './overlay-aware-adapter';
-import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
+import {
+  IOverlayOffset,
+  OverlayFlipState,
+  OverlayHideState,
+  OverlayPlacement,
+  OverlayPositionStrategy,
+  OVERLAY_CONSTANTS,
+  OverlayShiftState
+} from '../overlay-constants';
 import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
+import { toggleAttribute } from '@tylertech/forge-core';
 
 export interface IOverlayAwareCore extends IBaseOverlayCore {
   readonly overlayElement: IOverlayComponent;
@@ -135,13 +144,18 @@ export abstract class OverlayAwareCore<T extends IOverlayAwareAdapter> implement
     }
   }
 
-  public get shift(): boolean {
+  public get shift(): OverlayShiftState {
     return this._adapter.overlayElement.shift;
   }
-  public set shift(value: boolean) {
+  public set shift(value: OverlayShiftState) {
     if (this._adapter.overlayElement.shift !== value) {
       this._adapter.overlayElement.shift = value;
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.SHIFT, this._adapter.overlayElement.shift);
+      toggleAttribute(
+        this._adapter.hostElement,
+        this._adapter.overlayElement.shift !== OVERLAY_CONSTANTS.defaults.SHIFT,
+        OVERLAY_CONSTANTS.attributes.SHIFT,
+        String(this._adapter.overlayElement.shift)
+      );
     }
   }
 

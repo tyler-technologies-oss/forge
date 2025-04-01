@@ -1,11 +1,12 @@
-import { attachShadowTemplate, coerceBoolean, customElement } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { BadgeTheme, BADGE_CONSTANTS } from './badge-constants';
+import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { BadgeTheme } from './badge-constants';
+import { toggleState } from '../core/utils/utils';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
-import template from './badge.html';
 import styles from './badge.scss';
 
-export interface IBadgeComponent extends IBaseComponent {
+export interface IBadgeComponent extends LitElement {
   dot: boolean;
   theme: BadgeTheme;
   strong: boolean;
@@ -18,20 +19,10 @@ declare global {
   }
 }
 
+export const BADGE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-badge';
+
 /**
  * @tag forge-badge
- *
- * @summary Badges are non-interactive components used to inform status, counts, or as a descriptive label.
- *
- * @property {boolean} [dot=false] - Controls whether the badge will be a small dot without any content visible.
- * @property {BadgeTheme} [theme="default"] - The theme of the badge.
- * @property {boolean} [strong=false] - Controls whether the badge will have a stronger visual appearance.
- * @property {boolean} [hide=false] - Controls whether the badge is visible.
- *
- * @attribute {boolean} [dot=false] - When present, the badge will be a small dot without any content visible.
- * @attribute {BadgeTheme} [theme="default"] - The theme of the badge.
- * @attribute {boolean} [strong=false] - Controls whether the badge will have a stronger visual appearance.
- * @attribute {boolean} [hide=false] - Controls whether the badge is visible.
  *
  * @cssproperty --forge-badge-background - The background color.
  * @cssproperty --forge-badge-color - The text color.
@@ -47,46 +38,65 @@ declare global {
  * @slot start - Content placed before the default content.
  * @slot end - Content placed after the default content.
  *
+ * @state dot - The badge is rendered as a dot.
+ * @state strong - The badge has a stronger visual appearance.
+ * @state hide - The badge is hidden.
+ *
  * @cssclass forge-badge - The badge class _(required)_.
  * @cssclass forge-badge--dot - Renders the badge as a dot.
  * @cssclass forge-badge__icon - Styles a child element as an icon.
  */
-@customElement({
-  name: BADGE_CONSTANTS.elementName
-})
-export class BadgeComponent extends BaseComponent implements IBadgeComponent {
+@customElement(BADGE_TAG_NAME)
+export class BadgeComponent extends LitElement implements IBadgeComponent {
+  public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BADGE_TAG_NAME;
+
+  #internals: ElementInternals;
+
   constructor() {
     super();
-    attachShadowTemplate(this, template, styles);
+    this.#internals = this.attachInternals();
   }
 
-  public get dot(): boolean {
-    return this.hasAttribute(BADGE_CONSTANTS.attributes.DOT);
-  }
-  public set dot(value: boolean) {
-    this.toggleAttribute(BADGE_CONSTANTS.attributes.DOT, value);
-  }
+  /** Controls whether the badge will be a small dot without any content visible. */
+  @property({ type: Boolean, reflect: true })
+  public dot = false;
 
-  public get theme(): BadgeTheme {
-    return (this.getAttribute(BADGE_CONSTANTS.attributes.THEME) as BadgeTheme) ?? BADGE_CONSTANTS.defaults.THEME;
-  }
-  public set theme(value: BadgeTheme) {
-    this.setAttribute(BADGE_CONSTANTS.attributes.THEME, value);
-  }
+  /** The theme of the badge. */
+  @property({ type: String, reflect: true })
+  public theme: BadgeTheme = 'default';
 
-  public get strong(): boolean {
-    return this.hasAttribute(BADGE_CONSTANTS.attributes.STRONG);
-  }
-  public set strong(value: boolean) {
-    this.toggleAttribute(BADGE_CONSTANTS.attributes.STRONG, value);
-  }
+  /** Controls whether the badge will have a stronger visual appearance. */
+  @property({ type: Boolean, reflect: true })
+  public strong = false;
 
-  public get hide(): boolean {
-    return this.hasAttribute(BADGE_CONSTANTS.attributes.HIDE);
-  }
-  public set hide(value: boolean) {
-    if (this.hasAttribute(BADGE_CONSTANTS.attributes.HIDE) !== value) {
-      this.toggleAttribute(BADGE_CONSTANTS.attributes.HIDE, value);
+  /** Controls whether the badge is visible. */
+  @property({ type: Boolean, reflect: true })
+  public hide = false;
+
+  public override willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('dot')) {
+      toggleState(this.#internals, 'dot', this.dot);
     }
+    if (changedProperties.has('strong')) {
+      toggleState(this.#internals, 'strong', this.strong);
+    }
+    if (changedProperties.has('hide')) {
+      toggleState(this.#internals, 'hide', this.hide);
+    }
+  }
+
+  public render(): TemplateResult {
+    return html`
+      <div class="forge-badge" part="root">
+        <slot name="start"></slot>
+        <div class="content" part="content">
+          <slot></slot>
+        </div>
+        <slot name="end"></slot>
+      </div>
+    `;
   }
 }
