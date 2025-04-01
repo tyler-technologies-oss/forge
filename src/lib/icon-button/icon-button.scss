@@ -5,6 +5,7 @@
 @use '../focus-indicator';
 @use '../badge';
 @use '../circular-progress';
+@use '../app-bar/app-bar';
 
 //
 // Host
@@ -372,3 +373,16 @@ forge-state-layer {
 @include theme(error);
 @include theme(warning);
 @include theme(info);
+
+//
+// App Bar Theme
+//
+
+:host([theme='app-bar']) {
+  @include provide-theme(
+    (
+      icon-color: #{app-bar.token(theme-foreground)},
+      focus-indicator-color: #{app-bar.token(theme-foreground)}
+    )
+  );
+}

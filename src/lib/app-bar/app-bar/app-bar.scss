@@ -11,7 +11,7 @@
 // Host
 //
 
-$host-tokens: [background foreground];
+$host-tokens: (background, foreground);
 
 :host {
   @include tokens($includes: $host-tokens);
@@ -29,17 +29,11 @@ $host-tokens: [background foreground];
 // Default theme
 //
 
-:host(:not([theme])) {
-  @include theme.provide(
+:host {
+  @include provide-theme(
     (
-      primary: #{token(foreground)},
-      on-primary: rgba(black, color-emphasis.value(highest)),
-      text-high: rgba(white, color-emphasis.value(highest)),
-      text-medium: rgba(white, color-emphasis.value(medium)),
-      text-low: rgba(white, color-emphasis.value(medium-low)),
-      outline-high: rgba(white, color-emphasis.value(highest)),
-      outline-medium: rgba(white, color-emphasis.value(medium)),
-      outline-low: rgba(white, color-emphasis.value(medium-low))
+      theme-foreground: #{token(foreground)},
+      theme-foreground-muted: rgba(white, color-emphasis.value(medium))
     )
   );
 }
@@ -151,16 +145,12 @@ $host-tokens: [background foreground];
 //
 
 :host([theme='white']) {
-  @include theme.provide(
+  @include override(background, white, value);
+  @include override(foreground, black, value);
+
+  @include provide-theme(
     (
-      primary: black,
-      on-primary: rgba(white, color-emphasis.value(highest)),
-      text-medium: rgba(black, color-emphasis.value(medium))
+      theme-foreground-muted: rgba(black, color-emphasis.value(medium))
     )
   );
-
-  .forge-app-bar {
-    @include override(background, white, value);
-    @include override(foreground, black, value);
-  }
 }

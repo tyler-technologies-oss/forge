@@ -56,7 +56,7 @@ export const Demo: Story = {};
 export const Full: Story = {
   ...standaloneStoryParams,
   render: () => html`
-    <forge-app-bar title-text="Tyler Forge™" theme="custom">
+    <forge-app-bar title-text="Tyler Forge™">
       <forge-app-bar-menu-button slot="start"></forge-app-bar-menu-button>
       <forge-icon slot="logo" name="forge_logo"></forge-icon>
       <forge-app-bar-search slot="center">
@@ -81,17 +81,20 @@ export const CustomTheme: Story = {
   ...standaloneStoryParams,
   decorators: [
     storyStyles(`
-      .custom-app-bar {
-        --forge-app-bar-background: whitesmoke;
-        --forge-app-bar-foreground: darkblue;
-        --forge-theme-primary: orangered;
-      }
+.custom-app-bar {
+  --forge-app-bar-background: salmon;
+  --forge-app-bar-foreground: black;
+}
+
+.custom-app-bar forge-button {
+  margin-inline-end: var(--forge-spacing-xsmall);
+}
   `)
   ],
   render: () => html`
-    <forge-app-bar class="custom-app-bar" title-text="Tyler Forge™" theme="custom">
+    <forge-app-bar class="custom-app-bar" title-text="Tyler Forge™">
       <forge-icon slot="logo" name="forge_logo"></forge-icon>
-      <forge-button slot="end">Sign In</forge-button>
+      <forge-button slot="end" theme="app-bar">Sign In</forge-button>
     </forge-app-bar>
   `
 };
