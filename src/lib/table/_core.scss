@@ -13,7 +13,7 @@
 // The base styles for the `<table>` element.
 @mixin base {
   width: 100%;
-  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 // The base styles for the rows of the table.
