@@ -122,7 +122,8 @@ export abstract class BaseSelectAdapter<T extends IBaseSelectComponent> extends 
           : o.trailingIconType,
         trailingIconComponentProps: o.trailingIconComponentProps,
         leadingBuilder: o.leadingBuilder,
-        trailingBuilder: o.trailingBuilder
+        trailingBuilder: o.trailingBuilder,
+        tooltip: o.tooltip
       };
     });
   }

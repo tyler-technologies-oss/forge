@@ -274,112 +274,112 @@ export class CalendarComponent extends BaseComponent implements ICalendarCompone
 
   /** @readonly */
   @coreProperty({ set: false })
-  public declare activeDate: Date;
+  declare public activeDate: Date;
 
   @coreProperty()
-  public declare allowSingleDateRange: boolean;
+  declare public allowSingleDateRange: boolean;
 
   @coreProperty()
-  public declare clearButton: boolean;
+  declare public clearButton: boolean;
 
   @coreProperty()
-  public declare clearCallback: (() => void) | undefined;
+  declare public clearCallback: (() => void) | undefined;
 
   @coreProperty()
-  public declare constrainToEnabled: boolean;
+  declare public constrainToEnabled: boolean;
 
   @coreProperty()
-  public declare dateBuilder: CalendarDateBuilder | undefined;
+  declare public dateBuilder: CalendarDateBuilder | undefined;
 
   @coreProperty()
-  public declare dateSelectCallback: CalendarDateSelectCallback | undefined;
+  declare public dateSelectCallback: CalendarDateSelectCallback | undefined;
 
   @coreProperty()
-  public declare dayBuilder: CalendarDayBuilder | undefined;
+  declare public dayBuilder: CalendarDayBuilder | undefined;
 
   @coreProperty()
-  public declare disabledDateBuilder: ((date: Date) => boolean) | undefined;
+  declare public disabledDateBuilder: ((date: Date) => boolean) | undefined;
 
   @coreProperty()
-  public declare disabledDates: Date | Date[] | null | undefined;
+  declare public disabledDates: Date | Date[] | null | undefined;
 
   @coreProperty()
-  public declare disabledDaysOfWeek: DayOfWeek | DayOfWeek[] | null | undefined;
+  declare public disabledDaysOfWeek: DayOfWeek | DayOfWeek[] | null | undefined;
 
   @coreProperty()
-  public declare eventBuilder: CalendarEventBuilder | undefined;
+  declare public eventBuilder: CalendarEventBuilder | undefined;
 
   @coreProperty()
-  public declare events: ICalendarEvent[] | null | undefined;
+  declare public events: ICalendarEvent[] | null | undefined;
 
   @coreProperty()
-  public declare firstDayOfWeek: DayOfWeek | undefined;
+  declare public firstDayOfWeek: DayOfWeek | undefined;
 
   @coreProperty()
-  public declare fixedHeight: boolean;
+  declare public fixedHeight: boolean;
 
   @coreProperty()
-  public declare listYears: boolean;
+  declare public listYears: boolean;
 
   @coreProperty()
-  public declare locale: string | undefined;
+  declare public locale: string | undefined;
 
   @coreProperty()
-  public declare max: Date | string | null | undefined;
+  declare public max: Date | string | null | undefined;
 
   @coreProperty()
-  public declare menuAnimation: CalendarMenuAnimationType;
+  declare public menuAnimation: CalendarMenuAnimationType;
 
   @coreProperty()
-  public declare min: Date | string | null | undefined;
+  declare public min: Date | string | null | undefined;
 
   @coreProperty()
-  public declare mode: CalendarMode;
+  declare public mode: CalendarMode;
 
   @coreProperty()
-  public declare month: number;
+  declare public month: number;
 
   @coreProperty()
-  public declare preventFocus: boolean;
+  declare public preventFocus: boolean;
 
   @coreProperty()
-  public declare readonly: boolean;
+  declare public readonly: boolean;
 
   @coreProperty()
-  public declare selectionFollowsMonth: boolean;
+  declare public selectionFollowsMonth: boolean;
 
   @coreProperty()
-  public declare showHeader: boolean;
+  declare public showHeader: boolean;
 
   @coreProperty()
-  public declare showOtherMonths: boolean;
+  declare public showOtherMonths: boolean;
 
   @coreProperty()
-  public declare showToday: boolean;
+  declare public showToday: boolean;
 
   @coreProperty()
-  public declare todayButton: boolean;
+  declare public todayButton: boolean;
 
   @coreProperty()
-  public declare todayCallback: (() => void) | undefined;
+  declare public todayCallback: (() => void) | undefined;
 
   @coreProperty()
-  public declare tooltipBuilder: CalendarTooltipBuilder | undefined;
+  declare public tooltipBuilder: CalendarTooltipBuilder | undefined;
 
   @coreProperty()
-  public declare value: Date | Date[] | DateRange | null | undefined;
+  declare public value: Date | Date[] | DateRange | null | undefined;
 
   @coreProperty()
-  public declare view: CalendarView;
+  declare public view: CalendarView;
 
   @coreProperty()
-  public declare weekendDays: DayOfWeek[] | null | undefined;
+  declare public weekendDays: DayOfWeek[] | null | undefined;
 
   @coreProperty()
-  public declare year: number;
+  declare public year: number;
 
   @coreProperty()
-  public declare yearRange: string;
+  declare public yearRange: string;
 
   /**
    * Clears the selected date(s).

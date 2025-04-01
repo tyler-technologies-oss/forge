@@ -126,49 +126,49 @@ forge-state-layer {
 // Toggle
 //
 
-:host(:is(:not([toggle]), [toggle]:not([on]))) {
+:host(:is(:not([toggle]), [toggle]:not([pressed]))) {
   slot[name='on'] {
     display: none;
   }
 }
 
-:host([toggle][on]) {
+:host([toggle][pressed]) {
   slot:not([name]) {
     display: none;
   }
 }
 
-:host([toggle][on]:is(:not([variant]), [variant='icon'])) {
+:host([toggle][pressed]:is(:not([variant]), [variant='icon'])) {
   .forge-icon-button {
     @include toggle-on-icon;
   }
 }
 
-:host([toggle][on][variant='outlined']) {
+:host([toggle][pressed][variant='outlined']) {
   .forge-icon-button {
     @include toggle-on-outlined;
   }
 }
 
-:host([toggle]:not([on])[variant='tonal']) {
+:host([toggle]:not([pressed])[variant='tonal']) {
   .forge-icon-button {
     @include toggle-tonal;
   }
 }
 
-:host([toggle][on][variant='tonal']) {
+:host([toggle][pressed][variant='tonal']) {
   .forge-icon-button {
     @include toggle-on-tonal;
   }
 }
 
-:host([toggle]:not([on]):is([variant='filled'], [variant='raised'])) {
+:host([toggle]:not([pressed]):is([variant='filled'], [variant='raised'])) {
   .forge-icon-button {
     @include toggle-filled;
   }
 }
 
-:host([toggle][on]:is([variant='filled'], [variant='raised'])) {
+:host([toggle][pressed]:is([variant='filled'], [variant='raised'])) {
   .forge-icon-button {
     @include toggle-on-filled;
   }
@@ -318,7 +318,7 @@ forge-state-layer {
     }
 
     // Toggle + tonal variant
-    :host([toggle]:not([on])[theme='#{$theme}'][variant='tonal']) {
+    :host([toggle]:not([pressed])[theme='#{$theme}'][variant='tonal']) {
       .forge-icon-button {
         @include override(background-color, theme.variable(#{$theme}-container), value);
       }
@@ -341,7 +341,7 @@ forge-state-layer {
     }
 
     // Toggle + filled & raised variants
-    :host([toggle]:not([on])[theme='#{$theme}']:is([variant='filled'], [variant='raised'])) {
+    :host([toggle]:not([pressed])[theme='#{$theme}']:is([variant='filled'], [variant='raised'])) {
       .forge-icon-button {
         @include override(icon-color, theme.variable($theme), value);
         @include override(background-color, theme.variable(#{$theme}-container), value);

@@ -247,7 +247,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
       contextmenu: () => this._adapter.addDocumentListener('contextmenu', this._contextmenuListener)
     };
 
-    types.forEach(triggerType => triggerInitializers[triggerType]?.());
+    types.forEach(triggerType => triggerInitializers[triggerType as Exclude<PopoverTriggerType, 'manual'>]?.());
   }
 
   private _removeTriggerListeners(): void {
@@ -274,7 +274,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
       doubleclick: () => this._adapter.removeAnchorListener('dblclick', this._anchorDoubleClickListener),
       contextmenu: () => this._adapter.removeDocumentListener('contextmenu', this._contextmenuListener)
     };
-    this._triggerTypes.forEach(triggerType => triggerRemovers[triggerType]?.());
+    this._triggerTypes.forEach(triggerType => triggerRemovers[triggerType as Exclude<PopoverTriggerType, 'manual'>]?.());
   }
 
   private _startHoverListeners(): void {

@@ -22,6 +22,12 @@ import '../../label/label';
 class TestBaseButtonCore extends BaseButtonCore<IBaseButtonAdapter<IBaseButton>> {}
 class TestBaseButtonAdapter extends BaseButtonAdapter<IBaseButton> implements IBaseButtonAdapter<IBaseButton> {}
 
+declare global {
+  interface Window {
+    forgeAnchorTest?: () => void;
+  }
+}
+
 const template = `
 <template>
   <div class="forge-test-base-button" part="root">

@@ -62,7 +62,7 @@ const ACCEPTABLE_KEYS = [
   strings.TAB_KEY
 ];
 
-const KEYCODE_MAP = {
+const KEYCODE_MAP: Record<number, string> = {
   [numbers.ARROW_LEFT_KEYCODE]: strings.ARROW_LEFT_KEY,
   [numbers.ARROW_RIGHT_KEYCODE]: strings.ARROW_RIGHT_KEY,
   [numbers.END_KEYCODE]: strings.END_KEY,

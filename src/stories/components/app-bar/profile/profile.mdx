@@ -19,16 +19,45 @@ A common usage of the profile button will require you to provide some basic info
 
 ## Custom content
 
-The profile card allows for custom content to be placed within its template. This is provided in the form of a callback that you can use to generate DOM that the component will render for you. You will need to use JavaScript to accomplish this.
+The profile card allows for custom content to be placed within its template. This is provided in the form of a "builder" callback that you can use to generate DOM
+that the component will render for you. You will need to use JavaScript to accomplish this.
 
-The following snippet demonstrates basic usage in vanilla JavaScript. You could alternatively dynamically created an Angular component for instance and return a reference to its host element to render within the profile card. Don't forget to clean up the element to avoid memory leaks in this scenario.
+<Canvas of={ProfileStories.WithCustomContent} />
+
+The following snippet demonstrates basic usage in vanilla JavaScript, but if you're using this within a framework you can use the same concept, or if you prefer to avoid
+using vanilla DOM APIs within framework code you can always create a dynamic framework component and return the element instance from the builder callback.
 
 ```typescript
 profileButton.profileCardBuilder = () => {
-  const list = document.createElement('forge-list');
-  // ...
-  return list;
+  const listElement = document.createElement('forge-list');
+  listElement.addEventListener('forge-list-item-select', ({ detail }) => {
+    console.log('[profile-card] Selected custom item:', detail.value);
+  });
+  listElement.style.setProperty('--forge-list-padding', '0');
+  listElement.appendChild(document.createElement('forge-divider'));
+  listElement.appendChild(buildListItemElement('My Reports', 'assignment', 'reports'));
+  listElement.appendChild(buildListItemElement('My Workflow', 'work_outline', 'workflow'));
+  listElement.appendChild(buildListItemElement('My Alerts', 'warning', 'alerts'));
+  listElement.appendChild(buildListItemElement('My Preferences', 'settings', 'preferences'));
+  return listElement;
 };
+
+function buildListItemElement(text: string, icon: string, value: string): HTMLElement {
+  const listItemElement = document.createElement('forge-list-item');
+  listItemElement.value = value;
+
+  const iconElement = document.createElement('forge-icon');
+  iconElement.slot = 'leading';
+  iconElement.name = icon;
+  listItemElement.appendChild(iconElement);
+
+  const buttonElement = document.createElement('button');
+  buttonElement.type = 'button';
+  buttonElement.innerText = text;
+  listItemElement.appendChild(buttonElement);
+
+  return listItemElement;
+}
 ```
 
 ## API

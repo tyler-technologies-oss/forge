@@ -8,9 +8,11 @@ import {
   AutocompleteMode,
   AutocompleteOptionBuilder,
   defineAutocompleteComponent,
+  IAutocompleteAdapter,
   IAutocompleteComponent,
   IAutocompleteComponentDelegateConfig,
   IAutocompleteComponentDelegateOptions,
+  IAutocompleteCore,
   IAutocompleteOptionGroup
 } from '@tylertech/forge/autocomplete';
 import { AVATAR_CONSTANTS, IAvatarComponent } from '@tylertech/forge/avatar';
@@ -65,21 +67,25 @@ interface ITestContext {
   | ITestAutoCompleteDelegateContext;
 }
 
+type AutocompleteAdapterInternal = IAutocompleteAdapter & { _component: AutocompleteComponentInternal, _targetElement: HTMLElement };
+type AutocompleteCoreInternal = IAutocompleteCore & { _adapter: AutocompleteAdapterInternal, _pendingFilterPromises: Promise<IOption[]>[] };
+type AutocompleteComponentInternal = IAutocompleteComponent & { _core: AutocompleteCoreInternal };
+
 interface ITestAutocompleteContext {
-  component: IAutocompleteComponent;
+  component: AutocompleteComponentInternal;
   input: HTMLInputElement;
   optionElements: IOptionComponent[];
   destroy(): void;
 }
 
 interface ITestAutocompleteDynamicContext {
-  component: IAutocompleteComponent;
+  component: AutocompleteComponentInternal;
   input: HTMLInputElement;
   destroy(): void;
 }
 
 interface ITestAutocompleteTextFieldContext {
-  component: IAutocompleteComponent;
+  component: AutocompleteComponentInternal;
   label: HTMLLabelElement;
   input: HTMLInputElement;
   iconElement: HTMLElement;
@@ -169,6 +175,19 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await task(POPOVER_ANIMATION_DURATION);
       expect(this.context.component.open).toBe(false);
       expect(this.context.component.popupElement).toBeNull();
+    });
+
+    it('aria-controls attribute should be present when the popup is opened and closed', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      expect(this.context.input.hasAttribute('aria-controls')).toBe(true);
+      this.context.component.openDropdown();
+      await task();
+      this.context.component.closeDropdown();
+      await task(POPOVER_ANIMATION_DURATION);
+      expect(this.context.component.open).toBe(false);
+      expect(this.context.component.popupElement).toBeNull();
+      expect(this.context.input.hasAttribute('aria-controls')).toBe(true);
     });
 
     it('should not highlight first option in popup by default', async function(this: ITestContext) {
@@ -1715,7 +1734,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
   function setupTestContext(append = false): ITestAutocompleteContext {
     const fixture = document.createElement('div');
     fixture.id = 'autocomplete-test-fixture';
-    const component = document.createElement(AUTOCOMPLETE_CONSTANTS.elementName) as IAutocompleteComponent;
+    const component = document.createElement(AUTOCOMPLETE_CONSTANTS.elementName) as AutocompleteComponentInternal;
     const input = document.createElement('input') as HTMLInputElement;
     component.appendChild(input);
     const optionElements: IOptionComponent[] = [];
@@ -1740,7 +1759,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
   ): ITestAutocompleteTextFieldContext {
     const fixture = document.createElement('div');
     fixture.id = 'autocomplete-test-fixture';
-    const component = document.createElement(AUTOCOMPLETE_CONSTANTS.elementName) as IAutocompleteComponent;
+    const component = document.createElement(AUTOCOMPLETE_CONSTANTS.elementName) as AutocompleteComponentInternal;
     const textFieldElement = document.createElement(TEXT_FIELD_CONSTANTS.elementName) as ITextFieldComponent;
     const input = document.createElement('input') as HTMLInputElement;
     input.type = 'text';
@@ -1791,7 +1810,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
   ): ITestAutocompleteDynamicContext {
     const fixture = document.createElement('div');
     fixture.id = 'autocomplete-test-fixture';
-    const component = document.createElement(AUTOCOMPLETE_CONSTANTS.elementName) as IAutocompleteComponent;
+    const component = document.createElement(AUTOCOMPLETE_CONSTANTS.elementName) as AutocompleteComponentInternal;
     const input = document.createElement('input') as HTMLInputElement;
     fixture.appendChild(component);
     if (append) {

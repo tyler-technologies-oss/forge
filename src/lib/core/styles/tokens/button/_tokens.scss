@@ -14,7 +14,7 @@ $tokens: (
   text-color: utils.module-ref(button, text-color, primary-color),
   disabled-color: utils.module-val(button, disabled-color, theme.variable(surface-container)),
   padding: utils.module-val(button, padding, spacing.variable(medium)),
-  display: utils.module-val(button, display, inline-flex),
+  display: utils.module-val(button, display, inline-grid),
   justify: utils.module-val(button, justify, center),
   shape: utils.module-val(button, shape, shape.variable(medium)),
   // Base
@@ -28,7 +28,7 @@ $tokens: (
   shape-start-end-radius: utils.module-ref(button, shape-start-end-radius, shape),
   shape-end-start-radius: utils.module-ref(button, shape-end-start-radius, shape),
   shape-end-end-radius: utils.module-ref(button, shape-end-end-radius, shape),
-  padding-block: utils.module-ref(button, padding-block, padding),
+  padding-block: utils.module-ref(button, padding-block, 0),
   padding-inline: utils.module-ref(button, padding-inline, padding),
   background: utils.module-val(button, background, transparent),
   hover-background: utils.module-ref(button, hover-background, background),

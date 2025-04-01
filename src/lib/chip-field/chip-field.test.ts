@@ -706,20 +706,20 @@ async function createFixture({
   const chipField = await fixture<IChipFieldComponent>(html`
     <forge-chip-field
       ?add-on-blur=${addOnBlur ?? nothing}
-      .labelPosition=${labelPosition ?? nothing}
-      .labelAlignment=${labelAlignment ?? nothing}
+      label-position=${labelPosition ?? nothing}
+      label-alignment=${labelAlignment ?? nothing}
       ?invalid=${invalid ?? nothing}
       ?required=${required ?? nothing}
       ?optional=${optional ?? nothing}
       ?disabled=${disabled ?? nothing}
       ?float-label=${floatLabel ?? nothing}
-      .variant=${variant ?? nothing}
-      .theme=${theme ?? nothing}
-      .shape=${shape ?? nothing}
-      .density=${density ?? nothing}
+      variant=${variant ?? nothing}
+      theme=${theme ?? ''}
+      shape=${shape ?? nothing}
+      density=${density ?? nothing}
       ?dense=${dense ?? nothing}
       ?popover-icon=${popoverIcon ?? nothing}
-      .supportTextInset=${supportTextInset ?? nothing}>
+      .supportTextInset=${supportTextInset ?? 'none'}>
       <label for="cf-input">Label</label>
       <input type="text" id="cf-input" />
       ${hasChips && ['One', 'Two', 'Three'].map(value => html`<forge-chip slot="member" value=${value}>${value}</forge-chip>`)}

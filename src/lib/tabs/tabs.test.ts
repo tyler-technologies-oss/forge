@@ -614,6 +614,36 @@ describe('Tabs', () => {
       expect(ctx.forwardScrollButton).not.to.be.ok;
     });
 
+    it('should show scroll buttons when new tabs are added that cause scrolling', async () => {
+      const el = await createFixture({ scrollButtons: true, clustered: true, width: '250px' });
+      const ctx = new TabsHarness(el);
+
+      await elementUpdated(el);
+      expect(ctx.hasScrollButtons).to.be.false;
+
+      const tab = document.createElement('forge-tab');
+      tab.textContent = 'Fourth';
+      el.appendChild(tab);
+      await elementUpdated(el);
+
+      expect(ctx.hasScrollButtons).to.be.true;
+    });
+
+    it('should hide scroll buttons when scrollable tabs are removed causing no overflow', async () => {
+      const el = await createFixture({ scrollButtons: true, clustered: true, width: '215px' });
+      const ctx = new TabsHarness(el);
+
+      await elementUpdated(el);
+      expect(ctx.hasScrollButtons).to.be.true;
+
+      // Removing two tabs because the visibility of the scroll buttons causes the scrollable area to decrease
+      ctx.tabs[0].remove();
+      ctx.tabs[0].remove();
+      await elementUpdated(el);
+
+      expect(ctx.hasScrollButtons).to.be.false;
+    });
+
     it('should scroll forward when forward scroll button is clicked', async () => {
       const el = await createFixture({ scrollButtons: true, width: '150px' });
       const ctx = new TabsHarness(el);

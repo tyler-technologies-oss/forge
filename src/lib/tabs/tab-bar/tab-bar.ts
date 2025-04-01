@@ -140,30 +140,30 @@ export class TabBarComponent extends WithDefaultAria(WithElementInternals(BaseCo
   }
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare activeTab: number | null | undefined;
+  declare public activeTab: number | null | undefined;
 
   @coreProperty()
-  public declare vertical: boolean;
+  declare public vertical: boolean;
 
   @coreProperty()
-  public declare clustered: boolean;
+  declare public clustered: boolean;
 
   @coreProperty()
-  public declare stacked: boolean;
+  declare public stacked: boolean;
 
   /** @deprecated This will be removed in a future version */
   @coreProperty()
-  public declare secondary: boolean;
+  declare public secondary: boolean;
 
   @coreProperty()
-  public declare inverted: boolean;
+  declare public inverted: boolean;
 
   @coreProperty()
-  public declare autoActivate: boolean;
+  declare public autoActivate: boolean;
 
   @coreProperty()
-  public declare scrollButtons: boolean;
+  declare public scrollButtons: boolean;
 }

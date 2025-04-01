@@ -180,32 +180,32 @@ export class StepComponent extends BaseComponent implements IStepComponent {
   }
 
   @coreProperty()
-  public declare alternative: boolean;
+  declare public alternative: boolean;
 
   @coreProperty()
-  public declare index: number;
+  declare public index: number;
 
   @coreProperty()
-  public declare editable: boolean;
+  declare public editable: boolean;
 
   @coreProperty()
-  public declare completed: boolean;
+  declare public completed: boolean;
 
   @coreProperty()
-  public declare error: boolean;
+  declare public error: boolean;
 
   @coreProperty()
-  public declare selected: boolean;
+  declare public selected: boolean;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare vertical: boolean;
+  declare public vertical: boolean;
 
   @coreProperty()
-  public declare expanded: boolean;
+  declare public expanded: boolean;
 
   @coreProperty()
-  public declare ignoreUserExpansion: boolean;
+  declare public ignoreUserExpansion: boolean;
 }

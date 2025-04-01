@@ -299,47 +299,47 @@ export class SliderComponent extends BaseFormComponent<number> implements ISlide
   }
 
   @coreProperty()
-  public declare value: number;
+  declare public value: number;
 
   @coreProperty()
-  public declare valueStart: number;
+  declare public valueStart: number;
 
   @coreProperty()
-  public declare valueEnd: number;
+  declare public valueEnd: number;
 
   @coreProperty()
-  public declare label: string;
+  declare public label: string;
 
   @coreProperty()
-  public declare labelStart: string;
+  declare public labelStart: string;
 
   @coreProperty()
-  public declare labelEnd: string;
+  declare public labelEnd: string;
 
   @coreProperty()
-  public declare labelBuilder: SliderLabelBuilder;
+  declare public labelBuilder: SliderLabelBuilder;
 
   @coreProperty()
-  public declare min: number;
+  declare public min: number;
 
   @coreProperty()
-  public declare max: number;
+  declare public max: number;
 
   @coreProperty()
-  public declare step: number;
+  declare public step: number;
 
   @coreProperty()
-  public declare tickmarks: boolean;
+  declare public tickmarks: boolean;
 
   @coreProperty()
-  public declare labeled: boolean;
+  declare public labeled: boolean;
 
   @coreProperty()
-  public declare range: boolean;
+  declare public range: boolean;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare readonly: boolean;
+  declare public readonly: boolean;
 }

@@ -100,17 +100,17 @@ export class SplitButtonComponent extends BaseComponent implements ISplitButtonC
   }
 
   @coreProperty()
-  public declare variant: SplitButtonVariant;
+  declare public variant: SplitButtonVariant;
 
   @coreProperty()
-  public declare theme: ButtonTheme;
+  declare public theme: ButtonTheme;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   @coreProperty()
-  public declare pill: boolean;
+  declare public pill: boolean;
 }

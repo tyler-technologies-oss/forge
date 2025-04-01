@@ -12,6 +12,7 @@ const numbers = {
   DEFAULT_LETTER_COUNT: 2
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const AVATAR_CONSTANTS = {
   elementName,
   attributes,

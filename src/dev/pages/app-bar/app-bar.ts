@@ -118,9 +118,10 @@ function buildListItemElement(text: string, icon: string, value: string): HTMLEl
   iconElement.name = icon;
   listItemElement.appendChild(iconElement);
 
-  const textElement = document.createElement('span');
-  textElement.innerText = text;
-  listItemElement.appendChild(textElement);
+  const buttonElement = document.createElement('button');
+  buttonElement.type = 'button';
+  buttonElement.textContent = text;
+  listItemElement.appendChild(buttonElement);
 
   return listItemElement;
 }

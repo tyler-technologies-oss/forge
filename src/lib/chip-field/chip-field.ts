@@ -73,7 +73,7 @@ export class ChipFieldComponent extends BaseField<ChipFieldCore> implements IChi
   }
 
   @coreProperty()
-  public declare addOnBlur: boolean;
+  declare public addOnBlur: boolean;
 
   public get popoverTargetElement(): HTMLElement {
     return this._core.popoverTargetElement;

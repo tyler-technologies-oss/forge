@@ -1,7 +1,15 @@
 import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IBaseOverlayCore } from './base-overlay-core';
-import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
+import {
+  IOverlayOffset,
+  OverlayFlipState,
+  OverlayHideState,
+  OverlayPlacement,
+  OverlayPositionStrategy,
+  OVERLAY_CONSTANTS,
+  OverlayShiftState
+} from '../overlay-constants';
 import { coerceStringToArray } from '../../core/utils';
 import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
 
@@ -14,7 +22,7 @@ export interface IBaseOverlay extends IBaseComponent {
   placement: OverlayPlacement;
   positionStrategy: OverlayPositionStrategy;
   offset: IOverlayOffset;
-  shift: boolean;
+  shift: OverlayShiftState;
   hide: OverlayHideState;
   persistent: boolean;
   flip: OverlayFlipState;
@@ -62,7 +70,15 @@ export abstract class BaseOverlay<T extends IBaseOverlayCore> extends BaseCompon
         this.persistent = coerceBoolean(newValue);
         break;
       case OVERLAY_CONSTANTS.observedAttributes.SHIFT:
-        this.shift = coerceBoolean(newValue);
+        // Handle legacy boolean attributes for shift by converting to corresponding type values
+        // TODO: Remove support for boolean attribute conversion in v4
+        if (newValue === '' || newValue?.trim() === 'true') {
+          this.shift = 'auto';
+        } else if (newValue == null || newValue?.trim() === 'false') {
+          this.shift = 'never';
+        } else {
+          this.shift = newValue as OverlayShiftState;
+        }
         break;
       case OVERLAY_CONSTANTS.observedAttributes.FLIP:
         this.flip = newValue as OverlayFlipState;
@@ -77,47 +93,47 @@ export abstract class BaseOverlay<T extends IBaseOverlayCore> extends BaseCompon
   }
 
   @coreProperty()
-  public declare anchorElement: HTMLElement | VirtualElement | null;
+  declare public anchorElement: HTMLElement | VirtualElement | null;
 
   @coreProperty()
-  public declare anchor: string | null;
+  declare public anchor: string | null;
 
   @coreProperty()
-  public declare noAnchor: boolean;
+  declare public noAnchor: boolean;
 
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   @coreProperty()
-  public declare inline: boolean;
+  declare public inline: boolean;
 
   @coreProperty()
-  public declare placement: OverlayPlacement;
+  declare public placement: OverlayPlacement;
 
   @coreProperty()
-  public declare positionStrategy: OverlayPositionStrategy;
+  declare public positionStrategy: OverlayPositionStrategy;
 
   @coreProperty()
-  public declare offset: IOverlayOffset;
+  declare public offset: IOverlayOffset;
 
   @coreProperty()
-  public declare shift: boolean;
+  declare public shift: OverlayShiftState;
 
   @coreProperty()
-  public declare hide: OverlayHideState;
+  declare public hide: OverlayHideState;
 
   @coreProperty()
-  public declare persistent: boolean;
+  declare public persistent: boolean;
 
   @coreProperty()
-  public declare flip: OverlayFlipState;
+  declare public flip: OverlayFlipState;
 
   @coreProperty()
-  public declare boundary: string | null;
+  declare public boundary: string | null;
 
   @coreProperty()
-  public declare boundaryElement: HTMLElement | null;
+  declare public boundaryElement: HTMLElement | null;
 
   @coreProperty()
-  public declare fallbackPlacements: PositionPlacement[] | null;
+  declare public fallbackPlacements: PositionPlacement[] | null;
 }

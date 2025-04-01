@@ -1,5 +1,5 @@
 import type { IIconComponent } from '../../icon/icon';
-import { IBaseListDropdownOption, ListDropdownIconType } from '../../list-dropdown/list-dropdown-constants';
+import { IBaseListDropdownOption, ListDropdownIconType, ListDropdownTooltipConfig } from '../../list-dropdown/list-dropdown-constants';
 import { IOptionAdapter } from './option-adapter';
 import { OPTION_CONSTANTS } from './option-constants';
 
@@ -22,6 +22,7 @@ export class OptionCore implements IOptionCore {
   private _trailingIconComponentProps: Partial<IIconComponent>;
   private _leadingBuilder: () => HTMLElement;
   private _trailingBuilder: () => HTMLElement;
+  private _tooltip: ListDropdownTooltipConfig;
 
   constructor(private _adapter: IOptionAdapter) {}
 
@@ -202,6 +203,15 @@ export class OptionCore implements IOptionCore {
   public set trailingBuilder(value: () => HTMLElement) {
     if (this._trailingBuilder !== value) {
       this._trailingBuilder = value;
+    }
+  }
+
+  public get tooltip(): ListDropdownTooltipConfig {
+    return this._tooltip;
+  }
+  public set tooltip(value: ListDropdownTooltipConfig) {
+    if (this._tooltip !== value) {
+      this._tooltip = value;
     }
   }
 }

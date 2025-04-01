@@ -311,7 +311,7 @@ export function tryCreateAriaControlsPlaceholder(): void {
  */
 export function setAriaControls(component: HTMLElement): void {
   const placeholderDiv = document.getElementById(ARIA_CONTROLS_PLACEHOLDER_ID);
-  if (placeholderDiv) {
+  if (placeholderDiv && component) {
     component.setAttribute('aria-controls', placeholderDiv.id);
   }
 }
@@ -332,4 +332,59 @@ export function task(duration = 0): Promise<void> {
  */
 export function frame(): Promise<void> {
   return new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+}
+
+/**
+ * Determines if an object is an instance of a specific type.
+ * @param obj The object to test.
+ * @param name The name of the type to test against.
+ * @returns `true` if the object is an instance of the type, otherwise `false`.
+ */
+export function isInstanceOf<T>(obj: any, name: string): obj is T {
+  return Object.prototype.toString.call(obj) === `[object ${name}]`;
+}
+
+/**
+ * Determines if an element is visible based on its computed styles.
+ * @param element The element to check.
+ * @returns `true` if the element is visible, otherwise `false`.
+ */
+export function checkVisibility(element: HTMLElement): boolean {
+  // Use the `checkVisibility()` method on the element if available
+  if (typeof element.checkVisibility === 'function') {
+    return element.checkVisibility();
+  }
+
+  // Fall back to computed styles on older browsers
+  const style = window.getComputedStyle(element);
+  return (
+    style.display !== 'none' &&
+    style.visibility !== 'hidden' &&
+    style.visibility !== 'collapse' &&
+    style.opacity !== '0' &&
+    style.getPropertyValue('content-visibility') !== 'hidden'
+  );
+}
+
+/**
+ * Adds or removes a state from an element's custom state set.
+ *
+ * @param internals - The element's internals object.
+ * @param state - The name of the custom state to toggle.
+ * @param value - Whether to add or remove the state.
+ */
+export function toggleState(internals: ElementInternals, state: string, value: boolean): void {
+  if (value) {
+    try {
+      internals.states.add(state);
+    } catch {
+      internals.states.add(`--${state}`);
+    }
+  } else {
+    try {
+      internals.states.delete(state);
+    } catch {
+      internals.states.delete(`--${state}`);
+    }
+  }
 }

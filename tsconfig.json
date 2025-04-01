@@ -9,8 +9,6 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "noEmitHelpers": true,
-    "ignoreDeprecations": "5.0",
-    "suppressImplicitAnyIndexErrors": true,
     "noImplicitThis": true,
     "useDefineForClassFields": false,
     "esModuleInterop": true,

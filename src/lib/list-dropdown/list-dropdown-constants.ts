@@ -1,6 +1,7 @@
 import type { IIconComponent } from '../icon';
 import type { IOverlayOffset } from '../overlay/overlay-constants';
 import { PositionPlacement } from '../core/utils/position-utils';
+import { TooltipPlacement, TooltipType } from '../tooltip';
 
 const attributes = {
   POPUP_CLASSES: 'popup-classes',
@@ -49,6 +50,7 @@ export interface IBaseListDropdownOption<T = any> {
   trailingIconComponentProps?: Partial<IIconComponent>;
   leadingBuilder?: () => HTMLElement;
   trailingBuilder?: () => HTMLElement;
+  tooltip?: ListDropdownTooltipConfig;
 }
 
 export interface IListDropdownOption<T = any> extends IBaseListDropdownOption<T> {
@@ -130,4 +132,14 @@ export enum ListDropdownType {
 export enum ListDropdownAsyncStyle {
   Spinner = 'spinner',
   Skeleton = 'skeleton'
+}
+
+export interface ListDropdownTooltipConfig {
+  text: string;
+  placement?: TooltipPlacement;
+  type?: TooltipType;
+  delay?: number;
+  offset?: number;
+  anchor?: string;
+  anchorElement?: HTMLElement;
 }

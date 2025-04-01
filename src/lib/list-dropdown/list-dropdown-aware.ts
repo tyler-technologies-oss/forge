@@ -62,15 +62,15 @@ export class ListDropdownAware extends BaseComponent {
    * @attribute popup-classes
    */
   @coreProperty()
-  public declare popupClasses: string | string[];
+  declare public popupClasses: string | string[];
 
   /** Gets/sets the callback function for generating header content within the popup. */
   @coreProperty()
-  public declare popupHeaderBuilder: ListDropdownHeaderBuilder;
+  declare public popupHeaderBuilder: ListDropdownHeaderBuilder;
 
   /** Gets/sets the callback function for generating header content within the popup. */
   @coreProperty()
-  public declare popupFooterBuilder: ListDropdownFooterBuilder;
+  declare public popupFooterBuilder: ListDropdownFooterBuilder;
 
   /**
    * Gets/sets whether the popup width is synchronized with the popup target width.
@@ -78,7 +78,7 @@ export class ListDropdownAware extends BaseComponent {
    * @attribute sync-popup-width
    */
   @coreProperty()
-  public declare syncPopupWidth: boolean;
+  declare public syncPopupWidth: boolean;
 
   /**
    * Gets/sets the maximum number of options to display in the dropdown.
@@ -86,7 +86,7 @@ export class ListDropdownAware extends BaseComponent {
    * @attribute option-limit
    */
   @coreProperty()
-  public declare optionLimit: number;
+  declare public optionLimit: number;
 
   /**
    * Controls the observation of scroll events on the dropdown.
@@ -94,7 +94,7 @@ export class ListDropdownAware extends BaseComponent {
    * @attribute observe-scroll
    */
   @coreProperty()
-  public declare observeScroll: boolean;
+  declare public observeScroll: boolean;
 
   /**
    * The number of pixels from the bottom to trigger the scroll bottom event. Only applicable if `observeScroll` is true.
@@ -102,7 +102,7 @@ export class ListDropdownAware extends BaseComponent {
    * @attribute observe-scroll-threshold
    */
   @coreProperty()
-  public declare observeScrollThreshold: number;
+  declare public observeScrollThreshold: number;
 
   /**
    * Gets/sets whether the popup width will be constrained to a max width of the viewport width (default: `100vw`).
@@ -110,7 +110,7 @@ export class ListDropdownAware extends BaseComponent {
    * @attribute constrain-popup-width
    */
   @coreProperty()
-  public declare constrainPopupWidth: boolean;
+  declare public constrainPopupWidth: boolean;
 
   /**
    * Gets/sets whether the options will wrap their text or not.
@@ -119,5 +119,5 @@ export class ListDropdownAware extends BaseComponent {
    * @attribute wrap-option-text
    */
   @coreProperty()
-  public declare wrapOptionText: boolean;
+  declare public wrapOptionText: boolean;
 }

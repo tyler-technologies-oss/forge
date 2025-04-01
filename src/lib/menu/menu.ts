@@ -18,6 +18,7 @@ import {
   MENU_CONSTANTS
 } from './menu-constants';
 import { MenuCore } from './menu-core';
+import { TooltipComponent } from '../tooltip';
 
 import template from './menu.html';
 import styles from './menu.scss';
@@ -61,7 +62,7 @@ declare global {
  */
 @customElement({
   name: MENU_CONSTANTS.elementName,
-  dependencies: [PopoverComponent, ListComponent]
+  dependencies: [PopoverComponent, ListComponent, TooltipComponent]
 })
 export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   public static get observedAttributes(): string[] {
@@ -139,14 +140,14 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
    * @attribute
    */
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   /**
    * Gets/sets the array of options to display in the menu.
    * @default []
    */
   @coreProperty()
-  public declare options: Array<IMenuOption | IMenuOptionGroup> | MenuOptionFactory;
+  declare public options: Array<IMenuOption | IMenuOptionGroup> | MenuOptionFactory;
 
   /**
    * Gets/sets the selected option to the index. Does not support cascading menus.
@@ -154,7 +155,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
    * @deprecated Do not use menus for selection. Consider a `<forge-select>` instead.
    */
   @coreProperty()
-  public declare selectedIndex: number;
+  declare public selectedIndex: number;
 
   /**
    * Gets/sets the value of the option to select.
@@ -162,7 +163,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
    * @attribute selected-value
    */
   @coreProperty()
-  public declare selectedValue: any;
+  declare public selectedValue: any;
 
   /**
    * Gets/sets the menu placement (default is bottom-left).
@@ -170,14 +171,14 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
    * @attribute
    */
   @coreProperty()
-  public declare placement: `${PositionPlacement}`;
+  declare public placement: `${PositionPlacement}`;
 
   /**
    * Gets/sets the fallback menu placement for overriding the default of any side.
    * @attribute fallback-placements
    */
   @coreProperty()
-  public declare fallbackPlacements: `${PositionPlacement}`[];
+  declare public fallbackPlacements: `${PositionPlacement}`[];
 
   /**
    * Gets/sets dense state of the list options used in the menu popup.
@@ -185,21 +186,21 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
    * @attribute
    */
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   /**
    * Gets/sets the class name to use for option icons.
    * @attribute icon-class
    */
   @coreProperty()
-  public declare iconClass: string;
+  declare public iconClass: string;
 
   /**
    * Gets/sets whether selection of menu items is persisted.
    * @deprecated Please use `<forge-select-dropdown>` for handling selection states.
    */
   @coreProperty()
-  public declare persistSelection: boolean;
+  declare public persistSelection: boolean;
 
   /**
    * Gets/sets the mode that this menu is using.
@@ -207,26 +208,26 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
    * @attribute
    */
   @coreProperty()
-  public declare mode: MenuMode;
+  declare public mode: MenuMode;
 
   /**
    * Sets the position adjustment on the internal popup element.
    */
   @coreProperty()
-  public declare popupOffset: IOverlayOffset;
+  declare public popupOffset: IOverlayOffset;
 
   /**
    * Sets the callback that will be executed for each option in the dropdown for producing custom option templates.
    */
   @coreProperty()
-  public declare optionBuilder: MenuOptionBuilder;
+  declare public optionBuilder: MenuOptionBuilder;
 
   /**
    * Gets the currently active popup element when the dropdown is open.
    * @readonly
    */
   @coreProperty({ set: false })
-  public declare popupElement: HTMLElement | undefined;
+  declare public popupElement: HTMLElement | undefined;
 
   /**
    * Force propagates the key event from another element to this component.

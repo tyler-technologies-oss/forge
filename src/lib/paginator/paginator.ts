@@ -104,7 +104,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default 0
    */
   @coreProperty()
-  public declare pageIndex: number;
+  declare public pageIndex: number;
 
   /**
    * Number of items to display on a page.
@@ -112,7 +112,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default 25
    */
   @coreProperty()
-  public declare pageSize: number;
+  declare public pageSize: number;
 
   /**
    * Sets page index by providing the number of items to skip. The getter for this property returns the number of items to skip.
@@ -120,7 +120,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default 0
    */
   @coreProperty()
-  public declare offset: number;
+  declare public offset: number;
 
   /**
    * The total number of items to be paginated.
@@ -128,7 +128,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default 0;
    */
   @coreProperty()
-  public declare total: number;
+  declare public total: number;
 
   /**
    * The set of provided page size options to display to the user.
@@ -136,7 +136,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default [5, 15, 25, 50, 100]
    */
   @coreProperty()
-  public declare pageSizeOptions: number[];
+  declare public pageSizeOptions: number[];
 
   /**
    * A label for the paginator.
@@ -144,7 +144,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default "Rows per page:"
    */
   @coreProperty()
-  public declare label: string;
+  declare public label: string;
 
   /**
    * Whether to show the first page and last page buttons.
@@ -152,7 +152,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default false
    */
   @coreProperty()
-  public declare firstLast: boolean;
+  declare public firstLast: boolean;
 
   /**
    * Whether to show the first page button. Default is false.
@@ -160,7 +160,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default false
    */
   @coreProperty()
-  public declare first: boolean;
+  declare public first: boolean;
 
   /**
    * Whether the paginator is disabled.
@@ -168,7 +168,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default false
    */
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   /**
    * Whether to use the alternative range label slot.
@@ -176,13 +176,13 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default false
    */
   @coreProperty()
-  public declare alternative: boolean;
+  declare public alternative: boolean;
 
   /**
    * A callback function to build the range label dynamically.
    */
   @coreProperty()
-  public declare rangeLabelCallback: PaginatorRangeLabelBuilder;
+  declare public rangeLabelCallback: PaginatorRangeLabelBuilder;
 
   /** Sets focus to the first focusable element within the paginator. */
   public override focus(options?: FocusOptions): void {

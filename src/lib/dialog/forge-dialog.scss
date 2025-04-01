@@ -68,6 +68,10 @@
   transition-property: display, opacity, overlay, scale;
   transition-behavior: allow-discrete;
 
+  > forge-scaffold {
+    height: auto;
+  }
+
   &--fullscreen {
     @include core.fullscreen-dialog-base;
     @include core.fullscreen-surface;

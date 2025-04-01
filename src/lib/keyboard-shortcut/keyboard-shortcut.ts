@@ -90,7 +90,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * @attribute
    */
   @coreProperty()
-  public declare key: string | null | undefined;
+  declare public key: string | null | undefined;
 
   /**
    * Alias for key.
@@ -109,14 +109,14 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * @attribute
    */
   @coreProperty()
-  public declare target: string;
+  declare public target: string;
 
   /**
    * Gets/sets the global listener state.
    * @attribute
    */
   @coreProperty()
-  public declare global: boolean;
+  declare public global: boolean;
 
   /**
    * Gets/sets whether the callback will be called while in a text entry field.
@@ -124,7 +124,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * @default false
    */
   @coreProperty()
-  public declare allowWhileTyping: boolean;
+  declare public allowWhileTyping: boolean;
 
   /**
    * Gets/sets whether to prevent default on keyboard events
@@ -132,7 +132,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * @default true
    */
   @coreProperty()
-  public declare preventDefault: boolean;
+  declare public preventDefault: boolean;
 
   /**
    * Gets/sets whether to use capturing on keyboard events
@@ -140,7 +140,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * @default false
    */
   @coreProperty()
-  public declare capture: boolean;
+  declare public capture: boolean;
 
   /**
    * Gets/sets whether to match codes instead of keys on keyboard events.
@@ -148,7 +148,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * @default false
    */
   @coreProperty()
-  public declare useCode: boolean;
+  declare public useCode: boolean;
 
   /**
    * Gets/sets whether the callback will be called.
@@ -156,11 +156,11 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * @default false
    */
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   /**
    * Gets/sets whether the activation callback.
    */
   @coreProperty()
-  public declare activateCallback: KeyboardShortcutActivateCallback | null | undefined;
+  declare public activateCallback: KeyboardShortcutActivateCallback | null | undefined;
 }

@@ -17,7 +17,9 @@ const observedAttributes = {
   MOVE_TARGET: 'move-target',
   POSITION_STRATEGY: 'position-strategy',
   PLACEMENT: 'placement',
-  SIZE_STRATEGY: 'size-strategy'
+  SIZE_STRATEGY: 'size-strategy',
+  LABEL: 'label',
+  DESCRIPTION: 'description'
 };
 
 const attributes = {
@@ -33,7 +35,9 @@ const selectors = {
   DIALOG: '.forge-dialog',
   SURFACE: '.surface',
   MOVE_HANDLE: '.move-handle',
-  AUTOFOCUS: ':is([autofocus],[forge-dialog-focus])'
+  AUTOFOCUS: ':is([autofocus],[forge-dialog-focus])',
+  ACCESSIBLE_LABEL: '#forge-dialog-label',
+  ACCESSIBLE_DESCRIPTION: '#forge-dialog-description'
 };
 
 const events = {
@@ -80,6 +84,9 @@ export interface IDialogMoveContext {
 }
 
 export interface IDialogMoveStartEventData extends IDialogMoveEventData {}
+export interface IDialogBeforeCloseEventData {
+  reason: DialogCloseReason;
+}
 
 export type DialogMode = 'modal' | 'inline-modal' | 'nonmodal';
 export type DialogType = 'dialog' | 'alertdialog';
@@ -88,6 +95,7 @@ export type DialogPositionStrategy = 'viewport' | 'container';
 export type DialogPlacement = 'custom' | 'center' | 'top' | 'right' | 'bottom' | 'left' | 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 export type DialogSizeStrategy = 'content' | 'container-inline' | 'container-block';
 export type DialogPreset = 'dialog' | 'bottom-sheet' | 'top-sheet' | 'left-sheet' | 'right-sheet';
+export type DialogCloseReason = 'backdrop' | 'escape' | 'submit' | 'dismiss';
 
 export const hideBackdrop = Symbol('hideBackdrop');
 export const showBackdrop = Symbol('showBackdrop');

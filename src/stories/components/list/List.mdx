@@ -21,6 +21,25 @@ visual feedback when the item is hovered or pressed.
 
 <Canvas of={ListStories.Interactive} />
 
+### Using the `forge-ignore` attribute
+
+It is common to place multiple interactive elements within a `<forge-list-item>`. However, you may want to prevent the list item from responding to pointer events
+on specific elements. To do this you can either listen for the click event yourself on the specific elements you care about and call `stopPropagation()`
+on the event, or you can use the `forge-ignore` attribute for convenience. This attribute is used to prevent the list item from handling the event when the
+element (or any children of the element) is clicked.
+
+```html
+<forge-list-item>
+  <button type="button">List Item</button>
+
+  <!--
+    Using the forge-ignore attribute allows this element to be placed within the
+    list item without causing the list item to respond to pointer events when clicked.
+  -->
+  <forge-checkbox slot="start" tabindex="-1" forge-ignore aria-label="Checkbox"></forge-checkbox>
+</forge-list-item>
+```
+
 ## With Anchor
 
 Lists can also be used for navigation by providing a `<a>` element around your main list item content instead. When your list item will navigate to a new page,

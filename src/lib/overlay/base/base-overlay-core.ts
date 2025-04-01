@@ -1,6 +1,6 @@
 import { IBaseAdapter } from '../../core';
 import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
-import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy } from '../overlay-constants';
+import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OverlayShiftState } from '../overlay-constants';
 
 export interface IBaseOverlayCore {
   initialize(): void;
@@ -15,7 +15,7 @@ export interface IBaseOverlayCore {
   offset: IOverlayOffset;
   hide: OverlayHideState;
   persistent: boolean;
-  shift: boolean;
+  shift: OverlayShiftState;
   flip: OverlayFlipState;
   boundary: string | null;
   boundaryElement: HTMLElement | null;
@@ -39,7 +39,7 @@ export abstract class BaseOverlayCore<T extends IBaseAdapter> implements IBaseOv
   public abstract offset: IOverlayOffset;
   public abstract hide: OverlayHideState;
   public abstract persistent: boolean;
-  public abstract shift: boolean;
+  public abstract shift: OverlayShiftState;
   public abstract flip: OverlayFlipState;
   public abstract boundary: string | null;
   public abstract boundaryElement: HTMLElement | null;

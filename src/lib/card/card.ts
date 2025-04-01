@@ -1,11 +1,11 @@
-import { customElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { CARD_CONSTANTS } from './card-constants';
+import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { toggleState } from '../core/utils/utils';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
-import template from './card.html';
 import styles from './card.scss';
 
-export interface ICardComponent extends IBaseComponent {
+export interface ICardComponent extends LitElement {
   raised: boolean;
 }
 
@@ -15,14 +15,11 @@ declare global {
   }
 }
 
+export const CARD_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-card';
+
 /**
  * @tag forge-card
  *
- * @summary Cards are used to group related information and actions about a single subject.
- *
- * @property {boolean} [raised=false] - Whether the card has elevation or not.
- *
- * @attribute {boolean} [raised=false] - Whether the card has elevation or not.
  * @attribute {boolean} [no-padding=false] - Removes the default padding from the card.
  *
  * @cssproperty --forge-card-background - The background color of the card.
@@ -40,40 +37,35 @@ declare global {
  *
  * @csspart root - The root container element.
  *
+ * @state raised - The state of the card when raised.
+ *
  * @cssclass forge-card - The card container element _(required)_.
  * @cssclass forge-card--raised - The card container element when raised _(required)_.
  */
-@customElement({
-  name: CARD_CONSTANTS.elementName
-})
-export class CardComponent extends BaseComponent implements ICardComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(CARD_CONSTANTS.observedAttributes);
-  }
+@customElement(CARD_TAG_NAME)
+export class CardComponent extends LitElement implements ICardComponent {
+  public static styles = unsafeCSS(styles);
 
-  private _raised = false;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = CARD_TAG_NAME;
+
+  #internals: ElementInternals;
+
+  /** Whether the card has elevation or not. */
+  @property({ type: Boolean, reflect: true }) public raised = false; // TODO: remove reflect in v4 in favor of :state
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, styles);
+    this.#internals = this.attachInternals();
   }
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case CARD_CONSTANTS.attributes.RAISED:
-        this.raised = coerceBoolean(newValue);
-        break;
+  public override willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('raised')) {
+      toggleState(this.#internals, 'raised', this.raised);
     }
   }
 
-  public get raised(): boolean {
-    return this._raised;
-  }
-  public set raised(value: boolean) {
-    value = Boolean(value);
-    if (this._raised !== value) {
-      this._raised = value;
-      this.toggleAttribute(CARD_CONSTANTS.attributes.RAISED, this._raised);
-    }
+  public render(): TemplateResult {
+    return html`<div class="forge-card" part="root"><slot></slot></div>`;
   }
 }

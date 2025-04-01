@@ -151,6 +151,7 @@ declare global {
  * @csspart accessory - The element containing the accessory slot.
  * @csspart support-text - The element containing the support text slot.
  * @csspart support-text-end - The element containing the support text end slot.
+ * @csspart outline - The element containing the forge-focus-indicator element.
  * @csspart focus-indicator - The focus indicator element.
  *
  * @cssclass forge-field - The field container that wraps an `<input>` or `<textarea>`.
@@ -258,61 +259,61 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
   }
 
   @coreProperty()
-  public declare labelPosition: FieldLabelPosition;
+  declare public labelPosition: FieldLabelPosition;
 
   @coreProperty()
-  public declare labelAlignment: FieldLabelAlignment;
+  declare public labelAlignment: FieldLabelAlignment;
 
   @coreProperty()
-  public declare floatLabel: boolean;
+  declare public floatLabel: boolean;
 
   @coreProperty()
-  public declare invalid: boolean;
+  declare public invalid: boolean;
 
   @coreProperty()
-  public declare required: boolean;
+  declare public required: boolean;
 
   @coreProperty()
-  public declare optional: boolean;
+  declare public optional: boolean;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare variant: FieldVariant;
+  declare public variant: FieldVariant;
 
   @coreProperty()
-  public declare theme: FieldTheme;
+  declare public theme: FieldTheme;
 
   @coreProperty()
-  public declare shape: FieldShape;
+  declare public shape: FieldShape;
 
   @coreProperty()
-  public declare density: FieldDensity;
+  declare public density: FieldDensity;
 
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   @coreProperty()
-  public declare popoverIcon: boolean;
+  declare public popoverIcon: boolean;
 
   @coreProperty()
-  public declare popoverExpanded: boolean;
+  declare public popoverExpanded: boolean;
 
   @coreProperty()
-  public declare multiline: boolean;
+  declare public multiline: boolean;
 
   @coreProperty()
-  public declare supportTextInset: FieldSupportTextInset;
+  declare public supportTextInset: FieldSupportTextInset;
 
   @coreProperty()
-  public declare focusIndicatorTargetElement: HTMLElement;
+  declare public focusIndicatorTargetElement: HTMLElement;
 
   @coreProperty()
-  public declare focusIndicatorFocusMode: FocusIndicatorFocusMode;
+  declare public focusIndicatorFocusMode: FocusIndicatorFocusMode;
 
   @coreProperty()
-  public declare focusIndicatorAllowFocus: boolean;
+  declare public focusIndicatorAllowFocus: boolean;
 
   /** Sets the floating label without animating the transition. */
   public floatLabelWithoutAnimation(value: boolean): void {

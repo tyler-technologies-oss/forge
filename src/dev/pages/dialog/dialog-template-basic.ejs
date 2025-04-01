@@ -1,11 +1,11 @@
 <forge-scaffold>
   <forge-toolbar slot="header" class="header-toolbar" no-border>
-    <h1 id="dialog-title" slot="start" class="forge-typography--heading4">Dialog title</h1>
+    <h1 slot="start" class="forge-typography--heading4">Dialog title</h1>
     <forge-icon-button slot="end" id="close-button" aria-label="Close">
       <forge-icon name="close"></forge-icon>
     </forge-icon-button>
   </forge-toolbar>
-  <div slot="body" id="dialog-desc" class="dialog-body" tabindex="0">
+  <div slot="body" class="dialog-body" role="region" tabindex="0">
     <p class="forge-typography--body2">
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia eaque illum itaque.
       Quas, libero eaque veniam et voluptatem quod natus fugit! Nihil consequatur quo
@@ -25,13 +25,13 @@
   </div>
   <forge-toolbar slot="footer" no-border class="footer-toolbar">
     <div slot="end">
-      <forge-button variant="outlined" id="cancel-button" autofocus>Cancel</forge-button>
+      <forge-button variant="outlined" id="cancel-button">Cancel</forge-button>
       <forge-button variant="raised" id="save-button">Save</forge-button>
     </div>
   </forge-toolbar>
 </forge-scaffold>
 
-<forge-dialog type="alertdialog" persistent id="confirm-save-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-msg">
+<forge-dialog type="alertdialog" persistent id="confirm-save-dialog" label="My alert dialog" description="This is an alert dialog.">
   <div>
     <forge-toolbar no-border>
       <h1 id="confirm-title" slot="start" class="forge-typography--heading4">Save changes?</h1>

@@ -3,9 +3,13 @@ import { customElement, property, queryAssignedNodes, state } from 'lit/decorato
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { Theme } from '../../constants';
-import { setDefaultAria, toggleState } from '../../core/utils/a11y-utils';
+import { setDefaultAria } from '../../core/utils/a11y-utils';
+import { toggleState } from '../../core/utils/utils';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 import styles from './meter.scss';
+
+export const METER_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-meter';
 
 export type MeterDirection = 'horizontal' | 'vertical';
 export type MeterDensity = 'default' | 'small' | 'medium' | 'large';
@@ -56,10 +60,13 @@ const VALUE_STATE_MAP = new Map<MeterStatus, string>([
  * @slot - The default slot for the meter's label.
  * @slot value - A textual representation of the meter's value.
  */
-@customElement('forge-meter')
+@customElement(METER_TAG_NAME)
 export class MeterComponent extends LitElement {
   public static styles = unsafeCSS(styles);
   public static formAssociated = true;
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = METER_TAG_NAME;
 
   /**
    * The current value of the meter.

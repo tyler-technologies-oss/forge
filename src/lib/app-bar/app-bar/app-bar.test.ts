@@ -8,6 +8,12 @@ import sinon from 'sinon';
 
 import './app-bar';
 
+declare global {
+  interface Window {
+    forgeAppBarAnchorTest?: () => void;
+  }
+}
+
 describe('App Bar', () => {
   it('should initialize', async () => {
     const el = await fixture<IAppBarComponent>(html`<forge-app-bar></forge-app-bar>`);

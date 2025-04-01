@@ -4,6 +4,8 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}icon-b
 
 const observedAttributes = {
   TOGGLE: 'toggle',
+  PRESSED: 'pressed',
+  /** @deprecated use `PRESSED` instead. */
   ON: 'on',
   VARIANT: 'variant',
   THEME: 'theme',

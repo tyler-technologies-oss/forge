@@ -41,10 +41,10 @@ export class ProfileCardCore implements IProfileCardCore {
   }
 
   public focus(options?: FocusOptions): void {
-    if (this._showSignOutButton) {
-      this._adapter.requestSignOutButtonFocus({ ...options, focusVisible: true });
-    } else if (this._showProfileButton) {
+    if (this._showProfileButton) {
       this._adapter.requestProfileButtonFocus({ ...options, focusVisible: true });
+    } else if (this._showSignOutButton) {
+      this._adapter.requestSignOutButtonFocus({ ...options, focusVisible: true });
     }
   }
 

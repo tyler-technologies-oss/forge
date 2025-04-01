@@ -191,14 +191,14 @@ export class ButtonComponent extends BaseButton<ButtonCore> implements IButtonCo
   }
 
   @coreProperty()
-  public declare variant: ButtonVariant;
+  declare public variant: ButtonVariant;
 
   @coreProperty()
-  public declare pill: boolean;
+  declare public pill: boolean;
 
   @coreProperty()
-  public declare theme: ButtonTheme;
+  declare public theme: ButtonTheme;
 
   @coreProperty()
-  public declare fullWidth: boolean;
+  declare public fullWidth: boolean;
 }

@@ -19,7 +19,7 @@
 
 @mixin base {
   /* Internal custom properties */
-  @include override(disableable-cursor, unset, value);
+  @include override(disableable-cursor, auto, value);
   @include override(disableable-opacity, 1, value);
   @include override(inner-border-block-size, 100%, value);
   @include override(inner-border-color, #{token(outline-color, custom)}, value);

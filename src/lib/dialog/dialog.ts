@@ -1,26 +1,27 @@
-import { attachShadowTemplate, coerceBoolean, customElement, coreProperty, coerceNumber } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, coreProperty, customElement } from '@tylertech/forge-core';
 import { BackdropComponent } from '../backdrop';
 import { BaseComponent } from '../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
+import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
 import { DialogAdapter } from './dialog-adapter';
-import { DialogCore } from './dialog-core';
 import {
+  DIALOG_CONSTANTS,
   DialogAnimationType,
   DialogMode,
   DialogPlacement,
   DialogPositionStrategy,
   DialogPreset,
   DialogSizeStrategy,
-  dialogStack,
   DialogType,
-  DIALOG_CONSTANTS,
-  hideBackdrop,
+  IDialogBeforeCloseEventData,
   IDialogMoveEventData,
   IDialogMoveStartEventData,
+  dialogStack,
+  hideBackdrop,
   showBackdrop
 } from './dialog-constants';
-import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
+import { DialogCore } from './dialog-core';
 
 import template from './dialog.html';
 import styles from './dialog.scss';
@@ -40,6 +41,10 @@ export interface IDialogProperties {
   sizeStrategy: DialogSizeStrategy;
   placement: DialogPlacement;
   moveable: boolean;
+  label: string;
+  description: string;
+  [showBackdrop](): void;
+  [hideBackdrop](): void;
 }
 
 export interface IDialogComponent extends IDialogProperties, IWithDefaultAria, IWithElementInternals, IDismissible {
@@ -55,7 +60,7 @@ declare global {
   interface HTMLElementEventMap {
     'forge-dialog-open': CustomEvent<void>;
     'forge-dialog-close': CustomEvent<void>;
-    'forge-dialog-before-close': CustomEvent<void>;
+    'forge-dialog-before-close': CustomEvent<IDialogBeforeCloseEventData>;
     'forge-dialog-move-start': CustomEvent<IDialogMoveStartEventData>;
     'forge-dialog-move': CustomEvent<IDialogMoveEventData>;
     'forge-dialog-move-end': CustomEvent<void>;
@@ -70,6 +75,7 @@ declare global {
  *
  * @dependency forge-backdrop
  *
+ * @globalconfig mode
  * @globalconfig animationType
  * @globalconfig positionStrategy
  * @globalconfig sizeStrategy
@@ -79,7 +85,7 @@ declare global {
  *
  * @event {CustomEvent<void>} forge-dialog-open - Dispatched when the dialog is opened.
  * @event {CustomEvent<void>} forge-dialog-close - Dispatched when the dialog is closed.
- * @event {CustomEvent<void>} forge-dialog-before-close - Dispatched before the dialog is closed. This event is cancelable.
+ * @event {CustomEvent<IDialogBeforeCloseEventData>} forge-dialog-before-close - Dispatched before the dialog is closed. This event is cancelable.
  * @event {CustomEvent<IDialogMoveStartEventData>} forge-dialog-move-start - Dispatched when the dialog is first moved.
  * @event {CustomEvent<IDialogMoveEventData>} forge-dialog-move - Dispatched when the dialog is being moved.
  * @event {CustomEvent<void>} forge-dialog-move-end - Dispatched when the dialog is done being moved.
@@ -189,7 +195,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
   }
 
   public [tryDismiss](_state?: IDismissibleStackState<string> | undefined): boolean {
-    return this._core.dispatchBeforeCloseEvent();
+    return this._core.dispatchBeforeCloseEvent('dismiss');
   }
 
   constructor() {
@@ -247,6 +253,12 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
       case DIALOG_CONSTANTS.observedAttributes.PLACEMENT:
         this.placement = (newValue as DialogPlacement) ?? DIALOG_CONSTANTS.defaults.PLACEMENT;
         break;
+      case DIALOG_CONSTANTS.observedAttributes.LABEL:
+        this.label = newValue;
+        break;
+      case DIALOG_CONSTANTS.observedAttributes.DESCRIPTION:
+        this.description = newValue;
+        break;
     }
   }
 
@@ -256,7 +268,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   /**
    * The mode of the dialog.
@@ -264,7 +276,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare mode: DialogMode;
+  declare public mode: DialogMode;
 
   /**
    * The type of the dialog.
@@ -272,7 +284,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare type: DialogType;
+  declare public type: DialogType;
 
   /**
    * The animation type of the dialog.
@@ -280,7 +292,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute animation-type
    */
   @coreProperty()
-  public declare animationType: DialogAnimationType;
+  declare public animationType: DialogAnimationType;
 
   /**
    * The preset design that the dialog will apply.
@@ -288,7 +300,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare preset: DialogPreset;
+  declare public preset: DialogPreset;
 
   /**
    * Indicates whether the dialog is dismissible via escape and backdrop click or not.
@@ -296,7 +308,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare persistent: boolean;
+  declare public persistent: boolean;
 
   /**
    * Indicates whether the dialog is fullscreen or not.
@@ -304,7 +316,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare fullscreen: boolean;
+  declare public fullscreen: boolean;
 
   /**
    * The screen width at which the dialog will switch to fullscreen.
@@ -312,7 +324,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute fullscreen-threshold
    */
   @coreProperty()
-  public declare fullscreenThreshold: number;
+  declare public fullscreenThreshold: number;
 
   /**
    * The selector of the element that triggers the dialog.
@@ -320,14 +332,14 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare trigger: string;
+  declare public trigger: string;
 
   /**
    * The element that triggers the dialog.
    * @default null
    */
   @coreProperty()
-  public declare triggerElement: HTMLElement | null;
+  declare public triggerElement: HTMLElement | null;
 
   /**
    * Indicates whether the dialog is moveable or not.
@@ -335,7 +347,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare moveable: boolean;
+  declare public moveable: boolean;
 
   /**
    * Controls whether the dialog is rendered relative to the viewport or its nearest containing block.
@@ -343,7 +355,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute position-strategy
    */
   @coreProperty()
-  public declare positionStrategy: DialogPositionStrategy;
+  declare public positionStrategy: DialogPositionStrategy;
 
   /**
    * Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
@@ -351,7 +363,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute size-strategy
    */
   @coreProperty()
-  public declare sizeStrategy: DialogSizeStrategy;
+  declare public sizeStrategy: DialogSizeStrategy;
 
   /**
    * The placement of the dialog.
@@ -359,7 +371,23 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    * @attribute
    */
   @coreProperty()
-  public declare placement: DialogPlacement;
+  declare public placement: DialogPlacement;
+
+  /**
+   * The accessible label of the dialog.
+   * @default ''
+   * @attribute
+   */
+  @coreProperty()
+  declare public label: string;
+
+  /**
+   * The accessible description of the dialog.
+   * @default ''
+   * @attribute
+   */
+  @coreProperty()
+  declare public description: string;
 
   /** Shows the dialog. */
   public show(): void {
