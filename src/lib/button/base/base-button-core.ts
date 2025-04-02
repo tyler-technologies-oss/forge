@@ -9,6 +9,7 @@ export interface IBaseButtonCore {
   disabled: boolean;
   popoverIcon: boolean;
   dense: boolean;
+  formId: string | null | undefined;
   click(options: ButtonClickOptions): void;
   focus(options?: ExperimentalFocusOptions): void;
 }
@@ -178,5 +179,9 @@ export abstract class BaseButtonCore<T extends IBaseButtonAdapter<IBaseButton>> 
       this._dense = value;
       this._adapter.toggleHostAttribute(BASE_BUTTON_CONSTANTS.attributes.DENSE, value);
     }
+  }
+
+  public set formId(value: string | null | undefined) {
+    this._adapter.setNativeSubmitButtonForm(value);
   }
 }

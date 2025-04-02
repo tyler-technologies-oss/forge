@@ -23,6 +23,7 @@ export interface IBaseButtonAdapter<T extends IBaseComponent> extends IBaseAdapt
   animateStateLayer(): void;
   addDefaultSlotChangeListener(listener: EventListener): void;
   addNativeSubmitButton(): void;
+  setNativeSubmitButtonForm(form: string | null | undefined): void;
   removeNativeSubmitButton(): void;
 }
 
@@ -244,7 +245,25 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
     this._nativeSubmitButton.type = 'submit';
     this._nativeSubmitButton.style.display = 'none';
     this._nativeSubmitButton.ariaHidden = 'true';
+
+    const form = this._component.getAttribute('form');
+    if (form) {
+      this._component.setAttribute('form', form);
+    }
+
     this._component.prepend(this._nativeSubmitButton);
+  }
+
+  public setNativeSubmitButtonForm(form: string | null | undefined): void {
+    if (!this._nativeSubmitButton) {
+      return;
+    }
+
+    if (form) {
+      this._nativeSubmitButton.setAttribute('form', form);
+    } else {
+      this._nativeSubmitButton.removeAttribute('form');
+    }
   }
 
   public removeNativeSubmitButton(): void {

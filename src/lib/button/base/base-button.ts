@@ -82,6 +82,9 @@ export abstract class BaseButton<T extends BaseButtonCore<IBaseButtonAdapter<IBa
       case BASE_BUTTON_CONSTANTS.observedAttributes.DENSE:
         this.dense = coerceBoolean(newValue);
         return;
+      case BASE_BUTTON_CONSTANTS.observedAttributes.FORM:
+        this._core.formId = newValue;
+        return;
     }
   }
 
