@@ -1,6 +1,20 @@
 @use '../tokens/scrollbar/tokens';
 
 ///
+/// Gets a CSS custom property declaration for a specific scrollbar token with its token value as the fallback value.
+///
+/// Example:
+/// ```scss
+/// .my-class {
+///   width: #{scrollbar.variable(width)}; // => width: var(--forge-scrollbar-width, 16px);
+/// }
+/// ```
+///
+@function variable($key) {
+  @return tokens.get($key);
+}
+
+///
 /// Provides scrollbar styles.
 ///
 @mixin base {
