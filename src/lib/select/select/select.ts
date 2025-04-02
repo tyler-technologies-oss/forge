@@ -22,7 +22,7 @@ import { OptionGroupComponent } from '../option-group';
 import { SelectAdapter } from './select-adapter';
 import { SELECT_CONSTANTS } from './select-constants';
 import { SelectCore } from './select-core';
-import { IListDropdownAware } from '../../list-dropdown/list-dropdown-aware';
+import { IListDropdownAware, ListDropdownAware } from '../../list-dropdown/list-dropdown-aware';
 
 import template from './select.html';
 import styles from './select.scss';
@@ -178,6 +178,7 @@ export class SelectComponent
 {
   public static get observedAttributes(): string[] {
     return [
+      ...ListDropdownAware.observedAttributes,
       ...Object.values(BASE_FIELD_CONSTANTS.observedAttributes),
       ...Object.values(SELECT_CONSTANTS.observedAttributes),
       ...Object.values(BASE_SELECT_CONSTANTS.observedAttributes)

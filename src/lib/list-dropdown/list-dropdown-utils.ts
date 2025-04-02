@@ -17,7 +17,6 @@ import {
   ListDropdownType,
   LIST_DROPDOWN_CONSTANTS
 } from './list-dropdown-constants';
-import { LIST_ITEM_CONSTANTS } from '../list/list-item';
 
 export enum ListDropdownOptionType {
   Option,
