@@ -14,12 +14,39 @@
     <forge-app-bar-notification-button show-badge count="5" slot="end"></forge-app-bar-notification-button>
     <forge-app-bar-app-launcher-button slot="end"></forge-app-bar-app-launcher-button>
 
-    <forge-button slot="end" theme="app-bar">Sign in</forge-button>
+    <forge-button slot="end">Sign in</forge-button>
+
+    <div slot="end">
+      <forge-icon-button>
+        <forge-icon name="arrow_drop_down_circle"></forge-icon>
+      </forge-icon-button>
+  
+      <forge-popover arrow placement="bottom-end">
+        <div class="app-bar-popover">
+          <forge-toolbar no-border>
+            <forge-tab-bar clustered slot="before-start" active-tab="0">
+              <forge-tab>Tab 1</forge-tab>
+              <forge-tab>Tab 2</forge-tab>
+              <forge-tab>Tab 3</forge-tab>
+            </forge-tab-bar>
+            <forge-icon-button aria-label="Close" slot="after-end">
+              <forge-icon name="close"></forge-icon>
+            </forge-icon-button>
+          </forge-toolbar>
+          <div class="app-bar-popover__content">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis voluptates ipsa magnam molestias cum quis, aperiam laborum voluptatem voluptas et? Aut rerum, exercitationem tenetur reprehenderit dignissimos fugiat soluta asperiores nihil!
+          </div>
+          <forge-toolbar inverted>
+            <forge-button slot="end">Save</forge-button>
+          </forge-toolbar>
+        </div>
+      </forge-popover>
+    </div>
 
     <forge-app-bar-profile-button slot="end" full-name="First Last" email="first.last@tylerforge.io" profile-button profile-button-text="View profile">
     </forge-app-bar-profile-button>
 
-    <forge-tab-bar slot="bottom" active-tab="0" clustered scroll-buttons theme="app-bar">
+    <forge-tab-bar slot="bottom" active-tab="0" clustered scroll-buttons>
       <forge-tab>Tab 1</forge-tab>
       <forge-tab>Tab 2</forge-tab>
       <forge-tab>Tab 3</forge-tab>

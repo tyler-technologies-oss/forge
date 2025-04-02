@@ -6,6 +6,16 @@ include('./src/partials/page.ejs', {
     options: [
       {
         type: 'select',
+        label: 'Theme Mode',
+        id: 'opt-theme-mode',
+        defaultValue: 'inherit',
+        options: [
+          { label: 'Inherit (default)', value: 'inherit' },
+          { label: 'Scoped ', value: 'scoped' }
+        ]
+      },
+      {
+        type: 'select',
         label: 'Theme',
         id: 'opt-theme',
         defaultValue: '',

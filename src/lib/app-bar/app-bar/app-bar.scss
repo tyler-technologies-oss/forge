@@ -29,6 +29,31 @@ $host-tokens: (background, foreground);
 // Default theme
 //
 
+:host(:not([theme]):not([theme-mode='scoped'])) {
+  @include theme.provide(
+    (
+      primary: #{token(foreground)},
+      on-primary: rgba(black, color-emphasis.value(highest)),
+      text-high: rgba(white, color-emphasis.value(highest)),
+      text-medium: rgba(white, color-emphasis.value(medium)),
+      text-low: rgba(white, color-emphasis.value(medium-low)),
+      outline-high: rgba(white, color-emphasis.value(highest)),
+      outline-medium: rgba(white, color-emphasis.value(medium)),
+      outline-low: rgba(white, color-emphasis.value(medium-low))
+    )
+  );
+}
+
+:host([theme-mode='scoped']) {
+  .forge-app-bar {
+    color: inherit;
+
+    .logo-title-container {
+      color: #{token(foreground)};
+    }
+  }
+}
+
 :host {
   @include provide-theme(
     (
@@ -113,6 +138,25 @@ $host-tokens: (background, foreground);
 }
 
 //
+// Slotted (scoped theme mode)
+//
+// Attempt to auto-theme any specific slotted elements directly
+//
+
+:host([theme-mode='scoped']) {
+  ::slotted(:where(forge-tab-bar, forge-icon-button, forge-button)) {
+    color: #{token(theme-foreground)};
+
+    @include tab.provide-theme(
+      (
+        active-color: #{token(theme-foreground)},
+        inactive-color: #{token(theme-foreground-muted)}
+      )
+    );
+  }
+}
+
+//
 // Slotted - Tab bar
 //
 
@@ -151,6 +195,16 @@ $host-tokens: (background, foreground);
   @include provide-theme(
     (
       theme-foreground-muted: rgba(black, color-emphasis.value(medium))
+    )
+  );
+}
+
+:host([theme='white']:not([theme-mode='scoped'])) {
+  @include theme.provide(
+    (
+      primary: black,
+      on-primary: rgba(white, color-emphasis.value(highest)),
+      text-medium: rgba(black, color-emphasis.value(medium))
     )
   );
 }

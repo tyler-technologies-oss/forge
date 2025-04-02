@@ -31,7 +31,8 @@ import {
   tylIconStars,
   tylIconWarning,
   tylIconWorkOutline,
-  tylIconKeyboardVoice
+  tylIconKeyboardVoice,
+  tylIconArrowDropDownCircle
 } from '@tylertech/tyler-icons/standard';
 import { ToastComponent } from '@tylertech/forge/toast';
 
@@ -45,7 +46,8 @@ IconRegistry.define([
   tylIconWorkOutline,
   tylIconWarning,
   tylIconSettings,
-  tylIconKeyboardVoice
+  tylIconKeyboardVoice,
+  tylIconArrowDropDownCircle
 ]);
 
 const appBar = document.querySelector('forge-app-bar#forge-app-bar-example') as IAppBarComponent;
@@ -73,6 +75,11 @@ appBarMenuButton.addEventListener('click', ({ detail }) => {
 appBarSearch.addEventListener('forge-app-bar-search-input', ({ detail }) => {
   console.log('[forge-app-bar-search] ', detail);
   ToastComponent.present({ message: `Search text: ${detail.value}` });
+});
+
+const themeModeSelect = document.querySelector('#opt-theme-mode') as ISelectComponent;
+themeModeSelect.addEventListener('change', () => {
+  appBar.themeMode = themeModeSelect.value;
 });
 
 const themeSelect = document.querySelector('#opt-theme') as ISelectComponent;

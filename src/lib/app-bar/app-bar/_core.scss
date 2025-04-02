@@ -9,6 +9,7 @@
 
 @mixin base {
   background: #{token(background)};
+  color: #{token(foreground)};
 
   position: relative;
   z-index: #{token(z-index)};
@@ -82,8 +83,6 @@
 
   min-width: 0;
   padding-inline: #{token(title-padding)};
-
-  color: #{token(foreground)};
 }
 
 @mixin logo {
