@@ -160,7 +160,7 @@
 
   <section>
     <h3 class="forge-typography--heading2">Form example (linked by attribute)</h3>
-    <form class="test-form-2" id="test-btn-form-2" action="javascript: alert('<form> submit action');" style="margin-block-end: 8px;">
+    <form class="test-form" id="test-btn-form-2" action="javascript: alert('<form> submit action');" style="margin-block-end: 8px;">
       <forge-text-field style="width: 516px">
         <input type="text" placeholder="Text input" aria-label="Test form input" autocomplete="off" />
       </forge-text-field>
@@ -176,6 +176,7 @@
       formaction="javascript: alert('<forge-button> submit override action');"
       form="test-btn-form-2"
       >Submit</forge-button>
+      <forge-button id="ext-reset-btn" variant="outlined" type="reset" form="test-btn-form-2">Reset</forge-button>
   </section>
 
   <section>

@@ -138,6 +138,8 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
         },
         { capture: true, once: true }
       );
+      this._nativeSubmitButton?.addEventListener('click', evt => evt.stopPropagation(), { once: true });
+      this._nativeSubmitButton?.click();
     } else if (type === 'reset') {
       this._component.form?.reset();
     }
@@ -237,7 +239,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
   }
 
   public addNativeSubmitButton(): void {
-    if (this._nativeSubmitButton) {
+    if (this._nativeSubmitButton?.isConnected) {
       return;
     }
 
