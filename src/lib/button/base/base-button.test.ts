@@ -909,6 +909,40 @@ describe('BaseButton', () => {
     expect(submitSpy).to.have.been.calledOnce;
   });
 
+  it('should append native button when type is submit', async () => {
+    const el = await fixture<HTMLFormElement>(html`
+      <form id="test-form" action="javascript: void(0)">
+        <forge-test-base-button type="submit">Button</forge-test-base-button>
+      </form>
+    `);
+
+    await elementUpdated(el);
+
+    const buttonEl = el.querySelector('button') as HTMLButtonElement;
+    expect(el).to.be.accessible();
+    expect(buttonEl).to.be.ok;
+  });
+
+  it('should enable implicit form submission', async () => {
+    const el = await fixture<HTMLFormElement>(html`
+      <form id="test-form" action="javascript: void(0);">
+        <input name="test-input" />
+        <forge-test-base-button type="submit">Button</forge-test-base-button>
+      </form>
+    `);
+
+    const buttonEl = el.querySelector('forge-test-base-button') as IButtonComponent;
+    const inputEl = el.querySelector('input') as HTMLInputElement;
+    const submitSpy = spy();
+    el.addEventListener('submit', submitSpy);
+    await elementUpdated(buttonEl);
+
+    inputEl.focus();
+    await pressKey('Enter');
+
+    expect(submitSpy).to.have.been.calledOnce;
+  });
+
   it('should set name and value', async () => {
     const el = await fixture<HTMLFormElement>(html`<forge-test-base-button type="submit" name="test" value="test-value">Button</forge-test-base-button>`);
 
