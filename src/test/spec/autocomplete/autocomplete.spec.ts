@@ -22,7 +22,7 @@ import { ICON_CONSTANTS, IconComponent } from '@tylertech/forge/icon';
 import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '@tylertech/forge/linear-progress';
 import { IListItemComponent, LIST_CONSTANTS, LIST_ITEM_CONSTANTS } from '@tylertech/forge/list';
 import { LIST_DROPDOWN_CONSTANTS } from '@tylertech/forge/list-dropdown';
-import { POPOVER_CONSTANTS } from '@tylertech/forge/popover';
+import { IPopoverComponent, POPOVER_CONSTANTS } from '@tylertech/forge/popover';
 import { IOption, IOptionComponent, OPTION_CONSTANTS } from '@tylertech/forge/select';
 import { ISkeletonComponent, SKELETON_CONSTANTS } from '@tylertech/forge/skeleton';
 import { ITextFieldComponent, ITextFieldComponentDelegateOptions, TEXT_FIELD_CONSTANTS } from '@tylertech/forge/text-field';
@@ -1687,6 +1687,86 @@ describe('AutocompleteComponent', function(this: ITestContext) {
         expect(this.context.input.value).toBe(DEFAULT_FILTER_OPTIONS[2].label);
         expect(this.context.component.value).toBe(DEFAULT_FILTER_OPTIONS[2].value);
       });
+    });
+  });
+
+  describe('list dropdown API', () => {
+    it('should set popover flip', async function (this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.popoverFlip = 'never';
+      this.context.component.openDropdown();
+      await task();
+
+      const popover = this.context.component.popupElement as IPopoverComponent;
+
+      expect(this.context.component.popoverFlip).toEqual('never');
+      expect(popover.flip).toEqual('never');
+    });
+
+    it('should set popover flip from attribute', async function (this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.setAttribute('popover-flip', 'never');
+      this.context.component.openDropdown();
+      await task();
+
+      const popover = this.context.component.popupElement as IPopoverComponent;
+
+      expect(this.context.component.popoverFlip).toEqual('never');
+      expect(popover.flip).toEqual('never');
+    });
+
+    it('should set popover shift', async function (this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.popoverShift = 'never';
+      this.context.component.openDropdown();
+      await task();
+
+      const popover = this.context.component.popupElement as IPopoverComponent;
+
+      expect(this.context.component.popoverShift).toEqual('never');
+      expect(popover.shift).toEqual('never');
+    });
+
+    it('should set popover shift from attribute', async function (this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.setAttribute('popover-shift', 'never');
+      this.context.component.openDropdown();
+      await task();
+
+      const popover = this.context.component.popupElement as IPopoverComponent;
+
+      expect(this.context.component.popoverShift).toEqual('never');
+      expect(popover.shift).toEqual('never');
+    });
+
+    it('should set popover fallback placements', async function (this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.popoverFallbackPlacements = ['top'];
+      this.context.component.openDropdown();
+      await task();
+
+      const popover = this.context.component.popupElement as IPopoverComponent;
+
+      expect(this.context.component.popoverFallbackPlacements).toEqual(['top']);
+      expect(popover.fallbackPlacements).toEqual(['top']);
+    });
+
+    it('should set popover offset', async function (this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.popoverOffset = { mainAxis: 10, crossAxis: 10 };
+      this.context.component.openDropdown();
+      await task();
+
+      const popover = this.context.component.popupElement as IPopoverComponent;
+
+      expect(this.context.component.popoverOffset).toEqual({ mainAxis: 10, crossAxis: 10 });
+      expect(popover.offset).toEqual({ mainAxis: 10, crossAxis: 10 });
     });
   });
 
