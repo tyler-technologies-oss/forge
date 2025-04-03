@@ -18,7 +18,10 @@ $tokens: (
   title-padding: utils.module-val(app-bar, title-padding, spacing.variable(xsmall)),
   columns: utils.module-val(app-bar, columns, 1fr 1fr 1fr),
   transition-duration: utils.module-val(app-bar, transition-duration, animation.variable(duration-short4)),
-  transition-timing: utils.module-val(app-bar, transition-timing, animation.variable(easing-standard))
+  transition-timing: utils.module-val(app-bar, transition-timing, animation.variable(easing-standard)),
+  // Scoped theming tokens for app bar children to optionally inherit
+  theme-foreground: utils.module-ref(app-bar, theme-foreground, foreground),
+  theme-foreground-muted: utils.module-val(app-bar, theme-foreground-muted, rgba(white, theme.emphasis(medium)))
 ) !default;
 
 @function get($key) {

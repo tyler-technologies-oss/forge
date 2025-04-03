@@ -11,7 +11,7 @@
 // Host
 //
 
-$host-tokens: [background foreground];
+$host-tokens: (background, foreground);
 
 :host {
   @include tokens($includes: $host-tokens);
@@ -29,7 +29,7 @@ $host-tokens: [background foreground];
 // Default theme
 //
 
-:host(:not([theme])) {
+:host(:not([theme]):not([theme-mode='scoped'])) {
   @include theme.provide(
     (
       primary: #{token(foreground)},
@@ -40,6 +40,25 @@ $host-tokens: [background foreground];
       outline-high: rgba(white, color-emphasis.value(highest)),
       outline-medium: rgba(white, color-emphasis.value(medium)),
       outline-low: rgba(white, color-emphasis.value(medium-low))
+    )
+  );
+}
+
+:host([theme-mode='scoped']) {
+  .forge-app-bar {
+    color: inherit;
+
+    .logo-title-container {
+      color: #{token(foreground)};
+    }
+  }
+}
+
+:host {
+  @include provide-theme(
+    (
+      theme-foreground: #{token(foreground)},
+      theme-foreground-muted: rgba(white, color-emphasis.value(medium))
     )
   );
 }
@@ -119,6 +138,25 @@ $host-tokens: [background foreground];
 }
 
 //
+// Slotted (scoped theme mode)
+//
+// Attempt to auto-theme any specific slotted elements directly
+//
+
+:host([theme-mode='scoped']) {
+  ::slotted(:where(forge-tab-bar, forge-icon-button, forge-button)) {
+    color: #{token(theme-foreground)};
+
+    @include tab.provide-theme(
+      (
+        active-color: #{token(theme-foreground)},
+        inactive-color: #{token(theme-foreground-muted)}
+      )
+    );
+  }
+}
+
+//
 // Slotted - Tab bar
 //
 
@@ -151,6 +189,17 @@ $host-tokens: [background foreground];
 //
 
 :host([theme='white']) {
+  @include override(background, white, value);
+  @include override(foreground, black, value);
+
+  @include provide-theme(
+    (
+      theme-foreground-muted: rgba(black, color-emphasis.value(medium))
+    )
+  );
+}
+
+:host([theme='white']:not([theme-mode='scoped'])) {
   @include theme.provide(
     (
       primary: black,
@@ -158,9 +207,4 @@ $host-tokens: [background foreground];
       text-medium: rgba(black, color-emphasis.value(medium))
     )
   );
-
-  .forge-app-bar {
-    @include override(background, white, value);
-    @include override(foreground, black, value);
-  }
 }

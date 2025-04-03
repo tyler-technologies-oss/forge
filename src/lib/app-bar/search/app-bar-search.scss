@@ -1,8 +1,11 @@
 @use './core' as *;
 @use '../../focus-indicator';
+@use '../app-bar';
 
 :host {
   @include host;
+
+  color: #{app-bar.token(theme-foreground)};
 }
 
 :host([hidden]) {

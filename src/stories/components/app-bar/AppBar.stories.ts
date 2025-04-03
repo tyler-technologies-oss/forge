@@ -19,6 +19,8 @@ const meta = {
   title: 'Components/App Bar',
   render: args => {
     const el = customElementStoryRenderer(component, args);
+    el.setAttribute('theme-mode', 'scoped');
+
     const icon = document.createElement('forge-icon');
     icon.setAttribute('slot', 'logo');
     icon.setAttribute('name', 'forge_logo');
@@ -56,7 +58,7 @@ export const Demo: Story = {};
 export const Full: Story = {
   ...standaloneStoryParams,
   render: () => html`
-    <forge-app-bar title-text="Tyler Forge™" theme="custom">
+    <forge-app-bar title-text="Tyler Forge™" theme-mode="scoped">
       <forge-app-bar-menu-button slot="start"></forge-app-bar-menu-button>
       <forge-icon slot="logo" name="forge_logo"></forge-icon>
       <forge-app-bar-search slot="center">
@@ -81,17 +83,20 @@ export const CustomTheme: Story = {
   ...standaloneStoryParams,
   decorators: [
     storyStyles(`
-      .custom-app-bar {
-        --forge-app-bar-background: whitesmoke;
-        --forge-app-bar-foreground: darkblue;
-        --forge-theme-primary: orangered;
-      }
+.custom-app-bar {
+  --forge-app-bar-background: salmon;
+  --forge-app-bar-foreground: black;
+}
+
+.custom-app-bar forge-button {
+  margin-inline-end: var(--forge-spacing-xsmall);
+}
   `)
   ],
   render: () => html`
-    <forge-app-bar class="custom-app-bar" title-text="Tyler Forge™" theme="custom">
+    <forge-app-bar class="custom-app-bar" title-text="Tyler Forge™" theme-mode="scoped">
       <forge-icon slot="logo" name="forge_logo"></forge-icon>
-      <forge-button slot="end">Sign In</forge-button>
+      <forge-button slot="end" theme="app-bar">Sign In</forge-button>
     </forge-app-bar>
   `
 };
@@ -126,7 +131,7 @@ export const CSSOnly: Story = {
           <input type="text" placeholder="Search" aria-label="Search" id="app-bar-search" style="width: 256px" />
         </div>
         -->
-        <div class="forge-field forge-field--filled">
+        <div class="forge-field">
           <svg class="forge-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path d="M0 0h24v24H0z" fill="none" />
             <path
