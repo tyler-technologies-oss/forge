@@ -2,7 +2,15 @@ import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IOverlayComponent } from '../overlay';
 import { IOverlayAwareCore } from './overlay-aware-core';
-import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
+import {
+  IOverlayOffset,
+  OverlayFlipState,
+  OverlayHideState,
+  OverlayPlacement,
+  OverlayPositionStrategy,
+  OVERLAY_CONSTANTS,
+  OverlayShiftState
+} from '../overlay-constants';
 import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
 import { IBaseOverlay } from './base-overlay';
 
@@ -19,7 +27,7 @@ export interface IOverlayAware extends IBaseComponent, IBaseOverlay {
  * @property {OverlayPlacement} [placement="bottom"] - The placement of the overlay.
  * @property {OverlayPositionStrategy} [positionStrategy="fixed"] - The position strategy of the overlay.
  * @property {IOverlayOffset} [offset={}] - The offset of the overlay.
- * @property {boolean} [shift=false] - Whether the overlay should shift to fit within the viewport.
+ * @property {OverlayShiftState} [shift="auto"] - Whether the overlay should shift to fit within the viewport.
  * @property {OverlayHideState} [hide="anchor-hidden"] - The hide state of the overlay.
  * @property {boolean} [persistent=false] - Whether the overlay should persist when the anchor is removed.
  * @property {OverlayFlipState} [flip="auto"] - Whether the overlay should flip placements to another side fit within the viewport.
@@ -35,7 +43,7 @@ export interface IOverlayAware extends IBaseComponent, IBaseOverlay {
  * @attribute {OverlayPlacement} [placement="bottom"] - The placement of the overlay.
  * @attribute {OverlayPositionStrategy} [position-strategy="fixed"] - The position strategy of the overlay.
  * @attribute {IOverlayOffset} offset - The offset of the overlay.
- * @attribute {boolean} [shift=false] - Whether the overlay should shift to fit within the viewport.
+ * @attribute {OverlayShiftState} [shift="auto"] - Whether the overlay should shift to fit within the viewport.
  * @attribute {OverlayHideState} [hide="anchor-hidden"] - The hide state of the overlay.
  * @attribute {boolean} [persistent=false] - Whether the overlay should persist when the anchor is removed.
  * @attribute {OverlayFlipState} [flip="auto"] - Whether the overlay should flip placements to another side fit within the viewport.
@@ -82,7 +90,7 @@ export abstract class OverlayAware<T extends IOverlayAwareCore> extends BaseComp
         this.persistent = coerceBoolean(newValue);
         break;
       case OVERLAY_CONSTANTS.observedAttributes.SHIFT:
-        this.shift = coerceBoolean(newValue);
+        this.shift = newValue as OverlayShiftState;
         break;
       case OVERLAY_CONSTANTS.observedAttributes.FLIP:
         this.flip = newValue as OverlayFlipState;
@@ -122,7 +130,7 @@ export abstract class OverlayAware<T extends IOverlayAwareCore> extends BaseComp
   declare public offset: IOverlayOffset;
 
   @coreProperty()
-  declare public shift: boolean;
+  declare public shift: OverlayShiftState;
 
   @coreProperty()
   declare public hide: OverlayHideState;

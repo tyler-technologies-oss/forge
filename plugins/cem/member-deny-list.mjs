@@ -14,6 +14,7 @@ export default function forgeMemberDenyListPlugin() {
     'formAssociated',
     'form',
     'labels',
+    'setFormValue',
     '_core',
     '_internals'
   ];
