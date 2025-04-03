@@ -34,6 +34,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
   protected readonly _defaultSlotElement: HTMLSlotElement;
   protected readonly _endSlotElement: HTMLSlotElement;
   protected _nativeSubmitButton?: HTMLButtonElement;
+  protected _nativeSubmitButtonClickListener: EventListener = evt => evt.stopPropagation();
 
   constructor(component: T) {
     super(component);
@@ -253,6 +254,10 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
       this._component.setAttribute('form', form);
     }
 
+    // Prevent click events from being handled by the button component to avoid forms being
+    // submitted more than once
+    this._nativeSubmitButton?.addEventListener('click', this._nativeSubmitButtonClickListener, { capture: true });
+
     this._component.prepend(this._nativeSubmitButton);
   }
 
@@ -270,6 +275,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
 
   public removeNativeSubmitButton(): void {
     this._nativeSubmitButton?.remove();
+    this._nativeSubmitButton?.removeEventListener('click', this._nativeSubmitButtonClickListener, { capture: true });
     this._nativeSubmitButton = undefined;
   }
 
