@@ -22,6 +22,7 @@ import { OptionGroupComponent } from '../option-group';
 import { SelectAdapter } from './select-adapter';
 import { SELECT_CONSTANTS } from './select-constants';
 import { SelectCore } from './select-core';
+import { IListDropdownAware, ListDropdownAware } from '../../list-dropdown/list-dropdown-aware';
 
 import template from './select.html';
 import styles from './select.scss';
@@ -33,7 +34,8 @@ export interface ISelectComponent
     IWithElementInternals,
     IWithDefaultAria,
     IWithBaseField,
-    IBaseSelectComponent {
+    IBaseSelectComponent,
+    IListDropdownAware {
   label: string;
   placeholder: string;
   setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void;
@@ -82,6 +84,20 @@ declare global {
  * @property {SelectOptionBuilder} optionBuilder - Gets/sets the option builder function.
  * @property {SelectSelectedTextBuilder} selectedTextBuilder - Gets/sets the selected text builder function.
  * @property {SelectBeforeValueChangeCallback<any>} beforeValueChange - Gets/sets the before value change callback.
+ * @property {string | string[]; - } popupClasses - Gets/sets the list of classes to apply to the popup element.
+ * @property {ListDropdownHeaderBuilder} popupHeaderBuilder - Gets/sets the callback function for generating header content within the popup.
+ * @property {ListDropdownFooterBuilder} popupFooterBuilder - Gets/sets the callback function for generating header content within the popup.
+ * @property {boolean} [syncPopupWidth=false] - Gets/sets whether the popup width is synchronized with the popup target width.
+ * @property {number} optionLimit - Gets/sets the maximum number of options to display in the dropdown.
+ * @property {boolean} [observeScroll=false] - Controls the observation of scroll events on the dropdown.
+ * @property {number} [observeScrollThreshold=0] - The number of pixels from the bottom to trigger the scroll bottom event. Only applicable if `observeScroll` is true.
+ * @property {boolean} [constrainPopupWidth=true] - Gets/sets whether the popup width will be constrained to a max width of the viewport width (default: `100vw`).
+ * @property {boolean} [wrapOptionText=false] - Gets/sets whether the options will wrap their text or not. This only applies if `constrainPopupWidth` is `true`, if there is an explicit width set via CSS.
+ * @property {OverlayPlacement} [popoverPlacement="bottom"] - Gets/sets the placement of the popover.
+ * @property {IOverlayOffset} popoverOffset - Gets/sets the offset of the popover.
+ * @property {OverlayFlipState} [popoverFlip="auto"] - Gets/sets the flip state of the popover.
+ * @property {OverlayShiftState} [popoverShift="auto"] - Gets/sets whether the popover should shift to fit within the viewport.
+ * @property {PositionPlacement | null} popoverFallbackPlacements - Gets/sets the fallback placements of the popover.
  *
  * @attribute {string} label - Controls the label text.
  * @attribute {string} placeholder - Controls the placeholder text.
@@ -89,6 +105,15 @@ declare global {
  * @attribute {number | number[]} selected-index - Gets/sets the selected index.
  * @attribute {boolean} multiple - Gets/sets the multiple select state.
  * @attribute {boolean} open - Gets/sets the open state.
+ * @attribute {boolean} [sync-popup-width=false] - Gets/sets whether the popup width is synchronized with the popup target width.
+ * @attribute {number} option-limit - Gets/sets the maximum number of options to display in the dropdown.
+ * @attribute {boolean} [observe-scroll=false] - Controls the observation of scroll events on the dropdown.
+ * @attribute {number} [observe-scroll-threshold=0] - The number of pixels from the bottom to trigger the scroll bottom event. Only applicable if `observeScroll` is true.
+ * @attribute {boolean} [wrap-option-text=false] - Gets/sets whether the options will wrap their text or not. This only applies if `constrainPopupWidth` is `true`, if there is an explicit width set via CSS.
+ * @attribute {OverlayPlacement} [popover-placement="bottom"] - Gets/sets the placement of the popover.
+ * @attribute {IOverlayOffset} popover-offset - Gets/sets the offset of the popover.
+ * @attribute {OverlayFlipState} [popover-flip="auto"] - Gets/sets the flip state of the popover.
+ * @attribute {OverlayShiftState} [popover-shift="auto"] - Gets/sets whether the popover should shift to fit within the viewport.
  *
  * @cssproperty --forge-select-placeholder-color - The color of the placeholder text.
  * @cssproperty --forge-field-background - The background of the field surface.
@@ -176,6 +201,7 @@ export class SelectComponent
 {
   public static get observedAttributes(): string[] {
     return [
+      ...ListDropdownAware.observedAttributes,
       ...Object.values(BASE_FIELD_CONSTANTS.observedAttributes),
       ...Object.values(SELECT_CONSTANTS.observedAttributes),
       ...Object.values(BASE_SELECT_CONSTANTS.observedAttributes)

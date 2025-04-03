@@ -893,6 +893,104 @@ describe('Select', () => {
       expect(el[internals].validationMessage).to.equal('Custom error message');
     });
   });
+
+  describe('list dropdown API', () => {
+    it('should set popover placement', async () => {
+      const harness = await createFixture();
+
+      harness.element.popoverPlacement = 'right';
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverPlacement).to.equal('right');
+      expect(harness.popoverElement?.placement).to.equal('right');
+    });
+
+    it('should set popover placement from attribute', async () => {
+      const harness = await createFixture();
+
+      harness.element.setAttribute('popover-placement', 'right');
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverPlacement).to.equal('right');
+      expect(harness.popoverElement?.placement).to.equal('right');
+    });
+
+    it('should set popover flip', async () => {
+      const harness = await createFixture();
+
+      harness.element.popoverFlip = 'never';
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverFlip).to.equal('never');
+      expect(harness.popoverElement?.flip).to.equal('never');
+    });
+
+    it('should set popover flip from attribute', async () => {
+      const harness = await createFixture();
+
+      harness.element.setAttribute('popover-flip', 'never');
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverFlip).to.equal('never');
+      expect(harness.popoverElement?.flip).to.equal('never');
+    });
+
+    it('should set popover shift', async () => {
+      const harness = await createFixture();
+
+      harness.element.popoverShift = 'never';
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverShift).to.equal('never');
+      expect(harness.popoverElement?.shift).to.equal('never');
+    });
+
+    it('should set popover shift from attribute', async () => {
+      const harness = await createFixture();
+
+      harness.element.setAttribute('popover-shift', 'never');
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverShift).to.equal('never');
+      expect(harness.popoverElement?.shift).to.equal('never');
+    });
+
+    it('should set popover fallback placements', async () => {
+      const harness = await createFixture();
+
+      harness.element.popoverFallbackPlacements = ['top'];
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverFallbackPlacements).to.deep.equal(['top']);
+      expect(harness.popoverElement?.fallbackPlacements).to.deep.equal(['top']);
+    });
+
+    it('should set popover offset', async () => {
+      const harness = await createFixture();
+
+      harness.element.popoverOffset = { mainAxis: 10, crossAxis: 10 };
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverOffset).to.deep.equal({ mainAxis: 10, crossAxis: 10 });
+      expect(harness.popoverElement?.offset).to.deep.equal({ mainAxis: 10, crossAxis: 10 });
+    });
+  });
 });
 
 class SelectHarness extends TestHarness<ISelectComponent> {

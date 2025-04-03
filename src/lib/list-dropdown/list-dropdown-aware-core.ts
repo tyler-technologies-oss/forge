@@ -1,3 +1,5 @@
+import { PositionPlacement } from '../core/utils/position-utils';
+import { IOverlayOffset, OverlayFlipState, OverlayPlacement, OverlayShiftState } from '../overlay/overlay-constants';
 import { ListDropdownHeaderBuilder, ListDropdownFooterBuilder } from './list-dropdown-constants';
 
 export interface IListDropdownAwareCore {
@@ -10,6 +12,11 @@ export interface IListDropdownAwareCore {
   observeScrollThreshold: number;
   constrainPopupWidth: boolean;
   wrapOptionText: boolean;
+  popoverPlacement: OverlayPlacement;
+  popoverOffset: IOverlayOffset;
+  popoverFlip: OverlayFlipState;
+  popoverShift: OverlayShiftState;
+  popoverFallbackPlacements: PositionPlacement[] | null;
 }
 
 export abstract class ListDropdownAwareCore implements IListDropdownAwareCore {
@@ -22,6 +29,11 @@ export abstract class ListDropdownAwareCore implements IListDropdownAwareCore {
   protected _observeScrollThreshold = 0;
   protected _constrainPopupWidth = true;
   protected _wrapOptionText = false;
+  protected _popoverPlacement: OverlayPlacement;
+  protected _popoverOffset: IOverlayOffset;
+  protected _popoverFlip: OverlayFlipState;
+  protected _popoverShift: OverlayShiftState;
+  protected _popoverFallbackPlacements: PositionPlacement[] | null;
 
   public get syncPopupWidth(): boolean {
     return this._syncPopupWidth;
@@ -89,6 +101,41 @@ export abstract class ListDropdownAwareCore implements IListDropdownAwareCore {
   }
   public set wrapOptionText(value: boolean) {
     this._wrapOptionText = value;
+  }
+
+  public get popoverPlacement(): OverlayPlacement {
+    return this._popoverPlacement;
+  }
+  public set popoverPlacement(value: OverlayPlacement) {
+    this._popoverPlacement = value;
+  }
+
+  public get popoverOffset(): IOverlayOffset {
+    return this._popoverOffset;
+  }
+  public set popoverOffset(value: IOverlayOffset) {
+    this._popoverOffset = value;
+  }
+
+  public get popoverFlip(): OverlayFlipState {
+    return this._popoverFlip;
+  }
+  public set popoverFlip(value: OverlayFlipState) {
+    this._popoverFlip = value;
+  }
+
+  public get popoverShift(): OverlayShiftState {
+    return this._popoverShift;
+  }
+  public set popoverShift(value: OverlayShiftState) {
+    this._popoverShift = value;
+  }
+
+  public get popoverFallbackPlacements(): PositionPlacement[] | null {
+    return this._popoverFallbackPlacements;
+  }
+  public set popoverFallbackPlacements(value: PositionPlacement[] | null) {
+    this._popoverFallbackPlacements = value;
   }
 
   protected _applySelection(): void {}
