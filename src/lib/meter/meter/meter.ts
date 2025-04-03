@@ -1,4 +1,4 @@
-import { LitElement, PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
+import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -6,6 +6,7 @@ import { Theme } from '../../constants';
 import { setDefaultAria } from '../../core/utils/a11y-utils';
 import { toggleState } from '../../core/utils/utils';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { BaseLitElement } from '../../core/base/base-lit-element';
 
 import styles from './meter.scss';
 
@@ -61,7 +62,7 @@ const VALUE_STATE_MAP = new Map<MeterStatus, string>([
  * @slot value - A textual representation of the meter's value.
  */
 @customElement(METER_TAG_NAME)
-export class MeterComponent extends LitElement {
+export class MeterComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
   public static formAssociated = true;
 
