@@ -313,6 +313,7 @@ export interface ICalendarDateSelectEventData {
   range?: DateRange;
   rangeSelectionState?: RangeSelectionState;
   type: CalendarView;
+  rangeName?: string;
 }
 
 export interface ICalendarPredefinedDateRangeSelectEventData {

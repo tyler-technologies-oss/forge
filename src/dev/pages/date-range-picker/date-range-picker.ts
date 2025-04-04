@@ -29,7 +29,7 @@ dateRangePicker.addEventListener('forge-calendar-month-change', (evt) => {
 
 dateRangePicker.addEventListener('forge-date-range-picker-change', evt => {
   console.log('[forge-date-range-picker-change]', evt);
-  datePickerChangeStatusElement.textContent = ((evt.detail && evt.detail.from) || 'null') + ' - ' + ((evt.detail && evt.detail.to) || 'null');
+  datePickerChangeStatusElement.textContent = ((evt.detail && evt.detail.from) || 'null') + ' - ' + ((evt.detail && evt.detail.to) || 'null')  + ' - ' + ((evt.detail && evt.detail.rangeName) || 'null');
 });
 
 dateRangePickerFromInput.addEventListener('input', () => {

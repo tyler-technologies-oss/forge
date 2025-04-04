@@ -83,7 +83,8 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   protected _emitChangeEvent(value: DateRange | null | undefined, force?: boolean): boolean {
     const typedStartValue = this._getTypedValue((value && value.from) || null);
     const typedEndValue = this._getTypedValue((value && value.to) || null);
-    const detail: IDateRangePickerChangeEventData = new DatePickerRange({ from: typedStartValue, to: typedEndValue });
+    const rangeName = (value && value.rangeName) || null;
+    const detail: IDateRangePickerChangeEventData = new DatePickerRange({ from: typedStartValue, to: typedEndValue, rangeName: rangeName });
     const wasCancelled = !this._adapter.emitHostEvent(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, detail, true, !force);
     if (!wasCancelled) {
       this._setValue(this._coerceDateValue((value && value.from) || null));
@@ -107,7 +108,9 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     const todayFrom = new Date();
     todayFrom.setHours(0, 0, 0, 0);
     this._tryMergeCurrentTime({ from: today });
-    const range = this._open ? new DateRange({ from: this._from || todayFrom, to: this._to || today }) : new DateRange({ from: todayFrom, to: today });
+    const range = this._open
+      ? new DateRange({ from: this._from || todayFrom, to: this._to || today, rangeName: 'today' })
+      : new DateRange({ from: todayFrom, to: today, rangeName: 'today' });
     if (!this._isDateRangeAcceptable(range)) {
       return;
     }
@@ -126,12 +129,13 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
 
     this._tryMergeCurrentTime({ from: yesterdayFrom, to: yesterdayTo });
     const range = this._open
-      ? new DateRange({ from: this._from || yesterdayFrom, to: this._to || yesterdayTo })
-      : new DateRange({ from: yesterdayFrom, to: yesterdayTo });
+      ? new DateRange({ from: this._from || yesterdayFrom, to: this._to || yesterdayTo, rangeName: 'yesterday' })
+      : new DateRange({ from: yesterdayFrom, to: yesterdayTo, rangeName: 'yesterday' });
     if (!this._isDateRangeAcceptable(range)) {
       return;
     }
     this.value = range;
+    debugger;
     this._onDateSelected({ date: yesterdayFrom, range, selected: true, type: 'date' });
     this._adapter.setCalendarActiveDate(yesterdayFrom);
   }
@@ -146,8 +150,8 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
 
     this._tryMergeCurrentTime({ from: lastSevenDaysFrom, to: lastSevenDaysTo });
     const range = this._open
-      ? new DateRange({ from: this._from || lastSevenDaysFrom, to: this._to || lastSevenDaysTo })
-      : new DateRange({ from: lastSevenDaysFrom, to: lastSevenDaysTo });
+      ? new DateRange({ from: this._from || lastSevenDaysFrom, to: this._to || lastSevenDaysTo, rangeName: 'last 7 days' })
+      : new DateRange({ from: lastSevenDaysFrom, to: lastSevenDaysTo, rangeName: 'last 7 days' });
     if (!this._isDateRangeAcceptable(range)) {
       return;
     }
@@ -166,8 +170,8 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
 
     this._tryMergeCurrentTime({ from: lastThirtyDaysFrom, to: lastThirtyDaysTo });
     const range = this._open
-      ? new DateRange({ from: this._from || lastThirtyDaysFrom, to: this._to || lastThirtyDaysTo })
-      : new DateRange({ from: lastThirtyDaysFrom, to: lastThirtyDaysTo });
+      ? new DateRange({ from: this._from || lastThirtyDaysFrom, to: this._to || lastThirtyDaysTo, rangeName: 'last 30 days' })
+      : new DateRange({ from: lastThirtyDaysFrom, to: lastThirtyDaysTo, rangeName: 'last 30 days' });
     if (!this._isDateRangeAcceptable(range)) {
       return;
     }
@@ -262,7 +266,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   }
 
   protected _onDateSelected(event: ICalendarDateSelectEventData): void {
-    const value = event.range;
+    let value = event.range;
 
     if (event.rangeSelectionState === 'to') {
       this._closeCalendar(true);

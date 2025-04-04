@@ -2734,6 +2734,8 @@ export class CalendarCore implements ICalendarCore {
   public today(): void {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 0);
     this._goToDate(today, true);
     if (this._todayCallback) {
       this._todayCallback();
@@ -2750,7 +2752,7 @@ export class CalendarCore implements ICalendarCore {
 
     const dateRange = [yesterdayFrom, yesterdayTo];
     this._adapter.setRange(dateRange);
-    this._goToDate(today, true);
+    this._goToDate(yesterdayFrom, true);
 
     if (this._yesterdayCallback) {
       this._yesterdayCallback();
