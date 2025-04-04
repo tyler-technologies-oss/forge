@@ -251,7 +251,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
 
     const form = this._component.getAttribute('form');
     if (form) {
-      this._component.setAttribute('form', form);
+      this._nativeSubmitButton.setAttribute('form', form);
     }
 
     // Prevent click events from being handled by the button component to avoid forms being
