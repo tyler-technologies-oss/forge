@@ -3,6 +3,7 @@
 @use '../state-layer';
 @use '../focus-indicator';
 @use '../circular-progress';
+@use '../app-bar/app-bar';
 @use '../icon';
 
 //
@@ -126,6 +127,29 @@ forge-focus-indicator {
 @include theme(error);
 @include theme(warning);
 @include theme(info);
+
+//
+// App bar theme
+//
+
+:host([theme='app-bar']) {
+  @include provide-theme(
+    (
+      text-color: #{app-bar.token(theme-foreground)},
+      outlined-color: #{app-bar.token(theme-foreground)},
+      outlined-border-color: #{app-bar.token(theme-foreground)},
+      link-color: #{app-bar.token(theme-foreground)}
+    )
+  );
+
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme(
+      (
+        color: #{app-bar.token(theme-foreground)}
+      )
+    );
+  }
+}
 
 //
 // Variants

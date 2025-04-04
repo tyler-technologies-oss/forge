@@ -67,6 +67,7 @@ declare global {
 export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   public static get observedAttributes(): string[] {
     return [
+      ...ListDropdownAware.observedAttributes,
       MENU_CONSTANTS.attributes.OPEN,
       MENU_CONSTANTS.attributes.PLACEMENT,
       MENU_CONSTANTS.attributes.SELECTED_INDEX,

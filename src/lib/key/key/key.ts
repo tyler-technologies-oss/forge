@@ -1,7 +1,8 @@
-import { LitElement, TemplateResult, html, unsafeCSS } from 'lit';
+import { TemplateResult, html, unsafeCSS } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { BaseLitElement } from '../../core/base/base-lit-element';
 
 import styles from './key.scss';
 
@@ -20,7 +21,7 @@ export const KEY_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-key';
  * @csspart root - The root element.
  */
 @customElement(KEY_TAG_NAME)
-export class KeyComponent extends LitElement {
+export class KeyComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */

@@ -1,3 +1,64 @@
+# v3.8.0 (Thu Apr 03 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Eli Ganem ([@eliganemtyler](https://github.com/eliganemtyler)), for all your work!
+
+#### 🚀 Enhancement
+
+- feat: expose popover APIs in select, autocomplete, and menu [#899](https://github.com/tyler-technologies-oss/forge/pull/899) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(app-bar): remove default auto-theming in favor of scoped CSS variables and theme attribute [#894](https://github.com/tyler-technologies-oss/forge/pull/894) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(scrollbar): add `variable` mixin for consistent usage with other modules [#897](https://github.com/tyler-technologies-oss/forge/pull/897) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(dialog): add "reason" for why dialog is about to close to event `detail` [#875](https://github.com/tyler-technologies-oss/forge/pull/875) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(badge): refactor to use Lit [#879](https://github.com/tyler-technologies-oss/forge/pull/879) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(card): refactor to use Lit [#874](https://github.com/tyler-technologies-oss/forge/pull/874) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(dialog): automatically apply `height: auto` to slotted `<forge-scaffold>` [#866](https://github.com/tyler-technologies-oss/forge/pull/866) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: update imask dependency from 6.6.1 to 7.1.3 [#870](https://github.com/tyler-technologies-oss/forge/pull/870) ([@DRiFTy17](https://github.com/DRiFTy17))
+- Feat/expansion panel target button [#775](https://github.com/tyler-technologies-oss/forge/pull/775) ([@eliganemtyler](https://github.com/eliganemtyler) [@DRiFTy17](https://github.com/DRiFTy17))
+- chore: upgrade typescript to 5.8.2 [#871](https://github.com/tyler-technologies-oss/forge/pull/871) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix: readopt styles in Lit-based components when adopted [#900](https://github.com/tyler-technologies-oss/forge/pull/900) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(app-bar): remove default width to allow for wider logos without overriding styles [#896](https://github.com/tyler-technologies-oss/forge/pull/896) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(table): fixed a bug where the table head cell border could be hidden [#895](https://github.com/tyler-technologies-oss/forge/pull/895) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: updated how overlay positioning is handled when overflowing the viewport bounds [#883](https://github.com/tyler-technologies-oss/forge/pull/883) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(dialog): update accessible label and description handling for improved ARIA support [#888](https://github.com/tyler-technologies-oss/forge/pull/888) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: enable Lit-based component compatibility with Forge `@customElement` decorator [#889](https://github.com/tyler-technologies-oss/forge/pull/889) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(select): fix duplicate `label` CSS part [#892](https://github.com/tyler-technologies-oss/forge/pull/892) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore(stepper-constants): fix to set explicit index type for compatibility [#887](https://github.com/tyler-technologies-oss/forge/pull/887) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(autocomplete): fixed an issue where aria-controls attr was being removed when the popover closed [#882](https://github.com/tyler-technologies-oss/forge/pull/882) ([@nickonometry](https://github.com/nickonometry))
+- fix(table): fixed a bug where pressing space key would not trigger row selection handling [#877](https://github.com/tyler-technologies-oss/forge/pull/877) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(switch): improve contrast when disabled [#885](https://github.com/tyler-technologies-oss/forge/pull/885) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list-item): fix regression related to slotted `<button>` width applying to other child elements [#884](https://github.com/tyler-technologies-oss/forge/pull/884) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(profile-card): focus profile button before sign out button if available [#881](https://github.com/tyler-technologies-oss/forge/pull/881) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(app-bar-profile-button): adjust default tooltip placement [#880](https://github.com/tyler-technologies-oss/forge/pull/880) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(dialog): use capturing keydown listener [#869](https://github.com/tyler-technologies-oss/forge/pull/869) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(button): use grid layout instead of flex to avoid text nodes collapsing [#867](https://github.com/tyler-technologies-oss/forge/pull/867) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: revert `eslint-config-prettier` version upgrade [#876](https://github.com/tyler-technologies-oss/forge/pull/876) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(avatar): hide text when image is rendered [#863](https://github.com/tyler-technologies-oss/forge/pull/863) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: move `toggleState()` helper to general utils and export from lib [#864](https://github.com/tyler-technologies-oss/forge/pull/864) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: bump dependency versions [#873](https://github.com/tyler-technologies-oss/forge/pull/873) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(paginator): add docs about the alternative variant [#878](https://github.com/tyler-technologies-oss/forge/pull/878) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: demo cleanup [#886](https://github.com/tyler-technologies-oss/forge/pull/886) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs: improve documentation across various pages [#865](https://github.com/tyler-technologies-oss/forge/pull/865) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs: fix demo style code formatting [#872](https://github.com/tyler-technologies-oss/forge/pull/872) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🔩 Dependency Updates
+
+- chore: fix lint warning due to typescript compatibility with legacy shared lint rules package [#890](https://github.com/tyler-technologies-oss/forge/pull/890) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 3
+
+- Eli Ganem ([@eliganemtyler](https://github.com/eliganemtyler))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+
+---
+
 # v3.7.0 (Fri Mar 07 2025)
 
 :tada: This release contains work from new contributors! :tada:
