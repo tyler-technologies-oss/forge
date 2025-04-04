@@ -84,7 +84,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     const typedStartValue = this._getTypedValue((value && value.from) || null);
     const typedEndValue = this._getTypedValue((value && value.to) || null);
     const rangeName = (value && value.rangeName) || null;
-    const detail: IDateRangePickerChangeEventData = new DatePickerRange({ from: typedStartValue, to: typedEndValue, rangeName: rangeName });
+    const detail: IDateRangePickerChangeEventData = new DatePickerRange({ from: typedStartValue, to: typedEndValue, rangeName });
     const wasCancelled = !this._adapter.emitHostEvent(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, detail, true, !force);
     if (!wasCancelled) {
       this._setValue(this._coerceDateValue((value && value.from) || null));
@@ -135,7 +135,6 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
       return;
     }
     this.value = range;
-    debugger;
     this._onDateSelected({ date: yesterdayFrom, range, selected: true, type: 'date' });
     this._adapter.setCalendarActiveDate(yesterdayFrom);
   }
@@ -266,7 +265,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   }
 
   protected _onDateSelected(event: ICalendarDateSelectEventData): void {
-    let value = event.range;
+    const value = event.range;
 
     if (event.rangeSelectionState === 'to') {
       this._closeCalendar(true);
