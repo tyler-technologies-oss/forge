@@ -14,9 +14,9 @@ export interface IFilePickerCore {
 
 export class FilePickerCore implements IFilePickerCore {
   private _isInitialized = false;
-  private _accept: Nullable<string>;
-  private _maxSize: Nullable<number>;
-  private _capture: Nullable<string>;
+  private _accept: Nullable<string> = null;
+  private _maxSize: Nullable<number> = null;
+  private _capture: Nullable<string> = null;
   private _multiple = false;
   private _disabled = false;
   private _compact = false;
