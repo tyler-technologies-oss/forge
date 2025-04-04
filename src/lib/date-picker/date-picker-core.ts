@@ -44,6 +44,13 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
     this._onDateSelected({ date: today, selected: true, type: 'date' });
   }
 
+  protected _onYesterday(): void {
+    const today = new Date();
+    const yesterday = new Date(today.setDate(today.getDate() - 1));
+    this._tryMergeCurrentTime(yesterday);
+    this._onDateSelected({ date: yesterday, selected: true, type: 'date' });
+  }
+
   protected _onClear(): void {
     this._onDateSelected({ date: null, selected: false, type: 'date' });
   }

@@ -190,7 +190,7 @@
 
 @mixin footer() {
   padding: var(--forge-calendar-controls-padding, 0);
-  display: flex;
+  display: flex-wrap;
   align-items: center;
   justify-content: space-between;
 }
