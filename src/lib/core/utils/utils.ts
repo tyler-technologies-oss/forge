@@ -1,4 +1,7 @@
 export const ARIA_CONTROLS_PLACEHOLDER_ID = 'forge-aria-controls-placeholder';
+
+export type Nullable<T> = T | null | undefined;
+
 /**
  * Highlights text in the given label by converting it to HTML and using a `<span>` tag to show the highlighted text within the original label.
  * @param label The full text.

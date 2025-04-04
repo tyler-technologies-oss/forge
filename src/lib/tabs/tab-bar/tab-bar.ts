@@ -1,22 +1,23 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, coreProperty, customElement } from '@tylertech/forge-core';
+import { tylIconKeyboardArrowDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp } from '@tylertech/tyler-icons/standard';
+import { setDefaultAria } from '../../constants';
+import { Nullable } from '../../core';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
 import { IconComponent, IconRegistry } from '../../icon';
 import { IconButtonComponent } from '../../icon-button';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { TabComponent } from '../tab/tab';
 import { TabBarAdapter } from './tab-bar-adapter';
 import { ITabBarChangeEventData, TAB_BAR_CONSTANTS } from './tab-bar-constants';
 import { TabBarCore } from './tab-bar-core';
-import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
-import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
-import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
-import { setDefaultAria } from '../../constants';
 
 import template from './tab-bar.html';
 import styles from './tab-bar.scss';
 
 export interface ITabBarComponent extends IBaseComponent, IWithDefaultAria, IWithElementInternals {
   disabled: boolean;
-  activeTab: number | null | undefined;
+  activeTab: Nullable<number>;
   vertical: boolean;
   clustered: boolean;
   stacked: boolean;
@@ -143,7 +144,7 @@ export class TabBarComponent extends WithDefaultAria(WithElementInternals(BaseCo
   declare public disabled: boolean;
 
   @coreProperty()
-  declare public activeTab: number | null | undefined;
+  declare public activeTab: Nullable<number>;
 
   @coreProperty()
   declare public vertical: boolean;

@@ -1,5 +1,6 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, ensureChild, coreProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, coreProperty, customElement, ensureChild } from '@tylertech/forge-core';
 import { tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
+import { Nullable } from '../core';
 import { DividerComponent } from '../divider';
 import { IconComponent, IconRegistry } from '../icon';
 import { LinearProgressComponent } from '../linear-progress';
@@ -10,11 +11,11 @@ import { SkeletonComponent } from '../skeleton';
 import { TextFieldComponent } from '../text-field';
 import { AutocompleteAdapter } from './autocomplete-adapter';
 import {
+  AUTOCOMPLETE_CONSTANTS,
   AutocompleteFilterCallback,
   AutocompleteMode,
   AutocompleteOptionBuilder,
   AutocompleteSelectedTextBuilder,
-  AUTOCOMPLETE_CONSTANTS,
   IAutocompleteForceFilterOptions,
   IAutocompleteOption,
   IAutocompleteOptionGroup,
@@ -33,11 +34,11 @@ export interface IAutocompleteComponent extends IListDropdownAware {
   filterOnFocus: boolean;
   filterFocusFirst: boolean;
   allowUnmatched: boolean;
-  matchKey: string | null | undefined;
+  matchKey: Nullable<string>;
   popupTarget: string;
   filterText: string;
-  filter: AutocompleteFilterCallback | null | undefined;
-  optionBuilder: AutocompleteOptionBuilder | null | undefined;
+  filter: Nullable<AutocompleteFilterCallback>;
+  optionBuilder: Nullable<AutocompleteOptionBuilder>;
   selectedTextBuilder: AutocompleteSelectedTextBuilder;
   popupElement: HTMLElement | null;
   beforeValueChange: (value: any) => boolean | Promise<boolean>;
@@ -226,11 +227,11 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
 
   /** Sets the option builder callback that will be executed when building the option list in the dropdown. */
   @coreProperty()
-  declare public optionBuilder: AutocompleteOptionBuilder | null | undefined;
+  declare public optionBuilder: Nullable<AutocompleteOptionBuilder>;
 
   /** Sets the filter callback that will be executed when fetching options for the autocomplete dropdown. */
   @coreProperty()
-  declare public filter: AutocompleteFilterCallback | null | undefined;
+  declare public filter: Nullable<AutocompleteFilterCallback>;
 
   /** Sets the selected text builder callback that will be executed when getting the selected text. */
   @coreProperty()
@@ -249,7 +250,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
    * @attribute match-key
    */
   @coreProperty()
-  declare public matchKey: string | null | undefined;
+  declare public matchKey: Nullable<string>;
 
   /**
    * Returns whether the component has been initialized or not yet.

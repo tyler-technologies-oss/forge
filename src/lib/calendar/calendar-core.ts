@@ -55,6 +55,7 @@ import {
 } from './calendar-utils';
 import { ICalendarBase } from './core/calendar-base';
 import { DateRange } from './core/date-range';
+import { Nullable } from '../core';
 
 export interface ICalendarCore extends ICalendarBase {
   mode: CalendarMode;
@@ -2062,11 +2063,11 @@ export class CalendarCore implements ICalendarCore {
   }
 
   /** Get/set disabled dates */
-  public get disabledDates(): Date | Date[] | null | undefined {
+  public get disabledDates(): Nullable<Date | Date[]> {
     const dates = this._disabledDates.map(d => new Date(d));
     return dates.length ? dates : null;
   }
-  public set disabledDates(value: Date | Date[] | null | undefined) {
+  public set disabledDates(value: Nullable<Date | Date[]>) {
     const dates = value ? (isArray(value) ? value : [value]) : [];
     this._disabledDates = (dates as Date[]).map(d => {
       const date = new Date(d);
@@ -2080,10 +2081,10 @@ export class CalendarCore implements ICalendarCore {
   }
 
   /** Get/set disabled days of week */
-  public get disabledDaysOfWeek(): DayOfWeek | DayOfWeek[] | null | undefined {
+  public get disabledDaysOfWeek(): Nullable<DayOfWeek | DayOfWeek[]> {
     return this._disabledDaysOfWeek.length ? [...this._disabledDaysOfWeek] : null;
   }
-  public set disabledDaysOfWeek(value: DayOfWeek | DayOfWeek[] | null | undefined) {
+  public set disabledDaysOfWeek(value: Nullable<DayOfWeek | DayOfWeek[]>) {
     this._disabledDaysOfWeek = (isDefined(value) ? (isArray(value) ? value : [value]) : []) as DayOfWeek[];
 
     if (this._isInitialized) {
@@ -2104,10 +2105,10 @@ export class CalendarCore implements ICalendarCore {
   }
 
   /** Get/set events */
-  public get events(): ICalendarEvent[] | null | undefined {
+  public get events(): Nullable<ICalendarEvent[]> {
     return this._events ? [...this._events] : null;
   }
-  public set events(value: ICalendarEvent[] | null | undefined) {
+  public set events(value: Nullable<ICalendarEvent[]>) {
     this._events = value?.length ? [...value] : [];
 
     if (this._isInitialized) {
@@ -2173,10 +2174,10 @@ export class CalendarCore implements ICalendarCore {
   }
 
   /** Get/set max date */
-  public get max(): Date | string | null | undefined {
+  public get max(): Nullable<Date | string> {
     return this._max;
   }
-  public set max(value: Date | string | null | undefined) {
+  public set max(value: Nullable<Date | string>) {
     if (this._maxAttribute !== value) {
       this._maxAttribute = value?.toString() ?? null;
       this._max = coerceDateFromValue(value);
@@ -2199,10 +2200,10 @@ export class CalendarCore implements ICalendarCore {
   }
 
   /** Get/set min date */
-  public get min(): Date | string | null | undefined {
+  public get min(): Nullable<Date | string> {
     return this._min;
   }
-  public set min(value: Date | string | null | undefined) {
+  public set min(value: Nullable<Date | string>) {
     if (this._minAttribute !== value) {
       this._minAttribute = value?.toString() ?? null;
       this._min = coerceDateFromValue(value);
@@ -2363,7 +2364,7 @@ export class CalendarCore implements ICalendarCore {
   }
 
   /** Get/set value */
-  public get value(): Date | Date[] | DateRange | null | undefined {
+  public get value(): Nullable<Date | Date[] | DateRange> {
     if (this._mode === 'range') {
       return this._rangeSelectionStore ?? getDateRangeFromDates(this._value);
     }
@@ -2371,7 +2372,7 @@ export class CalendarCore implements ICalendarCore {
     const dates = this._value.map(d => new Date(d));
     return this._mode === 'multiple' ? dates : dates.length ? dates[0] : null;
   }
-  public set value(value: Date | Date[] | DateRange | null | undefined) {
+  public set value(value: Nullable<Date | Date[] | DateRange>) {
     let dates: Date[] = [];
 
     this._rangeSelectionStore = undefined;
@@ -2416,10 +2417,10 @@ export class CalendarCore implements ICalendarCore {
   }
 
   /** Get/set weekend days */
-  public get weekendDays(): DayOfWeek[] | null | undefined {
+  public get weekendDays(): Nullable<DayOfWeek[]> {
     return this._weekendDays ? [...this._weekendDays] : null;
   }
-  public set weekendDays(value: DayOfWeek[] | null | undefined) {
+  public set weekendDays(value: Nullable<DayOfWeek[]>) {
     this._weekendDays = value?.map(v => +v) ?? null;
 
     if (this._isInitialized) {

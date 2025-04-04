@@ -31,6 +31,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './calendar.html';
 import styles from './calendar.scss';
+import { Nullable } from '../core';
 
 export interface ICalendarComponent extends ICalendarBase, IBaseComponent {
   mode: CalendarMode;
@@ -41,9 +42,9 @@ export interface ICalendarComponent extends ICalendarBase, IBaseComponent {
   menuAnimation: CalendarMenuAnimationType;
   clearButton: boolean;
   todayButton: boolean;
-  clearCallback: (() => void) | undefined;
-  todayCallback: (() => void) | undefined;
-  tooltipBuilder: CalendarTooltipBuilder | undefined;
+  clearCallback: Nullable<() => void>;
+  todayCallback: Nullable<() => void>;
+  tooltipBuilder: Nullable<CalendarTooltipBuilder>;
   clear(): void;
   today(): void;
   selectDate(date: Date, setFocus?: boolean): void;
@@ -283,37 +284,37 @@ export class CalendarComponent extends BaseComponent implements ICalendarCompone
   declare public clearButton: boolean;
 
   @coreProperty()
-  declare public clearCallback: (() => void) | undefined;
+  declare public clearCallback: Nullable<() => void>;
 
   @coreProperty()
   declare public constrainToEnabled: boolean;
 
   @coreProperty()
-  declare public dateBuilder: CalendarDateBuilder | undefined;
+  declare public dateBuilder: Nullable<CalendarDateBuilder>;
 
   @coreProperty()
-  declare public dateSelectCallback: CalendarDateSelectCallback | undefined;
+  declare public dateSelectCallback: Nullable<CalendarDateSelectCallback>;
 
   @coreProperty()
-  declare public dayBuilder: CalendarDayBuilder | undefined;
+  declare public dayBuilder: Nullable<CalendarDayBuilder>;
 
   @coreProperty()
-  declare public disabledDateBuilder: ((date: Date) => boolean) | undefined;
+  declare public disabledDateBuilder: Nullable<(date: Date) => boolean>;
 
   @coreProperty()
-  declare public disabledDates: Date | Date[] | null | undefined;
+  declare public disabledDates: Nullable<Date | Date[]>;
 
   @coreProperty()
-  declare public disabledDaysOfWeek: DayOfWeek | DayOfWeek[] | null | undefined;
+  declare public disabledDaysOfWeek: Nullable<DayOfWeek | DayOfWeek[]>;
 
   @coreProperty()
   declare public eventBuilder: CalendarEventBuilder | undefined;
 
   @coreProperty()
-  declare public events: ICalendarEvent[] | null | undefined;
+  declare public events: Nullable<ICalendarEvent[]>;
 
   @coreProperty()
-  declare public firstDayOfWeek: DayOfWeek | undefined;
+  declare public firstDayOfWeek: Nullable<DayOfWeek>;
 
   @coreProperty()
   declare public fixedHeight: boolean;
@@ -322,16 +323,16 @@ export class CalendarComponent extends BaseComponent implements ICalendarCompone
   declare public listYears: boolean;
 
   @coreProperty()
-  declare public locale: string | undefined;
+  declare public locale: Nullable<string>;
 
   @coreProperty()
-  declare public max: Date | string | null | undefined;
+  declare public max: Nullable<Date | string>;
 
   @coreProperty()
   declare public menuAnimation: CalendarMenuAnimationType;
 
   @coreProperty()
-  declare public min: Date | string | null | undefined;
+  declare public min: Nullable<Date | string>;
 
   @coreProperty()
   declare public mode: CalendarMode;
@@ -361,19 +362,19 @@ export class CalendarComponent extends BaseComponent implements ICalendarCompone
   declare public todayButton: boolean;
 
   @coreProperty()
-  declare public todayCallback: (() => void) | undefined;
+  declare public todayCallback: Nullable<() => void>;
 
   @coreProperty()
-  declare public tooltipBuilder: CalendarTooltipBuilder | undefined;
+  declare public tooltipBuilder: Nullable<CalendarTooltipBuilder>;
 
   @coreProperty()
-  declare public value: Date | Date[] | DateRange | null | undefined;
+  declare public value: Nullable<Date | Date[] | DateRange>;
 
   @coreProperty()
   declare public view: CalendarView;
 
   @coreProperty()
-  declare public weekendDays: DayOfWeek[] | null | undefined;
+  declare public weekendDays: Nullable<DayOfWeek[]>;
 
   @coreProperty()
   declare public year: number;

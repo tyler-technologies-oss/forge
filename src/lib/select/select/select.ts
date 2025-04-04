@@ -2,7 +2,7 @@ import { attachShadowTemplate, coerceBoolean, coreProperty, customElement } from
 import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
 import { CircularProgressComponent } from '../../circular-progress';
 import { getFormValue, getValidationMessage, inputType, internals, setDefaultAria, setValidity } from '../../constants';
-import { FormValue } from '../../core';
+import { FormValue, Nullable } from '../../core';
 import { IWithFocusable, WithFocusable } from '../../core/mixins/focus/with-focusable';
 import { IWithFormAssociation, WithFormAssociation } from '../../core/mixins/form/with-form-associated';
 import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
@@ -38,7 +38,7 @@ export interface ISelectComponent
     IListDropdownAware {
   label: string;
   placeholder: string;
-  setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void;
+  setFormValue(value: FormValue | null, state?: Nullable<FormValue>): void;
   [setValidity](): void;
 }
 
@@ -277,7 +277,7 @@ export class SelectComponent
     this[setDefaultAria]({ ariaLabel: value });
   }
 
-  public setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void {
+  public setFormValue(value: FormValue | null, state?: Nullable<FormValue>): void {
     this[internals].setFormValue(value, state);
   }
 

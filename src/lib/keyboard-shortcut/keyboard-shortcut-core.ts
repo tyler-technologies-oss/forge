@@ -1,9 +1,10 @@
+import { Nullable } from '../core';
 import { IKeyboardShortcutAdapter } from './keyboard-shortcut-adapter';
 import { IKeyCombination, KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback } from './keyboard-shortcut-constants';
 import { elementAcceptsTextInput, matchKeyCombination, parseKeyCombinations } from './keyboard-shortcut-utils';
 
 export interface IKeyboardShortcutCore {
-  key: string | null | undefined;
+  key: Nullable<string>;
   target: string;
   global: boolean;
   allowWhileTyping: boolean;
@@ -11,11 +12,11 @@ export interface IKeyboardShortcutCore {
   capture: boolean;
   useCode: boolean;
   disabled: boolean;
-  activateCallback: KeyboardShortcutActivateCallback | null | undefined;
+  activateCallback: Nullable<KeyboardShortcutActivateCallback>;
 }
 
 export class KeyboardShortcutCore implements IKeyboardShortcutCore {
-  private _key: string | null | undefined;
+  private _key: Nullable<string>;
   private _target: string;
   private _global = false;
   private _allowWhileTyping = false;
@@ -23,7 +24,7 @@ export class KeyboardShortcutCore implements IKeyboardShortcutCore {
   private _capture = false;
   private _useCode = false;
   private _disabled = false;
-  private _activateCallback: KeyboardShortcutActivateCallback | null | undefined;
+  private _activateCallback: Nullable<KeyboardShortcutActivateCallback>;
   private _keyCombinations: IKeyCombination[] = [];
   private _keyDownListener: (evt: KeyboardEvent) => void;
 
@@ -92,10 +93,10 @@ export class KeyboardShortcutCore implements IKeyboardShortcutCore {
   }
 
   /** Gets/sets the key binding. */
-  public get key(): string | null | undefined {
+  public get key(): Nullable<string> {
     return this._key;
   }
-  public set key(value: string | null | undefined) {
+  public set key(value: Nullable<string>) {
     if (this._key !== value) {
       this._key = value;
       this._adapter.toggleHostAttribute(KEYBOARD_SHORTCUT_CONSTANTS.attributes.KEY, !!this.key, this._key || '');
@@ -197,10 +198,10 @@ export class KeyboardShortcutCore implements IKeyboardShortcutCore {
   }
 
   /** Gets/sets the activation callback. */
-  public get activateCallback(): KeyboardShortcutActivateCallback | null | undefined {
+  public get activateCallback(): Nullable<KeyboardShortcutActivateCallback> {
     return this._activateCallback;
   }
-  public set activateCallback(value: KeyboardShortcutActivateCallback | null | undefined) {
+  public set activateCallback(value: Nullable<KeyboardShortcutActivateCallback>) {
     this._activateCallback = value;
   }
 }

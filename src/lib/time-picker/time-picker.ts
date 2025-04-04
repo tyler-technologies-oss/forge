@@ -1,39 +1,40 @@
-import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumber, ensureChild } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, coreProperty, customElement, ensureChild } from '@tylertech/forge-core';
 import { tylIconClockOutline } from '@tylertech/tyler-icons/extended';
 import { tylIconClose } from '@tylertech/tyler-icons/standard';
-import { TimePickerAdapter } from './time-picker-adapter';
-import { TimePickerCore } from './time-picker-core';
-import {
-  TIME_PICKER_CONSTANTS,
-  ITimePickerOption,
-  TimePickerParseCallback,
-  TimePickerValidationCallback,
-  TimePickerFormatCallback,
-  TimePickerCoercionCallback,
-  TimePickerPrepareMaskCallback
-} from './time-picker-constants';
-import { IconRegistry, IconComponent } from '../icon';
-import { IconButtonComponent } from '../icon-button';
-import { DialogComponent } from '../dialog';
-import { ListComponent, ListItemComponent } from '../list';
+import { Nullable } from '../core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { DialogComponent } from '../dialog';
+import { IconComponent, IconRegistry } from '../icon';
+import { IconButtonComponent } from '../icon-button';
+import { ListComponent, ListItemComponent } from '../list';
 import { PopoverComponent } from '../popover/popover';
+import { TimePickerAdapter } from './time-picker-adapter';
+import {
+  ITimePickerOption,
+  TIME_PICKER_CONSTANTS,
+  TimePickerCoercionCallback,
+  TimePickerFormatCallback,
+  TimePickerParseCallback,
+  TimePickerPrepareMaskCallback,
+  TimePickerValidationCallback
+} from './time-picker-constants';
+import { TimePickerCore } from './time-picker-core';
 
 import template from './time-picker.html';
 import styles from './time-picker.scss';
 
 export interface ITimePickerComponent extends IBaseComponent {
-  value: string | null | undefined;
+  value: Nullable<string>;
   open: boolean;
   allowSeconds: boolean;
   masked: boolean;
   showMaskFormat: boolean;
   use24HourTime: boolean;
   allowInvalidTime: boolean;
-  min: string | null | undefined;
-  max: string | null | undefined;
+  min: Nullable<string>;
+  max: Nullable<string>;
   restrictedTimes: string[];
-  startTime: string | null | undefined;
+  startTime: Nullable<string>;
   step: number;
   allowInput: boolean;
   showNow: boolean;
@@ -176,7 +177,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute
    */
   @coreProperty()
-  declare public value: string | null | undefined;
+  declare public value: Nullable<string>;
 
   /**
    * Whether or not the time picker is open.
@@ -232,7 +233,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute
    */
   @coreProperty()
-  declare public min: string | null | undefined;
+  declare public min: Nullable<string>;
 
   /**
    * The maximum time that can be selected.
@@ -240,7 +241,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute
    */
   @coreProperty()
-  declare public max: string | null | undefined;
+  declare public max: Nullable<string>;
 
   /**
    * An array of times that cannot be selected.
@@ -256,7 +257,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
    * @attribute start-time
    */
   @coreProperty()
-  declare public startTime: string | null | undefined;
+  declare public startTime: Nullable<string>;
 
   /**
    * The step interval for the time picker.

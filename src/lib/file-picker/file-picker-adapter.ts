@@ -2,7 +2,7 @@ import { getShadowElement, emitEvent } from '@tylertech/forge-core';
 
 import { IFilePickerComponent } from './file-picker';
 import { FILE_PICKER_CONSTANTS } from './file-picker-constants';
-import { BaseAdapter, IBaseAdapter } from '../core';
+import { BaseAdapter, IBaseAdapter, Nullable } from '../core';
 import { IButtonComponent } from '../button';
 
 export interface IFilePickerAdapter extends IBaseAdapter {
@@ -19,8 +19,8 @@ export interface IFilePickerAdapter extends IBaseAdapter {
   removeDropListener(listener: (evt: DragEvent) => void): void;
   initializeButton(): void;
   setHighlightState(value: boolean): void;
-  setAccept(value: string | null | undefined): void;
-  setCapture(value: string | null | undefined): void;
+  setAccept(value: Nullable<string>): void;
+  setCapture(value: Nullable<string>): void;
   setMultiple(value: boolean): void;
   setDisabled(value: boolean): void;
   setCompact(value: boolean): void;
@@ -115,7 +115,7 @@ export class FilePickerAdapter extends BaseAdapter<IFilePickerComponent> impleme
    * Sets the accept attribute of the input.
    * @param value The accept string.
    */
-  public setAccept(value: string | null | undefined): void {
+  public setAccept(value: Nullable<string>): void {
     if (value) {
       this._input.setAttribute('accept', value);
     } else {
@@ -127,7 +127,7 @@ export class FilePickerAdapter extends BaseAdapter<IFilePickerComponent> impleme
    * Sets the capture attribute of the input.
    * @param value The capture string.
    */
-  public setCapture(value: string | null | undefined): void {
+  public setCapture(value: Nullable<string>): void {
     if (value) {
       this._input.setAttribute('capture', value);
     } else {

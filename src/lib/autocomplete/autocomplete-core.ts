@@ -1,5 +1,5 @@
 import { debounce, isDefined, isString, Platform, randomChars } from '@tylertech/forge-core';
-import { highlightTextHTML } from '../core';
+import { highlightTextHTML, Nullable } from '../core';
 import { IListItemComponent } from '../list';
 import {
   IListDropdownConfig,
@@ -27,19 +27,19 @@ import { getSelectedOption, isOptionType, optionEqualPredicate, OptionType } fro
 export interface IAutocompleteCore extends IListDropdownAwareCore {
   mode: AutocompleteMode;
   multiple: boolean;
-  value: string | string[] | IAutocompleteOption | IAutocompleteOption[] | null | undefined;
+  value: Nullable<string | string[] | IAutocompleteOption | IAutocompleteOption[]>;
   debounce: number;
   filterOnFocus: boolean;
   filterFocusFirst: boolean;
   allowUnmatched: boolean;
   popupTarget: string;
   filterText: string;
-  optionBuilder: AutocompleteOptionBuilder | null | undefined;
-  filter: AutocompleteFilterCallback | null | undefined;
+  optionBuilder: Nullable<AutocompleteOptionBuilder>;
+  filter: Nullable<AutocompleteFilterCallback>;
   selectedTextBuilder: AutocompleteSelectedTextBuilder;
   isInitialized: boolean;
   open: boolean;
-  matchKey: string | null | undefined;
+  matchKey: Nullable<string>;
   appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   beforeValueChange: (value: any) => boolean | Promise<boolean>;
   forceFilter(opts: IAutocompleteForceFilterOptions): void;
@@ -662,7 +662,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
    * Retrieves the current value(s) from the selected options array based on whether
    * we are in multi-select mode or not.
    */
-  private _getValue(): string | string[] | null | undefined {
+  private _getValue(): Nullable<string | string[]> {
     if (!this._values) {
       return null;
     }
@@ -714,7 +714,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
     this._closeDropdown();
   }
 
-  private async _applyValue(value: string | string[] | IAutocompleteOption | IAutocompleteOption[] | null | undefined): Promise<void> {
+  private async _applyValue(value: Nullable<string | string[] | IAutocompleteOption | IAutocompleteOption[]>): Promise<void> {
     let values: any[] = [];
     this._selectedOptions = [];
 
@@ -827,10 +827,10 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   /** Gets/sets the value of the component. */
-  public get value(): string | string[] | IAutocompleteOption | IAutocompleteOption[] | null | undefined {
+  public get value(): Nullable<string | string[] | IAutocompleteOption | IAutocompleteOption[]> {
     return this._getValue();
   }
-  public set value(value: string | string[] | IAutocompleteOption | IAutocompleteOption[] | null | undefined) {
+  public set value(value: Nullable<string | string[] | IAutocompleteOption | IAutocompleteOption[]>) {
     let values: Array<string | IAutocompleteOption | IAutocompleteOption[] | string[]> = [];
 
     if (value == null) {
@@ -889,10 +889,10 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   /** Gets/sets the property key to match the value to an option.  */
-  public get matchKey(): string | null | undefined {
+  public get matchKey(): Nullable<string | null> {
     return this._matchKey;
   }
-  public set matchKey(value: string | null | undefined) {
+  public set matchKey(value: Nullable<string | null>) {
     if (this._matchKey !== value) {
       this._matchKey = value;
     }
@@ -987,18 +987,18 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   /** Sets the item builder callback that will be executed when building the option list in the dropdown. */
-  public get optionBuilder(): AutocompleteOptionBuilder | null | undefined {
+  public get optionBuilder(): Nullable<AutocompleteOptionBuilder> {
     return this._optionBuilder;
   }
-  public set optionBuilder(fn: AutocompleteOptionBuilder | null | undefined) {
+  public set optionBuilder(fn: Nullable<AutocompleteOptionBuilder>) {
     this._optionBuilder = fn;
   }
 
   /** Sets the filter callback that will be executed when fetching options for the autocomplete dropdown. */
-  public get filter(): AutocompleteFilterCallback | null | undefined {
+  public get filter(): Nullable<AutocompleteFilterCallback> {
     return this._filter;
   }
-  public set filter(cb: AutocompleteFilterCallback | null | undefined) {
+  public set filter(cb: Nullable<AutocompleteFilterCallback>) {
     if (this._filter !== cb) {
       this._filter = cb;
 

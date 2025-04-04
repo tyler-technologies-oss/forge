@@ -1,5 +1,6 @@
 import { getActiveElement, isNumber, isString } from '@tylertech/forge-core';
 import { AbstractConstructor, MixinBase } from '../../../../constants';
+import { Nullable } from '../../../utils';
 
 export interface IWithMoveableMoveContext {
   top: number;
@@ -122,7 +123,7 @@ export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = clas
       this._activeElement = undefined;
     }
 
-    private _normalizePositionValue(value: number | string | null | undefined): string | null {
+    private _normalizePositionValue(value: Nullable<number | string>): string | null {
       if (isNumber(value)) {
         return `${value}px`;
       } else if (isString(value)) {

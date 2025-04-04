@@ -1,6 +1,7 @@
 import { attachLightTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
 import { tylIconNotifications } from '@tylertech/tyler-icons/standard';
 import { defineBadgeComponent } from '../../badge';
+import { Nullable } from '../../core';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IconComponent, IconRegistry } from '../../icon';
 import { IconButtonComponent } from '../../icon-button';
@@ -18,7 +19,7 @@ declare global {
 }
 
 export interface IAppBarNotificationButtonComponent extends IBaseComponent {
-  count: string | number | null | undefined;
+  count: Nullable<string | number>;
   dot: boolean;
   showBadge: boolean;
   theme: string;
@@ -101,7 +102,7 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
   }
 
   @coreProperty()
-  declare public count: string | number | null | undefined;
+  declare public count: Nullable<string | number>;
 
   @coreProperty()
   declare public dot: boolean;

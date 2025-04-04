@@ -1,20 +1,21 @@
 import { isDate, isValidDate, Platform } from '@tylertech/forge-core';
 import { CalendarMode, DateRange, ICalendarDateSelectEventData } from '../calendar';
-import { isSameDate } from '../core/utils/date-utils';
+import { Nullable } from '../core';
 import { IDateInputMaskOptions } from '../core/mask/date-input-mask';
+import { isSameDate } from '../core/utils/date-utils';
 import { BaseDatePickerCore, IBaseDatePickerCore } from '../date-picker/base/base-date-picker-core';
 import { IDateRangePickerAdapter } from './date-range-picker-adapter';
-import { DatePickerRange, DATE_RANGE_PICKER_CONSTANTS, IDatePickerRange, IDateRangePickerChangeEventData } from './date-range-picker-constants';
+import { DATE_RANGE_PICKER_CONSTANTS, DatePickerRange, IDatePickerRange, IDateRangePickerChangeEventData } from './date-range-picker-constants';
 
 export interface IDateRangePickerCore extends IBaseDatePickerCore<IDatePickerRange> {
-  from: Date | string | null | undefined;
-  to: Date | string | null | undefined;
+  from: Nullable<Date | string>;
+  to: Nullable<Date | string>;
 }
 
 export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdapter, IDatePickerRange> implements IDateRangePickerCore {
   protected _mode: CalendarMode = 'range';
-  private _from?: Date | null = null;
-  private _to?: Date | null = null;
+  private _from?: Nullable<Date>;
+  private _to?: Nullable<Date>;
   private _toInputListener: (evt: Event) => void;
   private _toInputKeydownListener: (evt: KeyboardEvent) => void;
   private _toInputFocusListener: (evt: FocusEvent) => void;
@@ -80,7 +81,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     }
   }
 
-  protected _emitChangeEvent(value: DateRange | null | undefined, force?: boolean): boolean {
+  protected _emitChangeEvent(value: Nullable<DateRange>, force?: boolean): boolean {
     const typedStartValue = this._getTypedValue((value && value.from) || null);
     const typedEndValue = this._getTypedValue((value && value.to) || null);
     const detail: IDateRangePickerChangeEventData = new DatePickerRange({ from: typedStartValue, to: typedEndValue });
@@ -118,7 +119,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     this._closeCalendar(true);
   }
 
-  protected _getCurrentValue(): IDatePickerRange | null | undefined {
+  protected _getCurrentValue(): Nullable<IDatePickerRange> {
     return this._value;
   }
 
@@ -164,7 +165,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     this._adapter.setToInputValue(formattedDate, suppressValueChanges ? false : this._notifyInputValueChanges);
   }
 
-  protected _isDateRangeAcceptable(value?: DateRange | null | undefined): boolean {
+  protected _isDateRangeAcceptable(value?: Nullable<DateRange>): boolean {
     if (!value?.to) {
       return true;
     }
@@ -176,7 +177,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     return passesMinDate() && passesMaxDate() && passesDateRange();
   }
 
-  protected _setValue(value: Date | null | undefined): void {
+  protected _setValue(value: Nullable<Date>): void {
     if (this._isDateValueAcceptable(value)) {
       this._from = value || null;
       if (!this._value) {
@@ -187,7 +188,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     }
   }
 
-  private _setToValue(value: Date | null | undefined): void {
+  private _setToValue(value: Nullable<Date>): void {
     if (this._isDateValueAcceptable(value)) {
       this._to = value || null;
       if (!this._value) {
@@ -390,7 +391,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     }
   }
 
-  private _tryMergeCurrentTime(range: Partial<DateRange> | null | undefined): void {
+  private _tryMergeCurrentTime(range: Nullable<Partial<DateRange>>): void {
     if (!range || !this._value || (!this._value.from && !this._value.to)) {
       return;
     }
@@ -404,10 +405,10 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     }
   }
 
-  public get value(): IDatePickerRange | null | undefined {
+  public get value(): Nullable<IDatePickerRange> {
     return { from: this.from, to: this.to };
   }
-  public set value(value: IDatePickerRange | null | undefined) {
+  public set value(value: Nullable<IDatePickerRange>) {
     if (!value) {
       value = { from: null, to: null };
     }
@@ -426,7 +427,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     this._value = { from: this.from, to: this.to };
   }
 
-  public get from(): Date | string | null | undefined {
+  public get from(): Nullable<Date | string> {
     const date = this._getTypedValue(this._from);
 
     if (!date) {
@@ -439,7 +440,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
 
     return date;
   }
-  public set from(value: Date | string | null | undefined) {
+  public set from(value: Nullable<Date | string>) {
     if (this._from !== value) {
       this._setValue(this._coerceDateValue(value));
       if (this._isInitialized) {
@@ -456,7 +457,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     }
   }
 
-  public get to(): Date | string | null | undefined {
+  public get to(): Nullable<Date | string> {
     const date = this._getTypedValue(this._to);
 
     if (!date) {
@@ -469,7 +470,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
 
     return date;
   }
-  public set to(value: Date | string | null | undefined) {
+  public set to(value: Nullable<Date | string>) {
     if (this._to !== value) {
       this._setToValue(this._coerceDateValue(value));
       if (this._isInitialized) {

@@ -1,12 +1,12 @@
-import { ITabBarChangeEventData, NAVIGATION_KEYS, TAB_BAR_CONSTANTS } from './tab-bar-constants';
+import { Nullable } from '../../core';
 import { ITabComponent } from '../tab/tab';
 import { TAB_CONSTANTS } from '../tab/tab-constants';
-
 import { ITabBarAdapter, ITabBarScrollButtonState } from './tab-bar-adapter';
+import { ITabBarChangeEventData, NAVIGATION_KEYS, TAB_BAR_CONSTANTS } from './tab-bar-constants';
 
 export interface ITabBarCore {
   disabled: boolean;
-  activeTab: number | null | undefined;
+  activeTab: Nullable<number>;
   vertical: boolean;
   clustered: boolean;
   stacked: boolean;
@@ -21,7 +21,7 @@ export interface ITabBarCore {
 export class TabBarCore implements ITabBarCore {
   // State
   private _isInitialized = false;
-  private _activeTab: number | null | undefined;
+  private _activeTab: Nullable<number>;
   private _disabled = false;
   private _vertical = false;
   private _clustered = false;
@@ -271,10 +271,10 @@ export class TabBarCore implements ITabBarCore {
     }
   }
 
-  public get activeTab(): number | null | undefined {
+  public get activeTab(): Nullable<number> {
     return this._activeTab;
   }
-  public set activeTab(value: number | null | undefined) {
+  public set activeTab(value: Nullable<number>) {
     if (this._activeTab !== value) {
       this._activeTab = value ?? undefined;
 
