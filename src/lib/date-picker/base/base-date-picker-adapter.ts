@@ -1,7 +1,7 @@
 import { randomChars } from '@tylertech/forge-core';
 import { CALENDAR_CONSTANTS, DateRange, DayOfWeek, ICalendarComponent } from '../../calendar';
 import { ICalendarDropdown, ICalendarDropdownPopupConfig } from '../../calendar/calendar-dropdown';
-import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions } from '../../core';
+import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions, Nullable } from '../../core';
 import { BaseComponent } from '../../core/base/base-component';
 import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
 import { TEXT_FIELD_CONSTANTS } from '../../text-field';
@@ -44,14 +44,14 @@ export interface IBaseDatePickerAdapter extends IBaseAdapter {
   goToCalendarDate(date: Date): void;
   addCalendarListener(type: keyof HTMLElementEventMap, listener: EventListener): void;
   removeCalendarListener(type: keyof HTMLElementEventMap, listener: EventListener): void;
-  setCalendarValue(value: Date | DateRange | null | undefined): void;
-  setCalendarMinDate(value: Date | null | undefined): void;
-  setCalendarMaxDate(value: Date | null | undefined): void;
-  setCalendarDisabledDates(value: Date | Date[] | null | undefined): void;
-  setCalendarDisabledDaysOfWeek(value: DayOfWeek[]): void;
+  setCalendarValue(value: Nullable<Date | DateRange>): void;
+  setCalendarMinDate(value: Nullable<Date>): void;
+  setCalendarMaxDate(value: Nullable<Date>): void;
+  setCalendarDisabledDates(value: Nullable<Date | Date[]>): void;
+  setCalendarDisabledDaysOfWeek(value: Nullable<DayOfWeek[]>): void;
   setCalendarDisableDayCallback(disableDayCallback: (date: Date) => boolean): void;
   setCalendarActiveDate(date: Date): void;
-  getCalendarActiveDate(): Date | undefined;
+  getCalendarActiveDate(): Nullable<Date> | undefined;
   setCalendarYearRange(value: string): void;
   setCalendarLocale(locale: string | undefined): void;
   setCalendarText(text: IDatePickerCalendarDropdownText): void;
@@ -154,25 +154,25 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
     this._calendarDropdown?.calendar?.removeEventListener(type, listener);
   }
 
-  public setCalendarValue(value: Date | DateRange | null | undefined): void {
+  public setCalendarValue(value: Nullable<Date | DateRange>): void {
     if (this._calendarDropdown?.calendar) {
       this._calendarDropdown.calendar.value = value;
     }
   }
 
-  public setCalendarMinDate(value: Date | null | undefined): void {
+  public setCalendarMinDate(value: Nullable<Date>): void {
     if (this._calendarDropdown?.calendar) {
       this._calendarDropdown.calendar.min = value;
     }
   }
 
-  public setCalendarMaxDate(value: Date | null | undefined): void {
+  public setCalendarMaxDate(value: Nullable<Date>): void {
     if (this._calendarDropdown?.calendar) {
       this._calendarDropdown.calendar.max = value;
     }
   }
 
-  public setCalendarDisabledDates(value: Date | Date[] | null | undefined): void {
+  public setCalendarDisabledDates(value: Nullable<Date | Date[]>): void {
     if (this._calendarDropdown?.calendar) {
       this._calendarDropdown.calendar.disabledDates = value;
     }

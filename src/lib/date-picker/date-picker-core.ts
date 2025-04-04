@@ -1,13 +1,13 @@
 import { isDate, Platform } from '@tylertech/forge-core';
 import { CalendarMode, ICalendarDateSelectEventData } from '../calendar';
-import { isSameDate } from '../core';
+import { isSameDate, Nullable } from '../core';
 import { BaseDatePickerCore, IBaseDatePickerCore } from './base/base-date-picker-core';
 import { IDatePickerAdapter } from './date-picker-adapter';
 import { DATE_PICKER_CONSTANTS } from './date-picker-constants';
 
 export interface IDatePickerCore extends IBaseDatePickerCore<Date | string> {}
 
-export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date | string | null | undefined, Date> implements IDatePickerCore {
+export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Nullable<Date | string>, Date> implements IDatePickerCore {
   protected _mode: CalendarMode = 'single';
 
   constructor(adapter: IDatePickerAdapter) {
@@ -20,7 +20,7 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
     }
   }
 
-  protected _emitChangeEvent(value: Date | null | undefined, force?: boolean): boolean {
+  protected _emitChangeEvent(value: Nullable<Date>, force?: boolean): boolean {
     const typedValue = this._getTypedValue(value);
     const wasCancelled = !this._adapter.emitHostEvent(DATE_PICKER_CONSTANTS.events.CHANGE, typedValue, true, !force);
     if (!wasCancelled) {
@@ -48,7 +48,7 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
     this._onDateSelected({ date: null, selected: false, type: 'date' });
   }
 
-  protected _getCurrentValue(): Date | null | undefined {
+  protected _getCurrentValue(): Nullable<Date> {
     return this._value;
   }
 
@@ -157,7 +157,7 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
     }
   }
 
-  private _tryMergeCurrentTime(date: Date | null | undefined): void {
+  private _tryMergeCurrentTime(date: Nullable<Date>): void {
     if (!date || !this._value) {
       return;
     }
@@ -171,7 +171,7 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
     }
   }
 
-  public get value(): Date | string | null | undefined {
+  public get value(): Nullable<Date | string> {
     const date = this._getTypedValue(this._value);
 
     if (!date) {
@@ -185,7 +185,7 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
     return date;
   }
 
-  public set value(value: Date | string | null | undefined) {
+  public set value(value: Nullable<Date | string>) {
     if (this._value !== value) {
       this._setValue(this._coerceDateValue(value));
       if (this._isInitialized) {

@@ -1,4 +1,4 @@
-import { frame } from '../core';
+import { frame, Nullable } from '../core';
 import { IExpansionPanelAdapter } from './expansion-panel-adapter';
 import { ExpansionPanelAnimationType, ExpansionPanelOrientation, EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 
@@ -170,10 +170,10 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
     }
   }
 
-  public get triggerElement(): HTMLElement | null | undefined {
+  public get triggerElement(): Nullable<HTMLElement> {
     return this._adapter.triggerElement;
   }
-  public set triggerElement(el: HTMLElement | null | undefined) {
+  public set triggerElement(el: Nullable<HTMLElement>) {
     if (this._adapter.triggerElement !== el) {
       this._clearTrigger();
 

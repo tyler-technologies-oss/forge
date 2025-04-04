@@ -1,3 +1,4 @@
+import { Nullable } from '../../core';
 import {
   CalendarDateBuilder,
   CalendarDateSelectCallback,
@@ -13,26 +14,26 @@ export interface ICalendarBase {
   readonly activeDate: Date;
   allowSingleDateRange: boolean;
   constrainToEnabled: boolean;
-  disabledDates: Date | Date[] | null | undefined;
-  disabledDaysOfWeek: DayOfWeek | DayOfWeek[] | null | undefined;
-  events: ICalendarEvent[] | null | undefined;
-  firstDayOfWeek: DayOfWeek | undefined;
+  disabledDates: Nullable<Date | Date[]>;
+  disabledDaysOfWeek: Nullable<DayOfWeek | DayOfWeek[]>;
+  events: Nullable<ICalendarEvent[]>;
+  firstDayOfWeek: Nullable<DayOfWeek>;
   fixedHeight: boolean;
   listYears: boolean;
-  locale: string | undefined;
-  max: Date | string | null | undefined;
-  min: Date | string | null | undefined;
+  locale: Nullable<string>;
+  max: Nullable<Date | string>;
+  min: Nullable<Date | string>;
   month: number;
   readonly: boolean;
   showOtherMonths: boolean;
   showToday: boolean;
-  value: Date | Date[] | DateRange | null | undefined;
-  weekendDays: DayOfWeek[] | null | undefined;
+  value: Nullable<Date | Date[] | DateRange>;
+  weekendDays: Nullable<DayOfWeek[]>;
   year: number;
   yearRange: string;
-  dateBuilder: CalendarDateBuilder | undefined;
-  dateSelectCallback: CalendarDateSelectCallback | undefined;
-  dayBuilder: CalendarDayBuilder | undefined;
-  disabledDateBuilder: CalendarDisabledDateBuilder | undefined;
-  eventBuilder: CalendarEventBuilder | undefined;
+  dateBuilder: Nullable<CalendarDateBuilder>;
+  dateSelectCallback: Nullable<CalendarDateSelectCallback>;
+  dayBuilder: Nullable<CalendarDayBuilder>;
+  disabledDateBuilder: Nullable<CalendarDisabledDateBuilder>;
+  eventBuilder: Nullable<CalendarEventBuilder>;
 }

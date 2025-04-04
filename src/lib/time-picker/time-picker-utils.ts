@@ -1,4 +1,5 @@
-import { tokenize24HourTimeString, tokenize12HourTimeString, TWENTY_FOUR_HOUR_TIME_REGEX, TWELVE_HOUR_TIME_REGEX } from '../core/utils/time-utils';
+import { Nullable } from '../core';
+import { tokenize12HourTimeString, tokenize24HourTimeString, TWELVE_HOUR_TIME_REGEX, TWENTY_FOUR_HOUR_TIME_REGEX } from '../core/utils/time-utils';
 
 export function timeStringToMillis(time: string | null, use24HourTime: boolean, allowSeconds: boolean): number | null {
   if (!time || /^\s*$/.test(time)) {
@@ -32,7 +33,7 @@ export function timeStringToMillis(time: string | null, use24HourTime: boolean, 
   return hoursToMillis(hours) + minutesToMillis(minutes) + (allowSeconds ? secondsToMillis(seconds) : 0);
 }
 
-export function millisToTimeString(value: number | null | undefined, use24HourTime: boolean, allowSeconds: boolean): string | null {
+export function millisToTimeString(value: Nullable<number>, use24HourTime: boolean, allowSeconds: boolean): string | null {
   if (typeof value !== 'number' || value < 0) {
     return null;
   }

@@ -4,10 +4,11 @@ import { KeyboardShortcutAdapter } from './keyboard-shortcut-adapter';
 import { KeyboardShortcutCore } from './keyboard-shortcut-core';
 import { KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback } from './keyboard-shortcut-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { Nullable } from '../core';
 
 export interface IKeyboardShortcutComponent extends IBaseComponent {
-  key: string | null | undefined;
-  keyBinding: string | null | undefined;
+  key: Nullable<string>;
+  keyBinding: Nullable<string>;
   target: string;
   global: boolean;
   allowWhileTyping: boolean;
@@ -15,7 +16,7 @@ export interface IKeyboardShortcutComponent extends IBaseComponent {
   capture: boolean;
   useCode: boolean;
   disabled: boolean;
-  activateCallback: KeyboardShortcutActivateCallback | null | undefined;
+  activateCallback: Nullable<KeyboardShortcutActivateCallback>;
 }
 
 declare global {
@@ -90,17 +91,17 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * @attribute
    */
   @coreProperty()
-  declare public key: string | null | undefined;
+  declare public key: Nullable<string>;
 
   /**
    * Alias for key.
    * @attribute key-binding
    *
    */
-  public get keyBinding(): string | null | undefined {
+  public get keyBinding(): Nullable<string> {
     return this.key;
   }
-  public set keyBinding(value: string | null | undefined) {
+  public set keyBinding(value: Nullable<string>) {
     this.key = value;
   }
 
@@ -162,5 +163,5 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * Gets/sets whether the activation callback.
    */
   @coreProperty()
-  declare public activateCallback: KeyboardShortcutActivateCallback | null | undefined;
+  declare public activateCallback: Nullable<KeyboardShortcutActivateCallback>;
 }

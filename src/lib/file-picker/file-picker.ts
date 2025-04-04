@@ -1,5 +1,6 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, coreProperty, customElement } from '@tylertech/forge-core';
 import { ButtonComponent } from '../button';
+import { Nullable } from '../core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { FilePickerAdapter } from './file-picker-adapter';
 import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants';
@@ -9,9 +10,9 @@ import template from './file-picker.html';
 import styles from './file-picker.scss';
 
 export interface IFilePickerComponent extends IBaseComponent {
-  accept: string | null | undefined;
-  maxSize: number | null | undefined;
-  capture: string | null | undefined;
+  accept: Nullable<string>;
+  maxSize: Nullable<number>;
+  capture: Nullable<string>;
   multiple: boolean;
   disabled: boolean;
   compact: boolean;
@@ -40,17 +41,17 @@ declare global {
  * The expectation of this component is that it will be used as a familiar element on the page that will let users upload files,
  * while providing that visual and functional consistency.
  *
- * @property {string | null} [accept=null] - Gets/sets the allowed file types.
- * @property {string | null} [maxSize=null] - Gets/sets the maximum allowed file size.
- * @property {string | null} [capture=null] - Gets/sets the camera to use when capturing video or images.
+ * @property {string | null | undefined} [accept=undefined] - Gets/sets the allowed file types.
+ * @property {string | null | undefined} [maxSize=undefined] - Gets/sets the maximum allowed file size.
+ * @property {string | null | undefined} [capture=undefined] - Gets/sets the camera to use when capturing video or images.
  * @property {boolean} [multiple=false] - Gets/sets whether multiple files are allowed.
  * @property {boolean} [disabled=false] - Gets/sets whether the file picker is disabled.
  * @property {boolean} [compact=false] - Gets/sets whether the file picker uses the compact variant.
  * @property {boolean} [borderless=false] - Gets and sets whether the file picker is borderless.
  *
- * @attribute {string | null} [accept=null] - Gets/sets the allowed file types.
- * @attribute {string | null} [maxSize=null] - Gets/sets the maximum allowed file size.
- * @attribute {string | null} [capture=null] - Gets/sets the camera to use when capturing video or images.
+ * @attribute {string | null | undefined} [accept=undefined] - Gets/sets the allowed file types.
+ * @attribute {string | null | undefined} [maxSize=undefined] - Gets/sets the maximum allowed file size.
+ * @attribute {string | null | undefined} [capture=undefined] - Gets/sets the camera to use when capturing video or images.
  * @attribute {boolean} [multiple=false] - Gets/sets whether multiple files are allowed.
  * @attribute {boolean} [disabled=false] - Gets/sets whether the file picker is disabled.
  * @attribute {boolean} [compact=false] - Gets/sets whether the file picker uses the compact variant.
@@ -140,15 +141,15 @@ export class FilePickerComponent extends BaseComponent implements IFilePickerCom
 
   /** Gets and sets the allowed file types */
   @coreProperty()
-  declare public accept: string | null | undefined;
+  declare public accept: Nullable<string>;
 
   /** Gets and sets the maximum allowed file size */
   @coreProperty()
-  declare public maxSize: number | null | undefined;
+  declare public maxSize: Nullable<number>;
 
   /** Gets and sets the camera to use when capturing video or images */
   @coreProperty()
-  declare public capture: string | null | undefined;
+  declare public capture: Nullable<string>;
 
   /** Gets and sets whether multiple files are allowed */
   @coreProperty()

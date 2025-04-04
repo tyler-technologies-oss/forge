@@ -1,8 +1,9 @@
+import { Nullable } from '../../core';
 import { IAppBarNotificationButtonAdapter } from './app-bar-notification-button-adapter';
 import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants';
 
 export interface IAppBarNotificationButtonCore {
-  count: string | number | null | undefined;
+  count: Nullable<string | number>;
   dot: boolean;
   theme: string;
   showBadge: boolean;
@@ -10,7 +11,7 @@ export interface IAppBarNotificationButtonCore {
 }
 
 export class AppBarNotificationButtonCore implements IAppBarNotificationButtonCore {
-  private _count: string | number | null | undefined = 0;
+  private _count: Nullable<string | number> = 0;
   private _dot = false;
   private _theme: string;
   private _showBadge = false;
@@ -47,10 +48,10 @@ export class AppBarNotificationButtonCore implements IAppBarNotificationButtonCo
     }
   }
 
-  public get count(): string | number | null | undefined {
+  public get count(): Nullable<string | number> {
     return this._count;
   }
-  public set count(value: string | number | null | undefined) {
+  public set count(value: Nullable<string | number>) {
     if (this._count !== value) {
       this._count = value;
       if (this._isInitialized) {

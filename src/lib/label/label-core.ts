@@ -1,11 +1,11 @@
-import { task } from '../core/utils/utils';
+import { Nullable, task } from '../core/utils/utils';
 import { ILabelAdapter } from './label-adapter';
 import { ILabelAware } from './label-aware';
 import { LABEL_CONSTANTS } from './label-constants';
 
 export interface ILabelCore {
-  for: string | null | undefined;
-  forElement: HTMLElement | null | undefined;
+  for: Nullable<string>;
+  forElement: Nullable<HTMLElement>;
   dynamic: boolean;
   nonInteractive: boolean;
   legend: boolean;
@@ -16,9 +16,9 @@ export interface ILabelCore {
 
 export class LabelCore implements ILabelCore {
   // State
-  private _for: string | null | undefined;
-  private _forElement: HTMLElement | null | undefined;
-  private _clickTarget: HTMLElement | null | undefined;
+  private _for: Nullable<string>;
+  private _forElement: Nullable<HTMLElement>;
+  private _clickTarget: Nullable<HTMLElement>;
   private _dynamic = false;
   private _nonInteractive = false;
   private _legend = false;
@@ -128,10 +128,10 @@ export class LabelCore implements ILabelCore {
     }
   }
 
-  public get for(): string | null | undefined {
+  public get for(): Nullable<string> {
     return this._for;
   }
-  public set for(value: string | null | undefined) {
+  public set for(value: Nullable<string>) {
     if (this._for !== value) {
       this._for = value;
       this._adapter.toggleHostAttribute(LABEL_CONSTANTS.attributes.FOR, !!this.for, this.for ?? undefined);
@@ -140,10 +140,10 @@ export class LabelCore implements ILabelCore {
     }
   }
 
-  public get forElement(): HTMLElement | null | undefined {
+  public get forElement(): Nullable<HTMLElement> {
     return this._forElement;
   }
-  public set forElement(value: HTMLElement | null | undefined) {
+  public set forElement(value: Nullable<HTMLElement>) {
     if (this._forElement !== value) {
       this._forElement = value;
       this._adapter.setTargetElement(this._forElement ?? null);
@@ -151,10 +151,10 @@ export class LabelCore implements ILabelCore {
     }
   }
 
-  public get clickTarget(): HTMLElement | null | undefined {
+  public get clickTarget(): Nullable<HTMLElement> {
     return this._clickTarget;
   }
-  public set clickTarget(value: HTMLElement | null | undefined) {
+  public set clickTarget(value: Nullable<HTMLElement>) {
     if (this._clickTarget !== value) {
       this._clickTarget = value;
     }

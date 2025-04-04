@@ -1,6 +1,7 @@
-import { isArray, createVisuallyHiddenElement, closestElement } from '@tylertech/forge-core';
-import { POPOVER_CONSTANTS } from '../../popover/popover-constants';
+import { closestElement, createVisuallyHiddenElement, isArray } from '@tylertech/forge-core';
+import { Nullable } from '../../core';
 import { IPopoverComponent } from '../../popover/popover';
+import { POPOVER_CONSTANTS } from '../../popover/popover-constants';
 
 import { ICalendarComponent } from '../calendar';
 import { CALENDAR_CONSTANTS, ICalendarFocusChangeEventData } from '../calendar-constants';
@@ -8,15 +9,15 @@ import { getDateId } from '../calendar-dom-utils';
 import { CALENDAR_DROPDOWN_CONSTANTS } from './calendar-dropdown-constants';
 
 export interface ICalendarDropdown {
-  calendar: ICalendarComponent | undefined;
-  dropdownElement: IPopoverComponent | undefined;
+  calendar: Nullable<ICalendarComponent>;
+  dropdownElement: Nullable<IPopoverComponent>;
   id: string;
   targetElement: HTMLElement;
   popupClasses: string | string[] | null;
-  locale: string | undefined;
+  locale: Nullable<string>;
   isOpen: boolean;
-  activeChangeCallback: ((id: string) => void) | undefined;
-  closeCallback: (() => void) | undefined;
+  activeChangeCallback: Nullable<(id: string) => void>;
+  closeCallback: Nullable<() => void>;
   open(config: Partial<ICalendarComponent>): void;
   close(): void;
   destroy(): void;
@@ -24,12 +25,12 @@ export interface ICalendarDropdown {
 }
 
 export class CalendarDropdown implements ICalendarDropdown {
-  public calendar: ICalendarComponent | undefined;
-  public dropdownElement: IPopoverComponent | undefined;
+  public calendar: Nullable<ICalendarComponent>;
+  public dropdownElement: Nullable<IPopoverComponent>;
   public id: string;
   public targetElement: HTMLElement;
-  public activeChangeCallback: ((id: string) => void) | undefined;
-  public closeCallback: (() => void) | undefined;
+  public activeChangeCallback: Nullable<(id: string) => void>;
+  public closeCallback: Nullable<() => void>;
 
   private _announcerElement: HTMLElement | undefined;
   private _popupClasses: string[] = [];
@@ -45,10 +46,10 @@ export class CalendarDropdown implements ICalendarDropdown {
     this._popupClasses = !!value ? (isArray(value) ? [...(value as string[])] : [value as string]) : [];
   }
 
-  public get locale(): string | undefined {
+  public get locale(): Nullable<string> {
     return this.calendar?.locale;
   }
-  public set locale(value: string | undefined) {
+  public set locale(value: Nullable<string>) {
     if (this.calendar) {
       this.calendar.locale = value;
     }

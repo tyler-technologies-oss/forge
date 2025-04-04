@@ -1,4 +1,5 @@
 import { getShadowElement, randomChars, toggleAttribute } from '@tylertech/forge-core';
+import { Nullable } from '../core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { OpenIconComponent } from '../open-icon';
 import { IExpansionPanelComponent } from './expansion-panel';
@@ -29,7 +30,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   private _innerElement: HTMLElement;
   private _defaultSlotElement: HTMLSlotElement;
   private _triggerListenerController: AbortController;
-  private _triggerElement?: HTMLElement | null;
+  private _triggerElement?: Nullable<HTMLElement>;
 
   private _transitionStartListener: EventListener = this._onTransitionStart.bind(this);
   private _transitionEndListener: EventListener = this._onTransitionEnd.bind(this);
@@ -43,7 +44,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
     this._defaultSlotElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
   }
 
-  public get triggerElement(): HTMLElement | null | undefined {
+  public get triggerElement(): Nullable<HTMLElement> {
     return this._triggerElement;
   }
 

@@ -1,30 +1,31 @@
 import { debounce } from '@tylertech/forge-core';
+import { Nullable } from '../core';
 import { IColorPickerAdapter } from './color-picker-adapter';
 import {
-  ColorPickerValueType,
   COLOR_PICKER_CONSTANTS,
+  ColorPickerChangeEventSource,
+  ColorPickerChangeEventType,
+  ColorPickerValueType,
   DEFAULT_COLOR,
   IColorPickerChangeEventData,
   IHSVA,
-  IRGBA,
-  ColorPickerChangeEventType,
-  ColorPickerChangeEventSource
+  IRGBA
 } from './color-picker-constants';
 import { ColorPickerGradientSlider } from './color-picker-gradient-slider';
 import { ColorPickerSlider } from './color-picker-slider';
 import { formatHex, formatRgba, hexToRgba, hsvaToRgba, isValidHex, isValidHSVA, isValidRGBA, rgbaToHex, rgbaToHsva } from './color-picker-utils';
 
 export interface IColorPickerCore {
-  value: string | null | undefined;
-  rgba: IRGBA | null | undefined;
-  hsva: IHSVA | null | undefined;
-  opacity: number | null | undefined;
+  value: Nullable<string>;
+  rgba: Nullable<IRGBA>;
+  hsva: Nullable<IHSVA>;
+  opacity: Nullable<number>;
   allowOpacity: boolean;
   debounceChangeEvent: boolean;
 }
 
 export class ColorPickerCore implements IColorPickerCore {
-  private _value: string | null | undefined = null;
+  private _value: Nullable<string> = null;
   private _allowOpacity = true;
   private _hex = DEFAULT_COLOR;
   private _hsva: IHSVA = { h: 0, s: 0, v: 0, a: 1 };
@@ -208,10 +209,10 @@ export class ColorPickerCore implements IColorPickerCore {
     this._adapter.emitHostEvent(COLOR_PICKER_CONSTANTS.events.CHANGE, data);
   }
 
-  public get value(): string | null | undefined {
+  public get value(): Nullable<string> {
     return formatHex(this._hex, false);
   }
-  public set value(value: string | null | undefined) {
+  public set value(value: Nullable<string>) {
     if (this._value !== value) {
       this._value = value || DEFAULT_COLOR;
 
@@ -225,10 +226,10 @@ export class ColorPickerCore implements IColorPickerCore {
     }
   }
 
-  public get rgba(): IRGBA | null | undefined {
+  public get rgba(): Nullable<IRGBA> {
     return !!this._rgba ? { ...this._rgba } : null;
   }
-  public set rgba(value: IRGBA | null | undefined) {
+  public set rgba(value: Nullable<IRGBA>) {
     if (value) {
       if (isValidRGBA(value)) {
         this.value = rgbaToHex(value);
@@ -238,10 +239,10 @@ export class ColorPickerCore implements IColorPickerCore {
     }
   }
 
-  public get hsva(): IHSVA | null | undefined {
+  public get hsva(): Nullable<IHSVA> {
     return !!this._hsva ? { ...this._hsva } : null;
   }
-  public set hsva(value: IHSVA | null | undefined) {
+  public set hsva(value: Nullable<IHSVA>) {
     if (value) {
       if (isValidHSVA(value)) {
         this.value = rgbaToHex(hsvaToRgba(value));
@@ -251,10 +252,10 @@ export class ColorPickerCore implements IColorPickerCore {
     }
   }
 
-  public get opacity(): number | null | undefined {
+  public get opacity(): Nullable<number> {
     return this._hsva ? this._hsva.a : null;
   }
-  public set opacity(value: number | null | undefined) {
+  public set opacity(value: Nullable<number>) {
     if (this._hsva.a !== value) {
       if (value != null && this._allowOpacity) {
         if (value >= 0 && value <= 1) {

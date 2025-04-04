@@ -1,6 +1,7 @@
-import { IChipFieldAdapter } from './chip-field-adapter';
-import { ChipFieldInputAttributeObserver, ChipFieldValueChangeListener, CHIP_FIELD_CONSTANTS, ChipFieldObservedInputAttributes } from './chip-field-constants';
+import { Nullable } from '../core';
 import { BaseFieldCore, IBaseFieldCore } from '../field/base/base-field-core';
+import { IChipFieldAdapter } from './chip-field-adapter';
+import { CHIP_FIELD_CONSTANTS, ChipFieldInputAttributeObserver, ChipFieldObservedInputAttributes, ChipFieldValueChangeListener } from './chip-field-constants';
 
 export interface IChipFieldCore extends IBaseFieldCore {
   addOnBlur: boolean;
@@ -210,7 +211,7 @@ export class ChipFieldCore extends BaseFieldCore<IChipFieldAdapter> implements I
   }
 
   private _removeMember(): void {
-    let memberToRemove: HTMLElement | null | undefined = this._getActiveMember();
+    let memberToRemove: Nullable<HTMLElement> = this._getActiveMember();
     if (!memberToRemove) {
       const members = this._adapter.getSlottedMemberElements();
       memberToRemove = members.at(-1);

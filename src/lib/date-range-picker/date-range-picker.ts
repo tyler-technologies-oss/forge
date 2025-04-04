@@ -1,6 +1,7 @@
-import { attachShadowTemplate, customElement, coreProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coreProperty, customElement } from '@tylertech/forge-core';
 import { tylIconDateRange } from '@tylertech/tyler-icons/standard';
 import { CalendarComponent } from '../calendar';
+import { Nullable } from '../core';
 import { BaseDatePickerComponent, IBaseDatePickerComponent } from '../date-picker/base/base-date-picker';
 import { BASE_DATE_PICKER_CONSTANTS } from '../date-picker/base/base-date-picker-constants';
 import { IconComponent, IconRegistry } from '../icon';
@@ -14,8 +15,8 @@ import template from './date-range-picker.html';
 import styles from './date-range-picker.scss';
 
 export interface IDateRangePickerComponent extends IBaseDatePickerComponent<IDatePickerRange> {
-  from: Date | string | null | undefined;
-  to: Date | string | null | undefined;
+  from: Nullable<Date | string>;
+  to: Nullable<Date | string>;
 }
 
 declare global {
@@ -101,9 +102,9 @@ export class DateRangePickerComponent
 
   /** Gets/sets the "from" date range value. */
   @coreProperty()
-  declare public from: Date | string | null | undefined;
+  declare public from: Nullable<Date | string>;
 
   /** Gets/sets the "to" date range value. */
   @coreProperty()
-  declare public to: Date | string | null | undefined;
+  declare public to: Nullable<Date | string>;
 }

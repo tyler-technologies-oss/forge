@@ -1,6 +1,8 @@
-import { coerceBoolean, ensureChild, coreProperty, coerceNumberArray } from '@tylertech/forge-core';
+import { coerceBoolean, coerceNumberArray, coreProperty, ensureChild } from '@tylertech/forge-core';
 import { DayOfWeek } from '../../calendar/calendar-constants';
+import { Nullable } from '../../core';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
 import {
   BASE_DATE_PICKER_CONSTANTS,
   DatePickerFormatCallback,
@@ -10,13 +12,12 @@ import {
   IDatePickerCalendarDropdownText
 } from './base-date-picker-constants';
 import { BaseDatePickerCore } from './base-date-picker-core';
-import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
 
 export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
-  value: TValue | null | undefined;
-  min: Date | string | null | undefined;
-  max: Date | string | null | undefined;
-  disabledDates: Date | Date[] | null | undefined;
+  value: Nullable<TValue>;
+  min: Nullable<Date | string>;
+  max: Nullable<Date | string>;
+  disabledDates: Nullable<Date | Date[]>;
   open: boolean;
   parseCallback: DatePickerParseCallback;
   formatCallback: DatePickerFormatCallback;
@@ -34,7 +35,7 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
   showClear: boolean;
   disabledDaysOfWeek: DayOfWeek[];
   yearRange: string;
-  locale: string | undefined;
+  locale: Nullable<string>;
   calendarText: IDatePickerCalendarDropdownText;
 }
 
@@ -162,16 +163,16 @@ export abstract class BaseDatePickerComponent<
   }
 
   @coreProperty()
-  declare public value: TPublicValue | null | undefined;
+  declare public value: Nullable<TPublicValue>;
 
   @coreProperty()
-  declare public min: Date | string | null | undefined;
+  declare public min: Nullable<Date | string>;
 
   @coreProperty()
-  declare public max: Date | string | null | undefined;
+  declare public max: Nullable<Date | string>;
 
   @coreProperty()
-  declare public disabledDates: Date | Date[] | null | undefined;
+  declare public disabledDates: Nullable<Date | Date[]>;
 
   @coreProperty()
   declare public open: boolean;
@@ -225,7 +226,7 @@ export abstract class BaseDatePickerComponent<
   declare public yearRange: string;
 
   @coreProperty()
-  declare public locale: string | undefined;
+  declare public locale: Nullable<string>;
 
   @coreProperty()
   declare public calendarText: IDatePickerCalendarDropdownText;

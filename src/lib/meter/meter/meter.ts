@@ -4,7 +4,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { Theme } from '../../constants';
 import { setDefaultAria } from '../../core/utils/a11y-utils';
-import { toggleState } from '../../core/utils/utils';
+import { Nullable, toggleState } from '../../core/utils/utils';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { BaseLitElement } from '../../core/base/base-lit-element';
 
@@ -95,21 +95,21 @@ export class MeterComponent extends BaseLitElement {
    * @default 0
    * @attribute
    */
-  @property({ type: Number }) public low: number | null | undefined;
+  @property({ type: Number }) public low: Nullable<number>;
 
   /**
    * The high value threshold.
    * @default 1
    * @attribute
    */
-  @property({ type: Number }) public high: number | null | undefined;
+  @property({ type: Number }) public high: Nullable<number>;
 
   /**
    * Indicates the region of the optimum value.
    * @default 1
    * @attribute
    */
-  @property({ type: Number }) public optimum: number | null | undefined;
+  @property({ type: Number }) public optimum: Nullable<number>;
 
   /**
    * Whether to display tickmarks.

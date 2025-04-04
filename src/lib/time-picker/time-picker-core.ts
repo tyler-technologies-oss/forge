@@ -21,19 +21,20 @@ import {
   millisToMinutes,
   stripSecondsFromMillis
 } from './time-picker-utils';
+import { Nullable } from '../core';
 
 export interface ITimePickerCore {
-  value: string | null | undefined;
+  value: Nullable<string>;
   open: boolean;
   allowSeconds: boolean;
   masked: boolean;
   showMaskFormat: boolean;
   use24HourTime: boolean;
   allowInvalidTime: boolean;
-  min: string | null | undefined;
-  max: string | null | undefined;
+  min: Nullable<string>;
+  max: Nullable<string>;
   restrictedTimes: string[];
-  startTime: string | null | undefined;
+  startTime: Nullable<string>;
   step: number;
   allowInput: boolean;
   showNow: boolean;
@@ -417,7 +418,7 @@ export class TimePickerCore implements ITimePickerCore {
     }
 
     // Convert the time string to milliseconds
-    let millis: number | null | undefined;
+    let millis: Nullable<number>;
     if (!this._masked && typeof this._parseCallback === 'function') {
       millis = this._parseCallback.call(null, value);
     } else {
@@ -435,7 +436,7 @@ export class TimePickerCore implements ITimePickerCore {
     return this._adapter.emitHostEvent(TIME_PICKER_CONSTANTS.events.CHANGE, value, true, !force);
   }
 
-  private _trySetValue(millis: number | null | undefined): boolean {
+  private _trySetValue(millis: Nullable<number>): boolean {
     // If our value hasn't changed, we can just return
     if (millis === this._value) {
       return false;
@@ -459,11 +460,11 @@ export class TimePickerCore implements ITimePickerCore {
     return false;
   }
 
-  private _setValue(value: number | null | undefined): void {
+  private _setValue(value: Nullable<number>): void {
     this._value = this._normalizeTimeValue(value);
   }
 
-  private _validateMillis(millis: number | null | undefined): number | null | undefined {
+  private _validateMillis(millis: Nullable<number>): Nullable<number> {
     // Trap for min/max validation
     if (typeof millis === 'number') {
       const isBelowMin = typeof this._min === 'number' && millis < this._min;
@@ -546,7 +547,7 @@ export class TimePickerCore implements ITimePickerCore {
     });
   }
 
-  private _applyValue(value: number | null | undefined, emitEvents = true): void {
+  private _applyValue(value: Nullable<number>, emitEvents = true): void {
     this._setValue(value);
     const formattedValue = this._formatValue(this._value);
     if (this._adapter.getInputValue() !== formattedValue) {
@@ -554,7 +555,7 @@ export class TimePickerCore implements ITimePickerCore {
     }
   }
 
-  private _normalizeTimeValue(value: number | null | undefined): number | null {
+  private _normalizeTimeValue(value: Nullable<number>): number | null {
     if (value == null) {
       return null;
     } else if (value < 0) {
@@ -727,7 +728,7 @@ export class TimePickerCore implements ITimePickerCore {
     return timeStringToMillis(value, use24HourTime, allowSeconds);
   }
 
-  private _formatValue(value: number | null | undefined): string {
+  private _formatValue(value: Nullable<number>): string {
     if (!this._masked && typeof this._formatCallback === 'function') {
       return this._formatCallback.call(null, value, this._use24HourTime, this._allowSeconds);
     }

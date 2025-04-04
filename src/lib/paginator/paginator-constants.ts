@@ -1,4 +1,5 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
+import { Nullable } from '../core';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}paginator`;
 
@@ -76,4 +77,4 @@ export interface IPaginatorRangeState {
   total: number;
 }
 
-export type PaginatorRangeLabelBuilder = ((state: IPaginatorRangeState) => string) | undefined | null;
+export type PaginatorRangeLabelBuilder = Nullable<(state: IPaginatorRangeState) => string>;
