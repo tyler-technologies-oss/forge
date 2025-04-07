@@ -1,3 +1,11 @@
 section:not(:last-of-type) {
   margin-block-end: 56px;
 }
+
+.app-bar-popover {
+  width: 500px;
+
+  &__content {
+    padding: var(--forge-spacing-medium);
+  }
+}

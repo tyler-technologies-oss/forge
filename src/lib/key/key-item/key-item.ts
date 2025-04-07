@@ -1,9 +1,13 @@
-import { LitElement, TemplateResult, html, unsafeCSS } from 'lit';
+import { TemplateResult, html, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { BaseLitElement } from '../../core/base/base-lit-element';
 
 import styles from './key-item.scss';
+
+export const KEY_ITEM_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-key-item';
 
 /**
  * @tag forge-key-item
@@ -25,9 +29,12 @@ import styles from './key-item.scss';
  * @csspart label - The label element.
  * @csspart value - The value element.
  */
-@customElement('forge-key-item')
-export class KeyItemComponent extends LitElement {
+@customElement(KEY_ITEM_TAG_NAME)
+export class KeyItemComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = KEY_ITEM_TAG_NAME;
 
   /**
    * Whether the label and value dislay on one line.

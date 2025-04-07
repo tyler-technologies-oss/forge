@@ -780,6 +780,64 @@ describe('MenuComponent', function(this: ITestContext) {
     });
   });
 
+  describe('list dropdown API', () => {
+    it('should set popover flip', async function (this: ITestContext) {
+      this.context = setupTestContext();
+
+      this.context.component.popoverFlip = 'never';
+      this.context.component.options = generateMenuOptions(1);
+      this.context.component.open = true;
+      await frame();
+
+      const popover = getPopoverElement();
+
+      expect(this.context.component.popoverFlip).toEqual('never');
+      expect(popover.flip).toEqual('never');
+    });
+
+    it('should set popover flip from attribute', async function (this: ITestContext) {
+      this.context = setupTestContext();
+
+      this.context.component.setAttribute('popover-flip', 'never');
+      this.context.component.options = generateMenuOptions(1);
+      this.context.component.open = true;
+      await frame();
+
+      const popover = getPopoverElement();
+
+      expect(this.context.component.popoverFlip).toEqual('never');
+      expect(popover.flip).toEqual('never');
+    });
+
+    it('should set popover shift', async function (this: ITestContext) {
+      this.context = setupTestContext();
+
+      this.context.component.popoverShift = 'never';
+      this.context.component.options = generateMenuOptions(1);
+      this.context.component.open = true;
+      await frame();
+
+      const popover = getPopoverElement();
+
+      expect(this.context.component.popoverShift).toEqual('never');
+      expect(popover.shift).toEqual('never');
+    });
+
+    it('should set popover shift from attribute', async function (this: ITestContext) {
+      this.context = setupTestContext();
+
+      this.context.component.setAttribute('popover-shift', 'never');
+      this.context.component.options = generateMenuOptions(1);
+      this.context.component.open = true;
+      await frame();
+
+      const popover = getPopoverElement();
+
+      expect(this.context.component.popoverShift).toEqual('never');
+      expect(popover.shift).toEqual('never');
+    });
+  });
+
   it('should remove popover when removed from DOM while open', async function(this: ITestContext) {
     this.context = setupTestContext();
     const options: IMenuOption[] = [

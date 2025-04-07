@@ -17,7 +17,6 @@ import {
   ListDropdownType,
   LIST_DROPDOWN_CONSTANTS
 } from './list-dropdown-constants';
-import { LIST_ITEM_CONSTANTS } from '../list/list-item';
 
 export enum ListDropdownOptionType {
   Option,
@@ -69,13 +68,17 @@ export function createPopupDropdown(config: IListDropdownOpenConfig, targetEleme
   if (config.popupFallbackPlacements?.length) {
     popoverElement.fallbackPlacements = config.popupFallbackPlacements;
   }
-
   if (config.constrainViewportWidth) {
     popoverElement.setAttribute(POPOVER_CONSTANTS.attributes.CONSTRAIN_VIEWPORT_WIDTH, '');
   }
-
   if (config.popupOffset) {
     popoverElement.offset = config.popupOffset;
+  }
+  if (config.popupFlip) {
+    popoverElement.flip = config.popupFlip;
+  }
+  if (config.popupShift !== undefined) {
+    popoverElement.shift = config.popupShift;
   }
 
   // Set the animations based on our type

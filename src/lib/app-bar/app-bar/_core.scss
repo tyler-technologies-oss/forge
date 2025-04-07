@@ -88,7 +88,6 @@
 @mixin logo {
   font-size: #{token(logo-font-size)};
   height: 1em;
-  width: 1em;
 }
 
 @mixin elevation-raised {

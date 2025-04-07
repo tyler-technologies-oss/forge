@@ -1,12 +1,15 @@
-import { debounce } from '@tylertech/forge-core';
-import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, debounce } from '@tylertech/forge-core';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedElements, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils';
 import { toggleState } from '../../core/utils/utils';
 import { MeterComponent, MeterDensity, MeterDirection, MeterInnerShape, MeterShape } from '../meter/meter';
+import { BaseLitElement } from '../../core/base/base-lit-element';
 
 import styles from './meter-group.scss';
+
+export const METER_GROUP_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-meter-group';
 
 /**
  * @tag forge-meter-group
@@ -29,11 +32,14 @@ import styles from './meter-group.scss';
  * @slot label - Positions a label above the meter group.
  * @slot value - A textual representation of the meter's value.
  */
-@customElement('forge-meter-group')
-export class MeterGroupComponent extends LitElement {
+@customElement(METER_GROUP_TAG_NAME)
+export class MeterGroupComponent extends BaseLitElement {
   /* @ignore */
   public static styles = unsafeCSS(styles);
   public static formAssociated = true;
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = METER_GROUP_TAG_NAME;
 
   /**
    * The minimum value of each meter in the group.

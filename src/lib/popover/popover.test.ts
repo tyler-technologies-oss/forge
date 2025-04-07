@@ -188,11 +188,11 @@ describe('Popover', () => {
     it('should proxy shift', async () => {
       const harness = await createFixture();
 
-      harness.popoverElement.shift = true;
+      harness.popoverElement.shift = 'never';
 
-      expect(harness.popoverElement.shift).to.be.true;
-      expect(harness.popoverElement.overlay.shift).to.be.true;
-      expect(harness.popoverElement.hasAttribute(OVERLAY_CONSTANTS.attributes.SHIFT)).to.be.true;
+      expect(harness.popoverElement.shift).to.equal('never');
+      expect(harness.popoverElement.overlay.shift).to.equal('never');
+      expect(harness.popoverElement.getAttribute(OVERLAY_CONSTANTS.attributes.SHIFT)).to.equal('never');
     });
 
     it('should proxy flip', async () => {

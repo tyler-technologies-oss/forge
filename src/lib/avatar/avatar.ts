@@ -1,12 +1,13 @@
-import { LitElement, PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
+import { PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { AVATAR_CONSTANTS } from './avatar-constants';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { BaseLitElement } from '../core/base/base-lit-element';
 
 import styles from './avatar.scss';
 
-export interface IAvatarComponent extends LitElement {
+export interface IAvatarComponent extends BaseLitElement {
   text: string;
   letterCount: number;
   imageUrl: string;
@@ -51,8 +52,11 @@ export const AVATAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-avatar';
  * @cssclass forge-avatar - The avatar class _(required)_.
  */
 @customElement(AVATAR_TAG_NAME)
-export class AvatarComponent extends LitElement implements IAvatarComponent {
+export class AvatarComponent extends BaseLitElement implements IAvatarComponent {
   public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = AVATAR_TAG_NAME;
 
   /**
    * The text to display in the avatar.
@@ -63,11 +67,10 @@ export class AvatarComponent extends LitElement implements IAvatarComponent {
 
   /**
    * Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
-   * @default 2
    * @attribute letter-count
    */
   @property({ type: Number, attribute: 'letter-count' })
-  public letterCount: number = AVATAR_CONSTANTS.numbers.DEFAULT_LETTER_COUNT;
+  public letterCount = 2;
 
   /**
    * The background image URL to use.
@@ -91,7 +94,7 @@ export class AvatarComponent extends LitElement implements IAvatarComponent {
         part="root"
         class=${classMap({ 'forge-avatar': true, 'forge-avatar--image': !!this._image })}
         style=${this._image ? styleMap({ backgroundImage: `url(${this._image.src})` }) : nothing}>
-        <slot>${this._image ? nothing : charsByLetterCount(this.text, this.letterCount ?? AVATAR_CONSTANTS.numbers.DEFAULT_LETTER_COUNT)}</slot>
+        <slot>${this._image ? nothing : charsByLetterCount(this.text, this.letterCount)}</slot>
       </div>
     `;
   }
