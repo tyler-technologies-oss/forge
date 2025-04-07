@@ -1,6 +1,8 @@
 import { coreProperty, coerceNumber, coerceBoolean } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { ListDropdownHeaderBuilder, ListDropdownFooterBuilder, LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants';
+import { PositionPlacement } from '../core/utils/position-utils';
+import { OverlayPlacement, IOverlayOffset, OverlayFlipState, OverlayShiftState } from '../overlay/overlay-constants';
 
 export interface IListDropdownAware extends IBaseComponent {
   popupClasses: string | string[];
@@ -12,19 +14,16 @@ export interface IListDropdownAware extends IBaseComponent {
   observeScrollThreshold: number;
   constrainPopupWidth: boolean;
   wrapOptionText: boolean;
+  popoverPlacement: OverlayPlacement;
+  popoverOffset: IOverlayOffset;
+  popoverFlip: OverlayFlipState;
+  popoverShift: OverlayShiftState;
+  popoverFallbackPlacements: PositionPlacement[] | null;
 }
 
 export class ListDropdownAware extends BaseComponent {
   public static get observedAttributes(): string[] {
-    return [
-      LIST_DROPDOWN_CONSTANTS.attributes.POPUP_CLASSES,
-      LIST_DROPDOWN_CONSTANTS.attributes.OPTION_LIMIT,
-      LIST_DROPDOWN_CONSTANTS.attributes.OBSERVE_SCROLL,
-      LIST_DROPDOWN_CONSTANTS.attributes.OBSERVE_SCROLL_THRESHOLD,
-      LIST_DROPDOWN_CONSTANTS.attributes.SYNC_POPUP_WIDTH,
-      LIST_DROPDOWN_CONSTANTS.attributes.CONSTRAIN_POPUP_WIDTH,
-      LIST_DROPDOWN_CONSTANTS.attributes.WRAP_OPTION_TEXT
-    ];
+    return Object.values(LIST_DROPDOWN_CONSTANTS.observedAttributes);
   }
 
   constructor() {
@@ -33,26 +32,38 @@ export class ListDropdownAware extends BaseComponent {
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case LIST_DROPDOWN_CONSTANTS.attributes.POPUP_CLASSES:
+      case LIST_DROPDOWN_CONSTANTS.observedAttributes.POPUP_CLASSES:
         this.popupClasses = newValue;
         break;
-      case LIST_DROPDOWN_CONSTANTS.attributes.OPTION_LIMIT:
+      case LIST_DROPDOWN_CONSTANTS.observedAttributes.OPTION_LIMIT:
         this.optionLimit = coerceNumber(newValue);
         break;
-      case LIST_DROPDOWN_CONSTANTS.attributes.OBSERVE_SCROLL:
+      case LIST_DROPDOWN_CONSTANTS.observedAttributes.OBSERVE_SCROLL:
         this.observeScroll = coerceBoolean(newValue);
         break;
-      case LIST_DROPDOWN_CONSTANTS.attributes.OBSERVE_SCROLL_THRESHOLD:
+      case LIST_DROPDOWN_CONSTANTS.observedAttributes.OBSERVE_SCROLL_THRESHOLD:
         this.observeScrollThreshold = coerceNumber(newValue);
         break;
-      case LIST_DROPDOWN_CONSTANTS.attributes.SYNC_POPUP_WIDTH:
+      case LIST_DROPDOWN_CONSTANTS.observedAttributes.SYNC_POPUP_WIDTH:
         this.syncPopupWidth = coerceBoolean(newValue);
         break;
-      case LIST_DROPDOWN_CONSTANTS.attributes.CONSTRAIN_POPUP_WIDTH:
+      case LIST_DROPDOWN_CONSTANTS.observedAttributes.CONSTRAIN_POPUP_WIDTH:
         this.constrainPopupWidth = coerceBoolean(newValue);
         break;
-      case LIST_DROPDOWN_CONSTANTS.attributes.WRAP_OPTION_TEXT:
+      case LIST_DROPDOWN_CONSTANTS.observedAttributes.WRAP_OPTION_TEXT:
         this.wrapOptionText = coerceBoolean(newValue);
+        break;
+      case LIST_DROPDOWN_CONSTANTS.observedAttributes.POPOVER_PLACEMENT:
+        this.popoverPlacement = newValue as OverlayPlacement;
+        break;
+      case LIST_DROPDOWN_CONSTANTS.observedAttributes.POPOVER_OFFSET:
+        this.popoverOffset = JSON.parse(newValue);
+        break;
+      case LIST_DROPDOWN_CONSTANTS.observedAttributes.POPOVER_FLIP:
+        this.popoverFlip = newValue as OverlayFlipState;
+        break;
+      case LIST_DROPDOWN_CONSTANTS.observedAttributes.POPOVER_SHIFT:
+        this.popoverShift = newValue as OverlayShiftState;
         break;
     }
   }
@@ -120,4 +131,42 @@ export class ListDropdownAware extends BaseComponent {
    */
   @coreProperty()
   declare public wrapOptionText: boolean;
+
+  /**
+   * Gets/sets the placement of the popover.
+   * @default 'bottom'
+   * @attribute popover-placement
+   */
+  @coreProperty()
+  declare public popoverPlacement: OverlayPlacement;
+
+  /**
+   * Gets/sets the offset of the popover.
+   * @attribute popover-offset
+   */
+  @coreProperty()
+  declare public popoverOffset: IOverlayOffset;
+
+  /**
+   * Gets/sets the flip state of the popover.
+   * @default 'auto'
+   * @attribute popover-flip
+   */
+  @coreProperty()
+  declare public popoverFlip: OverlayFlipState;
+
+  /**
+   * Gets/sets whether the popover should shift to fit within the viewport.
+   * @default 'auto'
+   * @attribute popover-shift
+   */
+  @coreProperty()
+  declare public popoverShift: OverlayShiftState;
+
+  /**
+   * Gets/sets the fallback placements of the popover.
+   * @attribute popover-fallback-placements
+   */
+  @coreProperty()
+  declare public popoverFallbackPlacements: PositionPlacement[] | null;
 }

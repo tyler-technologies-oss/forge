@@ -7,7 +7,8 @@ const observedAttributes = {
   ELEVATION: 'elevation',
   THEME: 'theme',
   HREF: 'href',
-  TARGET: 'target'
+  TARGET: 'target',
+  THEME_MODE: 'theme-mode'
 };
 
 const attributes = {
@@ -41,3 +42,4 @@ export const APP_BAR_CONSTANTS = {
 
 export type AppBarElevation = 'none' | 'raised';
 export type AppBarTheme = 'white' | 'custom' | '';
+export type AppBarThemeMode = 'inherit' | 'scoped';

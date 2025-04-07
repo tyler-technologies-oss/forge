@@ -391,13 +391,13 @@ describe('Dialog', () => {
 
       await harness.showAsync();
 
-      const labelElement = harness.nativeDialogElement.querySelector(`[id="${DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID}"]`) as HTMLElement;
+      const labelElement = harness.nativeDialogElement.querySelector(DIALOG_CONSTANTS.selectors.ACCESSIBLE_LABEL) as HTMLElement;
 
       expect(labelElement).to.be.ok;
       expect(labelElement.isConnected).to.be.true;
       expect(labelElement.textContent).to.equal('My dialog title');
-      expect(labelElement.id).to.equal(DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID);
-      expect(harness.nativeDialogElement.getAttribute('aria-labelledby')).to.equal(DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID);
+      expect(labelElement.id).to.equal('forge-dialog-label');
+      expect(harness.nativeDialogElement.getAttribute('aria-labelledby')).to.equal('forge-dialog-label');
       await expect(harness.dialogElement).to.be.accessible();
     });
 
@@ -406,13 +406,13 @@ describe('Dialog', () => {
 
       await harness.showAsync();
 
-      const descriptionElement = harness.nativeDialogElement.querySelector(`[id="${DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID}"]`) as HTMLElement;
+      const descriptionElement = harness.nativeDialogElement.querySelector(DIALOG_CONSTANTS.selectors.ACCESSIBLE_DESCRIPTION) as HTMLElement;
 
       expect(descriptionElement).to.be.ok;
       expect(descriptionElement.isConnected).to.be.true;
       expect(descriptionElement.textContent).to.equal('My dialog description');
-      expect(descriptionElement.id).to.equal(DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID);
-      expect(harness.nativeDialogElement.getAttribute('aria-describedby')).to.equal(DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID);
+      expect(descriptionElement.id).to.equal('forge-dialog-description');
+      expect(harness.nativeDialogElement.getAttribute('aria-describedby')).to.equal('forge-dialog-description');
       await expect(harness.dialogElement).to.be.accessible();
     });
 
@@ -421,8 +421,8 @@ describe('Dialog', () => {
 
       await harness.showAsync();
 
-      const labelElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(`[id="${DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID}"]`);
-      const descriptionElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(`[id="${DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID}"]`);
+      const labelElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(DIALOG_CONSTANTS.selectors.ACCESSIBLE_LABEL);
+      const descriptionElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(DIALOG_CONSTANTS.selectors.ACCESSIBLE_DESCRIPTION);
 
       expect(labelElements.length).to.equal(1);
       expect(descriptionElements.length).to.equal(1);
@@ -434,8 +434,8 @@ describe('Dialog', () => {
 
       await elementUpdated(harness.dialogElement);
 
-      const newLabelElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(`[id="${DIALOG_CONSTANTS.attributes.ARIA_LABEL_ID}"]`);
-      const newDescriptionElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(`[id="${DIALOG_CONSTANTS.attributes.ARIA_DESCRIPTION_ID}"]`);
+      const newLabelElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(DIALOG_CONSTANTS.selectors.ACCESSIBLE_LABEL);
+      const newDescriptionElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(DIALOG_CONSTANTS.selectors.ACCESSIBLE_DESCRIPTION);
 
       expect(newLabelElements.length).to.equal(1);
       expect(newDescriptionElements.length).to.equal(1);
@@ -512,6 +512,9 @@ describe('Dialog', () => {
     it('should close when button with formmethod="dialog" is clicked', async () => {
       const harness = await createFixture({ open: true });
 
+      const beforeCloseSpy = spy();
+      harness.dialogElement.addEventListener(DIALOG_CONSTANTS.events.BEFORE_CLOSE, beforeCloseSpy);
+
       const submitSpy = spy();
       const formEl = harness.dialogElement.querySelector('form') as HTMLFormElement;
       formEl.addEventListener('submit', submitSpy);
@@ -522,6 +525,8 @@ describe('Dialog', () => {
 
       expect(submitSpy).to.have.been.calledOnce;
       expect(harness.isOpen).to.be.false;
+      expect(beforeCloseSpy).to.have.been.calledOnce;
+      expect(beforeCloseSpy).to.have.been.calledWithMatch({ detail: { reason: 'submit' } });
     });
 
     it('should close when submit button is clicked within a form that has method="dialog"', async () => {
@@ -647,6 +652,7 @@ describe('Dialog', () => {
       await harness.pressEscapeKey();
 
       expect(beforeCloseSpy).to.have.been.calledOnce;
+      expect(beforeCloseSpy).to.have.been.calledWithMatch({ detail: { reason: 'escape' } });
     });
   });
 
@@ -701,6 +707,18 @@ describe('Dialog', () => {
       await harness.clickSurface();
 
       expect(harness.isOpen).to.be.true;
+    });
+
+    it('should fire before close event when closed via backdrop', async () => {
+      const harness = await createFixture({ open: true });
+
+      const beforeCloseSpy = spy();
+      harness.dialogElement.addEventListener(DIALOG_CONSTANTS.events.BEFORE_CLOSE, beforeCloseSpy);
+
+      await harness.clickOutside();
+
+      expect(beforeCloseSpy).to.have.been.calledOnce;
+      expect(beforeCloseSpy).to.have.been.calledWithMatch({ detail: { reason: 'backdrop' } });
     });
   });
 

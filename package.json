@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge",
-  "version": "3.7.0",
+  "version": "3.8.0",
   "description": "Tyler Forge™ Web Components library",
   "license": "Apache-2.0",
   "author": "Tyler Technologies, Inc.",
@@ -116,7 +116,10 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "overrides": {
-    "sass": "1.77.6"
+    "sass": "1.77.6",
+    "@tylertech-eslint/eslint-plugin": {
+      "@typescript-eslint/typescript-estree": "8.28.0"
+    }
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

@@ -1,6 +1,6 @@
-import { attachLightTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
+import { attachLightTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
 import { tylIconNotifications } from '@tylertech/tyler-icons/standard';
-import { BadgeComponent } from '../../badge';
+import { defineBadgeComponent } from '../../badge';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IconComponent, IconRegistry } from '../../icon';
 import { IconButtonComponent } from '../../icon-button';
@@ -43,9 +43,13 @@ export interface IAppBarNotificationButtonComponent extends IBaseComponent {
  */
 @customElement({
   name: APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.elementName,
-  dependencies: [IconButtonComponent, TooltipComponent, BadgeComponent, IconComponent]
+  dependencies: [IconButtonComponent, TooltipComponent, IconComponent]
 })
 export class AppBarNotificationButtonComponent extends BaseComponent implements IAppBarNotificationButtonComponent {
+  static {
+    defineBadgeComponent();
+  }
+
   public static get observedAttributes(): string[] {
     return [
       APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT,

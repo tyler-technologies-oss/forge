@@ -1,10 +1,12 @@
-import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { toggleState } from '../core/utils/utils';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { BaseLitElement } from '../core/base/base-lit-element';
 
 import styles from './card.scss';
 
-export interface ICardComponent extends LitElement {
+export interface ICardComponent extends BaseLitElement {
   raised: boolean;
 }
 
@@ -42,8 +44,11 @@ export const CARD_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-card';
  * @cssclass forge-card--raised - The card container element when raised _(required)_.
  */
 @customElement(CARD_TAG_NAME)
-export class CardComponent extends LitElement implements ICardComponent {
+export class CardComponent extends BaseLitElement implements ICardComponent {
   public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = CARD_TAG_NAME;
 
   #internals: ElementInternals;
 

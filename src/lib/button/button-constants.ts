@@ -20,4 +20,4 @@ export const BUTTON_CONSTANTS = {
 };
 
 export type ButtonVariant = 'text' | 'outlined' | 'tonal' | 'filled' | 'raised' | 'link';
-export type ButtonTheme = Theme;
+export type ButtonTheme = Theme | 'app-bar';
