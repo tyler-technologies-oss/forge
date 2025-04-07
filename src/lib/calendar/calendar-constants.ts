@@ -316,12 +316,6 @@ export interface ICalendarDateSelectEventData {
   rangeName?: string;
 }
 
-export interface ICalendarPredefinedDateRangeSelectEventData {
-  fromDate: Date;
-  toDate: Date;
-  rangeName: string;
-}
-
 export interface ICalendarMonthChangeEventData {
   month: number;
   userSelected: boolean; // Indicates whether event is from explicit selection or regular navigation

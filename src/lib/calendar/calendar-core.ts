@@ -1581,7 +1581,6 @@ export class CalendarCore implements ICalendarCore {
       this._adapter.unregisterClearButtonListener(this._clearButtonListener);
       this._adapter.removeClearButton();
 
-      // christina - make is any button selected? function
       if (!this._todayButton && !this._yesterdayButton && !this._lastSevenDaysButton && !this._lastThirtyDaysButton) {
         this._adapter.removeFooter();
       }
