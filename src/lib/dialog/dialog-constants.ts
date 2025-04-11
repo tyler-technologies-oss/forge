@@ -90,7 +90,7 @@ export interface IDialogBeforeCloseEventData {
 
 export type DialogMode = 'modal' | 'inline-modal' | 'nonmodal';
 export type DialogType = 'dialog' | 'alertdialog';
-export type DialogAnimationType = 'none' | 'zoom' | 'fade' | 'slide' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right';
+export type DialogAnimationType = 'none' | 'zoom' | 'fade' | 'slide';
 export type DialogPositionStrategy = 'viewport' | 'container';
 export type DialogPlacement = 'custom' | 'center' | 'top' | 'right' | 'bottom' | 'left' | 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 export type DialogSizeStrategy = 'content' | 'container-inline' | 'container-block';

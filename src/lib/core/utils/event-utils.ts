@@ -13,3 +13,15 @@ export function proxyShadowScrollEvent(shadowEl: Node, proxyEl: Node): () => voi
 export function eventIncludesArrowKey(evt: KeyboardEvent): boolean {
   return evt.key === 'ArrowLeft' || evt.key === 'ArrowRight' || evt.key === 'ArrowUp' || evt.key === 'ArrowDown';
 }
+
+/**
+ * Returns the composed path of an event stopping at the given element.
+ * @param fromElement The element to start the composed path from.
+ * @param evt The event to get the composed path from.
+ * @returns An array of elements in the composed path starting from the given element.
+ */
+export function composedPathFrom(fromElement: HTMLElement, evt: Event): HTMLElement[] {
+  const composedElements = evt.composedPath().filter((el: Element): el is HTMLElement => el.nodeType === Node.ELEMENT_NODE);
+  const startIndex = composedElements.indexOf(fromElement);
+  return startIndex >= 0 ? composedElements.slice(0, startIndex) : [];
+}
