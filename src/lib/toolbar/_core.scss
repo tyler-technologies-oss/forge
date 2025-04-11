@@ -39,6 +39,10 @@
   box-sizing: border-box;
 }
 
+@mixin inner-center {
+  min-width: 0;
+}
+
 @mixin section {
   display: flex;
   align-items: center;
@@ -48,6 +52,7 @@
 
 @mixin center {
   justify-content: center;
+  min-width: 0;
 }
 
 @mixin end {
