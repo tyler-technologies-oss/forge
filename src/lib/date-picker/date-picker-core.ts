@@ -51,6 +51,22 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
     this._onDateSelected({ date: yesterday, selected: true, type: 'date' });
   }
 
+  protected _onLastSevenDays(): void {
+    // not a range, so setting the day to 7 days ago
+    const today = new Date();
+    const sevenDaysAgo = new Date(today.setDate(today.getDate() - 7));
+    this._tryMergeCurrentTime(sevenDaysAgo);
+    this._onDateSelected({ date: sevenDaysAgo, selected: true, type: 'date' });
+  }
+
+  protected _onLastThirtyDays(): void {
+    // not a range, so setting the day to 30 days ago
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today.setDate(today.getDate() - 7));
+    this._tryMergeCurrentTime(thirtyDaysAgo);
+    this._onDateSelected({ date: thirtyDaysAgo, selected: true, type: 'date' });
+  }
+
   protected _onClear(): void {
     this._onDateSelected({ date: null, selected: false, type: 'date' });
   }

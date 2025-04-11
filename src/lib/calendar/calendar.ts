@@ -515,6 +515,18 @@ export class CalendarComponent extends BaseComponent implements ICalendarCompone
     this._core.today();
   }
 
+  public yesterday(): void {
+    this._core.yesterday();
+  }
+
+  public lastSevenDays(): void {
+    this._core.lastSevenDays();
+  }
+
+  public lastThirtyDays(): void {
+    this._core.lastThirtyDays();
+  }
+
   /**
    * Toggles a date selection.
    */
