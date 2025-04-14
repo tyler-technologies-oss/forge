@@ -1,3 +1,22 @@
+# v3.8.1 (Wed Apr 09 2025)
+
+#### 🐛 Bug Fix
+
+- fix(expansion-panel): fix connected check [#904](https://github.com/tyler-technologies-oss/forge/pull/904) ([@eliganemtyler](https://github.com/eliganemtyler) [@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list-item): fixed a bug where multiple clicks on the interactive element could occur [#905](https://github.com/tyler-technologies-oss/forge/pull/905) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore(dialog): remove unused slide direction values from `DialogAnimationType` [#906](https://github.com/tyler-technologies-oss/forge/pull/906) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(paginator): add missing slot docs [#907](https://github.com/tyler-technologies-oss/forge/pull/907) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Eli Ganem ([@eliganemtyler](https://github.com/eliganemtyler))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.8.0 (Thu Apr 03 2025)
 
 :tada: This release contains work from a new contributor! :tada:

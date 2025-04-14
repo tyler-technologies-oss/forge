@@ -1,3 +1,4 @@
+import { composedPathFrom } from '../../core/utils/event-utils';
 import { IListItemAdapter } from './list-item-adapter';
 import { IListItemSelectEventData, LIST_ITEM_CONSTANTS, ListItemFocusPropagation } from './list-item-constants';
 
@@ -48,7 +49,7 @@ export class ListItemCore implements IListItemCore {
   }
 
   private _onMousedown(evt: MouseEvent): void {
-    const composedElements = evt.composedPath().filter((el: Element) => el.nodeType === Node.ELEMENT_NODE);
+    const composedElements = composedPathFrom(this._adapter.hostElement, evt);
     const fromInteractiveElement = composedElements.some(el => el === this._adapter.interactiveElement);
     if (this._focusPropagation === 'off' || !fromInteractiveElement) {
       evt.preventDefault();
@@ -56,7 +57,7 @@ export class ListItemCore implements IListItemCore {
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
-    const composedElements = evt.composedPath().filter((el: Element) => el.nodeType === Node.ELEMENT_NODE);
+    const composedElements = composedPathFrom(this._adapter.hostElement, evt);
     const isFromStartEndSlot = composedElements.some((el: HTMLElement) => el.matches(LIST_ITEM_CONSTANTS.selectors.SLOTTED_START_END));
 
     if (evt.key === 'Enter' || evt.key === ' ') {
@@ -80,7 +81,7 @@ export class ListItemCore implements IListItemCore {
   }
 
   private _onClick(evt: MouseEvent): void {
-    const composedElements = evt.composedPath().filter((el: Element): el is HTMLElement => el.nodeType === Node.ELEMENT_NODE);
+    const composedElements = composedPathFrom(this._adapter.hostElement, evt);
 
     // Ignore clicks from elements that should not trigger selection
     const fromIgnoredElement = composedElements.some(el => (el as HTMLElement).matches(LIST_ITEM_CONSTANTS.selectors.IGNORE));

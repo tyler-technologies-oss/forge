@@ -163,8 +163,8 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
 
       this._trigger = value;
 
-      this._adapter.setTriggerElementById(this._trigger);
       if (this._adapter.isConnected) {
+        this._adapter.setTriggerElementById(this._trigger);
         this._syncTrigger();
       }
     }

@@ -39,6 +39,14 @@ declare global {
 /**
  * @tag forge-paginator
  *
+ * @slot label - Overrides the label text when in the default variant.
+ * @slot range-label - Overrides the default range label with a custom label when in the default variant.
+ * @slot alternative-range-label - Overrides the default range label with a custom label when in the `alternative` variant.
+ * @slot first-page-tooltip - Overrides the default tooltip for the first page button.
+ * @slot last-page-tooltip - Overrides the default tooltip for the last page button.
+ * @slot previous-page-tooltip - Overrides the default tooltip for the previous page button.
+ * @slot next-page-tooltip - Overrides the default tooltip for the next page button.
+ *
  * @event {CustomEvent<IPaginatorChangeEventData>} forge-paginator-change - Dispatched when the paginator state changes.
  */
 @customElement({
