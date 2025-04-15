@@ -29,7 +29,7 @@ dateRangePicker.addEventListener('forge-calendar-month-change', (evt) => {
 
 dateRangePicker.addEventListener('forge-date-range-picker-change', evt => {
   console.log('[forge-date-range-picker-change]', evt);
-  datePickerChangeStatusElement.textContent = ((evt.detail && evt.detail.from) || 'null') + ' - ' + ((evt.detail && evt.detail.to) || 'null');
+  datePickerChangeStatusElement.textContent = ((evt.detail && evt.detail.from) || 'null') + ' - ' + ((evt.detail && evt.detail.to) || 'null')  + ' - ' + ((evt.detail && evt.detail.rangeName) || 'null');
 });
 
 dateRangePickerFromInput.addEventListener('input', () => {
@@ -83,6 +83,21 @@ allowInvalidDateToggle.addEventListener('forge-switch-change', ({ detail: select
 const dateRangePickerShowTodayToggle = document.querySelector('#opt-show-today') as ISwitchComponent;
 dateRangePickerShowTodayToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   dateRangePicker.showToday = selected;
+});
+
+const dateRangePickerShowYesterdayToggle = document.querySelector('#opt-show-yesterday') as ISwitchComponent;
+dateRangePickerShowYesterdayToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  dateRangePicker.showYesterday = selected;
+});
+
+const dateRangePickerShowLastSevenDaysToggle = document.querySelector('#opt-show-last-seven-days') as ISwitchComponent;
+dateRangePickerShowLastSevenDaysToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  dateRangePicker.showLastSevenDays = selected;
+});
+
+const dateRangePickerShowLastThirtyDaysToggle = document.querySelector('#opt-show-last-thirty-days') as ISwitchComponent;
+dateRangePickerShowLastThirtyDaysToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  dateRangePicker.showLastThirtyDays = selected;
 });
 
 const dateRangePickerShowClearToggle = document.querySelector('#opt-show-clear') as ISwitchComponent;

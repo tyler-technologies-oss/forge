@@ -190,8 +190,9 @@
 
 @mixin footer() {
   padding: var(--forge-calendar-controls-padding, 0);
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  grid-auto-flow: row;
   justify-content: space-between;
 }
 

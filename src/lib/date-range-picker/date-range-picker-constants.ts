@@ -5,10 +5,12 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}date-r
 export class DatePickerRange implements IDatePickerRange {
   public from?: Date | string | null;
   public to?: Date | string | null;
+  public rangeName?: string | null | undefined;
   constructor(range?: IDatePickerRange) {
     if (range) {
       this.from = range.from;
       this.to = range.to;
+      this.rangeName = range.rangeName;
     }
   }
 
@@ -20,6 +22,7 @@ export class DatePickerRange implements IDatePickerRange {
 export interface IDatePickerRange {
   from?: Date | string | null;
   to?: Date | string | null;
+  rangeName?: string | null | undefined;
 }
 
 const observedAttributes = {
@@ -46,4 +49,6 @@ export const DATE_RANGE_PICKER_CONSTANTS = {
   observedAttributes
 };
 
-export interface IDateRangePickerChangeEventData extends DatePickerRange {}
+export interface IDateRangePickerChangeEventData extends DatePickerRange {
+  rangeName?: string | null | undefined;
+}
