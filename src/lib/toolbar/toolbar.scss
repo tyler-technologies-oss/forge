@@ -26,6 +26,10 @@
 
 .inner {
   @include inner;
+
+  &.center {
+    @include inner-center;
+  }
 }
 
 .section {
