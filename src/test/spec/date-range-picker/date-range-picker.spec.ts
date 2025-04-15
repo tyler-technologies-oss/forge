@@ -1429,7 +1429,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
 
       expect(changeSpy).toHaveBeenCalledTimes(2);
       expect(this.context.component.open).toBeFalse();
-      expect(popup).not.toBeNull('Expected popup to be removed');
+      expect(popup).toBeNull('Expected popup to be removed');
       expect(this.context.component.value?.from).not.toBeNull();
       expect(this.context.component.value?.to).not.toBeNull();
       expect((this.context.component.value?.to as Date).getDate()).toEqual(new Date().getDate());
