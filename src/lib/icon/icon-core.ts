@@ -152,13 +152,13 @@ export class IconCore implements IIconCore {
     if (typeof this._externalUrlBuilder === 'function') {
       return this._externalUrlBuilder(name, type);
     }
-    const setName = sanitizeExternalType(this._externalType);
 
-    if (!setName || setName === 'all') {
-      return `${ICON_CONSTANTS.strings.ALL_NETWORK_BASE_URL}/${name}.svg`;
+    const setName = sanitizeExternalType(this._externalType);
+    if (['standard', 'extended', 'custom'].includes(setName)) {
+      return `${ICON_CONSTANTS.strings.DEFAULT_NETWORK_BASE_URL}${setName ? `/${setName}` : ''}/${name}.svg`;
     }
 
-    return `${ICON_CONSTANTS.strings.DEFAULT_NETWORK_BASE_URL}${setName ? `/${setName}` : ''}/${name}.svg`;
+    return `${ICON_CONSTANTS.strings.ALL_NETWORK_BASE_URL}/${name}.svg`;
   }
 
   public get name(): string | undefined {

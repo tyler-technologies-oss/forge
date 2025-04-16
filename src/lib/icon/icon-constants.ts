@@ -23,7 +23,7 @@ const numbers = {
 };
 
 const strings = {
-  DEFAULT_NETWORK_BASE_URL: `${CDN_BASE_URL}v1/icons/svg/all`,
+  DEFAULT_NETWORK_BASE_URL: `${CDN_BASE_URL}v1/icons/svg`,
   ALL_NETWORK_BASE_URL: `${CDN_BASE_URL}v1/icons/svg/all`
 };
 
