@@ -1,7 +1,6 @@
 import '$src/shared';
 import '@tylertech/forge/switch';
-import { tylIconClose } from '@tylertech/tyler-icons/standard';
-import { tylIconCheck, tylIconEmoticonHappy, tylIconEmoticonSad } from '@tylertech/tyler-icons/extended';
+import { tylIconClose, tylIconCheck, tylIconEmoticonHappy, tylIconEmoticonSad } from '@tylertech/tyler-icons';
 import '@tylertech/forge/switch/forge-switch.scss';
 import './switch.scss';
 import { ISwitchComponent } from '@tylertech/forge/switch';

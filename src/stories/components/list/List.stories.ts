@@ -12,9 +12,9 @@ import {
   tylIconInbox,
   tylIconInfo,
   tylIconSettings,
-  tylIconStar
-} from '@tylertech/tyler-icons/standard';
-import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
+  tylIconStar,
+  tylIconForgeLogo
+} from '@tylertech/tyler-icons';
 import { styleMap } from 'lit/directives/style-map.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { storyStyles } from '../../decorators';

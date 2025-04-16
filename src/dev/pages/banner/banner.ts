@@ -3,7 +3,7 @@ import { IconRegistry } from '@tylertech/forge/icon';
 import '@tylertech/forge/banner';
 import '@tylertech/forge/button';
 import '@tylertech/forge/banner/forge-banner.scss';
-import { tylIconAddAlert } from '@tylertech/tyler-icons/standard';
+import { tylIconAddAlert } from '@tylertech/tyler-icons';
 import { BANNER_CONSTANTS, IBannerComponent } from '@tylertech/forge/banner';
 import { ISelectComponent } from '@tylertech/forge/select';
 import { ISwitchComponent } from '@tylertech/forge/switch';

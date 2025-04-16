@@ -1,5 +1,5 @@
 import { attachShadowTemplate, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconDateRange } from '@tylertech/tyler-icons/standard';
+import { tylIconDateRange } from '@tylertech/tyler-icons';
 import { CalendarComponent } from '../calendar';
 import { BaseDatePickerComponent, IBaseDatePickerComponent } from '../date-picker/base/base-date-picker';
 import { BASE_DATE_PICKER_CONSTANTS } from '../date-picker/base/base-date-picker-constants';

@@ -2,8 +2,7 @@ import '$src/shared';
 import { IconRegistry } from '@tylertech/forge/icon';
 import '@tylertech/forge/drawer';
 import '@tylertech/forge/drawer/forge-drawer.scss';
-import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
-import { tylIconDrafts, tylIconInbox, tylIconMenu, tylIconSend } from '@tylertech/tyler-icons/standard';
+import { tylIconForgeLogo, tylIconDrafts, tylIconInbox, tylIconMenu, tylIconSend } from '@tylertech/tyler-icons';
 import './drawer.scss';
 import type { IDrawerComponent, IModalDrawerComponent } from '@tylertech/forge/drawer';
 

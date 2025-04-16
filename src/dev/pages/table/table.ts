@@ -3,7 +3,7 @@ import '@tylertech/forge/table';
 import '@tylertech/forge/table/forge-table.scss';
 import './table.scss';
 import { TextFieldComponentDelegate } from '@tylertech/forge/text-field';
-import { tylIconChevronRight, tylIconDelete, tylIconEdit, tylIconMoreVert } from '@tylertech/tyler-icons/standard';
+import { tylIconChevronRight, tylIconDelete, tylIconEdit, tylIconMoreVert } from '@tylertech/tyler-icons';
 import { ITableComponent, IColumnConfiguration, SortDirection, ISortedColumn, CellAlign, ITableTemplateBuilderResult, ITableSortMultipleEventData } from '@tylertech/forge/table';
 import { ButtonComponentDelegate } from '@tylertech/forge/button';
 import { IconRegistry } from '@tylertech/forge/icon';

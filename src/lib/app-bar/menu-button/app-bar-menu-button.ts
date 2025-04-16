@@ -3,7 +3,7 @@ import { APP_BAR_MENU_BUTTON_CONSTANTS } from './app-bar-menu-button-constants';
 import { IconButtonComponent, ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
 import { TooltipComponent } from '../../tooltip';
 import { IconRegistry, ICON_CONSTANTS, IIconComponent } from '../../icon';
-import { tylIconMenu } from '@tylertech/tyler-icons/standard';
+import { tylIconMenu } from '@tylertech/tyler-icons';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { forwardAttributes } from '../../core/utils/reflect-utils';
 

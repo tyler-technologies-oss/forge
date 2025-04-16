@@ -1,4 +1,4 @@
-import { tylIconChevronRight, tylIconFavorite } from '@tylertech/tyler-icons/standard';
+import { tylIconChevronRight, tylIconFavorite } from '@tylertech/tyler-icons';
 import { IButtonAreaComponent } from '@tylertech/forge/button-area';
 import { IExpansionPanelComponent } from '@tylertech/forge/expansion-panel';
 import { IconRegistry } from '@tylertech/forge/icon';

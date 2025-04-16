@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { html } from 'lit';
 import { generateCustomElementArgTypes, standaloneStoryParams } from '../../../utils';
 import { IconRegistry } from '@tylertech/forge';
-import { tylIconAssignment, tylIconSettings, tylIconWarning, tylIconWorkOutline } from '@tylertech/tyler-icons/standard';
+import { tylIconAssignment, tylIconSettings, tylIconWarning, tylIconWorkOutline } from '@tylertech/tyler-icons';
 
 import '@tylertech/forge/app-bar';
 

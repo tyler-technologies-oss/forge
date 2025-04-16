@@ -6,7 +6,7 @@ import { TabComponent } from '../tab/tab';
 import { TabBarAdapter } from './tab-bar-adapter';
 import { ITabBarChangeEventData, TAB_BAR_CONSTANTS } from './tab-bar-constants';
 import { TabBarCore } from './tab-bar-core';
-import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
+import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons';
 import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
 import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 import { setDefaultAria } from '../../constants';

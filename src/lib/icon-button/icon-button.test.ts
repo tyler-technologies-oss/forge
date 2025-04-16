@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { sendMouse } from '@web/test-runner-commands';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { tylIconMoreVert } from '@tylertech/tyler-icons/standard';
+import { tylIconMoreVert } from '@tylertech/tyler-icons';
 import { IconRegistry } from '../icon/icon-registry';
 import { ICON_BUTTON_CONSTANTS } from './icon-button-constants';
 import { IconButtonComponent, IIconButtonComponent } from './icon-button';

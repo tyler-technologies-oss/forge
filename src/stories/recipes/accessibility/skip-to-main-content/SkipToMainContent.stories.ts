@@ -1,6 +1,6 @@
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
-import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
+import { tylIconForgeLogo } from '@tylertech/tyler-icons';
 import { storyStyles } from '../../../decorators';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 

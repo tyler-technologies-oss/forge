@@ -22,7 +22,7 @@ import {
   tylIconPerson,
   tylIconPhone,
   tylIconStar
-} from '@tylertech/tyler-icons/standard';
+} from '@tylertech/tyler-icons';
 import './button-toggle.scss';
 
 IconRegistry.define([

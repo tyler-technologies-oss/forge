@@ -1,5 +1,5 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceNumber, coerceBoolean, elementParents } from '@tylertech/forge-core';
-import { tylIconAdd, tylIconArrowDropDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconLens } from '@tylertech/tyler-icons/standard';
+import { tylIconAdd, tylIconArrowDropDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconLens } from '@tylertech/tyler-icons';
 
 import { CalendarAdapter } from './calendar-adapter';
 import { CalendarCore } from './calendar-core';

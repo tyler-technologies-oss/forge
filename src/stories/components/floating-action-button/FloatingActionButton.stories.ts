@@ -3,7 +3,7 @@ import { type Meta, type StoryObj } from '@storybook/web-components';
 import { DENSITY_OPTIONS, GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 import { styleMap } from 'lit/directives/style-map.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { tylIconFavorite, tylIconAdd, tylIconOpenInNew } from '@tylertech/tyler-icons/standard';
+import { tylIconFavorite, tylIconAdd, tylIconOpenInNew } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 
 import '@tylertech/forge/floating-action-button';

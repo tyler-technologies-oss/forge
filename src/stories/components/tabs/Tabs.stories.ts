@@ -3,8 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 import { styleMap } from 'lit/directives/style-map.js';
-import { tylIconFavorite } from '@tylertech/tyler-icons/standard';
-import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
+import { tylIconFavorite, tylIconForgeLogo } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 
 import '@tylertech/forge/tabs/tab-bar';

@@ -1,5 +1,5 @@
 import { coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconArrowDownward } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDownward } from '@tylertech/tyler-icons';
 import { ExpansionPanelComponent } from '../expansion-panel';
 import { CheckboxComponent } from '../checkbox';
 import { TableAdapter } from './table-adapter';

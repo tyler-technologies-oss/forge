@@ -12,6 +12,7 @@ export interface IIconProperties {
   src: string | undefined;
   lazy: boolean;
   external: boolean;
+  /** @deprecated This will be removed in a future version. */
   externalType: IconExternalType;
   externalUrlBuilder: IconUrlBuilder;
   theme: IconTheme;
@@ -37,7 +38,7 @@ declare global {
  * @property {string} src - Provides the ability to set the SVG string content directly.
  * @property {boolean} [lazy=false] - Controls whether the icon will be loaded dynamically when it comes into view. False by default.
  * @property {boolean} [external=false] - Controls whether external network requests are allowed for this icon. Only pertains for icons that aren't already defined in the registry.
- * @property {IconExternalType} [externalType="standard"] - The type of icon to load externally. Possible values: "standard" (default), "extended", "custom".
+ * @property {IconExternalType} [externalType="all"] - **(Deprecated)** The type of icon to load externally. Possible values: "all" (default), "standard", "extended", "custom".
  * @property {IconUrlBuilder} externalUrlBuilder - A callback that can be provided to generate a URL that will be used to fetch an SVG icon.
  * @property {string} viewbox - A custom value to apply to the `viewBox` attribute on the internal `<svg>` element.
  * @property {IconTheme} theme - The theme to apply to the icon.
@@ -135,6 +136,7 @@ export class IconComponent extends BaseComponent implements IIconComponent {
 
   /**
    * The type of icon to load externally. Possible values: "standard", "extended", "custom".
+   * @deprecated This will be removed in a future version.
    * @attribute external-type
    */
   @coreProperty()

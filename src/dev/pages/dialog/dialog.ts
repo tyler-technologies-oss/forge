@@ -5,7 +5,7 @@ import '@tylertech/forge/scaffold';
 import '@tylertech/forge/button';
 import '@tylertech/forge/dialog/forge-dialog.scss';
 import './dialog.scss';
-import { tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconClose } from '@tylertech/tyler-icons';
 import { IDialogComponent, IDialogMoveEventData } from '@tylertech/forge/dialog';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { ISelectComponent } from '@tylertech/forge/select';

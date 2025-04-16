@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconClear } from '@tylertech/tyler-icons/standard';
+import { tylIconClear } from '@tylertech/tyler-icons';
 import { BASE_FIELD_CONSTANTS, FieldComponent } from '../field';
 import { BaseField, IBaseField } from '../field/base/base-field';
 import { IconRegistry } from '../icon';

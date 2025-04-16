@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconClose } from '@tylertech/tyler-icons';
 import { ButtonComponent } from '../button';
 import { setDefaultAria } from '../constants';
 import { BaseComponent } from '../core/base/base-component';

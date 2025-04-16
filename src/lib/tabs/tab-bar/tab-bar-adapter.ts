@@ -1,6 +1,6 @@
 import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
 import { IIconButtonComponent } from '../../icon-button/icon-button';
-import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
+import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { ITabComponent } from '../tab/tab';
 import { TAB_CONSTANTS } from '../tab/tab-constants';

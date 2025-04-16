@@ -6,7 +6,7 @@ import type { ISplitButtonComponent, SplitButtonVariant } from '@tylertech/forge
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
 import type { IMenuComponent } from '@tylertech/forge/menu';
-import { tylIconArrowDropDown, tylIconScheduleSend, tylIconDeleteOutline, tylIconBookmarkBorder } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDropDown, tylIconScheduleSend, tylIconDeleteOutline, tylIconBookmarkBorder } from '@tylertech/tyler-icons';
 import './split-button.scss';
 
 IconRegistry.define([tylIconArrowDropDown, tylIconScheduleSend, tylIconDeleteOutline, tylIconBookmarkBorder]);

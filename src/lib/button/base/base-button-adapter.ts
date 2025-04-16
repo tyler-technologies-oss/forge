@@ -1,5 +1,5 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';

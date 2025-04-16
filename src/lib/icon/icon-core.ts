@@ -20,7 +20,7 @@ export class IconCore implements IIconCore {
   private _src: string | undefined;
   private _lazy = false;
   private _external = false;
-  private _externalType: IconExternalType = 'standard';
+  private _externalType: IconExternalType = 'all';
   private _externalUrlBuilder: IconUrlBuilder;
   private _viewbox: string;
   private _theme: IconTheme;
@@ -152,8 +152,13 @@ export class IconCore implements IIconCore {
     if (typeof this._externalUrlBuilder === 'function') {
       return this._externalUrlBuilder(name, type);
     }
+
     const setName = sanitizeExternalType(this._externalType);
-    return `${ICON_CONSTANTS.strings.DEFAULT_NETWORK_BASE_URL}${setName ? `/${setName}` : ''}/${name}.svg`;
+    if (['standard', 'extended', 'custom'].includes(setName)) {
+      return `${ICON_CONSTANTS.strings.DEFAULT_NETWORK_BASE_URL}/${setName}/${name}.svg`;
+    }
+
+    return `${ICON_CONSTANTS.strings.ALL_NETWORK_BASE_URL}/${name}.svg`;
   }
 
   public get name(): string | undefined {
@@ -210,6 +215,7 @@ export class IconCore implements IIconCore {
     return this._externalType;
   }
   public set externalType(value: IconExternalType) {
+    value = sanitizeExternalType(value);
     if (this._externalType !== value) {
       this._externalType = value;
       this._safeApplyIcon();

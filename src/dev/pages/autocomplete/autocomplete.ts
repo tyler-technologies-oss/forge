@@ -13,7 +13,7 @@ import type { ISelectComponent } from '@tylertech/forge/select';
 import type { IOption, IOptionGroup } from '@tylertech/forge/select';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { IListDropdownOption, IListDropdownOptionGroup } from '@tylertech/forge/list-dropdown';
-import { tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconClose } from '@tylertech/tyler-icons';
 import { randomTimeout } from '../../src/utils/utils';
 
 IconRegistry.define([

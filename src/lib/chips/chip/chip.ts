@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconClose } from '@tylertech/tyler-icons';
 import { BaseComponent, IBaseComponent } from '../../core';
 import { FocusIndicatorComponent } from '../../focus-indicator';
 import { IconComponent, IconRegistry } from '../../icon';

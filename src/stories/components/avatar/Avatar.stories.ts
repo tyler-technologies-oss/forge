@@ -1,14 +1,14 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
-import { tylIconPerson } from '@tylertech/tyler-icons/standard';
+import { tylIconPerson } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 import { styleMap } from 'lit/directives/style-map.js';
+import { AVATAR_CONSTANTS } from '@tylertech/forge/avatar';
 
 import '@tylertech/forge/avatar';
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/icon';
-import { AVATAR_CONSTANTS } from '@tylertech/forge/avatar';
 
 const component = 'forge-avatar';
 
@@ -70,8 +70,12 @@ export const WithIcon: Story = {
 
 export const WithIconButton: Story = {
   ...standaloneStoryParams,
-  render: args => {
-    return html` <forge-icon-button aria-label="Icon button with avatar"> ${customElementStoryRenderer(component, args)} </forge-icon-button> `;
+  render: ({ text }) => {
+    return html`
+      <forge-icon-button aria-label="Icon button with avatar">
+        <forge-avatar text=${text}></forge-avatar>
+      </forge-icon-button>
+    `;
   }
 };
 

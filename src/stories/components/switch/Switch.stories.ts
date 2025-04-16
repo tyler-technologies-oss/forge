@@ -1,6 +1,6 @@
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconCheck, tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconCheck, tylIconClose } from '@tylertech/tyler-icons';
 import { html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';

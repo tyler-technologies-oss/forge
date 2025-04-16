@@ -4,7 +4,7 @@ import '@tylertech/forge/checkbox';
 import '@tylertech/forge/select';
 import '@tylertech/forge/field/forge-field.scss';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconFood } from '@tylertech/tyler-icons/extended';
+import { tylIconFood } from '@tylertech/tyler-icons';
 import './select.scss';
 import { IListDropdownOption } from '@tylertech/forge/list-dropdown';
 import { ISelectComponent, SelectDensityType } from '@tylertech/forge/select';

@@ -1,6 +1,5 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumber, ensureChild } from '@tylertech/forge-core';
-import { tylIconClockOutline } from '@tylertech/tyler-icons/extended';
-import { tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconClockOutline, tylIconClose } from '@tylertech/tyler-icons';
 import { TimePickerAdapter } from './time-picker-adapter';
 import { TimePickerCore } from './time-picker-core';
 import {

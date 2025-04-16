@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { DIALOG_CONSTANTS, type IDialogProperties } from '@tylertech/forge/dialog';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconClose } from '@tylertech/tyler-icons';
 import { html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { storyStyles } from '../../decorators';

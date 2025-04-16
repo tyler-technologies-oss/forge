@@ -2,7 +2,7 @@ import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { action } from '@storybook/addon-actions';
 import { generateCustomElementArgTypes } from '../../../utils';
-import { tylIconDrafts, tylIconEmail, tylIconInbox, tylIconSend } from '@tylertech/tyler-icons/standard';
+import { tylIconDrafts, tylIconEmail, tylIconInbox, tylIconSend } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { type IMiniDrawerComponent } from '@tylertech/forge/drawer/mini-drawer';

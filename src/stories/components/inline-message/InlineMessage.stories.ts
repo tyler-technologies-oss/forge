@@ -2,7 +2,7 @@ import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { GLOBAL_THEME_OPTIONS, customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconInfo } from '@tylertech/tyler-icons/standard';
+import { tylIconInfo } from '@tylertech/tyler-icons';
 import { styleMap } from 'lit/directives/style-map.js';
 
 import '@tylertech/forge/inline-message';

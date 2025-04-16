@@ -25,8 +25,7 @@ import '@tylertech/forge/tooltip';
 import '@tylertech/forge/stack';
 
 // Icons
-import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
-import { tylIconBrightness3, tylIconWbSunny } from '@tylertech/tyler-icons/standard';
+import { tylIconForgeLogo, tylIconBrightness3, tylIconWbSunny } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon';
 
 IconRegistry.define([
