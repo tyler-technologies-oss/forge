@@ -1,8 +1,8 @@
-import { tryDefine } from '@tylertech/forge-core';
-import { METER_GROUP_TAG_NAME, MeterGroupComponent } from './meter-group';
+import { defineCustomElement } from '@tylertech/forge-core';
+import { MeterGroupComponent } from './meter-group';
 
 export * from './meter-group';
 
 export function defineMeterGroupComponent(): void {
-  tryDefine(METER_GROUP_TAG_NAME, MeterGroupComponent);
+  defineCustomElement(MeterGroupComponent);
 }
