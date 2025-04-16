@@ -3,7 +3,7 @@ import { IconRegistry } from '@tylertech/forge/icon';
 import '@tylertech/forge/meter';
 import { ISelectComponent } from '@tylertech/forge/select';
 import { ISwitchComponent } from '@tylertech/forge/switch';
-import { tylIconLens } from '@tylertech/tyler-icons/standard';
+import { tylIconLens } from '@tylertech/tyler-icons';
 import './meter.scss';
 
 IconRegistry.define([tylIconLens]);

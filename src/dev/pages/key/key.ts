@@ -1,8 +1,7 @@
 import '$src/shared';
 import '@tylertech/forge/key';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconSquare } from '@tylertech/tyler-icons/extended';
-import { tylIconFavorite, tylIconStar } from '@tylertech/tyler-icons/standard';
+import { tylIconSquare, tylIconFavorite, tylIconStar } from '@tylertech/tyler-icons';
 
 IconRegistry.define([
   tylIconFavorite,

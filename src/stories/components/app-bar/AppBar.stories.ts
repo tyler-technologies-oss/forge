@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
-import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
+import { tylIconForgeLogo } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 import { storyStyles } from '../../decorators';
 

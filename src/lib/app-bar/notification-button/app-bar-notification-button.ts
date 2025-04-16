@@ -1,5 +1,5 @@
 import { attachLightTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
-import { tylIconNotifications } from '@tylertech/tyler-icons/standard';
+import { tylIconNotifications } from '@tylertech/tyler-icons';
 import { defineBadgeComponent } from '../../badge';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IconComponent, IconRegistry } from '../../icon';

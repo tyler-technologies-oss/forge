@@ -1,5 +1,5 @@
 import { addClass, getEventPath, isDeepEqual, isDefined, isObject } from '@tylertech/forge-core';
-import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
+import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons';
 import { ICON_CLASS_NAME } from '../constants';
 import { IIconComponent } from '../icon';
 import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress';

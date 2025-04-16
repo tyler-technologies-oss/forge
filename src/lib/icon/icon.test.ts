@@ -4,7 +4,7 @@ import { stub } from 'sinon';
 import { task } from '../core/utils/utils';
 import type { IIconComponent } from './icon';
 import { IconRegistry } from './icon-registry';
-import { tylIcon360, tylIconCode, tylIconFace } from '@tylertech/tyler-icons/standard';
+import { tylIcon360, tylIconCode, tylIconFace } from '@tylertech/tyler-icons';
 import { ICON_CONSTANTS } from './icon-constants';
 
 import './icon';
@@ -40,7 +40,7 @@ describe('Icon', () => {
     expect(el.src).to.be.undefined;
     expect(el.lazy).to.be.false;
     expect(el.external).to.be.false;
-    expect(el.externalType).to.equal('standard');
+    expect(el.externalType).to.equal('all');
     expect(el.viewbox).to.be.undefined;
     expect(el.theme).to.be.undefined;
   });

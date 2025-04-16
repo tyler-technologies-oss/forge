@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
-import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
+import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons';
 import { CircularProgressComponent } from '../../circular-progress';
 import { getFormValue, getValidationMessage, inputType, internals, setDefaultAria, setValidity } from '../../constants';
 import { FormValue } from '../../core';

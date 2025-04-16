@@ -1,5 +1,5 @@
 import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
-import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
 import { IconRegistry } from '../../icon/icon-registry';
 import { BaseComponent } from '../../core/base/base-component';
 import { ExperimentalFocusOptions, internals, setDefaultAria } from '../../constants';

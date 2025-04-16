@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
-import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
 import { BASE_BUTTON_CONSTANTS } from '../base/base-button-constants';
 import type { IButtonComponent } from '../button';
 import type { IStateLayerComponent } from '../../state-layer';

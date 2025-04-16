@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, ensureChild, coreProperty } from '@tylertech/forge-core';
-import { tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons';
 import { DividerComponent } from '../divider';
 import { IconComponent, IconRegistry } from '../icon';
 import { LinearProgressComponent } from '../linear-progress';

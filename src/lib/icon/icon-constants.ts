@@ -23,7 +23,8 @@ const numbers = {
 };
 
 const strings = {
-  DEFAULT_NETWORK_BASE_URL: `${CDN_BASE_URL}v1/icons/svg`
+  DEFAULT_NETWORK_BASE_URL: `${CDN_BASE_URL}v1/icons/svg/all`,
+  ALL_NETWORK_BASE_URL: `${CDN_BASE_URL}v1/icons/svg/all`
 };
 
 export const ICON_CONSTANTS = {
@@ -37,5 +38,5 @@ export const ICON_CONSTANTS = {
 export const ICON_REGISTRY_KEY = 'forgeIcons' as const;
 
 export type IconUrlBuilder = (name: string, type: IconExternalType) => string;
-export type IconExternalType = '' | 'custom' | 'standard' | 'extended';
+export type IconExternalType = '' | 'custom' | 'standard' | 'extended' | 'all';
 export type IconTheme = Theme | 'text-medium' | 'text-low';

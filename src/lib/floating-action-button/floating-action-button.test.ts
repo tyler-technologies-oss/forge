@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { fixture, html } from '@open-wc/testing';
 import { sendMouse } from '@web/test-runner-commands';
-import { tylIconFavorite } from '@tylertech/tyler-icons/standard';
+import { tylIconFavorite } from '@tylertech/tyler-icons';
 import { IconRegistry } from '../icon/icon-registry';
 import type { IStateLayerComponent } from '../state-layer';
 import type { IFocusIndicatorComponent } from '../focus-indicator';

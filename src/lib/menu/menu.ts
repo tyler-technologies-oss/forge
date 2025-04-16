@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, customElement, ensureChild, coreProperty, isDefined } from '@tylertech/forge-core';
-import { tylIconArrowRight } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowRight } from '@tylertech/tyler-icons';
 import { PositionPlacement } from '../core/utils/position-utils';
 import { IconRegistry } from '../icon';
 import { ListComponent } from '../list';

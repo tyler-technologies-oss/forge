@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { GLOBAL_THEME_OPTIONS, customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
 import { IconRegistry, type IIconProperties } from '@tylertech/forge/icon';
-import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
+import { tylIconForgeLogo } from '@tylertech/tyler-icons';
 
 import '@tylertech/forge/icon';
 import { html } from 'lit';
@@ -48,7 +48,7 @@ export const External: Story = {
   render: () =>
     customElementStoryRenderer(component, {
       external: true,
-      externalType: 'custom',
+      externalType: 'all',
       name: 'action_launcher'
     })
 };

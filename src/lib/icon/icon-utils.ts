@@ -68,6 +68,6 @@ export function fetchIconContent(url: string, name: string): Promise<string> {
 }
 
 export function sanitizeExternalType(type: string): string {
-  const isValidType = ['standard', 'extended', 'custom'].includes(type);
+  const isValidType = ['standard', 'extended', 'custom', 'all'].includes(type);
   return isValidType ? type : '';
 }

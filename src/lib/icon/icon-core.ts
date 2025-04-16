@@ -20,7 +20,7 @@ export class IconCore implements IIconCore {
   private _src: string | undefined;
   private _lazy = false;
   private _external = false;
-  private _externalType: IconExternalType = 'standard';
+  private _externalType: IconExternalType = 'all';
   private _externalUrlBuilder: IconUrlBuilder;
   private _viewbox: string;
   private _theme: IconTheme;
@@ -153,6 +153,11 @@ export class IconCore implements IIconCore {
       return this._externalUrlBuilder(name, type);
     }
     const setName = sanitizeExternalType(this._externalType);
+
+    if (!setName || setName === 'all') {
+      return `${ICON_CONSTANTS.strings.ALL_NETWORK_BASE_URL}/${name}.svg`;
+    }
+
     return `${ICON_CONSTANTS.strings.DEFAULT_NETWORK_BASE_URL}${setName ? `/${setName}` : ''}/${name}.svg`;
   }
 
