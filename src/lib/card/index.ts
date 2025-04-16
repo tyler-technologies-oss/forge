@@ -1,9 +1,9 @@
-import { tryDefine } from '@tylertech/forge-core';
-import { CARD_TAG_NAME, CardComponent } from './card';
+import { defineCustomElement } from '@tylertech/forge-core';
+import { CardComponent } from './card';
 
-export * from './card-constants';
 export * from './card';
+export * from './card-constants';
 
 export function defineCardComponent(): void {
-  tryDefine(CARD_TAG_NAME, CardComponent);
+  defineCustomElement(CardComponent);
 }

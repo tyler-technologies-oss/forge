@@ -1,8 +1,8 @@
-import { tryDefine } from '@tylertech/forge-core';
-import { KEY_TAG_NAME, KeyComponent } from './key';
+import { defineCustomElement } from '@tylertech/forge-core';
+import { KeyComponent } from './key';
 
 export * from './key';
 
 export function defineKeyComponent(): void {
-  tryDefine(KEY_TAG_NAME, KeyComponent);
+  defineCustomElement(KeyComponent);
 }
