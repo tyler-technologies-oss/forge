@@ -1,6 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty, isDefined, isString } from '@tylertech/forge-core';
 import { getFormState, getFormValue, getValidationMessage, inputType, internals, setDefaultAria, setValidity } from '../constants';
-import { BaseComponent, FormValue } from '../core';
+import { BaseComponent, FormValue, Nullable } from '../core';
 import { IWithFocusable, WithFocusable } from '../core/mixins/focus/with-focusable';
 import { IWithFormAssociation, WithFormAssociation } from '../core/mixins/form/with-form-associated';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
@@ -30,7 +30,7 @@ export interface ISwitchComponent extends IWithFormAssociation, IWithFocusable, 
   icon: SwitchIconVisibility;
   labelPosition: SwitchLabelPosition;
   toggle(force?: boolean): void;
-  setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void;
+  setFormValue(value: FormValue | null, state?: Nullable<FormValue>): void;
   [setValidity](): void;
 }
 
@@ -247,7 +247,7 @@ export class SwitchComponent
   }
 
   /** @ignore */
-  public setFormValue(value: (FormValue & { [key: string]: any }) | null, state?: (FormValue & { [key: string]: any }) | null | undefined): void {
+  public setFormValue(value: (FormValue & { [key: string]: any }) | null, state?: Nullable<FormValue & { [key: string]: any }>): void {
     this[internals].setFormValue(value, state);
 
     if (state) {

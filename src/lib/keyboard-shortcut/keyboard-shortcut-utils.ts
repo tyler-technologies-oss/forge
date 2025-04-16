@@ -1,4 +1,5 @@
-import { textInputTypes, IKeyCombination } from './keyboard-shortcut-constants';
+import { Nullable } from '../core';
+import { IKeyCombination, textInputTypes } from './keyboard-shortcut-constants';
 
 /** Checks if an HTML element allows text input */
 export function elementAcceptsTextInput(el: any): boolean {
@@ -9,7 +10,7 @@ export function elementAcceptsTextInput(el: any): boolean {
 }
 
 /** Parses a string of key combinations into an array of keys and modifiers */
-export function parseKeyCombinations(keys: string | null | undefined, useCode = false): IKeyCombination[] {
+export function parseKeyCombinations(keys: Nullable<string>, useCode = false): IKeyCombination[] {
   if (!keys || !keys.length) {
     return [];
   }

@@ -1,6 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
 import { updateTarget } from '../constants';
-import { BaseComponent, IBaseComponent } from '../core';
+import { BaseComponent, IBaseComponent, Nullable } from '../core';
 import { LabelAdapter } from './label-adapter';
 import { ILabelAware } from './label-aware';
 import { LABEL_CONSTANTS } from './label-constants';
@@ -10,8 +10,8 @@ import template from './label.html';
 import style from './label.scss';
 
 export interface ILabelComponent extends IBaseComponent {
-  for: string | null | undefined;
-  forElement: HTMLElement | null | undefined;
+  for: Nullable<string>;
+  forElement: Nullable<HTMLElement>;
   dynamic: boolean;
   nonInteractive: boolean;
   legend: boolean;
@@ -83,21 +83,21 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
    * @attribute
    */
   @coreProperty()
-  declare public for: string | null | undefined;
+  declare public for: Nullable<string>;
 
   /**
    * The associated element.
    * @default null
    */
   @coreProperty()
-  declare public forElement: HTMLElement | null | undefined;
+  declare public forElement: Nullable<HTMLElement>;
 
   /**
    * The element that a click should be simulated on. If not defined clicks act on the associated element.
    * @default null
    */
   @coreProperty()
-  declare public clickTarget: HTMLElement | null | undefined;
+  declare public clickTarget: Nullable<HTMLElement>;
 
   /**
    * Propagates changes in the label's text content to the associated element.

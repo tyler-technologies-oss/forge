@@ -1,10 +1,11 @@
+import { Nullable } from '../core';
 import { IFilePickerAdapter } from './file-picker-adapter';
 import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants';
 
 export interface IFilePickerCore {
-  accept: string | null | undefined;
-  maxSize: number | null | undefined;
-  capture: string | null | undefined;
+  accept: Nullable<string>;
+  maxSize: Nullable<number>;
+  capture: Nullable<string>;
   multiple: boolean;
   disabled: boolean;
   compact: boolean;
@@ -13,9 +14,9 @@ export interface IFilePickerCore {
 
 export class FilePickerCore implements IFilePickerCore {
   private _isInitialized = false;
-  private _accept: string | null | undefined = null;
-  private _maxSize: number | null | undefined = null;
-  private _capture: string | null | undefined = null;
+  private _accept: Nullable<string> = null;
+  private _maxSize: Nullable<number> = null;
+  private _capture: Nullable<string> = null;
   private _multiple = false;
   private _disabled = false;
   private _compact = false;
@@ -155,10 +156,10 @@ export class FilePickerCore implements IFilePickerCore {
   }
 
   /** Get and set the allowed file types */
-  public get accept(): string | null | undefined {
+  public get accept(): Nullable<string> {
     return this._accept;
   }
-  public set accept(value: string | null | undefined) {
+  public set accept(value: Nullable<string>) {
     if (this._accept !== value) {
       this._accept = value;
       this._adapter.setAccept(value);
@@ -167,10 +168,10 @@ export class FilePickerCore implements IFilePickerCore {
   }
 
   /** Get and set the maximum allowed file size */
-  public get maxSize(): number | null | undefined {
+  public get maxSize(): Nullable<number> {
     return this._maxSize;
   }
-  public set maxSize(value: number | null | undefined) {
+  public set maxSize(value: Nullable<number>) {
     if (this._maxSize !== value) {
       this._maxSize = value;
       this._adapter.toggleHostAttribute(FILE_PICKER_CONSTANTS.attributes.MAX_SIZE, !!value, String(value));
@@ -178,10 +179,10 @@ export class FilePickerCore implements IFilePickerCore {
   }
 
   /** Get and set the camera to use when capturing video or images */
-  public get capture(): string | null | undefined {
+  public get capture(): Nullable<string> {
     return this._capture;
   }
-  public set capture(value: string | null | undefined) {
+  public set capture(value: Nullable<string>) {
     if (this._capture !== value) {
       this._capture = value;
       this._adapter.setCapture(value);

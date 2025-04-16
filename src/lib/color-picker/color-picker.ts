@@ -10,11 +10,12 @@ import { ColorPickerCore } from './color-picker-core';
 
 import template from './color-picker.html';
 import styles from './color-picker.scss';
+import { Nullable } from '../core';
 export interface IColorPickerComponent extends IBaseComponent {
-  value: string | null | undefined;
-  rgba: IRGBA | null | undefined;
-  hsva: IHSVA | null | undefined;
-  opacity: number | null | undefined;
+  value: Nullable<string>;
+  rgba: Nullable<IRGBA>;
+  hsva: Nullable<IHSVA>;
+  opacity: Nullable<number>;
   allowOpacity: boolean;
   debounceChangeEvent: boolean;
 }
@@ -87,19 +88,19 @@ export class ColorPickerComponent extends BaseComponent implements IColorPickerC
 
   /** Gets/sets the value using hex format only. */
   @coreProperty()
-  declare public value: string | null | undefined;
+  declare public value: Nullable<string>;
 
   /** Gets/sets the value using rgba format. */
   @coreProperty()
-  declare public rgba: IRGBA | null | undefined;
+  declare public rgba: Nullable<IRGBA>;
 
   /** Gets/sets the value using hsva format. */
   @coreProperty()
-  declare public hsva: IHSVA | null | undefined;
+  declare public hsva: Nullable<IHSVA>;
 
   /** Gets/sets the opacity value, if `allowOpacity` is true. */
   @coreProperty()
-  declare public opacity: number | null | undefined;
+  declare public opacity: Nullable<number>;
 
   /** Gets/sets whether opacity is displayed and allowed be to changed. */
   @coreProperty()

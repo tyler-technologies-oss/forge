@@ -1,5 +1,6 @@
 import { getLightElement, toggleAttribute } from '@tylertech/forge-core';
 import { IBadgeComponent } from '../../badge';
+import { Nullable } from '../../core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { forwardAttributes } from '../../core/utils/reflect-utils';
 import { ICON_CONSTANTS, IIconComponent } from '../../icon';
@@ -12,7 +13,7 @@ export interface IAppBarNotificationButtonAdapter extends IBaseAdapter {
   initialize(): void;
   destroy(): void;
   setIcon(icon: string): void;
-  setCount(value: string | number | null | undefined): void;
+  setCount(value: Nullable<string | number>): void;
   setBadgeType(dot: boolean): void;
   setBadgeTheme(theme: string): void;
   setBadgeVisible(isVisible: boolean): void;
