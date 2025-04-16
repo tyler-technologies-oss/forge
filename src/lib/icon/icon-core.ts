@@ -155,7 +155,7 @@ export class IconCore implements IIconCore {
 
     const setName = sanitizeExternalType(this._externalType);
     if (['standard', 'extended', 'custom'].includes(setName)) {
-      return `${ICON_CONSTANTS.strings.DEFAULT_NETWORK_BASE_URL}${setName ? `/${setName}` : ''}/${name}.svg`;
+      return `${ICON_CONSTANTS.strings.DEFAULT_NETWORK_BASE_URL}/${setName}/${name}.svg`;
     }
 
     return `${ICON_CONSTANTS.strings.ALL_NETWORK_BASE_URL}/${name}.svg`;
@@ -215,6 +215,7 @@ export class IconCore implements IIconCore {
     return this._externalType;
   }
   public set externalType(value: IconExternalType) {
+    value = sanitizeExternalType(value);
     if (this._externalType !== value) {
       this._externalType = value;
       this._safeApplyIcon();

@@ -1,5 +1,5 @@
 import { IconRegistry, IIconDescriptor } from './icon-registry';
-import { ICON_CONSTANTS } from './icon-constants';
+import { ICON_CONSTANTS, IconExternalType } from './icon-constants';
 import { createSvgFromString } from '../core/utils/svg-utils';
 
 const _activeIconRequests = new Map<string, Promise<any>>();
@@ -67,7 +67,7 @@ export function fetchIconContent(url: string, name: string): Promise<string> {
   return request || Promise.resolve('');
 }
 
-export function sanitizeExternalType(type: string): string {
+export function sanitizeExternalType(type: string): IconExternalType {
   const isValidType = ['standard', 'extended', 'custom', 'all'].includes(type);
-  return isValidType ? type : 'all';
+  return isValidType ? (type as IconExternalType) : 'all';
 }
