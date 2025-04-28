@@ -92,6 +92,7 @@ export interface IStepConfiguration {
   vertical?: boolean;
   expanded?: boolean;
   ignoreUserExpansion?: boolean;
+  customModel?: any
 }
 
 export interface IStepperConfiguration {
