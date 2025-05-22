@@ -603,6 +603,7 @@ export class TableCore implements ITableCore {
     this._adapter.createTable(this._tableConfiguration);
     this._renderSelections();
     this._rendered = true;
+    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.BODY_RENDERED, undefined, false);
   }
 
   /**
@@ -614,6 +615,7 @@ export class TableCore implements ITableCore {
     }
     this._adapter.recreateTableBody(this._tableConfiguration);
     this._renderSelections();
+    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.BODY_RENDERED, undefined, false);
   }
 
   private _renderSelections(): void {
