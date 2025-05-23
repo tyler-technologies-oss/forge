@@ -1,11 +1,17 @@
-@use './core';
+@use './core' as *;
 
 //
 // Host
 //
 
+$host-tokens: (height, width);
+
 :host {
-  @include core.host;
+  @include host;
+}
+
+:host {
+  @include tokens($includes: $host-tokens);
 }
 
 :host([hidden]) {
@@ -17,14 +23,14 @@
 //
 
 .forge-view-switcher {
-  @include core.tokens;
+  @include tokens($excludes: $host-tokens);
 }
 
 .forge-view-switcher {
-  @include core.base;
+  @include base;
 
   ::slotted(.forge-view-switcher__view--hidden) {
-    @include core.view-hidden;
+    @include view-hidden;
   }
 }
 
@@ -34,7 +40,7 @@
 
 :host(.slide) {
   ::slotted(forge-view) {
-    @include core.view-slidable;
+    @include view-slidable;
   }
 }
 
@@ -44,7 +50,7 @@
 
 :host(.fade) {
   ::slotted(forge-view) {
-    @include core.view-fadeable;
+    @include view-fadeable;
   }
 
   ::slotted(.forge-view-switcher__view--hidden) {

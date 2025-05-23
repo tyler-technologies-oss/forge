@@ -27,6 +27,11 @@ declare global {
  * @tag forge-view-switcher
  *
  * @dependency forge-view
+ *
+ * @cssproperty --forge-view-switcher-height - The `height` of the view switcher.
+ * @cssproperty --forge-view-switcher-width - The `width` of the view switcher.
+ * @cssproperty --forge-view-switcher-animation-duration - The duration of view switching animations.
+ * @cssproperty --forge-view-switcher-animation-easing - The timing function of view switching animations.
  */
 @customElement({
   name: VIEW_SWITCHER_CONSTANTS.elementName,
