@@ -81,6 +81,7 @@ declare global {
     'forge-table-filter': CustomEvent<ITableFilterEventData>;
     'forge-table-initialized': CustomEvent<void>;
     'forge-table-column-resize': CustomEvent<ITableColumnResizeEventData>;
+    'forge-table-body-rendered': CustomEvent<void>;
   }
 }
 
@@ -100,6 +101,7 @@ declare global {
  * @event {CustomEvent<ITableFilterEventData>} forge-table-filter - Dispatched when a column is filtered. Only applies when `filter` is specified.
  * @event {CustomEvent<void>} forge-table-initialized - Dispatched when the table is initialized in the DOM for the first time.
  * @event {CustomEvent<ITableColumnResizeEventData>} forge-table-column-resize - Dispatched when a column is resized.
+ * @event {CustomEvent<void>} forge-table-body-rendered - Dispatched when the table body is rendered.
  *
  * @cssclass forge-data-table - The base table class.
  */

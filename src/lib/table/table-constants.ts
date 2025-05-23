@@ -90,7 +90,8 @@ const events = {
   SORT: `${elementName}-sort`,
   FILTER: `${elementName}-filter`,
   INITIALIZED: `${elementName}-initialized`,
-  COLUMN_RESIZE: `${elementName}-column-resize`
+  COLUMN_RESIZE: `${elementName}-column-resize`,
+  BODY_RENDERED: `${elementName}-body-rendered`
 };
 
 const strings = {

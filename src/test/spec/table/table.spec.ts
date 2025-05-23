@@ -382,6 +382,18 @@ describe('TableComponent', function(this: ITestContext) {
 
       expect(callback).toHaveBeenCalled();
     });
+    
+    it('should emit body rendered event when table body renders', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      
+      this.context.component.data = data;
+      this.context.component.columnConfigurations = columns;
+      
+      const callback = jasmine.createSpy('callback');
+      this.context.component.addEventListener(TABLE_CONSTANTS.events.BODY_RENDERED, callback);
+      this.context.component.data = [...data];
+      expect(callback).toHaveBeenCalled();
+    });
 
     it('should emit select-double event when double clicking a row', function(this: ITestContext) {
       this.context = setupTestContext();
