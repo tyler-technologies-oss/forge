@@ -1,5 +1,5 @@
 import { customElement, attachShadowTemplate, coerceBoolean, coreProperty, ensureInputElement } from '@tylertech/forge-core';
-import { tylIconSearch } from '@tylertech/tyler-icons/standard';
+import { tylIconSearch } from '@tylertech/tyler-icons';
 import { AppBarSearchCore } from './app-bar-search-core';
 import { AppBarSearchAdapter } from './app-bar-search-adapter';
 import { IAppBarSearchInputEventData, APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants';

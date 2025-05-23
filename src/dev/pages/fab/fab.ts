@@ -1,6 +1,6 @@
 import '$src/shared';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconAdd, tylIconDelete, tylIconFavorite, tylIconOpenInNew } from '@tylertech/tyler-icons/standard';
+import { tylIconAdd, tylIconDelete, tylIconFavorite, tylIconOpenInNew } from '@tylertech/tyler-icons';
 import '@tylertech/forge/floating-action-button';
 import '@tylertech/forge/floating-action-button/forge-floating-action-button.scss';
 import type { ISelectComponent } from '@tylertech/forge/select';

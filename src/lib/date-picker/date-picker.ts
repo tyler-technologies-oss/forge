@@ -1,5 +1,5 @@
 import { attachShadowTemplate, customElement } from '@tylertech/forge-core';
-import { tylIconInsertInvitation } from '@tylertech/tyler-icons/standard';
+import { tylIconInsertInvitation } from '@tylertech/tyler-icons';
 import { CalendarComponent } from '../calendar';
 import { IconComponent, IconRegistry } from '../icon';
 import { IconButtonComponent } from '../icon-button';

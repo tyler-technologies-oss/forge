@@ -1,5 +1,5 @@
 import { customElement, attachLightTemplate, coreProperty } from '@tylertech/forge-core';
-import { tylIconHelp } from '@tylertech/tyler-icons/standard';
+import { tylIconHelp } from '@tylertech/tyler-icons';
 import { IMenuOption, MenuComponent } from '../../menu';
 import { AppBarHelpButtonAdapter } from './app-bar-help-button-adapter';
 import { AppBarHelpButtonCore } from './app-bar-help-button-core';

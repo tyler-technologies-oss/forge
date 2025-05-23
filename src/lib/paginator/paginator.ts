@@ -1,5 +1,5 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumberArray, coerceNumber } from '@tylertech/forge-core';
-import { tylIconFirstPage, tylIconLastPage, tylIconKeyboardArrowRight, tylIconKeyboardArrowLeft } from '@tylertech/tyler-icons/standard';
+import { tylIconFirstPage, tylIconLastPage, tylIconKeyboardArrowRight, tylIconKeyboardArrowLeft } from '@tylertech/tyler-icons';
 import { PAGINATOR_CONSTANTS, IPaginatorChangeEventData, PaginatorRangeLabelBuilder } from './paginator-constants';
 import { PaginatorCore } from './paginator-core';
 import { PaginatorAdapter } from './paginator-adapter';

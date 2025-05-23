@@ -21,8 +21,8 @@ import type { IListDropdownOption } from '@tylertech/forge/list-dropdown';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ITabBarComponent } from '@tylertech/forge/tabs';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
-import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import {
+  tylIconForgeLogo,
   tylIconAssignment,
   tylIconClose,
   tylIconHelpOutline,
@@ -33,7 +33,7 @@ import {
   tylIconWorkOutline,
   tylIconKeyboardVoice,
   tylIconArrowDropDownCircle
-} from '@tylertech/tyler-icons/standard';
+} from '@tylertech/tyler-icons';
 import { ToastComponent } from '@tylertech/forge/toast';
 
 IconRegistry.define([

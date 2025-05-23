@@ -1,5 +1,5 @@
 import '$src/shared';
-import { tylIconEvent, tylIconInfoOutline, tylIconMoreVert, tylIconPerson } from '@tylertech/tyler-icons/standard';
+import { tylIconEvent, tylIconInfoOutline, tylIconMoreVert, tylIconPerson } from '@tylertech/tyler-icons';
 import './text-field.scss';
 import { FieldDensity, FieldVariant, FieldTheme, FieldShape, FieldLabelPosition, FieldLabelAlignment, FieldSupportTextInset } from '../../../lib/field';
 import { IconRegistry } from '@tylertech/forge/icon';

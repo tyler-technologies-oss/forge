@@ -1,7 +1,7 @@
 import '$src/shared';
 import '@tylertech/forge/tabs';
 import '@tylertech/forge/view-switcher';
-import { tylIconFavorite, tylIconVideocam, tylIconInsertPhoto, tylIconAudiotrack } from '@tylertech/tyler-icons/standard';
+import { tylIconFavorite, tylIconVideocam, tylIconInsertPhoto, tylIconAudiotrack } from '@tylertech/tyler-icons';
 import './tabs.scss';
 import { ITabBarComponent } from '@tylertech/forge/tabs';
 import { IViewSwitcherComponent } from '@tylertech/forge/view-switcher';

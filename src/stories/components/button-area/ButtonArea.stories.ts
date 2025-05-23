@@ -4,7 +4,7 @@ import { action } from '@storybook/addon-actions';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconChevronRight, tylIconFavorite } from '@tylertech/tyler-icons/standard';
+import { tylIconChevronRight, tylIconFavorite } from '@tylertech/tyler-icons';
 
 import '@tylertech/forge/card';
 import '@tylertech/forge/button-area';

@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconUnfoldMore } from '@tylertech/tyler-icons/standard';
+import { tylIconUnfoldMore } from '@tylertech/tyler-icons';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { IconComponent, IconRegistry } from '../icon';
 import { IconButtonComponent } from '../icon-button';

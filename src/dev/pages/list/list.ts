@@ -12,7 +12,7 @@ import '@tylertech/forge/list/forge-list.scss';
 import '@tylertech/forge/drawer/forge-drawer.scss';
 import './list.scss';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconBluetooth, tylIconCode, tylIconDataUsage, tylIconFace, tylIconInfo, tylIconWifi, tylIconOpenInNew, tylIconFolder } from '@tylertech/tyler-icons/standard';
+import { tylIconBluetooth, tylIconCode, tylIconDataUsage, tylIconFace, tylIconInfo, tylIconWifi, tylIconOpenInNew, tylIconFolder } from '@tylertech/tyler-icons';
 
 IconRegistry.define([
   tylIconWifi,

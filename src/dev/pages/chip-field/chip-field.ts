@@ -2,7 +2,7 @@ import '$src/shared';
 import '@tylertech/forge/chip-field';
 import '@tylertech/forge/autocomplete';
 import data from '../autocomplete/data.json';
-import { tylIconArrowDropDown, tylIconPlace } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDropDown, tylIconPlace } from '@tylertech/tyler-icons';
 import { IAutocompleteComponent } from '@tylertech/forge/autocomplete';
 import { IChipFieldComponent } from '@tylertech/forge/chip-field';
 import { IChipComponent } from '@tylertech/forge/chips';

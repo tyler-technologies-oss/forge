@@ -15,7 +15,7 @@ import {
   tylIconOpenInNew,
   tylIconSettings,
   tylIconNotifications
-} from '@tylertech/tyler-icons/standard';
+} from '@tylertech/tyler-icons';
 import '@tylertech/forge/icon-button/forge-icon-button.scss';
 import './icon-button.scss';
 

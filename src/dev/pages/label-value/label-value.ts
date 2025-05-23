@@ -4,7 +4,7 @@ import '@tylertech/forge/label-value';
 import '@tylertech/forge/label-value/forge-label-value.scss';
 import './label-value.scss';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconInfoOutline } from '@tylertech/tyler-icons/standard';
+import { tylIconInfoOutline } from '@tylertech/tyler-icons';
 
 IconRegistry.define([
   tylIconInfoOutline

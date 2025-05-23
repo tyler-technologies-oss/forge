@@ -8,7 +8,7 @@ import { IIconComponent, IconRegistry } from '@tylertech/forge/icon';
 import { Density } from '@tylertech/forge/constants';
 import { ISelectComponent } from '@tylertech/forge/select';
 import { ISwitchComponent } from '@tylertech/forge/switch';
-import { tylIconFavorite } from '@tylertech/tyler-icons/standard';
+import { tylIconFavorite } from '@tylertech/tyler-icons';
 
 IconRegistry.define([
   tylIconFavorite
