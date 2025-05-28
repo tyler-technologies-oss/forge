@@ -19,6 +19,7 @@ export interface IPopoverProperties extends IOverlayAware, IDismissible {
   hoverDelay: number;
   hoverDismissDelay: number;
   preset: PopoverPreset;
+  distinct: string | null;
 }
 
 export interface IPopoverComponent extends IPopoverProperties {
@@ -51,6 +52,7 @@ declare global {
  * @property {number} [hoverDismissDelay=500] - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
  * @property {number} [hoverDelay=0] - The delay in milliseconds before the popover is shown.
  * @property {PopoverPreset} [preset="popover"] - The preset to use for the popover.
+ * @property {string | null} [distinct=null] - Enforces that this popover should be the only one open with the same unique value.
  *
  * @globalconfig placement
  * @globalconfig animationType
@@ -71,6 +73,7 @@ declare global {
  * @attribute {string} [hover-dismiss-delay=500] - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
  * @attribute {number} [hover-delay=0] - The delay in milliseconds before the popover is shown.
  * @attribute {string} [preset="popover"] - The preset to use for the popover.
+ * @attribute {string | null} [distinct=null] - Enforces that this popover should be the only one open with the same unique value.
  *
  * @event {CustomEvent<IPopoverToggleEventData>} forge-popover-beforetoggle - Dispatches before the popover is toggled, and is cancelable.
  * @event {CustomEvent<IPopoverToggleEventData>} forge-popover-toggle - Dispatches after the popover is toggled.
@@ -170,6 +173,9 @@ export class PopoverComponent extends OverlayAware<IPopoverCore> implements IPop
       case POPOVER_CONSTANTS.observedAttributes.PRESET:
         this.preset = newValue as PopoverPreset;
         return;
+      case POPOVER_CONSTANTS.observedAttributes.DISTINCT:
+        this.distinct = newValue;
+        return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
   }
@@ -197,6 +203,9 @@ export class PopoverComponent extends OverlayAware<IPopoverCore> implements IPop
 
   @coreProperty()
   declare public preset: PopoverPreset;
+
+  @coreProperty()
+  declare public distinct: string | null;
 
   /**
    * Hides the popover, and returns a `Promise` that resolves when the hide animation is complete.

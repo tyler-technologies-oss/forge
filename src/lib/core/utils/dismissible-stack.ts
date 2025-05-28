@@ -11,7 +11,7 @@ export interface IDismissibleStackState<T = string> {
   [key: string]: T;
 }
 
-export interface IDismissible {
+export interface IDismissible extends HTMLElement {
   [tryDismiss](state?: IDismissibleStackState): boolean;
 }
 
@@ -165,5 +165,12 @@ export class DismissibleStack<T extends IDismissible> {
   public isMostRecent(el: T): boolean {
     const elements = Array.from(this._dismissibleElements);
     return elements[elements.length - 1] === el;
+  }
+
+  /**
+   * Returns all elements in the dismissible queue.
+   */
+  public getAll(): T[] {
+    return Array.from(this._dismissibleElements);
   }
 }
