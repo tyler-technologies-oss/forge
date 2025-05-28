@@ -383,16 +383,22 @@ describe('TableComponent', function(this: ITestContext) {
       expect(callback).toHaveBeenCalled();
     });
     
-    it('should emit body rendered event when table body renders', async function(this: ITestContext) {
+    it('should emit body rendered events in order when table body renders', function(this: ITestContext) {
       this.context = setupTestContext();
       
-      this.context.component.data = data;
-      this.context.component.columnConfigurations = columns;
+      const templateBuilderCallback = jasmine.createSpy('templateBuilderCallback');
+      const beforeRenderedCallback = jasmine.createSpy('beforeRenderedCallback');
+      const renderedCallback = jasmine.createSpy('renderedCallback');
+            
+      const tableColumns: IColumnConfiguration[] = deepCopy(columns);
+      tableColumns[0].template = templateBuilderCallback;
+      this.context.component.columnConfigurations = tableColumns;
+      this.context.component.addEventListener(TABLE_CONSTANTS.events.BEFORE_BODY_RENDERED, beforeRenderedCallback);
+      this.context.component.addEventListener(TABLE_CONSTANTS.events.BODY_RENDERED, renderedCallback);
+      this.context.component.data = deepCopy(data);
       
-      const callback = jasmine.createSpy('callback');
-      this.context.component.addEventListener(TABLE_CONSTANTS.events.BODY_RENDERED, callback);
-      this.context.component.data = [...data];
-      expect(callback).toHaveBeenCalled();
+      expect(beforeRenderedCallback).toHaveBeenCalledBefore(templateBuilderCallback);
+      expect(templateBuilderCallback).toHaveBeenCalledBefore(renderedCallback);      
     });
 
     it('should emit select-double event when double clicking a row', function(this: ITestContext) {
