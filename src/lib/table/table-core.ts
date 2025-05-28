@@ -600,6 +600,7 @@ export class TableCore implements ITableCore {
    * Creates and renders the table with the current column configuration and data.
    */
   public render(): void {
+    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.BEFORE_BODY_RENDERED, undefined, false);
     this._adapter.createTable(this._tableConfiguration);
     this._renderSelections();
     this._rendered = true;
@@ -613,6 +614,7 @@ export class TableCore implements ITableCore {
     if (!this._rendered) {
       return;
     }
+    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.BEFORE_BODY_RENDERED, undefined, false);
     this._adapter.recreateTableBody(this._tableConfiguration);
     this._renderSelections();
     this._adapter.emitHostEvent(TABLE_CONSTANTS.events.BODY_RENDERED, undefined, false);
