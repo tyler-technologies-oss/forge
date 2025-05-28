@@ -815,6 +815,24 @@ describe('Popover', () => {
 
       expect(harness.isOpen).to.be.true;
     });
+
+    it('should not hide current hovered popover if previously open popover is dismissed', async () => {
+      const firstHarness = await createFixture({ triggerType: 'hover' });
+      const secondHarness = await createFixture({ triggerType: 'hover' });
+
+      expect(firstHarness.isOpen).to.be.false;
+      expect(secondHarness.isOpen).to.be.false;
+
+      await firstHarness.hoverTrigger();
+      await firstHarness.hoverOutside();
+      await secondHarness.hoverTrigger();
+
+      await task(POPOVER_HOVER_TIMEOUT + 100);
+      await firstHarness.exitAnimation();
+
+      expect(firstHarness.isOpen).to.be.false;
+      expect(secondHarness.isOpen).to.be.true;
+    });
   });
 
   describe('longpress trigger type', () => {
@@ -1544,6 +1562,7 @@ interface IPopoverFixtureConfig {
   triggerType?: PopoverTriggerType;
   persistentHover?: boolean;
   hoverDelay?: number;
+  hoverDismissDelay?: number;
   preset?: PopoverPreset;
 }
 
@@ -1556,6 +1575,7 @@ async function createFixture({
   triggerType,
   persistentHover = false,
   hoverDelay,
+  hoverDismissDelay,
   preset
 }: IPopoverFixtureConfig = {}): Promise<PopoverHarness> {
   const container = await fixture(html`
@@ -1568,7 +1588,8 @@ async function createFixture({
         ?persistent=${persistent}
         ?arrow=${arrow}
         ?persistent-hover=${persistentHover}
-        ?hoverDelay=${hoverDelay}
+        ?hover-delay=${hoverDelay ?? nothing}
+        ?hover-dismiss-delay=${hoverDismissDelay ?? nothing}
         animation-type=${animationType ?? nothing}
         trigger-type=${triggerType ?? nothing}
         preset=${preset ?? nothing}>
