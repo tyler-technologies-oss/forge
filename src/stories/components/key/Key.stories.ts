@@ -1,4 +1,4 @@
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { applyArgs, generateCustomElementArgTypes } from '../../utils';
 
 import '@tylertech/forge/key';

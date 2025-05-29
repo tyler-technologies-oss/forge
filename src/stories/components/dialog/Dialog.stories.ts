@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/web-components';
+import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { DIALOG_CONSTANTS, type IDialogProperties } from '@tylertech/forge/dialog';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconClose } from '@tylertech/tyler-icons';

@@ -1,4 +1,4 @@
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 import { type IMenuOption } from '@tylertech/forge/menu/menu-constants';
 import { SPLIT_BUTTON_CONSTANTS } from '@tylertech/forge/split-button';

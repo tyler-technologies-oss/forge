@@ -1,5 +1,5 @@
-import type { Preview } from '@storybook/web-components';
-import { addons } from '@storybook/preview-api';
+import type { Preview } from '@storybook/web-components-vite';
+import { addons } from 'storybook/preview-api';
 import { light, dark } from './forge-theme';
 
 import './preview-global.scss';
