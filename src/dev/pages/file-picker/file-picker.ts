@@ -49,7 +49,7 @@ filePickerBorderless.addEventListener('forge-file-picker-change', ({ detail }) =
   }
 });
 
-acceptTextField.addEventListener('chainputnge', () => {
+acceptTextField.addEventListener('input', () => {
   filePicker.accept = acceptTextField.value;
   filePickerCompact.accept = acceptTextField.value;
 });

@@ -91,6 +91,7 @@ const events = {
   FILTER: `${elementName}-filter`,
   INITIALIZED: `${elementName}-initialized`,
   COLUMN_RESIZE: `${elementName}-column-resize`,
+  BEFORE_BODY_RENDERED: `${elementName}-before-body-rendered`,
   BODY_RENDERED: `${elementName}-body-rendered`
 };
 
