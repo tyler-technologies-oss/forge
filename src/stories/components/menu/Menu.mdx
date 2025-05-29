@@ -41,6 +41,33 @@ This options array can then be set (or bound via framework) to the `options` pro
 
 Cascading menus are used to display a hierarchical list of options. When a menu item is hovered, a child menu will open next of the parent menu item.
 
+To set up a cascading menu, you can provide an array of options to the `options` property on any menu option object. This tells the menu to render a child
+menu when the parent menu item is hovered:
+
+```javascript
+const options: IMenuOption[] = [
+  { label: 'Save', value: 'save' },
+  {
+    label: 'Edit',
+    value: 'edit',
+    options: [
+      { label: 'As New', value: 'asNew' },
+      { label: 'Overwrite', value: 'overwrite' },
+      {
+        label: 'More',
+        value: 'more',
+        options: [
+          { label: 'Option 1', value: 'option1' },
+          { label: 'Option 2', value: 'option2' },
+          { label: 'Option 3', value: 'option3' }
+        ]
+      }
+    ]
+  },
+  { label: 'Delete', value: 'delete' }
+];
+```
+
 <Canvas of={MenuStories.Cascading} />
 
 ## Menu Groups
