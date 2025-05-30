@@ -18,6 +18,10 @@
   "build": {
     "static": {
       "distPath": "cdn/v1/libs/"
+    },
+    "sassOptions": {
+      "verbose": true,
+      "silenceDeprecations": ["mixed-decls"]
     }
   },
   "customElementsManifestConfig": {
