@@ -102,7 +102,7 @@
     "react-ga4": "^2.1.0",
     "remark-gfm": "^4.0.1",
     "rollup-plugin-scss": "^4.0.1",
-    "sass": "1.77.6",
+    "sass": "^1.89.0",
     "sinon": "^20.0.0",
     "storybook": "^8.6.7",
     "storybook-addon-tag-badges": "^1.4.0",
@@ -116,7 +116,6 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "overrides": {
-    "sass": "1.77.6",
     "@tylertech-eslint/eslint-plugin": {
       "@typescript-eslint/typescript-estree": "8.33.0"
     },
