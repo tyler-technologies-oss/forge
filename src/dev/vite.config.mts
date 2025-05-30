@@ -6,6 +6,14 @@ import ViteInlineForgeHtml from '../../plugins/vite/vite-inline-forge-html';
 import ViteTransformForgeInlineStyleImports from '../../plugins/vite/vite-inline-forge-style-import';
 
 export default defineConfig({
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern',
+        silenceDeprecations: ['mixed-decls'],
+      }
+    }
+  },
   server: {
     open: true,
     strictPort: false,
