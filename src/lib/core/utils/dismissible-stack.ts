@@ -63,13 +63,16 @@ export class DismissibleStack<T extends IDismissible> {
   }
 
   /**
-   * Dismisses all elements in the stack that have been presented after the provided element.
+   * Dismisses all elements in the stack that are descendants and have been presented after the provided element.
    * @param el The element to dismiss
    * @param state The state to pass to the dismiss method of each element
    */
   public async dismiss(el: T, state: IDismissibleStackState): Promise<void> {
-    const elements = Array.from(this._dismissibleElements);
-    const elementsAfter = elements.slice(elements.indexOf(el)).reverse();
+    const elements = DismissibleStack.instance.getAll();
+    const elementsAfter = elements
+      .slice(elements.indexOf(el))
+      .filter(element => element === el || element.contains(el))
+      .reverse();
     for (const element of elementsAfter) {
       if (!element[tryDismiss](state)) {
         break;
@@ -168,7 +171,8 @@ export class DismissibleStack<T extends IDismissible> {
   }
 
   /**
-   * Returns all elements in the dismissible queue.
+   * Gets all elements in the dismissible queue.
+   * @returns An array of all elements in the dismissible queue.
    */
   public getAll(): T[] {
     return Array.from(this._dismissibleElements);
