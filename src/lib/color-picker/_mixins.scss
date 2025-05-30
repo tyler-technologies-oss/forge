@@ -46,7 +46,7 @@
         height: 16px;
         width: 16px;
         background-color: white;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 2px rgb(0, 0, 0, 0.3);
         position: absolute;
         border-radius: 50%;
         top: calc(50% - 8px);
@@ -66,8 +66,8 @@
     &__color-preview-container {
       border-radius: 50%;
       box-shadow:
-        0 0 2px 0 rgba(0, 0, 0, 0.54) inset,
-        0 0 2px 0 rgba(0, 0, 0, 0.54);
+        0 0 2px 0 rgb(0, 0, 0, 0.54) inset,
+        0 0 2px 0 rgb(0, 0, 0, 0.54);
       overflow: hidden;
     }
 
@@ -154,7 +154,7 @@
     &__opacity-slider {
       height: 8px;
       margin-top: 16px;
-      background: linear-gradient(to right, rgba(255, 0, 0, 0) 0%, rgb(255, 0, 0) 100%);
+      background: linear-gradient(to right, rgb(255, 0, 0, 0) 0%, rgb(255, 0, 0) 100%);
     }
 
     &__color-rgba,
@@ -201,7 +201,7 @@
 }
 
 @mixin gradient-color() {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0, #000 100%), linear-gradient(to right, #fff 0, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(to bottom, rgb(0, 0, 0, 0) 0, #000 100%), linear-gradient(to right, #fff 0, rgb(255, 255, 255, 0) 100%);
   height: 152px;
 }
 
