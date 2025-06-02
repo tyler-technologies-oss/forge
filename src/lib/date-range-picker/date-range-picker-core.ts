@@ -83,7 +83,8 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   protected _emitChangeEvent(value: DateRange | null | undefined, force?: boolean): boolean {
     const typedStartValue = this._getTypedValue((value && value.from) || null);
     const typedEndValue = this._getTypedValue((value && value.to) || null);
-    const detail: IDateRangePickerChangeEventData = new DatePickerRange({ from: typedStartValue, to: typedEndValue });
+    const rangeName = (value && value.rangeName) || null;
+    const detail: IDateRangePickerChangeEventData = new DatePickerRange({ from: typedStartValue, to: typedEndValue, rangeName });
     const wasCancelled = !this._adapter.emitHostEvent(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, detail, true, !force);
     if (!wasCancelled) {
       this._setValue(this._coerceDateValue((value && value.from) || null));
@@ -102,15 +103,80 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   }
 
   protected _onToday(): void {
+    this._onClear();
     const today = new Date();
+    const todayFrom = new Date();
+    todayFrom.setHours(0, 0, 0, 0);
     this._tryMergeCurrentTime({ from: today });
-    const range = this._open ? new DateRange({ from: this._from || today, to: this._to || undefined }) : new DateRange({ from: today });
+    const range = this._open
+      ? new DateRange({ from: this._from || todayFrom, to: this._to || today, rangeName: 'today' })
+      : new DateRange({ from: todayFrom, to: today, rangeName: 'today' });
     if (!this._isDateRangeAcceptable(range)) {
       return;
     }
     this.value = range;
     this._onDateSelected({ date: today, range, selected: true, type: 'date' });
     this._adapter.setCalendarActiveDate(today);
+  }
+
+  protected _onYesterday(): void {
+    this._onClear();
+    const today = new Date();
+    const yesterdayFrom = new Date(today.setDate(today.getDate() - 1));
+    yesterdayFrom.setHours(0, 0, 0, 0);
+    const yesterdayTo = new Date(yesterdayFrom);
+    yesterdayTo.setHours(23, 59, 59, 0);
+
+    this._tryMergeCurrentTime({ from: yesterdayFrom, to: yesterdayTo });
+    const range = this._open
+      ? new DateRange({ from: this._from || yesterdayFrom, to: this._to || yesterdayTo, rangeName: 'yesterday' })
+      : new DateRange({ from: yesterdayFrom, to: yesterdayTo, rangeName: 'yesterday' });
+    if (!this._isDateRangeAcceptable(range)) {
+      return;
+    }
+    this.value = range;
+    this._onDateSelected({ date: yesterdayFrom, range, selected: true, type: 'date' });
+    this._adapter.setCalendarActiveDate(yesterdayFrom);
+  }
+
+  protected _onLastSevenDays(): void {
+    this._onClear();
+    const today = new Date();
+    const lastSevenDaysFrom = new Date(today.setDate(today.getDate() - 7));
+    lastSevenDaysFrom.setHours(0, 0, 0, 0);
+    const lastSevenDaysTo = new Date();
+    lastSevenDaysTo.setHours(23, 59, 59, 0);
+
+    this._tryMergeCurrentTime({ from: lastSevenDaysFrom, to: lastSevenDaysTo });
+    const range = this._open
+      ? new DateRange({ from: this._from || lastSevenDaysFrom, to: this._to || lastSevenDaysTo, rangeName: 'last 7 days' })
+      : new DateRange({ from: lastSevenDaysFrom, to: lastSevenDaysTo, rangeName: 'last 7 days' });
+    if (!this._isDateRangeAcceptable(range)) {
+      return;
+    }
+    this.value = range;
+    this._onDateSelected({ date: lastSevenDaysFrom, range, selected: true, rangeSelectionState: 'from', type: 'date' });
+    this._onDateSelected({ date: lastSevenDaysTo, range, selected: true, rangeSelectionState: 'to', type: 'date' });
+  }
+
+  protected _onLastThirtyDays(): void {
+    this._onClear();
+    const today = new Date();
+    const lastThirtyDaysFrom = new Date(today.setDate(today.getDate() - 30));
+    lastThirtyDaysFrom.setHours(0, 0, 0, 0);
+    const lastThirtyDaysTo = new Date();
+    lastThirtyDaysTo.setHours(23, 59, 59, 0);
+
+    this._tryMergeCurrentTime({ from: lastThirtyDaysFrom, to: lastThirtyDaysTo });
+    const range = this._open
+      ? new DateRange({ from: this._from || lastThirtyDaysFrom, to: this._to || lastThirtyDaysTo, rangeName: 'last 30 days' })
+      : new DateRange({ from: lastThirtyDaysFrom, to: lastThirtyDaysTo, rangeName: 'last 30 days' });
+    if (!this._isDateRangeAcceptable(range)) {
+      return;
+    }
+    this.value = range;
+    this._onDateSelected({ date: lastThirtyDaysFrom, range, selected: true, rangeSelectionState: 'from', type: 'date' });
+    this._onDateSelected({ date: lastThirtyDaysTo, range, selected: true, rangeSelectionState: 'to', type: 'date' });
   }
 
   protected _onClear(): void {
