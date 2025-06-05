@@ -677,8 +677,28 @@ describe('Dialog', () => {
       expect(harness.isOpen).to.be.true;
     });
 
+    it('should not close when clicking outside dialog when persistent set after open', async () => {
+      const harness = await createFixture({ open: true });
+
+      harness.dialogElement.persistent = true;
+
+      await harness.clickOutside();
+
+      expect(harness.isOpen).to.be.true;
+    });
+
     it('should not close when pressing escape key when persistent', async () => {
       const harness = await createFixture({ open: true, persistent: true });
+
+      await harness.pressEscapeKey();
+
+      expect(harness.isOpen).to.be.true;
+    });
+
+    it('should not close when pressing escape key when persistent set after open', async () => {
+      const harness = await createFixture({ open: true });
+
+      harness.dialogElement.persistent = true;
 
       await harness.pressEscapeKey();
 
