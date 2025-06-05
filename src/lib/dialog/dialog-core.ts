@@ -322,6 +322,15 @@ export class DialogCore implements IDialogCore {
     value = Boolean(value);
     if (this._persistent !== value) {
       this._persistent = value;
+
+      if (this._adapter.isConnected && this._open) {
+        if (this._persistent) {
+          this._adapter.removeBackdropDismissListener(this._backdropDismissListener);
+        } else {
+          this._adapter.addBackdropDismissListener(this._backdropDismissListener);
+        }
+      }
+
       this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.PERSISTENT, this._persistent);
     }
   }
