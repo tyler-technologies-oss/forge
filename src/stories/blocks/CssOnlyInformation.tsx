@@ -1,4 +1,4 @@
-import { Source, useOf } from '@storybook/blocks';
+import { Source, useOf } from '@storybook/addon-docs/blocks';
 import { getCustomElementsTagDeclaration, TagItem } from '../utils';
 import { NameDescriptionTable, Section, UsageLink } from './Shared';
 import { css } from 'lit';

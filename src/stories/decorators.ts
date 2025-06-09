@@ -1,4 +1,4 @@
-import { Decorator } from '@storybook/web-components';
+import { Decorator } from '@storybook/web-components-vite';
 import { html } from 'lit';
 import cssbeautify from 'cssbeautify';
 

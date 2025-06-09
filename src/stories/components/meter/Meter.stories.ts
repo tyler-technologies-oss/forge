@@ -1,4 +1,4 @@
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { MeterComponent, MeterGroupComponent } from '@tylertech/forge/meter';
 import { html } from 'lit';
 import { applyArgs, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
