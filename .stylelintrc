@@ -1,3 +1,6 @@
 {
-  "extends": "@tylertech/stylelint-rules"
+  "extends": "@tylertech/stylelint-rules",
+  "rules": {
+    "declaration-property-value-keyword-no-deprecated": [true, { "ignoreKeywords": ["/token\\(.*\\)/"] }]
+  }
 }

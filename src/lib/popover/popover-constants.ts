@@ -11,7 +11,8 @@ const observedAttributes = {
   PERSISTENT_HOVER: 'persistent-hover',
   HOVER_DELAY: 'hover-delay',
   HOVER_DISMISS_DELAY: 'hover-dismiss-delay',
-  PRESET: 'preset'
+  PRESET: 'preset',
+  DISTINCT: 'distinct'
 };
 
 const attributes = {

@@ -13,6 +13,7 @@ import {
 } from './popover-constants';
 import { IDismissibleStackState, DismissibleStack } from '../core/utils/dismissible-stack';
 import { VirtualElement } from '../core/utils/position-utils';
+import type { IPopoverComponent } from './popover';
 
 export interface IPopoverCore extends IOverlayAwareCore {
   arrow: boolean;
@@ -23,6 +24,7 @@ export interface IPopoverCore extends IOverlayAwareCore {
   hoverDismissDelay: number;
   hoverDelay: number;
   preset: PopoverPreset;
+  distinct: string | null;
   hideAsync(): Promise<void>;
   dispatchBeforeToggleEvent(state: IDismissibleStackState): boolean;
 }
@@ -36,6 +38,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
   private _hoverDismissDelay = POPOVER_HOVER_TIMEOUT;
   private _hoverDelay = POPOVER_CONSTANTS.defaults.HOVER_DELAY;
   private _preset = POPOVER_CONSTANTS.defaults.PRESET;
+  private _distinct: string | null = null;
   private _previouslyFocusedElement: HTMLElement | null = null;
 
   // Hover trigger state
@@ -154,6 +157,15 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
 
     this._previouslyFocusedElement = this._adapter.captureFocusedElement();
     this._adapter.setOverlayOpen(true);
+
+    // Popovers can be distinct from each other, meaning that only one popover with the same distinct
+    // value can be open at a time. Let's capture the distinct group context and close any other popovers
+    // that are open in the same context.
+    if (this._distinct != null) {
+      const allPopovers = DismissibleStack.instance.getAll().filter(el => el.tagName.toLowerCase() === 'forge-popover') as IPopoverComponent[];
+      const contextPopovers = allPopovers.filter(popover => popover.distinct === this._distinct && !popover.persistent);
+      contextPopovers.filter(popover => popover !== this._adapter.hostElement).forEach(popover => popover.hideAsync());
+    }
 
     if (!this.overlayElement.persistent) {
       DismissibleStack.instance.add(this._adapter.hostElement);
@@ -621,5 +633,12 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
       const hasPreset = value !== POPOVER_CONSTANTS.defaults.PRESET;
       this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.PRESET, hasPreset, this._preset);
     }
+  }
+
+  public get distinct(): string | null {
+    return this._distinct;
+  }
+  public set distinct(value: string | null) {
+    this._distinct = value;
   }
 }

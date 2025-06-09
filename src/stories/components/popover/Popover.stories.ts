@@ -7,12 +7,15 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { ToastComponent } from '@tylertech/forge/toast';
 import { type IButtonComponent } from '@tylertech/forge/button';
+import { storyStyles } from '../../decorators';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge/popover';
 import '@tylertech/forge/scaffold';
 import '@tylertech/forge/toolbar';
 import '@tylertech/forge/text-field';
+import '@tylertech/forge/drawer';
+import '@tylertech/forge/list';
 
 const component = 'forge-popover';
 
@@ -189,6 +192,52 @@ export const NonModal: Story = {
           </forge-toolbar>
         </forge-scaffold>
       </forge-popover>
+    `;
+  }
+};
+
+export const Distinct: Story = {
+  ...standaloneStoryParams,
+  parameters: {
+    layout: 'padded'
+  },
+  decorators: [
+    storyStyles(`
+.popover-content {
+  width: 300px;
+  padding: var(--forge-spacing-medium);
+}
+    `)
+  ],
+  render: () => {
+    return html`
+      <forge-drawer>
+        <forge-list navlist>
+          <forge-list-item id="li-1"><button type="button">List Item One</button></forge-list-item>
+          <forge-popover arrow placement="right" trigger-type="hover" distinct="list-item-nav-popovers">
+            <div class="popover-content">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+              veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </div>
+          </forge-popover>
+
+          <forge-list-item id="li-2"><button type="button">List Item Two</button></forge-list-item>
+          <forge-popover arrow placement="right" trigger-type="hover" distinct="list-item-nav-popovers">
+            <div class="popover-content">
+              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </forge-popover>
+
+          <forge-list-item id="li-3"><button type="button">List Item Three</button></forge-list-item>
+          <forge-popover arrow placement="right" trigger-type="hover" distinct="list-item-nav-popovers">
+            <div class="popover-content">
+              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
+              inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+            </div>
+          </forge-popover>
+        </forge-list>
+      </forge-drawer>
     `;
   }
 };
