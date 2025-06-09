@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, customElement, ensureChild, coreProperty, isDefined } from '@tylertech/forge-core';
-import { tylIconArrowRight } from '@tylertech/tyler-icons';
+import { tylIconArrowRightAlt } from '@tylertech/tyler-icons';
 import { PositionPlacement } from '../core/utils/position-utils';
 import { IconRegistry } from '../icon';
 import { ListComponent } from '../list';
@@ -88,7 +88,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
 
   constructor() {
     super();
-    IconRegistry.define(tylIconArrowRight);
+    IconRegistry.define(tylIconArrowRightAlt);
     this._core = new MenuCore(new MenuAdapter(this));
     attachShadowTemplate(this, template, styles);
   }
