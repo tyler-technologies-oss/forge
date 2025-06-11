@@ -344,7 +344,7 @@ export function createListItems(
       if (!option.disabled && typeof config.cascadingElementFactory === 'function' && Array.isArray(option.options) && option.options.length) {
         // Create the trailing indicator icon to show that a child menu exists for this option.
         const optionIconElement = document.createElement('forge-icon');
-        optionIconElement.name = 'arrow_right';
+        optionIconElement.name = 'arrow_right_alt';
         optionIconElement.slot = 'trailing';
         listItemElement.appendChild(optionIconElement);
 
