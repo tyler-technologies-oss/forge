@@ -134,6 +134,10 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
   }
 
   private _show(): void {
+    if (!this._adapter.hasContent) {
+      return;
+    }
+
     this._open = true;
     this._adapter.show();
     DismissibleStack.instance.add(this._adapter.hostElement);
