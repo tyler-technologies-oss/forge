@@ -1,3 +1,17 @@
+# v3.9.1 (Thu Jun 12 2025)
+
+#### 🐛 Bug Fix
+
+- fix(tooltip): do not render empty tooltips [#942](https://github.com/tyler-technologies-oss/forge/pull/942) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(color-picker): fixed a bug related to the hex format and gradient cursor position [#941](https://github.com/tyler-technologies-oss/forge/pull/941) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(menu): use `arrow_right_alt` icon for cascading menus with v2 icons [#940](https://github.com/tyler-technologies-oss/forge/pull/940) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.9.0 (Mon Jun 09 2025)
 
 :tada: This release contains work from new contributors! :tada:
