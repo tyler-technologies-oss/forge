@@ -80,11 +80,12 @@ export class ViewSwitcherCore implements IViewSwitcherCore {
     }
 
     switch (this._animationType) {
-      case 'slide':
+      case 'slide': {
         const animationDirection = this._viewIndex > fromIndex ? ViewAnimationDirection.Left : ViewAnimationDirection.Right;
         await this._adapter.transitionToView(fromIndex, this._viewIndex, 'slide', animationDirection);
         this._adapter.initializeSlideViews(this._viewIndex);
         break;
+      }
       case 'fade':
         await this._adapter.transitionToView(fromIndex, this._viewIndex, 'fade');
         this._adapter.initializeFadeViews(this._viewIndex);

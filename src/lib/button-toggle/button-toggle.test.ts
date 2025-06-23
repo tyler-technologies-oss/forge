@@ -528,7 +528,10 @@ class ButtonToggleGroupHarness extends TestHarness<IButtonToggleGroupComponent> 
   }
 
   public selectToggleViaMouse(index: number): Promise<void> {
-    const { x, y, width, height } = this.buttonToggles[index]?.getBoundingClientRect();
+    if (!this.buttonToggles[index]) {
+      throw new Error(`Button toggle at index ${index} does not exist.`);
+    }
+    const { x, y, width, height } = this.buttonToggles[index].getBoundingClientRect();
     return sendMouse({
       type: 'click',
       position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]

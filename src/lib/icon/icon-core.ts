@@ -167,7 +167,7 @@ export class IconCore implements IIconCore {
   public set name(value: string | undefined) {
     if (this._name !== value) {
       // We need to remove our listener for the previous name if we have any
-      if (!!this._registrationListener) {
+      if (this._registrationListener) {
         this._tryRemoveListener();
       }
       this._name = (value || '').replace(/\s+/, '');

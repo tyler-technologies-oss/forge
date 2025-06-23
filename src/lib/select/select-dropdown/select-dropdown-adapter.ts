@@ -92,12 +92,11 @@ export class SelectDropdownAdapter extends BaseSelectAdapter<ISelectDropdownComp
 
   public setTargetDisconnectedListener(cb: () => void): () => void {
     if (!this._targetElement || !this._targetElement.parentElement) {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       return () => {};
     }
     const observer = new MutationObserver(mutations => {
-      const isTargetRemoved = mutations.some(mutation => {
-        return Array.from(mutation.removedNodes).some(node => node === this._targetElement);
-      });
+      const isTargetRemoved = mutations.some(mutation => Array.from(mutation.removedNodes).some(node => node === this._targetElement));
       if (isTargetRemoved) {
         observer.disconnect();
         cb();

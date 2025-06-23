@@ -62,7 +62,7 @@ export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToast
 
   public setActionText(text: string): void {
     this._actionButtonElement.textContent = text;
-    if (!!text) {
+    if (text) {
       this._actionButtonElement.removeAttribute('hidden');
     } else {
       this._actionButtonElement.setAttribute('hidden', '');

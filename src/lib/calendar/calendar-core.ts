@@ -1433,9 +1433,10 @@ export class CalendarCore implements ICalendarCore {
     switch (this._view) {
       case 'date':
         return !this._min || this._min < new Date(this._year, this._month, 1);
-      case 'month':
+      case 'month': {
         const minDateYear = this._min?.getFullYear();
         return this._menuYear != null && (minDateYear == null || minDateYear < this._menuYear);
+      }
       case 'year':
         return !!this._menuYearsInView && this._minYear < this._menuYearsInView.min;
       default:
@@ -1455,9 +1456,10 @@ export class CalendarCore implements ICalendarCore {
     switch (this._view) {
       case 'date':
         return !this._max || this._max > getLastDateOfMonth(this._month, this._year);
-      case 'month':
+      case 'month': {
         const maxDateYear = this._max?.getFullYear();
         return this._menuYear != null && (maxDateYear == null || maxDateYear > this._menuYear);
+      }
       case 'year':
         return !!this._menuYearsInView && this._maxYear > this._menuYearsInView.max;
       default:
@@ -1735,7 +1737,6 @@ export class CalendarCore implements ICalendarCore {
     this._adapter.setMultiple(false);
 
     if (this._value.length > 1) {
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of
       for (let i = this._value.length - 2; i >= 0; i -= 1) {
         this._deselectDate(this._value[i]);
       }
@@ -2386,13 +2387,14 @@ export class CalendarCore implements ICalendarCore {
         case 'multiple':
           dates = value;
           break;
-        case 'range':
+        case 'range': {
           const minAndMax = getMinAndMaxDates(value);
           dates.push(minAndMax[0]);
           if (minAndMax.length > 1) {
             dates.push(minAndMax[1]);
           }
           break;
+        }
       }
     } else if (isValidDate(new Date(value as any))) {
       dates = [value as Date];

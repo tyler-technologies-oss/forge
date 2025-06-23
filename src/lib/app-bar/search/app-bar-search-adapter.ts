@@ -1,4 +1,4 @@
-import { addClass, getShadowElement, removeClass, toggleAttribute } from '@tylertech/forge-core';
+import { getShadowElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IAppBarSearchComponent } from './app-bar-search';
 import { APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants';

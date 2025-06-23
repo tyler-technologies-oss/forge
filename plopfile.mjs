@@ -47,7 +47,7 @@ export default function (plop) {
         default: true
       }
     ],
-    actions: function (answers) {
+    actions(answers) {
       const actions = [
         {
           type: 'addMany',

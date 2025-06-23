@@ -18,7 +18,7 @@ import {
 } from '@tylertech/forge-core';
 import { CHECKBOX_CONSTANTS, ICheckboxComponent } from '../checkbox';
 import { EXPANSION_PANEL_CONSTANTS, IExpansionPanelComponent } from '../expansion-panel';
-import { TooltipComponent, ITooltipComponent } from '../tooltip';
+import { ITooltipComponent } from '../tooltip';
 import { TABLE_CONSTANTS } from './table-constants';
 import { TableRow } from './table-row';
 import {
@@ -30,7 +30,6 @@ import {
   TableFilterDelegateFactory,
   TableFilterListener,
   TableHeaderSelectAllTemplate,
-  TableTemplateBuilder,
   TableViewTemplate,
   TableSelectTooltipCallback,
   ITableTemplateBuilderResult,
@@ -38,7 +37,7 @@ import {
 } from './types';
 import { ICON_CONSTANTS, IIconComponent } from '../icon';
 import { FormFieldComponentDelegate, IFormFieldComponentDelegate } from '../core/delegates/form-field-component-delegate';
-import { BaseComponentDelegate, IBaseComponentDelegate, IBaseComponentDelegateOptions } from '../core';
+import { BaseComponentDelegate, IBaseComponentDelegate } from '../core';
 
 function isTemplateResultObject(val: any): val is ITableTemplateBuilderResult {
   return val && typeof val === 'object' && 'content' in val;
@@ -524,18 +523,16 @@ export class TableUtils {
    * @param {IColumnData[]} data The row data.
    */
   private static _createColumnDataMap(columnConfigurations: IColumnConfiguration[], data: TableRow[]): IColumnData[] {
-    return columnConfigurations.map(columnConfig => {
-      return {
-        config: columnConfig,
-        data: data.map(item => {
-          if (columnConfig.property) {
-            const value = getPropertyValue(item.data, columnConfig.property);
-            return isDefined(value) ? value : null;
-          }
-          return null;
-        })
-      };
-    });
+    return columnConfigurations.map(columnConfig => ({
+      config: columnConfig,
+      data: data.map(item => {
+        if (columnConfig.property) {
+          const value = getPropertyValue(item.data, columnConfig.property);
+          return isDefined(value) ? value : null;
+        }
+        return null;
+      })
+    }));
   }
 
   /**

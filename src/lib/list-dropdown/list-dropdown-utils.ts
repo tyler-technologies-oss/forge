@@ -466,10 +466,14 @@ export function isListDropdownOptionType(
 ): type is ListDropdownOptionType {
   const isOptionGroups = options.some(
     (o: IListDropdownOption | IListDropdownOptionGroup) =>
-      isDefined(o) && isObject(o) && o.hasOwnProperty('options') && (o.hasOwnProperty('text') || o.hasOwnProperty('builder'))
+      isDefined(o) &&
+      isObject(o) &&
+      Object.prototype.hasOwnProperty.call(o, 'options') &&
+      (Object.prototype.hasOwnProperty.call(o, 'text') || Object.prototype.hasOwnProperty.call(o, 'builder'))
   );
   const isOptionTypes = options.some(
-    (o: IListDropdownOption | IListDropdownOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('label') && o.hasOwnProperty('value')
+    (o: IListDropdownOption | IListDropdownOptionGroup) =>
+      isDefined(o) && isObject(o) && Object.prototype.hasOwnProperty.call(o, 'label') && Object.prototype.hasOwnProperty.call(o, 'value')
   );
   return (isOptionGroups && type === ListDropdownOptionType.Group) || (isOptionTypes && type === ListDropdownOptionType.Option);
 }

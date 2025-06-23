@@ -71,6 +71,7 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
   }
 
   protected abstract _onDropdownScrollEnd(): void;
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected _onFocus(evt: Event): void {}
 
   public initialize(): void {
@@ -124,10 +125,7 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
 
   protected get _flatOptions(): ISelectOption[] {
     if (isSelectOptionType(this._options, SelectOptionType.Group)) {
-      return [].concat.apply(
-        [],
-        (this._options as ISelectOptionGroup[]).map(g => g.options)
-      ) as ISelectOption[];
+      return this._options.flatMap(g => g.options);
     }
     return this._options as ISelectOption[];
   }
@@ -225,92 +223,90 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
    * @param {number} optionIndex The index of the selected option.
    */
   protected async _onSelect(option: ISelectOption, optionIndex: number, closeDropdown = true): Promise<boolean> {
-    return new Promise(async resolve => {
-      if (this._valueChanging) {
-        return Promise.resolve(false);
+    if (this._valueChanging) {
+      return false;
+    }
+
+    const value = option ? option.value : '';
+    const label = option ? option.label : '';
+
+    // Store the current selections in case we need to rollback (if the event was cancelled)
+    const prevValues = [...this._value];
+    const prevSelectedValues = [...this._selectedValues];
+    const prevSelectedLabels = [...this._selectedLabels];
+    const prevSelectedIndexes = [...this._selectedIndexes];
+
+    if (this._multiple) {
+      if (this._selectedValues.includes(value)) {
+        const index = this._selectedValues.indexOf(value);
+        this._selectedValues.splice(index, 1);
+        this._selectedLabels.splice(index, 1);
+        this._selectedIndexes.splice(index, 1);
+      } else {
+        this._selectedValues.push(value);
+        this._selectedLabels.push(label);
+        this._selectedIndexes.push(optionIndex);
       }
+    } else {
+      if (isDefined(value)) {
+        this._selectedValues[0] = value;
+        this._selectedLabels[0] = label;
+        this._selectedIndexes[0] = optionIndex;
+      } else {
+        this._selectedValues = [];
+        this._selectedLabels = [];
+        this._selectedIndexes = [];
+      }
+    }
 
-      const value = option ? option.value : '';
-      const label = option ? option.label : '';
+    this._value = [...this._selectedValues];
 
-      // Store the current selections in case we need to rollback (if the event was cancelled)
-      const prevValues = [...this._value];
-      const prevSelectedValues = [...this._selectedValues];
-      const prevSelectedLabels = [...this._selectedLabels];
-      const prevSelectedIndexes = [...this._selectedIndexes];
+    const rollbackValue = (): void => {
+      this._selectedValues = [...prevSelectedValues];
+      this._selectedLabels = [...prevSelectedLabels];
+      this._selectedIndexes = [...prevSelectedIndexes];
+      this._value = [...prevValues];
+    };
 
+    const applyValue = (): void => {
+      // If we're in multiselect mode, we need to toggle the selected option
       if (this._multiple) {
-        if (this._selectedValues.includes(value)) {
-          const index = this._selectedValues.indexOf(value);
-          this._selectedValues.splice(index, 1);
-          this._selectedLabels.splice(index, 1);
-          this._selectedIndexes.splice(index, 1);
-        } else {
-          this._selectedValues.push(value);
-          this._selectedLabels.push(label);
-          this._selectedIndexes.push(optionIndex);
-        }
-      } else {
-        if (isDefined(value)) {
-          this._selectedValues[0] = value;
-          this._selectedLabels[0] = label;
-          this._selectedIndexes[0] = optionIndex;
-        } else {
-          this._selectedValues = [];
-          this._selectedLabels = [];
-          this._selectedIndexes = [];
-        }
+        const isSelected = this._selectedIndexes.includes(optionIndex);
+        this._adapter.toggleOptionMultiple(optionIndex, isSelected);
       }
 
-      this._value = [...this._selectedValues];
+      this._applySelection();
+    };
 
-      const rollbackValue = (): void => {
-        this._selectedValues = [...prevSelectedValues];
-        this._selectedLabels = [...prevSelectedLabels];
-        this._selectedIndexes = [...prevSelectedIndexes];
-        this._value = [...prevValues];
-      };
+    const data = this.multiple ? [...this._selectedValues] : this._selectedValues[0];
 
-      const applyValue = (): void => {
-        // If we're in multiselect mode, we need to toggle the selected option
-        if (this._multiple) {
-          const isSelected = this._selectedIndexes.includes(optionIndex);
-          this._adapter.toggleOptionMultiple(optionIndex, isSelected);
-        }
+    // We close the dropdown immediately if in single selection mode
+    if (this._open && closeDropdown && !this._multiple) {
+      this._closeDropdown();
+    }
 
-        this._applySelection();
-      };
-
-      const data = this.multiple ? [...this._selectedValues] : this._selectedValues[0];
-
-      // We close the dropdown immediately if in single selection mode
-      if (this._open && closeDropdown && !this._multiple) {
-        this._closeDropdown();
-      }
-
-      // First we check to see if there is an before change callback and execute that
-      if (typeof this._beforeValueChange === 'function') {
-        this._valueChanging = Promise.resolve(this._beforeValueChange.call(null, data));
-        const shouldContinue = await this._valueChanging;
-        this._valueChanging = undefined;
-        if (!shouldContinue) {
-          rollbackValue();
-          this._tryUpdateDropdownPosition();
-          return resolve(false);
-        }
-      }
-
-      // Now we can emit the change event AFTER the before change callback has been executed and returned true
-      const cancelled = !this._adapter.emitHostEvent(BASE_SELECT_CONSTANTS.events.CHANGE, data, true, true);
-      if (!cancelled) {
-        applyValue();
-      } else {
+    // First we check to see if there is an before change callback and execute that
+    if (typeof this._beforeValueChange === 'function') {
+      this._valueChanging = Promise.resolve(this._beforeValueChange.call(null, data));
+      const shouldContinue = await this._valueChanging;
+      this._valueChanging = undefined;
+      if (!shouldContinue) {
         rollbackValue();
+        this._tryUpdateDropdownPosition();
+        return false;
       }
+    }
 
-      this._tryUpdateDropdownPosition();
-      resolve(!cancelled);
-    });
+    // Now we can emit the change event AFTER the before change callback has been executed and returned true
+    const cancelled = !this._adapter.emitHostEvent(BASE_SELECT_CONSTANTS.events.CHANGE, data, true, true);
+    if (!cancelled) {
+      applyValue();
+    } else {
+      rollbackValue();
+    }
+
+    this._tryUpdateDropdownPosition();
+    return !cancelled;
   }
 
   private _selectActiveOption(): void {
@@ -538,9 +534,9 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
     }, 300);
     this._options = this._adapter.getOptions();
     // TODO: Enhance this to cycle through closest matches (see the native select)
-    const matchedOption = this._flatOptions.find(({ disabled, label }) => {
-      return !disabled && label.trim().toLowerCase().startsWith(this._filterString.trim().toLowerCase());
-    });
+    const matchedOption = this._flatOptions.find(
+      ({ disabled, label }) => !disabled && label.trim().toLowerCase().startsWith(this._filterString.trim().toLowerCase())
+    );
     if (matchedOption) {
       const optionIndex = this._flatOptions.indexOf(matchedOption);
       if (this._open) {

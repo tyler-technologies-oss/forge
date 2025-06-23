@@ -205,7 +205,7 @@ export class ListDropdownCore implements IListDropdownCore {
   public handleKey(key: string): void {
     switch (key) {
       case 'Enter':
-      case 'NumpadEnter':
+      case 'NumpadEnter': {
         const activeOptionIndex = this.getActiveOptionIndex();
         const activeOption = this._nonDividerOptions[activeOptionIndex];
         if (this._canSelectOption(activeOption)) {
@@ -215,10 +215,11 @@ export class ListDropdownCore implements IListDropdownCore {
           }
         }
         break;
+      }
       case 'Up':
       case 'ArrowUp':
       case 'Down':
-      case 'ArrowDown':
+      case 'ArrowDown': {
         const options = this._nonDividerOptions;
         if (options.length && options.every(o => !this._canSelectOption(o))) {
           return;
@@ -226,6 +227,7 @@ export class ListDropdownCore implements IListDropdownCore {
         const index = this._getNextActiveOptionIndex(key);
         this.activateOption(index);
         break;
+      }
       case 'Home':
         this.activateFirstOption();
         break;

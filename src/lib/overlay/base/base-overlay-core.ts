@@ -25,6 +25,7 @@ export interface IBaseOverlayCore {
 export abstract class BaseOverlayCore<T extends IBaseAdapter> implements IBaseOverlayCore {
   constructor(protected _adapter: T) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public initialize(): void {}
   public abstract destroy(): void;
   public abstract position(): void;

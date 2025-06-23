@@ -49,17 +49,14 @@ export default function forgeMemberDenyListPlugin() {
 }
 
 function deny(denyList) {
-  return member => {
-    return (
-      member.name &&
-      !denyList.some(pattern => {
-        if (typeof pattern === 'string') {
-          return member.name === pattern;
-        } else if (pattern instanceof RegExp) {
-          return pattern.test(member.name);
-        }
-        return false;
-      })
-    );
-  };
+  return member =>
+    member.name &&
+    !denyList.some(pattern => {
+      if (typeof pattern === 'string') {
+        return member.name === pattern;
+      } else if (pattern instanceof RegExp) {
+        return pattern.test(member.name);
+      }
+      return false;
+    });
 }

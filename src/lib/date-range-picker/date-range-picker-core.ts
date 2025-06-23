@@ -73,9 +73,9 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     super._openCalendar(emitOpenEvent);
 
     const currentValue = this._getCurrentValue();
-    if (!!currentValue?.to) {
+    if (currentValue?.to) {
       this._adapter.goToCalendarDate(new Date(currentValue.to));
-    } else if (!!currentValue?.from) {
+    } else if (currentValue?.from) {
       this._adapter.goToCalendarDate(new Date(currentValue.from));
     }
   }
@@ -266,9 +266,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     };
 
     if (this._prepareMaskCallback) {
-      options.prepareCallback = (value, masked, flags, maskInstance) => {
-        return this._prepareMaskCallback.call(null, value, masked, flags, maskInstance);
-      };
+      options.prepareCallback = (value, masked, flags, maskInstance) => this._prepareMaskCallback.call(null, value, masked, flags, maskInstance);
     }
 
     this._adapter.initializeToMask(options);

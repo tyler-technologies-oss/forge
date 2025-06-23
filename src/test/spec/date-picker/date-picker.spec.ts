@@ -559,7 +559,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       const formattedDate = formatDate(todayDate);
       this.context.component.valueMode = 'string';
       openPopup(this.context.component);
-      let eventDetail: string = '';
+      let eventDetail = '';
       const changeSpy = jasmine.createSpy('change spy', evt => eventDetail = evt.detail).and.callThrough();
       this.context.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
@@ -577,7 +577,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       todayDate.setHours(0, 0, 0, 0);
       this.context.component.valueMode = 'iso-string';
       openPopup(this.context.component);
-      let eventDetail: string = '';
+      let eventDetail = '';
       const changeSpy = jasmine.createSpy('change spy', evt => eventDetail = evt.detail).and.callThrough();
       this.context.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
@@ -1529,7 +1529,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
       const inputElement = getInputElement(this.context.component);
       inputElement.focus();
-      inputElement.value = inputElement.value.slice(0,-1);
+      inputElement.value = inputElement.value.slice(0, -1);
       inputElement.dispatchEvent(new KeyboardEvent('input'));
 
       expect(inputElement.value).toEqual('01/01/202_');
@@ -1543,7 +1543,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
       const inputElement = getInputElement(this.context.component);
       inputElement.focus();
-      inputElement.value = inputElement.value.slice(0,-1);
+      inputElement.value = inputElement.value.slice(0, -1);
       inputElement.dispatchEvent(new KeyboardEvent('input'));
       inputElement.blur();
       inputElement.dispatchEvent(new Event('blur'));
