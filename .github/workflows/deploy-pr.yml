@@ -24,6 +24,8 @@ jobs:
               - '.storybook/**'
               - 'src/stories/**'
               - 'src/lib/**'
+              - 'package.json'
+              - 'package-lock.json'
     outputs:
       deploy-storybook: ${{ steps.file-filter.outputs.storybook == 'true' }}
 
