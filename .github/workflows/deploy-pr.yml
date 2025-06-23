@@ -7,6 +7,8 @@ on:
       - '.storybook/**/*'
       - 'src/stories/**/*'
       - 'src/lib/**/*'
+      - 'package.json'
+      - 'package-lock.json'
 
 jobs:
   wf-config:
