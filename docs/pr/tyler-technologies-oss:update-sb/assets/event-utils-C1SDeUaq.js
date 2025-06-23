@@ -1,0 +1,1 @@
+function h(t){return t.path||t.composedPath&&t.composedPath()||a(t.target)}function a(t){const o=[];for(;t;){if(t.shadowRoot&&(t.shadowRoot.activeElement&&o.push(t.shadowRoot.activeElement),o.push(t.shadowRoot)),o.push(t),t.tagName==="HTML"){o.push(document),o.push(window);break}t=t.parentElement}return o}export{h as g};
