@@ -150,7 +150,7 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
 
   /**
    * Gets/sets the leading icon type of this option.
-   * @default "font"
+   * @default "component"
    * @attribute leading-icon-type
    */
   @coreProperty()
@@ -178,7 +178,7 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
 
   /**
    * Gets/sets the trailing icon type of this option.
-   * @default "font"
+   * @default "component"
    * @attribute trailing-icon-type
    */
   @coreProperty()

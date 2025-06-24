@@ -883,9 +883,9 @@ describe('ListDropdown', function(this: ITestContext) {
     expect(trailingElement).toBeTruthy();
   });
 
-  it('should set leading icon', async function(this: ITestContext) {
+  it('should set leading icon as font', async function(this: ITestContext) {
     const options: IListDropdownOption[] = [
-      { ...BASIC_OPTIONS[0], leadingIcon: 'heart', leadingIconClass: 'test-leading-icon' },
+      { ...BASIC_OPTIONS[0], leadingIcon: 'heart', leadingIconClass: 'test-leading-icon', leadingIconType: 'font' },
       { ...BASIC_OPTIONS[1] },
       { ...BASIC_OPTIONS[2] }
     ];
@@ -904,7 +904,7 @@ describe('ListDropdown', function(this: ITestContext) {
   it('should set leading icon as component', async function(this: ITestContext) {
     const options: IListDropdownOption[] = [
       { ...BASIC_OPTIONS[0] },
-      { ...BASIC_OPTIONS[1], leadingIcon: 'heart', leadingIconClass: 'test-leading-icon', leadingIconType: 'component' },
+      { ...BASIC_OPTIONS[1], leadingIcon: 'heart', leadingIconClass: 'test-leading-icon' },
       { ...BASIC_OPTIONS[2] }
     ];
     this.context = createListDropdown({ ...DEFAULT_CONFIG, options });
@@ -919,9 +919,9 @@ describe('ListDropdown', function(this: ITestContext) {
     expect(leadingIcon.classList.contains('test-leading-icon')).toBeTrue();
   });
 
-  it('should set trailing icon', async function(this: ITestContext) {
+  it('should set trailing icon as font', async function(this: ITestContext) {
     const options: IListDropdownOption[] = [
-      { ...BASIC_OPTIONS[0], trailingIcon: 'heart', trailingIconClass: 'test-trailing-icon' },
+      { ...BASIC_OPTIONS[0], trailingIcon: 'heart', trailingIconClass: 'test-trailing-icon', trailingIconType: 'font' },
       { ...BASIC_OPTIONS[1] },
       { ...BASIC_OPTIONS[2] }
     ];

@@ -11,7 +11,8 @@ import {
   POPOVER_CONSTANTS,
   LIST_ITEM_CONSTANTS,
   MENU_CONSTANTS,
-  MenuOptionFactory
+  MenuOptionFactory,
+  IIconComponent
 } from '@tylertech/forge';
 import { task, frame } from '@tylertech/forge/core/utils/utils';
 import { ICON_CLASS_NAME } from '@tylertech/forge/constants';
@@ -436,10 +437,10 @@ describe('MenuComponent', function(this: ITestContext) {
 
       const list = getPopupList(getPopoverElement());
       const listItems = Array.from(list.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
-      const leadingIconEl = listItems[0].querySelector('i[slot=leading]');
+      const leadingIconEl = listItems[0].querySelector('forge-icon[slot=leading]') as IIconComponent;
 
       expect(leadingIconEl).toBeTruthy();
-      expect(leadingIconEl?.textContent).toBe('code');
+      expect(leadingIconEl?.name).toBe('code');
     });
 
     it(`should load leading icons from options factory based on 'leadingIcon' or 'icon' property`, async function(this: ITestContext){
@@ -460,7 +461,7 @@ describe('MenuComponent', function(this: ITestContext) {
 
       const list = getPopupList(getPopoverElement());
       const listItems = Array.from(list.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
-      const leadingIcons = listItems.map(listItem => listItem.querySelector('i[slot=leading]'));
+      const leadingIcons = listItems.map(listItem => listItem.querySelector('forge-icon[slot=leading]'));
 
       expect(leadingIcons[0]).toBeTruthy();
       expect(leadingIcons[1]).toBeTruthy();

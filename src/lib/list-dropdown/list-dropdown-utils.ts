@@ -380,7 +380,12 @@ function createDivider(): HTMLElement {
   return document.createElement('forge-divider');
 }
 
-function createIconElement(type: ListDropdownIconType = 'font', iconName: string, iconClass?: string, componentProps?: Partial<IIconComponent>): HTMLElement {
+function createIconElement(
+  type: ListDropdownIconType = 'component',
+  iconName: string,
+  iconClass?: string,
+  componentProps?: Partial<IIconComponent>
+): HTMLElement {
   if (type === 'component') {
     const icon = document.createElement('forge-icon');
     if (iconClass) {
