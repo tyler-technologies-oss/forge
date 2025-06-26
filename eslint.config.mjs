@@ -21,9 +21,8 @@ export default defineConfig([
     files: ['src/**/*.test.ts'],
     extends: [pluginChaiFriendly.configs.recommendedFlat],
     rules: {
-      'dot-notation': 'off',
-      '@typescript-eslint/no-non-null-assertion': 'off',
-      '@typescript-eslint/no-empty-function': 'off'
+      '@typescript-eslint/dot-notation': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off'
     }
   },
   {
@@ -34,8 +33,7 @@ export default defineConfig([
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/consistent-type-assertions': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
-      '@typescript-eslint/no-empty-function': 'off',
-      'dot-notation': 'off'
+      '@typescript-eslint/dot-notation': 'off'
     }
   },
   { ignores: ['dist/**/*', 'src/dev/**/*', 'src/stories/**/*', '.storybook/**/*'] }

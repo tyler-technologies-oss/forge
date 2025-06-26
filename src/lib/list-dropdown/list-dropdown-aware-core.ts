@@ -138,6 +138,5 @@ export abstract class ListDropdownAwareCore implements IListDropdownAwareCore {
     this._popoverFallbackPlacements = value;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected _applySelection(): void {}
 }

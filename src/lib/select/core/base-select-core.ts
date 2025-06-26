@@ -71,7 +71,6 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
   }
 
   protected abstract _onDropdownScrollEnd(): void;
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected _onFocus(evt: Event): void {}
 
   public initialize(): void {

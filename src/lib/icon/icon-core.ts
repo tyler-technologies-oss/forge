@@ -26,7 +26,7 @@ export class IconCore implements IIconCore {
   private _theme: IconTheme;
   private _applyTimer: number | undefined;
   private _lazyListener = this._loadIcon.bind(this);
-  private _registrationListener: () => void;
+  private _registrationListener: (() => void) | undefined;
 
   constructor(private _adapter: IIconAdapter) {}
 
