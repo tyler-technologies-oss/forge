@@ -30,10 +30,10 @@
 }
 
 //
-// Start/End slots
+// Icon/Start/End slots
 //
 
-::slotted(:is([slot='start'], [slot='end'])) {
+::slotted(:is([slot='icon'], [slot='start'], [slot='end'])) {
   font-size: inherit;
 }
 
