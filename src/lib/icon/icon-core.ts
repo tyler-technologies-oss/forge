@@ -26,7 +26,7 @@ export class IconCore implements IIconCore {
   private _theme: IconTheme;
   private _applyTimer: number | undefined;
   private _lazyListener = this._loadIcon.bind(this);
-  private _registrationListener: () => void;
+  private _registrationListener: (() => void) | undefined;
 
   constructor(private _adapter: IIconAdapter) {}
 
@@ -167,7 +167,7 @@ export class IconCore implements IIconCore {
   public set name(value: string | undefined) {
     if (this._name !== value) {
       // We need to remove our listener for the previous name if we have any
-      if (!!this._registrationListener) {
+      if (this._registrationListener) {
         this._tryRemoveListener();
       }
       this._name = (value || '').replace(/\s+/, '');

@@ -127,7 +127,7 @@ export class ToastCore implements IToastCore {
 
       this._adapter.setActionText(this._actionText);
 
-      if (!!this._actionText) {
+      if (this._actionText) {
         this._adapter.addActionListener(this._actionListener);
       } else {
         this._adapter.removeActionListener(this._actionListener);

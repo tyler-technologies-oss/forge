@@ -15,7 +15,7 @@ interface ITestContext {
 }
 
 function createDummyInputElement(): HTMLInputElement {
-  let input = document.createElement('input');
+  const input = document.createElement('input');
   input.id = 'dummy-input';
   return input;
 }

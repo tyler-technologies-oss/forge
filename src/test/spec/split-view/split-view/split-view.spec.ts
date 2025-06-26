@@ -10,7 +10,7 @@ interface ITestContext {
 type SplitViewCoreInternal = ISplitViewCore & { _adapter: ISplitViewAdapter };
 type SplitViewComponentInternal = ISplitViewComponent & { _core: SplitViewCoreInternal };
 
-type SplitViewPanelCoreInternal = { _adapter: ISplitViewAdapter, _orientation: string };
+interface SplitViewPanelCoreInternal { _adapter: ISplitViewAdapter, _orientation: string }
 type SplitViewPanelComponentInternal = ISplitViewPanelComponent & { _core: SplitViewPanelCoreInternal };
 
 interface ITestSplitViewContext {
@@ -202,7 +202,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
   function setupTestContext(append = false, numberOfPanels = 0): ITestSplitViewContext {
     const component = document.createElement('forge-split-view') as SplitViewComponentInternal;
 
-    let panels: SplitViewPanelComponentInternal[] | undefined = undefined;
+    let panels: SplitViewPanelComponentInternal[] | undefined;
     if (numberOfPanels) {
       panels = new Array(numberOfPanels).fill(undefined).map(() => {
         const panel = document.createElement('forge-split-view-panel') as SplitViewPanelComponentInternal;

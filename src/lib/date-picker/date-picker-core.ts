@@ -96,7 +96,7 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
     super._openCalendar(emitOpenEvent);
 
     const currentValue = this._getCurrentValue();
-    if (!!currentValue) {
+    if (currentValue) {
       this._adapter.goToCalendarDate(new Date(currentValue));
     }
   }

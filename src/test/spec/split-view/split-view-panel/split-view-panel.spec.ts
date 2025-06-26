@@ -7,7 +7,7 @@ interface ITestContext {
   context: ITestSplitViewPanelContext;
 }
 
-type SplitViewPanelCoreInternal = { _adapter: ISplitViewPanelAdapter };
+interface SplitViewPanelCoreInternal { _adapter: ISplitViewPanelAdapter }
 type SplitViewPanelComponentInternal = ISplitViewPanelComponent & { _core: SplitViewPanelCoreInternal };
 
 interface ITestSplitViewPanelContext {
@@ -1000,7 +1000,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should not resize when start point or start size is undefined', function(this: ITestContext) {
         this.context = setupTestContext();
         const pointerEvt = new PointerEvent('pointermove');
-        let state = initState();
+        const state = initState();
         expect(pointerResize(this.context.adapter, pointerEvt, state)).toBeFalse();
         expect(keyboardResize(this.context.adapter, 0, state)).toBeFalse();
       });

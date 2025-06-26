@@ -169,13 +169,14 @@ export class TimePickerCore implements ITimePickerCore {
     if (evt.shiftKey) {
       switch (evt.code) {
         case 'Backspace':
-        case 'Delete':
+        case 'Delete': {
           evt.preventDefault();
           const result = this._trySetValue(null);
           if (result) {
             this._formatInputValue();
           }
           return;
+        }
       }
     }
 
@@ -240,7 +241,7 @@ export class TimePickerCore implements ITimePickerCore {
           this._adapter.propagateKey(evt.code);
         }
         break;
-      case 'KeyN':
+      case 'KeyN': {
         evt.preventDefault();
         const nowMillis = getCurrentTimeOfDayMillis(this._allowSeconds);
         if (this._value !== nowMillis) {
@@ -252,6 +253,7 @@ export class TimePickerCore implements ITimePickerCore {
           }
         }
         break;
+      }
     }
   }
 
@@ -640,9 +642,7 @@ export class TimePickerCore implements ITimePickerCore {
   }
 
   private _findClosestOptionIndex(value: number, options: Array<IListDropdownOption<ITimePickerOptionValue>>): number {
-    const closestItem = options.reduce((prev, curr) => {
-      return Math.abs((curr.value.time || 0) - value) < Math.abs((prev.value.time || 0) - value) ? curr : prev;
-    });
+    const closestItem = options.reduce((prev, curr) => (Math.abs((curr.value.time || 0) - value) < Math.abs((prev.value.time || 0) - value) ? curr : prev));
     return options.indexOf(closestItem);
   }
 

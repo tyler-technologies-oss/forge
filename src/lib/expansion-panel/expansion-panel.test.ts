@@ -573,31 +573,30 @@ describe('Expansion Panel', () => {
       expect(expansionPanel.open).to.be.false;
     });
 
-    it('should handle null trigger element reference'),
-      async () => {
-        const el = await fixture<HTMLElement>(html`
-          <div>
-            <button id="button-id"></button>
-            <forge-expansion-panel>
-              <div>Content</div>
-            </forge-expansion-panel>
-          </div>
-        `);
-        let trigger = el.querySelector('#button-id') as HTMLElement;
-        const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    it('should handle null trigger element reference', async () => {
+      const el = await fixture<HTMLElement>(html`
+        <div>
+          <button id="button-id"></button>
+          <forge-expansion-panel>
+            <div>Content</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const trigger = el.querySelector('#button-id') as HTMLElement;
+      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
 
-        expansionPanel.triggerElement = null;
+      expansionPanel.triggerElement = null;
 
-        expansionPanel.triggerElement = trigger;
-        trigger.click();
-        expect(expansionPanel.open).to.be.true;
-        trigger.click();
-        expect(expansionPanel.open).to.be.false;
+      expansionPanel.triggerElement = trigger;
+      trigger.click();
+      expect(expansionPanel.open).to.be.true;
+      trigger.click();
+      expect(expansionPanel.open).to.be.false;
 
-        expansionPanel.triggerElement = null;
-        trigger.click();
-        expect(expansionPanel.open).to.be.false;
-      };
+      expansionPanel.triggerElement = null;
+      trigger.click();
+      expect(expansionPanel.open).to.be.false;
+    });
 
     it('should not error if no slotted content', async () => {
       const el = await fixture<HTMLElement>(html`
@@ -606,7 +605,7 @@ describe('Expansion Panel', () => {
           <forge-expansion-panel trigger="button-id"></forge-expansion-panel>
         </div>
       `);
-      let trigger = el.querySelector('#button-id') as HTMLElement;
+      const trigger = el.querySelector('#button-id') as HTMLElement;
       const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
 
       trigger.click();
@@ -622,7 +621,7 @@ describe('Expansion Panel', () => {
           <forge-expansion-panel trigger="foo"></forge-expansion-panel>
         </div>
       `);
-      let trigger = el.querySelector('#button-id') as HTMLElement;
+      const trigger = el.querySelector('#button-id') as HTMLElement;
       const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
 
       trigger.click();
@@ -646,7 +645,6 @@ describe('Expansion Panel', () => {
         </div>
       `);
 
-      const trigger1 = el.querySelector('#button-id1') as HTMLElement;
       const trigger2 = el.querySelector('#button-id2') as HTMLElement;
       const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
 
@@ -663,7 +661,7 @@ describe('Expansion Panel', () => {
       trigger2.click();
       expect(expansionPanel.open).to.be.false;
       expect(trigger2.getAttribute('aria-controls')).to.be.null;
-      expect(expansionPanel['_core']['_adapter']._triggerElement).to.be.undefined;
+      expect((expansionPanel as any)['_core']['_adapter']._triggerElement).to.be.undefined;
     });
 
     it('should remove triggerElement on disconnect', async () => {
@@ -680,10 +678,10 @@ describe('Expansion Panel', () => {
       const button = el.querySelector('#button-id') as HTMLElement;
 
       expect(button.getAttribute('aria-controls')).to.not.be.null;
-      expect(expansionPanel['_core']['_adapter']._triggerElement).to.not.be.undefined;
+      expect((expansionPanel as any)['_core']['_adapter']._triggerElement).to.not.be.undefined;
       expansionPanel.remove();
       expect(button.getAttribute('aria-controls')).to.be.null;
-      expect(expansionPanel['_core']['_adapter']._triggerElement).to.be.undefined;
+      expect((expansionPanel as any)['_core']['_adapter']._triggerElement).to.be.undefined;
     });
   });
 

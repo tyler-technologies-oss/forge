@@ -66,11 +66,12 @@ export class FloatingActionButtonComponentDelegate extends BaseComponentDelegate
     const type = this._config.options?.iconType || 'component';
 
     switch (type) {
-      case 'font':
+      case 'font': {
         const classes = Array.isArray(this._config.options.iconClass) ? this._config.options.iconClass : [ICON_CLASS_NAME];
         addClass(classes, this._element);
         this._element.textContent = this._config.options.iconName;
         break;
+      }
       case 'component':
         this._iconElement = document.createElement(ICON_CONSTANTS.elementName);
         this._iconElement.name = this._config.options.iconName;

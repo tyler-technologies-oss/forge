@@ -1019,13 +1019,11 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
     it('should show skeleton loader when initially opened', async function(this: ITestContext) {
       this.context = setupTestContext(true);
-      this.context.component.filter = () => {
-        return new Promise<IOption[]>(resolve => {
+      this.context.component.filter = () => new Promise<IOption[]>(resolve => {
           setTimeout(() => {
             resolve(DEFAULT_FILTER_OPTIONS);
           }, 1000);
         });
-      };
       this.context.component.open = true;
       await frame();
 
@@ -1042,13 +1040,11 @@ describe('AutocompleteComponent', function(this: ITestContext) {
     it('should toggle linear progress when filtering', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       const timeout = 200;
-      this.context.component.filter = () => {
-        return new Promise<IOption[]>(resolve => {
+      this.context.component.filter = () => new Promise<IOption[]>(resolve => {
           setTimeout(() => {
             resolve(DEFAULT_FILTER_OPTIONS);
           }, timeout);
         });
-      };
       this.context.component.open = true;
       await task(timeout);
       _sendInputValue(this.context.input, 'e');
@@ -1107,13 +1103,11 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
     it('should close dropdown if filter completes without the input having focus anymore', async function(this: ITestContext) {
       this.context = setupTestContext(true);
-      this.context.component.filter = () => {
-        return new Promise<IOption[]>(resolve => {
+      this.context.component.filter = () => new Promise<IOption[]>(resolve => {
           setTimeout(() => {
             resolve(DEFAULT_FILTER_OPTIONS);
           }, 1000);
         });
-      };
       this.context.component.allowUnmatched = true;
       this.context.component.filterOnFocus = false;
       _sendInputValue(this.context.input, 'e');
@@ -1169,11 +1163,9 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
     it('should cancel all pending filters if an exception is thrown in filter callback', async function(this: ITestContext) {
       this.context = setupTestContext(true);
-      this.context.component.filter = () => {
-        return new Promise((resolve, reject) => {
+      this.context.component.filter = () => new Promise((resolve, reject) => {
           reject('Fake rejection');
         });
-      };
       await frame();
       _sendInputValue(this.context.input, 'a');
       await task(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
@@ -1187,8 +1179,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
     it('should handle subsequent out of order filters', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       // This filter simulates a request for filterText = a finishing before filterText = b
-      this.context.component.filter = filterText => {
-        return new Promise(resolve => {
+      this.context.component.filter = filterText => new Promise(resolve => {
           if (filterText === 'a') {
             setTimeout(() => resolve([{ label: 'A', value: 'a' }]), 200);
           } else if (filterText === 'b') {
@@ -1197,7 +1188,6 @@ describe('AutocompleteComponent', function(this: ITestContext) {
             resolve(DEFAULT_FILTER_OPTIONS);
           }
         });
-      };
       this.context.component.filterOnFocus = false;
       this.context.component.open = true;
       await frame();
@@ -1252,12 +1242,10 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
     it('should accept grouped options', async function(this: ITestContext) {
       this.context = setupTestContext(true);
-      this.context.component.filter = () => {
-        return [
+      this.context.component.filter = () => [
           { text: 'Group one', options: [DEFAULT_FILTER_OPTIONS[0], DEFAULT_FILTER_OPTIONS[1]] },
           { text: 'Group two', options: [DEFAULT_FILTER_OPTIONS[2]] }
         ];
-      };
       this.context.component.open = true;
       await frame();
       await task(POPOVER_ANIMATION_DURATION);
@@ -1278,12 +1266,10 @@ describe('AutocompleteComponent', function(this: ITestContext) {
         return avatar;
       }
 
-      this.context.component.filter = () => {
-        return [
+      this.context.component.filter = () => [
           { text: 'One', builder: optionGroupBuilder, options: [DEFAULT_FILTER_OPTIONS[0], DEFAULT_FILTER_OPTIONS[1]] },
           { text: 'Two', builder: optionGroupBuilder, options: [DEFAULT_FILTER_OPTIONS[2]] }
         ];
-      };
       this.context.component.open = true;
       await frame();
 
@@ -1857,7 +1843,9 @@ describe('AutocompleteComponent', function(this: ITestContext) {
     iconElement.setAttribute('data-forge-dropdown-icon', '');
     iconElement.setAttribute('aria-hidden', 'true');
     iconElement.textContent = 'arrow_drop_down';
-    if (includeIconElement) textFieldElement.appendChild(iconElement);
+    if (includeIconElement) {
+      textFieldElement.appendChild(iconElement);
+    }
     component.appendChild(textFieldElement);
     const optionElements: IOptionComponent[] = [];
     DEFAULT_FILTER_OPTIONS.forEach(o => {

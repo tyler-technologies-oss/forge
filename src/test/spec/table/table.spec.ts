@@ -254,7 +254,7 @@ describe('TableComponent', function(this: ITestContext) {
       expect((<HTMLElement>sortIconElement).classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORT_ICON_ACTIVE)).toBe(true);
     });
 
-    it('should hide columns', function(this: ITestContext) {
+    it('should hide columns', function (this: ITestContext) {
       this.context = setupTestContext();
       const testColumns: IColumnConfiguration[] = deepCopy(columns);
       testColumns[1].hidden = true;

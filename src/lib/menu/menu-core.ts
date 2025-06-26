@@ -144,9 +144,10 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
 
   private _flattenOptions(options: Array<IMenuOption | IMenuOptionGroup>): IMenuOption[] {
     if (isListDropdownOptionType(options, ListDropdownOptionType.Group)) {
-      return (options as IMenuOptionGroup[]).reduce((previousValue, currentValue) => {
-        return currentValue.options ? previousValue.concat(currentValue.options) : previousValue;
-      }, [] as IMenuOption[]);
+      return (options as IMenuOptionGroup[]).reduce(
+        (previousValue, currentValue) => (currentValue.options ? previousValue.concat(currentValue.options) : previousValue),
+        [] as IMenuOption[]
+      );
     }
     return options as IMenuOption[];
   }
@@ -208,7 +209,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
           this._adapter.propagateKey(evt.code);
         }
         break;
-      case 'Enter':
+      case 'Enter': {
         evt.preventDefault();
 
         if (!this._open) {
@@ -228,6 +229,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
           this._adapter.toggleChildMenu(activeIndex);
         }
         break;
+      }
       case 'ArrowUp':
       case 'ArrowDown':
         if (this._open) {
@@ -252,7 +254,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
           this._closeDropdown();
         }
         break;
-      case 'ArrowRight':
+      case 'ArrowRight': {
         if (this._open) {
           evt.stopImmediatePropagation();
         }
@@ -266,6 +268,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
           return;
         }
         break;
+      }
     }
   }
 
@@ -293,8 +296,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
 
     const config: IListDropdownConfig = {
       id: this._identifier,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      referenceElement: this._adapter.targetElement!,
+      referenceElement: this._adapter.targetElement as HTMLElement,
       type: ListDropdownType.Menu,
       options: this._options,
       selectedValues,

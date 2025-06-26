@@ -121,7 +121,6 @@ export class ButtonToggleGroupCore implements IButtonToggleGroupCore {
     // Combine the selected toggle values with our current state to ensure we always return the latest value
     // even if our state doesn't match a selected toggle.
     const values = Array.from(new Set(this._adapter.getSelectedValues().concat(this._values)));
-    // eslint-disable-next-line prettier/prettier
     return this._multiple ? Array.from(values) : (values[0] ?? null);
   }
   public set value(value: any) {

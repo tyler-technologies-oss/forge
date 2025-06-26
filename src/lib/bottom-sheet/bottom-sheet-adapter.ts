@@ -1,4 +1,4 @@
-import { getShadowElement, removeElement, deepQuerySelectorAll, toggleClass } from '@tylertech/forge-core';
+import { getShadowElement, deepQuerySelectorAll } from '@tylertech/forge-core';
 import { setDefaultAria } from '../constants';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import type { IDialogComponent } from '../dialog/dialog';

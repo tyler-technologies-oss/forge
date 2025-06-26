@@ -15,6 +15,7 @@ import { IBaseComponent } from '../../base/base-component';
 /**
  * A component that can be associated with a form.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface IWithFormAssociation<TValue = FormValue | null> extends IBaseComponent {
   /**
    * The form element that the component is associated with.
@@ -208,8 +209,12 @@ export function WithFormAssociation<TBase extends MixinBase>(base: TBase) {
 
       // Apply validation-affecting props to the input element to get the correct validation
       // message
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      Object.entries(props).forEach(([key, value]) => (this._inputElement![key] = value));
+      if (this._inputElement) {
+        const entries = Object.entries(props);
+        for (const [key, value] of entries) {
+          this._inputElement[key] = value;
+        }
+      }
 
       return this._inputElement.validationMessage;
     }

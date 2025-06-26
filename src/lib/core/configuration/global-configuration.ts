@@ -9,7 +9,6 @@ declare global {
 }
 
 export class GlobalConfiguration {
-  // eslint-disable-next-line @tylertech-eslint/require-private-modifier
   private constructor() {}
 
   /**

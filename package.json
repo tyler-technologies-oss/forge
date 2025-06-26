@@ -15,13 +15,17 @@
   },
   "scripts": {
     "prepare": "husky",
-    "build": "forge build",
-    "start": "vite serve src/dev",
+    "prebuild": "npm run lint",
+    "build": "forge build --no-lint",
     "prestorybook": "npm run cem",
+    "start": "vite serve src/dev",
     "storybook": "storybook dev -p 6006",
     "prebuild-storybook": "npm run cem",
     "build-storybook": "storybook build",
-    "lint": "forge lint",
+    "lint": "npm run lint:ts && npm run lint:styles",
+    "lint:ts": "eslint .",
+    "lint:ts-fix": "npm run lint:ts -- --fix",
+    "lint:styles": "stylelint \"src/lib/**/*.{css,scss}\"",
     "test": "wtr --coverage --watch --group lib",
     "test:playwright": "wtr --watch --group lib --playwright --browsers chromium webkit firefox",
     "test:focus": "wtr --coverage --watch --group",
@@ -61,7 +65,7 @@
     "@storybook/addon-links": "^9.0.12",
     "@storybook/addon-themes": "^9.0.12",
     "@storybook/web-components-vite": "^9.0.12",
-    "@tylertech-eslint/eslint-plugin": "^2.1.0",
+    "@tylertech-eslint/eslint-plugin": "3.0.0",
     "@tylertech/forge-cli": "^3.1.1",
     "@tylertech/stylelint-rules": "^5.1.2",
     "@types/cssbeautify": "^0.3.5",
@@ -69,7 +73,7 @@
     "@types/karma": "^6.3.9",
     "@types/karma-fixture": "^0.2.8",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.32",
+    "@types/node": "^22.15.33",
     "@types/webpack-env": "^1.18.8",
     "@ungap/structured-clone": "^1.3.0",
     "@vueless/storybook-dark-mode": "^9.0.5",
@@ -83,9 +87,9 @@
     "commitlint": "^19.8.1",
     "cssbeautify": "^0.3.1",
     "custom-element-vs-code-integration": "^1.5.0",
+    "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
-    "eslint-formatter-codeframe": "^7.32.1",
-    "eslint-plugin-storybook": "^9.0.12",
+    "eslint-plugin-chai-friendly": "^1.1.0",
     "eslint-plugin-prettier": "^5.4.1",
     "http-server": "^14.1.1",
     "husky": "^9.1.7",
@@ -109,9 +113,6 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "overrides": {
-    "@tylertech-eslint/eslint-plugin": {
-      "@typescript-eslint/typescript-estree": "8.33.1"
-    },
     "@web/test-runner-chrome": "0.18.0"
   },
   "lint-staged": {

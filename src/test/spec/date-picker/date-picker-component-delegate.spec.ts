@@ -157,7 +157,7 @@ describe('DatePickerComponentDelegate', function(this: ITestContext) {
 
   it('should set disabled dates via config', function(this: ITestContext) {
     const disabledDates = [new Date()];
-    this.context = setupTestContext({ disabledDates: disabledDates });
+    this.context = setupTestContext({ disabledDates });
     
     expect(this.context.delegate.element.disabledDates).toEqual(disabledDates);
   });

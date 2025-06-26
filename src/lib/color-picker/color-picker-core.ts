@@ -227,7 +227,7 @@ export class ColorPickerCore implements IColorPickerCore {
   }
 
   public get rgba(): IRGBA | null | undefined {
-    return !!this._rgba ? { ...this._rgba } : null;
+    return this._rgba ? { ...this._rgba } : null;
   }
   public set rgba(value: IRGBA | null | undefined) {
     if (value) {
@@ -240,7 +240,7 @@ export class ColorPickerCore implements IColorPickerCore {
   }
 
   public get hsva(): IHSVA | null | undefined {
-    return !!this._hsva ? { ...this._hsva } : null;
+    return this._hsva ? { ...this._hsva } : null;
   }
   public set hsva(value: IHSVA | null | undefined) {
     if (value) {

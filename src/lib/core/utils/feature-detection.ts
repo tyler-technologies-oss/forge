@@ -5,7 +5,7 @@ import { Platform } from '@tylertech/forge-core';
  * @returns {boolean}
  */
 export function supportsPopover(): boolean {
-  return HTMLElement.prototype.hasOwnProperty('popover');
+  return Object.prototype.hasOwnProperty.call(HTMLElement.prototype, 'popover');
 }
 
 /**
@@ -16,7 +16,7 @@ export function supportsPopover(): boolean {
  * @returns {boolean}
  */
 export function supportsElementInternalsAria(): boolean {
-  return ElementInternals.prototype.hasOwnProperty('role');
+  return Object.prototype.hasOwnProperty.call(ElementInternals.prototype, 'role');
 }
 
 /**

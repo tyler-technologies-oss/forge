@@ -7,7 +7,6 @@ import { IButtonAreaComponent } from './button-area';
 import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
 
 export interface IButtonAreaAdapter extends IBaseAdapter {
-  destroy(): void;
   setDisabled(value: boolean): void;
   addListener(type: string, listener: EventListener, capture?: boolean): void;
   removeListener(type: string, listener: EventListener, capture?: boolean): void;
@@ -40,8 +39,6 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
     this._focusIndicatorElement = getShadowElement(component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
     this._stateLayerElement = getShadowElement(component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
   }
-
-  public destroy(): void {}
 
   public setDisabled(value: boolean): void {
     this._buttonElement?.toggleAttribute(BUTTON_AREA_CONSTANTS.attributes.DISABLED, value);
@@ -108,8 +105,11 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
   public requestDisabledButtonFrame(): void {
     if (this._buttonElement) {
       this._buttonElement.disabled = true;
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      requestAnimationFrame(() => (this._buttonElement!.disabled = false));
+      requestAnimationFrame(() => {
+        if (this._buttonElement) {
+          this._buttonElement.disabled = false;
+        }
+      });
     }
   }
 }

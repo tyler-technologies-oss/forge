@@ -477,7 +477,7 @@ describe('Paginator', () => {
     it('should set range label via callback property', async () => {
       const harness = await createFixture();
 
-      const cb = () => 'Test';
+      const cb = (): string => 'Test';
       harness.paginatorElement.rangeLabelCallback = cb;
 
       expect(harness.paginatorElement.rangeLabelCallback).to.equal(cb);

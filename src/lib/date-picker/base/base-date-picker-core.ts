@@ -478,9 +478,7 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
     };
 
     if (this._prepareMaskCallback) {
-      options.prepareCallback = (value, masked, flags, maskInstance) => {
-        return this._prepareMaskCallback.call(null, value, masked, flags, maskInstance);
-      };
+      options.prepareCallback = (value, masked, flags, maskInstance) => this._prepareMaskCallback.call(null, value, masked, flags, maskInstance);
     }
 
     this._adapter.initializeMask(options);
@@ -535,7 +533,7 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
   public set min(value: Date | string | null | undefined) {
     if (this._min !== value) {
       const date = this._coerceDateValue(value);
-      this._min = !!date ? new Date(date.getTime()) : null;
+      this._min = date ? new Date(date.getTime()) : null;
       this._applyMin();
 
       if (this._isInitialized && this._open) {
