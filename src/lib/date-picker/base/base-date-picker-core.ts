@@ -60,6 +60,9 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
   protected _notifyInputValueChanges = true;
   protected _allowInvalidDate = false;
   protected _showToday = false;
+  protected _showYesterday = false;
+  protected _showLastSevenDays = false;
+  protected _showLastThirtyDays = false;
   protected _showClear = false;
   protected _disabledDaysOfWeek: DayOfWeek[];
   protected _yearRange = '-50:+50';
@@ -77,6 +80,9 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
   private _dropdownCloseListener: () => void;
   private _activeChangeListener: (id: string) => void;
   private _todayListener: () => void;
+  private _yesterdayListener: () => void;
+  private _lastSevenDaysListener: () => void;
+  private _lastThirtyDaysListener: () => void;
   private _clearListener: () => void;
   private _dateSelectListener: (evt: CustomEvent<ICalendarDateSelectEventData>) => void;
   private _monthChangeListener: (evt: CustomEvent<ICalendarMonthChangeEventData>) => void;
@@ -93,6 +99,9 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
     this._monthChangeListener = evt => this._onMonthChanged(evt);
     this._activeChangeListener = id => this._onActiveDescendantChanged(id);
     this._todayListener = () => this._onToday();
+    this._yesterdayListener = () => this._onYesterday();
+    this._lastSevenDaysListener = () => this._onLastSevenDays();
+    this._lastThirtyDaysListener = () => this._onLastThirtyDays();
     this._clearListener = () => this._onClear();
   }
 
@@ -102,6 +111,9 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
   protected abstract _emitOpenEvent(): void;
   protected abstract _emitCloseEvent(): void;
   protected abstract _onToday(): void;
+  protected abstract _onYesterday(): void;
+  protected abstract _onLastSevenDays(): void;
+  protected abstract _onLastThirtyDays(): void;
   protected abstract _onClear(): void;
   protected abstract _getCurrentValue(): TPrivateValue | null | undefined;
   protected abstract _setFormattedInputValue(suppressValueChanges?: boolean): void;
@@ -209,8 +221,14 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
       disabledDates: this._disabledDates,
       yearRange: this._yearRange,
       todayButton: this._showToday,
+      yesterdayButton: this._showYesterday,
+      lastSevenDaysButton: this._showLastSevenDays,
+      lastThirtyDaysButton: this._showLastThirtyDays,
       clearButton: this._showClear,
       todayCallback: this._todayListener,
+      yesterdayCallback: this._yesterdayListener,
+      lastSevenDaysCallback: this._lastSevenDaysListener,
+      lastThirtyDaysCallback: this._lastThirtyDaysListener,
       clearCallback: this._clearListener,
       disabledDateBuilder: this._disableDayCallback,
       disabledDaysOfWeek: this._disabledDaysOfWeek,
@@ -744,6 +762,27 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
   }
   public set showToday(value: boolean) {
     this._showToday = value;
+  }
+
+  public get showYesterday(): boolean {
+    return this._showYesterday;
+  }
+  public set showYesterday(value: boolean) {
+    this._showYesterday = value;
+  }
+
+  public get showLastSevenDays(): boolean {
+    return this._showLastSevenDays;
+  }
+  public set showLastSevenDays(value: boolean) {
+    this._showLastSevenDays = value;
+  }
+
+  public get showLastThirtyDays(): boolean {
+    return this._showLastThirtyDays;
+  }
+  public set showLastThirtyDays(value: boolean) {
+    this._showLastThirtyDays = value;
   }
 
   public get showClear(): boolean {
