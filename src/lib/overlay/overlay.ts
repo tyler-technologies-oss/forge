@@ -44,7 +44,7 @@ declare global {
  * @property {OverlayPositionStrategy} [positionStrategy="fixed"] - The positioning strategy to use for the overlay. Valid values are `'fixed'` and `'absolute'`.
  * @property {IOverlayPosition} offset - The offset to apply to the overlay position relative to the anchor element.
  * @property {OverlayShiftState} [shift="auto"] - Whether or not the anchor element should shift along the side of the overlay when scrolling.
- * @property {OverlayHideState} [hide="anchor-hidden"] - Whether or not the overlay should hide itself when the anchor element is out of view.
+ * @property {OverlayHideState} [hide="never"] - Whether or not the overlay should hide itself when the anchor element is out of view.
  * @property {boolean} persistent - Whether or not the overlay handles light dismiss itself or not.
  * @property {OverlayFlipState} [flip="auto"] - Whether or not the overlay should flip to the opposite placement when not enough room.
  * @property {string} boundary - The id of the element to use as the boundary for the overlay.
@@ -66,7 +66,7 @@ declare global {
  * @attribute {string} [inline=false] - Whether or not the overlay should be rendered inline (not in the :top-layer).
  * @attribute {string} [placement="bottom"] - The placement of the overlay relative to the anchor element.
  * @attribute {string} [position-strategy="fixed"] - The positioning strategy to use for the overlay. Valid values are `'fixed'` and `'absolute'`.
- * @attribute {string} [hide="anchor-hidden"] - Whether or not the overlay should hide itself when the anchor element is out of view.
+ * @attribute {string} [hide="never"] - Whether or not the overlay should hide itself when the anchor element is out of view.
  * @attribute {string} persistent - Whether or not the overlay handles light dismiss itself or not.
  * @attribute {OverlayShiftState} [shift="auto"] - Whether or not the anchor element should shift along the side of the overlay when scrolling.
  * @attribute {OverlayFlipState} [flip="auto"] - Tells the overlay not to flip to the opposite placement when not enough room.
