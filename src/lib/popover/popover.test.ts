@@ -168,11 +168,11 @@ describe('Popover', () => {
     it('should proxy hide', async () => {
       const harness = await createFixture();
 
-      harness.popoverElement.hide = 'never';
+      harness.popoverElement.hide = 'anchor-hidden';
 
-      expect(harness.popoverElement.hide).to.equal('never');
-      expect(harness.popoverElement.overlay.hide).to.equal('never');
-      expect(harness.popoverElement.getAttribute(OVERLAY_CONSTANTS.attributes.HIDE)).to.equal('never');
+      expect(harness.popoverElement.hide).to.equal('anchor-hidden');
+      expect(harness.popoverElement.overlay.hide).to.equal('anchor-hidden');
+      expect(harness.popoverElement.getAttribute(OVERLAY_CONSTANTS.attributes.HIDE)).to.equal('anchor-hidden');
     });
 
     it('should proxy persistent', async () => {
