@@ -282,6 +282,12 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
       }
 
       const iconButtonElement = this._createToggleElement();
+
+      // Inherit the density from the text field in certain cases
+      if (textField.density === 'extra-small') {
+        iconButtonElement.density = 'small';
+      }
+
       textField.appendChild(iconButtonElement);
       this._toggleElement = iconButtonElement;
     } else if (toggleElement) {
@@ -289,7 +295,7 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
     }
   }
 
-  protected _createToggleElement(): HTMLElement {
+  protected _createToggleElement(): IIconButtonComponent {
     return createToggleElement('insert_invitation');
   }
 
