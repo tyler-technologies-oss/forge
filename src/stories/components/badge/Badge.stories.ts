@@ -93,7 +93,7 @@ export const WithIcon: Story = {
     IconRegistry.define(tylIconAlert);
     return html`
       <forge-badge>
-        <forge-icon name="alert" slot="icon"></forge-icon>
+        <forge-icon name="alert" slot="start"></forge-icon>
         <span>Warning</span>
       </forge-badge>
     `;

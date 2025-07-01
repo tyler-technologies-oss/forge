@@ -36,9 +36,8 @@ export const BADGE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-badge';
  * @cssproperty --forge-badge-gap - The spacing between the content within the badge.
  *
  * @slot - Default content placed inside the badge.
- * @slot icon - Content placed before the default content, typically an icon.
- * @slot start - **(deprecated)** Use `icon` instead. Content placed before the default content.
- * @slot end - **(deprecated)** Use `icon` instead. Content placed after the default content.
+ * @slot start - Content placed before the default content.
+ * @slot end - Content placed after the default content.
  *
  * @state dot - The badge is rendered as a dot.
  * @state strong - The badge has a stronger visual appearance.
@@ -93,7 +92,6 @@ export class BadgeComponent extends BaseLitElement implements IBadgeComponent {
   public render(): TemplateResult {
     return html`
       <div class="forge-badge" part="root">
-        <slot name="icon"></slot>
         <slot name="start"></slot>
         <div class="content" part="content">
           <slot></slot>
