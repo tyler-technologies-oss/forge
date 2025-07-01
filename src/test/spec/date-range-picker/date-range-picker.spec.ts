@@ -1427,12 +1427,12 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
 
       const popup = getPopup(this.context.component);
 
-      expect(changeSpy).toHaveBeenCalledTimes(1);
-      expect(this.context.component.open).toBeTrue();
-      expect(popup).not.toBeNull('Expected popup to stay open');
+      expect(changeSpy).toHaveBeenCalledTimes(2);
+      expect(this.context.component.open).toBeFalse();
+      expect(popup).toBeNull('Expected popup to be removed');
       expect(this.context.component.value?.from).not.toBeNull();
-      expect(this.context.component.value?.to).toBeNull();
-      expect((this.context.component.value?.from as Date).getDate()).toEqual(new Date().getDate());
+      expect(this.context.component.value?.to).not.toBeNull();
+      expect((this.context.component.value?.to as Date).getDate()).toEqual(new Date().getDate());
     });
 
     it('should remove value when clicking clear button', async function(this: ITestContext) {

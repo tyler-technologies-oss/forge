@@ -303,6 +303,45 @@ export function getTodayButton(): HTMLElement {
   return todayButton;
 }
 
+/** Returns a yesterday button. */
+export function getYesterdayButton(): HTMLElement {
+  const yesterdayButton = document.createElement('forge-button');
+  yesterdayButton.id = CALENDAR_CONSTANTS.ids.YESTERDAY_BUTTON;
+  yesterdayButton.setAttribute('part', CALENDAR_CONSTANTS.parts.YESTERDAY_BUTTON);
+  yesterdayButton.type = 'button';
+  const slot = document.createElement('slot');
+  slot.name = CALENDAR_CONSTANTS.slots.YESTERDAY_BUTTON_TEXT;
+  slot.innerText = CALENDAR_CONSTANTS.strings.DEFAULT_YESTERDAY_BUTTON_TEXT;
+  yesterdayButton.appendChild(slot);
+  return yesterdayButton;
+}
+
+/** Returns a last seven days button. */
+export function getLastSevenDaysButton(): HTMLElement {
+  const lastSevenDaysButton = document.createElement('forge-button');
+  lastSevenDaysButton.id = CALENDAR_CONSTANTS.ids.LAST_SEVEN_DAYS_BUTTON;
+  lastSevenDaysButton.setAttribute('part', CALENDAR_CONSTANTS.parts.LAST_SEVEN_DAYS_BUTTON);
+  lastSevenDaysButton.type = 'button';
+  const slot = document.createElement('slot');
+  slot.name = CALENDAR_CONSTANTS.slots.LAST_SEVEN_DAYS_BUTTON_TEXT;
+  slot.innerText = CALENDAR_CONSTANTS.strings.DEFAULT_LAST_SEVEN_DAYS_BUTTON_TEXT;
+  lastSevenDaysButton.appendChild(slot);
+  return lastSevenDaysButton;
+}
+
+/** Returns a last thirty days button. */
+export function getLastThirtyDaysButton(): HTMLElement {
+  const lastThirtyDaysButton = document.createElement('forge-button');
+  lastThirtyDaysButton.id = CALENDAR_CONSTANTS.ids.LAST_THIRTY_DAYS_BUTTON;
+  lastThirtyDaysButton.setAttribute('part', CALENDAR_CONSTANTS.parts.LAST_THIRTY_DAYS_BUTTON);
+  lastThirtyDaysButton.type = 'button';
+  const slot = document.createElement('slot');
+  slot.name = CALENDAR_CONSTANTS.slots.LAST_THIRTY_DAYS_BUTTON_TEXT;
+  slot.innerText = CALENDAR_CONSTANTS.strings.DEFAULT_LAST_THIRTY_DAYS_BUTTON_TEXT;
+  lastThirtyDaysButton.appendChild(slot);
+  return lastThirtyDaysButton;
+}
+
 /** Checks whether an event originated from a date element, returning the element if it did. */
 export function eventIncludesDate(evt: Event, includeDisabled?: boolean): HTMLElement | null {
   const element = getEventPath(evt).find(p => p.classList && p.classList.contains(CALENDAR_CONSTANTS.classes.DATE));

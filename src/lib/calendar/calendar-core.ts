@@ -65,11 +65,20 @@ export interface ICalendarCore extends ICalendarBase {
   menuAnimation: CalendarMenuAnimationType;
   clearButton: boolean;
   todayButton: boolean;
+  yesterdayButton: boolean;
+  lastSevenDaysButton: boolean;
+  lastThirtyDaysButton: boolean;
   clearCallback: (() => void) | undefined;
   todayCallback: (() => void) | undefined;
+  yesterdayCallback: (() => void) | undefined;
+  lastSevenDaysCallback: (() => void) | undefined;
+  lastThirtyDaysCallback: (() => void) | undefined;
   tooltipBuilder: CalendarTooltipBuilder | undefined;
   clear(): void;
   today(): void;
+  yesterday(): void;
+  lastSevenDays(): void;
+  lastThirtyDays(): void;
   selectDate(date: Date, setFocus?: boolean): void;
   deselectDate(date: Date, setFocus?: boolean): void;
   toggleDate(date: Date, force?: boolean): void;
@@ -86,6 +95,9 @@ export class CalendarCore implements ICalendarCore {
   private _year: number = new Date().getFullYear();
   private _focusedDate: Date;
   private _showToday = true;
+  private _showYesterday = true;
+  private _showLastSevenDays = true;
+  private _showLastThirtyDays = true;
   private _showOtherMonths = false;
   private _fixedHeight = false;
   private _events: ICalendarEvent[] = [];
@@ -120,8 +132,14 @@ export class CalendarCore implements ICalendarCore {
   private _showHeader = true;
   private _clearButton = false;
   private _todayButton = false;
+  private _yesterdayButton = false;
+  private _lastSevenDaysButton = false;
+  private _lastThirtyDaysButton = false;
   private _clearCallback: (() => void) | undefined;
   private _todayCallback: (() => void) | undefined;
+  private _yesterdayCallback: (() => void) | undefined;
+  private _lastSevenDaysCallback: (() => void) | undefined;
+  private _lastThirtyDaysCallback: (() => void) | undefined;
 
   // Menu
   private _view: CalendarView = 'date';
@@ -158,6 +176,9 @@ export class CalendarCore implements ICalendarCore {
   private _preventFocusListener: (evt: Event) => void;
   private _previousButtonListener: (evt: Event) => void;
   private _todayButtonListener: (evt: Event) => void;
+  private _yesterdayButtonListener: (evt: Event) => void;
+  private _lastSevenDaysButtonListener: (evt: Event) => void;
+  private _lastThirtyDaysButtonListener: (evt: Event) => void;
   private _yearButtonListener: (evt: Event) => void;
 
   constructor(private _adapter: ICalendarAdapter) {
@@ -172,6 +193,9 @@ export class CalendarCore implements ICalendarCore {
     this._preventFocusListener = evt => evt.preventDefault();
     this._previousButtonListener = () => this._onPreviousButtonClicked();
     this._todayButtonListener = () => this._onTodayClicked();
+    this._yesterdayButtonListener = () => this._onYesterdayClicked();
+    this._lastSevenDaysButtonListener = () => this._onLastSevenDaysClicked();
+    this._lastThirtyDaysButtonListener = () => this._onLastThirtyDaysClicked();
     this._yearButtonListener = () => this._onYearButtonClicked();
   }
 
@@ -184,6 +208,9 @@ export class CalendarCore implements ICalendarCore {
     this._applyFixedHeight();
     this._applyReadOnly();
     this._applyShowToday();
+    this._applyShowYesterday();
+    this._applyShowLastSevenDays();
+    this._applyShowLastThirtyDays();
     this._applyPreventFocus();
     this._applyShowHeader();
     this._applyMonth();
@@ -193,6 +220,9 @@ export class CalendarCore implements ICalendarCore {
     this._applyLocale();
     this._applyClearButton();
     this._applyTodayButton();
+    this._applyYesterdayButton();
+    this._applyLastSevenDaysButton();
+    this._applyLastThirtyDaysButton();
     this._applyFirstDayOfWeek();
     this._applyShowOtherMonths();
     this._createDateView();
@@ -525,6 +555,18 @@ export class CalendarCore implements ICalendarCore {
 
   private _onTodayClicked(): void {
     this.today();
+  }
+
+  private _onYesterdayClicked(): void {
+    this.yesterday();
+  }
+
+  private _onLastSevenDaysClicked(): void {
+    this.lastSevenDays();
+  }
+
+  private _onLastThirtyDaysClicked(): void {
+    this.lastThirtyDays();
   }
 
   /** Attempts to the month and year of the value in single mode, then emits a selection event  */
@@ -1541,7 +1583,7 @@ export class CalendarCore implements ICalendarCore {
       this._adapter.unregisterClearButtonListener(this._clearButtonListener);
       this._adapter.removeClearButton();
 
-      if (!this._todayButton) {
+      if (!this._todayButton && !this._yesterdayButton && !this._lastSevenDaysButton && !this._lastThirtyDaysButton) {
         this._adapter.removeFooter();
       }
     } else {
@@ -1881,13 +1923,79 @@ export class CalendarCore implements ICalendarCore {
       this._adapter.unregisterTodayButtonListener(this._todayButtonListener);
       this._adapter.removeTodayButton();
 
-      if (!this._clearButton) {
+      if (!this._clearButton && !this._yesterdayButton && !this._lastSevenDaysButton && !this._lastThirtyDaysButton) {
         this._adapter.removeFooter();
       }
     } else {
       this._adapter.setFooter();
       this._adapter.setTodayButton();
       this._adapter.registerTodayButtonListener(this._todayButtonListener);
+    }
+  }
+
+  private _applyShowYesterday(): void {
+    this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.SHOW_YESTERDAY, this._showYesterday);
+    this._adapter.setContainerClass(CALENDAR_CONSTANTS.classes.SHOW_YESTERDAY, this._showYesterday);
+  }
+
+  private _applyYesterdayButton(): void {
+    this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.YESTERDAY_BUTTON, true, this._yesterdayButton.toString());
+
+    if (!this._yesterdayButton) {
+      this._adapter.unregisterYesterdayButtonListener(this._yesterdayButtonListener);
+      this._adapter.removeYesterdayButton();
+
+      if (!this._clearButton && !this._todayButton && !this._lastSevenDaysButton && !this._lastThirtyDaysButton) {
+        this._adapter.removeFooter();
+      }
+    } else {
+      this._adapter.setFooter();
+      this._adapter.setYesterdayButton();
+      this._adapter.registerYesterdayButtonListener(this._yesterdayButtonListener);
+    }
+  }
+
+  private _applyShowLastSevenDays(): void {
+    this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.SHOW_LAST_SEVEN_DAYS, this._showLastSevenDays);
+    this._adapter.setContainerClass(CALENDAR_CONSTANTS.classes.SHOW_LAST_SEVEN_DAYS, this._showLastSevenDays);
+  }
+
+  private _applyLastSevenDaysButton(): void {
+    this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.LAST_SEVEN_DAYS_BUTTON, true, this._lastSevenDaysButton.toString());
+
+    if (!this._lastSevenDaysButton) {
+      this._adapter.unregisterLastSevenDaysButtonListener(this._lastSevenDaysButtonListener);
+      this._adapter.removeLastSevenDaysButton();
+
+      if (!this._clearButton && !this._todayButton && !this._yesterdayButton) {
+        this._adapter.removeFooter();
+      }
+    } else {
+      this._adapter.setFooter();
+      this._adapter.setLastSevenDaysButton();
+      this._adapter.registerLastSevenDaysButtonListener(this._lastSevenDaysButtonListener);
+    }
+  }
+
+  private _applyShowLastThirtyDays(): void {
+    this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.SHOW_LAST_THIRTY_DAYS, this._showLastThirtyDays);
+    this._adapter.setContainerClass(CALENDAR_CONSTANTS.classes.SHOW_LAST_THIRTY_DAYS, this._showLastThirtyDays);
+  }
+
+  private _applyLastThirtyDaysButton(): void {
+    this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.LAST_THIRTY_DAYS_BUTTON, true, this._lastThirtyDaysButton.toString());
+
+    if (!this._lastThirtyDaysButton) {
+      this._adapter.unregisterLastThirtyDaysButtonListener(this._lastThirtyDaysButtonListener);
+      this._adapter.removeLastThirtyDaysButton();
+
+      if (!this._clearButton && !this._todayButton && !this._yesterdayButton && !this.lastSevenDaysButton) {
+        this._adapter.removeFooter();
+      }
+    } else {
+      this._adapter.setFooter();
+      this._adapter.setLastThirtyDaysButton();
+      this._adapter.registerLastThirtyDaysButtonListener(this._lastThirtyDaysButtonListener);
     }
   }
 
@@ -2351,6 +2459,114 @@ export class CalendarCore implements ICalendarCore {
     this._todayCallback = value;
   }
 
+  /** Get/set show yesterday */
+  public get showYesterday(): boolean {
+    return this._showYesterday;
+  }
+  public set showYesterday(value: boolean) {
+    if (this._showYesterday !== value) {
+      this._showYesterday = value;
+
+      if (this._isInitialized) {
+        this._applyShowYesterday();
+      }
+    }
+  }
+
+  /** Get/set whether to show the yesterday button */
+  public get yesterdayButton(): boolean {
+    return this._yesterdayButton;
+  }
+  public set yesterdayButton(value: boolean) {
+    if (this._yesterdayButton !== value) {
+      this._yesterdayButton = value;
+
+      if (this._isInitialized) {
+        this._applyYesterdayButton();
+      }
+    }
+  }
+
+  /* Get/set the yesterday button callback */
+  public get yesterdayCallback(): (() => void) | undefined {
+    return this._yesterdayCallback;
+  }
+  public set yesterdayCallback(value: (() => void) | undefined) {
+    this._yesterdayCallback = value;
+  }
+
+  /** Get/set show last seven days */
+  public get showLastSevenDays(): boolean {
+    return this._showLastSevenDays;
+  }
+  public set showLastSevenDays(value: boolean) {
+    if (this._showLastSevenDays !== value) {
+      this._showLastSevenDays = value;
+
+      if (this._isInitialized) {
+        this._applyShowLastSevenDays();
+      }
+    }
+  }
+
+  /** Get/set whether to show the last seven days button */
+  public get lastSevenDaysButton(): boolean {
+    return this._lastSevenDaysButton;
+  }
+  public set lastSevenDaysButton(value: boolean) {
+    if (this._lastSevenDaysButton !== value) {
+      this._lastSevenDaysButton = value;
+
+      if (this._isInitialized) {
+        this._applyLastSevenDaysButton();
+      }
+    }
+  }
+
+  /* Get/set the last seven days button callback */
+  public get lastSevenDaysCallback(): (() => void) | undefined {
+    return this._lastSevenDaysCallback;
+  }
+  public set lastSevenDaysCallback(value: (() => void) | undefined) {
+    this._lastSevenDaysCallback = value;
+  }
+
+  /** Get/set show last thirty days */
+  public get showLastThirtyDays(): boolean {
+    return this._showLastThirtyDays;
+  }
+  public set showLastThirtyDays(value: boolean) {
+    if (this._showLastThirtyDays !== value) {
+      this._showLastThirtyDays = value;
+
+      if (this._isInitialized) {
+        this._applyShowLastThirtyDays();
+      }
+    }
+  }
+
+  /** Get/set whether to show the last thirty days button */
+  public get lastThirtyDaysButton(): boolean {
+    return this._lastThirtyDaysButton;
+  }
+  public set lastThirtyDaysButton(value: boolean) {
+    if (this._lastThirtyDaysButton !== value) {
+      this._lastThirtyDaysButton = value;
+
+      if (this._isInitialized) {
+        this._applyLastThirtyDaysButton();
+      }
+    }
+  }
+
+  /* Get/set the last thirty days button callback */
+  public get lastThirtyDaysCallback(): (() => void) | undefined {
+    return this._lastThirtyDaysCallback;
+  }
+  public set lastThirtyDaysCallback(value: (() => void) | undefined) {
+    this._lastThirtyDaysCallback = value;
+  }
+
   /** Get/set the tooltip builder */
   public get tooltipBuilder(): CalendarTooltipBuilder | undefined {
     return this._tooltipBuilder;
@@ -2519,9 +2735,62 @@ export class CalendarCore implements ICalendarCore {
   public today(): void {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 0);
     this._goToDate(today, true);
     if (this._todayCallback) {
       this._todayCallback();
+    }
+  }
+
+  /** Go to yesterday */
+  public yesterday(): void {
+    const today = new Date();
+    const yesterdayFrom = new Date(today.setDate(today.getDate() - 1));
+    yesterdayFrom.setHours(0, 0, 0, 0);
+    const yesterdayTo = new Date(yesterdayFrom);
+    yesterdayTo.setHours(23, 59, 59, 0);
+
+    const dateRange = [yesterdayFrom, yesterdayTo];
+    this._adapter.setRange(dateRange);
+    this._goToDate(yesterdayFrom, true);
+
+    if (this._yesterdayCallback) {
+      this._yesterdayCallback();
+    }
+  }
+
+  /** Go to last seven days */
+  public lastSevenDays(): void {
+    const today = new Date();
+    const lastSevenDaysFrom = new Date(today.setDate(today.getDate() - 7));
+    lastSevenDaysFrom.setHours(0, 0, 0, 0);
+    const lastSevenDaysTo = new Date();
+    lastSevenDaysTo.setHours(23, 59, 59, 0);
+
+    const dateRange = [lastSevenDaysFrom, lastSevenDaysTo];
+    this._adapter.setRange(dateRange);
+    this._applyValue(dateRange);
+
+    if (this._lastSevenDaysCallback) {
+      this._lastSevenDaysCallback();
+    }
+  }
+
+  /** Go to last thirty days */
+  public lastThirtyDays(): void {
+    const today = new Date();
+    const lastThirtyDaysFrom = new Date(today.setDate(today.getDate() - 30));
+    lastThirtyDaysFrom.setHours(0, 0, 0, 0);
+    const lastThirtyDaysTo = new Date();
+    lastThirtyDaysTo.setHours(23, 59, 59, 0);
+
+    const dateRange = [lastThirtyDaysFrom, lastThirtyDaysTo];
+    this._adapter.setRange(dateRange);
+    this._applyValue(dateRange);
+
+    if (this._lastThirtyDaysCallback) {
+      this._lastThirtyDaysCallback();
     }
   }
 
