@@ -40,7 +40,7 @@ const events = {
 } as const;
 
 const defaults = {
-  HIDE: 'anchor-hidden' satisfies OverlayHideState,
+  HIDE: 'never' satisfies OverlayHideState,
   FLIP: 'auto' satisfies OverlayFlipState,
   SHIFT: 'auto' satisfies OverlayShiftState
 } as const;
