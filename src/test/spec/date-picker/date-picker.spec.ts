@@ -1243,7 +1243,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(clearButton).not.toBeNull();
     });
 
-    it('should set date to todays date when clicking today button', async function(this: ITestContext) {
+    it('should set date to todays date without time when clicking today button', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.showToday = true;
       const changeSpy = jasmine.createSpy('change spy');
@@ -1256,12 +1256,30 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
       const popup = getPopup(this.context.component);
       const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
       expect(changeSpy).toHaveBeenCalledTimes(1);
       expect(this.context.component.open).toBeFalse();
       expect(popup).toBeNull('Expected popup to be removed');
       expect(this.context.component.value).toBeInstanceOf(Date);
-      expect((this.context.component.value as Date).toDateString()).toEqual(today.toDateString());
+      expect((this.context.component.value as Date).toISOString()).toEqual(today.toISOString());
+    });
+
+    it('should set date to todays date with time when clicking today button if value with time is already set', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.showToday = true;
+      const dateWithTime = new Date('01/01/2021 12:00:00');
+      this.context.component.value = dateWithTime;
+      openPopup(this.context.component);
+
+      clickTodayButton(this.context.component);
+      await task(POPOVER_ANIMATION_DURATION);
+      await frame();
+
+      const todayWithTime = new Date();
+      todayWithTime.setHours(dateWithTime.getHours(), dateWithTime.getMinutes(), dateWithTime.getSeconds(), dateWithTime.getMilliseconds());
+
+      expect(this.context.component.value.toISOString()).toEqual(todayWithTime.toISOString());
     });
 
     it('should set date to todays date when clicking today button a second time', async function(this: ITestContext) {

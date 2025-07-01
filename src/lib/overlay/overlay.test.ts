@@ -35,7 +35,7 @@ describe('Overlay', () => {
       expect(harness.overlayElement.positionStrategy).to.equal('fixed');
       expect(harness.overlayElement.offset).to.deep.equal({});
       expect(harness.overlayElement.shift).to.equal('auto');
-      expect(harness.overlayElement.hide).to.equal('anchor-hidden' satisfies OverlayHideState);
+      expect(harness.overlayElement.hide).to.equal('never' satisfies OverlayHideState);
       expect(harness.overlayElement.persistent).to.be.false;
       expect(harness.overlayElement.flip).to.equal('auto' as OverlayFlipState);
     });
@@ -487,7 +487,7 @@ describe('Overlay', () => {
       harness.overlayElement.positionStrategy = 'absolute';
       harness.overlayElement.offset = { mainAxis: 10, crossAxis: 10 };
       harness.overlayElement.shift = 'never';
-      harness.overlayElement.hide = 'never';
+      harness.overlayElement.hide = 'anchor-hidden';
       harness.overlayElement.flip = 'main';
       harness.overlayElement.boundary = 'test-boundary';
       harness.overlayElement.boundaryElement = document.body;
@@ -548,9 +548,11 @@ describe('Overlay', () => {
   });
 
   describe('hide', () => {
-    it('should hide when anchor element is not visible', async () => {
-      const harness = await createFixture({ open: true });
+    it('should hide when anchor element is not visible when anchor-hidden', async () => {
+      const harness = await createFixture({ open: true, hide: 'anchor-hidden' });
 
+      expect(harness.overlayElement.hide).to.equal('anchor-hidden');
+      expect(harness.overlayElement.getAttribute(OVERLAY_CONSTANTS.attributes.HIDE)).to.equal('anchor-hidden');
       expect(harness.isOpen).to.be.true;
 
       harness.anchorElement.style.marginRight = '9999px';
@@ -560,11 +562,10 @@ describe('Overlay', () => {
       expect(harness.rootElement.style.visibility).to.equal('hidden');
     });
 
-    it('should not hide when anchor element is not visible and hide is false', async () => {
-      const harness = await createFixture({ open: true, hide: 'never' });
+    it('should not hide when anchor element is not visible and hide is never (default)', async () => {
+      const harness = await createFixture({ open: true });
 
       expect(harness.overlayElement.hide).to.equal('never');
-      expect(harness.overlayElement.getAttribute(OVERLAY_CONSTANTS.attributes.HIDE)).to.equal('never');
       expect(harness.isOpen).to.be.true;
 
       harness.anchorElement.style.marginRight = '9999px';
@@ -574,7 +575,7 @@ describe('Overlay', () => {
       expect(harness.rootElement.style.display).to.not.equal('none');
     });
 
-    it('should fall back to default hide value if null value is provided', async () => {
+    it('should fall back to default hide value (never) if null value is provided', async () => {
       const harness = await createFixture();
 
       harness.overlayElement.hide = null as any;

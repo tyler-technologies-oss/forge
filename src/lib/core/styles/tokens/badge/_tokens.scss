@@ -18,7 +18,7 @@ $tokens: (
   border-width: utils.module-val(badge, border-width, border.variable(thin)),
   border-style: utils.module-val(badge, border-style, none),
   border-color: utils.module-ref(badge, border-color, color),
-  gap: utils.module-val(badge, gap, spacing.variable(xsmall)),
+  gap: utils.module-val(badge, gap, spacing.variable(xxsmall)),
   font-weight: utils.module-val(badge, font-weight, bold),
   // Dot
   dot-size: utils.module-val(badge, dot-size, 8px),
