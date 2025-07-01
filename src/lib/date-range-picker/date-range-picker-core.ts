@@ -103,6 +103,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
 
   protected _onToday(): void {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     this._tryMergeCurrentTime({ from: today });
     const range = this._open ? new DateRange({ from: this._from || today, to: this._to || undefined }) : new DateRange({ from: today });
     if (!this._isDateRangeAcceptable(range)) {
