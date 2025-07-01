@@ -2,8 +2,8 @@ import { COLOR_PICKER_CONSTANTS } from './color-picker-constants';
 import { relativeCoords } from './color-picker-utils';
 
 export class ColorPickerGradientSlider {
-  private _xPercent: number;
-  private _yPercent: number;
+  private _xPercent = 0;
+  private _yPercent = 0;
   private _thumbElement: HTMLElement;
   private _keydownListener: (evt: KeyboardEvent) => void;
   private _downListener: (evt: MouseEvent & TouchEvent) => void;
@@ -12,7 +12,7 @@ export class ColorPickerGradientSlider {
 
   constructor(
     private _rootElement: HTMLElement,
-    private _changeListener: (x: number, y: number) => void
+    private _changeListener: (saturation: number, value: number) => void
   ) {
     this._keydownListener = evt => this._onKeydown(evt);
     this._downListener = evt => this._onDown(evt);
@@ -26,12 +26,9 @@ export class ColorPickerGradientSlider {
   }
 
   public setValue(saturation: number, value: number): void {
-    window.requestAnimationFrame(() => {
-      const bounds = this._rootElement.getBoundingClientRect();
-      this._xPercent = Math.round(bounds.width * (saturation / 100));
-      this._yPercent = bounds.height - Math.round(bounds.height * (value / 100));
-      this._setThumbPosition(this._xPercent, this._yPercent);
-    });
+    this._xPercent = Math.max(0, Math.min(100, saturation));
+    this._yPercent = Math.max(0, Math.min(100, 100 - value));
+    this._setThumbPosition(this._xPercent, this._yPercent);
   }
 
   private _initialize(): void {
@@ -63,37 +60,25 @@ export class ColorPickerGradientSlider {
     const isArrowRightKey = evt.key === 'ArrowRight' || evt.keyCode === 39;
     const isArrowDownKey = evt.key === 'ArrowDown' || evt.keyCode === 40;
 
-    const bounds = this._rootElement.getBoundingClientRect();
+    const stepSize = 1; // 1% steps
 
     if (isArrowDownKey) {
       evt.preventDefault();
-      this._yPercent++;
+      this._yPercent = Math.min(100, this._yPercent + stepSize);
     } else if (isArrowUpKey) {
       evt.preventDefault();
-      this._yPercent--;
+      this._yPercent = Math.max(0, this._yPercent - stepSize);
     } else if (isArrowLeftKey) {
       evt.preventDefault();
-      this._xPercent--;
+      this._xPercent = Math.max(0, this._xPercent - stepSize);
     } else if (isArrowRightKey) {
       evt.preventDefault();
-      this._xPercent++;
+      this._xPercent = Math.min(100, this._xPercent + stepSize);
     } else if (isEnterKey) {
       evt.preventDefault();
-      // TODO(kieran.nichols): Select the current color
+      // TODO: Select the current color
     } else {
       return;
-    }
-
-    if (this._xPercent > bounds.width) {
-      this._xPercent = bounds.width;
-    } else if (this._xPercent < 0) {
-      this._xPercent = 0;
-    }
-
-    if (this._yPercent > bounds.height) {
-      this._yPercent = bounds.height;
-    } else if (this._yPercent < 0) {
-      this._yPercent = 0;
     }
 
     this._setThumbPosition(this._xPercent, this._yPercent);
@@ -128,9 +113,9 @@ export class ColorPickerGradientSlider {
     const x = isMouseEvent ? evt.clientX : evt.changedTouches[0].clientX;
     const y = isMouseEvent ? evt.clientY : evt.changedTouches[0].clientY;
     const coords = this._calculateSliderPercent(x, y);
-    this._setThumbPosition(coords.x, coords.y);
-    this._xPercent = parseInt(((coords.x / coords.width) * 100).toString(), 10);
-    this._yPercent = Math.abs(parseInt(((coords.y / coords.height) * 100).toString(), 10) - 100);
+    this._xPercent = Math.max(0, Math.min(100, (coords.x / coords.width) * 100));
+    this._yPercent = Math.max(0, Math.min(100, (coords.y / coords.height) * 100));
+    this._setThumbPosition(this._xPercent, this._yPercent);
     this._notify();
   }
 
@@ -139,13 +124,15 @@ export class ColorPickerGradientSlider {
   }
 
   private _setThumbPosition(xPercent: number, yPercent: number): void {
-    this._thumbElement.style.left = `${xPercent}px`;
-    this._thumbElement.style.top = `${yPercent}px`;
+    this._thumbElement.style.left = `${xPercent}%`;
+    this._thumbElement.style.top = `${yPercent}%`;
   }
 
   private _notify(): void {
     if (typeof this._changeListener === 'function') {
-      this._changeListener(this._xPercent, this._yPercent);
+      const saturation = this._xPercent;
+      const value = 100 - this._yPercent;
+      this._changeListener(saturation, value);
     }
   }
 }

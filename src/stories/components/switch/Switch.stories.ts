@@ -1,4 +1,4 @@
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconCheck, tylIconClose } from '@tylertech/tyler-icons';
 import { html } from 'lit';

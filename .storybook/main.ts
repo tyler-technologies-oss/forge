@@ -11,10 +11,9 @@ const config: StorybookConfig = {
   ],
   addons: [
     '@storybook/addon-links',
-    '@storybook/addon-essentials',
     '@storybook/addon-a11y',
     '@storybook/addon-themes',
-    'storybook-dark-mode',
+    '@vueless/storybook-dark-mode',
     {
       name: '@storybook/addon-docs',
       options: {
@@ -26,7 +25,7 @@ const config: StorybookConfig = {
       },
     },
     'storybook-addon-tag-badges',
-    './addons/google-analytics/register.js',
+    './addons/google-analytics/register.js'
   ],
   staticDirs: ['../src/stories/assets'],
   framework: {

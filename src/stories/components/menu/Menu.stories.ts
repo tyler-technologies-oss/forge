@@ -1,5 +1,5 @@
 import { html, nothing } from 'lit';
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 import { IMenuComponent, IMenuOption, IMenuOptionGroup, IOption, IOptionGroup } from '@tylertech/forge';
 import { styleMap } from 'lit/directives/style-map.js';

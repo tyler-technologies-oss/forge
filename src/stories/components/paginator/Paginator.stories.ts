@@ -1,5 +1,5 @@
-import { type Meta, type StoryObj } from '@storybook/web-components';
-import { action } from '@storybook/addon-actions';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
+import { action } from 'storybook/actions';
 import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
 import type { IPaginatorComponent } from '@tylertech/forge/paginator';
 

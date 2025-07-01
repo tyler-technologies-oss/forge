@@ -183,7 +183,9 @@ export class TabBarCore implements ITabBarCore {
   private _syncTabState(): void {
     this._tabs.forEach((tab, index) => {
       tab.selected = index === this._activeTab;
-      if (this._disabled) tab.disabled = this._disabled;
+      if (this._disabled) {
+        tab.disabled = this._disabled;
+      }
       tab.vertical = this._vertical;
       tab.stacked = this._stacked;
       tab.secondary = this._secondary;

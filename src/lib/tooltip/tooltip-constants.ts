@@ -39,7 +39,8 @@ const defaults = {
 
 const selectors = {
   CONTENT: '.forge-tooltip',
-  ARROW: '.arrow'
+  ARROW: '.arrow',
+  DEFAULT_SLOT: 'slot:not([name])'
 } as const;
 
 export const TOOLTIP_CONSTANTS = {

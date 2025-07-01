@@ -1,3 +1,67 @@
+# v3.9.1 (Thu Jun 12 2025)
+
+#### 🐛 Bug Fix
+
+- fix(tooltip): do not render empty tooltips [#942](https://github.com/tyler-technologies-oss/forge/pull/942) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(color-picker): fixed a bug related to the hex format and gradient cursor position [#941](https://github.com/tyler-technologies-oss/forge/pull/941) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(menu): use `arrow_right_alt` icon for cascading menus with v2 icons [#940](https://github.com/tyler-technologies-oss/forge/pull/940) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v3.9.0 (Mon Jun 09 2025)
+
+:tada: This release contains work from new contributors! :tada:
+
+Thanks for all your work!
+
+:heart: Joe Nunnelley ([@JoeNunnelley](https://github.com/JoeNunnelley))
+
+:heart: Beau Christian ([@bctt](https://github.com/bctt))
+
+#### 🚀 Enhancement
+
+- chore(deps-dev): bump eazy-logger from 4.0.1 to 4.1.0 [#927](https://github.com/tyler-technologies-oss/forge/pull/927) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- chore(deps): bump koa from 2.15.3 to 2.16.1 [#925](https://github.com/tyler-technologies-oss/forge/pull/925) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- feat: update dependencies [#933](https://github.com/tyler-technologies-oss/forge/pull/933) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(popover): added new `distinct` API to support popover groups [#929](https://github.com/tyler-technologies-oss/forge/pull/929) ([@DRiFTy17](https://github.com/DRiFTy17))
+- Feat/table before render event [#930](https://github.com/tyler-technologies-oss/forge/pull/930) ([@eliganemtyler](https://github.com/eliganemtyler))
+- feat: upgrade tyler-icons to consolidated v2.x version [#911](https://github.com/tyler-technologies-oss/forge/pull/911) ([@DRiFTy17](https://github.com/DRiFTy17))
+- Feat/table render event [#919](https://github.com/tyler-technologies-oss/forge/pull/919) ([@eliganemtyler](https://github.com/eliganemtyler))
+
+#### 🐛 Bug Fix
+
+- fix(dialog): fixed a bug where the backdrop could still be clicked if persistent is set after open [#937](https://github.com/tyler-technologies-oss/forge/pull/937) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: silence mixed-decls warning in vite [#934](https://github.com/tyler-technologies-oss/forge/pull/934) ([@DRiFTy17](https://github.com/DRiFTy17))
+- Security Code Scanning - configuration files [#923](https://github.com/tyler-technologies-oss/forge/pull/923) ([@JoeNunnelley](https://github.com/JoeNunnelley))
+- Dependency reviewer [#920](https://github.com/tyler-technologies-oss/forge/pull/920) ([@JoeNunnelley](https://github.com/JoeNunnelley))
+- fix(popover): fixed a bug where popovers open after current were closing when hovered [#931](https://github.com/tyler-technologies-oss/forge/pull/931) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: consolidating various defineXComponent calls to use the standard forge-core defineCustomElement call [#912](https://github.com/tyler-technologies-oss/forge/pull/912) ([@bctt](https://github.com/bctt))
+- fix(view-switcher): output height and width tokens on host element [#917](https://github.com/tyler-technologies-oss/forge/pull/917) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix(toolbar): Apply min-width to grid center slots to allow overflows [#909](https://github.com/tyler-technologies-oss/forge/pull/909) ([@Alanoll](https://github.com/Alanoll))
+
+#### 📝 Documentation
+
+- Storybook v9 upgrade [#939](https://github.com/tyler-technologies-oss/forge/pull/939) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs: add required field markup section for accessibility in TextFiel… [#936](https://github.com/tyler-technologies-oss/forge/pull/936) ([@Ross-Blakeney](https://github.com/Ross-Blakeney))
+- docs(menu): add code snippet for setting up cascading menus [#932](https://github.com/tyler-technologies-oss/forge/pull/932) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 8
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@Ross-Blakeney](https://github.com/Ross-Blakeney)
+- Alan Collins ([@Alanoll](https://github.com/Alanoll))
+- Beau Christian ([@bctt](https://github.com/bctt))
+- Eli Ganem ([@eliganemtyler](https://github.com/eliganemtyler))
+- Joe Nunnelley ([@JoeNunnelley](https://github.com/JoeNunnelley))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v3.8.1 (Wed Apr 09 2025)
 
 #### 🐛 Bug Fix

@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/web-components';
+import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { html, nothing } from 'lit';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 import { OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 import { IPopoverComponent, IPopoverToggleEventData, type IPopoverProperties } from '@tylertech/forge/popover';
 import { styleMap } from 'lit/directives/style-map.js';

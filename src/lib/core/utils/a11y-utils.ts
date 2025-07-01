@@ -291,6 +291,7 @@ export interface ARIAMixinStrict extends ARIAMixin {
 /**
  * The ARIA attribute corresponding to a given ARIA property.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type ARIAPropertyToAttribute<K extends string> = K extends `aria${infer Suffix}Element${infer OptS}`
   ? `aria-${Lowercase<Suffix>}`
   : K extends `aria${infer Suffix}`
@@ -323,9 +324,9 @@ export function ariaAttributeToProperty<K extends ARIAAttribute | 'role'>(attrib
   return ARIA_ATTRIBUTES_TO_PROPERTIES[attribute] as ARIAProperty;
 }
 
-export type DefaultAriaOptions = {
+export interface DefaultAriaOptions {
   setAttribute?: boolean;
-};
+}
 
 /**
  * Applies default ARIA to an element through ElementInternals if supported. Otherwise, ARIA

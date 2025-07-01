@@ -1,4 +1,4 @@
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';

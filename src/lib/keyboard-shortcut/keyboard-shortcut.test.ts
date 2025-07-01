@@ -385,7 +385,7 @@ describe('Keyboard Shortcut', () => {
     it('should throw when unable to find target element', async () => {
       const el = document.createElement('forge-keyboard-shortcut');
 
-      const action = () => {
+      const action = (): void => {
         (el as any)['_core']['_initializeTargetElement']();
       };
 

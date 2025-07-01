@@ -1,4 +1,4 @@
-import { getShadowElement, emitEvent } from '@tylertech/forge-core';
+import { getShadowElement } from '@tylertech/forge-core';
 
 import { IFilePickerComponent } from './file-picker';
 import { FILE_PICKER_CONSTANTS } from './file-picker-constants';

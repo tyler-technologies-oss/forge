@@ -92,7 +92,6 @@ describe('Switch', () => {
 
   it('should accept checked', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch checked></forge-switch>`);
-    const ctx = new SwitchHarness(el);
 
     expect(el.checked).to.be.true;
     expect(el.on).to.be.true;
@@ -212,7 +211,6 @@ describe('Switch', () => {
 
   it('should toggle', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch></forge-switch>`);
-    const ctx = new SwitchHarness(el);
 
     el.toggle();
 

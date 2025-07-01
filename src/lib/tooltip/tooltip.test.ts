@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { nothing } from 'lit';
+import { nothing, TemplateResult } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { task } from '../core/utils/utils';
@@ -51,6 +51,26 @@ describe('Tooltip', () => {
 
       harness.tooltipElement.open = false;
       expect(harness.isOpen).to.be.false;
+    });
+
+    it('should not open if there is no text content', async () => {
+      const harness = await createFixture({ content: nothing });
+
+      harness.tooltipElement.open = true;
+
+      expect(harness.isOpen).to.be.false;
+      expect(harness.tooltipElement.open).to.be.false;
+      expect(harness.tooltipElement.hasAttribute(TOOLTIP_CONSTANTS.attributes.OPEN)).to.be.false;
+    });
+
+    it('should open if there is an element node even if no text content', async () => {
+      const harness = await createFixture({ content: html`<span></span>` });
+
+      harness.tooltipElement.open = true;
+
+      expect(harness.isOpen).to.be.true;
+      expect(harness.tooltipElement.open).to.be.true;
+      expect(harness.tooltipElement.hasAttribute(TOOLTIP_CONSTANTS.attributes.OPEN)).to.be.true;
     });
   });
 
@@ -745,6 +765,7 @@ class TooltipHarness {
 }
 
 interface ITooltipFixtureConfig {
+  content?: string | TemplateResult | typeof nothing;
   open?: boolean;
   type?: TooltipType;
   triggerType?: TooltipTriggerType;
@@ -752,13 +773,13 @@ interface ITooltipFixtureConfig {
   offset?: number;
 }
 
-async function createFixture({ open, type, triggerType, delay, offset }: ITooltipFixtureConfig = {}): Promise<TooltipHarness> {
+async function createFixture({ content = 'Tooltip text', open, type, triggerType, delay, offset }: ITooltipFixtureConfig = {}): Promise<TooltipHarness> {
   const container = await fixture<HTMLElement>(html`
     <div>
       <button type="button" id="alt-anchor">Alt Tooltip Anchor</button>
       <button type="button" id="test-anchor">Tooltip Anchor</button>
       <forge-tooltip ?open=${open} type=${type ?? nothing} trigger-type=${triggerType ?? nothing} delay=${delay ?? nothing} offset=${offset ?? nothing}>
-        Test tooltip content
+        ${content}
       </forge-tooltip>
     </div>
   `);

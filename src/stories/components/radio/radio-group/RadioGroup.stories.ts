@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../../utils';
 
 import '@tylertech/forge/radio';

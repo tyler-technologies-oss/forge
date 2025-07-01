@@ -142,10 +142,11 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
       case TOAST_CONSTANTS.attributes.OPEN:
         this.open = coerceBoolean(newValue);
         break;
-      case TOAST_CONSTANTS.attributes.DURATION:
+      case TOAST_CONSTANTS.attributes.DURATION: {
         const value = Number(newValue);
         this.duration = value && value > 0 ? value : TOAST_CONSTANTS.defaults.DURATION;
         break;
+      }
       case TOAST_CONSTANTS.attributes.PLACEMENT:
         this.placement = (newValue as ToastPlacement) || TOAST_CONSTANTS.defaults.PLACEMENT;
         break;

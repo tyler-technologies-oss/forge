@@ -7,18 +7,16 @@ import { compileString } from 'sass';
 import { dirname } from 'path';
 
 /** Custom plugin to inline imports against .scss files as compiled CSS strings. */
-const inlineScss = fromRollup(() => {
-  return {
-    name: 'inline-scss',
-    transform(code, id) {
-      if (id.endsWith('.scss')) {
-        const loadPaths = [dirname(id), 'node_modules/'];
-        const result = compileString(code, { loadPaths });
-        return result.css;
-      }
+const inlineScss = fromRollup(() => ({
+  name: 'inline-scss',
+  transform(code, id) {
+    if (id.endsWith('.scss')) {
+      const loadPaths = [dirname(id), 'node_modules/'];
+      const result = compileString(code, { loadPaths });
+      return result.css;
     }
-  };
-});
+  }
+}));
 
 /** Gets all directory names within a given source directory.  */
 export const directoryGroup = source =>

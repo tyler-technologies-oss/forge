@@ -36,8 +36,8 @@ export function createListDropdown(config: IListDropdownConfig, targetElement?: 
     targetElement,
     listDropdown,
     core: listDropdown['_core'],
-    append: () => document.body.appendChild(targetElement!),
-    remove: () => document.body.removeChild(targetElement!)
+    append: () => document.body.appendChild(targetElement),
+    remove: () => document.body.removeChild(targetElement)
   };
 }
 

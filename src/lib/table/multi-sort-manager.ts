@@ -1,4 +1,3 @@
-import { ColorPickerAdapter } from '../color-picker';
 import { ISortedItem, ISortedItemUpdate, SortDirection } from './types';
 
 export class MultiSortManager {

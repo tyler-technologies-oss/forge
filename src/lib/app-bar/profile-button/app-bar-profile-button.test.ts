@@ -362,7 +362,7 @@ describe('App Bar Profile Button', () => {
       profileCardContent.id = 'profile-card-content';
       profileCardContent.innerText = 'Custom profile card content';
 
-      const profileCardBuilder = () => profileCardContent;
+      const profileCardBuilder = (): HTMLElement => profileCardContent;
       el.profileCardBuilder = profileCardBuilder;
 
       const popup = await openPopup(el);

@@ -1,5 +1,5 @@
 import { getShadowElement, listenOwnProperty, randomChars, toggleAttribute } from '@tylertech/forge-core';
-import { BASE_FIELD_CONSTANTS, FIELD_CONSTANTS, IFieldComponent } from '../field';
+import { FIELD_CONSTANTS, IFieldComponent } from '../field';
 import { BaseFieldAdapter, IBaseFieldAdapter } from '../field/base/base-field-adapter';
 import { LabelComponent } from '../label';
 import { ITextFieldComponent } from './text-field';
@@ -131,9 +131,7 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     this._destroyValueChangerListeners.forEach(callback => callback());
 
     // Add a new value change listener to each input
-    this._destroyValueChangerListeners = this._inputElements.map(el => {
-      return listenOwnProperty(context, el, 'value', listener);
-    });
+    this._destroyValueChangerListeners = this._inputElements.map(el => listenOwnProperty(context, el, 'value', listener));
   }
 
   public removeValueChangeListener(): void {

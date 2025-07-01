@@ -149,9 +149,7 @@ export function getDatesInRange(dates: Date[], start: Date, end: Date): Date[] {
   if (!start || !end) {
     return [];
   }
-  return dates.filter(d => {
-    return isInRange(d, start, end);
-  });
+  return dates.filter(d => isInRange(d, start, end));
 }
 
 /** Gets an accessible description of events. */

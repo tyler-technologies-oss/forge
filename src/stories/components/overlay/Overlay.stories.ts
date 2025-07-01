@@ -1,5 +1,5 @@
-import { action } from '@storybook/addon-actions';
-import type { Meta, StoryObj } from '@storybook/web-components';
+import { action } from 'storybook/actions';
+import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { type IPopoverProperties } from '@tylertech/forge/popover';
 import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';

@@ -50,7 +50,6 @@ export class DismissibleStack<T extends IDismissible> {
    */
   private _elementsRequestingDismiss = new Map<T, IDismissibleStackState | undefined>();
 
-  // eslint-disable-next-line @tylertech-eslint/require-private-modifier
   private constructor() {}
 
   public static get instance(): DismissibleStack<IDismissible> {

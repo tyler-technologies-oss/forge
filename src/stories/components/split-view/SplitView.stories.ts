@@ -1,6 +1,6 @@
 import { html } from 'lit';
-import { action } from '@storybook/addon-actions';
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { action } from 'storybook/actions';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { generateCustomElementArgTypes } from '../../utils';
 import { storyStyles } from 'src/stories/decorators';
 

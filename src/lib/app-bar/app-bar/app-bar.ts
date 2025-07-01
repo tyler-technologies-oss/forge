@@ -1,4 +1,4 @@
-import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty } from '@tylertech/forge-core';
 import { AppBarAdapter } from './app-bar-adapter';
 import { AppBarCore } from './app-bar-core';
 import { AppBarElevation, AppBarTheme, APP_BAR_CONSTANTS, AppBarThemeMode } from './app-bar-constants';

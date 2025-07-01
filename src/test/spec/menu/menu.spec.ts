@@ -444,12 +444,10 @@ describe('MenuComponent', function(this: ITestContext) {
 
     it(`should load leading icons from options factory based on 'leadingIcon' or 'icon' property`, async function(this: ITestContext){
       this.context = setupTestContext();
-      const options: MenuOptionFactory = () => {
-        return [
+      const options: MenuOptionFactory = () => [
           { icon: 'code', value: '', label: '1' },
           { leadingIcon: 'code', value: '', label: '2' }
-        ];
-      }
+        ]
 
       await frame();
 
@@ -889,9 +887,7 @@ describe('MenuComponent', function(this: ITestContext) {
 
   function asyncMenuOptionsFactory(count: number = 5) {
     return () =>
-      new Promise<IMenuOption[]>(resolve => {
-        return resolve(generateMenuOptions(count));
-      });
+      new Promise<IMenuOption[]>(resolve => resolve(generateMenuOptions(count)));
   }
 
   function menuOptionsFactory(count: number = 5) {

@@ -1,6 +1,6 @@
 import { html, render } from 'lit';
-import { ArgTypes } from '@storybook/web-components';
-import { action } from '@storybook/addon-actions';
+import { ArgTypes } from '@storybook/web-components-vite';
+import { action } from 'storybook/actions';
 import { DialogPreset } from '@tylertech/forge/dialog';
 import { tylIconClose } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';

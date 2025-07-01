@@ -1,5 +1,5 @@
 import { html, nothing } from 'lit';
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, removeSourceStyleTagParams, standaloneStoryParams } from '../../utils';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconMoreVert } from '@tylertech/tyler-icons';

@@ -1,4 +1,4 @@
-import { getShadowElement, getActiveElement, toggleClass } from '@tylertech/forge-core';
+import { getShadowElement, toggleClass } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base';
 import { StepperUtils } from '../core/stepper-utils';
 import { IStepComponent } from '../step/step';

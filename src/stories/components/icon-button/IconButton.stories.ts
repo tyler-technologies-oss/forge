@@ -1,6 +1,6 @@
 import { html } from 'lit';
-import { type Meta, type StoryObj } from '@storybook/web-components';
-import { action } from '@storybook/addon-actions';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
+import { action } from 'storybook/actions';
 import { standaloneStoryParams, customElementStoryRenderer, generateCustomElementArgTypes, GLOBAL_THEME_OPTIONS } from '../../utils';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 import { tylIconForgeLogo, tylIconFavorite, tylIconFavoriteBorder, tylIconNotifications, tylIconOpenInNew, tylIconSettings } from '@tylertech/tyler-icons';

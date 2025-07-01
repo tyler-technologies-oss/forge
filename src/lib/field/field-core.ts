@@ -82,7 +82,9 @@ export class FieldCore implements IFieldCore {
   private _onPopoverIconMousedown(evt: Event): void {
     const popoverEvent = new CustomEvent(FIELD_CONSTANTS.events.POPOVER_ICON_MOUSEDOWN, { bubbles: true, composed: true, cancelable: true });
     this._adapter.dispatchHostEvent(popoverEvent);
-    if (popoverEvent.defaultPrevented) evt.preventDefault();
+    if (popoverEvent.defaultPrevented) {
+      evt.preventDefault();
+    }
   }
 
   public floatLabelWithoutAnimation(value: boolean): void {

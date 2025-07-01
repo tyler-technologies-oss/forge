@@ -128,6 +128,6 @@ export class IconRegistry {
 
   /** Determines if the provided `icon` matches the `IIcon` shape. */
   private static _isIconObject(icon: any): icon is IIcon {
-    return typeof icon === 'object' && icon.hasOwnProperty('name') && icon.hasOwnProperty('data');
+    return typeof icon === 'object' && Object.prototype.hasOwnProperty.call(icon, 'name') && Object.prototype.hasOwnProperty.call(icon, 'data');
   }
 }

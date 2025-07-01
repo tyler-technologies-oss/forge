@@ -52,7 +52,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
     const slottedAnchor = this.getSlottedAnchor;
     this._component[setDefaultAria](
       {
-        role: !!slottedAnchor ? null : 'button'
+        role: slottedAnchor ? null : 'button'
       },
       {
         setAttribute: !this._component.hasAttribute('role') || !!slottedAnchor
@@ -61,14 +61,14 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
 
     this._rootElement.classList.toggle(BASE_BUTTON_CONSTANTS.classes.WITH_ANCHOR, !!slottedAnchor);
 
-    if (!!slottedAnchor) {
+    if (slottedAnchor) {
       this._component.removeAttribute('tabindex');
     } else if (!this._component.disabled && !this._component.hasAttribute('tabindex')) {
       this._component.setAttribute('tabindex', '0');
     }
 
-    this._focusIndicatorElement.targetElement = !!slottedAnchor ? slottedAnchor : this._component;
-    this._stateLayerElement.targetElement = !!slottedAnchor ? slottedAnchor : this._component;
+    this._focusIndicatorElement.targetElement = slottedAnchor ? slottedAnchor : this._component;
+    this._stateLayerElement.targetElement = slottedAnchor ? slottedAnchor : this._component;
   }
 
   public setDisabled(value: boolean): void {
@@ -176,7 +176,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
         }
         return false;
       case 'toggle':
-      default:
+      default: {
         const result = popoverElement.togglePopover();
 
         // When the popover is open and is using an "auto" popover mode, we need to handle
@@ -205,6 +205,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
         }
 
         return result;
+      }
     }
   }
 

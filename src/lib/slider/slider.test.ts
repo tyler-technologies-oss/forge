@@ -75,14 +75,18 @@ class SliderHarness extends TestHarness<ISliderComponent> {
   }
 
   public simulateStartEnter(): void {
-    let { x, y, width, height } = this.startHandleThumbElement.getBoundingClientRect();
+    const bounds = this.startHandleThumbElement.getBoundingClientRect();
+    let { x, y } = bounds;
+    const { width, height } = bounds;
     x = x + width / 2;
     y = y + height / 2;
     this.startInputElement.dispatchEvent(new PointerEvent('pointerenter', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
 
   public simulateStartMove(divisor = 2): void {
-    let { x, y, width, height } = this.startInputElement.getBoundingClientRect();
+    const bounds = this.startInputElement.getBoundingClientRect();
+    let { x, y } = bounds;
+    const { width, height } = bounds;
     x = x + width / divisor;
     y = y + height / divisor;
     this.startInputElement.dispatchEvent(new PointerEvent('pointermove', { clientX: x, clientY: y, screenX: x, screenY: y }));
@@ -93,14 +97,18 @@ class SliderHarness extends TestHarness<ISliderComponent> {
   }
 
   public simulateEndEnter(): void {
-    let { x, y, width, height } = this.endHandleThumbElement.getBoundingClientRect();
+    const bounds = this.endHandleThumbElement.getBoundingClientRect();
+    let { x, y } = bounds;
+    const { width, height } = bounds;
     x = x + width / 2;
     y = y + height / 2;
     this.endInputElement.dispatchEvent(new PointerEvent('pointerenter', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
 
   public simulateEndMove(divisor = 2): void {
-    let { x, y, width, height } = this.endInputElement.getBoundingClientRect();
+    const bounds = this.endInputElement.getBoundingClientRect();
+    let { x, y } = bounds;
+    const { width, height } = bounds;
     x = x + width / divisor;
     y = y + height / divisor;
     this.endInputElement.dispatchEvent(new PointerEvent('pointermove', { clientX: x, clientY: y, screenX: x, screenY: y }));
