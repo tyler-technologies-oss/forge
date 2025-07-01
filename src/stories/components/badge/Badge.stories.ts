@@ -1,7 +1,7 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { standaloneStoryParams, customElementStoryRenderer, generateCustomElementArgTypes, GLOBAL_THEME_OPTIONS, getCssVariableArgs } from '../../utils';
-import { tylIconNotifications } from '@tylertech/tyler-icons';
+import { tylIconNotifications, tylIconAlert } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -51,7 +51,7 @@ export const Themed: Story = {
   render: () => {
     return html`
       <div style="display: flex; gap: 8px;">
-        <forge-badge theme="default">default</forge-badge>
+        <forge-badge theme="default">Default</forge-badge>
         <forge-badge theme="primary">Primary</forge-badge>
         <forge-badge theme="secondary">Secondary</forge-badge>
         <forge-badge theme="tertiary">Tertiary</forge-badge>
@@ -73,7 +73,7 @@ export const Strong: Story = {
   render: () => {
     return html`
       <div style="display: flex; gap: 8px;">
-        <forge-badge strong theme="default">default</forge-badge>
+        <forge-badge strong theme="default">Default</forge-badge>
         <forge-badge strong theme="primary">Primary</forge-badge>
         <forge-badge strong theme="secondary">Secondary</forge-badge>
         <forge-badge strong theme="tertiary">Tertiary</forge-badge>
@@ -83,6 +83,19 @@ export const Strong: Story = {
         <forge-badge strong theme="info">Info</forge-badge>
         <forge-badge strong theme="info-secondary">Info (secondary)</forge-badge>
       </div>
+    `;
+  }
+};
+
+export const WithIcon: Story = {
+  ...standaloneStoryParams,
+  render: () => {
+    IconRegistry.define(tylIconAlert);
+    return html`
+      <forge-badge>
+        <forge-icon name="alert" slot="start"></forge-icon>
+        <span>Warning</span>
+      </forge-badge>
     `;
   }
 };
