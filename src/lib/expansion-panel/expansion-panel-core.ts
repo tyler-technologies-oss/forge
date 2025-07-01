@@ -19,6 +19,7 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
 
   private _clickListener: EventListener = this._onClick.bind(this);
   private _keydownListener: EventListener = this._onKeydown.bind(this);
+  private _keyupListener: EventListener = this._onKeyup.bind(this);
   private _animationCompleteListener = this._onAnimationComplete.bind(this);
   private _slotListener = this._handleContentSlotChange.bind(this);
 
@@ -27,6 +28,7 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   public async initialize(): Promise<void> {
     this._adapter.addHeaderListener('click', this._clickListener);
     this._adapter.addHeaderListener('keydown', this._keydownListener);
+    this._adapter.addHeaderListener('keyup', this._keyupListener);
     this._adapter.setAnimationCompleteListener(this._animationCompleteListener);
     this._adapter.addContentSlotListener(this._slotListener);
     this._adapter.setContentId();
@@ -65,28 +67,36 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
     this._adapter.removeTriggerListeners({ reset: true });
     this._adapter.addTriggerListener('click', this._clickListener);
     this._adapter.addTriggerListener('keydown', this._keydownListener);
+    this._adapter.addTriggerListener('keyup', this._keyupListener);
   }
 
   private _onClick(evt: MouseEvent): void {
-    const fromIgnoredEl = evt
-      .composedPath()
-      .find((el: HTMLElement) => el.nodeType === Node.ELEMENT_NODE && el.matches(EXPANSION_PANEL_CONSTANTS.selectors.IGNORE));
-    if (fromIgnoredEl) {
+    this._tryToggle(evt);
+  }
+
+  private _onKeydown(evt: KeyboardEvent): void {
+    if (evt.key === ' ' || evt.key === 'Enter') {
+      evt.preventDefault();
+    }
+  }
+
+  private _onKeyup(evt: KeyboardEvent): void {
+    if (evt.key === ' ' || evt.key === 'Enter') {
+      this._tryToggle(evt);
+    }
+  }
+
+  private _tryToggle(evt: Event): void {
+    if (this._canIgnoreEvent(evt)) {
       return;
     }
-
     evt.stopPropagation();
     this._toggle();
     this.dispatchToggleEvent();
   }
 
-  private _onKeydown(evt: KeyboardEvent): void {
-    if (evt.key === ' ' || evt.key === 'Enter') {
-      evt.stopPropagation();
-      evt.preventDefault();
-      this._toggle();
-      this.dispatchToggleEvent();
-    }
+  private _canIgnoreEvent(evt: Event): boolean {
+    return evt.composedPath().some((el: HTMLElement) => el.nodeType === Node.ELEMENT_NODE && el.matches(EXPANSION_PANEL_CONSTANTS.selectors.IGNORE));
   }
 
   private _onAnimationComplete(): void {
