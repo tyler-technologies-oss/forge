@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
 
-    <title>@storybook/core - Storybook</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>storybook - Storybook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
@@ -46,37 +46,23 @@
     <link href="./sb-manager/runtime.js" rel="modulepreload" />
 
     
-    <link href="./sb-addons/storybook-core-core-server-presets-0/common-manager-bundle.js" rel="modulepreload" />
+    <link href="./sb-addons/storybook-core-server-presets-0/common-manager-bundle.js" rel="modulepreload" />
     
     <link href="./sb-addons/links-1/manager-bundle.js" rel="modulepreload" />
     
-    <link href="./sb-addons/essentials-controls-2/manager-bundle.js" rel="modulepreload" />
+    <link href="./sb-addons/a11y-2/manager-bundle.js" rel="modulepreload" />
     
-    <link href="./sb-addons/essentials-actions-3/manager-bundle.js" rel="modulepreload" />
+    <link href="./sb-addons/themes-3/manager-bundle.js" rel="modulepreload" />
     
-    <link href="./sb-addons/essentials-backgrounds-4/manager-bundle.js" rel="modulepreload" />
+    <link href="./sb-addons/vueless-storybook-dark-mode-esm-preset-4/manager-bundle.js" rel="modulepreload" />
     
-    <link href="./sb-addons/essentials-viewport-5/manager-bundle.js" rel="modulepreload" />
+    <link href="./sb-addons/docs-5/manager-bundle.js" rel="modulepreload" />
     
-    <link href="./sb-addons/essentials-toolbars-6/manager-bundle.js" rel="modulepreload" />
+    <link href="./sb-addons/tag-badges-6/manager-bundle.js" rel="modulepreload" />
     
-    <link href="./sb-addons/essentials-measure-7/manager-bundle.js" rel="modulepreload" />
+    <link href="./sb-addons/storybook-addons-google-analytics-7/register-bundle.js" rel="modulepreload" />
     
-    <link href="./sb-addons/essentials-outline-8/manager-bundle.js" rel="modulepreload" />
-    
-    <link href="./sb-addons/a11y-9/manager-bundle.js" rel="modulepreload" />
-    
-    <link href="./sb-addons/themes-10/manager-bundle.js" rel="modulepreload" />
-    
-    <link href="./sb-addons/storybook-dark-mode-esm-preset-11/manager-bundle.js" rel="modulepreload" />
-    
-    <link href="./sb-addons/docs-12/manager-bundle.js" rel="modulepreload" />
-    
-    <link href="./sb-addons/tag-badges-13/manager-bundle.js" rel="modulepreload" />
-    
-    <link href="./sb-addons/storybook-addons-google-analytics-14/register-bundle.js" rel="modulepreload" />
-    
-    <link href="./sb-addons/storybook-15/manager-bundle.js" rel="modulepreload" />
+    <link href="./sb-addons/storybook-8/manager-bundle.js" rel="modulepreload" />
       <style>
   body {
     font-family: 'Roboto', sans-serif !important;
@@ -84,6 +70,16 @@
 
   .sidebar-header img {
     max-width: 100%;
+  }
+
+  .sidebar-container .sidebar-item:hover {
+    --tree-node-background-hover: #ebebeb;
+  }
+
+  .dark {
+    .sidebar-container .sidebar-item:hover {
+      --tree-node-background-hover: #3d3d3d;
+    }
   }
 
   .forge-docs-banner {
@@ -154,7 +150,15 @@
           window['FEATURES'] = {
   "argTypeTargetsV7": true,
   "legacyDecoratorFileOrder": false,
-  "disallowImplicitActionsInRenderV8": true
+  "disallowImplicitActionsInRenderV8": true,
+  "viewport": true,
+  "highlight": true,
+  "controls": true,
+  "interactions": true,
+  "actions": true,
+  "backgrounds": true,
+  "outline": true,
+  "measure": true
 };
         
       
@@ -168,8 +172,7 @@
       
         
           window['DOCS_OPTIONS'] = {
-  "defaultName": "Docs",
-  "autodocs": "tag"
+  "defaultName": "Docs"
 };
         
       
@@ -213,41 +216,27 @@
 
     <script type="module">
       import './sb-manager/globals-runtime.js';
+
       
-      
-        import './sb-addons/storybook-core-core-server-presets-0/common-manager-bundle.js';
+        import './sb-addons/storybook-core-server-presets-0/common-manager-bundle.js';
       
         import './sb-addons/links-1/manager-bundle.js';
       
-        import './sb-addons/essentials-controls-2/manager-bundle.js';
+        import './sb-addons/a11y-2/manager-bundle.js';
       
-        import './sb-addons/essentials-actions-3/manager-bundle.js';
+        import './sb-addons/themes-3/manager-bundle.js';
       
-        import './sb-addons/essentials-backgrounds-4/manager-bundle.js';
+        import './sb-addons/vueless-storybook-dark-mode-esm-preset-4/manager-bundle.js';
       
-        import './sb-addons/essentials-viewport-5/manager-bundle.js';
+        import './sb-addons/docs-5/manager-bundle.js';
       
-        import './sb-addons/essentials-toolbars-6/manager-bundle.js';
+        import './sb-addons/tag-badges-6/manager-bundle.js';
       
-        import './sb-addons/essentials-measure-7/manager-bundle.js';
+        import './sb-addons/storybook-addons-google-analytics-7/register-bundle.js';
       
-        import './sb-addons/essentials-outline-8/manager-bundle.js';
+        import './sb-addons/storybook-8/manager-bundle.js';
       
-        import './sb-addons/a11y-9/manager-bundle.js';
-      
-        import './sb-addons/themes-10/manager-bundle.js';
-      
-        import './sb-addons/storybook-dark-mode-esm-preset-11/manager-bundle.js';
-      
-        import './sb-addons/docs-12/manager-bundle.js';
-      
-        import './sb-addons/tag-badges-13/manager-bundle.js';
-      
-        import './sb-addons/storybook-addons-google-analytics-14/register-bundle.js';
-      
-        import './sb-addons/storybook-15/manager-bundle.js';
-      
-      
+
       import './sb-manager/runtime.js';
     </script>
   </body>
