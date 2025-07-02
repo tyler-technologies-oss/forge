@@ -1,3 +1,32 @@
+# v3.9.2 (Wed Jul 02 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Rob Jacobs ([@RobJacobs](https://github.com/RobJacobs)), for all your work!
+
+#### 🐛 Bug Fix
+
+- fix(expansion-panel): trigger toggle from keyup event [#955](https://github.com/tyler-technologies-oss/forge/pull/955) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: use modern styles for visually hidden content [#956](https://github.com/tyler-technologies-oss/forge/pull/956) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(overlay): do not hide overlay by default when clipped by ancestors [#952](https://github.com/tyler-technologies-oss/forge/pull/952) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(date-picker): remove timestamp when setting "today" date [#954](https://github.com/tyler-technologies-oss/forge/pull/954) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(date-picker): toggle button will inherit density of text field if necessary [#953](https://github.com/tyler-technologies-oss/forge/pull/953) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(badge): update gap spacing [#938](https://github.com/tyler-technologies-oss/forge/pull/938) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(table): remove head cell filter vertical align style (#915) [#948](https://github.com/tyler-technologies-oss/forge/pull/948) ([@RobJacobs](https://github.com/RobJacobs))
+- chore: eslint v9 upgrade [#950](https://github.com/tyler-technologies-oss/forge/pull/950) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(typography): add link docs [#945](https://github.com/tyler-technologies-oss/forge/pull/945) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: update storybook [#944](https://github.com/tyler-technologies-oss/forge/pull/944) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Rob Jacobs ([@RobJacobs](https://github.com/RobJacobs))
+
+---
+
 # v3.9.1 (Thu Jun 12 2025)
 
 #### 🐛 Bug Fix
