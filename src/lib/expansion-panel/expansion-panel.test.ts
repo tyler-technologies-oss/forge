@@ -314,6 +314,7 @@ describe('Expansion Panel', () => {
 
       header.focus();
       header.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      header.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter', bubbles: true }));
 
       expect(el.open).to.be.true;
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).to.be.true;
@@ -336,6 +337,7 @@ describe('Expansion Panel', () => {
 
       header.focus();
       header.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+      header.dispatchEvent(new KeyboardEvent('keyup', { key: ' ', bubbles: true }));
 
       expect(el.open).to.be.true;
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).to.be.true;
