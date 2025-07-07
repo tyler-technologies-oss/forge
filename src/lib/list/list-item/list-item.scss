@@ -131,7 +131,9 @@ $_host-tokens: [indent dense-indent disabled-cursor];
 
 // Indented
 :host([indented]) {
-  @include indented;
+  .forge-list-item {
+    @include indented;
+  }
 }
 
 // Text container base
