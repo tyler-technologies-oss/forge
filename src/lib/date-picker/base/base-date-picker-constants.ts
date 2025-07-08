@@ -1,10 +1,18 @@
 import { Masked, InputMask, type AppendFlags, type FactoryArg } from 'imask';
 import { DayOfWeek, ICalendarDateSelectEventData } from '../../calendar';
+import { type IDatePickerComponent } from '../date-picker';
+import { SupportedDateFormats } from '../../core/utils/date-utils';
 
-export declare type DatePickerParseCallback = (value: string) => Date | null;
-export declare type DatePickerFormatCallback = (value: Date | null) => string;
-export declare type DatePickerPrepareMaskCallback = (value: string, masked: Masked<string>, flags: AppendFlags, maskInstance: InputMask<FactoryArg>) => string;
-export declare type DatePickerValueMode = 'object' | 'string' | 'iso-string';
+export type DatePickerParseCallback = (value: string) => Date | null;
+export type DatePickerFormatCallback = (value: Date | null) => string | null;
+export type DatePickerPrepareMaskCallback = (value: string, masked: Masked<string>, flags: AppendFlags, maskInstance: InputMask<FactoryArg>) => string;
+export type DatePickerValueMode = 'object' | 'string' | 'iso-string';
+export type DatePickerShortcuts = IDatePickerShortcuts | 'off' | undefined;
+export type DatePickerDateFormat = SupportedDateFormats;
+
+export interface IDatePickerShortcuts {
+  [key: string]: (context: { instance: IDatePickerComponent }) => Date | null | undefined | void;
+}
 
 export interface IDatePickerCalendarDropdownConfig<T> {
   value?: T | null;
@@ -43,7 +51,9 @@ const observedAttributes = {
   MASKED: 'masked',
   MASK_FORMAT: 'mask-format',
   SHOW_MASK_FORMAT: 'show-mask-format',
+  DATE_FORMAT: 'date-format',
   VALUE_MODE: 'value-mode',
+  SHORTCUTS: 'shortcuts',
   ALLOW_INVALID_DATE: 'allow-invalid-date',
   SHOW_TODAY: 'show-today',
   SHOW_CLEAR: 'show-clear',
@@ -62,8 +72,27 @@ const selectors = {
   TOGGLE: '[forge-date-picker-toggle],[data-forge-date-picker-toggle]'
 };
 
+const defaults = {
+  DATE_FORMAT: 'MM/DD/YYYY' as DatePickerDateFormat
+};
+
+const supportedDateFormats: DatePickerDateFormat[] = [
+  'MM/DD/YYYY',
+  'MM/DD/YY',
+  'DD/MMM/YYYY',
+  'MM-DD-YYYY',
+  'MM-DD-YY',
+  'DD-MMM-YYYY',
+  'YYYY-MM-DD',
+  'YYYY-MMM-DD',
+  'DD.MM.YYYY',
+  'DD.MM.YY'
+];
+
 export const BASE_DATE_PICKER_CONSTANTS = {
   observedAttributes,
   attributes,
-  selectors
+  selectors,
+  defaults,
+  supportedDateFormats
 };
