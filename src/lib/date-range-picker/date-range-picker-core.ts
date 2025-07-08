@@ -150,7 +150,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   }
 
   protected _setFormattedInputValue(suppressValueChanges?: boolean): void {
-    let formattedDate = this._formatDate(this._from);
+    let formattedDate = this._formatDate(this._from) ?? '';
     if (!formattedDate && !this._allowInvalidDate) {
       formattedDate = '';
     }
@@ -158,7 +158,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   }
 
   private _setFormattedToInputValue(suppressValueChanges?: boolean): void {
-    let formattedDate = this._formatDate(this._to);
+    let formattedDate = this._formatDate(this._to) ?? '';
     if (!formattedDate && !this._allowInvalidDate) {
       formattedDate = '';
     }
@@ -214,8 +214,8 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
 
     const formattedFromValue = this._formatDate((value && value.from) || null);
     const formattedToValue = this._formatDate((value && value.to) || null);
-    this._adapter.setInputValue(formattedFromValue, this._notifyInputValueChanges);
-    this._adapter.setToInputValue(formattedToValue, this._notifyInputValueChanges);
+    this._adapter.setInputValue(formattedFromValue ?? '', this._notifyInputValueChanges);
+    this._adapter.setToInputValue(formattedToValue ?? '', this._notifyInputValueChanges);
     this._formatInputValue();
     this._formatToInputValue();
 
@@ -253,6 +253,17 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
       this._setFormattedToInputValue();
     }
     super._applyMax();
+  }
+
+  protected override _applyMask(): void {
+    super._applyMask();
+
+    if (this._masked) {
+      this._initializeToMask();
+    } else {
+      this._adapter.destroyToMask();
+      this._formatToInputValue();
+    }
   }
 
   protected _initializeToMask(): void {

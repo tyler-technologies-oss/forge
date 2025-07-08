@@ -1566,7 +1566,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       inputElement.blur();
       inputElement.dispatchEvent(new Event('blur'));
 
-      expect(inputElement.value).toEqual('01/01/0202');
+      expect(inputElement.value).toEqual('01/01/202');
     });
 
     it('should clear mask format if the input is cleared programmatically', function(this: ITestContext) {

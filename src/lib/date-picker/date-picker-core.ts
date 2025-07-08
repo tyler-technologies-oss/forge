@@ -85,7 +85,7 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
 
     const formattedValue = this._formatDate(value);
 
-    this._adapter.setInputValue(formattedValue, this._notifyInputValueChanges);
+    this._adapter.setInputValue(formattedValue ?? '', this._notifyInputValueChanges);
     this._formatInputValue();
 
     if (!Platform.isMobile) {
