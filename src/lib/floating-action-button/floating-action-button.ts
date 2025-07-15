@@ -104,10 +104,6 @@ export class FloatingActionButtonComponent extends BaseButton<FloatingActionButt
     this._core = new FloatingActionButtonCore(new FloatingActionButtonAdapter(this));
   }
 
-  public disconnectedCallback(): void {
-    this._core.destroy();
-  }
-
   public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case FLOATING_ACTION_BUTTON_CONSTANTS.attributes.THEME:

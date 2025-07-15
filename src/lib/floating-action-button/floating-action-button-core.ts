@@ -18,10 +18,6 @@ export class FloatingActionButtonCore extends BaseButtonCore<IFloatingActionButt
     super(adapter);
   }
 
-  public destroy(): void {
-    this._adapter.destroy();
-  }
-
   public get theme(): ButtonTheme {
     return this._theme;
   }
