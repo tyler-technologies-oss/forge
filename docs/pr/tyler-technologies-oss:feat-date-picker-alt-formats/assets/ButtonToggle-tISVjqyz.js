@@ -1,7 +1,0 @@
-import{j as t,M as n,T as s,C as m}from"./blocks-9ZI0oVXF.js";import{useMDXComponents as i}from"./index-B_Ux3J5s.js";import{C as p}from"./CustomArgTypes-iIhtGFWz.js";import{B as a,D as c}from"./ButtonToggle.stories-CFYHTpTM.js";import"./iframe-BL36swfe.js";import"./_commonjsHelpers-CqkleIqs.js";import"./utils-DXw3pzOw.js";import"./style-map-CUqFSbcI.js";import"./directive-CJw_OlP2.js";import"./feature-detection-uS6p5jc8.js";import"./button-toggle-group-D5jBldBo.js";import"./constants-wOq9K3uV.js";import"./base-adapter-Mla2Q9YN.js";import"./with-form-associated-BeE6NBc1.js";import"./with-default-aria-CUUWGrPB.js";import"./a11y-utils-fzPGYZJ6.js";import"./with-label-aware-D31hYnqk.js";import"./focus-indicator-IWpzSXYP.js";import"./utils-CRxrUqQD.js";import"./index-CiLSBptl.js";import"./state-layer-BFwsAUDA.js";function r(o){const e={h2:"h2",p:"p",...i(),...o.components};return t.jsxs(t.Fragment,{children:[t.jsx(n,{of:a}),`
-`,t.jsx(s,{}),`
-`,t.jsx(e.p,{children:"The button toggle component can be used as simple buttons, or as an alternative to radio and checkbox elements to help provide users with a choice of options. They offer a group of interactive button-style elements that are related to each other."}),`
-`,t.jsx(m,{of:c}),`
-`,t.jsx(e.h2,{id:"api",children:"API"}),`
-`,t.jsx(p,{}),`
-`,t.jsx(e.h2,{id:"accessibility",children:"Accessibility"})]})}function E(o={}){const{wrapper:e}={...i(),...o.components};return e?t.jsx(e,{...o,children:t.jsx(r,{...o})}):r(o)}export{E as default};
