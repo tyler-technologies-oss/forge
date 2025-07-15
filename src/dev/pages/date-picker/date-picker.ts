@@ -42,6 +42,27 @@ valueModeSelect.addEventListener('change', () => {
   datePicker.valueMode = valueModeSelect.value;
 });
 
+const dateFormatSelect = document.getElementById('opt-date-format') as ISelectComponent;
+dateFormatSelect.addEventListener('change', () => {
+  datePicker.dateFormat = dateFormatSelect.value;
+  datePickerInput.placeholder = dateFormatSelect.value;
+});
+
+const shortcutsSelect = document.getElementById('opt-shortcuts') as ISelectComponent;
+shortcutsSelect.addEventListener('change', () => {
+  let shortcuts;
+  if (shortcutsSelect.value === 'custom') {
+    shortcuts = {
+      'z': () => new Date('01/01/2050'),
+    };
+  } else if (shortcutsSelect.value === 'off') {
+    shortcuts = 'off';
+  } else {
+    shortcuts = undefined;
+  }
+  datePicker.shortcuts = shortcuts;
+});
+
 const disabledDaysSelect = document.getElementById('opt-disabled-days') as ISelectComponent;
 disabledDaysSelect.addEventListener('change', () => {
   datePicker.disabledDaysOfWeek = Array.isArray(disabledDaysSelect.value) ? disabledDaysSelect.value.map(v => +v) : [];
@@ -114,21 +135,21 @@ customCallbackToggle.addEventListener('forge-switch-change', ({ detail: selected
         const split = str.split('-');
 
         if (split.length !== 3) {
-          return null;
-        }
+        return null;
+      }
 
         const yyyy = +split[0];
         const mm = +split[1];
         const dd = split[2].indexOf('T') ? +split[2].split('T')[0] : +split[2];
 
         if (!yyyy || isNaN(yyyy) || !mm || isNaN(mm) || !dd || isNaN(dd)) {
-          return null;
-        }
+        return null;
+      }
 
         return new Date(yyyy, mm - 1, dd, 0, 0, 0, 0);
       }
 
-      return null;
+        return null;
     };
   } else {
     datePickerInput.placeholder = 'mm/dd/yyyy';

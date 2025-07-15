@@ -10,9 +10,13 @@ import {
   DatePickerFormatCallback,
   DatePickerParseCallback,
   DatePickerPrepareMaskCallback,
+  IDatePickerShortcuts,
   DatePickerValueMode,
-  IDatePickerCalendarDropdownText
+  IDatePickerCalendarDropdownText,
+  DatePickerShortcuts,
+  DatePickerDateFormat
 } from './base-date-picker-constants';
+import { type IDatePickerComponent } from '../date-picker';
 
 export interface IBaseDatePickerCore<TValue> {
   value: TValue | null | undefined;
@@ -28,6 +32,7 @@ export interface IBaseDatePickerCore<TValue> {
   masked: boolean;
   maskFormat: string;
   showMaskFormat: boolean;
+  dateFormat: DatePickerDateFormat;
   valueMode: DatePickerValueMode;
   notifyInputValueChanges: boolean;
   allowInvalidDate: boolean;
@@ -56,7 +61,9 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
   protected _masked = true;
   protected _maskFormat = DEFAULT_DATE_MASK;
   protected _showMaskFormat = false;
+  protected _dateFormat: DatePickerDateFormat = BASE_DATE_PICKER_CONSTANTS.defaults.DATE_FORMAT;
   protected _valueMode: DatePickerValueMode = 'object';
+  protected _shortcuts: IDatePickerShortcuts | undefined;
   protected _notifyInputValueChanges = true;
   protected _allowInvalidDate = false;
   protected _showToday = false;
@@ -256,6 +263,28 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
     }
   }
 
+  private _getDefaultShortcuts(): IDatePickerShortcuts {
+    const handleTodayShortcut = (): void => {
+      this._onToday();
+      if (this._open) {
+        this._closeCalendar(true);
+      }
+    };
+
+    const formatAllowsMonthAbbreviations = this._dateFormat.toUpperCase().includes('MMM');
+
+    // We only allow "t" shortcut for today if the date format allows month abbreviations
+    // because otherwise it could conflict with the "n" shortcut for month names
+    if (formatAllowsMonthAbbreviations) {
+      return { t: handleTodayShortcut };
+    }
+
+    return {
+      n: handleTodayShortcut,
+      t: handleTodayShortcut
+    };
+  }
+
   protected _onInputKeydown(evt: KeyboardEvent): void {
     // Handle keyboard shortcuts that make use of the shift key first
     if (evt.shiftKey) {
@@ -285,6 +314,25 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
       }
     }
 
+    // Handle date entry shortcuts
+    const shortcuts = Object.entries(this._shortcuts ?? this._getDefaultShortcuts());
+    if (shortcuts.length && !evt.shiftKey && evt.key.length === 1) {
+      const key = evt.key.toLowerCase();
+      const shortcut = shortcuts.find(([k]) => k === key);
+      if (shortcut) {
+        evt.preventDefault();
+        const [_k, callback] = shortcut;
+        if (typeof callback === 'function') {
+          const date = callback({ instance: this._adapter.hostElement as IDatePickerComponent });
+          if (isValidDate(date)) {
+            this._onDateSelected({ date, selected: true, type: 'date' });
+          }
+        }
+        return;
+      }
+    }
+
+    // Handle shortcuts that do not require the shift key
     switch (evt.key) {
       case 'Escape':
         if (this._open) {
@@ -326,14 +374,6 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
           this._adapter.propagateCalendarKey(evt);
         }
         break;
-      case 'n':
-      case 't':
-        evt.preventDefault();
-        this._onToday();
-        if (this._open) {
-          this._closeCalendar(true);
-        }
-        break;
       case 'PageUp':
       case 'PageDown':
         if (this._open) {
@@ -357,7 +397,7 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
   }
 
   protected _getSanitizedDateString(value: string): string {
-    return value.replace(/_|[a-z]|[A-Z]/g, '').replace(/\/$|\/\/$/, '');
+    return value.replace(/_/g, '').replace(/\/$|\/\/$/, '');
   }
 
   private _onToggleMousedown(evt: Event): void {
@@ -415,19 +455,19 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
     }
   }
 
-  protected _formatDate(date: Date | null | undefined): string {
+  protected _formatDate(date: Date | null | undefined): string | null {
     if (!isValidDate(date)) {
-      return '';
+      return null;
     }
-    return typeof this._formatCallback === 'function' ? this._formatCallback(date) : formatDate(date);
+    return typeof this._formatCallback === 'function' ? this._formatCallback(date) : formatDate(date, this._dateFormat);
   }
 
   protected _parseDateString(value: string): Date | null {
-    value = value.replace(/_|\s/g, '');
+    value = value.replace(/_/g, '');
     if (!value || !value.length) {
       return null;
     }
-    const parsedDate = typeof this._parseCallback === 'function' ? this._parseCallback(value) : parseDateString(value);
+    const parsedDate = typeof this._parseCallback === 'function' ? this._parseCallback(value) : parseDateString(value, this._dateFormat);
     return isValidDate(parsedDate) ? parsedDate : null;
   }
 
@@ -484,7 +524,7 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
     this._adapter.initializeMask(options);
   }
 
-  private _applyMask(): void {
+  protected _applyMask(): void {
     if (this._masked) {
       this._initializeMask();
     } else {
@@ -525,6 +565,18 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
       this._emitChangeEvent(this._value);
       this._adapter.setHostAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.VALUE_MODE, this._valueMode);
     }
+  }
+
+  public get shortcuts(): DatePickerShortcuts {
+    return this._shortcuts;
+  }
+  public set shortcuts(value: DatePickerShortcuts) {
+    if (value === 'off') {
+      this._shortcuts = {};
+      return;
+    }
+
+    this._shortcuts = Object.prototype.toString.call(value) === '[object Object]' ? (value as IDatePickerShortcuts) : undefined;
   }
 
   public get min(): Date | string | null | undefined {
@@ -664,6 +716,26 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
   public set showMaskFormat(value: boolean) {
     if (this._showMaskFormat !== value) {
       this._showMaskFormat = value;
+    }
+  }
+
+  public get dateFormat(): DatePickerDateFormat {
+    return this._dateFormat;
+  }
+  public set dateFormat(value: DatePickerDateFormat) {
+    if (typeof value !== 'string' || !BASE_DATE_PICKER_CONSTANTS.supportedDateFormats.includes(value)) {
+      this._dateFormat = BASE_DATE_PICKER_CONSTANTS.defaults.DATE_FORMAT;
+    }
+
+    if (this._dateFormat !== value) {
+      this._dateFormat = value;
+
+      // Automatically set the mask format based on the date format
+      this._maskFormat = value === BASE_DATE_PICKER_CONSTANTS.defaults.DATE_FORMAT ? DEFAULT_DATE_MASK : value;
+
+      if (this._isInitialized) {
+        this._applyMask();
+      }
     }
   }
 

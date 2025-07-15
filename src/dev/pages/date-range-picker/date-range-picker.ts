@@ -45,6 +45,13 @@ valueModeSelect.addEventListener('change', () => {
   dateRangePicker.valueMode = valueModeSelect.value;
 });
 
+const dateFormatSelect = document.getElementById('opt-date-format') as ISelectComponent;
+dateFormatSelect.addEventListener('change', () => {
+  dateRangePicker.dateFormat = dateFormatSelect.value;
+  dateRangePickerToInput.placeholder = dateFormatSelect.value;
+  dateRangePickerFromInput.placeholder = dateFormatSelect.value;
+});
+
 const disabledDaysSelect = document.getElementById('opt-disabled-days') as ISelectComponent;
 disabledDaysSelect.addEventListener('change', () => {
   dateRangePicker.disabledDaysOfWeek = Array.isArray(disabledDaysSelect.value) ? disabledDaysSelect.value.map(v => +v) : [];

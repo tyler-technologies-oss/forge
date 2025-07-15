@@ -1,5 +1,5 @@
 import { isNumeric } from '@tylertech/forge-core';
-import { InputMask, MaskedRange, createMask, type AppendFlags, type FactoryArg, type Masked } from 'imask';
+import { InputMask, MaskedEnum, MaskedRange, createMask, type AppendFlags, type FactoryArg, type Masked } from 'imask';
 
 export interface IDateInputMaskOptions {
   showMaskFormat?: boolean;
@@ -64,6 +64,16 @@ export class DateInputMask {
           to: 12,
           maxLength: 2
         },
+        Mmm: {
+          mask: MaskedEnum,
+          enum: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          matchValue: (enumStr, inputStr, matchFrom) => MaskedEnum.DEFAULTS.matchValue(enumStr.toLowerCase(), inputStr.toLowerCase(), matchFrom)
+        },
+        MMM: {
+          mask: MaskedEnum,
+          enum: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+          matchValue: (enumStr, inputStr, matchFrom) => MaskedEnum.DEFAULTS.matchValue(enumStr.toLowerCase(), inputStr.toLowerCase(), matchFrom)
+        },
         DD: {
           mask: MaskedRange,
           autofix: true,
@@ -77,6 +87,13 @@ export class DateInputMask {
           from: 0,
           to: 9999,
           maxLength: 4
+        },
+        YY: {
+          mask: MaskedRange,
+          autofix: true,
+          from: 0,
+          to: 99,
+          maxLength: 2
         }
       }
     };
