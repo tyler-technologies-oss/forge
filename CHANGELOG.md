@@ -1,3 +1,20 @@
+# v3.10.0 (Tue Jul 15 2025)
+
+#### 🚀 Enhancement
+
+- feat(date-picker): add new `dateFormat` and `shortcuts` APIs to allow for alternative built-in date formats [#959](https://github.com/tyler-technologies-oss/forge/pull/959) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix(FAB): remove size detection logic in favor of label slotted content only [#958](https://github.com/tyler-technologies-oss/forge/pull/958) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list): move margins from host to internal container element [#957](https://github.com/tyler-technologies-oss/forge/pull/957) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.9.2 (Wed Jul 02 2025)
 
 :tada: This release contains work from a new contributor! :tada:
