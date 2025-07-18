@@ -4,7 +4,7 @@ import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IAppBarComponent } from './app-bar';
 import { APP_BAR_CONSTANTS } from './app-bar-constants';
 import { STATE_LAYER_CONSTANTS } from '../../state-layer';
-import { FOCUS_INDICATOR_CONSTANTS } from '../../focus-indicator';
+import { FOCUS_INDICATOR_TAG_NAME } from '../../focus-indicator';
 
 export interface IAppBarAdapter extends IBaseAdapter {
   initialize(): void;
@@ -63,7 +63,7 @@ export class AppBarAdapter extends BaseAdapter<IAppBarComponent> implements IApp
       this._logoTitleContainerElement = replaceElement(this._logoTitleContainerElement, document.createElement('div'));
       this._logoTitleContainerElement.classList.add(APP_BAR_CONSTANTS.classes.LOGO_TITLE_CONTAINER);
       this._logoTitleContainerElement.querySelector(STATE_LAYER_CONSTANTS.elementName)?.remove();
-      this._logoTitleContainerElement.querySelector(FOCUS_INDICATOR_CONSTANTS.elementName)?.remove();
+      this._logoTitleContainerElement.querySelector(FOCUS_INDICATOR_TAG_NAME)?.remove();
     }
   }
 

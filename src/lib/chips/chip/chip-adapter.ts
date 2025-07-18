@@ -1,6 +1,6 @@
 import { elementFromHTML, getShadowElement, toggleAttribute, walkUpUntil } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
+import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator';
 import { IIconButtonComponent } from '../../icon-button';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 import { IChipSetComponent } from '../chip-set/chip-set';
@@ -46,7 +46,7 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
     this._rootElement = getShadowElement(this._component, CHIP_CONSTANTS.selectors.ROOT);
     this._triggerElement = getShadowElement(this._component, CHIP_CONSTANTS.selectors.TRIGGER) as HTMLButtonElement;
     this._startSlotElement = getShadowElement(this._component, 'slot[name=start]') as HTMLSlotElement;
-    this._focusIndicatorElement = getShadowElement(this._component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
+    this._focusIndicatorElement = getShadowElement(this._component, FOCUS_INDICATOR_TAG_NAME) as IFocusIndicatorComponent;
     this._stateLayerElement = getShadowElement(this._component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
   }
 
