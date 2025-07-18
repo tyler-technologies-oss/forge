@@ -160,7 +160,7 @@ describe('Deprecated Button', () => {
     expect(focusIndicator.targetElement).to.equal(anchor);
   });
 
-  it.only('should dynamically swap button', async () => {
+  it('should dynamically swap button', async () => {
     const el = await fixture<IDeprecatedButtonComponent>(html`
       <forge-deprecated-button>
         <button type="button">Button</button>
