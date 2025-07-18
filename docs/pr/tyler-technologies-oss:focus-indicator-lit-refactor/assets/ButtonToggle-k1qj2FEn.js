@@ -1,7 +1,0 @@
-import{j as t,M as n,T as s,C as m}from"./blocks-Ci80t2jX.js";import{useMDXComponents as i}from"./index-Cqey9dI-.js";import{C as p}from"./CustomArgTypes-D5_RmmzV.js";import{B as a,D as c}from"./ButtonToggle.stories-COddCmN1.js";import"./iframe-Cqs95LDf.js";import"./_commonjsHelpers-CqkleIqs.js";import"./utils-D0zOu5id.js";import"./style-map-CqUpN2Mv.js";import"./directive-CJw_OlP2.js";import"./service-adapter-BykFeYYZ.js";import"./button-toggle-group-BalQXvu-.js";import"./constants-BGCYAxRd.js";import"./feature-detection-tRmgbRLz.js";import"./base-adapter-C0vShr2G.js";import"./with-form-associated-DboGVkoL.js";import"./with-default-aria-BuZDknr8.js";import"./a11y-utils-u_48QH_E.js";import"./with-label-aware-BxafsAK6.js";import"./focus-indicator-DoAi9By9.js";import"./base-lit-element-CfuWj_Vj.js";import"./utils-DY0XlZdW.js";import"./state-layer-BRTtEqto.js";function r(o){const e={h2:"h2",p:"p",...i(),...o.components};return t.jsxs(t.Fragment,{children:[t.jsx(n,{of:a}),`
-`,t.jsx(s,{}),`
-`,t.jsx(e.p,{children:"The button toggle component can be used as simple buttons, or as an alternative to radio and checkbox elements to help provide users with a choice of options. They offer a group of interactive button-style elements that are related to each other."}),`
-`,t.jsx(m,{of:c}),`
-`,t.jsx(e.h2,{id:"api",children:"API"}),`
-`,t.jsx(p,{}),`
-`,t.jsx(e.h2,{id:"accessibility",children:"Accessibility"})]})}function F(o={}){const{wrapper:e}={...i(),...o.components};return e?t.jsx(e,{...o,children:t.jsx(r,{...o})}):r(o)}export{F as default};
