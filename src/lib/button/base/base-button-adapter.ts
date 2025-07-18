@@ -1,7 +1,7 @@
 import { getShadowElement } from '@tylertech/forge-core';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
+import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 import { IBaseButton } from './base-button';
 import { BASE_BUTTON_CONSTANTS } from './base-button-constants';
@@ -34,7 +34,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
   constructor(component: T) {
     super(component);
     this._rootElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.ROOT) as HTMLButtonElement;
-    this._focusIndicatorElement = getShadowElement(this._component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
+    this._focusIndicatorElement = getShadowElement(this._component, FOCUS_INDICATOR_TAG_NAME) as IFocusIndicatorComponent;
     this._stateLayerElement = getShadowElement(this._component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
     this._defaultSlotElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
     this._endSlotElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.END_SLOT) as HTMLSlotElement;

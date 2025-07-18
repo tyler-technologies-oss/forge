@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, customElement, ensureChildren, getShadowElement, toggleAttribute } from '@tylertech/forge-core';
-import { FocusIndicatorComponent, FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
+import { FocusIndicatorComponent, FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator';
 import { IStateLayerComponent, StateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 import { DeprecatedButtonType, DEPRECATED_BUTTON_CONSTANTS } from './deprecated-button-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
@@ -51,7 +51,7 @@ export class DeprecatedButtonComponent extends BaseComponent implements IDepreca
     super();
     attachShadowTemplate(this, template, styles);
     this._slotElement = getShadowElement(this, 'slot:not([name])') as HTMLSlotElement;
-    this._focusIndicator = getShadowElement(this, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
+    this._focusIndicator = getShadowElement(this, FOCUS_INDICATOR_TAG_NAME) as IFocusIndicatorComponent;
     this._stateLayer = getShadowElement(this, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
   }
 

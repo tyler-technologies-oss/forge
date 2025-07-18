@@ -21,7 +21,7 @@
 // States
 //
 
-:host([active]) {
+:host(:where(:state(active), [active])) {
   @include active;
 }
 
