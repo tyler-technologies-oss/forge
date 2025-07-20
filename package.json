@@ -113,7 +113,19 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "overrides": {
-    "@web/test-runner-chrome": "0.18.0"
+    "@web/test-runner-chrome": "0.18.0",
+    "@eslint/plugin-kit": "^0.3.3",
+    "brace-expansion": "^2.0.2",
+    "json5": "^2.2.3",
+    "ajv": "^6.12.6",
+    "@babel/traverse": "^7.25.9",
+    "babel-traverse": "^6.26.0",
+    "@octokit/request": "^9.1.3",
+    "@octokit/request-error": "^6.1.5",
+    "@octokit/plugin-paginate-rest": "^11.4.0",
+    "loader-utils": "^3.3.1",
+    "istanbul-lib-instrument": "^6.0.3",
+    "html-minifier": "^4.0.0"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
