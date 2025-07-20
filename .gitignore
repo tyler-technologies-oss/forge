@@ -11,3 +11,4 @@ storybook-static/
 .vite/
 CLAUDE.md
 PROMPTS/
+.security-audit/
