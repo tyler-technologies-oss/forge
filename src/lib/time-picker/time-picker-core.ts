@@ -913,11 +913,18 @@ export class TimePickerCore implements ITimePickerCore {
       this._min = this._convertTimeStringToMillis(value, true, this._allowSeconds);
 
       // Validate and reset our millis to ensure within range
+      const originalValue = this._value;
       const millis = this._validateMillis(this._value);
       this._setValue(millis);
 
       if (this._isInitialized) {
         this._applyValue(millis);
+
+        // Emit change event if the value was modified due to range validation
+        if (originalValue !== millis) {
+          const timeString = millisToTimeString(millis, true, this._allowSeconds);
+          this._emitChangeEvent(timeString);
+        }
       }
     }
   }
@@ -934,11 +941,18 @@ export class TimePickerCore implements ITimePickerCore {
       this._max = this._convertTimeStringToMillis(value, true, this._allowSeconds);
 
       // Validate and reset our millis to ensure within range
+      const originalValue = this._value;
       const millis = this._validateMillis(this._value);
       this._setValue(millis);
 
       if (this._isInitialized) {
         this._applyValue(millis);
+
+        // Emit change event if the value was modified due to range validation
+        if (originalValue !== millis) {
+          const timeString = millisToTimeString(millis, true, this._allowSeconds);
+          this._emitChangeEvent(timeString);
+        }
       }
     }
   }
