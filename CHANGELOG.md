@@ -1,3 +1,16 @@
+# v3.10.1 (Thu Jul 24 2025)
+
+#### 🐛 Bug Fix
+
+- fix(time-picker): allow min and max to wrap around midnight [#963](https://github.com/tyler-technologies-oss/forge/pull/963) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(app-bar-profile-button): fixed a bug where the popover could get destroyed before the animation completes [#961](https://github.com/tyler-technologies-oss/forge/pull/961) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.10.0 (Tue Jul 15 2025)
 
 #### 🚀 Enhancement
