@@ -138,7 +138,7 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
   public async closePopup(): Promise<void> {
     if (this._popupElement) {
       await this._popupElement.hideAsync();
-      this._popupElement.remove();
+      this._popupElement?.remove();
       this._popupElement = undefined;
       this._profileCardElement = undefined;
     }
