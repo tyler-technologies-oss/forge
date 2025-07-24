@@ -565,10 +565,12 @@ describe('CalendarComponent', function(this: ITestContext) {
       expect(headerSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('should set active day when connecting if prevent focus is used', function(this: ITestContext) {
+    it('should set active day when connecting if prevent focus is used', async function(this: ITestContext) {
       const context = setupPartialTestContext();
       context.component.preventFocus = true;
       context.appendToFixture(); // Causes connectedCallback to run
+
+      await frame();
       const activeDay = getActiveDay(context.component);
 
       expect(activeDay).not.toBeNull();

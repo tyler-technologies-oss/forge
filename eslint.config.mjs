@@ -36,5 +36,5 @@ export default defineConfig([
       '@typescript-eslint/dot-notation': 'off'
     }
   },
-  { ignores: ['dist/**/*', 'src/dev/**/*', 'src/stories/**/*', '.storybook/**/*'] }
+  { ignores: ['dist/**/*', 'src/dev/**/*', 'src/stories/**/*', '.storybook/**/*', 'storybook-static/**/*'] }
 ]);
