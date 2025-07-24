@@ -352,11 +352,12 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(closeSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('should emit close event when selecting date from calendar with mouse', function(this: ITestContext) {
+    it('should emit close event when selecting date from calendar with mouse', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       const closeSpy = jasmine.createSpy('close spy');
       this.context.component.addEventListener(DATE_PICKER_CONSTANTS.events.CLOSE, closeSpy);
       openPopup(this.context.component);
+      await frame();
       clickActiveDay(this.context.component);
 
       expect(closeSpy).toHaveBeenCalledTimes(1);
@@ -517,6 +518,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
     it('should not blur input when clicking element in calendar', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       openPopup(this.context.component);
+      await frame();
       clickActiveDay(this.context.component);
 
       await popupCloseAnimation();
@@ -531,6 +533,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       const changeSpy = jasmine.createSpy('change spy', evt => theEvent = evt).and.callThrough();
       this.context.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.context.component);
 
       await popupCloseAnimation();
@@ -541,19 +544,20 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(this.context.component.value).toEqual(theEvent!.detail);
     });
 
-    it('should not set date if default prevented in change event', function(this: ITestContext) {
+    it('should not set date if default prevented in change event', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       openPopup(this.context.component);
       const changeSpy = jasmine.createSpy('change spy', evt => evt.preventDefault()).and.callThrough();
       this.context.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.context.component);
 
       expect(changeSpy).toHaveBeenCalledTimes(1);
       expect(this.context.component.value).toBeNull();
     });
 
-    it('should emit date as string', function(this: ITestContext) {
+    it('should emit date as string', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       const todayDate = new Date();
       const formattedDate = formatDate(todayDate);
@@ -563,6 +567,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       const changeSpy = jasmine.createSpy('change spy', evt => eventDetail = evt.detail).and.callThrough();
       this.context.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.context.component);
 
       expect(typeof eventDetail).toBe('string');
@@ -571,7 +576,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(this.context.component.value).toBe(eventDetail);
     });
 
-    it('should emit date as ISO string', function(this: ITestContext) {
+    it('should emit date as ISO string', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       const todayDate = new Date();
       todayDate.setHours(0, 0, 0, 0);
@@ -581,6 +586,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       const changeSpy = jasmine.createSpy('change spy', evt => eventDetail = evt.detail).and.callThrough();
       this.context.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.context.component);
 
       expect(typeof eventDetail).toBe('string');
