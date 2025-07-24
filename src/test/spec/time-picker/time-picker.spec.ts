@@ -296,6 +296,9 @@ describe('TimePickerComponent', function(this: ITestContext) {
   it('should remove value if setting min and value is below min', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
+    const changeEventSpy = jasmine.createSpy('change spy');
+    this.context.component.addEventListener(TIME_PICKER_CONSTANTS.events.CHANGE, changeEventSpy);
+
     const expectedTimeValue = '06:00';
     this.context.component.value = expectedTimeValue;
 
@@ -305,6 +308,8 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     expect(this.context.component.value).toBeNull();
     expect(this.context.inputElement.value).toBe('');
+    expect(changeEventSpy).toHaveBeenCalledTimes(1);
+    expect(changeEventSpy).toHaveBeenCalledWith(jasmine.objectContaining({ detail: null }));
   });
 
   it('should not set value if above max', function(this: ITestContext) {
@@ -320,6 +325,9 @@ describe('TimePickerComponent', function(this: ITestContext) {
   it('should remove value if setting max and value is above max', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
+    const changeEventSpy = jasmine.createSpy('change spy');
+    this.context.component.addEventListener(TIME_PICKER_CONSTANTS.events.CHANGE, changeEventSpy);
+
     const expectedTimeValue = '17:00';
     this.context.component.value = expectedTimeValue;
 
@@ -329,6 +337,8 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     expect(this.context.component.value).toBeNull();
     expect(this.context.inputElement.value).toBe('');
+    expect(changeEventSpy).toHaveBeenCalledTimes(1);
+    expect(changeEventSpy).toHaveBeenCalledWith(jasmine.objectContaining({ detail: null }));
   });
 
   it('should not emit change event when setting value via input element property', function(this: ITestContext) {
@@ -1022,6 +1032,23 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     const listItems = this.context.getListItems() as IListItemComponent<ITimePickerOptionValue>[];
 
+    expect(listItems[0].value.time).toBe(firstListItemMillis);
+    expect(listItems[listItems.length - 1].value.time).toBe(lastListItemMillis);
+  });
+
+  it('should show options between min and max if wrapping around midnight', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    const min = '23:00';
+    const max = '02:00';
+    this.context.component.min = min;
+    this.context.component.max = max;
+    this.context.component.open = true;
+    await task(POPOVER_ANIMATION_DURATION);
+
+    const firstListItemMillis = timeStringToMillis(min, true, false);
+    const lastListItemMillis = timeStringToMillis(max, true, false);
+
+    const listItems = this.context.getListItems() as IListItemComponent<ITimePickerOptionValue>[];
     expect(listItems[0].value.time).toBe(firstListItemMillis);
     expect(listItems[listItems.length - 1].value.time).toBe(lastListItemMillis);
   });
