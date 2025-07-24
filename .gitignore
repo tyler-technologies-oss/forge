@@ -9,3 +9,6 @@ coverage/
 storybook-static/
 *storybook.log
 .vite/
+CLAUDE.md
+PROMPTS/
+.security-audit/
