@@ -486,7 +486,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
     menu.popupOffset = { mainAxis: 0, crossAxis: -8 };
     menu.dense = this._dense;
     menu.placement = 'right-start';
-    menu.fallbackPlacements = ['left-start', 'right-start']; // Cascading menus should only fallback to left or right placement if needed
+    menu.fallbackPlacements = ['left-start', 'right-start', 'bottom', 'top'];
     menu.persistSelection = this._persistSelection;
     if (this._persistSelection) {
       menu.selectedValue = this._selectedValue;
