@@ -6,12 +6,11 @@ figma.connect('<FIGMA_ICON_BUTTON_ICON_BUTTON>', {
     type: figma.enum('Type', {
       Raised: 'raised',
       Outlined: 'outlined',
-      Text: 'text',
       Tonal: 'tonal'
     }),
     disabled: figma.enum('State', {
       Disabled: true
     })
   },
-  example: props => html` <forge-icon-button variant="${props.type}" disabled="${props.disabled}"> ${props.instance} </forge-icon-button>`
+  example: props => html` <forge-icon-button variant=${props.type} disabled=${props.disabled}> ${props.instance} </forge-icon-button>`
 });
