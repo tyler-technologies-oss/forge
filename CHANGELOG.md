@@ -1,3 +1,17 @@
+# v3.10.2 (Wed Jul 30 2025)
+
+#### 🐛 Bug Fix
+
+- fix(field): add overflow and isolation token to the inner container element [#965](https://github.com/tyler-technologies-oss/forge/pull/965) ([@nickonometry](https://github.com/nickonometry))
+- fix(menu): allow cascading menus to use bottom and top placements if left or right isn't available [#964](https://github.com/tyler-technologies-oss/forge/pull/964) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+
+---
+
 # v3.10.1 (Thu Jul 24 2025)
 
 #### 🐛 Bug Fix
