@@ -1,3 +1,15 @@
+# v3.10.3 (Wed Jul 30 2025)
+
+#### 🐛 Bug Fix
+
+- feat(date-range-picker): fixed a bug where the input mask was not being destroyed on end date input if turning off the mask [#966](https://github.com/tyler-technologies-oss/forge/pull/966) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.10.2 (Wed Jul 30 2025)
 
 #### 🐛 Bug Fix
