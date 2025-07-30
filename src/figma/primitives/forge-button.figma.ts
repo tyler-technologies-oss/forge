@@ -4,17 +4,17 @@ import figma, { html } from '@figma/code-connect/html';
 figma.connect('<FIGMA_BUTTON_BUTTON>', {
   props: {
     text: figma.string('Text'),
-    leadingIcon: figma.boolean('Leading Icon', {
+    startInstance: figma.boolean('Start slot', {
       true: html`<forge-icon name="icon-name" slot="start"></forge-icon>`,
       false: undefined
     }),
-    trailingIcon: figma.boolean('Trailing Icon', {
+    endInstance: figma.boolean('End slot', {
       true: html`<forge-icon name="icon-name" slot="end"></forge-icon>`,
       false: undefined
     }),
 
-    // leadingIconName: figma.children(".forge-icon"),
-    leadingIconName: figma.nestedProps('.forge-icon', {
+    // startInstanceName: figma.children(".forge-icon"),
+    startInstanceName: figma.nestedProps('.forge-icon', {
       icon: figma.instance('Icon')
     }),
     type: figma.enum('Type', {
@@ -29,8 +29,8 @@ figma.connect('<FIGMA_BUTTON_BUTTON>', {
     })
   },
   // alternative to get the icon name dynamically
-  // <forge-icon name="${props.leadingIconName.icon}" slot="start"></forge-icon>
+  // <forge-icon name="${props.startInstanceName.icon}" slot="start"></forge-icon>
   example: props => html`
-    <forge-button variant="${props.type}" disabled="${props.disabled}"> ${props.leadingIcon} ${props.text} ${props.trailingIcon} </forge-button>
+    <forge-button variant="${props.type}" disabled="${props.disabled}"> ${props.startInstance} ${props.text} ${props.endInstance} </forge-button>
   `
 });
