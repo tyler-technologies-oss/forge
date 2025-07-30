@@ -533,6 +533,12 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
     }
   }
 
+  protected _destroyMask(): void {
+    this._adapter.destroyMask();
+    this._setInputChangeListeners();
+    this._formatInputValue();
+  }
+
   protected _applyMin(): void {
     if (this._isInitialized) {
       this._adapter.setCalendarMinDate(this._min);
@@ -690,9 +696,7 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
           this._removeInputChangeListeners();
           this._applyMask();
         } else {
-          this._adapter.destroyMask();
-          this._setInputChangeListeners();
-          this._formatInputValue();
+          this._destroyMask();
         }
       }
     }
