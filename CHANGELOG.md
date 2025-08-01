@@ -1,3 +1,15 @@
+# v3.10.4 (Fri Aug 01 2025)
+
+#### 🐛 Bug Fix
+
+- fix(tab-bar): fixed a bug where child tabs were not synchronizing with the active tab state [#967](https://github.com/tyler-technologies-oss/forge/pull/967) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.10.3 (Wed Jul 30 2025)
 
 #### 🐛 Bug Fix
