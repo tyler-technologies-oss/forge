@@ -8,6 +8,18 @@
 
   to {
     opacity: 1;
-    transform: translateX(0) translateY(0);
+    transform: translateX(0) translateY(#{token(slideout-y, custom)});
+  }
+}
+
+@keyframes slidein-arrow {
+  from {
+    opacity: 0;
+    transform: translate(#{token(slidein-x, custom)}) translateY(#{token(slidein-y, custom)}) rotate(#{token(arrow-rotation, custom)});
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0) translateY(#{token(slideout-y, custom)}) rotate(#{token(arrow-rotation, custom)});
   }
 }
