@@ -433,6 +433,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const changeSpy = jasmine.createSpy('change spy', evt => (theEvent = evt)).and.callThrough();
       this.context.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.context.component);
       clickActiveDay(this.context.component);
 
@@ -445,19 +446,20 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect(this.context.component.from).toEqual(theEvent!.detail.from);
     });
 
-    it('should not set date if default prevented in change event', function(this: ITestContext) {
+    it('should not set date if default prevented in change event', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       openPopup(this.context.component);
       const changeSpy = jasmine.createSpy('change spy', evt => evt.preventDefault()).and.callThrough();
       this.context.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.context.component);
 
       expect(changeSpy).toHaveBeenCalledTimes(1);
       expect(this.context.component.from).toBeNull();
     });
 
-    it('should emit date as string', function(this: ITestContext) {
+    it('should emit date as string', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       const todayDate = new Date();
       const formattedDate = formatDate(todayDate);
@@ -468,6 +470,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const changeSpy = jasmine.createSpy('change spy', evt => (eventDetail = new DatePickerRange(evt.detail))).and.callThrough();
       this.context.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.context.component);
 
       expect(typeof eventDetail.from).toBe('string');
@@ -476,7 +479,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect(this.context.component.from).toBe(eventDetail.from as string);
     });
 
-    it('should emit date as ISO string', function(this: ITestContext) {
+    it('should emit date as ISO string', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       const todayDate = new Date();
       todayDate.setHours(0, 0, 0, 0);
@@ -486,6 +489,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const changeSpy = jasmine.createSpy('change spy', evt => (eventDetail = evt.detail)).and.callThrough();
       this.context.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.context.component);
 
       expect(typeof eventDetail).toBe('object');

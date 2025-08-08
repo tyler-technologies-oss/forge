@@ -205,12 +205,19 @@ export function locateTargetHeuristic(element: HTMLElement, id?: string | null):
  * @returns The element if found, otherwise `null`.
  */
 export function locateElementById(element: HTMLElement, id?: string | null): HTMLElement | null {
+  if (!element.isConnected) {
+    return null;
+  }
+
   const rootNode = element.getRootNode() as Document | ShadowRoot;
 
   // Special case handling for a `:host` selector to easily target a host element
   // from within a shadow tree, given that this is a very common scenario
-  if (id === ':host' && rootNode instanceof ShadowRoot) {
-    return rootNode.host as HTMLElement;
+  if (id === ':host') {
+    if (rootNode instanceof ShadowRoot) {
+      return rootNode.host as HTMLElement;
+    }
+    return null;
   }
 
   return rootNode.querySelector(`#${id}`);

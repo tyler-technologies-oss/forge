@@ -4,7 +4,7 @@ import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { TAB_BAR_CONSTANTS } from '../tab-bar/tab-bar-constants';
 import type { ITabComponent } from './tab';
 import { TAB_CONSTANTS } from './tab-constants';
-import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
+import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator';
 
 export interface ITabAdapter extends IBaseAdapter {
   initialize(): void;
@@ -24,7 +24,7 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
   constructor(component: ITabComponent) {
     super(component);
     this._tabIndicatorElement = getShadowElement(this._component, TAB_CONSTANTS.selectors.INDICATOR);
-    this._focusIndicatorElement = getShadowElement(this._component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
+    this._focusIndicatorElement = getShadowElement(this._component, FOCUS_INDICATOR_TAG_NAME) as IFocusIndicatorComponent;
     this._stateLayerElement = getShadowElement(this._component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
   }
 

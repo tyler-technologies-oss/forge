@@ -83,7 +83,7 @@ describe('Deprecated Icon Button', () => {
     const focusIndicator = getFocusIndicator(el);
 
     expect(stateLayer.targetElement).to.be.null;
-    expect(focusIndicator.targetElement).to.be.null;
+    expect(focusIndicator.targetElement).to.be.undefined;
 
     const button = document.createElement('button');
     el.appendChild(button);
@@ -105,7 +105,7 @@ describe('Deprecated Icon Button', () => {
     const focusIndicator = getFocusIndicator(el);
 
     expect(stateLayer.targetElement).to.be.null;
-    expect(focusIndicator.targetElement).to.be.null;
+    expect(focusIndicator.targetElement).to.be.undefined;
 
     const anchor = document.createElement('a');
     el.appendChild(anchor);
@@ -132,8 +132,8 @@ describe('Deprecated Icon Button', () => {
     const stateLayer = getStateLayer(el);
     const focusIndicator = getFocusIndicator(el);
 
-    expect(stateLayer.targetElement).to.be.ok;
-    expect(focusIndicator.targetElement).to.be.ok;
+    expect(stateLayer.targetElement).to.equal(el.querySelector('button'));
+    expect(focusIndicator.targetElement).to.equal(el.querySelector('button'));
 
     el.querySelector('button')?.remove();
 
@@ -228,7 +228,7 @@ describe('Deprecated Icon Button', () => {
     const focusIndicator = getFocusIndicator(el);
 
     expect(stateLayer.targetElement).to.be.null;
-    expect(focusIndicator.targetElement).to.be.null;
+    expect(focusIndicator.targetElement).to.be.undefined;
   });
 
   it('should toggle icons', async () => {

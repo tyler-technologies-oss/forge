@@ -28,7 +28,7 @@ export interface IFieldCore {
   popoverExpanded: boolean;
   multiline: boolean;
   supportTextInset: FieldSupportTextInset;
-  focusIndicatorTargetElement: HTMLElement;
+  focusIndicatorTargetElement: HTMLElement | undefined;
   focusIndicatorFocusMode: FocusIndicatorFocusMode;
   focusIndicatorAllowFocus: boolean;
   initialize(): void;
@@ -276,10 +276,10 @@ export class FieldCore implements IFieldCore {
     }
   }
 
-  public get focusIndicatorTargetElement(): HTMLElement {
+  public get focusIndicatorTargetElement(): HTMLElement | undefined {
     return this._adapter.focusIndicator.targetElement;
   }
-  public set focusIndicatorTargetElement(value: HTMLElement) {
+  public set focusIndicatorTargetElement(value: HTMLElement | undefined) {
     this._adapter.focusIndicator.targetElement = value;
   }
 
