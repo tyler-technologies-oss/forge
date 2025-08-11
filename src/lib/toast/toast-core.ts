@@ -96,6 +96,7 @@ export class ToastCore implements IToastCore {
     return this._duration;
   }
   public set duration(value: number) {
+    value ??= TOAST_CONSTANTS.defaults.DURATION;
     if (this._duration !== value) {
       this._duration = value;
       if (this._hideTimeout) {
