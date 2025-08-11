@@ -172,6 +172,23 @@ describe('Toast', () => {
       expect(el.open).to.be.false;
     });
 
+    it('should set duration to default if null/undefined is provided', async () => {
+      const el = await fixture<IToastComponent>(html`<forge-toast open>Test</forge-toast>`);
+      const closeSpy = sinon.spy();
+      el.addEventListener(TOAST_CONSTANTS.events.CLOSE, closeSpy);
+
+      expect(el.open).to.be.true;
+
+      el.duration = undefined as any;
+      expect(el.duration).to.eq(TOAST_CONSTANTS.defaults.DURATION);
+
+      await task(TOAST_ANIMATION_DURATION + TOAST_CONSTANTS.defaults.DURATION + 999);
+
+      expect(el.open).to.be.false;
+      expect(el.hasAttribute(TOAST_CONSTANTS.attributes.OPEN)).to.be.false;
+      expect(getOverlay(el).open).to.be.false;
+    });
+
     it('should show when show() method is called', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast>Test</forge-toast>`);
 
