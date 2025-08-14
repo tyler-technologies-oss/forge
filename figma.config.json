@@ -9,6 +9,7 @@
       "<FIGMA_ICONS_ICON>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2021-998",
       "<FIGMA_ICONS_16PX>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=3233-2184",
       "<FIGMA_BUTTON_BUTTON>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=20-2591",
+      "<FIGMA_BUTTON_BUTTON_NEUTRAL>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=3545-845",
       "<FIGMA_CARD_CARD>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2633-1003",
       "<FIGMA_TOOLBAR_TOOLBAR>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2457-199",
       "<FIGMA_ICON_BUTTON_ICON_BUTTON>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2280-2740",
@@ -24,7 +25,8 @@
       "<FIGMA_SWITCH_SWITCH_LABEL>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2387-180",
       "<FIGMA_FAB_FAB>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=3516-1012",
       "<FIGMA_DIVIDER_DIVIDER>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2056-673",
-      "<FIGMA_AVATAR_AVATAR>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2315-17"
+      "<FIGMA_AVATAR_AVATAR>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2315-17",
+      "<FIGMA_BANNER_BANNER>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=3548-1046"
     }
   }
 }
