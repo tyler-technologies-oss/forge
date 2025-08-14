@@ -15,7 +15,7 @@ figma.connect('<FIGMA_CHECKBOX_CHECKBOX>', {
   props: {
     ...sharedProps
   },
-  example: props => html`<forge-checkbox ${props.checked} ${props.state}></forge-checkbox>`
+  example: props => html` <forge-checkbox ${props.checked} ${props.state}></forge-checkbox>`
 });
 
 // checkbox label component
@@ -30,5 +30,5 @@ figma.connect('<FIGMA_CHECKBOX_CHECKBOX_LABEL>', {
       ...sharedProps
     })
   },
-  example: props => html`<forge-checkbox ${props.checkboxProps.checked} ${props.checkboxProps.state} ${props.labelPosition}>${props.label}</forge-checkbox>`
+  example: props => html` <forge-checkbox ${props.checkboxProps.checked} ${props.checkboxProps.state} ${props.labelPosition}>${props.label}</forge-checkbox>`
 });

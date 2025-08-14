@@ -1,5 +1,4 @@
 import figma, { html } from '@figma/code-connect/html';
-import { start } from 'repl';
 
 const sharedProps = {
   showBeforeStart: figma.boolean('Show before-start', {
@@ -26,11 +25,10 @@ figma.connect('<FIGMA_TOOLBAR_TOOLBAR>', {
   props: {
     ...sharedProps
   },
-  example: props => html`
-    <forge-toolbar>
+  example: props =>
+    html` <forge-toolbar>
       <h2 class="forge-typography--headline3" slot="start">${props.text}</h2>
-    </forge-toolbar>
-  `
+    </forge-toolbar>`
 });
 
 // footer toolbar variant
@@ -39,11 +37,10 @@ figma.connect('<FIGMA_TOOLBAR_TOOLBAR>', {
   props: {
     children: figma.children('forge-button')
   },
-  example: props => html`
-    <forge-toolbar>
+  example: props =>
+    html` <forge-toolbar>
       <div slot="end">${props.children}</div>
-    </forge-toolbar>
-  `
+    </forge-toolbar>`
 });
 
 // scaffold toolbar variant

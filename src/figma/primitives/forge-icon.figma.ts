@@ -13,7 +13,6 @@ figma.connect('<FIGMA_ICONS_ICON>', {
   props: {
     icon: figma.instance('Icon')
   },
-
   //todo: update example to use name prop instead of hardcoded value once available
   example: (props: { icon: any }) => html`<forge-icon name="icon_name"></forge-icon>`
 });

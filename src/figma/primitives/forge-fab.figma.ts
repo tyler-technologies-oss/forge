@@ -7,7 +7,7 @@ const sharedProps = {
   }),
   text: figma.string('Text'),
   startSlot: figma.boolean('Start slot', {
-    true: html`<forge-icon name="icon-name"></forge-icon>`,
+    true: html`<forge-icon name="icon_name"></forge-icon>`,
     false: undefined
   }),
   popoverIcon: figma.boolean('popoverIcon', {
@@ -24,7 +24,6 @@ figma.connect('<FIGMA_FAB_FAB>', {
   props: {
     ...sharedProps
   },
-
   example: props => html` <forge-fab ${props.popoverIcon} ${props.state}> ${props.startSlot} </forge-fab>`
 });
 
@@ -33,7 +32,6 @@ figma.connect('<FIGMA_FAB_FAB>', {
   props: {
     ...sharedProps
   },
-
   example: props =>
     html` <forge-fab ${props.popoverIcon} ${props.state}>
       ${props.startSlot}

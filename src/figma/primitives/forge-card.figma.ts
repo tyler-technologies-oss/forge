@@ -6,5 +6,5 @@ figma.connect('<FIGMA_CARD_CARD>', {
       Raised: true
     })
   },
-  example: props => html`<forge-card raised="${props.raised}"></forge-card>`
+  example: props => html` <forge-card raised="${props.raised}"></forge-card>`
 });

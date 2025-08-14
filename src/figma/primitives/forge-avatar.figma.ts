@@ -5,8 +5,7 @@ figma.connect('<FIGMA_AVATAR_AVATAR>', {
   props: {
     text: figma.string('Text')
   },
-
-  example: props => html`<forge-avatar text="${props.text}"></forge-avatar>`
+  example: props => html` <forge-avatar text="${props.text}"></forge-avatar>`
 });
 
 figma.connect('<FIGMA_AVATAR_AVATAR>', {
@@ -14,8 +13,7 @@ figma.connect('<FIGMA_AVATAR_AVATAR>', {
   props: {
     icon: figma.instance('Icon')
   },
-
-  example: props => html`<forge-avatar>${props.icon}</forge-avatar>`
+  example: props => html` <forge-avatar>${props.icon}</forge-avatar>`
 });
 
 figma.connect('<FIGMA_AVATAR_AVATAR>', {
@@ -23,6 +21,5 @@ figma.connect('<FIGMA_AVATAR_AVATAR>', {
   props: {
     image: figma.instance('Image')
   },
-
-  example: props => html`<forge-avatar image-url="./path-to-image.jpg"></forge-avatar>`
+  example: props => html` <forge-avatar image-url="./path-to-image.jpg"></forge-avatar>`
 });

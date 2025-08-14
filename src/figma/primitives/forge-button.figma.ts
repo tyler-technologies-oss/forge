@@ -34,7 +34,7 @@ figma.connect('<FIGMA_BUTTON_BUTTON>', {
   // alternative to get the icon name dynamically
   // <forge-icon name="${props.startInstanceName.icon}" slot="start"></forge-icon>
   example: props =>
-    html` <forge-button variant="${props.type}" disabled="${props.disabled}"> ${props.startInstance} ${props.text} ${props.endInstance}</forge-button>`
+    html` <forge-button variant="${props.type}" disabled="${props.disabled}"> ${props.startInstance} ${props.text} ${props.endInstance} </forge-button>`
 });
 
 //private neutral button for forge-banner component
@@ -43,5 +43,5 @@ figma.connect('<FIGMA_BUTTON_BUTTON_NEUTRAL>', {
     ...sharedProps
   },
   example: props =>
-    html` <forge-button variant="${props.type}" disabled="${props.disabled}"> ${props.startInstance} ${props.text} ${props.endInstance}</forge-button>`
+    html` <forge-button variant="${props.type}" disabled="${props.disabled}"> ${props.startInstance} ${props.text} ${props.endInstance} </forge-button>`
 });

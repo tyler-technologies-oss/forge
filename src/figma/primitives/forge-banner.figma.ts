@@ -18,7 +18,6 @@ figma.connect('<FIGMA_BANNER_BANNER>', {
   props: {
     ...sharedProps
   },
-
   example: props => html` <forge-banner> ${props.text} ${props.iconSlot} </forge-banner>`
 });
 
@@ -49,7 +48,6 @@ figma.connect('<FIGMA_BANNER_BANNER>', {
       })
     })
   },
-
   example: props =>
     html` <forge-banner>
       ${props.text} ${props.iconSlot}
