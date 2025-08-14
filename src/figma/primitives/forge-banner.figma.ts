@@ -6,7 +6,10 @@ const sharedProps = {
     false: undefined
   }),
   text: figma.string('Text'),
-  canDismiss: figma.boolean('canDismiss'),
+  canDismiss: figma.boolean('canDismiss', {
+    true: undefined,
+    false: html`persistent`
+  }),
   buttonSlot: figma.boolean('Button slot', {
     true: figma.children('.button-neutral'),
     false: undefined
@@ -18,7 +21,7 @@ figma.connect('<FIGMA_BANNER_BANNER>', {
   props: {
     ...sharedProps
   },
-  example: props => html` <forge-banner> ${props.text} ${props.iconSlot} </forge-banner>`
+  example: props => html` <forge-banner theme="info" ${props.canDismiss}> ${props.text} ${props.iconSlot} </forge-banner>`
 });
 
 //banner with button slot
@@ -48,11 +51,12 @@ figma.connect('<FIGMA_BANNER_BANNER>', {
       })
     })
   },
+
   example: props =>
-    html` <forge-banner>
+    html` <forge-banner theme="info" ${props.canDismiss}>
       ${props.text} ${props.iconSlot}
       <forge-button slot="button" variant="${props.buttonInstance.type}" disabled="${props.buttonInstance.disabled}">
-        ${props.buttonInstance.startInstance} ${props.buttonInstance.text} ${props.buttonInstance.endInstance}</forge-button
-      >
+        ${props.buttonInstance.startInstance} ${props.buttonInstance.text} ${props.buttonInstance.endInstance}
+      </forge-button>
     </forge-banner>`
 });
