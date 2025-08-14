@@ -10,7 +10,6 @@ const sharedProps = {
     true: html`<forge-icon name="icon_name" slot="end"></forge-icon>`,
     false: undefined
   }),
-  // startInstanceName: figma.children(".forge-icon"),
   startInstanceName: figma.nestedProps('.forge-icon', {
     icon: figma.instance('Icon')
   }),
@@ -31,8 +30,6 @@ figma.connect('<FIGMA_BUTTON_BUTTON>', {
   props: {
     ...sharedProps
   },
-  // alternative to get the icon name dynamically
-  // <forge-icon name="${props.startInstanceName.icon}" slot="start"></forge-icon>
   example: props =>
     html` <forge-button variant="${props.type}" disabled="${props.disabled}"> ${props.startInstance} ${props.text} ${props.endInstance} </forge-button>`
 });
@@ -44,4 +41,28 @@ figma.connect('<FIGMA_BUTTON_BUTTON_NEUTRAL>', {
   },
   example: props =>
     html` <forge-button variant="${props.type}" disabled="${props.disabled}"> ${props.startInstance} ${props.text} ${props.endInstance} </forge-button>`
+});
+
+// split button component
+figma.connect('<FIGMA_SPLIT_BUTTON_SPLIT_BUTTON>', {
+  props: {
+    variant: figma.enum('Variant', {
+      Raised: 'raised',
+      Outlined: 'outlined',
+      Text: 'text',
+      Tonal: 'tonal',
+      Filled: 'filled'
+    }),
+    button: figma.children('forge-button'),
+    button2: figma.nestedProps('forge-button 2', {
+      ...sharedProps
+    })
+  },
+  example: props =>
+    html` <forge-split-button variant="${props.variant}" theme="primary">
+      ${props.button}
+      <forge-menu>
+        <forge-button popover-icon variant="${props.button2.type}"></forge-button>
+      </forge-menu>
+    </forge-split-button>`
 });
