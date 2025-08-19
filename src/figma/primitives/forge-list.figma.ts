@@ -23,6 +23,17 @@ const sharedSecondaryProps = {
   showSecondary: figma.boolean('Show secondary')
 };
 
+const navListProps = {
+  showText: figma.boolean('Show text', {
+    true: figma.instance('Text'),
+    false: undefined
+  }),
+  indent: figma.boolean('Indent', {
+    true: 'indented',
+    false: undefined
+  })
+};
+
 figma.connect('<FIGMA_LIST_LIST_ITEM>', {
   variant: { 'Start slot': false, 'End slot': false },
   props: {
@@ -200,3 +211,97 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
       <div slot="end">${props.endInstance}</div>
     </forge-list-item>`
 });
+
+// Navlist
+figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
+  props: {
+    ...sharedProps,
+    ...navListProps
+  },
+  example: props =>
+    html` <forge-list-item ${props.state} ${props.indent}>
+      <a href="javascript: void(0)">${props.text}</a>
+    </forge-list-item>`
+});
+
+figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
+  variant: { 'Start slot': true, 'End slot': false },
+  props: {
+    ...sharedProps,
+    ...navListProps
+  },
+  example: props =>
+    html` <forge-list-item ${props.state} ${props.indent}>
+      <div slot="start">${props.startInstance}</div>
+      <a href="javascript: void(0)">${props.text}</a>
+    </forge-list-item>`
+});
+
+figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
+  variant: { 'Start slot': false, 'End slot': true },
+  props: {
+    ...sharedProps,
+    ...navListProps
+  },
+  example: props =>
+    html` <forge-list-item ${props.state} ${props.indent}>
+      <a href="javascript: void(0)">${props.text}</a>
+      <div slot="end">${props.endInstance}</div>
+    </forge-list-item>`
+});
+
+figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
+  variant: { 'Start slot': true, 'End slot': true },
+  props: {
+    ...sharedProps,
+    ...navListProps
+  },
+  example: props =>
+    html` <forge-list-item ${props.state} ${props.indent}>
+      <div slot="start">${props.startInstance}</div>
+      <a href="javascript: void(0)">${props.text}</a>
+      <div slot="end">${props.endInstance}</div>
+    </forge-list-item>`
+});
+
+figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
+  variant: { 'Start slot': true, 'Show text': false },
+  props: {
+    ...sharedProps,
+    ...navListProps
+  },
+  example: props =>
+    html` <forge-list-item ${props.state} ${props.indent}>
+      <div slot="start">${props.startInstance}</div>
+      <a href="javascript: void(0)">${props.text}</a>
+      <div slot="end">${props.endInstance}</div>
+    </forge-list-item>`
+});
+
+// Drawer
+figma.connect('<FIGMA_DRAWER_DRAWER>', {
+  props: {
+    listItem: figma.children('*')
+  },
+  example: props =>
+    html` <forge-drawer slot="body-left">
+      <aside>
+        <forge-list navlist> ${props.listItem} </forge-list>
+      </aside>
+    </forge-drawer>`
+});
+
+figma.connect('<FIGMA_DRAWER_DRAWER>', {
+  variant: { Type: 'Nav - Mini' },
+  props: {
+    listItem: figma.children('*')
+  },
+  example: props =>
+    html` <forge-mini-drawer slot="body-left">
+      <aside>
+        <forge-list navlist> ${props.listItem} </forge-list>
+      </aside>
+    </forge-mini-drawer>`
+});
+
+//TODO: Implement variant with header/footer toolbars
