@@ -17,7 +17,7 @@ figma.connect('<FIGMA_INLINE_MESSAGE_INLINE_MESSAGE>', {
   props: {
     ...sharedProps
   },
-  example: props => html` <forge-inline-message theme="info"> ${props.showIcon} ${props.body} </forge-inline-message>`
+  example: (props: any) => html` <forge-inline-message theme="info"> ${props.showIcon} ${props.body} </forge-inline-message>`
 });
 
 figma.connect('<FIGMA_INLINE_MESSAGE_INLINE_MESSAGE>', {
@@ -25,7 +25,7 @@ figma.connect('<FIGMA_INLINE_MESSAGE_INLINE_MESSAGE>', {
   props: {
     ...sharedProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-inline-message theme="info">
       ${props.showIcon}
       <span slot="title">${props.title}</span>

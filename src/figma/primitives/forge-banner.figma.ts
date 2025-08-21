@@ -21,7 +21,7 @@ figma.connect('<FIGMA_BANNER_BANNER>', {
   props: {
     ...sharedProps
   },
-  example: props => html` <forge-banner theme="info" ${props.canDismiss}> ${props.text} ${props.iconSlot} </forge-banner>`
+  example: (props: any) => html` <forge-banner theme="info" ${props.canDismiss}> ${props.text} ${props.iconSlot} </forge-banner>`
 });
 
 //banner with button slot
@@ -52,7 +52,7 @@ figma.connect('<FIGMA_BANNER_BANNER>', {
     })
   },
 
-  example: props =>
+  example: (props: any) =>
     html` <forge-banner theme="info" ${props.canDismiss}>
       ${props.text} ${props.iconSlot}
       <forge-button slot="button" variant="${props.buttonInstance.type}" disabled="${props.buttonInstance.disabled}">

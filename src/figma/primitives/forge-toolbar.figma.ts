@@ -25,7 +25,7 @@ figma.connect('<FIGMA_TOOLBAR_TOOLBAR>', {
   props: {
     ...sharedProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-toolbar>
       <h2 class="forge-typography--headline3" slot="start">${props.text}</h2>
     </forge-toolbar>`
@@ -37,7 +37,7 @@ figma.connect('<FIGMA_TOOLBAR_TOOLBAR>', {
   props: {
     children: figma.children('forge-button')
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-toolbar>
       <div slot="end">${props.children}</div>
     </forge-toolbar>`
@@ -70,7 +70,7 @@ figma.connect('<FIGMA_TOOLBAR_TOOLBAR>', {
     endSlot: figma.instance('end slot'),
     afterEndSlot: figma.instance('after slot')
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-toolbar>
       <div slot="before-start">${props.beforeStartSlot}</div>
       <div slot="start">${props.startSlot}</div>

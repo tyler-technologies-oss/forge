@@ -31,7 +31,7 @@ figma.connect('<FIGMA_TAB_TAB>', {
       false: undefined
     })
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-tab ${props.state} ${props.vertical} ${props.stacked} ${props.active}> ${props.startSlot} ${props.text} ${props.endSlot} </forge-tab>`
 });
 
@@ -41,5 +41,5 @@ figma.connect('<FIGMA_TAB_TAB_BAR>', {
     ...sharedProps,
     tab: figma.children('forge-tab')
   },
-  example: props => html` <forge-tab-bar ${props.vertical} ${props.stacked}> ${props.tab} </forge-tab-bar>`
+  example: (props: any) => html` <forge-tab-bar ${props.vertical} ${props.stacked}> ${props.tab} </forge-tab-bar>`
 });

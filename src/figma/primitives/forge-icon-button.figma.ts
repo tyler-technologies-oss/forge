@@ -22,7 +22,8 @@ figma.connect('<FIGMA_ICON_BUTTON_ICON_BUTTON>', {
   props: {
     ...sharedProps
   },
-  example: props => html` <forge-icon-button variant=${props.type} ${props.popoverIcon} disabled=${props.disabled}> ${props.instance}</forge-icon-button>`
+  example: (props: any) =>
+    html` <forge-icon-button variant=${props.type} ${props.popoverIcon} disabled=${props.disabled}> ${props.instance}</forge-icon-button>`
 });
 
 // icon button with badge component
@@ -33,7 +34,7 @@ figma.connect('<FIGMA_ICON_BUTTON_ICON_BUTTON_BADGE>', {
       ...sharedProps
     })
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-icon-button variant=${props.iconButton.type} ${props.iconButton.popoverIcon} disabled=${props.iconButton.disabled}>
       ${props.iconButton.instance} ${props.badge}
     </forge-icon-button>`

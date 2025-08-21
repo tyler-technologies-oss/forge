@@ -36,6 +36,6 @@ figma.connect('<FIGMA_BADGE_BADGE>', {
       false: undefined
     })
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-badge theme="${props.theme}" ${props.strong} ${props.dot}> ${props.startInstance} ${props.text} ${props.endInstance} </forge-badge>`
 });

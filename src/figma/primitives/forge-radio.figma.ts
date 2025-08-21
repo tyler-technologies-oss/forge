@@ -15,7 +15,7 @@ figma.connect('<FIGMA_RADIO_RADIO>', {
   props: {
     ...sharedProps
   },
-  example: props => html` <forge-radio ${props.checked} ${props.state}></forge-radio>`
+  example: (props: any) => html` <forge-radio ${props.checked} ${props.state}></forge-radio>`
 });
 
 // radio label component
@@ -30,5 +30,5 @@ figma.connect('<FIGMA_RADIO_RADIO_LABEL>', {
       ...sharedProps
     })
   },
-  example: props => html` <forge-radio ${props.radioProps.checked} ${props.radioProps.state} ${props.labelPosition}>${props.label}</forge-radio>`
+  example: (props: any) => html` <forge-radio ${props.radioProps.checked} ${props.radioProps.state} ${props.labelPosition}>${props.label}</forge-radio>`
 });

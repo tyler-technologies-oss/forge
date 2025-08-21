@@ -11,5 +11,5 @@ figma.connect('<FIGMA_TOAST_TOAST>', {
       text: figma.string('Text')
     })
   },
-  example: props => html` <forge-toast action-text="${props.actionText.text}" ${props.dismissible}>${props.text}</forge-toast>`
+  example: (props: any) => html` <forge-toast action-text="${props.actionText.text}" ${props.dismissible}>${props.text}</forge-toast>`
 });

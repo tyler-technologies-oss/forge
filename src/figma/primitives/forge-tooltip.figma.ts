@@ -10,5 +10,5 @@ figma.connect('<FIGMA_TOOLTIP_TOOLTIP>', {
       right: 'right'
     })
   },
-  example: props => html` <forge-tooltip anchor="my-button" placement="${props.placement}">${props.Text}</forge-tooltip>`
+  example: (props: any) => html` <forge-tooltip anchor="my-button" placement="${props.placement}">${props.Text}</forge-tooltip>`
 });

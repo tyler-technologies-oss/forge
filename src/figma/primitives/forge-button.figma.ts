@@ -30,7 +30,7 @@ figma.connect('<FIGMA_BUTTON_BUTTON>', {
   props: {
     ...sharedProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-button variant="${props.type}" disabled="${props.disabled}"> ${props.startInstance} ${props.text} ${props.endInstance} </forge-button>`
 });
 
@@ -39,7 +39,7 @@ figma.connect('<FIGMA_BUTTON_BUTTON_NEUTRAL>', {
   props: {
     ...sharedProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-button variant="${props.type}" disabled="${props.disabled}"> ${props.startInstance} ${props.text} ${props.endInstance} </forge-button>`
 });
 
@@ -58,7 +58,7 @@ figma.connect('<FIGMA_SPLIT_BUTTON_SPLIT_BUTTON>', {
       ...sharedProps
     })
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-split-button variant="${props.variant}" theme="primary">
       ${props.button}
       <forge-menu>

@@ -39,7 +39,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
   props: {
     ...sharedProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state}>
       <span>${props.text}</span>
     </forge-list-item>`
@@ -51,7 +51,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
     ...sharedProps,
     ...sharedSecondaryProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state} two-line>
       <span>${props.text}</span>
       <span slot="secondary-text">${props.secondaryText}</span>
@@ -65,7 +65,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
     ...sharedSecondaryProps,
     tertiaryText: figma.string('Tertiary text')
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state} two-line three-line>
       <span>${props.text}</span>
       <span slot="secondary-text">${props.secondaryText}</span>
@@ -77,7 +77,7 @@ figma.connect('<FIGMA_LIST_LIST>', {
   props: {
     listItem: figma.children('forge-list-item')
   },
-  example: props => html` <forge-list> ${props.listItem} </forge-list>`
+  example: (props: any) => html` <forge-list> ${props.listItem} </forge-list>`
 });
 
 // With Start Slot
@@ -86,7 +86,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
   props: {
     ...sharedProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state}>
       <div slot="start">${props.startInstance}</div>
       <span>${props.text}</span>
@@ -99,7 +99,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
     ...sharedProps,
     ...sharedSecondaryProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state} two-line>
       <div slot="start">${props.startInstance}</div>
       <span>${props.text}</span>
@@ -114,7 +114,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
     ...sharedSecondaryProps,
     tertiaryText: figma.string('Tertiary text')
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state} two-line three-line>
       <div slot="start">${props.startInstance}</div>
       <span>${props.text}</span>
@@ -129,7 +129,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
   props: {
     ...sharedProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state}>
       <span>${props.text}</span>
       <div slot="end">${props.endInstance}</div>
@@ -142,7 +142,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
     ...sharedProps,
     ...sharedSecondaryProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state} two-line>
       <span>${props.text}</span>
       <span slot="secondary-text">${props.secondaryText}</span>
@@ -157,7 +157,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
     ...sharedSecondaryProps,
     tertiaryText: figma.string('Tertiary text')
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state} two-line three-line>
       <span>${props.text}</span>
       <span slot="secondary-text">${props.secondaryText}</span>
@@ -172,7 +172,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
   props: {
     ...sharedProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state}>
       <div slot="start">${props.startInstance}</div>
       <span>${props.text}</span>
@@ -186,7 +186,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
     ...sharedProps,
     ...sharedSecondaryProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state} two-line>
       <div slot="start">${props.startInstance}</div>
       <span>${props.text}</span>
@@ -202,7 +202,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
     ...sharedSecondaryProps,
     tertiaryText: figma.string('Tertiary text')
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state} two-line three-line>
       <div slot="start">${props.startInstance}</div>
       <span>${props.text}</span>
@@ -218,7 +218,7 @@ figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
     ...sharedProps,
     ...navListProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state} ${props.indent}>
       <a href="javascript: void(0)">${props.text}</a>
     </forge-list-item>`
@@ -230,7 +230,7 @@ figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
     ...sharedProps,
     ...navListProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state} ${props.indent}>
       <div slot="start">${props.startInstance}</div>
       <a href="javascript: void(0)">${props.text}</a>
@@ -243,7 +243,7 @@ figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
     ...sharedProps,
     ...navListProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state} ${props.indent}>
       <a href="javascript: void(0)">${props.text}</a>
       <div slot="end">${props.endInstance}</div>
@@ -256,7 +256,7 @@ figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
     ...sharedProps,
     ...navListProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state} ${props.indent}>
       <div slot="start">${props.startInstance}</div>
       <a href="javascript: void(0)">${props.text}</a>
@@ -270,7 +270,7 @@ figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
     ...sharedProps,
     ...navListProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-list-item ${props.state} ${props.indent}>
       <div slot="start">${props.startInstance}</div>
       <a href="javascript: void(0)">${props.text}</a>
@@ -283,7 +283,7 @@ figma.connect('<FIGMA_DRAWER_DRAWER>', {
   props: {
     listItem: figma.children('*')
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-drawer slot="body-left">
       <aside>
         <forge-list navlist> ${props.listItem} </forge-list>
@@ -296,7 +296,7 @@ figma.connect('<FIGMA_DRAWER_DRAWER>', {
   props: {
     listItem: figma.children('*')
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-mini-drawer slot="body-left">
       <aside>
         <forge-list navlist> ${props.listItem} </forge-list>

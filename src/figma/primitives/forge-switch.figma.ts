@@ -15,7 +15,7 @@ figma.connect('<FIGMA_SWITCH_SWITCH>', {
   props: {
     ...sharedProps
   },
-  example: props => html` <forge-switch ${props.checked} ${props.state}></forge-switch>`
+  example: (props: any) => html` <forge-switch ${props.checked} ${props.state}></forge-switch>`
 });
 
 // switch & label component
@@ -30,5 +30,5 @@ figma.connect('<FIGMA_SWITCH_SWITCH_LABEL>', {
       ...sharedProps
     })
   },
-  example: props => html` <forge-switch ${props.switchProps.checked} ${props.switchProps.state} ${props.labelPosition}>${props.label}</forge-switch>`
+  example: (props: any) => html` <forge-switch ${props.switchProps.checked} ${props.switchProps.state} ${props.labelPosition}>${props.label}</forge-switch>`
 });

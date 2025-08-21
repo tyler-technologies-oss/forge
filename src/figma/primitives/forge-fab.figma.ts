@@ -24,7 +24,7 @@ figma.connect('<FIGMA_FAB_FAB>', {
   props: {
     ...sharedProps
   },
-  example: props => html` <forge-fab ${props.popoverIcon} ${props.state}> ${props.startSlot} </forge-fab>`
+  example: (props: any) => html` <forge-fab ${props.popoverIcon} ${props.state}> ${props.startSlot} </forge-fab>`
 });
 
 figma.connect('<FIGMA_FAB_FAB>', {
@@ -32,7 +32,7 @@ figma.connect('<FIGMA_FAB_FAB>', {
   props: {
     ...sharedProps
   },
-  example: props =>
+  example: (props: any) =>
     html` <forge-fab ${props.popoverIcon} ${props.state}>
       ${props.startSlot}
       <span slot="label">${props.text}</span>
