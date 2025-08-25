@@ -1,0 +1,70 @@
+# Standalone Dockerfile for Tyler Forge MCP Server
+# Optimized for AWS App Runner deployment with x86/x64 architecture
+# This version uses pre-bundled data and doesn't require the Forge source
+
+# Stage 1: Build stage
+FROM --platform=linux/amd64 node:20-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package.json ./
+
+# Install all dependencies (using npm install since we don't have lock file)
+RUN npm install
+
+# Copy source code
+COPY tsconfig.json ./
+COPY src ./src
+COPY scripts ./scripts
+
+# Copy pre-bundled data if it exists
+COPY dist ./dist
+
+# Build TypeScript
+RUN npm run build
+
+# Stage 2: Production stage
+FROM --platform=linux/amd64 node:20-alpine
+
+# Install dumb-init for proper signal handling
+RUN apk add --no-cache dumb-init
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package.json ./
+
+# Install production dependencies only
+RUN npm install --only=production && \
+    npm cache clean --force
+
+# Copy built application from builder stage
+COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
+
+# Switch to non-root user
+USER nodejs
+
+# Expose port (App Runner default is 8080)
+EXPOSE 8080
+
+# Set environment variables for production
+ENV NODE_ENV=production
+ENV PORT=8080
+ENV FORGE_BUNDLED=true
+
+# Health check for App Runner
+HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:8080/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1); }).on('error', () => { process.exit(1); });"
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+
+# Start the SSE server for remote access
+CMD ["node", "dist/server-sse.js"]

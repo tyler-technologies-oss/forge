@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "forge": {
+      "command": "node",
+      "args": ["./forge-mcp-server/dist/index.js"],
+      "env": {}
+    }
+  }
+}
