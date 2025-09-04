@@ -73,11 +73,22 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
     </forge-list-item>`
 });
 
+// forge-list: nested list-items
 figma.connect('<FIGMA_LIST_LIST>', {
+  variant: { Type: 'forge-list' },
   props: {
     listItem: figma.children('forge-list-item')
   },
   example: (props: any) => html` <forge-list> ${props.listItem} </forge-list>`
+});
+
+// forge-list: navigation list variant
+figma.connect('<FIGMA_LIST_LIST>', {
+  variant: { Type: 'navlist' },
+  props: {
+    listItem: figma.children('forge-list-item*')
+  },
+  example: (props: any) => html` <forge-list navlist> ${props.listItem} </forge-list>`
 });
 
 // With Start Slot
@@ -212,6 +223,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
     </forge-list-item>`
 });
 
+// TODO: deprecate this nav-list-item in favor of just using the list-item component
 // Navlist
 figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
   props: {
@@ -277,31 +289,3 @@ figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
       <div slot="end">${props.endInstance}</div>
     </forge-list-item>`
 });
-
-// Drawer
-figma.connect('<FIGMA_DRAWER_DRAWER>', {
-  props: {
-    listItem: figma.children('*')
-  },
-  example: (props: any) =>
-    html` <forge-drawer slot="body-left">
-      <aside>
-        <forge-list navlist> ${props.listItem} </forge-list>
-      </aside>
-    </forge-drawer>`
-});
-
-figma.connect('<FIGMA_DRAWER_DRAWER>', {
-  variant: { Type: 'Nav - Mini' },
-  props: {
-    listItem: figma.children('*')
-  },
-  example: (props: any) =>
-    html` <forge-mini-drawer slot="body-left">
-      <aside>
-        <forge-list navlist> ${props.listItem} </forge-list>
-      </aside>
-    </forge-mini-drawer>`
-});
-
-//TODO: Implement variant with header/footer toolbars
