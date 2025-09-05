@@ -12,7 +12,7 @@ const inlineScss = fromRollup(() => ({
   transform(code, id) {
     if (id.endsWith('.scss')) {
       const loadPaths = [dirname(id), 'node_modules/'];
-      const result = compileString(code, { loadPaths });
+      const result = compileString(code, { loadPaths, silenceDeprecations: ['mixed-decls'] });
       return result.css;
     }
   }
