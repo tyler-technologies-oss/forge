@@ -6,7 +6,7 @@ import { task, frame } from '../core/utils/utils';
 import { COLOR_PICKER_CONSTANTS, DEFAULT_COLOR, IHSVA, IRGBA } from './color-picker-constants';
 import { IColorPickerComponent } from './color-picker';
 import { formatHex, rgbaToHex, rgbaToHsva } from './color-picker-utils';
-import { TestHarness } from '../../test/utils/test-harness';
+import { TestHarness } from '../core/testing/test-harness';
 
 import './color-picker';
 

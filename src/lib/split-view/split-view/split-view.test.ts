@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
-import { TestHarness } from '../../../test/utils/test-harness';
+import { TestHarness } from '../../core/testing/test-harness';
 import { frame } from '../../core/utils/utils';
 import type { ISplitViewPanelComponent } from '../split-view-panel/split-view-panel';
 import { SPLIT_VIEW_PANEL_CONSTANTS, SplitViewAnimatingLayer } from '../split-view-panel/split-view-panel-constants';
