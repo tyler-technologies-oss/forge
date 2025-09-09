@@ -1,4 +1,5 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
+import { type MoveBoundary } from '../core/mixins/interactions/moveable/with-moveable';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}dialog`;
 
@@ -15,6 +16,7 @@ const observedAttributes = {
   TRIGGER: 'trigger',
   MOVEABLE: 'moveable',
   MOVE_TARGET: 'move-target',
+  MOVE_BOUNDARY: 'move-boundary',
   POSITION_STRATEGY: 'position-strategy',
   PLACEMENT: 'placement',
   SIZE_STRATEGY: 'size-strategy',
@@ -58,7 +60,8 @@ const defaults = {
   SIZE_STRATEGY: 'content' as DialogSizeStrategy,
   POSITION_STRATEGY: 'viewport' as DialogPositionStrategy,
   PLACEMENT: 'center' as DialogPlacement,
-  FULLSCREEN_THRESHOLD: 599
+  FULLSCREEN_THRESHOLD: 599,
+  MOVE_BOUNDARY: 'viewport' as DialogMoveBoundary
 };
 
 export const DIALOG_CONSTANTS = {
@@ -95,6 +98,7 @@ export type DialogPositionStrategy = 'viewport' | 'container';
 export type DialogPlacement = 'custom' | 'center' | 'top' | 'right' | 'bottom' | 'left' | 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 export type DialogSizeStrategy = 'content' | 'container-inline' | 'container-block';
 export type DialogPreset = 'dialog' | 'bottom-sheet' | 'top-sheet' | 'left-sheet' | 'right-sheet';
+export type DialogMoveBoundary = MoveBoundary;
 export type DialogCloseReason = 'backdrop' | 'escape' | 'submit' | 'dismiss';
 
 export const hideBackdrop = Symbol('hideBackdrop');

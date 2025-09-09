@@ -6,6 +6,7 @@ import {
   DialogAnimationType,
   DialogCloseReason,
   DialogMode,
+  DialogMoveBoundary,
   DialogPlacement,
   DialogPositionStrategy,
   DialogPreset,
@@ -29,6 +30,7 @@ export interface IDialogCore {
   sizeStrategy: DialogSizeStrategy;
   placement: DialogPlacement;
   moveable: boolean;
+  moveBoundary: DialogMoveBoundary;
   label: string;
   description: string;
   hideBackdrop(): void;
@@ -48,6 +50,7 @@ export class DialogCore implements IDialogCore {
   private _originalFullscreenValue: boolean | undefined;
   private _trigger = '';
   private _moveable = false;
+  private _moveBoundary: DialogMoveBoundary = DIALOG_CONSTANTS.defaults.MOVE_BOUNDARY;
   private _label = '';
   private _description = '';
   private _sizeStrategy: DialogSizeStrategy = DIALOG_CONSTANTS.defaults.SIZE_STRATEGY;
@@ -64,7 +67,16 @@ export class DialogCore implements IDialogCore {
   constructor(public _adapter: IDialogAdapter) {}
 
   public initialize(): void {
-    this._adapter.tryApplyGlobalConfiguration(['mode', 'animationType', 'positionStrategy', 'sizeStrategy', 'persistent', 'moveable', 'fullscreenThreshold']);
+    this._adapter.tryApplyGlobalConfiguration([
+      'mode',
+      'animationType',
+      'positionStrategy',
+      'sizeStrategy',
+      'persistent',
+      'moveable',
+      'moveBoundary',
+      'fullscreenThreshold'
+    ]);
 
     if (this._trigger && !this._adapter.triggerElement) {
       this._adapter.tryLocateTriggerElement(this._trigger);
@@ -245,7 +257,7 @@ export class DialogCore implements IDialogCore {
       this._adapter.dispatchHostEvent(event);
     };
     const { moveHandleElement: handleElement, surfaceElement } = this._adapter;
-    this._moveController = new MoveController({ handleElement, surfaceElement, onMoveStart, onMove, onMoveEnd });
+    this._moveController = new MoveController({ handleElement, surfaceElement, moveBoundary: this._moveBoundary, onMoveStart, onMove, onMoveEnd });
   }
 
   private _destroyMoveController(): void {
@@ -414,6 +426,20 @@ export class DialogCore implements IDialogCore {
       }
 
       this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.MOVEABLE, this._moveable);
+    }
+  }
+
+  public get moveBoundary(): DialogMoveBoundary {
+    return this._moveBoundary;
+  }
+  public set moveBoundary(value: DialogMoveBoundary) {
+    if (this._moveBoundary !== value) {
+      this._moveBoundary = value;
+
+      if (this._adapter.isConnected && this._open && this._moveable) {
+        this._destroyMoveController();
+        this._initializeMoveController();
+      }
     }
   }
 

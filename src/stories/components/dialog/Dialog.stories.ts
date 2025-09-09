@@ -41,6 +41,7 @@ const meta = {
           control: 'select',
           options: ['custom', 'center', 'top', 'right', 'bottom', 'left', 'top-right', 'top-left', 'bottom-right', 'bottom-left']
         },
+        moveBoundary: { control: 'select', options: ['viewport', 'none'] },
         fullscreenThreshold: { control: 'number' }
       }
     })
@@ -51,6 +52,7 @@ const meta = {
     fullscreen: false,
     fullscreenThreshold: DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD,
     moveable: false,
+    moveBoundary: DIALOG_CONSTANTS.defaults.MOVE_BOUNDARY,
     mode: DIALOG_CONSTANTS.defaults.MODE,
     type: DIALOG_CONSTANTS.defaults.TYPE,
     label: 'My dialog title',

@@ -132,6 +132,11 @@ moveableToggle.addEventListener('forge-switch-change', ({ detail: selected }) =>
   inlineDialog.moveable = selected;
 });
 
+const moveBoundarySelect = document.getElementById('opt-move-boundary') as ISelectComponent;
+moveBoundarySelect.addEventListener('change', ({ detail: selected }) => {
+  inlineDialog.moveBoundary = selected;
+});
+
 const preventMoveToggle = document.getElementById('opt-prevent-move') as ISwitchComponent;
 preventMoveToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
@@ -155,6 +160,7 @@ function openDynamicDialog(): void {
   dialogElement.persistent = persistentToggle.on;
   dialogElement.fullscreen = fullscreenToggle.on;
   dialogElement.moveable = moveableToggle.on;
+  dialogElement.moveBoundary = moveBoundarySelect.value;
   dialogElement.placement = placementSelect.value;
   dialogElement.sizeStrategy = sizeStrategySelect.value;
   dialogElement.positionStrategy = positionStrategySelect.value;

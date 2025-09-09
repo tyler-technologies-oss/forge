@@ -1,8 +1,9 @@
-import { WithMoveable } from '../mixins/interactions/moveable/with-moveable';
+import { MoveBoundary, WithMoveable } from '../mixins/interactions/moveable/with-moveable';
 
 export interface IMoveControllerConfig {
   handleElement: HTMLElement;
   surfaceElement: HTMLElement;
+  moveBoundary?: MoveBoundary;
   onMoveStart(): boolean;
   onMove(position: { x: number; y: number }): boolean;
   onMoveEnd(): void;
@@ -11,6 +12,9 @@ export interface IMoveControllerConfig {
 export class MoveController extends WithMoveable(Object) {
   constructor(private _config: IMoveControllerConfig) {
     super();
+    if (_config.moveBoundary) {
+      this._moveBoundary = _config.moveBoundary;
+    }
     this._startMoveListener();
   }
 

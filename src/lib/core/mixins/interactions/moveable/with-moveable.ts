@@ -1,6 +1,8 @@
 import { getActiveElement, isNumber, isString } from '@tylertech/forge-core';
 import { AbstractConstructor, MixinBase } from '../../../../constants';
 
+export type MoveBoundary = 'viewport' | 'none';
+
 export interface IWithMoveableMoveContext {
   top: number;
   left: number;
@@ -11,6 +13,7 @@ export interface IWithMoveableMoveContext {
 export declare abstract class WithMoveableContract {
   public stopMoveListener(): void;
   protected _movePointerDownListener: EventListener;
+  protected _moveBoundary: MoveBoundary;
   protected abstract _getMoveableBounds(): { top: number; left: number; height: number; width: number };
   protected abstract _updatePosition(x: string | null, y: string | null): void;
   protected abstract _onMoveStart(): boolean;
@@ -25,6 +28,7 @@ export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = clas
     private _moveContext: IWithMoveableMoveContext | undefined;
     private _lastPosition: { x: number; y: number } | undefined;
     private _activeElement: HTMLElement | undefined = undefined;
+    protected _moveBoundary: MoveBoundary = 'viewport';
 
     protected _movePointerDownListener = this._onMoveTargetPointerDown.bind(this);
     private _movePointerMoveListener = this._onMoveTargetPointerMove.bind(this);
@@ -77,8 +81,8 @@ export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = clas
         }
       }
 
-      // Ensure that the surface position stays within the bounds of the screen
-      const newPosition = this._clampPosition(position, this._moveContext);
+      // Ensure that the surface position stays within the bounds of the screen if boundary is set to viewport
+      const newPosition = this._moveBoundary === 'viewport' ? this._clampPosition(position, this._moveContext) : position;
 
       // Only update the position if it actually changed
       if (!this._lastPosition || newPosition.x !== this._lastPosition.x || newPosition.y !== this._lastPosition.y) {
