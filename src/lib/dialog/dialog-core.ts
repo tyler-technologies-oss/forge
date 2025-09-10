@@ -252,6 +252,11 @@ export class DialogCore implements IDialogCore {
       return event.defaultPrevented;
     };
     const onMoveEnd = (): void => {
+      // Snap dialog back into view if it's completely off-screen when moveBoundary is 'none'
+      if (this._moveBoundary === 'none' && this._adapter.isDialogCompletelyOffScreen()) {
+        this._adapter.resetSurfacePosition();
+      }
+
       const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE_END);
       this._adapter.removeSurfaceClass(DIALOG_CONSTANTS.classes.MOVING);
       this._adapter.dispatchHostEvent(event);

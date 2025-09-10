@@ -1074,6 +1074,28 @@ describe('Dialog', () => {
       expect(harness.dialogElement['_core']['_moveController']).to.not.be.undefined;
       expect(harness.dialogElement.moveBoundary).to.equal('none');
     });
+
+    it('should snap dialog back into view when completely off-screen with moveBoundary none', async () => {
+      const harness = await createFixture({ moveable: true, moveBoundary: 'none' });
+      await harness.showAsync();
+
+      const { x, y, height, width } = harness.moveHandleElement.getBoundingClientRect();
+      const [handleX, handleY]: [number, number] = [x + width / 2, y + height / 2];
+
+      // Move dialog completely off-screen (far left and up)
+      const moveAmount = -2000;
+
+      harness.simulateMoveHandleDown();
+      harness.simulateMoveHandleMove(handleX + moveAmount, handleY + moveAmount);
+      harness.simulateMoveHandleUp();
+
+      await elementUpdated(harness.surfaceElement);
+
+      // After move ends, dialog should snap back into view (position should be reset)
+      expect(harness.surfaceElement.style.top).to.equal('');
+      expect(harness.surfaceElement.style.left).to.equal('');
+      expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVED)).to.be.false;
+    });
   });
 
   describe('fullscreen', () => {

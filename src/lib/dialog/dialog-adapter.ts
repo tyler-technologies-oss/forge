@@ -24,10 +24,12 @@ export interface IDialogAdapter extends IBaseAdapter<IDialogComponent> {
   showBackdrop(): void;
   addSurfaceClass(className: string): void;
   removeSurfaceClass(className: string): void;
+  resetSurfacePosition(): void;
   addFullscreenListener(breakpoint: number, listener: (value: boolean) => void): void;
   removeFullscreenListener(listener: (value: boolean) => void): void;
   setAccessibleLabel(label: string): void;
   setAccessibleDescription(description: string): void;
+  isDialogCompletelyOffScreen(): boolean;
 }
 
 export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDialogAdapter {
@@ -194,6 +196,12 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
     this._surfaceElement.classList.remove(className);
   }
 
+  public resetSurfacePosition(): void {
+    this._surfaceElement.style.left = '';
+    this._surfaceElement.style.top = '';
+    this.removeSurfaceClass(DIALOG_CONSTANTS.classes.MOVED);
+  }
+
   public addFullscreenListener(breakpoint: number, listener: (value: boolean) => void): void {
     this._fullscreenMediaQuery = window.matchMedia(`(max-width: ${breakpoint}px)`);
     this._fullscreenMediaQuery.addEventListener('change', event => listener(event.matches));
@@ -214,6 +222,18 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
   public setAccessibleDescription(description: string): void {
     this._accessibleDescriptionElement.textContent = description;
+  }
+
+  public isDialogCompletelyOffScreen(): boolean {
+    if (!this._surfaceElement) {
+      return false;
+    }
+
+    const rect = this._surfaceElement.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    return rect.right <= 0 || rect.left >= viewportWidth || rect.bottom <= 0 || rect.top >= viewportHeight;
   }
 
   private _forceClose(): void {
