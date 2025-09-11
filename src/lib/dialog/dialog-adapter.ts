@@ -1,6 +1,7 @@
 import { getShadowElement, playKeyframeAnimation } from '@tylertech/forge-core';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
+import { isElementOutOfViewport, moveElementIntoViewport } from '../core/utils/utils';
 import { DialogComponent, IDialogComponent } from './dialog';
 import { DIALOG_CONSTANTS, dialogStack, hideBackdrop, showBackdrop } from './dialog-constants';
 
@@ -25,11 +26,13 @@ export interface IDialogAdapter extends IBaseAdapter<IDialogComponent> {
   addSurfaceClass(className: string): void;
   removeSurfaceClass(className: string): void;
   resetSurfacePosition(): void;
+  snapSurfaceIntoView(): void;
   addFullscreenListener(breakpoint: number, listener: (value: boolean) => void): void;
   removeFullscreenListener(listener: (value: boolean) => void): void;
   setAccessibleLabel(label: string): void;
   setAccessibleDescription(description: string): void;
   isDialogCompletelyOffScreen(): boolean;
+  isDragHandleOutOfView(): boolean;
 }
 
 export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDialogAdapter {
@@ -202,6 +205,10 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
     this.removeSurfaceClass(DIALOG_CONSTANTS.classes.MOVED);
   }
 
+  public snapSurfaceIntoView(): void {
+    moveElementIntoViewport(this._surfaceElement);
+  }
+
   public addFullscreenListener(breakpoint: number, listener: (value: boolean) => void): void {
     this._fullscreenMediaQuery = window.matchMedia(`(max-width: ${breakpoint}px)`);
     this._fullscreenMediaQuery.addEventListener('change', event => listener(event.matches));
@@ -234,6 +241,10 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
     const viewportHeight = window.innerHeight;
 
     return rect.right <= 0 || rect.left >= viewportWidth || rect.bottom <= 0 || rect.top >= viewportHeight;
+  }
+
+  public isDragHandleOutOfView(): boolean {
+    return isElementOutOfViewport(this._moveHandleElement);
   }
 
   private _forceClose(): void {
