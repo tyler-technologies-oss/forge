@@ -240,6 +240,11 @@ export class DialogCore implements IDialogCore {
       return event.defaultPrevented;
     };
     const onMoveEnd = (): void => {
+      // Move dialog back into view if the surface is clipped
+      if (this._adapter.isSurfaceClipped()) {
+        this._adapter.moveSurfaceIntoView();
+      }
+
       const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE_END);
       this._adapter.removeSurfaceClass(DIALOG_CONSTANTS.classes.MOVING);
       this._adapter.dispatchHostEvent(event);
