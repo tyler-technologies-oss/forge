@@ -25,8 +25,7 @@ export interface IDialogAdapter extends IBaseAdapter<IDialogComponent> {
   showBackdrop(): void;
   addSurfaceClass(className: string): void;
   removeSurfaceClass(className: string): void;
-  resetSurfacePosition(): void;
-  snapSurfaceIntoView(): void;
+  moveSurfaceIntoView(): void;
   addFullscreenListener(breakpoint: number, listener: (value: boolean) => void): void;
   removeFullscreenListener(listener: (value: boolean) => void): void;
   setAccessibleLabel(label: string): void;
@@ -199,13 +198,7 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
     this._surfaceElement.classList.remove(className);
   }
 
-  public resetSurfacePosition(): void {
-    this._surfaceElement.style.left = '';
-    this._surfaceElement.style.top = '';
-    this.removeSurfaceClass(DIALOG_CONSTANTS.classes.MOVED);
-  }
-
-  public snapSurfaceIntoView(): void {
+  public moveSurfaceIntoView(): void {
     moveElementIntoViewport(this._surfaceElement);
   }
 

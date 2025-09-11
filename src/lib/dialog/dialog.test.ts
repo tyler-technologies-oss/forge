@@ -11,7 +11,6 @@ import {
   DIALOG_CONSTANTS,
   DialogAnimationType,
   DialogMode,
-  DialogMoveBoundary,
   DialogPlacement,
   DialogPositionStrategy,
   DialogPreset,
@@ -45,7 +44,6 @@ describe('Dialog', () => {
       expect(harness.dialogElement.sizeStrategy).to.equal(DIALOG_CONSTANTS.defaults.SIZE_STRATEGY);
       expect(harness.dialogElement.placement).to.equal(DIALOG_CONSTANTS.defaults.PLACEMENT);
       expect(harness.dialogElement.moveable).to.be.false;
-      expect(harness.dialogElement.moveBoundary).to.equal(DIALOG_CONSTANTS.defaults.MOVE_BOUNDARY);
     });
 
     it('should set mode by default', async () => {
@@ -352,36 +350,6 @@ describe('Dialog', () => {
       harness.dialogElement.setAttribute(DIALOG_CONSTANTS.attributes.MOVEABLE, '');
 
       expect(harness.dialogElement.moveable).to.be.true;
-    });
-
-    it('should set move boundary by default', async () => {
-      const harness = await createFixture({ moveBoundary: 'none' });
-
-      expect(harness.dialogElement.moveBoundary).to.equal('none');
-    });
-
-    it('should set move boundary via property', async () => {
-      const harness = await createFixture();
-
-      harness.dialogElement.moveBoundary = 'none';
-
-      expect(harness.dialogElement.moveBoundary).to.equal('none');
-    });
-
-    it('should set move boundary via attribute', async () => {
-      const harness = await createFixture();
-
-      harness.dialogElement.setAttribute(DIALOG_CONSTANTS.attributes.MOVE_BOUNDARY, 'none');
-
-      expect(harness.dialogElement.moveBoundary).to.equal('none');
-    });
-
-    it('should set to default move boundary if attribute is removed', async () => {
-      const harness = await createFixture({ moveBoundary: 'none' });
-
-      harness.dialogElement.removeAttribute(DIALOG_CONSTANTS.attributes.MOVE_BOUNDARY);
-
-      expect(harness.dialogElement.moveBoundary).to.equal(DIALOG_CONSTANTS.defaults.MOVE_BOUNDARY);
     });
   });
 
@@ -1013,70 +981,8 @@ describe('Dialog', () => {
       expect(harness.surfaceElement.getBoundingClientRect().y).to.equal(origY);
     });
 
-    it('should allow moving dialog outside viewport when moveBoundary is set to none', async () => {
-      const harness = await createFixture({ moveable: true, moveBoundary: 'none' });
-      await harness.showAsync();
-
-      const { x: origX, y: origY } = harness.surfaceElement.getBoundingClientRect();
-      const { x, y, height, width } = harness.moveHandleElement.getBoundingClientRect();
-      const [handleX, handleY]: [number, number] = [x + width / 2, y + height / 2];
-
-      // Move dialog outside viewport (negative coordinates)
-      const moveAmount = -100;
-
-      harness.simulateMoveHandleDown();
-      harness.simulateMoveHandleMove(handleX + moveAmount, handleY + moveAmount);
-      harness.simulateMoveHandleUp();
-
-      await elementUpdated(harness.surfaceElement);
-
-      const { x: newX, y: newY } = harness.surfaceElement.getBoundingClientRect();
-
-      // Dialog should be able to move to negative coordinates (outside viewport)
-      expect(newX).to.be.lessThan(origX);
-      expect(newY).to.be.lessThan(origY);
-      expect(harness.surfaceElement.style.top).to.be.ok;
-      expect(harness.surfaceElement.style.left).to.be.ok;
-    });
-
-    it('should clamp dialog position to viewport when moveBoundary is set to viewport', async () => {
-      const harness = await createFixture({ moveable: true, moveBoundary: 'viewport' });
-      await harness.showAsync();
-
-      const { x, y, height, width } = harness.moveHandleElement.getBoundingClientRect();
-      const [handleX, handleY]: [number, number] = [x + width / 2, y + height / 2];
-
-      // Try to move dialog outside viewport (negative coordinates)
-      const moveAmount = -1000;
-
-      harness.simulateMoveHandleDown();
-      harness.simulateMoveHandleMove(handleX + moveAmount, handleY + moveAmount);
-      harness.simulateMoveHandleUp();
-
-      await elementUpdated(harness.surfaceElement);
-
-      const { x: newX, y: newY } = harness.surfaceElement.getBoundingClientRect();
-
-      // Dialog should be clamped to viewport bounds (position should be >= 0)
-      expect(newX).to.be.at.least(0);
-      expect(newY).to.be.at.least(0);
-    });
-
-    it('should update move controller when moveBoundary changes while dialog is open and moveable', async () => {
-      const harness = await createFixture({ moveable: true, moveBoundary: 'viewport' });
-      await harness.showAsync();
-
-      expect(harness.dialogElement['_core']['_moveController']).to.not.be.undefined;
-
-      // Change moveBoundary - this should recreate the move controller
-      harness.dialogElement.moveBoundary = 'none';
-
-      expect(harness.dialogElement['_core']['_moveController']).to.not.be.undefined;
-      expect(harness.dialogElement.moveBoundary).to.equal('none');
-    });
-
-    it('should snap dialog back into view when clipped by viewport with moveBoundary none', async () => {
-      const harness = await createFixture({ moveable: true, moveBoundary: 'none' });
+    it('should move dialog back into view when clipped by viewport after drag', async () => {
+      const harness = await createFixture({ moveable: true });
       await harness.showAsync();
 
       const { x, y, height, width } = harness.moveHandleElement.getBoundingClientRect();
@@ -1334,7 +1240,6 @@ interface IDialogFixtureConfig {
   sizeStrategy?: DialogSizeStrategy;
   placement?: DialogPlacement;
   moveable?: boolean;
-  moveBoundary?: DialogMoveBoundary;
   autofocus?: boolean;
 }
 
@@ -1351,7 +1256,6 @@ async function createFixture({
   sizeStrategy,
   placement,
   moveable,
-  moveBoundary,
   autofocus
 }: IDialogFixtureConfig = {}): Promise<DialogHarness> {
   const container = await fixture(html`
@@ -1373,8 +1277,7 @@ async function createFixture({
         position-strategy=${positionStrategy ?? nothing}
         size-strategy=${sizeStrategy ?? nothing}
         placement=${placement ?? nothing}
-        ?moveable=${moveable}
-        move-boundary=${moveBoundary ?? nothing}>
+        ?moveable=${moveable}>
         <h1 id="dialog-title">Dialog Title</h1>
         <p id="dialog-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         <form>

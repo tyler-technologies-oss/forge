@@ -9,7 +9,6 @@ import {
   DIALOG_CONSTANTS,
   DialogAnimationType,
   DialogMode,
-  DialogMoveBoundary,
   DialogPlacement,
   DialogPositionStrategy,
   DialogPreset,
@@ -42,7 +41,6 @@ export interface IDialogProperties {
   sizeStrategy: DialogSizeStrategy;
   placement: DialogPlacement;
   moveable: boolean;
-  moveBoundary: DialogMoveBoundary;
   label: string;
   description: string;
   [showBackdrop](): void;
@@ -83,7 +81,6 @@ declare global {
  * @globalconfig sizeStrategy
  * @globalconfig persistent
  * @globalconfig moveable
- * @globalconfig moveBoundary
  * @globalconfig fullscreenThreshold
  *
  * @event {CustomEvent<void>} forge-dialog-open - Dispatched when the dialog is opened.
@@ -247,9 +244,6 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
       case DIALOG_CONSTANTS.observedAttributes.MOVEABLE:
         this.moveable = coerceBoolean(newValue);
         break;
-      case DIALOG_CONSTANTS.observedAttributes.MOVE_BOUNDARY:
-        this.moveBoundary = (newValue as DialogMoveBoundary) ?? DIALOG_CONSTANTS.defaults.MOVE_BOUNDARY;
-        break;
       case DIALOG_CONSTANTS.observedAttributes.POSITION_STRATEGY:
         this.positionStrategy = (newValue as DialogPositionStrategy) ?? DIALOG_CONSTANTS.defaults.POSITION_STRATEGY;
         break;
@@ -354,14 +348,6 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    */
   @coreProperty()
   declare public moveable: boolean;
-
-  /**
-   * Controls the boundary constraints when the dialog is moved.
-   * @default 'viewport'
-   * @attribute move-boundary
-   */
-  @coreProperty()
-  declare public moveBoundary: DialogMoveBoundary;
 
   /**
    * Controls whether the dialog is rendered relative to the viewport or its nearest containing block.
