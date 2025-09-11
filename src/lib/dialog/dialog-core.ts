@@ -252,8 +252,8 @@ export class DialogCore implements IDialogCore {
       return event.defaultPrevented;
     };
     const onMoveEnd = (): void => {
-      // Snap dialog back into view if the drag handle is out of view when moveBoundary is 'none'
-      if (this._moveBoundary === 'none' && this._adapter.isDragHandleOutOfView()) {
+      // Snap dialog back into view if the surface is clipped when moveBoundary is 'none'
+      if (this._moveBoundary === 'none' && this._adapter.isSurfaceClipped()) {
         this._adapter.snapSurfaceIntoView();
       }
 

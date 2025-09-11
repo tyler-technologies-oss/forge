@@ -390,11 +390,11 @@ export function toggleState(internals: ElementInternals, state: string, value: b
 }
 
 /**
- * Determines if an element is completely outside the viewport bounds.
+ * Determines if an element is clipped by the viewport bounds
  * @param element The element to check.
- * @returns `true` if the element is completely outside the viewport, otherwise `false`.
+ * @returns `true` if the element is clipped by the viewport, otherwise `false`.
  */
-export function isElementOutOfViewport(element: HTMLElement | null): boolean {
+export function isElementClipped(element: HTMLElement | null): boolean {
   if (!element) {
     return false;
   }
@@ -403,7 +403,7 @@ export function isElementOutOfViewport(element: HTMLElement | null): boolean {
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
 
-  return rect.right <= 0 || rect.left >= viewportWidth || rect.bottom <= 0 || rect.top >= viewportHeight;
+  return rect.top < 0 || rect.left < 0 || rect.bottom > viewportHeight || rect.right > viewportWidth;
 }
 
 /**

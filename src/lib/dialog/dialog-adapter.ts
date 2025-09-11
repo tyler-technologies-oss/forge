@@ -1,7 +1,7 @@
 import { getShadowElement, playKeyframeAnimation } from '@tylertech/forge-core';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { isElementOutOfViewport, moveElementIntoViewport } from '../core/utils/utils';
+import { isElementClipped, moveElementIntoViewport } from '../core/utils/utils';
 import { DialogComponent, IDialogComponent } from './dialog';
 import { DIALOG_CONSTANTS, dialogStack, hideBackdrop, showBackdrop } from './dialog-constants';
 
@@ -32,7 +32,7 @@ export interface IDialogAdapter extends IBaseAdapter<IDialogComponent> {
   setAccessibleLabel(label: string): void;
   setAccessibleDescription(description: string): void;
   isDialogCompletelyOffScreen(): boolean;
-  isDragHandleOutOfView(): boolean;
+  isSurfaceClipped(): boolean;
 }
 
 export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDialogAdapter {
@@ -243,8 +243,8 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
     return rect.right <= 0 || rect.left >= viewportWidth || rect.bottom <= 0 || rect.top >= viewportHeight;
   }
 
-  public isDragHandleOutOfView(): boolean {
-    return isElementOutOfViewport(this._moveHandleElement);
+  public isSurfaceClipped(): boolean {
+    return isElementClipped(this._surfaceElement);
   }
 
   private _forceClose(): void {
