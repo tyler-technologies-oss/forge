@@ -1,3 +1,19 @@
+# v3.10.5 (Thu Sep 11 2025)
+
+#### 🐛 Bug Fix
+
+- fix(menu): update offset and fallback placements for improved child menu positioning [#977](https://github.com/tyler-technologies-oss/forge/pull/977) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(dialog): allow for moving dialog outside of viewport but move back into view when released [#976](https://github.com/tyler-technologies-oss/forge/pull/976) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(expansion-panel): update connected check [#971](https://github.com/tyler-technologies-oss/forge/pull/971) ([@eliganemtyler](https://github.com/eliganemtyler))
+- Fix/toast default duration [#970](https://github.com/tyler-technologies-oss/forge/pull/970) ([@eliganemtyler](https://github.com/eliganemtyler))
+
+#### Authors: 2
+
+- Eli Ganem ([@eliganemtyler](https://github.com/eliganemtyler))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.10.4 (Fri Aug 01 2025)
 
 #### 🐛 Bug Fix
