@@ -132,7 +132,6 @@ moveableToggle.addEventListener('forge-switch-change', ({ detail: selected }) =>
   inlineDialog.moveable = selected;
 });
 
-
 const preventMoveToggle = document.getElementById('opt-prevent-move') as ISwitchComponent;
 preventMoveToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
