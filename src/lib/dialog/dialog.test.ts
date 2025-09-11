@@ -1075,7 +1075,7 @@ describe('Dialog', () => {
       expect(harness.dialogElement.moveBoundary).to.equal('none');
     });
 
-    it('should snap dialog back into view when completely off-screen with moveBoundary none', async () => {
+    it('should snap dialog back into view when clipped by viewport with moveBoundary none', async () => {
       const harness = await createFixture({ moveable: true, moveBoundary: 'none' });
       await harness.showAsync();
 
@@ -1091,10 +1091,12 @@ describe('Dialog', () => {
 
       await elementUpdated(harness.surfaceElement);
 
-      // After move ends, dialog should snap back into view (position should be reset)
-      expect(harness.surfaceElement.style.top).to.equal('');
-      expect(harness.surfaceElement.style.left).to.equal('');
-      expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVED)).to.be.false;
+      // After move ends, dialog should snap back into view (positioned with padding from viewport edge)
+      const topValue = parseFloat(harness.surfaceElement.style.top);
+      const leftValue = parseFloat(harness.surfaceElement.style.left);
+      expect(topValue).to.be.closeTo(8, 0.1);
+      expect(leftValue).to.be.closeTo(8, 0.1);
+      expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVED)).to.be.true;
     });
   });
 
