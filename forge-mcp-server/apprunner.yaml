@@ -1,0 +1,44 @@
+version: 1.0
+runtime: docker
+build:
+  commands:
+    pre-build:
+      - echo "Installing dependencies for Tyler Forge MCP Server"
+    build:
+      - echo "Building Tyler Forge MCP Server"
+    post-build:
+      - echo "Build completed successfully"
+
+run:
+  runtime-version: latest
+  command: node dist/server-sse.js
+  network:
+    port: 8080
+    env: PORT
+  env:
+    - name: NODE_ENV
+      value: production
+    - name: PORT
+      value: "8080"
+    - name: FORGE_BUNDLED
+      value: "true"
+    - name: ALLOWED_ORIGINS
+      value: "*"  # Configure this for your specific domains in production
+    - name: API_KEY
+      value: "{{API_KEY}}"  # Will be replaced with actual secret from App Runner
+
+health_check:
+  path: /health
+  interval: 30
+  timeout: 5
+  healthy_threshold: 2
+  unhealthy_threshold: 3
+
+auto_scaling_configuration:
+  min_size: 1
+  max_size: 5
+  max_concurrent_requests: 100
+
+observability:
+  tracing:
+    vendor: awsxray
