@@ -315,8 +315,8 @@
         <button type="button">Cat Photos</button>
         <span slot="secondary-text">22 Dec 2017</span>
         <forge-icon slot="end" name="info"></forge-icon>
+        <forge-divider slot="additional-content" aria-hidden="true"></forge-divider>
       </forge-list-item>
-      <forge-divider aria-hidden="true"></forge-divider>
       <forge-list-item>
         <forge-avatar slot="start">
           <forge-icon  external name="folder"></forge-icon>
@@ -342,13 +342,11 @@
   <h3 class="forge-typography--heading2">List with Dividers and Expandable Items</h3>
   <div class="list-demo">
     <forge-list>
-      <forge-expansion-panel>
-        <forge-list-item slot="header">
-          <forge-icon slot="start" name="code"></forge-icon>
-          <button type="button">List Item One</button>
-          <forge-open-icon slot="end"></forge-open-icon>
-        </forge-list-item>
-        <div role="listitem">
+      <forge-list-item>
+        <forge-icon slot="start" name="code"></forge-icon>
+        <button type="button" id="exp-li-1">List Item One</button>
+        <forge-open-icon slot="end"></forge-open-icon>
+        <forge-expansion-panel trigger="exp-li-1" slot="additional-content">
           <forge-list indented>
             <forge-list-item>
               <button type="button">List Item One</button>
@@ -360,16 +358,14 @@
               <button type="button">List Item Three</button>
             </forge-list-item>
           </forge-list>
-        </div>
-      </forge-expansion-panel>
-      <forge-divider role="presentation"></forge-divider>
-      <forge-expansion-panel>
-        <forge-list-item slot="header">
-          <forge-icon slot="start" name="face"></forge-icon>
-          <button type="button">List Item Two</button>
-          <forge-open-icon slot="end"></forge-open-icon>
-        </forge-list-item>
-        <div role="listitem">
+        </forge-expansion-panel>
+        <forge-divider role="presentation" slot="additional-content"></forge-divider>
+      </forge-list-item>
+      <forge-list-item slot="header">
+        <forge-icon slot="start" name="face"></forge-icon>
+        <button type="button" id="exp-li-2">List Item Two</button>
+        <forge-open-icon slot="end"></forge-open-icon>
+        <forge-expansion-panel slot="additional-content" trigger="exp-li-2">
           <forge-list indented>
             <forge-list-item>
               <button type="button">List Item One</button>
@@ -381,9 +377,9 @@
               <button type="button">List Item Three</button>
             </forge-list-item>
           </forge-list>
-        </div>
-      </forge-expansion-panel>
-      <forge-divider role="presentation"></forge-divider>
+        </forge-expansion-panel>
+        <forge-divider role="presentation" slot="additional-content"></forge-divider>
+      </forge-list-item>
       <forge-list-item>
         <button type="button">List Item Three</button>
       </forge-list-item>
@@ -529,12 +525,12 @@
         <forge-list navlist>
           <forge-list-item>
             <button type="button">Home</button>
+            <forge-divider slot="additional-content" role="presentation"></forge-divider>
           </forge-list-item>
-          <forge-divider role="presentation"></forge-divider>
           <forge-list-item selected>
             <button type="button">About</button>
+            <forge-divider slot="additional-content" role="presentation"></forge-divider>
           </forge-list-item>
-          <forge-divider role="presentation"></forge-divider>
           <forge-list-item>
             <button type="button">Contact</button>
           </forge-list-item>

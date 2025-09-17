@@ -70,6 +70,7 @@ declare global {
  * @slot tertiary-text - The tertiary text.
  * @slot start - The start content.
  * @slot end - The end element.
+ * @slot additional-content - Additional content that appears below the main list item interactive area.
  *
  * @csspart root - The root container element.
  * @csspart text-container - The container for the text content.

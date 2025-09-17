@@ -76,7 +76,8 @@ content and/or sub-lists.
 
 <Canvas of={ListStories.Expandable} />
 
-> **Important:** make note of the adjacent wrapper `<div>` elements that have a `role="listitem"` attribute to ensure that the structure is accessible to screen readers.
+> **Important:** make note of the `slot="additional-content"` attribute on elements within the `<forge-list-item>`. This is required to ensure that the additional content is
+> visually + structurally separated from the main/interactive list item content, and is announced properly by screen readers.
 
 ## API
 
