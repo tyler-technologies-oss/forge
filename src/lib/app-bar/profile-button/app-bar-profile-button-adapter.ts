@@ -7,7 +7,8 @@ import { IAppBarProfileButtonComponent } from './app-bar-profile-button';
 import { APP_BAR_PROFILE_BUTTON_CONSTANTS, IAppBarProfileCardConfig } from './app-bar-profile-button-constants';
 import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
 import { forwardAttributes } from '../../core/utils/reflect-utils';
-import { IPopoverComponent } from '../../popover';
+import { type IPopoverComponent } from '../../popover';
+import { type ITooltipComponent } from '../../tooltip';
 
 export interface IAppBarProfileButtonAdapter extends IBaseAdapter {
   popupElement: IPopoverComponent | undefined;
@@ -34,6 +35,7 @@ export interface IAppBarProfileButtonAdapter extends IBaseAdapter {
 
 export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButtonComponent> implements IAppBarProfileButtonAdapter {
   private _avatarElement: IAvatarComponent;
+  private _tooltipElement: ITooltipComponent;
   private _iconButtonElement: IIconButtonComponent;
   private _popupElement?: IPopoverComponent;
   private _profileCardElement?: IProfileCardComponent;
@@ -49,6 +51,7 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
 
   public initialize(): void {
     this._avatarElement = getLightElement(this._component, AVATAR_CONSTANTS.elementName) as IAvatarComponent;
+    this._tooltipElement = getLightElement(this._component, 'forge-tooltip') as ITooltipComponent;
     this._iconButtonElement = getLightElement(this._component, ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
 
     const originalAriaLabelledBy = this._iconButtonElement.getAttribute('aria-labelledby'); // Set by tooltip
@@ -150,6 +153,7 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
 
   public setAvatarText(value: string): void {
     this._avatarElement.text = value;
+    this._tooltipElement.textContent = `View ${value}'s profile`;
     removeAllChildren(this._avatarElement);
   }
 

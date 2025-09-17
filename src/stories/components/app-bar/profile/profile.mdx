@@ -5,11 +5,17 @@ import * as ProfileStories from './profile.stories';
 <Meta of={ProfileStories} />
 
 <Title />
+
 For convenience Forge provides the `<forge-app-bar-profile-button>` component. This component uses an icon-button (with a predefined avatar), and is responsible for displaying profile information within a popup. The power of this component is that it will ensure a consistent experience for users across all applications that consume it.
 
 If necessary, you can use the `profileCardBuilder` API to provide custom content within the profile card popup.
 
 > It is expected that you place this component in the end slot of the app-bar for consistency and familiarity for users.
+
+## Deprecation notice
+
+**🚨 This component is deprecated and has been replaced by the [user profile](https://tyler-technologies-oss.github.io/forge-extended/v1/?path=/docs/components-user-profile--docs) component in the Tyler Forge™ Extended library.** This
+component will remain in the core library for the foreseeable future, but no new features will be added and it may be removed in a future major release. We recommend that you migrate to the new user profile component when possible.
 
 ## Common
 
