@@ -526,6 +526,7 @@ describe('List', () => {
 
       anchor.focus();
       anchor.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+      anchor.dispatchEvent(new KeyboardEvent('keyup', { key: ' ', bubbles: true }));
 
       expect(spy).to.have.been.calledOnce;
     });
