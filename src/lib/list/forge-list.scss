@@ -113,12 +113,12 @@
     }
 
     &:has(
-        button:not(:disabled),
-        a,
-        label,
-        .forge-list-item--interactive:not(.forge-list-item--disabled),
-        :is(forge-checkbox, forge-radio, forge-switch, input):not([disabled])
-      ) {
+      button:not(:disabled),
+      a,
+      label,
+      .forge-list-item--interactive:not(.forge-list-item--disabled),
+      :is(forge-checkbox, forge-radio, forge-switch, input):not([disabled])
+    ) {
       a,
       button,
       label,
