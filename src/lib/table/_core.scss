@@ -4,6 +4,7 @@
 @use '../core/styles/theme';
 @use '../core/styles/typography';
 @use '../core/styles/animation';
+@use '../focus-indicator';
 @use './variables';
 
 @mixin host {
@@ -234,7 +235,18 @@
   font: inherit;
   color: inherit;
   width: 100%;
-  outline-offset: #{spacing.variable(xxsmall)};
+  outline: none;
+  position: relative;
+
+  forge-focus-indicator {
+    border-radius: 4px;
+
+    @include focus-indicator.provide-theme(
+      (
+        'offset-inline': -4px
+      )
+    );
+  }
 }
 
 // The base table body row styles for row interactions.
