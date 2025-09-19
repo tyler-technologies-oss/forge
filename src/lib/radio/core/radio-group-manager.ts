@@ -48,7 +48,7 @@ export class RadioGroupManager {
     // When there is a form element, get all RadioComponents with the same name
     const formRadios = ((el.form ?? form) as HTMLFormElement).elements.namedItem(el.name);
     if (formRadios && Object.prototype.isPrototypeOf.call(RadioNodeList.prototype, formRadios)) {
-      return Array.from(formRadios as RadioNodeList).filter((radio: HTMLElement) => radio.matches(RADIO_CONSTANTS.elementName)) as IRadioComponent[];
+      return Array.from(formRadios as RadioNodeList).filter((radio: HTMLElement) => radio.matches(RADIO_CONSTANTS.elementName)) as unknown as IRadioComponent[];
     }
     return [el];
   }

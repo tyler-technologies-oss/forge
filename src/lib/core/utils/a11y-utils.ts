@@ -37,6 +37,7 @@ export type ARIAAttribute = `${ARIAPropertyToAttribute<ARIAProperty>}` | 'role';
  * Reflective ARIA properties.
  */
 export const ARIA_PROPERTIES: ARIAProperty[] = [
+  'ariaActiveDescendantElement',
   'ariaAtomic',
   'ariaAutoComplete',
   'ariaBusy',
@@ -44,20 +45,28 @@ export const ARIA_PROPERTIES: ARIAProperty[] = [
   'ariaColCount',
   'ariaColIndex',
   'ariaColSpan',
+  'ariaControlsElements',
   'ariaCurrent',
+  'ariaDescribedByElements',
+  'ariaDescription',
   'ariaDisabled',
+  'ariaDetailsElements',
   'ariaExpanded',
+  'ariaErrorMessageElements',
+  'ariaFlowToElements',
   'ariaHasPopup',
   'ariaHidden',
   'ariaInvalid',
   'ariaKeyShortcuts',
   'ariaLabel',
+  'ariaLabelledByElements',
   'ariaLevel',
   'ariaLive',
   'ariaModal',
   'ariaMultiLine',
   'ariaMultiSelectable',
   'ariaOrientation',
+  'ariaOwnsElements',
   'ariaPlaceholder',
   'ariaPosInSet',
   'ariaPressed',
@@ -82,6 +91,7 @@ export const ARIA_PROPERTIES: ARIAProperty[] = [
  * This is required because the property name cannot be reliably inferred from the attribute name.
  */
 const ARIA_ATTRIBUTES_TO_PROPERTIES: Record<ARIAAttribute, ARIAProperty | 'role'> = {
+  'aria-activedescendant': 'ariaActiveDescendantElement',
   'aria-atomic': 'ariaAtomic',
   'aria-autocomplete': 'ariaAutoComplete',
   'aria-braillelabel': 'ariaBrailleLabel',
@@ -92,21 +102,28 @@ const ARIA_ATTRIBUTES_TO_PROPERTIES: Record<ARIAAttribute, ARIAProperty | 'role'
   'aria-colindex': 'ariaColIndex',
   'aria-colindextext': 'ariaColIndexText',
   'aria-colspan': 'ariaColSpan',
+  'aria-controls': 'ariaControlsElements',
   'aria-current': 'ariaCurrent',
+  'aria-describedby': 'ariaDescribedByElements',
   'aria-description': 'ariaDescription',
+  'aria-details': 'ariaDetailsElements',
   'aria-disabled': 'ariaDisabled',
   'aria-expanded': 'ariaExpanded',
+  'aria-errormessage': 'ariaErrorMessageElements',
+  'aria-flowto': 'ariaFlowToElements',
   'aria-haspopup': 'ariaHasPopup',
   'aria-hidden': 'ariaHidden',
   'aria-invalid': 'ariaInvalid',
   'aria-keyshortcuts': 'ariaKeyShortcuts',
   'aria-label': 'ariaLabel',
+  'aria-labelledby': 'ariaLabelledByElements',
   'aria-level': 'ariaLevel',
   'aria-live': 'ariaLive',
   'aria-modal': 'ariaModal',
   'aria-multiline': 'ariaMultiLine',
   'aria-multiselectable': 'ariaMultiSelectable',
   'aria-orientation': 'ariaOrientation',
+  'aria-owns': 'ariaOwnsElements',
   'aria-placeholder': 'ariaPlaceholder',
   'aria-posinset': 'ariaPosInSet',
   'aria-pressed': 'ariaPressed',
@@ -368,7 +385,7 @@ export function setDefaultAria(
 ): void {
   Object.entries(properties).forEach(([key, value]) => {
     if (supportsElementInternalsAria()) {
-      internals[key as ARIAProperty] = value;
+      (internals as any)[key as ARIAProperty] = value;
     }
 
     const attribute = ariaPropertyToAttribute(key as ARIAProperty);
