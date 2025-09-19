@@ -18,6 +18,7 @@ export interface ITooltipAdapter extends IBaseAdapter<ITooltipComponent> {
   removeAnchorListener(type: string, listener: EventListener): void;
   addLightDismissListener(listener: EventListener): void;
   removeLightDismissListener(listener: EventListener): void;
+  isKeyboardFocused(): boolean;
   show(): void;
   hide(): void;
 }
@@ -110,6 +111,10 @@ export class TooltipAdapter extends BaseAdapter<ITooltipComponent> implements IT
 
   public removeLightDismissListener(listener: EventListener): void {
     this._overlayElement?.removeEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, listener);
+  }
+
+  public isKeyboardFocused(): boolean {
+    return !!this._anchorElement?.matches(':focus-visible');
   }
 
   public show(): void {

@@ -509,6 +509,34 @@ describe('Tooltip', () => {
       await harness.hoverTrigger();
       expect(harness.isOpen).to.be.true;
     });
+
+    it('should open when focusing the trigger via keyboard with hover trigger type', async () => {
+      const harness = await createFixture({ triggerType: 'hover' });
+
+      expect(harness.isOpen).to.be.false;
+
+      harness.focusTrigger();
+      expect(harness.isOpen).to.be.true;
+    });
+
+    it('should close when blurring the trigger after keyboard focus with hover trigger type', async () => {
+      const harness = await createFixture({ triggerType: 'hover' });
+
+      harness.focusTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      await harness.blurTrigger();
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should not open when clicking the trigger with hover trigger type (no keyboard focus)', async () => {
+      const harness = await createFixture({ triggerType: 'hover' });
+
+      expect(harness.isOpen).to.be.false;
+
+      await harness.clickTrigger();
+      expect(harness.isOpen).to.be.false;
+    });
   });
 
   describe('longpress trigger type', () => {
@@ -609,6 +637,29 @@ describe('Tooltip', () => {
 
       await harness.hoverOutside();
 
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should work correctly when both focus and hover triggers are specified (no double keyboard focus handling)', async () => {
+      const harness = await createFixture();
+
+      harness.tooltipElement.setAttribute(TOOLTIP_CONSTANTS.attributes.TRIGGER_TYPE, 'focus,hover');
+
+      expect(harness.tooltipElement.triggerType).to.deep.equal(['focus', 'hover']);
+
+      // Test keyboard focus works (via explicit focus trigger)
+      harness.focusTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      await harness.blurTrigger();
+      expect(harness.isOpen).to.be.false;
+
+      // Test hover works
+      await harness.hoverTrigger();
+      await task(harness.tooltipElement.delay + 100);
+      expect(harness.isOpen).to.be.true;
+
+      await harness.hoverOutside();
       expect(harness.isOpen).to.be.false;
     });
   });
