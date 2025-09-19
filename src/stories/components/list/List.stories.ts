@@ -197,13 +197,11 @@ export const Expandable: Story = {
   render: () => {
     return html`
       <forge-list>
-        <forge-expansion-panel>
-          <forge-list-item slot="header">
-            <forge-icon slot="start" name="code"></forge-icon>
-            <button type="button">List Item One</button>
-            <forge-open-icon slot="end"></forge-open-icon>
-          </forge-list-item>
-          <div role="listitem">
+        <forge-list-item>
+          <forge-icon slot="start" name="code"></forge-icon>
+          <button type="button" id="li-1">List Item One</button>
+          <forge-open-icon slot="end"></forge-open-icon>
+          <forge-expansion-panel slot="additional-content" trigger="li-1">
             <forge-list indented>
               <forge-list-item>
                 <button type="button">List Item One</button>
@@ -215,15 +213,13 @@ export const Expandable: Story = {
                 <button type="button">List Item Three</button>
               </forge-list-item>
             </forge-list>
-          </div>
-        </forge-expansion-panel>
-        <forge-expansion-panel>
-          <forge-list-item slot="header">
-            <forge-icon slot="start" name="face"></forge-icon>
-            <button type="button">List Item Two</button>
-            <forge-open-icon slot="end"></forge-open-icon>
-          </forge-list-item>
-          <div role="listitem">
+          </forge-expansion-panel>
+        </forge-list-item>
+        <forge-list-item>
+          <forge-icon slot="start" name="face"></forge-icon>
+          <button type="button" id="li-2">List Item Two</button>
+          <forge-open-icon slot="end"></forge-open-icon>
+          <forge-expansion-panel slot="additional-content" trigger="li-2">
             <forge-list indented>
               <forge-list-item>
                 <button type="button">List Item One</button>
@@ -235,8 +231,8 @@ export const Expandable: Story = {
                 <button type="button">List Item Three</button>
               </forge-list-item>
             </forge-list>
-          </div>
-        </forge-expansion-panel>
+          </forge-expansion-panel>
+        </forge-list-item>
         <forge-list-item>
           <forge-icon slot="start" name="favorite"></forge-icon>
           <button type="button">List Item Three</button>
