@@ -25,7 +25,8 @@ const attributes = {
 } as const;
 
 const numbers = {
-  LONGPRESS_VISIBILITY_DURATION: 3000
+  LONGPRESS_VISIBILITY_DURATION: 3000,
+  HOVER_OUTSIDE_THRESHOLD: 100
 };
 
 const defaults = {

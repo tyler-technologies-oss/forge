@@ -39,6 +39,17 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
   private _hoverStartListener: (evt: MouseEvent) => void = this._onHoverStart.bind(this);
   private _hoverEndListener: (evt: MouseEvent) => void = this._onHoverEnd.bind(this);
   private _hoverTimeout: number | undefined;
+  private _hoverOutsideTimeout: number | undefined;
+  private _isHoveringTooltip = false;
+  private _isHoveringAnchor = false;
+
+  // Tooltip hover listeners
+  private _tooltipHoverStartListener: (evt: MouseEvent) => void = this._onTooltipHoverStart.bind(this);
+  private _tooltipHoverEndListener: (evt: MouseEvent) => void = this._onTooltipHoverEnd.bind(this);
+
+  // Anchor hover listeners (when tooltip is open)
+  private _anchorOpenHoverStartListener: (evt: MouseEvent) => void = this._onAnchorOpenHoverStart.bind(this);
+  private _anchorOpenHoverEndListener: (evt: MouseEvent) => void = this._onAnchorOpenHoverEnd.bind(this);
 
   // Focus trigger type
   private _focusListener: (evt: FocusEvent) => void = this._onFocus.bind(this);
@@ -155,6 +166,8 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
 
     this._open = true;
     this._adapter.show();
+    this._attachTooltipHoverListeners();
+    this._attachAnchorOpenHoverListeners();
     DismissibleStack.instance.add(this._adapter.hostElement);
     this._attachDismissListeners();
     this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.OPEN, this._open);
@@ -162,8 +175,13 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
 
   private _hide(): void {
     window.clearTimeout(this._hoverTimeout);
+    window.clearTimeout(this._hoverOutsideTimeout);
     window.clearTimeout(this._longpressVisibilityTimeout);
+    this._isHoveringTooltip = false;
+    this._isHoveringAnchor = false;
 
+    this._detachTooltipHoverListeners();
+    this._detachAnchorOpenHoverListeners();
     this._open = false;
     this._adapter.hide();
     DismissibleStack.instance.remove(this._adapter.hostElement);
@@ -187,12 +205,40 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
     this._adapter.removeLightDismissListener(this._lightDismissListener);
   }
 
+  private _attachTooltipHoverListeners(): void {
+    // Only attach hover listeners if hover is one of the active trigger types
+    if (this._triggerTypes.includes('hover')) {
+      this._adapter.addTooltipListener('mouseenter', this._tooltipHoverStartListener);
+      this._adapter.addTooltipListener('mouseleave', this._tooltipHoverEndListener);
+    }
+  }
+
+  private _detachTooltipHoverListeners(): void {
+    this._adapter.removeTooltipListener('mouseenter', this._tooltipHoverStartListener);
+    this._adapter.removeTooltipListener('mouseleave', this._tooltipHoverEndListener);
+  }
+
+  private _attachAnchorOpenHoverListeners(): void {
+    // Only attach hover listeners if hover is one of the active trigger types
+    if (this._triggerTypes.includes('hover')) {
+      this._adapter.addAnchorListener('mouseenter', this._anchorOpenHoverStartListener);
+      this._adapter.addAnchorListener('mouseleave', this._anchorOpenHoverEndListener);
+    }
+  }
+
+  private _detachAnchorOpenHoverListeners(): void {
+    this._adapter.removeAnchorListener('mouseenter', this._anchorOpenHoverStartListener);
+    this._adapter.removeAnchorListener('mouseleave', this._anchorOpenHoverEndListener);
+  }
+
   private _onHoverStart(_evt: MouseEvent): void {
     /* c8 ignore next 3 */
     if (this._open) {
       return;
     }
 
+    this._isHoveringAnchor = true;
+    window.clearTimeout(this._hoverOutsideTimeout);
     this._adapter.addAnchorListener('mousedown', this._hoverEndListener);
     this._adapter.addAnchorListener('mouseleave', this._hoverEndListener);
 
@@ -206,10 +252,11 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
   }
 
   private _onHoverEnd(_evt: MouseEvent): void {
+    this._isHoveringAnchor = false;
     this._adapter.removeAnchorListener('mousedown', this._hoverEndListener);
     this._adapter.removeAnchorListener('mouseleave', this._hoverEndListener);
     window.clearTimeout(this._hoverTimeout);
-    this._onTryHide();
+    this._scheduleHideIfOutsideHoverRegion();
   }
 
   private _onFocus(_evt: FocusEvent): void {
@@ -241,6 +288,36 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
   private _onKeyboardBlur(_evt: FocusEvent): void {
     this._adapter.removeAnchorListener('focusout', this._keyboardBlurListener);
     this._onTryHide();
+  }
+
+  private _onTooltipHoverStart(_evt: MouseEvent): void {
+    this._isHoveringTooltip = true;
+    window.clearTimeout(this._hoverOutsideTimeout);
+  }
+
+  private _onTooltipHoverEnd(_evt: MouseEvent): void {
+    this._isHoveringTooltip = false;
+    this._scheduleHideIfOutsideHoverRegion();
+  }
+
+  private _onAnchorOpenHoverStart(_evt: MouseEvent): void {
+    this._isHoveringAnchor = true;
+    window.clearTimeout(this._hoverOutsideTimeout);
+  }
+
+  private _onAnchorOpenHoverEnd(_evt: MouseEvent): void {
+    this._isHoveringAnchor = false;
+    this._scheduleHideIfOutsideHoverRegion();
+  }
+
+  private _scheduleHideIfOutsideHoverRegion(): void {
+    window.clearTimeout(this._hoverOutsideTimeout);
+    this._hoverOutsideTimeout = window.setTimeout(() => {
+      // Only hide if user is outside both anchor and tooltip
+      if (!this._isHoveringTooltip && !this._isHoveringAnchor) {
+        this._onTryHide();
+      }
+    }, TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD);
   }
 
   protected _onLongpress(): void {
