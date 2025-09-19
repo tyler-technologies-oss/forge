@@ -1,1 +1,0 @@
-import{i as r,s as i}from"./constants-y3-o2nLB.js";import{s as l}from"./a11y-utils-Dbhjrk0x.js";function f(s){var t;class e extends(t=s,t){constructor(...a){super(...a),this[r]=this.attachInternals()}}return e}function c(s){class t extends s{[i](n,a){l(this,this[r],n,a)}}return t}export{c as W,f as a};
