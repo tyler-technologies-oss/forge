@@ -266,6 +266,12 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     }
   }
 
+  protected override _destroyMask(): void {
+    super._destroyMask();
+    this._adapter.destroyToMask();
+    this._formatToInputValue();
+  }
+
   protected _initializeToMask(): void {
     if (!this._masked) {
       return;

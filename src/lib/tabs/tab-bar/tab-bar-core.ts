@@ -1,7 +1,6 @@
 import { ITabBarChangeEventData, NAVIGATION_KEYS, TAB_BAR_CONSTANTS } from './tab-bar-constants';
 import { ITabComponent } from '../tab/tab';
 import { TAB_CONSTANTS } from '../tab/tab-constants';
-
 import { ITabBarAdapter, ITabBarScrollButtonState } from './tab-bar-adapter';
 
 export interface ITabBarCore {
@@ -30,7 +29,6 @@ export class TabBarCore implements ITabBarCore {
   private _inverted = false;
   private _autoActivate = false;
   private _scrollButtons = false;
-  private _tabs: ITabComponent[] = [];
   private _scrollButtonsVisible = false;
   private _tabScrollAnimationFrame: number | undefined;
 
@@ -75,8 +73,11 @@ export class TabBarCore implements ITabBarCore {
     this._isInitialized = false;
   }
 
+  private _getTabs(): ITabComponent[] {
+    return this._adapter.getTabs();
+  }
+
   private async _onTabsChanged(): Promise<void> {
-    this._tabs = this._adapter.getTabs();
     this._syncTabState();
     if (this._scrollButtons) {
       this._detectScrollableStatus();
@@ -99,23 +100,25 @@ export class TabBarCore implements ITabBarCore {
     evt.preventDefault();
     let index = -1;
 
+    const tabs = this._getTabs();
+
     if (evt.key === 'Home') {
       // Locate the first non-disabled tab
-      index = this._tabs.findIndex(tab => !tab.disabled);
+      index = tabs.findIndex(tab => !tab.disabled);
     } else if (evt.key === 'End') {
       // Locate the last non-disabled tab
-      index = this._tabs.reduceRight((acc, tab, i) => (!tab.disabled && acc === -1 ? i : acc), -1);
+      index = tabs.reduceRight((acc, tab, i) => (!tab.disabled && acc === -1 ? i : acc), -1);
     } else {
       // Locate the next or previous tab based on the key that was pressed
-      const currentIndex = this._tabs.findIndex(tab => tab.matches(':focus'));
+      const currentIndex = tabs.findIndex(tab => tab.matches(':focus'));
       const isPrevKey = evt.key === 'ArrowLeft' || evt.key === 'ArrowUp';
       const calcIndex = (startIndex: number): void => {
         index = startIndex + (isPrevKey ? -1 : 1);
-        index = index < 0 ? this._tabs.length - 1 : index % this._tabs.length;
+        index = index < 0 ? tabs.length - 1 : index % tabs.length;
 
         // Try to recurse until we find a non-disabled tab (unless all tabs are disabled already)
-        const isAllTabsDisabled = this._tabs.every(tab => tab.disabled);
-        if (!isAllTabsDisabled && this._tabs[index]?.disabled) {
+        const isAllTabsDisabled = tabs.every(tab => tab.disabled);
+        if (!isAllTabsDisabled && tabs[index]?.disabled) {
           calcIndex(index);
         }
       };
@@ -127,10 +130,10 @@ export class TabBarCore implements ITabBarCore {
     }
 
     if (this._autoActivate) {
-      this._selectTab({ tab: this._tabs[index], focusTab: true });
+      this._selectTab({ tab: tabs[index], focusTab: true });
     } else {
-      this._tabs[index].focus({ preventScroll: true, focusVisible: true });
-      await this._adapter.tryScrollTabIntoView(this._tabs[index]);
+      tabs[index].focus({ preventScroll: true, focusVisible: true });
+      await this._adapter.tryScrollTabIntoView(tabs[index]);
     }
   }
 
@@ -139,13 +142,15 @@ export class TabBarCore implements ITabBarCore {
       return;
     }
 
-    const currentSelectedTab = this._tabs.find(t => t.selected);
+    const tabs = this._getTabs();
+
+    const currentSelectedTab = tabs.find(t => t.selected);
     if (currentSelectedTab === tab) {
       return;
     }
 
     if (emitEvent) {
-      const index = this._tabs.indexOf(tab);
+      const index = tabs.indexOf(tab);
       const event = new CustomEvent<ITabBarChangeEventData>(TAB_BAR_CONSTANTS.events.CHANGE, {
         detail: { index },
         bubbles: true,
@@ -172,7 +177,7 @@ export class TabBarCore implements ITabBarCore {
       currentSelectedTab.selected = false;
     }
 
-    this._activeTab = this._tabs.indexOf(tab);
+    this._activeTab = tabs.indexOf(tab);
   }
 
   /**
@@ -181,7 +186,7 @@ export class TabBarCore implements ITabBarCore {
    * This is called whenever a child tab is added to the DOM.
    */
   private _syncTabState(): void {
-    this._tabs.forEach((tab, index) => {
+    this._getTabs().forEach((tab, index) => {
       tab.selected = index === this._activeTab;
       if (this._disabled) {
         tab.disabled = this._disabled;
@@ -254,8 +259,9 @@ export class TabBarCore implements ITabBarCore {
     this._tabScrollAnimationFrame = window.requestAnimationFrame(() => {
       this._tabScrollAnimationFrame = undefined;
       if (this._adapter.isScrollable()) {
-        if (typeof this._activeTab === 'number' && this._activeTab >= 0 && this._tabs[this._activeTab]) {
-          this._adapter.tryScrollTabIntoView(this._tabs[this._activeTab]);
+        const tabs = this._getTabs();
+        if (typeof this._activeTab === 'number' && this._activeTab >= 0 && tabs[this._activeTab]) {
+          this._adapter.tryScrollTabIntoView(tabs[this._activeTab]);
         }
       }
     });
@@ -268,7 +274,7 @@ export class TabBarCore implements ITabBarCore {
     value = Boolean(value);
     if (this._disabled !== value) {
       this._disabled = value;
-      this._tabs.forEach(tab => (tab.disabled = this._disabled));
+      this._getTabs().forEach(tab => (tab.disabled = this._disabled));
       this._adapter.toggleHostAttribute(TAB_BAR_CONSTANTS.attributes.DISABLED, this._disabled);
     }
   }
@@ -280,12 +286,13 @@ export class TabBarCore implements ITabBarCore {
     if (this._activeTab !== value) {
       this._activeTab = value ?? undefined;
 
+      const tabs = this._getTabs();
       if (typeof this._activeTab === 'number') {
-        const newSelectedTab = this._tabs[this._activeTab];
+        const newSelectedTab = tabs[this._activeTab];
         this._selectTab({ tab: newSelectedTab, emitEvent: false, focusTab: false });
         this._adapter.setHostAttribute(TAB_BAR_CONSTANTS.attributes.ACTIVE_TAB, String(this._activeTab));
       } else {
-        this._tabs.forEach(tab => (tab.selected = false));
+        tabs.forEach(tab => (tab.selected = false));
         this._adapter.removeHostAttribute(TAB_BAR_CONSTANTS.attributes.ACTIVE_TAB);
       }
     }
@@ -303,7 +310,7 @@ export class TabBarCore implements ITabBarCore {
         this._adapter.setVertical(this._vertical);
       }
 
-      this._tabs.forEach(tab => (tab.vertical = this._vertical));
+      this._getTabs().forEach(tab => (tab.vertical = this._vertical));
       if (this._scrollButtonsVisible) {
         this._adapter.updateScrollButtonIcons(this._vertical);
       }
@@ -329,7 +336,7 @@ export class TabBarCore implements ITabBarCore {
     value = Boolean(value);
     if (this._stacked !== value) {
       this._stacked = value;
-      this._tabs.forEach(tab => (tab.stacked = this._stacked));
+      this._getTabs().forEach(tab => (tab.stacked = this._stacked));
       this._adapter.toggleHostAttribute(TAB_BAR_CONSTANTS.attributes.STACKED, this._stacked);
     }
   }
@@ -341,7 +348,7 @@ export class TabBarCore implements ITabBarCore {
     value = Boolean(value);
     if (this._secondary !== value) {
       this._secondary = value;
-      this._tabs.forEach(tab => (tab.secondary = this._secondary));
+      this._getTabs().forEach(tab => (tab.secondary = this._secondary));
       this._adapter.toggleHostAttribute(TAB_BAR_CONSTANTS.attributes.SECONDARY, this._secondary);
     }
   }
@@ -353,7 +360,7 @@ export class TabBarCore implements ITabBarCore {
     value = Boolean(value);
     if (this._inverted !== value) {
       this._inverted = value;
-      this._tabs.forEach(tab => (tab.inverted = this._inverted));
+      this._getTabs().forEach(tab => (tab.inverted = this._inverted));
       this._adapter.toggleHostAttribute(TAB_BAR_CONSTANTS.attributes.INVERTED, this._inverted);
     }
   }

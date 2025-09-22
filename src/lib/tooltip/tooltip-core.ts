@@ -44,6 +44,10 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
   private _focusListener: (evt: FocusEvent) => void = this._onFocus.bind(this);
   private _blurListener: (evt: FocusEvent) => void = this._onBlur.bind(this);
 
+  // Keyboard-only focus for hover trigger (when focus trigger is not explicitly enabled)
+  private _keyboardFocusListener: (evt: FocusEvent) => void = this._onKeyboardFocus.bind(this);
+  private _keyboardBlurListener: (evt: FocusEvent) => void = this._onKeyboardBlur.bind(this);
+
   // Longpress trigger type
   private _longpressVisibilityTimeout: number | undefined;
 
@@ -99,7 +103,13 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
     }
 
     const triggerInitializers: Record<TooltipTriggerType, () => void> = {
-      hover: () => this._adapter.addAnchorListener('mouseenter', this._hoverStartListener),
+      hover: () => {
+        this._adapter.addAnchorListener('mouseenter', this._hoverStartListener);
+        // Add keyboard focus support if focus trigger is not explicitly enabled
+        if (!triggerTypes.includes('focus')) {
+          this._adapter.addAnchorListener('focusin', this._keyboardFocusListener);
+        }
+      },
       longpress: () => this._startLongpressListener(this._adapter.anchorElement as HTMLElement),
       focus: () => this._adapter.addAnchorListener('focusin', this._focusListener)
     };
@@ -123,6 +133,11 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
         this._adapter.removeAnchorListener('mouseenter', this._hoverStartListener);
         this._adapter.removeAnchorListener('mousedown', this._hoverEndListener);
         this._adapter.removeAnchorListener('mouseleave', this._hoverEndListener);
+        // Remove keyboard focus support if focus trigger is not explicitly enabled
+        if (!triggerTypes.includes('focus')) {
+          this._adapter.removeAnchorListener('focusin', this._keyboardFocusListener);
+          this._adapter.removeAnchorListener('focusout', this._keyboardBlurListener);
+        }
       },
       longpress: () => this._stopLongpressListener(this._adapter.anchorElement as HTMLElement),
       focus: () => {
@@ -208,6 +223,23 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
 
   private _onBlur(_evt: FocusEvent): void {
     this._adapter.removeAnchorListener('focusout', this._blurListener);
+    this._onTryHide();
+  }
+
+  private _onKeyboardFocus(_evt: FocusEvent): void {
+    /* c8 ignore next 3 */
+    if (this._open) {
+      return;
+    }
+    // Only show tooltip if the focus is from keyboard (focus-visible)
+    if (this._adapter.isKeyboardFocused()) {
+      this._adapter.addAnchorListener('focusout', this._keyboardBlurListener);
+      this._onTryShow();
+    }
+  }
+
+  private _onKeyboardBlur(_evt: FocusEvent): void {
+    this._adapter.removeAnchorListener('focusout', this._keyboardBlurListener);
     this._onTryHide();
   }
 

@@ -980,6 +980,30 @@ describe('Dialog', () => {
       expect(harness.surfaceElement.getBoundingClientRect().x).to.equal(origX);
       expect(harness.surfaceElement.getBoundingClientRect().y).to.equal(origY);
     });
+
+    it('should move dialog back into view when clipped by viewport after drag', async () => {
+      const harness = await createFixture({ moveable: true });
+      await harness.showAsync();
+
+      const { x, y, height, width } = harness.moveHandleElement.getBoundingClientRect();
+      const [handleX, handleY]: [number, number] = [x + width / 2, y + height / 2];
+
+      // Move dialog completely off-screen (far left and up)
+      const moveAmount = -2000;
+
+      harness.simulateMoveHandleDown();
+      harness.simulateMoveHandleMove(handleX + moveAmount, handleY + moveAmount);
+      harness.simulateMoveHandleUp();
+
+      await elementUpdated(harness.surfaceElement);
+
+      // After move ends, dialog should snap back into view (positioned with padding from viewport edge)
+      const topValue = parseFloat(harness.surfaceElement.style.top);
+      const leftValue = parseFloat(harness.surfaceElement.style.left);
+      expect(topValue).to.be.closeTo(8, 0.1);
+      expect(leftValue).to.be.closeTo(8, 0.1);
+      expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVED)).to.be.true;
+    });
   });
 
   describe('fullscreen', () => {

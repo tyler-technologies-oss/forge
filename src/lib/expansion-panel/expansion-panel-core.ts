@@ -173,10 +173,8 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
 
       this._trigger = value;
 
-      if (this._adapter.isConnected) {
-        this._adapter.setTriggerElementById(this._trigger);
-        this._syncTrigger();
-      }
+      this._adapter.setTriggerElementById(this._trigger);
+      this._syncTrigger();
     }
   }
 
@@ -189,9 +187,7 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
 
       this._adapter.setTriggerElement(el);
 
-      if (this._adapter.isConnected) {
-        this._syncTrigger();
-      }
+      this._syncTrigger();
     }
   }
 }
