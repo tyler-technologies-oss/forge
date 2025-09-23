@@ -3,6 +3,7 @@ import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import type { IFocusIndicatorComponent } from './focus-indicator';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 import './focus-indicator';
 
@@ -21,6 +22,8 @@ describe('FocusIndicator', () => {
 
     expect(button.matches(':focus-visible')).to.be.true;
     expect(focusIndicator.active).to.be.true;
+    expect(focusIndicator.hasAttribute('active')).to.be.true;
+    expect(focusIndicator.matches(':state(active)')).to.be.true;
   });
 
   it('should not be active on pointer focus', async () => {
@@ -33,6 +36,8 @@ describe('FocusIndicator', () => {
     expect(button.matches(':focus-visible')).to.be.false;
     expect(button.matches(':focus')).to.be.true;
     expect(focusIndicator.active).to.be.false;
+    expect(focusIndicator.hasAttribute('active')).to.be.false;
+    expect(focusIndicator.matches(':state(active)')).to.be.false;
   });
 
   it('should be active on pointer focus when allowFocus is true', async () => {
@@ -45,6 +50,8 @@ describe('FocusIndicator', () => {
     expect(button.matches(':focus-visible')).to.be.false;
     expect(button.matches(':focus')).to.be.true;
     expect(focusIndicator.active).to.be.true;
+    expect(focusIndicator.hasAttribute('active')).to.be.true;
+    expect(focusIndicator.matches(':state(active)')).to.be.true;
   });
 
   it('should attach to specific target via id', async () => {
@@ -82,6 +89,7 @@ describe('FocusIndicator', () => {
   it('should set inward', async () => {
     const { focusIndicator } = await createFixture({ inward: true });
     expect(focusIndicator.inward).to.be.true;
+    expect(focusIndicator.hasAttribute('inward')).to.be.true;
   });
 
   it('should animate inward when active', async () => {
@@ -103,6 +111,7 @@ describe('FocusIndicator', () => {
 
     expect(style.getPropertyValue('--_focus-indicator-shape')).to.equal('50%');
     expect(focusIndicator.circular).to.be.true;
+    expect(focusIndicator.hasAttribute('circular')).to.be.true;
   });
 
   it('should reattach listeners when moved in DOM', async () => {
@@ -131,7 +140,7 @@ describe('FocusIndicator', () => {
 
     button.remove();
 
-    expect(focusIndicator.targetElement).to.be.null;
+    expect(focusIndicator.targetElement).to.be.undefined;
   });
 
   it('should locate target element when target is :host', async () => {
@@ -170,7 +179,7 @@ async function createFixture({ target, inward, circular, allowFocus }: FocusIndi
       <button id="detached" type="button">Simple button</button>
       <button id="attached" type="button">
         Button
-        <forge-focus-indicator target=${target} ?inward=${inward} ?circular=${circular} ?allow-focus=${allowFocus}> </forge-focus-indicator>
+        <forge-focus-indicator target=${ifDefined(target)} ?inward=${inward} ?circular=${circular} ?allow-focus=${allowFocus}> </forge-focus-indicator>
       </button>
     </div>
   `);
