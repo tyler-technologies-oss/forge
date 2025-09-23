@@ -29,10 +29,16 @@ const classes = {
   GROUP_WRAPPER: 'forge-list-dropdown__group-wrapper'
 };
 
+const selectAllOption = {
+  VALUE: '__forge_select_all__',
+  LABEL: 'Select All'
+};
+
 export const LIST_DROPDOWN_CONSTANTS = {
   observedAttributes,
   attributes,
-  classes
+  classes,
+  selectAllOption
 };
 
 export type ListDropdownOptionBuilder<T = HTMLElement> = (option: IListDropdownOption, parentElement: T) => HTMLElement | string | void;
@@ -86,6 +92,8 @@ export interface IListDropdownConfig<T = any> {
 
   // Optional values
   activeChangeCallback?: (id: string) => void;
+  showSelectAll?: boolean;
+  selectAllLabel?: string;
   closeCallback?: () => void;
   syncWidth?: boolean;
   constrainViewportWidth?: boolean;

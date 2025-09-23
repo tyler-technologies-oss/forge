@@ -9,7 +9,12 @@ import {
   SelectBeforeValueChangeCallback
 } from './base-select-constants';
 import { isSelectOptionType, SelectOptionType } from './select-utils';
-import { IListDropdownConfig, ListDropdownHeaderBuilder, ListDropdownFooterBuilder } from '../../list-dropdown/list-dropdown-constants';
+import {
+  IListDropdownConfig,
+  ListDropdownHeaderBuilder,
+  ListDropdownFooterBuilder,
+  LIST_DROPDOWN_CONSTANTS
+} from '../../list-dropdown/list-dropdown-constants';
 import { IBaseSelectAdapter } from './base-select-adapter';
 import { IListDropdownAwareCore, ListDropdownAwareCore } from '../../list-dropdown/list-dropdown-aware-core';
 
@@ -23,6 +28,7 @@ export interface IBaseSelectCore extends IListDropdownAwareCore {
   optionBuilder: SelectOptionBuilder;
   selectedTextBuilder: SelectSelectedTextBuilder;
   beforeValueChange: SelectBeforeValueChangeCallback<any>;
+  selectAllLabel: string;
   appendOptions(options: ISelectOption[] | ISelectOptionGroup[]): void;
   selectAll(): void;
   deselectAll(): void;
@@ -36,6 +42,8 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
   protected _value: any = [];
   protected _multiple = false;
   protected _open = false;
+  protected _showSelectAll = false;
+  protected _selectAllLabel: string;
   protected _optionBuilder: SelectOptionBuilder;
   protected _selectedTextBuilder: SelectSelectedTextBuilder;
   protected _selectedValues: string[] = [];
@@ -72,6 +80,63 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
 
   protected abstract _onDropdownScrollEnd(): void;
   protected _onFocus(evt: Event): void {}
+
+  protected _onSelectAll(): void {
+    if (!this._multiple) {
+      return;
+    }
+
+    const currentlyAllSelected = this._selectedValues.length === this._nonDividerOptions.length;
+    const willSelectAll = !currentlyAllSelected;
+
+    // Emit the select all event
+    const newValue = willSelectAll ? this._nonDividerOptions.map(o => o.value) : [];
+    const cancelled = !this._adapter.emitHostEvent(
+      'forge-select-all',
+      {
+        value: newValue,
+        isAllSelected: willSelectAll
+      },
+      true,
+      true
+    );
+
+    if (!cancelled) {
+      if (willSelectAll) {
+        this.selectAll();
+      } else {
+        this.deselectAll();
+      }
+
+      // Emit the standard change event
+      const changeData = this._multiple ? [...this._selectedValues] : this._selectedValues[0];
+      this._adapter.emitHostEvent(BASE_SELECT_CONSTANTS.events.CHANGE, changeData, true, true);
+
+      // Update the dropdown to reflect the new selection state
+      if (this._open) {
+        // Preserve the currently active option index before updating selections
+        const activeOptionIndex = this._adapter.getActiveOptionIndex();
+        this._adapter.patchSelectedValues(this._selectedValues);
+        // Update the select all checkbox to reflect its new state
+        this._updateSelectAllState();
+        // Restore the active option to preserve highlighting
+        if (activeOptionIndex >= 0) {
+          this._adapter.highlightActiveOption(activeOptionIndex);
+        }
+      }
+    }
+  }
+
+  /** Updates the select all checkbox state based on current selections */
+  private _updateSelectAllState(): void {
+    if (!this._showSelectAll || !this._multiple || !this._open) {
+      return;
+    }
+
+    const allSelected = this._selectedValues.length === this._nonDividerOptions.length;
+    // The select all option is always at dropdown index 0
+    this._adapter.toggleOptionMultiple(0, allSelected);
+  }
 
   public initialize(): void {
     if (this._optionListenerDestructor) {
@@ -131,6 +196,25 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
 
   private get _nonDividerOptions(): ISelectOption[] {
     return this._flatOptions.filter(o => !o.divider);
+  }
+
+  /** Adjusts an index from list-dropdown coordinate system to select coordinate system */
+  private _adjustIndexFromDropdown(dropdownIndex: number): number {
+    // If select all is shown and enabled, the first option (index 0) in the dropdown is select all
+    // So we need to subtract 1 from the dropdown index to get the actual option index
+    if (this._showSelectAll && this._multiple && dropdownIndex > 0) {
+      return dropdownIndex - 1;
+    }
+    return dropdownIndex;
+  }
+
+  /** Adjusts an index from select coordinate system to list-dropdown coordinate system */
+  private _adjustIndexToDropdown(selectIndex: number): number {
+    // If select all is shown and enabled, we need to add 1 to account for the select all option
+    if (this._showSelectAll && this._multiple) {
+      return selectIndex + 1;
+    }
+    return selectIndex;
   }
 
   protected _initializeValue(): void {
@@ -194,8 +278,16 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
       optionLimit: this._optionLimit,
       headerBuilder: this._popupHeaderBuilder,
       footerBuilder: this._popupFooterBuilder,
+      showSelectAll: this._showSelectAll && this._multiple,
+      selectAllLabel: this._selectAllLabel,
       closeCallback: () => this._closeDropdown(),
       selectCallback: (value: any) => {
+        // Handle select all option
+        if (value === LIST_DROPDOWN_CONSTANTS.selectAllOption.VALUE) {
+          this._onSelectAll();
+          return;
+        }
+
         const flatOptions = this._flatOptions;
         const option = flatOptions.find(o => o.value === value);
         if (option) {
@@ -271,7 +363,19 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
       // If we're in multiselect mode, we need to toggle the selected option
       if (this._multiple) {
         const isSelected = this._selectedIndexes.includes(optionIndex);
-        this._adapter.toggleOptionMultiple(optionIndex, isSelected);
+        const dropdownIndex = this._adjustIndexToDropdown(optionIndex);
+        this._adapter.toggleOptionMultiple(dropdownIndex, isSelected);
+
+        // Update select all checkbox state if it's visible
+        if (this._showSelectAll && this._open) {
+          // Preserve the currently active option index before updating select all state
+          const activeOptionIndex = this._adapter.getActiveOptionIndex();
+          this._updateSelectAllState();
+          // Restore the active option to preserve highlighting
+          if (activeOptionIndex >= 0) {
+            this._adapter.highlightActiveOption(activeOptionIndex);
+          }
+        }
       }
 
       this._applySelection();
@@ -309,9 +413,18 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
   }
 
   private _selectActiveOption(): void {
-    const activeOptionIndex = this._adapter.getActiveOptionIndex();
-    if (activeOptionIndex >= 0 && this._nonDividerOptions[activeOptionIndex]) {
-      this._onSelect(this._nonDividerOptions[activeOptionIndex], activeOptionIndex);
+    const activeDropdownIndex = this._adapter.getActiveOptionIndex();
+    if (activeDropdownIndex >= 0) {
+      // Check if the active option is the select all option
+      if (this._showSelectAll && this._multiple && activeDropdownIndex === 0) {
+        this._onSelectAll();
+        return;
+      }
+
+      const adjustedIndex = this._adjustIndexFromDropdown(activeDropdownIndex);
+      if (this._nonDividerOptions[adjustedIndex]) {
+        this._onSelect(this._nonDividerOptions[adjustedIndex], adjustedIndex);
+      }
     }
   }
 
@@ -452,37 +565,44 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
         return;
       }
 
-      let optionIndex = 0;
+      let dropdownIndex = 0;
       if (this._open) {
-        optionIndex = this._adapter.getActiveOptionIndex();
-        if (optionIndex === -1) {
-          optionIndex = this._getFirstSelectedOptionIndex();
+        dropdownIndex = this._adapter.getActiveOptionIndex();
+        if (dropdownIndex === -1) {
+          // No option is currently active, so activate the first/last highlightable option based on direction
+          if (isArrowUp) {
+            dropdownIndex = this._getLastHighlightableDropdownIndex();
+          } else {
+            dropdownIndex = this._getFirstHighlightableDropdownIndex();
+          }
+        } else {
+          // An option is already active, move to the previous/next one
+          if (isArrowUp) {
+            dropdownIndex = this._getPreviousHighlightableDropdownIndex(dropdownIndex);
+          } else {
+            dropdownIndex = this._getNextHighlightableDropdownIndex(dropdownIndex);
+          }
         }
       } else {
-        optionIndex = this._getFirstSelectedOptionIndex();
+        const firstSelectedIndex = this._getFirstSelectedOptionIndex();
+        dropdownIndex = firstSelectedIndex >= 0 ? this._adjustIndexToDropdown(firstSelectedIndex) : 0;
       }
 
-      if (isArrowUp) {
-        optionIndex = this._getPreviousHighlightableOptionIndex(optionIndex, this._nonDividerOptions);
-      } else {
-        optionIndex = this._getNextHighlightableOptionIndex(optionIndex, this._nonDividerOptions);
-      }
-
-      this._adapter.highlightActiveOption(optionIndex);
+      this._adapter.highlightActiveOption(dropdownIndex);
     } else if (isHomeKey) {
       if (this._open) {
         evt.preventDefault();
-        this._adapter.highlightActiveOption(this._nonDividerOptions.findIndex(o => !o.disabled));
+        const firstDropdownIndex = this._getFirstHighlightableDropdownIndex();
+        if (firstDropdownIndex >= 0) {
+          this._adapter.highlightActiveOption(firstDropdownIndex);
+        }
       }
     } else if (isEndKey) {
       if (this._open) {
         evt.preventDefault();
-        const options = this._nonDividerOptions;
-        for (let i = options.length - 1; i >= 0; i--) {
-          if (!options[i].disabled) {
-            this._adapter.highlightActiveOption(i);
-            break;
-          }
+        const lastDropdownIndex = this._getLastHighlightableDropdownIndex();
+        if (lastDropdownIndex >= 0) {
+          this._adapter.highlightActiveOption(lastDropdownIndex);
         }
       }
     } else if (isFilterableCharacter) {
@@ -494,30 +614,112 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
     return this._nonDividerOptions.findIndex(option => this._selectedValues.includes(option.value));
   }
 
-  private _getPreviousHighlightableOptionIndex(startIndex: number, options: ISelectOption[]): number {
+  /** Navigation methods that work in dropdown coordinate system (includes select all when enabled) */
+  private _getPreviousHighlightableDropdownIndex(startIndex: number): number {
+    if (!this._adapter.popupElement) {
+      return startIndex;
+    }
+
+    const listItems = this._adapter.popupElement.querySelectorAll('forge-list-item');
+    const totalItems = listItems.length;
+
+    if (totalItems === 0) {
+      return startIndex;
+    }
+
     let index = startIndex;
-    if (index <= 0) {
-      index = options.length - 1;
-    } else {
-      index--;
-    }
-    if (options[index].disabled) {
-      return this._getPreviousHighlightableOptionIndex(index, options);
-    }
-    return index;
+    do {
+      if (index <= 0) {
+        index = totalItems - 1;
+      } else {
+        index--;
+      }
+
+      const listItem = listItems[index] as any;
+      if (listItem && !this._isDropdownOptionDisabled(listItem)) {
+        return index;
+      }
+    } while (index !== startIndex);
+
+    return startIndex;
   }
 
-  private _getNextHighlightableOptionIndex(startIndex: number, options: ISelectOption[]): number {
+  private _getNextHighlightableDropdownIndex(startIndex: number): number {
+    if (!this._adapter.popupElement) {
+      return startIndex;
+    }
+
+    const listItems = this._adapter.popupElement.querySelectorAll('forge-list-item');
+    const totalItems = listItems.length;
+
+    if (totalItems === 0) {
+      return startIndex;
+    }
+
     let index = startIndex;
-    if (index === options.length - 1) {
-      index = 0;
-    } else {
-      index++;
+    do {
+      if (index === totalItems - 1) {
+        index = 0;
+      } else {
+        index++;
+      }
+
+      const listItem = listItems[index] as any;
+      if (listItem && !this._isDropdownOptionDisabled(listItem)) {
+        return index;
+      }
+    } while (index !== startIndex);
+
+    return startIndex;
+  }
+
+  private _getFirstHighlightableDropdownIndex(): number {
+    if (!this._adapter.popupElement) {
+      return 0;
     }
-    if (options[index].disabled) {
-      return this._getNextHighlightableOptionIndex(index, options);
+
+    const listItems = this._adapter.popupElement.querySelectorAll('forge-list-item');
+
+    for (let i = 0; i < listItems.length; i++) {
+      const listItem = listItems[i] as any;
+      if (listItem && !this._isDropdownOptionDisabled(listItem)) {
+        return i;
+      }
     }
-    return index;
+
+    return 0;
+  }
+
+  private _getLastHighlightableDropdownIndex(): number {
+    if (!this._adapter.popupElement) {
+      return 0;
+    }
+
+    const listItems = this._adapter.popupElement.querySelectorAll('forge-list-item');
+
+    for (let i = listItems.length - 1; i >= 0; i--) {
+      const listItem = listItems[i] as any;
+      if (listItem && !this._isDropdownOptionDisabled(listItem)) {
+        return i;
+      }
+    }
+
+    return 0;
+  }
+
+  private _isDropdownOptionDisabled(listItem: any): boolean {
+    // Check if it's a divider (dividers are not selectable)
+    if (listItem.querySelector && listItem.querySelector('forge-divider')) {
+      return true;
+    }
+
+    // Check if the button inside is disabled
+    const button = listItem.querySelector('button');
+    if (button && button.disabled) {
+      return true;
+    }
+
+    return false;
   }
 
   private _filter(key: string): void {
@@ -705,5 +907,21 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
   }
   public set beforeValueChange(value: SelectBeforeValueChangeCallback<any>) {
     this._beforeValueChange = value;
+  }
+
+  /** Gets/sets whether to show the select all option when in multiple mode. */
+  public get showSelectAll(): boolean {
+    return this._showSelectAll;
+  }
+  public set showSelectAll(value: boolean) {
+    this._showSelectAll = value;
+  }
+
+  /** Gets/sets the label for the select all option. */
+  public get selectAllLabel(): string {
+    return this._selectAllLabel;
+  }
+  public set selectAllLabel(value: string) {
+    this._selectAllLabel = value;
   }
 }

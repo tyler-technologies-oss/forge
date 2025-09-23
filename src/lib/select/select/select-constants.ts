@@ -17,7 +17,9 @@ const observedAttributes = {
   DISABLED: 'disabled',
   PLACEHOLDER: 'placeholder',
   OBSERVE_SCROLL: 'observe-scroll',
-  OBSERVE_SCROLL_THRESHOLD: 'observe-scroll-threshold'
+  OBSERVE_SCROLL_THRESHOLD: 'observe-scroll-threshold',
+  SHOW_SELECT_ALL: 'show-select-all',
+  SELECT_ALL_LABEL: 'select-all-label'
 };
 
 const attributes = {
@@ -25,7 +27,8 @@ const attributes = {
 };
 
 const events = {
-  SCROLLED_BOTTOM: `${elementName}-scrolled-bottom`
+  SCROLLED_BOTTOM: `${elementName}-scrolled-bottom`,
+  SELECT_ALL: `${elementName}-select-all`
 };
 
 export const SELECT_CONSTANTS = {

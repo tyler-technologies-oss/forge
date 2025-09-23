@@ -125,8 +125,36 @@ export function createListItems(
   startIndex = 0,
   renderSelected = true
 ): void {
+  // Add select all option if enabled and in multiple mode
+  let optionsToRender = options || config.options;
+  if (config.showSelectAll && config.multiple && startIndex === 0) {
+    const selectAllOption: IListDropdownOption = {
+      value: LIST_DROPDOWN_CONSTANTS.selectAllOption.VALUE,
+      label: config.selectAllLabel || LIST_DROPDOWN_CONSTANTS.selectAllOption.LABEL
+    };
+
+    const dividerOption: IListDropdownOption = {
+      value: '',
+      label: '',
+      divider: true
+    };
+
+    // Inject select all at the beginning
+    if (isListDropdownOptionType(optionsToRender, ListDropdownOptionType.Group)) {
+      const optionGroups = optionsToRender as IListDropdownOptionGroup[];
+      if (optionGroups.length > 0) {
+        optionGroups[0] = { ...optionGroups[0], options: [selectAllOption, dividerOption, ...optionGroups[0].options] };
+        optionsToRender = optionGroups;
+      } else {
+        optionsToRender = [{ text: '', options: [selectAllOption, dividerOption] }];
+      }
+    } else {
+      optionsToRender = [selectAllOption, dividerOption, ...(optionsToRender as IListDropdownOption[])];
+    }
+  }
+
   // Ensure the options are provided in the form a group (if no groups provided, then we have one anonymous group of options)
-  const groups = getOptionsByGroup(options || config.options);
+  const groups = getOptionsByGroup(optionsToRender);
   const flatOptions = getFlattenedOptions(groups);
 
   const limitOptions = config.optionLimit ? true : false;
