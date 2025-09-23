@@ -212,6 +212,11 @@ export class TableUtils {
       if (columnConfig.sortable) {
         cellContainer = document.createElement('button');
         (cellContainer as HTMLButtonElement).type = 'button';
+
+        const focusIndicator = document.createElement('forge-focus-indicator');
+        focusIndicator.inward = true;
+        cellContainer.appendChild(focusIndicator);
+
         cellContainer.addEventListener('keydown', tableConfiguration.sortableHeadCellKeydownListener);
       } else {
         cellContainer = document.createElement('div');
