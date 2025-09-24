@@ -1,0 +1,50 @@
+{
+  "name": "@tylertech/forge-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for Tyler Forge design system - helps AI assistants understand and implement Forge components",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "bundle": "tsx scripts/bundle-data.ts",
+    "bundle:mdx": "tsx scripts/bundle-mdx.ts",
+    "build:deploy": "npm run build && npm run bundle && npm run bundle:mdx",
+    "start": "node dist/index.js",
+    "start:sse": "node dist/server-sse.js",
+    "start:bundled": "FORGE_BUNDLED=true node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "dev:sse": "tsx src/server-sse.ts",
+    "watch": "tsc --watch"
+  },
+  "keywords": [
+    "mcp",
+    "modelcontextprotocol",
+    "tyler-forge",
+    "design-system",
+    "ai-assistant"
+  ],
+  "author": "Tyler Technologies",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "glob": "^11.0.0",
+    "gray-matter": "^4.0.3",
+    "mdast-util-from-markdown": "^2.0.0",
+    "mdast-util-mdx": "^3.0.0",
+    "micromark-extension-mdxjs": "^3.0.0",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.24.6"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.5.5",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.2"
+  },
+  "bin": {
+    "forge-mcp": "./dist/index.js"
+  }
+}
