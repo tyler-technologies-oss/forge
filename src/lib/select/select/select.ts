@@ -16,13 +16,14 @@ import { ListComponent, ListItemComponent } from '../../list';
 import { PopoverComponent } from '../../popover';
 import { ScaffoldComponent } from '../../scaffold';
 import { ToolbarComponent } from '../../toolbar';
-import { BASE_SELECT_CONSTANTS, BaseSelectComponent, IBaseSelectComponent } from '../core';
+import { BASE_SELECT_CONSTANTS, BaseSelectComponent, IBaseSelectComponent, SelectSelectAllEventData } from '../core';
 import { OptionComponent } from '../option';
 import { OptionGroupComponent } from '../option-group';
 import { SelectAdapter } from './select-adapter';
 import { SELECT_CONSTANTS } from './select-constants';
 import { SelectCore } from './select-core';
 import { IListDropdownAware, ListDropdownAware } from '../../list-dropdown/list-dropdown-aware';
+import { DividerComponent } from '../../divider/divider';
 
 import template from './select.html';
 import styles from './select.scss';
@@ -38,6 +39,8 @@ export interface ISelectComponent
     IListDropdownAware {
   label: string;
   placeholder: string;
+  showSelectAll: boolean;
+  selectAllLabel: string;
   setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void;
   [setValidity](): void;
 }
@@ -49,6 +52,7 @@ declare global {
 
   interface HTMLElementEventMap {
     'forge-select-scrolled-bottom': CustomEvent<void>;
+    'forge-select-all': CustomEvent<SelectSelectAllEventData>;
     change: CustomEvent<any>;
   }
 }
@@ -75,9 +79,12 @@ declare global {
  *
  * @event {CustomEvent<void>} forge-select-scrolled-bottom - Dispatched when the dropdown list has scrolled to the bottom.
  * @event {CustomEvent<any>} change - Dispatched when the user selects a value.
+ * @event {CustomEvent<SelectSelectAllEventData>} forge-select-all - Dispatched when the select all option is toggled.
  *
  * @property {string} label - Controls the label text.
  * @property {string} placeholder - Controls the placeholder text.
+ * @property {boolean} showSelectAll - Gets/sets whether to show the select all option when in multiple mode.
+ * @property {string} selectAllLabel - Gets/sets the label for the select all option.
  * @property {any} value - Gets/sets the value.
  * @property {number | number[]} selectedIndex - Gets/sets the selected index.
  * @property {ISelectOption[] | ISelectOptionGroup[]} options - Gets/sets the available options.
@@ -103,6 +110,8 @@ declare global {
  *
  * @attribute {string} label - Controls the label text.
  * @attribute {string} placeholder - Controls the placeholder text.
+ * @attribute {boolean} show-select-all - Gets/sets whether to show the select all option when in multiple mode.
+ * @attribute {string} select-all-label - Gets/sets the label for the select all option.
  * @attribute {any} value - Gets/sets the value.
  * @attribute {number | number[]} selected-index - Gets/sets the selected index.
  * @attribute {boolean} multiple - Gets/sets the multiple select state.
@@ -194,7 +203,8 @@ declare global {
     IconComponent,
     ScaffoldComponent,
     ToolbarComponent,
-    IconButtonComponent
+    IconButtonComponent,
+    DividerComponent
   ]
 })
 export class SelectComponent
@@ -242,6 +252,12 @@ export class SelectComponent
         return;
       case SELECT_CONSTANTS.observedAttributes.PLACEHOLDER:
         this.placeholder = newValue;
+        return;
+      case SELECT_CONSTANTS.observedAttributes.SHOW_SELECT_ALL:
+        this.showSelectAll = coerceBoolean(newValue);
+        return;
+      case SELECT_CONSTANTS.observedAttributes.SELECT_ALL_LABEL:
+        this.selectAllLabel = newValue;
         return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
@@ -291,6 +307,12 @@ export class SelectComponent
 
   @coreProperty()
   declare public readonly: boolean;
+
+  @coreProperty()
+  declare public showSelectAll: boolean;
+
+  @coreProperty()
+  declare public selectAllLabel: string;
 
   public override get floatLabel(): boolean {
     return super.floatLabel;
