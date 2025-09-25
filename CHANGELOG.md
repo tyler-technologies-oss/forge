@@ -1,3 +1,28 @@
+# v3.11.0 (Thu Sep 25 2025)
+
+#### 🚀 Enhancement
+
+- feat(select): add "Select all" functionality [#989](https://github.com/tyler-technologies-oss/forge/pull/989) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(list): add support for additional content slot in list items for better accessibility [#981](https://github.com/tyler-technologies-oss/forge/pull/981) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(focus-indicator): refactor to use Lit [#960](https://github.com/tyler-technologies-oss/forge/pull/960) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: update sass, typescript, storybook, and bump other dependencies [#988](https://github.com/tyler-technologies-oss/forge/pull/988) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- chore: improve and standardize component summary comments [#991](https://github.com/tyler-technologies-oss/forge/pull/991) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(tooltip): allow hovering tooltip for accessibility compliance [#985](https://github.com/tyler-technologies-oss/forge/pull/985) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list-item): update keyboard interactions to trigger on keyup [#984](https://github.com/tyler-technologies-oss/forge/pull/984) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(table): replace outline style with focus indicator for improved accessibility and consistency [#987](https://github.com/tyler-technologies-oss/forge/pull/987) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(tooltip): open when focused via keyboard [#983](https://github.com/tyler-technologies-oss/forge/pull/983) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(profile-button): update tooltip text and add deprecation notice in docs [#982](https://github.com/tyler-technologies-oss/forge/pull/982) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: update to node 22 and adjust when workflows are triggered [#980](https://github.com/tyler-technologies-oss/forge/pull/980) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.10.5 (Thu Sep 11 2025)
 
 #### 🐛 Bug Fix
