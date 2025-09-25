@@ -27,6 +27,8 @@ export interface IAppBarNotificationButtonComponent extends IBaseComponent {
 /**
  * @tag forge-app-bar-notification-button
  *
+ * @summary A notification button component with a predefined notification bell icon that can display a badge with count or dot indicator, designed for use in app bars.
+ *
  * @property {number | string} [count = 0] - The number to display in the badge.
  * @property {boolean} [dot = false] - Whether to display the dot variant of the badge or not.
  * @property {boolean} [showBadge = false] - Whether to display the badge or not.

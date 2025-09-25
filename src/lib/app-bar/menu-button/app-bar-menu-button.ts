@@ -22,7 +22,7 @@ declare global {
 /**
  * @tag forge-app-bar-menu-button
  *
- * @description A utility component with predefined icon and descriptions for use in an app bar `start` slot.
+ * @summary A menu toggle button component with a predefined hamburger menu icon, typically used in an app bar's start slot to open navigation menus.
  *
  * @property {string} [icon=menu] - The name of an alternative icon to display.
  *

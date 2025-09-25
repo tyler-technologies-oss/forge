@@ -39,6 +39,8 @@ declare global {
 }
 
 /**
+ * @summary A compact, interactive element that represents an entity, action, or attribute with support for selection, removal, and various styling options.
+ *
  * @tag forge-chip
  *
  * @property {ChipType} type - The type of chip.

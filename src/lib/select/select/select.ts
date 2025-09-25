@@ -56,6 +56,8 @@ declare global {
 /**
  * @tag forge-select
  *
+ * @summary Selects present a list of options to users for single or multi-selection.
+ *
  * @dependency forge-field
  * @dependency forge-option
  * @dependency forge-option-group

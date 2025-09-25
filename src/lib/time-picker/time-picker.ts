@@ -63,6 +63,8 @@ declare global {
 }
 
 /**
+ * @summary A time input component with integrated dropdown for selecting time values with support for various formats, masking, and validation options.
+ *
  * @tag forge-time-picker
  */
 @customElement({

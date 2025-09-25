@@ -18,6 +18,8 @@ declare global {
 /**
  * @tag forge-mini-drawer
  *
+ * @summary A compact navigation drawer component that displays as a narrow rail and optionally expands on hover to show full content.
+ *
  * @property {boolean} [hover=false] - The drawer will expand open when hovered.
  *
  * @attribute {boolean} [hover=false] - The drawer will expand open when hovered.

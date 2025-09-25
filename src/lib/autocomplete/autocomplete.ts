@@ -64,6 +64,8 @@ declare global {
 /**
  * @tag forge-autocomplete
  *
+ * @summary Autocomplete components provide real-time suggestions as users type in a text field.
+ *
  * @event {CustomEvent<any>} forge-autocomplete-change - Fired when the value changes.
  * @event {CustomEvent<IAutocompleteSelectEventData>} forge-autocomplete-select -  Fired when an option is selected. Only applies when in "stateless" `mode`.
  * @event {CustomEvent<void>} forge-autocomplete-scrolled-bottom - Fired when the dropdown is scrolled to the bottom. Only applies when `observe-scroll` is enabled.
