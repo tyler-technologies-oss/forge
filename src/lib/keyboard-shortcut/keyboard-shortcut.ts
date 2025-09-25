@@ -29,6 +29,8 @@ declare global {
 }
 
 /**
+ * @summary A utility component that listens for keyboard shortcut combinations and triggers callbacks or events when the specified key bindings are activated.
+ *
  * @tag forge-keyboard-shortcut
  *
  * @event {CustomEvent<KeyboardEvent>} forge-keyboard-shortcut-activate - Event fired when the keyboard shortcut is activated.

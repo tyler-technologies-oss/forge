@@ -25,6 +25,8 @@ export const BADGE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-badge';
 /**
  * @tag forge-badge
  *
+ * @summary Badges display small amounts of information like counts, status indicators, or notifications.
+ *
  * @cssproperty --forge-badge-background - The background color.
  * @cssproperty --forge-badge-color - The text color.
  * @cssproperty --forge-badge-shape - The shape radius.

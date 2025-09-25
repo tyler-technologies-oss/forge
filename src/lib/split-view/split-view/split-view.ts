@@ -26,6 +26,8 @@ declare global {
 
 /**
  * @tag forge-split-view
+ *
+ * @summary Split views create resizable panels that allow users to adjust the space between content areas.
  */
 @customElement({
   name: SPLIT_VIEW_CONSTANTS.elementName,

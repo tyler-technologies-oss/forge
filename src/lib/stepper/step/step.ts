@@ -40,6 +40,8 @@ declare global {
 /**
  * @tag forge-step
  *
+ * @summary Individual steps within a stepper component that represent progress in a multi-step process.
+ *
  * @property {boolean} [alternative=false] - Whether the step is in the alternative style.
  * @property {boolean} [completed=false] - Whether the step is completed.
  * @property {boolean} [editable=false] - Whether the step is editable.

@@ -16,6 +16,8 @@ declare global {
 
 /**
  * @tag forge-option-group
+ *
+ * @summary Groups related options together with an optional label within select components.
  */
 @customElement({
   name: OPTION_GROUP_CONSTANTS.elementName

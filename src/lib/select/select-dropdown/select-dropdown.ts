@@ -35,6 +35,8 @@ declare global {
 
 /**
  * @tag forge-select-dropdown
+ *
+ * @summary A dropdown variant of the select component that renders options in a popover.
  */
 @customElement({
   name: SELECT_DROPDOWN_CONSTANTS.elementName,

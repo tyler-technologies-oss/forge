@@ -57,6 +57,8 @@ declare global {
 /**
  * @tag forge-menu
  *
+ * @summary Menus display a list of options or actions that users can select from a dropdown.
+ *
  * @dependency forge-popover
  * @dependency forge-list
  */

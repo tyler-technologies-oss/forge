@@ -41,7 +41,7 @@ declare global {
 /**
  * @tag forge-button-toggle-group
  *
- * @description Button toggle groups allow users to select one or more options from a set of related options.
+ * @summary Button toggle groups allow users to select one or more options from a set of related options.
  *
  * @property {any} value - The value of the selected button toggle(s).
  * @property {boolean} [outlined=true] - Whether or not the group should be outlined.

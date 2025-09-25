@@ -26,6 +26,8 @@ declare global {
 }
 
 /**
+ * @summary A specialized input field component that allows users to create and manage a collection of chips representing text values or selections.
+ *
  * @tag forge-chip-field
  *
  * @property {boolean} [addOnBlur=false] - Whether or not to add chip when blur event

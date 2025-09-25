@@ -16,6 +16,8 @@ declare global {
 
 /**
  * @tag forge-option
+ *
+ * @summary Options represent individual selectable items within select components and menus.
  */
 @customElement({
   name: OPTION_CONSTANTS.elementName

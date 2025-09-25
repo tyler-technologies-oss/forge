@@ -69,6 +69,8 @@ declare global {
 }
 
 /**
+ * @summary A flexible calendar component for date selection with support for single dates, ranges, multiple selections, and extensive customization options.
+ *
  * @tag forge-calendar
  *
  * @property {Date} activeDate - The currently active date in the calendar.

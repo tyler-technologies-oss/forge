@@ -88,6 +88,8 @@ declare global {
 }
 
 /**
+ * @summary A comprehensive data table component with features for selection, sorting, filtering, resizing, and row expansion functionality.
+ *
  * @tag forge-table
  *
  * @dependency forge-expansion-panel

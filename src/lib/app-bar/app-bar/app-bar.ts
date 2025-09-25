@@ -29,7 +29,7 @@ declare global {
 /**
  * @tag forge-app-bar
  *
- * @description App bars are a collection of components placed as a horizontal bar at the top of the screen. They typically contain a logo, title, and optional application-wide actions.
+ * @summary App bars are a collection of components placed as a horizontal bar at the top of the screen. They typically contain a logo, title, and optional application-wide actions.
  *
  * @property {string} titleText - The text to display in the title.
  * @property {AppBarElevation} [elevation="raised"] - The elevation of the app bar.

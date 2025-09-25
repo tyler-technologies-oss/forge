@@ -15,6 +15,8 @@ declare global {
 }
 
 /**
+ * @summary A wrapper component that represents a single view content area within a view-switcher for organizing and displaying content sections.
+ *
  * @tag forge-view
  */
 @customElement({
