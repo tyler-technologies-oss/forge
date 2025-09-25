@@ -298,6 +298,9 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
     };
     this._adapter.open(config);
     this._adapter.setDismissListener(this._dismissListener);
+
+    // Ensure select all state is synchronized after opening dropdown
+    this._updateSelectAllState();
   }
 
   /**
