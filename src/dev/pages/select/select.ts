@@ -18,6 +18,14 @@ const leadingEl = select.querySelector('[slot=leading]') as HTMLElement;
 const addonEndEl = select.querySelector('[slot=addon-end]') as HTMLElement;
 const helperTextEl = select.querySelector('[slot=helper-text]') as HTMLElement;
 
+// Add event logging
+select.addEventListener('change', ({ detail }) => {
+  console.log('change event:', detail);
+});
+select.addEventListener('forge-select-all', ({ detail }) => {
+  console.log('forge-select-all event:', detail);
+});
+
 // Hide these elements by default
 leadingEl.remove();
 addonEndEl.remove();
@@ -92,7 +100,17 @@ optSelectedTextBuilder.addEventListener('forge-switch-change', ({ detail: select
   select.selectedTextBuilder = selected ? selectedTextBuilder : undefined;
 });
 
-function optionBuilder(option: IListDropdownOption, parentElement: HTMLElement): HTMLElement {
+const optShowSelectAll = document.querySelector('#opt-show-select-all') as ISwitchComponent;
+optShowSelectAll.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  select.showSelectAll = selected;
+});
+
+const optSelectAllLabel = document.querySelector('#opt-select-all-label') as HTMLInputElement;
+optSelectAllLabel.addEventListener('input', () => select.selectAllLabel = optSelectAllLabel.value);
+// Initialize with default value
+select.selectAllLabel = optSelectAllLabel.value;
+
+function optionBuilder(option: IListDropdownOption): HTMLElement {
   const item = document.createElement('div');
   item.style.display = 'flex';
   item.style.alignItems = 'center';

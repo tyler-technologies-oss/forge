@@ -33,3 +33,8 @@ export const BASE_SELECT_CONSTANTS = {
   attributes,
   events
 };
+
+export interface SelectSelectAllEventData {
+  isAllSelected: boolean;
+  value: IListDropdownOption[];
+}

@@ -13,6 +13,7 @@ import { ISelectComponent } from '@tylertech/forge/select';
 const component = 'forge-select';
 
 const changeAction = action('change');
+const selectAllAction = action('forge-select-all');
 
 const meta = {
   title: 'Components/Select',
@@ -27,31 +28,34 @@ const meta = {
 
     return html`
       <forge-select
-        .label=${args.label}
-        .labelPosition=${args.labelPosition}
-        .labelAlignment=${args.labelAlignment}
-        .variant=${args.variant}
-        .theme=${args.theme}
-        .shape=${args.shape}
-        .density=${args.density}
-        .dense=${args.dense}
-        .supportTextInset=${args.supportTextInset}
-        .floatLabel=${args.floatLabel}
-        .placeholder=${args.placeholder}
-        .multiple=${args.multiple}
-        .open=${args.open}
+        label=${args.label ?? nothing}
+        label-position=${args.labelPosition ?? nothing}
+        label-alignment=${args.labelAlignment ?? nothing}
+        variant=${args.variant ?? nothing}
+        theme=${args.theme ?? ''}
+        shape=${args.shape ?? nothing}
+        density=${args.density ?? nothing}
+        placeholder=${args.placeholder ?? nothing}
+        ?dense=${args.dense}
+        ?support-text-inset=${args.supportTextInset}
+        ?float-label=${args.floatLabel}
+        ?multiple=${args.multiple}
+        ?show-select-all=${args.showSelectAll}
+        select-all-label=${args.selectAllLabel ?? nothing}
+        ?open=${args.open}
         ?optional=${args.optional}
         ?disabled=${args.disabled}
         ?required=${args.required}
         ?invalid=${args.invalid}
         style=${style}
-        @change=${changeAction}>
+        @change=${changeAction}
+        @forge-select-all=${selectAllAction}>
         <forge-option value="1">Option 1</forge-option>
         <forge-option value="2">Option 2</forge-option>
         <forge-option value="3">Option 3</forge-option>
         ${args.supportText.length ? html`<span slot="support-text">${args.supportText}</span>` : nothing}
         ${args.supportTextEnd.length ? html`<span slot="support-text-end">${args.supportTextEnd}</span>` : nothing}
-      </forge-text-field>
+      </forge-select>
     `;
   },
   decorators: [storyStyles(styles)],
@@ -68,7 +72,8 @@ const meta = {
         'optionBuilder',
         'selectedTextBuilder',
         'popupElement',
-        'beforeValueChange'
+        'beforeValueChange',
+        'showSelectAll'
       ],
       controls: {
         labelPosition: { control: 'select', options: ['inline-start', 'inline-end', 'block-start', 'inset', 'none'] },
@@ -81,7 +86,9 @@ const meta = {
       }
     }),
     supportText: { control: { type: 'text' } },
-    supportTextEnd: { control: { type: 'text' } }
+    supportTextEnd: { control: { type: 'text' } },
+    showSelectAll: { control: { type: 'boolean' } },
+    selectAllLabel: { control: { type: 'text' } }
   },
   args: {
     label: 'Label',
@@ -102,9 +109,11 @@ const meta = {
     disabled: false,
     floatLabel: false,
     supportTextInset: 'none',
-    open: false
+    open: false,
+    showSelectAll: false,
+    selectAllLabel: 'Select all'
   }
-} satisfies Meta<Partial<ISelectComponent> & { supportText: string; supportTextEnd: string }>;
+} satisfies Meta<Partial<ISelectComponent> & { supportText: string; supportTextEnd: string; selectAllLabel: string }>;
 
 export default meta;
 
@@ -130,5 +139,15 @@ export const Multiple: Story = {
   ...standaloneStoryParams,
   args: {
     multiple: true
+  }
+};
+
+export const SelectAll: Story = {
+  parameters: {
+    controls: { disable: true }
+  },
+  args: {
+    multiple: true,
+    showSelectAll: true
   }
 };
