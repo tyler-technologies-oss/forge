@@ -58,6 +58,12 @@ export class ListItemCore implements IListItemCore {
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
+    const composedElements = composedPathFrom(this._adapter.hostElement, evt);
+    const ignoredElements = composedElements.some(el => (el as HTMLElement).matches(LIST_ITEM_CONSTANTS.selectors.IGNORE));
+    if (ignoredElements) {
+      return;
+    }
+
     if (evt.key === 'Enter' || evt.key === ' ') {
       evt.stopPropagation();
 
