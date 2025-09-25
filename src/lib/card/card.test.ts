@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture } from '@open-wc/testing';
 import type { ICardComponent } from './card';
-import { TestHarness } from '../../test/utils/test-harness';
+import { TestHarness } from '../core/testing/test-harness';
 import { getShadowElement } from '@tylertech/forge-core';
 
 import './card';

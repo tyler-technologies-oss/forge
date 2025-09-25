@@ -4,7 +4,7 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { spy } from 'sinon';
-import { TestHarness } from '../../../test/utils/test-harness';
+import { TestHarness } from '../../core/testing/test-harness';
 import { internals } from '../../constants';
 import { frame } from '../../core/utils/utils';
 import {

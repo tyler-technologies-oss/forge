@@ -5,7 +5,7 @@ import { frame } from '../core/utils/utils';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
-import { TestHarness } from '../../test/utils/test-harness';
+import { TestHarness } from '../core/testing/test-harness';
 import { FIELD_CONSTANTS, IFieldComponent } from '../field';
 import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../icon-button';
 import { LABEL_CONSTANTS } from '../label';
