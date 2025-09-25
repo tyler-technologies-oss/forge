@@ -38,14 +38,6 @@ const config: StorybookConfig = {
   async viteFinal(config) {
     const { mergeConfig } = await import('vite');
     return mergeConfig(config, {
-      css: {
-        preprocessorOptions: {
-          scss: {
-            api: 'modern',
-            silenceDeprecations: ['mixed-decls'],
-          }
-        }
-      },
       plugins: [
         tsconfigPaths(),
         ViteInlineForgeHtml,

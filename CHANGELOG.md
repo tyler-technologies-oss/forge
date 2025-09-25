@@ -1,3 +1,57 @@
+# v3.10.5 (Thu Sep 11 2025)
+
+#### 🐛 Bug Fix
+
+- fix(menu): update offset and fallback placements for improved child menu positioning [#977](https://github.com/tyler-technologies-oss/forge/pull/977) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(dialog): allow for moving dialog outside of viewport but move back into view when released [#976](https://github.com/tyler-technologies-oss/forge/pull/976) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(expansion-panel): update connected check [#971](https://github.com/tyler-technologies-oss/forge/pull/971) ([@eliganemtyler](https://github.com/eliganemtyler))
+- Fix/toast default duration [#970](https://github.com/tyler-technologies-oss/forge/pull/970) ([@eliganemtyler](https://github.com/eliganemtyler))
+
+#### Authors: 2
+
+- Eli Ganem ([@eliganemtyler](https://github.com/eliganemtyler))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v3.10.4 (Fri Aug 01 2025)
+
+#### 🐛 Bug Fix
+
+- fix(tab-bar): fixed a bug where child tabs were not synchronizing with the active tab state [#967](https://github.com/tyler-technologies-oss/forge/pull/967) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v3.10.3 (Wed Jul 30 2025)
+
+#### 🐛 Bug Fix
+
+- feat(date-range-picker): fixed a bug where the input mask was not being destroyed on end date input if turning off the mask [#966](https://github.com/tyler-technologies-oss/forge/pull/966) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v3.10.2 (Wed Jul 30 2025)
+
+#### 🐛 Bug Fix
+
+- fix(field): add overflow and isolation token to the inner container element [#965](https://github.com/tyler-technologies-oss/forge/pull/965) ([@nickonometry](https://github.com/nickonometry))
+- fix(menu): allow cascading menus to use bottom and top placements if left or right isn't available [#964](https://github.com/tyler-technologies-oss/forge/pull/964) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+
+---
+
 # v3.10.1 (Thu Jul 24 2025)
 
 #### 🐛 Bug Fix

@@ -35,6 +35,8 @@ declare global {
 /**
  * @tag forge-tab
  *
+ * @summary Individual tab elements that provide navigation between different content panels.
+ *
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
  *

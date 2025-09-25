@@ -46,6 +46,8 @@ declare global {
 /**
  * @tag forge-split-view-panel
  *
+ * @summary Individual panels within split views that can be resized and collapsed.
+ *
  * @dependency forge-icon
  * @dependency forge-state-layer
  * @dependency forge-focus-indicator

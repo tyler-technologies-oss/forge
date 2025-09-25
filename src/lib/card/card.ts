@@ -21,6 +21,8 @@ export const CARD_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-card';
 /**
  * @tag forge-card
  *
+ * @summary Cards group related content and actions together in a single container.
+ *
  * @attribute {boolean} [no-padding=false] - Removes the default padding from the card.
  *
  * @cssproperty --forge-card-background - The background color of the card.

@@ -29,6 +29,8 @@ declare global {
 /**
  * @tag forge-app-bar-search
  *
+ * @summary A search input component with integrated search icon and styling optimized for use within app bars, supporting keyboard interaction and customizable actions.
+ *
  * @slot - The default (unnamed) slot is where child `<input>` elements will be placed.
  * @slot action - Places actions at the end of the input.
  *

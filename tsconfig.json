@@ -3,7 +3,7 @@
     "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
-    "lib": ["es2015", "dom", "es2017", "dom.iterable"],
+    "lib": ["es2022", "dom", "dom.iterable"],
     "noImplicitAny": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,

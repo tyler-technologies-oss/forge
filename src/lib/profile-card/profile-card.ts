@@ -37,6 +37,8 @@ declare global {
 
 /**
  * @tag forge-profile-card
+ *
+ * @summary Profile cards display user information and actions in a structured card format.
  */
 @customElement({
   name: PROFILE_CARD_CONSTANTS.elementName,

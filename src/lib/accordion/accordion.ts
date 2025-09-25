@@ -18,6 +18,8 @@ declare global {
 /**
  * @tag forge-accordion
  *
+ * @summary Accordions display a collection of panels that can be expanded or collapsed to show content.
+ *
  * @dependency forge-expansion-panel
  *
  * @fires {CustomEvent<IExpansionPanelComponent>} forge-accordion-toggle - Dispatched when a child expansion panel is toggled. Includes the related expansion panel element in the event detail.

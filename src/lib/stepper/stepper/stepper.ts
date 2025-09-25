@@ -29,6 +29,8 @@ declare global {
 /**
  * @tag forge-stepper
  *
+ * @summary Steppers guide users through multi-step processes by breaking them into logical steps.
+ *
  * @dependency forge-step
  *
  * @event {CustomEvent<number>} forge-step-select - Emits the index when a step is selected.

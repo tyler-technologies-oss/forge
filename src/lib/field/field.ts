@@ -141,6 +141,8 @@ declare global {
  * @cssproperty --forge-field-focus-indicator-width - The width of the focus indicator.
  * @cssproperty --forge-field-disabled-opacity - The opacity of the field when disabled.
  * @cssproperty --forge-field-disabled-background - The background of the field when disabled.
+ * @cssproperty --forge-field-overflow - The overflow behavior of the internal container element.
+ * @cssproperty --forge-field-isolation - The isolation behavior of the internal container element.
  *
  * @csspart root - The root container element.
  * @csspart label - The label element.

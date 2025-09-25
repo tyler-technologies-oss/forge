@@ -25,7 +25,7 @@ declare global {
 /**
  * @tag forge-app-bar-help-button
  *
- * @description A utility component with predefined icon and descriptions for use in an app bar `end` slot.
+ * @summary A help button component with a predefined help icon that displays a dropdown menu when clicked, designed for use in an app bar's end slot.
  *
  * @property {IMenuOption[]} [options=[]] - The menu options to display when the button is clicked
  * @property {string} [icon=help] - The name of an alternative icon to display.

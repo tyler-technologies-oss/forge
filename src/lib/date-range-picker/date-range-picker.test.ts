@@ -427,6 +427,7 @@ describe('DateRangePickerComponent', () => {
       const changeSpy = spy(evt => (theEvent = evt));
       this.harness.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.harness.component);
       clickActiveDay(this.harness.component);
 
@@ -437,19 +438,20 @@ describe('DateRangePickerComponent', () => {
       expect(this.harness.component.from).to.deep.equal(theEvent!.detail.from);
     });
 
-    it('should not set date if default prevented in change event', function () {
+    it('should not set date if default prevented in change event', async function () {
       this.harness = setupTestContext(true);
       openPopup(this.harness.component);
       const changeSpy = spy(evt => evt.preventDefault());
       this.harness.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.harness.component);
 
       expect(changeSpy.calledOnce).to.be.true;
       expect(this.harness.component.from).to.be.null;
     });
 
-    it('should emit date as string', function () {
+    it('should emit date as string', async function () {
       this.harness = setupTestContext(true);
       const todayDate = new Date();
       const formattedDate = formatDate(todayDate);
@@ -460,6 +462,7 @@ describe('DateRangePickerComponent', () => {
       const changeSpy = spy(evt => (eventDetail = new DatePickerRange(evt.detail)));
       this.harness.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.harness.component);
 
       expect(typeof eventDetail.from).to.equal('string');
@@ -467,7 +470,7 @@ describe('DateRangePickerComponent', () => {
       expect(this.harness.component.from).to.equal(eventDetail.from as string);
     });
 
-    it('should emit date as ISO string', function () {
+    it('should emit date as ISO string', async function () {
       this.harness = setupTestContext(true);
       const todayDate = new Date();
       todayDate.setHours(0, 0, 0, 0);
@@ -477,6 +480,7 @@ describe('DateRangePickerComponent', () => {
       const changeSpy = spy(evt => (eventDetail = evt.detail));
       this.harness.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.harness.component);
 
       expect(typeof eventDetail).to.equal('object');

@@ -32,6 +32,8 @@ declare global {
 }
 
 /**
+ * @summary A date input component with integrated calendar popup for selecting date ranges with separate "from" and "to" date values.
+ *
  * @tag forge-date-range-picker
  *
  * @property {Date | string | null | undefined} [from=null] - Gets/sets the "from" date range value.

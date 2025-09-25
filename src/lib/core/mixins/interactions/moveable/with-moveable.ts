@@ -77,16 +77,13 @@ export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = clas
         }
       }
 
-      // Ensure that the surface position stays within the bounds of the screen
-      const newPosition = this._clampPosition(position, this._moveContext);
-
       // Only update the position if it actually changed
-      if (!this._lastPosition || newPosition.x !== this._lastPosition.x || newPosition.y !== this._lastPosition.y) {
-        const defaultPrevented = this._onMove(newPosition);
+      if (!this._lastPosition || position.x !== this._lastPosition.x || position.y !== this._lastPosition.y) {
+        const defaultPrevented = this._onMove(position);
         if (!defaultPrevented) {
-          this._lastPosition = { ...newPosition };
-          const newX = this._normalizePositionValue(newPosition.x);
-          const newY = this._normalizePositionValue(newPosition.y);
+          this._lastPosition = { ...position };
+          const newX = this._normalizePositionValue(position.x);
+          const newY = this._normalizePositionValue(position.y);
           this._updatePosition(newX, newY);
         }
       }

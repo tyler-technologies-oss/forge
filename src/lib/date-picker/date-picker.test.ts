@@ -38,14 +38,14 @@ describe('DatePickerComponent', () => {
   });
 
   afterEach(function () {
-    if (this.currentTest?.ctx.harness) {
+    if (this.currentTest?.ctx?.harness) {
       this.currentTest.ctx.harness.destroy();
     }
   });
 
   describe('with imperative creation', () => {
     afterEach(function () {
-      if (this.currentTest?.ctx.harness) {
+      if (this.currentTest?.ctx?.harness) {
         const popup = getPopup(this.currentTest.ctx.harness.component);
         if (popup) {
           removeElement(popup);
@@ -263,7 +263,7 @@ describe('DatePickerComponent', () => {
 
   describe('with static HTML', () => {
     afterEach(function () {
-      if (this.currentTest?.ctx.harness) {
+      if (this.currentTest?.ctx?.harness) {
         const popup = getPopup(this.currentTest.ctx.harness.component);
         if (popup) {
           removeElement(popup);
@@ -360,11 +360,12 @@ describe('DatePickerComponent', () => {
       expect(closeSpy.calledOnce).to.be.true;
     });
 
-    it('should emit close event when selecting date from calendar with mouse', function () {
+    it('should emit close event when selecting date from calendar with mouse', async function () {
       this.harness = setupTestContext(true);
       const closeSpy = spy();
       this.harness.component.addEventListener(DATE_PICKER_CONSTANTS.events.CLOSE, closeSpy);
       openPopup(this.harness.component);
+      await frame();
       clickActiveDay(this.harness.component);
 
       expect(closeSpy.calledOnce).to.be.true;
@@ -524,6 +525,7 @@ describe('DatePickerComponent', () => {
     it('should not blur input when clicking element in calendar', async function () {
       this.harness = setupTestContext(true);
       openPopup(this.harness.component);
+      await frame();
       clickActiveDay(this.harness.component);
 
       await popupCloseAnimation();
@@ -538,6 +540,7 @@ describe('DatePickerComponent', () => {
       const changeSpy = spy(evt => (theEvent = evt));
       this.harness.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.harness.component);
 
       await popupCloseAnimation();
@@ -546,19 +549,20 @@ describe('DatePickerComponent', () => {
       expect(this.harness.component.value).to.deep.equal(theEvent!.detail);
     });
 
-    it('should not set date if default prevented in change event', function () {
+    it('should not set date if default prevented in change event', async function () {
       this.harness = setupTestContext(true);
       openPopup(this.harness.component);
       const changeSpy = spy(evt => evt.preventDefault());
       this.harness.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.harness.component);
 
       expect(changeSpy.calledOnce).to.be.true;
       expect(this.harness.component.value).to.be.null;
     });
 
-    it('should emit date as string', function () {
+    it('should emit date as string', async function () {
       this.harness = setupTestContext(true);
       const todayDate = new Date();
       const formattedDate = formatDate(todayDate);
@@ -568,6 +572,7 @@ describe('DatePickerComponent', () => {
       const changeSpy = spy(evt => (eventDetail = evt.detail));
       this.harness.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.harness.component);
 
       expect(typeof eventDetail).to.equal('string');
@@ -575,7 +580,7 @@ describe('DatePickerComponent', () => {
       expect(this.harness.component.value).to.equal(eventDetail);
     });
 
-    it('should emit date as ISO string', function () {
+    it('should emit date as ISO string', async function () {
       this.harness = setupTestContext(true);
       const todayDate = new Date();
       todayDate.setHours(0, 0, 0, 0);
@@ -585,6 +590,7 @@ describe('DatePickerComponent', () => {
       const changeSpy = spy(evt => (eventDetail = evt.detail));
       this.harness.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.harness.component);
 
       expect(typeof eventDetail).to.equal('string');
@@ -1007,8 +1013,8 @@ describe('DatePickerComponent', () => {
       this.harness.component.masked = true;
       this.harness.component.showMaskFormat = true;
       this.harness.component.maskFormat = '0000-00-00';
-      this.harness.component.parseCallback = str => (str ? new Date(`${str}T00:00:00.000Z`) : null);
-      this.harness.component.formatCallback = date => (date ? date.toISOString().split('T')[0] : '');
+      this.harness.component.parseCallback = (str: any) => (str ? new Date(`${str}T00:00:00.000Z`) : null);
+      this.harness.component.formatCallback = (date: any) => (date ? date.toISOString().split('T')[0] : '');
 
       const inputEl = getInputElement(this.harness.component);
       inputEl.focus();

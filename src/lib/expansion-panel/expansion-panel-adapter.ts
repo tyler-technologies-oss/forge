@@ -148,7 +148,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   }
 
   private _getTriggerElementById(id: string): HTMLElement | null {
-    if (id) {
+    if (id && this.isConnected) {
       const rootNode = this._component.getRootNode() as Document | ShadowRoot;
       return rootNode.getElementById(id);
     } else {

@@ -24,6 +24,8 @@ declare global {
 }
 
 /**
+ * @summary A container component that manages switching between multiple child views with configurable animations and programmatic navigation controls.
+ *
  * @tag forge-view-switcher
  *
  * @dependency forge-view

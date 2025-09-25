@@ -26,6 +26,7 @@ import {
   TableSelectTooltipCallback
 } from './types';
 import { TooltipComponent } from '../tooltip';
+import { FocusIndicatorComponent } from '../focus-indicator';
 
 export interface ITableComponent extends IBaseComponent {
   data: any[];
@@ -87,6 +88,8 @@ declare global {
 }
 
 /**
+ * @summary A comprehensive data table component with features for selection, sorting, filtering, resizing, and row expansion functionality.
+ *
  * @tag forge-table
  *
  * @dependency forge-expansion-panel
@@ -109,7 +112,7 @@ declare global {
  */
 @customElement({
   name: TABLE_CONSTANTS.elementName,
-  dependencies: [ExpansionPanelComponent, IconComponent, CheckboxComponent, TooltipComponent]
+  dependencies: [ExpansionPanelComponent, IconComponent, CheckboxComponent, TooltipComponent, FocusIndicatorComponent]
 })
 export class TableComponent extends BaseComponent implements ITableComponent {
   public static get observedAttributes(): string[] {

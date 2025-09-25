@@ -790,6 +790,7 @@ describe('Calendar', () => {
 
       harness.component.preventFocus = true;
       harness.appendToFixture(); // Causes connectedCallback to run
+      await frame();
       const activeDay = harness.activeDay;
 
       expect(activeDay).to.not.be.null;

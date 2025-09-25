@@ -1,6 +1,7 @@
 import { getShadowElement, playKeyframeAnimation } from '@tylertech/forge-core';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
+import { isElementClipped, moveElementIntoViewport } from '../core/utils/utils';
 import { DialogComponent, IDialogComponent } from './dialog';
 import { DIALOG_CONSTANTS, dialogStack, hideBackdrop, showBackdrop } from './dialog-constants';
 
@@ -24,10 +25,13 @@ export interface IDialogAdapter extends IBaseAdapter<IDialogComponent> {
   showBackdrop(): void;
   addSurfaceClass(className: string): void;
   removeSurfaceClass(className: string): void;
+  moveSurfaceIntoView(): void;
   addFullscreenListener(breakpoint: number, listener: (value: boolean) => void): void;
   removeFullscreenListener(listener: (value: boolean) => void): void;
   setAccessibleLabel(label: string): void;
   setAccessibleDescription(description: string): void;
+  isDialogCompletelyOffScreen(): boolean;
+  isSurfaceClipped(): boolean;
 }
 
 export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDialogAdapter {
@@ -194,6 +198,10 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
     this._surfaceElement.classList.remove(className);
   }
 
+  public moveSurfaceIntoView(): void {
+    moveElementIntoViewport(this._surfaceElement);
+  }
+
   public addFullscreenListener(breakpoint: number, listener: (value: boolean) => void): void {
     this._fullscreenMediaQuery = window.matchMedia(`(max-width: ${breakpoint}px)`);
     this._fullscreenMediaQuery.addEventListener('change', event => listener(event.matches));
@@ -214,6 +222,22 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
   public setAccessibleDescription(description: string): void {
     this._accessibleDescriptionElement.textContent = description;
+  }
+
+  public isDialogCompletelyOffScreen(): boolean {
+    if (!this._surfaceElement) {
+      return false;
+    }
+
+    const rect = this._surfaceElement.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    return rect.right <= 0 || rect.left >= viewportWidth || rect.bottom <= 0 || rect.top >= viewportHeight;
+  }
+
+  public isSurfaceClipped(): boolean {
+    return isElementClipped(this._surfaceElement);
   }
 
   private _forceClose(): void {

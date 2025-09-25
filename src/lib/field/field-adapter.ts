@@ -1,6 +1,6 @@
 import { addClass, getShadowElement, removeClass, toggleClass } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base';
-import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../focus-indicator';
+import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../focus-indicator';
 import { FieldLabelPosition } from './base/base-field-constants';
 import { IFieldComponent } from './field';
 import { FIELD_CONSTANTS } from './field-constants';
@@ -42,7 +42,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     this._labelElement = getShadowElement(component, FIELD_CONSTANTS.selectors.LABEL);
     this._labelSlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.LABEL_SLOT) as HTMLSlotElement;
     this._popoverIconElement = getShadowElement(component, FIELD_CONSTANTS.selectors.POPOVER_ICON);
-    this._focusIndicatorElement = getShadowElement(component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
+    this._focusIndicatorElement = getShadowElement(component, FOCUS_INDICATOR_TAG_NAME) as IFocusIndicatorComponent;
   }
 
   public addRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void {

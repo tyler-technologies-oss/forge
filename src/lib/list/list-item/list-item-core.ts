@@ -31,6 +31,7 @@ export class ListItemCore implements IListItemCore {
   private _mousedownListener: EventListener = this._onMousedown.bind(this);
   private _clickListener: EventListener = this._onClick.bind(this);
   private _keydownListener: EventListener = this._onKeydown.bind(this);
+  private _keyupListener: EventListener = this._onKeyup.bind(this);
 
   constructor(private _adapter: IListItemAdapter) {}
 
@@ -58,11 +59,26 @@ export class ListItemCore implements IListItemCore {
 
   private _onKeydown(evt: KeyboardEvent): void {
     const composedElements = composedPathFrom(this._adapter.hostElement, evt);
-    const isFromStartEndSlot = composedElements.some((el: HTMLElement) => el.matches(LIST_ITEM_CONSTANTS.selectors.SLOTTED_START_END));
+    const ignoredElements = composedElements.some(el => (el as HTMLElement).matches(LIST_ITEM_CONSTANTS.selectors.IGNORE));
+    if (ignoredElements) {
+      return;
+    }
 
     if (evt.key === 'Enter' || evt.key === ' ') {
       evt.stopPropagation();
+
+      const isAnchor = this._adapter.interactiveElement?.tagName === 'A';
+      if (!isAnchor) {
+        evt.preventDefault();
+      }
+
+      this._adapter.addHostListener('keyup', this._keyupListener, { capture: true });
     }
+  }
+
+  private _onKeyup(evt: KeyboardEvent): void {
+    const composedElements = composedPathFrom(this._adapter.hostElement, evt);
+    const isFromStartEndSlot = composedElements.some((el: HTMLElement) => el.matches(LIST_ITEM_CONSTANTS.selectors.SLOTTED_START_END));
 
     if (isFromStartEndSlot) {
       if (evt.key === 'Enter' || evt.key === ' ') {
@@ -74,13 +90,22 @@ export class ListItemCore implements IListItemCore {
       return;
     }
 
-    if (evt.key === ' ') {
-      evt.preventDefault();
-      this._adapter.interactiveElement?.click();
+    if (evt.key === ' ' || evt.key === 'Enter') {
+      const isAnchor = this._adapter.interactiveElement?.tagName === 'A';
+      if (isAnchor) {
+        if (evt.key === ' ') {
+          this._adapter.interactiveElement?.click();
+        }
+      } else {
+        this._adapter.animateStateLayer();
+        this._onClick(evt);
+      }
     }
+
+    this._adapter.removeHostListener('keyup', this._keyupListener, { capture: true });
   }
 
-  private _onClick(evt: MouseEvent): void {
+  private _onClick(evt: MouseEvent | KeyboardEvent): void {
     const composedElements = composedPathFrom(this._adapter.hostElement, evt);
 
     // Ignore clicks from elements that should not trigger selection
@@ -146,11 +171,12 @@ export class ListItemCore implements IListItemCore {
     if (value && !this._noninteractive) {
       this._adapter.addRootListener('mousedown', this._mousedownListener, { capture: true });
       this._adapter.addHostListener('click', this._clickListener, { capture: true });
-      this._adapter.addHostListener('keydown', this._keydownListener);
+      this._adapter.addHostListener('keydown', this._keydownListener, { capture: true });
     } else {
       this._adapter.removeRootListener('mousedown', this._mousedownListener, { capture: true });
       this._adapter.removeHostListener('click', this._clickListener, { capture: true });
-      this._adapter.removeHostListener('keydown', this._keydownListener);
+      this._adapter.removeHostListener('keydown', this._keydownListener, { capture: true });
+      this._adapter.removeHostListener('keyup', this._keyupListener, { capture: true });
     }
   }
 

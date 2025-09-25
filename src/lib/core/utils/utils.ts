@@ -205,12 +205,19 @@ export function locateTargetHeuristic(element: HTMLElement, id?: string | null):
  * @returns The element if found, otherwise `null`.
  */
 export function locateElementById(element: HTMLElement, id?: string | null): HTMLElement | null {
+  if (!element.isConnected) {
+    return null;
+  }
+
   const rootNode = element.getRootNode() as Document | ShadowRoot;
 
   // Special case handling for a `:host` selector to easily target a host element
   // from within a shadow tree, given that this is a very common scenario
-  if (id === ':host' && rootNode instanceof ShadowRoot) {
-    return rootNode.host as HTMLElement;
+  if (id === ':host') {
+    if (rootNode instanceof ShadowRoot) {
+      return rootNode.host as HTMLElement;
+    }
+    return null;
   }
 
   return rootNode.querySelector(`#${id}`);
@@ -387,4 +394,82 @@ export function toggleState(internals: ElementInternals, state: string, value: b
       internals.states.delete(`--${state}`);
     }
   }
+}
+
+/**
+ * Determines if an element is clipped by the viewport bounds
+ * @param element The element to check.
+ * @returns `true` if the element is clipped by the viewport, otherwise `false`.
+ */
+export function isElementClipped(element: HTMLElement | null): boolean {
+  if (!element) {
+    return false;
+  }
+
+  const rect = element.getBoundingClientRect();
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  return rect.top < 0 || rect.left < 0 || rect.bottom > viewportHeight || rect.right > viewportWidth;
+}
+
+/**
+ * Moves an element into the viewport by adjusting its position to ensure it's fully visible.
+ * @param element The element to move into view.
+ * @param options Configuration options for the viewport adjustment.
+ * @param options.padding The minimum distance from viewport edges (defaults to 8px).
+ * @returns `true` if the position was adjusted, otherwise `false`.
+ */
+export function moveElementIntoViewport(element: HTMLElement | null, { padding = 8 } = {}): boolean {
+  if (!element) {
+    return false;
+  }
+
+  const rect = element.getBoundingClientRect();
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  // Get current computed position values
+  const computedStyle = window.getComputedStyle(element);
+  const currentLeft = parseFloat(computedStyle.left) || 0;
+  const currentTop = parseFloat(computedStyle.top) || 0;
+
+  let newLeft = currentLeft;
+  let newTop = currentTop;
+
+  // Calculate the adjustments needed to bring the element into view
+  // Handle horizontal positioning
+  if (rect.left < 0) {
+    // Element extends beyond left edge - move it right
+    newLeft = currentLeft - rect.left + padding;
+  } else if (rect.right > viewportWidth) {
+    // Element extends beyond right edge - move it left
+    newLeft = currentLeft - (rect.right - viewportWidth) - padding;
+  }
+
+  // Handle vertical positioning
+  if (rect.top < 0) {
+    // Element extends beyond top edge - move it down
+    newTop = currentTop - rect.top + padding;
+  } else if (rect.bottom > viewportHeight) {
+    // Element extends beyond bottom edge - move it up
+    newTop = currentTop - (rect.bottom - viewportHeight) - padding;
+  }
+
+  // Ensure the element doesn't exceed viewport bounds after adjustment
+  // This prevents the element from being too large for the viewport
+  const maxLeft = viewportWidth - rect.width - padding;
+  const maxTop = viewportHeight - rect.height - padding;
+
+  newLeft = Math.max(padding, Math.min(newLeft, maxLeft));
+  newTop = Math.max(padding, Math.min(newTop, maxTop));
+
+  // Only apply position changes if they're different from current values
+  if (newLeft !== currentLeft || newTop !== currentTop) {
+    element.style.left = `${newLeft}px`;
+    element.style.top = `${newTop}px`;
+    return true;
+  }
+
+  return false;
 }

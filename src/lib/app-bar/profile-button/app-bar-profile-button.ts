@@ -36,6 +36,8 @@ declare global {
 /**
  * @tag forge-app-bar-profile-button
  *
+ * @summary A user profile button component that displays an avatar and opens a profile card popup with user information and action buttons when clicked.
+ *
  * @property {string} avatarImageUrl - The url of the avatar image to display.
  * @property {number} [avatarLetterCount=2] - The number of letters to display in the avatar.
  * @property {string} avatarText - The text to display in the avatar.

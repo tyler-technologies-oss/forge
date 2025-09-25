@@ -29,6 +29,8 @@ declare global {
 }
 
 /**
+ * @summary A date input component with an integrated calendar popup for selecting single dates with keyboard and mouse interaction support.
+ *
  * @tag forge-date-picker
  *
  * @attribute {string} [value] - The value of the date picker.

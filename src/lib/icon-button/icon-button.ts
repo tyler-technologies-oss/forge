@@ -33,6 +33,8 @@ declare global {
 }
 
 /**
+ * @summary A clickable button component that displays an icon with support for different variants, themes, toggle states, and accessibility features.
+ *
  * @tag forge-icon-button
  *
  * @globalconfig variant
