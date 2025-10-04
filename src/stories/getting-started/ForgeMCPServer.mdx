@@ -1,0 +1,120 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Getting Started/Forge MCP Server" tags={['experimental']} />
+
+# Forge MCP Server
+
+<div class="banner banner--warn">
+
+🚧 **Experimental** 🚧
+
+The Tyler Forge™ MCP Server is experimental and currently in developer preview. Please use it and provide feedback to help us improve it.
+
+**Important**: Always validate AI-generated code and information for accuracy. LLMs can make assumptions and mistakes.
+
+</div>
+
+The Tyler Forge™ MCP Server provides AI clients with direct access to Forge component documentation, design tokens, and code generation capabilities.
+This experimental tool helps developers discover components, generate framework-specific examples, and follow best practices while building with Forge.
+
+> **Key Principle**: While the MCP server significantly enhances AI assistance, always verify generated code, validate component usage, and test
+> implementations thoroughly.
+
+## Quick Setup
+
+Get started with the Forge MCP server in your AI client:
+
+### Claude Code
+```bash
+claude mcp add forge -- npx -y @tylertech/forge-mcp@latest
+```
+
+### VS Code
+
+#### Command Palette
+Open the Command Palette (`Cmd+Shift+P` or `Ctrl+Shift+P`) and run `MCP: Add Server...` and follow the instructions to add the `@tylertech/forge-mcp` npm package.
+
+#### Manual Configuration
+Create `.vscode/mcp.json`:
+```json
+{
+  "mcpServers": {
+    "forge": {
+      "command": "npx",
+      "args": ["-y", "@tylertech/forge-mcp@latest"]
+    }
+  }
+}
+```
+
+> **Note**: You may need to manually start the MCP server after updating your configuration.
+
+### Claude Desktop
+Add to your Claude Desktop configuration:
+
+```json
+{
+  "mcpServers": {
+    "forge": {
+      "command": "npx",
+      "args": ["-y", "@tylertech/forge-mcp@latest"]
+    }
+  }
+}
+```
+
+## Essential Tools
+
+The MCP server provides these key capabilities:
+
+- **Component Discovery**: `list_components`, `find_components`, `get_component_docs`
+- **Design System Access**: `get_design_tokens`, `setup_typography`, `setup_icons`
+- **Framework Integration**: `setup_framework` for Angular, React, Vue, etc.
+- **Migration Guidance**: `get_version_migration_guide`
+
+## Best Practices
+
+1. **Be Specific**: Ask for specific components or use cases rather than general questions
+2. **Validate Output**: Always review and test AI-generated code before implementation
+3. **Provide Context**: Include your framework, version constraints, and specific requirements
+4. **Break Down Complex Queries**: Split large requests into smaller, focused questions
+5. **Cross-Reference Documentation**: Use the MCP server alongside official Forge documentation
+
+## Example Usage
+
+To get started with the Forge MCP server, try these example prompts to explore its capabilities:
+
+```
+"What forge components should I use to create a navigation sidebar?"
+
+"Find components for creating a responsive form in React."
+
+"Help me add a forge data table with sorting, filtering, and pagination to this page."
+
+"Help me upgrade this page from Forge v2 to v3."
+```
+
+**Important**: The above prompts are just basic examples to get started. Tailor your queries to your needs and context, and **be specific**. If you
+know what you need and can provide details to guide the LLM, do so. The more information you provide, the better the results.
+
+## Contributing
+
+Found issues or have suggestions? The Tyler Forge™ MCP Server is open source and welcomes contributions:
+
+- **Repository**: [tyler-technologies-oss/forge-mcp](https://github.com/tyler-technologies-oss/forge-mcp)
+- **Issues**: Report bugs and request features
+- **Pull Requests**: Submit code changes and enhancements
+- **Discussions**: Share best practices, usage patterns, and improvements
+
+### Documentation
+
+The MCP server will only be as good as its documentation. If you find gaps or areas for improvement, please contribute to the docs via the MCP
+[markdown templates](https://github.com/tyler-technologies-oss/forge-mcp/tree/main/templates), or directly in the [Forge repository](https://github.com/tyler-technologies-oss/forge)
+where the API docs are generated from.
+
+## Resources
+
+- [What is the Model Context Protocol (MCP)?](https://modelcontextprotocol.io/docs/getting-started/intro)
+- [VS Code MCP documentation](https://code.visualstudio.com/docs/copilot/customization/mcp-servers)
+- [Claude Code MCP documentation](https://docs.claude.com/en/docs/claude-code/mcp)
+- [Claude Desktop MCP documentation](https://support.claude.com/en/articles/10949351-getting-started-with-local-mcp-servers-on-claude-desktop)
