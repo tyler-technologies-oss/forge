@@ -38,10 +38,11 @@ Open the Command Palette (`Cmd+Shift+P` or `Ctrl+Shift+P`) and run `MCP: Add Ser
 Create `.vscode/mcp.json`:
 ```json
 {
-  "mcpServers": {
+  "servers": {
     "forge": {
       "command": "npx",
-      "args": ["-y", "@tylertech/forge-mcp@latest"]
+      "args": ["-y", "@tylertech/forge-mcp@latest"],
+      "type": "stdio"
     }
   }
 }
