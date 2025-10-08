@@ -1,5 +1,5 @@
 {
-  "extends": "./lib/tsconfig-build.json",
+  "extends": "./tsconfig-build.json",
   "compilerOptions": {
     "sourceMap": true,
     "noImplicitReturns": true,
@@ -7,12 +7,12 @@
     "pretty": true,
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
-    "types": ["jasmine", "node", "webpack-env"],
+    "types": ["node"],
     "baseUrl": ".",
     "paths": {
       "@tylertech/forge": ["lib"],
       "@tylertech/forge/*": ["lib/*"]
     }
   },
-  "exclude": ["dev", "stories", "**/*.test.ts"]
+  "exclude": ["**/*.test.ts"]
 }

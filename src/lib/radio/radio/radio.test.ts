@@ -2,7 +2,7 @@ import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { TestHarness } from '../../../test/utils/test-harness';
+import { TestHarness } from '../../core/testing/test-harness';
 import { IFocusIndicatorComponent } from '../../focus-indicator';
 import { IStateLayerComponent } from '../../state-layer';
 import { IRadioComponent, RADIO_CONSTANTS } from '../radio';

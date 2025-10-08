@@ -5,7 +5,7 @@ import { frame } from '../core/utils/utils';
 import { sendMouse } from '@web/test-runner-commands';
 import { match, spy } from 'sinon';
 import { FIELD_CONSTANTS, IFieldComponent } from '../field';
-import { TestHarness } from '../../test/utils/test-harness';
+import { TestHarness } from '../core/testing/test-harness';
 import {
   FieldDensity,
   FieldLabelAlignment,

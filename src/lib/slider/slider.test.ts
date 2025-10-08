@@ -3,7 +3,7 @@ import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { spy } from 'sinon';
 import { getShadowElement } from '@tylertech/forge-core';
-import { TestHarness } from '../../test/utils/test-harness';
+import { TestHarness } from '../core/testing/test-harness';
 import { ISliderComponent } from '../slider';
 import { SLIDER_CONSTANTS } from './slider-constants';
 import type { IStateLayerComponent } from '../state-layer/state-layer';
