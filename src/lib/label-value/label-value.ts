@@ -1,11 +1,12 @@
-import { customElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
-import { LABEL_VALUE_CONSTANTS } from './label-value-constants';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { BaseLitElement } from '../core/base/base-lit-element';
+import { customElement, property } from 'lit/decorators.js';
+import { toggleState } from '../core/utils/utils';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
-import template from './label-value.html';
 import styles from './label-value.scss';
 
-export interface ILabelValueComponent extends IBaseComponent {
+export interface ILabelValueComponent extends BaseLitElement {
   empty: boolean;
   ellipsis: boolean;
   inline: boolean;
@@ -19,34 +20,31 @@ declare global {
   }
 }
 
+export const LABEL_VALUE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-label-value';
+
 /**
  * @tag forge-label-value
  *
- * @summary Label-value pairs are used to display a label and a value in a compact format.
+ * @summary Label-value pairs display a label and a value in a compact format.
  *
- * @property {boolean} [empty=false] - If true, the value will be displayed in an alternative emphasized style.
- * @property {boolean} [ellipsis=false] - If true, the value will be truncated with an ellipsis if it overflows its container.
- * @property {boolean} [inline=false] - If true, the label and value will be displayed on the same line.
- * @property {boolean} [dense=false] - Deprecated. Use `inline` instead.
+ * @cssproperty --forge-label-value-align
+ * @cssproperty --forge-label-value-label-spacing
+ * @cssproperty --forge-label-value-label-block-start-spacing
+ * @cssproperty --forge-label-value-label-block-end-spacing
+ * @cssproperty --forge-label-value-label-color
+ * @cssproperty --forge-label-value-icon-spacing
+ * @cssproperty --forge-label-value-inline-label-spacing
+ * @cssproperty --forge-label-value-empty-color
+ * @cssproperty --forge-label-value-empty-style
  *
- * @attribute {boolean} [empty=false] - If present, the value will be displayed in an alternative emphasized style.
- * @attribute {boolean} [ellipsis=false] - If present, the value will be truncated with an ellipsis if it overflows its container.
- * @attribute {boolean} [inline=false] - If present, the label and value will be displayed on the same line.
+ * @slot label
+ * @slot value
+ * @slot icon
  *
- * @cssproperty --forge-label-value-align - Aligns the label and value. Possible values: `start` (default), `center`, `end`.
- * @cssproperty --forge-label-value-label-spacing - The spacing between the label and value.
- * @cssproperty --forge-label-value-label-block-start-spacing - The block start spacing for the label.
- * @cssproperty --forge-label-value-label-block-end-spacing - The block end spacing for the label.
- * @cssproperty --forge-label-value-label-color - The color to apply to the label.
- * @cssproperty --forge-label-value-icon-spacing - The spacing between the icon and the label.
- * @cssproperty --forge-label-value-inline-label-spacing - The spacing between the label and value when displayed inline.
- * @cssproperty --forge-label-value-empty-color - The color to apply to the value when empty.
- * @cssproperty --forge-label-value-empty-style - The font-style to apply to the value when empty.
- *
- * @csspart root - The root layout container element.
- * @csspart label - The label container element.
- * @csspart value - The value container element.
- * @csspart icon - The icon container element.
+ * @state empty - display the value in an alternative emphasized style.
+ * @state ellipsis - truncate overflowing text with an ellipsis.
+ * @state inline - display the label and value in a single line.
+ * @state dense - Deprecated. Use `inline` instead.
  *
  * @cssclass forge-label-value - The container element for the label and value elements.
  * @cssclass forge-label-value--inline - Applied to the container element when the label and value are displayed inline next to each other.
@@ -55,81 +53,71 @@ declare global {
  * @cssclass forge-label-value__label - The label element.
  * @cssclass forge-label-value__value - The value element.
  * @cssclass forge-label-value__icon - The icon element.
- *
- * @slot label - The label to display.
- * @slot value - The value to display.
- * @slot icon - An icon to display next to the label.
  */
-@customElement({
-  name: LABEL_VALUE_CONSTANTS.elementName
-})
-export class LabelValueComponent extends BaseComponent implements ILabelValueComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(LABEL_VALUE_CONSTANTS.observedAttributes);
-  }
+@customElement(LABEL_VALUE_TAG_NAME)
+export class LabelValueComponent extends BaseLitElement implements ILabelValueComponent {
+  public static styles = unsafeCSS(styles);
 
-  private _empty = false;
-  private _ellipsis = false;
-  private _inline = false;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = LABEL_VALUE_TAG_NAME;
+
+  #internals: ElementInternals;
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, styles);
+    this.#internals = this.attachInternals();
   }
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case LABEL_VALUE_CONSTANTS.observedAttributes.EMPTY:
-        this.empty = coerceBoolean(newValue);
-        break;
-      case LABEL_VALUE_CONSTANTS.observedAttributes.ELLIPSIS:
-        this.ellipsis = coerceBoolean(newValue);
-        break;
-      case LABEL_VALUE_CONSTANTS.observedAttributes.INLINE:
-      case LABEL_VALUE_CONSTANTS.observedAttributes.DENSE:
-        this.inline = coerceBoolean(newValue);
-        break;
+  /** Controls whether the value is displayed in an alternative emphasized style. */
+  @property({ type: Boolean, reflect: true })
+  public empty = false;
+
+  /** Controls whether overflowing text is truncated with an ellipsis. */
+  @property({ type: Boolean, reflect: true })
+  public ellipsis = false;
+
+  /** Controls whether the label and value are displayed inline. */
+  @property({ type: Boolean, reflect: true })
+  public inline = false;
+
+  /** Deprecated. Use `inline` instead. */
+  @property({ type: Boolean, reflect: true })
+  public dense = false;
+
+  public override willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('dense')) {
+      if (this.hasUpdated || this.hasAttribute('dense')) {
+        // Ignore the initialization cycle. On subsequent updates, map dense to inline
+        if (this.inline !== this.dense) {
+          this.inline = this.dense;
+        }
+      }
+    }
+
+    if (changedProperties.has('empty')) {
+      toggleState(this.#internals, 'empty', this.empty);
+    }
+    if (changedProperties.has('ellipsis')) {
+      toggleState(this.#internals, 'ellipsis', this.ellipsis);
+    }
+    if (changedProperties.has('inline') || changedProperties.has('dense')) {
+      toggleState(this.#internals, 'inline', this.inline);
     }
   }
 
-  public get empty(): boolean {
-    return this._empty;
-  }
-  public set empty(value: boolean) {
-    value = Boolean(value);
-    if (this._empty !== value) {
-      this._empty = value;
-      this.toggleAttribute(LABEL_VALUE_CONSTANTS.attributes.EMPTY, this._empty);
-    }
-  }
-
-  public get ellipsis(): boolean {
-    return this._ellipsis;
-  }
-  public set ellipsis(value: boolean) {
-    value = Boolean(value);
-    if (this._ellipsis !== value) {
-      this._ellipsis = value;
-      this.toggleAttribute(LABEL_VALUE_CONSTANTS.attributes.ELLIPSIS, this._ellipsis);
-    }
-  }
-
-  public get inline(): boolean {
-    return this._inline;
-  }
-  public set inline(value: boolean) {
-    value = Boolean(value);
-    if (this._inline !== value) {
-      this._inline = value;
-      this.toggleAttribute(LABEL_VALUE_CONSTANTS.attributes.INLINE, this._inline);
-    }
-  }
-
-  /** @deprecated Use `inline` instead. */
-  public get dense(): boolean {
-    return this.inline;
-  }
-  public set dense(value: boolean) {
-    this.inline = value;
+  public render(): TemplateResult {
+    return html`
+      <div class="forge-label-value" part="root">
+        <div class="icon" part="icon">
+          <slot name="icon"></slot>
+        </div>
+        <div class="label" part="label">
+          <slot name="label"></slot>
+        </div>
+        <div class="value" part="value">
+          <slot name="value"></slot>
+        </div>
+      </div>
+    `;
   }
 }
