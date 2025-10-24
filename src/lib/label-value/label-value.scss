@@ -8,7 +8,7 @@
   @include host;
 }
 
-:host(:where([hide], :state(hidden))) {
+:host(:where([hidden], :state(hidden))) {
   display: none;
 }
 
