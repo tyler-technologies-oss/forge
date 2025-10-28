@@ -245,6 +245,7 @@ export class TableCore implements ITableCore {
       // Now we can add/remove the column
       this._adapter.setSelectColumnVisibility(
         this._adapter.getTableElement(),
+        this._dense,
         this._select,
         this._selectRowListener,
         this._multiselect ? this._selectAllListener : undefined,
@@ -277,6 +278,7 @@ export class TableCore implements ITableCore {
       if (this._select) {
         this._adapter.setSelectAllVisibility(
           this._adapter.getTableElement(),
+          this._dense,
           this._multiselect,
           this._multiselect ? this._selectAllListener : null,
           this._multiselect ? this.selectAllTemplate : null,
