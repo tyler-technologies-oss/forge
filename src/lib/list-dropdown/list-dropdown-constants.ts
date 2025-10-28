@@ -161,4 +161,7 @@ export interface ListDropdownTooltipConfig {
   offset?: number;
   anchor?: string;
   anchorElement?: HTMLElement;
+  visibilityMode?: ListDropdownTooltipVisibilityMode;
 }
+
+export type ListDropdownTooltipVisibilityMode = 'always' | 'overflow-only';
