@@ -10,6 +10,7 @@ export interface ITextFieldAdapter extends IBaseFieldAdapter {
   addRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void;
   removeRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void;
   disableInput(disabled: boolean): void;
+  setInvalid(value: boolean): void;
   handleDefaultSlotChange(listener: TextFieldInputAttributeObserver): void;
   tryAddValueChangeListener(context: unknown, listener: TextFieldValueChangeListener): void;
   removeValueChangeListener(): void;
@@ -67,6 +68,10 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
 
   public disableInput(disabled: boolean): void {
     this._inputElements.forEach(el => (el.disabled = disabled));
+  }
+
+  public setInvalid(value: boolean): void {
+    this._inputElements.forEach(el => toggleAttribute(el, value, 'aria-invalid', 'true'));
   }
 
   public inputIsDisabled(): boolean {
