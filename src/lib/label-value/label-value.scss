@@ -8,7 +8,7 @@
   @include host;
 }
 
-:host([hidden]) {
+:host(:where([hide], :state(hidden))) {
   display: none;
 }
 
@@ -48,11 +48,10 @@
 // Inline/dense
 //
 
-:host(:is([inline], [dense])) {
+:host(:where([inline], [dense], :state(inline), :state(dense))) {
   .forge-label-value {
     @include inline;
   }
-
   .label {
     @include inline-label;
   }
@@ -62,7 +61,7 @@
 // Ellipsis
 //
 
-:host([ellipsis]) {
+:host(:where([ellipsis], :state(ellipsis))) {
   ::slotted([slot='value']) {
     @include ellipsis;
   }
@@ -72,7 +71,7 @@
 // Empty
 //
 
-:host([empty]) {
+:host(:where([empty], :state(empty))) {
   .value {
     @include value-empty;
   }

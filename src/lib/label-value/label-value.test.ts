@@ -1,24 +1,24 @@
-import { expect, fixture, html } from '@open-wc/testing';
+import { expect } from '@esm-bundle/chai';
+import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { ILabelValueComponent } from './label-value';
 
 import './label-value';
-import { LABEL_VALUE_CONSTANTS } from './label-value-constants';
 
 describe('Label Value', () => {
-  it('should use shadow DOM', async () => {
-    const el = await createFixture();
+  it('should contain shadow root', async () => {
+    const el = await fixture(html`<forge-label-value>Test</forge-label-value>`);
 
-    expect(el.shadowRoot).to.not.be.null;
+    expect(el.shadowRoot).not.to.be.null;
   });
 
   it('should be accessible', async () => {
-    const el = await createFixture();
+    const el = await fixture(html`<forge-label-value>Test</forge-label-value>`);
 
     await expect(el).to.be.accessible();
   });
 
   it('should have expected default state', async () => {
-    const el = await createFixture();
+    const el = await fixture<ILabelValueComponent>(html`<forge-label-value></forge-label-value>`);
 
     expect(el.empty).to.be.false;
     expect(el.ellipsis).to.be.false;
@@ -26,81 +26,67 @@ describe('Label Value', () => {
     expect(el.dense).to.be.false;
   });
 
-  it('should set empty via attribute', async () => {
-    const el = await createFixture({ empty: true });
-
-    expect(el.empty).to.be.true;
-    expect(el.hasAttribute(LABEL_VALUE_CONSTANTS.attributes.EMPTY)).to.be.true;
-  });
-
-  it('should set empty via property', async () => {
-    const el = await createFixture();
-
+  it('should set empty attribute when empty property is set', async () => {
+    const el = await fixture<ILabelValueComponent>(html`<forge-label-value></forge-label-value>`);
     el.empty = true;
+    await elementUpdated(el);
+
+    expect(el.hasAttribute('empty')).to.be.true;
+    expect(el.matches(':state(empty)')).to.be.true;
+  });
+
+  it('should set empty property when empty attribute is set', async () => {
+    const el = await fixture<ILabelValueComponent>(html`<forge-label-value empty></forge-label-value>`);
 
     expect(el.empty).to.be.true;
-    expect(el.hasAttribute(LABEL_VALUE_CONSTANTS.attributes.EMPTY)).to.be.true;
+    expect(el.matches(':state(empty)')).to.be.true;
   });
 
-  it('should set ellipsis via attribute', async () => {
-    const el = await createFixture({ ellipsis: true });
-
-    expect(el.ellipsis).to.be.true;
-    expect(el.hasAttribute(LABEL_VALUE_CONSTANTS.attributes.ELLIPSIS)).to.be.true;
-  });
-
-  it('should set ellipsis via property', async () => {
-    const el = await createFixture();
-
+  it('should set ellipsis attribute when ellipsis property is set', async () => {
+    const el = await fixture<ILabelValueComponent>(html`<forge-label-value></forge-label-value>`);
     el.ellipsis = true;
+    await elementUpdated(el);
+
+    expect(el.hasAttribute('ellipsis')).to.be.true;
+    expect(el.matches(':state(ellipsis)')).to.be.true;
+  });
+
+  it('should set ellipsis property when ellipsis attribute is set', async () => {
+    const el = await fixture<ILabelValueComponent>(html`<forge-label-value ellipsis></forge-label-value>`);
 
     expect(el.ellipsis).to.be.true;
-    expect(el.hasAttribute(LABEL_VALUE_CONSTANTS.attributes.ELLIPSIS)).to.be.true;
+    expect(el.matches(':state(ellipsis)')).to.be.true;
   });
 
-  it('should set inline via attribute', async () => {
-    const el = await createFixture({ inline: true });
-
-    expect(el.dense).to.be.true;
-    expect(el.inline).to.be.true;
-    expect(el.hasAttribute(LABEL_VALUE_CONSTANTS.attributes.INLINE)).to.be.true;
-  });
-
-  it('should set inline via property', async () => {
-    const el = await createFixture();
-
+  it('should set inline attribute when inline property is set', async () => {
+    const el = await fixture<ILabelValueComponent>(html`<forge-label-value></forge-label-value>`);
     el.inline = true;
+    await elementUpdated(el);
 
-    expect(el.inline).to.be.true;
-    expect(el.hasAttribute(LABEL_VALUE_CONSTANTS.attributes.INLINE)).to.be.true;
+    expect(el.hasAttribute('inline')).to.be.true;
+    expect(el.matches(':state(inline)')).to.be.true;
   });
 
-  it('should set inline via deprecated dense property', async () => {
-    const el = await createFixture();
+  it('should set inline property when inline attribute is set', async () => {
+    const el = await fixture<ILabelValueComponent>(html`<forge-label-value inline></forge-label-value>`);
 
+    expect(el.inline).to.be.true;
+    expect(el.matches(':state(inline)')).to.be.true;
+  });
+
+  it('should set inline attribute when dense deprecated property is set', async () => {
+    const el = await fixture<ILabelValueComponent>(html`<forge-label-value></forge-label-value>`);
     el.dense = true;
+    await elementUpdated(el);
 
-    expect(el.dense).to.be.true;
-    expect(el.inline).to.be.true;
-    expect(el.hasAttribute(LABEL_VALUE_CONSTANTS.attributes.INLINE)).to.be.true;
+    expect(el.hasAttribute('inline')).to.be.true;
+    expect(el.matches(':state(inline)')).to.be.true;
   });
 
-  it('should set inline via deprecated dense attribute', async () => {
-    const el = await createFixture();
+  it('should set inline property when dense deprecated attribute is set', async () => {
+    const el = await fixture<ILabelValueComponent>(html`<forge-label-value dense></forge-label-value>`);
 
-    el.setAttribute(LABEL_VALUE_CONSTANTS.attributes.DENSE, '');
-
-    expect(el.dense).to.be.true;
     expect(el.inline).to.be.true;
-    expect(el.hasAttribute(LABEL_VALUE_CONSTANTS.attributes.INLINE)).to.be.true;
+    expect(el.matches(':state(inline)')).to.be.true;
   });
 });
-
-function createFixture({ empty = false, ellipsis = false, inline = false } = {}): Promise<ILabelValueComponent> {
-  return fixture<ILabelValueComponent>(html`
-    <forge-label-value ?empty=${empty} ?ellipsis=${ellipsis} ?inline=${inline}>
-      <span slot="label">Label</span>
-      <span slot="value">Value</span>
-    </forge-label-value>
-  `);
-}
