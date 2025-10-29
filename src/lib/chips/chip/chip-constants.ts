@@ -13,7 +13,8 @@ const observedAttributes = {
   HREF: 'href',
   TARGET: 'target',
   DOWNLOAD: 'download',
-  REL: 'rel'
+  REL: 'rel',
+  REMOVE_BUTTON_LABEL: 'remove-button-label'
 };
 
 const attributes = {

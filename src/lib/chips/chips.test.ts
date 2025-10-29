@@ -237,6 +237,7 @@ describe('Chips', () => {
       expect(el.target).to.be.undefined;
       expect(el.download).to.be.undefined;
       expect(el.rel).to.be.undefined;
+      expect(el.removeButtonLabel).to.be.undefined;
     });
 
     it('should set type via attribute', async () => {
@@ -383,6 +384,59 @@ describe('Chips', () => {
       expect(anchorEl.target).to.equal('_blank');
       expect(anchorEl.download).to.equal('test');
       expect(anchorEl.rel).to.equal('noopener');
+    });
+
+    it('should set remove button label via attribute', async () => {
+      const el = await fixture<IChipComponent>(html`<forge-chip type="input" remove-button-label="Custom remove">Test</forge-chip>`);
+      const removeButton = getRemoveButtonElement(el);
+
+      expect(el.removeButtonLabel).to.equal('Custom remove');
+      expect(removeButton?.getAttribute('aria-label')).to.equal('Custom remove');
+    });
+
+    it('should update remove button label attribute when setting property', async () => {
+      const el = await fixture<IChipComponent>(html`<forge-chip type="input">Test</forge-chip>`);
+      const removeButton = getRemoveButtonElement(el);
+
+      expect(el.removeButtonLabel).to.be.undefined;
+      expect(removeButton?.getAttribute('aria-label')).to.equal('Remove Test');
+
+      el.removeButtonLabel = 'Custom remove';
+
+      expect(removeButton?.getAttribute('aria-label')).to.equal('Custom remove');
+    });
+
+    it('should use default remove button label when custom label is not set', async () => {
+      const el = await fixture<IChipComponent>(html`<forge-chip type="input">Test Chip</forge-chip>`);
+      const removeButton = getRemoveButtonElement(el);
+
+      expect(el.removeButtonLabel).to.be.undefined;
+      expect(removeButton?.getAttribute('aria-label')).to.equal('Remove Test Chip');
+    });
+
+    it('should update remove button label when property is set after creation', async () => {
+      const el = await fixture<IChipComponent>(html`<forge-chip type="input">Test</forge-chip>`);
+      let removeButton = getRemoveButtonElement(el);
+
+      expect(removeButton?.getAttribute('aria-label')).to.equal('Remove Test');
+
+      el.removeButtonLabel = 'Delete item';
+      removeButton = getRemoveButtonElement(el);
+
+      expect(removeButton?.getAttribute('aria-label')).to.equal('Delete item');
+    });
+
+    it('should reset to default remove button label when custom label is removed', async () => {
+      const el = await fixture<IChipComponent>(html`<forge-chip type="input" remove-button-label="Custom remove">Test</forge-chip>`);
+      let removeButton = getRemoveButtonElement(el);
+
+      expect(removeButton?.getAttribute('aria-label')).to.equal('Custom remove');
+
+      el.removeAttribute(CHIP_CONSTANTS.attributes.REMOVE_BUTTON_LABEL);
+      removeButton = getRemoveButtonElement(el);
+
+      expect(el.removeButtonLabel).to.be.null;
+      expect(removeButton?.getAttribute('aria-label')).to.equal('Remove Test');
     });
 
     it('should set focus to trigger element when calling focus() method', async () => {
