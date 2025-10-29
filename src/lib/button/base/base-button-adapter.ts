@@ -4,7 +4,7 @@ import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 import { IBaseButton } from './base-button';
-import { BASE_BUTTON_CONSTANTS } from './base-button-constants';
+import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants';
 import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflect-utils';
 import { internals, setDefaultAria } from '../../constants';
 import { supportsPopover } from '../../core/utils/feature-detection';
@@ -22,6 +22,9 @@ export interface IBaseButtonAdapter<T extends IBaseComponent> extends IBaseAdapt
   toggleDefaultPopoverIcon(value: boolean): void;
   animateStateLayer(): void;
   addDefaultSlotChangeListener(listener: EventListener): void;
+  addNativeSubmitButton(): void;
+  setNativeSubmitButtonForm(form: string | null | undefined): void;
+  removeNativeSubmitButton(): void;
 }
 
 export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapter<T> implements IBaseButtonAdapter<T> {
@@ -30,6 +33,8 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
   protected readonly _stateLayerElement: IStateLayerComponent;
   protected readonly _defaultSlotElement: HTMLSlotElement;
   protected readonly _endSlotElement: HTMLSlotElement;
+  protected _nativeSubmitButton?: HTMLButtonElement;
+  protected _nativeSubmitButtonClickListener: EventListener = evt => evt.stopPropagation();
 
   constructor(component: T) {
     super(component);
@@ -103,21 +108,22 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
     this._focusIndicatorElement.active = true;
   }
 
-  public clickFormButton(type: string): void {
-    if (!this._component.form) {
+  public clickFormButton(type: ButtonType): void {
+    if (!this._component.form || type === 'button') {
       return; // Nothing for us to do if there is no form element associated to us
     }
 
     if (type === 'submit') {
+      // Add a native submit button to the DOM if it doesn't already exist
+      this.addNativeSubmitButton();
+
       // We need to set the form value to the button value before submitting the form
       this._component[internals].setFormValue(this._component.value);
 
       // We don't use a real <button> since the host is the semantic button, so for
-      // the "submit" button type we need to create a temporary button and click it
+      // the "submit" button type we need to clone attibutes to a native button and click it
       // to trigger the form submission
-      const tempBtn = document.createElement('button');
-      tempBtn.type = type;
-      cloneAttributes(this._component, tempBtn, BUTTON_FORM_ATTRIBUTES);
+      cloneAttributes(this._component, this._nativeSubmitButton as HTMLButtonElement, BUTTON_FORM_ATTRIBUTES);
 
       // form.requestSubmit(submitter) does not work with form associated custom
       // elements. This patches the dispatched submit event to add the correct `submitter`.
@@ -133,10 +139,8 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
         },
         { capture: true, once: true }
       );
-
-      this._component.insertAdjacentElement('afterend', tempBtn);
-      tempBtn.click();
-      tempBtn.remove();
+      this._nativeSubmitButton?.addEventListener('click', evt => evt.stopPropagation(), { capture: true, once: true });
+      this._nativeSubmitButton?.click();
     } else if (type === 'reset') {
       this._component.form?.reset();
     }
@@ -234,6 +238,46 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
 
   public addDefaultSlotChangeListener(listener: EventListener): void {
     this._defaultSlotElement.addEventListener('slotchange', listener);
+  }
+
+  public addNativeSubmitButton(): void {
+    if (this._nativeSubmitButton?.isConnected) {
+      return;
+    }
+
+    this._nativeSubmitButton = document.createElement('button');
+    this._nativeSubmitButton.type = 'submit';
+    this._nativeSubmitButton.style.display = 'none';
+    this._nativeSubmitButton.ariaHidden = 'true';
+
+    const form = this._component.getAttribute('form');
+    if (form) {
+      this._nativeSubmitButton.setAttribute('form', form);
+    }
+
+    // Prevent click events from being handled by the button component to avoid forms being
+    // submitted more than once
+    this._nativeSubmitButton?.addEventListener('click', this._nativeSubmitButtonClickListener, { capture: true });
+
+    this._component.prepend(this._nativeSubmitButton);
+  }
+
+  public setNativeSubmitButtonForm(form: string | null | undefined): void {
+    if (!this._nativeSubmitButton) {
+      return;
+    }
+
+    if (form) {
+      this._nativeSubmitButton.setAttribute('form', form);
+    } else {
+      this._nativeSubmitButton.removeAttribute('form');
+    }
+  }
+
+  public removeNativeSubmitButton(): void {
+    this._nativeSubmitButton?.remove();
+    this._nativeSubmitButton?.removeEventListener('click', this._nativeSubmitButtonClickListener, { capture: true });
+    this._nativeSubmitButton = undefined;
   }
 
   private _locatePopoverTargetElement(): HTMLElement | null {
