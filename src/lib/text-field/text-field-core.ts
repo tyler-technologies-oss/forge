@@ -127,6 +127,14 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
     }
   }
 
+  public override get invalid(): boolean {
+    return super.invalid;
+  }
+  public override set invalid(value: boolean) {
+    super.invalid = value;
+    this._adapter.setInvalid(value);
+  }
+
   public override get disabled(): boolean {
     return super.disabled;
   }
