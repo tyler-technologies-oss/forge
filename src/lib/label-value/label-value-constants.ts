@@ -14,6 +14,7 @@ const attributes = {
   ...observedAttributes
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const LABEL_VALUE_CONSTANTS = {
   elementName,
   observedAttributes,

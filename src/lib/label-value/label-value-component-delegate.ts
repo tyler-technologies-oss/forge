@@ -1,6 +1,5 @@
 import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate';
-import { ILabelValueComponent } from '../label-value';
-import { LABEL_VALUE_CONSTANTS } from './label-value-constants';
+import { ILabelValueComponent, LABEL_VALUE_TAG_NAME } from '../label-value';
 
 export type LabelValueComponentDelegateProps = Partial<ILabelValueComponent>;
 export interface ILabelValueComponentDelegateOptions extends IBaseComponentDelegateOptions {
@@ -41,7 +40,7 @@ export class LabelValueComponentDelegate extends BaseComponentDelegate<ILabelVal
   }
 
   protected _build(): ILabelValueComponent {
-    return document.createElement(LABEL_VALUE_CONSTANTS.elementName);
+    return document.createElement(LABEL_VALUE_TAG_NAME) as ILabelValueComponent;
   }
 
   protected override _configure(): void {
