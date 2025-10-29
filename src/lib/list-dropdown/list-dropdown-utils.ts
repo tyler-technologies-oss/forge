@@ -15,8 +15,10 @@ import {
   ListDropdownAsyncStyle,
   ListDropdownIconType,
   ListDropdownType,
-  LIST_DROPDOWN_CONSTANTS
+  LIST_DROPDOWN_CONSTANTS,
+  ListDropdownTooltipConfig
 } from './list-dropdown-constants';
+import { frame } from '../core/utils/utils';
 
 export enum ListDropdownOptionType {
   Option,
@@ -270,37 +272,25 @@ export function createListItems(
         }
       }
 
-      // Check for a tooltip configuration
-      if (option.tooltip) {
-        const { text, type = 'presentation', ...restConfig } = option.tooltip;
-        const tooltipElement = document.createElement('forge-tooltip');
-        tooltipElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}-tooltip`;
-        tooltipElement.textContent = option.tooltip.text;
-
-        // We always anchor to the list item element unless an anchor element is provided
-        if (!option.tooltip.anchor && !option.tooltip.anchorElement) {
-          tooltipElement.anchorElement = listItemElement;
-        }
-
-        // We need to attach the tooltip ARIA attributes to the button element, not the anchor element
-        if (type === 'label' || type === 'description') {
-          const a11yAttr = type === 'label' ? 'aria-labelledby' : 'aria-describedby';
-          buttonElement.setAttribute(a11yAttr, tooltipElement.id);
-        }
-
-        Object.assign(tooltipElement, restConfig);
-        listItemElement.appendChild(tooltipElement);
-      }
-
+      const secondaryLabelElement = document.createElement('span');
       // Check for secondary (subtitle) text
       if (option.secondaryLabel) {
-        const secondaryLabelElement = document.createElement('span');
         secondaryLabelElement.slot = 'secondary-text';
         secondaryLabelElement.textContent = option.secondaryLabel;
         secondaryLabelElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}-secondary`;
         listItemElement.twoLine = true;
         listItemElement.appendChild(secondaryLabelElement);
         buttonElement.setAttribute('aria-describedby', secondaryLabelElement.id);
+      }
+
+      // Check for a tooltip configuration
+      if (option.tooltip) {
+        if (!isDefined(option.tooltip?.visibilityMode) || option.tooltip?.visibilityMode === 'always') {
+          const tooltipElement = createListItemTooltip(option.tooltip, config.id, optionIdIndex, listItemElement, buttonElement);
+          listItemElement.appendChild(tooltipElement);
+        } else if (option.tooltip?.visibilityMode === 'overflow-only') {
+          asyncCreateListItemTooltipIfTextOverflows(option.tooltip, config.id, optionIdIndex, listItemElement, buttonElement, secondaryLabelElement);
+        }
       }
 
       // If multiple selections are enabled then we need to create and append a leading checkbox element
@@ -391,6 +381,50 @@ export function createListItems(
 
       optionParent.appendChild(listItemElement);
     }
+  }
+}
+
+export function createListItemTooltip(
+  tooltip: ListDropdownTooltipConfig,
+  configId: string,
+  optionIdIndex: number,
+  listItemElement: HTMLElement,
+  buttonElement: HTMLElement
+): HTMLElement {
+  const { text, type = 'presentation', ...restConfig } = tooltip;
+  const tooltipElement = document.createElement('forge-tooltip');
+  tooltipElement.id = `list-dropdown-option-${configId}-${optionIdIndex++}-tooltip`;
+  tooltipElement.textContent = tooltip.text;
+
+  // We always anchor to the list item element unless an anchor element is provided
+  if (!tooltip.anchor && !tooltip.anchorElement) {
+    tooltipElement.anchorElement = listItemElement;
+  }
+
+  // We need to attach the tooltip ARIA attributes to the button element, not the anchor element
+  if (type === 'label' || type === 'description') {
+    const a11yAttr = type === 'label' ? 'aria-labelledby' : 'aria-describedby';
+    buttonElement.setAttribute(a11yAttr, tooltipElement.id);
+  }
+
+  Object.assign(tooltipElement, restConfig);
+  return tooltipElement;
+}
+
+export async function asyncCreateListItemTooltipIfTextOverflows(
+  tooltip: ListDropdownTooltipConfig,
+  configId: string,
+  optionIdIndex: number,
+  listItemElement: HTMLElement,
+  buttonElement: HTMLElement,
+  secondaryLabelElement: HTMLElement
+): Promise<void> {
+  await frame();
+
+  // Only append the tooltip if the button or secondary label overflow the width of the parent list item.
+  if (buttonElement.scrollWidth > listItemElement.clientWidth || secondaryLabelElement.scrollWidth > listItemElement.clientWidth) {
+    const tooltipElement = createListItemTooltip(tooltip, configId, optionIdIndex, listItemElement, buttonElement);
+    listItemElement.appendChild(tooltipElement);
   }
 }
 
