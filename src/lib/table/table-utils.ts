@@ -90,6 +90,7 @@ export class TableUtils {
       TableUtils._addSelectColumn(
         thead,
         tbody,
+        configuration.dense,
         configuration.selectListener,
         configuration.selectAllListener,
         configuration.selectAllTemplate,
@@ -152,6 +153,7 @@ export class TableUtils {
     if (configuration.selectListener) {
       TableUtils._createBodySelectColumn(
         tbody,
+        configuration.dense,
         configuration.selectCheckboxAlignment,
         configuration.data,
         configuration.tooltipSelect,
@@ -731,6 +733,7 @@ export class TableUtils {
   private static _createSelectColumn(
     theadElement: HTMLTableSectionElement,
     tbodyElement: HTMLTableSectionElement,
+    dense: boolean,
     showSelectAll: boolean,
     selectAllTemplate: TableHeaderSelectAllTemplate | null,
     registerListener: () => void,
@@ -740,11 +743,11 @@ export class TableUtils {
     tooltipSelectAll: string | null
   ): void {
     if (theadElement) {
-      TableUtils._createHeadSelectColumn(theadElement, showSelectAll, selectAllTemplate, registerListener, selectCheckboxAlignment, tooltipSelectAll);
+      TableUtils._createHeadSelectColumn(theadElement, dense, showSelectAll, selectAllTemplate, registerListener, selectCheckboxAlignment, tooltipSelectAll);
     }
 
     if (tbodyElement) {
-      TableUtils._createBodySelectColumn(tbodyElement, selectCheckboxAlignment, data, tooltipSelect, tooltipSelectAll);
+      TableUtils._createBodySelectColumn(tbodyElement, dense, selectCheckboxAlignment, data, tooltipSelect, tooltipSelectAll);
     }
   }
 
@@ -755,6 +758,7 @@ export class TableUtils {
    */
   private static _createHeadSelectColumn(
     theadElement: HTMLTableSectionElement,
+    dense: boolean,
     showSelectAll: boolean,
     selectAllTemplate: TableHeaderSelectAllTemplate | null,
     registerListener: () => void,
@@ -778,7 +782,7 @@ export class TableUtils {
           }
         });
       } else {
-        lastRowFirstCell?.appendChild(TableUtils._createCheckboxElement(true, selectCheckboxAlignment, null, null, null, tooltipSelectAll));
+        lastRowFirstCell?.appendChild(TableUtils._createCheckboxElement(true, dense, selectCheckboxAlignment, null, null, null, tooltipSelectAll));
       }
     }
   }
@@ -789,6 +793,7 @@ export class TableUtils {
    */
   private static _createBodySelectColumn(
     tbodyElement: HTMLTableSectionElement,
+    dense: boolean,
     selectCheckboxAlignment: CellAlign | null,
     data: TableRow[],
     tooltipSelect: string | TableSelectTooltipCallback | null,
@@ -796,7 +801,7 @@ export class TableUtils {
   ): void {
     const nonExpandedRows = TableUtils._getNonExpandedRows(tbodyElement.rows);
     nonExpandedRows.forEach((row, rowIndex) =>
-      TableUtils._addRowSelectColumn(row, selectCheckboxAlignment, rowIndex, data[rowIndex], tooltipSelect, tooltipSelectAll)
+      TableUtils._addRowSelectColumn(row, dense, selectCheckboxAlignment, rowIndex, data[rowIndex], tooltipSelect, tooltipSelectAll)
     );
 
     // Update the colspan on the expanded rows
@@ -810,6 +815,7 @@ export class TableUtils {
 
   private static _addRowSelectColumn(
     row: HTMLTableRowElement,
+    dense: boolean,
     selectCheckboxAlignment: CellAlign | null,
     rowIndex: number,
     rowData: TableRow,
@@ -819,7 +825,7 @@ export class TableUtils {
     const td = row.insertCell(0);
     addClass([TABLE_CONSTANTS.classes.TABLE_CELL, TABLE_CONSTANTS.classes.TABLE_BODY_CELL, TABLE_CONSTANTS.classes.TABLE_CELL_SELECT], td);
 
-    td.appendChild(TableUtils._createCheckboxElement(false, selectCheckboxAlignment, rowIndex, rowData, tooltipSelect, tooltipSelectAll));
+    td.appendChild(TableUtils._createCheckboxElement(false, dense, selectCheckboxAlignment, rowIndex, rowData, tooltipSelect, tooltipSelectAll));
   }
 
   /**
@@ -857,6 +863,7 @@ export class TableUtils {
    */
   private static _createCheckboxElement(
     isHeader: boolean,
+    dense: boolean,
     alignment: CellAlign | null,
     rowIndex: number | null,
     rowData: TableRow | null,
@@ -881,6 +888,7 @@ export class TableUtils {
 
     const checkboxElement = document.createElement(CHECKBOX_CONSTANTS.elementName) as ICheckboxComponent;
     checkboxElement.setAttribute(TABLE_CONSTANTS.attributes.SELECT_CHECKBOX, '');
+    checkboxElement.dense = dense;
     checkboxContainer.appendChild(checkboxElement);
 
     const tooltipFactory = (text: string): ITooltipComponent => {
@@ -1182,6 +1190,7 @@ export class TableUtils {
    */
   public static setSelectColumnVisibility(
     tableElement: HTMLTableElement,
+    dense: boolean,
     isVisible: boolean,
     selectListener: ((evt: Event) => void) | null,
     selectAllListener: ((evt: Event) => void) | null,
@@ -1202,6 +1211,7 @@ export class TableUtils {
       TableUtils._addSelectColumn(
         theadElement,
         tbodyElement,
+        dense,
         selectListener,
         selectAllListener,
         selectAllTemplate,
@@ -1233,6 +1243,7 @@ export class TableUtils {
   private static _addSelectColumn(
     theadElement: HTMLTableSectionElement,
     tbodyElement: HTMLTableSectionElement,
+    dense: boolean,
     selectListener: ((evt: Event) => void) | null,
     selectAllListener: ((evt: Event) => void) | null,
     selectAllTemplate: TableHeaderSelectAllTemplate | null,
@@ -1244,6 +1255,7 @@ export class TableUtils {
     TableUtils._createSelectColumn(
       theadElement,
       tbodyElement,
+      dense,
       !!selectAllListener,
       selectAllTemplate,
       () => {
@@ -1276,6 +1288,12 @@ export class TableUtils {
     if (isDense) {
       tableElement.classList.add(TABLE_CONSTANTS.classes.TABLE_DENSE);
     }
+
+    // Update the select column checkboxes if they exist
+    const selectColumnCheckboxes = tableElement.querySelectorAll(
+      `forge-checkbox[${TABLE_CONSTANTS.attributes.SELECT_CHECKBOX}]`
+    ) as NodeListOf<ICheckboxComponent>;
+    selectColumnCheckboxes.forEach(checkboxEl => (checkboxEl.dense = isDense));
   }
 
   /**
@@ -1365,6 +1383,7 @@ export class TableUtils {
    */
   public static setSelectAllVisibility(
     tableElement: HTMLTableElement,
+    dense: boolean,
     isVisible: boolean,
     listener: ((evt: Event) => void) | null,
     selectAllTemplate: TableHeaderSelectAllTemplate | null,
@@ -1396,7 +1415,7 @@ export class TableUtils {
             }
           });
         } else {
-          selectAllCell.appendChild(TableUtils._createCheckboxElement(true, selectCheckboxAlignment || null, null, null, null, tooltipSelectAll));
+          selectAllCell.appendChild(TableUtils._createCheckboxElement(true, dense, selectCheckboxAlignment || null, null, null, null, tooltipSelectAll));
         }
 
         if (listener && !selectAllTemplate) {
