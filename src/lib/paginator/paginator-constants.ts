@@ -77,3 +77,13 @@ export interface IPaginatorRangeState {
 }
 
 export type PaginatorRangeLabelBuilder = ((state: IPaginatorRangeState) => string) | undefined | null;
+
+export interface IPaginatorPageInfo {
+  pageIndex: number;
+  pageSize: number;
+  total: number;
+  offset: number;
+  pageStart: number;
+  pageEnd: number;
+  totalPages: number;
+}
