@@ -164,18 +164,18 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
   }
 
   #detachTargetListeners(): void {
-    this.#targetElement?.removeEventListener(this.focusMode, this.#handleTargetInteraction.bind(this));
-    this.#targetElement?.removeEventListener('focusout', this.#handleTargetInteraction.bind(this));
-    this.#targetElement?.removeEventListener('pointerdown', this.#handleTargetInteraction.bind(this));
+    this.#targetElement?.removeEventListener(this.focusMode, this.#handleTargetInteraction);
+    this.#targetElement?.removeEventListener('focusout', this.#handleTargetInteraction);
+    this.#targetElement?.removeEventListener('pointerdown', this.#handleTargetInteraction);
   }
 
   #attachTargetListeners(): void {
-    this.#targetElement?.addEventListener(this.focusMode, this.#handleTargetInteraction.bind(this));
-    this.#targetElement?.addEventListener('focusout', this.#handleTargetInteraction.bind(this));
-    this.#targetElement?.addEventListener('pointerdown', this.#handleTargetInteraction.bind(this));
+    this.#targetElement?.addEventListener(this.focusMode, this.#handleTargetInteraction);
+    this.#targetElement?.addEventListener('focusout', this.#handleTargetInteraction);
+    this.#targetElement?.addEventListener('pointerdown', this.#handleTargetInteraction);
   }
 
-  #handleTargetInteraction(evt: Event): void {
+  #handleTargetInteraction = (evt: Event): void => {
     const target = evt.target as HTMLElement | null;
     switch (evt.type) {
       case this.focusMode:
@@ -188,7 +188,7 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
         this.active = this.allowFocus ? this.#isActive(':focus', target) : this.#isActive(':focus-visible', target);
         break;
     }
-  }
+  };
 
   #isActive(selector: string, el?: HTMLElement | null): boolean {
     const targetedEl = el ?? this.#targetElement;

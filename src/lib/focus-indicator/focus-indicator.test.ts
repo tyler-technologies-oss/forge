@@ -158,6 +158,38 @@ describe('FocusIndicator', () => {
 
     expect(focusIndicator.targetElement).to.equal(el);
   });
+
+  it('should properly handle event listener attach/detach cycles', async () => {
+    const { detachedButton, button, focusIndicator } = await createFixture();
+
+    // Verify initial focus works
+    await focusKeyboard(detachedButton);
+    expect(focusIndicator.active).to.be.true;
+
+    // Blur to deactivate
+    button.blur();
+    expect(focusIndicator.active).to.be.false;
+
+    // Change target element to trigger detach/attach cycle
+    const newButton = document.createElement('button');
+    newButton.textContent = 'New Button';
+    document.body.appendChild(newButton);
+
+    focusIndicator.targetElement = newButton;
+
+    // Verify targetElement was set correctly
+    expect(focusIndicator.targetElement).to.equal(newButton);
+
+    // Use keyboard focus by tabbing to the new button
+    detachedButton.focus(); // Start from a known element
+    await sendKeys({ press: 'Tab' }); // Tab to button (first tab target)
+    await sendKeys({ press: 'Tab' }); // Tab to newButton (second tab target)
+
+    expect(focusIndicator.active).to.be.true;
+
+    // Cleanup
+    newButton.remove();
+  });
 });
 
 interface FocusIndicatorFixtureConfig {
