@@ -24,6 +24,14 @@ export interface IPaginatorComponent extends IBaseComponent {
   disabled: boolean;
   alternative: boolean;
   rangeLabelCallback: PaginatorRangeLabelBuilder;
+  goToFirstPage(): void;
+  goToPreviousPage(): void;
+  goToNextPage(): void;
+  goToLastPage(): void;
+  canGoToFirstPage(): boolean;
+  canGoToPreviousPage(): boolean;
+  canGoToNextPage(): boolean;
+  canGoToLastPage(): boolean;
 }
 
 declare global {
@@ -197,5 +205,57 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
   /** Sets focus to the first focusable element within the paginator. */
   public override focus(options?: FocusOptions): void {
     this._core.focus(options);
+  }
+
+  /** Navigates to the first page. */
+  public goToFirstPage(): void {
+    this._core.goToFirstPage();
+  }
+
+  /** Navigates to the previous page. */
+  public goToPreviousPage(): void {
+    this._core.goToPreviousPage();
+  }
+
+  /** Navigates to the next page. */
+  public goToNextPage(): void {
+    this._core.goToNextPage();
+  }
+
+  /** Navigates to the last page. */
+  public goToLastPage(): void {
+    this._core.goToLastPage();
+  }
+
+  /**
+   * Checks if navigation to the first page is possible.
+   * @returns True if can navigate to first page
+   */
+  public canGoToFirstPage(): boolean {
+    return this._core.canGoToFirstPage();
+  }
+
+  /**
+   * Checks if navigation to the previous page is possible.
+   * @returns True if can navigate to previous page
+   */
+  public canGoToPreviousPage(): boolean {
+    return this._core.canGoToPreviousPage();
+  }
+
+  /**
+   * Checks if navigation to the next page is possible.
+   * @returns True if can navigate to next page
+   */
+  public canGoToNextPage(): boolean {
+    return this._core.canGoToNextPage();
+  }
+
+  /**
+   * Checks if navigation to the last page is possible.
+   * @returns True if can navigate to last page
+   */
+  public canGoToLastPage(): boolean {
+    return this._core.canGoToLastPage();
   }
 }

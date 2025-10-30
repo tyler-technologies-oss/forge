@@ -677,6 +677,130 @@ describe('Paginator', () => {
       expect(harness.lastButton?.disabled).to.be.true;
     });
   });
+
+  describe('Interaction API', () => {
+    describe('navigation methods', () => {
+      it('should navigate to first page via goToFirstPage()', async () => {
+        const harness = await createFixture({ total: 100, pageIndex: 2 });
+        const changeSpy = sinon.spy();
+        harness.paginatorElement.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, changeSpy);
+
+        harness.paginatorElement.goToFirstPage();
+
+        expect(harness.paginatorElement.pageIndex).to.equal(0);
+        expect(harness.paginatorElement.offset).to.equal(0);
+        expect(changeSpy).to.have.been.calledOnce;
+        expect(changeSpy.firstCall.args[0].detail.type).to.equal('first-page');
+        expect(changeSpy.firstCall.args[0].detail.pageIndex).to.equal(0);
+      });
+
+      it('should navigate to previous page via goToPreviousPage()', async () => {
+        const harness = await createFixture({ total: 100, pageIndex: 2 });
+        const changeSpy = sinon.spy();
+        harness.paginatorElement.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, changeSpy);
+
+        harness.paginatorElement.goToPreviousPage();
+
+        expect(harness.paginatorElement.pageIndex).to.equal(1);
+        expect(harness.paginatorElement.offset).to.equal(25);
+        expect(changeSpy).to.have.been.calledOnce;
+        expect(changeSpy.firstCall.args[0].detail.type).to.equal('previous-page');
+        expect(changeSpy.firstCall.args[0].detail.pageIndex).to.equal(1);
+      });
+
+      it('should navigate to next page via goToNextPage()', async () => {
+        const harness = await createFixture({ total: 100, pageIndex: 1 });
+        const changeSpy = sinon.spy();
+        harness.paginatorElement.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, changeSpy);
+
+        harness.paginatorElement.goToNextPage();
+
+        expect(harness.paginatorElement.pageIndex).to.equal(2);
+        expect(harness.paginatorElement.offset).to.equal(50);
+        expect(changeSpy).to.have.been.calledOnce;
+        expect(changeSpy.firstCall.args[0].detail.type).to.equal('next-page');
+        expect(changeSpy.firstCall.args[0].detail.pageIndex).to.equal(2);
+      });
+
+      it('should navigate to last page via goToLastPage()', async () => {
+        const harness = await createFixture({ total: 100, pageIndex: 1 });
+        const changeSpy = sinon.spy();
+        harness.paginatorElement.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, changeSpy);
+
+        harness.paginatorElement.goToLastPage();
+
+        expect(harness.paginatorElement.pageIndex).to.equal(3);
+        expect(harness.paginatorElement.offset).to.equal(75);
+        expect(changeSpy).to.have.been.calledOnce;
+        expect(changeSpy.firstCall.args[0].detail.type).to.equal('last-page');
+        expect(changeSpy.firstCall.args[0].detail.pageIndex).to.equal(3);
+      });
+
+      it('should not navigate beyond bounds', async () => {
+        const harness = await createFixture({ total: 100, pageIndex: 0 });
+
+        harness.paginatorElement.goToFirstPage();
+        expect(harness.paginatorElement.pageIndex).to.equal(0);
+
+        harness.paginatorElement.goToPreviousPage();
+        expect(harness.paginatorElement.pageIndex).to.equal(0);
+
+        harness.paginatorElement.pageIndex = 3; // Last page
+        harness.paginatorElement.goToLastPage();
+        expect(harness.paginatorElement.pageIndex).to.equal(3);
+
+        harness.paginatorElement.goToNextPage();
+        expect(harness.paginatorElement.pageIndex).to.equal(3);
+      });
+    });
+
+    describe('validation methods', () => {
+      it('should validate navigation possibilities correctly', async () => {
+        const harness = await createFixture({ total: 100, pageIndex: 0 });
+
+        expect(harness.paginatorElement.canGoToFirstPage()).to.be.false;
+        expect(harness.paginatorElement.canGoToPreviousPage()).to.be.false;
+        expect(harness.paginatorElement.canGoToNextPage()).to.be.true;
+        expect(harness.paginatorElement.canGoToLastPage()).to.be.true;
+
+        harness.paginatorElement.pageIndex = 1;
+
+        expect(harness.paginatorElement.canGoToFirstPage()).to.be.true;
+        expect(harness.paginatorElement.canGoToPreviousPage()).to.be.true;
+        expect(harness.paginatorElement.canGoToNextPage()).to.be.true;
+        expect(harness.paginatorElement.canGoToLastPage()).to.be.true;
+
+        harness.paginatorElement.pageIndex = 3; // Last page (100 total / 25 size = 4 pages, 0-indexed)
+
+        expect(harness.paginatorElement.canGoToFirstPage()).to.be.true;
+        expect(harness.paginatorElement.canGoToPreviousPage()).to.be.true;
+        expect(harness.paginatorElement.canGoToNextPage()).to.be.false;
+        expect(harness.paginatorElement.canGoToLastPage()).to.be.false;
+      });
+
+      it('should handle edge cases for validation', async () => {
+        const harness = await createFixture({ total: 0 });
+
+        expect(harness.paginatorElement.canGoToFirstPage()).to.be.false;
+        expect(harness.paginatorElement.canGoToPreviousPage()).to.be.false;
+        expect(harness.paginatorElement.canGoToNextPage()).to.be.false;
+        expect(harness.paginatorElement.canGoToLastPage()).to.be.false;
+      });
+    });
+
+    describe('event cancellation support', () => {
+      it('should respect cancelled navigation events', async () => {
+        const harness = await createFixture({ total: 100, pageIndex: 1 });
+        const changeSpy = sinon.spy(evt => evt.preventDefault());
+        harness.paginatorElement.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, changeSpy);
+
+        harness.paginatorElement.goToNextPage();
+
+        expect(harness.paginatorElement.pageIndex).to.equal(1); // Should not change
+        expect(changeSpy).to.have.been.calledOnce;
+      });
+    });
+  });
 });
 
 class PaginatorHarness {
