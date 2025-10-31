@@ -16,8 +16,8 @@ export interface ITextFieldAdapter extends IBaseFieldAdapter {
   removeValueChangeListener(): void;
   tryFloatLabel(force?: boolean): void;
   tryConnectSlottedLabel(): void;
-  connectClearButton(listener: EventListener): void;
-  disconnectClearButton(listener: EventListener): void;
+  connectClearButton(clickListener: EventListener, mouseDownListener: EventListener): void;
+  disconnectClearButton(clickListener: EventListener, mouseDownListener: EventListener): void;
   toggleClearButtonVisibility(visible: boolean): void;
   clearInput(): void;
   getAllSlotElements(): HTMLSlotElement[];
@@ -183,12 +183,16 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     label.htmlFor = id;
   }
 
-  public connectClearButton(listener: EventListener): void {
-    this._clearButtonSlotElement.addEventListener('click', listener);
+  public connectClearButton(clickListener: EventListener, mouseDownListener: EventListener): void {
+    this._clearButtonSlotElement.addEventListener('click', clickListener);
+    if (mouseDownListener) {
+      this._clearButtonSlotElement.addEventListener('mousedown', mouseDownListener);
+    }
   }
 
-  public disconnectClearButton(listener: EventListener): void {
-    this._clearButtonSlotElement.removeEventListener('click', listener);
+  public disconnectClearButton(clickListener: EventListener, mouseDownListener: EventListener): void {
+    this._clearButtonSlotElement.removeEventListener('click', clickListener);
+    this._clearButtonSlotElement.removeEventListener('mousedown', mouseDownListener);
   }
 
   public toggleClearButtonVisibility(visible: boolean): void {
