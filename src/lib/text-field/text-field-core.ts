@@ -16,6 +16,7 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
   private _valueChangeListener: TextFieldValueChangeListener = this._onValueChange.bind(this);
   private _inputListener: EventListener = this._onInputChange.bind(this);
   private _clearButtonClickListener: EventListener = (evt: PointerEvent) => this._onClearButtonClick(evt);
+  private _clearButtonMouseDownListener: EventListener = (evt: MouseEvent) => this._onClearButtonMouseDown(evt);
 
   constructor(protected _adapter: TextFieldAdapter) {
     super(_adapter);
@@ -83,6 +84,10 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
     }
   }
 
+  private _onClearButtonMouseDown(evt: MouseEvent): void {
+    evt.preventDefault(); // Prevent focus change to avoid blur event
+  }
+
   /** Responds to the `input` event from the <input> element. */
   private _onInputChange(evt: InputEvent & { target: HTMLInputElement }): void {
     let floatLabel;
@@ -119,9 +124,9 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
       this._adapter.toggleHostAttribute(TEXT_FIELD_CONSTANTS.attributes.SHOW_CLEAR, value);
 
       if (value) {
-        this._adapter.connectClearButton(this._clearButtonClickListener);
+        this._adapter.connectClearButton(this._clearButtonClickListener, this._clearButtonMouseDownListener);
       } else {
-        this._adapter.disconnectClearButton(this._clearButtonClickListener);
+        this._adapter.disconnectClearButton(this._clearButtonClickListener, this._clearButtonMouseDownListener);
       }
       this._toggleClearButtonVisibility();
     }
