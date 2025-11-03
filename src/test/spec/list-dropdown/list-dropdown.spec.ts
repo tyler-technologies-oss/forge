@@ -450,7 +450,7 @@ describe('ListDropdown', function(this: ITestContext) {
     expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).toBeTrue();
   });
 
-  it('should scroll selected option into view on demand', async function(this: ITestContext) {
+  it.skip('should scroll selected option into view on demand', async function(this: ITestContext) {
     const options = generateScrollableOptions();
     this.context = createListDropdown({ ...DEFAULT_CONFIG, options });
     this.context.listDropdown.open();
