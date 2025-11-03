@@ -24,6 +24,7 @@ export interface IChipComponent extends IBaseComponent {
   target: string;
   download: string;
   rel: string;
+  removeButtonLabel: string;
   focusRemoveButton(): void;
 }
 
@@ -54,6 +55,7 @@ declare global {
  * @property {string} target - The target of the chip.
  * @property {string} download - The download of the chip.
  * @property {string} rel - The rel of the chip.
+ * @property {string} removeButtonLabel - The custom aria-label for the remove button.
  *
  * @attribute {ChipType} type - The type of chip.
  * @attribute {unknown} value - The value of the chip.
@@ -66,6 +68,7 @@ declare global {
  * @attribute {string} target - The target of the chip.
  * @attribute {string} download - The download of the chip.
  * @attribute {string} rel - The rel of the chip.
+ * @attribute {string} remove-button-label - The custom aria-label for the remove button.
  *
  * @fires {CustomEvent<IChipDeleteEventData>} forge-chip-delete - Event fired when the chip is deleted.
  * @fires {CustomEvent<IChipSelectEventData>} forge-chip-select - Event fired when the chip is selected.
@@ -191,6 +194,9 @@ export class ChipComponent extends BaseComponent implements IChipComponent {
       case CHIP_CONSTANTS.attributes.REL:
         this.rel = newValue;
         break;
+      case CHIP_CONSTANTS.attributes.REMOVE_BUTTON_LABEL:
+        this.removeButtonLabel = newValue;
+        break;
     }
   }
 
@@ -238,4 +244,7 @@ export class ChipComponent extends BaseComponent implements IChipComponent {
 
   @coreProperty()
   declare public rel: string;
+
+  @coreProperty()
+  declare public removeButtonLabel: string;
 }

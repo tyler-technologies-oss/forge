@@ -358,7 +358,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
 
   /**
    * Controls the visibility of the select column.
-   * @default true
+   * @default false
    * @attribute
    */
   @coreProperty()

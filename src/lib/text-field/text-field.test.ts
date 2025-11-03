@@ -87,6 +87,22 @@ describe('Text field', () => {
       await frame();
       expect(harness.element.disabled).to.be.true;
     });
+
+    it('should set aria-invalid attribute on input when invalid is true', async () => {
+      const harness = await createFixture();
+      harness.element.invalid = true;
+      expect(harness.inputElement.getAttribute('aria-invalid')).to.equal('true');
+    });
+
+    it('should remove aria-invalid attribute from input when invalid is false', async () => {
+      const harness = await createFixture();
+
+      harness.element.invalid = true;
+      expect(harness.inputElement.getAttribute('aria-invalid')).to.equal('true');
+
+      harness.element.invalid = false;
+      expect(harness.inputElement.hasAttribute('aria-invalid')).to.be.false;
+    });
   });
 
   describe('clear button', () => {

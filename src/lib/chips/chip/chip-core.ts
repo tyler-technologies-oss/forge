@@ -13,6 +13,7 @@ export interface IChipCore {
   target: string;
   download: string;
   rel: string;
+  removeButtonLabel: string;
   focus(options?: FocusOptions): void;
   focusRemoveButton(): void;
   click(): void;
@@ -30,6 +31,7 @@ export class ChipCore implements IChipCore {
   private _target: string;
   private _download: string;
   private _rel: string;
+  private _removeButtonLabel: string;
 
   private _clickListener: EventListener = this._onClick.bind(this);
   private _keydownListener: EventListener = this._onKeydown.bind(this);
@@ -342,6 +344,16 @@ export class ChipCore implements IChipCore {
       this._rel = value;
       this._adapter.setAnchorProperty('rel', value);
       this._adapter.toggleHostAttribute(CHIP_CONSTANTS.attributes.REL, !!this._rel?.trim(), this._rel);
+    }
+  }
+
+  public get removeButtonLabel(): string {
+    return this._removeButtonLabel;
+  }
+  public set removeButtonLabel(value: string) {
+    if (this._removeButtonLabel !== value) {
+      this._removeButtonLabel = value;
+      this._adapter.setRemoveButtonLabel(this._removeButtonLabel);
     }
   }
 }
