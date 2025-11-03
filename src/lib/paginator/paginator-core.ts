@@ -16,6 +16,14 @@ export interface IPaginatorCore {
   alternative: boolean;
   rangeLabelCallback: PaginatorRangeLabelBuilder;
   focus(options?: FocusOptions): void;
+  goToFirstPage(): void;
+  goToPreviousPage(): void;
+  goToNextPage(): void;
+  goToLastPage(): void;
+  canGoToFirstPage(): boolean;
+  canGoToPreviousPage(): boolean;
+  canGoToNextPage(): boolean;
+  canGoToLastPage(): boolean;
 }
 
 export class PaginatorCore {
@@ -64,10 +72,7 @@ export class PaginatorCore {
     this._adapter.attachLastPageListener(this._lastPageListener);
   }
 
-  private _onFirstPage(evt: Event): void {
-    evt.stopPropagation();
-
-    /* c8 ignore next 3 */
+  public goToFirstPage(): void {
     if (!this._hasFirstPage()) {
       return;
     }
@@ -79,10 +84,12 @@ export class PaginatorCore {
     }
   }
 
-  private _onPreviousPage(evt: Event): void {
+  private _onFirstPage(evt: Event): void {
     evt.stopPropagation();
+    this.goToFirstPage();
+  }
 
-    /* c8 ignore next 3 */
+  public goToPreviousPage(): void {
     if (!this._hasPreviousPage()) {
       return;
     }
@@ -94,10 +101,12 @@ export class PaginatorCore {
     }
   }
 
-  private _onNextPage(evt: Event): void {
+  private _onPreviousPage(evt: Event): void {
     evt.stopPropagation();
+    this.goToPreviousPage();
+  }
 
-    /* c8 ignore next 3 */
+  public goToNextPage(): void {
     if (!this._hasNextPage()) {
       return;
     }
@@ -109,10 +118,12 @@ export class PaginatorCore {
     }
   }
 
-  private _onLastPage(evt: Event): void {
+  private _onNextPage(evt: Event): void {
     evt.stopPropagation();
+    this.goToNextPage();
+  }
 
-    /* c8 ignore next 3 */
+  public goToLastPage(): void {
     if (!this._hasLastPage()) {
       return;
     }
@@ -122,6 +133,11 @@ export class PaginatorCore {
     if (canPage) {
       this._applyPageIndex(lastPage);
     }
+  }
+
+  private _onLastPage(evt: Event): void {
+    evt.stopPropagation();
+    this.goToLastPage();
   }
 
   private _onPageSizeChanged(evt: CustomEvent): void {
@@ -439,5 +455,21 @@ export class PaginatorCore {
   public set rangeLabelCallback(value: PaginatorRangeLabelBuilder) {
     this._rangeLabelCallback = value;
     this._updateRangeLabel();
+  }
+
+  public canGoToFirstPage(): boolean {
+    return this._hasFirstPage();
+  }
+
+  public canGoToPreviousPage(): boolean {
+    return this._hasPreviousPage();
+  }
+
+  public canGoToNextPage(): boolean {
+    return this._hasNextPage();
+  }
+
+  public canGoToLastPage(): boolean {
+    return this._hasLastPage();
   }
 }
