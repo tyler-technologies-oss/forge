@@ -11,6 +11,7 @@ export interface IBaseDrawerAdapter extends IBaseAdapter {
   removeDrawerClass(className: string | string[]): void;
   setDrawerClass(className: string | string[]): void;
   listenTransitionComplete(listener: () => void): void;
+  setInert(value: boolean): void;
 }
 
 export class BaseDrawerAdapter extends BaseAdapter<IBaseDrawerComponent> implements IBaseDrawerAdapter {
@@ -72,5 +73,9 @@ export class BaseDrawerAdapter extends BaseAdapter<IBaseDrawerComponent> impleme
       }
     };
     this._drawerElement.addEventListener('transitionend', this._activeTransitionListener);
+  }
+
+  public setInert(value: boolean): void {
+    this._drawerElement.inert = value;
   }
 }

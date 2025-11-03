@@ -26,6 +26,7 @@ export class BaseDrawerCore implements IBaseDrawerCore {
     }
 
     this._applyDirection();
+    this._adapter.setInert(!this._open);
     this._adapter.proxyScrollEvent();
   }
 
@@ -69,9 +70,11 @@ export class BaseDrawerCore implements IBaseDrawerCore {
 
   protected _applyOpen(): void {
     if (this._open) {
+      this._adapter.setInert(false);
       this._triggerDrawerOpen();
       this._adapter.setHostAttribute(BASE_DRAWER_CONSTANTS.attributes.OPEN);
     } else {
+      this._adapter.setInert(true);
       this._triggerDrawerClose();
       this._adapter.removeHostAttribute(BASE_DRAWER_CONSTANTS.attributes.OPEN);
     }
