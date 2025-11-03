@@ -263,7 +263,7 @@ export function createListItems(
         if (typeof config.transform !== 'function') {
           buttonElement.textContent = option.label || '';
         } else {
-          const result = config.transform(option.label, option, isSelected);
+          const result = config.transform(option.label);
           if (typeof result === 'string') {
             buttonElement.textContent = result;
           } else if (typeof result === 'object' && (result as HTMLElement).nodeType !== undefined) {

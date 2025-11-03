@@ -451,9 +451,9 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
       asyncStyle: ListDropdownAsyncStyle.Skeleton,
       headerBuilder: this._popupHeaderBuilder,
       footerBuilder: this._popupFooterBuilder,
-      transform: (label, option, selected) => {
+      transform: label => {
         if (this._filterText) {
-          // Highlight the filter text within the label
+          // Highlight the filter text within the option label
           const highlightElement = highlightTextHTML(label, this._filterText);
           if (highlightElement) {
             return highlightElement;

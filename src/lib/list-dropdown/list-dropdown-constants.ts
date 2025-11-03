@@ -45,7 +45,7 @@ export type ListDropdownOptionBuilder<T = HTMLElement> = (option: IListDropdownO
 export type ListDropdownHeaderBuilder = () => HTMLElement;
 export type ListDropdownFooterBuilder = () => HTMLElement;
 export type ListDropdownOptionGroupBuilder<T = any> = (option: IListDropdownOptionGroup<T>) => HTMLElement | string;
-export type ListDropdownTransformCallback = (label: string, option?: IListDropdownOption, isSelected?: boolean) => string | HTMLElement;
+export type ListDropdownTransformCallback = (label: string) => string | HTMLElement;
 export type ListDropdownIconType = 'font' | 'component';
 
 export interface IBaseListDropdownOption<T = any> {
