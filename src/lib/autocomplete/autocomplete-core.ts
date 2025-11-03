@@ -451,14 +451,28 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
       asyncStyle: ListDropdownAsyncStyle.Skeleton,
       headerBuilder: this._popupHeaderBuilder,
       footerBuilder: this._popupFooterBuilder,
-      transform: label => {
-        if (this._filterText) {
-          // Highlight the filter text within the label
+      transform: (label, option, isSelected) => {
+        const inputValue = this._adapter.getInputValue();
+        const isUserTyping =
+          this._filterText &&
+          inputValue?.length &&
+          inputValue !== label && // User hasn't just selected this exact option
+          this._adapter.hasFocus();
+
+        if (isUserTyping) {
+          // When filtering: highlight only the matching search text
           const highlightElement = highlightTextHTML(label, this._filterText);
           if (highlightElement) {
             return highlightElement;
           }
+        } else if (isSelected) {
+          // When not filtering: bold the entire text of selected options
+          const boldElement = document.createElement('span');
+          boldElement.style.fontWeight = 'bold';
+          boldElement.textContent = label;
+          return boldElement;
         }
+
         return label;
       },
       allowBusy: true,
