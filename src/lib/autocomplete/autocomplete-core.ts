@@ -213,6 +213,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   private _onClear(evt: MouseEvent): void {
+    evt.preventDefault();
     this._filterText = '';
     this._clearValue();
     this._adapter.setSelectedText(this._getSelectedText());
