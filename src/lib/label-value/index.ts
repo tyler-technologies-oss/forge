@@ -1,10 +1,10 @@
-import { defineCustomElement } from '@tylertech/forge-core';
-import { LabelValueComponent } from './label-value';
+import { tryDefine } from '@tylertech/forge-core';
+import { LABEL_VALUE_TAG_NAME, LabelValueComponent } from './label-value';
 
+export * from './label-value-component-delegate';
 export * from './label-value-constants';
 export * from './label-value';
-export * from './label-value-component-delegate';
 
 export function defineLabelValueComponent(): void {
-  defineCustomElement(LabelValueComponent);
+  tryDefine(LABEL_VALUE_TAG_NAME, LabelValueComponent);
 }
