@@ -1221,6 +1221,37 @@ describe('TimePickerComponent', () => {
       expect(harness.getPopup()).to.be.null;
     });
 
+    it('should display seconds in dropdown options when allowSeconds is true', async () => {
+      harness = await TimePickerFixtures.createBasic();
+
+      harness.component.allowSeconds = true;
+      await frame();
+
+      harness.dispatchKeydown('ArrowDown');
+      await task(POPOVER_ANIMATION_DURATION);
+
+      const listItems = harness.getListItems();
+      const firstLabel = listItems[0].innerText.trim();
+
+      expect(firstLabel).to.match(/\d{2}:\d{2}:\d{2}\s?(AM|PM)/);
+    });
+
+    it('should display seconds in dropdown options when allowSeconds is true in 24 hour mode', async () => {
+      harness = await TimePickerFixtures.createBasic();
+
+      harness.component.allowSeconds = true;
+      harness.component.use24HourTime = true;
+      await frame();
+
+      harness.dispatchKeydown('ArrowDown');
+      await task(POPOVER_ANIMATION_DURATION);
+
+      const listItems = harness.getListItems();
+      const firstLabel = listItems[0].innerText.trim();
+
+      expect(firstLabel).to.match(/^\d{2}:\d{2}:\d{2}$/);
+    });
+
     it('should not allow time to be selected if exists in restricted times', async () => {
       harness = await TimePickerFixtures.createBasic();
 

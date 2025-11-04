@@ -709,7 +709,7 @@ export class TimePickerCore implements ITimePickerCore {
         for (let totalMinutes = minMinutes; totalMinutes < TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES; totalMinutes += minuteStep) {
           const millis = minutesToMillis(totalMinutes);
           const disabled = this._restrictedTimes.includes(millis);
-          const label = millisToTimeString(millis, this._use24HourTime, false) || '';
+          const label = millisToTimeString(millis, this._use24HourTime, this._allowSeconds) || '';
           const value: ITimePickerOptionValue = { time: millis };
           times.push({ label, value, disabled });
         }
@@ -718,7 +718,7 @@ export class TimePickerCore implements ITimePickerCore {
         for (let totalMinutes = 0; totalMinutes <= maxMinutes; totalMinutes += minuteStep) {
           const millis = minutesToMillis(totalMinutes);
           const disabled = this._restrictedTimes.includes(millis);
-          const label = millisToTimeString(millis, this._use24HourTime, false) || '';
+          const label = millisToTimeString(millis, this._use24HourTime, this._allowSeconds) || '';
           const value: ITimePickerOptionValue = { time: millis };
           times.push({ label, value, disabled });
         }
@@ -733,7 +733,7 @@ export class TimePickerCore implements ITimePickerCore {
           }
           const millis = minutesToMillis(totalMinutes);
           const disabled = this._restrictedTimes.includes(millis);
-          const label = millisToTimeString(millis, this._use24HourTime, false) || '';
+          const label = millisToTimeString(millis, this._use24HourTime, this._allowSeconds) || '';
           const value: ITimePickerOptionValue = { time: millis };
           times.push({ label, value, disabled });
         }
