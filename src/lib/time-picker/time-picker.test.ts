@@ -414,6 +414,7 @@ describe('TimePickerComponent', () => {
       expect(harness.component.disabled).to.be.false;
       expect(harness.inputElement.disabled).to.be.false;
       expect(harness.toggleElement.disabled).to.be.false;
+      expect(harness.toggleElement.tabIndex).to.equal(-1);
 
       harness.component.disabled = true;
       await frame();
@@ -421,6 +422,7 @@ describe('TimePickerComponent', () => {
       expect(harness.component.disabled).to.be.true;
       expect(harness.inputElement.disabled).to.be.true;
       expect(harness.toggleElement.disabled).to.be.true;
+      expect(harness.toggleElement.tabIndex).to.equal(-1);
     });
 
     it('should enable field after being disabled by default', async () => {
@@ -452,6 +454,7 @@ describe('TimePickerComponent', () => {
 
       expect(harness.component.disabled).to.be.false;
       expect(harness.inputElement.disabled).to.be.false;
+      expect(harness.toggleElement.tabIndex).to.equal(-1);
     });
 
     it('should not open dropdown if disabled', async () => {
