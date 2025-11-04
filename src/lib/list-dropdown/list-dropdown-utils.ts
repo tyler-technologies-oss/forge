@@ -82,6 +82,9 @@ export function createPopupDropdown(config: IListDropdownOpenConfig, targetEleme
   if (config.popupShift !== undefined) {
     popoverElement.shift = config.popupShift;
   }
+  if (config.anchorAccessibility) {
+    popoverElement.anchorAccessibility = config.anchorAccessibility;
+  }
 
   // Set the animations based on our type
   if (config.type === ListDropdownType.None) {

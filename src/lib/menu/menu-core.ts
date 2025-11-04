@@ -39,6 +39,7 @@ export interface IMenuCore {
   mode: MenuMode;
   popupOffset: IOverlayOffset;
   optionBuilder: MenuOptionBuilder | undefined;
+  popupTarget: string | null;
   activateFirstOption(): void;
 }
 
@@ -53,6 +54,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
   private _mode: MenuMode = 'click';
   private _popupOffset: IOverlayOffset;
   private _optionBuilder: MenuOptionBuilder | undefined;
+  private _popupTarget: string | null = null;
   private _identifier: string;
   private _clickListener: (evt: MouseEvent) => void;
   private _blurListener: (evt: MouseEvent) => void;
@@ -293,10 +295,22 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
     this._mapIconToLeadingIcon();
 
     const selectedValues = this._persistSelection ? this._getSelectedValues() : [];
+    let referenceElement = this._adapter.targetElement as HTMLElement;
+    if (this._popupTarget) {
+      const popupTargetElement = this._adapter.resolvePopupTargetById(this._popupTarget);
+      if (popupTargetElement) {
+        referenceElement = popupTargetElement;
+      }
+    } else {
+      const resolvedTarget = this._tryResolvePopupTarget();
+      if (resolvedTarget) {
+        referenceElement = resolvedTarget;
+      }
+    }
 
     const config: IListDropdownConfig = {
       id: this._identifier,
-      referenceElement: this._adapter.targetElement as HTMLElement,
+      referenceElement,
       type: ListDropdownType.Menu,
       options: this._options,
       selectedValues,
@@ -322,7 +336,8 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
       activeChangeCallback: this._activeChangeListener,
       selectCallback: this._selectListener,
       popupOffset: this._popupOffset,
-      cascadingElementFactory: params => this._createCascadingElement(params)
+      cascadingElementFactory: params => this._createCascadingElement(params),
+      anchorAccessibility: 'none'
     };
 
     this._adapter.setHostAttribute(MENU_CONSTANTS.attributes.OPEN, '');
@@ -498,6 +513,17 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
     return menu;
   }
 
+  private _tryResolvePopupTarget(): HTMLElement | undefined {
+    if (this._popupTarget) {
+      return;
+    }
+
+    // Automatically detect forge-list-item > button case and set popup target if not explicitly set
+    if (this._adapter.targetElement?.matches('button')) {
+      return this._adapter.targetElement.closest('forge-list-item') ?? undefined;
+    }
+  }
+
   private _mapIconToLeadingIcon(): void {
     // For backwards compatibility with old API, map the old "icon" property to the new "leadingIcon" property (if exists)
     this._flatOptions.filter(o => o.icon).forEach(o => (o.leadingIcon = o.icon));
@@ -636,6 +662,21 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
   }
   public set popupOffset(value: IOverlayOffset) {
     this._popupOffset = value;
+  }
+
+  public get popupTarget(): string | null {
+    return this._popupTarget ?? null;
+  }
+  public set popupTarget(value: string | null) {
+    value = value ?? null;
+    if (this._popupTarget !== value) {
+      this._popupTarget = value;
+      if (this._popupTarget) {
+        this._adapter.setHostAttribute(MENU_CONSTANTS.attributes.POPUP_TARGET, this._popupTarget);
+      } else {
+        this._adapter.removeHostAttribute(MENU_CONSTANTS.attributes.POPUP_TARGET);
+      }
+    }
   }
 
   public get optionBuilder(): MenuOptionBuilder | undefined {

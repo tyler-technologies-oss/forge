@@ -9,7 +9,8 @@ import {
   POPOVER_CONSTANTS,
   PopoverDismissReason,
   POPOVER_HOVER_TIMEOUT,
-  PopoverPreset
+  PopoverPreset,
+  PopoverAnchorAccessibility
 } from './popover-constants';
 import { IDismissibleStackState, DismissibleStack } from '../core/utils/dismissible-stack';
 import { VirtualElement } from '../core/utils/position-utils';
@@ -25,6 +26,7 @@ export interface IPopoverCore extends IOverlayAwareCore {
   hoverDelay: number;
   preset: PopoverPreset;
   distinct: string | null;
+  anchorAccessibility: PopoverAnchorAccessibility;
   hideAsync(): Promise<void>;
   dispatchBeforeToggleEvent(state: IDismissibleStackState): boolean;
 }
@@ -39,6 +41,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
   private _hoverDelay = POPOVER_CONSTANTS.defaults.HOVER_DELAY;
   private _preset = POPOVER_CONSTANTS.defaults.PRESET;
   private _distinct: string | null = null;
+  private _anchorAccessibility = POPOVER_CONSTANTS.defaults.ANCHOR_ACCESSIBILITY;
   private _previouslyFocusedElement: HTMLElement | null = null;
 
   // Hover trigger state
@@ -640,5 +643,18 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
   }
   public set distinct(value: string | null) {
     this._distinct = value;
+  }
+
+  public get anchorAccessibility(): PopoverAnchorAccessibility {
+    return this._anchorAccessibility;
+  }
+  public set anchorAccessibility(value: PopoverAnchorAccessibility) {
+    if (this._anchorAccessibility !== value) {
+      this._anchorAccessibility = value;
+      this._adapter.setHostAttribute(POPOVER_CONSTANTS.attributes.ANCHOR_ACCESSIBILITY, this._anchorAccessibility);
+      if (this._adapter.isConnected) {
+        this._adapter.initializeAnchorElement();
+      }
+    }
   }
 }

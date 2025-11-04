@@ -193,7 +193,7 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
   }
 
   private _updateAnchorExpandedState(state: boolean | null): void {
-    if (!this._overlayElement.anchorElement) {
+    if (!this._overlayElement.anchorElement || this._component.anchorAccessibility !== 'auto') {
       return;
     }
 

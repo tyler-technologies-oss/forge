@@ -10,7 +10,8 @@ import {
   PopoverPreset,
   PopoverTriggerType,
   POPOVER_CONSTANTS,
-  POPOVER_HOVER_TIMEOUT
+  POPOVER_HOVER_TIMEOUT,
+  PopoverAnchorAccessibility
 } from './popover-constants';
 import { LONGPRESS_TRIGGER_DELAY } from '../core/mixins/interactions/longpress/with-longpress-listener';
 import type { IPopoverComponent } from './popover';
@@ -1449,6 +1450,72 @@ describe('Popover', () => {
     });
   });
 
+  describe('anchor accessibility', () => {
+    it('should have default anchor accessibility value of auto', async () => {
+      const harness = await createFixture();
+
+      expect(harness.popoverElement.anchorAccessibility).to.equal('auto');
+    });
+
+    it('should set anchor accessibility via attribute', async () => {
+      const harness = await createFixture({ anchorAccessibility: 'none' });
+
+      expect(harness.popoverElement.anchorAccessibility).to.equal('none');
+      expect(harness.popoverElement.getAttribute(POPOVER_CONSTANTS.attributes.ANCHOR_ACCESSIBILITY)).to.equal('none');
+    });
+
+    it('should set anchor accessibility via property', async () => {
+      const harness = await createFixture();
+
+      harness.popoverElement.anchorAccessibility = 'none';
+
+      expect(harness.popoverElement.anchorAccessibility).to.equal('none');
+      expect(harness.popoverElement.getAttribute(POPOVER_CONSTANTS.attributes.ANCHOR_ACCESSIBILITY)).to.equal('none');
+    });
+
+    it('should remove anchor accessibility attribute when setting to default value', async () => {
+      const harness = await createFixture({ anchorAccessibility: 'none' });
+
+      expect(harness.popoverElement.anchorAccessibility).to.equal('none');
+      expect(harness.popoverElement.getAttribute(POPOVER_CONSTANTS.attributes.ANCHOR_ACCESSIBILITY)).to.equal('none');
+
+      harness.popoverElement.anchorAccessibility = 'auto';
+
+      expect(harness.popoverElement.anchorAccessibility).to.equal('auto');
+      expect(harness.popoverElement.getAttribute(POPOVER_CONSTANTS.attributes.ANCHOR_ACCESSIBILITY)).to.equal('auto');
+    });
+
+    it('should set aria-expanded on anchor element when anchor accessibility is auto', async () => {
+      const harness = await createFixture({ anchorAccessibility: 'auto' });
+
+      expect(harness.triggerElement.getAttribute('aria-expanded')).to.equal('false');
+
+      await harness.clickTrigger();
+
+      expect(harness.triggerElement.getAttribute('aria-expanded')).to.equal('true');
+
+      await harness.clickTrigger();
+      await harness.exitAnimation();
+
+      expect(harness.triggerElement.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('should not set aria-expanded on anchor element when anchor accessibility is none', async () => {
+      const harness = await createFixture({ anchorAccessibility: 'none' });
+
+      expect(harness.triggerElement.hasAttribute('aria-expanded')).to.be.false;
+
+      await harness.clickTrigger();
+
+      expect(harness.triggerElement.hasAttribute('aria-expanded')).to.be.false;
+
+      await harness.clickTrigger();
+      await harness.exitAnimation();
+
+      expect(harness.triggerElement.hasAttribute('aria-expanded')).to.be.false;
+    });
+  });
+
   describe('distinct', () => {
     it('should have distinct property null by default', async () => {
       const harness = await createFixture();
@@ -1670,6 +1737,7 @@ interface IPopoverFixtureConfig {
   hoverDismissDelay?: number;
   preset?: PopoverPreset;
   distinct?: string | null;
+  anchorAccessibility?: PopoverAnchorAccessibility;
 }
 
 async function createFixture({
@@ -1683,7 +1751,8 @@ async function createFixture({
   hoverDelay,
   hoverDismissDelay,
   preset,
-  distinct
+  distinct,
+  anchorAccessibility
 }: IPopoverFixtureConfig = {}): Promise<PopoverHarness> {
   const container = await fixture(html`
     <div style="display: flex; justify-content: center; align-items: center; height: 300px; width: 300px;">
@@ -1701,7 +1770,8 @@ async function createFixture({
         animation-type=${animationType ?? nothing}
         trigger-type=${triggerType ?? nothing}
         preset=${preset ?? nothing}
-        distinct=${distinct ?? nothing}>
+        distinct=${distinct ?? nothing}
+        anchor-accessibility=${anchorAccessibility ?? nothing}>
         <span>Test popover content</span>
         <button type="button" id="content-button" style="pointer-events: none;">Button</button>
         <forge-popover id="nested-popover">Nested popover</forge-popover>
