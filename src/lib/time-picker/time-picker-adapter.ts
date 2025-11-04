@@ -261,6 +261,7 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
       this._toggleElement.setAttribute('aria-disabled', value.toString());
       if ('disabled' in this._toggleElement) {
         (this._toggleElement as HTMLButtonElement).disabled = value;
+        this._toggleElement.tabIndex = -1;
       } else {
         const button = this._toggleElement.querySelector('button') as HTMLButtonElement;
         if (button) {
