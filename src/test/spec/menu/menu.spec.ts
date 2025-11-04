@@ -627,10 +627,10 @@ describe('MenuComponent', function(this: ITestContext) {
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
       expect(childMenuComponent.tagName.toLowerCase()).toBe(MENU_CONSTANTS.elementName);
       
-      const listItem = childMenuComponent.firstElementChild as IListItemComponent;
-      expect(listItem.tagName.toLowerCase()).toBe(LIST_ITEM_CONSTANTS.elementName);
+      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
+      expect(menuTrigger.tagName.toLowerCase()).toBe('button');
       
-      listItem.dispatchEvent(new MouseEvent('mouseenter'));
+      menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       await frame();
 
       expect(childMenuComponent.open).toBeTrue();
@@ -651,13 +651,13 @@ describe('MenuComponent', function(this: ITestContext) {
       await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      const listItem = childMenuComponent.firstElementChild as IListItemComponent;
+      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
       
-      listItem.dispatchEvent(new MouseEvent('mouseenter'));
+      menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       await frame();
       expect(childMenuComponent.open).toBeTrue();
       
-      listItem.dispatchEvent(new MouseEvent('mouseleave'));
+      menuTrigger.dispatchEvent(new MouseEvent('mouseleave'));
       await task(MENU_CONSTANTS.numbers.CHILD_MOUSE_LEAVE_TIMEOUT);
       await frame();
       expect(childMenuComponent.open).toBeFalse();
@@ -674,9 +674,9 @@ describe('MenuComponent', function(this: ITestContext) {
       await frame();
       
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      const listItem = childMenuComponent.firstElementChild as IListItemComponent;
+      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
       
-      listItem.dispatchEvent(new MouseEvent('mouseenter'));
+      menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       
       await frame();
       
@@ -686,7 +686,7 @@ describe('MenuComponent', function(this: ITestContext) {
 
       await frame();
       
-      listItem.dispatchEvent(new MouseEvent('mouseleave'));
+      menuTrigger.dispatchEvent(new MouseEvent('mouseleave'));
       document.dispatchEvent(new MouseEvent('mousemove', { pageX: 0, pageY: 0 } as MouseEventInit));
       childMenuPopup.dispatchEvent(new MouseEvent('mouseleave'));
 
@@ -711,9 +711,9 @@ describe('MenuComponent', function(this: ITestContext) {
       await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      const listItem = childMenuComponent.firstElementChild as IListItemComponent;
-      
-      listItem.dispatchEvent(new MouseEvent('mouseenter'));
+      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
+
+      menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       await frame();
 
       const childMenuListItems = getChildMenuListItems(getPopoverElement());
