@@ -2,6 +2,7 @@ import type { IIconComponent } from '../icon';
 import type { IOverlayOffset, OverlayFlipState, OverlayShiftState } from '../overlay/overlay-constants';
 import { PositionPlacement } from '../core/utils/position-utils';
 import { TooltipPlacement, TooltipType } from '../tooltip';
+import type { PopoverAnchorAccessibility } from '../popover/popover-constants';
 
 const observedAttributes = {
   POPUP_CLASSES: 'popup-classes',
@@ -125,6 +126,7 @@ export interface IListDropdownConfig<T = any> {
   footerBuilder?: ListDropdownFooterBuilder;
   cascade?: boolean;
   cascadingElementFactory?: (config: IListDropdownCascadingElementFactoryConfig) => HTMLElement;
+  anchorAccessibility?: PopoverAnchorAccessibility;
 }
 
 export interface IListDropdownCascadingElementFactoryConfig {

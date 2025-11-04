@@ -1,6 +1,13 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
 import { PopoverAdapter } from './popover-adapter';
-import { IPopoverToggleEventData, PopoverAnimationType, PopoverPreset, PopoverTriggerType, POPOVER_CONSTANTS } from './popover-constants';
+import {
+  IPopoverToggleEventData,
+  PopoverAnimationType,
+  PopoverPreset,
+  PopoverTriggerType,
+  POPOVER_CONSTANTS,
+  PopoverAnchorAccessibility
+} from './popover-constants';
 import { IPopoverCore, PopoverCore } from './popover-core';
 import { OverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
 import { IOverlayAware, OverlayAware } from '../overlay/base/overlay-aware';
@@ -20,6 +27,7 @@ export interface IPopoverProperties extends IOverlayAware, IDismissible {
   hoverDismissDelay: number;
   preset: PopoverPreset;
   distinct: string | null;
+  anchorAccessibility: PopoverAnchorAccessibility;
 }
 
 export interface IPopoverComponent extends IPopoverProperties {
@@ -53,6 +61,7 @@ declare global {
  * @property {number} [hoverDelay=0] - The delay in milliseconds before the popover is shown.
  * @property {PopoverPreset} [preset="popover"] - The preset to use for the popover.
  * @property {string | null} [distinct=null] - Enforces that this popover should be the only one open with the same unique value.
+ * @property {PopoverAnchorAccessibility} [anchorAccessibility="auto"] - Controls whether the popover manages accessibility attributes on the anchor element.
  *
  * @globalconfig placement
  * @globalconfig animationType
@@ -74,6 +83,7 @@ declare global {
  * @attribute {number} [hover-delay=0] - The delay in milliseconds before the popover is shown.
  * @attribute {string} [preset="popover"] - The preset to use for the popover.
  * @attribute {string | null} [distinct=null] - Enforces that this popover should be the only one open with the same unique value.
+ * @attribute {string} [anchor-accessibility="auto"] - Controls whether the popover manages accessibility attributes on the anchor element.
  *
  * @event {CustomEvent<IPopoverToggleEventData>} forge-popover-beforetoggle - Dispatches before the popover is toggled, and is cancelable.
  * @event {CustomEvent<IPopoverToggleEventData>} forge-popover-toggle - Dispatches after the popover is toggled.
@@ -176,6 +186,9 @@ export class PopoverComponent extends OverlayAware<IPopoverCore> implements IPop
       case POPOVER_CONSTANTS.observedAttributes.DISTINCT:
         this.distinct = newValue;
         return;
+      case POPOVER_CONSTANTS.observedAttributes.ANCHOR_ACCESSIBILITY:
+        this.anchorAccessibility = (newValue as PopoverAnchorAccessibility) || POPOVER_CONSTANTS.defaults.ANCHOR_ACCESSIBILITY;
+        return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
   }
@@ -206,6 +219,9 @@ export class PopoverComponent extends OverlayAware<IPopoverCore> implements IPop
 
   @coreProperty()
   declare public distinct: string | null;
+
+  @coreProperty()
+  declare public anchorAccessibility: PopoverAnchorAccessibility;
 
   /**
    * Hides the popover, and returns a `Promise` that resolves when the hide animation is complete.

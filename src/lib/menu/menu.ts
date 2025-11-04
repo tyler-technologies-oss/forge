@@ -37,6 +37,7 @@ export interface IMenuComponent extends IListDropdownAware {
   popupOffset: IOverlayOffset;
   optionBuilder: MenuOptionBuilder | undefined;
   popupElement: HTMLElement | undefined;
+  popupTarget: string | null;
   propagateKeyEvent(evt: KeyboardEvent): void;
   activateFirstOption(): void;
 }
@@ -61,6 +62,11 @@ declare global {
  *
  * @dependency forge-popover
  * @dependency forge-list
+ *
+ * @event {CustomEvent<IMenuSelectEventData>} forge-menu-select - Dispatches when a menu option is selected.
+ * @event {CustomEvent<void>} forge-menu-open - Dispatches when the menu is opened.
+ * @event {CustomEvent<void>} forge-menu-close - Dispatches when the menu is closed.
+ * @event {CustomEvent<IMenuActiveChangeEventData>} forge-menu-active-change - Dispatches when the active menu option changes.
  */
 @customElement({
   name: MENU_CONSTANTS.elementName,
@@ -82,7 +88,8 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
       MENU_CONSTANTS.attributes.POPUP_CLASSES,
       MENU_CONSTANTS.attributes.OPTION_LIMIT,
       MENU_CONSTANTS.attributes.OBSERVE_SCROLL,
-      MENU_CONSTANTS.attributes.OBSERVE_SCROLL_THRESHOLD
+      MENU_CONSTANTS.attributes.OBSERVE_SCROLL_THRESHOLD,
+      MENU_CONSTANTS.attributes.POPUP_TARGET
     ];
   }
 
@@ -129,6 +136,9 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
         break;
       case MENU_CONSTANTS.attributes.MODE:
         this.mode = newValue as MenuMode;
+        break;
+      case MENU_CONSTANTS.attributes.POPUP_TARGET:
+        this._core.popupTarget = isDefined(newValue) ? newValue : null;
         break;
     }
   }
@@ -231,6 +241,17 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
    */
   @coreProperty({ set: false })
   declare public popupElement: HTMLElement | undefined;
+
+  /**
+   * Gets/sets the ID of the element to use as the popup anchor for positioning.
+   * When null or empty, the target element (button) is used for both interaction and positioning.
+   * This is useful for cases like forge-list-item > button where the menu should be
+   * attached to the button for listeners but positioned relative to the list item.
+   * @default null
+   * @attribute popup-target
+   */
+  @coreProperty()
+  declare public popupTarget: string | null;
 
   /**
    * Force propagates the key event from another element to this component.
