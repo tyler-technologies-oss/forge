@@ -40,7 +40,7 @@ declare global {
 /**
  * @tag forge-tab-bar
  *
- * @summary Tabs organize content across different screens and views.
+ * @summary Tab bars organize a set of tabs, holding selection state and enabling navigation between different views or sections of content.
  *
  * @description
  * Use tabs to group content into helpful categories. Tabs are typically placed

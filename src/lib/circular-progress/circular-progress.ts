@@ -26,8 +26,7 @@ declare global {
 /**
  * @tag forge-circular-progress
  *
- * @summary
- * Circular progress indicators display progress by animating along a circular track in a clockwise direction.
+ * @summary Circular progress indicators display progress by animating along a circular track in a clockwise direction. They can be used to represent both determinate and indeterminate progress.
  *
  * @description
  * Progress indicators inform users about the status of ongoing processes.

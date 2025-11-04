@@ -25,8 +25,7 @@ declare global {
 /**
  * @tag forge-overlay
  *
- * @summary Overlays are used to render content in an element that rendered above all content on the page,
- * and positioned around a specified anchor element.
+ * @summary Overlays are used to show content in an element that is rendered above all other content on the page, and positioned around a specified anchor element. This is a low-level building block component that does not provide any visual styles, but is used within other components such as popovers, and tooltips.
  *
  * @description
  * An overlay is a low-level building block component that does not provide any visual styles. Its only

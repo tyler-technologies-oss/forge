@@ -30,7 +30,7 @@ declare global {
 }
 
 /**
- * @summary An interactive color selection component with support for multiple color formats (hex, RGB, HSV) and optional opacity control.
+ * @summary An interactive color selection component with support for multiple color formats (hex, RGB, HSV) and optional opacity control. Intended to be used either inline, or within a popover or dialog for selecting colors.
  *
  * @tag forge-color-picker
  *

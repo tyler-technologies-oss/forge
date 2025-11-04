@@ -23,7 +23,7 @@ declare global {
 /**
  * @tag forge-state-layer
  *
- * @summary State layers show the interaction status of an element.
+ * @summary State layers show the interaction status of an element. These layers are semi-transparent overlays that indicate hover, focus, press, and drag states. State layers are building blocks for components and should generally not be used directly, but part of other components that have interactive states.
  *
  * @description A state layer is a semi-transparent overlay on an element that indicates its interaction
  * state. State layers provide a systematic approach to visualizing states by using opacity.

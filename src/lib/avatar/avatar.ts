@@ -36,7 +36,7 @@ export const AVATAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-avatar';
 /**
  * @tag forge-avatar
  *
- * @summary Avatars represent an entity via text or image.
+ * @summary Avatars represent an entity via text or image. Use avatars to visually represent users, objects, or identifiers in your application.
  *
  * @cssproperty {string} --forge-avatar-background - The background color of the avatar.
  * @cssproperty {number} --forge-avatar-shape - The border radius of the avatar, defaults to 50%.

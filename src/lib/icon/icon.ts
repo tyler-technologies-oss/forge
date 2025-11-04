@@ -32,7 +32,7 @@ declare global {
 /**
  * @tag forge-icon
  *
- * @summary Icons are used to represent information visually
+ * @summary Icons are used to represent information visually. The icon component is a wrapper around SVG icons that are registered in the icon registry.
  *
  * @property {string} name - The name of the icon to render.
  * @property {string} src - Provides the ability to set the SVG string content directly.

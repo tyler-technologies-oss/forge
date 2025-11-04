@@ -88,7 +88,7 @@ declare global {
 }
 
 /**
- * @summary A comprehensive data table component with features for selection, sorting, filtering, resizing, and row expansion functionality.
+ * @summary Tables are used to display sets of data. They organize information into rows and columns, making it easier to read, compare, and analyze. The Forge table provides a configuration-based approach to building data tables with means for sorting, filtering, selecting, and customizing the display of tabular data.
  *
  * @tag forge-table
  *

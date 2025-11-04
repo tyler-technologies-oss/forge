@@ -25,8 +25,7 @@ declare global {
 /**
  * @tag forge-linear-progress
  *
- * @summary
- * Linear progress indicators display progress by animating along a linear track in a horizontal direction.
+ * @summary Linear progress indicators display progress by animating along a linear track in a horizontal direction. They can be used to show determinate or indeterminate progress.
  *
  * @description
  * Progress indicators inform users about the status of ongoing processes.

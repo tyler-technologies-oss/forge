@@ -42,7 +42,7 @@ declare global {
 /**
  * @tag forge-tooltip
  *
- * @summary Tooltips display information related to an element when the user hovers over an element.
+ * @summary Tooltips display information related to an element when the user focuses or hovers over an anchor element. Use tooltips to provide additional context or information about elements that may not be immediately apparent.
  *
  * @dependency forge-overlay
  *

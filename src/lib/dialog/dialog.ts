@@ -71,7 +71,7 @@ declare global {
 /**
  * @tag forge-dialog
  *
- * @summary Dialogs are temporary UI elements that are used to display information, ask for input, or confirm actions.
+ * @summary Dialogs are temporary UI elements that are used to display information, ask for input, or confirm actions. Dialogs can be modal or non-modal.
  *
  * @dependency forge-backdrop
  *

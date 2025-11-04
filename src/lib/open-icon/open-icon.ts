@@ -22,7 +22,8 @@ declare global {
 /**
  * @tag forge-open-icon
  *
- * @summary Open icons are used to indicate whether a section is open or closed.
+ * @summary Open icons are icons used to indicate whether a section is open or closed. They provide an animated transition between the two states to enhance the user experience.
+ 
  *
  * @property {boolean} [open=false] - Whether the icon is open or closed.
  * @property {OpenIconOrientation} [orientation=vertical] - The orientation of the rotation.

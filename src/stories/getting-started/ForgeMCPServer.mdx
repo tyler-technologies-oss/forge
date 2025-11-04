@@ -22,17 +22,44 @@ This experimental tool helps developers discover components, generate framework-
 
 ## Quick Setup
 
-Get started with the Forge MCP server in your AI client:
+Get started with the Tyler Forge™ MCP server in your AI client:
+
+> The Tyler Forge™ MCP server is currently available as a stdio server only, and requires Node.js >=18 and npm to be installed on your system.
 
 ### Claude Code
+
 ```bash
-claude mcp add forge -- npx -y @tylertech/forge-mcp@latest
+claude mcp add -t stdio -s [scope] forge -- npx -y @tylertech/forge-mcp@latest
 ```
+
+> The `[scope]` must be `user`, `project` or `local`.
+
+### Codex CLI
+
+Add the following to your `config.toml` (which defaults to `~/.codex/config.toml`, but refer to the configuration documentation for more advanced setups):
+
+```toml
+[mcp_servers.forge]
+command = "npx"
+args = ["-y", "@tylertech/forge-mcp@latest"]
+```
+
+### Gemini CLI
+
+```bash
+gemini mcp add -t stdio -s [scope] forge npx -y @tylertech/forge-mcp@latest
+```
+
+> The `[scope]` must be `user`, `project` or `local`.
 
 ### VS Code
 
-#### Command Palette
-Open the Command Palette (`Cmd+Shift+P` or `Ctrl+Shift+P`) and run `MCP: Add Server...` and follow the instructions to add the `@tylertech/forge-mcp` npm package.
+- Open the Command Palette (`Cmd+Shift+P` or `Ctrl+Shift+P`)
+- Choose `MCP: Add Server...`
+- Choose `Command (stdio)`
+- Enter `npx -y @tylertech/forge-mcp@latest`
+- Name the server `forge`
+- Choose if you want to use it as a `Global` or `Workspace` MCP server
 
 #### Manual Configuration
 Create `.vscode/mcp.json`:
@@ -51,7 +78,12 @@ Create `.vscode/mcp.json`:
 > **Note**: You may need to manually start the MCP server after updating your configuration.
 
 ### Claude Desktop
-Add to your Claude Desktop configuration:
+
+- Open `Settings`
+- Choose `Developer`
+- Click on `Edit Config`
+
+This will open your file explorer to the directory where the `claude_desktop_config.json` file lives. Edit the file to include the following configuration:
 
 ```json
 {
@@ -64,7 +96,24 @@ Add to your Claude Desktop configuration:
 }
 ```
 
-## Essential Tools
+## Using the Forge MCP Server
+
+Once the Forge MCP server is set up in your AI client, you can start interacting with it using natural language prompts.
+
+### Prompts
+
+Prompts are selected by the user and are sent as a message. They can be used to provide common instructions/rules to guide LLMs on how to properly use the MCP server.
+
+> You can activate prompts in your AI client (if supported) by specifying the prompt name, typically via a slash command, or via prompt selection UI.
+
+- `forge_mode`: Sets baseline rules when running Forge-specific task.
+
+  This prompt accepts a `[task]` parameter where you can describe your specific request/query. This helps guide the LLM to use the correct MCP
+  server tools, as well as includes some rules and best practices when outputting Tyler Forge-related code.
+
+> Learn more about MCP prompts [here](https://modelcontextprotocol.io/specification/2025-06-18/server/prompts).
+
+### Essential Tools
 
 The MCP server provides these key capabilities:
 
@@ -72,6 +121,7 @@ The MCP server provides these key capabilities:
 - **Design System Access**: `get_design_tokens`, `setup_typography`, `setup_icons`
 - **Framework Integration**: `setup_framework` for Angular, React, Vue, etc.
 - **Migration Guidance**: `get_version_migration_guide`
+- **Validation**: `validate_component_api`
 
 ## Best Practices
 
@@ -80,6 +130,7 @@ The MCP server provides these key capabilities:
 3. **Provide Context**: Include your framework, version constraints, and specific requirements
 4. **Break Down Complex Queries**: Split large requests into smaller, focused questions
 5. **Cross-Reference Documentation**: Use the MCP server alongside official Forge documentation
+6. **Manage Context**: For lengthy conversations, periodically compact or clear context to maintain relevance.
 
 ## Example Usage
 

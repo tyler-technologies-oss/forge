@@ -47,7 +47,7 @@ declare global {
 /**
  * @tag forge-paginator
  *
- * @summary Paginators provide navigation controls for dividing content across multiple pages.
+ * @summary Paginators provide navigation controls for dividing content across multiple pages. Typically used alongside data tables or lists.
  *
  * @slot label - Overrides the label text when in the default variant.
  * @slot range-label - Overrides the default range label with a custom label when in the default variant.

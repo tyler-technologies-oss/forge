@@ -25,7 +25,7 @@ declare global {
 /**
  * @tag forge-skip-link
  *
- * @summary The Forge Skip Link component is used to provide a way for users to skip repetitive content and navigate directly to a section of the page.
+ * @summary The Forge Skip Link component is used to provide an accessible way for users to skip repetitive content and navigate directly to a section of the page. This is used for screen reader and keyboard users to improve the overall accessibility of web applications.
  *
  * @cssproperty --forge-skip-link-background - The background color of the skip link.
  * @cssproperty --forge-skip-link-color - The text color of the skip link.

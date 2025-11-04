@@ -64,7 +64,7 @@ declare global {
 /**
  * @tag forge-autocomplete
  *
- * @summary Autocomplete components provide real-time suggestions as users type in a text field.
+ * @summary Autocomplete components provide real-time typeahead suggestions as users type in a text field. Use autocompletes to help users quickly find and select from a list of options, improving form usability and data accuracy.
  *
  * @event {CustomEvent<any>} forge-autocomplete-change - Fired when the value changes.
  * @event {CustomEvent<IAutocompleteSelectEventData>} forge-autocomplete-select -  Fired when an option is selected. Only applies when in "stateless" `mode`.

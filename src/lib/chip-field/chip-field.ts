@@ -26,7 +26,7 @@ declare global {
 }
 
 /**
- * @summary A specialized input field component that allows users to create and manage a collection of chips representing text values or selections.
+ * @summary A specialized input field component that allows users to create and manage a collection of chips representing text values or selections. Use a chip field when you want to allow users to input multiple discrete items, such as tags, categories, or selections from a predefined list. Prefer alternatives such as a select or autocomplete when dealing with a large number of options or when single selection is sufficient.
  *
  * @tag forge-chip-field
  *
