@@ -1,3 +1,4 @@
+import { DismissibleStack, IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
 import { IToastAdapter } from './toast-adapter';
 import { TOAST_CONSTANTS, ToastPlacement, ToastTheme } from './toast-constants';
 
@@ -22,11 +23,26 @@ export class ToastCore implements IToastCore {
   private _hideTimeout: number | undefined;
   private _actionListener: EventListener = this._onAction.bind(this);
   private _closeListener: EventListener = this._onClose.bind(this);
+  private _isHovered = false;
+  private _isFocused = false;
+  private _startTime: number | undefined;
+  private _remainingTime: number | undefined;
+  private _mouseEnterListener: EventListener = this._handleMouseEnter.bind(this);
+  private _mouseLeaveListener: EventListener = this._handleMouseLeave.bind(this);
+  private _focusInListener: EventListener = this._handleFocusIn.bind(this);
+  private _focusOutListener: EventListener = this._handleFocusOut.bind(this);
+  private _keyboardListener: EventListener = this._handleKeyboard.bind(this);
 
   constructor(private _adapter: IToastAdapter) {}
 
   public initialize(): void {
     this._adapter.tryApplyGlobalConfiguration(['duration', 'placement', 'dismissible']);
+
+    this._adapter.addMouseEnterListener(this._mouseEnterListener);
+    this._adapter.addMouseLeaveListener(this._mouseLeaveListener);
+    this._adapter.addFocusInListener(this._focusInListener);
+    this._adapter.addFocusOutListener(this._focusOutListener);
+    this._adapter.addKeyboardListener(this._keyboardListener);
 
     if (this._open) {
       this.show();
@@ -36,11 +52,15 @@ export class ToastCore implements IToastCore {
   public show(): void {
     this._adapter.show();
 
+    DismissibleStack.instance.add(this._adapter.hostElement as IDismissible);
+
     if (isFinite(this._duration) && this._duration > 0) {
       /* c8 ignore next 3 */
       if (this._hideTimeout) {
         window.clearTimeout(this._hideTimeout);
       }
+      this._startTime = Date.now();
+      this._remainingTime = this._duration;
       this._hideTimeout = window.setTimeout(() => this.hide(), this._duration);
     }
 
@@ -53,6 +73,13 @@ export class ToastCore implements IToastCore {
       window.clearTimeout(this._hideTimeout);
       this._hideTimeout = undefined;
     }
+
+    this._startTime = undefined;
+    this._remainingTime = undefined;
+    this._isHovered = false;
+    this._isFocused = false;
+
+    DismissibleStack.instance.remove(this._adapter.hostElement as IDismissible);
 
     await this._adapter.hide();
 
@@ -71,6 +98,67 @@ export class ToastCore implements IToastCore {
 
   private _onClose(_evt: MouseEvent): void {
     this.hide();
+  }
+
+  private _handleMouseEnter(): void {
+    this._isHovered = true;
+    this._updateTimerState();
+  }
+
+  private _handleMouseLeave(): void {
+    this._isHovered = false;
+    this._updateTimerState();
+  }
+
+  private _handleFocusIn(): void {
+    this._isFocused = true;
+    this._updateTimerState();
+  }
+
+  private _handleFocusOut(): void {
+    this._isFocused = false;
+    this._updateTimerState();
+  }
+
+  private _handleKeyboard(event: KeyboardEvent): void {
+    if (event.key === 'Escape' && this._open) {
+      event.stopPropagation();
+      DismissibleStack.instance.dismiss(this._adapter.hostElement as IDismissible, { reason: 'escape' });
+    }
+  }
+
+  private _updateTimerState(): void {
+    const shouldPause = this._isHovered || this._isFocused;
+
+    if (shouldPause && this._hideTimeout) {
+      this._pauseTimer();
+    } else if (!shouldPause && !this._hideTimeout && this._remainingTime !== undefined) {
+      this._resumeTimer();
+    }
+  }
+
+  private _pauseTimer(): void {
+    if (this._hideTimeout && this._startTime !== undefined) {
+      window.clearTimeout(this._hideTimeout);
+      this._hideTimeout = undefined;
+      const elapsed = Date.now() - this._startTime;
+      this._remainingTime = Math.max(0, (this._remainingTime ?? this._duration) - elapsed);
+    }
+  }
+
+  private _resumeTimer(): void {
+    if (this._remainingTime !== undefined && this._remainingTime > 0) {
+      this._startTime = Date.now();
+      this._hideTimeout = window.setTimeout(() => this.hide(), this._remainingTime);
+    }
+  }
+
+  public [tryDismiss](state?: IDismissibleStackState): boolean {
+    if (state?.reason === 'escape') {
+      this.hide();
+      return true;
+    }
+    return false;
   }
 
   public get open(): boolean {

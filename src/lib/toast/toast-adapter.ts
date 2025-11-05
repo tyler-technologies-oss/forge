@@ -15,6 +15,16 @@ export interface IToastAdapter extends IBaseAdapter<IToastComponent> {
   removeActionListener(listener: EventListener): void;
   setDismissLabel(label: string): void;
   setActionText(text: string): void;
+  addMouseEnterListener(listener: EventListener): void;
+  removeMouseEnterListener(listener: EventListener): void;
+  addMouseLeaveListener(listener: EventListener): void;
+  removeMouseLeaveListener(listener: EventListener): void;
+  addFocusInListener(listener: EventListener): void;
+  removeFocusInListener(listener: EventListener): void;
+  addFocusOutListener(listener: EventListener): void;
+  removeFocusOutListener(listener: EventListener): void;
+  addKeyboardListener(listener: EventListener): void;
+  removeKeyboardListener(listener: EventListener): void;
 }
 
 export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToastAdapter {
@@ -67,5 +77,45 @@ export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToast
     } else {
       this._actionButtonElement.setAttribute('hidden', '');
     }
+  }
+
+  public addMouseEnterListener(listener: EventListener): void {
+    this._component.addEventListener('mouseenter', listener);
+  }
+
+  public removeMouseEnterListener(listener: EventListener): void {
+    this._component.removeEventListener('mouseenter', listener);
+  }
+
+  public addMouseLeaveListener(listener: EventListener): void {
+    this._component.addEventListener('mouseleave', listener);
+  }
+
+  public removeMouseLeaveListener(listener: EventListener): void {
+    this._component.removeEventListener('mouseleave', listener);
+  }
+
+  public addFocusInListener(listener: EventListener): void {
+    this._component.addEventListener('focusin', listener);
+  }
+
+  public removeFocusInListener(listener: EventListener): void {
+    this._component.removeEventListener('focusin', listener);
+  }
+
+  public addFocusOutListener(listener: EventListener): void {
+    this._component.addEventListener('focusout', listener);
+  }
+
+  public removeFocusOutListener(listener: EventListener): void {
+    this._component.removeEventListener('focusout', listener);
+  }
+
+  public addKeyboardListener(listener: EventListener): void {
+    this._component.addEventListener('keydown', listener);
+  }
+
+  public removeKeyboardListener(listener: EventListener): void {
+    this._component.removeEventListener('keydown', listener);
   }
 }

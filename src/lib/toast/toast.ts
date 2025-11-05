@@ -5,6 +5,7 @@ import { setDefaultAria } from '../constants';
 import { BaseComponent } from '../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
+import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
 import { DialogComponent, dialogStack } from '../dialog';
 import { IconComponent, IconRegistry, IIconProperties } from '../icon';
 import { IconButtonComponent } from '../icon-button';
@@ -34,7 +35,7 @@ export interface IToastPresentConfiguration extends Partial<IToastProperties> {
   topLayer?: boolean;
 }
 
-export interface IToastComponent extends IToastProperties, IWithElementInternals, IWithDefaultAria {
+export interface IToastComponent extends IToastProperties, IWithElementInternals, IWithDefaultAria, IDismissible {
   show(): void;
   hide(): Promise<void>;
 }
@@ -199,6 +200,15 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
    */
   public hide(): Promise<void> {
     return this._core.hide();
+  }
+
+  /**
+   * Attempts to dismiss the toast.
+   * @param state The dismiss state.
+   * @returns True if the toast was dismissed, false otherwise.
+   */
+  public [tryDismiss](state?: IDismissibleStackState): boolean {
+    return this._core[tryDismiss](state);
   }
 
   /**
