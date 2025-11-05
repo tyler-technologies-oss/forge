@@ -25,7 +25,6 @@ export class ToastCore implements IToastCore {
   private _closeListener: EventListener = this._onClose.bind(this);
   private _isHovered = false;
   private _isFocused = false;
-  private _remainingTime: number | undefined;
   private _pointerEnterListener: EventListener = this._handlePointerEnter.bind(this);
   private _pointerLeaveListener: EventListener = this._handlePointerLeave.bind(this);
   private _focusInListener: EventListener = this._handleFocusIn.bind(this);
@@ -58,7 +57,6 @@ export class ToastCore implements IToastCore {
       if (this._hideTimeout) {
         window.clearTimeout(this._hideTimeout);
       }
-      this._remainingTime = this._duration;
       this._hideTimeout = window.setTimeout(() => this.hide(), this._duration);
     }
 
@@ -72,7 +70,6 @@ export class ToastCore implements IToastCore {
       this._hideTimeout = undefined;
     }
 
-    this._remainingTime = undefined;
     this._isHovered = false;
     this._isFocused = false;
 
@@ -138,13 +135,12 @@ export class ToastCore implements IToastCore {
     if (this._hideTimeout) {
       window.clearTimeout(this._hideTimeout);
       this._hideTimeout = undefined;
-      this._remainingTime = this._duration;
     }
   }
 
   private _resumeTimer(): void {
-    if (this._remainingTime !== undefined && this._remainingTime > 0) {
-      this._hideTimeout = window.setTimeout(() => this.hide(), this._remainingTime);
+    if (isFinite(this._duration) && this._duration > 0) {
+      this._hideTimeout = window.setTimeout(() => this.hide(), this._duration);
     }
   }
 
