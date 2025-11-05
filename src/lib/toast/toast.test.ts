@@ -396,7 +396,7 @@ describe('Toast', () => {
       expect(el.open).to.be.true;
 
       el.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true }));
-      await task(250 + TOAST_ANIMATION_DURATION);
+      await task(500 + TOAST_ANIMATION_DURATION);
 
       expect(el.open).to.be.false;
     });
@@ -413,7 +413,7 @@ describe('Toast', () => {
       expect(el.open).to.be.true;
 
       el.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
-      await task(250 + TOAST_ANIMATION_DURATION);
+      await task(500 + TOAST_ANIMATION_DURATION);
 
       expect(el.open).to.be.false;
     });
@@ -437,12 +437,12 @@ describe('Toast', () => {
       expect(el.open).to.be.true;
 
       el.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
-      await task(250 + TOAST_ANIMATION_DURATION);
+      await task(500 + TOAST_ANIMATION_DURATION);
 
       expect(el.open).to.be.false;
     });
 
-    it('should resume timer with remaining time after pointer hover ends', async () => {
+    it('should reset timer to full duration after pointer hover ends', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open duration="1000">Test</forge-toast>`);
 
       expect(el.open).to.be.true;
@@ -454,7 +454,7 @@ describe('Toast', () => {
       expect(el.open).to.be.true;
 
       el.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true }));
-      await task(300 + TOAST_ANIMATION_DURATION);
+      await task(1000 + TOAST_ANIMATION_DURATION);
 
       expect(el.open).to.be.false;
     });
