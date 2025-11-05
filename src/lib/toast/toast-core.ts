@@ -27,8 +27,8 @@ export class ToastCore implements IToastCore {
   private _isFocused = false;
   private _startTime: number | undefined;
   private _remainingTime: number | undefined;
-  private _mouseEnterListener: EventListener = this._handleMouseEnter.bind(this);
-  private _mouseLeaveListener: EventListener = this._handleMouseLeave.bind(this);
+  private _pointerEnterListener: EventListener = this._handlePointerEnter.bind(this);
+  private _pointerLeaveListener: EventListener = this._handlePointerLeave.bind(this);
   private _focusInListener: EventListener = this._handleFocusIn.bind(this);
   private _focusOutListener: EventListener = this._handleFocusOut.bind(this);
   private _keyboardListener: EventListener = this._handleKeyboard.bind(this);
@@ -38,8 +38,8 @@ export class ToastCore implements IToastCore {
   public initialize(): void {
     this._adapter.tryApplyGlobalConfiguration(['duration', 'placement', 'dismissible']);
 
-    this._adapter.addMouseEnterListener(this._mouseEnterListener);
-    this._adapter.addMouseLeaveListener(this._mouseLeaveListener);
+    this._adapter.addPointerEnterListener(this._pointerEnterListener);
+    this._adapter.addPointerLeaveListener(this._pointerLeaveListener);
     this._adapter.addFocusInListener(this._focusInListener);
     this._adapter.addFocusOutListener(this._focusOutListener);
     this._adapter.addKeyboardListener(this._keyboardListener);
@@ -100,12 +100,12 @@ export class ToastCore implements IToastCore {
     this.hide();
   }
 
-  private _handleMouseEnter(): void {
+  private _handlePointerEnter(): void {
     this._isHovered = true;
     this._updateTimerState();
   }
 
-  private _handleMouseLeave(): void {
+  private _handlePointerLeave(): void {
     this._isHovered = false;
     this._updateTimerState();
   }

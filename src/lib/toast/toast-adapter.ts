@@ -15,10 +15,10 @@ export interface IToastAdapter extends IBaseAdapter<IToastComponent> {
   removeActionListener(listener: EventListener): void;
   setDismissLabel(label: string): void;
   setActionText(text: string): void;
-  addMouseEnterListener(listener: EventListener): void;
-  removeMouseEnterListener(listener: EventListener): void;
-  addMouseLeaveListener(listener: EventListener): void;
-  removeMouseLeaveListener(listener: EventListener): void;
+  addPointerEnterListener(listener: EventListener): void;
+  removePointerEnterListener(listener: EventListener): void;
+  addPointerLeaveListener(listener: EventListener): void;
+  removePointerLeaveListener(listener: EventListener): void;
   addFocusInListener(listener: EventListener): void;
   removeFocusInListener(listener: EventListener): void;
   addFocusOutListener(listener: EventListener): void;
@@ -79,20 +79,20 @@ export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToast
     }
   }
 
-  public addMouseEnterListener(listener: EventListener): void {
-    this._component.addEventListener('mouseenter', listener);
+  public addPointerEnterListener(listener: EventListener): void {
+    this._component.addEventListener('pointerenter', listener);
   }
 
-  public removeMouseEnterListener(listener: EventListener): void {
-    this._component.removeEventListener('mouseenter', listener);
+  public removePointerEnterListener(listener: EventListener): void {
+    this._component.removeEventListener('pointerenter', listener);
   }
 
-  public addMouseLeaveListener(listener: EventListener): void {
-    this._component.addEventListener('mouseleave', listener);
+  public addPointerLeaveListener(listener: EventListener): void {
+    this._component.addEventListener('pointerleave', listener);
   }
 
-  public removeMouseLeaveListener(listener: EventListener): void {
-    this._component.removeEventListener('mouseleave', listener);
+  public removePointerLeaveListener(listener: EventListener): void {
+    this._component.removeEventListener('pointerleave', listener);
   }
 
   public addFocusInListener(listener: EventListener): void {

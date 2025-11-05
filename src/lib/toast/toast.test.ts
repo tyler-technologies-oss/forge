@@ -384,18 +384,18 @@ describe('Toast', () => {
   });
 
   describe('timer pause/resume', () => {
-    it('should pause timer on hover', async () => {
+    it('should pause timer on pointer hover', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open duration="500">Test</forge-toast>`);
 
       expect(el.open).to.be.true;
 
       await task(250);
-      el.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+      el.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
       await task(500);
 
       expect(el.open).to.be.true;
 
-      el.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+      el.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true }));
       await task(250 + TOAST_ANIMATION_DURATION);
 
       expect(el.open).to.be.false;
@@ -418,20 +418,20 @@ describe('Toast', () => {
       expect(el.open).to.be.false;
     });
 
-    it('should pause timer when hover or focus is active', async () => {
+    it('should pause timer when pointer hover or focus is active', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open duration="500">Test</forge-toast>`);
 
       expect(el.open).to.be.true;
 
       await task(250);
-      el.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+      el.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
       await task(100);
       el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
       await task(500);
 
       expect(el.open).to.be.true;
 
-      el.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+      el.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true }));
       await task(100);
 
       expect(el.open).to.be.true;
@@ -442,31 +442,31 @@ describe('Toast', () => {
       expect(el.open).to.be.false;
     });
 
-    it('should resume timer with remaining time after hover ends', async () => {
+    it('should resume timer with remaining time after pointer hover ends', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open duration="1000">Test</forge-toast>`);
 
       expect(el.open).to.be.true;
 
       await task(700);
-      el.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+      el.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
       await task(1000);
 
       expect(el.open).to.be.true;
 
-      el.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+      el.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true }));
       await task(300 + TOAST_ANIMATION_DURATION);
 
       expect(el.open).to.be.false;
     });
 
-    it('should not auto-dismiss if duration is 0 even with hover/focus events', async () => {
+    it('should not auto-dismiss if duration is 0 even with pointer hover/focus events', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open duration="0">Test</forge-toast>`);
 
       expect(el.open).to.be.true;
 
-      el.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+      el.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
       await task(100);
-      el.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+      el.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true }));
       await task(100);
 
       expect(el.open).to.be.true;
