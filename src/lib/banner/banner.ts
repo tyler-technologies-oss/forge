@@ -33,7 +33,7 @@ declare global {
 /**
  * @tag forge-banner
  *
- * @summary Banners are used to inform users of important information, such as errors, warnings, or success messages.
+ * @summary Banners are used to inform users of important information, such as errors, warnings, or success messages. Use banners for non-critical messages that require user attention but do not interrupt workflow.
  *
  * @property {boolean} [dismissed=false] - Controls the visibility of the banner.
  * @property {boolean} [persistent=false] - Controls the visibility of the built-in dismiss button.

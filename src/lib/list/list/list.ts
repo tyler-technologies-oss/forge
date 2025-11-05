@@ -32,7 +32,7 @@ declare global {
 /**
  * @tag forge-list
  *
- * @summary Lists are vertical groupings of related content.
+ * @summary Lists are vertically oriented groups of related content that allow users to select or view one or more items from a set.
  *
  * @csspart root - The component's root container element.
  *

@@ -28,7 +28,7 @@ declare global {
 /**
  * @tag forge-label
  *
- * @summary The Forge Label component is used to associate a text label with a compatible Forge component.
+ * @summary The Label component is used to associate a text label with a compatible Forge component.
  *
  * @cssclass forge-label - Apply to the root element of the label to align the label and associated element horizontally.
  * @cssclass forge-label-block - Apply to the root element instead of `forge-label` to align the label and associated element vertically.

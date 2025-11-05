@@ -21,7 +21,7 @@ declare global {
 /**
  * @tag forge-drawer
  *
- * @summary A persistent side navigation drawer component that provides a sliding panel for navigation content.
+ * @summary A persistent side navigation drawer component that provides the ability to dismiss and open the drawer with smooth animations. Use for navigation or to display additional content alongside the main application content.
  *
  * @slot - The content to display in the scrollable content container.
  * @slot header - The header content above the main content.

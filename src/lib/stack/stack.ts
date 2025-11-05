@@ -25,14 +25,7 @@ declare global {
 /**
  * @tag forge-stack
  *
- * @summary The stack is a utility component that helps manage spacing and alignment of immediate children along a vertical or horizontal axis.
- *
- * @description
- * The stack utility component uses flexbox under the hood, but it is not meant to be an abstraction or replacement for CSS flexbox.
- * Stack is simply a utility component for developer convenience. There are many UI patterns and situations where elements need to be
- * arranged horizontally or vertically with a specific gap inbetween. Instead of having to use an inline style or create a new CSS class for
- * these scenarios, you can reach for the stack. This keeps developers within a template and prevents having to jump around from HTML
- * to CSS. It also helps minimize the number of CSS classes being used for simple situations where basic flexbox is needed.
+ * @summary The stack is a utility component that helps manage spacing and alignment of immediate children along a vertical or horizontal axis. Use stacks sparingly to avoid unnecessary DOM complexity, and prefer CSS flexbox or grid for more complex layouts.
  *
  * @cssproperty --forge-stack-alignment - Controls the align-items CSS property of the root stack element.
  * @cssproperty --forge-stack-justify - Controls the justify-content CSS property of the root stack element.

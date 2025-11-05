@@ -33,7 +33,7 @@ declare global {
 }
 
 /**
- * @summary A clickable button component that displays an icon with support for different variants, themes, toggle states, and accessibility features.
+ * @summary Icon buttons are buttons that contain **only** an icon, and are used to represent actions or commands. Always provide an accessible label when using icon buttons.
  *
  * @tag forge-icon-button
  *

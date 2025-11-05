@@ -33,7 +33,7 @@ declare global {
 /**
  * @tag forge-button-toggle
  *
- * @summary Toggle buttons allow users to select from a group of choices with single or multiple selection.
+ * @summary Button toggles allow users to select from a group of choices with single or multiple selection.
  *
  * @property {unknown} value - The value of the button toggle.
  * @property {boolean} [selected=false] - Whether or not the button is selected.

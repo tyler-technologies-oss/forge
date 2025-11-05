@@ -38,7 +38,8 @@ declare global {
 /**
  * @tag forge-profile-card
  *
- * @summary Profile cards display user information and actions in a structured card format.
+ * @summary Profile cards display user information and actions in a structured card format. This component is deprecated prefer using the `<forge-user-profile>` component from the extended library instead.
+ 
  */
 @customElement({
   name: PROFILE_CARD_CONSTANTS.elementName,

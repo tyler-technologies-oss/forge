@@ -59,7 +59,7 @@ declare global {
  * @cssclass forge-expansion-panel--open - The open state of the panel.
  *
  * @slot - The content of the panel.
- * @slot header - The header of the panel.
+ * @slot header - The header of the panel. This is deprecated, prefer using the trigger property instead, or manually associating a button with the panel.
  */
 @customElement({
   name: EXPANSION_PANEL_CONSTANTS.elementName

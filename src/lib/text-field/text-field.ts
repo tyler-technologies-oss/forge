@@ -30,7 +30,7 @@ declare global {
 /**
  * @tag forge-text-field
  *
- * @summary The Forge Text Field component wraps and styles an input or textarea element.
+ * @summary The Forge Text Field component is an input field used to capture user text input. It requires a child `<input>` or `<textarea>` element to function properly, and an optional `<label>` element can be used to provide a label for the `<input>`.
  *
  * @dependency forge-field
  * @dependency forge-icon-button

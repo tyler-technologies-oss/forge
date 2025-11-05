@@ -23,7 +23,7 @@ declare global {
 /**
  * @tag forge-modal-drawer
  *
- * @summary A modal navigation drawer component that slides in from the side with a backdrop overlay, typically used for temporary navigation panels.
+ * @summary A modal navigation drawer component that slides in from the side with a backdrop overlay, typically used for temporary navigation panels. Prefer to use the dialog component with the preset options for sidesheet styles drawers.
  *
  * @dependency forge-backdrop
  *

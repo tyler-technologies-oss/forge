@@ -31,9 +31,8 @@ declare global {
 /**
  * @tag forge-file-picker
  *
- * @summary
- * The file-picker component allows for a user to upload files of their own to the system. The component provides a slot for a
- * button, as well as drag-and-drop functionality to launch the system file chooser dialog. There are visual queues to let the
+ * @summary The file picker component allows for a user to upload files of their own to the system. The component provides a slot for a
+ * button, as well as drag-and-drop functionality to launch the system file chooser dialog. There are visual cues to let the
  * user know when files they are dragging can be dropped, as well as events that are relayed to the developer to handle files
  * that are legal and/or illegal based on the parameters set on the component.
  *

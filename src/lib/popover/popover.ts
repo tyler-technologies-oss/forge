@@ -48,7 +48,7 @@ declare global {
 /**
  * @tag forge-popover
  *
- * @summary Popovers are used to render content in an element that is above all other content on the page.
+ * @summary Popovers are used to show content in an element that is rendered above all other content on the page. Use popovers to display additional information or actions related to a specific element. Popovers are typically triggered by user interaction, such as clicking a button or hovering over an element.
  *
  * @dependency forge-overlay
  *

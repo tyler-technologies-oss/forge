@@ -25,7 +25,7 @@ declare global {
 /**
  * @tag forge-chip-set
  *
- * @summary Chips sets are used to group multiple chips together and orchestrate their behavior.
+ * @summary Chip sets are used to group multiple chips together and orchestrate their behavior.
  *
  * @property {boolean} [vertical=false] - Whether the chip set is vertical.
  * @property {ChipType} [type='action'] - The type of chip.

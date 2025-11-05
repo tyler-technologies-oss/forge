@@ -29,7 +29,7 @@ export const FOCUS_INDICATOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-focu
 /**
  * @tag forge-focus-indicator
  *
- * @summary Renders a focus indicator when an attached element matches `:focus-visible`.
+ * @summary Focus indicators show a "focus ring" around an attached element that matches `:focus-visible`. These are building block components used by other components to show focus state, and are not typically used directly.
  *
  * @cssproperty --forge-focus-indicator-display - The `display` style. Defaults to `flex`.
  * @cssproperty --forge-focus-indicator-width - The width of the focus indicator when resting.

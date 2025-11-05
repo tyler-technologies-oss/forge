@@ -18,7 +18,7 @@ declare global {
 /**
  * @tag forge-divider
  *
- * @summary Divider is used to separate elements.
+ * @summary Dividers are used to separate elements with a thin line, either vertically or horizontally.
  *
  * @property {boolean} [vertical=false] - Controls if the divider is displayed vertically or horizontally.
  *

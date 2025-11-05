@@ -18,7 +18,7 @@ declare global {
 /**
  * @tag forge-accordion
  *
- * @summary Accordions display a collection of panels that can be expanded or collapsed to show content.
+ * @summary Accordions wrap a collection of expansion panels to ensure that only one panel is expanded at a time.
  *
  * @dependency forge-expansion-panel
  *

@@ -43,7 +43,7 @@ declare global {
 /**
  * @tag forge-slider
  *
- * @summary Sliders allow users to make selections from a range of values.
+ * @summary Sliders allow users to make selections from a range of values. You can use sliders for selecting values from either a continuous or discrete range, and they can also be used for selecting a single value or a range of values.
  *
  * @description Use sliders to enable users to select a value from a continuous or discrete range of values.
  *

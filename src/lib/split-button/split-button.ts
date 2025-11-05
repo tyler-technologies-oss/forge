@@ -25,7 +25,7 @@ declare global {
 /**
  * @tag forge-split-button
  *
- * @summary Split buttons are used for splitting an action into two parts.
+ * @summary Split buttons are used for splitting an action into two parts, typically a primary action and a secondary action that opens a menu or performs an alternative action. Split buttons expect child Forge buttons as their content.
  *
  * @dependency forge-button
  *

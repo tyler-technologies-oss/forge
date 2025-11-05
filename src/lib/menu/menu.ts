@@ -58,7 +58,7 @@ declare global {
 /**
  * @tag forge-menu
  *
- * @summary Menus display a list of options or actions that users can select from a dropdown.
+ * @summary Menus display a list of options or actions that users can select from a dropdown. Menus wrap button or list item elements to provide the trigger for displaying the menu options.
  *
  * @dependency forge-popover
  * @dependency forge-list

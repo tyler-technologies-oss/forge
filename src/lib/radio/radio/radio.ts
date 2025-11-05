@@ -36,8 +36,7 @@ declare global {
 /**
  * @tag forge-radio
  *
- * @summary The Forge Radio component is used to create a form input where only one out of a set of
- * values should be selected.
+ * @summary The Forge Radio component is used to create a form input where only one out of a set of values should be selected.
  *
  * @cssproperty --forge-radio-primary-color - The primary color of the radio button when checked.
  * @cssproperty --forge-radio-inactive-color - The color of the radio button when unchecked.

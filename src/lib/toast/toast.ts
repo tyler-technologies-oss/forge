@@ -54,7 +54,7 @@ declare global {
 /**
  * @tag forge-toast
  *
- * @summary Toasts are non-modal notifications that appear in response to user interactions.
+ * @summary Toasts are non-modal notifications that appear in response to user interactions. Use toasts to provide brief messages about app processes at the bottom or top of the screen. They automatically disappear after a timeout, but can also include an action button and a dismiss button.
  *
  * @dependency forge-overlay
  * @dependency forge-button

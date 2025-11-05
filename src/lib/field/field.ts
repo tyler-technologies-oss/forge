@@ -53,8 +53,7 @@ declare global {
 /**
  * @tag forge-field
  *
- * @summary The Forge Field component is a basic component that handles the layout and theming of
- * form elements that can include a label, various states, and a border around an input area.
+ * @description The field component is a building block component that handles the layout and theming of other form elements. Avoid using this component directly unless part of a larger component. Instead, use one of the specific field type components such as `<forge-text-field>` and `<forge-select>` for example.
  *
  * @property {FieldLabelPosition} [labelPosition="inset"] - The position of the label relative to the input area.
  * @property {FieldLabelAlignment} [labelAlignment="start"] - The alignment of the label relative to the input area.

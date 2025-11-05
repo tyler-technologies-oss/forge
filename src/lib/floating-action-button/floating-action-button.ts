@@ -27,7 +27,7 @@ declare global {
 /**
  * @tag forge-fab
  *
- * @summary Floating action buttons are used to represent the most important action on a page.
+ * @summary Floating action buttons are used to represent the most important action on a page. They are typically used in mobile applications, and are positioned above other content in a way that draws attention to them.
  *
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
