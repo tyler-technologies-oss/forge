@@ -383,6 +383,141 @@ describe('Toast', () => {
     });
   });
 
+  describe('timer pause/resume', () => {
+    it('should pause timer on pointer hover', async () => {
+      const el = await fixture<IToastComponent>(html`<forge-toast open duration="500">Test</forge-toast>`);
+
+      expect(el.open).to.be.true;
+
+      await task(250);
+      el.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
+      await task(500);
+
+      expect(el.open).to.be.true;
+
+      el.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true }));
+      await task(500 + TOAST_ANIMATION_DURATION);
+
+      expect(el.open).to.be.false;
+    });
+
+    it('should pause timer on focus', async () => {
+      const el = await fixture<IToastComponent>(html`<forge-toast open duration="500">Test</forge-toast>`);
+
+      expect(el.open).to.be.true;
+
+      await task(250);
+      el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+      await task(500);
+
+      expect(el.open).to.be.true;
+
+      el.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
+      await task(500 + TOAST_ANIMATION_DURATION);
+
+      expect(el.open).to.be.false;
+    });
+
+    it('should pause timer when pointer hover or focus is active', async () => {
+      const el = await fixture<IToastComponent>(html`<forge-toast open duration="500">Test</forge-toast>`);
+
+      expect(el.open).to.be.true;
+
+      await task(250);
+      el.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
+      await task(100);
+      el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+      await task(500);
+
+      expect(el.open).to.be.true;
+
+      el.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true }));
+      await task(100);
+
+      expect(el.open).to.be.true;
+
+      el.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
+      await task(500 + TOAST_ANIMATION_DURATION);
+
+      expect(el.open).to.be.false;
+    });
+
+    it('should reset timer to full duration after pointer hover ends', async () => {
+      const el = await fixture<IToastComponent>(html`<forge-toast open duration="1000">Test</forge-toast>`);
+
+      expect(el.open).to.be.true;
+
+      await task(700);
+      el.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
+      await task(1000);
+
+      expect(el.open).to.be.true;
+
+      el.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true }));
+      await task(1000 + TOAST_ANIMATION_DURATION);
+
+      expect(el.open).to.be.false;
+    });
+
+    it('should not auto-dismiss if duration is 0 even with pointer hover/focus events', async () => {
+      const el = await fixture<IToastComponent>(html`<forge-toast open duration="0">Test</forge-toast>`);
+
+      expect(el.open).to.be.true;
+
+      el.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
+      await task(100);
+      el.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true }));
+      await task(100);
+
+      expect(el.open).to.be.true;
+    });
+  });
+
+  describe('keyboard dismissal', () => {
+    it('should dismiss toast on Escape key', async () => {
+      const el = await fixture<IToastComponent>(html`<forge-toast open>Test</forge-toast>`);
+      const closeSpy = sinon.spy();
+      el.addEventListener(TOAST_CONSTANTS.events.CLOSE, closeSpy);
+
+      expect(el.open).to.be.true;
+
+      const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+      el.dispatchEvent(escapeEvent);
+      await task(TOAST_ANIMATION_DURATION);
+
+      expect(el.open).to.be.false;
+      expect(closeSpy.calledOnce).to.be.true;
+      expect(escapeEvent.defaultPrevented).to.be.false;
+    });
+
+    it('should not dismiss on other keys', async () => {
+      const el = await fixture<IToastComponent>(html`<forge-toast open>Test</forge-toast>`);
+      const closeSpy = sinon.spy();
+      el.addEventListener(TOAST_CONSTANTS.events.CLOSE, closeSpy);
+
+      expect(el.open).to.be.true;
+
+      el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      await task(TOAST_ANIMATION_DURATION);
+
+      expect(el.open).to.be.true;
+      expect(closeSpy.called).to.be.false;
+    });
+
+    it('should stop propagation of Escape key event', async () => {
+      const el = await fixture<IToastComponent>(html`<forge-toast open>Test</forge-toast>`);
+      const parentSpy = sinon.spy();
+      document.addEventListener('keydown', parentSpy);
+
+      const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+      el.dispatchEvent(escapeEvent);
+      await task(10);
+
+      expect(parentSpy.called).to.be.false;
+      document.removeEventListener('keydown', parentSpy);
+    });
+  });
+
   describe('static present()', () => {
     afterEach(() => {
       const toasts = document.querySelectorAll('forge-toast');

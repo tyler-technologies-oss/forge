@@ -1,3 +1,4 @@
+import { DismissibleStack, IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
 import { IToastAdapter } from './toast-adapter';
 import { TOAST_CONSTANTS, ToastPlacement, ToastTheme } from './toast-constants';
 
@@ -22,11 +23,24 @@ export class ToastCore implements IToastCore {
   private _hideTimeout: number | undefined;
   private _actionListener: EventListener = this._onAction.bind(this);
   private _closeListener: EventListener = this._onClose.bind(this);
+  private _isHovered = false;
+  private _isFocused = false;
+  private _pointerEnterListener: EventListener = this._handlePointerEnter.bind(this);
+  private _pointerLeaveListener: EventListener = this._handlePointerLeave.bind(this);
+  private _focusInListener: EventListener = this._handleFocusIn.bind(this);
+  private _focusOutListener: EventListener = this._handleFocusOut.bind(this);
+  private _keyboardListener: EventListener = this._handleKeyboard.bind(this);
 
   constructor(private _adapter: IToastAdapter) {}
 
   public initialize(): void {
     this._adapter.tryApplyGlobalConfiguration(['duration', 'placement', 'dismissible']);
+
+    this._adapter.addPointerEnterListener(this._pointerEnterListener);
+    this._adapter.addPointerLeaveListener(this._pointerLeaveListener);
+    this._adapter.addFocusInListener(this._focusInListener);
+    this._adapter.addFocusOutListener(this._focusOutListener);
+    this._adapter.addKeyboardListener(this._keyboardListener);
 
     if (this._open) {
       this.show();
@@ -35,6 +49,8 @@ export class ToastCore implements IToastCore {
 
   public show(): void {
     this._adapter.show();
+
+    DismissibleStack.instance.add(this._adapter.hostElement as IDismissible);
 
     if (isFinite(this._duration) && this._duration > 0) {
       /* c8 ignore next 3 */
@@ -54,6 +70,11 @@ export class ToastCore implements IToastCore {
       this._hideTimeout = undefined;
     }
 
+    this._isHovered = false;
+    this._isFocused = false;
+
+    DismissibleStack.instance.remove(this._adapter.hostElement as IDismissible);
+
     await this._adapter.hide();
 
     this._open = false;
@@ -71,6 +92,64 @@ export class ToastCore implements IToastCore {
 
   private _onClose(_evt: MouseEvent): void {
     this.hide();
+  }
+
+  private _handlePointerEnter(): void {
+    this._isHovered = true;
+    this._updateTimerState();
+  }
+
+  private _handlePointerLeave(): void {
+    this._isHovered = false;
+    this._updateTimerState();
+  }
+
+  private _handleFocusIn(): void {
+    this._isFocused = true;
+    this._updateTimerState();
+  }
+
+  private _handleFocusOut(): void {
+    this._isFocused = false;
+    this._updateTimerState();
+  }
+
+  private _handleKeyboard(event: KeyboardEvent): void {
+    if (event.key === 'Escape' && this._open) {
+      event.stopPropagation();
+      DismissibleStack.instance.dismiss(this._adapter.hostElement as IDismissible, { reason: 'escape' });
+    }
+  }
+
+  private _updateTimerState(): void {
+    const shouldPause = this._isHovered || this._isFocused;
+
+    if (shouldPause && this._hideTimeout) {
+      this._pauseTimer();
+    } else if (!shouldPause && !this._hideTimeout) {
+      this._resumeTimer();
+    }
+  }
+
+  private _pauseTimer(): void {
+    if (this._hideTimeout) {
+      window.clearTimeout(this._hideTimeout);
+      this._hideTimeout = undefined;
+    }
+  }
+
+  private _resumeTimer(): void {
+    if (isFinite(this._duration) && this._duration > 0) {
+      this._hideTimeout = window.setTimeout(() => this.hide(), this._duration);
+    }
+  }
+
+  public [tryDismiss](state?: IDismissibleStackState): boolean {
+    if (state?.reason === 'escape') {
+      this.hide();
+      return true;
+    }
+    return false;
   }
 
   public get open(): boolean {
