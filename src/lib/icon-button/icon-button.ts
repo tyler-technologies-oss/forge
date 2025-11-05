@@ -33,7 +33,7 @@ declare global {
 }
 
 /**
- * @summary Icon buttons are buttons that contain an icon and are used to represent actions or commands. Always provide an accessible label when using icon buttons.
+ * @summary Icon buttons are buttons that contain **only** an icon, and are used to represent actions or commands. Always provide an accessible label when using icon buttons.
  *
  * @tag forge-icon-button
  *
