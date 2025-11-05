@@ -1,3 +1,49 @@
+# v3.12.0 (Wed Nov 05 2025)
+
+:tada: This release contains work from new contributors! :tada:
+
+Thanks for all your work!
+
+:heart: Brian Jackson ([@alienriver49](https://github.com/alienriver49))
+
+:heart: Bobby Choi ([@BobbyTylerChoi](https://github.com/BobbyTylerChoi))
+
+:heart: Connor Desmond ([@cdesmondee](https://github.com/cdesmondee))
+
+#### 🚀 Enhancement
+
+- feat(menu): allow for forge-menu to attach to forge-list-item [#1019](https://github.com/tyler-technologies-oss/forge/pull/1019) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(paginator): add interaction methods for convenience [#1012](https://github.com/tyler-technologies-oss/forge/pull/1012) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(list-dropdown): add option to have list item tooltip only appear if list item text has overflowed [#1007](https://github.com/tyler-technologies-oss/forge/pull/1007) ([@BobbyTylerChoi](https://github.com/BobbyTylerChoi))
+
+#### 🐛 Bug Fix
+
+- docs: improve docs for LLM integration [#1020](https://github.com/tyler-technologies-oss/forge/pull/1020) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(toast): pause dismiss timer when focused or hovered for improved a11y compliance [#1021](https://github.com/tyler-technologies-oss/forge/pull/1021) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(state-layer): fix animation flash [#1017](https://github.com/tyler-technologies-oss/forge/pull/1017) ([@DRiFTy17](https://github.com/DRiFTy17))
+- Fix/time picker toggle tab index enabled show seconds options [#1018](https://github.com/tyler-technologies-oss/forge/pull/1018) ([@alienriver49](https://github.com/alienriver49))
+- fix(drawer): set drawer content inert when closed [#1016](https://github.com/tyler-technologies-oss/forge/pull/1016) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(autocomplete): fix text highlighting for selected options [#1015](https://github.com/tyler-technologies-oss/forge/pull/1015) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(text-field): prevent focus change on clear button mousedown to fix autocomplete clear issue [#1014](https://github.com/tyler-technologies-oss/forge/pull/1014) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(focus-indicator): resolve event listener binding issue preventing focus detection [#1013](https://github.com/tyler-technologies-oss/forge/pull/1013) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(text-field): ensure `aria-invalid` is set on `<input>` element when `invalid` state changes [#1010](https://github.com/tyler-technologies-oss/forge/pull/1010) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chip): allow remove button to be part of tab order and expose property to control label [#1001](https://github.com/tyler-technologies-oss/forge/pull/1001) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(table): synchronize dense state with select column checkboxes to fix dense row height [#1008](https://github.com/tyler-technologies-oss/forge/pull/1008) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs: fix incorrect JSDoc default value for table select property [#999](https://github.com/tyler-technologies-oss/forge/pull/999) ([@cdesmondee](https://github.com/cdesmondee))
+
+#### 📝 Documentation
+
+- docs(mcp-server): add docs for Forge MCP server [#994](https://github.com/tyler-technologies-oss/forge/pull/994) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 4
+
+- Bobby Choi ([@BobbyTylerChoi](https://github.com/BobbyTylerChoi))
+- Brian Jackson ([@alienriver49](https://github.com/alienriver49))
+- Connor Desmond ([@cdesmondee](https://github.com/cdesmondee))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.11.0 (Thu Sep 25 2025)
 
 #### 🚀 Enhancement
