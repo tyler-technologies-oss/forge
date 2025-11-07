@@ -103,5 +103,5 @@ export class RadioGroupComponent extends WithLabelAwareness(WithDefaultAria(With
    * @attribute
    */
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 }

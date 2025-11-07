@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/web-components';
+import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { DIALOG_CONSTANTS, type IDialogProperties } from '@tylertech/forge/dialog';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconClose } from '@tylertech/tyler-icons';
 import { html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { storyStyles } from '../../decorators';
@@ -53,6 +53,8 @@ const meta = {
     moveable: false,
     mode: DIALOG_CONSTANTS.defaults.MODE,
     type: DIALOG_CONSTANTS.defaults.TYPE,
+    label: 'My dialog title',
+    description: 'My dialog description',
     animationType: DIALOG_CONSTANTS.defaults.ANIMATION_TYPE,
     preset: DIALOG_CONSTANTS.defaults.PRESET,
     sizeStrategy: DIALOG_CONSTANTS.defaults.SIZE_STRATEGY,

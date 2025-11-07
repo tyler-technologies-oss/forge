@@ -1,5 +1,5 @@
-import { HeaderMdx, Markdown, useOf } from '@storybook/blocks';
-import { Code } from '@storybook/components';
+import { HeaderMdx, Markdown, useOf } from '@storybook/addon-docs/blocks';
+import { Code } from 'storybook/internal/components';
 import { TagItem, getBranchName, getCustomElementType, getCustomElementsTagDeclaration, getCustomElementsTagModule, htmlEncode } from '../utils';
 import { NameDescriptionTable, Section, UsageLink } from './Shared';
 

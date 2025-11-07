@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/blocks';
+import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Getting Started/Icons" />
 
@@ -11,16 +11,7 @@ To learn more about the Forge icon component, see the [documentation][1].
 
 ## Icon Library
 
-Icons are distributed via the Tyler icons library. This library is made up 3 sets of icons:
-
-- **Standard:** The standard Material Design icons.
-- **Extended:** This is a subset of the community-based Material Design icon set.
-- **Custom:** Custom icons created by Tyler Technologies.
-
-These three sets of icons are combined into a single library that can be used in your applications, that gives you access to over 5000 icons.
-
-> **Note:** we are currently in the planning phase of combining all 3 icon sets into a single library to reduce confusion and deduplicate the icons.
-> This will be available in a future release. See the [roadmap][3] to view the status of this project.
+Icons are distributed via the Tyler icons library. This library gives you access to over 8500+ icons.
 
 You can view the full set of icons or search the library in the design system [here][2].
 
@@ -41,9 +32,7 @@ npm install @tylertech/tyler-icons
 The icons are distributed as ES modules, so you can import them directly into your application:
 
 ```javascript
-import { tylIconFavorite } from '@tylertech/tyler-icons/standard';
-import { tylIconHeart } from '@tylertech/tyler-icons/extended';
-import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
+import { tylIconFavorite, tylIconHeart, tylIconForgeLogo } from '@tylertech/tyler-icons';
 ```
 
 Each icon object consists of a `name` and `data` property. The `name` is the name of the icon, and the `data` is the raw SVG string for the icon.
@@ -63,6 +52,14 @@ You can then use the icon in your HTML like so:
 <forge-icon name="heart"></forge-icon>
 <forge-icon name="forge-logo"></forge-icon>
 ```
+
+If you cannot statically determine the name of the icon to render at build time, you can also use the `external` attribute on the `<forge-icon>` element:
+
+```html
+<forge-icon name="favorite" external></forge-icon>
+```
+
+This instructs the `<forge-icon>` component to fetch the icon data from the CDN at runtime. This is useful if you want to dynamically load icons based on dynamic data.
 
 ## CDN
 

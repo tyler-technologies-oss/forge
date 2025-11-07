@@ -1,6 +1,6 @@
-import { attachLightTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconNotifications } from '@tylertech/tyler-icons/standard';
-import { BadgeComponent } from '../../badge';
+import { attachLightTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
+import { tylIconNotifications } from '@tylertech/tyler-icons';
+import { defineBadgeComponent } from '../../badge';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IconComponent, IconRegistry } from '../../icon';
 import { IconButtonComponent } from '../../icon-button';
@@ -27,6 +27,8 @@ export interface IAppBarNotificationButtonComponent extends IBaseComponent {
 /**
  * @tag forge-app-bar-notification-button
  *
+ * @summary A notification button component with a predefined notification bell icon that can display a badge with count or dot indicator, designed for use in app bars.
+ *
  * @property {number | string} [count = 0] - The number to display in the badge.
  * @property {boolean} [dot = false] - Whether to display the dot variant of the badge or not.
  * @property {boolean} [showBadge = false] - Whether to display the badge or not.
@@ -43,9 +45,13 @@ export interface IAppBarNotificationButtonComponent extends IBaseComponent {
  */
 @customElement({
   name: APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.elementName,
-  dependencies: [IconButtonComponent, TooltipComponent, BadgeComponent, IconComponent]
+  dependencies: [IconButtonComponent, TooltipComponent, IconComponent]
 })
 export class AppBarNotificationButtonComponent extends BaseComponent implements IAppBarNotificationButtonComponent {
+  static {
+    defineBadgeComponent();
+  }
+
   public static get observedAttributes(): string[] {
     return [
       APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT,
@@ -97,17 +103,17 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
   }
 
   @coreProperty()
-  public declare count: string | number | null | undefined;
+  declare public count: string | number | null | undefined;
 
   @coreProperty()
-  public declare dot: boolean;
+  declare public dot: boolean;
 
   @coreProperty()
-  public declare theme: string;
+  declare public theme: string;
 
   @coreProperty()
-  public declare icon: string;
+  declare public icon: string;
 
   @coreProperty()
-  public declare showBadge: boolean;
+  declare public showBadge: boolean;
 }

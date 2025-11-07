@@ -149,9 +149,7 @@ export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelec
     // Update the state of the component based on the existence of a selected value
     const text = this._getSelectedText();
     this._adapter.setSelectedText(text);
-    if (!this._open) {
-      this._tryFloatLabel();
-    }
+    this._tryFloatLabel();
   }
 
   /** Gets/sets the label text. */

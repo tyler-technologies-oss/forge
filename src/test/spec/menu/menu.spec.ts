@@ -22,6 +22,13 @@ interface ITestContext {
   context: ITestMenuContext;
 }
 
+interface MenuComponentWithCore extends IMenuComponent {
+  _core: IMenuCore & {
+    _optionsFactory: MenuOptionFactory;
+    _adapter: IMenuAdapter;
+  };
+}
+
 interface ITestMenuContext {
   component: IMenuComponent;
   core: IMenuCore;
@@ -204,7 +211,7 @@ describe('MenuComponent', function(this: ITestContext) {
       it('should update the options property with factory', async function(this: ITestContext) {
         this.context = setupTestContext();
         this.context.component.options = asyncMenuOptionsFactory(5);
-        expect(this.context.component['_core']['_optionsFactory']).not.toBe(undefined, `The options factory should be set in the core`);
+        expect((this.context.component as MenuComponentWithCore)['_core']['_optionsFactory']).not.toBe(undefined, `The options factory should be set in the core`);
         expect(this.context.component.options).toEqual([], `The options factory should be set in the core`);
       });
     });
@@ -437,12 +444,10 @@ describe('MenuComponent', function(this: ITestContext) {
 
     it(`should load leading icons from options factory based on 'leadingIcon' or 'icon' property`, async function(this: ITestContext){
       this.context = setupTestContext();
-      const options: MenuOptionFactory = () => {
-        return [
+      const options: MenuOptionFactory = () => [
           { icon: 'code', value: '', label: '1' },
           { leadingIcon: 'code', value: '', label: '2' }
-        ];
-      }
+        ]
 
       await frame();
 
@@ -622,10 +627,10 @@ describe('MenuComponent', function(this: ITestContext) {
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
       expect(childMenuComponent.tagName.toLowerCase()).toBe(MENU_CONSTANTS.elementName);
       
-      const listItem = childMenuComponent.firstElementChild as IListItemComponent;
-      expect(listItem.tagName.toLowerCase()).toBe(LIST_ITEM_CONSTANTS.elementName);
+      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
+      expect(menuTrigger.tagName.toLowerCase()).toBe('button');
       
-      listItem.dispatchEvent(new MouseEvent('mouseenter'));
+      menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       await frame();
 
       expect(childMenuComponent.open).toBeTrue();
@@ -646,13 +651,13 @@ describe('MenuComponent', function(this: ITestContext) {
       await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      const listItem = childMenuComponent.firstElementChild as IListItemComponent;
+      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
       
-      listItem.dispatchEvent(new MouseEvent('mouseenter'));
+      menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       await frame();
       expect(childMenuComponent.open).toBeTrue();
       
-      listItem.dispatchEvent(new MouseEvent('mouseleave'));
+      menuTrigger.dispatchEvent(new MouseEvent('mouseleave'));
       await task(MENU_CONSTANTS.numbers.CHILD_MOUSE_LEAVE_TIMEOUT);
       await frame();
       expect(childMenuComponent.open).toBeFalse();
@@ -669,9 +674,9 @@ describe('MenuComponent', function(this: ITestContext) {
       await frame();
       
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      const listItem = childMenuComponent.firstElementChild as IListItemComponent;
+      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
       
-      listItem.dispatchEvent(new MouseEvent('mouseenter'));
+      menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       
       await frame();
       
@@ -681,7 +686,7 @@ describe('MenuComponent', function(this: ITestContext) {
 
       await frame();
       
-      listItem.dispatchEvent(new MouseEvent('mouseleave'));
+      menuTrigger.dispatchEvent(new MouseEvent('mouseleave'));
       document.dispatchEvent(new MouseEvent('mousemove', { pageX: 0, pageY: 0 } as MouseEventInit));
       childMenuPopup.dispatchEvent(new MouseEvent('mouseleave'));
 
@@ -706,9 +711,9 @@ describe('MenuComponent', function(this: ITestContext) {
       await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      const listItem = childMenuComponent.firstElementChild as IListItemComponent;
-      
-      listItem.dispatchEvent(new MouseEvent('mouseenter'));
+      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
+
+      menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       await frame();
 
       const childMenuListItems = getChildMenuListItems(getPopoverElement());
@@ -773,6 +778,64 @@ describe('MenuComponent', function(this: ITestContext) {
     });
   });
 
+  describe('list dropdown API', () => {
+    it('should set popover flip', async function (this: ITestContext) {
+      this.context = setupTestContext();
+
+      this.context.component.popoverFlip = 'never';
+      this.context.component.options = generateMenuOptions(1);
+      this.context.component.open = true;
+      await frame();
+
+      const popover = getPopoverElement();
+
+      expect(this.context.component.popoverFlip).toEqual('never');
+      expect(popover.flip).toEqual('never');
+    });
+
+    it('should set popover flip from attribute', async function (this: ITestContext) {
+      this.context = setupTestContext();
+
+      this.context.component.setAttribute('popover-flip', 'never');
+      this.context.component.options = generateMenuOptions(1);
+      this.context.component.open = true;
+      await frame();
+
+      const popover = getPopoverElement();
+
+      expect(this.context.component.popoverFlip).toEqual('never');
+      expect(popover.flip).toEqual('never');
+    });
+
+    it('should set popover shift', async function (this: ITestContext) {
+      this.context = setupTestContext();
+
+      this.context.component.popoverShift = 'never';
+      this.context.component.options = generateMenuOptions(1);
+      this.context.component.open = true;
+      await frame();
+
+      const popover = getPopoverElement();
+
+      expect(this.context.component.popoverShift).toEqual('never');
+      expect(popover.shift).toEqual('never');
+    });
+
+    it('should set popover shift from attribute', async function (this: ITestContext) {
+      this.context = setupTestContext();
+
+      this.context.component.setAttribute('popover-shift', 'never');
+      this.context.component.options = generateMenuOptions(1);
+      this.context.component.open = true;
+      await frame();
+
+      const popover = getPopoverElement();
+
+      expect(this.context.component.popoverShift).toEqual('never');
+      expect(popover.shift).toEqual('never');
+    });
+  });
+
   it('should remove popover when removed from DOM while open', async function(this: ITestContext) {
     this.context = setupTestContext();
     const options: IMenuOption[] = [
@@ -796,8 +859,8 @@ describe('MenuComponent', function(this: ITestContext) {
   function setupTestContext(appendToggle = true): ITestMenuContext {
     const fixture = document.createElement('div');
     fixture.id = 'menu-test-fixture';
-    const component = document.createElement(MENU_CONSTANTS.elementName);
-    const core = component['_core'] as IMenuCore;
+    const component = document.createElement(MENU_CONSTANTS.elementName) as MenuComponentWithCore;
+    const core = component['_core'];
     const adapter = core['_adapter'] as IMenuAdapter;
     if (appendToggle) {
       component.appendChild(createToggleElement());
@@ -824,9 +887,7 @@ describe('MenuComponent', function(this: ITestContext) {
 
   function asyncMenuOptionsFactory(count: number = 5) {
     return () =>
-      new Promise<IMenuOption[]>(resolve => {
-        return resolve(generateMenuOptions(count));
-      });
+      new Promise<IMenuOption[]>(resolve => resolve(generateMenuOptions(count)));
   }
 
   function menuOptionsFactory(count: number = 5) {

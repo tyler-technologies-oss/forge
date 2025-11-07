@@ -8,6 +8,7 @@ import { createToggleElement } from '../date-picker/base/base-date-picker-utils'
 import { FIELD_CONSTANTS } from '../field';
 import { DateRangePickerComponent, IDateRangePickerComponent } from './date-range-picker';
 import { DATE_RANGE_PICKER_CONSTANTS } from './date-range-picker-constants';
+import { IIconButtonComponent } from '../icon-button/icon-button';
 
 export interface IDateRangePickerAdapter extends IBaseDatePickerAdapter {
   initializeToMask(toOptions: IDateInputMaskOptions): void;
@@ -218,7 +219,7 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
 
     if (this._toggleElement) {
       this._toggleElement.setAttribute('aria-disabled', isDisabled.toString());
-      if (this._toggleElement.hasOwnProperty('disabled')) {
+      if (Object.prototype.hasOwnProperty.call(this._toggleElement, 'disabled')) {
         (this._toggleElement as HTMLButtonElement).disabled = isDisabled;
         // The toggle element should never be in the tab order
         this._toggleElement.tabIndex = -1;
@@ -234,7 +235,7 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     emitEvent(this._toInputElement, type, data);
   }
 
-  protected override _createToggleElement(): HTMLElement {
+  protected override _createToggleElement(): IIconButtonComponent {
     return createToggleElement('date_range');
   }
 

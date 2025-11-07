@@ -12,6 +12,7 @@ export interface IIconProperties {
   src: string | undefined;
   lazy: boolean;
   external: boolean;
+  /** @deprecated This will be removed in a future version. */
   externalType: IconExternalType;
   externalUrlBuilder: IconUrlBuilder;
   theme: IconTheme;
@@ -31,13 +32,13 @@ declare global {
 /**
  * @tag forge-icon
  *
- * @summary Icons are used to represent information visually
+ * @summary Icons are used to represent information visually. The icon component is a wrapper around SVG icons that are registered in the icon registry.
  *
  * @property {string} name - The name of the icon to render.
  * @property {string} src - Provides the ability to set the SVG string content directly.
  * @property {boolean} [lazy=false] - Controls whether the icon will be loaded dynamically when it comes into view. False by default.
  * @property {boolean} [external=false] - Controls whether external network requests are allowed for this icon. Only pertains for icons that aren't already defined in the registry.
- * @property {IconExternalType} [externalType="standard"] - The type of icon to load externally. Possible values: "standard" (default), "extended", "custom".
+ * @property {IconExternalType} [externalType="all"] - **(Deprecated)** The type of icon to load externally. Possible values: "all" (default), "standard", "extended", "custom".
  * @property {IconUrlBuilder} externalUrlBuilder - A callback that can be provided to generate a URL that will be used to fetch an SVG icon.
  * @property {string} viewbox - A custom value to apply to the `viewBox` attribute on the internal `<svg>` element.
  * @property {IconTheme} theme - The theme to apply to the icon.
@@ -113,48 +114,49 @@ export class IconComponent extends BaseComponent implements IIconComponent {
    * The name of the icon within the icon registry to be used.
    */
   @coreProperty()
-  public declare name: string | undefined;
+  declare public name: string | undefined;
 
   /**
    * Provides the ability to set the SVG string content directly.
    */
   @coreProperty()
-  public declare src: string | undefined;
+  declare public src: string | undefined;
 
   /**
    * Controls whether the icon will be loaded dynamically when it comes into view. False by default.
    */
   @coreProperty()
-  public declare lazy: boolean;
+  declare public lazy: boolean;
 
   /**
    * Controls whether external network requests are allowed for this icon. Only pertains for icons that aren't defined in the registry.
    */
   @coreProperty()
-  public declare external: boolean;
+  declare public external: boolean;
 
   /**
    * The type of icon to load externally. Possible values: "standard", "extended", "custom".
+   * @deprecated This will be removed in a future version.
    * @attribute external-type
    */
   @coreProperty()
-  public declare externalType: IconExternalType;
+  declare public externalType: IconExternalType;
 
   /**
    * A callback that can be provided to generate a URL that will be used to fetch an SVG icon.
    * @attribute external-url-builder
    */
   @coreProperty()
-  public declare externalUrlBuilder: IconUrlBuilder;
+  declare public externalUrlBuilder: IconUrlBuilder;
 
   /**
    * A custom value to apply to the `viewBox` attribute on the internal `<svg>` element.
    */
   @coreProperty()
-  public declare viewbox: string;
+  declare public viewbox: string;
 
   @coreProperty()
-  public declare theme: IconTheme;
+  declare public theme: IconTheme;
 
   /**
    * Forces a reload of the icon.

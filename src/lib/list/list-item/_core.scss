@@ -38,6 +38,7 @@
   padding-inline: 0;
   margin: 0;
   box-sizing: border-box;
+  width: 100%;
 
   background: transparent;
   color: inherit;
@@ -48,8 +49,15 @@
   text-align: inherit;
   letter-spacing: inherit;
   word-spacing: inherit;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 
-  display: inline;
+  display: block;
+}
+
+@mixin button-wrap {
+  white-space: normal;
 }
 
 @mixin anchor {
@@ -89,6 +97,7 @@
     border-radius: inherit;
     opacity: #{token(selected-opacity)};
     background-color: #{token(selected-background)};
+    pointer-events: none;
   }
 }
 
@@ -106,6 +115,8 @@
 
 @mixin start-end-selected {
   color: #{token(selected-color)};
+
+  isolation: isolate;
 }
 
 @mixin text {

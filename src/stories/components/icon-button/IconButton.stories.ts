@@ -1,10 +1,9 @@
 import { html } from 'lit';
-import { type Meta, type StoryObj } from '@storybook/web-components';
-import { action } from '@storybook/addon-actions';
-import { standaloneStoryParams, customElementStoryRenderer, generateCustomElementArgTypes, GLOBAL_THEME_OPTIONS, applyArgs } from '../../utils';
-import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
+import { action } from 'storybook/actions';
+import { standaloneStoryParams, customElementStoryRenderer, generateCustomElementArgTypes, GLOBAL_THEME_OPTIONS } from '../../utils';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
-import { tylIconFavorite, tylIconFavoriteBorder, tylIconNotifications, tylIconOpenInNew, tylIconSettings } from '@tylertech/tyler-icons/standard';
+import { tylIconForgeLogo, tylIconFavorite, tylIconFavoriteBorder, tylIconNotifications, tylIconOpenInNew, tylIconSettings } from '@tylertech/tyler-icons';
 import { classMap } from 'lit/directives/class-map.js';
 
 import '@tylertech/forge/icon-button';
@@ -50,7 +49,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['form', 'name', 'value', 'type'],
+      exclude: ['form', 'name', 'value', 'type', 'on'],
       controls: {
         variant: { control: { type: 'select' }, options: ['icon', 'outlined', 'tonal', 'filled', 'raised'] },
         theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS },
@@ -65,7 +64,7 @@ const meta = {
     disabled: false,
     dense: false,
     toggle: false,
-    on: false,
+    pressed: false,
     shape: 'circular',
     density: 'large',
     popoverIcon: false

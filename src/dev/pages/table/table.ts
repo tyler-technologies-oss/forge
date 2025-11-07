@@ -3,7 +3,7 @@ import '@tylertech/forge/table';
 import '@tylertech/forge/table/forge-table.scss';
 import './table.scss';
 import { TextFieldComponentDelegate } from '@tylertech/forge/text-field';
-import { tylIconChevronRight, tylIconDelete, tylIconEdit, tylIconMoreVert } from '@tylertech/tyler-icons/standard';
+import { tylIconChevronRight, tylIconDelete, tylIconEdit, tylIconMoreVert } from '@tylertech/tyler-icons';
 import { ITableComponent, IColumnConfiguration, SortDirection, ISortedColumn, CellAlign, ITableTemplateBuilderResult, ITableSortMultipleEventData } from '@tylertech/forge/table';
 import { ButtonComponentDelegate } from '@tylertech/forge/button';
 import { IconRegistry } from '@tylertech/forge/icon';
@@ -370,13 +370,13 @@ function sortMultiColumnData(columns: ITableSortMultipleEventData): IData[] {
   return displayData;
 }
 
-function getSelectAllTemplate(): string {
-  return `
-    <div style="display: flex; flex-direction: row; align-items: center;">
-      <forge-checkbox>
-        <input type="checkbox" />
-      </forge-checkbox>
-      <forge-button>Custom</forge-button>
-    </div>
-  `;
+function getSelectAllTemplate(): HTMLElement {
+  const checkbox = document.createElement('forge-checkbox');
+  checkbox.setAttribute('aria-label', 'Detached select all');
+  checkbox.setAttribute('forge-ignore', '');
+  checkbox.addEventListener('change', () => {
+    // Do something custom when checked
+    console.log('Custom select all checked:', checkbox.checked);
+  });
+  return checkbox;
 }

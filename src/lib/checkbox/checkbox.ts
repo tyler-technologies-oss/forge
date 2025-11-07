@@ -56,6 +56,7 @@ declare global {
  * @cssproperty --forge-checkbox-elevation - The shadow of the checkbox.
  * @cssproperty --forge-checkbox-gap - The space between the checkbox and label.
  * @cssproperty --forge-checkbox-justify - How the checkbox and label are distributed along their main axis.
+ * @cssproperty --forge-checkbox-align - How the checkbox and label are distributed along their cross axis.
  * @cssproperty --forge-checkbox-direction - Whether the checkbox and label are arranged along the inline or block axis.
  * @cssproperty --forge-checkbox-checked-background - The color of the checkbox background when checked or indeterminate.
  * @cssproperty --forge-checkbox-checked-border-width - The width of the checkbox border when checked or indeterminate.
@@ -195,11 +196,11 @@ export class CheckboxComponent
   }
 
   /** @ignore */
-  public setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void {
+  public setFormValue(value: (FormValue & { [key: string]: any }) | null, state?: (FormValue & { [key: string]: any }) | null | undefined): void {
     this[internals].setFormValue(value, state);
 
     if (state) {
-      const stateValue = isString(state) ? state : state[this.name];
+      const stateValue = isString(state) ? state : (state as Record<string, any>)[this.name];
       this.checked = stateValue === 'checked' || stateValue === 'checked-indeterminate';
       this.indeterminate = stateValue === 'unchecked-indeterminate' || stateValue === 'checked-indeterminate';
       return;
@@ -220,7 +221,7 @@ export class CheckboxComponent
    * @attribute checked
    */
   @coreProperty()
-  public declare checked: boolean;
+  declare public checked: boolean;
 
   /**
    * Gets/sets whether the checkbox is checked by default.
@@ -228,7 +229,7 @@ export class CheckboxComponent
    * @attribute default-checked
    */
   @coreProperty()
-  public declare defaultChecked: boolean;
+  declare public defaultChecked: boolean;
 
   /**
    * Gets/sets the indeterminate state.
@@ -236,7 +237,7 @@ export class CheckboxComponent
    * @attribute
    */
   @coreProperty()
-  public declare indeterminate: boolean;
+  declare public indeterminate: boolean;
 
   /**
    * Controls the value submitted with a form when checked.
@@ -244,7 +245,7 @@ export class CheckboxComponent
    * @attribute
    */
   @coreProperty()
-  public declare value: string;
+  declare public value: string;
 
   /**
    * Controls whether the checkbox is dense.
@@ -252,7 +253,7 @@ export class CheckboxComponent
    * @attribute
    */
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   /**
    * Controls whether the checkbox is disabled.
@@ -260,7 +261,7 @@ export class CheckboxComponent
    * @attribute
    */
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   /**
    * Controls whether the checkbox is required.
@@ -268,7 +269,7 @@ export class CheckboxComponent
    * @attribute
    */
   @coreProperty()
-  public declare required: boolean;
+  declare public required: boolean;
 
   /**
    * Controls whether the checkbox is readonly.
@@ -276,7 +277,7 @@ export class CheckboxComponent
    * @attribute
    */
   @coreProperty()
-  public declare readonly: boolean;
+  declare public readonly: boolean;
 
   /**
    * Controls whether the label appears before or after the checkbox.
@@ -284,7 +285,7 @@ export class CheckboxComponent
    * @attribute label-position
    */
   @coreProperty()
-  public declare labelPosition: CheckboxLabelPosition;
+  declare public labelPosition: CheckboxLabelPosition;
 
   /**
    * Toggles the checkbox checked or unchecked.

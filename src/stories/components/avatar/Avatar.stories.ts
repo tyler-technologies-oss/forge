@@ -1,8 +1,10 @@
-import { html } from 'lit';
-import { type Meta, type StoryObj } from '@storybook/web-components';
-import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
-import { tylIconPerson } from '@tylertech/tyler-icons/standard';
+import { html, nothing } from 'lit';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
+import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { tylIconPerson } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
+import { styleMap } from 'lit/directives/style-map.js';
+import { AVATAR_CONSTANTS } from '@tylertech/forge/avatar';
 
 import '@tylertech/forge/avatar';
 import '@tylertech/forge/icon-button';
@@ -12,7 +14,15 @@ const component = 'forge-avatar';
 
 const meta = {
   title: 'Components/Avatar',
-  render: args => customElementStoryRenderer(component, args),
+  render: ({ text, letterCount, imageUrl, ...args }) => {
+    const cssVarArgs = getCssVariableArgs(args);
+    const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
+    return html`<forge-avatar
+      style=${style}
+      text=${text}
+      letter-count=${letterCount !== AVATAR_CONSTANTS.numbers.DEFAULT_LETTER_COUNT ? letterCount : nothing}
+      image-url=${imageUrl ?? nothing}></forge-avatar>`;
+  },
   component,
   parameters: {
     actions: { disable: true }
@@ -60,8 +70,12 @@ export const WithIcon: Story = {
 
 export const WithIconButton: Story = {
   ...standaloneStoryParams,
-  render: args => {
-    return html` <forge-icon-button aria-label="Icon button with avatar"> ${customElementStoryRenderer(component, args)} </forge-icon-button> `;
+  render: ({ text }) => {
+    return html`
+      <forge-icon-button aria-label="Icon button with avatar">
+        <forge-avatar text=${text}></forge-avatar>
+      </forge-icon-button>
+    `;
   }
 };
 

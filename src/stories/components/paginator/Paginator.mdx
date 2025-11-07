@@ -1,4 +1,4 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as PaginatorStories from './Paginator.stories';
 
@@ -6,11 +6,19 @@ import * as PaginatorStories from './Paginator.stories';
 
 <Title />
 
-The paginator component is used to navigate through a collection of items. It provides a set of controls to navigate through the items, such as previous and next buttons.
+The paginator component is used to navigate through a collection of items.
 
-This component is typically composed with a [list](?path=/docs/components-list--docs) or [table](?path=/docs/components-table--docs) component to allow users to navigate large or expensive set of data.
+While this component is typically composed with a [list](?path=/docs/components-list--docs) or [table](?path=/docs/components-table--docs) component to
+allow users to navigate large sets of data, it can be used in any context where pagination of content is desired.
 
 <Canvas of={PaginatorStories.Demo} />
+
+## Alternative
+
+The paginator also supports an alternative variant that is less verbose and more compact. This variant removes the page size selector, and uses a simpler
+label for the page count. Use when space is limited, or if you don't want the user to be able to change the page size.
+
+<Canvas of={PaginatorStories.Alternative} />
 
 ## API
 

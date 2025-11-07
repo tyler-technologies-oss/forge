@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
-import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
+import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons';
 import { CircularProgressComponent } from '../../circular-progress';
 import { getFormValue, getValidationMessage, inputType, internals, setDefaultAria, setValidity } from '../../constants';
 import { FormValue } from '../../core';
@@ -16,12 +16,14 @@ import { ListComponent, ListItemComponent } from '../../list';
 import { PopoverComponent } from '../../popover';
 import { ScaffoldComponent } from '../../scaffold';
 import { ToolbarComponent } from '../../toolbar';
-import { BASE_SELECT_CONSTANTS, BaseSelectComponent, IBaseSelectComponent } from '../core';
+import { BASE_SELECT_CONSTANTS, BaseSelectComponent, IBaseSelectComponent, SelectSelectAllEventData } from '../core';
 import { OptionComponent } from '../option';
 import { OptionGroupComponent } from '../option-group';
 import { SelectAdapter } from './select-adapter';
 import { SELECT_CONSTANTS } from './select-constants';
 import { SelectCore } from './select-core';
+import { IListDropdownAware, ListDropdownAware } from '../../list-dropdown/list-dropdown-aware';
+import { DividerComponent } from '../../divider/divider';
 
 import template from './select.html';
 import styles from './select.scss';
@@ -33,9 +35,12 @@ export interface ISelectComponent
     IWithElementInternals,
     IWithDefaultAria,
     IWithBaseField,
-    IBaseSelectComponent {
+    IBaseSelectComponent,
+    IListDropdownAware {
   label: string;
   placeholder: string;
+  showSelectAll: boolean;
+  selectAllLabel: string;
   setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void;
   [setValidity](): void;
 }
@@ -47,12 +52,15 @@ declare global {
 
   interface HTMLElementEventMap {
     'forge-select-scrolled-bottom': CustomEvent<void>;
+    'forge-select-all': CustomEvent<SelectSelectAllEventData>;
     change: CustomEvent<any>;
   }
 }
 
 /**
  * @tag forge-select
+ *
+ * @summary Select components are comboboxes that present a list of options to users for single or multi-selection.
  *
  * @dependency forge-field
  * @dependency forge-option
@@ -71,9 +79,12 @@ declare global {
  *
  * @event {CustomEvent<void>} forge-select-scrolled-bottom - Dispatched when the dropdown list has scrolled to the bottom.
  * @event {CustomEvent<any>} change - Dispatched when the user selects a value.
+ * @event {CustomEvent<SelectSelectAllEventData>} forge-select-all - Dispatched when the select all option is toggled.
  *
  * @property {string} label - Controls the label text.
  * @property {string} placeholder - Controls the placeholder text.
+ * @property {boolean} showSelectAll - Gets/sets whether to show the select all option when in multiple mode.
+ * @property {string} selectAllLabel - Gets/sets the label for the select all option.
  * @property {any} value - Gets/sets the value.
  * @property {number | number[]} selectedIndex - Gets/sets the selected index.
  * @property {ISelectOption[] | ISelectOptionGroup[]} options - Gets/sets the available options.
@@ -82,13 +93,38 @@ declare global {
  * @property {SelectOptionBuilder} optionBuilder - Gets/sets the option builder function.
  * @property {SelectSelectedTextBuilder} selectedTextBuilder - Gets/sets the selected text builder function.
  * @property {SelectBeforeValueChangeCallback<any>} beforeValueChange - Gets/sets the before value change callback.
+ * @property {string | string[]; - } popupClasses - Gets/sets the list of classes to apply to the popup element.
+ * @property {ListDropdownHeaderBuilder} popupHeaderBuilder - Gets/sets the callback function for generating header content within the popup.
+ * @property {ListDropdownFooterBuilder} popupFooterBuilder - Gets/sets the callback function for generating header content within the popup.
+ * @property {boolean} [syncPopupWidth=false] - Gets/sets whether the popup width is synchronized with the popup target width.
+ * @property {number} optionLimit - Gets/sets the maximum number of options to display in the dropdown.
+ * @property {boolean} [observeScroll=false] - Controls the observation of scroll events on the dropdown.
+ * @property {number} [observeScrollThreshold=0] - The number of pixels from the bottom to trigger the scroll bottom event. Only applicable if `observeScroll` is true.
+ * @property {boolean} [constrainPopupWidth=true] - Gets/sets whether the popup width will be constrained to a max width of the viewport width (default: `100vw`).
+ * @property {boolean} [wrapOptionText=false] - Gets/sets whether the options will wrap their text or not. This only applies if `constrainPopupWidth` is `true`, if there is an explicit width set via CSS.
+ * @property {OverlayPlacement} [popoverPlacement="bottom"] - Gets/sets the placement of the popover.
+ * @property {IOverlayOffset} popoverOffset - Gets/sets the offset of the popover.
+ * @property {OverlayFlipState} [popoverFlip="auto"] - Gets/sets the flip state of the popover.
+ * @property {OverlayShiftState} [popoverShift="auto"] - Gets/sets whether the popover should shift to fit within the viewport.
+ * @property {PositionPlacement | null} popoverFallbackPlacements - Gets/sets the fallback placements of the popover.
  *
  * @attribute {string} label - Controls the label text.
  * @attribute {string} placeholder - Controls the placeholder text.
+ * @attribute {boolean} show-select-all - Gets/sets whether to show the select all option when in multiple mode.
+ * @attribute {string} select-all-label - Gets/sets the label for the select all option.
  * @attribute {any} value - Gets/sets the value.
  * @attribute {number | number[]} selected-index - Gets/sets the selected index.
  * @attribute {boolean} multiple - Gets/sets the multiple select state.
  * @attribute {boolean} open - Gets/sets the open state.
+ * @attribute {boolean} [sync-popup-width=false] - Gets/sets whether the popup width is synchronized with the popup target width.
+ * @attribute {number} option-limit - Gets/sets the maximum number of options to display in the dropdown.
+ * @attribute {boolean} [observe-scroll=false] - Controls the observation of scroll events on the dropdown.
+ * @attribute {number} [observe-scroll-threshold=0] - The number of pixels from the bottom to trigger the scroll bottom event. Only applicable if `observeScroll` is true.
+ * @attribute {boolean} [wrap-option-text=false] - Gets/sets whether the options will wrap their text or not. This only applies if `constrainPopupWidth` is `true`, if there is an explicit width set via CSS.
+ * @attribute {OverlayPlacement} [popover-placement="bottom"] - Gets/sets the placement of the popover.
+ * @attribute {IOverlayOffset} popover-offset - Gets/sets the offset of the popover.
+ * @attribute {OverlayFlipState} [popover-flip="auto"] - Gets/sets the flip state of the popover.
+ * @attribute {OverlayShiftState} [popover-shift="auto"] - Gets/sets whether the popover should shift to fit within the viewport.
  *
  * @cssproperty --forge-select-placeholder-color - The color of the placeholder text.
  * @cssproperty --forge-field-background - The background of the field surface.
@@ -144,6 +180,7 @@ declare global {
  * @csspart support-text - The support text element.
  * @csspart support-text - The element containing the support text slot.
  * @csspart support-text-end - The element containing the support text end slot.
+ * @csspart outline - The element containing the forge-focus-indicator element.
  * @csspart focus-indicator - The focus indicator element.
  *
  * @slot value - The selected text to display
@@ -166,7 +203,8 @@ declare global {
     IconComponent,
     ScaffoldComponent,
     ToolbarComponent,
-    IconButtonComponent
+    IconButtonComponent,
+    DividerComponent
   ]
 })
 export class SelectComponent
@@ -175,6 +213,7 @@ export class SelectComponent
 {
   public static get observedAttributes(): string[] {
     return [
+      ...ListDropdownAware.observedAttributes,
       ...Object.values(BASE_FIELD_CONSTANTS.observedAttributes),
       ...Object.values(SELECT_CONSTANTS.observedAttributes),
       ...Object.values(BASE_SELECT_CONSTANTS.observedAttributes)
@@ -213,6 +252,12 @@ export class SelectComponent
         return;
       case SELECT_CONSTANTS.observedAttributes.PLACEHOLDER:
         this.placeholder = newValue;
+        return;
+      case SELECT_CONSTANTS.observedAttributes.SHOW_SELECT_ALL:
+        this.showSelectAll = coerceBoolean(newValue);
+        return;
+      case SELECT_CONSTANTS.observedAttributes.SELECT_ALL_LABEL:
+        this.selectAllLabel = newValue;
         return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
@@ -255,13 +300,19 @@ export class SelectComponent
   }
 
   @coreProperty()
-  public declare label: string;
+  declare public label: string;
 
   @coreProperty()
-  public declare placeholder: string;
+  declare public placeholder: string;
 
   @coreProperty()
-  public declare readonly: boolean;
+  declare public readonly: boolean;
+
+  @coreProperty()
+  declare public showSelectAll: boolean;
+
+  @coreProperty()
+  declare public selectAllLabel: string;
 
   public override get floatLabel(): boolean {
     return super.floatLabel;

@@ -1,107 +1,306 @@
 import { isValidDate } from '@tylertech/forge-core';
 
+export type SupportedDateFormats =
+  | 'MM/DD/YYYY'
+  | 'MM/DD/YY'
+  | 'DD/MMM/YYYY'
+  | 'MM-DD-YYYY'
+  | 'MM-DD-YY'
+  | 'DD-MMM-YYYY'
+  | 'YYYY-MM-DD'
+  | 'YYYY-MMM-DD'
+  | 'DD.MM.YYYY'
+  | 'DD.MM.YY';
 export const ISO_8601_REGEX =
-  /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
+  /^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([.,]\d+(?!:))?)?(\17[0-5]\d([.,]\d+)?)?([zZ]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
 export const ISO_TIMEZONE_REGEX = /a-z/i;
 const FUTURE_YEAR_COERCION = 10; // The number of years in the future to coerce two-digit years into current century
 
-/**
- * Parses a date string value to a `Date` object in local time.
- * @param str The date string value.
- */
-export function parseDateString(value: string): Date | null {
-  value = value.replace(/_|\s/g, ''); // Remove potential extraneous characters
+const MONTH_ABBREVIATIONS = {
+  JAN: 1,
+  FEB: 2,
+  MAR: 3,
+  APR: 4,
+  MAY: 5,
+  JUN: 6,
+  JUL: 7,
+  AUG: 8,
+  SEP: 9,
+  OCT: 10,
+  NOV: 11,
+  DEC: 12
+} as const;
 
-  // We first check if this is a valid date in ISO 8601 format and return it if so
-  if (ISO_8601_REGEX.test(value)) {
-    const iso8601Date = new Date(value);
+const MONTH_NAMES = {
+  1: 'JAN',
+  2: 'FEB',
+  3: 'MAR',
+  4: 'APR',
+  5: 'MAY',
+  6: 'JUN',
+  7: 'JUL',
+  8: 'AUG',
+  9: 'SEP',
+  10: 'OCT',
+  11: 'NOV',
+  12: 'DEC'
+} as const;
 
-    // This is an ISO string, but does it have a timezone? If not, we add current timezone offset
-    if (!ISO_TIMEZONE_REGEX.test(value)) {
-      iso8601Date.setMinutes(iso8601Date.getMinutes() + iso8601Date.getTimezoneOffset());
-    }
+// Date format patterns and their parsers
+interface DatePattern {
+  regex: RegExp;
+  parser: (parts: string[]) => Date | null;
+}
 
-    if (isValidDate(iso8601Date)) {
-      return iso8601Date;
-    }
+const DATE_PATTERNS: DatePattern[] = [
+  // YYYY-MM-DD (ISO-like numeric)
+  {
+    regex: /^(\d{4})-(\d{1,2})-(\d{1,2})$/,
+    parser: ([year, month, day]) => parseNumericDate(year, month, day, 'YMD')
+  },
+  // YYYY-MMM-DD
+  {
+    regex: /^(\d{4})-([A-Za-z]{3})-(\d{1,2})$/,
+    parser: ([year, monthAbbr, day]) => parseWithMonthAbbr(year, monthAbbr, day, 'YMD')
+  },
+  // MM/DD/YYYY or MM/DD/YY
+  {
+    regex: /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/,
+    parser: ([month, day, year]) => parseNumericDate(month, day, year, 'MDY')
+  },
+  // MM-DD-YYYY or MM-DD-YY
+  {
+    regex: /^(\d{1,2})-(\d{1,2})-(\d{2,4})$/,
+    parser: ([month, day, year]) => parseNumericDate(month, day, year, 'MDY')
+  },
+  // DD/MMM/YYYY
+  {
+    regex: /^(\d{1,2})\/([A-Za-z]{3})\/(\d{2,4})$/,
+    parser: ([day, monthAbbr, year]) => parseWithMonthAbbr(day, monthAbbr, year, 'DMY')
+  },
+  // DD-MMM-YYYY
+  {
+    regex: /^(\d{1,2})-([A-Za-z]{3})-(\d{2,4})$/,
+    parser: ([day, monthAbbr, year]) => parseWithMonthAbbr(day, monthAbbr, year, 'DMY')
+  },
+  // Numeric without separators (MMDDYYYY or MMDDYY)
+  {
+    regex: /^(\d{2})(\d{2})(\d{2,4})$/,
+    parser: ([month, day, year]) => parseNumericDate(month, day, year, 'MDY')
+  },
+  // DD.MM.YYYY or DD.MM.YY
+  {
+    regex: /^(\d{1,2})\.(\d{1,2})\.(\d{2,4})$/,
+    parser: ([day, month, year]) => parseNumericDate(day, month, year, 'DMY')
   }
+];
 
-  let values: string[] = [];
+// Format configurations
+interface FormatConfig {
+  pattern: string;
+  formatter: (date: Date) => string;
+}
 
-  // We accept dates with a "/" or "-" separator and in the format of MM/DD/YYYY
-  if (value.indexOf('/') !== -1) {
-    values = value.split('/');
-  } else if (value.indexOf('-') !== -1) {
-    values = value.split('-');
-  } else if ((value.length === 6 || value.length === 8) && !isNaN(+value)) {
-    values = [value.substring(0, 2), value.substring(2, 4), value.substring(4)];
+const FORMAT_CONFIGS: Record<SupportedDateFormats, FormatConfig> = {
+  'MM/DD/YYYY': {
+    pattern: 'MM/DD/YYYY',
+    formatter: date => `${pad(date.getMonth() + 1)}/${pad(date.getDate())}/${date.getFullYear()}`
+  },
+  'MM/DD/YY': {
+    pattern: 'MM/DD/YY',
+    formatter: date => `${pad(date.getMonth() + 1)}/${pad(date.getDate())}/${String(date.getFullYear()).slice(-2)}`
+  },
+  'DD/MMM/YYYY': {
+    pattern: 'DD/MMM/YYYY',
+    formatter: date => `${pad(date.getDate())}/${MONTH_NAMES[(date.getMonth() + 1) as keyof typeof MONTH_NAMES]}/${date.getFullYear()}`
+  },
+  'MM-DD-YYYY': {
+    pattern: 'MM-DD-YYYY',
+    formatter: date => `${pad(date.getMonth() + 1)}-${pad(date.getDate())}-${date.getFullYear()}`
+  },
+  'MM-DD-YY': {
+    pattern: 'MM-DD-YY',
+    formatter: date => `${pad(date.getMonth() + 1)}-${pad(date.getDate())}-${String(date.getFullYear()).slice(-2)}`
+  },
+  'DD-MMM-YYYY': {
+    pattern: 'DD-MMM-YYYY',
+    formatter: date => `${pad(date.getDate())}-${MONTH_NAMES[(date.getMonth() + 1) as keyof typeof MONTH_NAMES]}-${date.getFullYear()}`
+  },
+  'YYYY-MM-DD': {
+    pattern: 'YYYY-MM-DD',
+    formatter: date => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+  },
+  'YYYY-MMM-DD': {
+    pattern: 'YYYY-MMM-DD',
+    formatter: date => `${date.getFullYear()}-${MONTH_NAMES[(date.getMonth() + 1) as keyof typeof MONTH_NAMES]}-${pad(date.getDate())}`
+  },
+  'DD.MM.YYYY': {
+    pattern: 'DD.MM.YYYY',
+    formatter: date => `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()}`
+  },
+  'DD.MM.YY': {
+    pattern: 'DD.MM.YY',
+    formatter: date => `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${String(date.getFullYear()).slice(-2)}`
   }
+};
 
-  const hasMonthDayYear = values.length === 3;
-  let [month, day, year] = values;
+function pad(num: number): string {
+  return String(num).padStart(2, '0');
+}
 
-  // Ensure are month and year values are coerced from 0 to 1 in case of incomplete entry
-  if (month === '0') {
-    month = '1';
-  }
-  if (day === '0') {
-    day = '1';
-  }
-
-  // Trap for the case where only 3 digit years are entered
-  if (typeof year === 'string' && year.length === 3) {
+function normalizeYear(year: string): number {
+  if (year.length === 3) {
     year = year.padStart(4, '0');
   }
 
-  if (hasMonthDayYear) {
-    const isValidMonthLength = month.length === 1 || month.length === 2;
-    const isValidDayLength = day.length === 1 || day.length === 2;
-    const isValidYearLength = year.length === 2 || year.length === 4;
+  if (year.length === 2) {
+    const currentYear = new Date().getFullYear();
+    const minYear = currentYear - (100 - FUTURE_YEAR_COERCION);
+    const maxYear = currentYear + FUTURE_YEAR_COERCION;
+    const minCentury = String(minYear).slice(0, 2);
+    const maxCentury = String(maxYear).slice(0, 2);
+    const maxYearLastTwo = +String(maxYear).slice(2);
 
-    if (!isValidMonthLength || !isValidDayLength || !isValidYearLength) {
-      return null;
-    }
+    return +year <= maxYearLastTwo ? +`${maxCentury}${year}` : +`${minCentury}${year}`;
+  }
+
+  return +year;
+}
+
+function validateAndClampDate(month: number, day: number, year: number): { month: number; day: number; year: number } {
+  const clampedMonth = Math.min(Math.max(month, 1), 12);
+  const maxDaysInMonth = new Date(year, clampedMonth, 0).getDate();
+  const clampedDay = Math.min(Math.max(day, 1), maxDaysInMonth);
+
+  return { month: clampedMonth, day: clampedDay, year };
+}
+
+function parseMonthAbbreviation(abbr: string): number | null {
+  const upperAbbr = abbr.toUpperCase() as keyof typeof MONTH_ABBREVIATIONS;
+  return MONTH_ABBREVIATIONS[upperAbbr] || null;
+}
+
+function parseNumericDate(part1: string, part2: string, part3: string, order: 'MDY' | 'YMD' | 'DMY'): Date | null {
+  let monthStr: string;
+  let dayStr: string;
+  let yearStr: string;
+
+  if (order === 'MDY') {
+    [monthStr, dayStr, yearStr] = [part1, part2, part3];
+  } else if (order === 'YMD') {
+    [yearStr, monthStr, dayStr] = [part1, part2, part3];
   } else {
+    // DMY
+    [dayStr, monthStr, yearStr] = [part1, part2, part3];
+  }
+
+  // Handle edge cases for incomplete input
+  if (monthStr === '0') {
+    monthStr = '1';
+  }
+  if (dayStr === '0') {
+    dayStr = '1';
+  }
+
+  const year = normalizeYear(yearStr);
+  const month = +monthStr;
+  const day = +dayStr;
+
+  const { month: validMonth, day: validDay, year: validYear } = validateAndClampDate(month, day, year);
+
+  const date = new Date(validYear, validMonth - 1, validDay, 0, 0, 0, 0);
+  return isValidDate(date) ? date : null;
+}
+
+function parseWithMonthAbbr(part1: string, monthAbbr: string, part3: string, order: 'DMY' | 'YMD'): Date | null {
+  const monthNum = parseMonthAbbreviation(monthAbbr);
+  if (!monthNum) {
     return null;
   }
 
-  // Check if we need to coerce two-digit years to the four-digit equivalent
-  if (year.length === 2) {
-    const minYear = new Date().getFullYear() - (100 - FUTURE_YEAR_COERCION);
-    const maxYear = new Date().getFullYear() + FUTURE_YEAR_COERCION;
-    const minYearCentury = String(minYear).slice(0, 2);
-    const maxYearCentury = String(maxYear).slice(0, 2);
-    const normalizedMaxYear = +String(maxYear).slice(2);
-    year = +year <= normalizedMaxYear ? `${maxYearCentury}${year}` : `${minYearCentury}${year}`;
+  let dayStr: string;
+  let yearStr: string;
+
+  if (order === 'DMY') {
+    [dayStr, yearStr] = [part1, part3];
+  } else {
+    [yearStr, dayStr] = [part1, part3];
   }
 
-  let numMonth = +month;
-  let numDay = +day;
-  const numYear = +year;
+  const year = normalizeYear(yearStr);
+  const day = +dayStr;
 
-  if (numMonth > 12) {
-    numMonth = 12;
+  const { day: validDay, year: validYear } = validateAndClampDate(monthNum, day, year);
+
+  const date = new Date(validYear, monthNum - 1, validDay, 0, 0, 0, 0);
+  return isValidDate(date) ? date : null;
+}
+
+function parseISO8601(value: string): Date | null {
+  if (!ISO_8601_REGEX.test(value)) {
+    return null;
   }
 
-  const maxDaysInMonth = new Date(numYear, numMonth, 0).getDate();
+  const date = new Date(value);
 
-  if (numDay > maxDaysInMonth) {
-    numDay = maxDaysInMonth;
+  // Handle timezone offset for ISO strings without explicit timezone
+  if (!ISO_TIMEZONE_REGEX.test(value)) {
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
   }
 
-  const parsedDate = new Date(numYear, numMonth - 1, numDay, 0, 0, 0, 0);
-  return isValidDate(parsedDate) ? parsedDate : null;
+  return isValidDate(date) ? date : null;
 }
 
 /**
- * Formats a `Date` to a specified format.
- * @param str The date string value.
+ * Parses a date string value to a `Date` object in local time.
+ * Supports multiple formats as defined in SupportedDateFormats.
+ *
+ * @param value The date string value to parse
+ * @param format Optional format hint for better parsing accuracy
+ * @returns Parsed Date object or null if parsing fails
  */
-export function formatDate(date: Date): string {
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const year = String(date.getFullYear()).padStart(4, '0');
-  return [month, day, year].join('/');
+export function parseDateString(value: string, format?: SupportedDateFormats): Date | null {
+  const cleanValue = value.replace(/[_\s]/g, '');
+
+  // Try ISO 8601 first
+  const isoDate = parseISO8601(cleanValue);
+  if (isoDate) {
+    return isoDate;
+  }
+
+  // Try each pattern until one matches
+  for (const pattern of DATE_PATTERNS) {
+    const match = cleanValue.match(pattern.regex);
+    if (match) {
+      const result = pattern.parser(match.slice(1));
+      if (result) {
+        return result;
+      }
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Formats a Date object to a specified string format.
+ *
+ * @param date The Date object to format
+ * @param format The desired output format (defaults to 'MM/DD/YYYY')
+ * @returns Formatted date string
+ * @throws Error if date is invalid or format is unsupported
+ */
+export function formatDate(date: Date, format: SupportedDateFormats = 'MM/DD/YYYY'): string {
+  if (!isValidDate(date)) {
+    throw new Error('Invalid date provided');
+  }
+
+  const config = FORMAT_CONFIGS[format];
+  if (!config) {
+    throw new Error(`Unsupported format: ${format}`);
+  }
+
+  return config.formatter(date);
 }
 
 /**

@@ -1,5 +1,5 @@
 import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
-import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
 import { IconRegistry } from '../../icon/icon-registry';
 import { BaseComponent } from '../../core/base/base-component';
 import { ExperimentalFocusOptions, internals, setDefaultAria } from '../../constants';
@@ -112,16 +112,16 @@ export abstract class BaseButton<T extends BaseButtonCore<IBaseButtonAdapter<IBa
   }
 
   @coreProperty()
-  public declare type: ButtonType;
+  declare public type: ButtonType;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare popoverIcon: boolean;
+  declare public popoverIcon: boolean;
 
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   /** Clicks the button. */
   public override click(): void {

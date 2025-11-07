@@ -11,7 +11,9 @@ const observedAttributes = {
   PERSISTENT_HOVER: 'persistent-hover',
   HOVER_DELAY: 'hover-delay',
   HOVER_DISMISS_DELAY: 'hover-dismiss-delay',
-  PRESET: 'preset'
+  PRESET: 'preset',
+  DISTINCT: 'distinct',
+  ANCHOR_ACCESSIBILITY: 'anchor-accessibility'
 };
 
 const attributes = {
@@ -43,7 +45,8 @@ const events = {
 const defaults = {
   TRIGGER_TYPE: 'click' as PopoverTriggerType,
   HOVER_DELAY: 0,
-  PRESET: 'popover' as PopoverPreset
+  PRESET: 'popover' as PopoverPreset,
+  ANCHOR_ACCESSIBILITY: 'auto' as PopoverAnchorAccessibility
 };
 
 export const POPOVER_CONSTANTS = {
@@ -63,6 +66,7 @@ export type PopoverAnimationType = 'none' | 'zoom' | 'slide' | 'fade';
 export type PopoverTriggerType = 'click' | 'hover' | 'focus' | 'longpress' | 'doubleclick' | 'contextmenu' | 'manual';
 export type PopoverDismissReason = OverlayLightDismissReason | PopoverTriggerType | 'destroy';
 export type PopoverPreset = 'popover' | 'dropdown' | 'list';
+export type PopoverAnchorAccessibility = 'auto' | 'none';
 
 export interface IPopoverToggleEventData {
   newState: 'closed' | 'open';

@@ -1,4 +1,5 @@
 @use './core' as *;
+@use '../utils/mixins' as utils;
 @use './animations';
 @use '../backdrop';
 @use '../core/styles/theme';
@@ -31,6 +32,14 @@ $can-animate: '[visible]:not([animation-type=none])';
   }
 
   //
+  // Slotted
+  //
+
+  ::slotted(forge-scaffold) {
+    height: auto;
+  }
+
+  //
   // Base
   //
 
@@ -48,6 +57,10 @@ $can-animate: '[visible]:not([animation-type=none])';
 
   .surface {
     @include surface;
+  }
+
+  .visually-hidden {
+    @include utils.visually-hidden;
   }
 
   //

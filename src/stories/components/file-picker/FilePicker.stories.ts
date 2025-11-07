@@ -1,5 +1,5 @@
 import { html, nothing } from 'lit';
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 
 import '@tylertech/forge/file-picker';

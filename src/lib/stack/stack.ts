@@ -25,14 +25,7 @@ declare global {
 /**
  * @tag forge-stack
  *
- * @summary The stack is a utility component that helps manage spacing and alignment of immediate children along a vertical or horizontal axis.
- *
- * @description
- * The stack utility component uses flexbox under the hood, but it is not meant to be an abstraction or replacement for CSS flexbox.
- * Stack is simply a utility component for developer convenience. There are many UI patterns and situations where elements need to be
- * arranged horizontally or vertically with a specific gap inbetween. Instead of having to use an inline style or create a new CSS class for
- * these scenarios, you can reach for the stack. This keeps developers within a template and prevents having to jump around from HTML
- * to CSS. It also helps minimize the number of CSS classes being used for simple situations where basic flexbox is needed.
+ * @summary The stack is a utility component that helps manage spacing and alignment of immediate children along a vertical or horizontal axis. Use stacks sparingly to avoid unnecessary DOM complexity, and prefer CSS flexbox or grid for more complex layouts.
  *
  * @cssproperty --forge-stack-alignment - Controls the align-items CSS property of the root stack element.
  * @cssproperty --forge-stack-justify - Controls the justify-content CSS property of the root stack element.
@@ -101,7 +94,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @attribute
    */
   @coreProperty()
-  public declare inline: boolean;
+  declare public inline: boolean;
 
   /**
    * Controls if items wrap to a new line in inline mode
@@ -109,7 +102,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @attribute
    */
   @coreProperty()
-  public declare wrap: boolean;
+  declare public wrap: boolean;
 
   /**
    * Controls if items stretch and take up the maximum amount of space
@@ -117,7 +110,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @attribute
    */
   @coreProperty()
-  public declare stretch: boolean;
+  declare public stretch: boolean;
 
   /**
    * Controls the gap between the children within the stack
@@ -125,7 +118,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @attribute
    */
   @coreProperty()
-  public declare gap: string;
+  declare public gap: string;
 
   /**
    * Controls the align-items property of a row or column
@@ -133,7 +126,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @attribute
    */
   @coreProperty()
-  public declare alignment: StackAlignment;
+  declare public alignment: StackAlignment;
 
   /**
    * Controls the justify-content property of a row or column
@@ -141,5 +134,5 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @attribute
    */
   @coreProperty()
-  public declare justify: StackAlignment;
+  declare public justify: StackAlignment;
 }

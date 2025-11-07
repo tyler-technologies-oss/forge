@@ -38,6 +38,7 @@ export interface IMenuAdapter extends IBaseAdapter {
   ): IMenuComponent;
   closeOtherChildMenus(excludeIndex?: number): void;
   setSelectedValues(values: any[]): void;
+  resolvePopupTargetById(id: string | null): HTMLElement | null;
 }
 
 export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAdapter {
@@ -84,22 +85,18 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
   }
 
   public addTargetListener(event: string, callback: (event: Event) => void, bubbles = false): void {
-    if (this._targetElement) {
-      this._targetElement.addEventListener(event, callback, bubbles);
-    }
+    this._targetElement?.addEventListener(event, callback, bubbles);
   }
 
   public removeTargetListener(event: string, callback: (event: Event) => void): void {
-    if (this._targetElement) {
-      this._targetElement.removeEventListener(event, callback);
-    }
+    this._targetElement?.removeEventListener(event, callback);
   }
 
   public attachMenu(config: IListDropdownConfig): void {
-    if (this._listDropdown || !this._targetElement) {
+    if (this._listDropdown || !this._targetElement || !config.referenceElement) {
       return;
     }
-    this._listDropdown = new ListDropdown(this._targetElement as HTMLElement, config);
+    this._listDropdown = new ListDropdown(config.referenceElement, config);
     this._listDropdown.open();
     this._targetElement.setAttribute('aria-expanded', 'true');
     this._targetElement.setAttribute('aria-controls', `list-dropdown-popup-${config.id}`);
@@ -274,5 +271,14 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
       return Array.from(listElement.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
     }
     return [];
+  }
+
+  public resolvePopupTargetById(id: string | null): HTMLElement | null {
+    if (!id) {
+      return null;
+    }
+    const root = this._component.getRootNode();
+    const contextDocument = root instanceof Document || root instanceof ShadowRoot ? root : document;
+    return contextDocument.getElementById(id);
   }
 }

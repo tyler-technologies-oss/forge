@@ -25,7 +25,8 @@ const attributes = {
 } as const;
 
 const numbers = {
-  LONGPRESS_VISIBILITY_DURATION: 3000
+  LONGPRESS_VISIBILITY_DURATION: 3000,
+  HOVER_OUTSIDE_THRESHOLD: 100
 };
 
 const defaults = {
@@ -39,7 +40,8 @@ const defaults = {
 
 const selectors = {
   CONTENT: '.forge-tooltip',
-  ARROW: '.arrow'
+  ARROW: '.arrow',
+  DEFAULT_SLOT: 'slot:not([name])'
 } as const;
 
 export const TOOLTIP_CONSTANTS = {

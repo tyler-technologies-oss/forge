@@ -19,7 +19,7 @@
 
 @mixin base {
   /* Internal custom properties */
-  @include override(disableable-cursor, unset, value);
+  @include override(disableable-cursor, auto, value);
   @include override(disableable-opacity, 1, value);
   @include override(inner-border-block-size, 100%, value);
   @include override(inner-border-color, #{token(outline-color, custom)}, value);
@@ -87,7 +87,7 @@
 
   position: relative;
   display: grid;
-  isolation: isolate;
+  isolation: #{token(isolation)};
 
   grid-area: main;
   grid-template-areas: 'start center end popover-icon accessory';
@@ -98,7 +98,7 @@
 
   inline-size: 100%;
   block-size: #{token(height)};
-  overflow: hidden;
+  overflow: #{token(overflow)};
 }
 
 @mixin surface {

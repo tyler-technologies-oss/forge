@@ -213,6 +213,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   private _onClear(evt: MouseEvent): void {
+    evt.preventDefault();
     this._filterText = '';
     this._clearValue();
     this._adapter.setSelectedText(this._getSelectedText());
@@ -361,7 +362,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
         }
         break;
       case 'Backspace':
-      case 'Delete':
+      case 'Delete': {
         const input = evt.target as HTMLInputElement;
         const value = this._adapter.getInputValue();
         const isRemovingAllChars = input.value.substring(input.selectionStart as number, input.selectionEnd as number) === input.value;
@@ -374,6 +375,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
           this._clearValue();
         }
         break;
+      }
     }
   }
 
@@ -386,14 +388,14 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
     const filterText = sendFilterText ? this._filterText : '';
     const value = sendValue ? this._getValue() : null;
 
-    return new Promise<IAutocompleteOption[] | IAutocompleteOptionGroup[]>((resolve, reject) => {
-      return Promise.resolve(filter(filterText, value))
+    return new Promise<IAutocompleteOption[] | IAutocompleteOptionGroup[]>((resolve, reject) =>
+      Promise.resolve(filter(filterText, value))
         .then(options => {
           this._options = options;
           resolve(this._options);
         })
-        .catch(e => reject(`An unexpected error occurred while filtering: ${e}`));
-    });
+        .catch(e => reject(`An unexpected error occurred while filtering: ${e}`))
+    );
   }
 
   private _onFilterComplete(): void {
@@ -438,9 +440,8 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
     let listOptionBuilder: ListDropdownOptionBuilder<HTMLElement> | undefined;
     if (this._optionBuilder) {
       const optionBuilder = this._optionBuilder;
-      listOptionBuilder = (option: IListDropdownOption, parentElement: HTMLElement) => {
-        return optionBuilder(option, this._filterText, parentElement as IListItemComponent);
-      };
+      listOptionBuilder = (option: IListDropdownOption, parentElement: HTMLElement) =>
+        optionBuilder(option, this._filterText, parentElement as IListItemComponent);
     }
     const config: IListDropdownConfig = {
       options: this._options,
@@ -451,14 +452,28 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
       asyncStyle: ListDropdownAsyncStyle.Skeleton,
       headerBuilder: this._popupHeaderBuilder,
       footerBuilder: this._popupFooterBuilder,
-      transform: label => {
-        if (this._filterText) {
-          // Highlight the filter text within the label
+      transform: (label, option, isSelected) => {
+        const inputValue = this._adapter.getInputValue();
+        const isUserTyping =
+          this._filterText &&
+          inputValue?.length &&
+          inputValue !== label && // User hasn't just selected this exact option
+          this._adapter.hasFocus();
+
+        if (isUserTyping) {
+          // When filtering: highlight only the matching search text
           const highlightElement = highlightTextHTML(label, this._filterText);
           if (highlightElement) {
             return highlightElement;
           }
+        } else if (isSelected) {
+          // When not filtering: bold the entire text of selected options
+          const boldElement = document.createElement('span');
+          boldElement.style.fontWeight = 'bold';
+          boldElement.textContent = label;
+          return boldElement;
         }
+
         return label;
       },
       allowBusy: true,
@@ -470,6 +485,11 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
       wrapOptionText: this._wrapOptionText,
       observeScroll: this._observeScroll,
       observeScrollThreshold: this._observeScrollThreshold,
+      popupPlacement: this._popoverPlacement,
+      popupOffset: this._popoverOffset,
+      popupFlip: this._popoverFlip,
+      popupShift: this._popoverShift,
+      popupFallbackPlacements: this._popoverFallbackPlacements,
       scrollEndListener: this._dropdownScrollEndListener,
       activeChangeCallback: this._activeChangeListener,
       targetWidthCallback: this._targetWidthCallback,

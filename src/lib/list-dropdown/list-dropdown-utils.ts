@@ -1,5 +1,5 @@
 import { addClass, getEventPath, isDeepEqual, isDefined, isObject } from '@tylertech/forge-core';
-import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
+import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons';
 import { ICON_CLASS_NAME } from '../constants';
 import { IIconComponent } from '../icon';
 import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress';
@@ -15,9 +15,10 @@ import {
   ListDropdownAsyncStyle,
   ListDropdownIconType,
   ListDropdownType,
-  LIST_DROPDOWN_CONSTANTS
+  LIST_DROPDOWN_CONSTANTS,
+  ListDropdownTooltipConfig
 } from './list-dropdown-constants';
-import { LIST_ITEM_CONSTANTS } from '../list/list-item';
+import { frame } from '../core/utils/utils';
 
 export enum ListDropdownOptionType {
   Option,
@@ -69,13 +70,20 @@ export function createPopupDropdown(config: IListDropdownOpenConfig, targetEleme
   if (config.popupFallbackPlacements?.length) {
     popoverElement.fallbackPlacements = config.popupFallbackPlacements;
   }
-
   if (config.constrainViewportWidth) {
     popoverElement.setAttribute(POPOVER_CONSTANTS.attributes.CONSTRAIN_VIEWPORT_WIDTH, '');
   }
-
   if (config.popupOffset) {
     popoverElement.offset = config.popupOffset;
+  }
+  if (config.popupFlip) {
+    popoverElement.flip = config.popupFlip;
+  }
+  if (config.popupShift !== undefined) {
+    popoverElement.shift = config.popupShift;
+  }
+  if (config.anchorAccessibility) {
+    popoverElement.anchorAccessibility = config.anchorAccessibility;
   }
 
   // Set the animations based on our type
@@ -122,8 +130,36 @@ export function createListItems(
   startIndex = 0,
   renderSelected = true
 ): void {
+  // Add select all option if enabled and in multiple mode
+  let optionsToRender = options || config.options;
+  if (config.showSelectAll && config.multiple && startIndex === 0) {
+    const selectAllOption: IListDropdownOption = {
+      value: LIST_DROPDOWN_CONSTANTS.selectAllOption.VALUE,
+      label: config.selectAllLabel || LIST_DROPDOWN_CONSTANTS.selectAllOption.LABEL
+    };
+
+    const dividerOption: IListDropdownOption = {
+      value: '',
+      label: '',
+      divider: true
+    };
+
+    // Inject select all at the beginning
+    if (isListDropdownOptionType(optionsToRender, ListDropdownOptionType.Group)) {
+      const optionGroups = optionsToRender as IListDropdownOptionGroup[];
+      if (optionGroups.length > 0) {
+        optionGroups[0] = { ...optionGroups[0], options: [selectAllOption, dividerOption, ...optionGroups[0].options] };
+        optionsToRender = optionGroups;
+      } else {
+        optionsToRender = [{ text: '', options: [selectAllOption, dividerOption] }];
+      }
+    } else {
+      optionsToRender = [selectAllOption, dividerOption, ...(optionsToRender as IListDropdownOption[])];
+    }
+  }
+
   // Ensure the options are provided in the form a group (if no groups provided, then we have one anonymous group of options)
-  const groups = getOptionsByGroup(options || config.options);
+  const groups = getOptionsByGroup(optionsToRender);
   const flatOptions = getFlattenedOptions(groups);
 
   const limitOptions = config.optionLimit ? true : false;
@@ -230,7 +266,7 @@ export function createListItems(
         if (typeof config.transform !== 'function') {
           buttonElement.textContent = option.label || '';
         } else {
-          const result = config.transform(option.label);
+          const result = config.transform(option.label, option, isSelected);
           if (typeof result === 'string') {
             buttonElement.textContent = result;
           } else if (typeof result === 'object' && (result as HTMLElement).nodeType !== undefined) {
@@ -239,15 +275,25 @@ export function createListItems(
         }
       }
 
+      const secondaryLabelElement = document.createElement('span');
       // Check for secondary (subtitle) text
       if (option.secondaryLabel) {
-        const secondaryLabelElement = document.createElement('span');
         secondaryLabelElement.slot = 'secondary-text';
         secondaryLabelElement.textContent = option.secondaryLabel;
         secondaryLabelElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}-secondary`;
         listItemElement.twoLine = true;
         listItemElement.appendChild(secondaryLabelElement);
         buttonElement.setAttribute('aria-describedby', secondaryLabelElement.id);
+      }
+
+      // Check for a tooltip configuration
+      if (option.tooltip) {
+        if (!isDefined(option.tooltip?.visibilityMode) || option.tooltip?.visibilityMode === 'always') {
+          const tooltipElement = createListItemTooltip(option.tooltip, config.id, optionIdIndex, listItemElement, buttonElement);
+          listItemElement.appendChild(tooltipElement);
+        } else if (option.tooltip?.visibilityMode === 'overflow-only') {
+          asyncCreateListItemTooltipIfTextOverflows(option.tooltip, config.id, optionIdIndex, listItemElement, buttonElement, secondaryLabelElement);
+        }
       }
 
       // If multiple selections are enabled then we need to create and append a leading checkbox element
@@ -319,7 +365,7 @@ export function createListItems(
       if (!option.disabled && typeof config.cascadingElementFactory === 'function' && Array.isArray(option.options) && option.options.length) {
         // Create the trailing indicator icon to show that a child menu exists for this option.
         const optionIconElement = document.createElement('forge-icon');
-        optionIconElement.name = 'arrow_right';
+        optionIconElement.name = 'arrow_right_alt';
         optionIconElement.slot = 'trailing';
         listItemElement.appendChild(optionIconElement);
 
@@ -338,6 +384,50 @@ export function createListItems(
 
       optionParent.appendChild(listItemElement);
     }
+  }
+}
+
+export function createListItemTooltip(
+  tooltip: ListDropdownTooltipConfig,
+  configId: string,
+  optionIdIndex: number,
+  listItemElement: HTMLElement,
+  buttonElement: HTMLElement
+): HTMLElement {
+  const { text, type = 'presentation', ...restConfig } = tooltip;
+  const tooltipElement = document.createElement('forge-tooltip');
+  tooltipElement.id = `list-dropdown-option-${configId}-${optionIdIndex++}-tooltip`;
+  tooltipElement.textContent = tooltip.text;
+
+  // We always anchor to the list item element unless an anchor element is provided
+  if (!tooltip.anchor && !tooltip.anchorElement) {
+    tooltipElement.anchorElement = listItemElement;
+  }
+
+  // We need to attach the tooltip ARIA attributes to the button element, not the anchor element
+  if (type === 'label' || type === 'description') {
+    const a11yAttr = type === 'label' ? 'aria-labelledby' : 'aria-describedby';
+    buttonElement.setAttribute(a11yAttr, tooltipElement.id);
+  }
+
+  Object.assign(tooltipElement, restConfig);
+  return tooltipElement;
+}
+
+export async function asyncCreateListItemTooltipIfTextOverflows(
+  tooltip: ListDropdownTooltipConfig,
+  configId: string,
+  optionIdIndex: number,
+  listItemElement: HTMLElement,
+  buttonElement: HTMLElement,
+  secondaryLabelElement: HTMLElement
+): Promise<void> {
+  await frame();
+
+  // Only append the tooltip if the button or secondary label overflow the width of the parent list item.
+  if (buttonElement.scrollWidth > listItemElement.clientWidth || secondaryLabelElement.scrollWidth > listItemElement.clientWidth) {
+    const tooltipElement = createListItemTooltip(tooltip, configId, optionIdIndex, listItemElement, buttonElement);
+    listItemElement.appendChild(tooltipElement);
   }
 }
 
@@ -441,10 +531,14 @@ export function isListDropdownOptionType(
 ): type is ListDropdownOptionType {
   const isOptionGroups = options.some(
     (o: IListDropdownOption | IListDropdownOptionGroup) =>
-      isDefined(o) && isObject(o) && o.hasOwnProperty('options') && (o.hasOwnProperty('text') || o.hasOwnProperty('builder'))
+      isDefined(o) &&
+      isObject(o) &&
+      Object.prototype.hasOwnProperty.call(o, 'options') &&
+      (Object.prototype.hasOwnProperty.call(o, 'text') || Object.prototype.hasOwnProperty.call(o, 'builder'))
   );
   const isOptionTypes = options.some(
-    (o: IListDropdownOption | IListDropdownOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('label') && o.hasOwnProperty('value')
+    (o: IListDropdownOption | IListDropdownOptionGroup) =>
+      isDefined(o) && isObject(o) && Object.prototype.hasOwnProperty.call(o, 'label') && Object.prototype.hasOwnProperty.call(o, 'value')
   );
   return (isOptionGroups && type === ListDropdownOptionType.Group) || (isOptionTypes && type === ListDropdownOptionType.Option);
 }

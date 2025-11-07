@@ -117,6 +117,7 @@ export interface IBaseField extends IWithLabelAwareness {
  * @csspart accessory - The element containing the accessory slot.
  * @csspart support-text - The support text element.
  * @csspart support-text-end - The element containing the support text end slot.
+ * @csspart outline - The element containing the forge-focus-indicator element.
  * @csspart focus-indicator - The focus indicator element.
  *
  * @slot - The default/unnamed slot for the field's input.
@@ -197,49 +198,49 @@ export abstract class BaseField<T extends BaseFieldCore<IBaseFieldAdapter>> exte
   }
 
   @coreProperty()
-  public declare labelPosition: FieldLabelPosition;
+  declare public labelPosition: FieldLabelPosition;
 
   @coreProperty()
-  public declare labelAlignment: FieldLabelAlignment;
+  declare public labelAlignment: FieldLabelAlignment;
 
   @coreProperty()
-  public declare invalid: boolean;
+  declare public invalid: boolean;
 
   @coreProperty()
-  public declare required: boolean;
+  declare public required: boolean;
 
   @coreProperty()
-  public declare optional: boolean;
+  declare public optional: boolean;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty({ name: 'permanentlyFloatLabel' })
-  public declare floatLabel: boolean;
+  declare public floatLabel: boolean;
 
   @coreProperty()
-  public declare variant: FieldVariant;
+  declare public variant: FieldVariant;
 
   @coreProperty()
-  public declare theme: FieldTheme;
+  declare public theme: FieldTheme;
 
   @coreProperty()
-  public declare shape: FieldShape;
+  declare public shape: FieldShape;
 
   @coreProperty()
-  public declare density: FieldDensity;
+  declare public density: FieldDensity;
 
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   @coreProperty()
-  public declare popoverIcon: boolean;
+  declare public popoverIcon: boolean;
 
   @coreProperty()
-  public declare popoverExpanded: boolean;
+  declare public popoverExpanded: boolean;
 
   @coreProperty()
-  public declare supportTextInset: FieldSupportTextInset;
+  declare public supportTextInset: FieldSupportTextInset;
 
   /** Floats the label immediately. Only applies when the label is inset. */
   public floatLabelWithoutAnimation(value: boolean): void {

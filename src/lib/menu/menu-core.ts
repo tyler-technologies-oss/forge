@@ -39,6 +39,7 @@ export interface IMenuCore {
   mode: MenuMode;
   popupOffset: IOverlayOffset;
   optionBuilder: MenuOptionBuilder | undefined;
+  popupTarget: string | null;
   activateFirstOption(): void;
 }
 
@@ -53,6 +54,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
   private _mode: MenuMode = 'click';
   private _popupOffset: IOverlayOffset;
   private _optionBuilder: MenuOptionBuilder | undefined;
+  private _popupTarget: string | null = null;
   private _identifier: string;
   private _clickListener: (evt: MouseEvent) => void;
   private _blurListener: (evt: MouseEvent) => void;
@@ -144,9 +146,10 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
 
   private _flattenOptions(options: Array<IMenuOption | IMenuOptionGroup>): IMenuOption[] {
     if (isListDropdownOptionType(options, ListDropdownOptionType.Group)) {
-      return (options as IMenuOptionGroup[]).reduce((previousValue, currentValue) => {
-        return currentValue.options ? previousValue.concat(currentValue.options) : previousValue;
-      }, [] as IMenuOption[]);
+      return (options as IMenuOptionGroup[]).reduce(
+        (previousValue, currentValue) => (currentValue.options ? previousValue.concat(currentValue.options) : previousValue),
+        [] as IMenuOption[]
+      );
     }
     return options as IMenuOption[];
   }
@@ -208,7 +211,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
           this._adapter.propagateKey(evt.code);
         }
         break;
-      case 'Enter':
+      case 'Enter': {
         evt.preventDefault();
 
         if (!this._open) {
@@ -228,6 +231,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
           this._adapter.toggleChildMenu(activeIndex);
         }
         break;
+      }
       case 'ArrowUp':
       case 'ArrowDown':
         if (this._open) {
@@ -252,7 +256,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
           this._closeDropdown();
         }
         break;
-      case 'ArrowRight':
+      case 'ArrowRight': {
         if (this._open) {
           evt.stopImmediatePropagation();
         }
@@ -266,6 +270,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
           return;
         }
         break;
+      }
     }
   }
 
@@ -290,11 +295,22 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
     this._mapIconToLeadingIcon();
 
     const selectedValues = this._persistSelection ? this._getSelectedValues() : [];
+    let referenceElement = this._adapter.targetElement as HTMLElement;
+    if (this._popupTarget) {
+      const popupTargetElement = this._adapter.resolvePopupTargetById(this._popupTarget);
+      if (popupTargetElement) {
+        referenceElement = popupTargetElement;
+      }
+    } else {
+      const resolvedTarget = this._tryResolvePopupTarget();
+      if (resolvedTarget) {
+        referenceElement = resolvedTarget;
+      }
+    }
 
     const config: IListDropdownConfig = {
       id: this._identifier,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      referenceElement: this._adapter.targetElement!,
+      referenceElement,
       type: ListDropdownType.Menu,
       options: this._options,
       selectedValues,
@@ -311,14 +327,17 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
       observeScroll: this._observeScroll,
       observeScrollThreshold: this._observeScrollThreshold,
       popupPlacement: this._placement,
+      popupFlip: this._popoverFlip,
+      popupShift: this._popoverShift,
       popupFallbackPlacements: this._fallbackPlacements,
       activeStartIndex: fromKeyboard ? 0 : undefined,
-      popupClasses: [MENU_CONSTANTS.classes.POPUP, MENU_CONSTANTS.classes.MENU, ...(this._popupClasses as string[])],
+      popupClasses: [MENU_CONSTANTS.classes.POPUP, ...(this._popupClasses as string[])],
       syncWidth: this._syncPopupWidth,
       activeChangeCallback: this._activeChangeListener,
       selectCallback: this._selectListener,
       popupOffset: this._popupOffset,
-      cascadingElementFactory: params => this._createCascadingElement(params)
+      cascadingElementFactory: params => this._createCascadingElement(params),
+      anchorAccessibility: 'none'
     };
 
     this._adapter.setHostAttribute(MENU_CONSTANTS.attributes.OPEN, '');
@@ -479,10 +498,10 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
       this._onCascadingOptionSelected.bind(this)
     );
     menu.mode = 'cascade';
-    menu.popupOffset = { mainAxis: 0, crossAxis: -8 };
+    menu.popupOffset = { alignmentAxis: -8 };
     menu.dense = this._dense;
     menu.placement = 'right-start';
-    menu.fallbackPlacements = ['left-start', 'right-start']; // Cascading menus should only fallback to left or right placement if needed
+    menu.fallbackPlacements = ['left-start', 'left-end', 'right-start', 'right-end', 'bottom', 'top'];
     menu.persistSelection = this._persistSelection;
     if (this._persistSelection) {
       menu.selectedValue = this._selectedValue;
@@ -492,6 +511,17 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
     menu.iconClass = this._iconClass;
 
     return menu;
+  }
+
+  private _tryResolvePopupTarget(): HTMLElement | undefined {
+    if (this._popupTarget) {
+      return;
+    }
+
+    // Automatically detect forge-list-item > button case and set popup target if not explicitly set
+    if (this._adapter.targetElement?.matches('button')) {
+      return this._adapter.targetElement.closest('forge-list-item') ?? undefined;
+    }
   }
 
   private _mapIconToLeadingIcon(): void {
@@ -632,6 +662,21 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
   }
   public set popupOffset(value: IOverlayOffset) {
     this._popupOffset = value;
+  }
+
+  public get popupTarget(): string | null {
+    return this._popupTarget ?? null;
+  }
+  public set popupTarget(value: string | null) {
+    value = value ?? null;
+    if (this._popupTarget !== value) {
+      this._popupTarget = value;
+      if (this._popupTarget) {
+        this._adapter.setHostAttribute(MENU_CONSTANTS.attributes.POPUP_TARGET, this._popupTarget);
+      } else {
+        this._adapter.removeHostAttribute(MENU_CONSTANTS.attributes.POPUP_TARGET);
+      }
+    }
   }
 
   public get optionBuilder(): MenuOptionBuilder | undefined {

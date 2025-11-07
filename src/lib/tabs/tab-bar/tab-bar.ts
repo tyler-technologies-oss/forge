@@ -6,12 +6,15 @@ import { TabComponent } from '../tab/tab';
 import { TabBarAdapter } from './tab-bar-adapter';
 import { ITabBarChangeEventData, TAB_BAR_CONSTANTS } from './tab-bar-constants';
 import { TabBarCore } from './tab-bar-core';
-import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
+import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
+import { setDefaultAria } from '../../constants';
 
 import template from './tab-bar.html';
 import styles from './tab-bar.scss';
 
-export interface ITabBarComponent extends IBaseComponent {
+export interface ITabBarComponent extends IBaseComponent, IWithDefaultAria, IWithElementInternals {
   disabled: boolean;
   activeTab: number | null | undefined;
   vertical: boolean;
@@ -37,7 +40,7 @@ declare global {
 /**
  * @tag forge-tab-bar
  *
- * @summary Tabs organize content across different screens and views.
+ * @summary Tab bars organize a set of tabs, holding selection state and enabling navigation between different views or sections of content.
  *
  * @description
  * Use tabs to group content into helpful categories. Tabs are typically placed
@@ -66,7 +69,6 @@ declare global {
  * @attribute {boolean} [secondary=false] - Deprecated. Controls whether the tabs are styled as secondary tab navigation.
  * @attribute {boolean} [auto-activate=false] - Controls whether the tabs are automatically activated when receiving focus.
  * @attribute {boolean} [scroll-buttons=false] - Controls whether scroll buttons are displayed when the tabs overflow their container.
- * @attribute {string} [data-aria-label] - The ARIA label to forward to the internal tablist element.
  *
  * @event {CustomEvent<ITabBarChangeEventData>} forge-tab-bar-change - Dispatches when the active tab changes.
  *
@@ -82,7 +84,7 @@ declare global {
   name: TAB_BAR_CONSTANTS.elementName,
   dependencies: [TabComponent, IconButtonComponent, IconComponent]
 })
-export class TabBarComponent extends BaseComponent implements ITabBarComponent {
+export class TabBarComponent extends WithDefaultAria(WithElementInternals(BaseComponent)) implements ITabBarComponent {
   public static get observedAttributes(): string[] {
     return Object.values(TAB_BAR_CONSTANTS.observedAttributes);
   }
@@ -97,6 +99,7 @@ export class TabBarComponent extends BaseComponent implements ITabBarComponent {
   }
 
   public connectedCallback(): void {
+    this[setDefaultAria]({ role: 'tablist' }, { setAttribute: true });
     this._core.initialize();
   }
 
@@ -137,30 +140,30 @@ export class TabBarComponent extends BaseComponent implements ITabBarComponent {
   }
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare activeTab: number | null | undefined;
+  declare public activeTab: number | null | undefined;
 
   @coreProperty()
-  public declare vertical: boolean;
+  declare public vertical: boolean;
 
   @coreProperty()
-  public declare clustered: boolean;
+  declare public clustered: boolean;
 
   @coreProperty()
-  public declare stacked: boolean;
+  declare public stacked: boolean;
 
   /** @deprecated This will be removed in a future version */
   @coreProperty()
-  public declare secondary: boolean;
+  declare public secondary: boolean;
 
   @coreProperty()
-  public declare inverted: boolean;
+  declare public inverted: boolean;
 
   @coreProperty()
-  public declare autoActivate: boolean;
+  declare public autoActivate: boolean;
 
   @coreProperty()
-  public declare scrollButtons: boolean;
+  declare public scrollButtons: boolean;
 }

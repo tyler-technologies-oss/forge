@@ -10,7 +10,8 @@ import {
   PopoverPreset,
   PopoverTriggerType,
   POPOVER_CONSTANTS,
-  POPOVER_HOVER_TIMEOUT
+  POPOVER_HOVER_TIMEOUT,
+  PopoverAnchorAccessibility
 } from './popover-constants';
 import { LONGPRESS_TRIGGER_DELAY } from '../core/mixins/interactions/longpress/with-longpress-listener';
 import type { IPopoverComponent } from './popover';
@@ -168,11 +169,11 @@ describe('Popover', () => {
     it('should proxy hide', async () => {
       const harness = await createFixture();
 
-      harness.popoverElement.hide = 'never';
+      harness.popoverElement.hide = 'anchor-hidden';
 
-      expect(harness.popoverElement.hide).to.equal('never');
-      expect(harness.popoverElement.overlay.hide).to.equal('never');
-      expect(harness.popoverElement.getAttribute(OVERLAY_CONSTANTS.attributes.HIDE)).to.equal('never');
+      expect(harness.popoverElement.hide).to.equal('anchor-hidden');
+      expect(harness.popoverElement.overlay.hide).to.equal('anchor-hidden');
+      expect(harness.popoverElement.getAttribute(OVERLAY_CONSTANTS.attributes.HIDE)).to.equal('anchor-hidden');
     });
 
     it('should proxy persistent', async () => {
@@ -188,11 +189,11 @@ describe('Popover', () => {
     it('should proxy shift', async () => {
       const harness = await createFixture();
 
-      harness.popoverElement.shift = true;
+      harness.popoverElement.shift = 'never';
 
-      expect(harness.popoverElement.shift).to.be.true;
-      expect(harness.popoverElement.overlay.shift).to.be.true;
-      expect(harness.popoverElement.hasAttribute(OVERLAY_CONSTANTS.attributes.SHIFT)).to.be.true;
+      expect(harness.popoverElement.shift).to.equal('never');
+      expect(harness.popoverElement.overlay.shift).to.equal('never');
+      expect(harness.popoverElement.getAttribute(OVERLAY_CONSTANTS.attributes.SHIFT)).to.equal('never');
     });
 
     it('should proxy flip', async () => {
@@ -815,6 +816,24 @@ describe('Popover', () => {
 
       expect(harness.isOpen).to.be.true;
     });
+
+    it('should not hide current hovered popover if previously open popover is dismissed', async () => {
+      const firstHarness = await createFixture({ triggerType: 'hover' });
+      const secondHarness = await createFixture({ triggerType: 'hover' });
+
+      expect(firstHarness.isOpen).to.be.false;
+      expect(secondHarness.isOpen).to.be.false;
+
+      await firstHarness.hoverTrigger();
+      await firstHarness.hoverOutside();
+      await secondHarness.hoverTrigger();
+
+      await task(POPOVER_HOVER_TIMEOUT + 100);
+      await firstHarness.exitAnimation();
+
+      expect(firstHarness.isOpen).to.be.false;
+      expect(secondHarness.isOpen).to.be.true;
+    });
   });
 
   describe('longpress trigger type', () => {
@@ -1430,6 +1449,177 @@ describe('Popover', () => {
       expect(overlayRoot.style.translate).to.equal('100px 100px');
     });
   });
+
+  describe('anchor accessibility', () => {
+    it('should have default anchor accessibility value of auto', async () => {
+      const harness = await createFixture();
+
+      expect(harness.popoverElement.anchorAccessibility).to.equal('auto');
+    });
+
+    it('should set anchor accessibility via attribute', async () => {
+      const harness = await createFixture({ anchorAccessibility: 'none' });
+
+      expect(harness.popoverElement.anchorAccessibility).to.equal('none');
+      expect(harness.popoverElement.getAttribute(POPOVER_CONSTANTS.attributes.ANCHOR_ACCESSIBILITY)).to.equal('none');
+    });
+
+    it('should set anchor accessibility via property', async () => {
+      const harness = await createFixture();
+
+      harness.popoverElement.anchorAccessibility = 'none';
+
+      expect(harness.popoverElement.anchorAccessibility).to.equal('none');
+      expect(harness.popoverElement.getAttribute(POPOVER_CONSTANTS.attributes.ANCHOR_ACCESSIBILITY)).to.equal('none');
+    });
+
+    it('should remove anchor accessibility attribute when setting to default value', async () => {
+      const harness = await createFixture({ anchorAccessibility: 'none' });
+
+      expect(harness.popoverElement.anchorAccessibility).to.equal('none');
+      expect(harness.popoverElement.getAttribute(POPOVER_CONSTANTS.attributes.ANCHOR_ACCESSIBILITY)).to.equal('none');
+
+      harness.popoverElement.anchorAccessibility = 'auto';
+
+      expect(harness.popoverElement.anchorAccessibility).to.equal('auto');
+      expect(harness.popoverElement.getAttribute(POPOVER_CONSTANTS.attributes.ANCHOR_ACCESSIBILITY)).to.equal('auto');
+    });
+
+    it('should set aria-expanded on anchor element when anchor accessibility is auto', async () => {
+      const harness = await createFixture({ anchorAccessibility: 'auto' });
+
+      expect(harness.triggerElement.getAttribute('aria-expanded')).to.equal('false');
+
+      await harness.clickTrigger();
+
+      expect(harness.triggerElement.getAttribute('aria-expanded')).to.equal('true');
+
+      await harness.clickTrigger();
+      await harness.exitAnimation();
+
+      expect(harness.triggerElement.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('should not set aria-expanded on anchor element when anchor accessibility is none', async () => {
+      const harness = await createFixture({ anchorAccessibility: 'none' });
+
+      expect(harness.triggerElement.hasAttribute('aria-expanded')).to.be.false;
+
+      await harness.clickTrigger();
+
+      expect(harness.triggerElement.hasAttribute('aria-expanded')).to.be.false;
+
+      await harness.clickTrigger();
+      await harness.exitAnimation();
+
+      expect(harness.triggerElement.hasAttribute('aria-expanded')).to.be.false;
+    });
+  });
+
+  describe('distinct', () => {
+    it('should have distinct property null by default', async () => {
+      const harness = await createFixture();
+
+      expect(harness.popoverElement.distinct).to.be.null;
+      expect(harness.popoverElement.hasAttribute(POPOVER_CONSTANTS.attributes.DISTINCT)).to.be.false;
+    });
+
+    it('should set distinct property when setting attribute', async () => {
+      const harness = await createFixture();
+
+      harness.popoverElement.setAttribute(POPOVER_CONSTANTS.attributes.DISTINCT, 'test-context');
+
+      expect(harness.popoverElement.distinct).to.equal('test-context');
+    });
+
+    it('should close other popovers with the same distinct value when opening', async () => {
+      const distinctName = 'test-context';
+      const firstHarness = await createFixture({ distinct: distinctName });
+      const secondHarness = await createFixture({ distinct: distinctName });
+
+      await firstHarness.clickTrigger();
+      expect(firstHarness.isOpen).to.be.true;
+
+      await secondHarness.clickTrigger();
+      await firstHarness.exitAnimation();
+
+      expect(firstHarness.isOpen).to.be.false;
+      expect(secondHarness.isOpen).to.be.true;
+    });
+
+    it('should close other popovers with the same distinct value when opening via hover trigger type', async () => {
+      const distinctName = 'test-context';
+      const firstHarness = await createFixture({ distinct: distinctName, triggerType: 'hover' });
+      const secondHarness = await createFixture({ distinct: distinctName, triggerType: 'hover' });
+
+      await firstHarness.hoverTrigger();
+      expect(firstHarness.isOpen).to.be.true;
+
+      await secondHarness.hoverTrigger();
+      await firstHarness.exitAnimation();
+
+      expect(firstHarness.isOpen).to.be.false;
+      expect(secondHarness.isOpen).to.be.true;
+    });
+
+    it('should not close popovers with different distinct values', async () => {
+      const firstHarness = await createFixture({ triggerType: 'hover', hoverDismissDelay: 5000, distinct: 'context-1' });
+      const secondHarness = await createFixture({ triggerType: 'hover', distinct: 'context-2' });
+
+      await firstHarness.hoverTrigger();
+      expect(firstHarness.isOpen).to.be.true;
+
+      await secondHarness.hoverTrigger();
+      await firstHarness.exitAnimation();
+
+      expect(firstHarness.isOpen).to.be.true;
+      expect(secondHarness.isOpen).to.be.true;
+    });
+
+    it('should not close popovers without distinct values', async () => {
+      const firstHarness = await createFixture({ triggerType: 'hover', hoverDismissDelay: 5000 });
+      const secondHarness = await createFixture({ triggerType: 'hover', distinct: 'test-context' });
+
+      await firstHarness.hoverTrigger();
+      expect(firstHarness.isOpen).to.be.true;
+
+      await secondHarness.hoverTrigger();
+      await firstHarness.exitAnimation();
+
+      expect(firstHarness.isOpen).to.be.true;
+      expect(secondHarness.isOpen).to.be.true;
+    });
+
+    it('should not close itself when reopening', async () => {
+      const harness = await createFixture({ distinct: 'test-context', open: true });
+
+      expect(harness.isOpen).to.be.true;
+
+      await harness.clickTrigger();
+      await harness.exitAnimation();
+      expect(harness.isOpen).to.be.false;
+
+      await harness.clickTrigger();
+      expect(harness.isOpen).to.be.true;
+    });
+
+    it('should use default group context when distinct attribute is empty', async () => {
+      const firstHarness = await createFixture({ distinct: '' });
+      const secondHarness = await createFixture({ distinct: '' });
+
+      expect(firstHarness.popoverElement.distinct).to.equal('');
+      expect(secondHarness.popoverElement.distinct).to.equal('');
+
+      await firstHarness.clickTrigger();
+      expect(firstHarness.isOpen).to.be.true;
+
+      await secondHarness.clickTrigger();
+      await firstHarness.exitAnimation();
+
+      expect(firstHarness.isOpen).to.be.false;
+      expect(secondHarness.isOpen).to.be.true;
+    });
+  });
 });
 
 class PopoverHarness {
@@ -1544,7 +1734,10 @@ interface IPopoverFixtureConfig {
   triggerType?: PopoverTriggerType;
   persistentHover?: boolean;
   hoverDelay?: number;
+  hoverDismissDelay?: number;
   preset?: PopoverPreset;
+  distinct?: string | null;
+  anchorAccessibility?: PopoverAnchorAccessibility;
 }
 
 async function createFixture({
@@ -1556,7 +1749,10 @@ async function createFixture({
   triggerType,
   persistentHover = false,
   hoverDelay,
-  preset
+  hoverDismissDelay,
+  preset,
+  distinct,
+  anchorAccessibility
 }: IPopoverFixtureConfig = {}): Promise<PopoverHarness> {
   const container = await fixture(html`
     <div style="display: flex; justify-content: center; align-items: center; height: 300px; width: 300px;">
@@ -1568,10 +1764,14 @@ async function createFixture({
         ?persistent=${persistent}
         ?arrow=${arrow}
         ?persistent-hover=${persistentHover}
-        ?hoverDelay=${hoverDelay}
+        hover-delay=${hoverDelay ?? nothing}
+        ?hover-dismiss-delay=${hoverDismissDelay ?? nothing}
+        hover-dismiss-delay=${hoverDismissDelay ?? nothing}
         animation-type=${animationType ?? nothing}
         trigger-type=${triggerType ?? nothing}
-        preset=${preset ?? nothing}>
+        preset=${preset ?? nothing}
+        distinct=${distinct ?? nothing}
+        anchor-accessibility=${anchorAccessibility ?? nothing}>
         <span>Test popover content</span>
         <button type="button" id="content-button" style="pointer-events: none;">Button</button>
         <forge-popover id="nested-popover">Nested popover</forge-popover>

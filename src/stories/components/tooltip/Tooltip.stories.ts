@@ -1,4 +1,4 @@
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { html, nothing } from 'lit-html';
 import { styleMap } from 'lit/directives/style-map.js';
 import { OVERLAY_PLACEMENT_OPTIONS, OVERLAY_FLIP_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
@@ -15,8 +15,9 @@ const meta = {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
     return html`
-      <forge-button variant="raised">Hover me</forge-button>
+      <forge-button id="my-button" variant="raised">Hover me</forge-button>
       <forge-tooltip
+        anchor="my-button"
         .open=${args.open}
         .type=${args.type}
         .placement=${args.placement}

@@ -4,7 +4,7 @@ import { AppBarProfileButtonCore } from './app-bar-profile-button-core';
 import { APP_BAR_PROFILE_BUTTON_CONSTANTS, AppBarProfileButtonProfileCardBuilder } from './app-bar-profile-button-constants';
 import { ProfileCardComponent } from '../../profile-card';
 import { IconButtonComponent } from '../../icon-button';
-import { AvatarComponent } from '../../avatar';
+import { defineAvatarComponent } from '../../avatar';
 import { TooltipComponent } from '../../tooltip';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IPopoverComponent, PopoverComponent } from '../../popover/popover';
@@ -35,6 +35,8 @@ declare global {
 
 /**
  * @tag forge-app-bar-profile-button
+ *
+ * @summary A user profile button component that displays an avatar and opens a profile card popup with user information and action buttons when clicked.
  *
  * @property {string} avatarImageUrl - The url of the avatar image to display.
  * @property {number} [avatarLetterCount=2] - The number of letters to display in the avatar.
@@ -69,9 +71,13 @@ declare global {
  */
 @customElement({
   name: APP_BAR_PROFILE_BUTTON_CONSTANTS.elementName,
-  dependencies: [PopoverComponent, ProfileCardComponent, IconButtonComponent, AvatarComponent, TooltipComponent]
+  dependencies: [PopoverComponent, ProfileCardComponent, IconButtonComponent, TooltipComponent]
 })
 export class AppBarProfileButtonComponent extends BaseComponent implements IAppBarProfileButtonComponent {
+  static {
+    defineAvatarComponent();
+  }
+
   public static get observedAttributes(): string[] {
     return [
       APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.FULL_NAME,
@@ -146,37 +152,37 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
   }
 
   @coreProperty()
-  public declare fullName: string;
+  declare public fullName: string;
 
   @coreProperty()
-  public declare email: string;
+  declare public email: string;
 
   @coreProperty()
-  public declare avatarImageUrl: string;
+  declare public avatarImageUrl: string;
 
   @coreProperty()
-  public declare avatarLetterCount: number;
+  declare public avatarLetterCount: number;
 
   @coreProperty()
-  public declare avatarText: string;
+  declare public avatarText: string;
 
   @coreProperty()
-  public declare avatarIcon: string;
+  declare public avatarIcon: string;
 
   @coreProperty()
-  public declare signOutButton: boolean;
+  declare public signOutButton: boolean;
 
   @coreProperty()
-  public declare profileButton: boolean;
+  declare public profileButton: boolean;
 
   @coreProperty()
-  public declare signOutButtonText: string;
+  declare public signOutButtonText: string;
 
   @coreProperty()
-  public declare profileButtonText: string;
+  declare public profileButtonText: string;
 
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   public get popupElement(): IPopoverComponent | undefined {
     return this._core.popupElement;
@@ -184,5 +190,5 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
 
   /** Sets the profile card builder callback that will be used to add extra content to the profile card. */
   @coreProperty()
-  public declare profileCardBuilder: AppBarProfileButtonProfileCardBuilder;
+  declare public profileCardBuilder: AppBarProfileButtonProfileCardBuilder;
 }

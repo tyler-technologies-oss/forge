@@ -1,10 +1,9 @@
 import { html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { standaloneStoryParams, customElementStoryRenderer, generateCustomElementArgTypes, GLOBAL_THEME_OPTIONS } from '../../utils';
-import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
+import { tylIconForgeLogo, tylIconOpenInNew } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
-import { tylIconOpenInNew } from '@tylertech/tyler-icons/standard';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge/icon';

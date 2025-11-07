@@ -1,6 +1,6 @@
-import { type Meta, type StoryObj } from '@storybook/web-components';
-import { action } from '@storybook/addon-actions';
-import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
+import { action } from 'storybook/actions';
+import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
 import type { IPaginatorComponent } from '@tylertech/forge/paginator';
 
 import '@tylertech/forge/paginator';
@@ -45,3 +45,13 @@ export default meta;
 type Story = StoryObj;
 
 export const Demo: Story = {};
+
+export const Alternative: Story = {
+  ...standaloneStoryParams,
+  args: {
+    pageSize: 1,
+    pageSizeOptions: [1],
+    total: 10,
+    alternative: true
+  }
+};

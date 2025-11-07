@@ -137,7 +137,6 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
       iconButtonElement.density = 'medium';
       iconButtonElement.type = 'button';
       iconButtonElement.tabIndex = -1;
-      iconButtonElement.style.marginRight = '4px'; // Override default trailing slot margin in text-field
       iconButtonElement.setAttribute('aria-label', 'Toggle time dropdown');
 
       const iconElement = document.createElement(ICON_CONSTANTS.elementName) as IIconComponent;
@@ -262,6 +261,7 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
       this._toggleElement.setAttribute('aria-disabled', value.toString());
       if ('disabled' in this._toggleElement) {
         (this._toggleElement as HTMLButtonElement).disabled = value;
+        this._toggleElement.tabIndex = -1;
       } else {
         const button = this._toggleElement.querySelector('button') as HTMLButtonElement;
         if (button) {

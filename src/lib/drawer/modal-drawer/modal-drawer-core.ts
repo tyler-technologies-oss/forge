@@ -1,4 +1,3 @@
-import { Platform } from '@tylertech/forge-core';
 import { BaseDrawerCore, IBaseDrawerCore } from '../base';
 
 import { IModalDrawerAdapter } from './modal-drawer-adapter';

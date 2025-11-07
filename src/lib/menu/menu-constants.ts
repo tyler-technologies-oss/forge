@@ -4,12 +4,11 @@ import { IListDropdownOption, IListDropdownOptionGroup } from '../list-dropdown'
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}menu`;
 
 const classes = {
-  POPUP: 'forge-menu__popup',
-  MENU: 'mdc-menu'
+  POPUP: 'forge-menu__popup'
 };
 
 const selectors = {
-  TOGGLE: `.${elementName}__toggle,[${elementName}-toggle],forge-button,forge-icon-button,forge-fab,button,[type=button],[role=button],a,forge-list-item,[tabindex]:not([tabindex^="-"])`,
+  TOGGLE: `.${elementName}__toggle,[${elementName}-toggle],forge-button,forge-icon-button,forge-fab,button,[type=button],[role=button],a,forge-list-item > button,[tabindex]:not([tabindex^="-"])`,
   MENU_LIST: 'forge-list'
 };
 
@@ -26,7 +25,8 @@ const attributes = {
   POPUP_CLASSES: 'popup-classes',
   OPTION_LIMIT: 'option-limit',
   OBSERVE_SCROLL: 'observe-scroll',
-  OBSERVE_SCROLL_THRESHOLD: 'observe-scroll-threshold'
+  OBSERVE_SCROLL_THRESHOLD: 'observe-scroll-threshold',
+  POPUP_TARGET: 'popup-target'
 };
 
 const events = {

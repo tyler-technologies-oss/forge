@@ -23,6 +23,8 @@ declare global {
 /**
  * @tag forge-backdrop
  *
+ * @summary Backdrops provide a semi-transparent overlay behind modal content like dialogs and drawers. These are building blocks for creating modal experiences, not intended to be used directly.
+ *
  * @property {boolean} [visible=false] - Whether the backdrop is visible.
  * @property {boolean} [fixed=false] - Whether the backdrop uses "fixed" or "relative" positioning.
  *

@@ -1,4 +1,4 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as BadgeStories from './Badge.stories';
@@ -22,6 +22,12 @@ Badges are used to highlight an item's status for quick recognition. They are no
 Badges can be styled with a `strong` variant to emphasize their importance.
 
 <Canvas of={BadgeStories.Strong} />
+
+## With Icon
+
+Badges can include an icon to provide additional context or visual interest. Icons should be placed in the `start` slot.
+
+<Canvas of={BadgeStories.WithIcon} />
 
 ## With Icon Button
 

@@ -11,9 +11,6 @@ jobs:
   prettier:
     name: Prettier
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20]
     steps:
       - uses: actions/checkout@v4
         
@@ -30,10 +27,10 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - name: Use Node ${{ matrix.node-version }}
+      - name: Use Node 22
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
 
       - name: Install
         run: npm ci

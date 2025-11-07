@@ -25,9 +25,7 @@ export default function forgeFilterUnusedPlugin() {
   return {
     name: 'FORGE - BRANCH-NAME',
     packageLinkPhase({ customElementsManifest }) {
-      customElementsManifest.modules = customElementsManifest.modules.filter(module => {
-        return !IGNORED.some(pattern => minimatch(module.path, pattern));
-      });
+      customElementsManifest.modules = customElementsManifest.modules.filter(module => !IGNORED.some(pattern => minimatch(module.path, pattern)));
     }
   };
 }

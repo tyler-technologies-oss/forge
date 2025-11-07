@@ -12,19 +12,9 @@ const numbers = {
   DEFAULT_LETTER_COUNT: 2
 };
 
-const selectors = {
-  ROOT: '.forge-avatar',
-  DEFAULT_SLOT: '.forge-avatar > slot:not([name])'
-};
-
-const strings = {
-  BACKGROUND_VARNAME: '--forge-avatar-background'
-};
-
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const AVATAR_CONSTANTS = {
   elementName,
   attributes,
-  numbers,
-  selectors,
-  strings
+  numbers
 };

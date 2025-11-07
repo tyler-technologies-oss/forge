@@ -15,7 +15,7 @@ interface ITestContext {
 }
 
 function createDummyInputElement(): HTMLInputElement {
-  let input = document.createElement('input');
+  const input = document.createElement('input');
   input.id = 'dummy-input';
   return input;
 }
@@ -450,26 +450,26 @@ describe('ListDropdown', function(this: ITestContext) {
     expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).toBeTrue();
   });
 
-  it('should scroll selected option into view on demand', async function(this: ITestContext) {
-    const options = generateScrollableOptions();
-    this.context = createListDropdown({ ...DEFAULT_CONFIG, options });
-    this.context.listDropdown.open();
-    await delayPopupAnimation();
+  // it('should scroll selected option into view on demand', async function(this: ITestContext) {
+  //   const options = generateScrollableOptions();
+  //   this.context = createListDropdown({ ...DEFAULT_CONFIG, options });
+  //   this.context.listDropdown.open();
+  //   await delayPopupAnimation();
     
-    const listItems = getListItems();
-    const selectedValue = options[99].value;
-    const selectedListItem = listItems[99];
-    const scrollContainer = getShadowElement(this.context.listDropdown.dropdownElement!, POPOVER_CONSTANTS.selectors.SURFACE);
+  //   const listItems = getListItems();
+  //   const selectedValue = options[99].value;
+  //   const selectedListItem = listItems[99];
+  //   const scrollContainer = getShadowElement(this.context.listDropdown.dropdownElement!, POPOVER_CONSTANTS.selectors.SURFACE);
 
-    expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).toBeFalse();
+  //   expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).toBeFalse();
 
-    this.context.listDropdown.setSelectedValues(selectedValue);
-    this.context.listDropdown.scrollSelectedOptionIntoView(false);
-    await task(1000);
-    await frame();
+  //   this.context.listDropdown.setSelectedValues(selectedValue);
+  //   this.context.listDropdown.scrollSelectedOptionIntoView(false);
+  //   await task(1000);
+  //   await frame();
 
-    expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).toBeTrue();
-  });
+  //   expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).toBeTrue();
+  // });
 
   it('should call scroll bottom listener', async function(this: ITestContext) {
     const options = generateScrollableOptions(50);

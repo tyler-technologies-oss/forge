@@ -27,12 +27,7 @@ declare global {
 /**
  * @tag forge-button
  *
- * @summary Buttons represent actions that a user can take.
- *
- * @description
- * Buttons are used when a user needs to take an action, such as submitting a form or opening a dialog.
- * Buttons can be used to trigger an action or to navigate to a new location. Buttons can be styled with
- * a variety of themes and variants.
+ * @summary Buttons are used when a user needs to take an action. They can be used to trigger an action, navigate to a new location, and can be styled with a variety of themes and variants.
  *
  * @dependency forge-icon
  * @dependency forge-focus-indicator
@@ -191,14 +186,14 @@ export class ButtonComponent extends BaseButton<ButtonCore> implements IButtonCo
   }
 
   @coreProperty()
-  public declare variant: ButtonVariant;
+  declare public variant: ButtonVariant;
 
   @coreProperty()
-  public declare pill: boolean;
+  declare public pill: boolean;
 
   @coreProperty()
-  public declare theme: ButtonTheme;
+  declare public theme: ButtonTheme;
 
   @coreProperty()
-  public declare fullWidth: boolean;
+  declare public fullWidth: boolean;
 }

@@ -1,4 +1,4 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as MenuStories from './Menu.stories';
 
@@ -41,8 +41,61 @@ This options array can then be set (or bound via framework) to the `options` pro
 
 Cascading menus are used to display a hierarchical list of options. When a menu item is hovered, a child menu will open next of the parent menu item.
 
+To set up a cascading menu, you can provide an array of options to the `options` property on any menu option object. This tells the menu to render a child
+menu when the parent menu item is hovered:
+
+```javascript
+const options: IMenuOption[] = [
+  { label: 'Save', value: 'save' },
+  {
+    label: 'Edit',
+    value: 'edit',
+    options: [
+      { label: 'As New', value: 'asNew' },
+      { label: 'Overwrite', value: 'overwrite' },
+      {
+        label: 'More',
+        value: 'more',
+        options: [
+          { label: 'Option 1', value: 'option1' },
+          { label: 'Option 2', value: 'option2' },
+          { label: 'Option 3', value: 'option3' }
+        ]
+      }
+    ]
+  },
+  { label: 'Delete', value: 'delete' }
+];
+```
+
 <Canvas of={MenuStories.Cascading} />
 
+## Menu Groups
+
+Grouping menu items can be useful to visually separate different types of options. The menu options use the `IMenuOptionGroup` interface to define the group
+and its options.
+
+Below is an example of a basic array of menu options with groups:
+
+```javascript
+let optionGroup: IMenuOptionGroup[] = [
+      {
+        text: 'Group 1',
+        options: [
+          { label: 'Option 1', value: 'option1' },
+          { label: 'Option 2', value: 'option2' },
+        ]
+      },
+      {
+        text: 'Group 2',
+        options: [
+          { label: 'Option 3', value: 'option3' },
+          { label: 'Option 4', value: 'option4' }
+        ]
+      }
+    ];
+```
+<Canvas of={MenuStories.Grouped} />
 ## API
 
 <CustomArgTypes />

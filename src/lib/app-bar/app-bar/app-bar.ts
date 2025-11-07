@@ -1,7 +1,7 @@
 import { customElement, attachShadowTemplate, coreProperty } from '@tylertech/forge-core';
 import { AppBarAdapter } from './app-bar-adapter';
 import { AppBarCore } from './app-bar-core';
-import { AppBarElevation, AppBarTheme, APP_BAR_CONSTANTS } from './app-bar-constants';
+import { AppBarElevation, AppBarTheme, APP_BAR_CONSTANTS, AppBarThemeMode } from './app-bar-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 
 import template from './app-bar.html';
@@ -11,6 +11,7 @@ export interface IAppBarComponent extends IBaseComponent {
   titleText: string;
   elevation: AppBarElevation;
   theme: AppBarTheme;
+  themeMode: AppBarThemeMode;
   href: string;
   target: string;
 }
@@ -28,22 +29,26 @@ declare global {
 /**
  * @tag forge-app-bar
  *
- * @description App bars are a collection of components placed as a horizontal bar at the top of the screen. They typically contain a logo, title, and optional application-wide actions.
+ * @summary App bars are headers used to display branding, navigation, and actions at the top of an application. They typically contain a logo, title, and various action items.
  *
  * @property {string} titleText - The text to display in the title.
  * @property {AppBarElevation} [elevation="raised"] - The elevation of the app bar.
  * @property {AppBarTheme} theme - The theme of the app bar.
  * @property {string} href - The href that will be used to make the logo and title area a clickable link.
  * @property {string} target - The `<a>` target of the logo + title area link when `href` is set.
+ * @property {AppBarThemeMode} [themeMode="inherit"] - Controls how the theme is applied. `inherit` will apply the global theme to the app bar and all child components. `scoped` will only apply the theme to the app bar and not set any global tokens.
  *
  * @attribute {string} title-text - The text to display in the title.
  * @attribute {string} [elevation="raised"] - The elevation of the app bar.
  * @attribute {string} theme - The theme of the app bar.
  * @attribute {string} href - The href that will be used to make the logo and title area a clickable link
  * @attribute {string} target - The `<a>` target of the logo + title area link when `href` is set.
+ * @attribute {string} [theme-mode="inherit"] - Controls how the theme is applied. `inherit` will apply the global theme to the app bar and all child components. `scoped` will only apply the theme to the app bar and not set any global tokens.
  *
  * @cssproperty --forge-app-bar-background - The background color of the app bar.
  * @cssproperty --forge-app-bar-foreground - The text color of the app bar.
+ * @cssproperty --forge-app-bar-theme-foreground - The text color of the app bar when using the **scoped theme mode**.
+ * @cssproperty --forge-app-bar-theme-foreground-muted - The muted text color of the app bar when using the **scoped theme mode**.
  * @cssproperty --forge-app-bar-z-index - The `z-index` of the app bar.
  * @cssproperty --forge-app-bar-elevation - The elevation of the app bar.
  * @cssproperty --forge-app-bar-height - The height of the app bar.
@@ -66,6 +71,8 @@ declare global {
  * @slot end - Places content at the end of the app bar.
  *
  * @cssclass forge-app-bar - The app bar container element _(required)_.
+ * @cssclass forge-app-bar--scoped - Sets the theme mode to scoped.
+ * @cssclass forge-app-bar-theme - Applies the scoped theme from the app bar to the element.
  * @cssclass forge-app-bar--raised - The app bar container element when raised.
  * @cssclass forge-app-bar__logo - The logo container element.
  * @cssclass forge-app-bar__title - The title container element.
@@ -85,7 +92,8 @@ export class AppBarComponent extends BaseComponent implements IAppBarComponent {
       APP_BAR_CONSTANTS.attributes.ELEVATION,
       APP_BAR_CONSTANTS.attributes.THEME,
       APP_BAR_CONSTANTS.attributes.HREF,
-      APP_BAR_CONSTANTS.attributes.TARGET
+      APP_BAR_CONSTANTS.attributes.TARGET,
+      APP_BAR_CONSTANTS.attributes.THEME_MODE
     ];
   }
 
@@ -118,21 +126,27 @@ export class AppBarComponent extends BaseComponent implements IAppBarComponent {
       case APP_BAR_CONSTANTS.attributes.TARGET:
         this.target = newValue;
         break;
+      case APP_BAR_CONSTANTS.attributes.THEME_MODE:
+        this.themeMode = newValue as AppBarThemeMode;
+        break;
     }
   }
 
   @coreProperty()
-  public declare titleText: string;
+  declare public titleText: string;
 
   @coreProperty()
-  public declare elevation: AppBarElevation;
+  declare public elevation: AppBarElevation;
 
   @coreProperty()
-  public declare theme: AppBarTheme;
+  declare public theme: AppBarTheme;
 
   @coreProperty()
-  public declare href: string;
+  declare public href: string;
 
   @coreProperty()
-  public declare target: string;
+  declare public target: string;
+
+  @coreProperty()
+  declare public themeMode: AppBarThemeMode;
 }

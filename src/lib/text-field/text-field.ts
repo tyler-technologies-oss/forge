@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconClear } from '@tylertech/tyler-icons/standard';
+import { tylIconClear } from '@tylertech/tyler-icons';
 import { BASE_FIELD_CONSTANTS, FieldComponent } from '../field';
 import { BaseField, IBaseField } from '../field/base/base-field';
 import { IconRegistry } from '../icon';
@@ -30,7 +30,7 @@ declare global {
 /**
  * @tag forge-text-field
  *
- * @summary The Forge Text Field component wraps and styles an input or textarea element.
+ * @summary The Forge Text Field component is an input field used to capture user text input. It requires a child `<input>` or `<textarea>` element to function properly, and an optional `<label>` element can be used to provide a label for the `<input>`.
  *
  * @dependency forge-field
  * @dependency forge-icon-button
@@ -57,6 +57,7 @@ declare global {
  * @csspart support-text - The support text element.
  * @csspart support-text - The element containing the support text slot.
  * @csspart support-text-end - The element containing the support text end slot.
+ * @csspart outline - The element containing the forge-focus-indicator element.
  * @csspart focus-indicator - The focus indicator element.
  *
  * @slot - The default/unnamed slot for the field's input.
@@ -110,5 +111,5 @@ export class TextFieldComponent extends BaseField<TextFieldCore> implements ITex
   }
 
   @coreProperty()
-  public declare showClear: boolean;
+  declare public showClear: boolean;
 }

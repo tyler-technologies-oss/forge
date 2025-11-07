@@ -1,10 +1,10 @@
 import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { action } from '@storybook/addon-actions';
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { action } from 'storybook/actions';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconChevronRight, tylIconFavorite } from '@tylertech/tyler-icons/standard';
+import { tylIconChevronRight, tylIconFavorite } from '@tylertech/tyler-icons';
 
 import '@tylertech/forge/card';
 import '@tylertech/forge/button-area';
@@ -35,7 +35,7 @@ const meta = {
               <div id="button-heading">Heading</div>
               <div>Content</div>
             </div>
-            <forge-icon-button>
+            <forge-icon-button forge-ignore>
               <forge-icon role="img" name="favorite" aria-label="A heart graphic"></forge-icon>
             </forge-icon-button>
             <forge-tooltip>Favorite</forge-tooltip>

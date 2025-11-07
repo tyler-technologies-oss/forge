@@ -1,4 +1,4 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as TextFieldStories from './TextField.stories';
 
@@ -44,6 +44,21 @@ This variant positions the label to the left of the text field.
 ## Accessibility
 
 - Ensure that if you are not using a `<label>` element, you provide an `aria-label` or `aria-labelledby` attribute to the `<input>` element.
+
+### Required Field Markup
+
+To ensure proper validation and accessibility, apply the `required` attribute to both the `<forge-text-field>` component and its nested `<input>` element:
+
+- The `required` attribute on `<forge-text-field>` is **presentational**, used to display the required field indicator in the UI.
+- The `required` attribute on the nested `<input>` is **semantic**, enabling native form validation and improving accessibility support.
+
+**Example:**
+
+```html
+<forge-text-field required>
+  <input required />
+</forge-text-field>
+```
 
 ## CSS-Only
 

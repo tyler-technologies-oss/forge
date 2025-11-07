@@ -1,5 +1,4 @@
 import { defineCustomElement } from '@tylertech/forge-core';
-
 import { BadgeComponent } from './badge';
 
 export * from './badge-component-delegate';

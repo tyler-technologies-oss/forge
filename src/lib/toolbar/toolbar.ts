@@ -19,9 +19,7 @@ declare global {
 /**
  * @tag forge-toolbar
  *
- * @summary
- * Toolbars allow you to place titles and actions within a container and align them to the start, center, or end of the toolbar.
- * This component is useful as headers and footers within pages, dialogs, sections... etc. to ensure consistent layout and alignment.
+ * @summary Toolbars allow you to place titles and actions within a container and align them to the start, center, or end of the toolbar. This component is useful as headers and footers within pages, dialogs, sections... etc. to ensure consistent layout and alignment.
  *
  * @property {boolean} [inverted=false] - Controls whether a bottom divider (default) or top divider (true) is used.
  *

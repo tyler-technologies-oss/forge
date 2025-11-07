@@ -108,6 +108,40 @@ describe('Drawer', () => {
     expect(harness.drawerEl.open).to.be.false;
     expect(spy.calledOnce).to.be.true;
   });
+
+  it('should set inert when closed', async () => {
+    const harness = await createFixture({ open: false });
+
+    expect(harness.isInert).to.be.true;
+  });
+
+  it('should not be inert when open', async () => {
+    const harness = await createFixture({ open: true });
+
+    expect(harness.isInert).to.be.false;
+  });
+
+  it('should remove inert when opening', async () => {
+    const harness = await createFixture({ open: false });
+
+    expect(harness.isInert).to.be.true;
+
+    harness.drawerEl.open = true;
+    await elementUpdated(harness.drawerEl);
+
+    expect(harness.isInert).to.be.false;
+  });
+
+  it('should set inert when closing', async () => {
+    const harness = await createFixture({ open: true });
+
+    expect(harness.isInert).to.be.false;
+
+    harness.drawerEl.open = false;
+    await elementUpdated(harness.drawerEl);
+
+    expect(harness.isInert).to.be.true;
+  });
 });
 
 class DrawerHarness {
@@ -125,6 +159,10 @@ class DrawerHarness {
     return new Promise(resolve => {
       this._rootElement.addEventListener('transitionend', () => resolve(), { once: true });
     });
+  }
+
+  public get isInert(): boolean {
+    return this._rootElement.inert;
   }
 }
 

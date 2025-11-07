@@ -21,8 +21,8 @@ import type { IListDropdownOption } from '@tylertech/forge/list-dropdown';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ITabBarComponent } from '@tylertech/forge/tabs';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
-import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import {
+  tylIconForgeLogo,
   tylIconAssignment,
   tylIconClose,
   tylIconHelpOutline,
@@ -31,8 +31,9 @@ import {
   tylIconStars,
   tylIconWarning,
   tylIconWorkOutline,
-  tylIconKeyboardVoice
-} from '@tylertech/tyler-icons/standard';
+  tylIconKeyboardVoice,
+  tylIconArrowDropDownCircle
+} from '@tylertech/tyler-icons';
 import { ToastComponent } from '@tylertech/forge/toast';
 
 IconRegistry.define([
@@ -45,7 +46,8 @@ IconRegistry.define([
   tylIconWorkOutline,
   tylIconWarning,
   tylIconSettings,
-  tylIconKeyboardVoice
+  tylIconKeyboardVoice,
+  tylIconArrowDropDownCircle
 ]);
 
 const appBar = document.querySelector('forge-app-bar#forge-app-bar-example') as IAppBarComponent;
@@ -73,6 +75,11 @@ appBarMenuButton.addEventListener('click', ({ detail }) => {
 appBarSearch.addEventListener('forge-app-bar-search-input', ({ detail }) => {
   console.log('[forge-app-bar-search] ', detail);
   ToastComponent.present({ message: `Search text: ${detail.value}` });
+});
+
+const themeModeSelect = document.querySelector('#opt-theme-mode') as ISelectComponent;
+themeModeSelect.addEventListener('change', () => {
+  appBar.themeMode = themeModeSelect.value;
 });
 
 const themeSelect = document.querySelector('#opt-theme') as ISelectComponent;
@@ -118,9 +125,10 @@ function buildListItemElement(text: string, icon: string, value: string): HTMLEl
   iconElement.name = icon;
   listItemElement.appendChild(iconElement);
 
-  const textElement = document.createElement('span');
-  textElement.innerText = text;
-  listItemElement.appendChild(textElement);
+  const buttonElement = document.createElement('button');
+  buttonElement.type = 'button';
+  buttonElement.textContent = text;
+  listItemElement.appendChild(buttonElement);
 
   return listItemElement;
 }

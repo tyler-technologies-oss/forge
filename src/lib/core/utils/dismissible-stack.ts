@@ -11,8 +11,14 @@ export interface IDismissibleStackState<T = string> {
   [key: string]: T;
 }
 
-export interface IDismissible {
+export interface IDismissible extends HTMLElement {
   [tryDismiss](state?: IDismissibleStackState): boolean;
+}
+
+declare global {
+  interface Window {
+    [DISMISSIBLE_STACK_INSTANCE_KEY]: DismissibleStack<IDismissible>;
+  }
 }
 
 export class DismissibleStack<T extends IDismissible> {
@@ -44,7 +50,6 @@ export class DismissibleStack<T extends IDismissible> {
    */
   private _elementsRequestingDismiss = new Map<T, IDismissibleStackState | undefined>();
 
-  // eslint-disable-next-line @tylertech-eslint/require-private-modifier
   private constructor() {}
 
   public static get instance(): DismissibleStack<IDismissible> {
@@ -57,13 +62,16 @@ export class DismissibleStack<T extends IDismissible> {
   }
 
   /**
-   * Dismisses all elements in the stack that have been presented after the provided element.
+   * Dismisses all elements in the stack that are descendants and have been presented after the provided element.
    * @param el The element to dismiss
    * @param state The state to pass to the dismiss method of each element
    */
   public async dismiss(el: T, state: IDismissibleStackState): Promise<void> {
-    const elements = Array.from(this._dismissibleElements);
-    const elementsAfter = elements.slice(elements.indexOf(el)).reverse();
+    const elements = DismissibleStack.instance.getAll();
+    const elementsAfter = elements
+      .slice(elements.indexOf(el))
+      .filter(element => element === el || element.contains(el))
+      .reverse();
     for (const element of elementsAfter) {
       if (!element[tryDismiss](state)) {
         break;
@@ -159,5 +167,13 @@ export class DismissibleStack<T extends IDismissible> {
   public isMostRecent(el: T): boolean {
     const elements = Array.from(this._dismissibleElements);
     return elements[elements.length - 1] === el;
+  }
+
+  /**
+   * Gets all elements in the dismissible queue.
+   * @returns An array of all elements in the dismissible queue.
+   */
+  public getAll(): T[] {
+    return Array.from(this._dismissibleElements);
   }
 }

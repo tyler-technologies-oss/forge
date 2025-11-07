@@ -14,6 +14,7 @@ export default function forgeMemberDenyListPlugin() {
     'formAssociated',
     'form',
     'labels',
+    'setFormValue',
     '_core',
     '_internals'
   ];
@@ -41,24 +42,21 @@ export default function forgeMemberDenyListPlugin() {
       classes?.forEach(klass => (klass.members = klass?.members?.filter(deny(GENERAL_MEMBER_DENY_LIST))));
 
       // LitElement classes
-      const litElementClasses = classes?.filter(klass => klass.superclass?.name === 'LitElement');
+      const litElementClasses = classes?.filter(klass => klass.superclass?.name === 'LitElement' || klass.superclass?.name === 'BaseLitElement');
       litElementClasses?.forEach(klass => (klass.members = klass?.members?.filter(deny(LIT_ELEMENT_MEMBER_DENY_LIST))));
     }
   };
 }
 
 function deny(denyList) {
-  return member => {
-    return (
-      member.name &&
-      !denyList.some(pattern => {
-        if (typeof pattern === 'string') {
-          return member.name === pattern;
-        } else if (pattern instanceof RegExp) {
-          return pattern.test(member.name);
-        }
-        return false;
-      })
-    );
-  };
+  return member =>
+    member.name &&
+    !denyList.some(pattern => {
+      if (typeof pattern === 'string') {
+        return member.name === pattern;
+      } else if (pattern instanceof RegExp) {
+        return pattern.test(member.name);
+      }
+      return false;
+    });
 }

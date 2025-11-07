@@ -10,18 +10,28 @@
 
 .forge-app-bar {
   @include core.tokens;
-  @include theme.provide(
+
+  @include core.provide-theme(
     (
-      primary: #{core.token(foreground)},
-      on-primary: rgba(black, color-emphasis.value(highest)),
-      text-high: rgba(white, color-emphasis.value(highest)),
-      text-medium: rgba(white, color-emphasis.value(medium)),
-      text-low: rgba(white, color-emphasis.value(medium-low)),
-      outline-high: rgba(white, color-emphasis.value(highest)),
-      outline-medium: rgba(white, color-emphasis.value(medium)),
-      outline-low: rgba(white, color-emphasis.value(medium-low))
+      theme-foreground: #{core.token(foreground)},
+      theme-foreground-muted: rgba(white, color-emphasis.value(medium))
     )
   );
+
+  &:not(.forge-app-bar--scoped) {
+    @include theme.provide(
+      (
+        primary: #{core.token(foreground)},
+        on-primary: rgba(black, color-emphasis.value(highest)),
+        text-high: rgba(white, color-emphasis.value(highest)),
+        text-medium: rgba(white, color-emphasis.value(medium)),
+        text-low: rgba(white, color-emphasis.value(medium-low)),
+        outline-high: rgba(white, color-emphasis.value(highest)),
+        outline-medium: rgba(white, color-emphasis.value(medium)),
+        outline-low: rgba(white, color-emphasis.value(medium-low))
+      )
+    );
+  }
 }
 
 .forge-app-bar {
@@ -41,6 +51,16 @@
   &:has(.forge-app-bar__section-end):not(:has(.forge-app-bar__section-center)) {
     grid-template-columns: 1fr auto;
     grid-template-areas: 'start end';
+  }
+
+  &--scoped {
+    color: inherit;
+
+    .forge-app-bar__logo,
+    .forge-app-bar__title h1,
+    .forge-app-bar__logo-title-container {
+      color: #{core.token(foreground)};
+    }
   }
 
   &--raised {
@@ -74,7 +94,7 @@
     @include focus-indicator.standalone($type: inward);
     @include focus-indicator.provide-theme(
       (
-        color: currentColor,
+        color: #{core.token(foreground)},
         offset-block: #{spacing.variable(xxsmall)},
         shape: #{shape.variable(medium)}
       )
@@ -91,7 +111,7 @@
       @include state-layer.standalone;
       @include state-layer.provide-theme(
         (
-          color: currentColor
+          color: #{core.token(foreground)}
         )
       );
     }
@@ -137,5 +157,15 @@
       grid-area: end;
       justify-content: end;
     }
+  }
+
+  .forge-app-bar-theme {
+    color: #{core.token(theme-foreground)};
+
+    @include focus-indicator.provide-theme(
+      (
+        color: #{core.token(theme-foreground)}
+      )
+    );
   }
 }

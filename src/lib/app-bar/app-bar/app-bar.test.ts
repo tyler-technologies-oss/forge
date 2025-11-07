@@ -8,6 +8,12 @@ import sinon from 'sinon';
 
 import './app-bar';
 
+declare global {
+  interface Window {
+    forgeAppBarAnchorTest?: () => void;
+  }
+}
+
 describe('App Bar', () => {
   it('should initialize', async () => {
     const el = await fixture<IAppBarComponent>(html`<forge-app-bar></forge-app-bar>`);
@@ -163,6 +169,24 @@ describe('App Bar', () => {
     expect(navigateSpy.calledOnce).to.be.true;
     expect(window['forgeAppBarAnchorTest']).to.be.undefined;
     expect(testSpy.calledOnce).to.be.false;
+  });
+
+  it('should disable global theme token cascade when using scoped theme mode', async () => {
+    const el = await fixture<IAppBarComponent>(html`<forge-app-bar></forge-app-bar>`);
+
+    const defaultStyle = getComputedStyle(el);
+    expect(defaultStyle.getPropertyValue('--forge-theme-primary')).to.equal('#ffffff');
+
+    expect(el.themeMode).to.equal('inherit');
+    expect(el.hasAttribute(APP_BAR_CONSTANTS.attributes.THEME_MODE)).to.be.false;
+
+    el.themeMode = 'scoped';
+
+    const noGlobalStyle = getComputedStyle(el);
+    expect(noGlobalStyle.getPropertyValue('--forge-theme-primary')).to.equal('');
+
+    expect(el.themeMode).to.equal('scoped');
+    expect(el.getAttribute(APP_BAR_CONSTANTS.attributes.THEME_MODE)).to.equal('scoped');
   });
 
   function getRootEl(el: IAppBarComponent): HTMLElement {

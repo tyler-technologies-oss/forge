@@ -1,7 +1,5 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumber } from '@tylertech/forge-core';
-import { tylIconDragVerticalVariant } from '@tylertech/tyler-icons/extended';
-import { tylIconDragHandle } from '@tylertech/tyler-icons/standard';
-
+import { tylIconDragHandle, tylIconDragVerticalVariant } from '@tylertech/tyler-icons';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { ISplitViewPanelOpenEvent, ISplitViewPanelWillResizeEvent, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { SplitViewPanelCore } from './split-view-panel-core';
@@ -9,11 +7,11 @@ import { SplitViewPanelAdapter } from './split-view-panel-adapter';
 import { ISplitViewUpdateConfig } from '../split-view/split-view-constants';
 import { ISplitViewBase } from '../core/split-view-base';
 import { IconComponent, IconRegistry } from '../../icon';
+import { StateLayerComponent } from '../../state-layer';
+import { FocusIndicatorComponent } from '../../focus-indicator';
 
 import template from './split-view-panel.html';
 import styles from './split-view-panel.scss';
-import { StateLayerComponent } from '../../state-layer';
-import { FocusIndicatorComponent } from '../../focus-indicator';
 
 export interface ISplitViewPanelComponent extends Partial<ISplitViewBase>, IBaseComponent {
   resizable: SplitViewPanelResizable;
@@ -47,6 +45,8 @@ declare global {
 
 /**
  * @tag forge-split-view-panel
+ *
+ * @summary Individual panels within split views that can be resized and collapsed.
  *
  * @dependency forge-icon
  * @dependency forge-state-layer

@@ -35,6 +35,8 @@ declare global {
 
 /**
  * @tag forge-select-dropdown
+ *
+ * @summary A dropdown variant of the select component that renders options in a popover.
  */
 @customElement({
   name: SELECT_DROPDOWN_CONSTANTS.elementName,
@@ -89,13 +91,13 @@ export class SelectDropdownComponent extends BaseSelectComponent<SelectDropdownC
 
   /** Sets the target element CSS selector */
   @coreProperty()
-  public declare target: string;
+  declare public target: string;
 
   /** Sets the selected text element CSS selector */
   @coreProperty()
-  public declare selectedTextTarget: string;
+  declare public selectedTextTarget: string;
 
   /** Controls whether the selected text is synchronized to the target elements' text content. Default is false. */
   @coreProperty()
-  public declare syncSelectedText: boolean;
+  declare public syncSelectedText: boolean;
 }

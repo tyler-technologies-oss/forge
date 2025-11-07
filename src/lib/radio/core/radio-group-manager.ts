@@ -1,6 +1,7 @@
 import { getValidationMessage, internals, isFocusable, setDefaultAria } from '../../constants';
 import { task } from '../../core/utils/utils';
 import { IRadioComponent, RADIO_CONSTANTS, tryCheck } from '../radio';
+import { IRadioGroupComponent } from '../radio-group';
 
 /**
  * A class for coordinating the states of radio components within a radio group.
@@ -47,7 +48,7 @@ export class RadioGroupManager {
     // When there is a form element, get all RadioComponents with the same name
     const formRadios = ((el.form ?? form) as HTMLFormElement).elements.namedItem(el.name);
     if (formRadios && Object.prototype.isPrototypeOf.call(RadioNodeList.prototype, formRadios)) {
-      return Array.from(formRadios as RadioNodeList).filter((radio: HTMLElement) => radio.matches(RADIO_CONSTANTS.elementName)) as IRadioComponent[];
+      return Array.from(formRadios as RadioNodeList).filter((radio: HTMLElement) => radio.matches(RADIO_CONSTANTS.elementName)) as unknown as IRadioComponent[];
     }
     return [el];
   }
@@ -104,7 +105,7 @@ export class RadioGroupManager {
    * @param el A radio component within the group.
    * @returns The radio group element containing the given radio component or null if there is none.
    */
-  public static getRadioGroupElement(el: IRadioComponent): HTMLElement | null {
+  public static getRadioGroupElement(el: IRadioComponent): IRadioGroupComponent | null {
     return el.closest(`:is(fieldset, [role=radiogroup], forge-radio-group)`);
   }
 

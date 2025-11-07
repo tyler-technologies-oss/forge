@@ -26,6 +26,8 @@ declare global {
 }
 
 /**
+ * @summary A specialized input field component that allows users to create and manage a collection of chips representing text values or selections. Use a chip field when you want to allow users to input multiple discrete items, such as tags, categories, or selections from a predefined list. Prefer alternatives such as a select or autocomplete when dealing with a large number of options or when single selection is sufficient.
+ *
  * @tag forge-chip-field
  *
  * @property {boolean} [addOnBlur=false] - Whether or not to add chip when blur event
@@ -73,7 +75,7 @@ export class ChipFieldComponent extends BaseField<ChipFieldCore> implements IChi
   }
 
   @coreProperty()
-  public declare addOnBlur: boolean;
+  declare public addOnBlur: boolean;
 
   public get popoverTargetElement(): HTMLElement {
     return this._core.popoverTargetElement;

@@ -245,6 +245,7 @@ export class TableCore implements ITableCore {
       // Now we can add/remove the column
       this._adapter.setSelectColumnVisibility(
         this._adapter.getTableElement(),
+        this._dense,
         this._select,
         this._selectRowListener,
         this._multiselect ? this._selectAllListener : undefined,
@@ -277,6 +278,7 @@ export class TableCore implements ITableCore {
       if (this._select) {
         this._adapter.setSelectAllVisibility(
           this._adapter.getTableElement(),
+          this._dense,
           this._multiselect,
           this._multiselect ? this._selectAllListener : null,
           this._multiselect ? this.selectAllTemplate : null,
@@ -600,9 +602,11 @@ export class TableCore implements ITableCore {
    * Creates and renders the table with the current column configuration and data.
    */
   public render(): void {
+    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.BEFORE_BODY_RENDERED, undefined, false);
     this._adapter.createTable(this._tableConfiguration);
     this._renderSelections();
     this._rendered = true;
+    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.BODY_RENDERED, undefined, false);
   }
 
   /**
@@ -612,8 +616,10 @@ export class TableCore implements ITableCore {
     if (!this._rendered) {
       return;
     }
+    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.BEFORE_BODY_RENDERED, undefined, false);
     this._adapter.recreateTableBody(this._tableConfiguration);
     this._renderSelections();
+    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.BODY_RENDERED, undefined, false);
   }
 
   private _renderSelections(): void {
@@ -710,8 +716,6 @@ export class TableCore implements ITableCore {
     if (isAllSelected !== this._isAllSelected || this._isIndeterminate(isAllSelected)) {
       this._isAllSelected = isAllSelected;
 
-      // (derek.moss): while writting test it seemed like this could never be false.
-      // maybe an unneeded check
       if (this._multiselect) {
         this._adapter.updateSelectAllState(this._adapter.getTableElement(), this._isAllSelected, this._isIndeterminate(this._isAllSelected));
       }
@@ -762,6 +766,17 @@ export class TableCore implements ITableCore {
    * Handles a row being selected/deselected.
    */
   private _onRowSelected(evt: Event): void {
+    // We handle row selection manually with either a pointerdown or keydown event (space key), so we listen
+    // for the change event as well to prevent checking the checkbox being checked by the time the event reaches us
+    if (evt.type === 'change') {
+      evt.preventDefault();
+      return;
+    }
+
+    if (evt.type === 'keydown' && (evt as KeyboardEvent).key !== ' ') {
+      return;
+    }
+
     const rowSelectedInfo = this._getSelectedRowFromEvent(evt);
 
     // Deselect the previously selected row(s) when not in multiselect mode (only if it's different than the newly selected row)
@@ -799,6 +814,7 @@ export class TableCore implements ITableCore {
       const shift = (evt as KeyboardEvent).shiftKey;
 
       if (shift && this._previouslyClickedRow) {
+        document.getSelection()?.removeAllRanges();
         selectionIndexes = this._shiftSelectRows(rowSelectedInfo);
         if (selectionIndexes.includes(this._previouslyClickedRow.index)) {
           const idx = selectionIndexes.indexOf(this._previouslyClickedRow.index);

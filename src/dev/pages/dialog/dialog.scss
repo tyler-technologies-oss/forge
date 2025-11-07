@@ -6,8 +6,7 @@
 dialog.forge-dialog:not(.forge-dialog--fullscreen),
 .dialog:not([fullscreen]) {
   forge-scaffold {
-    max-width: 500px;
-    height: auto;
+    width: 500px;
   }
 }
 

@@ -467,7 +467,7 @@ describe('ColorPickerComponent', function(this: ITestContext) {
         getGradientElement(this.context.component).dispatchEvent(new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
         getGradientElement(this.context.component).dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', keyCode: 40 } as Partial<KeyboardEventInit>));
 
-        expect(this.context.component.value).toBe('#020202');
+        expect(this.context.component.value).toBe('#fcfcfc');
       });
 
       it('when key up gets pressed after down it should change back to white', async function(this: ITestContext) {

@@ -1,10 +1,11 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconClose } from '@tylertech/tyler-icons';
 import { ButtonComponent } from '../button';
 import { setDefaultAria } from '../constants';
 import { BaseComponent } from '../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
+import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
 import { DialogComponent, dialogStack } from '../dialog';
 import { IconComponent, IconRegistry, IIconProperties } from '../icon';
 import { IconButtonComponent } from '../icon-button';
@@ -34,7 +35,7 @@ export interface IToastPresentConfiguration extends Partial<IToastProperties> {
   topLayer?: boolean;
 }
 
-export interface IToastComponent extends IToastProperties, IWithElementInternals, IWithDefaultAria {
+export interface IToastComponent extends IToastProperties, IWithElementInternals, IWithDefaultAria, IDismissible {
   show(): void;
   hide(): Promise<void>;
 }
@@ -53,7 +54,7 @@ declare global {
 /**
  * @tag forge-toast
  *
- * @summary Toasts are non-modal notifications that appear in response to user interactions.
+ * @summary Toasts are non-modal notifications that appear in response to user interactions. Use toasts to provide brief messages about app processes at the bottom or top of the screen. They automatically disappear after a timeout, but can also include an action button and a dismiss button.
  *
  * @dependency forge-overlay
  * @dependency forge-button
@@ -142,10 +143,11 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
       case TOAST_CONSTANTS.attributes.OPEN:
         this.open = coerceBoolean(newValue);
         break;
-      case TOAST_CONSTANTS.attributes.DURATION:
+      case TOAST_CONSTANTS.attributes.DURATION: {
         const value = Number(newValue);
         this.duration = value && value > 0 ? value : TOAST_CONSTANTS.defaults.DURATION;
         break;
+      }
       case TOAST_CONSTANTS.attributes.PLACEMENT:
         this.placement = (newValue as ToastPlacement) || TOAST_CONSTANTS.defaults.PLACEMENT;
         break;
@@ -165,25 +167,25 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
   }
 
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   @coreProperty()
-  public declare duration: number;
+  declare public duration: number;
 
   @coreProperty()
-  public declare placement: ToastPlacement;
+  declare public placement: ToastPlacement;
 
   @coreProperty()
-  public declare actionText: string;
+  declare public actionText: string;
 
   @coreProperty()
-  public declare dismissible: boolean;
+  declare public dismissible: boolean;
 
   @coreProperty()
-  public declare dismissLabel: string;
+  declare public dismissLabel: string;
 
   @coreProperty()
-  public declare theme: ToastTheme;
+  declare public theme: ToastTheme;
 
   /**
    * Shows the toast.
@@ -198,6 +200,15 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
    */
   public hide(): Promise<void> {
     return this._core.hide();
+  }
+
+  /**
+   * Attempts to dismiss the toast.
+   * @param state The dismiss state.
+   * @returns True if the toast was dismissed, false otherwise.
+   */
+  public [tryDismiss](state?: IDismissibleStackState): boolean {
+    return this._core[tryDismiss](state);
   }
 
   /**

@@ -3,7 +3,7 @@ import { APP_BAR_MENU_BUTTON_CONSTANTS } from './app-bar-menu-button-constants';
 import { IconButtonComponent, ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
 import { TooltipComponent } from '../../tooltip';
 import { IconRegistry, ICON_CONSTANTS, IIconComponent } from '../../icon';
-import { tylIconMenu } from '@tylertech/tyler-icons/standard';
+import { tylIconMenu } from '@tylertech/tyler-icons';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { forwardAttributes } from '../../core/utils/reflect-utils';
 
@@ -22,7 +22,7 @@ declare global {
 /**
  * @tag forge-app-bar-menu-button
  *
- * @description A utility component with predefined icon and descriptions for use in an app bar `start` slot.
+ * @summary A menu toggle button component with a predefined hamburger menu icon, typically used in an app bar's start slot to open navigation menus.
  *
  * @property {string} [icon=menu] - The name of an alternative icon to display.
  *

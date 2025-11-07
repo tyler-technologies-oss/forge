@@ -47,6 +47,7 @@ $tokens: (
   // Label
   gap: utils.module-val(switch, gap, 0),
   justify: utils.module-val(switch, justify, start),
+  align: utils.module-val(switch, align, center),
   direction: utils.module-val(switch, direction, initial),
   // State layer
   state-layer-width: utils.module-ref(switch, state-layer-width, state-layer-size),
@@ -57,7 +58,7 @@ $tokens: (
   state-layer-dense-width: utils.module-ref(switch, state-layer-dense-width, state-layer-dense-size),
   state-layer-dense-height: utils.module-ref(switch, state-layer-dense-height, state-layer-dense-size),
   // Disabled
-  disabled-opacity: utils.module-val(switch, disabled-opacity, theme.emphasis(medium-low)),
+  disabled-opacity: utils.module-val(switch, disabled-opacity, theme.emphasis(medium)),
   // Active
   handle-active-on-color: utils.module-ref(switch, handle-active-on-color, handle-on-color),
   handle-active-off-color: utils.module-ref(switch, handle-active-off-color, handle-off-color),

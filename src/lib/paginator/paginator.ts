@@ -1,5 +1,5 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumberArray, coerceNumber } from '@tylertech/forge-core';
-import { tylIconFirstPage, tylIconLastPage, tylIconKeyboardArrowRight, tylIconKeyboardArrowLeft } from '@tylertech/tyler-icons/standard';
+import { tylIconFirstPage, tylIconLastPage, tylIconKeyboardArrowRight, tylIconKeyboardArrowLeft } from '@tylertech/tyler-icons';
 import { PAGINATOR_CONSTANTS, IPaginatorChangeEventData, PaginatorRangeLabelBuilder } from './paginator-constants';
 import { PaginatorCore } from './paginator-core';
 import { PaginatorAdapter } from './paginator-adapter';
@@ -24,6 +24,14 @@ export interface IPaginatorComponent extends IBaseComponent {
   disabled: boolean;
   alternative: boolean;
   rangeLabelCallback: PaginatorRangeLabelBuilder;
+  goToFirstPage(): void;
+  goToPreviousPage(): void;
+  goToNextPage(): void;
+  goToLastPage(): void;
+  canGoToFirstPage(): boolean;
+  canGoToPreviousPage(): boolean;
+  canGoToNextPage(): boolean;
+  canGoToLastPage(): boolean;
 }
 
 declare global {
@@ -38,6 +46,16 @@ declare global {
 
 /**
  * @tag forge-paginator
+ *
+ * @summary Paginators provide navigation controls for dividing content across multiple pages. Typically used alongside data tables or lists.
+ *
+ * @slot label - Overrides the label text when in the default variant.
+ * @slot range-label - Overrides the default range label with a custom label when in the default variant.
+ * @slot alternative-range-label - Overrides the default range label with a custom label when in the `alternative` variant.
+ * @slot first-page-tooltip - Overrides the default tooltip for the first page button.
+ * @slot last-page-tooltip - Overrides the default tooltip for the last page button.
+ * @slot previous-page-tooltip - Overrides the default tooltip for the previous page button.
+ * @slot next-page-tooltip - Overrides the default tooltip for the next page button.
  *
  * @event {CustomEvent<IPaginatorChangeEventData>} forge-paginator-change - Dispatched when the paginator state changes.
  */
@@ -104,7 +122,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default 0
    */
   @coreProperty()
-  public declare pageIndex: number;
+  declare public pageIndex: number;
 
   /**
    * Number of items to display on a page.
@@ -112,7 +130,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default 25
    */
   @coreProperty()
-  public declare pageSize: number;
+  declare public pageSize: number;
 
   /**
    * Sets page index by providing the number of items to skip. The getter for this property returns the number of items to skip.
@@ -120,7 +138,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default 0
    */
   @coreProperty()
-  public declare offset: number;
+  declare public offset: number;
 
   /**
    * The total number of items to be paginated.
@@ -128,7 +146,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default 0;
    */
   @coreProperty()
-  public declare total: number;
+  declare public total: number;
 
   /**
    * The set of provided page size options to display to the user.
@@ -136,7 +154,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default [5, 15, 25, 50, 100]
    */
   @coreProperty()
-  public declare pageSizeOptions: number[];
+  declare public pageSizeOptions: number[];
 
   /**
    * A label for the paginator.
@@ -144,7 +162,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default "Rows per page:"
    */
   @coreProperty()
-  public declare label: string;
+  declare public label: string;
 
   /**
    * Whether to show the first page and last page buttons.
@@ -152,7 +170,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default false
    */
   @coreProperty()
-  public declare firstLast: boolean;
+  declare public firstLast: boolean;
 
   /**
    * Whether to show the first page button. Default is false.
@@ -160,7 +178,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default false
    */
   @coreProperty()
-  public declare first: boolean;
+  declare public first: boolean;
 
   /**
    * Whether the paginator is disabled.
@@ -168,7 +186,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default false
    */
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   /**
    * Whether to use the alternative range label slot.
@@ -176,16 +194,68 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @default false
    */
   @coreProperty()
-  public declare alternative: boolean;
+  declare public alternative: boolean;
 
   /**
    * A callback function to build the range label dynamically.
    */
   @coreProperty()
-  public declare rangeLabelCallback: PaginatorRangeLabelBuilder;
+  declare public rangeLabelCallback: PaginatorRangeLabelBuilder;
 
   /** Sets focus to the first focusable element within the paginator. */
   public override focus(options?: FocusOptions): void {
     this._core.focus(options);
+  }
+
+  /** Navigates to the first page. */
+  public goToFirstPage(): void {
+    this._core.goToFirstPage();
+  }
+
+  /** Navigates to the previous page. */
+  public goToPreviousPage(): void {
+    this._core.goToPreviousPage();
+  }
+
+  /** Navigates to the next page. */
+  public goToNextPage(): void {
+    this._core.goToNextPage();
+  }
+
+  /** Navigates to the last page. */
+  public goToLastPage(): void {
+    this._core.goToLastPage();
+  }
+
+  /**
+   * Checks if navigation to the first page is possible.
+   * @returns True if can navigate to first page
+   */
+  public canGoToFirstPage(): boolean {
+    return this._core.canGoToFirstPage();
+  }
+
+  /**
+   * Checks if navigation to the previous page is possible.
+   * @returns True if can navigate to previous page
+   */
+  public canGoToPreviousPage(): boolean {
+    return this._core.canGoToPreviousPage();
+  }
+
+  /**
+   * Checks if navigation to the next page is possible.
+   * @returns True if can navigate to next page
+   */
+  public canGoToNextPage(): boolean {
+    return this._core.canGoToNextPage();
+  }
+
+  /**
+   * Checks if navigation to the last page is possible.
+   * @returns True if can navigate to last page
+   */
+  public canGoToLastPage(): boolean {
+    return this._core.canGoToLastPage();
   }
 }

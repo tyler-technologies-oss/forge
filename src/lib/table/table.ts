@@ -1,5 +1,5 @@
 import { coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconArrowDownward } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDownward } from '@tylertech/tyler-icons';
 import { ExpansionPanelComponent } from '../expansion-panel';
 import { CheckboxComponent } from '../checkbox';
 import { TableAdapter } from './table-adapter';
@@ -26,6 +26,7 @@ import {
   TableSelectTooltipCallback
 } from './types';
 import { TooltipComponent } from '../tooltip';
+import { FocusIndicatorComponent } from '../focus-indicator';
 
 export interface ITableComponent extends IBaseComponent {
   data: any[];
@@ -81,10 +82,14 @@ declare global {
     'forge-table-filter': CustomEvent<ITableFilterEventData>;
     'forge-table-initialized': CustomEvent<void>;
     'forge-table-column-resize': CustomEvent<ITableColumnResizeEventData>;
+    'forge-table-before-body-rendered': CustomEvent<void>;
+    'forge-table-body-rendered': CustomEvent<void>;
   }
 }
 
 /**
+ * @summary Tables are used to display sets of data. They organize information into rows and columns, making it easier to read, compare, and analyze. The Forge table provides a configuration-based approach to building data tables with means for sorting, filtering, selecting, and customizing the display of tabular data.
+ *
  * @tag forge-table
  *
  * @dependency forge-expansion-panel
@@ -100,12 +105,14 @@ declare global {
  * @event {CustomEvent<ITableFilterEventData>} forge-table-filter - Dispatched when a column is filtered. Only applies when `filter` is specified.
  * @event {CustomEvent<void>} forge-table-initialized - Dispatched when the table is initialized in the DOM for the first time.
  * @event {CustomEvent<ITableColumnResizeEventData>} forge-table-column-resize - Dispatched when a column is resized.
+ * @event {CustomEvent<void>} forge-table-before-body-rendered - Dispatched before the table body is rendered.
+ * @event {CustomEvent<void>} forge-table-body-rendered - Dispatched when the table body is rendered.
  *
  * @cssclass forge-data-table - The base table class.
  */
 @customElement({
   name: TABLE_CONSTANTS.elementName,
-  dependencies: [ExpansionPanelComponent, IconComponent, CheckboxComponent, TooltipComponent]
+  dependencies: [ExpansionPanelComponent, IconComponent, CheckboxComponent, TooltipComponent, FocusIndicatorComponent]
 })
 export class TableComponent extends BaseComponent implements ITableComponent {
   public static get observedAttributes(): string[] {
@@ -340,22 +347,22 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @default []
    */
   @coreProperty()
-  public declare data: any[];
+  declare public data: any[];
 
   /**
    * The column configuration options.
    * @default []
    */
   @coreProperty()
-  public declare columnConfigurations: IColumnConfiguration[];
+  declare public columnConfigurations: IColumnConfiguration[];
 
   /**
    * Controls the visibility of the select column.
-   * @default true
+   * @default false
    * @attribute
    */
   @coreProperty()
-  public declare select: boolean;
+  declare public select: boolean;
 
   /**
    * Controls the visibility of the select all checkbox (only applied when `select` is `true`).
@@ -363,28 +370,28 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @attribute
    */
   @coreProperty()
-  public declare multiselect: boolean;
+  declare public multiselect: boolean;
 
   /**
    * The row key for matching data to selections.
    * @attribute select-key
    */
   @coreProperty()
-  public declare selectKey: string | string[];
+  declare public selectKey: string | string[];
 
   /**
    * The tooltip to display when hovering over the select column.
    * @attribute tooltip-select
    */
   @coreProperty()
-  public declare tooltipSelect: string | TableSelectTooltipCallback;
+  declare public tooltipSelect: string | TableSelectTooltipCallback;
 
   /**
    * The tooltip to display when hovering over the select all checkbox.
    * @attribute tooltip-select-all
    */
   @coreProperty()
-  public declare tooltipSelectAll: string;
+  declare public tooltipSelectAll: string;
 
   /**
    * Controls whether the table is dense or not.
@@ -392,7 +399,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @attribute
    */
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   /**
    * Controls whether the table is roomy or not.
@@ -400,7 +407,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @attribute
    */
   @coreProperty()
-  public declare roomy: boolean;
+  declare public roomy: boolean;
 
   /**
    * Controls whether the table shows its column filter row.
@@ -408,7 +415,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @attribute
    */
   @coreProperty()
-  public declare filter: boolean;
+  declare public filter: boolean;
 
   /**
    * Controls whether the table applies fixed headers when in scroll containers.
@@ -416,7 +423,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @attribute fixed-headers
    */
   @coreProperty()
-  public declare fixedHeaders: boolean;
+  declare public fixedHeaders: boolean;
 
   /**
    * Controls the table layout algorithm.
@@ -424,7 +431,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @attribute layout-type
    */
   @coreProperty()
-  public declare layoutType: TableLayoutType;
+  declare public layoutType: TableLayoutType;
 
   /**
    * Controls whether the content in each cell wraps or not (true by default).
@@ -432,7 +439,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @attribute wrap-content
    */
   @coreProperty()
-  public declare wrapContent: boolean;
+  declare public wrapContent: boolean;
 
   /**
    * Controls whether the columns are resizable or not.
@@ -440,7 +447,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @attribute
    */
   @coreProperty()
-  public declare resizable: boolean;
+  declare public resizable: boolean;
 
   /**
    * Gets/sets the minimum width that a column can be resized to by the user dragging the resize handle.
@@ -448,7 +455,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @attribute min-resize-width
    */
   @coreProperty()
-  public declare minResizeWidth: number;
+  declare public minResizeWidth: number;
 
   /**
    * Gets/sets whether the rows respond to (and emit) row click events.
@@ -456,7 +463,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @attribute allow-row-click
    */
   @coreProperty()
-  public declare allowRowClick: boolean;
+  declare public allowRowClick: boolean;
 
   /**
    * Gets/sets whether the table supports multi-column sorting.
@@ -464,25 +471,25 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @attribute multi-column-sort
    */
   @coreProperty()
-  public declare multiColumnSort: boolean;
+  declare public multiColumnSort: boolean;
 
   /**
    * Callback for when a row is clicked. This allows for custom logic to run after each `<tr>` is created.
    */
   @coreProperty()
-  public declare rowCreated: TableRowCreatedCallback;
+  declare public rowCreated: TableRowCreatedCallback;
 
   /**
    * Callback for when a cell is clicked. This allows for custom logic to run after each `<td>` is created.
    */
   @coreProperty()
-  public declare cellCreated: TableCellCreatedCallback;
+  declare public cellCreated: TableCellCreatedCallback;
 
   /**
    * The template to use for the select all checkbox in the header.
    */
   @coreProperty()
-  public declare selectAllTemplate: TableHeaderSelectAllTemplate;
+  declare public selectAllTemplate: TableHeaderSelectAllTemplate;
 
   /**
    * Controls the alignment of the select checkbox.
@@ -490,5 +497,5 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    * @attribute select-checkbox-alignment
    */
   @coreProperty()
-  public declare selectCheckboxAlignment: `${CellAlign}`;
+  declare public selectCheckboxAlignment: `${CellAlign}`;
 }

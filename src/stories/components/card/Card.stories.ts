@@ -1,8 +1,8 @@
 import { html, nothing } from 'lit';
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, removeSourceStyleTagParams, standaloneStoryParams } from '../../utils';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconMoreVert } from '@tylertech/tyler-icons/standard';
+import { tylIconMoreVert } from '@tylertech/tyler-icons';
 import { storyStyles } from '../../decorators';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';

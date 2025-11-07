@@ -1,5 +1,5 @@
 import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/delegates/form-field-component-delegate';
-import { ITextFieldComponent, TextFieldComponentDelegate, ITextFieldComponentDelegateOptions } from '../text-field';
+import { TextFieldComponentDelegate } from '../text-field';
 import { IAutocompleteComponent } from './autocomplete';
 import { AUTOCOMPLETE_CONSTANTS } from './autocomplete-constants';
 import { IconComponentDelegate, IIconComponentDelegateConfig } from '../icon';

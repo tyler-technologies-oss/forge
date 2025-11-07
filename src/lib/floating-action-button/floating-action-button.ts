@@ -27,7 +27,7 @@ declare global {
 /**
  * @tag forge-fab
  *
- * @summary Floating action buttons are used to represent the most important action on a page.
+ * @summary Floating action buttons are used to represent the most important action on a page. They are typically used in mobile applications, and are positioned above other content in a way that draws attention to them.
  *
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
@@ -104,10 +104,6 @@ export class FloatingActionButtonComponent extends BaseButton<FloatingActionButt
     this._core = new FloatingActionButtonCore(new FloatingActionButtonAdapter(this));
   }
 
-  public disconnectedCallback(): void {
-    this._core.destroy();
-  }
-
   public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case FLOATING_ACTION_BUTTON_CONSTANTS.attributes.THEME:
@@ -124,11 +120,11 @@ export class FloatingActionButtonComponent extends BaseButton<FloatingActionButt
   }
 
   @coreProperty()
-  public declare theme: ButtonTheme;
+  declare public theme: ButtonTheme;
 
   @coreProperty()
-  public declare density: FloatingActionButtonDensity;
+  declare public density: FloatingActionButtonDensity;
 
   @coreProperty()
-  public declare elevation: FloatingActionButtonElevation;
+  declare public elevation: FloatingActionButtonElevation;
 }

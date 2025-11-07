@@ -1,4 +1,4 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as AppBarStories from './AppBar.stories';
@@ -23,13 +23,79 @@ The following example shows the usage of all of the common app bar elements plac
 
 <Canvas of={AppBarStories.Full} />
 
-## Themed
+## Theming
 
-The app bar can be themed by providing a `theme` attribute. By default it will automatically use the "brand" theme and apply the appropriate colors
-to itself and all slotted elements by overriding the global theme colors within the context of the app bar itself only.
+The app bar will automatically use the "brand" theme by default, and inherit global theme tokens to ensure child elements are styled accordingly. This handles the most
+common use cases, but you can also customize the app bar to use a different theme or adjust how its theme tokens are applied.
 
-> **Important:** This means that if you adjust the global theme variables for colors, the app bar will not be affected by those changes because it
-> has its own theming context.
+The important aspect of theming the app bar is to correctly style the sub-components that are placed within it. By default the app bar will set the `color` style
+that it expects, which will be inherited automatically by most child elements. This comes with the caveat that some child elements may inherit color styles incorrectly.
+This issue is most commonly seen with popovers and dialogs that placed as children within the app bar, and the global theme tokens may cascade to those elements causing
+problems with the colors.
+
+### Theme Mode
+
+The app bar has two theme modes:
+- `"inherit"` _(default)_: The app bar will inherit the global theme tokens and apply them to the app bar and its child elements.
+- `"scoped"`: The app bar will set its own theme tokens and scope them to the app bar only. No global theme tokens will be applied to the app bar or its child elements.
+
+To handle the problem where the global theme is cascading to child elements that you don't want to inherit the theme, you can set the `theme-mode` attribute on the app bar
+to `"scoped"`. This will ensure that the app bar's theme tokens are scoped to only the app bar, and switches the app bar to instead set scoped theme tokens for the child elements
+to optionally inherit.
+
+This fixes the problem of cascading global theme tokens to child elements, but you may potentially see another issue when doing this where certain elements placed directly in the app bar
+may no longer be inheriting the correct theme colors because this inheritance has been disabled. To fix this problem, Forge provides a `theme="app-bar"` attribute that can be set on
+the following child elements to allow for them to inherit the "scoped" theme tokens from the app bar:
+
+- `<forge-button>`
+- `<forge-icon-button>`
+- `<forge-tab-bar>`
+
+Example usage with `theme-mode="scoped"`:
+```html
+<forge-app-bar theme-mode="scoped">
+  <!-- Themed icon button -->
+  <forge-icon-button slot="end" theme="app-bar">
+    <forge-icon name="settings"></forge-icon>
+  </forge-icon-button>
+
+  <!-- Themed button -->
+  <forge-button slot="end" theme="app-bar">Profile</forge-button>
+
+  <!-- Theme tab bar -->
+  <forge-tab-bar slot="bottom" theme="app-bar">
+    <forge-tab selected>Tab 1</forge-tab>
+    <forge-tab>Tab 2</forge-tab>
+    <forge-tab>Tab 3</forge-tab>
+  </forge-tab-bar>
+</forge-app-bar>
+```
+
+Using the `theme="app-bar"` attribute will automatically set the correct colors for usage within a scoped app bar. Keep in mind that the following convenience components automatically set 
+this attribute for you, so you do not need to set it manually:
+
+- `<forge-app-bar-menu-button>`
+- `<forge-app-bar-help-button>`
+- `<forge-app-bar-profile-button>`
+- `<forge-app-bar-notification-button>`
+
+> **Note:** The `theme="app-bar"` attribute is only supported on a small subset of Forge components as noted above.
+>
+> If you are using a component that does not support this attribute, but would like it to inherit the scoped theme tokens, you will need to manually reference the app bar's scoped theme tokens:
+>
+> Available scoped tokens:
+> - `--forge-app-bar-theme-foreground`: The foreground color of the app bar theme.
+> - `--forge-app-bar-theme-background-muted`: A muted foreground color using the `medium` color emphasis.
+>
+> ```css
+> forge-app-bar forge-avatar {
+>   --forge-avatar-background: var(--forge-app-bar-theme-foreground);
+>   --forge-avatar-color: var(--forge-theme-text-high);
+> }
+> ```
+>
+> This will ensure that this component uses the correct colors for the app bar theme.
+  
 
 ### White Theme
 
@@ -38,13 +104,19 @@ white and the contrast/text color to black.
 
 <Canvas of={AppBarStories.WhiteTheme} />
 
+> **Note:** The sub-components will properly inherit the correct theme colors if using the `theme="app-bar"` attribute, and this can be used in conjunction with the `theme-mode="scoped"` attribute.
+
 ### Custom Theme
 
-You can also provide a custom theme by setting the `theme="custom"` attribute. This will disable any global auto-theming that is built-in to the app bar
-and allow you to provide your own fully custom styling. This also allows the global theme variables to cascade down into the app bar as they normally would
-because the app bar is no longer overriding the global theme variables.
+The app bar can also be themed using a custom theme by using the design tokens as CSS variables. This allows you to set the background color, text color, and
+other styles using to match your desired brand.
+
+In addition to the above, if you want to disable inheritance of global theme tokens you can set `theme-mode="scoped"`.
 
 <Canvas of={AppBarStories.CustomTheme} />
+
+> **Note:** To ensure that sub-components properly inherit your custom theme, you may either need to manually override their own component-specific design tokens, or
+> you can update the app bar theme design tokens as well to ensure they are inherited by all sub-components that use the `theme="app-bar"` attribute.
 
 ## API
 

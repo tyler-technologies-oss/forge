@@ -1,4 +1,4 @@
-import { CALENDAR_CONSTANTS, defineCalendarComponent, ICalendarComponent, ICalendarEvent, CALENDAR_MENU_CONSTANTS, CalendarView, ICalendarDateSelectEventData } from '@tylertech/forge/calendar';
+import { CALENDAR_CONSTANTS, defineCalendarComponent, ICalendarComponent, ICalendarEvent, CALENDAR_MENU_CONSTANTS, CalendarView, ICalendarDateSelectEventData, ICalendarCore } from '@tylertech/forge/calendar';
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
 import { task, frame } from '@tylertech/forge/core/utils/utils';
 import { getDateId } from '@tylertech/forge/calendar/calendar-dom-utils';
@@ -8,13 +8,16 @@ interface ITestContext {
   context: ITestCalendarContext;
 }
 
+type CalendarComponentCoreInternal = ICalendarCore & { _preventFocusListener: (e: MouseEvent) => void, _applyShowHeader: () => void };
+type CalendarComponentInternal = ICalendarComponent & { _core: CalendarComponentCoreInternal };
+
 interface ITestCalendarContext {
-  component: ICalendarComponent;
+  component: CalendarComponentInternal;
   destroy(): void;
 }
 
 interface ITestPartialCalendarContext {
-  component: ICalendarComponent;
+  component: CalendarComponentInternal;
   appendToFixture(): void;
   destroy(): void;
 }
@@ -225,14 +228,12 @@ describe('CalendarComponent', function(this: ITestContext) {
   });
 
   it('should show an additional events icon when more than three events are set on a date', function(this: ITestContext) {
-    const eventsCallback = (date: Date) => {
-      return [
+    const eventsCallback = (date: Date) => [
         {date, label: 'Test event', color: 'blue'},
         {date, label: 'Test event', color: 'light-green'},
         {date, label: 'Test event', color: 'cyan'},
         {date, label: 'Test event', color: 'teal'}
       ];
-    };
     this.context.component.eventBuilder = eventsCallback;
     expect(getFirstDate(this.context.component).querySelector(`.${CALENDAR_CONSTANTS.classes.EVENT_OVERFLOW}`)).toBeDefined();
   });
@@ -357,25 +358,19 @@ describe('CalendarComponent', function(this: ITestContext) {
     });
 
     it('should add events to dates when eventsCallback is set and return a single event', function(this: ITestContext) {
-      const eventsCallback = (date: Date) => {
-        return {date, label: 'Test event', color: 'blue'};
-      };
+      const eventsCallback = (date: Date) => ({date, label: 'Test event', color: 'blue'});
       this.context.component.eventBuilder = eventsCallback;
       expect(getFirstDate(this.context.component).querySelector(`.${CALENDAR_CONSTANTS.classes.EVENT}`)).toBeDefined();
     });
 
     it('should add events to dates when eventsCallback is set and return an array of events', function(this: ITestContext) {
-      const eventsCallback = (date: Date) => {
-        return [{date, label: 'Test event', color: 'blue'}];
-      };
+      const eventsCallback = (date: Date) => [{date, label: 'Test event', color: 'blue'}];
       this.context.component.eventBuilder = eventsCallback;
       expect(getFirstDate(this.context.component).querySelector(`.${CALENDAR_CONSTANTS.classes.EVENT}`)).toBeDefined();
     });
 
     it('should add no events when eventsCallback is set and returns no events', function(this: ITestContext) {
-      const eventsCallback = (date: Date) => {
-        return null;
-      };
+      const eventsCallback = (date: Date) => null;
       this.context.component.eventBuilder = eventsCallback;
       expect(getFirstDate(this.context.component).querySelectorAll(`.${CALENDAR_CONSTANTS.classes.EVENT}`).length).toBe(0);
     });
@@ -434,7 +429,7 @@ describe('CalendarComponent', function(this: ITestContext) {
     });
 
     it('should select the previous month when the left arrow button is clicked', function(this: ITestContext) {
-      let startMonth = this.context.component.month;
+      const startMonth = this.context.component.month;
 
       getPreviousButton(this.context.component).click();
 
@@ -442,7 +437,7 @@ describe('CalendarComponent', function(this: ITestContext) {
     });
 
     it('should select the next month when the right arrow button is clicked', function(this: ITestContext) {
-      let startMonth = this.context.component.month;
+      const startMonth = this.context.component.month;
 
       getNextButton(this.context.component).click();
 
@@ -570,10 +565,12 @@ describe('CalendarComponent', function(this: ITestContext) {
       expect(headerSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('should set active day when connecting if prevent focus is used', function(this: ITestContext) {
+    it('should set active day when connecting if prevent focus is used', async function(this: ITestContext) {
       const context = setupPartialTestContext();
       context.component.preventFocus = true;
       context.appendToFixture(); // Causes connectedCallback to run
+
+      await frame();
       const activeDay = getActiveDay(context.component);
 
       expect(activeDay).not.toBeNull();
@@ -741,7 +738,7 @@ describe('CalendarComponent', function(this: ITestContext) {
   function setupTestContext(): ITestCalendarContext {
     const fixture = document.createElement('div');
     fixture.id = 'calendar-test-fixture';
-    const component = document.createElement(CALENDAR_CONSTANTS.elementName);
+    const component = document.createElement(CALENDAR_CONSTANTS.elementName) as CalendarComponentInternal;
     fixture.appendChild(component);
     document.body.appendChild(fixture);
     return {
@@ -753,7 +750,7 @@ describe('CalendarComponent', function(this: ITestContext) {
   function setupPartialTestContext(): ITestPartialCalendarContext {
     const fixture = document.createElement('div');
     fixture.id = 'calendar-test-fixture';
-    const component = document.createElement(CALENDAR_CONSTANTS.elementName);
+    const component = document.createElement(CALENDAR_CONSTANTS.elementName) as CalendarComponentInternal;
     document.body.appendChild(fixture);
     return {
       component,

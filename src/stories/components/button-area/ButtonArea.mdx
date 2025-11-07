@@ -1,4 +1,4 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as ButtonAreaStories from './ButtonArea.stories';
 
@@ -6,7 +6,41 @@ import * as ButtonAreaStories from './ButtonArea.stories';
 
 <Title />
 
+The button area is a container element for an interactive "area" of the page. It's common to make larger sections of the page (such as individual cards)
+interactive and respond to user pointer events. The button area provides an accessible way to do this.
+
+It works by wrapping the content you want to visually appear interactive, and then provide a slotted button element that will be used to control the
+interactive behavior while the state layer fills the parent container size. The `<button>` is visually hidden from the page, but it can still receive
+focus which the button area will handle and make it appear as if the full content is interactive to the user. When clicking anywhere in the button area,
+the component will dispatch a `click` event to the slotted `<button>` itself, allowing you to listen for the event and respond accordingly.
+
 <Canvas of={ButtonAreaStories.Demo} />
+
+## Using the `forge-ignore` attribute
+
+It is common to place multiple interactive elements within a `<forge-button-area>`. In these cases you will likely want to prevent the button area from
+responding when clicking those elements (or any elements within). To do this you can either listen for the click event yourself on the specific elements you care about
+and call `stopPropagation()` on the event, or you can use the `forge-ignore` attribute for convenience.
+
+```html
+<forge-button-area id="button-area">
+  <button slot="button" aria-labelledby="button-area-heading"></button>
+  <div style="display: flex; justify-content: space-between;">
+    <div>
+      <div class="forge-typography--heading4" id="button-area-heading">Heading</div>
+      <div>Content</div>
+    </div>
+
+    <!--
+      Using the forge-ignore attribute allows this element to be placed within the
+      button area content without interfering or triggering the main button interaction.
+    -->
+    <forge-icon-button forge-ignore>
+      <forge-icon name="favorite"></forge-icon>
+    </forge-icon-button>
+  </div>
+</forge-button-area>
+```
 
 ## API
 

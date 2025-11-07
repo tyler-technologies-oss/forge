@@ -4,6 +4,8 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}icon-b
 
 const observedAttributes = {
   TOGGLE: 'toggle',
+  PRESSED: 'pressed',
+  /** @deprecated use `PRESSED` instead. */
   ON: 'on',
   VARIANT: 'variant',
   THEME: 'theme',
@@ -36,6 +38,6 @@ export const ICON_BUTTON_CONSTANTS = {
 };
 
 export type IconButtonVariant = 'icon' | 'outlined' | 'tonal' | 'filled' | 'raised';
-export type IconButtonTheme = Theme | 'default';
+export type IconButtonTheme = Theme | 'default' | 'app-bar';
 export type IconButtonShape = 'circular' | 'squared';
 export type IconButtonDensity = Density;

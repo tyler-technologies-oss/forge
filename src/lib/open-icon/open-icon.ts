@@ -1,7 +1,7 @@
 import { customElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
-import { tylIconKeyboardArrowRight, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
+import { tylIconKeyboardArrowRight, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons';
 import { OpenIconOrientation, OpenIconRotation, OPEN_ICON_CONSTANTS } from './open-icon-constants';
-import { IconRegistry, IconComponent, ICON_CONSTANTS } from '../icon';
+import { IconRegistry, IconComponent } from '../icon';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './open-icon.html';
@@ -22,7 +22,8 @@ declare global {
 /**
  * @tag forge-open-icon
  *
- * @summary Open icons are used to indicate whether a section is open or closed.
+ * @summary Open icons are icons used to indicate whether a section is open or closed. They provide an animated transition between the two states to enhance the user experience.
+ 
  *
  * @property {boolean} [open=false] - Whether the icon is open or closed.
  * @property {OpenIconOrientation} [orientation=vertical] - The orientation of the rotation.

@@ -131,7 +131,9 @@ $_host-tokens: [indent dense-indent disabled-cursor];
 
 // Indented
 :host([indented]) {
-  @include indented;
+  .forge-list-item {
+    @include indented;
+  }
 }
 
 // Text container base
@@ -152,7 +154,7 @@ slot[name='tertiary-text'] {
 }
 
 // Button slotted elements
-::slotted(:is(button, [role='button'][tabindex], [forge-list-item-button])) {
+::slotted(:is(button:not([slot]), [forge-list-item-button])) {
   @include button;
 }
 
@@ -209,6 +211,10 @@ slot[name='tertiary-text'] {
 
   .text-container {
     @include text-container-wrap;
+  }
+
+  ::slotted(:is(button, [role='button'][tabindex], [forge-list-item-button])) {
+    @include button-wrap;
   }
 
   slot[name='secondary-text'],

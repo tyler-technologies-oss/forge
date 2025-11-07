@@ -169,13 +169,14 @@ export class TimePickerCore implements ITimePickerCore {
     if (evt.shiftKey) {
       switch (evt.code) {
         case 'Backspace':
-        case 'Delete':
+        case 'Delete': {
           evt.preventDefault();
           const result = this._trySetValue(null);
           if (result) {
             this._formatInputValue();
           }
           return;
+        }
       }
     }
 
@@ -240,7 +241,7 @@ export class TimePickerCore implements ITimePickerCore {
           this._adapter.propagateKey(evt.code);
         }
         break;
-      case 'KeyN':
+      case 'KeyN': {
         evt.preventDefault();
         const nowMillis = getCurrentTimeOfDayMillis(this._allowSeconds);
         if (this._value !== nowMillis) {
@@ -252,6 +253,7 @@ export class TimePickerCore implements ITimePickerCore {
           }
         }
         break;
+      }
     }
   }
 
@@ -465,10 +467,9 @@ export class TimePickerCore implements ITimePickerCore {
 
   private _validateMillis(millis: number | null | undefined): number | null | undefined {
     // Trap for min/max validation
-    if (typeof millis === 'number') {
-      const isBelowMin = typeof this._min === 'number' && millis < this._min;
-      const isAboveMax = typeof this._max === 'number' && millis > this._max;
-      if (isBelowMin || isAboveMax) {
+    if (typeof millis === 'number' && (typeof this._min === 'number' || typeof this._max === 'number')) {
+      const isInValidRange = this._isTimeInRange(millis, this._min, this._max);
+      if (!isInValidRange) {
         millis = null;
       }
     }
@@ -481,6 +482,37 @@ export class TimePickerCore implements ITimePickerCore {
     }
 
     return millis;
+  }
+
+  private _isTimeInRange(millis: number, min: number | null | undefined, max: number | null | undefined): boolean {
+    // If neither min nor max is set, everything is valid
+    if (typeof min !== 'number' && typeof max !== 'number') {
+      return true;
+    }
+
+    // If only min is set
+    if (typeof min === 'number' && typeof max !== 'number') {
+      return millis >= min;
+    }
+
+    // If only max is set
+    if (typeof max === 'number' && typeof min !== 'number') {
+      return millis <= max;
+    }
+
+    // Both min and max are set
+    if (typeof min === 'number' && typeof max === 'number') {
+      // Normal range: min <= max (e.g., 09:00 to 17:00)
+      if (min <= max) {
+        return millis >= min && millis <= max;
+      }
+      // Wrapped range: min > max (e.g., 23:30 to 06:00, crossing midnight)
+      else {
+        return millis >= min || millis <= max;
+      }
+    }
+
+    return true;
   }
 
   private _isValidTimeFormat(value: string): boolean {
@@ -640,9 +672,7 @@ export class TimePickerCore implements ITimePickerCore {
   }
 
   private _findClosestOptionIndex(value: number, options: Array<IListDropdownOption<ITimePickerOptionValue>>): number {
-    const closestItem = options.reduce((prev, curr) => {
-      return Math.abs((curr.value.time || 0) - value) < Math.abs((prev.value.time || 0) - value) ? curr : prev;
-    });
+    const closestItem = options.reduce((prev, curr) => (Math.abs((curr.value.time || 0) - value) < Math.abs((prev.value.time || 0) - value) ? curr : prev));
     return options.indexOf(closestItem);
   }
 
@@ -671,21 +701,50 @@ export class TimePickerCore implements ITimePickerCore {
     let leadingOptions: IListDropdownOption[] = [];
 
     if (this._showHourOptions) {
-      for (let totalMinutes = minMinutes; totalMinutes <= maxMinutes; totalMinutes += minuteStep) {
-        if (totalMinutes === TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES) {
-          break;
+      // Handle wrapped time ranges (e.g., 23:30 to 06:00)
+      const isWrappedRange = this._min != null && this._max != null && this._min > this._max;
+
+      if (isWrappedRange) {
+        // Generate times from min to end of day
+        for (let totalMinutes = minMinutes; totalMinutes < TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES; totalMinutes += minuteStep) {
+          const millis = minutesToMillis(totalMinutes);
+          const disabled = this._restrictedTimes.includes(millis);
+          const label = millisToTimeString(millis, this._use24HourTime, this._allowSeconds) || '';
+          const value: ITimePickerOptionValue = { time: millis };
+          times.push({ label, value, disabled });
         }
-        const millis = minutesToMillis(totalMinutes);
-        const disabled = this._restrictedTimes.includes(millis);
-        const label = millisToTimeString(millis, this._use24HourTime, false) || '';
-        const value: ITimePickerOptionValue = { time: millis };
-        times.push({ label, value, disabled });
+
+        // Generate times from start of day to max
+        for (let totalMinutes = 0; totalMinutes <= maxMinutes; totalMinutes += minuteStep) {
+          const millis = minutesToMillis(totalMinutes);
+          const disabled = this._restrictedTimes.includes(millis);
+          const label = millisToTimeString(millis, this._use24HourTime, this._allowSeconds) || '';
+          const value: ITimePickerOptionValue = { time: millis };
+          times.push({ label, value, disabled });
+        }
+      } else {
+        // Normal range or no range restrictions
+        const startMinutes = this._min != null ? minMinutes : 0;
+        const endMinutes = this._max != null ? maxMinutes : TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES;
+
+        for (let totalMinutes = startMinutes; totalMinutes <= endMinutes; totalMinutes += minuteStep) {
+          if (totalMinutes === TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES) {
+            break;
+          }
+          const millis = minutesToMillis(totalMinutes);
+          const disabled = this._restrictedTimes.includes(millis);
+          const label = millisToTimeString(millis, this._use24HourTime, this._allowSeconds) || '';
+          const value: ITimePickerOptionValue = { time: millis };
+          times.push({ label, value, disabled });
+        }
       }
 
-      // Add divider between AM/PM times
-      const firstPmIndex = times.findIndex(t => t.value.time / 1000 / 60 >= 720);
-      if (firstPmIndex >= 0 && firstPmIndex < times.length - 1) {
-        times.splice(firstPmIndex, 0, { label: '', value: null, divider: true });
+      // Add divider between AM/PM times (only for normal ranges)
+      if (!isWrappedRange) {
+        const firstPmIndex = times.findIndex(t => t.value.time / 1000 / 60 >= 720);
+        if (firstPmIndex >= 0 && firstPmIndex < times.length - 1) {
+          times.splice(firstPmIndex, 0, { label: '', value: null, divider: true });
+        }
       }
     }
 
@@ -854,11 +913,18 @@ export class TimePickerCore implements ITimePickerCore {
       this._min = this._convertTimeStringToMillis(value, true, this._allowSeconds);
 
       // Validate and reset our millis to ensure within range
+      const originalValue = this._value;
       const millis = this._validateMillis(this._value);
       this._setValue(millis);
 
       if (this._isInitialized) {
         this._applyValue(millis);
+
+        // Emit change event if the value was modified due to range validation
+        if (originalValue !== millis) {
+          const timeString = millisToTimeString(millis, true, this._allowSeconds);
+          this._emitChangeEvent(timeString);
+        }
       }
     }
   }
@@ -875,11 +941,18 @@ export class TimePickerCore implements ITimePickerCore {
       this._max = this._convertTimeStringToMillis(value, true, this._allowSeconds);
 
       // Validate and reset our millis to ensure within range
+      const originalValue = this._value;
       const millis = this._validateMillis(this._value);
       this._setValue(millis);
 
       if (this._isInitialized) {
         this._applyValue(millis);
+
+        // Emit change event if the value was modified due to range validation
+        if (originalValue !== millis) {
+          const timeString = millisToTimeString(millis, true, this._allowSeconds);
+          this._emitChangeEvent(timeString);
+        }
       }
     }
   }

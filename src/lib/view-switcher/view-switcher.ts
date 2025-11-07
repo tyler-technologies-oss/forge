@@ -24,9 +24,16 @@ declare global {
 }
 
 /**
+ * @summary A container component that manages switching between multiple child `<forge-view>` elements with configurable animations and programmatic navigation controls.
+ *
  * @tag forge-view-switcher
  *
  * @dependency forge-view
+ *
+ * @cssproperty --forge-view-switcher-height - The `height` of the view switcher.
+ * @cssproperty --forge-view-switcher-width - The `width` of the view switcher.
+ * @cssproperty --forge-view-switcher-animation-duration - The duration of view switching animations.
+ * @cssproperty --forge-view-switcher-animation-easing - The timing function of view switching animations.
  */
 @customElement({
   name: VIEW_SWITCHER_CONSTANTS.elementName,
@@ -70,7 +77,7 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
    * @attribute
    */
   @coreProperty()
-  public declare index: number;
+  declare public index: number;
 
   /**
    * Gets/sets the animation type.
@@ -78,7 +85,7 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
    * @attribute animation-type
    */
   @coreProperty()
-  public declare animationType: `${ViewSwitcherAnimationType}` | ViewSwitcherAnimation;
+  declare public animationType: `${ViewSwitcherAnimationType}` | ViewSwitcherAnimation;
 
   /** Transitions to the next view. */
   public next(): void {

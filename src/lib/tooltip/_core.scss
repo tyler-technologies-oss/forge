@@ -6,7 +6,6 @@
 
 @mixin host {
   display: contents;
-  pointer-events: none;
 }
 
 @mixin base {
@@ -27,7 +26,6 @@
 
   width: #{token(width)};
   max-width: #{token(max-width)};
-  pointer-events: none;
   text-align: #{token(content-align)};
   line-height: normal;
   white-space: normal;

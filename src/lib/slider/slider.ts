@@ -43,7 +43,7 @@ declare global {
 /**
  * @tag forge-slider
  *
- * @summary Sliders allow users to make selections from a range of values.
+ * @summary Sliders allow users to make selections from a range of values. You can use sliders for selecting values from either a continuous or discrete range, and they can also be used for selecting a single value or a range of values.
  *
  * @description Use sliders to enable users to select a value from a continuous or discrete range of values.
  *
@@ -299,47 +299,47 @@ export class SliderComponent extends BaseFormComponent<number> implements ISlide
   }
 
   @coreProperty()
-  public declare value: number;
+  declare public value: number;
 
   @coreProperty()
-  public declare valueStart: number;
+  declare public valueStart: number;
 
   @coreProperty()
-  public declare valueEnd: number;
+  declare public valueEnd: number;
 
   @coreProperty()
-  public declare label: string;
+  declare public label: string;
 
   @coreProperty()
-  public declare labelStart: string;
+  declare public labelStart: string;
 
   @coreProperty()
-  public declare labelEnd: string;
+  declare public labelEnd: string;
 
   @coreProperty()
-  public declare labelBuilder: SliderLabelBuilder;
+  declare public labelBuilder: SliderLabelBuilder;
 
   @coreProperty()
-  public declare min: number;
+  declare public min: number;
 
   @coreProperty()
-  public declare max: number;
+  declare public max: number;
 
   @coreProperty()
-  public declare step: number;
+  declare public step: number;
 
   @coreProperty()
-  public declare tickmarks: boolean;
+  declare public tickmarks: boolean;
 
   @coreProperty()
-  public declare labeled: boolean;
+  declare public labeled: boolean;
 
   @coreProperty()
-  public declare range: boolean;
+  declare public range: boolean;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare readonly: boolean;
+  declare public readonly: boolean;
 }

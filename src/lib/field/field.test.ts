@@ -15,6 +15,7 @@ import {
   FieldTheme,
   FieldVariant
 } from './base/base-field-constants';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 import './field';
 
@@ -649,22 +650,22 @@ async function createFixture({
 }: FieldFixtureConfig = {}): Promise<FieldHarness> {
   const el = await fixture<IFieldComponent>(html`
     <forge-field
-      .labelPosition=${labelPosition}
-      .labelAlignment=${labelAlignment}
-      .floatLabel=${floatLabel}
-      .invalid=${invalid}
-      .required=${required}
-      .optional=${optional}
-      .disabled=${disabled}
-      .variant=${variant}
-      .theme=${theme}
-      .shape=${shape}
-      .density=${density}
-      .dense=${dense}
-      .popoverIcon=${popoverIcon}
-      .popoverExpanded=${popoverExpanded}
-      .multiline=${multiline}
-      .supportTextInset=${supportTextInset}></forge-field>
+      label-position=${ifDefined(labelPosition)}
+      label-alignment=${ifDefined(labelAlignment)}
+      ?float-label=${floatLabel}
+      ?invalid=${invalid}
+      ?required=${required}
+      ?optional=${optional}
+      ?disabled=${disabled}
+      variant=${ifDefined(variant)}
+      theme=${ifDefined(theme)}
+      shape=${ifDefined(shape)}
+      density=${ifDefined(density)}
+      ?dense=${dense}
+      ?popover-icon=${popoverIcon}
+      ?popover-expanded=${popoverExpanded}
+      ?multiline=${multiline}
+      .supportTextInset=${supportTextInset ?? 'none'}></forge-field>
   `);
   return new FieldHarness(el);
 }

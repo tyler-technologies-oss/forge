@@ -1,5 +1,8 @@
 @use './core' as *;
+@use '../../app-bar/app-bar';
 @use '../../icon-button';
+@use '../tab';
+@use '../../core/styles/theme';
 
 //
 // Host
@@ -105,5 +108,26 @@ forge-icon-button {
 :host([clustered='end']) {
   .forge-tab-bar {
     @include override(justify, flex-end, value);
+  }
+}
+
+//
+// App Bar Theme
+//
+
+:host([theme='app-bar']) {
+  @include tab.provide-theme(
+    (
+      active-color: #{app-bar.token(theme-foreground)},
+      inactive-color: #{app-bar.token(theme-foreground-muted)}
+    )
+  );
+
+  forge-icon-button {
+    @include icon-button.provide-theme(
+      (
+        icon-color: #{app-bar.token(theme-foreground)}
+      )
+    );
   }
 }

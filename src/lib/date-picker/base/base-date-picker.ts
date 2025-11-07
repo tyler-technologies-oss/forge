@@ -1,16 +1,18 @@
-import { coerceBoolean, ensureChild, coreProperty, coerceNumberArray } from '@tylertech/forge-core';
+import { coerceBoolean, coerceNumberArray, coreProperty, ensureChild } from '@tylertech/forge-core';
 import { DayOfWeek } from '../../calendar/calendar-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
 import {
   BASE_DATE_PICKER_CONSTANTS,
+  DatePickerDateFormat,
   DatePickerFormatCallback,
   DatePickerParseCallback,
   DatePickerPrepareMaskCallback,
+  DatePickerShortcuts,
   DatePickerValueMode,
   IDatePickerCalendarDropdownText
 } from './base-date-picker-constants';
 import { BaseDatePickerCore } from './base-date-picker-core';
-import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
 
 export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
   value: TValue | null | undefined;
@@ -27,7 +29,9 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
   masked: boolean;
   maskFormat: string;
   showMaskFormat: boolean;
+  dateFormat: DatePickerDateFormat;
   valueMode: DatePickerValueMode;
+  shortcuts: DatePickerShortcuts;
   notifyInputValueChanges: boolean;
   allowInvalidDate: boolean;
   showToday: boolean;
@@ -58,9 +62,11 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
  * @property {DatePickerPrepareMaskCallback} prepareMaskCallback - The callback to use when altering default mask entry.
  * @property {boolean} [showClear=false] - Whether the clear button is visible in the popup.
  * @property {boolean} [showMaskFormat=false] - Whether the mask format is displayed in the input or not. Only applies if `masked` is `true`.
+ * @property {DatePickerDateFormat} [dateFormat='MM/DD/YYYY'] - The date format to use for the date picker.
  * @property {boolean} [showToday=false] - Whether the today button is visible in the popup.
  * @property {TValue} value - The value of the date picker.
  * @property {DatePickerValueMode} valueMode - The type for the `value` property and `forge-date-picker-change` event.
+ * @property {DatePickerShortcuts} shortcuts - The shortcuts to use for the date picker. Can be an object with key-value pairs where the key is the shortcut name and the value is a function that returns a `Date` object.
  * @property {string} yearRange - The year range.
  *
  * @attribute {boolean} [allow-invalid-date=false] - Whether to allow an invalid date to be input. When true, the date picker will not clear out the value of the input if the date was invalid (i.e. could not be parsed).
@@ -76,8 +82,10 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
  * @attribute {string} [popup-classes] - The CSS classes that are applied to the popup element.
  * @attribute {boolean} [show-clear=false] - Whether the clear button is visible in the popup.
  * @attribute {boolean} [show-mask-format=false] - Whether the mask format is displayed in the input or not. Only applies if `masked` is `true`.
+ * @attribute {DatePickerDateFormat} [date-format=MM/DD/YYYY] - The date format to use for the date picker.
  * @attribute {boolean} [show-today=false] - Whether the today button is visible in the popup.
  * @attribute {DatePickerValueMode} [value-mode=string] - The type for the `value` property and `forge-date-picker-change` event.
+ * @attribute {DatePickerShortcuts} shortcuts - When specifies as an attribute you can only use the `off` value to disable shortcuts. Otherwise, you can use the `shortcuts` property to set your own shortcuts.
  * @attribute {string} [year-range] - The year range.
  */
 export abstract class BaseDatePickerComponent<
@@ -131,11 +139,17 @@ export abstract class BaseDatePickerComponent<
       case BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT:
         this.showMaskFormat = coerceBoolean(newValue);
         break;
+      case BASE_DATE_PICKER_CONSTANTS.observedAttributes.DATE_FORMAT:
+        this.dateFormat = newValue as DatePickerDateFormat;
+        break;
       case BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASK_FORMAT:
         this.maskFormat = newValue;
         break;
       case BASE_DATE_PICKER_CONSTANTS.observedAttributes.VALUE_MODE:
         this.valueMode = newValue as DatePickerValueMode;
+        break;
+      case BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHORTCUTS:
+        this.shortcuts = newValue === 'off' ? {} : undefined;
         break;
       case BASE_DATE_PICKER_CONSTANTS.observedAttributes.ALLOW_INVALID_DATE:
         this.allowInvalidDate = coerceBoolean(newValue);
@@ -162,71 +176,77 @@ export abstract class BaseDatePickerComponent<
   }
 
   @coreProperty()
-  public declare value: TPublicValue | null | undefined;
+  declare public value: TPublicValue | null | undefined;
 
   @coreProperty()
-  public declare min: Date | string | null | undefined;
+  declare public min: Date | string | null | undefined;
 
   @coreProperty()
-  public declare max: Date | string | null | undefined;
+  declare public max: Date | string | null | undefined;
 
   @coreProperty()
-  public declare disabledDates: Date | Date[] | null | undefined;
+  declare public disabledDates: Date | Date[] | null | undefined;
 
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   @coreProperty()
-  public declare popupClasses: string | string[];
+  declare public popupClasses: string | string[];
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare masked: boolean;
+  declare public masked: boolean;
 
   @coreProperty()
-  public declare maskFormat: string;
+  declare public maskFormat: string;
 
   @coreProperty()
-  public declare showMaskFormat: boolean;
+  declare public showMaskFormat: boolean;
 
   @coreProperty()
-  public declare valueMode: DatePickerValueMode;
+  declare public dateFormat: DatePickerDateFormat;
 
   @coreProperty()
-  public declare notifyInputValueChanges: boolean;
+  declare public valueMode: DatePickerValueMode;
 
   @coreProperty()
-  public declare allowInvalidDate: boolean;
+  declare public shortcuts: DatePickerShortcuts;
 
   @coreProperty()
-  public declare showToday: boolean;
+  declare public notifyInputValueChanges: boolean;
 
   @coreProperty()
-  public declare showClear: boolean;
+  declare public allowInvalidDate: boolean;
 
   @coreProperty()
-  public declare parseCallback: DatePickerParseCallback;
+  declare public showToday: boolean;
 
   @coreProperty()
-  public declare formatCallback: DatePickerFormatCallback;
+  declare public showClear: boolean;
 
   @coreProperty()
-  public declare prepareMaskCallback: DatePickerPrepareMaskCallback;
+  declare public parseCallback: DatePickerParseCallback;
 
   @coreProperty()
-  public declare disabledDaysOfWeek: DayOfWeek[];
+  declare public formatCallback: DatePickerFormatCallback;
 
   @coreProperty()
-  public declare disableDayCallback: (date: Date) => boolean;
+  declare public prepareMaskCallback: DatePickerPrepareMaskCallback;
 
   @coreProperty()
-  public declare yearRange: string;
+  declare public disabledDaysOfWeek: DayOfWeek[];
 
   @coreProperty()
-  public declare locale: string | undefined;
+  declare public disableDayCallback: (date: Date) => boolean;
 
   @coreProperty()
-  public declare calendarText: IDatePickerCalendarDropdownText;
+  declare public yearRange: string;
+
+  @coreProperty()
+  declare public locale: string | undefined;
+
+  @coreProperty()
+  declare public calendarText: IDatePickerCalendarDropdownText;
 }

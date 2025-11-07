@@ -1,5 +1,5 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { getFormState, getFormValue, getValidationMessage, internals, isFocusable } from '../../constants';
+import { getFormState, getFormValue, getValidationMessage, internals } from '../../constants';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IButtonToggleComponent } from '../button-toggle/button-toggle';
 import { BUTTON_TOGGLE_CONSTANTS } from '../button-toggle/button-toggle-constants';
@@ -52,7 +52,6 @@ export class ButtonToggleGroupAdapter extends BaseAdapter<IButtonToggleGroupComp
   }
 
   public setDisabled(value: boolean): void {
-    this._component[isFocusable] = !value;
     const toggles = this._getButtonToggleElements();
     toggles.forEach(t => (t.disabled = value));
   }

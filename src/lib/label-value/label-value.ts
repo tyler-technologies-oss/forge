@@ -22,7 +22,7 @@ declare global {
 /**
  * @tag forge-label-value
  *
- * @summary Label-value pairs are used to display a label and a value in a compact format.
+ * @summary Label values are used to display a label and value pair in a compact format with the proper typography and spacing styles applied.
  *
  * @property {boolean} [empty=false] - If true, the value will be displayed in an alternative emphasized style.
  * @property {boolean} [ellipsis=false] - If true, the value will be truncated with an ellipsis if it overflows its container.

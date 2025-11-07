@@ -188,7 +188,7 @@ export class ColorPickerCore implements IColorPickerCore {
   private _render(): void {
     this._setGradientColor();
     this._adapter.setPreviewColor(formatRgba(this._rgba));
-    this._adapter.setHexInputValue(`#${this._hex}`);
+    this._adapter.setHexInputValue(formatHex(this._hex, this._allowOpacity));
     this._adapter.setRgbaInputValue(this._rgba);
     this._adapter.setHsvaInputValue(this._hsva);
     this._adapter.updateA11y(this._hsva.h, Math.round(this._hsva.a * 100));
@@ -213,20 +213,21 @@ export class ColorPickerCore implements IColorPickerCore {
   }
   public set value(value: string | null | undefined) {
     if (this._value !== value) {
-      this._value = value || DEFAULT_COLOR;
+      this._value = value ?? DEFAULT_COLOR;
 
       if (!isValidHex(this._value)) {
         throw new Error('Invalid hex value provided.');
       }
 
-      this._hex = this._value.replace(/^#/, '');
+      this._value = this._value.replace(/^#/, ''); // Normalize hex value by removing leading hash
+      this._hex = this._value;
       this._setColorFromHex();
       this._adapter.setHostAttribute(COLOR_PICKER_CONSTANTS.attributes.VALUE, this._value);
     }
   }
 
   public get rgba(): IRGBA | null | undefined {
-    return !!this._rgba ? { ...this._rgba } : null;
+    return this._rgba ? { ...this._rgba } : null;
   }
   public set rgba(value: IRGBA | null | undefined) {
     if (value) {
@@ -239,7 +240,7 @@ export class ColorPickerCore implements IColorPickerCore {
   }
 
   public get hsva(): IHSVA | null | undefined {
-    return !!this._hsva ? { ...this._hsva } : null;
+    return this._hsva ? { ...this._hsva } : null;
   }
   public set hsva(value: IHSVA | null | undefined) {
     if (value) {

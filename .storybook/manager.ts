@@ -1,4 +1,4 @@
-import { addons } from '@storybook/manager-api';
+import { addons } from 'storybook/manager-api';
 
 const banner = document.createElement('div');
 banner.classList.add('forge-docs-banner');

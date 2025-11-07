@@ -9,6 +9,7 @@ import { TOOLTIP_CONSTANTS } from './tooltip-constants';
 export interface ITooltipAdapter extends IBaseAdapter<ITooltipComponent> {
   readonly hostElement: ITooltipComponent;
   readonly anchorElement: HTMLElement | null;
+  readonly hasContent: boolean;
   syncAria(): void;
   detachAria(): void;
   setAnchorElement(element: HTMLElement | null): void;
@@ -17,6 +18,9 @@ export interface ITooltipAdapter extends IBaseAdapter<ITooltipComponent> {
   removeAnchorListener(type: string, listener: EventListener): void;
   addLightDismissListener(listener: EventListener): void;
   removeLightDismissListener(listener: EventListener): void;
+  addTooltipListener(type: string, listener: EventListener, opts?: AddEventListenerOptions): void;
+  removeTooltipListener(type: string, listener: EventListener): void;
+  isKeyboardFocused(): boolean;
   show(): void;
   hide(): void;
 }
@@ -24,6 +28,7 @@ export interface ITooltipAdapter extends IBaseAdapter<ITooltipComponent> {
 export class TooltipAdapter extends BaseAdapter<ITooltipComponent> implements ITooltipAdapter {
   private _contentElement: HTMLElement;
   private _arrowElement: HTMLElement;
+  private _defaultSlotElement: HTMLSlotElement;
   private _anchorElement: HTMLElement | null = null;
   private _overlayElement: IOverlayComponent | null = null;
 
@@ -31,10 +36,21 @@ export class TooltipAdapter extends BaseAdapter<ITooltipComponent> implements IT
     super(component);
     this._contentElement = getShadowElement(this._component, TOOLTIP_CONSTANTS.selectors.CONTENT);
     this._arrowElement = getShadowElement(this._component, TOOLTIP_CONSTANTS.selectors.ARROW);
+    this._defaultSlotElement = getShadowElement(this._component, TOOLTIP_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
   }
 
   public get anchorElement(): HTMLElement | null {
     return this._anchorElement;
+  }
+
+  /**
+   * Tooltips are considered to have content if the default slot has assigned nodes that
+   * are either elements, or text nodes with non-whitespace content.
+   */
+  public get hasContent(): boolean {
+    return this._defaultSlotElement
+      .assignedNodes({ flatten: true })
+      .some(node => node.nodeType === Node.ELEMENT_NODE || (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()));
   }
 
   public syncAria(): void {
@@ -97,6 +113,18 @@ export class TooltipAdapter extends BaseAdapter<ITooltipComponent> implements IT
 
   public removeLightDismissListener(listener: EventListener): void {
     this._overlayElement?.removeEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, listener);
+  }
+
+  public addTooltipListener(type: string, listener: EventListener, opts?: AddEventListenerOptions): void {
+    this.hostElement?.addEventListener(type, listener, opts);
+  }
+
+  public removeTooltipListener(type: string, listener: EventListener): void {
+    this.hostElement?.removeEventListener(type, listener);
+  }
+
+  public isKeyboardFocused(): boolean {
+    return !!this._anchorElement?.matches(':focus-visible');
   }
 
   public show(): void {

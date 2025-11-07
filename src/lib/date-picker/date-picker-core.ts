@@ -40,6 +40,7 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
 
   protected _onToday(): void {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     this._tryMergeCurrentTime(today);
     this._onDateSelected({ date: today, selected: true, type: 'date' });
   }
@@ -84,7 +85,7 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
 
     const formattedValue = this._formatDate(value);
 
-    this._adapter.setInputValue(formattedValue, this._notifyInputValueChanges);
+    this._adapter.setInputValue(formattedValue ?? '', this._notifyInputValueChanges);
     this._formatInputValue();
 
     if (!Platform.isMobile) {
@@ -96,7 +97,7 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
     super._openCalendar(emitOpenEvent);
 
     const currentValue = this._getCurrentValue();
-    if (!!currentValue) {
+    if (currentValue) {
       this._adapter.goToCalendarDate(new Date(currentValue));
     }
   }

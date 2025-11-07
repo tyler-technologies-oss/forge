@@ -6,86 +6,85 @@
  * License: Apache-2.0
  */
 
-import { defineCustomElements } from '@tylertech/forge-core';
-import { AccordionComponent } from './accordion';
+import { defineAccordionComponent } from './accordion';
 import {
-  AppBarComponent,
-  AppBarHelpButtonComponent,
-  AppBarMenuButtonComponent,
-  AppBarNotificationButtonComponent,
-  AppBarProfileButtonComponent,
-  AppBarSearchComponent,
-  ProfileCardComponent
+  defineAppBarComponent,
+  defineAppBarHelpButtonComponent,
+  defineAppBarMenuButtonComponent,
+  defineAppBarNotificationButtonComponent,
+  defineAppBarProfileButtonComponent,
+  defineAppBarSearchComponent,
+  defineProfileCardComponent
 } from './app-bar';
-import { AutocompleteComponent } from './autocomplete';
-import { AvatarComponent } from './avatar';
-import { BackdropComponent } from './backdrop';
-import { BadgeComponent } from './badge';
-import { BannerComponent } from './banner';
-import { BottomSheetComponent } from './bottom-sheet';
-import { ButtonComponent } from './button';
-import { ButtonAreaComponent } from './button-area';
-import { ButtonToggleComponent, ButtonToggleGroupComponent } from './button-toggle';
-import { CalendarComponent } from './calendar';
-import { CardComponent } from './card';
-import { CheckboxComponent } from './checkbox';
-import { ChipFieldComponent } from './chip-field';
-import { ChipComponent, ChipSetComponent } from './chips';
-import { CircularProgressComponent } from './circular-progress';
-import { ColorPickerComponent } from './color-picker';
-import { DatePickerComponent } from './date-picker';
-import { DateRangePickerComponent } from './date-range-picker';
-import { DialogComponent } from './dialog';
-import { DividerComponent } from './divider';
-import { DrawerComponent, MiniDrawerComponent, ModalDrawerComponent } from './drawer';
-import { ExpansionPanelComponent } from './expansion-panel';
-import { FieldComponent } from './field';
-import { FilePickerComponent } from './file-picker';
-import { FloatingActionButtonComponent } from './floating-action-button';
-import { FocusIndicatorComponent } from './focus-indicator';
-import { IconComponent } from './icon';
-import { IconButtonComponent } from './icon-button';
-import { InlineMessageComponent } from './inline-message';
-import { KeyComponent, KeyItemComponent } from './key';
-import { KeyboardShortcutComponent } from './keyboard-shortcut';
-import { LabelComponent } from './label';
-import { LabelValueComponent } from './label-value';
-import { LinearProgressComponent } from './linear-progress';
-import { ListComponent } from './list';
-import { ListItemComponent } from './list/list-item';
-import { MenuComponent } from './menu';
-import { MeterComponent, MeterGroupComponent } from './meter';
-import { OpenIconComponent } from './open-icon';
-import { OverlayComponent } from './overlay';
-import { PageStateComponent } from './page-state';
-import { PaginatorComponent } from './paginator';
-import { PopoverComponent } from './popover';
-import { RadioComponent, RadioGroupComponent } from './radio';
-import { ScaffoldComponent } from './scaffold';
-import { OptionComponent, OptionGroupComponent, SelectComponent } from './select';
-import { SelectDropdownComponent } from './select/select-dropdown';
-import { SkeletonComponent } from './skeleton';
-import { SkipLinkComponent } from './skip-link';
-import { SliderComponent } from './slider';
-import { SplitViewComponent } from './split-view';
-import { StackComponent } from './stack';
-import { StateLayerComponent } from './state-layer';
-import { StepComponent, StepperComponent } from './stepper';
-import { SwitchComponent } from './switch';
-import { TableComponent } from './table';
-import { TabBarComponent, TabComponent } from './tabs';
-import { TextFieldComponent } from './text-field';
-import { TimePickerComponent } from './time-picker';
-import { ToastComponent } from './toast';
-import { ToolbarComponent } from './toolbar';
-import { TooltipComponent } from './tooltip';
-import { ViewComponent, ViewSwitcherComponent } from './view-switcher';
+import { defineAutocompleteComponent } from './autocomplete';
+import { defineAvatarComponent } from './avatar';
+import { defineBackdropComponent } from './backdrop';
+import { defineBadgeComponent } from './badge';
+import { defineBannerComponent } from './banner';
+import { defineBottomSheetComponent } from './bottom-sheet';
+import { defineButtonComponent } from './button';
+import { defineButtonAreaComponent } from './button-area';
+import { defineButtonToggleComponent, defineButtonToggleGroupComponent } from './button-toggle';
+import { defineCalendarComponent } from './calendar';
+import { defineCardComponent } from './card';
+import { defineCheckboxComponent } from './checkbox';
+import { defineChipFieldComponent } from './chip-field';
+import { defineChipComponent, defineChipSetComponent } from './chips';
+import { defineCircularProgressComponent } from './circular-progress';
+import { defineColorPickerComponent } from './color-picker';
+import { defineDatePickerComponent } from './date-picker';
+import { defineDateRangePickerComponent } from './date-range-picker';
+import { defineDialogComponent } from './dialog';
+import { defineDividerComponent } from './divider';
+import { defineDrawerComponent, defineMiniDrawerComponent, defineModalDrawerComponent } from './drawer';
+import { defineExpansionPanelComponent } from './expansion-panel';
+import { defineFieldComponent } from './field';
+import { defineFilePickerComponent } from './file-picker';
+import { defineFloatingActionButtonComponent } from './floating-action-button';
+import { defineFocusIndicatorComponent } from './focus-indicator';
+import { defineIconComponent } from './icon';
+import { defineIconButtonComponent } from './icon-button';
+import { defineInlineMessageComponent } from './inline-message';
+import { defineKeyComponent, defineKeyItemComponent } from './key';
+import { defineKeyboardShortcutComponent } from './keyboard-shortcut';
+import { defineLabelComponent } from './label';
+import { defineLabelValueComponent } from './label-value';
+import { defineLinearProgressComponent } from './linear-progress';
+import { defineListComponent } from './list';
+import { defineListItemComponent } from './list/list-item';
+import { defineMenuComponent } from './menu';
+import { defineMeterComponent, defineMeterGroupComponent } from './meter';
+import { defineOpenIconComponent } from './open-icon';
+import { defineOverlayComponent } from './overlay';
+import { definePageStateComponent } from './page-state';
+import { definePaginatorComponent } from './paginator';
+import { definePopoverComponent } from './popover';
+import { defineRadioComponent, defineRadioGroupComponent } from './radio';
+import { defineScaffoldComponent } from './scaffold';
+import { defineOptionComponent, defineOptionGroupComponent, defineSelectComponent } from './select';
+import { defineSelectDropdownComponent } from './select/select-dropdown';
+import { defineSkeletonComponent } from './skeleton';
+import { defineSkipLinkComponent } from './skip-link';
+import { defineSliderComponent } from './slider';
+import { defineSplitViewComponent } from './split-view';
+import { defineStackComponent } from './stack';
+import { defineStateLayerComponent } from './state-layer';
+import { defineStepComponent, defineStepperComponent } from './stepper';
+import { defineSwitchComponent } from './switch';
+import { defineTableComponent } from './table';
+import { defineTabBarComponent, defineTabComponent } from './tabs';
+import { defineTextFieldComponent } from './text-field';
+import { defineTimePickerComponent } from './time-picker';
+import { defineToastComponent } from './toast';
+import { defineToolbarComponent } from './toolbar';
+import { defineTooltipComponent } from './tooltip';
+import { defineViewComponent, defineViewSwitcherComponent } from './view-switcher';
 
 /**
  * Deprecated imports
  */
-import { DeprecatedButtonComponent } from './deprecated/button';
-import { DeprecatedIconButtonComponent } from './deprecated/icon-button';
+import { defineDeprecatedButtonComponent } from './deprecated/button';
+import { defineDeprecatedIconButtonComponent } from './deprecated/icon-button';
 
 export * from './accordion';
 export * from './app-bar';
@@ -161,105 +160,100 @@ export * from './view-switcher';
 export * from './deprecated/button';
 export * from './deprecated/icon-button';
 
-const CUSTOM_ELEMENTS = [
-  AccordionComponent,
-  AppBarComponent,
-  AppBarHelpButtonComponent,
-  AppBarMenuButtonComponent,
-  AppBarNotificationButtonComponent,
-  AppBarProfileButtonComponent,
-  AppBarSearchComponent,
-  AutocompleteComponent,
-  AvatarComponent,
-  BackdropComponent,
-  BadgeComponent,
-  BannerComponent,
-  BottomSheetComponent,
-  ButtonAreaComponent,
-  ButtonComponent,
-  ButtonToggleComponent,
-  ButtonToggleGroupComponent,
-  CalendarComponent,
-  CardComponent,
-  CheckboxComponent,
-  ChipComponent,
-  ChipFieldComponent,
-  ChipSetComponent,
-  CircularProgressComponent,
-  ColorPickerComponent,
-  DatePickerComponent,
-  DateRangePickerComponent,
-  DialogComponent,
-  DividerComponent,
-  DrawerComponent,
-  ExpansionPanelComponent,
-  FieldComponent,
-  FilePickerComponent,
-  FloatingActionButtonComponent,
-  FocusIndicatorComponent,
-  IconButtonComponent,
-  IconComponent,
-  InlineMessageComponent,
-  KeyComponent,
-  KeyboardShortcutComponent,
-  KeyItemComponent,
-  LabelComponent,
-  LabelValueComponent,
-  LinearProgressComponent,
-  ListComponent,
-  ListItemComponent,
-  MenuComponent,
-  MeterComponent,
-  MeterGroupComponent,
-  MiniDrawerComponent,
-  ModalDrawerComponent,
-  OpenIconComponent,
-  OptionComponent,
-  OptionGroupComponent,
-  OverlayComponent,
-  PageStateComponent,
-  PaginatorComponent,
-  PopoverComponent,
-  ProfileCardComponent,
-  RadioComponent,
-  RadioGroupComponent,
-  ScaffoldComponent,
-  SelectComponent,
-  SelectDropdownComponent,
-  SkeletonComponent,
-  SkipLinkComponent,
-  SliderComponent,
-  SplitViewComponent,
-  StackComponent,
-  StateLayerComponent,
-  StepComponent,
-  StepperComponent,
-  SwitchComponent,
-  TabBarComponent,
-  TabComponent,
-  TableComponent,
-  TextFieldComponent,
-  TimePickerComponent,
-  ToastComponent,
-  ToolbarComponent,
-  TooltipComponent,
-  ViewComponent,
-  ViewSwitcherComponent
-];
-
 /**
  * Registers all components in the library with the browser.
  */
 export function defineComponents(): void {
-  defineCustomElements(CUSTOM_ELEMENTS);
+  defineAccordionComponent();
+  defineAppBarComponent();
+  defineAppBarHelpButtonComponent();
+  defineAppBarMenuButtonComponent();
+  defineAppBarNotificationButtonComponent();
+  defineAppBarProfileButtonComponent();
+  defineAppBarSearchComponent();
+  defineAutocompleteComponent();
+  defineAvatarComponent();
+  defineBackdropComponent();
+  defineBadgeComponent();
+  defineBannerComponent();
+  defineBottomSheetComponent();
+  defineButtonAreaComponent();
+  defineButtonComponent();
+  defineButtonToggleComponent();
+  defineButtonToggleGroupComponent();
+  defineCalendarComponent();
+  defineCardComponent();
+  defineCheckboxComponent();
+  defineChipComponent();
+  defineChipFieldComponent();
+  defineChipSetComponent();
+  defineCircularProgressComponent();
+  defineColorPickerComponent();
+  defineDatePickerComponent();
+  defineDateRangePickerComponent();
+  defineDialogComponent();
+  defineDividerComponent();
+  defineDrawerComponent();
+  defineExpansionPanelComponent();
+  defineFieldComponent();
+  defineFilePickerComponent();
+  defineFloatingActionButtonComponent();
+  defineFocusIndicatorComponent();
+  defineIconButtonComponent();
+  defineIconComponent();
+  defineInlineMessageComponent();
+  defineKeyComponent();
+  defineKeyboardShortcutComponent();
+  defineKeyItemComponent();
+  defineLabelComponent();
+  defineLabelValueComponent();
+  defineLinearProgressComponent();
+  defineListComponent();
+  defineListItemComponent();
+  defineMenuComponent();
+  defineMeterComponent();
+  defineMeterGroupComponent();
+  defineMiniDrawerComponent();
+  defineModalDrawerComponent();
+  defineOpenIconComponent();
+  defineOptionComponent();
+  defineOptionGroupComponent();
+  defineOverlayComponent();
+  definePageStateComponent();
+  definePaginatorComponent();
+  definePopoverComponent();
+  defineProfileCardComponent();
+  defineRadioComponent();
+  defineRadioGroupComponent();
+  defineScaffoldComponent();
+  defineSelectComponent();
+  defineSelectDropdownComponent();
+  defineSkeletonComponent();
+  defineSkipLinkComponent();
+  defineSliderComponent();
+  defineSplitViewComponent();
+  defineStackComponent();
+  defineStateLayerComponent();
+  defineStepComponent();
+  defineStepperComponent();
+  defineSwitchComponent();
+  defineTabBarComponent();
+  defineTabComponent();
+  defineTableComponent();
+  defineTextFieldComponent();
+  defineTimePickerComponent();
+  defineToastComponent();
+  defineToolbarComponent();
+  defineTooltipComponent();
+  defineViewComponent();
+  defineViewSwitcherComponent();
 }
 
 /**
  * Deprecated component registration
  */
 
-const DEPRECATED_CUSTOM_ELEMENTS = [DeprecatedButtonComponent, DeprecatedIconButtonComponent];
-
 export function defineDeprecatedComponents(): void {
-  defineCustomElements(DEPRECATED_CUSTOM_ELEMENTS);
+  defineDeprecatedButtonComponent();
+  defineDeprecatedIconButtonComponent();
 }

@@ -35,7 +35,6 @@ export class ButtonAreaCore implements IButtonAreaCore {
     this._adapter.removeContentSlotListener('pointerdown', this._ignoreStateLayerListener.bind(this));
     this._adapter.removeContentSlotListener('pointerup', this._ignoreStateLayerListener.bind(this));
     this._adapter.removeButtonSlotListener('slotchange', this._slotListener);
-    this._adapter.destroy();
     this._adapter.stopButtonObserver();
   }
 

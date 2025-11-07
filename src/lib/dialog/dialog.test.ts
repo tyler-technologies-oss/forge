@@ -1,22 +1,24 @@
 import { expect } from '@esm-bundle/chai';
-import { spy } from 'sinon';
-import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { sendKeys, sendMouse, setViewport } from '@web/test-runner-commands';
 import { getShadowElement } from '@tylertech/forge-core';
+import { sendKeys, sendMouse, setViewport } from '@web/test-runner-commands';
+import { nothing } from 'lit';
+import { spy } from 'sinon';
+import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
+import { frame, task } from '../core/utils/utils';
 import { IDialogComponent } from './dialog';
 import {
+  DIALOG_CONSTANTS,
   DialogAnimationType,
   DialogMode,
   DialogPlacement,
   DialogPositionStrategy,
   DialogPreset,
   DialogSizeStrategy,
-  DialogType,
-  DIALOG_CONSTANTS
+  DialogType
 } from './dialog-constants';
-import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
-import { task } from '../core/utils/utils';
+import { type DialogCore } from './dialog-core';
+import { type MoveController } from '../core/controllers/move-controller';
 
 import './dialog';
 
@@ -371,23 +373,74 @@ describe('Dialog', () => {
 
       await harness.showAsync();
 
+      expect(harness.nativeDialogElement.role).to.equal('alertdialog');
       await expect(harness.dialogElement).to.be.accessible();
     });
 
-    it('should not set role when role="presentation" is set', async () => {
-      const el = await fixture(html`<forge-dialog role="presentation"></forge-dialog>`);
+    it('should be accessible when mode is set to nonmodal', async () => {
+      const harness = await createFixture({ mode: 'nonmodal' });
 
-      expect(el.getAttribute('role')).to.equal('presentation');
-      expect(el.hasAttribute('aria-modal')).to.be.false;
-      await expect(el).to.be.accessible();
+      await harness.showAsync();
+
+      expect(harness.nativeDialogElement.getAttribute('aria-modal')).to.equal('false');
+      await expect(harness.dialogElement).to.be.accessible();
     });
 
-    it('should not set role when role="none" is set', async () => {
-      const el = await fixture(html`<forge-dialog role="none"></forge-dialog>`);
+    it('should be accessible when label is set', async () => {
+      const harness = await createFixture();
 
-      expect(el.getAttribute('role')).to.equal('none');
-      expect(el.hasAttribute('aria-modal')).to.be.false;
-      await expect(el).to.be.accessible();
+      await harness.showAsync();
+
+      const labelElement = harness.nativeDialogElement.querySelector(DIALOG_CONSTANTS.selectors.ACCESSIBLE_LABEL) as HTMLElement;
+
+      expect(labelElement).to.be.ok;
+      expect(labelElement.isConnected).to.be.true;
+      expect(labelElement.textContent).to.equal('My dialog title');
+      expect(labelElement.id).to.equal('forge-dialog-label');
+      expect(harness.nativeDialogElement.getAttribute('aria-labelledby')).to.equal('forge-dialog-label');
+      await expect(harness.dialogElement).to.be.accessible();
+    });
+
+    it('should be accessible when description is set', async () => {
+      const harness = await createFixture();
+
+      await harness.showAsync();
+
+      const descriptionElement = harness.nativeDialogElement.querySelector(DIALOG_CONSTANTS.selectors.ACCESSIBLE_DESCRIPTION) as HTMLElement;
+
+      expect(descriptionElement).to.be.ok;
+      expect(descriptionElement.isConnected).to.be.true;
+      expect(descriptionElement.textContent).to.equal('My dialog description');
+      expect(descriptionElement.id).to.equal('forge-dialog-description');
+      expect(harness.nativeDialogElement.getAttribute('aria-describedby')).to.equal('forge-dialog-description');
+      await expect(harness.dialogElement).to.be.accessible();
+    });
+
+    it('should not add multiple visually hidden elements when label or description is updated dynamically', async () => {
+      const harness = await createFixture();
+
+      await harness.showAsync();
+
+      const labelElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(DIALOG_CONSTANTS.selectors.ACCESSIBLE_LABEL);
+      const descriptionElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(DIALOG_CONSTANTS.selectors.ACCESSIBLE_DESCRIPTION);
+
+      expect(labelElements.length).to.equal(1);
+      expect(descriptionElements.length).to.equal(1);
+      expect(labelElements[0].textContent).to.equal('My dialog title');
+      expect(descriptionElements[0].textContent).to.equal('My dialog description');
+
+      harness.dialogElement.label = 'My new dialog title';
+      harness.dialogElement.description = 'My new dialog description';
+
+      await elementUpdated(harness.dialogElement);
+
+      const newLabelElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(DIALOG_CONSTANTS.selectors.ACCESSIBLE_LABEL);
+      const newDescriptionElements = harness.nativeDialogElement.querySelectorAll<HTMLElement>(DIALOG_CONSTANTS.selectors.ACCESSIBLE_DESCRIPTION);
+
+      expect(newLabelElements.length).to.equal(1);
+      expect(newDescriptionElements.length).to.equal(1);
+      expect(newLabelElements[0].textContent).to.equal('My new dialog title');
+      expect(newDescriptionElements[0].textContent).to.equal('My new dialog description');
     });
   });
 
@@ -459,6 +512,9 @@ describe('Dialog', () => {
     it('should close when button with formmethod="dialog" is clicked', async () => {
       const harness = await createFixture({ open: true });
 
+      const beforeCloseSpy = spy();
+      harness.dialogElement.addEventListener(DIALOG_CONSTANTS.events.BEFORE_CLOSE, beforeCloseSpy);
+
       const submitSpy = spy();
       const formEl = harness.dialogElement.querySelector('form') as HTMLFormElement;
       formEl.addEventListener('submit', submitSpy);
@@ -469,6 +525,8 @@ describe('Dialog', () => {
 
       expect(submitSpy).to.have.been.calledOnce;
       expect(harness.isOpen).to.be.false;
+      expect(beforeCloseSpy).to.have.been.calledOnce;
+      expect(beforeCloseSpy).to.have.been.calledWithMatch({ detail: { reason: 'submit' } });
     });
 
     it('should close when submit button is clicked within a form that has method="dialog"', async () => {
@@ -486,12 +544,52 @@ describe('Dialog', () => {
       expect(harness.isOpen).to.be.false;
     });
 
-    it('should set focus to element with autofocus attribute when opened', async () => {
-      const harness = await createFixture({ open: true });
+    it('should set focus to element with autofocus attribute when modal', async () => {
+      const harness = await createFixture({ open: true, autofocus: true });
 
       await elementUpdated(harness.dialogElement);
 
       expect(harness.formCloseButton).to.equal(document.activeElement);
+    });
+
+    it('should set focus to element with autofocus attribute when inline-modal', async () => {
+      const harness = await createFixture({ open: true, mode: 'inline-modal', autofocus: true });
+
+      await elementUpdated(harness.dialogElement);
+
+      expect(harness.formCloseButton).to.equal(document.activeElement);
+    });
+
+    it('should set focus to element with autofocus attribute when nonmodal', async () => {
+      const harness = await createFixture({ open: true, mode: 'nonmodal', autofocus: true });
+
+      await elementUpdated(harness.dialogElement);
+
+      expect(harness.formCloseButton).to.equal(document.activeElement);
+    });
+
+    it('should set focus to <dialog> element when modal and no autofocus element is present', async () => {
+      const harness = await createFixture({ open: true });
+
+      await elementUpdated(harness.dialogElement);
+
+      expect(harness.dialogElement.matches(':focus-within')).to.be.true;
+    });
+
+    it('should not set focus to dialog when inline-modal', async () => {
+      const harness = await createFixture({ open: true, mode: 'inline-modal' });
+
+      await harness.focusDelay();
+
+      expect(harness.dialogElement.matches(':focus-within')).to.be.false;
+    });
+
+    it('should not set focus to dialog when nonmodal', async () => {
+      const harness = await createFixture({ open: true, mode: 'nonmodal' });
+
+      await harness.focusDelay();
+
+      expect(harness.dialogElement.matches(':focus-within')).to.be.false;
     });
 
     it('should open immediately when animation type is set to none', async () => {
@@ -554,6 +652,7 @@ describe('Dialog', () => {
       await harness.pressEscapeKey();
 
       expect(beforeCloseSpy).to.have.been.calledOnce;
+      expect(beforeCloseSpy).to.have.been.calledWithMatch({ detail: { reason: 'escape' } });
     });
   });
 
@@ -578,8 +677,28 @@ describe('Dialog', () => {
       expect(harness.isOpen).to.be.true;
     });
 
+    it('should not close when clicking outside dialog when persistent set after open', async () => {
+      const harness = await createFixture({ open: true });
+
+      harness.dialogElement.persistent = true;
+
+      await harness.clickOutside();
+
+      expect(harness.isOpen).to.be.true;
+    });
+
     it('should not close when pressing escape key when persistent', async () => {
       const harness = await createFixture({ open: true, persistent: true });
+
+      await harness.pressEscapeKey();
+
+      expect(harness.isOpen).to.be.true;
+    });
+
+    it('should not close when pressing escape key when persistent set after open', async () => {
+      const harness = await createFixture({ open: true });
+
+      harness.dialogElement.persistent = true;
 
       await harness.pressEscapeKey();
 
@@ -608,6 +727,18 @@ describe('Dialog', () => {
       await harness.clickSurface();
 
       expect(harness.isOpen).to.be.true;
+    });
+
+    it('should fire before close event when closed via backdrop', async () => {
+      const harness = await createFixture({ open: true });
+
+      const beforeCloseSpy = spy();
+      harness.dialogElement.addEventListener(DIALOG_CONSTANTS.events.BEFORE_CLOSE, beforeCloseSpy);
+
+      await harness.clickOutside();
+
+      expect(beforeCloseSpy).to.have.been.calledOnce;
+      expect(beforeCloseSpy).to.have.been.calledWithMatch({ detail: { reason: 'backdrop' } });
     });
   });
 
@@ -849,6 +980,30 @@ describe('Dialog', () => {
       expect(harness.surfaceElement.getBoundingClientRect().x).to.equal(origX);
       expect(harness.surfaceElement.getBoundingClientRect().y).to.equal(origY);
     });
+
+    it('should move dialog back into view when clipped by viewport after drag', async () => {
+      const harness = await createFixture({ moveable: true });
+      await harness.showAsync();
+
+      const { x, y, height, width } = harness.moveHandleElement.getBoundingClientRect();
+      const [handleX, handleY]: [number, number] = [x + width / 2, y + height / 2];
+
+      // Move dialog completely off-screen (far left and up)
+      const moveAmount = -2000;
+
+      harness.simulateMoveHandleDown();
+      harness.simulateMoveHandleMove(handleX + moveAmount, handleY + moveAmount);
+      harness.simulateMoveHandleUp();
+
+      await elementUpdated(harness.surfaceElement);
+
+      // After move ends, dialog should snap back into view (positioned with padding from viewport edge)
+      const topValue = parseFloat(harness.surfaceElement.style.top);
+      const leftValue = parseFloat(harness.surfaceElement.style.left);
+      expect(topValue).to.be.closeTo(8, 0.1);
+      expect(leftValue).to.be.closeTo(8, 0.1);
+      expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVED)).to.be.true;
+    });
   });
 
   describe('fullscreen', () => {
@@ -960,9 +1115,12 @@ describe('Dialog', () => {
   });
 });
 
+type DialogCoreInternal = DialogCore & { _moveController: MoveController };
+type DialogComponentWithCore = IDialogComponent & { _core: DialogCoreInternal };
+
 class DialogHarness {
   constructor(
-    public dialogElement: IDialogComponent,
+    public dialogElement: DialogComponentWithCore,
     public triggerElement: HTMLButtonElement,
     public altTriggerElement: HTMLButtonElement,
     public formCloseButton: HTMLButtonElement,
@@ -1061,6 +1219,12 @@ class DialogHarness {
   public exitAnimation(): Promise<void> {
     return task(500);
   }
+
+  public async focusDelay(): Promise<void> {
+    // Wait two frames for focus to be set
+    await frame();
+    await frame();
+  }
 }
 
 interface IDialogFixtureConfig {
@@ -1076,6 +1240,7 @@ interface IDialogFixtureConfig {
   sizeStrategy?: DialogSizeStrategy;
   placement?: DialogPlacement;
   moveable?: boolean;
+  autofocus?: boolean;
 }
 
 async function createFixture({
@@ -1090,7 +1255,8 @@ async function createFixture({
   positionStrategy,
   sizeStrategy,
   placement,
-  moveable
+  moveable,
+  autofocus
 }: IDialogFixtureConfig = {}): Promise<DialogHarness> {
   const container = await fixture(html`
     <div>
@@ -1098,8 +1264,8 @@ async function createFixture({
       <button type="button" id="alt-test-trigger">Dialog Trigger</button>
       <forge-dialog
         trigger="test-trigger"
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-desc"
+        label="My dialog title"
+        description="My dialog description"
         ?open=${open}
         type=${type ?? nothing}
         mode=${mode ?? nothing}
@@ -1115,7 +1281,7 @@ async function createFixture({
         <h1 id="dialog-title">Dialog Title</h1>
         <p id="dialog-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         <form>
-          <button id="form-close-button" type="submit" formmethod="dialog" autofocus>Form button close</button>
+          <button id="form-close-button" type="submit" formmethod=${'dialog' as any} ?autofocus=${autofocus}>Form button close</button>
         </form>
         <form method="dialog">
           <button id="form-submit-button" type="submit">Form close</button>
@@ -1124,7 +1290,7 @@ async function createFixture({
     </div>
   `);
 
-  const dialogEl = container.querySelector('forge-dialog') as IDialogComponent;
+  const dialogEl = container.querySelector('forge-dialog') as DialogComponentWithCore;
   const triggerEl = container.querySelector('#test-trigger') as HTMLButtonElement;
   const altTriggerEl = container.querySelector('#alt-test-trigger') as HTMLButtonElement;
   const formCloseButton = container.querySelector('#form-close-button') as HTMLButtonElement;

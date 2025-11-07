@@ -76,7 +76,7 @@
 }
 
 // On
-:host([on]) {
+:host([checked]) {
   .track {
     @include track-on;
   }
@@ -122,7 +122,7 @@
     }
   }
 }
-:host(:not([disabled]):not([readonly])[on]) {
+:host(:not([disabled]):not([readonly])[checked]) {
   .forge-switch {
     .container:active {
       .track {

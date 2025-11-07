@@ -1,38 +1,24 @@
 import {
+  arrow as arrowMiddleware,
+  ArrowOptions,
   computePosition,
   flip as flipMiddleware,
-  hide as hideMiddleware,
-  shift as shiftMiddleware,
-  offset as offsetMiddleware,
-  arrow as arrowMiddleware,
   FlipOptions,
-  ShiftOptions,
+  hide as hideMiddleware,
   HideOptions,
   Middleware,
-  Placement,
-  Strategy,
-  OffsetOptions,
   MiddlewareData,
-  ArrowOptions,
-  MiddlewareState
+  offset as offsetMiddleware,
+  OffsetOptions,
+  Placement,
+  shift as shiftMiddleware,
+  ShiftOptions,
+  Strategy
 } from '@floating-ui/dom';
-import { getContainingBlock, isContainingBlock, getWindow } from '@floating-ui/utils/dom';
 import { roundByDPR } from './utils';
 
 export type PositionPlacement = Placement;
 export type PositionStrategy = Strategy;
-
-export const DEFAULT_FALLBACK_PLACEMENTS: PositionPlacement[] = [
-  'top-start',
-  'top',
-  'top-end',
-  'left-start',
-  'left',
-  'left-end',
-  'right-start',
-  'right',
-  'right-end'
-];
 
 export interface IPositionElementResult {
   x: number;
@@ -129,10 +115,7 @@ export async function positionElementAsync({
   strategy = 'fixed',
   apply = true,
   flip = true,
-  flipOptions = {
-    fallbackPlacements: DEFAULT_FALLBACK_PLACEMENTS,
-    fallbackStrategy: 'initialPlacement'
-  },
+  flipOptions,
   shift = true,
   shiftOptions,
   hide = false,
@@ -149,11 +132,11 @@ export async function positionElementAsync({
   if (offset) {
     middleware.push(offsetMiddleware(offsetOptions));
   }
-  if (shift) {
-    middleware.push(shiftMiddleware(shiftOptions));
-  }
   if (flip) {
     middleware.push(flipMiddleware(flipOptions));
+  }
+  if (shift) {
+    middleware.push(shiftMiddleware(shiftOptions));
   }
   if (hide) {
     middleware.push(hideMiddleware(hideOptions));
@@ -175,11 +158,10 @@ export async function positionElementAsync({
 
     Object.assign(element.style, styles);
 
-    // We use `display` here to ensure that any child overlays are also hidden
     if (middlewareData.hide?.referenceHidden) {
-      element.style.display = 'none';
+      element.style.visibility = 'hidden';
     } else {
-      element.style.removeProperty('display');
+      element.style.removeProperty('visibility');
     }
   }
 

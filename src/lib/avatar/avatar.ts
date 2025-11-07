@@ -1,14 +1,13 @@
-import { customElement, attachShadowTemplate, coerceNumber, coreProperty } from '@tylertech/forge-core';
+import { PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { BaseLitElement } from '../core/base/base-lit-element';
 
-import { AvatarAdapter } from './avatar-adapter';
-import { AvatarCore } from './avatar-core';
-import { AVATAR_CONSTANTS } from './avatar-constants';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-
-import template from './avatar.html';
 import styles from './avatar.scss';
 
-export interface IAvatarComponent extends IBaseComponent {
+export interface IAvatarComponent extends BaseLitElement {
   text: string;
   letterCount: number;
   imageUrl: string;
@@ -20,22 +19,24 @@ declare global {
   }
 }
 
+const charsByLetterCount = (text: string, count: number): string => {
+  if (!text?.trim()) {
+    return '';
+  }
+  if (count === 1) {
+    return text[0].toUpperCase();
+  } else {
+    const words = text.match(/\S+/g) ?? [];
+    return words.slice(0, count).reduce((prev, curr) => (prev += curr[0].toUpperCase()), '');
+  }
+};
+
+export const AVATAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-avatar';
+
 /**
  * @tag forge-avatar
  *
- * @summary Avatars represent an entity via text or image.
- *
- * @description The avatar component allows you to provide text or images to display that represent an entity. By default, the
- * avatar will display textual content as single characters (character count is configurable), or display an image or
- * icon based on the URL provided to it.
- *
- * @property {string} [text=""] - The text to display in the avatar.
- * @property {number} [letterCount=2] - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
- * @property {string} imageUrl - The background image URL to use.
- *
- * @attribute {string} [text=""] - The text to display in the avatar.
- * @attribute {string} [letter-count=2] - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
- * @attribute {string} image-url - The background image URL to use.
+ * @summary Avatars represent an entity via text or image. Use avatars to visually represent users, objects, or identifiers in your application.
  *
  * @cssproperty {string} --forge-avatar-background - The background color of the avatar.
  * @cssproperty {number} --forge-avatar-shape - The border radius of the avatar, defaults to 50%.
@@ -50,50 +51,62 @@ declare global {
  *
  * @cssclass forge-avatar - The avatar class _(required)_.
  */
-@customElement({
-  name: AVATAR_CONSTANTS.elementName
-})
-export class AvatarComponent extends BaseComponent implements IAvatarComponent {
-  public static get observedAttributes(): string[] {
-    return [AVATAR_CONSTANTS.attributes.TEXT, AVATAR_CONSTANTS.attributes.LETTER_COUNT, AVATAR_CONSTANTS.attributes.IMAGE_URL];
-  }
+@customElement(AVATAR_TAG_NAME)
+export class AvatarComponent extends BaseLitElement implements IAvatarComponent {
+  public static styles = unsafeCSS(styles);
 
-  private _core: AvatarCore;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = AVATAR_TAG_NAME;
 
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new AvatarCore(new AvatarAdapter(this));
-  }
+  /**
+   * The text to display in the avatar.
+   * @default ''
+   * @attribute
+   */
+  @property() public text = '';
 
-  public connectedCallback(): void {
-    this._core.initialize();
-  }
+  /**
+   * Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
+   * @attribute letter-count
+   */
+  @property({ type: Number, attribute: 'letter-count' })
+  public letterCount = 2;
 
-  public disconnectedCallback(): void {
-    this._core.destroy();
-  }
+  /**
+   * The background image URL to use.
+   * @default ''
+   * @attribute image-url
+   */
+  @property({ type: String, attribute: 'image-url' }) public imageUrl = '';
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case AVATAR_CONSTANTS.attributes.TEXT:
-        this.text = newValue;
-        break;
-      case AVATAR_CONSTANTS.attributes.LETTER_COUNT:
-        this.letterCount = coerceNumber(newValue);
-        break;
-      case AVATAR_CONSTANTS.attributes.IMAGE_URL:
-        this.imageUrl = newValue;
-        break;
+  @state() private _image: HTMLImageElement | undefined;
+
+  public willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('imageUrl')) {
+      this._tryLoadImage();
     }
   }
 
-  @coreProperty()
-  public declare text: string;
+  public render(): TemplateResult {
+    return html`
+      <div
+        aria-hidden="true"
+        part="root"
+        class=${classMap({ 'forge-avatar': true, 'forge-avatar--image': !!this._image })}
+        style=${this._image ? styleMap({ backgroundImage: `url(${this._image.src})` }) : nothing}>
+        <slot>${this._image ? nothing : charsByLetterCount(this.text, this.letterCount)}</slot>
+      </div>
+    `;
+  }
 
-  @coreProperty()
-  public declare letterCount: number;
-
-  @coreProperty()
-  public declare imageUrl: string;
+  private async _tryLoadImage(): Promise<void> {
+    if (this.imageUrl) {
+      const image = new Image();
+      image.onload = () => (this._image = image);
+      image.onerror = () => (this._image = undefined);
+      image.src = this.imageUrl;
+    } else {
+      this._image = undefined;
+    }
+  }
 }

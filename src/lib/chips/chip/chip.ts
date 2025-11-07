@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconClose } from '@tylertech/tyler-icons';
 import { BaseComponent, IBaseComponent } from '../../core';
 import { FocusIndicatorComponent } from '../../focus-indicator';
 import { IconComponent, IconRegistry } from '../../icon';
@@ -24,6 +24,7 @@ export interface IChipComponent extends IBaseComponent {
   target: string;
   download: string;
   rel: string;
+  removeButtonLabel: string;
   focusRemoveButton(): void;
 }
 
@@ -39,6 +40,8 @@ declare global {
 }
 
 /**
+ * @summary A compact, interactive element that represents an entity, action, or attribute with support for selection, removal, and various styling options.
+ *
  * @tag forge-chip
  *
  * @property {ChipType} type - The type of chip.
@@ -52,6 +55,7 @@ declare global {
  * @property {string} target - The target of the chip.
  * @property {string} download - The download of the chip.
  * @property {string} rel - The rel of the chip.
+ * @property {string} removeButtonLabel - The custom aria-label for the remove button.
  *
  * @attribute {ChipType} type - The type of chip.
  * @attribute {unknown} value - The value of the chip.
@@ -64,6 +68,7 @@ declare global {
  * @attribute {string} target - The target of the chip.
  * @attribute {string} download - The download of the chip.
  * @attribute {string} rel - The rel of the chip.
+ * @attribute {string} remove-button-label - The custom aria-label for the remove button.
  *
  * @fires {CustomEvent<IChipDeleteEventData>} forge-chip-delete - Event fired when the chip is deleted.
  * @fires {CustomEvent<IChipSelectEventData>} forge-chip-select - Event fired when the chip is selected.
@@ -189,6 +194,9 @@ export class ChipComponent extends BaseComponent implements IChipComponent {
       case CHIP_CONSTANTS.attributes.REL:
         this.rel = newValue;
         break;
+      case CHIP_CONSTANTS.attributes.REMOVE_BUTTON_LABEL:
+        this.removeButtonLabel = newValue;
+        break;
     }
   }
 
@@ -205,35 +213,38 @@ export class ChipComponent extends BaseComponent implements IChipComponent {
   }
 
   @coreProperty()
-  public declare type: ChipType;
+  declare public type: ChipType;
 
   @coreProperty()
-  public declare value: unknown;
+  declare public value: unknown;
 
   @coreProperty()
-  public declare selected: boolean;
+  declare public selected: boolean;
 
   @coreProperty()
-  public declare invalid: boolean;
+  declare public invalid: boolean;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   @coreProperty()
-  public declare theme: ChipTheme;
+  declare public theme: ChipTheme;
 
   @coreProperty()
-  public declare href: string;
+  declare public href: string;
 
   @coreProperty()
-  public declare target: string;
+  declare public target: string;
 
   @coreProperty()
-  public declare download: string;
+  declare public download: string;
 
   @coreProperty()
-  public declare rel: string;
+  declare public rel: string;
+
+  @coreProperty()
+  declare public removeButtonLabel: string;
 }

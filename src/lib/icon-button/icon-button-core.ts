@@ -4,7 +4,7 @@ import { IconButtonDensity, IconButtonShape, IconButtonTheme, IconButtonVariant,
 
 export interface IIconButtonCore extends IBaseButtonCore {
   toggle: boolean;
-  on: boolean;
+  pressed: boolean;
   variant: IconButtonVariant;
   theme: IconButtonTheme;
   shape: IconButtonShape;
@@ -13,7 +13,7 @@ export interface IIconButtonCore extends IBaseButtonCore {
 
 export class IconButtonCore extends BaseButtonCore<IIconButtonAdapter> implements IIconButtonCore {
   private _toggle = false;
-  private _on = false;
+  private _pressed = false;
   private _variant: IconButtonVariant = ICON_BUTTON_CONSTANTS.defaults.DEFAULT_VARIANT;
   private _theme: IconButtonTheme = ICON_BUTTON_CONSTANTS.defaults.DEFAULT_THEME;
   private _shape: IconButtonShape = ICON_BUTTON_CONSTANTS.defaults.DEFAULT_SHAPE;
@@ -37,17 +37,17 @@ export class IconButtonCore extends BaseButtonCore<IIconButtonAdapter> implement
 
   private _onToggle(): void {
     // Update internal state first so listeners can access the new state
-    const originalOn = this._on;
-    this._on = !this._on;
+    const originalPressed = this._pressed;
+    this._pressed = !this._pressed;
 
-    const cancelled = !this._adapter.emitHostEvent(ICON_BUTTON_CONSTANTS.events.TOGGLE, this.on, true, true);
-    this._on = originalOn;
+    const cancelled = !this._adapter.emitHostEvent(ICON_BUTTON_CONSTANTS.events.TOGGLE, this.pressed, true, true);
+    this._pressed = originalPressed;
 
     if (cancelled) {
       return;
     }
 
-    this.on = !originalOn;
+    this.pressed = !originalPressed;
   }
 
   public get toggle(): boolean {
@@ -57,26 +57,29 @@ export class IconButtonCore extends BaseButtonCore<IIconButtonAdapter> implement
     value = !!value;
     if (this._toggle !== value) {
       this._toggle = value;
-      this._adapter.toggleHostAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED, this._toggle, `${this._on}`);
+      this._adapter.toggleHostAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED, this._toggle, `${this._pressed}`);
       this._adapter.toggleHostAttribute(ICON_BUTTON_CONSTANTS.attributes.TOGGLE, this._toggle);
     }
   }
 
-  public get on(): boolean {
-    return this._on;
+  public get pressed(): boolean {
+    return this._pressed;
   }
-  public set on(value: boolean) {
+  public set pressed(value: boolean) {
     value = !!value;
-    if (this._on !== value) {
-      this._on = value;
+    if (this._pressed !== value) {
+      this._pressed = value;
 
       if (this._toggle) {
-        this._adapter.setHostAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED, `${this._on}`);
+        this._adapter.setHostAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED, `${this._pressed}`);
       } else {
         this._adapter.removeHostAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED);
       }
 
-      this._adapter.toggleHostAttribute(ICON_BUTTON_CONSTANTS.attributes.ON, this._on);
+      this._adapter.toggleHostAttribute(ICON_BUTTON_CONSTANTS.attributes.PRESSED, this._pressed);
+
+      // Deprecated but left for legacy support
+      this._adapter.toggleHostAttribute(ICON_BUTTON_CONSTANTS.attributes.ON, this._pressed);
     }
   }
 

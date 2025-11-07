@@ -16,6 +16,7 @@
 
   position: relative;
   display: #{token(display)};
+  grid-auto-flow: column;
   align-items: center;
   justify-content: #{token(justify)};
   gap: #{token(spacing)};

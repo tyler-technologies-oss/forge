@@ -1,5 +1,5 @@
 import { getShadowElement, listenOwnProperty, randomChars, toggleAttribute } from '@tylertech/forge-core';
-import { BASE_FIELD_CONSTANTS, FIELD_CONSTANTS, IFieldComponent } from '../field';
+import { FIELD_CONSTANTS, IFieldComponent } from '../field';
 import { BaseFieldAdapter, IBaseFieldAdapter } from '../field/base/base-field-adapter';
 import { LabelComponent } from '../label';
 import { ITextFieldComponent } from './text-field';
@@ -10,13 +10,14 @@ export interface ITextFieldAdapter extends IBaseFieldAdapter {
   addRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void;
   removeRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void;
   disableInput(disabled: boolean): void;
+  setInvalid(value: boolean): void;
   handleDefaultSlotChange(listener: TextFieldInputAttributeObserver): void;
   tryAddValueChangeListener(context: unknown, listener: TextFieldValueChangeListener): void;
   removeValueChangeListener(): void;
   tryFloatLabel(force?: boolean): void;
   tryConnectSlottedLabel(): void;
-  connectClearButton(listener: EventListener): void;
-  disconnectClearButton(listener: EventListener): void;
+  connectClearButton(clickListener: EventListener, mouseDownListener: EventListener): void;
+  disconnectClearButton(clickListener: EventListener, mouseDownListener: EventListener): void;
   toggleClearButtonVisibility(visible: boolean): void;
   clearInput(): void;
   getAllSlotElements(): HTMLSlotElement[];
@@ -67,6 +68,10 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
 
   public disableInput(disabled: boolean): void {
     this._inputElements.forEach(el => (el.disabled = disabled));
+  }
+
+  public setInvalid(value: boolean): void {
+    this._inputElements.forEach(el => toggleAttribute(el, value, 'aria-invalid', 'true'));
   }
 
   public inputIsDisabled(): boolean {
@@ -131,9 +136,7 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     this._destroyValueChangerListeners.forEach(callback => callback());
 
     // Add a new value change listener to each input
-    this._destroyValueChangerListeners = this._inputElements.map(el => {
-      return listenOwnProperty(context, el, 'value', listener);
-    });
+    this._destroyValueChangerListeners = this._inputElements.map(el => listenOwnProperty(context, el, 'value', listener));
   }
 
   public removeValueChangeListener(): void {
@@ -180,12 +183,16 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     label.htmlFor = id;
   }
 
-  public connectClearButton(listener: EventListener): void {
-    this._clearButtonSlotElement.addEventListener('click', listener);
+  public connectClearButton(clickListener: EventListener, mouseDownListener: EventListener): void {
+    this._clearButtonSlotElement.addEventListener('click', clickListener);
+    if (mouseDownListener) {
+      this._clearButtonSlotElement.addEventListener('mousedown', mouseDownListener);
+    }
   }
 
-  public disconnectClearButton(listener: EventListener): void {
-    this._clearButtonSlotElement.removeEventListener('click', listener);
+  public disconnectClearButton(clickListener: EventListener, mouseDownListener: EventListener): void {
+    this._clearButtonSlotElement.removeEventListener('click', clickListener);
+    this._clearButtonSlotElement.removeEventListener('mousedown', mouseDownListener);
   }
 
   public toggleClearButtonVisibility(visible: boolean): void {

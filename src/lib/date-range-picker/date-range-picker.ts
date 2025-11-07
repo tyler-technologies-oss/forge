@@ -1,5 +1,5 @@
 import { attachShadowTemplate, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconDateRange } from '@tylertech/tyler-icons/standard';
+import { tylIconDateRange } from '@tylertech/tyler-icons';
 import { CalendarComponent } from '../calendar';
 import { BaseDatePickerComponent, IBaseDatePickerComponent } from '../date-picker/base/base-date-picker';
 import { BASE_DATE_PICKER_CONSTANTS } from '../date-picker/base/base-date-picker-constants';
@@ -32,6 +32,8 @@ declare global {
 }
 
 /**
+ * @summary A date input component with integrated calendar popup for selecting date ranges with separate "from" and "to" date values.
+ *
  * @tag forge-date-range-picker
  *
  * @property {Date | string | null | undefined} [from=null] - Gets/sets the "from" date range value.
@@ -101,9 +103,9 @@ export class DateRangePickerComponent
 
   /** Gets/sets the "from" date range value. */
   @coreProperty()
-  public declare from: Date | string | null | undefined;
+  declare public from: Date | string | null | undefined;
 
   /** Gets/sets the "to" date range value. */
   @coreProperty()
-  public declare to: Date | string | null | undefined;
+  declare public to: Date | string | null | undefined;
 }

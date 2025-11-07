@@ -18,6 +18,8 @@ declare global {
 /**
  * @tag forge-accordion
  *
+ * @summary Accordions wrap a collection of expansion panels to ensure that only one panel is expanded at a time.
+ *
  * @dependency forge-expansion-panel
  *
  * @fires {CustomEvent<IExpansionPanelComponent>} forge-accordion-toggle - Dispatched when a child expansion panel is toggled. Includes the related expansion panel element in the event detail.
@@ -56,5 +58,5 @@ export class AccordionComponent extends BaseComponent implements IAccordionCompo
    * @attribute panel-selector
    */
   @coreProperty()
-  public declare panelSelector: string;
+  declare public panelSelector: string;
 }

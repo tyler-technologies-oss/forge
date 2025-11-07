@@ -15,8 +15,9 @@ declare global {
 }
 
 /**
- *
  * @tag forge-page-state
+ *
+ * @summary Page states display full-height messages for empty states, errors, or other general information. They can be used as full page content, or within smaller containers and will adapt accordingly.
  *
  * @cssproperty --forge-page-state-width - The width of the page state.
  * @cssproperty --forge-page-state-height - The height of the page state.

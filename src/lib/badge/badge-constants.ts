@@ -21,6 +21,7 @@ const defaults = {
   THEME: 'default' as BadgeTheme
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const BADGE_CONSTANTS = {
   elementName,
   attributes,

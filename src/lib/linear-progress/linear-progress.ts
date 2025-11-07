@@ -25,8 +25,7 @@ declare global {
 /**
  * @tag forge-linear-progress
  *
- * @summary
- * Linear progress indicators display progress by animating along a linear track in a horizontal direction.
+ * @summary Linear progress indicators display progress by animating along a linear track in a horizontal direction. They can be used to show determinate or indeterminate progress.
  *
  * @description
  * Progress indicators inform users about the status of ongoing processes.
@@ -94,14 +93,14 @@ export class LinearProgressComponent extends WithElementInternals(WithDefaultAri
   }
 
   @coreProperty()
-  public declare determinate: boolean;
+  declare public determinate: boolean;
 
   @coreProperty()
-  public declare progress: number;
+  declare public progress: number;
 
   @coreProperty()
-  public declare buffer: number;
+  declare public buffer: number;
 
   @coreProperty()
-  public declare theme: LinearProgressTheme;
+  declare public theme: LinearProgressTheme;
 }

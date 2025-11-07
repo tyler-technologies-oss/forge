@@ -1,5 +1,4 @@
 import { expect } from '@esm-bundle/chai';
-import { spy } from 'sinon';
 import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { IViewSwitcherComponent } from './view-switcher';

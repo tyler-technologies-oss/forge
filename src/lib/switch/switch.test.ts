@@ -73,8 +73,10 @@ describe('Switch', () => {
     const ctx = new SwitchHarness(el);
 
     await expect(el).not.to.be.accessible();
+    expect(el.checked).to.be.false;
     expect(el.on).to.be.false;
     expect(el.selected).to.be.false;
+    expect(el.defaultChecked).to.be.false;
     expect(el.defaultOn).to.be.false;
     expect(el.value).to.equal('on');
     expect(el.dense).to.be.false;
@@ -88,39 +90,52 @@ describe('Switch', () => {
     expect(ctx.rootElement.lastElementChild).to.equal(ctx.labelElement);
   });
 
+  it('should accept checked', async () => {
+    const el = await fixture<ISwitchComponent>(html`<forge-switch checked></forge-switch>`);
+
+    expect(el.checked).to.be.true;
+    expect(el.on).to.be.true;
+    expect(el.selected).to.be.true;
+  });
+
   it('should accept on', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch on></forge-switch>`);
-    const ctx = new SwitchHarness(el);
 
+    expect(el.checked).to.be.true;
     expect(el.on).to.be.true;
     expect(el.selected).to.be.true;
   });
 
   it('should accept selected', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch selected></forge-switch>`);
-    const ctx = new SwitchHarness(el);
 
+    expect(el.checked).to.be.true;
     expect(el.on).to.be.true;
     expect(el.selected).to.be.true;
   });
 
+  it('should accept default-checked', async () => {
+    const el = await fixture<ISwitchComponent>(html`<forge-switch default-checked></forge-switch>`);
+
+    expect(el.defaultChecked).to.be.true;
+    expect(el.defaultOn).to.be.true;
+  });
+
   it('should accept default-on', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch default-on></forge-switch>`);
-    const ctx = new SwitchHarness(el);
 
+    expect(el.defaultChecked).to.be.true;
     expect(el.defaultOn).to.be.true;
   });
 
   it('should accept value', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch value="test"></forge-switch>`);
-    const ctx = new SwitchHarness(el);
 
     expect(el.value).to.equal('test');
   });
 
   it('should accept disabled', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch disabled aria-label="Active"></forge-switch>`);
-    const ctx = new SwitchHarness(el);
 
     expect(el.disabled).to.be.true;
     await expect(el).to.be.accessible();
@@ -128,7 +143,6 @@ describe('Switch', () => {
 
   it('should accept required', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch required></forge-switch>`);
-    const ctx = new SwitchHarness(el);
 
     expect(el.required).to.be.true;
   });
@@ -197,30 +211,42 @@ describe('Switch', () => {
 
   it('should toggle', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch></forge-switch>`);
-    const ctx = new SwitchHarness(el);
 
     el.toggle();
 
+    expect(el.checked).to.be.true;
     expect(el.on).to.be.true;
+    expect(el.selected).to.be.true;
   });
 
   it('should toggle on', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch aria-label="Active"></forge-switch>`);
-    const ctx = new SwitchHarness(el);
+
+    expect(el.checked).to.be.false;
+    expect(el.on).to.be.false;
+    expect(el.selected).to.be.false;
 
     el.toggle(true);
 
+    expect(el.checked).to.be.true;
     expect(el.on).to.be.true;
+    expect(el.selected).to.be.true;
     await expect(el).to.be.accessible();
   });
 
   it('should toggle off', async () => {
-    const el = await fixture<ISwitchComponent>(html`<forge-switch on></forge-switch>`);
-    const ctx = new SwitchHarness(el);
+    const el = await fixture<ISwitchComponent>(html`<forge-switch aria-label="Active" checked></forge-switch>`);
+
+    expect(el.checked).to.be.true;
+    expect(el.on).to.be.true;
+    expect(el.selected).to.be.true;
 
     el.toggle(false);
 
+    expect(el.checked).to.be.false;
     expect(el.on).to.be.false;
+    expect(el.selected).to.be.false;
+    await expect(el).to.be.accessible();
   });
 
   it('should set on when clicked', async () => {
@@ -231,7 +257,9 @@ describe('Switch', () => {
 
     await ctx.clickElement(el);
 
+    expect(el.checked).to.be.true;
     expect(el.on).to.be.true;
+    expect(el.selected).to.be.true;
     expect(changeSpy.calledWith(new CustomEvent('forge-switch-input', { detail: true }))).to.be.true;
   });
 
@@ -257,7 +285,9 @@ describe('Switch', () => {
 
     await ctx.clickElement(el);
 
+    expect(el.checked).to.be.false;
     expect(el.on).to.be.false;
+    expect(el.selected).to.be.false;
   });
 
   it('should return form element and name', async () => {
@@ -305,7 +335,7 @@ describe('Switch', () => {
     let formData = new FormData(form);
     expect(formData.get('test-switch')).to.be.null;
 
-    switchEl.on = true;
+    switchEl.checked = true;
     formData = new FormData(form);
     expect(formData.get('test-switch')).to.equal('on');
   });
@@ -317,14 +347,16 @@ describe('Switch', () => {
     switchEl.setAttribute('name', 'test-switch');
     form.appendChild(switchEl);
 
-    switchEl.on = true;
+    switchEl.checked = true;
     let formData = new FormData(form);
     expect(formData.get('test-switch')).to.equal('on');
 
     form.reset();
     formData = new FormData(form);
 
+    expect(switchEl.checked).to.be.false;
     expect(switchEl.on).to.be.false;
+    expect(switchEl.selected).to.be.false;
     expect(formData.get('test-switch')).to.be.null;
   });
 
@@ -334,7 +366,7 @@ describe('Switch', () => {
     const switchEl = document.createElement('forge-switch');
     const setFormValueSpy = spy(switchEl[internals], 'setFormValue');
     switchEl.name = 'test-switch';
-    switchEl.toggleAttribute('on', true);
+    switchEl.toggleAttribute('checked', true);
     form.appendChild(switchEl);
 
     const [value, state] = setFormValueSpy.args ?? [null, null];
@@ -349,7 +381,9 @@ describe('Switch', () => {
 
     (newSwitchEl as any).formStateRestoreCallback(restoreState, 'restore');
 
+    expect(switchEl.checked).to.be.true;
     expect(switchEl.on).to.be.true;
+    expect(switchEl.selected).to.be.true;
   });
 
   it('should validate', async () => {
@@ -360,7 +394,7 @@ describe('Switch', () => {
     expect(el[internals].checkValidity()).to.be.false;
     expect(el[internals].reportValidity()).to.be.false;
 
-    el.on = true;
+    el.checked = true;
 
     expect(el[internals].willValidate).to.be.true;
     expect(el[internals].validity.valid).to.be.true;

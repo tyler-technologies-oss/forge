@@ -189,7 +189,7 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   }
 
   public tryDisableFields(fieldsToDisable: PaginatorFieldIdentifier[]): void {
-    const fieldDisablers = {
+    const fieldDisablers: Record<string, () => void> = {
       first: () => this.setFirstPageButtonEnabled(false),
       last: () => this.setLastPageButtonEnabled(false),
       previous: () => this.setPreviousPageButtonEnabled(false),

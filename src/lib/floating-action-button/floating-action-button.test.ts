@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { fixture, html } from '@open-wc/testing';
 import { sendMouse } from '@web/test-runner-commands';
-import { tylIconFavorite } from '@tylertech/tyler-icons/standard';
+import { tylIconFavorite } from '@tylertech/tyler-icons';
 import { IconRegistry } from '../icon/icon-registry';
 import type { IStateLayerComponent } from '../state-layer';
 import type { IFocusIndicatorComponent } from '../focus-indicator';
@@ -126,28 +126,28 @@ describe('Floating Action Button', () => {
   });
 
   describe('Extended detection', () => {
-    it('should not be extended by default', async () => {
+    it('should not be extended without a slotted label', async () => {
       const el = await fixture<IFloatingActionButtonComponent>(html`<forge-fab><forge-icon name="favorite"></forge-icon></forge-fab>`);
 
       const rootEl = getRootEl(el);
       expect(rootEl.classList.contains(FLOATING_ACTION_BUTTON_CONSTANTS.classes.EXTENDED)).to.be.false;
     });
 
-    it('should not be extended when has short label in default slot', async () => {
+    it('should not be extended with slotted text content', async () => {
       const el = await fixture<IFloatingActionButtonComponent>(html`<forge-fab>A</forge-fab>`);
 
       const rootEl = getRootEl(el);
       expect(rootEl.classList.contains(FLOATING_ACTION_BUTTON_CONSTANTS.classes.EXTENDED)).to.be.false;
     });
 
-    it('should be extended when has long label in default slot', async () => {
+    it('should not be extended when has long label in default slot', async () => {
       const el = await fixture<IFloatingActionButtonComponent>(html`<forge-fab>Long label text</forge-fab>`);
 
       const rootEl = getRootEl(el);
-      expect(rootEl.classList.contains(FLOATING_ACTION_BUTTON_CONSTANTS.classes.EXTENDED)).to.be.true;
+      expect(rootEl.classList.contains(FLOATING_ACTION_BUTTON_CONSTANTS.classes.EXTENDED)).to.be.false;
     });
 
-    it('should be extended when has short label in label slot', async () => {
+    it('should be extended when has slotted label', async () => {
       const el = await fixture<IFloatingActionButtonComponent>(html`
         <forge-fab>
           <span slot="label">A</span>
@@ -158,11 +158,11 @@ describe('Floating Action Button', () => {
       expect(rootEl.classList.contains(FLOATING_ACTION_BUTTON_CONSTANTS.classes.EXTENDED)).to.be.true;
     });
 
-    it('should be extended when has icon and label', async () => {
+    it('should be extended when has icon and slotted label', async () => {
       const el = await fixture<IFloatingActionButtonComponent>(html`
         <forge-fab>
           <forge-icon name="favorite"></forge-icon>
-          <span>Label</span>
+          <span slot="label">Label</span>
         </forge-fab>
       `);
 

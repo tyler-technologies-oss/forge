@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/blocks';
+import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Getting Started/Theming" />
 
@@ -17,7 +17,7 @@ properties, you can always target internal elements directly using the [CSS Shad
 
 ## Colors
 
-To view a complete set of the color tokens that are available for theming, please view the [theme tokens](?path=/docs/design-tokens-theme--docs).
+To view a complete set of the color tokens that are available for theming, please view the [color design tokens](?path=/docs/design-tokens-color--docs).
 
 ## CSS custom properties
 
@@ -166,7 +166,7 @@ Forge provides a built-in default dark theme stylesheet for ease of use that com
 A stylesheet is distributed with Forge called `forge-dark.css` this can be found in the npm package under the `dist` directory.
 
 ```css
-@use '@tylertech/forge/styles/forge-dark';
+@use '@tylertech/forge/dist/forge-dark';
 ```
 
 > Loading this stylesheet in your application (after `forge.css` is loaded) your app will change to dark mode.
@@ -175,7 +175,7 @@ The dark theme uses the Sass mixins mentioned above to generate the proper CSS c
 the styles to the `:root` selector:
 
 ```css
-@use '@tylertech/forge/styles/theme/theme-dark';
+@use '@tylertech/forge/sass/theme/theme-dark';
 
 :root {
   @include theme-dark.theme-properties;

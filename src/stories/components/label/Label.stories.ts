@@ -1,6 +1,6 @@
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
-import { tylIconSettings } from '@tylertech/tyler-icons/standard';
+import { tylIconSettings } from '@tylertech/tyler-icons';
 import { html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 

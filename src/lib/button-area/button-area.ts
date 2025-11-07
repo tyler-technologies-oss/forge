@@ -22,10 +22,7 @@ declare global {
 /**
  * @tag forge-button-area
  *
- * @summary Button areas are used to create a clickable area that group related information and actions about a single subject.
- *
- * @description
- * The button area component wraps any arbitrary content with a `<button>` element to enable accessible clickable interfaces including nested controls and other complex content.
+ * @summary Button areas are used to create clickable areas that group related information and actions about a single subject. The button area component wraps any arbitrary content with a `<button>` element to enable accessible, clickable interfaces including nested controls and other complex content.
  *
  * @property {boolean} [disabled=false] - Sets whether the button area and slotted button are disabled. Setting this on one will also set it on the other.
  *
@@ -79,5 +76,5 @@ export class ButtonAreaComponent extends BaseComponent implements IButtonAreaCom
 
   /** Controls whether the component and associated button element are disabled. */
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 }

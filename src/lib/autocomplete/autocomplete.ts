@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, ensureChild, coreProperty } from '@tylertech/forge-core';
-import { tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons';
 import { DividerComponent } from '../divider';
 import { IconComponent, IconRegistry } from '../icon';
 import { LinearProgressComponent } from '../linear-progress';
@@ -63,6 +63,8 @@ declare global {
 
 /**
  * @tag forge-autocomplete
+ *
+ * @summary Autocomplete components provide real-time typeahead suggestions as users type in a text field. Use autocompletes to help users quickly find and select from a list of options, improving form usability and data accuracy.
  *
  * @event {CustomEvent<any>} forge-autocomplete-change - Fired when the value changes.
  * @event {CustomEvent<IAutocompleteSelectEventData>} forge-autocomplete-select -  Fired when an option is selected. Only applies when in "stateless" `mode`.
@@ -161,7 +163,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
    * @attribute
    */
   @coreProperty()
-  public declare mode: `${AutocompleteMode}`;
+  declare public mode: `${AutocompleteMode}`;
 
   /**
    * Gets/sets the multi-select state.
@@ -169,13 +171,13 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
    * @attribute
    */
   @coreProperty()
-  public declare multiple: boolean;
+  declare public multiple: boolean;
 
   /**
    * Gets/sets the value.
    */
   @coreProperty()
-  public declare value: any;
+  declare public value: any;
 
   /**
    * Gets/sets the debounce delay (milliseconds) for keyboard events.
@@ -183,7 +185,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
    * @attribute
    */
   @coreProperty()
-  public declare debounce: number;
+  declare public debounce: number;
 
   /**
    * Gets/sets filter on focus settings which controls whether the dropdown displays automatically when focused.
@@ -191,7 +193,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
    * @attribute filter-on-focus
    */
   @coreProperty()
-  public declare filterOnFocus: boolean;
+  declare public filterOnFocus: boolean;
 
   /**
    * Gets/sets whether the first option in the dropdown will be focused automatically when opened or not.
@@ -199,7 +201,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
    * @attribute filter-focus-first
    */
   @coreProperty()
-  public declare filterFocusFirst: boolean;
+  declare public filterFocusFirst: boolean;
 
   /**
    * Controls whether unmatched text entered by the user will stay visible an option in the dropdown is not found.
@@ -207,14 +209,14 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
    * @attribute allow-unmatched
    */
   @coreProperty()
-  public declare allowUnmatched: boolean;
+  declare public allowUnmatched: boolean;
 
   /**
    * Gets/sets the selector that will be used to find an element to attach the popup to. Defaults to the input element.
    * @attribute popup-target
    */
   @coreProperty()
-  public declare popupTarget: string;
+  declare public popupTarget: string;
 
   /**
    * Gets/sets the filter text.
@@ -222,19 +224,19 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
    * Setting the filter text only applies when allowUnmatched is enabled.
    */
   @coreProperty()
-  public declare filterText: string;
+  declare public filterText: string;
 
   /** Sets the option builder callback that will be executed when building the option list in the dropdown. */
   @coreProperty()
-  public declare optionBuilder: AutocompleteOptionBuilder | null | undefined;
+  declare public optionBuilder: AutocompleteOptionBuilder | null | undefined;
 
   /** Sets the filter callback that will be executed when fetching options for the autocomplete dropdown. */
   @coreProperty()
-  public declare filter: AutocompleteFilterCallback | null | undefined;
+  declare public filter: AutocompleteFilterCallback | null | undefined;
 
   /** Sets the selected text builder callback that will be executed when getting the selected text. */
   @coreProperty()
-  public declare selectedTextBuilder: AutocompleteSelectedTextBuilder;
+  declare public selectedTextBuilder: AutocompleteSelectedTextBuilder;
 
   /**
    * Controls the open state of the dropdown.
@@ -242,32 +244,32 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
    * @attribute
    */
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   /**
    * Gets/sets the property key to match the value to an option.
    * @attribute match-key
    */
   @coreProperty()
-  public declare matchKey: string | null | undefined;
+  declare public matchKey: string | null | undefined;
 
   /**
    * Returns whether the component has been initialized or not yet.
    * @readonly
    */
   @coreProperty({ set: false })
-  public declare isInitialized: boolean;
+  declare public isInitialized: boolean;
 
   /**
    * Gets the currently active popup element when the dropdown is open.
    * @readonly
    */
   @coreProperty({ set: false })
-  public declare popupElement: HTMLElement | null;
+  declare public popupElement: HTMLElement | null;
 
   /** Sets the callback to be executed when the user selects an option, before the UI is updated to allow for validation. */
   @coreProperty()
-  public declare beforeValueChange: (value: any) => boolean | Promise<boolean>;
+  declare public beforeValueChange: (value: any) => boolean | Promise<boolean>;
 
   /** Adds options to the dropdown while it is open. Has no effect if the dropdown is closed.  */
   public appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void {

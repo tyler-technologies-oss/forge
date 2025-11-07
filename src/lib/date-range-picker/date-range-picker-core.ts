@@ -73,9 +73,9 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     super._openCalendar(emitOpenEvent);
 
     const currentValue = this._getCurrentValue();
-    if (!!currentValue?.to) {
+    if (currentValue?.to) {
       this._adapter.goToCalendarDate(new Date(currentValue.to));
-    } else if (!!currentValue?.from) {
+    } else if (currentValue?.from) {
       this._adapter.goToCalendarDate(new Date(currentValue.from));
     }
   }
@@ -103,6 +103,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
 
   protected _onToday(): void {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     this._tryMergeCurrentTime({ from: today });
     const range = this._open ? new DateRange({ from: this._from || today, to: this._to || undefined }) : new DateRange({ from: today });
     if (!this._isDateRangeAcceptable(range)) {
@@ -149,7 +150,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   }
 
   protected _setFormattedInputValue(suppressValueChanges?: boolean): void {
-    let formattedDate = this._formatDate(this._from);
+    let formattedDate = this._formatDate(this._from) ?? '';
     if (!formattedDate && !this._allowInvalidDate) {
       formattedDate = '';
     }
@@ -157,7 +158,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
   }
 
   private _setFormattedToInputValue(suppressValueChanges?: boolean): void {
-    let formattedDate = this._formatDate(this._to);
+    let formattedDate = this._formatDate(this._to) ?? '';
     if (!formattedDate && !this._allowInvalidDate) {
       formattedDate = '';
     }
@@ -213,8 +214,8 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
 
     const formattedFromValue = this._formatDate((value && value.from) || null);
     const formattedToValue = this._formatDate((value && value.to) || null);
-    this._adapter.setInputValue(formattedFromValue, this._notifyInputValueChanges);
-    this._adapter.setToInputValue(formattedToValue, this._notifyInputValueChanges);
+    this._adapter.setInputValue(formattedFromValue ?? '', this._notifyInputValueChanges);
+    this._adapter.setToInputValue(formattedToValue ?? '', this._notifyInputValueChanges);
     this._formatInputValue();
     this._formatToInputValue();
 
@@ -254,6 +255,23 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     super._applyMax();
   }
 
+  protected override _applyMask(): void {
+    super._applyMask();
+
+    if (this._masked) {
+      this._initializeToMask();
+    } else {
+      this._adapter.destroyToMask();
+      this._formatToInputValue();
+    }
+  }
+
+  protected override _destroyMask(): void {
+    super._destroyMask();
+    this._adapter.destroyToMask();
+    this._formatToInputValue();
+  }
+
   protected _initializeToMask(): void {
     if (!this._masked) {
       return;
@@ -266,9 +284,7 @@ export class DateRangePickerCore extends BaseDatePickerCore<IDateRangePickerAdap
     };
 
     if (this._prepareMaskCallback) {
-      options.prepareCallback = (value, masked, flags, maskInstance) => {
-        return this._prepareMaskCallback.call(null, value, masked, flags, maskInstance);
-      };
+      options.prepareCallback = (value, masked, flags, maskInstance) => this._prepareMaskCallback.call(null, value, masked, flags, maskInstance);
     }
 
     this._adapter.initializeToMask(options);

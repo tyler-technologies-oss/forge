@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconCancel } from '@tylertech/tyler-icons/standard';
+import { tylIconCancel } from '@tylertech/tyler-icons';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { IconRegistry } from '../icon';
 import { IconButtonComponent } from '../icon-button';
@@ -33,7 +33,7 @@ declare global {
 /**
  * @tag forge-banner
  *
- * @summary Banners are used to inform users of important information, such as errors, warnings, or success messages.
+ * @summary Banners are used to inform users of important information, such as errors, warnings, or success messages. Use banners for non-critical messages that require user attention but do not interrupt workflow.
  *
  * @property {boolean} [dismissed=false] - Controls the visibility of the banner.
  * @property {boolean} [persistent=false] - Controls the visibility of the built-in dismiss button.
@@ -101,13 +101,13 @@ export class BannerComponent extends BaseComponent implements IBannerComponent {
   }
 
   @coreProperty()
-  public declare dismissed: boolean;
+  declare public dismissed: boolean;
 
   @coreProperty()
-  public declare persistent: boolean;
+  declare public persistent: boolean;
 
   @coreProperty()
-  public declare theme: BannerTheme;
+  declare public theme: BannerTheme;
 
   /** @deprecated Use `persistent` instead. */
   public get canDismiss(): boolean {

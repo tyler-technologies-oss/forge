@@ -1,8 +1,8 @@
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 import { type IMenuOption } from '@tylertech/forge/menu/menu-constants';
 import { SPLIT_BUTTON_CONSTANTS } from '@tylertech/forge/split-button';
-import { tylIconBookmarkBorder, tylIconScheduleSend } from '@tylertech/tyler-icons/standard';
+import { tylIconBookmarkBorder, tylIconScheduleSend } from '@tylertech/tyler-icons';
 import { html, nothing } from 'lit-html';
 import { styleMap } from 'lit/directives/style-map.js';
 import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';

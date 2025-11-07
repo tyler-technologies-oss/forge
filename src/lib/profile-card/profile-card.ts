@@ -3,7 +3,7 @@ import { ProfileCardAdapter } from './profile-card-adapter';
 import { ProfileCardCore } from './profile-card-core';
 import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
 import { ButtonComponent } from '../button';
-import { AvatarComponent } from '../avatar';
+import { defineAvatarComponent } from '../avatar';
 import { IconComponent } from '../icon/icon';
 import { ToolbarComponent } from '../toolbar';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
@@ -37,12 +37,19 @@ declare global {
 
 /**
  * @tag forge-profile-card
+ *
+ * @summary Profile cards display user information and actions in a structured card format. This component is deprecated prefer using the `<forge-user-profile>` component from the extended library instead.
+ 
  */
 @customElement({
   name: PROFILE_CARD_CONSTANTS.elementName,
-  dependencies: [ToolbarComponent, ButtonComponent, IconComponent, AvatarComponent]
+  dependencies: [ToolbarComponent, ButtonComponent, IconComponent]
 })
 export class ProfileCardComponent extends BaseComponent implements IProfileCardComponent {
+  static {
+    defineAvatarComponent();
+  }
+
   public static get observedAttributes(): string[] {
     return [
       PROFILE_CARD_CONSTANTS.attributes.FULL_NAME,
@@ -106,34 +113,34 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
   }
 
   @coreProperty()
-  public declare fullName: string;
+  declare public fullName: string;
 
   @coreProperty()
-  public declare email: string;
+  declare public email: string;
 
   @coreProperty()
-  public declare signOut: boolean;
+  declare public signOut: boolean;
 
   @coreProperty()
-  public declare profile: boolean;
+  declare public profile: boolean;
 
   @coreProperty()
-  public declare signOutText: string;
+  declare public signOutText: string;
 
   @coreProperty()
-  public declare profileText: string;
+  declare public profileText: string;
 
   @coreProperty()
-  public declare avatarText: string;
+  declare public avatarText: string;
 
   @coreProperty()
-  public declare avatarIcon: string;
+  declare public avatarIcon: string;
 
   @coreProperty()
-  public declare avatarImageUrl: string;
+  declare public avatarImageUrl: string;
 
   @coreProperty()
-  public declare avatarLetterCount: number;
+  declare public avatarLetterCount: number;
 
   public override focus(options?: FocusOptions): void {
     this._core.focus(options);

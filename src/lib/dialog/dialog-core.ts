@@ -2,14 +2,15 @@ import { MoveController } from '../core/controllers/move-controller';
 import { DismissibleStack } from '../core/utils/dismissible-stack';
 import { IDialogAdapter } from './dialog-adapter';
 import {
+  DIALOG_CONSTANTS,
   DialogAnimationType,
+  DialogCloseReason,
   DialogMode,
   DialogPlacement,
   DialogPositionStrategy,
   DialogPreset,
   DialogSizeStrategy,
   DialogType,
-  DIALOG_CONSTANTS,
   IDialogMoveEventData
 } from './dialog-constants';
 
@@ -28,9 +29,11 @@ export interface IDialogCore {
   sizeStrategy: DialogSizeStrategy;
   placement: DialogPlacement;
   moveable: boolean;
+  label: string;
+  description: string;
   hideBackdrop(): void;
   showBackdrop(): void;
-  dispatchBeforeCloseEvent(): boolean;
+  dispatchBeforeCloseEvent(reason: DialogCloseReason): boolean;
 }
 
 export class DialogCore implements IDialogCore {
@@ -45,6 +48,8 @@ export class DialogCore implements IDialogCore {
   private _originalFullscreenValue: boolean | undefined;
   private _trigger = '';
   private _moveable = false;
+  private _label = '';
+  private _description = '';
   private _sizeStrategy: DialogSizeStrategy = DIALOG_CONSTANTS.defaults.SIZE_STRATEGY;
   private _placement: DialogPlacement = DIALOG_CONSTANTS.defaults.PLACEMENT;
   private _positionStrategy: DialogPositionStrategy = DIALOG_CONSTANTS.defaults.POSITION_STRATEGY;
@@ -59,7 +64,7 @@ export class DialogCore implements IDialogCore {
   constructor(public _adapter: IDialogAdapter) {}
 
   public initialize(): void {
-    this._adapter.tryApplyGlobalConfiguration(['animationType', 'positionStrategy', 'sizeStrategy', 'persistent', 'moveable', 'fullscreenThreshold']);
+    this._adapter.tryApplyGlobalConfiguration(['mode', 'animationType', 'positionStrategy', 'sizeStrategy', 'persistent', 'moveable', 'fullscreenThreshold']);
 
     if (this._trigger && !this._adapter.triggerElement) {
       this._adapter.tryLocateTriggerElement(this._trigger);
@@ -83,16 +88,17 @@ export class DialogCore implements IDialogCore {
       this._destroyMoveController();
     }
 
-    if (this._open) {
-      this._hide();
-    }
+    this._release();
+    this._tryResetFullscreenValue();
+    this._adapter.destroy();
   }
 
-  public dispatchBeforeCloseEvent(): boolean {
+  public dispatchBeforeCloseEvent(reason: DialogCloseReason): boolean {
     const evt = new CustomEvent(DIALOG_CONSTANTS.events.BEFORE_CLOSE, {
       cancelable: true,
       bubbles: true,
-      composed: true
+      composed: true,
+      detail: { reason }
     });
     this._adapter.dispatchHostEvent(evt);
     return !evt.defaultPrevented;
@@ -111,10 +117,8 @@ export class DialogCore implements IDialogCore {
     this._adapter.addDialogFormSubmitListener(this._dialogFormSubmitListener);
     DismissibleStack.instance.add(this._adapter.hostElement);
 
-    if (this._mode === 'modal') {
-      this._adapter.addDialogCancelListener(this._escapeDismissListener);
-    } else if (this._mode === 'inline-modal') {
-      this._adapter.addDocumentListener('keydown', this._escapeDismissListener);
+    if (this._mode === 'modal' || this._mode === 'inline-modal') {
+      this._adapter.addDocumentListener('keydown', this._escapeDismissListener, { capture: true });
     }
 
     if (!this._persistent) {
@@ -134,25 +138,31 @@ export class DialogCore implements IDialogCore {
   }
 
   private async _hide(): Promise<void> {
-    this._adapter.removeDialogFormSubmitListener(this._dialogFormSubmitListener);
-    this._adapter.removeDialogCancelListener(this._escapeDismissListener);
-    this._adapter.removeDocumentListener('keydown', this._escapeDismissListener);
-    this._adapter.removeBackdropDismissListener(this._backdropDismissListener);
-    DismissibleStack.instance.remove(this._adapter.hostElement);
-
+    this._release();
     await this._adapter.hide();
 
     // Reset the fullscreen value to the original value if it was changed internally by our media query listener
-    if (typeof this._originalFullscreenValue === 'boolean') {
-      this.fullscreen = this._originalFullscreenValue;
-    }
-    this._originalFullscreenValue = undefined;
+    this._tryResetFullscreenValue();
 
     if (this._moveController) {
       this._destroyMoveController();
     }
 
     this._adapter.dispatchHostEvent(new CustomEvent(DIALOG_CONSTANTS.events.CLOSE, { bubbles: true, composed: true }));
+  }
+
+  private _release(): void {
+    this._adapter.removeDialogFormSubmitListener(this._dialogFormSubmitListener);
+    this._adapter.removeDocumentListener('keydown', this._escapeDismissListener, { capture: true });
+    this._adapter.removeBackdropDismissListener(this._backdropDismissListener);
+    DismissibleStack.instance.remove(this._adapter.hostElement);
+  }
+
+  private _tryResetFullscreenValue(): void {
+    if (typeof this._originalFullscreenValue === 'boolean') {
+      this.fullscreen = this._originalFullscreenValue;
+    }
+    this._originalFullscreenValue = undefined;
   }
 
   private async _applyOpen(): Promise<void> {
@@ -167,30 +177,27 @@ export class DialogCore implements IDialogCore {
     this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.OPEN, this._open);
   }
 
-  private _onEscapeDismiss(evt: Event): void {
-    if (evt.type === 'keydown') {
-      const key = (evt as KeyboardEvent).key;
-      if (key !== 'Escape' || !DismissibleStack.instance.isMostRecent(this._adapter.hostElement)) {
-        return;
-      }
-    } else if (evt.type === 'cancel') {
-      evt.preventDefault();
+  private _onEscapeDismiss(evt: KeyboardEvent): void {
+    if (evt.key !== 'Escape' || !DismissibleStack.instance.isMostRecent(this._adapter.hostElement)) {
+      return;
     }
 
+    evt.preventDefault();
+
     if (!this._persistent) {
-      this._tryClose();
+      this._tryClose('escape');
     }
   }
 
   private _onBackdropDismiss(): void {
-    this._tryClose();
+    this._tryClose('backdrop');
   }
 
   private _onDialogFormSubmit(evt: SubmitEvent): void {
     evt.stopPropagation();
     const isDialogSubmitter = evt.submitter?.getAttribute('formmethod') === 'dialog' || (evt.target as HTMLFormElement)?.getAttribute('method') === 'dialog';
     if (isDialogSubmitter) {
-      this._tryClose();
+      this._tryClose('submit');
     }
   }
 
@@ -200,8 +207,8 @@ export class DialogCore implements IDialogCore {
     this._adapter.dispatchHostEvent(event);
   }
 
-  private _tryClose(): void {
-    if (this.dispatchBeforeCloseEvent()) {
+  private _tryClose(reason: DialogCloseReason): void {
+    if (this.dispatchBeforeCloseEvent(reason)) {
       this.open = false;
     }
   }
@@ -233,6 +240,11 @@ export class DialogCore implements IDialogCore {
       return event.defaultPrevented;
     };
     const onMoveEnd = (): void => {
+      // Move dialog back into view if the surface is clipped
+      if (this._adapter.isSurfaceClipped()) {
+        this._adapter.moveSurfaceIntoView();
+      }
+
       const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE_END);
       this._adapter.removeSurfaceClass(DIALOG_CONSTANTS.classes.MOVING);
       this._adapter.dispatchHostEvent(event);
@@ -315,6 +327,15 @@ export class DialogCore implements IDialogCore {
     value = Boolean(value);
     if (this._persistent !== value) {
       this._persistent = value;
+
+      if (this._adapter.isConnected && this._open) {
+        if (this._persistent) {
+          this._adapter.removeBackdropDismissListener(this._backdropDismissListener);
+        } else {
+          this._adapter.addBackdropDismissListener(this._backdropDismissListener);
+        }
+      }
+
       this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.PERSISTENT, this._persistent);
     }
   }
@@ -398,6 +419,26 @@ export class DialogCore implements IDialogCore {
       }
 
       this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.MOVEABLE, this._moveable);
+    }
+  }
+
+  public get label(): string {
+    return this._label;
+  }
+  public set label(value: string) {
+    if (this._label !== value) {
+      this._label = value;
+      this._adapter.setAccessibleLabel(this._label);
+    }
+  }
+
+  public get description(): string {
+    return this._description;
+  }
+  public set description(value: string) {
+    if (this._description !== value) {
+      this._description = value;
+      this._adapter.setAccessibleDescription(this._description);
     }
   }
 

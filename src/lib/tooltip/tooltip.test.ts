@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { nothing } from 'lit';
+import { nothing, TemplateResult } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { task } from '../core/utils/utils';
@@ -51,6 +51,26 @@ describe('Tooltip', () => {
 
       harness.tooltipElement.open = false;
       expect(harness.isOpen).to.be.false;
+    });
+
+    it('should not open if there is no text content', async () => {
+      const harness = await createFixture({ content: nothing });
+
+      harness.tooltipElement.open = true;
+
+      expect(harness.isOpen).to.be.false;
+      expect(harness.tooltipElement.open).to.be.false;
+      expect(harness.tooltipElement.hasAttribute(TOOLTIP_CONSTANTS.attributes.OPEN)).to.be.false;
+    });
+
+    it('should open if there is an element node even if no text content', async () => {
+      const harness = await createFixture({ content: html`<span></span>` });
+
+      harness.tooltipElement.open = true;
+
+      expect(harness.isOpen).to.be.true;
+      expect(harness.tooltipElement.open).to.be.true;
+      expect(harness.tooltipElement.hasAttribute(TOOLTIP_CONSTANTS.attributes.OPEN)).to.be.true;
     });
   });
 
@@ -442,6 +462,7 @@ describe('Tooltip', () => {
       expect(harness.isOpen).to.be.true;
 
       await harness.hoverOutside();
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
 
       expect(harness.isOpen).to.be.false;
     });
@@ -477,6 +498,7 @@ describe('Tooltip', () => {
       expect(harness.isOpen).to.be.true;
 
       await harness.hoverOutside();
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
 
       expect(harness.isOpen).to.be.false;
     });
@@ -488,6 +510,223 @@ describe('Tooltip', () => {
 
       await harness.hoverTrigger();
       expect(harness.isOpen).to.be.true;
+    });
+
+    it('should open when focusing the trigger via keyboard with hover trigger type', async () => {
+      const harness = await createFixture({ triggerType: 'hover' });
+
+      expect(harness.isOpen).to.be.false;
+
+      harness.focusTrigger();
+      expect(harness.isOpen).to.be.true;
+    });
+
+    it('should close when blurring the trigger after keyboard focus with hover trigger type', async () => {
+      const harness = await createFixture({ triggerType: 'hover' });
+
+      harness.focusTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      await harness.blurTrigger();
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should not open when clicking the trigger with hover trigger type (no keyboard focus)', async () => {
+      const harness = await createFixture({ triggerType: 'hover' });
+
+      expect(harness.isOpen).to.be.false;
+
+      await harness.clickTrigger();
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should use grace period when moving away from anchor', async () => {
+      const harness = await createFixture({ triggerType: 'hover', delay: 0 });
+
+      // Open tooltip by hovering anchor
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      // Move away from anchor - tooltip should stay open during grace period
+      await harness.hoverOutside();
+      expect(harness.isOpen).to.be.true;
+
+      // Wait for grace period to expire - tooltip should close
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should allow hovering the tooltip itself to keep it open', async () => {
+      const harness = await createFixture({ triggerType: 'hover', delay: 0 });
+
+      // Open tooltip by hovering anchor
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      // Move away from anchor to trigger grace period
+      await harness.hoverOutside();
+
+      // Immediately move to tooltip before grace period expires
+      await harness.hoverTooltip();
+
+      // Wait beyond grace period - tooltip should stay open
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      expect(harness.isOpen).to.be.true;
+
+      // Move away from tooltip - should close after grace period
+      await harness.hoverOutside();
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should close tooltip when moving from anchor to outside during grace period', async () => {
+      const harness = await createFixture({ triggerType: 'hover', delay: 0 });
+
+      // Open tooltip by hovering anchor
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      // Move directly away from anchor (not to tooltip)
+      await harness.hoverOutside();
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should allow rapid transitions between anchor and tooltip', async () => {
+      const harness = await createFixture({ triggerType: 'hover', delay: 0 });
+
+      // Open tooltip by hovering anchor
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      // Move to tooltip
+      await harness.hoverTooltip();
+      expect(harness.isOpen).to.be.true;
+
+      // Move back to anchor quickly
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      // Move to tooltip again
+      await harness.hoverTooltip();
+      expect(harness.isOpen).to.be.true;
+
+      // Final move away should close
+      await harness.hoverOutside();
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should only attach tooltip hover listeners when hover trigger is active', async () => {
+      const harness = await createFixture({ triggerType: 'focus' });
+
+      // Open tooltip via focus (not hover)
+      harness.focusTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      // Moving to tooltip should not affect it since hover listeners aren't attached
+      await harness.hoverTooltip();
+      expect(harness.isOpen).to.be.true;
+
+      // Blur should close it
+      harness.blurTrigger();
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should handle anchor → tooltip → anchor transitions correctly', async () => {
+      const harness = await createFixture({ triggerType: 'hover', delay: 0 });
+
+      // Open tooltip by hovering anchor
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      // Move to tooltip
+      await harness.hoverTooltip();
+      expect(harness.isOpen).to.be.true;
+
+      // Move back to anchor - tooltip should remain open
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      // Wait beyond grace period to ensure no accidental timeouts
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      expect(harness.isOpen).to.be.true;
+
+      // Finally move away from anchor - should close after grace period
+      await harness.hoverOutside();
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should handle quick anchor re-entry scenarios', async () => {
+      const harness = await createFixture({ triggerType: 'hover', delay: 0 });
+
+      // Open tooltip by hovering anchor
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      // Quickly leave and re-enter anchor before grace period expires
+      await harness.hoverOutside();
+      expect(harness.isOpen).to.be.true; // Should still be open during grace period
+
+      // Re-enter anchor before grace period expires
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD / 2);
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      // Wait beyond original grace period - should still be open
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      expect(harness.isOpen).to.be.true;
+
+      // Finally leave anchor completely - should close after grace period
+      await harness.hoverOutside();
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should use increased grace period for better usability', async () => {
+      const harness = await createFixture({ triggerType: 'hover', delay: 0 });
+
+      // Open tooltip by hovering anchor
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      // Move away from anchor
+      await harness.hoverOutside();
+
+      // Should still be open during the 100ms grace period
+      await task(50);
+      expect(harness.isOpen).to.be.true;
+
+      // Should close after the full grace period
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should handle rapid multiple transitions between anchor and tooltip', async () => {
+      const harness = await createFixture({ triggerType: 'hover', delay: 0 });
+
+      // Open tooltip by hovering anchor
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      // Perform multiple rapid transitions
+      for (let i = 0; i < 3; i++) {
+        // Move to tooltip
+        await harness.hoverTooltip();
+        expect(harness.isOpen).to.be.true;
+        await task(50); // Short delay
+
+        // Move back to anchor
+        await harness.hoverTrigger();
+        expect(harness.isOpen).to.be.true;
+        await task(50); // Short delay
+      }
+
+      // Finally move away - should close after grace period
+      await harness.hoverOutside();
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      expect(harness.isOpen).to.be.false;
     });
   });
 
@@ -588,7 +827,32 @@ describe('Tooltip', () => {
       expect(harness.isOpen).to.be.true;
 
       await harness.hoverOutside();
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
 
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should work correctly when both focus and hover triggers are specified (no double keyboard focus handling)', async () => {
+      const harness = await createFixture();
+
+      harness.tooltipElement.setAttribute(TOOLTIP_CONSTANTS.attributes.TRIGGER_TYPE, 'focus,hover');
+
+      expect(harness.tooltipElement.triggerType).to.deep.equal(['focus', 'hover']);
+
+      // Test keyboard focus works (via explicit focus trigger)
+      harness.focusTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      await harness.blurTrigger();
+      expect(harness.isOpen).to.be.false;
+
+      // Test hover works
+      await harness.hoverTrigger();
+      await task(harness.tooltipElement.delay + 100);
+      expect(harness.isOpen).to.be.true;
+
+      await harness.hoverOutside();
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
       expect(harness.isOpen).to.be.false;
     });
   });
@@ -715,6 +979,16 @@ class TooltipHarness {
     await sendMouse({ type: 'move', position: [mouseX, mouseY] });
   }
 
+  public async hoverTooltip(): Promise<void> {
+    if (!this.isOpen || !this.contentElement) {
+      throw new Error('Cannot hover tooltip when it is not open');
+    }
+    const { x, y, height, width } = this.contentElement.getBoundingClientRect();
+    const mouseX = Math.round(x + width / 2);
+    const mouseY = Math.round(y + height / 2);
+    await sendMouse({ type: 'move', position: [mouseX, mouseY] });
+  }
+
   public async longpressTrigger(delay = LONGPRESS_TRIGGER_DELAY): Promise<void> {
     await this.hoverTrigger();
     await sendMouse({ type: 'down', button: 'left' });
@@ -745,6 +1019,7 @@ class TooltipHarness {
 }
 
 interface ITooltipFixtureConfig {
+  content?: string | TemplateResult | typeof nothing;
   open?: boolean;
   type?: TooltipType;
   triggerType?: TooltipTriggerType;
@@ -752,13 +1027,13 @@ interface ITooltipFixtureConfig {
   offset?: number;
 }
 
-async function createFixture({ open, type, triggerType, delay, offset }: ITooltipFixtureConfig = {}): Promise<TooltipHarness> {
+async function createFixture({ content = 'Tooltip text', open, type, triggerType, delay, offset }: ITooltipFixtureConfig = {}): Promise<TooltipHarness> {
   const container = await fixture<HTMLElement>(html`
     <div>
       <button type="button" id="alt-anchor">Alt Tooltip Anchor</button>
       <button type="button" id="test-anchor">Tooltip Anchor</button>
       <forge-tooltip ?open=${open} type=${type ?? nothing} trigger-type=${triggerType ?? nothing} delay=${delay ?? nothing} offset=${offset ?? nothing}>
-        Test tooltip content
+        ${content}
       </forge-tooltip>
     </div>
   `);

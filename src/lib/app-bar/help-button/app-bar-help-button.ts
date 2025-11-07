@@ -1,5 +1,5 @@
 import { customElement, attachLightTemplate, coreProperty } from '@tylertech/forge-core';
-import { tylIconHelp } from '@tylertech/tyler-icons/standard';
+import { tylIconHelp } from '@tylertech/tyler-icons';
 import { IMenuOption, MenuComponent } from '../../menu';
 import { AppBarHelpButtonAdapter } from './app-bar-help-button-adapter';
 import { AppBarHelpButtonCore } from './app-bar-help-button-core';
@@ -25,7 +25,7 @@ declare global {
 /**
  * @tag forge-app-bar-help-button
  *
- * @description A utility component with predefined icon and descriptions for use in an app bar `end` slot.
+ * @summary A help button component with a predefined help icon that displays a dropdown menu when clicked, designed for use in an app bar's end slot.
  *
  * @property {IMenuOption[]} [options=[]] - The menu options to display when the button is clicked
  * @property {string} [icon=help] - The name of an alternative icon to display.
@@ -74,8 +74,8 @@ export class AppBarHelpButtonComponent extends BaseComponent implements IAppBarH
   }
 
   @coreProperty()
-  public declare options: IMenuOption[];
+  declare public options: IMenuOption[];
 
   @coreProperty()
-  public declare icon: string;
+  declare public icon: string;
 }

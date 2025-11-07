@@ -18,7 +18,7 @@ declare global {
 /**
  * @tag forge-scaffold
  *
- * @summary A scaffold provides a generic layout structure for your content using common named areas.
+ * @summary The scaffold provides a generic layout structure for your content using common named areas. Use scaffolds for full page layouts or smaller sections within other elements where you want positioned content areas and scrollable body content.
  *
  * @property {boolean} [viewport=false] - Whether the scaffold should be full viewport height.
  *

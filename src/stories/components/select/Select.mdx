@@ -1,4 +1,4 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as SelectStories from './Select.stories';
 
@@ -39,6 +39,20 @@ The select supports a `multiple` property/attribute to allow multiple options to
 
 When the select is in multiple mode, the `value` property/attribute should be an array of selected values.
 
+## Select All
+
+When using the select in multiple mode, you can enable a "Select All" option by setting the `showSelectAll` property to `true`. This adds a convenient option at the top of the dropdown to select or deselect all available options at once.
+
+<Canvas of={SelectStories.SelectAll} />
+
+To customize the label for the "Select all" option, use the `selectAllLabel` property (or `select-all-label` attribute). This is useful for localization or when you want to use different wording.
+
+When the "Select All" option is clicked, the component dispatches a `forge-select-all` event before the standard `change` event. The `forge-select-all` event detail contains:
+- `value`: An array of all option values (when selecting all) or an empty array (when deselecting all)
+- `isAllSelected`: A boolean indicating whether all options are now selected (`true`) or deselected (`false`)
+
+You can prevent the select all action by calling `preventDefault()` on the `forge-select-all` event, which will also prevent the subsequent `change` event from being dispatched.
+
 ## API
 
 <CustomArgTypes />
@@ -47,10 +61,9 @@ When the select is in multiple mode, the `value` property/attribute should be an
 
 | Name | Description |
 | :--- | :---------- |
-
 | **Select Opened**
 | `escape / space` | Closes the select.
-| `tab / enter` | Selects the focused option and closes the select.
+| `tab / enter` | Selects the focused option and closes the select. If the "Select All" option is focused, toggles all options.
 | `arrow down` | Highlights the next option if an option is selected, otherwise highlights the first option.
 | `arrow up` | Highlights the previous option if an option is selected, otherwise highlights the first option.
 | `home` | Highlights the first option that is not disabled.
@@ -70,6 +83,8 @@ When the select is in multiple mode, the `value` property/attribute should be an
 - Verify that the select list can be toggled open or closed by pressing the space or enter key.
 - Verify that each active item in the select list can be reached by the up-arrow and down-arrow keys.
 - Verify that in multiple-select mode, the Enter key can toggle an item as selected or un-selected.
+- Verify that the select has a label and/or placeholder set via the `label` and `placeholder` properties/attributes.
+  - The select does not support the `aria-label`, `aria-labelledby` attributes. Instead, use the `label` property/attribute to set an accessible label.
 
 ## CSS-Only
 

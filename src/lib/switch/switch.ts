@@ -17,11 +17,13 @@ import styles from './switch.scss';
 
 export interface ISwitchComponent extends IWithFormAssociation, IWithFocusable, IWithLabelAwareness, IWithElementInternals, IWithDefaultAria {
   value: string;
+  checked: boolean;
+  /** @deprecated use `checked` instead */
   on: boolean;
-  /**
-   * @deprecated use `on` instead
-   */
+  /** @deprecated use `checked` instead */
   selected: boolean;
+  defaultChecked: boolean;
+  /** @deprecated use `defaultChecked` instead */
   defaultOn: boolean;
   required: boolean;
   dense: boolean;
@@ -109,6 +111,7 @@ declare global {
  * @cssproperty --forge-switch-icon-active-off-scale - The scale transformation applied to the handle icons when the switch is active (pressed) in its off state.
  * @cssproperty --forge-switch-gap - The space between the switch and label.
  * @cssproperty --forge-switch-justify - How the switch and label are distributed along their main axis.
+ * @cssproperty --forge-switch-align - How the switch and label are distributed along their cross axis.
  * @cssproperty --forge-switch-direction - Whether the switch and label are arranged along the inline or block axis.
  * @cssproperty --forge-switch-state-layer-size - The inline and block size of the handle's state layer.
  * @cssproperty --forge-switch-state-layer-width - The inline size of the handle's state layer.
@@ -164,7 +167,7 @@ export class SwitchComponent
     super.connectedCallback();
     this[setDefaultAria]({
       role: 'switch',
-      ariaChecked: this.on ? 'true' : 'false',
+      ariaChecked: this.checked ? 'true' : 'false',
       ariaDisabled: this.disabled ? 'true' : 'false',
       ariaRequired: this.required ? 'true' : 'false'
     });
@@ -173,12 +176,14 @@ export class SwitchComponent
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
+      case SWITCH_CONSTANTS.observedAttributes.CHECKED:
       case SWITCH_CONSTANTS.observedAttributes.ON:
       case SWITCH_CONSTANTS.observedAttributes.SELECTED:
-        this.on = coerceBoolean(newValue);
+        this.checked = coerceBoolean(newValue);
         break;
+      case SWITCH_CONSTANTS.observedAttributes.DEFAULT_CHECKED:
       case SWITCH_CONSTANTS.observedAttributes.DEFAULT_ON:
-        this.defaultOn = coerceBoolean(newValue);
+        this.defaultChecked = coerceBoolean(newValue);
         break;
       case SWITCH_CONSTANTS.observedAttributes.VALUE:
         this.value = newValue;
@@ -206,29 +211,29 @@ export class SwitchComponent
   }
 
   public override [getFormValue](): FormValue | null {
-    return this.on ? this.value : null;
+    return this.checked ? this.value : null;
   }
 
   public override [getFormState](): string {
-    return this.on ? SWITCH_CONSTANTS.state.ON : SWITCH_CONSTANTS.state.OFF;
+    return this.checked ? SWITCH_CONSTANTS.state.ON : SWITCH_CONSTANTS.state.OFF;
   }
 
   public [setValidity](): void {
     this[internals].setValidity(
-      { valueMissing: this.required && !this.on },
+      { valueMissing: this.required && !this.checked },
       this[getValidationMessage]({
-        checked: this.on,
+        checked: this.checked,
         required: this.required
       })
     );
   }
 
   public formResetCallback(): void {
-    this.on = this.defaultOn;
+    this.checked = this.defaultChecked;
   }
 
   public formStateRestoreCallback(state: string): void {
-    this.on = state === SWITCH_CONSTANTS.state.ON;
+    this.checked = state === SWITCH_CONSTANTS.state.ON;
   }
 
   public labelClickedCallback(): void {
@@ -242,48 +247,65 @@ export class SwitchComponent
   }
 
   /** @ignore */
-  public setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void {
+  public setFormValue(value: (FormValue & { [key: string]: any }) | null, state?: (FormValue & { [key: string]: any }) | null | undefined): void {
     this[internals].setFormValue(value, state);
 
     if (state) {
       const stateValue = isString(state) ? state : state[this.name];
-      this.on = stateValue === SWITCH_CONSTANTS.state.ON;
+      this.checked = stateValue === SWITCH_CONSTANTS.state.ON;
       return;
     }
 
     if (isString(value)) {
-      this.on = !!value;
+      this.checked = !!value;
     } else if (value?.[this.name]) {
-      this.on = !!value[this.name];
+      this.checked = !!value[this.name];
     } else {
-      this.on = false;
+      this.checked = false;
     }
   }
 
   /**
-   * Gets/sets whether the switch is on or off.
+   * Gets/sets whether the switch is checked or not.
    * @default false
    * @attribute
    */
   @coreProperty()
-  public declare on: boolean;
+  declare public checked: boolean;
 
   /**
-   * Alias for `on` _(deprecated)_.
-   * @deprecated use `on` instead
+   * Alias for `checked` _(deprecated)_. Gets/sets whether the switch is checked or not.
+   * @deprecated use `checked` instead.
    * @default false
    * @attribute
    */
-  @coreProperty({ name: 'on' })
-  public declare selected: boolean;
+  @coreProperty({ name: 'checked' })
+  declare public on: boolean;
 
   /**
-   * Gets/sets whether the switch is on or off by default.
+   * Alias for `checked` _(deprecated)_.
+   * @deprecated use `checked` instead
+   * @default false
+   * @attribute
+   */
+  @coreProperty({ name: 'checked' })
+  declare public selected: boolean;
+
+  /**
+   * Gets/sets whether the switch is checked by default.
+   * @default false
+   * @attribute default-checked
+   */
+  @coreProperty()
+  declare public defaultChecked: boolean;
+
+  /**
+   * Alias for `defaultChecked` _(deprecated)_. Gets/sets whether the switch is checked by default.
    * @default false
    * @attribute default-on
    */
-  @coreProperty()
-  public declare defaultOn: boolean;
+  @coreProperty({ name: 'defaultChecked' })
+  declare public defaultOn: boolean;
 
   /**
    * Gets/sets the value of the switch.
@@ -291,7 +313,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty()
-  public declare value: string;
+  declare public value: string;
 
   /**
    * Controls whether the switch is dense.
@@ -299,7 +321,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   /**
    * Controls whether the switch is disabled.
@@ -307,7 +329,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   /**
    * Controls whether the switch is required.
@@ -315,7 +337,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty()
-  public declare required: boolean;
+  declare public required: boolean;
 
   /**
    * Controls whether the switch is readonly.
@@ -323,7 +345,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty()
-  public declare readonly: boolean;
+  declare public readonly: boolean;
 
   /**
    * Controls the presence of the off and on icons.
@@ -331,7 +353,7 @@ export class SwitchComponent
    * @attribute
    */
   @coreProperty()
-  public declare icon: SwitchIconVisibility;
+  declare public icon: SwitchIconVisibility;
 
   /**
    * Controls whether the label appears before or after the switch.
@@ -339,7 +361,7 @@ export class SwitchComponent
    * @attribute label-position
    */
   @coreProperty()
-  public declare labelPosition: SwitchLabelPosition;
+  declare public labelPosition: SwitchLabelPosition;
 
   /**
    * Toggles the switch on or off.
@@ -347,9 +369,9 @@ export class SwitchComponent
    */
   public toggle(force?: boolean): void {
     if (isDefined(force)) {
-      this._core.on = force as boolean;
+      this._core.checked = force as boolean;
     } else {
-      this._core.on = !this._core.on;
+      this._core.checked = !this._core.checked;
     }
   }
 }

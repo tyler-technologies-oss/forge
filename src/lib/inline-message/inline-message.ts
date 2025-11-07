@@ -18,7 +18,7 @@ declare global {
 /**
  * @tag forge-inline-message
  *
- * @summary Inline messages are used to provide feedback to the user about a specific action or state.
+ * @summary Inline messages are used to provide feedback to the user about a specific action or state. Use inline messages to communicate information such as errors, warnings, or success messages in a way that is contextual to the content on the page.
  *
  * @property {InlineMessageTheme} [theme="info"] - The theme to apply.
  *

@@ -16,6 +16,8 @@ declare global {
 
 /**
  * @tag forge-option-group
+ *
+ * @summary Groups related options together with an optional label within select components.
  */
 @customElement({
   name: OPTION_GROUP_CONSTANTS.elementName
@@ -51,16 +53,16 @@ export class OptionGroupComponent extends BaseComponent implements IOptionGroupC
   }
 
   /** The child options of this group. */
-  public declare options: ISelectOption[];
+  declare public options: ISelectOption[];
 
   /** The builder function for the group content. */
-  public declare builder: ListDropdownOptionGroupBuilder;
+  declare public builder: ListDropdownOptionGroupBuilder;
 
   /**
    * Gets/sets the optional group value.
    * @attribute
    */
-  public declare value: any;
+  declare public value: any;
 
   /**
    * The text content for the group.

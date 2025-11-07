@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { tylIconUnfoldMore } from '@tylertech/tyler-icons/standard';
+import { tylIconUnfoldMore } from '@tylertech/tyler-icons';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { IconComponent, IconRegistry } from '../icon';
 import { IconButtonComponent } from '../icon-button';
@@ -30,6 +30,8 @@ declare global {
 }
 
 /**
+ * @summary An interactive color selection component with support for multiple color formats (hex, RGB, HSV) and optional opacity control. Intended to be used either inline, or within a popover or dialog for selecting colors.
+ *
  * @tag forge-color-picker
  *
  * @property {boolean} [allowOpacity=false] Gets/sets whether opacity is displayed and allowed be to changed.
@@ -87,25 +89,25 @@ export class ColorPickerComponent extends BaseComponent implements IColorPickerC
 
   /** Gets/sets the value using hex format only. */
   @coreProperty()
-  public declare value: string | null | undefined;
+  declare public value: string | null | undefined;
 
   /** Gets/sets the value using rgba format. */
   @coreProperty()
-  public declare rgba: IRGBA | null | undefined;
+  declare public rgba: IRGBA | null | undefined;
 
   /** Gets/sets the value using hsva format. */
   @coreProperty()
-  public declare hsva: IHSVA | null | undefined;
+  declare public hsva: IHSVA | null | undefined;
 
   /** Gets/sets the opacity value, if `allowOpacity` is true. */
   @coreProperty()
-  public declare opacity: number | null | undefined;
+  declare public opacity: number | null | undefined;
 
   /** Gets/sets whether opacity is displayed and allowed be to changed. */
   @coreProperty()
-  public declare allowOpacity: boolean;
+  declare public allowOpacity: boolean;
 
   /** Gets/sets whether change event has a debounce applied to avoid successive updates. Defaults to `false`. */
   @coreProperty()
-  public declare debounceChangeEvent: boolean;
+  declare public debounceChangeEvent: boolean;
 }

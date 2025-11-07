@@ -1,4 +1,4 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as PopoverStories from './Popover.stories';
 
@@ -41,6 +41,15 @@ you can use the `<forge-popover>` and add the proper ARIA attributes to make it 
 In this example, the popover is presented with the `role="dialog"` and `aria-modal="false"` attributes. This tells screen readers that the popover is a
 dialog, but it is not modal. This specific example will gracefully handle user entry into a form, by ensuring that the user does not lose valuable data
 by accidentally closing the popover.
+
+## Distinct Popovers
+
+In some cases, typically when using the `"hover"` trigger type, you may want to ensure that the popover is distinct from other popovers on the page meaning
+that it can be the only popover within a specific group that is open at a time. This can be achieved by using the `distinct` attribute on
+the `<forge-popover>` element. While you can use the `distinct` attribute on any popover, this will cause it to use a "default" group. It is most commonly
+used with a specific name or group to scope the distinct behavior to a specific set of popovers.
+
+<Canvas of={PopoverStories.Distinct} />
 
 ## API
 

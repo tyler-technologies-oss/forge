@@ -94,13 +94,14 @@ export class DeprecatedIconButtonComponentDelegate extends BaseComponentDelegate
     const type = this._config.options?.iconType || 'component';
 
     switch (type) {
-      case 'font':
+      case 'font': {
         const classes = Array.isArray(this._config.options.iconClass) ? this._config.options.iconClass : [ICON_CLASS_NAME];
         this._buttonElement?.classList.add(...classes);
         if (this._buttonElement) {
           this._buttonElement.textContent = this._config.options.iconName;
         }
         break;
+      }
       case 'component':
         this._iconElement = document.createElement(ICON_CONSTANTS.elementName);
         this._iconElement.name = this._config.options.iconName;

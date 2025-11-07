@@ -1,4 +1,4 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as DatePickerStories from './DatePicker.stories';
 
@@ -10,15 +10,42 @@ Date pickers are used to allow users to select a date from a calendar.
 
 <Canvas of={DatePickerStories.Demo} />
 
+## Alternative Date Formats
+
+The date picker component supports multiple built-in date formats, which can be set via the `date-format` attribute. The default format is `MM/DD/YYYY`,
+but you can change it to any of the following formats:
+
+- `MM/DD/YYYY`
+- `MM/DD/YY`
+- `DD/MMM/YYYY`
+- `MM-DD-YYYY`
+- `MM-DD-YY`
+- `DD-MMM-YYYY`
+- `YYYY-MM-DD`
+- `YYYY-MMM-DD`
+- `DD.MM.YYYY`
+- `DD.MM.YY`
+
+When changing the default format, the date picker will automatically update the input mask to match the new format as well as handle the parsing and formatting of the date value.
+
+<Canvas of={DatePickerStories.DateFormats} />
+
 ## Custom Date Format
 
-Input masking is enabled by default to ensure the user enters the date in the correct format, but you can also customize the date format via the `parseCallback`, `formatCallback`,
-and `maskFormat` properties.
+You can also customize the date format via the `parseCallback`, `formatCallback`, and `maskFormat` properties. This gives you full control over how the date is parsed from the input string and how it is formatted back into a string for display.
+
+The following mask segment blocks are supported for the `mask-format` attribute:
+
+- `Mmm` - Month abbreviation (e.g., Jan, Feb, Mar)
+- `MMM` - Month abbreviation uppercase (e.g., JAN, FEB, MAR)
+- `DD` - Day of the month with leading zero (01 to 31)
+- `YYYY` - Four-digit year (e.g., 2025)
+- `YY` - Two-digit year (e.g., 25)
 
 <Canvas of={DatePickerStories.CustomFormat} />
 
 In the example above, the `parseCallback` function is used to parse the date string into a `Date` object, and the `formatCallback` function is used to format the date object into a string
-using the `YYYY-MM-DD` format. You will also need to set the `mask-format` attribute to `YYYY-MM-DD` to enable input masking support.
+using the `Mmm DD, YYYY` format. You will also need to set the `mask-format` attribute to `Mmm DD, YYYY` to enable input masking support.
 
 ```typescript
 function parseCallback(str: string): Date | null {
@@ -26,26 +53,77 @@ function parseCallback(str: string): Date | null {
     return null;
   }
 
-  const split = str.split('-');
+  // Regular expression to match "Mmm DD, YYYY" (e.g., "Jul 08, 2025")
+  const regex = /(\w{3}) (\d{2}), (\d{4})/;
+  const match = str.match(regex);
 
-  if (split.length !== 3) {
+  if (!match || match.length !== 4) {
     return null;
   }
 
-  const yyyy = +split[0];
-  const mm = +split[1];
-  const dd = split[2].indexOf('T') ? +split[2].split('T')[0] : +split[2];
+  const monthStr = match[1];
+  const day = parseInt(match[2], 10);
+  const year = parseInt(match[3], 10);
 
-  if (!yyyy || isNaN(yyyy) || !mm || isNaN(mm) || !dd || isNaN(dd)) {
+  // Map month abbreviations to month numbers (0-indexed)
+  const monthMap: { [key: string]: number } = {
+    Jan: 0,
+    Feb: 1,
+    Mar: 2,
+    Apr: 3,
+    May: 4,
+    Jun: 5,
+    Jul: 6,
+    Aug: 7,
+    Sep: 8,
+    Oct: 9,
+    Nov: 10,
+    Dec: 11
+  };
+  const month = monthMap[monthStr];
+
+  if (isNaN(day) || isNaN(month) || isNaN(year)) {
     return null;
   }
 
-  return new Date(yyyy, mm - 1, dd, 0, 0, 0, 0);
+  const date = new Date(year, month, day);
+
+  // Validate the date to prevent issues with invalid dates (e.g., Feb 30)
+  if (date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day) {
+    return null;
+  }
+
+  return date;
 }
 
-function formatCallback(date: Date): string | null {
-  return date ? date.toISOString().split('T')[0] : null;
+function formatCallback(date: Date | null): string {
+  if (!date) {
+    return '';
+  }
+
+  const options: Intl.DateTimeFormatOptions = { month: 'short', day: '2-digit', year: 'numeric' };
+  return new Intl.DateTimeFormat('en-US', options).format(date);
 }
+```
+
+## Custom Shortcuts
+
+You can also customize the shortcuts available in the date picker by using the `shortcuts` property. This allows you to define your own key shortcuts based on your application's needs.
+
+The date picker supports the following built-in shortcuts by default:
+
+- `t`: Today
+
+If you need to turn off the built-in shortcuts, you can set the `shortcuts` attribute to `"off"`.
+
+If you want to add custom shortcuts, you can set the `shortcuts` property to a JavaScript object that maps key names to a callback function that returns a `Date` object. The callback function will receive the current date as an argument, which you can use to calculate the desired date.
+
+```typescript
+const shortcuts = {
+  t: (currentDate: Date) => new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()),
+  y: (currentDate: Date) => new Date(currentDate.getFullYear(), 0, 1),
+  e: (currentDate: Date) => new Date(currentDate.getFullYear(), 11, 31),
+};
 ```
 
 ## API

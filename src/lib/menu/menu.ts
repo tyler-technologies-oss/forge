@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, customElement, ensureChild, coreProperty, isDefined } from '@tylertech/forge-core';
-import { tylIconArrowRight } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowRightAlt } from '@tylertech/tyler-icons';
 import { PositionPlacement } from '../core/utils/position-utils';
 import { IconRegistry } from '../icon';
 import { ListComponent } from '../list';
@@ -18,6 +18,7 @@ import {
   MENU_CONSTANTS
 } from './menu-constants';
 import { MenuCore } from './menu-core';
+import { TooltipComponent } from '../tooltip';
 
 import template from './menu.html';
 import styles from './menu.scss';
@@ -36,6 +37,7 @@ export interface IMenuComponent extends IListDropdownAware {
   popupOffset: IOverlayOffset;
   optionBuilder: MenuOptionBuilder | undefined;
   popupElement: HTMLElement | undefined;
+  popupTarget: string | null;
   propagateKeyEvent(evt: KeyboardEvent): void;
   activateFirstOption(): void;
 }
@@ -56,16 +58,24 @@ declare global {
 /**
  * @tag forge-menu
  *
+ * @summary Menus display a list of options or actions that users can select from a dropdown. Menus wrap button or list item elements to provide the trigger for displaying the menu options.
+ *
  * @dependency forge-popover
  * @dependency forge-list
+ *
+ * @event {CustomEvent<IMenuSelectEventData>} forge-menu-select - Dispatches when a menu option is selected.
+ * @event {CustomEvent<void>} forge-menu-open - Dispatches when the menu is opened.
+ * @event {CustomEvent<void>} forge-menu-close - Dispatches when the menu is closed.
+ * @event {CustomEvent<IMenuActiveChangeEventData>} forge-menu-active-change - Dispatches when the active menu option changes.
  */
 @customElement({
   name: MENU_CONSTANTS.elementName,
-  dependencies: [PopoverComponent, ListComponent]
+  dependencies: [PopoverComponent, ListComponent, TooltipComponent]
 })
 export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   public static get observedAttributes(): string[] {
     return [
+      ...ListDropdownAware.observedAttributes,
       MENU_CONSTANTS.attributes.OPEN,
       MENU_CONSTANTS.attributes.PLACEMENT,
       MENU_CONSTANTS.attributes.SELECTED_INDEX,
@@ -78,7 +88,8 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
       MENU_CONSTANTS.attributes.POPUP_CLASSES,
       MENU_CONSTANTS.attributes.OPTION_LIMIT,
       MENU_CONSTANTS.attributes.OBSERVE_SCROLL,
-      MENU_CONSTANTS.attributes.OBSERVE_SCROLL_THRESHOLD
+      MENU_CONSTANTS.attributes.OBSERVE_SCROLL_THRESHOLD,
+      MENU_CONSTANTS.attributes.POPUP_TARGET
     ];
   }
 
@@ -86,7 +97,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
 
   constructor() {
     super();
-    IconRegistry.define(tylIconArrowRight);
+    IconRegistry.define(tylIconArrowRightAlt);
     this._core = new MenuCore(new MenuAdapter(this));
     attachShadowTemplate(this, template, styles);
   }
@@ -126,6 +137,9 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
       case MENU_CONSTANTS.attributes.MODE:
         this.mode = newValue as MenuMode;
         break;
+      case MENU_CONSTANTS.attributes.POPUP_TARGET:
+        this._core.popupTarget = isDefined(newValue) ? newValue : null;
+        break;
     }
   }
 
@@ -139,14 +153,14 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
    * @attribute
    */
   @coreProperty()
-  public declare open: boolean;
+  declare public open: boolean;
 
   /**
    * Gets/sets the array of options to display in the menu.
    * @default []
    */
   @coreProperty()
-  public declare options: Array<IMenuOption | IMenuOptionGroup> | MenuOptionFactory;
+  declare public options: Array<IMenuOption | IMenuOptionGroup> | MenuOptionFactory;
 
   /**
    * Gets/sets the selected option to the index. Does not support cascading menus.
@@ -154,7 +168,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
    * @deprecated Do not use menus for selection. Consider a `<forge-select>` instead.
    */
   @coreProperty()
-  public declare selectedIndex: number;
+  declare public selectedIndex: number;
 
   /**
    * Gets/sets the value of the option to select.
@@ -162,7 +176,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
    * @attribute selected-value
    */
   @coreProperty()
-  public declare selectedValue: any;
+  declare public selectedValue: any;
 
   /**
    * Gets/sets the menu placement (default is bottom-left).
@@ -170,14 +184,14 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
    * @attribute
    */
   @coreProperty()
-  public declare placement: `${PositionPlacement}`;
+  declare public placement: `${PositionPlacement}`;
 
   /**
    * Gets/sets the fallback menu placement for overriding the default of any side.
    * @attribute fallback-placements
    */
   @coreProperty()
-  public declare fallbackPlacements: `${PositionPlacement}`[];
+  declare public fallbackPlacements: `${PositionPlacement}`[];
 
   /**
    * Gets/sets dense state of the list options used in the menu popup.
@@ -185,21 +199,21 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
    * @attribute
    */
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   /**
    * Gets/sets the class name to use for option icons.
    * @attribute icon-class
    */
   @coreProperty()
-  public declare iconClass: string;
+  declare public iconClass: string;
 
   /**
    * Gets/sets whether selection of menu items is persisted.
    * @deprecated Please use `<forge-select-dropdown>` for handling selection states.
    */
   @coreProperty()
-  public declare persistSelection: boolean;
+  declare public persistSelection: boolean;
 
   /**
    * Gets/sets the mode that this menu is using.
@@ -207,26 +221,37 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
    * @attribute
    */
   @coreProperty()
-  public declare mode: MenuMode;
+  declare public mode: MenuMode;
 
   /**
    * Sets the position adjustment on the internal popup element.
    */
   @coreProperty()
-  public declare popupOffset: IOverlayOffset;
+  declare public popupOffset: IOverlayOffset;
 
   /**
    * Sets the callback that will be executed for each option in the dropdown for producing custom option templates.
    */
   @coreProperty()
-  public declare optionBuilder: MenuOptionBuilder;
+  declare public optionBuilder: MenuOptionBuilder;
 
   /**
    * Gets the currently active popup element when the dropdown is open.
    * @readonly
    */
   @coreProperty({ set: false })
-  public declare popupElement: HTMLElement | undefined;
+  declare public popupElement: HTMLElement | undefined;
+
+  /**
+   * Gets/sets the ID of the element to use as the popup anchor for positioning.
+   * When null or empty, the target element (button) is used for both interaction and positioning.
+   * This is useful for cases like forge-list-item > button where the menu should be
+   * attached to the button for listeners but positioned relative to the list item.
+   * @default null
+   * @attribute popup-target
+   */
+  @coreProperty()
+  declare public popupTarget: string | null;
 
   /**
    * Force propagates the key event from another element to this component.

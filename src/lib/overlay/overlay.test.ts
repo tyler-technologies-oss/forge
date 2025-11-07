@@ -4,10 +4,11 @@ import { spy } from 'sinon';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { IOverlayComponent, OverlayComponent } from './overlay';
-import { OverlayFlipState, OverlayHideState, overlayStack, OVERLAY_CONSTANTS } from './overlay-constants';
-import { IOverlayAdapter } from './overlay-adapter';
+import { OverlayFlipState, OverlayHideState, overlayStack, OVERLAY_CONSTANTS, OverlayShiftState } from './overlay-constants';
+import { IOverlayAdapter, OverlayAdapter } from './overlay-adapter';
 
 import './overlay';
+import { OverlayCore } from './overlay-core';
 
 describe('Overlay', () => {
   describe('defaults', () => {
@@ -33,8 +34,8 @@ describe('Overlay', () => {
       expect(harness.overlayElement.placement).to.equal('bottom');
       expect(harness.overlayElement.positionStrategy).to.equal('fixed');
       expect(harness.overlayElement.offset).to.deep.equal({});
-      expect(harness.overlayElement.shift).to.be.false;
-      expect(harness.overlayElement.hide).to.equal('anchor-hidden' satisfies OverlayHideState);
+      expect(harness.overlayElement.shift).to.equal('auto');
+      expect(harness.overlayElement.hide).to.equal('never' satisfies OverlayHideState);
       expect(harness.overlayElement.persistent).to.be.false;
       expect(harness.overlayElement.flip).to.equal('auto' as OverlayFlipState);
     });
@@ -365,10 +366,45 @@ describe('Overlay', () => {
     });
 
     it('should set shift', async () => {
-      const harness = await createFixture({ open: true, shift: true });
+      const harness = await createFixture({ open: true, shift: 'never' });
 
-      expect(harness.overlayElement.shift).to.be.true;
+      expect(harness.overlayElement.shift).to.equal('never');
       expect(harness.overlayElement.hasAttribute(OVERLAY_CONSTANTS.attributes.SHIFT)).to.be.true;
+      expect(harness.overlayElement.getAttribute(OVERLAY_CONSTANTS.attributes.SHIFT)).to.equal('never');
+    });
+
+    it('should set shift as boolean for backwards compatibility', async () => {
+      const harness = await createFixture();
+      expect(harness.overlayElement.shift).to.equal('auto');
+
+      harness.overlayElement.shift = false;
+      expect(harness.overlayElement.shift).to.equal('never');
+
+      harness.overlayElement.shift = true;
+      expect(harness.overlayElement.shift).to.equal('auto');
+    });
+
+    it('should set shift as boolean attribute for backwards compatibility', async () => {
+      const harness = await createFixture();
+
+      harness.overlayElement.setAttribute(OVERLAY_CONSTANTS.attributes.SHIFT, '');
+      expect(harness.overlayElement.shift).to.equal('auto');
+
+      harness.overlayElement.removeAttribute(OVERLAY_CONSTANTS.attributes.SHIFT);
+      expect(harness.overlayElement.shift).to.equal('never');
+
+      harness.overlayElement.setAttribute(OVERLAY_CONSTANTS.attributes.SHIFT, 'true');
+      expect(harness.overlayElement.shift).to.equal('auto');
+    });
+
+    it('should handle invalid shift values', async () => {
+      const harness = await createFixture({ open: true });
+
+      harness.overlayElement.shift = 'invalid' as any;
+      expect(harness.overlayElement.shift).to.equal('auto');
+
+      harness.overlayElement.shift = null as any;
+      expect(harness.overlayElement.shift).to.equal('auto');
     });
 
     it('should set position strategy', async () => {
@@ -450,8 +486,8 @@ describe('Overlay', () => {
       harness.overlayElement.placement = 'top';
       harness.overlayElement.positionStrategy = 'absolute';
       harness.overlayElement.offset = { mainAxis: 10, crossAxis: 10 };
-      harness.overlayElement.shift = true;
-      harness.overlayElement.hide = 'never';
+      harness.overlayElement.shift = 'never';
+      harness.overlayElement.hide = 'anchor-hidden';
       harness.overlayElement.flip = 'main';
       harness.overlayElement.boundary = 'test-boundary';
       harness.overlayElement.boundaryElement = document.body;
@@ -512,23 +548,24 @@ describe('Overlay', () => {
   });
 
   describe('hide', () => {
-    it('should hide when anchor element is not visible', async () => {
-      const harness = await createFixture({ open: true });
+    it('should hide when anchor element is not visible when anchor-hidden', async () => {
+      const harness = await createFixture({ open: true, hide: 'anchor-hidden' });
 
+      expect(harness.overlayElement.hide).to.equal('anchor-hidden');
+      expect(harness.overlayElement.getAttribute(OVERLAY_CONSTANTS.attributes.HIDE)).to.equal('anchor-hidden');
       expect(harness.isOpen).to.be.true;
 
       harness.anchorElement.style.marginRight = '9999px';
 
       await harness.positionUpdated();
 
-      expect(harness.rootElement.style.display).to.equal('none');
+      expect(harness.rootElement.style.visibility).to.equal('hidden');
     });
 
-    it('should not hide when anchor element is not visible and hide is false', async () => {
-      const harness = await createFixture({ open: true, hide: 'never' });
+    it('should not hide when anchor element is not visible and hide is never (default)', async () => {
+      const harness = await createFixture({ open: true });
 
       expect(harness.overlayElement.hide).to.equal('never');
-      expect(harness.overlayElement.getAttribute(OVERLAY_CONSTANTS.attributes.HIDE)).to.equal('never');
       expect(harness.isOpen).to.be.true;
 
       harness.anchorElement.style.marginRight = '9999px';
@@ -538,7 +575,7 @@ describe('Overlay', () => {
       expect(harness.rootElement.style.display).to.not.equal('none');
     });
 
-    it('should fall back to default hide value if null value is provided', async () => {
+    it('should fall back to default hide value (never) if null value is provided', async () => {
       const harness = await createFixture();
 
       harness.overlayElement.hide = null as any;
@@ -615,9 +652,11 @@ describe('Overlay', () => {
   });
 });
 
+type OverlayComponentInternal = IOverlayComponent & { _core: OverlayCore & { _adapter: OverlayAdapter } };
+
 class OverlayHarness {
   constructor(
-    public overlayElement: IOverlayComponent,
+    public overlayElement: OverlayComponentInternal,
     public anchorElement: HTMLButtonElement
   ) {}
 
@@ -680,7 +719,7 @@ interface IOverlayFixtureConfig {
   boundary?: string | null;
   fallbackPlacements?: string | null;
   positionStrategy?: string | null;
-  shift?: boolean;
+  shift?: OverlayShiftState;
 }
 
 async function createFixture({
@@ -694,7 +733,7 @@ async function createFixture({
   boundary = null,
   fallbackPlacements = null,
   positionStrategy = null,
-  shift = false
+  shift = 'auto'
 }: IOverlayFixtureConfig = {}): Promise<OverlayHarness> {
   const container = await fixture(html`
     <div style="display: flex; justify-content: center; align-items: center; height: 300px; width: 300px;" id="test-boundary">
@@ -706,7 +745,7 @@ async function createFixture({
         ?persistent=${persistent}
         flip=${flip ?? nothing}
         hide=${hide ?? nothing}
-        ?shift=${shift}
+        shift=${shift ?? nothing}
         placement=${placement ?? nothing}
         boundary=${boundary ?? nothing}
         fallback-placements=${fallbackPlacements ?? nothing}
@@ -717,7 +756,7 @@ async function createFixture({
   `);
 
   const button = container.querySelector('button') as HTMLButtonElement;
-  const overlay = container.querySelector('forge-overlay') as IOverlayComponent;
+  const overlay = container.querySelector('forge-overlay') as OverlayComponentInternal;
 
   return new OverlayHarness(overlay, button);
 }
@@ -744,8 +783,8 @@ async function createNestedFixture({ inline = false } = {}): Promise<{
 
   const parentAnchor = container.querySelector('#test-anchor') as HTMLButtonElement;
   const nestedAnchor = container.querySelector('#test-nested-anchor') as HTMLButtonElement;
-  const parentOverlay = container.querySelector('forge-overlay') as IOverlayComponent;
-  const nestedOverlay = parentOverlay.querySelector('forge-overlay') as IOverlayComponent;
+  const parentOverlay = container.querySelector('forge-overlay') as OverlayComponentInternal;
+  const nestedOverlay = parentOverlay.querySelector('forge-overlay') as OverlayComponentInternal;
 
   return {
     parentHarness: new OverlayHarness(parentOverlay, parentAnchor),

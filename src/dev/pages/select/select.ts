@@ -4,7 +4,7 @@ import '@tylertech/forge/checkbox';
 import '@tylertech/forge/select';
 import '@tylertech/forge/field/forge-field.scss';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconFood } from '@tylertech/tyler-icons/extended';
+import { tylIconFood } from '@tylertech/tyler-icons';
 import './select.scss';
 import { IListDropdownOption } from '@tylertech/forge/list-dropdown';
 import { ISelectComponent, SelectDensityType } from '@tylertech/forge/select';
@@ -17,6 +17,14 @@ const select = document.querySelector('forge-select#select') as ISelectComponent
 const leadingEl = select.querySelector('[slot=leading]') as HTMLElement;
 const addonEndEl = select.querySelector('[slot=addon-end]') as HTMLElement;
 const helperTextEl = select.querySelector('[slot=helper-text]') as HTMLElement;
+
+// Add event logging
+select.addEventListener('change', ({ detail }) => {
+  console.log('change event:', detail);
+});
+select.addEventListener('forge-select-all', ({ detail }) => {
+  console.log('forge-select-all event:', detail);
+});
 
 // Hide these elements by default
 leadingEl.remove();
@@ -92,7 +100,17 @@ optSelectedTextBuilder.addEventListener('forge-switch-change', ({ detail: select
   select.selectedTextBuilder = selected ? selectedTextBuilder : undefined;
 });
 
-function optionBuilder(option: IListDropdownOption, parentElement: HTMLElement): HTMLElement {
+const optShowSelectAll = document.querySelector('#opt-show-select-all') as ISwitchComponent;
+optShowSelectAll.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  select.showSelectAll = selected;
+});
+
+const optSelectAllLabel = document.querySelector('#opt-select-all-label') as HTMLInputElement;
+optSelectAllLabel.addEventListener('input', () => select.selectAllLabel = optSelectAllLabel.value);
+// Initialize with default value
+select.selectAllLabel = optSelectAllLabel.value;
+
+function optionBuilder(option: IListDropdownOption): HTMLElement {
   const item = document.createElement('div');
   item.style.display = 'flex';
   item.style.alignItems = 'center';

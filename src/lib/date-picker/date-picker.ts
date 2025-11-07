@@ -1,5 +1,5 @@
 import { attachShadowTemplate, customElement } from '@tylertech/forge-core';
-import { tylIconInsertInvitation } from '@tylertech/tyler-icons/standard';
+import { tylIconInsertInvitation } from '@tylertech/tyler-icons';
 import { CalendarComponent } from '../calendar';
 import { IconComponent, IconRegistry } from '../icon';
 import { IconButtonComponent } from '../icon-button';
@@ -29,6 +29,8 @@ declare global {
 }
 
 /**
+ * @summary A date input component with an integrated calendar popup for selecting single dates.
+ *
  * @tag forge-date-picker
  *
  * @attribute {string} [value] - The value of the date picker.

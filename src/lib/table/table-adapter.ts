@@ -20,6 +20,7 @@ export interface ITableAdapter extends IBaseAdapter {
   setSortDirection: (tableElement: HTMLTableElement, columnIndex: number, sortDirection: SortDirection) => void;
   setSelectColumnVisibility: (
     tableElement: HTMLTableElement,
+    dense: boolean,
     isVisible: boolean,
     selectListener: (evt: Event) => void,
     selectAllListener?: (evt: Event) => void,
@@ -34,6 +35,7 @@ export interface ITableAdapter extends IBaseAdapter {
   setResizable: (configuration: ITableConfiguration) => void;
   setSelectAllVisibility: (
     tableElement: HTMLTableElement,
+    dense: boolean,
     isVisible: boolean,
     listener: ((evt: Event) => void) | null,
     selectAllTemplate: TableHeaderSelectAllTemplate | null,
@@ -130,6 +132,7 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
 
   public setSelectColumnVisibility(
     tableElement: HTMLTableElement,
+    dense: boolean,
     isVisible: boolean,
     selectListener: (evt: Event) => void,
     selectAllListener?: (evt: Event) => void,
@@ -141,6 +144,7 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
   ): void {
     TableUtils.setSelectColumnVisibility(
       tableElement,
+      dense,
       isVisible,
       selectListener,
       selectAllListener || null,
@@ -166,13 +170,14 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
 
   public setSelectAllVisibility(
     tableElement: HTMLTableElement,
+    dense: boolean,
     isVisible: boolean,
     listener: ((evt: Event) => void) | null,
     selectAllTemplate: TableHeaderSelectAllTemplate | null,
     selectCheckboxAlignment?: CellAlign,
     tooltipSelectAll: string | null = null
   ): void {
-    TableUtils.setSelectAllVisibility(tableElement, isVisible, listener, selectAllTemplate, selectCheckboxAlignment || null, tooltipSelectAll || null);
+    TableUtils.setSelectAllVisibility(tableElement, dense, isVisible, listener, selectAllTemplate, selectCheckboxAlignment || null, tooltipSelectAll || null);
   }
 
   public setFilterRow(configuration: ITableConfiguration): void {

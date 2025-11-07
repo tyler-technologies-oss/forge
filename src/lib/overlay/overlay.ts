@@ -25,8 +25,7 @@ declare global {
 /**
  * @tag forge-overlay
  *
- * @summary Overlays are used to render content in an element that rendered above all content on the page,
- * and positioned around a specified anchor element.
+ * @summary Overlays are used to show content in an element that is rendered above all other content on the page, and positioned around a specified anchor element. This is a low-level building block component that does not provide any visual styles, but is used within other components such as popovers, and tooltips.
  *
  * @description
  * An overlay is a low-level building block component that does not provide any visual styles. Its only
@@ -43,8 +42,8 @@ declare global {
  * @property {OverlayPlacement} [placement="bottom"] - The placement of the overlay relative to the anchor element.
  * @property {OverlayPositionStrategy} [positionStrategy="fixed"] - The positioning strategy to use for the overlay. Valid values are `'fixed'` and `'absolute'`.
  * @property {IOverlayPosition} offset - The offset to apply to the overlay position relative to the anchor element.
- * @property {boolean} [shift=false] - Whether or not the anchor element should shift along the side of the overlay when scrolling.
- * @property {OverlayHideState} [hide="anchor-hidden"] - Whether or not the overlay should hide itself when the anchor element is out of view.
+ * @property {OverlayShiftState} [shift="auto"] - Whether or not the anchor element should shift along the side of the overlay when scrolling.
+ * @property {OverlayHideState} [hide="never"] - Whether or not the overlay should hide itself when the anchor element is out of view.
  * @property {boolean} persistent - Whether or not the overlay handles light dismiss itself or not.
  * @property {OverlayFlipState} [flip="auto"] - Whether or not the overlay should flip to the opposite placement when not enough room.
  * @property {string} boundary - The id of the element to use as the boundary for the overlay.
@@ -66,9 +65,9 @@ declare global {
  * @attribute {string} [inline=false] - Whether or not the overlay should be rendered inline (not in the :top-layer).
  * @attribute {string} [placement="bottom"] - The placement of the overlay relative to the anchor element.
  * @attribute {string} [position-strategy="fixed"] - The positioning strategy to use for the overlay. Valid values are `'fixed'` and `'absolute'`.
- * @attribute {string} [hide="anchor-hidden"] - Whether or not the overlay should hide itself when the anchor element is out of view.
+ * @attribute {string} [hide="never"] - Whether or not the overlay should hide itself when the anchor element is out of view.
  * @attribute {string} persistent - Whether or not the overlay handles light dismiss itself or not.
- * @attribute {string} [shift=false] - Whether or not the anchor element should shift along the side of the overlay when scrolling.
+ * @attribute {OverlayShiftState} [shift="auto"] - Whether or not the anchor element should shift along the side of the overlay when scrolling.
  * @attribute {OverlayFlipState} [flip="auto"] - Tells the overlay not to flip to the opposite placement when not enough room.
  * @attribute {string} position-placement - The placement of the overlay around the anchor element **after** dynamic positioning. This is a read-only attribute that is only available when open.
  * @attribute {string} boundary - The id of the element to use as the boundary for the overlay.
@@ -118,8 +117,8 @@ export class OverlayComponent extends BaseOverlay<OverlayCore> implements IOverl
   }
 
   @coreProperty()
-  public declare arrowElement: HTMLElement;
+  declare public arrowElement: HTMLElement;
 
   @coreProperty()
-  public declare arrowElementOffset: number;
+  declare public arrowElementOffset: number;
 }

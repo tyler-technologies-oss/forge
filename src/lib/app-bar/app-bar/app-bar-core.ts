@@ -1,10 +1,11 @@
 import { IAppBarAdapter } from './app-bar-adapter';
-import { AppBarElevation, AppBarTheme, APP_BAR_CONSTANTS } from './app-bar-constants';
+import { AppBarElevation, AppBarTheme, APP_BAR_CONSTANTS, AppBarThemeMode } from './app-bar-constants';
 
 export interface IAppBarCore {
   titleText: string;
   elevation: AppBarElevation;
   theme: string;
+  themeMode: AppBarThemeMode;
   href: string;
   target: string;
 }
@@ -15,6 +16,7 @@ export class AppBarCore implements IAppBarCore {
   private _theme: AppBarTheme;
   private _href = '';
   private _target = '';
+  private _themeMode: AppBarThemeMode = 'inherit';
 
   private _centerSlotListener: EventListener = (): void => this._adapter.setCenterSlotVisibility();
   private _anchorClickListener: EventListener = this._onHrefClick.bind(this);
@@ -90,6 +92,16 @@ export class AppBarCore implements IAppBarCore {
       this._target = value?.trim().length ? value.trim() : '';
       this._adapter.setTarget(this._target);
       this._adapter.toggleHostAttribute(APP_BAR_CONSTANTS.attributes.TARGET, !!this._target, this._target);
+    }
+  }
+
+  public get themeMode(): AppBarThemeMode {
+    return this._themeMode;
+  }
+  public set themeMode(value: AppBarThemeMode) {
+    if (this._themeMode !== value) {
+      this._themeMode = value;
+      this._adapter.toggleHostAttribute(APP_BAR_CONSTANTS.attributes.THEME_MODE, this._themeMode !== 'inherit', this._themeMode);
     }
   }
 }

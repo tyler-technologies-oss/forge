@@ -1,7 +1,7 @@
-import { action } from '@storybook/addon-actions';
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { action } from 'storybook/actions';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
-import { tylIconAdjust, tylIconOpenInNew, tylIconPayment, tylIconPayments } from '@tylertech/tyler-icons/standard';
+import { tylIconAdjust, tylIconOpenInNew, tylIconPayment, tylIconPayments } from '@tylertech/tyler-icons';
 import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { classMap } from 'lit/directives/class-map.js';

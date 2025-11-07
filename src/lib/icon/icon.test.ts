@@ -4,12 +4,16 @@ import { stub } from 'sinon';
 import { task } from '../core/utils/utils';
 import type { IIconComponent } from './icon';
 import { IconRegistry } from './icon-registry';
-import { tylIcon360, tylIconCode, tylIconFace } from '@tylertech/tyler-icons/standard';
+import { tylIcon360, tylIconCode, tylIconFace } from '@tylertech/tyler-icons';
 import { ICON_CONSTANTS } from './icon-constants';
 
 import './icon';
+import { IconCore } from './icon-core';
 
 const ICON_NAME = 'code';
+
+type IconCoreInternal = IconCore & { _loadIcon: () => void };
+type IconComponentWithCore = IIconComponent & { _core: IconCoreInternal };
 
 describe('Icon', () => {
   before(() => {
@@ -36,7 +40,7 @@ describe('Icon', () => {
     expect(el.src).to.be.undefined;
     expect(el.lazy).to.be.false;
     expect(el.external).to.be.false;
-    expect(el.externalType).to.equal('standard');
+    expect(el.externalType).to.equal('all');
     expect(el.viewbox).to.be.undefined;
     expect(el.theme).to.be.undefined;
   });
@@ -157,7 +161,7 @@ describe('Icon', () => {
     });
 
     it('should force icon to load when calling layout method', async () => {
-      const el = await fixture<IIconComponent>(html`<forge-icon></forge-icon>`);
+      const el = await fixture<IconComponentWithCore>(html`<forge-icon></forge-icon>`);
       const loadStub = stub(el['_core'], '_loadIcon');
 
       el.layout();
@@ -265,7 +269,7 @@ describe('Icon', () => {
     });
 
     it('should update icon if external type is changed', async () => {
-      const el = await fixture<IIconComponent>(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
+      const el = await fixture<IconComponentWithCore>(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
       const loadStub = stub(el['_core'], '_loadIcon');
 
       el.external = true;
@@ -296,7 +300,7 @@ describe('Icon', () => {
     });
 
     it('should batch icon updates if multiple properties change in same frame', async () => {
-      const el = await fixture<IIconComponent>(html`<forge-icon></forge-icon>`);
+      const el = await fixture<IconComponentWithCore>(html`<forge-icon></forge-icon>`);
       const loadStub = stub(el['_core'], '_loadIcon');
 
       el.name = ICON_NAME;
@@ -309,7 +313,7 @@ describe('Icon', () => {
     });
 
     it('should not apply icon if not initialized', async () => {
-      const tempIcon = document.createElement(ICON_CONSTANTS.elementName) as IIconComponent;
+      const tempIcon = document.createElement(ICON_CONSTANTS.elementName) as IconComponentWithCore;
       const loadStub = stub(tempIcon['_core'], '_loadIcon');
 
       tempIcon.name = tylIconCode.name;

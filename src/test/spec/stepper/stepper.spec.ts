@@ -658,7 +658,9 @@ describe('StepperComponent', function (this: ITestContext) {
     fixture.id = 'stepper-test-fixture';
     const component = createStepperComponent(numberOfSteps);
     fixture.appendChild(component);
-    if (append) document.body.appendChild(fixture);
+    if (append) {
+      document.body.appendChild(fixture);
+    }
     return {
       component,
       getSteps: () => Array.from(component.querySelectorAll(STEP_CONSTANTS.elementName)) as IStepComponent[],

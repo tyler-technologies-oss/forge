@@ -70,6 +70,7 @@ declare global {
  * @slot tertiary-text - The tertiary text.
  * @slot start - The start content.
  * @slot end - The end element.
+ * @slot additional-content - Additional content that appears below the main list item interactive area.
  *
  * @csspart root - The root container element.
  * @csspart text-container - The container for the text content.
@@ -183,32 +184,32 @@ export class ListItemComponent extends WithElementInternals(WithDefaultAria(Base
   }
 
   @coreProperty()
-  public declare selected: boolean;
+  declare public selected: boolean;
 
   @coreProperty()
-  public declare active: boolean;
+  declare public active: boolean;
 
   @coreProperty()
-  public declare value: unknown;
+  declare public value: unknown;
 
   @coreProperty()
-  public declare dense: boolean;
+  declare public dense: boolean;
 
   @coreProperty()
-  public declare indented: boolean;
+  declare public indented: boolean;
 
   @coreProperty()
-  public declare twoLine: boolean;
+  declare public twoLine: boolean;
 
   @coreProperty()
-  public declare threeLine: boolean;
+  declare public threeLine: boolean;
 
   @coreProperty()
-  public declare wrap: boolean;
+  declare public wrap: boolean;
 
   @coreProperty()
-  public declare noninteractive: boolean;
+  declare public noninteractive: boolean;
 
   @coreProperty()
-  public declare focusPropagation: ListItemFocusPropagation;
+  declare public focusPropagation: ListItemFocusPropagation;
 }

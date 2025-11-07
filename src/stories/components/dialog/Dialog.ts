@@ -1,8 +1,8 @@
 import { html, render } from 'lit';
-import { ArgTypes } from '@storybook/web-components';
-import { action } from '@storybook/addon-actions';
+import { ArgTypes } from '@storybook/web-components-vite';
+import { action } from 'storybook/actions';
 import { DialogPreset } from '@tylertech/forge/dialog';
-import { tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconClose } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 import { customElementStoryRenderer } from '../../utils';
 
@@ -34,8 +34,8 @@ export const Dialog = (args: ArgTypes) => {
   container.appendChild(button);
 
   const dialog = customElementStoryRenderer('forge-dialog', args);
-  dialog.setAttribute('aria-labelledby', 'dialog-title');
-  dialog.setAttribute('aria-describedby', 'dialog-message');
+  dialog.label = 'My dialog title';
+  dialog.description = 'My dialog description';
   dialog.addEventListener('forge-dialog-close', evt => {
     closeEventAction(evt);
     dialog.open = false;

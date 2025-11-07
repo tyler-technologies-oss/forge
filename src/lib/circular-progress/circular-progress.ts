@@ -26,8 +26,7 @@ declare global {
 /**
  * @tag forge-circular-progress
  *
- * @summary
- * Circular progress indicators display progress by animating along a circular track in a clockwise direction.
+ * @summary Circular progress indicators display progress by animating along a circular track in a clockwise direction. They can be used to represent both determinate and indeterminate progress.
  *
  * @description
  * Progress indicators inform users about the status of ongoing processes.
@@ -103,14 +102,14 @@ export class CircularProgressComponent extends WithDefaultAria(WithElementIntern
   }
 
   @coreProperty()
-  public declare determinate: boolean;
+  declare public determinate: boolean;
 
   @coreProperty()
-  public declare progress: number;
+  declare public progress: number;
 
   @coreProperty()
-  public declare theme: CircularProgressTheme;
+  declare public theme: CircularProgressTheme;
 
   @coreProperty()
-  public declare track: boolean;
+  declare public track: boolean;
 }

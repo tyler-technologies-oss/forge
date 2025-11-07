@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { sendMouse } from '@web/test-runner-commands';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { tylIconMoreVert } from '@tylertech/tyler-icons/standard';
+import { tylIconMoreVert } from '@tylertech/tyler-icons';
 import { IconRegistry } from '../icon/icon-registry';
 import { ICON_BUTTON_CONSTANTS } from './icon-button-constants';
 import { IconButtonComponent, IIconButtonComponent } from './icon-button';
@@ -25,6 +25,7 @@ describe('Icon Button', () => {
     const el = await fixture<IIconButtonComponent>(html`<forge-icon-button>${DEFAULT_ICON}</forge-icon-button>`);
 
     expect(el.toggle).to.be.false;
+    expect(el.pressed).to.be.false;
     expect(el.on).to.be.false;
   });
 
@@ -196,6 +197,7 @@ describe('Icon Button', () => {
   it('should not be on by default', async () => {
     const el = await fixture<IIconButtonComponent>(html`<forge-icon-button toggle>${DEFAULT_ICON}</forge-icon-button>`);
 
+    expect(el.pressed).to.be.false;
     expect(el.on).to.be.false;
     expect(el.getAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).to.equal('false');
   });
@@ -205,15 +207,17 @@ describe('Icon Button', () => {
 
     el.click();
 
+    expect(el.pressed).to.be.true;
     expect(el.on).to.be.true;
     expect(el.getAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).to.equal('true');
   });
 
-  it('should toggle on click when on is set', async () => {
-    const el = await fixture<IIconButtonComponent>(html`<forge-icon-button toggle on>${DEFAULT_ICON}</forge-icon-button>`);
+  it('should toggle on click when pressed is set', async () => {
+    const el = await fixture<IIconButtonComponent>(html`<forge-icon-button toggle pressed>${DEFAULT_ICON}</forge-icon-button>`);
 
     el.click();
 
+    expect(el.pressed).to.be.false;
     expect(el.on).to.be.false;
     expect(el.getAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).to.equal('false');
   });
@@ -223,14 +227,16 @@ describe('Icon Button', () => {
 
     el.click();
 
+    expect(el.pressed).to.be.false;
     expect(el.on).to.be.false;
     expect(el.getAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).to.equal('false');
   });
 
-  it('should not toggle to on when toggle event cancelled', async () => {
+  it('should not toggle to pressed when toggle event cancelled', async () => {
     const el = await fixture<IIconButtonComponent>(html`<forge-icon-button toggle>${DEFAULT_ICON}</forge-icon-button>`);
     const clickSpy = spy((evt: CustomEvent<boolean>) => evt.preventDefault());
 
+    expect(el.pressed).to.be.false;
     expect(el.on).to.be.false;
     expect(el.getAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).to.equal('false');
 
@@ -239,6 +245,7 @@ describe('Icon Button', () => {
     await elementUpdated(el);
 
     expect(clickSpy).to.be.calledOnce;
+    expect(el.pressed).to.be.false;
     expect(el.on).to.be.false;
     expect(el.getAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).to.equal('false');
   });
@@ -247,6 +254,7 @@ describe('Icon Button', () => {
     const el = await fixture<IIconButtonComponent>(html`<forge-icon-button toggle on>${DEFAULT_ICON}</forge-icon-button>`);
     const clickSpy = spy((evt: CustomEvent<boolean>) => evt.preventDefault());
 
+    expect(el.pressed).to.be.true;
     expect(el.on).to.be.true;
     expect(el.getAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).to.equal('true');
 
@@ -255,24 +263,27 @@ describe('Icon Button', () => {
     await elementUpdated(el);
 
     expect(clickSpy).to.be.calledOnce;
+    expect(el.pressed).to.be.true;
     expect(el.on).to.be.true;
     expect(el.getAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).to.equal('true');
   });
 
-  it('should not enable toggle if on is set while toggle is off', async () => {
-    const el = await fixture<IIconButtonComponent>(html`<forge-icon-button on>${DEFAULT_ICON}</forge-icon-button>`);
+  it('should not enable toggle if pressed is set while toggle is off', async () => {
+    const el = await fixture<IIconButtonComponent>(html`<forge-icon-button pressed>${DEFAULT_ICON}</forge-icon-button>`);
 
     expect(el.toggle).to.be.false;
+    expect(el.pressed).to.be.true;
     expect(el.on).to.be.true;
     expect(el.hasAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).to.be.false;
   });
 
-  it('should remove aria-pressed if on is set while toggle is off', async () => {
-    const el = await fixture<IIconButtonComponent>(html`<forge-icon-button on aria-pressed="true">${DEFAULT_ICON}</forge-icon-button>`);
+  it('should remove aria-pressed if pressed is set while toggle is off', async () => {
+    const el = await fixture<IIconButtonComponent>(html`<forge-icon-button pressed aria-pressed="true">${DEFAULT_ICON}</forge-icon-button>`);
 
-    el.on = false;
+    el.pressed = false;
 
     expect(el.toggle).to.be.false;
+    expect(el.pressed).to.be.false;
     expect(el.on).to.be.false;
     expect(el.hasAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).to.be.false;
   });

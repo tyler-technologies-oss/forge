@@ -1,4 +1,4 @@
-import { Meta, Title, Primary, Canvas } from '@storybook/blocks';
+import { Meta, Title, Primary, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as ListStories from './List.stories';
@@ -20,6 +20,25 @@ Lists can be made interactive by providing a `<button>` element around your main
 visual feedback when the item is hovered or pressed.
 
 <Canvas of={ListStories.Interactive} />
+
+### Using the `forge-ignore` attribute
+
+It is common to place multiple interactive elements within a `<forge-list-item>`. However, you may want to prevent the list item from responding to pointer events
+on specific elements. To do this you can either listen for the click event yourself on the specific elements you care about and call `stopPropagation()`
+on the event, or you can use the `forge-ignore` attribute for convenience. This attribute is used to prevent the list item from handling the event when the
+element (or any children of the element) is clicked.
+
+```html
+<forge-list-item>
+  <button type="button">List Item</button>
+
+  <!--
+    Using the forge-ignore attribute allows this element to be placed within the
+    list item without causing the list item to respond to pointer events when clicked.
+  -->
+  <forge-checkbox slot="start" tabindex="-1" forge-ignore aria-label="Checkbox"></forge-checkbox>
+</forge-list-item>
+```
 
 ## With Anchor
 
@@ -57,7 +76,8 @@ content and/or sub-lists.
 
 <Canvas of={ListStories.Expandable} />
 
-> **Important:** make note of the adjacent wrapper `<div>` elements that have a `role="listitem"` attribute to ensure that the structure is accessible to screen readers.
+> **Important:** make note of the `slot="additional-content"` attribute on elements within the `<forge-list-item>`. This is required to ensure that the additional content is
+> visually + structurally separated from the main/interactive list item content, and is announced properly by screen readers.
 
 ## API
 

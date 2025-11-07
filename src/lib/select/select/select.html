@@ -1,6 +1,6 @@
 <template>
-  <forge-field id="field" popover-icon focus-indicator-allow-focus focus-indicator-focus-mode="focus">
-    <label id="select-label" aria-hidden="true" part="label" slot="label"></label>
+  <forge-field id="field" popover-icon focus-indicator-allow-focus>
+    <span id="select-label" slot="label"></span>
     <slot slot="start" name="start"></slot>
     <div data-forge-field-input class="selected-text-container" part="text-container" aria-live="assertive" aria-atomic="true">
       <slot name="value">

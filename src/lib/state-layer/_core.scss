@@ -52,6 +52,8 @@
 @mixin layer-base {
   opacity: 0;
   position: absolute;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 @mixin hover-base {

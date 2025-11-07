@@ -7,18 +7,16 @@ import { compileString } from 'sass';
 import { dirname } from 'path';
 
 /** Custom plugin to inline imports against .scss files as compiled CSS strings. */
-const inlineScss = fromRollup(() => {
-  return {
-    name: 'inline-scss',
-    transform(code, id) {
-      if (id.endsWith('.scss')) {
-        const loadPaths = [dirname(id), 'node_modules/'];
-        const result = compileString(code, { loadPaths });
-        return result.css;
-      }
+const inlineScss = fromRollup(() => ({
+  name: 'inline-scss',
+  transform(code, id) {
+    if (id.endsWith('.scss')) {
+      const loadPaths = [dirname(id), 'node_modules/'];
+      const result = compileString(code, { loadPaths });
+      return result.css;
     }
-  };
-});
+  }
+}));
 
 /** Gets all directory names within a given source directory.  */
 export const directoryGroup = source =>
@@ -26,13 +24,27 @@ export const directoryGroup = source =>
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name);
 
+export const FILTERED_LOGS = ['Lit is in dev mode'];
+
 /**
  * @type {import('@web/test-runner').TestRunnerConfig}
  */
 export default {
-  concurrentBrowsers: 1,
+  // Workaround until https://github.com/modernweb-dev/web/issues/2772 is resolved
+  // Remove the @ungap/structured-clone dependency once the issue is resolved
+  testRunnerHtml(testFramework) {
+    return `<html><body><script type="module">import structuredClone from '@ungap/structured-clone';window.structuredClone = (value) => structuredClone(value, { lossy: true });</script><script type="module" src="${testFramework}"></script></body></html>`;
+  },
   concurrency: 1,
   nodeResolve: true,
+  filterBrowserLogs: ({ args }) => {
+    for (const arg of args) {
+      if (typeof arg === 'string' && FILTERED_LOGS.some(l => arg.includes(l))) {
+        return false;
+      }
+    }
+    return true;
+  },
   testsFinishTimeout: 60000,
   testFramework: {
     config: {

@@ -1,7 +1,7 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
+import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 import { IBaseButton } from './base-button';
 import { BASE_BUTTON_CONSTANTS } from './base-button-constants';
@@ -34,7 +34,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
   constructor(component: T) {
     super(component);
     this._rootElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.ROOT) as HTMLButtonElement;
-    this._focusIndicatorElement = getShadowElement(this._component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
+    this._focusIndicatorElement = getShadowElement(this._component, FOCUS_INDICATOR_TAG_NAME) as IFocusIndicatorComponent;
     this._stateLayerElement = getShadowElement(this._component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
     this._defaultSlotElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
     this._endSlotElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.END_SLOT) as HTMLSlotElement;
@@ -52,7 +52,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
     const slottedAnchor = this.getSlottedAnchor;
     this._component[setDefaultAria](
       {
-        role: !!slottedAnchor ? null : 'button'
+        role: slottedAnchor ? null : 'button'
       },
       {
         setAttribute: !this._component.hasAttribute('role') || !!slottedAnchor
@@ -61,14 +61,14 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
 
     this._rootElement.classList.toggle(BASE_BUTTON_CONSTANTS.classes.WITH_ANCHOR, !!slottedAnchor);
 
-    if (!!slottedAnchor) {
+    if (slottedAnchor) {
       this._component.removeAttribute('tabindex');
     } else if (!this._component.disabled && !this._component.hasAttribute('tabindex')) {
       this._component.setAttribute('tabindex', '0');
     }
 
-    this._focusIndicatorElement.targetElement = !!slottedAnchor ? slottedAnchor : this._component;
-    this._stateLayerElement.targetElement = !!slottedAnchor ? slottedAnchor : this._component;
+    this._focusIndicatorElement.targetElement = slottedAnchor ? slottedAnchor : this._component;
+    this._stateLayerElement.targetElement = slottedAnchor ? slottedAnchor : this._component;
   }
 
   public setDisabled(value: boolean): void {
@@ -86,7 +86,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
     } else {
       if (value) {
         this._component.removeAttribute('tabindex');
-      } else {
+      } else if (!this._component.hasAttribute('tabindex')) {
         this._component.setAttribute('tabindex', '0');
       }
       this._component[setDefaultAria]({ ariaDisabled: value ? 'true' : null });
@@ -176,7 +176,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
         }
         return false;
       case 'toggle':
-      default:
+      default: {
         const result = popoverElement.togglePopover();
 
         // When the popover is open and is using an "auto" popover mode, we need to handle
@@ -205,6 +205,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
         }
 
         return result;
+      }
     }
   }
 

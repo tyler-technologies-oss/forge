@@ -1,6 +1,6 @@
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconCheck, tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconCheck, tylIconClose } from '@tylertech/tyler-icons';
 import { html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
@@ -26,7 +26,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['icon', 'form', 'labels', 'name'],
+      exclude: ['icon', 'form', 'labels', 'name', 'on', 'defaultOn', 'selected'],
       controls: {
         labelPosition: {
           control: 'select',
@@ -48,11 +48,11 @@ export const CSSOnly: Story = {
     controls: { include: ['on', 'dense', 'disabled'] }
   },
   args: {
-    on: false,
+    checked: false,
     dense: false,
     disabled: false
   },
-  render: ({ on, dense, disabled }) => {
+  render: ({ checked, dense, disabled }) => {
     const classes = {
       'forge-switch': true,
       'forge-switch--dense': dense
@@ -60,7 +60,7 @@ export const CSSOnly: Story = {
     return html`
       <label class="forge-typography--label2" style="display: flex; align-items: center;">
         <div class=${classMap(classes)}>
-          <input type="checkbox" switch .checked=${on} ?disabled=${disabled} />
+          <input type="checkbox" switch .checked=${checked} ?disabled=${disabled} />
           <div class="forge-switch__thumb">
             <forge-icon name="close" class="forge-switch__icon forge-switch__icon--off"></forge-icon>
             <forge-icon name="check" class="forge-switch__icon forge-switch__icon--on"></forge-icon>

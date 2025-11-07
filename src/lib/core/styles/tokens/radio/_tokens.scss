@@ -28,6 +28,7 @@ $tokens: (
   // Label
   gap: utils.module-val(radio, gap, 0),
   justify: utils.module-val(radio, justify, start),
+  align: utils.module-val(radio, align, center),
   direction: utils.module-val(radio, direction, initial),
   // State layer
   state-layer-width: utils.module-ref(radio, state-layer-width, state-layer-size),

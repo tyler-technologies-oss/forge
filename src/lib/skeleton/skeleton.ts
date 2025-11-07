@@ -16,7 +16,7 @@ declare global {
 /**
  * @tag forge-skeleton
  *
- * @summary Skeleton is used to provide a placeholder for content that is loading.
+ * @summary Skeletons are used to provide a placeholder for content that is loading. They have various styles to represent different types of content.
  *
  * @attribute {string} form-field - Apply form field styles to the skeleton.
  * @attribute {string} button - Apply button styles to the skeleton.

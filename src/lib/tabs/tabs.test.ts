@@ -24,19 +24,6 @@ describe('Tabs', () => {
     await expect(el).to.be.accessible();
   });
 
-  it('should forward aria-label to internal tablist element', async () => {
-    const el = await createFixture();
-    const scrollContainerEl = getShadowElement(el, TAB_BAR_CONSTANTS.selectors.SCROLL_CONTAINER);
-
-    expect(scrollContainerEl.hasAttribute('aria-label')).to.be.false;
-
-    el.setAttribute('data-aria-label', 'Test');
-    await elementUpdated(el);
-
-    expect(scrollContainerEl.getAttribute('aria-label')).to.equal('Test');
-    await expect(el).to.be.accessible();
-  });
-
   it('should set default active tab', async () => {
     const el = await createFixture({ activeTab: 1 });
     const ctx = new TabsHarness(el);
@@ -56,6 +43,27 @@ describe('Tabs', () => {
     expect(el.activeTab).to.equal(1);
     expect(ctx.tabs[1].selected).to.be.true;
     expect(ctx.selectedTabCount).to.be.equal(1);
+  });
+
+  it('should not set focus on tab when active tab is set', async () => {
+    const el = await createFixture({ activeTab: 0 });
+    const ctx = new TabsHarness(el);
+
+    expect(ctx.tabs[0].matches(':focus')).to.be.false;
+
+    el.activeTab = 1;
+
+    expect(ctx.tabs[1].matches(':focus')).to.be.false;
+  });
+
+  it('should set focus on tab when user clicks on tab', async () => {
+    const el = await createFixture();
+    const ctx = new TabsHarness(el);
+
+    ctx.clickTab(0);
+    await elementUpdated(el);
+
+    expect(ctx.tabs[0].matches(':focus')).to.be.true;
   });
 
   it('should deselect tab when active tab set to undefined', async () => {
@@ -604,6 +612,36 @@ describe('Tabs', () => {
       expect(ctx.hasScrollButtons).to.be.false;
       expect(ctx.backwardScrollButton).not.to.be.ok;
       expect(ctx.forwardScrollButton).not.to.be.ok;
+    });
+
+    it('should show scroll buttons when new tabs are added that cause scrolling', async () => {
+      const el = await createFixture({ scrollButtons: true, clustered: true, width: '250px' });
+      const ctx = new TabsHarness(el);
+
+      await elementUpdated(el);
+      expect(ctx.hasScrollButtons).to.be.false;
+
+      const tab = document.createElement('forge-tab');
+      tab.textContent = 'Fourth';
+      el.appendChild(tab);
+      await elementUpdated(el);
+
+      expect(ctx.hasScrollButtons).to.be.true;
+    });
+
+    it('should hide scroll buttons when scrollable tabs are removed causing no overflow', async () => {
+      const el = await createFixture({ scrollButtons: true, clustered: true, width: '215px' });
+      const ctx = new TabsHarness(el);
+
+      await elementUpdated(el);
+      expect(ctx.hasScrollButtons).to.be.true;
+
+      // Removing two tabs because the visibility of the scroll buttons causes the scrollable area to decrease
+      ctx.tabs[0].remove();
+      ctx.tabs[0].remove();
+      await elementUpdated(el);
+
+      expect(ctx.hasScrollButtons).to.be.false;
     });
 
     it('should scroll forward when forward scroll button is clicked', async () => {

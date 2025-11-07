@@ -526,6 +526,7 @@ describe('List', () => {
 
       anchor.focus();
       anchor.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+      anchor.dispatchEvent(new KeyboardEvent('keyup', { key: ' ', bubbles: true }));
 
       expect(spy).to.have.been.calledOnce;
     });
@@ -564,8 +565,6 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
-      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
-      const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
 
       await expect(el).to.be.accessible();
     });
@@ -577,7 +576,6 @@ describe('List', () => {
         </forge-list>
       `);
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
-      const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
 
       await expect(el).to.be.accessible();
 

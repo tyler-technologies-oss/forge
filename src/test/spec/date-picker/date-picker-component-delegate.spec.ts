@@ -157,7 +157,7 @@ describe('DatePickerComponentDelegate', function(this: ITestContext) {
 
   it('should set disabled dates via config', function(this: ITestContext) {
     const disabledDates = [new Date()];
-    this.context = setupTestContext({ disabledDates: disabledDates });
+    this.context = setupTestContext({ disabledDates });
     
     expect(this.context.delegate.element.disabledDates).toEqual(disabledDates);
   });
@@ -178,13 +178,15 @@ describe('DatePickerComponentDelegate', function(this: ITestContext) {
   it('should set parse callback via config', function(this: ITestContext) {
     this.context = setupTestContext({ parseCallback: dateStr => new Date() });
     
-    expect(this.context.delegate.element['_core']['_parseCallback']).not.toBeFalsy();
+    type ComponentWithCore = IDatePickerComponent & { _core: { _parseCallback: (dateStr: string) => Date }};
+    expect((this.context.delegate.element as ComponentWithCore)['_core']['_parseCallback']).not.toBeFalsy();
   });
 
   it('should set format callback via config', function(this: ITestContext) {
     this.context = setupTestContext({ formatCallback: date => '' });
 
-    expect(this.context.delegate.element['_core']['_formatCallback']).not.toBeFalsy();
+    type ComponentWithCore = IDatePickerComponent & { _core: { _formatCallback: (date: Date) => string }};
+    expect((this.context.delegate.element as ComponentWithCore)['_core']['_formatCallback']).not.toBeFalsy();
   });
 
   it('should set popup classes via config', function(this: ITestContext) {

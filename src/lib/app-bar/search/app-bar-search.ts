@@ -1,5 +1,5 @@
 import { customElement, attachShadowTemplate, coerceBoolean, coreProperty, ensureInputElement } from '@tylertech/forge-core';
-import { tylIconSearch } from '@tylertech/tyler-icons/standard';
+import { tylIconSearch } from '@tylertech/tyler-icons';
 import { AppBarSearchCore } from './app-bar-search-core';
 import { AppBarSearchAdapter } from './app-bar-search-adapter';
 import { IAppBarSearchInputEventData, APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants';
@@ -28,6 +28,8 @@ declare global {
 
 /**
  * @tag forge-app-bar-search
+ *
+ * @summary A search input component with integrated search icon and styling optimized for use within app bars, supporting keyboard interaction and customizable actions.
  *
  * @slot - The default (unnamed) slot is where child `<input>` elements will be placed.
  * @slot action - Places actions at the end of the input.
@@ -108,11 +110,11 @@ export class AppBarSearchComponent extends BaseComponent implements IAppBarSearc
   }
 
   @coreProperty()
-  public declare value: string;
+  declare public value: string;
 
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   @coreProperty()
-  public declare placeholder: string;
+  declare public placeholder: string;
 }

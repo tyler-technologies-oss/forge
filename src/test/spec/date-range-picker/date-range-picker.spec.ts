@@ -18,7 +18,9 @@ import {
   ITextFieldComponent,
   parseDateString,
   POPOVER_CONSTANTS,
-  TEXT_FIELD_CONSTANTS
+  TEXT_FIELD_CONSTANTS,
+  IDateRangePickerCore,
+  IDateRangePickerAdapter
 } from '@tylertech/forge';
 import { BASE_DATE_PICKER_CONSTANTS } from '@tylertech/forge/date-picker/base/base-date-picker-constants';
 import { tryCleanupPopovers } from '../../utils';
@@ -29,8 +31,12 @@ interface ITestContext {
   context: ITestDateRangePickerContext;
 }
 
+type DateRangePickerAdapterInternal = IDateRangePickerAdapter & { _identifier: string };
+type DateRangePickerCoreWithAdapter = IDateRangePickerCore & { _adapter: DateRangePickerAdapterInternal, _isInitialized: boolean };
+type DateRangePickerWithCore = IDateRangePickerComponent & { _core: DateRangePickerCoreWithAdapter };
+
 interface ITestDateRangePickerContext {
-  component: IDateRangePickerComponent;
+  component: DateRangePickerWithCore;
   append(): void;
   destroy(): void;
 }
@@ -427,6 +433,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const changeSpy = jasmine.createSpy('change spy', evt => (theEvent = evt)).and.callThrough();
       this.context.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.context.component);
       clickActiveDay(this.context.component);
 
@@ -439,19 +446,20 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect(this.context.component.from).toEqual(theEvent!.detail.from);
     });
 
-    it('should not set date if default prevented in change event', function(this: ITestContext) {
+    it('should not set date if default prevented in change event', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       openPopup(this.context.component);
       const changeSpy = jasmine.createSpy('change spy', evt => evt.preventDefault()).and.callThrough();
       this.context.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.context.component);
 
       expect(changeSpy).toHaveBeenCalledTimes(1);
       expect(this.context.component.from).toBeNull();
     });
 
-    it('should emit date as string', function(this: ITestContext) {
+    it('should emit date as string', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       const todayDate = new Date();
       const formattedDate = formatDate(todayDate);
@@ -462,6 +470,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const changeSpy = jasmine.createSpy('change spy', evt => (eventDetail = new DatePickerRange(evt.detail))).and.callThrough();
       this.context.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.context.component);
 
       expect(typeof eventDetail.from).toBe('string');
@@ -470,7 +479,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect(this.context.component.from).toBe(eventDetail.from as string);
     });
 
-    it('should emit date as ISO string', function(this: ITestContext) {
+    it('should emit date as ISO string', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       const todayDate = new Date();
       todayDate.setHours(0, 0, 0, 0);
@@ -480,6 +489,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const changeSpy = jasmine.createSpy('change spy', evt => (eventDetail = evt.detail)).and.callThrough();
       this.context.component.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
+      await frame();
       clickActiveDay(this.context.component);
 
       expect(typeof eventDetail).toBe('object');
@@ -537,6 +547,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const expectedDate = new Date(date);
       const inputElement = getToElement(this.context.component);
       inputElement.value = date;
+      inputElement.dispatchEvent(new Event('input'));
       inputElement.dispatchEvent(new Event('blur'));
 
       expect(this.context.component.to).toEqual(expectedDate);
@@ -1546,7 +1557,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     });
   });
 
-   function getViewElements(component: IDateRangePickerComponent) {
+   function getViewElements(component: DateRangePickerWithCore) {
     const list = Array.from(getCalendarShadow(component).querySelectorAll('forge-view'));
 
     return {
@@ -1569,7 +1580,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
   ): ITestDateRangePickerContext {
     const fixture = document.createElement('div');
     fixture.id = 'date-range-picker-test-fixture';
-    const component = document.createElement(DATE_RANGE_PICKER_CONSTANTS.elementName) as IDateRangePickerComponent;
+    const component = document.createElement(DATE_RANGE_PICKER_CONSTANTS.elementName) as DateRangePickerWithCore;
     if (hasFromInput) {
       component.appendChild(createFromElement());
     }
@@ -1620,7 +1631,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     return component.querySelector('#date-range-toggle') as HTMLButtonElement;
   }
 
-  function getIdentifier(component: IDateRangePickerComponent): string {
+  function getIdentifier(component: DateRangePickerWithCore): string {
     return 'forge-date-range-picker-' + component['_core']['_adapter']['_identifier'];
   }
 
@@ -1629,45 +1640,45 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     component.open = true;
   }
 
-  function getPopup(component: IDateRangePickerComponent): IPopoverComponent {
+  function getPopup(component: DateRangePickerWithCore): IPopoverComponent {
     return document.querySelector(`${POPOVER_CONSTANTS.elementName}[id=${getIdentifier(component)}]`) as IPopoverComponent;
   }
 
-  function getCalendar(component: IDateRangePickerComponent): ICalendarComponent {
+  function getCalendar(component: DateRangePickerWithCore): ICalendarComponent {
     const popup = getPopup(component);
     return popup.querySelector('forge-calendar') as ICalendarComponent;
   }
 
-  function clickActiveDay(component: IDateRangePickerComponent): void {
+  function clickActiveDay(component: DateRangePickerWithCore): void {
     const calendar = getCalendar(component);
     const calendarShadow = calendar.shadowRoot as ShadowRoot;
     const activeCell = calendarShadow.querySelector('.forge-calendar__date:has(forge-focus-indicator[active])') as HTMLTableCellElement;
     activeCell.click();
   }
 
-  function getAnnouncerElement(component: IDateRangePickerComponent): HTMLElement {
+  function getAnnouncerElement(component: DateRangePickerWithCore): HTMLElement {
     const popup = getPopup(component);
     return popup.querySelector('[data-forge-live-announcer]') as HTMLElement;
   }
 
-  function getTodayButton(component: IDateRangePickerComponent): IButtonComponent {
+  function getTodayButton(component: DateRangePickerWithCore): IButtonComponent {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
     return getShadowElement(calendar, '#today-button') as IButtonComponent ?? null;
   }
 
-  function getClearButton(component: IDateRangePickerComponent): IButtonComponent {
+  function getClearButton(component: DateRangePickerWithCore): IButtonComponent {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
     return getShadowElement(calendar, '#clear-button') as IButtonComponent ?? null;
   }
 
-  function clickTodayButton(component: IDateRangePickerComponent): void {
+  function clickTodayButton(component: DateRangePickerWithCore): void {
     const todayButton = getTodayButton(component);
     todayButton.click();
   }
 
-  function clickClearButton(component: IDateRangePickerComponent): void {
+  function clickClearButton(component: DateRangePickerWithCore): void {
     const clearButton = getClearButton(component);
     clearButton.click();
   }
@@ -1676,7 +1687,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     return task(POPOVER_ANIMATION_DURATION);
   }
 
-  function expectPopupOpen(component: IDateRangePickerComponent, isOpen: boolean): void {
+  function expectPopupOpen(component: DateRangePickerWithCore, isOpen: boolean): void {
     const popup = getPopup(component);
     expect(component.hasAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.OPEN)).toBe(isOpen);
     if (isOpen) {
@@ -1719,11 +1730,11 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     }
   }
 
-  function getAllTdElementsForSundays(component: IDateRangePickerComponent) {
+  function getAllTdElementsForSundays(component: DateRangePickerWithCore) {
     return Array.from(getCalendarShadow(component).querySelectorAll('tbody tr')).map(tr => tr.querySelector('td')).filter(td => td!.hasAttribute('data-date'));
   }
 
-  function getCalendarShadow(component: IDateRangePickerComponent): ShadowRoot {
+  function getCalendarShadow(component: DateRangePickerWithCore): ShadowRoot {
     const calendar = getCalendar(component);
     return calendar.shadowRoot as ShadowRoot;
   }

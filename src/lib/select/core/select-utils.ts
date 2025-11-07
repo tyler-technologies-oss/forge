@@ -11,16 +11,16 @@ export enum SelectOptionType {
  * @param options The options either grouped or individual.
  * @param type The type of option to detect.
  */
-export function isSelectOptionType(options: ISelectOption[] | ISelectOptionGroup[], type: SelectOptionType): boolean {
+export function isSelectOptionType(options: ISelectOption[] | ISelectOptionGroup[], type: SelectOptionType): options is ISelectOptionGroup[] {
   const isOptionGroups = options.some((o: ISelectOption | ISelectOptionGroup) => isOptionGroupObject(o));
   const isOptionTypes = options.some((o: ISelectOption | ISelectOptionGroup) => isOptionObject(o));
   return (isOptionGroups && type === SelectOptionType.Group) || (isOptionTypes && type === SelectOptionType.Option);
 }
 
 export function isOptionGroupObject(o: ISelectOption | ISelectOptionGroup): o is ISelectOptionGroup {
-  return isDefined(o) && isObject(o) && o.hasOwnProperty('options');
+  return isDefined(o) && isObject(o) && Object.prototype.hasOwnProperty.call(o, 'options');
 }
 
 export function isOptionObject(o: ISelectOption | ISelectOptionGroup): o is ISelectOption {
-  return isDefined(o) && isObject(o) && o.hasOwnProperty('label') && o.hasOwnProperty('value');
+  return isDefined(o) && isObject(o) && Object.prototype.hasOwnProperty.call(o, 'label') && Object.prototype.hasOwnProperty.call(o, 'value');
 }

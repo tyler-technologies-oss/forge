@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
-import { nothing } from 'lit-html';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { spy } from 'sinon';
 import { TestHarness } from '../../../test/utils/test-harness';
 import { internals } from '../../constants';
@@ -136,7 +136,6 @@ describe('Select', () => {
       ];
       const harness = await createFixture();
       harness.element.options = options;
-      console.log('hello options', harness.element.children[2].getAttribute('data-test-attr'));
       expect(harness.element.children[2].getAttribute('data-test-attr')).to.equal('test-value');
     });
   });
@@ -707,6 +706,21 @@ describe('Select', () => {
       expect(harness.fieldElement.floatLabel).to.be.true;
     });
 
+    it('should float label when value is set while dropdown is open', async () => {
+      const harness = await createFixture();
+
+      harness.element.labelPosition = 'inset';
+      await harness.clickElement(harness.element);
+
+      expect(harness.element.open).to.be.true;
+      expect(harness.fieldElement.floatLabel).to.be.false;
+
+      harness.element.value = 'one';
+      await frame();
+
+      expect(harness.fieldElement.floatLabel).to.be.true;
+    });
+
     it('should not float label when select has no value or placeholder', async () => {
       const harness = await createFixture();
 
@@ -879,6 +893,284 @@ describe('Select', () => {
       expect(el[internals].validationMessage).to.equal('Custom error message');
     });
   });
+
+  describe('list dropdown API', () => {
+    it('should set popover placement', async () => {
+      const harness = await createFixture();
+
+      harness.element.popoverPlacement = 'right';
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverPlacement).to.equal('right');
+      expect(harness.popoverElement?.placement).to.equal('right');
+    });
+
+    it('should set popover placement from attribute', async () => {
+      const harness = await createFixture();
+
+      harness.element.setAttribute('popover-placement', 'right');
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverPlacement).to.equal('right');
+      expect(harness.popoverElement?.placement).to.equal('right');
+    });
+
+    it('should set popover flip', async () => {
+      const harness = await createFixture();
+
+      harness.element.popoverFlip = 'never';
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverFlip).to.equal('never');
+      expect(harness.popoverElement?.flip).to.equal('never');
+    });
+
+    it('should set popover flip from attribute', async () => {
+      const harness = await createFixture();
+
+      harness.element.setAttribute('popover-flip', 'never');
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverFlip).to.equal('never');
+      expect(harness.popoverElement?.flip).to.equal('never');
+    });
+
+    it('should set popover shift', async () => {
+      const harness = await createFixture();
+
+      harness.element.popoverShift = 'never';
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverShift).to.equal('never');
+      expect(harness.popoverElement?.shift).to.equal('never');
+    });
+
+    it('should set popover shift from attribute', async () => {
+      const harness = await createFixture();
+
+      harness.element.setAttribute('popover-shift', 'never');
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverShift).to.equal('never');
+      expect(harness.popoverElement?.shift).to.equal('never');
+    });
+
+    it('should set popover fallback placements', async () => {
+      const harness = await createFixture();
+
+      harness.element.popoverFallbackPlacements = ['top'];
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverFallbackPlacements).to.deep.equal(['top']);
+      expect(harness.popoverElement?.fallbackPlacements).to.deep.equal(['top']);
+    });
+
+    it('should set popover offset', async () => {
+      const harness = await createFixture();
+
+      harness.element.popoverOffset = { mainAxis: 10, crossAxis: 10 };
+
+      harness.element.open = true;
+      await frame();
+
+      expect(harness.element.popoverOffset).to.deep.equal({ mainAxis: 10, crossAxis: 10 });
+      expect(harness.popoverElement?.offset).to.deep.equal({ mainAxis: 10, crossAxis: 10 });
+    });
+  });
+
+  describe('show select all', () => {
+    it('should have showSelectAll property', async () => {
+      const harness = await createFixture();
+
+      expect(harness.element.showSelectAll).to.be.false;
+
+      harness.element.showSelectAll = true;
+      await elementUpdated(harness.element);
+
+      expect(harness.element.showSelectAll).to.be.true;
+    });
+
+    it('should set show-select-all attribute when showSelectAll is true', async () => {
+      const harness = await createFixture({ showSelectAll: true });
+
+      expect(harness.element.hasAttribute('show-select-all')).to.be.true;
+    });
+
+    it('should only show select all option when multiple is true and showSelectAll is true', async () => {
+      const harness = await createFixture({ multiple: true, showSelectAll: true });
+
+      harness.element.open = true;
+      await elementUpdated(harness.element);
+
+      const listItems = harness.getListItems();
+      expect(listItems.length).to.be.greaterThan(3); // 3 regular options + select all
+
+      const firstItem = listItems[0];
+      const button = firstItem.querySelector('button');
+      expect(button?.textContent?.trim()).to.equal('Select All');
+    });
+
+    it('should not show select all option when multiple is false', async () => {
+      const harness = await createFixture({ multiple: false, showSelectAll: true });
+
+      harness.element.open = true;
+      await elementUpdated(harness.element);
+
+      const listItems = harness.getListItems();
+      expect(listItems.length).to.equal(3); // Only regular options
+
+      const firstItem = listItems[0];
+      const button = firstItem.querySelector('button');
+      expect(button?.textContent?.trim()).not.to.equal('Select All');
+    });
+
+    it('should dispatch forge-select-all event when select all is clicked', async () => {
+      const harness = await createFixture({ multiple: true, showSelectAll: true });
+      let eventDetail: any;
+
+      harness.element.addEventListener('forge-select-all', (e: any) => {
+        eventDetail = e.detail;
+      });
+
+      harness.element.open = true;
+      await elementUpdated(harness.element);
+
+      const listItems = harness.getListItems();
+      const selectAllButton = listItems[0].querySelector('button') as HTMLButtonElement;
+
+      await harness.clickElement(selectAllButton);
+
+      expect(eventDetail).to.exist;
+      expect(eventDetail.value).to.deep.equal(['one', 'two', 'three']);
+      expect(eventDetail.isAllSelected).to.be.true;
+    });
+
+    it('should select all options when select all is clicked while none selected', async () => {
+      const harness = await createFixture({ multiple: true, showSelectAll: true });
+
+      harness.element.open = true;
+      await elementUpdated(harness.element);
+
+      const listItems = harness.getListItems();
+      const selectAllButton = listItems[0].querySelector('button') as HTMLButtonElement;
+
+      expect(harness.element.value).to.deep.equal([]);
+
+      await harness.clickElement(selectAllButton);
+      await elementUpdated(harness.element);
+
+      expect(harness.element.value).to.deep.equal(['one', 'two', 'three']);
+    });
+
+    it('should deselect all options when select all is clicked while all selected', async () => {
+      const harness = await createFixture({ multiple: true, showSelectAll: true });
+
+      // First select all options
+      harness.element.value = ['one', 'two', 'three'];
+      await elementUpdated(harness.element);
+
+      harness.element.open = true;
+      await elementUpdated(harness.element);
+
+      const listItems = harness.getListItems();
+      const selectAllButton = listItems[0].querySelector('button') as HTMLButtonElement;
+
+      await harness.clickElement(selectAllButton);
+      await elementUpdated(harness.element);
+
+      expect(harness.element.value).to.deep.equal([]);
+    });
+
+    it('should have selectAllLabel property', async () => {
+      const harness = await createFixture();
+
+      expect(harness.element.selectAllLabel).to.be.undefined;
+
+      harness.element.selectAllLabel = 'Custom Select All';
+      await elementUpdated(harness.element);
+
+      expect(harness.element.selectAllLabel).to.equal('Custom Select All');
+    });
+
+    it('should set select-all-label attribute when selectAllLabel is set', async () => {
+      const harness = await createFixture({ selectAllLabel: 'Custom Select All' });
+
+      expect(harness.element.getAttribute('select-all-label')).to.equal('Custom Select All');
+    });
+
+    it('should use custom select all label in dropdown', async () => {
+      const harness = await createFixture({
+        multiple: true,
+        showSelectAll: true,
+        selectAllLabel: 'Tout sélectionner'
+      });
+
+      harness.element.open = true;
+      await elementUpdated(harness.element);
+
+      const listItems = harness.getListItems();
+      expect(listItems.length).to.be.greaterThan(3); // 3 regular options + select all
+
+      const firstItem = listItems[0];
+      const button = firstItem.querySelector('button');
+      expect(button?.textContent?.trim()).to.equal('Tout sélectionner');
+    });
+
+    it('should use default select all label when selectAllLabel is not set', async () => {
+      const harness = await createFixture({ multiple: true, showSelectAll: true });
+
+      harness.element.open = true;
+      await elementUpdated(harness.element);
+
+      const listItems = harness.getListItems();
+      const firstItem = listItems[0];
+      const button = firstItem.querySelector('button');
+      expect(button?.textContent?.trim()).to.equal('Select All');
+    });
+
+    it('should update select all label dynamically', async () => {
+      const harness = await createFixture({ multiple: true, showSelectAll: true });
+
+      harness.element.open = true;
+      await elementUpdated(harness.element);
+
+      let listItems = harness.getListItems();
+      let firstItem = listItems[0];
+      let button = firstItem.querySelector('button');
+      expect(button?.textContent?.trim()).to.equal('Select All');
+
+      // Close dropdown
+      harness.element.open = false;
+      await elementUpdated(harness.element);
+
+      // Change the label
+      harness.element.selectAllLabel = 'Choose All Items';
+      await elementUpdated(harness.element);
+
+      // Reopen dropdown
+      harness.element.open = true;
+      await elementUpdated(harness.element);
+
+      listItems = harness.getListItems();
+      firstItem = listItems[0];
+      button = firstItem.querySelector('button');
+      expect(button?.textContent?.trim()).to.equal('Choose All Items');
+    });
+  });
 });
 
 class SelectHarness extends TestHarness<ISelectComponent> {
@@ -886,7 +1178,7 @@ class SelectHarness extends TestHarness<ISelectComponent> {
   public selectedTextElement: HTMLElement;
 
   public get labelElement(): HTMLLabelElement | null {
-    return getShadowElement(this.element, 'label') as HTMLLabelElement;
+    return getShadowElement(this.element, SELECT_CONSTANTS.selectors.LABEL) as HTMLLabelElement;
   }
 
   constructor(el: ISelectComponent) {
@@ -931,6 +1223,8 @@ interface SelectFixtureConfig {
   label?: string;
   placeholder?: string;
   multiple?: boolean;
+  showSelectAll?: boolean;
+  selectAllLabel?: string;
   labelPosition?: FieldLabelPosition;
   labelAlignment?: FieldLabelAlignment;
   invalid?: boolean;
@@ -950,6 +1244,8 @@ async function createFixture({
   label = 'Test label',
   placeholder,
   multiple,
+  showSelectAll,
+  selectAllLabel,
   labelPosition,
   labelAlignment,
   invalid,
@@ -969,21 +1265,23 @@ async function createFixture({
       id="my-test-id"
       style="margin-top: 10px;"
       label=${label}
-      placeholder=${placeholder}
+      placeholder=${placeholder ?? ''}
       ?multiple=${multiple}
-      .labelPosition=${labelPosition ?? nothing}
-      .labelAlignment=${labelAlignment ?? nothing}
+      ?show-select-all=${showSelectAll}
+      select-all-label=${ifDefined(selectAllLabel)}
+      label-position=${ifDefined(labelPosition)}
+      label-alignment=${ifDefined(labelAlignment)}
       ?invalid=${invalid}
       ?required=${required}
       ?optional=${optional}
       ?disabled=${disabled}
       ?float-label=${floatLabel}
-      .variant=${variant ?? nothing}
-      .theme=${theme ?? nothing}
-      .shape=${shape ?? nothing}
-      .density=${density ?? nothing}
+      variant=${ifDefined(variant)}
+      theme=${ifDefined(theme)}
+      shape=${ifDefined(shape)}
+      density=${ifDefined(density)}
       ?dense=${dense}
-      .supportTextInset=${supportTextInset ?? nothing}>
+      support-text-inset=${ifDefined(supportTextInset)}>
       <forge-option value="one">Option 1</forge-option>
       <forge-option value="two">Option 2</forge-option>
       <forge-option value="three">Option 3</forge-option>

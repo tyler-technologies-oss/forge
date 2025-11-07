@@ -86,7 +86,6 @@ export abstract class BaseSelectAdapter<T extends IBaseSelectComponent> extends 
       }
 
       return {
-        // eslint-disable-next-line @typescript-eslint/no-extra-parens
         label: o.hasAttribute(OPTION_CONSTANTS.attributes.LABEL)
           ? (o.getAttribute(OPTION_CONSTANTS.attributes.LABEL) as string)
           : isDefined(o.label)
@@ -122,7 +121,8 @@ export abstract class BaseSelectAdapter<T extends IBaseSelectComponent> extends 
           : o.trailingIconType,
         trailingIconComponentProps: o.trailingIconComponentProps,
         leadingBuilder: o.leadingBuilder,
-        trailingBuilder: o.trailingBuilder
+        trailingBuilder: o.trailingBuilder,
+        tooltip: o.tooltip
       };
     });
   }

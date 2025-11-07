@@ -29,6 +29,8 @@ declare global {
 /**
  * @tag forge-stepper
  *
+ * @summary Steppers guide users through multi-step processes by breaking them into logical steps.
+ *
  * @dependency forge-step
  *
  * @event {CustomEvent<number>} forge-step-select - Emits the index when a step is selected.
@@ -101,7 +103,7 @@ export class StepperComponent extends BaseComponent implements IStepperComponent
    * @default []
    */
   @coreProperty()
-  public declare steps: IStepConfiguration[];
+  declare public steps: IStepConfiguration[];
 
   /**
    * The active step index.
@@ -109,7 +111,7 @@ export class StepperComponent extends BaseComponent implements IStepperComponent
    * @attribute selected-index
    */
   @coreProperty()
-  public declare selectedIndex: number;
+  declare public selectedIndex: number;
 
   /**
    * Whether the stepper is linear or non-linear.
@@ -117,7 +119,7 @@ export class StepperComponent extends BaseComponent implements IStepperComponent
    * @attribute
    */
   @coreProperty()
-  public declare linear: boolean;
+  declare public linear: boolean;
 
   /**
    * Whether the stepper uses the default or alternative label layout mode.
@@ -125,7 +127,7 @@ export class StepperComponent extends BaseComponent implements IStepperComponent
    * @attribute
    */
   @coreProperty()
-  public declare alternative: boolean;
+  declare public alternative: boolean;
 
   /**
    * The layout mode of the stepper.
@@ -133,7 +135,7 @@ export class StepperComponent extends BaseComponent implements IStepperComponent
    * @attribute layout-mode
    */
   @coreProperty()
-  public declare layoutMode: StepperLayoutMode;
+  declare public layoutMode: StepperLayoutMode;
 
   /**
    * The layout alignment of the stepper.
@@ -141,7 +143,7 @@ export class StepperComponent extends BaseComponent implements IStepperComponent
    * @attribute layout-align
    */
   @coreProperty()
-  public declare layoutAlign: StepperLayoutAlign;
+  declare public layoutAlign: StepperLayoutAlign;
 
   /**
    * Whether the stepper is disabled.
@@ -149,7 +151,7 @@ export class StepperComponent extends BaseComponent implements IStepperComponent
    * @attribute
    */
   @coreProperty()
-  public declare disabled: boolean;
+  declare public disabled: boolean;
 
   /**
    * Whether the stepper is vertical.
@@ -157,5 +159,5 @@ export class StepperComponent extends BaseComponent implements IStepperComponent
    * @attribute
    */
   @coreProperty()
-  public declare vertical: boolean;
+  declare public vertical: boolean;
 }

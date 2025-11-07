@@ -37,6 +37,7 @@ export type ARIAAttribute = `${ARIAPropertyToAttribute<ARIAProperty>}` | 'role';
  * Reflective ARIA properties.
  */
 export const ARIA_PROPERTIES: ARIAProperty[] = [
+  'ariaActiveDescendantElement',
   'ariaAtomic',
   'ariaAutoComplete',
   'ariaBusy',
@@ -44,20 +45,28 @@ export const ARIA_PROPERTIES: ARIAProperty[] = [
   'ariaColCount',
   'ariaColIndex',
   'ariaColSpan',
+  'ariaControlsElements',
   'ariaCurrent',
+  'ariaDescribedByElements',
+  'ariaDescription',
   'ariaDisabled',
+  'ariaDetailsElements',
   'ariaExpanded',
+  'ariaErrorMessageElements',
+  'ariaFlowToElements',
   'ariaHasPopup',
   'ariaHidden',
   'ariaInvalid',
   'ariaKeyShortcuts',
   'ariaLabel',
+  'ariaLabelledByElements',
   'ariaLevel',
   'ariaLive',
   'ariaModal',
   'ariaMultiLine',
   'ariaMultiSelectable',
   'ariaOrientation',
+  'ariaOwnsElements',
   'ariaPlaceholder',
   'ariaPosInSet',
   'ariaPressed',
@@ -82,36 +91,49 @@ export const ARIA_PROPERTIES: ARIAProperty[] = [
  * This is required because the property name cannot be reliably inferred from the attribute name.
  */
 const ARIA_ATTRIBUTES_TO_PROPERTIES: Record<ARIAAttribute, ARIAProperty | 'role'> = {
+  'aria-activedescendant': 'ariaActiveDescendantElement',
   'aria-atomic': 'ariaAtomic',
   'aria-autocomplete': 'ariaAutoComplete',
+  'aria-braillelabel': 'ariaBrailleLabel',
+  'aria-brailleroledescription': 'ariaBrailleRoleDescription',
   'aria-busy': 'ariaBusy',
   'aria-checked': 'ariaChecked',
   'aria-colcount': 'ariaColCount',
   'aria-colindex': 'ariaColIndex',
+  'aria-colindextext': 'ariaColIndexText',
   'aria-colspan': 'ariaColSpan',
+  'aria-controls': 'ariaControlsElements',
   'aria-current': 'ariaCurrent',
+  'aria-describedby': 'ariaDescribedByElements',
   'aria-description': 'ariaDescription',
+  'aria-details': 'ariaDetailsElements',
   'aria-disabled': 'ariaDisabled',
   'aria-expanded': 'ariaExpanded',
+  'aria-errormessage': 'ariaErrorMessageElements',
+  'aria-flowto': 'ariaFlowToElements',
   'aria-haspopup': 'ariaHasPopup',
   'aria-hidden': 'ariaHidden',
   'aria-invalid': 'ariaInvalid',
   'aria-keyshortcuts': 'ariaKeyShortcuts',
   'aria-label': 'ariaLabel',
+  'aria-labelledby': 'ariaLabelledByElements',
   'aria-level': 'ariaLevel',
   'aria-live': 'ariaLive',
   'aria-modal': 'ariaModal',
   'aria-multiline': 'ariaMultiLine',
   'aria-multiselectable': 'ariaMultiSelectable',
   'aria-orientation': 'ariaOrientation',
+  'aria-owns': 'ariaOwnsElements',
   'aria-placeholder': 'ariaPlaceholder',
   'aria-posinset': 'ariaPosInSet',
   'aria-pressed': 'ariaPressed',
   'aria-readonly': 'ariaReadOnly',
+  'aria-relevant': 'ariaRelevant',
   'aria-required': 'ariaRequired',
   'aria-roledescription': 'ariaRoleDescription',
   'aria-rowcount': 'ariaRowCount',
   'aria-rowindex': 'ariaRowIndex',
+  'aria-rowindextext': 'ariaRowIndexText',
   'aria-rowspan': 'ariaRowSpan',
   'aria-selected': 'ariaSelected',
   'aria-setsize': 'ariaSetSize',
@@ -286,6 +308,7 @@ export interface ARIAMixinStrict extends ARIAMixin {
 /**
  * The ARIA attribute corresponding to a given ARIA property.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type ARIAPropertyToAttribute<K extends string> = K extends `aria${infer Suffix}Element${infer OptS}`
   ? `aria-${Lowercase<Suffix>}`
   : K extends `aria${infer Suffix}`
@@ -318,9 +341,9 @@ export function ariaAttributeToProperty<K extends ARIAAttribute | 'role'>(attrib
   return ARIA_ATTRIBUTES_TO_PROPERTIES[attribute] as ARIAProperty;
 }
 
-export type DefaultAriaOptions = {
+export interface DefaultAriaOptions {
   setAttribute?: boolean;
-};
+}
 
 /**
  * Applies default ARIA to an element through ElementInternals if supported. Otherwise, ARIA
@@ -362,7 +385,7 @@ export function setDefaultAria(
 ): void {
   Object.entries(properties).forEach(([key, value]) => {
     if (supportsElementInternalsAria()) {
-      internals[key as ARIAProperty] = value;
+      (internals as any)[key as ARIAProperty] = value;
     }
 
     const attribute = ariaPropertyToAttribute(key as ARIAProperty);
@@ -370,27 +393,4 @@ export function setDefaultAria(
       toggleAttribute(element, value != null, attribute, value as string);
     }
   });
-}
-
-/**
- * Adds or removes a state from an element's custom state set.
- *
- * @param internals - The element's internals object.
- * @param state - The name of the custom state to toggle.
- * @param value - Whether to add or remove the state.
- */
-export function toggleState(internals: ElementInternals, state: string, value: boolean): void {
-  if (value) {
-    try {
-      internals.states.add(state);
-    } catch {
-      internals.states.add(`--${state}`);
-    }
-  } else {
-    try {
-      internals.states.delete(state);
-    } catch {
-      internals.states.delete(`--${state}`);
-    }
-  }
 }

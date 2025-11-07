@@ -30,9 +30,13 @@ $_host-tokens: [track-height];
   // State vars
   #{declare(track-dot-size)}: calc(#{token(track-height)} / 2);
   #{declare(track-background-width)}: calc(#{token(track-dot-size, custom)} * 5);
-  #{declare(track-background)}: 0 / #{token(track-background-width, custom)} 100% radial-gradient(circle at calc(#{token(track-dot-size, custom)} * 2), #{token(
-          track-color
-        )} 0, #{token(track-color)} #{token(track-dot-size, custom)}, transparent #{token(track-dot-size, custom)});
+  #{declare(track-background)}: 0 / #{token(track-background-width, custom)} 100%
+    radial-gradient(
+      circle at calc(#{token(track-dot-size, custom)} * 2),
+      #{token(track-color)} 0,
+      #{token(track-color)} #{token(track-dot-size, custom)},
+      transparent #{token(track-dot-size, custom)}
+    );
 }
 
 .forge-linear-progress {

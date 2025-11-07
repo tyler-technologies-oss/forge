@@ -1,6 +1,6 @@
 import { html, nothing } from 'lit';
-import { type Meta, type StoryObj } from '@storybook/web-components';
-import { action } from '@storybook/addon-actions';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
+import { action } from 'storybook/actions';
 import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from 'src/stories/utils';
 import { styleMap } from 'lit/directives/style-map.js';
 

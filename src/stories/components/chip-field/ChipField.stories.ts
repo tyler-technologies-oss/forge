@@ -1,7 +1,7 @@
 import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { action } from '@storybook/addon-actions';
-import { type Meta, type StoryObj } from '@storybook/web-components';
+import { action } from 'storybook/actions';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 import { IOption } from '@tylertech/forge/select';
 import { IAutocompleteSelectEventData } from '@tylertech/forge/autocomplete';

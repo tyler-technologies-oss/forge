@@ -1,16 +1,16 @@
 import { html } from 'lit';
-import { type Meta, type StoryObj } from '@storybook/web-components';
-import { action } from '@storybook/addon-actions';
+import { type Meta, type StoryObj } from '@storybook/web-components-vite';
+import { action } from 'storybook/actions';
 import { generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
 
 import '@tylertech/forge/date-picker';
 
 const component = 'forge-date-picker';
 
-const changeAction = action('forge-date-picker-change');
-const openAction = action('forge-date-picker-open');
-const closeAction = action('forge-date-picker-close');
-const inputAction = action('forge-date-picker-input');
+const changeAction = (evt: CustomEvent) => action('forge-date-picker-change')(evt.detail);
+const openAction = (evt: CustomEvent) => action('forge-date-picker-open')(evt.detail);
+const closeAction = (evt: CustomEvent) => action('forge-date-picker-close')(evt.detail);
+const inputAction = (evt: CustomEvent) => action('forge-date-picker-input')(evt.detail);
 
 const meta = {
   title: 'Components/Date Picker',
@@ -22,7 +22,6 @@ const meta = {
         .disabledDaysOfWeek=${args.disabledDaysOfWeek}
         .locale=${args.locale}
         .masked=${args.masked}
-        .maskedFormat=${args.maskedFormat}
         .max=${args.max}
         .min=${args.min}
         .open=${args.open}
@@ -30,6 +29,7 @@ const meta = {
         .showMaskFormat=${args.showMaskFormat}
         .showToday=${args.showToday}
         .yearRange=${args.yearRange}
+        .dateFormat=${args.dateFormat}
         @forge-date-picker-change=${changeAction}
         @forge-date-picker-open=${openAction}
         @forge-date-picker-close=${closeAction}
@@ -50,6 +50,7 @@ const meta = {
         'prepareMaskCallback',
         'formatCallback',
         'parseCallback',
+        'maskFormat',
         'popupClasses',
         'disabledDates',
         'value',
@@ -63,6 +64,12 @@ const meta = {
             labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
           },
           options: [0, 1, 2, 3, 4, 5, 6]
+        },
+        dateFormat: {
+          control: {
+            type: 'select'
+          },
+          options: ['MM/DD/YYYY', 'MM/DD/YY', 'DD/MMM/YYYY', 'MM-DD-YYYY', 'MM-DD-YY', 'DD-MMM-YYYY', 'YYYY-MM-DD', 'YYYY-MMM-DD', 'DD.MM.YYYY', 'DD.MM.YY']
         }
       }
     })
@@ -73,7 +80,7 @@ const meta = {
     disabledDaysOfWeek: [],
     locale: 'en-US',
     masked: true,
-    maskFormat: 'MM/DD/YYYY',
+    dateFormat: 'MM/DD/YYYY',
     max: '',
     min: '',
     open: false,
@@ -90,6 +97,24 @@ type Story = StoryObj;
 
 export const Demo: Story = {};
 
+export const DateFormats: Story = {
+  parameters: {
+    controls: {
+      include: ['dateFormat']
+    }
+  },
+  render: args => {
+    return html`
+      <forge-date-picker date-format=${args.dateFormat} @forge-date-picker-change=${changeAction}>
+        <forge-text-field>
+          <label for="date-picker-date-formats">${args.dateFormat}</label>
+          <input type="text" id="date-picker-date-formats" autocomplete="off" />
+        </forge-text-field>
+      </forge-date-picker>
+    `;
+  }
+};
+
 export const CustomFormat: Story = {
   ...standaloneStoryParams,
   render: () => {
@@ -98,33 +123,69 @@ export const CustomFormat: Story = {
         return null;
       }
 
-      const split = str.split('-');
+      // Regular expression to match "Mmm DD, YYYY" (e.g., "Jul 08, 2025")
+      const regex = /(\w{3}) (\d{2}), (\d{4})/;
+      const match = str.match(regex);
 
-      if (split.length !== 3) {
+      if (!match || match.length !== 4) {
         return null;
       }
 
-      const yyyy = +split[0];
-      const mm = +split[1];
-      const dd = split[2].indexOf('T') ? +split[2].split('T')[0] : +split[2];
+      const monthStr = match[1];
+      const day = parseInt(match[2], 10);
+      const year = parseInt(match[3], 10);
 
-      if (!yyyy || isNaN(yyyy) || !mm || isNaN(mm) || !dd || isNaN(dd)) {
+      // Map month abbreviations to month numbers (0-indexed)
+      const monthMap: { [key: string]: number } = {
+        Jan: 0,
+        Feb: 1,
+        Mar: 2,
+        Apr: 3,
+        May: 4,
+        Jun: 5,
+        Jul: 6,
+        Aug: 7,
+        Sep: 8,
+        Oct: 9,
+        Nov: 10,
+        Dec: 11
+      };
+      const month = monthMap[monthStr];
+
+      if (isNaN(day) || isNaN(month) || isNaN(year)) {
         return null;
       }
 
-      return new Date(yyyy, mm - 1, dd, 0, 0, 0, 0);
+      const date = new Date(year, month, day);
+
+      // Validate the date to prevent issues with invalid dates (e.g., Feb 30)
+      if (date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day) {
+        return null;
+      }
+
+      return date;
     }
 
-    function formatCallback(date: Date): string | null {
-      return date ? date.toISOString().split('T')[0] : null;
+    function formatCallback(date: Date | null): string {
+      if (!date) {
+        return '';
+      }
+
+      const options: Intl.DateTimeFormatOptions = { month: 'short', day: '2-digit', year: 'numeric' };
+      return new Intl.DateTimeFormat('en-US', options).format(date);
     }
 
     return html`
-      <forge-date-picker .parseCallback=${parseCallback} .formatCallback=${formatCallback} mask-format="YYYY-MM-DD">
+      <forge-date-picker
+        .parseCallback=${parseCallback}
+        .formatCallback=${formatCallback}
+        mask-format="Mmm DD, YYYY"
+        shortcuts="off"
+        @forge-date-picker-change=${changeAction}>
         <forge-text-field>
           <label for="date-picker">Date</label>
-          <input type="text" id="date-picker" autocomplete="off" placeholder="YYYY-MM-DD" />
-          <span slot="support-text">Enter a date in the format YYYY-MM-DD</span>
+          <input type="text" id="date-picker" autocomplete="off" placeholder="Mmm DD, YYYY" />
+          <span slot="support-text">Enter a date in the format Mmm DD, YYYY (e.g., Jul 08, 2025)</span>
         </forge-text-field>
       </forge-date-picker>
     `;
