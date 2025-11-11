@@ -35,8 +35,9 @@ describe('Paginator', () => {
     const harness = await createFixture();
 
     harness.paginatorElement.focus();
+    harness.paginatorElement.dispatchEvent(new Event('focus'));
 
-    expect(harness.pageSizeSelect.matches(':focus')).to.be.true;
+    expect(document.activeElement === harness.pageSizeSelect).to.be.true;
   });
 
   describe('accessibility', () => {
