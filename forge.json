@@ -3,9 +3,6 @@
   "license": {
     "header": "/**\n * @license\n * Copyright Tyler Technologies, Inc. \n * License: Apache-2.0\n */\n"
   },
-  "karma": {
-    "stylesheets": ["src/lib/forge.scss"]
-  },
   "packageConfig": {
     "copyFiles": [
       {

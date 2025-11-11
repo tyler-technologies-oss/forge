@@ -7,12 +7,12 @@ import type { IProfileCardComponent } from './profile-card';
 import type { IToolbarComponent } from '../toolbar/toolbar';
 import type { IButtonComponent } from '../button/button';
 import type { IAvatarComponent } from '../avatar/avatar';
-import { TestHarness } from '../../test/utils/test-harness';
-
-import './profile-card';
+import { TestHarness } from '../core/testing/test-harness';
 import { getShadowElement } from '@tylertech/forge-core';
 import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
 import { IIconComponent } from '../icon';
+
+import './profile-card';
 
 class ProfileCardHarness extends TestHarness<IProfileCardComponent> {
   private _actionToolbarElement: IToolbarComponent;

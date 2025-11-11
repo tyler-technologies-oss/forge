@@ -110,7 +110,7 @@ export class ListDropdown implements IListDropdown {
   }
 
   public scrollSelectedOptionIntoView(animate?: boolean): void {
-    this._core.scrollSelectedOptionIntoView();
+    this._core.scrollSelectedOptionIntoView(animate);
   }
 
   public setScrollBottomListener(listener: () => void, threshold?: number): void {

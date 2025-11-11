@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { spy } from 'sinon';
-import { TestHarness } from '../../../test/utils/test-harness';
+import { TestHarness } from '../../core/testing/test-harness';
 import { LABEL_CONSTANTS } from '../../label';
 import { IRadioComponent, RADIO_CONSTANTS } from '../radio';
 import { IRadioGroupComponent } from './radio-group';
