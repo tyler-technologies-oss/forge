@@ -3,7 +3,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { spy } from 'sinon';
 import { getShadowElement } from '@tylertech/forge-core';
-import { TestHarness } from '../../test/utils/test-harness';
+import { TestHarness } from '../core/testing/test-harness';
 import { IFocusIndicatorComponent } from '../focus-indicator';
 import { IStateLayerComponent } from '../state-layer';
 import { ISwitchComponent, SWITCH_CONSTANTS } from '../switch';

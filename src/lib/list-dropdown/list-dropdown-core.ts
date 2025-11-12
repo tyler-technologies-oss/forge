@@ -179,7 +179,7 @@ export class ListDropdownCore implements IListDropdownCore {
     return this._adapter.dropdownElement;
   }
 
-  public scrollSelectedOptionIntoView(animate = true): void {
+  public scrollSelectedOptionIntoView(animate?: boolean): void {
     this._adapter.scrollSelectedOptionIntoView(animate);
   }
 

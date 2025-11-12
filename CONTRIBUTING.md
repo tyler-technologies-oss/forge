@@ -97,10 +97,10 @@ run at any time with the `npm run lint` command.
 
 ### Running unit tests
 
-This project uses Karma and Jasmine as the unit testing environment.
+This project uses Web Test Runner as the unit testing environment.
 
 - To run tests over the whole project, use command: `npm run test`.
-- To run tests over a single component, use command: `forge test component <component name> [--browser chrome] [--port <port number>]`
+- To run tests over a single component, use command: `npx wtr --group <component name>`.
 
 > It's important that you add/update tests when submitting changes to the library. The tests are validated in the CI environment.
 

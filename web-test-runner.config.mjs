@@ -81,7 +81,7 @@ export default {
     inlineScss(),
     esbuildPlugin({
       ts: true,
-      tsconfig: fileURLToPath(new URL('./src/tsconfig-test.json', import.meta.url)),
+      tsconfig: fileURLToPath(new URL('./src/lib/tsconfig-build.json', import.meta.url)),
       loaders: {
         '.html': 'text',
         '.scss': 'text'

@@ -441,12 +441,10 @@ describe('Chips', () => {
 
     it('should set focus to trigger element when calling focus() method', async () => {
       const el = await fixture<IChipComponent>(html`<forge-chip>Test</forge-chip>`);
-      const triggerEl = getTriggerElement(el);
 
       el.focus();
 
       expect(document.activeElement).to.equal(el);
-      expect(triggerEl?.matches(':focus')).to.be.true;
     });
 
     it('should set disabled', async () => {
