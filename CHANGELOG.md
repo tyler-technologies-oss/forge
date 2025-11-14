@@ -1,3 +1,24 @@
+# v3.12.1 (Fri Nov 14 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Bobby Choi ([@BobbyTylerChoi](https://github.com/BobbyTylerChoi)), for all your work!
+
+#### 🐛 Bug Fix
+
+- fix(list-dropdown): fix overflow-only tooltips so that they appear whenever text is cut [#1027](https://github.com/tyler-technologies-oss/forge/pull/1027) ([@BobbyTylerChoi](https://github.com/BobbyTylerChoi))
+
+#### 🧪 Tests
+
+- chore: migrate remaining legacy karma-based tests to WTR [#1023](https://github.com/tyler-technologies-oss/forge/pull/1023) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Bobby Choi ([@BobbyTylerChoi](https://github.com/BobbyTylerChoi))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v3.12.0 (Wed Nov 05 2025)
 
 :tada: This release contains work from new contributors! :tada:
