@@ -12,6 +12,9 @@ export type SecretVariant = 'blur' | 'dots';
 
 export const SECRET_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-secret';
 
+// TODO: Add inline property and make block by default
+// TODO: Allow text to be selected when visible
+
 /**
  * @tag forge-secret
  * @summary A component that conceals inline content with a blur or dots effect, revealing it on user interaction.
@@ -176,39 +179,40 @@ export class SecretComponent extends BaseLitElement {
     `;
   }
 
-  #renderStateLayer(): TemplateResult {
+  #renderStateLayer(): TemplateResult | typeof nothing {
+    if (this.variant === 'blur' && !this.visible) {
+      return nothing;
+    }
+
     return html`<forge-state-layer target=":host"></forge-state-layer>`;
   }
 
   #renderTooltip(): TemplateResult | typeof nothing {
-    if (!this.visible && !this.noLabel && !this.showOnHover) {
-      return nothing;
+    if (this.visible || this.variant === 'dots' || this.showOnHover || this.noLabel) {
+      return html`<forge-tooltip anchor="button" placement="top">${this.visible ? 'Hide' : 'Show'}</forge-tooltip>`;
     }
 
-    return html`<forge-tooltip anchor="button" placement="top">${this.visible ? 'Hide' : 'Show'}</forge-tooltip>`;
+    return nothing;
   }
 
   public render(): TemplateResult {
-    const showLabel = !this.noLabel && this.variant !== 'dots';
-
     return html`
       <span part="root" class=${classMap({ 'forge-secret': true, 'show-on-hover': this.showOnHover })} @click="${this.#handleClick}">
+        <button type="button" part="button" id="button" aria-expanded="${this.visible}" @keydown="${this.#handleKeyDown}">
+          <div part="label" class=${classMap({ label: true, 'label--hidden': this.noLabel || this.variant === 'dots' })}>
+            <slot name="label">Show</slot>
+          </div>
+          <forge-focus-indicator></forge-focus-indicator>
+          ${this.#renderStateLayer()}
+        </button>
+        ${this.#renderTooltip()}
         <span
           ?inert=${!this.visible}
           part="content"
           class=${classMap({ content: true, blur: !this.visible && this.variant === 'blur', dots: !this.visible && this.variant === 'dots' })}>
-          ${this.#renderIcon()}
           <slot></slot>
+          ${this.#renderIcon()}
         </span>
-        <button type="button" part="button" id="button" aria-expanded="${this.visible}" @keydown="${this.#handleKeyDown}">
-          <div part="label" class=${classMap({ label: true, 'label--hidden': !showLabel })}>
-            <slot name="label">Show</slot>
-            ${showLabel ? this.#renderStateLayer() : nothing}
-          </div>
-          <forge-focus-indicator></forge-focus-indicator>
-          ${this.variant === 'dots' ? this.#renderStateLayer() : nothing}
-        </button>
-        ${this.#renderTooltip()}
         <div class="announcer" aria-live="polite" aria-atomic="true"></div>
       </span>
     `;
