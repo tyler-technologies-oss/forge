@@ -120,15 +120,15 @@ export const LinkedGroup: Story = {
       <div style="display: flex; flex-direction: column; gap: 12px;">
         <p>Click on any secret to reveal it. Only one can be visible at a time:</p>
         <div>
-          <p>Username:</p>
+          <p class="forge-typography--label1">Username</p>
           <forge-secret name="credentials">john_doe</forge-secret>
         </div>
         <div>
-          <p>Password:</p>
+          <p class="forge-typography--label1">Password</p>
           <forge-secret name="credentials">my_secret_password</forge-secret>
         </div>
         <div>
-          <p>API Key:</p>
+          <p class="forge-typography--label1">API Key</p>
           <forge-secret name="credentials">sk_test_1234567890abcdef</forge-secret>
         </div>
       </div>
