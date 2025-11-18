@@ -1,5 +1,7 @@
+import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
+import { SecretComponent } from '@tylertech/forge/secret';
+import { generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
 
 import '@tylertech/forge/secret';
 import '@tylertech/forge/focus-indicator';
@@ -12,33 +14,18 @@ const component = 'forge-secret';
 const meta = {
   title: 'Components/Secret',
   render: args => {
-    const el = customElementStoryRenderer(component, args);
+    const { text, label, ...componentArgs } = args;
 
-    // Handle label slot
-    if (args.label) {
-      const labelEl = document.createElement('span');
-      labelEl.setAttribute('slot', 'label');
-      labelEl.textContent = args.label;
-      el.appendChild(labelEl);
-    }
-
-    // Handle custom icons
-    if (args.customIcons) {
-      const hiddenIcon = document.createElement('span');
-      hiddenIcon.setAttribute('slot', 'hidden-icon');
-      hiddenIcon.textContent = '🔒';
-      el.appendChild(hiddenIcon);
-
-      const visibleIcon = document.createElement('span');
-      visibleIcon.setAttribute('slot', 'visible-icon');
-      visibleIcon.textContent = '🔓';
-      el.appendChild(visibleIcon);
-    }
-
-    // Set text content
-    el.appendChild(document.createTextNode(args.text || 'Secret content'));
-
-    return el;
+    return html`
+      <forge-secret
+        ?visible=${componentArgs.visible}
+        variant=${componentArgs.variant}
+        ?show-on-hover=${componentArgs.showOnHover}
+        ?no-label=${componentArgs.noLabel}
+        name=${componentArgs.name || nothing}>
+        ${label ? html`<span slot="label">${label}</span>` : nothing} ${text}
+      </forge-secret>
+    `;
   },
   component,
   parameters: {
@@ -47,28 +34,32 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
+      exclude: ['text', 'label'],
       controls: {
         visible: { control: 'boolean' },
-        variant: { control: 'select', options: ['blur', 'dots'] },
+        variant: { control: 'inline-radio', options: ['blur', 'dots'] },
         showOnHover: { control: 'boolean' },
-        icon: { control: 'boolean' },
+        noLabel: { control: 'boolean' },
         name: { control: 'text' }
-      },
-      exclude: ['customIcons', 'label', 'text']
+      }
     }),
-    text: { control: 'text', description: 'The secret text content' },
-    label: { control: 'text', description: 'Optional label text (label slot)' },
-    customIcons: { control: 'boolean', description: 'Use custom icons via slots' }
+    text: {
+      control: 'text',
+      description: 'The secret text content'
+    },
+    label: {
+      control: 'text',
+      description: 'Optional label text (label slot)'
+    }
   },
   args: {
     visible: false,
     variant: 'blur',
     showOnHover: false,
-    icon: false,
+    noLabel: false,
     name: '',
     text: 'Secret content',
-    label: '',
-    customIcons: false
+    label: ''
   }
 } satisfies Meta;
 
@@ -78,155 +69,106 @@ type Story = StoryObj;
 
 export const Demo: Story = {
   args: {
-    text: 'This is secret content',
-    icon: true
+    text: 'This is secret content'
   }
 };
 
-export const BlurVariant: Story = {
+export const Blur: Story = {
+  parameters: {
+    controls: { include: ['text', 'visible'] }
+  },
   args: {
     text: 'This content is blurred when hidden',
-    variant: 'blur',
-    icon: true
+    variant: 'blur'
   }
 };
 
-export const DotsVariant: Story = {
+export const Dots: Story = {
+  parameters: {
+    controls: { include: ['text', 'visible'] }
+  },
   args: {
     text: 'This content is replaced by dots when hidden',
-    variant: 'dots',
-    icon: true
+    variant: 'dots'
   }
 };
 
 export const WithLabel: Story = {
+  parameters: {
+    controls: { include: ['text', 'label', 'visible'] }
+  },
   args: {
-    label: 'Password: ',
-    text: 'my_secret_password',
-    icon: true
+    label: 'Password',
+    text: 'my_secret_password'
   }
 };
 
 export const ShowOnHover: Story = {
+  parameters: {
+    controls: { include: ['text', 'showOnHover'] }
+  },
   args: {
     text: 'Hover over me to reveal',
-    showOnHover: true,
-    icon: true
+    showOnHover: true
   }
 };
 
-export const CustomIcons: Story = {
-  args: {
-    text: 'Secret with custom icons',
-    icon: true,
-    customIcons: true
-  }
-};
-
-export const NoIcon: Story = {
-  args: {
-    text: 'Secret without visible icon',
-    icon: false
-  }
-};
-
-export const ProgrammaticControl: Story = {
+export const LinkedGroup: Story = {
+  ...standaloneStoryParams,
   render: () => {
-    const container = document.createElement('div');
-    container.style.display = 'flex';
-    container.style.flexDirection = 'column';
-    container.style.gap = '16px';
-
-    const secret = document.createElement('forge-secret');
-    secret.setAttribute('icon', '');
-    secret.textContent = 'Programmable secret content';
-
-    const button = document.createElement('button');
-    button.textContent = 'Toggle Visibility';
-    button.style.width = 'fit-content';
-    button.onclick = () => {
-      (secret as any).visible = !(secret as any).visible;
-    };
-
-    container.appendChild(button);
-    container.appendChild(secret);
-
-    return container;
-  }
-};
-
-export const RadioGroup: Story = {
-  render: () => {
-    const container = document.createElement('div');
-    container.style.display = 'flex';
-    container.style.flexDirection = 'column';
-    container.style.gap = '12px';
-    container.innerHTML = `
-      <p>Click on any secret to reveal it. Only one can be visible at a time:</p>
-      <div>
-        <strong>Username:</strong>
-        <forge-secret name="credentials" icon>john_doe</forge-secret>
-      </div>
-      <div>
-        <strong>Password:</strong>
-        <forge-secret name="credentials" icon>my_secret_password</forge-secret>
-      </div>
-      <div>
-        <strong>API Key:</strong>
-        <forge-secret name="credentials" icon>sk_test_1234567890abcdef</forge-secret>
+    return html`
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <p>Click on any secret to reveal it. Only one can be visible at a time:</p>
+        <div>
+          <p>Username:</p>
+          <forge-secret name="credentials">john_doe</forge-secret>
+        </div>
+        <div>
+          <p>Password:</p>
+          <forge-secret name="credentials">my_secret_password</forge-secret>
+        </div>
+        <div>
+          <p>API Key:</p>
+          <forge-secret name="credentials">sk_test_1234567890abcdef</forge-secret>
+        </div>
       </div>
     `;
-    return container;
   }
 };
 
 export const InlineUsage: Story = {
+  ...standaloneStoryParams,
   render: () => {
-    const container = document.createElement('div');
-    container.innerHTML = `
+    return html`
       <p>
         The user's email is
-        <forge-secret icon>user@example.com</forge-secret>
+        <forge-secret>user@example.com</forge-secret>
         and their phone number is
-        <forge-secret icon variant="dots">555-1234</forge-secret>.
+        <forge-secret variant="dots">555-1234</forge-secret>.
       </p>
     `;
-    return container;
   }
 };
 
-export const LongContent: Story = {
-  args: {
-    text: 'This is a much longer secret that contains sensitive information which should be carefully protected and only revealed when the user explicitly requests it.',
-    variant: 'blur',
-    icon: true
-  }
-};
-
-export const MultipleVariants: Story = {
+export const Programmatic: Story = {
+  ...standaloneStoryParams,
   render: () => {
-    const container = document.createElement('div');
-    container.style.display = 'flex';
-    container.style.flexDirection = 'column';
-    container.style.gap = '16px';
-    container.innerHTML = `
-      <div>
-        <strong>Blur variant:</strong>
-        <forge-secret variant="blur" icon>secret_blur</forge-secret>
-      </div>
-      <div>
-        <strong>Dots variant:</strong>
-        <forge-secret variant="dots" icon>secret_dots</forge-secret>
-      </div>
-      <div>
-        <strong>Hover reveal (blur):</strong>
-        <forge-secret variant="blur" show-on-hover icon>hover_me_blur</forge-secret>
-      </div>
-      <div>
-        <strong>Hover reveal (dots):</strong>
-        <forge-secret variant="dots" show-on-hover icon>hover_me_dots</forge-secret>
+    const handleToggle = (event: Event) => {
+      const button = event.target as HTMLButtonElement;
+      const secret = button.nextElementSibling as SecretComponent;
+      secret.visible = !secret.visible;
+    };
+
+    const handleChange = (event: Event) => {
+      const customEvent = event as CustomEvent<{ visible: boolean }>;
+      console.log('Visibility changed:', customEvent.detail.visible);
+    };
+
+    return html`
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <button @click=${handleToggle} style="width: fit-content;">Toggle Visibility</button>
+        <forge-secret no-label style="width: fit-content;" @forge-secret-change=${handleChange}>Programmable secret content</forge-secret>
       </div>
     `;
-    return container;
   }
 };
