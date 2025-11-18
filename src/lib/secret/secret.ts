@@ -1,9 +1,10 @@
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query, queryAssignedNodes } from 'lit/decorators.js';
-import { BaseLitElement } from '../core/base/base-lit-element';
-import { toggleState } from '../core/utils/utils';
 import { classMap } from 'lit/directives/class-map.js';
+import { BaseLitElement } from '../core/base/base-lit-element';
+import { setDefaultAria } from '../core/utils/a11y-utils';
+import { toggleState } from '../core/utils/utils';
 
 import styles from './secret.scss';
 
@@ -51,22 +52,6 @@ export class SecretComponent extends BaseLitElement {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = SECRET_TAG_NAME;
 
-  #internals: ElementInternals;
-
-  @query('.content')
-  private _contentElement?: HTMLElement;
-
-  @queryAssignedNodes({ flatten: true })
-  private _contentNodes: NodeListOf<ChildNode>;
-
-  @query('[aria-live]')
-  private _liveRegion?: HTMLElement;
-
-  constructor() {
-    super();
-    this.#internals = this.attachInternals();
-  }
-
   /** Whether the secret content is currently visible */
   @property({ type: Boolean })
   public visible = false;
@@ -87,6 +72,23 @@ export class SecretComponent extends BaseLitElement {
   @property({ type: String })
   public name = '';
 
+  @query('[aria-live]')
+  private _liveRegion?: HTMLElement;
+
+  @queryAssignedNodes({ flatten: true })
+  private _contentNodes: NodeListOf<ChildNode>;
+
+  #internals: ElementInternals;
+
+  constructor() {
+    super();
+    this.#internals = this.attachInternals();
+  }
+
+  public override firstUpdated(): void {
+    setDefaultAria(this, this.#internals, { role: 'group', ariaLabel: 'secret' });
+  }
+
   public override willUpdate(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('visible')) {
       toggleState(this.#internals, 'visible', this.visible);
@@ -101,13 +103,17 @@ export class SecretComponent extends BaseLitElement {
   public override updated(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('visible')) {
       // Announce content to screen readers when revealed
-      if (this.visible && this._liveRegion && this._contentElement) {
+      if (!this._liveRegion) {
+        return;
+      }
+
+      if (this.visible) {
         const contentText = Array.from(this._contentNodes)
           .map(node => node.textContent)
           .join(' ')
           .trim();
         this._liveRegion.textContent = contentText || '';
-      } else if (!this.visible && this._liveRegion) {
+      } else {
         this._liveRegion.textContent = '';
       }
     }
@@ -188,7 +194,7 @@ export class SecretComponent extends BaseLitElement {
     return html`
       <span part="root" class=${classMap({ 'forge-secret': true, 'show-on-hover': this.showOnHover })} @click="${this.#handleClick}">
         <span
-          ?inert="${!this.visible}"
+          ?inert=${!this.visible}
           part="content"
           class=${classMap({ content: true, blur: !this.visible && this.variant === 'blur', dots: !this.visible && this.variant === 'dots' })}>
           ${this.#renderIcon()}
