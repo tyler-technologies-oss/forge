@@ -261,9 +261,7 @@ export function getPreviousItem(el: TreeItemComponent): TreeItemComponent | null
  */
 export function searchItems(from: TreeItemComponent, query: string): TreeItemComponent | null {
   // Check if the item matches the query
-  const matchesQuery = (item: TreeItemComponent): boolean => {
-    return item.textContent?.trim().toLowerCase().startsWith(query) ?? false;
-  };
+  const matchesQuery = (item: TreeItemComponent): boolean => item.textContent?.trim().toLowerCase().startsWith(query) ?? false;
 
   // Recursively search the children of an item
   const searchChildren = (item: TreeItemComponent): TreeItemComponent | null => {

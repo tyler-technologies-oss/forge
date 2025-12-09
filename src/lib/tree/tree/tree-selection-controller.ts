@@ -100,7 +100,7 @@ export class TreeSelectionController implements ReactiveController {
 
     let changedItems: TreeItemComponent[] = [];
     switch (this.host.mode) {
-      case 'single':
+      case 'single': {
         // The last selected item is the only one that should remain
         if (this.items.length === 1) {
           return;
@@ -110,7 +110,8 @@ export class TreeSelectionController implements ReactiveController {
         this.items.forEach(item => this._selectItem(item, false));
         this.items = singleItem;
         break;
-      case 'leaf':
+      }
+      case 'leaf': {
         // The last selected leaf item is the only one that should remain
         const index = this.items.reverse().findIndex(item => item.leaf); // TODO: replace with findLastIndex()
         const leafItem = index > -1 ? this.items.splice(index, 1) : null;
@@ -120,6 +121,7 @@ export class TreeSelectionController implements ReactiveController {
           this.items = leafItem;
         }
         break;
+      }
       case 'multiple':
         // No items should be deselected but descendent items should be updated
         changedItems = this.items;

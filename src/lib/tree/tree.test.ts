@@ -1271,10 +1271,10 @@ describe('Tree', () => {
 
           await elementUpdated(el);
 
-          const harness = new TreeHarness(el);
-          const parent1 = harness.treeItems.find(item => item.value === 'parent1')!;
-          const parent2 = harness.treeItems.find(item => item.value === 'parent2')!;
-          const child2 = harness.treeItems.find(item => item.value === 'child2')!;
+          // const harness = new TreeHarness(el);
+          // const parent1 = harness.treeItems.find(item => item.value === 'parent1')!;
+          // const parent2 = harness.treeItems.find(item => item.value === 'parent2')!;
+          // const child2 = harness.treeItems.find(item => item.value === 'child2')!;
 
           // Check that tree-level custom icons exist
           const treeExpandIcon = el.querySelector('forge-icon[slot="expand-icon"]') as HTMLElement;
