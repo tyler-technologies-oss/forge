@@ -1,10 +1,11 @@
 import { consume } from '@lit/context';
-import { tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconIndeterminateCheckBox } from '@tylertech/tyler-icons/standard';
+import { tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconIndeterminateCheckBox } from '@tylertech/tyler-icons';
 import { LitElement, PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { setDefaultAria, toggleState } from '../../core/utils/a11y-utils';
+import { setDefaultAria } from '../../core/utils/a11y-utils';
+import { toggleState } from '../../core/utils/utils';
 import { IconRegistry } from '../../icon';
 import { ITreeContext, TREE_CONTEXT } from '../tree';
 import { getLevel, indeterminate } from '../tree-utils';
@@ -103,7 +104,7 @@ export class TreeItemComponent extends LitElement {
     return this[indeterminate];
   }
 
-  @state() @consume({ context: TREE_CONTEXT, subscribe: true }) private _context: ITreeContext;
+  @state() @consume({ context: TREE_CONTEXT, subscribe: true }) private _treeContext?: ITreeContext;
 
   @state() private _level = 0;
   @state() private _leaf = true;
@@ -172,11 +173,12 @@ export class TreeItemComponent extends LitElement {
     });
 
     // Keep track of changed properties within the tree's context object.
-    const modeChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.mode !== this._context.mode;
-    const rootDisabledChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.disabled !== this._context.disabled;
-    const rootExpandIconChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.expandIcon !== this._context.expandIcon;
+    const modeChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.mode !== this._treeContext?.mode;
+    const rootDisabledChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.disabled !== this._treeContext?.disabled;
+    const rootExpandIconChanged =
+      changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.expandIcon !== this._treeContext?.expandIcon;
     const rootCollapseIconChanged =
-      changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.collapseIcon !== this._context.collapseIcon;
+      changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.collapseIcon !== this._treeContext?.collapseIcon;
 
     if (modeChanged) {
       this._setDisabled();
@@ -196,14 +198,15 @@ export class TreeItemComponent extends LitElement {
 
   public render(): TemplateResult {
     // An item can individually disabled or inherit the disabled state from the tree.
-    const disabled = this.disabled || this._context.disabled;
+    const disabled = this.disabled || !!this._treeContext?.disabled;
 
     // An item is interactive if a click anywhere in the header can select or open it. Interactive
     // items show a pointer cursor.
-    const interactive =
-      this._context.mode === 'off'
+    const interactive = !this._treeContext
+      ? false
+      : this._treeContext.mode === 'off'
         ? !this._leaf && !this.openDisabled
-        : this._context.mode === 'leaf'
+        : this._treeContext.mode === 'leaf'
           ? (this._leaf && !disabled) || (!this._leaf && !this.openDisabled)
           : !disabled;
 
@@ -217,7 +220,7 @@ export class TreeItemComponent extends LitElement {
         style=${styleMap({ '--_tree-item-level': this.level })}>
         <div part="header" class="header">
           ${!this._leaf ? this._expandIconTemplate() : html`<span class="leaf-spacer"></span>`}
-          ${this._context.mode === 'multiple'
+          ${this._treeContext?.mode === 'multiple'
             ? html`<forge-icon id="checkbox" class="checkbox" part="checkbox" .name="${this._checkboxIcon}"></forge-icon>`
             : nothing}
           <div class="start">
@@ -248,7 +251,12 @@ export class TreeItemComponent extends LitElement {
   private _expandIconTemplate(): TemplateResult {
     // When an item is not interactive the expand icon may still be enabled and should show its
     // own state layer.
-    const showStateLayer = this._context.mode !== 'leaf' && this._context.mode !== 'off' && (this.disabled || this._context.disabled) && !this.openDisabled;
+    const showStateLayer =
+      this._treeContext &&
+      this._treeContext.mode !== 'leaf' &&
+      this._treeContext.mode !== 'off' &&
+      (this.disabled || this._treeContext.disabled) &&
+      !this.openDisabled;
 
     if (this._loading) {
       return html`
@@ -310,19 +318,23 @@ export class TreeItemComponent extends LitElement {
   }
 
   private _setIconFromContext(icon: 'expand' | 'collapse'): void {
+    if (!this._treeContext) {
+      return;
+    }
+
     // Remove any old icons in this slot
     const oldIcons = Array.from(this.children).filter(el => el.slot === `context-${icon}-icon`);
     oldIcons.forEach(i => i.remove());
 
     // Add the new icon if it exists
-    const newIcon = this._context[`${icon}Icon`];
+    const newIcon = this._treeContext[`${icon}Icon`];
     if (newIcon) {
       this.append(newIcon.cloneNode(true));
     }
   }
 
   private _setDisabled(): void {
-    const disabled = this.disabled || this._context.disabled;
+    const disabled = this.disabled || !!this._treeContext?.disabled;
     setDefaultAria(this, this._internals, { ariaDisabled: disabled ? 'true' : 'false' });
     toggleState(this._internals, 'disabled', disabled);
   }
@@ -333,7 +345,7 @@ export class TreeItemComponent extends LitElement {
 
   private _setMode(): void {
     setDefaultAria(this, this._internals, {
-      ariaSelected: this._context.mode === 'off' ? null : this.selected ? 'true' : 'false'
+      ariaSelected: !this._treeContext || this._treeContext.mode === 'off' ? null : this.selected ? 'true' : 'false'
     });
   }
 
@@ -355,7 +367,7 @@ export class TreeItemComponent extends LitElement {
     if (!this._hasBeenSelected && this.selected) {
       this._hasBeenSelected = true;
     }
-    setDefaultAria(this, this._internals, { ariaSelected: this._context.mode === 'off' ? null : this.selected ? 'true' : 'false' });
+    setDefaultAria(this, this._internals, { ariaSelected: !this._treeContext || this._treeContext.mode === 'off' ? null : this.selected ? 'true' : 'false' });
     toggleState(this._internals, 'selected', this.selected);
     if (this._hasBeenSelected) {
       this._dispatchUpdate(this.selected ? 'selected' : 'deselected');

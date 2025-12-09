@@ -1,8 +1,9 @@
 import { createContext, provide } from '@lit/context';
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedNodes } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { setDefaultAria, toggleState } from '../../core/utils/a11y-utils';
+import { setDefaultAria } from '../../core/utils/a11y-utils';
+import { toggleState } from '../../core/utils/utils';
 import { KeyActionController } from '../../core/utils/key-action';
 import { TreeItemComponent, TreeItemUpdateReason } from '../tree-item';
 import {
