@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import type { IAppBarMenuButtonComponent } from './app-bar-menu-button';
-import { IIconComponent } from '@tylertech/forge/icon';
+import type { IIconComponent } from '../../icon';
 
 import './app-bar-menu-button';
 

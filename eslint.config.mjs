@@ -25,16 +25,5 @@ export default defineConfig([
       '@typescript-eslint/no-non-null-assertion': 'off'
     }
   },
-  {
-    name: 'Legacy tests (Karma + Jasmine)',
-    files: ['src/test/**/*.ts'],
-    rules: {
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/consistent-type-assertions': 'off',
-      '@typescript-eslint/no-non-null-assertion': 'off',
-      '@typescript-eslint/dot-notation': 'off'
-    }
-  },
   { ignores: ['dist/**/*', 'src/dev/**/*', 'src/stories/**/*', '.storybook/**/*', 'storybook-static/**/*'] }
 ]);

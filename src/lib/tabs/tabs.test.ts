@@ -3,7 +3,7 @@ import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import { task } from '../core/utils/utils';
-import { TestHarness } from '../../test/utils/test-harness';
+import { TestHarness } from '../core/testing/test-harness';
 import { TAB_CONSTANTS } from './tab/tab-constants';
 import { TAB_BAR_CONSTANTS } from './tab-bar';
 import type { ITabBarComponent } from './tab-bar/tab-bar';

@@ -425,7 +425,7 @@ export async function asyncCreateListItemTooltipIfTextOverflows(
   await frame();
 
   // Only append the tooltip if the button or secondary label overflow the width of the parent list item.
-  if (buttonElement.scrollWidth > listItemElement.clientWidth || secondaryLabelElement.scrollWidth > listItemElement.clientWidth) {
+  if (buttonElement.scrollWidth > buttonElement.clientWidth || secondaryLabelElement.scrollWidth > secondaryLabelElement.clientWidth) {
     const tooltipElement = createListItemTooltip(tooltip, configId, optionIdIndex, listItemElement, buttonElement);
     listItemElement.appendChild(tooltipElement);
   }

@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
-import { TestHarness } from '../../test/utils/test-harness';
+import { TestHarness } from '../core/testing/test-harness';
 import { ILabelAware, ILabelComponent, LABEL_CONSTANTS } from '../label';
 
 import './label';

@@ -3,7 +3,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
-import { TestHarness } from '../../test/utils/test-harness';
+import { TestHarness } from '../core/testing/test-harness';
 import { IButtonToggleGroupComponent } from './button-toggle-group/button-toggle-group';
 import { IButtonToggleComponent } from './button-toggle/button-toggle';
 import { BUTTON_TOGGLE_CONSTANTS } from './button-toggle/button-toggle-constants';
