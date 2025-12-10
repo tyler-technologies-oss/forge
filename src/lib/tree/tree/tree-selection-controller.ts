@@ -105,7 +105,7 @@ export class TreeSelectionController implements ReactiveController {
         if (this.items.length === 1) {
           return;
         }
-        const singleItem = this.items.splice(-1, 0);
+        const singleItem = this.items.splice(-1, 1);
         changedItems = [...this.items];
         this.items.forEach(item => this._selectItem(item, false));
         this.items = singleItem;
@@ -131,6 +131,7 @@ export class TreeSelectionController implements ReactiveController {
         // All items should be deselected
         changedItems = [...this.items];
         this.items.forEach(item => this._selectItem(item, false));
+        this.items = [];
         break;
     }
 
