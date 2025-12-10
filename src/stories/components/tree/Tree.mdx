@@ -1,4 +1,4 @@
-import { Meta, Title, Canvas } from '@storybook/blocks';
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as TreeStories from './Tree.stories';
 
@@ -6,11 +6,14 @@ import * as TreeStories from './Tree.stories';
 
 <Title />
 
-TODO: A basic description of the `Tree` component goes here.
+🚧 **Experimental** 🚧
+
+The Tree component is an experimental feature that is in developer preview. This means that the API and implementation may change in future versions,
+and there may be bugs or issues that need to be resolved. Use at your own risk and be prepared to update your code as needed.
+
+Trees are interactive lists that allow users to navigate through hierarchical data.
 
 <Canvas of={TreeStories.Demo} />
-
-TODO: If applicable, add any additional content for the `Tree` component here.
 
 ## API
 
@@ -18,4 +21,4 @@ TODO: If applicable, add any additional content for the `Tree` component here.
 
 ## Accessibility
 
-TODO: If applicable, add accessibility guidelines for the `Tree` component here.
+Implements keyboard shortcuts and ARIA roles, states, and properties defined in the [WAI-ARIA Tree View pattern](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/).
