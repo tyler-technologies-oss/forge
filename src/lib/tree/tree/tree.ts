@@ -153,7 +153,9 @@ export class TreeComponent extends LitElement {
 
   public willUpdate(_changedProperties: PropertyValues<this>): void {
     if (_changedProperties.has('accordion')) {
-      closeDescendants(this);
+      if (this.accordion) {
+        closeDescendants(this);
+      }
     }
     if (_changedProperties.has('disabled')) {
       this._setDisabled();
