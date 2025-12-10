@@ -26,7 +26,7 @@ import { TreeSelectionController } from './tree-selection-controller';
 
 import styles from './tree.scss';
 
-export type TreeMode = 'single' | 'multiple' | 'multiple-discrete' | 'leaf' | 'off';
+export type TreeMode = 'single' | 'multiple' | 'leaf' | 'off'; // | 'multiple-discrete'
 
 export interface ITreeContext {
   collapseIcon?: HTMLElement;
@@ -131,6 +131,8 @@ export class TreeComponent extends LitElement {
   private _lastFocusedItem?: TreeItemComponent;
   private _expandIcon?: HTMLElement;
   private _collapseIcon?: HTMLElement;
+  private _expandIconObserver?: MutationObserver;
+  private _collapseIconObserver?: MutationObserver;
 
   constructor() {
     super();
@@ -149,6 +151,12 @@ export class TreeComponent extends LitElement {
 
     // Listen for item update events on the host element
     this.addEventListener('forge-tree-item-update', this._handleUpdate.bind(this));
+  }
+
+  public disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this._expandIconObserver?.disconnect();
+    this._collapseIconObserver?.disconnect();
   }
 
   public willUpdate(_changedProperties: PropertyValues<this>): void {
@@ -493,25 +501,37 @@ export class TreeComponent extends LitElement {
     if (!assignedElement) {
       if (slot.name === 'expand-icon') {
         this._expandIcon = undefined;
+        this._expandIconObserver?.disconnect();
       } else if (slot.name === 'collapse-icon') {
         this._collapseIcon = undefined;
+        this._collapseIconObserver?.disconnect();
       }
       this._updateContext();
       return;
     }
 
+    if (slot.name === 'expand-icon') {
+      this._observeIcon(assignedElement, 'expand');
+    } else if (slot.name === 'collapse-icon') {
+      this._observeIcon(assignedElement, 'collapse');
+    }
+  }
+
+  private _observeIcon(assignedElement: Element, type: 'expand' | 'collapse'): void {
+    const key: `_${typeof type}IconObserver` = `_${type}IconObserver`;
+    this[key] ??= new MutationObserver(() => this._updateIcon(assignedElement, type));
+    this[key].observe(assignedElement, { attributes: true, subtree: true, childList: true, characterData: true });
+    this._updateIcon(assignedElement, type);
+  }
+
+  private _updateIcon(assignedElement: Element, type: 'expand' | 'collapse'): void {
     // Clone the element and remove any ids
     const clone = assignedElement?.cloneNode(true) as HTMLElement;
     [clone, ...clone.querySelectorAll('[id]')].forEach(el => el.removeAttribute('id'));
 
     // Set the slot, save the clone to the appropriate property, and update the context
-    if (slot.name === 'expand-icon') {
-      clone.slot = 'context-expand-icon';
-      this._expandIcon = clone;
-    } else if (slot.name === 'collapse-icon') {
-      clone.slot = 'context-collapse-icon';
-      this._collapseIcon = clone;
-    }
+    clone.slot = `context-${type}-icon`;
+    this[`_${type}Icon`] = clone;
     this._updateContext();
   }
 
@@ -522,7 +542,7 @@ export class TreeComponent extends LitElement {
 
   private _setMode(): void {
     setDefaultAria(this, this._internals, {
-      ariaMultiSelectable: this.mode === 'multiple' || this.mode === 'multiple-discrete' ? 'true' : 'false'
+      ariaMultiSelectable: this.mode === 'multiple' ? 'true' : 'false' // || this.mode === 'multiple-discrete'
     });
   }
 }
