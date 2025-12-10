@@ -173,12 +173,11 @@ export class TreeItemComponent extends LitElement {
     });
 
     // Keep track of changed properties within the tree's context object.
-    const modeChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.mode !== this._treeContext?.mode;
-    const rootDisabledChanged = changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.disabled !== this._treeContext?.disabled;
-    const rootExpandIconChanged =
-      changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.expandIcon !== this._treeContext?.expandIcon;
-    const rootCollapseIconChanged =
-      changedProperties.has('_context' as any) && changedProperties.get('_context' as any)?.collapseIcon !== this._treeContext?.collapseIcon;
+    const contextKey: any = '_treeContext';
+    const modeChanged = changedProperties.has(contextKey) && changedProperties.get(contextKey)?.mode !== this._treeContext?.mode;
+    const rootDisabledChanged = changedProperties.has(contextKey) && changedProperties.get(contextKey)?.disabled !== this._treeContext?.disabled;
+    const rootExpandIconChanged = changedProperties.has(contextKey) && changedProperties.get(contextKey)?.expandIcon !== this._treeContext?.expandIcon;
+    const rootCollapseIconChanged = changedProperties.has(contextKey) && changedProperties.get(contextKey)?.collapseIcon !== this._treeContext?.collapseIcon;
 
     if (modeChanged) {
       this._setDisabled();
