@@ -1488,14 +1488,14 @@ export class CalendarCore implements ICalendarCore {
   /**
    * Sets the month text and attribute in the adapter.
    * @param userSelected Whether the month was explicitly selected by the user (optional)
-   * @param emitEvent Whether to suppress emitting the month change event (optional)
+   * @param suppressEvent Whether to suppress emitting the month change event (optional)
    * */
-  private _setMonth(userSelected?: boolean, emitEvent?: boolean): void {
+  private _setMonth(userSelected?: boolean, suppressEvent?: boolean): void {
     this._adapter.setMonth(this._month, this._locale);
     this._adapter.setHostAttribute(CALENDAR_CONSTANTS.attributes.MONTH, this._month.toString());
     if (this._isInitialized) {
       this._setNavigationButtonStates();
-      if (!emitEvent) {
+      if (!suppressEvent) {
         this._adapter.emitHostEvent(CALENDAR_CONSTANTS.events.MONTH_CHANGE, {
           month: this._month,
           userSelected: userSelected ?? false,
@@ -1508,14 +1508,14 @@ export class CalendarCore implements ICalendarCore {
   /**
    * Sets the year text and attribute in the adapter.
    * @param userSelected Whether the year was explicity selected by the user (optional)
-   * @param emitEvent Whether to suppress emitting the month change event (optional)
+   * @param suppressEvent Whether to suppress emitting the month change event (optional)
    * */
-  private _setYear(userSelected?: boolean, emitEvent?: boolean): void {
+  private _setYear(userSelected?: boolean, suppressEvent?: boolean): void {
     this._adapter.setYear(this._year, this._locale);
     this._adapter.setHostAttribute(CALENDAR_CONSTANTS.attributes.YEAR, this._year.toString());
     if (this._isInitialized) {
       this._setNavigationButtonStates();
-      if (!emitEvent) {
+      if (!suppressEvent) {
         this._adapter.emitHostEvent(CALENDAR_CONSTANTS.events.MONTH_CHANGE, {
           month: this._month,
           userSelected: userSelected ?? false,
