@@ -1332,7 +1332,8 @@ describe('Tree', () => {
           const parent2ItemIcon = parent2.querySelector('forge-icon[name="item_expand"]') as HTMLElement;
           const parent2TreeIcon = parent2.querySelector('forge-icon[name="tree_expand"]') as HTMLElement;
           expect(parent2ItemIcon).to.not.be.null;
-          expect(parent2TreeIcon).to.be.null; // Should not have tree-level icon cloned
+          expect(parent2ItemIcon.checkVisibility()).to.be.true;
+          expect(parent2TreeIcon.checkVisibility()).to.be.false; // Should not have tree-level icon cloned
         });
 
         it('should update cloned icons when tree level icons change', async () => {
@@ -1552,7 +1553,8 @@ describe('Tree', () => {
           const parent2CustomIcon = parent2.querySelector('forge-icon[name="custom_expand"]') as HTMLElement;
           const parent2TreeIcon = parent2.querySelector('forge-icon[name="tree_expand"]') as HTMLElement;
           expect(parent2CustomIcon).to.not.be.null;
-          expect(parent2TreeIcon).to.be.null;
+          expect(parent2CustomIcon.checkVisibility()).to.be.true;
+          expect(parent2TreeIcon.checkVisibility()).to.be.false;
 
           // Child2 should have tree-level cloned icon (inherits from tree, not parent2)
           const child2TreeIcon = child2.querySelector('forge-icon[name="tree_expand"]') as HTMLElement;
