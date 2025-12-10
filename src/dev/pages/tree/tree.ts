@@ -3,8 +3,7 @@ import { IconRegistry } from '@tylertech/forge/icon';
 import { ISwitchComponent } from '@tylertech/forge/switch';
 import '@tylertech/forge/tree/tree';
 import '@tylertech/forge/tree/tree-item';
-import { tylIconBird, tylIconTree, tylIconWater } from '@tylertech/tyler-icons/extended';
-import { tylIconAddBox, tylIconGrass, tylIconIndeterminateCheckBox } from '@tylertech/tyler-icons/standard';
+import { tylIconBird, tylIconTree, tylIconWater, tylIconAddBox, tylIconGrass, tylIconIndeterminateCheckBox } from '@tylertech/tyler-icons';
 import './tree.scss';
 
 IconRegistry.define([
