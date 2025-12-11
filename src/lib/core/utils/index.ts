@@ -4,6 +4,7 @@ export * from './dismissible-stack';
 export * from './event-utils';
 export * from './feature-detection';
 export * from './form-utils';
+export * from './key-action';
 export * from './reflect-utils';
 export * from './svg-utils';
 export * from './time-utils';
