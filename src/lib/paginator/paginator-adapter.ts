@@ -161,19 +161,16 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   }
 
   public setFirstPageButtonEnabled(enabled: boolean): void {
-    this._firstPageButton.disabled = !enabled;
+    this._setButtonEnabled(this._firstPageButton, enabled);
   }
-
   public setPreviousPageButtonEnabled(enabled: boolean): void {
-    this._previousPageButton.disabled = !enabled;
+    this._setButtonEnabled(this._previousPageButton, enabled);
   }
-
   public setNextPageButtonEnabled(enabled: boolean): void {
-    this._nextPageButton.disabled = !enabled;
+    this._setButtonEnabled(this._nextPageButton, enabled);
   }
-
   public setLastPageButtonEnabled(enabled: boolean): void {
-    this._lastPageButton.disabled = !enabled;
+    this._setButtonEnabled(this._lastPageButton, enabled);
   }
 
   public setPageSizeSelectEnabled(enabled: boolean): void {
@@ -205,6 +202,17 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
         el.focus({ ...options, preventScroll });
         return;
       }
+    }
+  }
+
+  private _setButtonEnabled(btn: HTMLElement, enabled: boolean): void {
+    if (enabled) {
+      btn.removeAttribute('disabled');
+      btn.setAttribute('tabindex', '0');
+    } else {
+      btn.setAttribute('disabled', 'true');
+      btn.setAttribute('tabindex', '-1');
+      btn.blur();
     }
   }
 }
