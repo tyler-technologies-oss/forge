@@ -71,6 +71,11 @@ filterFocusFirstToggle.addEventListener('forge-switch-change', ({ detail: select
   autocomplete.filterFocusFirst = selected;
 });
 
+const selectFirstOptionOnBlurToggle = document.querySelector('#autocomplete-select-first-option-on-blur') as HTMLInputElement;
+selectFirstOptionOnBlurToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  autocomplete.selectFirstOptionOnBlur = selected;
+});
+
 const itemBuilderToggle = document.querySelector('#autocomplete-item-builder') as HTMLInputElement;
 itemBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   autocomplete.optionBuilder = selected ? itemBuilder : undefined;

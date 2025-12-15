@@ -31,6 +31,7 @@ export interface IAutocompleteCore extends IListDropdownAwareCore {
   debounce: number;
   filterOnFocus: boolean;
   filterFocusFirst: boolean;
+  selectFirstOptionOnBlur: boolean;
   allowUnmatched: boolean;
   popupTarget: string;
   filterText: string;
@@ -55,6 +56,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   private _popupTarget: string;
   private _filterOnFocus = true;
   private _filterFocusFirst = true;
+  private _selectFirstOptionOnBlur = false;
   private _optionBuilder?: AutocompleteOptionBuilder | null;
   private _filter?: AutocompleteFilterCallback | null;
   private _selectedTextBuilder: AutocompleteSelectedTextBuilder;
@@ -63,6 +65,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   private _selectedOptions: IAutocompleteOption[] = [];
   private _values: any[] = [];
   private _pendingFilterPromises: Array<Promise<IAutocompleteOption[] | IAutocompleteOptionGroup[]>> = [];
+  private _selectOnBlurPending = false;
   private _identifier: string;
   private _matchKey?: string | null = null;
   private _filterFn: () => Promise<void>;
@@ -239,12 +242,22 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   private _applyBlur(): void {
+    const shouldSelectFirstOptionOnBlur = this._shouldSelectFirstOptionOnBlur();
+    if (shouldSelectFirstOptionOnBlur) {
+      this._selectOnBlurPending = true;
+    }
+
     if (this._isDropdownOpen) {
       this._closeDropdown();
     }
 
     // If we are in stateless mode, we don't need to do anything further
     if (this._mode === AutocompleteMode.Stateless) {
+      this._selectOnBlurPending = false;
+      return;
+    }
+
+    if (shouldSelectFirstOptionOnBlur) {
       return;
     }
 
@@ -256,6 +269,17 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
     } else {
       this._adapter.setSelectedText(this._getSelectedText());
     }
+  }
+
+  private _shouldSelectFirstOptionOnBlur(): boolean {
+    return (
+      this._selectFirstOptionOnBlur &&
+      !this._multiple &&
+      this._mode !== AutocompleteMode.Stateless &&
+      !!this._filter &&
+      !!this._filterText &&
+      !this._selectedOptions.length
+    );
   }
 
   private _onInput(evt: KeyboardEvent): void {
@@ -289,9 +313,12 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
     // If the dropdown is open, show the spinner and execute the filter. If not open, then we need to
     // show the dropdown (which will handle showing the spinner and executing the filter for us) so
     // we use the promise from that method instead.
-    if (this._isDropdownOpen) {
+    const keepDropdownClosed = this._selectOnBlurPending && !this._adapter.hasFocus();
+    if (this._isDropdownOpen && keepDropdownClosed) {
+      this._closeDropdown();
+    } else if (this._isDropdownOpen) {
       this._adapter.setBusyVisibility(true);
-    } else {
+    } else if (!keepDropdownClosed) {
       this._showDropdown({ filter: false });
     }
 
@@ -300,6 +327,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
     } catch {
       // When an exception occurs, we just flush the pending promises and clean up
       this._pendingFilterPromises = [];
+      this._selectOnBlurPending = false;
       if (this._isDropdownOpen) {
         this._closeDropdown();
       }
@@ -399,22 +427,42 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   private _onFilterComplete(): void {
+    const shouldSelectOnBlur = this._selectFirstOptionOnBlur && this._selectOnBlurPending;
+
+    if (!this._options.length) {
+      this._selectOnBlurPending = false;
+      if (this._isDropdownOpen) {
+        this._closeDropdown();
+      }
+      if (shouldSelectOnBlur && !this._allowUnmatched) {
+        this._filterText = '';
+        this._adapter.setSelectedText('');
+      }
+      return;
+    }
+
+    if (shouldSelectOnBlur) {
+      this._selectOnBlurPending = false;
+      const firstOption = this._flatOptions[0];
+      if (firstOption) {
+        this._onSelect(firstOption.value, false);
+      }
+      return;
+    }
+
     if (!this._adapter.hasFocus()) {
+      this._selectOnBlurPending = false;
       if (this._isDropdownOpen) {
         this._closeDropdown();
       }
       return;
     }
 
-    if (this._options.length) {
-      const sendFilterText = this._allowUnmatched && !this._selectedOptions.length;
-      this._dropdownReady({ userTriggered: sendFilterText });
+    const sendFilterText = this._allowUnmatched && !this._selectedOptions.length;
+    this._dropdownReady({ userTriggered: sendFilterText });
 
-      if (this._filterFocusFirst && this._filterText) {
-        this._adapter.activateFirstOption();
-      }
-    } else {
-      this._closeDropdown();
+    if (this._filterFocusFirst && this._filterText) {
+      this._adapter.activateFirstOption();
     }
   }
 
@@ -886,6 +934,16 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
     if (this._filterFocusFirst !== value) {
       this._filterFocusFirst = value;
       this._adapter.toggleHostAttribute(AUTOCOMPLETE_CONSTANTS.attributes.FILTER_FOCUS_FIRST, this._filterFocusFirst);
+    }
+  }
+
+  public get selectFirstOptionOnBlur(): boolean {
+    return this._selectFirstOptionOnBlur;
+  }
+  public set selectFirstOptionOnBlur(value: boolean) {
+    if (this._selectFirstOptionOnBlur !== value) {
+      this._selectFirstOptionOnBlur = value;
+      this._adapter.toggleHostAttribute(AUTOCOMPLETE_CONSTANTS.attributes.SELECT_FIRST_OPTION_ON_BLUR, this._selectFirstOptionOnBlur);
     }
   }
 

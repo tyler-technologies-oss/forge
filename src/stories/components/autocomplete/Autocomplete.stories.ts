@@ -101,6 +101,7 @@ const meta = {
         .syncPopupWidth=${args.syncPopupWidth}
         .constrainPopupWidth=${args.constrainPopupWidth}
         .wrapOptionText=${args.wrapOptionText}
+        .selectFirstOptionOnBlur=${args.selectFirstOptionOnBlur}
         @forge-autocomplete-change=${changeAction}
         @forge-autocomplete-select=${selectAction}
         @forge-autocomplete-scrolled-bottom=${scrolledBottomAction}>
@@ -142,6 +143,7 @@ const meta = {
     debounce: 500,
     filterOnFocus: true,
     filterFocusFirst: true,
+    selectFirstOptionOnBlur: false,
     mode: 'default',
     optionLimit: 10,
     observeScroll: true,
