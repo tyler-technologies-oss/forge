@@ -1,7 +1,8 @@
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, query, property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element';
+import { toggleState } from '../core/utils/utils';
 
 import styles from './backdrop.scss';
 
@@ -22,28 +23,28 @@ declare global {
 
 export const BACKDROP_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-backdrop';
 
-/** Unsure where these should go, for now, here */
-const ATTR_VISIBLE = 'visible';
-const ENTERING = 'entering';
-const EXITING = 'exiting';
+const STATE_VISIBLE = 'visible';
+const STATE_ENTERING = 'entering';
+const STATE_EXITING = 'exiting';
 
 /**
  * @tag forge-backdrop
  *
  * @summary Backdrops provide a semi-transparent overlay behind modal content like dialogs and drawers.
  *
- * @cssproperty --forge-backdrop-background
- * @cssproperty --forge-backdrop-opacity
- * @cssproperty --forge-backdrop-z-index
- * @cssproperty --forge-backdrop-enter-animation-duration
- * @cssproperty --forge-backdrop-enter-animation-easing
- * @cssproperty --forge-backdrop-exit-animation-duration
- * @cssproperty --forge-backdrop-exit-animation-easing
+ * @cssproperty --forge-backdrop-background - The backdrop background color.
+ * @cssproperty --forge-backdrop-opacity - The backdrop opacity.
+ * @cssproperty --forge-backdrop-z-index - The backdrop z-index.
+ * @cssproperty --forge-backdrop-enter-animation-duration - The animation duration for the enter animation.
+ * @cssproperty --forge-backdrop-enter-animation-easing - The animation easing for the enter animation.
+ * @cssproperty --forge-backdrop-exit-animation-duration - The animation duration for the exit animation.
+ * @cssproperty --forge-backdrop-exit-animation-easing - The animation easing for the exit animation.
  *
  * @csspart root - The root element of the backdrop.
  *
  * @state visible - whether or not the backdrop is visible
- * @state fixed - whether the backdrop uses fixed or relative positioning
+ * @state entering - applied during enter animation
+ * @state exiting - applied during exit animation
  */
 @customElement(BACKDROP_TAG_NAME)
 export class BackdropComponent extends BaseLitElement implements IBackdropComponent {
@@ -52,131 +53,127 @@ export class BackdropComponent extends BaseLitElement implements IBackdropCompon
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BACKDROP_TAG_NAME;
 
-  /** Convenience accessor for the root node. */
-  @query('[part="root"]') private _root!: HTMLElement;
-
-  /** Controls whether or not the backdrop is visible
-   * @default false;
+  /**
+   * Controls whether or not the backdrop is visible.
+   * @default false
+   * @attribute
    */
   @property({ type: Boolean })
   public visible = false;
 
-  /** Controls whether the backdrop uses "fixed" or "relative" positioning
-   * @default false;
+  /**
+   * Controls whether the backdrop uses "fixed" or "relative" positioning.
+   * @default false
+   * @attribute
    */
   @property({ type: Boolean, reflect: true })
   public fixed = false;
 
-  private _didFirstUpdate = false;
-  private _animationController?: AbortController;
+  #internals: ElementInternals;
+  #animationController?: AbortController;
+
+  constructor() {
+    super();
+    this.#internals = this.attachInternals();
+  }
 
   public override disconnectedCallback(): void {
     super.disconnectedCallback();
-    this._clearAnimation();
+    this.#cancelAnimation();
   }
 
-  public override async firstUpdated(): Promise<void> {
-    this._didFirstUpdate = true;
-    if (this.visible) {
-      await this.updateComplete;
-      this.show();
-    }
-  }
-
-  public override updated(changedProperties: PropertyValues<this>): void {
-    if (changedProperties.has(ATTR_VISIBLE)) {
-      // Property changed by user or API. Default uses animation.
-      // If you need immediate change, call show()/hide().
-      const animate = this._didFirstUpdate; // no animation on initial render
-      void this._applyVisibility(this.visible, { animate });
+  public override willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has(STATE_VISIBLE)) {
+      // Default behavior: animate if component has rendered at least once
+      if (this.hasUpdated) {
+        void this.#animateVisibility(this.visible);
+      } else {
+        // No animation on initial render
+        this.toggleAttribute(STATE_VISIBLE, this.visible);
+      }
     }
   }
 
   /** Immediately shows without animation. */
   public show(): void {
-    void this._applyVisibility(true, { animate: false });
+    this.#cancelAnimation();
+    this.visible = true;
+    this.toggleAttribute(STATE_VISIBLE, true);
   }
 
   /** Immediately hides without animation. */
   public hide(): void {
-    void this._applyVisibility(false, { animate: false });
+    this.#cancelAnimation();
+    this.visible = false;
+    this.toggleAttribute(STATE_VISIBLE, false);
   }
 
   /** Shows with enter animation. */
-  public fadeIn(): Promise<void> {
-    return this._applyVisibility(true, { animate: true });
+  public async fadeIn(): Promise<void> {
+    this.visible = true;
+    await this.#animateVisibility(true);
   }
 
   /** Hides with exit animation. */
-  public fadeOut(): Promise<void> {
-    return this._applyVisibility(false, { animate: true });
-  }
-
-  private async _applyVisibility(visible: boolean, { animate }: { animate: boolean }): Promise<void> {
-    // If not connected, just sync attribute state and stop.
-    if (!this.isConnected) {
-      this._toggleVisibleAttr(visible);
-      return;
-    }
-
-    if (!animate) {
-      // Immediate sync. No animation classes. Attribute reflects current state.
-      this._clearAnimation();
-      this._toggleVisibleAttr(visible);
-      return;
-    }
-
-    // Animated path.
-    const className = visible ? ENTERING : EXITING;
-
-    // Cancel any in-flight animation.
-    this._clearAnimation();
-
-    this._animationController = new AbortController();
-    const signal = this._animationController.signal;
-
-    // For enter, attribute must be present before animation starts.
-    if (visible) {
-      this._ensureVisibleAttr();
-    }
-
-    // Kick off CSS animation via class.
-    this._root.classList.add(className);
-
-    // Wait for animationend once.
-    await new Promise<void>(resolve => {
-      this._root.addEventListener('animationend', () => resolve(), { once: true, signal });
-    });
-
-    this._root.classList.remove(ENTERING, EXITING);
-    if (!visible) {
-      this._removeVisibleAttr();
-    }
-  }
-
-  private _clearAnimation(): void {
-    if (this._animationController) {
-      this._animationController.abort();
-      this._animationController = undefined;
-    }
-    this._root?.classList.remove(ENTERING, EXITING);
-  }
-
-  // Since visible does not reflect but is instead managed by animation state, we need these helpers
-
-  private _ensureVisibleAttr(): void {
-    this.setAttribute(ATTR_VISIBLE, '');
-  }
-
-  private _removeVisibleAttr(): void {
-    this.removeAttribute(ATTR_VISIBLE);
-  }
-
-  private _toggleVisibleAttr(on: boolean): void {
-    this.toggleAttribute(ATTR_VISIBLE, on);
+  public async fadeOut(): Promise<void> {
+    this.visible = false;
+    await this.#animateVisibility(false);
   }
 
   public override render(): TemplateResult {
     return html` <div class="forge-backdrop" part="root"></div> `;
+  }
+
+  async #animateVisibility(visible: boolean): Promise<void> {
+    if (!this.isConnected) {
+      return;
+    }
+
+    this.#cancelAnimation();
+
+    // Set visible attribute for enter animations before starting
+    if (visible) {
+      this.toggleAttribute(STATE_VISIBLE, true);
+    }
+
+    // Set animation state
+    toggleState(this.#internals, STATE_ENTERING, visible);
+    toggleState(this.#internals, STATE_EXITING, !visible);
+
+    await this.updateComplete;
+
+    // Wait for CSS animation to complete
+    this.#animationController = new AbortController();
+    const signal = this.#animationController.signal;
+
+    try {
+      await new Promise<void>((resolve, reject) => {
+        this.addEventListener('animationend', () => resolve(), { once: true, signal });
+        signal.addEventListener('abort', () => reject(new Error('Animation cancelled')));
+      });
+    } catch {
+      // Animation was cancelled
+      return;
+    }
+
+    // Clean up animation states
+    toggleState(this.#internals, STATE_ENTERING, false);
+    toggleState(this.#internals, STATE_EXITING, false);
+
+    // Remove visible attribute for exit animations after completion
+    if (!visible) {
+      this.toggleAttribute(STATE_VISIBLE, false);
+    }
+
+    this.#animationController = undefined;
+  }
+
+  #cancelAnimation(): void {
+    if (this.#animationController) {
+      this.#animationController.abort();
+      this.#animationController = undefined;
+    }
+    toggleState(this.#internals, STATE_ENTERING, false);
+    toggleState(this.#internals, STATE_EXITING, false);
   }
 }
