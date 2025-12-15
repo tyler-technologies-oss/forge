@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import { sendMouse } from '@web/test-runner-commands';
-import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
+import { IBackdropComponent } from '../backdrop';
 import { task } from '../core/utils/utils';
 
 import './backdrop';
@@ -30,6 +30,7 @@ describe('Backdrop', () => {
     const harness = await createFixture();
 
     harness.backdropElement.visible = true;
+    await elementUpdated(harness.backdropElement);
     await harness.enterAnimation();
 
     expect(harness.isVisible).to.be.true;
@@ -38,7 +39,8 @@ describe('Backdrop', () => {
   it('should show when visible attribute is set', async () => {
     const harness = await createFixture();
 
-    harness.backdropElement.setAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE, '');
+    harness.backdropElement.setAttribute('visible', '');
+    await elementUpdated(harness.backdropElement);
     await harness.enterAnimation();
 
     expect(harness.isVisible).to.be.true;
@@ -47,7 +49,8 @@ describe('Backdrop', () => {
   it('should hide when visible attribute is removed', async () => {
     const harness = await createFixture({ visible: true });
 
-    harness.backdropElement.removeAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE);
+    harness.backdropElement.removeAttribute('visible');
+    await elementUpdated(harness.backdropElement);
     await harness.exitAnimation();
 
     expect(harness.isVisible).to.be.false;
@@ -61,7 +64,7 @@ describe('Backdrop', () => {
     await harness.fadeIn();
 
     expect(harness.isVisible).to.be.true;
-    expect(harness.rootElement.classList.contains(BACKDROP_CONSTANTS.classes.EXITING)).to.be.false;
+    expect(harness.backdropElement.matches(':state(exiting)')).to.be.false;
   });
 
   it('should fade out', async () => {
@@ -73,13 +76,14 @@ describe('Backdrop', () => {
     await harness.exitAnimation();
 
     expect(harness.isVisible).to.be.false;
-    expect(harness.rootElement.classList.contains(BACKDROP_CONSTANTS.classes.EXITING)).to.be.false;
+    expect(harness.backdropElement.matches(':state(exiting)')).to.be.false;
   });
 
   it('should show immediately when calling show() method', async () => {
     const harness = await createFixture();
 
     harness.backdropElement.show();
+    await elementUpdated(harness.backdropElement);
     await harness.enterAnimation();
 
     expect(harness.isVisible).to.be.true;
@@ -89,6 +93,7 @@ describe('Backdrop', () => {
     const harness = await createFixture({ visible: true });
 
     harness.backdropElement.hide();
+    await elementUpdated(harness.backdropElement);
     await harness.exitAnimation();
 
     expect(harness.isVisible).to.be.false;
@@ -98,21 +103,23 @@ describe('Backdrop', () => {
     const harness = await createFixture({ fixed: true });
 
     expect(harness.backdropElement.fixed).to.be.true;
-    expect(harness.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.FIXED)).to.be.true;
+    expect(harness.backdropElement.hasAttribute('fixed')).to.be.true;
   });
 
   it('should toggle fixed attribute', async () => {
     const harness = await createFixture();
 
     harness.backdropElement.fixed = true;
+    await elementUpdated(harness.backdropElement);
 
     expect(harness.backdropElement.fixed).to.be.true;
-    expect(harness.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.FIXED)).to.be.true;
+    expect(harness.backdropElement.hasAttribute('fixed')).to.be.true;
 
     harness.backdropElement.fixed = false;
+    await elementUpdated(harness.backdropElement);
 
     expect(harness.backdropElement.fixed).to.be.false;
-    expect(harness.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.FIXED)).to.be.false;
+    expect(harness.backdropElement.hasAttribute('fixed')).to.be.false;
   });
 });
 
@@ -120,25 +127,19 @@ class BackdropHarness {
   constructor(public backdropElement: IBackdropComponent) {}
 
   public get rootElement(): HTMLElement {
-    return getShadowElement(this.backdropElement, BACKDROP_CONSTANTS.selectors.ROOT);
+    return getShadowElement(this.backdropElement, '.forge-backdrop');
   }
 
   public get isVisible(): boolean {
-    return (
-      this.backdropElement.visible &&
-      this.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE) &&
-      getComputedStyle(this.rootElement).opacity === '0.54'
-    );
+    return this.backdropElement.visible && this.backdropElement.hasAttribute('visible') && getComputedStyle(this.rootElement).opacity === '0.54';
   }
 
-  public fadeIn(): Promise<void> {
-    this.backdropElement.fadeIn();
-    return this.enterAnimation();
+  public async fadeIn(): Promise<void> {
+    await this.backdropElement.fadeIn();
   }
 
-  public fadeOut(): Promise<void> {
-    this.backdropElement.fadeOut();
-    return this.exitAnimation();
+  public async fadeOut(): Promise<void> {
+    await this.backdropElement.fadeOut();
   }
 
   public async click(): Promise<void> {
