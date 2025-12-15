@@ -9,7 +9,7 @@
   display: contents;
 }
 
-:host(:where([hidden], :state(hidden))) {
+:host([hidden]) {
   display: none;
 }
 
@@ -29,7 +29,7 @@
 // Fixed
 //
 
-:host(:where([fixed], :state(fixed))) {
+:host([fixed]) {
   .forge-backdrop {
     position: fixed;
   }
@@ -39,7 +39,7 @@
 // Animation
 //
 
-:host(:where([visible], :state(visible))) {
+:host([visible]) {
   .forge-backdrop {
     @include visible;
   }

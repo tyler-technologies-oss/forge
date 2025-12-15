@@ -1,155 +1,171 @@
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
+import { getShadowElement } from '@tylertech/forge-core';
+import { sendMouse } from '@web/test-runner-commands';
+import { IBackdropComponent } from '../backdrop';
 import { task } from '../core/utils/utils';
-import { IBackdropComponent } from './backdrop';
 
 import './backdrop';
 
 describe('Backdrop', () => {
-  it('should initialize', async () => {
-    const el = await fixture<IBackdropComponent>(html`<forge-backdrop></forge-backdrop>`);
+  it('should have shadow root', async () => {
+    const harness = await createFixture();
 
-    expect(el.shadowRoot).not.to.be.null;
+    expect(harness.backdropElement.shadowRoot).to.not.be.null;
   });
 
   it('should be hidden by default', async () => {
-    const h = await createFixture();
+    const harness = await createFixture();
 
-    expect(h.el.visible).to.be.false;
-    expect(h.el.hasAttribute('visible')).to.be.false;
+    expect(harness.isVisible).to.be.false;
   });
 
   it('should show when visible by default', async () => {
-    const h = await createFixture({ visible: true });
+    const harness = await createFixture({ visible: true });
 
-    expect(h.isVisible).to.be.true;
+    expect(harness.backdropElement.visible).to.be.true;
   });
 
   it('should show when visible property is set', async () => {
-    const h = await createFixture();
-    h.el.visible = true;
-    await elementUpdated(h.el);
-    await h.animationBuffer();
+    const harness = await createFixture();
 
-    expect(h.isVisible).to.be.true;
+    harness.backdropElement.visible = true;
+    await elementUpdated(harness.backdropElement);
+    await harness.enterAnimation();
+
+    expect(harness.isVisible).to.be.true;
   });
 
   it('should show when visible attribute is set', async () => {
-    const h = await createFixture();
-    h.el.setAttribute('visible', '');
-    await elementUpdated(h.el);
-    await h.animationBuffer();
+    const harness = await createFixture();
 
-    expect(h.isVisible).to.be.true;
+    harness.backdropElement.setAttribute('visible', '');
+    await elementUpdated(harness.backdropElement);
+    await harness.enterAnimation();
+
+    expect(harness.isVisible).to.be.true;
   });
 
   it('should hide when visible attribute is removed', async () => {
-    const h = await createFixture({ visible: true });
-    h.el.removeAttribute('visible');
-    await elementUpdated(h.el);
-    await h.animationBuffer();
+    const harness = await createFixture({ visible: true });
 
-    expect(h.isVisible).to.be.false;
+    harness.backdropElement.removeAttribute('visible');
+    await elementUpdated(harness.backdropElement);
+    await harness.exitAnimation();
+
+    expect(harness.isVisible).to.be.false;
   });
 
   it('should fade in', async () => {
-    const h = await createFixture();
-    expect(h.isVisible).to.be.false;
+    const harness = await createFixture();
 
-    await h.fadeIn();
+    expect(harness.isVisible).to.be.false;
 
-    expect(h.isVisible).to.be.true;
-    // This assertion depends on "animationend", which may not be emitted by this test runner
-    // expect(h.root.classList.contains('entering')).to.be.false;
+    await harness.fadeIn();
+
+    expect(harness.isVisible).to.be.true;
+    expect(harness.backdropElement.matches(':state(exiting)')).to.be.false;
   });
 
   it('should fade out', async () => {
-    const h = await createFixture({ visible: true });
-    expect(h.isVisible).to.be.true;
+    const harness = await createFixture({ visible: true });
 
-    await h.fadeOut();
+    expect(harness.isVisible).to.be.true;
 
-    expect(h.isVisible).to.be.false;
-    // This assertion depends on "animationend", which may not be emitted by this test runner
-    // expect(h.root.classList.contains('exiting')).to.be.false;
+    await harness.fadeOut();
+    await harness.exitAnimation();
+
+    expect(harness.isVisible).to.be.false;
+    expect(harness.backdropElement.matches(':state(exiting)')).to.be.false;
   });
 
-  it('should show immediately when calling show()', async () => {
-    const h = await createFixture();
-    h.el.show();
-    await h.animationBuffer();
+  it('should show immediately when calling show() method', async () => {
+    const harness = await createFixture();
 
-    expect(h.isVisible).to.be.true;
+    harness.backdropElement.show();
+    await elementUpdated(harness.backdropElement);
+    await harness.enterAnimation();
+
+    expect(harness.isVisible).to.be.true;
   });
 
-  it('should hide immediately when calling hide()', async () => {
-    const h = await createFixture({ visible: true });
-    h.el.hide();
-    await h.animationBuffer();
+  it('should hide immediately when calling hide() method', async () => {
+    const harness = await createFixture({ visible: true });
 
-    expect(h.isVisible).to.be.false;
+    harness.backdropElement.hide();
+    await elementUpdated(harness.backdropElement);
+    await harness.exitAnimation();
+
+    expect(harness.isVisible).to.be.false;
   });
 
-  it('should set fixed by default via attribute', async () => {
-    const h = await createFixture({ fixed: true });
+  it('should set fixed by default', async () => {
+    const harness = await createFixture({ fixed: true });
 
-    expect(h.el.fixed).to.be.true;
-    expect(h.el.hasAttribute('fixed')).to.be.true;
+    expect(harness.backdropElement.fixed).to.be.true;
+    expect(harness.backdropElement.hasAttribute('fixed')).to.be.true;
   });
 
-  it('should toggle fixed attribute when property changes', async () => {
-    const h = await createFixture();
+  it('should toggle fixed attribute', async () => {
+    const harness = await createFixture();
 
-    h.el.fixed = true;
-    await elementUpdated(h.el);
-    expect(h.el.fixed).to.be.true;
-    expect(h.el.hasAttribute('fixed')).to.be.true;
+    harness.backdropElement.fixed = true;
+    await elementUpdated(harness.backdropElement);
 
-    h.el.fixed = false;
-    await elementUpdated(h.el);
-    expect(h.el.fixed).to.be.false;
-    expect(h.el.hasAttribute('fixed')).to.be.false;
+    expect(harness.backdropElement.fixed).to.be.true;
+    expect(harness.backdropElement.hasAttribute('fixed')).to.be.true;
+
+    harness.backdropElement.fixed = false;
+    await elementUpdated(harness.backdropElement);
+
+    expect(harness.backdropElement.fixed).to.be.false;
+    expect(harness.backdropElement.hasAttribute('fixed')).to.be.false;
   });
 });
 
-/** Harness keeps animation timing concerns isolated. */
 class BackdropHarness {
-  constructor(public el: IBackdropComponent) {}
+  constructor(public backdropElement: IBackdropComponent) {}
 
-  public get root(): HTMLElement {
-    return this.el.shadowRoot?.firstElementChild as HTMLElement;
+  public get rootElement(): HTMLElement {
+    return getShadowElement(this.backdropElement, '.forge-backdrop');
   }
 
-  /** Visible = property true + attribute present. Optional CSS check retained. */
   public get isVisible(): boolean {
-    const style = getComputedStyle(this.root);
-    return this.el.visible && this.el.hasAttribute('visible') && style.opacity !== '0';
+    return this.backdropElement.visible && this.backdropElement.hasAttribute('visible') && getComputedStyle(this.rootElement).opacity === '0.54';
   }
 
-  public async fadeIn(): Promise<void> {
-    this.el.fadeIn();
-    await elementUpdated(this.el);
-    return this.animationBuffer();
+  public fadeIn(): Promise<void> {
+    this.backdropElement.fadeIn();
+    return this.enterAnimation();
   }
 
-  public async fadeOut(): Promise<void> {
-    this.el.fadeOut();
-    await elementUpdated(this.el);
-    return this.animationBuffer();
+  public fadeOut(): Promise<void> {
+    this.backdropElement.fadeOut();
+    return this.exitAnimation();
   }
 
-  /** Keep generous buffer to outlast CSS duration + delay. */
-  public animationBuffer(): Promise<void> {
-    return task(350);
+  public async click(): Promise<void> {
+    const { x, y, height, width } = this.backdropElement.getBoundingClientRect();
+    const mouseX = Math.round(x + width / 2);
+    const mouseY = Math.round(y + height / 2);
+    await sendMouse({ type: 'click', position: [mouseX, mouseY], button: 'left' });
+  }
+
+  public enterAnimation(): Promise<void> {
+    return task(300);
+  }
+
+  public exitAnimation(): Promise<void> {
+    return task(300);
   }
 }
 
-interface BackdropFixtureConfig {
+interface IBackdropFixtureConfig {
   visible?: boolean;
   fixed?: boolean;
 }
 
-async function createFixture({ visible, fixed }: BackdropFixtureConfig = {}): Promise<BackdropHarness> {
+async function createFixture({ visible, fixed }: IBackdropFixtureConfig = {}): Promise<BackdropHarness> {
   const el = await fixture<IBackdropComponent>(html`<forge-backdrop ?visible=${visible} ?fixed=${fixed}></forge-backdrop>`);
   return new BackdropHarness(el);
 }
