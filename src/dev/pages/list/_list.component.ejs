@@ -342,9 +342,9 @@
   <h3 class="forge-typography--heading2">List with Dividers and Expandable Items</h3>
   <div class="list-demo">
     <forge-list>
-      <forge-list-item>
+      <forge-list-item id="exp-li-1">
         <forge-icon slot="start" name="code"></forge-icon>
-        <button type="button" id="exp-li-1">List Item One</button>
+        <button type="button">List Item One</button>
         <forge-open-icon slot="end"></forge-open-icon>
         <forge-expansion-panel trigger="exp-li-1" slot="additional-content">
           <forge-list indented>
@@ -361,9 +361,9 @@
         </forge-expansion-panel>
         <forge-divider role="presentation" slot="additional-content"></forge-divider>
       </forge-list-item>
-      <forge-list-item slot="header">
+      <forge-list-item slot="header" id="exp-li-2">
         <forge-icon slot="start" name="face"></forge-icon>
-        <button type="button" id="exp-li-2">List Item Two</button>
+        <button type="button">List Item Two</button>
         <forge-open-icon slot="end"></forge-open-icon>
         <forge-expansion-panel slot="additional-content" trigger="exp-li-2">
           <forge-list indented>

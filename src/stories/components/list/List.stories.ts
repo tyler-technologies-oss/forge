@@ -197,9 +197,9 @@ export const Expandable: Story = {
   render: () => {
     return html`
       <forge-list>
-        <forge-list-item>
+        <forge-list-item id="li-1">
           <forge-icon slot="start" name="code"></forge-icon>
-          <button type="button" id="li-1">List Item One</button>
+          <button type="button">List Item One</button>
           <forge-open-icon slot="end"></forge-open-icon>
           <forge-expansion-panel slot="additional-content" trigger="li-1">
             <forge-list indented>
@@ -215,9 +215,9 @@ export const Expandable: Story = {
             </forge-list>
           </forge-expansion-panel>
         </forge-list-item>
-        <forge-list-item>
+        <forge-list-item id="li-2">
           <forge-icon slot="start" name="face"></forge-icon>
-          <button type="button" id="li-2">List Item Two</button>
+          <button type="button">List Item Two</button>
           <forge-open-icon slot="end"></forge-open-icon>
           <forge-expansion-panel slot="additional-content" trigger="li-2">
             <forge-list indented>
