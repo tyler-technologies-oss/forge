@@ -1,6 +1,6 @@
 import { getShadowElement, randomChars, toggleAttribute } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { OpenIconComponent } from '../open-icon';
+import { OPEN_ICON_CONSTANTS, OpenIconComponent } from '../open-icon';
 import { IExpansionPanelComponent } from './expansion-panel';
 import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 
@@ -89,9 +89,14 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   }
 
   public tryToggleOpenIcon(value: boolean): void {
-    const openIconElement = this._component.querySelector<OpenIconComponent>(EXPANSION_PANEL_CONSTANTS.selectors.OPEN_ICON);
-    if (openIconElement) {
-      openIconElement.open = value;
+    const openIconElements = [
+      this._component.querySelector<OpenIconComponent>(EXPANSION_PANEL_CONSTANTS.selectors.OPEN_ICON),
+      this._component.triggerElement?.querySelector<OpenIconComponent>(`${OPEN_ICON_CONSTANTS.elementName}`)
+    ];
+    for (const openIconElement of openIconElements) {
+      if (openIconElement) {
+        openIconElement.open = value;
+      }
     }
   }
 
