@@ -381,6 +381,26 @@ describe('Expansion Panel', () => {
 
       expect(openIcon.open).to.be.true;
     });
+
+    it(`should toggle trigger's open icon when toggled`, async () => {
+      const el = await fixture<IExpansionPanelComponent>(html`
+        <div>
+          <button id="button-id"><forge-open-icon></forge-open-icon></button>
+          <forge-expansion-panel trigger="button-id">
+            <div>Content</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+
+      await elementUpdated(el);
+
+      const openIcon = el.querySelector('forge-open-icon') as IOpenIconComponent;
+      const trigger = el.querySelector('#button-id') as HTMLButtonElement;
+
+      expect(openIcon.open).to.be.false;
+      trigger.click();
+      expect(openIcon.open).to.be.true;
+    });
   });
 
   describe('nested panels', () => {
