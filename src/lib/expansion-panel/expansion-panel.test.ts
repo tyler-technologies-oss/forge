@@ -360,7 +360,7 @@ describe('Expansion Panel', () => {
   });
 
   describe('open icon', () => {
-    it('should toggle open icon when toggled', async () => {
+    it('should toggle internal open icon when toggled', async () => {
       const el = await fixture<IExpansionPanelComponent>(html`
         <forge-expansion-panel>
           <button slot="header">
@@ -382,11 +382,12 @@ describe('Expansion Panel', () => {
       expect(openIcon.open).to.be.true;
     });
 
-    it(`should toggle trigger's open icon when toggled`, async () => {
+    it(`should toggle detached open icon when toggled`, async () => {
       const el = await fixture<IExpansionPanelComponent>(html`
         <div>
-          <button id="button-id"><forge-open-icon></forge-open-icon></button>
-          <forge-expansion-panel trigger="button-id">
+          <button id="button-id"></button>
+          <forge-open-icon id="open-icon-id"></forge-open-icon>
+          <forge-expansion-panel trigger="button-id" open-icon="open-icon-id">
             <div>Content</div>
           </forge-expansion-panel>
         </div>
@@ -394,9 +395,28 @@ describe('Expansion Panel', () => {
 
       await elementUpdated(el);
 
-      const openIcon = el.querySelector('forge-open-icon') as IOpenIconComponent;
+      const openIcon = el.querySelector('#open-icon-id') as IOpenIconComponent;
       const trigger = el.querySelector('#button-id') as HTMLButtonElement;
 
+      expect(openIcon.open).to.be.false;
+      trigger.click();
+      expect(openIcon.open).to.be.true;
+    });
+
+    it('should set open icon by reference', async () => {
+      const el = await fixture<HTMLElement>(html`
+        <div>
+          <button id="button-id"></button>
+          <forge-open-icon id="open-icon-id"></forge-open-icon>
+          <forge-expansion-panel trigger="button-id">
+            <div>Content</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const trigger = el.querySelector('#button-id') as HTMLElement;
+      const openIcon = el.querySelector('#open-icon-id') as IOpenIconComponent;
+      const expansionPanel = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      expansionPanel.openIconElement = openIcon;
       expect(openIcon.open).to.be.false;
       trigger.click();
       expect(openIcon.open).to.be.true;
