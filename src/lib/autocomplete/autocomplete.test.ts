@@ -718,6 +718,39 @@ describe('AutocompleteComponent', () => {
       expect(harness.input.value).to.equal(DEFAULT_FILTER_OPTIONS[0].label);
     });
 
+    it('should emit change event when select-on-blur clears unmatched text with no results', async () => {
+      const changeSpy = spy();
+      let resolveFilter: ((options: IOption[]) => void) | undefined;
+      const filterSpy = spy(
+        () =>
+          new Promise<IOption[]>(resolve => {
+            resolveFilter = resolve;
+          })
+      );
+      const harness = await createFixture({
+        debounce: 0,
+        filter: filterSpy,
+        selectFirstOptionOnBlur: true,
+        allowUnmatched: false
+      });
+      harness.component.addEventListener(AUTOCOMPLETE_CONSTANTS.events.CHANGE, changeSpy);
+
+      harness.sendInputValue('no results');
+      harness.input.blur();
+      await frame();
+
+      resolveFilter?.([]);
+      await task();
+      await frame();
+
+      expect(filterSpy).to.have.been.calledOnce;
+      expect(filterSpy).to.have.been.calledWith('no results', null);
+      expect(changeSpy).to.have.been.calledOnce;
+      expect(changeSpy.firstCall.args[0].detail).to.be.null;
+      expect(harness.component.value).to.be.null;
+      expect(harness.input.value).to.equal('');
+    });
+
     it('should select multiple options when enter key is pressed in multiple mode', async () => {
       const changeSpy = spy();
       const harness = await createFixture({

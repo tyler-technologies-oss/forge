@@ -422,6 +422,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
       if (shouldSelectOnBlur && !this._allowUnmatched) {
         this._filterText = '';
         this._adapter.setSelectedText('');
+        this._clearValue();
       }
       return;
     }
