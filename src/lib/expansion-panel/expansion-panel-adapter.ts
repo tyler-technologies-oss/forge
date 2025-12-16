@@ -102,8 +102,9 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
 
   public tryToggleOpenIcon(value: boolean): void {
     const internalOpenIcon = this._component.querySelector<IOpenIconComponent>(EXPANSION_PANEL_CONSTANTS.selectors.OPEN_ICON);
+    const triggerOpenIcon = this._triggerElement?.querySelector<IOpenIconComponent>(OPEN_ICON_CONSTANTS.elementName);
     const externalOpenIcon = this._openIcon;
-    const openIcons = [internalOpenIcon, externalOpenIcon];
+    const openIcons = [internalOpenIcon, triggerOpenIcon, externalOpenIcon];
     for (const openIcon of openIcons) {
       if (openIcon) {
         openIcon.open = value;
