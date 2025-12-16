@@ -227,6 +227,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   private _onFocus(): void {
+    this._selectOnBlurPending = false;
     if (!this._isDropdownOpen && this._adapter.getInputValue() && !Platform.isMobile) {
       this._adapter.selectInputValue();
     }
@@ -242,22 +243,13 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   private _applyBlur(): void {
-    const shouldSelectFirstOptionOnBlur = this._shouldSelectFirstOptionOnBlur();
-    if (shouldSelectFirstOptionOnBlur) {
-      this._selectOnBlurPending = true;
-    }
+    this._selectOnBlurPending = this._shouldSelectFirstOptionOnBlur();
 
     if (this._isDropdownOpen) {
       this._closeDropdown();
     }
 
-    // If we are in stateless mode, we don't need to do anything further
-    if (this._mode === AutocompleteMode.Stateless) {
-      this._selectOnBlurPending = false;
-      return;
-    }
-
-    if (shouldSelectFirstOptionOnBlur) {
+    if (this._selectOnBlurPending || this._mode === AutocompleteMode.Stateless) {
       return;
     }
 
@@ -272,14 +264,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   private _shouldSelectFirstOptionOnBlur(): boolean {
-    return (
-      this._selectFirstOptionOnBlur &&
-      !this._multiple &&
-      this._mode !== AutocompleteMode.Stateless &&
-      !!this._filter &&
-      !!this._filterText &&
-      !this._selectedOptions.length
-    );
+    return this._selectFirstOptionOnBlur && !this._multiple && this._mode !== AutocompleteMode.Stateless && !!this._filter && !!this._filterText;
   }
 
   private _onInput(evt: KeyboardEvent): void {

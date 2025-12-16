@@ -1195,6 +1195,51 @@ describe('AutocompleteComponent', () => {
       expect(harness.component['_core']._pendingFilterPromises).to.deep.equal([]);
     });
 
+    it('should not select first option when refocusing before a select-on-blur filter resolves', async () => {
+      const initialOptions = [{ label: 'First option', value: 'first' }];
+      const updatedOptions = [{ label: 'Second option', value: 'second' }];
+      let resolveInitial: ((options: IOption[]) => void) | undefined;
+      let resolveUpdated: ((options: IOption[]) => void) | undefined;
+      const filterSpy = spy(
+        (filterText: string) =>
+          new Promise<IOption[]>(resolve => {
+            if (filterText === 'first') {
+              resolveInitial = resolve;
+            } else if (filterText === 'second') {
+              resolveUpdated = resolve;
+            }
+          })
+      );
+
+      const harness = await createFixture({
+        debounce: 0,
+        filter: filterSpy,
+        selectFirstOptionOnBlur: true
+      });
+
+      harness.sendInputValue('first');
+      harness.input.blur();
+      await frame();
+
+      harness.input.focus();
+      await frame();
+
+      harness.sendInputValue('second');
+
+      resolveInitial?.(initialOptions);
+      await task();
+
+      resolveUpdated?.(updatedOptions);
+      await task();
+      await frame();
+
+      const popupOptions = harness.getPopupOptions();
+      expect(_toLabelValue(popupOptions)).to.deep.equal(updatedOptions);
+      expect(popupOptions.every(o => !o.selected)).to.be.true;
+      expect(harness.component.value).to.be.null;
+      expect(harness.input.value).to.equal('second');
+    });
+
     it('should cancel all pending filters if an exception is thrown in filter callback', async () => {
       const harness = await createFixture({
         filter: () =>
