@@ -1,11 +1,12 @@
 import { getShadowElement, randomChars, toggleAttribute } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { OPEN_ICON_CONSTANTS, OpenIconComponent } from '../open-icon';
+import { IOpenIconComponent, OPEN_ICON_CONSTANTS } from '../open-icon';
 import { IExpansionPanelComponent } from './expansion-panel';
 import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 
 export interface IExpansionPanelAdapter extends IBaseAdapter {
   readonly triggerElement?: HTMLElement | null;
+  readonly openIcon?: IOpenIconComponent | null;
   setAnimationCompleteListener(listener: () => void): void;
   addContentSlotListener(listener: EventListener): void;
   addHeaderListener(type: keyof HTMLElementEventMap, listener: EventListener): void;
@@ -17,6 +18,8 @@ export interface IExpansionPanelAdapter extends IBaseAdapter {
   animationEnd(): void;
   setTriggerElementById(id: string): void;
   setTriggerElement(el?: HTMLElement | null): void;
+  setOpenIconById(id: string): void;
+  setOpenIcon(openIcon?: IOpenIconComponent | null): void;
   setContentId(): void;
   updateAriaControls(): void;
   updateAriaExpanded(open: boolean): void;
@@ -30,6 +33,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   private _defaultSlotElement: HTMLSlotElement;
   private _triggerListenerController: AbortController;
   private _triggerElement?: HTMLElement | null;
+  private _openIcon?: IOpenIconComponent | null;
 
   private _transitionStartListener: EventListener = this._onTransitionStart.bind(this);
   private _transitionEndListener: EventListener = this._onTransitionEnd.bind(this);
@@ -47,6 +51,10 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
     return this._triggerElement;
   }
 
+  public get openIcon(): IOpenIconComponent | null | undefined {
+    return this._openIcon;
+  }
+
   private get _slottedContentElement(): Element | undefined {
     return this._defaultSlotElement.assignedElements({ flatten: true })[0];
   }
@@ -61,6 +69,10 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
 
   public setTriggerElementById(id: string): void {
     this._triggerElement = this._getTriggerElementById(id);
+  }
+
+  public setOpenIconById(id: string): void {
+    this._openIcon = this._getOpenIconElementById(id);
   }
 
   public setAnimationCompleteListener(listener: () => void): void {
@@ -89,13 +101,12 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   }
 
   public tryToggleOpenIcon(value: boolean): void {
-    const openIconElements = [
-      this._component.querySelector<OpenIconComponent>(EXPANSION_PANEL_CONSTANTS.selectors.OPEN_ICON),
-      this._component.triggerElement?.querySelector<OpenIconComponent>(`${OPEN_ICON_CONSTANTS.elementName}`)
-    ];
-    for (const openIconElement of openIconElements) {
-      if (openIconElement) {
-        openIconElement.open = value;
+    const internalOpenIcon = this._component.querySelector<IOpenIconComponent>(EXPANSION_PANEL_CONSTANTS.selectors.OPEN_ICON);
+    const externalOpenIcon = this._openIcon;
+    const openIcons = [internalOpenIcon, externalOpenIcon];
+    for (const openIcon of openIcons) {
+      if (openIcon) {
+        openIcon.open = value;
       }
     }
   }
@@ -129,6 +140,10 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
     this._triggerElement = el;
   }
 
+  public setOpenIcon(openIcon: IOpenIconComponent | null): void {
+    this._openIcon = openIcon;
+  }
+
   public setContentId(): void {
     if (!this._slottedContentId) {
       this._slottedContentId = `forge-expansion-panel-content-${randomChars()}`;
@@ -156,6 +171,19 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
     if (id && this.isConnected) {
       const rootNode = this._component.getRootNode() as Document | ShadowRoot;
       return rootNode.getElementById(id);
+    } else {
+      return null;
+    }
+  }
+
+  private _getOpenIconElementById(id: string): IOpenIconComponent | null {
+    if (id && this.isConnected) {
+      const rootNode = this._component.getRootNode() as Document | ShadowRoot;
+      const el = rootNode.getElementById(id);
+      if (el?.tagName.toLocaleLowerCase() === OPEN_ICON_CONSTANTS.elementName) {
+        return el as IOpenIconComponent;
+      }
+      return null;
     } else {
       return null;
     }
