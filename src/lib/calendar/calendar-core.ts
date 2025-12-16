@@ -1348,7 +1348,7 @@ export class CalendarCore implements ICalendarCore {
     } else {
       this._month = 0;
       this._year += 1;
-      this._setYear();
+      this._setYear(undefined, true);
     }
     this._setMonth();
     this._resetDateGrid();
@@ -1363,7 +1363,7 @@ export class CalendarCore implements ICalendarCore {
     } else {
       this._month = 11;
       this._year -= 1;
-      this._setYear();
+      this._setYear(undefined, true);
     }
     this._setMonth();
     this._resetDateGrid();
@@ -1488,34 +1488,40 @@ export class CalendarCore implements ICalendarCore {
   /**
    * Sets the month text and attribute in the adapter.
    * @param userSelected Whether the month was explicitly selected by the user (optional)
+   * @param suppressEvent Whether to suppress emitting the month change event (optional)
    * */
-  private _setMonth(userSelected?: boolean): void {
+  private _setMonth(userSelected?: boolean, suppressEvent?: boolean): void {
     this._adapter.setMonth(this._month, this._locale);
     this._adapter.setHostAttribute(CALENDAR_CONSTANTS.attributes.MONTH, this._month.toString());
     if (this._isInitialized) {
       this._setNavigationButtonStates();
-      this._adapter.emitHostEvent(CALENDAR_CONSTANTS.events.MONTH_CHANGE, {
-        month: this._month,
-        userSelected: userSelected ?? false,
-        year: this._year
-      });
+      if (!suppressEvent) {
+        this._adapter.emitHostEvent(CALENDAR_CONSTANTS.events.MONTH_CHANGE, {
+          month: this._month,
+          userSelected: userSelected ?? false,
+          year: this._year
+        });
+      }
     }
   }
 
   /**
    * Sets the year text and attribute in the adapter.
    * @param userSelected Whether the year was explicity selected by the user (optional)
+   * @param suppressEvent Whether to suppress emitting the month change event (optional)
    * */
-  private _setYear(userSelected?: boolean): void {
+  private _setYear(userSelected?: boolean, suppressEvent?: boolean): void {
     this._adapter.setYear(this._year, this._locale);
     this._adapter.setHostAttribute(CALENDAR_CONSTANTS.attributes.YEAR, this._year.toString());
     if (this._isInitialized) {
       this._setNavigationButtonStates();
-      this._adapter.emitHostEvent(CALENDAR_CONSTANTS.events.MONTH_CHANGE, {
-        month: this._month,
-        userSelected: userSelected ?? false,
-        year: this._year
-      });
+      if (!suppressEvent) {
+        this._adapter.emitHostEvent(CALENDAR_CONSTANTS.events.MONTH_CHANGE, {
+          month: this._month,
+          userSelected: userSelected ?? false,
+          year: this._year
+        });
+      }
     }
   }
 
