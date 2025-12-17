@@ -1,11 +1,12 @@
-import { attachShadowTemplate, coerceBoolean, customElement, getShadowElement } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { BACKDROP_CONSTANTS } from './backdrop-constants';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { BaseLitElement } from '../core/base/base-lit-element';
+import { toggleState } from '../core/utils/utils';
 
-import template from './backdrop.html';
 import styles from './backdrop.scss';
 
-export interface IBackdropComponent extends IBaseComponent {
+export interface IBackdropComponent extends BaseLitElement {
   visible: boolean;
   fixed: boolean;
   show(): void;
@@ -20,16 +21,15 @@ declare global {
   }
 }
 
+export const BACKDROP_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-backdrop';
+const STATE_VISIBLE = 'visible';
+const STATE_ENTERING = 'entering';
+const STATE_EXITING = 'exiting';
+
 /**
  * @tag forge-backdrop
  *
  * @summary Backdrops provide a semi-transparent overlay behind modal content like dialogs and drawers. These are building blocks for creating modal experiences, not intended to be used directly.
- *
- * @property {boolean} [visible=false] - Whether the backdrop is visible.
- * @property {boolean} [fixed=false] - Whether the backdrop uses "fixed" or "relative" positioning.
- *
- * @attribute {boolean} [visible=false] - Whether the backdrop is visible.
- * @attribute {boolean} [fixed=false] - Whether the backdrop uses "fixed" or "relative" positioning.
  *
  * @cssproperty --forge-backdrop-background - The backdrop background color.
  * @cssproperty --forge-backdrop-opacity - The backdrop opacity.
@@ -40,134 +40,145 @@ declare global {
  * @cssproperty --forge-backdrop-exit-animation-easing - The animation easing for the exit animation.
  *
  * @csspart root - The root element of the backdrop.
+ *
+ * @state visible - whether or not the backdrop is visible
+ * @state entering - applied during enter animation
+ * @state exiting - applied during exit animation
  */
-@customElement({
-  name: BACKDROP_CONSTANTS.elementName
-})
-export class BackdropComponent extends BaseComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(BACKDROP_CONSTANTS.observedAttributes);
-  }
+@customElement(BACKDROP_TAG_NAME)
+export class BackdropComponent extends BaseLitElement implements IBackdropComponent {
+  public static styles = unsafeCSS(styles);
 
-  private _visible = false;
-  private _fixed = false;
-  private _rootElement: HTMLElement;
-  private _animationController: AbortController | undefined;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BACKDROP_TAG_NAME;
+
+  /**
+   * Controls whether or not the backdrop is visible.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean })
+  public visible = false;
+
+  /**
+   * Controls whether the backdrop uses "fixed" or "relative" positioning.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public fixed = false;
+
+  #internals: ElementInternals;
+  #animationController?: AbortController;
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, styles);
-    this._rootElement = getShadowElement(this, BACKDROP_CONSTANTS.selectors.ROOT);
+    this.#internals = this.attachInternals();
   }
 
-  public disconnectedCallback(): void {
-    if (this._animationController) {
-      this._animationController.abort();
-      this._animationController = undefined;
-    }
-
-    this.classList.remove(BACKDROP_CONSTANTS.classes.ENTERING, BACKDROP_CONSTANTS.classes.EXITING);
+  public override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.#cancelAnimation();
   }
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case BACKDROP_CONSTANTS.attributes.VISIBLE:
-        this.visible = coerceBoolean(newValue);
-        break;
-      case BACKDROP_CONSTANTS.attributes.FIXED:
-        this.fixed = coerceBoolean(newValue);
-        break;
+  public override willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has(STATE_VISIBLE)) {
+      // Default behavior: animate if component has rendered at least once
+      if (this.hasUpdated) {
+        void this.#animateVisibility(this.visible);
+      } else {
+        // No animation on initial render
+        this.toggleAttribute(STATE_VISIBLE, this.visible);
+      }
     }
   }
 
-  private async _applyVisibility(visible: boolean, { animate } = { animate: true }): Promise<void> {
-    if (this._visible === visible) {
-      return;
-    }
-
-    this._visible = visible;
-
-    if (!this.isConnected) {
-      this.toggleAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE, this._visible);
-      return Promise.resolve();
-    }
-
-    if (!animate) {
-      this.toggleAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE, this._visible);
-      return;
-    }
-
-    const isVisible = this._visible;
-    const className = isVisible ? BACKDROP_CONSTANTS.classes.ENTERING : BACKDROP_CONSTANTS.classes.EXITING;
-
-    if (this._animationController) {
-      this._animationController.abort();
-      this._rootElement.classList.remove(BACKDROP_CONSTANTS.classes.ENTERING, BACKDROP_CONSTANTS.classes.EXITING);
-    }
-
-    this._animationController = new AbortController();
-
-    const animationComplete = new Promise<void>(resolve => {
-      this._rootElement.addEventListener(
-        'animationend',
-        () => {
-          if (!isVisible) {
-            this.removeAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE);
-          }
-          this._rootElement.classList.remove(className);
-          resolve();
-        },
-        { once: true, signal: this._animationController?.signal }
-      );
-    });
-
-    if (isVisible) {
-      this.setAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE, '');
-    }
-
-    this._rootElement.classList.add(className);
-
-    return animationComplete;
-  }
-
-  /** Immediately shows the backdrop by setting the `visibility` to `true` without animations. */
+  /** Immediately shows without animation. */
   public show(): void {
-    this._applyVisibility(true, { animate: false });
+    this.#cancelAnimation();
+    this.visible = true;
+    this.toggleAttribute(STATE_VISIBLE, true);
   }
 
-  /** Immediately hides the backdrop by setting the `visibility` to `false` without animations. */
+  /** Immediately hides without animation. */
   public hide(): void {
-    this._applyVisibility(false, { animate: false });
+    this.#cancelAnimation();
+    this.visible = false;
+    this.toggleAttribute(STATE_VISIBLE, false);
   }
 
-  /** Sets the `visibility` to `true` and animates in. */
-  public fadeIn(): Promise<void> {
-    return this._applyVisibility(true);
+  /** Shows with enter animation. */
+  public async fadeIn(): Promise<void> {
+    this.visible = true;
+    await this.#animateVisibility(true);
   }
 
-  /** Sets the `visibility` to `false` and animates out. */
-  public fadeOut(): Promise<void> {
-    return this._applyVisibility(false);
+  /** Hides with exit animation. */
+  public async fadeOut(): Promise<void> {
+    this.visible = false;
+    await this.#animateVisibility(false);
   }
 
-  public get visible(): boolean {
-    return this._visible;
+  public override render(): TemplateResult {
+    return html` <div class=${BACKDROP_TAG_NAME} part="root"></div> `;
   }
-  public set visible(value: boolean) {
-    value = Boolean(value);
-    if (this._visible !== value) {
-      this._applyVisibility(value);
+
+  async #animateVisibility(visible: boolean): Promise<void> {
+    if (!this.isConnected) {
+      return;
     }
+
+    this.#cancelAnimation();
+
+    // Set visible attribute for enter animations before starting
+    if (visible) {
+      this.toggleAttribute(STATE_VISIBLE, true);
+    }
+
+    // Set animation state
+    toggleState(this.#internals, STATE_ENTERING, visible);
+    toggleState(this.#internals, STATE_EXITING, !visible);
+
+    await this.updateComplete;
+
+    // Get the root element from shadow DOM to listen for animation events
+    const rootElement = this.shadowRoot?.querySelector(`.${BACKDROP_TAG_NAME}`) as HTMLElement;
+    if (!rootElement) {
+      return;
+    }
+
+    // Wait for CSS animation to complete
+    this.#animationController = new AbortController();
+    const signal = this.#animationController.signal;
+
+    try {
+      await new Promise<void>((resolve, reject) => {
+        rootElement.addEventListener('animationend', () => resolve(), { once: true, signal });
+        signal.addEventListener('abort', () => reject(new Error('Animation cancelled')));
+      });
+    } catch {
+      // Animation was cancelled
+      return;
+    }
+
+    // Clean up animation states
+    toggleState(this.#internals, STATE_ENTERING, false);
+    toggleState(this.#internals, STATE_EXITING, false);
+
+    // Remove visible attribute for exit animations after completion
+    if (!visible) {
+      this.toggleAttribute(STATE_VISIBLE, false);
+    }
+
+    this.#animationController = undefined;
   }
 
-  public get fixed(): boolean {
-    return this._fixed;
-  }
-  public set fixed(value: boolean) {
-    value = Boolean(value);
-    if (this._fixed !== value) {
-      this._fixed = value;
-      this.toggleAttribute(BACKDROP_CONSTANTS.attributes.FIXED, this._fixed);
+  #cancelAnimation(): void {
+    if (this.#animationController) {
+      this.#animationController.abort();
+      this.#animationController = undefined;
     }
+    toggleState(this.#internals, STATE_ENTERING, false);
+    toggleState(this.#internals, STATE_EXITING, false);
   }
 }
