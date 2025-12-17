@@ -45,6 +45,7 @@
   { "label": "Profile card", "path": "/pages/profile-card/profile-card.html" },
   { "label": "Radio", "path": "/pages/radio/radio.html", "tags": ["form"] },
   { "label": "Scaffold", "path": "/pages/scaffold/scaffold.html" },
+  { "label": "Secret", "path": "/pages/secret/secret.html", "tags": ["password", "sensitive", "hide", "privacy", "credentials", "blur"] },
   { "label": "Select", "path": "/pages/select/select.html", "tags": ["form", "field"] },
   { "label": "Skeleton", "path": "/pages/skeleton/skeleton.html" },
   { "label": "Skip link", "path": "/pages/skip-link/skip-link.html", "tags": ["button", "skip to content", "skip to main"] },
