@@ -1,3 +1,35 @@
+# v3.13.0 (Wed Dec 17 2025)
+
+:tada: This release contains work from new contributors! :tada:
+
+Thanks for all your work!
+
+:heart: Jackson Casey ([@jaxcksn](https://github.com/jaxcksn))
+
+:heart: Angela Lim ([@angelalim-tyler](https://github.com/angelalim-tyler))
+
+#### 🚀 Enhancement
+
+- feat(tree): create tree component [#1035](https://github.com/tyler-technologies-oss/forge/pull/1035) ([@samrichardsontylertech](https://github.com/samrichardsontylertech) [@MikeMatusz](https://github.com/MikeMatusz) [@DRiFTy17](https://github.com/DRiFTy17))
+- Feat/exp trigger open icon [#1041](https://github.com/tyler-technologies-oss/forge/pull/1041) ([@eliganemtyler](https://github.com/eliganemtyler))
+- feat(autocomplete): add select first option on blur [#1040](https://github.com/tyler-technologies-oss/forge/pull/1040) ([@jaxcksn](https://github.com/jaxcksn) [@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix(paginator): remove double focus/highlight on buttons [#1033](https://github.com/tyler-technologies-oss/forge/pull/1033) ([@angelalim-tyler](https://github.com/angelalim-tyler) [@DRiFTy17](https://github.com/DRiFTy17))
+- fix(calendar): only emit month change event once when year also changes on next/previous [#1036](https://github.com/tyler-technologies-oss/forge/pull/1036) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 6
+
+- Angela Lim ([@angelalim-tyler](https://github.com/angelalim-tyler))
+- Eli Ganem ([@eliganemtyler](https://github.com/eliganemtyler))
+- Jackson Casey ([@jaxcksn](https://github.com/jaxcksn))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v3.12.1 (Fri Nov 14 2025)
 
 :tada: This release contains work from a new contributor! :tada:
