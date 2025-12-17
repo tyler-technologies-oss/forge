@@ -78,6 +78,7 @@ import { defineTimePickerComponent } from './time-picker';
 import { defineToastComponent } from './toast';
 import { defineToolbarComponent } from './toolbar';
 import { defineTooltipComponent } from './tooltip';
+import { defineTreeComponent, defineTreeItemComponent } from './tree';
 import { defineViewComponent, defineViewSwitcherComponent } from './view-switcher';
 
 /**
@@ -151,6 +152,7 @@ export * from './time-picker';
 export * from './toast';
 export * from './toolbar';
 export * from './tooltip';
+export * from './tree';
 export * from './utils';
 export * from './view-switcher';
 
@@ -245,6 +247,8 @@ export function defineComponents(): void {
   defineToastComponent();
   defineToolbarComponent();
   defineTooltipComponent();
+  defineTreeComponent();
+  defineTreeItemComponent();
   defineViewComponent();
   defineViewSwitcherComponent();
 }
