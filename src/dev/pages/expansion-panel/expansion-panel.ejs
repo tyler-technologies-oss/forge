@@ -1,6 +1,6 @@
-<div class="vert">
+<div class="vert">  
   <section>
-    <h3 class="forge-typography--heading2">Basic (unstyled)</h3>
+    <h3 class="forge-typography--heading2">Basic</h3>
     <forge-expansion-panel>
       <button type="button" slot="header">Click me</button>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel totam porro, quidem dolore repellat laborum soluta numquam? Voluptate debitis iusto, omnis perspiciatis dicta libero, unde amet molestiae minus quis sequi.</p>
@@ -8,9 +8,10 @@
   </section>
   
   <section>
-    <h3 class="forge-typography--heading2">Basic (button separate from expansion panel)</h3>
-    <button id="button-id">Click me</button>
-    <forge-expansion-panel trigger="button-id">
+    <h3 class="forge-typography--heading2">External trigger button and open icon</h3>
+    <forge-button id="button-id">Click me<forge-open-icon slot="end"></forge-open-icon></forge-button>
+    External open icon: <forge-open-icon id="open-icon-id"></forge-open-icon>
+    <forge-expansion-panel trigger="button-id" open-icon="open-icon-id">
       <div slot="header">Header text</div>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel totam porro, quidem dolore repellat laborum soluta numquam? Voluptate debitis iusto, omnis perspiciatis dicta libero, unde amet molestiae minus quis sequi.</p>
     </forge-expansion-panel>

@@ -7,7 +7,8 @@ const observedAttributes = {
   OPEN: 'open',
   ORIENTATION: 'orientation',
   ANIMATION_TYPE: 'animation-type',
-  TRIGGER: 'trigger'
+  TRIGGER: 'trigger',
+  OPEN_ICON: 'open-icon'
 };
 
 const attributes = {
