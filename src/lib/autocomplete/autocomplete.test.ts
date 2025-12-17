@@ -695,6 +695,62 @@ describe('AutocompleteComponent', () => {
       expect(harness.input.value).to.equal('');
     });
 
+    it('should select first option on blur after pending filter resolves', async () => {
+      const filterSpy = spy();
+      const harness = await createFixture({
+        selectFirstOptionOnBlur: true,
+        debounce: 100,
+        filter: () =>
+          new Promise(resolve => {
+            filterSpy();
+            setTimeout(() => resolve(DEFAULT_FILTER_OPTIONS), 50);
+          })
+      });
+
+      harness.sendInputValue('o');
+      harness.input.blur();
+
+      await task(200);
+      await frame();
+
+      expect(filterSpy).to.have.been.calledOnce;
+      expect(harness.component.value).to.equal(DEFAULT_FILTER_OPTIONS[0].value);
+      expect(harness.input.value).to.equal(DEFAULT_FILTER_OPTIONS[0].label);
+    });
+
+    it('should emit change event when select-on-blur clears unmatched text with no results', async () => {
+      const changeSpy = spy();
+      let resolveFilter: ((options: IOption[]) => void) | undefined;
+      const filterSpy = spy(
+        () =>
+          new Promise<IOption[]>(resolve => {
+            resolveFilter = resolve;
+          })
+      );
+      const harness = await createFixture({
+        debounce: 0,
+        filter: filterSpy,
+        selectFirstOptionOnBlur: true,
+        allowUnmatched: false
+      });
+      harness.component.addEventListener(AUTOCOMPLETE_CONSTANTS.events.CHANGE, changeSpy);
+
+      harness.sendInputValue('no results');
+      harness.input.blur();
+      await frame();
+
+      resolveFilter?.([]);
+      await task();
+      await frame();
+
+      expect(filterSpy).to.have.been.calledOnce;
+      expect(filterSpy).to.have.been.calledWith('no results', null);
+      expect(changeSpy).to.have.been.calledOnce;
+      expect(changeSpy.firstCall.args[0].detail).to.be.null;
+      expect(harness.component.value).to.be.null;
+      expect(harness.input.value).to.equal('');
+    });
+
     it('should select multiple options when enter key is pressed in multiple mode', async () => {
       const changeSpy = spy();
       const harness = await createFixture({
@@ -1170,6 +1226,51 @@ describe('AutocompleteComponent', () => {
 
       expect(harness.popupElement).to.be.null;
       expect(harness.component['_core']._pendingFilterPromises).to.deep.equal([]);
+    });
+
+    it('should not select first option when refocusing before a select-on-blur filter resolves', async () => {
+      const initialOptions = [{ label: 'First option', value: 'first' }];
+      const updatedOptions = [{ label: 'Second option', value: 'second' }];
+      let resolveInitial: ((options: IOption[]) => void) | undefined;
+      let resolveUpdated: ((options: IOption[]) => void) | undefined;
+      const filterSpy = spy(
+        (filterText: string) =>
+          new Promise<IOption[]>(resolve => {
+            if (filterText === 'first') {
+              resolveInitial = resolve;
+            } else if (filterText === 'second') {
+              resolveUpdated = resolve;
+            }
+          })
+      );
+
+      const harness = await createFixture({
+        debounce: 0,
+        filter: filterSpy,
+        selectFirstOptionOnBlur: true
+      });
+
+      harness.sendInputValue('first');
+      harness.input.blur();
+      await frame();
+
+      harness.input.focus();
+      await frame();
+
+      harness.sendInputValue('second');
+
+      resolveInitial?.(initialOptions);
+      await task();
+
+      resolveUpdated?.(updatedOptions);
+      await task();
+      await frame();
+
+      const popupOptions = harness.getPopupOptions();
+      expect(_toLabelValue(popupOptions)).to.deep.equal(updatedOptions);
+      expect(popupOptions.every(o => !o.selected)).to.be.true;
+      expect(harness.component.value).to.be.null;
+      expect(harness.input.value).to.equal('second');
     });
 
     it('should cancel all pending filters if an exception is thrown in filter callback', async () => {
@@ -1873,6 +1974,7 @@ interface IAutocompleteFixtureConfig {
   syncPopupWidth?: boolean;
   matchKey?: string;
   filterFocusFirst?: boolean;
+  selectFirstOptionOnBlur?: boolean;
 }
 
 async function createFixture(config: IAutocompleteFixtureConfig = {}): Promise<AutocompleteHarness> {
@@ -1931,6 +2033,9 @@ async function createFixture(config: IAutocompleteFixtureConfig = {}): Promise<A
   }
   if (config.filterFocusFirst !== undefined) {
     component.filterFocusFirst = config.filterFocusFirst;
+  }
+  if (config.selectFirstOptionOnBlur !== undefined) {
+    component.selectFirstOptionOnBlur = config.selectFirstOptionOnBlur;
   }
 
   return new AutocompleteHarness(component, input, container);

@@ -32,6 +32,7 @@ export interface IAutocompleteComponent extends IListDropdownAware {
   debounce: number;
   filterOnFocus: boolean;
   filterFocusFirst: boolean;
+  selectFirstOptionOnBlur: boolean;
   allowUnmatched: boolean;
   matchKey: string | null | undefined;
   popupTarget: string;
@@ -92,6 +93,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
       AUTOCOMPLETE_CONSTANTS.attributes.DEBOUNCE,
       AUTOCOMPLETE_CONSTANTS.attributes.FILTER_ON_FOCUS,
       AUTOCOMPLETE_CONSTANTS.attributes.FILTER_FOCUS_FIRST,
+      AUTOCOMPLETE_CONSTANTS.attributes.SELECT_FIRST_OPTION_ON_BLUR,
       AUTOCOMPLETE_CONSTANTS.attributes.ALLOW_UNMATCHED,
       AUTOCOMPLETE_CONSTANTS.attributes.POPUP_TARGET,
       AUTOCOMPLETE_CONSTANTS.attributes.OPEN,
@@ -138,6 +140,9 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
         break;
       case AUTOCOMPLETE_CONSTANTS.attributes.FILTER_FOCUS_FIRST:
         this.filterFocusFirst = coerceBoolean(newValue);
+        break;
+      case AUTOCOMPLETE_CONSTANTS.attributes.SELECT_FIRST_OPTION_ON_BLUR:
+        this.selectFirstOptionOnBlur = coerceBoolean(newValue);
         break;
       case AUTOCOMPLETE_CONSTANTS.attributes.ALLOW_UNMATCHED:
         this.allowUnmatched = coerceBoolean(newValue);
@@ -202,6 +207,14 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
    */
   @coreProperty()
   declare public filterFocusFirst: boolean;
+
+  /**
+   * Determines whether the first available option should be selected automatically when blurring mid-filter.
+   * @default false
+   * @attribute select-first-option-on-blur
+   */
+  @coreProperty()
+  declare public selectFirstOptionOnBlur: boolean;
 
   /**
    * Controls whether unmatched text entered by the user will stay visible an option in the dropdown is not found.

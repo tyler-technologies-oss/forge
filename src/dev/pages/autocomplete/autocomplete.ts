@@ -28,6 +28,7 @@ let states = data as IAutocompleteOption[];
 let asyncFilter = false;
 let useGroupedData = false;
 let useGroupHeaderBuilder = false;
+let asyncFilterDelay = 0;
 const filterCache = new Map();
 
 const valueContainer = document.querySelector('#autocomplete-value');
@@ -51,6 +52,12 @@ debounceThresholdInput.addEventListener('input', () => {
   autocomplete.debounce = +debounceThresholdInput.value;
 });
 
+const asyncDelayInput = document.querySelector('#autocomplete-async-delay') as HTMLInputElement;
+asyncDelayInput.addEventListener('input', () => {
+  const delay = +asyncDelayInput.value;
+  asyncFilterDelay = delay;
+});
+
 const autocompleteModeSelect = document.querySelector('#autocomplete-mode') as ISelectComponent;
 autocompleteModeSelect.addEventListener('change', ({ detail: mode }) => {
   autocomplete.mode = mode;
@@ -69,6 +76,11 @@ filterOnFocusToggle.addEventListener('forge-switch-change', ({ detail: selected 
 const filterFocusFirstToggle = document.querySelector('#autocomplete-filter-focus-first') as HTMLInputElement;
 filterFocusFirstToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   autocomplete.filterFocusFirst = selected;
+});
+
+const selectFirstOptionOnBlurToggle = document.querySelector('#autocomplete-select-first-option-on-blur') as HTMLInputElement;
+selectFirstOptionOnBlurToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  autocomplete.selectFirstOptionOnBlur = selected;
 });
 
 const itemBuilderToggle = document.querySelector('#autocomplete-item-builder') as HTMLInputElement;
@@ -159,7 +171,7 @@ function filterOptions(filter: string, value: string): Promise<IOption[] | IList
       window.setTimeout(() => {
         const result = executeFilter(filter);
         resolve(useGroupedData ? groupOptions(result) : result);
-      }, randomTimeout(250, 1500));
+      }, asyncFilterDelay !== 0 ? asyncFilterDelay : randomTimeout(250, 1500));
     });
   }
   const options = executeFilter(filter);
