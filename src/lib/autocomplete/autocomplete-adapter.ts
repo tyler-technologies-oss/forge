@@ -194,14 +194,23 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
 
   public setDropdownIconListener(type: string, listener: EventListener): void {
     window.requestAnimationFrame(() => {
+      const wrappedListener = (event: Event): void => {
+        if (this._inputElement?.disabled || this._inputElement?.hasAttribute('disabled')) {
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
+        listener(event);
+      };
+
       const textField = this._component.querySelector(TEXT_FIELD_CONSTANTS.elementName);
       if (textField && (textField.popoverIcon || textField.hasAttribute(FIELD_CONSTANTS.attributes.POPOVER_ICON))) {
         const eventType = type === 'mousedown' ? FIELD_CONSTANTS.events.POPOVER_ICON_MOUSEDOWN : FIELD_CONSTANTS.events.POPOVER_ICON_CLICK;
-        this._component.addEventListener(eventType, listener);
+        this._component.addEventListener(eventType, wrappedListener);
       }
 
       const dropdownIcon = this._component.querySelector(AUTOCOMPLETE_CONSTANTS.selectors.DROPDOWN_ICON);
-      dropdownIcon?.addEventListener(type, listener);
+      dropdownIcon?.addEventListener(type, wrappedListener);
     });
   }
 
