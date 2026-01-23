@@ -79,6 +79,14 @@ content and/or sub-lists.
 > **Important:** make note of the `slot="additional-content"` attribute on elements within the `<forge-list-item>`. This is required to ensure that the additional content is
 > visually + structurally separated from the main/interactive list item content, and is announced properly by screen readers.
 
+## Multicolumn Layout
+
+The list component supports a responsive multicolumn grid layout that automatically adapts the number of columns based on available width. This is useful for displaying large collections of items in a compact, scannable format.
+
+When enabled via the `multicolumn` attribute, list items are displayed in a CSS Grid using a `repeat(auto-fit, minmax())` pattern, which creates as many columns as will fit given the minimum column width constraint.
+
+<Canvas of={ListStories.Multicolumn} />
+
 ## API
 
 <CustomArgTypes />
