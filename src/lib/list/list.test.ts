@@ -207,6 +207,29 @@ describe('List', () => {
       expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.WRAP)).to.false;
       expect(ctx.listItemsAttr('wrap', '')).to.false;
     });
+
+    it('should set multicolumn', async () => {
+      const ctx = await createFixture({ multicolumn: true });
+
+      // Assert host attribute is set
+      expect(ctx.list.hasAttribute(LIST_CONSTANTS.attributes.MULTICOLUMN)).to.true;
+
+      // Assert CSS class is added to inner element
+      const innerElement = getShadowElement(ctx.list, LIST_CONSTANTS.selectors.INNER);
+      expect(innerElement.classList.contains(LIST_CONSTANTS.classes.MULTICOLUMN)).to.be.true;
+
+      // Assert child list items do NOT receive the property (unlike dense/wrap)
+      expect(ctx.listItemsAttr('multicolumn', '')).to.false;
+
+      // Test toggling off
+      ctx.list.multicolumn = false;
+
+      // Assert host attribute is removed
+      expect(ctx.list.hasAttribute(LIST_CONSTANTS.attributes.MULTICOLUMN)).to.false;
+
+      // Assert CSS class is removed from inner element
+      expect(innerElement.classList.contains(LIST_CONSTANTS.classes.MULTICOLUMN)).to.be.false;
+    });
   });
 
   describe('focus indicator', () => {
@@ -836,6 +859,7 @@ interface ListFixtureConfig {
   twoLine?: boolean;
   threeLine?: boolean;
   wrap?: boolean;
+  multicolumn?: boolean;
   anchor?: boolean;
   anchorTarget?: '_blank' | '_self';
   withCheckbox?: boolean;
@@ -850,11 +874,19 @@ async function createFixture({
   twoLine,
   threeLine,
   wrap,
+  multicolumn,
   withCheckbox,
   withRadioButton
 }: ListFixtureConfig = {}): Promise<ListHarness> {
   const el = await fixture<IListComponent>(html`
-    <forge-list ?dense=${dense} ?indented=${indented} ?two-line=${twoLine} ?three-line=${threeLine} ?wrap=${wrap} .selectedValue=${selectedValue}>
+    <forge-list
+      ?dense=${dense}
+      ?indented=${indented}
+      ?two-line=${twoLine}
+      ?three-line=${threeLine}
+      ?wrap=${wrap}
+      ?multicolumn=${multicolumn}
+      .selectedValue=${selectedValue}>
       <forge-list-item value="1">
         <button ?disabled=${disabled}>One</button>
         ${withCheckbox ? html`<input type="checkbox" slot="end" />` : null} ${withRadioButton ? html`<input type="radio" slot="end" />` : null}
