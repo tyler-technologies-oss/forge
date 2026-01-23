@@ -8,6 +8,8 @@ $tokens: (
   // Base
   spacing: utils.module-val(list, spacing, 0),
   container-color: utils.module-val(list, container-color, transparent),
+  column-width: utils.module-val(list, column-width, 256px),
+  column-spacing: utils.module-val(list, column-spacing, 0),
   // Navlist
   navlist-spacing: utils.module-val(list, navlist-spacing, spacing.variable(xxsmall)),
   navlist-margin: utils.module-val(list, navlist-margin, spacing.variable(xxsmall) spacing.variable(xsmall)),

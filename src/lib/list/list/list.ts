@@ -19,6 +19,7 @@ export interface IListProperties<T = unknown> {
   threeLine: boolean;
   wrap: boolean;
   noninteractive: boolean;
+  multicolumn: boolean;
 }
 
 export interface IListComponent<T = unknown> extends IListProperties<T>, IBaseComponent {}
@@ -40,6 +41,8 @@ declare global {
  *
  * @cssproperty --forge-list-container-color - The background color of the list surface.
  * @cssproperty --forge-list-spacing - The spacing between the list items.
+ * @cssproperty --forge-list-column-width - The minimum width of each column when the list is in multicolumn mode.
+ * @cssproperty --forge-list-column-spacing - The spacing between columns when the list is in multicolumn mode.
  *
  * @property {boolean} [dense=false] - Whether the list has all dense items or not.
  * @property {boolean} [indented=false] - Whether the list items within this list are indented. Default is false.
@@ -48,6 +51,7 @@ declare global {
  * @property {boolean} [threeLine=false] - Whether the list has all three-line items or not.
  * @property {boolean} [wrap=false] - Whether the list has all items that wrap their text or not.
  * @property {boolean} [noninteractive=false] - Controls whether the list items will automatically attach themselves to interactive slotted elements or not.
+ * @property {boolean} [multicolumn=false] - Whether the list displays items in multiple columns using a responsive grid layout.
  *
  * @attribute {boolean} [dense=false] - Whether the list has all dense items or not.
  * @attribute {string} selected-value - The selected list item value(s).
@@ -57,6 +61,7 @@ declare global {
  * @attribute {boolean} [wrap=false] - Whether the list has all items that wrap their text or not.
  * @attribute {boolean} [navlist=false] - Controls whether the list is styled a navigation list or not.
  * @attribute {boolean} [noninteractive=false] - Controls whether the list items will automatically attach themselves to interactive slotted elements or not.
+ * @attribute {boolean} [multicolumn=false] - Whether the list displays items in multiple columns using a responsive grid layout.
  *
  * @cssclass forge-list - The list container element.
  * @cssclass forge-list--dense - Applies a dense style to the list items.
@@ -66,6 +71,7 @@ declare global {
  * @cssclass forge-list--indented - Indents the list items.
  * @cssclass forge-list--wrap - Wraps the text of the list items.
  * @cssclass forge-list--disabled - Applies a disabled style to the list items.
+ * @cssclass multicolumn - Applies a responsive multi-column grid layout to the list.
  */
 @customElement({
   name: LIST_CONSTANTS.elementName,
@@ -112,6 +118,9 @@ export class ListComponent extends WithElementInternals(WithDefaultAria(BaseComp
       case LIST_CONSTANTS.attributes.NONINTERACTIVE:
         this.noninteractive = coerceBoolean(newValue);
         break;
+      case LIST_CONSTANTS.attributes.MULTICOLUMN:
+        this.multicolumn = coerceBoolean(newValue);
+        break;
     }
   }
 
@@ -135,4 +144,7 @@ export class ListComponent extends WithElementInternals(WithDefaultAria(BaseComp
 
   @coreProperty()
   declare public noninteractive: boolean;
+
+  @coreProperty()
+  declare public multicolumn: boolean;
 }
