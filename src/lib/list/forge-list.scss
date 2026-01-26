@@ -4,7 +4,7 @@
 @use '../state-layer';
 @use '../core/styles/shape';
 
-@layer list, list-item, navlist, with-start-end, two-line, three-line, dense, wrap, selected, indented, disabled;
+@layer list, list-item, navlist, with-start-end, two-line, three-line, dense, wrap, selected, indented, disabled, multicolumn;
 
 @layer list {
   .forge-list {
@@ -224,5 +224,12 @@
   .forge-list-item--disabled,
   .forge-list-item button:disabled {
     @include list-item-core.disabled;
+  }
+}
+
+@layer multicolumn {
+  .forge-list--multicolumn {
+    @include list-core.inner;
+    @include list-core.multicolumn;
   }
 }

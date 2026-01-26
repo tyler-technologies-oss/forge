@@ -94,6 +94,7 @@ const meta = {
         .twoLine=${args.twoLine}
         .threeLine=${args.threeLine}
         .wrap=${args.wrap}
+        .multicolumn=${args.multicolumn}
         style=${style}
         @forge-list-item-select=${selectAction}>
         ${items}
@@ -106,7 +107,7 @@ const meta = {
   },
   decorators: [
     storyStyles(`
-    forge-list {
+    forge-list:not([multicolumn]) {
       max-width: 500px;
     }
   `)
@@ -147,7 +148,8 @@ const meta = {
     twoLine: false,
     threeLine: false,
     wrap: false,
-    selected: false
+    selected: false,
+    multicolumn: false
   }
 } satisfies Meta;
 
@@ -239,6 +241,23 @@ export const Expandable: Story = {
         </forge-list-item>
       </forge-list>
     `;
+  }
+};
+
+export const Multicolumn: Story = {
+  ...standaloneStoryParams,
+  render: () => {
+    const items = [];
+    for (let i = 0; i < 9; i++) {
+      items.push(html`
+        <forge-list-item>
+          <forge-icon slot="start" name="folder"></forge-icon>
+          <button type="button">List Item ${i + 1}</button>
+        </forge-list-item>
+      `);
+    }
+
+    return html` <forge-list multicolumn> ${items} </forge-list> `;
   }
 };
 

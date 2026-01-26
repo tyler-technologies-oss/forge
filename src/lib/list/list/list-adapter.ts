@@ -1,4 +1,4 @@
-import { deepQuerySelectorAll, isDeepEqual } from '@tylertech/forge-core';
+import { deepQuerySelectorAll, isDeepEqual, getShadowElement, toggleClass } from '@tylertech/forge-core';
 import { BaseAdapter } from '../../core/base/base-adapter';
 import { IListComponent } from './list';
 import { LIST_ITEM_CONSTANTS } from '../list-item/list-item-constants';
@@ -8,11 +8,15 @@ import { LIST_CONSTANTS } from './list-constants';
 export interface IListAdapter extends BaseAdapter<IListComponent> {
   setSelectedListItems(values: unknown | unknown[]): void;
   setListItemsProperty<T extends keyof IListItemComponent>(property: T, value: IListItemComponent[T]): void;
+  toggleInnerClass(className: string, force: boolean): void;
 }
 
 export class ListAdapter extends BaseAdapter<IListComponent> implements IListAdapter {
+  private _innerElement: HTMLElement;
+
   constructor(component: IListComponent) {
     super(component);
+    this._innerElement = getShadowElement(component, LIST_CONSTANTS.selectors.INNER);
   }
 
   /** Select all list items that match values in the provided array of values. */
@@ -28,6 +32,10 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
 
   public setListItemsProperty<T extends keyof IListItemComponent>(property: T, value: IListItemComponent[T]): void {
     this._getOwnListItems().forEach(listItem => (listItem[property] = value));
+  }
+
+  public toggleInnerClass(className: string, force: boolean): void {
+    toggleClass(this._innerElement, force, className);
   }
 
   private _getOwnListItems(): IListItemComponent[] {

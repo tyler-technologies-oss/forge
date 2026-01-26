@@ -9,6 +9,7 @@ export interface IListCore {
   threeLine: boolean;
   wrap: boolean;
   noninteractive: boolean;
+  multicolumn: boolean;
 }
 
 export class ListCore implements IListCore {
@@ -19,6 +20,7 @@ export class ListCore implements IListCore {
   private _threeLine = false;
   private _wrap = false;
   private _noninteractive = false;
+  private _multicolumn = false;
 
   constructor(private _adapter: IListAdapter) {}
 
@@ -101,6 +103,17 @@ export class ListCore implements IListCore {
       this._noninteractive = value;
       this._adapter.setListItemsProperty('noninteractive', this._noninteractive);
       this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.NONINTERACTIVE, this._noninteractive);
+    }
+  }
+
+  public get multicolumn(): boolean {
+    return this._multicolumn;
+  }
+  public set multicolumn(value: boolean) {
+    if (this._multicolumn !== value) {
+      this._multicolumn = value;
+      this._adapter.toggleInnerClass(LIST_CONSTANTS.classes.MULTICOLUMN, this._multicolumn);
+      this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.MULTICOLUMN, this._multicolumn);
     }
   }
 }

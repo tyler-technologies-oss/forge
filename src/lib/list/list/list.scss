@@ -55,3 +55,7 @@ $_host-tokens: [navlist-spacing navlist-margin navlist-height navlist-padding na
     min-width: 0;
   }
 }
+
+.multicolumn {
+  @include multicolumn;
+}

@@ -3,6 +3,8 @@
   grid-template-columns: 1fr 1fr;
   gap: var(--forge-spacing-large);
 
+  --forge-list-column-width: 128px;
+
   & > div {
     min-width: 0;
   }

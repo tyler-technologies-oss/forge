@@ -15,3 +15,8 @@
   gap: #{token(spacing)};
   min-width: 0;
 }
+
+@mixin multicolumn {
+  grid-template-columns: repeat(auto-fit, minmax(#{token(column-width)}, 1fr));
+  column-gap: #{token(column-spacing)};
+}
