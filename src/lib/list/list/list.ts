@@ -71,7 +71,7 @@ declare global {
  * @cssclass forge-list--indented - Indents the list items.
  * @cssclass forge-list--wrap - Wraps the text of the list items.
  * @cssclass forge-list--disabled - Applies a disabled style to the list items.
- * @cssclass multicolumn - Applies a responsive multi-column grid layout to the list.
+ * @cssclass forge-list--multicolumn - Applies a responsive multi-column grid layout to the list.
  */
 @customElement({
   name: LIST_CONSTANTS.elementName,

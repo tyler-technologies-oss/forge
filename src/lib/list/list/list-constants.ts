@@ -26,7 +26,7 @@ const classes = {
 } as const;
 
 const selectors = {
-  INNER: '.inner'
+  INNER: '#inner'
 } as const;
 
 export const LIST_CONSTANTS = {
