@@ -327,6 +327,9 @@ export class PaginatorCore {
     return this._pageIndex;
   }
   public set pageIndex(value: number) {
+    if (!Number.isFinite(value)) {
+      value = PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_INDEX;
+    }
     if (this._pageIndex !== value) {
       if (isDefined(value)) {
         this._applyPageIndex(value);
@@ -340,6 +343,9 @@ export class PaginatorCore {
     return this._pageSize;
   }
   public set pageSize(value: number) {
+    if (!Number.isFinite(value)) {
+      value = PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE;
+    }
     if (this._pageSize !== value) {
       this._applyPageSize(value);
       this._adapter.setHostAttribute(PAGINATOR_CONSTANTS.attributes.PAGE_SIZE, `${this._pageSize}`);
@@ -360,6 +366,9 @@ export class PaginatorCore {
     return this._total;
   }
   public set total(value: number) {
+    if (!Number.isFinite(value)) {
+      value = PAGINATOR_CONSTANTS.numbers.DEFAULT_TOTAL;
+    }
     if (this._total !== value) {
       this._applyTotal(value);
       this._adapter.setHostAttribute(PAGINATOR_CONSTANTS.attributes.TOTAL, `${this._total}`);
