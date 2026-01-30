@@ -9,6 +9,7 @@ export interface IBaseButtonCore {
   disabled: boolean;
   popoverIcon: boolean;
   dense: boolean;
+  formId: string | null | undefined;
   click(options: ButtonClickOptions): void;
   focus(options?: ExperimentalFocusOptions): void;
 }
@@ -28,6 +29,9 @@ export abstract class BaseButtonCore<T extends IBaseButtonAdapter<IBaseButton>> 
   public initialize(): void {
     this._detectSlottedAnchor();
     this._adapter.addDefaultSlotChangeListener(this._slotChangeListener);
+    if (this._type === 'submit') {
+      this._adapter.addNativeSubmitButton();
+    }
   }
 
   /**
@@ -126,6 +130,12 @@ export abstract class BaseButtonCore<T extends IBaseButtonAdapter<IBaseButton>> 
     if (this._type !== type) {
       this._type = type;
       this._adapter.setHostAttribute(BASE_BUTTON_CONSTANTS.attributes.TYPE, type);
+
+      if (this.type === 'submit') {
+        this._adapter.addNativeSubmitButton();
+      } else {
+        this._adapter.removeNativeSubmitButton();
+      }
     }
   }
 
@@ -169,5 +179,9 @@ export abstract class BaseButtonCore<T extends IBaseButtonAdapter<IBaseButton>> 
       this._dense = value;
       this._adapter.toggleHostAttribute(BASE_BUTTON_CONSTANTS.attributes.DENSE, value);
     }
+  }
+
+  public set formId(value: string | null | undefined) {
+    this._adapter.setNativeSubmitButtonForm(value);
   }
 }

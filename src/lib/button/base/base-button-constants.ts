@@ -3,7 +3,8 @@ const observedAttributes = {
   DISABLED: 'disabled',
   POPOVER_ICON: 'popover-icon',
   DENSE: 'dense',
-  TABINDEX: 'tabindex'
+  TABINDEX: 'tabindex',
+  FORM: 'form'
 } as const;
 
 const attributes = {
