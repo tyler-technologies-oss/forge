@@ -1548,13 +1548,16 @@ export class TableUtils {
 
     // If this is a FormFieldComponentDelegate then we can listen for when the value changes, otherwise we just render the custom delegate element
     if (!!filterListener && delegate instanceof FormFieldComponentDelegate && isFunction(delegate.onChange)) {
-      if (!isDefined(columnConfig.filterDebounceTime) || isNumber(columnConfig.filterDebounceTime)) {
-        const debounceTime = isDefined(columnConfig.filterDebounceTime)
-          ? (columnConfig.filterDebounceTime as number)
-          : TABLE_CONSTANTS.numbers.DEFAULT_FILTER_DEBOUNCE_TIME;
-        delegate.onChange(debounce((value: any) => filterListener(value, columnIndex), debounceTime));
-      } else {
-        delegate.onChange((value: any) => filterListener(value, columnIndex));
+      if (!(delegate as any).__forgeTableListenerAttached) {
+        if (!isDefined(columnConfig.filterDebounceTime) || isNumber(columnConfig.filterDebounceTime)) {
+          const debounceTime = isDefined(columnConfig.filterDebounceTime)
+            ? (columnConfig.filterDebounceTime as number)
+            : TABLE_CONSTANTS.numbers.DEFAULT_FILTER_DEBOUNCE_TIME;
+          delegate.onChange(debounce((value: any) => filterListener(value, columnIndex), debounceTime));
+        } else {
+          delegate.onChange((value: any) => filterListener(value, columnIndex));
+        }
+        (delegate as any).__forgeTableListenerAttached = true;
       }
     }
 
