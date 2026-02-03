@@ -1,0 +1,11 @@
+node_modules/
+dist/
+coverage/
+.coverage/
+*.bak
+.DS_Store
+*.log
+.vscode/
+storybook-static/
+*storybook.log
+.vite/

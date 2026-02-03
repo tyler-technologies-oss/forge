@@ -1,0 +1,8 @@
+<%- include('./src/partials/page.ejs', { page: { title: 'Icon button', includePath: './pages/icon-button/icon-button.ejs', options: [ { type: 'switch', label:
+'Disabled', id: 'opt-disabled' }, { type: 'switch', label: 'Dense', id: 'opt-dense' }, { type: 'switch', label: 'Popover icon', id: 'opt-popover-icon' }, {
+type: 'select', label: 'Density', id: 'opt-density', defaultValue: 'large', options: [ { label: 'Small (dense)', value: 'small' }, { label: 'Medium', value:
+'medium' }, { label: 'Large (default)', value: 'large' } ] }, { type: 'select', label: 'Shape', id: 'opt-shape', defaultValue: 'circular', options: [ { label:
+'Circular', value: 'circular' }, { label: 'Squared', value: 'squared' } ] }, { type: 'select', label: 'Theme', id: 'opt-theme', defaultValue: 'default',
+options: [ { label: 'Default', value: 'default' }, { label: 'Primary', value: 'primary' }, { label: 'Secondary', value: 'secondary' }, { label: 'Tertiary',
+value: 'tertiary' }, { label: 'Success', value: 'success' }, { label: 'Error', value: 'error' }, { label: 'Warning', value: 'warning' }, { label: 'Info', value:
+'info' } ] } ] } }) %>

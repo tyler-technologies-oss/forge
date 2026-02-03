@@ -1,0 +1,7 @@
+<%- include('./src/partials/page.ejs', { page: { title: 'Floating action button', includePath: './pages/fab/fab.ejs', options: [ { type: 'switch', label:
+'Disabled', id: 'opt-disabled' }, { type: 'switch', label: 'Dense (small density)', id: 'opt-dense' }, { type: 'select', label: 'Density', id: 'opt-density',
+defaultValue: 'medium', options: [ { label: 'Small (dense)', value: 'small' }, { label: 'Medium (default)', value: 'medium' }, { label: 'Large', value: 'large'
+} ] }, { type: 'select', label: 'Elevation', id: 'opt-elevation', defaultValue: 'raised', options: [ { label: 'Raised (default)', value: 'raised' }, { label:
+'Lowered', value: 'lowered' } ] }, { type: 'select', label: 'Theme', id: 'opt-theme', defaultValue: 'secondary', options: [ { label: 'Primary', value: 'primary'
+}, { label: 'Secondary (default)', value: 'secondary' }, { label: 'Tertiary', value: 'tertiary' }, { label: 'Success', value: 'success' }, { label: 'Error',
+value: 'error' }, { label: 'Warning', value: 'warning' }, { label: 'Info', value: 'info' } ] } ] } }) %>

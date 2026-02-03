@@ -1,0 +1,6 @@
+<%- include('./src/partials/page.ejs', { page: { title: 'Banner', includePath: './pages/banner/banner.ejs', options: [ { type: 'select', label: 'Theme',
+defaultValue: 'info', id: 'opt-theme', options: [ { label: 'Primary', value: 'primary' }, { label: 'Secondary', value: 'secondary' }, { label: 'Tertiary',
+value: 'tertiary' }, { label: 'Success', value: 'success' }, { label: 'Error', value: 'error' }, { label: 'Warning', value: 'warning' }, { label: 'Info
+(default)', value: 'info' }, { label: 'Info Secondary', value: 'info-secondary' }, ] }, { type: 'switch', label: 'Dismissed', id: 'opt-dismissed' }, { type:
+'switch', label: 'Persistent', id: 'opt-persistent' }, { type: 'switch', label: 'Show icon', id: 'opt-show-icon', defaultValue: true }, { type: 'switch', label:
+'Use more text', id: 'opt-more-text' }, { type: 'switch', label: 'Prevent dismiss', id: 'opt-prevent-dismiss' } ] } }) %>

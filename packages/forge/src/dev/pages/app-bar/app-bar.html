@@ -1,0 +1,7 @@
+<%- include('./src/partials/page.ejs', { page: { title: 'App Bar', includePath: './pages/app-bar/app-bar.ejs', options: [ { type: 'select', label: 'Theme Mode',
+id: 'opt-theme-mode', defaultValue: 'inherit', options: [ { label: 'Inherit (default)', value: 'inherit' }, { label: 'Scoped ', value: 'scoped' } ] }, { type:
+'select', label: 'Theme', id: 'opt-theme', defaultValue: '', options: [ { label: 'Default', value: '' }, { label: 'White', value: 'white' } ] }, { type:
+'select', label: 'Elevation', id: 'opt-elevation', defaultValue: 'raised', options: [ { label: 'Raised (default)', value: 'raised' }, { label: 'None ', value:
+'' } ] }, { type: 'text-field', label: 'Title text', id: 'opt-title-text', defaultValue: 'App bar' }, { type: 'switch', label: 'Href', id: 'opt-href',
+defaultValue: true }, { type: 'switch', label: 'Show tabs', id: 'opt-show-tabs', defaultValue: true }, { type: 'switch', label: 'Use profile card builder', id:
+'opt-profile-card-builder' } ] } }) %>

@@ -1,0 +1,13 @@
+<%- include('./src/partials/page.ejs', { page: { title: 'Date range picker', includePath: './pages/date-range-picker/date-range-picker.ejs', options: [ { type:
+'select', label: 'Value mode', id: 'opt-value-mode', defaultValue: 'object', options: [ { label: 'Object', value: 'object' }, { label: 'String', value: 'string'
+}, { label: 'ISO-8601 String', value: 'iso-string' } ] }, { type: 'select', label: 'Date format', id: 'opt-date-format', defaultValue: 'MM/DD/YYYY', options: [
+{ label: 'MM/DD/YYYY', value: 'MM/DD/YYYY' }, { label: 'MM/DD/YY', value: 'MM/DD/YY' }, { label: 'DD/MMM/YYYY', value: 'DD/MMM/YYYY' }, { label: 'MM-DD-YYYY',
+value: 'MM-DD-YYYY' }, { label: 'MM-DD-YY', value: 'MM-DD-YY' }, { label: 'DD-MMM-YYYY', value: 'DD-MMM-YYYY' }, { label: 'YYYY-MM-DD', value: 'YYYY-MM-DD' }, {
+label: 'YYYY-MMM-DD', value: 'YYYY-MMM-DD' }, { label: 'DD.MM.YYYY', value: 'DD.MM.YYYY' }, { label: 'DD.MM.YY', value: 'DD.MM.YY' } ] }, { type: 'select',
+label: 'Disabled days of week', id: 'opt-disabled-days', multiple: true, options: [ { label: 'Sundays', value: '0' }, { label: 'Mondays', value: '1' }, { label:
+'Tuesdays', value: '2' }, { label: 'Wednesdays', value: '3' }, { label: 'Thursdays', value: '4' }, { label: 'Fridays', value: '5' }, { label: 'Saturdays',
+value: '6' } ] }, { type: 'switch', label: 'Masked', id: 'opt-masked', defaultValue: true }, { type: 'switch', label: 'Show mask format', id:
+'opt-show-mask-format' }, { type: 'switch', label: 'Min date', id: 'opt-min-date' }, { type: 'switch', label: 'Max date', id: 'opt-max-date' }, { type:
+'switch', label: 'Disabled', id: 'opt-disabled' }, { type: 'switch', label: 'Allow invalid date', id: 'opt-allow-invalid-date' }, { type: 'switch', label: 'Show
+today button', id: 'opt-show-today' }, { type: 'switch', label: 'Show clear button', id: 'opt-show-clear' }, { type: 'switch', label: 'Disable day callback',
+id: 'opt-disable-day-callback' }, { type: 'button', label: 'Toggle dropdown open', id: 'opt-toggle-dropdown-open' }, ] } }) %>

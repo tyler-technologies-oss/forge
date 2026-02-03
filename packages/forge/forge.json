@@ -1,0 +1,26 @@
+{
+  "$schema": "./node_modules/@tylertech/forge-cli/config/schema.json",
+  "license": {
+    "header": "/**\n * @license\n * Copyright Tyler Technologies, Inc. \n * License: Apache-2.0\n */\n"
+  },
+  "packageConfig": {
+    "copyFiles": [
+      {
+        "pattern": "./dist/cem/vscode.*.json",
+        "root": "./dist/cem/",
+        "output": "dist"
+      }
+    ]
+  },
+  "build": {
+    "static": {
+      "distPath": "cdn/v1/libs/"
+    },
+    "sassOptions": {
+      "verbose": true
+    }
+  },
+  "customElementsManifestConfig": {
+    "configFileName": "custom-elements-manifest.config.js"
+  }
+}

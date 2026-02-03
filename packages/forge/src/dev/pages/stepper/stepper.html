@@ -1,0 +1,5 @@
+<%- include('./src/partials/page.ejs', { page: { title: 'Stepper', includePath: './pages/stepper/stepper.ejs', options: [ { type: 'select', label: 'Layout
+mode', id: 'opt-layout-mode', defaultValue: 'fixed', options: [ { label: 'Fixed', value: 'fixed' }, { label: 'Clustered', value: 'clustered' }, ] }, { type:
+'select', label: 'Layout align', id: 'opt-layout-align', defaultValue: 'left', options: [ { label: 'Left', value: 'left' }, { label: 'Center', value: 'center'
+}, { label: 'Right', value: 'right' }, ] }, { type: 'switch', label: 'Linear', id: 'opt-linear' }, { type: 'switch', label: 'Alternative', id: 'opt-alternative'
+}, { type: 'switch', label: 'First step disabled', id: 'opt-first-step-disabled' }, ] } }) %>
