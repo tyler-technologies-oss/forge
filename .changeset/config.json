@@ -7,7 +7,11 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "minor",
-  "ignore": [],
+  "ignore": ["@repo/*"],
+  "privatePackages": {
+    "version": false,
+    "tag": false
+  },
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "updateInternalDependents": "out-of-range",
     "onlyUpdatePeerDependentsWhenOutOfRange": true
