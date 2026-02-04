@@ -2,12 +2,9 @@ import * as sass from 'sass';
 import { glob } from 'glob';
 import { mkdir, writeFile } from 'fs/promises';
 import { dirname, basename, join, relative } from 'path';
-import { LICENSE_HEADER } from './build-utils.js';
+import { getCdnOutdir, LICENSE_HEADER } from './build-utils.js';
 
-/**
- * Builds and outputs the compiled CSS files for both the release and CDN distributions.
- */
-export async function buildCss({ releaseOutdir = 'dist/release/@tylertech/forge/dist', cdnOutdir = 'dist/cdn/v1/libs/@tylertech/forge' } = {}) {
+export async function buildCss({ releaseOutdir = 'dist', cdnOutdir = getCdnOutdir() } = {}) {
   const rootStylesheets = await glob('src/lib/*.scss');
 
   const componentStylesheets = await glob('src/lib/**/forge-*.scss', {

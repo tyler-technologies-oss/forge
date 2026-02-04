@@ -16,6 +16,10 @@ jobs:
   version:
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
 
     steps:
       - name: Checkout Repository
@@ -48,3 +52,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
+
+      - name: Configure AWS Credentials
+        if: steps.changesets.outputs.published == 'true'
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy CDN Assets
+        if: steps.changesets.outputs.published == 'true'
+        working-directory: packages/forge
+        run: |
+          aws s3 sync cdn/ s3://${{ secrets.AWS_S3_BUCKET_NAME }}/ \
+            --size-only \
+            --cache-control "public, max-age=31536000, immutable"

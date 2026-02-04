@@ -1,6 +1,6 @@
 import { ArgTypes, Args, type StoryObj } from '@storybook/web-components-vite';
 import { type ControlType } from '@storybook/addon-docs/blocks';
-import cem from '../../dist/cem/custom-elements.json';
+import cem from '../../custom-elements.json';
 
 /** Global theme options for components that support a `theme` attribute. */
 export const GLOBAL_THEME_OPTIONS = ['primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'];

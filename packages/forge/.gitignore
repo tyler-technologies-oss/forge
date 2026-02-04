@@ -1,5 +1,10 @@
 node_modules/
 dist/
+cdn/
+esm/
+sass/
+custom-elements.json
+vscode.*.json
 coverage/
 .coverage/
 *.bak

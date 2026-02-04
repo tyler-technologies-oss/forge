@@ -13,6 +13,11 @@ export function getPackageJson() {
   return JSON.parse(readFileSync('package.json', 'utf-8'));
 }
 
+export function getCdnOutdir() {
+  const { version } = getPackageJson();
+  return `cdn/v1/libs/@tylertech/forge@${version}`;
+}
+
 export function getExternalDeps() {
   return Object.keys(getPackageJson().dependencies || {});
 }

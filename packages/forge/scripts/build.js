@@ -20,13 +20,23 @@ async function step(text, fn) {
   }
 }
 
-await step('Cleaning', () => rm('dist', { recursive: true, force: true }));
+await step('Cleaning', async () => {
+  await Promise.all([
+    rm('dist', { recursive: true, force: true }),
+    rm('cdn', { recursive: true, force: true }),
+    rm('esm', { recursive: true, force: true }),
+    rm('sass', { recursive: true, force: true }),
+    rm('custom-elements.json', { force: true }),
+    rm('vscode.html-custom-data.json', { force: true }),
+    rm('vscode.css-custom-data.json', { force: true })
+  ]);
+});
 await step('Generating CEM', buildCem);
 await step('Building', buildEsm);
 await step('Generating types', buildTypes);
 await step('Bundling CDN assets', buildCdn);
 await step('Building CSS', buildCss);
-await step('Assembling package', buildPackage);
+await step('Copying SCSS sources', buildPackage);
 
 const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
 ora().succeed(`Build complete in ${elapsed}s`);

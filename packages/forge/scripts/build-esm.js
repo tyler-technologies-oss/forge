@@ -35,7 +35,7 @@ const scssPlugin = () => ({
 /**
  * Builds the ESM distribution of the Forge library.
  */
-export async function buildEsm({ outdir = 'dist/release/@tylertech/forge/esm' } = {}) {
+export async function buildEsm({ outdir = 'esm' } = {}) {
   const external = getExternalDeps();
 
   const bundle = await rollup({

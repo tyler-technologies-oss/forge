@@ -1,10 +1,7 @@
 import * as esbuild from 'esbuild';
-import { getComponentEntryPoints, LICENSE_HEADER, htmlLoaderPlugin, scssLoaderPlugin } from './build-utils.js';
+import { getCdnOutdir, getComponentEntryPoints, LICENSE_HEADER, htmlLoaderPlugin, scssLoaderPlugin } from './build-utils.js';
 
-/**
- * Creates a bundled build of all Forge components for CDN distribution.
- */
-export async function buildCdn({ outdir = 'dist/cdn/v1/libs/@tylertech/forge', minify = true } = {}) {
+export async function buildCdn({ outdir = getCdnOutdir(), minify = true } = {}) {
   const entryPoints = await getComponentEntryPoints();
 
   await esbuild.build({

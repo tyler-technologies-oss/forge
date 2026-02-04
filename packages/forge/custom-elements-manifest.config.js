@@ -20,7 +20,7 @@ export default {
     forgeTypePathsPlugin(),
     customElementVsCodePlugin({
       hideLogs: true,
-      outdir: path.resolve('dist/cem')
+      outdir: path.resolve('.')
     }),
     jsDocTagsPlugin({
       tags: {
