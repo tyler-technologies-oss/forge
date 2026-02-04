@@ -1,0 +1,60 @@
+diff --git a/dist/changesets-assemble-release-plan.cjs.js b/dist/changesets-assemble-release-plan.cjs.js
+index e07ba6e793021b6cfdec898afca517e293386ddb..23e0c25ac249deb340d6b6f4f2c3055319e77556 100644
+--- a/dist/changesets-assemble-release-plan.cjs.js
++++ b/dist/changesets-assemble-release-plan.cjs.js
+@@ -317,11 +317,15 @@ function shouldBumpMajor({
+   preInfo,
+   onlyUpdatePeerDependentsWhenOutOfRange
+ }) {
++  // disable major bump due to peer dep
++  if (depType === 'peerDependencies') {
++    return false;
++  }
+   // we check if it is a peerDependency because if it is, our dependent bump type might need to be major.
+   return depType === "peerDependencies" && nextRelease.type !== "none" && nextRelease.type !== "patch" && (
+   // 1. If onlyUpdatePeerDependentsWhenOutOfRange set to true, bump major if the version is leaving the range.
+   // 2. If onlyUpdatePeerDependentsWhenOutOfRange set to false, bump major regardless whether or not the version is leaving the range.
+-  !onlyUpdatePeerDependentsWhenOutOfRange || !semverSatisfies__default["default"](incrementVersion(nextRelease, preInfo), versionRange)) && (
++  !onlyUpdatePeerDependentsWhenOutOfRange) && (
+   // bump major only if the dependent doesn't already has a major release.
+   !releases.has(dependent) || releases.has(dependent) && releases.get(dependent).type !== "major");
+ }
+@@ -411,7 +415,7 @@ function matchFixedConstraint(releases, packagesByName, config) {
+
+ function getPreVersion(version) {
+   let parsed = semverParse__default["default"](version);
+-  let preVersion = parsed.prerelease[1] === undefined ? -1 : parsed.prerelease[1];
++  let preVersion = parsed?.prerelease[1] === undefined ? -1 : parsed.prerelease[1];
+   if (typeof preVersion !== "number") {
+     throw new errors.InternalError("preVersion is not a number");
+   }
+diff --git a/dist/changesets-assemble-release-plan.esm.js b/dist/changesets-assemble-release-plan.esm.js
+index ea2be567403c4ef94a65f3218ccb683cf5cb4bc1..8531ef1ebc563f9b3a7ec928f6447763818e403b 100644
+--- a/dist/changesets-assemble-release-plan.esm.js
++++ b/dist/changesets-assemble-release-plan.esm.js
+@@ -306,11 +306,15 @@ function shouldBumpMajor({
+   preInfo,
+   onlyUpdatePeerDependentsWhenOutOfRange
+ }) {
++  // disable major bump due to peer dep
++  if (depType === 'peerDependencies') {
++    return false;
++  }
+   // we check if it is a peerDependency because if it is, our dependent bump type might need to be major.
+   return depType === "peerDependencies" && nextRelease.type !== "none" && nextRelease.type !== "patch" && (
+   // 1. If onlyUpdatePeerDependentsWhenOutOfRange set to true, bump major if the version is leaving the range.
+   // 2. If onlyUpdatePeerDependentsWhenOutOfRange set to false, bump major regardless whether or not the version is leaving the range.
+-  !onlyUpdatePeerDependentsWhenOutOfRange || !semverSatisfies(incrementVersion(nextRelease, preInfo), versionRange)) && (
++  !onlyUpdatePeerDependentsWhenOutOfRange) && (
+   // bump major only if the dependent doesn't already has a major release.
+   !releases.has(dependent) || releases.has(dependent) && releases.get(dependent).type !== "major");
+ }
+@@ -400,7 +404,7 @@ function matchFixedConstraint(releases, packagesByName, config) {
+
+ function getPreVersion(version) {
+   let parsed = semverParse(version);
+-  let preVersion = parsed.prerelease[1] === undefined ? -1 : parsed.prerelease[1];
++  let preVersion = parsed?.prerelease[1] === undefined ? -1 : parsed.prerelease[1];
+   if (typeof preVersion !== "number") {
+     throw new InternalError("preVersion is not a number");
+   }
