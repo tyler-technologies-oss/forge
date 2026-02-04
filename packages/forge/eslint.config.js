@@ -25,5 +25,5 @@ export default defineConfig([
       '@typescript-eslint/no-non-null-assertion': 'off'
     }
   },
-  { ignores: ['dist/**/*', 'src/dev/**/*', 'src/stories/**/*', '.storybook/**/*', 'storybook-static/**/*'] }
+  { ignores: ['dist/**/*', 'esm/**/*', 'cdn/**/*', 'src/dev/**/*', 'src/stories/**/*', '.storybook/**/*', 'storybook-static/**/*'] }
 ]);
