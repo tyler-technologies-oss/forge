@@ -11,7 +11,8 @@
     "lint": "turbo run lint",
     "format": "turbo run format",
     "format:check": "turbo run format:check",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "release": "pnpm run build && changeset publish"
   },
   "keywords": [
     "tyler forge"

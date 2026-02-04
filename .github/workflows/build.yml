@@ -1,0 +1,45 @@
+name: Build
+ 
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+env:
+  CI: true
+  PNPM_CACHE_FOLDER: .pnpm-store
+  TURBO_TELEMETRY_DISABLED: 1
+
+jobs:
+  build:
+    name: Build
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+ 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+ 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+ 
+      - name: Configure pnpm
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Code Format
+        run: pnpm run format:check
+ 
+      - name: Build
+        run: pnpm run build
+ 
+      - name: Test
+        run: pnpm run test

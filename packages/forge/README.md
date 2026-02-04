@@ -25,14 +25,14 @@ and its broad customer base.
 To develop locally, fork this repository, and then run the following commands from the root of the project to view the dev site:
 
 ```bash
-npm install
-npm start
+pnpm install
+pnpm run dev:forge
 ```
 
 You can also view the Storybook documentation site by running:
 
 ```bash
-npm run storybook
+pnpm run storybook:forge
 ```
 
 ## Release Process

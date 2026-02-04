@@ -10,7 +10,7 @@ The site is built and served via [Vite](https://vitejs.dev/). It is an intention
 simple multi-page website comprised of standard TypeScript, Sass, and HTML files.
 
 ```bash
-npm run dev
+pnpm run dev:forge
 ```
 
 ## EJS
