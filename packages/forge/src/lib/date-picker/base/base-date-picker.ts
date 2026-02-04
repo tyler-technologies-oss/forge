@@ -89,10 +89,10 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
  * @attribute {string} [year-range] - The year range.
  */
 export abstract class BaseDatePickerComponent<
-    TPublicValue,
-    TPrivateValue,
-    TCore extends BaseDatePickerCore<IBaseDatePickerAdapter, TPublicValue, TPrivateValue>
-  >
+  TPublicValue,
+  TPrivateValue,
+  TCore extends BaseDatePickerCore<IBaseDatePickerAdapter, TPublicValue, TPrivateValue>
+>
   extends BaseComponent
   implements IBaseDatePickerComponent<TPublicValue>
 {

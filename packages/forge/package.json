@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge",
-  "version": "3.13.1",
+  "version": "3.14.0",
   "description": "Tyler Forge™ Web Components library",
   "license": "Apache-2.0",
   "author": "Tyler Technologies, Inc.",
@@ -14,25 +14,29 @@
     "url": "git+https://github.com/tyler-technologies-oss/forge.git"
   },
   "type": "module",
+  "main": "esm/index.js",
+  "module": "esm/index.js",
+  "typings": "esm/index.d.ts",
   "exports": {
+    ".": {
+      "types": "./esm/index.d.ts",
+      "default": "./esm/index.js"
+    },
+    "./*": {
+      "types": "./esm/*/index.d.ts",
+      "default": "./esm/*/index.js"
+    },
     "./custom-elements.json": {
       "default": "./custom-elements.json"
     },
     "./package.json": {
       "default": "./package.json"
-    },
-    ".": {
-      "types": "./src/index.d.ts",
-      "default": "./src/index.js"
-    },
-    "./*": {
-      "types": "./src/*/index.d.ts",
-      "default": "./src/*/index.js"
     }
   },
+  "customElements": "custom-elements.json",
   "scripts": {
-    "build": "forge build --no-lint",
-    "start": "vite serve src/dev",
+    "build": "node scripts/build.js",
+    "dev": "vite src/dev",
     "storybook": "pnpm run cem && storybook dev -p 6006",
     "build:storybook": "pnpm run cem && storybook build",
     "lint": "pnpm run lint:ts && pnpm run lint:styles",
@@ -64,13 +68,14 @@
     "@custom-elements-manifest/analyzer": "catalog:",
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@open-wc/testing": "4.0.0",
+    "@repo/prettier-config": "workspace:",
+    "@rollup/plugin-typescript": "^12.3.0",
     "@storybook/addon-a11y": "catalog:",
     "@storybook/addon-docs": "catalog:",
     "@storybook/addon-links": "catalog:",
     "@storybook/addon-themes": "catalog:",
     "@storybook/web-components-vite": "catalog:",
     "@tylertech-eslint/eslint-plugin": "catalog:",
-    "@tylertech/forge-cli": "^3.1.1",
     "@tylertech/stylelint-rules": "catalog:",
     "@types/cssbeautify": "^0.3.5",
     "@types/mocha": "^10.0.10",
@@ -81,26 +86,33 @@
     "@web/dev-server-esbuild": "1.0.4",
     "@web/dev-server-rollup": "^0.6.4",
     "@web/test-runner": "0.20.2",
+    "@web/test-runner-commands": "^0.9.0",
     "@web/test-runner-junit-reporter": "^0.8.0",
     "@web/test-runner-playwright": "^0.11.1",
     "cssbeautify": "^0.3.1",
     "custom-element-vs-code-integration": "^1.5.0",
+    "esbuild": "^0.27.2",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-plugin-chai-friendly": "^1.1.0",
     "eslint-plugin-prettier": "catalog:",
+    "glob": "catalog:",
     "http-server": "^14.1.1",
-    "minimatch": "^10.1.1",
+    "lit-html": "^3.3.2",
+    "minimatch": "^10.1.2",
+    "ora": "^9.2.0",
     "plop": "catalog:",
     "prettier": "catalog:",
     "react-ga4": "^2.1.0",
     "remark-gfm": "^4.0.1",
+    "rollup": "^4.57.1",
     "sass": "catalog:",
-    "sinon": "^21.0.0",
+    "sinon": "^21.0.1",
     "storybook": "catalog:",
-    "storybook-addon-tag-badges": "^2.0.2",
-    "stylelint": "^16.24.0",
+    "storybook-addon-tag-badges": "^2.0.4",
+    "stylelint": "^16.26.1",
     "typescript": "~5.9.3",
+    "typescript-eslint": "^8.54.0",
     "vite": "catalog:",
     "vite-plugin-ejs": "^1.7.0",
     "vite-plugin-full-reload": "^1.2.0",

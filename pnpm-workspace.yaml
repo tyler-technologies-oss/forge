@@ -2,37 +2,38 @@ packages:
   - packages/*
 
 catalog:
-  '@custom-elements-manifest/analyzer': 0.10.4
+  '@custom-elements-manifest/analyzer': ^0.11.0
   '@floating-ui/dom': ^1.7.5
   '@lit/context': ^1.1.6
-  '@storybook/addon-a11y': ^9.1.7
-  '@storybook/addon-docs': ^9.1.7
-  '@storybook/addon-links': ^9.1.7
-  '@storybook/addon-themes': ^9.1.7
-  '@storybook/web-components-vite': ^9.1.7
+  '@storybook/addon-a11y': ^9.1.17
+  '@storybook/addon-docs': ^9.1.17
+  '@storybook/addon-links': ^9.1.17
+  '@storybook/addon-themes': ^9.1.17
+  '@storybook/web-components-vite': ^9.1.17
   '@tylertech-eslint/eslint-plugin': ^4.0.0
   '@tylertech/stylelint-rules': ^5.1.2
   '@tylertech/tyler-icons': ^2.0.4
-  '@types/node': ^24.10.4
-  '@vueless/storybook-dark-mode': ^9.1.7
+  '@types/node': ^25.2.0
+  '@vueless/storybook-dark-mode': ^9.0.10
   eslint: ^9.39.2
   eslint-config-prettier: ^10.1.8
-  eslint-plugin-prettier: ^5.5.4
-  glob: ^13.0.0
+  eslint-plugin-prettier: ^5.5.5
+  glob: ^13.0.1
   lit: ^3.3.2
-  plop: ^4.0.2
-  prettier: ^3.6.2
+  plop: ^4.0.5
+  prettier: ^3.8.1
   sass: ~1.92.1
-  storybook: ^9.1.7
+  storybook: ^9.1.17
   stylelint: ^16.26.1
   tslib: ^2.8.1
   vite: ^7.3.1
-  vite-tsconfig-paths: ^6.0.3
+  vite-tsconfig-paths: ^6.0.5
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
-  - core-js
   - core-js-pure
   - esbuild
-  - node-sass
   - rs-module-lexer
+
+patchedDependencies:
+  custom-element-vs-code-integration@1.5.0: patches/custom-element-vs-code-integration@1.5.0.patch

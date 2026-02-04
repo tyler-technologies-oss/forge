@@ -42,9 +42,11 @@ export interface IBaseDatePickerCore<TValue> {
   locale: string | undefined;
 }
 
-export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter, TPublicValue, TPrivateValue = TPublicValue>
-  implements IBaseDatePickerCore<TPublicValue>
-{
+export abstract class BaseDatePickerCore<
+  TAdapter extends IBaseDatePickerAdapter,
+  TPublicValue,
+  TPrivateValue = TPublicValue
+> implements IBaseDatePickerCore<TPublicValue> {
   // State
   protected abstract _mode: CalendarMode;
   protected _value?: TPrivateValue | null = null;

@@ -11,6 +11,7 @@ import forgeFilterIgnored from './plugins/cem/filter-ignored.mjs';
 export default {
   globs: ['src/lib/**/*.ts'],
   exclude: ['**/*.test.ts'],
+  packagejson: false,
   plugins: [
     forgeBranchNamePlugin(),
     forgeFilterIgnored(),

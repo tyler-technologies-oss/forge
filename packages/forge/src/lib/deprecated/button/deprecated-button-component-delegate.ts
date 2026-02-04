@@ -7,8 +7,10 @@ export interface IDeprecatedButtonComponentDelegateOptions extends IBaseComponen
   type?: 'button' | 'submit';
   text?: string;
 }
-export interface IDeprecatedButtonComponentDelegateConfig
-  extends IBaseComponentDelegateConfig<IDeprecatedButtonComponent, IDeprecatedButtonComponentDelegateOptions> {}
+export interface IDeprecatedButtonComponentDelegateConfig extends IBaseComponentDelegateConfig<
+  IDeprecatedButtonComponent,
+  IDeprecatedButtonComponentDelegateOptions
+> {}
 
 export class DeprecatedButtonComponentDelegate extends BaseComponentDelegate<IDeprecatedButtonComponent, IDeprecatedButtonComponentDelegateOptions> {
   private _buttonElement?: HTMLButtonElement;

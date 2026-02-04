@@ -30,10 +30,10 @@ jobs:
       - name: Use Node 22
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Install
-        run: npm ci
+        run: pnpm install
         
-      - name: Prettier Check
-        run: npm run prettier:check
+      - name: Code Format
+        run: pnpm run format:check

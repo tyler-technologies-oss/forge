@@ -55,7 +55,7 @@ export default {
   coverageConfig: {
     report: true,
     reportDir: '.coverage',
-    exclude: ['src/lib/*', 'src/lib/core/**', 'src/lib/**/index.ts', 'src/lib/**/*.{html,scss,json}', '**/node_modules/**'],
+    exclude: ['src/lib/*', 'src/lib/core/**', 'src/lib/**/index.ts', 'src/lib/**/*.{html,scss,json}', '**/node_modules/**', '**/.pnpm/**'],
     threshold: {
       statements: 98.5,
       branches: 95.5,
@@ -81,7 +81,7 @@ export default {
     inlineScss(),
     esbuildPlugin({
       ts: true,
-      tsconfig: fileURLToPath(new URL('./src/lib/tsconfig-build.json', import.meta.url)),
+      tsconfig: fileURLToPath(new URL('./src/lib/tsconfig-test.json', import.meta.url)),
       loaders: {
         '.html': 'text',
         '.scss': 'text'

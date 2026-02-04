@@ -16,8 +16,10 @@ export interface IDeprecatedIconButtonComponentDelegateOptions extends IBaseComp
   tooltip?: string;
   tooltipPosition?: TooltipPlacement;
 }
-export interface IDeprecatedIconButtonComponentDelegateConfig
-  extends IBaseComponentDelegateConfig<IDeprecatedIconButtonComponent, IDeprecatedIconButtonComponentDelegateOptions> {}
+export interface IDeprecatedIconButtonComponentDelegateConfig extends IBaseComponentDelegateConfig<
+  IDeprecatedIconButtonComponent,
+  IDeprecatedIconButtonComponentDelegateOptions
+> {}
 
 export class DeprecatedIconButtonComponentDelegate extends BaseComponentDelegate<
   IDeprecatedIconButtonComponent,

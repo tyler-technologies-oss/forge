@@ -29,7 +29,8 @@ import template from './select.html';
 import styles from './select.scss';
 
 export interface ISelectComponent
-  extends IWithFormAssociation,
+  extends
+    IWithFormAssociation,
     IWithFocusable,
     IWithLabelAwareness,
     IWithElementInternals,

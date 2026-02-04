@@ -18,8 +18,10 @@ export interface IFloatingActionButtonComponentDelegateOptions extends IBaseComp
   density?: FloatingActionButtonDensity;
   elevation?: FloatingActionButtonElevation;
 }
-export interface IFloatingActionButtonComponentDelegateConfig
-  extends IBaseComponentDelegateConfig<IFloatingActionButtonComponent, IFloatingActionButtonComponentDelegateOptions> {}
+export interface IFloatingActionButtonComponentDelegateConfig extends IBaseComponentDelegateConfig<
+  IFloatingActionButtonComponent,
+  IFloatingActionButtonComponentDelegateOptions
+> {}
 
 export class FloatingActionButtonComponentDelegate extends BaseComponentDelegate<
   IFloatingActionButtonComponent,
