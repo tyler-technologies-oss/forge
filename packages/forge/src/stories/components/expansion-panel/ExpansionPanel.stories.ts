@@ -23,7 +23,7 @@ const meta = {
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
     const buttonRef = createRef();
 
-    function handleToggle(evt: CustomEvent<boolean>) {
+    function handleToggle(evt: CustomEvent<boolean>): void {
       toggleEventAction();
       buttonRef.value?.setAttribute('aria-expanded', evt.detail.toString());
     }
@@ -77,28 +77,26 @@ type Story = StoryObj;
 export const Demo: Story = {};
 
 export const WithCard: Story = {
-  render: ({ open, animationType, orientation }) => {
-    return html`
-      <forge-card>
-        <forge-expansion-panel .open=${open} .animationType=${animationType} .orientation=${orientation}>
-          <div slot="header" role="button" tabindex="0" style="display: flex; justify-content: space-between;">
-            <div>Header text</div>
-            <forge-open-icon></forge-open-icon>
-          </div>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem
-            nulla quod corporis similique consequuntur facere laborum veniam error eius.
-          </p>
-        </forge-expansion-panel>
-      </forge-card>
-    `;
-  }
+  render: ({ open, animationType, orientation }) => html`
+    <forge-card>
+      <forge-expansion-panel .open=${open} .animationType=${animationType} .orientation=${orientation}>
+        <div slot="header" role="button" tabindex="0" style="display: flex; justify-content: space-between;">
+          <div>Header text</div>
+          <forge-open-icon></forge-open-icon>
+        </div>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem nulla
+          quod corporis similique consequuntur facere laborum veniam error eius.
+        </p>
+      </forge-expansion-panel>
+    </forge-card>
+  `
 };
 
 export const WithUnslottedButton: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`<button id="button-id">Toggle</button>
+  render: () =>
+    html`<button id="button-id">Toggle</button>
       <forge-card>
         <forge-expansion-panel trigger="button-id">
           <div slot="header" role="button" tabindex="0" style="display: flex; justify-content: space-between;">
@@ -107,8 +105,7 @@ export const WithUnslottedButton: Story = {
           </div>
           <p>Content text</p>
         </forge-expansion-panel>
-      </forge-card>`;
-  }
+      </forge-card>`
 };
 
 export const CSSOnly: Story = {

@@ -28,13 +28,11 @@ type Story = StoryObj;
 
 export const Demo: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <forge-app-bar title-text="Search">
-        <forge-app-bar-search slot="center">
-          <input type="text" aria-label="Search for a record" placeholder="Search" />
-        </forge-app-bar-search>
-      </forge-app-bar>
-    `;
-  }
+  render: () => html`
+    <forge-app-bar title-text="Search">
+      <forge-app-bar-search slot="center">
+        <input type="text" aria-label="Search for a record" placeholder="Search" />
+      </forge-app-bar-search>
+    </forge-app-bar>
+  `
 };

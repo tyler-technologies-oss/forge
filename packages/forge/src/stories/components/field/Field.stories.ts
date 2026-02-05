@@ -20,7 +20,9 @@ const meta = {
     const fieldRef = createRef<IFieldComponent>();
 
     function handleInput({ target }: KeyboardEvent): void {
-      fieldRef.value!.floatLabel = !!(target as HTMLInputElement).value;
+      if (fieldRef.value) {
+        fieldRef.value.floatLabel = !!(target as HTMLInputElement).value;
+      }
     }
 
     return html`
@@ -208,7 +210,7 @@ export const CSSOnly: Story = {
 
     if (value) {
       requestAnimationFrame(() => {
-        const input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement = fieldRef.value?.querySelector('input,select,textarea')!;
+        const input = fieldRef.value?.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input,select,textarea');
         toggleFloatingLabel(input, { animate: false });
       });
     }

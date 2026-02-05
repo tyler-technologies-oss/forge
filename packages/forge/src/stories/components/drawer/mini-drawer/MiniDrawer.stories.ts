@@ -29,7 +29,7 @@ const meta = {
   render: args => {
     const drawerRef = createRef<IMiniDrawerComponent>();
 
-    function toggleDrawer() {
+    function toggleDrawer(): void {
       const drawer = drawerRef.value as IMiniDrawerComponent;
       drawer.open = !drawer.open;
     }

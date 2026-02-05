@@ -14,22 +14,20 @@ const activateCallbackAction = action('activateCallback');
 
 const meta = {
   title: 'Components/Keyboard Shortcut',
-  render: args => {
-    return html`
-      <forge-button variant="raised">Shortcut target</forge-button>
-      <forge-keyboard-shortcut
-        .activateCallback=${activateCallbackAction}
-        .keyBinding=${args.keyBinding}
-        .global=${args.global}
-        .allowWhileTyping=${args.allowWhileTyping}
-        .preventDefault=${args.preventDefault}
-        .capture=${args.capture}
-        .useCode=${args.useCode}
-        .disabled=${args.disabled}
-        @forge-keyboard-shortcut-activate=${activateAction}>
-      </forge-keyboard-shortcut>
-    `;
-  },
+  render: args => html`
+    <forge-button variant="raised">Shortcut target</forge-button>
+    <forge-keyboard-shortcut
+      .activateCallback=${activateCallbackAction}
+      .keyBinding=${args.keyBinding}
+      .global=${args.global}
+      .allowWhileTyping=${args.allowWhileTyping}
+      .preventDefault=${args.preventDefault}
+      .capture=${args.capture}
+      .useCode=${args.useCode}
+      .disabled=${args.disabled}
+      @forge-keyboard-shortcut-activate=${activateAction}>
+    </forge-keyboard-shortcut>
+  `,
   component,
   argTypes: {
     ...generateCustomElementArgTypes({

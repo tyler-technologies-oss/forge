@@ -15,7 +15,7 @@ const component = 'forge-switch';
 const meta = {
   title: 'Components/Switch',
   render: args => {
-    var el = customElementStoryRenderer(component, args);
+    const el = customElementStoryRenderer(component, args);
     el.textContent = 'off/on';
     return el;
   },

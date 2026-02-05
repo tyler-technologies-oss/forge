@@ -11,15 +11,13 @@ const changeAction = action('forge-color-picker-change');
 
 const meta = {
   title: 'Components/Color Picker',
-  render: args => {
-    return html`
-      <forge-color-picker
-        .value=${args.value}
-        .allowOpacity=${args.allowOpacity}
-        .opacity=${args.opacity}
-        @forge-color-picker-change=${changeAction}></forge-color-picker>
-    `;
-  },
+  render: args => html`
+    <forge-color-picker
+      .value=${args.value}
+      .allowOpacity=${args.allowOpacity}
+      .opacity=${args.opacity}
+      @forge-color-picker-change=${changeAction}></forge-color-picker>
+  `,
   component,
   argTypes: {
     ...generateCustomElementArgTypes({

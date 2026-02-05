@@ -80,30 +80,28 @@ export const Styled: Story = {
 
 export const Scaffold: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <forge-card class="scaffold-card">
-        <forge-scaffold>
-          <forge-toolbar slot="header">
-            <h1 slot="start">Lorem ipsum</h1>
-          </forge-toolbar>
+  render: () => html`
+    <forge-card class="scaffold-card">
+      <forge-scaffold>
+        <forge-toolbar slot="header">
+          <h1 slot="start">Lorem ipsum</h1>
+        </forge-toolbar>
 
-          <p slot="body" tabindex="0" class="card-content">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas sed aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero
-            necessitatibus enim sint nesciunt provident excepturi dolorum pariatur illum? Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-            quas sed aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero necessitatibus enim sint nesciunt provident excepturi dolorum pariatur
-            illum? Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas sed aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero
-            necessitatibus enim sint nesciunt provident excepturi dolorum pariatur illum?
-          </p>
+        <p slot="body" tabindex="0" class="card-content">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas sed aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero
+          necessitatibus enim sint nesciunt provident excepturi dolorum pariatur illum? Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas
+          sed aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero necessitatibus enim sint nesciunt provident excepturi dolorum pariatur illum?
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas sed aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero
+          necessitatibus enim sint nesciunt provident excepturi dolorum pariatur illum?
+        </p>
 
-          <forge-toolbar slot="footer" inverted>
-            <forge-button type="outlined" slot="end"> Cancel </forge-button>
-            <forge-button type="unelevated" slot="end" style="margin-left: 8px;"> Ok </forge-button>
-          </forge-toolbar>
-        </forge-scaffold>
-      </forge-card>
-    `;
-  }
+        <forge-toolbar slot="footer" inverted>
+          <forge-button type="outlined" slot="end"> Cancel </forge-button>
+          <forge-button type="unelevated" slot="end" style="margin-left: 8px;"> Ok </forge-button>
+        </forge-toolbar>
+      </forge-scaffold>
+    </forge-card>
+  `
 };
 
 export const CSSOnly: Story = {

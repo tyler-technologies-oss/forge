@@ -4,13 +4,11 @@ import cssbeautify from 'cssbeautify';
 
 export function storyStyles(styles: string): Decorator {
   // prettier-ignore
-  return story => {
-    return html`
+  return story => html`
       ${story()}
 
       <style>
 ${cssbeautify(styles, { indent: '  ' })}
       </style>
     `;
-  };
 }

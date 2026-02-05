@@ -19,12 +19,16 @@ const meta = {
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
     const bottomSheetRef = createRef<IBottomSheetComponent>();
 
-    function handleClick() {
-      bottomSheetRef.value!.open = !bottomSheetRef.value!.open;
+    function handleClick(): void {
+      if (bottomSheetRef.value) {
+        bottomSheetRef.value.open = !bottomSheetRef.value.open;
+      }
     }
 
-    function handleClose() {
-      bottomSheetRef.value!.open = false;
+    function handleClose(): void {
+      if (bottomSheetRef.value) {
+        bottomSheetRef.value.open = false;
+      }
     }
 
     return html`

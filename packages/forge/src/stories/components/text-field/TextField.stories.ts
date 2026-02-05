@@ -1,8 +1,8 @@
-import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, removeInlineStyleTag, standaloneStoryParams } from '../../utils';
+import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { storyStyles } from '../../decorators';
+import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 
 import '@tylertech/forge/text-field';
 

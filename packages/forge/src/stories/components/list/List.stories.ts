@@ -166,82 +166,78 @@ export const WithAnchor: Story = {
 };
 export const NavigationMenu: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <forge-drawer>
-        <aside>
-          <forge-list navlist>
-            <forge-list-item>
-              <forge-icon slot="start" name="home"></forge-icon>
-              <a href="javascript: void(0);">Home</a>
-            </forge-list-item>
-            <forge-list-item>
-              <forge-icon slot="start" name="inbox"></forge-icon>
-              <a href="javascript: void(0);">Inbox</a>
-            </forge-list-item>
-            <forge-list-item>
-              <forge-icon slot="start" name="star"></forge-icon>
-              <a href="javascript: void(0);">Starred</a>
-            </forge-list-item>
-            <forge-list-item>
-              <forge-icon slot="start" name="settings"></forge-icon>
-              <a href="javascript: void(0);">Settings</a>
-            </forge-list-item>
-          </forge-list>
-        </aside>
-      </forge-drawer>
-    `;
-  }
+  render: () => html`
+    <forge-drawer>
+      <aside>
+        <forge-list navlist>
+          <forge-list-item>
+            <forge-icon slot="start" name="home"></forge-icon>
+            <a href="javascript: void(0);">Home</a>
+          </forge-list-item>
+          <forge-list-item>
+            <forge-icon slot="start" name="inbox"></forge-icon>
+            <a href="javascript: void(0);">Inbox</a>
+          </forge-list-item>
+          <forge-list-item>
+            <forge-icon slot="start" name="star"></forge-icon>
+            <a href="javascript: void(0);">Starred</a>
+          </forge-list-item>
+          <forge-list-item>
+            <forge-icon slot="start" name="settings"></forge-icon>
+            <a href="javascript: void(0);">Settings</a>
+          </forge-list-item>
+        </forge-list>
+      </aside>
+    </forge-drawer>
+  `
 };
 
 export const Expandable: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <forge-list>
-        <forge-list-item>
-          <forge-icon slot="start" name="code"></forge-icon>
-          <button type="button" id="li-1">List Item One</button>
-          <forge-open-icon slot="end" id="li-open-1"></forge-open-icon>
-          <forge-expansion-panel slot="additional-content" trigger="li-1" open-icon="li-open-1">
-            <forge-list indented>
-              <forge-list-item>
-                <button type="button">List Item One</button>
-              </forge-list-item>
-              <forge-list-item>
-                <button type="button">List Item Two</button>
-              </forge-list-item>
-              <forge-list-item>
-                <button type="button">List Item Three</button>
-              </forge-list-item>
-            </forge-list>
-          </forge-expansion-panel>
-        </forge-list-item>
-        <forge-list-item>
-          <forge-icon slot="start" name="face"></forge-icon>
-          <button type="button" id="li-2">List Item Two</button>
-          <forge-open-icon slot="end" id="li-open-2"></forge-open-icon>
-          <forge-expansion-panel slot="additional-content" trigger="li-2" open-icon="li-open-2">
-            <forge-list indented>
-              <forge-list-item>
-                <button type="button">List Item One</button>
-              </forge-list-item>
-              <forge-list-item>
-                <button type="button">List Item Two</button>
-              </forge-list-item>
-              <forge-list-item>
-                <button type="button">List Item Three</button>
-              </forge-list-item>
-            </forge-list>
-          </forge-expansion-panel>
-        </forge-list-item>
-        <forge-list-item>
-          <forge-icon slot="start" name="favorite"></forge-icon>
-          <button type="button">List Item Three</button>
-        </forge-list-item>
-      </forge-list>
-    `;
-  }
+  render: () => html`
+    <forge-list>
+      <forge-list-item>
+        <forge-icon slot="start" name="code"></forge-icon>
+        <button type="button" id="li-1">List Item One</button>
+        <forge-open-icon slot="end" id="li-open-1"></forge-open-icon>
+        <forge-expansion-panel slot="additional-content" trigger="li-1" open-icon="li-open-1">
+          <forge-list indented>
+            <forge-list-item>
+              <button type="button">List Item One</button>
+            </forge-list-item>
+            <forge-list-item>
+              <button type="button">List Item Two</button>
+            </forge-list-item>
+            <forge-list-item>
+              <button type="button">List Item Three</button>
+            </forge-list-item>
+          </forge-list>
+        </forge-expansion-panel>
+      </forge-list-item>
+      <forge-list-item>
+        <forge-icon slot="start" name="face"></forge-icon>
+        <button type="button" id="li-2">List Item Two</button>
+        <forge-open-icon slot="end" id="li-open-2"></forge-open-icon>
+        <forge-expansion-panel slot="additional-content" trigger="li-2" open-icon="li-open-2">
+          <forge-list indented>
+            <forge-list-item>
+              <button type="button">List Item One</button>
+            </forge-list-item>
+            <forge-list-item>
+              <button type="button">List Item Two</button>
+            </forge-list-item>
+            <forge-list-item>
+              <button type="button">List Item Three</button>
+            </forge-list-item>
+          </forge-list>
+        </forge-expansion-panel>
+      </forge-list-item>
+      <forge-list-item>
+        <forge-icon slot="start" name="favorite"></forge-icon>
+        <button type="button">List Item Three</button>
+      </forge-list-item>
+    </forge-list>
+  `
 };
 
 export const Multicolumn: Story = {
@@ -294,17 +290,17 @@ export const CSSOnly: Story = {
     };
 
     // prettier-ignore
-    const forgeIcon = ({ area }: { area: 'start' | 'end' }) => html`<svg class=${classMap({ 'forge-icon': true, 'forge-list-item__start': area === 'start', 'forge-list-item__end': area === 'end' })} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Forge design system logo</title><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20.9 3.2h-7.5c-.4 0-.7.2-.9.5l-1.6 2.9c-.3.5-.1 1.2.4 1.5.2.1.4.1.5.1h7.5c.4 0 .7-.2.9-.5l1.6-2.9c.3-.5.1-1.2-.4-1.5-.1-.1-.3-.1-.5-.1zm-3.6 6.2H9.8c-.4 0-.8.2-1 .6l-1.6 2.7c-.2.3-.2.8 0 1.1l3.8 6.5c.3.5 1 .7 1.5.4.2-.1.3-.2.4-.4l5.3-9.2c.3-.5.1-1.2-.4-1.5-.1-.1-.3-.2-.5-.2zm-6.9-4.6c.3-.5.1-1.2-.4-1.5-.2-.1-.4-.1-.6-.1H3c-.6 0-1.1.5-1.1 1.1 0 .2.1.4.1.5l2.7 4.6.5.9c.3.5 1 .7 1.5.4.2-.1.3-.2.4-.4l3.3-5.5z"/></svg>`;
-    const checkbox = ({ area, id }: { area: 'start' | 'end'; id: string }) =>
+    const forgeIcon = ({ area }: { area: 'start' | 'end' }): ReturnType<typeof html> => html`<svg class=${classMap({ 'forge-icon': true, 'forge-list-item__start': area === 'start', 'forge-list-item__end': area === 'end' })} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Forge design system logo</title><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20.9 3.2h-7.5c-.4 0-.7.2-.9.5l-1.6 2.9c-.3.5-.1 1.2.4 1.5.2.1.4.1.5.1h7.5c.4 0 .7-.2.9-.5l1.6-2.9c.3-.5.1-1.2-.4-1.5-.1-.1-.3-.1-.5-.1zm-3.6 6.2H9.8c-.4 0-.8.2-1 .6l-1.6 2.7c-.2.3-.2.8 0 1.1l3.8 6.5c.3.5 1 .7 1.5.4.2-.1.3-.2.4-.4l5.3-9.2c.3-.5.1-1.2-.4-1.5-.1-.1-.3-.2-.5-.2zm-6.9-4.6c.3-.5.1-1.2-.4-1.5-.2-.1-.4-.1-.6-.1H3c-.6 0-1.1.5-1.1 1.1 0 .2.1.4.1.5l2.7 4.6.5.9c.3.5 1 .7 1.5.4.2-.1.3-.2.4-.4l3.3-5.5z"/></svg>`;
+    const checkbox = ({ area, id }: { area: 'start' | 'end'; id: string }): ReturnType<typeof html> =>
       html`<div class=${classMap({ 'forge-checkbox': true, 'forge-list-item__start': area === 'start', 'forge-list-item__end': area === 'end' })}>
         <input type="checkbox" id=${id} />
         <div class="forge-checkbox__icon"></div>
       </div>`;
-    const radio = ({ area, id }: { area: 'start' | 'end'; id: string }) =>
+    const radio = ({ area, id }: { area: 'start' | 'end'; id: string }): ReturnType<typeof html> =>
       html`<div class=${classMap({ 'forge-radio': true, 'forge-list-item__start': area === 'start', 'forge-list-item__end': area === 'end' })}>
         <input type="radio" id=${id} name="radios" />
       </div>`;
-    const switchEl = ({ area, id }: { area: 'start' | 'end'; id: string }) =>
+    const switchEl = ({ area, id }: { area: 'start' | 'end'; id: string }): ReturnType<typeof html> =>
       html`<div class=${classMap({ 'forge-switch': true, 'forge-list-item__start': area === 'start', 'forge-list-item__end': area === 'end' })}>
         <input type="checkbox" switch id=${id} />
         <div class="forge-switch__thumb">

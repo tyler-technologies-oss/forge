@@ -32,11 +32,9 @@ export default meta;
 type Story = StoryObj;
 
 export const Demo: Story = {
-  render: () => {
-    return html`
-      <forge-app-bar title-text="Help Icon">
-        <forge-app-bar-help-button slot="end" .options=${options}> </forge-app-bar-help-button>
-      </forge-app-bar>
-    `;
-  }
+  render: () => html`
+    <forge-app-bar title-text="Help Icon">
+      <forge-app-bar-help-button slot="end" .options=${options}> </forge-app-bar-help-button>
+    </forge-app-bar>
+  `
 };

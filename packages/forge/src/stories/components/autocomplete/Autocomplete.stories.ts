@@ -165,9 +165,7 @@ export const Demo: Story = {};
 export const CustomOptions: Story = {
   ...standaloneStoryParams,
   render: () => {
-    const filterCb: AutocompleteFilterCallback = filterText => {
-      return states.filter(state => state.label.toLowerCase().includes(filterText.toLowerCase()));
-    };
+    const filterCb: AutocompleteFilterCallback = filterText => states.filter(state => state.label.toLowerCase().includes(filterText.toLowerCase()));
 
     const optionBuilder: AutocompleteOptionBuilder = option => {
       const container = document.createElement('div');
@@ -209,14 +207,14 @@ export const InfiniteScroll: Story = {
       return currentOptions;
     };
 
-    const onScrolledBottom = () => {
+    const onScrolledBottom = (): void => {
       const currentLength = currentOptions.length;
       const nextOptions = states.slice(currentLength, currentLength + 5);
       currentOptions = [...currentOptions, ...nextOptions];
       autocompleteRef.value?.appendOptions(nextOptions);
     };
 
-    const beforeClose = () => {
+    const beforeClose = (): void => {
       // Reset the current options when the autocomplete is closed for demo purposes
       currentOptions = [];
     };

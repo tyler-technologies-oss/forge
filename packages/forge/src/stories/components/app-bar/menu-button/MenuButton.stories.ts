@@ -33,11 +33,9 @@ type Story = StoryObj;
 
 export const Demo: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <forge-app-bar title-text="Menu Button">
-        <forge-app-bar-menu-button slot="start" .options=${options}> </forge-app-bar-menu-button>
-      </forge-app-bar>
-    `;
-  }
+  render: () => html`
+    <forge-app-bar title-text="Menu Button">
+      <forge-app-bar-menu-button slot="start" .options=${options}> </forge-app-bar-menu-button>
+    </forge-app-bar>
+  `
 };

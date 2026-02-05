@@ -1,7 +1,7 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
-import { IMenuComponent, IMenuOption, IMenuOptionGroup, IOption, IOptionGroup } from '@tylertech/forge';
+import { IMenuComponent, IMenuOption, IMenuOptionGroup, IOption } from '@tylertech/forge';
 import { styleMap } from 'lit/directives/style-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { standaloneStoryParams } from '../../utils';
@@ -16,7 +16,7 @@ const meta = {
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
-    let options = [
+    const options = [
       { label: 'Save', value: 'save' },
       { label: 'Edit', value: 'edit' },
       { label: 'Delete', value: 'delete' }
@@ -98,7 +98,10 @@ export const Grouped: Story = {
     const menuRef = createRef<IMenuComponent>();
 
     window.requestAnimationFrame(() => {
-      menuRef.value!.options = [
+      if (!menuRef.value) {
+        return;
+      }
+      menuRef.value.options = [
         {
           text: 'Group 1',
           options: [

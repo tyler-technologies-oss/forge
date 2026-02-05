@@ -28,7 +28,7 @@ const meta = {
   render: args => {
     const drawerRef = createRef<IDrawerComponent>();
 
-    function toggleDrawer() {
+    function toggleDrawer(): void {
       const drawer = drawerRef.value as IDrawerComponent;
       drawer.open = !drawer.open;
     }
@@ -123,21 +123,19 @@ export const Demo: Story = {};
 
 export const CSSOnly: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <aside class="forge-drawer">
-        <ul class="forge-list forge-list--navlist">
-          <li class="forge-list-item">
-            <button>List Item</button>
-          </li>
-          <li class="forge-list-item">
-            <button>List Item</button>
-          </li>
-          <li class="forge-list-item">
-            <button>List Item</button>
-          </li>
-        </ul>
-      </aside>
-    `;
-  }
+  render: () => html`
+    <aside class="forge-drawer">
+      <ul class="forge-list forge-list--navlist">
+        <li class="forge-list-item">
+          <button>List Item</button>
+        </li>
+        <li class="forge-list-item">
+          <button>List Item</button>
+        </li>
+        <li class="forge-list-item">
+          <button>List Item</button>
+        </li>
+      </ul>
+    </aside>
+  `
 };

@@ -32,11 +32,13 @@ const meta = {
     };
 
     window.requestAnimationFrame(() => {
-      anchorRef.value!.scrollIntoView({ block: 'center', inline: 'center' });
+      anchorRef.value?.scrollIntoView({ block: 'center', inline: 'center' });
     });
 
-    function handleClick() {
-      overlayRef.value!.open = !overlayRef.value!.open;
+    function handleClick(): void {
+      if (overlayRef.value) {
+        overlayRef.value.open = !overlayRef.value.open;
+      }
     }
 
     return html`

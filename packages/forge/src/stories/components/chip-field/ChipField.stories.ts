@@ -75,7 +75,7 @@ const meta = {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
 
-    const addMember = (evt: CustomEvent) => {
+    const addMember = (evt: CustomEvent): void => {
       if (evt.target) {
         const chipField = evt.target as HTMLElement;
         const name = evt.detail;
@@ -92,12 +92,12 @@ const meta = {
       addedAction(evt);
     };
 
-    const removeMember = (evt: CustomEvent) => {
+    const removeMember = (evt: CustomEvent): void => {
       evt.detail.remove();
       removedAction(evt);
     };
 
-    const onChipRemoveButtonClicked = (evt: Event) => {
+    const onChipRemoveButtonClicked = (evt: Event): void => {
       if (evt.target) {
         const member = evt.target as HTMLElement;
         member.remove();
@@ -176,12 +176,12 @@ export const WithAutocomplete: Story = {
     const chipFieldRef = createRef<IChipFieldComponent>();
     const selectedAutocompleteValues: string[] = [];
 
-    const filter = (filterText: string) => {
+    const filter = (filterText: string): IOption[] => {
       const remainingStates = US_STATES.filter(({ value }) => !selectedAutocompleteValues.includes(value));
       return remainingStates.filter(({ label }) => label.toLowerCase().includes(filterText.toLowerCase()));
     };
 
-    const onSelect = (evt: CustomEvent<IAutocompleteSelectEventData>) => {
+    const onSelect = (evt: CustomEvent<IAutocompleteSelectEventData>): void => {
       const exists = selectedAutocompleteValues.includes(evt.detail.value);
       if (!exists) {
         addMember(evt.detail.value);

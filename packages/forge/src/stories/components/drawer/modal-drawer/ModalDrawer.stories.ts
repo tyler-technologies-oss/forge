@@ -29,7 +29,7 @@ const meta = {
   render: args => {
     const drawerRef = createRef<IModalDrawerComponent>();
 
-    function toggleDrawer() {
+    function toggleDrawer(): void {
       const drawer = drawerRef.value as IModalDrawerComponent;
       drawer.open = !drawer.open;
     }

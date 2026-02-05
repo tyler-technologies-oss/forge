@@ -15,25 +15,23 @@ IconRegistry.define([tylIconAssignment, tylIconWorkOutline, tylIconWarning, tylI
 
 const meta = {
   title: 'Components/App Bar/Profile',
-  render: ({ profileButton, profileButtonText, signOutButton, signOutButtonText, open, fullName, email, avatarLetterCount = 2 }) => {
-    return html`
-      <forge-app-bar title-text="Profile">
-        <forge-app-bar-profile-button
-          slot="end"
-          @forge-profile-card-profile=${profileClickedAction}
-          @forge-profile-card-sign-out=${signOutClickedAction}
-          .avatarLetterCount=${avatarLetterCount}
-          .profileButton=${profileButton}
-          .profileButtonText=${profileButtonText}
-          .signOutButton=${signOutButton}
-          .signOutButtonText=${signOutButtonText}
-          .fullName=${fullName}
-          .email=${email}
-          .open=${open}>
-        </forge-app-bar-profile-button>
-      </forge-app-bar>
-    `;
-  },
+  render: ({ profileButton, profileButtonText, signOutButton, signOutButtonText, open, fullName, email, avatarLetterCount = 2 }) => html`
+    <forge-app-bar title-text="Profile">
+      <forge-app-bar-profile-button
+        slot="end"
+        @forge-profile-card-profile=${profileClickedAction}
+        @forge-profile-card-sign-out=${signOutClickedAction}
+        .avatarLetterCount=${avatarLetterCount}
+        .profileButton=${profileButton}
+        .profileButtonText=${profileButtonText}
+        .signOutButton=${signOutButton}
+        .signOutButtonText=${signOutButtonText}
+        .fullName=${fullName}
+        .email=${email}
+        .open=${open}>
+      </forge-app-bar-profile-button>
+    </forge-app-bar>
+  `,
   component,
   argTypes: {
     ...generateCustomElementArgTypes({
@@ -59,10 +57,10 @@ export const Demo: Story = {};
 export const WithCustomContent: Story = {
   ...standaloneStoryParams,
   render: () => {
-    function builder() {
+    function builder(): HTMLElement {
       const listElement = document.createElement('forge-list');
       listElement.addEventListener('forge-list-item-select', ({ detail }) => {
-        console.log('[profile-card] Selected custom item:', detail.value);
+        console.warn('[profile-card] Selected custom item:', detail.value);
       });
       listElement.style.setProperty('--forge-list-padding', '0');
       listElement.appendChild(document.createElement('forge-divider'));

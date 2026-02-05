@@ -8,7 +8,7 @@ import '@tylertech/forge/key';
 
 const component = 'forge-meter';
 
-const applyLabel = (element: MeterComponent | MeterGroupComponent) => {
+const applyLabel = (element: MeterComponent | MeterGroupComponent): void => {
   element.id = 'meter';
   const label = document.createElement('label');
   label.htmlFor = 'meter';
@@ -112,36 +112,34 @@ export const Grouped: Story = {
     innerShape: 'default',
     density: 'medium'
   },
-  render: args => {
-    return html`
-      <forge-meter-group
-        id="meter-group"
-        .min=${args.min}
-        .max=${args.max}
-        .tickmarks=${args.tickmarks}
-        .direction=${args.direction}
-        .density=${args.density}
-        .shape=${args.shape}
-        .innerShape=${args.innerShape}>
-        <label slot="label" for="meter-group">Label</label>
-        <forge-meter id="meter-1" value="0.25" style="--forge-meter-color: #1E88E5;"></forge-meter>
-        <forge-meter id="meter-2" value="0.15" style="--forge-meter-color: #FDD835;"></forge-meter>
-        <forge-meter id="meter-3" value="0.35" style="--forge-meter-color: #43A047;"></forge-meter>
-      </forge-meter-group>
-      <forge-key style="margin-block-start: 8px;">
-        <forge-key-item style="--forge-key-item-icon-color: #1E88E5;">
-          <label for="meter-1">First</label>
-          <span slot="value">25%</span>
-        </forge-key-item>
-        <forge-key-item style="--forge-key-item-icon-color: #FDD835;">
-          <label for="meter-2">Second</label>
-          <span slot="value">15%</span>
-        </forge-key-item>
-        <forge-key-item style="--forge-key-item-icon-color: #43A047;">
-          <label for="meter-3">Third</label>
-          <span slot="value">35%</span>
-        </forge-key-item>
-      </forge-key>
-    `;
-  }
+  render: args => html`
+    <forge-meter-group
+      id="meter-group"
+      .min=${args.min}
+      .max=${args.max}
+      .tickmarks=${args.tickmarks}
+      .direction=${args.direction}
+      .density=${args.density}
+      .shape=${args.shape}
+      .innerShape=${args.innerShape}>
+      <label slot="label" for="meter-group">Label</label>
+      <forge-meter id="meter-1" value="0.25" style="--forge-meter-color: #1E88E5;"></forge-meter>
+      <forge-meter id="meter-2" value="0.15" style="--forge-meter-color: #FDD835;"></forge-meter>
+      <forge-meter id="meter-3" value="0.35" style="--forge-meter-color: #43A047;"></forge-meter>
+    </forge-meter-group>
+    <forge-key style="margin-block-start: 8px;">
+      <forge-key-item style="--forge-key-item-icon-color: #1E88E5;">
+        <label for="meter-1">First</label>
+        <span slot="value">25%</span>
+      </forge-key-item>
+      <forge-key-item style="--forge-key-item-icon-color: #FDD835;">
+        <label for="meter-2">Second</label>
+        <span slot="value">15%</span>
+      </forge-key-item>
+      <forge-key-item style="--forge-key-item-icon-color: #43A047;">
+        <label for="meter-3">Third</label>
+        <span slot="value">35%</span>
+      </forge-key-item>
+    </forge-key>
+  `
 };

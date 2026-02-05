@@ -32,33 +32,31 @@ export default meta;
 type Story = StoryObj;
 
 export const Demo: Story = {
-  render: () => {
-    return html`
-      <forge-accordion>
-        <forge-expansion-panel>
-          <div slot="header">
-            Panel One
-            <forge-open-icon></forge-open-icon>
-          </div>
-          <div>Panel One Content</div>
-        </forge-expansion-panel>
-        <forge-divider></forge-divider>
-        <forge-expansion-panel>
-          <div slot="header">
-            Panel Two
-            <forge-open-icon></forge-open-icon>
-          </div>
-          <div>Panel Two Content</div>
-        </forge-expansion-panel>
-        <forge-divider></forge-divider>
-        <forge-expansion-panel>
-          <div slot="header">
-            Panel Three
-            <forge-open-icon></forge-open-icon>
-          </div>
-          <div>Panel Three Content</div>
-        </forge-expansion-panel>
-      </forge-accordion>
-    `;
-  }
+  render: () => html`
+    <forge-accordion>
+      <forge-expansion-panel>
+        <div slot="header">
+          Panel One
+          <forge-open-icon></forge-open-icon>
+        </div>
+        <div>Panel One Content</div>
+      </forge-expansion-panel>
+      <forge-divider></forge-divider>
+      <forge-expansion-panel>
+        <div slot="header">
+          Panel Two
+          <forge-open-icon></forge-open-icon>
+        </div>
+        <div>Panel Two Content</div>
+      </forge-expansion-panel>
+      <forge-divider></forge-divider>
+      <forge-expansion-panel>
+        <div slot="header">
+          Panel Three
+          <forge-open-icon></forge-open-icon>
+        </div>
+        <div>Panel Three Content</div>
+      </forge-expansion-panel>
+    </forge-accordion>
+  `
 };

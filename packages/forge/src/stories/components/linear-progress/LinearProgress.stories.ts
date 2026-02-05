@@ -33,14 +33,10 @@ export const Demo: Story = {};
 
 export const Determinate: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html` <forge-linear-progress determinate progress="0.5" aria-label="Linear progress demo"></forge-linear-progress> `;
-  }
+  render: () => html` <forge-linear-progress determinate progress="0.5" aria-label="Linear progress demo"></forge-linear-progress> `
 };
 
 export const Buffer: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html` <forge-linear-progress determinate progress="0.33" buffer="0.66" aria-label="Linear progress buffer demo"></forge-linear-progress> `;
-  }
+  render: () => html` <forge-linear-progress determinate progress="0.33" buffer="0.66" aria-label="Linear progress buffer demo"></forge-linear-progress> `
 };

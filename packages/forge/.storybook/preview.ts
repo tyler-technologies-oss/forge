@@ -4,7 +4,7 @@ import { light, dark } from './forge-theme';
 
 import './preview-global.scss';
 
-const toggleDarkTheme = value => document.body.classList.toggle('forge-storybook-dark', value);
+const toggleDarkTheme = (value: boolean): boolean => document.body.classList.toggle('forge-storybook-dark', value);
 const channel = addons.getChannel();
 channel.on('DARK_MODE', isDark => toggleDarkTheme(isDark));
 channel.off('DARK_MODE', isDark => toggleDarkTheme(isDark));

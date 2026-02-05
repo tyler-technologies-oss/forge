@@ -22,31 +22,29 @@ const didCloseAction = action('forge-split-view-panel-did-close');
 
 const meta = {
   title: 'Components/Split View',
-  render: args => {
-    return html`
-      <forge-split-view
-        .orientation=${args.orientation}
-        .disabled=${args.disabled}
-        .allowClose=${args.allowClose}
-        .autoClose=${args.autoClose}
-        .autoCloseThreshold=${args.autoCloseThreshold}
-        @forge-split-view-panel-will-resize=${willResizeAction}
-        @forge-split-view-panel-resize-start=${resizeStartAction}
-        @forge-split-view-panel-resize-end=${resizeEndAction}
-        @forge-split-view-panel-resize=${resizeAction}
-        @forge-split-view-panel-will-open=${willOpenAction}
-        @forge-split-view-panel-will-close=${willCloseAction}
-        @forge-split-view-panel-did-open=${didOpenAction}
-        @forge-split-view-panel-did-close=${didCloseAction}>
-        <forge-split-view-panel>
-          <div>Panel 1</div>
-        </forge-split-view-panel>
-        <forge-split-view-panel size="200">
-          <div>Panel 2</div>
-        </forge-split-view-panel>
-      </forge-split-view>
-    `;
-  },
+  render: args => html`
+    <forge-split-view
+      .orientation=${args.orientation}
+      .disabled=${args.disabled}
+      .allowClose=${args.allowClose}
+      .autoClose=${args.autoClose}
+      .autoCloseThreshold=${args.autoCloseThreshold}
+      @forge-split-view-panel-will-resize=${willResizeAction}
+      @forge-split-view-panel-resize-start=${resizeStartAction}
+      @forge-split-view-panel-resize-end=${resizeEndAction}
+      @forge-split-view-panel-resize=${resizeAction}
+      @forge-split-view-panel-will-open=${willOpenAction}
+      @forge-split-view-panel-will-close=${willCloseAction}
+      @forge-split-view-panel-did-open=${didOpenAction}
+      @forge-split-view-panel-did-close=${didCloseAction}>
+      <forge-split-view-panel>
+        <div>Panel 1</div>
+      </forge-split-view-panel>
+      <forge-split-view-panel size="200">
+        <div>Panel 2</div>
+      </forge-split-view-panel>
+    </forge-split-view>
+  `,
   component,
   subcomponents: {
     'Split View Panel': 'forge-split-view-panel'

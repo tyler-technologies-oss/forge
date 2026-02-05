@@ -3,7 +3,6 @@ import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../../utils';
 
 import '@tylertech/forge/app-bar';
-import { IMenuOption } from '@tylertech/forge';
 
 const component = 'forge-app-bar-notification-button';
 
@@ -28,11 +27,9 @@ type Story = StoryObj;
 
 export const Demo: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <forge-app-bar title-text="Menu Button">
-        <forge-app-bar-notification-button slot="end" show-badge dot> </forge-app-bar-notification-button>
-      </forge-app-bar>
-    `;
-  }
+  render: () => html`
+    <forge-app-bar title-text="Menu Button">
+      <forge-app-bar-notification-button slot="end" show-badge dot> </forge-app-bar-notification-button>
+    </forge-app-bar>
+  `
 };

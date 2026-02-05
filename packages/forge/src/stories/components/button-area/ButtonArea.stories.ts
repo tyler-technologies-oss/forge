@@ -2,7 +2,7 @@ import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { action } from 'storybook/actions';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconChevronRight, tylIconFavorite } from '@tylertech/tyler-icons';
 

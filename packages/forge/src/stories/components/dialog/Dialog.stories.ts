@@ -110,7 +110,7 @@ export const CSSOnly: Story = {
     animationType: 'zoom'
   },
   render: ({ fullscreen, mode, placement, preset, animationType }) => {
-    const toggleDialog = () => {
+    const toggleDialog = (): void => {
       const dialog = document.getElementById('css-dialog') as HTMLDialogElement;
       if (dialog.open) {
         dialog.close();

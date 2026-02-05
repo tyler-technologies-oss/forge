@@ -29,7 +29,7 @@ const meta = {
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
     const popoverRef = createRef<IPopoverComponent>();
 
-    function handleClose() {
+    function handleClose(): void {
       if (popoverRef.value) {
         popoverRef.value.open = false;
       }
@@ -130,13 +130,13 @@ export const NonModal: Story = {
     const inputRef = createRef<HTMLInputElement>();
     const saveButtonRef = createRef<IButtonComponent>();
 
-    function handleInput() {
+    function handleInput(): void {
       if (saveButtonRef.value) {
         saveButtonRef.value.disabled = !inputRef.value?.value;
       }
     }
 
-    function handleClose() {
+    function handleClose(): void {
       if (inputRef.value) {
         inputRef.value.value = '';
       }
@@ -148,14 +148,14 @@ export const NonModal: Story = {
       }
     }
 
-    function handleSave() {
+    function handleSave(): void {
       if (inputRef.value?.value) {
         ToastComponent.present({ message: `Hello, ${inputRef.value.value}!` });
       }
       handleClose();
     }
 
-    function handleBeforeToggle(evt: CustomEvent<IPopoverToggleEventData>) {
+    function handleBeforeToggle(evt: CustomEvent<IPopoverToggleEventData>): void {
       if (evt.detail.newState === 'closed') {
         if (inputRef.value?.value) {
           evt.preventDefault();
@@ -209,35 +209,33 @@ export const Distinct: Story = {
 }
     `)
   ],
-  render: () => {
-    return html`
-      <forge-drawer>
-        <forge-list navlist>
-          <forge-list-item id="li-1"><button type="button">List Item One</button></forge-list-item>
-          <forge-popover arrow placement="right" trigger-type="hover" distinct="list-item-nav-popovers">
-            <div class="popover-content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-              veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </div>
-          </forge-popover>
+  render: () => html`
+    <forge-drawer>
+      <forge-list navlist>
+        <forge-list-item id="li-1"><button type="button">List Item One</button></forge-list-item>
+        <forge-popover arrow placement="right" trigger-type="hover" distinct="list-item-nav-popovers">
+          <div class="popover-content">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          </div>
+        </forge-popover>
 
-          <forge-list-item id="li-2"><button type="button">List Item Two</button></forge-list-item>
-          <forge-popover arrow placement="right" trigger-type="hover" distinct="list-item-nav-popovers">
-            <div class="popover-content">
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </div>
-          </forge-popover>
+        <forge-list-item id="li-2"><button type="button">List Item Two</button></forge-list-item>
+        <forge-popover arrow placement="right" trigger-type="hover" distinct="list-item-nav-popovers">
+          <div class="popover-content">
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </div>
+        </forge-popover>
 
-          <forge-list-item id="li-3"><button type="button">List Item Three</button></forge-list-item>
-          <forge-popover arrow placement="right" trigger-type="hover" distinct="list-item-nav-popovers">
-            <div class="popover-content">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
-              inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-            </div>
-          </forge-popover>
-        </forge-list>
-      </forge-drawer>
-    `;
-  }
+        <forge-list-item id="li-3"><button type="button">List Item Three</button></forge-list-item>
+        <forge-popover arrow placement="right" trigger-type="hover" distinct="list-item-nav-popovers">
+          <div class="popover-content">
+            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
+            inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+          </div>
+        </forge-popover>
+      </forge-list>
+    </forge-drawer>
+  `
 };

@@ -36,7 +36,5 @@ export const Demo: Story = {};
 
 export const CSSOnly: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`<hr class="forge-divider" />`;
-  }
+  render: () => html`<hr class="forge-divider" />`
 };

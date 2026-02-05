@@ -121,7 +121,7 @@
     "sass": "catalog:",
     "sinon": "^21.0.1",
     "storybook": "catalog:",
-    "storybook-addon-tag-badges": "^2.0.4",
+    "storybook-addon-tag-badges": "catalog:",
     "stylelint": "^16.26.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.54.0",
@@ -130,7 +130,8 @@
     "vite-plugin-full-reload": "^1.2.0",
     "vite-tsconfig-paths": "catalog:",
     "vitest": "^4.0.18",
-    "vitest-browser-lit": "^1.0.1"
+    "vitest-browser-lit": "^1.0.1",
+    "eslint-plugin-storybook": "catalog:"
   },
   "overrides": {
     "@web/test-runner-chrome": "0.18.0"

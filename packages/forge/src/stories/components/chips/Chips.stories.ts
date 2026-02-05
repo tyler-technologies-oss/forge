@@ -5,7 +5,7 @@ import { tylIconAdjust, tylIconOpenInNew, tylIconPayment, tylIconPayments } from
 import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 
 import '@tylertech/forge/avatar';
 import '@tylertech/forge/chips/chip';

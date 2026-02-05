@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
+import { generateCustomElementArgTypes } from '../../utils';
 
 import '@tylertech/forge/view-switcher';
 import '@tylertech/forge/view-switcher/view';
@@ -18,8 +18,10 @@ const meta = {
   render: args => {
     const popoverRef = createRef<IViewSwitcherComponent>();
 
-    function handleTabChange(event: CustomEvent) {
-      if (popoverRef.value === undefined) return;
+    function handleTabChange(event: CustomEvent): void {
+      if (popoverRef.value === undefined) {
+        return;
+      }
       popoverRef.value.index = event.detail.index;
     }
 

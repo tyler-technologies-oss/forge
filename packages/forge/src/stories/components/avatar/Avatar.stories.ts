@@ -1,6 +1,6 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 import { tylIconPerson } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -49,9 +49,7 @@ export const WithImage: Story = {
   args: {
     imageUrl: './ruby.jpg'
   },
-  render: ({ imageUrl }) => {
-    return html` <forge-avatar image-url=${imageUrl}></forge-avatar> `;
-  }
+  render: ({ imageUrl }) => html` <forge-avatar image-url=${imageUrl}></forge-avatar> `
 };
 
 export const WithIcon: Story = {
@@ -70,18 +68,14 @@ export const WithIcon: Story = {
 
 export const WithIconButton: Story = {
   ...standaloneStoryParams,
-  render: ({ text }) => {
-    return html`
-      <forge-icon-button aria-label="Icon button with avatar">
-        <forge-avatar text=${text}></forge-avatar>
-      </forge-icon-button>
-    `;
-  }
+  render: ({ text }) => html`
+    <forge-icon-button aria-label="Icon button with avatar">
+      <forge-avatar text=${text}></forge-avatar>
+    </forge-icon-button>
+  `
 };
 
 export const CSSOnly: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`<div class="forge-avatar">A</div>`;
-  }
+  render: () => html`<div class="forge-avatar">A</div>`
 };

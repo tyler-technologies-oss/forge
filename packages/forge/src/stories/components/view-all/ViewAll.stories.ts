@@ -7,3 +7,7 @@ const meta = {
 } satisfies Meta;
 
 export default meta;
+
+type Story = StoryObj;
+
+export const Placeholder: Story = {};

@@ -48,21 +48,19 @@ export const Demo: Story = {};
 
 export const Themed: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <div style="display: flex; gap: 8px;">
-        <forge-badge theme="default">Default</forge-badge>
-        <forge-badge theme="primary">Primary</forge-badge>
-        <forge-badge theme="secondary">Secondary</forge-badge>
-        <forge-badge theme="tertiary">Tertiary</forge-badge>
-        <forge-badge theme="success">Success</forge-badge>
-        <forge-badge theme="error">Error</forge-badge>
-        <forge-badge theme="warning">Warning</forge-badge>
-        <forge-badge theme="info">Info</forge-badge>
-        <forge-badge theme="info-secondary">Info (secondary)</forge-badge>
-      </div>
-    `;
-  }
+  render: () => html`
+    <div style="display: flex; gap: 8px;">
+      <forge-badge theme="default">Default</forge-badge>
+      <forge-badge theme="primary">Primary</forge-badge>
+      <forge-badge theme="secondary">Secondary</forge-badge>
+      <forge-badge theme="tertiary">Tertiary</forge-badge>
+      <forge-badge theme="success">Success</forge-badge>
+      <forge-badge theme="error">Error</forge-badge>
+      <forge-badge theme="warning">Warning</forge-badge>
+      <forge-badge theme="info">Info</forge-badge>
+      <forge-badge theme="info-secondary">Info (secondary)</forge-badge>
+    </div>
+  `
 };
 
 export const Strong: Story = {
@@ -70,21 +68,19 @@ export const Strong: Story = {
   args: {
     strong: true
   },
-  render: () => {
-    return html`
-      <div style="display: flex; gap: 8px;">
-        <forge-badge strong theme="default">Default</forge-badge>
-        <forge-badge strong theme="primary">Primary</forge-badge>
-        <forge-badge strong theme="secondary">Secondary</forge-badge>
-        <forge-badge strong theme="tertiary">Tertiary</forge-badge>
-        <forge-badge strong theme="success">Success</forge-badge>
-        <forge-badge strong theme="error">Error</forge-badge>
-        <forge-badge strong theme="warning">Warning</forge-badge>
-        <forge-badge strong theme="info">Info</forge-badge>
-        <forge-badge strong theme="info-secondary">Info (secondary)</forge-badge>
-      </div>
-    `;
-  }
+  render: () => html`
+    <div style="display: flex; gap: 8px;">
+      <forge-badge strong theme="default">Default</forge-badge>
+      <forge-badge strong theme="primary">Primary</forge-badge>
+      <forge-badge strong theme="secondary">Secondary</forge-badge>
+      <forge-badge strong theme="tertiary">Tertiary</forge-badge>
+      <forge-badge strong theme="success">Success</forge-badge>
+      <forge-badge strong theme="error">Error</forge-badge>
+      <forge-badge strong theme="warning">Warning</forge-badge>
+      <forge-badge strong theme="info">Info</forge-badge>
+      <forge-badge strong theme="info-secondary">Info (secondary)</forge-badge>
+    </div>
+  `
 };
 
 export const WithIcon: Story = {

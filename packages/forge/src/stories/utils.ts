@@ -48,8 +48,8 @@ export const removeSourceStyleTagParams: StoryObj = {
  * @param tagName {string} - The tag name of the custom element
  * @returns {object} - The controls object for Storybook
  */
-export function transformCssPropsToControls(tagName: string) {
-  const declaration = cem.modules.flatMap((module: any) => module.declarations).find((declaration: any) => declaration.tagName === tagName);
+export function transformCssPropsToControls(tagName: string): object {
+  const declaration = cem.modules.flatMap((module: any) => module.declarations).find((dec: any) => dec.tagName === tagName);
   return declaration.cssProperties.reduce((acc: object, prop: any) => {
     acc[prop.name] = { control: 'text' };
     return acc;
@@ -76,7 +76,7 @@ export function customElementStoryRenderer<T extends keyof HTMLElementTagNameMap
  * @param element {HTMLElement} - The element to apply props to
  * @param props {Partial<HTMLElement>} - The props to apply
  */
-export function applyArgs(element: HTMLElement, props: Partial<HTMLElement>) {
+export function applyArgs(element: HTMLElement, props: Partial<HTMLElement>): void {
   Object.keys(props).forEach(key => {
     if (key.startsWith('--')) {
       // Set CSS custom properties via inline style
@@ -191,12 +191,12 @@ export function getCustomElementsTagDeclaration(tagName: string): Declaration {
 }
 
 /** Attempts to retrieve the Forge type information for the provided type string. */
-export function getCustomElementType(type: string) {
+export function getCustomElementType(type: string): unknown {
   return cem.forgeTypes[type];
 }
 
 /** Gets the branch name that the custom elements manifest was generated with. */
-export function getBranchName() {
+export function getBranchName(): string {
   return cem.branchName;
 }
 
@@ -220,13 +220,13 @@ export function removeEmptyAttributes(source: string): string {
 }
 
 const CONTROL_TYPE_MAP: Record<string, ControlType> = {
-  boolean: 'boolean',
-  string: 'text',
-  number: 'number',
-  object: 'object',
-  function: 'object',
-  array: 'object',
-  bigint: 'number'
+  ['boolean']: 'boolean',
+  ['string']: 'text',
+  ['number']: 'number',
+  ['object']: 'object',
+  ['function']: 'object',
+  ['array']: 'object',
+  ['bigint']: 'number'
 };
 
 export interface TagItem {

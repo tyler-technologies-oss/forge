@@ -509,7 +509,7 @@ describe('BaseButton', () => {
   });
 
   it('should click <a> tag when click() is called', async () => {
-    window['forgeAnchorTest'] = () => {};
+    window.forgeAnchorTest = () => {};
     const href = `javascript: forgeAnchorTest()`;
     const screen = render(html`<forge-test-base-button><a href="${href}">Test</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as IButtonComponent;
@@ -518,13 +518,13 @@ describe('BaseButton', () => {
 
     el.click();
     await frame();
-    delete window['forgeAnchorTest'];
+    delete window.forgeAnchorTest;
 
     expect(clickSpy).toHaveBeenCalledOnce();
   });
 
   it('should click <a> tag via mouse', async () => {
-    window['forgeAnchorTest'] = () => {};
+    window.forgeAnchorTest = () => {};
     const href = `javascript: forgeAnchorTest()`;
     const screen = render(html`<forge-test-base-button><a href="${href}">Test</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as IButtonComponent;
@@ -533,14 +533,14 @@ describe('BaseButton', () => {
     el.addEventListener('click', clickSpy);
 
     await userEvent.click(el);
-    delete window['forgeAnchorTest'];
+    delete window.forgeAnchorTest;
 
     expect(clickSpy).toHaveBeenCalledOnce();
     expect(testSpy).toHaveBeenCalledOnce();
   });
 
   it('should not click <a> tag when click event is canceled', async () => {
-    window['forgeAnchorTest'] = () => {};
+    window.forgeAnchorTest = () => {};
     const href = `javascript: forgeAnchorTest()`;
     const screen = render(html`<forge-test-base-button><a href="${href}">Test</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as IButtonComponent;
@@ -549,13 +549,13 @@ describe('BaseButton', () => {
 
     el.click();
     await frame();
-    delete window['forgeAnchorTest'];
+    delete window.forgeAnchorTest;
 
     expect(testSpy).not.toHaveBeenCalled();
   });
 
   it('should click <a> tag via keyboard', async () => {
-    window['forgeAnchorTest'] = () => {};
+    window.forgeAnchorTest = () => {};
     const href = `javascript: forgeAnchorTest()`;
     const screen = render(html`<forge-test-base-button><a href="${href}">Test</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as IButtonComponent;
@@ -567,14 +567,14 @@ describe('BaseButton', () => {
     anchorEl.focus();
     await userEvent.keyboard('{Enter}');
     await frame();
-    delete window['forgeAnchorTest'];
+    delete window.forgeAnchorTest;
 
     expect(clickSpy).toHaveBeenCalledOnce();
     expect(testSpy).toHaveBeenCalledOnce();
   });
 
   it('should not click <a> tag when enter key is pressed and event is canceled', async () => {
-    window['forgeAnchorTest'] = () => {};
+    window.forgeAnchorTest = () => {};
     const href = `javascript: forgeAnchorTest()`;
     const screen = render(html`<forge-test-base-button><a href="${href}">Test</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as IButtonComponent;
@@ -585,13 +585,13 @@ describe('BaseButton', () => {
     anchorEl.focus();
     await userEvent.keyboard('{Enter}');
     await frame();
-    delete window['forgeAnchorTest'];
+    delete window.forgeAnchorTest;
 
     expect(testSpy).not.toHaveBeenCalled();
   });
 
   it('should not disable <a>', async () => {
-    window['forgeAnchorTest'] = () => {};
+    window.forgeAnchorTest = () => {};
     const href = `javascript: forgeAnchorTest()`;
     const screen = render(html`<forge-test-base-button disabled><a href="${href}">Test</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as IButtonComponent;
@@ -600,7 +600,7 @@ describe('BaseButton', () => {
 
     el.click();
     await frame();
-    delete window['forgeAnchorTest'];
+    delete window.forgeAnchorTest;
 
     expect(clickSpy).toHaveBeenCalled();
   });
@@ -823,7 +823,7 @@ describe('BaseButton', () => {
     await frame();
     expect(popoverEl.matches(':popover-open')).toBe(false);
 
-    popoverEl['showPopover']();
+    popoverEl.showPopover();
     await frame();
     expect(popoverEl.matches(':popover-open')).toBe(true);
 

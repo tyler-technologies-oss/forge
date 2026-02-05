@@ -1,13 +1,13 @@
-import { html, nothing } from 'lit';
-import { action } from 'storybook/actions';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { GLOBAL_THEME_OPTIONS, OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 import { IToastComponent, IToastProperties } from '@tylertech/forge/toast';
-import { styleMap } from 'lit/directives/style-map.js';
+import { html, nothing } from 'lit';
 import { createRef, ref } from 'lit/directives/ref.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import { action } from 'storybook/actions';
+import { GLOBAL_THEME_OPTIONS, OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 
-import '@tylertech/forge/toast';
 import '@tylertech/forge/button';
+import '@tylertech/forge/toast';
 
 const component = 'forge-toast';
 
@@ -20,7 +20,7 @@ const meta = {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
     const toastRef = createRef();
-    const showToast = () => ((toastRef.value as IToastComponent).open = !(toastRef.value as IToastComponent).open);
+    const showToast = (): boolean => ((toastRef.value as IToastComponent).open = !(toastRef.value as IToastComponent).open);
 
     return html`
       <forge-button variant="raised" @click=${showToast}>Show Toast</forge-button>

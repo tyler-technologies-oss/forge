@@ -23,7 +23,7 @@ const moveEventAction = action('forge-dialog-move');
 const moveEndEventAction = action('forge-dialog-move-end');
 const fullscreenChangeAction = action('forge-dialog-fullscreen-change');
 
-export const Dialog = (args: ArgTypes) => {
+export const Dialog = (args: ArgTypes): HTMLDivElement => {
   IconRegistry.define(tylIconClose);
   const container = document.createElement('div');
 

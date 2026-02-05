@@ -75,14 +75,14 @@ const meta = {
 
       TABLE_FILTER_VALUES[COLUMNS[columnIndex].property as string] = filter;
 
-      tableEl.data = DATA.filter(row => {
-        return Object.keys(TABLE_FILTER_VALUES).every(key => {
+      tableEl.data = DATA.filter(row =>
+        Object.keys(TABLE_FILTER_VALUES).every(key => {
           if (TABLE_FILTER_VALUES[key] === '') {
             return true;
           }
           return row[key].toString().toLowerCase().includes(TABLE_FILTER_VALUES[key].toLowerCase());
-        });
-      });
+        })
+      );
     });
 
     tableEl.addEventListener('forge-table-sort', (evt: CustomEvent<ITableSortEventData>) => {
@@ -154,38 +154,36 @@ export const Demo: Story = {
 
 export const CSSOnly: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <table class="forge-data-table">
-        <thead>
-          <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
-            <th>Column 3</th>
-            <th>Column 4</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Row 1, Col 1</td>
-            <td>Row 1, Col 2</td>
-            <td>Row 1, Col 3</td>
-            <td>Row 1, Col 4</td>
-          </tr>
-          <tr>
-            <td>Row 2, Col 1</td>
-            <td>Row 2, Col 2</td>
-            <td>Row 2, Col 3</td>
-            <td>Row 2, Col 4</td>
-          </tr>
-          <tr>
-            <td>Row 3, Col 1</td>
-            <td>Row 3, Col 2</td>
-            <td>Row 3, Col 3</td>
-            <td>Row 3, Col 4</td>
-          </tr>
-        </tbody>
-      </table>
-    `;
-  }
+  render: () => html`
+    <table class="forge-data-table">
+      <thead>
+        <tr>
+          <th>Column 1</th>
+          <th>Column 2</th>
+          <th>Column 3</th>
+          <th>Column 4</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Row 1, Col 1</td>
+          <td>Row 1, Col 2</td>
+          <td>Row 1, Col 3</td>
+          <td>Row 1, Col 4</td>
+        </tr>
+        <tr>
+          <td>Row 2, Col 1</td>
+          <td>Row 2, Col 2</td>
+          <td>Row 2, Col 3</td>
+          <td>Row 2, Col 4</td>
+        </tr>
+        <tr>
+          <td>Row 3, Col 1</td>
+          <td>Row 3, Col 2</td>
+          <td>Row 3, Col 3</td>
+          <td>Row 3, Col 4</td>
+        </tr>
+      </tbody>
+    </table>
+  `
 };

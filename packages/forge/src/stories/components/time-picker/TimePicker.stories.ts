@@ -1,35 +1,33 @@
-import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
+import { html } from 'lit';
+import { generateCustomElementArgTypes } from '../../utils';
 
-import '@tylertech/forge/time-picker';
 import '@tylertech/forge/text-field';
+import '@tylertech/forge/time-picker';
 
 const component = 'forge-time-picker';
 
 const meta = {
   title: 'Components/Time Picker',
-  render: args => {
-    return html`
-      <forge-time-picker
-        .allowSeconds=${args.allowSeconds}
-        .masked=${args.masked}
-        .showMaskFormat=${args.showMaskFormat}
-        .use24HourTime=${args.use24HourTime}
-        .allowInvalidTime=${args.allowInvalidTime}
-        .step=${args.step}
-        .allowInput=${args.allowInput}
-        .allowDropdown=${args.allowDropdown}
-        .showNow=${args.showNow}
-        .showHourOptions=${args.showHourOptions}
-        .disabled=${args.disabled}>
-        <forge-text-field>
-          <input id="time-picker" type="text" />
-          <label for="time-picker">Time</label>
-        </forge-text-field>
-      </forge-time-picker>
-    `;
-  },
+  render: args => html`
+    <forge-time-picker
+      .allowSeconds=${args.allowSeconds}
+      .masked=${args.masked}
+      .showMaskFormat=${args.showMaskFormat}
+      .use24HourTime=${args.use24HourTime}
+      .allowInvalidTime=${args.allowInvalidTime}
+      .step=${args.step}
+      .allowInput=${args.allowInput}
+      .allowDropdown=${args.allowDropdown}
+      .showNow=${args.showNow}
+      .showHourOptions=${args.showHourOptions}
+      .disabled=${args.disabled}>
+      <forge-text-field>
+        <input id="time-picker" type="text" />
+        <label for="time-picker">Time</label>
+      </forge-text-field>
+    </forge-time-picker>
+  `,
   component,
   parameters: {
     actions: { disable: true }

@@ -14,8 +14,8 @@ const viewChangeAction = action('forge-calendar-view-change');
 
 const meta = {
   title: 'Components/Calendar',
-  render: args => {
-    return html`<forge-calendar
+  render: args =>
+    html`<forge-calendar
       .month=${args.month}
       .year=${args.year}
       .mode=${args.mode}
@@ -45,8 +45,7 @@ const meta = {
       @forge-calendar-date-select=${dateSelectAction}
       @forge-calendar-focus-change=${focusChangeAction}
       @forge-calendar-month-change=${monthChangeAction}
-      @forge-calendar-view-change=${viewChangeAction}></forge-calendar>`;
-  },
+      @forge-calendar-view-change=${viewChangeAction}></forge-calendar>`,
   component,
   argTypes: {
     ...generateCustomElementArgTypes({

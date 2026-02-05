@@ -44,25 +44,21 @@ export const Demo: Story = {};
 
 export const Horizontal: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html` <forge-open-icon orientation="horizontal"></forge-open-icon> `;
-  }
+  render: () => html` <forge-open-icon orientation="horizontal"></forge-open-icon> `
 };
 
 export const ExpansionPanel: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <forge-expansion-panel>
-        <div role="button" tabindex="0" slot="header" style="display: flex; justify-content: space-between; align-items: center;">
-          <div>Expansion panel</div>
-          <forge-open-icon></forge-open-icon>
-        </div>
-        <div>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum error officia iure corporis veritatis ut quod quo libero ea repellendus, consequuntur
-          porro explicabo exercitationem minus pariatur debitis nihil at labore!
-        </div>
-      </forge-expansion-panel>
-    `;
-  }
+  render: () => html`
+    <forge-expansion-panel>
+      <div role="button" tabindex="0" slot="header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>Expansion panel</div>
+        <forge-open-icon></forge-open-icon>
+      </div>
+      <div>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum error officia iure corporis veritatis ut quod quo libero ea repellendus, consequuntur
+        porro explicabo exercitationem minus pariatur debitis nihil at labore!
+      </div>
+    </forge-expansion-panel>
+  `
 };

@@ -88,15 +88,13 @@ export const Extended: Story = {
 
 export const WithAnchor: Story = {
   ...standaloneStoryParams,
-  render: args => {
-    return html`
-      <forge-fab>
-        <a href="javascript: void(0);" aria-label="FAB with anchor">
-          <forge-icon name="open_in_new"></forge-icon>
-        </a>
-      </forge-fab>
-    `;
-  }
+  render: args => html`
+    <forge-fab>
+      <a href="javascript: void(0);" aria-label="FAB with anchor">
+        <forge-icon name="open_in_new"></forge-icon>
+      </a>
+    </forge-fab>
+  `
 };
 
 export const CSSOnly: Story = {

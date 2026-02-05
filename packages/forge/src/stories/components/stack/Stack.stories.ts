@@ -107,60 +107,66 @@ export const SimpleVerticalForm: Story = {
 
 export const ComplexForm: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <form>
+  render: () => html`
+    <form>
+      <forge-stack>
         <forge-stack>
           <forge-stack>
-            <forge-stack>
+            <forge-text-field>
+              <label for="input-text-01">Text field</label>
+              <input type="text" id="input-text-1" />
+            </forge-text-field>
+            <forge-stack inline stretch>
               <forge-text-field>
-                <label for="input-text-01">Text field</label>
-                <input type="text" id="input-text-1" />
+                <label for="input-text-2">Text field</label>
+                <input type="text" id="input-text-2" />
               </forge-text-field>
-              <forge-stack inline stretch>
-                <forge-text-field>
-                  <label for="input-text-2">Text field</label>
-                  <input type="text" id="input-text-2" />
-                </forge-text-field>
-                <forge-text-field>
-                  <label for="input-text-3">Text field</label>
-                  <input type="text" id="input-text-3" />
-                </forge-text-field>
-              </forge-stack>
+              <forge-text-field>
+                <label for="input-text-3">Text field</label>
+                <input type="text" id="input-text-3" />
+              </forge-text-field>
+            </forge-stack>
+          </forge-stack>
+          <forge-stack inline stretch>
+            <forge-stack inline stretch>
+              <forge-text-field>
+                <input type="text" id="input-text-4" />
+                <label for="input-text-4">Text field</label>
+              </forge-text-field>
+              <forge-text-field>
+                <input type="text" id="input-text-5" />
+                <label for="input-text-5">Text field</label>
+              </forge-text-field>
             </forge-stack>
             <forge-stack inline stretch>
-              <forge-stack inline stretch>
-                <forge-text-field>
-                  <input type="text" id="input-text-4" />
-                  <label for="input-text-4">Text field</label>
-                </forge-text-field>
-                <forge-text-field>
-                  <input type="text" id="input-text-5" />
-                  <label for="input-text-5">Text field</label>
-                </forge-text-field>
-              </forge-stack>
-              <forge-stack inline stretch>
-                <forge-text-field>
-                  <input type="text" id="input-text-6" />
-                  <label for="input-text-6">Text field</label>
-                </forge-text-field>
-              </forge-stack>
+              <forge-text-field>
+                <input type="text" id="input-text-6" />
+                <label for="input-text-6">Text field</label>
+              </forge-text-field>
             </forge-stack>
           </forge-stack>
         </forge-stack>
-      </form>
-    `;
-  }
+      </forge-stack>
+    </form>
+  `
 };
 
 export const CSSOnly: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <div class="forge-stack">
+  render: () => html`
+    <div class="forge-stack">
+      <div class="forge-field">
+        <input type="text" placeholder="Text field" />
+      </div>
+      <div class="forge-stack forge-stack--inline forge-stack--stretch">
         <div class="forge-field">
           <input type="text" placeholder="Text field" />
         </div>
+        <div class="forge-field">
+          <input type="text" placeholder="Text field" />
+        </div>
+      </div>
+      <div class="forge-stack forge-stack--inline forge-stack--stretch">
         <div class="forge-stack forge-stack--inline forge-stack--stretch">
           <div class="forge-field">
             <input type="text" placeholder="Text field" />
@@ -170,21 +176,11 @@ export const CSSOnly: Story = {
           </div>
         </div>
         <div class="forge-stack forge-stack--inline forge-stack--stretch">
-          <div class="forge-stack forge-stack--inline forge-stack--stretch">
-            <div class="forge-field">
-              <input type="text" placeholder="Text field" />
-            </div>
-            <div class="forge-field">
-              <input type="text" placeholder="Text field" />
-            </div>
-          </div>
-          <div class="forge-stack forge-stack--inline forge-stack--stretch">
-            <div class="forge-field">
-              <input type="text" placeholder="Text field" />
-            </div>
+          <div class="forge-field">
+            <input type="text" placeholder="Text field" />
           </div>
         </div>
       </div>
-    `;
-  }
+    </div>
+  `
 };

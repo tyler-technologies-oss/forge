@@ -7,40 +7,38 @@ import '@tylertech/forge/date-picker';
 
 const component = 'forge-date-picker';
 
-const changeAction = (evt: CustomEvent) => action('forge-date-picker-change')(evt.detail);
-const openAction = (evt: CustomEvent) => action('forge-date-picker-open')(evt.detail);
-const closeAction = (evt: CustomEvent) => action('forge-date-picker-close')(evt.detail);
-const inputAction = (evt: CustomEvent) => action('forge-date-picker-input')(evt.detail);
+const changeAction = (evt: CustomEvent): void => action('forge-date-picker-change')(evt.detail);
+const openAction = (evt: CustomEvent): void => action('forge-date-picker-open')(evt.detail);
+const closeAction = (evt: CustomEvent): void => action('forge-date-picker-close')(evt.detail);
+const inputAction = (evt: CustomEvent): void => action('forge-date-picker-input')(evt.detail);
 
 const meta = {
   title: 'Components/Date Picker',
-  render: args => {
-    return html`
-      <forge-date-picker
-        .allowInvalidDate=${args.allowInvalidDate}
-        ?disabled=${args.disabled}
-        .disabledDaysOfWeek=${args.disabledDaysOfWeek}
-        .locale=${args.locale}
-        .masked=${args.masked}
-        .max=${args.max}
-        .min=${args.min}
-        .open=${args.open}
-        .showClear=${args.showClear}
-        .showMaskFormat=${args.showMaskFormat}
-        .showToday=${args.showToday}
-        .yearRange=${args.yearRange}
-        .dateFormat=${args.dateFormat}
-        @forge-date-picker-change=${changeAction}
-        @forge-date-picker-open=${openAction}
-        @forge-date-picker-close=${closeAction}
-        @forge-date-picker-input=${inputAction}>
-        <forge-text-field>
-          <label for="date-picker">Date</label>
-          <input aria-label="Pick a date" type="text" id="date-picker" autocomplete="off" placeholder="" />
-        </forge-text-field>
-      </forge-date-picker>
-    `;
-  },
+  render: args => html`
+    <forge-date-picker
+      .allowInvalidDate=${args.allowInvalidDate}
+      ?disabled=${args.disabled}
+      .disabledDaysOfWeek=${args.disabledDaysOfWeek}
+      .locale=${args.locale}
+      .masked=${args.masked}
+      .max=${args.max}
+      .min=${args.min}
+      .open=${args.open}
+      .showClear=${args.showClear}
+      .showMaskFormat=${args.showMaskFormat}
+      .showToday=${args.showToday}
+      .yearRange=${args.yearRange}
+      .dateFormat=${args.dateFormat}
+      @forge-date-picker-change=${changeAction}
+      @forge-date-picker-open=${openAction}
+      @forge-date-picker-close=${closeAction}
+      @forge-date-picker-input=${inputAction}>
+      <forge-text-field>
+        <label for="date-picker">Date</label>
+        <input aria-label="Pick a date" type="text" id="date-picker" autocomplete="off" placeholder="" />
+      </forge-text-field>
+    </forge-date-picker>
+  `,
   component,
   argTypes: {
     ...generateCustomElementArgTypes({
@@ -103,16 +101,14 @@ export const DateFormats: Story = {
       include: ['dateFormat']
     }
   },
-  render: args => {
-    return html`
-      <forge-date-picker date-format=${args.dateFormat} @forge-date-picker-change=${changeAction}>
-        <forge-text-field>
-          <label for="date-picker-date-formats">${args.dateFormat}</label>
-          <input type="text" id="date-picker-date-formats" autocomplete="off" />
-        </forge-text-field>
-      </forge-date-picker>
-    `;
-  }
+  render: args => html`
+    <forge-date-picker date-format=${args.dateFormat} @forge-date-picker-change=${changeAction}>
+      <forge-text-field>
+        <label for="date-picker-date-formats">${args.dateFormat}</label>
+        <input type="text" id="date-picker-date-formats" autocomplete="off" />
+      </forge-text-field>
+    </forge-date-picker>
+  `
 };
 
 export const CustomFormat: Story = {

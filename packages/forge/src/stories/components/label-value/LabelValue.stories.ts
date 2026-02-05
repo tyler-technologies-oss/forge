@@ -74,10 +74,9 @@ export const CSSOnly: Story = {
   render: ({ inline, empty, ellipsis, withIcon, ...args }) => {
     const cssVarArgs = getCssVariableArgs(args) ?? {};
     if (ellipsis) {
-      cssVarArgs['maxWidth'] = '150px';
+      cssVarArgs.maxWidth = '150px';
     }
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
-    console.log(style);
     const classes = {
       'forge-label-value': true,
       'forge-label-value--inline': inline,

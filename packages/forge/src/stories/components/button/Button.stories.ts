@@ -51,16 +51,14 @@ export const Demo: Story = {};
 
 export const Variants: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <forge-button>Text</forge-button>
-      <forge-button variant="outlined">Outlined</forge-button>
-      <forge-button variant="tonal">Tonal</forge-button>
-      <forge-button variant="filled">Filled</forge-button>
-      <forge-button variant="raised">Raised</forge-button>
-      <forge-button variant="link">Link</forge-button>
-    `;
-  }
+  render: () => html`
+    <forge-button>Text</forge-button>
+    <forge-button variant="outlined">Outlined</forge-button>
+    <forge-button variant="tonal">Tonal</forge-button>
+    <forge-button variant="filled">Filled</forge-button>
+    <forge-button variant="raised">Raised</forge-button>
+    <forge-button variant="link">Link</forge-button>
+  `
 };
 
 export const Anchor: Story = {
@@ -90,17 +88,15 @@ export const Themed: Story = {
   args: {
     variant: 'raised'
   },
-  render: ({ variant }) => {
-    return html`
-      <forge-button variant=${variant}>Primary</forge-button>
-      <forge-button variant=${variant} theme="secondary">Secondary</forge-button>
-      <forge-button variant=${variant} theme="tertiary">Tertiary</forge-button>
-      <forge-button variant=${variant} theme="success">Success</forge-button>
-      <forge-button variant=${variant} theme="warning">Warning</forge-button>
-      <forge-button variant=${variant} theme="error">Error</forge-button>
-      <forge-button variant=${variant} theme="info">Info</forge-button>
-    `;
-  }
+  render: ({ variant }) => html`
+    <forge-button variant=${variant}>Primary</forge-button>
+    <forge-button variant=${variant} theme="secondary">Secondary</forge-button>
+    <forge-button variant=${variant} theme="tertiary">Tertiary</forge-button>
+    <forge-button variant=${variant} theme="success">Success</forge-button>
+    <forge-button variant=${variant} theme="warning">Warning</forge-button>
+    <forge-button variant=${variant} theme="error">Error</forge-button>
+    <forge-button variant=${variant} theme="info">Info</forge-button>
+  `
 };
 
 export const WithIcon: Story = {
@@ -135,14 +131,12 @@ export const WithCircularProgress: Story = {
   args: {
     variant: 'raised'
   },
-  render: ({ variant, theme, disabled }) => {
-    return html`
-      <forge-button .variant=${variant} .theme=${theme} ?disabled=${disabled}>
-        Loading...
-        <forge-circular-progress slot="end" aria-label="Loading something important"></forge-circular-progress>
-      </forge-button>
-    `;
-  }
+  render: ({ variant, theme, disabled }) => html`
+    <forge-button .variant=${variant} .theme=${theme} ?disabled=${disabled}>
+      Loading...
+      <forge-circular-progress slot="end" aria-label="Loading something important"></forge-circular-progress>
+    </forge-button>
+  `
 };
 
 export const CSSOnly: Story = {

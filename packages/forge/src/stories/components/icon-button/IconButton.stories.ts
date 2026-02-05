@@ -79,110 +79,102 @@ export const Demo: Story = {};
 
 export const Variants: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <forge-icon-button aria-label="Default icon button">
-        <forge-icon name="favorite"></forge-icon>
-      </forge-icon-button>
+  render: () => html`
+    <forge-icon-button aria-label="Default icon button">
+      <forge-icon name="favorite"></forge-icon>
+    </forge-icon-button>
 
-      <forge-icon-button variant="outlined" aria-label="Outlined icon button">
-        <forge-icon name="favorite"></forge-icon>
-      </forge-icon-button>
+    <forge-icon-button variant="outlined" aria-label="Outlined icon button">
+      <forge-icon name="favorite"></forge-icon>
+    </forge-icon-button>
 
-      <forge-icon-button variant="tonal" aria-label="Tonal icon button">
-        <forge-icon name="favorite"></forge-icon>
-      </forge-icon-button>
+    <forge-icon-button variant="tonal" aria-label="Tonal icon button">
+      <forge-icon name="favorite"></forge-icon>
+    </forge-icon-button>
 
-      <forge-icon-button variant="filled" aria-label="Filled icon button">
-        <forge-icon name="favorite"></forge-icon>
-      </forge-icon-button>
+    <forge-icon-button variant="filled" aria-label="Filled icon button">
+      <forge-icon name="favorite"></forge-icon>
+    </forge-icon-button>
 
-      <forge-icon-button variant="raised" aria-label="Raised icon button">
-        <forge-icon name="favorite"></forge-icon>
-      </forge-icon-button>
-    `;
-  }
+    <forge-icon-button variant="raised" aria-label="Raised icon button">
+      <forge-icon name="favorite"></forge-icon>
+    </forge-icon-button>
+  `
 };
 
 export const Toggle: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <forge-icon-button toggle aria-label="Default toggle icon button">
-        <forge-icon name="favorite_border"></forge-icon>
-        <forge-icon slot="on" name="favorite"></forge-icon>
-      </forge-icon-button>
+  render: () => html`
+    <forge-icon-button toggle aria-label="Default toggle icon button">
+      <forge-icon name="favorite_border"></forge-icon>
+      <forge-icon slot="on" name="favorite"></forge-icon>
+    </forge-icon-button>
 
-      <forge-icon-button toggle variant="outlined" aria-label="Outlined toggle icon button">
-        <forge-icon name="favorite_border"></forge-icon>
-        <forge-icon slot="on" name="favorite"></forge-icon>
-      </forge-icon-button>
+    <forge-icon-button toggle variant="outlined" aria-label="Outlined toggle icon button">
+      <forge-icon name="favorite_border"></forge-icon>
+      <forge-icon slot="on" name="favorite"></forge-icon>
+    </forge-icon-button>
 
-      <forge-icon-button toggle variant="tonal" aria-label="Tonal toggle icon button">
-        <forge-icon name="favorite_border"></forge-icon>
-        <forge-icon slot="on" name="favorite"></forge-icon>
-      </forge-icon-button>
+    <forge-icon-button toggle variant="tonal" aria-label="Tonal toggle icon button">
+      <forge-icon name="favorite_border"></forge-icon>
+      <forge-icon slot="on" name="favorite"></forge-icon>
+    </forge-icon-button>
 
-      <forge-icon-button toggle variant="filled" aria-label="Filled toggle icon button">
-        <forge-icon name="favorite_border"></forge-icon>
-        <forge-icon slot="on" name="favorite"></forge-icon>
-      </forge-icon-button>
+    <forge-icon-button toggle variant="filled" aria-label="Filled toggle icon button">
+      <forge-icon name="favorite_border"></forge-icon>
+      <forge-icon slot="on" name="favorite"></forge-icon>
+    </forge-icon-button>
 
-      <forge-icon-button toggle variant="raised" aria-label="Raised toggle icon button">
-        <forge-icon name="favorite_border"></forge-icon>
-        <forge-icon slot="on" name="favorite"></forge-icon>
-      </forge-icon-button>
-    `;
-  }
+    <forge-icon-button toggle variant="raised" aria-label="Raised toggle icon button">
+      <forge-icon name="favorite_border"></forge-icon>
+      <forge-icon slot="on" name="favorite"></forge-icon>
+    </forge-icon-button>
+  `
 };
 
 export const Anchor: Story = {
   parameters: {
     controls: { include: ['variant'] }
   },
-  render: ({ variant }) => {
-    return html`
-      <forge-icon-button .variant=${variant}>
-        <a href="javascript: alert('Icon button with anchor works!');" aria-label="Anchor link icon button">
-          <forge-icon .name=${tylIconOpenInNew.name}></forge-icon>
-        </a>
-      </forge-icon-button>
-    `;
-  }
+  render: ({ variant }) => html`
+    <forge-icon-button .variant=${variant}>
+      <a href="javascript: alert('Icon button with anchor works!');" aria-label="Anchor link icon button">
+        <forge-icon .name=${tylIconOpenInNew.name}></forge-icon>
+      </a>
+    </forge-icon-button>
+  `
 };
 
 export const Themed: Story = {
   parameters: {
     controls: { include: ['variant'] }
   },
-  render: ({ variant }) => {
-    return html`
-      <forge-icon-button variant=${variant} aria-label="Default theme icon button">
-        <forge-icon name="forge_logo"></forge-icon>
-      </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="primary" aria-label="Primary theme icon button">
-        <forge-icon name="forge_logo"></forge-icon>
-      </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="secondary" aria-label="Secondary theme icon button">
-        <forge-icon name="forge_logo"></forge-icon>
-      </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="tertiary" aria-label="Tertiary theme icon button">
-        <forge-icon name="forge_logo"></forge-icon>
-      </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="success" aria-label="Success theme icon button">
-        <forge-icon name="forge_logo"></forge-icon>
-      </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="warning" aria-label="Warning theme icon button">
-        <forge-icon name="forge_logo"></forge-icon>
-      </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="error" aria-label="Error theme icon button">
-        <forge-icon name="forge_logo"></forge-icon>
-      </forge-icon-button>
-      <forge-icon-button variant=${variant} theme="info" aria-label="Info theme icon button">
-        <forge-icon name="forge_logo"></forge-icon>
-      </forge-icon-button>
-    `;
-  }
+  render: ({ variant }) => html`
+    <forge-icon-button variant=${variant} aria-label="Default theme icon button">
+      <forge-icon name="forge_logo"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button variant=${variant} theme="primary" aria-label="Primary theme icon button">
+      <forge-icon name="forge_logo"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button variant=${variant} theme="secondary" aria-label="Secondary theme icon button">
+      <forge-icon name="forge_logo"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button variant=${variant} theme="tertiary" aria-label="Tertiary theme icon button">
+      <forge-icon name="forge_logo"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button variant=${variant} theme="success" aria-label="Success theme icon button">
+      <forge-icon name="forge_logo"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button variant=${variant} theme="warning" aria-label="Warning theme icon button">
+      <forge-icon name="forge_logo"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button variant=${variant} theme="error" aria-label="Error theme icon button">
+      <forge-icon name="forge_logo"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button variant=${variant} theme="info" aria-label="Info theme icon button">
+      <forge-icon name="forge_logo"></forge-icon>
+    </forge-icon-button>
+  `
 };
 
 export const WithBadge: Story = {
@@ -210,27 +202,23 @@ export const WithCircularProgress: Story = {
   parameters: {
     controls: { include: ['variant', 'theme', 'disabled'] }
   },
-  render: ({ variant, theme, disabled }) => {
-    return html`
-      <forge-icon-button .variant=${variant} .theme=${theme} ?disabled=${disabled} aria-label="Loading">
-        <forge-circular-progress aria-label="Progress label"></forge-circular-progress>
-      </forge-icon-button>
-    `;
-  }
+  render: ({ variant, theme, disabled }) => html`
+    <forge-icon-button .variant=${variant} .theme=${theme} ?disabled=${disabled} aria-label="Loading">
+      <forge-circular-progress aria-label="Progress label"></forge-circular-progress>
+    </forge-icon-button>
+  `
 };
 
 export const WithLabel: Story = {
   ...standaloneStoryParams,
-  render: () => {
-    return html`
-      <forge-label style="display: flex; flex-direction: column; width: min-content; align-items: center;">
-        <forge-icon-button>
-          <forge-icon name=${tylIconSettings.name}></forge-icon>
-        </forge-icon-button>
-        <span>Settings</span>
-      </forge-label>
-    `;
-  }
+  render: () => html`
+    <forge-label style="display: flex; flex-direction: column; width: min-content; align-items: center;">
+      <forge-icon-button>
+        <forge-icon name=${tylIconSettings.name}></forge-icon>
+      </forge-icon-button>
+      <span>Settings</span>
+    </forge-label>
+  `
 };
 
 export const CSSOnly: Story = {

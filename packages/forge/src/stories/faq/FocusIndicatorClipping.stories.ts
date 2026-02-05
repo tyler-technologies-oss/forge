@@ -28,21 +28,19 @@ export const ClippingExample: Story = {
       }
     `)
   ],
-  render: () => {
-    return html`
-      <forge-card>
-        <forge-scaffold>
-          <div slot="body">
-            <forge-text-field>
-              <label for="my-input">My Input</label>
-              <input id="my-input" type="text" />
-            </forge-text-field>
-            <forge-button>My Button</forge-button>
-          </div>
-        </forge-scaffold>
-      </forge-card>
-    `;
-  }
+  render: () => html`
+    <forge-card>
+      <forge-scaffold>
+        <div slot="body">
+          <forge-text-field>
+            <label for="my-input">My Input</label>
+            <input id="my-input" type="text" />
+          </forge-text-field>
+          <forge-button>My Button</forge-button>
+        </div>
+      </forge-scaffold>
+    </forge-card>
+  `
 };
 
 export const NoClippingExample: Story = {
@@ -57,21 +55,19 @@ export const NoClippingExample: Story = {
       }
     `)
   ],
-  render: () => {
-    return html`
-      <forge-card class="my-card">
-        <forge-scaffold>
-          <div slot="body" class="my-scaffold-body">
-            <forge-text-field>
-              <label for="my-input">My Input</label>
-              <input id="my-input" type="text" />
-            </forge-text-field>
-            <forge-button>My Button</forge-button>
-          </div>
-        </forge-scaffold>
-      </forge-card>
-    `;
-  }
+  render: () => html`
+    <forge-card class="my-card">
+      <forge-scaffold>
+        <div slot="body" class="my-scaffold-body">
+          <forge-text-field>
+            <label for="my-input">My Input</label>
+            <input id="my-input" type="text" />
+          </forge-text-field>
+          <forge-button>My Button</forge-button>
+        </div>
+      </forge-scaffold>
+    </forge-card>
+  `
 };
 
 export const NoClippingFixExample: Story = {
@@ -90,19 +86,17 @@ export const NoClippingFixExample: Story = {
       }
     `)
   ],
-  render: () => {
-    return html`
-      <forge-card class="my-card">
-        <forge-scaffold>
-          <div slot="body" class="my-scaffold-body">
-            <forge-text-field>
-              <label for="my-input">My Input</label>
-              <input id="my-input" type="text" />
-            </forge-text-field>
-            <forge-button>My Button</forge-button>
-          </div>
-        </forge-scaffold>
-      </forge-card>
-    `;
-  }
+  render: () => html`
+    <forge-card class="my-card">
+      <forge-scaffold>
+        <div slot="body" class="my-scaffold-body">
+          <forge-text-field>
+            <label for="my-input">My Input</label>
+            <input id="my-input" type="text" />
+          </forge-text-field>
+          <forge-button>My Button</forge-button>
+        </div>
+      </forge-scaffold>
+    </forge-card>
+  `
 };
