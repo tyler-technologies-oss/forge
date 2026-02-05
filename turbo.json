@@ -16,6 +16,9 @@
     "test": {
       "outputs": []
     },
+    "test:run": {
+      "outputs": []
+    },
     "dev": {
       "dependsOn": ["^build"],
       "persistent": true,

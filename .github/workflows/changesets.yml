@@ -1,5 +1,7 @@
 name: Changesets
 
+# Version branches: Add branch names here (e.g., v2.x) and update baseBranch in .changeset/config.json
+# For old major releases, use: publish: pnpm run release -- --tag v2
 on:
   push:
     branches:
@@ -9,7 +11,6 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 env:
   CI: true
-  PNPM_CACHE_FOLDER: .pnpm-store
   TURBO_TELEMETRY_DISABLED: 1
 
 jobs:
@@ -23,20 +24,18 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 24
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
 
-      - name: Setup pnpm
-        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
 
       - name: Install Dependencies
         run: pnpm install

@@ -12,6 +12,7 @@
     "format": "turbo run format",
     "format:check": "turbo run format:check",
     "test": "turbo run test",
+    "test:run": "turbo run test:run",
     "release": "pnpm run build && changeset publish"
   },
   "keywords": [

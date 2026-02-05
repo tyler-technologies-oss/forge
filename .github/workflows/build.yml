@@ -1,12 +1,15 @@
 name: Build
- 
+
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 env:
   CI: true
-  PNPM_CACHE_FOLDER: .pnpm-store
   TURBO_TELEMETRY_DISABLED: 1
 
 jobs:
@@ -14,32 +17,31 @@ jobs:
     name: Build
     timeout-minutes: 15
     runs-on: ubuntu-latest
- 
+
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
- 
+        uses: actions/checkout@v6
+
       - name: Install pnpm
         uses: pnpm/action-setup@v4
- 
+
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
- 
-      - name: Configure pnpm
-        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+          cache: pnpm
 
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Code Format
+      - name: Format
         run: pnpm run format:check
- 
+
+      - name: Lint
+        run: pnpm run lint
+
       - name: Build
         run: pnpm run build
- 
+
       - name: Test
-        run: pnpm run test
+        run: pnpm run test:run

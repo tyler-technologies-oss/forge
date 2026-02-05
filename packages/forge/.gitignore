@@ -7,6 +7,7 @@ custom-elements.json
 vscode.*.json
 coverage/
 .coverage/
+.vitest-coverage/
 *.bak
 .DS_Store
 *.log

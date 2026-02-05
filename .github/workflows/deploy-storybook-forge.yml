@@ -1,0 +1,38 @@
+name: Deploy Storybook (Forge)
+
+on:
+  release:
+    types: [published]
+
+env:
+  CI: true
+  TURBO_TELEMETRY_DISABLED: 1
+
+jobs:
+  deploy:
+    if: startsWith(github.event.release.tag_name, '@tylertech/forge@')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install
+
+      - run: pnpm run --filter @tylertech/forge build:storybook
+
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: packages/forge/storybook-static
+          target-folder: docs/forge/v3
+          clean: true

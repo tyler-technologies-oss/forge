@@ -1,0 +1,51 @@
+name: Deploy Storybook
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package to deploy'
+        required: true
+        default: 'forge'
+        type: choice
+        options:
+          - forge
+      version:
+        description: 'Version directory (e.g., v3)'
+        required: true
+        default: 'v3'
+
+concurrency:
+  group: deploy-storybook-${{ inputs.package }}-${{ inputs.version }}
+
+env:
+  CI: true
+  TURBO_TELEMETRY_DISABLED: 1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install
+
+      - run: pnpm run --filter @tylertech/${{ inputs.package }} build:storybook
+
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: packages/${{ inputs.package }}/storybook-static
+          target-folder: docs/${{ inputs.package }}/${{ inputs.version }}
+          clean: true

@@ -20,5 +20,5 @@
       "@tylertech/forge/*": ["src/lib/*"]
     }
   },
-  "exclude": ["dist", "docs"]
+  "exclude": ["dist", "esm", "docs"]
 }
