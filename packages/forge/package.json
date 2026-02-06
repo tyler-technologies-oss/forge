@@ -47,6 +47,7 @@
     "storybook": "pnpm run cem && storybook dev -p 6006",
     "build:storybook": "pnpm run cem && storybook build",
     "lint": "eslint . && stylelint \"src/lib/**/*.{css,scss}\"",
+    "setup:playwright": "playwright install --with-deps chromium",
     "test:run": "pnpm run test:vitest:run && pnpm run test:wtr:run",
     "test:wtr": "wtr --watch --group lib",
     "test:wtr:focus": "wtr --watch --group",

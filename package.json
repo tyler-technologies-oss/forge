@@ -11,6 +11,7 @@
     "lint": "turbo run lint",
     "format": "turbo run format",
     "format:check": "turbo run format:check",
+    "setup:playwright": "turbo run setup:playwright",
     "test": "turbo run test",
     "test:run": "turbo run test:run",
     "release": "pnpm run build && changeset publish"

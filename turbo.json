@@ -13,6 +13,9 @@
     },
     "format": {},
     "format:check": {},
+    "setup:playwright": {
+      "outputs": []
+    },
     "test": {
       "outputs": []
     },
