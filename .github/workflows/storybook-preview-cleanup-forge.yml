@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      deployments: write
 
     steps:
       - uses: actions/checkout@v6
@@ -25,3 +26,19 @@ jobs:
             git commit -m "chore: remove forge PR #${{ github.event.pull_request.number }} preview"
             git push
           fi
+
+      - name: Delete GitHub Environment
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const envName = `pr-preview-${{ github.event.pull_request.number }}`;
+            try {
+              await github.rest.repos.deleteAnEnvironment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                environment_name: envName
+              });
+              console.log(`Deleted environment: ${envName}`);
+            } catch (e) {
+              console.log(`Environment ${envName} not found or already deleted`);
+            }
