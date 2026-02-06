@@ -1,6 +1,7 @@
 import '$src/shared';
 import '@tylertech/forge/button';
 import '@tylertech/forge/tooltip';
+import '@tylertech/forge/tooltip/forge-tooltip.scss';
 import './tooltip.scss';
 import { ITooltipComponent } from '@tylertech/forge/tooltip';
 import { ISelectComponent } from '@tylertech/forge/select';
