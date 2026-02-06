@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      deployments: write
 
     steps:
       - uses: actions/checkout@v6
@@ -27,9 +26,17 @@ jobs:
             git push
           fi
 
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.FORGE_AUTOBOT_ID }}
+          private-key: ${{ secrets.FORGE_AUTOBOT_SECRET }}
+
       - name: Delete GitHub Environment
         uses: actions/github-script@v8
         with:
+          github-token: ${{ steps.app-token.outputs.token }}
           script: |
             const envName = `pr-preview-${{ github.event.pull_request.number }}`;
             try {
