@@ -5,6 +5,7 @@ import { userEvent } from 'vitest/browser';
 import type { IAccordionComponent } from './accordion';
 import type { IExpansionPanelComponent } from '../expansion-panel';
 import { ACCORDION_CONSTANTS } from './accordion-constants';
+import { frame } from '../core/utils/utils';
 
 import './accordion';
 
@@ -27,7 +28,7 @@ describe('Accordion', () => {
     const [panel] = harness.expansionPanels;
     panel.querySelector('button')?.click();
 
-    await panel.updateComplete;
+    await frame();
 
     expect(panel.open).toBe(true);
     expect(harness.expansionPanels.filter(p => p !== panel).every(p => !p.open)).toBe(true);
@@ -42,13 +43,13 @@ describe('Accordion', () => {
     expect(secondPanel.open).toBe(false);
 
     firstPanel.querySelector('button')?.click();
-    await firstPanel.updateComplete;
+    await frame();
 
     expect(firstPanel.open).toBe(true);
     expect(secondPanel.open).toBe(false);
 
     secondPanel.querySelector('button')?.click();
-    await secondPanel.updateComplete;
+    await frame();
 
     expect(firstPanel.open).toBe(false);
     expect(secondPanel.open).toBe(true);
@@ -64,7 +65,7 @@ describe('Accordion', () => {
 
     const nestedPanel = secondPanel.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
     nestedPanel.querySelector('button')?.click();
-    await nestedPanel.updateComplete;
+    await frame();
 
     expect(firstPanel.open).toBe(false);
   });
@@ -77,13 +78,13 @@ describe('Accordion', () => {
 
     button?.focus();
     await userEvent.keyboard('{Enter}');
-    await panel.updateComplete;
+    await frame();
 
     expect(panel.open).toBe(true);
 
     button?.focus();
     await userEvent.keyboard(' ');
-    await panel.updateComplete;
+    await frame();
 
     expect(panel.open).toBe(false);
   });
@@ -113,10 +114,10 @@ describe('Accordion', () => {
     expect(thirdPanel.classList.contains('test-class')).toBe(false);
 
     firstPanel.querySelector('button')?.click();
-    await firstPanel.updateComplete;
+    await frame();
 
     thirdPanel.querySelector('button')?.click();
-    await thirdPanel.updateComplete;
+    await frame();
 
     expect(firstPanel.open).toBe(true);
     expect(secondPanel.open).toBe(false);
@@ -133,7 +134,7 @@ describe('Accordion', () => {
     harness.accordionElement.addEventListener(ACCORDION_CONSTANTS.events.TOGGLE, toggleSpy);
 
     button?.click();
-    await panel.updateComplete;
+    await frame();
 
     expect(toggleSpy).toHaveBeenCalledOnce();
   });
