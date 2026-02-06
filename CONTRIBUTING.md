@@ -1,211 +1,60 @@
-# Contributing to Forge
+# Contributing
 
-We are very open to contributions to the Forge component library! There are many forms of
-contribution, from documentation updates and creating issues to bug fixes and features. 
-No matter your contribution, we only ask that you follow our contribution guidelines defined below. 
-Thank you for helping to move this project forward!
+We welcome contributions to Tyler Forge! Whether it's bug fixes, new features, or documentation improvements, we appreciate your help.
 
-- [Contributing to Forge](#contributing-to-forge)
-  - [General Contributing Guidelines](#general-contributing-guidelines)
-  - [Development Process](#development-process)
-    - [Setting up your development environment](#setting-up-your-development-environment)
-    - [Building the library](#building-the-library)
-    - [Linting](#linting)
-    - [Running unit tests](#running-unit-tests)
-    - [Developing inside a container](#developing-inside-a-container)
-      - [Manually open project in container](#manually-open-project-in-container)
-      - [DevContainers Performance Notes](#devcontainers-performance-notes)
-      - [Clone in containers](#clone-in-containers)
-      - [Testing in a container](#testing-in-a-container)
-  - [Issues and Bugs](#issues-and-bugs)
-  - [Feature or Component Requests](#feature-or-component-requests)
-  - [Submitting Pull Requests](#submitting-pull-requests)
-
-## General Contributing Guidelines
-
-Forge is an open source project that accepts contributions from community members.
-
-Want to contribute? Great! Please read on for more details.
-
-> If you’ve never contributed to an open source project before, take a look at GitHub’s
-[Contributing to Open Source on GitHub](https://docs.github.com/en) to learn some of the basics.
-
-## Development Process
-
-We strive to make developing the Forge components library as frictionless as possible, both for
-ourselves and for our community. This section should get you up and running working on the Forge
-codebase.
-
-Before beginning development, you may want to read through our overview on architecture and best
-practices to get a better understanding of our overall structure.
-
-### Setting up your development environment
-
-Ensure you have the latest LTS version of node installed. We use LTS versions of node in our CI 
-environments to validate builds and run unit tests. Compatibility with your local development
-environment is important.
-
-To get started, clone the repository:
+## Setup
 
 ```bash
 git clone https://github.com/tyler-technologies-oss/forge.git
+pnpm install
+pnpm run dev:forge
 ```
 
-Navigate to the project root, and install dependencies:
+Requires Node 22.12+ and pnpm 10+.
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `pnpm run dev:forge` | Start dev server |
+| `pnpm run storybook:forge` | Start Storybook |
+| `pnpm run build` | Production build |
+| `pnpm run test` | Run tests |
+| `pnpm run lint` | Lint code |
+
+## Pull Requests
+
+1. Create a GitHub issue first to discuss your proposed change
+2. Fork the repo and create a feature branch
+3. Make your changes and add/update tests as needed
+4. Run `pnpm changeset` to create a changeset (see below)
+5. Submit your PR and fill out the template
+
+Please validate your build locally before pushing to avoid CI iteration.
+
+## Changesets
+
+This project uses [changesets](https://github.com/changesets/changesets) for versioning and changelog generation. When submitting a PR that changes published packages, run:
 
 ```bash
-npm install
+pnpm changeset
 ```
 
-This project contains a dev site built using Vite to make development faster and easier.
+Follow the prompts to describe your change and select the appropriate semver bump (patch/minor/major).
 
-```bash
-npm start
-```
+## Commits
 
-We also use [Storybook](https://storybook.js.org/) for docs and local development. This helps us build and
-maintain component demos (stories) and the corresponding documentation for each component.
-To start up the Storybook environment locally, run the following command:
+Use [conventional commits](https://conventionalcommits.org) format. A pre-commit hook enforces this via commitlint.
 
-```bash
-pnpm run storybook:forge
-```
-
-> New Storybook versions are deployed for every pull request to help reviewers easily validate changes. The main
-> Storybook deployment is updated when changes are merged to `main`.  Storybook is linked in the main Forge
-> documentation site to help keep documentation up to date.
-
-### Building the library
-
-To run a production build of the library (which generates a distribution npm package directory), please run the following command:
-
-```bash
-pnpm run build
-```
-
-A successful build-command output is found in the `dist/release/@tylertech/forge` directory.
-
-> Please validate that your build runs locally before pushing changes to remote to avoid iterating on build errors in the CI environment.
-
-### Linting
-
-To ensure proper code style and formatting, we use ESLint and stylelint in this project for linting javascript/TypeScript 
-and CSS/Sass respectively. Linting is executed when running the build command and as a pre-commit hook. The linter can be 
-run at any time with the `pnpm run lint` command.
-
-### Running unit tests
-
-This project uses Web Test Runner as the unit testing environment.
-
-- To run tests over the whole project, use command: `pnpm run test`.
-- To run tests over a single component, use command: `npx wtr --group <component name>`.
-
-> It's important that you add/update tests when submitting changes to the library. The tests are validated in the CI environment.
-
-You can view the code coverage report by running the following command:
-
-```bash
-pnpm run serve:coverage
-```
-
-This will open your default browser to the code coverage generated by the most recent test run. Code coverage is instrumented by `istanbul`.
-
-### Developing inside a container
-
-This project supports VS Code DevContainers to help streamline and standardize the local development
-process. To get started with DevContainers you'll need to ensure you're running the following on your
-local machine:
-
-- Docker
-- Visual Studio Code
-- VSCode Remote Development extension pack
-- `GITHUB_TOKEN` environment variable configured
-
-See these [getting-started](https://code.visualstudio.com/docs/remote/containers#_installation)
-instructions for additional details.
-
-Once setup, VS Code should prompt with a notification that a DevContainer config file is recognized
-and suggest re-opening within a container.
-
-You can create a new token `GITHUB_TOKEN` at https://github.com/settings/tokens with the `read:packages`.
-This needs to be added to your environment through your `.bashrc`, `.zshrc` or windows path environment
-settings. 
-
-#### Manually open project in container
-
-1. Open project folder in VS Code
-2. Open in container
-3. Wait for devcontainer to build (~5 minutes)
-4. Serve the dev site to test the library: `pnpm run dev:forge`
-5. To build the npm package, run the following: `pnpm run build`
-
-For more information on starting a development environment within a container see
-[Developing inside a Container](https://code.visualstudio.com/docs/remote/containers)
-
-#### DevContainers Performance Notes
-
-When opening this project in a DevContainer on a Windows or Mac operating system, you may experience poor
-disk performance due to their use of bind mounts. See the following article for additional information and
-tips on how you might
-[improve disk performance](https://code.visualstudio.com/remote/advancedcontainers/improve-performance).
-
-In situations where you're unable to make use of the WSL2 filesystem (Windows), or where you're using macOS,
-you'll experience the best performance by making use of the **Remote-Containers: Clone Repository in Container Volume**
-command within VS Code. See this [article](https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-clone-repository-in-container-volume) 
-for more information.
-
-#### Clone in containers
-
-1. Open VS Code
-2. Clone repository in container
-3. Wait for devcontainer to build (~5 minutes)
-4. Serve the dev site to test the library: `pnpm run dev:forge`
-5. To build the npm package, run the following: `pnpm run build`
-
-> **Note:** if you make any package changes and want them to persist you may need to rebuild the container
-
-#### Testing in a container
-
-- To run tests over the whole project, use command: `pnpm run test`.
-- To run tests over a single component, use command: `forge test component <component name> --no-sandbox [--browser chrome] [--port <port number>]`
-- To connect via Chrome visit `chrome://inspect/#devices` and select the correct instance
+Examples:
+- `feat(button): add loading state`
+- `fix(dialog): correct focus trap behavior`
+- `docs: update README`
 
 ## Issues and Bugs
 
-If you find a bug in the source code or a mistake in the documentation, you can help us by submitting
-an issue to the GitHub repository.
+Found a bug? [Create an issue](https://github.com/tyler-technologies-oss/forge/issues/new/choose) with reproduction steps. PRs with fixes are even better!
 
-Pull requests are even better! Propose a fix with a pull request, and link it to the issue!
+## Feature Requests
 
-## Feature or Component Requests
-
-We are always interested in improving the Forge library. Whether it's a new feature for a component, 
-an improvement to the developer experience, or an entirely new component, we look forward to your 
-engagement.
-
-> The Forge team uses a governance model to discuss enhancements to the library. This is where we will
-> discuss the feature or new component and make sure it aligns with our overall vision.
-
-When creating a new issue on this repository, you will choose from one of the corresponding issue templates
-and provide the requested information. From there we will work with you to iron out the details of your
-proposal and then determine timeline and resources needed to implement the feature.
-
-## Submitting Pull Requests
-
-The best way to make an impact is by creating code submissions. Pull requests should
-be "solutions" to GitHub issues. If there is not an existing GitHub issue, please start by creating one
-before submitting a pull request.
-
-When creating a new pull request, please provide as much information as you can by filling out the pull
-request template. This will help speed up the process of getting your changes reviewed and merged.
-
-> This project uses [Auto](https://intuit.github.io/auto/) for its CI/CD automation. Please familiarize
-> yourself with Auto. Release versions are controlled by labels on Pull Requests.
-
-## Commit message format
-
-This project uses a pre-commit hook (via [husky](https://typicode.github.io/husky/#/)) to ensure a proper commit message format is provided for
-all commits. This format follows the conventional commit format described [here](https://www.conventionalcommits.org/en/v1.0.0/).
-
-> **Note:** if you're on MacOS/Linux **and** use NVM, you may run into an issue with the pre-commit hook.
-> See [here](https://github.com/typicode/husky/issues/77#issuecomment-630065185) for information about how to resolve this issue.
+Have an idea? Open an issue to discuss it first. The Forge team uses a governance model to ensure new features align with the library's vision.
