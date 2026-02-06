@@ -1,29 +1,32 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, it, expect } from 'vitest';
+import { render } from 'vitest-browser-lit';
+import { html } from 'lit';
 import { getShadowElement } from '@tylertech/forge-core';
-import { sendMouse } from '@web/test-runner-commands';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
 import { task } from '../core/utils/utils';
 
 import './backdrop';
 
+// Animation duration for enter/exit transitions
+const ANIMATION_TIMEOUT = 300;
+
 describe('Backdrop', () => {
   it('should have shadow root', async () => {
     const harness = await createFixture();
 
-    expect(harness.backdropElement.shadowRoot).to.not.be.null;
+    expect(harness.backdropElement.shadowRoot).not.toBeNull();
   });
 
   it('should be hidden by default', async () => {
     const harness = await createFixture();
 
-    expect(harness.isVisible).to.be.false;
+    expect(harness.isVisible).toBe(false);
   });
 
   it('should show when visible by default', async () => {
     const harness = await createFixture({ visible: true });
 
-    expect(harness.backdropElement.visible).to.be.true;
+    expect(harness.backdropElement.visible).toBe(true);
   });
 
   it('should show when visible property is set', async () => {
@@ -32,7 +35,7 @@ describe('Backdrop', () => {
     harness.backdropElement.visible = true;
     await harness.enterAnimation();
 
-    expect(harness.isVisible).to.be.true;
+    expect(harness.isVisible).toBe(true);
   });
 
   it('should show when visible attribute is set', async () => {
@@ -41,7 +44,7 @@ describe('Backdrop', () => {
     harness.backdropElement.setAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE, '');
     await harness.enterAnimation();
 
-    expect(harness.isVisible).to.be.true;
+    expect(harness.isVisible).toBe(true);
   });
 
   it('should hide when visible attribute is removed', async () => {
@@ -50,30 +53,30 @@ describe('Backdrop', () => {
     harness.backdropElement.removeAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE);
     await harness.exitAnimation();
 
-    expect(harness.isVisible).to.be.false;
+    expect(harness.isVisible).toBe(false);
   });
 
   it('should fade in', async () => {
     const harness = await createFixture();
 
-    expect(harness.isVisible).to.be.false;
+    expect(harness.isVisible).toBe(false);
 
     await harness.fadeIn();
 
-    expect(harness.isVisible).to.be.true;
-    expect(harness.rootElement.classList.contains(BACKDROP_CONSTANTS.classes.EXITING)).to.be.false;
+    expect(harness.isVisible).toBe(true);
+    expect(harness.rootElement.classList.contains(BACKDROP_CONSTANTS.classes.EXITING)).toBe(false);
   });
 
   it('should fade out', async () => {
     const harness = await createFixture({ visible: true });
 
-    expect(harness.isVisible).to.be.true;
+    expect(harness.isVisible).toBe(true);
 
     await harness.fadeOut();
     await harness.exitAnimation();
 
-    expect(harness.isVisible).to.be.false;
-    expect(harness.rootElement.classList.contains(BACKDROP_CONSTANTS.classes.EXITING)).to.be.false;
+    expect(harness.isVisible).toBe(false);
+    expect(harness.rootElement.classList.contains(BACKDROP_CONSTANTS.classes.EXITING)).toBe(false);
   });
 
   it('should show immediately when calling show() method', async () => {
@@ -82,7 +85,7 @@ describe('Backdrop', () => {
     harness.backdropElement.show();
     await harness.enterAnimation();
 
-    expect(harness.isVisible).to.be.true;
+    expect(harness.isVisible).toBe(true);
   });
 
   it('should hide immediately when calling hide() method', async () => {
@@ -91,14 +94,14 @@ describe('Backdrop', () => {
     harness.backdropElement.hide();
     await harness.exitAnimation();
 
-    expect(harness.isVisible).to.be.false;
+    expect(harness.isVisible).toBe(false);
   });
 
   it('should set fixed by default', async () => {
     const harness = await createFixture({ fixed: true });
 
-    expect(harness.backdropElement.fixed).to.be.true;
-    expect(harness.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.FIXED)).to.be.true;
+    expect(harness.backdropElement.fixed).toBe(true);
+    expect(harness.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.FIXED)).toBe(true);
   });
 
   it('should toggle fixed attribute', async () => {
@@ -106,13 +109,13 @@ describe('Backdrop', () => {
 
     harness.backdropElement.fixed = true;
 
-    expect(harness.backdropElement.fixed).to.be.true;
-    expect(harness.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.FIXED)).to.be.true;
+    expect(harness.backdropElement.fixed).toBe(true);
+    expect(harness.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.FIXED)).toBe(true);
 
     harness.backdropElement.fixed = false;
 
-    expect(harness.backdropElement.fixed).to.be.false;
-    expect(harness.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.FIXED)).to.be.false;
+    expect(harness.backdropElement.fixed).toBe(false);
+    expect(harness.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.FIXED)).toBe(false);
   });
 });
 
@@ -141,19 +144,12 @@ class BackdropHarness {
     return this.exitAnimation();
   }
 
-  public async click(): Promise<void> {
-    const { x, y, height, width } = this.backdropElement.getBoundingClientRect();
-    const mouseX = Math.round(x + width / 2);
-    const mouseY = Math.round(y + height / 2);
-    await sendMouse({ type: 'click', position: [mouseX, mouseY], button: 'left' });
-  }
-
   public enterAnimation(): Promise<void> {
-    return task(300);
+    return task(ANIMATION_TIMEOUT);
   }
 
   public exitAnimation(): Promise<void> {
-    return task(300);
+    return task(ANIMATION_TIMEOUT);
   }
 }
 
@@ -163,6 +159,7 @@ interface IBackdropFixtureConfig {
 }
 
 async function createFixture({ visible, fixed }: IBackdropFixtureConfig = {}): Promise<BackdropHarness> {
-  const el = await fixture<IBackdropComponent>(html`<forge-backdrop ?visible=${visible} ?fixed=${fixed}></forge-backdrop>`);
+  const screen = render(html`<forge-backdrop ?visible=${visible} ?fixed=${fixed}></forge-backdrop>`);
+  const el = screen.container.querySelector('forge-backdrop') as IBackdropComponent;
   return new BackdropHarness(el);
 }
