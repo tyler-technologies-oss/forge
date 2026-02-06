@@ -292,7 +292,12 @@ Avoid arbitrary magic number timeouts. When tests need to wait for animations or
 
 **Fixture not rendering**: Import component side-effect before test: `import './component';`
 
-**Async timing issues**: Use `await el.updateComplete` for Lit components or `await frame()` for general render waiting.
+**Async timing issues**: The `render()` function waits for initial render, so `updateComplete` is NOT needed immediately after render. Only use `await el.updateComplete` after programmatically setting a property that triggers a re-render, before checking the resulting DOM changes.
+
+Do NOT add `updateComplete`:
+- After `render()` for property checks (`el.checked`, `el.value`, etc.)
+- After `render()` before creating TestHarness or accessing shadow DOM
+- After `render()` before checking `:state()` matchers
 
 **Browser commands not working**: Ensure `userEvent` is imported from `vitest/browser`.
 
