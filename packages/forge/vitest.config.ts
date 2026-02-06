@@ -64,6 +64,11 @@ export default defineConfig({
       screenshotFailures: false
     },
     include: ['src/lib/**/*.vitest.ts'],
+    onConsoleLog(log) {
+      if (log.includes('Lit is in dev mode')) {
+        return false;
+      }
+    },
     setupFiles: ['src/lib/core/testing/vitest-setup.ts'],
     coverage: {
       provider: 'v8',

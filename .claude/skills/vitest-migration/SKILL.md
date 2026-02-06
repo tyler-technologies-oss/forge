@@ -38,6 +38,8 @@ Migrate test files from Web Test Runner (WTR) + Mocha + Chai + Sinon to Vitest b
    });
    ```
 
+   It's important to keep all original tests and make sure it's a 1:1 mapping to ensure we don't miss any tests.
+
 4. **Pick ONE simple test** (usually "should initialize") and un-skip it
 
 5. **Update imports for that test**:
@@ -58,7 +60,7 @@ Migrate test files from Web Test Runner (WTR) + Mocha + Chai + Sinon to Vitest b
    import type { IMyComponent } from './my-component';
    ```
 
-6. **Update fixture pattern** - use inline render calls, avoid helper functions:
+6. **Update fixture pattern** - for simple components, use inline render:
 
    ```typescript
    // Before
@@ -69,7 +71,7 @@ Migrate test files from Web Test Runner (WTR) + Mocha + Chai + Sinon to Vitest b
    const el = screen.container.querySelector('forge-my-component') as IMyComponent;
    ```
 
-   Avoid render helper functions that accept options objects with defaults - they can mask component defaults and cause test failures.
+   For **composite components** with nested children, keep `createFixture` helpers - see "Composite Component Fixtures" section below.
 
 7. **Run test** and fix any assertion failures (see Quick Reference below)
 
@@ -149,11 +151,12 @@ For each remaining test:
 ### Phase 4: Cleanup
 
 1. Remove all remaining `.skip` markers
-2. Delete the old WTR test file
-3. Run full test suite to verify coverage
-4. Run ESLint on the new file and fix any issues
-5. Run Prettier on the new file for consistent formatting
-6. Update any test scripts/configs if needed
+2. Verify that there is a 1:1 mapping of tests from old file to new file (unless some were removed/modified based on review)
+3. Delete the old WTR test file
+4. Run full test suite to verify coverage
+5. Run ESLint on the new file and fix any issues
+6. Run Prettier on the new file for consistent formatting
+7. Update any test scripts/configs if needed
 
 ## Quick Reference: Assertion Mappings
 
@@ -292,3 +295,86 @@ Avoid arbitrary magic number timeouts. When tests need to wait for animations or
 **Async timing issues**: Use `await el.updateComplete` for Lit components or `await frame()` for general render waiting.
 
 **Browser commands not working**: Ensure `userEvent` is imported from `vitest/browser`.
+
+## Composite Component Fixtures
+
+For components with nested children (e.g., `forge-button-toggle-group` containing `forge-button-toggle` elements), keep the `createFixture` helper pattern from the original test. This is appropriate when:
+
+- Parent component contains slotted child components
+- Tests need consistent child element structure
+- Multiple fixture variants exist (e.g., with/without form wrapper)
+
+### Fixture Helper Pattern
+
+```typescript
+import { html, nothing } from 'lit';
+
+interface FixtureConfig {
+  value?: unknown;
+  disabled?: boolean;
+  // ... other options
+}
+
+async function createFixture({ value, disabled }: FixtureConfig = {}): Promise<ComponentHarness> {
+  const screen = render(html`
+    <forge-parent-component .value=${value} ?disabled=${disabled}>
+      <forge-child value="one">One</forge-child>
+      <forge-child value="two">Two</forge-child>
+    </forge-parent-component>
+  `);
+  const el = screen.container.querySelector('forge-parent-component') as IParentComponent;
+  return new ComponentHarness(el);
+}
+```
+
+### Using `nothing` for Optional Attributes
+
+When an attribute should be omitted (not set to empty string), use Lit's `nothing`:
+
+```typescript
+import { html, nothing } from 'lit';
+
+// Value attribute only rendered when value is truthy
+render(html`<forge-component value="${value || nothing}"></forge-component>`);
+```
+
+This prevents empty string values from being set, which can cause test failures when testing null/undefined defaults.
+
+### TestHarness Pattern
+
+Keep TestHarness classes for composite components - they provide:
+
+- Typed access to child elements
+- Reusable interaction helpers
+- Cleaner test code
+
+```typescript
+class ComponentHarness extends TestHarness<IParentComponent> {
+  public get childElements(): IChildComponent[] {
+    return Array.from(this.element.querySelectorAll('forge-child'));
+  }
+
+  public async selectChild(index: number): Promise<void> {
+    await userEvent.click(this.childElements[index]);
+  }
+
+  public async selectChildViaKeyboard(index: number): Promise<void> {
+    this.childElements[index].focus();
+    await userEvent.keyboard(' ');
+  }
+}
+```
+
+### Accessing Event Details
+
+When testing custom events with `vi.fn()`:
+
+```typescript
+const changeSpy = vi.fn();
+element.addEventListener('forge-change', changeSpy);
+
+await userEvent.click(childElement);
+
+expect(changeSpy).toHaveBeenCalledOnce();
+expect(changeSpy.mock.calls[0][0].detail).toBe('expected-value');
+```
