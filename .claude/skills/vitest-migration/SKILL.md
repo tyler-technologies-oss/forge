@@ -29,6 +29,7 @@ Migrate test files from Web Test Runner (WTR) + Mocha + Chai + Sinon to Vitest b
 2. **Create new test file** - rename from `.test.ts` to `.vitest.ts`
 
 3. **Migrate test structure** - copy all `describe()` and `it()` blocks verbatim:
+
    ```typescript
    describe('Component', () => {
      it.skip('should initialize', async () => {});
@@ -40,6 +41,7 @@ Migrate test files from Web Test Runner (WTR) + Mocha + Chai + Sinon to Vitest b
 4. **Pick ONE simple test** (usually "should initialize") and un-skip it
 
 5. **Update imports for that test**:
+
    ```typescript
    // Before
    import { expect } from '@esm-bundle/chai';
@@ -57,6 +59,7 @@ Migrate test files from Web Test Runner (WTR) + Mocha + Chai + Sinon to Vitest b
    ```
 
 6. **Update fixture pattern** - use inline render calls, avoid helper functions:
+
    ```typescript
    // Before
    const el = await fixture<IMyComponent>(html`<forge-my-component></forge-my-component>`);
@@ -79,6 +82,7 @@ Migrate test files from Web Test Runner (WTR) + Mocha + Chai + Sinon to Vitest b
 1. **If TestHarness exists**, migrate it:
    - Keep the class structure
    - Update browser command helpers to use `userEvent`:
+
    ```typescript
    // Before (in harness)
    public async clickElement(el: HTMLElement): Promise<void> {
@@ -93,6 +97,7 @@ Migrate test files from Web Test Runner (WTR) + Mocha + Chai + Sinon to Vitest b
    ```
 
 2. **Update element waiting patterns**:
+
    ```typescript
    // Before
    import { elementUpdated } from '@open-wc/testing';
@@ -147,52 +152,54 @@ For each remaining test:
 2. Delete the old WTR test file
 3. Run full test suite to verify coverage
 4. Run ESLint on the new file and fix any issues
-5. Update any test scripts/configs if needed
+5. Run Prettier on the new file for consistent formatting
+6. Update any test scripts/configs if needed
 
 ## Quick Reference: Assertion Mappings
 
-| Chai (before) | Vitest (after) |
-|---------------|----------------|
-| `expect(x).to.equal(y)` | `expect(x).toBe(y)` |
-| `expect(x).to.deep.equal(y)` | `expect(x).toEqual(y)` |
-| `expect(x).to.be.true` | `expect(x).toBe(true)` |
-| `expect(x).to.be.false` | `expect(x).toBe(false)` |
-| `expect(x).to.be.null` | `expect(x).toBeNull()` |
-| `expect(x).not.to.be.null` | `expect(x).not.toBeNull()` |
-| `expect(x).to.be.undefined` | `expect(x).toBeUndefined()` |
-| `expect(x).to.be.ok` | `expect(x).toBeTruthy()` |
-| `expect(x).not.to.be.ok` | `expect(x).toBeFalsy()` |
-| `expect(x).to.be.empty` | `expect(x).toHaveLength(0)` |
-| `expect(x).to.have.lengthOf(n)` | `expect(x).toHaveLength(n)` |
-| `expect(x).to.contain(y)` | `expect(x).toContain(y)` |
+| Chai (before)                   | Vitest (after)                |
+| ------------------------------- | ----------------------------- |
+| `expect(x).to.equal(y)`         | `expect(x).toBe(y)`           |
+| `expect(x).to.deep.equal(y)`    | `expect(x).toEqual(y)`        |
+| `expect(x).to.be.true`          | `expect(x).toBe(true)`        |
+| `expect(x).to.be.false`         | `expect(x).toBe(false)`       |
+| `expect(x).to.be.null`          | `expect(x).toBeNull()`        |
+| `expect(x).not.to.be.null`      | `expect(x).not.toBeNull()`    |
+| `expect(x).to.be.undefined`     | `expect(x).toBeUndefined()`   |
+| `expect(x).to.be.ok`            | `expect(x).toBeTruthy()`      |
+| `expect(x).not.to.be.ok`        | `expect(x).toBeFalsy()`       |
+| `expect(x).to.be.empty`         | `expect(x).toHaveLength(0)`   |
+| `expect(x).to.have.lengthOf(n)` | `expect(x).toHaveLength(n)`   |
+| `expect(x).to.contain(y)`       | `expect(x).toContain(y)`      |
 | `expect(x).to.be.instanceOf(Y)` | `expect(x).toBeInstanceOf(Y)` |
-| `expect(fn).to.throw()` | `expect(fn).toThrow()` |
+| `expect(fn).to.throw()`         | `expect(fn).toThrow()`        |
 
 ## Quick Reference: Spy/Mock Mappings
 
-| Sinon (before) | Vitest (after) |
-|----------------|----------------|
-| `spy()` | `vi.fn()` |
-| `spy(obj, 'method')` | `vi.spyOn(obj, 'method')` |
-| `expect(s).to.have.been.called` | `expect(s).toHaveBeenCalled()` |
-| `expect(s).to.have.been.calledOnce` | `expect(s).toHaveBeenCalledOnce()` |
+| Sinon (before)                         | Vitest (after)                      |
+| -------------------------------------- | ----------------------------------- |
+| `spy()`                                | `vi.fn()`                           |
+| `spy(obj, 'method')`                   | `vi.spyOn(obj, 'method')`           |
+| `expect(s).to.have.been.called`        | `expect(s).toHaveBeenCalled()`      |
+| `expect(s).to.have.been.calledOnce`    | `expect(s).toHaveBeenCalledOnce()`  |
 | `expect(s).to.have.been.calledWith(x)` | `expect(s).toHaveBeenCalledWith(x)` |
-| `expect(s).not.to.have.been.called` | `expect(s).not.toHaveBeenCalled()` |
-| `stub().returns(x)` | `vi.fn().mockReturnValue(x)` |
-| `stub().resolves(x)` | `vi.fn().mockResolvedValue(x)` |
-| `spy.restore()` | `spy.mockRestore()` |
+| `expect(s).not.to.have.been.called`    | `expect(s).not.toHaveBeenCalled()`  |
+| `stub().returns(x)`                    | `vi.fn().mockReturnValue(x)`        |
+| `stub().resolves(x)`                   | `vi.fn().mockResolvedValue(x)`      |
+| `spy.restore()`                        | `spy.mockRestore()`                 |
 
 ## Quick Reference: Browser Commands
 
-| WTR Commands (before) | Vitest Browser (after) |
-|-----------------------|------------------------|
-| `sendKeys({ press: ' ' })` | `await userEvent.keyboard(' ')` |
-| `sendKeys({ press: 'Enter' })` | `await userEvent.keyboard('{Enter}')` |
-| `sendKeys({ type: 'text' })` | `await userEvent.keyboard('text')` |
-| `sendMouse({ type: 'click', position: [x,y] })` | `await userEvent.click(element)` |
-| Click disabled element | `await userEvent.click(el, { force: true })` |
+| WTR Commands (before)                           | Vitest Browser (after)                       |
+| ----------------------------------------------- | -------------------------------------------- |
+| `sendKeys({ press: ' ' })`                      | `await userEvent.keyboard(' ')`              |
+| `sendKeys({ press: 'Enter' })`                  | `await userEvent.keyboard('{Enter}')`        |
+| `sendKeys({ type: 'text' })`                    | `await userEvent.keyboard('text')`           |
+| `sendMouse({ type: 'click', position: [x,y] })` | `await userEvent.click(element)`             |
+| Click disabled element                          | `await userEvent.click(el, { force: true })` |
 
 Import for Vitest browser:
+
 ```typescript
 import { userEvent } from 'vitest/browser';
 ```
@@ -209,18 +216,21 @@ await expect(el).toBeAccessible();
 When reviewing tests during migration:
 
 **Remove tests that**:
+
 - Test default values that are obvious from type definitions
 - Duplicate coverage from other tests
 - Test framework behavior rather than component behavior
 - Are flaky and don't test real user scenarios
 
 **Update tests that**:
+
 - Have outdated assertions or expectations
 - Use deprecated APIs
 - Test implementation details instead of behavior
 - Have unclear test names
 
 **Add tests for**:
+
 - Accessibility if not already covered
 - User interaction sequences not covered
 - Error handling and edge cases
@@ -229,6 +239,7 @@ When reviewing tests during migration:
 ## Additional Resources
 
 For detailed API mappings and advanced patterns, see:
+
 - **`references/mappings.md`** - Complete assertion, mock, and browser command mappings
 
 ## Running Tests
@@ -242,6 +253,9 @@ pnpm --filter @tylertech/forge run test:vitest:run
 
 # Lint specific test file
 pnpm --filter @tylertech/forge exec eslint src/lib/path/to/component.vitest.ts
+
+# Format specific test file
+pnpm --filter @tylertech/forge exec prettier --write src/lib/path/to/component.vitest.ts
 ```
 
 ## Common Issues

@@ -1,9 +1,9 @@
-import sinon from 'sinon';
-import { expect } from '@esm-bundle/chai';
-import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { sendKeys } from '@web/test-runner-commands';
-import { IAccordionComponent } from './accordion';
-import { IExpansionPanelComponent } from '../expansion-panel';
+import { describe, it, expect, vi } from 'vitest';
+import { render } from 'vitest-browser-lit';
+import { html } from 'lit';
+import { userEvent } from 'vitest/browser';
+import type { IAccordionComponent } from './accordion';
+import type { IExpansionPanelComponent } from '../expansion-panel';
 import { ACCORDION_CONSTANTS } from './accordion-constants';
 
 import './accordion';
@@ -12,13 +12,13 @@ describe('Accordion', () => {
   it('should not have shadow root', async () => {
     const harness = await createFixture();
 
-    expect(harness.accordionElement.shadowRoot).to.be.null;
+    expect(harness.accordionElement.shadowRoot).toBeNull();
   });
 
   it('should not affect the default open state of the panels', async () => {
     const harness = await createFixture();
 
-    expect(harness.expansionPanels.every(panel => panel.open)).to.be.false;
+    expect(harness.expansionPanels.every(panel => panel.open)).toBe(false);
   });
 
   it('should open a panel when clicked', async () => {
@@ -27,10 +27,10 @@ describe('Accordion', () => {
     const [panel] = harness.expansionPanels;
     panel.querySelector('button')?.click();
 
-    await elementUpdated(panel);
+    await panel.updateComplete;
 
-    expect(panel.open).to.be.true;
-    expect(harness.expansionPanels.filter(p => p !== panel).every(p => !p.open)).to.be.true;
+    expect(panel.open).toBe(true);
+    expect(harness.expansionPanels.filter(p => p !== panel).every(p => !p.open)).toBe(true);
   });
 
   it('should close open panel when closed panel is clicked', async () => {
@@ -38,21 +38,21 @@ describe('Accordion', () => {
 
     const [firstPanel, secondPanel] = harness.expansionPanels;
 
-    expect(firstPanel.open).to.be.false;
-    expect(secondPanel.open).to.be.false;
+    expect(firstPanel.open).toBe(false);
+    expect(secondPanel.open).toBe(false);
 
     firstPanel.querySelector('button')?.click();
-    await elementUpdated(firstPanel);
+    await firstPanel.updateComplete;
 
-    expect(firstPanel.open).to.be.true;
-    expect(secondPanel.open).to.be.false;
+    expect(firstPanel.open).toBe(true);
+    expect(secondPanel.open).toBe(false);
 
     secondPanel.querySelector('button')?.click();
-    await elementUpdated(secondPanel);
+    await secondPanel.updateComplete;
 
-    expect(firstPanel.open).to.be.false;
-    expect(secondPanel.open).to.be.true;
-    expect(harness.expansionPanels.filter(p => p !== secondPanel).every(p => !p.open)).to.be.true;
+    expect(firstPanel.open).toBe(false);
+    expect(secondPanel.open).toBe(true);
+    expect(harness.expansionPanels.filter(p => p !== secondPanel).every(p => !p.open)).toBe(true);
   });
 
   it('should ignore events from nested panels', async () => {
@@ -64,9 +64,9 @@ describe('Accordion', () => {
 
     const nestedPanel = secondPanel.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
     nestedPanel.querySelector('button')?.click();
-    await elementUpdated(nestedPanel);
+    await nestedPanel.updateComplete;
 
-    expect(firstPanel.open).to.be.false;
+    expect(firstPanel.open).toBe(false);
   });
 
   it('should handle keyboard events', async () => {
@@ -76,30 +76,30 @@ describe('Accordion', () => {
     const button = panel.querySelector('button');
 
     button?.focus();
-    await sendKeys({ press: 'Enter' });
-    await elementUpdated(panel);
+    await userEvent.keyboard('{Enter}');
+    await panel.updateComplete;
 
-    expect(panel.open).to.be.true;
+    expect(panel.open).toBe(true);
 
     button?.focus();
-    await sendKeys({ press: 'Space' });
-    await elementUpdated(panel);
+    await userEvent.keyboard(' ');
+    await panel.updateComplete;
 
-    expect(panel.open).to.be.false;
+    expect(panel.open).toBe(false);
   });
 
   it('should set panel selector via property and attribute', async () => {
     const harness = await createFixture();
 
-    expect(harness.accordionElement.panelSelector).to.be.undefined;
+    expect(harness.accordionElement.panelSelector).toBeUndefined();
 
     harness.accordionElement.panelSelector = '.test-selector';
-    expect(harness.accordionElement.panelSelector).to.equal('.test-selector');
-    expect(harness.accordionElement.getAttribute('panel-selector')).to.equal('.test-selector');
+    expect(harness.accordionElement.panelSelector).toBe('.test-selector');
+    expect(harness.accordionElement.getAttribute('panel-selector')).toBe('.test-selector');
 
     harness.accordionElement.setAttribute('panel-selector', '.test2-selector');
-    expect(harness.accordionElement.panelSelector).to.equal('.test2-selector');
-    expect(harness.accordionElement.getAttribute('panel-selector')).to.equal('.test2-selector');
+    expect(harness.accordionElement.panelSelector).toBe('.test2-selector');
+    expect(harness.accordionElement.getAttribute('panel-selector')).toBe('.test2-selector');
   });
 
   it("should ignore panels that don't match the panel selector", async () => {
@@ -108,19 +108,19 @@ describe('Accordion', () => {
     const panels = harness.expansionPanels;
     const [firstPanel, secondPanel, thirdPanel] = panels;
 
-    expect(firstPanel.classList.contains('test-class')).to.be.true;
-    expect(secondPanel.classList.contains('test-class')).to.be.true;
-    expect(thirdPanel.classList.contains('test-class')).to.be.false;
+    expect(firstPanel.classList.contains('test-class')).toBe(true);
+    expect(secondPanel.classList.contains('test-class')).toBe(true);
+    expect(thirdPanel.classList.contains('test-class')).toBe(false);
 
     firstPanel.querySelector('button')?.click();
-    await elementUpdated(firstPanel);
+    await firstPanel.updateComplete;
 
     thirdPanel.querySelector('button')?.click();
-    await elementUpdated(thirdPanel);
+    await thirdPanel.updateComplete;
 
-    expect(firstPanel.open).to.be.true;
-    expect(secondPanel.open).to.be.false;
-    expect(thirdPanel.open).to.be.true;
+    expect(firstPanel.open).toBe(true);
+    expect(secondPanel.open).toBe(false);
+    expect(thirdPanel.open).toBe(true);
   });
 
   it('should dispatch toggle event', async () => {
@@ -129,13 +129,13 @@ describe('Accordion', () => {
     const [panel] = harness.expansionPanels;
     const button = panel.querySelector('button');
 
-    const toggleSpy = sinon.spy();
+    const toggleSpy = vi.fn();
     harness.accordionElement.addEventListener(ACCORDION_CONSTANTS.events.TOGGLE, toggleSpy);
 
     button?.click();
-    await elementUpdated(panel);
+    await panel.updateComplete;
 
-    expect(toggleSpy).to.have.been.calledOnce;
+    expect(toggleSpy).toHaveBeenCalledOnce();
   });
 });
 
@@ -152,7 +152,7 @@ interface IAccordionFixtureConfig {
 }
 
 async function createFixture({ panelSelector }: IAccordionFixtureConfig = {}): Promise<AccordionHarness> {
-  const accordion = await fixture<IAccordionComponent>(html`
+  const screen = render(html`
     <forge-accordion .panelSelector=${panelSelector as string}>
       <forge-expansion-panel class="test-class">
         <button type="button" slot="header"></button>
@@ -168,11 +168,12 @@ async function createFixture({ panelSelector }: IAccordionFixtureConfig = {}): P
       </forge-expansion-panel>
     </forge-accordion>
   `);
+  const accordion = screen.container.querySelector('forge-accordion') as IAccordionComponent;
   return new AccordionHarness(accordion);
 }
 
 async function createNestedFixture(): Promise<AccordionHarness> {
-  const accordion = await fixture<IAccordionComponent>(html`
+  const screen = render(html`
     <forge-accordion>
       <forge-expansion-panel>
         <button type="button" slot="header"></button>
@@ -190,5 +191,6 @@ async function createNestedFixture(): Promise<AccordionHarness> {
       </forge-expansion-panel>
     </forge-accordion>
   `);
+  const accordion = screen.container.querySelector('forge-accordion') as IAccordionComponent;
   return new AccordionHarness(accordion);
 }
