@@ -8,8 +8,10 @@ import { IStateLayerComponent } from '../state-layer/state-layer';
 import { IListItemComponent, LIST_ITEM_CONSTANTS } from './list-item';
 import { IListComponent } from './list/list';
 import { LIST_CONSTANTS } from './list/list-constants';
+import { IMenuComponent } from '../menu/menu';
 
 import './list/list';
+import '../menu/menu';
 
 describe('List', () => {
   describe('accessibility', () => {
@@ -847,6 +849,93 @@ describe('List', () => {
       await sendKeys({ press: 'Enter' });
 
       expect(spy).to.have.been.calledOnce;
+    });
+  });
+
+  describe('with menu', () => {
+    it('should toggle its menu when clicked anywhere', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-menu id="menu">
+            <forge-list-item>
+              <span id="slotted-content" slot="start">Text</span>
+              <button type="button">Open menu</button>
+            </forge-list-item>
+          </forge-menu>
+        </forge-list>
+      `);
+      const menu = el.querySelector('#menu') as IMenuComponent;
+      const slottedContent = el.querySelector('#slotted-content') as HTMLElement;
+
+      slottedContent.click();
+
+      expect(menu.open).to.be.true;
+    });
+
+    it('should handle forge-ignore on menus identically to buttons', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <!-- with forge-ignore -->
+          <forge-menu id="list-item-1-menu">
+            <forge-list-item id="list-item-1">
+              <button type="button">List item 1 button</button>
+              <forge-menu forge-ignore id="list-item-1-slotted-menu" slot="end">
+                <button id="list-item-1-slotted-menu-button" type="button">Open menu</button>
+              </forge-menu>
+              <button forge-ignore id="list-item-1-slotted-button" slot="end">Click me</button>
+            </forge-list-item>
+          </forge-menu>
+
+          <!-- without forge-ignore -->
+          <forge-menu id="list-item-2-menu">
+            <forge-list-item id="list-item-2">
+              <button type="button">List item 1 button</button>
+              <forge-menu id="list-item-2-slotted-menu" slot="end">
+                <button id="list-item-2-slotted-menu-button" type="button">Open menu</button>
+              </forge-menu>
+              <button id="list-item-2-slotted-button" slot="end">Click me</button>
+            </forge-list-item>
+          </forge-menu>
+        </forge-list>
+      `);
+
+      //List item with forge-ignore on menu and button
+      const listItem1 = el.querySelector('#list-item-1') as IListItemComponent;
+      const listItem1Menu = el.querySelector('#list-item-1-menu') as IMenuComponent;
+      const listItem1SlottedMenu = el.querySelector('#list-item-1-slotted-menu') as IMenuComponent;
+      const listItem1SlottedMenuButton = el.querySelector('#list-item-1-slotted-menu-button') as HTMLButtonElement;
+      const listItem1SlottedButton = el.querySelector('#list-item-1-slotted-button') as HTMLButtonElement;
+      const listItem1SlottedButtonSpy = sinon.spy();
+      listItem1SlottedButton.addEventListener('click', listItem1SlottedButtonSpy);
+
+      listItem1.click();
+      expect(listItem1Menu.open).to.be.true;
+
+      //Expect both buttons to receive click
+      await clickElement(listItem1SlottedMenuButton);
+      expect(listItem1SlottedMenu.open).to.be.true;
+
+      await clickElement(listItem1SlottedButton);
+      expect(listItem1SlottedButtonSpy).to.have.been.calledOnce;
+
+      //List item with no forge-ignore on menu and button
+      const listItem2 = el.querySelector('#list-item-2') as IListItemComponent;
+      const listItem2Menu = el.querySelector('#list-item-2-menu') as IMenuComponent;
+      const listItem2SlottedMenu = el.querySelector('#list-item-2-slotted-menu') as IMenuComponent;
+      const listItem2SlottedMenuButton = el.querySelector('#list-item-2-slotted-menu-button') as HTMLButtonElement;
+      const listItem2SlottedButton = el.querySelector('#list-item-2-slotted-button') as HTMLButtonElement;
+      const listItem2SlottedButtonSpy = sinon.spy();
+      listItem2SlottedButton.addEventListener('click', listItem2SlottedButtonSpy);
+
+      listItem2.click();
+      expect(listItem2Menu.open).to.be.true;
+
+      //Expect both buttons to do nothing
+      await clickElement(listItem2SlottedMenuButton);
+      expect(listItem2SlottedMenu.open).to.be.false;
+
+      await clickElement(listItem2SlottedButton);
+      expect(listItem2SlottedButtonSpy).to.not.have.been.called;
     });
   });
 });
