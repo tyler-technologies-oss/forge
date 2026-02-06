@@ -60,7 +60,8 @@ export default defineConfig({
     browser: {
       enabled: true,
       provider: playwright(),
-      instances: [{ browser: 'chromium' }]
+      instances: [{ browser: 'chromium' }],
+      screenshotFailures: false
     },
     include: ['src/lib/**/*.vitest.ts'],
     setupFiles: ['src/lib/core/testing/vitest-setup.ts'],

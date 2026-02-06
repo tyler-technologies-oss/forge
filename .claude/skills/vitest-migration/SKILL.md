@@ -106,7 +106,7 @@ Migrate test files from Web Test Runner (WTR) + Mocha + Chai + Sinon to Vitest b
    // After - for Lit-based components
    await el.updateComplete;
 
-   // After - for non-Lit or general render waiting
+   // After - for Forge components (extend BaseComponent, not LitElement)
    import { frame } from '../core/utils/utils';
    await frame();
    ```
@@ -257,6 +257,31 @@ pnpm --filter @tylertech/forge exec eslint src/lib/path/to/component.vitest.ts
 # Format specific test file
 pnpm --filter @tylertech/forge exec prettier --write src/lib/path/to/component.vitest.ts
 ```
+
+## Timeouts and Animation Delays
+
+Avoid arbitrary magic number timeouts. When tests need to wait for animations or transitions:
+
+1. **Define a named constant** at the top of the test file with a comment explaining the value:
+
+   ```typescript
+   // Dismiss animation duration (200ms from duration-short4 token) + buffer for transitionend event
+   const DISMISS_ANIMATION_TIMEOUT = 500;
+   ```
+
+2. **Reference component constants** when available - check the component's `*-constants.ts` file or token definitions for animation durations.
+
+3. **Use the constant** throughout the test file:
+
+   ```typescript
+   await task(DISMISS_ANIMATION_TIMEOUT);
+   ```
+
+4. **For one-off timeouts**, add an inline comment explaining why or try to avoid them if possible:
+
+   ```typescript
+   await task(100); // wait for popover positioning calculation
+   ```
 
 ## Common Issues
 
