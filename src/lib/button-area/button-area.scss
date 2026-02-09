@@ -37,7 +37,11 @@
   @include base;
 
   .button {
-    @include utils.visually-hidden;
+    @include button;
+
+    ::slotted(:is(button)) {
+      @include slotted-button;
+    }
   }
 }
 

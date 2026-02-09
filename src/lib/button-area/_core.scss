@@ -21,3 +21,23 @@
 @mixin disabled {
   cursor: #{token(disabled-cursor)};
 }
+
+@mixin button {
+  position: absolute;
+  inline-size: 100%;
+  block-size: 100%;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+@mixin slotted-button {
+  position: absolute;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+}
