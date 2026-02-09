@@ -5,6 +5,7 @@ import { IconRegistry } from '@tylertech/forge/icon';
 import { ISwitchComponent } from '@tylertech/forge/switch';
 import '$src/shared';
 import '@tylertech/forge/button-area';
+import '@tylertech/forge/expansion-panel';
 import './button-area.scss';
 
 IconRegistry.define([

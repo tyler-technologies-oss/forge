@@ -83,8 +83,6 @@ describe('Button Area', () => {
     const clickSpy = spy();
     el.addEventListener('click', clickSpy);
 
-    el.disabled = true;
-
     await elementUpdated(el);
 
     heading.click();
@@ -98,7 +96,6 @@ describe('Button Area', () => {
     const heading = getHeadingEl(el);
 
     el.disabled = true;
-
     await elementUpdated(el);
 
     heading.click();
@@ -183,12 +180,14 @@ describe('Button Area', () => {
     const { el } = await createFixture({});
 
     el.disabled = true;
+    await elementUpdated(el);
 
     expect(el.disabled).to.be.true;
     expect(el.hasAttribute('disabled')).to.be.true;
     await expect(el).to.be.accessible();
 
     el.disabled = false;
+    await elementUpdated(el);
 
     expect(el.disabled).to.be.false;
     expect(el.hasAttribute('disabled')).to.be.false;
@@ -206,6 +205,7 @@ describe('Button Area', () => {
     button.setAttribute('disabled', 'true');
     button.innerHTML = 'Slot Changed';
     el.append(button);
+    await elementUpdated(el);
     await expect(el).to.be.accessible();
 
     expect(el.disabled).to.be.true;
@@ -223,9 +223,24 @@ describe('Button Area', () => {
     button.setAttribute('slot', 'button');
     button.innerHTML = 'Slot Changed';
     el.append(button);
+    await elementUpdated(el);
     await expect(el).to.be.accessible();
 
     expect(button.disabled).to.be.true;
+  });
+
+  it('should sync disabled state when button disabled attribute changes via DOM', async () => {
+    const { el, button } = await createFixture({});
+
+    expect(el.disabled).to.be.false;
+    expect(button.disabled).to.be.false;
+
+    // Simulate external DOM manipulation
+    button.setAttribute('disabled', '');
+    await elementUpdated(el);
+
+    expect(el.disabled).to.be.true;
+    expect(el.hasAttribute('disabled')).to.be.true;
   });
 
   function getHeadingEl(el: IButtonAreaComponent): HTMLSpanElement {
@@ -254,7 +269,6 @@ describe('Button Area', () => {
     focusIndicator: IFocusIndicatorComponent;
     stateLayer: IStateLayerComponent;
     button: HTMLButtonElement;
-    content: HTMLSlotElement;
   }> {
     const buttonTemplate = html`<button slot="button" type="button">Go to detail</button>`;
     const ignoredButton = html`<forge-icon-button data-forge-ignore>
@@ -280,7 +294,6 @@ describe('Button Area', () => {
     const stateLayer = el.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent;
     const focusIndicator = el.shadowRoot?.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
     const button = el.querySelector('[slot=button]') as HTMLButtonElement;
-    const content = el.shadowRoot?.querySelector('#content') as HTMLSlotElement;
-    return { el, root, focusIndicator, stateLayer, button, content };
+    return { el, root, focusIndicator, stateLayer, button };
   }
 });
