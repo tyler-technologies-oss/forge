@@ -43,6 +43,13 @@ DO NOT add comments unless code is complex. Defer to configs.
 - Avoid using `any` in TypeScript unless necessary, prefer specific types or generics
 - Use `readonly` for properties that should not be reassigned
 
+## Testing
+
+- Avoid accessing and/or testing internal implementation details, focus on behavior and user interactions, and test through public APIs and events.
+- DO NOT access private properties or methods in tests, use public APIs to verify behavior.
+  - If you find yourself needing to access private members, consider if the class design can be improved to expose necessary functionality through public methods.
+- Use descriptive test names that clearly communicate the behavior being tested, following the pattern `should do something when condition`.
+
 ## Commits
 
 - Conventional commits REQUIRED (commitlint enforced)

@@ -154,9 +154,10 @@ For each remaining test:
 2. Verify that there is a 1:1 mapping of tests from old file to new file (unless some were removed/modified based on review)
 3. Delete the old WTR test file
 4. Run full test suite to verify coverage
-5. Run ESLint on the new file and fix any issues
-6. Run Prettier on the new file for consistent formatting
-7. Update any test scripts/configs if needed
+5. Run TypeScript type checks to ensure no type errors
+6. Run ESLint on the new file and fix any issues
+7. Run Prettier on the new file for consistent formatting
+8. Update any test scripts/configs if needed
 
 ## Quick Reference: Assertion Mappings
 
@@ -200,11 +201,12 @@ For each remaining test:
 | `sendKeys({ type: 'text' })`                    | `await userEvent.keyboard('text')`           |
 | `sendMouse({ type: 'click', position: [x,y] })` | `await userEvent.click(element)`             |
 | Click disabled element                          | `await userEvent.click(el, { force: true })` |
+| `setViewport({ width, height })`                | `await page.viewport(width, height)`         |
 
 Import for Vitest browser:
 
 ```typescript
-import { userEvent } from 'vitest/browser';
+import { page, userEvent } from 'vitest/browser';
 ```
 
 ## Accessibility Testing
@@ -295,11 +297,66 @@ Avoid arbitrary magic number timeouts. When tests need to wait for animations or
 **Async timing issues**: The `render()` function waits for initial render, so `updateComplete` is NOT needed immediately after render. Only use `await el.updateComplete` after programmatically setting a property that triggers a re-render, before checking the resulting DOM changes.
 
 Do NOT add `updateComplete`:
+
 - After `render()` for property checks (`el.checked`, `el.value`, etc.)
 - After `render()` before creating TestHarness or accessing shadow DOM
 - After `render()` before checking `:state()` matchers
 
 **Browser commands not working**: Ensure `userEvent` is imported from `vitest/browser`.
+
+**Viewport-dependent behavior failing**: Vitest's default viewport may be smaller than WTR's. Components with responsive thresholds (fullscreen, etc.) may behave differently. Use `await page.viewport(width, height)` to set appropriate sizes before tests.
+
+**Feature not initializing**: If a component conditionally initializes features based on viewport (e.g., MoveController only when `!fullscreen`), the viewport size may be triggering a responsive mode. Check component constants for threshold values.
+
+## Viewport Control
+
+```typescript
+import { page } from 'vitest/browser';
+
+// Set viewport larger than fullscreen threshold for move/drag tests
+await page.viewport(DIALOG_CONSTANTS.defaults.FULLSCREEN_THRESHOLD + 100, 1000);
+```
+
+## Backdrop Click Handling
+
+For "click outside" on modals, dispatch directly on the backdrop element:
+
+```typescript
+public clickOutside(): void {
+  if (this.backdropElement.visible) {
+    this.backdropElement.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
+  }
+}
+```
+
+## Synthetic Pointer Events for Drag/Move
+
+```typescript
+// pointerdown on handle element
+this.moveHandleElement.dispatchEvent(
+  new PointerEvent('pointerdown', { bubbles: true, clientX, clientY })
+);
+
+// pointermove/pointerup on document
+document.dispatchEvent(new PointerEvent('pointermove', { bubbles: true, clientX, clientY }));
+document.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
+```
+
+## Testing Internal Properties (Migration Only)
+
+**Avoid accessing private/internal properties in tests.** Test observable behavior instead.
+
+If migrating a test that already accesses internals and there's no alternative:
+
+```typescript
+interface IComponentInternal extends IComponent {
+  _core: { _moveController: unknown };
+}
+
+class ComponentHarness extends TestHarness<IComponentInternal> { }
+```
+
+Do NOT add new tests that access internal properties.
 
 ## Composite Component Fixtures
 
