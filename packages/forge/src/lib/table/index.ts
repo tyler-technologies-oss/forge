@@ -1,13 +1,13 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
-import { TableComponent } from './table';
+import { TableComponent } from './table.js';
 
-export * from './table-adapter';
-export * from './table-constants';
-export * from './table-core';
-export * from './table-row';
-export * from './table';
-export * from './types';
+export * from './table-adapter.js';
+export * from './table-constants.js';
+export * from './table-core.js';
+export * from './table-row.js';
+export * from './table.js';
+export * from './types.js';
 
 export function defineTableComponent(): void {
   defineCustomElement(TableComponent);

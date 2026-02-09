@@ -1,4 +1,4 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
 
 const elementName = `${COMPONENT_NAME_PREFIX}button-area`;
 

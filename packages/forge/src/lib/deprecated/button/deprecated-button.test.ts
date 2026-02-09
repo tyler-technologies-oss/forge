@@ -2,13 +2,13 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
-import type { IStateLayerComponent } from '../../state-layer';
-import type { IFocusIndicatorComponent } from '../../focus-indicator';
-import { DeprecatedButtonComponentDelegate } from './deprecated-button-component-delegate';
-import { DeprecatedButtonComponent, IDeprecatedButtonComponent } from './deprecated-button';
-import { DEPRECATED_BUTTON_CONSTANTS } from './deprecated-button-constants';
+import type { IStateLayerComponent } from '../../state-layer/index.js';
+import type { IFocusIndicatorComponent } from '../../focus-indicator/index.js';
+import { DeprecatedButtonComponentDelegate } from './deprecated-button-component-delegate.js';
+import { DeprecatedButtonComponent, IDeprecatedButtonComponent } from './deprecated-button.js';
+import { DEPRECATED_BUTTON_CONSTANTS } from './deprecated-button-constants.js';
 
-import './deprecated-button';
+import './deprecated-button.js';
 
 describe('Deprecated Button', () => {
   it('should initialize', async () => {

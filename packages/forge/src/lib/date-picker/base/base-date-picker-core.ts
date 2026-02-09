@@ -1,10 +1,10 @@
 import { isValidDate, Platform } from '@tylertech/forge-core';
-import { ICalendarComponent, ICalendarDropdownPopupConfig } from '../../calendar';
-import { CALENDAR_CONSTANTS, CalendarMode, DayOfWeek, ICalendarDateSelectEventData, ICalendarMonthChangeEventData } from '../../calendar/calendar-constants';
-import { DateRange } from '../../calendar/core/date-range';
-import { formatDate, parseDateString } from '../../core/utils/date-utils';
-import { DEFAULT_DATE_MASK, IDateInputMaskOptions } from '../../core/mask/date-input-mask';
-import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
+import { ICalendarComponent, ICalendarDropdownPopupConfig } from '../../calendar/index.js';
+import { CALENDAR_CONSTANTS, CalendarMode, DayOfWeek, ICalendarDateSelectEventData, ICalendarMonthChangeEventData } from '../../calendar/calendar-constants.js';
+import { DateRange } from '../../calendar/core/date-range.js';
+import { formatDate, parseDateString } from '../../core/utils/date-utils.js';
+import { DEFAULT_DATE_MASK, IDateInputMaskOptions } from '../../core/mask/date-input-mask.js';
+import { IBaseDatePickerAdapter } from './base-date-picker-adapter.js';
 import {
   BASE_DATE_PICKER_CONSTANTS,
   DatePickerFormatCallback,
@@ -15,8 +15,8 @@ import {
   IDatePickerCalendarDropdownText,
   DatePickerShortcuts,
   DatePickerDateFormat
-} from './base-date-picker-constants';
-import { type IDatePickerComponent } from '../date-picker';
+} from './base-date-picker-constants.js';
+import { type IDatePickerComponent } from '../date-picker.js';
 
 export interface IBaseDatePickerCore<TValue> {
   value: TValue | null | undefined;

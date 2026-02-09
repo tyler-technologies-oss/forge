@@ -1,6 +1,6 @@
-import { IKeyboardShortcutAdapter } from './keyboard-shortcut-adapter';
-import { IKeyCombination, KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback } from './keyboard-shortcut-constants';
-import { elementAcceptsTextInput, matchKeyCombination, parseKeyCombinations } from './keyboard-shortcut-utils';
+import { IKeyboardShortcutAdapter } from './keyboard-shortcut-adapter.js';
+import { IKeyCombination, KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback } from './keyboard-shortcut-constants.js';
+import { elementAcceptsTextInput, matchKeyCombination, parseKeyCombinations } from './keyboard-shortcut-utils.js';
 
 export interface IKeyboardShortcutCore {
   key: string | null | undefined;

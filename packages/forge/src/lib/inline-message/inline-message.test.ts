@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { IInlineMessageComponent } from './inline-message';
-import { InlineMessageTheme, INLINE_MESSAGE_CONSTANTS } from './inline-message-constants';
+import { IInlineMessageComponent } from './inline-message.js';
+import { InlineMessageTheme, INLINE_MESSAGE_CONSTANTS } from './inline-message-constants.js';
 
-import './inline-message';
+import './inline-message.js';
 
 describe('Inline Message', () => {
   it('should contain shadow root', async () => {

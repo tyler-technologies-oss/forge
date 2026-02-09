@@ -7,7 +7,7 @@ import {
   DatePickerComponentDelegateProps,
   IDatePickerComponent,
   IDatePickerComponentDelegateOptions
-} from './index';
+} from './index.js';
 
 interface IDatePickerComponentDelegateHarness {
   delegate: DatePickerComponentDelegate;

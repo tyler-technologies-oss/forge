@@ -1,4 +1,4 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}chip-field`;
 
@@ -44,7 +44,7 @@ export const CHIP_FIELD_CONSTANTS = {
   tagNames
 };
 
-export { type FieldDensity as ChipFieldDensityType, type FieldShape as ChipFieldShapeType } from '../field/base/base-field-constants';
+export { type FieldDensity as ChipFieldDensityType, type FieldShape as ChipFieldShapeType } from '../field/base/base-field-constants.js';
 
 export type ChipFieldObservedInputAttributes = (typeof observedInputAttributes)[number];
 export type ChipFieldInputAttributeObserver = (name: ChipFieldObservedInputAttributes, value: string | null) => void;

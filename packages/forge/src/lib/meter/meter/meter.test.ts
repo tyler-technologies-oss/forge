@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { MeterComponent } from './meter';
+import { MeterComponent } from './meter.js';
 
-import './meter';
+import './meter.js';
 
 describe('Meter', () => {
   it('should instantiate shadow root', async () => {

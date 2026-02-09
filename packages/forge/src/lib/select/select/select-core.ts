@@ -1,6 +1,6 @@
-import { BaseSelectCore, IBaseSelectCore, ISelectOption } from '../core';
-import { ISelectAdapter } from './select-adapter';
-import { SELECT_CONSTANTS } from './select-constants';
+import { BaseSelectCore, IBaseSelectCore, ISelectOption } from '../core/index.js';
+import { ISelectAdapter } from './select-adapter.js';
+import { SELECT_CONSTANTS } from './select-constants.js';
 
 export interface ISelectCore extends IBaseSelectCore {
   label: string;

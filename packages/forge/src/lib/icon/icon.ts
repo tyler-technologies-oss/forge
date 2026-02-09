@@ -1,8 +1,8 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
-import { IconAdapter } from './icon-adapter';
-import { IconCore } from './icon-core';
-import { ICON_CONSTANTS, IconUrlBuilder, IconExternalType, IconTheme } from './icon-constants';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { IconAdapter } from './icon-adapter.js';
+import { IconCore } from './icon-core.js';
+import { ICON_CONSTANTS, IconUrlBuilder, IconExternalType, IconTheme } from './icon-constants.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 
 import template from './icon.html';
 import styles from './icon.scss';

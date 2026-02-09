@@ -1,9 +1,9 @@
 import { getShadowElement, playKeyframeAnimation, removeAllChildren, tryScrollIntoView } from '@tylertech/forge-core';
 
-import { BaseAdapter, IBaseAdapter } from '../../core';
-import { CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS, ICalendarMenuOption } from './calendar-menu-constants';
-import { ICalendarMenuComponent } from './calendar-menu';
-import { getGrid, getList, getListItems, removeAllExceptLastChild } from './calendar-menu-utils';
+import { BaseAdapter, IBaseAdapter } from '../../core/index.js';
+import { CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS, ICalendarMenuOption } from './calendar-menu-constants.js';
+import { ICalendarMenuComponent } from './calendar-menu.js';
+import { getGrid, getList, getListItems, removeAllExceptLastChild } from './calendar-menu-utils.js';
 
 export interface ICalendarMenuAdapter extends IBaseAdapter {
   appendListItemsToEnd(options: ICalendarMenuOption[]): void;

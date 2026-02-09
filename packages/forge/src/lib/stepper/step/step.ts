@@ -1,13 +1,13 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconModeEdit, tylIconWarning, tylIconCheck, tylIconBlock, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons';
-import { StepAdapter } from './step-adapter';
-import { STEP_CONSTANTS } from './step-constants';
-import { StepCore } from './step-core';
-import { IconRegistry, IconComponent } from '../../icon';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { ExpansionPanelComponent } from '../../expansion-panel';
-import { StateLayerComponent } from '../../state-layer';
-import { FocusIndicatorComponent } from '../../focus-indicator';
+import { StepAdapter } from './step-adapter.js';
+import { STEP_CONSTANTS } from './step-constants.js';
+import { StepCore } from './step-core.js';
+import { IconRegistry, IconComponent } from '../../icon/index.js';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { ExpansionPanelComponent } from '../../expansion-panel/index.js';
+import { StateLayerComponent } from '../../state-layer/index.js';
+import { FocusIndicatorComponent } from '../../focus-indicator/index.js';
 
 import template from './step.html';
 import styles from './step.scss';

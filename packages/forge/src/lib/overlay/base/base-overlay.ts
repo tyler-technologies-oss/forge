@@ -1,6 +1,6 @@
 import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { IBaseOverlayCore } from './base-overlay-core';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { IBaseOverlayCore } from './base-overlay-core.js';
 import {
   IOverlayOffset,
   OverlayFlipState,
@@ -9,9 +9,9 @@ import {
   OverlayPositionStrategy,
   OVERLAY_CONSTANTS,
   OverlayShiftState
-} from '../overlay-constants';
-import { coerceStringToArray } from '../../core/utils';
-import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
+} from '../overlay-constants.js';
+import { coerceStringToArray } from '../../core/utils/index.js';
+import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils.js';
 
 export interface IBaseOverlay extends IBaseComponent {
   anchorElement: HTMLElement | VirtualElement | null;

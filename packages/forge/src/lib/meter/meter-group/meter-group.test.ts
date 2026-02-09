@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { MeterGroupComponent } from './meter-group';
+import { MeterGroupComponent } from './meter-group.js';
 
-import './meter-group';
-import '../meter/meter';
+import './meter-group.js';
+import '../meter/meter.js';
 
 describe('Meter Group', () => {
   it('should instantiate shadow root', async () => {

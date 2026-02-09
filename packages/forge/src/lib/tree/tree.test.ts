@@ -2,9 +2,9 @@ import { sendKeys } from '@web/test-runner-commands';
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { spy } from 'sinon';
-import { TreeComponent } from './tree';
-import { TreeItemComponent } from './tree-item';
-import { TreeSelectionController } from './tree/tree-selection-controller';
+import { TreeComponent } from './tree/index.js';
+import { TreeItemComponent } from './tree-item/index.js';
+import { TreeSelectionController } from './tree/tree-selection-controller.js';
 import {
   getChildItems,
   getFirstChildItem,
@@ -19,10 +19,10 @@ import {
   isTree,
   isTreeItem,
   searchItems
-} from './tree-utils';
+} from './tree-utils.js';
 
-import './tree';
-import './tree-item';
+import './tree/index.js';
+import './tree-item/index.js';
 
 class TreeHarness {
   constructor(public treeElement: TreeComponent) {}

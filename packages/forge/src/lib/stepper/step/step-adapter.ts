@@ -1,10 +1,10 @@
 import { addClass, getShadowElement, toggleAttribute, toggleClass } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/base';
-import { IStepComponent } from './step';
-import { StepIcons, STEP_CONSTANTS } from './step-constants';
-import { IIconComponent } from '../../icon';
-import { IExpansionPanelComponent } from '../../expansion-panel';
-import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/index.js';
+import { IStepComponent } from './step.js';
+import { StepIcons, STEP_CONSTANTS } from './step-constants.js';
+import { IIconComponent } from '../../icon/index.js';
+import { IExpansionPanelComponent } from '../../expansion-panel/index.js';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer/index.js';
 
 export interface IStepAdapter extends IBaseAdapter {
   component: IStepComponent;

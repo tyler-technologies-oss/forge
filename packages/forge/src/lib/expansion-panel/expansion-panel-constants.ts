@@ -1,5 +1,5 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
-import { OPEN_ICON_CONSTANTS } from '../open-icon';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
+import { OPEN_ICON_CONSTANTS } from '../open-icon/index.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}expansion-panel`;
 

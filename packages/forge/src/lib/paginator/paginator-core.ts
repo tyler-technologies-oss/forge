@@ -1,7 +1,7 @@
 import { coerceNumber, isArray, isDefined } from '@tylertech/forge-core';
-import { IPaginatorAdapter, PaginatorFieldIdentifier } from './paginator-adapter';
-import { PAGINATOR_CONSTANTS, IPaginatorChangeEventData, PaginatorRangeLabelBuilder, IPaginatorRangeState } from './paginator-constants';
-import { ISelectOption } from '../select';
+import { IPaginatorAdapter, PaginatorFieldIdentifier } from './paginator-adapter.js';
+import { PAGINATOR_CONSTANTS, IPaginatorChangeEventData, PaginatorRangeLabelBuilder, IPaginatorRangeState } from './paginator-constants.js';
+import { ISelectOption } from '../select/index.js';
 
 export interface IPaginatorCore {
   pageIndex: number;

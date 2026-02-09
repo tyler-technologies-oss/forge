@@ -1,8 +1,8 @@
-import type { IIconComponent } from '../icon';
-import type { IOverlayOffset, OverlayFlipState, OverlayShiftState } from '../overlay/overlay-constants';
-import { PositionPlacement } from '../core/utils/position-utils';
-import { TooltipPlacement, TooltipType } from '../tooltip';
-import type { PopoverAnchorAccessibility } from '../popover/popover-constants';
+import type { IIconComponent } from '../icon/index.js';
+import type { IOverlayOffset, OverlayFlipState, OverlayShiftState } from '../overlay/overlay-constants.js';
+import { PositionPlacement } from '../core/utils/position-utils.js';
+import { TooltipPlacement, TooltipType } from '../tooltip/index.js';
+import type { PopoverAnchorAccessibility } from '../popover/popover-constants.js';
 
 const observedAttributes = {
   POPUP_CLASSES: 'popup-classes',

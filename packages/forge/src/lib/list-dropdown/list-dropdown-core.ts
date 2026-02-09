@@ -1,6 +1,6 @@
-import { IListDropdownAdapter } from './list-dropdown-adapter';
-import { DEFAULT_LIST_DROPDOWN_CONFIG, IListDropdownConfig, IListDropdownOption, IListDropdownOptionGroup } from './list-dropdown-constants';
-import { getFlattenedOptions } from './list-dropdown-utils';
+import { IListDropdownAdapter } from './list-dropdown-adapter.js';
+import { DEFAULT_LIST_DROPDOWN_CONFIG, IListDropdownConfig, IListDropdownOption, IListDropdownOptionGroup } from './list-dropdown-constants.js';
+import { getFlattenedOptions } from './list-dropdown-utils.js';
 
 export interface IListDropdownCore {
   dropdownElement: HTMLElement | undefined;

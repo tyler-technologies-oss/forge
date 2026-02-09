@@ -1,4 +1,4 @@
-import { ISortedItem, ISortedItemUpdate, SortDirection } from './types';
+import { ISortedItem, ISortedItemUpdate, SortDirection } from './types.js';
 
 export class MultiSortManager {
   private _sortedColumns: ISortedItem[] = [];

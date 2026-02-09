@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { removeElement } from '@tylertech/forge-core';
-import { task, frame } from '../../core/utils/utils';
+import { task, frame } from '../../core/utils/utils.js';
 import {
   clearState,
   defineSplitViewComponent,
@@ -20,8 +20,8 @@ import {
   pointerResize,
   setState,
   SPLIT_VIEW_PANEL_CONSTANTS
-} from '../';
-import { IStateLayerComponent } from '../../state-layer';
+} from '../index.js';
+import { IStateLayerComponent } from '../../state-layer/index.js';
 
 interface SplitViewPanelCoreInternal {
   _adapter: ISplitViewPanelAdapter;

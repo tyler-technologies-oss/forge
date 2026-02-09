@@ -1,9 +1,9 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, ensureChildren, getShadowElement } from '@tylertech/forge-core';
-import { FocusIndicatorComponent, FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator';
-import { IStateLayerComponent, StateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
-import { DEPRECATED_ICON_BUTTON_CONSTANTS } from './deprecated-icon-button-constants';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { IconComponent } from '../../icon/icon';
+import { FocusIndicatorComponent, FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator/index.js';
+import { IStateLayerComponent, StateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer/index.js';
+import { DEPRECATED_ICON_BUTTON_CONSTANTS } from './deprecated-icon-button-constants.js';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { IconComponent } from '../../icon/icon.js';
 
 import template from './deprecated-icon-button.html';
 import styles from './deprecated-icon-button.scss';

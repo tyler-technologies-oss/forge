@@ -1,8 +1,8 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
-import { StateLayerAdapter } from './state-layer-adapter';
-import { StateLayerCore } from './state-layer-core';
-import { StateLayerCoords, STATE_LAYER_CONSTANTS } from './state-layer-constants';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { StateLayerAdapter } from './state-layer-adapter.js';
+import { StateLayerCore } from './state-layer-core.js';
+import { StateLayerCoords, STATE_LAYER_CONSTANTS } from './state-layer-constants.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 
 import template from './state-layer.html';
 import styles from './state-layer.scss';

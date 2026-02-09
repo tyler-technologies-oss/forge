@@ -1,13 +1,13 @@
 import { attachLightTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
 import { tylIconNotifications } from '@tylertech/tyler-icons';
-import { defineBadgeComponent } from '../../badge';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { IconComponent, IconRegistry } from '../../icon';
-import { IconButtonComponent } from '../../icon-button';
-import { TooltipComponent } from '../../tooltip';
-import { AppBarNotificationButtonAdapter } from './app-bar-notification-button-adapter';
-import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants';
-import { AppBarNotificationButtonCore } from './app-bar-notification-button-core';
+import { defineBadgeComponent } from '../../badge/index.js';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { IconComponent, IconRegistry } from '../../icon/index.js';
+import { IconButtonComponent } from '../../icon-button/index.js';
+import { TooltipComponent } from '../../tooltip/index.js';
+import { AppBarNotificationButtonAdapter } from './app-bar-notification-button-adapter.js';
+import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants.js';
+import { AppBarNotificationButtonCore } from './app-bar-notification-button-core.js';
 
 import template from './app-bar-notification-button.html';
 

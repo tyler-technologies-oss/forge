@@ -1,5 +1,5 @@
 import { isDefined, isObject } from '@tylertech/forge-core';
-import { ISelectOption, ISelectOptionGroup } from './base-select-constants';
+import { ISelectOption, ISelectOptionGroup } from './base-select-constants.js';
 
 export enum SelectOptionType {
   Option,

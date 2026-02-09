@@ -1,9 +1,9 @@
 import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons';
 
-import { IListDropdownConfig, IListDropdownOption, IListDropdownOptionGroup } from './list-dropdown-constants';
-import { ListDropdownCore } from './list-dropdown-core';
-import { ListDropdownAdapter } from './list-dropdown-adapter';
-import { IconRegistry } from '../icon';
+import { IListDropdownConfig, IListDropdownOption, IListDropdownOptionGroup } from './list-dropdown-constants.js';
+import { ListDropdownCore } from './list-dropdown-core.js';
+import { ListDropdownAdapter } from './list-dropdown-adapter.js';
+import { IconRegistry } from '../icon/index.js';
 
 export interface IListDropdown {
   dropdownElement: HTMLElement | undefined;

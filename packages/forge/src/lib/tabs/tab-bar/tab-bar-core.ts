@@ -1,7 +1,7 @@
-import { ITabBarChangeEventData, NAVIGATION_KEYS, TAB_BAR_CONSTANTS } from './tab-bar-constants';
-import { ITabComponent } from '../tab/tab';
-import { TAB_CONSTANTS } from '../tab/tab-constants';
-import { ITabBarAdapter, ITabBarScrollButtonState } from './tab-bar-adapter';
+import { ITabBarChangeEventData, NAVIGATION_KEYS, TAB_BAR_CONSTANTS } from './tab-bar-constants.js';
+import { ITabComponent } from '../tab/tab.js';
+import { TAB_CONSTANTS } from '../tab/tab-constants.js';
+import { ITabBarAdapter, ITabBarScrollButtonState } from './tab-bar-adapter.js';
 
 export interface ITabBarCore {
   disabled: boolean;

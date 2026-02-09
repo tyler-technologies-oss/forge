@@ -1,2 +1,2 @@
-export * from './base-component-delegate';
-export * from './form-field-component-delegate';
+export * from './base-component-delegate.js';
+export * from './form-field-component-delegate.js';

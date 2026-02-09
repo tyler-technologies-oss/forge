@@ -2,10 +2,10 @@ import { nothing } from 'lit';
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import sinon from 'sinon';
-import { IKeyboardShortcutComponent } from './keyboard-shortcut';
-import { KEYBOARD_SHORTCUT_CONSTANTS } from './keyboard-shortcut-constants';
+import { IKeyboardShortcutComponent } from './keyboard-shortcut.js';
+import { KEYBOARD_SHORTCUT_CONSTANTS } from './keyboard-shortcut-constants.js';
 
-import './keyboard-shortcut';
+import './keyboard-shortcut.js';
 
 describe('Keyboard Shortcut', () => {
   describe('events', () => {

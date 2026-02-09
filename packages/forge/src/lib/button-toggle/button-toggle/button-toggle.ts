@@ -1,14 +1,14 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { ExperimentalFocusOptions } from '../../constants';
-import { IWithFocusable, WithFocusable } from '../../core/mixins/focus/with-focusable';
-import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
-import { FocusIndicatorComponent } from '../../focus-indicator';
-import { StateLayerComponent } from '../../state-layer';
-import { BaseComponent } from '../../core/base/base-component';
-import { ButtonToggleAdapter } from './button-toggle-adapter';
-import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from './button-toggle-constants';
-import { ButtonToggleCore } from './button-toggle-core';
-import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
+import { ExperimentalFocusOptions } from '../../constants.js';
+import { IWithFocusable, WithFocusable } from '../../core/mixins/focus/with-focusable.js';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals.js';
+import { FocusIndicatorComponent } from '../../focus-indicator/index.js';
+import { StateLayerComponent } from '../../state-layer/index.js';
+import { BaseComponent } from '../../core/base/base-component.js';
+import { ButtonToggleAdapter } from './button-toggle-adapter.js';
+import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from './button-toggle-constants.js';
+import { ButtonToggleCore } from './button-toggle-core.js';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria.js';
 
 import template from './button-toggle.html';
 import styles from './button-toggle.scss';

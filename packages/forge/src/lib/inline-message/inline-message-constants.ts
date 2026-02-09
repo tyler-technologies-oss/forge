@@ -1,4 +1,4 @@
-import { COMPONENT_NAME_PREFIX, Theme } from '../constants';
+import { COMPONENT_NAME_PREFIX, Theme } from '../constants.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}inline-message`;
 

@@ -1,7 +1,7 @@
-import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core';
-import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate';
-import { ICheckboxComponent } from './checkbox';
-import { CHECKBOX_CONSTANTS, CheckboxLabelPosition } from './checkbox-constants';
+import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/index.js';
+import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate.js';
+import { ICheckboxComponent } from './checkbox.js';
+import { CHECKBOX_CONSTANTS, CheckboxLabelPosition } from './checkbox-constants.js';
 
 export type CheckboxComponentDelegateProps = Partial<ICheckboxComponent>;
 export interface ICheckboxComponentDelegateOptions extends IFormFieldComponentDelegateOptions {

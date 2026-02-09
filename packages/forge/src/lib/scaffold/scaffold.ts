@@ -1,6 +1,6 @@
 import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { SCAFFOLD_CONSTANTS } from './scaffold-constants';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { SCAFFOLD_CONSTANTS } from './scaffold-constants.js';
 
 import template from './scaffold.html';
 import styles from './scaffold.scss';

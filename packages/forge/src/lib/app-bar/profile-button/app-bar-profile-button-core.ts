@@ -1,9 +1,9 @@
 import { isFunction } from '@tylertech/forge-core';
-import { AVATAR_CONSTANTS } from '../../avatar';
-import { PROFILE_CARD_CONSTANTS } from '../../profile-card';
-import { IAppBarProfileButtonAdapter } from './app-bar-profile-button-adapter';
-import { IAppBarProfileCardConfig, AppBarProfileButtonProfileCardBuilder, APP_BAR_PROFILE_BUTTON_CONSTANTS } from './app-bar-profile-button-constants';
-import { IPopoverComponent } from '../../popover/popover';
+import { AVATAR_CONSTANTS } from '../../avatar/index.js';
+import { PROFILE_CARD_CONSTANTS } from '../../profile-card/index.js';
+import { IAppBarProfileButtonAdapter } from './app-bar-profile-button-adapter.js';
+import { IAppBarProfileCardConfig, AppBarProfileButtonProfileCardBuilder, APP_BAR_PROFILE_BUTTON_CONSTANTS } from './app-bar-profile-button-constants.js';
+import { IPopoverComponent } from '../../popover/popover.js';
 
 export interface IAppBarProfileButtonCore {
   fullName: string;

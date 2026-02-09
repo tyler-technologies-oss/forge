@@ -1,14 +1,14 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { spy } from 'sinon';
-import { TestHarness } from '../../core/testing/test-harness';
-import { LABEL_CONSTANTS } from '../../label';
-import { IRadioComponent, RADIO_CONSTANTS } from '../radio';
-import { IRadioGroupComponent } from './radio-group';
-import { RADIO_GROUP_CONSTANTS } from './radio-group-constants';
-import { frame } from '../../core/utils/utils';
+import { TestHarness } from '../../core/testing/test-harness.js';
+import { LABEL_CONSTANTS } from '../../label/index.js';
+import { IRadioComponent, RADIO_CONSTANTS } from '../radio/index.js';
+import { IRadioGroupComponent } from './radio-group.js';
+import { RADIO_GROUP_CONSTANTS } from './radio-group-constants.js';
+import { frame } from '../../core/utils/utils.js';
 
-import './radio-group';
+import './radio-group.js';
 
 class RadioGroupHarness extends TestHarness<HTMLElement> {
   public radioElements: IRadioComponent[];

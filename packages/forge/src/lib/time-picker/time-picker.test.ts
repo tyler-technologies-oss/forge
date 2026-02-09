@@ -1,10 +1,10 @@
 import { expect, fixture, html } from '@open-wc/testing';
 import sinon from 'sinon';
-import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list';
-import { IPopoverComponent } from '../popover';
-import { frame, task } from '../core/utils/utils';
-import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../icon-button';
-import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
+import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/index.js';
+import { IPopoverComponent } from '../popover/index.js';
+import { frame, task } from '../core/utils/utils.js';
+import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../icon-button/index.js';
+import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field/index.js';
 import {
   getCurrentTimeOfDayMillis,
   hoursToMillis,
@@ -17,10 +17,10 @@ import {
   millisToTimeString,
   timeStringToMillis,
   TIME_PICKER_CONSTANTS
-} from './';
+} from './index.js';
 
-import '../text-field';
-import './time-picker';
+import '../text-field/index.js';
+import './time-picker.js';
 
 const POPOVER_ANIMATION_DURATION = 200;
 

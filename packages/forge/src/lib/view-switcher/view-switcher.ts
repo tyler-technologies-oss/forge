@@ -1,9 +1,9 @@
 import { customElement, attachShadowTemplate, coerceNumber, coreProperty } from '@tylertech/forge-core';
-import { ViewSwitcherAdapter } from './view-switcher-adapter';
-import { ViewSwitcherCore } from './view-switcher-core';
-import { VIEW_SWITCHER_CONSTANTS, ViewSwitcherAnimation, ViewSwitcherAnimationType } from './view-switcher-constants';
-import { ViewComponent } from './view/view';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { ViewSwitcherAdapter } from './view-switcher-adapter.js';
+import { ViewSwitcherCore } from './view-switcher-core.js';
+import { VIEW_SWITCHER_CONSTANTS, ViewSwitcherAnimation, ViewSwitcherAnimationType } from './view-switcher-constants.js';
+import { ViewComponent } from './view/view.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 
 import template from './view-switcher.html';
 import styles from './view-switcher.scss';

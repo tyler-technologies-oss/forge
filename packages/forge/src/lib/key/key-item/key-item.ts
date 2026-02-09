@@ -1,9 +1,9 @@
 import { TemplateResult, html, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { setDefaultAria } from '../../core/utils/a11y-utils';
+import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
-import { BaseLitElement } from '../../core/base/base-lit-element';
+import { BaseLitElement } from '../../core/base/base-lit-element.js';
 
 import styles from './key-item.scss';
 

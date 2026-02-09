@@ -1,9 +1,9 @@
 import { ForgeResizeObserver, getShadowElement } from '@tylertech/forge-core';
 
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { ISplitViewPanelComponent, SPLIT_VIEW_PANEL_CONSTANTS } from '../split-view-panel';
-import { ISplitViewComponent } from './split-view';
-import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { ISplitViewPanelComponent, SPLIT_VIEW_PANEL_CONSTANTS } from '../split-view-panel/index.js';
+import { ISplitViewComponent } from './split-view.js';
+import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants.js';
 
 export interface ISplitViewAdapter extends IBaseAdapter {
   registerSlotListener(listener: (evt: Event) => void): void;

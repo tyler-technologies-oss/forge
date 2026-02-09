@@ -1,7 +1,7 @@
 import { appendToAttribute, getShadowElement, removeAllChildren, toggleAttribute, toggleOnAttribute } from '@tylertech/forge-core';
 
-import { BaseAdapter, IBaseAdapter } from '../core/base';
-import { ICalendarComponent } from './calendar';
+import { BaseAdapter, IBaseAdapter } from '../core/base/index.js';
+import { ICalendarComponent } from './calendar.js';
 import {
   CALENDAR_CONSTANTS,
   CalendarView,
@@ -10,7 +10,7 @@ import {
   ICalendarDateOptions,
   ICalendarDayOptions,
   ICalendarEvent
-} from './calendar-constants';
+} from './calendar-constants.js';
 import {
   getAccessibleHeader,
   getClearButton,
@@ -29,10 +29,10 @@ import {
   getTooltip,
   getYearButtonContent,
   setTabindexOnElement
-} from './calendar-dom-utils';
-import { getLocalizedMonth, getLocalizedYear } from './calendar-locale-utils';
-import { CALENDAR_MENU_CONSTANTS, CalendarDirection, CalendarMenuAnimationType, ICalendarMenuComponent, ICalendarMenuOption } from './calendar-menu';
-import { splitIntoWeeks } from './calendar-utils';
+} from './calendar-dom-utils.js';
+import { getLocalizedMonth, getLocalizedYear } from './calendar-locale-utils.js';
+import { CALENDAR_MENU_CONSTANTS, CalendarDirection, CalendarMenuAnimationType, ICalendarMenuComponent, ICalendarMenuOption } from './calendar-menu/index.js';
+import { splitIntoWeeks } from './calendar-utils.js';
 
 export interface ICalendarAdapter extends IBaseAdapter {
   animateIntoSelectionMenu(options: ICalendarMenuOption[], direction: CalendarDirection, setFocus: boolean): void;

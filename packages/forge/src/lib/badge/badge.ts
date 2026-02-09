@@ -1,9 +1,9 @@
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { BadgeTheme } from './badge-constants';
-import { toggleState } from '../core/utils/utils';
+import { BadgeTheme } from './badge-constants.js';
+import { toggleState } from '../core/utils/utils.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
-import { BaseLitElement } from '../core/base/base-lit-element';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
 
 import styles from './badge.scss';
 

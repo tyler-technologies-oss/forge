@@ -67,12 +67,14 @@ export class DateInputMask {
         Mmm: {
           mask: MaskedEnum,
           enum: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-          matchValue: (enumStr, inputStr, matchFrom) => MaskedEnum.DEFAULTS.matchValue(enumStr.toLowerCase(), inputStr.toLowerCase(), matchFrom)
+          matchValue: (enumStr: string, inputStr: string, matchFrom: number) =>
+            MaskedEnum.DEFAULTS.matchValue(enumStr.toLowerCase(), inputStr.toLowerCase(), matchFrom)
         },
         MMM: {
           mask: MaskedEnum,
           enum: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-          matchValue: (enumStr, inputStr, matchFrom) => MaskedEnum.DEFAULTS.matchValue(enumStr.toLowerCase(), inputStr.toLowerCase(), matchFrom)
+          matchValue: (enumStr: string, inputStr: string, matchFrom: number) =>
+            MaskedEnum.DEFAULTS.matchValue(enumStr.toLowerCase(), inputStr.toLowerCase(), matchFrom)
         },
         DD: {
           mask: MaskedRange,

@@ -1,9 +1,9 @@
 import { isDate, Platform } from '@tylertech/forge-core';
-import { CalendarMode, ICalendarDateSelectEventData } from '../calendar';
-import { isSameDate } from '../core';
-import { BaseDatePickerCore, IBaseDatePickerCore } from './base/base-date-picker-core';
-import { IDatePickerAdapter } from './date-picker-adapter';
-import { DATE_PICKER_CONSTANTS } from './date-picker-constants';
+import { CalendarMode, ICalendarDateSelectEventData } from '../calendar/index.js';
+import { isSameDate } from '../core/index.js';
+import { BaseDatePickerCore, IBaseDatePickerCore } from './base/base-date-picker-core.js';
+import { IDatePickerAdapter } from './date-picker-adapter.js';
+import { DATE_PICKER_CONSTANTS } from './date-picker-constants.js';
 
 export interface IDatePickerCore extends IBaseDatePickerCore<Date | string> {}
 

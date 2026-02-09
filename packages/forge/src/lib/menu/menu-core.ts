@@ -1,17 +1,17 @@
 import { isArray, randomChars } from '@tylertech/forge-core';
-import { ICON_CLASS_NAME } from '../constants';
-import { PositionPlacement } from '../core/utils/position-utils';
+import { ICON_CLASS_NAME } from '../constants.js';
+import { PositionPlacement } from '../core/utils/position-utils.js';
 import {
   CascadingListDropdownAwareCore,
   IListDropdownCascadingElementFactoryConfig,
   IListDropdownConfig,
   ListDropdownAsyncStyle,
   ListDropdownType
-} from '../list-dropdown';
-import { isListDropdownOptionType, ListDropdownOptionType } from '../list-dropdown/list-dropdown-utils';
-import type { IOverlayOffset } from '../overlay/overlay-constants';
-import { IMenuOption } from './index';
-import { IMenuAdapter } from './menu-adapter';
+} from '../list-dropdown/index.js';
+import { isListDropdownOptionType, ListDropdownOptionType } from '../list-dropdown/list-dropdown-utils.js';
+import type { IOverlayOffset } from '../overlay/overlay-constants.js';
+import { IMenuOption } from './index.js';
+import { IMenuAdapter } from './menu-adapter.js';
 import {
   IMenuActiveChangeEventData,
   IMenuOptionGroup,
@@ -20,7 +20,7 @@ import {
   MenuOptionBuilder,
   MenuOptionFactory,
   MENU_CONSTANTS
-} from './menu-constants';
+} from './menu-constants.js';
 
 export interface IMenuCore {
   initialize(): void;

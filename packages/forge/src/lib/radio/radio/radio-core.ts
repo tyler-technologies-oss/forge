@@ -1,6 +1,6 @@
-import { task } from '../../core/utils/utils';
-import { IRadioAdapter } from './radio-adapter';
-import { RadioLabelPosition, RADIO_CONSTANTS } from './radio-constants';
+import { task } from '../../core/utils/utils.js';
+import { IRadioAdapter } from './radio-adapter.js';
+import { RadioLabelPosition, RADIO_CONSTANTS } from './radio-constants.js';
 
 export interface IRadioCore {
   checked: boolean;

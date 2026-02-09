@@ -1,5 +1,5 @@
-import { IListAdapter } from './list-adapter';
-import { LIST_CONSTANTS } from './list-constants';
+import { IListAdapter } from './list-adapter.js';
+import { LIST_CONSTANTS } from './list-constants.js';
 
 export interface IListCore {
   dense: boolean;

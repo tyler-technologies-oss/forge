@@ -1,10 +1,10 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IButtonToggleComponent } from './button-toggle';
-import { isFocusable, setDefaultAria } from '../../constants';
-import { IStateLayerComponent } from '../../state-layer/state-layer';
-import { STATE_LAYER_CONSTANTS } from '../../state-layer/state-layer-constants';
-import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { IButtonToggleComponent } from './button-toggle.js';
+import { isFocusable, setDefaultAria } from '../../constants.js';
+import { IStateLayerComponent } from '../../state-layer/state-layer.js';
+import { STATE_LAYER_CONSTANTS } from '../../state-layer/state-layer-constants.js';
+import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
 
 export interface IButtonToggleAdapter extends IBaseAdapter {
   initialize(): void;

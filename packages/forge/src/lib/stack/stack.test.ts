@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 
-import './stack';
-import { IStackComponent } from './stack';
-import { STACK_CONSTANTS } from './stack-constants';
+import './stack.js';
+import { IStackComponent } from './stack.js';
+import { STACK_CONSTANTS } from './stack-constants.js';
 
 describe('Stack', () => {
   it('should initialize', async () => {

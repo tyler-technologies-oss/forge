@@ -1,10 +1,10 @@
 import { customElement, coreProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
-import { ChipFieldAdapter } from './chip-field-adapter';
-import { ChipFieldCore } from './chip-field-core';
-import { CHIP_FIELD_CONSTANTS } from './chip-field-constants';
-import { ChipComponent } from '../chips';
-import { BaseField, IBaseField } from '../field/base/base-field';
-import { BASE_FIELD_CONSTANTS, FieldComponent } from '../field';
+import { ChipFieldAdapter } from './chip-field-adapter.js';
+import { ChipFieldCore } from './chip-field-core.js';
+import { CHIP_FIELD_CONSTANTS } from './chip-field-constants.js';
+import { ChipComponent } from '../chips/index.js';
+import { BaseField, IBaseField } from '../field/base/base-field.js';
+import { BASE_FIELD_CONSTANTS, FieldComponent } from '../field/index.js';
 
 import template from './chip-field.html';
 import styles from './chip-field.scss';

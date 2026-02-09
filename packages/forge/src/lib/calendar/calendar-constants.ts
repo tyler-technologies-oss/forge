@@ -1,7 +1,7 @@
-import { TOOLTIP_CONSTANTS } from '../tooltip/tooltip-constants';
-import { COMPONENT_NAME_PREFIX } from '../constants';
-import { CALENDAR_MENU_CONSTANTS } from './calendar-menu';
-import { DateRange } from './core/date-range';
+import { TOOLTIP_CONSTANTS } from '../tooltip/tooltip-constants.js';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
+import { CALENDAR_MENU_CONSTANTS } from './calendar-menu/index.js';
+import { DateRange } from './core/date-range.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}calendar`;
 

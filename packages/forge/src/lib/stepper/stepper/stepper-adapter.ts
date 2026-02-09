@@ -1,10 +1,10 @@
 import { getShadowElement, toggleClass } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/base';
-import { StepperUtils } from '../core/stepper-utils';
-import { IStepComponent } from '../step/step';
-import { STEP_CONSTANTS } from '../step/step-constants';
-import { IStepperComponent } from './stepper';
-import { StepperLayoutAlign, StepperLayoutMode, STEPPER_CONSTANTS } from './stepper-constants';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/index.js';
+import { StepperUtils } from '../core/stepper-utils.js';
+import { IStepComponent } from '../step/step.js';
+import { STEP_CONSTANTS } from '../step/step-constants.js';
+import { IStepperComponent } from './stepper.js';
+import { StepperLayoutAlign, StepperLayoutMode, STEPPER_CONSTANTS } from './stepper-constants.js';
 
 export interface IStepperAdapter extends IBaseAdapter {
   initializeAccessibility(): void;

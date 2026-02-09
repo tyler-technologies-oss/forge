@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
-import { PopoverAdapter } from './popover-adapter';
+import { PopoverAdapter } from './popover-adapter.js';
 import {
   IPopoverToggleEventData,
   PopoverAnimationType,
@@ -7,12 +7,12 @@ import {
   PopoverTriggerType,
   POPOVER_CONSTANTS,
   PopoverAnchorAccessibility
-} from './popover-constants';
-import { IPopoverCore, PopoverCore } from './popover-core';
-import { OverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
-import { IOverlayAware, OverlayAware } from '../overlay/base/overlay-aware';
-import { coerceStringToArray } from '../core/utils/utils';
-import { IDismissible, tryDismiss, IDismissibleStackState } from '../core/utils/dismissible-stack';
+} from './popover-constants.js';
+import { IPopoverCore, PopoverCore } from './popover-core.js';
+import { OverlayComponent, OVERLAY_CONSTANTS } from '../overlay/index.js';
+import { IOverlayAware, OverlayAware } from '../overlay/base/overlay-aware.js';
+import { coerceStringToArray } from '../core/utils/utils.js';
+import { IDismissible, tryDismiss, IDismissibleStackState } from '../core/utils/dismissible-stack.js';
 
 import template from './popover.html';
 import styles from './popover.scss';

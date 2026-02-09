@@ -2,13 +2,13 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { task } from '../core/utils/utils';
-import type { IStateLayerComponent } from './state-layer';
-import { MINIMUM_PRESS_MS, PRESS_GROW_MS, STATE_LAYER_CONSTANTS, TOUCH_DELAY_MS } from './state-layer-constants';
-import { createMouseEventInit, simulateHover, simulateLeave, simulatePressAndHold, simulatePressed } from '../core/testing/pointer';
-import { StateLayerCore } from './state-layer-core';
+import { task } from '../core/utils/utils.js';
+import type { IStateLayerComponent } from './state-layer.js';
+import { MINIMUM_PRESS_MS, PRESS_GROW_MS, STATE_LAYER_CONSTANTS, TOUCH_DELAY_MS } from './state-layer-constants.js';
+import { createMouseEventInit, simulateHover, simulateLeave, simulatePressAndHold, simulatePressed } from '../core/testing/pointer.js';
+import { StateLayerCore } from './state-layer-core.js';
 
-import './state-layer';
+import './state-layer.js';
 import { nothing } from 'lit';
 
 describe('StateLayer', () => {

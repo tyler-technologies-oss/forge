@@ -1,5 +1,5 @@
-import { IStepAdapter } from './step-adapter';
-import { StepIcons, STEP_CONSTANTS } from './step-constants';
+import { IStepAdapter } from './step-adapter.js';
+import { StepIcons, STEP_CONSTANTS } from './step-constants.js';
 
 export interface IStepCore {
   index: number;

@@ -1,7 +1,7 @@
 import { Platform, debounce, randomChars } from '@tylertech/forge-core';
-import { ITimePickerAdapter } from './time-picker-adapter';
-import { ITimeInputMaskOptions } from '../core/mask/time-input-mask';
-import { isSupportedTimeFormat, TWENTY_FOUR_HOUR_TIME_REGEX, tryCoerceTimeString } from '../core/utils/time-utils';
+import { ITimePickerAdapter } from './time-picker-adapter.js';
+import { ITimeInputMaskOptions } from '../core/mask/time-input-mask.js';
+import { isSupportedTimeFormat, TWENTY_FOUR_HOUR_TIME_REGEX, tryCoerceTimeString } from '../core/utils/time-utils.js';
 import {
   TIME_PICKER_CONSTANTS,
   ITimePickerOptionValue,
@@ -11,8 +11,8 @@ import {
   TimePickerFormatCallback,
   TimePickerCoercionCallback,
   TimePickerPrepareMaskCallback
-} from './time-picker-constants';
-import { IListDropdownConfig, ListDropdownType, IListDropdownOption } from '../list-dropdown/list-dropdown-constants';
+} from './time-picker-constants.js';
+import { IListDropdownConfig, ListDropdownType, IListDropdownOption } from '../list-dropdown/list-dropdown-constants.js';
 import {
   timeStringToMillis,
   millisToTimeString,
@@ -20,7 +20,7 @@ import {
   getCurrentTimeOfDayMillis,
   millisToMinutes,
   stripSecondsFromMillis
-} from './time-picker-utils';
+} from './time-picker-utils.js';
 
 export interface ITimePickerCore {
   value: string | null | undefined;

@@ -1,7 +1,7 @@
-import { IAccordionAdapter } from './accordion-adapter';
-import { EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from '../expansion-panel/expansion-panel-constants';
-import { IExpansionPanelComponent } from '../expansion-panel';
-import { ACCORDION_CONSTANTS } from './accordion-constants';
+import { IAccordionAdapter } from './accordion-adapter.js';
+import { EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from '../expansion-panel/expansion-panel-constants.js';
+import { IExpansionPanelComponent } from '../expansion-panel/index.js';
+import { ACCORDION_CONSTANTS } from './accordion-constants.js';
 
 export interface IAccordionCore {
   panelSelector: string;

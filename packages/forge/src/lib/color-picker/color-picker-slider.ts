@@ -1,5 +1,5 @@
-import { COLOR_PICKER_CONSTANTS } from './color-picker-constants';
-import { relativeCoords } from './color-picker-utils';
+import { COLOR_PICKER_CONSTANTS } from './color-picker-constants.js';
+import { relativeCoords } from './color-picker-utils.js';
 
 export interface IColorPickerSliderOptions {
   min: number;

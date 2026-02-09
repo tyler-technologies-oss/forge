@@ -1,14 +1,14 @@
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { stub } from 'sinon';
-import { task } from '../core/utils/utils';
-import type { IIconComponent } from './icon';
-import { IconRegistry } from './icon-registry';
+import { task } from '../core/utils/utils.js';
+import type { IIconComponent } from './icon.js';
+import { IconRegistry } from './icon-registry.js';
 import { tylIcon360, tylIconCode, tylIconFace } from '@tylertech/tyler-icons';
-import { ICON_CONSTANTS } from './icon-constants';
+import { ICON_CONSTANTS } from './icon-constants.js';
 
-import './icon';
-import { IconCore } from './icon-core';
+import './icon.js';
+import { IconCore } from './icon-core.js';
 
 const ICON_NAME = 'code';
 

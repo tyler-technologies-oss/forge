@@ -1,10 +1,10 @@
 import { attachShadowTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
-import { updateTarget } from '../constants';
-import { BaseComponent, IBaseComponent } from '../core';
-import { LabelAdapter } from './label-adapter';
-import { ILabelAware } from './label-aware';
-import { LABEL_CONSTANTS } from './label-constants';
-import { LabelCore } from './label-core';
+import { updateTarget } from '../constants.js';
+import { BaseComponent, IBaseComponent } from '../core/index.js';
+import { LabelAdapter } from './label-adapter.js';
+import { ILabelAware } from './label-aware.js';
+import { LABEL_CONSTANTS } from './label-constants.js';
+import { LabelCore } from './label-core.js';
 
 import template from './label.html';
 import style from './label.scss';

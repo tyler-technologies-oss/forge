@@ -1,10 +1,10 @@
 import { coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { IIconComponent } from '../../icon';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { IBaseListDropdownOption, ListDropdownIconType, ListDropdownTooltipConfig } from '../../list-dropdown/list-dropdown-constants';
-import { OptionAdapter } from './option-adapter';
-import { OPTION_CONSTANTS } from './option-constants';
-import { OptionCore } from './option-core';
+import { IIconComponent } from '../../icon/index.js';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { IBaseListDropdownOption, ListDropdownIconType, ListDropdownTooltipConfig } from '../../list-dropdown/list-dropdown-constants.js';
+import { OptionAdapter } from './option-adapter.js';
+import { OPTION_CONSTANTS } from './option-constants.js';
+import { OptionCore } from './option-core.js';
 
 export interface IOptionComponent extends IBaseComponent, Required<IBaseListDropdownOption> {}
 

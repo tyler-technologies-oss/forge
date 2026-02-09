@@ -1,10 +1,10 @@
-import { ITooltipAdapter } from './tooltip-adapter';
-import { TOOLTIP_CONSTANTS, TooltipPlacement, TooltipTriggerType, TooltipType } from './tooltip-constants';
-import { WithLongpressListener } from '../core/mixins/interactions/longpress/with-longpress-listener';
-import { canUserHoverElements } from '../constants';
-import { OverlayFlipState } from '../overlay/overlay-constants';
-import { PositionPlacement } from '../core/utils/position-utils';
-import { DismissibleStack } from '../core/utils/dismissible-stack';
+import { ITooltipAdapter } from './tooltip-adapter.js';
+import { TOOLTIP_CONSTANTS, TooltipPlacement, TooltipTriggerType, TooltipType } from './tooltip-constants.js';
+import { WithLongpressListener } from '../core/mixins/interactions/longpress/with-longpress-listener.js';
+import { canUserHoverElements } from '../constants.js';
+import { OverlayFlipState } from '../overlay/overlay-constants.js';
+import { PositionPlacement } from '../core/utils/position-utils.js';
+import { DismissibleStack } from '../core/utils/dismissible-stack.js';
 
 export interface ITooltipCore {
   open: boolean;

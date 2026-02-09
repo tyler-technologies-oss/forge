@@ -1,2 +1,2 @@
-export * from './calendar-dropdown';
-export * from './calendar-dropdown-constants';
+export * from './calendar-dropdown.js';
+export * from './calendar-dropdown-constants.js';

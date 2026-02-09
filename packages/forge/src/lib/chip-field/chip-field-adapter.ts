@@ -1,10 +1,15 @@
 import { getShadowElement, listenOwnProperty, randomChars, toggleAttribute } from '@tylertech/forge-core';
-import { IChipFieldComponent } from './chip-field';
-import { ChipFieldInputAttributeObserver, ChipFieldValueChangeListener, CHIP_FIELD_CONSTANTS, ChipFieldObservedInputAttributes } from './chip-field-constants';
-import { BaseFieldAdapter, IBaseFieldAdapter } from '../field/base/base-field-adapter';
-import { FIELD_CONSTANTS } from '../field/field-constants';
-import { IFieldComponent } from '../field';
-import { LabelComponent, LABEL_CONSTANTS } from '../label';
+import { IChipFieldComponent } from './chip-field.js';
+import {
+  ChipFieldInputAttributeObserver,
+  ChipFieldValueChangeListener,
+  CHIP_FIELD_CONSTANTS,
+  ChipFieldObservedInputAttributes
+} from './chip-field-constants.js';
+import { BaseFieldAdapter, IBaseFieldAdapter } from '../field/base/base-field-adapter.js';
+import { FIELD_CONSTANTS } from '../field/field-constants.js';
+import { IFieldComponent } from '../field/index.js';
+import { LabelComponent, LABEL_CONSTANTS } from '../label/index.js';
 
 export interface IChipFieldAdapter extends IBaseFieldAdapter {
   readonly popoverTargetElement: HTMLElement;

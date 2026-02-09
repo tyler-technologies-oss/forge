@@ -1,11 +1,11 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty, toggleAttribute } from '@tylertech/forge-core';
-import { internals } from '../constants';
-import { BaseFormComponent, IBaseFormComponent } from '../core/base/base-form-component';
-import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
-import { StateLayerComponent } from '../state-layer/state-layer';
-import { SliderAdapter } from './slider-adapter';
-import { SLIDER_CONSTANTS, SliderLabelBuilder, ISliderRangeChangeEventData, ISliderChangeEventData } from './slider-constants';
-import { SliderCore } from './slider-core';
+import { internals } from '../constants.js';
+import { BaseFormComponent, IBaseFormComponent } from '../core/base/base-form-component.js';
+import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator.js';
+import { StateLayerComponent } from '../state-layer/state-layer.js';
+import { SliderAdapter } from './slider-adapter.js';
+import { SLIDER_CONSTANTS, SliderLabelBuilder, ISliderRangeChangeEventData, ISliderChangeEventData } from './slider-constants.js';
+import { SliderCore } from './slider-core.js';
 
 import template from './slider.html';
 import styles from './slider.scss';

@@ -3,13 +3,13 @@ import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { spy } from 'sinon';
 import { getShadowElement } from '@tylertech/forge-core';
-import { TestHarness } from '../core/testing/test-harness';
-import { ISliderComponent } from '../slider';
-import { SLIDER_CONSTANTS } from './slider-constants';
-import type { IStateLayerComponent } from '../state-layer/state-layer';
-import { internals } from '../constants';
+import { TestHarness } from '../core/testing/test-harness.js';
+import { ISliderComponent } from '../slider/index.js';
+import { SLIDER_CONSTANTS } from './slider-constants.js';
+import type { IStateLayerComponent } from '../state-layer/state-layer.js';
+import { internals } from '../constants.js';
 
-import './slider';
+import './slider.js';
 
 class SliderHarness extends TestHarness<ISliderComponent> {
   public rootElement: HTMLElement;

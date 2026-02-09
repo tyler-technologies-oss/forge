@@ -1,10 +1,10 @@
 import { isDate, isValidDate, Platform } from '@tylertech/forge-core';
-import { CalendarMode, DateRange, ICalendarDateSelectEventData } from '../calendar';
-import { isSameDate } from '../core/utils/date-utils';
-import { IDateInputMaskOptions } from '../core/mask/date-input-mask';
-import { BaseDatePickerCore, IBaseDatePickerCore } from '../date-picker/base/base-date-picker-core';
-import { IDateRangePickerAdapter } from './date-range-picker-adapter';
-import { DatePickerRange, DATE_RANGE_PICKER_CONSTANTS, IDatePickerRange, IDateRangePickerChangeEventData } from './date-range-picker-constants';
+import { CalendarMode, DateRange, ICalendarDateSelectEventData } from '../calendar/index.js';
+import { isSameDate } from '../core/utils/date-utils.js';
+import { IDateInputMaskOptions } from '../core/mask/date-input-mask.js';
+import { BaseDatePickerCore, IBaseDatePickerCore } from '../date-picker/base/base-date-picker-core.js';
+import { IDateRangePickerAdapter } from './date-range-picker-adapter.js';
+import { DatePickerRange, DATE_RANGE_PICKER_CONSTANTS, IDatePickerRange, IDateRangePickerChangeEventData } from './date-range-picker-constants.js';
 
 export interface IDateRangePickerCore extends IBaseDatePickerCore<IDatePickerRange> {
   from: Date | string | null | undefined;

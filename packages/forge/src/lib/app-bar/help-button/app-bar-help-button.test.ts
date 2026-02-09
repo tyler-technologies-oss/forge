@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import type { IAppBarHelpButtonComponent } from './app-bar-help-button';
-import type { IMenuComponent } from '../../menu/menu';
-import type { IIconComponent } from '../../icon/icon';
-import { MENU_CONSTANTS } from '../../menu/menu-constants';
+import type { IAppBarHelpButtonComponent } from './app-bar-help-button.js';
+import type { IMenuComponent } from '../../menu/menu.js';
+import type { IIconComponent } from '../../icon/icon.js';
+import { MENU_CONSTANTS } from '../../menu/menu-constants.js';
 
-import './app-bar-help-button';
+import './app-bar-help-button.js';
 
 describe('App Bar Help Button', () => {
   it('should be accessible', async () => {

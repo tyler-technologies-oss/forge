@@ -1,4 +1,4 @@
-import { textInputTypes, IKeyCombination } from './keyboard-shortcut-constants';
+import { textInputTypes, IKeyCombination } from './keyboard-shortcut-constants.js';
 
 /** Checks if an HTML element allows text input */
 export function elementAcceptsTextInput(el: any): boolean {

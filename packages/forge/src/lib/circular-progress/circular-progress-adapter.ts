@@ -1,12 +1,12 @@
 import { getShadowElement } from '@tylertech/forge-core';
 
-import { ICircularProgressComponent } from './circular-progress';
-import { CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
+import { ICircularProgressComponent } from './circular-progress.js';
+import { CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants.js';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
 
 import indeterminateTemplate from './_indeterminate.html';
 import determinateTemplate from './_determinate.html';
-import { setDefaultAria } from '../constants';
+import { setDefaultAria } from '../constants.js';
 
 export interface ICircularProgressAdapter extends IBaseAdapter<ICircularProgressComponent> {
   initialize(): void;

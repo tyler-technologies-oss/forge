@@ -8,7 +8,7 @@
  */
 
 import { toggleAttribute } from '@tylertech/forge-core';
-import { supportsElementInternalsAria } from './feature-detection';
+import { supportsElementInternalsAria } from './feature-detection.js';
 
 /**
  * Augment ElementInternals to support `CustomStateSet`.

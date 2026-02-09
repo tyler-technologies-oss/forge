@@ -1,16 +1,16 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty, isDefined, isString } from '@tylertech/forge-core';
-import { getFormState, getFormValue, getValidationMessage, inputType, internals, setDefaultAria, setValidity } from '../constants';
-import { BaseComponent, FormValue } from '../core';
-import { IWithFocusable, WithFocusable } from '../core/mixins/focus/with-focusable';
-import { IWithFormAssociation, WithFormAssociation } from '../core/mixins/form/with-form-associated';
-import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
-import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
-import { IWithLabelAwareness, WithLabelAwareness } from '../core/mixins/label/with-label-aware';
-import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
-import { StateLayerComponent } from '../state-layer/state-layer';
-import { SwitchAdapter } from './switch-adapter';
-import { SwitchIconVisibility, SwitchLabelPosition, SWITCH_CONSTANTS } from './switch-constants';
-import { SwitchCore } from './switch-core';
+import { getFormState, getFormValue, getValidationMessage, inputType, internals, setDefaultAria, setValidity } from '../constants.js';
+import { BaseComponent, FormValue } from '../core/index.js';
+import { IWithFocusable, WithFocusable } from '../core/mixins/focus/with-focusable.js';
+import { IWithFormAssociation, WithFormAssociation } from '../core/mixins/form/with-form-associated.js';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria.js';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals.js';
+import { IWithLabelAwareness, WithLabelAwareness } from '../core/mixins/label/with-label-aware.js';
+import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator.js';
+import { StateLayerComponent } from '../state-layer/state-layer.js';
+import { SwitchAdapter } from './switch-adapter.js';
+import { SwitchIconVisibility, SwitchLabelPosition, SWITCH_CONSTANTS } from './switch-constants.js';
+import { SwitchCore } from './switch-core.js';
 
 import template from './switch.html';
 import styles from './switch.scss';

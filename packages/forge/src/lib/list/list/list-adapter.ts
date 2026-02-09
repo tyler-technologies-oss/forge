@@ -1,9 +1,9 @@
 import { deepQuerySelectorAll, isDeepEqual, getShadowElement, toggleClass } from '@tylertech/forge-core';
-import { BaseAdapter } from '../../core/base/base-adapter';
-import { IListComponent } from './list';
-import { LIST_ITEM_CONSTANTS } from '../list-item/list-item-constants';
-import { IListItemComponent } from '../list-item/list-item';
-import { LIST_CONSTANTS } from './list-constants';
+import { BaseAdapter } from '../../core/base/base-adapter.js';
+import { IListComponent } from './list.js';
+import { LIST_ITEM_CONSTANTS } from '../list-item/list-item-constants.js';
+import { IListItemComponent } from '../list-item/list-item.js';
+import { LIST_CONSTANTS } from './list-constants.js';
 
 export interface IListAdapter extends BaseAdapter<IListComponent> {
   setSelectedListItems(values: unknown | unknown[]): void;

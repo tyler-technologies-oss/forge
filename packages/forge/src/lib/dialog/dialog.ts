@@ -1,10 +1,10 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, coreProperty, customElement } from '@tylertech/forge-core';
-import { BackdropComponent } from '../backdrop';
-import { BaseComponent } from '../core/base/base-component';
-import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
-import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
-import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
-import { DialogAdapter } from './dialog-adapter';
+import { BackdropComponent } from '../backdrop/index.js';
+import { BaseComponent } from '../core/base/base-component.js';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria.js';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals.js';
+import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack.js';
+import { DialogAdapter } from './dialog-adapter.js';
 import {
   DIALOG_CONSTANTS,
   DialogAnimationType,
@@ -20,8 +20,8 @@ import {
   dialogStack,
   hideBackdrop,
   showBackdrop
-} from './dialog-constants';
-import { DialogCore } from './dialog-core';
+} from './dialog-constants.js';
+import { DialogCore } from './dialog-core.js';
 
 import template from './dialog.html';
 import styles from './dialog.scss';

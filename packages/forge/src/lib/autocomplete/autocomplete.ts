@@ -1,14 +1,14 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, ensureChild, coreProperty } from '@tylertech/forge-core';
 import { tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons';
-import { DividerComponent } from '../divider';
-import { IconComponent, IconRegistry } from '../icon';
-import { LinearProgressComponent } from '../linear-progress';
-import { ListComponent, ListItemComponent } from '../list';
-import { IListDropdownAware, ListDropdownAware } from '../list-dropdown/list-dropdown-aware';
-import { PopoverComponent } from '../popover/popover';
-import { SkeletonComponent } from '../skeleton';
-import { TextFieldComponent } from '../text-field';
-import { AutocompleteAdapter } from './autocomplete-adapter';
+import { DividerComponent } from '../divider/index.js';
+import { IconComponent, IconRegistry } from '../icon/index.js';
+import { LinearProgressComponent } from '../linear-progress/index.js';
+import { ListComponent, ListItemComponent } from '../list/index.js';
+import { IListDropdownAware, ListDropdownAware } from '../list-dropdown/list-dropdown-aware.js';
+import { PopoverComponent } from '../popover/popover.js';
+import { SkeletonComponent } from '../skeleton/index.js';
+import { TextFieldComponent } from '../text-field/index.js';
+import { AutocompleteAdapter } from './autocomplete-adapter.js';
 import {
   AutocompleteFilterCallback,
   AutocompleteMode,
@@ -19,8 +19,8 @@ import {
   IAutocompleteOption,
   IAutocompleteOptionGroup,
   IAutocompleteSelectEventData
-} from './autocomplete-constants';
-import { AutocompleteCore } from './autocomplete-core';
+} from './autocomplete-constants.js';
+import { AutocompleteCore } from './autocomplete-core.js';
 
 import template from './autocomplete.html';
 import styles from './autocomplete.scss';

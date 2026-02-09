@@ -1,7 +1,7 @@
-import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate';
-import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/delegates/form-field-component-delegate';
-import { ITextFieldComponent } from './text-field';
-import { TEXT_FIELD_CONSTANTS } from './text-field-constants';
+import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate.js';
+import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/delegates/form-field-component-delegate.js';
+import { ITextFieldComponent } from './text-field.js';
+import { TEXT_FIELD_CONSTANTS } from './text-field-constants.js';
 
 export type TextFieldComponentDelegateProps = Partial<ITextFieldComponent>;
 export interface ITextFieldComponentDelegateOptions extends IFormFieldComponentDelegateOptions {

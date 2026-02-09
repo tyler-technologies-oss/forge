@@ -1,7 +1,7 @@
 import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
-import { BaseComponent } from '../../core/base/base-component';
-import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware';
-import { IBaseFieldAdapter } from './base-field-adapter';
+import { BaseComponent } from '../../core/base/base-component.js';
+import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware.js';
+import { IBaseFieldAdapter } from './base-field-adapter.js';
 import {
   BASE_FIELD_CONSTANTS,
   FieldDensity,
@@ -11,8 +11,8 @@ import {
   FieldSupportTextInset,
   FieldTheme,
   FieldVariant
-} from './base-field-constants';
-import { BaseFieldCore } from './base-field-core';
+} from './base-field-constants.js';
+import { BaseFieldCore } from './base-field-core.js';
 
 export interface IBaseField extends IWithLabelAwareness {
   labelPosition: FieldLabelPosition;

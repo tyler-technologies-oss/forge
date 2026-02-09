@@ -1,8 +1,8 @@
 import { coerceBoolean } from '@tylertech/forge-core';
-import { AbstractConstructor, MixinBase } from '../../constants';
-import { IBaseComponent } from '../../core/base/base-component';
-import { IFieldComponent } from '../field';
-import { FIELD_CONSTANTS } from '../field-constants';
+import { AbstractConstructor, MixinBase } from '../../constants.js';
+import { IBaseComponent } from '../../core/base/base-component.js';
+import { IFieldComponent } from '../field.js';
+import { FIELD_CONSTANTS } from '../field-constants.js';
 import {
   FieldLabelPosition,
   FieldLabelAlignment,
@@ -12,7 +12,7 @@ import {
   FieldDensity,
   FieldSupportTextInset,
   BASE_FIELD_CONSTANTS
-} from './base-field-constants';
+} from './base-field-constants.js';
 
 /**
  * Provides a consistent passthrough API to the underlying field component, for

@@ -1,11 +1,11 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
-import { SplitViewComponent } from './split-view';
+import { SplitViewComponent } from './split-view.js';
 
-export * from './split-view-adapter';
-export * from './split-view-constants';
-export * from './split-view-core';
-export * from './split-view';
+export * from './split-view-adapter.js';
+export * from './split-view-constants.js';
+export * from './split-view-core.js';
+export * from './split-view.js';
 
 export function defineSplitViewComponent(): void {
   defineCustomElement(SplitViewComponent);

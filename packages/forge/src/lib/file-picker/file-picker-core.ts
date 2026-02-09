@@ -1,5 +1,5 @@
-import { IFilePickerAdapter } from './file-picker-adapter';
-import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants';
+import { IFilePickerAdapter } from './file-picker-adapter.js';
+import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants.js';
 
 export interface IFilePickerCore {
   accept: string | null | undefined;

@@ -1,10 +1,10 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
-import { ButtonAreaAdapter } from './button-area-adapter';
-import { ButtonAreaCore } from './button-area-core';
-import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
-import { FocusIndicatorComponent } from '../focus-indicator';
-import { StateLayerComponent } from '../state-layer';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { ButtonAreaAdapter } from './button-area-adapter.js';
+import { ButtonAreaCore } from './button-area-core.js';
+import { BUTTON_AREA_CONSTANTS } from './button-area-constants.js';
+import { FocusIndicatorComponent } from '../focus-indicator/index.js';
+import { StateLayerComponent } from '../state-layer/index.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 
 import template from './button-area.html';
 import styles from './button-area.scss';

@@ -2,16 +2,16 @@ import { describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html, nothing } from 'lit';
 import { userEvent } from 'vitest/browser';
-import { frame } from '../core/utils/utils';
-import { TestHarness } from '../core/testing/test-harness';
-import type { IButtonToggleGroupComponent } from './button-toggle-group/button-toggle-group';
-import type { IButtonToggleComponent } from './button-toggle/button-toggle';
-import { BUTTON_TOGGLE_CONSTANTS } from './button-toggle/button-toggle-constants';
-import { ButtonToggleGroupTheme, BUTTON_TOGGLE_GROUP_CONSTANTS } from './button-toggle-group';
-import { getFormState } from '../constants';
+import { frame } from '../core/utils/utils.js';
+import { TestHarness } from '../core/testing/test-harness.js';
+import type { IButtonToggleGroupComponent } from './button-toggle-group/button-toggle-group.js';
+import type { IButtonToggleComponent } from './button-toggle/button-toggle.js';
+import { BUTTON_TOGGLE_CONSTANTS } from './button-toggle/button-toggle-constants.js';
+import { ButtonToggleGroupTheme, BUTTON_TOGGLE_GROUP_CONSTANTS } from './button-toggle-group/index.js';
+import { getFormState } from '../constants.js';
 
-import './button-toggle-group/button-toggle-group';
-import '../label/label';
+import './button-toggle-group/button-toggle-group.js';
+import '../label/label.js';
 
 describe('Button Toggle', () => {
   it('should be accessible', async () => {

@@ -1,7 +1,7 @@
 import { customElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 
-import { TOOLBAR_CONSTANTS } from './toolbar-constants';
+import { TOOLBAR_CONSTANTS } from './toolbar-constants.js';
 
 import template from './toolbar.html';
 import styles from './toolbar.scss';

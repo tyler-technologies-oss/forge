@@ -2,12 +2,12 @@ import { describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
-import type { IAccordionComponent } from './accordion';
-import type { IExpansionPanelComponent } from '../expansion-panel';
-import { ACCORDION_CONSTANTS } from './accordion-constants';
-import { frame } from '../core/utils/utils';
+import type { IAccordionComponent } from './accordion.js';
+import type { IExpansionPanelComponent } from '../expansion-panel/index.js';
+import { ACCORDION_CONSTANTS } from './accordion-constants.js';
+import { frame } from '../core/utils/utils.js';
 
-import './accordion';
+import './accordion.js';
 
 describe('Accordion', () => {
   it('should not have shadow root', async () => {

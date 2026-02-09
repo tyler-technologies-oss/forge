@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
 import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { IViewSwitcherComponent } from './view-switcher';
-import { IViewComponent } from './view/view';
-import { VIEW_SWITCHER_CONSTANTS } from './view-switcher-constants';
-import { task } from '../core/utils/utils';
+import { IViewSwitcherComponent } from './view-switcher.js';
+import { IViewComponent } from './view/view.js';
+import { VIEW_SWITCHER_CONSTANTS } from './view-switcher-constants.js';
+import { task } from '../core/utils/utils.js';
 
-import './view-switcher';
+import './view-switcher.js';
 
 describe('View Switcher', () => {
   it('should have shadow root', async () => {

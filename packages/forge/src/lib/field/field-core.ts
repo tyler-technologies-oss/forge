@@ -1,4 +1,4 @@
-import { FocusIndicatorFocusMode } from '../focus-indicator';
+import { FocusIndicatorFocusMode } from '../focus-indicator/index.js';
 import {
   FieldDensity,
   FieldLabelAlignment,
@@ -7,9 +7,9 @@ import {
   FieldSupportTextInset,
   FieldTheme,
   FieldVariant
-} from './base/base-field-constants';
-import { IFieldAdapter } from './field-adapter';
-import { FIELD_CONSTANTS } from './field-constants';
+} from './base/base-field-constants.js';
+import { IFieldAdapter } from './field-adapter.js';
+import { FIELD_CONSTANTS } from './field-constants.js';
 
 export interface IFieldCore {
   labelPosition: FieldLabelPosition;

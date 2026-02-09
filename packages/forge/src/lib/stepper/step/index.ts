@@ -1,11 +1,11 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
-import { StepComponent } from './step';
+import { StepComponent } from './step.js';
 
-export * from './step-adapter';
-export * from './step-constants';
-export * from './step-core';
-export * from './step';
+export * from './step-adapter.js';
+export * from './step-constants.js';
+export * from './step-core.js';
+export * from './step.js';
 
 export function defineStepComponent(): void {
   defineCustomElement(StepComponent);

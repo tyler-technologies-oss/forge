@@ -2,14 +2,14 @@ import { describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
-import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants';
-import { BUTTON_CONSTANTS } from './button-constants';
-import { ButtonComponent, IButtonComponent } from './button';
-import type { IStateLayerComponent } from '../state-layer';
-import type { IFocusIndicatorComponent } from '../focus-indicator';
-import { ButtonComponentDelegate } from './button-component-delegate';
+import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants.js';
+import { BUTTON_CONSTANTS } from './button-constants.js';
+import { ButtonComponent, IButtonComponent } from './button.js';
+import type { IStateLayerComponent } from '../state-layer/index.js';
+import type { IFocusIndicatorComponent } from '../focus-indicator/index.js';
+import { ButtonComponentDelegate } from './button-component-delegate.js';
 
-import './button';
+import './button.js';
 
 describe('Button', () => {
   it('should initialize', async () => {

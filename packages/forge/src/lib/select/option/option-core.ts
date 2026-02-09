@@ -1,7 +1,7 @@
-import type { IIconComponent } from '../../icon/icon';
-import { IBaseListDropdownOption, ListDropdownIconType, ListDropdownTooltipConfig } from '../../list-dropdown/list-dropdown-constants';
-import { IOptionAdapter } from './option-adapter';
-import { OPTION_CONSTANTS } from './option-constants';
+import type { IIconComponent } from '../../icon/icon.js';
+import { IBaseListDropdownOption, ListDropdownIconType, ListDropdownTooltipConfig } from '../../list-dropdown/list-dropdown-constants.js';
+import { IOptionAdapter } from './option-adapter.js';
+import { OPTION_CONSTANTS } from './option-constants.js';
 
 export interface IOptionCore extends Required<IBaseListDropdownOption> {}
 

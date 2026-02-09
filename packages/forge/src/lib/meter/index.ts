@@ -1,2 +1,2 @@
-export * from './meter';
-export * from './meter-group';
+export * from './meter/index.js';
+export * from './meter-group/index.js';

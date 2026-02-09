@@ -1,9 +1,9 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { isFocusable, setDefaultAria, setValidity } from '../constants';
-import { BaseAdapter, IBaseAdapter } from '../core';
-import { StateLayerComponent } from '../state-layer';
-import { ICheckboxComponent } from './checkbox';
-import { CheckboxLabelPosition, CheckboxState, CHECKBOX_CONSTANTS } from './checkbox-constants';
+import { isFocusable, setDefaultAria, setValidity } from '../constants.js';
+import { BaseAdapter, IBaseAdapter } from '../core/index.js';
+import { StateLayerComponent } from '../state-layer/index.js';
+import { ICheckboxComponent } from './checkbox.js';
+import { CheckboxLabelPosition, CheckboxState, CHECKBOX_CONSTANTS } from './checkbox-constants.js';
 
 export interface ICheckboxAdapter extends IBaseAdapter {
   setChecked(value: boolean): void;

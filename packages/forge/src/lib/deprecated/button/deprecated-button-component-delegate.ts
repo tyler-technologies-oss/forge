@@ -1,6 +1,6 @@
-import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../../core/delegates/base-component-delegate';
-import { IDeprecatedButtonComponent } from './deprecated-button';
-import { DEPRECATED_BUTTON_CONSTANTS } from './deprecated-button-constants';
+import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../../core/delegates/base-component-delegate.js';
+import { IDeprecatedButtonComponent } from './deprecated-button.js';
+import { DEPRECATED_BUTTON_CONSTANTS } from './deprecated-button-constants.js';
 
 export type DeprecatedButtonComponentDelegateProps = Partial<IDeprecatedButtonComponent>;
 export interface IDeprecatedButtonComponentDelegateOptions extends IBaseComponentDelegateOptions {

@@ -1,8 +1,8 @@
 import { customElement, attachShadowTemplate, coerceBoolean, coreProperty } from '@tylertech/forge-core';
-import { StackAdapter } from './stack-adapter';
-import { StackCore } from './stack-core';
-import { STACK_CONSTANTS, StackAlignment } from './stack-constants';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { StackAdapter } from './stack-adapter.js';
+import { StackCore } from './stack-core.js';
+import { STACK_CONSTANTS, StackAlignment } from './stack-constants.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 
 import template from './stack.html';
 import styles from './stack.scss';

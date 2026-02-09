@@ -1,8 +1,8 @@
 import { attachShadowTemplate, coerceBoolean, customElement } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { ChipComponent, IChipComponent } from '../chip/chip';
-import { ChipTheme, ChipType, CHIP_CONSTANTS, IChipNavigateEventData } from '../chip/chip-constants';
-import { CHIP_SET_CONSTANTS } from './chip-set-constants';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { ChipComponent, IChipComponent } from '../chip/chip.js';
+import { ChipTheme, ChipType, CHIP_CONSTANTS, IChipNavigateEventData } from '../chip/chip-constants.js';
+import { CHIP_SET_CONSTANTS } from './chip-set-constants.js';
 
 import template from './chip-set.html';
 import styles from './chip-set.scss';

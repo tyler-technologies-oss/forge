@@ -1,5 +1,5 @@
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IOptionComponent } from './option';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { IOptionComponent } from './option.js';
 
 export interface IOptionAdapter extends IBaseAdapter {
   setHostAttribute(name: string, value: string): void;

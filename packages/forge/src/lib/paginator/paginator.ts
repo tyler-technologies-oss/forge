@@ -1,13 +1,13 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumberArray, coerceNumber } from '@tylertech/forge-core';
 import { tylIconFirstPage, tylIconLastPage, tylIconKeyboardArrowRight, tylIconKeyboardArrowLeft } from '@tylertech/tyler-icons';
-import { PAGINATOR_CONSTANTS, IPaginatorChangeEventData, PaginatorRangeLabelBuilder } from './paginator-constants';
-import { PaginatorCore } from './paginator-core';
-import { PaginatorAdapter } from './paginator-adapter';
-import { IconButtonComponent } from '../icon-button/icon-button';
-import { SelectComponent } from '../select/select';
-import { IconRegistry } from '../icon/icon-registry';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { TooltipComponent } from '../tooltip/tooltip';
+import { PAGINATOR_CONSTANTS, IPaginatorChangeEventData, PaginatorRangeLabelBuilder } from './paginator-constants.js';
+import { PaginatorCore } from './paginator-core.js';
+import { PaginatorAdapter } from './paginator-adapter.js';
+import { IconButtonComponent } from '../icon-button/icon-button.js';
+import { SelectComponent } from '../select/select/index.js';
+import { IconRegistry } from '../icon/icon-registry.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { TooltipComponent } from '../tooltip/tooltip.js';
 
 import template from './paginator.html';
 import styles from './paginator.scss';

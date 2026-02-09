@@ -1,8 +1,13 @@
-import { isInstanceOf } from '../core/utils/utils';
-import { FieldLabelPosition, FIELD_CONSTANTS } from '../field';
-import { BaseFieldCore, IBaseFieldCore } from '../field/base/base-field-core';
-import { ITextFieldAdapter, TextFieldAdapter } from './text-field-adapter';
-import { TextFieldInputAttributeObserver, TextFieldValueChangeListener, TEXT_FIELD_CONSTANTS, TextFieldObservedInputAttributes } from './text-field-constants';
+import { isInstanceOf } from '../core/utils/utils.js';
+import { FieldLabelPosition, FIELD_CONSTANTS } from '../field/index.js';
+import { BaseFieldCore, IBaseFieldCore } from '../field/base/base-field-core.js';
+import { ITextFieldAdapter, TextFieldAdapter } from './text-field-adapter.js';
+import {
+  TextFieldInputAttributeObserver,
+  TextFieldValueChangeListener,
+  TEXT_FIELD_CONSTANTS,
+  TextFieldObservedInputAttributes
+} from './text-field-constants.js';
 
 export interface ITextFieldCore extends IBaseFieldCore {
   readonly popoverTargetElement: HTMLElement;

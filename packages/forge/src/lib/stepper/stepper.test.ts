@@ -2,17 +2,17 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { task } from '../core/utils/utils';
-import type { IStepComponent } from './step/step';
-import type { IStepperComponent } from './stepper/stepper';
-import type { IExpansionPanelComponent } from '../expansion-panel/expansion-panel';
-import type { IIconComponent } from '../icon/icon';
-import { IStepConfiguration, IStepperConfiguration, STEPPER_CONSTANTS } from './stepper/stepper-constants';
-import { STEP_CONSTANTS } from './step/step-constants';
-import { StepperUtils } from './core/stepper-utils';
+import { task } from '../core/utils/utils.js';
+import type { IStepComponent } from './step/step.js';
+import type { IStepperComponent } from './stepper/stepper.js';
+import type { IExpansionPanelComponent } from '../expansion-panel/expansion-panel.js';
+import type { IIconComponent } from '../icon/icon.js';
+import { IStepConfiguration, IStepperConfiguration, STEPPER_CONSTANTS } from './stepper/stepper-constants.js';
+import { STEP_CONSTANTS } from './step/step-constants.js';
+import { StepperUtils } from './core/stepper-utils.js';
 
-import './stepper/stepper';
-import './step/step';
+import './stepper/stepper.js';
+import './step/step.js';
 
 const DEFAULT_STEP_COUNT = 5;
 const DEFAULT_STEPS: IStepConfiguration[] = [

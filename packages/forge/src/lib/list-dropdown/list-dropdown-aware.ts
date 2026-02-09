@@ -1,8 +1,8 @@
 import { coreProperty, coerceNumber, coerceBoolean } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { ListDropdownHeaderBuilder, ListDropdownFooterBuilder, LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants';
-import { PositionPlacement } from '../core/utils/position-utils';
-import { OverlayPlacement, IOverlayOffset, OverlayFlipState, OverlayShiftState } from '../overlay/overlay-constants';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { ListDropdownHeaderBuilder, ListDropdownFooterBuilder, LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants.js';
+import { PositionPlacement } from '../core/utils/position-utils.js';
+import { OverlayPlacement, IOverlayOffset, OverlayFlipState, OverlayShiftState } from '../overlay/overlay-constants.js';
 
 export interface IListDropdownAware extends IBaseComponent {
   popupClasses: string | string[];

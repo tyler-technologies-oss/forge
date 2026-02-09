@@ -1,13 +1,13 @@
 import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { IExpansionPanelComponent } from './expansion-panel';
-import { EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from './expansion-panel-constants';
-import { task } from '../core/utils/utils';
-import { IOpenIconComponent } from '../open-icon/open-icon';
+import { IExpansionPanelComponent } from './expansion-panel.js';
+import { EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from './expansion-panel-constants.js';
+import { task } from '../core/utils/utils.js';
+import { IOpenIconComponent } from '../open-icon/open-icon.js';
 
-import './expansion-panel';
-import '../open-icon/open-icon';
+import './expansion-panel.js';
+import '../open-icon/open-icon.js';
 
 describe('Expansion Panel', () => {
   it('should initialize', async () => {

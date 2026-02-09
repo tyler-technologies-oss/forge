@@ -1,18 +1,18 @@
 import { customElement, coreProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 
-import { SelectDropdownCore } from './select-dropdown-core';
-import { SELECT_DROPDOWN_CONSTANTS } from './select-dropdown-constants';
-import { IBaseSelectComponent, BaseSelectComponent } from '../core/base-select';
-import { BASE_SELECT_CONSTANTS } from '../core/base-select-constants';
-import { SelectDropdownAdapter } from './select-dropdown-adapter';
-import { OptionComponent } from '../option';
-import { OptionGroupComponent } from '../option-group';
-import { ListComponent, ListItemComponent } from '../../list';
-import { CircularProgressComponent } from '../../circular-progress';
-import { ScaffoldComponent } from '../../scaffold';
-import { ToolbarComponent } from '../../toolbar';
-import { IconButtonComponent } from '../../icon-button';
-import { PopoverComponent } from '../../popover/popover';
+import { SelectDropdownCore } from './select-dropdown-core.js';
+import { SELECT_DROPDOWN_CONSTANTS } from './select-dropdown-constants.js';
+import { IBaseSelectComponent, BaseSelectComponent } from '../core/base-select.js';
+import { BASE_SELECT_CONSTANTS } from '../core/base-select-constants.js';
+import { SelectDropdownAdapter } from './select-dropdown-adapter.js';
+import { OptionComponent } from '../option/index.js';
+import { OptionGroupComponent } from '../option-group/index.js';
+import { ListComponent, ListItemComponent } from '../../list/index.js';
+import { CircularProgressComponent } from '../../circular-progress/index.js';
+import { ScaffoldComponent } from '../../scaffold/index.js';
+import { ToolbarComponent } from '../../toolbar/index.js';
+import { IconButtonComponent } from '../../icon-button/index.js';
+import { PopoverComponent } from '../../popover/popover.js';
 
 import template from './select-dropdown.html';
 import styles from './select-dropdown.scss';

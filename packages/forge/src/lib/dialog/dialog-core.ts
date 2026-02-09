@@ -1,6 +1,6 @@
-import { MoveController } from '../core/controllers/move-controller';
-import { DismissibleStack } from '../core/utils/dismissible-stack';
-import { IDialogAdapter } from './dialog-adapter';
+import { MoveController } from '../core/controllers/move-controller.js';
+import { DismissibleStack } from '../core/utils/dismissible-stack.js';
+import { IDialogAdapter } from './dialog-adapter.js';
 import {
   DIALOG_CONSTANTS,
   DialogAnimationType,
@@ -12,7 +12,7 @@ import {
   DialogSizeStrategy,
   DialogType,
   IDialogMoveEventData
-} from './dialog-constants';
+} from './dialog-constants.js';
 
 export interface IDialogCore {
   open: boolean;

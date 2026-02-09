@@ -1,12 +1,12 @@
 import { coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconArrowDownward } from '@tylertech/tyler-icons';
-import { ExpansionPanelComponent } from '../expansion-panel';
-import { CheckboxComponent } from '../checkbox';
-import { TableAdapter } from './table-adapter';
-import { TABLE_CONSTANTS } from './table-constants';
-import { TableCore } from './table-core';
-import { IconRegistry, IconComponent } from '../icon';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { ExpansionPanelComponent } from '../expansion-panel/index.js';
+import { CheckboxComponent } from '../checkbox/index.js';
+import { TableAdapter } from './table-adapter.js';
+import { TABLE_CONSTANTS } from './table-constants.js';
+import { TableCore } from './table-core.js';
+import { IconRegistry, IconComponent } from '../icon/index.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 import {
   IColumnConfiguration,
   TableLayoutType,
@@ -24,9 +24,9 @@ import {
   ITableSortMultipleEventData,
   ITableFilterEventData,
   TableSelectTooltipCallback
-} from './types';
-import { TooltipComponent } from '../tooltip';
-import { FocusIndicatorComponent } from '../focus-indicator';
+} from './types.js';
+import { TooltipComponent } from '../tooltip/index.js';
+import { FocusIndicatorComponent } from '../focus-indicator/index.js';
 
 export interface ITableComponent extends IBaseComponent {
   data: any[];

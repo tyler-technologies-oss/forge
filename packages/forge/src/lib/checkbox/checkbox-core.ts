@@ -1,5 +1,5 @@
-import { ICheckboxAdapter } from './checkbox-adapter';
-import { CHECKBOX_CONSTANTS, CheckboxLabelPosition, CheckboxState } from './checkbox-constants';
+import { ICheckboxAdapter } from './checkbox-adapter.js';
+import { CHECKBOX_CONSTANTS, CheckboxLabelPosition, CheckboxState } from './checkbox-constants.js';
 
 export interface ICheckboxCore {
   checked: boolean;

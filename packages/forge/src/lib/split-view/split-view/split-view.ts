@@ -1,11 +1,11 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumber } from '@tylertech/forge-core';
 
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { SplitViewAdapter } from './split-view-adapter';
-import { SplitViewCore } from './split-view-core';
-import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
-import { ISplitViewPanelComponent, SplitViewPanelComponent } from '../split-view-panel';
-import { ISplitViewBase } from '../core/split-view-base';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { SplitViewAdapter } from './split-view-adapter.js';
+import { SplitViewCore } from './split-view-core.js';
+import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants.js';
+import { ISplitViewPanelComponent, SplitViewPanelComponent } from '../split-view-panel/index.js';
+import { ISplitViewBase } from '../core/split-view-base.js';
 
 import template from './split-view.html';
 import styles from './split-view.scss';

@@ -1,11 +1,11 @@
 import { defineCustomElement } from '@tylertech/forge-core';
-import { DateRangePickerComponent } from './date-range-picker';
+import { DateRangePickerComponent } from './date-range-picker.js';
 
-export * from './date-range-picker';
-export * from './date-range-picker-adapter';
-export * from './date-range-picker-constants';
-export * from './date-range-picker-core';
-export * from './date-range-picker-component-delegate';
+export * from './date-range-picker.js';
+export * from './date-range-picker-adapter.js';
+export * from './date-range-picker-constants.js';
+export * from './date-range-picker-core.js';
+export * from './date-range-picker-component-delegate.js';
 
 export function defineDateRangePickerComponent(): void {
   defineCustomElement(DateRangePickerComponent);

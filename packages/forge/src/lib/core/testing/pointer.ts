@@ -1,4 +1,4 @@
-import { task } from '../utils/utils';
+import { task } from '../utils/utils.js';
 
 export function simulateHover(targetEl: HTMLElement, { pointerType = 'mouse', isPrimary = true } = {}): void {
   targetEl.dispatchEvent(new PointerEvent('pointerenter', { ...createMouseEventInit(targetEl), isPrimary, pointerType }));

@@ -1,7 +1,7 @@
-import { task } from '../core/utils/utils';
-import { ILabelAdapter } from './label-adapter';
-import { ILabelAware } from './label-aware';
-import { LABEL_CONSTANTS } from './label-constants';
+import { task } from '../core/utils/utils.js';
+import { ILabelAdapter } from './label-adapter.js';
+import { ILabelAware } from './label-aware.js';
+import { LABEL_CONSTANTS } from './label-constants.js';
 
 export interface ILabelCore {
   for: string | null | undefined;

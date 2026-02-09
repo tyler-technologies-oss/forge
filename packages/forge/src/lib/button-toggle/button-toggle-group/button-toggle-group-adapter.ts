@@ -1,10 +1,10 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { getFormState, getFormValue, getValidationMessage, internals } from '../../constants';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IButtonToggleComponent } from '../button-toggle/button-toggle';
-import { BUTTON_TOGGLE_CONSTANTS } from '../button-toggle/button-toggle-constants';
-import { IButtonToggleGroupComponent } from './button-toggle-group';
-import { BUTTON_TOGGLE_GROUP_CONSTANTS } from './button-toggle-group-constants';
+import { getFormState, getFormValue, getValidationMessage, internals } from '../../constants.js';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { IButtonToggleComponent } from '../button-toggle/button-toggle.js';
+import { BUTTON_TOGGLE_CONSTANTS } from '../button-toggle/button-toggle-constants.js';
+import { IButtonToggleGroupComponent } from './button-toggle-group.js';
+import { BUTTON_TOGGLE_GROUP_CONSTANTS } from './button-toggle-group-constants.js';
 
 export interface IButtonToggleGroupAdapter extends IBaseAdapter {
   addListener(type: string, listener: (evt: Event) => void): void;

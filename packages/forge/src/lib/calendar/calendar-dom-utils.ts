@@ -1,8 +1,8 @@
 import { getEventPath, appendToAttribute, toggleOnAttribute } from '@tylertech/forge-core';
 
-import { IIconComponent } from '../icon';
-import { CALENDAR_CONSTANTS, DayOfWeek, ICalendarDateConfig, ICalendarDateOptions, ICalendarEvent } from './calendar-constants';
-import { getLocalizedDayOfMonth, getLocalizedDayOfWeek, getLocalizedMonth, getLocalizedYear } from './calendar-locale-utils';
+import { IIconComponent } from '../icon/index.js';
+import { CALENDAR_CONSTANTS, DayOfWeek, ICalendarDateConfig, ICalendarDateOptions, ICalendarEvent } from './calendar-constants.js';
+import { getLocalizedDayOfMonth, getLocalizedDayOfWeek, getLocalizedMonth, getLocalizedYear } from './calendar-locale-utils.js';
 
 /** Converts a day into an id string prefixed with "d". */
 export function getDayId(day: DayOfWeek): string {

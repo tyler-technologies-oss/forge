@@ -1,6 +1,6 @@
 import { isNumeric } from '@tylertech/forge-core';
 import { FactoryArg, InputMask, MaskedEnum, createMask, type AppendFlags, type Masked } from 'imask';
-import { IntermediateTimeParser } from './intermediate-time-parser';
+import { IntermediateTimeParser } from './intermediate-time-parser.js';
 
 export interface ITimeInputMaskOptions {
   showMaskFormat?: boolean;
@@ -59,7 +59,7 @@ export class TimeInputMask {
       mask: this._getMaskFormat(),
       overwrite: true,
       lazy: !this._options.showMaskFormat,
-      prepareChar: (value, masked, flags) => this._prepare(value, masked, flags, this._mask),
+      prepareChar: (value: string, masked: Masked<string>, flags: AppendFlags) => this._prepare(value, masked, flags, this._mask),
       blocks: {
         A: {
           mask: MaskedEnum,

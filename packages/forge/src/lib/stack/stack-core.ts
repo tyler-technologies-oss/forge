@@ -1,5 +1,5 @@
-import { IStackAdapter } from './stack-adapter';
-import { StackAlignment, STACK_CONSTANTS } from './stack-constants';
+import { IStackAdapter } from './stack-adapter.js';
+import { StackAlignment, STACK_CONSTANTS } from './stack-constants.js';
 
 export interface IStackCore {
   inline: boolean;

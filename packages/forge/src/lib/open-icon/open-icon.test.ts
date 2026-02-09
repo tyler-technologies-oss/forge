@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
-import type { IOpenIconComponent } from './open-icon';
-import { OPEN_ICON_CONSTANTS } from './open-icon-constants';
+import type { IOpenIconComponent } from './open-icon.js';
+import { OPEN_ICON_CONSTANTS } from './open-icon-constants.js';
 
-import './open-icon';
+import './open-icon.js';
 
 describe('Open icon', () => {
   it('should use shadow DOM', async () => {

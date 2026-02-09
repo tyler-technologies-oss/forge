@@ -1,7 +1,7 @@
 import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { IOverlayComponent } from '../overlay';
-import { IOverlayAwareCore } from './overlay-aware-core';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { IOverlayComponent } from '../overlay.js';
+import { IOverlayAwareCore } from './overlay-aware-core.js';
 import {
   IOverlayOffset,
   OverlayFlipState,
@@ -10,9 +10,9 @@ import {
   OverlayPositionStrategy,
   OVERLAY_CONSTANTS,
   OverlayShiftState
-} from '../overlay-constants';
-import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
-import { IBaseOverlay } from './base-overlay';
+} from '../overlay-constants.js';
+import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils.js';
+import { IBaseOverlay } from './base-overlay.js';
 
 export interface IOverlayAware extends IBaseComponent, IBaseOverlay {
   readonly overlay: IOverlayComponent;

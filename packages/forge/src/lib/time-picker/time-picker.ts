@@ -1,7 +1,7 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumber, ensureChild } from '@tylertech/forge-core';
 import { tylIconClockOutline, tylIconClose } from '@tylertech/tyler-icons';
-import { TimePickerAdapter } from './time-picker-adapter';
-import { TimePickerCore } from './time-picker-core';
+import { TimePickerAdapter } from './time-picker-adapter.js';
+import { TimePickerCore } from './time-picker-core.js';
 import {
   TIME_PICKER_CONSTANTS,
   ITimePickerOption,
@@ -10,13 +10,13 @@ import {
   TimePickerFormatCallback,
   TimePickerCoercionCallback,
   TimePickerPrepareMaskCallback
-} from './time-picker-constants';
-import { IconRegistry, IconComponent } from '../icon';
-import { IconButtonComponent } from '../icon-button';
-import { DialogComponent } from '../dialog';
-import { ListComponent, ListItemComponent } from '../list';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { PopoverComponent } from '../popover/popover';
+} from './time-picker-constants.js';
+import { IconRegistry, IconComponent } from '../icon/index.js';
+import { IconButtonComponent } from '../icon-button/index.js';
+import { DialogComponent } from '../dialog/index.js';
+import { ListComponent, ListItemComponent } from '../list/index.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { PopoverComponent } from '../popover/popover.js';
 
 import template from './time-picker.html';
 import styles from './time-picker.scss';

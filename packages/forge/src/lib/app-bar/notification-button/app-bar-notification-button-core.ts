@@ -1,5 +1,5 @@
-import { IAppBarNotificationButtonAdapter } from './app-bar-notification-button-adapter';
-import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants';
+import { IAppBarNotificationButtonAdapter } from './app-bar-notification-button-adapter.js';
+import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants.js';
 
 export interface IAppBarNotificationButtonCore {
   count: string | number | null | undefined;

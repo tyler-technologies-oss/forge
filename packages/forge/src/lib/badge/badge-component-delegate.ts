@@ -1,5 +1,5 @@
-import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate';
-import { IBadgeComponent } from './badge';
+import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate.js';
+import { IBadgeComponent } from './badge.js';
 
 export type BadgeComponentDelegateProps = Partial<IBadgeComponent>;
 export interface IBadgeComponentDelegateOptions extends IBaseComponentDelegateOptions {}

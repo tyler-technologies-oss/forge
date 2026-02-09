@@ -1,7 +1,7 @@
 import { getEventPath, isArray, isValidDate } from '@tylertech/forge-core';
 
-import { isSameDate } from '../core/utils/date-utils';
-import { ICalendarMenuOption } from './calendar-menu/calendar-menu-constants';
+import { isSameDate } from '../core/utils/date-utils.js';
+import { ICalendarMenuOption } from './calendar-menu/calendar-menu-constants.js';
 import {
   CALENDAR_CONSTANTS,
   CalendarEventBuilder,
@@ -12,10 +12,10 @@ import {
   ICalendarMenuYearConfig,
   ICalendarDisabledDateParams,
   CalendarView
-} from './calendar-constants';
-import { getLocalizedMonth, getLocalizedYear } from './calendar-locale-utils';
-import { DateRange } from './core/date-range';
-import { eventIncludesDate, eventIncludesElement } from './calendar-dom-utils';
+} from './calendar-constants.js';
+import { getLocalizedMonth, getLocalizedYear } from './calendar-locale-utils.js';
+import { DateRange } from './core/date-range.js';
+import { eventIncludesDate, eventIncludesElement } from './calendar-dom-utils.js';
 
 /** Returns an array of dates encompassing an entire month and the beginning and end of adjacent months to fill weeks. */
 export function getMonthDates(month: number, year: number, firstDayOfWeek: DayOfWeek = DayOfWeek.Sunday): Date[] {

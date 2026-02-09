@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
-import type { ICardComponent } from './card';
+import type { ICardComponent } from './card.js';
 
-import './card';
+import './card.js';
 
 describe('Card', () => {
   it('should instantiate component with shadow dom', async () => {

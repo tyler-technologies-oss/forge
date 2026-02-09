@@ -1,4 +1,4 @@
-import { MixinBase } from '../../constants';
+import { MixinBase } from '../../constants.js';
 
 type MixinFunction<T extends MixinBase = MixinBase, R extends T = T & MixinBase> = (Base: T) => R;
 type UnionToIntersection<T> = (T extends any ? (x: T) => any : never) extends (x: infer R) => any ? R : never;

@@ -1,9 +1,9 @@
 import { addClass, getShadowElement, removeClass, toggleClass } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/base';
-import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../focus-indicator';
-import { FieldLabelPosition } from './base/base-field-constants';
-import { IFieldComponent } from './field';
-import { FIELD_CONSTANTS } from './field-constants';
+import { BaseAdapter, IBaseAdapter } from '../core/base/index.js';
+import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../focus-indicator/index.js';
+import { FieldLabelPosition } from './base/base-field-constants.js';
+import { IFieldComponent } from './field.js';
+import { FIELD_CONSTANTS } from './field-constants.js';
 
 export interface IFieldAdapter extends IBaseAdapter<IFieldComponent> {
   readonly focusIndicator: IFocusIndicatorComponent;

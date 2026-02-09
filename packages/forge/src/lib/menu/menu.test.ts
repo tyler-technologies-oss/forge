@@ -3,15 +3,15 @@ import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendMouse } from '@web/test-runner-commands';
 import { nothing } from 'lit';
-import { task } from '../core/utils/utils';
-import { IMenuComponent } from './menu';
-import { IMenuOption, MENU_CONSTANTS } from './menu-constants';
-import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover';
-import { IListComponent, IListItemComponent, LIST_ITEM_CONSTANTS } from '../list';
-import { ICON_CLASS_NAME } from '../constants';
+import { task } from '../core/utils/utils.js';
+import { IMenuComponent } from './menu.js';
+import { IMenuOption, MENU_CONSTANTS } from './menu-constants.js';
+import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover/index.js';
+import { IListComponent, IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/index.js';
+import { ICON_CLASS_NAME } from '../constants.js';
 
-import './menu';
-import '../list/list-item';
+import './menu.js';
+import '../list/list-item/index.js';
 
 const POPOVER_ANIMATION_DURATION = 200;
 

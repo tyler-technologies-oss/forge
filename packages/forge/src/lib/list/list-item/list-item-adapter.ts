@@ -1,12 +1,12 @@
 import { getShadowElement, isDeepEqual } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IFocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
-import { IStateLayerComponent } from '../../state-layer/state-layer';
-import { IListComponent } from '../list/list';
-import { LIST_CONSTANTS } from '../list/list-constants';
-import { IListItemComponent } from './list-item';
-import { LIST_ITEM_CONSTANTS } from './list-item-constants';
-import { setDefaultAria } from '../../constants';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { IFocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
+import { IStateLayerComponent } from '../../state-layer/state-layer.js';
+import { IListComponent } from '../list/list.js';
+import { LIST_CONSTANTS } from '../list/list-constants.js';
+import { IListItemComponent } from './list-item.js';
+import { LIST_ITEM_CONSTANTS } from './list-item-constants.js';
+import { setDefaultAria } from '../../constants.js';
 
 export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
   readonly interactiveElement: HTMLElement | HTMLAnchorElement | undefined;

@@ -1,4 +1,4 @@
-import { AbstractConstructor, canUserHoverElements, MixinBase } from '../../../../constants';
+import { AbstractConstructor, canUserHoverElements, MixinBase } from '../../../../constants.js';
 
 /**
  * The delay in milliseconds before a longpress event is detected.

@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
-import { task, frame } from '../core/utils/utils';
-import { DEFAULT_DATE_MASK, parseDateString, formatDate } from '../core';
-import { CALENDAR_CONSTANTS, DateRange, ICalendarComponent, IDateRange } from '../calendar';
-import { POPOVER_CONSTANTS, IPopoverComponent } from '../popover';
+import { task, frame } from '../core/utils/utils.js';
+import { DEFAULT_DATE_MASK, parseDateString, formatDate } from '../core/index.js';
+import { CALENDAR_CONSTANTS, DateRange, ICalendarComponent, IDateRange } from '../calendar/index.js';
+import { POPOVER_CONSTANTS, IPopoverComponent } from '../popover/index.js';
 import {
   DatePickerRange,
   DATE_RANGE_PICKER_CONSTANTS,
@@ -12,11 +12,11 @@ import {
   IDateRangePickerComponent,
   IDateRangePickerCore,
   IDateRangePickerAdapter
-} from './';
-import { defineTextFieldComponent, TEXT_FIELD_CONSTANTS, ITextFieldComponent } from '../text-field';
-import { ICON_BUTTON_CONSTANTS } from '../icon-button';
-import { BASE_DATE_PICKER_CONSTANTS } from '../date-picker/base/base-date-picker-constants';
-import { IButtonComponent } from '../button';
+} from './index.js';
+import { defineTextFieldComponent, TEXT_FIELD_CONSTANTS, ITextFieldComponent } from '../text-field/index.js';
+import { ICON_BUTTON_CONSTANTS } from '../icon-button/index.js';
+import { BASE_DATE_PICKER_CONSTANTS } from '../date-picker/base/base-date-picker-constants.js';
+import { IButtonComponent } from '../button/index.js';
 
 const POPOVER_ANIMATION_DURATION = 200;
 

@@ -1,5 +1,5 @@
-import { AbstractConstructor, DEFERRED_LABEL_TARGET, MixinBase, forgeLabelRef, updateTarget } from '../../../constants';
-import { IBaseComponent } from '../../base/base-component';
+import { AbstractConstructor, DEFERRED_LABEL_TARGET, MixinBase, forgeLabelRef, updateTarget } from '../../../constants.js';
+import { IBaseComponent } from '../../base/base-component.js';
 
 /**
  * An element that can be associated with a Forge label component.

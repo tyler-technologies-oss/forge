@@ -1,5 +1,5 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
-import { LABEL_CONSTANTS } from '../label';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
+import { LABEL_CONSTANTS } from '../label/index.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}text-field`;
 

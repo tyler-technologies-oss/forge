@@ -1,12 +1,12 @@
 import { getLightElement, toggleAttribute } from '@tylertech/forge-core';
-import { IBadgeComponent } from '../../badge';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { forwardAttributes } from '../../core/utils/reflect-utils';
-import { ICON_CONSTANTS, IIconComponent } from '../../icon';
-import { IIconButtonComponent } from '../../icon-button/icon-button';
-import { ICON_BUTTON_CONSTANTS } from '../../icon-button/icon-button-constants';
-import { IAppBarNotificationButtonComponent } from './app-bar-notification-button';
-import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants';
+import { IBadgeComponent } from '../../badge/index.js';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { forwardAttributes } from '../../core/utils/reflect-utils.js';
+import { ICON_CONSTANTS, IIconComponent } from '../../icon/index.js';
+import { IIconButtonComponent } from '../../icon-button/icon-button.js';
+import { ICON_BUTTON_CONSTANTS } from '../../icon-button/icon-button-constants.js';
+import { IAppBarNotificationButtonComponent } from './app-bar-notification-button.js';
+import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants.js';
 
 export interface IAppBarNotificationButtonAdapter extends IBaseAdapter {
   initialize(): void;

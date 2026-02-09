@@ -4,14 +4,14 @@ import { LitElement, PropertyValues, TemplateResult, html, nothing, unsafeCSS } 
 import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { setDefaultAria } from '../../core/utils/a11y-utils';
-import { toggleState } from '../../core/utils/utils';
-import { IconRegistry } from '../../icon';
-import { ITreeContext, TREE_CONTEXT } from '../tree';
-import { getLevel, indeterminate } from '../tree-utils';
+import { setDefaultAria } from '../../core/utils/a11y-utils.js';
+import { toggleState } from '../../core/utils/utils.js';
+import { IconRegistry } from '../../icon/index.js';
+import { ITreeContext, TREE_CONTEXT } from '../tree/index.js';
+import { getLevel, indeterminate } from '../tree-utils.js';
 
-import '../../icon';
-import '../../open-icon';
+import '../../icon/index.js';
+import '../../open-icon/index.js';
 
 import styles from './tree-item.scss';
 

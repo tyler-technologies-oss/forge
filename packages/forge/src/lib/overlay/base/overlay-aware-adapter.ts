@@ -1,6 +1,6 @@
-import { BaseAdapter, IBaseAdapter } from '../../core';
-import { IOverlayComponent } from '../overlay';
-import { IOverlayAware } from '../base/overlay-aware';
+import { BaseAdapter, IBaseAdapter } from '../../core/index.js';
+import { IOverlayComponent } from '../overlay.js';
+import { IOverlayAware } from '../base/overlay-aware.js';
 
 export interface IOverlayAwareAdapter<T extends IOverlayAware = IOverlayAware> extends IBaseAdapter<T> {
   readonly overlayElement: IOverlayComponent;

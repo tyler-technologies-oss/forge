@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
-import { IPageStateComponent, PageStateComponent } from './page-state';
-import './page-state';
+import { IPageStateComponent, PageStateComponent } from './page-state.js';
+import './page-state.js';
 
 describe('PageStateComponent', () => {
   it('should instantiate component instance', async () => {

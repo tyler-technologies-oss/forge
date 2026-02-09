@@ -1,10 +1,10 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
-import { BaseComponent } from '../core/base/base-component';
-import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
-import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
-import { LinearProgressAdapter } from './linear-progress-adapter';
-import { LinearProgressTheme, LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
-import { LinearProgressCore } from './linear-progress-core';
+import { BaseComponent } from '../core/base/base-component.js';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria.js';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals.js';
+import { LinearProgressAdapter } from './linear-progress-adapter.js';
+import { LinearProgressTheme, LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants.js';
+import { LinearProgressCore } from './linear-progress-core.js';
 
 import template from './linear-progress.html';
 import styles from './linear-progress.scss';

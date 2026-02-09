@@ -1,16 +1,16 @@
 import { attachShadowTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
-import { getFormState, getFormValue, inputType, setDefaultAria } from '../../constants';
-import { BaseComponent } from '../../core/base/base-component';
-import { IWithFormAssociation, WithFormAssociation } from '../../core/mixins/form/with-form-associated';
-import { IWithFormValidity, WithFormValidity } from '../../core/mixins/form/with-form-validity';
-import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
-import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
-import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware';
-import { FormRestoreReason, FormRestoreState, FormValue } from '../../core/utils/form-utils';
-import { ButtonToggleComponent } from '../button-toggle/button-toggle';
-import { ButtonToggleGroupAdapter } from './button-toggle-group-adapter';
-import { BUTTON_TOGGLE_GROUP_CONSTANTS, ButtonToggleGroupTheme, IButtonToggleGroupChangeEventData } from './button-toggle-group-constants';
-import { ButtonToggleGroupCore } from './button-toggle-group-core';
+import { getFormState, getFormValue, inputType, setDefaultAria } from '../../constants.js';
+import { BaseComponent } from '../../core/base/base-component.js';
+import { IWithFormAssociation, WithFormAssociation } from '../../core/mixins/form/with-form-associated.js';
+import { IWithFormValidity, WithFormValidity } from '../../core/mixins/form/with-form-validity.js';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria.js';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals.js';
+import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware.js';
+import { FormRestoreReason, FormRestoreState, FormValue } from '../../core/utils/form-utils.js';
+import { ButtonToggleComponent } from '../button-toggle/button-toggle.js';
+import { ButtonToggleGroupAdapter } from './button-toggle-group-adapter.js';
+import { BUTTON_TOGGLE_GROUP_CONSTANTS, ButtonToggleGroupTheme, IButtonToggleGroupChangeEventData } from './button-toggle-group-constants.js';
+import { ButtonToggleGroupCore } from './button-toggle-group-core.js';
 
 import template from './button-toggle-group.html';
 import styles from './button-toggle-group.scss';

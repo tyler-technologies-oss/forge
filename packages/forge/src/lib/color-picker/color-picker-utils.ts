@@ -1,6 +1,6 @@
 import { isNumber } from '@tylertech/forge-core';
 
-import { IRGBA, IHSVA } from './color-picker-constants';
+import { IRGBA, IHSVA } from './color-picker-constants.js';
 
 /**
  * Calcuates coordinates relative to the provided element based on absolute coordinates.

@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
-import { IDividerComponent } from './divider';
+import { IDividerComponent } from './divider.js';
 
-import './divider';
-import { DIVIDER_CONSTANTS } from './divider-constants';
+import './divider.js';
+import { DIVIDER_CONSTANTS } from './divider-constants.js';
 
 describe('Divider', () => {
   it('should initialize', async () => {

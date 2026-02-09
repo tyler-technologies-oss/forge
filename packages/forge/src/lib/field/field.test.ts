@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { frame } from '../core/utils/utils';
+import { frame } from '../core/utils/utils.js';
 import { sendMouse } from '@web/test-runner-commands';
 import { match, spy } from 'sinon';
-import { FIELD_CONSTANTS, IFieldComponent } from '../field';
-import { TestHarness } from '../core/testing/test-harness';
+import { FIELD_CONSTANTS, IFieldComponent } from '../field/index.js';
+import { TestHarness } from '../core/testing/test-harness.js';
 import {
   FieldDensity,
   FieldLabelAlignment,
@@ -14,10 +14,10 @@ import {
   FieldSupportTextInset,
   FieldTheme,
   FieldVariant
-} from './base/base-field-constants';
+} from './base/base-field-constants.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
-import './field';
+import './field.js';
 
 describe('Field', () => {
   it('should contain shadow root', async () => {

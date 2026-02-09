@@ -1,7 +1,7 @@
 import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 
-import { PAGE_STATE_CONSTANTS } from './page-state-constants';
+import { PAGE_STATE_CONSTANTS } from './page-state-constants.js';
 
 import template from './page-state.html';
 import styles from './page-state.scss';

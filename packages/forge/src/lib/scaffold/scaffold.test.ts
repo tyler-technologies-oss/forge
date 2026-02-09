@@ -1,8 +1,8 @@
 import { fixture, expect } from '@open-wc/testing';
-import type { IScaffoldComponent } from './scaffold';
-import { SCAFFOLD_CONSTANTS } from './scaffold-constants';
+import type { IScaffoldComponent } from './scaffold.js';
+import { SCAFFOLD_CONSTANTS } from './scaffold-constants.js';
 
-import './scaffold';
+import './scaffold.js';
 
 describe('Scaffold', () => {
   it('should create shadow root', async () => {

@@ -1,6 +1,6 @@
 import { debounce, isDefined, isString, Platform, randomChars } from '@tylertech/forge-core';
-import { highlightTextHTML } from '../core';
-import { IListItemComponent } from '../list';
+import { highlightTextHTML } from '../core/index.js';
+import { IListItemComponent } from '../list/index.js';
 import {
   IListDropdownConfig,
   IListDropdownOption,
@@ -8,9 +8,9 @@ import {
   ListDropdownFooterBuilder,
   ListDropdownHeaderBuilder,
   ListDropdownOptionBuilder
-} from '../list-dropdown';
-import { IListDropdownAwareCore, ListDropdownAwareCore } from '../list-dropdown/list-dropdown-aware-core';
-import { IAutocompleteAdapter } from './autocomplete-adapter';
+} from '../list-dropdown/index.js';
+import { IListDropdownAwareCore, ListDropdownAwareCore } from '../list-dropdown/list-dropdown-aware-core.js';
+import { IAutocompleteAdapter } from './autocomplete-adapter.js';
 import {
   AutocompleteFilterCallback,
   AutocompleteMode,
@@ -21,8 +21,8 @@ import {
   IAutocompleteOption,
   IAutocompleteOptionGroup,
   IAutocompleteSelectEventData
-} from './autocomplete-constants';
-import { getSelectedOption, isOptionType, optionEqualPredicate, OptionType } from './autocomplete-utils';
+} from './autocomplete-constants.js';
+import { getSelectedOption, isOptionType, optionEqualPredicate, OptionType } from './autocomplete-utils.js';
 
 export interface IAutocompleteCore extends IListDropdownAwareCore {
   mode: AutocompleteMode;

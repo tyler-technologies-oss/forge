@@ -1,6 +1,6 @@
-import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from '../button-toggle/button-toggle-constants';
-import { IButtonToggleGroupAdapter } from './button-toggle-group-adapter';
-import { ButtonToggleGroupTheme, BUTTON_TOGGLE_GROUP_CONSTANTS, IButtonToggleGroupChangeEventData } from './button-toggle-group-constants';
+import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from '../button-toggle/button-toggle-constants.js';
+import { IButtonToggleGroupAdapter } from './button-toggle-group-adapter.js';
+import { ButtonToggleGroupTheme, BUTTON_TOGGLE_GROUP_CONSTANTS, IButtonToggleGroupChangeEventData } from './button-toggle-group-constants.js';
 
 export interface IButtonToggleGroupCore {
   value: unknown;

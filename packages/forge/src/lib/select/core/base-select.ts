@@ -7,10 +7,10 @@ import {
   ISelectOptionGroup,
   SelectBeforeValueChangeCallback,
   BASE_SELECT_CONSTANTS
-} from './base-select-constants';
-import { IBaseSelectCore } from './base-select-core';
-import { IListDropdownAware, ListDropdownAware } from '../../list-dropdown/list-dropdown-aware';
-import type { IPopoverComponent } from '../../popover/popover';
+} from './base-select-constants.js';
+import { IBaseSelectCore } from './base-select-core.js';
+import { IListDropdownAware, ListDropdownAware } from '../../list-dropdown/list-dropdown-aware.js';
+import type { IPopoverComponent } from '../../popover/popover.js';
 
 export interface IBaseSelectComponent extends IListDropdownAware {
   value: any;

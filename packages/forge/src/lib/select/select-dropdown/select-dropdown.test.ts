@@ -1,18 +1,18 @@
 import { expect } from '@open-wc/testing';
 import { spy } from 'sinon';
 import { removeElement } from '@tylertech/forge-core';
-import { task, frame } from '../../core/utils/utils';
-import { SELECT_DROPDOWN_CONSTANTS } from './select-dropdown-constants';
-import type { ISelectDropdownComponent } from './select-dropdown';
-import type { ISelectDropdownCore } from './select-dropdown-core';
-import type { ISelectDropdownAdapter } from './select-dropdown-adapter';
-import { IOptionComponent, OPTION_CONSTANTS } from '../option';
-import { ISelectOption, BASE_SELECT_CONSTANTS } from '../core';
-import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../../list';
-import { POPOVER_CONSTANTS, IPopoverComponent } from '../../popover';
-import { tryCleanupPopovers } from '../../core/testing/utils';
+import { task, frame } from '../../core/utils/utils.js';
+import { SELECT_DROPDOWN_CONSTANTS } from './select-dropdown-constants.js';
+import type { ISelectDropdownComponent } from './select-dropdown.js';
+import type { ISelectDropdownCore } from './select-dropdown-core.js';
+import type { ISelectDropdownAdapter } from './select-dropdown-adapter.js';
+import { IOptionComponent, OPTION_CONSTANTS } from '../option/index.js';
+import { ISelectOption, BASE_SELECT_CONSTANTS } from '../core/index.js';
+import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../../list/index.js';
+import { POPOVER_CONSTANTS, IPopoverComponent } from '../../popover/index.js';
+import { tryCleanupPopovers } from '../../core/testing/utils.js';
 
-import './select-dropdown';
+import './select-dropdown.js';
 
 const DEFAULT_OPTIONS: ISelectOption[] = [
   { value: 'one', label: 'One' },

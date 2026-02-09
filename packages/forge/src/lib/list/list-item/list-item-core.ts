@@ -1,6 +1,6 @@
-import { composedPathFrom } from '../../core/utils/event-utils';
-import { IListItemAdapter } from './list-item-adapter';
-import { IListItemSelectEventData, LIST_ITEM_CONSTANTS, ListItemFocusPropagation } from './list-item-constants';
+import { composedPathFrom } from '../../core/utils/event-utils.js';
+import { IListItemAdapter } from './list-item-adapter.js';
+import { IListItemSelectEventData, LIST_ITEM_CONSTANTS, ListItemFocusPropagation } from './list-item-constants.js';
 
 export interface IListItemCore {
   selected: boolean;

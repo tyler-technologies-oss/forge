@@ -1,7 +1,7 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import type { IBannerComponent } from './banner';
-import { BANNER_CONSTANTS } from './banner-constants';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import type { IBannerComponent } from './banner.js';
+import { BANNER_CONSTANTS } from './banner-constants.js';
 
 export interface IBannerAdapter extends IBaseAdapter {
   initialize(): void;

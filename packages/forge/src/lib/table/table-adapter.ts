@@ -1,10 +1,10 @@
 import { addClass, removeAllChildren, removeClass } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { ITableComponent } from './table';
-import { TABLE_CONSTANTS } from './table-constants';
-import { TableUtils } from './table-utils';
-import { CellAlign, ITableConfiguration, SortDirection, TableHeaderSelectAllTemplate, TableViewTemplate, TableSelectTooltipCallback } from './types';
-import { TableRow } from './table-row';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { ITableComponent } from './table.js';
+import { TABLE_CONSTANTS } from './table-constants.js';
+import { TableUtils } from './table-utils.js';
+import { CellAlign, ITableConfiguration, SortDirection, TableHeaderSelectAllTemplate, TableViewTemplate, TableSelectTooltipCallback } from './types.js';
+import { TableRow } from './table-row.js';
 
 export interface ITableAdapter extends IBaseAdapter {
   initialize: () => void;

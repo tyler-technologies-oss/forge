@@ -1,13 +1,13 @@
 import { getShadowElement, playKeyframeAnimation, toggleAttribute } from '@tylertech/forge-core';
 
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { ISplitViewPanelComponent } from './split-view-panel';
-import { ISplitViewPanelCursorConfig, ISplitViewPanelOpenEvent, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
-import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from '../split-view/split-view-constants';
-import { ISplitViewComponent } from '../split-view/split-view';
-import { getCursor, getHandleIcon, createOverlay, getSplitViewPanelSibling } from './split-view-panel-utils';
-import { IIconComponent } from '../../icon';
-import { IStateLayerComponent } from '../../state-layer';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { ISplitViewPanelComponent } from './split-view-panel.js';
+import { ISplitViewPanelCursorConfig, ISplitViewPanelOpenEvent, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants.js';
+import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from '../split-view/split-view-constants.js';
+import { ISplitViewComponent } from '../split-view/split-view.js';
+import { getCursor, getHandleIcon, createOverlay, getSplitViewPanelSibling } from './split-view-panel-utils.js';
+import { IIconComponent } from '../../icon/index.js';
+import { IStateLayerComponent } from '../../state-layer/index.js';
 
 export interface ISplitViewPanelAdapter extends IBaseAdapter {
   initialize(): void;

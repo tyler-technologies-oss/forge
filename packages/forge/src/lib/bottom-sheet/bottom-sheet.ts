@@ -1,11 +1,11 @@
 import { attachShadowTemplate, customElement, coreProperty, coerceBoolean } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
-import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
-import { DialogComponent } from '../dialog/dialog';
-import { BottomSheetAdapter } from './bottom-sheet-adapter';
-import { BottomSheetMode, BOTTOM_SHEET_CONSTANTS, IBottomSheetDragEventData, IBottomSheetDragStartEventData } from './bottom-sheet-constants';
-import { BottomSheetCore } from './bottom-sheet-core';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria.js';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals.js';
+import { DialogComponent } from '../dialog/dialog.js';
+import { BottomSheetAdapter } from './bottom-sheet-adapter.js';
+import { BottomSheetMode, BOTTOM_SHEET_CONSTANTS, IBottomSheetDragEventData, IBottomSheetDragStartEventData } from './bottom-sheet-constants.js';
+import { BottomSheetCore } from './bottom-sheet-core.js';
 
 import template from './bottom-sheet.html';
 import styles from './bottom-sheet.scss';

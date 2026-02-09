@@ -1,7 +1,7 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IAppBarSearchComponent } from './app-bar-search';
-import { APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { IAppBarSearchComponent } from './app-bar-search.js';
+import { APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants.js';
 
 export interface IAppBarSearchAdapter extends IBaseAdapter {
   initialize(): void;

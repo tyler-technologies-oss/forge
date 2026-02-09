@@ -1,6 +1,6 @@
-import { FormFieldComponentDelegate, IBaseComponentDelegateConfig, IFormFieldComponentDelegateOptions } from '../../core';
-import { IRadioComponent } from './radio';
-import { RadioLabelPosition, RADIO_CONSTANTS } from './radio-constants';
+import { FormFieldComponentDelegate, IBaseComponentDelegateConfig, IFormFieldComponentDelegateOptions } from '../../core/index.js';
+import { IRadioComponent } from './radio.js';
+import { RadioLabelPosition, RADIO_CONSTANTS } from './radio-constants.js';
 
 export type RadioComponentDelegateProps = Partial<IRadioComponent>;
 export interface IRadioComponentDelegateOptions extends IFormFieldComponentDelegateOptions {

@@ -1,15 +1,15 @@
 import { deepQuerySelectorAll, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
-import { CHIP_FIELD_CONSTANTS, IChipFieldComponent } from '../chip-field';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
-import { FIELD_CONSTANTS } from '../field';
-import type { IFieldComponent } from '../field/field';
-import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdown';
-import { POPOVER_CONSTANTS } from '../popover';
-import { IPopoverComponent } from '../popover/popover';
-import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
-import { IAutocompleteComponent } from './autocomplete';
-import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants';
+import { CHIP_FIELD_CONSTANTS, IChipFieldComponent } from '../chip-field/index.js';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils.js';
+import { FIELD_CONSTANTS } from '../field/index.js';
+import type { IFieldComponent } from '../field/field.js';
+import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdown/index.js';
+import { POPOVER_CONSTANTS } from '../popover/index.js';
+import { IPopoverComponent } from '../popover/popover.js';
+import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field/index.js';
+import { IAutocompleteComponent } from './autocomplete.js';
+import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants.js';
 
 export interface IAutocompleteAdapter extends IBaseAdapter {
   readonly inputElement: HTMLInputElement;

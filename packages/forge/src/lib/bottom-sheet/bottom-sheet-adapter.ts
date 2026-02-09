@@ -1,9 +1,9 @@
 import { getShadowElement, deepQuerySelectorAll } from '@tylertech/forge-core';
-import { setDefaultAria } from '../constants';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import type { IDialogComponent } from '../dialog/dialog';
-import { IBottomSheetComponent } from './bottom-sheet';
-import { BOTTOM_SHEET_CONSTANTS } from './bottom-sheet-constants';
+import { setDefaultAria } from '../constants.js';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import type { IDialogComponent } from '../dialog/dialog.js';
+import { IBottomSheetComponent } from './bottom-sheet.js';
+import { BOTTOM_SHEET_CONSTANTS } from './bottom-sheet-constants.js';
 
 export interface IBottomSheetAdapter extends IBaseAdapter {
   initialize(): void;

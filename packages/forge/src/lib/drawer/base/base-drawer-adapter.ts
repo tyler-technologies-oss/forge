@@ -1,8 +1,8 @@
 import { addClass, getShadowElement, removeClass } from '@tylertech/forge-core';
-import { proxyShadowScrollEvent } from '../../core/utils/event-utils';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IBaseDrawerComponent } from './base-drawer';
-import { DrawerDirection, BASE_DRAWER_CONSTANTS } from './base-drawer-constants';
+import { proxyShadowScrollEvent } from '../../core/utils/event-utils.js';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { IBaseDrawerComponent } from './base-drawer.js';
+import { DrawerDirection, BASE_DRAWER_CONSTANTS } from './base-drawer-constants.js';
 
 export interface IBaseDrawerAdapter extends IBaseAdapter {
   proxyScrollEvent(): void;

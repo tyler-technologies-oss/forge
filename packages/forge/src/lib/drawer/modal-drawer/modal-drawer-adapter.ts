@@ -1,7 +1,7 @@
 import { getShadowElement, toggleClass } from '@tylertech/forge-core';
-import { BACKDROP_CONSTANTS, IBackdropComponent } from '../../backdrop';
-import { BaseDrawerAdapter, IBaseDrawerAdapter } from '../base';
-import { IModalDrawerComponent } from './modal-drawer';
+import { BACKDROP_CONSTANTS, IBackdropComponent } from '../../backdrop/index.js';
+import { BaseDrawerAdapter, IBaseDrawerAdapter } from '../base/index.js';
+import { IModalDrawerComponent } from './modal-drawer.js';
 
 export interface IModalDrawerAdapter extends IBaseDrawerAdapter {
   setBackdropCloseListener(listener: EventListener): void;

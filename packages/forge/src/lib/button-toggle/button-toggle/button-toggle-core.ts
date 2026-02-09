@@ -1,7 +1,7 @@
-import { task } from '../../core/utils/utils';
-import { ExperimentalFocusOptions } from '../../constants';
-import { IButtonToggleAdapter } from './button-toggle-adapter';
-import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from './button-toggle-constants';
+import { task } from '../../core/utils/utils.js';
+import { ExperimentalFocusOptions } from '../../constants.js';
+import { IButtonToggleAdapter } from './button-toggle-adapter.js';
+import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from './button-toggle-constants.js';
 
 export interface IButtonToggleCore {
   value: unknown;

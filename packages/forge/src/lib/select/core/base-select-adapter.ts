@@ -1,14 +1,14 @@
 import { isDefined, removeElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IBaseSelectComponent } from './base-select';
-import { ListDropdown, IListDropdown } from '../../list-dropdown';
-import { IListDropdownConfig, ListDropdownIconType } from '../../list-dropdown/list-dropdown-constants';
-import { IOptionComponent, OPTION_CONSTANTS } from '../option';
-import { IOptionGroupComponent, OPTION_GROUP_CONSTANTS } from '../option-group';
-import { ISelectOption, ISelectOptionGroup, SelectOptionListenerDestructor } from './base-select-constants';
-import { isOptionGroupObject } from './select-utils';
-import { IPopoverComponent, POPOVER_CONSTANTS } from '../../popover';
-import { type IBaseComponent } from '../../core/base/base-component';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { IBaseSelectComponent } from './base-select.js';
+import { ListDropdown, IListDropdown } from '../../list-dropdown/index.js';
+import { IListDropdownConfig, ListDropdownIconType } from '../../list-dropdown/list-dropdown-constants.js';
+import { IOptionComponent, OPTION_CONSTANTS } from '../option/index.js';
+import { IOptionGroupComponent, OPTION_GROUP_CONSTANTS } from '../option-group/index.js';
+import { ISelectOption, ISelectOptionGroup, SelectOptionListenerDestructor } from './base-select-constants.js';
+import { isOptionGroupObject } from './select-utils.js';
+import { IPopoverComponent, POPOVER_CONSTANTS } from '../../popover/index.js';
+import { type IBaseComponent } from '../../core/base/base-component.js';
 
 export interface IBaseSelectAdapter<T extends IBaseComponent = IBaseSelectComponent> extends IBaseAdapter<T> {
   initializeAccessibility(): void;

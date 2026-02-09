@@ -1,4 +1,4 @@
-import { IListDropdownOption, IListDropdownOptionGroup } from '../../list-dropdown/list-dropdown-constants';
+import { IListDropdownOption, IListDropdownOptionGroup } from '../../list-dropdown/list-dropdown-constants.js';
 
 export type SelectOptionBuilder = (option: ISelectOption, parentElement: HTMLElement) => HTMLElement;
 export type SelectSelectedTextBuilder = (selectedOptions: IListDropdownOption[]) => string;

@@ -1,9 +1,9 @@
 import { customElement, coreProperty } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { ExpansionPanelComponent } from '../expansion-panel';
-import { AccordionAdapter } from './accordion-adapter';
-import { ACCORDION_CONSTANTS } from './accordion-constants';
-import { AccordionCore } from './accordion-core';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { ExpansionPanelComponent } from '../expansion-panel/index.js';
+import { AccordionAdapter } from './accordion-adapter.js';
+import { ACCORDION_CONSTANTS } from './accordion-constants.js';
+import { AccordionCore } from './accordion-core.js';
 
 export interface IAccordionComponent extends IBaseComponent {
   panelSelector: string;

@@ -1,6 +1,6 @@
-import { ButtonTheme } from '../button/button-constants';
-import { ISplitButtonAdapter } from './split-button-adapter';
-import { SplitButtonVariant, SPLIT_BUTTON_CONSTANTS } from './split-button-constants';
+import { ButtonTheme } from '../button/button-constants.js';
+import { ISplitButtonAdapter } from './split-button-adapter.js';
+import { SplitButtonVariant, SPLIT_BUTTON_CONSTANTS } from './split-button-constants.js';
 
 export interface ISplitButtonCore {
   variant: SplitButtonVariant;

@@ -1,10 +1,10 @@
 import { attachShadowTemplate, coerceBoolean, customElement, ensureChildren, coreProperty } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { IStepConfiguration, StepperLayoutAlign, StepperLayoutMode } from '../stepper/stepper-constants';
-import { StepComponent } from '../step/step';
-import { StepperAdapter } from './stepper-adapter';
-import { STEPPER_CONSTANTS } from './stepper-constants';
-import { StepperCore } from './stepper-core';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { IStepConfiguration, StepperLayoutAlign, StepperLayoutMode } from '../stepper/stepper-constants.js';
+import { StepComponent } from '../step/step.js';
+import { StepperAdapter } from './stepper-adapter.js';
+import { STEPPER_CONSTANTS } from './stepper-constants.js';
+import { StepperCore } from './stepper-core.js';
 
 import template from './stepper.html';
 import styles from './stepper.scss';

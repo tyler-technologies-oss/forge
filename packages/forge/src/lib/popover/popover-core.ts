@@ -1,7 +1,7 @@
-import { IOverlayAwareCore, OverlayAwareCore } from '../overlay/base/overlay-aware-core';
-import { OverlayLightDismissEventData } from '../overlay/overlay-constants';
-import { WithLongpressListener } from '../core/mixins/interactions/longpress/with-longpress-listener';
-import { IPopoverAdapter } from './popover-adapter';
+import { IOverlayAwareCore, OverlayAwareCore } from '../overlay/base/overlay-aware-core.js';
+import { OverlayLightDismissEventData } from '../overlay/overlay-constants.js';
+import { WithLongpressListener } from '../core/mixins/interactions/longpress/with-longpress-listener.js';
+import { IPopoverAdapter } from './popover-adapter.js';
 import {
   PopoverAnimationType,
   IPopoverToggleEventData,
@@ -11,10 +11,10 @@ import {
   POPOVER_HOVER_TIMEOUT,
   PopoverPreset,
   PopoverAnchorAccessibility
-} from './popover-constants';
-import { IDismissibleStackState, DismissibleStack } from '../core/utils/dismissible-stack';
-import { VirtualElement } from '../core/utils/position-utils';
-import type { IPopoverComponent } from './popover';
+} from './popover-constants.js';
+import { IDismissibleStackState, DismissibleStack } from '../core/utils/dismissible-stack.js';
+import { VirtualElement } from '../core/utils/position-utils.js';
+import type { IPopoverComponent } from './popover.js';
 
 export interface IPopoverCore extends IOverlayAwareCore {
   arrow: boolean;

@@ -1,13 +1,13 @@
 import { customElement, attachLightTemplate, coreProperty } from '@tylertech/forge-core';
 import { tylIconHelp } from '@tylertech/tyler-icons';
-import { IMenuOption, MenuComponent } from '../../menu';
-import { AppBarHelpButtonAdapter } from './app-bar-help-button-adapter';
-import { AppBarHelpButtonCore } from './app-bar-help-button-core';
-import { APP_BAR_HELP_BUTTON_CONSTANTS } from './app-bar-help-button-constants';
-import { IconButtonComponent } from '../../icon-button';
-import { TooltipComponent } from '../../tooltip';
-import { IconRegistry } from '../../icon';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { IMenuOption, MenuComponent } from '../../menu/index.js';
+import { AppBarHelpButtonAdapter } from './app-bar-help-button-adapter.js';
+import { AppBarHelpButtonCore } from './app-bar-help-button-core.js';
+import { APP_BAR_HELP_BUTTON_CONSTANTS } from './app-bar-help-button-constants.js';
+import { IconButtonComponent } from '../../icon-button/index.js';
+import { TooltipComponent } from '../../tooltip/index.js';
+import { IconRegistry } from '../../icon/index.js';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
 
 import template from './app-bar-help-button.html';
 

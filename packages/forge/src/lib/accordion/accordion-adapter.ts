@@ -1,6 +1,6 @@
-import { BaseAdapter, IBaseAdapter } from '../core/base';
-import { EXPANSION_PANEL_CONSTANTS, IExpansionPanelComponent } from '../expansion-panel';
-import { IAccordionComponent } from './accordion';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { EXPANSION_PANEL_CONSTANTS, IExpansionPanelComponent } from '../expansion-panel/index.js';
+import { IAccordionComponent } from './accordion.js';
 import { elementParents } from '@tylertech/forge-core';
 
 export interface IAccordionAdapter extends IBaseAdapter {

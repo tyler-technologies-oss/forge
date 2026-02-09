@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 
-import './skip-link';
-import { ISkipLinkComponent } from './skip-link';
-import { SKIP_LINK_CONSTANTS } from './skip-link-constants';
+import './skip-link.js';
+import { ISkipLinkComponent } from './skip-link.js';
+import { SKIP_LINK_CONSTANTS } from './skip-link-constants.js';
 
 describe('SkipLink', () => {
   it('should initialize', async () => {

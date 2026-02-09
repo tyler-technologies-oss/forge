@@ -1,5 +1,5 @@
-import { IAppBarSearchAdapter } from './app-bar-search-adapter';
-import { APP_BAR_SEARCH_CONSTANTS, IAppBarSearchInputEventData } from './app-bar-search-constants';
+import { IAppBarSearchAdapter } from './app-bar-search-adapter.js';
+import { APP_BAR_SEARCH_CONSTANTS, IAppBarSearchInputEventData } from './app-bar-search-constants.js';
 
 export interface IAppBarSearchCore {
   disabled: boolean;

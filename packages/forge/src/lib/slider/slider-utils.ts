@@ -1,5 +1,5 @@
-import { ISliderComponent } from '../slider';
-import { SLIDER_CONSTANTS } from './slider-constants';
+import { ISliderComponent } from '../slider/index.js';
+import { SLIDER_CONSTANTS } from './slider-constants.js';
 
 export function createStartInputElement(component: ISliderComponent): HTMLInputElement {
   const startInput = document.createElement('input');

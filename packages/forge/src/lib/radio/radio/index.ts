@@ -1,11 +1,11 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
-import { RadioComponent } from './radio';
+import { RadioComponent } from './radio.js';
 
-export * from './radio-adapter';
-export * from './radio-constants';
-export * from './radio-core';
-export * from './radio';
+export * from './radio-adapter.js';
+export * from './radio-constants.js';
+export * from './radio-core.js';
+export * from './radio.js';
 
 export function defineRadioComponent(): void {
   defineCustomElement(RadioComponent);

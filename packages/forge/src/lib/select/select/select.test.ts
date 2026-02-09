@@ -4,9 +4,9 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { spy } from 'sinon';
-import { TestHarness } from '../../core/testing/test-harness';
-import { internals } from '../../constants';
-import { frame } from '../../core/utils/utils';
+import { TestHarness } from '../../core/testing/test-harness.js';
+import { internals } from '../../constants.js';
+import { frame } from '../../core/utils/utils.js';
 import {
   FIELD_CONSTANTS,
   FieldDensity,
@@ -17,13 +17,13 @@ import {
   FieldTheme,
   FieldVariant,
   IFieldComponent
-} from '../../field';
-import { IPopoverComponent, POPOVER_CONSTANTS } from '../../popover';
-import { BASE_SELECT_CONSTANTS, ISelectOption } from '../core';
-import { ISelectComponent } from './select';
-import { SELECT_CONSTANTS } from './select-constants';
+} from '../../field/index.js';
+import { IPopoverComponent, POPOVER_CONSTANTS } from '../../popover/index.js';
+import { BASE_SELECT_CONSTANTS, ISelectOption } from '../core/index.js';
+import { ISelectComponent } from './select.js';
+import { SELECT_CONSTANTS } from './select-constants.js';
 
-import './select';
+import './select.js';
 
 describe('Select', () => {
   describe('base', () => {

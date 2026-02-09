@@ -1,13 +1,13 @@
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import sinon from 'sinon';
-import { IToastComponent, ToastComponent } from './toast';
-import { TOAST_CONSTANTS } from './toast-constants';
-import { task } from '../core/utils/utils';
-import { IOverlayComponent } from '../overlay';
-import { IIconComponent } from '../icon';
+import { IToastComponent, ToastComponent } from './toast.js';
+import { TOAST_CONSTANTS } from './toast-constants.js';
+import { task } from '../core/utils/utils.js';
+import { IOverlayComponent } from '../overlay/index.js';
+import { IIconComponent } from '../icon/index.js';
 
-import './toast';
+import './toast.js';
 
 const TOAST_ANIMATION_DURATION = 400;
 

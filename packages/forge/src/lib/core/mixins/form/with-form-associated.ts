@@ -8,9 +8,9 @@
  */
 
 import { toggleAttribute } from '@tylertech/forge-core';
-import { MixinBase, getFormState, getFormValue, getValidationMessage, inputType, internals, AbstractConstructor } from '../../../constants';
-import { FormRestoreReason, FormRestoreState, FormValue, InputType, InputValidationProps } from '../../utils/form-utils';
-import { IBaseComponent } from '../../base/base-component';
+import { MixinBase, getFormState, getFormValue, getValidationMessage, inputType, internals, AbstractConstructor } from '../../../constants.js';
+import { FormRestoreReason, FormRestoreState, FormValue, InputType, InputValidationProps } from '../../utils/form-utils.js';
+import { IBaseComponent } from '../../base/base-component.js';
 
 /**
  * A component that can be associated with a form.

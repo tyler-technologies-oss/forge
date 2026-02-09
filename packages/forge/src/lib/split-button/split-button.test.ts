@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 
-import './split-button';
-import { ISplitButtonComponent } from './split-button';
-import { SPLIT_BUTTON_CONSTANTS } from './split-button-constants';
+import './split-button.js';
+import { ISplitButtonComponent } from './split-button.js';
+import { SPLIT_BUTTON_CONSTANTS } from './split-button-constants.js';
 
 describe('SplitButton', () => {
   it('should initialize', async () => {

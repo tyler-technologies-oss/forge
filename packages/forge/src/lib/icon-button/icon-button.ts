@@ -1,12 +1,12 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { IconComponent } from '../icon';
-import { BaseButton, IBaseButton } from '../button/base/base-button';
-import { BASE_BUTTON_CONSTANTS } from '../button/base/base-button-constants';
-import { FocusIndicatorComponent } from '../focus-indicator';
-import { StateLayerComponent } from '../state-layer';
-import { IconButtonDensity, IconButtonShape, IconButtonTheme, IconButtonVariant, ICON_BUTTON_CONSTANTS } from './icon-button-constants';
-import { IconButtonCore } from './icon-button-core';
-import { IconButtonAdapter } from './icon-button-adapter';
+import { IconComponent } from '../icon/index.js';
+import { BaseButton, IBaseButton } from '../button/base/base-button.js';
+import { BASE_BUTTON_CONSTANTS } from '../button/base/base-button-constants.js';
+import { FocusIndicatorComponent } from '../focus-indicator/index.js';
+import { StateLayerComponent } from '../state-layer/index.js';
+import { IconButtonDensity, IconButtonShape, IconButtonTheme, IconButtonVariant, ICON_BUTTON_CONSTANTS } from './icon-button-constants.js';
+import { IconButtonCore } from './icon-button-core.js';
+import { IconButtonAdapter } from './icon-button-adapter.js';
 
 import template from './icon-button.html';
 import styles from './icon-button.scss';

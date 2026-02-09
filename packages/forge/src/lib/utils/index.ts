@@ -1,1 +1,1 @@
-export * from './color-utils';
+export * from './color-utils.js';

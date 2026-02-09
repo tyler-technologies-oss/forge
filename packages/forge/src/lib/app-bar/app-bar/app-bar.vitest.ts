@@ -1,13 +1,13 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
-import { frame } from '../../core/utils/utils';
-import { APP_BAR_CONSTANTS } from './app-bar-constants';
-import type { IStateLayerComponent } from '../../state-layer';
-import type { IFocusIndicatorComponent } from '../../focus-indicator';
-import type { IAppBarComponent } from './app-bar';
+import { frame } from '../../core/utils/utils.js';
+import { APP_BAR_CONSTANTS } from './app-bar-constants.js';
+import type { IStateLayerComponent } from '../../state-layer/index.js';
+import type { IFocusIndicatorComponent } from '../../focus-indicator/index.js';
+import type { IAppBarComponent } from './app-bar.js';
 
-import './app-bar';
+import './app-bar.js';
 
 declare global {
   interface Window {

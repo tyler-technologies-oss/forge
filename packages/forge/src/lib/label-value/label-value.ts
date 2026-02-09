@@ -1,6 +1,6 @@
 import { customElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
-import { LABEL_VALUE_CONSTANTS } from './label-value-constants';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { LABEL_VALUE_CONSTANTS } from './label-value-constants.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 
 import template from './label-value.html';
 import styles from './label-value.scss';

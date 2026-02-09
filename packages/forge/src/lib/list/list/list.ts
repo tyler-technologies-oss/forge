@@ -1,12 +1,12 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { ListAdapter } from './list-adapter';
-import { ListCore } from './list-core';
-import { LIST_CONSTANTS } from './list-constants';
-import { ListItemComponent } from '../list-item';
-import { setDefaultAria } from '../../constants';
-import { WithElementInternals } from '../../core/mixins/internals/with-element-internals';
-import { WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { ListAdapter } from './list-adapter.js';
+import { ListCore } from './list-core.js';
+import { LIST_CONSTANTS } from './list-constants.js';
+import { ListItemComponent } from '../list-item/index.js';
+import { setDefaultAria } from '../../constants.js';
+import { WithElementInternals } from '../../core/mixins/internals/with-element-internals.js';
+import { WithDefaultAria } from '../../core/mixins/internals/with-default-aria.js';
 
 import template from './list.html';
 import styles from './list.scss';

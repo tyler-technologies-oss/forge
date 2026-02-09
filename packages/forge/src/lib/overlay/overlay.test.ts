@@ -3,12 +3,12 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { IOverlayComponent, OverlayComponent } from './overlay';
-import { OverlayFlipState, OverlayHideState, overlayStack, OVERLAY_CONSTANTS, OverlayShiftState } from './overlay-constants';
-import { IOverlayAdapter, OverlayAdapter } from './overlay-adapter';
+import { IOverlayComponent, OverlayComponent } from './overlay.js';
+import { OverlayFlipState, OverlayHideState, overlayStack, OVERLAY_CONSTANTS, OverlayShiftState } from './overlay-constants.js';
+import { IOverlayAdapter, OverlayAdapter } from './overlay-adapter.js';
 
-import './overlay';
-import { OverlayCore } from './overlay-core';
+import './overlay.js';
+import { OverlayCore } from './overlay-core.js';
 
 describe('Overlay', () => {
   describe('defaults', () => {

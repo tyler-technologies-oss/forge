@@ -1,4 +1,4 @@
-import { ICON_REGISTRY_KEY } from './icon-constants';
+import { ICON_REGISTRY_KEY } from './icon-constants.js';
 
 /** The shape of an SVG icon that can be defined with the icon registry. */
 export interface IIcon {

@@ -1,11 +1,11 @@
 import { defineCustomElement } from '@tylertech/forge-core';
-import { TextFieldComponent } from './text-field';
+import { TextFieldComponent } from './text-field.js';
 
-export * from './text-field';
-export * from './text-field-adapter';
-export * from './text-field-constants';
-export * from './text-field-core';
-export * from './text-field-component-delegate';
+export * from './text-field.js';
+export * from './text-field-adapter.js';
+export * from './text-field-constants.js';
+export * from './text-field-core.js';
+export * from './text-field-component-delegate.js';
 
 export function defineTextFieldComponent(): void {
   defineCustomElement(TextFieldComponent);

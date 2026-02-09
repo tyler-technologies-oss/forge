@@ -1,16 +1,16 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { frame } from '../core/utils/utils';
+import { frame } from '../core/utils/utils.js';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { spy } from 'sinon';
-import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
-import { TestHarness } from '../core/testing/test-harness';
-import { FIELD_CONSTANTS, IFieldComponent } from '../field';
-import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../icon-button';
-import { LABEL_CONSTANTS } from '../label';
+import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field/index.js';
+import { TestHarness } from '../core/testing/test-harness.js';
+import { FIELD_CONSTANTS, IFieldComponent } from '../field/index.js';
+import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../icon-button/index.js';
+import { LABEL_CONSTANTS } from '../label/index.js';
 
-import './text-field';
+import './text-field.js';
 
 describe('Text field', () => {
   it('should contain shadow root', async () => {

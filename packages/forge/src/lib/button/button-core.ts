@@ -1,6 +1,6 @@
-import { BaseButtonCore, IBaseButtonCore } from './base/base-button-core';
-import { IButtonAdapter } from './button-adapter';
-import { ButtonTheme, ButtonVariant, BUTTON_CONSTANTS } from './button-constants';
+import { BaseButtonCore, IBaseButtonCore } from './base/base-button-core.js';
+import { IButtonAdapter } from './button-adapter.js';
+import { ButtonTheme, ButtonVariant, BUTTON_CONSTANTS } from './button-constants.js';
 
 export interface IButtonCore extends IBaseButtonCore {
   variant: ButtonVariant;

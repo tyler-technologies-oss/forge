@@ -1,9 +1,9 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
-import { SkeletonComponent } from './skeleton';
+import { SkeletonComponent } from './skeleton.js';
 
-export * from './skeleton-constants';
-export * from './skeleton';
+export * from './skeleton-constants.js';
+export * from './skeleton.js';
 
 export function defineSkeletonComponent(): void {
   defineCustomElement(SkeletonComponent);

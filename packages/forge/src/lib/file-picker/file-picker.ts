@@ -1,9 +1,9 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
-import { ButtonComponent } from '../button';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { FilePickerAdapter } from './file-picker-adapter';
-import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants';
-import { FilePickerCore } from './file-picker-core';
+import { ButtonComponent } from '../button/index.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { FilePickerAdapter } from './file-picker-adapter.js';
+import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants.js';
+import { FilePickerCore } from './file-picker-core.js';
 
 import template from './file-picker.html';
 import styles from './file-picker.scss';

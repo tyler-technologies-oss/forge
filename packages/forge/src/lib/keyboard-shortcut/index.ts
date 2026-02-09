@@ -1,12 +1,12 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
-import { KeyboardShortcutComponent } from './keyboard-shortcut';
+import { KeyboardShortcutComponent } from './keyboard-shortcut.js';
 
-export * from './keyboard-shortcut-adapter';
-export * from './keyboard-shortcut-constants';
-export * from './keyboard-shortcut-core';
-export * from './keyboard-shortcut-utils';
-export * from './keyboard-shortcut';
+export * from './keyboard-shortcut-adapter.js';
+export * from './keyboard-shortcut-constants.js';
+export * from './keyboard-shortcut-core.js';
+export * from './keyboard-shortcut-utils.js';
+export * from './keyboard-shortcut.js';
 
 export function defineKeyboardShortcutComponent(): void {
   defineCustomElement(KeyboardShortcutComponent);

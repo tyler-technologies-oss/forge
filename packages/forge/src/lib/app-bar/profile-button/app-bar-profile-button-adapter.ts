@@ -1,14 +1,14 @@
 import { getLightElement, notChildEventListener, removeAllChildren, toggleAttribute } from '@tylertech/forge-core';
-import { IconComponentDelegate } from '../../icon';
-import { AVATAR_CONSTANTS, IAvatarComponent } from '../../avatar';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IProfileCardComponent, PROFILE_CARD_CONSTANTS } from '../../profile-card';
-import { IAppBarProfileButtonComponent } from './app-bar-profile-button';
-import { APP_BAR_PROFILE_BUTTON_CONSTANTS, IAppBarProfileCardConfig } from './app-bar-profile-button-constants';
-import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
-import { forwardAttributes } from '../../core/utils/reflect-utils';
-import { type IPopoverComponent } from '../../popover';
-import { type ITooltipComponent } from '../../tooltip';
+import { IconComponentDelegate } from '../../icon/index.js';
+import { AVATAR_CONSTANTS, IAvatarComponent } from '../../avatar/index.js';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { IProfileCardComponent, PROFILE_CARD_CONSTANTS } from '../../profile-card/index.js';
+import { IAppBarProfileButtonComponent } from './app-bar-profile-button.js';
+import { APP_BAR_PROFILE_BUTTON_CONSTANTS, IAppBarProfileCardConfig } from './app-bar-profile-button-constants.js';
+import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button/index.js';
+import { forwardAttributes } from '../../core/utils/reflect-utils.js';
+import { type IPopoverComponent } from '../../popover/index.js';
+import { type ITooltipComponent } from '../../tooltip/index.js';
 
 export interface IAppBarProfileButtonAdapter extends IBaseAdapter {
   popupElement: IPopoverComponent | undefined;

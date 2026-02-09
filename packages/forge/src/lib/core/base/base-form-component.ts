@@ -1,5 +1,5 @@
-import { internals } from '../../constants';
-import { BaseComponent, IBaseComponent } from './base-component';
+import { internals } from '../../constants.js';
+import { BaseComponent, IBaseComponent } from './base-component.js';
 
 export interface IBaseFormComponent<T = string> extends IBaseComponent {
   value: T;

@@ -1,5 +1,5 @@
-import { IBannerAdapter } from './banner-adapter';
-import { BannerTheme, BANNER_CONSTANTS } from './banner-constants';
+import { IBannerAdapter } from './banner-adapter.js';
+import { BannerTheme, BANNER_CONSTANTS } from './banner-constants.js';
 
 export interface IBannerCore {
   dismissed: boolean;

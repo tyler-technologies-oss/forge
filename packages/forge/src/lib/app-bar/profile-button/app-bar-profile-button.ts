@@ -1,13 +1,13 @@
 import { customElement, attachLightTemplate, coerceNumber, coerceBoolean, coreProperty } from '@tylertech/forge-core';
-import { AppBarProfileButtonAdapter } from './app-bar-profile-button-adapter';
-import { AppBarProfileButtonCore } from './app-bar-profile-button-core';
-import { APP_BAR_PROFILE_BUTTON_CONSTANTS, AppBarProfileButtonProfileCardBuilder } from './app-bar-profile-button-constants';
-import { ProfileCardComponent } from '../../profile-card';
-import { IconButtonComponent } from '../../icon-button';
-import { defineAvatarComponent } from '../../avatar';
-import { TooltipComponent } from '../../tooltip';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { IPopoverComponent, PopoverComponent } from '../../popover/popover';
+import { AppBarProfileButtonAdapter } from './app-bar-profile-button-adapter.js';
+import { AppBarProfileButtonCore } from './app-bar-profile-button-core.js';
+import { APP_BAR_PROFILE_BUTTON_CONSTANTS, AppBarProfileButtonProfileCardBuilder } from './app-bar-profile-button-constants.js';
+import { ProfileCardComponent } from '../../profile-card/index.js';
+import { IconButtonComponent } from '../../icon-button/index.js';
+import { defineAvatarComponent } from '../../avatar/index.js';
+import { TooltipComponent } from '../../tooltip/index.js';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { IPopoverComponent, PopoverComponent } from '../../popover/popover.js';
 
 import template from './app-bar-profile-button.html';
 

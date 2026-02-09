@@ -1,7 +1,7 @@
 import { getEventPath } from '@tylertech/forge-core';
 
-import { IButtonAreaAdapter } from './button-area-adapter';
-import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
+import { IButtonAreaAdapter } from './button-area-adapter.js';
+import { BUTTON_AREA_CONSTANTS } from './button-area-constants.js';
 
 export interface IButtonAreaCore {
   disabled: boolean;

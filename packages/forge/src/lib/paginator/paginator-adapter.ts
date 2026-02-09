@@ -1,9 +1,9 @@
 import { getShadowElement, removeAllChildren, toggleElementPlaceholder } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IIconButtonComponent } from '../icon-button';
-import { ISelectComponent, ISelectOption } from '../select';
-import { IPaginatorComponent } from './paginator';
-import { PAGINATOR_CONSTANTS } from './paginator-constants';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { IIconButtonComponent } from '../icon-button/index.js';
+import { ISelectComponent, ISelectOption } from '../select/index.js';
+import { IPaginatorComponent } from './paginator.js';
+import { PAGINATOR_CONSTANTS } from './paginator-constants.js';
 
 export type PaginatorFieldIdentifier = 'first' | 'last' | 'previous' | 'next' | 'page-size';
 

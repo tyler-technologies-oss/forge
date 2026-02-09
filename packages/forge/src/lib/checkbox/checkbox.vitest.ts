@@ -3,13 +3,13 @@ import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
-import { TestHarness } from '../core/testing/test-harness';
-import { CHECKBOX_CONSTANTS, CheckboxComponentDelegate, ICheckboxComponent } from '../checkbox';
-import { internals } from '../constants';
-import type { IFocusIndicatorComponent } from '../focus-indicator';
-import type { IStateLayerComponent } from '../state-layer';
+import { TestHarness } from '../core/testing/test-harness.js';
+import { CHECKBOX_CONSTANTS, CheckboxComponentDelegate, ICheckboxComponent } from '../checkbox/index.js';
+import { internals } from '../constants.js';
+import type { IFocusIndicatorComponent } from '../focus-indicator/index.js';
+import type { IStateLayerComponent } from '../state-layer/index.js';
 
-import './checkbox';
+import './checkbox.js';
 
 class CheckboxHarness extends TestHarness<ICheckboxComponent> {
   public rootElement: HTMLElement;

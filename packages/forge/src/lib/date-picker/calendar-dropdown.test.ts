@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
-import { task } from '../core/utils/utils';
-import { CalendarDropdown } from '../calendar/calendar-dropdown/calendar-dropdown';
-import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover';
+import { task } from '../core/utils/utils.js';
+import { CalendarDropdown } from '../calendar/calendar-dropdown/calendar-dropdown.js';
+import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover/index.js';
 
-import '../calendar';
-import '../popover';
+import '../calendar/index.js';
+import '../popover/index.js';
 
 const DEFAULT_ID = 'calendar-dropdown';
 const POPOVER_ANIMATION_DURATION = 200;

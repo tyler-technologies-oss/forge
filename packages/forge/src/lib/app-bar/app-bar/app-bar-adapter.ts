@@ -1,10 +1,10 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { replaceElement } from '../../core/utils/utils';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IAppBarComponent } from './app-bar';
-import { APP_BAR_CONSTANTS } from './app-bar-constants';
-import { STATE_LAYER_CONSTANTS } from '../../state-layer';
-import { FOCUS_INDICATOR_TAG_NAME } from '../../focus-indicator';
+import { replaceElement } from '../../core/utils/utils.js';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { IAppBarComponent } from './app-bar.js';
+import { APP_BAR_CONSTANTS } from './app-bar-constants.js';
+import { STATE_LAYER_CONSTANTS } from '../../state-layer/index.js';
+import { FOCUS_INDICATOR_TAG_NAME } from '../../focus-indicator/index.js';
 
 export interface IAppBarAdapter extends IBaseAdapter {
   initialize(): void;

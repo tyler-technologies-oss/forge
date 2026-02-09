@@ -27,6 +27,7 @@ DO NOT add comments unless code is complex. Defer to configs.
 
 ### Syntax Preferences
 
+- MUST use modern ESM (.js) extensions for all imports/exports
 - Use `const` by default, only use `let` if reassignment is needed
 - Use arrow functions for callbacks and methods where appropriate
 - Use template literals for string concatenation
@@ -42,6 +43,11 @@ DO NOT add comments unless code is complex. Defer to configs.
 - Use consistent naming conventions (camelCase for variables/functions, PascalCase for classes/types)
 - Avoid using `any` in TypeScript unless necessary, prefer specific types or generics
 - Use `readonly` for properties that should not be reassigned
+- Always use braces for control structures, even for single statements
+- Use consistent indentation (2 spaces) and line breaks for readability
+- Avoid using magic numbers, use constants or enums instead
+- Use descriptive variable and function names that clearly communicate their purpose
+- Avoid deep nesting of code, refactor into smaller functions if necessary
 
 ## Testing
 

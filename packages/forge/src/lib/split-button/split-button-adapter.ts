@@ -1,7 +1,7 @@
-import { ButtonTheme, BUTTON_CONSTANTS, IButtonComponent } from '../button';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { ISplitButtonComponent } from './split-button';
-import { SplitButtonVariant } from './split-button-constants';
+import { ButtonTheme, BUTTON_CONSTANTS, IButtonComponent } from '../button/index.js';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { ISplitButtonComponent } from './split-button.js';
+import { SplitButtonVariant } from './split-button-constants.js';
 
 export interface ISplitButtonAdapter extends IBaseAdapter {
   setVariant(variant: SplitButtonVariant): void;

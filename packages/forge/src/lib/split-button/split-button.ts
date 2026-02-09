@@ -1,9 +1,9 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { ButtonComponent, ButtonTheme } from '../button';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { SplitButtonAdapter } from './split-button-adapter';
-import { SplitButtonVariant, SPLIT_BUTTON_CONSTANTS } from './split-button-constants';
-import { SplitButtonCore } from './split-button-core';
+import { ButtonComponent, ButtonTheme } from '../button/index.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { SplitButtonAdapter } from './split-button-adapter.js';
+import { SplitButtonVariant, SPLIT_BUTTON_CONSTANTS } from './split-button-constants.js';
+import { SplitButtonCore } from './split-button-core.js';
 
 import template from './split-button.html';
 import styles from './split-button.scss';

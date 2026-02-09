@@ -1,7 +1,7 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IColorPickerComponent } from './color-picker';
-import { ColorPickerValueType, COLOR_PICKER_CONSTANTS, IHSVA, IRGBA } from './color-picker-constants';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { IColorPickerComponent } from './color-picker.js';
+import { ColorPickerValueType, COLOR_PICKER_CONSTANTS, IHSVA, IRGBA } from './color-picker-constants.js';
 
 export interface IColorPickerAdapter extends IBaseAdapter {
   setPreviewColor(rgbaStyle: string): void;

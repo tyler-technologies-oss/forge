@@ -1,9 +1,9 @@
 import { ForgeResizeObserverCallback, throttle } from '@tylertech/forge-core';
 
-import { ISplitViewBase } from '../core/split-view-base';
-import { ISplitViewPanelComponent, SplitViewAnimatingLayer } from '../split-view-panel';
-import { ISplitViewAdapter } from './split-view-adapter';
-import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
+import { ISplitViewBase } from '../core/split-view-base.js';
+import { ISplitViewPanelComponent, SplitViewAnimatingLayer } from '../split-view-panel/index.js';
+import { ISplitViewAdapter } from './split-view-adapter.js';
+import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants.js';
 
 export interface ISplitViewCore extends ISplitViewBase {
   orientation: SplitViewOrientation;

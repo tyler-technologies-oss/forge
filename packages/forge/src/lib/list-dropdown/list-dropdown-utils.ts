@@ -1,12 +1,12 @@
 import { addClass, getEventPath, isDeepEqual, isDefined, isObject } from '@tylertech/forge-core';
 import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons';
-import { ICON_CLASS_NAME } from '../constants';
-import { IIconComponent } from '../icon';
-import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress';
-import { IListComponent, LIST_CONSTANTS } from '../list/list';
-import { POPOVER_CONSTANTS } from '../popover';
-import { IPopoverComponent } from '../popover/popover';
-import { ISkeletonComponent, SKELETON_CONSTANTS } from '../skeleton';
+import { ICON_CLASS_NAME } from '../constants.js';
+import { IIconComponent } from '../icon/index.js';
+import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress/index.js';
+import { IListComponent, LIST_CONSTANTS } from '../list/list/index.js';
+import { POPOVER_CONSTANTS } from '../popover/index.js';
+import { IPopoverComponent } from '../popover/popover.js';
+import { ISkeletonComponent, SKELETON_CONSTANTS } from '../skeleton/index.js';
 import {
   IListDropdownCascadingElementFactoryConfig,
   IListDropdownOpenConfig,
@@ -17,8 +17,8 @@ import {
   ListDropdownType,
   LIST_DROPDOWN_CONSTANTS,
   ListDropdownTooltipConfig
-} from './list-dropdown-constants';
-import { frame } from '../core/utils/utils';
+} from './list-dropdown-constants.js';
+import { frame } from '../core/utils/utils.js';
 
 export enum ListDropdownOptionType {
   Option,

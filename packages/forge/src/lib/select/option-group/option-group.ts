@@ -1,8 +1,8 @@
 import { customElement } from '@tylertech/forge-core';
-import { ListDropdownOptionGroupBuilder } from '../../list-dropdown/list-dropdown-constants';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { ISelectOption, ISelectOptionGroup } from '../core';
-import { OPTION_GROUP_CONSTANTS } from './option-group-constants';
+import { ListDropdownOptionGroupBuilder } from '../../list-dropdown/list-dropdown-constants.js';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { ISelectOption, ISelectOptionGroup } from '../core/index.js';
+import { OPTION_GROUP_CONSTANTS } from './option-group-constants.js';
 
 export interface IOptionGroupComponent extends Required<ISelectOptionGroup>, IBaseComponent {
   label: string;

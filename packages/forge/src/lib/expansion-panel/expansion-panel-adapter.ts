@@ -1,8 +1,8 @@
 import { getShadowElement, randomChars, toggleAttribute } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IOpenIconComponent, OPEN_ICON_CONSTANTS } from '../open-icon';
-import { IExpansionPanelComponent } from './expansion-panel';
-import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { IOpenIconComponent, OPEN_ICON_CONSTANTS } from '../open-icon/index.js';
+import { IExpansionPanelComponent } from './expansion-panel.js';
+import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants.js';
 
 export interface IExpansionPanelAdapter extends IBaseAdapter {
   readonly triggerElement?: HTMLElement | null;

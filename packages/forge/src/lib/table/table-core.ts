@@ -1,9 +1,9 @@
 import { createPredicate, getEventPath, isNumber, isObject, ItemManager, matchesPredicate } from '@tylertech/forge-core';
-import { MultiSortManager } from './multi-sort-manager';
-import { ITableAdapter } from './table-adapter';
-import { TABLE_CONSTANTS } from './table-constants';
-import { TableRow } from './table-row';
-import { TableUtils } from './table-utils';
+import { MultiSortManager } from './multi-sort-manager.js';
+import { ITableAdapter } from './table-adapter.js';
+import { TABLE_CONSTANTS } from './table-constants.js';
+import { TableRow } from './table-row.js';
+import { TableUtils } from './table-utils.js';
 import {
   IColumnConfiguration,
   ITableConfiguration,
@@ -26,7 +26,7 @@ import {
   TableHeaderSelectAllTemplate,
   CellAlign,
   TableSelectTooltipCallback
-} from './types';
+} from './types.js';
 
 export interface ITableCore {
   data: any[];

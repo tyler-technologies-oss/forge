@@ -1,7 +1,7 @@
-import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate';
-import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/delegates/form-field-component-delegate';
-import { ISelectComponent } from './select/select';
-import { SELECT_CONSTANTS } from './select/select-constants';
+import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate.js';
+import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/delegates/form-field-component-delegate.js';
+import { ISelectComponent } from './select/select.js';
+import { SELECT_CONSTANTS } from './select/select-constants.js';
 
 export type SelectComponentDelegateProps = Partial<ISelectComponent>;
 export interface ISelectComponentDelegateOptions extends IFormFieldComponentDelegateOptions {

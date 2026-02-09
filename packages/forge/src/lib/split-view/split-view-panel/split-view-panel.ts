@@ -1,14 +1,14 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumber } from '@tylertech/forge-core';
 import { tylIconDragHandle, tylIconDragVerticalVariant } from '@tylertech/tyler-icons';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { ISplitViewPanelOpenEvent, ISplitViewPanelWillResizeEvent, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
-import { SplitViewPanelCore } from './split-view-panel-core';
-import { SplitViewPanelAdapter } from './split-view-panel-adapter';
-import { ISplitViewUpdateConfig } from '../split-view/split-view-constants';
-import { ISplitViewBase } from '../core/split-view-base';
-import { IconComponent, IconRegistry } from '../../icon';
-import { StateLayerComponent } from '../../state-layer';
-import { FocusIndicatorComponent } from '../../focus-indicator';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { ISplitViewPanelOpenEvent, ISplitViewPanelWillResizeEvent, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants.js';
+import { SplitViewPanelCore } from './split-view-panel-core.js';
+import { SplitViewPanelAdapter } from './split-view-panel-adapter.js';
+import { ISplitViewUpdateConfig } from '../split-view/split-view-constants.js';
+import { ISplitViewBase } from '../core/split-view-base.js';
+import { IconComponent, IconRegistry } from '../../icon/index.js';
+import { StateLayerComponent } from '../../state-layer/index.js';
+import { FocusIndicatorComponent } from '../../focus-indicator/index.js';
 
 import template from './split-view-panel.html';
 import styles from './split-view-panel.scss';

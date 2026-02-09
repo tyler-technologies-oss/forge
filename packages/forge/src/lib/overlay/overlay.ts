@@ -1,8 +1,8 @@
 import { attachShadowTemplate, customElement, coreProperty } from '@tylertech/forge-core';
-import { OverlayAdapter } from './overlay-adapter';
-import { OverlayLightDismissEventData, overlayStack, OVERLAY_CONSTANTS } from './overlay-constants';
-import { OverlayCore } from './overlay-core';
-import { BaseOverlay, IBaseOverlay } from './base/base-overlay';
+import { OverlayAdapter } from './overlay-adapter.js';
+import { OverlayLightDismissEventData, overlayStack, OVERLAY_CONSTANTS } from './overlay-constants.js';
+import { OverlayCore } from './overlay-core.js';
+import { BaseOverlay, IBaseOverlay } from './base/base-overlay.js';
 
 import template from './overlay.html';
 import styles from './overlay.scss';

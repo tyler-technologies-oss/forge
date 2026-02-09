@@ -1,12 +1,12 @@
 import { customElement, attachShadowTemplate, coerceBoolean, coreProperty } from '@tylertech/forge-core';
 
-import { TabAdapter } from './tab-adapter';
-import { TabCore } from './tab-core';
-import { TAB_CONSTANTS } from './tab-constants';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
-import { StateLayerComponent } from '../../state-layer/state-layer';
-import { ExperimentalFocusOptions } from '../../constants';
+import { TabAdapter } from './tab-adapter.js';
+import { TabCore } from './tab-core.js';
+import { TAB_CONSTANTS } from './tab-constants.js';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
+import { StateLayerComponent } from '../../state-layer/state-layer.js';
+import { ExperimentalFocusOptions } from '../../constants.js';
 
 import template from './tab.html';
 import styles from './tab.scss';

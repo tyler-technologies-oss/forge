@@ -1,6 +1,6 @@
-import { internals, MixinBase, setDefaultAria, AbstractConstructor } from '../../../constants';
-import { ARIAMixinStrict, setDefaultAria as setDefaultAriaUtil, DefaultAriaOptions } from '../../utils/a11y-utils';
-import { IBaseComponent } from '../../base/base-component';
+import { internals, MixinBase, setDefaultAria, AbstractConstructor } from '../../../constants.js';
+import { ARIAMixinStrict, setDefaultAria as setDefaultAriaUtil, DefaultAriaOptions } from '../../utils/a11y-utils.js';
+import { IBaseComponent } from '../../base/base-component.js';
 
 /**
  * A component with support for setting default ARIA.

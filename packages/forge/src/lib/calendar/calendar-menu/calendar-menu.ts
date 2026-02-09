@@ -1,11 +1,11 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, elementParents } from '@tylertech/forge-core';
-import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
-import { StateLayerComponent } from '../../state-layer/state-layer';
+import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
+import { StateLayerComponent } from '../../state-layer/state-layer.js';
 
-import { CalendarMenuAdapter } from './calendar-menu-adapter';
-import { CalendarDirection, CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS, ICalendarMenuOption } from './calendar-menu-constants';
-import { CalendarMenuCore } from './calendar-menu-core';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { CalendarMenuAdapter } from './calendar-menu-adapter.js';
+import { CalendarDirection, CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS, ICalendarMenuOption } from './calendar-menu-constants.js';
+import { CalendarMenuCore } from './calendar-menu-core.js';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
 
 import template from './calendar-menu.html';
 import styles from './calendar-menu.scss';

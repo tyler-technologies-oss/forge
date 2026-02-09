@@ -1,12 +1,12 @@
 import { nothing } from 'lit-html';
 import { fixture, expect, html } from '@open-wc/testing';
-import type { IPaginatorComponent } from './paginator';
+import type { IPaginatorComponent } from './paginator.js';
 
-import './paginator';
-import { IPaginatorChangeEventData, PAGINATOR_CONSTANTS } from './paginator-constants';
+import './paginator.js';
+import { IPaginatorChangeEventData, PAGINATOR_CONSTANTS } from './paginator-constants.js';
 import { getShadowElement } from '@tylertech/forge-core';
-import { ISelectComponent } from '../select/select/select';
-import { IIconButtonComponent } from '../icon-button';
+import { ISelectComponent } from '../select/select/select.js';
+import { IIconButtonComponent } from '../icon-button/index.js';
 import sinon from 'sinon';
 
 describe('Paginator', () => {

@@ -1,6 +1,6 @@
-import { LABEL_CONSTANTS, LabelComponent } from '../../label';
-import { IRadioGroupAdapter } from './radio-group-adapter';
-import { RADIO_GROUP_CONSTANTS } from './radio-group-constants';
+import { LABEL_CONSTANTS, LabelComponent } from '../../label/index.js';
+import { IRadioGroupAdapter } from './radio-group-adapter.js';
+import { RADIO_GROUP_CONSTANTS } from './radio-group-constants.js';
 
 export interface IRadioGroupCore {
   disabled: boolean;

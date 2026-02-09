@@ -1,7 +1,7 @@
 import { isArray, isDefined, isValidDate } from '@tylertech/forge-core';
 
-import { getLastDateOfMonth, getMonthLength, isSameDate } from '../core/utils/date-utils';
-import { ICalendarAdapter } from './calendar-adapter';
+import { getLastDateOfMonth, getMonthLength, isSameDate } from '../core/utils/date-utils.js';
+import { ICalendarAdapter } from './calendar-adapter.js';
 import {
   CALENDAR_CONSTANTS,
   CalendarDateBuilder,
@@ -24,10 +24,10 @@ import {
   ICalendarMenuYearConfig,
   ICalendarNumberRange,
   RangeSelectionState
-} from './calendar-constants';
-import { eventIncludesDate } from './calendar-dom-utils';
-import { getFirstDayOfWeekForLocale, getLocalizedMonth, getLocalizedYear, getWeekendDaysForLocale, isRtlLocale } from './calendar-locale-utils';
-import { CalendarMenuAnimationType, ICalendarMenuOption } from './calendar-menu';
+} from './calendar-constants.js';
+import { eventIncludesDate } from './calendar-dom-utils.js';
+import { getFirstDayOfWeekForLocale, getLocalizedMonth, getLocalizedYear, getWeekendDaysForLocale, isRtlLocale } from './calendar-locale-utils.js';
+import { CalendarMenuAnimationType, ICalendarMenuOption } from './calendar-menu/index.js';
 import {
   coerceDateFromValue,
   getAllYearOptions,
@@ -52,9 +52,9 @@ import {
   parseYearRange,
   shouldHandleEvent,
   sortDates
-} from './calendar-utils';
-import { ICalendarBase } from './core/calendar-base';
-import { DateRange } from './core/date-range';
+} from './calendar-utils.js';
+import { ICalendarBase } from './core/calendar-base.js';
+import { DateRange } from './core/date-range.js';
 
 export interface ICalendarCore extends ICalendarBase {
   mode: CalendarMode;

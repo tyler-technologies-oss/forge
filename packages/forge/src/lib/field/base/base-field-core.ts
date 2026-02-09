@@ -1,4 +1,4 @@
-import { IBaseFieldAdapter } from './base-field-adapter';
+import { IBaseFieldAdapter } from './base-field-adapter.js';
 import {
   BASE_FIELD_CONSTANTS,
   FieldDensity,
@@ -8,7 +8,7 @@ import {
   FieldSupportTextInset,
   FieldTheme,
   FieldVariant
-} from './base-field-constants';
+} from './base-field-constants.js';
 
 export interface IBaseFieldCore {
   labelPosition: string;

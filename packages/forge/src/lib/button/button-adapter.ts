@@ -1,5 +1,5 @@
-import { BaseButtonAdapter, IBaseButtonAdapter } from './base/base-button-adapter';
-import { IButtonComponent } from './button';
+import { BaseButtonAdapter, IBaseButtonAdapter } from './base/base-button-adapter.js';
+import { IButtonComponent } from './button.js';
 
 export interface IButtonAdapter extends IBaseButtonAdapter<IButtonComponent> {
   toggleStateLayer(value: boolean): void;

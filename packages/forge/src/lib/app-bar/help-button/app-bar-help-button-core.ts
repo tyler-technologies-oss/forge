@@ -1,6 +1,6 @@
-import type { IMenuOption } from '../../menu/menu-constants';
-import { IAppBarHelpButtonAdapter } from './app-bar-help-button-adapter';
-import { APP_BAR_HELP_BUTTON_CONSTANTS } from './app-bar-help-button-constants';
+import type { IMenuOption } from '../../menu/menu-constants.js';
+import { IAppBarHelpButtonAdapter } from './app-bar-help-button-adapter.js';
+import { APP_BAR_HELP_BUTTON_CONSTANTS } from './app-bar-help-button-constants.js';
 
 export interface IAppBarHelpButtonCore {
   options: IMenuOption[];

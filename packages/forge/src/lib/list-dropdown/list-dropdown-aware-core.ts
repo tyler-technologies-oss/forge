@@ -1,6 +1,6 @@
-import { PositionPlacement } from '../core/utils/position-utils';
-import { IOverlayOffset, OverlayFlipState, OverlayPlacement, OverlayShiftState } from '../overlay/overlay-constants';
-import { ListDropdownHeaderBuilder, ListDropdownFooterBuilder } from './list-dropdown-constants';
+import { PositionPlacement } from '../core/utils/position-utils.js';
+import { IOverlayOffset, OverlayFlipState, OverlayPlacement, OverlayShiftState } from '../overlay/overlay-constants.js';
+import { ListDropdownHeaderBuilder, ListDropdownFooterBuilder } from './list-dropdown-constants.js';
 
 export interface IListDropdownAwareCore {
   popupClasses: string | string[];

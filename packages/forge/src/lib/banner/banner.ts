@@ -1,12 +1,12 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconCancel } from '@tylertech/tyler-icons';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { IconRegistry } from '../icon';
-import { IconButtonComponent } from '../icon-button';
-import { TooltipComponent } from '../tooltip';
-import { BannerAdapter } from './banner-adapter';
-import { BannerTheme, BANNER_CONSTANTS } from './banner-constants';
-import { BannerCore } from './banner-core';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { IconRegistry } from '../icon/index.js';
+import { IconButtonComponent } from '../icon-button/index.js';
+import { TooltipComponent } from '../tooltip/index.js';
+import { BannerAdapter } from './banner-adapter.js';
+import { BannerTheme, BANNER_CONSTANTS } from './banner-constants.js';
+import { BannerCore } from './banner-core.js';
 
 import template from './banner.html';
 import styles from './banner.scss';

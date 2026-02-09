@@ -1,8 +1,8 @@
-import { ExperimentalFocusOptions } from '../../constants';
-import { task } from '../../core/utils/utils';
-import { IBaseButtonAdapter } from './base-button-adapter';
-import { BASE_BUTTON_CONSTANTS, ButtonClickOptions, ButtonType } from './base-button-constants';
-import { IBaseButton } from './base-button';
+import { ExperimentalFocusOptions } from '../../constants.js';
+import { task } from '../../core/utils/utils.js';
+import { IBaseButtonAdapter } from './base-button-adapter.js';
+import { BASE_BUTTON_CONSTANTS, ButtonClickOptions, ButtonType } from './base-button-constants.js';
+import { IBaseButton } from './base-button.js';
 
 export interface IBaseButtonCore {
   type: ButtonType;

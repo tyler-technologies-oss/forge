@@ -1,5 +1,5 @@
-import { ICircularProgressAdapter } from './circular-progress-adapter';
-import { CircularProgressTheme, CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
+import { ICircularProgressAdapter } from './circular-progress-adapter.js';
+import { CircularProgressTheme, CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants.js';
 
 export interface ICircularProgressCore {
   determinate: boolean;

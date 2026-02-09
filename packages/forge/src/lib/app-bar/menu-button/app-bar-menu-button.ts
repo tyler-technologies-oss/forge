@@ -1,11 +1,11 @@
 import { customElement, attachLightTemplate, toggleAttribute, getLightElement } from '@tylertech/forge-core';
-import { APP_BAR_MENU_BUTTON_CONSTANTS } from './app-bar-menu-button-constants';
-import { IconButtonComponent, ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
-import { TooltipComponent } from '../../tooltip';
-import { IconRegistry, ICON_CONSTANTS, IIconComponent } from '../../icon';
+import { APP_BAR_MENU_BUTTON_CONSTANTS } from './app-bar-menu-button-constants.js';
+import { IconButtonComponent, ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button/index.js';
+import { TooltipComponent } from '../../tooltip/index.js';
+import { IconRegistry, ICON_CONSTANTS, IIconComponent } from '../../icon/index.js';
 import { tylIconMenu } from '@tylertech/tyler-icons';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { forwardAttributes } from '../../core/utils/reflect-utils';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { forwardAttributes } from '../../core/utils/reflect-utils.js';
 
 import template from './app-bar-menu-button.html';
 

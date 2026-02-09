@@ -1,12 +1,12 @@
 import { expect } from '@open-wc/testing';
 import { removeElement } from '@tylertech/forge-core';
 import { spy } from 'sinon';
-import type { ISelectOption } from './core';
-import { ISelectComponent } from './select';
-import type { ISelectComponentDelegateConfig, ISelectComponentDelegateOptions, SelectComponentDelegateProps } from './select-component-delegate';
-import { SelectComponentDelegate } from './select-component-delegate';
+import type { ISelectOption } from './core/index.js';
+import { ISelectComponent } from './select/index.js';
+import type { ISelectComponentDelegateConfig, ISelectComponentDelegateOptions, SelectComponentDelegateProps } from './select-component-delegate.js';
+import { SelectComponentDelegate } from './select-component-delegate.js';
 
-import './select';
+import './select/index.js';
 
 interface ITestSelectComponentDelegateContext {
   delegate: SelectComponentDelegate;

@@ -1,4 +1,4 @@
-import { COMPONENT_NAME_PREFIX } from '../../constants';
+import { COMPONENT_NAME_PREFIX } from '../../constants.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}select`;
 
@@ -39,4 +39,4 @@ export const SELECT_CONSTANTS = {
   events
 };
 
-export { type FieldDensity as SelectDensityType, type FieldShape as SelectShapeType } from '../../field/base/base-field-constants';
+export { type FieldDensity as SelectDensityType, type FieldShape as SelectShapeType } from '../../field/base/base-field-constants.js';

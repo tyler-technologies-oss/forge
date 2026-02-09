@@ -1,11 +1,11 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
-import { SelectComponent } from './select';
+import { SelectComponent } from './select.js';
 
-export * from './select-adapter';
-export * from './select-constants';
-export * from './select-core';
-export * from './select';
+export * from './select-adapter.js';
+export * from './select-constants.js';
+export * from './select-core.js';
+export * from './select.js';
 
 export function defineSelectComponent(): void {
   defineCustomElement(SelectComponent);

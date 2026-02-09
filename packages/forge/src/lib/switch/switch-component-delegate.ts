@@ -1,7 +1,7 @@
-import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core';
-import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate';
-import { ISwitchComponent } from './switch';
-import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants';
+import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/index.js';
+import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate.js';
+import { ISwitchComponent } from './switch.js';
+import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants.js';
 
 export type SwitchComponentDelegateProps = Partial<ISwitchComponent>;
 export interface ISwitchComponentDelegateOptions extends IFormFieldComponentDelegateOptions {

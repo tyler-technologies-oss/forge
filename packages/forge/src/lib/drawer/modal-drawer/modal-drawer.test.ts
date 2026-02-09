@@ -3,12 +3,12 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { styleMap } from 'lit/directives/style-map.js';
-import { IModalDrawerComponent } from './modal-drawer';
-import { BASE_DRAWER_CONSTANTS } from '../base/base-drawer-constants';
-import { BACKDROP_CONSTANTS, IBackdropComponent } from '../../backdrop';
+import { IModalDrawerComponent } from './modal-drawer.js';
+import { BASE_DRAWER_CONSTANTS } from '../base/base-drawer-constants.js';
+import { BACKDROP_CONSTANTS, IBackdropComponent } from '../../backdrop/index.js';
 
-import './modal-drawer';
-import { MODAL_DRAWER_CONSTANTS } from './modal-drawer-constants';
+import './modal-drawer.js';
+import { MODAL_DRAWER_CONSTANTS } from './modal-drawer-constants.js';
 
 describe('Modal Drawer', () => {
   it('should contain shadow root', async () => {

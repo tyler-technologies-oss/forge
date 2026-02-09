@@ -3,16 +3,16 @@ import { sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { nothing } from 'lit-html';
-import type { IProfileCardComponent } from './profile-card';
-import type { IToolbarComponent } from '../toolbar/toolbar';
-import type { IButtonComponent } from '../button/button';
-import type { IAvatarComponent } from '../avatar/avatar';
-import { TestHarness } from '../core/testing/test-harness';
+import type { IProfileCardComponent } from './profile-card.js';
+import type { IToolbarComponent } from '../toolbar/toolbar.js';
+import type { IButtonComponent } from '../button/button.js';
+import type { IAvatarComponent } from '../avatar/avatar.js';
+import { TestHarness } from '../core/testing/test-harness.js';
 import { getShadowElement } from '@tylertech/forge-core';
-import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
-import { IIconComponent } from '../icon';
+import { PROFILE_CARD_CONSTANTS } from './profile-card-constants.js';
+import { IIconComponent } from '../icon/index.js';
 
-import './profile-card';
+import './profile-card.js';
 
 class ProfileCardHarness extends TestHarness<IProfileCardComponent> {
   private _actionToolbarElement: IToolbarComponent;

@@ -108,6 +108,7 @@
     "eslint-config-prettier": "catalog:",
     "eslint-plugin-chai-friendly": "^1.1.0",
     "eslint-plugin-prettier": "catalog:",
+    "eslint-plugin-storybook": "catalog:",
     "glob": "catalog:",
     "http-server": "^14.1.1",
     "lit-html": "^3.3.2",
@@ -131,8 +132,7 @@
     "vite-plugin-full-reload": "^1.2.0",
     "vite-tsconfig-paths": "catalog:",
     "vitest": "^4.0.18",
-    "vitest-browser-lit": "^1.0.1",
-    "eslint-plugin-storybook": "catalog:"
+    "vitest-browser-lit": "^1.0.1"
   },
   "overrides": {
     "@web/test-runner-chrome": "0.18.0"

@@ -1,11 +1,11 @@
 import { isArray, createVisuallyHiddenElement, closestElement } from '@tylertech/forge-core';
-import { POPOVER_CONSTANTS } from '../../popover/popover-constants';
-import { IPopoverComponent } from '../../popover/popover';
+import { POPOVER_CONSTANTS } from '../../popover/popover-constants.js';
+import { IPopoverComponent } from '../../popover/popover.js';
 
-import { ICalendarComponent } from '../calendar';
-import { CALENDAR_CONSTANTS, ICalendarFocusChangeEventData } from '../calendar-constants';
-import { getDateId } from '../calendar-dom-utils';
-import { CALENDAR_DROPDOWN_CONSTANTS } from './calendar-dropdown-constants';
+import { ICalendarComponent } from '../calendar.js';
+import { CALENDAR_CONSTANTS, ICalendarFocusChangeEventData } from '../calendar-constants.js';
+import { getDateId } from '../calendar-dom-utils.js';
+import { CALENDAR_DROPDOWN_CONSTANTS } from './calendar-dropdown-constants.js';
 
 export interface ICalendarDropdown {
   calendar: ICalendarComponent | undefined;

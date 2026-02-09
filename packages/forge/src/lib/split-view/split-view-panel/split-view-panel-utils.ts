@@ -1,8 +1,8 @@
-import { percentToPixels, safeMin, scaleValue } from '../../core/utils/utils';
-import { ISplitViewPanelCursorConfig, ISplitViewPanelState, SplitViewInputDeviceType, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
-import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
-import { SplitViewOrientation } from '../split-view/split-view-constants';
-import { ISplitViewPanelComponent, SplitViewPanelComponent } from './split-view-panel';
+import { percentToPixels, safeMin, scaleValue } from '../../core/utils/utils.js';
+import { ISplitViewPanelCursorConfig, ISplitViewPanelState, SplitViewInputDeviceType, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants.js';
+import { ISplitViewPanelAdapter } from './split-view-panel-adapter.js';
+import { SplitViewOrientation } from '../split-view/split-view-constants.js';
+import { ISplitViewPanelComponent, SplitViewPanelComponent } from './split-view-panel.js';
 
 /**
  * Creates a default split view panel state object.

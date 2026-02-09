@@ -11,9 +11,9 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { customElement } from '@tylertech/forge-core';
 
-import { isFocusable } from '../../../constants';
-import { WithFocusable } from './with-focusable';
-import { BaseComponent } from '../../base/base-component';
+import { isFocusable } from '../../../constants.js';
+import { WithFocusable } from './with-focusable.js';
+import { BaseComponent } from '../../base/base-component.js';
 
 describe('WithFocusable', () => {
   @customElement({ name: 'test-focusable' })

@@ -1,6 +1,6 @@
-import { COMPONENT_NAME_PREFIX } from '../../constants';
-import { ISplitViewBase } from '../core';
-import { SPLIT_VIEW_PANEL_CONSTANTS } from '../split-view-panel/split-view-panel-constants';
+import { COMPONENT_NAME_PREFIX } from '../../constants.js';
+import { ISplitViewBase } from '../core/index.js';
+import { SPLIT_VIEW_PANEL_CONSTANTS } from '../split-view-panel/split-view-panel-constants.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}split-view`;
 

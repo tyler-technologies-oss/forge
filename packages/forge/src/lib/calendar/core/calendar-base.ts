@@ -6,8 +6,8 @@ import {
   CalendarEventBuilder,
   DayOfWeek,
   ICalendarEvent
-} from '../calendar-constants';
-import { DateRange } from './date-range';
+} from '../calendar-constants.js';
+import { DateRange } from './date-range.js';
 
 export interface ICalendarBase {
   readonly activeDate: Date;

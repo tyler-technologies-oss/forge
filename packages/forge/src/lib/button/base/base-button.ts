@@ -1,14 +1,14 @@
 import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
-import { IconRegistry } from '../../icon/icon-registry';
-import { BaseComponent } from '../../core/base/base-component';
-import { ExperimentalFocusOptions, internals, setDefaultAria } from '../../constants';
-import { IBaseButtonAdapter } from './base-button-adapter';
-import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants';
-import { BaseButtonCore } from './base-button-core';
-import { WithLabelAwareness, IWithLabelAwareness } from '../../core/mixins/label/with-label-aware';
-import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
-import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
+import { IconRegistry } from '../../icon/icon-registry.js';
+import { BaseComponent } from '../../core/base/base-component.js';
+import { ExperimentalFocusOptions, internals, setDefaultAria } from '../../constants.js';
+import { IBaseButtonAdapter } from './base-button-adapter.js';
+import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants.js';
+import { BaseButtonCore } from './base-button-core.js';
+import { WithLabelAwareness, IWithLabelAwareness } from '../../core/mixins/label/with-label-aware.js';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals.js';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria.js';
 
 export interface IBaseButton extends IWithLabelAwareness, IWithElementInternals, IWithDefaultAria {
   type: ButtonType;

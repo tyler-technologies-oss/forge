@@ -1,7 +1,7 @@
 import { getEventPath } from '@tylertech/forge-core';
-import { DIALOG_CONSTANTS } from '../dialog';
-import { IBottomSheetAdapter } from './bottom-sheet-adapter';
-import { BottomSheetMode, BOTTOM_SHEET_CONSTANTS, IBottomSheetDragContext } from './bottom-sheet-constants';
+import { DIALOG_CONSTANTS } from '../dialog/index.js';
+import { IBottomSheetAdapter } from './bottom-sheet-adapter.js';
+import { BottomSheetMode, BOTTOM_SHEET_CONSTANTS, IBottomSheetDragContext } from './bottom-sheet-constants.js';
 
 export interface IBottomSheetCore {
   mode: BottomSheetMode;

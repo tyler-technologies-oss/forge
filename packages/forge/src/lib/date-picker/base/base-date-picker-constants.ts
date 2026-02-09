@@ -1,7 +1,7 @@
 import { Masked, InputMask, type AppendFlags, type FactoryArg } from 'imask';
-import { DayOfWeek, ICalendarDateSelectEventData } from '../../calendar';
-import { type IDatePickerComponent } from '../date-picker';
-import { SupportedDateFormats } from '../../core/utils/date-utils';
+import { DayOfWeek, ICalendarDateSelectEventData } from '../../calendar/index.js';
+import { type IDatePickerComponent } from '../date-picker.js';
+import { SupportedDateFormats } from '../../core/utils/date-utils.js';
 
 export type DatePickerParseCallback = (value: string) => Date | null;
 export type DatePickerFormatCallback = (value: Date | null) => string | null;

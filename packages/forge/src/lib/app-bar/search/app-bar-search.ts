@@ -1,11 +1,11 @@
 import { customElement, attachShadowTemplate, coerceBoolean, coreProperty, ensureInputElement } from '@tylertech/forge-core';
 import { tylIconSearch } from '@tylertech/tyler-icons';
-import { AppBarSearchCore } from './app-bar-search-core';
-import { AppBarSearchAdapter } from './app-bar-search-adapter';
-import { IAppBarSearchInputEventData, APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants';
-import { FocusIndicatorComponent } from '../../focus-indicator';
-import { IconComponent, IconRegistry } from '../../icon';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { AppBarSearchCore } from './app-bar-search-core.js';
+import { AppBarSearchAdapter } from './app-bar-search-adapter.js';
+import { IAppBarSearchInputEventData, APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants.js';
+import { FocusIndicatorComponent } from '../../focus-indicator/index.js';
+import { IconComponent, IconRegistry } from '../../icon/index.js';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
 
 import template from './app-bar-search.html';
 import styles from './app-bar-search.scss';

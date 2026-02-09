@@ -1,5 +1,5 @@
-import { IAppBarAdapter } from './app-bar-adapter';
-import { AppBarElevation, AppBarTheme, APP_BAR_CONSTANTS, AppBarThemeMode } from './app-bar-constants';
+import { IAppBarAdapter } from './app-bar-adapter.js';
+import { AppBarElevation, AppBarTheme, APP_BAR_CONSTANTS, AppBarThemeMode } from './app-bar-constants.js';
 
 export interface IAppBarCore {
   titleText: string;

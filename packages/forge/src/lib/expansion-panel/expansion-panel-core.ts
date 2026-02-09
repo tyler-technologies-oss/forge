@@ -1,7 +1,7 @@
-import { frame } from '../core';
-import { IOpenIconComponent } from '../open-icon';
-import { IExpansionPanelAdapter } from './expansion-panel-adapter';
-import { ExpansionPanelAnimationType, ExpansionPanelOrientation, EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
+import { frame } from '../core/index.js';
+import { IOpenIconComponent } from '../open-icon/index.js';
+import { IExpansionPanelAdapter } from './expansion-panel-adapter.js';
+import { ExpansionPanelAnimationType, ExpansionPanelOrientation, EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants.js';
 
 export interface IExpansionPanelCore {
   open: boolean;

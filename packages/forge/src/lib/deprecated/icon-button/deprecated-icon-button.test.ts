@@ -3,14 +3,14 @@ import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons';
-import type { IStateLayerComponent } from '../../state-layer';
-import type { IFocusIndicatorComponent } from '../../focus-indicator';
-import { DeprecatedIconButtonComponentDelegate } from './deprecated-icon-button-component-delegate';
-import { DeprecatedIconButtonComponent, IDeprecatedIconButtonComponent } from './deprecated-icon-button';
-import { DEPRECATED_ICON_BUTTON_CONSTANTS } from './deprecated-icon-button-constants';
-import { IconRegistry } from '../../icon/icon-registry';
+import type { IStateLayerComponent } from '../../state-layer/index.js';
+import type { IFocusIndicatorComponent } from '../../focus-indicator/index.js';
+import { DeprecatedIconButtonComponentDelegate } from './deprecated-icon-button-component-delegate.js';
+import { DeprecatedIconButtonComponent, IDeprecatedIconButtonComponent } from './deprecated-icon-button.js';
+import { DEPRECATED_ICON_BUTTON_CONSTANTS } from './deprecated-icon-button-constants.js';
+import { IconRegistry } from '../../icon/icon-registry.js';
 
-import './deprecated-icon-button';
+import './deprecated-icon-button.js';
 
 describe('Deprecated Icon Button', () => {
   before(() => {

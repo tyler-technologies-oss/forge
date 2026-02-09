@@ -1,7 +1,7 @@
 import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
 
-import { VIEW_CONSTANTS } from './view-constants';
+import { VIEW_CONSTANTS } from './view-constants.js';
 
 import template from './view.html';
 import styles from './view.scss';

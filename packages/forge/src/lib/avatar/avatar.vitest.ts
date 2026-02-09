@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
-import { task } from '../core/utils/utils';
+import { task } from '../core/utils/utils.js';
 import { getShadowElement } from '@tylertech/forge-core';
-import type { IAvatarComponent } from './avatar';
+import type { IAvatarComponent } from './avatar.js';
 
-import './avatar';
+import './avatar.js';
 
 describe('Avatar', () => {
   it('should initialize', async () => {

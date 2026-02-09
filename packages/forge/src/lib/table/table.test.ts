@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { fixture, html } from '@open-wc/testing';
-import { task, frame } from '../core/utils/utils';
+import { task, frame } from '../core/utils/utils.js';
 import {
   CellAlign,
   defineTableComponent,
@@ -16,11 +16,11 @@ import {
   TABLE_CONSTANTS,
   ITableSortMultipleEventData,
   TableSelectTooltipCallback
-} from './index';
-import { TextFieldComponentDelegate } from '../text-field';
-import { ITooltipComponent } from '../tooltip';
+} from './index.js';
+import { TextFieldComponentDelegate } from '../text-field/index.js';
+import { ITooltipComponent } from '../tooltip/index.js';
 
-import './table';
+import './table.js';
 
 const columns: IColumnConfiguration[] = [
   { header: 'Name', property: 'Name' },

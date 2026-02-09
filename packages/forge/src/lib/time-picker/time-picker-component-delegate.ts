@@ -1,8 +1,8 @@
-import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate';
-import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/delegates/form-field-component-delegate';
-import { ITextFieldComponent, ITextFieldComponentDelegateConfig, TextFieldComponentDelegate } from '../text-field';
-import { ITimePickerComponent } from './time-picker';
-import { TIME_PICKER_CONSTANTS } from './time-picker-constants';
+import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate.js';
+import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/delegates/form-field-component-delegate.js';
+import { ITextFieldComponent, ITextFieldComponentDelegateConfig, TextFieldComponentDelegate } from '../text-field/index.js';
+import { ITimePickerComponent } from './time-picker.js';
+import { TIME_PICKER_CONSTANTS } from './time-picker-constants.js';
 
 export type TimePickerComponentDelegateProps = Partial<ITimePickerComponent>;
 export interface ITimePickerComponentDelegateOptions extends IFormFieldComponentDelegateOptions {

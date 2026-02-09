@@ -1,5 +1,5 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
-import { IListDropdownOption, IListDropdownOptionGroup } from '../list-dropdown';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
+import { IListDropdownOption, IListDropdownOptionGroup } from '../list-dropdown/index.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}menu`;
 

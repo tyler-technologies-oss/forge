@@ -1,6 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, customElement, getShadowElement } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { BACKDROP_CONSTANTS } from './backdrop-constants';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { BACKDROP_CONSTANTS } from './backdrop-constants.js';
 
 import template from './backdrop.html';
 import styles from './backdrop.scss';

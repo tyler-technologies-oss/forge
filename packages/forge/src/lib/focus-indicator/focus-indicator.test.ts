@@ -2,10 +2,10 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
-import type { IFocusIndicatorComponent } from './focus-indicator';
+import type { IFocusIndicatorComponent } from './focus-indicator.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
-import './focus-indicator';
+import './focus-indicator.js';
 
 describe('FocusIndicator', () => {
   it('should contain shadow root', async () => {

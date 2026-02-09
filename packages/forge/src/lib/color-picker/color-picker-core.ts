@@ -1,5 +1,5 @@
 import { debounce } from '@tylertech/forge-core';
-import { IColorPickerAdapter } from './color-picker-adapter';
+import { IColorPickerAdapter } from './color-picker-adapter.js';
 import {
   ColorPickerValueType,
   COLOR_PICKER_CONSTANTS,
@@ -9,10 +9,10 @@ import {
   IRGBA,
   ColorPickerChangeEventType,
   ColorPickerChangeEventSource
-} from './color-picker-constants';
-import { ColorPickerGradientSlider } from './color-picker-gradient-slider';
-import { ColorPickerSlider } from './color-picker-slider';
-import { formatHex, formatRgba, hexToRgba, hsvaToRgba, isValidHex, isValidHSVA, isValidRGBA, rgbaToHex, rgbaToHsva } from './color-picker-utils';
+} from './color-picker-constants.js';
+import { ColorPickerGradientSlider } from './color-picker-gradient-slider.js';
+import { ColorPickerSlider } from './color-picker-slider.js';
+import { formatHex, formatRgba, hexToRgba, hsvaToRgba, isValidHex, isValidHSVA, isValidRGBA, rgbaToHex, rgbaToHsva } from './color-picker-utils.js';
 
 export interface IColorPickerCore {
   value: string | null | undefined;

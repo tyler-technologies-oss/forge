@@ -1,4 +1,4 @@
-import { WithMoveable } from '../mixins/interactions/moveable/with-moveable';
+import { WithMoveable } from '../mixins/interactions/moveable/with-moveable.js';
 
 export interface IMoveControllerConfig {
   handleElement: HTMLElement;

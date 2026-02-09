@@ -1,15 +1,15 @@
 import { elementFromHTML, getShadowElement, toggleAttribute, walkUpUntil } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator';
-import { IIconButtonComponent } from '../../icon-button';
-import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
-import { IChipSetComponent } from '../chip-set/chip-set';
-import { CHIP_SET_CONSTANTS } from '../chip-set/chip-set-constants';
-import { IChipComponent } from './chip';
-import { CHIP_CONSTANTS, IChipState } from './chip-constants';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator/index.js';
+import { IIconButtonComponent } from '../../icon-button/index.js';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer/index.js';
+import { IChipSetComponent } from '../chip-set/chip-set.js';
+import { CHIP_SET_CONSTANTS } from '../chip-set/chip-set-constants.js';
+import { IChipComponent } from './chip.js';
+import { CHIP_CONSTANTS, IChipState } from './chip-constants.js';
 
 import checkmarkTemplate from './chip-checkmark.html';
-import { replaceElement } from '../../core/utils/utils';
+import { replaceElement } from '../../core/utils/utils.js';
 
 export interface IChipAdapter extends IBaseAdapter {
   readonly removeButtonElement: IIconButtonComponent | undefined;

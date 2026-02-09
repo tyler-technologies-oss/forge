@@ -1,10 +1,10 @@
-import { ICON_CLASS_NAME } from '../../constants';
-import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../../core/delegates/base-component-delegate';
-import { IIconComponent } from '../../icon/icon';
-import { IconExternalType, ICON_CONSTANTS } from '../../icon/icon-constants';
-import { TooltipPlacement } from '../../tooltip/tooltip-constants';
-import { IDeprecatedIconButtonComponent } from './deprecated-icon-button';
-import { DEPRECATED_ICON_BUTTON_CONSTANTS } from './deprecated-icon-button-constants';
+import { ICON_CLASS_NAME } from '../../constants.js';
+import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../../core/delegates/base-component-delegate.js';
+import { IIconComponent } from '../../icon/icon.js';
+import { IconExternalType, ICON_CONSTANTS } from '../../icon/icon-constants.js';
+import { TooltipPlacement } from '../../tooltip/tooltip-constants.js';
+import { IDeprecatedIconButtonComponent } from './deprecated-icon-button.js';
+import { DEPRECATED_ICON_BUTTON_CONSTANTS } from './deprecated-icon-button-constants.js';
 
 export type DeprecatedIconButtonComponentDelegateProps = Partial<IDeprecatedIconButtonComponent>;
 export interface IDeprecatedIconButtonComponentDelegateOptions extends IBaseComponentDelegateOptions {

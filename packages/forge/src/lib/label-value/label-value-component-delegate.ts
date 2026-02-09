@@ -1,6 +1,6 @@
-import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate';
-import { ILabelValueComponent } from '../label-value';
-import { LABEL_VALUE_CONSTANTS } from './label-value-constants';
+import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate.js';
+import { ILabelValueComponent } from '../label-value/index.js';
+import { LABEL_VALUE_CONSTANTS } from './label-value-constants.js';
 
 export type LabelValueComponentDelegateProps = Partial<ILabelValueComponent>;
 export interface ILabelValueComponentDelegateOptions extends IBaseComponentDelegateOptions {

@@ -7,8 +7,8 @@
  * The original source code can be found at: [GitHub](https://github.com/material-components/material-web/blob/main/labs/behaviors/focusable.ts)
  */
 
-import { AbstractConstructor, isFocusable, MixinBase } from '../../../constants';
-import { IBaseComponent } from '../../base/base-component';
+import { AbstractConstructor, isFocusable, MixinBase } from '../../../constants.js';
+import { IBaseComponent } from '../../base/base-component.js';
 
 /**
  * An element that can enable and disable `tabindex` focusability.

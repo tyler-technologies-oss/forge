@@ -1,9 +1,9 @@
 import { attachShadowTemplate, customElement } from '@tylertech/forge-core';
-import { BackdropComponent } from '../../backdrop';
-import { BaseDrawerComponent, IBaseDrawerComponent } from '../base';
-import { ModalDrawerAdapter } from './modal-drawer-adapter';
-import { MODAL_DRAWER_CONSTANTS } from './modal-drawer-constants';
-import { ModalDrawerCore } from './modal-drawer-core';
+import { BackdropComponent } from '../../backdrop/index.js';
+import { BaseDrawerComponent, IBaseDrawerComponent } from '../base/index.js';
+import { ModalDrawerAdapter } from './modal-drawer-adapter.js';
+import { MODAL_DRAWER_CONSTANTS } from './modal-drawer-constants.js';
+import { ModalDrawerCore } from './modal-drawer-core.js';
 
 import template from './modal-drawer.html';
 import styles from './modal-drawer.scss';

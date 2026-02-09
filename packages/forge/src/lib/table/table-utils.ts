@@ -16,11 +16,11 @@ import {
   safeCssWidth,
   toggleClass
 } from '@tylertech/forge-core';
-import { CHECKBOX_CONSTANTS, ICheckboxComponent } from '../checkbox';
-import { EXPANSION_PANEL_CONSTANTS, IExpansionPanelComponent } from '../expansion-panel';
-import { ITooltipComponent } from '../tooltip';
-import { TABLE_CONSTANTS } from './table-constants';
-import { TableRow } from './table-row';
+import { CHECKBOX_CONSTANTS, ICheckboxComponent } from '../checkbox/index.js';
+import { EXPANSION_PANEL_CONSTANTS, IExpansionPanelComponent } from '../expansion-panel/index.js';
+import { ITooltipComponent } from '../tooltip/index.js';
+import { TABLE_CONSTANTS } from './table-constants.js';
+import { TableRow } from './table-row.js';
 import {
   CellAlign,
   IColumnConfiguration,
@@ -34,10 +34,10 @@ import {
   TableSelectTooltipCallback,
   ITableTemplateBuilderResult,
   TableViewTemplateBuilder
-} from './types';
-import { ICON_CONSTANTS, IIconComponent } from '../icon';
-import { FormFieldComponentDelegate, IFormFieldComponentDelegate } from '../core/delegates/form-field-component-delegate';
-import { BaseComponentDelegate, IBaseComponentDelegate } from '../core';
+} from './types.js';
+import { ICON_CONSTANTS, IIconComponent } from '../icon/index.js';
+import { FormFieldComponentDelegate, IFormFieldComponentDelegate } from '../core/delegates/form-field-component-delegate.js';
+import { BaseComponentDelegate, IBaseComponentDelegate } from '../core/index.js';
 
 function isTemplateResultObject(val: any): val is ITableTemplateBuilderResult {
   return val && typeof val === 'object' && 'content' in val;

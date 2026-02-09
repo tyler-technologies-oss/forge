@@ -1,10 +1,10 @@
 import { addClass } from '@tylertech/forge-core';
-import { IconExternalType, ICON_CONSTANTS, IIconComponent } from '../icon';
-import { ICON_CLASS_NAME } from '../constants';
-import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate';
-import { IIconButtonComponent } from './icon-button';
-import { ICON_BUTTON_CONSTANTS } from './icon-button-constants';
-import { TooltipPlacement } from '../tooltip/tooltip-constants';
+import { IconExternalType, ICON_CONSTANTS, IIconComponent } from '../icon/index.js';
+import { ICON_CLASS_NAME } from '../constants.js';
+import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate.js';
+import { IIconButtonComponent } from './icon-button.js';
+import { ICON_BUTTON_CONSTANTS } from './icon-button-constants.js';
+import { TooltipPlacement } from '../tooltip/tooltip-constants.js';
 
 export type IconButtonComponentDelegateProps = Partial<IIconButtonComponent>;
 export interface IIconButtonComponentDelegateOptions extends IBaseComponentDelegateOptions {

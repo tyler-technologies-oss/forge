@@ -1,11 +1,11 @@
 import { getShadowElement, toggleAttribute, toggleClass } from '@tylertech/forge-core';
-import { internals } from '../constants';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { elementsOverlapping, isPointerOverElement } from '../core/utils/utils';
-import { ISliderComponent } from '../slider';
-import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer';
-import { SLIDER_CONSTANTS } from './slider-constants';
-import { createLabel, createStartHandleElement, createStartInputElement } from './slider-utils';
+import { internals } from '../constants.js';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { elementsOverlapping, isPointerOverElement } from '../core/utils/utils.js';
+import { ISliderComponent } from '../slider/index.js';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer/index.js';
+import { SLIDER_CONSTANTS } from './slider-constants.js';
+import { createLabel, createStartHandleElement, createStartInputElement } from './slider-utils.js';
 
 export interface ISliderState {
   startFraction: number;

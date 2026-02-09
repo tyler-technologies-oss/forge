@@ -1,6 +1,6 @@
-import { PositionPlacement } from '../core/utils/position-utils';
-import { IBaseOverlayCore, BaseOverlayCore } from './base/base-overlay-core';
-import { IOverlayAdapter } from './overlay-adapter';
+import { PositionPlacement } from '../core/utils/position-utils.js';
+import { IBaseOverlayCore, BaseOverlayCore } from './base/base-overlay-core.js';
+import { IOverlayAdapter } from './overlay-adapter.js';
 import {
   SUPPORTS_POPOVER,
   IOverlayOffset,
@@ -12,7 +12,7 @@ import {
   OverlayHideState,
   OverlayLightDismissReason,
   OverlayShiftState
-} from './overlay-constants';
+} from './overlay-constants.js';
 
 export interface IOverlayCore extends IBaseOverlayCore {
   arrowElement: HTMLElement;

@@ -3,10 +3,10 @@ import { render } from 'vitest-browser-lit';
 import { html, nothing } from 'lit';
 import { page, userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
-import { TestHarness } from '../core/testing/test-harness';
-import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
-import { frame, task } from '../core/utils/utils';
-import type { IDialogComponent } from './dialog';
+import { TestHarness } from '../core/testing/test-harness.js';
+import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop/index.js';
+import { frame, task } from '../core/utils/utils.js';
+import type { IDialogComponent } from './dialog.js';
 import {
   DIALOG_CONSTANTS,
   DialogAnimationType,
@@ -16,8 +16,8 @@ import {
   DialogPreset,
   DialogSizeStrategy,
   DialogType
-} from './dialog-constants';
-import './dialog';
+} from './dialog-constants.js';
+import './dialog.js';
 
 // Animation duration + buffer for open/close transitions
 const ANIMATION_TIMEOUT = 500;

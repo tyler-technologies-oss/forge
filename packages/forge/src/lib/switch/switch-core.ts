@@ -1,5 +1,5 @@
-import { ISwitchAdapter } from './switch-adapter';
-import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants';
+import { ISwitchAdapter } from './switch-adapter.js';
+import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants.js';
 
 export interface ISwitchCore {
   checked: boolean;

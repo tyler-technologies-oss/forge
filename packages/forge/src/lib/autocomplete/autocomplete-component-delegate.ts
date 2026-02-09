@@ -1,10 +1,10 @@
-import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/delegates/form-field-component-delegate';
-import { TextFieldComponentDelegate } from '../text-field';
-import { IAutocompleteComponent } from './autocomplete';
-import { AUTOCOMPLETE_CONSTANTS } from './autocomplete-constants';
-import { IconComponentDelegate, IIconComponentDelegateConfig } from '../icon';
-import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate';
-import { ITextFieldComponentDelegateConfig } from '../text-field/text-field-component-delegate';
+import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/delegates/form-field-component-delegate.js';
+import { TextFieldComponentDelegate } from '../text-field/index.js';
+import { IAutocompleteComponent } from './autocomplete.js';
+import { AUTOCOMPLETE_CONSTANTS } from './autocomplete-constants.js';
+import { IconComponentDelegate, IIconComponentDelegateConfig } from '../icon/index.js';
+import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate.js';
+import { ITextFieldComponentDelegateConfig } from '../text-field/text-field-component-delegate.js';
 
 export type AutocompleteComponentDelegateProps = Partial<IAutocompleteComponent>;
 export interface IAutocompleteComponentDelegateOptions extends IFormFieldComponentDelegateOptions {

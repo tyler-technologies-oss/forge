@@ -1,9 +1,9 @@
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IMenuOption } from './index';
-import { IMenuComponent } from './menu';
-import { MENU_CONSTANTS, IMenuSelectEventData, IMenuOptionGroup } from './menu-constants';
-import { IListDropdownConfig, IListDropdown, ListDropdown } from '../list-dropdown';
-import { IListComponent, IListItemComponent, LIST_CONSTANTS, LIST_ITEM_CONSTANTS } from '../list';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { IMenuOption } from './index.js';
+import { IMenuComponent } from './menu.js';
+import { MENU_CONSTANTS, IMenuSelectEventData, IMenuOptionGroup } from './menu-constants.js';
+import { IListDropdownConfig, IListDropdown, ListDropdown } from '../list-dropdown/index.js';
+import { IListComponent, IListItemComponent, LIST_CONSTANTS, LIST_ITEM_CONSTANTS } from '../list/index.js';
 
 export interface IMenuAdapter extends IBaseAdapter {
   readonly targetElement: HTMLElement | null;

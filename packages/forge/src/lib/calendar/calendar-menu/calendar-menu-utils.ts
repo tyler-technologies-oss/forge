@@ -1,4 +1,4 @@
-import { CALENDAR_MENU_CONSTANTS, ICalendarMenuOption } from './calendar-menu-constants';
+import { CALENDAR_MENU_CONSTANTS, ICalendarMenuOption } from './calendar-menu-constants.js';
 
 export function getGrid(options: ICalendarMenuOption[]): HTMLElement {
   const grid = document.createElement('div');

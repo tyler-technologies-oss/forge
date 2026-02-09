@@ -1,8 +1,8 @@
-import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate';
-import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/delegates/form-field-component-delegate';
-import { ITextFieldComponent, ITextFieldComponentDelegateConfig, TextFieldComponentDelegate } from '../text-field';
-import { IDatePickerComponent } from './date-picker';
-import { DATE_PICKER_CONSTANTS } from './date-picker-constants';
+import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate.js';
+import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/delegates/form-field-component-delegate.js';
+import { ITextFieldComponent, ITextFieldComponentDelegateConfig, TextFieldComponentDelegate } from '../text-field/index.js';
+import { IDatePickerComponent } from './date-picker.js';
+import { DATE_PICKER_CONSTANTS } from './date-picker-constants.js';
 
 export type DatePickerComponentDelegateProps = Partial<IDatePickerComponent>;
 export interface IDatePickerComponentDelegateOptions extends IFormFieldComponentDelegateOptions {

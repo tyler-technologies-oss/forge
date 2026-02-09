@@ -3,7 +3,7 @@ import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import sinon from 'sinon';
 import { nothing } from 'lit';
-import { IChipFieldComponent } from './chip-field';
+import { IChipFieldComponent } from './chip-field.js';
 import {
   BASE_FIELD_CONSTANTS,
   FieldDensity,
@@ -15,14 +15,14 @@ import {
   FieldVariant,
   FIELD_CONSTANTS,
   IFieldComponent
-} from '../field';
+} from '../field/index.js';
 import { getShadowElement } from '@tylertech/forge-core';
 
-import './chip-field';
-import { CHIP_FIELD_CONSTANTS } from './chip-field-constants';
-import { IChipComponent } from '../chips';
-import { LABEL_CONSTANTS } from '../label/label-constants';
-import { task } from '../core/utils/utils';
+import './chip-field.js';
+import { CHIP_FIELD_CONSTANTS } from './chip-field-constants.js';
+import { IChipComponent } from '../chips/index.js';
+import { LABEL_CONSTANTS } from '../label/label-constants.js';
+import { task } from '../core/utils/utils.js';
 
 describe('Chip Field', () => {
   it('should use shadow DOM', async () => {

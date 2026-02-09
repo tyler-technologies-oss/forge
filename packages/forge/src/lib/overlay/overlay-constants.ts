@@ -1,6 +1,6 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
-import { supportsPopover } from '../core';
-import { PositionPlacement } from '../core/utils/position-utils';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
+import { supportsPopover } from '../core/index.js';
+import { PositionPlacement } from '../core/utils/position-utils.js';
 
 const elementName = `${COMPONENT_NAME_PREFIX}overlay` as const;
 

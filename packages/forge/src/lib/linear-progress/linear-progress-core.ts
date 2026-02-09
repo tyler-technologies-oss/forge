@@ -1,5 +1,5 @@
-import { ILinearProgressAdapter } from './linear-progress-adapter';
-import { LinearProgressTheme, LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
+import { ILinearProgressAdapter } from './linear-progress-adapter.js';
+import { LinearProgressTheme, LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants.js';
 
 export interface ICircularProgressCore {
   determinate: boolean;

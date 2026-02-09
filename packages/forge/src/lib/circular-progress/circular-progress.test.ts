@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { ICircularProgressComponent } from './circular-progress';
-import { CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
+import { ICircularProgressComponent } from './circular-progress.js';
+import { CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants.js';
 
-import './circular-progress';
+import './circular-progress.js';
 
 describe('Circular Progress', () => {
   it('should contain shadow root', async () => {

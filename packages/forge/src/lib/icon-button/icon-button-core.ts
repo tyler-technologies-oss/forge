@@ -1,6 +1,6 @@
-import { BaseButtonCore, IBaseButtonCore } from '../button/base/base-button-core';
-import { IIconButtonAdapter } from './icon-button-adapter';
-import { IconButtonDensity, IconButtonShape, IconButtonTheme, IconButtonVariant, ICON_BUTTON_CONSTANTS } from './icon-button-constants';
+import { BaseButtonCore, IBaseButtonCore } from '../button/base/base-button-core.js';
+import { IIconButtonAdapter } from './icon-button-adapter.js';
+import { IconButtonDensity, IconButtonShape, IconButtonTheme, IconButtonVariant, ICON_BUTTON_CONSTANTS } from './icon-button-constants.js';
 
 export interface IIconButtonCore extends IBaseButtonCore {
   toggle: boolean;

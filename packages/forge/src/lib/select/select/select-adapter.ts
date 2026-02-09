@@ -1,12 +1,12 @@
 import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
-import { isFocusable, setValidity } from '../../constants';
-import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../../core/utils/utils';
-import type { IFieldComponent } from '../../field/field';
-import { FIELD_CONSTANTS } from '../../field/field-constants';
-import { IListDropdownConfig } from '../../list-dropdown/list-dropdown-constants';
-import { BaseSelectAdapter, IBaseSelectAdapter } from '../core';
-import { ISelectComponent } from './select';
-import { SELECT_CONSTANTS } from './select-constants';
+import { isFocusable, setValidity } from '../../constants.js';
+import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../../core/utils/utils.js';
+import type { IFieldComponent } from '../../field/field.js';
+import { FIELD_CONSTANTS } from '../../field/field-constants.js';
+import { IListDropdownConfig } from '../../list-dropdown/list-dropdown-constants.js';
+import { BaseSelectAdapter, IBaseSelectAdapter } from '../core/index.js';
+import { ISelectComponent } from './select.js';
+import { SELECT_CONSTANTS } from './select-constants.js';
 
 export type OptionListenerDestructor = () => void;
 

@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { getShadowElement } from '@tylertech/forge-core';
-import { task, frame } from '../core/utils/utils';
+import { task, frame } from '../core/utils/utils.js';
 import {
   ListDropdown,
   IListDropdownConfig,
@@ -12,14 +12,14 @@ import {
   ListDropdownHeaderBuilder,
   ListDropdownFooterBuilder,
   IListDropdownOptionGroup
-} from './index';
-import { defineOptionComponent, defineOptionGroupComponent } from '../select';
-import { defineListComponent, IListItemComponent, LIST_ITEM_CONSTANTS } from '../list';
-import { defineLinearProgressComponent, LINEAR_PROGRESS_CONSTANTS, ILinearProgressComponent } from '../linear-progress';
-import { SKELETON_CONSTANTS } from '../skeleton';
-import { CIRCULAR_PROGRESS_CONSTANTS } from '../circular-progress';
-import { DIVIDER_CONSTANTS } from '../divider';
-import { definePopoverComponent, IPopoverComponent, POPOVER_CONSTANTS } from '../popover';
+} from './index.js';
+import { defineOptionComponent, defineOptionGroupComponent } from '../select/index.js';
+import { defineListComponent, IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/index.js';
+import { defineLinearProgressComponent, LINEAR_PROGRESS_CONSTANTS, ILinearProgressComponent } from '../linear-progress/index.js';
+import { SKELETON_CONSTANTS } from '../skeleton/index.js';
+import { CIRCULAR_PROGRESS_CONSTANTS } from '../circular-progress/index.js';
+import { DIVIDER_CONSTANTS } from '../divider/index.js';
+import { definePopoverComponent, IPopoverComponent, POPOVER_CONSTANTS } from '../popover/index.js';
 
 const POPOVER_ANIMATION_DURATION = 200;
 

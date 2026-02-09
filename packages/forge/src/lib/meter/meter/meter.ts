@@ -2,11 +2,11 @@ import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { Theme } from '../../constants';
-import { setDefaultAria } from '../../core/utils/a11y-utils';
-import { toggleState } from '../../core/utils/utils';
+import { Theme } from '../../constants.js';
+import { setDefaultAria } from '../../core/utils/a11y-utils.js';
+import { toggleState } from '../../core/utils/utils.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
-import { BaseLitElement } from '../../core/base/base-lit-element';
+import { BaseLitElement } from '../../core/base/base-lit-element.js';
 
 import styles from './meter.scss';
 

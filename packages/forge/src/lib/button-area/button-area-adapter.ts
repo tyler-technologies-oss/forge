@@ -1,10 +1,10 @@
 import { getShadowElement } from '@tylertech/forge-core';
 
-import { BaseAdapter, IBaseAdapter } from '../core';
-import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../focus-indicator';
-import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer';
-import { IButtonAreaComponent } from './button-area';
-import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
+import { BaseAdapter, IBaseAdapter } from '../core/index.js';
+import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../focus-indicator/index.js';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer/index.js';
+import { IButtonAreaComponent } from './button-area.js';
+import { BUTTON_AREA_CONSTANTS } from './button-area-constants.js';
 
 export interface IButtonAreaAdapter extends IBaseAdapter {
   setDisabled(value: boolean): void;

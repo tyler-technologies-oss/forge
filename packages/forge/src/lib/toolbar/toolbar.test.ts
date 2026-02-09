@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { IToolbarComponent } from './toolbar';
-import { TOOLBAR_CONSTANTS } from './toolbar-constants';
+import { IToolbarComponent } from './toolbar.js';
+import { TOOLBAR_CONSTANTS } from './toolbar-constants.js';
 
-import './toolbar';
+import './toolbar.js';
 
 describe('Toolbar', () => {
   it('should initialize', async () => {

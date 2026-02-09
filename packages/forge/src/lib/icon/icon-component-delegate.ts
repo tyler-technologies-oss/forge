@@ -1,6 +1,6 @@
-import { BaseComponentDelegate, IBaseComponentDelegateOptions, IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate';
-import { ICON_CONSTANTS } from './icon-constants';
-import { IIconComponent } from './icon';
+import { BaseComponentDelegate, IBaseComponentDelegateOptions, IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate.js';
+import { ICON_CONSTANTS } from './icon-constants.js';
+import { IIconComponent } from './icon.js';
 
 export interface IIconComponentDelegateOptions extends IBaseComponentDelegateOptions {}
 export interface IIconComponentDelegateConfig extends IBaseComponentDelegateConfig<IIconComponent, IIconComponentDelegateOptions> {}

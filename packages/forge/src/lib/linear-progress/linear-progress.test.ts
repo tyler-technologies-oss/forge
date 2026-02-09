@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { ILinearProgressComponent } from './linear-progress';
-import { LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
+import { ILinearProgressComponent } from './linear-progress.js';
+import { LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants.js';
 
-import './linear-progress';
+import './linear-progress.js';
 
 describe('Linear Progress', () => {
   it('should contain shadow root', async () => {

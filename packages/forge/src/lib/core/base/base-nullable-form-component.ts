@@ -1,4 +1,4 @@
-import { BaseFormComponent, IBaseFormComponent } from './base-form-component';
+import { BaseFormComponent, IBaseFormComponent } from './base-form-component.js';
 
 export interface IBaseNullableFormComponent<T = string> extends IBaseFormComponent<T> {
   required: boolean;

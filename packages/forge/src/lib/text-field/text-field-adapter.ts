@@ -1,9 +1,14 @@
 import { getShadowElement, listenOwnProperty, randomChars, toggleAttribute } from '@tylertech/forge-core';
-import { FIELD_CONSTANTS, IFieldComponent } from '../field';
-import { BaseFieldAdapter, IBaseFieldAdapter } from '../field/base/base-field-adapter';
-import { LabelComponent } from '../label';
-import { ITextFieldComponent } from './text-field';
-import { TextFieldInputAttributeObserver, TextFieldValueChangeListener, TEXT_FIELD_CONSTANTS, TextFieldObservedInputAttributes } from './text-field-constants';
+import { FIELD_CONSTANTS, IFieldComponent } from '../field/index.js';
+import { BaseFieldAdapter, IBaseFieldAdapter } from '../field/base/base-field-adapter.js';
+import { LabelComponent } from '../label/index.js';
+import { ITextFieldComponent } from './text-field.js';
+import {
+  TextFieldInputAttributeObserver,
+  TextFieldValueChangeListener,
+  TEXT_FIELD_CONSTANTS,
+  TextFieldObservedInputAttributes
+} from './text-field-constants.js';
 
 export interface ITextFieldAdapter extends IBaseFieldAdapter {
   readonly popoverTargetElement: HTMLElement;

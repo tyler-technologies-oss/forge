@@ -1,5 +1,5 @@
 import { isDefined, isDeepEqual, randomChars } from '@tylertech/forge-core';
-import { OptionListenerDestructor } from '../select/select-adapter';
+import { OptionListenerDestructor } from '../select/select-adapter.js';
 import {
   ISelectOption,
   ISelectOptionGroup,
@@ -7,16 +7,16 @@ import {
   SelectOptionBuilder,
   BASE_SELECT_CONSTANTS,
   SelectBeforeValueChangeCallback
-} from './base-select-constants';
-import { isSelectOptionType, SelectOptionType } from './select-utils';
+} from './base-select-constants.js';
+import { isSelectOptionType, SelectOptionType } from './select-utils.js';
 import {
   IListDropdownConfig,
   ListDropdownHeaderBuilder,
   ListDropdownFooterBuilder,
   LIST_DROPDOWN_CONSTANTS
-} from '../../list-dropdown/list-dropdown-constants';
-import { IBaseSelectAdapter } from './base-select-adapter';
-import { IListDropdownAwareCore, ListDropdownAwareCore } from '../../list-dropdown/list-dropdown-aware-core';
+} from '../../list-dropdown/list-dropdown-constants.js';
+import { IBaseSelectAdapter } from './base-select-adapter.js';
+import { IListDropdownAwareCore, ListDropdownAwareCore } from '../../list-dropdown/list-dropdown-aware-core.js';
 
 export interface IBaseSelectCore extends IListDropdownAwareCore {
   value: any;

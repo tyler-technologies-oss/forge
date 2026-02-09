@@ -3,17 +3,17 @@ import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import { nothing } from 'lit';
 import { spy } from 'sinon';
-import { AVATAR_CONSTANTS, IAvatarComponent } from '../avatar';
-import { frame, task } from '../core/utils/utils';
-import { FIELD_CONSTANTS } from '../field';
-import { ICON_CONSTANTS, IconComponent } from '../icon';
-import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress';
-import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list';
-import { LIST_DROPDOWN_CONSTANTS } from '../list-dropdown';
-import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover';
-import { IOption } from '../select';
-import { ISkeletonComponent, SKELETON_CONSTANTS } from '../skeleton';
-import { ITextFieldComponent, ITextFieldComponentDelegateOptions, TEXT_FIELD_CONSTANTS } from '../text-field';
+import { AVATAR_CONSTANTS, IAvatarComponent } from '../avatar/index.js';
+import { frame, task } from '../core/utils/utils.js';
+import { FIELD_CONSTANTS } from '../field/index.js';
+import { ICON_CONSTANTS, IconComponent } from '../icon/index.js';
+import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress/index.js';
+import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/index.js';
+import { LIST_DROPDOWN_CONSTANTS } from '../list-dropdown/index.js';
+import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover/index.js';
+import { IOption } from '../select/index.js';
+import { ISkeletonComponent, SKELETON_CONSTANTS } from '../skeleton/index.js';
+import { ITextFieldComponent, ITextFieldComponentDelegateOptions, TEXT_FIELD_CONSTANTS } from '../text-field/index.js';
 import {
   AUTOCOMPLETE_CONSTANTS,
   AutocompleteComponent,
@@ -29,9 +29,9 @@ import {
   IAutocompleteCore,
   IAutocompleteOption,
   IAutocompleteOptionGroup
-} from './';
+} from './index.js';
 
-import './autocomplete';
+import './autocomplete.js';
 
 const DEFAULT_FILTER_OPTIONS = [
   { label: 'One', value: 1 },

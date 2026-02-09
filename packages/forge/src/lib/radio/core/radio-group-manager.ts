@@ -1,7 +1,7 @@
-import { getValidationMessage, internals, isFocusable, setDefaultAria } from '../../constants';
-import { task } from '../../core/utils/utils';
-import { IRadioComponent, RADIO_CONSTANTS, tryCheck } from '../radio';
-import { IRadioGroupComponent } from '../radio-group';
+import { getValidationMessage, internals, isFocusable, setDefaultAria } from '../../constants.js';
+import { task } from '../../core/utils/utils.js';
+import { IRadioComponent, RADIO_CONSTANTS, tryCheck } from '../radio/index.js';
+import { IRadioGroupComponent } from '../radio-group/index.js';
 
 /**
  * A class for coordinating the states of radio components within a radio group.

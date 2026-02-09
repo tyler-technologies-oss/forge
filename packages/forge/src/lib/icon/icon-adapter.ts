@@ -1,6 +1,6 @@
-import { IIconComponent } from './icon';
-import { BaseAdapter, IBaseAdapter } from '../core';
-import { ICON_CONSTANTS } from './icon-constants';
+import { IIconComponent } from './icon.js';
+import { BaseAdapter, IBaseAdapter } from '../core/index.js';
+import { ICON_CONSTANTS } from './icon-constants.js';
 
 export interface IIconAdapter extends IBaseAdapter {
   canLazyLoad(): boolean;

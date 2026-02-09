@@ -1,12 +1,12 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { ExpansionPanelAdapter } from './expansion-panel-adapter';
-import { ExpansionPanelAnimationType, ExpansionPanelOrientation, EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from './expansion-panel-constants';
-import { ExpansionPanelCore } from './expansion-panel-core';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { ExpansionPanelAdapter } from './expansion-panel-adapter.js';
+import { ExpansionPanelAnimationType, ExpansionPanelOrientation, EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from './expansion-panel-constants.js';
+import { ExpansionPanelCore } from './expansion-panel-core.js';
 
 import template from './expansion-panel.html';
 import styles from './expansion-panel.scss';
-import { IOpenIconComponent } from '../open-icon';
+import { IOpenIconComponent } from '../open-icon/index.js';
 
 export interface IExpansionPanelComponent extends IBaseComponent {
   open: boolean;

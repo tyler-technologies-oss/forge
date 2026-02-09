@@ -1,6 +1,6 @@
 import { customElement, attachShadowTemplate, toggleAttribute } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { InlineMessageTheme, INLINE_MESSAGE_CONSTANTS } from './inline-message-constants';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { InlineMessageTheme, INLINE_MESSAGE_CONSTANTS } from './inline-message-constants.js';
 
 import template from './inline-message.html';
 import styles from './inline-message.scss';

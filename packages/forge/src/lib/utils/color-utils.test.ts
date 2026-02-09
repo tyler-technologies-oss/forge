@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { randomHexColor } from './color-utils';
+import { randomHexColor } from './color-utils.js';
 
 describe('ColorUtils', () => {
   describe('randomHexColor', () => {

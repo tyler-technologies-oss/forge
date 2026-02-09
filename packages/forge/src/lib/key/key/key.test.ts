@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
-import { KeyComponent } from './key';
+import { KeyComponent } from './key.js';
 
-import './key';
+import './key.js';
 
 describe('Key', () => {
   it('should instantiate shadow root', async () => {

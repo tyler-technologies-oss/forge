@@ -1,13 +1,13 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty, toggleAttribute } from '@tylertech/forge-core';
-import { internals, setDefaultAria } from '../../constants';
-import { BaseComponent } from '../../core/base/base-component';
-import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
-import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
-import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware';
-import { RadioComponent } from '../radio/radio';
-import { RadioGroupAdapter } from './radio-group-adapter';
-import { RADIO_GROUP_CONSTANTS } from './radio-group-constants';
-import { RadioGroupCore } from './radio-group-core';
+import { internals, setDefaultAria } from '../../constants.js';
+import { BaseComponent } from '../../core/base/base-component.js';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria.js';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals.js';
+import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware.js';
+import { RadioComponent } from '../radio/radio.js';
+import { RadioGroupAdapter } from './radio-group-adapter.js';
+import { RADIO_GROUP_CONSTANTS } from './radio-group-constants.js';
+import { RadioGroupCore } from './radio-group-core.js';
 
 import template from './radio-group.html';
 

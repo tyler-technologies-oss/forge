@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { frame } from '../../core/utils/utils';
-import type { IAppBarSearchComponent } from './app-bar-search';
-import { APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants';
+import { frame } from '../../core/utils/utils.js';
+import type { IAppBarSearchComponent } from './app-bar-search.js';
+import { APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants.js';
 
-import './app-bar-search';
-import { IAppBarSearchCore } from './app-bar-search-core';
+import './app-bar-search.js';
+import { IAppBarSearchCore } from './app-bar-search-core.js';
 
 describe('App Bar Search', () => {
   it('should initialize', async () => {

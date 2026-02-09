@@ -1,6 +1,6 @@
 import { attachShadowTemplate, customElement } from '@tylertech/forge-core';
-import { BaseDrawerAdapter, BaseDrawerComponent, BaseDrawerCore, IBaseDrawerComponent } from '../base';
-import { MINI_DRAWER_CONSTANTS } from './mini-drawer-constants';
+import { BaseDrawerAdapter, BaseDrawerComponent, BaseDrawerCore, IBaseDrawerComponent } from '../base/index.js';
+import { MINI_DRAWER_CONSTANTS } from './mini-drawer-constants.js';
 
 import template from './mini-drawer.html';
 import styles from './mini-drawer.scss';

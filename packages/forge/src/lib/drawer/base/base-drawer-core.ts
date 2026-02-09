@@ -1,7 +1,7 @@
 import { isDefined } from '@tylertech/forge-core';
-import { IBaseDrawerAdapter } from './base-drawer-adapter';
-import { DrawerDirection, BASE_DRAWER_CONSTANTS } from './base-drawer-constants';
-import { frame } from '../../core/utils/utils';
+import { IBaseDrawerAdapter } from './base-drawer-adapter.js';
+import { DrawerDirection, BASE_DRAWER_CONSTANTS } from './base-drawer-constants.js';
+import { frame } from '../../core/utils/utils.js';
 
 export interface IBaseDrawerCore {
   direction: DrawerDirection;

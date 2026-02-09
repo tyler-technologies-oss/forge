@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
-import type { IBadgeComponent } from './badge';
-import type { BadgeTheme } from './badge-constants';
+import type { IBadgeComponent } from './badge.js';
+import type { BadgeTheme } from './badge-constants.js';
 
-import './badge';
+import './badge.js';
 
 describe('Badge', () => {
   it('should contain shadow root', async () => {

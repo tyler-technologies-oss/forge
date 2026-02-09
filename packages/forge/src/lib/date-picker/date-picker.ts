@@ -1,14 +1,14 @@
 import { attachShadowTemplate, customElement } from '@tylertech/forge-core';
 import { tylIconInsertInvitation } from '@tylertech/tyler-icons';
-import { CalendarComponent } from '../calendar';
-import { IconComponent, IconRegistry } from '../icon';
-import { IconButtonComponent } from '../icon-button';
-import { PopoverComponent } from '../popover';
-import { BaseDatePickerComponent, IBaseDatePickerComponent } from './base/base-date-picker';
-import { BASE_DATE_PICKER_CONSTANTS } from './base/base-date-picker-constants';
-import { DatePickerAdapter } from './date-picker-adapter';
-import { DATE_PICKER_CONSTANTS } from './date-picker-constants';
-import { DatePickerCore } from './date-picker-core';
+import { CalendarComponent } from '../calendar/index.js';
+import { IconComponent, IconRegistry } from '../icon/index.js';
+import { IconButtonComponent } from '../icon-button/index.js';
+import { PopoverComponent } from '../popover/index.js';
+import { BaseDatePickerComponent, IBaseDatePickerComponent } from './base/base-date-picker.js';
+import { BASE_DATE_PICKER_CONSTANTS } from './base/base-date-picker-constants.js';
+import { DatePickerAdapter } from './date-picker-adapter.js';
+import { DATE_PICKER_CONSTANTS } from './date-picker-constants.js';
+import { DatePickerCore } from './date-picker-core.js';
 
 import template from './date-picker.html';
 import styles from './date-picker.scss';

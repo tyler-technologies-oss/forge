@@ -3,15 +3,15 @@ import { spy } from 'sinon';
 import { fixture, html } from '@open-wc/testing';
 import { sendMouse } from '@web/test-runner-commands';
 import { tylIconFavorite } from '@tylertech/tyler-icons';
-import { IconRegistry } from '../icon/icon-registry';
-import type { IStateLayerComponent } from '../state-layer';
-import type { IFocusIndicatorComponent } from '../focus-indicator';
-import { FloatingActionButtonComponent, IFloatingActionButtonComponent } from './floating-action-button';
-import { FloatingActionButtonComponentDelegate } from './floating-action-button-component-delegate';
-import { FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants';
+import { IconRegistry } from '../icon/icon-registry.js';
+import type { IStateLayerComponent } from '../state-layer/index.js';
+import type { IFocusIndicatorComponent } from '../focus-indicator/index.js';
+import { FloatingActionButtonComponent, IFloatingActionButtonComponent } from './floating-action-button.js';
+import { FloatingActionButtonComponentDelegate } from './floating-action-button-component-delegate.js';
+import { FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants.js';
 
-import './floating-action-button';
-import { ICON_CLASS_NAME } from '../constants';
+import './floating-action-button.js';
+import { ICON_CLASS_NAME } from '../constants.js';
 IconRegistry.define(tylIconFavorite);
 
 describe('Floating Action Button', () => {

@@ -1,4 +1,4 @@
-import { IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants';
+import { IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants.js';
 import { isDefined, isObject, isDeepEqual } from '@tylertech/forge-core';
 
 /** The available option types. */

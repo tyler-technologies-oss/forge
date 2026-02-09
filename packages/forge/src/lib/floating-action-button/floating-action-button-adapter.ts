@@ -1,7 +1,7 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { BaseButtonAdapter, IBaseButtonAdapter } from '../button/base/base-button-adapter';
-import { IFloatingActionButtonComponent } from './floating-action-button';
-import { FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants';
+import { BaseButtonAdapter, IBaseButtonAdapter } from '../button/base/base-button-adapter.js';
+import { IFloatingActionButtonComponent } from './floating-action-button.js';
+import { FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants.js';
 
 export interface IFloatingActionButtonAdapter extends IBaseButtonAdapter<IFloatingActionButtonComponent> {}
 

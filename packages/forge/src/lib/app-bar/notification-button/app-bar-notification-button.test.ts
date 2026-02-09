@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import type { IAppBarNotificationButtonComponent } from './app-bar-notification-button';
-import { IIconComponent } from '../../icon';
-import { IBadgeComponent } from '../../badge';
+import type { IAppBarNotificationButtonComponent } from './app-bar-notification-button.js';
+import { IIconComponent } from '../../icon/index.js';
+import { IBadgeComponent } from '../../badge/index.js';
 
-import './app-bar-notification-button';
+import './app-bar-notification-button.js';
 
 describe('App Bar Notification Button', () => {
   it('should be accessible', async () => {

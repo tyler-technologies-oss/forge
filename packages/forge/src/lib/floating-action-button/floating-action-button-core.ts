@@ -1,7 +1,7 @@
-import { BaseButtonCore, IBaseButtonCore } from '../button/base/base-button-core';
-import { ButtonTheme } from '../button/button-constants';
-import { IFloatingActionButtonAdapter } from './floating-action-button-adapter';
-import { FloatingActionButtonDensity, FloatingActionButtonElevation, FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants';
+import { BaseButtonCore, IBaseButtonCore } from '../button/base/base-button-core.js';
+import { ButtonTheme } from '../button/button-constants.js';
+import { IFloatingActionButtonAdapter } from './floating-action-button-adapter.js';
+import { FloatingActionButtonDensity, FloatingActionButtonElevation, FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants.js';
 
 export interface IFloatingActionButtonCore extends IBaseButtonCore {
   theme: ButtonTheme;

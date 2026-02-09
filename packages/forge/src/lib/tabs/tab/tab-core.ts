@@ -1,6 +1,6 @@
-import { ExperimentalFocusOptions } from '../../constants';
-import { ITabAdapter } from './tab-adapter';
-import { TAB_CONSTANTS } from './tab-constants';
+import { ExperimentalFocusOptions } from '../../constants.js';
+import { ITabAdapter } from './tab-adapter.js';
+import { TAB_CONSTANTS } from './tab-constants.js';
 
 export interface ITabCore {
   disabled: boolean;

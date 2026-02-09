@@ -1,7 +1,7 @@
 import { getShadowElement, removeClass } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IViewSwitcherComponent } from './view-switcher';
-import { ViewAnimationDirection, VIEW_SWITCHER_CONSTANTS, ViewSwitcherAnimation } from './view-switcher-constants';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { IViewSwitcherComponent } from './view-switcher.js';
+import { ViewAnimationDirection, VIEW_SWITCHER_CONSTANTS, ViewSwitcherAnimation } from './view-switcher-constants.js';
 
 export interface IViewSwitcherAdapter extends IBaseAdapter {
   getViewCount(): number;

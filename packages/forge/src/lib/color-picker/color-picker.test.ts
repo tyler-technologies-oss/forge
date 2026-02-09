@@ -2,10 +2,10 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import { spy } from 'sinon';
-import { frame, task } from '../core/utils/utils';
-import { COLOR_PICKER_CONSTANTS, DEFAULT_COLOR, IColorPickerComponent, IHSVA, IRGBA } from './';
-import './color-picker';
-import { formatHex, rgbaToHex, rgbaToHsva } from './color-picker-utils';
+import { frame, task } from '../core/utils/utils.js';
+import { COLOR_PICKER_CONSTANTS, DEFAULT_COLOR, IColorPickerComponent, IHSVA, IRGBA } from './index.js';
+import './color-picker.js';
+import { formatHex, rgbaToHex, rgbaToHsva } from './color-picker-utils.js';
 
 const DEFAULT_RGBA = { r: 0, g: 0, b: 0, a: 1 };
 const DEFAULT_HEX = '#000000';

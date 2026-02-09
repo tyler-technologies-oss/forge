@@ -1,12 +1,12 @@
 import { getShadowElement, removeAllChildren } from '@tylertech/forge-core';
-import { ExperimentalFocusOptions } from '../constants';
-import { IAvatarComponent } from '../avatar';
-import { IButtonComponent } from '../button';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IconComponentDelegate } from '../icon';
-import { IToolbarComponent } from '../toolbar';
-import { IProfileCardComponent } from './profile-card';
-import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
+import { ExperimentalFocusOptions } from '../constants.js';
+import { IAvatarComponent } from '../avatar/index.js';
+import { IButtonComponent } from '../button/index.js';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { IconComponentDelegate } from '../icon/index.js';
+import { IToolbarComponent } from '../toolbar/index.js';
+import { IProfileCardComponent } from './profile-card.js';
+import { PROFILE_CARD_CONSTANTS } from './profile-card-constants.js';
 
 export interface IProfileCardAdapter extends IBaseAdapter {
   setFullName(value: string): void;

@@ -2,14 +2,14 @@ import { expect } from '@esm-bundle/chai';
 import { nothing, TemplateResult } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
-import { task } from '../core/utils/utils';
-import { LONGPRESS_TRIGGER_DELAY } from '../core/mixins/interactions/longpress/with-longpress-listener';
-import type { ITooltipComponent } from './tooltip';
-import type { IOverlayComponent } from '../overlay/overlay';
-import { OVERLAY_CONSTANTS } from '../overlay';
-import { TooltipPlacement, TooltipTriggerType, TooltipType, TOOLTIP_CONSTANTS } from './tooltip-constants';
+import { task } from '../core/utils/utils.js';
+import { LONGPRESS_TRIGGER_DELAY } from '../core/mixins/interactions/longpress/with-longpress-listener.js';
+import type { ITooltipComponent } from './tooltip.js';
+import type { IOverlayComponent } from '../overlay/overlay.js';
+import { OVERLAY_CONSTANTS } from '../overlay/index.js';
+import { TooltipPlacement, TooltipTriggerType, TooltipType, TOOLTIP_CONSTANTS } from './tooltip-constants.js';
 
-import './tooltip';
+import './tooltip.js';
 
 describe('Tooltip', () => {
   afterEach(async () => {

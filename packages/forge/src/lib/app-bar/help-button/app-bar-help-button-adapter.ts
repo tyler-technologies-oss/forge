@@ -1,12 +1,12 @@
 import { getLightElement, toggleAttribute } from '@tylertech/forge-core';
-import { forwardAttributes } from '../../core/utils/reflect-utils';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IMenuComponent, IMenuOption, MENU_CONSTANTS } from '../../menu';
-import type { IAppBarHelpButtonComponent } from './app-bar-help-button';
-import type { IIconButtonComponent } from '../../icon-button/icon-button';
-import { ICON_BUTTON_CONSTANTS } from '../../icon-button/icon-button-constants';
-import { APP_BAR_HELP_BUTTON_CONSTANTS } from './app-bar-help-button-constants';
-import { ICON_CONSTANTS, IIconComponent } from '../../icon';
+import { forwardAttributes } from '../../core/utils/reflect-utils.js';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { IMenuComponent, IMenuOption, MENU_CONSTANTS } from '../../menu/index.js';
+import type { IAppBarHelpButtonComponent } from './app-bar-help-button.js';
+import type { IIconButtonComponent } from '../../icon-button/icon-button.js';
+import { ICON_BUTTON_CONSTANTS } from '../../icon-button/icon-button-constants.js';
+import { APP_BAR_HELP_BUTTON_CONSTANTS } from './app-bar-help-button-constants.js';
+import { ICON_CONSTANTS, IIconComponent } from '../../icon/index.js';
 
 export interface IAppBarHelpButtonAdapter extends IBaseAdapter {
   initialize(): void;

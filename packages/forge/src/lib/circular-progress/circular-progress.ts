@@ -1,11 +1,11 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumber } from '@tylertech/forge-core';
 
-import { CircularProgressAdapter } from './circular-progress-adapter';
-import { CircularProgressCore } from './circular-progress-core';
-import { CircularProgressTheme, CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
-import { BaseComponent } from '../core/base/base-component';
-import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
-import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
+import { CircularProgressAdapter } from './circular-progress-adapter.js';
+import { CircularProgressCore } from './circular-progress-core.js';
+import { CircularProgressTheme, CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants.js';
+import { BaseComponent } from '../core/base/base-component.js';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals.js';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria.js';
 
 import template from './circular-progress.html';
 import styles from './circular-progress.scss';

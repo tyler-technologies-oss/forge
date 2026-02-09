@@ -1,13 +1,13 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
-import { TimePickerComponent } from './time-picker';
+import { TimePickerComponent } from './time-picker.js';
 
-export * from './time-picker-adapter';
-export * from './time-picker-component-delegate';
-export * from './time-picker-constants';
-export * from './time-picker-core';
-export * from './time-picker-utils';
-export * from './time-picker';
+export * from './time-picker-adapter.js';
+export * from './time-picker-component-delegate.js';
+export * from './time-picker-constants.js';
+export * from './time-picker-core.js';
+export * from './time-picker-utils.js';
+export * from './time-picker.js';
 
 export function defineTimePickerComponent(): void {
   defineCustomElement(TimePickerComponent);

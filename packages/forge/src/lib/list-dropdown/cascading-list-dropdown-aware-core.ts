@@ -1,4 +1,4 @@
-import { IListDropdownAwareCore, ListDropdownAwareCore } from './list-dropdown-aware-core';
+import { IListDropdownAwareCore, ListDropdownAwareCore } from './list-dropdown-aware-core.js';
 
 export interface ICascadingListDropdownAwareCore extends IListDropdownAwareCore {}
 

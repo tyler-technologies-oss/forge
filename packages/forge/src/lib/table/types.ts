@@ -1,6 +1,6 @@
-import { BaseComponentDelegate, IBaseComponentDelegate, IBaseComponentDelegateOptions } from '../core';
-import { IFormFieldComponentDelegate } from '../core/delegates/form-field-component-delegate';
-import { TableRow } from './table-row';
+import { BaseComponentDelegate, IBaseComponentDelegate, IBaseComponentDelegateOptions } from '../core/index.js';
+import { IFormFieldComponentDelegate } from '../core/delegates/form-field-component-delegate.js';
+import { TableRow } from './table-row.js';
 
 export declare type TableViewTemplate = string | HTMLElement | TableViewTemplateBuilder;
 export declare type TableViewTemplateBuilder<T = any> = (

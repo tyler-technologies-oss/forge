@@ -1,12 +1,12 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
-import { CheckboxComponent } from './checkbox';
+import { CheckboxComponent } from './checkbox.js';
 
-export * from './checkbox-adapter';
-export * from './checkbox-constants';
-export * from './checkbox-core';
-export * from './checkbox';
-export * from './checkbox-component-delegate';
+export * from './checkbox-adapter.js';
+export * from './checkbox-constants.js';
+export * from './checkbox-core.js';
+export * from './checkbox.js';
+export * from './checkbox-component-delegate.js';
 
 export function defineCheckboxComponent(): void {
   defineCustomElement(CheckboxComponent);

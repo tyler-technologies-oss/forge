@@ -1,8 +1,8 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { setDefaultAria } from '../constants';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { ILinearProgressComponent } from './linear-progress';
-import { LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
+import { setDefaultAria } from '../constants.js';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { ILinearProgressComponent } from './linear-progress.js';
+import { LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants.js';
 
 export interface ILinearProgressAdapter extends IBaseAdapter {
   initialize(): void;

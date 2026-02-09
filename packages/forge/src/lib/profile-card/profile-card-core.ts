@@ -1,5 +1,5 @@
-import { IProfileCardAdapter } from './profile-card-adapter';
-import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
+import { IProfileCardAdapter } from './profile-card-adapter.js';
+import { PROFILE_CARD_CONSTANTS } from './profile-card-constants.js';
 
 export interface IProfileCardCore {
   fullName: string;

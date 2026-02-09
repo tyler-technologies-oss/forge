@@ -3,13 +3,13 @@ import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import sinon from 'sinon';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
-import { IFocusIndicatorComponent } from '../focus-indicator/focus-indicator';
-import { IStateLayerComponent } from '../state-layer/state-layer';
-import { IListItemComponent, LIST_ITEM_CONSTANTS } from './list-item';
-import { IListComponent } from './list/list';
-import { LIST_CONSTANTS } from './list/list-constants';
+import { IFocusIndicatorComponent } from '../focus-indicator/focus-indicator.js';
+import { IStateLayerComponent } from '../state-layer/state-layer.js';
+import { IListItemComponent, LIST_ITEM_CONSTANTS } from './list-item/index.js';
+import { IListComponent } from './list/list.js';
+import { LIST_CONSTANTS } from './list/list-constants.js';
 
-import './list/list';
+import './list/list.js';
 
 describe('List', () => {
   describe('accessibility', () => {

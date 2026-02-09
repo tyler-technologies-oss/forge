@@ -1,4 +1,4 @@
-import { Density, Theme } from '../../constants';
+import { Density, Theme } from '../../constants.js';
 
 const observedAttributes = {
   LABEL_POSITION: 'label-position',

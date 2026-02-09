@@ -1,6 +1,11 @@
-import { IChipFieldAdapter } from './chip-field-adapter';
-import { ChipFieldInputAttributeObserver, ChipFieldValueChangeListener, CHIP_FIELD_CONSTANTS, ChipFieldObservedInputAttributes } from './chip-field-constants';
-import { BaseFieldCore, IBaseFieldCore } from '../field/base/base-field-core';
+import { IChipFieldAdapter } from './chip-field-adapter.js';
+import {
+  ChipFieldInputAttributeObserver,
+  ChipFieldValueChangeListener,
+  CHIP_FIELD_CONSTANTS,
+  ChipFieldObservedInputAttributes
+} from './chip-field-constants.js';
+import { BaseFieldCore, IBaseFieldCore } from '../field/base/base-field-core.js';
 
 export interface IChipFieldCore extends IBaseFieldCore {
   addOnBlur: boolean;

@@ -2,16 +2,16 @@ import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { TestHarness } from '../../core/testing/test-harness';
-import { IFocusIndicatorComponent } from '../../focus-indicator';
-import { IStateLayerComponent } from '../../state-layer';
-import { IRadioComponent, RADIO_CONSTANTS } from '../radio';
+import { TestHarness } from '../../core/testing/test-harness.js';
+import { IFocusIndicatorComponent } from '../../focus-indicator/index.js';
+import { IStateLayerComponent } from '../../state-layer/index.js';
+import { IRadioComponent, RADIO_CONSTANTS } from '../radio/index.js';
 import { spy } from 'sinon';
-import { getFormState, getFormValue, internals } from '../../constants';
-import { task } from '../../core';
-import { RadioComponentDelegate } from './radio-component-delegate';
+import { getFormState, getFormValue, internals } from '../../constants.js';
+import { task } from '../../core/index.js';
+import { RadioComponentDelegate } from './radio-component-delegate.js';
 
-import './radio';
+import './radio.js';
 
 class RadioHarness extends TestHarness<HTMLElement> {
   public radioElements: IRadioComponent[];

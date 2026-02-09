@@ -1,4 +1,4 @@
-import { BaseComponentDelegate, IBaseComponentDelegate, IBaseComponentDelegateOptions, IBaseComponentDelegateConfig } from './base-component-delegate';
+import { BaseComponentDelegate, IBaseComponentDelegate, IBaseComponentDelegateOptions, IBaseComponentDelegateConfig } from './base-component-delegate.js';
 
 export type FormFieldComponentDelegateProps<T> = Partial<T>;
 

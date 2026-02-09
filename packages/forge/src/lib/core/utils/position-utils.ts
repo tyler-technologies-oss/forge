@@ -15,7 +15,7 @@ import {
   ShiftOptions,
   Strategy
 } from '@floating-ui/dom';
-import { roundByDPR } from './utils';
+import { roundByDPR } from './utils.js';
 
 export type PositionPlacement = Placement;
 export type PositionStrategy = Strategy;

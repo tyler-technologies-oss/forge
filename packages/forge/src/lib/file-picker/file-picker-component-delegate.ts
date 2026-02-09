@@ -1,7 +1,7 @@
-import { ButtonComponentDelegate } from '../button/button-component-delegate';
-import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate';
-import { IFilePickerComponent } from './file-picker';
-import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants';
+import { ButtonComponentDelegate } from '../button/button-component-delegate.js';
+import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate.js';
+import { IFilePickerComponent } from './file-picker.js';
+import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants.js';
 
 export type FilePickerComponentDelegateProps = Partial<IFilePickerComponent>;
 export interface IFilePickerComponentDelegateOptions extends IBaseComponentDelegateOptions {

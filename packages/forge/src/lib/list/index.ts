@@ -1,2 +1,2 @@
-export * from './list';
-export * from './list-item';
+export * from './list/index.js';
+export * from './list-item/index.js';

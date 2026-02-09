@@ -1,7 +1,7 @@
-import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate';
-import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/delegates/form-field-component-delegate';
-import { IChipFieldComponent } from './chip-field';
-import { CHIP_FIELD_CONSTANTS } from './chip-field-constants';
+import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate.js';
+import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/delegates/form-field-component-delegate.js';
+import { IChipFieldComponent } from './chip-field.js';
+import { CHIP_FIELD_CONSTANTS } from './chip-field-constants.js';
 
 export type ChipFieldComponentDelegateProps = Partial<IChipFieldComponent>;
 export interface IChipFieldComponentDelegateOptions extends IFormFieldComponentDelegateOptions {

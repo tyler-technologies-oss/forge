@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "skipLibCheck": true,
     "lib": ["es2022", "dom", "dom.iterable"],
     "noImplicitAny": true,
     "strictNullChecks": true,

@@ -1,5 +1,5 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
-import { DialogMode, DIALOG_CONSTANTS } from '../dialog';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
+import { DialogMode, DIALOG_CONSTANTS } from '../dialog/index.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}bottom-sheet`;
 

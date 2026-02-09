@@ -3,14 +3,14 @@ import { spy } from 'sinon';
 import { sendMouse } from '@web/test-runner-commands';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { tylIconMoreVert } from '@tylertech/tyler-icons';
-import { IconRegistry } from '../icon/icon-registry';
-import { ICON_BUTTON_CONSTANTS } from './icon-button-constants';
-import { IconButtonComponent, IIconButtonComponent } from './icon-button';
-import { IconButtonComponentDelegate } from './icon-button-component-delegate';
-import { ITooltipComponent } from '../tooltip';
-import { ICON_CLASS_NAME } from '../constants';
+import { IconRegistry } from '../icon/icon-registry.js';
+import { ICON_BUTTON_CONSTANTS } from './icon-button-constants.js';
+import { IconButtonComponent, IIconButtonComponent } from './icon-button.js';
+import { IconButtonComponentDelegate } from './icon-button-component-delegate.js';
+import { ITooltipComponent } from '../tooltip/index.js';
+import { ICON_CLASS_NAME } from '../constants.js';
 
-import './icon-button';
+import './icon-button.js';
 
 const DEFAULT_ICON = '<forge-icon name="more_vert"></forge-icon>';
 IconRegistry.define(tylIconMoreVert);

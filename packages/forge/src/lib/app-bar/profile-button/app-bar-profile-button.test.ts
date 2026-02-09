@@ -1,17 +1,17 @@
 import { expect } from '@esm-bundle/chai';
-import { task } from '../../core/utils/utils';
+import { task } from '../../core/utils/utils.js';
 import { sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import type { IAppBarProfileButtonComponent } from './app-bar-profile-button';
-import { APP_BAR_PROFILE_BUTTON_CONSTANTS } from './app-bar-profile-button-constants';
-import { IIconButtonComponent } from '../../icon-button';
-import { IProfileCardComponent, PROFILE_CARD_CONSTANTS } from '../../profile-card';
+import type { IAppBarProfileButtonComponent } from './app-bar-profile-button.js';
+import { APP_BAR_PROFILE_BUTTON_CONSTANTS } from './app-bar-profile-button-constants.js';
+import { IIconButtonComponent } from '../../icon-button/index.js';
+import { IProfileCardComponent, PROFILE_CARD_CONSTANTS } from '../../profile-card/index.js';
 
 const POPOVER_ANIMATION_DURATION = 200;
 
-import './app-bar-profile-button';
-import { IPopoverComponent } from '../../popover';
+import './app-bar-profile-button.js';
+import { IPopoverComponent } from '../../popover/index.js';
 
 // Required by floating-ui library to prevent errors
 globalThis['process'] = { env: { NODE_ENV: 'test' } } as any;

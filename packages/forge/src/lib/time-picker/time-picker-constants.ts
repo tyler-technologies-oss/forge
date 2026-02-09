@@ -1,5 +1,5 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
-import { IListDropdownOption } from '../list-dropdown/list-dropdown-constants';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
+import { IListDropdownOption } from '../list-dropdown/list-dropdown-constants.js';
 import { Masked, InputMask, type FactoryArg, type AppendFlags } from 'imask';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}time-picker`;

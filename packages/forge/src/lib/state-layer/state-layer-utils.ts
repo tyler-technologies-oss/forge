@@ -1,4 +1,4 @@
-import { INITIAL_ORIGIN_SCALE, PADDING, SOFT_EDGE_CONTAINER_RATIO, SOFT_EDGE_MINIMUM_SIZE, StateLayerCoords } from './state-layer-constants';
+import { INITIAL_ORIGIN_SCALE, PADDING, SOFT_EDGE_CONTAINER_RATIO, SOFT_EDGE_MINIMUM_SIZE, StateLayerCoords } from './state-layer-constants.js';
 
 export function calcRippleSize(hostEl: HTMLElement): { rippleScale: string; rippleSize: string; initialSize: number } {
   const { height, width } = hostEl.getBoundingClientRect();

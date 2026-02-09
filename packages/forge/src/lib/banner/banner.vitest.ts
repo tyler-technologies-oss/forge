@@ -1,11 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
-import type { IBannerComponent } from './banner';
-import { BannerTheme, BANNER_CONSTANTS } from './banner-constants';
-import { frame, task } from '../core/utils/utils';
+import type { IBannerComponent } from './banner.js';
+import { BannerTheme, BANNER_CONSTANTS } from './banner-constants.js';
+import { frame, task } from '../core/utils/utils.js';
 
-import './banner';
+import './banner.js';
 
 // Dismiss animation duration (200ms from duration-short4 token) + buffer for transitionend event
 const DISMISS_ANIMATION_TIMEOUT = 500;

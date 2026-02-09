@@ -2,10 +2,10 @@ import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
-import { TestHarness } from '../core/testing/test-harness';
-import { ILabelAware, ILabelComponent, LABEL_CONSTANTS } from '../label';
+import { TestHarness } from '../core/testing/test-harness.js';
+import { ILabelAware, ILabelComponent, LABEL_CONSTANTS } from '../label/index.js';
 
-import './label';
+import './label.js';
 
 class LabelHarness extends TestHarness<ILabelComponent> {
   public labelAwareElement: HTMLElement & ILabelAware;

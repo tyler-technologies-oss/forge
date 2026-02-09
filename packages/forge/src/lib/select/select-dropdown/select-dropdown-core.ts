@@ -1,6 +1,6 @@
-import { ISelectDropdownAdapter } from './select-dropdown-adapter';
-import { BaseSelectCore, IBaseSelectCore } from '../core/base-select-core';
-import { SELECT_DROPDOWN_CONSTANTS } from './select-dropdown-constants';
+import { ISelectDropdownAdapter } from './select-dropdown-adapter.js';
+import { BaseSelectCore, IBaseSelectCore } from '../core/base-select-core.js';
+import { SELECT_DROPDOWN_CONSTANTS } from './select-dropdown-constants.js';
 
 export interface ISelectDropdownCore extends IBaseSelectCore {
   target: string;

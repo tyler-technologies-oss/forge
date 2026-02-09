@@ -1,12 +1,12 @@
 import { emitEvent, listenOwnProperty, getActiveElement } from '@tylertech/forge-core';
-import { ICalendarDropdownPopupConfig } from '../calendar/calendar-dropdown';
-import { CalendarDropdown } from '../calendar/calendar-dropdown/calendar-dropdown';
-import { DateInputMask, IDateInputMaskOptions } from '../core/mask/date-input-mask';
-import { BaseDatePickerAdapter, IBaseDatePickerAdapter } from './base/base-date-picker-adapter';
-import { IDatePickerCalendarDropdownConfig } from './base/base-date-picker-constants';
-import { IDatePickerComponent } from './date-picker';
-import { DATE_PICKER_CONSTANTS } from './date-picker-constants';
-import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
+import { ICalendarDropdownPopupConfig } from '../calendar/calendar-dropdown/index.js';
+import { CalendarDropdown } from '../calendar/calendar-dropdown/calendar-dropdown.js';
+import { DateInputMask, IDateInputMaskOptions } from '../core/mask/date-input-mask.js';
+import { BaseDatePickerAdapter, IBaseDatePickerAdapter } from './base/base-date-picker-adapter.js';
+import { IDatePickerCalendarDropdownConfig } from './base/base-date-picker-constants.js';
+import { IDatePickerComponent } from './date-picker.js';
+import { DATE_PICKER_CONSTANTS } from './date-picker-constants.js';
+import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils.js';
 
 export interface IDatePickerAdapter extends IBaseDatePickerAdapter {}
 

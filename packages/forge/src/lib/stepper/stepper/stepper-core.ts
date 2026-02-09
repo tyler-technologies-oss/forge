@@ -1,9 +1,9 @@
 import { getEventPath, isDefined, isNumber, Platform } from '@tylertech/forge-core';
-import { STEP_CONSTANTS } from '../step/step-constants';
-import { StepperUtils } from '../core/stepper-utils';
-import { IStepComponent } from '../step/step';
-import { IStepperAdapter } from './stepper-adapter';
-import { STEPPER_CONSTANTS, IStepConfiguration, StepperLayoutAlign, StepperLayoutMode } from './stepper-constants';
+import { STEP_CONSTANTS } from '../step/step-constants.js';
+import { StepperUtils } from '../core/stepper-utils.js';
+import { IStepComponent } from '../step/step.js';
+import { IStepperAdapter } from './stepper-adapter.js';
+import { STEPPER_CONSTANTS, IStepConfiguration, StepperLayoutAlign, StepperLayoutMode } from './stepper-constants.js';
 
 export interface IStepperCore {
   steps: IStepConfiguration[];

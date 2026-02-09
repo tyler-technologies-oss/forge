@@ -1,5 +1,5 @@
 import { getActiveElement, isNumber, isString } from '@tylertech/forge-core';
-import { AbstractConstructor, MixinBase } from '../../../../constants';
+import { AbstractConstructor, MixinBase } from '../../../../constants.js';
 
 export interface IWithMoveableMoveContext {
   top: number;

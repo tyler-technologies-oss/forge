@@ -1,6 +1,6 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
-import { PositionPlacement } from '../core/utils/position-utils';
-import { OverlayFlipState } from '../overlay/overlay-constants';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
+import { PositionPlacement } from '../core/utils/position-utils.js';
+import { OverlayFlipState } from '../overlay/overlay-constants.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tooltip`;
 

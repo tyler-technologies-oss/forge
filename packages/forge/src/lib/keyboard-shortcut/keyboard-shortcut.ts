@@ -1,9 +1,9 @@
 import { coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 
-import { KeyboardShortcutAdapter } from './keyboard-shortcut-adapter';
-import { KeyboardShortcutCore } from './keyboard-shortcut-core';
-import { KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback } from './keyboard-shortcut-constants';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { KeyboardShortcutAdapter } from './keyboard-shortcut-adapter.js';
+import { KeyboardShortcutCore } from './keyboard-shortcut-core.js';
+import { KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback } from './keyboard-shortcut-constants.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 
 export interface IKeyboardShortcutComponent extends IBaseComponent {
   key: string | null | undefined;

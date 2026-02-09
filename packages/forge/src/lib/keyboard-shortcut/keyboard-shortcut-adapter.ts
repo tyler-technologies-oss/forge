@@ -1,7 +1,7 @@
 import { matchesSelectors } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/base';
-import { IKeyboardShortcutComponent } from './keyboard-shortcut';
-import { KEYBOARD_SHORTCUT_CONSTANTS } from './keyboard-shortcut-constants';
+import { BaseAdapter, IBaseAdapter } from '../core/base/index.js';
+import { IKeyboardShortcutComponent } from './keyboard-shortcut.js';
+import { KEYBOARD_SHORTCUT_CONSTANTS } from './keyboard-shortcut-constants.js';
 
 export interface IKeyboardShortcutAdapter extends IBaseAdapter {
   hasTargetElement(): boolean;

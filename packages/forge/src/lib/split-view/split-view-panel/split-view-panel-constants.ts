@@ -1,5 +1,5 @@
-import { COMPONENT_NAME_PREFIX } from '../../constants';
-import { SplitViewOrientation } from '../split-view/split-view-constants';
+import { COMPONENT_NAME_PREFIX } from '../../constants.js';
+import { SplitViewOrientation } from '../split-view/split-view-constants.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}split-view-panel`;
 

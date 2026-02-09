@@ -2,14 +2,14 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendKeys } from '@web/test-runner-commands';
-import { task } from '../core/utils/utils';
+import { task } from '../core/utils/utils.js';
 import { getShadowElement } from '@tylertech/forge-core';
-import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
-import { IButtonAreaComponent } from './button-area';
-import { TOUCH_DELAY_MS, type IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer';
-import type { IFocusIndicatorComponent } from '../focus-indicator';
+import { BUTTON_AREA_CONSTANTS } from './button-area-constants.js';
+import { IButtonAreaComponent } from './button-area.js';
+import { TOUCH_DELAY_MS, type IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer/index.js';
+import type { IFocusIndicatorComponent } from '../focus-indicator/index.js';
 
-import './button-area';
+import './button-area.js';
 
 describe('Button Area', () => {
   it('should initialize', async () => {

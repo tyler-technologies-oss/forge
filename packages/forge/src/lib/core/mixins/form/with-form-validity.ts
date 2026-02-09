@@ -1,5 +1,5 @@
-import { AbstractConstructor, MixinBase, internals } from '../../../constants';
-import { IBaseComponent } from '../../base/base-component';
+import { AbstractConstructor, MixinBase, internals } from '../../../constants.js';
+import { IBaseComponent } from '../../base/base-component.js';
 
 /**
  * An element that is integrated with native form validation.

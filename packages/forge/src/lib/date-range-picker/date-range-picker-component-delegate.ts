@@ -1,8 +1,8 @@
-import { FormFieldComponentDelegate, IBaseComponentDelegateConfig, IFormFieldComponentDelegateOptions } from '../core/delegates';
-import { FieldDensity } from '../field';
-import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
-import { IDateRangePickerComponent } from './date-range-picker';
-import { DATE_RANGE_PICKER_CONSTANTS, IDateRangePickerChangeEventData } from './date-range-picker-constants';
+import { FormFieldComponentDelegate, IBaseComponentDelegateConfig, IFormFieldComponentDelegateOptions } from '../core/delegates/index.js';
+import { FieldDensity } from '../field/index.js';
+import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field/index.js';
+import { IDateRangePickerComponent } from './date-range-picker.js';
+import { DATE_RANGE_PICKER_CONSTANTS, IDateRangePickerChangeEventData } from './date-range-picker-constants.js';
 
 export type DateRangePickerComponentDelegateProps = Partial<IDateRangePickerComponent>;
 export interface IDateRangePickerComponentDelegateOptions extends IFormFieldComponentDelegateOptions {

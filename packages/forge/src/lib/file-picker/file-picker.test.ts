@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { IFilePickerComponent } from './file-picker';
-import './file-picker';
-import { FILE_PICKER_CONSTANTS } from './file-picker-constants';
+import { IFilePickerComponent } from './file-picker.js';
+import './file-picker.js';
+import { FILE_PICKER_CONSTANTS } from './file-picker-constants.js';
 import { spy } from 'sinon';
 
 describe('File Picker', () => {

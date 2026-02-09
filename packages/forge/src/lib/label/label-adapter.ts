@@ -1,9 +1,9 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { DEFERRED_LABEL_TARGET, forgeLabelRef } from '../constants';
-import { BaseAdapter, IBaseAdapter } from '../core';
-import { ILabelComponent } from './label';
-import { ILabelAware, isLabelAware } from './label-aware';
-import { LABEL_CONSTANTS } from './label-constants';
+import { DEFERRED_LABEL_TARGET, forgeLabelRef } from '../constants.js';
+import { BaseAdapter, IBaseAdapter } from '../core/index.js';
+import { ILabelComponent } from './label.js';
+import { ILabelAware, isLabelAware } from './label-aware.js';
+import { LABEL_CONSTANTS } from './label-constants.js';
 
 export interface ILabelAdapter extends IBaseAdapter {
   destroy(): void;

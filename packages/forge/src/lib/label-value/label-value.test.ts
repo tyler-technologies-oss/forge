@@ -1,8 +1,8 @@
 import { expect, fixture, html } from '@open-wc/testing';
-import { ILabelValueComponent } from './label-value';
+import { ILabelValueComponent } from './label-value.js';
 
-import './label-value';
-import { LABEL_VALUE_CONSTANTS } from './label-value-constants';
+import './label-value.js';
+import { LABEL_VALUE_CONSTANTS } from './label-value-constants.js';
 
 describe('Label Value', () => {
   it('should use shadow DOM', async () => {

@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
-import { TestHarness } from '../../core/testing/test-harness';
-import { frame } from '../../core/utils/utils';
-import type { ISplitViewPanelComponent } from '../split-view-panel/split-view-panel';
-import { SPLIT_VIEW_PANEL_CONSTANTS, SplitViewAnimatingLayer } from '../split-view-panel/split-view-panel-constants';
-import type { ISplitViewComponent } from './split-view';
-import { SPLIT_VIEW_CONSTANTS } from './split-view-constants';
+import { TestHarness } from '../../core/testing/test-harness.js';
+import { frame } from '../../core/utils/utils.js';
+import type { ISplitViewPanelComponent } from '../split-view-panel/split-view-panel.js';
+import { SPLIT_VIEW_PANEL_CONSTANTS, SplitViewAnimatingLayer } from '../split-view-panel/split-view-panel-constants.js';
+import type { ISplitViewComponent } from './split-view.js';
+import { SPLIT_VIEW_CONSTANTS } from './split-view-constants.js';
 
 type SplitViewCoreInternal = ISplitViewCore & { _adapter: ISplitViewAdapter };
 type SplitViewComponentInternal = ISplitViewComponent & { _core: SplitViewCoreInternal };
@@ -16,10 +16,10 @@ interface SplitViewPanelCoreInternal {
 }
 type SplitViewPanelComponentInternal = ISplitViewPanelComponent & { _core: SplitViewPanelCoreInternal };
 
-import '../split-view-panel/split-view-panel';
-import './split-view';
-import { ISplitViewCore } from './split-view-core';
-import { ISplitViewAdapter } from './split-view-adapter';
+import '../split-view-panel/split-view-panel.js';
+import './split-view.js';
+import { ISplitViewCore } from './split-view-core.js';
+import { ISplitViewAdapter } from './split-view-adapter.js';
 
 describe('SplitView', () => {
   afterEach(() => {

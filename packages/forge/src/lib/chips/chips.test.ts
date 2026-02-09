@@ -2,14 +2,14 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { sendKeys } from '@web/test-runner-commands';
 import { spy } from 'sinon';
-import { CHIP_SET_CONSTANTS, IChipSetComponent } from './chip-set';
-import { IChipComponent } from './chip/chip';
-import { CHIP_CONSTANTS, IChipSelectEventData } from './chip/chip-constants';
-import { IIconButtonComponent } from '../icon-button';
-import { IFocusIndicatorComponent } from '../focus-indicator';
-import { IStateLayerComponent } from '../state-layer';
+import { CHIP_SET_CONSTANTS, IChipSetComponent } from './chip-set/index.js';
+import { IChipComponent } from './chip/chip.js';
+import { CHIP_CONSTANTS, IChipSelectEventData } from './chip/chip-constants.js';
+import { IIconButtonComponent } from '../icon-button/index.js';
+import { IFocusIndicatorComponent } from '../focus-indicator/index.js';
+import { IStateLayerComponent } from '../state-layer/index.js';
 
-import './chip-set';
+import './chip-set/index.js';
 
 describe('Chips', () => {
   describe('ChipSet', () => {

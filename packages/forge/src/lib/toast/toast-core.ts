@@ -1,6 +1,6 @@
-import { DismissibleStack, IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
-import { IToastAdapter } from './toast-adapter';
-import { TOAST_CONSTANTS, ToastPlacement, ToastTheme } from './toast-constants';
+import { DismissibleStack, IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack.js';
+import { IToastAdapter } from './toast-adapter.js';
+import { TOAST_CONSTANTS, ToastPlacement, ToastTheme } from './toast-constants.js';
 
 export interface IToastCore {
   duration: number;

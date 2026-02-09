@@ -1,15 +1,15 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
-import { IconComponent, IconRegistry } from '../../icon';
-import { IconButtonComponent } from '../../icon-button';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { TabComponent } from '../tab/tab';
-import { TabBarAdapter } from './tab-bar-adapter';
-import { ITabBarChangeEventData, TAB_BAR_CONSTANTS } from './tab-bar-constants';
-import { TabBarCore } from './tab-bar-core';
+import { IconComponent, IconRegistry } from '../../icon/index.js';
+import { IconButtonComponent } from '../../icon-button/index.js';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { TabComponent } from '../tab/tab.js';
+import { TabBarAdapter } from './tab-bar-adapter.js';
+import { ITabBarChangeEventData, TAB_BAR_CONSTANTS } from './tab-bar-constants.js';
+import { TabBarCore } from './tab-bar-core.js';
 import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons';
-import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
-import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
-import { setDefaultAria } from '../../constants';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals.js';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria.js';
+import { setDefaultAria } from '../../constants.js';
 
 import template from './tab-bar.html';
 import styles from './tab-bar.scss';

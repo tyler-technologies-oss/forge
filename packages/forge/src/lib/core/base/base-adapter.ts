@@ -1,6 +1,6 @@
 import { emitEvent, toggleAttribute } from '@tylertech/forge-core';
-import { IBaseComponent } from './base-component';
-import { GlobalConfiguration } from '../configuration/global-configuration';
+import { IBaseComponent } from './base-component.js';
+import { GlobalConfiguration } from '../configuration/global-configuration.js';
 
 export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   readonly hostElement: T;

@@ -1,5 +1,5 @@
-import { BaseButtonAdapter, IBaseButtonAdapter } from '../button/base/base-button-adapter';
-import { IIconButtonComponent } from './icon-button';
+import { BaseButtonAdapter, IBaseButtonAdapter } from '../button/base/base-button-adapter.js';
+import { IIconButtonComponent } from './icon-button.js';
 
 export interface IIconButtonAdapter extends IBaseButtonAdapter<IIconButtonComponent> {}
 

@@ -1,10 +1,10 @@
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { nothing, PropertyValues, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { IBaseComponent } from '../core/base/base-component';
-import { BaseLitElement } from '../core/base/base-lit-element';
-import { locateTargetHeuristic, toggleState } from '../core/utils/utils';
-import { FocusIndicatorFocusMode } from './focus-indicator-constants';
+import { IBaseComponent } from '../core/base/base-component.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { locateTargetHeuristic, toggleState } from '../core/utils/utils.js';
+import { FocusIndicatorFocusMode } from './focus-indicator-constants.js';
 
 import styles from './focus-indicator.scss';
 

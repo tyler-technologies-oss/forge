@@ -1,6 +1,6 @@
 import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
-import { DRAWER_CONSTANTS } from './drawer-constants';
-import { BaseDrawerAdapter, BaseDrawerComponent, BaseDrawerCore, IBaseDrawerComponent } from '../base';
+import { DRAWER_CONSTANTS } from './drawer-constants.js';
+import { BaseDrawerAdapter, BaseDrawerComponent, BaseDrawerCore, IBaseDrawerComponent } from '../base/index.js';
 
 import template from './drawer.html';
 import styles from './drawer.scss';

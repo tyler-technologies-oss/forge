@@ -1,12 +1,12 @@
 import { attachShadowTemplate, coerceBoolean, customElement, ensureChild, coreProperty, isDefined } from '@tylertech/forge-core';
 import { tylIconArrowRightAlt } from '@tylertech/tyler-icons';
-import { PositionPlacement } from '../core/utils/position-utils';
-import { IconRegistry } from '../icon';
-import { ListComponent } from '../list';
-import { IListDropdownAware, ListDropdownAware } from '../list-dropdown/list-dropdown-aware';
-import type { IOverlayOffset } from '../overlay/overlay-constants';
-import { PopoverComponent } from '../popover';
-import { MenuAdapter } from './menu-adapter';
+import { PositionPlacement } from '../core/utils/position-utils.js';
+import { IconRegistry } from '../icon/index.js';
+import { ListComponent } from '../list/index.js';
+import { IListDropdownAware, ListDropdownAware } from '../list-dropdown/list-dropdown-aware.js';
+import type { IOverlayOffset } from '../overlay/overlay-constants.js';
+import { PopoverComponent } from '../popover/index.js';
+import { MenuAdapter } from './menu-adapter.js';
 import {
   IMenuActiveChangeEventData,
   IMenuOption,
@@ -16,9 +16,9 @@ import {
   MenuOptionBuilder,
   MenuOptionFactory,
   MENU_CONSTANTS
-} from './menu-constants';
-import { MenuCore } from './menu-core';
-import { TooltipComponent } from '../tooltip';
+} from './menu-constants.js';
+import { MenuCore } from './menu-core.js';
+import { TooltipComponent } from '../tooltip/index.js';
 
 import template from './menu.html';
 import styles from './menu.scss';

@@ -1,8 +1,8 @@
 import { getEventPath, isDefined } from '@tylertech/forge-core';
 
-import { CalendarDirection, CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS } from './calendar-menu-constants';
-import { ICalendarMenuAdapter } from './calendar-menu-adapter';
-import { ICalendarMenuOption } from './calendar-menu-constants';
+import { CalendarDirection, CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS } from './calendar-menu-constants.js';
+import { ICalendarMenuAdapter } from './calendar-menu-adapter.js';
+import { ICalendarMenuOption } from './calendar-menu-constants.js';
 
 export interface ICalendarMenuCore {
   animationType: CalendarMenuAnimationType;

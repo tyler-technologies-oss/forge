@@ -1,12 +1,12 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
-import { ListItemAdapter } from './list-item-adapter';
-import { ListItemCore } from './list-item-core';
-import { IListItemSelectEventData, LIST_ITEM_CONSTANTS, ListItemFocusPropagation } from './list-item-constants';
-import { StateLayerComponent } from '../../state-layer';
-import { FocusIndicatorComponent } from '../../focus-indicator';
-import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
-import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
-import { BaseComponent } from '../../core/base/base-component';
+import { ListItemAdapter } from './list-item-adapter.js';
+import { ListItemCore } from './list-item-core.js';
+import { IListItemSelectEventData, LIST_ITEM_CONSTANTS, ListItemFocusPropagation } from './list-item-constants.js';
+import { StateLayerComponent } from '../../state-layer/index.js';
+import { FocusIndicatorComponent } from '../../focus-indicator/index.js';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals.js';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria.js';
+import { BaseComponent } from '../../core/base/base-component.js';
 
 import template from './list-item.html';
 import styles from './list-item.scss';

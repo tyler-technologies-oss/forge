@@ -1,10 +1,10 @@
 import { getShadowElement, playKeyframeAnimation } from '@tylertech/forge-core';
-import { IButtonComponent } from '../button/button';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IIconButtonComponent } from '../icon-button/icon-button';
-import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
-import { IToastComponent } from './toast';
-import { TOAST_CONSTANTS } from './toast-constants';
+import { IButtonComponent } from '../button/button.js';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { IIconButtonComponent } from '../icon-button/icon-button.js';
+import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay/index.js';
+import { IToastComponent } from './toast.js';
+import { TOAST_CONSTANTS } from './toast-constants.js';
 
 export interface IToastAdapter extends IBaseAdapter<IToastComponent> {
   show(): void;

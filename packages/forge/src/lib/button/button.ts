@@ -1,12 +1,12 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { IconComponent } from '../icon';
-import { FocusIndicatorComponent } from '../focus-indicator';
-import { StateLayerComponent } from '../state-layer';
-import { BaseButton, IBaseButton } from './base/base-button';
-import { ButtonAdapter } from './button-adapter';
-import { ButtonTheme, ButtonVariant, BUTTON_CONSTANTS } from './button-constants';
-import { ButtonCore } from './button-core';
-import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants';
+import { IconComponent } from '../icon/index.js';
+import { FocusIndicatorComponent } from '../focus-indicator/index.js';
+import { StateLayerComponent } from '../state-layer/index.js';
+import { BaseButton, IBaseButton } from './base/base-button.js';
+import { ButtonAdapter } from './button-adapter.js';
+import { ButtonTheme, ButtonVariant, BUTTON_CONSTANTS } from './button-constants.js';
+import { ButtonCore } from './button-core.js';
+import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants.js';
 
 import template from './button.html';
 import styles from './button.scss';

@@ -1,1 +1,1 @@
-export * from './global-configuration';
+export * from './global-configuration.js';

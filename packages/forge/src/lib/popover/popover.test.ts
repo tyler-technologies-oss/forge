@@ -3,7 +3,7 @@ import { spy } from 'sinon';
 import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
-import { task } from '../core/utils/utils';
+import { task } from '../core/utils/utils.js';
 import {
   IPopoverToggleEventData,
   PopoverAnimationType,
@@ -12,15 +12,15 @@ import {
   POPOVER_CONSTANTS,
   POPOVER_HOVER_TIMEOUT,
   PopoverAnchorAccessibility
-} from './popover-constants';
-import { LONGPRESS_TRIGGER_DELAY } from '../core/mixins/interactions/longpress/with-longpress-listener';
-import type { IPopoverComponent } from './popover';
-import type { IOverlayComponent } from '../overlay/overlay';
-import { DismissibleStack } from '../core/utils/dismissible-stack';
-import { OVERLAY_CONSTANTS } from '../overlay';
-import { VirtualElement } from '../core/utils/position-utils';
+} from './popover-constants.js';
+import { LONGPRESS_TRIGGER_DELAY } from '../core/mixins/interactions/longpress/with-longpress-listener.js';
+import type { IPopoverComponent } from './popover.js';
+import type { IOverlayComponent } from '../overlay/overlay.js';
+import { DismissibleStack } from '../core/utils/dismissible-stack.js';
+import { OVERLAY_CONSTANTS } from '../overlay/index.js';
+import { VirtualElement } from '../core/utils/position-utils.js';
 
-import './popover';
+import './popover.js';
 
 const EXIT_ANIMATION_DURATION = 200;
 

@@ -3,7 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
-import { BaseLitElement } from '../core/base/base-lit-element';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
 
 import styles from './avatar.scss';
 

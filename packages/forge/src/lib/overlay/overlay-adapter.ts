@@ -1,9 +1,9 @@
 import { autoUpdate, Boundary } from '@floating-ui/dom';
 import { getShadowElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { positionElementAsync, PositionPlacement, VirtualElement } from '../core/utils/position-utils';
-import { locateElementById } from '../core/utils/utils';
-import { IOverlayComponent, OverlayComponent } from './overlay';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { positionElementAsync, PositionPlacement, VirtualElement } from '../core/utils/position-utils.js';
+import { locateElementById } from '../core/utils/utils.js';
+import { IOverlayComponent, OverlayComponent } from './overlay.js';
 import {
   IOverlayOffset,
   OVERLAY_CONSTANTS,
@@ -14,7 +14,7 @@ import {
   OverlayShiftState,
   overlayStack,
   SUPPORTS_POPOVER
-} from './overlay-constants';
+} from './overlay-constants.js';
 
 export interface IOverlayAdapter extends IBaseAdapter<IOverlayComponent> {
   show(): void;

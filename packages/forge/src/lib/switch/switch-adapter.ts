@@ -1,9 +1,9 @@
 import { getShadowElement, toggleClass } from '@tylertech/forge-core';
-import { isFocusable, setDefaultAria, setValidity } from '../constants';
-import { BaseAdapter, IBaseAdapter } from '../core';
-import { StateLayerComponent } from '../state-layer';
-import { ISwitchComponent } from './switch';
-import { SwitchIconVisibility, SwitchLabelPosition, SWITCH_CONSTANTS } from './switch-constants';
+import { isFocusable, setDefaultAria, setValidity } from '../constants.js';
+import { BaseAdapter, IBaseAdapter } from '../core/index.js';
+import { StateLayerComponent } from '../state-layer/index.js';
+import { ISwitchComponent } from './switch.js';
+import { SwitchIconVisibility, SwitchLabelPosition, SWITCH_CONSTANTS } from './switch-constants.js';
 
 export interface ISwitchAdapter extends IBaseAdapter {
   setChecked(value: boolean): void;

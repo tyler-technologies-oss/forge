@@ -2,10 +2,10 @@ import { createContext, provide } from '@lit/context';
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { setDefaultAria } from '../../core/utils/a11y-utils';
-import { toggleState } from '../../core/utils/utils';
-import { KeyActionController } from '../../core/utils/key-action';
-import { TreeItemComponent, TreeItemUpdateReason } from '../tree-item';
+import { setDefaultAria } from '../../core/utils/a11y-utils.js';
+import { toggleState } from '../../core/utils/utils.js';
+import { KeyActionController } from '../../core/utils/key-action.js';
+import { TreeItemComponent, TreeItemUpdateReason } from '../tree-item/index.js';
 import {
   closeDescendants,
   eventPathIncludesTreeItemExpandIcon,
@@ -21,8 +21,8 @@ import {
   getTreeItemTarget,
   isTreeItem,
   searchItems
-} from '../tree-utils';
-import { TreeSelectionController } from './tree-selection-controller';
+} from '../tree-utils.js';
+import { TreeSelectionController } from './tree-selection-controller.js';
 
 import styles from './tree.scss';
 

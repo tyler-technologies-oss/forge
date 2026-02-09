@@ -1,12 +1,12 @@
 import { customElement, attachShadowTemplate, coerceBoolean, coerceNumber, coreProperty } from '@tylertech/forge-core';
-import { ProfileCardAdapter } from './profile-card-adapter';
-import { ProfileCardCore } from './profile-card-core';
-import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
-import { ButtonComponent } from '../button';
-import { defineAvatarComponent } from '../avatar';
-import { IconComponent } from '../icon/icon';
-import { ToolbarComponent } from '../toolbar';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { ProfileCardAdapter } from './profile-card-adapter.js';
+import { ProfileCardCore } from './profile-card-core.js';
+import { PROFILE_CARD_CONSTANTS } from './profile-card-constants.js';
+import { ButtonComponent } from '../button/index.js';
+import { defineAvatarComponent } from '../avatar/index.js';
+import { IconComponent } from '../icon/icon.js';
+import { ToolbarComponent } from '../toolbar/index.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 
 import template from './profile-card.html';
 import styles from './profile-card.scss';

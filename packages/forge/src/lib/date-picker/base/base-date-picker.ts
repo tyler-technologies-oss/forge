@@ -1,7 +1,7 @@
 import { coerceBoolean, coerceNumberArray, coreProperty, ensureChild } from '@tylertech/forge-core';
-import { DayOfWeek } from '../../calendar/calendar-constants';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
+import { DayOfWeek } from '../../calendar/calendar-constants.js';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { IBaseDatePickerAdapter } from './base-date-picker-adapter.js';
 import {
   BASE_DATE_PICKER_CONSTANTS,
   DatePickerDateFormat,
@@ -11,8 +11,8 @@ import {
   DatePickerShortcuts,
   DatePickerValueMode,
   IDatePickerCalendarDropdownText
-} from './base-date-picker-constants';
-import { BaseDatePickerCore } from './base-date-picker-core';
+} from './base-date-picker-constants.js';
+import { BaseDatePickerCore } from './base-date-picker-core.js';
 
 export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
   value: TValue | null | undefined;

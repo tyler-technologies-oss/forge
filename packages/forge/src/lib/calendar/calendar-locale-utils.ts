@@ -1,7 +1,7 @@
 // TODO: implement year before month support
 // TODO: use a more robust strategy to get language and region parts from a locale, like the Intl API (in TypeScript 4.1.2 and es2020.intl)
 
-import { DayOfWeek } from './calendar-constants';
+import { DayOfWeek } from './calendar-constants.js';
 
 /** Returns a localized day name. */
 export function getLocalizedDayOfWeek(day: DayOfWeek, format: 'long' | 'short' | 'narrow' | undefined, locale?: string): string {

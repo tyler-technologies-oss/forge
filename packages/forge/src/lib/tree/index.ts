@@ -1,2 +1,2 @@
-export * from './tree';
-export * from './tree-item';
+export * from './tree/index.js';
+export * from './tree-item/index.js';

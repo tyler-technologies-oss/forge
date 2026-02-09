@@ -1,16 +1,16 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty, isDefined, isString } from '@tylertech/forge-core';
-import { getFormState, getFormValue, getValidationMessage, inputType, internals, setDefaultAria, setValidity } from '../constants';
-import { BaseComponent, FormValue } from '../core';
-import { IWithFocusable, WithFocusable } from '../core/mixins/focus/with-focusable';
-import { IWithFormAssociation, WithFormAssociation } from '../core/mixins/form/with-form-associated';
-import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
-import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
-import { IWithLabelAwareness, WithLabelAwareness } from '../core/mixins/label/with-label-aware';
-import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
-import { StateLayerComponent } from '../state-layer/state-layer';
-import { CheckboxAdapter } from './checkbox-adapter';
-import { CheckboxLabelPosition, CheckboxState, CHECKBOX_CONSTANTS } from './checkbox-constants';
-import { CheckboxCore } from './checkbox-core';
+import { getFormState, getFormValue, getValidationMessage, inputType, internals, setDefaultAria, setValidity } from '../constants.js';
+import { BaseComponent, FormValue } from '../core/index.js';
+import { IWithFocusable, WithFocusable } from '../core/mixins/focus/with-focusable.js';
+import { IWithFormAssociation, WithFormAssociation } from '../core/mixins/form/with-form-associated.js';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria.js';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals.js';
+import { IWithLabelAwareness, WithLabelAwareness } from '../core/mixins/label/with-label-aware.js';
+import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator.js';
+import { StateLayerComponent } from '../state-layer/state-layer.js';
+import { CheckboxAdapter } from './checkbox-adapter.js';
+import { CheckboxLabelPosition, CheckboxState, CHECKBOX_CONSTANTS } from './checkbox-constants.js';
+import { CheckboxCore } from './checkbox-core.js';
 
 import template from './checkbox.html';
 import styles from './checkbox.scss';

@@ -1,5 +1,5 @@
-import { AbstractConstructor, internals, MixinBase } from '../../../constants';
-import { IBaseComponent } from '../../base/base-component';
+import { AbstractConstructor, internals, MixinBase } from '../../../constants.js';
+import { IBaseComponent } from '../../base/base-component.js';
 
 /**
  * A component with attached Element Internals.

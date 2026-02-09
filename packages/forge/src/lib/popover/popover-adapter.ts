@@ -1,11 +1,11 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { prefersReducedMotion } from '../core/utils/feature-detection';
-import { VirtualElement } from '../core/utils/position-utils';
-import { checkVisibility, frame } from '../core/utils/utils';
-import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
-import { IOverlayAwareAdapter, OverlayAwareAdapter } from '../overlay/base/overlay-aware-adapter';
-import { IPopoverComponent } from './popover';
-import { POPOVER_CONSTANTS } from './popover-constants';
+import { prefersReducedMotion } from '../core/utils/feature-detection.js';
+import { VirtualElement } from '../core/utils/position-utils.js';
+import { checkVisibility, frame } from '../core/utils/utils.js';
+import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay/index.js';
+import { IOverlayAwareAdapter, OverlayAwareAdapter } from '../overlay/base/overlay-aware-adapter.js';
+import { IPopoverComponent } from './popover.js';
+import { POPOVER_CONSTANTS } from './popover-constants.js';
 
 export interface IPopoverAdapter extends IOverlayAwareAdapter<IPopoverComponent> {
   readonly hostElement: IPopoverComponent;

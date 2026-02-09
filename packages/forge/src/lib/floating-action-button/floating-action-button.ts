@@ -1,13 +1,13 @@
 import { attachShadowTemplate, customElement, coreProperty } from '@tylertech/forge-core';
-import { ButtonTheme } from '../button';
-import { BaseButton, IBaseButton } from '../button/base/base-button';
-import { BASE_BUTTON_CONSTANTS } from '../button/base/base-button-constants';
-import { FocusIndicatorComponent } from '../focus-indicator';
-import { IconComponent } from '../icon/icon';
-import { StateLayerComponent } from '../state-layer';
-import { FloatingActionButtonAdapter } from './floating-action-button-adapter';
-import { FloatingActionButtonDensity, FloatingActionButtonElevation, FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants';
-import { FloatingActionButtonCore } from './floating-action-button-core';
+import { ButtonTheme } from '../button/index.js';
+import { BaseButton, IBaseButton } from '../button/base/base-button.js';
+import { BASE_BUTTON_CONSTANTS } from '../button/base/base-button-constants.js';
+import { FocusIndicatorComponent } from '../focus-indicator/index.js';
+import { IconComponent } from '../icon/icon.js';
+import { StateLayerComponent } from '../state-layer/index.js';
+import { FloatingActionButtonAdapter } from './floating-action-button-adapter.js';
+import { FloatingActionButtonDensity, FloatingActionButtonElevation, FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants.js';
+import { FloatingActionButtonCore } from './floating-action-button-core.js';
 
 import template from './floating-action-button.html';
 import styles from './floating-action-button.scss';

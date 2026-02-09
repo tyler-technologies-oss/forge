@@ -3,22 +3,22 @@ import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
-import { BASE_BUTTON_CONSTANTS } from '../base/base-button-constants';
-import type { IButtonComponent } from '../button';
-import type { IStateLayerComponent } from '../../state-layer';
-import type { IFocusIndicatorComponent } from '../../focus-indicator';
-import type { IIconComponent } from '../../icon';
-import type { ILabelComponent } from '../../label/label';
+import { BASE_BUTTON_CONSTANTS } from '../base/base-button-constants.js';
+import type { IButtonComponent } from '../button.js';
+import type { IStateLayerComponent } from '../../state-layer/index.js';
+import type { IFocusIndicatorComponent } from '../../focus-indicator/index.js';
+import type { IIconComponent } from '../../icon/index.js';
+import type { ILabelComponent } from '../../label/label.js';
 import { attachShadowTemplate } from '@tylertech/forge-core';
-import { BaseButton, IBaseButton } from './base-button';
-import { BaseButtonCore } from './base-button-core';
-import { BaseButtonAdapter, IBaseButtonAdapter } from './base-button-adapter';
-import { ExperimentalFocusOptions } from '../../constants';
-import { frame } from '../../core/utils/utils';
+import { BaseButton, IBaseButton } from './base-button.js';
+import { BaseButtonCore } from './base-button-core.js';
+import { BaseButtonAdapter, IBaseButtonAdapter } from './base-button-adapter.js';
+import { ExperimentalFocusOptions } from '../../constants.js';
+import { frame } from '../../core/utils/utils.js';
 
-import '../../focus-indicator/focus-indicator';
-import '../../state-layer/state-layer';
-import '../../label/label';
+import '../../focus-indicator/focus-indicator.js';
+import '../../state-layer/state-layer.js';
+import '../../label/label.js';
 
 class TestBaseButtonCore extends BaseButtonCore<IBaseButtonAdapter<IBaseButton>> {}
 class TestBaseButtonAdapter extends BaseButtonAdapter<IBaseButton> implements IBaseButtonAdapter<IBaseButton> {}

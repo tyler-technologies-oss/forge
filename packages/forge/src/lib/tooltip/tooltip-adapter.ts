@@ -1,10 +1,10 @@
 import { getShadowElement, randomChars } from '@tylertech/forge-core';
-import { setDefaultAria } from '../constants';
-import { locateElementById } from '../core/utils/utils';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
-import { ITooltipComponent } from './tooltip';
-import { TOOLTIP_CONSTANTS } from './tooltip-constants';
+import { setDefaultAria } from '../constants.js';
+import { locateElementById } from '../core/utils/utils.js';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay/index.js';
+import { ITooltipComponent } from './tooltip.js';
+import { TOOLTIP_CONSTANTS } from './tooltip-constants.js';
 
 export interface ITooltipAdapter extends IBaseAdapter<ITooltipComponent> {
   readonly hostElement: ITooltipComponent;

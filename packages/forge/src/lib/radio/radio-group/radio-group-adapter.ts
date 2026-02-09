@@ -1,8 +1,8 @@
-import { setDefaultAria } from '../../constants';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/';
-import { LabelComponent } from '../../label';
-import { RADIO_CONSTANTS } from '../radio/radio-constants';
-import { IRadioGroupComponent } from './radio-group';
+import { setDefaultAria } from '../../constants.js';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/index.js';
+import { LabelComponent } from '../../label/index.js';
+import { RADIO_CONSTANTS } from '../radio/radio-constants.js';
+import { IRadioGroupComponent } from './radio-group.js';
 
 export interface IRadioGroupAdapter extends IBaseAdapter {
   attachLabel(label: LabelComponent): void;

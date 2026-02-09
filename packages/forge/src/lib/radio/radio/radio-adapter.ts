@@ -1,10 +1,10 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { internals, setDefaultAria } from '../../constants';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/';
-import { StateLayerComponent } from '../../state-layer';
-import { RadioGroupManager } from '../core/radio-group-manager';
-import { IRadioComponent } from './radio';
-import { RadioLabelPosition, RadioState, RADIO_CONSTANTS } from './radio-constants';
+import { internals, setDefaultAria } from '../../constants.js';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/index.js';
+import { StateLayerComponent } from '../../state-layer/index.js';
+import { RadioGroupManager } from '../core/radio-group-manager.js';
+import { IRadioComponent } from './radio.js';
+import { RadioLabelPosition, RadioState, RADIO_CONSTANTS } from './radio-constants.js';
 
 export interface IRadioAdapter extends IBaseAdapter {
   setChecked(checked: boolean, value: string): void;

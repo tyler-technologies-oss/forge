@@ -1,7 +1,7 @@
 import { isDefined } from '@tylertech/forge-core';
 
-import { IViewSwitcherAdapter } from './view-switcher-adapter';
-import { VIEW_SWITCHER_CONSTANTS, ViewAnimationDirection, ViewSwitcherAnimation } from './view-switcher-constants';
+import { IViewSwitcherAdapter } from './view-switcher-adapter.js';
+import { VIEW_SWITCHER_CONSTANTS, ViewAnimationDirection, ViewSwitcherAnimation } from './view-switcher-constants.js';
 
 export interface IViewSwitcherCore {
   index: number;

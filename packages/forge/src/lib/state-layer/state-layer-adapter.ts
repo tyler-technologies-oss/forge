@@ -1,9 +1,9 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { locateTargetHeuristic, createUserInteractionListener } from '../core/utils/utils';
-import { IStateLayerComponent } from './state-layer';
-import { ANIMATION_FILL, EASING, MINIMUM_PRESS_MS, PRESS_GROW_MS, PRESS_PSEUDO, StateLayerCoords, STATE_LAYER_CONSTANTS } from './state-layer-constants';
-import { calcRippleSize, getTranslationCoordinates, isInBounds } from './state-layer-utils';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { locateTargetHeuristic, createUserInteractionListener } from '../core/utils/utils.js';
+import { IStateLayerComponent } from './state-layer.js';
+import { ANIMATION_FILL, EASING, MINIMUM_PRESS_MS, PRESS_GROW_MS, PRESS_PSEUDO, StateLayerCoords, STATE_LAYER_CONSTANTS } from './state-layer-constants.js';
+import { calcRippleSize, getTranslationCoordinates, isInBounds } from './state-layer-utils.js';
 
 export interface IStateLayerAdapter extends IBaseAdapter {
   destroy(): void;

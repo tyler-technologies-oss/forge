@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { spy } from 'sinon';
-import { isSameDate } from '../core/utils/date-utils';
-import { task } from '../core/utils/utils';
-import { getDateId } from './calendar-dom-utils';
-import { CALENDAR_CONSTANTS, CALENDAR_MENU_CONSTANTS, ICalendarComponent, ICalendarCore, ICalendarDateSelectEventData, ICalendarEvent } from './index';
+import { isSameDate } from '../core/utils/date-utils.js';
+import { task } from '../core/utils/utils.js';
+import { getDateId } from './calendar-dom-utils.js';
+import { CALENDAR_CONSTANTS, CALENDAR_MENU_CONSTANTS, ICalendarComponent, ICalendarCore, ICalendarDateSelectEventData, ICalendarEvent } from './index.js';
 
-import './calendar';
+import './calendar.js';
 
 type CalendarComponentCoreInternal = ICalendarCore & {
   _preventFocusListener: (e: MouseEvent) => void;

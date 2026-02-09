@@ -1,7 +1,7 @@
-import { BaseDrawerCore, IBaseDrawerCore } from '../base';
+import { BaseDrawerCore, IBaseDrawerCore } from '../base/index.js';
 
-import { IModalDrawerAdapter } from './modal-drawer-adapter';
-import { MODAL_DRAWER_CONSTANTS } from './modal-drawer-constants';
+import { IModalDrawerAdapter } from './modal-drawer-adapter.js';
+import { MODAL_DRAWER_CONSTANTS } from './modal-drawer-constants.js';
 
 export interface IModalDrawerCore extends IBaseDrawerCore {}
 

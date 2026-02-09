@@ -2,13 +2,13 @@ import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { attachShadowTemplate, getShadowElement } from '@tylertech/forge-core';
 import { fake, replace, replaceGetter, spy } from 'sinon';
-import { IFieldComponent } from '../field';
-import { FIELD_CONSTANTS } from '../field-constants';
-import { BaseField, IBaseField } from './base-field';
-import { BaseFieldAdapter, IBaseFieldAdapter } from './base-field-adapter';
-import { BaseFieldCore } from './base-field-core';
+import { IFieldComponent } from '../field.js';
+import { FIELD_CONSTANTS } from '../field-constants.js';
+import { BaseField, IBaseField } from './base-field.js';
+import { BaseFieldAdapter, IBaseFieldAdapter } from './base-field-adapter.js';
+import { BaseFieldCore } from './base-field-core.js';
 
-import '../field';
+import '../field.js';
 
 class TestBaseFieldCore extends BaseFieldCore<IBaseFieldAdapter> {}
 class TestBaseFieldAdapter extends BaseFieldAdapter implements IBaseFieldAdapter {

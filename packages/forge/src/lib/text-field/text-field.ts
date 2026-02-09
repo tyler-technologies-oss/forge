@@ -1,13 +1,13 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconClear } from '@tylertech/tyler-icons';
-import { BASE_FIELD_CONSTANTS, FieldComponent } from '../field';
-import { BaseField, IBaseField } from '../field/base/base-field';
-import { IconRegistry } from '../icon';
-import { IconButtonComponent } from '../icon-button';
-import { TooltipComponent } from '../tooltip';
-import { TextFieldAdapter } from './text-field-adapter';
-import { TEXT_FIELD_CONSTANTS } from './text-field-constants';
-import { TextFieldCore } from './text-field-core';
+import { BASE_FIELD_CONSTANTS, FieldComponent } from '../field/index.js';
+import { BaseField, IBaseField } from '../field/base/base-field.js';
+import { IconRegistry } from '../icon/index.js';
+import { IconButtonComponent } from '../icon-button/index.js';
+import { TooltipComponent } from '../tooltip/index.js';
+import { TextFieldAdapter } from './text-field-adapter.js';
+import { TEXT_FIELD_CONSTANTS } from './text-field-constants.js';
+import { TextFieldCore } from './text-field-core.js';
 
 import template from './text-field.html';
 import styles from './text-field.scss';

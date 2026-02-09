@@ -1,6 +1,6 @@
-import { IBaseAdapter } from '../../core';
-import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
-import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OverlayShiftState } from '../overlay-constants';
+import { IBaseAdapter } from '../../core/index.js';
+import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils.js';
+import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OverlayShiftState } from '../overlay-constants.js';
 
 export interface IBaseOverlayCore {
   initialize(): void;

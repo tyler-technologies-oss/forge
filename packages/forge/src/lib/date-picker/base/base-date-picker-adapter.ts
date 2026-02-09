@@ -1,12 +1,12 @@
 import { randomChars } from '@tylertech/forge-core';
-import { CALENDAR_CONSTANTS, DateRange, DayOfWeek, ICalendarComponent } from '../../calendar';
-import { ICalendarDropdown, ICalendarDropdownPopupConfig } from '../../calendar/calendar-dropdown';
-import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions } from '../../core';
-import { BaseComponent } from '../../core/base/base-component';
-import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
-import { TEXT_FIELD_CONSTANTS } from '../../text-field';
-import { BASE_DATE_PICKER_CONSTANTS, IDatePickerCalendarDropdownText } from './base-date-picker-constants';
-import { createToggleElement } from './base-date-picker-utils';
+import { CALENDAR_CONSTANTS, DateRange, DayOfWeek, ICalendarComponent } from '../../calendar/index.js';
+import { ICalendarDropdown, ICalendarDropdownPopupConfig } from '../../calendar/calendar-dropdown/index.js';
+import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions } from '../../core/index.js';
+import { BaseComponent } from '../../core/base/base-component.js';
+import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button/index.js';
+import { TEXT_FIELD_CONSTANTS } from '../../text-field/index.js';
+import { BASE_DATE_PICKER_CONSTANTS, IDatePickerCalendarDropdownText } from './base-date-picker-constants.js';
+import { createToggleElement } from './base-date-picker-utils.js';
 
 export interface IBaseDatePickerAdapter extends IBaseAdapter {
   initialize(): void;

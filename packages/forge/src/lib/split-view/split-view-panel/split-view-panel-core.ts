@@ -1,17 +1,17 @@
 import { isDefined } from '@tylertech/forge-core';
 
-import { safeMin, scaleValue } from '../../core/utils/utils';
-import { eventIncludesArrowKey } from '../../core/utils/event-utils';
+import { safeMin, scaleValue } from '../../core/utils/utils.js';
+import { eventIncludesArrowKey } from '../../core/utils/event-utils.js';
 import {
   ISplitViewPanelOpenEvent,
   ISplitViewPanelState,
   SplitViewInputDeviceType,
   SplitViewPanelResizable,
   SPLIT_VIEW_PANEL_CONSTANTS
-} from './split-view-panel-constants';
-import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
-import { ISplitViewUpdateConfig, SplitViewOrientation } from '../split-view/split-view-constants';
-import { ISplitViewBase } from '../core/split-view-base';
+} from './split-view-panel-constants.js';
+import { ISplitViewPanelAdapter } from './split-view-panel-adapter.js';
+import { ISplitViewUpdateConfig, SplitViewOrientation } from '../split-view/split-view-constants.js';
+import { ISplitViewBase } from '../core/split-view-base.js';
 import {
   clampSize,
   clearState,
@@ -25,7 +25,7 @@ import {
   minResize,
   pointerResize,
   setState
-} from './split-view-panel-utils';
+} from './split-view-panel-utils.js';
 
 export interface ISplitViewPanelCore extends Partial<ISplitViewBase> {
   resizable: SplitViewPanelResizable;

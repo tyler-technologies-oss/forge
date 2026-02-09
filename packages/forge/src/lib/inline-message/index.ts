@@ -1,9 +1,9 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
-import { InlineMessageComponent } from './inline-message';
+import { InlineMessageComponent } from './inline-message.js';
 
-export * from './inline-message-constants';
-export * from './inline-message';
+export * from './inline-message-constants.js';
+export * from './inline-message.js';
 
 export function defineInlineMessageComponent(): void {
   defineCustomElement(InlineMessageComponent);

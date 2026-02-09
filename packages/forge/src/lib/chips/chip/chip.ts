@@ -1,13 +1,13 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconClose } from '@tylertech/tyler-icons';
-import { BaseComponent, IBaseComponent } from '../../core';
-import { FocusIndicatorComponent } from '../../focus-indicator';
-import { IconComponent, IconRegistry } from '../../icon';
-import { IconButtonComponent } from '../../icon-button';
-import { StateLayerComponent } from '../../state-layer';
-import { ChipAdapter } from './chip-adapter';
-import { ChipTheme, ChipType, CHIP_CONSTANTS, IChipDeleteEventData, IChipSelectEventData } from './chip-constants';
-import { ChipCore } from './chip-core';
+import { BaseComponent, IBaseComponent } from '../../core/index.js';
+import { FocusIndicatorComponent } from '../../focus-indicator/index.js';
+import { IconComponent, IconRegistry } from '../../icon/index.js';
+import { IconButtonComponent } from '../../icon-button/index.js';
+import { StateLayerComponent } from '../../state-layer/index.js';
+import { ChipAdapter } from './chip-adapter.js';
+import { ChipTheme, ChipType, CHIP_CONSTANTS, IChipDeleteEventData, IChipSelectEventData } from './chip-constants.js';
+import { ChipCore } from './chip-core.js';
 
 import template from './chip.html';
 import styles from './chip.scss';

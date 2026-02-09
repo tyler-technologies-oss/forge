@@ -1,11 +1,11 @@
 import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
-import { IIconButtonComponent } from '../../icon-button/icon-button';
+import { IIconButtonComponent } from '../../icon-button/icon-button.js';
 import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { ITabComponent } from '../tab/tab';
-import { TAB_CONSTANTS } from '../tab/tab-constants';
-import { ITabBarComponent } from './tab-bar';
-import { TAB_BAR_CONSTANTS } from './tab-bar-constants';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { ITabComponent } from '../tab/tab.js';
+import { TAB_CONSTANTS } from '../tab/tab-constants.js';
+import { ITabBarComponent } from './tab-bar.js';
+import { TAB_BAR_CONSTANTS } from './tab-bar-constants.js';
 
 export interface ITabBarAdapter extends IBaseAdapter {
   initializeContainerSizeObserver(listener: () => void): void;

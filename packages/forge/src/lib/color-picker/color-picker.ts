@@ -1,12 +1,12 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconUnfoldMore } from '@tylertech/tyler-icons';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { IconComponent, IconRegistry } from '../icon';
-import { IconButtonComponent } from '../icon-button';
-import { TooltipComponent } from '../tooltip';
-import { ColorPickerAdapter } from './color-picker-adapter';
-import { COLOR_PICKER_CONSTANTS, IColorPickerChangeEventData, IHSVA, IRGBA } from './color-picker-constants';
-import { ColorPickerCore } from './color-picker-core';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { IconComponent, IconRegistry } from '../icon/index.js';
+import { IconButtonComponent } from '../icon-button/index.js';
+import { TooltipComponent } from '../tooltip/index.js';
+import { ColorPickerAdapter } from './color-picker-adapter.js';
+import { COLOR_PICKER_CONSTANTS, IColorPickerChangeEventData, IHSVA, IRGBA } from './color-picker-constants.js';
+import { ColorPickerCore } from './color-picker-core.js';
 
 import template from './color-picker.html';
 import styles from './color-picker.scss';

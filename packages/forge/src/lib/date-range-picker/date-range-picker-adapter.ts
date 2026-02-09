@@ -1,14 +1,14 @@
 import { emitEvent, listenOwnProperty, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
-import { CalendarDropdown, ICalendarDropdownPopupConfig } from '../calendar/calendar-dropdown';
-import { DateInputMask, IDateInputMaskOptions } from '../core/mask/date-input-mask';
-import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
-import { BaseDatePickerAdapter, IBaseDatePickerAdapter } from '../date-picker/base/base-date-picker-adapter';
-import { IDatePickerCalendarDropdownConfig } from '../date-picker/base/base-date-picker-constants';
-import { createToggleElement } from '../date-picker/base/base-date-picker-utils';
-import { FIELD_CONSTANTS } from '../field';
-import { DateRangePickerComponent, IDateRangePickerComponent } from './date-range-picker';
-import { DATE_RANGE_PICKER_CONSTANTS } from './date-range-picker-constants';
-import { IIconButtonComponent } from '../icon-button/icon-button';
+import { CalendarDropdown, ICalendarDropdownPopupConfig } from '../calendar/calendar-dropdown/index.js';
+import { DateInputMask, IDateInputMaskOptions } from '../core/mask/date-input-mask.js';
+import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils.js';
+import { BaseDatePickerAdapter, IBaseDatePickerAdapter } from '../date-picker/base/base-date-picker-adapter.js';
+import { IDatePickerCalendarDropdownConfig } from '../date-picker/base/base-date-picker-constants.js';
+import { createToggleElement } from '../date-picker/base/base-date-picker-utils.js';
+import { FIELD_CONSTANTS } from '../field/index.js';
+import { DateRangePickerComponent, IDateRangePickerComponent } from './date-range-picker.js';
+import { DATE_RANGE_PICKER_CONSTANTS } from './date-range-picker-constants.js';
+import { IIconButtonComponent } from '../icon-button/icon-button.js';
 
 export interface IDateRangePickerAdapter extends IBaseDatePickerAdapter {
   initializeToMask(toOptions: IDateInputMaskOptions): void;

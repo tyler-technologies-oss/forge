@@ -2,16 +2,16 @@ import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { task } from '../core/utils/utils';
-import { TestHarness } from '../core/testing/test-harness';
-import { TAB_CONSTANTS } from './tab/tab-constants';
-import { TAB_BAR_CONSTANTS } from './tab-bar';
-import type { ITabBarComponent } from './tab-bar/tab-bar';
-import type { ITabComponent } from './tab/tab';
-import type { IIconComponent } from '../icon/icon';
-import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer';
+import { task } from '../core/utils/utils.js';
+import { TestHarness } from '../core/testing/test-harness.js';
+import { TAB_CONSTANTS } from './tab/tab-constants.js';
+import { TAB_BAR_CONSTANTS } from './tab-bar/index.js';
+import type { ITabBarComponent } from './tab-bar/tab-bar.js';
+import type { ITabComponent } from './tab/tab.js';
+import type { IIconComponent } from '../icon/icon.js';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer/index.js';
 
-import './tab-bar/tab-bar';
+import './tab-bar/tab-bar.js';
 
 describe('Tabs', () => {
   it('should contain shadow root', async () => {

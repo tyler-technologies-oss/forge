@@ -1,9 +1,9 @@
 import { defineCustomElement } from '@tylertech/forge-core';
-import { DeprecatedButtonComponent } from './deprecated-button';
+import { DeprecatedButtonComponent } from './deprecated-button.js';
 
-export * from './deprecated-button';
-export * from './deprecated-button-component-delegate';
-export * from './deprecated-button-constants';
+export * from './deprecated-button.js';
+export * from './deprecated-button-component-delegate.js';
+export * from './deprecated-button-constants.js';
 
 /**
  * @deprecated Use `defineButtonComponent()` instead for the `<forge-button>` element.

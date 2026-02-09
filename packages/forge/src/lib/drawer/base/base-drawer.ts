@@ -1,7 +1,7 @@
 import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { BASE_DRAWER_CONSTANTS, DrawerDirection } from './base-drawer-constants';
-import { BaseDrawerCore } from './base-drawer-core';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { BASE_DRAWER_CONSTANTS, DrawerDirection } from './base-drawer-constants.js';
+import { BaseDrawerCore } from './base-drawer-core.js';
 
 export interface IBaseDrawerComponent extends IBaseComponent {
   open: boolean;

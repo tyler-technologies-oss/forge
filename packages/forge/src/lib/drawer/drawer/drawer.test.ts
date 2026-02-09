@@ -2,11 +2,11 @@ import { nothing } from 'lit';
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import sinon from 'sinon';
-import { IDrawerComponent } from './drawer';
+import { IDrawerComponent } from './drawer.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { BASE_DRAWER_CONSTANTS } from '../base/base-drawer-constants';
+import { BASE_DRAWER_CONSTANTS } from '../base/base-drawer-constants.js';
 
-import './drawer';
+import './drawer.js';
 
 describe('Drawer', () => {
   it('should contain shadow root', async () => {

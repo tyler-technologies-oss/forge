@@ -1,6 +1,6 @@
 import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { SKELETON_CONSTANTS } from './skeleton-constants';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { SKELETON_CONSTANTS } from './skeleton-constants.js';
 
 import template from './skeleton.html';
 import styles from './skeleton.scss';

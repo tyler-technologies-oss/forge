@@ -2,10 +2,10 @@ import { CUSTOM_ELEMENT_NAME_PROPERTY, debounce } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedElements, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { setDefaultAria } from '../../core/utils/a11y-utils';
-import { toggleState } from '../../core/utils/utils';
-import { MeterComponent, MeterDensity, MeterDirection, MeterInnerShape, MeterShape } from '../meter/meter';
-import { BaseLitElement } from '../../core/base/base-lit-element';
+import { setDefaultAria } from '../../core/utils/a11y-utils.js';
+import { toggleState } from '../../core/utils/utils.js';
+import { MeterComponent, MeterDensity, MeterDirection, MeterInnerShape, MeterShape } from '../meter/meter.js';
+import { BaseLitElement } from '../../core/base/base-lit-element.js';
 
 import styles from './meter-group.scss';
 

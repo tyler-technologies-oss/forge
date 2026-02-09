@@ -1,8 +1,8 @@
 import { attachShadowTemplate, coerceBoolean, customElement, getShadowElement } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core';
-import { FocusIndicatorComponent } from '../focus-indicator';
-import { StateLayerComponent } from '../state-layer';
-import { SKIP_LINK_CONSTANTS, SkipLinkTheme } from './skip-link-constants';
+import { BaseComponent, IBaseComponent } from '../core/index.js';
+import { FocusIndicatorComponent } from '../focus-indicator/index.js';
+import { StateLayerComponent } from '../state-layer/index.js';
+import { SKIP_LINK_CONSTANTS, SkipLinkTheme } from './skip-link-constants.js';
 
 import template from './skip-link.html';
 import style from './skip-link.scss';

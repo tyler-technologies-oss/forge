@@ -1,5 +1,5 @@
-import { TreeItemComponent } from './tree-item/tree-item';
-import { TreeComponent } from './tree/tree';
+import { TreeItemComponent } from './tree-item/tree-item.js';
+import { TreeComponent } from './tree/tree.js';
 
 export interface ITreeItemSnapshot {
   el: TreeItemComponent;

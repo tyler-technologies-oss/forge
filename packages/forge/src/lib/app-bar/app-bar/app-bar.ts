@@ -1,8 +1,8 @@
 import { customElement, attachShadowTemplate, coreProperty } from '@tylertech/forge-core';
-import { AppBarAdapter } from './app-bar-adapter';
-import { AppBarCore } from './app-bar-core';
-import { AppBarElevation, AppBarTheme, APP_BAR_CONSTANTS, AppBarThemeMode } from './app-bar-constants';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { AppBarAdapter } from './app-bar-adapter.js';
+import { AppBarCore } from './app-bar-core.js';
+import { AppBarElevation, AppBarTheme, APP_BAR_CONSTANTS, AppBarThemeMode } from './app-bar-constants.js';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
 
 import template from './app-bar.html';
 import styles from './app-bar.scss';

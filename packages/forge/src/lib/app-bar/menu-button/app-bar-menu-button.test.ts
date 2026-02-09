@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import type { IAppBarMenuButtonComponent } from './app-bar-menu-button';
-import type { IIconComponent } from '../../icon';
+import type { IAppBarMenuButtonComponent } from './app-bar-menu-button.js';
+import type { IIconComponent } from '../../icon/index.js';
 
-import './app-bar-menu-button';
+import './app-bar-menu-button.js';
 
 describe('App Bar Menu Button', () => {
   it('should be accessible', async () => {

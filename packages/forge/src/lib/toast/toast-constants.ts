@@ -1,5 +1,5 @@
-import { COMPONENT_NAME_PREFIX, Theme } from '../constants';
-import { PositionPlacement } from '../core/utils/position-utils';
+import { COMPONENT_NAME_PREFIX, Theme } from '../constants.js';
+import { PositionPlacement } from '../core/utils/position-utils.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}toast`;
 

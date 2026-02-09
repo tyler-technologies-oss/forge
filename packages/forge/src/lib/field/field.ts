@@ -1,6 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core';
-import { FocusIndicatorComponent, FocusIndicatorFocusMode } from '../focus-indicator';
+import { BaseComponent, IBaseComponent } from '../core/index.js';
+import { FocusIndicatorComponent, FocusIndicatorFocusMode } from '../focus-indicator/index.js';
 import {
   FieldDensity,
   FieldLabelAlignment,
@@ -9,10 +9,10 @@ import {
   FieldSupportTextInset,
   FieldTheme,
   FieldVariant
-} from './base/base-field-constants';
-import { FieldAdapter } from './field-adapter';
-import { FIELD_CONSTANTS } from './field-constants';
-import { FieldCore } from './field-core';
+} from './base/base-field-constants.js';
+import { FieldAdapter } from './field-adapter.js';
+import { FIELD_CONSTANTS } from './field-constants.js';
+import { FieldCore } from './field-core.js';
 
 import template from './field.html';
 import styles from './field.scss';

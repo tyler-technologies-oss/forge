@@ -1,7 +1,7 @@
-import { COMPONENT_NAME_PREFIX, KEYSTROKE_DEBOUNCE_THRESHOLD } from '../constants';
-import { IListItemComponent } from '../list';
-import { IListDropdownConfig, IListDropdownOption, IListDropdownOptionGroup, ListDropdownOptionGroupBuilder } from '../list-dropdown';
-import { IOverlayOffset } from '../overlay/overlay-constants';
+import { COMPONENT_NAME_PREFIX, KEYSTROKE_DEBOUNCE_THRESHOLD } from '../constants.js';
+import { IListItemComponent } from '../list/index.js';
+import { IListDropdownConfig, IListDropdownOption, IListDropdownOptionGroup, ListDropdownOptionGroupBuilder } from '../list-dropdown/index.js';
+import { IOverlayOffset } from '../overlay/overlay-constants.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}autocomplete`;
 

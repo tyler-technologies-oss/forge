@@ -1,15 +1,15 @@
 import { customElement, coerceNumber, coreProperty, coerceBoolean, attachShadowTemplate } from '@tylertech/forge-core';
-import { TooltipAdapter } from './tooltip-adapter';
-import { TooltipCore } from './tooltip-core';
-import { TooltipPlacement, TooltipTriggerType, TooltipType, TOOLTIP_CONSTANTS } from './tooltip-constants';
-import { BaseComponent } from '../core/base/base-component';
-import { OverlayComponent } from '../overlay/overlay';
-import { coerceStringToArray } from '../core/utils/utils';
-import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
-import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
-import { OverlayFlipState } from '../overlay/overlay-constants';
-import { PositionPlacement } from '../core/utils/position-utils';
-import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
+import { TooltipAdapter } from './tooltip-adapter.js';
+import { TooltipCore } from './tooltip-core.js';
+import { TooltipPlacement, TooltipTriggerType, TooltipType, TOOLTIP_CONSTANTS } from './tooltip-constants.js';
+import { BaseComponent } from '../core/base/base-component.js';
+import { OverlayComponent } from '../overlay/overlay.js';
+import { coerceStringToArray } from '../core/utils/utils.js';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria.js';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals.js';
+import { OverlayFlipState } from '../overlay/overlay-constants.js';
+import { PositionPlacement } from '../core/utils/position-utils.js';
+import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack.js';
 
 import template from './tooltip.html';
 import styles from './tooltip.scss';

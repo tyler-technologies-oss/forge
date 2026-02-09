@@ -1,6 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, customElement } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { DIVIDER_CONSTANTS } from './divider-constants';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { DIVIDER_CONSTANTS } from './divider-constants.js';
 
 import template from './divider.html';
 import styles from './divider.scss';

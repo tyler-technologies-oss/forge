@@ -1,5 +1,5 @@
-import { IChipAdapter } from './chip-adapter';
-import { ChipTheme, ChipType, CHIP_CONSTANTS, IChipDeleteEventData, IChipNavigateEventData, IChipSelectEventData } from './chip-constants';
+import { IChipAdapter } from './chip-adapter.js';
+import { ChipTheme, ChipType, CHIP_CONSTANTS, IChipDeleteEventData, IChipNavigateEventData, IChipSelectEventData } from './chip-constants.js';
 
 export interface IChipCore {
   type: ChipType;

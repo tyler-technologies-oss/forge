@@ -1,8 +1,8 @@
 import { customElement, attachShadowTemplate, coreProperty, coerceNumber, coerceBoolean, elementParents } from '@tylertech/forge-core';
 import { tylIconAdd, tylIconArrowDropDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconLens } from '@tylertech/tyler-icons';
 
-import { CalendarAdapter } from './calendar-adapter';
-import { CalendarCore } from './calendar-core';
+import { CalendarAdapter } from './calendar-adapter.js';
+import { CalendarCore } from './calendar-core.js';
 import {
   CALENDAR_CONSTANTS,
   CalendarMode,
@@ -17,17 +17,17 @@ import {
   ICalendarMonthChangeEventData,
   CalendarTooltipBuilder,
   CalendarView
-} from './calendar-constants';
-import { DateRange } from './core/date-range';
-import { ButtonComponent } from '../button';
-import { IconButtonComponent } from '../icon-button';
-import { IconComponent, IconRegistry } from '../icon';
-import { TooltipComponent } from '../tooltip';
-import { ICalendarBase } from './core/calendar-base';
-import { CalendarMenuAnimationType, CalendarMenuComponent } from './calendar-menu';
-import { StateLayerComponent } from '../state-layer';
-import { FocusIndicatorComponent } from '../focus-indicator';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+} from './calendar-constants.js';
+import { DateRange } from './core/date-range.js';
+import { ButtonComponent } from '../button/index.js';
+import { IconButtonComponent } from '../icon-button/index.js';
+import { IconComponent, IconRegistry } from '../icon/index.js';
+import { TooltipComponent } from '../tooltip/index.js';
+import { ICalendarBase } from './core/calendar-base.js';
+import { CalendarMenuAnimationType, CalendarMenuComponent } from './calendar-menu/index.js';
+import { StateLayerComponent } from '../state-layer/index.js';
+import { FocusIndicatorComponent } from '../focus-indicator/index.js';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 
 import template from './calendar.html';
 import styles from './calendar.scss';

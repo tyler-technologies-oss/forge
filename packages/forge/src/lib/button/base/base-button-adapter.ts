@@ -1,14 +1,14 @@
 import { getShadowElement } from '@tylertech/forge-core';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator';
-import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
-import { IBaseButton } from './base-button';
-import { BASE_BUTTON_CONSTANTS } from './base-button-constants';
-import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflect-utils';
-import { internals, setDefaultAria } from '../../constants';
-import { supportsPopover } from '../../core/utils/feature-detection';
-import { IBaseComponent } from '../../core';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator/index.js';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer/index.js';
+import { IBaseButton } from './base-button.js';
+import { BASE_BUTTON_CONSTANTS } from './base-button-constants.js';
+import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflect-utils.js';
+import { internals, setDefaultAria } from '../../constants.js';
+import { supportsPopover } from '../../core/utils/feature-detection.js';
+import { IBaseComponent } from '../../core/index.js';
 
 export interface IBaseButtonAdapter<T extends IBaseComponent> extends IBaseAdapter<T> {
   readonly hasSlottedAnchor: boolean;

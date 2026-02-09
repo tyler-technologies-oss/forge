@@ -1,5 +1,5 @@
-import { ISliderAdapter } from './slider-adapter';
-import { SLIDER_CONSTANTS, SliderLabelBuilder } from './slider-constants';
+import { ISliderAdapter } from './slider-adapter.js';
+import { SLIDER_CONSTANTS, SliderLabelBuilder } from './slider-constants.js';
 
 export interface ISliderCore {
   ariaLabel: string | null;

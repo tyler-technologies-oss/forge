@@ -12,13 +12,19 @@ import {
   replaceElement,
   tryScrollIntoView
 } from '@tylertech/forge-core';
-import { ICON_CONSTANTS, IIconComponent } from '../icon';
-import { ILinearProgressComponent } from '../linear-progress';
-import { IListComponent } from '../list/list';
-import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/list-item';
-import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover';
-import { IListDropdownOpenConfig, IListDropdownOption, IListDropdownOptionGroup, LIST_DROPDOWN_CONSTANTS, ListDropdownType } from './list-dropdown-constants';
-import { createAsyncElement, createBusyElement, createCheckboxElement, createDropdown, createList, createListItems } from './list-dropdown-utils';
+import { ICON_CONSTANTS, IIconComponent } from '../icon/index.js';
+import { ILinearProgressComponent } from '../linear-progress/index.js';
+import { IListComponent } from '../list/list/index.js';
+import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/list-item/index.js';
+import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover/index.js';
+import {
+  IListDropdownOpenConfig,
+  IListDropdownOption,
+  IListDropdownOptionGroup,
+  LIST_DROPDOWN_CONSTANTS,
+  ListDropdownType
+} from './list-dropdown-constants.js';
+import { createAsyncElement, createBusyElement, createCheckboxElement, createDropdown, createList, createListItems } from './list-dropdown-utils.js';
 
 export interface IListDropdownAdapter {
   dropdownElement: HTMLElement | undefined;

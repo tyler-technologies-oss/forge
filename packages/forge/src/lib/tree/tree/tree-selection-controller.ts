@@ -1,5 +1,5 @@
 import { ReactiveController } from 'lit';
-import { TreeItemComponent, TreeItemUpdateReason } from '../tree-item';
+import { TreeItemComponent, TreeItemUpdateReason } from '../tree-item/index.js';
 import {
   getChildItems,
   getFirstChildItem,
@@ -9,8 +9,8 @@ import {
   getTreeItemFromEvent,
   indeterminate,
   isIndeterminate
-} from '../tree-utils';
-import { TreeComponent } from './tree';
+} from '../tree-utils.js';
+import { TreeComponent } from './tree.js';
 
 export interface ITreeItemSnapshot {
   el: TreeItemComponent;

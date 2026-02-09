@@ -1,14 +1,14 @@
 import { emitEvent, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
-import { ITimePickerComponent } from './time-picker';
-import { BaseAdapter } from '../core/base/base-adapter';
-import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
-import { TIME_PICKER_CONSTANTS } from './time-picker-constants';
-import { ITimeInputMaskOptions, TimeInputMask } from '../core/mask/time-input-mask';
-import { TEXT_FIELD_CONSTANTS, ITextFieldComponent } from '../text-field';
-import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../icon-button';
-import { ICON_CONSTANTS, IIconComponent } from '../icon';
-import { IListDropdownConfig, IListDropdownOption } from '../list-dropdown/list-dropdown-constants';
-import { IListDropdown, ListDropdown } from '../list-dropdown';
+import { ITimePickerComponent } from './time-picker.js';
+import { BaseAdapter } from '../core/base/base-adapter.js';
+import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils.js';
+import { TIME_PICKER_CONSTANTS } from './time-picker-constants.js';
+import { ITimeInputMaskOptions, TimeInputMask } from '../core/mask/time-input-mask.js';
+import { TEXT_FIELD_CONSTANTS, ITextFieldComponent } from '../text-field/index.js';
+import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../icon-button/index.js';
+import { ICON_CONSTANTS, IIconComponent } from '../icon/index.js';
+import { IListDropdownConfig, IListDropdownOption } from '../list-dropdown/list-dropdown-constants.js';
+import { IListDropdown, ListDropdown } from '../list-dropdown/index.js';
 
 export interface ITimePickerAdapter extends BaseAdapter<ITimePickerComponent> {
   readonly inputElement: HTMLInputElement | undefined;

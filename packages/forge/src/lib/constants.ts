@@ -1,5 +1,5 @@
-import type { IBaseComponent } from './core/base/base-component';
-import { supportsHover } from './core/utils/feature-detection';
+import type { IBaseComponent } from './core/base/base-component.js';
+import { supportsHover } from './core/utils/feature-detection.js';
 
 export const COMPONENT_NAME_PREFIX = 'forge-';
 export const KEYSTROKE_DEBOUNCE_THRESHOLD = 500;

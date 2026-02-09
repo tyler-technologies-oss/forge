@@ -1,10 +1,10 @@
 import { addClass } from '@tylertech/forge-core';
-import { ICON_CLASS_NAME, Theme } from '../constants';
-import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate';
-import { IIconComponent } from '../icon/icon';
-import { IconExternalType, ICON_CONSTANTS } from '../icon/icon-constants';
-import { IFloatingActionButtonComponent } from './floating-action-button';
-import { FloatingActionButtonDensity, FloatingActionButtonElevation, FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants';
+import { ICON_CLASS_NAME, Theme } from '../constants.js';
+import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate.js';
+import { IIconComponent } from '../icon/icon.js';
+import { IconExternalType, ICON_CONSTANTS } from '../icon/icon-constants.js';
+import { IFloatingActionButtonComponent } from './floating-action-button.js';
+import { FloatingActionButtonDensity, FloatingActionButtonElevation, FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants.js';
 
 export type FloatingActionButtonComponentDelegateProps = Partial<IFloatingActionButtonComponent>;
 export interface IFloatingActionButtonComponentDelegateOptions extends IBaseComponentDelegateOptions {

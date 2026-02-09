@@ -1,11 +1,11 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
-import { TabComponent } from './tab';
+import { TabComponent } from './tab.js';
 
-export * from './tab-adapter';
-export * from './tab-constants';
-export * from './tab-core';
-export * from './tab';
+export * from './tab-adapter.js';
+export * from './tab-constants.js';
+export * from './tab-core.js';
+export * from './tab.js';
 
 export function defineTabComponent(): void {
   defineCustomElement(TabComponent);

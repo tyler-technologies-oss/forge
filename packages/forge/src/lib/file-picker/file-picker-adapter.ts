@@ -1,9 +1,9 @@
 import { getShadowElement } from '@tylertech/forge-core';
 
-import { IFilePickerComponent } from './file-picker';
-import { FILE_PICKER_CONSTANTS } from './file-picker-constants';
-import { BaseAdapter, IBaseAdapter } from '../core';
-import { IButtonComponent } from '../button';
+import { IFilePickerComponent } from './file-picker.js';
+import { FILE_PICKER_CONSTANTS } from './file-picker-constants.js';
+import { BaseAdapter, IBaseAdapter } from '../core/index.js';
+import { IButtonComponent } from '../button/index.js';
 
 export interface IFilePickerAdapter extends IBaseAdapter {
   destroy(): void;

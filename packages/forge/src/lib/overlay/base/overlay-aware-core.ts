@@ -1,6 +1,6 @@
-import { IBaseOverlayCore } from './base-overlay-core';
-import { IOverlayComponent } from '../overlay';
-import { IOverlayAwareAdapter } from './overlay-aware-adapter';
+import { IBaseOverlayCore } from './base-overlay-core.js';
+import { IOverlayComponent } from '../overlay.js';
+import { IOverlayAwareAdapter } from './overlay-aware-adapter.js';
 import {
   IOverlayOffset,
   OverlayFlipState,
@@ -9,8 +9,8 @@ import {
   OverlayPositionStrategy,
   OVERLAY_CONSTANTS,
   OverlayShiftState
-} from '../overlay-constants';
-import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
+} from '../overlay-constants.js';
+import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils.js';
 import { toggleAttribute } from '@tylertech/forge-core';
 
 export interface IOverlayAwareCore extends IBaseOverlayCore {

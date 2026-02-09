@@ -1,5 +1,5 @@
 import { InputMask, type FactoryArg } from 'imask';
-import { TimeSegmentParser, TimeSegmentType } from './time-segment-parser';
+import { TimeSegmentParser, TimeSegmentType } from './time-segment-parser.js';
 
 export const SEGMENT_CURSOR_POSITION = {
   'hours-start': 0,

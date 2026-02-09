@@ -1,6 +1,6 @@
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IFieldComponent } from '../field';
-import { IBaseField } from './base-field';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { IFieldComponent } from '../field.js';
+import { IBaseField } from './base-field.js';
 
 export interface IBaseFieldAdapter extends IBaseAdapter {
   click(): void;

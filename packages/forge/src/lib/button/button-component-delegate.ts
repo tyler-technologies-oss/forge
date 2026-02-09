@@ -1,7 +1,7 @@
-import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate';
-import { ButtonType } from './base/base-button-constants';
-import { IButtonComponent } from './button';
-import { ButtonVariant, BUTTON_CONSTANTS } from './button-constants';
+import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate.js';
+import { ButtonType } from './base/base-button-constants.js';
+import { IButtonComponent } from './button.js';
+import { ButtonVariant, BUTTON_CONSTANTS } from './button-constants.js';
 
 export type ButtonComponentDelegateProps = Partial<IButtonComponent>;
 export interface IButtonComponentDelegateOptions extends IBaseComponentDelegateOptions {

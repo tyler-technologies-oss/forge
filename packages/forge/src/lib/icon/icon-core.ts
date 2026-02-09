@@ -1,7 +1,7 @@
-import { IIconAdapter } from './icon-adapter';
-import { ICON_CONSTANTS, IconUrlBuilder, IconExternalType, IconTheme } from './icon-constants';
-import { IconRegistry, IIconDescriptor } from './icon-registry';
-import { createSanitizedSvg, fetchIconContent, getCachedIcon, sanitizeExternalType, awaitIconDefinition, removeIconListener } from './icon-utils';
+import { IIconAdapter } from './icon-adapter.js';
+import { ICON_CONSTANTS, IconUrlBuilder, IconExternalType, IconTheme } from './icon-constants.js';
+import { IconRegistry, IIconDescriptor } from './icon-registry.js';
+import { createSanitizedSvg, fetchIconContent, getCachedIcon, sanitizeExternalType, awaitIconDefinition, removeIconListener } from './icon-utils.js';
 
 export interface IIconCore {
   name: string | undefined;

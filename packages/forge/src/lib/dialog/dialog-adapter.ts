@@ -1,9 +1,9 @@
 import { getShadowElement, playKeyframeAnimation } from '@tylertech/forge-core';
-import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { isElementClipped, moveElementIntoViewport } from '../core/utils/utils';
-import { DialogComponent, IDialogComponent } from './dialog';
-import { DIALOG_CONSTANTS, dialogStack, hideBackdrop, showBackdrop } from './dialog-constants';
+import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop/index.js';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { isElementClipped, moveElementIntoViewport } from '../core/utils/utils.js';
+import { DialogComponent, IDialogComponent } from './dialog.js';
+import { DIALOG_CONSTANTS, dialogStack, hideBackdrop, showBackdrop } from './dialog-constants.js';
 
 export interface IDialogAdapter extends IBaseAdapter<IDialogComponent> {
   readonly hostElement: IDialogComponent;

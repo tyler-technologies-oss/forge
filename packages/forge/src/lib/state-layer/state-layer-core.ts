@@ -1,5 +1,5 @@
-import { IStateLayerAdapter } from './state-layer-adapter';
-import { PointerState, StateLayerCoords, STATE_LAYER_CONSTANTS, TOUCH_DELAY_MS } from './state-layer-constants';
+import { IStateLayerAdapter } from './state-layer-adapter.js';
+import { PointerState, StateLayerCoords, STATE_LAYER_CONSTANTS, TOUCH_DELAY_MS } from './state-layer-constants.js';
 
 export interface IStateLayerCore {
   targetElement: HTMLElement | null;

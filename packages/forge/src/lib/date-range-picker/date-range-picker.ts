@@ -1,14 +1,14 @@
 import { attachShadowTemplate, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconDateRange } from '@tylertech/tyler-icons';
-import { CalendarComponent } from '../calendar';
-import { BaseDatePickerComponent, IBaseDatePickerComponent } from '../date-picker/base/base-date-picker';
-import { BASE_DATE_PICKER_CONSTANTS } from '../date-picker/base/base-date-picker-constants';
-import { IconComponent, IconRegistry } from '../icon';
-import { IconButtonComponent } from '../icon-button';
-import { PopoverComponent } from '../popover';
-import { DateRangePickerAdapter } from './date-range-picker-adapter';
-import { DATE_RANGE_PICKER_CONSTANTS, IDatePickerRange, IDateRangePickerChangeEventData } from './date-range-picker-constants';
-import { DateRangePickerCore } from './date-range-picker-core';
+import { CalendarComponent } from '../calendar/index.js';
+import { BaseDatePickerComponent, IBaseDatePickerComponent } from '../date-picker/base/base-date-picker.js';
+import { BASE_DATE_PICKER_CONSTANTS } from '../date-picker/base/base-date-picker-constants.js';
+import { IconComponent, IconRegistry } from '../icon/index.js';
+import { IconButtonComponent } from '../icon-button/index.js';
+import { PopoverComponent } from '../popover/index.js';
+import { DateRangePickerAdapter } from './date-range-picker-adapter.js';
+import { DATE_RANGE_PICKER_CONSTANTS, IDatePickerRange, IDateRangePickerChangeEventData } from './date-range-picker-constants.js';
+import { DateRangePickerCore } from './date-range-picker-core.js';
 
 import template from './date-range-picker.html';
 import styles from './date-range-picker.scss';

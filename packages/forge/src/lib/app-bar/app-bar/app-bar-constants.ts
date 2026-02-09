@@ -1,4 +1,4 @@
-import { COMPONENT_NAME_PREFIX } from '../../constants';
+import { COMPONENT_NAME_PREFIX } from '../../constants.js';
 
 export const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}app-bar`;
 

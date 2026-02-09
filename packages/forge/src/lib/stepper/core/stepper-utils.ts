@@ -1,5 +1,5 @@
-import { IStepComponent, STEP_CONSTANTS } from '../step';
-import { STEPPER_CONSTANTS, IStepConfiguration, IStepperConfiguration, StepperLayoutAlign, StepperLayoutMode } from '../stepper/stepper-constants';
+import { IStepComponent, STEP_CONSTANTS } from '../step/index.js';
+import { STEPPER_CONSTANTS, IStepConfiguration, IStepperConfiguration, StepperLayoutAlign, StepperLayoutMode } from '../stepper/stepper-constants.js';
 
 export class StepperUtils {
   /**

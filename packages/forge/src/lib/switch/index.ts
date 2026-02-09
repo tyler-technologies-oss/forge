@@ -1,12 +1,12 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
-import { SwitchComponent } from './switch';
+import { SwitchComponent } from './switch.js';
 
-export * from './switch-adapter';
-export * from './switch-constants';
-export * from './switch-core';
-export * from './switch';
-export * from './switch-component-delegate';
+export * from './switch-adapter.js';
+export * from './switch-constants.js';
+export * from './switch-core.js';
+export * from './switch.js';
+export * from './switch-component-delegate.js';
 
 export function defineSwitchComponent(): void {
   defineCustomElement(SwitchComponent);

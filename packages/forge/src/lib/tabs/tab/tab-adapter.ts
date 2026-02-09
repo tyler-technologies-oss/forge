@@ -1,10 +1,10 @@
 import { getShadowElement, requireParent, toggleAttribute } from '@tylertech/forge-core';
-import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { TAB_BAR_CONSTANTS } from '../tab-bar/tab-bar-constants';
-import type { ITabComponent } from './tab';
-import { TAB_CONSTANTS } from './tab-constants';
-import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer/index.js';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
+import { TAB_BAR_CONSTANTS } from '../tab-bar/tab-bar-constants.js';
+import type { ITabComponent } from './tab.js';
+import { TAB_CONSTANTS } from './tab-constants.js';
+import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator/index.js';
 
 export interface ITabAdapter extends IBaseAdapter {
   initialize(): void;

@@ -1,7 +1,7 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IStackComponent } from './stack';
-import { STACK_CONSTANTS } from './stack-constants';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { IStackComponent } from './stack.js';
+import { STACK_CONSTANTS } from './stack-constants.js';
 
 export interface IStackAdapter extends IBaseAdapter {
   setGap(gap: string): void;

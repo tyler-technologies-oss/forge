@@ -1,5 +1,5 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
-import { OverlayLightDismissReason } from '../overlay';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
+import { OverlayLightDismissReason } from '../overlay/index.js';
 
 const elementName = `${COMPONENT_NAME_PREFIX}popover`;
 

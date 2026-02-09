@@ -4,14 +4,14 @@ import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { getShadowElement } from '@tylertech/forge-core';
-import { IBottomSheetComponent } from './bottom-sheet';
-import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
-import { task } from '../core/utils/utils';
-import { BOTTOM_SHEET_CONSTANTS, BottomSheetMode } from './bottom-sheet-constants';
-import { DIALOG_CONSTANTS } from '../dialog/dialog-constants';
-import { IDialogComponent } from '../dialog';
+import { IBottomSheetComponent } from './bottom-sheet.js';
+import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop/index.js';
+import { task } from '../core/utils/utils.js';
+import { BOTTOM_SHEET_CONSTANTS, BottomSheetMode } from './bottom-sheet-constants.js';
+import { DIALOG_CONSTANTS } from '../dialog/dialog-constants.js';
+import { IDialogComponent } from '../dialog/index.js';
 
-import './bottom-sheet';
+import './bottom-sheet.js';
 
 describe('Bottom Sheet', () => {
   it('should have shadow root', async () => {

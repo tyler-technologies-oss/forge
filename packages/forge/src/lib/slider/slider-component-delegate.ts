@@ -1,7 +1,7 @@
-import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core';
-import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate';
-import { ISliderComponent } from '../slider';
-import { ISliderChangeEventData, ISliderRangeChangeEventData, SLIDER_CONSTANTS } from './slider-constants';
+import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core/index.js';
+import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate.js';
+import { ISliderComponent } from '../slider/index.js';
+import { ISliderChangeEventData, ISliderRangeChangeEventData, SLIDER_CONSTANTS } from './slider-constants.js';
 
 export type SliderComponentDelegateProps = Partial<ISliderComponent>;
 export interface ISliderComponentDelegateOptions extends IFormFieldComponentDelegateOptions {}
