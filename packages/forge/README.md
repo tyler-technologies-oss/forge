@@ -35,6 +35,20 @@ You can also view the Storybook documentation site by running:
 pnpm run storybook:forge
 ```
 
+### Testing
+
+Forge uses [Vitest](https://vitest.dev/) for unit testing. To run the tests, use the following command:
+
+```bash
+pnpm run test:vitest
+```
+
+To run tests for a specific component, use:
+
+```bash
+pnpm run test:vitest:run <component-name>
+```  
+
 ## Need help?
 
 Please [create](https://github.com/tyler-technologies-oss/forge/issues/new/choose) a GitHub issue with any questions and we'll be glad to help!

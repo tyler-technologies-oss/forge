@@ -57,8 +57,10 @@ Migrate test files from Web Test Runner (WTR) + Mocha + Chai + Sinon to Vitest b
    import { render } from 'vitest-browser-lit';
    import { html } from 'lit';
    import { userEvent } from 'vitest/browser';
-   import type { IMyComponent } from './my-component';
+   import type { IMyComponent } from './my-component.js';
    ```
+
+   **Important**: Always use `.js` extensions for local imports (e.g., `'./my-component.js'`). This is required for ESM compatibility since TypeScript compiles to JavaScript.
 
 6. **Update fixture pattern** - for simple components, use inline render:
 

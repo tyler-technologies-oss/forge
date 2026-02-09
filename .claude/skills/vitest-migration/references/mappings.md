@@ -15,8 +15,10 @@ import { describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { page, userEvent } from 'vitest/browser';
-import type { IAvatarComponent } from './avatar';
+import type { IAvatarComponent } from './avatar.js';
 ```
+
+**Important**: Always use `.js` extensions for local imports. ESM requires explicit file extensions.
 
 ## Fixture/Render Pattern
 
@@ -39,7 +41,7 @@ const el = screen.container.querySelector('forge-component') as IComponent;
 | `await elementUpdated(el)` | `await el.updateComplete` | Lit-based components                  |
 | `await elementUpdated(el)` | `await frame()`           | Non-Lit components or wait for render |
 
-Note: `frame()` is from `../core/utils/utils`
+Note: `frame()` is from `../core/utils/utils.js`
 
 ## Chai → Vitest Assertions
 
