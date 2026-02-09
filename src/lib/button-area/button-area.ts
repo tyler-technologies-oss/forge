@@ -38,6 +38,7 @@ export const BUTTON_AREA_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-button-a
  * @csspart focus-indicator - The focus-indicator indicator element.
  * @csspart state-layer - The state-layer surface element.
  *
+ * @cssproperty --forge-button-area-shape - The border radius of the button area.
  * @cssproperty --forge-button-area-cursor - The cursor.
  * @cssproperty --forge-button-area-disabled-cursor - The cursor when in the disabled state.
  *

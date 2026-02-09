@@ -12,6 +12,7 @@
   overflow: hidden;
   block-size: 100%;
   inline-size: 100%;
+  border-radius: #{token(shape)};
 }
 
 @mixin enabled {

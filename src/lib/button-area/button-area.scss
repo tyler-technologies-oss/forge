@@ -51,7 +51,8 @@ forge-focus-indicator {
   @include focus-indicator.provide-theme(
     (
       color: #{token(focus-indicator-color)},
-      outward-offset: #{token(focus-indicator-offset)}
+      outward-offset: #{token(focus-indicator-offset)},
+      shape: #{token(shape)}
     )
   );
 }
