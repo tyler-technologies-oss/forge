@@ -41,6 +41,7 @@ export async function buildEsm({ outdir = 'esm' } = {}) {
   const bundle = await rollup({
     input: 'src/lib/index.ts',
     external: id => external.some(dep => id === dep || id.startsWith(dep + '/')),
+    treeshake: false,
     onwarn(warning, warn) {
       if (warning.code === 'CIRCULAR_DEPENDENCY') {
         return; // Ignore circular dependency warnings
