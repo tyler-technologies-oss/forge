@@ -4,24 +4,21 @@ import { customElement, property, queryAssignedElements } from 'lit/decorators.j
 import { createRef, Ref, ref } from 'lit/directives/ref.js';
 import { IBaseComponent } from '../core/base/base-component';
 import { BaseLitElement } from '../core/base/base-lit-element';
-import { toggleState } from '../core/utils/utils';
+import { locateElementById, toggleState } from '../core/utils/utils';
 import { IFocusIndicatorComponent } from '../focus-indicator';
 import { StateLayerComponent } from '../state-layer';
-import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
 
 import styles from './button-area.scss';
 
 export interface IButtonAreaComponent extends IBaseComponent {
   disabled: boolean;
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-button-area': IButtonAreaComponent;
-  }
+  target: string | null | undefined;
+  targetElement: HTMLElement | null | undefined;
 }
 
 export const BUTTON_AREA_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-button-area';
+
+type DisableableElement = HTMLElement & { disabled?: boolean };
 
 /**
  * @tag forge-button-area
@@ -42,7 +39,7 @@ export const BUTTON_AREA_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-button-a
  * @cssproperty --forge-button-area-disabled-cursor - The cursor when in the disabled state.
  *
  * @slot - Places content within the default (unnamed) slot (main body of the component).
- * @slot button - Places content within a visually hidden slot. Always place a `<button>` element in this slot.
+ * @slot button - Places content within a visually hidden slot. Only a `<button>` element can be placed in this slot.
  */
 @customElement(BUTTON_AREA_TAG_NAME)
 export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaComponent {
@@ -66,6 +63,21 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
   @property({ type: Boolean, reflect: true })
   public disabled = false;
 
+  /**
+   * The ID of a button element to use for semantics and functionality.
+   * @default undefined
+   * @attribute
+   */
+  @property({ type: String })
+  public target: string | null | undefined = undefined;
+
+  /**
+   * A button element instance to use for semantics and functionality.
+   * @default undefined
+   */
+  @property({ attribute: false })
+  public targetElement: HTMLElement | null | undefined = undefined;
+
   @queryAssignedElements({ slot: 'button', selector: 'button' })
   private _buttonElements: HTMLButtonElement[];
 
@@ -78,16 +90,28 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
     return this._buttonElements[0];
   }
 
+  get #observedElement(): DisableableElement | null | undefined {
+    // Return the target element if it is set and can be disabled, otherwise return the slotted button element
+    return this.targetElement && 'disabled' in this.targetElement && typeof this.targetElement.disabled === 'boolean'
+      ? (this.targetElement as DisableableElement)
+      : this.#buttonElement;
+  }
+
   public override connectedCallback(): void {
     super.connectedCallback();
+
+    // Locate target element by ID if target is set
+    if (this.target && !this.targetElement) {
+      this.targetElement = locateElementById(this, this.target) ?? undefined;
+    }
   }
 
   public override firstUpdated(): void {
     // Initial slotted button detection
-    this.#startButtonObserver();
+    this.#startObserver();
 
     // Match the component and button states if either is disabled
-    if (this.#buttonElement?.disabled) {
+    if (this.#observedElement?.disabled) {
       this.disabled = true;
     } else if (this.disabled) {
       this.#handleDisabledChange();
@@ -98,6 +122,14 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
     if (changedProperties.has('disabled')) {
       this.#handleDisabledChange();
       toggleState(this.#internals, 'disabled', this.disabled);
+    }
+
+    if (changedProperties.has('target') && this.hasUpdated) {
+      this.#handleTargetChange();
+    }
+
+    if (changedProperties.has('targetElement')) {
+      this.#handleTargetElementChange();
     }
   }
 
@@ -122,7 +154,7 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
 
   public override disconnectedCallback(): void {
     super.disconnectedCallback();
-    this.#stopButtonObserver();
+    this.#stopObserver();
   }
 
   #handleClick = (event: Event): void => {
@@ -179,46 +211,102 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
   };
 
   #handleSlotChange = (): void => {
-    // Clear old button-connected listeners
-    this.#stopButtonObserver();
+    if (this.targetElement) {
+      return;
+    }
 
-    this.#startButtonObserver();
+    this.#stopObserver();
+    this.#startObserver();
 
     // Match the component and button states if either is disabled
     if (this.#buttonElement?.disabled) {
       this.disabled = true;
     } else if (this.disabled) {
-      this.#buttonElement?.toggleAttribute(BUTTON_AREA_CONSTANTS.attributes.DISABLED, true);
+      this.#buttonElement?.toggleAttribute('disabled', true);
     }
   };
 
+  #handleTargetChange(): void {
+    if (this.target) {
+      this.targetElement = locateElementById(this, this.target) ?? undefined;
+    }
+  }
+
+  #handleTargetElementChange(): void {
+    this.#stopObserver();
+    this.#startObserver();
+
+    // Manage focus-indicator visibility
+    if (this.targetElement) {
+      // Remove focus-indicator when target element is set
+      this.#focusIndicator.value?.remove();
+    } else if (!this.disabled && this.#focusIndicator.value && this.#root.value) {
+      // Restore focus-indicator when target element is cleared (if not disabled)
+      this.#root.value.append(this.#focusIndicator.value);
+    }
+
+    // Sync initial disabled state from the new observed element
+    const observed = this.#observedElement;
+    if (observed) {
+      this.disabled = observed.disabled ?? false;
+    }
+  }
+
   #handleDisabledChange(): void {
-    // Sync with button element
-    this.#buttonElement?.toggleAttribute(BUTTON_AREA_CONSTANTS.attributes.DISABLED, this.disabled);
+    const element = this.#observedElement;
+
+    // Only sync if element exists and is connected
+    if (element?.isConnected) {
+      element.toggleAttribute('disabled', this.disabled);
+    }
 
     // Toggle focus-indicator and state-layer visibility
     if (this.disabled) {
       this.#focusIndicator.value?.remove();
       this.#stateLayer.value?.remove();
-    } else if (this.#focusIndicator.value && this.#stateLayer.value && this.#root.value) {
-      this.#root.value.append(this.#focusIndicator.value, this.#stateLayer.value);
+    } else if (this.#stateLayer.value && this.#root.value) {
+      this.#root.value.append(this.#stateLayer.value);
+
+      // Only append focus-indicator if not using target element
+      if (!this.targetElement && this.#focusIndicator.value) {
+        this.#root.value.append(this.#focusIndicator.value);
+      }
     }
   }
 
-  #startButtonObserver(): void {
-    if (this.#buttonElement) {
+  #startObserver(): void {
+    const element = this.#observedElement;
+
+    if (element?.isConnected) {
       this.#buttonObserver = new MutationObserver(() => {
-        this.disabled = this.#buttonElement?.disabled ?? false;
+        const observed = this.#observedElement;
+
+        if (!observed?.isConnected) {
+          this.#handleObservedElementRemoved();
+          return;
+        }
+
+        this.disabled = observed.disabled ?? false;
       });
-      this.#buttonObserver.observe(this.#buttonElement, {
-        attributeFilter: [BUTTON_AREA_CONSTANTS.attributes.DISABLED]
+
+      this.#buttonObserver.observe(element, {
+        attributeFilter: ['disabled']
       });
     }
   }
 
-  #stopButtonObserver(): void {
+  #stopObserver(): void {
     this.#buttonObserver?.disconnect();
     this.#buttonObserver = undefined;
+  }
+
+  #handleObservedElementRemoved(): void {
+    this.#stopObserver();
+
+    // If target element was removed, clear it and fall back to slotted button
+    if (this.targetElement) {
+      this.targetElement = undefined;
+    }
   }
 
   #animateStateLayer(): void {
@@ -238,8 +326,12 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
 
   #shouldIgnoreEvent(event: Event): boolean {
     const eventPath = getEventPath(event);
-    return eventPath.some(
-      el => el.nodeType === 1 && (el.hasAttribute(BUTTON_AREA_CONSTANTS.attributes.IGNORE) || el.hasAttribute(BUTTON_AREA_CONSTANTS.attributes.IGNORE_ALT))
-    );
+    return eventPath.some(el => el.nodeType === 1 && (el.hasAttribute('forge-ignore') || el.hasAttribute('data-forge-ignore')));
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-button-area': ButtonAreaComponent;
   }
 }

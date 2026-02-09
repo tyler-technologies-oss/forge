@@ -3,7 +3,7 @@
     <button slot="button" aria-labelledby="button-area-heading"></button>
     <div class="flex-wrapper">
       <div>
-        <div class="forge-typography--heading4" id="button-area-heading">Heading</div>
+        <div class="forge-typography--heading4" id="button-area-heading">Basic Usage</div>
         <div>Content</div>
       </div>
       <forge-icon-button data-forge-ignore>
@@ -37,6 +37,40 @@
       Expansion panel content
     </div>
   </forge-expansion-panel>
+</forge-card>
+
+<br />
+
+<forge-card outlined>
+  <forge-button-area id="target-button-area" target="target-button">
+    <div class="flex-wrapper">
+      <div>
+        <div class="forge-typography--heading4" id="button-area-heading">Using Target</div>
+        <div>Content</div>
+      </div>
+      <forge-icon-button id="target-button">
+        <forge-icon name="favorite"></forge-icon>
+      </forge-icon-button>
+      <forge-tooltip type="label">Like</forge-tooltip>
+    </div>
+  </forge-button-area>
+</forge-card>
+
+<br />
+
+<forge-card outlined>
+  <forge-button-area id="target-element-button-area">
+    <div class="flex-wrapper">
+      <div>
+        <div class="forge-typography--heading4" id="button-area-heading">Using Target Element</div>
+        <div>Content</div>
+      </div>
+      <forge-icon-button id="target-element-button">
+        <forge-icon name="favorite"></forge-icon>
+      </forge-icon-button>
+      <forge-tooltip type="label">Like</forge-tooltip>
+    </div>
+  </forge-button-area>
 </forge-card>
 
 <script type="module" src="button-area.ts"></script>

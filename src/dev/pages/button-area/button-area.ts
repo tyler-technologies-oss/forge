@@ -23,9 +23,18 @@ expansionPanel.addEventListener('forge-expansion-panel-toggle', (event: CustomEv
   expansionPanelButton.setAttribute('aria-expanded', event.detail.toString());
 });
 
+const targetButtonArea = document.getElementById('target-button-area') as IButtonAreaComponent;
+targetButtonArea.addEventListener('click', () => alert('Click'));
+
+const targetElementButtonArea = document.getElementById('target-element-button-area') as IButtonAreaComponent;
+const targetElementButton = document.getElementById('target-element-button') as HTMLButtonElement;
+targetElementButtonArea.targetElement = targetElementButton;
+targetElementButtonArea.addEventListener('click', () => alert('Click'));
 
 const disabledToggle = document.querySelector('#disabled-switch') as ISwitchComponent;
 disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   buttonArea.disabled = selected;
   expansionPanelButtonArea.disabled = selected;
+  targetButtonArea.disabled = selected;
+  targetElementButton.disabled = selected;
 });

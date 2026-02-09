@@ -289,6 +289,257 @@ describe('Button Area', () => {
     expect(el.hasAttribute('disabled')).to.be.true;
   });
 
+  describe('target and targetElement', () => {
+    it('should locate target element by ID when target property is set', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.id = 'target-button';
+      targetButton.textContent = 'Target Button';
+      document.body.appendChild(targetButton);
+
+      const { el } = await createFixture({});
+      el.target = 'target-button';
+      await elementUpdated(el);
+
+      expect(el.targetElement).to.equal(targetButton);
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should use targetElement when set directly', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.textContent = 'Target Button';
+      document.body.appendChild(targetButton);
+
+      const { el } = await createFixture({});
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      expect(el.targetElement).to.equal(targetButton);
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should remove focus indicator when targetElement is set', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.textContent = 'Target Button';
+      document.body.appendChild(targetButton);
+
+      const { el, focusIndicator } = await createFixture({});
+
+      expect(focusIndicator.isConnected).to.be.true;
+
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      expect(focusIndicator.isConnected).to.be.false;
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should restore focus indicator when targetElement is cleared', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.textContent = 'Target Button';
+      document.body.appendChild(targetButton);
+
+      const { el, focusIndicator } = await createFixture({});
+
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+      expect(focusIndicator.isConnected).to.be.false;
+
+      el.targetElement = undefined;
+      await elementUpdated(el);
+
+      expect(focusIndicator.isConnected).to.be.true;
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should sync disabled state from targetElement when set', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.textContent = 'Target Button';
+      targetButton.disabled = true;
+      document.body.appendChild(targetButton);
+
+      const { el } = await createFixture({});
+      expect(el.disabled).to.be.false;
+
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      expect(el.disabled).to.be.true;
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should sync disabled state to targetElement when button area disabled changes', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.textContent = 'Target Button';
+      document.body.appendChild(targetButton);
+
+      const { el } = await createFixture({});
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      expect(targetButton.disabled).to.be.false;
+
+      el.disabled = true;
+      await elementUpdated(el);
+
+      expect(targetButton.disabled).to.be.true;
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should observe targetElement disabled attribute changes', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.textContent = 'Target Button';
+      document.body.appendChild(targetButton);
+
+      const { el } = await createFixture({});
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      expect(el.disabled).to.be.false;
+
+      targetButton.setAttribute('disabled', '');
+      await elementUpdated(el);
+
+      expect(el.disabled).to.be.true;
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should clear targetElement when target element is removed and disabled changes', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.textContent = 'Target Button';
+      document.body.appendChild(targetButton);
+
+      const { el } = await createFixture({});
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      expect(el.targetElement).to.equal(targetButton);
+
+      // Remove the element from DOM
+      document.body.removeChild(targetButton);
+
+      // Trigger a disabled attribute change to invoke the observer callback
+      targetButton.setAttribute('disabled', '');
+      await elementUpdated(el);
+
+      // The observer detects the element is disconnected and clears targetElement
+      expect(el.targetElement).to.be.undefined;
+    });
+
+    it('should update targetElement when target property changes', async () => {
+      const targetButton1 = document.createElement('button');
+      targetButton1.id = 'target-button-1';
+      targetButton1.textContent = 'Target Button 1';
+      document.body.appendChild(targetButton1);
+
+      const targetButton2 = document.createElement('button');
+      targetButton2.id = 'target-button-2';
+      targetButton2.textContent = 'Target Button 2';
+      document.body.appendChild(targetButton2);
+
+      const { el } = await createFixture({});
+      el.target = 'target-button-1';
+      await elementUpdated(el);
+
+      expect(el.targetElement).to.equal(targetButton1);
+
+      el.target = 'target-button-2';
+      await elementUpdated(el);
+
+      expect(el.targetElement).to.equal(targetButton2);
+
+      document.body.removeChild(targetButton1);
+      document.body.removeChild(targetButton2);
+    });
+
+    it('should prioritize targetElement over slotted button for disabled state', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.textContent = 'Target Button';
+      targetButton.disabled = true;
+      document.body.appendChild(targetButton);
+
+      const { el, button } = await createFixture({});
+      expect(button.disabled).to.be.false;
+
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      // Button area should sync with target element, not slotted button
+      expect(el.disabled).to.be.true;
+      expect(button.disabled).to.be.false;
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should not sync disabled state from slotted button when targetElement is set', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.textContent = 'Target Button';
+      document.body.appendChild(targetButton);
+
+      const { el, button } = await createFixture({});
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      expect(el.disabled).to.be.false;
+
+      // Change slotted button disabled state
+      button.setAttribute('disabled', '');
+      await elementUpdated(el);
+
+      // Button area should not sync with slotted button when target element is set
+      expect(el.disabled).to.be.false;
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should restore focus indicator only when not disabled and targetElement is cleared', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.textContent = 'Target Button';
+      document.body.appendChild(targetButton);
+
+      const { el, focusIndicator } = await createFixture({});
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      expect(focusIndicator.isConnected).to.be.false;
+
+      el.disabled = true;
+      await elementUpdated(el);
+
+      el.targetElement = undefined;
+      await elementUpdated(el);
+
+      // Focus indicator should not be restored because button area is disabled
+      expect(focusIndicator.isConnected).to.be.false;
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should handle targetElement without disabled property', async () => {
+      const targetDiv = document.createElement('div');
+      targetDiv.textContent = 'Target Div';
+      document.body.appendChild(targetDiv);
+
+      const { el, button } = await createFixture({});
+      el.targetElement = targetDiv;
+      await elementUpdated(el);
+
+      // Should fall back to slotted button since targetDiv doesn't have disabled property
+      el.disabled = true;
+      await elementUpdated(el);
+
+      expect(button.disabled).to.be.true;
+
+      document.body.removeChild(targetDiv);
+    });
+  });
+
   function getHeadingEl(el: IButtonAreaComponent): HTMLSpanElement {
     return el.querySelector('.heading') as HTMLSpanElement;
   }
