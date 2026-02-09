@@ -152,7 +152,7 @@ For each remaining test:
 
 ### Phase 4: Cleanup
 
-1. Remove all remaining `.skip` markers
+1. Remove all remaining `.skip` markers (no tests should be skipped at this point)
 2. Verify that there is a 1:1 mapping of tests from old file to new file (unless some were removed/modified based on review)
 3. Delete the old WTR test file
 4. Run full test suite to verify coverage
@@ -335,9 +335,7 @@ public clickOutside(): void {
 
 ```typescript
 // pointerdown on handle element
-this.moveHandleElement.dispatchEvent(
-  new PointerEvent('pointerdown', { bubbles: true, clientX, clientY })
-);
+this.moveHandleElement.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX, clientY }));
 
 // pointermove/pointerup on document
 document.dispatchEvent(new PointerEvent('pointermove', { bubbles: true, clientX, clientY }));
@@ -355,7 +353,7 @@ interface IComponentInternal extends IComponent {
   _core: { _moveController: unknown };
 }
 
-class ComponentHarness extends TestHarness<IComponentInternal> { }
+class ComponentHarness extends TestHarness<IComponentInternal> {}
 ```
 
 Do NOT add new tests that access internal properties.

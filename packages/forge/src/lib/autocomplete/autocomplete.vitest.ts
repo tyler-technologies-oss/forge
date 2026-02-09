@@ -1,34 +1,40 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, it, expect, vi } from 'vitest';
+import { render } from 'vitest-browser-lit';
+import { html, nothing } from 'lit';
 import { getShadowElement } from '@tylertech/forge-core';
-import { nothing } from 'lit';
-import { spy } from 'sinon';
-import { AVATAR_CONSTANTS, IAvatarComponent } from '../avatar/index.js';
+import type { IAvatarComponent } from '../avatar/index.js';
+import { AVATAR_CONSTANTS } from '../avatar/index.js';
 import { frame, task } from '../core/utils/utils.js';
 import { FIELD_CONSTANTS } from '../field/index.js';
-import { ICON_CONSTANTS, IconComponent } from '../icon/index.js';
-import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress/index.js';
-import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/index.js';
+import type { IconComponent } from '../icon/index.js';
+import { ICON_CONSTANTS } from '../icon/index.js';
+import type { ILinearProgressComponent } from '../linear-progress/index.js';
+import { LINEAR_PROGRESS_CONSTANTS } from '../linear-progress/index.js';
+import type { IListItemComponent } from '../list/index.js';
+import { LIST_ITEM_CONSTANTS } from '../list/index.js';
 import { LIST_DROPDOWN_CONSTANTS } from '../list-dropdown/index.js';
-import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover/index.js';
-import { IOption } from '../select/index.js';
-import { ISkeletonComponent, SKELETON_CONSTANTS } from '../skeleton/index.js';
-import { ITextFieldComponent, ITextFieldComponentDelegateOptions, TEXT_FIELD_CONSTANTS } from '../text-field/index.js';
+import type { IPopoverComponent } from '../popover/index.js';
+import { POPOVER_CONSTANTS } from '../popover/index.js';
+import type { IOption } from '../select/index.js';
+import type { ISkeletonComponent } from '../skeleton/index.js';
+import { SKELETON_CONSTANTS } from '../skeleton/index.js';
+import type { ITextFieldComponent, ITextFieldComponentDelegateOptions } from '../text-field/index.js';
+import { TEXT_FIELD_CONSTANTS } from '../text-field/index.js';
 import {
   AUTOCOMPLETE_CONSTANTS,
   AutocompleteComponent,
   AutocompleteComponentDelegate,
-  AutocompleteComponentDelegateProps,
-  AutocompleteFilterCallback,
   AutocompleteMode,
-  AutocompleteOptionBuilder,
-  IAutocompleteAdapter,
-  IAutocompleteComponent,
-  IAutocompleteComponentDelegateConfig,
-  IAutocompleteComponentDelegateOptions,
-  IAutocompleteCore,
-  IAutocompleteOption,
-  IAutocompleteOptionGroup
+  type AutocompleteComponentDelegateProps,
+  type AutocompleteFilterCallback,
+  type AutocompleteOptionBuilder,
+  type IAutocompleteAdapter,
+  type IAutocompleteComponent,
+  type IAutocompleteComponentDelegateConfig,
+  type IAutocompleteComponentDelegateOptions,
+  type IAutocompleteCore,
+  type IAutocompleteOption,
+  type IAutocompleteOptionGroup
 } from './index.js';
 
 import './autocomplete.js';
@@ -63,6 +69,7 @@ const DEFAULT_AUTOCOMPLETE_TEXTFIELD_DELEGATE_CONFIG: IAutocompleteComponentDele
   }
 };
 
+// Popover animation duration (200ms) + buffer
 const POPOVER_ANIMATION_DURATION = 200;
 
 type AutocompleteAdapterInternal = IAutocompleteAdapter & { _component: AutocompleteComponentInternal; _targetElement: HTMLElement };
@@ -77,7 +84,7 @@ interface ITestAutocompleteGroup {
 describe('AutocompleteComponent', () => {
   describe('with static <input> element', () => {
     it('should call filter callback', async () => {
-      const filterCb = spy();
+      const filterCb = vi.fn();
       const harness = await createFixture({
         filter: () => {
           filterCb();
@@ -86,11 +93,11 @@ describe('AutocompleteComponent', () => {
       });
       harness.triggerDropdownClick();
       await frame();
-      expect(filterCb).to.have.been.calledOnce;
+      expect(filterCb).toHaveBeenCalledOnce();
     });
 
     it('should not call filter callback if filter on focus is turned off', async () => {
-      const filterCb = spy();
+      const filterCb = vi.fn();
       const harness = await createFixture({
         filter: () => {
           filterCb();
@@ -100,8 +107,8 @@ describe('AutocompleteComponent', () => {
       });
       harness.triggerDropdownClick();
       await frame();
-      expect(harness.component.filterOnFocus).to.be.false;
-      expect(filterCb).to.not.have.been.called;
+      expect(harness.component.filterOnFocus).toBe(false);
+      expect(filterCb).not.toHaveBeenCalled();
     });
 
     it('should not show popup if no filter options are provided', async () => {
@@ -112,7 +119,7 @@ describe('AutocompleteComponent', () => {
       await frame();
       await task(POPOVER_ANIMATION_DURATION);
 
-      expect(harness.popupElement).to.be.null;
+      expect(harness.popupElement).toBeNull();
     });
 
     it('should show popup if filter options are provided', async () => {
@@ -122,7 +129,7 @@ describe('AutocompleteComponent', () => {
       harness.triggerDropdownClick();
       await frame();
 
-      expect(harness.popupElement).to.not.be.null;
+      expect(harness.popupElement).not.toBeNull();
     });
 
     it('should show popup programatically', async () => {
@@ -132,8 +139,8 @@ describe('AutocompleteComponent', () => {
       harness.component.openDropdown();
       await frame();
 
-      expect(harness.component.open).to.be.true;
-      expect(harness.popupElement).to.not.be.null;
+      expect(harness.component.open).toBe(true);
+      expect(harness.popupElement).not.toBeNull();
     });
 
     it('should close popup programatically', async () => {
@@ -144,22 +151,22 @@ describe('AutocompleteComponent', () => {
       await task();
       harness.component.closeDropdown();
       await task(POPOVER_ANIMATION_DURATION);
-      expect(harness.component.open).to.be.false;
-      expect(harness.popupElement).to.be.null;
+      expect(harness.component.open).toBe(false);
+      expect(harness.popupElement).toBeNull();
     });
 
     it('aria-controls attribute should be present when the popup is opened and closed', async () => {
       const harness = await createFixture({
         filter: () => DEFAULT_FILTER_OPTIONS
       });
-      expect(harness.input.hasAttribute('aria-controls')).to.be.true;
+      expect(harness.input.hasAttribute('aria-controls')).toBe(true);
       harness.component.openDropdown();
       await task();
       harness.component.closeDropdown();
       await task(POPOVER_ANIMATION_DURATION);
-      expect(harness.component.open).to.be.false;
-      expect(harness.popupElement).to.be.null;
-      expect(harness.input.hasAttribute('aria-controls')).to.be.true;
+      expect(harness.component.open).toBe(false);
+      expect(harness.popupElement).toBeNull();
+      expect(harness.input.hasAttribute('aria-controls')).toBe(true);
     });
 
     it('should not highlight first option in popup by default', async () => {
@@ -171,7 +178,7 @@ describe('AutocompleteComponent', () => {
       await frame();
       const listItems = harness.getListItems();
 
-      expect(listItems.every(li => !li.active)).to.be.true;
+      expect(listItems.every(li => !li.active)).toBe(true);
     });
 
     it('should not close popup when programmatically adding values', async () => {
@@ -187,8 +194,8 @@ describe('AutocompleteComponent', () => {
       harness.clickListItem(1);
       harness.component.value = [DEFAULT_FILTER_OPTIONS[2]];
 
-      expect(harness.input.value).to.equal(DEFAULT_FILTER_OPTIONS[2].label);
-      expect(harness.component.open).to.be.true;
+      expect(harness.input.value).toBe(DEFAULT_FILTER_OPTIONS[2].label);
+      expect(harness.component.open).toBe(true);
     });
 
     it('should append options while dropdown is open', async () => {
@@ -200,16 +207,16 @@ describe('AutocompleteComponent', () => {
       harness.component.appendOptions([{ label: 'New option', value: 'new' }]);
       await frame();
       const listItems = harness.getListItems();
-      expect(listItems[listItems.length - 1].value).to.equal('new');
+      expect(listItems[listItems.length - 1].value).toBe('new');
     });
 
     it('should use default debounce value', async () => {
       const harness = await createFixture();
-      expect(harness.component.debounce).to.equal(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
+      expect(harness.component.debounce).toBe(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
     });
 
     it('should call filter after debounce elapses', async () => {
-      const filterSpy = spy();
+      const filterSpy = vi.fn();
       const harness = await createFixture({
         filter: () => {
           filterSpy();
@@ -218,13 +225,13 @@ describe('AutocompleteComponent', () => {
       });
       harness.sendInputValue('a');
 
-      expect(filterSpy).to.not.have.been.called;
+      expect(filterSpy).not.toHaveBeenCalled();
       await task(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
-      expect(filterSpy).to.have.been.called;
+      expect(filterSpy).toHaveBeenCalled();
     });
 
     it('should use custom debounce time', async () => {
-      const filterSpy = spy();
+      const filterSpy = vi.fn();
       const harness = await createFixture({
         debounce: 200,
         filter: () => {
@@ -234,13 +241,13 @@ describe('AutocompleteComponent', () => {
       });
       harness.sendInputValue('a');
 
-      expect(filterSpy).to.not.have.been.called;
+      expect(filterSpy).not.toHaveBeenCalled();
       await task(200);
-      expect(filterSpy).to.have.been.called;
+      expect(filterSpy).toHaveBeenCalled();
     });
 
     it('should not use debounce if set to 0', async () => {
-      const filterSpy = spy();
+      const filterSpy = vi.fn();
       const harness = await createFixture({
         debounce: 0,
         filter: () => {
@@ -250,7 +257,7 @@ describe('AutocompleteComponent', () => {
       });
       harness.sendInputValue('a');
 
-      expect(filterSpy).to.have.been.called;
+      expect(filterSpy).toHaveBeenCalled();
     });
 
     it('should display filtered options in dropdown on initial click', async () => {
@@ -261,7 +268,7 @@ describe('AutocompleteComponent', () => {
       harness.triggerDropdownClick();
       await frame();
       const popupOptions = _toLabelValue(harness.getPopupOptions());
-      expect(popupOptions).to.deep.equal(DEFAULT_FILTER_OPTIONS);
+      expect(popupOptions).toEqual(DEFAULT_FILTER_OPTIONS);
     });
 
     it('should display filtered options in dropdown after entering character', async () => {
@@ -272,7 +279,7 @@ describe('AutocompleteComponent', () => {
       harness.sendInputValue('one');
       await frame();
       const popupOptions = _toLabelValue(harness.getPopupOptions());
-      expect(popupOptions).to.deep.equal([DEFAULT_FILTER_OPTIONS[0]]);
+      expect(popupOptions).toEqual([DEFAULT_FILTER_OPTIONS[0]]);
     });
 
     it('should update selected options in dropdown after filtering', async () => {
@@ -287,17 +294,17 @@ describe('AutocompleteComponent', () => {
       await frame();
 
       let popupOptions = harness.getPopupOptions();
-      expect(popupOptions[0].selected).to.be.true;
+      expect(popupOptions[0].selected).toBe(true);
 
       harness.sendInputValue('o');
       await frame();
       popupOptions = harness.getPopupOptions();
 
-      expect(popupOptions.every(o => !o.selected)).to.be.true;
+      expect(popupOptions.every(o => !o.selected)).toBe(true);
     });
 
     it('should emit change event when clicking option in dropdown', async () => {
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
       const harness = await createFixture({
         filter: () => DEFAULT_FILTER_OPTIONS
       });
@@ -305,15 +312,15 @@ describe('AutocompleteComponent', () => {
       harness.component.open = true;
       await frame();
       harness.clickListItem(0);
-      expect(harness.input.value).to.equal(DEFAULT_FILTER_OPTIONS[0].label);
-      expect(harness.component.value).to.equal(DEFAULT_FILTER_OPTIONS[0].value);
-      expect(changeSpy).to.have.been.calledOnce;
-      expect(changeSpy.firstCall.args[0]).to.be.instanceOf(CustomEvent);
-      expect(changeSpy.firstCall.args[0].detail).to.equal(DEFAULT_FILTER_OPTIONS[0].value);
+      expect(harness.input.value).toBe(DEFAULT_FILTER_OPTIONS[0].label);
+      expect(harness.component.value).toBe(DEFAULT_FILTER_OPTIONS[0].value);
+      expect(changeSpy).toHaveBeenCalledOnce();
+      expect(changeSpy.mock.calls[0][0]).toBeInstanceOf(CustomEvent);
+      expect(changeSpy.mock.calls[0][0].detail).toBe(DEFAULT_FILTER_OPTIONS[0].value);
     });
 
     it('should emit change event when clicking option in dropdown in multiple mode', async () => {
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
       const harness = await createFixture({
         filter: () => DEFAULT_FILTER_OPTIONS,
         multiple: true
@@ -323,14 +330,14 @@ describe('AutocompleteComponent', () => {
       await frame();
       harness.clickListItem(0);
       harness.clickListItem(1);
-      expect(harness.input.value).to.equal('2 options selected');
-      expect(harness.component.value).to.deep.equal([DEFAULT_FILTER_OPTIONS[0].value, DEFAULT_FILTER_OPTIONS[1].value]);
-      expect(changeSpy).to.have.been.calledTwice;
+      expect(harness.input.value).toBe('2 options selected');
+      expect(harness.component.value).toEqual([DEFAULT_FILTER_OPTIONS[0].value, DEFAULT_FILTER_OPTIONS[1].value]);
+      expect(changeSpy).toHaveBeenCalledTimes(2);
     });
 
     it('should emit select event when clicking option in dropdown in stateless mode', async () => {
-      const changeSpy = spy();
-      const selectSpy = spy();
+      const changeSpy = vi.fn();
+      const selectSpy = vi.fn();
       const harness = await createFixture({
         mode: AutocompleteMode.Stateless,
         filter: () => DEFAULT_FILTER_OPTIONS
@@ -342,14 +349,14 @@ describe('AutocompleteComponent', () => {
       await frame();
       harness.clickListItem(0);
 
-      expect(harness.input.value).to.equal('');
-      expect(harness.component.value).to.be.null;
-      expect(changeSpy).to.have.callCount(0);
-      expect(selectSpy).to.have.been.calledOnce;
+      expect(harness.input.value).toBe('');
+      expect(harness.component.value).toBeNull();
+      expect(changeSpy).toHaveBeenCalledTimes(0);
+      expect(selectSpy).toHaveBeenCalledOnce();
     });
 
     it('should not close dropdown if select event is canceled in stateless mode', async () => {
-      const selectSpy = spy((evt: CustomEvent) => evt.preventDefault());
+      const selectSpy = vi.fn((evt: CustomEvent) => evt.preventDefault());
       const harness = await createFixture({
         mode: AutocompleteMode.Stateless,
         filter: () => DEFAULT_FILTER_OPTIONS
@@ -364,8 +371,8 @@ describe('AutocompleteComponent', () => {
       await frame();
       harness.clickListItem(0);
 
-      expect(harness.input.value).to.equal(filterText);
-      expect(harness.component.open).to.be.true;
+      expect(harness.input.value).toBe(filterText);
+      expect(harness.component.open).toBe(true);
     });
 
     it('should set value', async () => {
@@ -374,8 +381,8 @@ describe('AutocompleteComponent', () => {
         value: DEFAULT_FILTER_OPTIONS[0].value
       });
       await frame();
-      expect(harness.component.value).to.equal(DEFAULT_FILTER_OPTIONS[0].value);
-      expect(harness.input.value).to.equal(DEFAULT_FILTER_OPTIONS[0].label);
+      expect(harness.component.value).toBe(DEFAULT_FILTER_OPTIONS[0].value);
+      expect(harness.input.value).toBe(DEFAULT_FILTER_OPTIONS[0].label);
     });
 
     it('should set value when multiple is allowed', async () => {
@@ -385,8 +392,8 @@ describe('AutocompleteComponent', () => {
       });
       harness.component.value = [DEFAULT_FILTER_OPTIONS[0].value, DEFAULT_FILTER_OPTIONS[1].value];
       await frame();
-      expect(harness.component.value).to.deep.equal([DEFAULT_FILTER_OPTIONS[0].value, DEFAULT_FILTER_OPTIONS[1].value]);
-      expect(harness.input.value).to.equal('2 options selected');
+      expect(harness.component.value).toEqual([DEFAULT_FILTER_OPTIONS[0].value, DEFAULT_FILTER_OPTIONS[1].value]);
+      expect(harness.input.value).toBe('2 options selected');
     });
 
     it('should set single option value when one option is selected in multiple mode', async () => {
@@ -396,7 +403,7 @@ describe('AutocompleteComponent', () => {
         value: [DEFAULT_FILTER_OPTIONS[0].value]
       });
       await frame();
-      expect(harness.input.value).to.equal(DEFAULT_FILTER_OPTIONS[0].label);
+      expect(harness.input.value).toBe(DEFAULT_FILTER_OPTIONS[0].label);
     });
 
     it('should set label via match key', async () => {
@@ -413,7 +420,7 @@ describe('AutocompleteComponent', () => {
       });
       await frame();
 
-      expect(harness.input.value).to.equal(filterOptions[0].label);
+      expect(harness.input.value).toBe(filterOptions[0].label);
     });
 
     it('should close dropdown when input is blurred', async () => {
@@ -423,12 +430,12 @@ describe('AutocompleteComponent', () => {
       harness.triggerDropdownClick();
       await frame();
 
-      expect(harness.popupElement).to.not.be.null;
+      expect(harness.popupElement).not.toBeNull();
 
       harness.input.dispatchEvent(new Event('blur'));
       await task(POPOVER_ANIMATION_DURATION);
 
-      expect(harness.popupElement).to.be.null;
+      expect(harness.popupElement).toBeNull();
     });
 
     it('should not open dropdown when receiving focus in input', async () => {
@@ -437,7 +444,7 @@ describe('AutocompleteComponent', () => {
       });
       harness.input.focus();
       await frame();
-      expect(harness.popupElement).to.be.null;
+      expect(harness.popupElement).toBeNull();
     });
 
     it('should highlight next option when arrow down key is pressed', async () => {
@@ -451,7 +458,7 @@ describe('AutocompleteComponent', () => {
       harness.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
 
       const activeListItemIndex = harness.getActiveListItemIndex();
-      expect(activeListItemIndex).to.equal(0);
+      expect(activeListItemIndex).toBe(0);
     });
 
     it('should highlight previous option when arrow up key is pressed', async () => {
@@ -468,7 +475,7 @@ describe('AutocompleteComponent', () => {
       harness.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' })); // 0
 
       const activeListItemIndex = harness.getActiveListItemIndex();
-      expect(activeListItemIndex).to.equal(0);
+      expect(activeListItemIndex).toBe(0);
     });
 
     it('should wrap active element highlight previous', async () => {
@@ -482,7 +489,7 @@ describe('AutocompleteComponent', () => {
       harness.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
 
       const activeListItemIndex = harness.getActiveListItemIndex();
-      expect(activeListItemIndex).to.equal(2);
+      expect(activeListItemIndex).toBe(2);
     });
 
     it('should wrap active element highlight next', async () => {
@@ -500,7 +507,7 @@ describe('AutocompleteComponent', () => {
       harness.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // Index 0
 
       const activeListItemIndex = harness.getActiveListItemIndex();
-      expect(activeListItemIndex).to.equal(0);
+      expect(activeListItemIndex).toBe(0);
     });
 
     it('should highlight last item if end key is pressed', async () => {
@@ -514,7 +521,7 @@ describe('AutocompleteComponent', () => {
       harness.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'End' }));
 
       const activeListItemIndex = harness.getActiveListItemIndex();
-      expect(activeListItemIndex).to.equal(2);
+      expect(activeListItemIndex).toBe(2);
     });
 
     it('should highlight first item if home key is pressed', async () => {
@@ -530,7 +537,7 @@ describe('AutocompleteComponent', () => {
       harness.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home' }));
 
       const activeListItemIndex = harness.getActiveListItemIndex();
-      expect(activeListItemIndex).to.equal(0);
+      expect(activeListItemIndex).toBe(0);
     });
 
     it('should close the dropdown if escape key is pressed', async () => {
@@ -545,11 +552,11 @@ describe('AutocompleteComponent', () => {
       harness.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
       await task(POPOVER_ANIMATION_DURATION);
 
-      expect(harness.popupElement).to.be.null;
+      expect(harness.popupElement).toBeNull();
     });
 
     it('should emit change event if backspace is pressed to clear text', async () => {
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
       const harness = await createFixture({
         filter: () => DEFAULT_FILTER_OPTIONS,
         value: 1
@@ -560,13 +567,13 @@ describe('AutocompleteComponent', () => {
       harness.input.value = '';
       harness.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
 
-      expect(changeSpy).to.have.been.calledOnce;
-      expect(changeSpy.firstCall.args[0].detail).to.be.null;
-      expect(harness.component.value).to.be.null;
+      expect(changeSpy).toHaveBeenCalledOnce();
+      expect(changeSpy.mock.calls[0][0].detail).toBeNull();
+      expect(harness.component.value).toBeNull();
     });
 
     it('should clear value if input text is removed', async () => {
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
       const harness = await createFixture({
         filter: () => DEFAULT_FILTER_OPTIONS,
         value: 1
@@ -576,13 +583,13 @@ describe('AutocompleteComponent', () => {
       await task();
       harness.sendInputValue('');
 
-      expect(changeSpy).to.have.been.calledOnce;
-      expect(changeSpy.firstCall.args[0].detail).to.be.null;
-      expect(harness.component.value).to.be.null;
+      expect(changeSpy).toHaveBeenCalledOnce();
+      expect(changeSpy.mock.calls[0][0].detail).toBeNull();
+      expect(harness.component.value).toBeNull();
     });
 
     it('should clear value if input text is changed with allow unmatched turned on', async () => {
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
       const harness = await createFixture({
         allowUnmatched: true,
         filter: () => DEFAULT_FILTER_OPTIONS,
@@ -593,13 +600,13 @@ describe('AutocompleteComponent', () => {
       await task();
       harness.sendInputValue('test');
 
-      expect(changeSpy).to.have.been.calledOnce;
-      expect(changeSpy.firstCall.args[0].detail).to.be.null;
-      expect(harness.component.value).to.be.null;
+      expect(changeSpy).toHaveBeenCalledOnce();
+      expect(changeSpy.mock.calls[0][0].detail).toBeNull();
+      expect(harness.component.value).toBeNull();
     });
 
     it('should select active option if enter key is pressed', async () => {
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
       const harness = await createFixture({
         filter: () => DEFAULT_FILTER_OPTIONS
       });
@@ -611,15 +618,15 @@ describe('AutocompleteComponent', () => {
       harness.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
       harness.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
-      expect(changeSpy).to.have.been.calledOnce;
-      expect(changeSpy.firstCall.args[0].detail).to.equal(DEFAULT_FILTER_OPTIONS[0].value);
-      expect(harness.component.value).to.equal(DEFAULT_FILTER_OPTIONS[0].value);
-      expect(harness.input.value).to.equal(DEFAULT_FILTER_OPTIONS[0].label);
+      expect(changeSpy).toHaveBeenCalledOnce();
+      expect(changeSpy.mock.calls[0][0].detail).toBe(DEFAULT_FILTER_OPTIONS[0].value);
+      expect(harness.component.value).toBe(DEFAULT_FILTER_OPTIONS[0].value);
+      expect(harness.input.value).toBe(DEFAULT_FILTER_OPTIONS[0].label);
     });
 
     it('should not emit change event if enter key is pressed in multiple mode when only one disabled option exists in the filtered options', async () => {
-      const filterSpy = spy(() => Promise.resolve([{ label: 'No results', value: undefined, disabled: true }]));
-      const changeSpy = spy();
+      const filterSpy = vi.fn(() => Promise.resolve([{ label: 'No results', value: undefined, disabled: true }]));
+      const changeSpy = vi.fn();
       const harness = await createFixture({
         multiple: true,
         filter: filterSpy
@@ -636,12 +643,12 @@ describe('AutocompleteComponent', () => {
 
       harness.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
-      expect(filterSpy).to.have.been.called;
-      expect(changeSpy).to.not.have.been.called;
+      expect(filterSpy).toHaveBeenCalled();
+      expect(changeSpy).not.toHaveBeenCalled();
     });
 
     it('should not select active option if input is blurred', async () => {
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
       const harness = await createFixture({
         filter: () => DEFAULT_FILTER_OPTIONS
       });
@@ -652,13 +659,13 @@ describe('AutocompleteComponent', () => {
       await task(POPOVER_ANIMATION_DURATION);
       harness.input.blur();
 
-      expect(changeSpy).to.not.have.been.called;
-      expect(harness.component.value).to.be.null;
-      expect(harness.input.value).to.equal('');
+      expect(changeSpy).not.toHaveBeenCalled();
+      expect(harness.component.value).toBeNull();
+      expect(harness.input.value).toBe('');
     });
 
     it('should select active option if input is blurred via tab key', async () => {
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
       const harness = await createFixture({
         filter: () => DEFAULT_FILTER_OPTIONS
       });
@@ -671,14 +678,14 @@ describe('AutocompleteComponent', () => {
       await frame();
       harness.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
 
-      expect(changeSpy).to.have.been.calledOnce;
-      expect(changeSpy.firstCall.args[0].detail).to.equal(DEFAULT_FILTER_OPTIONS[0].value);
-      expect(harness.component.value).to.equal(DEFAULT_FILTER_OPTIONS[0].value);
-      expect(harness.input.value).to.equal(DEFAULT_FILTER_OPTIONS[0].label);
+      expect(changeSpy).toHaveBeenCalledOnce();
+      expect(changeSpy.mock.calls[0][0].detail).toBe(DEFAULT_FILTER_OPTIONS[0].value);
+      expect(harness.component.value).toBe(DEFAULT_FILTER_OPTIONS[0].value);
+      expect(harness.input.value).toBe(DEFAULT_FILTER_OPTIONS[0].label);
     });
 
     it('should not select active option if input is blurred in multiple mode', async () => {
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
       const harness = await createFixture({
         multiple: true,
         filter: () => DEFAULT_FILTER_OPTIONS
@@ -690,13 +697,13 @@ describe('AutocompleteComponent', () => {
       await task(POPOVER_ANIMATION_DURATION);
       harness.input.blur();
 
-      expect(changeSpy).to.not.have.been.called;
-      expect(harness.component.value).to.deep.equal([]);
-      expect(harness.input.value).to.equal('');
+      expect(changeSpy).not.toHaveBeenCalled();
+      expect(harness.component.value).toEqual([]);
+      expect(harness.input.value).toBe('');
     });
 
     it('should select first option on blur after pending filter resolves', async () => {
-      const filterSpy = spy();
+      const filterSpy = vi.fn();
       const harness = await createFixture({
         selectFirstOptionOnBlur: true,
         debounce: 100,
@@ -713,15 +720,15 @@ describe('AutocompleteComponent', () => {
       await task(200);
       await frame();
 
-      expect(filterSpy).to.have.been.calledOnce;
-      expect(harness.component.value).to.equal(DEFAULT_FILTER_OPTIONS[0].value);
-      expect(harness.input.value).to.equal(DEFAULT_FILTER_OPTIONS[0].label);
+      expect(filterSpy).toHaveBeenCalledOnce();
+      expect(harness.component.value).toBe(DEFAULT_FILTER_OPTIONS[0].value);
+      expect(harness.input.value).toBe(DEFAULT_FILTER_OPTIONS[0].label);
     });
 
     it('should emit change event when select-on-blur clears unmatched text with no results', async () => {
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
       let resolveFilter: ((options: IOption[]) => void) | undefined;
-      const filterSpy = spy(
+      const filterSpy = vi.fn(
         () =>
           new Promise<IOption[]>(resolve => {
             resolveFilter = resolve;
@@ -743,16 +750,16 @@ describe('AutocompleteComponent', () => {
       await task();
       await frame();
 
-      expect(filterSpy).to.have.been.calledOnce;
-      expect(filterSpy).to.have.been.calledWith('no results', null);
-      expect(changeSpy).to.have.been.calledOnce;
-      expect(changeSpy.firstCall.args[0].detail).to.be.null;
-      expect(harness.component.value).to.be.null;
-      expect(harness.input.value).to.equal('');
+      expect(filterSpy).toHaveBeenCalledOnce();
+      expect(filterSpy).toHaveBeenCalledWith('no results', null);
+      expect(changeSpy).toHaveBeenCalledOnce();
+      expect(changeSpy.mock.calls[0][0].detail).toBeNull();
+      expect(harness.component.value).toBeNull();
+      expect(harness.input.value).toBe('');
     });
 
     it('should select multiple options when enter key is pressed in multiple mode', async () => {
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
       const harness = await createFixture({
         filter: () => DEFAULT_FILTER_OPTIONS,
         multiple: true
@@ -771,19 +778,19 @@ describe('AutocompleteComponent', () => {
       await frame();
 
       const listItems = harness.getListItems();
-      expect(listItems[0].selected).to.be.true;
-      expect((listItems[0].querySelector(ICON_CONSTANTS.elementName) as IconComponent).name).to.equal('check_box');
-      expect(listItems[1].selected).to.be.true;
-      expect((listItems[1].querySelector(ICON_CONSTANTS.elementName) as IconComponent).name).to.equal('check_box');
-      expect(changeSpy).to.have.been.calledTwice;
-      expect(changeSpy.firstCall.args[0].detail).to.deep.equal([DEFAULT_FILTER_OPTIONS[0].value]);
-      expect(changeSpy.secondCall.args[0].detail).to.deep.equal([DEFAULT_FILTER_OPTIONS[0].value, DEFAULT_FILTER_OPTIONS[1].value]);
-      expect(harness.component.value).to.deep.equal([DEFAULT_FILTER_OPTIONS[0].value, DEFAULT_FILTER_OPTIONS[1].value]);
-      expect(harness.input.value).to.equal('2 options selected');
+      expect(listItems[0].selected).toBe(true);
+      expect((listItems[0].querySelector(ICON_CONSTANTS.elementName) as IconComponent).name).toBe('check_box');
+      expect(listItems[1].selected).toBe(true);
+      expect((listItems[1].querySelector(ICON_CONSTANTS.elementName) as IconComponent).name).toBe('check_box');
+      expect(changeSpy).toHaveBeenCalledTimes(2);
+      expect(changeSpy.mock.calls[0][0].detail).toEqual([DEFAULT_FILTER_OPTIONS[0].value]);
+      expect(changeSpy.mock.calls[1][0].detail).toEqual([DEFAULT_FILTER_OPTIONS[0].value, DEFAULT_FILTER_OPTIONS[1].value]);
+      expect(harness.component.value).toEqual([DEFAULT_FILTER_OPTIONS[0].value, DEFAULT_FILTER_OPTIONS[1].value]);
+      expect(harness.input.value).toBe('2 options selected');
     });
 
     it('should toggle option when in multiple mode', async () => {
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
       const harness = await createFixture({
         filter: () => DEFAULT_FILTER_OPTIONS,
         multiple: true
@@ -798,17 +805,17 @@ describe('AutocompleteComponent', () => {
       await frame();
 
       const listItems = harness.getListItems();
-      expect(listItems[1].selected).to.be.false;
-      expect((listItems[1].querySelector(ICON_CONSTANTS.elementName) as IconComponent)!.name).to.equal('check_box_outline_blank');
-      expect(changeSpy).to.have.been.calledTwice;
-      expect(changeSpy.firstCall.args[0].detail).to.deep.equal([DEFAULT_FILTER_OPTIONS[1].value]);
-      expect(changeSpy.secondCall.args[0].detail).to.deep.equal([]);
-      expect(harness.component.value).to.deep.equal([]);
-      expect(harness.input.value).to.equal('');
+      expect(listItems[1].selected).toBe(false);
+      expect((listItems[1].querySelector(ICON_CONSTANTS.elementName) as IconComponent)!.name).toBe('check_box_outline_blank');
+      expect(changeSpy).toHaveBeenCalledTimes(2);
+      expect(changeSpy.mock.calls[0][0].detail).toEqual([DEFAULT_FILTER_OPTIONS[1].value]);
+      expect(changeSpy.mock.calls[1][0].detail).toEqual([]);
+      expect(harness.component.value).toEqual([]);
+      expect(harness.input.value).toBe('');
     });
 
     it('should not select any options if enter key is pressed when no item is highlighted', async () => {
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
       const harness = await createFixture({
         filter: () => DEFAULT_FILTER_OPTIONS
       });
@@ -817,9 +824,9 @@ describe('AutocompleteComponent', () => {
       await task();
       harness.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
-      expect(changeSpy).to.have.callCount(0);
-      expect(harness.component.value).to.be.null;
-      expect(harness.input.value).to.equal('');
+      expect(changeSpy).toHaveBeenCalledTimes(0);
+      expect(harness.component.value).toBeNull();
+      expect(harness.input.value).toBe('');
     });
 
     it('should open popup if down arrow is pressed', async () => {
@@ -832,7 +839,7 @@ describe('AutocompleteComponent', () => {
       await frame();
       await task(POPOVER_ANIMATION_DURATION);
 
-      expect(harness.popupElement).to.not.be.null;
+      expect(harness.popupElement).not.toBeNull();
     });
 
     it('should activate first option if opened via down arrow key when there is no option selected', async () => {
@@ -846,7 +853,7 @@ describe('AutocompleteComponent', () => {
       await task(POPOVER_ANIMATION_DURATION);
 
       const activeListItemIndex = harness.getActiveListItemIndex();
-      expect(activeListItemIndex).to.equal(0);
+      expect(activeListItemIndex).toBe(0);
     });
 
     it('should activate selected option if opened via down arrow key when there is a selected option', async () => {
@@ -862,7 +869,7 @@ describe('AutocompleteComponent', () => {
       await task(POPOVER_ANIMATION_DURATION);
 
       const activeListItemIndex = harness.getActiveListItemIndex();
-      expect(activeListItemIndex).to.equal(expectedSelectedIndex);
+      expect(activeListItemIndex).toBe(expectedSelectedIndex);
     });
 
     it('should activate first option when filtering', async () => {
@@ -880,7 +887,7 @@ describe('AutocompleteComponent', () => {
       await frame();
 
       const activeListItemIndex = harness.getActiveListItemIndex();
-      expect(activeListItemIndex).to.equal(0);
+      expect(activeListItemIndex).toBe(0);
     });
 
     it('should not activate first option if filterFocusFirst is false', async () => {
@@ -899,7 +906,7 @@ describe('AutocompleteComponent', () => {
       await frame();
 
       const activeListItemIndex = harness.getActiveListItemIndex();
-      expect(activeListItemIndex).to.equal(-1);
+      expect(activeListItemIndex).toBe(-1);
     });
 
     it('should not activate first option when clearing filter text', async () => {
@@ -919,7 +926,7 @@ describe('AutocompleteComponent', () => {
       await frame();
 
       const activeListItemIndex = harness.getActiveListItemIndex();
-      expect(activeListItemIndex).to.equal(-1);
+      expect(activeListItemIndex).toBe(-1);
     });
 
     it('should set CSS class on popup', async () => {
@@ -930,8 +937,8 @@ describe('AutocompleteComponent', () => {
       harness.component.openDropdown();
       await frame();
 
-      expect(harness.component.popupClasses).to.deep.equal(['test-class']);
-      expect(harness.popupElement!.classList.contains('test-class')).to.be.true;
+      expect(harness.component.popupClasses).toEqual(['test-class']);
+      expect(harness.popupElement!.classList.contains('test-class')).toBe(true);
     });
 
     it('should sync popup width to popup target', async () => {
@@ -946,8 +953,8 @@ describe('AutocompleteComponent', () => {
       const popup = harness.popupElement as HTMLElement;
       const container = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
 
-      expect(harness.component.syncPopupWidth).to.be.true;
-      expect(container!.getBoundingClientRect().width).to.equal(harness.input.getBoundingClientRect().width);
+      expect(harness.component.syncPopupWidth).toBe(true);
+      expect(container!.getBoundingClientRect().width).toBe(harness.input.getBoundingClientRect().width);
     });
 
     it('should set popup target', async () => {
@@ -964,19 +971,19 @@ describe('AutocompleteComponent', () => {
       harness.component.openDropdown();
       await frame();
       await task(POPOVER_ANIMATION_DURATION);
-      const targetElement = harness.component['_core']['_adapter']['_targetElement'];
+      const targetElement = harness.component._core._adapter._targetElement;
 
-      expect(targetElement).to.equal(expectedTargetElement);
+      expect(targetElement).toBe(expectedTargetElement);
     });
 
     it('should call option builder and display custom option template for each item', async () => {
-      const builder: AutocompleteOptionBuilder = (option, filterText, parentElement) => {
+      const builder: AutocompleteOptionBuilder = (option, _filterText, _parentElement) => {
         const div = document.createElement('div');
         div.id = `custom-option-${option.value}`;
         div.textContent = option.label;
         return div;
       };
-      const builderSpy = spy(builder);
+      const builderSpy = vi.fn(builder);
       const harness = await createFixture({
         filter: () => DEFAULT_FILTER_OPTIONS
       });
@@ -984,12 +991,12 @@ describe('AutocompleteComponent', () => {
       harness.component.openDropdown();
       await frame();
       const listItems = harness.getListItems();
-      const allOptionsUseBuilder = listItems.every((li, index) => {
+      const allOptionsUseBuilder = listItems.every(li => {
         const div = li.querySelector('button')?.firstElementChild;
         return div && div.id === `custom-option-${li.value}`;
       });
-      expect(builderSpy).to.have.been.calledThrice;
-      expect(allOptionsUseBuilder).to.be.true;
+      expect(builderSpy).toHaveBeenCalledTimes(3);
+      expect(allOptionsUseBuilder).toBe(true);
     });
 
     it('should emit scroll bottom event', async () => {
@@ -1005,14 +1012,14 @@ describe('AutocompleteComponent', () => {
         }
       });
       harness.component.openDropdown();
-      const scrolledBottomSpy = spy();
+      const scrolledBottomSpy = vi.fn();
       harness.component.addEventListener(AUTOCOMPLETE_CONSTANTS.events.SCROLLED_BOTTOM, scrolledBottomSpy);
       await frame();
       const popup = harness.popupElement as HTMLElement;
       const scrollElement = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE) as HTMLElement;
       scrollElement.scrollTop = scrollElement.scrollHeight - harness.component.observeScrollThreshold;
       await frame();
-      expect(scrolledBottomSpy).to.have.been.calledOnce;
+      expect(scrolledBottomSpy).toHaveBeenCalledOnce();
     });
 
     it('should set scroll observer if set while popup is open', async () => {
@@ -1027,7 +1034,7 @@ describe('AutocompleteComponent', () => {
       });
       harness.component.observeScroll = true;
       harness.component.openDropdown();
-      const scrolledBottomSpy = spy();
+      const scrolledBottomSpy = vi.fn();
       harness.component.addEventListener(AUTOCOMPLETE_CONSTANTS.events.SCROLLED_BOTTOM, scrolledBottomSpy);
       await frame();
 
@@ -1036,7 +1043,7 @@ describe('AutocompleteComponent', () => {
       scrollElement.scrollTop = scrollElement.scrollHeight;
 
       await frame();
-      expect(scrolledBottomSpy).to.have.been.calledOnce;
+      expect(scrolledBottomSpy).toHaveBeenCalledOnce();
     });
 
     it('should set configuration via attributes', async () => {
@@ -1053,22 +1060,22 @@ describe('AutocompleteComponent', () => {
       harness.component.setAttribute(AUTOCOMPLETE_CONSTANTS.attributes.OBSERVE_SCROLL_THRESHOLD, '100');
       harness.component.setAttribute(AUTOCOMPLETE_CONSTANTS.attributes.SYNC_POPUP_WIDTH, 'true');
 
-      expect(harness.component.mode).to.equal(AutocompleteMode.Stateless);
-      expect(harness.component.multiple).to.be.true;
-      expect(harness.component.debounce).to.equal(1000);
-      expect(harness.component.filterOnFocus).to.be.false;
-      expect(harness.component.allowUnmatched).to.be.true;
-      expect(harness.component.popupTarget).to.equal('input');
-      expect(harness.component.popupClasses).to.deep.equal(['test-class']);
-      expect(harness.component.optionLimit).to.equal(10);
-      expect(harness.component.observeScroll).to.be.true;
-      expect(harness.component.observeScrollThreshold).to.equal(100);
-      expect(harness.component.syncPopupWidth).to.be.true;
+      expect(harness.component.mode).toBe(AutocompleteMode.Stateless);
+      expect(harness.component.multiple).toBe(true);
+      expect(harness.component.debounce).toBe(1000);
+      expect(harness.component.filterOnFocus).toBe(false);
+      expect(harness.component.allowUnmatched).toBe(true);
+      expect(harness.component.popupTarget).toBe('input');
+      expect(harness.component.popupClasses).toEqual(['test-class']);
+      expect(harness.component.optionLimit).toBe(10);
+      expect(harness.component.observeScroll).toBe(true);
+      expect(harness.component.observeScrollThreshold).toBe(100);
+      expect(harness.component.syncPopupWidth).toBe(true);
     });
 
     it('should use selected text builder', async () => {
       const builder = (selectedOptions: IOption[]): string => selectedOptions.map(o => o.label).join(', ');
-      const selectedTextBuilderSpy = spy(builder);
+      const selectedTextBuilderSpy = vi.fn(builder);
       const harness = await createFixture({
         filter: () => DEFAULT_FILTER_OPTIONS,
         multiple: true
@@ -1080,8 +1087,8 @@ describe('AutocompleteComponent', () => {
       await frame();
       harness.clickListItem(1);
       await frame();
-      expect(selectedTextBuilderSpy).to.have.been.calledTwice;
-      expect(harness.input.value).to.equal(`${DEFAULT_FILTER_OPTIONS[0].label}, ${DEFAULT_FILTER_OPTIONS[1].label}`);
+      expect(selectedTextBuilderSpy).toHaveBeenCalledTimes(2);
+      expect(harness.input.value).toBe(`${DEFAULT_FILTER_OPTIONS[0].label}, ${DEFAULT_FILTER_OPTIONS[1].label}`);
     });
 
     it('should show skeleton loader when initially opened', async () => {
@@ -1101,9 +1108,9 @@ describe('AutocompleteComponent', () => {
       const listItems = harness.getListItems();
       const linearProgress = popup!.querySelector(LINEAR_PROGRESS_CONSTANTS.elementName) as ILinearProgressComponent;
 
-      expect(skeletons.length).to.equal(3);
-      expect(listItems.length).to.equal(0);
-      expect(getComputedStyle(linearProgress).display).to.equal('none');
+      expect(skeletons.length).toBe(3);
+      expect(listItems.length).toBe(0);
+      expect(getComputedStyle(linearProgress).display).toBe('none');
     });
 
     it('should toggle linear progress when filtering', async () => {
@@ -1125,15 +1132,15 @@ describe('AutocompleteComponent', () => {
       const skeletons = Array.from(popup!.querySelectorAll(SKELETON_CONSTANTS.elementName)) as ISkeletonComponent[];
       const linearProgress = popup!.querySelector(LINEAR_PROGRESS_CONSTANTS.elementName) as ILinearProgressComponent;
 
-      expect(skeletons.length).to.equal(0);
-      expect(getComputedStyle(linearProgress).display).to.not.equal('none');
+      expect(skeletons.length).toBe(0);
+      expect(getComputedStyle(linearProgress).display).not.toBe('none');
 
       await task(timeout);
-      expect(getComputedStyle(linearProgress).display).to.equal('none');
+      expect(getComputedStyle(linearProgress).display).toBe('none');
     });
 
     it('should handle multiple filter requests in proper order', async () => {
-      const filterSpy = spy(() => Promise.resolve(DEFAULT_FILTER_OPTIONS));
+      const filterSpy = vi.fn(() => Promise.resolve(DEFAULT_FILTER_OPTIONS));
       const harness = await createFixture({
         filter: filterSpy,
         filterOnFocus: false
@@ -1145,12 +1152,12 @@ describe('AutocompleteComponent', () => {
 
       await task(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
 
-      expect(filterSpy).to.have.been.calledOnce;
-      expect(filterSpy).to.have.been.calledWith('e', null);
+      expect(filterSpy).toHaveBeenCalledOnce();
+      expect(filterSpy).toHaveBeenCalledWith('e', null);
     });
 
     it('should execute initial filter callback with selected value', async () => {
-      const filterSpy = spy(() => Promise.resolve(DEFAULT_FILTER_OPTIONS));
+      const filterSpy = vi.fn(() => Promise.resolve(DEFAULT_FILTER_OPTIONS));
       const harness = await createFixture({
         filter: filterSpy,
         value: 1
@@ -1159,9 +1166,9 @@ describe('AutocompleteComponent', () => {
       harness.triggerDropdownClick();
       await frame();
 
-      expect(filterSpy).to.have.been.calledTwice;
-      expect(filterSpy).to.have.been.calledWith('', 1);
-      expect(filterSpy).to.have.been.calledWith('', null);
+      expect(filterSpy).toHaveBeenCalledTimes(2);
+      expect(filterSpy).toHaveBeenCalledWith('', 1);
+      expect(filterSpy).toHaveBeenCalledWith('', null);
     });
 
     it('should close dropdown if filter completes without the input having focus anymore', async () => {
@@ -1181,7 +1188,7 @@ describe('AutocompleteComponent', () => {
       harness.input.dispatchEvent(new Event('blur'));
       await task(POPOVER_ANIMATION_DURATION);
 
-      expect(harness.popupElement).to.be.null;
+      expect(harness.popupElement).toBeNull();
     });
 
     it('should keep selected options at top of list in popup', async () => {
@@ -1203,12 +1210,12 @@ describe('AutocompleteComponent', () => {
 
       const listItems = harness.getListItems();
 
-      expect(listItems[0].value).to.equal(DEFAULT_FILTER_OPTIONS[1].value);
-      expect(listItems[0].selected).to.be.true;
-      expect(listItems[1].value).to.equal(DEFAULT_FILTER_OPTIONS[2].value);
-      expect(listItems[1].selected).to.be.true;
-      expect(listItems[2].value).to.equal(DEFAULT_FILTER_OPTIONS[0].value);
-      expect(listItems[2].selected).to.be.false;
+      expect(listItems[0].value).toBe(DEFAULT_FILTER_OPTIONS[1].value);
+      expect(listItems[0].selected).toBe(true);
+      expect(listItems[1].value).toBe(DEFAULT_FILTER_OPTIONS[2].value);
+      expect(listItems[1].selected).toBe(true);
+      expect(listItems[2].value).toBe(DEFAULT_FILTER_OPTIONS[0].value);
+      expect(listItems[2].selected).toBe(false);
     });
 
     it('should handle cancelling filter requests if focus is lost after filter has been triggered', async () => {
@@ -1224,8 +1231,8 @@ describe('AutocompleteComponent', () => {
       await task(POPOVER_ANIMATION_DURATION);
       await frame();
 
-      expect(harness.popupElement).to.be.null;
-      expect(harness.component['_core']._pendingFilterPromises).to.deep.equal([]);
+      expect(harness.popupElement).toBeNull();
+      expect(harness.component._core._pendingFilterPromises).toEqual([]);
     });
 
     it('should not select first option when refocusing before a select-on-blur filter resolves', async () => {
@@ -1233,7 +1240,7 @@ describe('AutocompleteComponent', () => {
       const updatedOptions = [{ label: 'Second option', value: 'second' }];
       let resolveInitial: ((options: IOption[]) => void) | undefined;
       let resolveUpdated: ((options: IOption[]) => void) | undefined;
-      const filterSpy = spy(
+      const filterSpy = vi.fn(
         (filterText: string) =>
           new Promise<IOption[]>(resolve => {
             if (filterText === 'first') {
@@ -1267,16 +1274,16 @@ describe('AutocompleteComponent', () => {
       await frame();
 
       const popupOptions = harness.getPopupOptions();
-      expect(_toLabelValue(popupOptions)).to.deep.equal(updatedOptions);
-      expect(popupOptions.every(o => !o.selected)).to.be.true;
-      expect(harness.component.value).to.be.null;
-      expect(harness.input.value).to.equal('second');
+      expect(_toLabelValue(popupOptions)).toEqual(updatedOptions);
+      expect(popupOptions.every(o => !o.selected)).toBe(true);
+      expect(harness.component.value).toBeNull();
+      expect(harness.input.value).toBe('second');
     });
 
     it('should cancel all pending filters if an exception is thrown in filter callback', async () => {
       const harness = await createFixture({
         filter: () =>
-          new Promise((resolve, reject) => {
+          new Promise((_resolve, reject) => {
             reject('Fake rejection');
           })
       });
@@ -1286,8 +1293,8 @@ describe('AutocompleteComponent', () => {
       await task(POPOVER_ANIMATION_DURATION);
       await frame();
 
-      expect(harness.popupElement).to.be.null;
-      expect(harness.component['_core']._pendingFilterPromises).to.deep.equal([]);
+      expect(harness.popupElement).toBeNull();
+      expect(harness.component._core._pendingFilterPromises).toEqual([]);
     });
 
     it('should handle subsequent out of order filters', async () => {
@@ -1316,14 +1323,14 @@ describe('AutocompleteComponent', () => {
       await frame();
 
       const options = _toLabelValue(harness.getPopupOptions());
-      expect(options).to.deep.equal([{ label: 'B', value: 'b' }]);
+      expect(options).toEqual([{ label: 'B', value: 'b' }]);
     });
 
     it('should reset filter function', async () => {
       const initialFilter = (): IAutocompleteOption[] => DEFAULT_FILTER_OPTIONS;
       const newFilter = (): IAutocompleteOption[] => DEFAULT_FILTER_OPTIONS;
-      const initialFilterSpy = spy(initialFilter);
-      const newFilterSpy = spy(newFilter);
+      const initialFilterSpy = vi.fn(initialFilter);
+      const newFilterSpy = vi.fn(newFilter);
 
       const harness = await createFixture({
         filter: initialFilterSpy
@@ -1334,8 +1341,8 @@ describe('AutocompleteComponent', () => {
       harness.sendInputValue('a');
       await task(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
 
-      expect(initialFilterSpy).to.have.callCount(0);
-      expect(newFilterSpy).to.have.been.calledOnce;
+      expect(initialFilterSpy).toHaveBeenCalledTimes(0);
+      expect(newFilterSpy).toHaveBeenCalledOnce();
     });
 
     it('should update selected text if selectedTextBuilder is set after a value is selected', async () => {
@@ -1347,12 +1354,12 @@ describe('AutocompleteComponent', () => {
       harness.component.value = [DEFAULT_FILTER_OPTIONS[0].value, DEFAULT_FILTER_OPTIONS[1].value];
       await frame();
 
-      expect(harness.input.value).to.equal('2 options selected');
+      expect(harness.input.value).toBe('2 options selected');
 
       harness.component.selectedTextBuilder = selectedOptions => selectedOptions.map(o => o.label).join(', ');
       await frame();
 
-      expect(harness.input.value).to.equal(`${DEFAULT_FILTER_OPTIONS[0].label}, ${DEFAULT_FILTER_OPTIONS[1].label}`);
+      expect(harness.input.value).toBe(`${DEFAULT_FILTER_OPTIONS[0].label}, ${DEFAULT_FILTER_OPTIONS[1].label}`);
     });
 
     it('should accept grouped options', async () => {
@@ -1367,11 +1374,11 @@ describe('AutocompleteComponent', () => {
       await task(POPOVER_ANIMATION_DURATION);
 
       const popupGroups = _getPopupGroups(harness.popupElement);
-      expect(popupGroups.length).to.equal(2);
-      expect(popupGroups[0].headerElement.textContent).to.equal('Group one');
-      expect(popupGroups[0].options.length).to.equal(2);
-      expect(popupGroups[1].headerElement.textContent).to.equal('Group two');
-      expect(popupGroups[1].options.length).to.equal(1);
+      expect(popupGroups.length).toBe(2);
+      expect(popupGroups[0].headerElement.textContent).toBe('Group one');
+      expect(popupGroups[0].options.length).toBe(2);
+      expect(popupGroups[1].headerElement.textContent).toBe('Group two');
+      expect(popupGroups[1].options.length).toBe(1);
     });
 
     it('should render custom header for option groups', async () => {
@@ -1391,8 +1398,8 @@ describe('AutocompleteComponent', () => {
       await frame();
 
       const popupGroups = _getPopupGroups(harness.popupElement);
-      expect((popupGroups[0].headerElement as IAvatarComponent).text).to.equal('One');
-      expect((popupGroups[1].headerElement as IAvatarComponent).text).to.equal('Two');
+      expect((popupGroups[0].headerElement as IAvatarComponent).text).toBe('One');
+      expect((popupGroups[1].headerElement as IAvatarComponent).text).toBe('Two');
     });
 
     it('should highlight filter text in options by default', async () => {
@@ -1408,7 +1415,7 @@ describe('AutocompleteComponent', () => {
 
       const listItems = harness.getListItems();
       const firstListItemSpan = listItems[0].querySelector('span > span') as HTMLElement;
-      expect(firstListItemSpan.innerText).to.equal('e');
+      expect(firstListItemSpan.innerText).toBe('e');
     });
 
     it('should use first value in array as value is multiple values passed in single selection mode', async () => {
@@ -1418,7 +1425,7 @@ describe('AutocompleteComponent', () => {
       harness.component.value = [DEFAULT_FILTER_OPTIONS[0], DEFAULT_FILTER_OPTIONS[1]];
       await frame();
 
-      expect(harness.component.value).to.equal(DEFAULT_FILTER_OPTIONS[0].value);
+      expect(harness.component.value).toBe(DEFAULT_FILTER_OPTIONS[0].value);
     });
 
     it('should set value after initial filter via IOption or regular data type', async () => {
@@ -1430,18 +1437,18 @@ describe('AutocompleteComponent', () => {
       await frame();
 
       harness.component.value = DEFAULT_FILTER_OPTIONS[0];
-      expect(harness.component.value).to.equal(DEFAULT_FILTER_OPTIONS[0].value);
+      expect(harness.component.value).toBe(DEFAULT_FILTER_OPTIONS[0].value);
 
       await frame();
 
       harness.component.value = DEFAULT_FILTER_OPTIONS[1].value;
-      expect(harness.component.value).to.equal(DEFAULT_FILTER_OPTIONS[1].value);
+      expect(harness.component.value).toBe(DEFAULT_FILTER_OPTIONS[1].value);
     });
 
     it('should be connected', async () => {
       const harness = await createFixture();
-      expect(harness.component.isConnected).to.be.true;
-      expect(harness.component instanceof AutocompleteComponent).to.be.true;
+      expect(harness.component.isConnected).toBe(true);
+      expect(harness.component instanceof AutocompleteComponent).toBe(true);
     });
 
     it('should remove popover when removed from DOM while open', async () => {
@@ -1454,19 +1461,19 @@ describe('AutocompleteComponent', () => {
       harness.component.remove();
       await frame();
 
-      expect(harness.component.popupElement).to.be.null;
+      expect(harness.component.popupElement).toBeNull();
     });
   });
 
   describe('with dynamic <input> element', () => {
     it('should wait for input element to initialize', async () => {
-      const container = await fixture<HTMLElement>(html`
+      const screen = render(html`
         <div>
           <forge-autocomplete></forge-autocomplete>
         </div>
       `);
 
-      const component = container.querySelector('forge-autocomplete') as AutocompleteComponentInternal;
+      const component = screen.container.querySelector('forge-autocomplete') as AutocompleteComponentInternal;
       const input = document.createElement('input');
       input.type = 'text';
 
@@ -1474,35 +1481,35 @@ describe('AutocompleteComponent', () => {
       component.appendChild(input);
       await frame();
 
-      expect(component.isInitialized).to.be.true;
+      expect(component.isInitialized).toBe(true);
     });
 
     it('should initialize if input is provided', async () => {
-      const container = await fixture<HTMLElement>(html`
+      const screen = render(html`
         <div>
           <forge-autocomplete></forge-autocomplete>
         </div>
       `);
 
-      const component = container.querySelector('forge-autocomplete') as AutocompleteComponentInternal;
+      const component = screen.container.querySelector('forge-autocomplete') as AutocompleteComponentInternal;
       const input = document.createElement('input');
       input.type = 'text';
 
       component.appendChild(input);
       await frame();
-      expect(component.isInitialized).to.be.true;
+      expect(component.isInitialized).toBe(true);
     });
 
     it('should be connected', async () => {
-      const container = await fixture<HTMLElement>(html`
+      const screen = render(html`
         <div>
           <forge-autocomplete></forge-autocomplete>
         </div>
       `);
 
-      const component = container.querySelector('forge-autocomplete') as AutocompleteComponentInternal;
-      expect(component.isConnected).to.be.true;
-      expect(component instanceof AutocompleteComponent).to.be.true;
+      const component = screen.container.querySelector('forge-autocomplete') as AutocompleteComponentInternal;
+      expect(component.isConnected).toBe(true);
+      expect(component instanceof AutocompleteComponent).toBe(true);
     });
 
     it('should keep dropdown open when selecting options in stateless + multiple mode', async () => {
@@ -1514,13 +1521,13 @@ describe('AutocompleteComponent', () => {
       harness.triggerDropdownClick();
       await frame();
 
-      expect(harness.popupElement).to.not.be.null;
+      expect(harness.popupElement).not.toBeNull();
 
       harness.clickListItem(0);
-      expect(harness.popupElement).to.not.be.null;
+      expect(harness.popupElement).not.toBeNull();
 
       harness.clickListItem(1);
-      expect(harness.popupElement).to.not.be.null;
+      expect(harness.popupElement).not.toBeNull();
     });
   });
 
@@ -1532,8 +1539,8 @@ describe('AutocompleteComponent', () => {
       harness.iconElement!.click();
       await frame();
       await frame();
-      expect(document.activeElement).to.equal(harness.input);
-      expect(harness.popupElement).to.not.be.null;
+      expect(document.activeElement).toBe(harness.input);
+      expect(harness.popupElement).not.toBeNull();
     });
 
     it('should open dropdown if popover icon clicked', async () => {
@@ -1541,17 +1548,17 @@ describe('AutocompleteComponent', () => {
       harness.component.filter = () => DEFAULT_FILTER_OPTIONS;
       await frame();
       const popoverIcon = getPopoverIcon(harness.component);
-      expect(popoverIcon).to.not.be.undefined;
+      expect(popoverIcon).not.toBeUndefined();
 
       harness.input.focus();
       const mousedownEvent = new MouseEvent('mousedown', { cancelable: true });
       popoverIcon?.dispatchEvent(mousedownEvent);
       popoverIcon?.dispatchEvent(new MouseEvent('click'));
-      expect(mousedownEvent.defaultPrevented).to.be.true;
+      expect(mousedownEvent.defaultPrevented).toBe(true);
 
       await frame();
-      expect(document.activeElement).to.equal(harness.input);
-      expect(harness.popupElement).to.not.be.null;
+      expect(document.activeElement).toBe(harness.input);
+      expect(harness.popupElement).not.toBeNull();
     });
 
     it('should close dropdown if popover icon clicked while open', async () => {
@@ -1559,15 +1566,15 @@ describe('AutocompleteComponent', () => {
       harness.component.filter = () => DEFAULT_FILTER_OPTIONS;
       _triggerDropdownClick(harness.input);
       await frame();
-      expect(harness.popupElement).to.not.be.null;
+      expect(harness.popupElement).not.toBeNull();
       const popoverIcon = getPopoverIcon(harness.component);
-      expect(popoverIcon).to.not.be.null;
-      expect(popoverIcon).to.not.be.undefined;
+      expect(popoverIcon).not.toBeNull();
+      expect(popoverIcon).not.toBeUndefined();
 
       popoverIcon!.dispatchEvent(new MouseEvent('click'));
 
       await task(POPOVER_ANIMATION_DURATION);
-      expect(harness.component.popupElement).to.be.null;
+      expect(harness.component.popupElement).toBeNull();
     });
   });
 
@@ -1575,34 +1582,34 @@ describe('AutocompleteComponent', () => {
     it('should create text field and set value', async () => {
       const { delegate } = await createDelegateFixture();
       const textField = delegate.element.querySelector(TEXT_FIELD_CONSTANTS.elementName) as ITextFieldComponent;
-      expect(textField).to.not.be.null;
+      expect(textField).not.toBeNull();
     });
 
     it('should set value', async () => {
       const { delegate } = await createDelegateFixture();
       delegate.value = 1;
       await frame();
-      expect(delegate.textFieldDelegate.value).to.equal('One');
-      expect(delegate.value).to.equal(1);
+      expect(delegate.textFieldDelegate.value).toBe('One');
+      expect(delegate.value).toBe(1);
     });
 
     it('should set dropdown icon', async () => {
       const { delegate } = await createDelegateFixture(DEFAULT_AUTOCOMPLETE_DELEGATE_CONFIG, DEFAULT_AUTOCOMPLETE_TEXTFIELD_DELEGATE_CONFIG.options);
       await frame();
       const icon = delegate.element.querySelector(AUTOCOMPLETE_CONSTANTS.selectors.DROPDOWN_ICON);
-      expect(icon).to.not.be.null;
+      expect(icon).not.toBeNull();
     });
 
     it('should not set dropdown icon', async () => {
       const { delegate } = await createDelegateFixture({}, { useDropdownIcon: false });
       await frame();
       const icon = delegate.element.querySelector(AUTOCOMPLETE_CONSTANTS.selectors.DROPDOWN_ICON);
-      expect(icon).to.be.null;
+      expect(icon).toBeNull();
     });
 
     it('should set input value and call filter function', async () => {
-      const filterSpy = spy();
-      const filter: AutocompleteFilterCallback = text => {
+      const filterSpy = vi.fn();
+      const filter: AutocompleteFilterCallback = _text => {
         filterSpy();
         return [];
       };
@@ -1614,12 +1621,12 @@ describe('AutocompleteComponent', () => {
       input.dispatchEvent(new Event('input'));
       await task(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
 
-      expect(delegate.textFieldDelegate.value).to.equal('test');
-      expect(filterSpy).to.have.been.calledOnce;
+      expect(delegate.textFieldDelegate.value).toBe('test');
+      expect(filterSpy).toHaveBeenCalledOnce();
     });
 
     it('should call onChange handler', async () => {
-      const onChangeSpy = spy();
+      const onChangeSpy = vi.fn();
       const { delegate } = await createDelegateFixture();
       delegate.onChange(onChangeSpy);
       await frame();
@@ -1628,40 +1635,40 @@ describe('AutocompleteComponent', () => {
       await frame();
       _clickListItem(0, delegate.element.popupElement);
 
-      expect(onChangeSpy).to.have.been.calledOnce;
+      expect(onChangeSpy).toHaveBeenCalledOnce();
     });
 
     it('should render with selected value text if value set before connecting', async () => {
-      const filterSpy = spy(() => [DEFAULT_FILTER_OPTIONS[0]]);
+      const filterSpy = vi.fn(() => [DEFAULT_FILTER_OPTIONS[0]]);
       const delegate = new AutocompleteComponentDelegate({ props: { filter: filterSpy } });
       delegate.value = DEFAULT_FILTER_OPTIONS[0].value;
-      await fixture(html`<div>${delegate.element}</div>`);
+      render(html`<div>${delegate.element}</div>`);
       await frame();
-      expect(delegate.textFieldDelegate.value).to.equal(DEFAULT_FILTER_OPTIONS[0].label);
-      expect(filterSpy).to.have.been.calledOnce;
+      expect(delegate.textFieldDelegate.value).toBe(DEFAULT_FILTER_OPTIONS[0].label);
+      expect(filterSpy).toHaveBeenCalledOnce();
     });
 
     it('should render with selected value text if value set before connecting via IOption', async () => {
       const delegate = new AutocompleteComponentDelegate({ props: DEFAULT_AUTOCOMPLETE_DELEGATE_CONFIG });
       delegate.value = { ...DEFAULT_FILTER_OPTIONS[0] };
-      await fixture(html`<div>${delegate.element}</div>`);
+      render(html`<div>${delegate.element}</div>`);
       await frame();
-      expect(delegate.textFieldDelegate.value).to.equal(DEFAULT_FILTER_OPTIONS[0].label);
+      expect(delegate.textFieldDelegate.value).toBe(DEFAULT_FILTER_OPTIONS[0].label);
     });
 
     it('should call new filter function if reset with value selected', async () => {
       const initialFilter = (): IAutocompleteOption[] => [];
       const newFilter = (): IAutocompleteOption[] => DEFAULT_FILTER_OPTIONS;
-      const newFilterSpy = spy(newFilter);
+      const newFilterSpy = vi.fn(newFilter);
 
       const delegate = new AutocompleteComponentDelegate({ props: { filter: initialFilter } });
       delegate.value = 1;
-      await fixture(html`<div>${delegate.element}</div>`);
+      render(html`<div>${delegate.element}</div>`);
 
       await frame();
       delegate.element.filter = newFilterSpy;
 
-      expect(newFilterSpy).to.have.been.calledOnce;
+      expect(newFilterSpy).toHaveBeenCalledOnce();
     });
   });
 
@@ -1679,7 +1686,7 @@ describe('AutocompleteComponent', () => {
         harness.clickListItem(2);
         await frame();
 
-        expect(harness.component.value).to.be.null;
+        expect(harness.component.value).toBeNull();
       });
 
       it('should select item if resolves to true', async () => {
@@ -1695,7 +1702,7 @@ describe('AutocompleteComponent', () => {
         harness.clickListItem(2);
         await frame();
 
-        expect(harness.component.value).to.equal(listItems[2].value);
+        expect(harness.component.value).toBe(listItems[2].value);
       });
 
       it('should select item if beforeValueChange resolves to true only after a period of time', async () => {
@@ -1713,11 +1720,11 @@ describe('AutocompleteComponent', () => {
         await frame();
         const listItems = harness.getListItems();
         harness.clickListItem(2);
-        expect(harness.component.value).to.be.null;
+        expect(harness.component.value).toBeNull();
         await task(1000);
         await frame();
 
-        expect(harness.component.value).to.equal(listItems[2].value);
+        expect(harness.component.value).toBe(listItems[2].value);
       });
 
       it('should pass in to-be new value in beforeValueChange', async () => {
@@ -1737,7 +1744,7 @@ describe('AutocompleteComponent', () => {
         harness.clickListItem(2);
         await frame();
 
-        expect(newValue).to.equal(listItems[2].value);
+        expect(newValue).toBe(listItems[2].value);
       });
 
       it('should force filter callback to execute and update selected value', async () => {
@@ -1752,7 +1759,7 @@ describe('AutocompleteComponent', () => {
         harness.clickListItem(2);
         await frame();
 
-        expect(harness.component.value).to.equal(listItems[2].value);
+        expect(harness.component.value).toBe(listItems[2].value);
 
         harness.component.filter = () => [
           { label: `${DEFAULT_FILTER_OPTIONS[2].label} UPDATED`, value: DEFAULT_FILTER_OPTIONS[2].value },
@@ -1762,8 +1769,8 @@ describe('AutocompleteComponent', () => {
 
         await frame();
 
-        expect(harness.input.value).to.equal(`${DEFAULT_FILTER_OPTIONS[2].label} UPDATED`);
-        expect(harness.component.value).to.equal(DEFAULT_FILTER_OPTIONS[2].value);
+        expect(harness.input.value).toBe(`${DEFAULT_FILTER_OPTIONS[2].label} UPDATED`);
+        expect(harness.component.value).toBe(DEFAULT_FILTER_OPTIONS[2].value);
       });
 
       it('should force filter callback to execute and remove selected value', async () => {
@@ -1778,15 +1785,15 @@ describe('AutocompleteComponent', () => {
         harness.clickListItem(2);
         await frame();
 
-        expect(harness.component.value).to.equal(listItems[2].value);
+        expect(harness.component.value).toBe(listItems[2].value);
 
         harness.component.filter = () => [{ label: 'New', value: 'new' }];
         harness.component.forceFilter();
 
         await frame();
 
-        expect(harness.input.value).to.equal('');
-        expect(harness.component.value).to.equal(DEFAULT_FILTER_OPTIONS[2].value);
+        expect(harness.input.value).toBe('');
+        expect(harness.component.value).toBe(DEFAULT_FILTER_OPTIONS[2].value);
       });
 
       it('should force filter callback to execute and preserve selected value if not present in new filtered options', async () => {
@@ -1801,15 +1808,15 @@ describe('AutocompleteComponent', () => {
         harness.clickListItem(2);
         await frame();
 
-        expect(harness.component.value).to.equal(listItems[2].value);
+        expect(harness.component.value).toBe(listItems[2].value);
 
         harness.component.filter = () => [{ label: 'New', value: 'new' }];
         harness.component.forceFilter({ preserveValue: true });
 
         await frame();
 
-        expect(harness.input.value).to.equal(DEFAULT_FILTER_OPTIONS[2].label);
-        expect(harness.component.value).to.equal(DEFAULT_FILTER_OPTIONS[2].value);
+        expect(harness.input.value).toBe(DEFAULT_FILTER_OPTIONS[2].label);
+        expect(harness.component.value).toBe(DEFAULT_FILTER_OPTIONS[2].value);
       });
     });
   });
@@ -1825,8 +1832,8 @@ describe('AutocompleteComponent', () => {
 
       const popover = harness.popupElement as IPopoverComponent;
 
-      expect(harness.component.popoverFlip).to.equal('never');
-      expect(popover.flip).to.equal('never');
+      expect(harness.component.popoverFlip).toBe('never');
+      expect(popover.flip).toBe('never');
     });
 
     it('should set popover flip from attribute', async () => {
@@ -1839,8 +1846,8 @@ describe('AutocompleteComponent', () => {
 
       const popover = harness.popupElement as IPopoverComponent;
 
-      expect(harness.component.popoverFlip).to.equal('never');
-      expect(popover.flip).to.equal('never');
+      expect(harness.component.popoverFlip).toBe('never');
+      expect(popover.flip).toBe('never');
     });
 
     it('should set popover shift', async () => {
@@ -1853,8 +1860,8 @@ describe('AutocompleteComponent', () => {
 
       const popover = harness.popupElement as IPopoverComponent;
 
-      expect(harness.component.popoverShift).to.equal('never');
-      expect(popover.shift).to.equal('never');
+      expect(harness.component.popoverShift).toBe('never');
+      expect(popover.shift).toBe('never');
     });
 
     it('should set popover shift from attribute', async () => {
@@ -1867,8 +1874,8 @@ describe('AutocompleteComponent', () => {
 
       const popover = harness.popupElement as IPopoverComponent;
 
-      expect(harness.component.popoverShift).to.equal('never');
-      expect(popover.shift).to.equal('never');
+      expect(harness.component.popoverShift).toBe('never');
+      expect(popover.shift).toBe('never');
     });
 
     it('should set popover fallback placements', async () => {
@@ -1881,8 +1888,8 @@ describe('AutocompleteComponent', () => {
 
       const popover = harness.popupElement as IPopoverComponent;
 
-      expect(harness.component.popoverFallbackPlacements).to.deep.equal(['top']);
-      expect(popover.fallbackPlacements).to.deep.equal(['top']);
+      expect(harness.component.popoverFallbackPlacements).toEqual(['top']);
+      expect(popover.fallbackPlacements).toEqual(['top']);
     });
 
     it('should set popover offset', async () => {
@@ -1895,8 +1902,8 @@ describe('AutocompleteComponent', () => {
 
       const popover = harness.popupElement as IPopoverComponent;
 
-      expect(harness.component.popoverOffset).to.deep.equal({ mainAxis: 10, crossAxis: 10 });
-      expect(popover.offset).to.deep.equal({ mainAxis: 10, crossAxis: 10 });
+      expect(harness.component.popoverOffset).toEqual({ mainAxis: 10, crossAxis: 10 });
+      expect(popover.offset).toEqual({ mainAxis: 10, crossAxis: 10 });
     });
   });
 
@@ -1908,8 +1915,8 @@ describe('AutocompleteComponent', () => {
     await task();
     harness.input.click();
     await task(POPOVER_ANIMATION_DURATION);
-    expect(harness.component.open).to.be.false;
-    expect(harness.popupElement).to.be.null;
+    expect(harness.component.open).toBe(false);
+    expect(harness.popupElement).toBeNull();
   });
 });
 
@@ -1941,7 +1948,7 @@ class AutocompleteHarness {
     _clickListItem(index, this.popupElement);
   }
 
-  public getListItems(): IListItemComponent<any>[] {
+  public getListItems(): IListItemComponent<unknown>[] {
     return _getListItems(this.popupElement);
   }
 
@@ -1960,7 +1967,7 @@ class AutocompleteHarness {
 
 interface IAutocompleteFixtureConfig {
   filter?: AutocompleteFilterCallback;
-  value?: any;
+  value?: unknown;
   multiple?: boolean;
   debounce?: number;
   filterOnFocus?: boolean;
@@ -1978,7 +1985,7 @@ interface IAutocompleteFixtureConfig {
 }
 
 async function createFixture(config: IAutocompleteFixtureConfig = {}): Promise<AutocompleteHarness> {
-  const container = await fixture<HTMLElement>(html`
+  const screen = render(html`
     <div>
       <forge-autocomplete>
         <input type="text" />
@@ -1986,7 +1993,7 @@ async function createFixture(config: IAutocompleteFixtureConfig = {}): Promise<A
     </div>
   `);
 
-  const component = container.querySelector('forge-autocomplete') as AutocompleteComponentInternal;
+  const component = screen.container.querySelector('forge-autocomplete') as AutocompleteComponentInternal;
   const input = component.querySelector('input') as HTMLInputElement;
 
   if (config.filter) {
@@ -2038,11 +2045,11 @@ async function createFixture(config: IAutocompleteFixtureConfig = {}): Promise<A
     component.selectFirstOptionOnBlur = config.selectFirstOptionOnBlur;
   }
 
-  return new AutocompleteHarness(component, input, container);
+  return new AutocompleteHarness(component, input, screen.container);
 }
 
 async function createTextFieldFixture(includeIconElement = true): Promise<AutocompleteHarness & { iconElement?: HTMLElement; label: HTMLLabelElement }> {
-  const container = await fixture<HTMLElement>(html`
+  const screen = render(html`
     <div>
       <forge-autocomplete>
         <forge-text-field .popoverIcon=${!includeIconElement}>
@@ -2056,12 +2063,12 @@ async function createTextFieldFixture(includeIconElement = true): Promise<Autoco
     </div>
   `);
 
-  const component = container.querySelector('forge-autocomplete') as AutocompleteComponentInternal;
+  const component = screen.container.querySelector('forge-autocomplete') as AutocompleteComponentInternal;
   const input = component.querySelector('input') as HTMLInputElement;
   const label = component.querySelector('label') as HTMLLabelElement;
   const iconElement = component.querySelector('[data-forge-dropdown-icon]') as HTMLElement | undefined;
 
-  const harness = new AutocompleteHarness(component, input, container);
+  const harness = new AutocompleteHarness(component, input, screen.container);
   return { ...harness, iconElement, label } as AutocompleteHarness & { iconElement?: HTMLElement; label: HTMLLabelElement };
 }
 
@@ -2077,9 +2084,9 @@ async function createDelegateFixture(
   options: IAutocompleteComponentDelegateOptions = {}
 ): Promise<{ delegate: AutocompleteComponentDelegate; container: HTMLElement; input: HTMLInputElement }> {
   const delegate = new AutocompleteComponentDelegate({ props, options });
-  const container = await fixture<HTMLElement>(html`<div>${delegate.element}</div>`);
+  const screen = render(html`<div>${delegate.element}</div>`);
   const input = delegate.element.querySelector('input') as HTMLInputElement;
-  return { delegate, container, input };
+  return { delegate, container: screen.container, input };
 }
 
 // Helper functions
@@ -2095,11 +2102,11 @@ function _toLabelValue(options: IOption[]): Array<{ label: IOption['label']; val
   return options.map(({ label, value }) => ({ label, value }));
 }
 
-function _getListItems(popupElement: HTMLElement | null): IListItemComponent<any>[] {
+function _getListItems(popupElement: HTMLElement | null): IListItemComponent<unknown>[] {
   if (!popupElement) {
     return [];
   }
-  return Array.from(popupElement.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent<any>[];
+  return Array.from(popupElement.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent<unknown>[];
 }
 
 function _triggerDropdownClick(input: HTMLInputElement): void {
