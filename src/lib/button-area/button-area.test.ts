@@ -193,6 +193,52 @@ describe('Button Area', () => {
     expect(el.hasAttribute('disabled')).to.be.false;
   });
 
+  it('should set disabled state when disabled property is set', async () => {
+    const { el } = await createFixture({});
+
+    el.disabled = true;
+    await elementUpdated(el);
+
+    expect(el.matches(':state(disabled)')).to.be.true;
+  });
+
+  it('should set disabled state when disabled attribute is set', async () => {
+    const el = await fixture<IButtonAreaComponent>(html`
+      <forge-button-area disabled>
+        <button slot="button">Test</button>
+      </forge-button-area>
+    `);
+
+    expect(el.matches(':state(disabled)')).to.be.true;
+  });
+
+  it('should remove disabled state when disabled is set to false', async () => {
+    const { el } = await createFixture({ disabled: true });
+
+    expect(el.matches(':state(disabled)')).to.be.true;
+
+    el.disabled = false;
+    await elementUpdated(el);
+
+    expect(el.matches(':state(disabled)')).to.be.false;
+  });
+
+  it('should toggle disabled state dynamically', async () => {
+    const { el } = await createFixture({});
+
+    expect(el.matches(':state(disabled)')).to.be.false;
+
+    el.disabled = true;
+    await elementUpdated(el);
+
+    expect(el.matches(':state(disabled)')).to.be.true;
+
+    el.disabled = false;
+    await elementUpdated(el);
+
+    expect(el.matches(':state(disabled)')).to.be.false;
+  });
+
   it('should set disabled if the button is disabled and is added after initialize', async () => {
     const { el } = await createFixture({}, false);
 

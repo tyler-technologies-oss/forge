@@ -2,8 +2,9 @@ import { CUSTOM_ELEMENT_NAME_PROPERTY, getEventPath } from '@tylertech/forge-cor
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
 import { createRef, Ref, ref } from 'lit/directives/ref.js';
-import { BaseLitElement } from '../core/base/base-lit-element';
 import { IBaseComponent } from '../core/base/base-component';
+import { BaseLitElement } from '../core/base/base-lit-element';
+import { toggleState } from '../core/utils/utils';
 import { IFocusIndicatorComponent } from '../focus-indicator';
 import { StateLayerComponent } from '../state-layer';
 import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
@@ -27,9 +28,7 @@ export const BUTTON_AREA_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-button-a
  *
  * @summary Button areas are used to create clickable areas that group related information and actions about a single subject. The button area component wraps any arbitrary content with a `<button>` element to enable accessible, clickable interfaces including nested controls and other complex content.
  *
- * @property {boolean} [disabled=false] - Sets whether the button area and slotted button are disabled. Setting this on one will also set it on the other.
- *
- * @attribute {boolean} [disabled=false] - Sets whether the button area and slotted button are disabled. Setting this on one will also set it on the other.
+ * @state disabled - Applied when the button area is disabled.
  *
  * @event {PointerEvent} click - The button area emits a native HTML click event whenever it or the slotted button is clicked. Add the listener to the `<forge-button-area>` element to receive all events. Note: Set `data-forge-ignore` on any nested buttons or other interactive elements to prevent them from activating the button area.
  *
@@ -51,6 +50,13 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BUTTON_AREA_TAG_NAME;
+
+  #internals: ElementInternals;
+
+  constructor() {
+    super();
+    this.#internals = this.attachInternals();
+  }
 
   /**
    * Controls whether the component and associated button element are disabled.
@@ -91,6 +97,7 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
   public override willUpdate(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('disabled')) {
       this.#handleDisabledChange();
+      toggleState(this.#internals, 'disabled', this.disabled);
     }
   }
 
@@ -103,11 +110,11 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
         @click=${this.#handleClick}
         @keydown=${this.#handleKeydown}
         @pointerdown=${this.#handlePointerdown}>
-        <div class="button" part="button" @slotchange=${this.#handleSlotChange}>
+        <div id="button" class="button" part="button" @slotchange=${this.#handleSlotChange}>
           <slot name="button"></slot>
         </div>
         <slot @click=${this.#handleIgnoreStateLayer} @pointerdown=${this.#handleIgnoreStateLayer} @pointerup=${this.#handleIgnoreStateLayer}></slot>
-        <forge-state-layer target="root" exportparts="surface:state-layer" ${ref(this.#stateLayer)}></forge-state-layer>
+        <forge-state-layer exportparts="surface:state-layer" ${ref(this.#stateLayer)}></forge-state-layer>
         <forge-focus-indicator target="button" part="focus-indicator" inward ${ref(this.#focusIndicator)}></forge-focus-indicator>
       </div>
     `;
