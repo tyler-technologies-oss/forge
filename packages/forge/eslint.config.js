@@ -21,7 +21,7 @@ export default defineConfig([
   },
   {
     name: 'Modern tests (Web Test Runner + Mocha + Chai)',
-    files: ['src/**/*.test.ts'],
+    files: ['src/**/*.test.ts', 'src/**/*.vitest.ts'],
     extends: [pluginChaiFriendly.configs.recommendedFlat],
     rules: {
       '@typescript-eslint/dot-notation': 'off',
