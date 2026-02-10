@@ -10,6 +10,7 @@ import { StateLayerComponent } from '../state-layer';
 
 import styles from './button-area.scss';
 
+/** @deprecated - This will be removed in the future. Please switch to using ButtonAreaComponent. */
 export interface IButtonAreaComponent extends IBaseComponent {
   disabled: boolean;
   target: string | null | undefined;
