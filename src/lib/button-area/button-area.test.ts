@@ -289,6 +289,256 @@ describe('Button Area', () => {
     expect(el.hasAttribute('disabled')).to.be.true;
   });
 
+  describe('aria-pressed observation', () => {
+    it('should not have pressed state initially', async () => {
+      const { el } = await createFixture({});
+      expect(el.matches(':state(pressed)')).to.be.false;
+    });
+
+    it('should sync pressed state when button aria-pressed attribute is true', async () => {
+      const { el, button } = await createFixture({});
+
+      button.setAttribute('aria-pressed', 'true');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(pressed)')).to.be.true;
+    });
+
+    it('should remove pressed state when aria-pressed is set to false', async () => {
+      const { el, button } = await createFixture({});
+
+      button.setAttribute('aria-pressed', 'true');
+      await elementUpdated(el);
+
+      button.setAttribute('aria-pressed', 'false');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(pressed)')).to.be.false;
+    });
+
+    it('should remove pressed state when aria-pressed attribute is removed', async () => {
+      const { el, button } = await createFixture({});
+
+      button.setAttribute('aria-pressed', 'true');
+      await elementUpdated(el);
+
+      button.removeAttribute('aria-pressed');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(pressed)')).to.be.false;
+    });
+
+    it('should observe targetElement aria-pressed attribute changes', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.textContent = 'Target Button';
+      document.body.appendChild(targetButton);
+
+      const { el } = await createFixture({});
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      targetButton.setAttribute('aria-pressed', 'true');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(pressed)')).to.be.true;
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should sync initial pressed state from button with aria-pressed', async () => {
+      const el = await fixture<IButtonAreaComponent>(html`
+        <forge-button-area>
+          <button slot="button" aria-pressed="true">Test</button>
+        </forge-button-area>
+      `);
+
+      expect(el.matches(':state(pressed)')).to.be.true;
+    });
+
+    it('should not sync pressed state from slotted button when targetElement is set', async () => {
+      const targetButton = document.createElement('button');
+      document.body.appendChild(targetButton);
+
+      const { el, button } = await createFixture({});
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      button.setAttribute('aria-pressed', 'true');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(pressed)')).to.be.false;
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should sync initial pressed state from targetElement', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.setAttribute('aria-pressed', 'true');
+      document.body.appendChild(targetButton);
+
+      const { el } = await createFixture({});
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      expect(el.matches(':state(pressed)')).to.be.true;
+
+      document.body.removeChild(targetButton);
+    });
+  });
+
+  describe('aria-current observation', () => {
+    it('should not have current state initially', async () => {
+      const { el } = await createFixture({});
+      expect(el.matches(':state(current)')).to.be.false;
+    });
+
+    it('should sync current state when aria-current is "true"', async () => {
+      const { el, button } = await createFixture({});
+
+      button.setAttribute('aria-current', 'true');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(current)')).to.be.true;
+    });
+
+    it('should sync current state when aria-current is "page"', async () => {
+      const { el, button } = await createFixture({});
+
+      button.setAttribute('aria-current', 'page');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(current)')).to.be.true;
+    });
+
+    it('should sync current state when aria-current is "step"', async () => {
+      const { el, button } = await createFixture({});
+
+      button.setAttribute('aria-current', 'step');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(current)')).to.be.true;
+    });
+
+    it('should sync current state when aria-current is "location"', async () => {
+      const { el, button } = await createFixture({});
+
+      button.setAttribute('aria-current', 'location');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(current)')).to.be.true;
+    });
+
+    it('should sync current state when aria-current is "date"', async () => {
+      const { el, button } = await createFixture({});
+
+      button.setAttribute('aria-current', 'date');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(current)')).to.be.true;
+    });
+
+    it('should sync current state when aria-current is "time"', async () => {
+      const { el, button } = await createFixture({});
+
+      button.setAttribute('aria-current', 'time');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(current)')).to.be.true;
+    });
+
+    it('should remove current state when aria-current is set to "false"', async () => {
+      const { el, button } = await createFixture({});
+
+      button.setAttribute('aria-current', 'page');
+      await elementUpdated(el);
+      expect(el.matches(':state(current)')).to.be.true;
+
+      button.setAttribute('aria-current', 'false');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(current)')).to.be.false;
+    });
+
+    it('should remove current state when aria-current attribute is removed', async () => {
+      const { el, button } = await createFixture({});
+
+      button.setAttribute('aria-current', 'page');
+      await elementUpdated(el);
+      expect(el.matches(':state(current)')).to.be.true;
+
+      button.removeAttribute('aria-current');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(current)')).to.be.false;
+    });
+
+    it('should not set current state for invalid aria-current values', async () => {
+      const { el, button } = await createFixture({});
+
+      button.setAttribute('aria-current', 'invalid');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(current)')).to.be.false;
+    });
+
+    it('should observe targetElement aria-current attribute changes', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.textContent = 'Target Button';
+      document.body.appendChild(targetButton);
+
+      const { el } = await createFixture({});
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      targetButton.setAttribute('aria-current', 'page');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(current)')).to.be.true;
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should sync initial current state from button with aria-current', async () => {
+      const el = await fixture<IButtonAreaComponent>(html`
+        <forge-button-area>
+          <button slot="button" aria-current="page">Test</button>
+        </forge-button-area>
+      `);
+
+      expect(el.matches(':state(current)')).to.be.true;
+    });
+
+    it('should not sync current state from slotted button when targetElement is set', async () => {
+      const targetButton = document.createElement('button');
+      document.body.appendChild(targetButton);
+
+      const { el, button } = await createFixture({});
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      button.setAttribute('aria-current', 'page');
+      await elementUpdated(el);
+
+      expect(el.matches(':state(current)')).to.be.false;
+
+      document.body.removeChild(targetButton);
+    });
+
+    it('should sync initial current state from targetElement', async () => {
+      const targetButton = document.createElement('button');
+      targetButton.setAttribute('aria-current', 'step');
+      document.body.appendChild(targetButton);
+
+      const { el } = await createFixture({});
+      el.targetElement = targetButton;
+      await elementUpdated(el);
+
+      expect(el.matches(':state(current)')).to.be.true;
+
+      document.body.removeChild(targetButton);
+    });
+  });
+
   describe('target and targetElement', () => {
     it('should locate target element by ID when target property is set', async () => {
       const targetButton = document.createElement('button');

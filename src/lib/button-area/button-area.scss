@@ -19,9 +19,15 @@
   display: none;
 }
 
-:host([disabled]) {
+:host(:state(disabled)) {
   .forge-button-area {
     @include disabled;
+  }
+}
+
+:host(:where(:state(pressed), :state(current))) {
+  .forge-button-area {
+    @include selected;
   }
 }
 

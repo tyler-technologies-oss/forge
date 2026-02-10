@@ -26,6 +26,8 @@ type DisableableElement = HTMLElement & { disabled?: boolean };
  * @summary Button areas are used to create clickable areas that group related information and actions about a single subject. The button area component wraps any arbitrary content with a `<button>` element to enable accessible, clickable interfaces including nested controls and other complex content.
  *
  * @state disabled - Applied when the button area is disabled.
+ * @state pressed - Applied when the observed button has `aria-pressed="true"`.
+ * @state current - Applied when the observed button has `aria-current` set to a valid value ("true", "page", "step", "location", "date", or "time").
  *
  * @event {PointerEvent} click - The button area emits a native HTML click event whenever it or the slotted button is clicked. Add the listener to the `<forge-button-area>` element to receive all events. Note: Set `data-forge-ignore` on any nested buttons or other interactive elements to prevent them from activating the button area.
  *
@@ -35,6 +37,7 @@ type DisableableElement = HTMLElement & { disabled?: boolean };
  * @csspart state-layer - The state-layer surface element.
  *
  * @cssproperty --forge-button-area-shape - The border radius of the button area.
+ * @cssproperty --forge-button-area-selected-color - The background color of the button area when in the pressed or current states.
  * @cssproperty --forge-button-area-cursor - The cursor.
  * @cssproperty --forge-button-area-disabled-cursor - The cursor when in the disabled state.
  *
@@ -116,6 +119,10 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
     } else if (this.disabled) {
       this.#handleDisabledChange();
     }
+
+    // Sync initial pressed and current states
+    this.#handlePressedChange(this.#observedElement);
+    this.#handleCurrentChange(this.#observedElement);
   }
 
   public override willUpdate(changedProperties: PropertyValues<this>): void {
@@ -224,6 +231,10 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
     } else if (this.disabled) {
       this.#buttonElement?.toggleAttribute('disabled', true);
     }
+
+    // Sync pressed and current states
+    this.#handlePressedChange(this.#observedElement);
+    this.#handleCurrentChange(this.#observedElement);
   };
 
   #handleTargetChange(): void {
@@ -249,6 +260,8 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
     const observed = this.#observedElement;
     if (observed) {
       this.disabled = observed.disabled ?? false;
+      this.#handlePressedChange(observed);
+      this.#handleCurrentChange(observed);
     }
   }
 
@@ -274,6 +287,27 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
     }
   }
 
+  #handlePressedChange(element?: DisableableElement | null): void {
+    if (!element?.isConnected) {
+      return;
+    }
+
+    const ariaPressed = element.getAttribute('aria-pressed');
+    const isPressed = ariaPressed === 'true';
+    toggleState(this.#internals, 'pressed', isPressed);
+  }
+
+  #handleCurrentChange(element?: DisableableElement | null): void {
+    if (!element?.isConnected) {
+      return;
+    }
+
+    const ariaCurrent = element.getAttribute('aria-current');
+    const validValues = ['true', 'page', 'step', 'location', 'date', 'time'];
+    const isCurrent = ariaCurrent !== null && validValues.includes(ariaCurrent);
+    toggleState(this.#internals, 'current', isCurrent);
+  }
+
   #startObserver(): void {
     const element = this.#observedElement;
 
@@ -287,10 +321,12 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
         }
 
         this.disabled = observed.disabled ?? false;
+        this.#handlePressedChange(observed);
+        this.#handleCurrentChange(observed);
       });
 
       this.#buttonObserver.observe(element, {
-        attributeFilter: ['disabled']
+        attributeFilter: ['disabled', 'aria-pressed', 'aria-current']
       });
     }
   }

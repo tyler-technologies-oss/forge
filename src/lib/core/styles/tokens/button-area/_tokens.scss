@@ -10,6 +10,7 @@ $tokens: (
   // Base
   cursor: utils.module-val(button-area, cursor, pointer),
   shape: utils.module-val(button-area, shape, shape.variable(extra-small)),
+  selected-color: utils.module-val(button-area, selected-color, theme.variable(primary-container)),
   // Disabled
   disabled-cursor: utils.module-val(button-area, disabled-cursor, not-allowed),
   // Focus indicator

@@ -20,3 +20,25 @@ forge-open-icon {
 .expansion-panel-content {
   margin: 16px;
 }
+
+#toggle-icon {
+  margin-inline-end: 8px;
+}
+
+.current-container {
+  display: grid;
+  grid-template-columns: 256px 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 8px;
+
+  .current-detail {
+    grid-area: 1 / 2 / -1 / -1;
+
+    &-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      block-size: 100%;
+    }
+  }
+}

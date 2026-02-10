@@ -48,12 +48,12 @@
         <div class="forge-typography--heading4" id="button-area-heading">Using Target</div>
         <div>Content</div>
       </div>
-      <forge-icon-button id="target-button">
+      <forge-icon-button id="target-button" aria-label="Like">
         <forge-icon name="favorite"></forge-icon>
       </forge-icon-button>
-      <forge-tooltip type="label">Like</forge-tooltip>
     </div>
   </forge-button-area>
+  <forge-tooltip position="top">Like</forge-tooltip>
 </forge-card>
 
 <br />
@@ -65,12 +65,87 @@
         <div class="forge-typography--heading4" id="button-area-heading">Using Target Element</div>
         <div>Content</div>
       </div>
-      <forge-icon-button id="target-element-button">
+      <forge-icon-button id="target-element-button" aria-label="Like">
         <forge-icon name="favorite"></forge-icon>
       </forge-icon-button>
-      <forge-tooltip type="label">Like</forge-tooltip>
+    </div>
+  </forge-button-area>
+  <forge-tooltip position="top">Like</forge-tooltip>
+</forge-card>
+
+<br />
+
+<forge-card outlined>
+  <forge-button-area id="toggle-button-area">
+    <button slot="button" id="toggle-button" aria-pressed="false" aria-labelledby="button-area-heading"></button>
+    <div class="flex-wrapper">
+      <div>
+        <div class="forge-typography--heading4" id="button-area-heading">Toggle</div>
+        <div>Content</div>
+      </div>
+      <forge-icon id="toggle-icon" name="favorite_border"></forge-icon>
+      <forge-icon-button forge-ignore>
+        <forge-icon name="open_in_new"></forge-icon>
+      </forge-icon-button>
+      <forge-tooltip type="label">Open</forge-tooltip>
     </div>
   </forge-button-area>
 </forge-card>
+
+<br />
+
+<div id="current-container" class="current-container">
+  <forge-card>
+    <forge-button-area>
+      <button slot="button" aria-current="true" aria-labelledby="current-button-area-heading-one"></button>
+      <div class="flex-wrapper">
+        <div>
+          <div class="forge-typography--heading4" id="current-button-area-heading-one">View One</div>
+          <div>Content</div>
+        </div>
+        <forge-icon-button data-forge-ignore>
+          <forge-icon name="info"></forge-icon>
+        </forge-icon-button>
+        <forge-tooltip type="label">Information</forge-tooltip>
+        <forge-icon name="chevron_right"></forge-icon>
+      </div>
+    </forge-button-area>
+  </forge-card>
+  <forge-card>
+    <forge-button-area>
+      <button slot="button" aria-labelledby="current-button-area-heading-two"></button>
+      <div class="flex-wrapper">
+        <div>
+          <div class="forge-typography--heading4" id="current-button-area-heading-two">View Two</div>
+          <div>Content</div>
+        </div>
+        <forge-icon-button data-forge-ignore>
+          <forge-icon name="info"></forge-icon>
+        </forge-icon-button>
+        <forge-tooltip type="label">Information</forge-tooltip>
+        <forge-icon name="chevron_right"></forge-icon>
+      </div>
+    </forge-button-area>
+  </forge-card>
+  <forge-card>
+    <forge-button-area>
+      <button slot="button" aria-labelledby="current-button-area-heading-three"></button>
+      <div class="flex-wrapper">
+        <div>
+          <div class="forge-typography--heading4" id="current-button-area-heading-three">View Three</div>
+          <div>Content</div>
+        </div>
+        <forge-icon-button data-forge-ignore>
+          <forge-icon name="info"></forge-icon>
+        </forge-icon-button>
+        <forge-tooltip type="label">Information</forge-tooltip>
+        <forge-icon name="chevron_right"></forge-icon>
+      </div>
+    </forge-button-area>
+  </forge-card>
+  <forge-card class="current-detail">
+    <div id="current-detail-content" class="current-detail-content forge-typography--display3">View One</div>
+  </forge-card>
+</div>
 
 <script type="module" src="button-area.ts"></script>

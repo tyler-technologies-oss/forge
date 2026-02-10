@@ -23,6 +23,10 @@
   cursor: #{token(disabled-cursor)};
 }
 
+@mixin selected {
+  background-color: #{token(selected-color)};
+}
+
 @mixin button {
   position: absolute;
   inline-size: 100%;
