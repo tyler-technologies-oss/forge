@@ -2,11 +2,8 @@ import { expect } from 'vitest';
 import axe from 'axe-core';
 
 expect.extend({
-  /**
-   * Custom matcher to test accessibility using axe-core.
-   */
-  async toBeAccessible(received: Element) {
-    const results = await axe.run(received);
+  async toBeAccessible(received: Element, options?: axe.RunOptions) {
+    const results = await axe.run(received, options ?? {});
     const pass = results.violations.length === 0;
     return {
       pass,

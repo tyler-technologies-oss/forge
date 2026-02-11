@@ -1,7 +1,8 @@
 import 'vitest';
+import type { RunOptions } from 'axe-core';
 
 interface CustomMatchers<R = unknown> {
-  toBeAccessible(): Promise<R>;
+  toBeAccessible(options?: RunOptions): Promise<R>;
 }
 
 declare module 'vitest' {
