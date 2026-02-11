@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { describe, it, expect } from 'vitest';
 import { randomHexColor } from './color-utils.js';
 
 describe('ColorUtils', () => {
@@ -6,7 +6,7 @@ describe('ColorUtils', () => {
     it('should return valid hex', () => {
       const hex = randomHexColor();
 
-      expect(hex.length).to.equal(7);
+      expect(hex.length).toBe(7);
     });
   });
 });
