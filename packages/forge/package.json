@@ -19,10 +19,12 @@
   "typings": "esm/index.d.ts",
   "exports": {
     ".": {
+      "development": "./src/lib/index.ts",
       "types": "./esm/index.d.ts",
       "default": "./esm/index.js"
     },
     "./*": {
+      "development": "./src/lib/*/index.ts",
       "types": "./esm/*/index.d.ts",
       "default": "./esm/*/index.js"
     },
@@ -94,7 +96,7 @@
     "@vitest/coverage-v8": "^4.0.18",
     "@vueless/storybook-dark-mode": "catalog:",
     "@wc-toolkit/jsdoc-tags": "^1.1.0",
-    "@web/dev-server-esbuild": "1.0.4",
+    "@web/dev-server-esbuild": "1.0.5",
     "@web/dev-server-rollup": "^0.6.4",
     "@web/test-runner": "0.20.2",
     "@web/test-runner-commands": "^0.9.0",
@@ -103,7 +105,7 @@
     "axe-core": "^4.11.1",
     "cssbeautify": "^0.3.1",
     "custom-element-vs-code-integration": "^1.5.0",
-    "esbuild": "^0.27.2",
+    "esbuild": "^0.27.3",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-plugin-chai-friendly": "^1.1.0",
@@ -113,8 +115,8 @@
     "http-server": "^14.1.1",
     "lit-html": "^3.3.2",
     "minimatch": "^10.1.2",
-    "ora": "^9.2.0",
-    "playwright": "^1.58.1",
+    "ora": "^9.3.0",
+    "playwright": "^1.58.2",
     "plop": "catalog:",
     "prettier": "catalog:",
     "react-ga4": "^2.1.0",
@@ -124,9 +126,9 @@
     "sinon": "^21.0.1",
     "storybook": "catalog:",
     "storybook-addon-tag-badges": "catalog:",
-    "stylelint": "^16.26.1",
+    "stylelint": "catalog:",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.54.0",
+    "typescript-eslint": "^8.55.0",
     "vite": "catalog:",
     "vite-plugin-ejs": "^1.7.0",
     "vite-plugin-full-reload": "^1.2.0",
