@@ -1,9 +1,9 @@
-import { expect } from '@esm-bundle/chai';
-import { elementUpdated, fixture, html } from '@open-wc/testing';
+import { describe, it, expect, vi } from 'vitest';
+import { render } from 'vitest-browser-lit';
+import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
+import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
-import { sendKeys, sendMouse } from '@web/test-runner-commands';
-import { ifDefined } from 'lit-html/directives/if-defined.js';
-import { spy } from 'sinon';
 import { TestHarness } from '../../core/testing/test-harness.js';
 import { internals } from '../../constants.js';
 import { frame } from '../../core/utils/utils.js';
@@ -30,32 +30,32 @@ describe('Select', () => {
     it('should contain shadow root', async () => {
       const harness = await createFixture();
 
-      expect(harness.element.shadowRoot).not.to.be.null;
+      expect(harness.element.shadowRoot).not.toBeNull();
     });
 
     it('should initialize field', async () => {
       const harness = await createFixture();
 
-      expect(harness.fieldElement).to.be.ok;
-      expect(harness.fieldElement.shadowRoot).to.be.ok;
+      expect(harness.fieldElement).toBeTruthy();
+      expect(harness.fieldElement.shadowRoot).toBeTruthy();
     });
 
     it('should instantiate field before connected to DOM', async () => {
       const selectEl = document.createElement('forge-select');
       const fieldEl = selectEl.shadowRoot?.querySelector('forge-field');
 
-      expect(fieldEl).to.be.ok;
-      expect(fieldEl?.shadowRoot).to.be.ok;
+      expect(fieldEl).toBeTruthy();
+      expect(fieldEl?.shadowRoot).toBeTruthy();
     });
 
     it('should focus element when clicking field', async () => {
       const harness = await createFixture();
 
-      expect(harness.element.matches(':focus')).to.be.false;
+      expect(harness.element.matches(':focus')).toBe(false);
 
       await harness.clickElement(harness.element);
 
-      expect(harness.element.matches(':focus')).to.be.true;
+      expect(harness.element.matches(':focus')).toBe(true);
     });
 
     it('should ignore clicks originating from field accessory slot', async () => {
@@ -64,48 +64,48 @@ describe('Select', () => {
       accessoryEl.slot = 'accessory';
       harness.element.appendChild(accessoryEl);
 
-      await elementUpdated(harness.element);
-      expect(harness.element.matches(':focus')).to.be.false;
+      await frame();
+      expect(harness.element.matches(':focus')).toBe(false);
 
       await harness.clickElement(accessoryEl);
 
-      expect(harness.element.matches(':focus')).to.be.false;
-      expect(harness.element.open).to.be.false;
+      expect(harness.element.matches(':focus')).toBe(false);
+      expect(harness.element.open).toBe(false);
     });
 
     it('should not focus field when disabled', async () => {
       const harness = await createFixture({ disabled: true });
 
-      expect(harness.element.matches(':focus')).to.be.false;
+      expect(harness.element.matches(':focus')).toBe(false);
 
-      await harness.clickElement(harness.element);
+      await harness.clickElement(harness.element, { force: true });
 
-      expect(harness.element.matches(':focus')).to.be.false;
+      expect(harness.element.matches(':focus')).toBe(false);
     });
 
     it('should have correct default state', async () => {
       const harness = await createFixture();
 
-      expect(harness.element.open).to.be.false;
-      expect(harness.element.value).to.be.undefined;
-      expect(harness.element.label).to.be.equal(harness.labelElement?.textContent);
-      expect(harness.element.placeholder).to.be.empty;
-      expect(harness.element.multiple).to.be.false;
-      expect(harness.element.disabled).to.be.false;
-      expect(harness.element.labelPosition).to.equal(FIELD_CONSTANTS.defaults.DEFAULT_LABEL_POSITION);
-      expect(harness.element.labelAlignment).to.equal(FIELD_CONSTANTS.defaults.DEFAULT_LABEL_ALIGNMENT);
-      expect(harness.element.invalid).to.be.false;
-      expect(harness.element.required).to.be.false;
-      expect(harness.element.optional).to.be.false;
-      expect(harness.element.disabled).to.be.false;
-      expect(harness.element.floatLabel).to.be.false;
-      expect(harness.element.variant).to.equal(FIELD_CONSTANTS.defaults.DEFAULT_VARIANT);
-      expect(harness.element.theme).to.equal(FIELD_CONSTANTS.defaults.DEFAULT_THEME);
-      expect(harness.element.shape).to.equal(FIELD_CONSTANTS.defaults.DEFAULT_SHAPE);
-      expect(harness.element.density).to.equal(FIELD_CONSTANTS.defaults.DEFAULT_DENSITY);
-      expect(harness.element.dense).to.be.false;
-      expect(harness.element.popoverIcon).to.be.true;
-      expect(harness.element.supportTextInset).to.equal(FIELD_CONSTANTS.defaults.DEFAULT_SUPPORT_TEXT_INSET);
+      expect(harness.element.open).toBe(false);
+      expect(harness.element.value).toBeUndefined();
+      expect(harness.element.label).toBe(harness.labelElement?.textContent);
+      expect(harness.element.placeholder).toBe('');
+      expect(harness.element.multiple).toBe(false);
+      expect(harness.element.disabled).toBe(false);
+      expect(harness.element.labelPosition).toBe(FIELD_CONSTANTS.defaults.DEFAULT_LABEL_POSITION);
+      expect(harness.element.labelAlignment).toBe(FIELD_CONSTANTS.defaults.DEFAULT_LABEL_ALIGNMENT);
+      expect(harness.element.invalid).toBe(false);
+      expect(harness.element.required).toBe(false);
+      expect(harness.element.optional).toBe(false);
+      expect(harness.element.disabled).toBe(false);
+      expect(harness.element.floatLabel).toBe(false);
+      expect(harness.element.variant).toBe(FIELD_CONSTANTS.defaults.DEFAULT_VARIANT);
+      expect(harness.element.theme).toBe(FIELD_CONSTANTS.defaults.DEFAULT_THEME);
+      expect(harness.element.shape).toBe(FIELD_CONSTANTS.defaults.DEFAULT_SHAPE);
+      expect(harness.element.density).toBe(FIELD_CONSTANTS.defaults.DEFAULT_DENSITY);
+      expect(harness.element.dense).toBe(false);
+      expect(harness.element.popoverIcon).toBe(true);
+      expect(harness.element.supportTextInset).toBe(FIELD_CONSTANTS.defaults.DEFAULT_SUPPORT_TEXT_INSET);
     });
 
     it('should dispatch scrolled bottom event when scrolling to bottom of dropdown', async () => {
@@ -113,19 +113,19 @@ describe('Select', () => {
 
       harness.element.observeScroll = true;
       harness.element.options = Array.from({ length: 10 }, (_, i) => ({ value: `option-${i}`, label: `Option ${i}` }));
-      const spyScrolledBottom = spy();
+      const spyScrolledBottom = vi.fn();
       harness.element.addEventListener(SELECT_CONSTANTS.events.SCROLLED_BOTTOM, spyScrolledBottom);
 
-      await elementUpdated(harness.element);
+      await frame();
 
       harness.element.open = true;
-      await elementUpdated(harness.element);
+      await frame();
 
       const scrollElement = harness.element.popupElement!.shadowRoot!.querySelector(POPOVER_CONSTANTS.selectors.SURFACE) as HTMLElement;
       scrollElement.scrollTop = scrollElement.scrollHeight;
       await frame();
 
-      expect(spyScrolledBottom.calledOnce).to.be.true;
+      expect(spyScrolledBottom).toHaveBeenCalledOnce();
     });
 
     it('should set element attributes on options', async () => {
@@ -136,19 +136,19 @@ describe('Select', () => {
       ];
       const harness = await createFixture();
       harness.element.options = options;
-      expect(harness.element.children[2].getAttribute('data-test-attr')).to.equal('test-value');
+      expect(harness.element.children[2].getAttribute('data-test-attr')).toBe('test-value');
     });
   });
 
   describe('accessibility', () => {
     it('should be accessible', async () => {
       const harness = await createFixture();
-      expect(harness.element.getAttribute('role')).to.equal('combobox');
-      expect(harness.element.getAttribute('aria-haspopup')).to.equal('true');
-      expect(harness.element.getAttribute('aria-expanded')).to.equal('false');
-      expect(harness.element.tabIndex).to.equal(0);
-      expect(harness.element.getAttribute('aria-label')).to.equal(harness.labelElement?.textContent);
-      await expect(harness.element).to.be.accessible();
+      expect(harness.element.getAttribute('role')).toBe('combobox');
+      expect(harness.element.getAttribute('aria-haspopup')).toBe('true');
+      expect(harness.element.getAttribute('aria-expanded')).toBe('false');
+      expect(harness.element.tabIndex).toBe(0);
+      expect(harness.element.getAttribute('aria-label')).toBe(harness.labelElement?.textContent);
+      await expect(harness.element).toBeAccessible();
     });
 
     it('should be accessible when open', async () => {
@@ -157,10 +157,10 @@ describe('Select', () => {
       harness.element.open = true;
       await frame();
 
-      expect(harness.element.hasAttribute('open')).to.be.true;
-      expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
-      expect(harness.element.getAttribute('aria-controls')).to.equal(harness.popoverElement?.id);
-      await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
+      expect(harness.element.hasAttribute('open')).toBe(true);
+      expect(harness.element.getAttribute('aria-expanded')).toBe('true');
+      expect(harness.element.getAttribute('aria-controls')).toBe(harness.popoverElement?.id);
+      await expect(harness.element).toBeAccessible();
     });
 
     it('should set aria-activedescendant when opened via keyboard', async () => {
@@ -169,14 +169,14 @@ describe('Select', () => {
       harness.element.open = true;
       await frame();
 
-      expect(harness.element.hasAttribute('aria-activedescendant')).to.be.false;
+      expect(harness.element.hasAttribute('aria-activedescendant')).toBe(false);
 
       harness.element.focus();
-      harness.pressKey('ArrowDown');
-      await elementUpdated(harness.element);
+      await harness.pressKey('ArrowDown');
+      await frame();
       await harness.popoverToggleAnimation;
-      expect(harness.element.getAttribute('aria-activedescendant')).to.equal(harness.getListItems()[0].querySelector('button')?.id);
-      await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
+      expect(harness.element.getAttribute('aria-activedescendant')).toBe(harness.getListItems()[0].querySelector('button')?.id);
+      await expect(harness.element).toBeAccessible();
     });
 
     it('should update aria-activedescendant when focused', async () => {
@@ -185,7 +185,7 @@ describe('Select', () => {
       harness.element.open = true;
       await frame();
 
-      expect(harness.element.hasAttribute('aria-activedescendant')).to.be.false;
+      expect(harness.element.hasAttribute('aria-activedescendant')).toBe(false);
 
       harness.element.focus();
       await frame();
@@ -193,25 +193,25 @@ describe('Select', () => {
       await harness.pressKey('ArrowDown');
 
       const listItems = harness.getListItems();
-      expect(harness.element.getAttribute('aria-activedescendant')).to.equal(listItems[0].querySelector('button')?.id);
-      await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
+      expect(harness.element.getAttribute('aria-activedescendant')).toBe(listItems[0].querySelector('button')?.id);
+      await expect(harness.element).toBeAccessible();
     });
 
     it('should be accessible when required', async () => {
       const harness = await createFixture({ required: true });
-      expect(harness.element.getAttribute('aria-required')).to.equal('true');
-      await expect(harness.element).to.be.accessible();
+      expect(harness.element.getAttribute('aria-required')).toBe('true');
+      await expect(harness.element).toBeAccessible();
     });
 
     it('should be accessible when invalid', async () => {
       const harness = await createFixture({ invalid: true });
-      expect(harness.element.getAttribute('aria-invalid')).to.equal('true');
-      await expect(harness.element).to.be.accessible();
+      expect(harness.element.getAttribute('aria-invalid')).toBe('true');
+      await expect(harness.element).toBeAccessible();
     });
 
     it('should be accessible when multiple', async () => {
       const harness = await createFixture({ multiple: true });
-      await expect(harness.element).to.be.accessible();
+      await expect(harness.element).toBeAccessible();
     });
 
     it('should be accessible when multiple and open', async () => {
@@ -220,11 +220,11 @@ describe('Select', () => {
       harness.element.open = true;
       await frame();
 
-      expect(harness.element.hasAttribute('open')).to.be.true;
-      expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
-      expect(harness.element.getAttribute('aria-controls')).to.equal(harness.popoverElement?.id);
-      expect(harness.popoverElement?.querySelector('forge-list')?.getAttribute('aria-multiselectable')).to.equal('true');
-      await expect(harness.element).to.be.accessible();
+      expect(harness.element.hasAttribute('open')).toBe(true);
+      expect(harness.element.getAttribute('aria-expanded')).toBe('true');
+      expect(harness.element.getAttribute('aria-controls')).toBe(harness.popoverElement?.id);
+      expect(harness.popoverElement?.querySelector('forge-list')?.getAttribute('aria-multiselectable')).toBe('true');
+      await expect(harness.element).toBeAccessible();
     });
   });
 
@@ -234,11 +234,11 @@ describe('Select', () => {
 
       await harness.clickElement(harness.element);
 
-      expect(harness.element.matches(':focus')).to.be.true;
-      expect(harness.element.open).to.be.true;
-      expect(harness.popoverElement).to.exist;
-      expect(harness.popoverElement?.open).to.be.true;
-      expect(harness.fieldElement.popoverExpanded).to.be.true;
+      expect(harness.element.matches(':focus')).toBe(true);
+      expect(harness.element.open).toBe(true);
+      expect(harness.popoverElement).toBeTruthy();
+      expect(harness.popoverElement?.open).toBe(true);
+      expect(harness.fieldElement.popoverExpanded).toBe(true);
     });
 
     it('should close when clicking select', async () => {
@@ -250,9 +250,9 @@ describe('Select', () => {
       await harness.clickElement(harness.element);
       await harness.popoverToggleAnimation;
 
-      expect(harness.element.open).to.be.false;
-      expect(harness.popoverElement).not.to.exist;
-      expect(harness.fieldElement.popoverExpanded).to.be.false;
+      expect(harness.element.open).toBe(false);
+      expect(harness.popoverElement).toBeFalsy();
+      expect(harness.fieldElement.popoverExpanded).toBe(false);
     });
 
     it('should close when clicking outside', async () => {
@@ -264,19 +264,19 @@ describe('Select', () => {
       await harness.clickOutside();
       await harness.popoverToggleAnimation;
 
-      expect(harness.element.open).to.be.false;
-      expect(harness.popoverElement).not.to.exist;
-      expect(harness.fieldElement.popoverExpanded).to.be.false;
+      expect(harness.element.open).toBe(false);
+      expect(harness.popoverElement).toBeFalsy();
+      expect(harness.fieldElement.popoverExpanded).toBe(false);
     });
 
     it('should not open when clicking select while disabled', async () => {
       const harness = await createFixture({ disabled: true });
 
-      await harness.clickElement(harness.element);
+      await harness.clickElement(harness.element, { force: true });
 
-      expect(harness.element.open).to.be.false;
-      expect(harness.popoverElement).not.to.exist;
-      expect(harness.fieldElement.popoverExpanded).to.be.false;
+      expect(harness.element.open).toBe(false);
+      expect(harness.popoverElement).toBeFalsy();
+      expect(harness.fieldElement.popoverExpanded).toBe(false);
     });
 
     it('should not open dropdown if no options are available', async () => {
@@ -284,9 +284,9 @@ describe('Select', () => {
 
       await harness.clickElement(harness.element);
 
-      expect(harness.element.open).to.be.false;
-      expect(harness.popoverElement).not.to.exist;
-      expect(harness.fieldElement.popoverExpanded).to.be.false;
+      expect(harness.element.open).toBe(false);
+      expect(harness.popoverElement).toBeFalsy();
+      expect(harness.fieldElement.popoverExpanded).toBe(false);
     });
   });
 
@@ -295,10 +295,10 @@ describe('Select', () => {
       const harness = await createFixture();
       await harness.clickElement(harness.element);
 
-      expect(harness.element.value).not.to.be.ok;
+      expect(harness.element.value).toBeFalsy();
 
       await harness.clickElement(harness.getListItems()[0]);
-      expect(harness.element.value).to.equal('one');
+      expect(harness.element.value).toBe('one');
     });
 
     it('should select multiple options when multiple is true', async () => {
@@ -308,7 +308,7 @@ describe('Select', () => {
       await harness.clickElement(harness.getListItems()[0]);
       await harness.clickElement(harness.getListItems()[1]);
 
-      expect(harness.element.value).to.deep.equal(['one', 'two']);
+      expect(harness.element.value).toEqual(['one', 'two']);
     });
 
     it('should deselect an option when multiple is true', async () => {
@@ -316,23 +316,23 @@ describe('Select', () => {
       await harness.clickElement(harness.element);
       await harness.clickElement(harness.getListItems()[0]);
 
-      expect(harness.element.value).to.deep.equal(['one']);
+      expect(harness.element.value).toEqual(['one']);
 
       await harness.clickElement(harness.getListItems()[0]);
-      expect(harness.element.value).to.deep.equal([]);
+      expect(harness.element.value).toEqual([]);
     });
 
     it('should dispatch change event when selecting an option', async () => {
       const harness = await createFixture();
-      const spyChange = spy();
+      const spyChange = vi.fn();
 
       harness.element.addEventListener(BASE_SELECT_CONSTANTS.events.CHANGE, spyChange);
 
       await harness.clickElement(harness.element);
       await harness.clickElement(harness.getListItems()[0]);
 
-      expect(spyChange.calledOnce).to.be.true;
-      expect(spyChange.firstCall.args[0].detail).to.equal('one');
+      expect(spyChange).toHaveBeenCalledOnce();
+      expect(spyChange.mock.calls[0][0].detail).toBe('one');
     });
   });
 
@@ -340,28 +340,28 @@ describe('Select', () => {
     it('should set placeholder', async () => {
       const harness = await createFixture({ placeholder: 'Test placeholder' });
 
-      expect(harness.selectedTextElement.getAttribute(SELECT_CONSTANTS.attributes.PLACEHOLDER)).to.equal('Test placeholder');
-      expect(harness.element.placeholder).to.equal('Test placeholder');
-      expect(harness.element.getAttribute(SELECT_CONSTANTS.attributes.PLACEHOLDER)).to.equal('Test placeholder');
+      expect(harness.selectedTextElement.getAttribute(SELECT_CONSTANTS.attributes.PLACEHOLDER)).toBe('Test placeholder');
+      expect(harness.element.placeholder).toBe('Test placeholder');
+      expect(harness.element.getAttribute(SELECT_CONSTANTS.attributes.PLACEHOLDER)).toBe('Test placeholder');
     });
 
     it('should set disabled', async () => {
       const harness = await createFixture({ disabled: true });
 
-      expect(harness.element.tabIndex).to.equal(-1);
-      expect(harness.element.getAttribute('aria-disabled')).to.equal('true');
-      expect(harness.element.disabled).to.be.true;
-      expect(harness.element.hasAttribute('disabled')).to.be.true;
-      expect(harness.fieldElement.disabled).to.be.true;
-      await expect(harness.element).to.be.accessible();
+      expect(harness.element.tabIndex).toBe(-1);
+      expect(harness.element.getAttribute('aria-disabled')).toBe('true');
+      expect(harness.element.disabled).toBe(true);
+      expect(harness.element.hasAttribute('disabled')).toBe(true);
+      expect(harness.fieldElement.disabled).toBe(true);
+      await expect(harness.element).toBeAccessible();
 
       harness.element.disabled = false;
 
-      expect(harness.element.tabIndex).to.equal(0);
-      expect(harness.element.getAttribute('aria-disabled')).to.be.null;
-      expect(harness.element.disabled).to.be.false;
-      expect(harness.element.hasAttribute('disabled')).to.be.false;
-      expect(harness.fieldElement.disabled).to.be.false;
+      expect(harness.element.tabIndex).toBe(0);
+      expect(harness.element.getAttribute('aria-disabled')).toBeNull();
+      expect(harness.element.disabled).toBe(false);
+      expect(harness.element.hasAttribute('disabled')).toBe(false);
+      expect(harness.fieldElement.disabled).toBe(false);
     });
 
     it('should set disabled property from attribute', async () => {
@@ -369,17 +369,17 @@ describe('Select', () => {
 
       harness.element.setAttribute('disabled', '');
 
-      expect(harness.element.hasAttribute('disabled')).to.be.true;
-      expect(harness.element.disabled).to.be.true;
-      expect(harness.fieldElement.disabled).to.be.true;
+      expect(harness.element.hasAttribute('disabled')).toBe(true);
+      expect(harness.element.disabled).toBe(true);
+      expect(harness.fieldElement.disabled).toBe(true);
     });
 
     it('should set label-position attribute', async () => {
       const harness = await createFixture({ labelPosition: 'block-start' });
 
-      expect(harness.element.labelPosition).to.equal('block-start');
-      expect(harness.element.getAttribute('label-position')).to.equal('block-start');
-      expect(harness.fieldElement.labelPosition).to.equal('block-start');
+      expect(harness.element.labelPosition).toBe('block-start');
+      expect(harness.element.getAttribute('label-position')).toBe('block-start');
+      expect(harness.fieldElement.labelPosition).toBe('block-start');
     });
 
     it('should set labelPosition property from attribute', async () => {
@@ -387,17 +387,17 @@ describe('Select', () => {
 
       harness.element.setAttribute('label-position', 'block-start');
 
-      expect(harness.element.labelPosition).to.equal('block-start');
-      expect(harness.fieldElement.labelPosition).to.equal('block-start');
-      expect(harness.element.getAttribute('label-position')).to.equal('block-start');
+      expect(harness.element.labelPosition).toBe('block-start');
+      expect(harness.fieldElement.labelPosition).toBe('block-start');
+      expect(harness.element.getAttribute('label-position')).toBe('block-start');
     });
 
     it('should set label-alignment attribute', async () => {
       const harness = await createFixture({ labelAlignment: 'end' });
 
-      expect(harness.element.labelAlignment).to.equal('end');
-      expect(harness.element.getAttribute('label-alignment')).to.equal('end');
-      expect(harness.fieldElement.labelAlignment).to.equal('end');
+      expect(harness.element.labelAlignment).toBe('end');
+      expect(harness.element.getAttribute('label-alignment')).toBe('end');
+      expect(harness.fieldElement.labelAlignment).toBe('end');
     });
 
     it('should set labelAlignment property from attribute', async () => {
@@ -405,18 +405,18 @@ describe('Select', () => {
 
       harness.element.setAttribute('label-alignment', 'end');
 
-      expect(harness.element.labelAlignment).to.equal('end');
-      expect(harness.fieldElement.labelAlignment).to.equal('end');
-      expect(harness.element.getAttribute('label-alignment')).to.equal('end');
+      expect(harness.element.labelAlignment).toBe('end');
+      expect(harness.fieldElement.labelAlignment).toBe('end');
+      expect(harness.element.getAttribute('label-alignment')).toBe('end');
     });
 
     it('should set invalid attribute', async () => {
       const harness = await createFixture({ invalid: true });
 
-      expect(harness.element.invalid).to.be.true;
-      expect(harness.element.getAttribute('invalid')).to.equal('');
-      expect(harness.fieldElement.invalid).to.be.true;
-      expect(harness.fieldElement.hasAttribute('invalid')).to.be.true;
+      expect(harness.element.invalid).toBe(true);
+      expect(harness.element.getAttribute('invalid')).toBe('');
+      expect(harness.fieldElement.invalid).toBe(true);
+      expect(harness.fieldElement.hasAttribute('invalid')).toBe(true);
     });
 
     it('should set invalid property from attribute', async () => {
@@ -424,18 +424,18 @@ describe('Select', () => {
 
       harness.element.setAttribute('invalid', '');
 
-      expect(harness.element.invalid).to.be.true;
-      expect(harness.fieldElement.invalid).to.be.true;
-      expect(harness.element.hasAttribute('invalid')).to.be.true;
+      expect(harness.element.invalid).toBe(true);
+      expect(harness.fieldElement.invalid).toBe(true);
+      expect(harness.element.hasAttribute('invalid')).toBe(true);
     });
 
     it('should set required attribute', async () => {
       const harness = await createFixture({ required: true });
 
-      expect(harness.element.required).to.be.true;
-      expect(harness.element.getAttribute('required')).to.equal('');
-      expect(harness.fieldElement.required).to.be.true;
-      expect(harness.fieldElement.hasAttribute('required')).to.be.true;
+      expect(harness.element.required).toBe(true);
+      expect(harness.element.getAttribute('required')).toBe('');
+      expect(harness.fieldElement.required).toBe(true);
+      expect(harness.fieldElement.hasAttribute('required')).toBe(true);
     });
 
     it('should set required property from attribute', async () => {
@@ -443,18 +443,18 @@ describe('Select', () => {
 
       harness.element.setAttribute('required', '');
 
-      expect(harness.element.required).to.be.true;
-      expect(harness.fieldElement.required).to.be.true;
-      expect(harness.element.hasAttribute('required')).to.be.true;
+      expect(harness.element.required).toBe(true);
+      expect(harness.fieldElement.required).toBe(true);
+      expect(harness.element.hasAttribute('required')).toBe(true);
     });
 
     it('should set optional attribute', async () => {
       const harness = await createFixture({ optional: true });
 
-      expect(harness.element.optional).to.be.true;
-      expect(harness.element.getAttribute('optional')).to.equal('');
-      expect(harness.fieldElement.optional).to.be.true;
-      expect(harness.fieldElement.hasAttribute('optional')).to.be.true;
+      expect(harness.element.optional).toBe(true);
+      expect(harness.element.getAttribute('optional')).toBe('');
+      expect(harness.fieldElement.optional).toBe(true);
+      expect(harness.fieldElement.hasAttribute('optional')).toBe(true);
     });
 
     it('should set optional property from attribute', async () => {
@@ -462,18 +462,18 @@ describe('Select', () => {
 
       harness.element.setAttribute('optional', '');
 
-      expect(harness.element.optional).to.be.true;
-      expect(harness.fieldElement.optional).to.be.true;
-      expect(harness.element.hasAttribute('optional')).to.be.true;
+      expect(harness.element.optional).toBe(true);
+      expect(harness.fieldElement.optional).toBe(true);
+      expect(harness.element.hasAttribute('optional')).toBe(true);
     });
 
     it('should set floatLabel attribute', async () => {
       const harness = await createFixture({ floatLabel: true });
 
-      expect(harness.element.floatLabel).to.be.true;
-      expect(harness.element.getAttribute('float-label')).to.equal('');
-      expect(harness.fieldElement.floatLabel).to.be.true;
-      expect(harness.fieldElement.hasAttribute('float-label')).to.be.true;
+      expect(harness.element.floatLabel).toBe(true);
+      expect(harness.element.getAttribute('float-label')).toBe('');
+      expect(harness.fieldElement.floatLabel).toBe(true);
+      expect(harness.fieldElement.hasAttribute('float-label')).toBe(true);
     });
 
     it('should set floatLabel property from attribute', async () => {
@@ -481,17 +481,17 @@ describe('Select', () => {
 
       harness.element.setAttribute('float-label', '');
 
-      expect(harness.element.floatLabel).to.be.true;
-      expect(harness.fieldElement.floatLabel).to.be.true;
-      expect(harness.element.hasAttribute('float-label')).to.be.true;
+      expect(harness.element.floatLabel).toBe(true);
+      expect(harness.fieldElement.floatLabel).toBe(true);
+      expect(harness.element.hasAttribute('float-label')).toBe(true);
     });
 
     it('should set variant attribute', async () => {
       const harness = await createFixture({ variant: 'filled' });
 
-      expect(harness.element.variant).to.equal('filled');
-      expect(harness.element.getAttribute('variant')).to.equal('filled');
-      expect(harness.fieldElement.variant).to.equal('filled');
+      expect(harness.element.variant).toBe('filled');
+      expect(harness.element.getAttribute('variant')).toBe('filled');
+      expect(harness.fieldElement.variant).toBe('filled');
     });
 
     it('should set variant property from attribute', async () => {
@@ -499,17 +499,17 @@ describe('Select', () => {
 
       harness.element.setAttribute('variant', 'filled');
 
-      expect(harness.element.variant).to.equal('filled');
-      expect(harness.fieldElement.variant).to.equal('filled');
-      expect(harness.element.getAttribute('variant')).to.equal('filled');
+      expect(harness.element.variant).toBe('filled');
+      expect(harness.fieldElement.variant).toBe('filled');
+      expect(harness.element.getAttribute('variant')).toBe('filled');
     });
 
     it('should set theme attribute', async () => {
       const harness = await createFixture({ theme: 'success' });
 
-      expect(harness.element.theme).to.equal('success');
-      expect(harness.element.getAttribute('theme')).to.equal('success');
-      expect(harness.fieldElement.theme).to.equal('success');
+      expect(harness.element.theme).toBe('success');
+      expect(harness.element.getAttribute('theme')).toBe('success');
+      expect(harness.fieldElement.theme).toBe('success');
     });
 
     it('should set theme property from attribute', async () => {
@@ -517,68 +517,68 @@ describe('Select', () => {
 
       harness.element.setAttribute('theme', 'success');
 
-      expect(harness.element.theme).to.equal('success');
-      expect(harness.fieldElement.theme).to.equal('success');
-      expect(harness.element.getAttribute('theme')).to.equal('success');
+      expect(harness.element.theme).toBe('success');
+      expect(harness.fieldElement.theme).toBe('success');
+      expect(harness.element.getAttribute('theme')).toBe('success');
     });
 
     it('should set shape attribute', async () => {
       const harness = await createFixture({ shape: 'rounded' });
 
-      expect(harness.element.shape).to.equal('rounded');
-      expect(harness.element.getAttribute('shape')).to.equal('rounded');
-      expect(harness.fieldElement.shape).to.equal('rounded');
+      expect(harness.element.shape).toBe('rounded');
+      expect(harness.element.getAttribute('shape')).toBe('rounded');
+      expect(harness.fieldElement.shape).toBe('rounded');
     });
 
     it('should set shape property from attribute', async () => {
       const harness = await createFixture({ shape: 'rounded' });
 
-      expect(harness.element.shape).to.equal('rounded');
-      expect(harness.fieldElement.shape).to.equal('rounded');
-      expect(harness.element.getAttribute('shape')).to.equal('rounded');
+      expect(harness.element.shape).toBe('rounded');
+      expect(harness.fieldElement.shape).toBe('rounded');
+      expect(harness.element.getAttribute('shape')).toBe('rounded');
     });
 
     it('should set density attribute', async () => {
       const harness = await createFixture({ density: 'extra-small' });
 
-      expect(harness.element.density).to.equal('extra-small');
-      expect(harness.element.getAttribute('density')).to.equal('extra-small');
-      expect(harness.fieldElement.density).to.equal('extra-small');
+      expect(harness.element.density).toBe('extra-small');
+      expect(harness.element.getAttribute('density')).toBe('extra-small');
+      expect(harness.fieldElement.density).toBe('extra-small');
     });
 
     it('should set density property from attribute', async () => {
       const harness = await createFixture({ density: 'extra-small' });
 
-      expect(harness.element.density).to.equal('extra-small');
-      expect(harness.fieldElement.density).to.equal('extra-small');
-      expect(harness.element.getAttribute('density')).to.equal('extra-small');
+      expect(harness.element.density).toBe('extra-small');
+      expect(harness.fieldElement.density).toBe('extra-small');
+      expect(harness.element.getAttribute('density')).toBe('extra-small');
     });
 
     it('should set dense attribute', async () => {
       const harness = await createFixture({ dense: true });
 
-      expect(harness.element.dense).to.be.true;
-      expect(harness.element.getAttribute('dense')).to.equal('');
-      expect(harness.fieldElement.dense).to.be.true;
-      expect(harness.fieldElement.hasAttribute('dense')).to.be.true;
+      expect(harness.element.dense).toBe(true);
+      expect(harness.element.getAttribute('dense')).toBe('');
+      expect(harness.fieldElement.dense).toBe(true);
+      expect(harness.fieldElement.hasAttribute('dense')).toBe(true);
     });
 
     it('should set dense property from attribute', async () => {
       const harness = await createFixture({ dense: true });
 
-      expect(harness.element.dense).to.be.true;
-      expect(harness.fieldElement.dense).to.be.true;
-      expect(harness.element.hasAttribute('dense')).to.be.true;
+      expect(harness.element.dense).toBe(true);
+      expect(harness.fieldElement.dense).toBe(true);
+      expect(harness.element.hasAttribute('dense')).toBe(true);
     });
 
     it('should set popover-icon attribute', async () => {
       const harness = await createFixture();
       harness.element.popoverIcon = false;
 
-      expect(harness.element.popoverIcon).to.be.false;
-      expect(harness.element.hasAttribute('popover-icon')).to.be.false;
-      expect(harness.fieldElement.popoverIcon).to.be.false;
-      expect(harness.fieldElement.hasAttribute('popover-icon')).to.be.false;
+      expect(harness.element.popoverIcon).toBe(false);
+      expect(harness.element.hasAttribute('popover-icon')).toBe(false);
+      expect(harness.fieldElement.popoverIcon).toBe(false);
+      expect(harness.fieldElement.hasAttribute('popover-icon')).toBe(false);
     });
 
     it('should set popoverIcon property from attribute', async () => {
@@ -586,17 +586,17 @@ describe('Select', () => {
 
       harness.element.setAttribute('popover-icon', 'false');
 
-      expect(harness.element.popoverIcon).to.be.false;
-      expect(harness.fieldElement.popoverIcon).to.be.false;
-      expect(harness.element.hasAttribute('popover-icon')).to.be.false;
+      expect(harness.element.popoverIcon).toBe(false);
+      expect(harness.fieldElement.popoverIcon).toBe(false);
+      expect(harness.element.hasAttribute('popover-icon')).toBe(false);
     });
 
     it('should set support-text-inset attribute', async () => {
       const harness = await createFixture({ supportTextInset: 'start' });
 
-      expect(harness.element.supportTextInset).to.equal('start');
-      expect(harness.element.getAttribute('support-text-inset')).to.equal('start');
-      expect(harness.fieldElement.supportTextInset).to.equal('start');
+      expect(harness.element.supportTextInset).toBe('start');
+      expect(harness.element.getAttribute('support-text-inset')).toBe('start');
+      expect(harness.fieldElement.supportTextInset).toBe('start');
     });
 
     it('should set supportTextInset property from attribute', async () => {
@@ -604,9 +604,9 @@ describe('Select', () => {
 
       harness.element.setAttribute('support-text-inset', 'start');
 
-      expect(harness.element.supportTextInset).to.equal('start');
-      expect(harness.fieldElement.supportTextInset).to.equal('start');
-      expect(harness.element.getAttribute('support-text-inset')).to.equal('start');
+      expect(harness.element.supportTextInset).toBe('start');
+      expect(harness.fieldElement.supportTextInset).toBe('start');
+      expect(harness.element.getAttribute('support-text-inset')).toBe('start');
     });
   });
 
@@ -614,74 +614,74 @@ describe('Select', () => {
     it('should set label', async () => {
       const harness = await createFixture({ label: 'Test label' });
 
-      expect(harness.labelElement?.textContent).to.equal('Test label');
-      expect(harness.element.label).to.equal('Test label');
+      expect(harness.labelElement?.textContent).toBe('Test label');
+      expect(harness.element.label).toBe('Test label');
     });
 
     it('should set label property from attribute', async () => {
       const harness = await createFixture({ label: 'Test label' });
       harness.element.setAttribute('label', 'New label');
 
-      expect(harness.labelElement?.textContent).to.equal('New label');
-      expect(harness.element.label).to.equal('New label');
+      expect(harness.labelElement?.textContent).toBe('New label');
+      expect(harness.element.label).toBe('New label');
     });
 
     it('should set aria-label when label is set', async () => {
       const harness = await createFixture({ label: 'Test label' });
 
-      expect(harness.element.getAttribute('aria-label')).to.equal('Test label');
+      expect(harness.element.getAttribute('aria-label')).toBe('Test label');
     });
 
     it('should remove label element when label is not set', async () => {
       const harness = await createFixture({ label: '' });
 
-      expect(harness.labelElement).not.to.be.ok;
+      expect(harness.labelElement).toBeFalsy();
     });
 
     it('should change label dynamically', async () => {
       const harness = await createFixture({ label: 'Test label' });
-      expect(harness.labelElement?.textContent).to.equal('Test label');
+      expect(harness.labelElement?.textContent).toBe('Test label');
 
       harness.element.label = 'New label';
 
-      expect(harness.labelElement?.textContent).to.equal('New label');
-      expect(harness.element.getAttribute('aria-label')).to.equal('New label');
+      expect(harness.labelElement?.textContent).toBe('New label');
+      expect(harness.element.getAttribute('aria-label')).toBe('New label');
     });
 
     it('should hide label when dense', async () => {
       const harness = await createFixture({ dense: true });
 
-      expect(harness.labelElement).not.to.be.ok;
+      expect(harness.labelElement).toBeFalsy();
     });
 
     it('should hide label when density is extra-small', async () => {
       const harness = await createFixture({ density: 'extra-small' });
 
-      expect(harness.labelElement).not.to.be.ok;
+      expect(harness.labelElement).toBeFalsy();
     });
 
     it('should show label when dense and label position is not inset', async () => {
       const harness = await createFixture({ dense: true, labelPosition: 'block-start' });
 
-      expect(harness.labelElement).to.be.ok;
+      expect(harness.labelElement).toBeTruthy();
     });
 
     it('should show label when density is extra-small and label position is not inset', async () => {
       const harness = await createFixture({ density: 'extra-small', labelPosition: 'block-start' });
 
-      expect(harness.labelElement).to.be.ok;
+      expect(harness.labelElement).toBeTruthy();
     });
 
     it('should hide and show label when inset and dense', async () => {
       const harness = await createFixture();
 
-      expect(harness.labelElement).to.be.ok;
+      expect(harness.labelElement).toBeTruthy();
 
       harness.element.dense = true;
-      expect(harness.labelElement).not.to.be.ok;
+      expect(harness.labelElement).toBeFalsy();
 
       harness.element.dense = false;
-      expect(harness.labelElement).to.be.ok;
+      expect(harness.labelElement).toBeTruthy();
     });
   });
 
@@ -693,7 +693,7 @@ describe('Select', () => {
       harness.element.value = 'one';
       await frame();
 
-      expect(harness.fieldElement.floatLabel).to.be.true;
+      expect(harness.fieldElement.floatLabel).toBe(true);
     });
 
     it('should float label when has placeholder', async () => {
@@ -703,7 +703,7 @@ describe('Select', () => {
       harness.element.placeholder = 'test';
       await frame();
 
-      expect(harness.fieldElement.floatLabel).to.be.true;
+      expect(harness.fieldElement.floatLabel).toBe(true);
     });
 
     it('should float label when value is set while dropdown is open', async () => {
@@ -712,13 +712,13 @@ describe('Select', () => {
       harness.element.labelPosition = 'inset';
       await harness.clickElement(harness.element);
 
-      expect(harness.element.open).to.be.true;
-      expect(harness.fieldElement.floatLabel).to.be.false;
+      expect(harness.element.open).toBe(true);
+      expect(harness.fieldElement.floatLabel).toBe(false);
 
       harness.element.value = 'one';
       await frame();
 
-      expect(harness.fieldElement.floatLabel).to.be.true;
+      expect(harness.fieldElement.floatLabel).toBe(true);
     });
 
     it('should not float label when select has no value or placeholder', async () => {
@@ -727,7 +727,7 @@ describe('Select', () => {
       harness.element.labelPosition = 'inset';
       await frame();
 
-      expect(harness.fieldElement.floatLabel).to.be.false;
+      expect(harness.fieldElement.floatLabel).toBe(false);
     });
 
     it('should always float label when floatLabel is true', async () => {
@@ -737,7 +737,7 @@ describe('Select', () => {
       harness.element.floatLabel = true;
       await frame();
 
-      expect(harness.fieldElement.floatLabel).to.be.true;
+      expect(harness.fieldElement.floatLabel).toBe(true);
     });
 
     it('should float label when select has value and floatLabel is false', async () => {
@@ -747,55 +747,57 @@ describe('Select', () => {
       harness.element.floatLabel = false;
       harness.element.value = 'one';
 
-      expect(harness.fieldElement.floatLabel).to.be.true;
+      expect(harness.fieldElement.floatLabel).toBe(true);
     });
 
     it('should hide label when setting density to extra-small', async () => {
       const harness = await createFixture();
 
-      expect(harness.labelElement).to.be.ok;
+      expect(harness.labelElement).toBeTruthy();
 
       harness.element.density = 'extra-small';
-      expect(harness.labelElement).not.to.be.ok;
+      expect(harness.labelElement).toBeFalsy();
 
       harness.element.density = 'medium';
-      expect(harness.labelElement).to.be.ok;
+      expect(harness.labelElement).toBeTruthy();
     });
 
     it('should hide label when setting dense to true', async () => {
       const harness = await createFixture();
 
-      expect(harness.labelElement).to.be.ok;
+      expect(harness.labelElement).toBeTruthy();
 
       harness.element.dense = true;
-      expect(harness.labelElement).not.to.be.ok;
+      expect(harness.labelElement).toBeFalsy();
 
       harness.element.dense = false;
-      expect(harness.labelElement).to.be.ok;
+      expect(harness.labelElement).toBeTruthy();
     });
   });
 
   describe('form association', () => {
     it('should return form element and name', async () => {
-      const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
+      const screen = render(html`<form name="test-form"></form>`);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
 
       const selectEl = document.createElement('forge-select');
       selectEl.setAttribute('name', 'test-select');
       form.appendChild(selectEl);
 
-      expect(selectEl.form).to.equal(form);
-      expect(selectEl.name).to.equal('test-select');
-      expect(selectEl.labels).to.be.empty;
+      expect(selectEl.form).toBe(form);
+      expect(selectEl.name).toBe('test-select');
+      expect(selectEl.labels).toHaveLength(0);
 
       selectEl.name = 'new-name';
-      expect(selectEl.name).to.equal('new-name');
+      expect(selectEl.name).toBe('new-name');
 
       selectEl.name = null as any;
-      expect(selectEl.name).to.be.empty;
+      expect(selectEl.name).toBe('');
     });
 
     it('should return associated form labels', async () => {
-      const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
+      const screen = render(html`<form name="test-form"></form>`);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
 
       const selectEl = document.createElement('forge-select');
       selectEl.setAttribute('id', 'test-select');
@@ -807,27 +809,29 @@ describe('Select', () => {
       labelEl.textContent = labelText;
       form.appendChild(labelEl);
 
-      expect(selectEl.labels).to.have.lengthOf(1);
-      expect(selectEl.labels[0]).to.equal(labelEl);
+      expect(selectEl.labels).toHaveLength(1);
+      expect(selectEl.labels[0]).toBe(labelEl);
     });
 
     it('should set form value when value is set', async () => {
-      const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
+      const screen = render(html`<form name="test-form"></form>`);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
 
       const selectEl = document.createElement('forge-select');
       selectEl.setAttribute('name', 'test-select');
       form.appendChild(selectEl);
 
       let formData = new FormData(form);
-      expect(formData.get('test-select')).to.be.null;
+      expect(formData.get('test-select')).toBeNull();
 
       selectEl.value = 'one';
       formData = new FormData(form);
-      expect(formData.get('test-select')).to.equal('["one"]');
+      expect(formData.get('test-select')).toBe('["one"]');
     });
 
     it('should reset value when form is reset', async () => {
-      const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
+      const screen = render(html`<form name="test-form"></form>`);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
 
       const selectEl = document.createElement('forge-select');
       selectEl.setAttribute('name', 'test-select');
@@ -835,24 +839,25 @@ describe('Select', () => {
 
       selectEl.value = 'one';
       let formData = new FormData(form);
-      expect(formData.get('test-select')).to.equal('["one"]');
+      expect(formData.get('test-select')).toBe('["one"]');
 
       form.reset();
       formData = new FormData(form);
-      expect(formData.get('test-select')).to.be.null;
+      expect(formData.get('test-select')).toBeNull();
     });
 
     it('should restore form state', async () => {
-      const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
+      const screen = render(html`<form name="test-form"></form>`);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
 
-      const selectEl = document.createElement('forge-select');
-      const setFormValueSpy = spy(selectEl, 'setFormValue');
+      const selectEl = document.createElement('forge-select') as ISelectComponent;
+      const setFormValueSpy = vi.spyOn(selectEl, 'setFormValue');
       selectEl.name = 'test-select';
       selectEl.value = 'one';
       form.appendChild(selectEl);
 
-      const [value, state] = setFormValueSpy.args[0] ?? [null, null];
-      const newSelectEl = document.createElement('forge-select');
+      const [value, state] = setFormValueSpy.mock.calls[0] ?? [null, null];
+      const newSelectEl = document.createElement('forge-select') as ISelectComponent;
       newSelectEl.name = 'test-select';
       selectEl.remove();
       form.appendChild(newSelectEl);
@@ -864,33 +869,35 @@ describe('Select', () => {
 
       newSelectEl.formStateRestoreCallback(restoreState, 'restore');
 
-      expect(newSelectEl.value).to.equal('one');
+      expect(newSelectEl.value).toBe('one');
     });
 
     it('should validate', async () => {
-      const el = await fixture<ISelectComponent>(html`<forge-select required></forge-select>`);
+      const screen = render(html`<forge-select required></forge-select>`);
+      const el = screen.container.querySelector('forge-select') as ISelectComponent;
 
-      expect(el[internals].validity.valid).to.be.false;
-      expect(el[internals].validationMessage).not.to.be.empty;
-      expect(el[internals].checkValidity()).to.be.false;
-      expect(el[internals].reportValidity()).to.be.false;
+      expect(el[internals].validity.valid).toBe(false);
+      expect(el[internals].validationMessage).not.toBe('');
+      expect(el[internals].checkValidity()).toBe(false);
+      expect(el[internals].reportValidity()).toBe(false);
 
       el.value = 'one';
 
-      expect(el[internals].willValidate).to.be.true;
-      expect(el[internals].validity.valid).to.be.true;
-      expect(el[internals].validationMessage).to.be.empty;
-      expect(el[internals].checkValidity()).to.be.true;
-      expect(el[internals].reportValidity()).to.be.true;
+      expect(el[internals].willValidate).toBe(true);
+      expect(el[internals].validity.valid).toBe(true);
+      expect(el[internals].validationMessage).toBe('');
+      expect(el[internals].checkValidity()).toBe(true);
+      expect(el[internals].reportValidity()).toBe(true);
     });
 
     it('should set custom validity', async () => {
-      const el = await fixture<ISelectComponent>(html`<forge-select required></forge-select>`);
+      const screen = render(html`<forge-select required></forge-select>`);
+      const el = screen.container.querySelector('forge-select') as ISelectComponent;
       const message = 'Custom error message';
 
       el[internals].setValidity({ customError: true }, message);
 
-      expect(el[internals].validationMessage).to.equal('Custom error message');
+      expect(el[internals].validationMessage).toBe('Custom error message');
     });
   });
 
@@ -903,8 +910,8 @@ describe('Select', () => {
       harness.element.open = true;
       await frame();
 
-      expect(harness.element.popoverPlacement).to.equal('right');
-      expect(harness.popoverElement?.placement).to.equal('right');
+      expect(harness.element.popoverPlacement).toBe('right');
+      expect(harness.popoverElement?.placement).toBe('right');
     });
 
     it('should set popover placement from attribute', async () => {
@@ -915,8 +922,8 @@ describe('Select', () => {
       harness.element.open = true;
       await frame();
 
-      expect(harness.element.popoverPlacement).to.equal('right');
-      expect(harness.popoverElement?.placement).to.equal('right');
+      expect(harness.element.popoverPlacement).toBe('right');
+      expect(harness.popoverElement?.placement).toBe('right');
     });
 
     it('should set popover flip', async () => {
@@ -927,8 +934,8 @@ describe('Select', () => {
       harness.element.open = true;
       await frame();
 
-      expect(harness.element.popoverFlip).to.equal('never');
-      expect(harness.popoverElement?.flip).to.equal('never');
+      expect(harness.element.popoverFlip).toBe('never');
+      expect(harness.popoverElement?.flip).toBe('never');
     });
 
     it('should set popover flip from attribute', async () => {
@@ -939,8 +946,8 @@ describe('Select', () => {
       harness.element.open = true;
       await frame();
 
-      expect(harness.element.popoverFlip).to.equal('never');
-      expect(harness.popoverElement?.flip).to.equal('never');
+      expect(harness.element.popoverFlip).toBe('never');
+      expect(harness.popoverElement?.flip).toBe('never');
     });
 
     it('should set popover shift', async () => {
@@ -951,8 +958,8 @@ describe('Select', () => {
       harness.element.open = true;
       await frame();
 
-      expect(harness.element.popoverShift).to.equal('never');
-      expect(harness.popoverElement?.shift).to.equal('never');
+      expect(harness.element.popoverShift).toBe('never');
+      expect(harness.popoverElement?.shift).toBe('never');
     });
 
     it('should set popover shift from attribute', async () => {
@@ -963,8 +970,8 @@ describe('Select', () => {
       harness.element.open = true;
       await frame();
 
-      expect(harness.element.popoverShift).to.equal('never');
-      expect(harness.popoverElement?.shift).to.equal('never');
+      expect(harness.element.popoverShift).toBe('never');
+      expect(harness.popoverElement?.shift).toBe('never');
     });
 
     it('should set popover fallback placements', async () => {
@@ -975,8 +982,8 @@ describe('Select', () => {
       harness.element.open = true;
       await frame();
 
-      expect(harness.element.popoverFallbackPlacements).to.deep.equal(['top']);
-      expect(harness.popoverElement?.fallbackPlacements).to.deep.equal(['top']);
+      expect(harness.element.popoverFallbackPlacements).toEqual(['top']);
+      expect(harness.popoverElement?.fallbackPlacements).toEqual(['top']);
     });
 
     it('should set popover offset', async () => {
@@ -987,8 +994,8 @@ describe('Select', () => {
       harness.element.open = true;
       await frame();
 
-      expect(harness.element.popoverOffset).to.deep.equal({ mainAxis: 10, crossAxis: 10 });
-      expect(harness.popoverElement?.offset).to.deep.equal({ mainAxis: 10, crossAxis: 10 });
+      expect(harness.element.popoverOffset).toEqual({ mainAxis: 10, crossAxis: 10 });
+      expect(harness.popoverElement?.offset).toEqual({ mainAxis: 10, crossAxis: 10 });
     });
   });
 
@@ -996,46 +1003,46 @@ describe('Select', () => {
     it('should have showSelectAll property', async () => {
       const harness = await createFixture();
 
-      expect(harness.element.showSelectAll).to.be.false;
+      expect(harness.element.showSelectAll).toBe(false);
 
       harness.element.showSelectAll = true;
-      await elementUpdated(harness.element);
+      await frame();
 
-      expect(harness.element.showSelectAll).to.be.true;
+      expect(harness.element.showSelectAll).toBe(true);
     });
 
     it('should set show-select-all attribute when showSelectAll is true', async () => {
       const harness = await createFixture({ showSelectAll: true });
 
-      expect(harness.element.hasAttribute('show-select-all')).to.be.true;
+      expect(harness.element.hasAttribute('show-select-all')).toBe(true);
     });
 
     it('should only show select all option when multiple is true and showSelectAll is true', async () => {
       const harness = await createFixture({ multiple: true, showSelectAll: true });
 
       harness.element.open = true;
-      await elementUpdated(harness.element);
+      await frame();
 
       const listItems = harness.getListItems();
-      expect(listItems.length).to.be.greaterThan(3); // 3 regular options + select all
+      expect(listItems.length).toBeGreaterThan(3);
 
       const firstItem = listItems[0];
       const button = firstItem.querySelector('button');
-      expect(button?.textContent?.trim()).to.equal('Select All');
+      expect(button?.textContent?.trim()).toBe('Select All');
     });
 
     it('should not show select all option when multiple is false', async () => {
       const harness = await createFixture({ multiple: false, showSelectAll: true });
 
       harness.element.open = true;
-      await elementUpdated(harness.element);
+      await frame();
 
       const listItems = harness.getListItems();
-      expect(listItems.length).to.equal(3); // Only regular options
+      expect(listItems.length).toBe(3);
 
       const firstItem = listItems[0];
       const button = firstItem.querySelector('button');
-      expect(button?.textContent?.trim()).not.to.equal('Select All');
+      expect(button?.textContent?.trim()).not.toBe('Select All');
     });
 
     it('should dispatch forge-select-all event when select all is clicked', async () => {
@@ -1047,69 +1054,68 @@ describe('Select', () => {
       });
 
       harness.element.open = true;
-      await elementUpdated(harness.element);
+      await frame();
 
       const listItems = harness.getListItems();
       const selectAllButton = listItems[0].querySelector('button') as HTMLButtonElement;
 
       await harness.clickElement(selectAllButton);
 
-      expect(eventDetail).to.exist;
-      expect(eventDetail.value).to.deep.equal(['one', 'two', 'three']);
-      expect(eventDetail.isAllSelected).to.be.true;
+      expect(eventDetail).toBeTruthy();
+      expect(eventDetail.value).toEqual(['one', 'two', 'three']);
+      expect(eventDetail.isAllSelected).toBe(true);
     });
 
     it('should select all options when select all is clicked while none selected', async () => {
       const harness = await createFixture({ multiple: true, showSelectAll: true });
 
       harness.element.open = true;
-      await elementUpdated(harness.element);
+      await frame();
 
       const listItems = harness.getListItems();
       const selectAllButton = listItems[0].querySelector('button') as HTMLButtonElement;
 
-      expect(harness.element.value).to.deep.equal([]);
+      expect(harness.element.value).toEqual([]);
 
       await harness.clickElement(selectAllButton);
-      await elementUpdated(harness.element);
+      await frame();
 
-      expect(harness.element.value).to.deep.equal(['one', 'two', 'three']);
+      expect(harness.element.value).toEqual(['one', 'two', 'three']);
     });
 
     it('should deselect all options when select all is clicked while all selected', async () => {
       const harness = await createFixture({ multiple: true, showSelectAll: true });
 
-      // First select all options
       harness.element.value = ['one', 'two', 'three'];
-      await elementUpdated(harness.element);
+      await frame();
 
       harness.element.open = true;
-      await elementUpdated(harness.element);
+      await frame();
 
       const listItems = harness.getListItems();
       const selectAllButton = listItems[0].querySelector('button') as HTMLButtonElement;
 
       await harness.clickElement(selectAllButton);
-      await elementUpdated(harness.element);
+      await frame();
 
-      expect(harness.element.value).to.deep.equal([]);
+      expect(harness.element.value).toEqual([]);
     });
 
     it('should have selectAllLabel property', async () => {
       const harness = await createFixture();
 
-      expect(harness.element.selectAllLabel).to.be.undefined;
+      expect(harness.element.selectAllLabel).toBeUndefined();
 
       harness.element.selectAllLabel = 'Custom Select All';
-      await elementUpdated(harness.element);
+      await frame();
 
-      expect(harness.element.selectAllLabel).to.equal('Custom Select All');
+      expect(harness.element.selectAllLabel).toBe('Custom Select All');
     });
 
     it('should set select-all-label attribute when selectAllLabel is set', async () => {
       const harness = await createFixture({ selectAllLabel: 'Custom Select All' });
 
-      expect(harness.element.getAttribute('select-all-label')).to.equal('Custom Select All');
+      expect(harness.element.getAttribute('select-all-label')).toBe('Custom Select All');
     });
 
     it('should use custom select all label in dropdown', async () => {
@@ -1120,55 +1126,52 @@ describe('Select', () => {
       });
 
       harness.element.open = true;
-      await elementUpdated(harness.element);
+      await frame();
 
       const listItems = harness.getListItems();
-      expect(listItems.length).to.be.greaterThan(3); // 3 regular options + select all
+      expect(listItems.length).toBeGreaterThan(3);
 
       const firstItem = listItems[0];
       const button = firstItem.querySelector('button');
-      expect(button?.textContent?.trim()).to.equal('Tout sélectionner');
+      expect(button?.textContent?.trim()).toBe('Tout sélectionner');
     });
 
     it('should use default select all label when selectAllLabel is not set', async () => {
       const harness = await createFixture({ multiple: true, showSelectAll: true });
 
       harness.element.open = true;
-      await elementUpdated(harness.element);
+      await frame();
 
       const listItems = harness.getListItems();
       const firstItem = listItems[0];
       const button = firstItem.querySelector('button');
-      expect(button?.textContent?.trim()).to.equal('Select All');
+      expect(button?.textContent?.trim()).toBe('Select All');
     });
 
     it('should update select all label dynamically', async () => {
       const harness = await createFixture({ multiple: true, showSelectAll: true });
 
       harness.element.open = true;
-      await elementUpdated(harness.element);
+      await frame();
 
       let listItems = harness.getListItems();
       let firstItem = listItems[0];
       let button = firstItem.querySelector('button');
-      expect(button?.textContent?.trim()).to.equal('Select All');
+      expect(button?.textContent?.trim()).toBe('Select All');
 
-      // Close dropdown
       harness.element.open = false;
-      await elementUpdated(harness.element);
+      await frame();
 
-      // Change the label
       harness.element.selectAllLabel = 'Choose All Items';
-      await elementUpdated(harness.element);
+      await frame();
 
-      // Reopen dropdown
       harness.element.open = true;
-      await elementUpdated(harness.element);
+      await frame();
 
       listItems = harness.getListItems();
       firstItem = listItems[0];
       button = firstItem.querySelector('button');
-      expect(button?.textContent?.trim()).to.equal('Choose All Items');
+      expect(button?.textContent?.trim()).toBe('Choose All Items');
     });
   });
 });
@@ -1202,20 +1205,16 @@ class SelectHarness extends TestHarness<ISelectComponent> {
     return Array.from(this.popoverElement?.querySelectorAll('forge-list-item') ?? []);
   }
 
-  public async clickElement(el: HTMLElement): Promise<void> {
-    const { x, y, width, height } = el.getBoundingClientRect();
-    await sendMouse({
-      type: 'click',
-      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
-    });
+  public async clickElement(el: HTMLElement, options?: { force?: boolean }): Promise<void> {
+    await userEvent.click(el, options);
   }
 
   public async clickOutside(): Promise<void> {
-    await sendMouse({ type: 'click', position: [0, 0] });
+    await userEvent.click(document.body, { position: { x: 0, y: 0 } });
   }
 
   public async pressKey(key: string): Promise<void> {
-    await sendKeys({ press: key });
+    await userEvent.keyboard(`{${key}}`);
   }
 }
 
@@ -1260,11 +1259,11 @@ async function createFixture({
   dense,
   supportTextInset
 }: SelectFixtureConfig = {}): Promise<SelectHarness> {
-  const el = await fixture<ISelectComponent>(html`
+  const screen = render(html`
     <forge-select
       id="my-test-id"
       style="margin-top: 10px;"
-      label=${label}
+      .label=${label}
       placeholder=${placeholder ?? ''}
       ?multiple=${multiple}
       ?show-select-all=${showSelectAll}
@@ -1287,10 +1286,12 @@ async function createFixture({
       <forge-option value="three">Option 3</forge-option>
     </forge-select>
   `);
+  const el = screen.container.querySelector('forge-select') as ISelectComponent;
   return new SelectHarness(el);
 }
 
 async function createEmptyFixture(): Promise<SelectHarness> {
-  const el = await fixture<ISelectComponent>(html`<forge-select></forge-select>`);
+  const screen = render(html`<forge-select></forge-select>`);
+  const el = screen.container.querySelector('forge-select') as ISelectComponent;
   return new SelectHarness(el);
 }
