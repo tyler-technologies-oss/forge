@@ -1,6 +1,31 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'Tabs', includePath: './pages/tabs/tabs.ejs', options: [ { type: 'switch', label: 'Vertical', id:
-'opt-vertical' }, { type: 'switch', label: 'Clustered', id: 'opt-clustered' }, { type: 'switch', label: 'Stacked', id: 'opt-stacked' }, { type: 'switch', label:
-'Disabled', id: 'opt-disabled' }, { type: 'switch', label: 'Inverted', id: 'opt-inverted' }, { type: 'switch', label: 'Auto activate', id: 'opt-auto-activate'
-}, { type: 'switch', label: 'Scroll buttons', id: 'opt-scroll-buttons' }, { type: 'switch', label: 'Show start icon', id: 'opt-show-start' }, { type: 'switch',
-label: 'Show end icon', id: 'opt-show-end' }, { type: 'select', label: 'Clustered alignment', id: 'opt-clustered-alignment', defaultValue: 'start', disabled:
-true, options: [ { label: 'Start', value: 'start' }, { label: 'Center', value: 'center' }, { label: 'End', value: 'end' } ] } ] } }) %>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Tabs',
+    includePath: './pages/tabs/tabs.ejs',
+    options: [
+      { type: 'switch', label: 'Vertical', id: 'opt-vertical' },
+      { type: 'switch', label: 'Clustered', id: 'opt-clustered' },
+      { type: 'switch', label: 'Stacked', id: 'opt-stacked' },
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
+      { type: 'switch', label: 'Inverted', id: 'opt-inverted' },
+      { type: 'switch', label: 'Auto activate', id: 'opt-auto-activate' },
+      { type: 'switch', label: 'Scroll buttons', id: 'opt-scroll-buttons' },
+      { type: 'switch', label: 'Show start icon', id: 'opt-show-start' },
+      { type: 'switch', label: 'Show end icon', id: 'opt-show-end' },
+      {
+        type: 'select',
+        label: 'Clustered alignment',
+        id: 'opt-clustered-alignment',
+        defaultValue: 'start',
+        disabled: true,
+        options: [
+          { label: 'Start', value: 'start' },
+          { label: 'Center', value: 'center' },
+          { label: 'End', value: 'end' }
+        ]
+      }
+    ]
+  }
+})
+%>

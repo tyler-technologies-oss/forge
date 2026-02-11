@@ -1,7 +1,31 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'Circular progress', includePath: './pages/circular-progress/circular-progress.ejs', options: [ { type:
-'select', label: 'Theme', id: 'opt-theme', defaultValue: 'tertiary', options: [ { label: 'Primary', value: 'primary' }, { label: 'Secondary', value: 'secondary'
-}, { label: 'Tertiary', value: 'tertiary' }, { label: 'Success', value: 'success' }, { label: 'Error', value: 'error' }, { label: 'Warning', value: 'warning' },
-{ label: 'Info', value: 'info' } ] }, { type: 'text-field', label: 'Size', id: 'opt-size', defaultValue: '48px' }, { type: 'text-field', label: 'Spacing', id:
-'opt-spacing', defaultValue: '0' }, { type: 'text-field', inputType: 'number', label: 'Track width', id: 'opt-track-width', defaultValue: 12 }, { type:
-'switch', label: 'Determinate', id: 'opt-determinate' }, { type: 'switch', label: 'Show percent', id: 'opt-show-percent', disabled: true }, { type: 'switch',
-label: 'Show track', id: 'opt-show-track', disabled: false }, ] } }) %>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Circular progress',
+    includePath: './pages/circular-progress/circular-progress.ejs',
+    options: [
+    {
+        type: 'select',
+        label: 'Theme',
+        id: 'opt-theme',
+        defaultValue: 'tertiary',
+        options: [
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info', value: 'info' }
+        ]
+      },
+      { type: 'text-field', label: 'Size', id: 'opt-size', defaultValue: '48px' },
+      { type: 'text-field', label: 'Spacing', id: 'opt-spacing', defaultValue: '0' },
+      { type: 'text-field', inputType: 'number', label: 'Track width', id: 'opt-track-width', defaultValue: 12 },
+      { type: 'switch', label: 'Determinate', id: 'opt-determinate' },
+      { type: 'switch', label: 'Show percent', id: 'opt-show-percent', disabled: true },
+      { type: 'switch', label: 'Show track', id: 'opt-show-track', disabled: false },
+    ]
+  }
+})
+%>

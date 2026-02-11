@@ -1,7 +1,32 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'Button toggle', includePath: './pages/button-toggle/button-toggle.ejs', options: [ { type: 'select',
-label: 'Theme', id: 'opt-theme', defaultValue: 'tertiary', options: [ { label: 'Primary', value: 'primary' }, { label: 'Secondary', value: 'secondary' }, {
-label: 'Tertiary', value: 'tertiary' }, { label: 'Success', value: 'success' }, { label: 'Error', value: 'error' }, { label: 'Warning', value: 'warning' }, {
-label: 'Info', value: 'info' } ] }, { type: 'switch', label: 'Multiple', id: 'button-toggle-multiple' }, { type: 'switch', label: 'Mandatory', id:
-'button-toggle-mandatory' }, { type: 'switch', label: 'Vertical', id: 'button-toggle-vertical' }, { type: 'switch', label: 'Stretch', id:
-'button-toggle-stretch' }, { type: 'switch', label: 'Dense', id: 'button-toggle-dense' }, { type: 'switch', label: 'Disabled', id: 'button-toggle-disabled' }, {
-type: 'switch', label: 'Readonly', id: 'button-toggle-readonly' } ] } }) %>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Button toggle',
+    includePath: './pages/button-toggle/button-toggle.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'opt-theme',
+        defaultValue: 'tertiary',
+        options: [
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info', value: 'info' }
+        ]
+      },
+      { type: 'switch', label: 'Multiple', id: 'button-toggle-multiple' },
+      { type: 'switch', label: 'Mandatory', id: 'button-toggle-mandatory' },
+      { type: 'switch', label: 'Vertical', id: 'button-toggle-vertical' },
+      { type: 'switch', label: 'Stretch', id: 'button-toggle-stretch' },
+      { type: 'switch', label: 'Dense', id: 'button-toggle-dense' },
+      { type: 'switch', label: 'Disabled', id: 'button-toggle-disabled' },
+      { type: 'switch', label: 'Readonly', id: 'button-toggle-readonly' }
+    ]
+  }
+})
+%>

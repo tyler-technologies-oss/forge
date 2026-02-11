@@ -1,6 +1,31 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'Button', includePath: './pages/button/button.ejs', options: [ { type: 'switch', label: 'Disabled', id:
-'opt-disabled' }, { type: 'switch', label: 'Dense', id: 'opt-dense' }, { type: 'switch', label: 'Pill', id: 'opt-pill' }, { type: 'switch', label: 'Full width',
-id: 'opt-full-width' }, { type: 'switch', label: 'Popover icon', id: 'opt-popover-icon' }, { type: 'switch', label: 'Form prevent default', id:
-'opt-form-prevent' }, { type: 'select', label: 'Theme', id: 'opt-theme', defaultValue: 'primary', options: [ { label: 'Primary', value: 'primary' }, { label:
-'Secondary', value: 'secondary' }, { label: 'Tertiary', value: 'tertiary' }, { label: 'Success', value: 'success' }, { label: 'Error', value: 'error' }, {
-label: 'Warning', value: 'warning' }, { label: 'Info', value: 'info' } ] } ] } }) %>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Button',
+    includePath: './pages/button/button.ejs',
+    options: [
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
+      { type: 'switch', label: 'Dense', id: 'opt-dense' },
+      { type: 'switch', label: 'Pill', id: 'opt-pill' },
+      { type: 'switch', label: 'Full width', id: 'opt-full-width' },
+      { type: 'switch', label: 'Popover icon', id: 'opt-popover-icon' },
+      { type: 'switch', label: 'Form prevent default', id: 'opt-form-prevent' },
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'opt-theme',
+        defaultValue: 'primary',
+        options: [
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info', value: 'info' }
+        ]
+      }
+    ]
+  }
+})
+%>

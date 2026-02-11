@@ -1,10 +1,44 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'Table', includePath: './pages/table/table.ejs', options: [ { type: 'switch', label: 'Select', id:
-'opt-select', defaultValue: true }, { type: 'switch', label: 'Multiselect', id: 'opt-multiselect', defaultValue: true }, { type: 'switch', label: 'Tooltip
-select all', id: 'opt-tooltip-select-all' }, { type: 'switch', label: 'Tooltip select', id: 'opt-tooltip-select' }, { type: 'switch', label: 'Dense', id:
-'opt-dense' }, { type: 'switch', label: 'Roomy', id: 'opt-roomy' }, { type: 'switch', label: 'Filter', id: 'opt-filter' }, { type: 'switch', label: 'Wrap
-content', id: 'opt-wrap-content', defaultValue: true }, { type: 'switch', label: 'Fixed headers', id: 'opt-fixed-headers' }, { type: 'switch', label:
-'Resizable', id: 'opt-resizable' }, { type: 'switch', label: 'Allow row click', id: 'opt-allow-row-click' }, { type: 'switch', label: 'Multi column sort', id:
-'opt-multi-column-sort' }, { type: 'switch', label: 'Custom select all template', id: 'opt-custom-select-all' }, { type: 'select', label: 'Layout type', id:
-'opt-layout-type', defaultValue: 'auto', options: [ { label: 'Auto', value: 'auto' }, { label: 'Fixed', value: 'fixed' } ] }, { type: 'select', label: 'Select
-checkbox alignment', id: 'opt-select-alignment', defaultValue: 'auto', options: [ { label: 'Left', value: 'left' }, { label: 'Center', value: 'center' }, {
-label: 'Right', value: 'right' } ] }, ] } }) %>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Table',
+    includePath: './pages/table/table.ejs',
+    options: [
+      { type: 'switch', label: 'Select', id: 'opt-select', defaultValue: true },
+      { type: 'switch', label: 'Multiselect', id: 'opt-multiselect', defaultValue: true },
+      { type: 'switch', label: 'Tooltip select all', id: 'opt-tooltip-select-all' },
+      { type: 'switch', label: 'Tooltip select', id: 'opt-tooltip-select' },
+      { type: 'switch', label: 'Dense', id: 'opt-dense' },
+      { type: 'switch', label: 'Roomy', id: 'opt-roomy' },
+      { type: 'switch', label: 'Filter', id: 'opt-filter' },
+      { type: 'switch', label: 'Wrap content', id: 'opt-wrap-content', defaultValue: true },
+      { type: 'switch', label: 'Fixed headers', id: 'opt-fixed-headers' },
+      { type: 'switch', label: 'Resizable', id: 'opt-resizable' },
+      { type: 'switch', label: 'Allow row click', id: 'opt-allow-row-click' },
+      { type: 'switch', label: 'Multi column sort', id: 'opt-multi-column-sort' },
+      { type: 'switch', label: 'Custom select all template', id: 'opt-custom-select-all' },
+      {
+        type: 'select',
+        label: 'Layout type',
+        id: 'opt-layout-type',
+        defaultValue: 'auto',
+        options: [
+          { label: 'Auto', value: 'auto' },
+          { label: 'Fixed', value: 'fixed' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Select checkbox alignment',
+        id: 'opt-select-alignment',
+        defaultValue: 'auto',
+        options: [
+          { label: 'Left', value: 'left' },
+          { label: 'Center', value: 'center' },
+          { label: 'Right', value: 'right' }
+        ]
+      },
+    ]
+  }
+})
+%>

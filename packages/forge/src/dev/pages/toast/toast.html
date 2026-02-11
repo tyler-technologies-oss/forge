@@ -1,9 +1,44 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'Toast', includePath: './pages/toast/toast.ejs', options: [ { type: 'text-field', id:
-'opt-toast-message', label: 'Message', defaultValue: 'Save successful' }, { type: 'text-field', id: 'opt-toast-action-text', label: 'Action text', defaultValue:
-'Undo' }, { type: 'text-field', inputType: 'number', id: 'opt-toast-duration', label: 'Duration', defaultValue: 2750 }, { type: 'select', id:
-'opt-toast-placement', label: 'Placement', defaultValue: 'bottom', options: [ { label: 'Bottom', value: 'bottom' }, { label: 'Bottom start', value:
-'bottom-start' }, { label: 'Bottom end', value: 'bottom-end' }, { label: 'Top', value: 'top' }, { label: 'Top start', value: 'top-start' }, { label: 'Top end',
-value: 'top-end' } ] }, { type: 'select', label: 'Theme', id: 'opt-toast-theme', defaultValue: 'default', options: [ { label: 'Default', value: 'default' }, {
-label: 'Primary', value: 'primary' }, { label: 'Secondary', value: 'secondary' }, { label: 'Tertiary', value: 'tertiary' }, { label: 'Success', value: 'success'
-}, { label: 'Error', value: 'error' }, { label: 'Warning', value: 'warning' }, { label: 'Info', value: 'info' } ] }, { type: 'switch', id:
-'opt-toast-dismissible', label: 'Dismissible' } ] } }) %>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Toast',
+    includePath: './pages/toast/toast.ejs',
+    options: [
+      { type: 'text-field', id: 'opt-toast-message', label: 'Message', defaultValue: 'Save successful' },
+      { type: 'text-field', id: 'opt-toast-action-text', label: 'Action text', defaultValue: 'Undo' },
+      { type: 'text-field', inputType: 'number', id: 'opt-toast-duration', label: 'Duration', defaultValue: 2750 },
+      {
+        type: 'select',
+        id: 'opt-toast-placement',
+        label: 'Placement',
+        defaultValue: 'bottom',
+        options: [
+          { label: 'Bottom', value: 'bottom' },
+          { label: 'Bottom start', value: 'bottom-start' },
+          { label: 'Bottom end', value: 'bottom-end' },
+          { label: 'Top', value: 'top' },
+          { label: 'Top start', value: 'top-start' },
+          { label: 'Top end', value: 'top-end' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'opt-toast-theme',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info', value: 'info' }
+        ]
+      },
+      { type: 'switch', id: 'opt-toast-dismissible', label: 'Dismissible' }
+    ]
+  }
+})
+%>

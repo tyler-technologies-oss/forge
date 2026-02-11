@@ -1,4 +1,20 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'View switcher', includePath: './pages/view-switcher/view-switcher.ejs', options: [ { type:
-'radiogroup', label: 'Animation type', id: 'view-switcher-animation-type-radiogroup', radios: [ { type: 'radio', label: 'None', value: 'none', id:
-'view-switcher-radio-none', defaultValue: true }, { type: 'radio', label: 'Slide', value: 'slide', id: 'view-switcher-radio-slide' }, { type: 'radio', label:
-'Fade', value: 'fade', id: 'view-switcher-radio-fade' } ] } ] } }) %>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'View switcher',
+    includePath: './pages/view-switcher/view-switcher.ejs',
+    options: [
+      {
+        type: 'radiogroup',
+        label: 'Animation type',
+        id: 'view-switcher-animation-type-radiogroup',
+        radios: [
+          { type: 'radio', label: 'None', value: 'none', id: 'view-switcher-radio-none', defaultValue: true },
+          { type: 'radio', label: 'Slide', value: 'slide', id: 'view-switcher-radio-slide' },
+          { type: 'radio', label: 'Fade', value: 'fade', id: 'view-switcher-radio-fade' }
+        ]
+      }
+    ]
+  }
+})
+%>

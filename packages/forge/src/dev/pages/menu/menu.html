@@ -1,4 +1,17 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'Menu', includePath: './pages/menu/menu.ejs', options: [ { type: 'switch', label: 'Complex', id:
-'opt-complex' }, { type: 'switch', label: 'Dense', id: 'opt-dense' }, { type: 'switch', label: 'Async', id: 'opt-async' }, { type: 'switch', label: 'Use option
-builder', id: 'opt-option-builder' }, { type: 'switch', label: 'Allow persistent menu item selection', id: 'opt-allow-persistent-selection' }, { type: 'switch',
-label: 'Cancel select event', id: 'opt-cancel-select' }, { type: 'button', label: 'Set selected option', id: 'opt-set-selected' } ] } }) %>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Menu',
+    includePath: './pages/menu/menu.ejs',
+    options: [
+      { type: 'switch', label: 'Complex', id: 'opt-complex' },
+      { type: 'switch', label: 'Dense', id: 'opt-dense' },
+      { type: 'switch', label: 'Async', id: 'opt-async' },
+      { type: 'switch', label: 'Use option builder', id: 'opt-option-builder' },
+      { type: 'switch', label: 'Allow persistent menu item selection', id: 'opt-allow-persistent-selection' },
+      { type: 'switch', label: 'Cancel select event', id: 'opt-cancel-select' },
+      { type: 'button', label: 'Set selected option', id: 'opt-set-selected' }
+    ]
+  }
+})
+%>

@@ -1,7 +1,30 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'Tree', includePath: './pages/tree/tree.ejs', options: [ { type: 'select', label: 'Mode', id:
-'opt-mode', defaultValue: 'single', options: [ { label: 'Single', value: 'single' }, { label: 'Multiple', value: 'multiple' },
-<!-- { label: 'Multiple discrete', value: 'multiple-discrete' }, -->
-{ label: 'Leaf', value: 'leaf' }, { label: 'Off', value: 'off' } ] }, { type: 'switch', id: 'opt-selection-follows-focus', label: 'Selection follows focus' }, {
-type: 'switch', id: 'opt-accordion', label: 'Accordion' }, { type: 'switch', id: 'opt-indent-lines', label: 'Indent lines' }, { type: 'switch', id:
-'opt-prevent-selection', label: 'Prevent selection' }, { type: 'switch', id: 'opt-disabled', label: 'Disabled' }, { type: 'switch', id: 'opt-open-disabled',
-label: 'Open disabled' }, { type: 'button', id: 'btn-value', label: 'Inspect value' } ] } }) %>
+<%-
+ include('./src/partials/page.ejs', {
+   page: {
+     title: 'Tree',
+     includePath: './pages/tree/tree.ejs',
+     options: [
+       {
+         type: 'select',
+         label: 'Mode',
+         id: 'opt-mode',
+         defaultValue: 'single',
+         options: [
+           { label: 'Single', value: 'single' },
+           { label: 'Multiple', value: 'multiple' },
+           <!-- { label: 'Multiple discrete', value: 'multiple-discrete' }, -->
+           { label: 'Leaf', value: 'leaf' },
+           { label: 'Off', value: 'off' }
+         ]
+       },
+       { type: 'switch', id: 'opt-selection-follows-focus', label: 'Selection follows focus' },
+       { type: 'switch', id: 'opt-accordion', label: 'Accordion' },
+       { type: 'switch', id: 'opt-indent-lines', label: 'Indent lines' },
+       { type: 'switch', id: 'opt-prevent-selection', label: 'Prevent selection' },
+       { type: 'switch', id: 'opt-disabled', label: 'Disabled' },
+       { type: 'switch', id: 'opt-open-disabled', label: 'Open disabled' },
+       { type: 'button', id: 'btn-value', label: 'Inspect value' }
+     ]
+   }
+ })
+ %>

@@ -1,15 +1,87 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'Meter', includePath: './pages/meter/meter.ejs', options: [ { type: 'text-field', inputType: 'number',
-label: 'Value', id: 'opt-value', defaultValue: 50 }, { type: 'text-field', inputType: 'number', label: 'Min', id: 'opt-min', defaultValue: 0 }, { type:
-'text-field', inputType: 'number', label: 'Max', id: 'opt-max', defaultValue: 100 }, { type: 'text-field', inputType: 'number', label: 'Low', id: 'opt-low',
-defaultValue: '' }, { type: 'text-field', inputType: 'number', label: 'High', id: 'opt-high', defaultValue: '' }, { type: 'text-field', inputType: 'number',
-label: 'Optimum', id: 'opt-optimum', defaultValue: '' }, { type: 'text-field', inputType: 'number', label: 'Tickmarks', id: 'opt-tickmarks', defaultValue: 0 },
-{ type: 'select', label: 'Value mode', id: 'opt-value-mode', defaultValue: 'manual', options: [ { label: 'Manual', value: 'manual'}, { label: 'Percentage',
-value: 'percentage' }, { label: 'Value', value: 'value' } ] }, { type: 'select', label: 'Direction', id: 'opt-direction', defaultValue: 'horizontal', options: [
-{ label: 'Horizontal (default)', value: 'horizontal'}, { label: 'Vertical', value: 'vertical' } ] }, { type: 'select', label: 'Density', id: 'opt-density',
-defaultValue: 'medium', options: [ { label: 'Small', value: 'small'}, { label: 'Medium (default)', value: 'medium' }, { label: 'Large', value: 'large' } ] }, {
-type: 'select', label: 'Shape', id: 'opt-shape', defaultValue: 'default', options: [ { label: 'Default', value: 'default'}, { label: 'Rounded', value: 'rounded'
-}, { label: 'Squared', value: 'squared' } ] }, { type: 'select', label: 'Inner shape', id: 'opt-inner-shape', defaultValue: 'default', options: [ { label:
-'Default', value: 'default'}, { label: 'Inherit', value: 'inherit' } ] }, { type: 'select', label: 'Theme', id: 'opt-theme', defaultValue: 'default', options: [
-{ label: 'Default', value: 'default'}, { label: 'Primary', value: 'primary' }, { label: 'Secondary', value: 'secondary' }, { label: 'Tertiary', value:
-'tertiary' }, { label: 'Success', value: 'success' }, { label: 'Error', value: 'error' }, { label: 'Warning', value: 'warning' }, { label: 'Info', value: 'info'
-} ] }, { type: 'switch', label: 'Muted', id: 'opt-muted' } ] } }) %>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Meter',
+    includePath: './pages/meter/meter.ejs',
+    options: [
+      { type: 'text-field', inputType: 'number', label: 'Value', id: 'opt-value', defaultValue: 50 },
+      { type: 'text-field', inputType: 'number', label: 'Min', id: 'opt-min', defaultValue: 0 },
+      { type: 'text-field', inputType: 'number', label: 'Max', id: 'opt-max', defaultValue: 100 },
+      { type: 'text-field', inputType: 'number', label: 'Low', id: 'opt-low', defaultValue: '' },
+      { type: 'text-field', inputType: 'number', label: 'High', id: 'opt-high', defaultValue: '' },
+      { type: 'text-field', inputType: 'number', label: 'Optimum', id: 'opt-optimum', defaultValue: '' },
+      { type: 'text-field', inputType: 'number', label: 'Tickmarks', id: 'opt-tickmarks', defaultValue: 0 },
+      {
+        type: 'select',
+        label: 'Value mode',
+        id: 'opt-value-mode',
+        defaultValue: 'manual',
+        options: [
+          { label: 'Manual', value: 'manual'},
+          { label: 'Percentage', value: 'percentage' },
+          { label: 'Value', value: 'value' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Direction',
+        id: 'opt-direction',
+        defaultValue: 'horizontal',
+        options: [
+          { label: 'Horizontal (default)', value: 'horizontal'},
+          { label: 'Vertical', value: 'vertical' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Density',
+        id: 'opt-density',
+        defaultValue: 'medium',
+        options: [
+          { label: 'Small', value: 'small'},
+          { label: 'Medium (default)', value: 'medium' },
+          { label: 'Large', value: 'large' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Shape',
+        id: 'opt-shape',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default'},
+          { label: 'Rounded', value: 'rounded' },
+          { label: 'Squared', value: 'squared' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Inner shape',
+        id: 'opt-inner-shape',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default'},
+          { label: 'Inherit', value: 'inherit' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'opt-theme',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default'},
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info', value: 'info' }
+        ]
+      },
+      { type: 'switch', label: 'Muted', id: 'opt-muted' }
+    ]
+  }
+})
+%>

@@ -1,3 +1,14 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'State layer', includePath: './pages/state-layer/state-layer.ejs', options: [ { type: 'switch', label:
-'Disabled', id: 'opt-disabled' }, { type: 'switch', label: 'Selected', id: 'opt-selected' }, { type: 'switch', label: 'Circular', id: 'opt-circular' }, { type:
-'button', label: 'Play ripple animation', id: 'opt-btn-play-ripple-animation' } ] } }) %>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'State layer',
+    includePath: './pages/state-layer/state-layer.ejs',
+    options: [
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
+      { type: 'switch', label: 'Selected', id: 'opt-selected' },
+      { type: 'switch', label: 'Circular', id: 'opt-circular' },
+      { type: 'button', label: 'Play ripple animation', id: 'opt-btn-play-ripple-animation' }
+    ]
+  }
+})
+%>

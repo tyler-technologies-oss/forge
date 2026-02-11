@@ -1,3 +1,20 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'Split view', includePath: './pages/split-view/split-view.ejs', options: [ { type: 'select', label:
-'Orientation', id: 'opt-orientation', defaultValue: 'horizontal', options: [ { label: 'Horizontal', value: 'horizontal' }, { label: 'Vertical', value:
-'vertical' }, ] } ] } }) %>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Split view',
+    includePath: './pages/split-view/split-view.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Orientation',
+        id: 'opt-orientation',
+        defaultValue: 'horizontal',
+        options: [
+          { label: 'Horizontal', value: 'horizontal' },
+          { label: 'Vertical', value: 'vertical' },
+        ]
+      }
+    ]
+  }
+})
+%>

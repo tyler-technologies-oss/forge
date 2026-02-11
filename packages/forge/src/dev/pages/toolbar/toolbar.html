@@ -1,3 +1,14 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'Toolbar', includePath: './pages/toolbar/toolbar.ejs', options: [ { type: 'switch', id:
-'toolbar-opt-inverted', label: 'Inverted' }, { type: 'switch', id: 'toolbar-opt-border', label: 'Show border', defaultValue: true }, { type: 'switch', id:
-'toolbar-opt-has-padding', label: 'Has padding', defaultValue: true }, { type: 'switch', id: 'toolbar-opt-auto-height', label: 'Auto height' } ] } }) %>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Toolbar',
+    includePath: './pages/toolbar/toolbar.ejs',
+    options: [
+      { type: 'switch', id: 'toolbar-opt-inverted', label: 'Inverted' },
+      { type: 'switch', id: 'toolbar-opt-border', label: 'Show border', defaultValue: true },
+      { type: 'switch', id: 'toolbar-opt-has-padding', label: 'Has padding', defaultValue: true },
+      { type: 'switch', id: 'toolbar-opt-auto-height', label: 'Auto height' }
+    ]
+  }
+})
+%>

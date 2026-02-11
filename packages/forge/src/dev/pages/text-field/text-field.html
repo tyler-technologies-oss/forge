@@ -1,21 +1,116 @@
-<%- include('./src/partials/page.ejs', { page: { title: 'Text field', includePath: './pages/text-field/text-field.ejs', options: [ { type: 'text-field', label:
-'Label', id: 'opt-label', defaultValue: 'First name' }, { type: 'text-field', label: 'Placeholder', id: 'opt-placeholder' }, { type: 'switch', label:
-'Required', id: 'opt-required' }, { type: 'switch', label: 'Optional', id: 'opt-optional' }, { type: 'switch', label: 'Invalid', id: 'opt-invalid' }, { type:
-'switch', label: 'Disabled', id: 'opt-disabled' }, { type: 'switch', label: 'Dense (extra small density)', id: 'opt-dense' }, { type: 'switch', label: 'Float
-label', id: 'opt-float-label' }, { type: 'switch', label: 'Show clear button', id: 'opt-show-clear' }, { type: 'switch', label: 'Prevent clear', id:
-'opt-prevent-clear' }, { type: 'switch', label: 'Start slot', id: 'opt-start' }, { type: 'switch', label: 'End slot', id: 'opt-end' }, { type: 'switch', label:
-'Accessory slot', id: 'opt-accessory' }, { type: 'switch', label: 'Support text', id: 'opt-support-text'}, { type: 'switch', label: 'Support text (end)', id:
-'opt-support-text-end'}, { type: 'select', label: 'Density', id: 'opt-density', defaultValue: 'medium', options: [ { label: 'Extra-small (dense)', value:
-'extra-small' }, { label: 'Small', value: 'small' }, { label: 'Medium (default)', value: 'medium' }, { label: 'Large', value: 'large' }, { label: 'Extra-large',
-value: 'extra-large' } ] }, { type: 'select', label: 'Variant', id: 'opt-variant', defaultValue: 'outlined', options: [ { label: 'Plain', value: 'plain' }, {
-label: 'Outlined (default)', value: 'outlined' }, { label: 'Tonal', value: 'tonal' }, { label: 'Filled', value: 'filled' }, { label: 'Raised', value: 'raised' }
-] }, { type: 'select', label: 'Theme', id: 'opt-theme', defaultValue: 'default', options: [ { label: 'Default', value: 'default' }, { label: 'Primary', value:
-'primary' }, { label: 'Secondary', value: 'secondary' }, { label: 'Tertiary', value: 'tertiary' }, { label: 'Success', value: 'success' }, { label: 'Error',
-value: 'error' }, { label: 'Warning', value: 'warning' }, { label: 'Info', value: 'info' } ] }, { type: 'select', label: 'Shape', id: 'opt-shape', defaultValue:
-'default', options: [ { label: 'Default', value: 'default' }, { label: 'Squared', value: 'squared' }, { label: 'Rounded', value: 'rounded' } ] }, { type:
-'select', label: 'Label position', id: 'opt-label-position', defaultValue: 'inset', options: [ { label: 'Inset (default)', value: 'inset' }, { label: 'Block
-start', value: 'block-start' }, { label: 'Inline start', value: 'inline-start' }, { label: 'Inline end', value: 'inline-end' }, { label: 'None', value: 'none' }
-] }, { type: 'select', label: 'Label alignment', id: 'opt-label-alignment', defaultValue: 'default', options: [ { label: 'Default', value: 'default' }, { label:
-'Center', value: 'center' }, { label: 'Start', value: 'start' }, { label: 'End', value: 'end' }, { label: 'Baseline', value: 'baseline' } ] }, { type: 'select',
-label: 'Support text inset', id: 'opt-support-text-inset', defaultValue: 'none', options: [ { label: 'None (default)', value: 'none' }, { label: 'Both', value:
-'both' }, { label: 'Start', value: 'start' }, { label: 'End', value: 'end' } ] } ] } }) %>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Text field',
+    includePath: './pages/text-field/text-field.ejs',
+    options: [
+      { type: 'text-field', label: 'Label', id: 'opt-label', defaultValue: 'First name' },
+      { type: 'text-field', label: 'Placeholder', id: 'opt-placeholder' },
+      { type: 'switch', label: 'Required', id: 'opt-required' },
+      { type: 'switch', label: 'Optional', id: 'opt-optional' },
+      { type: 'switch', label: 'Invalid', id: 'opt-invalid' },
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
+      { type: 'switch', label: 'Dense (extra small density)', id: 'opt-dense' },
+      { type: 'switch', label: 'Float label', id: 'opt-float-label' },
+      { type: 'switch', label: 'Show clear button', id: 'opt-show-clear' },
+      { type: 'switch', label: 'Prevent clear', id: 'opt-prevent-clear' },
+      { type: 'switch', label: 'Start slot', id: 'opt-start' },
+      { type: 'switch', label: 'End slot', id: 'opt-end' },
+      { type: 'switch', label: 'Accessory slot', id: 'opt-accessory' },
+      { type: 'switch', label: 'Support text', id: 'opt-support-text'},
+      { type: 'switch', label: 'Support text (end)', id: 'opt-support-text-end'},
+      {
+        type: 'select',
+        label: 'Density',
+        id: 'opt-density',
+        defaultValue: 'medium',
+        options: [
+          { label: 'Extra-small (dense)', value: 'extra-small' },
+          { label: 'Small', value: 'small' },
+          { label: 'Medium (default)', value: 'medium' },
+          { label: 'Large', value: 'large' },
+          { label: 'Extra-large', value: 'extra-large' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Variant',
+        id: 'opt-variant',
+        defaultValue: 'outlined',
+        options: [
+          { label: 'Plain', value: 'plain' },
+          { label: 'Outlined (default)', value: 'outlined' },
+          { label: 'Tonal', value: 'tonal' },
+          { label: 'Filled', value: 'filled' },
+          { label: 'Raised', value: 'raised' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'opt-theme',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info', value: 'info' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Shape',
+        id: 'opt-shape',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Squared', value: 'squared' },
+          { label: 'Rounded', value: 'rounded' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Label position',
+        id: 'opt-label-position',
+        defaultValue: 'inset',
+        options: [
+          { label: 'Inset (default)', value: 'inset' },
+          { label: 'Block start', value: 'block-start' },
+          { label: 'Inline start', value: 'inline-start' },
+          { label: 'Inline end', value: 'inline-end' },
+          { label: 'None', value: 'none' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Label alignment',
+        id: 'opt-label-alignment',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Center', value: 'center' },
+          { label: 'Start', value: 'start' },
+          { label: 'End', value: 'end' },
+          { label: 'Baseline', value: 'baseline' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Support text inset',
+        id: 'opt-support-text-inset',
+        defaultValue: 'none',
+        options: [
+          { label: 'None (default)', value: 'none' },
+          { label: 'Both', value: 'both' },
+          { label: 'Start', value: 'start' },
+          { label: 'End', value: 'end' }
+        ]
+      }
+    ]
+  }
+})
+%>
