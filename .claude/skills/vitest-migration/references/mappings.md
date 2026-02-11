@@ -81,6 +81,7 @@ Note: `frame()` is from `../core/utils/utils.js`
 | `match.string`                | `expect.any(String)`           |
 | `sinon.restore()`             | `vi.restoreAllMocks()`         |
 | `spy.restore()`               | `spy.mockRestore()`            |
+| `stub(window, 'fetch')`       | `vi.stubGlobal('fetch', ...)`  |
 
 ## Browser Commands
 
@@ -156,6 +157,25 @@ it('should emit click', async () => {
 
   expect(clickSpy).toHaveBeenCalledOnce();
 });
+```
+
+## Mocking Global `fetch`
+
+In vitest browser mode, `vi.spyOn(window, 'fetch')` won't intercept fetch calls because code uses bare `fetch()`. Use `vi.stubGlobal`:
+
+```typescript
+// Setup
+const fetchMock = vi.fn().mockResolvedValue(new Response(svgData));
+vi.stubGlobal('fetch', fetchMock);
+
+// ... test code ...
+
+// Cleanup
+vi.unstubAllGlobals();
+
+// Assertions
+expect(fetchMock).toHaveBeenCalledOnce();
+expect(fetchMock).toHaveBeenCalledWith('expected-url');
 ```
 
 ## Drag/Move Pointer Events

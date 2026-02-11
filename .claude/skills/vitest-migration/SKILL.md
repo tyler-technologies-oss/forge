@@ -290,6 +290,66 @@ Avoid arbitrary magic number timeouts. When tests need to wait for animations or
    await task(100); // wait for popover positioning calculation
    ```
 
+## Mocking Global `fetch`
+
+In vitest browser mode, `vi.spyOn(window, 'fetch')` does NOT work because component code uses bare `fetch()` which is a different reference than `window.fetch`. Use `vi.stubGlobal` instead:
+
+```typescript
+// WRONG - won't intercept fetch calls
+const fetchSpy = vi.spyOn(window, 'fetch');
+fetchSpy.mockResolvedValue(new Response(data));
+
+// CORRECT - properly stubs the global fetch
+const fetchMock = vi.fn().mockResolvedValue(new Response(data));
+vi.stubGlobal('fetch', fetchMock);
+
+// ... test code ...
+
+vi.unstubAllGlobals(); // cleanup
+```
+
+## Polling Helpers for Async DOM Changes
+
+When components have internal async operations (setTimeout batching, fetch calls, IntersectionObserver), use polling helpers instead of arbitrary timeouts:
+
+```typescript
+async function waitForElement(
+  container: Element,
+  selector: string,
+  timeout = 500
+): Promise<Element | null> {
+  const start = Date.now();
+  while (Date.now() - start < timeout) {
+    const el = container.querySelector(selector);
+    if (el) {
+      return el;
+    }
+    await frame();
+  }
+  return null;
+}
+
+async function waitForRemoval(
+  container: Element,
+  selector: string,
+  timeout = 500
+): Promise<void> {
+  const start = Date.now();
+  while (Date.now() - start < timeout) {
+    if (!container.querySelector(selector)) {
+      return;
+    }
+    await frame();
+  }
+}
+```
+
+This pattern:
+- Polls until the expected DOM state is reached
+- Returns as soon as condition is met (fast)
+- Has a timeout to prevent infinite loops
+- More reliable than fixed delays
+
 ## Common Issues
 
 **"Cannot find module"**: Ensure vitest config includes proper aliases and browser mode setup.
