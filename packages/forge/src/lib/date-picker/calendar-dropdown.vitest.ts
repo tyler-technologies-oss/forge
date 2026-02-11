@@ -1,5 +1,6 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, it, expect, afterEach } from 'vitest';
+import { render } from 'vitest-browser-lit';
+import { html } from 'lit';
 import { task } from '../core/utils/utils.js';
 import { CalendarDropdown } from '../calendar/calendar-dropdown/calendar-dropdown.js';
 import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover/index.js';
@@ -17,31 +18,31 @@ describe('CalendarDropdown', () => {
   });
 
   it('should open popup', async () => {
-    const container = await fixture<HTMLElement>(html`
+    const screen = render(html`
       <div>
         <button id="test-target">Test</button>
       </div>
     `);
-    const targetElement = container.querySelector('#test-target') as HTMLElement;
+    const targetElement = screen.container.querySelector('#test-target') as HTMLElement;
     const calendarDropdown = new CalendarDropdown(targetElement, DEFAULT_ID);
 
     calendarDropdown.open({ id: DEFAULT_ID });
 
     const popup = document.querySelector(`${POPOVER_CONSTANTS.elementName}[id="${DEFAULT_ID}"]`) as IPopoverComponent;
 
-    expect(calendarDropdown.isOpen).to.be.true;
-    expect(popup).to.not.be.null;
+    expect(calendarDropdown.isOpen).toBe(true);
+    expect(popup).not.toBeNull();
 
     calendarDropdown.destroy();
   });
 
   it('should close popup when destroyed', async () => {
-    const container = await fixture<HTMLElement>(html`
+    const screen = render(html`
       <div>
         <button id="test-target">Test</button>
       </div>
     `);
-    const targetElement = container.querySelector('#test-target') as HTMLElement;
+    const targetElement = screen.container.querySelector('#test-target') as HTMLElement;
     const calendarDropdown = new CalendarDropdown(targetElement, DEFAULT_ID);
 
     calendarDropdown.open({ id: DEFAULT_ID });
@@ -50,7 +51,7 @@ describe('CalendarDropdown', () => {
     await task(POPOVER_ANIMATION_DURATION);
     const popup = document.querySelector(`${POPOVER_CONSTANTS.elementName}[id="${DEFAULT_ID}"]`) as IPopoverComponent;
 
-    expect(calendarDropdown.isOpen).to.be.false;
-    expect(popup).to.be.null;
+    expect(calendarDropdown.isOpen).toBe(false);
+    expect(popup).toBeNull();
   });
 });
