@@ -1,11 +1,15 @@
-import { expect } from '@esm-bundle/chai';
-import { spy } from 'sinon';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { TestHarness } from '../../core/testing/test-harness.js';
-import { frame } from '../../core/utils/utils.js';
+import { frame, task } from '../../core/utils/utils.js';
 import type { ISplitViewPanelComponent } from '../split-view-panel/split-view-panel.js';
 import { SPLIT_VIEW_PANEL_CONSTANTS, SplitViewAnimatingLayer } from '../split-view-panel/split-view-panel-constants.js';
 import type { ISplitViewComponent } from './split-view.js';
 import { SPLIT_VIEW_CONSTANTS } from './split-view-constants.js';
+import type { ISplitViewCore } from './split-view-core.js';
+import type { ISplitViewAdapter } from './split-view-adapter.js';
+
+import '../split-view-panel/split-view-panel.js';
+import './split-view.js';
 
 type SplitViewCoreInternal = ISplitViewCore & { _adapter: ISplitViewAdapter };
 type SplitViewComponentInternal = ISplitViewComponent & { _core: SplitViewCoreInternal };
@@ -16,14 +20,8 @@ interface SplitViewPanelCoreInternal {
 }
 type SplitViewPanelComponentInternal = ISplitViewPanelComponent & { _core: SplitViewPanelCoreInternal };
 
-import '../split-view-panel/split-view-panel.js';
-import './split-view.js';
-import { ISplitViewCore } from './split-view-core.js';
-import { ISplitViewAdapter } from './split-view-adapter.js';
-
 describe('SplitView', () => {
   afterEach(() => {
-    // Clean up any elements appended to body during tests
     const splitViews = document.body.querySelectorAll('forge-split-view');
     splitViews.forEach(el => el.remove());
   });
@@ -31,31 +29,31 @@ describe('SplitView', () => {
   it('should instantiate component instance', async () => {
     const harness = await createFixture({ appendToBody: true });
 
-    expect(harness.element.isConnected).to.be.true;
+    expect(harness.element.isConnected).toBe(true);
   });
 
   it('should be oriented horizontally by default', async () => {
     const harness = await createFixture();
 
-    expect(harness.element.orientation).to.equal('horizontal');
+    expect(harness.element.orientation).toBe('horizontal');
   });
 
   it('should be enabled by default', async () => {
     const harness = await createFixture();
 
-    expect(harness.element.disabled).to.be.false;
+    expect(harness.element.disabled).toBe(false);
   });
 
   it('should disable closing by default', async () => {
     const harness = await createFixture();
 
-    expect(harness.element.allowClose).to.be.false;
+    expect(harness.element.allowClose).toBe(false);
   });
 
   it('should disable autoclose by default', async () => {
     const harness = await createFixture();
 
-    expect(harness.element.autoClose).to.be.false;
+    expect(harness.element.autoClose).toBe(false);
   });
 
   describe('attributes', () => {
@@ -64,7 +62,7 @@ describe('SplitView', () => {
 
       harness.element.setAttribute('orientation', 'vertical');
 
-      expect(harness.element.orientation).to.equal('vertical');
+      expect(harness.element.orientation).toBe('vertical');
     });
 
     it('should set disabled', async () => {
@@ -72,7 +70,7 @@ describe('SplitView', () => {
 
       harness.element.setAttribute('disabled', 'true');
 
-      expect(harness.element.disabled).to.be.true;
+      expect(harness.element.disabled).toBe(true);
     });
 
     it('should set allow close', async () => {
@@ -80,7 +78,7 @@ describe('SplitView', () => {
 
       harness.element.setAttribute('allow-close', 'true');
 
-      expect(harness.element.allowClose).to.be.true;
+      expect(harness.element.allowClose).toBe(true);
     });
 
     it('should set auto close', async () => {
@@ -88,7 +86,7 @@ describe('SplitView', () => {
 
       harness.element.setAttribute('auto-close', 'true');
 
-      expect(harness.element.autoClose).to.be.true;
+      expect(harness.element.autoClose).toBe(true);
     });
 
     it('should set auto close threshold', async () => {
@@ -97,7 +95,7 @@ describe('SplitView', () => {
 
       harness.element.setAttribute('auto-close-threshold', autoCloseThreshold.toString());
 
-      expect(harness.element.autoCloseThreshold).to.equal(autoCloseThreshold);
+      expect(harness.element.autoCloseThreshold).toBe(autoCloseThreshold);
     });
   });
 
@@ -112,9 +110,9 @@ describe('SplitView', () => {
       const layerTwo = harness.panels[1].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
       const layerThree = harness.panels[2].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
 
-      expect(layerOne).to.equal(SplitViewAnimatingLayer.Above.toString());
-      expect(layerTwo).to.equal(SplitViewAnimatingLayer.Active.toString());
-      expect(layerThree).to.equal(SplitViewAnimatingLayer.Under.toString());
+      expect(layerOne).toBe(SplitViewAnimatingLayer.Above.toString());
+      expect(layerTwo).toBe(SplitViewAnimatingLayer.Active.toString());
+      expect(layerThree).toBe(SplitViewAnimatingLayer.Under.toString());
     });
 
     it('should arrange panels correctly when the target has resizable set to start', async () => {
@@ -127,9 +125,9 @@ describe('SplitView', () => {
       const layerTwo = harness.panels[1].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
       const layerThree = harness.panels[2].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
 
-      expect(layerOne).to.equal(SplitViewAnimatingLayer.Under.toString());
-      expect(layerTwo).to.equal(SplitViewAnimatingLayer.Active.toString());
-      expect(layerThree).to.equal(SplitViewAnimatingLayer.Above.toString());
+      expect(layerOne).toBe(SplitViewAnimatingLayer.Under.toString());
+      expect(layerTwo).toBe(SplitViewAnimatingLayer.Active.toString());
+      expect(layerThree).toBe(SplitViewAnimatingLayer.Above.toString());
     });
 
     it('should remove animating layer properties', async () => {
@@ -141,7 +139,7 @@ describe('SplitView', () => {
 
       const layer = harness.panels[0].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
 
-      expect(layer).to.equal('');
+      expect(layer).toBe('');
     });
   });
 
@@ -151,7 +149,7 @@ describe('SplitView', () => {
 
       harness.element.orientation = 'vertical';
 
-      expect((harness.panels[0] as any)['_core']._orientation).to.equal('vertical');
+      expect((harness.panels[0] as SplitViewPanelComponentInternal)['_core']._orientation).toBe('vertical');
     });
 
     it('should layout when all have resizable set to off', async () => {
@@ -159,9 +157,9 @@ describe('SplitView', () => {
 
       await frame();
 
-      expect(harness.panels[0].resizable).to.equal('off');
-      expect(harness.panels[1].resizable).to.equal('start');
-      expect(harness.panels[2].resizable).to.equal('start');
+      expect(harness.panels[0].resizable).toBe('off');
+      expect(harness.panels[1].resizable).toBe('start');
+      expect(harness.panels[2].resizable).toBe('start');
     });
 
     it('should not layout when resizable is set to start or end', async () => {
@@ -173,9 +171,9 @@ describe('SplitView', () => {
 
       await frame();
 
-      expect(harness.panels[0].resizable).to.equal('end');
-      expect(harness.panels[1].resizable).to.equal('off');
-      expect(harness.panels[2].resizable).to.equal('start');
+      expect(harness.panels[0].resizable).toBe('end');
+      expect(harness.panels[1].resizable).toBe('off');
+      expect(harness.panels[2].resizable).toBe('start');
     });
 
     it('should not layout one or fewer panels', async () => {
@@ -185,18 +183,18 @@ describe('SplitView', () => {
 
       await frame();
 
-      expect(harness.panels[0].resizable).to.equal('off');
+      expect(harness.panels[0].resizable).toBe('off');
     });
 
     it('should update accessibility', async () => {
       const harness = await createFixture({ appendToBody: false, numberOfPanels: 2 });
 
       harness.panels[0].resizable = 'end';
-      const updateSpy = spy(harness.panels[0], 'update');
+      const updateSpy = vi.spyOn(harness.panels[0], 'update');
 
       harness.element.update({ accessibility: true });
 
-      expect(updateSpy.called).to.be.true;
+      expect(updateSpy).toHaveBeenCalled();
     });
 
     it('should update accessibility on resize', async () => {
@@ -204,14 +202,15 @@ describe('SplitView', () => {
 
       await frame();
 
-      const updateSpy = spy(harness.panels[0], 'update');
+      const updateSpy = vi.spyOn(harness.panels[0], 'update');
       harness.panels[0].resizable = 'end';
       harness.element.style.width = '100%';
       harness.element.parentElement!.style.width = '400px';
 
-      await frame();
+      // Wait for throttled resize observer callback (200ms threshold)
+      await task(SPLIT_VIEW_CONSTANTS.numbers.RESIZE_THROTTLE_THRESHOLD + 50);
 
-      expect(updateSpy.called).to.be.true;
+      expect(updateSpy).toHaveBeenCalled();
     });
 
     it('should not update size of closed panels on resize', async () => {
@@ -231,7 +230,7 @@ describe('SplitView', () => {
 
       const size = harness.panels[1].style.getPropertyValue(SPLIT_VIEW_PANEL_CONSTANTS.customCssProperties.SIZE);
 
-      expect(size).to.not.equal('0px');
+      expect(size).not.toBe('0px');
     });
 
     it('should query only immediate child panels', async () => {
@@ -243,9 +242,9 @@ describe('SplitView', () => {
       div.appendChild(panel);
       harness.element.appendChild(div);
 
-      const queriedComponents = (harness.element as any)['_core']['_adapter'].getSlottedPanels();
+      const queriedComponents = (harness.element as SplitViewComponentInternal)['_core']['_adapter'].getSlottedPanels();
 
-      expect(queriedComponents.length).to.equal(2);
+      expect(queriedComponents.length).toBe(2);
     });
   });
 });
@@ -286,9 +285,7 @@ class SplitViewTestHarness extends TestHarness<ISplitViewComponent> {
     this.panels = panels;
   }
 
-  public initElementRefs(): void {
-    // Split view uses shadow DOM, so we can get internal elements if needed
-  }
+  public initElementRefs(): void {}
 
   public appendToBody(): void {
     document.body.appendChild(this.element);
