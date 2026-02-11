@@ -1,8 +1,7 @@
-import { expect } from '@esm-bundle/chai';
-import { sendMouse } from '@web/test-runner-commands';
-import { spy } from 'sinon';
-import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { nothing } from 'lit-html';
+import { describe, it, expect, vi } from 'vitest';
+import { render } from 'vitest-browser-lit';
+import { html, nothing } from 'lit';
+import { userEvent } from 'vitest/browser';
 import type { IProfileCardComponent } from './profile-card.js';
 import type { IToolbarComponent } from '../toolbar/toolbar.js';
 import type { IButtonComponent } from '../button/button.js';
@@ -10,7 +9,8 @@ import type { IAvatarComponent } from '../avatar/avatar.js';
 import { TestHarness } from '../core/testing/test-harness.js';
 import { getShadowElement } from '@tylertech/forge-core';
 import { PROFILE_CARD_CONSTANTS } from './profile-card-constants.js';
-import { IIconComponent } from '../icon/index.js';
+import type { IIconComponent } from '../icon/index.js';
+import { frame } from '../core/utils/utils.js';
 
 import './profile-card.js';
 
@@ -74,19 +74,11 @@ class ProfileCardHarness extends TestHarness<IProfileCardComponent> {
   }
 
   public async clickSignOutButton(): Promise<void> {
-    await this._clickElement(this._signOutButton);
+    await userEvent.click(this._signOutButton);
   }
 
   public async clickProfileButton(): Promise<void> {
-    await this._clickElement(this._profileButton);
-  }
-
-  private _clickElement(el: HTMLElement): Promise<void> {
-    const { x, y, width, height } = el.getBoundingClientRect();
-    return sendMouse({
-      type: 'click',
-      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
-    });
+    await userEvent.click(this._profileButton);
   }
 }
 
@@ -119,7 +111,7 @@ describe('Profile Card', () => {
     avatarImageUrl,
     avatarLetterCount
   }: ProfileCardFixtureConfig = {}): Promise<ProfileCardHarness> {
-    const el = await fixture<IProfileCardComponent>(html`
+    const screen = render(html`
       <forge-profile-card
         full-Name=${fullName || nothing}
         email=${email || nothing}
@@ -133,20 +125,20 @@ describe('Profile Card', () => {
         ?profile=${profile}>
       </forge-profile-card>
     `);
+    const el = screen.container.querySelector('forge-profile-card') as IProfileCardComponent;
     return new ProfileCardHarness(el);
   }
 
   it('should be accessible', async () => {
     const harness = await setupTest();
-
-    await expect(harness.element).to.be.accessible();
+    await expect(harness.element).toBeAccessible();
   });
 
   it('should display full name', async () => {
     const harness = await setupTest();
 
-    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.FULL_NAME)).to.equal(DEFAULT_FULL_NAME);
-    expect(harness.fullName).to.equal(DEFAULT_FULL_NAME);
+    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.FULL_NAME)).toBe(DEFAULT_FULL_NAME);
+    expect(harness.fullName).toBe(DEFAULT_FULL_NAME);
   });
 
   it('should update full name', async () => {
@@ -155,15 +147,15 @@ describe('Profile Card', () => {
     const newFullName = 'New Name';
     harness.fullName = newFullName;
 
-    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.FULL_NAME)).to.equal(newFullName);
-    expect(harness.fullName).to.equal(newFullName);
+    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.FULL_NAME)).toBe(newFullName);
+    expect(harness.fullName).toBe(newFullName);
   });
 
   it('should display email', async () => {
     const harness = await setupTest();
 
-    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.EMAIL)).to.equal(DEFAULT_EMAIL);
-    expect(harness.email).to.equal(DEFAULT_EMAIL);
+    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.EMAIL)).toBe(DEFAULT_EMAIL);
+    expect(harness.email).toBe(DEFAULT_EMAIL);
   });
 
   it('should update email', async () => {
@@ -172,131 +164,121 @@ describe('Profile Card', () => {
     const newEmail = 'new email';
     harness.email = newEmail;
 
-    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.EMAIL)).to.equal(newEmail);
-    expect(harness.email).to.equal(newEmail);
+    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.EMAIL)).toBe(newEmail);
+    expect(harness.email).toBe(newEmail);
   });
 
   it('should display avatar', async () => {
     const harness = await setupTest();
-
-    expect(harness.avatarElement).to.exist;
+    expect(harness.avatarElement).toBeTruthy();
   });
 
   it('should set avatar text from full name', async () => {
     const harness = await setupTest();
-
-    expect(harness.avatarElement.text).to.equal(DEFAULT_FULL_NAME);
+    expect(harness.avatarElement.text).toBe(DEFAULT_FULL_NAME);
   });
 
   it('should set avatar text separately from full name', async () => {
     const harness = await setupTest({ avatarText: 'Test Avatar' });
-
-    expect(harness.avatarElement.text).to.equal('Test Avatar');
+    expect(harness.avatarElement.text).toBe('Test Avatar');
   });
 
   it('should display action toolbar', async () => {
     const harness = await setupTest();
-
-    expect(harness.isToolbarVisible).to.be.true;
+    expect(harness.isToolbarVisible).toBe(true);
   });
 
   it('should display sign out button', async () => {
     const harness = await setupTest();
-
-    expect(harness.isSignOutButtonVisible).to.be.true;
+    expect(harness.isSignOutButtonVisible).toBe(true);
   });
 
   it('should hide sign out button', async () => {
     const harness = await setupTest({ signOut: false });
-
-    expect(harness.isSignOutButtonVisible).not.to.be.true;
+    expect(harness.isSignOutButtonVisible).toBe(false);
   });
 
   it('should emit sign out event', async () => {
     const harness = await setupTest();
-    const signOutSpy = spy();
+    const signOutSpy = vi.fn();
     harness.element.addEventListener(PROFILE_CARD_CONSTANTS.events.SIGN_OUT, signOutSpy);
 
     await harness.clickSignOutButton();
 
-    expect(signOutSpy).to.have.been.calledOnce;
+    expect(signOutSpy).toHaveBeenCalledOnce();
   });
 
   it('should not display profile button', async () => {
     const harness = await setupTest();
-
-    expect(harness.isProfileButtonVisible).not.to.be.true;
+    expect(harness.isProfileButtonVisible).toBe(false);
   });
 
   it('should display profile button', async () => {
     const harness = await setupTest({ profile: true });
-
-    expect(harness.isProfileButtonVisible).to.be.true;
+    expect(harness.isProfileButtonVisible).toBe(true);
   });
 
   it('should emit profile event', async () => {
     const harness = await setupTest({ profile: true });
-    const profileSpy = spy();
+    const profileSpy = vi.fn();
     harness.element.addEventListener(PROFILE_CARD_CONSTANTS.events.PROFILE, profileSpy);
 
     await harness.clickProfileButton();
 
-    expect(profileSpy).to.have.been.calledOnce;
+    expect(profileSpy).toHaveBeenCalledOnce();
   });
 
   it('should not set focus to anything by default', async () => {
     const harness = await setupTest();
-
-    await elementUpdated(harness.element);
-
-    expect(document.activeElement).not.to.equal(harness.element);
+    await frame();
+    expect(document.activeElement).not.toBe(harness.element);
   });
 
   it('should set focus to sign out button', async () => {
     const harness = await setupTest();
 
     harness.element.focus();
-    await elementUpdated(harness.element);
+    await frame();
 
-    expect(document.activeElement).to.equal(harness.element);
-    expect(harness.element.shadowRoot?.activeElement).to.equal(harness.signOutButton);
+    expect(document.activeElement).toBe(harness.element);
+    expect(harness.element.shadowRoot?.activeElement).toBe(harness.signOutButton);
   });
 
   it('should set focus to profile button when sign out button is hidden', async () => {
     const harness = await setupTest({ signOut: false, profile: true });
 
     harness.element.focus();
-    await elementUpdated(harness.element);
+    await frame();
 
-    expect(document.activeElement).to.equal(harness.element);
-    expect(harness.element.shadowRoot?.activeElement).to.equal(harness.profileButton);
+    expect(document.activeElement).toBe(harness.element);
+    expect(harness.element.shadowRoot?.activeElement).toBe(harness.profileButton);
   });
 
   it('should not set focus to anything when sign out and profile buttons are hidden', async () => {
     const harness = await setupTest({ signOut: false, profile: false });
 
     harness.element.focus();
-    await elementUpdated(harness.element);
+    await frame();
 
-    expect(document.activeElement).not.to.equal(harness.element);
+    expect(document.activeElement).not.toBe(harness.element);
   });
 
   it('should set sign out text', async () => {
     const signOutText = 'Sign Out Test';
     const harness = await setupTest({ signOutText });
 
-    expect(harness.element.signOutText).to.equal(signOutText);
-    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT)).to.equal(signOutText);
-    expect(harness.signOutButton.innerText).to.equal(signOutText);
+    expect(harness.element.signOutText).toBe(signOutText);
+    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT)).toBe(signOutText);
+    expect(harness.signOutButton.innerText).toBe(signOutText);
   });
 
   it('should set profile text', async () => {
     const profileText = 'Profile Test';
     const harness = await setupTest({ profile: true, profileText });
 
-    expect(harness.element.profileText).to.equal(profileText);
-    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT)).to.equal(profileText);
-    expect(harness.profileButton.innerText).to.equal(profileText);
+    expect(harness.element.profileText).toBe(profileText);
+    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT)).toBe(profileText);
+    expect(harness.profileButton.innerText).toBe(profileText);
   });
 
   it('should set avatar icon', async () => {
@@ -305,10 +287,10 @@ describe('Profile Card', () => {
 
     const iconElement = harness.avatarElement.querySelector('forge-icon') as IIconComponent;
 
-    expect(harness.element.avatarIcon).to.equal(avatarIcon);
-    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_ICON)).to.equal(avatarIcon);
-    expect(iconElement).to.exist;
-    expect(iconElement.name).to.equal(avatarIcon);
+    expect(harness.element.avatarIcon).toBe(avatarIcon);
+    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_ICON)).toBe(avatarIcon);
+    expect(iconElement).toBeTruthy();
+    expect(iconElement.name).toBe(avatarIcon);
   });
 
   it('should remove icon element when avatar icon is removed', async () => {
@@ -317,30 +299,30 @@ describe('Profile Card', () => {
 
     const iconElement = harness.avatarElement.querySelector('forge-icon') as IIconComponent;
 
-    expect(iconElement).to.exist;
+    expect(iconElement).toBeTruthy();
 
     harness.element.avatarIcon = '';
 
-    expect(harness.element.avatarIcon).to.equal('');
-    expect(harness.element.hasAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_ICON)).to.false;
-    expect(harness.avatarElement.querySelector('forge-icon')).not.to.exist;
+    expect(harness.element.avatarIcon).toBe('');
+    expect(harness.element.hasAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_ICON)).toBe(false);
+    expect(harness.avatarElement.querySelector('forge-icon')).toBeFalsy();
   });
 
   it('should set avatar image url', async () => {
     const avatarImageUrl = 'javascript: void(0);';
     const harness = await setupTest({ avatarImageUrl });
 
-    expect(harness.element.avatarImageUrl).to.equal(avatarImageUrl);
-    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_IMAGE_URL)).to.equal(avatarImageUrl);
-    expect(harness.avatarElement.imageUrl).to.equal(avatarImageUrl);
+    expect(harness.element.avatarImageUrl).toBe(avatarImageUrl);
+    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_IMAGE_URL)).toBe(avatarImageUrl);
+    expect(harness.avatarElement.imageUrl).toBe(avatarImageUrl);
   });
 
   it('should set avatar letter count', async () => {
     const avatarLetterCount = 2;
     const harness = await setupTest({ avatarLetterCount });
 
-    expect(harness.element.avatarLetterCount).to.equal(avatarLetterCount);
-    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_LETTER_COUNT)).to.equal(`${avatarLetterCount}`);
-    expect(harness.avatarElement.letterCount).to.equal(avatarLetterCount);
+    expect(harness.element.avatarLetterCount).toBe(avatarLetterCount);
+    expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_LETTER_COUNT)).toBe(`${avatarLetterCount}`);
+    expect(harness.avatarElement.letterCount).toBe(avatarLetterCount);
   });
 });
