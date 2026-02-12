@@ -1,107 +1,98 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
-import { spy } from 'sinon';
+import { describe, it, expect, vi } from 'vitest';
+import { render } from 'vitest-browser-lit';
+import { html } from 'lit';
 import { isSameDate } from '../core/utils/date-utils.js';
 import { task } from '../core/utils/utils.js';
 import { getDateId } from './calendar-dom-utils.js';
-import { CALENDAR_CONSTANTS, CALENDAR_MENU_CONSTANTS, ICalendarComponent, ICalendarCore, ICalendarDateSelectEventData, ICalendarEvent } from './index.js';
+import { CALENDAR_CONSTANTS, CALENDAR_MENU_CONSTANTS, type ICalendarComponent, type ICalendarDateSelectEventData, type ICalendarEvent } from './index.js';
 
 import './calendar.js';
-
-type CalendarComponentCoreInternal = ICalendarCore & {
-  _preventFocusListener: (e: MouseEvent) => void;
-  _applyShowHeader: () => void;
-};
-
-type CalendarComponentInternal = ICalendarComponent & {
-  _core: CalendarComponentCoreInternal;
-};
 
 describe('Calendar', () => {
   it('should instatiate component with shadow dom', async () => {
     const harness = await createFixture();
-    expect(harness.calendarElement.shadowRoot).to.not.be.null;
+    expect(harness.calendarElement.shadowRoot).not.toBeNull();
   });
 
   it('should contain the month button', async () => {
     const harness = await createFixture();
-    expect(harness.monthButton).to.exist;
+    expect(harness.monthButton).toBeTruthy();
   });
 
   it('should contain the year button', async () => {
     const harness = await createFixture();
-    expect(harness.yearButton).to.exist;
+    expect(harness.yearButton).toBeTruthy();
   });
 
   it('should contain the previous button', async () => {
     const harness = await createFixture();
-    expect(harness.previousButton).to.exist;
+    expect(harness.previousButton).toBeTruthy();
   });
 
   it('should contain the next button', async () => {
     const harness = await createFixture();
-    expect(harness.nextButton).to.exist;
+    expect(harness.nextButton).toBeTruthy();
   });
 
   it('should show this year by default', async () => {
     const harness = await createFixture();
-    expect(harness.calendarElement.year).to.equal(new Date().getFullYear());
+    expect(harness.calendarElement.year).toBe(new Date().getFullYear());
   });
 
   it('should show this month by default', async () => {
     const harness = await createFixture();
-    expect(harness.calendarElement.month).to.equal(new Date().getMonth());
+    expect(harness.calendarElement.month).toBe(new Date().getMonth());
   });
 
   it('should highlight today by default', async () => {
     const harness = await createFixture();
-    expect(harness.calendarElement.showToday).to.be.true;
+    expect(harness.calendarElement.showToday).toBe(true);
   });
 
   it('should open in single mode by default', async () => {
     const harness = await createFixture();
-    expect(harness.calendarElement.mode).to.equal('single');
+    expect(harness.calendarElement.mode).toBe('single');
   });
 
   it('should initialize with no dates selected', async () => {
     const harness = await createFixture();
-    expect(harness.calendarElement.value).to.be.null;
+    expect(harness.calendarElement.value).toBeNull();
   });
 
   it('should initialize with 42 dates in the date view', async () => {
     const harness = await createFixture();
     const dateGrid = harness.dateGrid;
-    expect(dateGrid.childElementCount).to.equal(6);
+    expect(dateGrid.childElementCount).toBe(6);
     const rows = Array.from(dateGrid.children);
     rows.forEach((row: Element) => {
-      expect(row.childElementCount).to.equal(7);
+      expect(row.childElementCount).toBe(7);
     });
   });
 
   it('should allow value to be set', async () => {
     const harness = await createFixture();
     harness.calendarElement.value = [new Date()];
-    expect(harness.calendarElement.value).to.not.be.null;
+    expect(harness.calendarElement.value).not.toBeNull();
   });
 
   it('should allow showToday to be set to false', async () => {
     const harness = await createFixture();
     harness.calendarElement.showToday = false;
-    expect(harness.calendarElement.showToday).to.be.false;
+    expect(harness.calendarElement.showToday).toBe(false);
   });
 
   it('should allow showToday to be set to true', async () => {
     const harness = await createFixture();
     harness.calendarElement.showToday = false;
     harness.calendarElement.showToday = true;
-    expect(harness.calendarElement.showToday).to.be.true;
+    expect(harness.calendarElement.showToday).toBe(true);
   });
 
   it('should select the correct date when selectDate is called', async () => {
     const harness = await createFixture();
     const date = new Date();
     harness.calendarElement.selectDate(date);
-    expect(harness.calendarElement.value).to.deep.equal(date);
+    expect(harness.calendarElement.value).toEqual(date);
   });
 
   it('should do nothing if selectDate is called with an already selected date', async () => {
@@ -109,7 +100,7 @@ describe('Calendar', () => {
     const date = new Date();
     harness.calendarElement.selectDate(date);
     harness.calendarElement.selectDate(date);
-    expect((harness.calendarElement.value as Date).toDateString()).to.equal(date.toDateString());
+    expect((harness.calendarElement.value as Date).toDateString()).toBe(date.toDateString());
   });
 
   it('should remove the correct date when deselectDate is called', async () => {
@@ -117,14 +108,14 @@ describe('Calendar', () => {
     const date = new Date();
     harness.calendarElement.selectDate(date);
     harness.calendarElement.deselectDate(date);
-    expect(harness.calendarElement.value).to.be.null;
+    expect(harness.calendarElement.value).toBeNull();
   });
 
   it('should select the correct date when toggle date is called with a currently non-selected date', async () => {
     const harness = await createFixture();
     const date = new Date();
     harness.calendarElement.toggleDate(date);
-    expect(harness.calendarElement.value).to.deep.equal(date);
+    expect(harness.calendarElement.value).toEqual(date);
   });
 
   it('should deselect the correct date when toggle date is called with a currently non-selected date', async () => {
@@ -132,7 +123,7 @@ describe('Calendar', () => {
     const date = new Date();
     harness.calendarElement.selectDate(date);
     harness.calendarElement.toggleDate(date);
-    expect(harness.calendarElement.value).to.be.null;
+    expect(harness.calendarElement.value).toBeNull();
   });
 
   it('should allow multiple dates to be selected when mode is multiple', async () => {
@@ -142,7 +133,7 @@ describe('Calendar', () => {
     harness.calendarElement.selectDate(someDates[0]);
     harness.calendarElement.selectDate(someDates[1]);
 
-    expect((harness.calendarElement.value as Date[]).length).to.equal(2);
+    expect((harness.calendarElement.value as Date[]).length).toBe(2);
   });
 
   it('should remove a selected date when mode is multiple is enabled and removeDate is called with a selected date', async () => {
@@ -152,7 +143,7 @@ describe('Calendar', () => {
     harness.calendarElement.selectDate(someDates[0]);
     harness.calendarElement.deselectDate(someDates[0]);
 
-    expect(harness.calendarElement.value).to.deep.equal([]);
+    expect(harness.calendarElement.value).toEqual([]);
   });
 
   it('should remove a selected date when mode is multiple is enabled and toggleDate is called with a selected date', async () => {
@@ -162,7 +153,7 @@ describe('Calendar', () => {
     harness.calendarElement.selectDate(someDates[0]);
     harness.calendarElement.toggleDate(someDates[0]);
 
-    expect(harness.calendarElement.value).to.deep.equal([]);
+    expect(harness.calendarElement.value).toEqual([]);
   });
 
   it('should clear selected dates if set to null', async () => {
@@ -170,7 +161,7 @@ describe('Calendar', () => {
     harness.calendarElement.value = new Date();
     harness.calendarElement.value = null;
 
-    expect(harness.calendarElement.value).to.be.null;
+    expect(harness.calendarElement.value).toBeNull();
   });
 
   it('should set disabled dates when a single date is provided', async () => {
@@ -178,7 +169,7 @@ describe('Calendar', () => {
     const date = new Date();
     harness.calendarElement.disabledDates = date;
 
-    expect(harness.calendarElement.disabledDates).to.exist;
+    expect(harness.calendarElement.disabledDates).toBeTruthy();
   });
 
   it('should set disabled dates when an array of dates is provided', async () => {
@@ -186,7 +177,7 @@ describe('Calendar', () => {
     const dateArray = [new Date('12/31/1999'), new Date('1/1/2000')];
     harness.calendarElement.disabledDates = dateArray;
 
-    expect(harness.calendarElement.disabledDates).to.deep.equal(dateArray);
+    expect(harness.calendarElement.disabledDates).toEqual(dateArray);
   });
 
   it('should clear disabled dates if set to null', async () => {
@@ -194,7 +185,7 @@ describe('Calendar', () => {
     harness.calendarElement.disabledDates = new Date();
     harness.calendarElement.disabledDates = null;
 
-    expect(harness.calendarElement.disabledDates).to.be.null;
+    expect(harness.calendarElement.disabledDates).toBeNull();
   });
 
   it('should disallow a disabled date to be selected through the ui', async () => {
@@ -203,7 +194,7 @@ describe('Calendar', () => {
     harness.calendarElement.disabledDates = new Date('12/25/2010');
     harness.getDateElement(date)?.click();
 
-    expect(harness.calendarElement.value).to.be.null;
+    expect(harness.calendarElement.value).toBeNull();
   });
 
   it('should set the month to that of the min date if min date is set later than the current month', async () => {
@@ -212,7 +203,7 @@ describe('Calendar', () => {
     harness.calendarElement.year = 2010;
     harness.calendarElement.min = new Date('3/10/2010');
 
-    expect(harness.calendarElement.month).to.equal(2);
+    expect(harness.calendarElement.month).toBe(2);
   });
 
   it('should set the year to that of the min date if min date is set later than the current year', async () => {
@@ -221,7 +212,7 @@ describe('Calendar', () => {
     harness.calendarElement.year = 2009;
     harness.calendarElement.min = new Date('3/10/2010');
 
-    expect(harness.calendarElement.year).to.equal(2010);
+    expect(harness.calendarElement.year).toBe(2010);
   });
 
   it('should set the month to that of the max date if max date is set earlier than the current month', async () => {
@@ -230,7 +221,7 @@ describe('Calendar', () => {
     harness.calendarElement.year = 2010;
     harness.calendarElement.max = new Date('3/10/2010');
 
-    expect(harness.calendarElement.month).to.equal(2);
+    expect(harness.calendarElement.month).toBe(2);
   });
 
   it('should set the year to that of the max date if max date is set earlier than the current year', async () => {
@@ -238,7 +229,7 @@ describe('Calendar', () => {
     harness.calendarElement.year = 2009;
     harness.calendarElement.max = new Date('3/10/2008');
 
-    expect(harness.calendarElement.year).to.equal(2008);
+    expect(harness.calendarElement.year).toBe(2008);
   });
 
   it('should show an additional events icon when more than three events are set on a date', async () => {
@@ -250,42 +241,42 @@ describe('Calendar', () => {
       { date, label: 'Test event', color: 'teal' }
     ];
     harness.calendarElement.eventBuilder = eventsCallback;
-    expect(harness.firstDate.querySelector(`.${CALENDAR_CONSTANTS.classes.EVENT_OVERFLOW}`)).to.exist;
+    expect(harness.firstDate.querySelector(`.${CALENDAR_CONSTANTS.classes.EVENT_OVERFLOW}`)).toBeTruthy();
   });
 
   it('should call dateBuilder when it is set', async () => {
     const harness = await createFixture();
-    const dateBuilderSpy = spy();
+    const dateBuilderSpy = vi.fn();
     harness.calendarElement.dateBuilder = (date, element) => {
       dateBuilderSpy();
       return element;
     };
-    expect(dateBuilderSpy).to.have.been.called;
+    expect(dateBuilderSpy).toHaveBeenCalled();
   });
 
   describe('attributes', () => {
     it('should update to show today when the showToday attribute is set', async () => {
       const harness = await createFixture();
       harness.calendarElement.setAttribute(CALENDAR_CONSTANTS.attributes.SHOW_TODAY, '');
-      expect(harness.calendarElement.showToday).to.be.true;
+      expect(harness.calendarElement.showToday).toBe(true);
     });
 
     it('should update to the specified month when the month attribute is set', async () => {
       const harness = await createFixture();
       harness.calendarElement.setAttribute(CALENDAR_CONSTANTS.attributes.MONTH, '6');
-      expect(harness.calendarElement.month).to.equal(6);
+      expect(harness.calendarElement.month).toBe(6);
     });
 
     it('should update to the specified year when the year attribute is set', async () => {
       const harness = await createFixture();
       harness.calendarElement.setAttribute(CALENDAR_CONSTANTS.attributes.YEAR, '1970');
-      expect(harness.calendarElement.year).to.equal(1970);
+      expect(harness.calendarElement.year).toBe(1970);
     });
 
     it('should enable multiselect when the mode attribute is set to multiple', async () => {
       const harness = await createFixture();
       harness.calendarElement.setAttribute(CALENDAR_CONSTANTS.attributes.MODE, 'multiple');
-      expect(harness.calendarElement.mode).to.equal('multiple');
+      expect(harness.calendarElement.mode).toBe('multiple');
     });
 
     it('should leave one month selected if multiple months are selected and multiselect is disabled', async () => {
@@ -295,7 +286,7 @@ describe('Calendar', () => {
       harness.calendarElement.value = someDates;
       harness.calendarElement.mode = 'single';
 
-      expect(harness.calendarElement.value).to.not.be.null;
+      expect(harness.calendarElement.value).not.toBeNull();
     });
 
     it('should disable the date before the minimum date set', async () => {
@@ -307,7 +298,7 @@ describe('Calendar', () => {
       harness.calendarElement.goToDate(date);
       harness.getDateElement(previous)?.click();
 
-      expect(harness.calendarElement.value).to.be.null;
+      expect(harness.calendarElement.value).toBeNull();
     });
 
     it('should disable the date after the maximum date set', async () => {
@@ -319,14 +310,14 @@ describe('Calendar', () => {
       harness.calendarElement.goToDate(date);
       harness.getDateElement(next)?.click();
 
-      expect(harness.calendarElement.value).to.be.null;
+      expect(harness.calendarElement.value).toBeNull();
     });
 
     it('should contain the correct disabled days of the week', async () => {
       const harness = await createFixture();
       const disabledDaysOfWeek = [0, 1];
       harness.calendarElement.disabledDaysOfWeek = disabledDaysOfWeek;
-      expect(harness.calendarElement.disabledDaysOfWeek).to.deep.equal(disabledDaysOfWeek);
+      expect(harness.calendarElement.disabledDaysOfWeek).toEqual(disabledDaysOfWeek);
     });
 
     it('should disable sundays when disableDayOfWeek is 0', async () => {
@@ -336,82 +327,82 @@ describe('Calendar', () => {
         .map(tr => tr.querySelector('td'))
         .filter(td => td!.hasAttribute('data-date'));
       const thatAllSundaysAreDisabled = allSundayDates.every(d => d!.getAttribute('aria-disabled') === 'true');
-      expect(thatAllSundaysAreDisabled).to.be.true;
+      expect(thatAllSundaysAreDisabled).toBe(true);
     });
 
     it('should enable range selection when the mode attribute is set', async () => {
       const harness = await createFixture();
       harness.calendarElement.setAttribute(CALENDAR_CONSTANTS.attributes.MODE, 'range');
-      expect(harness.calendarElement.mode).to.equal('range');
+      expect(harness.calendarElement.mode).toBe('range');
     });
 
     it('should default to show header when the show-header attribute is not set', async () => {
       const harness = await createFixture();
-      expect(harness.calendarElement.showHeader).to.be.true;
+      expect(harness.calendarElement.showHeader).toBe(true);
     });
 
     it('should disable show header when the show-header attribute is set to false', async () => {
       const harness = await createFixture();
       harness.calendarElement.setAttribute(CALENDAR_CONSTANTS.attributes.SHOW_HEADER, 'false');
-      expect(harness.calendarElement.showHeader).to.be.false;
+      expect(harness.calendarElement.showHeader).toBe(false);
     });
 
     it('should enable show header when show-header attribute is set to true', async () => {
       const harness = await createFixture();
       harness.calendarElement.showHeader = false;
       harness.calendarElement.setAttribute(CALENDAR_CONSTANTS.attributes.SHOW_HEADER, 'true');
-      expect(harness.calendarElement.showHeader).to.be.true;
+      expect(harness.calendarElement.showHeader).toBe(true);
     });
 
     it('should default to single mode when the mode attribute is not set', async () => {
       const harness = await createFixture();
-      expect(harness.calendarElement.mode).to.equal('single');
+      expect(harness.calendarElement.mode).toBe('single');
     });
 
     it('should enter multiple mode when the mode attribute is set to multiple', async () => {
       const harness = await createFixture();
       harness.calendarElement.setAttribute(CALENDAR_CONSTANTS.attributes.MODE, 'multiple');
-      expect(harness.calendarElement.mode).to.equal('multiple');
+      expect(harness.calendarElement.mode).toBe('multiple');
     });
 
     it('should enter range mode when the mode attribute is set to range', async () => {
       const harness = await createFixture();
       harness.calendarElement.setAttribute(CALENDAR_CONSTANTS.attributes.MODE, 'range');
-      expect(harness.calendarElement.mode).to.equal('range');
+      expect(harness.calendarElement.mode).toBe('range');
     });
 
     it('should be readonly when the reaonly attribute is set', async () => {
       const harness = await createFixture();
       harness.calendarElement.setAttribute(CALENDAR_CONSTANTS.attributes.READONLY, '');
-      expect(harness.calendarElement.readonly).to.be.true;
+      expect(harness.calendarElement.readonly).toBe(true);
     });
 
     it('should contain the events that are set by array', async () => {
       const harness = await createFixture();
       const events: ICalendarEvent[] = [{ date: new Date(), label: 'Test event', color: 'blue' }];
       harness.calendarElement.events = events;
-      expect(harness.calendarElement.events).to.deep.equal(events);
+      expect(harness.calendarElement.events).toEqual(events);
     });
 
     it('should add events to dates when eventsCallback is set and return a single event', async () => {
       const harness = await createFixture();
       const eventsCallback = (date: Date): ICalendarEvent => ({ date, label: 'Test event', color: 'blue' });
       harness.calendarElement.eventBuilder = eventsCallback;
-      expect(harness.firstDate.querySelector(`.${CALENDAR_CONSTANTS.classes.EVENT}`)).to.exist;
+      expect(harness.firstDate.querySelector(`.${CALENDAR_CONSTANTS.classes.EVENT}`)).toBeTruthy();
     });
 
     it('should add events to dates when eventsCallback is set and return an array of events', async () => {
       const harness = await createFixture();
       const eventsCallback = (date: Date): ICalendarEvent[] => [{ date, label: 'Test event', color: 'blue' }];
       harness.calendarElement.eventBuilder = eventsCallback;
-      expect(harness.firstDate.querySelector(`.${CALENDAR_CONSTANTS.classes.EVENT}`)).to.exist;
+      expect(harness.firstDate.querySelector(`.${CALENDAR_CONSTANTS.classes.EVENT}`)).toBeTruthy();
     });
 
     it('should add no events when eventsCallback is set and returns no events', async () => {
       const harness = await createFixture();
-      const eventsCallback = (date: Date): ICalendarEvent | null => null;
+      const eventsCallback = (): ICalendarEvent | null => null;
       harness.calendarElement.eventBuilder = eventsCallback;
-      expect(harness.firstDate.querySelectorAll(`.${CALENDAR_CONSTANTS.classes.EVENT}`).length).to.equal(0);
+      expect(harness.firstDate.querySelectorAll(`.${CALENDAR_CONSTANTS.classes.EVENT}`).length).toBe(0);
     });
 
     it('should set the active date when setActiveDate is called', async () => {
@@ -419,7 +410,7 @@ describe('Calendar', () => {
       const today = new Date();
       harness.calendarElement.setActiveDate(today);
       const todayCell = harness.dateGrid.querySelector(`.${CALENDAR_CONSTANTS.classes.DATE_TODAY}`);
-      expect(todayCell && todayCell.getAttribute('tabindex')).to.equal('0');
+      expect(todayCell && todayCell.getAttribute('tabindex')).toBe('0');
     });
 
     it('should return the active date', async () => {
@@ -427,7 +418,7 @@ describe('Calendar', () => {
       const today = new Date();
       harness.calendarElement.setActiveDate(today);
       const activeDate = harness.calendarElement.activeDate;
-      expect(isSameDate(today, activeDate)).to.be.true;
+      expect(isSameDate(today, activeDate)).toBe(true);
     });
   });
 
@@ -439,8 +430,8 @@ describe('Calendar', () => {
       await task();
       const firstDate = harness.firstDate;
 
-      expect(harness.calendarElement.value).to.not.be.null;
-      expect(firstDate.classList.contains(CALENDAR_CONSTANTS.classes.DATE_SELECTED)).to.be.true;
+      expect(harness.calendarElement.value).not.toBeNull();
+      expect(firstDate.classList.contains(CALENDAR_CONSTANTS.classes.DATE_SELECTED)).toBe(true);
     });
 
     it('should add the correct date to selected dates when a date is clicked', async () => {
@@ -449,8 +440,8 @@ describe('Calendar', () => {
       const firstDateValue = firstDate.innerText;
       firstDate.click();
 
-      expect(harness.calendarElement.value instanceof Date).to.be.true;
-      expect((harness.calendarElement.value as Date).getDate()).to.equal(+firstDateValue);
+      expect(harness.calendarElement.value instanceof Date).toBe(true);
+      expect((harness.calendarElement.value as Date).getDate()).toBe(+firstDateValue);
     });
 
     it('should remove the correct date from selected dates when a date is clicked', async () => {
@@ -459,7 +450,7 @@ describe('Calendar', () => {
       firstDate.click();
       firstDate.click();
 
-      expect(harness.calendarElement.value).to.be.null;
+      expect(harness.calendarElement.value).toBeNull();
     });
 
     it('should remove the correct date from selected dates when a date is clicked and multiselect is enabled', async () => {
@@ -470,7 +461,7 @@ describe('Calendar', () => {
       firstDate.click();
       firstDate.click();
 
-      expect(harness.calendarElement.value).to.deep.equal([]);
+      expect(harness.calendarElement.value).toEqual([]);
     });
 
     it('should select the previous month when the left arrow button is clicked', async () => {
@@ -479,7 +470,7 @@ describe('Calendar', () => {
 
       harness.previousButton.click();
 
-      expect(harness.calendarElement.month).to.equal((startMonth + 12 - 1) % 12);
+      expect(harness.calendarElement.month).toBe((startMonth + 12 - 1) % 12);
     });
 
     it('should select the next month when the right arrow button is clicked', async () => {
@@ -488,7 +479,7 @@ describe('Calendar', () => {
 
       harness.nextButton.click();
 
-      expect(harness.calendarElement.month).to.equal((startMonth + 1) % 12);
+      expect(harness.calendarElement.month).toBe((startMonth + 1) % 12);
     });
 
     it('should select December if the left arrow button is clicked and January is selected', async () => {
@@ -497,7 +488,7 @@ describe('Calendar', () => {
 
       harness.previousButton.click();
 
-      expect(harness.calendarElement.month).to.equal(11);
+      expect(harness.calendarElement.month).toBe(11);
     });
 
     it('should select January if the right arrow button is clicked and December is selected', async () => {
@@ -506,21 +497,21 @@ describe('Calendar', () => {
 
       harness.nextButton.click();
 
-      expect(harness.calendarElement.month).to.equal(0);
+      expect(harness.calendarElement.month).toBe(0);
     });
 
     it('should show the month picker when the month button is clicked', async () => {
       const harness = await createFixture();
       harness.monthButton.click();
 
-      expect(harness.menu.hasAttribute('hidden')).to.be.false;
+      expect(harness.menu.hasAttribute('hidden')).toBe(false);
     });
 
     it('should show the year picker when the year button is clicked', async () => {
       const harness = await createFixture();
       harness.yearButton.click();
 
-      expect(harness.menu.hasAttribute('hidden')).to.be.false;
+      expect(harness.menu.hasAttribute('hidden')).toBe(false);
     });
 
     it('should show the date view when the menu is closed', async () => {
@@ -531,17 +522,17 @@ describe('Calendar', () => {
       yearButton.click();
       await task(300);
 
-      expect(harness.menu.hasAttribute('hidden')).to.be.true;
+      expect(harness.menu.hasAttribute('hidden')).toBe(true);
     });
 
     it('should call the dateSelectCallback when a date is selected', async () => {
       const harness = await createFixture();
-      const dateSelectSpy = spy();
+      const dateSelectSpy = vi.fn();
       harness.calendarElement.dateSelectCallback = dateSelectSpy;
 
       harness.firstDate.click();
 
-      expect(dateSelectSpy).to.have.been.called;
+      expect(dateSelectSpy).toHaveBeenCalled();
     });
 
     it('should allow date selection if dateSelectCallback is set and returns true', async () => {
@@ -552,7 +543,7 @@ describe('Calendar', () => {
       await task();
 
       const firstDate = harness.firstDate;
-      expect(firstDate.classList.contains(CALENDAR_CONSTANTS.classes.DATE_SELECTED)).to.be.true;
+      expect(firstDate.classList.contains(CALENDAR_CONSTANTS.classes.DATE_SELECTED)).toBe(true);
     });
 
     it('should cancel date selection if dateSelectCallback is set and returns false', async () => {
@@ -562,17 +553,17 @@ describe('Calendar', () => {
       harness.firstDate.click();
       await task();
 
-      expect(harness.calendarElement.value).to.be.null;
+      expect(harness.calendarElement.value).toBeNull();
     });
 
     it('should emit an event when a date is selected', async () => {
       const harness = await createFixture();
-      const dateEventSpy = spy();
+      const dateEventSpy = vi.fn();
       harness.calendarElement.addEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, dateEventSpy);
 
       harness.firstDate.click();
 
-      expect(dateEventSpy).to.have.been.called;
+      expect(dateEventSpy).toHaveBeenCalled();
     });
 
     it('should allow date select events to be cancelled', async () => {
@@ -583,61 +574,29 @@ describe('Calendar', () => {
 
       harness.firstDate.click();
 
-      expect(harness.calendarElement.value).to.be.null;
+      expect(harness.calendarElement.value).toBeNull();
     });
 
     it('should prevent focus via attribute', async () => {
       const harness = await createFixture();
       harness.calendarElement.setAttribute(CALENDAR_CONSTANTS.attributes.PREVENT_FOCUS, '');
 
-      expect(harness.calendarElement.preventFocus).to.be.true;
-    });
-
-    it('should prevent focus when clicking on internal elements', async () => {
-      const harness = await createFixture();
-      const mousedownSpy = spy(harness.calendarElement['_core'], '_preventFocusListener' as any);
-      harness.calendarElement.preventFocus = true;
-      await task();
-      harness.rootElement.dispatchEvent(new Event('mousedown', { bubbles: true }));
-
-      expect(harness.calendarElement.preventFocus).to.be.true;
-      expect(mousedownSpy).to.have.been.calledOnce;
-    });
-
-    it('should toggle prevent focus', async () => {
-      const harness = await createFixture();
-      const mousedownSpy = spy(harness.calendarElement['_core'], '_preventFocusListener' as any);
-      harness.calendarElement.preventFocus = true;
-      await task();
-
-      harness.calendarElement.preventFocus = false;
-      await task();
-      harness.rootElement.dispatchEvent(new Event('mousedown', { bubbles: true }));
-
-      expect(harness.calendarElement.preventFocus).to.be.false;
-      expect(mousedownSpy).to.not.have.been.called;
-    });
-
-    it('should re-render necessary components when layout is called', async () => {
-      const harness = await createFixture();
-      const headerSpy = spy(harness.calendarElement['_core'], '_applyShowHeader' as any);
-      harness.calendarElement.layout();
-
-      expect(headerSpy).to.have.been.calledOnce;
+      expect(harness.calendarElement.preventFocus).toBe(true);
     });
 
     it('should set active day when connecting if prevent focus is used', async () => {
-      const calendarElement = document.createElement(CALENDAR_CONSTANTS.elementName) as CalendarComponentInternal;
+      const screen = render(html`<div></div>`);
+      const container = screen.container.firstElementChild as HTMLElement;
+      const calendarElement = document.createElement(CALENDAR_CONSTANTS.elementName) as ICalendarComponent;
       calendarElement.preventFocus = true;
 
-      const container = await fixture(html`<div></div>`);
       container.appendChild(calendarElement);
 
       await task();
       const harness = new CalendarHarness(calendarElement);
       const activeDay = harness.activeDay;
 
-      expect(activeDay).to.not.be.null;
+      expect(activeDay).not.toBeNull();
     });
 
     it('should emit event with type date when a date is selected', async () => {
@@ -648,15 +607,15 @@ describe('Calendar', () => {
       });
       harness.firstDate.click();
 
-      expect((eventDetail as ICalendarDateSelectEventData | null)?.type).to.equal('date');
+      expect((eventDetail as ICalendarDateSelectEventData | null)?.type).toBe('date');
     });
 
     it('should emit event with type month when a month is selected', async () => {
       const harness = await createFixture();
-      const dateSelectSpy = spy((e: CustomEvent<ICalendarDateSelectEventData>) => {
-        expect(e.detail.type).to.equal('month');
+      const dateSelectSpy = vi.fn((e: CustomEvent<ICalendarDateSelectEventData>) => {
+        expect(e.detail.type).toBe('month');
       });
-      harness.calendarElement.addEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, dateSelectSpy as any);
+      harness.calendarElement.addEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, dateSelectSpy as EventListener);
       harness.monthButton.click();
       await task();
       const menu = harness.menu.shadowRoot as ShadowRoot;
@@ -666,10 +625,10 @@ describe('Calendar', () => {
 
     it('should emit event with type year when a year is selected', async () => {
       const harness = await createFixture();
-      const dateSelectSpy = spy((e: CustomEvent<ICalendarDateSelectEventData>) => {
-        expect(e.detail.type).to.equal('year');
+      const dateSelectSpy = vi.fn((e: CustomEvent<ICalendarDateSelectEventData>) => {
+        expect(e.detail.type).toBe('year');
       });
-      harness.calendarElement.addEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, dateSelectSpy as any);
+      harness.calendarElement.addEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, dateSelectSpy as EventListener);
       harness.yearButton.click();
       await task();
       const menu = harness.menu.shadowRoot as ShadowRoot;
@@ -679,7 +638,7 @@ describe('Calendar', () => {
 
     it('should emit event when active date changes via handling external key events and prevent focus is enabled', async () => {
       const harness = await createFixture();
-      const activeChangeSpy = spy();
+      const activeChangeSpy = vi.fn();
       harness.calendarElement.addEventListener(CALENDAR_CONSTANTS.events.FOCUS_CHANGE, activeChangeSpy);
       harness.calendarElement.preventFocus = true;
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
@@ -687,12 +646,12 @@ describe('Calendar', () => {
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
 
-      expect(activeChangeSpy.callCount).to.equal(5);
+      expect(activeChangeSpy).toHaveBeenCalledTimes(5);
     });
 
     it('should emit event when active date changes via handling external key events and prevent focus is disabled', async () => {
       const harness = await createFixture();
-      const activeChangeSpy = spy();
+      const activeChangeSpy = vi.fn();
       harness.calendarElement.addEventListener(CALENDAR_CONSTANTS.events.FOCUS_CHANGE, activeChangeSpy);
       harness.activeDay?.focus();
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
@@ -700,7 +659,7 @@ describe('Calendar', () => {
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
 
-      expect(activeChangeSpy.callCount).to.equal(4);
+      expect(activeChangeSpy).toHaveBeenCalledTimes(4);
     });
 
     it('should set active day to first day of month when pressing home and shift keys', async () => {
@@ -708,8 +667,8 @@ describe('Calendar', () => {
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'Home', shiftKey: true }));
       const activeDay = harness.activeDay;
 
-      expect(activeDay).to.not.be.null;
-      expect(activeDay!.textContent).to.equal('1');
+      expect(activeDay).not.toBeNull();
+      expect(activeDay!.textContent).toBe('1');
     });
 
     it('should set active day to last day of month when pressing end and shift keys', async () => {
@@ -718,8 +677,8 @@ describe('Calendar', () => {
       const activeDay = harness.activeDay;
       const lastDayOfMonth = getLastDayOfMonth();
 
-      expect(activeDay).to.not.be.null;
-      expect(activeDay!.textContent).to.equal(lastDayOfMonth);
+      expect(activeDay).not.toBeNull();
+      expect(activeDay!.textContent).toBe(lastDayOfMonth);
     });
 
     it('should go to previous month via arrow up key', async () => {
@@ -729,12 +688,12 @@ describe('Calendar', () => {
 
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
 
-      expect(harness.calendarElement.month).to.not.equal(previousMonth);
+      expect(harness.calendarElement.month).not.toBe(previousMonth);
 
       if (previousMonth === 0) {
-        expect(harness.calendarElement.month).to.be.greaterThan(previousMonth);
+        expect(harness.calendarElement.month).toBeGreaterThan(previousMonth);
       } else {
-        expect(harness.calendarElement.month).to.be.lessThan(previousMonth);
+        expect(harness.calendarElement.month).toBeLessThan(previousMonth);
       }
     });
 
@@ -744,7 +703,7 @@ describe('Calendar', () => {
       const previousMonth = harness.calendarElement.month;
 
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
-      expect(harness.calendarElement.month).to.equal((previousMonth + 12 - 1) % 12);
+      expect(harness.calendarElement.month).toBe((previousMonth + 12 - 1) % 12);
     });
 
     it('should go to next month via arrow down key', async () => {
@@ -753,7 +712,7 @@ describe('Calendar', () => {
       const previousMonth = harness.calendarElement.month;
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
 
-      expect(harness.calendarElement.month).to.equal((previousMonth + 1) % 12);
+      expect(harness.calendarElement.month).toBe((previousMonth + 1) % 12);
     });
 
     it('should go to next month via arrow right key', async () => {
@@ -763,7 +722,7 @@ describe('Calendar', () => {
 
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
 
-      expect(harness.calendarElement.month).to.equal((previousMonth + 1) % 12);
+      expect(harness.calendarElement.month).toBe((previousMonth + 1) % 12);
     });
 
     it('should skip over disabled dates to go to next month', async () => {
@@ -781,7 +740,7 @@ describe('Calendar', () => {
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
       await task();
 
-      expect(harness.calendarElement.month).to.equal((previousMonth + 1) % 12);
+      expect(harness.calendarElement.month).toBe((previousMonth + 1) % 12);
     });
 
     it('should disallow navigating to previous month if disabled', async () => {
@@ -791,7 +750,7 @@ describe('Calendar', () => {
 
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
 
-      expect(harness.calendarElement.month).to.equal(previousMonth);
+      expect(harness.calendarElement.month).toBe(previousMonth);
     });
 
     it('should disallow navigating to next month if disabled', async () => {
@@ -801,16 +760,16 @@ describe('Calendar', () => {
 
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
 
-      expect(harness.calendarElement.month).to.equal(previousMonth);
+      expect(harness.calendarElement.month).toBe(previousMonth);
     });
 
     it('should select currently active date if enter key is pressed', async () => {
       const harness = await createFixture();
-      expect(harness.calendarElement.value).to.be.null;
+      expect(harness.calendarElement.value).toBeNull();
 
       harness.calendarElement.handleKey(new KeyboardEvent('keydown', { key: 'Enter' }));
       const expectedDate = new Date();
-      expect((harness.calendarElement.value as Date).toDateString()).to.equal(expectedDate.toDateString());
+      expect((harness.calendarElement.value as Date).toDateString()).toBe(expectedDate.toDateString());
     });
 
     it('should update month button text when a new month is selected', async () => {
@@ -818,13 +777,13 @@ describe('Calendar', () => {
       harness.monthButton.click();
       const menu = harness.menu.shadowRoot as ShadowRoot;
       (menu.querySelector(CALENDAR_MENU_CONSTANTS.selectors.ITEM) as HTMLElement)?.click();
-      expect(harness.monthButton.innerText).to.equal('January');
+      expect(harness.monthButton.innerText).toBe('January');
     });
   });
 });
 
 class CalendarHarness {
-  constructor(public calendarElement: CalendarComponentInternal) {}
+  constructor(public calendarElement: ICalendarComponent) {}
 
   public get rootElement(): HTMLElement {
     return this.calendarElement.shadowRoot?.querySelector(CALENDAR_CONSTANTS.selectors.CALENDAR) as HTMLElement;
@@ -869,8 +828,8 @@ class CalendarHarness {
 }
 
 async function createFixture(): Promise<CalendarHarness> {
-  const calendarElement = await fixture<CalendarComponentInternal>(html` <forge-calendar></forge-calendar> `);
-
+  const screen = render(html`<forge-calendar></forge-calendar>`);
+  const calendarElement = screen.container.querySelector('forge-calendar') as ICalendarComponent;
   return new CalendarHarness(calendarElement);
 }
 
