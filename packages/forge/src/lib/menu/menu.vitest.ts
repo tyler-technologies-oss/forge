@@ -1,18 +1,19 @@
-import { expect } from '@esm-bundle/chai';
-import { spy } from 'sinon';
-import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { sendMouse } from '@web/test-runner-commands';
-import { nothing } from 'lit';
-import { task } from '../core/utils/utils.js';
-import { IMenuComponent } from './menu.js';
-import { IMenuOption, MENU_CONSTANTS } from './menu-constants.js';
-import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover/index.js';
-import { IListComponent, IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/index.js';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render } from 'vitest-browser-lit';
+import { html, nothing } from 'lit';
+import { userEvent } from 'vitest/browser';
+import { frame, task } from '../core/utils/utils.js';
+import type { IMenuComponent } from './menu.js';
+import type { IMenuOption } from './menu-constants.js';
+import { MENU_CONSTANTS } from './menu-constants.js';
+import { type IPopoverComponent, POPOVER_CONSTANTS } from '../popover/index.js';
+import { type IListComponent, type IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/index.js';
 import { ICON_CLASS_NAME } from '../constants.js';
 
 import './menu.js';
 import '../list/list-item/index.js';
 
+// Popover animation duration (200ms) + buffer
 const POPOVER_ANIMATION_DURATION = 200;
 
 const OPTIONS: IMenuOption<number>[] = [
@@ -34,7 +35,7 @@ describe('Menu', () => {
     it('should be accessible', async () => {
       const harness = await createFixture();
 
-      await expect(harness.menuEl).to.be.accessible();
+      await expect(harness.menuEl).toBeAccessible();
     });
 
     it('should be accessible when open', async () => {
@@ -42,8 +43,8 @@ describe('Menu', () => {
 
       await harness.openMenu();
 
-      expect(harness.isOpen).to.be.true;
-      await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
+      expect(harness.isOpen).toBe(true);
+      await expect(document.body).toBeAccessible({ rules: { region: { enabled: false } } });
     });
   });
 
@@ -53,7 +54,7 @@ describe('Menu', () => {
         const el = document.createElement('forge-menu') as IMenuComponent;
         document.body.appendChild(el);
 
-        expect(el.isConnected).to.be.true;
+        expect(el.isConnected).toBe(true);
 
         el.remove();
       });
@@ -61,31 +62,31 @@ describe('Menu', () => {
       it('should have open set to false', async () => {
         const harness = await createFixture();
 
-        expect(harness.menuEl.open).to.equal(false);
+        expect(harness.menuEl.open).toBe(false);
       });
 
       it('should have placement set to bottom-start', async () => {
         const harness = await createFixture();
 
-        expect(harness.menuEl.placement).to.equal('bottom-start');
+        expect(harness.menuEl.placement).toBe('bottom-start');
       });
 
       it('should have selected-index set -1', async () => {
         const harness = await createFixture();
 
-        expect(harness.menuEl.selectedIndex).to.equal(-1);
+        expect(harness.menuEl.selectedIndex).toBe(-1);
       });
 
       it('should have dense set to false', async () => {
         const harness = await createFixture();
 
-        expect(harness.menuEl.dense).to.equal(false);
+        expect(harness.menuEl.dense).toBe(false);
       });
 
       it(`should have icon-class set to ${ICON_CLASS_NAME}`, async () => {
         const harness = await createFixture();
 
-        expect(harness.menuEl.iconClass).to.equal(ICON_CLASS_NAME);
+        expect(harness.menuEl.iconClass).toBe(ICON_CLASS_NAME);
       });
     });
 
@@ -95,7 +96,7 @@ describe('Menu', () => {
 
         harness.menuEl.setAttribute(MENU_CONSTANTS.attributes.DENSE, '');
 
-        expect(harness.menuEl.dense).to.equal(true);
+        expect(harness.menuEl.dense).toBe(true);
       });
     });
 
@@ -105,7 +106,7 @@ describe('Menu', () => {
 
         harness.menuEl.setAttribute(MENU_CONSTANTS.attributes.OPEN, '');
 
-        expect(harness.menuEl.open).to.equal(true);
+        expect(harness.menuEl.open).toBe(true);
       });
     });
 
@@ -115,7 +116,7 @@ describe('Menu', () => {
 
         harness.menuEl.setAttribute(MENU_CONSTANTS.attributes.SELECTED_INDEX, '2');
 
-        expect(harness.menuEl.selectedIndex).to.equal(2);
+        expect(harness.menuEl.selectedIndex).toBe(2);
       });
     });
 
@@ -125,7 +126,7 @@ describe('Menu', () => {
 
         harness.menuEl.setAttribute(MENU_CONSTANTS.attributes.PLACEMENT, 'right-end');
 
-        expect(harness.menuEl.placement).to.equal('right-end');
+        expect(harness.menuEl.placement).toBe('right-end');
       });
     });
 
@@ -135,7 +136,7 @@ describe('Menu', () => {
 
         harness.menuEl.setAttribute(MENU_CONSTANTS.attributes.ICON_CLASS, ICON_CLASS_NAME);
 
-        expect(harness.menuEl.iconClass).to.equal(ICON_CLASS_NAME);
+        expect(harness.menuEl.iconClass).toBe(ICON_CLASS_NAME);
       });
     });
   });
@@ -149,7 +150,7 @@ describe('Menu', () => {
         harness.menuEl.dense = false;
         harness.menuEl.dense = true;
 
-        expect(harness.menuEl.dense).to.equal(true);
+        expect(harness.menuEl.dense).toBe(true);
       });
     });
 
@@ -161,7 +162,7 @@ describe('Menu', () => {
         harness.menuEl.open = false;
         harness.menuEl.open = true;
 
-        expect(harness.menuEl.open).to.equal(true);
+        expect(harness.menuEl.open).toBe(true);
       });
     });
 
@@ -170,12 +171,12 @@ describe('Menu', () => {
         const harness = await createFixture();
 
         harness.menuEl.persistSelection = false;
-        await elementUpdated(harness.menuEl);
+        await frame();
         harness.menuEl.persistSelection = true;
-        await elementUpdated(harness.menuEl);
+        await frame();
 
-        expect(harness.menuEl.persistSelection).to.equal(true);
-        expect(harness.menuEl.hasAttribute(MENU_CONSTANTS.attributes.PERSIST_SELECTION)).to.be.true;
+        expect(harness.menuEl.persistSelection).toBe(true);
+        expect(harness.menuEl.hasAttribute(MENU_CONSTANTS.attributes.PERSIST_SELECTION)).toBe(true);
       });
     });
 
@@ -184,12 +185,12 @@ describe('Menu', () => {
         const harness = await createFixture();
 
         harness.menuEl.removeAttribute(MENU_CONSTANTS.attributes.PERSIST_SELECTION);
-        await elementUpdated(harness.menuEl);
+        await frame();
         harness.menuEl.setAttribute(MENU_CONSTANTS.attributes.PERSIST_SELECTION, '');
-        await elementUpdated(harness.menuEl);
+        await frame();
 
-        expect(harness.menuEl.persistSelection).to.equal(true);
-        expect(harness.menuEl.hasAttribute(MENU_CONSTANTS.attributes.PERSIST_SELECTION)).to.be.true;
+        expect(harness.menuEl.persistSelection).toBe(true);
+        expect(harness.menuEl.hasAttribute(MENU_CONSTANTS.attributes.PERSIST_SELECTION)).toBe(true);
       });
     });
 
@@ -200,7 +201,7 @@ describe('Menu', () => {
         harness.menuEl.selectedIndex = 1;
         harness.menuEl.selectedIndex = 2;
 
-        expect(harness.menuEl.selectedIndex).to.equal(2);
+        expect(harness.menuEl.selectedIndex).toBe(2);
       });
     });
 
@@ -210,7 +211,7 @@ describe('Menu', () => {
 
         harness.menuEl.placement = 'right-end';
 
-        expect(harness.menuEl.placement).to.equal('right-end');
+        expect(harness.menuEl.placement).toBe('right-end');
       });
     });
 
@@ -220,7 +221,7 @@ describe('Menu', () => {
 
         harness.menuEl.iconClass = ICON_CLASS_NAME;
 
-        expect(harness.menuEl.iconClass).to.equal(ICON_CLASS_NAME);
+        expect(harness.menuEl.iconClass).toBe(ICON_CLASS_NAME);
       });
     });
 
@@ -230,7 +231,7 @@ describe('Menu', () => {
 
         harness.menuEl.options = generateMenuOptions(5);
 
-        expect(harness.menuEl.options.length).to.equal(5);
+        expect(harness.menuEl.options.length).toBe(5);
       });
 
       it('should update the options property with factory', async () => {
@@ -238,61 +239,64 @@ describe('Menu', () => {
 
         harness.menuEl.options = asyncMenuOptionsFactory(5);
 
-        expect((harness.menuEl as any)._core._optionsFactory).to.not.be.undefined;
-        expect(harness.menuEl.options).to.deep.equal([]);
+        expect((harness.menuEl as any)._core._optionsFactory).not.toBeUndefined();
+        expect(harness.menuEl.options).toEqual([]);
       });
     });
   });
 
   describe('toggle element', () => {
     it('should await dynamic toggle element', async () => {
-      const el = await fixture<IMenuComponent>(html`<forge-menu></forge-menu>`);
+      const screen = render(html`<forge-menu></forge-menu>`);
+      const el = screen.container.querySelector('forge-menu') as IMenuComponent;
 
-      await elementUpdated(el);
-      expect((el as any)._core._adapter.hasTargetElement()).to.be.false;
+      await frame();
+      expect((el as any)._core._adapter.hasTargetElement()).toBe(false);
 
       const toggleElement = createToggleElement();
       el.appendChild(toggleElement);
-      await elementUpdated(el);
+      await frame();
 
-      expect((el as any)._core._adapter.hasTargetElement()).to.be.true;
+      expect((el as any)._core._adapter.hasTargetElement()).toBe(true);
     });
 
     it('should await nested dynamic toggle element', async () => {
-      const el = await fixture<IMenuComponent>(html`<forge-menu></forge-menu>`);
+      const screen = render(html`<forge-menu></forge-menu>`);
+      const el = screen.container.querySelector('forge-menu') as IMenuComponent;
 
       const emptyContainer = document.createElement('div');
       el.appendChild(emptyContainer);
-      await elementUpdated(el);
+      await frame();
 
-      expect((el as any)._core._adapter.hasTargetElement()).to.be.false;
+      expect((el as any)._core._adapter.hasTargetElement()).toBe(false);
 
       const toggleElement = createToggleElement();
       emptyContainer.appendChild(toggleElement);
-      await elementUpdated(el);
+      await frame();
 
-      expect((el as any)._core._adapter.hasTargetElement()).to.be.true;
+      expect((el as any)._core._adapter.hasTargetElement()).toBe(true);
     });
 
     it('should close dropdown on blur when nested dynamic toggle element is provided', async () => {
-      const el = await fixture<IMenuComponent>(html`<forge-menu></forge-menu>`);
+      const screen = render(html`<forge-menu></forge-menu>`);
+      const el = screen.container.querySelector('forge-menu') as IMenuComponent;
 
       const emptyContainer = document.createElement('div');
       el.appendChild(emptyContainer);
-      await elementUpdated(el);
+      await frame();
 
       const toggleElement = createToggleElement();
       emptyContainer.appendChild(toggleElement);
-      await elementUpdated(el);
+      await frame();
 
       toggleElement.focus();
       toggleElement.click();
-      expect(el.open).to.be.true;
-      expect(document.activeElement).to.equal(toggleElement);
+      expect(el.open).toBe(true);
+      expect(document.activeElement).toBe(toggleElement);
 
       toggleElement.blur();
-      expect(el.open).to.be.false;
-      expect(document.activeElement).not.to.equal(toggleElement);
+      expect(el.open).toBe(false);
+      expect(document.activeElement).not.toBe(toggleElement);
     });
 
     it('when clicked should open the menu', async () => {
@@ -300,7 +304,7 @@ describe('Menu', () => {
 
       await harness.clickElement(harness.triggerEl);
 
-      expect(harness.menuEl.open).to.be.true;
+      expect(harness.menuEl.open).toBe(true);
     });
 
     it('when clicked should open the menu with options factory', async () => {
@@ -309,7 +313,7 @@ describe('Menu', () => {
       harness.menuEl.options = asyncMenuOptionsFactory();
       await harness.clickElement(harness.triggerEl);
 
-      expect(harness.menuEl.open).to.be.true;
+      expect(harness.menuEl.open).toBe(true);
     });
 
     it('when clicked should open the menu with options', async () => {
@@ -317,17 +321,17 @@ describe('Menu', () => {
 
       await harness.clickElement(harness.triggerEl);
 
-      expect(harness.menuEl.open).to.be.true;
+      expect(harness.menuEl.open).toBe(true);
     });
 
     it('when clicked twice should open then close the menu', async () => {
       const harness = await createFixture();
 
       await harness.clickElement(harness.triggerEl);
-      expect(harness.menuEl.open).to.be.true;
+      expect(harness.menuEl.open).toBe(true);
 
       await harness.clickElement(harness.triggerEl);
-      expect(harness.menuEl.open).to.be.false;
+      expect(harness.menuEl.open).toBe(false);
     });
   });
 
@@ -336,22 +340,22 @@ describe('Menu', () => {
       const harness = await createFixture();
 
       harness.menuEl.options = menuOptionsFactory();
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       harness.menuEl.open = true;
-      expect(harness.menuEl.open).to.be.true;
+      expect(harness.menuEl.open).toBe(true);
     });
 
     it('should close menu if no options', async () => {
       const harness = await createFixture();
 
       harness.menuEl.options = () => [];
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       harness.menuEl.open = true;
-      await elementUpdated(harness.menuEl);
+      await frame();
 
-      expect(harness.menuEl.open).to.be.false;
+      expect(harness.menuEl.open).toBe(false);
     });
 
     it('should load menu with leading builder', async () => {
@@ -360,13 +364,13 @@ describe('Menu', () => {
 
       options[6].leadingBuilder = () => document.createElement('a');
 
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       harness.menuEl.options = options;
       harness.menuEl.open = true;
 
-      await elementUpdated(harness.menuEl);
-      expect(harness.menuEl.open).to.be.true;
+      await frame();
+      expect(harness.menuEl.open).toBe(true);
     });
 
     it('should have disabled class when option is set to disabled', async () => {
@@ -378,7 +382,7 @@ describe('Menu', () => {
       harness.menuEl.open = true;
       await task(300);
 
-      expect(getPopupListItem(5).querySelector('button')?.hasAttribute('disabled')).to.be.true;
+      expect(getPopupListItem(5).querySelector('button')?.hasAttribute('disabled')).toBe(true);
     });
 
     it('should have selected class when option is set to selected and persistSelection is true', async () => {
@@ -391,7 +395,7 @@ describe('Menu', () => {
       harness.menuEl.open = true;
       await task(300);
 
-      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).to.be.true;
+      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).toBe(true);
     });
 
     it('should not have selected class when option is set to selected and persistSelection is false', async () => {
@@ -404,7 +408,7 @@ describe('Menu', () => {
       harness.menuEl.open = true;
       await task(300);
 
-      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).to.be.false;
+      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).toBe(false);
     });
 
     it('should not have selected class when option is set to selected and persistSelection is switched from true to false', async () => {
@@ -414,18 +418,18 @@ describe('Menu', () => {
       harness.menuEl.persistSelection = true;
       options[5].selected = true;
       harness.menuEl.options = options;
-      await elementUpdated(harness.menuEl);
+      await frame();
       harness.menuEl.persistSelection = false;
       harness.menuEl.open = true;
       await task(300);
 
-      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).to.be.false;
+      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).toBe(false);
     });
 
     it('should use option builder', async () => {
       const harness = await createFixture();
 
-      const optionBuilderSpy = spy((option: IMenuOption, listItem: HTMLElement) => {
+      const optionBuilderSpy = vi.fn((option: IMenuOption, _listItem: HTMLElement) => {
         const div = document.createElement('div');
         div.id = `custom-option-${option.value}`;
         div.textContent = `Custom option: ${option.label}`;
@@ -441,14 +445,14 @@ describe('Menu', () => {
       harness.menuEl.optionBuilder = optionBuilderSpy;
 
       harness.menuEl.open = true;
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const list = getPopupList(getPopoverElement());
       const listItems = Array.from(list.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
 
-      expect(optionBuilderSpy.callCount).to.equal(options.length);
+      expect(optionBuilderSpy).toHaveBeenCalledTimes(options.length);
       options.forEach((option, index) => {
-        expect(listItems[index].textContent).to.equal(`Custom option: ${option.label}`);
+        expect(listItems[index].textContent).toBe(`Custom option: ${option.label}`);
       });
     });
 
@@ -456,25 +460,25 @@ describe('Menu', () => {
       const harness = await createFixture();
       const options = generateMenuOptions(1);
 
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       harness.menuEl.options = options;
       harness.menuEl.open = true;
 
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const newOptions = generateMenuOptions(1);
       newOptions[0].icon = 'code';
       harness.menuEl.options = newOptions;
 
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const list = getPopupList(getPopoverElement());
       const listItems = Array.from(list.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
       const leadingIconEl = listItems[0].querySelector('i[slot=leading]');
 
-      expect(leadingIconEl).to.exist;
-      expect(leadingIconEl?.textContent).to.equal('code');
+      expect(leadingIconEl).not.toBeNull();
+      expect(leadingIconEl?.textContent).toBe('code');
     });
 
     it(`should load leading icons from options factory based on 'leadingIcon' or 'icon' property`, async () => {
@@ -484,19 +488,19 @@ describe('Menu', () => {
         { leadingIcon: 'code', value: '', label: '2' }
       ];
 
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       harness.menuEl.options = options;
       harness.menuEl.open = true;
 
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const list = getPopupList(getPopoverElement());
       const listItems = Array.from(list.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
       const leadingIcons = listItems.map(listItem => listItem.querySelector('i[slot=leading]'));
 
-      expect(leadingIcons[0]).to.exist;
-      expect(leadingIcons[1]).to.exist;
+      expect(leadingIcons[0]).not.toBeNull();
+      expect(leadingIcons[1]).not.toBeNull();
     });
   });
 
@@ -509,7 +513,7 @@ describe('Menu', () => {
         await task(300);
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
 
-        expect(getPopupListItem(0).hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).to.be.true;
+        expect(getPopupListItem(0).hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).toBe(true);
       });
 
       it('arrow up from the start should activate the last list element', async () => {
@@ -519,7 +523,7 @@ describe('Menu', () => {
         await task(300);
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
 
-        expect(getPopupListItem(6).hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).to.be.true;
+        expect(getPopupListItem(6).hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).toBe(true);
       });
 
       it('enter should select the list element when persistSelection is true', async () => {
@@ -532,7 +536,7 @@ describe('Menu', () => {
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
 
-        expect(harness.menuEl.selectedIndex).to.equal(0);
+        expect(harness.menuEl.selectedIndex).toBe(0);
       });
 
       it('enter should select the list element when persistSelection is false', async () => {
@@ -545,17 +549,17 @@ describe('Menu', () => {
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
 
-        expect(harness.menuEl.selectedIndex).to.equal(-1);
+        expect(harness.menuEl.selectedIndex).toBe(-1);
       });
 
       it('space should toggle the popup', async () => {
         const harness = await createFixture({ options: generateMenuOptions(7) });
 
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space' }));
-        expect(harness.menuEl.open).to.be.true;
+        expect(harness.menuEl.open).toBe(true);
 
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space' }));
-        expect(harness.menuEl.open).to.be.false;
+        expect(harness.menuEl.open).toBe(false);
       });
 
       it('tab should close the popup', async () => {
@@ -567,9 +571,9 @@ describe('Menu', () => {
         harness.triggerEl.focus();
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Tab' }));
         harness.triggerEl.blur();
-        await elementUpdated(harness.menuEl);
+        await frame();
 
-        expect(harness.menuEl.open).to.be.false;
+        expect(harness.menuEl.open).toBe(false);
       });
 
       it('should not select active item when tab key is pressed while dropdown is open', async () => {
@@ -578,16 +582,16 @@ describe('Menu', () => {
         harness.triggerEl.focus();
         await harness.clickElement(harness.triggerEl);
 
-        const selectSpy = spy();
+        const selectSpy = vi.fn();
         harness.menuEl.addEventListener(MENU_CONSTANTS.events.SELECT, selectSpy);
 
         await task(POPOVER_ANIMATION_DURATION);
 
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Tab' }));
-        await elementUpdated(harness.menuEl);
+        await frame();
 
-        expect(selectSpy).not.to.have.been.called;
+        expect(selectSpy).not.toHaveBeenCalled();
       });
 
       it('should highlight first option when opened via down arrow key', async () => {
@@ -598,7 +602,7 @@ describe('Menu', () => {
         await task(POPOVER_ANIMATION_DURATION);
 
         const firstListItem = getPopupListItem(0) as IListItemComponent;
-        expect(firstListItem.active).to.be.true;
+        expect(firstListItem.active).toBe(true);
       });
 
       it('escape should close the popup', async () => {
@@ -608,9 +612,9 @@ describe('Menu', () => {
         await harness.clickElement(harness.triggerEl);
 
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Escape' }));
-        await elementUpdated(harness.menuEl);
+        await frame();
 
-        expect(harness.menuEl.open).to.be.false;
+        expect(harness.menuEl.open).toBe(false);
       });
 
       it('blur should close the popup', async () => {
@@ -623,7 +627,7 @@ describe('Menu', () => {
 
         await task(300);
 
-        expect(harness.menuEl.open).to.be.false;
+        expect(harness.menuEl.open).toBe(false);
       });
     });
   });
@@ -638,22 +642,22 @@ describe('Menu', () => {
       harness.menuEl.options = options;
       harness.menuEl.open = true;
 
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      expect(childMenuComponent.tagName.toLowerCase()).to.equal(MENU_CONSTANTS.elementName);
+      expect(childMenuComponent.tagName.toLowerCase()).toBe(MENU_CONSTANTS.elementName);
 
       const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
-      expect(menuTrigger.tagName.toLowerCase()).to.equal('button');
+      expect(menuTrigger.tagName.toLowerCase()).toBe('button');
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
-      await elementUpdated(harness.menuEl);
+      await frame();
 
-      expect(childMenuComponent.open).to.be.true;
-      expect(childMenuComponent.mode).to.equal('cascade');
+      expect(childMenuComponent.open).toBe(true);
+      expect(childMenuComponent.mode).toBe('cascade');
 
       const childMenuListItems = getChildMenuListItems(getPopoverElement());
-      expect(childMenuListItems.length).to.equal(CHILD_MENU_OPTION_COUNT);
+      expect(childMenuListItems.length).toBe(CHILD_MENU_OPTION_COUNT);
     });
 
     it('should hide child menu on mouseleave', async () => {
@@ -665,19 +669,19 @@ describe('Menu', () => {
       harness.menuEl.options = options;
       harness.menuEl.open = true;
 
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
       const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
-      await elementUpdated(harness.menuEl);
-      expect(childMenuComponent.open).to.be.true;
+      await frame();
+      expect(childMenuComponent.open).toBe(true);
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseleave'));
       await task(MENU_CONSTANTS.numbers.CHILD_MOUSE_LEAVE_TIMEOUT);
-      await elementUpdated(harness.menuEl);
-      expect(childMenuComponent.open).to.be.false;
+      await frame();
+      expect(childMenuComponent.open).toBe(false);
     });
 
     it('should hide child menu if mouse leaves popup after threshold', async () => {
@@ -689,29 +693,29 @@ describe('Menu', () => {
       harness.menuEl.options = options;
       harness.menuEl.open = true;
 
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
       const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
 
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const childMenuPopup = getChildPopupElement(childMenuComponent);
       childMenuPopup.dispatchEvent(new MouseEvent('mouseenter'));
-      expect(childMenuComponent.open).to.be.true;
+      expect(childMenuComponent.open).toBe(true);
 
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseleave'));
       document.dispatchEvent(new MouseEvent('mousemove', { pageX: 0, pageY: 0 } as MouseEventInit));
       childMenuPopup.dispatchEvent(new MouseEvent('mouseleave'));
 
       await task(MENU_CONSTANTS.numbers.POPUP_MOUSE_LEAVE_TIMEOUT * 2);
-      await elementUpdated(harness.menuEl);
+      await frame();
 
-      expect(childMenuComponent.open).to.be.false;
+      expect(childMenuComponent.open).toBe(false);
     });
 
     it('should select option in child menu', async () => {
@@ -724,22 +728,22 @@ describe('Menu', () => {
       harness.menuEl.options = options;
       harness.menuEl.open = true;
 
-      const selectSpy = spy();
+      const selectSpy = vi.fn();
       harness.menuEl.addEventListener(MENU_CONSTANTS.events.SELECT, selectSpy);
 
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
       const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const childMenuListItems = getChildMenuListItems(getPopoverElement());
       childMenuListItems[1].dispatchEvent(new MouseEvent('click'));
 
-      expect(selectSpy).to.have.been.calledOnce;
-      expect(selectSpy.firstCall.args[0].detail).to.deep.include({
+      expect(selectSpy).toHaveBeenCalledOnce();
+      expect(selectSpy.mock.calls[0][0].detail).toMatchObject({
         index: 1,
         value: EXPECTED_SELECTION_VALUE,
         parentValue: options[1].value
@@ -754,19 +758,19 @@ describe('Menu', () => {
       harness.menuEl.options = options;
       harness.menuEl.open = true;
 
-      await elementUpdated(harness.menuEl);
+      await frame();
       harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
       harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
       harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowRight' }));
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      expect(childMenuComponent.open).to.be.true;
+      expect(childMenuComponent.open).toBe(true);
 
       harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowLeft' }));
-      await elementUpdated(harness.menuEl);
+      await frame();
 
-      expect(childMenuComponent.open).to.be.false;
+      expect(childMenuComponent.open).toBe(false);
     });
 
     it('should select child option with arrow key', async () => {
@@ -778,26 +782,26 @@ describe('Menu', () => {
       harness.menuEl.options = options;
       harness.menuEl.open = true;
 
-      const selectSpy = spy();
+      const selectSpy = vi.fn();
       harness.menuEl.addEventListener(MENU_CONSTANTS.events.SELECT, selectSpy);
 
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       harness.triggerEl.focus();
       harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
       harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
       harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowRight' }));
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      expect(childMenuComponent.open).to.be.true;
+      expect(childMenuComponent.open).toBe(true);
 
-      await elementUpdated(harness.menuEl);
+      await frame();
       harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
 
-      expect(harness.menuEl.open).to.be.false;
-      expect(selectSpy).to.have.been.calledOnce;
-      expect(selectSpy.firstCall.args[0].detail).to.deep.include({
+      expect(harness.menuEl.open).toBe(false);
+      expect(selectSpy).toHaveBeenCalledOnce();
+      expect(selectSpy.mock.calls[0][0].detail).toMatchObject({
         index: 0,
         value: EXPECTED_SELECTION_VALUE,
         parentValue: options[1].value
@@ -811,12 +815,12 @@ describe('Menu', () => {
 
       harness.menuEl.popoverFlip = 'never';
       harness.menuEl.open = true;
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const popover = getPopoverElement();
 
-      expect(harness.menuEl.popoverFlip).to.equal('never');
-      expect(popover.flip).to.equal('never');
+      expect(harness.menuEl.popoverFlip).toBe('never');
+      expect(popover.flip).toBe('never');
     });
 
     it('should set popover flip from attribute', async () => {
@@ -824,12 +828,12 @@ describe('Menu', () => {
 
       harness.menuEl.setAttribute('popover-flip', 'never');
       harness.menuEl.open = true;
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const popover = getPopoverElement();
 
-      expect(harness.menuEl.popoverFlip).to.equal('never');
-      expect(popover.flip).to.equal('never');
+      expect(harness.menuEl.popoverFlip).toBe('never');
+      expect(popover.flip).toBe('never');
     });
 
     it('should set popover shift', async () => {
@@ -837,12 +841,12 @@ describe('Menu', () => {
 
       harness.menuEl.popoverShift = 'never';
       harness.menuEl.open = true;
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const popover = getPopoverElement();
 
-      expect(harness.menuEl.popoverShift).to.equal('never');
-      expect(popover.shift).to.equal('never');
+      expect(harness.menuEl.popoverShift).toBe('never');
+      expect(popover.shift).toBe('never');
     });
 
     it('should set popover shift from attribute', async () => {
@@ -850,12 +854,12 @@ describe('Menu', () => {
 
       harness.menuEl.setAttribute('popover-shift', 'never');
       harness.menuEl.open = true;
-      await elementUpdated(harness.menuEl);
+      await frame();
 
       const popover = getPopoverElement();
 
-      expect(harness.menuEl.popoverShift).to.equal('never');
-      expect(popover.shift).to.equal('never');
+      expect(harness.menuEl.popoverShift).toBe('never');
+      expect(popover.shift).toBe('never');
     });
   });
 
@@ -863,14 +867,14 @@ describe('Menu', () => {
     it('should have popup target property null by default', async () => {
       const harness = await createFixture();
 
-      expect(harness.menuEl.popupTarget).to.equal(null);
+      expect(harness.menuEl.popupTarget).toBeNull();
     });
 
     it('should set popup target via attribute', async () => {
       const harness = await createFixture({ popupTarget: 'custom-target' });
 
-      expect(harness.menuEl.popupTarget).to.equal('custom-target');
-      expect(harness.menuEl.getAttribute(MENU_CONSTANTS.attributes.POPUP_TARGET)).to.equal('custom-target');
+      expect(harness.menuEl.popupTarget).toBe('custom-target');
+      expect(harness.menuEl.getAttribute(MENU_CONSTANTS.attributes.POPUP_TARGET)).toBe('custom-target');
     });
 
     it('should set popup target via property', async () => {
@@ -878,12 +882,12 @@ describe('Menu', () => {
 
       harness.menuEl.popupTarget = 'custom-target';
 
-      expect(harness.menuEl.popupTarget).to.equal('custom-target');
-      expect(harness.menuEl.getAttribute(MENU_CONSTANTS.attributes.POPUP_TARGET)).to.equal('custom-target');
+      expect(harness.menuEl.popupTarget).toBe('custom-target');
+      expect(harness.menuEl.getAttribute(MENU_CONSTANTS.attributes.POPUP_TARGET)).toBe('custom-target');
     });
 
     it('should position menu relative to popup target element when specified', async () => {
-      const container = await fixture(html`
+      const screen = render(html`
         <div>
           <div id="position-target" style="position: absolute; top: 100px; left: 100px; width: 200px; height: 50px;"></div>
           <forge-menu popup-target="position-target" .options=${OPTIONS}>
@@ -892,21 +896,21 @@ describe('Menu', () => {
         </div>
       `);
 
-      const menuEl = container.querySelector('forge-menu') as IMenuComponent;
+      const menuEl = screen.container.querySelector('forge-menu') as IMenuComponent;
       const triggerEl = menuEl.querySelector('button') as HTMLButtonElement;
-      const targetEl = container.querySelector('#position-target') as HTMLElement;
+      const targetEl = screen.container.querySelector('#position-target') as HTMLElement;
 
-      await clickElement(triggerEl);
-      await elementUpdated(menuEl);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await userEvent.click(triggerEl);
+      await frame();
+      await task(500);
 
       const popover = menuEl.popupElement as IPopoverComponent;
-      expect(popover).to.exist;
-      expect(popover.anchorElement).to.equal(targetEl);
+      expect(popover).not.toBeNull();
+      expect(popover.anchorElement).toBe(targetEl);
     });
 
     it('should set aria-expanded on trigger button and not on popup target element', async () => {
-      const container = await fixture(html`
+      const screen = render(html`
         <div>
           <div id="position-target"></div>
           <forge-menu popup-target="position-target" .options=${OPTIONS}>
@@ -915,16 +919,16 @@ describe('Menu', () => {
         </div>
       `);
 
-      const menuEl = container.querySelector('forge-menu') as IMenuComponent;
+      const menuEl = screen.container.querySelector('forge-menu') as IMenuComponent;
       const triggerEl = menuEl.querySelector('button') as HTMLButtonElement;
-      const targetEl = container.querySelector('#position-target') as HTMLElement;
+      const targetEl = screen.container.querySelector('#position-target') as HTMLElement;
 
-      await clickElement(triggerEl);
-      await elementUpdated(menuEl);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await userEvent.click(triggerEl);
+      await frame();
+      await task(500);
 
-      expect(triggerEl.getAttribute('aria-expanded')).to.equal('true');
-      expect(targetEl.hasAttribute('aria-expanded')).to.be.false;
+      expect(triggerEl.getAttribute('aria-expanded')).toBe('true');
+      expect(targetEl.hasAttribute('aria-expanded')).toBe(false);
     });
   });
 
@@ -938,15 +942,15 @@ describe('Menu', () => {
 
     harness.menuEl.options = options;
     harness.menuEl.open = true;
-    await elementUpdated(harness.menuEl);
+    await frame();
 
     const popover = getPopoverElement();
-    expect(popover).to.exist;
+    expect(popover).not.toBeNull();
 
     harness.menuEl.remove();
-    await elementUpdated(harness.menuEl);
+    await frame();
 
-    expect(popover.isConnected).to.be.false;
+    expect(popover.isConnected).toBe(false);
   });
 });
 
@@ -958,12 +962,12 @@ class MenuHarness {
 
   public async openMenu(): Promise<void> {
     await this.clickElement(this.triggerEl);
-    await elementUpdated(this.menuEl);
+    await frame();
     await this.dropdownAnimation();
   }
 
   public async dropdownAnimation(): Promise<void> {
-    await elementUpdated(this.menuEl);
+    await frame();
     return new Promise(resolve => setTimeout(resolve, 500));
   }
 
@@ -983,12 +987,8 @@ class MenuHarness {
     }
   }
 
-  public clickElement(element: HTMLElement): Promise<void> {
-    const { x, y, width, height } = element.getBoundingClientRect();
-    return sendMouse({
-      type: 'click',
-      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
-    });
+  public async clickElement(element: HTMLElement): Promise<void> {
+    await userEvent.click(element);
   }
 }
 
@@ -999,11 +999,12 @@ interface MenuFixtureConfig {
 
 async function createFixture({ options = OPTIONS, popupTarget }: MenuFixtureConfig = {}): Promise<MenuHarness> {
   const optionsValue = options === null ? nothing : options;
-  const el = await fixture<IMenuComponent>(html`
+  const screen = render(html`
     <forge-menu .options=${optionsValue} popup-target=${popupTarget ?? nothing}>
       <button type="button">Menu</button>
     </forge-menu>
   `);
+  const el = screen.container.querySelector('forge-menu') as IMenuComponent;
   const triggerEl = el.querySelector('button') as HTMLButtonElement;
   return new MenuHarness(el, triggerEl);
 }
@@ -1064,12 +1065,4 @@ function getChildMenuListItems(popup: IPopoverComponent): IListItemComponent[] {
 async function clearPopups(): Promise<void> {
   const popups = Array.from(document.querySelectorAll(POPOVER_CONSTANTS.elementName));
   popups.forEach(p => p.remove());
-}
-
-function clickElement(element: HTMLElement): Promise<void> {
-  const { x, y, width, height } = element.getBoundingClientRect();
-  return sendMouse({
-    type: 'click',
-    position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
-  });
 }
