@@ -1310,6 +1310,7 @@ describe('Popover', () => {
       const harness = await createFixture({ open: true });
 
       harness.nestedPopoverElement.open = true;
+      await frame();
 
       const beforetoggleSpy = vi.fn((evt: CustomEvent<IPopoverToggleEventData>) => evt.preventDefault());
       harness.nestedPopoverElement.addEventListener(POPOVER_CONSTANTS.events.BEFORETOGGLE, beforetoggleSpy);
