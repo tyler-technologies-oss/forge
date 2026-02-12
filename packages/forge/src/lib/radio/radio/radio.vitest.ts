@@ -1,14 +1,15 @@
-import { sendKeys, sendMouse } from '@web/test-runner-commands';
-import { expect } from '@esm-bundle/chai';
-import { elementUpdated, fixture, html } from '@open-wc/testing';
+import { describe, it, expect, vi } from 'vitest';
+import { render } from 'vitest-browser-lit';
+import { html } from 'lit';
+import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
 import { TestHarness } from '../../core/testing/test-harness.js';
-import { IFocusIndicatorComponent } from '../../focus-indicator/index.js';
-import { IStateLayerComponent } from '../../state-layer/index.js';
-import { IRadioComponent, RADIO_CONSTANTS } from '../radio/index.js';
-import { spy } from 'sinon';
+import type { IFocusIndicatorComponent } from '../../focus-indicator/index.js';
+import type { IStateLayerComponent } from '../../state-layer/index.js';
+import type { IRadioComponent } from '../radio/index.js';
+import { RADIO_CONSTANTS } from '../radio/index.js';
 import { getFormState, getFormValue, internals } from '../../constants.js';
-import { task } from '../../core/index.js';
+import { frame, task } from '../../core/index.js';
 import { RadioComponentDelegate } from './radio-component-delegate.js';
 
 import './radio.js';
@@ -40,183 +41,190 @@ class RadioHarness extends TestHarness<HTMLElement> {
     return getShadowElement(el, '[part=focus-indicator]') as IFocusIndicatorComponent;
   }
 
-  public async pressKey(key: string): Promise<void> {
-    await sendKeys({ press: key });
-  }
-
   public async clickElement(el: HTMLElement): Promise<void> {
-    const { x, y, width, height } = el.getBoundingClientRect();
-
-    await sendMouse({
-      type: 'click',
-      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
-    });
+    await userEvent.click(el);
   }
 }
 
 describe('Radio', () => {
   it('should contain shadow root', async () => {
-    const el = await fixture(html`<forge-radio></forge-radio>`);
-    expect(el.shadowRoot).to.not.be.null;
+    const screen = render(html`<forge-radio></forge-radio>`);
+    const el = screen.container.querySelector('forge-radio') as IRadioComponent;
+    expect(el.shadowRoot).not.toBeNull();
   });
 
   it('should be accessible', async () => {
-    const ariaEl = await fixture(html`<forge-radio aria-label="Active"></forge-radio>`);
-    await expect(ariaEl).to.be.accessible();
+    const screen1 = render(html`<forge-radio aria-label="Active"></forge-radio>`);
+    const ariaEl = screen1.container.querySelector('forge-radio') as IRadioComponent;
+    await expect(ariaEl).toBeAccessible();
 
-    const labelEl = await fixture(html`<forge-radio>Active</forge-radio>`);
-    await expect(labelEl).to.be.accessible();
+    const screen2 = render(html`<forge-radio>Active</forge-radio>`);
+    const labelEl = screen2.container.querySelector('forge-radio') as IRadioComponent;
+    await expect(labelEl).toBeAccessible();
   });
 
   it('should render with correct default values', async () => {
-    const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
+    const screen = render(html`<forge-radio></forge-radio>`);
+    const el = screen.container.querySelector('forge-radio') as IRadioComponent;
     const ctx = new RadioHarness(el);
 
-    await expect(el).not.to.be.accessible();
-    expect(el.checked).to.be.false;
-    expect(el.defaultChecked).to.be.false;
-    expect(el.value).to.equal('on');
-    expect(el.required).to.be.false;
-    expect(el.dense).to.be.false;
-    expect(el.labelPosition).to.equal('end');
-    expect(el.disabled).to.be.false;
-    expect(el.readonly).to.be.false;
-    expect(ctx.getRootElement(el).lastElementChild).to.equal(ctx.getLabelElement(el));
+    await expect(el).not.toBeAccessible();
+    expect(el.checked).toBe(false);
+    expect(el.defaultChecked).toBe(false);
+    expect(el.value).toBe('on');
+    expect(el.required).toBe(false);
+    expect(el.dense).toBe(false);
+    expect(el.labelPosition).toBe('end');
+    expect(el.disabled).toBe(false);
+    expect(el.readonly).toBe(false);
+    expect(ctx.getRootElement(el).lastElementChild).toBe(ctx.getLabelElement(el));
   });
 
-  describe('attributes', async () => {
+  describe('attributes', () => {
     it('should set checked', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio checked></forge-radio>`);
-      expect(el.checked).to.be.true;
+      const screen = render(html`<forge-radio checked></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
+      expect(el.checked).toBe(true);
     });
 
     it('should set defaultChecked', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio default-checked></forge-radio>`);
-      expect(el.defaultChecked).to.be.true;
+      const screen = render(html`<forge-radio default-checked></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
+      expect(el.defaultChecked).toBe(true);
     });
 
     it('should set value', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio value="active"></forge-radio>`);
-      expect(el.value).to.equal('active');
+      const screen = render(html`<forge-radio value="active"></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
+      expect(el.value).toBe('active');
     });
 
     it('should set required', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio required></forge-radio>`);
-      expect(el.required).to.be.true;
+      const screen = render(html`<forge-radio required></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
+      expect(el.required).toBe(true);
     });
 
     it('should set dense', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio dense></forge-radio>`);
-      expect(el.dense).to.be.true;
+      const screen = render(html`<forge-radio dense></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
+      expect(el.dense).toBe(true);
     });
 
     it('should set labelPosition', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio label-position="start"></forge-radio>`);
+      const screen = render(html`<forge-radio label-position="start"></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       const ctx = new RadioHarness(el);
 
-      expect(el.labelPosition).to.equal('start');
-      expect(ctx.getRootElement(el).firstElementChild).to.equal(ctx.getLabelElement(el));
+      expect(el.labelPosition).toBe('start');
+      expect(ctx.getRootElement(el).firstElementChild).toBe(ctx.getLabelElement(el));
 
       el.labelPosition = 'end';
 
-      expect(el.labelPosition).to.equal('end');
-      expect(ctx.getRootElement(el).lastElementChild).to.equal(ctx.getLabelElement(el));
+      expect(el.labelPosition).toBe('end');
+      expect(ctx.getRootElement(el).lastElementChild).toBe(ctx.getLabelElement(el));
     });
 
     it('should set disabled', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio disabled>Active</forge-radio>`);
-      expect(el.disabled).to.be.true;
-      await expect(el).to.be.accessible();
+      const screen = render(html`<forge-radio disabled>Active</forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
+      expect(el.disabled).toBe(true);
+      await expect(el).toBeAccessible();
     });
 
     it('should set readonly', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio readonly></forge-radio>`);
-      expect(el.readonly).to.be.true;
+      const screen = render(html`<forge-radio readonly></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
+      expect(el.readonly).toBe(true);
     });
 
     it('should not set non-string value as attribute', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
+      const screen = render(html`<forge-radio></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       const value = { value: 'value' } as any;
       el.value = value;
-      expect(el.value).to.equal(value);
-      expect(el.getAttribute('value')).to.be.null;
+      expect(el.value).toBe(value);
+      expect(el.getAttribute('value')).toBeNull();
     });
   });
 
-  describe('form association', async () => {
+  describe('form association', () => {
     it('should return form element and name', async () => {
-      const form = await fixture<HTMLFormElement>(html`<form name="test-form"><forge-radio name="test-radio"></forge-radio></form>`);
-      const ctx = new RadioHarness(form as HTMLElement);
+      const screen = render(html`<form name="test-form"><forge-radio name="test-radio"></forge-radio></form>`);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
+      const ctx = new RadioHarness(form);
 
-      expect(ctx.radioElements[0].form).to.equal(form);
-      expect(ctx.radioElements[0].name).to.equal('test-radio');
-      expect(ctx.radioElements[0].labels).to.be.empty;
+      expect(ctx.radioElements[0].form).toBe(form);
+      expect(ctx.radioElements[0].name).toBe('test-radio');
+      expect(ctx.radioElements[0].labels).toHaveLength(0);
 
       ctx.radioElements[0].name = 'new-name';
-      expect(ctx.radioElements[0].name).to.equal('new-name');
+      expect(ctx.radioElements[0].name).toBe('new-name');
 
       ctx.radioElements[0].name = null as any;
-      expect(ctx.radioElements[0].name).to.be.empty;
+      expect(ctx.radioElements[0].name).toHaveLength(0);
     });
 
     it('should return associated form labels', async () => {
-      const form = await fixture<HTMLFormElement>(
-        html`<form name="test-form"><label for="test-radio">Test label</label><forge-radio id="test-radio"></forge-radio></form>`
-      );
+      const screen = render(html`<form name="test-form"><label for="test-radio">Test label</label><forge-radio id="test-radio"></forge-radio></form>`);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const labelEl = form.querySelector('label') as HTMLLabelElement;
 
-      expect(ctx.radioElements[0].labels).to.have.lengthOf(1);
-      expect(ctx.radioElements[0].labels[0]).to.equal(labelEl);
+      expect(ctx.radioElements[0].labels).toHaveLength(1);
+      expect(ctx.radioElements[0].labels[0]).toBe(labelEl);
     });
 
     it('should set form value when value is set', async () => {
-      const form = await fixture<HTMLFormElement>(html`<form name="test-form"><forge-radio name="test-radio"></forge-radio></form>`);
+      const screen = render(html`<form name="test-form"><forge-radio name="test-radio"></forge-radio></form>`);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
 
       let formData = new FormData(form);
-      expect(formData.get('test-radio')).to.be.null;
+      expect(formData.get('test-radio')).toBeNull();
 
       ctx.radioElements[0].checked = true;
       formData = new FormData(form);
-      expect(formData.get('test-radio')).to.equal('on');
+      expect(formData.get('test-radio')).toBe('on');
     });
 
     it('should reset value when form is reset', async () => {
-      const form = await fixture<HTMLFormElement>(html`<form name="test-form"><forge-radio name="test-radio"></forge-radio></form>`);
+      const screen = render(html`<form name="test-form"><forge-radio name="test-radio"></forge-radio></form>`);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
 
       ctx.radioElements[0].checked = true;
       let formData = new FormData(form);
-      expect(formData.get('test-radio')).to.equal('on');
+      expect(formData.get('test-radio')).toBe('on');
 
       form.reset();
       await task();
       formData = new FormData(form);
 
-      expect(ctx.radioElements[0].checked).to.be.false;
-      expect(formData.get('test-radio')).to.be.null;
+      expect(ctx.radioElements[0].checked).toBe(false);
+      expect(formData.get('test-radio')).toBeNull();
 
       ctx.radioElements[0].defaultChecked = true;
       formData = new FormData(form);
-      expect(formData.get('test-radio')).to.be.null;
+      expect(formData.get('test-radio')).toBeNull();
 
       form.reset();
       await task();
       formData = new FormData(form);
 
-      expect(ctx.radioElements[0].checked).to.be.true;
-      expect(formData.get('test-radio')).to.equal('on');
+      expect(ctx.radioElements[0].checked).toBe(true);
+      expect(formData.get('test-radio')).toBe('on');
     });
 
     it('should restore form state', async () => {
-      const form = await fixture<HTMLFormElement>(html`<form name="test-form"><forge-radio name="test-radio"></forge-radio></form>`);
+      const screen = render(html`<form name="test-form"><forge-radio name="test-radio"></forge-radio></form>`);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
-      const setFormValueSpy = spy(ctx.radioElements[0][internals], 'setFormValue');
+      const setFormValueSpy = vi.spyOn(ctx.radioElements[0][internals], 'setFormValue');
 
       ctx.radioElements[0].checked = true;
 
-      const [value, state] = setFormValueSpy.args ?? [null, null];
+      const [value, state] = setFormValueSpy.mock.calls[0] ?? [null, null];
       const newRadioEl = document.createElement('forge-radio');
       ctx.radioElements[0].remove();
       form.appendChild(newRadioEl);
@@ -228,103 +236,111 @@ describe('Radio', () => {
 
       (newRadioEl as any).formStateRestoreCallback(restoreState, 'restore');
 
-      expect(ctx.radioElements[0].checked).to.be.true;
+      expect(ctx.radioElements[0].checked).toBe(true);
     });
 
     it('should validate', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio required></forge-radio>`);
+      const screen = render(html`<forge-radio required></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
 
-      expect(el[internals].validity.valid).to.be.false;
-      expect(el[internals].validationMessage).not.to.be.empty;
-      expect(el[internals].checkValidity()).to.be.false;
-      expect(el[internals].reportValidity()).to.be.false;
+      expect(el[internals].validity.valid).toBe(false);
+      expect(el[internals].validationMessage).not.toHaveLength(0);
+      expect(el[internals].checkValidity()).toBe(false);
+      expect(el[internals].reportValidity()).toBe(false);
 
       el.checked = true;
 
-      expect(el[internals].willValidate).to.be.true;
-      expect(el[internals].validity.valid).to.be.true;
-      expect(el[internals].validationMessage).to.be.empty;
-      expect(el[internals].checkValidity()).to.be.true;
-      expect(el[internals].reportValidity()).to.be.true;
+      expect(el[internals].willValidate).toBe(true);
+      expect(el[internals].validity.valid).toBe(true);
+      expect(el[internals].validationMessage).toHaveLength(0);
+      expect(el[internals].checkValidity()).toBe(true);
+      expect(el[internals].reportValidity()).toBe(true);
     });
 
     it('should set custom validity', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio required></forge-radio>`);
+      const screen = render(html`<forge-radio required></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       const message = 'Custom error message';
 
       el[internals].setValidity({ customError: true }, message);
 
-      expect(el[internals].validationMessage).to.equal(message);
+      expect(el[internals].validationMessage).toBe(message);
     });
 
     it('should get form value', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
+      const screen = render(html`<forge-radio></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       let formValue = el[getFormValue]();
 
-      expect(formValue).to.be.null;
+      expect(formValue).toBeNull();
 
       el.checked = true;
       formValue = el[getFormValue]();
 
-      expect(formValue).to.equal('on');
+      expect(formValue).toBe('on');
     });
 
     it('should get form state', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
+      const screen = render(html`<forge-radio></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       let formState = el[getFormState]();
 
-      expect(formState).to.equal('unchecked');
+      expect(formState).toBe('unchecked');
 
       el.checked = true;
       formState = el[getFormState]();
 
-      expect(formState).to.equal('checked');
+      expect(formState).toBe('checked');
     });
   });
 
-  describe('interaction', async () => {
+  describe('interaction', () => {
     it('should check on click', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
+      const screen = render(html`<forge-radio></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       const ctx = new RadioHarness(el);
 
       await ctx.clickElement(el);
       await task();
 
-      expect(el.checked).to.be.true;
+      expect(el.checked).toBe(true);
     });
 
     it('should not uncheck on click', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio checked></forge-radio>`);
+      const screen = render(html`<forge-radio checked></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       const ctx = new RadioHarness(el);
 
       await ctx.clickElement(el);
       await task();
 
-      expect(el.checked).to.be.true;
+      expect(el.checked).toBe(true);
     });
 
     it('should not check on click when disabled', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio disabled></forge-radio>`);
-      const ctx = new RadioHarness(el);
+      const screen = render(html`<forge-radio disabled></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
 
-      await ctx.clickElement(el);
+      await userEvent.click(el, { force: true });
       await task();
 
-      expect(el.checked).to.be.false;
+      expect(el.checked).toBe(false);
     });
 
     it('should not check on click when readonly', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio readonly></forge-radio>`);
+      const screen = render(html`<forge-radio readonly></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       const ctx = new RadioHarness(el);
 
       await ctx.clickElement(el);
       await task();
 
-      expect(el.checked).to.be.false;
+      expect(el.checked).toBe(false);
     });
 
     it('should not check if click is prevented', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
+      const screen = render(html`<forge-radio></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       const ctx = new RadioHarness(el);
 
       el.addEventListener('click', evt => evt.preventDefault());
@@ -332,114 +348,119 @@ describe('Radio', () => {
       await ctx.clickElement(el);
       await task();
 
-      expect(el.checked).to.be.false;
+      expect(el.checked).toBe(false);
     });
 
     it('should check on space key', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
-      const ctx = new RadioHarness(el);
+      const screen = render(html`<forge-radio></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       el.focus();
 
-      await ctx.pressKey(' ');
+      await userEvent.keyboard(' ');
 
-      expect(el.checked).to.be.true;
+      expect(el.checked).toBe(true);
     });
 
     it('should not uncheck on space key', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio checked></forge-radio>`);
-      const ctx = new RadioHarness(el);
+      const screen = render(html`<forge-radio checked></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       el.focus();
 
-      await ctx.pressKey(' ');
+      await userEvent.keyboard(' ');
 
-      expect(el.checked).to.be.true;
+      expect(el.checked).toBe(true);
     });
 
     it('should not check on space key when disabled', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio disabled></forge-radio>`);
-      const ctx = new RadioHarness(el);
+      const screen = render(html`<forge-radio disabled></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       el.focus();
 
-      await ctx.pressKey(' ');
+      await userEvent.keyboard(' ');
 
-      expect(el.checked).to.be.false;
+      expect(el.checked).toBe(false);
     });
 
     it('should not check on space key when readonly', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio readonly></forge-radio>`);
-      const ctx = new RadioHarness(el);
+      const screen = render(html`<forge-radio readonly></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       el.focus();
 
-      await ctx.pressKey(' ');
+      await userEvent.keyboard(' ');
 
-      expect(el.checked).to.be.false;
+      expect(el.checked).toBe(false);
     });
 
     it('should not check on space key if prevented', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
-      const ctx = new RadioHarness(el);
+      const screen = render(html`<forge-radio></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       el.focus();
 
       el.addEventListener('keyup', evt => evt.preventDefault());
 
-      await ctx.pressKey(' ');
+      await userEvent.keyboard(' ');
       await task();
 
-      expect(el.checked).to.be.false;
+      expect(el.checked).toBe(false);
     });
   });
 
-  describe('label aware', async () => {
+  describe('label aware', () => {
     it('should accept forge label click', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
+      const screen = render(html`<forge-radio></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
 
       el.labelClickedCallback?.();
       await task();
 
-      expect(el.checked).to.be.true;
+      expect(el.checked).toBe(true);
     });
 
     it('should accept forge label change', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
+      const screen = render(html`<forge-radio></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       el.labelChangedCallback?.('Test label');
-      expect(el.ariaLabel).to.equal('Test label');
-      await expect(el).to.be.accessible();
+      expect(el.ariaLabel).toBe('Test label');
+      await expect(el).toBeAccessible();
 
       el.labelChangedCallback?.(null);
-      expect(el.ariaLabel).to.be.null;
-      await expect(el).not.to.be.accessible();
+      expect(el.ariaLabel).toBeNull();
+      await expect(el).not.toBeAccessible();
     });
   });
 
-  describe('events', async () => {
+  describe('events', () => {
     it('should emit change event', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
+      const screen = render(html`<forge-radio></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       const ctx = new RadioHarness(el);
-      const changeSpy = spy();
+      const changeSpy = vi.fn();
 
       el.addEventListener(RADIO_CONSTANTS.events.CHANGE, changeSpy);
 
       await ctx.clickElement(el);
       await task();
 
-      expect(changeSpy).to.have.been.calledOnce;
+      expect(changeSpy).toHaveBeenCalledOnce();
     });
 
     it('should emit input event', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
+      const screen = render(html`<forge-radio></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       const ctx = new RadioHarness(el);
-      const inputSpy = spy();
+      const inputSpy = vi.fn();
 
       el.addEventListener(RADIO_CONSTANTS.events.INPUT, inputSpy);
 
       await ctx.clickElement(el);
       await task();
 
-      expect(inputSpy).to.have.been.calledOnce;
+      expect(inputSpy).toHaveBeenCalledOnce();
     });
 
     it('should allow change event to be cancelled', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
+      const screen = render(html`<forge-radio></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       const ctx = new RadioHarness(el);
 
       el.addEventListener(RADIO_CONSTANTS.events.CHANGE, evt => evt.preventDefault());
@@ -447,11 +468,12 @@ describe('Radio', () => {
       await ctx.clickElement(el);
       await task();
 
-      expect(el.checked).to.be.false;
+      expect(el.checked).toBe(false);
     });
 
     it('should allow input event to be cancelled', async () => {
-      const el = await fixture<IRadioComponent>(html`<forge-radio></forge-radio>`);
+      const screen = render(html`<forge-radio></forge-radio>`);
+      const el = screen.container.querySelector('forge-radio') as IRadioComponent;
       const ctx = new RadioHarness(el);
 
       el.addEventListener(RADIO_CONSTANTS.events.INPUT, evt => evt.preventDefault());
@@ -459,64 +481,67 @@ describe('Radio', () => {
       await ctx.clickElement(el);
       await task();
 
-      expect(el.checked).to.be.false;
+      expect(el.checked).toBe(false);
     });
   });
 
-  describe('radio group', async () => {
+  describe('radio group', () => {
     it('should should not group unnamed radios', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio></forge-radio>
           <forge-radio></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
       radioEls[0].checked = true;
       radioEls[1].checked = true;
 
-      expect(radioEls[0].checked).to.be.true;
-      expect(radioEls[1].checked).to.be.true;
+      expect(radioEls[0].checked).toBe(true);
+      expect(radioEls[1].checked).toBe(true);
     });
 
     it('should group radios with same name but not part of form', async () => {
-      const el = await fixture<HTMLElement>(html`
+      const screen = render(html`
         <div>
           <forge-radio name="test-radio"></forge-radio>
           <forge-radio name="test-radio"></forge-radio>
-        </form>
+        </div>
       `);
+      const el = screen.container.querySelector('div') as HTMLElement;
       const ctx = new RadioHarness(el);
       const radioEls = ctx.radioElements;
 
       radioEls[0].checked = true;
       radioEls[1].checked = true;
 
-      expect(radioEls[0].checked).to.be.false;
-      expect(radioEls[1].checked).to.be.true;
+      expect(radioEls[0].checked).toBe(false);
+      expect(radioEls[1].checked).toBe(true);
     });
 
     it('should group radios with same name and in same form', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio"></forge-radio>
           <forge-radio name="test-radio"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
       radioEls[0].checked = true;
       radioEls[1].checked = true;
 
-      expect(radioEls[0].checked).to.be.false;
-      expect(radioEls[1].checked).to.be.true;
+      expect(radioEls[0].checked).toBe(false);
+      expect(radioEls[1].checked).toBe(true);
     });
 
     it('should not group radios with same name in different forms', async () => {
-      const el = await fixture<HTMLElement>(html`
+      const screen = render(html`
         <div>
           <form>
             <forge-radio name="test-radio"></forge-radio>
@@ -524,293 +549,234 @@ describe('Radio', () => {
           <form>
             <forge-radio name="test-radio"></forge-radio>
           </form>
-        </div<
+        </div>
       `);
+      const el = screen.container.querySelector('div') as HTMLElement;
       const ctx = new RadioHarness(el);
       const radioEls = ctx.radioElements;
 
       radioEls[0].checked = true;
       radioEls[1].checked = true;
 
-      expect(radioEls[0].checked).to.be.true;
-      expect(radioEls[1].checked).to.be.true;
+      expect(radioEls[0].checked).toBe(true);
+      expect(radioEls[1].checked).toBe(true);
     });
 
     it('should submit value of checked radio', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one"></forge-radio>
           <forge-radio name="test-radio" value="two"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
       radioEls[0].checked = true;
 
       let formData = new FormData(form);
-      expect(formData.get('test-radio')).to.equal('one');
+      expect(formData.get('test-radio')).toBe('one');
 
       radioEls[1].checked = true;
 
       formData = new FormData(form);
-      expect(formData.get('test-radio')).to.equal('two');
+      expect(formData.get('test-radio')).toBe('two');
     });
 
     it('should unchecked other radios in group when radio is checked', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one"></forge-radio>
           <forge-radio name="test-radio" value="two"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
       radioEls[0].checked = true;
       radioEls[1].checked = true;
 
-      expect(radioEls[0].checked).to.be.false;
-      expect(radioEls[1].checked).to.be.true;
+      expect(radioEls[0].checked).toBe(false);
+      expect(radioEls[1].checked).toBe(true);
     });
 
     it('should focus next radio in group when arrow down key is pressed', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one"></forge-radio>
           <forge-radio name="test-radio" value="two"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
       radioEls[0].focus();
 
-      await ctx.pressKey('ArrowDown');
+      await userEvent.keyboard('{ArrowDown}');
 
-      expect(radioEls[0].checked).to.be.false;
-      expect(radioEls[1].checked).to.be.true;
+      expect(radioEls[0].checked).toBe(false);
+      expect(radioEls[1].checked).toBe(true);
     });
 
     it('should focus previous radio in group when arrow up key is pressed', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one"></forge-radio>
           <forge-radio name="test-radio" value="two"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
       radioEls[1].focus();
 
-      await ctx.pressKey('ArrowUp');
+      await userEvent.keyboard('{ArrowUp}');
 
-      expect(radioEls[0].checked).to.be.true;
-      expect(radioEls[1].checked).to.be.false;
+      expect(radioEls[0].checked).toBe(true);
+      expect(radioEls[1].checked).toBe(false);
     });
 
     it('should focus next radio in group when arrow right key is pressed', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one"></forge-radio>
           <forge-radio name="test-radio" value="two"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
       radioEls[0].focus();
 
-      await ctx.pressKey('ArrowRight');
+      await userEvent.keyboard('{ArrowRight}');
 
-      expect(radioEls[0].checked).to.be.false;
-      expect(radioEls[1].checked).to.be.true;
+      expect(radioEls[0].checked).toBe(false);
+      expect(radioEls[1].checked).toBe(true);
     });
 
     it('should focus previous radio in group when arrow left key is pressed', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one"></forge-radio>
           <forge-radio name="test-radio" value="two"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
       radioEls[1].focus();
 
-      await ctx.pressKey('ArrowLeft');
+      await userEvent.keyboard('{ArrowLeft}');
 
-      expect(radioEls[0].checked).to.be.true;
-      expect(radioEls[1].checked).to.be.false;
-    });
-
-    it('should check next radio in group when arrow down key is pressed', async () => {
-      const form = await fixture<HTMLFormElement>(html`
-        <form name="test-form">
-          <forge-radio name="test-radio" value="one"></forge-radio>
-          <forge-radio name="test-radio" value="two"></forge-radio>
-        </form>
-      `);
-      const ctx = new RadioHarness(form);
-      const radioEls = ctx.radioElements;
-
-      radioEls[0].focus();
-
-      await ctx.pressKey('ArrowDown');
-
-      expect(radioEls[0].checked).to.be.false;
-      expect(radioEls[1].checked).to.be.true;
-    });
-
-    it('should check previous radio in group when arrow up key is pressed', async () => {
-      const form = await fixture<HTMLFormElement>(html`
-        <form name="test-form">
-          <forge-radio name="test-radio" value="one"></forge-radio>
-          <forge-radio name="test-radio" value="two"></forge-radio>
-        </form>
-      `);
-      const ctx = new RadioHarness(form);
-      const radioEls = ctx.radioElements;
-
-      radioEls[1].focus();
-
-      await ctx.pressKey('ArrowUp');
-
-      expect(radioEls[0].checked).to.be.true;
-      expect(radioEls[1].checked).to.be.false;
-    });
-
-    it('should check next radio in group when arrow right key is pressed', async () => {
-      const form = await fixture<HTMLFormElement>(html`
-        <form name="test-form">
-          <forge-radio name="test-radio" value="one"></forge-radio>
-          <forge-radio name="test-radio" value="two"></forge-radio>
-        </form>
-      `);
-      const ctx = new RadioHarness(form);
-      const radioEls = ctx.radioElements;
-
-      radioEls[0].focus();
-
-      await ctx.pressKey('ArrowRight');
-
-      expect(radioEls[0].checked).to.be.false;
-      expect(radioEls[1].checked).to.be.true;
-    });
-
-    it('should check previous radio in group when arrow left key is pressed', async () => {
-      const form = await fixture<HTMLFormElement>(html`
-        <form name="test-form">
-          <forge-radio name="test-radio" value="one"></forge-radio>
-          <forge-radio name="test-radio" value="two"></forge-radio>
-        </form>
-      `);
-      const ctx = new RadioHarness(form);
-      const radioEls = ctx.radioElements;
-
-      radioEls[1].focus();
-
-      await ctx.pressKey('ArrowLeft');
-
-      expect(radioEls[0].checked).to.be.true;
-      expect(radioEls[1].checked).to.be.false;
+      expect(radioEls[0].checked).toBe(true);
+      expect(radioEls[1].checked).toBe(false);
     });
 
     it('should skip disabled radio when arrow key is pressed', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one"></forge-radio>
           <forge-radio name="test-radio" value="two" disabled></forge-radio>
           <forge-radio name="test-radio" value="three"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
       radioEls[0].focus();
 
-      await ctx.pressKey('ArrowDown');
+      await userEvent.keyboard('{ArrowDown}');
 
-      expect(radioEls[0].checked).to.be.false;
-      expect(radioEls[1].checked).to.be.false;
-      expect(radioEls[2].checked).to.be.true;
+      expect(radioEls[0].checked).toBe(false);
+      expect(radioEls[1].checked).toBe(false);
+      expect(radioEls[2].checked).toBe(true);
     });
 
     it('should skip readonly radio when arrow key is pressed', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one"></forge-radio>
           <forge-radio name="test-radio" value="two" readonly></forge-radio>
           <forge-radio name="test-radio" value="three"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
       radioEls[0].focus();
 
-      await ctx.pressKey('ArrowDown');
+      await userEvent.keyboard('{ArrowDown}');
 
-      expect(radioEls[0].checked).to.be.false;
-      expect(radioEls[1].checked).to.be.false;
-      expect(radioEls[2].checked).to.be.true;
+      expect(radioEls[0].checked).toBe(false);
+      expect(radioEls[1].checked).toBe(false);
+      expect(radioEls[2].checked).toBe(true);
     });
 
     it('should only include checked radio in tab order', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one" checked></forge-radio>
           <forge-radio name="test-radio" value="two"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
-      await elementUpdated(radioEls[0]);
+      await frame();
 
-      expect(radioEls[0].tabIndex).to.equal(0);
-      expect(radioEls[1].tabIndex).to.equal(-1);
+      expect(radioEls[0].tabIndex).toBe(0);
+      expect(radioEls[1].tabIndex).toBe(-1);
     });
 
     it('should include all radios in tab order when none are checked', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one"></forge-radio>
           <forge-radio name="test-radio" value="two"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
-      expect(radioEls[0].tabIndex).to.equal(0);
-      expect(radioEls[1].tabIndex).to.equal(0);
+      expect(radioEls[0].tabIndex).toBe(0);
+      expect(radioEls[1].tabIndex).toBe(0);
     });
 
     it('should remove other radios from tab order when radio is focused', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one"></forge-radio>
           <forge-radio name="test-radio" value="two"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
       radioEls[0].focus();
 
-      expect(radioEls[0].tabIndex).to.equal(0);
-      expect(radioEls[1].tabIndex).to.equal(-1);
+      expect(radioEls[0].tabIndex).toBe(0);
+      expect(radioEls[1].tabIndex).toBe(-1);
     });
 
     it('should not change focus if change event is prevented', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one" checked></forge-radio>
           <forge-radio name="test-radio" value="two"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
@@ -818,41 +784,43 @@ describe('Radio', () => {
 
       radioEls[0].focus();
 
-      await ctx.pressKey('ArrowDown');
+      await userEvent.keyboard('{ArrowDown}');
       await task();
 
-      expect(radioEls[0]).to.be.focus;
-      expect(radioEls[0].checked).to.be.true;
-      expect(radioEls[1].checked).to.be.false;
+      expect(document.activeElement).toBe(radioEls[0]);
+      expect(radioEls[0].checked).toBe(true);
+      expect(radioEls[1].checked).toBe(false);
     });
   });
 
-  describe('adding and removing', async () => {
+  describe('adding and removing', () => {
     it('should make all radios focusable when checked radio is removed', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one"></forge-radio>
           <forge-radio name="test-radio" value="two"></forge-radio>
           <forge-radio name="test-radio" value="three" checked></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
       radioEls[2].remove();
       await task();
 
-      expect(radioEls[0].tabIndex).to.equal(0);
-      expect(radioEls[1].tabIndex).to.equal(0);
+      expect(radioEls[0].tabIndex).toBe(0);
+      expect(radioEls[1].tabIndex).toBe(0);
     });
 
     it('should make other radios non-focusable when checked radio is added', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form name="test-form">
           <forge-radio name="test-radio" value="one"></forge-radio>
           <forge-radio name="test-radio" value="two"></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
@@ -864,17 +832,18 @@ describe('Radio', () => {
       form.appendChild(checkedRadio);
       await task();
 
-      expect(radioEls[0].tabIndex).to.equal(-1);
-      expect(radioEls[1].tabIndex).to.equal(-1);
-      expect(checkedRadio.tabIndex).to.equal(0);
+      expect(radioEls[0].tabIndex).toBe(-1);
+      expect(radioEls[1].tabIndex).toBe(-1);
+      expect(checkedRadio.tabIndex).toBe(0);
     });
 
     it('should uncheck radio when checked radio is added', async () => {
-      const form = await fixture<HTMLFormElement>(html`
+      const screen = render(html`
         <form>
           <forge-radio name="test-radio" value="one" checked></forge-radio>
         </form>
       `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
       const ctx = new RadioHarness(form);
       const radioEls = ctx.radioElements;
 
@@ -886,23 +855,23 @@ describe('Radio', () => {
       form.appendChild(checkedRadio);
       await task();
 
-      expect(radioEls[0].checked).to.be.false;
-      expect(checkedRadio.checked).to.be.true;
+      expect(radioEls[0].checked).toBe(false);
+      expect(checkedRadio.checked).toBe(true);
     });
   });
 
-  describe('delegate', async () => {
+  describe('delegate', () => {
     it('should create delegate with default values', () => {
       const delegate = new RadioComponentDelegate();
-      expect(delegate.value).to.equal('on');
-      expect(delegate.checked).to.be.false;
-      expect(delegate.defaultChecked).to.be.false;
-      expect(delegate.dense).to.be.false;
-      expect(delegate.disabled).to.be.false;
-      expect(delegate.required).to.be.false;
-      expect(delegate.readonly).to.be.false;
-      expect(delegate.name).to.be.empty;
-      expect(delegate.labelPosition).to.equal('end');
+      expect(delegate.value).toBe('on');
+      expect(delegate.checked).toBe(false);
+      expect(delegate.defaultChecked).toBe(false);
+      expect(delegate.dense).toBe(false);
+      expect(delegate.disabled).toBe(false);
+      expect(delegate.required).toBe(false);
+      expect(delegate.readonly).toBe(false);
+      expect(delegate.name).toHaveLength(0);
+      expect(delegate.labelPosition).toBe('end');
     });
 
     it('should set properties via the constructor', () => {
@@ -919,88 +888,88 @@ describe('Radio', () => {
           labelPosition: 'start'
         }
       });
-      expect(delegate.value).to.equal('value');
-      expect(delegate.checked).to.be.true;
-      expect(delegate.defaultChecked).to.be.true;
-      expect(delegate.dense).to.be.true;
-      expect(delegate.disabled).to.be.true;
-      expect(delegate.required).to.be.true;
-      expect(delegate.readonly).to.be.true;
-      expect(delegate.name).to.equal('test-radio');
-      expect(delegate.labelPosition).to.equal('start');
+      expect(delegate.value).toBe('value');
+      expect(delegate.checked).toBe(true);
+      expect(delegate.defaultChecked).toBe(true);
+      expect(delegate.dense).toBe(true);
+      expect(delegate.disabled).toBe(true);
+      expect(delegate.required).toBe(true);
+      expect(delegate.readonly).toBe(true);
+      expect(delegate.name).toBe('test-radio');
+      expect(delegate.labelPosition).toBe('start');
     });
 
     it('should set value', () => {
       const delegate = new RadioComponentDelegate();
       delegate.value = 'value';
-      expect(delegate.value).to.equal('value');
+      expect(delegate.value).toBe('value');
     });
 
     it('should set checked', () => {
       const delegate = new RadioComponentDelegate();
       delegate.checked = true;
-      expect(delegate.checked).to.be.true;
+      expect(delegate.checked).toBe(true);
     });
 
     it('should set defaultChecked', () => {
       const delegate = new RadioComponentDelegate();
       delegate.defaultChecked = true;
-      expect(delegate.defaultChecked).to.be.true;
+      expect(delegate.defaultChecked).toBe(true);
     });
 
     it('should set dense', () => {
       const delegate = new RadioComponentDelegate();
       delegate.dense = true;
-      expect(delegate.dense).to.be.true;
+      expect(delegate.dense).toBe(true);
     });
 
     it('should set disabled', () => {
       const delegate = new RadioComponentDelegate();
       delegate.disabled = true;
-      expect(delegate.disabled).to.be.true;
+      expect(delegate.disabled).toBe(true);
     });
 
     it('should set required', () => {
       const delegate = new RadioComponentDelegate();
       delegate.required = true;
-      expect(delegate.required).to.be.true;
+      expect(delegate.required).toBe(true);
     });
 
     it('should set readonly', () => {
       const delegate = new RadioComponentDelegate();
       delegate.readonly = true;
-      expect(delegate.readonly).to.be.true;
+      expect(delegate.readonly).toBe(true);
     });
 
     it('should set name', () => {
       const delegate = new RadioComponentDelegate();
       delegate.name = 'test-radio';
-      expect(delegate.name).to.equal('test-radio');
+      expect(delegate.name).toBe('test-radio');
     });
 
     it('should set labelPosition', () => {
       const delegate = new RadioComponentDelegate();
       delegate.labelPosition = 'start';
-      expect(delegate.labelPosition).to.equal('start');
+      expect(delegate.labelPosition).toBe('start');
     });
 
     it('should set label via constructor', () => {
       const delegate = new RadioComponentDelegate({ options: { label: 'Test label' } });
-      expect(delegate.element.innerText).to.equal('Test label');
+      expect(delegate.element.innerText).toBe('Test label');
     });
 
     it('should set label', () => {
       const delegate = new RadioComponentDelegate();
       delegate.setLabel('Test label');
-      expect(delegate.element.innerText).to.equal('Test label');
+      expect(delegate.element.innerText).toBe('Test label');
 
       delegate.setLabel(null);
-      expect(delegate.element.innerText).to.be.empty;
+      expect(delegate.element.innerText).toHaveLength(0);
     });
 
     it('should set id via constructor', () => {
       const delegate = new RadioComponentDelegate({ options: { id: 'test' } });
-      expect(delegate.element.id).to.equal('test');
+      expect(delegate.element.id).toBe('test');
     });
   });
 });
