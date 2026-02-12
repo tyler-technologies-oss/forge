@@ -1,12 +1,13 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, it, expect, vi } from 'vitest';
+import { render } from 'vitest-browser-lit';
+import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
+import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
 import { frame } from '../core/utils/utils.js';
-import { sendMouse } from '@web/test-runner-commands';
-import { match, spy } from 'sinon';
-import { FIELD_CONSTANTS, IFieldComponent } from '../field/index.js';
 import { TestHarness } from '../core/testing/test-harness.js';
-import {
+import { FIELD_CONSTANTS, type IFieldComponent } from '../field/index.js';
+import type {
   FieldDensity,
   FieldLabelAlignment,
   FieldLabelPosition,
@@ -15,113 +16,112 @@ import {
   FieldTheme,
   FieldVariant
 } from './base/base-field-constants.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
 
 import './field.js';
 
 describe('Field', () => {
   it('should contain shadow root', async () => {
     const harness = await createFixture();
-    expect(harness.element.shadowRoot).not.to.be.null;
+    expect(harness.element.shadowRoot).not.toBeNull();
   });
 
   it('should be accessible', async () => {
     const harness = await createFixture();
-    await expect(harness.element).to.be.accessible();
+    await expect(harness.element).toBeAccessible();
   });
 
   describe('properties', () => {
     (['inline-start', 'inline-end', 'block-start', 'inset', 'none'] as FieldLabelPosition[]).forEach(labelPosition => {
       it(`should set label position ${labelPosition}`, async () => {
         const harness = await createFixture({ labelPosition });
-        expect(harness.element.labelPosition).to.equal(labelPosition);
+        expect(harness.element.labelPosition).toBe(labelPosition);
       });
     });
 
     (['default', 'center', 'baseline', 'start', 'end'] as FieldLabelAlignment[]).forEach(labelAlignment => {
       it(`should set label alignment ${labelAlignment}`, async () => {
         const harness = await createFixture({ labelAlignment });
-        expect(harness.element.labelAlignment).to.equal(labelAlignment);
+        expect(harness.element.labelAlignment).toBe(labelAlignment);
       });
     });
 
     it('should set float label', async () => {
       const harness = await createFixture({ floatLabel: true });
-      expect(harness.element.floatLabel).to.be.true;
+      expect(harness.element.floatLabel).toBe(true);
     });
 
     it('should set invalid', async () => {
       const harness = await createFixture({ invalid: true });
-      expect(harness.element.invalid).to.be.true;
+      expect(harness.element.invalid).toBe(true);
     });
 
     it('should set required', async () => {
       const harness = await createFixture({ required: true });
-      expect(harness.element.required).to.be.true;
+      expect(harness.element.required).toBe(true);
     });
 
     it('should set optional', async () => {
       const harness = await createFixture({ optional: true });
-      expect(harness.element.optional).to.be.true;
+      expect(harness.element.optional).toBe(true);
     });
 
     it('should set disabled', async () => {
       const harness = await createFixture({ disabled: true });
-      expect(harness.element.disabled).to.be.true;
+      expect(harness.element.disabled).toBe(true);
     });
 
     (['plain', 'outlined', 'tonal', 'filled', 'raised'] as FieldVariant[]).forEach(variant => {
       it(`should set ${variant} variant`, async () => {
         const harness = await createFixture({ variant });
-        expect(harness.element.variant).to.equal(variant);
+        expect(harness.element.variant).toBe(variant);
       });
     });
 
     (['default', 'primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'] as FieldTheme[]).forEach(theme => {
       it(`should set ${theme} theme`, async () => {
         const harness = await createFixture({ theme });
-        expect(harness.element.theme).to.equal(theme);
+        expect(harness.element.theme).toBe(theme);
       });
     });
 
     (['default', 'rounded', 'squared'] as FieldShape[]).forEach(shape => {
       it(`should set ${shape} shape`, async () => {
         const harness = await createFixture({ shape });
-        expect(harness.element.shape).to.equal(shape);
+        expect(harness.element.shape).toBe(shape);
       });
     });
 
     (['extra-small', 'small', 'medium', 'large', 'extra-large'] as FieldDensity[]).forEach(density => {
       it(`should set ${density} density`, async () => {
         const harness = await createFixture({ density });
-        expect(harness.element.density).to.equal(density);
+        expect(harness.element.density).toBe(density);
       });
     });
 
     it('should set dense', async () => {
       const harness = await createFixture({ dense: true });
-      expect(harness.element.dense).to.be.true;
+      expect(harness.element.dense).toBe(true);
     });
 
     it('should set popover icon', async () => {
       const harness = await createFixture({ popoverIcon: true });
-      expect(harness.element.popoverIcon).to.be.true;
+      expect(harness.element.popoverIcon).toBe(true);
     });
 
     it('should set popover expanded', async () => {
       const harness = await createFixture({ popoverExpanded: true });
-      expect(harness.element.popoverExpanded).to.be.true;
+      expect(harness.element.popoverExpanded).toBe(true);
     });
 
     it('should set multiline', async () => {
       const harness = await createFixture({ multiline: true });
-      expect(harness.element.multiline).to.be.true;
+      expect(harness.element.multiline).toBe(true);
     });
 
     (['none', 'start', 'end', 'both'] as FieldSupportTextInset[]).forEach(supportTextInset => {
       it(`should set support text inset ${supportTextInset}`, async () => {
         const harness = await createFixture({ supportTextInset });
-        expect(harness.element.supportTextInset).to.equal(supportTextInset);
+        expect(harness.element.supportTextInset).toBe(supportTextInset);
       });
     });
   });
@@ -135,7 +135,7 @@ describe('Field', () => {
       it(`should set label position ${labelPosition} attribute`, async () => {
         const harness = await createDefaultFixture();
         harness.element.labelPosition = labelPosition;
-        expect(harness.element.getAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION)).to.equal(labelPosition);
+        expect(harness.element.getAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION)).toBe(labelPosition);
       });
     });
 
@@ -147,56 +147,56 @@ describe('Field', () => {
       it(`should set label alignment ${labelAlignment} attribute`, async () => {
         const harness = await createDefaultFixture();
         harness.element.labelAlignment = labelAlignment;
-        expect(harness.element.getAttribute(FIELD_CONSTANTS.attributes.LABEL_ALIGNMENT)).to.equal(labelAlignment);
+        expect(harness.element.getAttribute(FIELD_CONSTANTS.attributes.LABEL_ALIGNMENT)).toBe(labelAlignment);
       });
     });
 
     it('should set float label attribute', async () => {
       const harness = await createDefaultFixture();
       harness.element.floatLabel = true;
-      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL)).to.be.true;
+      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL)).toBe(true);
     });
 
     it('should set invalid attribute', async () => {
       const harness = await createDefaultFixture();
       harness.element.invalid = true;
-      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.INVALID)).to.be.true;
+      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.INVALID)).toBe(true);
     });
 
     it('should set required attribute', async () => {
       const harness = await createDefaultFixture();
       harness.element.required = true;
-      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.REQUIRED)).to.be.true;
+      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.REQUIRED)).toBe(true);
     });
 
     it('should set optional attribute', async () => {
       const harness = await createDefaultFixture();
       harness.element.optional = true;
-      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.OPTIONAL)).to.be.true;
+      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.OPTIONAL)).toBe(true);
     });
 
     it('should set disabled attribute', async () => {
       const harness = await createDefaultFixture();
       harness.element.disabled = true;
-      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.DISABLED)).to.be.true;
+      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.DISABLED)).toBe(true);
     });
 
     it('should set popover icon attribute', async () => {
       const harness = await createDefaultFixture();
       harness.element.popoverIcon = true;
-      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.POPOVER_ICON)).to.be.true;
+      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.POPOVER_ICON)).toBe(true);
     });
 
     it('should set popover expanded attribute', async () => {
       const harness = await createDefaultFixture();
       harness.element.popoverExpanded = true;
-      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.POPOVER_EXPANDED)).to.be.true;
+      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.POPOVER_EXPANDED)).toBe(true);
     });
 
     it('should set multiline attribute', async () => {
       const harness = await createDefaultFixture();
       harness.element.multiline = true;
-      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.MULTILINE)).to.be.true;
+      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.MULTILINE)).toBe(true);
     });
 
     (['none', 'start', 'end', 'both'] as FieldSupportTextInset[]).forEach(supportTextInset => {
@@ -207,7 +207,7 @@ describe('Field', () => {
       it(`should set support text inset ${supportTextInset} attribute`, async () => {
         const harness = await createDefaultFixture();
         harness.element.supportTextInset = supportTextInset;
-        expect(harness.element.getAttribute(FIELD_CONSTANTS.attributes.SUPPORT_TEXT_INSET)).to.equal(supportTextInset);
+        expect(harness.element.getAttribute(FIELD_CONSTANTS.attributes.SUPPORT_TEXT_INSET)).toBe(supportTextInset);
       });
     });
   });
@@ -215,136 +215,136 @@ describe('Field', () => {
   describe('defaults', () => {
     it('should default label position to "inset"', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.labelPosition).to.equal('inset');
+      expect(harness.element.labelPosition).toBe('inset');
     });
 
     it('should default label alignment to "default"', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.labelAlignment).to.equal('default');
+      expect(harness.element.labelAlignment).toBe('default');
     });
 
     it('should default float label to false', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.floatLabel).to.be.false;
+      expect(harness.element.floatLabel).toBe(false);
     });
 
     it('should default invalid to false', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.invalid).to.be.false;
+      expect(harness.element.invalid).toBe(false);
     });
 
     it('should default required to false', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.required).to.be.false;
+      expect(harness.element.required).toBe(false);
     });
 
     it('should default optional to false', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.optional).to.be.false;
+      expect(harness.element.optional).toBe(false);
     });
 
     it('should default disabled to false', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.disabled).to.be.false;
+      expect(harness.element.disabled).toBe(false);
     });
 
     it('should default variant to "outlined"', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.variant).to.equal('outlined');
+      expect(harness.element.variant).toBe('outlined');
     });
 
     it('should default theme to "default"', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.theme).to.equal('default');
+      expect(harness.element.theme).toBe('default');
     });
 
     it('should default shape to "default"', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.shape).to.equal('default');
+      expect(harness.element.shape).toBe('default');
     });
 
     it('should default density to "default"', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.density).to.equal('default');
+      expect(harness.element.density).toBe('default');
     });
 
     it('should default dense to false', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.dense).to.be.false;
+      expect(harness.element.dense).toBe(false);
     });
 
     it('should default popover icon to false', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.popoverIcon).to.be.false;
+      expect(harness.element.popoverIcon).toBe(false);
     });
 
     it('should default popover expanded to false', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.popoverExpanded).to.be.false;
+      expect(harness.element.popoverExpanded).toBe(false);
     });
 
     it('should default multiline to false', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.multiline).to.be.false;
+      expect(harness.element.multiline).toBe(false);
     });
 
     it('should default support text inset to "none"', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.supportTextInset).to.equal('none');
+      expect(harness.element.supportTextInset).toBe('none');
     });
   });
 
   describe('events', () => {
     it('should dispatch popover icon click event', async () => {
       const harness = await createFixture({ popoverIcon: true });
-      const clickSpy = spy();
+      const clickSpy = vi.fn();
       harness.element.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK, clickSpy);
 
       await harness.clickElement(harness.popoverIconElement);
 
-      expect(clickSpy.called).to.be.true;
+      expect(clickSpy).toHaveBeenCalled();
     });
 
     it('should not dispatch popover icon click event when popover icon is false', async () => {
       const harness = await createDefaultFixture();
-      const clickSpy = spy();
+      const clickSpy = vi.fn();
       harness.element.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK, clickSpy);
 
       harness.popoverIconElement.dispatchEvent(new PointerEvent('click'));
 
-      expect(clickSpy.called).to.be.false;
+      expect(clickSpy).not.toHaveBeenCalled();
     });
 
     it('should not dispatch popover icon click event when popover icon is removed', async () => {
       const harness = await createFixture({ popoverIcon: true });
-      const clickSpy = spy();
+      const clickSpy = vi.fn();
       harness.element.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK, clickSpy);
       harness.element.popoverIcon = false;
 
       harness.popoverIconElement.dispatchEvent(new PointerEvent('click'));
 
-      expect(clickSpy.called).to.be.false;
+      expect(clickSpy).not.toHaveBeenCalled();
     });
 
     it('should dispatch popover icon mousedown event when popover icon receives mousedown event', async () => {
       const harness = await createFixture({ popoverIcon: true });
-      const mousedownSpy = spy();
+      const mousedownSpy = vi.fn();
       harness.element.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_MOUSEDOWN, mousedownSpy);
 
       harness.popoverIconElement.dispatchEvent(new MouseEvent('mousedown'));
 
-      expect(mousedownSpy.called).to.be.true;
+      expect(mousedownSpy).toHaveBeenCalled();
     });
 
     it('should not dispatch popover icon mousedown event when popover icon is removed', async () => {
       const harness = await createFixture({ popoverIcon: true });
-      const mousedownSpy = spy();
+      const mousedownSpy = vi.fn();
       harness.element.addEventListener(FIELD_CONSTANTS.events.POPOVER_ICON_MOUSEDOWN, mousedownSpy);
       harness.element.popoverIcon = false;
 
       harness.popoverIconElement.dispatchEvent(new MouseEvent('mousedown'));
 
-      expect(mousedownSpy.called).to.be.false;
+      expect(mousedownSpy).not.toHaveBeenCalled();
     });
 
     it('should prevent default on the original mousedown event if default prevented on popover icon mousedown event', async () => {
@@ -354,7 +354,7 @@ describe('Field', () => {
       const mousedownEvent = new MouseEvent('mousedown', { cancelable: true });
       harness.popoverIconElement.dispatchEvent(mousedownEvent);
 
-      expect(mousedownEvent.defaultPrevented).to.be.true;
+      expect(mousedownEvent.defaultPrevented).toBe(true);
     });
   });
 
@@ -363,13 +363,13 @@ describe('Field', () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('start');
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_START)).to.be.true;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_START)).toBe(true);
     });
 
     it('should not add class when start slot has no content', async () => {
       const harness = await createDefaultFixture();
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_START)).to.be.false;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_START)).toBe(false);
     });
 
     it('should remove class when start slot content is removed', async () => {
@@ -378,20 +378,20 @@ describe('Field', () => {
       await frame();
       harness.removeSlottedContent('start');
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_START)).to.be.false;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_START)).toBe(false);
     });
 
     it('should add class when end slot has content', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('end');
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_END)).to.be.true;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_END)).toBe(true);
     });
 
     it('should not add class when end slot has no content', async () => {
       const harness = await createDefaultFixture();
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_END)).to.be.false;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_END)).toBe(false);
     });
 
     it('should remove class when end slot content is removed', async () => {
@@ -400,20 +400,20 @@ describe('Field', () => {
       await frame();
       harness.removeSlottedContent('end');
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_END)).to.be.false;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_END)).toBe(false);
     });
 
     it('should add class when accessory slot has content', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('accessory');
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_ACCESSORY)).to.be.true;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_ACCESSORY)).toBe(true);
     });
 
     it('should not add class when accessory slot has no content', async () => {
       const harness = await createDefaultFixture();
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_ACCESSORY)).to.be.false;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_ACCESSORY)).toBe(false);
     });
 
     it('should remove class when accessory slot content is removed', async () => {
@@ -422,20 +422,20 @@ describe('Field', () => {
       await frame();
       harness.removeSlottedContent('accessory');
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_ACCESSORY)).to.be.false;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_ACCESSORY)).toBe(false);
     });
 
     it('should add class when support text slot has content', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('support-text');
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).to.be.true;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).toBe(true);
     });
 
     it('should not add class when support text slot has no content', async () => {
       const harness = await createDefaultFixture();
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).to.be.false;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).toBe(false);
     });
 
     it('should remove class when support text slot content is removed', async () => {
@@ -444,20 +444,20 @@ describe('Field', () => {
       await frame();
       harness.removeSlottedContent('support-text');
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).to.be.false;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).toBe(false);
     });
 
     it('should add class when support text end slot has content', async () => {
       const harness = await createDefaultFixture();
       harness.addSlottedContent('support-text-end');
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_END)).to.be.true;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_END)).toBe(true);
     });
 
     it('should not add class when support text end slot has no content', async () => {
       const harness = await createDefaultFixture();
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_END)).to.be.false;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_END)).toBe(false);
     });
 
     it('should remove class when support text end slot content is removed', async () => {
@@ -466,14 +466,14 @@ describe('Field', () => {
       await frame();
       harness.removeSlottedContent('support-text-end');
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_END)).to.be.false;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_END)).toBe(false);
     });
 
     it('should add class when label slot has content and label position is inset', async () => {
       const harness = await createFixture({ labelPosition: 'inset' });
       harness.addSlottedContent('label');
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_LABEL)).to.be.true;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_LABEL)).toBe(true);
     });
 
     it('should remove class when label slot content is removed and label position is inset', async () => {
@@ -482,89 +482,91 @@ describe('Field', () => {
       await frame();
       harness.removeSlottedContent('label');
       await frame();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_LABEL)).to.be.false;
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_LABEL)).toBe(false);
     });
   });
 
   describe('label position', () => {
     it('should render label before container when label position is inline start', async () => {
       const harness = await createFixture({ labelPosition: 'inline-start' });
-      expect(harness.labelElement).to.equal(harness.rootElement.firstElementChild);
+      expect(harness.labelElement).toBe(harness.rootElement.firstElementChild);
     });
 
     it('should render label before container when label position is inline end', async () => {
       const harness = await createFixture({ labelPosition: 'inline-end' });
-      expect(harness.labelElement).to.equal(harness.rootElement.firstElementChild);
+      expect(harness.labelElement).toBe(harness.rootElement.firstElementChild);
     });
 
     it('should render label before container when label position is block start', async () => {
       const harness = await createFixture({ labelPosition: 'block-start' });
-      expect(harness.labelElement).to.equal(harness.rootElement.firstElementChild);
+      expect(harness.labelElement).toBe(harness.rootElement.firstElementChild);
     });
 
     it('should render label as first child of container when label position is inset', async () => {
       const harness = await createFixture({ labelPosition: 'inset' });
-      expect(harness.labelElement).to.equal(harness.containerElement.firstElementChild);
+      expect(harness.labelElement).toBe(harness.containerElement.firstElementChild);
     });
 
     it('should render label before container when label position is none', async () => {
       const harness = await createFixture({ labelPosition: 'none' });
-      expect(harness.labelElement).to.equal(harness.rootElement.firstElementChild);
+      expect(harness.labelElement).toBe(harness.rootElement.firstElementChild);
     });
 
     it('should render label as first child of container container when multiline and label position is inset', async () => {
       const harness = await createFixture({ labelPosition: 'inset', multiline: true });
-      expect(harness.labelElement).to.equal(harness.containerElement.firstElementChild);
+      expect(harness.labelElement).toBe(harness.containerElement.firstElementChild);
     });
   });
 
   describe('animations', () => {
     it('should animate in floating label', async () => {
       const harness = await createFixture({ labelPosition: 'inset' });
-      const animationSpy = spy();
+      const animationSpy = vi.fn();
       harness.rootElement.addEventListener('animationstart', animationSpy);
       harness.addSlottedContent('label');
       harness.element.floatLabel = true;
 
       await frame();
 
-      expect(animationSpy.calledWithMatch(match({ animationName: FIELD_CONSTANTS.animations.FLOAT_IN_LABEL }))).to.be.true;
+      expect(animationSpy).toHaveBeenCalled();
+      expect(animationSpy.mock.calls.some((call: [AnimationEvent]) => call[0].animationName === FIELD_CONSTANTS.animations.FLOAT_IN_LABEL)).toBe(true);
     });
 
     it('should animate out floating label', async () => {
       const harness = await createFixture({ labelPosition: 'inset', floatLabel: true });
-      const animationSpy = spy();
+      const animationSpy = vi.fn();
       harness.rootElement.addEventListener('animationstart', animationSpy);
       harness.addSlottedContent('label');
       harness.element.floatLabel = false;
 
       await frame();
 
-      expect(animationSpy.calledWithMatch(match({ animationName: FIELD_CONSTANTS.animations.FLOAT_OUT_LABEL }))).to.be.true;
+      expect(animationSpy).toHaveBeenCalled();
+      expect(animationSpy.mock.calls.some((call: [AnimationEvent]) => call[0].animationName === FIELD_CONSTANTS.animations.FLOAT_OUT_LABEL)).toBe(true);
     });
 
     it('should float label in without animation', async () => {
       const harness = await createFixture({ labelPosition: 'inset' });
-      const animationSpy = spy();
+      const animationSpy = vi.fn();
       harness.rootElement.addEventListener('animationstart', animationSpy);
       harness.addSlottedContent('label');
       harness.element.floatLabelWithoutAnimation(true);
 
       await frame();
 
-      expect(animationSpy.called).to.be.false;
+      expect(animationSpy).not.toHaveBeenCalled();
     });
 
     it('should float label out without animation', async () => {
       const harness = await createFixture({ labelPosition: 'inset', floatLabel: true });
-      const animationSpy = spy();
+      const animationSpy = vi.fn();
       harness.rootElement.addEventListener('animationstart', animationSpy);
       harness.addSlottedContent('label');
       harness.element.floatLabelWithoutAnimation(false);
 
       await frame();
 
-      expect(animationSpy.called).to.be.false;
+      expect(animationSpy).not.toHaveBeenCalled();
     });
   });
 });
@@ -589,12 +591,7 @@ class FieldHarness extends TestHarness<IFieldComponent> {
   }
 
   public async clickElement(el: HTMLElement): Promise<void> {
-    const { x, y, width, height } = el.getBoundingClientRect();
-
-    await sendMouse({
-      type: 'click',
-      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
-    });
+    await userEvent.click(el);
   }
 
   public addSlottedContent(slotName: string): void {
@@ -648,7 +645,7 @@ async function createFixture({
   multiline,
   supportTextInset
 }: FieldFixtureConfig = {}): Promise<FieldHarness> {
-  const el = await fixture<IFieldComponent>(html`
+  const screen = render(html`
     <forge-field
       label-position=${ifDefined(labelPosition)}
       label-alignment=${ifDefined(labelAlignment)}
@@ -667,10 +664,12 @@ async function createFixture({
       ?multiline=${multiline}
       .supportTextInset=${supportTextInset ?? 'none'}></forge-field>
   `);
+  const el = screen.container.querySelector('forge-field') as IFieldComponent;
   return new FieldHarness(el);
 }
 
 async function createDefaultFixture(): Promise<FieldHarness> {
-  const el = await fixture<IFieldComponent>(html`<forge-field></forge-field>`);
+  const screen = render(html`<forge-field></forge-field>`);
+  const el = screen.container.querySelector('forge-field') as IFieldComponent;
   return new FieldHarness(el);
 }
