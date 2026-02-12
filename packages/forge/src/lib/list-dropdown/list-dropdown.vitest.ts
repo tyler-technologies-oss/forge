@@ -1,5 +1,4 @@
-import { expect } from '@esm-bundle/chai';
-import { spy } from 'sinon';
+import { describe, it, expect, vi, beforeAll, afterEach } from 'vitest';
 import { getShadowElement } from '@tylertech/forge-core';
 import { task, frame } from '../core/utils/utils.js';
 import {
@@ -20,7 +19,9 @@ import { SKELETON_CONSTANTS } from '../skeleton/index.js';
 import { CIRCULAR_PROGRESS_CONSTANTS } from '../circular-progress/index.js';
 import { DIVIDER_CONSTANTS } from '../divider/index.js';
 import { definePopoverComponent, IPopoverComponent, POPOVER_CONSTANTS } from '../popover/index.js';
+import { tryCleanupPopovers } from '../core/testing/utils.js';
 
+// Popover enter animation duration + buffer
 const POPOVER_ANIMATION_DURATION = 200;
 
 interface IListDropdownTestContext {
@@ -118,11 +119,6 @@ function isVisibleInScrollContainer(scrollContainer: Element, element: Element):
   );
 }
 
-function tryCleanupPopovers(): void {
-  const popovers = Array.from(document.querySelectorAll(POPOVER_CONSTANTS.elementName));
-  popovers.forEach(popover => popover.remove());
-}
-
 describe('ListDropdown', () => {
   const BASIC_OPTIONS: IListDropdownOption[] = [
     { label: 'One', value: 1 },
@@ -138,7 +134,7 @@ describe('ListDropdown', () => {
     selectCallback: (value: any) => {}
   };
 
-  before(() => {
+  beforeAll(() => {
     definePopoverComponent();
     defineListComponent();
     defineOptionComponent();
@@ -150,13 +146,12 @@ describe('ListDropdown', () => {
     tryCleanupPopovers();
   });
 
-  // All tests from original list-dropdown.spec.ts - implemented in batches
   it('should be instantiated', async () => {
     const context = createListDropdown(DEFAULT_CONFIG);
     context.listDropdown.open();
     await delayPopupAnimation();
 
-    expect(context.listDropdown.dropdownElement).to.not.be.null;
+    expect(context.listDropdown.dropdownElement).not.toBeNull();
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -171,10 +166,10 @@ describe('ListDropdown', () => {
     await frame();
 
     const listItems = getListItems();
-    expect(listItems.length).to.equal(BASIC_OPTIONS.length);
+    expect(listItems.length).toBe(BASIC_OPTIONS.length);
     BASIC_OPTIONS.forEach((o, index) => {
-      expect(listItems[index].value).to.equal(o.value);
-      expect(listItems[index].innerText).to.equal(o.label as string);
+      expect(listItems[index].value).toBe(o.value);
+      expect(listItems[index].innerText).toBe(o.label as string);
     });
 
     context.listDropdown.destroy();
@@ -184,15 +179,15 @@ describe('ListDropdown', () => {
   });
 
   it('should call select callback when clicking option', async () => {
-    const selectCallback = spy() as any;
+    const selectCallback = vi.fn();
     const context = createListDropdown({ ...DEFAULT_CONFIG, selectCallback });
     context.listDropdown.open();
     await task(POPOVER_ANIMATION_DURATION);
 
     clickListItem(0);
 
-    expect(selectCallback.callCount).to.equal(1);
-    expect(selectCallback.firstCall.args[0]).to.equal(BASIC_OPTIONS[0].value);
+    expect(selectCallback).toHaveBeenCalledOnce();
+    expect(selectCallback).toHaveBeenCalledWith(BASIC_OPTIONS[0].value);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -201,16 +196,16 @@ describe('ListDropdown', () => {
   });
 
   it('should call active change callback when using arrow keys', async () => {
-    const activeChangeCallback = spy() as any;
+    const activeChangeCallback = vi.fn();
     const context = createListDropdown({ ...DEFAULT_CONFIG, activeChangeCallback });
     context.listDropdown.open();
     await delayPopupAnimation();
 
-    expect(activeChangeCallback.callCount).to.equal(0);
+    expect(activeChangeCallback).not.toHaveBeenCalled();
 
     context.listDropdown.handleKey('ArrowDown');
-    expect(activeChangeCallback.callCount).to.equal(1);
-    expect(activeChangeCallback.firstCall.args[0]).to.equal('list-dropdown-option-list-dropdown-0');
+    expect(activeChangeCallback).toHaveBeenCalledOnce();
+    expect(activeChangeCallback).toHaveBeenCalledWith('list-dropdown-option-list-dropdown-0');
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -223,11 +218,11 @@ describe('ListDropdown', () => {
 
     context.listDropdown.open();
     await delayPopupAnimation();
-    expect(getListDropdownPopup()).to.not.be.null;
+    expect(getListDropdownPopup()).not.toBeNull();
 
     context.listDropdown.close();
     await delayPopupAnimation();
-    expect(getListDropdownPopup()).to.be.null;
+    expect(getListDropdownPopup()).toBeNull();
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -240,10 +235,10 @@ describe('ListDropdown', () => {
     context.listDropdown.open();
     await delayPopupAnimation();
 
-    expect(context.listDropdown.getActiveOptionIndex()).to.equal(-1);
+    expect(context.listDropdown.getActiveOptionIndex()).toBe(-1);
 
     context.listDropdown.handleKey('ArrowDown');
-    expect(context.listDropdown.getActiveOptionIndex()).to.equal(0);
+    expect(context.listDropdown.getActiveOptionIndex()).toBe(0);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -257,7 +252,7 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     context.listDropdown.handleKey('ArrowUp');
-    expect(context.listDropdown.getActiveOptionIndex()).to.equal(DEFAULT_CONFIG.options.length - 1);
+    expect(context.listDropdown.getActiveOptionIndex()).toBe(DEFAULT_CONFIG.options.length - 1);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -271,13 +266,13 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     context.listDropdown.handleKey('ArrowDown');
-    expect(context.listDropdown.getActiveOptionIndex()).to.equal(0);
+    expect(context.listDropdown.getActiveOptionIndex()).toBe(0);
 
     context.listDropdown.handleKey('ArrowDown');
-    expect(context.listDropdown.getActiveOptionIndex()).to.equal(1);
+    expect(context.listDropdown.getActiveOptionIndex()).toBe(1);
 
     context.listDropdown.handleKey('ArrowDown');
-    expect(context.listDropdown.getActiveOptionIndex()).to.equal(2);
+    expect(context.listDropdown.getActiveOptionIndex()).toBe(2);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -290,7 +285,7 @@ describe('ListDropdown', () => {
     context.listDropdown.open();
     await delayPopupAnimation();
 
-    expect(context.listDropdown.getActiveOptionIndex()).to.equal(-1);
+    expect(context.listDropdown.getActiveOptionIndex()).toBe(-1);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -303,7 +298,7 @@ describe('ListDropdown', () => {
     context.listDropdown.open();
     await delayPopupAnimation();
 
-    expect(context.listDropdown.getActiveOptionIndex()).to.equal(-1);
+    expect(context.listDropdown.getActiveOptionIndex()).toBe(-1);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -316,7 +311,7 @@ describe('ListDropdown', () => {
     context.listDropdown.open();
     await delayPopupAnimation();
 
-    expect(getBusyVisibility(context)).to.be.false;
+    expect(getBusyVisibility(context)).toBe(false);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -330,10 +325,10 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     const skeleton = context.listDropdown.dropdownElement!.querySelector(SKELETON_CONSTANTS.elementName);
-    expect(skeleton).to.be.null;
+    expect(skeleton).toBeNull();
 
     const spinner = context.listDropdown.dropdownElement!.querySelector(CIRCULAR_PROGRESS_CONSTANTS.elementName);
-    expect(spinner).to.not.be.null;
+    expect(spinner).not.toBeNull();
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -347,10 +342,10 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     const spinner = context.listDropdown.dropdownElement!.querySelector(CIRCULAR_PROGRESS_CONSTANTS.elementName);
-    expect(spinner).to.be.null;
+    expect(spinner).toBeNull();
 
     const skeleton = context.listDropdown.dropdownElement!.querySelector(SKELETON_CONSTANTS.elementName);
-    expect(skeleton).to.not.be.null;
+    expect(skeleton).not.toBeNull();
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -364,12 +359,12 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     let listItems = getListItems();
-    expect(listItems.length).to.equal(0);
+    expect(listItems.length).toBe(0);
 
     context.listDropdown.setOptions(BASIC_OPTIONS);
     listItems = getListItems();
 
-    expect(listItems.length).to.equal(BASIC_OPTIONS.length);
+    expect(listItems.length).toBe(BASIC_OPTIONS.length);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -390,9 +385,9 @@ describe('ListDropdown', () => {
 
     const listItems = getListItems();
 
-    expect(listItems.length).to.equal(DEFAULT_CONFIG.options.length + extraOptions.length);
-    expect(listItems[listItems.length - 2].value).to.equal(extraOptions[0].value);
-    expect(listItems[listItems.length - 1].value).to.equal(extraOptions[1].value);
+    expect(listItems.length).toBe(DEFAULT_CONFIG.options.length + extraOptions.length);
+    expect(listItems[listItems.length - 2].value).toBe(extraOptions[0].value);
+    expect(listItems[listItems.length - 1].value).toBe(extraOptions[1].value);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -405,13 +400,13 @@ describe('ListDropdown', () => {
     context.listDropdown.open();
     await delayPopupAnimation();
 
-    expect(getBusyVisibility(context)).to.be.false;
+    expect(getBusyVisibility(context)).toBe(false);
 
     context.listDropdown.setBusyVisibility(true);
-    expect(getBusyVisibility(context)).to.be.true;
+    expect(getBusyVisibility(context)).toBe(true);
 
     context.listDropdown.setBusyVisibility(false);
-    expect(getBusyVisibility(context)).to.be.false;
+    expect(getBusyVisibility(context)).toBe(false);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -427,7 +422,7 @@ describe('ListDropdown', () => {
     const listItems = getListItems();
     const selectedIndex = listItems.findIndex(li => li.selected);
 
-    expect(selectedIndex).to.equal(1);
+    expect(selectedIndex).toBe(1);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -444,7 +439,7 @@ describe('ListDropdown', () => {
     const listItems = getListItems();
     const selectedIndex = listItems.findIndex(li => li.selected);
 
-    expect(selectedIndex).to.equal(0);
+    expect(selectedIndex).toBe(0);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -460,9 +455,9 @@ describe('ListDropdown', () => {
     context.listDropdown.setSelectedValues([BASIC_OPTIONS[1].value, BASIC_OPTIONS[2].value]);
     const listItems = getListItems();
 
-    expect(listItems[0].selected).to.be.false;
-    expect(listItems[1].selected).to.be.true;
-    expect(listItems[2].selected).to.be.false;
+    expect(listItems[0].selected).toBe(false);
+    expect(listItems[1].selected).toBe(true);
+    expect(listItems[2].selected).toBe(false);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -478,9 +473,9 @@ describe('ListDropdown', () => {
     context.listDropdown.setSelectedValues([BASIC_OPTIONS[1].value, BASIC_OPTIONS[2].value]);
     const listItems = getListItems();
 
-    expect(listItems[0].selected).to.be.false;
-    expect(listItems[1].selected).to.be.true;
-    expect(listItems[2].selected).to.be.true;
+    expect(listItems[0].selected).toBe(false);
+    expect(listItems[1].selected).toBe(true);
+    expect(listItems[2].selected).toBe(true);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -494,13 +489,13 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     const listItems = getListItems();
-    expect(listItems[1].selected).to.be.true;
+    expect(listItems[1].selected).toBe(true);
 
     context.listDropdown.toggleOptionMultiple(1, false);
 
-    expect(listItems[0].selected).to.be.false;
-    expect(listItems[1].selected).to.be.false;
-    expect(listItems[2].selected).to.be.true;
+    expect(listItems[0].selected).toBe(false);
+    expect(listItems[1].selected).toBe(false);
+    expect(listItems[2].selected).toBe(true);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -514,16 +509,16 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     const listItems = getListItems();
-    expect(listItems[2].selected).to.be.false;
+    expect(listItems[2].selected).toBe(false);
 
     context.listDropdown.toggleOptionMultiple(2, true);
 
-    expect(listItems[0].selected).to.be.false;
-    expect(listItems[0].active).to.be.false;
-    expect(listItems[1].selected).to.be.true;
-    expect(listItems[1].active).to.be.false;
-    expect(listItems[2].selected).to.be.true;
-    expect(listItems[2].active).to.be.false;
+    expect(listItems[0].selected).toBe(false);
+    expect(listItems[0].active).toBe(false);
+    expect(listItems[1].selected).toBe(true);
+    expect(listItems[1].active).toBe(false);
+    expect(listItems[2].selected).toBe(true);
+    expect(listItems[2].active).toBe(false);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -539,12 +534,12 @@ describe('ListDropdown', () => {
     const listItems = getListItems();
 
     context.listDropdown.handleKey('ArrowDown');
-    expect(listItems[0].active).to.be.true;
+    expect(listItems[0].active).toBe(true);
 
     context.listDropdown.activateSelectedOption();
 
-    expect(listItems[0].active).to.be.false;
-    expect(listItems[2].active).to.be.true;
+    expect(listItems[0].active).toBe(false);
+    expect(listItems[2].active).toBe(true);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -559,8 +554,8 @@ describe('ListDropdown', () => {
 
     const listItems = getListItems();
 
-    expect(listItems[0].active).to.be.false;
-    expect(listItems[2].active).to.be.true;
+    expect(listItems[0].active).toBe(false);
+    expect(listItems[2].active).toBe(true);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -574,11 +569,11 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     const listItems = getListItems();
-    expect(listItems[2].active).to.be.false;
+    expect(listItems[2].active).toBe(false);
 
     context.listDropdown.activateFirstOption();
 
-    expect(listItems[0].active).to.be.true;
+    expect(listItems[0].active).toBe(true);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -592,11 +587,11 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     const listItems = getListItems();
-    expect(listItems.some(li => li.active)).to.be.false;
+    expect(listItems.some(li => li.active)).toBe(false);
 
     context.listDropdown.activateOption(2);
 
-    expect(listItems[2].active).to.be.true;
+    expect(listItems[2].active).toBe(true);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -612,7 +607,7 @@ describe('ListDropdown', () => {
 
     context.listDropdown.activateOption(0);
 
-    expect(listItems[0].active).to.be.false;
+    expect(listItems[0].active).toBe(false);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -627,8 +622,8 @@ describe('ListDropdown', () => {
 
     context.listDropdown.handleKey('End');
     const listItems = getListItems();
-    expect(listItems[0].active).to.be.false;
-    expect(listItems[listItems.length - 1].active).to.be.true;
+    expect(listItems[0].active).toBe(false);
+    expect(listItems[listItems.length - 1].active).toBe(true);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -643,12 +638,12 @@ describe('ListDropdown', () => {
 
     const listItems = getListItems();
     context.listDropdown.activateOption(listItems.length - 1);
-    expect(listItems[listItems.length - 1].active).to.be.true;
+    expect(listItems[listItems.length - 1].active).toBe(true);
 
     context.listDropdown.handleKey('Home');
 
-    expect(listItems[0].active).to.be.true;
-    expect(listItems[listItems.length - 1].active).to.be.false;
+    expect(listItems[0].active).toBe(true);
+    expect(listItems[listItems.length - 1].active).toBe(false);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -657,7 +652,7 @@ describe('ListDropdown', () => {
   });
 
   it('should select active option when enter key is pressed', async () => {
-    const selectCallback = spy() as any;
+    const selectCallback = vi.fn();
     const context = createListDropdown({ ...DEFAULT_CONFIG, selectCallback });
     context.listDropdown.open();
     await delayPopupAnimation();
@@ -665,8 +660,8 @@ describe('ListDropdown', () => {
     context.listDropdown.activateOption(BASIC_OPTIONS.length - 1);
     context.listDropdown.handleKey('Enter');
 
-    expect(selectCallback.callCount).to.equal(1);
-    expect(selectCallback.firstCall.args[0]).to.equal(BASIC_OPTIONS[BASIC_OPTIONS.length - 1].value);
+    expect(selectCallback).toHaveBeenCalledOnce();
+    expect(selectCallback).toHaveBeenCalledWith(BASIC_OPTIONS[BASIC_OPTIONS.length - 1].value);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -675,7 +670,7 @@ describe('ListDropdown', () => {
   });
 
   it('should select active option when numpadenter key is pressed', async () => {
-    const selectCallback = spy() as any;
+    const selectCallback = vi.fn();
     const context = createListDropdown({ ...DEFAULT_CONFIG, selectCallback });
     context.listDropdown.open();
     await delayPopupAnimation();
@@ -683,8 +678,8 @@ describe('ListDropdown', () => {
     context.listDropdown.activateOption(BASIC_OPTIONS.length - 1);
     context.listDropdown.handleKey('NumpadEnter');
 
-    expect(selectCallback.callCount).to.equal(1);
-    expect(selectCallback.firstCall.args[0]).to.equal(BASIC_OPTIONS[BASIC_OPTIONS.length - 1].value);
+    expect(selectCallback).toHaveBeenCalledOnce();
+    expect(selectCallback).toHaveBeenCalledWith(BASIC_OPTIONS[BASIC_OPTIONS.length - 1].value);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -703,7 +698,7 @@ describe('ListDropdown', () => {
     const selectedListItem = listItems.find(li => li.value === selectedValue) as IListItemComponent;
     const scrollContainer = getShadowElement(context.listDropdown.dropdownElement!, POPOVER_CONSTANTS.selectors.SURFACE);
 
-    expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).to.be.true;
+    expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).toBe(true);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -722,14 +717,14 @@ describe('ListDropdown', () => {
     const selectedListItem = listItems[99];
     const scrollContainer = getShadowElement(context.listDropdown.dropdownElement!, POPOVER_CONSTANTS.selectors.SURFACE);
 
-    expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).to.be.false;
+    expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).toBe(false);
 
     context.listDropdown.setSelectedValues(selectedValue);
     context.listDropdown.scrollSelectedOptionIntoView(false);
     await task(1000);
     await frame();
 
-    expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).to.be.true;
+    expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).toBe(true);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -739,7 +734,7 @@ describe('ListDropdown', () => {
 
   it('should call scroll bottom listener', async () => {
     const options = generateScrollableOptions(50);
-    const scrollEndListener = spy();
+    const scrollEndListener = vi.fn();
     const context = createListDropdown({ ...DEFAULT_CONFIG, options, observeScroll: true, scrollEndListener });
     context.listDropdown.open();
     await delayPopupAnimation();
@@ -747,9 +742,9 @@ describe('ListDropdown', () => {
     const popup = context.listDropdown.dropdownElement as HTMLElement;
     const scrollContainer = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
     scrollContainer.scrollTop = scrollContainer.scrollHeight;
-    await task(1000); // Wait for scroll animation (flaky?)
+    await task(1000);
 
-    expect(scrollEndListener.callCount).to.equal(1);
+    expect(scrollEndListener).toHaveBeenCalledOnce();
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -759,7 +754,7 @@ describe('ListDropdown', () => {
 
   it('should set scroll bottom listener', async () => {
     const options = generateScrollableOptions(50);
-    const scrollEndListener = spy();
+    const scrollEndListener = vi.fn();
     const context = createListDropdown({ ...DEFAULT_CONFIG, options });
     context.listDropdown.open();
     await delayPopupAnimation();
@@ -768,9 +763,9 @@ describe('ListDropdown', () => {
 
     const scrollContainer = getShadowElement(context.listDropdown.dropdownElement!, POPOVER_CONSTANTS.selectors.SURFACE);
     scrollContainer.scrollTop = scrollContainer.scrollHeight;
-    await task(1000); // Wait for scroll animation (flaky?)
+    await task(1000);
 
-    expect(scrollEndListener.callCount).to.equal(1);
+    expect(scrollEndListener).toHaveBeenCalledOnce();
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -780,7 +775,7 @@ describe('ListDropdown', () => {
 
   it('should remove scroll bottom listener', async () => {
     const options = generateScrollableOptions(50);
-    const scrollEndListener = spy();
+    const scrollEndListener = vi.fn();
     const context = createListDropdown({ ...DEFAULT_CONFIG, options });
     context.listDropdown.open();
     await delayPopupAnimation();
@@ -790,9 +785,9 @@ describe('ListDropdown', () => {
 
     const scrollContainer = getShadowElement(context.listDropdown.dropdownElement!, POPOVER_CONSTANTS.selectors.SURFACE);
     scrollContainer.scrollTop = scrollContainer.scrollHeight;
-    await task(1000); // Wait for scroll animation (flaky?)
+    await task(1000);
 
-    expect(scrollEndListener.callCount).to.equal(0);
+    expect(scrollEndListener).not.toHaveBeenCalled();
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -809,14 +804,14 @@ describe('ListDropdown', () => {
 
     const listItems = getListItems();
     context.listDropdown.handleKey('ArrowDown');
-    expect(listItems[0].active).to.be.true;
+    expect(listItems[0].active).toBe(true);
 
     context.listDropdown.handleKey('ArrowDown');
 
-    expect(listItems[0].active).to.be.false;
-    expect(listItems[1].active).to.be.false;
-    expect(listItems[2].active).to.be.true;
-    expect(listItems[3].active).to.be.false;
+    expect(listItems[0].active).toBe(false);
+    expect(listItems[1].active).toBe(false);
+    expect(listItems[2].active).toBe(true);
+    expect(listItems[3].active).toBe(false);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -835,10 +830,10 @@ describe('ListDropdown', () => {
     context.listDropdown.activateOption(2);
     context.listDropdown.handleKey('ArrowUp');
 
-    expect(listItems[0].active).to.be.true;
-    expect(listItems[1].active).to.be.false;
-    expect(listItems[2].active).to.be.false;
-    expect(listItems[3].active).to.be.false;
+    expect(listItems[0].active).toBe(true);
+    expect(listItems[1].active).toBe(false);
+    expect(listItems[2].active).toBe(false);
+    expect(listItems[3].active).toBe(false);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -858,7 +853,7 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     const headerElement = context.listDropdown.dropdownElement!.querySelector('#test-header');
-    expect(headerElement).to.not.be.null;
+    expect(headerElement).not.toBeNull();
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -878,7 +873,7 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     const footerElement = context.listDropdown.dropdownElement!.querySelector('#test-footer');
-    expect(footerElement).to.not.be.null;
+    expect(footerElement).not.toBeNull();
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -910,11 +905,11 @@ describe('ListDropdown', () => {
     const groups = popup.querySelectorAll(`.${LIST_DROPDOWN_CONSTANTS.classes.GROUP_WRAPPER} > div`);
     const listItems = getListItems();
 
-    expect(listItems.length).to.equal(6);
-    expect(groups.length).to.equal(3);
-    expect(groups[0].textContent).to.equal('Group 1');
-    expect(groups[1].textContent).to.equal('Custom group 2');
-    expect(groups[2].textContent).to.equal('Group 3');
+    expect(listItems.length).toBe(6);
+    expect(groups.length).toBe(3);
+    expect(groups[0].textContent).toBe('Group 1');
+    expect(groups[1].textContent).toBe('Custom group 2');
+    expect(groups[2].textContent).toBe('Group 3');
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -931,7 +926,7 @@ describe('ListDropdown', () => {
 
     const divider = context.listDropdown.dropdownElement!.querySelector(DIVIDER_CONSTANTS.elementName);
 
-    expect(divider).to.not.be.null;
+    expect(divider).not.toBeNull();
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -941,16 +936,20 @@ describe('ListDropdown', () => {
 
   it('should call custom callback for determining target element width to set min-width of dropdown', async () => {
     const width = 500;
-    const targetWidthCallback = spy(() => width);
+    let callCount = 0;
+    const targetWidthCallback = (): number => {
+      callCount++;
+      return width;
+    };
     const context = createListDropdown({ ...DEFAULT_CONFIG, targetWidthCallback });
     context.listDropdown.open();
     await delayPopupAnimation();
+    await frame();
 
     const popup = getListDropdownPopup();
-    const container = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
 
-    expect(getComputedStyle(container).minWidth).to.equal(`${width}px`);
-    expect(targetWidthCallback.callCount).to.equal(1);
+    expect(callCount).toBe(1);
+    expect(popup.style.getPropertyValue('--forge-popover-min-width')).toBe(`${width}px`);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -960,16 +959,20 @@ describe('ListDropdown', () => {
 
   it('should sync width with custom target width', async () => {
     const width = 500;
-    const targetWidthCallback = spy(() => width);
+    let callCount = 0;
+    const targetWidthCallback = (): number => {
+      callCount++;
+      return width;
+    };
     const context = createListDropdown({ ...DEFAULT_CONFIG, targetWidthCallback, syncWidth: true });
     context.listDropdown.open();
     await task(POPOVER_ANIMATION_DURATION);
+    await frame();
 
     const popup = getListDropdownPopup();
-    const container = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
 
-    expect(getComputedStyle(container).width).to.equal(`${width}px`);
-    expect(targetWidthCallback.callCount).to.equal(1);
+    expect(callCount).toBe(1);
+    expect(popup.style.getPropertyValue('--forge-popover-width')).toBe(`${width}px`);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -986,7 +989,7 @@ describe('ListDropdown', () => {
     const popup = getListDropdownPopup();
     const container = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
 
-    expect(getComputedStyle(container).width).to.equal(targetElementWidth);
+    expect(getComputedStyle(container).width).toBe(targetElementWidth);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -1000,12 +1003,12 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     let spinner = context.listDropdown.dropdownElement!.querySelector(CIRCULAR_PROGRESS_CONSTANTS.elementName);
-    expect(spinner).to.not.be.null;
+    expect(spinner).not.toBeNull();
 
     context.listDropdown.setOptions(BASIC_OPTIONS);
 
     spinner = context.listDropdown.dropdownElement!.querySelector(CIRCULAR_PROGRESS_CONSTANTS.elementName);
-    expect(spinner).to.be.null;
+    expect(spinner).toBeNull();
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -1026,12 +1029,12 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     let headerElement = context.listDropdown.dropdownElement!.querySelector('#test-header');
-    expect(headerElement).to.be.null;
+    expect(headerElement).toBeNull();
 
     context.listDropdown.setOptions(BASIC_OPTIONS);
 
     headerElement = context.listDropdown.dropdownElement!.querySelector('#test-header');
-    expect(headerElement).to.not.be.null;
+    expect(headerElement).not.toBeNull();
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -1052,12 +1055,12 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     let footerElement = context.listDropdown.dropdownElement!.querySelector('#test-footer');
-    expect(footerElement).to.be.null;
+    expect(footerElement).toBeNull();
 
     context.listDropdown.setOptions(BASIC_OPTIONS);
 
     footerElement = context.listDropdown.dropdownElement!.querySelector('#test-footer');
-    expect(footerElement).to.not.be.null;
+    expect(footerElement).not.toBeNull();
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -1074,7 +1077,7 @@ describe('ListDropdown', () => {
     context.listDropdown.dropdownElement!.dispatchEvent(new MouseEvent('mousedown'));
     await frame();
 
-    expect(document.activeElement).to.equal(context.targetElement);
+    expect(document.activeElement).toBe(context.targetElement);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -1088,7 +1091,7 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     const listElement = context.listDropdown.dropdownElement!.querySelector(LIST_ITEM_CONSTANTS.elementName.replace('-item', ''));
-    expect(listElement!.getAttribute('role')).to.equal('menu');
+    expect(listElement!.getAttribute('role')).toBe('menu');
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -1102,7 +1105,7 @@ describe('ListDropdown', () => {
     context.listDropdown.open();
     await delayPopupAnimation();
 
-    expect(Array.from(context.listDropdown.dropdownElement!.classList)).to.deep.equal(popupClasses);
+    expect(Array.from(context.listDropdown.dropdownElement!.classList)).toEqual(popupClasses);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -1115,7 +1118,7 @@ describe('ListDropdown', () => {
     context.listDropdown.open();
     await delayPopupAnimation();
 
-    expect((context.listDropdown.dropdownElement as any).animationType).to.equal('none');
+    expect((context.listDropdown.dropdownElement as any).animationType).toBe('none');
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -1129,8 +1132,8 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     const listItems = getListItems();
-    expect(listItems.length).to.equal(1);
-    expect(listItems[0].value).to.equal(BASIC_OPTIONS[0].value);
+    expect(listItems.length).toBe(1);
+    expect(listItems[0].value).toBe(BASIC_OPTIONS[0].value);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -1145,49 +1148,13 @@ describe('ListDropdown', () => {
 
     const listItems = getListItems();
     listItems.forEach(li => {
-      expect(li.dense).to.be.true;
+      expect(li.dense).toBe(true);
     });
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
       context.remove();
     }
-  });
-
-  it('should use custom option builder', () => {
-    // TODO: Implement test
-  });
-
-  it('should use custom option builder with HTML string', () => {
-    // TODO: Implement test
-  });
-
-  it('should use transform callback', () => {
-    // TODO: Implement test
-  });
-
-  it('should use leading builder callback', () => {
-    // TODO: Implement test
-  });
-
-  it('should use trailing builder callback', () => {
-    // TODO: Implement test
-  });
-
-  it('should set leading icon', () => {
-    // TODO: Implement test
-  });
-
-  it('should set leading icon as component', () => {
-    // TODO: Implement test
-  });
-
-  it('should set trailing icon', () => {
-    // TODO: Implement test
-  });
-
-  it('should set trailing icon as component', () => {
-    // TODO: Implement test
   });
 
   it('should set element attributes on options', async () => {
@@ -1198,8 +1165,8 @@ describe('ListDropdown', () => {
 
     const listItems = getListItems();
     const attrValue = listItems[2].getAttribute('data-test-attr');
-    expect(attrValue).to.not.be.null;
-    expect(attrValue).to.equal('test-value');
+    expect(attrValue).not.toBeNull();
+    expect(attrValue).toBe('test-value');
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
@@ -1215,7 +1182,7 @@ describe('ListDropdown', () => {
     await frame();
 
     const listItems = getListItems();
-    expect(listItems[0].querySelector('span[slot=secondary-text]')?.textContent).to.equal('Secondary label');
+    expect(listItems[0].querySelector('span[slot=secondary-text]')?.textContent).toBe('Secondary label');
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {
