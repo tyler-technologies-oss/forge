@@ -1,11 +1,12 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, it, expect, vi } from 'vitest';
+import { render } from 'vitest-browser-lit';
+import { html } from 'lit';
 import { getShadowElement } from '@tylertech/forge-core';
-import { spy } from 'sinon';
 import { frame, task } from '../core/utils/utils.js';
 import { COLOR_PICKER_CONSTANTS, DEFAULT_COLOR, IColorPickerComponent, IHSVA, IRGBA } from './index.js';
 import './color-picker.js';
 import { formatHex, rgbaToHex, rgbaToHsva } from './color-picker-utils.js';
+import { TestHarness } from '../core/testing/test-harness.js';
 
 const DEFAULT_RGBA = { r: 0, g: 0, b: 0, a: 1 };
 const DEFAULT_HEX = '#000000';
@@ -19,129 +20,129 @@ describe('ColorPickerComponent', () => {
     it('should have shadow root', async () => {
       const harness = await createFixture();
 
-      expect(harness.component.shadowRoot).to.not.be.null;
+      expect(harness.element.shadowRoot).not.toBeNull();
     });
 
     it('should have default value', async () => {
       const harness = await createFixture();
 
-      expect(harness.component.value).to.equal(`#${DEFAULT_COLOR}`);
+      expect(harness.element.value).toBe(`#${DEFAULT_COLOR}`);
     });
 
     it('should have default rgba ', async () => {
       const harness = await createFixture();
 
-      expect(harness.component.rgba).to.deep.equal(DEFAULT_RGBA);
+      expect(harness.element.rgba).toEqual(DEFAULT_RGBA);
     });
 
     it('should have default hsva', async () => {
       const harness = await createFixture();
 
-      expect(harness.component.hsva).to.deep.equal(DEFAULT_HSVA);
+      expect(harness.element.hsva).toEqual(DEFAULT_HSVA);
     });
 
     it('should have default opacity', async () => {
       const harness = await createFixture();
 
-      expect(harness.component.opacity).to.equal(1);
+      expect(harness.element.opacity).toBe(1);
     });
 
     it('should have default allow opacity', async () => {
       const harness = await createFixture();
 
-      expect(harness.component.allowOpacity).to.be.true;
+      expect(harness.element.allowOpacity).toBe(true);
     });
   });
 
   describe('properties', () => {
     describe('value', () => {
-      it(`when value is set should apply the correct rgba and hsva`, async () => {
+      it('when value is set should apply the correct rgba and hsva', async () => {
         const harness = await createFixture();
 
-        harness.component.setAttribute(COLOR_PICKER_CONSTANTS.attributes.VALUE, WHITE_AS_HEX);
+        harness.element.setAttribute(COLOR_PICKER_CONSTANTS.attributes.VALUE, WHITE_AS_HEX);
 
-        expect(harness.component.rgba).to.deep.equal(WHITE_AS_RGBA);
-        expect(harness.component.hsva).to.deep.equal(WHITE_AS_HSVA);
+        expect(harness.element.rgba).toEqual(WHITE_AS_RGBA);
+        expect(harness.element.hsva).toEqual(WHITE_AS_HSVA);
       });
 
-      it(`when value is set with short hex it should apply the correct rgba and hsva`, async () => {
+      it('when value is set with short hex it should apply the correct rgba and hsva', async () => {
         const harness = await createFixture();
 
-        harness.component.setAttribute(COLOR_PICKER_CONSTANTS.attributes.VALUE, '#ffff');
+        harness.element.setAttribute(COLOR_PICKER_CONSTANTS.attributes.VALUE, '#ffff');
 
-        expect(harness.component.rgba).to.deep.equal(WHITE_AS_RGBA);
-        expect(harness.component.hsva).to.deep.equal(WHITE_AS_HSVA);
+        expect(harness.element.rgba).toEqual(WHITE_AS_RGBA);
+        expect(harness.element.hsva).toEqual(WHITE_AS_HSVA);
       });
 
-      it(`when value is set with shorterhex it should apply the correct rgba and hsva`, async () => {
+      it('when value is set with shorterhex it should apply the correct rgba and hsva', async () => {
         const harness = await createFixture();
 
-        harness.component.setAttribute(COLOR_PICKER_CONSTANTS.attributes.VALUE, '#fff');
+        harness.element.setAttribute(COLOR_PICKER_CONSTANTS.attributes.VALUE, '#fff');
 
-        expect(harness.component.rgba).to.deep.equal(WHITE_AS_RGBA);
-        expect(harness.component.hsva).to.deep.equal(WHITE_AS_HSVA);
+        expect(harness.element.rgba).toEqual(WHITE_AS_RGBA);
+        expect(harness.element.hsva).toEqual(WHITE_AS_HSVA);
       });
 
-      it(`when value has the wrong type, should throw error`, async () => {
-        const harness = await createFixture();
-
-        expect(() => {
-          harness.component.value = 1 as any;
-        }).to.throw('Invalid hex value provided.');
-      });
-
-      it(`when value is set to invalid hex it should throw an error`, async () => {
+      it('when value has the wrong type, should throw error', async () => {
         const harness = await createFixture();
 
         expect(() => {
-          harness.component.value = '#fa3gt43sh';
-        }).to.throw('Invalid hex value provided.');
+          harness.element.value = 1 as any;
+        }).toThrow('Invalid hex value provided.');
       });
 
-      it(`when value is set to null rgba and hsva should reset`, async () => {
+      it('when value is set to invalid hex it should throw an error', async () => {
         const harness = await createFixture();
 
-        harness.component.value = null;
-
-        expect(harness.component.rgba).to.deep.equal(DEFAULT_RGBA);
-        expect(harness.component.hsva).to.deep.equal(DEFAULT_HSVA);
+        expect(() => {
+          harness.element.value = '#fa3gt43sh';
+        }).toThrow('Invalid hex value provided.');
       });
 
-      it(`when value is set with all possible paths`, async () => {
+      it('when value is set to null rgba and hsva should reset', async () => {
+        const harness = await createFixture();
+
+        harness.element.value = null;
+
+        expect(harness.element.rgba).toEqual(DEFAULT_RGBA);
+        expect(harness.element.hsva).toEqual(DEFAULT_HSVA);
+      });
+
+      it('when value is set with all possible paths', async () => {
         const harness = await createFixture();
 
         expect(() => {
           allPossibleHexValuesForRgbaToHsva(color => {
-            harness.component.value = color;
-            harness.component.allowOpacity = true;
-            harness.component.opacity = 1;
+            harness.element.value = color;
+            harness.element.allowOpacity = true;
+            harness.element.opacity = 1;
           });
-        }).to.not.throw();
+        }).not.toThrow();
       });
     });
 
     describe('rgba', () => {
-      it(`when rgba is set should update value and hsva`, async () => {
+      it('when rgba is set should update value and hsva', async () => {
         const harness = await createFixture();
         const color = { r: 255, g: 200, b: 150, a: 1 } as IRGBA;
         const hsva = rgbaToHsva(color);
         const hex = formatHex(rgbaToHex(color), false);
 
-        harness.component.rgba = color;
+        harness.element.rgba = color;
 
-        expect(harness.component.rgba).to.deep.equal(color);
-        expect(harness.component.hsva).to.deep.equal(hsva);
-        expect(harness.component.value).to.equal(hex);
+        expect(harness.element.rgba).toEqual(color);
+        expect(harness.element.hsva).toEqual(hsva);
+        expect(harness.element.value).toBe(hex);
       });
 
-      it(`when rgba is set to null should update value and hsva`, async () => {
+      it('when rgba is set to null should update value and hsva', async () => {
         const harness = await createFixture();
 
-        harness.component.rgba = null as IRGBA | null;
+        harness.element.rgba = null as IRGBA | null;
 
-        expect(harness.component.rgba).to.deep.equal(DEFAULT_RGBA);
-        expect(harness.component.hsva).to.deep.equal(DEFAULT_HSVA);
-        expect(harness.component.value).to.equal(DEFAULT_HEX);
+        expect(harness.element.rgba).toEqual(DEFAULT_RGBA);
+        expect(harness.element.hsva).toEqual(DEFAULT_HSVA);
+        expect(harness.element.value).toBe(DEFAULT_HEX);
       });
     });
 
@@ -149,54 +150,54 @@ describe('ColorPickerComponent', () => {
       it('when set to white should update rgba and value', async () => {
         const harness = await createFixture();
 
-        harness.component.hsva = WHITE_AS_HSVA;
+        harness.element.hsva = WHITE_AS_HSVA;
 
-        expect(harness.component.rgba).to.deep.equal(WHITE_AS_RGBA);
-        expect(harness.component.hsva).to.deep.equal(WHITE_AS_HSVA);
-        expect(harness.component.value).to.equal(WHITE_AS_HEX);
+        expect(harness.element.rgba).toEqual(WHITE_AS_RGBA);
+        expect(harness.element.hsva).toEqual(WHITE_AS_HSVA);
+        expect(harness.element.value).toBe(WHITE_AS_HEX);
       });
 
-      it('when set to white should update rgba and value', async () => {
+      it('when set to null should update rgba and value', async () => {
         const harness = await createFixture();
 
-        harness.component.hsva = null as IHSVA | null;
+        harness.element.hsva = null as IHSVA | null;
 
-        expect(harness.component.rgba).to.deep.equal(DEFAULT_RGBA);
-        expect(harness.component.hsva).to.deep.equal(DEFAULT_HSVA);
-        expect(harness.component.value).to.equal(DEFAULT_HEX);
+        expect(harness.element.rgba).toEqual(DEFAULT_RGBA);
+        expect(harness.element.hsva).toEqual(DEFAULT_HSVA);
+        expect(harness.element.value).toBe(DEFAULT_HEX);
       });
     });
 
     describe('opacity', () => {
       it('when set higher than 1 the console warns', async () => {
         const harness = await createFixture();
-        const warnSpy = spy(console, 'warn');
+        const warnSpy = vi.spyOn(console, 'warn');
 
-        harness.component.opacity = 500;
+        harness.element.opacity = 500;
 
-        expect(warnSpy).to.have.been.called;
-        warnSpy.restore();
+        expect(warnSpy).toHaveBeenCalled();
+        warnSpy.mockRestore();
       });
 
       it('when set to 0.5 ', async () => {
         const harness = await createFixture();
 
-        harness.component.value = '#fef';
-        harness.component.allowOpacity = true;
-        harness.component.opacity = 0.5;
+        harness.element.value = '#fef';
+        harness.element.allowOpacity = true;
+        harness.element.opacity = 0.5;
 
-        expect(harness.component.hsva!.a).to.equal(0.5);
+        expect(harness.element.hsva!.a).toBe(0.5);
       });
 
       it('when set to all possible hsva paths ', async () => {
         const harness = await createFixture();
 
         allPossiblePathsForhsvaToRgba(color => {
-          harness.component.hsva = color;
-          harness.component.allowOpacity = true;
-          harness.component.opacity = 0.5;
+          harness.element.hsva = color;
+          harness.element.allowOpacity = true;
+          harness.element.opacity = 0.5;
 
-          expect(harness.component.hsva.a).to.equal(0.5);
+          expect(harness.element.hsva.a).toBe(0.5);
         });
       });
     });
@@ -207,10 +208,10 @@ describe('ColorPickerComponent', () => {
         const hsva = { ...DEFAULT_HSVA };
         hsva.a = 0.5;
 
-        harness.component.hsva = hsva;
-        harness.component.setAttribute(COLOR_PICKER_CONSTANTS.attributes.ALLOW_OPACITY, '');
+        harness.element.hsva = hsva;
+        harness.element.setAttribute(COLOR_PICKER_CONSTANTS.attributes.ALLOW_OPACITY, '');
 
-        expect(harness.component.hsva!.a).to.equal(1);
+        expect(harness.element.hsva!.a).toBe(1);
       });
 
       it('when added then removed should have no negative effect', async () => {
@@ -218,13 +219,13 @@ describe('ColorPickerComponent', () => {
         const hsva = { ...DEFAULT_HSVA };
         hsva.a = 0.5;
 
-        harness.component.hsva = hsva;
-        harness.component.setAttribute(COLOR_PICKER_CONSTANTS.attributes.ALLOW_OPACITY, '');
-        harness.component.removeAttribute(COLOR_PICKER_CONSTANTS.attributes.ALLOW_OPACITY);
-        harness.component.hsva = hsva;
-        harness.component.setAttribute(COLOR_PICKER_CONSTANTS.attributes.ALLOW_OPACITY, '');
+        harness.element.hsva = hsva;
+        harness.element.setAttribute(COLOR_PICKER_CONSTANTS.attributes.ALLOW_OPACITY, '');
+        harness.element.removeAttribute(COLOR_PICKER_CONSTANTS.attributes.ALLOW_OPACITY);
+        harness.element.hsva = hsva;
+        harness.element.setAttribute(COLOR_PICKER_CONSTANTS.attributes.ALLOW_OPACITY, '');
 
-        expect(harness.component.hsva!.a).to.equal(1);
+        expect(harness.element.hsva!.a).toBe(1);
       });
     });
   });
@@ -232,32 +233,32 @@ describe('ColorPickerComponent', () => {
   describe('events', () => {
     it('when hex input has changed with an invalid input should not trigger change event', async () => {
       const harness = await createFixture();
-      const changeSpy = spy();
-      harness.component.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      const changeSpy = vi.fn();
+      harness.element.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
       harness.hexInputElement.value = '54';
       harness.hexInputElement.dispatchEvent(new Event('input'));
 
-      expect(changeSpy).to.not.have.been.called;
-      harness.component.removeEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      expect(changeSpy).not.toHaveBeenCalled();
+      harness.element.removeEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
     });
 
-    it('when hex input has changed with an invalid input it should trigger the change event', async () => {
+    it('when hex input has changed with an valid input it should trigger the change event', async () => {
       const harness = await createFixture();
-      const changeSpy = spy();
-      harness.component.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      const changeSpy = vi.fn();
+      harness.element.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
       harness.hexInputElement.value = '#fff';
       harness.hexInputElement.dispatchEvent(new Event('input'));
 
-      expect(changeSpy).to.have.been.called;
-      harness.component.removeEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      expect(changeSpy).toHaveBeenCalled();
+      harness.element.removeEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
     });
 
     it('when rgba input has changed the input should trigger the change event', async () => {
       const harness = await createFixture();
-      const changeSpy = spy();
-      harness.component.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      const changeSpy = vi.fn();
+      harness.element.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
       harness.rgbaInputAElement.value = '1';
       harness.rgbaInputBElement.value = '100';
@@ -269,14 +270,14 @@ describe('ColorPickerComponent', () => {
       harness.rgbaInputGElement.dispatchEvent(new Event('input'));
       harness.rgbaInputRElement.dispatchEvent(new Event('input'));
 
-      expect(changeSpy).to.have.callCount(4);
-      harness.component.removeEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      expect(changeSpy).toHaveBeenCalledTimes(4);
+      harness.element.removeEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
     });
 
     it('when rgba input has changed with an invalid input it should not trigger the change event', async () => {
       const harness = await createFixture();
-      const changeSpy = spy();
-      harness.component.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      const changeSpy = vi.fn();
+      harness.element.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
       harness.rgbaInputAElement.value = 'd';
       harness.rgbaInputBElement.value = 'asd';
@@ -288,14 +289,14 @@ describe('ColorPickerComponent', () => {
       harness.rgbaInputGElement.dispatchEvent(new Event('input'));
       harness.rgbaInputRElement.dispatchEvent(new Event('input'));
 
-      expect(changeSpy).to.have.callCount(0);
-      harness.component.removeEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      expect(changeSpy).toHaveBeenCalledTimes(0);
+      harness.element.removeEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
     });
 
     it('when hsva input has changed the input should trigger the change event', async () => {
       const harness = await createFixture();
-      const changeSpy = spy();
-      harness.component.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      const changeSpy = vi.fn();
+      harness.element.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
       harness.hsvaInputAElement.value = DEFAULT_HSVA.a.toString();
       harness.hsvaInputHElement.value = DEFAULT_HSVA.h.toString();
@@ -307,14 +308,14 @@ describe('ColorPickerComponent', () => {
       harness.hsvaInputSElement.dispatchEvent(new Event('input'));
       harness.hsvaInputVElement.dispatchEvent(new Event('input'));
 
-      expect(changeSpy).to.have.callCount(4);
-      harness.component.removeEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      expect(changeSpy).toHaveBeenCalledTimes(4);
+      harness.element.removeEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
     });
 
     it('when hsva input has changed the input should not trigger the change event', async () => {
       const harness = await createFixture();
-      const changeSpy = spy();
-      harness.component.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      const changeSpy = vi.fn();
+      harness.element.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
 
       harness.hsvaInputAElement.value = 'asdasdasd';
       harness.hsvaInputHElement.value = '-5';
@@ -326,8 +327,8 @@ describe('ColorPickerComponent', () => {
       harness.hsvaInputSElement.dispatchEvent(new Event('input'));
       harness.hsvaInputVElement.dispatchEvent(new Event('input'));
 
-      expect(changeSpy).to.have.callCount(0);
-      harness.component.removeEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      expect(changeSpy).toHaveBeenCalledTimes(0);
+      harness.element.removeEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeSpy);
     });
 
     it('when type clicked once it should change to rgba', async () => {
@@ -335,7 +336,7 @@ describe('ColorPickerComponent', () => {
 
       harness.typeButtonElement.click();
 
-      expect(harness.component.shadowRoot!.activeElement).to.equal(harness.rgbaInputRElement);
+      expect(harness.element.shadowRoot!.activeElement).toBe(harness.rgbaInputRElement);
     });
 
     it('when type clicked twice it should change to hsva', async () => {
@@ -344,7 +345,7 @@ describe('ColorPickerComponent', () => {
       harness.typeButtonElement.click();
       harness.typeButtonElement.click();
 
-      expect(harness.component.shadowRoot!.activeElement).to.equal(harness.hsvaInputHElement);
+      expect(harness.element.shadowRoot!.activeElement).toBe(harness.hsvaInputHElement);
     });
 
     it('when type clicked thrice it should change to hex', async () => {
@@ -354,7 +355,7 @@ describe('ColorPickerComponent', () => {
       harness.typeButtonElement.click();
       harness.typeButtonElement.click();
 
-      expect(harness.component.shadowRoot!.activeElement).to.equal(harness.hexInputElement);
+      expect(harness.element.shadowRoot!.activeElement).toBe(harness.hexInputElement);
     });
 
     it('when gradient slider changes it should update the value', async () => {
@@ -377,7 +378,7 @@ describe('ColorPickerComponent', () => {
       document.dispatchEvent(new MouseEvent('mouseup', { clientX: 1000, clientY: 0 }));
       await frame();
 
-      expect(harness.component.value).to.equal('#ff0000');
+      expect(harness.element.value).toBe('#ff0000');
     });
 
     it('when hue slider changes it should update the value', async () => {
@@ -394,7 +395,7 @@ describe('ColorPickerComponent', () => {
 
       await frame();
 
-      expect(harness.component.value).to.equal('#ff00ff');
+      expect(harness.element.value).toBe('#ff00ff');
     });
 
     it('when opacity slider changes it should update the color preview', async () => {
@@ -411,14 +412,14 @@ describe('ColorPickerComponent', () => {
 
       await frame();
 
-      expect(harness.component.value).to.equal('#ff0000');
+      expect(harness.element.value).toBe('#ff0000');
     });
 
     it('should debounce multiple attempts to dispatch the change event', async () => {
       const harness = await createFixture();
-      const changeEventSpy = spy();
-      harness.component.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeEventSpy);
-      harness.component.debounceChangeEvent = true;
+      const changeEventSpy = vi.fn();
+      harness.element.addEventListener(COLOR_PICKER_CONSTANTS.events.CHANGE, changeEventSpy);
+      harness.element.debounceChangeEvent = true;
 
       harness.gradientElement.dispatchEvent(new MouseEvent('mousedown', { clientX: 360, clientY: 0 }));
       harness.gradientElement.dispatchEvent(new MouseEvent('mousemove', { clientX: 361, clientY: 0 }));
@@ -430,9 +431,9 @@ describe('ColorPickerComponent', () => {
       await frame();
       await task(COLOR_PICKER_CONSTANTS.numbers.CHANGE_EVENT_DEBOUNCE_THRESHOLD * 2);
 
-      expect(changeEventSpy).to.have.been.calledOnce;
-      expect(changeEventSpy.firstCall.args[0].detail.type).to.equal('slider');
-      expect(changeEventSpy.firstCall.args[0].detail.source).to.equal('gradient');
+      expect(changeEventSpy).toHaveBeenCalledOnce();
+      expect(changeEventSpy.mock.calls[0][0].detail.type).toBe('slider');
+      expect(changeEventSpy.mock.calls[0][0].detail.source).toBe('gradient');
     });
 
     describe('gradient keyboard events', () => {
@@ -444,7 +445,7 @@ describe('ColorPickerComponent', () => {
         harness.gradientElement.dispatchEvent(new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
         harness.gradientElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', keyCode: 39 } as Partial<KeyboardEventInit>));
 
-        expect(harness.component.value).to.equal('#fffcfc');
+        expect(harness.element.value).toBe('#fffcfc');
       });
 
       it('when enter key gets pressed it should do nothing (currently)', async () => {
@@ -455,7 +456,7 @@ describe('ColorPickerComponent', () => {
         harness.gradientElement.dispatchEvent(new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
         harness.gradientElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 } as Partial<KeyboardEventInit>));
 
-        expect(harness.component.value).to.equal('#ffffff');
+        expect(harness.element.value).toBe('#ffffff');
       });
 
       it('when key left gets pressed after key right it should go back to white', async () => {
@@ -467,7 +468,7 @@ describe('ColorPickerComponent', () => {
         harness.gradientElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', keyCode: 39 } as Partial<KeyboardEventInit>));
         harness.gradientElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', keyCode: 37 } as Partial<KeyboardEventInit>));
 
-        expect(harness.component.value).to.equal('#ffffff');
+        expect(harness.element.value).toBe('#ffffff');
       });
 
       it('when key down gets pressed it should change color', async () => {
@@ -478,7 +479,7 @@ describe('ColorPickerComponent', () => {
         harness.gradientElement.dispatchEvent(new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
         harness.gradientElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', keyCode: 40 } as Partial<KeyboardEventInit>));
 
-        expect(harness.component.value).to.equal('#fcfcfc');
+        expect(harness.element.value).toBe('#fcfcfc');
       });
 
       it('when key up gets pressed after down it should change back to white', async () => {
@@ -490,7 +491,7 @@ describe('ColorPickerComponent', () => {
         harness.gradientElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', keyCode: 40 } as Partial<KeyboardEventInit>));
         harness.gradientElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', keyCode: 38 } as Partial<KeyboardEventInit>));
 
-        expect(harness.component.value).to.equal('#ffffff');
+        expect(harness.element.value).toBe('#ffffff');
       });
 
       it('when arrow left is pressed on edge it should stay at white', async () => {
@@ -503,7 +504,7 @@ describe('ColorPickerComponent', () => {
         harness.gradientElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', keyCode: 37 } as Partial<KeyboardEventInit>));
         harness.gradientElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', keyCode: 37 } as Partial<KeyboardEventInit>));
 
-        expect(harness.component.value).to.equal('#ffffff');
+        expect(harness.element.value).toBe('#ffffff');
       });
 
       it('when moved around then back to 0 it should end up to be white', async () => {
@@ -515,7 +516,7 @@ describe('ColorPickerComponent', () => {
         document.dispatchEvent(new MouseEvent('mousemove', { clientX: 0, clientY: 0 }));
         document.dispatchEvent(new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
 
-        expect(harness.component.value).to.equal('#ffffff');
+        expect(harness.element.value).toBe('#ffffff');
       });
 
       it('when other key pressed it should not affect the color', async () => {
@@ -526,7 +527,7 @@ describe('ColorPickerComponent', () => {
         harness.gradientElement.dispatchEvent(new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
         harness.gradientElement.dispatchEvent(new KeyboardEvent('keydown', { key: 't' } as Partial<KeyboardEventInit>));
 
-        expect(harness.component.value).to.equal('#ffffff');
+        expect(harness.element.value).toBe('#ffffff');
       });
 
       describe('color picker slider keyboard events', () => {
@@ -538,9 +539,9 @@ describe('ColorPickerComponent', () => {
 
           harness.opacitySliderElement.dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
           document.dispatchEvent(new MouseEvent('mouseup', { clientY: 0, clientX: 0 }));
-          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', keycode: 39 } as Partial<KeyboardEventInit>));
+          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', keyCode: 39 } as Partial<KeyboardEventInit>));
 
-          expect(harness.component.value).to.equal('#ff0d00');
+          expect(harness.element.value).toBe('#ff0d00');
         });
 
         it('when hue slider on the left edge and left key pressed no change should occur', async () => {
@@ -551,9 +552,9 @@ describe('ColorPickerComponent', () => {
 
           harness.opacitySliderElement.dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
           document.dispatchEvent(new MouseEvent('mouseup', { clientY: 0, clientX: 0 }));
-          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', keycode: 37 } as Partial<KeyboardEventInit>));
+          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', keyCode: 37 } as Partial<KeyboardEventInit>));
 
-          expect(harness.component.value).to.equal('#ff0000');
+          expect(harness.element.value).toBe('#ff0000');
         });
 
         it('when hue slider is changed by end key it should move to end', async () => {
@@ -564,9 +565,9 @@ describe('ColorPickerComponent', () => {
 
           harness.opacitySliderElement.dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
           document.dispatchEvent(new MouseEvent('mouseup', { clientY: 0, clientX: 0 }));
-          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', keycode: 35 } as Partial<KeyboardEventInit>));
+          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', keyCode: 35 } as Partial<KeyboardEventInit>));
 
-          expect(harness.component.value).to.equal('#ff00ff');
+          expect(harness.element.value).toBe('#ff00ff');
         });
 
         it('when hue slider is changed by home key it should move to start', async () => {
@@ -577,10 +578,10 @@ describe('ColorPickerComponent', () => {
 
           harness.opacitySliderElement.dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
           document.dispatchEvent(new MouseEvent('mouseup', { clientY: 0, clientX: 0 }));
-          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', keycode: 35 } as Partial<KeyboardEventInit>));
-          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', keycode: 36 } as Partial<KeyboardEventInit>));
+          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', keyCode: 35 } as Partial<KeyboardEventInit>));
+          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', keyCode: 36 } as Partial<KeyboardEventInit>));
 
-          expect(harness.component.value).to.equal('#ff0000');
+          expect(harness.element.value).toBe('#ff0000');
         });
 
         it('when hue slider is moved to the end and arrow right is pressed it should not go further', async () => {
@@ -591,20 +592,19 @@ describe('ColorPickerComponent', () => {
 
           harness.opacitySliderElement.dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
           document.dispatchEvent(new MouseEvent('mouseup', { clientY: 0, clientX: 0 }));
-          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', keycode: 35 } as Partial<KeyboardEventInit>));
-          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', keycode: 39 } as Partial<KeyboardEventInit>));
-          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', keycode: 39 } as Partial<KeyboardEventInit>));
+          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', keyCode: 35 } as Partial<KeyboardEventInit>));
+          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', keyCode: 39 } as Partial<KeyboardEventInit>));
+          harness.hueSliderThumbElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', keyCode: 39 } as Partial<KeyboardEventInit>));
 
-          expect(harness.component.value).to.equal('#ff00ff');
+          expect(harness.element.value).toBe('#ff00ff');
         });
       });
     });
   });
 
   describe('Color picker utils', () => {
-    it('rgbaToHasa should not throw error when different rgba values are used', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const harness = await createFixture();
+    it('rgbaToHsva should not throw error when different rgba values are used', async () => {
+      await createFixture();
 
       expect(() => {
         const color = { r: 255, g: 200, b: 150, a: 1 } as IRGBA;
@@ -614,7 +614,7 @@ describe('ColorPickerComponent', () => {
         rgbaToHsva(color);
         rgbaToHsva(color2);
         rgbaToHsva(color3);
-      }).to.not.throw();
+      }).not.toThrow();
     });
 
     it('hsvaToRgba should not throw error when different rgba values are used', async () => {
@@ -622,95 +622,96 @@ describe('ColorPickerComponent', () => {
 
       expect(() => {
         allPossiblePathsForhsvaToRgba(color => {
-          harness.component.hsva = color;
+          harness.element.hsva = color;
         });
-      }).to.not.throw();
+      }).not.toThrow();
     });
   });
 });
 
-class ColorPickerHarness {
-  constructor(public component: IColorPickerComponent) {}
+class ColorPickerHarness extends TestHarness<IColorPickerComponent> {
+  public initElementRefs(): void {}
 
   public get gradientElement(): HTMLElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.GRADIENT);
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.GRADIENT);
   }
 
   public get previewColorElement(): HTMLElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.PREVIEW_COLOR);
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.PREVIEW_COLOR);
   }
 
   public get hexInputElement(): HTMLInputElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.HEX_INPUT) as HTMLInputElement;
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.HEX_INPUT) as HTMLInputElement;
   }
 
   public get rgbaInputRElement(): HTMLInputElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_RGBA_R) as HTMLInputElement;
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_RGBA_R) as HTMLInputElement;
   }
 
   public get rgbaInputGElement(): HTMLInputElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_RGBA_G) as HTMLInputElement;
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_RGBA_G) as HTMLInputElement;
   }
 
   public get rgbaInputBElement(): HTMLInputElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_RGBA_B) as HTMLInputElement;
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_RGBA_B) as HTMLInputElement;
   }
 
   public get rgbaInputAElement(): HTMLInputElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_RGBA_A) as HTMLInputElement;
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_RGBA_A) as HTMLInputElement;
   }
 
   public get hsvaInputHElement(): HTMLInputElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_HSVA_H) as HTMLInputElement;
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_HSVA_H) as HTMLInputElement;
   }
 
   public get hsvaInputSElement(): HTMLInputElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_HSVA_S) as HTMLInputElement;
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_HSVA_S) as HTMLInputElement;
   }
 
   public get hsvaInputVElement(): HTMLInputElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_HSVA_V) as HTMLInputElement;
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_HSVA_V) as HTMLInputElement;
   }
 
   public get hsvaInputAElement(): HTMLInputElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_HSVA_A) as HTMLInputElement;
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_HSVA_A) as HTMLInputElement;
   }
 
   public get hueSliderElement(): HTMLElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.HUE_SLIDER);
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.HUE_SLIDER);
   }
 
   public get hueSliderThumbElement(): HTMLElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.HUE_SLIDER_THUMB);
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.HUE_SLIDER_THUMB);
   }
 
   public get opacitySliderElement(): HTMLElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.OPACITY_SLIDER);
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.OPACITY_SLIDER);
   }
 
   public get opacitySliderThumbElement(): HTMLElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.OPACITY_SLIDER_THUMB);
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.OPACITY_SLIDER_THUMB);
   }
 
   public get hexValueContainerElement(): HTMLElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_HEX_CONTAINER);
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_HEX_CONTAINER);
   }
 
   public get rgbaValueContainerElement(): HTMLElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_RGBA_CONTAINER);
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_RGBA_CONTAINER);
   }
 
   public get hsvaValueContainerElement(): HTMLElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_HSVA_CONTAINER);
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.COLOR_VALUE_HSVA_CONTAINER);
   }
 
   public get typeButtonElement(): HTMLButtonElement {
-    return getShadowElement(this.component, COLOR_PICKER_CONSTANTS.selectors.TYPE_BUTTON) as HTMLButtonElement;
+    return getShadowElement(this.element, COLOR_PICKER_CONSTANTS.selectors.TYPE_BUTTON) as HTMLButtonElement;
   }
 }
 
 async function createFixture(): Promise<ColorPickerHarness> {
-  const el = await fixture<IColorPickerComponent>(html`<forge-color-picker></forge-color-picker>`);
+  const screen = render(html`<forge-color-picker></forge-color-picker>`);
+  const el = screen.container.querySelector('forge-color-picker') as IColorPickerComponent;
   return new ColorPickerHarness(el);
 }
 
