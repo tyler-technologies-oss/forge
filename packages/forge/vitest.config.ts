@@ -63,7 +63,7 @@ export default defineConfig({
       instances: [{ browser: 'chromium' }],
       screenshotFailures: false
     },
-    include: ['src/lib/**/*.vitest.ts'],
+    include: ['src/lib/**/*.test.ts'],
     onConsoleLog(log) {
       if (log.includes('Lit is in dev mode')) {
         return false;

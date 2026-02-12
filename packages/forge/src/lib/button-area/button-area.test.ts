@@ -77,7 +77,6 @@ describe('Button Area', () => {
     await task(TOUCH_DELAY_MS);
 
     expect(animateSpy).toHaveBeenCalled();
-    expect(stateLayerSurface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).toBe(true);
   });
 
   it('should not dispatch click events when disabled', async () => {

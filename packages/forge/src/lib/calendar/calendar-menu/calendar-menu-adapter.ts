@@ -72,9 +72,9 @@ export class CalendarMenuAdapter extends BaseAdapter<ICalendarMenuComponent> imp
   public setClosed(): void {
     this._container.classList.remove(CALENDAR_MENU_CONSTANTS.classes.OPEN);
     this._container.classList.add(CALENDAR_MENU_CONSTANTS.classes.CLOSING);
+    this.toggleHostAttribute('hidden', true);
     playKeyframeAnimation(this._container, CALENDAR_MENU_CONSTANTS.classes.CLOSING, true).then(() => {
       removeAllChildren(this._container);
-      this.toggleHostAttribute('hidden', true);
     });
   }
 
