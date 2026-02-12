@@ -136,12 +136,12 @@ export class SliderCore implements ISliderCore {
     this._handlePointerMove(evt);
   }
 
-  private _handlePointerMove({ target, x, y }: PointerEvent): void {
+  private _handlePointerMove({ target, clientX, clientY }: PointerEvent): void {
     const isStart = (target as HTMLInputElement).id === 'start';
     if (isStart) {
-      this._adapter.tryHoverStartHandle({ x, y });
+      this._adapter.tryHoverStartHandle({ x: clientX, y: clientY });
     } else {
-      this._adapter.tryHoverEndHandle({ x, y });
+      this._adapter.tryHoverEndHandle({ x: clientX, y: clientY });
     }
   }
 
