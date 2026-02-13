@@ -1,0 +1,59 @@
+.focus-group-demo-container {
+  section:not(:last-of-type) {
+    margin-block-end: 32px;
+  }
+
+  p.forge-typography--body2 {
+    margin-block: 8px 16px;
+    color: var(--forge-theme-text-medium);
+  }
+
+  // Listbox styling
+  .listbox-card {
+    display: inline-block;
+    --forge-card-padding: 0;
+    min-width: 250px;
+  }
+
+  .listbox-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    forge-button {
+      justify-content: flex-start;
+      border-radius: 0;
+    }
+  }
+
+  // Menu styling
+  .menu-card {
+    display: inline-block;
+    --forge-card-padding: 0;
+    min-width: 250px;
+  }
+
+  .menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    forge-button {
+      justify-content: flex-start;
+      border-radius: 0;
+    }
+  }
+
+  // Vertical navigation styling
+  .vertical-card {
+    display: inline-block;
+    --forge-card-padding: 8px;
+    width: fit-content;
+  }
+
+  .vertical-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}

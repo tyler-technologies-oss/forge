@@ -1,0 +1,38 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Focus group',
+    includePath: './pages/focus-group/focus-group.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Behavior',
+        id: 'opt-behavior',
+        defaultValue: '',
+        options: [
+          { label: 'None', value: '' },
+          { label: 'Toolbar', value: 'toolbar' },
+          { label: 'Tablist', value: 'tablist' },
+          { label: 'Radiogroup', value: 'radiogroup' },
+          { label: 'Listbox', value: 'listbox' },
+          { label: 'Menu', value: 'menu' },
+          { label: 'Menubar', value: 'menubar' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Direction',
+        id: 'opt-direction',
+        defaultValue: 'both',
+        options: [
+          { label: 'Both', value: 'both' },
+          { label: 'Inline', value: 'inline' },
+          { label: 'Block', value: 'block' }
+        ]
+      },
+      { type: 'switch', label: 'Wrap', id: 'opt-wrap' },
+      { type: 'switch', label: 'No memory', id: 'opt-no-memory' }
+    ]
+  }
+})
+%>

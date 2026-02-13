@@ -26,6 +26,7 @@
   { "label": "File picker", "path": "/pages/file-picker/file-picker.html", "tags": ["form"] },
   { "label": "Floating action button", "path": "/pages/fab/fab.html", "tags": ["fab"] },
   { "label": "Focus indicator", "path": "/pages/focus-indicator/focus-indicator.html" },
+  { "label": "Focus group", "path": "/pages/focus-group/focus-group.html", "tags": ["accessibility", "keyboard", "navigation", "a11y", "roving tabindex"] },
   { "label": "Icon", "path": "/pages/icon/icon.html" },
   { "label": "Icon button", "path": "/pages/icon-button/icon-button.html" },
   { "label": "Inline message", "path": "/pages/inline-message/inline-message.html" },

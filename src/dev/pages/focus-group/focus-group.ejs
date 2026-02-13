@@ -1,0 +1,191 @@
+<div class="focus-group-demo-container">
+  <!-- Basic -->
+  <section>
+    <h3 class="forge-typography--heading2">Basic toolbar</h3>
+    <forge-focus-group id="focus-group-toolbar" behavior="toolbar">
+      <forge-button variant="text">
+        <forge-icon name="undo" slot="start"></forge-icon>
+        Undo
+      </forge-button>
+      <forge-button variant="text">
+        <forge-icon name="redo" slot="start"></forge-icon>
+        Redo
+      </forge-button>
+      <forge-button variant="text">
+        <forge-icon name="content_copy" slot="start"></forge-icon>
+        Copy
+      </forge-button>
+      <forge-button variant="text">
+        <forge-icon name="content_cut" slot="start"></forge-icon>
+        Cut
+      </forge-button>
+      <forge-button variant="text">
+        <forge-icon name="content_paste" slot="start"></forge-icon>
+        Paste
+      </forge-button>
+    </forge-focus-group>
+  </section>
+
+  <!-- Tablist -->
+  <section>
+    <h3 class="forge-typography--heading2">Tablist</h3>
+    <forge-focus-group id="focus-group-tablist" behavior="tablist">
+      <forge-button variant="text">Overview</forge-button>
+      <forge-button variant="text">Details</forge-button>
+      <forge-button variant="text">Settings</forge-button>
+      <forge-button variant="text">History</forge-button>
+    </forge-focus-group>
+  </section>
+
+  <!-- Radiogroup -->
+  <section>
+    <h3 class="forge-typography--heading2">Radiogroup</h3>
+    <forge-focus-group id="focus-group-radiogroup" behavior="radiogroup">
+      <forge-button variant="tonal">Small</forge-button>
+      <forge-button variant="tonal">Medium</forge-button>
+      <forge-button variant="tonal">Large</forge-button>
+      <forge-button variant="tonal">Extra Large</forge-button>
+    </forge-focus-group>
+  </section>
+
+  <!-- Listbox -->
+  <section>
+    <h3 class="forge-typography--heading2">Listbox</h3>
+    <forge-card class="listbox-card">
+      <forge-focus-group id="focus-group-listbox" behavior="listbox" class="listbox-container">
+        <forge-button variant="text">Option 1</forge-button>
+        <forge-button variant="text">Option 2</forge-button>
+        <forge-button variant="text">Option 3</forge-button>
+        <forge-button variant="text">Option 4</forge-button>
+        <forge-button variant="text">Option 5</forge-button>
+      </forge-focus-group>
+    </forge-card>
+  </section>
+
+  <!-- Menu -->
+  <section>
+    <h3 class="forge-typography--heading2">Menu</h3>
+    <forge-card class="menu-card">
+      <forge-focus-group id="focus-group-menu" behavior="menu" class="menu-container">
+        <forge-button variant="text">
+          <forge-icon name="save" slot="start"></forge-icon>
+          Save
+        </forge-button>
+        <forge-button variant="text">
+          <forge-icon name="print" slot="start"></forge-icon>
+          Print
+        </forge-button>
+        <forge-button variant="text">
+          <forge-icon name="share" slot="start"></forge-icon>
+          Share
+        </forge-button>
+        <forge-button variant="text">
+          <forge-icon name="delete" slot="start"></forge-icon>
+          Delete
+        </forge-button>
+      </forge-focus-group>
+    </forge-card>
+  </section>
+
+  <!-- Menubar -->
+  <section>
+    <h3 class="forge-typography--heading2">Menubar</h3>
+    <forge-focus-group id="focus-group-menubar" behavior="menubar">
+      <forge-button variant="text">File</forge-button>
+      <forge-button variant="text">Edit</forge-button>
+      <forge-button variant="text">View</forge-button>
+      <forge-button variant="text">Help</forge-button>
+    </forge-focus-group>
+  </section>
+
+  <!-- Direction: Inline -->
+  <section>
+    <h3 class="forge-typography--heading2">Direction: Inline (horizontal only)</h3>
+    <forge-focus-group id="focus-group-inline" behavior="toolbar" direction="inline">
+      <forge-icon-button shape="squared">
+        <forge-icon name="format_bold"></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button shape="squared">
+        <forge-icon name="format_italic"></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button shape="squared">
+        <forge-icon name="format_underlined"></forge-icon>
+      </forge-icon-button>
+    </forge-focus-group>
+  </section>
+
+  <!-- Direction: Block -->
+  <section>
+    <h3 class="forge-typography--heading2">Direction: Block (vertical only)</h3>
+    <forge-card class="vertical-card">
+      <forge-focus-group id="focus-group-block" behavior="toolbar" direction="block" class="vertical-container">
+        <forge-icon-button shape="squared">
+          <forge-icon name="home"></forge-icon>
+        </forge-icon-button>
+        <forge-icon-button shape="squared">
+          <forge-icon name="search"></forge-icon>
+        </forge-icon-button>
+        <forge-icon-button shape="squared">
+          <forge-icon name="settings"></forge-icon>
+        </forge-icon-button>
+        <forge-icon-button shape="squared">
+          <forge-icon name="person"></forge-icon>
+        </forge-icon-button>
+      </forge-focus-group>
+    </forge-card>
+  </section>
+
+  <!-- With Wrap -->
+  <section>
+    <h3 class="forge-typography--heading2">With wrap enabled</h3>
+    <p class="forge-typography--body2">Arrow keys wrap from last item to first (and vice versa)</p>
+    <forge-focus-group id="focus-group-wrap" behavior="toolbar" wrap>
+      <forge-button variant="tonal">First</forge-button>
+      <forge-button variant="tonal">Second</forge-button>
+      <forge-button variant="tonal">Third</forge-button>
+      <forge-button variant="tonal">Last</forge-button>
+    </forge-focus-group>
+  </section>
+
+  <!-- No Memory -->
+  <section>
+    <h3 class="forge-typography--heading2">No memory</h3>
+    <p class="forge-typography--body2">Focus always returns to first item instead of last-focused item</p>
+    <forge-focus-group id="focus-group-no-memory" behavior="toolbar" no-memory>
+      <forge-button variant="tonal">Alpha</forge-button>
+      <forge-button variant="tonal">Beta</forge-button>
+      <forge-button variant="tonal">Gamma</forge-button>
+      <forge-button variant="tonal">Delta</forge-button>
+    </forge-focus-group>
+  </section>
+
+  <!-- Icon buttons toolbar -->
+  <section>
+    <h3 class="forge-typography--heading2">Icon buttons toolbar</h3>
+    <forge-focus-group id="focus-group-icons" behavior="toolbar">
+      <forge-icon-button shape="squared" aria-label="Bold">
+        <forge-icon name="format_bold"></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button shape="squared" aria-label="Italic">
+        <forge-icon name="format_italic"></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button shape="squared" aria-label="Underline">
+        <forge-icon name="format_underlined"></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button shape="squared" aria-label="Strikethrough">
+        <forge-icon name="format_strikethrough"></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button shape="squared" aria-label="Align left">
+        <forge-icon name="format_align_left"></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button shape="squared" aria-label="Align center">
+        <forge-icon name="format_align_center"></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button shape="squared" aria-label="Align right">
+        <forge-icon name="format_align_right"></forge-icon>
+      </forge-icon-button>
+    </forge-focus-group>
+  </section>
+</div>
+
+<script type="module" src="focus-group.ts"></script>

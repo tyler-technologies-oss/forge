@@ -1,0 +1,9 @@
+// Focus group component uses display: contents to be layout-transparent
+// It acts as a pure behavioral wrapper without affecting the visual layout
+:host {
+  display: contents;
+}
+
+:host([hidden]) {
+  display: none;
+}
