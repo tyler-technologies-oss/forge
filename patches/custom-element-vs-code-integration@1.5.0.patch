@@ -1,0 +1,26 @@
+diff --git a/dist/index.cjs b/dist/index.cjs
+index 915f00bf81f45196ae56a4fa85bc65b23bd70f71..1de4e8115cad88a1c44f241aa101d3ff6931edd6 100644
+--- a/dist/index.cjs
++++ b/dist/index.cjs
+@@ -390,7 +390,7 @@ function generateVsCodeCustomElementData(customElementsManifest, options) {
+     cssProperties,
+     cssParts
+   );
+-  logGreen(`[vs-code-custom-data-generator] - Generated ${outputPath}.`);
++  logGreen(`[vs-code-custom-data-generator] - Generated ${outputPath}.`, options.hideLogs);
+ }
+ function getVsCodeHtmlCustomData(customElementsManifest, options) {
+   options = getOptions(options);
+diff --git a/dist/index.js b/dist/index.js
+index 9f8ecef9566bb8de3c7ec7e6e413af724183f8e1..094fcd49b13c86bf646db830fc65ac69375404c5 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -351,7 +351,7 @@ function generateVsCodeCustomElementData(customElementsManifest, options) {
+     cssProperties,
+     cssParts
+   );
+-  logGreen(`[vs-code-custom-data-generator] - Generated ${outputPath}.`);
++  logGreen(`[vs-code-custom-data-generator] - Generated ${outputPath}.`, options.hideLogs);
+ }
+ function getVsCodeHtmlCustomData(customElementsManifest, options) {
+   options = getOptions(options);

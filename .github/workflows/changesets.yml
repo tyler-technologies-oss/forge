@@ -1,0 +1,68 @@
+name: Changesets
+
+# Version branches: Add branch names here (e.g., v2.x) and update baseBranch in .changeset/config.json
+# For old major releases, use: publish: pnpm run release -- --tag v2
+on:
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  CI: true
+  TURBO_TELEMETRY_DISABLED: 1
+
+jobs:
+  version:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          title: "chore: release"
+          commit: "chore: release"
+          publish: pnpm run release
+          version: pnpm changeset version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
+
+      - name: Configure AWS Credentials
+        if: steps.changesets.outputs.published == 'true'
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy CDN Assets
+        if: steps.changesets.outputs.published == 'true'
+        working-directory: packages/forge
+        run: |
+          aws s3 sync cdn/ s3://${{ secrets.AWS_S3_BUCKET_NAME }}/ \
+            --size-only \
+            --cache-control "public, max-age=31536000, immutable"
