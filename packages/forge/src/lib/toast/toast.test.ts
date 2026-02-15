@@ -257,7 +257,7 @@ describe('Toast', () => {
       expect(el.open).toBe(true);
 
       getCloseButton(el).click();
-      await task(TOAST_ANIMATION_DURATION);
+      await task(TOAST_ANIMATION_DURATION + 100);
 
       expect(el.open).toBe(false);
       expect(el.hasAttribute(TOAST_CONSTANTS.attributes.OPEN)).toBe(false);

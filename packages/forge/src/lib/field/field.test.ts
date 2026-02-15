@@ -527,6 +527,7 @@ describe('Field', () => {
       harness.element.floatLabel = true;
 
       await frame();
+      await frame();
 
       expect(animationSpy).toHaveBeenCalled();
       expect(animationSpy.mock.calls.some((call: [AnimationEvent]) => call[0].animationName === FIELD_CONSTANTS.animations.FLOAT_IN_LABEL)).toBe(true);
@@ -539,6 +540,7 @@ describe('Field', () => {
       harness.addSlottedContent('label');
       harness.element.floatLabel = false;
 
+      await frame();
       await frame();
 
       expect(animationSpy).toHaveBeenCalled();

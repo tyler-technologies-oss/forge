@@ -70,7 +70,7 @@ export class DismissibleStack<T extends IDismissible> {
     const elements = DismissibleStack.instance.getAll();
     const elementsAfter = elements
       .slice(elements.indexOf(el))
-      .filter(element => element === el || element.contains(el))
+      .filter(element => element === el || el.contains(element))
       .reverse();
     for (const element of elementsAfter) {
       if (!element[tryDismiss](state)) {

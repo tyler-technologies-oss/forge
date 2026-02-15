@@ -40,13 +40,13 @@ pnpm run storybook:forge
 Forge uses [Vitest](https://vitest.dev/) for unit testing. To run the tests, use the following command:
 
 ```bash
-pnpm run test:vitest
+pnpm run test
 ```
 
 To run tests for a specific component, use:
 
 ```bash
-pnpm run test:vitest:run <component-name>
+pnpm run test <component-name>
 ```  
 
 ## Need help?

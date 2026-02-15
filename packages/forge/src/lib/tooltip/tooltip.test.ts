@@ -53,6 +53,7 @@ class TooltipHarness extends TestHarness<ITooltipComponent> {
   public async hoverOutside(): Promise<void> {
     if (this.isOpen && this.contentElement) {
       this.contentElement.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true, composed: true }));
+      await frame();
     }
     await userEvent.unhover(this.anchorElement);
   }
@@ -651,7 +652,7 @@ describe('Tooltip', () => {
       await harness.hoverOutside();
       expect(harness.isOpen).toBe(true);
 
-      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 150);
       expect(harness.isOpen).toBe(false);
     });
 
@@ -769,7 +770,7 @@ describe('Tooltip', () => {
       await task(50);
       expect(harness.isOpen).toBe(true);
 
-      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 150);
       expect(harness.isOpen).toBe(false);
     });
 

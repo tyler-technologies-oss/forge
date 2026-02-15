@@ -360,7 +360,7 @@ describe('Icon', () => {
       el.external = true;
       el.externalType = 'custom';
 
-      await frame();
+      await task();
 
       expect(loadSpy).toHaveBeenCalledOnce();
     });

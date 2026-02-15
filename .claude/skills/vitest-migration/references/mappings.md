@@ -190,3 +190,27 @@ el.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX, clien
 document.dispatchEvent(new PointerEvent('pointermove', { bubbles: true, clientX, clientY }));
 document.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
 ```
+
+## Polling with vi.waitFor()
+
+For flaky timing-dependent conditions, use `vi.waitFor()` to poll until a condition is true. **Don't put `expect` inside** - wait for the condition, then assert.
+
+```typescript
+// BEFORE - fragile timing
+ctx.simulateHover();
+await frame();
+expect(el.classList.contains('hover')).toBe(true); // May fail under CPU load
+
+// AFTER - wait for condition, then assert
+ctx.simulateHover();
+await vi.waitFor(() => el.classList.contains('hover'));
+expect(el.classList.contains('hover')).toBe(true);
+
+// Wait for negation
+await vi.waitFor(() => !el.classList.contains('loading'));
+```
+
+Options:
+- Default timeout: 1000ms
+- Default interval: 50ms
+- Custom: `await vi.waitFor(fn, { timeout: 2000, interval: 100 })`

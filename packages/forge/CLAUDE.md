@@ -88,8 +88,7 @@ export class ExampleComponent extends BaseComponent {
 
 ## Testing
 
-- **Vitest PREFERRED**: `*.vitest.ts`, `pnpm test:vitest:run`
-- WTR legacy: `*.test.ts`, `pnpm test:wtr:run`
+- `pnpm run test`
 
 ## Key Directories
 

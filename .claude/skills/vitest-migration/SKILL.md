@@ -310,7 +310,34 @@ vi.unstubAllGlobals(); // cleanup
 
 ## Polling Helpers for Async DOM Changes
 
-When components have internal async operations (setTimeout batching, fetch calls, IntersectionObserver), use polling helpers instead of arbitrary timeouts:
+### vi.waitFor() - Wait for Conditions
+
+Use Vitest's built-in `vi.waitFor()` to wait for async conditions. **Important**: Don't put `expect` inside `vi.waitFor()` - use it to wait for a condition, then assert afterwards.
+
+```typescript
+import { vi } from 'vitest';
+
+// Wait for condition to become true, then assert
+await vi.waitFor(() => el.classList.contains('active'));
+expect(el.getAttribute('aria-expanded')).toBe('true');
+
+// Wait for negation
+await vi.waitFor(() => !el.classList.contains('loading'));
+expect(el.textContent).toBe('Loaded');
+
+// Custom timeout
+await vi.waitFor(() => overlay.open, { timeout: 2000 });
+```
+
+**When to use `vi.waitFor()`:**
+- Hover/pointer state changes that depend on coordinate matching
+- Animation state transitions
+- Any condition that becomes true asynchronously
+- Tests that are flaky in parallel execution but pass when run alone
+
+### Custom Polling Helpers
+
+For waiting on DOM elements (not assertions), use custom helpers:
 
 ```typescript
 async function waitForElement(

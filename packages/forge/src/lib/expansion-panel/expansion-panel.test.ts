@@ -134,9 +134,10 @@ describe('Expansion Panel', () => {
     el.addEventListener(EXPANSION_PANEL_CONSTANTS.events.ANIMATION_COMPLETE, animationCompleteSpy);
 
     el.toggle();
-    await task(50); // wait for transitionstart event
 
-    expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPENING)).toBe(true);
+    await vi.waitFor(() => {
+      expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPENING)).toBe(true);
+    });
 
     await task(ANIMATION_TIMEOUT);
 

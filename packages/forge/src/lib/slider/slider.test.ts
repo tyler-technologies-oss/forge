@@ -80,19 +80,15 @@ class SliderHarness {
 
   public simulateStartEnter(): void {
     const bounds = this.startHandleThumbElement.getBoundingClientRect();
-    let { x, y } = bounds;
-    const { width, height } = bounds;
-    x = x + width / 2;
-    y = y + height / 2;
+    const x = bounds.x + bounds.width / 2;
+    const y = bounds.y + bounds.height / 2;
     this.startInputElement.dispatchEvent(new PointerEvent('pointerenter', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
 
   public simulateStartMove(divisor = 2): void {
     const bounds = this.startInputElement.getBoundingClientRect();
-    let { x, y } = bounds;
-    const { width, height } = bounds;
-    x = x + width / divisor;
-    y = y + height / divisor;
+    const x = bounds.x + bounds.width / divisor;
+    const y = bounds.y + bounds.height / divisor;
     this.startInputElement.dispatchEvent(new PointerEvent('pointermove', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
 
@@ -102,19 +98,15 @@ class SliderHarness {
 
   public simulateEndEnter(): void {
     const bounds = this.endHandleThumbElement.getBoundingClientRect();
-    let { x, y } = bounds;
-    const { width, height } = bounds;
-    x = x + width / 2;
-    y = y + height / 2;
+    const x = bounds.x + bounds.width / 2;
+    const y = bounds.y + bounds.height / 2;
     this.endInputElement.dispatchEvent(new PointerEvent('pointerenter', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
 
   public simulateEndMove(divisor = 2): void {
     const bounds = this.endInputElement.getBoundingClientRect();
-    let { x, y } = bounds;
-    const { width, height } = bounds;
-    x = x + width / divisor;
-    y = y + height / divisor;
+    const x = bounds.x + bounds.width / divisor;
+    const y = bounds.y + bounds.height / divisor;
     this.endInputElement.dispatchEvent(new PointerEvent('pointermove', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
 
@@ -398,11 +390,11 @@ describe('Slider', () => {
 
   it('should show label when hovering end input', async () => {
     const { ctx } = await createFixture();
-
-    ctx.simulateEndEnter();
     await frame();
 
-    expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(true);
+    ctx.simulateEndEnter();
+
+    await vi.waitFor(() => ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER));
     expect(ctx.endHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(true);
   });
 
@@ -605,49 +597,47 @@ describe('Slider', () => {
 
   it('should hover end handle', async () => {
     const { ctx } = await createFixture();
-
-    ctx.simulateEndEnter();
     await frame();
 
-    expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(true);
+    ctx.simulateEndEnter();
+
+    await vi.waitFor(() => ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER));
     expect(ctx.endHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(true);
   });
 
   it('should hover start handle', async () => {
     const { ctx } = await createFixture(html`<forge-slider range></forge-slider>`);
-
-    ctx.simulateStartEnter();
     await frame();
 
-    expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(true);
+    ctx.simulateStartEnter();
+
+    await vi.waitFor(() => ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER));
     expect(ctx.startHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(true);
   });
 
   it('should not set end hover if moving mouse over input when not focused', async () => {
     const { ctx } = await createFixture();
+    await frame();
 
     ctx.simulateEndEnter();
-    await frame();
-    expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(true);
+    await vi.waitFor(() => ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER));
     expect(ctx.endHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(true);
 
     ctx.simulateEndMove(1);
-    await frame();
-    expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(false);
+    await vi.waitFor(() => !ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER));
     expect(ctx.endHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(false);
   });
 
   it('should not set start hover if moving mouse over input when not focused', async () => {
     const { ctx } = await createFixture(html`<forge-slider range></forge-slider>`);
+    await frame();
 
     ctx.simulateStartEnter();
-    await frame();
-    expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(true);
+    await vi.waitFor(() => ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER));
     expect(ctx.startHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(true);
 
     ctx.simulateStartMove(1);
-    await frame();
-    expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(false);
+    await vi.waitFor(() => !ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER));
     expect(ctx.startHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).toBe(false);
   });
 

@@ -47,4 +47,4 @@ jobs:
         run: pnpm run setup:playwright
 
       - name: Test
-        run: pnpm run test:run
+        run: pnpm run test
