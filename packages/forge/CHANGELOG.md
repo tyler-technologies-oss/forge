@@ -1,10 +1,12 @@
-# v3.13.1 (Wed Dec 17 2025)
+# @tylertech/forge
 
-#### 🐛 Bug Fix
+## 3.13.1
+
+### 🐛 Bug Fix
 
 - fix(tree): export from index [#1042](https://github.com/tyler-technologies-oss/forge/pull/1042) ([@MikeMatusz](https://github.com/MikeMatusz))
 
-#### Authors: 1
+### Authors: 1
 
 - Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
 
