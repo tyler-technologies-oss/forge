@@ -427,7 +427,7 @@ describe('Chips', () => {
       const removeButton = getRemoveButtonElement(el);
 
       expect(el.removeButtonLabel).toBe('Custom remove');
-      expect(removeButton?.getAttribute('aria-label')).toBe('Custom remove');
+      expect(removeButton).toHaveAccessibleName('Custom remove');
     });
 
     it('should update remove button label attribute when setting property', async () => {
@@ -436,11 +436,11 @@ describe('Chips', () => {
       const removeButton = getRemoveButtonElement(el);
 
       expect(el.removeButtonLabel).toBeUndefined();
-      expect(removeButton?.getAttribute('aria-label')).toBe('Remove Test');
+      expect(removeButton).toHaveAccessibleName('Remove Test');
 
       el.removeButtonLabel = 'Custom remove';
 
-      expect(removeButton?.getAttribute('aria-label')).toBe('Custom remove');
+      expect(removeButton).toHaveAccessibleName('Custom remove');
     });
 
     it('should use default remove button label when custom label is not set', async () => {
@@ -449,7 +449,7 @@ describe('Chips', () => {
       const removeButton = getRemoveButtonElement(el);
 
       expect(el.removeButtonLabel).toBeUndefined();
-      expect(removeButton?.getAttribute('aria-label')).toBe('Remove Test Chip');
+      expect(removeButton).toHaveAccessibleName('Remove Test Chip');
     });
 
     it('should update remove button label when property is set after creation', async () => {
@@ -457,12 +457,12 @@ describe('Chips', () => {
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
       let removeButton = getRemoveButtonElement(el);
 
-      expect(removeButton?.getAttribute('aria-label')).toBe('Remove Test');
+      expect(removeButton).toHaveAccessibleName('Remove Test');
 
       el.removeButtonLabel = 'Delete item';
       removeButton = getRemoveButtonElement(el);
 
-      expect(removeButton?.getAttribute('aria-label')).toBe('Delete item');
+      expect(removeButton).toHaveAccessibleName('Delete item');
     });
 
     it('should reset to default remove button label when custom label is removed', async () => {
@@ -470,13 +470,13 @@ describe('Chips', () => {
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
       let removeButton = getRemoveButtonElement(el);
 
-      expect(removeButton?.getAttribute('aria-label')).toBe('Custom remove');
+      expect(removeButton).toHaveAccessibleName('Custom remove');
 
       el.removeAttribute(CHIP_CONSTANTS.attributes.REMOVE_BUTTON_LABEL);
       removeButton = getRemoveButtonElement(el);
 
       expect(el.removeButtonLabel).toBeNull();
-      expect(removeButton?.getAttribute('aria-label')).toBe('Remove Test');
+      expect(removeButton).toHaveAccessibleName('Remove Test');
     });
 
     it('should set focus to trigger element when calling focus() method', async () => {

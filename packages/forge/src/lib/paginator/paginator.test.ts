@@ -53,6 +53,21 @@ describe('Paginator', () => {
   });
 
   describe('total', () => {
+    it('should default to DEFAULT_TOTAL when set to non-finite value', async () => {
+      const harness = await createFixture({ total: 100 });
+
+      harness.paginatorElement.total = NaN;
+      expect(harness.paginatorElement.total).toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_TOTAL);
+
+      harness.paginatorElement.total = 100;
+      harness.paginatorElement.total = Infinity;
+      expect(harness.paginatorElement.total).toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_TOTAL);
+
+      harness.paginatorElement.total = 100;
+      harness.paginatorElement.total = -Infinity;
+      expect(harness.paginatorElement.total).toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_TOTAL);
+    });
+
     it('should set total via attribute', async () => {
       const harness = await createFixture({ total: 100 });
 
@@ -90,6 +105,21 @@ describe('Paginator', () => {
   });
 
   describe('pageIndex', () => {
+    it('should default to DEFAULT_PAGE_INDEX when set to non-finite value', async () => {
+      const harness = await createFixture({ total: 100, pageIndex: 2 });
+
+      harness.paginatorElement.pageIndex = NaN;
+      expect(harness.paginatorElement.pageIndex).toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_INDEX);
+
+      harness.paginatorElement.pageIndex = 2;
+      harness.paginatorElement.pageIndex = Infinity;
+      expect(harness.paginatorElement.pageIndex).toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_INDEX);
+
+      harness.paginatorElement.pageIndex = 2;
+      harness.paginatorElement.pageIndex = -Infinity;
+      expect(harness.paginatorElement.pageIndex).toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_INDEX);
+    });
+
     it('should set pageIndex via attribute', async () => {
       const harness = await createFixture({ pageIndex: 2 });
 
@@ -137,6 +167,21 @@ describe('Paginator', () => {
   });
 
   describe('pageSize', () => {
+    it('should default to DEFAULT_PAGE_SIZE when set to non-finite value', async () => {
+      const harness = await createFixture({ total: 100, pageSize: 50 });
+
+      harness.paginatorElement.pageSize = NaN;
+      expect(harness.paginatorElement.pageSize).toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE);
+
+      harness.paginatorElement.pageSize = 50;
+      harness.paginatorElement.pageSize = Infinity;
+      expect(harness.paginatorElement.pageSize).toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE);
+
+      harness.paginatorElement.pageSize = 50;
+      harness.paginatorElement.pageSize = -Infinity;
+      expect(harness.paginatorElement.pageSize).toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE);
+    });
+
     it('should set pageSize via attribute', async () => {
       const harness = await createFixture({ pageSize: 50 });
 
