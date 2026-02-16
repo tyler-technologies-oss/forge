@@ -1,0 +1,53 @@
+name: Storybook Preview (Forge)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'packages/forge/**'
+  pull_request_target:
+    types: [labeled]
+
+concurrency:
+  group: storybook-preview-forge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  CI: true
+  TURBO_TELEMETRY_DISABLED: 1
+
+jobs:
+  deploy-preview:
+    if: |
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'pull_request_target' && github.event.label.name == 'deploy-preview')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: pr-preview-${{ github.event.pull_request.number }}
+      url: https://forge.tylerdev.io/forge/pr-${{ github.event.pull_request.number }}/
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm run --filter @tylertech/forge build:storybook
+
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: packages/forge/storybook-static
+          target-folder: docs/forge/pr-${{ github.event.pull_request.number }}
+          clean: true
