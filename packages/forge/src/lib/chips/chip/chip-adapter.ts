@@ -37,6 +37,7 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
   private _rootElement: HTMLElement;
   private _triggerElement: HTMLButtonElement | HTMLAnchorElement;
   private _removeButtonElement: IIconButtonComponent | undefined;
+  private _removeTextElement: HTMLElement | undefined;
   private _startSlotElement: HTMLSlotElement;
   private _checkmarkElement: HTMLElement;
   private _focusIndicatorElement: IFocusIndicatorComponent;
@@ -147,9 +148,16 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
   }
 
   public setRemoveButtonLabel(value: string): void {
-    if (this._removeButtonElement) {
-      const label = value?.trim() || this._getDefaultRemoveButtonLabel();
-      this._removeButtonElement.setAttribute('aria-label', label);
+    if (!this._removeButtonElement) {
+      return;
+    }
+
+    if (value) {
+      this._removeButtonElement.removeAttribute('aria-labelledby');
+      this._removeButtonElement.setAttribute('aria-label', value.trim());
+    } else {
+      this._removeButtonElement.removeAttribute('aria-label');
+      this._removeButtonElement.setAttribute('aria-labelledby', this._getDefaultRemoveButtonLabelledBy());
     }
   }
 
@@ -170,10 +178,16 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
     if (value) {
       if (!this._removeButtonElement) {
         this._removeButtonElement = this._createRemoveButton();
+        this.setRemoveButtonLabel(this._component.removeButtonLabel || '');
+      }
+      if (!this._removeTextElement) {
+        this._removeTextElement = this._createRemoveTextElement();
       }
       this._rootElement.appendChild(this._removeButtonElement);
+      this._rootElement.appendChild(this._removeTextElement);
     } else {
       this._removeButtonElement?.remove();
+      this._removeTextElement?.remove();
     }
   }
 
@@ -214,8 +228,8 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
     this._stateLayerElement.playAnimation();
   }
 
-  private _getDefaultRemoveButtonLabel(): string {
-    return `Remove ${this._component.innerText}`;
+  private _getDefaultRemoveButtonLabelledBy(): string {
+    return 'remove-text trigger';
   }
 
   private _createRemoveButton(): IIconButtonComponent {
@@ -229,11 +243,15 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
     iconEl.name = 'close';
     buttonEl.appendChild(iconEl);
 
-    // Set initial aria-label, this will be updated by setRemoveButtonLabel if a custom label is provided
-    const label = this._component.removeButtonLabel?.trim() || this._getDefaultRemoveButtonLabel();
-    buttonEl.setAttribute('aria-label', label);
-
     return buttonEl;
+  }
+
+  private _createRemoveTextElement(): HTMLElement {
+    const span = document.createElement('span');
+    span.id = 'remove-text';
+    span.style.display = 'none';
+    span.textContent = 'Remove';
+    return span;
   }
 
   private _createAnchorElement(): HTMLAnchorElement {
