@@ -70,7 +70,6 @@
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "catalog:",
-    "@repo/prettier-config": "workspace:",
     "@rollup/plugin-typescript": "^12.3.0",
     "@storybook/addon-a11y": "catalog:",
     "@storybook/addon-docs": "catalog:",

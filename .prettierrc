@@ -1,1 +1,8 @@
-"@repo/prettier-config"
+{
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "bracketSameLine": true,
+  "printWidth": 160,
+  "singleQuote": true,
+  "trailingComma": "none"
+}

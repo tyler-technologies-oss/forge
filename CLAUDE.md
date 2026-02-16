@@ -20,7 +20,7 @@ pnpm test         # Run all tests
 ## Code Style
 
 - ESLint 9 flat config (`eslint.config.js`)
-- Prettier via `@repo/prettier-config`
+- Prettier (config in root `.prettierrc`)
 - Stylelint for SCSS
 
 DO NOT add comments unless code is complex. Defer to configs.
@@ -64,4 +64,3 @@ DO NOT add comments unless code is complex. Defer to configs.
 ## Packages
 
 - `packages/forge` - Web components library (see its CLAUDE.md)
-- `packages/prettier-config` - Shared prettier config
