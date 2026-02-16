@@ -2,4 +2,4 @@
 '@tylertech/forge': patch
 ---
 
-Ensure remove chip button has the expected default name
+fix(chip): Ensure remove chip button has the expected default name
