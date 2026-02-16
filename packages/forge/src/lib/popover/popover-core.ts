@@ -1,0 +1,660 @@
+import { IOverlayAwareCore, OverlayAwareCore } from '../overlay/base/overlay-aware-core.js';
+import { OverlayLightDismissEventData } from '../overlay/overlay-constants.js';
+import { WithLongpressListener } from '../core/mixins/interactions/longpress/with-longpress-listener.js';
+import { IPopoverAdapter } from './popover-adapter.js';
+import {
+  PopoverAnimationType,
+  IPopoverToggleEventData,
+  PopoverTriggerType,
+  POPOVER_CONSTANTS,
+  PopoverDismissReason,
+  POPOVER_HOVER_TIMEOUT,
+  PopoverPreset,
+  PopoverAnchorAccessibility
+} from './popover-constants.js';
+import { IDismissibleStackState, DismissibleStack } from '../core/utils/dismissible-stack.js';
+import { VirtualElement } from '../core/utils/position-utils.js';
+import type { IPopoverComponent } from './popover.js';
+
+export interface IPopoverCore extends IOverlayAwareCore {
+  arrow: boolean;
+  animationType: PopoverAnimationType;
+  triggerType: PopoverTriggerType | PopoverTriggerType[];
+  longpressDelay: number;
+  persistentHover: boolean;
+  hoverDismissDelay: number;
+  hoverDelay: number;
+  preset: PopoverPreset;
+  distinct: string | null;
+  anchorAccessibility: PopoverAnchorAccessibility;
+  hideAsync(): Promise<void>;
+  dispatchBeforeToggleEvent(state: IDismissibleStackState): boolean;
+}
+
+export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopoverAdapter>) implements IPopoverCore {
+  private _anchor: string | null = null;
+  private _arrow = false;
+  private _animationType: PopoverAnimationType = 'zoom';
+  private _triggerTypes: PopoverTriggerType[] = [POPOVER_CONSTANTS.defaults.TRIGGER_TYPE];
+  private _persistentHover = false;
+  private _hoverDismissDelay = POPOVER_HOVER_TIMEOUT;
+  private _hoverDelay = POPOVER_CONSTANTS.defaults.HOVER_DELAY;
+  private _preset = POPOVER_CONSTANTS.defaults.PRESET;
+  private _distinct: string | null = null;
+  private _anchorAccessibility = POPOVER_CONSTANTS.defaults.ANCHOR_ACCESSIBILITY;
+  private _previouslyFocusedElement: HTMLElement | null = null;
+
+  // Hover trigger state
+  private _hoverAnchorLeaveTimeout: undefined | number;
+  private _popoverMouseleaveTimeout: undefined | number;
+  private _currentHoverCoords: undefined | { x: number; y: number };
+  private _hoverTimeout: number | undefined;
+
+  // Click trigger listeners
+  private _anchorClickListener = this._onAnchorClick.bind(this);
+
+  // Double click trigger listeners
+  private _anchorDoubleClickListener = this._onAnchorDoubleClick.bind(this);
+
+  // Hover trigger listeners
+  private _anchorMouseenterListener = this._onAnchorMouseenter.bind(this);
+  private _anchorMouseleaveListener = this._onAnchorMouseleave.bind(this);
+  private _popoverMouseenterListener = this._onPopoverMouseenter.bind(this);
+  private _popoverMouseleaveListener = this._onPopoverMouseleave.bind(this);
+  private _mousemoveListener = this._onMousemove.bind(this);
+
+  // Focus trigger listeners
+  private _anchorFocusListener = this._onAnchorFocus.bind(this);
+  private _anchorBlurListener = this._onAnchorBlur.bind(this);
+  private _popoverBlurListener = this._onPopoverBlur.bind(this);
+
+  // Contextmenu listener
+  private _contextmenuListener = this._onContextmenu.bind(this);
+
+  constructor(adapter: IPopoverAdapter) {
+    super(adapter);
+  }
+
+  public override initialize(): void {
+    super.initialize();
+
+    this._adapter.tryApplyGlobalConfiguration([
+      'placement',
+      'animationType',
+      'positionStrategy',
+      'shift',
+      'hide',
+      'flip',
+      'boundaryElement',
+      'fallbackPlacements',
+      'persistent',
+      'arrow'
+    ]);
+
+    if (!this.anchorElement) {
+      this._adapter.tryLocateAnchorElement(this._anchor);
+    }
+
+    this._initializeTriggerListeners();
+    this._adapter.initializeAnchorElement();
+  }
+
+  public override destroy(): void {
+    super.destroy();
+
+    this._adapter.destroy();
+
+    window.clearTimeout(this._hoverTimeout);
+    window.clearTimeout(this._hoverAnchorLeaveTimeout);
+    window.clearTimeout(this._popoverMouseleaveTimeout);
+
+    this._previouslyFocusedElement = null;
+
+    if (this.open) {
+      this._closePopover();
+    }
+
+    this._removeTriggerListeners();
+  }
+
+  public hideAsync(): Promise<void> {
+    return this._closePopover();
+  }
+
+  protected async _onOverlayLightDismiss(evt: CustomEvent<OverlayLightDismissEventData>): Promise<void> {
+    evt.preventDefault();
+    this._requestDismiss(evt.detail.reason);
+  }
+
+  public dispatchBeforeToggleEvent({ reason }: IDismissibleStackState): boolean {
+    const evt = this._dispatchBeforetoggleEvent();
+
+    if (evt.defaultPrevented) {
+      return false;
+    }
+
+    const previousFocusedEl = this._previouslyFocusedElement;
+
+    this._closePopover().then(() => {
+      this._dispatchToggleEvent();
+
+      if (reason === 'escape' && previousFocusedEl && this._adapter.hasFocus()) {
+        previousFocusedEl.focus();
+      }
+    });
+
+    return true;
+  }
+
+  private _openPopover({ dispatchEvents = true } = {}): void {
+    if (this.open) {
+      return;
+    }
+
+    if (dispatchEvents) {
+      const evt = this._dispatchBeforetoggleEvent();
+      if (evt.defaultPrevented) {
+        return;
+      }
+    }
+
+    this._previouslyFocusedElement = this._adapter.captureFocusedElement();
+    this._adapter.setOverlayOpen(true);
+
+    // Popovers can be distinct from each other, meaning that only one popover with the same distinct
+    // value can be open at a time. Let's capture the distinct group context and close any other popovers
+    // that are open in the same context.
+    if (this._distinct != null) {
+      const allPopovers = DismissibleStack.instance.getAll().filter(el => el.tagName.toLowerCase() === 'forge-popover') as IPopoverComponent[];
+      const contextPopovers = allPopovers.filter(popover => popover.distinct === this._distinct && !popover.persistent);
+      contextPopovers.filter(popover => popover !== this._adapter.hostElement).forEach(popover => popover.hideAsync());
+    }
+
+    if (!this.overlayElement.persistent) {
+      DismissibleStack.instance.add(this._adapter.hostElement);
+    }
+
+    this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.OPEN, this.open);
+    this._adapter.tryAutofocus();
+
+    if (dispatchEvents) {
+      this._dispatchToggleEvent();
+    }
+  }
+
+  private async _closePopover(): Promise<void> {
+    if (!this.open) {
+      return;
+    }
+
+    this._previouslyFocusedElement = null;
+    DismissibleStack.instance.remove(this._adapter.hostElement);
+
+    if (this._animationType === 'none') {
+      this._adapter.setOverlayOpen(false);
+    } else {
+      await this._adapter.hide();
+    }
+
+    this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.OPEN, this.open);
+  }
+
+  private _dispatchBeforetoggleEvent(): CustomEvent<IPopoverToggleEventData> {
+    const evt = new CustomEvent<IPopoverToggleEventData>(POPOVER_CONSTANTS.events.BEFORETOGGLE, {
+      detail: {
+        oldState: this.open ? 'open' : 'closed',
+        newState: this.open ? 'closed' : 'open'
+      },
+      bubbles: false,
+      cancelable: true
+    });
+    this._adapter.dispatchHostEvent(evt);
+    return evt;
+  }
+
+  private _dispatchToggleEvent(): void {
+    this._adapter.dispatchHostEvent(
+      new CustomEvent<IPopoverToggleEventData>(POPOVER_CONSTANTS.events.TOGGLE, {
+        detail: {
+          oldState: this.open ? 'closed' : 'open',
+          newState: this.open ? 'open' : 'closed'
+        },
+        bubbles: false
+      })
+    );
+  }
+
+  private _initializeTriggerListeners(): void {
+    if (this._triggerTypes.includes('manual')) {
+      return;
+    }
+
+    let types = [...this._triggerTypes];
+
+    // When contextmenu is used, we ignore all other trigger types
+    if (types.includes('contextmenu')) {
+      types = ['contextmenu'];
+    } else {
+      // Hover triggers already listen to focus by default
+      if (types.includes('hover') && types.includes('focus')) {
+        types.splice(types.indexOf('focus'), 1);
+      }
+
+      // We don't support both click and doubleclick together; click takes precedence
+      if (types.includes('click') && types.includes('doubleclick')) {
+        types.splice(types.indexOf('doubleclick'), 1);
+      }
+    }
+
+    const triggerInitializers: Record<Exclude<PopoverTriggerType, 'manual'>, () => void> = {
+      click: () => this._adapter.addAnchorListener('click', this._anchorClickListener),
+      hover: () => {
+        this._adapter.addAnchorListener('mouseenter', this._anchorMouseenterListener);
+        this._adapter.addAnchorListener('focusin', this._anchorFocusListener);
+      },
+      focus: () => this._adapter.addAnchorListener('focusin', this._anchorFocusListener),
+      longpress: () => {
+        if (this._adapter.overlayElement.anchorElement && !(this._adapter.overlayElement.anchorElement instanceof VirtualElement)) {
+          this._startLongpressListener(this._adapter.overlayElement.anchorElement);
+        }
+      },
+      doubleclick: () => this._adapter.addAnchorListener('dblclick', this._anchorDoubleClickListener),
+      contextmenu: () => this._adapter.addDocumentListener('contextmenu', this._contextmenuListener)
+    };
+
+    types.forEach(triggerType => triggerInitializers[triggerType as Exclude<PopoverTriggerType, 'manual'>]?.());
+  }
+
+  private _removeTriggerListeners(): void {
+    const triggerRemovers: Record<Exclude<PopoverTriggerType, 'manual'>, () => void> = {
+      click: () => this._adapter.removeAnchorListener('click', this._anchorClickListener),
+      hover: () => {
+        this._adapter.removeAnchorListener('mouseenter', this._anchorMouseenterListener);
+        this._adapter.removeAnchorListener('mouseleave', this._anchorMouseleaveListener);
+        this._adapter.removeAnchorListener('focusin', this._anchorFocusListener);
+        this._adapter.removeAnchorListener('focusout', this._anchorBlurListener);
+        this._adapter.removeHostListener('focusout', this._popoverBlurListener);
+        this._tryRemoveHoverListeners();
+      },
+      focus: () => {
+        this._adapter.removeAnchorListener('focusin', this._anchorFocusListener);
+        this._adapter.removeAnchorListener('focusout', this._anchorBlurListener);
+        this._adapter.removeHostListener('focusout', this._popoverBlurListener);
+      },
+      longpress: () => {
+        if (this._adapter.overlayElement.anchorElement && !(this._adapter.overlayElement.anchorElement instanceof VirtualElement)) {
+          this._stopLongpressListener(this._adapter.overlayElement.anchorElement);
+        }
+      },
+      doubleclick: () => this._adapter.removeAnchorListener('dblclick', this._anchorDoubleClickListener),
+      contextmenu: () => this._adapter.removeDocumentListener('contextmenu', this._contextmenuListener)
+    };
+    this._triggerTypes.forEach(triggerType => triggerRemovers[triggerType as Exclude<PopoverTriggerType, 'manual'>]?.());
+  }
+
+  private _startHoverListeners(): void {
+    this._adapter.addDocumentListener('mousemove', this._mousemoveListener);
+    this._adapter.addSurfaceListener('mouseenter', this._popoverMouseenterListener);
+    this._adapter.addSurfaceListener('mouseleave', this._popoverMouseleaveListener);
+  }
+
+  private _tryRemoveHoverListeners(): void {
+    this._adapter.removeDocumentListener('mousemove', this._mousemoveListener);
+    this._adapter.removeSurfaceListener('mouseenter', this._popoverMouseenterListener);
+    this._adapter.removeSurfaceListener('mouseleave', this._popoverMouseleaveListener);
+  }
+
+  private _requestDismiss(reason: PopoverDismissReason): void {
+    DismissibleStack.instance.requestDismiss(this._adapter.hostElement, { reason });
+  }
+
+  private _requestClose(reason: PopoverDismissReason): void {
+    DismissibleStack.instance.dismiss(this._adapter.hostElement, { reason });
+  }
+
+  private _onHoverClose(): void {
+    /* c8 ignore next 3 */
+    if (!this.open) {
+      return;
+    }
+
+    if (this._currentHoverCoords) {
+      const mouseElement = document.elementFromPoint(this._currentHoverCoords.x, this._currentHoverCoords.y) as HTMLElement;
+      const isOwnElement =
+        mouseElement &&
+        (this._adapter.isChildElement(mouseElement) ||
+          (!(this._adapter.overlayElement.anchorElement instanceof VirtualElement) && this._adapter.overlayElement.anchorElement?.contains(mouseElement)));
+      /* c8 ignore next 3 */
+      if (isOwnElement) {
+        return;
+      }
+    }
+    window.clearTimeout(this._hoverTimeout);
+    this._tryRemoveHoverListeners();
+    this._requestClose('hover');
+  }
+
+  /**
+   * Handles `click` events on the anchor element.
+   *
+   * Only called when using the "click" (default) trigger type.
+   */
+  private _onAnchorClick(_evt: PointerEvent): void {
+    if (!this.open) {
+      this._openPopover();
+    } else {
+      this._requestClose('click');
+    }
+  }
+
+  /**
+   * Handles `dblclick` events on the anchor element.
+   */
+  private _onAnchorDoubleClick(): void {
+    if (!this.open) {
+      this._openPopover();
+    } else {
+      this._requestClose('doubleclick');
+    }
+  }
+
+  /**
+   * Handles `mouseenter` events on the anchor element. This is used to determine if the popover should be opened.
+   *
+   * Only called when using the "hover" trigger type.
+   */
+  private _onAnchorMouseenter(): void {
+    window.clearTimeout(this._hoverAnchorLeaveTimeout);
+    if (!this._adapter.overlayElement.open) {
+      if (!this._persistentHover) {
+        this._adapter.addAnchorListener('mouseleave', this._anchorMouseleaveListener);
+      }
+      if (this._hoverDelay) {
+        this._hoverTimeout = window.setTimeout(() => {
+          this._openPopover();
+        }, this._hoverDelay);
+      } else {
+        this._openPopover();
+      }
+    }
+  }
+
+  /**
+   * Handles `mouseleave` events on the anchor element. This is used to determine if the popover should be closed.
+   *
+   * Only called when using the "hover" trigger type.
+   *
+   * We use a timeout here to allow for the user to take an indirect path toward the popover.
+   */
+  private _onAnchorMouseleave(): void {
+    this._startHoverListeners();
+    window.clearTimeout(this._hoverTimeout);
+
+    this._hoverAnchorLeaveTimeout = window.setTimeout(() => {
+      this._hoverAnchorLeaveTimeout = undefined;
+      this._onHoverClose();
+    }, this._hoverDismissDelay);
+  }
+
+  /**
+   * Handles `mouseenter` events on the popover element. This is used to determine if the mouse has entered the popover element,
+   * only after the mouse leaves the anchor element..
+   */
+  private _onPopoverMouseenter(): void {
+    window.clearTimeout(this._hoverAnchorLeaveTimeout);
+    window.clearTimeout(this._popoverMouseleaveTimeout);
+  }
+
+  /**
+   * Handles `mouseleave` events on the popover element. This is used to determine if the mouse has moved outside of the popover.
+   *
+   * Only called when using the "hover" trigger type.
+   *
+   * We use a timeout here to allow for the user to take an indirect path toward an open child menu.
+   * This allows for the popup to stay open while the user is moving their mouse to it to avoid closing immediately.
+   */
+  private _onPopoverMouseleave(): void {
+    this._popoverMouseleaveTimeout = window.setTimeout(() => {
+      this._popoverMouseleaveTimeout = undefined;
+      this._onHoverClose();
+    }, this._hoverDismissDelay);
+  }
+
+  /**
+   * Handles `mousemove` events on the document. This is used to determine if the mouse has moved outside of the popover.
+   *
+   * This listener is only initialized once the mouse leaves the anchor element.
+   *
+   * Only called when using the "hover" trigger type.
+   */
+  private _onMousemove(evt: MouseEvent): void {
+    this._currentHoverCoords = { x: evt.pageX, y: evt.pageY };
+  }
+
+  /**
+   * Handles `focusin` events on the anchor element. This is used to determine if focus has been received on the anchor element when using the "focus" trigger type.
+   */
+  private _onAnchorFocus(_evt: FocusEvent): void {
+    if (!this._adapter.overlayElement.open) {
+      this._adapter.addAnchorListener('focusout', this._anchorBlurListener);
+      this._openPopover();
+    }
+  }
+
+  /**
+   * Handles `focusout` events on the anchor element. This is used to determine if focus has been moved outside of the anchor element when using the "focus" trigger type.
+   */
+  private _onAnchorBlur(evt: FocusEvent): void {
+    if (!this._adapter.isChildElement(evt.relatedTarget as HTMLElement)) {
+      // Focus was moved outside of the popover element, so let's assume we need to close
+      this._requestClose('focus');
+    } else {
+      // Focus was moved to within the popover element, now we must listen for focus to move outside of the popover
+      this._adapter.addHostListener('focusout', this._popoverBlurListener);
+    }
+  }
+
+  private _onPopoverBlur({ relatedTarget }: FocusEvent): void {
+    const popoverHasFocus = this._adapter.hasFocus();
+    const anchorHasFocus =
+      !(this._adapter.overlayElement.anchorElement instanceof VirtualElement) &&
+      (this._adapter.overlayElement.anchorElement?.matches(':focus-within') ||
+        this._adapter.overlayElement.anchorElement?.contains(relatedTarget as HTMLElement));
+    if (!popoverHasFocus && !anchorHasFocus) {
+      this._requestClose('focus');
+    }
+  }
+
+  protected _onLongpress(): void {
+    if (!this.open) {
+      this._openPopover();
+    }
+  }
+
+  private _onContextmenu(evt: MouseEvent): void {
+    evt.preventDefault();
+    this.anchorElement = VirtualElement.fromEvent(evt);
+    if (!this.open) {
+      this._openPopover();
+    }
+  }
+
+  /**
+   * Public API
+   */
+
+  public override get open(): boolean {
+    return this._adapter.overlayElement.open;
+  }
+  public override set open(value: boolean) {
+    if (this._adapter.overlayElement.open !== value) {
+      if (value) {
+        this._openPopover({ dispatchEvents: false });
+      } else {
+        this._closePopover();
+      }
+    }
+  }
+
+  public override get anchorElement(): HTMLElement | VirtualElement | null {
+    return this._adapter.overlayElement.anchorElement;
+  }
+  public override set anchorElement(value: HTMLElement | VirtualElement | null) {
+    if (this._adapter.overlayElement.anchorElement !== value) {
+      if (this._adapter.isConnected) {
+        this._removeTriggerListeners();
+        this._adapter.cleanupAnchorElement();
+      }
+
+      this._adapter.overlayElement.anchorElement = value;
+
+      if (this._adapter.isConnected) {
+        this._initializeTriggerListeners();
+        this._adapter.initializeAnchorElement();
+      }
+    }
+  }
+
+  public override get anchor(): string | null {
+    return this._anchor;
+  }
+  public override set anchor(value: string | null) {
+    if (this._anchor !== value) {
+      this._anchor = value;
+
+      if (this._adapter.isConnected) {
+        this._removeTriggerListeners();
+        this._adapter.cleanupAnchorElement();
+        this._adapter.tryLocateAnchorElement(this._anchor);
+        this._initializeTriggerListeners();
+        this._adapter.initializeAnchorElement();
+      }
+    }
+  }
+
+  public get arrow(): boolean {
+    return this._arrow;
+  }
+  public set arrow(value: boolean) {
+    value = Boolean(value);
+    if (this._arrow !== value) {
+      this._arrow = value;
+      this._adapter.toggleArrow(value);
+      this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.ARROW, value);
+    }
+  }
+
+  public get animationType(): PopoverAnimationType {
+    return this._animationType;
+  }
+  public set animationType(value: PopoverAnimationType) {
+    if (this._animationType !== value) {
+      this._animationType = value;
+      this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.ANIMATION_TYPE, !!this._animationType, this._animationType);
+    }
+  }
+
+  public get triggerType(): PopoverTriggerType | PopoverTriggerType[] {
+    return this._triggerTypes.length === 1 ? this._triggerTypes[0] : this._triggerTypes;
+  }
+  public set triggerType(value: PopoverTriggerType | PopoverTriggerType[]) {
+    if (this._triggerTypes !== value) {
+      if (this._adapter.isConnected) {
+        this._removeTriggerListeners();
+      }
+
+      this._triggerTypes = Array.isArray(value) ? value : [value];
+      this._triggerTypes = this._triggerTypes.filter(type => !!type);
+
+      if (!this._triggerTypes.length) {
+        this._triggerTypes = [POPOVER_CONSTANTS.defaults.TRIGGER_TYPE];
+      }
+
+      if (this._adapter.isConnected) {
+        this._initializeTriggerListeners();
+      }
+    }
+  }
+
+  public get longpressDelay(): number {
+    return this._longpressDelay;
+  }
+  public set longpressDelay(value: number) {
+    if (this._longpressDelay !== value) {
+      this._longpressDelay = value;
+      this._adapter.setHostAttribute(POPOVER_CONSTANTS.attributes.LONGPRESS_DELAY, String(this._longpressDelay));
+    }
+  }
+
+  public get persistentHover(): boolean {
+    return this._persistentHover;
+  }
+  public set persistentHover(value: boolean) {
+    value = Boolean(value);
+    if (this._persistentHover !== value) {
+      this._persistentHover = value;
+
+      if (this._persistentHover && this._triggerTypes.includes('hover') && this._adapter.isConnected) {
+        this._removeTriggerListeners();
+        this._initializeTriggerListeners();
+      }
+
+      this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.PERSISTENT_HOVER, value);
+    }
+  }
+
+  public get hoverDelay(): number {
+    return this._hoverDelay;
+  }
+  public set hoverDelay(value: number) {
+    if (isNaN(value) || value < 0) {
+      value = POPOVER_CONSTANTS.defaults.HOVER_DELAY;
+    }
+    if (this._hoverDelay !== value) {
+      this._hoverDelay = value;
+      this._adapter.setHostAttribute(POPOVER_CONSTANTS.attributes.HOVER_DELAY, String(this._hoverDelay));
+    }
+  }
+
+  public get hoverDismissDelay(): number {
+    return this._hoverDismissDelay;
+  }
+  public set hoverDismissDelay(value: number) {
+    if (this._hoverDismissDelay !== value) {
+      this._hoverDismissDelay = value;
+      this._adapter.setHostAttribute(POPOVER_CONSTANTS.attributes.HOVER_DISMISS_DELAY, String(this._hoverDismissDelay));
+    }
+  }
+
+  public get preset(): PopoverPreset {
+    return this._preset ?? POPOVER_CONSTANTS.defaults.PRESET;
+  }
+  public set preset(value: PopoverPreset) {
+    value = value ?? POPOVER_CONSTANTS.defaults.PRESET;
+    if (this._preset !== value) {
+      this._preset = value;
+      const hasPreset = value !== POPOVER_CONSTANTS.defaults.PRESET;
+      this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.PRESET, hasPreset, this._preset);
+    }
+  }
+
+  public get distinct(): string | null {
+    return this._distinct;
+  }
+  public set distinct(value: string | null) {
+    this._distinct = value;
+  }
+
+  public get anchorAccessibility(): PopoverAnchorAccessibility {
+    return this._anchorAccessibility;
+  }
+  public set anchorAccessibility(value: PopoverAnchorAccessibility) {
+    if (this._anchorAccessibility !== value) {
+      this._anchorAccessibility = value;
+      this._adapter.setHostAttribute(POPOVER_CONSTANTS.attributes.ANCHOR_ACCESSIBILITY, this._anchorAccessibility);
+      if (this._adapter.isConnected) {
+        this._adapter.initializeAnchorElement();
+      }
+    }
+  }
+}
