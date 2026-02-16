@@ -153,8 +153,10 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
     }
 
     if (value) {
+      this._removeButtonElement.removeAttribute('aria-labelledby');
       this._removeButtonElement.setAttribute('aria-label', value.trim());
     } else {
+      this._removeButtonElement.removeAttribute('aria-label');
       this._removeButtonElement.setAttribute('aria-labelledby', this._getDefaultRemoveButtonLabelledBy());
     }
   }

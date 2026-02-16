@@ -1,13 +1,14 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { sendKeys } from '@web/test-runner-commands';
+import { computeAccessibleName } from 'dom-accessibility-api';
 import { spy } from 'sinon';
+import { IFocusIndicatorComponent } from '../focus-indicator';
+import { IIconButtonComponent } from '../icon-button';
+import { IStateLayerComponent } from '../state-layer';
 import { CHIP_SET_CONSTANTS, IChipSetComponent } from './chip-set';
 import { IChipComponent } from './chip/chip';
 import { CHIP_CONSTANTS, IChipSelectEventData } from './chip/chip-constants';
-import { IIconButtonComponent } from '../icon-button';
-import { IFocusIndicatorComponent } from '../focus-indicator';
-import { IStateLayerComponent } from '../state-layer';
 
 import './chip-set';
 
@@ -391,7 +392,7 @@ describe('Chips', () => {
       const removeButton = getRemoveButtonElement(el);
 
       expect(el.removeButtonLabel).to.equal('Custom remove');
-      expect(removeButton?.getAttribute('aria-label')).to.equal('Custom remove');
+      expect(computeAccessibleName(removeButton)).to.equal('Custom remove');
     });
 
     it('should update remove button label attribute when setting property', async () => {
@@ -399,11 +400,11 @@ describe('Chips', () => {
       const removeButton = getRemoveButtonElement(el);
 
       expect(el.removeButtonLabel).to.be.undefined;
-      expect(removeButton?.getAttribute('aria-label')).to.equal('Remove Test');
+      expect(computeAccessibleName(removeButton)).to.equal('Remove Test');
 
       el.removeButtonLabel = 'Custom remove';
 
-      expect(removeButton?.getAttribute('aria-label')).to.equal('Custom remove');
+      expect(computeAccessibleName(removeButton)).to.equal('Custom remove');
     });
 
     it('should use default remove button label when custom label is not set', async () => {
@@ -411,32 +412,32 @@ describe('Chips', () => {
       const removeButton = getRemoveButtonElement(el);
 
       expect(el.removeButtonLabel).to.be.undefined;
-      expect(removeButton?.getAttribute('aria-label')).to.equal('Remove Test Chip');
+      expect(computeAccessibleName(removeButton)).to.equal('Remove Test Chip');
     });
 
     it('should update remove button label when property is set after creation', async () => {
       const el = await fixture<IChipComponent>(html`<forge-chip type="input">Test</forge-chip>`);
       let removeButton = getRemoveButtonElement(el);
 
-      expect(removeButton?.getAttribute('aria-label')).to.equal('Remove Test');
+      expect(computeAccessibleName(removeButton)).to.equal('Remove Test');
 
       el.removeButtonLabel = 'Delete item';
       removeButton = getRemoveButtonElement(el);
 
-      expect(removeButton?.getAttribute('aria-label')).to.equal('Delete item');
+      expect(computeAccessibleName(removeButton)).to.equal('Delete item');
     });
 
     it('should reset to default remove button label when custom label is removed', async () => {
       const el = await fixture<IChipComponent>(html`<forge-chip type="input" remove-button-label="Custom remove">Test</forge-chip>`);
       let removeButton = getRemoveButtonElement(el);
 
-      expect(removeButton?.getAttribute('aria-label')).to.equal('Custom remove');
+      expect(computeAccessibleName(removeButton)).to.equal('Custom remove');
 
       el.removeAttribute(CHIP_CONSTANTS.attributes.REMOVE_BUTTON_LABEL);
       removeButton = getRemoveButtonElement(el);
 
       expect(el.removeButtonLabel).to.be.null;
-      expect(removeButton?.getAttribute('aria-label')).to.equal('Remove Test');
+      expect(computeAccessibleName(removeButton)).to.equal('Remove Test');
     });
 
     it('should set focus to trigger element when calling focus() method', async () => {
