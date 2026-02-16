@@ -4,8 +4,7 @@ import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
 import { task, frame } from '../core/utils/utils.js';
-import { BUTTON_AREA_CONSTANTS } from './button-area-constants.js';
-import type { IButtonAreaComponent } from './button-area.js';
+import { BUTTON_AREA_CONSTANTS, ButtonAreaComponent } from './index.js';
 import { TOUCH_DELAY_MS, type IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer/index.js';
 import type { IFocusIndicatorComponent } from '../focus-indicator/index.js';
 
@@ -181,14 +180,14 @@ describe('Button Area', () => {
     const { el } = await createFixture({});
 
     el.disabled = true;
-    await elementUpdated(el);
+    await frame();
 
     expect(el.disabled).toBe(true);
     expect(el.hasAttribute('disabled')).toBe(true);
     await expect(el).toBeAccessible();
 
     el.disabled = false;
-    await elementUpdated(el);
+    await frame();
 
     expect(el.disabled).toBe(false);
     expect(el.hasAttribute('disabled')).toBe(false);
@@ -198,46 +197,48 @@ describe('Button Area', () => {
     const { el } = await createFixture({});
 
     el.disabled = true;
-    await elementUpdated(el);
+    await frame();
 
-    expect(el.matches(':state(disabled)')).to.be.true;
+    expect(el.matches(':state(disabled)')).toBe(true);
   });
 
   it('should set disabled state when disabled attribute is set', async () => {
-    const el = await fixture<IButtonAreaComponent>(html`
+    const screen = render(html`
       <forge-button-area disabled>
         <button slot="button">Test</button>
       </forge-button-area>
     `);
+    const el = screen.container.querySelector('forge-button-area') as ButtonAreaComponent;
+    await frame();
 
-    expect(el.matches(':state(disabled)')).to.be.true;
+    expect(el.matches(':state(disabled)')).toBe(true);
   });
 
   it('should remove disabled state when disabled is set to false', async () => {
     const { el } = await createFixture({ disabled: true });
 
-    expect(el.matches(':state(disabled)')).to.be.true;
+    expect(el.matches(':state(disabled)')).toBe(true);
 
     el.disabled = false;
-    await elementUpdated(el);
+    await frame();
 
-    expect(el.matches(':state(disabled)')).to.be.false;
+    expect(el.matches(':state(disabled)')).toBe(false);
   });
 
   it('should toggle disabled state dynamically', async () => {
     const { el } = await createFixture({});
 
-    expect(el.matches(':state(disabled)')).to.be.false;
+    expect(el.matches(':state(disabled)')).toBe(false);
 
     el.disabled = true;
-    await elementUpdated(el);
+    await frame();
 
-    expect(el.matches(':state(disabled)')).to.be.true;
+    expect(el.matches(':state(disabled)')).toBe(true);
 
     el.disabled = false;
-    await elementUpdated(el);
+    await frame();
 
-    expect(el.matches(':state(disabled)')).to.be.false;
+    expect(el.matches(':state(disabled)')).toBe(false);
   });
 
   it('should set disabled if the button is disabled and is added after initialize', async () => {
@@ -277,54 +278,54 @@ describe('Button Area', () => {
   it('should sync disabled state when button disabled attribute changes via DOM', async () => {
     const { el, button } = await createFixture({});
 
-    expect(el.disabled).to.be.false;
-    expect(button.disabled).to.be.false;
+    expect(el.disabled).toBe(false);
+    expect(button.disabled).toBe(false);
 
     // Simulate external DOM manipulation
     button.setAttribute('disabled', '');
-    await elementUpdated(el);
+    await frame();
 
-    expect(el.disabled).to.be.true;
-    expect(el.hasAttribute('disabled')).to.be.true;
+    expect(el.disabled).toBe(true);
+    expect(el.hasAttribute('disabled')).toBe(true);
   });
 
   describe('aria-pressed observation', () => {
     it('should not have pressed state initially', async () => {
       const { el } = await createFixture({});
-      expect(el.matches(':state(pressed)')).to.be.false;
+      expect(el.matches(':state(pressed)')).toBe(false);
     });
 
     it('should sync pressed state when button aria-pressed attribute is true', async () => {
       const { el, button } = await createFixture({});
 
       button.setAttribute('aria-pressed', 'true');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(pressed)')).to.be.true;
+      expect(el.matches(':state(pressed)')).toBe(true);
     });
 
     it('should remove pressed state when aria-pressed is set to false', async () => {
       const { el, button } = await createFixture({});
 
       button.setAttribute('aria-pressed', 'true');
-      await elementUpdated(el);
+      await frame();
 
       button.setAttribute('aria-pressed', 'false');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(pressed)')).to.be.false;
+      expect(el.matches(':state(pressed)')).toBe(false);
     });
 
     it('should remove pressed state when aria-pressed attribute is removed', async () => {
       const { el, button } = await createFixture({});
 
       button.setAttribute('aria-pressed', 'true');
-      await elementUpdated(el);
+      await frame();
 
       button.removeAttribute('aria-pressed');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(pressed)')).to.be.false;
+      expect(el.matches(':state(pressed)')).toBe(false);
     });
 
     it('should observe targetElement aria-pressed attribute changes', async () => {
@@ -334,24 +335,26 @@ describe('Button Area', () => {
 
       const { el } = await createFixture({});
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
       targetButton.setAttribute('aria-pressed', 'true');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(pressed)')).to.be.true;
+      expect(el.matches(':state(pressed)')).toBe(true);
 
       document.body.removeChild(targetButton);
     });
 
     it('should sync initial pressed state from button with aria-pressed', async () => {
-      const el = await fixture<IButtonAreaComponent>(html`
+      const screen = render(html`
         <forge-button-area>
           <button slot="button" aria-pressed="true">Test</button>
         </forge-button-area>
       `);
+      const el = screen.container.querySelector('forge-button-area') as ButtonAreaComponent;
+      await frame();
 
-      expect(el.matches(':state(pressed)')).to.be.true;
+      expect(el.matches(':state(pressed)')).toBe(true);
     });
 
     it('should not sync pressed state from slotted button when targetElement is set', async () => {
@@ -360,12 +363,12 @@ describe('Button Area', () => {
 
       const { el, button } = await createFixture({});
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
       button.setAttribute('aria-pressed', 'true');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(pressed)')).to.be.false;
+      expect(el.matches(':state(pressed)')).toBe(false);
 
       document.body.removeChild(targetButton);
     });
@@ -377,9 +380,9 @@ describe('Button Area', () => {
 
       const { el } = await createFixture({});
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(pressed)')).to.be.true;
+      expect(el.matches(':state(pressed)')).toBe(true);
 
       document.body.removeChild(targetButton);
     });
@@ -388,96 +391,96 @@ describe('Button Area', () => {
   describe('aria-current observation', () => {
     it('should not have current state initially', async () => {
       const { el } = await createFixture({});
-      expect(el.matches(':state(current)')).to.be.false;
+      expect(el.matches(':state(current)')).toBe(false);
     });
 
     it('should sync current state when aria-current is "true"', async () => {
       const { el, button } = await createFixture({});
 
       button.setAttribute('aria-current', 'true');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(current)')).to.be.true;
+      expect(el.matches(':state(current)')).toBe(true);
     });
 
     it('should sync current state when aria-current is "page"', async () => {
       const { el, button } = await createFixture({});
 
       button.setAttribute('aria-current', 'page');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(current)')).to.be.true;
+      expect(el.matches(':state(current)')).toBe(true);
     });
 
     it('should sync current state when aria-current is "step"', async () => {
       const { el, button } = await createFixture({});
 
       button.setAttribute('aria-current', 'step');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(current)')).to.be.true;
+      expect(el.matches(':state(current)')).toBe(true);
     });
 
     it('should sync current state when aria-current is "location"', async () => {
       const { el, button } = await createFixture({});
 
       button.setAttribute('aria-current', 'location');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(current)')).to.be.true;
+      expect(el.matches(':state(current)')).toBe(true);
     });
 
     it('should sync current state when aria-current is "date"', async () => {
       const { el, button } = await createFixture({});
 
       button.setAttribute('aria-current', 'date');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(current)')).to.be.true;
+      expect(el.matches(':state(current)')).toBe(true);
     });
 
     it('should sync current state when aria-current is "time"', async () => {
       const { el, button } = await createFixture({});
 
       button.setAttribute('aria-current', 'time');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(current)')).to.be.true;
+      expect(el.matches(':state(current)')).toBe(true);
     });
 
     it('should remove current state when aria-current is set to "false"', async () => {
       const { el, button } = await createFixture({});
 
       button.setAttribute('aria-current', 'page');
-      await elementUpdated(el);
-      expect(el.matches(':state(current)')).to.be.true;
+      await frame();
+      expect(el.matches(':state(current)')).toBe(true);
 
       button.setAttribute('aria-current', 'false');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(current)')).to.be.false;
+      expect(el.matches(':state(current)')).toBe(false);
     });
 
     it('should remove current state when aria-current attribute is removed', async () => {
       const { el, button } = await createFixture({});
 
       button.setAttribute('aria-current', 'page');
-      await elementUpdated(el);
-      expect(el.matches(':state(current)')).to.be.true;
+      await frame();
+      expect(el.matches(':state(current)')).toBe(true);
 
       button.removeAttribute('aria-current');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(current)')).to.be.false;
+      expect(el.matches(':state(current)')).toBe(false);
     });
 
     it('should not set current state for invalid aria-current values', async () => {
       const { el, button } = await createFixture({});
 
       button.setAttribute('aria-current', 'invalid');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(current)')).to.be.false;
+      expect(el.matches(':state(current)')).toBe(false);
     });
 
     it('should observe targetElement aria-current attribute changes', async () => {
@@ -487,24 +490,26 @@ describe('Button Area', () => {
 
       const { el } = await createFixture({});
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
       targetButton.setAttribute('aria-current', 'page');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(current)')).to.be.true;
+      expect(el.matches(':state(current)')).toBe(true);
 
       document.body.removeChild(targetButton);
     });
 
     it('should sync initial current state from button with aria-current', async () => {
-      const el = await fixture<IButtonAreaComponent>(html`
+      const screen = render(html`
         <forge-button-area>
           <button slot="button" aria-current="page">Test</button>
         </forge-button-area>
       `);
+      const el = screen.container.querySelector('forge-button-area') as ButtonAreaComponent;
+      await frame();
 
-      expect(el.matches(':state(current)')).to.be.true;
+      expect(el.matches(':state(current)')).toBe(true);
     });
 
     it('should not sync current state from slotted button when targetElement is set', async () => {
@@ -513,12 +518,12 @@ describe('Button Area', () => {
 
       const { el, button } = await createFixture({});
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
       button.setAttribute('aria-current', 'page');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(current)')).to.be.false;
+      expect(el.matches(':state(current)')).toBe(false);
 
       document.body.removeChild(targetButton);
     });
@@ -530,9 +535,9 @@ describe('Button Area', () => {
 
       const { el } = await createFixture({});
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.matches(':state(current)')).to.be.true;
+      expect(el.matches(':state(current)')).toBe(true);
 
       document.body.removeChild(targetButton);
     });
@@ -547,9 +552,9 @@ describe('Button Area', () => {
 
       const { el } = await createFixture({});
       el.target = 'target-button';
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.targetElement).to.equal(targetButton);
+      expect(el.targetElement).toBe(targetButton);
 
       document.body.removeChild(targetButton);
     });
@@ -561,9 +566,9 @@ describe('Button Area', () => {
 
       const { el } = await createFixture({});
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.targetElement).to.equal(targetButton);
+      expect(el.targetElement).toBe(targetButton);
 
       document.body.removeChild(targetButton);
     });
@@ -575,12 +580,12 @@ describe('Button Area', () => {
 
       const { el, focusIndicator } = await createFixture({});
 
-      expect(focusIndicator.isConnected).to.be.true;
+      expect(focusIndicator.isConnected).toBe(true);
 
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
-      expect(focusIndicator.isConnected).to.be.false;
+      expect(focusIndicator.isConnected).toBe(false);
 
       document.body.removeChild(targetButton);
     });
@@ -593,13 +598,13 @@ describe('Button Area', () => {
       const { el, focusIndicator } = await createFixture({});
 
       el.targetElement = targetButton;
-      await elementUpdated(el);
-      expect(focusIndicator.isConnected).to.be.false;
+      await frame();
+      expect(focusIndicator.isConnected).toBe(false);
 
       el.targetElement = undefined;
-      await elementUpdated(el);
+      await frame();
 
-      expect(focusIndicator.isConnected).to.be.true;
+      expect(focusIndicator.isConnected).toBe(true);
 
       document.body.removeChild(targetButton);
     });
@@ -611,12 +616,12 @@ describe('Button Area', () => {
       document.body.appendChild(targetButton);
 
       const { el } = await createFixture({});
-      expect(el.disabled).to.be.false;
+      expect(el.disabled).toBe(false);
 
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.disabled).to.be.true;
+      expect(el.disabled).toBe(true);
 
       document.body.removeChild(targetButton);
     });
@@ -628,14 +633,14 @@ describe('Button Area', () => {
 
       const { el } = await createFixture({});
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
-      expect(targetButton.disabled).to.be.false;
+      expect(targetButton.disabled).toBe(false);
 
       el.disabled = true;
-      await elementUpdated(el);
+      await frame();
 
-      expect(targetButton.disabled).to.be.true;
+      expect(targetButton.disabled).toBe(true);
 
       document.body.removeChild(targetButton);
     });
@@ -647,14 +652,14 @@ describe('Button Area', () => {
 
       const { el } = await createFixture({});
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.disabled).to.be.false;
+      expect(el.disabled).toBe(false);
 
       targetButton.setAttribute('disabled', '');
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.disabled).to.be.true;
+      expect(el.disabled).toBe(true);
 
       document.body.removeChild(targetButton);
     });
@@ -666,19 +671,19 @@ describe('Button Area', () => {
 
       const { el } = await createFixture({});
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.targetElement).to.equal(targetButton);
+      expect(el.targetElement).toBe(targetButton);
 
       // Remove the element from DOM
       document.body.removeChild(targetButton);
 
       // Trigger a disabled attribute change to invoke the observer callback
       targetButton.setAttribute('disabled', '');
-      await elementUpdated(el);
+      await frame();
 
       // The observer detects the element is disconnected and clears targetElement
-      expect(el.targetElement).to.be.undefined;
+      expect(el.targetElement).toBeUndefined();
     });
 
     it('should update targetElement when target property changes', async () => {
@@ -694,12 +699,12 @@ describe('Button Area', () => {
 
       const { el } = await createFixture({});
       el.target = 'target-button-1';
-      await elementUpdated(el);
+      await frame();
 
       expect(el.targetElement).to.equal(targetButton1);
 
       el.target = 'target-button-2';
-      await elementUpdated(el);
+      await frame();
 
       expect(el.targetElement).to.equal(targetButton2);
 
@@ -714,14 +719,14 @@ describe('Button Area', () => {
       document.body.appendChild(targetButton);
 
       const { el, button } = await createFixture({});
-      expect(button.disabled).to.be.false;
+      expect(button.disabled).toBe(false);
 
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
       // Button area should sync with target element, not slotted button
-      expect(el.disabled).to.be.true;
-      expect(button.disabled).to.be.false;
+      expect(el.disabled).toBe(true);
+      expect(button.disabled).toBe(false);
 
       document.body.removeChild(targetButton);
     });
@@ -733,16 +738,16 @@ describe('Button Area', () => {
 
       const { el, button } = await createFixture({});
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
-      expect(el.disabled).to.be.false;
+      expect(el.disabled).toBe(false);
 
       // Change slotted button disabled state
       button.setAttribute('disabled', '');
-      await elementUpdated(el);
+      await frame();
 
       // Button area should not sync with slotted button when target element is set
-      expect(el.disabled).to.be.false;
+      expect(el.disabled).toBe(false);
 
       document.body.removeChild(targetButton);
     });
@@ -754,18 +759,18 @@ describe('Button Area', () => {
 
       const { el, focusIndicator } = await createFixture({});
       el.targetElement = targetButton;
-      await elementUpdated(el);
+      await frame();
 
-      expect(focusIndicator.isConnected).to.be.false;
+      expect(focusIndicator.isConnected).toBe(false);
 
       el.disabled = true;
-      await elementUpdated(el);
+      await frame();
 
       el.targetElement = undefined;
-      await elementUpdated(el);
+      await frame();
 
       // Focus indicator should not be restored because button area is disabled
-      expect(focusIndicator.isConnected).to.be.false;
+      expect(focusIndicator.isConnected).toBe(false);
 
       document.body.removeChild(targetButton);
     });
@@ -777,23 +782,23 @@ describe('Button Area', () => {
 
       const { el, button } = await createFixture({});
       el.targetElement = targetDiv;
-      await elementUpdated(el);
+      await frame();
 
       // Should fall back to slotted button since targetDiv doesn't have disabled property
       el.disabled = true;
-      await elementUpdated(el);
+      await frame();
 
-      expect(button.disabled).to.be.true;
+      expect(button.disabled).toBe(true);
 
       document.body.removeChild(targetDiv);
     });
   });
 
-  function getHeadingEl(el: IButtonAreaComponent): HTMLSpanElement {
+  function getHeadingEl(el: ButtonAreaComponent): HTMLSpanElement {
     return el.querySelector('.heading') as HTMLSpanElement;
   }
 
-  function getIgnoredButtonEl(el: IButtonAreaComponent): HTMLButtonElement {
+  function getIgnoredButtonEl(el: ButtonAreaComponent): HTMLButtonElement {
     return el.querySelector('[data-forge-ignore]') as HTMLButtonElement;
   }
 
@@ -802,11 +807,11 @@ describe('Button Area', () => {
   }
 
   async function createFixture(
-    { disabled }: Partial<IButtonAreaComponent> = {},
+    { disabled }: Partial<ButtonAreaComponent> = {},
     hasButton: boolean = true,
     hasIgnoredChildren: boolean = false
   ): Promise<{
-    el: IButtonAreaComponent;
+    el: ButtonAreaComponent;
     root: HTMLElement;
     focusIndicator: IFocusIndicatorComponent;
     stateLayer: IStateLayerComponent;
@@ -834,7 +839,8 @@ describe('Button Area', () => {
         </div>
       </forge-button-area>
     `);
-    const el = screen.container.querySelector('forge-button-area') as IButtonAreaComponent;
+    const el = screen.container.querySelector('forge-button-area') as ButtonAreaComponent;
+    await frame();
     const root = el.shadowRoot?.firstElementChild as HTMLElement;
     const stateLayer = el.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent;
     const focusIndicator = el.shadowRoot?.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;

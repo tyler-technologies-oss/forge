@@ -2,11 +2,11 @@ import { CUSTOM_ELEMENT_NAME_PROPERTY, getEventPath } from '@tylertech/forge-cor
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
 import { createRef, Ref, ref } from 'lit/directives/ref.js';
-import { IBaseComponent } from '../core/base/base-component';
-import { BaseLitElement } from '../core/base/base-lit-element';
-import { locateElementById, toggleState } from '../core/utils/utils';
-import { IFocusIndicatorComponent } from '../focus-indicator';
-import { StateLayerComponent } from '../state-layer';
+import { IBaseComponent } from '../core/base/base-component.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { locateElementById, toggleState } from '../core/utils/utils.js';
+import { IFocusIndicatorComponent } from '../focus-indicator/index.js';
+import { StateLayerComponent } from '../state-layer/index.js';
 
 import styles from './button-area.scss';
 
