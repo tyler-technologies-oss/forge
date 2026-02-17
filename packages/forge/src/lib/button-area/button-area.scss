@@ -48,6 +48,10 @@
     ::slotted(:is(button)) {
       @include slotted-button;
     }
+
+    ::slotted(:is(a[href])) {
+      @include slotted-anchor;
+    }
   }
 }
 

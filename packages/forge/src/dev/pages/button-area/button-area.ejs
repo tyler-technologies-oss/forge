@@ -76,6 +76,45 @@
 <br />
 
 <forge-card outlined>
+  <forge-button-area id="button-area">
+    <a href="#" target="_blank" slot="button" aria-labelledby="anchor-area-heading"></a>
+    <div class="flex-wrapper">
+      <div>
+        <div class="forge-typography--heading4" id="anchor-area-heading">With Anchor Link</div>
+        <div>Content</div>
+      </div>
+      <forge-icon-button data-forge-ignore>
+        <forge-icon name="favorite"></forge-icon>
+      </forge-icon-button>
+      <forge-tooltip type="label">Like</forge-tooltip>
+      <forge-icon name="open_in_new"></forge-icon>
+    </div>
+  </forge-button-area>
+</forge-card>
+
+<br />
+
+<forge-card outlined>
+  <forge-button-area id="button-area" target="target-anchor">
+    <div class="flex-wrapper">
+      <div>
+        <div class="forge-typography--heading4" id="anchor-area-heading">
+          <a href="#" target="_blank" id="target-anchor">With Anchor Link Target</a>
+        </div>
+        <div>Content</div>
+      </div>
+      <forge-icon-button data-forge-ignore>
+        <forge-icon name="favorite"></forge-icon>
+      </forge-icon-button>
+      <forge-tooltip type="label">Like</forge-tooltip>
+      <forge-icon name="open_in_new"></forge-icon>
+    </div>
+  </forge-button-area>
+</forge-card>
+
+<br />
+
+<forge-card outlined>
   <forge-button-area id="toggle-button-area">
     <button slot="button" id="toggle-button" aria-pressed="false" aria-labelledby="button-area-heading"></button>
     <div class="flex-wrapper">
@@ -85,7 +124,7 @@
       </div>
       <forge-icon id="toggle-icon" name="favorite_border"></forge-icon>
       <forge-icon-button forge-ignore>
-        <forge-icon name="open_in_new"></forge-icon>
+        <forge-icon name="info"></forge-icon>
       </forge-icon-button>
       <forge-tooltip type="label">Open</forge-tooltip>
     </div>

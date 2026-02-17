@@ -17,13 +17,14 @@ IconRegistry.define([
 ]);
 
 const buttonArea = document.getElementById('button-area') as ButtonAreaComponent;
-buttonArea.addEventListener('click', () => alert('Click'));
+const buttonAreaButton = buttonArea?.querySelector('button');
+buttonAreaButton?.addEventListener('click', () => alert('Click'));
 
 const expansionPanel = document.getElementById('expansion-panel') as IExpansionPanelComponent;
 const expansionPanelButtonArea = document.getElementById('expansion-panel-button-area') as ButtonAreaComponent;
 const expansionPanelButton = document.getElementById('expansion-panel-button');
 expansionPanel.addEventListener('forge-expansion-panel-toggle', (event: CustomEvent<boolean>) => {
-  expansionPanelButton.setAttribute('aria-expanded', event.detail.toString());
+  expansionPanelButton?.setAttribute('aria-expanded', event.detail.toString());
 });
 
 const targetButtonArea = document.getElementById('target-button-area') as ButtonAreaComponent;
@@ -59,7 +60,9 @@ currentContainer.addEventListener('click', (event) => {
   currentButton.setAttribute('aria-current', 'true');
 
   const textContent = currentButton.getAttribute('aria-labelledby') ? document.getElementById(currentButton.getAttribute('aria-labelledby')!)?.textContent : currentButton.textContent;
-  currentDetailContent.textContent = textContent;
+  if (currentDetailContent) {
+    currentDetailContent.textContent = textContent ?? '';
+  }
 });
 
 const disabledToggle = document.querySelector('#disabled-switch') as ISwitchComponent;

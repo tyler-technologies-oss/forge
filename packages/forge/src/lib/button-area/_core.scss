@@ -31,13 +31,9 @@
   position: absolute;
   inline-size: 100%;
   block-size: 100%;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  overflow: hidden;
-  pointer-events: none;
 }
 
-@mixin slotted-button {
+@mixin slotted-element {
   position: absolute;
   inline-size: 100%;
   block-size: 100%;
@@ -45,4 +41,17 @@
   padding: 0;
   border: none;
   outline: none;
+  overflow: hidden;
+}
+
+@mixin slotted-button {
+  @include slotted-element;
+
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  pointer-events: none;
+}
+
+@mixin slotted-anchor {
+  @include slotted-element;
 }

@@ -209,6 +209,7 @@ describe('Button Area', () => {
       </forge-button-area>
     `);
     const el = screen.container.querySelector('forge-button-area') as ButtonAreaComponent;
+    await el.updateComplete;
     await frame();
 
     expect(el.matches(':state(disabled)')).toBe(true);
@@ -216,6 +217,7 @@ describe('Button Area', () => {
 
   it('should remove disabled state when disabled is set to false', async () => {
     const { el } = await createFixture({ disabled: true });
+    await el.updateComplete;
 
     expect(el.matches(':state(disabled)')).toBe(true);
 
@@ -261,6 +263,7 @@ describe('Button Area', () => {
 
   it('should set button to disabled if element is disabled and button is added after initialize', async () => {
     const { el } = await createFixture({ disabled: true }, false);
+    await el.updateComplete;
     await expect(el).toBeAccessible();
 
     expect(el.disabled).toBe(true);
@@ -270,6 +273,7 @@ describe('Button Area', () => {
     button.setAttribute('slot', 'button');
     button.innerHTML = 'Slot Changed';
     el.append(button);
+    await el.updateComplete;
     await expect(el).toBeAccessible();
 
     expect(button.disabled).toBe(true);
@@ -540,6 +544,163 @@ describe('Button Area', () => {
       expect(el.matches(':state(current)')).toBe(true);
 
       document.body.removeChild(targetButton);
+    });
+  });
+
+  describe('anchor element', () => {
+    it('should initialize with anchor element in button slot', async () => {
+      const { el, anchor, stateLayer, focusIndicator } = await createFixtureWithAnchor({});
+
+      expect(el.shadowRoot).not.toBeNull();
+      expect(anchor).toBeTruthy();
+      expect(anchor.tagName).toBe('A');
+      expect(stateLayer.disabled).toBe(false);
+      expect(focusIndicator).toBeTruthy();
+    });
+
+    it('should handle Enter key with anchor element', async () => {
+      const { anchor, stateLayer } = await createFixtureWithAnchor({});
+      const stateLayerSurface = getStateLayerSurfaceEl(stateLayer);
+      const animateSpy = vi.spyOn(stateLayerSurface, 'animate');
+
+      anchor.focus();
+      await userEvent.keyboard('{Enter}');
+      await task(TOUCH_DELAY_MS);
+
+      expect(animateSpy).toHaveBeenCalled();
+    });
+
+    it('should not handle Space key with anchor element', async () => {
+      const { anchor, stateLayer } = await createFixtureWithAnchor({});
+      const stateLayerSurface = getStateLayerSurfaceEl(stateLayer);
+      const animateSpy = vi.spyOn(stateLayerSurface, 'animate');
+
+      anchor.focus();
+      await userEvent.keyboard(' ');
+      await task(TOUCH_DELAY_MS);
+
+      expect(animateSpy).not.toHaveBeenCalled();
+    });
+
+    it('should keep state layer when disabled with anchor element', async () => {
+      const { el, stateLayer } = await createFixtureWithAnchor({});
+
+      el.disabled = true;
+      await frame();
+
+      expect(stateLayer.isConnected).toBe(true);
+    });
+
+    it('should keep focus indicator when disabled with anchor element', async () => {
+      const { el, focusIndicator } = await createFixtureWithAnchor({});
+
+      el.disabled = true;
+      await frame();
+
+      expect(focusIndicator.isConnected).toBe(true);
+    });
+
+    it('should not add disabled attribute to anchor element', async () => {
+      const { el, anchor } = await createFixtureWithAnchor({});
+
+      el.disabled = true;
+      await frame();
+
+      expect(anchor.hasAttribute('disabled')).toBe(false);
+    });
+
+    it('should sync current state with anchor element aria-current', async () => {
+      const { el, anchor } = await createFixtureWithAnchor({});
+
+      anchor.setAttribute('aria-current', 'page');
+      await frame();
+
+      expect(el.matches(':state(current)')).toBe(true);
+    });
+
+    it('should use anchor element as target element', async () => {
+      const targetAnchor = document.createElement('a');
+      targetAnchor.href = '#test';
+      targetAnchor.textContent = 'Target Link';
+      document.body.appendChild(targetAnchor);
+
+      const { el } = await createFixture({});
+      el.targetElement = targetAnchor;
+      await frame();
+
+      expect(el.targetElement).toBe(targetAnchor);
+      expect(el.targetElement.tagName).toBe('A');
+
+      document.body.removeChild(targetAnchor);
+    });
+
+    it('should keep state layer when disabled with anchor target element', async () => {
+      const targetAnchor = document.createElement('a');
+      targetAnchor.href = '#test';
+      document.body.appendChild(targetAnchor);
+
+      const { el, stateLayer } = await createFixture({});
+      el.targetElement = targetAnchor;
+      await frame();
+
+      el.disabled = true;
+      await frame();
+
+      expect(stateLayer.isConnected).toBe(true);
+
+      document.body.removeChild(targetAnchor);
+    });
+
+    it('should locate anchor element by ID when target property is set', async () => {
+      const targetAnchor = document.createElement('a');
+      targetAnchor.id = 'target-anchor';
+      targetAnchor.href = '#test';
+      targetAnchor.textContent = 'Target Link';
+      document.body.appendChild(targetAnchor);
+
+      const { el } = await createFixture({});
+      el.target = 'target-anchor';
+      await frame();
+
+      expect(el.targetElement).toBe(targetAnchor);
+      expect(el.targetElement?.tagName).toBe('A');
+
+      document.body.removeChild(targetAnchor);
+    });
+
+    it('should sync current state from anchor target element', async () => {
+      const targetAnchor = document.createElement('a');
+      targetAnchor.href = '#test';
+      targetAnchor.setAttribute('aria-current', 'page');
+      document.body.appendChild(targetAnchor);
+
+      const { el } = await createFixture({});
+      el.targetElement = targetAnchor;
+      await frame();
+
+      expect(el.matches(':state(current)')).toBe(true);
+
+      document.body.removeChild(targetAnchor);
+    });
+
+    it('should trigger click on anchor target element when button area is clicked', async () => {
+      const targetAnchor = document.createElement('a');
+      targetAnchor.href = '#test';
+      document.body.appendChild(targetAnchor);
+
+      const { el } = await createFixture({});
+      el.targetElement = targetAnchor;
+      await frame();
+
+      const clickSpy = vi.fn((e: Event) => e.preventDefault());
+      targetAnchor.addEventListener('click', clickSpy);
+
+      const content = el.querySelector('.content') as HTMLElement;
+      content.click();
+
+      expect(clickSpy).toHaveBeenCalledOnce();
+
+      document.body.removeChild(targetAnchor);
     });
   });
 
@@ -846,5 +1007,33 @@ describe('Button Area', () => {
     const focusIndicator = el.shadowRoot?.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
     const button = el.querySelector('[slot=button]') as HTMLButtonElement;
     return { el, root, focusIndicator, stateLayer, button };
+  }
+
+  async function createFixtureWithAnchor({ disabled }: Partial<ButtonAreaComponent> = {}): Promise<{
+    el: ButtonAreaComponent;
+    root: HTMLElement;
+    focusIndicator: IFocusIndicatorComponent;
+    stateLayer: IStateLayerComponent;
+    anchor: HTMLAnchorElement;
+  }> {
+    const screen = render(html`
+      <forge-button-area ?disabled=${disabled}>
+        <a slot="button" href="#test">Go to detail</a>
+        <div class="content">
+          <div>
+            <span class="heading">Heading</span>
+            <span>Content</span>
+          </div>
+          <forge-icon name="chevron_right"></forge-icon>
+        </div>
+      </forge-button-area>
+    `);
+    const el = screen.container.querySelector('forge-button-area') as ButtonAreaComponent;
+    await frame();
+    const root = el.shadowRoot?.firstElementChild as HTMLElement;
+    const stateLayer = el.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent;
+    const focusIndicator = el.shadowRoot?.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
+    const anchor = el.querySelector('[slot=button]') as HTMLAnchorElement;
+    return { el, root, focusIndicator, stateLayer, anchor };
   }
 });
