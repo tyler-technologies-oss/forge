@@ -1,1 +1,0 @@
-import{s as n,t as u}from"./feature-detection-DBWkqjAp.js";import"./service-adapter-CffG5Lhq.js";function p(t){return t.replace("aria","aria-").replace(/Elements?/g,"").toLowerCase()}function b(t,i,s,{setAttribute:o}={setAttribute:!0}){Object.entries(s).forEach(([e,r])=>{n()&&(i[e]=r);const a=p(e);(o||!t.hasAttribute(a))&&u(t,r!=null,a,r)})}export{b as s};
