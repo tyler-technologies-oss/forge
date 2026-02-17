@@ -19,9 +19,15 @@
   display: none;
 }
 
-:host([disabled]) {
+:host(:state(disabled)) {
   .forge-button-area {
     @include disabled;
+  }
+}
+
+:host(:where(:state(pressed), :state(current))) {
+  .forge-button-area {
+    @include selected;
   }
 }
 
@@ -37,7 +43,15 @@
   @include base;
 
   .button {
-    @include utils.visually-hidden;
+    @include button;
+
+    ::slotted(:is(button)) {
+      @include slotted-button;
+    }
+
+    ::slotted(:is(a[href])) {
+      @include slotted-anchor;
+    }
   }
 }
 
@@ -47,7 +61,8 @@ forge-focus-indicator {
   @include focus-indicator.provide-theme(
     (
       color: #{token(focus-indicator-color)},
-      outward-offset: #{token(focus-indicator-offset)}
+      outward-offset: #{token(focus-indicator-offset)},
+      shape: #{token(shape)}
     )
   );
 }
