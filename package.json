@@ -11,7 +11,7 @@
     "lint": "turbo run lint",
     "format": "turbo run format",
     "format:check": "turbo run format:check",
-    "setup:playwright": "turbo run setup:playwright",
+    "setup:playwright": "playwright install --with-deps chromium",
     "test": "turbo run test",
     "release": "pnpm run build && changeset publish"
   },
@@ -39,6 +39,7 @@
     "commitlint": "^20.4.1",
     "eslint": "catalog:",
     "husky": "^9.1.7",
+    "playwright": "catalog:",
     "prettier": "catalog:",
     "lint-staged": "^16.2.7",
     "turbo": "^2.8.3"

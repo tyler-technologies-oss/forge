@@ -13,11 +13,13 @@
     },
     "format": {},
     "format:check": {},
-    "setup:playwright": {
-      "outputs": []
-    },
     "test": {
       "outputs": []
+    },
+    "build:storybook": {
+      "dependsOn": ["^build"],
+      "outputs": ["storybook-static/**"],
+      "cache": false
     },
     "dev": {
       "dependsOn": ["^build"],
