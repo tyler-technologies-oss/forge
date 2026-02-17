@@ -80,7 +80,6 @@
     "@tylertech/stylelint-rules": "catalog:",
     "@types/cssbeautify": "^0.3.5",
     "@types/node": "catalog:",
-    "@ungap/structured-clone": "^1.3.0",
     "@vitest/browser": "^4.0.18",
     "@vitest/browser-playwright": "^4.0.18",
     "@vitest/coverage-v8": "^4.0.18",
