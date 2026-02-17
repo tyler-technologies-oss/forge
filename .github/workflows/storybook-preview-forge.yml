@@ -16,7 +16,7 @@ env:
 
 jobs:
   deploy-preview:
-    if: contains(github.event.pull_request.labels.*.name, 'deploy-preview')
+    if: contains(github.event.pull_request.labels.*.name, 'deploy-preview') && !github.event.pull_request.head.repo.fork
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:
