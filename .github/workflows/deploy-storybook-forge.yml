@@ -28,8 +28,6 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm run --filter @tylertech/forge-core build
-
       - run: pnpm run --filter @tylertech/forge build:storybook
 
       - uses: JamesIves/github-pages-deploy-action@v4

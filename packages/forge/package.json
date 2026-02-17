@@ -50,7 +50,6 @@
     "storybook": "pnpm run cem && storybook dev -p 6006",
     "build:storybook": "pnpm run cem && storybook build",
     "lint": "eslint . && stylelint \"src/lib/**/*.{css,scss}\"",
-    "setup:playwright": "playwright install --with-deps chromium",
     "test": "vitest run --browser.headless",
     "vitest": "vitest",
     "cdn-pack": "tar -czvhf cdn/deployment-assets.tar.gz -C cdn .",

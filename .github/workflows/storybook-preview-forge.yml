@@ -2,11 +2,9 @@ name: Storybook Preview (Forge)
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [labeled, synchronize]
     paths:
       - 'packages/forge/**'
-  pull_request_target:
-    types: [labeled]
 
 concurrency:
   group: storybook-preview-forge-${{ github.event.pull_request.number }}
@@ -18,9 +16,7 @@ env:
 
 jobs:
   deploy-preview:
-    if: |
-      github.event_name == 'pull_request' ||
-      (github.event_name == 'pull_request_target' && github.event.label.name == 'deploy-preview')
+    if: contains(github.event.pull_request.labels.*.name, 'deploy-preview')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:

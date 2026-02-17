@@ -11,7 +11,7 @@
     "lint": "turbo run lint",
     "format": "turbo run format",
     "format:check": "turbo run format:check",
-    "setup:playwright": "turbo run setup:playwright",
+    "setup:playwright": "playwright install --with-deps chromium",
     "test": "turbo run test",
     "release": "pnpm run build && changeset publish"
   },

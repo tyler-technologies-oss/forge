@@ -28,7 +28,6 @@
   "scripts": {
     "build": "rimraf ./dist && tsc -p tsconfig.build.json",
     "lint": "eslint",
-    "setup:playwright": "playwright install --with-deps chromium",
     "test": "vitest run --browser.headless",
     "vitest": "vitest",
     "format": "prettier --write \"**/*.{ts,js}\"",
