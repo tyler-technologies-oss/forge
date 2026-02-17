@@ -1,6 +1,3 @@
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from 'eslint-plugin-storybook';
-
 import { defineConfig } from 'eslint/config';
 import tylerPlugin from '@tylertech-eslint/eslint-plugin';
 
@@ -14,18 +11,12 @@ export default defineConfig([
     }
   },
   {
-    name: 'JavaScript files',
-    files: ['**/*.js', '**/*.mjs'],
-    extends: [tylerPlugin.configs.recommended]
-  },
-  {
     name: 'Test files',
-    files: ['src/lib/**/*.test.ts'],
+    files: ['src/**/*.test.ts'],
     rules: {
       '@typescript-eslint/dot-notation': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off'
     }
   },
-  ...storybook.configs['flat/recommended'],
-  { ignores: ['dist/**/*', 'esm/**/*', 'cdn/**/*', 'src/dev/**/*', '.storybook/**/*', 'storybook-static/**/*'] }
+  { ignores: ['dist/**/*'] }
 ]);
