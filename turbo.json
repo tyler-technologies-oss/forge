@@ -1,0 +1,28 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "esm/**", "custom-elements.json"],
+      "cache": false
+    },
+    "lint": {
+      "outputs": [],
+      "cache": false
+    },
+    "format": {},
+    "format:check": {},
+    "setup:playwright": {
+      "outputs": []
+    },
+    "test": {
+      "outputs": []
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "persistent": true,
+      "cache": false
+    }
+  }
+}

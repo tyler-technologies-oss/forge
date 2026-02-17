@@ -1,0 +1,150 @@
+import { ISelectDropdownComponent } from './select-dropdown.js';
+import { BaseSelectAdapter, IBaseSelectAdapter } from '../core/base-select-adapter.js';
+import { IListDropdownConfig } from '../../list-dropdown/list-dropdown-constants.js';
+import { randomChars } from '@tylertech/forge-core';
+import { type IBaseComponent } from '../../core/base/base-component.js';
+
+export interface ISelectDropdownAdapter<T extends IBaseComponent = ISelectDropdownComponent> extends IBaseSelectAdapter<T> {
+  attach(selector: string): void;
+  detach(): void;
+  setTargetDisconnectedListener(cb: () => void): () => void;
+  isAttached(): boolean;
+  setTargetText(text: string, selector: string): void;
+  getTargetText(selector: string): string;
+}
+
+export class SelectDropdownAdapter extends BaseSelectAdapter<ISelectDropdownComponent> implements ISelectDropdownAdapter {
+  constructor(component: ISelectDropdownComponent) {
+    super(component);
+  }
+
+  public initializeAccessibility(): void {
+    this._targetElement.setAttribute('role', 'combobox');
+    this._targetElement.setAttribute('aria-live', 'polite');
+    this._targetElement.setAttribute('aria-haspopup', 'true');
+    this._targetElement.setAttribute('aria-expanded', 'false');
+    this.setAriaControls();
+  }
+
+  public addClickListener(listener: (evt: Event) => void): void {
+    this._targetElement.addEventListener('click', listener);
+  }
+
+  public removeClickListener(listener: (evt: Event) => void): void {
+    if (this._targetElement) {
+      this._targetElement.removeEventListener('click', listener);
+    }
+  }
+
+  public addTargetListener(type: string, listener: (evt: Event) => void): void {
+    let passive: boolean | undefined;
+    let capture: boolean | undefined;
+
+    if (type === 'keydown') {
+      // We don't use a passive keydown listener because we are preventing default in this event and Angular doesn't like that
+      // We need to use capturing to ensure that we get to this event before zone.js does
+      passive = false;
+      capture = true;
+    }
+
+    this._targetElement.addEventListener(type, listener, { passive, capture });
+  }
+
+  public removeTargetListener(type: string, listener: (evt: Event) => void): void {
+    if (this._targetElement) {
+      this._targetElement.removeEventListener(type, listener);
+    }
+  }
+
+  public updateActiveDescendant(id: string): void {
+    if (id) {
+      this._targetElement.setAttribute('aria-activedescendant', id);
+    } else {
+      this._targetElement.removeAttribute('aria-activedescendant');
+    }
+  }
+
+  public open(config: IListDropdownConfig): void {
+    super.open(config);
+    this._targetElement.setAttribute('aria-controls', `list-dropdown-popup-${config.id}`);
+    this._targetElement.setAttribute('aria-expanded', 'true');
+  }
+
+  public close(): Promise<void> {
+    this._targetElement.setAttribute('aria-expanded', 'false');
+    this._targetElement.removeAttribute('aria-activedescendant');
+    this.setAriaControls();
+    return super.close();
+  }
+
+  public attach(selector: string): void {
+    const rootNode = (this._component.getRootNode() as ShadowRoot) || HTMLDocument;
+    const doc = rootNode || this._component.ownerDocument || document;
+    const element = doc.querySelector(selector) as HTMLElement;
+    if (element) {
+      this._targetElement = element;
+    }
+  }
+
+  public detach(): void {
+    this._targetElement = undefined as any;
+  }
+
+  public setTargetDisconnectedListener(cb: () => void): () => void {
+    if (!this._targetElement || !this._targetElement.parentElement) {
+      return () => {};
+    }
+    const observer = new MutationObserver(mutations => {
+      const isTargetRemoved = mutations.some(mutation => Array.from(mutation.removedNodes).some(node => node === this._targetElement));
+      if (isTargetRemoved) {
+        observer.disconnect();
+        cb();
+      }
+    });
+    observer.observe(this._targetElement.parentElement, { childList: true });
+    return () => observer.disconnect();
+  }
+
+  public isAttached(): boolean {
+    return !!this._targetElement;
+  }
+
+  public setTargetText(text: string, selector: string): void {
+    let target: Element = this._targetElement;
+    if (selector) {
+      const element = this._getElementBySelector(selector);
+      if (element) {
+        target = element;
+      }
+    }
+    if (target) {
+      target.textContent = text;
+    }
+  }
+
+  public getTargetText(selector: string): string {
+    const element = selector ? this._getElementBySelector(selector) : this._targetElement;
+    return element ? element.innerText : '';
+  }
+
+  private _getElementBySelector(selector: string): HTMLElement | null {
+    return this._targetElement.querySelector(selector) || this._getRootNode().querySelector(selector);
+  }
+
+  private _getRootNode(): ShadowRoot | Document {
+    return (this._component.getRootNode() as ShadowRoot | Document) ?? this._component.ownerDocument ?? document;
+  }
+
+  public setAriaControls(): void {
+    let placeholderDiv = this._component.querySelector('[data-forge-aria-controls-placeholder]');
+    if (placeholderDiv) {
+      this._targetElement.setAttribute('aria-controls', placeholderDiv.id);
+      return;
+    }
+    placeholderDiv = document.createElement('div');
+    placeholderDiv.id = `forge-select-dropdown-temp-${randomChars(10)}`;
+    placeholderDiv.setAttribute('data-forge-aria-controls-placeholder', '');
+    this._targetElement.setAttribute('aria-controls', placeholderDiv.id);
+    this._component.appendChild(placeholderDiv);
+  }
+}
