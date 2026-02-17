@@ -41,6 +41,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - run: pnpm run build
+
       - run: pnpm run --filter @tylertech/${{ inputs.package }} build:storybook
 
       - uses: JamesIves/github-pages-deploy-action@v4
