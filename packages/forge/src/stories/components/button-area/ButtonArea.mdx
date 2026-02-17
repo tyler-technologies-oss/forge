@@ -43,6 +43,24 @@ and call `stopPropagation()` on the event, or you can use the `forge-ignore` att
 </forge-button-area>
 ```
 
+## Usage with anchor links
+
+The button area can be used with anchor (`<a>`) elements in addition to buttons:
+
+```html
+<forge-button-area>
+  <a slot="button" href="/page" aria-labelledby="heading">
+    Navigate to page
+  </a>
+  <div>
+    <div class="forge-typography--heading4" id="heading">Page Title</div>
+    <div>Click anywhere to navigate</div>
+  </div>
+</forge-button-area>
+```
+
+> **Note:** `<a>` elements can't be disabled. Attempting to disable a `<forge-button-area>` with an anchor element will have no effect.
+
 ## State reflection
 
 The button area observes the connected button and automatically reflects certain ARIA attributes as CSS states that can be styled:
@@ -76,7 +94,7 @@ When the connected button has `aria-current` set to a valid value (`"true"`, `"p
 
 ## Accessibility
 
-- Always include a slotted `<button>` element or connect a visble button with the `target` or `targetElement` properties.
+- Always include a slotted `<button>` or `<a>` element or connect a visible button or `<a>` element with the `target` or `targetElement` properties.
 - Add a concise, descriptive description of the button area's action as the text content of the connected button.
   - The button's text content should preferably be the same as the visible text within the button area to reduce confusion. This can a portion of the content if long.
 - Set any accessible attributes on the connected button.
@@ -86,5 +104,5 @@ When the connected button has `aria-current` set to a valid value (`"true"`, `"p
   - Set `aria-current` if the button represents the current item within a set of items
 - Verify that you can reach every nested button by keyboard navigation.
   - Ensure that there is a visual cue that the nested button is currently in focus.
-- Verify that pressing the space bar or enter key while focused on a button will activate the button area in the same manner as if it had been clicked with a mouse.
+- Verify that pressing the space bar or enter key while focused on a button will activate the button area in the same manner as if it had been clicked with a mouse. When used with an `<a>` element only the enter key should activate the button area.
 - Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
