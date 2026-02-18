@@ -20,10 +20,12 @@ import {
   tylIconInfo,
   tylIconWifi,
   tylIconOpenInNew,
-  tylIconFolder
+  tylIconFolder,
+  tylIconMoreHoriz
 } from '@tylertech/tyler-icons';
+import { IMenuOption } from '@tylertech/forge/menu/menu-constants.js';
 
-IconRegistry.define([tylIconWifi, tylIconBluetooth, tylIconDataUsage, tylIconInfo, tylIconCode, tylIconFace, tylIconOpenInNew, tylIconFolder]);
+IconRegistry.define([tylIconWifi, tylIconBluetooth, tylIconDataUsage, tylIconInfo, tylIconCode, tylIconFace, tylIconOpenInNew, tylIconFolder, tylIconMoreHoriz]);
 
 const listDemoRootEl = document.getElementById('list-demo-root') as HTMLElement;
 listDemoRootEl.addEventListener('forge-list-item-select', console.log);
@@ -32,3 +34,15 @@ const cssOnlyPanelTriggers = document.querySelectorAll('.expandable-list-item');
 cssOnlyPanelTriggers.forEach(trigger => {
   trigger.addEventListener('click', () => trigger.nextElementSibling.classList.toggle('forge-expansion-panel--open'));
 });
+
+const menus = document.querySelectorAll('forge-menu');
+const numOptionsPerMenu = 2;
+let optionsCounter = 0;
+menus.forEach((menu) => {
+  const options: IMenuOption[] = []
+  for(let i = 0; i < numOptionsPerMenu; i++){
+    const num = ++optionsCounter;
+    options.push({label: `Menu option ${num}`, value: `menu-option-${num}`})
+  }
+  menu.options = options;
+})
