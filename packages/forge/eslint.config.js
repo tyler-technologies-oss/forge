@@ -3,11 +3,10 @@ import storybook from 'eslint-plugin-storybook';
 
 import { defineConfig } from 'eslint/config';
 import tylerPlugin from '@tylertech-eslint/eslint-plugin';
-import pluginChaiFriendly from 'eslint-plugin-chai-friendly';
 
 export default defineConfig([
   {
-    name: 'Forge TypeScript files',
+    name: 'TypeScript files',
     files: ['**/*.ts'],
     extends: [tylerPlugin.configs.tsRecommended, tylerPlugin.configs.tsStylistic],
     rules: {
@@ -15,14 +14,13 @@ export default defineConfig([
     }
   },
   {
-    name: 'Forge JavaScript files',
+    name: 'JavaScript files',
     files: ['**/*.js', '**/*.mjs'],
     extends: [tylerPlugin.configs.recommended]
   },
   {
-    name: 'Modern tests (Web Test Runner + Mocha + Chai)',
-    files: ['src/**/*.test.ts', 'src/**/*.vitest.ts'],
-    extends: [pluginChaiFriendly.configs.recommendedFlat],
+    name: 'Test files',
+    files: ['src/lib/**/*.test.ts'],
     rules: {
       '@typescript-eslint/dot-notation': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off'

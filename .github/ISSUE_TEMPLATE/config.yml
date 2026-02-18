@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://forge.tylertech.com
+    about: Check docs before filing an issue
+  - name: Questions & Discussions
+    url: https://github.com/tyler-technologies-oss/forge/discussions
+    about: Ask questions and discuss ideas

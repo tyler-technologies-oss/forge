@@ -1,7 +1,6 @@
 name: Changesets
 
-# Version branches: Add branch names here (e.g., v2.x) and update baseBranch in .changeset/config.json
-# For old major releases, use: publish: pnpm run release -- --tag v2
+# Version branches: Add branch names here (e.g., v2.x) and update baseBranch and tag in .changeset/config.json
 on:
   push:
     branches:
@@ -44,8 +43,8 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          title: "chore: release"
-          commit: "chore: release"
+          title: "chore: release (${{ github.ref_name }})"
+          commit: "chore: release (${{ github.ref_name }})"
           publish: pnpm run release
           version: pnpm changeset version
         env:
