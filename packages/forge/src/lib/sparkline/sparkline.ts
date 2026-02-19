@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
-import { PropertyValues, TemplateResult, html, unsafeCSS, svg, SVGTemplateResult } from 'lit';
+import { PropertyValues, SVGTemplateResult, TemplateResult, html, nothing, svg, unsafeCSS } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { Theme } from '../constants.js';
@@ -86,6 +86,9 @@ export class SparklineComponent extends BaseLitElement {
   @state()
   protected _fill = '';
 
+  @state()
+  protected _fillMask?: SVGTemplateResult;
+
   get #numericMin(): number | undefined {
     if (this.min === undefined) {
       return undefined;
@@ -123,6 +126,7 @@ export class SparklineComponent extends BaseLitElement {
       const normalized = this.#normalizeData(this.value);
       this._path = this.#createPath(normalized);
       this._fill = this.#createFill();
+      this._fillMask = this.#createFillMaskTemplate();
     }
   }
 
@@ -138,8 +142,9 @@ export class SparklineComponent extends BaseLitElement {
         <linearGradient part="gradient" class="gradient" id="gradient" x1="0%" y1="0%" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
           ${this.#createGradient()}
         </linearGradient>
+        ${this._fillMask ?? nothing}
         <path part="path" class="path" stroke=${gradient} d=${this._path} />
-        <path part="fill" class="fill" fill=${gradient} stroke=${gradient} d=${this._fill} />
+        <path part="fill" class="fill" fill=${gradient} stroke=${gradient} mask="url(#fillMask)" d=${this._fill} />
       </svg>
     `;
   }
@@ -155,9 +160,9 @@ export class SparklineComponent extends BaseLitElement {
       dataCopy.push(dataCopy[0]);
     }
 
-    // Set all points to 0 if they are the same to create a flat line at the bottom of the chart
+    // Set all points to 0.5 if they are the same to create a flat line in the middle of the chart
     if (range === 0) {
-      return dataCopy.map(() => 0);
+      return dataCopy.map(() => 0.5);
     }
 
     return dataCopy.map(val => (val - minVal) / range);
@@ -183,6 +188,19 @@ export class SparklineComponent extends BaseLitElement {
       return `${this._path} L 100 100 L 0 100 Z`;
     }
     return '';
+  }
+
+  #createFillMaskTemplate(): SVGTemplateResult {
+    // Use a mask to hide areas of the fill that may extend above the value path
+    if (this._path) {
+      return svg`
+        <mask id="fillMask">
+          <rect fill="white" x="-100" y="-100" width="300" height="300" />
+          <path class="fill-mask" fill="black" stroke="none" d="${this._path} L 100 0 L 0 0 Z" />
+        </mask>
+      `;
+    }
+    return svg``;
   }
 
   #normalizedDataToPoints(normalized: number[]): Array<{ x: number; y: number }> {

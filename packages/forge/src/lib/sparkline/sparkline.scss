@@ -37,6 +37,10 @@
   @include fill;
 }
 
+.fill-mask {
+  @include fill-mask;
+}
+
 .gradient-start {
   @include gradient-start;
 }
@@ -60,16 +64,22 @@
 //
 
 @media (prefers-reduced-motion: reduce) {
-  .forge-sparkline {
+  .sparkline {
     @include override(transition-duration, 0ms, value);
   }
 }
 
 @media (forced-colors: active) {
-  .forge-sparkline {
-    @include override(fill-color, CanvasText, value);
-    @include override(background, Canvas, value);
+  .sparkline {
+    border: 1px solid CanvasText !important;
+  }
 
-    border: 1px solid CanvasText;
+  .path {
+    stroke: CanvasText !important;
+  }
+
+  .fill,
+  .fill-mask {
+    display: hidden;
   }
 }

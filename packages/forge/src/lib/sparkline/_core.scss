@@ -44,6 +44,12 @@
   opacity: #{token(fill-opacity)};
 }
 
+@mixin fill-mask {
+  @include path-animation;
+
+  visibility: #{token(fill-visibility)};
+}
+
 @mixin gradient-start {
   stop-color: #{token(primary-color)};
 }
