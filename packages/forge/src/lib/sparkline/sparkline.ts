@@ -41,7 +41,21 @@ export class SparklineComponent extends BaseLitElement {
    * @default []
    * @attribute
    */
-  @property({ type: Array, attribute: false })
+  @property({
+    type: Array,
+    converter: value => {
+      const points = value?.split(' ') ?? [];
+      const numeric = points?.map(point => {
+        const coerced = Number(point);
+        return Number.isNaN(coerced) ? Number(new Date(point)) : coerced;
+      });
+      if (numeric.some(isNaN)) {
+        console.warn('Invalid value provided to sparkline. Expected a space-separated string of numbers or dates.');
+        return [];
+      }
+      return numeric;
+    }
+  })
   public value: number[] | Date[] = [];
 
   /**
@@ -60,7 +74,7 @@ export class SparklineComponent extends BaseLitElement {
 
   /**
    * Theme color variant.
-   * @default 'primary'
+   * @default 'default'
    * @attribute
    */
   @property({ type: String })
@@ -76,8 +90,9 @@ export class SparklineComponent extends BaseLitElement {
 
   /**
    * Custom gradient color stop values.
+   * @attribute
    */
-  @property({ type: Array, attribute: false })
+  @property({ type: Array, converter: value => value?.split(' ') ?? undefined })
   public gradient?: string[];
 
   @state()
@@ -150,7 +165,7 @@ export class SparklineComponent extends BaseLitElement {
   }
 
   #normalizeData(data: number[] | Date[]): number[] {
-    const dataCopy = data.map(value => Number(value));
+    const dataCopy = this.#guardAgainstLargeSets(data.map(value => Number(value)));
     const minVal = this.#numericMin ?? Math.min(...dataCopy);
     const maxVal = this.#numericMax ?? Math.max(...dataCopy);
     const range = maxVal - minVal;
@@ -168,6 +183,13 @@ export class SparklineComponent extends BaseLitElement {
     return dataCopy.map(val => (val - minVal) / range);
   }
 
+  #normalizedDataToPoints(normalized: number[]): Array<{ x: number; y: number }> {
+    return normalized.map((value, index) => ({
+      x: normalized.length === 1 ? 50 : (index / (normalized.length - 1)) * 100,
+      y: 100 - value * 100
+    }));
+  }
+
   #createPath(data: number[]): string {
     if (data.length === 0) {
       return '';
@@ -181,33 +203,6 @@ export class SparklineComponent extends BaseLitElement {
     }
 
     return this.#createLinearPath(points);
-  }
-
-  #createFill(): string {
-    if (this._path) {
-      return `${this._path} L 100 100 L 0 100 Z`;
-    }
-    return '';
-  }
-
-  #createFillMaskTemplate(): SVGTemplateResult {
-    // Use a mask to hide areas of the fill that may extend above the value path
-    if (this._path) {
-      return svg`
-        <mask id="fillMask">
-          <rect fill="white" x="-100" y="-100" width="300" height="300" />
-          <path class="fill-mask" fill="black" stroke="none" d="${this._path} L 100 0 L 0 0 Z" />
-        </mask>
-      `;
-    }
-    return svg``;
-  }
-
-  #normalizedDataToPoints(normalized: number[]): Array<{ x: number; y: number }> {
-    return normalized.map((value, index) => ({
-      x: normalized.length === 1 ? 50 : (index / (normalized.length - 1)) * 100,
-      y: 100 - value * 100
-    }));
   }
 
   #createLinearPath(points: Array<{ x: number; y: number }>): string {
@@ -290,6 +285,34 @@ export class SparklineComponent extends BaseLitElement {
       <stop class="gradient-start" offset="0%" />
       <stop class="gradient-stop" offset="100%" />
     `;
+  }
+
+  #createFill(): string {
+    if (this._path) {
+      return `${this._path} L 100 100 L 0 100 Z`;
+    }
+    return '';
+  }
+
+  #createFillMaskTemplate(): SVGTemplateResult {
+    // Use a mask to hide areas of the fill that may extend above the value path
+    if (this._path) {
+      return svg`
+        <mask id="fillMask">
+          <rect fill="white" x="-100" y="-100" width="300" height="300" />
+          <path class="fill-mask" fill="black" stroke="none" d="${this._path} L 100 0 L 0 0 Z" />
+        </mask>
+      `;
+    }
+    return svg``;
+  }
+
+  #guardAgainstLargeSets(data: number[]): number[] {
+    const maxPoints = 1000;
+    if (data.length > maxPoints) {
+      console.warn(`Sparkline is rendering a large dataset with ${data.length} points. Consider reducing the number of points for better performance.`);
+    }
+    return data.slice(0, maxPoints);
   }
 }
 
