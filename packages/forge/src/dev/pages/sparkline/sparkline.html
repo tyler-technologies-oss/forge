@@ -13,6 +13,18 @@ include('./src/partials/page.ejs', {
         defaultValue: '10'
       },
       {
+        type: 'text-field',
+        label: 'Min',
+        id: 'opt-min',
+        inputType: 'number',
+      },
+      {
+        type: 'text-field',
+        label: 'Max',
+        id: 'opt-max',
+        inputType: 'number',
+      },
+      {
         type: 'switch',
         label: 'Smooth',
         id: 'opt-smooth',
@@ -23,6 +35,22 @@ include('./src/partials/page.ejs', {
         label: 'Fill',
         id: 'opt-fill',
         defaultValue: false
+      },
+      {
+        type: 'select',
+        label: 'Density',
+        id: 'opt-density',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'XXSmall', value: 'xxsmall' },
+          { label: 'XSmall', value: 'xsmall' },
+          { label: 'Small', value: 'small' },
+          { label: 'Medium', value: 'medium' },
+          { label: 'Large', value: 'large' },
+          { label: 'XLarge', value: 'xlarge' },
+          { label: 'XXLarge', value: 'xxlarge' }
+        ]
       },
       {
         type: 'select',
@@ -48,6 +76,16 @@ include('./src/partials/page.ejs', {
         min: 0,
         step: 0.2,
         defaultValue: '6'
+      },
+      {
+        type: 'text-field',
+        label: 'Fill opacity',
+        id: 'opt-fill-opacity',
+        inputType: 'number',
+        min: 0,
+        max: 100,
+        step: 1,
+        defaultValue: '12'
       },
       {
         type: 'button',

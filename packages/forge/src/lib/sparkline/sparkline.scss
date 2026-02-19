@@ -29,6 +29,10 @@
 // SVG
 //
 
+.svg {
+  @include svg;
+}
+
 .path {
   @include path;
 }
@@ -56,6 +60,16 @@
 @each $theme in (primary, secondary, tertiary, success, error, warning, info) {
   .theme--#{$theme} {
     @include theme($theme);
+  }
+}
+
+//
+// Density
+//
+
+@each $density in (xxsmall, xsmall, small, medium, medium-large, large, xlarge, xxlarge) {
+  .density--#{$density} {
+    @include density($density);
   }
 }
 

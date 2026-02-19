@@ -9,9 +9,10 @@ $tokens: (
   primary-color: utils.module-val(sparkline, primary-color, theme.variable(outline-medium)),
   secondary-color: utils.module-val(sparkline, secondary-color, theme.variable(outline-high)),
   stroke-width: utils.module-val(sparkline, stroke-width, 6px),
-  height: utils.module-val(sparkline, height, spacing.variable(xxlarge)),
+  height: utils.module-val(sparkline, height, spacing.variable(xxxlarge)),
   fill-opacity: utils.module-val(sparkline, fill-opacity, theme.emphasis(low)),
   fill-visibility: utils.module-val(sparkline, fill-visibility, hidden),
+  overflow: utils.module-val(sparkline, overflow, visible),
   transition-duration: utils.module-val(sparkline, transition-duration, animation.variable(duration-short4)),
   transition-easing: utils.module-val(sparkline, transition-easing, animation.variable(easing-standard))
 ) !default;

@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { PropertyValues, SVGTemplateResult, TemplateResult, html, nothing, svg, unsafeCSS } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { Theme } from '../constants.js';
+import { Density, Theme } from '../constants.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
 
@@ -11,21 +11,28 @@ import styles from './sparkline.scss';
 export const SPARKLINE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-sparkline';
 
 export type SparklineTheme = Theme | 'default';
+export type SparklineDensity = Density | 'xxsmall' | 'xsmall' | 'xlarge' | 'xxlarge' | 'default';
 
 /**
  * @tag forge-sparkline
  *
  * @summary Sparklines display compact line charts for visualizing data trends without axes or labels.
  *
- * @cssproperty --forge-sparkline-fill-color - The color of the filled area.
- * @cssproperty --forge-sparkline-stroke-color - The color of the line stroke.
+ * @cssproperty --forge-sparkline-primary-color - The primary gradient color.
+ * @cssproperty --forge-sparkline-secondary-color - The secondary gradient color.
+ * @cssproperty --forge-sparkline-stroke-width - The width of the path's stroke.
  * @cssproperty --forge-sparkline-height - The block size.
+ * @cssproperty --forge-sparkline-fill-opacity - The opacity of the fill area under the path.
+ * @cssproperty --forge-sparkline-fill-visibility - The visibility of the fill area under the path.
+ * @cssproperty --forge-sparkline-overflow - The overflow behavior of the sparkline.
  * @cssproperty --forge-sparkline-transition-duration - Animation duration.
  * @cssproperty --forge-sparkline-transition-easing - Animation easing.
  *
- * @csspart root - The root SVG element.
+ * @csspart root - The root container element.
+ * @csspart svg - The SVG element containing the sparkline paths.
  * @csspart gradient - The linear gradient definition for the line stroke.
  * @csspart path - The SVG path element representing the line.
+ * @csspart fill - The SVG path element representing the filled area under the path.
  */
 @customElement(SPARKLINE_TAG_NAME)
 export class SparklineComponent extends BaseLitElement {
@@ -79,6 +86,14 @@ export class SparklineComponent extends BaseLitElement {
    */
   @property({ type: String })
   public theme: SparklineTheme = 'default';
+
+  /**
+   * Density variant.
+   * @default 'default'
+   * @attribute
+   */
+  @property({ type: String })
+  public density: SparklineDensity = 'default';
 
   /**
    * Whether to render the path as a smooth curve using Bezier interpolation.
@@ -148,19 +163,22 @@ export class SparklineComponent extends BaseLitElement {
   public render(): TemplateResult {
     const classes = {
       sparkline: true,
+      [`density--${this.density}`]: true,
       [`theme--${this.theme}`]: true
     };
     const gradient = 'url(#gradient)';
 
     return html`
-      <svg part="root" class=${classMap(classes)} aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <linearGradient part="gradient" class="gradient" id="gradient" x1="0%" y1="0%" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
-          ${this.#createGradient()}
-        </linearGradient>
-        ${this._fillMask ?? nothing}
-        <path part="path" class="path" stroke=${gradient} d=${this._path} />
-        <path part="fill" class="fill" fill=${gradient} stroke=${gradient} mask="url(#fillMask)" d=${this._fill} />
-      </svg>
+      <div part="root" class=${classMap(classes)}>
+        <svg part="svg" class="svg" aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <linearGradient part="gradient" class="gradient" id="gradient" x1="0%" y1="0%" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
+            ${this.#createGradient()}
+          </linearGradient>
+          ${this._fillMask ?? nothing}
+          <path part="path" class="path" stroke=${gradient} d=${this._path} />
+          <path part="fill" class="fill" fill=${gradient} stroke=${gradient} mask="url(#fillMask)" d=${this._fill} />
+        </svg>
+      </div>
     `;
   }
 

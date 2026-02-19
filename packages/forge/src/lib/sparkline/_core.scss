@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '../core/styles/theme';
 @use './token-utils' as *;
 
@@ -9,10 +10,17 @@
 }
 
 @mixin base {
-  position: relative;
-  display: block;
+  box-sizing: border-box;
   width: 100%;
   height: #{token(height)};
+  padding: #{token(stroke-width)};
+  overflow: #{token(overflow)};
+}
+
+@mixin svg {
+  display: block;
+  width: 100%;
+  height: 100%;
   overflow: visible;
 }
 
@@ -61,4 +69,40 @@
 @mixin theme($theme-name) {
   @include override(primary-color, theme.variable($theme-name + '-container-high'), value);
   @include override(secondary-color, theme.variable($theme-name), value);
+}
+
+$densities: (
+  xxsmall: (
+    height: 8px,
+    stroke-width: 2px
+  ),
+  xsmall: (
+    height: 24px,
+    stroke-width: 2px
+  ),
+  small: (
+    height: 40px,
+    stroke-width: 4px
+  ),
+  medium: (
+    height: 56px,
+    stroke-width: 6px
+  ),
+  large: (
+    height: 72px,
+    stroke-width: 6px
+  ),
+  xlarge: (
+    height: 88px,
+    stroke-width: 8px
+  ),
+  xxlarge: (
+    height: 104px,
+    stroke-width: 8px
+  )
+);
+
+@mixin density($density) {
+  @include override(height, map.get($densities, $density, height), value);
+  @include override(stroke-width, map.get($densities, $density, stroke-width), value);
 }
