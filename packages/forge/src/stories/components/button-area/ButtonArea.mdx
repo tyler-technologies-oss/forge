@@ -9,10 +9,11 @@ import * as ButtonAreaStories from './ButtonArea.stories';
 The button area is a container element for an interactive "area" of the page. It's common to make larger sections of the page (such as individual cards)
 interactive and respond to user pointer events. The button area provides an accessible way to do this.
 
-It works by wrapping the content you want to visually appear interactive, and then provide a slotted button element that will be used to control the
-interactive behavior while the state layer fills the parent container size. The `<button>` is visually hidden from the page, but it can still receive
-focus which the button area will handle and make it appear as if the full content is interactive to the user. When clicking anywhere in the button area,
-the component will dispatch a `click` event to the slotted `<button>` itself, allowing you to listen for the event and respond accordingly.
+It works by wrapping the content you want to visually appear interactive and then connecting a button element that will be used to control the
+interactive behavior while the state layer fills the parent container. When set to the component's `button` slot, this `<button>` is visually hidden
+from the page, but it can still receive focus which the button area will handle and make it appear as if the full content is interactive to the user. Buttons visible
+within the content area of the component can also be connected and used the same way, expanding their interactive area while maintaining simple code and good accessibility.
+When clicking anywhere in the button area, the component will dispatch a `click` event to the connected button, allowing you to listen for the event and respond accordingly.
 
 <Canvas of={ButtonAreaStories.Demo} />
 
@@ -42,19 +43,66 @@ and call `stopPropagation()` on the event, or you can use the `forge-ignore` att
 </forge-button-area>
 ```
 
+## Usage with anchor links
+
+The button area can be used with anchor (`<a>`) elements in addition to buttons:
+
+```html
+<forge-button-area>
+  <a slot="button" href="/page" aria-labelledby="heading">
+    Navigate to page
+  </a>
+  <div>
+    <div class="forge-typography--heading4" id="heading">Page Title</div>
+    <div>Click anywhere to navigate</div>
+  </div>
+</forge-button-area>
+```
+
+> **Note:** `<a>` elements can't be disabled. Attempting to disable a `<forge-button-area>` with an anchor element will have no effect.
+
+## State reflection
+
+The button area observes the connected button and automatically reflects certain ARIA attributes as CSS states that can be styled:
+
+### Pressed state
+
+When the connected button has `aria-pressed="true"`, the button area applies the `:state(pressed)` CSS state. This is useful for toggle buttons:
+
+```html
+<forge-button-area>
+  <button slot="button" aria-pressed="false">Toggle</button>
+  <div>Toggle content</div>
+</forge-button-area>
+```
+
+### Current state
+
+When the connected button has `aria-current` set to a valid value (`"true"`, `"page"`, `"step"`, `"location"`, `"date"`, or `"time"`), the button area applies the
+`:state(current)` CSS state. This is useful for navigation items:
+
+```html
+<forge-button-area>
+  <button slot="button" aria-current="page">Home</button>
+  <div>Home page</div>
+</forge-button-area>
+```
+
 ## API
 
 <CustomArgTypes />
 
 ## Accessibility
 
-- Always include a slotted `<button>` element.
-- Add a concise, descriptive description of the button area's action as the text content of the slotted button.
+- Always include a slotted `<button>` or `<a>` element or connect a visible button or `<a>` element with the `target` or `targetElement` properties.
+- Add a concise, descriptive description of the button area's action as the text content of the connected button.
   - The button's text content should preferably be the same as the visible text within the button area to reduce confusion. This can a portion of the content if long.
-- Set any accessible attributes on the slotted button.
+- Set any accessible attributes on the connected button.
   - Set `aria-controls` if the button controls another element on the page.
   - Set `aria-expanded` to reflect the state of the controlled element if appropriate.
+  - Set `aria-pressed` if the button is a toggle button.
+  - Set `aria-current` if the button represents the current item within a set of items
 - Verify that you can reach every nested button by keyboard navigation.
   - Ensure that there is a visual cue that the nested button is currently in focus.
-- Verify that pressing the space bar or enter key while focused on a button will activate the button area in the same manner as if it had been clicked with a mouse.
+- Verify that pressing the space bar or enter key while focused on a button will activate the button area in the same manner as if it had been clicked with a mouse. When used with an `<a>` element only the enter key should activate the button area.
 - Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
