@@ -1,0 +1,75 @@
+@use '../core/styles/theme';
+@use './core' as *;
+
+//
+// Host
+//
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.sparkline {
+  @include tokens;
+}
+
+.sparkline {
+  @include base;
+}
+
+//
+// SVG
+//
+
+.path {
+  @include path;
+}
+
+.fill {
+  @include fill;
+}
+
+.gradient-start {
+  @include gradient-start;
+}
+
+.gradient-stop {
+  @include gradient-stop;
+}
+
+//
+// Themes
+//
+
+@each $theme in (primary, secondary, tertiary, success, error, warning, info) {
+  .theme--#{$theme} {
+    @include theme($theme);
+  }
+}
+
+//
+// Media queries
+//
+
+@media (prefers-reduced-motion: reduce) {
+  .forge-sparkline {
+    @include override(transition-duration, 0ms, value);
+  }
+}
+
+@media (forced-colors: active) {
+  .forge-sparkline {
+    @include override(fill-color, CanvasText, value);
+    @include override(background, Canvas, value);
+
+    border: 1px solid CanvasText;
+  }
+}

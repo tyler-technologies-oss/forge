@@ -49,6 +49,7 @@
   { "label": "Skeleton", "path": "/pages/skeleton/skeleton.html" },
   { "label": "Skip link", "path": "/pages/skip-link/skip-link.html", "tags": ["button", "skip to content", "skip to main"] },
   { "label": "Slider", "path": "/pages/slider/slider.html", "tags": ["form"] },
+  { "label": "Sparkline", "path": "/pages/sparkline/sparkline.html" },
   { "label": "Split button", "path": "/pages/split-button/split-button.html" },
   { "label": "Split view", "path": "/pages/split-view/split-view.html", "tags": ["form"] },
   { "label": "Stack", "path": "/pages/stack/stack.html" },

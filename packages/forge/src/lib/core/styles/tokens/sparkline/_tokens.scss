@@ -1,0 +1,21 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../shape';
+@use '../../animation';
+@use '../../utils';
+@use '../../spacing';
+
+$tokens: (
+  primary-color: utils.module-val(sparkline, primary-color, theme.variable(outline-medium)),
+  secondary-color: utils.module-val(sparkline, secondary-color, theme.variable(outline-high)),
+  stroke-width: utils.module-val(sparkline, stroke-width, 6px),
+  height: utils.module-val(sparkline, height, spacing.variable(xxlarge)),
+  fill-opacity: utils.module-val(sparkline, fill-opacity, theme.emphasis(low)),
+  fill-visibility: utils.module-val(sparkline, fill-visibility, hidden),
+  transition-duration: utils.module-val(sparkline, transition-duration, animation.variable(duration-short4)),
+  transition-easing: utils.module-val(sparkline, transition-easing, animation.variable(easing-standard))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

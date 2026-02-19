@@ -1,0 +1,58 @@
+@use '../core/styles/theme';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+  box-sizing: border-box;
+}
+
+@mixin base {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: #{token(height)};
+  overflow: visible;
+}
+
+@mixin path-stroke {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: #{token(stroke-width)};
+  vector-effect: non-scaling-stroke;
+}
+
+@mixin path-animation {
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-easing)};
+  transition-property: d;
+}
+
+@mixin path {
+  @include path-stroke;
+  @include path-animation;
+
+  fill: transparent;
+}
+
+@mixin fill {
+  @include path-stroke;
+  @include path-animation;
+
+  visibility: #{token(fill-visibility)};
+  opacity: #{token(fill-opacity)};
+}
+
+@mixin gradient-start {
+  stop-color: #{token(primary-color)};
+}
+
+@mixin gradient-stop {
+  stop-color: #{token(secondary-color)};
+}
+
+@mixin theme($theme-name) {
+  @include override(primary-color, theme.variable($theme-name + '-container-high'), value);
+  @include override(secondary-color, theme.variable($theme-name), value);
+}
