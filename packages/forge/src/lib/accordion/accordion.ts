@@ -1,19 +1,16 @@
-import { customElement, coreProperty } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
-import { ExpansionPanelComponent } from '../expansion-panel/index.js';
-import { AccordionAdapter } from './accordion-adapter.js';
-import { ACCORDION_CONSTANTS } from './accordion-constants.js';
-import { AccordionCore } from './accordion-core.js';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, elementParents } from '@tylertech/forge-core';
+import { customElement, property } from 'lit/decorators.js';
+import { IBaseComponent } from '../core/base/base-component.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { ExpansionPanelComponent } from '../expansion-panel/expansion-panel.js';
+import { emulateUserToggle } from '../expansion-panel/expansion-panel-constants.js';
 
+/** @deprecated - This will be removed in the future. Please switch to using AccordionComponent. */
 export interface IAccordionComponent extends IBaseComponent {
   panelSelector: string;
 }
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-accordion': IAccordionComponent;
-  }
-}
+export const ACCORDION_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-accordion';
 
 /**
  * @tag forge-accordion
@@ -24,39 +21,77 @@ declare global {
  *
  * @fires {CustomEvent<IExpansionPanelComponent>} forge-accordion-toggle - Dispatched when a child expansion panel is toggled. Includes the related expansion panel element in the event detail.
  */
-@customElement({
-  name: ACCORDION_CONSTANTS.elementName,
-  dependencies: [ExpansionPanelComponent]
-})
-export class AccordionComponent extends BaseComponent implements IAccordionComponent {
-  public static get observedAttributes(): string[] {
-    return [ACCORDION_CONSTANTS.attributes.PANEL_SELECTOR];
-  }
+@customElement(ACCORDION_TAG_NAME)
+export class AccordionComponent extends BaseLitElement {
+  /** @deprecated - Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = ACCORDION_TAG_NAME;
 
-  private _core: AccordionCore;
+  /** @deprecated - Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [ExpansionPanelComponent];
 
-  constructor() {
-    super();
-    this._core = new AccordionCore(new AccordionAdapter(this));
-  }
-
-  public connectedCallback(): void {
-    this._core.initialize();
-  }
-
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case ACCORDION_CONSTANTS.attributes.PANEL_SELECTOR:
-        this.panelSelector = newValue;
-        break;
-    }
-  }
+  // TODO: remove attribute reflection
 
   /**
    * Gets/sets the selector to use for finding the child expansion panels. Defaults to searching the direct children for `<forge-expansion-panel>` elements.
    * Use this if you need to scope this accordion to a specific set of expansion panels, or your expansion panels are not direct children of the accordion.
    * @attribute panel-selector
    */
-  @coreProperty()
-  declare public panelSelector: string;
+  @property({ type: String, attribute: 'panel-selector', reflect: true })
+  public panelSelector?: string;
+
+  public connectedCallback(): void {
+    super.connectedCallback();
+    this.addEventListener('forge-expansion-panel-toggle', this.#handleToggle.bind(this));
+  }
+
+  public override createRenderRoot(): HTMLElement | DocumentFragment {
+    return this;
+  }
+
+  #handleToggle(evt: CustomEvent): void {
+    if (!evt.detail || (this.panelSelector && !(evt.target as HTMLElement).matches(this.panelSelector))) {
+      return;
+    }
+
+    evt.stopPropagation();
+
+    if (this.#isNestedPanel(evt.target as HTMLElement)) {
+      return;
+    }
+
+    const panels = this.#getChildPanels();
+    panels.forEach(panel => {
+      if (evt.target !== panel && !this.#isNestedPanel(panel)) {
+        if (panel.open) {
+          panel[emulateUserToggle](false);
+        }
+      }
+    });
+
+    this.dispatchEvent(new CustomEvent('forge-accordion-toggle', { detail: evt.target, bubbles: true, composed: true }));
+  }
+
+  #isNestedPanel(element: HTMLElement): boolean {
+    if (!element || !this.contains(element)) {
+      return false;
+    }
+    const parents = elementParents(element, this);
+    return parents.some(el => el.tagName.toLocaleLowerCase() === 'forge-expansion-panel');
+  }
+
+  #getChildPanels(): ExpansionPanelComponent[] {
+    if (this.panelSelector) {
+      return Array.from(this.querySelectorAll(this.panelSelector)).filter(
+        el => el.tagName.toLocaleLowerCase() === 'forge-expansion-panel'
+      ) as ExpansionPanelComponent[];
+    }
+    const children = Array.from(this.children);
+    return children.filter(child => child.tagName.toLocaleLowerCase() === 'forge-expansion-panel') as ExpansionPanelComponent[];
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-accordion': AccordionComponent;
+  }
 }
