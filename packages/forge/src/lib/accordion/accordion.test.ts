@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
-import type { IAccordionComponent } from './accordion.js';
+import type { AccordionComponent } from './accordion.js';
 import type { IExpansionPanelComponent } from '../expansion-panel/index.js';
 import { ACCORDION_CONSTANTS } from './accordion-constants.js';
 import { frame } from '../core/utils/utils.js';
@@ -96,10 +96,12 @@ describe('Accordion', () => {
 
     harness.accordionElement.panelSelector = '.test-selector';
     expect(harness.accordionElement.panelSelector).toBe('.test-selector');
+    await frame();
     expect(harness.accordionElement.getAttribute('panel-selector')).toBe('.test-selector');
 
     harness.accordionElement.setAttribute('panel-selector', '.test2-selector');
     expect(harness.accordionElement.panelSelector).toBe('.test2-selector');
+    await frame();
     expect(harness.accordionElement.getAttribute('panel-selector')).toBe('.test2-selector');
   });
 
@@ -141,7 +143,7 @@ describe('Accordion', () => {
 });
 
 class AccordionHarness {
-  constructor(public accordionElement: IAccordionComponent) {}
+  constructor(public accordionElement: AccordionComponent) {}
 
   public get expansionPanels(): IExpansionPanelComponent[] {
     return Array.from(this.accordionElement.querySelectorAll('forge-expansion-panel'));
@@ -169,7 +171,7 @@ async function createFixture({ panelSelector }: IAccordionFixtureConfig = {}): P
       </forge-expansion-panel>
     </forge-accordion>
   `);
-  const accordion = screen.container.querySelector('forge-accordion') as IAccordionComponent;
+  const accordion = screen.container.querySelector('forge-accordion')!;
   return new AccordionHarness(accordion);
 }
 
@@ -192,6 +194,6 @@ async function createNestedFixture(): Promise<AccordionHarness> {
       </forge-expansion-panel>
     </forge-accordion>
   `);
-  const accordion = screen.container.querySelector('forge-accordion') as IAccordionComponent;
+  const accordion = screen.container.querySelector('forge-accordion')!;
   return new AccordionHarness(accordion);
 }
