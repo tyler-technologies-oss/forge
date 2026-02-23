@@ -1,13 +1,16 @@
-import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
-import { ExpansionPanelAdapter } from './expansion-panel-adapter.js';
-import { ExpansionPanelAnimationType, ExpansionPanelOrientation, EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from './expansion-panel-constants.js';
-import { ExpansionPanelCore } from './expansion-panel-core.js';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, randomChars } from '@tylertech/forge-core';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { classMap } from 'lit-html/directives/class-map.js';
+import { customElement, property, queryAssignedElements, state } from 'lit/decorators.js';
+import { IBaseComponent } from '../core/base/base-component.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { IOpenIconComponent, OPEN_ICON_CONSTANTS } from '../open-icon/index.js';
+import { emulateUserToggle, EXPANSION_PANEL_CONSTANTS, ExpansionPanelAnimationType, ExpansionPanelOrientation } from './expansion-panel-constants.js';
+import { ExpansionPanelTriggerController } from './expansion-panel-trigger-controller.js';
 
-import template from './expansion-panel.html';
 import styles from './expansion-panel.scss';
-import { IOpenIconComponent } from '../open-icon/index.js';
 
+/** @deprecated - This will be removed in the future. Please switch to using AccordionComponent. */
 export interface IExpansionPanelComponent extends IBaseComponent {
   open: boolean;
   orientation: ExpansionPanelOrientation;
@@ -20,35 +23,10 @@ export interface IExpansionPanelComponent extends IBaseComponent {
   [emulateUserToggle](open: boolean): void;
 }
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-expansion-panel': IExpansionPanelComponent;
-  }
-
-  interface HTMLElementEventMap {
-    'forge-expansion-panel-toggle': CustomEvent<boolean>;
-    'forge-expansion-panel-animation-complete': CustomEvent<boolean>;
-  }
-}
-
 /**
  * @tag forge-expansion-panel
  *
  * @summary Expansion panels provide progressive disclosure of content.
- *
- * @property {boolean} [open=false] - Whether the panel is open or closed.
- * @property {ExpansionPanelOrientation} [orientation="vertical"] - The orientation of the panel.
- * @property {ExpansionPanelAnimationType} [animationType="default"] - The type of animation to use when opening/closing the panel.
- * @property {string} trigger - The id of the button that the expansion panel should be toggled by.
- * @property {HTMLElement | null} triggerElement - The button that the expansion panel should be toggled by.
- * @property {string} openIcon - The id of the `<forge-open-icon>` that the expansion panel should toggle.
- * @property {IOpenIconComponent | null} openIconElement - The `<forge-open-icon>` that the expansion panel should toggle.
- *
- * @attribute {boolean} [open=false] - Whether the panel is open or closed.
- * @attribute {ExpansionPanelOrientation} [orientation="vertical"] - The orientation of the panel.
- * @attribute {ExpansionPanelAnimationType} [animation-type="default"] - The type of animation to use when opening/closing the panel.
- * @attribute {string} [trigger] - The id of the button that the expansion panel should be toggled by.
- * @attribute {string} [open-icon] - The id of the `<forge-open-icon>` that the expansion panel should toggle.
  *
  * @fires {CustomEvent<boolean>} forge-expansion-panel-toggle - Event fired when the panel is toggled open or closed.
  * @fires {CustomEvent<boolean>} forge-expansion-panel-animation-complete - Event fired when the panel has finished animating when toggling.
@@ -67,88 +45,289 @@ declare global {
  * @slot - The content of the panel.
  * @slot header - The header of the panel. This is deprecated, prefer using the trigger property instead, or manually associating a button with the panel.
  */
-@customElement({
-  name: EXPANSION_PANEL_CONSTANTS.elementName
-})
-export class ExpansionPanelComponent extends BaseComponent implements IExpansionPanelComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(EXPANSION_PANEL_CONSTANTS.observedAttributes);
+@customElement(EXPANSION_PANEL_CONSTANTS.elementName)
+export class ExpansionPanelComponent extends BaseLitElement implements IExpansionPanelComponent {
+  public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = EXPANSION_PANEL_CONSTANTS.elementName;
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [];
+
+  // TODO: remove attribute reflection
+
+  /**
+   * Whether the panel is open or closed.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true }) public open = false;
+
+  /**
+   * The orientation of the panel.
+   * @default 'vertical'
+   * @attribute
+   */
+  @property({ type: String, reflect: true }) public orientation: ExpansionPanelOrientation = 'vertical';
+
+  /**
+   * The type of animation to use when opening/closing the panel.
+   * @default 'default'
+   * @attribute {animation-type}
+   */
+  @property({ type: String, reflect: true, attribute: EXPANSION_PANEL_CONSTANTS.observedAttributes.ANIMATION_TYPE })
+  public animationType: ExpansionPanelAnimationType = 'default';
+
+  /**
+   * The id of the button that the expansion panel should be toggled by.
+   * @attribute
+   */
+  @property({ type: String, reflect: true }) public trigger = '';
+
+  /**
+   * The button that the expansion panel should be toggled by.
+   */
+  @property({ type: Object }) public triggerElement: HTMLElement | null = null;
+
+  /**
+   * The id of the `<forge-open-icon>` that the expansion panel should toggle.
+   * @attribute {open-icon}
+   */
+  @property({ type: String, reflect: true, attribute: EXPANSION_PANEL_CONSTANTS.observedAttributes.OPEN_ICON })
+  public openIcon = '';
+
+  /**
+   * The `<forge-open-icon>` that the expansion panel should toggle.
+   */
+  @property({ type: Object })
+  public openIconElement: IOpenIconComponent | null = null;
+
+  @state() private _isAnimating = false;
+
+  @queryAssignedElements() private _slottedContentElements!: HTMLElement[];
+
+  @queryAssignedElements({ selector: OPEN_ICON_CONSTANTS.elementName, slot: 'header' }) private _slottedOpenIconElements!: IOpenIconComponent[];
+
+  /**
+   * TODO: The unmigrated code synced with *all* possible trigger elements
+   * whereas this syncs with just one utilizing a series of fallbacks.
+   * Determine which behavior is preferable.
+   * */
+  get #openIconElement(): IOpenIconComponent | null {
+    if (this.openIconElement) {
+      return this.openIconElement;
+    } else if (this.openIcon) {
+      const openIconEl = this.#getOpenIconElementById(this.openIcon);
+      this.openIconElement = openIconEl;
+      return this.openIconElement;
+    }
+
+    const triggerOpenIcon = this.#triggerController.openIcon;
+    if (triggerOpenIcon) {
+      return triggerOpenIcon;
+    }
+
+    return this._slottedOpenIconElements[0] ?? null;
   }
 
-  private _core: ExpansionPanelCore;
-
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new ExpansionPanelCore(new ExpansionPanelAdapter(this));
+  get #slottedContentId(): string {
+    return this._slottedContentElements[0]?.id ?? '';
   }
 
-  public connectedCallback(): void {
-    this._core.initialize();
-  }
-
-  public disconnectedCallback(): void {
-    this._core.destroy();
-  }
-
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case EXPANSION_PANEL_CONSTANTS.observedAttributes.OPEN:
-        this.open = coerceBoolean(newValue);
-        break;
-      case EXPANSION_PANEL_CONSTANTS.observedAttributes.ORIENTATION:
-        this.orientation = newValue as ExpansionPanelOrientation;
-        break;
-      case EXPANSION_PANEL_CONSTANTS.observedAttributes.ANIMATION_TYPE:
-        this.animationType = newValue as ExpansionPanelAnimationType;
-        break;
-      case EXPANSION_PANEL_CONSTANTS.observedAttributes.TRIGGER:
-        this.trigger = newValue;
-        break;
-      case EXPANSION_PANEL_CONSTANTS.observedAttributes.OPEN_ICON:
-        this.openIcon = newValue;
-        break;
+  set #slottedContentId(value: string) {
+    if (this._slottedContentElements[0]) {
+      this._slottedContentElements[0].id = value;
     }
   }
 
-  @coreProperty()
-  declare public open: boolean;
+  #triggerController = new ExpansionPanelTriggerController(this, {
+    clickHandler: this.#handleClick.bind(this),
+    keydownHandler: this.#handleKeyDown.bind(this),
+    keyupHandler: this.#handleKeyUp.bind(this)
+  });
 
-  @coreProperty()
-  declare public orientation: ExpansionPanelOrientation;
+  public willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('open')) {
+      this.#tryToggleOpenIcon();
+    }
+    if (changedProperties.has('openIcon')) {
+      this.openIconElement = this.#getOpenIconElementById(this.openIcon);
+    }
+  }
 
-  @coreProperty()
-  declare public animationType: ExpansionPanelAnimationType;
+  public connectedCallback(): void {
+    super.connectedCallback();
+    this.#setContentId();
+  }
 
-  @coreProperty()
-  declare public trigger: string;
+  public disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.openIconElement = null;
+  }
 
-  @coreProperty()
-  declare public triggerElement: HTMLElement | null;
+  public render(): TemplateResult {
+    return html`
+      <div class="forge-expansion-panel" part="root">
+        <div
+          class="header"
+          part="header"
+          @click="${this.#handleClick.bind(this)}"
+          @keydown="${this.#handleKeyDown.bind(this)}"
+          @keyup="${this.#handleKeyUp.bind(this)}">
+          <slot name="header"></slot>
+        </div>
+        <div
+          class="content"
+          part="content"
+          ?hidden=${!this.open && !this._isAnimating}
+          @transitionstart="${this.#handleTransitionStart.bind(this)}"
+          @transitionend="${this.#handleTransitionEnd.bind(this)}">
+          <div class=${classMap({ inner: true, animating: this._isAnimating })} @slotchange="${this.#handleContentSlotChange.bind(this)}">
+            <slot></slot>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
-  @coreProperty()
-  declare public openIcon: string;
+  //
+  // Public Methods
+  //
 
-  @coreProperty()
-  declare public openIconElement: IOpenIconComponent | null;
-
-  /**
-   * Toggles the open state of the panel.
-   */
   public toggle(): void {
     this.open = !this.open;
   }
 
-  /**
-   * @internal
-   *
-   * Emulates a user toggle of the panel, by also dispatching the toggle event.
-   */
   public [emulateUserToggle](open: boolean): void {
     if (this.open === open) {
       return;
     }
     this.open = open;
-    this._core.dispatchToggleEvent();
+    this.#dispatchToggleEvent();
+  }
+
+  //
+  // User Interaction Handlers
+  //
+
+  #handleClick(evt: PointerEvent): void {
+    this.#tryToggle(evt);
+  }
+
+  #handleKeyDown(evt: KeyboardEvent): void {
+    if (evt.key === 'Enter' || evt.key === ' ') {
+      this.#tryToggle(evt);
+    }
+  }
+
+  #handleKeyUp(evt: KeyboardEvent): void {
+    if (evt.key === 'Enter' || evt.key === ' ') {
+      this.#tryToggle(evt);
+    }
+  }
+
+  #tryToggle(evt: Event): void {
+    if (this.#canIgnoreEvent(evt)) {
+      return;
+    }
+    evt.stopPropagation();
+    this.toggle();
+    this.#dispatchToggleEvent();
+  }
+
+  #canIgnoreEvent(evt: Event): boolean {
+    return evt.composedPath().some((el: HTMLElement) => el.nodeType === Node.ELEMENT_NODE && el.matches(EXPANSION_PANEL_CONSTANTS.selectors.IGNORE));
+  }
+
+  //
+  // Animation Handlers
+  //
+
+  #handleTransitionStart(evt: TransitionEvent): void {
+    if (evt.propertyName.startsWith('grid-template')) {
+      this._isAnimating = true;
+      this.toggleAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPENING, true);
+    }
+  }
+
+  #handleTransitionEnd(evt: TransitionEvent): void {
+    if (evt.propertyName.startsWith('grid-template')) {
+      this._isAnimating = false;
+      this.toggleAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPENING, false);
+      this.#dispatchAnimationCompleteEvent();
+    }
+  }
+
+  //
+  // Slot Change Handlers
+  //
+
+  #handleContentSlotChange(): void {
+    this.#setContentId();
+  }
+
+  #setContentId(): void {
+    if (!this.#slottedContentId) {
+      this.#slottedContentId = `forge-expansion-panel-content-${randomChars()}`;
+    }
+    this.#triggerController.setControls(this.#slottedContentId);
+  }
+
+  //
+  // Open Icon
+  //
+
+  #getOpenIconElementById(id: string): IOpenIconComponent | null {
+    if (!id || !this.isConnected) {
+      return null;
+    }
+
+    const rootNode = this.getRootNode() as Document | ShadowRoot;
+    const el = rootNode.getElementById(id);
+    if (el?.tagName.toLocaleLowerCase() === OPEN_ICON_CONSTANTS.elementName) {
+      return el as IOpenIconComponent;
+    }
+    return null;
+  }
+
+  #tryToggleOpenIcon(): void {
+    const openIconEl = this.#openIconElement;
+    if (openIconEl) {
+      openIconEl.open = this.open;
+    }
+  }
+
+  //
+  // Event Dispatchers
+  //
+
+  #dispatchToggleEvent(): void {
+    const evt = new CustomEvent(EXPANSION_PANEL_CONSTANTS.events.TOGGLE, {
+      detail: this.open,
+      bubbles: true,
+      composed: true
+    });
+    this.dispatchEvent(evt);
+  }
+
+  #dispatchAnimationCompleteEvent(): void {
+    const evt = new CustomEvent(EXPANSION_PANEL_CONSTANTS.events.ANIMATION_COMPLETE, {
+      detail: this.open,
+      bubbles: true,
+      composed: true
+    });
+    this.dispatchEvent(evt);
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-expansion-panel': IExpansionPanelComponent;
+  }
+
+  interface HTMLElementEventMap {
+    'forge-expansion-panel-toggle': CustomEvent<boolean>;
+    'forge-expansion-panel-animation-complete': CustomEvent<boolean>;
   }
 }

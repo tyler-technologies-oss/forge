@@ -31,6 +31,11 @@
 @mixin inner {
   display: grid;
   grid-template-rows: 1fr;
+  overflow: unset;
+}
+
+@mixin inner-animating {
+  overflow: hidden;
 }
 
 @mixin orientation-horizontal-base {

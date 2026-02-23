@@ -29,6 +29,10 @@
 
   .inner {
     @include inner;
+
+    &.animating {
+      @include inner-animating;
+    }
   }
 }
 
