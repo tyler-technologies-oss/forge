@@ -80,14 +80,14 @@ describe('Expansion Panel', () => {
 
     expect(el.open).toBe(false);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-    expect(contentEl.hasAttribute('hidden')).toBe(true);
+    expect(contentEl.classList.contains('hidden')).toBe(true);
 
     el.setAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN, '');
     await task();
 
     expect(el.open).toBe(true);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-    expect(contentEl.hasAttribute('hidden')).toBe(false);
+    expect(contentEl.classList.contains('hidden')).toBe(false);
   });
 
   it('should set open via property', async () => {
@@ -98,14 +98,14 @@ describe('Expansion Panel', () => {
 
     expect(el.open).toBe(false);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-    expect(contentEl.hasAttribute('hidden')).toBe(true);
+    expect(contentEl.classList.contains('hidden')).toBe(true);
 
     el.open = true;
     await task();
 
     expect(el.open).toBe(true);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-    expect(contentEl.hasAttribute('hidden')).toBe(false);
+    expect(contentEl.classList.contains('hidden')).toBe(false);
   });
 
   it('should set open attribute to true when toggle() is called', async () => {
@@ -119,7 +119,7 @@ describe('Expansion Panel', () => {
 
     expect(el.open).toBe(true);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-    expect(contentEl.hasAttribute('hidden')).toBe(false);
+    expect(contentEl.classList.contains('hidden')).toBe(false);
   });
 
   it('should set open attribute to false when toggle() is called', async () => {
@@ -133,7 +133,7 @@ describe('Expansion Panel', () => {
 
     expect(el.open).toBe(false);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-    expect(contentEl.hasAttribute('hidden')).toBe(true);
+    expect(contentEl.classList.contains('hidden')).toBe(true);
   });
 
   it('should set opening state attribute while toggle animation is in progress', async () => {
@@ -206,7 +206,7 @@ describe('Expansion Panel', () => {
 
     await task(ANIMATION_TIMEOUT);
 
-    expect(contentEl.hasAttribute('hidden')).toBe(true);
+    expect(contentEl.classList.contains('hidden')).toBe(true);
   });
 
   describe('orientation', () => {
@@ -226,6 +226,100 @@ describe('Expansion Panel', () => {
       el.orientation = 'horizontal';
 
       expect(el.orientation).toBe('horizontal');
+    });
+  });
+
+  describe('states', () => {
+    it('should apply open state when panel is open', async () => {
+      const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+
+      expect(el.matches(':state(open)')).toBe(false);
+
+      el.open = true;
+      await task();
+
+      expect(el.matches(':state(open)')).toBe(true);
+    });
+
+    it('should remove open state when panel is closed', async () => {
+      const screen = render(html`<forge-expansion-panel open></forge-expansion-panel>`);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      await task();
+
+      expect(el.matches(':state(open)')).toBe(true);
+
+      el.open = false;
+      await task();
+
+      expect(el.matches(':state(open)')).toBe(false);
+    });
+
+    it('should apply horizontal state when orientation is horizontal', async () => {
+      const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+
+      expect(el.matches(':state(horizontal)')).toBe(false);
+
+      el.orientation = 'horizontal';
+      await task();
+
+      expect(el.matches(':state(horizontal)')).toBe(true);
+    });
+
+    it('should remove horizontal state when orientation is vertical', async () => {
+      const screen = render(html`<forge-expansion-panel orientation="horizontal"></forge-expansion-panel>`);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      await task();
+
+      expect(el.matches(':state(horizontal)')).toBe(true);
+
+      el.orientation = 'vertical';
+      await task();
+
+      expect(el.matches(':state(horizontal)')).toBe(false);
+    });
+
+    it('should have open state when opened by default', async () => {
+      const screen = render(html`<forge-expansion-panel open></forge-expansion-panel>`);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      await task();
+
+      expect(el.matches(':state(open)')).toBe(true);
+    });
+
+    it('should have horizontal state when set via attribute', async () => {
+      const screen = render(html`<forge-expansion-panel orientation="horizontal"></forge-expansion-panel>`);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      await task();
+
+      expect(el.matches(':state(horizontal)')).toBe(true);
+    });
+
+    it('should toggle open state when toggled via toggle method', async () => {
+      const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+
+      expect(el.matches(':state(open)')).toBe(false);
+
+      el.toggle();
+      await task();
+
+      expect(el.matches(':state(open)')).toBe(true);
+
+      el.toggle();
+      await task();
+
+      expect(el.matches(':state(open)')).toBe(false);
+    });
+
+    it('should apply both open and horizontal states simultaneously', async () => {
+      const screen = render(html`<forge-expansion-panel open orientation="horizontal"></forge-expansion-panel>`);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      await task();
+
+      expect(el.matches(':state(open)')).toBe(true);
+      expect(el.matches(':state(horizontal)')).toBe(true);
     });
   });
 
@@ -266,7 +360,7 @@ describe('Expansion Panel', () => {
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.hasAttribute('hidden')).toBe(false);
+      expect(contentEl.classList.contains('hidden')).toBe(false);
     });
 
     it('should close when clicking header element', async () => {
@@ -286,7 +380,7 @@ describe('Expansion Panel', () => {
 
       expect(el.open).toBe(false);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-      expect(contentEl.hasAttribute('hidden')).toBe(true);
+      expect(contentEl.classList.contains('hidden')).toBe(true);
     });
 
     it('should dispatch toggle event when clicking header element', async () => {
@@ -352,7 +446,7 @@ describe('Expansion Panel', () => {
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.hasAttribute('hidden')).toBe(false);
+      expect(contentEl.classList.contains('hidden')).toBe(false);
       expect(toggleSpy).toHaveBeenCalledOnce();
     });
 
@@ -376,7 +470,7 @@ describe('Expansion Panel', () => {
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.hasAttribute('hidden')).toBe(false);
+      expect(contentEl.classList.contains('hidden')).toBe(false);
       expect(toggleSpy).toHaveBeenCalledOnce();
     });
 
@@ -504,22 +598,22 @@ describe('Expansion Panel', () => {
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.hasAttribute('hidden')).toBe(false);
+      expect(contentEl.classList.contains('hidden')).toBe(false);
 
       expect(childEl.open).toBe(false);
       expect(childEl.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-      expect(childContentEl.hasAttribute('hidden')).toBe(true);
+      expect(childContentEl.classList.contains('hidden')).toBe(true);
 
       await userEvent.click(childHeader);
       await task();
 
       expect(childEl.open).toBe(true);
       expect(childEl.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(childContentEl.hasAttribute('hidden')).toBe(false);
+      expect(childContentEl.classList.contains('hidden')).toBe(false);
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.hasAttribute('hidden')).toBe(false);
+      expect(contentEl.classList.contains('hidden')).toBe(false);
     });
   });
 

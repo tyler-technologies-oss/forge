@@ -9,6 +9,7 @@ import { emulateUserToggle, EXPANSION_PANEL_CONSTANTS, ExpansionPanelAnimationTy
 import { ExpansionPanelTriggerController } from './expansion-panel-trigger-controller.js';
 
 import styles from './expansion-panel.scss';
+import { toggleState } from '../core/index.js';
 
 /** @deprecated - This will be removed in the future. Please switch to using AccordionComponent. */
 export interface IExpansionPanelComponent extends IBaseComponent {
@@ -30,6 +31,9 @@ export interface IExpansionPanelComponent extends IBaseComponent {
  *
  * @fires {CustomEvent<boolean>} forge-expansion-panel-toggle - Event fired when the panel is toggled open or closed.
  * @fires {CustomEvent<boolean>} forge-expansion-panel-animation-complete - Event fired when the panel has finished animating when toggling.
+ *
+ * @state open - Applied when the panel is open.
+ * @state horizontal - Applied when the orientation is horizontal.
  *
  * @cssproperty --forge-expansion-panel-animation-duration - The duration of the open/close animation.
  * @cssproperty --forge-expansion-panel-animation-easing - The easing function of the open/close animation.
@@ -54,6 +58,8 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [];
+
+  #internals: ElementInternals;
 
   // TODO: remove attribute reflection
 
@@ -149,12 +155,23 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
     keyupHandler: this.#handleKeyUp.bind(this)
   });
 
+  constructor() {
+    super();
+    this.#internals = this.attachInternals();
+  }
+
   public willUpdate(changedProperties: PropertyValues<this>): void {
-    if (changedProperties.has('openIcon')) {
-      this.openIconElement = this.#getOpenIconElementById(this.openIcon);
+    if (changedProperties.has('open')) {
+      toggleState(this.#internals, 'open', this.open);
     }
     if (changedProperties.has('open') || changedProperties.has('openIconElement')) {
       this.#tryToggleOpenIcon();
+    }
+    if (changedProperties.has('openIcon')) {
+      this.openIconElement = this.#getOpenIconElementById(this.openIcon);
+    }
+    if (changedProperties.has('orientation')) {
+      toggleState(this.#internals, 'horizontal', this.orientation === 'horizontal');
     }
   }
 
@@ -180,9 +197,8 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
           <slot name="header"></slot>
         </div>
         <div
-          class="content"
+          class=${classMap({ content: true, hidden: !this.open && !this._isAnimating, 'no-animation': this.animationType === 'none' })}
           part="content"
-          ?hidden=${!this.open && !this._isAnimating}
           @transitionstart="${this.#handleTransitionStart.bind(this)}"
           @transitionend="${this.#handleTransitionEnd.bind(this)}">
           <div class=${classMap({ inner: true, animating: this._isAnimating })} @slotchange="${this.#handleContentSlotChange.bind(this)}">

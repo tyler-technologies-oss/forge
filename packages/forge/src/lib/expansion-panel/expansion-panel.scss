@@ -34,10 +34,10 @@
       @include inner-animating;
     }
   }
-}
 
-.hidden {
-  @include hidden;
+  .hidden {
+    @include hidden;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -50,25 +50,25 @@
 // Open
 //
 
-:host(:not([open])) {
+:host(:not(:state(open))) {
   .inner {
     overflow: hidden;
   }
 }
 
-:host([open]) {
+:host(:state(open)) {
   .content {
     @include open-base;
   }
 }
 
-:host([open]:is(:not([orientation]), [orientation='vertical'])) {
+:host(:state(open):not(:state(horizontal))) {
   .content {
     @include open-vertical;
   }
 }
 
-:host([open][orientation='horizontal']) {
+:host(:state(open):state(horizontal)) {
   .content {
     @include open-horizontal;
   }
@@ -78,7 +78,7 @@
 // Orientation
 //
 
-:host([orientation='horizontal']) {
+:host(:state(horizontal)) {
   .forge-expansion-panel {
     @include orientation-horizontal-base;
   }
@@ -92,8 +92,8 @@
 // Animation type
 //
 
-:host([animation-type='none']) {
-  .content {
+:host {
+  .content.no-animation {
     transition: none;
   }
 }
