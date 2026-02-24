@@ -80,14 +80,14 @@ describe('Expansion Panel', () => {
 
     expect(el.open).toBe(false);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-    expect(contentEl.classList.contains('hidden')).toBe(true);
+    expect(contentEl.getAttribute('hidden')).toBe('until-found');
 
     el.setAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN, '');
     await task();
 
     expect(el.open).toBe(true);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-    expect(contentEl.classList.contains('hidden')).toBe(false);
+    expect(contentEl.hasAttribute('hidden')).toBe(false);
   });
 
   it('should set open via property', async () => {
@@ -98,14 +98,14 @@ describe('Expansion Panel', () => {
 
     expect(el.open).toBe(false);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-    expect(contentEl.classList.contains('hidden')).toBe(true);
+    expect(contentEl.getAttribute('hidden')).toBe('until-found');
 
     el.open = true;
     await task();
 
     expect(el.open).toBe(true);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-    expect(contentEl.classList.contains('hidden')).toBe(false);
+    expect(contentEl.hasAttribute('hidden')).toBe(false);
   });
 
   it('should set open attribute to true when toggle() is called', async () => {
@@ -119,7 +119,7 @@ describe('Expansion Panel', () => {
 
     expect(el.open).toBe(true);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-    expect(contentEl.classList.contains('hidden')).toBe(false);
+    expect(contentEl.hasAttribute('hidden')).toBe(false);
   });
 
   it('should set open attribute to false when toggle() is called', async () => {
@@ -133,7 +133,7 @@ describe('Expansion Panel', () => {
 
     expect(el.open).toBe(false);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-    expect(contentEl.classList.contains('hidden')).toBe(true);
+    expect(contentEl.getAttribute('hidden')).toBe('until-found');
   });
 
   it('should set opening state attribute while toggle animation is in progress', async () => {
@@ -196,7 +196,7 @@ describe('Expansion Panel', () => {
     expect(animationCompleteSpy).not.toHaveBeenCalled();
   });
 
-  it('should set content visibility to hidden when toggled close', async () => {
+  it('should set content hidden attribute when toggled close', async () => {
     const screen = render(html`<forge-expansion-panel open></forge-expansion-panel>`);
     const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
     await task();
@@ -206,7 +206,7 @@ describe('Expansion Panel', () => {
 
     await task(ANIMATION_TIMEOUT);
 
-    expect(contentEl.classList.contains('hidden')).toBe(true);
+    expect(contentEl.getAttribute('hidden')).toBe('until-found');
   });
 
   describe('orientation', () => {
@@ -323,6 +323,127 @@ describe('Expansion Panel', () => {
     });
   });
 
+  describe('hidden until-found', () => {
+    it('should set hidden="until-found" on content element when closed', async () => {
+      const screen = render(html`
+        <forge-expansion-panel>
+          <button slot="header">Header</button>
+          <div>Searchable content</div>
+        </forge-expansion-panel>
+      `);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      await task();
+      const contentEl = getContentElement(el);
+
+      expect(el.open).toBe(false);
+      expect(contentEl.getAttribute('hidden')).toBe('until-found');
+    });
+
+    it('should not set hidden attribute on content element when open', async () => {
+      const screen = render(html`
+        <forge-expansion-panel open>
+          <button slot="header">Header</button>
+          <div>Searchable content</div>
+        </forge-expansion-panel>
+      `);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      await task();
+      const contentEl = getContentElement(el);
+
+      expect(el.open).toBe(true);
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
+    });
+
+    it('should not set hidden attribute on content element while animating', async () => {
+      const screen = render(html`
+        <forge-expansion-panel>
+          <button slot="header">Header</button>
+          <div style="height: 100px;">Content</div>
+        </forge-expansion-panel>
+      `);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      await task();
+      const contentEl = getContentElement(el);
+
+      expect(contentEl.getAttribute('hidden')).toBe('until-found');
+
+      el.toggle();
+      mockTransitionEvent(contentEl, 'start', 'grid-template-rows');
+      await task();
+
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
+
+      mockTransitionEvent(contentEl, 'end', 'grid-template-rows');
+      await task();
+
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
+    });
+
+    it('should open panel when beforematch event fires', async () => {
+      const screen = render(html`
+        <forge-expansion-panel>
+          <button slot="header">Header</button>
+          <div>Searchable content text</div>
+        </forge-expansion-panel>
+      `);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      await task();
+      const contentEl = getContentElement(el);
+
+      expect(el.open).toBe(false);
+      expect(contentEl.getAttribute('hidden')).toBe('until-found');
+
+      const beforeMatchEvent = new Event('beforematch', { bubbles: true, cancelable: true });
+      contentEl.dispatchEvent(beforeMatchEvent);
+      await task();
+
+      expect(el.open).toBe(true);
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
+    });
+
+    it('should make content searchable via hidden="until-found"', async () => {
+      const screen = render(html`
+        <forge-expansion-panel>
+          <button slot="header">Header</button>
+          <div>This is unique searchable text in the panel</div>
+        </forge-expansion-panel>
+      `);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      await task();
+      const contentEl = getContentElement(el);
+      const slottedContent = el.querySelector('div') as HTMLElement;
+
+      expect(el.open).toBe(false);
+      expect(contentEl.getAttribute('hidden')).toBe('until-found');
+      expect(slottedContent.textContent).toContain('unique searchable text');
+    });
+
+    it('should remove hidden attribute after beforematch event opens panel', async () => {
+      const screen = render(html`
+        <forge-expansion-panel>
+          <button slot="header">Header</button>
+          <div>Content to find</div>
+        </forge-expansion-panel>
+      `);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      await task();
+      const contentEl = getContentElement(el);
+
+      const beforeMatchEvent = new Event('beforematch', { bubbles: true });
+      contentEl.dispatchEvent(beforeMatchEvent);
+      await task();
+
+      expect(el.open).toBe(true);
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
+
+      el.toggle();
+      await task();
+
+      expect(el.open).toBe(false);
+      expect(contentEl.getAttribute('hidden')).toBe('until-found');
+    });
+  });
+
   describe('animation type', () => {
     it('should set animation type via attribute', async () => {
       const screen = render(html`<forge-expansion-panel animation-type="none"></forge-expansion-panel>`);
@@ -360,7 +481,7 @@ describe('Expansion Panel', () => {
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.classList.contains('hidden')).toBe(false);
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
     });
 
     it('should close when clicking header element', async () => {
@@ -380,7 +501,7 @@ describe('Expansion Panel', () => {
 
       expect(el.open).toBe(false);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-      expect(contentEl.classList.contains('hidden')).toBe(true);
+      expect(contentEl.getAttribute('hidden')).toBe('until-found');
     });
 
     it('should dispatch toggle event when clicking header element', async () => {
@@ -446,7 +567,7 @@ describe('Expansion Panel', () => {
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.classList.contains('hidden')).toBe(false);
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
       expect(toggleSpy).toHaveBeenCalledOnce();
     });
 
@@ -470,7 +591,7 @@ describe('Expansion Panel', () => {
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.classList.contains('hidden')).toBe(false);
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
       expect(toggleSpy).toHaveBeenCalledOnce();
     });
 
@@ -598,22 +719,22 @@ describe('Expansion Panel', () => {
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.classList.contains('hidden')).toBe(false);
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
 
       expect(childEl.open).toBe(false);
       expect(childEl.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-      expect(childContentEl.classList.contains('hidden')).toBe(true);
+      expect(childContentEl.getAttribute('hidden')).toBe('until-found');
 
       await userEvent.click(childHeader);
       await task();
 
       expect(childEl.open).toBe(true);
       expect(childEl.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(childContentEl.classList.contains('hidden')).toBe(false);
+      expect(childContentEl.hasAttribute('hidden')).toBe(false);
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.classList.contains('hidden')).toBe(false);
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
     });
   });
 

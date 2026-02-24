@@ -34,10 +34,6 @@
       @include inner-animating;
     }
   }
-
-  .hidden {
-    @include hidden;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

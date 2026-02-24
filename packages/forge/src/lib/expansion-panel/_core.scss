@@ -61,6 +61,7 @@
   grid-template-columns: 1fr;
 }
 
+// Unused in the component (replaced with [hidden=until-found]) but used in the CSS-only version and available for external use
 @mixin hidden {
   visibility: hidden;
 }

@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, randomChars } from '@tylertech/forge-core';
-import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { classMap } from 'lit-html/directives/class-map.js';
 import { customElement, property, queryAssignedElements, state } from 'lit/decorators.js';
 import { IBaseComponent } from '../core/base/base-component.js';
@@ -197,8 +197,10 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
           <slot name="header"></slot>
         </div>
         <div
-          class=${classMap({ content: true, hidden: !this.open && !this._isAnimating, 'no-animation': this.animationType === 'none' })}
+          class=${classMap({ content: true, 'no-animation': this.animationType === 'none' })}
+          hidden=${!this.open && !this._isAnimating ? 'until-found' : nothing}
           part="content"
+          @beforematch="${this.#handleBeforeMatch.bind(this)}"
           @transitionstart="${this.#handleTransitionStart.bind(this)}"
           @transitionend="${this.#handleTransitionEnd.bind(this)}">
           <div class=${classMap({ inner: true, animating: this._isAnimating })} @slotchange="${this.#handleContentSlotChange.bind(this)}">
@@ -243,6 +245,10 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
     if (evt.key === 'Enter' || evt.key === ' ') {
       this.#tryToggle(evt);
     }
+  }
+
+  #handleBeforeMatch(): void {
+    this.open = true;
   }
 
   #tryToggle(evt: Event): void {
