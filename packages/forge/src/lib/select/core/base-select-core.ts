@@ -545,6 +545,7 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
 
       if (!this._open) {
         this._openDropdown();
+        this._adapter.activateSelectedOption();
       } else {
         this._closeDropdown();
       }
@@ -560,7 +561,7 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
 
       if (!this._open) {
         this._openDropdown();
-        this._adapter.activateFirstOption();
+        this._adapter.activateSelectedOption();
         return;
       }
 
