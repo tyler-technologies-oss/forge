@@ -1,7 +1,8 @@
+import { toggleAttribute } from '@tylertech/forge-core';
 import { ReactiveController } from 'lit';
-import { ExpansionPanelComponent } from './expansion-panel.js';
-import { OPEN_ICON_CONSTANTS } from '../open-icon/open-icon-constants.js';
 import { IOpenIconComponent } from '../index.js';
+import { OPEN_ICON_CONSTANTS } from '../open-icon/open-icon-constants.js';
+import { ExpansionPanelComponent } from './expansion-panel.js';
 
 export interface ExpansionPanelTriggerControllerOptions {
   clickHandler: EventListener;
@@ -50,7 +51,7 @@ export class ExpansionPanelTriggerController implements ReactiveController {
   #tryHostTriggerChanged(): void {
     // Check for changes to the host's trigger and triggerElement properties
     const trigger = this.#host.trigger;
-    const triggerElement = this.#hostOldTriggerElement;
+    const triggerElement = this.#host.triggerElement ?? undefined;
     const triggerChanged = trigger !== this.#hostOldTrigger;
     const triggerElementChanged = triggerElement !== this.#hostOldTriggerElement;
 
@@ -103,10 +104,14 @@ export class ExpansionPanelTriggerController implements ReactiveController {
       this.#detach();
     }
 
-    this.#triggerElement = triggerElement;
+    if (!triggerElement.isConnected) {
+      return;
+    }
+
     if (!this.#abortController) {
       this.#abortController = new AbortController();
     }
+    this.#triggerElement = triggerElement;
     this.#triggerElement.addEventListener('click', this.#clickHandler, { signal: this.#abortController.signal });
     this.#triggerElement.addEventListener('keydown', this.#keydownHandler, { signal: this.#abortController.signal });
     this.#triggerElement.addEventListener('keyup', this.#keyupHandler, { signal: this.#abortController.signal });
@@ -117,6 +122,8 @@ export class ExpansionPanelTriggerController implements ReactiveController {
 
   #detach(): void {
     this.#abortController?.abort();
+    this.#abortController = undefined;
+
     this.#triggerElement?.removeAttribute('aria-controls');
     this.#triggerElement?.removeAttribute('aria-expanded');
     this.#triggerElement = undefined;
@@ -127,14 +134,8 @@ export class ExpansionPanelTriggerController implements ReactiveController {
   }
 
   #setAriaControls(value?: string): void {
-    if (!this.#triggerElement) {
-      return;
-    }
-
-    if (value) {
-      this.#triggerElement.setAttribute('aria-controls', value);
-    } else {
-      this.#triggerElement.removeAttribute('aria-controls');
+    if (this.#triggerElement) {
+      toggleAttribute(this.#triggerElement, !!value, 'aria-controls', value);
     }
   }
 }

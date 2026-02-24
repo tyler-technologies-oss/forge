@@ -107,7 +107,9 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
 
   @queryAssignedElements() private _slottedContentElements!: HTMLElement[];
 
-  @queryAssignedElements({ selector: OPEN_ICON_CONSTANTS.elementName, slot: 'header' }) private _slottedOpenIconElements!: IOpenIconComponent[];
+  get #slottedOpenIconElement(): IOpenIconComponent | null {
+    return this.querySelector(OPEN_ICON_CONSTANTS.elementName);
+  }
 
   /**
    * TODO: The unmigrated code synced with *all* possible trigger elements
@@ -128,7 +130,7 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
       return triggerOpenIcon;
     }
 
-    return this._slottedOpenIconElements[0] ?? null;
+    return this.#slottedOpenIconElement ?? null;
   }
 
   get #slottedContentId(): string {
@@ -148,11 +150,11 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
   });
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
-    if (changedProperties.has('open')) {
-      this.#tryToggleOpenIcon();
-    }
     if (changedProperties.has('openIcon')) {
       this.openIconElement = this.#getOpenIconElementById(this.openIcon);
+    }
+    if (changedProperties.has('open') || changedProperties.has('openIconElement')) {
+      this.#tryToggleOpenIcon();
     }
   }
 
@@ -217,7 +219,7 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
 
   #handleKeyDown(evt: KeyboardEvent): void {
     if (evt.key === 'Enter' || evt.key === ' ') {
-      this.#tryToggle(evt);
+      evt.preventDefault();
     }
   }
 
@@ -237,7 +239,12 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
   }
 
   #canIgnoreEvent(evt: Event): boolean {
-    return evt.composedPath().some((el: HTMLElement) => el.nodeType === Node.ELEMENT_NODE && el.matches(EXPANSION_PANEL_CONSTANTS.selectors.IGNORE));
+    return evt.composedPath().some(el => {
+      if (!(el instanceof HTMLElement)) {
+        return false;
+      }
+      return el.matches(EXPANSION_PANEL_CONSTANTS.selectors.IGNORE);
+    });
   }
 
   //

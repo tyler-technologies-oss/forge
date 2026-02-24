@@ -1,14 +1,14 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
+import { describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-lit';
 import { userEvent } from 'vitest/browser';
-import type { IExpansionPanelComponent } from './expansion-panel.js';
-import { EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from './expansion-panel-constants.js';
-import { frame, task } from '../core/utils/utils.js';
+import { task } from '../core/utils/utils.js';
 import type { IOpenIconComponent } from '../open-icon/open-icon.js';
+import { EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from './expansion-panel-constants.js';
+import type { IExpansionPanelComponent } from './expansion-panel.js';
 
-import './expansion-panel.js';
 import '../open-icon/open-icon.js';
+import './expansion-panel.js';
 
 // Animation duration + buffer for transitionend event
 const ANIMATION_TIMEOUT = 500;
@@ -47,9 +47,11 @@ describe('Expansion Panel', () => {
     expect(button.getAttribute('aria-controls')).toBe(content?.getAttribute('id'));
     expect(button.getAttribute('aria-expanded')).toBe('false');
     el.open = true;
+    await task();
     expect(button.getAttribute('aria-expanded')).toBe('true');
     await expect(el).toBeAccessible();
     el.open = false;
+    await task();
     expect(button.getAttribute('aria-expanded')).toBe('false');
   });
 
@@ -73,73 +75,82 @@ describe('Expansion Panel', () => {
   it('should set open via attribute', async () => {
     const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
     const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    await task();
     const contentEl = getContentElement(el);
 
     expect(el.open).toBe(false);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-    expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(true);
+    expect(contentEl.hasAttribute('hidden')).toBe(true);
 
     el.setAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN, '');
+    await task();
 
     expect(el.open).toBe(true);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-    expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(false);
+    expect(contentEl.hasAttribute('hidden')).toBe(false);
   });
 
   it('should set open via property', async () => {
     const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
     const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    await task();
     const contentEl = getContentElement(el);
 
     expect(el.open).toBe(false);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-    expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(true);
+    expect(contentEl.hasAttribute('hidden')).toBe(true);
 
     el.open = true;
+    await task();
 
     expect(el.open).toBe(true);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-    expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(false);
+    expect(contentEl.hasAttribute('hidden')).toBe(false);
   });
 
   it('should set open attribute to true when toggle() is called', async () => {
     const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
     const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    await task();
     const contentEl = getContentElement(el);
 
     el.toggle();
+    await task();
 
     expect(el.open).toBe(true);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-    expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(false);
+    expect(contentEl.hasAttribute('hidden')).toBe(false);
   });
 
   it('should set open attribute to false when toggle() is called', async () => {
     const screen = render(html`<forge-expansion-panel open></forge-expansion-panel>`);
     const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    await task();
     const contentEl = getContentElement(el);
 
     el.toggle();
+    await task();
 
     expect(el.open).toBe(false);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-    expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(false);
+    expect(contentEl.hasAttribute('hidden')).toBe(true);
   });
 
   it('should set opening state attribute while toggle animation is in progress', async () => {
     const screen = render(html`<forge-expansion-panel><div style="height: 100px;">Test</div></forge-expansion-panel>`);
     const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    await task();
+    const contentEl = getContentElement(el);
 
     const animationCompleteSpy = vi.fn();
     el.addEventListener(EXPANSION_PANEL_CONSTANTS.events.ANIMATION_COMPLETE, animationCompleteSpy);
-
-    el.toggle();
+    mockTransitionEvent(contentEl, 'start', 'grid-template-rows');
 
     await vi.waitFor(() => {
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPENING)).toBe(true);
     });
 
-    await task(ANIMATION_TIMEOUT);
+    mockTransitionEvent(contentEl, 'end', 'grid-template-rows');
 
     expect(animationCompleteSpy).toHaveBeenCalledOnce();
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPENING)).toBe(false);
@@ -161,13 +172,12 @@ describe('Expansion Panel', () => {
   it('should dispatch animation-complete event when toggle animation is complete', async () => {
     const screen = render(html`<forge-expansion-panel><div>Test</div></forge-expansion-panel>`);
     const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    await task();
+    const contentEl = getContentElement(el);
 
     const animationCompleteSpy = vi.fn();
     el.addEventListener(EXPANSION_PANEL_CONSTANTS.events.ANIMATION_COMPLETE, animationCompleteSpy);
-
-    el.toggle();
-
-    await task(ANIMATION_TIMEOUT);
+    mockTransitionEvent(contentEl, 'end', 'grid-template-rows');
 
     expect(animationCompleteSpy).toHaveBeenCalledOnce();
   });
@@ -189,13 +199,14 @@ describe('Expansion Panel', () => {
   it('should set content visibility to hidden when toggled close', async () => {
     const screen = render(html`<forge-expansion-panel open></forge-expansion-panel>`);
     const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    await task();
     const contentEl = getContentElement(el);
 
     el.toggle();
 
     await task(ANIMATION_TIMEOUT);
 
-    expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(true);
+    expect(contentEl.hasAttribute('hidden')).toBe(true);
   });
 
   describe('orientation', () => {
@@ -248,13 +259,14 @@ describe('Expansion Panel', () => {
       `);
       const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
       const header = el.querySelector('button') as HTMLButtonElement;
+      await task();
       const contentEl = getContentElement(el);
 
       await userEvent.click(header);
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(false);
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
     });
 
     it('should close when clicking header element', async () => {
@@ -266,13 +278,15 @@ describe('Expansion Panel', () => {
       `);
       const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
       const header = el.querySelector('button') as HTMLButtonElement;
+      await task();
       const contentEl = getContentElement(el);
 
       await userEvent.click(header);
+      await task(ANIMATION_TIMEOUT);
 
       expect(el.open).toBe(false);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-      expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(false);
+      expect(contentEl.hasAttribute('hidden')).toBe(true);
     });
 
     it('should dispatch toggle event when clicking header element', async () => {
@@ -327,6 +341,7 @@ describe('Expansion Panel', () => {
       `);
       const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
       const header = el.querySelector('button') as HTMLButtonElement;
+      await task();
       const contentEl = getContentElement(el);
 
       const toggleSpy = vi.fn();
@@ -337,7 +352,7 @@ describe('Expansion Panel', () => {
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(false);
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
       expect(toggleSpy).toHaveBeenCalledOnce();
     });
 
@@ -350,6 +365,7 @@ describe('Expansion Panel', () => {
       `);
       const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
       const header = el.querySelector('button') as HTMLButtonElement;
+      await task();
       const contentEl = getContentElement(el);
 
       const toggleSpy = vi.fn();
@@ -360,7 +376,7 @@ describe('Expansion Panel', () => {
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(false);
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
       expect(toggleSpy).toHaveBeenCalledOnce();
     });
 
@@ -396,6 +412,7 @@ describe('Expansion Panel', () => {
       expect(openIcon.open).toBe(false);
 
       el.toggle();
+      await task();
 
       expect(openIcon.open).toBe(true);
     });
@@ -453,8 +470,10 @@ describe('Expansion Panel', () => {
       const trigger = container.querySelector('#button-id') as HTMLElement;
       const openIcon = container.querySelector('#open-icon-id') as IOpenIconComponent;
       const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      await task();
 
       expansionPanel.openIconElement = openIcon;
+      await task();
       expect(openIcon.open).toBe(false);
       await userEvent.click(trigger);
       expect(openIcon.open).toBe(true);
@@ -475,29 +494,32 @@ describe('Expansion Panel', () => {
         </forge-expansion-panel>
       `);
       const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      await task();
       const contentEl = getContentElement(el);
 
       const childEl = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
       const childHeader = childEl.querySelector('button') as HTMLButtonElement;
+      await task();
       const childContentEl = getContentElement(childEl);
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(false);
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
 
       expect(childEl.open).toBe(false);
       expect(childEl.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
-      expect(childContentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(true);
+      expect(childContentEl.hasAttribute('hidden')).toBe(true);
 
       await userEvent.click(childHeader);
+      await task();
 
       expect(childEl.open).toBe(true);
       expect(childEl.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(childContentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(false);
+      expect(childContentEl.hasAttribute('hidden')).toBe(false);
 
       expect(el.open).toBe(true);
       expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
-      expect(contentEl.classList.contains(EXPANSION_PANEL_CONSTANTS.classes.HIDDEN)).toBe(false);
+      expect(contentEl.hasAttribute('hidden')).toBe(false);
     });
   });
 
@@ -514,7 +536,7 @@ describe('Expansion Panel', () => {
       const container = screen.container.querySelector('div') as HTMLElement;
       const trigger = container.querySelector('#button-id') as HTMLElement;
       const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
-      await frame();
+      await task();
 
       trigger.click();
       expect(expansionPanel.open).toBe(true);
@@ -554,14 +576,16 @@ describe('Expansion Panel', () => {
       const trigger = container.querySelector('#button-id') as HTMLElement;
       const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
       const content = container.querySelector('#content') as HTMLElement;
-      await frame();
+      await task();
 
       expect(trigger.getAttribute('aria-controls')).not.toBeNull();
       expect(trigger.getAttribute('aria-controls')).toBe(content.getAttribute('id'));
       expect(trigger.getAttribute('aria-expanded')).toBe('false');
       expansionPanel.open = true;
+      await task();
       expect(trigger.getAttribute('aria-expanded')).toBe('true');
       expansionPanel.open = false;
+      await task();
       expect(trigger.getAttribute('aria-expanded')).toBe('false');
       expansionPanel.remove();
       expect(trigger.getAttribute('aria-controls')).toBeNull();
@@ -578,7 +602,7 @@ describe('Expansion Panel', () => {
       const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
       const button = el.querySelector('button') as HTMLElement;
       const content = el.querySelector('#foo') as HTMLElement;
-      await frame();
+      await task();
 
       expect(content.getAttribute('id')).toBe('foo');
       expect(button.getAttribute('aria-controls')).toBe(content.getAttribute('id'));
@@ -599,12 +623,13 @@ describe('Expansion Panel', () => {
       const trigger2 = container.querySelector('#button-id2') as HTMLElement;
       const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
       const content = container.querySelector('#content') as HTMLElement;
-      await frame();
+      await task();
 
       await userEvent.click(trigger1);
       expect(expansionPanel.open).toBe(true);
 
       expansionPanel.trigger = 'button-id2';
+      await task();
       expect(trigger1.getAttribute('aria-controls')).toBeNull();
       expect(trigger1.getAttribute('aria-expanded')).toBeNull();
       await userEvent.click(trigger1);
@@ -613,6 +638,7 @@ describe('Expansion Panel', () => {
       expect(trigger2.getAttribute('aria-controls')).toBe(content.getAttribute('id'));
       expect(trigger2.getAttribute('aria-expanded')).toBe('true');
       await userEvent.click(trigger2);
+      await task();
       expect(trigger2.getAttribute('aria-expanded')).toBe('false');
       expect(expansionPanel.open).toBe(false);
     });
@@ -634,16 +660,16 @@ describe('Expansion Panel', () => {
       const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
       const content1 = container.querySelector('#content1') as HTMLElement;
       const content2 = container.querySelector('#content2') as HTMLElement;
-      await frame();
+      await task();
 
       expect(trigger.getAttribute('aria-controls')).toBe(content1.getAttribute('id'));
       expect(trigger.getAttribute('aria-expanded')).toBe('false');
       content1.remove();
-      await frame();
+      await task();
       expect(trigger.getAttribute('aria-controls')).toBeNull();
       expect(trigger.getAttribute('aria-expanded')).toBe('false');
       expansionPanel.appendChild(content2);
-      await frame();
+      await task();
       expect(trigger.getAttribute('aria-controls')).toBe(content2.getAttribute('id'));
       expect(trigger.getAttribute('aria-expanded')).toBe('false');
     });
@@ -662,6 +688,7 @@ describe('Expansion Panel', () => {
       const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
 
       expansionPanel.triggerElement = trigger;
+      await task();
       await userEvent.click(trigger);
       expect(expansionPanel.open).toBe(true);
       await userEvent.click(trigger);
@@ -682,14 +709,17 @@ describe('Expansion Panel', () => {
       const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
 
       expansionPanel.triggerElement = null;
+      await task();
 
       expansionPanel.triggerElement = trigger;
+      await task();
       await userEvent.click(trigger);
       expect(expansionPanel.open).toBe(true);
       await userEvent.click(trigger);
       expect(expansionPanel.open).toBe(false);
 
       expansionPanel.triggerElement = null;
+      await task();
       await userEvent.click(trigger);
       expect(expansionPanel.open).toBe(false);
     });
@@ -747,6 +777,7 @@ describe('Expansion Panel', () => {
       const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
 
       expansionPanel.triggerElement = trigger2;
+      await task();
 
       trigger2.click();
       expect(expansionPanel.open).toBe(true);
@@ -755,7 +786,9 @@ describe('Expansion Panel', () => {
 
       container.querySelector('#button-id2')!.remove();
       expansionPanel.triggerElement = null;
+      await task();
       expansionPanel.triggerElement = trigger2;
+      await task();
       trigger2.click();
       expect(expansionPanel.open).toBe(false);
       expect(trigger2.getAttribute('aria-controls')).toBeNull();
@@ -773,7 +806,7 @@ describe('Expansion Panel', () => {
       const container = screen.container.querySelector('div') as HTMLElement;
       const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
       const button = container.querySelector('#button-id') as HTMLElement;
-      await frame();
+      await task();
 
       expect(button.getAttribute('aria-controls')).not.toBeNull();
       expansionPanel.remove();
@@ -783,5 +816,12 @@ describe('Expansion Panel', () => {
 
   function getContentElement(el: IExpansionPanelComponent): HTMLElement {
     return el.shadowRoot?.querySelector(EXPANSION_PANEL_CONSTANTS.selectors.CONTENT) as HTMLElement;
+  }
+
+  function mockTransitionEvent(element: HTMLElement, type: 'start' | 'end', propertyName: string): void {
+    const event = new TransitionEvent(`transition${type}`, {
+      propertyName
+    });
+    element.dispatchEvent(event);
   }
 });
