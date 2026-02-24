@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge-core",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "A library of core web utilities that support Tyler Forge™ based libraries.",
   "author": "Tyler Technologies, Inc.",
   "license": "Apache-2.0",
