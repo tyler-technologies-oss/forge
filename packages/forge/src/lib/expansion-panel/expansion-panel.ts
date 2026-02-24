@@ -11,7 +11,7 @@ import { ExpansionPanelTriggerController } from './expansion-panel-trigger-contr
 import styles from './expansion-panel.scss';
 import { toggleState } from '../core/index.js';
 
-/** @deprecated - This will be removed in the future. Please switch to using AccordionComponent. */
+/** @deprecated - This will be removed in the future. Please switch to using ExpansionPanelComponent. */
 export interface IExpansionPanelComponent extends IBaseComponent {
   open: boolean;
   orientation: ExpansionPanelOrientation;
