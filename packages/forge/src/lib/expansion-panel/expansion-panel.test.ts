@@ -738,6 +738,305 @@ describe('Expansion Panel', () => {
     });
   });
 
+  describe('linked groups', () => {
+    it('should set name via attribute', async () => {
+      const screen = render(html`<forge-expansion-panel name="group1"></forge-expansion-panel>`);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+
+      expect(el.name).toBe('group1');
+      expect(el.hasAttribute('name')).toBe(true);
+      expect(el.getAttribute('name')).toBe('group1');
+    });
+
+    it('should set name via property', async () => {
+      const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
+      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+
+      expect(el.name).toBe('');
+
+      el.name = 'group1';
+      await task();
+
+      expect(el.name).toBe('group1');
+      expect(el.hasAttribute('name')).toBe(true);
+      expect(el.getAttribute('name')).toBe('group1');
+    });
+
+    it('should close other panels in the same group when one opens', async () => {
+      const screen = render(html`
+        <div>
+          <forge-expansion-panel name="group1">
+            <button slot="header" id="button1">Header 1</button>
+            <div>Content 1</div>
+          </forge-expansion-panel>
+          <forge-expansion-panel name="group1">
+            <button slot="header" id="button2">Header 2</button>
+            <div>Content 2</div>
+          </forge-expansion-panel>
+          <forge-expansion-panel name="group1">
+            <button slot="header" id="button3">Header 3</button>
+            <div>Content 3</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const container = screen.container.querySelector('div') as HTMLElement;
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const [panel1, panel2, panel3] = panels;
+
+      expect(panel1.open).toBe(false);
+      expect(panel2.open).toBe(false);
+      expect(panel3.open).toBe(false);
+
+      panel1.open = true;
+      await task();
+
+      expect(panel1.open).toBe(true);
+      expect(panel2.open).toBe(false);
+      expect(panel3.open).toBe(false);
+
+      panel2.open = true;
+      await task();
+
+      expect(panel1.open).toBe(false);
+      expect(panel2.open).toBe(true);
+      expect(panel3.open).toBe(false);
+
+      panel3.open = true;
+      await task();
+
+      expect(panel1.open).toBe(false);
+      expect(panel2.open).toBe(false);
+      expect(panel3.open).toBe(true);
+    });
+
+    it('should not close panels in different groups', async () => {
+      const screen = render(html`
+        <div>
+          <forge-expansion-panel name="group1">
+            <button slot="header">Header 1</button>
+            <div>Content 1</div>
+          </forge-expansion-panel>
+          <forge-expansion-panel name="group2">
+            <button slot="header">Header 2</button>
+            <div>Content 2</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const container = screen.container.querySelector('div') as HTMLElement;
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const [panel1, panel2] = panels;
+
+      panel1.open = true;
+      await task();
+
+      expect(panel1.open).toBe(true);
+      expect(panel2.open).toBe(false);
+
+      panel2.open = true;
+      await task();
+
+      expect(panel1.open).toBe(true);
+      expect(panel2.open).toBe(true);
+    });
+
+    it('should not close panels without a name', async () => {
+      const screen = render(html`
+        <div>
+          <forge-expansion-panel>
+            <button slot="header">Header 1</button>
+            <div>Content 1</div>
+          </forge-expansion-panel>
+          <forge-expansion-panel>
+            <button slot="header">Header 2</button>
+            <div>Content 2</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const container = screen.container.querySelector('div') as HTMLElement;
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const [panel1, panel2] = panels;
+
+      panel1.open = true;
+      await task();
+
+      expect(panel1.open).toBe(true);
+      expect(panel2.open).toBe(false);
+
+      panel2.open = true;
+      await task();
+
+      expect(panel1.open).toBe(true);
+      expect(panel2.open).toBe(true);
+    });
+
+    it('should dispatch toggle events when closing linked panels', async () => {
+      const screen = render(html`
+        <div>
+          <forge-expansion-panel name="group1">
+            <button slot="header">Header 1</button>
+            <div>Content 1</div>
+          </forge-expansion-panel>
+          <forge-expansion-panel name="group1">
+            <button slot="header">Header 2</button>
+            <div>Content 2</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const container = screen.container.querySelector('div') as HTMLElement;
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const [panel1, panel2] = panels;
+
+      const panel1ToggleSpy = vi.fn();
+      const panel2ToggleSpy = vi.fn();
+      panel1.addEventListener(EXPANSION_PANEL_CONSTANTS.events.TOGGLE, panel1ToggleSpy);
+      panel2.addEventListener(EXPANSION_PANEL_CONSTANTS.events.TOGGLE, panel2ToggleSpy);
+
+      panel1.open = true;
+      await task();
+
+      expect(panel1ToggleSpy).not.toHaveBeenCalled();
+      expect(panel2ToggleSpy).not.toHaveBeenCalled();
+
+      panel2.open = true;
+      await task();
+
+      expect(panel1ToggleSpy).toHaveBeenCalledOnce();
+      expect(panel2ToggleSpy).not.toHaveBeenCalled();
+      expect(panel1.open).toBe(false);
+      expect(panel2.open).toBe(true);
+    });
+
+    it('should update linked group when name changes', async () => {
+      const screen = render(html`
+        <div>
+          <forge-expansion-panel name="group1" open>
+            <button slot="header">Header 1</button>
+            <div>Content 1</div>
+          </forge-expansion-panel>
+          <forge-expansion-panel name="group2">
+            <button slot="header">Header 2</button>
+            <div>Content 2</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const container = screen.container.querySelector('div') as HTMLElement;
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const [panel1, panel2] = panels;
+
+      panel2.open = true;
+      await task();
+
+      expect(panel1.open).toBe(true);
+      expect(panel2.open).toBe(true);
+
+      panel2.name = 'group1';
+      await task();
+
+      expect(panel1.open).toBe(false);
+      expect(panel2.open).toBe(true);
+    });
+
+    it('should handle multiple groups simultaneously', async () => {
+      const screen = render(html`
+        <div>
+          <forge-expansion-panel name="group1">
+            <button slot="header">Header 1</button>
+            <div>Content 1</div>
+          </forge-expansion-panel>
+          <forge-expansion-panel name="group1">
+            <button slot="header">Header 2</button>
+            <div>Content 2</div>
+          </forge-expansion-panel>
+          <forge-expansion-panel name="group2">
+            <button slot="header">Header 3</button>
+            <div>Content 3</div>
+          </forge-expansion-panel>
+          <forge-expansion-panel name="group2">
+            <button slot="header">Header 4</button>
+            <div>Content 4</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const container = screen.container.querySelector('div') as HTMLElement;
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const [panel1, panel2, panel3, panel4] = panels;
+
+      panel1.open = true;
+      panel3.open = true;
+      await task();
+
+      expect(panel1.open).toBe(true);
+      expect(panel2.open).toBe(false);
+      expect(panel3.open).toBe(true);
+      expect(panel4.open).toBe(false);
+
+      panel2.open = true;
+      await task();
+
+      expect(panel1.open).toBe(false);
+      expect(panel2.open).toBe(true);
+      expect(panel3.open).toBe(true);
+      expect(panel4.open).toBe(false);
+
+      panel4.open = true;
+      await task();
+
+      expect(panel1.open).toBe(false);
+      expect(panel2.open).toBe(true);
+      expect(panel3.open).toBe(false);
+      expect(panel4.open).toBe(true);
+    });
+
+    it('should not close already closed panels in the group', async () => {
+      const screen = render(html`
+        <div>
+          <forge-expansion-panel name="group1">
+            <button slot="header">Header 1</button>
+            <div>Content 1</div>
+          </forge-expansion-panel>
+          <forge-expansion-panel name="group1">
+            <button slot="header">Header 2</button>
+            <div>Content 2</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const container = screen.container.querySelector('div') as HTMLElement;
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const [panel1, panel2] = panels;
+
+      const panel1ToggleSpy = vi.fn();
+      panel1.addEventListener(EXPANSION_PANEL_CONSTANTS.events.TOGGLE, panel1ToggleSpy);
+
+      expect(panel1.open).toBe(false);
+      expect(panel2.open).toBe(false);
+
+      panel2.open = true;
+      await task();
+
+      expect(panel1ToggleSpy).not.toHaveBeenCalled();
+      expect(panel1.open).toBe(false);
+      expect(panel2.open).toBe(true);
+    });
+
+    it('should not affect self when opening', async () => {
+      const screen = render(html`
+        <div>
+          <forge-expansion-panel name="group1">
+            <button slot="header">Header 1</button>
+            <div>Content 1</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const container = screen.container.querySelector('div') as HTMLElement;
+      const panel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+
+      panel.open = true;
+      await task();
+
+      expect(panel.open).toBe(true);
+    });
+  });
+
   describe('trigger', () => {
     it('should be toggled by nested trigger', async () => {
       const screen = render(html`

@@ -20,6 +20,7 @@ export interface IExpansionPanelComponent extends IBaseComponent {
   triggerElement: HTMLElement | null;
   openIcon: string;
   openIconElement: IOpenIconComponent | null;
+  name: string;
   toggle(): void;
   [emulateUserToggle](open: boolean): void;
 }
@@ -109,6 +110,12 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
   @property({ type: Object })
   public openIconElement: IOpenIconComponent | null = null;
 
+  /**
+   * The expansion panel's name. Expansion panels that share the same name form an accordion group where only one panel may be open at a time.
+   * @attribute
+   */
+  @property({ type: String, reflect: true }) public name = '';
+
   @state() private _isAnimating = false;
 
   @queryAssignedElements() private _slottedContentElements!: HTMLElement[];
@@ -163,6 +170,7 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
   public willUpdate(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('open')) {
       toggleState(this.#internals, 'open', this.open);
+      this.#tryCloseLinkedPanels();
     }
     if (changedProperties.has('open') || changedProperties.has('openIconElement')) {
       this.#tryToggleOpenIcon();
@@ -172,6 +180,9 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
     }
     if (changedProperties.has('orientation')) {
       toggleState(this.#internals, 'horizontal', this.orientation === 'horizontal');
+    }
+    if (changedProperties.has('name')) {
+      this.#tryCloseLinkedPanels();
     }
   }
 
@@ -347,6 +358,33 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
       composed: true
     });
     this.dispatchEvent(evt);
+  }
+
+  //
+  //  Linked Group
+  //
+
+  #getLinkedPanels(): ExpansionPanelComponent[] {
+    if (!this.name) {
+      return [];
+    }
+    const rootNode = this.getRootNode() as Document | ShadowRoot;
+    const selector = `${EXPANSION_PANEL_CONSTANTS.elementName}[name="${this.name}"]`;
+    const linkedPanels = Array.from(rootNode.querySelectorAll(selector)).filter(el => el !== this) as ExpansionPanelComponent[];
+    return linkedPanels;
+  }
+
+  #tryCloseLinkedPanels(): void {
+    if (!this.open) {
+      return;
+    }
+
+    const linkedPanels = this.#getLinkedPanels();
+    linkedPanels.forEach(panel => {
+      if (panel.open) {
+        panel[emulateUserToggle](false);
+      }
+    });
   }
 }
 

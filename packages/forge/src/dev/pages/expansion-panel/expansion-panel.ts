@@ -1,11 +1,11 @@
 import '$src/shared';
-import '@tylertech/forge/expansion-panel';
 import '@tylertech/forge/card';
-import '@tylertech/forge/open-icon';
-import '@tylertech/forge/expansion-panel/forge-expansion-panel.scss';
-import './expansion-panel.scss';
+import '@tylertech/forge/expansion-panel';
 import { IExpansionPanelComponent } from '@tylertech/forge/expansion-panel';
+import '@tylertech/forge/expansion-panel/forge-expansion-panel.scss';
+import '@tylertech/forge/open-icon';
 import { ISwitchComponent } from '@tylertech/forge/switch';
+import './expansion-panel.scss';
 
 const cssOnlyPanel = document.querySelector('.forge-expansion-panel');
 const cssOnlyPanelTrigger = document.querySelector('#css-only-panel-trigger') as HTMLButtonElement;
