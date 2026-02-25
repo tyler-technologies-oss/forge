@@ -8,7 +8,7 @@ const classes = {
 };
 
 const selectors = {
-  TOGGLE: `.${elementName}__toggle,[${elementName}-toggle],forge-button,forge-icon-button,forge-fab,button,[type=button],[role=button],a,forge-list-item > button,[tabindex]:not([tabindex^="-"])`,
+  TOGGLE: `.${elementName}__toggle,[${elementName}-toggle],forge-button,forge-icon-button,forge-fab,button,[type=button],[role=button],a,forge-list-item > button:not([slot]),[tabindex]:not([tabindex^="-"])`,
   MENU_LIST: 'forge-list'
 };
 
