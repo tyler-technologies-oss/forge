@@ -1,11 +1,11 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { IFieldComponent } from '@tylertech/forge/field';
-import { storyStyles } from '../../decorators';
+import { storyStyles } from '../../decorators.js';
 
 import '@tylertech/forge/field';
 
@@ -211,7 +211,9 @@ export const CSSOnly: Story = {
     if (value) {
       requestAnimationFrame(() => {
         const input = fieldRef.value?.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input,select,textarea');
-        toggleFloatingLabel(input, { animate: false });
+        if (input) {
+          toggleFloatingLabel(input, { animate: false });
+        }
       });
     }
 

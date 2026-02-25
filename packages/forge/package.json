@@ -80,6 +80,7 @@
     "@tylertech/stylelint-rules": "catalog:",
     "@types/cssbeautify": "^0.3.5",
     "@types/node": "catalog:",
+    "@types/react": "^19.2.14",
     "@vitest/browser": "^4.0.18",
     "@vitest/browser-playwright": "^4.0.18",
     "@vitest/coverage-v8": "^4.0.18",

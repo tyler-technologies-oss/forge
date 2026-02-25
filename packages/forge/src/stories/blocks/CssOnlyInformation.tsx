@@ -1,6 +1,6 @@
 import { Source, useOf } from '@storybook/addon-docs/blocks';
-import { getCustomElementsTagDeclaration, TagItem } from '../utils';
-import { NameDescriptionTable, Section, UsageLink } from './Shared';
+import { getCustomElementsTagDeclaration, TagItem } from '../utils.js';
+import { NameDescriptionTable, Section, UsageLink } from './Shared.js';
 import { css } from 'lit';
 
 function friendlyNameFromTagName(tagName: string) {

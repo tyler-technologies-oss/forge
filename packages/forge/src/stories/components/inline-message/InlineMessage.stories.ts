@@ -1,6 +1,6 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { GLOBAL_THEME_OPTIONS, customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { GLOBAL_THEME_OPTIONS, customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconInfo } from '@tylertech/tyler-icons';
 import { styleMap } from 'lit/directives/style-map.js';
