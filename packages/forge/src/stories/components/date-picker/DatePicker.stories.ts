@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { action } from 'storybook/actions';
-import { generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+import { generateCustomElementArgTypes, standaloneStoryParams } from '../../utils.js';
 
 import '@tylertech/forge/date-picker';
 

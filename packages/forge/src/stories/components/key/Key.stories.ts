@@ -1,5 +1,5 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { applyArgs, generateCustomElementArgTypes } from '../../utils';
+import { applyArgs, generateCustomElementArgTypes } from '../../utils.js';
 
 import '@tylertech/forge/key';
 

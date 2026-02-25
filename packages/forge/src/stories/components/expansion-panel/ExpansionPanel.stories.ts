@@ -1,7 +1,7 @@
 import { html, nothing } from 'lit';
 import { action } from 'storybook/actions';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { classMap } from 'lit/directives/class-map.js';

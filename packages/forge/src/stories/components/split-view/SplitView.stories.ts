@@ -1,8 +1,8 @@
 import { html } from 'lit';
 import { action } from 'storybook/actions';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { generateCustomElementArgTypes } from '../../utils';
-import { storyStyles } from 'src/stories/decorators';
+import { generateCustomElementArgTypes } from '../../utils.js';
+import { storyStyles } from '../../decorators.js';
 
 import '@tylertech/forge/split-view/split-view-panel';
 import '@tylertech/forge/split-view/split-view';

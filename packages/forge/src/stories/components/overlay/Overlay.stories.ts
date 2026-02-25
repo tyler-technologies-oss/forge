@@ -5,14 +5,14 @@ import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
-import { storyStyles } from '../../decorators';
+import { OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
+import { storyStyles } from '../../decorators.js';
 import type { IOverlayComponent } from '@tylertech/forge/overlay';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge/overlay';
 import styles from './Overlay.scss?inline';
-import { VirtualElement } from '../../../lib/core/utils/position-utils';
+import { VirtualElement } from '../../../lib/core/utils/position-utils.js';
 
 const component = 'forge-overlay';
 

@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { MeterComponent, MeterGroupComponent } from '@tylertech/forge/meter';
 import { html } from 'lit';
-import { applyArgs, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+import { applyArgs, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils.js';
 
 import '@tylertech/forge/meter';
 import '@tylertech/forge/key';

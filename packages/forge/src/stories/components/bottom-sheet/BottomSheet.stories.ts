@@ -1,7 +1,7 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
-import { storyStyles } from '../../decorators';
+import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils.js';
+import { storyStyles } from '../../decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { ref, createRef } from 'lit/directives/ref.js';
 import { type IBottomSheetComponent } from '@tylertech/forge/bottom-sheet';

@@ -1,11 +1,11 @@
 import { action } from 'storybook/actions';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
+import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconAdjust, tylIconOpenInNew, tylIconPayment, tylIconPayments } from '@tylertech/tyler-icons';
 import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils.js';
 
 import '@tylertech/forge/avatar';
 import '@tylertech/forge/chips/chip';

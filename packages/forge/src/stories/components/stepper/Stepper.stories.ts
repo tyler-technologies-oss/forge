@@ -1,7 +1,7 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { action } from 'storybook/actions';
-import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
 import '@tylertech/forge/stepper';
