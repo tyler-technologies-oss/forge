@@ -55,6 +55,7 @@ export class IconComponent extends BaseLitElement implements IIconComponent {
    * The name of the icon to render.
    * @attribute
    */
+  @property({ reflect: true })
   public set name(value: string | undefined) {
     if (isDefined(value)) {
       this.#name = value?.replace(/\s+/, '');
@@ -62,7 +63,6 @@ export class IconComponent extends BaseLitElement implements IIconComponent {
       this.#name = undefined;
     }
   }
-  @property({ reflect: true })
   public get name(): string | undefined {
     return this.#name;
   }
