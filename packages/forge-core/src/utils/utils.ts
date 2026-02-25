@@ -7,12 +7,59 @@ export function randomChars(length = 5): string {
 }
 
 /**
+ * Represents a value that may be undefined.
+ */
+export type Optional<T> = T | undefined;
+
+/**
+ * Represents a value that may be null or undefined.
+ */
+export type Nullable<T> = T | null | undefined;
+
+/**
+ * Unwraps a nullable value, returning the default value if the provided value is null or undefined.
+ * @param {Nullable<T>} obj The object to unwrap.
+ * @param {T} defaultValue The default value to return if the value is null or undefined.
+ * @returns {T}
+ */
+export function unwrap<T>(obj: Nullable<T>, defaultValue: T): T {
+  return obj ?? defaultValue;
+}
+
+/**
+ * Unwraps a nullable value, returning null if the provided value is undefined.
+ * @param {Nullable<T>} obj The object to unwrap.
+ * @returns {T | null}
+ */
+export function unwrapOrNull<T>(obj: Nullable<T>): T | null {
+  return obj ?? null;
+}
+
+/**
+ * Unwraps a nullable value, returning undefined if the provided value is null.
+ * @param {Nullable<T>} obj The object to unwrap.
+ * @returns {T | undefined}
+ */
+export function unwrapOrUndefined<T>(obj: Nullable<T>): T | undefined {
+  return obj ?? undefined;
+}
+
+/**
  * Checks if an object is undefined or null.
  * @param {object} obj The object to test.
  * @returns {boolean}
  */
-export function isDefined(obj: any): boolean {
+export function isDefined<T>(obj: T | null | undefined): obj is T {
   return typeof obj !== 'undefined' && obj !== null;
+}
+
+/**
+ * Checks if an object is undefined or null.
+ * @param {object} obj The object to test.
+ * @returns {boolean}
+ */
+export function isNullish(obj: any): obj is null | undefined {
+  return typeof obj === 'undefined' || obj === null;
 }
 
 /**
@@ -77,7 +124,8 @@ export function isValidDate(obj: any): obj is Date {
  * @param {object} obj The object to test.
  * @returns {boolean}
  */
-export function isFunction(obj: any): boolean {
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/no-restricted-types
+export function isFunction(obj: any): obj is Function {
   return typeof obj === 'function';
 }
 
@@ -86,7 +134,7 @@ export function isFunction(obj: any): boolean {
  * @param {object} obj The object to test.
  * @returns {boolean}
  */
-export function isArray(obj: any): boolean {
+export function isArray(obj: any): obj is Array<any> {
   return obj instanceof Array;
 }
 
@@ -95,7 +143,7 @@ export function isArray(obj: any): boolean {
  * @param {object} obj The object to test.
  * @returns {boolean}
  */
-export function isObject(obj: any): boolean {
+export function isObject(obj: any): obj is object {
   return obj instanceof Object;
 }
 
