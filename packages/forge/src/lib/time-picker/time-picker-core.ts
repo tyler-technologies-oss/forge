@@ -987,7 +987,7 @@ export class TimePickerCore implements ITimePickerCore {
     return this._step;
   }
   public set step(value: number) {
-    this._step = value;
+    this._step = value > 0 ? value : TIME_PICKER_CONSTANTS.numbers.DEFAULT_MINUTE_STEP;
   }
 
   public get allowInput(): boolean {
