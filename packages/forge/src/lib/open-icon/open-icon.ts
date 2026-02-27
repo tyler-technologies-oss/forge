@@ -1,37 +1,27 @@
-import { customElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
-import { tylIconKeyboardArrowRight, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons';
-import { OpenIconOrientation, OpenIconRotation, OPEN_ICON_CONSTANTS } from './open-icon-constants.js';
-import { IconRegistry, IconComponent } from '../icon/index.js';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { tylIconKeyboardArrowDown } from '@tylertech/tyler-icons';
+import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { IBaseComponent } from '../core/base/base-component.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { toggleState } from '../core/utils/utils.js';
+import { IconComponent, IconRegistry } from '../icon/index.js';
+import { OPEN_ICON_CONSTANTS, OpenIconOrientation, OpenIconRotation } from './open-icon-constants.js';
 
-import template from './open-icon.html';
 import styles from './open-icon.scss';
 
+/** @deprecated - This will be removed in the future. Please switch to using OpenIconComponent. */
 export interface IOpenIconComponent extends IBaseComponent {
   open: boolean;
   orientation: OpenIconOrientation;
   rotation: OpenIconRotation;
 }
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-open-icon': IOpenIconComponent;
-  }
-}
-
 /**
  * @tag forge-open-icon
  *
  * @summary Open icons are icons used to indicate whether a section is open or closed. They provide an animated transition between the two states to enhance the user experience.
- 
- *
- * @property {boolean} [open=false] - Whether the icon is open or closed.
- * @property {OpenIconOrientation} [orientation=vertical] - The orientation of the rotation.
- * @property {OpenIconRotation} [rotation=full] - The rotation amount.
- *
- * @attribute {boolean} [open=false] - Whether the icon is open or closed.
- * @attribute {OpenIconOrientation} [orientation=vertical] - The orientation of the rotation.
- * @attribute {OpenIconRotation} [rotation=full] - The rotation amount.
  *
  * @cssproperty --forge-open-icon-color - The color of the icon.
  * @cssproperty --forge-open-icon-size - The size of the icon.
@@ -47,69 +37,77 @@ declare global {
  * @csspart icon - The icon element.
  *
  * @slot - The icon to display when open.
+ *
+ * @state open - Applied when the icon is in the open state.
  */
-@customElement({
-  name: OPEN_ICON_CONSTANTS.elementName,
-  dependencies: [IconComponent]
-})
-export class OpenIconComponent extends BaseComponent implements IOpenIconComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(OPEN_ICON_CONSTANTS.observedAttributes);
-  }
+@customElement(OPEN_ICON_CONSTANTS.elementName)
+export class OpenIconComponent extends BaseLitElement implements IOpenIconComponent {
+  public static styles = unsafeCSS(styles);
 
-  private _open = false;
-  private _orientation: OpenIconOrientation = OPEN_ICON_CONSTANTS.defaults.ORIENTATION;
-  private _rotation: OpenIconRotation = OPEN_ICON_CONSTANTS.defaults.ROTATION;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = OPEN_ICON_CONSTANTS.elementName;
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [IconComponent];
+
+  #internals: ElementInternals;
+
+  // TODO: Remove attribute reflection
+
+  /**
+   * Whether the icon is open or closed.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public open = false;
+
+  /**
+   * The orientation of the rotation.
+   * @default 'vertical'
+   * @attribute
+   */
+  @property({ reflect: true })
+  public orientation: OpenIconOrientation = 'vertical';
+
+  /**
+   * The rotation amount.
+   * @default 'full'
+   * @attribute
+   */
+  @property({ reflect: true })
+  public rotation: OpenIconRotation = 'full';
+
+  public willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('open')) {
+      toggleState(this.#internals, 'open', this.open);
+    }
+  }
 
   constructor() {
     super();
-    IconRegistry.define([tylIconKeyboardArrowRight, tylIconKeyboardArrowDown]);
-    attachShadowTemplate(this, template, styles);
+    this.#internals = this.attachInternals();
+    IconRegistry.define(tylIconKeyboardArrowDown);
   }
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case OPEN_ICON_CONSTANTS.attributes.OPEN:
-        this.open = coerceBoolean(newValue);
-        break;
-      case OPEN_ICON_CONSTANTS.attributes.ORIENTATION:
-        this.orientation = newValue as OpenIconOrientation;
-        break;
-      case OPEN_ICON_CONSTANTS.attributes.ROTATION:
-        this.rotation = newValue as OpenIconRotation;
-        break;
-    }
+  public render(): TemplateResult {
+    const rootClasses = {
+      'forge-open-icon': true,
+      horizontal: this.orientation === 'horizontal',
+      'half-rotation': this.rotation === 'half'
+    };
+    return html`
+      <span class=${classMap(rootClasses)} part="root">
+        <slot>
+          <forge-icon class="icon" part="icon" name="keyboard_arrow_down"></forge-icon>
+        </slot>
+      </span>
+    `;
   }
+}
 
-  public get open(): boolean {
-    return this._open;
-  }
-  public set open(value: boolean) {
-    value = Boolean(value);
-    if (this._open !== value) {
-      this._open = value;
-      this.toggleAttribute(OPEN_ICON_CONSTANTS.attributes.OPEN, value);
-    }
-  }
-
-  public get orientation(): OpenIconOrientation {
-    return this._orientation;
-  }
-
-  public set orientation(value: OpenIconOrientation) {
-    if (this._orientation !== value) {
-      this._orientation = value;
-      this.setAttribute(OPEN_ICON_CONSTANTS.attributes.ORIENTATION, value);
-    }
-  }
-
-  public get rotation(): OpenIconRotation {
-    return this._rotation;
-  }
-  public set rotation(value: OpenIconRotation) {
-    if (this._rotation !== value) {
-      this._rotation = value;
-      this.setAttribute(OPEN_ICON_CONSTANTS.attributes.ROTATION, value);
-    }
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-open-icon': IOpenIconComponent;
   }
 }
