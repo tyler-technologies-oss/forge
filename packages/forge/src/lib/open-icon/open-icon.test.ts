@@ -94,6 +94,20 @@ describe('Open icon', () => {
       expect(el.open).toBe(false);
       expect(el.hasAttribute(OPEN_ICON_CONSTANTS.attributes.OPEN)).toBe(false);
     });
+
+    it('should toggle open state when open property is toggled', async () => {
+      const screen = render(html`<forge-open-icon></forge-open-icon>`);
+      const el = screen.container.querySelector('forge-open-icon') as OpenIconComponent;
+      expect(el.matches(':state(open)')).toBe(false);
+
+      el.open = true;
+      await el.updateComplete;
+      expect(el.matches(':state(open)')).toBe(true);
+
+      el.open = false;
+      await el.updateComplete;
+      expect(el.matches(':state(open)')).toBe(false);
+    });
   });
 
   describe('orientation', async () => {
