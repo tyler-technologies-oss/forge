@@ -95,7 +95,7 @@
     "eslint-plugin-storybook": "catalog:",
     "glob": "catalog:",
     "lit-html": "^3.3.2",
-    "minimatch": "^10.2.1",
+    "minimatch": "^10.2.3",
     "ora": "^9.3.0",
     "playwright": "catalog:",
     "plop": "catalog:",
