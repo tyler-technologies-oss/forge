@@ -4,12 +4,12 @@ import { classMap } from 'lit-html/directives/class-map.js';
 import { customElement, property, queryAssignedElements, state } from 'lit/decorators.js';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { toggleState } from '../core/index.js';
 import { IOpenIconComponent, OPEN_ICON_CONSTANTS } from '../open-icon/index.js';
 import { emulateUserToggle, EXPANSION_PANEL_CONSTANTS, ExpansionPanelAnimationType, ExpansionPanelOrientation } from './expansion-panel-constants.js';
 import { ExpansionPanelTriggerController } from './expansion-panel-trigger-controller.js';
 
 import styles from './expansion-panel.scss';
-import { toggleState } from '../core/index.js';
 
 /** @deprecated - This will be removed in the future. Please switch to using ExpansionPanelComponent. */
 export interface IExpansionPanelComponent extends IBaseComponent {
