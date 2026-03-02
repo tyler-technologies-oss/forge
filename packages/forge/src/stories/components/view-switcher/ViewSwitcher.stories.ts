@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { generateCustomElementArgTypes } from '../../utils';
+import { generateCustomElementArgTypes } from '../../utils.js';
 
 import '@tylertech/forge/view-switcher';
 import '@tylertech/forge/view-switcher/view';
@@ -9,7 +9,7 @@ import { IViewSwitcherComponent } from '@tylertech/forge/view-switcher';
 import { createRef, ref } from 'lit/directives/ref.js';
 
 import style from './ViewSwitcher.scss?inline';
-import { storyStyles } from 'src/stories/decorators';
+import { storyStyles } from '../../decorators.js';
 
 const component = 'forge-view-switcher';
 

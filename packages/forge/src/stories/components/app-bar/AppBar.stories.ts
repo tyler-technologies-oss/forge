@@ -1,9 +1,9 @@
 import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils.js';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons';
-import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
-import { storyStyles } from '../../decorators';
+import { IconRegistry } from '@tylertech/forge/icon';
+import { storyStyles } from '../../decorators.js';
 
 import '@tylertech/forge/app-bar';
 import '@tylertech/forge/expansion-panel';
