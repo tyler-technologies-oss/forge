@@ -1,8 +1,8 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
-import { storyStyles } from '../../decorators';
+import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
+import { storyStyles } from '../../decorators.js';
 
 import '@tylertech/forge/stack';
 import '@tylertech/forge/text-field';

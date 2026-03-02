@@ -1,10 +1,10 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils.js';
 import { IMenuComponent, IMenuOption, IMenuOptionGroup, IOption } from '@tylertech/forge';
 import { styleMap } from 'lit/directives/style-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
-import { standaloneStoryParams } from '../../utils';
+import { standaloneStoryParams } from '../../utils.js';
 
 import '@tylertech/forge/menu';
 import '@tylertech/forge/button';
