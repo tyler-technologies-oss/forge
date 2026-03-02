@@ -5,7 +5,7 @@ import { frame } from '../../core/utils/utils.js';
 import { APP_BAR_CONSTANTS } from './app-bar-constants.js';
 import type { IStateLayerComponent } from '../../state-layer/index.js';
 import type { IFocusIndicatorComponent } from '../../focus-indicator/index.js';
-import type { IAppBarComponent } from './app-bar.js';
+import type { AppBarComponent } from './app-bar.js';
 
 import './app-bar.js';
 
@@ -18,21 +18,21 @@ declare global {
 describe('App Bar', () => {
   it('should initialize', async () => {
     const screen = render(html`<forge-app-bar></forge-app-bar>`);
-    const el = screen.container.querySelector('forge-app-bar') as IAppBarComponent;
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
 
     expect(el.shadowRoot).not.toBeNull();
   });
 
   it('should be accessible', async () => {
     const screen = render(html`<forge-app-bar title-text="Test"></forge-app-bar>`);
-    const el = screen.container.querySelector('forge-app-bar') as IAppBarComponent;
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
 
     await expect(el).toBeAccessible();
   });
 
   it('should not have title element if no title text is set', async () => {
     const screen = render(html`<forge-app-bar></forge-app-bar>`);
-    const el = screen.container.querySelector('forge-app-bar') as IAppBarComponent;
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
 
     const titleEl = getTitleEl(el);
     expect(el.titleText).toBe('');
@@ -41,7 +41,9 @@ describe('App Bar', () => {
 
   it('should set title', async () => {
     const screen = render(html`<forge-app-bar title-text="Test"></forge-app-bar>`);
-    const el = screen.container.querySelector('forge-app-bar') as IAppBarComponent;
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+
+    await el.updateComplete;
 
     const titleEl = getTitleEl(el);
     expect(el.titleText).toBe('Test');
@@ -51,7 +53,7 @@ describe('App Bar', () => {
 
   it('should set title as slot', async () => {
     const screen = render(html`<forge-app-bar><h2 slot="title">Test</h2></forge-app-bar>`);
-    const el = screen.container.querySelector('forge-app-bar') as IAppBarComponent;
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
 
     const titleEl = getTitleEl(el);
 
@@ -62,12 +64,14 @@ describe('App Bar', () => {
 
   it('should set elevation', async () => {
     const screen = render(html`<forge-app-bar elevation="raised"></forge-app-bar>`);
-    const el = screen.container.querySelector('forge-app-bar') as IAppBarComponent;
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
 
     expect(el.elevation).toBe('raised');
     expect(el.getAttribute(APP_BAR_CONSTANTS.attributes.ELEVATION)).toBe('raised');
 
     el.elevation = 'none';
+
+    await el.updateComplete;
 
     expect(el.elevation).toBe('none');
     expect(el.getAttribute(APP_BAR_CONSTANTS.attributes.ELEVATION)).toBe('none');
@@ -75,12 +79,13 @@ describe('App Bar', () => {
 
   it('should set theme', async () => {
     const screen = render(html`<forge-app-bar theme="white"></forge-app-bar>`);
-    const el = screen.container.querySelector('forge-app-bar') as IAppBarComponent;
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
 
     expect(el.theme).toBe('white');
     expect(el.getAttribute(APP_BAR_CONSTANTS.attributes.THEME)).toBe('white');
 
     el.theme = '';
+    await el.updateComplete;
 
     expect(el.theme).toBe('');
     expect(el.hasAttribute(APP_BAR_CONSTANTS.attributes.THEME)).toBe(false);
@@ -88,7 +93,8 @@ describe('App Bar', () => {
 
   it('should set href', async () => {
     const screen = render(html`<forge-app-bar href="javascript: void(0);" title-text="Test"></forge-app-bar>`);
-    const el = screen.container.querySelector('forge-app-bar') as IAppBarComponent;
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+    await el.updateComplete;
 
     let anchorEl = getAnchorEl(el);
     expect(el.href).toBe('javascript: void(0);');
@@ -101,6 +107,7 @@ describe('App Bar', () => {
     await expect(el).toBeAccessible();
 
     el.href = '';
+    await el.updateComplete;
     anchorEl = getAnchorEl(el);
     const containerEl = el.shadowRoot?.querySelector(APP_BAR_CONSTANTS.selectors.LOGO_TITLE_CONTAINER) as HTMLElement;
 
@@ -114,7 +121,8 @@ describe('App Bar', () => {
 
   it('should set anchor target', async () => {
     const screen = render(html`<forge-app-bar href="javascript: void(0);" target="_blank"></forge-app-bar>`);
-    const el = screen.container.querySelector('forge-app-bar') as IAppBarComponent;
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+    await el.updateComplete;
 
     let anchorEl = getAnchorEl(el);
     expect(el.target).toBe('_blank');
@@ -122,6 +130,7 @@ describe('App Bar', () => {
     expect(anchorEl.target).toBe('_blank');
 
     el.target = '';
+    await el.updateComplete;
     anchorEl = getAnchorEl(el);
 
     expect(el.target).toBe('');
@@ -131,10 +140,11 @@ describe('App Bar', () => {
 
   it('should set center section visibility', async () => {
     const screen = render(html`<forge-app-bar></forge-app-bar>`);
-    const el = screen.container.querySelector('forge-app-bar') as IAppBarComponent;
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+    await el.updateComplete;
 
     const centerEl = getCenterEl(el);
-    expect(centerEl.style.display).toBe('none');
+    expect(centerEl.hidden).toBe(true);
     expect(getRootEl(el).classList.contains(APP_BAR_CONSTANTS.classes.NO_CENTER)).toBe(true);
 
     const slottedCenterEl = document.createElement('div');
@@ -143,13 +153,14 @@ describe('App Bar', () => {
 
     await frame();
 
-    expect(centerEl.style.display).toBe('');
+    expect(centerEl.hidden).toBe(false);
     expect(getRootEl(el).classList.contains(APP_BAR_CONSTANTS.classes.NO_CENTER)).toBe(false);
   });
 
   it('should dispatch navigate event', async () => {
     const screen = render(html`<forge-app-bar href="javascript: void(0);"></forge-app-bar>`);
-    const el = screen.container.querySelector('forge-app-bar') as IAppBarComponent;
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+    await el.updateComplete;
     const anchorEl = getAnchorEl(el);
 
     const navigateSpy = vi.fn();
@@ -165,7 +176,8 @@ describe('App Bar', () => {
     const testSpy = vi.spyOn(window as any, 'forgeAppBarAnchorTest');
 
     const screen = render(html`<forge-app-bar href="javascript: forgeAppBarAnchorTest();"></forge-app-bar>`);
-    const el = screen.container.querySelector('forge-app-bar') as IAppBarComponent;
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+    await el.updateComplete;
     const anchorEl = getAnchorEl(el);
 
     const navigateSpy = vi.fn(evt => evt.preventDefault());
@@ -184,44 +196,47 @@ describe('App Bar', () => {
 
   it('should disable global theme token cascade when using scoped theme mode', async () => {
     const screen = render(html`<forge-app-bar></forge-app-bar>`);
-    const el = screen.container.querySelector('forge-app-bar') as IAppBarComponent;
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+    await el.updateComplete;
+    const rootEl = getRootEl(el);
 
-    const defaultStyle = getComputedStyle(el);
+    const defaultStyle = getComputedStyle(rootEl);
     expect(defaultStyle.getPropertyValue('--forge-theme-primary')).toBe('#ffffff');
 
     expect(el.themeMode).toBe('inherit');
     expect(el.hasAttribute(APP_BAR_CONSTANTS.attributes.THEME_MODE)).toBe(false);
 
     el.themeMode = 'scoped';
+    await el.updateComplete;
 
-    const noGlobalStyle = getComputedStyle(el);
+    const noGlobalStyle = getComputedStyle(rootEl);
     expect(noGlobalStyle.getPropertyValue('--forge-theme-primary')).toBe('');
 
     expect(el.themeMode).toBe('scoped');
     expect(el.getAttribute(APP_BAR_CONSTANTS.attributes.THEME_MODE)).toBe('scoped');
   });
 
-  function getRootEl(el: IAppBarComponent): HTMLElement {
+  function getRootEl(el: AppBarComponent): HTMLElement {
     return el.shadowRoot?.firstElementChild as HTMLElement;
   }
 
-  function getTitleEl(el: IAppBarComponent): HTMLHeadingElement {
+  function getTitleEl(el: AppBarComponent): HTMLHeadingElement {
     return el.shadowRoot?.querySelector('h1') as HTMLHeadingElement;
   }
 
-  function getAnchorEl(el: IAppBarComponent): HTMLAnchorElement {
+  function getAnchorEl(el: AppBarComponent): HTMLAnchorElement {
     return el.shadowRoot?.querySelector('a') as HTMLAnchorElement;
   }
 
-  function getCenterEl(el: IAppBarComponent): HTMLElement {
+  function getCenterEl(el: AppBarComponent): HTMLElement {
     return el.shadowRoot?.querySelector(APP_BAR_CONSTANTS.selectors.CENTER_SECTION) as HTMLElement;
   }
 
-  function getStateLayer(el: IAppBarComponent): IStateLayerComponent {
+  function getStateLayer(el: AppBarComponent): IStateLayerComponent {
     return el.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent;
   }
 
-  function getFocusIndicator(el: IAppBarComponent): IFocusIndicatorComponent {
+  function getFocusIndicator(el: AppBarComponent): IFocusIndicatorComponent {
     return el.shadowRoot?.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
   }
 });
