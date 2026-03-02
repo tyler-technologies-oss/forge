@@ -1,9 +1,9 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { storyStyles } from '../../decorators';
+import { storyStyles } from '../../decorators.js';
 
 import '@tylertech/forge/toolbar';
 
