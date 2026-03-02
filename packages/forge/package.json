@@ -103,7 +103,7 @@
     "prettier": "catalog:",
     "react-ga4": "^2.1.0",
     "remark-gfm": "^4.0.1",
-    "rollup": "^4.57.1",
+    "rollup": "^4.59.0",
     "sass": "catalog:",
     "storybook": "catalog:",
     "storybook-addon-tag-badges": "catalog:",
