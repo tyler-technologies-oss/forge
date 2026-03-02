@@ -1,6 +1,6 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
-import { generateCustomElementArgTypes } from '../../utils';
+import { generateCustomElementArgTypes } from '../../utils.js';
 
 import '@tylertech/forge/text-field';
 import '@tylertech/forge/time-picker';
