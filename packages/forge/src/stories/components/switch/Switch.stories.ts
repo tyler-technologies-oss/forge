@@ -3,7 +3,7 @@ import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconCheck, tylIconClose } from '@tylertech/tyler-icons';
 import { html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
-import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
+import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils.js';
 
 import '@tylertech/forge/icon';
 import '@tylertech/forge/switch';

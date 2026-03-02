@@ -4,7 +4,7 @@ import { html, nothing } from 'lit';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { action } from 'storybook/actions';
-import { GLOBAL_THEME_OPTIONS, OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { GLOBAL_THEME_OPTIONS, OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils.js';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge/toast';

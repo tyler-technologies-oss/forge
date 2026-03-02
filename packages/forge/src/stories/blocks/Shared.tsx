@@ -1,6 +1,6 @@
 import { HeaderMdx, Markdown } from '@storybook/addon-docs/blocks';
 import { Code } from 'storybook/internal/components';
-import { TagItem } from '../utils';
+import { TagItem } from '../utils.js';
 
 import styles from './CustomArgTypes.module.scss';
 

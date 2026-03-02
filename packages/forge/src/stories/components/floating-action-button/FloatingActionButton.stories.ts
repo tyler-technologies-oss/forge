@@ -1,10 +1,10 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { DENSITY_OPTIONS, GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { DENSITY_OPTIONS, GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { tylIconFavorite, tylIconAdd, tylIconOpenInNew } from '@tylertech/tyler-icons';
-import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
+import { IconRegistry } from '@tylertech/forge/icon';
 
 import '@tylertech/forge/floating-action-button';
 import '@tylertech/forge/icon';
