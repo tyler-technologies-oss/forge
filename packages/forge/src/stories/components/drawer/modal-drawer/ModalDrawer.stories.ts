@@ -1,9 +1,9 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { action } from 'storybook/actions';
-import { generateCustomElementArgTypes } from '../../../utils';
+import { generateCustomElementArgTypes } from '../../../utils.js';
 import { tylIconDrafts, tylIconEmail, tylIconInbox, tylIconSend } from '@tylertech/tyler-icons';
-import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
+import { IconRegistry } from '@tylertech/forge/icon';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { type IModalDrawerComponent } from '@tylertech/forge/drawer/modal-drawer';
 

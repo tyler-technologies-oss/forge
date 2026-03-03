@@ -1,5 +1,5 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { GLOBAL_THEME_OPTIONS, customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
+import { GLOBAL_THEME_OPTIONS, customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils.js';
 
 import '@tylertech/forge/circular-progress';
 

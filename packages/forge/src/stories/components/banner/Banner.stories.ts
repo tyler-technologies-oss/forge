@@ -2,13 +2,13 @@ import { html } from 'lit';
 import { action } from 'storybook/actions';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { tylIconNotifications } from '@tylertech/tyler-icons';
-import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
+import { IconRegistry } from '@tylertech/forge/icon';
 
 import '@tylertech/forge/banner';
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/button';
 import '@tylertech/forge/icon';
-import { GLOBAL_THEME_OPTIONS, customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+import { GLOBAL_THEME_OPTIONS, customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils.js';
 import { BANNER_CONSTANTS } from '@tylertech/forge/banner';
 
 const component = 'forge-banner';
