@@ -169,8 +169,7 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('open')) {
-      toggleState(this.#internals, 'open', this.open);
-      this.#tryCloseLinkedPanels();
+      this.#handleOpen();
     }
     if (changedProperties.has('open') || changedProperties.has('openIconElement')) {
       this.#tryToggleOpenIcon();
@@ -281,12 +280,18 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
   }
 
   //
-  // Animation Handlers
+  // Open and Animation Handlers
   //
+
+  #handleOpen(): void {
+    // Only animate if this isn't the initial update cycle
+    this._isAnimating = this.animationType !== 'none' && this.hasUpdated;
+    toggleState(this.#internals, 'open', this.open);
+    this.#tryCloseLinkedPanels();
+  }
 
   #handleTransitionStart(evt: TransitionEvent): void {
     if (evt.propertyName.startsWith('grid-template')) {
-      this._isAnimating = true;
       this.toggleAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPENING, true);
     }
   }
