@@ -1,0 +1,20 @@
+import{j as t,M as r,T as a,C as n}from"./blocks-BjHgXG2B.js";import{useMDXComponents as s}from"./index-D8fqT_yN.js";import{C as c}from"./CustomArgTypes-swUOIEy9.js";import{C as l}from"./CssOnlyInformation-DQjP3zab.js";import{P as p,D as h,C as m}from"./PageState.stories-DJDIJV25.js";import"./preload-helper-PPVm8Dsz.js";import"./_commonjsHelpers-CqkleIqs.js";import"./iframe-BUvWK7Gm.js";import"./utils-D8X1NLZa.js";import"./style-map-BiPVbLS3.js";import"./directive-jorct-Oe.js";import"./service-adapter-CoGDs2_3.js";import"./page-state-B0m1Ibgi.js";import"./base-component-C90hx4_s.js";import"./feature-detection-Dexxu8GM.js";import"./button-HjiDhvyP.js";import"./base-adapter-BG6Ht_Mg.js";import"./tyler-icons-Dn_DGO8W.js";import"./index-DTwfV0k0.js";import"./focus-indicator-DuaWb64U.js";import"./property-Cj2i7KzY.js";import"./base-lit-element-C1OBJTYz.js";import"./utils-DU-9AqTO.js";import"./state-layer-CwwoRddA.js";import"./base-button-core-B4eJrefY.js";import"./with-label-aware-CLcNK3IJ.js";import"./with-default-aria-DzaWzFxa.js";import"./a11y-utils-B1Om3UYy.js";function i(o){const e={a:"a",blockquote:"blockquote",code:"code",h2:"h2",li:"li",p:"p",ul:"ul",...s(),...o.components};return t.jsxs(t.Fragment,{children:[t.jsx(r,{of:p}),`
+`,t.jsx(a,{}),`
+`,t.jsx(e.p,{children:`The page-state component is a layout component that ensures consistent spacing, alignment, and structure for pages or containers that need to display a state such as empty,
+error, 404... etc.`}),`
+`,t.jsx(e.p,{children:"These states will typically be the only content on the page or container, and they provide a clear description, with optional actions to take when the user reaches the state."}),`
+`,t.jsxs(e.blockquote,{children:[`
+`,t.jsxs(e.p,{children:["This component uses ",t.jsx(e.code,{children:"@container"})," queries to adapt to the width of its parent container."]}),`
+`]}),`
+`,t.jsx(n,{of:h}),`
+`,t.jsx(e.h2,{id:"api",children:"API"}),`
+`,t.jsx(c,{}),`
+`,t.jsx(e.h2,{id:"accessibility",children:"Accessibility"}),`
+`,t.jsxs(e.ul,{children:[`
+`,t.jsxs(e.li,{children:["If the graphic is important to the communication of the page state, ensure it has an ",t.jsx(e.code,{children:"alt"})," attribute which describes the graphic, otherwise include an ",t.jsx(e.code,{children:"alt"})," attribute with an empty value (",t.jsx(e.code,{children:'alt=""'}),")"]}),`
+`,t.jsxs(e.li,{children:["If any action buttons are included, verify that they have a ",t.jsx(e.a,{href:"https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques",rel:"nofollow",children:"role"})," attribute set."]}),`
+`]}),`
+`,t.jsx(e.h2,{id:"css-only",children:"CSS-Only"}),`
+`,t.jsx(e.p,{children:"The page-state component is also available as a CSS-only component without the need for JavaScript."}),`
+`,t.jsx(n,{of:m}),`
+`,t.jsx(l,{})]})}function L(o={}){const{wrapper:e}={...s(),...o.components};return e?t.jsx(e,{...o,children:t.jsx(i,{...o})}):i(o)}export{L as default};
