@@ -5,7 +5,7 @@ import { userEvent } from 'vitest/browser';
 import { task } from '../core/utils/utils.js';
 import type { IOpenIconComponent } from '../open-icon/open-icon.js';
 import { EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from './expansion-panel-constants.js';
-import type { IExpansionPanelComponent } from './expansion-panel.js';
+import type { ExpansionPanelComponent } from './expansion-panel.js';
 
 import '../open-icon/open-icon.js';
 import './expansion-panel.js';
@@ -16,14 +16,14 @@ const ANIMATION_TIMEOUT = 500;
 describe('Expansion Panel', () => {
   it('should initialize', async () => {
     const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
     expect(el.shadowRoot).not.toBeNull();
   });
 
   it('should be accessible', async () => {
     const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
     await expect(el).toBeAccessible();
   });
@@ -37,7 +37,7 @@ describe('Expansion Panel', () => {
         <div>Content</div>
       </forge-expansion-panel>
     `);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
     await expect(el).toBeAccessible();
 
@@ -57,7 +57,7 @@ describe('Expansion Panel', () => {
 
   it('should have expected default values', async () => {
     const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
     expect(el.open).toBe(false);
     expect(el.orientation).toBe('vertical');
@@ -66,7 +66,7 @@ describe('Expansion Panel', () => {
 
   it('should set open by default', async () => {
     const screen = render(html`<forge-expansion-panel open></forge-expansion-panel>`);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
     expect(el.open).toBe(true);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
@@ -74,8 +74,8 @@ describe('Expansion Panel', () => {
 
   it('should set open via attribute', async () => {
     const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
-    await task();
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
+    await el.updateComplete;
     const contentEl = getContentElement(el);
 
     expect(el.open).toBe(false);
@@ -83,7 +83,7 @@ describe('Expansion Panel', () => {
     expect(contentEl.getAttribute('hidden')).toBe('until-found');
 
     el.setAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN, '');
-    await task();
+    await el.updateComplete;
 
     expect(el.open).toBe(true);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(true);
@@ -92,7 +92,7 @@ describe('Expansion Panel', () => {
 
   it('should set open via property', async () => {
     const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
     await task();
     const contentEl = getContentElement(el);
 
@@ -110,7 +110,7 @@ describe('Expansion Panel', () => {
 
   it('should set open attribute to true when toggle() is called', async () => {
     const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
     await task();
     const contentEl = getContentElement(el);
 
@@ -124,12 +124,14 @@ describe('Expansion Panel', () => {
 
   it('should set open attribute to false when toggle() is called', async () => {
     const screen = render(html`<forge-expansion-panel open></forge-expansion-panel>`);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
-    await task();
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
+    await el.updateComplete;
     const contentEl = getContentElement(el);
 
     el.toggle();
-    await task();
+    await el.updateComplete;
+    mockTransitionEvent(contentEl, 'end', 'grid-template-rows');
+    await el.updateComplete;
 
     expect(el.open).toBe(false);
     expect(el.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN)).toBe(false);
@@ -138,7 +140,7 @@ describe('Expansion Panel', () => {
 
   it('should set opening state attribute while toggle animation is in progress', async () => {
     const screen = render(html`<forge-expansion-panel><div style="height: 100px;">Test</div></forge-expansion-panel>`);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
     await task();
     const contentEl = getContentElement(el);
 
@@ -158,7 +160,7 @@ describe('Expansion Panel', () => {
 
   it('should not set opening state attribute when animation type is set to none', async () => {
     const screen = render(html`<forge-expansion-panel animation-type="none"><div>Test</div></forge-expansion-panel>`);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
     el.toggle();
 
@@ -171,7 +173,7 @@ describe('Expansion Panel', () => {
 
   it('should dispatch animation-complete event when toggle animation is complete', async () => {
     const screen = render(html`<forge-expansion-panel><div>Test</div></forge-expansion-panel>`);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
     await task();
     const contentEl = getContentElement(el);
 
@@ -184,7 +186,7 @@ describe('Expansion Panel', () => {
 
   it('should not dispatch animation-complete event when animation type is set to none', async () => {
     const screen = render(html`<forge-expansion-panel animation-type="none"><div>Test</div></forge-expansion-panel>`);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
     const animationCompleteSpy = vi.fn();
     el.addEventListener(EXPANSION_PANEL_CONSTANTS.events.ANIMATION_COMPLETE, animationCompleteSpy);
@@ -198,13 +200,14 @@ describe('Expansion Panel', () => {
 
   it('should set content hidden attribute when toggled close', async () => {
     const screen = render(html`<forge-expansion-panel open></forge-expansion-panel>`);
-    const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
-    await task();
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
+    await el.updateComplete;
     const contentEl = getContentElement(el);
 
     el.toggle();
-
-    await task(ANIMATION_TIMEOUT);
+    await el.updateComplete;
+    mockTransitionEvent(contentEl, 'end', 'grid-template-rows');
+    await el.updateComplete;
 
     expect(contentEl.getAttribute('hidden')).toBe('until-found');
   });
@@ -212,14 +215,14 @@ describe('Expansion Panel', () => {
   describe('orientation', () => {
     it('should set orientation via attribute', async () => {
       const screen = render(html`<forge-expansion-panel orientation="horizontal"></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       expect(el.orientation).toBe('horizontal');
     });
 
     it('should set orientation via property', async () => {
       const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       expect(el.orientation).toBe('vertical');
 
@@ -232,7 +235,7 @@ describe('Expansion Panel', () => {
   describe('states', () => {
     it('should apply open state when panel is open', async () => {
       const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       expect(el.matches(':state(open)')).toBe(false);
 
@@ -244,7 +247,7 @@ describe('Expansion Panel', () => {
 
     it('should remove open state when panel is closed', async () => {
       const screen = render(html`<forge-expansion-panel open></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       await task();
 
       expect(el.matches(':state(open)')).toBe(true);
@@ -257,7 +260,7 @@ describe('Expansion Panel', () => {
 
     it('should apply horizontal state when orientation is horizontal', async () => {
       const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       expect(el.matches(':state(horizontal)')).toBe(false);
 
@@ -269,7 +272,7 @@ describe('Expansion Panel', () => {
 
     it('should remove horizontal state when orientation is vertical', async () => {
       const screen = render(html`<forge-expansion-panel orientation="horizontal"></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       await task();
 
       expect(el.matches(':state(horizontal)')).toBe(true);
@@ -282,7 +285,7 @@ describe('Expansion Panel', () => {
 
     it('should have open state when opened by default', async () => {
       const screen = render(html`<forge-expansion-panel open></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       await task();
 
       expect(el.matches(':state(open)')).toBe(true);
@@ -290,7 +293,7 @@ describe('Expansion Panel', () => {
 
     it('should have horizontal state when set via attribute', async () => {
       const screen = render(html`<forge-expansion-panel orientation="horizontal"></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       await task();
 
       expect(el.matches(':state(horizontal)')).toBe(true);
@@ -298,7 +301,7 @@ describe('Expansion Panel', () => {
 
     it('should toggle open state when toggled via toggle method', async () => {
       const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       expect(el.matches(':state(open)')).toBe(false);
 
@@ -315,7 +318,7 @@ describe('Expansion Panel', () => {
 
     it('should apply both open and horizontal states simultaneously', async () => {
       const screen = render(html`<forge-expansion-panel open orientation="horizontal"></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       await task();
 
       expect(el.matches(':state(open)')).toBe(true);
@@ -331,7 +334,7 @@ describe('Expansion Panel', () => {
           <div>Searchable content</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       await task();
       const contentEl = getContentElement(el);
 
@@ -346,7 +349,7 @@ describe('Expansion Panel', () => {
           <div>Searchable content</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       await task();
       const contentEl = getContentElement(el);
 
@@ -361,7 +364,7 @@ describe('Expansion Panel', () => {
           <div style="height: 100px;">Content</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       await task();
       const contentEl = getContentElement(el);
 
@@ -386,7 +389,7 @@ describe('Expansion Panel', () => {
           <div>Searchable content text</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       await task();
       const contentEl = getContentElement(el);
 
@@ -408,7 +411,7 @@ describe('Expansion Panel', () => {
           <div>This is unique searchable text in the panel</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       await task();
       const contentEl = getContentElement(el);
       const slottedContent = el.querySelector('div') as HTMLElement;
@@ -425,19 +428,21 @@ describe('Expansion Panel', () => {
           <div>Content to find</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
-      await task();
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
+      await el.updateComplete;
       const contentEl = getContentElement(el);
 
       const beforeMatchEvent = new Event('beforematch', { bubbles: true });
       contentEl.dispatchEvent(beforeMatchEvent);
-      await task();
+      await el.updateComplete;
 
       expect(el.open).toBe(true);
       expect(contentEl.hasAttribute('hidden')).toBe(false);
 
       el.toggle();
-      await task();
+      await el.updateComplete;
+      mockTransitionEvent(contentEl, 'end', 'grid-template-rows');
+      await el.updateComplete;
 
       expect(el.open).toBe(false);
       expect(contentEl.getAttribute('hidden')).toBe('until-found');
@@ -447,14 +452,14 @@ describe('Expansion Panel', () => {
   describe('animation type', () => {
     it('should set animation type via attribute', async () => {
       const screen = render(html`<forge-expansion-panel animation-type="none"></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       expect(el.animationType).toBe('none');
     });
 
     it('should set animation type via property', async () => {
       const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       expect(el.animationType).toBe('default');
 
@@ -472,7 +477,7 @@ describe('Expansion Panel', () => {
           <div>Content</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       const header = el.querySelector('button') as HTMLButtonElement;
       await task();
       const contentEl = getContentElement(el);
@@ -491,7 +496,7 @@ describe('Expansion Panel', () => {
           <div>Content</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       const header = el.querySelector('button') as HTMLButtonElement;
       await task();
       const contentEl = getContentElement(el);
@@ -511,7 +516,7 @@ describe('Expansion Panel', () => {
           <div>Content</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       const header = el.querySelector('button') as HTMLButtonElement;
 
       const toggleSpy = vi.fn();
@@ -535,7 +540,7 @@ describe('Expansion Panel', () => {
           <div>Content</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       const header = el.querySelector('button') as HTMLButtonElement;
 
       const toggleSpy = vi.fn();
@@ -554,7 +559,7 @@ describe('Expansion Panel', () => {
           <div>Content</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       const header = el.querySelector('button') as HTMLButtonElement;
       await task();
       const contentEl = getContentElement(el);
@@ -578,7 +583,7 @@ describe('Expansion Panel', () => {
           <div>Content</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       const header = el.querySelector('button') as HTMLButtonElement;
       await task();
       const contentEl = getContentElement(el);
@@ -597,7 +602,7 @@ describe('Expansion Panel', () => {
 
     it('should dispatch toggle event when calling internal emulateUserToggle symbol method', async () => {
       const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       const toggleSpy = vi.fn();
       el.addEventListener(EXPANSION_PANEL_CONSTANTS.events.TOGGLE, toggleSpy);
@@ -621,7 +626,7 @@ describe('Expansion Panel', () => {
           <div>Content</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       const openIcon = el.querySelector('forge-open-icon') as IOpenIconComponent;
 
       expect(openIcon.open).toBe(false);
@@ -684,7 +689,7 @@ describe('Expansion Panel', () => {
       const container = screen.container.querySelector('div') as HTMLElement;
       const trigger = container.querySelector('#button-id') as HTMLElement;
       const openIcon = container.querySelector('#open-icon-id') as IOpenIconComponent;
-      const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const expansionPanel = container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       await task();
 
       expansionPanel.openIconElement = openIcon;
@@ -708,11 +713,11 @@ describe('Expansion Panel', () => {
           </div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       await task();
       const contentEl = getContentElement(el);
 
-      const childEl = el.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const childEl = el.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       const childHeader = childEl.querySelector('button') as HTMLButtonElement;
       await task();
       const childContentEl = getContentElement(childEl);
@@ -741,7 +746,7 @@ describe('Expansion Panel', () => {
   describe('linked groups', () => {
     it('should set name via attribute', async () => {
       const screen = render(html`<forge-expansion-panel name="group1"></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       expect(el.name).toBe('group1');
       expect(el.hasAttribute('name')).toBe(true);
@@ -750,7 +755,7 @@ describe('Expansion Panel', () => {
 
     it('should set name via property', async () => {
       const screen = render(html`<forge-expansion-panel></forge-expansion-panel>`);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       expect(el.name).toBe('');
 
@@ -780,7 +785,7 @@ describe('Expansion Panel', () => {
         </div>
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
-      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as ExpansionPanelComponent[];
       const [panel1, panel2, panel3] = panels;
 
       expect(panel1.open).toBe(false);
@@ -823,7 +828,7 @@ describe('Expansion Panel', () => {
         </div>
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
-      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as ExpansionPanelComponent[];
       const [panel1, panel2] = panels;
 
       panel1.open = true;
@@ -853,7 +858,7 @@ describe('Expansion Panel', () => {
         </div>
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
-      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as ExpansionPanelComponent[];
       const [panel1, panel2] = panels;
 
       panel1.open = true;
@@ -883,7 +888,7 @@ describe('Expansion Panel', () => {
         </div>
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
-      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as ExpansionPanelComponent[];
       const [panel1, panel2] = panels;
 
       const panel1ToggleSpy = vi.fn();
@@ -920,7 +925,7 @@ describe('Expansion Panel', () => {
         </div>
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
-      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as ExpansionPanelComponent[];
       const [panel1, panel2] = panels;
 
       panel2.open = true;
@@ -958,7 +963,7 @@ describe('Expansion Panel', () => {
         </div>
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
-      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as ExpansionPanelComponent[];
       const [panel1, panel2, panel3, panel4] = panels;
 
       panel1.open = true;
@@ -1001,7 +1006,7 @@ describe('Expansion Panel', () => {
         </div>
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
-      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as IExpansionPanelComponent[];
+      const panels = Array.from(container.querySelectorAll('forge-expansion-panel')) as ExpansionPanelComponent[];
       const [panel1, panel2] = panels;
 
       const panel1ToggleSpy = vi.fn();
@@ -1028,7 +1033,7 @@ describe('Expansion Panel', () => {
         </div>
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
-      const panel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const panel = container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       panel.open = true;
       await task();
@@ -1049,7 +1054,7 @@ describe('Expansion Panel', () => {
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
       const trigger = container.querySelector('#button-id') as HTMLElement;
-      const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const expansionPanel = container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       await task();
 
       trigger.click();
@@ -1069,7 +1074,7 @@ describe('Expansion Panel', () => {
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
       const trigger = container.querySelector('#button-id') as HTMLElement;
-      const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const expansionPanel = container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       await userEvent.click(trigger);
       expect(expansionPanel.open).toBe(true);
@@ -1088,7 +1093,7 @@ describe('Expansion Panel', () => {
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
       const trigger = container.querySelector('#button-id') as HTMLElement;
-      const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const expansionPanel = container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       const content = container.querySelector('#content') as HTMLElement;
       await task();
 
@@ -1113,7 +1118,7 @@ describe('Expansion Panel', () => {
           <div id="foo">Content</div>
         </forge-expansion-panel>
       `);
-      const el = screen.container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       const button = el.querySelector('button') as HTMLElement;
       const content = el.querySelector('#foo') as HTMLElement;
       await task();
@@ -1135,7 +1140,7 @@ describe('Expansion Panel', () => {
       const container = screen.container.querySelector('div') as HTMLElement;
       const trigger1 = container.querySelector('#button-id1') as HTMLElement;
       const trigger2 = container.querySelector('#button-id2') as HTMLElement;
-      const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const expansionPanel = container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       const content = container.querySelector('#content') as HTMLElement;
       await task();
 
@@ -1171,7 +1176,7 @@ describe('Expansion Panel', () => {
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
       const trigger = container.querySelector('#button-id') as HTMLElement;
-      const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const expansionPanel = container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       const content1 = container.querySelector('#content1') as HTMLElement;
       const content2 = container.querySelector('#content2') as HTMLElement;
       await task();
@@ -1199,7 +1204,7 @@ describe('Expansion Panel', () => {
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
       const trigger = container.querySelector('#button-id') as HTMLElement;
-      const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const expansionPanel = container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       expansionPanel.triggerElement = trigger;
       await task();
@@ -1220,7 +1225,7 @@ describe('Expansion Panel', () => {
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
       const trigger = container.querySelector('#button-id') as HTMLElement;
-      const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const expansionPanel = container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       expansionPanel.triggerElement = null;
       await task();
@@ -1247,7 +1252,7 @@ describe('Expansion Panel', () => {
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
       const trigger = container.querySelector('#button-id') as HTMLElement;
-      const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const expansionPanel = container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       await userEvent.click(trigger);
       expect(expansionPanel.open).toBe(true);
@@ -1264,7 +1269,7 @@ describe('Expansion Panel', () => {
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
       const trigger = container.querySelector('#button-id') as HTMLElement;
-      const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const expansionPanel = container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       await userEvent.click(trigger);
       expect(expansionPanel.open).toBe(false);
@@ -1288,7 +1293,7 @@ describe('Expansion Panel', () => {
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
       const trigger2 = container.querySelector('#button-id2') as HTMLElement;
-      const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const expansionPanel = container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
 
       expansionPanel.triggerElement = trigger2;
       await task();
@@ -1318,7 +1323,7 @@ describe('Expansion Panel', () => {
         </div>
       `);
       const container = screen.container.querySelector('div') as HTMLElement;
-      const expansionPanel = container.querySelector('forge-expansion-panel') as IExpansionPanelComponent;
+      const expansionPanel = container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
       const button = container.querySelector('#button-id') as HTMLElement;
       await task();
 
@@ -1328,7 +1333,7 @@ describe('Expansion Panel', () => {
     });
   });
 
-  function getContentElement(el: IExpansionPanelComponent): HTMLElement {
+  function getContentElement(el: ExpansionPanelComponent): HTMLElement {
     return el.shadowRoot?.querySelector(EXPANSION_PANEL_CONSTANTS.selectors.CONTENT) as HTMLElement;
   }
 
