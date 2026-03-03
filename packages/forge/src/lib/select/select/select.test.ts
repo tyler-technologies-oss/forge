@@ -288,6 +288,51 @@ describe('Select', () => {
       expect(harness.popoverElement).toBeFalsy();
       expect(harness.fieldElement.popoverExpanded).toBe(false);
     });
+
+    it('should activate currently selected option when opened via arrow down key', async () => {
+      const harness = await createFixture();
+      harness.element.value = 'two';
+      await frame();
+
+      harness.element.focus();
+      await harness.pressKey('ArrowDown');
+      await frame();
+      await harness.popoverToggleAnimation;
+
+      expect(harness.element.open).toBe(true);
+      const listItems = harness.getListItems();
+      expect(harness.element.getAttribute('aria-activedescendant')).toBe(listItems[1].querySelector('button')?.id);
+    });
+
+    it('should activate currently selected option when opened via arrow up key', async () => {
+      const harness = await createFixture();
+      harness.element.value = 'three';
+      await frame();
+
+      harness.element.focus();
+      await harness.pressKey('ArrowUp');
+      await frame();
+      await harness.popoverToggleAnimation;
+
+      expect(harness.element.open).toBe(true);
+      const listItems = harness.getListItems();
+      expect(harness.element.getAttribute('aria-activedescendant')).toBe(listItems[2].querySelector('button')?.id);
+    });
+
+    it('should activate currently selected option when opened via space key', async () => {
+      const harness = await createFixture();
+      harness.element.value = 'two';
+      await frame();
+
+      harness.element.focus();
+      await harness.pressKey('Space');
+      await frame();
+      await harness.popoverToggleAnimation;
+
+      expect(harness.element.open).toBe(true);
+      const listItems = harness.getListItems();
+      expect(harness.element.getAttribute('aria-activedescendant')).toBe(listItems[1].querySelector('button')?.id);
+    });
   });
 
   describe('selection state', () => {

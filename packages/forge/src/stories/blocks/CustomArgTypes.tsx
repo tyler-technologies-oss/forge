@@ -1,12 +1,13 @@
 import { HeaderMdx, Markdown, useOf } from '@storybook/addon-docs/blocks';
 import { Code } from 'storybook/internal/components';
-import { TagItem, getBranchName, getCustomElementType, getCustomElementsTagDeclaration, getCustomElementsTagModule, htmlEncode } from '../utils';
-import { NameDescriptionTable, Section, UsageLink } from './Shared';
+import { TagItem, getBranchName, getCustomElementType, getCustomElementsTagDeclaration, getCustomElementsTagModule, htmlEncode } from '../utils.js';
+import { NameDescriptionTable, Section, UsageLink } from './Shared.jsx';
 
 import styles from './CustomArgTypes.module.scss';
-import GitHubLogo from './GitHubLogo';
+import GitHubLogo from './GitHubLogo.jsx';
 
-const BASE_GITHUB_URL = `https://github.com/tyler-technologies-oss/forge/tree`;
+const BASE_GITHUB_URL = `https://github.com/tyler-technologies-oss/forge/blob`;
+const PACKAGE_PATH = 'packages/forge';
 const STORY_KIND_PATH_SEPARATOR = /\s*\/\s*/;
 
 export const extractTitle = (title: string) => {
@@ -34,7 +35,7 @@ function ForgeTypeLinks({ typeText }: { typeText: string }) {
     const matchingType = getCustomElementType(token);
     if (matchingType) {
       const { path, lineNumber } = matchingType;
-      const href = `${BASE_GITHUB_URL}/${branchName}/${path}#L${lineNumber}`;
+      const href = `${BASE_GITHUB_URL}/${branchName}/${PACKAGE_PATH}/${path}#L${lineNumber}`;
       const tokenRegExp = new RegExp(`(?<!>)${token}`, 'g'); // Negative lookbehind to avoid replacing inside existing links
       typeText = typeText.replace(tokenRegExp, `<a href=${href} target="_blank" rel="noreferrer noopener">${token}</a>`);
     }

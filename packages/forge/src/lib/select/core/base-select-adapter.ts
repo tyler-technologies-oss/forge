@@ -24,7 +24,6 @@ export interface IBaseSelectAdapter<T extends IBaseComponent = IBaseSelectCompon
   setDismissListener(listener: () => void): void;
   scrollSelectedOptionIntoView(): void;
   activateSelectedOption(): void;
-  activateFirstOption(): void;
   getActiveOptionIndex(): number;
   highlightActiveOption(index: number): void;
   toggleOptionMultiple(index: number, isSelected: boolean): void;
@@ -166,10 +165,6 @@ export abstract class BaseSelectAdapter<T extends IBaseSelectComponent> extends 
 
   public activateSelectedOption(): void {
     this._listDropdown?.activateSelectedOption();
-  }
-
-  public activateFirstOption(): void {
-    this._listDropdown?.activateFirstOption();
   }
 
   public highlightActiveOption(index: number): void {

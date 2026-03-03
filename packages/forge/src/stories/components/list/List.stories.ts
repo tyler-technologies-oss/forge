@@ -1,8 +1,8 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { action } from 'storybook/actions';
-import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
-import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
+import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
+import { IconRegistry } from '@tylertech/forge/icon';
 import {
   tylIconCode,
   tylIconFace,
@@ -17,7 +17,7 @@ import {
 } from '@tylertech/tyler-icons';
 import { styleMap } from 'lit/directives/style-map.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { storyStyles } from '../../decorators';
+import { storyStyles } from '../../decorators.js';
 
 import '@tylertech/forge/list';
 import '@tylertech/forge/drawer/drawer';
