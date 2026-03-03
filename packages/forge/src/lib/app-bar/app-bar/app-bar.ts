@@ -1,11 +1,11 @@
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
-import { TemplateResult, html, nothing, unsafeCSS } from 'lit';
+import { html, nothing, TemplateResult, unsafeCSS } from 'lit';
 import { classMap } from 'lit-html/directives/class-map.js';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { IBaseComponent } from '../../core/base/base-component.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
-import { removeDefaultAttribute, removeEmptyAttribute } from '../../core/utils/lit-utils.js';
+import { createHideRef, hideWhenEmpty, removeDefaultAttribute, removeEmptyAttribute } from '../../core/utils/lit-utils.js';
 import { APP_BAR_CONSTANTS, AppBarElevation, AppBarTheme, AppBarThemeMode } from './app-bar-constants.js';
 
 import styles from './app-bar.scss';
@@ -119,7 +119,7 @@ export class AppBarComponent extends BaseLitElement {
   @property({ attribute: 'theme-mode', reflect: true, converter: { toAttribute: (value: AppBarThemeMode) => removeDefaultAttribute(value, 'inherit') } })
   public themeMode: AppBarThemeMode = 'inherit';
 
-  @state() private _hasCenterContent = false;
+  #centerSlotHideRef = createHideRef();
 
   constructor() {
     super();
@@ -134,7 +134,7 @@ export class AppBarComponent extends BaseLitElement {
   public render(): TemplateResult {
     const rootClasses = {
       'forge-app-bar': true,
-      'no-center': !this._hasCenterContent,
+      'no-center': this.#centerSlotHideRef.hidden,
       white: this.theme === 'white',
       scoped: this.themeMode === 'scoped',
       raised: this.elevation === 'raised'
@@ -146,8 +146,8 @@ export class AppBarComponent extends BaseLitElement {
             <slot name="start"></slot>
             ${this.href ? this.#renderAnchorTitleConatiner() : this.#renderDivTitleContainer()}
           </div>
-          <div id="center-section" class="section" ?hidden="${!this._hasCenterContent}">
-            <slot name="center" @slotchange="${this.#handleCenterSlotChange.bind(this)}"></slot>
+          <div id="center-section" class="section" ${hideWhenEmpty(this.#centerSlotHideRef)}>
+            <slot name="center"></slot>
           </div>
           <div class="section">
             <slot name="end"></slot>
@@ -194,12 +194,6 @@ export class AppBarComponent extends BaseLitElement {
     if (event.defaultPrevented) {
       evt.preventDefault();
     }
-  }
-
-  #handleCenterSlotChange(evt: Event): void {
-    const slot = evt.target as HTMLSlotElement;
-    const hasAssignedNodes = slot.assignedNodes().length > 0;
-    this._hasCenterContent = hasAssignedNodes;
   }
 }
 

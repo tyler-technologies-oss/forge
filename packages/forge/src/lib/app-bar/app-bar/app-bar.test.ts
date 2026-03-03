@@ -142,18 +142,20 @@ describe('App Bar', () => {
     const screen = render(html`<forge-app-bar></forge-app-bar>`);
     const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
     await el.updateComplete;
+    await frame();
 
     const centerEl = getCenterEl(el);
-    expect(centerEl.hidden).toBe(true);
+    expect(centerEl.style.display).toBe('none');
     expect(getRootEl(el).classList.contains(APP_BAR_CONSTANTS.classes.NO_CENTER)).toBe(true);
 
     const slottedCenterEl = document.createElement('div');
     slottedCenterEl.slot = 'center';
     el.appendChild(slottedCenterEl);
 
+    await el.updateComplete;
     await frame();
 
-    expect(centerEl.hidden).toBe(false);
+    expect(centerEl.style.display).toBe('');
     expect(getRootEl(el).classList.contains(APP_BAR_CONSTANTS.classes.NO_CENTER)).toBe(false);
   });
 
