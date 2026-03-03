@@ -1,10 +1,10 @@
 name: Changesets
 
-# Version branches: Add branch names here (e.g., v2.x) and update baseBranch and tag in .changeset/config.json
 on:
   push:
     branches:
       - main
+      - release/** # Version branches use the format release/<package-name>/v<version> (e.g., release/forge/v3.10.5)
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
