@@ -39,9 +39,11 @@ export class AccordionComponent extends BaseLitElement {
   @property({ type: String, attribute: 'panel-selector', reflect: true })
   public panelSelector?: string;
 
+  #onToggle: EventListener = (evt: CustomEvent) => this.#handleToggle(evt);
+
   public connectedCallback(): void {
     super.connectedCallback();
-    this.addEventListener('forge-expansion-panel-toggle', this.#handleToggle.bind(this));
+    this.addEventListener('forge-expansion-panel-toggle', this.#onToggle);
   }
 
   public override createRenderRoot(): HTMLElement | DocumentFragment {
