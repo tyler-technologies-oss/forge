@@ -1,0 +1,38 @@
+import{j as e,M as i,T as s,C as c}from"./blocks-c81nojJq.js";import{useMDXComponents as n}from"./index-srxrMyqs.js";import{C as a}from"./CustomArgTypes-CMTqcV0o.js";import{K as l,D as h}from"./KeyboardShortcut.stories-DS-xhsrS.js";import"./preload-helper-PPVm8Dsz.js";import"./_commonjsHelpers-CqkleIqs.js";import"./iframe-Cyv46XVN.js";import"./utils-DJF5Ajxq.js";import"./service-adapter-8tADcN_b.js";import"./keyboard-shortcut-CWcwLsK9.js";import"./base-component-CgTc0tMd.js";import"./feature-detection-CiXpQaRQ.js";import"./base-adapter-Dd2Rwp6N.js";import"./button-C96CRxyU.js";import"./tyler-icons-DG1d6qey.js";import"./index-DTwfV0k0.js";import"./focus-indicator-C-z2W46n.js";import"./property-wAJbOwSc.js";import"./base-lit-element-DVGqRCw7.js";import"./utils-DU-9AqTO.js";import"./state-layer-D_bEeiyc.js";import"./base-button-core-CQQw1DDx.js";import"./with-label-aware-UxVhxMHx.js";import"./with-default-aria-BEow76us.js";import"./a11y-utils-Byu3IW8S.js";function r(o){const t={a:"a",blockquote:"blockquote",code:"code",h2:"h2",h3:"h3",li:"li",p:"p",pre:"pre",strong:"strong",ul:"ul",...n(),...o.components};return e.jsxs(e.Fragment,{children:[e.jsx(i,{of:l}),`
+`,e.jsx(s,{}),`
+`,e.jsxs(t.p,{children:[`The keyboard shortcut component provides a simple way to attach keyboard driven functionality to an
+element via the DOM. By default placing `,e.jsx(t.code,{children:"<forge-keyboard-shortcut>"}),` as a sibling after an element
+enables the shortcut when focus is within the element.`]}),`
+`,e.jsxs(t.p,{children:["The shortcut can also be enabled on the entire document body with the ",e.jsx(t.code,{children:"global"}),` attribute or other
+elements with the `,e.jsx(t.code,{children:"target"})," attribute which accepts a CSS selector."]}),`
+`,e.jsx(c,{of:h}),`
+`,e.jsx(t.h3,{id:"targeting-a-different-host-element",children:"Targeting a different host element"}),`
+`,e.jsxs(t.p,{children:["Keyboard shortcut can also target a specific element using the ",e.jsx(t.code,{children:"target"})," attribute:"]}),`
+`,e.jsx(t.pre,{children:e.jsx(t.code,{className:"language-html",children:`<forge-button type="raised" id="shortcut-target">
+  <button type="button">Button</button>
+</forge-button>
+<p>Some other element</p>
+<forge-keyboard-shortcut id="shortcut" key="shift+a" target="#shortcut-target"></forge-keyboard-shortcut>
+`})}),`
+`,e.jsxs(t.blockquote,{children:[`
+`,e.jsxs(t.p,{children:[e.jsx(t.strong,{children:"Note:"})," the ",e.jsx(t.code,{children:"target"})," attribute must be a valid CSS selector."]}),`
+`]}),`
+`,e.jsx(t.h3,{id:"targeting-the-document-body",children:"Targeting the document body"}),`
+`,e.jsxs(t.p,{children:["Additionally, keyboard shortcut can be set to work across the whole page using the ",e.jsx(t.code,{children:"global"})," attribute:"]}),`
+`,e.jsx(t.pre,{children:e.jsx(t.code,{className:"language-html",children:`<forge-keyboard-shortcut id="shortcut" key="shift+a" global></forge-keyboard-shortcut>
+`})}),`
+`,e.jsx(t.h2,{id:"api",children:"API"}),`
+`,e.jsx(a,{}),`
+`,e.jsx(t.h2,{id:"accessibility",children:"Accessibility"}),`
+`,e.jsxs(t.ul,{children:[`
+`,e.jsx(t.li,{children:"Ensure that the shortcut is described in a logical, visible spot on the page. Include its function and the key combination that activates it."}),`
+`,e.jsx(t.li,{children:"Don't override browser, operating system, or assistive technology shortcuts."}),`
+`,e.jsxs(t.li,{children:["Set ",e.jsx(t.code,{children:"aria-keyshortcuts"}),` on any element that is focused or activated by a global shortcut. See the
+`,e.jsx(t.a,{href:"https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-keyshortcuts",rel:"nofollow",children:"MDN docs"})," for more information."]}),`
+`,e.jsxs(t.li,{children:["Avoid using the ",e.jsx(t.code,{children:"accesskey"})," attribute. See the ",e.jsx(t.a,{href:"https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/accesskey",rel:"nofollow",children:"MDN docs"})," for more information."]}),`
+`,e.jsx(t.li,{children:"Don't duplicate behavior provided by the browser. A form will automatically submit when enter is pressed if it includes a submit button."}),`
+`]}),`
+`,e.jsxs(t.blockquote,{children:[`
+`,e.jsxs(t.p,{children:[`Even though the keyboard shortcut component exists in the DOM, the element itself doesn't affect
+accessibility or layout due to having its `,e.jsx(t.code,{children:"display"})," style property set to ",e.jsx(t.code,{children:"none"}),"."]}),`
+`]})]})}function _(o={}){const{wrapper:t}={...n(),...o.components};return t?e.jsx(t,{...o,children:e.jsx(r,{...o})}):r(o)}export{_ as default};
