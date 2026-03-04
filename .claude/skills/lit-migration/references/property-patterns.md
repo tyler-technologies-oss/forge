@@ -408,8 +408,27 @@ public get step(): number {
 
 ### Property with Side Effects
 
-When setter needs to trigger other updates immediately:
+**Prefer `willUpdate()` for external side effects** (managing event listeners, resolving target elements, updating state on other objects). Custom setters are appropriate only when you need to validate or transform the stored value itself.
 
+**willUpdate() approach** (preferred for listener management):
+```typescript
+@property({ type: Boolean, reflect: true })
+public disabled = false;
+
+public willUpdate(changedProperties: PropertyValues<this>): void {
+  if (changedProperties.has('disabled')) {
+    if (this.disabled) {
+      this.#disconnect();
+    } else {
+      this.#connect();
+    }
+  }
+}
+```
+
+**Important**: `willUpdate()` is async — tests must `await element.updateComplete` before asserting listener effects after a property change.
+
+**Custom setter approach** (only when you need synchronous value transformation):
 ```typescript
 /**
  * The trigger element id.
@@ -418,7 +437,7 @@ When setter needs to trigger other updates immediately:
 @property({ reflect: true })
 public set trigger(value: string) {
   this.#trigger = value;
-  // Immediately resolve trigger element
+  // Immediately resolve trigger element (synchronous lookup needed)
   this.triggerElement = value ? document.getElementById(value) : null;
 }
 public get trigger(): string {
