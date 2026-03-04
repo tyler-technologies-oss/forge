@@ -32,16 +32,16 @@
     }
   },
   "devDependencies": {
-    "@changesets/cli": "2.29.8",
-    "@commitlint/cli": "^20.4.1",
-    "@commitlint/config-conventional": "^20.4.1",
+    "@changesets/cli": "2.30.0",
+    "@commitlint/cli": "^20.4.3",
+    "@commitlint/config-conventional": "^20.4.3",
     "@types/node": "catalog:",
-    "commitlint": "^20.4.1",
+    "commitlint": "^20.4.3",
     "eslint": "catalog:",
     "husky": "^9.1.7",
     "playwright": "catalog:",
     "prettier": "catalog:",
-    "lint-staged": "^16.2.7",
-    "turbo": "^2.8.3"
+    "lint-staged": "^16.3.2",
+    "turbo": "^2.8.13"
   }
 }
