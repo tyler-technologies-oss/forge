@@ -1,7 +1,6 @@
 ---
-name: Lit Migration
+name: lit-migration
 description: This skill should be used when the user asks to "migrate component to lit", "convert to lit", "lit migration", "migrate to litElement", "convert component to Lit", or discusses migrating Tyler Forge components from the legacy component/core/adapter/template architecture to Lit-based components.
-version: 1.0.0
 ---
 
 # Lit Component Migration
@@ -79,7 +78,6 @@ import styles from './component.scss';
 import { CUSTOM_ELEMENT_NAME_PROPERTY, CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY } from '@tylertech/forge-core';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import styles from './component.scss';
 ```
@@ -121,33 +119,77 @@ export class ComponentNameComponent extends BaseComponent implements IComponentN
 
 **After**:
 ```typescript
-@customElement(COMPONENT_TAG_NAME)
+/** @deprecated - This will be removed in the future. Please switch to using ComponentNameComponent. */
+export interface IComponentNameComponent extends BaseLitElement {
+  propertyName: string;
+}
+
+/**
+ * @tag forge-component-name
+ *
+ * @summary Short description of the component.
+ *
+ * @cssproperty --forge-component-name-color - The color.
+ *
+ * @csspart root - The root container element.
+ *
+ * @state property-name - The property-name state is active.
+ */
+@customElement(COMPONENT_CONSTANTS.elementName)
 export class ComponentNameComponent extends BaseLitElement implements IComponentNameComponent {
   public static styles = unsafeCSS(styles);
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = COMPONENT_TAG_NAME;
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = COMPONENT_CONSTANTS.elementName;
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [DependencyComponent];
 
-  // Properties will go here
+  #internals: ElementInternals;
+
+  /**
+   * Gets/sets the property.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public propertyName = false;
 
   constructor() {
     super();
-    // Only essential initialization here (e.g., ElementInternals)
-    // this.#internals = this.attachInternals(); // If needed
+    this.#internals = this.attachInternals();
+  }
+
+  public override willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('propertyName')) {
+      toggleState(this.#internals, 'property-name', this.propertyName);
+    }
+  }
+
+  public render(): TemplateResult {
+    return html`<div class="forge-component-name" part="root"></div>`;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-component-name': IComponentNameComponent;
   }
 }
 ```
 
 **Key changes**:
 - `@customElement` takes a simple string, not an object
-- No `observedAttributes` - Lit handles this automatically
+- No `observedAttributes` — Lit handles this automatically
 - No core/adapter instantiation
 - Add static `styles` property
-- Add two deprecated static properties for backward compatibility
+- Add deprecated static properties for backward compatibility
 - Extends `BaseLitElement` instead of `BaseComponent`
+- Interface is `@deprecated` and extends `BaseLitElement` (not `IBaseComponent`)
+- Class JSDoc has NO `@property` or `@attribute` tags — those live on the properties themselves
+- `declare global` goes at the **bottom** of the file, after the class
+- `#internals` is always present — needed for custom states
+- `@state` JSDoc tags in the class comment document custom CSS states
 
 #### 3. Convert Properties
 
@@ -257,6 +299,7 @@ public get name(): string | undefined {
 
 **CRITICAL CONVENTIONS**:
 - JSDoc comments MUST precede the property, not in the component's JSDoc
+- The class-level JSDoc comment must NOT contain `@property` or `@attribute` tags — only `@tag`, `@summary`, `@cssproperty`, `@csspart`, `@cssclass`, `@state`, `@slot`, `@fires`, `@dependency`, etc.
 - Private fields use `#field` notation (JavaScript private)
 - Exception: Decorated fields use `@state() private _field` (TypeScript + underscore)
 - Only reflect when the original component reflected
@@ -505,7 +548,10 @@ public disconnectedCallback(): void {
 
 #### 3. Handle ElementInternals
 
-For components that need custom states or ARIA:
+Use `#internals` when the component needs any of:
+- **Custom CSS states** — host-level styles driven by a property, or states with external value for consumers
+- **Form association** — see `references/form-association.md`
+- **Default ARIA** — setting implicit ARIA roles or properties
 
 ```typescript
 #internals: ElementInternals;
@@ -515,24 +561,59 @@ constructor() {
   this.#internals = this.attachInternals();
 }
 
-public connectedCallback(): void {
-  super.connectedCallback();
-  // Set default ARIA
-  setDefaultAria(this, this.#internals, {
-    role: 'progressbar',
-    ariaValueMin: '0',
-    ariaValueMax: '1'
-  });
-}
-
-public willUpdate(changedProperties: PropertyValues<this>): void {
-  // Toggle custom states
+public override willUpdate(changedProperties: PropertyValues<this>): void {
   if (changedProperties.has('open')) {
     toggleState(this.#internals, 'open', this.open);
   }
   if (changedProperties.has('disabled')) {
     toggleState(this.#internals, 'disabled', this.disabled);
   }
+}
+```
+
+**When to use custom states vs. template classes**:
+
+Use `toggleState()` and `:state(...)` in SCSS when:
+- Styles need to be applied to the **host element** based on a property (`vertical`, `open`, `disabled`, etc.)
+- The state has value for **external consumers** who may want to target it in their own CSS
+
+Use classes on internal template elements when:
+- The styles are purely internal and do not affect the host element
+- There is no value in exposing the state externally
+
+```scss
+// Host-level state → use :state(...)
+:host(:state(vertical)) {
+  @include vertical-host;
+
+  .forge-component {
+    @include vertical-base;
+  }
+}
+
+// Internal-only styling → use a class
+.forge-component--active {
+  @include active-styles;
+}
+```
+
+Document each custom state with a `@state` tag in the class JSDoc:
+```typescript
+/**
+ * @state open - Applied when the component is open.
+ * @state disabled - Applied when the component is disabled.
+ */
+```
+
+For components that also need default ARIA roles or properties:
+```typescript
+public override connectedCallback(): void {
+  super.connectedCallback();
+  setDefaultAria(this, this.#internals, {
+    role: 'progressbar',
+    ariaValueMin: '0',
+    ariaValueMax: '1'
+  });
 }
 ```
 
@@ -670,7 +751,7 @@ console.log(el.open); // Should be false
 
 #### 1. Update index.ts
 
-Add deprecation to define function:
+Add deprecation to the define function:
 
 ```typescript
 /** @deprecated Definition functions are deprecated and replaced with side effect imports (`import '@tylertech/forge/component-name'`). */
@@ -679,11 +760,12 @@ export function defineComponentNameComponent(): void {
 }
 ```
 
-Add deprecation to interface if needed:
+The interface `@deprecated` annotation lives directly on the interface in the **component file** (`component.ts`), not in `index.ts`. The interface must also extend `BaseLitElement` (not `IBaseComponent`) so consumers have access to `updateComplete` and other Lit lifecycle members via the type:
 
 ```typescript
+// In component.ts — NOT in index.ts
 /** @deprecated - This will be removed in the future. Please switch to using ComponentNameComponent. */
-export interface IComponentNameComponent extends IBaseComponent {
+export interface IComponentNameComponent extends BaseLitElement {
   propertyName: string;
 }
 ```
@@ -992,9 +1074,14 @@ See the `references/` directory for detailed documentation:
 
 Study these completed migrations for patterns:
 
+### Simple Shadow DOM Component
+- **Branch**: `feat/divider-lit`
+- **File**: `packages/forge/src/lib/divider/divider.ts`
+- **Patterns**: Boolean reflected property, custom state, shadow DOM, ElementInternals, `:state(...)` SCSS
+
 ### Simple Light DOM Component
 - **Branch**: `feat/accordion-lit`
-- **File**: [packages/forge/src/lib/accordion/accordion.ts](../../packages/forge/src/lib/accordion/accordion.ts)
+- **File**: `packages/forge/src/lib/accordion/accordion.ts`
 - **Patterns**: Basic properties, event handling, light DOM, no render method
 
 ### Complex Shadow DOM Component
@@ -1003,21 +1090,24 @@ Study these completed migrations for patterns:
 
 ### Component with Custom Setters
 - **Branch**: `feat/icon-lit`
-- **File**: [packages/forge/src/lib/icon/icon.ts](../../packages/forge/src/lib/icon/icon.ts)
+- **File**: `packages/forge/src/lib/icon/icon.ts`
 - **Patterns**: Property validation, custom setters, lazy loading, external content
 
 ## Conventions Summary
 
 **CRITICAL - Follow these conventions:**
 
-1. **JSDoc placement**: MUST precede properties, not in component JSDoc comment
-2. **Private fields**: Use `#field` notation (JavaScript private)
-3. **Exception**: Decorated state uses `@state() private _field` (TypeScript + underscore)
-4. **Reflection**: Only reflect when original component reflected to attributes
-5. **Attribute names**: Set `attribute` field when names differ (typically kebab-case)
-6. **Property validation**: Use custom setters for validation/transformation
-7. **Change handling**: Prefer `willUpdate()` over `updated()` for property reactions
-8. **String type**: Omit `type: String` - it's the default in Lit
-9. **Goal**: Simplify code, reduce boilerplate, leverage Lit features
-10. **Controllers**: Extract verbose code into controllers/directives for clarity
-11. **Behavior**: No changes to consumer-facing behavior or appearance
+1. **JSDoc placement**: Property JSDoc MUST precede the property. Class JSDoc must NOT contain `@property` or `@attribute` tags — only `@tag`, `@summary`, `@cssproperty`, `@csspart`, `@cssclass`, `@state`, `@slot`, `@fires`, `@dependency`, etc.
+2. **Interface**: The legacy `IComponentNameComponent` interface must be marked `@deprecated` and must extend `BaseLitElement` (not `IBaseComponent`). Keep it exported for backward compatibility.
+3. **`declare global`**: Always placed at the **bottom** of the file, after the class declaration.
+4. **Private fields**: Use `#field` notation (JavaScript private)
+5. **Exception**: Decorated state uses `@state() private _field` (TypeScript + underscore)
+6. **Reflection**: Only reflect when original component reflected to attributes
+7. **Attribute names**: Set `attribute` field when names differ (typically kebab-case)
+8. **Property validation**: Use custom setters for validation/transformation
+9. **Change handling**: Prefer `willUpdate()` over `updated()` for property reactions
+10. **String type**: Omit `type: String` - it's the default in Lit
+11. **Custom states**: Use `toggleState()` and `:state(...)` in SCSS when styles target the host element or the state has external styling value. Use internal classes for purely internal styling.
+12. **Goal**: Simplify code, reduce boilerplate, leverage Lit features
+13. **Controllers**: Extract verbose code into controllers/directives for clarity
+14. **Behavior**: No changes to consumer-facing behavior or appearance
