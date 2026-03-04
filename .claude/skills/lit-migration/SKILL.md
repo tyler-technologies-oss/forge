@@ -512,9 +512,107 @@ public willUpdate(changedProperties: PropertyValues<this>): void {
 }
 ```
 
+**Getting the old property value** (e.g., to disconnect with old `capture` value):
+```typescript
+public willUpdate(changedProperties: PropertyValues<this>): void {
+  if (changedProperties.has('capture')) {
+    const oldCapture = changedProperties.get('capture') as boolean;
+    this.#disconnectTargetElement(oldCapture); // pass old value explicitly
+    this.#connectTargetElement();             // uses new this.capture
+  }
+}
+
+#disconnectTargetElement(capture = this.capture): void {
+  this.#targetElement?.removeEventListener('keydown', this.#keyDownListener, { capture });
+}
+```
+
 **When to use willUpdate() vs updated()**:
-- `willUpdate()` - Property change reactions, state updates, calculations
+- `willUpdate()` - Property change reactions, state updates, calculations, listener management
 - `updated()` - DOM queries, measurements, focus management
+
+**IMPORTANT - willUpdate() is async**: `willUpdate()` runs in Lit's async update cycle, so property changes don't take effect synchronously. In tests, use `await element.updateComplete` before asserting effects of property changes:
+```typescript
+element.disabled = false;
+await element.updateComplete; // required before checking listener behavior
+dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+expect(spy).toHaveBeenCalledOnce();
+```
+
+**When to use custom setters instead of willUpdate()**:
+Use custom getter/setter (with `#field` backing) when you need to **validate or transform** the stored value itself (e.g., sanitizing a string, clamping a number). `willUpdate()` receives the already-stored value, so it cannot change what gets persisted. See the [property-patterns.md](./references/property-patterns.md) reference for examples.
+
+#### 1a. Non-Visual Utility Components (No Template, No Shadow DOM)
+
+For components that are purely behavioral (hidden from view, attach listeners to other elements), use this pattern:
+
+```typescript
+@customElement(COMPONENT_CONSTANTS.elementName)
+export class ComponentNameComponent extends BaseLitElement implements IComponentNameComponent {
+  // Standard @property() declarations — NO custom setters needed for listener management
+  @property({ reflect: true })
+  public target = '';
+
+  @property({ type: Boolean, reflect: true })
+  public disabled = false;
+
+  // Inline initialization — no constructor needed
+  #targetElement: HTMLElement | null = null;
+  #keyDownListener = (evt: KeyboardEvent) => this.#handleKeyDown(evt);
+
+  public override createRenderRoot(): HTMLElement | DocumentFragment {
+    return this; // Light DOM — no shadow root
+  }
+  // NO render() method
+
+  public override connectedCallback(): void {
+    super.connectedCallback();
+    this.style.display = 'none'; // Hide from layout
+    this.#tryInitialize();       // Synchronous setup on first connection
+  }
+
+  public override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.#disconnect();
+    this.#targetElement = null;
+  }
+
+  public override willUpdate(changedProperties: PropertyValues<this>): void {
+    // Re-initialize when target-resolving properties change
+    if (changedProperties.has('target') || changedProperties.has('global')) {
+      this.#tryInitialize();
+    }
+    // Toggle listener when disabled changes
+    if (changedProperties.has('disabled')) {
+      if (this.disabled) {
+        this.#disconnect();
+      } else {
+        this.#connect();
+      }
+    }
+  }
+
+  // Guard with isConnected so this method is safe to call from both
+  // connectedCallback (synchronous) AND willUpdate (async)
+  #tryInitialize(): void {
+    if (!this.isConnected) {
+      return;
+    }
+    this.#disconnect();
+    this.#resolveTargetElement();
+    if (!this.disabled) {
+      this.#connect();
+    }
+  }
+}
+```
+
+**Key points**:
+- `connectedCallback` handles the initial synchronous setup
+- `willUpdate()` handles subsequent property changes (async)
+- The `isConnected` guard makes helper methods safe to call from both contexts
+- No `constructor()` needed — inline field initialization suffices when there is no `#internals`
+- `style.display = 'none'` replaces the legacy `adapter.setHostStyles()`
 
 #### 2. Move Event Listeners
 
@@ -683,6 +781,21 @@ Tests should pass without modification. If they fail:
 - Check event names and detail structure
 - Ensure deprecated interfaces are still exported
 - Verify attribute reflection behavior
+- Add `await element.updateComplete` between property changes and assertions that depend on listener state or `willUpdate()` side effects
+
+```typescript
+// Tests that change properties post-connection and then immediately
+// dispatch events require awaiting the Lit update cycle:
+element.disabled = false;
+await element.updateComplete;
+dispatchKeyboardEvent({ key: 'a' });
+expect(spy).toHaveBeenCalledOnce();
+
+element.key = 'Ctrl+a';
+await element.updateComplete;
+dispatchKeyboardEvent({ key: 'a', ctrlKey: true });
+expect(spy).toHaveBeenCalledOnce();
+```
 
 #### 2. Run Build
 
@@ -1092,6 +1205,11 @@ Study these completed migrations for patterns:
 - **Branch**: `feat/icon-lit`
 - **File**: `packages/forge/src/lib/icon/icon.ts`
 - **Patterns**: Property validation, custom setters, lazy loading, external content
+
+### Non-Visual Utility Component (No Template, No Shadow DOM)
+- **Branch**: `feat/keyboard-shortcut-lit`
+- **File**: `packages/forge/src/lib/keyboard-shortcut/keyboard-shortcut.ts`
+- **Patterns**: `createRenderRoot()` returning `this`, no `render()`, `display: none` in `connectedCallback`, `willUpdate()` for listener management, `isConnected` guard, old value via `changedProperties.get()`, `#disconnect(capture = this.capture)` optional parameter for old-value disconnect
 
 ## Conventions Summary
 
