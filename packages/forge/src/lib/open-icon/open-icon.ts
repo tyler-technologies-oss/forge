@@ -50,6 +50,10 @@ export class OpenIconComponent extends BaseLitElement implements IOpenIconCompon
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [IconComponent];
 
+  static {
+    IconRegistry.define(tylIconKeyboardArrowDown);
+  }
+
   #internals: ElementInternals;
 
   // TODO: Remove attribute reflection
@@ -87,7 +91,6 @@ export class OpenIconComponent extends BaseLitElement implements IOpenIconCompon
   constructor() {
     super();
     this.#internals = this.attachInternals();
-    IconRegistry.define(tylIconKeyboardArrowDown);
   }
 
   public render(): TemplateResult {
