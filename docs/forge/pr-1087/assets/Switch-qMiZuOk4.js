@@ -1,0 +1,23 @@
+import{j as e,M as s,T as l,C as o}from"./blocks-nyaWQ-RQ.js";import{useMDXComponents as r}from"./index-C_55wpGi.js";import{C as a}from"./CssOnlyInformation-D94CLLWv.js";import{C as c}from"./CustomArgTypes-C6R8pJn9.js";import{S as m,D as p,C as h}from"./Switch.stories-BSIOeybn.js";import"./preload-helper-PPVm8Dsz.js";import"./_commonjsHelpers-CqkleIqs.js";import"./iframe-D2F8ddPp.js";import"./utils-CaFArwHh.js";import"./service-adapter-CoGDs2_3.js";import"./tyler-icons-DJO2-615.js";import"./base-component-DtuZ_bHQ.js";import"./dom-utils-DBb1ZGPZ.js";import"./base-adapter-CrwPj14V.js";import"./index-DTwfV0k0.js";import"./constants-d60dfpEV.js";import"./feature-detection-DlorGArm.js";import"./class-map-BNW4cHQM.js";import"./directive-jorct-Oe.js";import"./switch-C4s55zFO.js";import"./with-form-associated-CILBPDg5.js";import"./with-default-aria-BAoBQKAE.js";import"./a11y-utils-BcRiVt5E.js";import"./with-label-aware-DpjVJhjv.js";import"./focus-indicator-DNMqWSN9.js";import"./property-CpeuzGQ1.js";import"./base-lit-element-DDoWFVVc.js";import"./utils-DU-9AqTO.js";import"./state-layer-n7PzpGlA.js";function n(i){const t={code:"code",h2:"h2",li:"li",p:"p",ul:"ul",...r(),...i.components};return e.jsxs(e.Fragment,{children:[e.jsx(s,{of:m}),`
+`,e.jsx(l,{}),`
+`,e.jsx(t.p,{children:"Switches toggle the state of a single setting on or off."}),`
+`,e.jsx(t.p,{children:"Use switches to:"}),`
+`,e.jsxs(t.ul,{children:[`
+`,e.jsx(t.li,{children:"Toggle a single item on or off, on mobile and tablet"}),`
+`,e.jsx(t.li,{children:"Immediately activate or deactivate something"}),`
+`]}),`
+`,e.jsx(o,{of:p}),`
+`,e.jsx(t.h2,{id:"api",children:"API"}),`
+`,e.jsx(c,{}),`
+`,e.jsx(t.h2,{id:"accessibility",children:"Accessibility"}),`
+`,e.jsxs(t.ul,{children:[`
+`,e.jsx(t.li,{children:"Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard."}),`
+`,e.jsx(t.li,{children:"Ensure the controls are reachable by the tab key."}),`
+`,e.jsx(t.li,{children:"Ensure each control can be updated or activated by the keyboard."}),`
+`,e.jsxs(t.li,{children:["The input element will receive the proper ARIA attribute ",e.jsx(t.code,{children:"aria-checked"}),"."]}),`
+`,e.jsxs(t.li,{children:["The input element will receive the proper role attribute ",e.jsx(t.code,{children:'role="switch"'}),"."]}),`
+`]}),`
+`,e.jsx(t.h2,{id:"css-only",children:"CSS-Only"}),`
+`,e.jsx(t.p,{children:"The switch component is also available as a CSS-only component without the need for JavaScript."}),`
+`,e.jsx(o,{of:h}),`
+`,e.jsx(a,{})]})}function z(i={}){const{wrapper:t}={...r(),...i.components};return t?e.jsx(t,{...i,children:e.jsx(n,{...i})}):n(i)}export{z as default};
