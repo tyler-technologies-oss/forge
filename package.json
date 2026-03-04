@@ -5,8 +5,8 @@
   "description": "Tyler Forge™ Monorepo",
   "scripts": {
     "prepare": "husky",
-    "dev:forge": "pnpm run --filter @tylertech/forge dev",
-    "storybook:forge": "pnpm run --filter @tylertech/forge storybook",
+    "dev:forge": "turbo run --filter @tylertech/forge dev",
+    "storybook:forge": "turbo run --filter @tylertech/forge storybook",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "format": "turbo run format",

@@ -23,8 +23,8 @@ visual feedback when the item is hovered or pressed.
 
 ### Using the `forge-ignore` attribute
 
-It is common to place multiple interactive elements within a `<forge-list-item>`. However, you may want to prevent the list item from responding to pointer events
-on specific elements. To do this you can either listen for the click event yourself on the specific elements you care about and call `stopPropagation()`
+It is common to place multiple interactive elements within a `<forge-list-item>`. However, by default, children of an interactive `<forge-list-item>` will not receive pointer events.
+To ensure certain elements receive pointer events instead of the `<forge-list-item>`, you can either listen for the click event yourself on these specific elements and call `stopPropagation()`
 on the event, or you can use the `forge-ignore` attribute for convenience. This attribute is used to prevent the list item from handling the event when the
 element (or any children of the element) is clicked.
 
