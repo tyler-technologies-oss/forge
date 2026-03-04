@@ -44,6 +44,7 @@ Use this checklist to ensure complete and correct migration from legacy architec
 - [ ] Add `BaseLitElement` from `'../core/base/base-lit-element.js'`
 - [ ] Keep styles import from `.scss`
 - [ ] Add `CUSTOM_ELEMENT_NAME_PROPERTY`, `CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY` from `'@tylertech/forge-core'`
+- [ ] Remove `IBaseComponent` import — the interface now extends `BaseLitElement` directly
 
 ### Add Directives (As Needed)
 
@@ -88,7 +89,7 @@ For each property:
 - [ ] Set `attribute: 'kebab-case'` if attribute name differs
 - [ ] Add converter if needed (`removeEmptyAttribute`, `removeDefaultAttribute`)
 - [ ] Set default value
-- [ ] Move JSDoc comment to PRECEDE the property
+- [ ] Move JSDoc comment to PRECEDE the property — do NOT add `@property`/`@attribute` tags to the class JSDoc
 - [ ] If validation needed, use custom getter/setter with `#field`
 
 ### Internal State
@@ -140,12 +141,14 @@ For event listeners:
 - [ ] Add in `connectedCallback()`
 - [ ] Remove in `disconnectedCallback()`
 
-For ElementInternals:
-- [ ] Set form value in `willUpdate()` when value changes
-- [ ] Use `toggleState()` for custom states
+For ElementInternals (when needed for custom states, form association, or ARIA):
+- [ ] Declare `#internals: ElementInternals`
+- [ ] Call `this.#internals = this.attachInternals()` in constructor
+- [ ] Use `toggleState()` in `willUpdate()` for custom CSS states
+- [ ] Update SCSS to use `:state(...)` selectors instead of `[attribute]` for host-level styles
+- [ ] Add `@state` JSDoc tags to the class comment for each custom state
 - [ ] Use `setDefaultAria()` for ARIA properties
-- [ ] Implement validation in separate method
-- [ ] Call validation in `willUpdate()`
+- [ ] If form-associated: set form value in `willUpdate()` when value changes
 
 For complex logic:
 - [ ] Consider extracting to controller
@@ -163,12 +166,16 @@ For complex logic:
 
 ## Deprecations
 
+### In component.ts
+
+- [ ] Add `@deprecated` JSDoc directly on the interface
+- [ ] Change interface to extend `BaseLitElement` (not `IBaseComponent`)
+- [ ] Keep interface exported for backward compatibility
+- [ ] Place `declare global` block at the **bottom** of the file, after the class
+
 ### In index.ts
 
 - [ ] Add `@deprecated` JSDoc to define function
-- [ ] Add `@deprecated` JSDoc to interface
-- [ ] Keep interface exported for backward compatibility
-- [ ] Keep define function exported
 
 ### In constants.ts (Optional)
 
