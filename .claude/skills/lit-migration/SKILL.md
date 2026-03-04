@@ -781,6 +781,8 @@ Tests should pass without modification. If they fail:
 - Check event names and detail structure
 - Ensure deprecated interfaces are still exported
 - Verify attribute reflection behavior
+<<<<<<< feat/divider-lit
+=======
 - Add `await element.updateComplete` between property changes and assertions that depend on listener state or `willUpdate()` side effects
 
 ```typescript
@@ -796,6 +798,7 @@ await element.updateComplete;
 dispatchKeyboardEvent({ key: 'a', ctrlKey: true });
 expect(spy).toHaveBeenCalledOnce();
 ```
+>>>>>>> main
 
 #### 2. Run Build
 
@@ -1206,11 +1209,14 @@ Study these completed migrations for patterns:
 - **File**: `packages/forge/src/lib/icon/icon.ts`
 - **Patterns**: Property validation, custom setters, lazy loading, external content
 
+<<<<<<< feat/divider-lit
+=======
 ### Non-Visual Utility Component (No Template, No Shadow DOM)
 - **Branch**: `feat/keyboard-shortcut-lit`
 - **File**: `packages/forge/src/lib/keyboard-shortcut/keyboard-shortcut.ts`
 - **Patterns**: `createRenderRoot()` returning `this`, no `render()`, `display: none` in `connectedCallback`, `willUpdate()` for listener management, `isConnected` guard, old value via `changedProperties.get()`, `#disconnect(capture = this.capture)` optional parameter for old-value disconnect
 
+>>>>>>> main
 ## Conventions Summary
 
 **CRITICAL - Follow these conventions:**

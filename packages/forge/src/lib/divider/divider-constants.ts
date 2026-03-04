@@ -5,6 +5,7 @@ const attributes = {
   VERTICAL: 'vertical'
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const DIVIDER_CONSTANTS = {
   elementName,
   attributes

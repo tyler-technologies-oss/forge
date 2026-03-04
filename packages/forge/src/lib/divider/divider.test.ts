@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest';
-import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
-import type { IDividerComponent } from './divider.js';
+import { describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-lit';
 import { DIVIDER_CONSTANTS } from './divider-constants.js';
+import type { IDividerComponent } from './divider.js';
 
 import './divider.js';
 
@@ -40,6 +40,16 @@ describe('Divider', () => {
     const el = screen.container.querySelector('forge-divider') as IDividerComponent;
     expect(el.hasAttribute(DIVIDER_CONSTANTS.attributes.VERTICAL)).toBe(false);
     el.vertical = true;
+    await el.updateComplete;
     expect(el.hasAttribute(DIVIDER_CONSTANTS.attributes.VERTICAL)).toBe(true);
+  });
+
+  it('should set vertical state when setting vertical property', async () => {
+    const screen = render(html`<forge-divider></forge-divider>`);
+    const el = screen.container.querySelector('forge-divider') as IDividerComponent;
+    expect(el.matches(':state(vertical)')).toBe(false);
+    el.vertical = true;
+    await el.updateComplete;
+    expect(el.matches(':state(vertical)')).toBe(true);
   });
 });
