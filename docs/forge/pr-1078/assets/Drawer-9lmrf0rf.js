@@ -1,0 +1,18 @@
+import{j as o,M as s,T as p,C as i}from"./blocks-BGXNjPUL.js";import{useMDXComponents as n}from"./index-C9aBCO2c.js";import{C as m}from"./CustomArgTypes-DKQaY4X4.js";import{C as a}from"./CssOnlyInformation-CBzd1zP3.js";import{D as c,a as d,C as l}from"./Drawer.stories-U64I1agk.js";import"./preload-helper-PPVm8Dsz.js";import"./_commonjsHelpers-CqkleIqs.js";import"./iframe-6jvvl83j.js";import"./utils-BQsOXphk.js";import"./tyler-icons-_ZRRE207.js";import"./feature-detection-DBnB2p_f.js";import"./service-adapter-CoGDs2_3.js";import"./base-lit-element-DuNePglZ.js";import"./constants-uy-3DCWv.js";import"./ref-CcO1L0WB.js";import"./directive-jorct-Oe.js";import"./drawer-CBK_snqa.js";import"./base-component-B5xZY7DP.js";import"./dom-utils-CBD4z_3d.js";import"./base-drawer-CgGVTosj.js";import"./event-utils-zQ4FLDwK.js";import"./base-adapter-DZ7lVcI0.js";import"./utils-DU-9AqTO.js";import"./list-n8XxbbWm.js";import"./state-layer-CDycYdPe.js";import"./focus-indicator-uWMef9QC.js";import"./with-default-aria-qCwd8R18.js";import"./a11y-utils-OON17uxD.js";import"./toolbar-CJhTaBYA.js";import"./scaffold-DRWrbyLH.js";import"./card-ylDKlB-w.js";import"./app-bar-profile-button-CpnTpsBC.js";import"./icon-button-Bs31_lcM.js";import"./base-button-core-l79ZJf1a.js";import"./with-label-aware-rB4nYfN7.js";import"./tooltip-D6IG9xiN.js";import"./overlay-CeKA2Vs0.js";import"./key-action-CxixFCpG.js";import"./index-5CPwzmQS.js";import"./with-longpress-listener-CURrVc38.js";import"./dismissible-stack-xq-0Rg1q.js";import"./badge-CxS8NskQ.js";import"./menu-C6DBPHOx.js";import"./list-dropdown-aware-core-C_SgFd9S.js";import"./list-dropdown-CYOM7X8_.js";import"./event-utils-C1SDeUaq.js";import"./linear-progress-DAF_c_Qg.js";import"./popover-DVUMrAH6.js";import"./skeleton-BEzRyBrd.js";import"./a11y-BxM9_46k.js";import"./base-component-delegate-39J3iYQ0.js";import"./avatar-CpjMD2dN.js";import"./state-8aIRTevk.js";import"./style-map-OsH3dYIv.js";import"./class-map-BA1pFziw.js";import"./avatar-constants-BHzMsS7-.js";import"./button-gG20MWYF.js";function e(t){const r={code:"code",h2:"h2",li:"li",p:"p",strong:"strong",ul:"ul",...n(),...t.components};return o.jsxs(o.Fragment,{children:[o.jsx(s,{of:c}),`
+`,o.jsx(p,{}),`
+`,o.jsx(r.p,{children:"Drawers are used to display content that is not a primary focus of the page. They can be used for navigation, settings, or other secondary content."}),`
+`,o.jsx(r.p,{children:"There are two types of drawers:"}),`
+`,o.jsxs(r.ul,{children:[`
+`,o.jsxs(r.li,{children:[o.jsx(r.strong,{children:"dismissible:"})," can be hidden by the user via a button provided by the developer"]}),`
+`,o.jsxs(r.li,{children:[o.jsx(r.strong,{children:"permanent:"})," always visible"]}),`
+`]}),`
+`,o.jsx(i,{of:d}),`
+`,o.jsx(r.h2,{id:"api",children:"API"}),`
+`,o.jsx(m,{}),`
+`,o.jsx(r.h2,{id:"accessibility",children:"Accessibility"}),`
+`,o.jsxs(r.p,{children:["The drawer component does ",o.jsx(r.strong,{children:"not"})," provide any semantics by default. Developers should provide their own ",o.jsx(r.code,{children:"<aside>"}),` for navigation,
+or various ARIA roles in other scenarios.`]}),`
+`,o.jsx(r.h2,{id:"css-only",children:"CSS-Only"}),`
+`,o.jsx(r.p,{children:"The drawer component is also available as a CSS-only component without the need for JavaScript."}),`
+`,o.jsx(i,{of:l}),`
+`,o.jsx(a,{})]})}function fo(t={}){const{wrapper:r}={...n(),...t.components};return r?o.jsx(r,{...t,children:o.jsx(e,{...t})}):e(t)}export{fo as default};
