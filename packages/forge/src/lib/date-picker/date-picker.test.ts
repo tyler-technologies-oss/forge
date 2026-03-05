@@ -789,6 +789,17 @@ describe('DatePickerComponent', () => {
       expect(getInputElement(harness.component).value).toBe(date);
     });
 
+    it('should clear input when setting value to null with allowInvalidDate=true', () => {
+      harness = setupTestContext(true);
+      harness.component.allowInvalidDate = true;
+      harness.component.value = new Date('01/01/2020');
+      expect(getInputElement(harness.component).value).toBe('01/01/2020');
+
+      harness.component.value = null;
+      expect(harness.component.value).toBeNull();
+      expect(getInputElement(harness.component).value).toBe('');
+    });
+
     it('should clear value when max date is set if current value is not valid', () => {
       harness = setupTestContext(true);
       const maxDate = new Date('01/01/2020');
