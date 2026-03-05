@@ -1074,8 +1074,6 @@ export class TableUtils {
         }
       });
     }
-
-    TableUtils.updateSelectAllState(tableElement, selectedRowCount > 0 && rows.length === selectedRowCount);
   }
 
   /**
