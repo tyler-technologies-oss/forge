@@ -82,7 +82,7 @@ class HideWhenEmptyDirective extends AsyncDirective {
     });
 
     this.#toggleHidden(element);
-    this.#requestUpdate(part);
+    queueMicrotask(() => this.#requestUpdate(part));
     this.#isInitialized = true;
   }
 
