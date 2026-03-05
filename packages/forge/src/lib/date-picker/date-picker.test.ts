@@ -140,6 +140,21 @@ describe('DatePickerComponent', () => {
       expect(calendar.month).toBe(expectedMonth);
     });
 
+    it('should open calendar in current month when max is today and min is in the past', () => {
+      harness = setupTestContext(false);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const minDate = new Date(today.getFullYear() - 1, today.getMonth(), 1);
+      harness.component.min = minDate;
+      harness.component.max = today;
+      harness.append();
+
+      openPopup(harness.component);
+      const calendar = getCalendar(harness.component);
+
+      expect(calendar.month).toBe(today.getMonth());
+    });
+
     it('should automatically render a toggle button with a Forge text-field component', () => {
       harness = setupTestContext(false, true, false);
 
