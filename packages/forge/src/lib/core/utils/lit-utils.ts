@@ -1,6 +1,6 @@
 import { LitElement, noChange, supportsAdoptingStyleSheets } from 'lit';
-import { AsyncDirective } from 'lit-html/async-directive.js';
-import { directive, ElementPart } from 'lit-html/directive.js';
+import { AsyncDirective } from 'lit/async-directive.js';
+import { directive, ElementPart } from 'lit/directive.js';
 
 /**
  * Readopts styles for the given element in the context of its new window.
