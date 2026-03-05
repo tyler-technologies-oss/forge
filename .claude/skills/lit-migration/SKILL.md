@@ -64,6 +64,7 @@ Migrate Tyler Forge components from the legacy component/core/adapter/template a
 #### 1. Update Imports
 
 **Remove**:
+
 ```typescript
 import { attachShadowTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
 import { BaseComponent } from '../core/base/base-component.js';
@@ -74,6 +75,7 @@ import styles from './component.scss';
 ```
 
 **Add**:
+
 ```typescript
 import { CUSTOM_ELEMENT_NAME_PROPERTY, CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY } from '@tylertech/forge-core';
 import { customElement, property, state, query } from 'lit/decorators.js';
@@ -83,6 +85,7 @@ import styles from './component.scss';
 ```
 
 Add as needed:
+
 ```typescript
 // For dynamic classes
 import { classMap } from 'lit-html/directives/class-map.js';
@@ -97,6 +100,7 @@ import { removeEmptyAttribute, removeDefaultAttribute } from '../core/utils/lit-
 #### 2. Update Class Declaration
 
 **Before**:
+
 ```typescript
 @customElement({
   name: COMPONENT_CONSTANTS.elementName,
@@ -118,6 +122,7 @@ export class ComponentNameComponent extends BaseComponent implements IComponentN
 ```
 
 **After**:
+
 ```typescript
 /** @deprecated - This will be removed in the future. Please switch to using ComponentNameComponent. */
 export interface IComponentNameComponent extends BaseLitElement {
@@ -179,6 +184,7 @@ declare global {
 ```
 
 **Key changes**:
+
 - `@customElement` takes a simple string, not an object
 - No `observedAttributes` — Lit handles this automatically
 - No core/adapter instantiation
@@ -194,6 +200,7 @@ declare global {
 #### 3. Convert Properties
 
 **Legacy pattern** (`component.ts` + `component-core.ts`):
+
 ```typescript
 // In component.ts
 @coreProperty()
@@ -216,6 +223,7 @@ public set propertyName(value: string) {
 ```
 
 **Lit pattern - Simple reflected property**:
+
 ```typescript
 /**
  * Gets/sets the property description.
@@ -229,6 +237,7 @@ public propertyName = 'default';
 **Note**: Don't add `type: String` - it's the default in Lit. Only specify `type` for `Boolean`, `Number`, `Object`, or `Array`.
 
 **Lit pattern - Custom attribute name**:
+
 ```typescript
 /**
  * Gets/sets the panel selector.
@@ -239,6 +248,7 @@ public panelSelector?: string;
 ```
 
 **Lit pattern - Boolean property**:
+
 ```typescript
 /**
  * Whether the panel is open.
@@ -250,6 +260,7 @@ public open = false;
 ```
 
 **Lit pattern - Non-reflected property** (objects, functions):
+
 ```typescript
 /**
  * A callback that generates URLs for external icons.
@@ -259,6 +270,7 @@ public externalUrlBuilder?: IconUrlBuilder;
 ```
 
 **Lit pattern - With custom converter**:
+
 ```typescript
 /**
  * The title text to display.
@@ -273,6 +285,7 @@ public titleText = '';
 ```
 
 **Lit pattern - With custom setter** (for validation/transformation):
+
 ```typescript
 /**
  * The name of the icon to render.
@@ -293,11 +306,13 @@ public get name(): string | undefined {
 ```
 
 **Lit pattern - Internal reactive state**:
+
 ```typescript
 @state() private _isAnimating = false;
 ```
 
 **CRITICAL CONVENTIONS**:
+
 - JSDoc comments MUST precede the property, not in the component's JSDoc
 - The class-level JSDoc comment must NOT contain `@property` or `@attribute` tags — only `@tag`, `@summary`, `@cssproperty`, `@csspart`, `@cssclass`, `@state`, `@slot`, `@fires`, `@dependency`, etc.
 - Private fields use `#field` notation (JavaScript private)
@@ -309,11 +324,13 @@ public get name(): string | undefined {
 #### 4. Handle Private Fields
 
 **Before** (legacy):
+
 ```typescript
 private _clickListener: EventListener = this._onClick.bind(this);
 ```
 
 **After** (Lit):
+
 ```typescript
 // True private methods and event listeners
 #clickListener: EventListener = this.#onClick.bind(this);
@@ -327,6 +344,7 @@ private _clickListener: EventListener = this._onClick.bind(this);
 #### 5. Add Render Method or Override createRenderRoot
 
 **For shadow DOM components**:
+
 ```typescript
 public render(): TemplateResult {
   return html`
@@ -338,6 +356,7 @@ public render(): TemplateResult {
 ```
 
 **For light DOM components** (no shadow root):
+
 ```typescript
 public override createRenderRoot(): HTMLElement | DocumentFragment {
   return this; // Render directly into the component's light DOM
@@ -353,6 +372,7 @@ public override createRenderRoot(): HTMLElement | DocumentFragment {
 #### Basic Conversion
 
 **Before** (`component.html`):
+
 ```html
 <template>
   <div class="forge-component" part="root">
@@ -367,6 +387,7 @@ public override createRenderRoot(): HTMLElement | DocumentFragment {
 ```
 
 **After** (in `render()` method):
+
 ```typescript
 public render(): TemplateResult {
   return html`
@@ -385,6 +406,7 @@ public render(): TemplateResult {
 #### Conditional Rendering
 
 **Before** (adapter manipulates DOM):
+
 ```typescript
 // In adapter
 if (this._determinate) {
@@ -395,6 +417,7 @@ if (this._determinate) {
 ```
 
 **After** (Lit):
+
 ```typescript
 public render(): TemplateResult {
   return html`
@@ -414,6 +437,7 @@ public render(): TemplateResult {
 ```
 
 Or use `nothing` for optional content:
+
 ```typescript
 ${this.titleText ? html`<h1>${this.titleText}</h1>` : nothing}
 ```
@@ -421,12 +445,14 @@ ${this.titleText ? html`<h1>${this.titleText}</h1>` : nothing}
 #### Dynamic Classes
 
 **Before** (adapter):
+
 ```typescript
 this._rootElement.classList.toggle('active', isActive);
 this._rootElement.classList.toggle('disabled', isDisabled);
 ```
 
 **After** (Lit with classMap):
+
 ```typescript
 import { classMap } from 'lit-html/directives/class-map.js';
 
@@ -446,6 +472,7 @@ public render(): TemplateResult {
 #### Event Handlers
 
 **In template**:
+
 ```typescript
 public render(): TemplateResult {
   return html`
@@ -455,6 +482,7 @@ public render(): TemplateResult {
 ```
 
 **With options** (capture, passive, etc.):
+
 ```typescript
 @click="${{ handleEvent: this.#handleClick, capture: true }}"
 ```
@@ -462,6 +490,7 @@ public render(): TemplateResult {
 #### DOM Queries
 
 **Before** (adapter):
+
 ```typescript
 // In adapter
 private readonly _rootElement: HTMLElement;
@@ -471,6 +500,7 @@ constructor(component: IComponent) {
 ```
 
 **After** (Lit):
+
 ```typescript
 @query('.root') private _rootElement!: HTMLElement;
 @queryAll('.item') private _items!: HTMLElement[];
@@ -486,6 +516,7 @@ Access these in `updated()` lifecycle, not `willUpdate()`.
 #### 1. Move Property Change Logic to willUpdate()
 
 **Before** (core setter):
+
 ```typescript
 // In component-core.ts
 public set open(value: boolean) {
@@ -498,6 +529,7 @@ public set open(value: boolean) {
 ```
 
 **After** (Lit):
+
 ```typescript
 public willUpdate(changedProperties: PropertyValues<this>): void {
   if (changedProperties.has('open')) {
@@ -513,6 +545,7 @@ public willUpdate(changedProperties: PropertyValues<this>): void {
 ```
 
 **Getting the old property value** (e.g., to disconnect with old `capture` value):
+
 ```typescript
 public willUpdate(changedProperties: PropertyValues<this>): void {
   if (changedProperties.has('capture')) {
@@ -528,10 +561,12 @@ public willUpdate(changedProperties: PropertyValues<this>): void {
 ```
 
 **When to use willUpdate() vs updated()**:
+
 - `willUpdate()` - Property change reactions, state updates, calculations, listener management
 - `updated()` - DOM queries, measurements, focus management
 
 **IMPORTANT - willUpdate() is async**: `willUpdate()` runs in Lit's async update cycle, so property changes don't take effect synchronously. In tests, use `await element.updateComplete` before asserting effects of property changes:
+
 ```typescript
 element.disabled = false;
 await element.updateComplete; // required before checking listener behavior
@@ -568,7 +603,7 @@ export class ComponentNameComponent extends BaseLitElement implements IComponent
   public override connectedCallback(): void {
     super.connectedCallback();
     this.style.display = 'none'; // Hide from layout
-    this.#tryInitialize();       // Synchronous setup on first connection
+    this.#tryInitialize(); // Synchronous setup on first connection
   }
 
   public override disconnectedCallback(): void {
@@ -608,6 +643,7 @@ export class ComponentNameComponent extends BaseLitElement implements IComponent
 ```
 
 **Key points**:
+
 - `connectedCallback` handles the initial synchronous setup
 - `willUpdate()` handles subsequent property changes (async)
 - The `isConnected` guard makes helper methods safe to call from both contexts
@@ -617,6 +653,7 @@ export class ComponentNameComponent extends BaseLitElement implements IComponent
 #### 2. Move Event Listeners
 
 **Before** (core + adapter):
+
 ```typescript
 // In core initialize()
 this._adapter.addHostListener('click', this._clickListener);
@@ -626,6 +663,7 @@ this._adapter.removeHostListener('click', this._clickListener);
 ```
 
 **After** (Lit):
+
 ```typescript
 #clickListener: EventListener = (evt: Event) => this.#handleClick(evt);
 
@@ -647,6 +685,7 @@ public disconnectedCallback(): void {
 #### 3. Handle ElementInternals
 
 Use `#internals` when the component needs any of:
+
 - **Custom CSS states** — host-level styles driven by a property, or states with external value for consumers
 - **Form association** — see `references/form-association.md`
 - **Default ARIA** — setting implicit ARIA roles or properties
@@ -672,10 +711,12 @@ public override willUpdate(changedProperties: PropertyValues<this>): void {
 **When to use custom states vs. template classes**:
 
 Use `toggleState()` and `:state(...)` in SCSS when:
+
 - Styles need to be applied to the **host element** based on a property (`vertical`, `open`, `disabled`, etc.)
 - The state has value for **external consumers** who may want to target it in their own CSS
 
 Use classes on internal template elements when:
+
 - The styles are purely internal and do not affect the host element
 - There is no value in exposing the state externally
 
@@ -696,6 +737,7 @@ Use classes on internal template elements when:
 ```
 
 Document each custom state with a `@state` tag in the class JSDoc:
+
 ```typescript
 /**
  * @state open - Applied when the component is open.
@@ -704,6 +746,7 @@ Document each custom state with a `@state` tag in the class JSDoc:
 ```
 
 For components that also need default ARIA roles or properties:
+
 ```typescript
 public override connectedCallback(): void {
   super.connectedCallback();
@@ -718,6 +761,7 @@ public override connectedCallback(): void {
 #### 4. Extract Complex Logic to Controllers
 
 When to create a controller:
+
 - Complex event handling logic (>50 lines)
 - Focus management
 - Scroll/resize observation
@@ -725,6 +769,7 @@ When to create a controller:
 - Trigger element synchronization
 
 **Example structure**:
+
 ```typescript
 // In component
 #triggerController = new ComponentTriggerController(this, {
@@ -777,10 +822,13 @@ pnpm test
 ```
 
 Tests should pass without modification. If they fail:
+
 - Verify property names match exactly
 - Check event names and detail structure
 - Ensure deprecated interfaces are still exported
 - Verify attribute reflection behavior
+  <<<<<<< feat/divider-lit
+  =======
 - Add `await element.updateComplete` between property changes and assertions that depend on listener state or `willUpdate()` side effects
 
 ```typescript
@@ -796,6 +844,8 @@ await element.updateComplete;
 dispatchKeyboardEvent({ key: 'a', ctrlKey: true });
 expect(spy).toHaveBeenCalledOnce();
 ```
+
+> > > > > > > main
 
 #### 2. Run Build
 
@@ -820,6 +870,7 @@ pnpm run dev:forge-docs
 ```
 
 Navigate to the component's story in Storybook and verify:
+
 - Component renders correctly
 - All properties work (test in controls panel)
 - Events fire properly
@@ -830,6 +881,7 @@ Navigate to the component's story in Storybook and verify:
 #### 5. Accessibility Testing
 
 Verify:
+
 - ARIA attributes set correctly
 - Keyboard navigation works
 - Screen reader announcements correct
@@ -839,6 +891,7 @@ Verify:
 #### 6. Property & Attribute Verification
 
 Test in browser console:
+
 ```javascript
 const el = document.querySelector('forge-component');
 
@@ -895,6 +948,7 @@ export const COMPONENT_NAME_CONSTANTS = { ... };
 #### 3. Clean Up TODOs
 
 Remove or address any TODO comments added during migration:
+
 - `// TODO: remove attribute reflection` - Decide if reflection is still needed
 - `// TODO: clarify types` - Finalize type definitions
 - Any other temporary notes
@@ -902,6 +956,7 @@ Remove or address any TODO comments added during migration:
 #### 4. Update Tests (If Necessary)
 
 If tests accessed internal implementation details:
+
 - Update to test through public API
 - Remove direct access to private fields
 - Update to test behavior, not implementation
@@ -913,11 +968,13 @@ pnpm changeset
 ```
 
 Select the package and change type:
+
 - **Major** - If there are breaking changes to public API
 - **Minor** - If adding new features (rare in migration)
 - **Patch** - If only internal changes, no API changes
 
 Example changeset content:
+
 ```markdown
 ---
 '@tylertech/forge': major
@@ -980,58 +1037,58 @@ EOF
 
 ### Import Mappings
 
-| Legacy | Lit | Notes |
-|--------|-----|-------|
-| `@tylertech/forge-core` decorators | `lit/decorators.js` | Use Lit's decorators |
-| `BaseComponent` | `BaseLitElement` | New base class |
-| `attachShadowTemplate()` | `render()` method or `createRenderRoot()` | Lit handles templates |
-| `@coreProperty()` | `@property()` | Lit's reactive properties |
-| `@customElement({...})` | `@customElement(string)` | Simpler decorator |
-| `coerceBoolean()` | `type: Boolean` in decorator | Lit handles coercion |
-| `getShadowElement()` | `@query()` | Lit query decorators |
+| Legacy                             | Lit                                       | Notes                     |
+| ---------------------------------- | ----------------------------------------- | ------------------------- |
+| `@tylertech/forge-core` decorators | `lit/decorators.js`                       | Use Lit's decorators      |
+| `BaseComponent`                    | `BaseLitElement`                          | New base class            |
+| `attachShadowTemplate()`           | `render()` method or `createRenderRoot()` | Lit handles templates     |
+| `@coreProperty()`                  | `@property()`                             | Lit's reactive properties |
+| `@customElement({...})`            | `@customElement(string)`                  | Simpler decorator         |
+| `coerceBoolean()`                  | `type: Boolean` in decorator              | Lit handles coercion      |
+| `getShadowElement()`               | `@query()`                                | Lit query decorators      |
 
 ### Property Decorator Patterns
 
-| Pattern | Decorator | Notes |
-|---------|-----------|-------|
-| Simple string, reflected | `@property({ reflect: true })` | Omit `type` for strings |
-| Custom attribute name | `@property({ attribute: 'kebab-case', reflect: true })` | Set explicit attribute name |
-| Boolean | `@property({ type: Boolean, reflect: true })` | Specify type for booleans |
-| Number | `@property({ type: Number, reflect: true })` | Specify type for numbers |
-| Object/Array | `@property({ type: Object })` | Never reflected |
-| Non-reflected | `@property({ attribute: false })` | No attribute sync |
-| With converter | `@property({ converter: { toAttribute: fn } })` | Custom conversion |
-| Internal state | `@state() private _value` | Not reflected, triggers renders |
-| With validation | Custom setter with `#field` backing | Sanitize in setter |
+| Pattern                  | Decorator                                               | Notes                           |
+| ------------------------ | ------------------------------------------------------- | ------------------------------- |
+| Simple string, reflected | `@property({ reflect: true })`                          | Omit `type` for strings         |
+| Custom attribute name    | `@property({ attribute: 'kebab-case', reflect: true })` | Set explicit attribute name     |
+| Boolean                  | `@property({ type: Boolean, reflect: true })`           | Specify type for booleans       |
+| Number                   | `@property({ type: Number, reflect: true })`            | Specify type for numbers        |
+| Object/Array             | `@property({ type: Object })`                           | Never reflected                 |
+| Non-reflected            | `@property({ attribute: false })`                       | No attribute sync               |
+| With converter           | `@property({ converter: { toAttribute: fn } })`         | Custom conversion               |
+| Internal state           | `@state() private _value`                               | Not reflected, triggers renders |
+| With validation          | Custom setter with `#field` backing                     | Sanitize in setter              |
 
 ### Lifecycle Method Mappings
 
-| Legacy | Lit | Use Case |
-|--------|-----|----------|
-| `constructor()` | `constructor()` | Essential initialization only |
-| `connectedCallback()` | `connectedCallback()` | Setup needing DOM |
-| `disconnectedCallback()` | `disconnectedCallback()` | Cleanup |
-| `attributeChangedCallback()` | `willUpdate()` | Property change handling |
-| Core initialize() | `connectedCallback()` + `willUpdate()` | Split setup logic |
-| Core destroy() | `disconnectedCallback()` | Cleanup |
-| Adapter DOM updates | `render()` + `updated()` | Declarative + imperative |
-| - | `firstUpdated()` | First render complete |
-| - | `createRenderRoot()` | Light DOM override |
+| Legacy                       | Lit                                    | Use Case                      |
+| ---------------------------- | -------------------------------------- | ----------------------------- |
+| `constructor()`              | `constructor()`                        | Essential initialization only |
+| `connectedCallback()`        | `connectedCallback()`                  | Setup needing DOM             |
+| `disconnectedCallback()`     | `disconnectedCallback()`               | Cleanup                       |
+| `attributeChangedCallback()` | `willUpdate()`                         | Property change handling      |
+| Core initialize()            | `connectedCallback()` + `willUpdate()` | Split setup logic             |
+| Core destroy()               | `disconnectedCallback()`               | Cleanup                       |
+| Adapter DOM updates          | `render()` + `updated()`               | Declarative + imperative      |
+| -                            | `firstUpdated()`                       | First render complete         |
+| -                            | `createRenderRoot()`                   | Light DOM override            |
 
 ### Lit Directives & Utilities
 
-| Directive/Utility | Import | Use Case |
-|-------------------|--------|----------|
-| `classMap` | `lit-html/directives/class-map.js` | Dynamic classes |
-| `styleMap` | `lit-html/directives/style-map.js` | Dynamic styles |
-| `nothing` | `lit` | Render nothing |
-| `@query()` | `lit/decorators.js` | Query shadow DOM |
-| `@queryAll()` | `lit/decorators.js` | Query all matches |
-| `@queryAssignedElements()` | `lit/decorators.js` | Query slotted elements |
-| `removeEmptyAttribute` | `../core/utils/lit-utils.js` | Converter for empty strings |
-| `removeDefaultAttribute` | `../core/utils/lit-utils.js` | Converter for default values |
-| `toggleState` | `../core/utils/utils.js` | ElementInternals custom states |
-| `setDefaultAria` | `../core/utils/a11y-utils.js` | ARIA properties |
+| Directive/Utility          | Import                             | Use Case                       |
+| -------------------------- | ---------------------------------- | ------------------------------ |
+| `classMap`                 | `lit-html/directives/class-map.js` | Dynamic classes                |
+| `styleMap`                 | `lit-html/directives/style-map.js` | Dynamic styles                 |
+| `nothing`                  | `lit`                              | Render nothing                 |
+| `@query()`                 | `lit/decorators.js`                | Query shadow DOM               |
+| `@queryAll()`              | `lit/decorators.js`                | Query all matches              |
+| `@queryAssignedElements()` | `lit/decorators.js`                | Query slotted elements         |
+| `removeEmptyAttribute`     | `../core/utils/lit-utils.js`       | Converter for empty strings    |
+| `removeDefaultAttribute`   | `../core/utils/lit-utils.js`       | Converter for default values   |
+| `toggleState`              | `../core/utils/utils.js`           | ElementInternals custom states |
+| `setDefaultAria`           | `../core/utils/a11y-utils.js`      | ARIA properties                |
 
 ## Common Issues & Solutions
 
@@ -1058,6 +1115,7 @@ public myProperty = 'value';
 **Symptom**: Setting attribute doesn't update property, or vice versa.
 
 **Solution**:
+
 1. Set `reflect: true` in property decorator
 2. Verify `attribute` field matches expected attribute name
 3. For booleans, ensure `type: Boolean` is set
@@ -1095,12 +1153,14 @@ public updated(changedProperties: PropertyValues): void {
 **Symptom**: Previously passing tests now fail.
 
 **Common causes**:
+
 1. **Property names changed** - Verify exact match with legacy
 2. **Event names changed** - Check custom event names
 3. **Interfaces not exported** - Ensure deprecated interfaces still exported
 4. **Timing issues** - Lit updates are async, use `await el.updateComplete`
 
 **Solution**:
+
 ```typescript
 // In tests, wait for Lit to finish rendering
 await element.updateComplete;
@@ -1116,6 +1176,7 @@ await element.updateComplete;
 **Symptom**: Component has no styles or wrong styles.
 
 **Solution**:
+
 1. Check `static styles = unsafeCSS(styles)` is set
 2. Verify shadow DOM vs light DOM - light DOM components don't use `styles` property
 3. Ensure styles import is correct
@@ -1188,28 +1249,37 @@ See the `references/` directory for detailed documentation:
 Study these completed migrations for patterns:
 
 ### Simple Shadow DOM Component
+
 - **Branch**: `feat/divider-lit`
 - **File**: `packages/forge/src/lib/divider/divider.ts`
 - **Patterns**: Boolean reflected property, custom state, shadow DOM, ElementInternals, `:state(...)` SCSS
 
 ### Simple Light DOM Component
+
 - **Branch**: `feat/accordion-lit`
 - **File**: `packages/forge/src/lib/accordion/accordion.ts`
 - **Patterns**: Basic properties, event handling, light DOM, no render method
 
 ### Complex Shadow DOM Component
+
 - **Branch**: `feat/expansion-panel-lit`
 - **Patterns**: ElementInternals, custom states, controllers, animations, shadow DOM
 
 ### Component with Custom Setters
+
 - **Branch**: `feat/icon-lit`
 - **File**: `packages/forge/src/lib/icon/icon.ts`
 - **Patterns**: Property validation, custom setters, lazy loading, external content
 
+# <<<<<<< feat/divider-lit
+
 ### Non-Visual Utility Component (No Template, No Shadow DOM)
+
 - **Branch**: `feat/keyboard-shortcut-lit`
 - **File**: `packages/forge/src/lib/keyboard-shortcut/keyboard-shortcut.ts`
 - **Patterns**: `createRenderRoot()` returning `this`, no `render()`, `display: none` in `connectedCallback`, `willUpdate()` for listener management, `isConnected` guard, old value via `changedProperties.get()`, `#disconnect(capture = this.capture)` optional parameter for old-value disconnect
+
+> > > > > > > main
 
 ## Conventions Summary
 

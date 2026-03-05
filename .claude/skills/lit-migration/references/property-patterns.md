@@ -64,6 +64,7 @@ public checked?: boolean;
 ```
 
 **Attribute Behavior**:
+
 ```html
 <!-- Presence of attribute = true -->
 <my-component open></my-component>
@@ -161,6 +162,7 @@ public selectedIds: number[] = [];
 ### When to Reflect
 
 Reflect properties to attributes when:
+
 - The property represents visual state (open, disabled, active, etc.)
 - External CSS needs to select based on the attribute
 - The attribute existed in the legacy component
@@ -184,6 +186,7 @@ public size: Size = 'medium'; // CSS: [size="medium"] { ... }
 ### When NOT to Reflect
 
 Don't reflect when:
+
 - Property is an object, array, or function
 - Property is only for internal state
 - Property changes frequently (performance)
@@ -290,9 +293,10 @@ public titleText = '';
 ```
 
 **Behavior**:
+
 ```typescript
 component.titleText = 'Hello'; // <component title-text="Hello">
-component.titleText = '';       // <component> (no attribute)
+component.titleText = ''; // <component> (no attribute)
 ```
 
 ### Remove Default Value Attributes
@@ -313,9 +317,10 @@ public themeMode: ThemeMode = 'inherit';
 ```
 
 **Behavior**:
+
 ```typescript
 component.themeMode = 'inherit'; // <component> (no attribute)
-component.themeMode = 'scoped';  // <component theme-mode="scoped">
+component.themeMode = 'scoped'; // <component theme-mode="scoped">
 ```
 
 ### Custom Bi-Directional Converter
@@ -341,6 +346,7 @@ public range: Range | null = null;
 ```
 
 **Usage**:
+
 ```html
 <component range="0,100"></component>
 <!-- component.range = { min: 0, max: 100 } -->
@@ -408,9 +414,14 @@ public get step(): number {
 
 ### Property with Side Effects
 
+<<<<<<< feat/divider-lit
+When setter needs to trigger other updates immediately:
+
+=======
 **Prefer `willUpdate()` for external side effects** (managing event listeners, resolving target elements, updating state on other objects). Custom setters are appropriate only when you need to validate or transform the stored value itself.
 
 **willUpdate() approach** (preferred for listener management):
+
 ```typescript
 @property({ type: Boolean, reflect: true })
 public disabled = false;
@@ -429,6 +440,9 @@ public willUpdate(changedProperties: PropertyValues<this>): void {
 **Important**: `willUpdate()` is async — tests must `await element.updateComplete` before asserting listener effects after a property change.
 
 **Custom setter approach** (only when you need synchronous value transformation):
+
+> > > > > > > main
+
 ```typescript
 /**
  * The trigger element id.
@@ -437,7 +451,11 @@ public willUpdate(changedProperties: PropertyValues<this>): void {
 @property({ reflect: true })
 public set trigger(value: string) {
   this.#trigger = value;
+<<<<<<< feat/divider-lit
+  // Immediately resolve trigger element
+=======
   // Immediately resolve trigger element (synchronous lookup needed)
+>>>>>>> main
   this.triggerElement = value ? document.getElementById(value) : null;
 }
 public get trigger(): string {
@@ -743,18 +761,18 @@ public selectedId: string | null = null;
 
 ## Common Patterns Summary
 
-| Pattern | Decorator Example |
-|---------|-------------------|
-| Simple string | `@property({ reflect: true })` |
-| String, custom attribute | `@property({ attribute: 'my-attr', reflect: true })` |
-| Boolean | `@property({ type: Boolean, reflect: true })` |
-| Number | `@property({ type: Number, reflect: true })` |
-| Object | `@property({ type: Object })` |
-| Array | `@property({ type: Array })` |
-| Function | `@property({ attribute: false })` |
-| Internal state | `@state() private _value` |
-| Private field | `#field` (no decorator) |
-| With converter | `@property({ converter: { toAttribute: fn } })` |
-| With custom setter | Custom getter/setter + `#field` |
-| Optional | `@property({ reflect: true }) public prop?: Type` |
-| Required with default | `@property({ reflect: true }) public prop: Type = default` |
+| Pattern                  | Decorator Example                                          |
+| ------------------------ | ---------------------------------------------------------- |
+| Simple string            | `@property({ reflect: true })`                             |
+| String, custom attribute | `@property({ attribute: 'my-attr', reflect: true })`       |
+| Boolean                  | `@property({ type: Boolean, reflect: true })`              |
+| Number                   | `@property({ type: Number, reflect: true })`               |
+| Object                   | `@property({ type: Object })`                              |
+| Array                    | `@property({ type: Array })`                               |
+| Function                 | `@property({ attribute: false })`                          |
+| Internal state           | `@state() private _value`                                  |
+| Private field            | `#field` (no decorator)                                    |
+| With converter           | `@property({ converter: { toAttribute: fn } })`            |
+| With custom setter       | Custom getter/setter + `#field`                            |
+| Optional                 | `@property({ reflect: true }) public prop?: Type`          |
+| Required with default    | `@property({ reflect: true }) public prop: Type = default` |
