@@ -22,7 +22,7 @@ import type { IChipComponent } from '../chips/index.js';
 import { LABEL_CONSTANTS } from '../label/label-constants.js';
 
 import './chip-field.js';
-import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 // Wait for field animation to complete
 const FIELD_ANIMATION_TIMEOUT = 200;

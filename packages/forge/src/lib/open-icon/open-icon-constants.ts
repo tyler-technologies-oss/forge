@@ -17,6 +17,7 @@ const defaults = {
   ROTATION: 'full' as OpenIconRotation
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const OPEN_ICON_CONSTANTS = {
   elementName,
   observedAttributes,

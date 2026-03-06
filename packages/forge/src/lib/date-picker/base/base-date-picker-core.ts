@@ -237,8 +237,9 @@ export abstract class BaseDatePickerCore<
     };
 
     // If the max date is in the past, set the calendar to the min date
-    const currentDate = new Date().getTime();
-    if (this._min && this._max && this._max.getTime() < currentDate) {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    if (this._min && this._max && this._max.getTime() < currentDate.getTime()) {
       calendarConfig.year = this._min.getFullYear();
       calendarConfig.month = this._min.getMonth();
     }

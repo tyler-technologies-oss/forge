@@ -207,6 +207,9 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   private _onDropdownIconClick(evt: MouseEvent): void {
+    if (this._adapter.inputElement.disabled) {
+      return;
+    }
     if (!this._isDropdownOpen) {
       this._adapter.focus();
       window.requestAnimationFrame(() => this._showDropdown());
@@ -216,6 +219,9 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   private _onClear(evt: MouseEvent): void {
+    if (this._adapter.inputElement.disabled) {
+      return;
+    }
     evt.preventDefault();
     this._filterText = '';
     this._clearValue();

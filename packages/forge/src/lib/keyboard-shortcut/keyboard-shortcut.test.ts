@@ -111,6 +111,7 @@ describe('Keyboard Shortcut', () => {
       expect(activateSpy).not.toHaveBeenCalled();
 
       harness.keyboardShortcutEl.disabled = false;
+      await harness.keyboardShortcutEl.updateComplete;
       harness.dispatchKeyboardEvent({ key: 'a' });
 
       expect(activateSpy).toHaveBeenCalledOnce();
@@ -178,9 +179,11 @@ describe('Keyboard Shortcut', () => {
       harness.keyboardShortcutEl.addEventListener(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, activateSpy);
 
       harness.keyboardShortcutEl.key = 'A';
+      await harness.keyboardShortcutEl.updateComplete;
       harness.dispatchKeyboardEvent({ key: 'a' });
 
       harness.keyboardShortcutEl.key = 'a';
+      await harness.keyboardShortcutEl.updateComplete;
       harness.dispatchKeyboardEvent({ key: 'A' });
 
       expect(activateSpy).toHaveBeenCalledTimes(2);
@@ -379,14 +382,19 @@ describe('Keyboard Shortcut', () => {
       expect(activateSpy).toHaveBeenCalledOnce();
     });
 
-    it('should throw when unable to find target element', async () => {
+    it('should log an error when unable to find target element', () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const container = document.createElement('div');
       const el = document.createElement('forge-keyboard-shortcut');
+      el.setAttribute('target', '#does-not-exist');
+      container.appendChild(el);
+      document.body.appendChild(container);
 
-      const action = (): void => {
-        (el as any)['_core']['_initializeTargetElement']();
-      };
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Unable to locate the target element.'));
 
-      expect(action).toThrow();
+      consoleSpy.mockRestore();
+      document.body.removeChild(container);
     });
 
     it('should activate on events on the document element when global is true', async () => {

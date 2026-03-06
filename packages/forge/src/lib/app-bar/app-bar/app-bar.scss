@@ -139,7 +139,7 @@ $host-tokens: (background, foreground);
 // Attempt to auto-theme any specific slotted elements directly
 //
 
-.fprge-app-bar.scoped {
+.forge-app-bar.scoped {
   ::slotted(:where(forge-tab-bar, forge-icon-button, forge-button)) {
     color: #{token(theme-foreground)};
 
