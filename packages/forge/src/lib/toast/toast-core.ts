@@ -9,7 +9,6 @@ export interface IToastCore {
   actionText: string;
   dismissible: boolean;
   dismissLabel: string;
-  announcement: string;
   show(): void;
   hide(): Promise<void>;
 }
@@ -22,7 +21,6 @@ export class ToastCore implements IToastCore {
   private _dismissible = false;
   private _dismissLabel: string;
   private _theme: ToastTheme = TOAST_CONSTANTS.defaults.THEME;
-  private _announcement: string;
   private _hideTimeout: number | undefined;
   private _actionListener: EventListener = this._onAction.bind(this);
   private _closeListener: EventListener = this._onClose.bind(this);
@@ -262,12 +260,5 @@ export class ToastCore implements IToastCore {
       this._theme = value;
       this._adapter.setHostAttribute(TOAST_CONSTANTS.attributes.THEME, this._theme);
     }
-  }
-
-  public get announcement(): string {
-    return this._announcement;
-  }
-  public set announcement(value: string) {
-    this._announcement = value;
   }
 }

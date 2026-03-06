@@ -52,7 +52,7 @@ export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToast
   }
 
   public getMessageText(): string {
-    return this._component.announcement?.trim() || this._component.textContent?.trim() || '';
+    return this._component.textContent?.trim() ?? '';
   }
 
   public addCloseListener(listener: EventListener): void {

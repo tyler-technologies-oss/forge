@@ -97,24 +97,6 @@ describe('Toast', () => {
 
       toast.remove();
     });
-
-    it('should use announcement property over text content when announcing', async () => {
-      const screen = render(html`<forge-toast announcement="Custom announcement">Visible text</forge-toast>`);
-      const el = screen.container.querySelector('forge-toast') as IToastComponent;
-
-      el.open = true;
-      await task(150);
-
-      const liveRegion = document.querySelector('[data-forge-live-announcer-assertive]');
-      expect(liveRegion?.textContent).toBe('Custom announcement');
-    });
-
-    it('should set announcement property via attribute', async () => {
-      const screen = render(html`<forge-toast announcement="Test announcement">Test</forge-toast>`);
-      const el = screen.container.querySelector('forge-toast') as IToastComponent;
-
-      expect(el.announcement).toBe('Test announcement');
-    });
   });
 
   describe('open/close', () => {

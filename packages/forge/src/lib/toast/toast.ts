@@ -25,7 +25,6 @@ export interface IToastProperties {
   dismissible: boolean;
   dismissLabel: string;
   theme: ToastTheme;
-  announcement: string;
 }
 
 export interface IToastPresentConfiguration extends Partial<IToastProperties> {
@@ -69,7 +68,6 @@ declare global {
  * @property {boolean} [dismissible=false] - Whether the toast is dismissible (displays a close button).
  * @property {string} dismissLabel - The accessible label for the dismiss button.
  * @property {ToastTheme} [theme="default"] - The theme of the toast.
- * @property {string} announcement - Custom text to announce to screen readers. Falls back to text content if not set.
  *
  * @globalconfig duration
  * @globalconfig placement
@@ -82,7 +80,6 @@ declare global {
  * @attribute {boolean} [dismissible=false] - Whether the toast is dismissible (displays a close button).
  * @attribute {string} dismiss-label - The accessible label for the dismiss button.
  * @attribute {ToastTheme} [theme="default"] - The theme of the toast.
- * @attribute {string} announcement - Custom text to announce to screen readers. Falls back to text content if not set.
  *
  * @event {CustomEvent<void>} forge-toast-action - Dispatched when the action button is clicked.
  * @event {CustomEvent<void>} forge-toast-close - Dispatched when the toast is closed.
@@ -166,9 +163,6 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
       case TOAST_CONSTANTS.attributes.THEME:
         this.theme = newValue as ToastTheme;
         break;
-      case TOAST_CONSTANTS.attributes.ANNOUNCEMENT:
-        this.announcement = newValue;
-        break;
     }
   }
 
@@ -192,9 +186,6 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
 
   @coreProperty()
   declare public theme: ToastTheme;
-
-  @coreProperty()
-  declare public announcement: string;
 
   /**
    * Shows the toast.
