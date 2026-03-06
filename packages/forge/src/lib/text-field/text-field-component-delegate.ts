@@ -161,7 +161,6 @@ export class TextFieldComponentDelegate extends FormFieldComponentDelegate<IText
   private _createLabel(text: string): void {
     this._labelElement = document.createElement('label');
     this._labelElement.textContent = text;
-    this._labelElement.slot = 'label';
     if (this._config.options?.id) {
       this._labelElement.htmlFor = this._config.options.id;
     }
