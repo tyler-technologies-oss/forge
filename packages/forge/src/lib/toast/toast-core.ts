@@ -1,5 +1,5 @@
+import { LiveAnnouncer } from '@tylertech/forge-core';
 import { DismissibleStack, IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack.js';
-import { LiveAnnouncer } from '../core/utils/live-announcer.js';
 import { IToastAdapter } from './toast-adapter.js';
 import { TOAST_CONSTANTS, ToastPlacement, ToastTheme } from './toast-constants.js';
 

@@ -1,4 +1,4 @@
-import { createVisuallyHiddenElement } from '@tylertech/forge-core';
+import { createVisuallyHiddenElement } from '../utils/a11y.js';
 
 const LIVE_ANNOUNCER_KEY = Symbol('forgeLiveAnnouncer');
 
