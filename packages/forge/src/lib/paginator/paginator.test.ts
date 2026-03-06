@@ -7,6 +7,7 @@ import type { IPaginatorChangeEventData } from './paginator-constants.js';
 import { PAGINATOR_CONSTANTS } from './paginator-constants.js';
 import type { ISelectComponent } from '../select/select/select.js';
 import type { IIconButtonComponent } from '../icon-button/index.js';
+import { LiveAnnouncer } from '@tylertech/forge-core';
 
 import './paginator.js';
 
@@ -49,6 +50,36 @@ describe('Paginator', () => {
       const harness = await createFixture({ disabled: true });
 
       await expect(harness.paginatorElement).toBeAccessible();
+    });
+
+    it('should announce range changes to screen readers on page navigation', async () => {
+      const announceSpy = vi.spyOn(LiveAnnouncer.instance, 'announce');
+      const harness = await createFixture({ total: 100 });
+
+      announceSpy.mockClear();
+      harness.nextButton.click();
+
+      expect(announceSpy).toHaveBeenCalledWith('26-50 of 100', 'polite');
+    });
+
+    it('should announce range changes to screen readers on page size change', async () => {
+      const announceSpy = vi.spyOn(LiveAnnouncer.instance, 'announce');
+      const harness = await createFixture({ total: 100 });
+
+      announceSpy.mockClear();
+      harness.pageSizeSelect.value = '50';
+      harness.pageSizeSelect.dispatchEvent(new CustomEvent('change', { detail: '50' }));
+
+      expect(announceSpy).toHaveBeenCalledWith('1-50 of 100', 'polite');
+    });
+
+    it('should not announce on initial render', async () => {
+      const announceSpy = vi.spyOn(LiveAnnouncer.instance, 'announce');
+      announceSpy.mockClear();
+
+      await createFixture({ total: 100 });
+
+      expect(announceSpy).not.toHaveBeenCalled();
     });
   });
 
