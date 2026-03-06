@@ -1,5 +1,12 @@
 # @tylertech/forge-core
 
+## 3.3.0
+
+### Minor Changes
+
+- 9015abf: updated dependencies and build target to es2022
+- f95fdef: feat: add `LiveAnnouncer` for accessibility announcements
+
 ## 3.2.0
 
 :tada: This release contains work from a new contributor! :tada:

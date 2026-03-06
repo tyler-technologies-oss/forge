@@ -1,5 +1,45 @@
 # @tylertech/forge
 
+## 3.14.0
+
+### Minor Changes
+
+- 956c3cd: feat(open-icon): migrate to lit
+- e0f93f5: feat(divider): migrate to lit
+- 1631521: Add disabled custom state to the button area component
+- 956c3cd: feat(open-icon): add open state
+- 1631521: Add support for buttons areas to connect to buttons placed outside the button slot
+- 1631521: Convert the button area component to Lit
+- 21af3d5: feat: Conversion to monorepo and package build updates
+- d304fe1: feat(keyboard-shortcut): migrate to lit
+- 1631521: Allow anchor links to be used with button areas
+- f48e001: feat(accordion): migrate to lit
+- ec66fe7: fix(select): activate selected option when opened via keyboard
+- 1631521: Fix cursor misalignment when using a button area with a screen reader
+- 1631521: Add pressed and current state reflection to the button area component
+- 8cbba43: feat(app-bar): migrate to lit
+
+### Patch Changes
+
+- f8eae5e: feat(time-picker): sanitize invalid step values to fix infinite loop
+- 8894379: fix(menu): prevent synthetic click from closing keyboard-opened menu
+- 49f2f79: fix(date-picker): clear input when value set to null with allowInvalidDate
+- b7ca449: fix(chip): Ensure remove chip button has the expected default name
+- cbeb54f: feat(date-picker-component-delegate): fix onChange to use correct element event to trigger table filter
+- 14a1b91: fix(table): preserve select-all indeterminate state across data changes
+- 57c52d1: fix(menu): expand cascade menu hover area to full list-item
+- 8de3e5f: Fix clickable area on menus around list items
+- f95fdef: fix(toast): announce content to screen readers when opened
+- 5c1f532: fix(autocomplete): prevent dropdown interaction when input disabled
+- 6cc615f: fix(radio): escape special characters in radio name for grouping
+- 4b822e8: fix(date-picker): open calendar on current month when max is current date
+- be982ba: fix(paginator): ensure `total`, `pageSize`, and `pageIndex` are finite numbers to avoid invalid values
+- 9e53426: fix(checkbox,radio,switch): improve unchecked state contrast ratio
+- d9ddfbc: fix(text-field): fix missing for-id pair in async edge case
+- Updated dependencies [9015abf]
+- Updated dependencies [f95fdef]
+  - @tylertech/forge-core@3.3.0
+
 ## 3.13.1
 
 ### 🐛 Bug Fix
@@ -1035,7 +1075,7 @@ Thank you, null[@kevaltyler](https://github.com/kevaltyler), for all your work!
 
 #### 🚀 Enhancement
 
-- feat:  update `forge-hyperlink` CSS class to use `text-decoration: underline` [#499](https://github.com/tyler-technologies-oss/forge/pull/499) ([@kevaltyler](https://github.com/kevaltyler))
+- feat: update `forge-hyperlink` CSS class to use `text-decoration: underline` [#499](https://github.com/tyler-technologies-oss/forge/pull/499) ([@kevaltyler](https://github.com/kevaltyler))
 
 #### Authors: 1
 
@@ -1615,7 +1655,7 @@ Thank you, Josh Pierro ([@joshpierro](https://github.com/joshpierro)), for all y
 - fix: fixed duplicate asterisk characters on required form field labels in Safari [#168](https://github.com/tyler-technologies-oss/forge/pull/168) ([@DRiFTy17](https://github.com/DRiFTy17))
 - fix(autocomplete): fixed a bug where opening the dropdown via down arrow key would not activate the selected option [#163](https://github.com/tyler-technologies-oss/forge/pull/163) ([@DRiFTy17](https://github.com/DRiFTy17))
 - fix(select): fix to ensure `--forge-select-font-size` CSS custom prop… [#164](https://github.com/tyler-technologies-oss/forge/pull/164) ([@DRiFTy17](https://github.com/DRiFTy17))
-- fix(date-picker): _onToday zeros out time values [#162](https://github.com/tyler-technologies-oss/forge/pull/162) ([@jake-crawford-tyler](https://github.com/jake-crawford-tyler))
+- fix(date-picker): \_onToday zeros out time values [#162](https://github.com/tyler-technologies-oss/forge/pull/162) ([@jake-crawford-tyler](https://github.com/jake-crawford-tyler))
 - chore: support node 16 [#157](https://github.com/tyler-technologies-oss/forge/pull/157) ([@DRiFTy17](https://github.com/DRiFTy17))
 - chore: post release notes to slack [#156](https://github.com/tyler-technologies-oss/forge/pull/156) ([@DRiFTy17](https://github.com/DRiFTy17))
 
@@ -1814,4 +1854,3 @@ Thank you, Nick Andrews ([@nickonometry](https://github.com/nickonometry)), for 
 - Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
 
 ---
-
