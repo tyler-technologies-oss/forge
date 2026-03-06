@@ -9,6 +9,7 @@ import { TOAST_CONSTANTS } from './toast-constants.js';
 export interface IToastAdapter extends IBaseAdapter<IToastComponent> {
   show(): void;
   hide(): void;
+  getMessageText(): string;
   addCloseListener(listener: EventListener): void;
   removeCloseListener(listener: EventListener): void;
   addActionListener(listener: EventListener): void;
@@ -48,6 +49,10 @@ export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToast
   public async hide(): Promise<void> {
     await playKeyframeAnimation(this._surfaceElement, TOAST_CONSTANTS.classes.EXITING);
     this._overlayElement.open = false;
+  }
+
+  public getMessageText(): string {
+    return this._component.announcement?.trim() || this._component.textContent?.trim() || '';
   }
 
   public addCloseListener(listener: EventListener): void {

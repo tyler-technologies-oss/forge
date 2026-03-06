@@ -10,7 +10,8 @@ const observedAttributes = {
   ACTION_TEXT: 'action-text',
   DISMISSIBLE: 'dismissible',
   DISMISS_LABEL: 'dismiss-label',
-  THEME: 'theme'
+  THEME: 'theme',
+  ANNOUNCEMENT: 'announcement'
 };
 
 const attributes = {

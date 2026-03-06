@@ -1,4 +1,5 @@
 import { DismissibleStack, IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack.js';
+import { LiveAnnouncer } from '../core/utils/live-announcer.js';
 import { IToastAdapter } from './toast-adapter.js';
 import { TOAST_CONSTANTS, ToastPlacement, ToastTheme } from './toast-constants.js';
 
@@ -8,6 +9,7 @@ export interface IToastCore {
   actionText: string;
   dismissible: boolean;
   dismissLabel: string;
+  announcement: string;
   show(): void;
   hide(): Promise<void>;
 }
@@ -20,6 +22,7 @@ export class ToastCore implements IToastCore {
   private _dismissible = false;
   private _dismissLabel: string;
   private _theme: ToastTheme = TOAST_CONSTANTS.defaults.THEME;
+  private _announcement: string;
   private _hideTimeout: number | undefined;
   private _actionListener: EventListener = this._onAction.bind(this);
   private _closeListener: EventListener = this._onClose.bind(this);
@@ -49,6 +52,11 @@ export class ToastCore implements IToastCore {
 
   public show(): void {
     this._adapter.show();
+
+    const message = this._adapter.getMessageText();
+    if (message) {
+      LiveAnnouncer.instance.announce(message, 'assertive');
+    }
 
     DismissibleStack.instance.add(this._adapter.hostElement as IDismissible);
 
@@ -254,5 +262,12 @@ export class ToastCore implements IToastCore {
       this._theme = value;
       this._adapter.setHostAttribute(TOAST_CONSTANTS.attributes.THEME, this._theme);
     }
+  }
+
+  public get announcement(): string {
+    return this._announcement;
+  }
+  public set announcement(value: string) {
+    this._announcement = value;
   }
 }
