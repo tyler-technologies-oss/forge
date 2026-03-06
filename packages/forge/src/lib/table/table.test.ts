@@ -1916,6 +1916,30 @@ describe('TableComponent', () => {
       expect(selectAllCheckbox.checked).toBe(true);
     });
 
+    it('should preserve indeterminate state when data changes (pagination)', async () => {
+      const harness = await createFixture();
+      const page1Data = data.slice(0, 3);
+      const page2Data = data.slice(3, 6);
+
+      harness.component.columnConfigurations = columns;
+      harness.component.select = true;
+      harness.component.multiselect = true;
+      harness.component.selectKey = 'Id';
+      harness.component.data = page1Data;
+
+      harness.component.selectRowsByIndex(0);
+
+      const headerRow = harness.getTableHeaderRow();
+      const selectAllCheckbox = headerRow.cells.item(0)!.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLInputElement;
+
+      expect(selectAllCheckbox.indeterminate).toBe(true);
+
+      harness.component.data = page2Data;
+
+      expect(selectAllCheckbox.indeterminate).toBe(true);
+      expect(selectAllCheckbox.checked).toBe(false);
+    });
+
     it('should contain custom header template', async () => {
       const harness = await createFixture();
       const testColumns = deepCopy(columns);
