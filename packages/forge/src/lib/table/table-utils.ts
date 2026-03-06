@@ -1058,7 +1058,6 @@ export class TableUtils {
     }
 
     const rows = tableElement.tBodies[0].rows;
-    let selectedRowCount = 0;
 
     if (selectedRows.length) {
       Array.from(rows).forEach((row, index) => {
@@ -1070,12 +1069,9 @@ export class TableUtils {
           if (selectCheckbox) {
             TableUtils._setSelectedCheckboxState(selectCheckbox, true);
           }
-          selectedRowCount++;
         }
       });
     }
-
-    TableUtils.updateSelectAllState(tableElement, selectedRowCount > 0 && rows.length === selectedRowCount);
   }
 
   /**

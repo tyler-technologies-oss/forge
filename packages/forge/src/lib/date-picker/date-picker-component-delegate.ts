@@ -54,11 +54,7 @@ export class DatePickerComponentDelegate extends FormFieldComponentDelegate<IDat
   }
 
   public onChange(listener: (value: string) => void): void {
-    if (this._element.masked) {
-      this._element.addEventListener(DATE_PICKER_CONSTANTS.events.INPUT, evt => listener((evt.target as HTMLInputElement).value));
-    } else {
-      this.getInputElement().addEventListener('input', evt => listener((evt.target as HTMLInputElement).value));
-    }
+    this._element.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, (evt: CustomEvent) => listener(evt.detail));
   }
 
   public onInput(listener: (value: string) => void): void {

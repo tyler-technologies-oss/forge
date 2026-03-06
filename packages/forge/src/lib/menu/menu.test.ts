@@ -562,6 +562,37 @@ describe('Menu', () => {
         expect(harness.menuEl.open).toBe(false);
       });
 
+      it('should keep menu open when activated with space key', async () => {
+        const harness = await createFixture({ options: generateMenuOptions(3) });
+
+        harness.triggerEl.focus();
+        await userEvent.keyboard(' ');
+
+        expect(harness.menuEl.open).toBe(true);
+      });
+
+      it('should keep menu open when activated with enter key', async () => {
+        const harness = await createFixture({ options: generateMenuOptions(3) });
+
+        harness.triggerEl.focus();
+        await userEvent.keyboard('{Enter}');
+
+        expect(harness.menuEl.open).toBe(true);
+      });
+
+      it('should allow enter to open menu after space closes it', async () => {
+        const harness = await createFixture({ options: generateMenuOptions(3) });
+
+        harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space', bubbles: true }));
+        expect(harness.menuEl.open).toBe(true);
+
+        harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space', bubbles: true }));
+        expect(harness.menuEl.open).toBe(false);
+
+        harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
+        expect(harness.menuEl.open).toBe(true);
+      });
+
       it('tab should close the popup', async () => {
         const harness = await createFixture({ options: generateMenuOptions(7) });
 

@@ -1,3 +1,4 @@
+import { LiveAnnouncer } from '@tylertech/forge-core';
 import { DismissibleStack, IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack.js';
 import { IToastAdapter } from './toast-adapter.js';
 import { TOAST_CONSTANTS, ToastPlacement, ToastTheme } from './toast-constants.js';
@@ -49,6 +50,11 @@ export class ToastCore implements IToastCore {
 
   public show(): void {
     this._adapter.show();
+
+    const message = this._adapter.getMessageText();
+    if (message) {
+      LiveAnnouncer.instance.announce(message, 'assertive');
+    }
 
     DismissibleStack.instance.add(this._adapter.hostElement as IDismissible);
 
