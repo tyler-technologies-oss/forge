@@ -8,10 +8,6 @@ figma.connect('<FIGMA_BADGE_BADGE>', {
       true: html`<forge-icon name="icon_name" slot="start"></forge-icon>`,
       false: undefined
     }),
-    endInstance: figma.boolean('End slot', {
-      true: html`<forge-icon name="icon_name" slot="end"></forge-icon>`,
-      false: undefined
-    }),
     // startInstanceName: figma.children(".forge-icon"),
     startInstanceName: figma.nestedProps('.forge-icon', {
       icon: figma.instance('Icon')
@@ -36,6 +32,5 @@ figma.connect('<FIGMA_BADGE_BADGE>', {
       false: undefined
     })
   },
-  example: (props: any) =>
-    html` <forge-badge theme="${props.theme}" ${props.strong} ${props.dot}> ${props.startInstance} ${props.text} ${props.endInstance} </forge-badge>`
+  example: (props: any) => html` <forge-badge theme="${props.theme}" ${props.strong} ${props.dot}> ${props.startInstance} ${props.text} </forge-badge>`
 });

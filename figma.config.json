@@ -1,7 +1,7 @@
 {
   "codeConnect": {
     "interactiveSetupFigmaFileUrl": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components",
-    "include": ["src/figma/**/*.figma.ts", "src/lib/**", "src/figma/test/*.figma.ts"],
+    "include": ["src/figma/**/*.figma.ts"],
     "exclude": ["docs/**", "plugins/**", "templates/**", "src/dev/**", "src/stories/**", "src/test/**"],
     "parser": "html",
     "documentUrlSubstitutions": {
@@ -36,7 +36,17 @@
       "<FIGMA_DRAWER_DRAWER>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2491-279",
       "<FIGMA_DRAWER_NAV_LIST_ITEM>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2439-2983",
       "<FIGMA_POPOVER_POPOVER>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2439-2372",
-      "<FIGMA_LABEL_VALUE_LABEL_VALUE>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=4504-97"
+      "<FIGMA_LABEL_VALUE_LABEL_VALUE>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=4504-97",
+      "<FIGMA_EXPANSION_PANEL_EXPANSION_PANEL>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=3557-1316",
+      "<FIGMA_BUTTON_TOGGLE_BUTTON_TOGGLE>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2034-720",
+      "<FIGMA_BUTTON_TOGGLE_GROUP_BUTTON_TOGGLE_GROUP>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2040-1099",
+      "<FIGMA_CHIP_CHIP>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=3527-866",
+      "<FIGMA_CHIP_SET_CHIP_SET>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=3538-171",
+      "<FIGMA_SCAFFOLD_SCAFFOLD>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=3958-206",
+      "<FIGMA_APP_BAR_APP_BAR>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2642-944",
+      "<FIGMA_LOGO_TITLE_CONTAINER>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2648-3229",
+      "<FIGMA_APP_BAR_SEARCH>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2642-967",
+      "<FIGMA_END_SLOT_CONTENT>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2649-3786"
     }
   }
 }

@@ -2,7 +2,7 @@ import figma, { html } from '@figma/code-connect/html';
 
 figma.connect('<FIGMA_TOOLTIP_TOOLTIP>', {
   props: {
-    Text: figma.string('Text'),
+    text: figma.string('Text'),
     placement: figma.enum('Placement', {
       top: 'top',
       bottom: 'bottom',
@@ -10,5 +10,5 @@ figma.connect('<FIGMA_TOOLTIP_TOOLTIP>', {
       right: 'right'
     })
   },
-  example: (props: any) => html` <forge-tooltip anchor="my-button" placement="${props.placement}">${props.Text}</forge-tooltip>`
+  example: (props: any) => html` <forge-tooltip anchor="my-button" placement="${props.placement}">${props.text}</forge-tooltip>`
 });
