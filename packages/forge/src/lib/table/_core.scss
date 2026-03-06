@@ -249,6 +249,27 @@
   }
 }
 
+// The default table footer row styles.
+@mixin foot-row {
+  height: variables.$tfoot-row-height;
+  background-color: variables.$tfoot-background;
+}
+@mixin foot-header {
+  // place holder for any specific styles for header cells in the table foot, if needed in the future.
+}
+
+// The base styles for the cells within the table foot.
+@mixin foot-cell {
+  color: #{theme.variable(on-surface)};
+  font-size: variables.$cell-font-size;
+}
+
+// The table foot cell wrapper element styles for alignment purposes.
+@mixin foot-cell-container {
+  display: flex;
+  align-items: center;
+}
+
 // The base table body row styles for row interactions.
 @mixin body-row {
   height: variables.$tbody-row-height;
@@ -335,6 +356,20 @@
         @include cell;
         @include body-row-cell;
       }
+    }
+  }
+
+  tfoot {
+    tr {
+      @include foot-row;
+    }
+    td {
+      @include cell;
+      @include foot-cell;
+    }
+    th {
+      @include cell;
+      @include foot-header;
     }
   }
 }

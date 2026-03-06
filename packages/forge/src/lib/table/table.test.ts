@@ -23,9 +23,9 @@ import type { ITooltipComponent } from '../tooltip/index.js';
 import './table.js';
 
 const columns: IColumnConfiguration[] = [
-  { header: 'Name', property: 'Name' },
-  { header: 'Age', property: 'Age' },
-  { header: 'Position', property: 'Position' }
+  { header: 'Name', property: 'Name', footer: 'Totals' },
+  { header: 'Age', property: 'Age', footer: '' },
+  { header: 'Position', property: 'Position', footer: '$21,000' }
 ];
 
 const resizableColumns: IColumnConfiguration[] = [
@@ -79,6 +79,7 @@ describe('TableComponent', () => {
       expect(harness.component.resizable).toBe(true);
       expect(harness.component.minResizeWidth).toBe(10);
       expect(harness.component.allowRowClick).toBe(true);
+      expect(harness.component.includeFooter).toBe(true);
 
       expect(harness.component.getAttribute(TABLE_CONSTANTS.attributes.SELECT)).toBe('true');
       expect(harness.component.getAttribute(TABLE_CONSTANTS.attributes.MULTISELECT)).toBe('true');
@@ -171,6 +172,7 @@ describe('TableComponent', () => {
     it('should have proper default DOM state', async () => {
       const harness = await createFixture();
       expect(harness.tableElement.tHead).toBeNull();
+      expect(harness.tableElement.tFoot).toBeNull();
       expect(harness.tableElement.tBodies.length).toBe(0);
       expect(harness.tableElement.classList.contains(TABLE_CONSTANTS.classes.TABLE)).toBe(true);
     });
@@ -2268,6 +2270,10 @@ function getTableHeaderRow(tableElement: HTMLTableElement): HTMLTableRowElement 
   return (tableElement.tHead as HTMLTableSectionElement).rows.item(0) as HTMLTableRowElement;
 }
 
+function getTableFooterRow(tableElement: HTMLTableElement): HTMLTableRowElement {
+  return (tableElement.tFoot as HTMLTableSectionElement).rows.item(0) as HTMLTableRowElement;
+}
+
 function getTableResizeHandle(tableElement: HTMLTableElement): HTMLElement {
   const tHead = tableElement.tHead as HTMLTableSectionElement;
   const row = tHead.rows.item(0) as HTMLTableRowElement;
@@ -2350,6 +2356,10 @@ class TableHarness {
     return getTableHeaderRow(this.tableElement);
   }
 
+  public getTableFooterRow(): HTMLTableRowElement {
+    return getTableFooterRow(this.tableElement);
+  }
+
   public getTableBodyRows(): HTMLTableRowElement[] {
     return getTableBodyRows(this.tableElement);
   }
@@ -2384,7 +2394,8 @@ async function createFixture(config: ITableFixtureConfig = {}): Promise<TableHar
           wrap-content="true"
           resizable="true"
           min-resize-width="10"
-          allow-row-click="true">
+          allow-row-click="true"
+          include-footer="true">
           <span></span>
           <span></span>
         </forge-table>
@@ -2404,7 +2415,8 @@ async function createFixture(config: ITableFixtureConfig = {}): Promise<TableHar
           wrap-content="true"
           resizable="true"
           min-resize-width="10"
-          allow-row-click="true">
+          allow-row-click="true"
+          include-footer="true">
         </forge-table>
       `);
     }

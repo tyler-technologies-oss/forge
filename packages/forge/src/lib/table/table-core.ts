@@ -38,6 +38,7 @@ export interface ITableCore {
   fixedHeaders: boolean;
   layoutType: TableLayoutType;
   wrapContent: boolean;
+  includeFooter: boolean;
   resizable: boolean;
   minResizeWidth: number;
   allowRowClick: boolean;
@@ -87,6 +88,7 @@ export class TableCore implements ITableCore {
   private _fixedHeaders = false;
   private _layoutType: TableLayoutType = TABLE_CONSTANTS.strings.DEFAULT_LAYOUT_TYPE as TableLayoutType;
   private _wrapContent = true;
+  private _includeFooter = false;
   private _resizable = false;
   private _minResizeWidth = TABLE_CONSTANTS.numbers.MIN_RESIZE_WIDTH;
   private _multiColumnSort = false;
@@ -233,7 +235,8 @@ export class TableCore implements ITableCore {
       selectAllTemplate: this._selectAllTemplate,
       selectCheckboxAlignment: this._selectCheckboxAlignment,
       tooltipSelect: this._tooltipSelect,
-      tooltipSelectAll: this._tooltipSelectAll
+      tooltipSelectAll: this._tooltipSelectAll,
+      includeFooter: this._includeFooter
     };
   }
 
@@ -384,6 +387,17 @@ export class TableCore implements ITableCore {
     if (this._wrapContent !== value) {
       this._wrapContent = value;
       this._adapter.setWrapContentState(this._tableConfiguration);
+    }
+  }
+
+  /** Controls whether the table includes a footer row or not. */
+  public get includeFooter(): boolean {
+    return this._includeFooter;
+  }
+  public set includeFooter(value: boolean) {
+    if (this._includeFooter !== value) {
+      this._includeFooter = value;
+      this.render();
     }
   }
 

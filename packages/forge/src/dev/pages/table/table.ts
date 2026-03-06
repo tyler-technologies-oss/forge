@@ -60,17 +60,19 @@ const columnConfigurations: IColumnConfiguration[] = [
     initialSort: { direction: SortDirection.Descending, sortOrder: 1 } as ISortedColumn,
     headerTemplate: () => Promise.resolve('<span>Player names</span>'),
     filter: true,
-    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter name...' } })
+    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter name...' } }),
+    footer: "Calculated",
   },
   {
     header: 'Age',
     property: 'age',
-    align: CellAlign.Right,
+    align: CellAlign.Center,
     sortable: true,
     initialSort: true,
     sortDirection: SortDirection.Descending,
     filter: true,
-    filterDelegate: new TextFieldComponentDelegate({ options: { placeholder: 'Filter age...' } })
+    filterDelegate: new TextFieldComponentDelegate({ options: { placeholder: 'Filter age...' } }),
+    footerTemplate: () => Promise.resolve(`Average: ${parseFloat((displayData.reduce((sum, { age }) => sum + age, 0) / displayData.length).toFixed(2))}`)
   },
   {
     header: 'Position',
@@ -122,6 +124,11 @@ multiselectToggle.addEventListener('forge-switch-change', ({ detail: selected })
 const tooltipSelectAllToggle = document.querySelector('#opt-tooltip-select-all') as ISwitchComponent;
 tooltipSelectAllToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   table.tooltipSelectAll = selected ? 'Select all' : undefined;
+});
+
+const includeFooterToggle = document.querySelector('#opt-include-footer') as ISwitchComponent;
+includeFooterToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  table.includeFooter = selected;
 });
 
 const tooltipSelectToggle = document.querySelector('#opt-tooltip-select') as ISwitchComponent;
