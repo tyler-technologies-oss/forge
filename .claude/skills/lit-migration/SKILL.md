@@ -44,9 +44,7 @@ Migrate Tyler Forge components from the legacy component/core/adapter/template a
 
 **Goal**: Set up new file structure and delete legacy files.
 
-1. **Ensure clean git state** - commit or stash any changes first
-
-2. **Delete legacy files**:
+1. **Delete legacy files**:
    - `component-adapter.ts`
    - `component-core.ts`
    - `component.html` (if exists)
@@ -985,48 +983,10 @@ BREAKING CHANGE: Internal architecture changed from component/core/adapter patte
 - All functionality preserved with improved performance and maintainability
 ```
 
-#### 6. Commit Changes
-
-Use conventional commit format:
+#### 6. Create Changeset
 
 ```bash
-git add .
-git commit -m "feat(component-name)!: migrate to Lit
-
-BREAKING CHANGE: Internal architecture changed to Lit.
-Component API remains the same for consumers."
-```
-
-#### 7. Create Pull Request
-
-```bash
-# Push branch
-git push -u origin feat/component-name-lit
-
-# Create PR using gh CLI
-gh pr create --title "feat(component-name)!: migrate to Lit" --body "$(cat <<'EOF'
-## Summary
-Migrates component-name from legacy component/core/adapter/template architecture to Lit-based component.
-
-## Changes
-- Consolidated 4 files into single component file
-- Replaced core/adapter pattern with Lit reactive properties
-- Maintained all existing functionality and public API
-- Added backward compatibility for legacy decorators
-
-## Testing
-- [ ] All existing tests pass
-- [ ] Build succeeds
-- [ ] Linter passes
-- [ ] Visual testing in Storybook verified
-- [ ] Accessibility verified
-
-## Breaking Changes
-Internal architecture changed - consumers should see no differences, but internal implementation details are no longer accessible.
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-EOF
-)"
+pnpm changeset
 ```
 
 ## Quick Reference
