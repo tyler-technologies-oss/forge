@@ -1,5 +1,6 @@
 import { getShadowElement, removeAllChildren, toggleElementPlaceholder } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { LiveAnnouncer } from '@tylertech/forge-core';
 import { IIconButtonComponent } from '../icon-button/index.js';
 import { ISelectComponent, ISelectOption } from '../select/index.js';
 import { IPaginatorComponent } from './paginator.js';
@@ -32,6 +33,7 @@ export interface IPaginatorAdapter extends IBaseAdapter {
   setPageSizeVisibility(visible: boolean): void;
   setFocus(options?: FocusOptions): void;
   tryDisableFields(fieldsToDisable: PaginatorFieldIdentifier[]): void;
+  announceChange(message: string): void;
 }
 
 export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implements IPaginatorAdapter {
@@ -193,6 +195,10 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
       next: () => this.setNextPageButtonEnabled(false)
     };
     fieldsToDisable.forEach(field => fieldDisablers[field]?.());
+  }
+
+  public announceChange(message: string): void {
+    LiveAnnouncer.instance.announce(message, 'polite');
   }
 
   private _tryFocus(elements: Array<IIconButtonComponent | ISelectComponent>, options?: FocusOptions): void {
