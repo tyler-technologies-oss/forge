@@ -27,6 +27,7 @@ const strings = {
   ALL_NETWORK_BASE_URL: `${CDN_BASE_URL}v1/icons/svg/all`
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const ICON_CONSTANTS = {
   elementName,
   observedAttributes,
