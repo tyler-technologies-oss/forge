@@ -31,6 +31,7 @@ const COLUMNS: IColumnConfiguration[] = [
   {
     header: 'First Name',
     property: 'firstName',
+    footer: 'Summary',
     sortable: true,
     initialSort: true,
     filter: true,
@@ -39,6 +40,7 @@ const COLUMNS: IColumnConfiguration[] = [
   {
     header: 'Last Name',
     property: 'lastName',
+    footer: `${DATA.length} rows`,
     sortable: true,
     filter: true,
     filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter last name...' }, props: { showClear: true } })
@@ -46,6 +48,7 @@ const COLUMNS: IColumnConfiguration[] = [
   {
     header: 'Age',
     property: 'age',
+    footer: `Avg: ${Math.round(DATA.reduce((sum, row) => sum + row.age, 0) / DATA.length)}`,
     sortable: true,
     filter: true,
     filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter age...' }, props: { showClear: true } })
@@ -135,7 +138,8 @@ const meta = {
     minResizeWidth: 100,
     allowRowClick: false,
     multiColumnSort: false,
-    selectCheckboxAlignment: 'center'
+    selectCheckboxAlignment: 'center',
+    includeFooter: false
   }
 } satisfies Meta<ITableComponent>;
 

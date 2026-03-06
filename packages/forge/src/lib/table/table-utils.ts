@@ -58,6 +58,7 @@ export class TableUtils {
     // Create the header and body rows
     const thead = TableUtils._createTableHead(configuration);
     const tbody = TableUtils._createTableBody(configuration);
+    const tfoot = TableUtils._createTableFoot(configuration);
 
     // If we are allowing click events on the table rows then attach the row click listeners and attributes
     if (configuration.clickListener) {
@@ -90,6 +91,7 @@ export class TableUtils {
       TableUtils._addSelectColumn(
         thead,
         tbody,
+        tfoot,
         configuration.dense,
         configuration.selectListener,
         configuration.selectAllListener,
@@ -117,6 +119,10 @@ export class TableUtils {
     }
 
     TableUtils._setTableBody(configuration.tableElement, tbody);
+
+    if (configuration.includeFooter) {
+      TableUtils._setTableFoot(configuration.tableElement, tfoot);
+    }
   }
 
   private static _setTableHead(tableElement: HTMLTableElement, thead: HTMLTableSectionElement): void {
@@ -132,6 +138,14 @@ export class TableUtils {
       replaceElement(tbody, tableElement.tBodies[0]);
     } else {
       tableElement.appendChild(tbody);
+    }
+  }
+
+  private static _setTableFoot(tableElement: HTMLTableElement, tfoot: HTMLTableSectionElement): void {
+    if (tableElement.tFoot) {
+      replaceElement(tfoot, tableElement.tFoot);
+    } else {
+      tableElement.appendChild(tfoot);
     }
   }
 
@@ -321,6 +335,85 @@ export class TableUtils {
     }
 
     return thead;
+  }
+
+  /**
+   * Creates the table footer section by adding a row for the column footers based on column configuration.
+   * @param columnDataMap The column based data map.
+   * @param tableElement The table element.
+   */
+  private static _createTableFoot(tableConfiguration: ITableConfiguration): HTMLTableSectionElement {
+    const tfoot = document.createElement('tfoot');
+
+    // Create the table foot row for our column headers with required class
+    const tr = tfoot.insertRow();
+    addClass([TABLE_CONSTANTS.classes.TABLE_ROW, TABLE_CONSTANTS.classes.TABLE_FOOT_ROW], tr);
+
+    // Create a footer cell for each column in our column data map
+    for (let i = 0; i < tableConfiguration.columnConfigurations.length; i++) {
+      const columnConfig = tableConfiguration.columnConfigurations[i];
+
+      // Create the th/td element with required classes
+      const cell = i === 0 ? document.createElement('th') : document.createElement('td');
+      cell.scope = 'row';
+      if (i === 0) {
+        addClass([TABLE_CONSTANTS.classes.TABLE_CELL, TABLE_CONSTANTS.classes.TABLE_FOOT_HEADER, 'forge-typography--overline'], cell);
+      } else {
+        addClass([TABLE_CONSTANTS.classes.TABLE_CELL, TABLE_CONSTANTS.classes.TABLE_FOOT_CELL], cell);
+      }
+
+      // We wrap the header text in a div for ease of alignment
+      const cellContainer: HTMLElement = document.createElement('div');
+      cellContainer.classList.add(TABLE_CONSTANTS.classes.TABLE_FOOT_CELL_CONTAINER);
+
+      // Set the cell alignment from config
+      if (columnConfig.align) {
+        TableUtils._setCellAlignmentClass(cellContainer, columnConfig.align);
+      }
+
+      // Check if width was specified
+      if (isDefined(columnConfig.width)) {
+        const width = safeCssWidth(columnConfig.width as string | number);
+        if (width) {
+          cell.style.width = width;
+        }
+      }
+
+      // Check if we were provided any inline style declarations and apply to th/td AND wrapper content div
+      if (isDefined(columnConfig.footerCellStyle) && isObject(columnConfig.footerCellStyle)) {
+        Object.assign(cell.style, columnConfig.footerCellStyle);
+        Object.assign(cellContainer.style, columnConfig.footerCellStyle);
+      }
+
+      if (typeof columnConfig.footerTemplate === 'function') {
+        Promise.resolve(columnConfig.footerTemplate(i, cellContainer, columnConfig)).then(element => {
+          if (element) {
+            const node = document.createElement('div');
+            addClass(TABLE_CONSTANTS.classes.TABLE_CELL_CONTAINER, node);
+            if (typeof element === 'string') {
+              node.innerHTML = element;
+            } else {
+              TableUtils._prepend(element, node);
+            }
+            node.setAttribute(TABLE_CONSTANTS.attributes.CUSTOM_CELL_TEMPLATE, '');
+            TableUtils._prepend(node, cellContainer);
+          }
+        });
+      } else {
+        const span = document.createElement('span');
+        span.classList.add(TABLE_CONSTANTS.classes.TABLE_FOOT_CELL_TEXT);
+        span.textContent = columnConfig.footer && typeof columnConfig.footer === 'string' ? columnConfig.footer.trim() : '';
+        if (span.textContent.trim().length === 0) {
+          cell.setAttribute('aria-hidden', 'true');
+        }
+        TableUtils._prepend(span, cellContainer);
+      }
+
+      cell.appendChild(cellContainer);
+      tr.appendChild(cell);
+    }
+
+    return tfoot;
   }
 
   /**
@@ -729,10 +822,12 @@ export class TableUtils {
    * Creates the select column as the first column in the table.
    * @param theadElement
    * @param tbodyElement
+   * @param tfootElement
    */
   private static _createSelectColumn(
     theadElement: HTMLTableSectionElement,
     tbodyElement: HTMLTableSectionElement,
+    tfootElement: HTMLTableSectionElement | null,
     dense: boolean,
     showSelectAll: boolean,
     selectAllTemplate: TableHeaderSelectAllTemplate | null,
@@ -748,6 +843,10 @@ export class TableUtils {
 
     if (tbodyElement) {
       TableUtils._createBodySelectColumn(tbodyElement, dense, selectCheckboxAlignment, data, tooltipSelect, tooltipSelectAll);
+    }
+
+    if (tfootElement) {
+      TableUtils._createFootSelectColumn(tfootElement, dense, showSelectAll, selectAllTemplate, registerListener, selectCheckboxAlignment, tooltipSelectAll);
     }
   }
 
@@ -784,6 +883,32 @@ export class TableUtils {
       } else {
         lastRowFirstCell?.appendChild(TableUtils._createCheckboxElement(true, dense, selectCheckboxAlignment, null, null, null, tooltipSelectAll));
       }
+    }
+  }
+
+  /**
+   * Creates the select column in the table foot.
+   * @param {HTMLTableSectionElement} tfootElement The table foot element.
+   * @param {boolean} showSelectAll Whether to show the select all checkbox or not.
+   */
+  private static _createFootSelectColumn(
+    tfootElement: HTMLTableSectionElement,
+    dense: boolean,
+    showSelectAll: boolean,
+    selectAllTemplate: TableHeaderSelectAllTemplate | null,
+    registerListener: () => void,
+    selectCheckboxAlignment: CellAlign | null,
+    tooltipSelectAll: string | null
+  ): void {
+    Array.from(tfootElement.rows).forEach(row => {
+      const th = document.createElement('th');
+      addClass([TABLE_CONSTANTS.classes.TABLE_CELL, TABLE_CONSTANTS.classes.TABLE_FOOT_CELL], th);
+      row.insertBefore(th, row.cells.item(0));
+    });
+
+    if (showSelectAll) {
+      const lastRowFirstCell = tfootElement.rows.item(tfootElement.rows.length - 1)?.cells.item(0) as HTMLTableHeaderCellElement;
+      lastRowFirstCell?.appendChild(document.createElement('div'));
     }
   }
 
@@ -833,10 +958,18 @@ export class TableUtils {
    * @param {HTMLTableSectionElement} theadElement The table head element.
    * @param {HTMLTableSectionElement} tbodyElement The table body element.
    */
-  private static _destroySelectColumn(theadElement: HTMLTableSectionElement, tbodyElement: HTMLTableSectionElement): void {
+  private static _destroySelectColumn(
+    theadElement: HTMLTableSectionElement,
+    tbodyElement: HTMLTableSectionElement,
+    tfootElement: HTMLTableSectionElement | null
+  ): void {
     const nonExpandedRows = TableUtils._getNonExpandedRows(tbodyElement.rows);
     Array.from(theadElement.rows).forEach(row => row.removeChild(row.cells.item(0) as HTMLTableHeaderCellElement));
     Array.from(nonExpandedRows).forEach(row => row.removeChild(row.cells.item(0) as HTMLTableHeaderCellElement));
+
+    if (tfootElement) {
+      Array.from(tfootElement.rows).forEach(row => row.removeChild(row.cells.item(0) as HTMLTableHeaderCellElement));
+    }
 
     // Update the colspan on the expanded rows
     if (tbodyElement.rows.length) {
@@ -1202,6 +1335,7 @@ export class TableUtils {
   ): void {
     const theadElement = tableElement.tHead;
     const tbodyElement = tableElement.tBodies[0];
+    const tfootElement = tableElement.tFoot;
 
     if (!theadElement || !tbodyElement) {
       return;
@@ -1211,6 +1345,7 @@ export class TableUtils {
       TableUtils._addSelectColumn(
         theadElement,
         tbodyElement,
+        tfootElement,
         dense,
         selectListener,
         selectAllListener,
@@ -1229,7 +1364,7 @@ export class TableUtils {
         TableUtils._detachSelectAllListener(theadElement, selectAllListener);
       }
 
-      TableUtils._destroySelectColumn(theadElement, tbodyElement);
+      TableUtils._destroySelectColumn(theadElement, tbodyElement, tfootElement);
     }
   }
 
@@ -1243,6 +1378,7 @@ export class TableUtils {
   private static _addSelectColumn(
     theadElement: HTMLTableSectionElement,
     tbodyElement: HTMLTableSectionElement,
+    tfootElement: HTMLTableSectionElement | null,
     dense: boolean,
     selectListener: ((evt: Event) => void) | null,
     selectAllListener: ((evt: Event) => void) | null,
@@ -1255,6 +1391,7 @@ export class TableUtils {
     TableUtils._createSelectColumn(
       theadElement,
       tbodyElement,
+      tfootElement,
       dense,
       !!selectAllListener,
       selectAllTemplate,

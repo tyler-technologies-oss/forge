@@ -37,6 +37,7 @@ export interface ITableComponent extends IBaseComponent {
   dense: boolean;
   roomy: boolean;
   filter: boolean;
+  includeFooter: boolean;
   fixedHeaders: boolean;
   layoutType: TableLayoutType;
   wrapContent: boolean;
@@ -132,7 +133,8 @@ export class TableComponent extends BaseComponent implements ITableComponent {
       TABLE_CONSTANTS.attributes.MULTI_COLUMN_SORT,
       TABLE_CONSTANTS.attributes.SELECT_CHECKBOX_ALIGNMENT,
       TABLE_CONSTANTS.attributes.TOOLTIP_SELECT,
-      TABLE_CONSTANTS.attributes.TOOLTIP_SELECT_ALL
+      TABLE_CONSTANTS.attributes.TOOLTIP_SELECT_ALL,
+      TABLE_CONSTANTS.attributes.INCLUDE_FOOTER
     ];
   }
 
@@ -205,6 +207,9 @@ export class TableComponent extends BaseComponent implements ITableComponent {
         break;
       case TABLE_CONSTANTS.attributes.TOOLTIP_SELECT_ALL:
         this.tooltipSelectAll = newValue;
+        break;
+      case TABLE_CONSTANTS.attributes.INCLUDE_FOOTER:
+        this.includeFooter = coerceBoolean(newValue);
         break;
     }
   }
@@ -440,6 +445,14 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    */
   @coreProperty()
   declare public wrapContent: boolean;
+
+  /**
+   * Controls whether the content in each cell wraps or not (true by default).
+   * @default false
+   * @attribute wrap-content
+   */
+  @coreProperty()
+  declare public includeFooter: boolean;
 
   /**
    * Controls whether the columns are resizable or not.

@@ -77,6 +77,7 @@ The `columnConfigurations` property is an array of objects that define the colum
 the following properties:
 
 - `header` - The text to be displayed in the column header.
+- `footer` - The text to be displayed in the column footer.
 - `property` - The property name of the object in the `data` array that should be displayed in this column.
 - `sortable` - A boolean value that determines if the column should be sortable. Defaults to `false`.
 - `initialSort` - A boolean value that determines if the column should be sorted initially. Defaults to `false`.
@@ -116,6 +117,42 @@ table.columnConfigurations = [
   { property: 'age', header: 'Person age', filter: true, filterDelegate: new SomeCustomComponentDelegate() }
 ];
 ```
+
+## Using column footers
+
+To add a footer row to the table, set the `include-footer` attribute (or `includeFooter` property) to `true` on the `<forge-table>` element. Then configure each column with either a `footer` string or a `footerTemplate` callback to control what each cell in the footer row renders.
+
+Use `footer` for simple static text:
+
+```typescript
+const columnConfigurations: IColumnConfiguration[] = [
+  { header: 'First Name', property: 'firstName', footer: 'Total' },
+  { header: 'Last Name', property: 'lastName', footer: '' },
+  { header: 'Age', property: 'age', footer: '155' }
+];
+
+const tableEl = document.querySelector('forge-table');
+tableEl.includeFooter = true;
+tableEl.columnConfigurations = columnConfigurations;
+```
+
+Use `footerTemplate` for custom HTML content in footer cells:
+
+```typescript
+{
+  header: 'Age',
+  property: 'age',
+  footerTemplate: (rowIndex, cell, columnConfig) => {
+    const span = document.createElement('span');
+    span.textContent = `Avg: ${average}`;
+    return span;
+  }
+}
+```
+
+You can also apply custom styles to footer cells via the `footerCellStyle` property on each column configuration.
+
+<Canvas of={TableStories.Demo} />
 
 ## Mapping Boolean outputs
 

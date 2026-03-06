@@ -17,6 +17,15 @@ $thead-roomy-row-height: 56px !default;
 // The height of the table head cells when the filter row is applied
 $thead-filter-row-height: 32px !default;
 
+// The default row height within the table foot.
+$tfoot-row-height: 48px !default;
+
+// The default row height within the table foot.
+$tfoot-dense-row-height: 36px !default;
+
+// The roomy row height within the table foot.
+$tfoot-roomy-row-height: 56px !default;
+
 // The padding for each table row.
 $row-padding: 0 #{spacing.variable(large)} !default;
 
@@ -30,6 +39,7 @@ $filter-input-width: 80px !default;
 $cell-font-size: #{typography.font-size-relative('0875')} !default;
 
 // Theme values
+$tfoot-background: #{theme.variable(surface-dim)} !default;
 $row-hover-background: #{theme.variable(surface-container-low)} !default;
 $row-active-background: #{theme.variable(surface-container)} !default;
 $row-selected-background: #{theme.variable(primary-container-low)} !default;

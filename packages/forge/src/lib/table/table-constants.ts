@@ -26,6 +26,12 @@ const classes = {
   TABLE_HEAD_CELL_SORTED_DESCENDING: 'forge-table-head__cell--sorted-descending',
   TABLE_HEAD_CELL_SORT_ORDER: 'forge-table-head__cell__sort-order',
   TABLE_HEAD_CELL_SORT_ORDER_HIDDEN: 'forge-table-head__cell__sort-order--hidden',
+  TABLE_FOOT: 'forge-table-foot',
+  TABLE_FOOT_ROW: 'forge-table-foot__row',
+  TABLE_FOOT_CELL: 'forge-table-foot__cell',
+  TABLE_FOOT_HEADER: 'forge-table-foot__header',
+  TABLE_FOOT_CELL_CONTAINER: 'forge-table-foot__cell-container',
+  TABLE_FOOT_CELL_TEXT: 'forge-table-foot__cell-text',
   TABLE_BODY: 'forge-table-body',
   TABLE_BODY_ROW: 'forge-table-body__row',
   TABLE_BODY_ROW_SELECTED: 'forge-table-body__row--selected',
@@ -74,7 +80,7 @@ const attributes = {
   SELECT_CHECKBOX_ALIGNMENT: 'select-checkbox-alignment',
   TOOLTIP_SELECT: 'tooltip-select',
   TOOLTIP_SELECT_ALL: 'tooltip-select-all',
-
+  INCLUDE_FOOTER: 'include-footer',
   // Internal
   CHECKBOX_TYPE: 'forge-checkbox-type',
   CUSTOM_CELL_TEMPLATE: 'data-cell-template',
