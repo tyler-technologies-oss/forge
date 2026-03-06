@@ -678,8 +678,8 @@ describe('Menu', () => {
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
       expect(childMenuComponent.tagName.toLowerCase()).toBe(MENU_CONSTANTS.elementName);
 
-      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
-      expect(menuTrigger.tagName.toLowerCase()).toBe('button');
+      const menuTrigger = childMenuComponent.querySelector('forge-list-item') as HTMLElement;
+      expect(menuTrigger.tagName.toLowerCase()).toBe('forge-list-item');
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       await frame();
@@ -703,7 +703,7 @@ describe('Menu', () => {
       await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
+      const menuTrigger = childMenuComponent.querySelector('forge-list-item') as HTMLElement;
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       await frame();
@@ -727,7 +727,7 @@ describe('Menu', () => {
       await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
+      const menuTrigger = childMenuComponent.querySelector('forge-list-item') as HTMLElement;
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
 
@@ -765,7 +765,7 @@ describe('Menu', () => {
       await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
+      const menuTrigger = childMenuComponent.querySelector('forge-list-item') as HTMLElement;
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       await frame();
