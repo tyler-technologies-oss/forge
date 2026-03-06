@@ -1543,6 +1543,17 @@ describe('AutocompleteComponent', () => {
       expect(harness.popupElement).not.toBeNull();
     });
 
+    it('should not open dropdown if icon clicked when input is disabled', async () => {
+      const harness = await createTextFieldFixture();
+      harness.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      harness.input.disabled = true;
+      await frame();
+      harness.iconElement!.click();
+      await frame();
+      await frame();
+      expect(harness.popupElement).toBeFalsy();
+    });
+
     it('should open dropdown if popover icon clicked', async () => {
       const harness = await createTextFieldFixture(false);
       harness.component.filter = () => DEFAULT_FILTER_OPTIONS;

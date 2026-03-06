@@ -61,6 +61,7 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
       case '':
         this._adapter.handleDefaultSlotChange(this._inputAttributeListener);
         this._adapter.tryAddValueChangeListener(this, this._valueChangeListener);
+        this._adapter.tryConnectSlottedLabel();
         this._tryFloatLabel();
         break;
     }
