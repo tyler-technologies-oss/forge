@@ -613,6 +613,28 @@ describe('Expansion Panel', () => {
       el[emulateUserToggle](false);
       expect(toggleSpy).toHaveBeenCalledTimes(2);
     });
+
+    it('should dispatch toggle event when opened by a beforematch event', async () => {
+      const screen = render(html`
+        <forge-expansion-panel>
+          <button slot="header">Header</button>
+          <div>Content</div>
+        </forge-expansion-panel>
+      `);
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
+      await el.updateComplete;
+      const contentEl = getContentElement(el);
+
+      const toggleSpy = vi.fn();
+      el.addEventListener(EXPANSION_PANEL_CONSTANTS.events.TOGGLE, toggleSpy);
+
+      contentEl.dispatchEvent(new Event('beforematch', { bubbles: true }));
+      await el.updateComplete;
+
+      expect(el.open).toBe(true);
+      expect(toggleSpy).toHaveBeenCalledOnce();
+      expect(toggleSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: true }));
+    });
   });
 
   describe('open icon', () => {
