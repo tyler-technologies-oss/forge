@@ -69,6 +69,7 @@ export interface ITableAdapter extends IBaseAdapter {
  */
 export class TableAdapter extends BaseAdapter<ITableComponent> implements ITableAdapter {
   private _tableElement: HTMLTableElement;
+  private _filterListenerController = new AbortController();
 
   constructor(component: ITableComponent) {
     super(component);
@@ -95,7 +96,8 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
   }
 
   public createTable(configuration: ITableConfiguration): void {
-    return TableUtils.createTable(configuration);
+    this._resetFilterListeners();
+    return TableUtils.createTable(configuration, this._filterListenerController.signal);
   }
 
   public recreateTableBody(configuration: ITableConfiguration): void {
@@ -181,7 +183,8 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
   }
 
   public setFilterRow(configuration: ITableConfiguration): void {
-    TableUtils.setFilterRow(configuration);
+    this._resetFilterListeners();
+    TableUtils.setFilterRow(configuration, this._filterListenerController.signal);
   }
 
   public expandRow(configuration: ITableConfiguration, rowIndex: number, template: TableViewTemplate): Promise<void> {
@@ -243,5 +246,10 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
 
   public setRowClickAttributes(tableElement: HTMLTableElement, allowClick: boolean): void {
     TableUtils.setRowClickAttributes(tableElement, allowClick);
+  }
+
+  private _resetFilterListeners(): void {
+    this._filterListenerController.abort();
+    this._filterListenerController = new AbortController();
   }
 }
