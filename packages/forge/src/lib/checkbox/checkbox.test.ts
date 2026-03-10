@@ -235,6 +235,32 @@ describe('Checkbox', () => {
     expect(el.indeterminate).toBe(false);
   });
 
+  it('should update aria-checked when clicking indeterminate checkbox', async () => {
+    const screen = render(html`<forge-checkbox indeterminate aria-label="Active"></forge-checkbox>`);
+    const el = screen.container.querySelector('forge-checkbox') as ICheckboxComponent;
+    const ctx = new CheckboxHarness(el);
+
+    expect(el.ariaChecked).toBe('mixed');
+
+    await ctx.clickElement(ctx.containerElement);
+
+    expect(el.ariaChecked).toBe('true');
+  });
+
+  it('should set aria-checked to mixed when indeterminate', async () => {
+    const screen = render(html`<forge-checkbox indeterminate aria-label="Active"></forge-checkbox>`);
+    const el = screen.container.querySelector('forge-checkbox') as ICheckboxComponent;
+
+    expect(el.ariaChecked).toBe('mixed');
+
+    el.indeterminate = false;
+    expect(el.ariaChecked).toBe('false');
+
+    el.checked = true;
+    el.indeterminate = true;
+    expect(el.ariaChecked).toBe('mixed');
+  });
+
   describe('form association', () => {
     it('should return form element and name', async () => {
       const screen = render(html`<form name="test-form"></form>`);
