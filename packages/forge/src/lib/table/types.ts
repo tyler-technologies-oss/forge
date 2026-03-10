@@ -17,12 +17,12 @@ export declare type TableTemplateBuilder<T = any> = (
 export declare type TableHeaderTemplateBuilder = (
   rowIndex: number,
   div: HTMLElement,
-  columConfig: IColumnConfiguration
+  columnConfig: IColumnConfiguration
 ) => HTMLElement | string | Promise<HTMLElement | string>;
 export declare type TableFooterTemplateBuilder = (
   rowIndex: number,
   div: HTMLElement,
-  columConfig: IColumnConfiguration
+  columnConfig: IColumnConfiguration
 ) => HTMLElement | string | Promise<HTMLElement | string>;
 export declare type TableHeaderSelectAllTemplate = () => HTMLElement | string | Promise<HTMLElement | string>;
 export declare type TableRowCreatedCallback = (rowElement: HTMLTableRowElement, rowIndex: number, rowData: any) => void;

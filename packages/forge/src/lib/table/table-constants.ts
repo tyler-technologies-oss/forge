@@ -98,7 +98,9 @@ const events = {
   INITIALIZED: `${elementName}-initialized`,
   COLUMN_RESIZE: `${elementName}-column-resize`,
   BEFORE_BODY_RENDERED: `${elementName}-before-body-rendered`,
-  BODY_RENDERED: `${elementName}-body-rendered`
+  BODY_RENDERED: `${elementName}-body-rendered`,
+  BEFORE_FOOTER_RENDERED: `${elementName}-before-footer-rendered`,
+  FOOTER_RENDERED: `${elementName}-footer-rendered`
 };
 
 const strings = {

@@ -2307,6 +2307,108 @@ describe('TableComponent', () => {
         });
       });
     });
+
+    describe('footer', () => {
+      it('should render footer row with the correct number of cells when data is set', async () => {
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.columnConfigurations = columns;
+        harness.component.data = data;
+
+        expect(harness.tableElement.tFoot).not.toBeNull();
+        expect(harness.tableElement.tFoot!.rows.length).toBe(1);
+        expect(harness.tableElement.tFoot!.rows.item(0)!.cells.length).toBe(columns.length);
+      });
+
+      it('should render footer string property as cell text content', async () => {
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.columnConfigurations = columns;
+        harness.component.data = data;
+
+        const footerRow = harness.getTableFooterRow();
+        const firstCellText = footerRow.cells.item(0)!.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_FOOT_CELL_TEXT}`)!.textContent;
+        const thirdCellText = footerRow.cells.item(2)!.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_FOOT_CELL_TEXT}`)!.textContent;
+
+        expect(firstCellText).toBe('Totals');
+        expect(thirdCellText).toBe('$21,000');
+      });
+
+      it('should render footer cell via footerTemplate callback', async () => {
+        const footerTemplate = vi.fn(() => Promise.resolve('<span class="custom-footer">Custom</span>'));
+        const testColumns: IColumnConfiguration[] = deepCopy(columns);
+        testColumns[0].footerTemplate = footerTemplate;
+
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.data = data;
+        harness.component.columnConfigurations = testColumns;
+
+        await task();
+
+        const footerRow = harness.getTableFooterRow();
+        const firstCell = footerRow.cells.item(0)!;
+        const customContent = firstCell.querySelector('.custom-footer');
+
+        expect(footerTemplate).toHaveBeenCalledOnce();
+        expect(customContent).not.toBeNull();
+        expect(customContent!.textContent).toBe('Custom');
+      });
+
+      it('should add a cell to the footer row when select column is enabled', async () => {
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.select = true;
+        harness.component.columnConfigurations = columns;
+        harness.component.data = data;
+
+        expect(harness.tableElement.tFoot!.rows.item(0)!.cells.length).toBe(columns.length + 1);
+      });
+
+      it('should remove the select cell from the footer row when select column is disabled', async () => {
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.select = true;
+        harness.component.columnConfigurations = columns;
+        harness.component.data = data;
+
+        harness.component.select = false;
+
+        expect(harness.tableElement.tFoot!.rows.item(0)!.cells.length).toBe(columns.length);
+      });
+
+      it('should apply column alignment class to footer cell container', async () => {
+        const testColumns: IColumnConfiguration[] = deepCopy(columns);
+        testColumns[2].align = CellAlign.Right;
+
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.columnConfigurations = testColumns;
+        harness.component.data = data;
+
+        const footerRow = harness.getTableFooterRow();
+        const thirdCellContainer = footerRow.cells.item(2)!.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_FOOT_CELL_CONTAINER}`)!;
+
+        expect(thirdCellContainer.classList.contains(TABLE_CONSTANTS.classes.TABLE_CELL_RIGHT)).toBe(true);
+      });
+
+      it('should emit before-footer-rendered and footer-rendered events when data is set', async () => {
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.columnConfigurations = columns;
+        harness.component.data = data;
+
+        const beforeSpy = vi.fn();
+        const afterSpy = vi.fn();
+        harness.component.addEventListener(TABLE_CONSTANTS.events.BEFORE_FOOTER_RENDERED, beforeSpy);
+        harness.component.addEventListener(TABLE_CONSTANTS.events.FOOTER_RENDERED, afterSpy);
+
+        harness.component.data = data;
+
+        expect(beforeSpy).toHaveBeenCalledOnce();
+        expect(afterSpy).toHaveBeenCalledOnce();
+      });
+    });
   });
 });
 

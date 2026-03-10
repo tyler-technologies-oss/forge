@@ -447,9 +447,9 @@ export class TableComponent extends BaseComponent implements ITableComponent {
   declare public wrapContent: boolean;
 
   /**
-   * Controls whether the content in each cell wraps or not (true by default).
+   * Controls whether to render a table footer.
    * @default false
-   * @attribute wrap-content
+   * @attribute include-footer
    */
   @coreProperty()
   declare public includeFooter: boolean;
@@ -457,7 +457,7 @@ export class TableComponent extends BaseComponent implements ITableComponent {
   /**
    * Controls whether the columns are resizable or not.
    * @default false
-   * @attribute
+   * @attribute resizable
    */
   @coreProperty()
   declare public resizable: boolean;

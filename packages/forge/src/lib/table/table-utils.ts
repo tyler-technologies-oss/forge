@@ -150,6 +150,18 @@ export class TableUtils {
   }
 
   /**
+   * Destroys and recreates the table footer section only.
+   * @param {ITableConfiguration} configuration The table configuration.
+   */
+  public static recreateTableFoot(configuration: ITableConfiguration): void {
+    const tfoot = TableUtils._createTableFoot(configuration);
+    if (configuration.selectListener) {
+      TableUtils._createFootSelectColumn(tfoot, !!configuration.selectAllListener);
+    }
+    TableUtils._setTableFoot(configuration.tableElement, tfoot);
+  }
+
+  /**
    * Destroys and recreates the table body section only.
    * @param {ITableConfiguration} configuration The table configuration.
    */
@@ -355,8 +367,8 @@ export class TableUtils {
 
       // Create the th/td element with required classes
       const cell = i === 0 ? document.createElement('th') : document.createElement('td');
-      cell.scope = 'row';
-      if (i === 0) {
+      if (cell.tagName === 'TH') {
+        cell.scope = 'row';
         addClass([TABLE_CONSTANTS.classes.TABLE_CELL, TABLE_CONSTANTS.classes.TABLE_FOOT_HEADER, 'forge-typography--overline'], cell);
       } else {
         addClass([TABLE_CONSTANTS.classes.TABLE_CELL, TABLE_CONSTANTS.classes.TABLE_FOOT_CELL], cell);
@@ -846,7 +858,7 @@ export class TableUtils {
     }
 
     if (tfootElement) {
-      TableUtils._createFootSelectColumn(tfootElement, dense, showSelectAll, selectAllTemplate, registerListener, selectCheckboxAlignment, tooltipSelectAll);
+      TableUtils._createFootSelectColumn(tfootElement, showSelectAll);
     }
   }
 
@@ -891,15 +903,7 @@ export class TableUtils {
    * @param {HTMLTableSectionElement} tfootElement The table foot element.
    * @param {boolean} showSelectAll Whether to show the select all checkbox or not.
    */
-  private static _createFootSelectColumn(
-    tfootElement: HTMLTableSectionElement,
-    dense: boolean,
-    showSelectAll: boolean,
-    selectAllTemplate: TableHeaderSelectAllTemplate | null,
-    registerListener: () => void,
-    selectCheckboxAlignment: CellAlign | null,
-    tooltipSelectAll: string | null
-  ): void {
+  private static _createFootSelectColumn(tfootElement: HTMLTableSectionElement, showSelectAll: boolean): void {
     Array.from(tfootElement.rows).forEach(row => {
       const th = document.createElement('th');
       addClass([TABLE_CONSTANTS.classes.TABLE_CELL, TABLE_CONSTANTS.classes.TABLE_FOOT_CELL], th);

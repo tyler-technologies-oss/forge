@@ -176,6 +176,10 @@ export class TableCore implements ITableCore {
     this._tableRows = this._data.map(data => new TableRow(data, this._selectionManager.exists(data)));
 
     this._renderBody();
+
+    if (this._includeFooter) {
+      this._renderFooter();
+    }
   }
   public get data(): any[] {
     return this._data.map(o => ({ ...o })); // Shallow clone
@@ -634,6 +638,18 @@ export class TableCore implements ITableCore {
     this._adapter.recreateTableBody(this._tableConfiguration);
     this._renderSelections();
     this._adapter.emitHostEvent(TABLE_CONSTANTS.events.BODY_RENDERED, undefined, false);
+  }
+
+  /**
+   * Renders the table footer only.
+   */
+  private _renderFooter(): void {
+    if (!this._rendered) {
+      return;
+    }
+    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.BEFORE_FOOTER_RENDERED, undefined, false);
+    this._adapter.recreateTableFoot(this._tableConfiguration);
+    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.FOOTER_RENDERED, undefined, false);
   }
 
   private _renderSelections(): void {
