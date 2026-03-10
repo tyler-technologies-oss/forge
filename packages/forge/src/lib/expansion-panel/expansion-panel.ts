@@ -258,7 +258,7 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
   }
 
   #handleBeforeMatch(): void {
-    this.open = true;
+    this[emulateUserToggle](true);
   }
 
   #tryToggle(evt: Event): void {
