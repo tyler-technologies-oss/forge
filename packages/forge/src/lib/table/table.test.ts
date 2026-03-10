@@ -1664,6 +1664,51 @@ describe('TableComponent', () => {
       expect(filterCallback).toHaveBeenCalledOnce();
     });
 
+    it('should remove old filter listeners on filter element creation or table re-render', async () => {
+      const harness = await createFixture();
+      const testColumns: IColumnConfiguration[] = deepCopy(columns);
+      testColumns[0].filter = true;
+      testColumns[0].filterDelegate = new TextFieldComponentDelegate();
+      const filterDebounceTime = testColumns[0].filterDebounceTime || TABLE_CONSTANTS.numbers.DEFAULT_FILTER_DEBOUNCE_TIME;
+
+      harness.component.data = data;
+      harness.component.columnConfigurations = testColumns;
+      harness.component.filter = true;
+
+      const lastTableRow = getLastTableHeaderRow(harness.tableElement);
+      const firstFilterCellIndex = harness.component.select && harness.component.multiselect ? 1 : 0;
+      const filterInputElement = lastTableRow.cells.item(firstFilterCellIndex)!.querySelector('input[type=text]') as HTMLInputElement;
+
+      const filterCallback = vi.fn((evt: CustomEvent) => {
+        const evtData = evt.detail as ITableFilterEventData;
+        expect(evtData.value).toBe('a');
+        expect(evtData.columnIndex).toBe(0);
+      });
+      harness.component.addEventListener(TABLE_CONSTANTS.events.FILTER, filterCallback as any);
+
+      filterInputElement.value = 'a';
+      filterInputElement.dispatchEvent(new Event('input'));
+
+      await task(filterDebounceTime);
+
+      expect(filterCallback).toHaveBeenCalledTimes(1);
+
+      harness.component.filter = false;
+      harness.component.filter = true;
+      filterInputElement.dispatchEvent(new Event('input'));
+
+      await task(filterDebounceTime);
+
+      expect(filterCallback).toHaveBeenCalledTimes(2);
+
+      harness.component.render();
+      filterInputElement.dispatchEvent(new Event('input'));
+
+      await task(filterDebounceTime);
+
+      expect(filterCallback).toHaveBeenCalledTimes(3);
+    });
+
     it('should remove resize handle when resizable is turned off', async () => {
       const harness = await createFixture();
       harness.component.resizable = true;
