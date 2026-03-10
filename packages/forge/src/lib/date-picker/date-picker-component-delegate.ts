@@ -53,24 +53,24 @@ export class DatePickerComponentDelegate extends FormFieldComponentDelegate<IDat
     this._textFieldDelegate.invalid = value;
   }
 
-  public onChange(listener: (value: string) => void): void {
-    this._element.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, (evt: CustomEvent) => listener(evt.detail));
+  public onChange(listener: (value: string) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, (evt: CustomEvent) => listener(evt.detail), options);
   }
 
-  public onInput(listener: (value: string) => void): void {
+  public onInput(listener: (value: string) => void, options?: AddEventListenerOptions): void {
     if (this._element.masked) {
-      this._element.addEventListener(DATE_PICKER_CONSTANTS.events.INPUT, (evt: CustomEvent) => listener(evt.detail));
+      this._element.addEventListener(DATE_PICKER_CONSTANTS.events.INPUT, (evt: CustomEvent) => listener(evt.detail), options);
     } else {
-      this._textFieldDelegate.inputElement.addEventListener('input', evt => listener((evt.target as HTMLInputElement).value));
+      this._textFieldDelegate.inputElement.addEventListener('input', evt => listener((evt.target as HTMLInputElement).value), options);
     }
   }
 
-  public onFocus(listener: (evt: FocusEvent) => void): void {
-    this._textFieldDelegate.inputElement.addEventListener('focus', (evt: FocusEvent) => listener(evt));
+  public onFocus(listener: (evt: FocusEvent) => void, options?: AddEventListenerOptions): void {
+    this._textFieldDelegate.inputElement.addEventListener('focus', (evt: FocusEvent) => listener(evt), options);
   }
 
-  public onBlur(listener: (evt: FocusEvent) => void): void {
-    this._textFieldDelegate.inputElement.addEventListener('blur', (evt: FocusEvent) => listener(evt));
+  public onBlur(listener: (evt: FocusEvent) => void, options?: AddEventListenerOptions): void {
+    this._textFieldDelegate.inputElement.addEventListener('blur', (evt: FocusEvent) => listener(evt), options);
   }
 
   private _attachTextField(datePicker: IDatePickerComponent): void {
