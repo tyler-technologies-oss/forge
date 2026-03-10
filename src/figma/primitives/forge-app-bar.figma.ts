@@ -31,7 +31,7 @@ figma.connect('<FIGMA_APP_BAR_APP_BAR>', {
 });
 
 // logo-title-container - shows the logo icon and title text
-figma.connect('<FIGMA_LOGO_TITLE_CONTAINER>', {
+figma.connect('<FIGMA_APP_BAR_LOGO_TITLE_CONTAINER>', {
   props: {
     logoIcon: figma.boolean('Show logo icon', {
       true: html`<forge-icon slot="logo" name="forge_logo"></forge-icon>`,
@@ -53,7 +53,7 @@ figma.connect('<FIGMA_APP_BAR_SEARCH>', {
 });
 
 // end-slot-content - contains action buttons and avatar in the end slot
-figma.connect('<FIGMA_END_SLOT_CONTENT>', {
+figma.connect('<FIGMA_APP_BAR_END_SLOT_CONTENT>', {
   props: {
     children: figma.children('*')
   },

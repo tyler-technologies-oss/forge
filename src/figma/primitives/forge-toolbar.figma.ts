@@ -38,7 +38,7 @@ figma.connect('<FIGMA_TOOLBAR_TOOLBAR>', {
     children: figma.children('forge-button')
   },
   example: (props: any) =>
-    html` <forge-toolbar>
+    html` <forge-toolbar slot="footer">
       <div slot="end">${props.children}</div>
     </forge-toolbar>`
 });
@@ -77,5 +77,20 @@ figma.connect('<FIGMA_TOOLBAR_TOOLBAR>', {
       <div slot="center">${props.centerSlot}</div>
       <div slot="end">${props.endSlot}</div>
       <div slot="after-end">${props.afterEndSlot}</div>
+    </forge-toolbar>`
+});
+
+figma.connect('<FIGMA_TOOLBAR_TOOLBAR>', {
+  variant: { Type: 'Dialog' },
+  props: {
+    ...sharedProps,
+    text: figma.string('Title')
+  },
+  example: (props: any) =>
+    html`<forge-toolbar slot="header" no-divider>
+      <h1 class="forge-typography--heading4" id="dialog-title" slot="start">${props.text}</h1>
+      <forge-icon-button slot="end" aria-label="Close dialog">
+        <forge-icon name="close"></forge-icon>
+      </forge-icon-button>
     </forge-toolbar>`
 });
