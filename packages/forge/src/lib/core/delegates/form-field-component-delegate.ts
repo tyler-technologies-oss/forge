@@ -7,9 +7,9 @@ export interface IFormFieldComponentDelegateOptions extends IBaseComponentDelega
 export interface IFormFieldComponentDelegate<T extends HTMLElement> extends IBaseComponentDelegate<T> {
   value: unknown;
   disabled: boolean;
-  onChange(cb: (value: unknown) => void): void;
-  onFocus(cb: (evt: Event) => void): void;
-  onBlur(cb: (evt: Event) => void): void;
+  onChange(cb: (value: unknown) => void, options?: AddEventListenerOptions): void;
+  onFocus(cb: (evt: Event) => void, options?: AddEventListenerOptions): void;
+  onBlur(cb: (evt: Event) => void, options?: AddEventListenerOptions): void;
 }
 
 export abstract class FormFieldComponentDelegate<T extends HTMLElement, K extends IFormFieldComponentDelegateOptions>
@@ -23,7 +23,7 @@ export abstract class FormFieldComponentDelegate<T extends HTMLElement, K extend
     super(config);
   }
 
-  public abstract onChange(listener: (value: unknown) => void): void;
-  public abstract onFocus(cb: (evt: Event) => void): void;
-  public abstract onBlur(cb: (evt: Event) => void): void;
+  public abstract onChange(listener: (value: unknown) => void, options?: AddEventListenerOptions): void;
+  public abstract onFocus(cb: (evt: Event) => void, options?: AddEventListenerOptions): void;
+  public abstract onBlur(cb: (evt: Event) => void, options?: AddEventListenerOptions): void;
 }
