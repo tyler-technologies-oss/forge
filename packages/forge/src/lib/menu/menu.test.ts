@@ -562,6 +562,37 @@ describe('Menu', () => {
         expect(harness.menuEl.open).toBe(false);
       });
 
+      it('should keep menu open when activated with space key', async () => {
+        const harness = await createFixture({ options: generateMenuOptions(3) });
+
+        harness.triggerEl.focus();
+        await userEvent.keyboard(' ');
+
+        expect(harness.menuEl.open).toBe(true);
+      });
+
+      it('should keep menu open when activated with enter key', async () => {
+        const harness = await createFixture({ options: generateMenuOptions(3) });
+
+        harness.triggerEl.focus();
+        await userEvent.keyboard('{Enter}');
+
+        expect(harness.menuEl.open).toBe(true);
+      });
+
+      it('should allow enter to open menu after space closes it', async () => {
+        const harness = await createFixture({ options: generateMenuOptions(3) });
+
+        harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space', bubbles: true }));
+        expect(harness.menuEl.open).toBe(true);
+
+        harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space', bubbles: true }));
+        expect(harness.menuEl.open).toBe(false);
+
+        harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
+        expect(harness.menuEl.open).toBe(true);
+      });
+
       it('tab should close the popup', async () => {
         const harness = await createFixture({ options: generateMenuOptions(7) });
 
@@ -647,8 +678,8 @@ describe('Menu', () => {
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
       expect(childMenuComponent.tagName.toLowerCase()).toBe(MENU_CONSTANTS.elementName);
 
-      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
-      expect(menuTrigger.tagName.toLowerCase()).toBe('button');
+      const menuTrigger = childMenuComponent.querySelector('forge-list-item') as HTMLElement;
+      expect(menuTrigger.tagName.toLowerCase()).toBe('forge-list-item');
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       await frame();
@@ -672,7 +703,7 @@ describe('Menu', () => {
       await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
+      const menuTrigger = childMenuComponent.querySelector('forge-list-item') as HTMLElement;
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       await frame();
@@ -696,7 +727,7 @@ describe('Menu', () => {
       await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
+      const menuTrigger = childMenuComponent.querySelector('forge-list-item') as HTMLElement;
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
 
@@ -734,7 +765,7 @@ describe('Menu', () => {
       await frame();
 
       const childMenuComponent = getPopupListItem(1) as IMenuComponent;
-      const menuTrigger = childMenuComponent.querySelector('button') as HTMLButtonElement;
+      const menuTrigger = childMenuComponent.querySelector('forge-list-item') as HTMLElement;
 
       menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
       await frame();

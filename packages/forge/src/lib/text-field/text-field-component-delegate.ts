@@ -96,16 +96,16 @@ export class TextFieldComponentDelegate extends FormFieldComponentDelegate<IText
     return this._labelElement;
   }
 
-  public onChange(listener: (value: string) => void): void {
-    this._inputElement.addEventListener('input', evt => listener((evt.target as HTMLInputElement).value));
+  public onChange(listener: (value: string) => void, options?: AddEventListenerOptions): void {
+    this._inputElement.addEventListener('input', evt => listener((evt.target as HTMLInputElement).value), options);
   }
 
-  public onFocus(listener: (evt: Event) => void): void {
-    this._inputElement.addEventListener('focus', evt => listener(evt));
+  public onFocus(listener: (evt: Event) => void, options?: AddEventListenerOptions): void {
+    this._inputElement.addEventListener('focus', evt => listener(evt), options);
   }
 
-  public onBlur(listener: (evt: Event) => void): void {
-    this._inputElement.addEventListener('blur', evt => listener(evt));
+  public onBlur(listener: (evt: Event) => void, options?: AddEventListenerOptions): void {
+    this._inputElement.addEventListener('blur', evt => listener(evt), options);
   }
 
   public setLabel(text: string | null): void {
@@ -161,7 +161,6 @@ export class TextFieldComponentDelegate extends FormFieldComponentDelegate<IText
   private _createLabel(text: string): void {
     this._labelElement = document.createElement('label');
     this._labelElement.textContent = text;
-    this._labelElement.slot = 'label';
     if (this._config.options?.id) {
       this._labelElement.htmlFor = this._config.options.id;
     }
