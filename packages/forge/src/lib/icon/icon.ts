@@ -130,11 +130,6 @@ export class IconComponent extends BaseLitElement implements IIconComponent {
   #visibilityObserver?: IntersectionObserver;
   #registrationListener?: () => void;
 
-  public connectedCallback(): void {
-    super.connectedCallback();
-    this.#applyIcon();
-  }
-
   public disconnectedCallback(): void {
     super.disconnectedCallback();
     this.#visibilityObserver?.disconnect();
@@ -203,7 +198,7 @@ export class IconComponent extends BaseLitElement implements IIconComponent {
     try {
       if (this.src) {
         // We were provided direct icon source content so just set that
-        const node = createSanitizedSvg(this.src);
+        const node = createSanitizedSvg(this.src, this.viewbox);
         this.#setContent(node);
       } else if (this.name) {
         // Let's attempt to get our icon from the registry
