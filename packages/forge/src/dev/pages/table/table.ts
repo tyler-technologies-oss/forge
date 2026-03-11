@@ -61,7 +61,7 @@ const columnConfigurations: IColumnConfiguration[] = [
     headerTemplate: () => Promise.resolve('<span>Player names</span>'),
     filter: true,
     filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter name...' } }),
-    footer: "Calculated",
+    footer: 'Calculated'
   },
   {
     header: 'Age',
