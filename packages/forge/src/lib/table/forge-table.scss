@@ -133,6 +133,28 @@ forge-table {
     }
   }
 
+  &-foot {
+    &__row {
+      @include foot-row;
+    }
+
+    &__header {
+      @include foot-header;
+    }
+    &__cell {
+      @include foot-cell;
+
+      &-container {
+        @include foot-cell-container;
+      }
+      &-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+
   &-row {
     @include row-base(forge-table-cell, forge-table-cell__select);
 

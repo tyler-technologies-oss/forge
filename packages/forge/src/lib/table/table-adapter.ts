@@ -11,6 +11,7 @@ export interface ITableAdapter extends IBaseAdapter {
   getTableElement: () => HTMLTableElement;
   createTable: (configuration: ITableConfiguration) => void;
   recreateTableBody: (configuration: ITableConfiguration) => void;
+  recreateTableFoot: (configuration: ITableConfiguration) => void;
   setSelectedRows: (tableElement: HTMLTableElement, key: string[], data: any[], selectedRows: any[], preserveExisting?: boolean) => void;
   clearSelectedRows: (tableElement: HTMLTableElement) => void;
   updateSelectedState: (rowElement: HTMLTableRowElement, isSelected: boolean) => void;
@@ -102,6 +103,10 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
 
   public recreateTableBody(configuration: ITableConfiguration): void {
     TableUtils.recreateTableBody(configuration);
+  }
+
+  public recreateTableFoot(configuration: ITableConfiguration): void {
+    TableUtils.recreateTableFoot(configuration);
   }
 
   public setSelectedRows(tableElement: HTMLTableElement, key: string[], data: any[], selectedRows: any[], preserveExisting: boolean = false): void {
