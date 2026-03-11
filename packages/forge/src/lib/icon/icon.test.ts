@@ -49,6 +49,8 @@ describe('Icon', () => {
     const screen = render(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
     const el = screen.container.querySelector('forge-icon') as IconComponent;
 
+    await waitForIconRender(el);
+
     expect(el.shadowRoot?.querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
     await expect(el).toBeAccessible();
   });
@@ -177,6 +179,8 @@ describe('Icon', () => {
       const screen = render(html`<forge-icon viewbox="0 0 16 16" name=${ICON_NAME}></forge-icon>`);
       const el = screen.container.querySelector('forge-icon') as IconComponent;
 
+      await waitForIconRender(el);
+
       expect(el.viewbox).toBe('0 0 16 16');
       expect(el.shadowRoot?.querySelector('svg')?.getAttribute('viewBox')).toBe('0 0 16 16');
     });
@@ -184,8 +188,10 @@ describe('Icon', () => {
     it('should set viewbox via property', async () => {
       const screen = render(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
       const el = screen.container.querySelector('forge-icon') as IconComponent;
-      el.viewbox = '0 0 16 16';
 
+      await waitForIconRender(el);
+
+      el.viewbox = '0 0 16 16';
       await el.updateComplete;
 
       expect(el.viewbox).toBe('0 0 16 16');
@@ -238,6 +244,8 @@ describe('Icon', () => {
       const screen = render(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
       const el = screen.container.querySelector('forge-icon') as IconComponent;
 
+      await waitForIconRender(el);
+
       expect(el.shadowRoot?.querySelector('svg')).toBeTruthy();
 
       el.name = '';
@@ -249,6 +257,8 @@ describe('Icon', () => {
     it('should set icon content if exists in registry', async () => {
       const screen = render(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
       const el = screen.container.querySelector('forge-icon') as IconComponent;
+
+      await waitForIconRender(el);
 
       expect(el.shadowRoot?.querySelector('svg')).toBeTruthy();
     });
@@ -306,6 +316,8 @@ describe('Icon', () => {
       const screen = render(html`<forge-icon src=${tylIconFace.data}></forge-icon>`);
       const el = screen.container.querySelector('forge-icon') as IconComponent;
 
+      await waitForIconRender(el);
+
       expect(el.shadowRoot?.querySelector('svg')).toBeTruthy();
     });
 
@@ -341,6 +353,8 @@ describe('Icon', () => {
     it('should update icon if external type is changed', async () => {
       const screen = render(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
       const el = screen.container.querySelector('forge-icon') as IconComponent;
+
+      await waitForIconRender(el);
 
       const initialSvg = el.shadowRoot?.querySelector('svg');
       expect(initialSvg).toBeTruthy();
