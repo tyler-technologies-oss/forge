@@ -29,7 +29,7 @@ $host-tokens: (background, foreground);
 // Default theme
 //
 
-:host(:not([theme]):not([theme-mode='scoped'])) {
+.forge-app-bar:not(.white):not(.scoped) {
   @include theme.provide(
     (
       primary: #{token(foreground)},
@@ -44,17 +44,15 @@ $host-tokens: (background, foreground);
   );
 }
 
-:host([theme-mode='scoped']) {
-  .forge-app-bar {
-    color: inherit;
+.forge-app-bar.scoped {
+  color: inherit;
 
-    .logo-title-container {
-      color: #{token(foreground)};
-    }
+  .logo-title-container {
+    color: #{token(foreground)};
   }
 }
 
-:host {
+.forge-app-bar {
   @include provide-theme(
     (
       theme-foreground: #{token(foreground)},
@@ -131,10 +129,8 @@ $host-tokens: (background, foreground);
 // Elevation
 //
 
-:host(:is(:not([elevation]), [elevation='raised'])) {
-  .forge-app-bar {
-    @include elevation-raised;
-  }
+.forge-app-bar.raised {
+  @include elevation-raised;
 }
 
 //
@@ -143,7 +139,7 @@ $host-tokens: (background, foreground);
 // Attempt to auto-theme any specific slotted elements directly
 //
 
-:host([theme-mode='scoped']) {
+.forge-app-bar.scoped {
   ::slotted(:where(forge-tab-bar, forge-icon-button, forge-button)) {
     color: #{token(theme-foreground)};
 
@@ -188,7 +184,7 @@ $host-tokens: (background, foreground);
 // White theme
 //
 
-:host([theme='white']) {
+.forge-app-bar.white {
   @include override(background, white, value);
   @include override(foreground, black, value);
 
@@ -199,7 +195,7 @@ $host-tokens: (background, foreground);
   );
 }
 
-:host([theme='white']:not([theme-mode='scoped'])) {
+.forge-app-bar.white:not(.scoped) {
   @include theme.provide(
     (
       primary: black,

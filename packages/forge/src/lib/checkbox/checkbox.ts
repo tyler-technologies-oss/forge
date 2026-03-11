@@ -115,7 +115,7 @@ export class CheckboxComponent
     super.connectedCallback();
     this[setDefaultAria]({
       role: 'checkbox',
-      ariaChecked: this.checked ? 'true' : 'false',
+      ariaChecked: this.indeterminate ? 'mixed' : this.checked ? 'true' : 'false',
       ariaDisabled: this.disabled ? 'true' : 'false',
       ariaRequired: this.required ? 'true' : 'false'
     });

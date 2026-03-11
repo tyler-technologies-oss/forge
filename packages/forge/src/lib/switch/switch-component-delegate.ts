@@ -109,16 +109,16 @@ export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchC
     this._element.labelPosition = value;
   }
 
-  public onChange(listener: (value: boolean) => void): void {
-    this._element.addEventListener(SWITCH_CONSTANTS.events.CHANGE, ({ detail }: CustomEvent<boolean>) => listener(detail));
+  public onChange(listener: (value: boolean) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener(SWITCH_CONSTANTS.events.CHANGE, ({ detail }: CustomEvent<boolean>) => listener(detail), options);
   }
 
-  public onFocus(listener: (evt: Event) => void): void {
-    this._element.addEventListener('focus', evt => listener(evt));
+  public onFocus(listener: (evt: Event) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener('focus', evt => listener(evt), options);
   }
 
-  public onBlur(listener: (evt: Event) => void): void {
-    this._element.addEventListener('blur', evt => listener(evt));
+  public onBlur(listener: (evt: Event) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener('blur', evt => listener(evt), options);
   }
 
   public setLabel(text: string | null): void {

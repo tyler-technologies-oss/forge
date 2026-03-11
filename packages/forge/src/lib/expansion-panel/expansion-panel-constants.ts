@@ -35,6 +35,7 @@ const events = {
   ANIMATION_COMPLETE: `${elementName}-animation-complete`
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const EXPANSION_PANEL_CONSTANTS = {
   elementName,
   observedAttributes,

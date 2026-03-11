@@ -51,7 +51,7 @@ export class TableUtils {
    * Creates a table using the provided configuration.
    * @param {ITableConfiguration} configuration The table configuration.
    */
-  public static createTable(configuration: ITableConfiguration): void {
+  public static createTable(configuration: ITableConfiguration, signal: AbortSignal): void {
     // Reset the table back to its original unpopulated state
     TableUtils._resetTable(configuration.tableElement);
 
@@ -113,7 +113,7 @@ export class TableUtils {
 
     // Add the filter row (must come after adding the select column and table head)
     if (configuration.filter) {
-      TableUtils.setFilterRow(configuration);
+      TableUtils.setFilterRow(configuration, signal);
     }
 
     TableUtils._setTableBody(configuration.tableElement, tbody);
@@ -1058,7 +1058,6 @@ export class TableUtils {
     }
 
     const rows = tableElement.tBodies[0].rows;
-    let selectedRowCount = 0;
 
     if (selectedRows.length) {
       Array.from(rows).forEach((row, index) => {
@@ -1070,12 +1069,9 @@ export class TableUtils {
           if (selectCheckbox) {
             TableUtils._setSelectedCheckboxState(selectCheckbox, true);
           }
-          selectedRowCount++;
         }
       });
     }
-
-    TableUtils.updateSelectAllState(tableElement, selectedRowCount > 0 && rows.length === selectedRowCount);
   }
 
   /**
@@ -1434,7 +1430,7 @@ export class TableUtils {
    * Controls the visibility of the table filter row.
    * @param {ITableConfiguration} configuration The table configuration.
    */
-  public static setFilterRow(configuration: ITableConfiguration): void {
+  public static setFilterRow(configuration: ITableConfiguration, signal: AbortSignal): void {
     if (!configuration.tableElement.tHead) {
       return;
     }
@@ -1461,7 +1457,7 @@ export class TableUtils {
         selectAllCell = lastTheadRow.cells.item(0) as HTMLTableHeaderCellElement;
       }
 
-      const rowElement = TableUtils._createFilterRowElement(configuration);
+      const rowElement = TableUtils._createFilterRowElement(configuration, signal);
 
       // Move the select all cell to the new filter row
       if (rowElement && selectAllCell) {
@@ -1492,7 +1488,7 @@ export class TableUtils {
    * Creates the table filter row element.
    * @param {ITableConfiguration} configuration The table configuration.
    */
-  private static _createFilterRowElement(configuration: ITableConfiguration): HTMLTableRowElement {
+  private static _createFilterRowElement(configuration: ITableConfiguration, signal: AbortSignal): HTMLTableRowElement {
     if (!configuration.tableElement.tHead) {
       throw new Error('Table head element cannot be null.');
     }
@@ -1520,7 +1516,7 @@ export class TableUtils {
           TableUtils._setCellAlignmentClass(container, columnConfig.align);
         }
 
-        const element = TableUtils._createFilterElement(columnConfig, columnIndex, configuration.filterListener as TableFilterListener);
+        const element = TableUtils._createFilterElement(columnConfig, columnIndex, configuration.filterListener as TableFilterListener, signal);
         container.appendChild(element);
         th.appendChild(container);
       }
@@ -1535,7 +1531,12 @@ export class TableUtils {
    * Creates the element that will be used as the filter for this column.
    * @param {IColumnConfiguration} columnConfig The column configuration.
    */
-  private static _createFilterElement(columnConfig: IColumnConfiguration, columnIndex: number, filterListener: TableFilterListener): HTMLElement {
+  private static _createFilterElement(
+    columnConfig: IColumnConfiguration,
+    columnIndex: number,
+    filterListener: TableFilterListener,
+    signal: AbortSignal
+  ): HTMLElement {
     let delegate: IFormFieldComponentDelegate<any> | IBaseComponentDelegate<HTMLElement>;
 
     if (isFunction(columnConfig.filterDelegate)) {
@@ -1552,9 +1553,12 @@ export class TableUtils {
         const debounceTime = isDefined(columnConfig.filterDebounceTime)
           ? (columnConfig.filterDebounceTime as number)
           : TABLE_CONSTANTS.numbers.DEFAULT_FILTER_DEBOUNCE_TIME;
-        delegate.onChange(debounce((value: any) => filterListener(value, columnIndex), debounceTime));
+        delegate.onChange(
+          debounce((value: any) => filterListener(value, columnIndex), debounceTime),
+          { signal }
+        );
       } else {
-        delegate.onChange((value: any) => filterListener(value, columnIndex));
+        delegate.onChange((value: any) => filterListener(value, columnIndex), { signal });
       }
     }
 

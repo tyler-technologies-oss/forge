@@ -1,12 +1,16 @@
-import { customElement, attachShadowTemplate, coreProperty } from '@tylertech/forge-core';
-import { AppBarAdapter } from './app-bar-adapter.js';
-import { AppBarCore } from './app-bar-core.js';
-import { AppBarElevation, AppBarTheme, APP_BAR_CONSTANTS, AppBarThemeMode } from './app-bar-constants.js';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { html, nothing, TemplateResult, unsafeCSS } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
+import { customElement, property } from 'lit/decorators.js';
+import { IBaseComponent } from '../../core/base/base-component.js';
+import { BaseLitElement } from '../../core/base/base-lit-element.js';
+import { setDefaultAria } from '../../core/utils/a11y-utils.js';
+import { createHideRef, hideWhenEmpty, removeDefaultAttribute, removeEmptyAttribute } from '../../core/utils/lit-utils.js';
+import { APP_BAR_CONSTANTS, AppBarElevation, AppBarTheme, AppBarThemeMode } from './app-bar-constants.js';
 
-import template from './app-bar.html';
 import styles from './app-bar.scss';
 
+/** @deprecated - This will be removed in the future. Please switch to using AppBarComponent. */
 export interface IAppBarComponent extends IBaseComponent {
   titleText: string;
   elevation: AppBarElevation;
@@ -16,34 +20,10 @@ export interface IAppBarComponent extends IBaseComponent {
   target: string;
 }
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-app-bar': IAppBarComponent;
-  }
-
-  interface HTMLElementEventMap {
-    'forge-app-bar-navigate': CustomEvent<void>;
-  }
-}
-
 /**
  * @tag forge-app-bar
  *
  * @summary App bars are headers used to display branding, navigation, and actions at the top of an application. They typically contain a logo, title, and various action items.
- *
- * @property {string} titleText - The text to display in the title.
- * @property {AppBarElevation} [elevation="raised"] - The elevation of the app bar.
- * @property {AppBarTheme} theme - The theme of the app bar.
- * @property {string} href - The href that will be used to make the logo and title area a clickable link.
- * @property {string} target - The `<a>` target of the logo + title area link when `href` is set.
- * @property {AppBarThemeMode} [themeMode="inherit"] - Controls how the theme is applied. `inherit` will apply the global theme to the app bar and all child components. `scoped` will only apply the theme to the app bar and not set any global tokens.
- *
- * @attribute {string} title-text - The text to display in the title.
- * @attribute {string} [elevation="raised"] - The elevation of the app bar.
- * @attribute {string} theme - The theme of the app bar.
- * @attribute {string} href - The href that will be used to make the logo and title area a clickable link
- * @attribute {string} target - The `<a>` target of the logo + title area link when `href` is set.
- * @attribute {string} [theme-mode="inherit"] - Controls how the theme is applied. `inherit` will apply the global theme to the app bar and all child components. `scoped` will only apply the theme to the app bar and not set any global tokens.
  *
  * @cssproperty --forge-app-bar-background - The background color of the app bar.
  * @cssproperty --forge-app-bar-foreground - The text color of the app bar.
@@ -82,71 +62,147 @@ declare global {
  * @cssclass forge-app-bar__section-center - The center section of the app bar.
  * @cssclass forge-app-bar__section-end - The end section of the app bar.
  */
-@customElement({
-  name: APP_BAR_CONSTANTS.elementName
-})
-export class AppBarComponent extends BaseComponent implements IAppBarComponent {
-  public static get observedAttributes(): string[] {
-    return [
-      APP_BAR_CONSTANTS.attributes.TITLE_TEXT,
-      APP_BAR_CONSTANTS.attributes.ELEVATION,
-      APP_BAR_CONSTANTS.attributes.THEME,
-      APP_BAR_CONSTANTS.attributes.HREF,
-      APP_BAR_CONSTANTS.attributes.TARGET,
-      APP_BAR_CONSTANTS.attributes.THEME_MODE
-    ];
-  }
+@customElement(APP_BAR_CONSTANTS.elementName)
+export class AppBarComponent extends BaseLitElement {
+  public static styles = unsafeCSS(styles);
 
-  private _core: AppBarCore;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = APP_BAR_CONSTANTS.elementName;
+
+  #internals: ElementInternals;
+
+  /**
+   * The text to display in the title.
+   * @default ''
+   * @attribute title-text
+   */
+  @property({ attribute: 'title-text', reflect: true, converter: { toAttribute: removeEmptyAttribute } })
+  public titleText = '';
+
+  /**
+   * The elevation of the app bar.
+   * @default 'raised'
+   * @attribute elevation
+   */
+  @property({ reflect: true, converter: { toAttribute: removeEmptyAttribute } })
+  public elevation: AppBarElevation = 'raised';
+
+  /**
+   * The theme of the app bar.
+   * @default ''
+   * @attribute theme
+   */
+  @property({ reflect: true, converter: { toAttribute: removeEmptyAttribute } })
+  public theme: AppBarTheme = '';
+
+  /**
+   * The href that will be used to make the logo and title area a clickable link.
+   * @default ''
+   * @attribute href
+   */
+  @property({ reflect: true, converter: { toAttribute: removeEmptyAttribute } })
+  public href = '';
+
+  /**
+   * The `<a>` target of the logo + title area link when `href` is set.
+   * @default ''
+   * @attribute target
+   */
+  @property({ reflect: true, converter: { toAttribute: removeEmptyAttribute } })
+  public target = '';
+
+  /**
+   * Controls how the theme is applied. `inherit` will apply the global theme to the app bar and all child components. `scoped` will only apply the theme to the app bar and not set any global tokens.
+   * @default 'inherit'
+   * @attribute theme-mode
+   */
+  @property({ attribute: 'theme-mode', reflect: true, converter: { toAttribute: (value: AppBarThemeMode) => removeDefaultAttribute(value, 'inherit') } })
+  public themeMode: AppBarThemeMode = 'inherit';
+
+  #centerSlotHideRef = createHideRef();
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new AppBarCore(new AppBarAdapter(this));
+    this.#internals = this.attachInternals();
   }
 
   public connectedCallback(): void {
-    this._core.initialize();
+    super.connectedCallback();
+    setDefaultAria(this, this.#internals, { role: 'banner' });
   }
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case APP_BAR_CONSTANTS.attributes.TITLE_TEXT:
-        this.titleText = newValue;
-        break;
-      case APP_BAR_CONSTANTS.attributes.ELEVATION:
-        this.elevation = newValue as AppBarElevation;
-        break;
-      case APP_BAR_CONSTANTS.attributes.THEME:
-        this.theme = newValue as AppBarTheme;
-        break;
-      case APP_BAR_CONSTANTS.attributes.HREF:
-        this.href = newValue;
-        break;
-      case APP_BAR_CONSTANTS.attributes.TARGET:
-        this.target = newValue;
-        break;
-      case APP_BAR_CONSTANTS.attributes.THEME_MODE:
-        this.themeMode = newValue as AppBarThemeMode;
-        break;
+  public render(): TemplateResult {
+    const rootClasses = {
+      'forge-app-bar': true,
+      'no-center': this.#centerSlotHideRef.hidden,
+      white: this.theme === 'white',
+      scoped: this.themeMode === 'scoped',
+      raised: this.elevation === 'raised'
+    };
+    return html`
+      <div class=${classMap(rootClasses)} part="root">
+        <div class="row">
+          <div class="section">
+            <slot name="start"></slot>
+            ${this.href ? this.#renderAnchorTitleConatiner() : this.#renderDivTitleContainer()}
+          </div>
+          <div id="center-section" class="section" ${hideWhenEmpty(this.#centerSlotHideRef)}>
+            <slot name="center"></slot>
+          </div>
+          <div class="section">
+            <slot name="end"></slot>
+          </div>
+        </div>
+        <div>
+          <slot name="bottom"></slot>
+        </div>
+      </div>
+    `;
+  }
+
+  #renderDivTitleContainer(): TemplateResult {
+    return html`
+      <div class="logo-title-container">
+        <slot name="logo"></slot>
+        <slot name="title">${this.titleText ? this.#renderTitle() : nothing}</slot>
+      </div>
+    `;
+  }
+
+  #renderAnchorTitleConatiner(): TemplateResult {
+    return html`
+      <a class="logo-title-container" href="${this.href}" target="${this.target}" @click="${{ handleEvent: this.#handleHrefClick.bind(this), capture: true }}">
+        <slot name="logo"></slot>
+        <slot name="title">${this.titleText ? this.#renderTitle() : nothing}</slot>
+        <forge-state-layer></forge-state-layer>
+        <forge-focus-indicator .inward=${true}></forge-focus-indicator>
+      </a>
+    `;
+  }
+
+  #renderTitle(): TemplateResult {
+    return html`<h1 class="title" part="title">${this.titleText}</h1>`;
+  }
+
+  #handleHrefClick(evt: Event): void {
+    const event = new CustomEvent(APP_BAR_CONSTANTS.events.NAVIGATE, {
+      bubbles: true,
+      composed: true,
+      cancelable: true
+    });
+    this.dispatchEvent(event);
+    if (event.defaultPrevented) {
+      evt.preventDefault();
     }
   }
+}
 
-  @coreProperty()
-  declare public titleText: string;
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-app-bar': IAppBarComponent;
+  }
 
-  @coreProperty()
-  declare public elevation: AppBarElevation;
-
-  @coreProperty()
-  declare public theme: AppBarTheme;
-
-  @coreProperty()
-  declare public href: string;
-
-  @coreProperty()
-  declare public target: string;
-
-  @coreProperty()
-  declare public themeMode: AppBarThemeMode;
+  interface HTMLElementEventMap {
+    'forge-app-bar-navigate': CustomEvent<void>;
+  }
 }

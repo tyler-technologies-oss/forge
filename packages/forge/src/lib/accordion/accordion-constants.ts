@@ -10,6 +10,7 @@ const events = {
   TOGGLE: `${elementName}-toggle`
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const ACCORDION_CONSTANTS = {
   elementName,
   attributes,
