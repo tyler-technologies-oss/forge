@@ -76,6 +76,31 @@ The following example shows how you can use the `optionBuilder` callback to cust
 
 > **Note:** The content you return will be rendered within a `<forge-list-item>` element, so you should only return the content of the list item, not a replacement for the list item itself.
 
+## Empty State
+
+When the filter callback returns no results, the default empty state message is displayed to provide feedback to the user. This is useful for indicating that the search returned no matches.
+
+For more control over the empty state content, use the `emptyMessage` property to change it, or the `emptyStateBuilder` callback. The callback receives the current filter text and can return either a `string` or an `HTMLElement`:
+
+```typescript
+// Update the default text
+autocomplete.emptyMessage = 'Better luck next time!';
+
+// Return a dynamic string
+autocomplete.emptyStateBuilder = (filterText) => {
+  return `No results found for "${filterText}"`;
+};
+
+// Or return custom HTML
+autocomplete.emptyStateBuilder = (filterText) => {
+  const el = document.createElement('div');
+  el.innerHTML = `<strong>No matches</strong><br>Try a different search term`;
+  return el;
+};
+```
+
+> **Note:** If both `emptyMessage` and `emptyStateBuilder` are set, the `emptyStateBuilder` takes precedence.
+
 ## Configuration
 
 The autocomplete is one of the most volatile and highly configurable components in the Forge library. It has many properties that allow you to customize the behavior and appearance of the

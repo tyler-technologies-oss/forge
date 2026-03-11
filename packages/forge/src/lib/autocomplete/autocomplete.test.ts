@@ -111,9 +111,10 @@ describe('AutocompleteComponent', () => {
       expect(filterCb).not.toHaveBeenCalled();
     });
 
-    it('should not show popup if no filter options are provided', async () => {
+    it('should not show popup if no filter options are provided and empty state disabled', async () => {
       const harness = await createFixture({
-        filter: () => []
+        filter: () => [],
+        emptyMessage: null
       });
       harness.triggerDropdownClick();
       await frame();
@@ -1098,7 +1099,8 @@ describe('AutocompleteComponent', () => {
             setTimeout(() => {
               resolve(DEFAULT_FILTER_OPTIONS);
             }, 1000);
-          })
+          }),
+        emptyMessage: null
       });
       harness.component.open = true;
       await frame();
@@ -1918,6 +1920,88 @@ describe('AutocompleteComponent', () => {
     });
   });
 
+  describe('empty state', () => {
+    it('should display empty message when filter returns no results', async () => {
+      const harness = await createFixture({
+        filter: () => [],
+        emptyMessage: 'No results found'
+      });
+      harness.component.openDropdown();
+      await task(POPOVER_ANIMATION_DURATION);
+
+      expect(harness.popupElement).not.toBeNull();
+      expect(harness.popupElement?.textContent).toContain('No results found');
+    });
+
+    it('should not display empty state when emptyMessage is null', async () => {
+      const harness = await createFixture({
+        filter: () => [],
+        emptyMessage: null
+      });
+      harness.component.openDropdown();
+      await task(POPOVER_ANIMATION_DURATION);
+
+      expect(harness.popupElement).toBeNull();
+    });
+
+    it('should use emptyStateBuilder when provided', async () => {
+      const harness = await createFixture({
+        filter: () => [],
+        emptyStateBuilder: () => {
+          const el = document.createElement('div');
+          el.textContent = 'Custom empty state';
+          el.id = 'custom-empty-state';
+          return el;
+        }
+      });
+      harness.component.openDropdown();
+      await task(POPOVER_ANIMATION_DURATION);
+
+      expect(harness.popupElement).not.toBeNull();
+      expect(harness.popupElement?.querySelector('#custom-empty-state')).not.toBeNull();
+    });
+
+    it('should pass filterText to emptyStateBuilder', async () => {
+      const builderSpy = vi.fn((filterText: string) => `No results for "${filterText}"`);
+      const harness = await createFixture({
+        filter: () => [],
+        emptyStateBuilder: builderSpy
+      });
+      harness.component.openDropdown();
+      harness.sendInputValue('xyz');
+      await task(POPOVER_ANIMATION_DURATION);
+
+      expect(builderSpy).toHaveBeenCalledWith('xyz');
+    });
+
+    it('should prefer emptyStateBuilder over emptyMessage', async () => {
+      const harness = await createFixture({
+        filter: () => [],
+        emptyMessage: 'Default message',
+        emptyStateBuilder: () => 'Builder message'
+      });
+      harness.component.openDropdown();
+      await task(POPOVER_ANIMATION_DURATION);
+
+      expect(harness.popupElement).not.toBeNull();
+      expect(harness.popupElement?.textContent).toContain('Builder message');
+      expect(harness.popupElement?.textContent).not.toContain('Default message');
+    });
+
+    it('should handle emptyStateBuilder returning string', async () => {
+      const harness = await createFixture({
+        filter: () => [],
+        emptyStateBuilder: (filterText: string) => `No results for "${filterText}"`
+      });
+      harness.component.openDropdown();
+      harness.sendInputValue('test');
+      await task(POPOVER_ANIMATION_DURATION);
+
+      expect(harness.popupElement).not.toBeNull();
+      expect(harness.popupElement?.textContent).toContain('No results for "test"');
+    });
+  });
+
   it('should update open status if popup dismissed via click inside the anchor element', async () => {
     const harness = await createFixture({
       filter: () => DEFAULT_FILTER_OPTIONS
@@ -1993,6 +2077,8 @@ interface IAutocompleteFixtureConfig {
   matchKey?: string;
   filterFocusFirst?: boolean;
   selectFirstOptionOnBlur?: boolean;
+  emptyMessage?: string;
+  emptyStateBuilder?: (filterText: string) => HTMLElement | string;
 }
 
 async function createFixture(config: IAutocompleteFixtureConfig = {}): Promise<AutocompleteHarness> {
@@ -2054,6 +2140,12 @@ async function createFixture(config: IAutocompleteFixtureConfig = {}): Promise<A
   }
   if (config.selectFirstOptionOnBlur !== undefined) {
     component.selectFirstOptionOnBlur = config.selectFirstOptionOnBlur;
+  }
+  if (config.emptyMessage !== undefined) {
+    component.emptyMessage = config.emptyMessage;
+  }
+  if (config.emptyStateBuilder !== undefined) {
+    component.emptyStateBuilder = config.emptyStateBuilder;
   }
 
   return new AutocompleteHarness(component, input, screen.container);
