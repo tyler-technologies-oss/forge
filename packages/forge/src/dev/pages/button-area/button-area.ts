@@ -8,13 +8,7 @@ import '@tylertech/forge/button-area';
 import '@tylertech/forge/expansion-panel';
 import './button-area.scss';
 
-IconRegistry.define([
-  tylIconChevronRight,
-  tylIconFavorite,
-  tylIconFavoriteBorder,
-  tylIconInfo,
-  tylIconOpenInNew
-]);
+IconRegistry.define([tylIconChevronRight, tylIconFavorite, tylIconFavoriteBorder, tylIconInfo, tylIconOpenInNew]);
 
 const buttonArea = document.getElementById('button-area') as ButtonAreaComponent;
 const buttonAreaButton = buttonArea?.querySelector('button');
@@ -47,19 +41,22 @@ toggleButtonArea.addEventListener('click', () => {
 const currentContainer = document.getElementById('current-container') as HTMLDivElement;
 const currentDetailContent = document.getElementById('current-detail-content') as HTMLDivElement;
 const currentButtons = Array.from(currentContainer.querySelectorAll('button[slot=button]') as NodeListOf<HTMLButtonElement>);
-currentContainer.addEventListener('click', (event) => {
-  const targetButtonArea = event.composedPath().find(path => path instanceof HTMLElement && path.tagName.toLowerCase() === 'forge-button-area') as ButtonAreaComponent;
-  if (!targetButtonArea) {
+currentContainer.addEventListener('click', event => {
+  const clickedButtonArea = event
+    .composedPath()
+    .find(path => path instanceof HTMLElement && path.tagName.toLowerCase() === 'forge-button-area') as ButtonAreaComponent;
+  if (!clickedButtonArea) {
     return;
   }
 
   const activeCurrentButtons = currentButtons.filter(button => button.hasAttribute('aria-current'));
   activeCurrentButtons.forEach(button => button.removeAttribute('aria-current'));
 
-  const currentButton = targetButtonArea.querySelector('button[slot=button]') as HTMLButtonElement;
+  const currentButton = clickedButtonArea.querySelector('button[slot=button]') as HTMLButtonElement;
   currentButton.setAttribute('aria-current', 'true');
 
-  const textContent = currentButton.getAttribute('aria-labelledby') ? document.getElementById(currentButton.getAttribute('aria-labelledby')!)?.textContent : currentButton.textContent;
+  const labelledById = currentButton.getAttribute('aria-labelledby');
+  const textContent = labelledById ? document.getElementById(labelledById)?.textContent : currentButton.textContent;
   if (currentDetailContent) {
     currentDetailContent.textContent = textContent ?? '';
   }

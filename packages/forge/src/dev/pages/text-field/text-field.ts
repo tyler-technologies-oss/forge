@@ -10,7 +10,7 @@ import { ITextFieldComponent } from '@tylertech/forge/text-field';
 IconRegistry.define([tylIconEvent, tylIconInfoOutline, tylIconMoreVert, tylIconPerson]);
 
 const container = document.querySelector('.container');
-const textFields = container.querySelectorAll('forge-text-field') as NodeListOf<ITextFieldComponent>;
+const textFields = container?.querySelectorAll('forge-text-field') as NodeListOf<ITextFieldComponent>;
 
 // Options
 const optLabel = document.getElementById('opt-label') as HTMLInputElement;
@@ -46,7 +46,10 @@ optLabel.addEventListener('input', () => {
         label.textContent = optLabel.value;
         textField.prepend(label);
       }
-      textField.querySelector(':is(label, span, forge-label)').textContent = optLabel.value;
+      const labelElement = textField.querySelector(':is(label, span, forge-label)');
+      if (labelElement) {
+        labelElement.textContent = optLabel.value;
+      }
     } else {
       labelEl?.remove();
     }
@@ -106,7 +109,7 @@ optStart.addEventListener('forge-switch-change', () => {
     if (optStart.on) {
       textField.append(createStartElement());
     } else {
-      textField.querySelector('[slot=start]').remove();
+      textField.querySelector('[slot=start]')?.remove();
     }
   });
 });
@@ -116,7 +119,7 @@ optEnd.addEventListener('forge-switch-change', () => {
     if (optEnd.on) {
       textField.append(createEndElement());
     } else {
-      textField.querySelector('[slot=end]').remove();
+      textField.querySelector('[slot=end]')?.remove();
     }
   });
 });
@@ -126,7 +129,7 @@ optAccessory.addEventListener('forge-switch-change', () => {
     if (optAccessory.on) {
       textField.append(createAccessoryElement());
     } else {
-      textField.querySelector('[slot=accessory]').remove();
+      textField.querySelector('[slot=accessory]')?.remove();
     }
   });
 });
@@ -136,7 +139,7 @@ optSupportText.addEventListener('forge-switch-change', () => {
     if (optSupportText.on) {
       textField.append(createSupportTextElement());
     } else {
-      textField.querySelector('[slot=support-text]').remove();
+      textField.querySelector('[slot=support-text]')?.remove();
     }
   });
 });
@@ -146,7 +149,7 @@ optSupportTextEnd.addEventListener('forge-switch-change', () => {
     if (optSupportTextEnd.on) {
       textField.append(createSupportTextEndElement());
     } else {
-      textField.querySelector('[slot=support-text-end]').remove();
+      textField.querySelector('[slot=support-text-end]')?.remove();
     }
   });
 });

@@ -41,9 +41,7 @@ simpleChipField.addEventListener('forge-chip-field-member-removed', ({ detail })
   simpleChipField.removeChild(detail);
 });
 
-autocompleteComponent.filter = filter => {
-  return data.filter(({ label }) => label.toLowerCase().includes(filter.toLowerCase()));
-};
+autocompleteComponent.filter = filter => data.filter(({ label }) => label.toLowerCase().includes(filter.toLowerCase()));
 
 autocompleteComponent.addEventListener('forge-autocomplete-select', ({ detail: { value } }) => {
   const exists = selectedAutocompleteValues.includes(value);
@@ -60,12 +58,13 @@ autocompleteChipField.addEventListener('forge-chip-field-member-removed', ({ det
   removeMember(chip.value as string);
 });
 
-function onRemoveMemberEvent(evt): void {
-  if (evt.target.disabled) {
+function onRemoveMemberEvent(evt: Event): void {
+  const target = evt.target as HTMLElement & { disabled: boolean; value: string };
+  if (target.disabled) {
     return;
   }
 
-  removeMember(evt.target.value);
+  removeMember(target.value);
 }
 
 function addAutocompleteMember(value: string): void {

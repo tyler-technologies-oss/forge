@@ -12,7 +12,7 @@ showPageSizeOptsToggle.addEventListener('forge-switch-change', ({ detail: select
 
 const showLabelToggle = document.getElementById('opt-show-label') as ISwitchComponent;
 showLabelToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  paginator.label = selected ? PAGINATOR_CONSTANTS.strings.DEFAULT_LABEL : null;
+  paginator.label = selected ? PAGINATOR_CONSTANTS.strings.DEFAULT_LABEL : '';
 });
 
 const showFirstToggle = document.getElementById('opt-show-first') as ISwitchComponent;
@@ -38,9 +38,7 @@ alternativeToggle.addEventListener('forge-switch-change', ({ detail: selected })
 const customRangeLabelToggle = document.getElementById('opt-custom-range-label') as ISwitchComponent;
 customRangeLabelToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
-    paginator.rangeLabelCallback = (state: IPaginatorRangeState) => {
-      return `items ${state.pageStart} thru ${state.pageEnd} out of ${state.total} total`;
-    };
+    paginator.rangeLabelCallback = (state: IPaginatorRangeState) => `items ${state.pageStart} thru ${state.pageEnd} out of ${state.total} total`;
   } else {
     paginator.rangeLabelCallback = undefined;
   }

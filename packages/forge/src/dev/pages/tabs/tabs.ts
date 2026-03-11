@@ -23,7 +23,7 @@ tabBar.addEventListener('forge-tab-bar-change', evt => {
 const verticalToggle = document.getElementById('opt-vertical') as ISwitchComponent;
 verticalToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   tabBar.vertical = selected;
-  container.classList.toggle('tabs-demo-container--vertical', selected);
+  container?.classList.toggle('tabs-demo-container--vertical', selected);
 });
 
 const clusteredToggle = document.getElementById('opt-clustered') as ISwitchComponent;
@@ -68,7 +68,10 @@ showStartToggle.addEventListener('forge-switch-change', ({ detail: selected }) =
     if (selected) {
       tab.appendChild(createIcon('favorite', 'start'));
     } else {
-      tab.removeChild(tab.querySelector('forge-icon[slot=start]'));
+      const icon = tab.querySelector('forge-icon[slot=start]');
+      if (icon) {
+        tab.removeChild(icon);
+      }
     }
   });
 });
@@ -80,7 +83,10 @@ showEndToggle.addEventListener('forge-switch-change', ({ detail: selected }) => 
     if (selected) {
       tab.appendChild(createIcon('favorite', 'end'));
     } else {
-      tab.removeChild(tab.querySelector('forge-icon[slot=end]'));
+      const icon = tab.querySelector('forge-icon[slot=end]');
+      if (icon) {
+        tab.removeChild(icon);
+      }
     }
   });
 });

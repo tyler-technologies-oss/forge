@@ -20,8 +20,8 @@ interface IComponentIdentifier {
 const componentGroups: IComponentGroup[] = createComponentGroups(componentsJson); // Group components alphabetically
 const listElement = document.getElementById('component-list') as ListComponent;
 const searchField = document.getElementById('search-field') as HTMLInputElement;
-const searchFieldInput = searchField.querySelector('input');
-const contentTitleElement = document.querySelector('#content-title');
+const searchFieldInput = searchField.querySelector('input') as HTMLInputElement;
+const contentTitleElement = document.querySelector('#content-title') as Element;
 const originalComponentCount = updateContentTitle(componentGroups);
 
 const url = new URL(document.location.href);
@@ -67,9 +67,9 @@ function onSearch(filter: string): void {
   filter = filter.trim().toLowerCase();
   let groups = window.structuredClone<IComponentGroup[]>(componentGroups);
   groups = groups.filter(group => {
-    group.components = group.components.filter(({ label, tags }) => {
-      return label.toLowerCase().includes(filter) || tags?.some(tag => tag.toLowerCase().includes(filter));
-    });
+    group.components = group.components.filter(
+      ({ label, tags }) => label.toLowerCase().includes(filter) || tags?.some(tag => tag.toLowerCase().includes(filter))
+    );
     return !!group.components.length;
   });
   const elements = buildComponentsList(groups);

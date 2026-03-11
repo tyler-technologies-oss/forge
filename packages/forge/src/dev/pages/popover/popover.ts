@@ -72,7 +72,7 @@ arrowToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (p
 
 const useOffsetToggle = document.getElementById('opt-use-offset') as ISwitchComponent;
 useOffsetToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  popover.offset = selected ? { mainAxis: 4 } : null;
+  popover.offset = (selected ? { mainAxis: 4 } : undefined) as typeof popover.offset;
 });
 
 const persistentHoverToggle = document.getElementById('opt-persistent-hover') as ISwitchComponent;
