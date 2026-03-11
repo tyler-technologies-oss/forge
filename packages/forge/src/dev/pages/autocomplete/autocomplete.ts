@@ -130,6 +130,11 @@ secondaryLabelToggle.addEventListener('forge-switch-change', ({ detail: selected
   states = selected ? data.map(state => ({ ...state, secondaryLabel: state.value })) : data;
 });
 
+const emptyMessageToggle = document.querySelector('#autocomplete-empty-message') as HTMLInputElement;
+emptyMessageToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  autocomplete.emptyMessage = selected ? 'Forced custom empty message!' : undefined;
+});
+
 function itemBuilder(option: IListDropdownOption, filterText: string, _listItem: IListItemComponent): HTMLElement {
   const item = document.createElement('div');
   item.style.display = 'flex';
@@ -179,6 +184,10 @@ function filterOptions(filter: string, value: string): Promise<IOption[] | IList
 }
 
 function executeFilter(filter: string): IOption[] {
+  if (emptyMessageToggle.checked) {
+    return [];
+  }
+
   const filteredData = states.filter(item => {
     return item.label.toLowerCase().includes(filter.toLowerCase());
   });

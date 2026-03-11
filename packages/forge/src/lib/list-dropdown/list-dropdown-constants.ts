@@ -23,7 +23,8 @@ const attributes = {
 
   // Internal
   CHECKBOX_ELEMENT: 'data-list-dropdown-checkbox',
-  DATA_ALLOW_FOCUS: 'data-list-dropdown-allow-focus'
+  DATA_ALLOW_FOCUS: 'data-list-dropdown-allow-focus',
+  DATA_EMPTY_STATE: 'data-list-dropdown-empty-state'
 };
 
 const classes = {
@@ -45,6 +46,7 @@ export const LIST_DROPDOWN_CONSTANTS = {
 export type ListDropdownOptionBuilder<T = HTMLElement> = (option: IListDropdownOption, parentElement: T) => HTMLElement | string | void;
 export type ListDropdownHeaderBuilder = () => HTMLElement;
 export type ListDropdownFooterBuilder = () => HTMLElement;
+export type ListDropdownEmptyStateBuilder = (filterText: string) => HTMLElement | string;
 export type ListDropdownOptionGroupBuilder<T = any> = (option: IListDropdownOptionGroup<T>) => HTMLElement | string;
 export type ListDropdownTransformCallback = (label: string, option?: IListDropdownOption, isSelected?: boolean) => string | HTMLElement;
 export type ListDropdownIconType = 'font' | 'component';
@@ -124,6 +126,9 @@ export interface IListDropdownConfig<T = any> {
   scrollEndListener?: () => void;
   headerBuilder?: ListDropdownHeaderBuilder;
   footerBuilder?: ListDropdownFooterBuilder;
+  emptyMessage?: string;
+  emptyStateBuilder?: ListDropdownEmptyStateBuilder;
+  filterText?: string;
   cascade?: boolean;
   cascadingElementFactory?: (config: IListDropdownCascadingElementFactoryConfig) => HTMLElement;
   anchorAccessibility?: PopoverAnchorAccessibility;

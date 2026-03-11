@@ -12,6 +12,7 @@ import {
 import { IListDropdownAwareCore, ListDropdownAwareCore } from '../list-dropdown/list-dropdown-aware-core.js';
 import { IAutocompleteAdapter } from './autocomplete-adapter.js';
 import {
+  AutocompleteEmptyStateBuilder,
   AutocompleteFilterCallback,
   AutocompleteMode,
   AutocompleteOptionBuilder,
@@ -41,6 +42,8 @@ export interface IAutocompleteCore extends IListDropdownAwareCore {
   isInitialized: boolean;
   open: boolean;
   matchKey: string | null | undefined;
+  emptyMessage: string | null | undefined;
+  emptyStateBuilder: AutocompleteEmptyStateBuilder | null | undefined;
   appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   beforeValueChange: (value: any) => boolean | Promise<boolean>;
   forceFilter(opts: IAutocompleteForceFilterOptions): void;
@@ -60,6 +63,8 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   private _optionBuilder?: AutocompleteOptionBuilder | null;
   private _filter?: AutocompleteFilterCallback | null;
   private _selectedTextBuilder: AutocompleteSelectedTextBuilder;
+  private _emptyMessage?: string | null = 'No results found';
+  private _emptyStateBuilder?: AutocompleteEmptyStateBuilder | null;
   private _options: IAutocompleteOption[] | IAutocompleteOptionGroup[] = [];
   private _filterText = '';
   private _selectedOptions: IAutocompleteOption[] = [];
@@ -419,9 +424,16 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
 
   private _onFilterComplete(): void {
     const shouldSelectOnBlur = this._selectFirstOptionOnBlur && this._selectOnBlurPending;
+    const hasEmptyState = !!this._emptyMessage || !!this._emptyStateBuilder;
 
     if (!this._options.length) {
       this._selectOnBlurPending = false;
+
+      if (hasEmptyState && this._isDropdownOpen) {
+        this._adapter.setOptions(this._options, this._filterText, this._emptyMessage, this._emptyStateBuilder);
+        return;
+      }
+
       if (this._isDropdownOpen) {
         this._closeDropdown();
       }
@@ -534,7 +546,10 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
       activeChangeCallback: this._activeChangeListener,
       targetWidthCallback: this._targetWidthCallback,
       selectCallback: (value: any) => this._onSelect(value),
-      closeCallback: () => this._closeDropdown()
+      closeCallback: () => this._closeDropdown(),
+      emptyMessage: this._emptyMessage ?? undefined,
+      emptyStateBuilder: this._emptyStateBuilder ?? undefined,
+      filterText: this._filterText
     };
 
     this._adapter.show(config, this._popupTarget);
@@ -561,14 +576,17 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   private _dropdownReady({ userTriggered = true, activateFirst = false, activateSelected = false } = {}): void {
-    if (!this._isDropdownOpen || !this._options.length || (userTriggered && !this._adapter.hasFocus())) {
+    const hasEmptyState = !!this._emptyMessage || !!this._emptyStateBuilder;
+    const shouldClose = !this._isDropdownOpen || (!this._options.length && !hasEmptyState) || (userTriggered && !this._adapter.hasFocus());
+
+    if (shouldClose) {
       this._closeDropdown();
       return;
     }
 
     this._sortSelectedOptions();
     this._adapter.setBusyVisibility(false);
-    this._adapter.setOptions(this._options);
+    this._adapter.setOptions(this._options, this._filterText, this._emptyMessage, this._emptyStateBuilder);
     this._adapter.setSelectedOptions(this._selectedOptions);
     this._adapter.setDismissListener(this._dismissListener);
 
@@ -1140,5 +1158,21 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
 
   public get popupElement(): HTMLElement | null {
     return this._adapter.getPopupElement();
+  }
+
+  public get emptyMessage(): string | null | undefined {
+    return this._emptyMessage;
+  }
+  public set emptyMessage(value: string | null | undefined) {
+    if (this._emptyMessage !== value) {
+      this._emptyMessage = value;
+    }
+  }
+
+  public get emptyStateBuilder(): AutocompleteEmptyStateBuilder | null | undefined {
+    return this._emptyStateBuilder;
+  }
+  public set emptyStateBuilder(value: AutocompleteEmptyStateBuilder | null | undefined) {
+    this._emptyStateBuilder = value;
   }
 }
