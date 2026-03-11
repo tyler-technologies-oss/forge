@@ -52,10 +52,10 @@ function getButtonToggleGroups(): IButtonToggleGroupComponent[] {
 }
 
 const buttonToggleDemoContainer = document.querySelector('.button-toggle-demo-container');
-buttonToggleDemoContainer.addEventListener('forge-button-toggle-group-change', ({ detail }: CustomEvent<IButtonToggleGroupChangeEventData>) => {
+buttonToggleDemoContainer?.addEventListener('forge-button-toggle-group-change', ({ detail }: CustomEvent<IButtonToggleGroupChangeEventData>) => {
   console.log('[forge-button-toggle-group-change]', detail);
 });
-buttonToggleDemoContainer.addEventListener('forge-button-toggle-select', ({ detail }: CustomEvent<IButtonToggleSelectEventData>) => {
+buttonToggleDemoContainer?.addEventListener('forge-button-toggle-select', ({ detail }: CustomEvent<IButtonToggleSelectEventData>) => {
   console.log('[forge-button-toggle-select]', detail);
 });
 

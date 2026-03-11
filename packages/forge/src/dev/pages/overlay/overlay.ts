@@ -83,13 +83,13 @@ showArrowToggle.addEventListener('forge-switch-change', ({ detail: selected }) =
     overlay.arrowElement = arrowEl;
   } else {
     overlay.querySelector('.arrow')?.remove();
-    overlay.arrowElement = null;
+    overlay.arrowElement = undefined as unknown as typeof overlay.arrowElement;
   }
 });
 
 const setBoundaryToggle = document.getElementById('opt-set-boundary') as ISwitchComponent;
 setBoundaryToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  overlay.boundaryElement = selected ? clippingContainer : null;
+  overlay.boundaryElement = (selected ? clippingContainer : undefined) as typeof overlay.boundaryElement;
 });
 
 const useSmallContainerToggle = document.getElementById('opt-use-small-container') as ISwitchComponent;
@@ -105,7 +105,7 @@ forceContainmentToggle.addEventListener('forge-switch-change', ({ detail: select
 
 const useOffsetToggle = document.getElementById('opt-use-offset') as ISwitchComponent;
 useOffsetToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  overlay.offset = selected ? { mainAxis: 16 } : null;
+  overlay.offset = (selected ? { mainAxis: 16 } : undefined) as typeof overlay.offset;
 });
 
 const centerButton = document.getElementById('opt-center') as HTMLButtonElement;

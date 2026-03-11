@@ -133,14 +133,14 @@ function buildSwatches(): void {
       const header = document.createElement('h2');
       header.classList.add('forge-typography--subheading4');
       header.textContent = group.header;
-      container.appendChild(header);
+      container?.appendChild(header);
     }
 
     group.swatches.forEach(config => {
       swatchContainer.appendChild(createSwatch(config));
     });
 
-    container.appendChild(swatchContainer);
+    container?.appendChild(swatchContainer);
   });
 }
 
@@ -194,7 +194,7 @@ function _linearChannelValue($channelValue: number): number {
 
 // Calculate the luminance for a color.
 // See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-function _luminance($color): number {
+function _luminance($color: string): number {
   const [r, g, b] = hexToRGB($color);
   const red = _linearChannelValue(r);
   const green = _linearChannelValue(g);
@@ -204,7 +204,7 @@ function _luminance($color): number {
 
 // Calculate the contrast ratio between two colors.
 // See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-function contrastRatio($back: string, $front: string): number {
+function _contrastRatio($back: string, $front: string): number {
   const backLum = _luminance($back) + 0.05;
   const foreLum = _luminance($front) + 0.05;
   return Math.max(backLum, foreLum) / Math.min(backLum, foreLum);

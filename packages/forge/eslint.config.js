@@ -26,6 +26,15 @@ export default defineConfig([
       '@typescript-eslint/no-non-null-assertion': 'off'
     }
   },
+  {
+    name: 'Dev files',
+    files: ['src/dev/**/*.ts'],
+    rules: {
+      'no-console': 'off',
+      '@typescript-eslint/dot-notation': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off'
+    }
+  },
   ...storybook.configs['flat/recommended'],
-  { ignores: ['dist/**/*', 'esm/**/*', 'cdn/**/*', 'src/dev/**/*', '.storybook/**/*', 'storybook-static/**/*'] }
+  { ignores: ['dist/**/*', 'esm/**/*', 'cdn/**/*', '.storybook/**/*', 'storybook-static/**/*'] }
 ]);

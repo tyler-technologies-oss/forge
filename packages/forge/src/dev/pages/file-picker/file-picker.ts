@@ -19,33 +19,39 @@ const disabledCheckbox = document.querySelector('#opt-disabled') as ISwitchCompo
 filePicker.addEventListener('forge-file-picker-change', ({ detail }) => {
   console.log('[forge-file-picker-change]', detail);
 
-  filePickerHelperText.innerText = `${detail.legalFiles.length} file(s)`;
-  list.innerHTML = '';
+  filePickerHelperText.innerText = `${detail.legalFiles?.length ?? 0} file(s)`;
+  if (list) {
+    list.innerHTML = '';
 
-  for (const { name } of detail.legalFiles) {
-    const li = document.createElement('li');
-    li.textContent = name;
-    list.appendChild(li);
+    for (const { name } of detail.legalFiles ?? []) {
+      const li = document.createElement('li');
+      li.textContent = name;
+      list.appendChild(li);
+    }
   }
 });
 
 filePickerCompact.addEventListener('forge-file-picker-change', ({ detail }) => {
-  listCompact.innerHTML = '';
+  if (listCompact) {
+    listCompact.innerHTML = '';
 
-  for (const { name } of detail.legalFiles) {
-    const li = document.createElement('li');
-    li.textContent = name;
-    listCompact.appendChild(li);
+    for (const { name } of detail.legalFiles ?? []) {
+      const li = document.createElement('li');
+      li.textContent = name;
+      listCompact.appendChild(li);
+    }
   }
 });
 
 filePickerBorderless.addEventListener('forge-file-picker-change', ({ detail }) => {
-  listBorderless.innerHTML = '';
+  if (listBorderless) {
+    listBorderless.innerHTML = '';
 
-  for (const { name } of detail.legalFiles) {
-    const li = document.createElement('li');
-    li.textContent = name;
-    listBorderless.appendChild(li);
+    for (const { name } of detail.legalFiles ?? []) {
+      const li = document.createElement('li');
+      li.textContent = name;
+      listBorderless.appendChild(li);
+    }
   }
 });
 

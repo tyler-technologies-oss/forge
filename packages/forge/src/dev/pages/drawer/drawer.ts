@@ -23,14 +23,14 @@ dismissibleDrawer.addEventListener('forge-drawer-after-open', () => {
   console.log('[dismissible drawer] forge-drawer-after-open');
 });
 
-dismissibleAppBarMenuButton.addEventListener('click', () => {
+dismissibleAppBarMenuButton?.addEventListener('click', () => {
   dismissibleDrawer.open = !dismissibleDrawer.open;
 });
 
-dismissibleRightAppBarMenuButton.addEventListener('click', () => {
+dismissibleRightAppBarMenuButton?.addEventListener('click', () => {
   dismissibleRightDrawer.open = !dismissibleRightDrawer.open;
 });
 
-modalAppBarMenuButton.addEventListener('click', () => {
+modalAppBarMenuButton?.addEventListener('click', () => {
   modalDrawer.open = !modalDrawer.open;
 });

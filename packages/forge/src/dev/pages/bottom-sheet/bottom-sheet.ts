@@ -6,17 +6,17 @@ import './bottom-sheet.scss';
 
 const standardBottomSheet = document.getElementById('standard-bottom-sheet') as IBottomSheetComponent;
 const showStandardButton = document.getElementById('show-standard-bottom-sheet-button');
-showStandardButton.addEventListener('click', () => (standardBottomSheet.open = !standardBottomSheet.open));
+showStandardButton?.addEventListener('click', () => (standardBottomSheet.open = !standardBottomSheet.open));
 
 const scrollableBottomSheet = document.getElementById('scrollable-bottom-sheet') as IBottomSheetComponent;
 const showStandardScrollableSheet = document.getElementById('show-scrollable-bottom-sheet-button');
-showStandardScrollableSheet.addEventListener('click', () => (scrollableBottomSheet.open = true));
+showStandardScrollableSheet?.addEventListener('click', () => (scrollableBottomSheet.open = true));
 
 const standardCloseButton = standardBottomSheet.querySelector('#standard-close-button');
-standardCloseButton.addEventListener('click', () => (standardBottomSheet.open = false));
+standardCloseButton?.addEventListener('click', () => (standardBottomSheet.open = false));
 
 const scrollableCloseButton = scrollableBottomSheet.querySelector('#scrollable-close-button');
-scrollableCloseButton.addEventListener('click', () => (scrollableBottomSheet.open = false));
+scrollableCloseButton?.addEventListener('click', () => (scrollableBottomSheet.open = false));
 
 const events = [
   BOTTOM_SHEET_CONSTANTS.events.BEFORE_CLOSE,

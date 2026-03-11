@@ -7,7 +7,7 @@ import { ISelectComponent } from '@tylertech/forge/select';
 import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const datePicker = document.querySelector('forge-date-picker#demo-date-picker') as IDatePickerComponent;
-const datePickerInput = datePicker.querySelector('input');
+const datePickerInput = datePicker.querySelector('input') as HTMLInputElement;
 const datePickerChangeStatusElement = document.querySelector('#date-picker-change-status') as HTMLElement;
 const datePickerInputValueElement = document.querySelector('#date-picker-input-value') as HTMLElement;
 
@@ -50,7 +50,7 @@ dateFormatSelect.addEventListener('change', () => {
 
 const shortcutsSelect = document.getElementById('opt-shortcuts') as ISelectComponent;
 shortcutsSelect.addEventListener('change', () => {
-  let shortcuts;
+  let shortcuts: any;
   if (shortcutsSelect.value === 'custom') {
     shortcuts = {
       z: () => new Date('01/01/2050')
@@ -113,7 +113,7 @@ disableDayCallbackToggle.addEventListener('forge-switch-change', ({ detail: sele
   if (selected) {
     datePicker.disableDayCallback = date => date.toLocaleDateString() === new Date().toLocaleDateString();
   } else {
-    datePicker.disableDayCallback = null;
+    datePicker.disableDayCallback = undefined as unknown as typeof datePicker.disableDayCallback;
   }
 });
 
@@ -127,9 +127,7 @@ customCallbackToggle.addEventListener('forge-switch-change', ({ detail: selected
   if (selected) {
     datePickerInput.placeholder = 'yyyy-mm-dd';
     datePicker.maskFormat = 'YYYY-MM-DD';
-    datePicker.formatCallback = date => {
-      return date ? date.toISOString().split('T')[0] : null;
-    };
+    datePicker.formatCallback = date => (date ? date.toISOString().split('T')[0] : '');
     datePicker.parseCallback = str => {
       if (str) {
         const split = str.split('-');
@@ -153,8 +151,8 @@ customCallbackToggle.addEventListener('forge-switch-change', ({ detail: selected
     };
   } else {
     datePickerInput.placeholder = 'mm/dd/yyyy';
-    datePicker.maskFormat = null;
-    datePicker.formatCallback = null;
-    datePicker.parseCallback = null;
+    datePicker.maskFormat = undefined as unknown as typeof datePicker.maskFormat;
+    datePicker.formatCallback = undefined as unknown as typeof datePicker.formatCallback;
+    datePicker.parseCallback = undefined as unknown as typeof datePicker.parseCallback;
   }
 });

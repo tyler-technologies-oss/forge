@@ -9,7 +9,7 @@ import './expansion-panel.scss';
 
 const cssOnlyPanel = document.querySelector('.forge-expansion-panel');
 const cssOnlyPanelTrigger = document.querySelector('#css-only-panel-trigger') as HTMLButtonElement;
-cssOnlyPanelTrigger.addEventListener('click', () => cssOnlyPanel.classList.toggle('forge-expansion-panel--open'));
+cssOnlyPanelTrigger.addEventListener('click', () => cssOnlyPanel?.classList.toggle('forge-expansion-panel--open'));
 
 const animationTypeSelect = document.getElementById('opt-animation-type') as HTMLSelectElement;
 animationTypeSelect.addEventListener('change', () => {

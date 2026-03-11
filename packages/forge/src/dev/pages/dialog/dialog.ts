@@ -35,25 +35,25 @@ inlineDialog.addEventListener('forge-dialog-move-end', evt => console.log('[forg
 inlineDialog.addEventListener('forge-dialog-fullscreen-change', evt => console.log('[forge-dialog]', evt));
 
 const showDynamicDialogButton = document.getElementById('show-dynamic-dialog-button');
-showDynamicDialogButton.addEventListener('click', () => openDynamicDialog());
+showDynamicDialogButton?.addEventListener('click', () => openDynamicDialog());
 
 const saveButton = inlineDialog.querySelector('#save-button');
-saveButton.addEventListener('click', () => {
+saveButton?.addEventListener('click', () => {
   confirmSaveDialog.show();
 });
 
 const confirmSaveDialog = inlineDialog.querySelector('#confirm-save-dialog') as IDialogComponent;
 const confirmYesButton = confirmSaveDialog.querySelector('#yes-button');
-confirmYesButton.addEventListener('click', () => {
+confirmYesButton?.addEventListener('click', () => {
   confirmSaveDialog.hide();
   inlineDialog.hide();
 });
 
 const cancelButton = inlineDialog.querySelector('#cancel-button');
-cancelButton.addEventListener('click', () => inlineDialog.hide());
+cancelButton?.addEventListener('click', () => inlineDialog.hide());
 
 const closeButton = inlineDialog.querySelector('#close-button');
-closeButton.addEventListener('click', () => inlineDialog.hide());
+closeButton?.addEventListener('click', () => inlineDialog.hide());
 
 const typeSelect = document.getElementById('opt-type') as ISelectComponent;
 typeSelect.addEventListener('change', ({ detail: selected }) => {
@@ -202,15 +202,15 @@ function openDynamicDialog(): void {
 
   // Handle the accept button being clicked
   const templateSaveButton = dialogElement.querySelector('#save-button');
-  templateSaveButton.addEventListener('click', () => dialogElement.hide());
+  templateSaveButton?.addEventListener('click', () => dialogElement.hide());
 
   // Handle the cancel button being clicked
   const templateCancelButton = dialogElement.querySelector('#cancel-button');
-  templateCancelButton.addEventListener('click', () => dialogElement.hide());
+  templateCancelButton?.addEventListener('click', () => dialogElement.hide());
 
   // Handle the close button being clicked
   const templateCloseButton = dialogElement.querySelector('#close-button');
-  templateCloseButton.addEventListener('click', () => dialogElement.hide());
+  templateCloseButton?.addEventListener('click', () => dialogElement.hide());
 
   // Shows the dialog by appending it to the body and toggling its open state
   document.body.appendChild(dialogElement);
@@ -218,7 +218,7 @@ function openDynamicDialog(): void {
 }
 
 const cssDialogButton = document.getElementById('show-css-dialog-button');
-cssDialogButton.addEventListener('click', () => openCssOnlyDialog());
+cssDialogButton?.addEventListener('click', () => openCssOnlyDialog());
 
 function openCssOnlyDialog(): void {
   if (cssDialog.classList.contains('forge-dialog--non-modal')) {
@@ -226,7 +226,7 @@ function openCssOnlyDialog(): void {
   } else {
     cssDialog.showModal();
   }
-  cssDialog.querySelector('#close-button').addEventListener('click', () => cssDialog.close(), { once: true });
-  cssDialog.querySelector('#cancel-button').addEventListener('click', () => cssDialog.close(), { once: true });
-  cssDialog.querySelector('#save-button').addEventListener('click', () => cssDialog.close(), { once: true });
+  cssDialog.querySelector('#close-button')?.addEventListener('click', () => cssDialog.close(), { once: true });
+  cssDialog.querySelector('#cancel-button')?.addEventListener('click', () => cssDialog.close(), { once: true });
+  cssDialog.querySelector('#save-button')?.addEventListener('click', () => cssDialog.close(), { once: true });
 }
