@@ -41,16 +41,18 @@ export abstract class BaseDrawerComponent extends BaseLitElement implements IBas
     this._internals = this.attachInternals();
   }
 
-  public override firstUpdated(changedProperties: PropertyValues<this>): void {
-    super.firstUpdated(changedProperties);
-    if (this.shadowRoot) {
-      this.#unproxyScroll = proxyShadowScrollEvent(this.shadowRoot, this);
-    }
-  }
-
   public willUpdate(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('open')) {
       this.#handleOpenChange();
+    }
+    if (changedProperties.has('direction')) {
+      toggleState(this._internals, 'right', this.direction === 'right');
+    }
+  }
+
+  public override firstUpdated(): void {
+    if (this.shadowRoot) {
+      this.#unproxyScroll = proxyShadowScrollEvent(this.shadowRoot, this);
     }
   }
 

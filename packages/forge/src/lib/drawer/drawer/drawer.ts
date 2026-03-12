@@ -1,7 +1,6 @@
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { TemplateResult, html, unsafeCSS } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
 import { ref } from 'lit/directives/ref.js';
 import { BaseDrawerComponent, IBaseDrawerComponent } from '../base/base-drawer.js';
 import { DRAWER_CONSTANTS } from './drawer-constants.js';
@@ -45,13 +44,8 @@ export class DrawerComponent extends BaseDrawerComponent implements IDrawerCompo
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = DRAWER_CONSTANTS.elementName;
 
   public render(): TemplateResult {
-    const rootClasses = {
-      'forge-drawer': true,
-      left: this.direction !== 'right',
-      right: this.direction === 'right'
-    };
     return html`
-      <div class=${classMap(rootClasses)} part="root" ${ref(this._drawerElement)}>
+      <div class="forge-drawer" part="root" ${ref(this._drawerElement)}>
         <slot name="header"></slot>
         <div class="content" part="content">
           <slot></slot>

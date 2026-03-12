@@ -24,14 +24,6 @@
       @include content;
     }
 
-    &.left {
-      @include left;
-    }
-
-    &.right {
-      @include right;
-    }
-
     &.no-transition {
       transition: none !important;
     }
@@ -43,9 +35,27 @@
     }
   }
 
+  :host(:not(:state(right))) {
+    .forge-drawer {
+      @include left;
+    }
+  }
+
+  :host(:state(right)) {
+    .forge-drawer {
+      @include right;
+    }
+  }
+
   :host(:not(:state(open))) {
     .forge-drawer {
       @include closed;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .forge-drawer {
+      transition: none !important;
     }
   }
 }
@@ -82,6 +92,7 @@
 
 @mixin header {
   grid-row: 1;
+  min-height: 0;
 }
 
 @mixin content {
@@ -90,13 +101,16 @@
   -webkit-overflow-scrolling: 'touch';
 
   width: auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   grid-row: 2;
+  overflow-y: auto;
 }
 
 @mixin footer {
   grid-row: 3;
+  min-height: 0;
 }
 
 @mixin left {

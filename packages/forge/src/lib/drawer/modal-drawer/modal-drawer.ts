@@ -1,7 +1,6 @@
 import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { html, TemplateResult, unsafeCSS } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
 import { createRef, ref, Ref } from 'lit/directives/ref.js';
 import { BackdropComponent } from '../../backdrop/index.js';
 import { BaseDrawerComponent, IBaseDrawerComponent } from '../base/base-drawer.js';
@@ -58,12 +57,6 @@ export class ModalDrawerComponent extends BaseDrawerComponent implements IModalD
   }
 
   public render(): TemplateResult {
-    const rootClasses = {
-      'forge-drawer': true,
-      modal: true,
-      left: this.direction !== 'right',
-      right: this.direction === 'right'
-    };
     return html`
       <forge-backdrop
         class="scrim"
@@ -71,7 +64,7 @@ export class ModalDrawerComponent extends BaseDrawerComponent implements IModalD
         exportparts="root:backdrop"
         @click=${this.#backdropClickListener}
         ${ref(this.#backdropElement)}></forge-backdrop>
-      <div class=${classMap(rootClasses)} part="root" ${ref(this._drawerElement)}>
+      <div class="forge-drawer modal" part="root" ${ref(this._drawerElement)}>
         <slot name="header"></slot>
         <div class="content" part="content">
           <slot></slot>

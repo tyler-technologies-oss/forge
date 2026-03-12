@@ -1,10 +1,10 @@
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
-import { TemplateResult, html, unsafeCSS } from 'lit';
+import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
-import { IBaseDrawerComponent, BaseDrawerComponent } from '../base/base-drawer.js';
-import { MINI_DRAWER_CONSTANTS } from './mini-drawer-constants.js';
 import { ref } from 'lit/directives/ref.js';
+import { toggleState } from '../../core/utils/utils.js';
+import { BaseDrawerComponent, IBaseDrawerComponent } from '../base/base-drawer.js';
+import { MINI_DRAWER_CONSTANTS } from './mini-drawer-constants.js';
 
 import styles from './mini-drawer.scss';
 
@@ -50,6 +50,8 @@ export class MiniDrawerComponent extends BaseDrawerComponent implements IMiniDra
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = MINI_DRAWER_CONSTANTS.elementName;
 
+  // TODO: Remove attribute reflection
+
   /**
    * Whether the drawer expands on hover.
    * @default false
@@ -60,16 +62,17 @@ export class MiniDrawerComponent extends BaseDrawerComponent implements IMiniDra
 
   protected override _fixContentWidthWhileAnimating = false;
 
+  public willUpdate(changedProperties: PropertyValues<this>): void {
+    super.willUpdate(changedProperties);
+    if (changedProperties.has('hover')) {
+      toggleState(this._internals, 'hover', this.hover);
+    }
+  }
+
   public render(): TemplateResult {
-    const containerClasses = {
-      'forge-drawer': true,
-      mini: true,
-      left: this.direction !== 'right',
-      right: this.direction === 'right'
-    };
     return html`
       <div class="root" part="root">
-        <div class=${classMap(containerClasses)} part="container" ${ref(this._drawerElement)}>
+        <div class="forge-drawer mini" part="container" ${ref(this._drawerElement)}>
           <slot name="header"></slot>
           <div class="content" part="content">
             <slot></slot>
