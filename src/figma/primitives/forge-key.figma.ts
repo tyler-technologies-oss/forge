@@ -11,7 +11,7 @@ const keyItemProps = {
 
 // forge-key-item component
 figma.connect('<FIGMA_KEY_ITEM_KEY_ITEM>', {
-  variant: { Inline: false },
+  variant: { Inline: false, 'Value slot': true },
   props: {
     ...keyItemProps
   },
@@ -23,7 +23,18 @@ figma.connect('<FIGMA_KEY_ITEM_KEY_ITEM>', {
 });
 
 figma.connect('<FIGMA_KEY_ITEM_KEY_ITEM>', {
-  variant: { Inline: true },
+  variant: { Inline: false, 'Value slot': false },
+  props: {
+    ...keyItemProps
+  },
+  example: (props: any) =>
+    html`<forge-key-item ${props.inline}>
+      <span>${props.label}</span>
+    </forge-key-item>`
+});
+
+figma.connect('<FIGMA_KEY_ITEM_KEY_ITEM>', {
+  variant: { Inline: true, 'Value slot': true },
   props: {
     ...keyItemProps
   },
@@ -31,6 +42,17 @@ figma.connect('<FIGMA_KEY_ITEM_KEY_ITEM>', {
     html`<forge-key-item ${props.inline}>
       <span>${props.label}</span>
       <span slot="value">${props.value}</span>
+    </forge-key-item>`
+});
+
+figma.connect('<FIGMA_KEY_ITEM_KEY_ITEM>', {
+  variant: { Inline: true, 'Value slot': false },
+  props: {
+    ...keyItemProps
+  },
+  example: (props: any) =>
+    html`<forge-key-item ${props.inline}>
+      <span>${props.label}</span>
     </forge-key-item>`
 });
 
