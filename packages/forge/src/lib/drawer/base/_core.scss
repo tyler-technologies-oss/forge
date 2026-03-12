@@ -30,26 +30,22 @@
 
     &.right {
       @include right;
-
-      &.closing {
-        @include closing(right);
-      }
-
-      &.closed {
-        @include closed(right);
-      }
-    }
-
-    &.closing {
-      @include closing(left);
-    }
-
-    &.closed {
-      @include closed(left);
     }
 
     &.no-transition {
       transition: none !important;
+    }
+
+    &.animating {
+      .content {
+        @include animating-content();
+      }
+    }
+  }
+
+  :host(:not(:state(open))) {
+    .forge-drawer {
+      @include closed();
     }
   }
 }
@@ -74,9 +70,14 @@
   background-color: #{token(background)};
   border-color: #{token(border-color)};
 
-  transition-property: transform;
+  transition-property: width, display;
   transition-duration: #{token(transition-duration)};
   transition-timing-function: #{token(transition-easing)};
+  transition-behavior: allow-discrete;
+
+  @starting-style {
+    width: 0;
+  }
 }
 
 @mixin header() {
@@ -86,9 +87,9 @@
 @mixin content() {
   @include scrollbar.base;
 
-  overflow-x: auto;
   -webkit-overflow-scrolling: 'touch';
 
+  width: auto;
   display: flex;
   flex-direction: column;
   grid-row: 2;
@@ -108,31 +109,12 @@
   border-left-style: solid;
 }
 
-@mixin closed($direction: left) {
-  @include closed-direction($direction);
-
+@mixin closed() {
+  display: none;
   width: 0;
-  border: none;
-}
-
-@mixin closing($direction: left) {
-  @include closed-direction($direction);
-
-  z-index: #{elevation.z-index-variable(surface)};
-  position: absolute;
-  top: 0;
-  right: 0;
-
   transition-duration: #{token(transition-duration-close)};
 }
 
-@mixin closed-direction($direction: left) {
-  @if $direction == right {
-    transform: translateX(100%);
-    right: 0;
-    left: auto;
-  } @else {
-    transform: translateX(-100%);
-    left: 0;
-  }
+@mixin animating-content() {
+  width: #{token(width)};
 }

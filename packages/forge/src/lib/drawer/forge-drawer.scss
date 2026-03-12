@@ -9,12 +9,8 @@
   @include base.base;
   @include base.left;
 
-  &--closing {
-    @include base.closing(left);
-  }
-
   &--closed {
-    @include base.closed(left);
+    @include base.closed();
   }
 
   &--right {
@@ -22,12 +18,8 @@
 
     border-right: none;
 
-    &.forge-drawer--closing {
-      @include base.closing(right);
-    }
-
     &.forge-drawer--closed {
-      @include base.closed(right);
+      @include base.closed();
     }
   }
 
