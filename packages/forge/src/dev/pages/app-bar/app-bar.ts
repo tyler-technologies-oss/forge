@@ -99,7 +99,7 @@ titleInput.addEventListener('input', () => {
 
 const hrefToggle = document.querySelector('#opt-href') as ISwitchComponent;
 hrefToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  appBar.href = selected ? 'javascript: void(0);' : undefined;
+  appBar.href = selected ? 'javascript: void(0);' : '';
 });
 
 const showTabsToggle = document.querySelector('#opt-show-tabs') as ISwitchComponent;
@@ -113,7 +113,7 @@ showTabsToggle.addEventListener('forge-switch-change', ({ detail: selected }) =>
 
 const useProfileCardBuilderToggle = document.querySelector('#opt-profile-card-builder') as ISwitchComponent;
 useProfileCardBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  appBarProfileButton.profileCardBuilder = selected ? profileCardBuilder : undefined;
+  appBarProfileButton.profileCardBuilder = (selected ? profileCardBuilder : undefined) as typeof appBarProfileButton.profileCardBuilder;
 });
 
 function buildListItemElement(text: string, icon: string, value: string): HTMLElement {

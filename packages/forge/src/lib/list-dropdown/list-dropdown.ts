@@ -1,6 +1,6 @@
 import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons';
 
-import { IListDropdownConfig, IListDropdownOption, IListDropdownOptionGroup } from './list-dropdown-constants.js';
+import { IListDropdownConfig, IListDropdownOption, IListDropdownOptionGroup, ListDropdownEmptyStateBuilder } from './list-dropdown-constants.js';
 import { ListDropdownCore } from './list-dropdown-core.js';
 import { ListDropdownAdapter } from './list-dropdown-adapter.js';
 import { IconRegistry } from '../icon/index.js';
@@ -19,7 +19,12 @@ export interface IListDropdown {
   activateInitialOption(): void;
   clearActiveOption(): void;
   setSelectedValues(values: any[]): void;
-  setOptions(options: Array<IListDropdownOption | IListDropdownOptionGroup>): void;
+  setOptions(
+    options: Array<IListDropdownOption | IListDropdownOptionGroup>,
+    filterText?: string,
+    emptyMessage?: string,
+    emptyStateBuilder?: ListDropdownEmptyStateBuilder
+  ): void;
   appendOptions(options: Array<IListDropdownOption | IListDropdownOptionGroup>): void;
   scrollSelectedOptionIntoView(animate?: boolean): void;
   setScrollBottomListener(listener: () => void, threshold?: number): void;
@@ -101,8 +106,13 @@ export class ListDropdown implements IListDropdown {
     return this._core.dropdownElement;
   }
 
-  public setOptions(options: Array<IListDropdownOption | IListDropdownOptionGroup>): void {
-    this._core.setOptions(options);
+  public setOptions(
+    options: Array<IListDropdownOption | IListDropdownOptionGroup>,
+    filterText?: string,
+    emptyMessage?: string,
+    emptyStateBuilder?: ListDropdownEmptyStateBuilder
+  ): void {
+    this._core.setOptions(options, filterText, emptyMessage, emptyStateBuilder);
   }
 
   public appendOptions(options: Array<IListDropdownOption | IListDropdownOptionGroup>): void {

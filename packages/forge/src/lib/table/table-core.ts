@@ -38,6 +38,7 @@ export interface ITableCore {
   fixedHeaders: boolean;
   layoutType: TableLayoutType;
   wrapContent: boolean;
+  includeFooter: boolean;
   resizable: boolean;
   minResizeWidth: number;
   allowRowClick: boolean;
@@ -87,6 +88,7 @@ export class TableCore implements ITableCore {
   private _fixedHeaders = false;
   private _layoutType: TableLayoutType = TABLE_CONSTANTS.strings.DEFAULT_LAYOUT_TYPE as TableLayoutType;
   private _wrapContent = true;
+  private _includeFooter = false;
   private _resizable = false;
   private _minResizeWidth = TABLE_CONSTANTS.numbers.MIN_RESIZE_WIDTH;
   private _multiColumnSort = false;
@@ -174,6 +176,10 @@ export class TableCore implements ITableCore {
     this._tableRows = this._data.map(data => new TableRow(data, this._selectionManager.exists(data)));
 
     this._renderBody();
+
+    if (this._includeFooter) {
+      this._renderFooter();
+    }
   }
   public get data(): any[] {
     return this._data.map(o => ({ ...o })); // Shallow clone
@@ -233,7 +239,8 @@ export class TableCore implements ITableCore {
       selectAllTemplate: this._selectAllTemplate,
       selectCheckboxAlignment: this._selectCheckboxAlignment,
       tooltipSelect: this._tooltipSelect,
-      tooltipSelectAll: this._tooltipSelectAll
+      tooltipSelectAll: this._tooltipSelectAll,
+      includeFooter: this._includeFooter
     };
   }
 
@@ -384,6 +391,17 @@ export class TableCore implements ITableCore {
     if (this._wrapContent !== value) {
       this._wrapContent = value;
       this._adapter.setWrapContentState(this._tableConfiguration);
+    }
+  }
+
+  /** Controls whether the table includes a footer row or not. */
+  public get includeFooter(): boolean {
+    return this._includeFooter;
+  }
+  public set includeFooter(value: boolean) {
+    if (this._includeFooter !== value) {
+      this._includeFooter = value;
+      this.render();
     }
   }
 
@@ -620,6 +638,18 @@ export class TableCore implements ITableCore {
     this._adapter.recreateTableBody(this._tableConfiguration);
     this._renderSelections();
     this._adapter.emitHostEvent(TABLE_CONSTANTS.events.BODY_RENDERED, undefined, false);
+  }
+
+  /**
+   * Renders the table footer only.
+   */
+  private _renderFooter(): void {
+    if (!this._rendered) {
+      return;
+    }
+    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.BEFORE_FOOTER_RENDERED, undefined, false);
+    this._adapter.recreateTableFoot(this._tableConfiguration);
+    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.FOOTER_RENDERED, undefined, false);
   }
 
   private _renderSelections(): void {

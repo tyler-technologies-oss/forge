@@ -10,6 +10,7 @@ import { SkeletonComponent } from '../skeleton/index.js';
 import { TextFieldComponent } from '../text-field/index.js';
 import { AutocompleteAdapter } from './autocomplete-adapter.js';
 import {
+  AutocompleteEmptyStateBuilder,
   AutocompleteFilterCallback,
   AutocompleteMode,
   AutocompleteOptionBuilder,
@@ -44,6 +45,8 @@ export interface IAutocompleteComponent extends IListDropdownAware {
   beforeValueChange: (value: any) => boolean | Promise<boolean>;
   isInitialized: boolean;
   open: boolean;
+  emptyMessage: string | null | undefined;
+  emptyStateBuilder: AutocompleteEmptyStateBuilder | null | undefined;
   appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   openDropdown(): void;
   closeDropdown(): void;
@@ -98,7 +101,8 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
       AUTOCOMPLETE_CONSTANTS.attributes.POPUP_TARGET,
       AUTOCOMPLETE_CONSTANTS.attributes.OPEN,
       AUTOCOMPLETE_CONSTANTS.attributes.MATCH_KEY,
-      AUTOCOMPLETE_CONSTANTS.attributes.FILTER_TEXT
+      AUTOCOMPLETE_CONSTANTS.attributes.FILTER_TEXT,
+      AUTOCOMPLETE_CONSTANTS.attributes.EMPTY_MESSAGE
     ];
   }
 
@@ -158,6 +162,9 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
         break;
       case AUTOCOMPLETE_CONSTANTS.attributes.FILTER_TEXT:
         this.filterText = newValue;
+        break;
+      case AUTOCOMPLETE_CONSTANTS.attributes.EMPTY_MESSAGE:
+        this.emptyMessage = newValue !== null ? newValue || AUTOCOMPLETE_CONSTANTS.strings.DEFAULT_EMPTY_MESSAGE : null;
         break;
     }
   }
@@ -283,6 +290,17 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
   /** Sets the callback to be executed when the user selects an option, before the UI is updated to allow for validation. */
   @coreProperty()
   declare public beforeValueChange: (value: any) => boolean | Promise<boolean>;
+
+  /**
+   * Gets/sets the message displayed when the filter returns no results.
+   * @attribute empty-message
+   */
+  @coreProperty()
+  declare public emptyMessage: string | null | undefined;
+
+  /** Sets the callback to build custom empty state content when the filter returns no results. */
+  @coreProperty()
+  declare public emptyStateBuilder: AutocompleteEmptyStateBuilder | null | undefined;
 
   /** Adds options to the dropdown while it is open. Has no effect if the dropdown is closed.  */
   public appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void {

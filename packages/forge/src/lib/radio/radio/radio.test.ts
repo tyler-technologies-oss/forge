@@ -540,6 +540,24 @@ describe('Radio', () => {
       expect(radioEls[1].checked).toBe(true);
     });
 
+    it('should group radios with special characters in name', async () => {
+      const screen = render(html`
+        <div>
+          <forge-radio name="test/radio"></forge-radio>
+          <forge-radio name="test/radio"></forge-radio>
+        </div>
+      `);
+      const el = screen.container.querySelector('div') as HTMLElement;
+      const ctx = new RadioHarness(el);
+      const radioEls = ctx.radioElements;
+
+      radioEls[0].checked = true;
+      radioEls[1].checked = true;
+
+      expect(radioEls[0].checked).toBe(false);
+      expect(radioEls[1].checked).toBe(true);
+    });
+
     it('should not group radios with same name in different forms', async () => {
       const screen = render(html`
         <div>

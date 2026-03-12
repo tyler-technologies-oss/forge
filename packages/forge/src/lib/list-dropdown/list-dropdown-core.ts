@@ -1,5 +1,11 @@
 import { IListDropdownAdapter } from './list-dropdown-adapter.js';
-import { DEFAULT_LIST_DROPDOWN_CONFIG, IListDropdownConfig, IListDropdownOption, IListDropdownOptionGroup } from './list-dropdown-constants.js';
+import {
+  DEFAULT_LIST_DROPDOWN_CONFIG,
+  IListDropdownConfig,
+  IListDropdownOption,
+  IListDropdownOptionGroup,
+  ListDropdownEmptyStateBuilder
+} from './list-dropdown-constants.js';
 import { getFlattenedOptions } from './list-dropdown-utils.js';
 
 export interface IListDropdownCore {
@@ -14,7 +20,12 @@ export interface IListDropdownCore {
   activateOption(index: number): void;
   setSelectedValues(values: any): void;
   clearActiveOption(): void;
-  setOptions(options: Array<IListDropdownOption | IListDropdownOptionGroup>): void;
+  setOptions(
+    options: Array<IListDropdownOption | IListDropdownOptionGroup>,
+    filterText?: string,
+    emptyMessage?: string,
+    emptyStateBuilder?: ListDropdownEmptyStateBuilder
+  ): void;
   appendOptions(options: Array<IListDropdownOption | IListDropdownOptionGroup>): void;
   scrollSelectedOptionIntoView(animate?: boolean): void;
   setScrollBottomListener(listener: () => void, threshold?: number): void;
@@ -158,13 +169,29 @@ export class ListDropdownCore implements IListDropdownCore {
     this._adapter.clearActiveOption();
   }
 
-  public setOptions(options: Array<IListDropdownOption | IListDropdownOptionGroup>): void {
+  public setOptions(
+    options: Array<IListDropdownOption | IListDropdownOptionGroup>,
+    filterText?: string,
+    emptyMessage?: string,
+    emptyStateBuilder?: ListDropdownEmptyStateBuilder
+  ): void {
     this._config.options = options;
+    if (filterText !== undefined) {
+      this._config.filterText = filterText;
+    }
+    if (emptyMessage !== undefined) {
+      this._config.emptyMessage = emptyMessage;
+    }
+    if (emptyStateBuilder !== undefined) {
+      this._config.emptyStateBuilder = emptyStateBuilder;
+    }
     if (!this._open) {
       return;
     }
     this._adapter.setOptions(this._config);
-    this.activateInitialOption();
+    if (options.length) {
+      this.activateInitialOption();
+    }
   }
 
   public appendOptions(options: Array<IListDropdownOption | IListDropdownOptionGroup>): void {

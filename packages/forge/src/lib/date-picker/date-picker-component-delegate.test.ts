@@ -5,7 +5,8 @@ import {
   DatePickerComponentDelegate,
   DatePickerComponentDelegateProps,
   IDatePickerComponent,
-  IDatePickerComponentDelegateOptions
+  IDatePickerComponentDelegateOptions,
+  DATE_PICKER_CONSTANTS
 } from './index.js';
 
 interface IDatePickerComponentDelegateHarness {
@@ -54,11 +55,21 @@ describe('DatePickerComponentDelegate', () => {
 
   it('should listen for change event', () => {
     harness = setupTestContext();
-
     const value = '01/01/2020';
     const changeSpy = vi.fn();
     harness.delegate.onChange(changeSpy);
-    _setInputValue(harness.delegate.element, value, 'input');
+    harness.delegate.element.dispatchEvent(new CustomEvent(DATE_PICKER_CONSTANTS.events.CHANGE, { detail: value }));
+
+    expect(changeSpy).toHaveBeenCalledOnce();
+    expect(changeSpy).toHaveBeenCalledWith(value);
+  });
+
+  it('should listen for change event when masked', () => {
+    harness = setupTestContext({ masked: true });
+    const value = '01/01/2020';
+    const changeSpy = vi.fn();
+    harness.delegate.onChange(changeSpy);
+    harness.delegate.element.dispatchEvent(new CustomEvent(DATE_PICKER_CONSTANTS.events.CHANGE, { detail: value }));
 
     expect(changeSpy).toHaveBeenCalledOnce();
     expect(changeSpy).toHaveBeenCalledWith(value);

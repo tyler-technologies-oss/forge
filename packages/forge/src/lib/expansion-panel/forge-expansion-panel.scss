@@ -8,7 +8,7 @@
   @include core.content;
 
   &:not(.forge-expansion-panel--open) {
-    @include core.hidden;
+    visibility: hidden;
   }
 
   &--open {

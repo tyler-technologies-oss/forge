@@ -6,6 +6,7 @@ import { AutocompleteFilterCallback, AutocompleteOptionBuilder, IAutocompleteCom
 import { IOption } from '@tylertech/forge/select';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { storyStyles } from '../../decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 import '@tylertech/forge/autocomplete';
 import '@tylertech/forge/avatar';
@@ -102,6 +103,7 @@ const meta = {
         .constrainPopupWidth=${args.constrainPopupWidth}
         .wrapOptionText=${args.wrapOptionText}
         .selectFirstOptionOnBlur=${args.selectFirstOptionOnBlur}
+        empty-message=${ifDefined(args.emptyMessage)}
         @forge-autocomplete-change=${changeAction}
         @forge-autocomplete-select=${selectAction}
         @forge-autocomplete-scrolled-bottom=${scrolledBottomAction}>
@@ -129,7 +131,8 @@ const meta = {
         'popupHeaderBuilder',
         'popupFooterBuilder',
         'matchKey',
-        'open'
+        'open',
+        'emptyStateBuilder'
       ],
       controls: {
         mode: {

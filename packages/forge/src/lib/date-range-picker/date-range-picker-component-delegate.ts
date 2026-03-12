@@ -66,26 +66,38 @@ export class DateRangeComponentDelegate extends FormFieldComponentDelegate<IDate
     this._textField.invalid = value;
   }
 
-  public onChange(listener: (value: IDateRangePickerChangeEventData) => void): void {
-    this._element.addEventListener(DATE_RANGE_PICKER_CONSTANTS.events.CHANGE, (evt: CustomEvent<IDateRangePickerChangeEventData>) => listener(evt.detail));
+  public onChange(listener: (value: IDateRangePickerChangeEventData) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener(
+      DATE_RANGE_PICKER_CONSTANTS.events.CHANGE,
+      (evt: CustomEvent<IDateRangePickerChangeEventData>) => listener(evt.detail),
+      options
+    );
   }
 
-  public onFocus(listener: (evt: FocusEvent) => void): void {
-    this._element.addEventListener('focusin', (evt: FocusEvent) => {
-      const isFocusWithin = !this._element.contains(evt.relatedTarget as Node);
-      if (isFocusWithin) {
-        listener(evt);
-      }
-    });
+  public onFocus(listener: (evt: FocusEvent) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener(
+      'focusin',
+      (evt: FocusEvent) => {
+        const isFocusWithin = !this._element.contains(evt.relatedTarget as Node);
+        if (isFocusWithin) {
+          listener(evt);
+        }
+      },
+      options
+    );
   }
 
-  public onBlur(listener: (evt: FocusEvent) => void): void {
-    this._element.addEventListener('focusout', (evt: FocusEvent) => {
-      const isFocusOutside = !this._element.contains(evt.relatedTarget as Node);
-      if (isFocusOutside) {
-        listener(evt);
-      }
-    });
+  public onBlur(listener: (evt: FocusEvent) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener(
+      'focusout',
+      (evt: FocusEvent) => {
+        const isFocusOutside = !this._element.contains(evt.relatedTarget as Node);
+        if (isFocusOutside) {
+          listener(evt);
+        }
+      },
+      options
+    );
   }
 
   private _attachTextField(dateRangePicker: IDateRangePickerComponent): void {

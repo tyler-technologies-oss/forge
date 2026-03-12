@@ -12,6 +12,8 @@ They are useful for organizing information and reducing clutter on the screen.
 
 <Canvas of={ExpansionPanelStories.Demo} />
 
+> Content within an expansion panel remains findable by the browser. When a user's find-in-page search matches text in a closed expansion panel, the panel will open to reveal the text.
+
 ## With Card
 
 It's common to compose an expansion panel with a card component to provide a more visually appealing layout.
@@ -30,14 +32,14 @@ You can also set `trigger` to the `id` of a button elsewhere in the document to 
 
 <Canvas of={ExpansionPanelStories.WithUnslottedButton} />
 
-## Open icon
+## Open Icon
 
 A `<forge-open-icon>` that's in the `header` slot of the expansion panel, or that's a child of the expansion panel's trigger button, has its `open` state automatically synced to the `open` state of the expansion panel.
 You can also set `openIcon` to the `id` of a `<forge-open-icon>` elsewhere in the document.
 
 > **Tip:** The same guidance about trigger button timing applies here. An `openIconElement` property exists to pass the open icon by reference as well.
 
-## Using the `forge-ignore` attribute
+## Using the `forge-ignore` Attribute
 
 It is common to place interactive elements within an expansion panel "header" slot. However, you may want to prevent the expansion panel from automatically
 expanding/collapsing when the interactive element is clicked. To do this you can use the `forge-ignore` attribute for convenience. This attribute will
@@ -62,6 +64,14 @@ and you will need to control the open state of the expansion panel manually.
   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
 </forge-expansion-panel>
 ```
+
+## Named Groups
+
+Expansion panels with the same `name` attribute will form a named group, where only one panel can be open at a time. When a panel in the group is opened, any other open panel in the group will automatically close.
+
+<Canvas of={ExpansionPanelStories.NamedGroup} />
+
+> **Tip:** Named groups can be used to create accordion behavior without using a `<forge-accordion>` component. 
 
 ## API
 

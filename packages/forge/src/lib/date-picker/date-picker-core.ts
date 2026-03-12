@@ -57,10 +57,8 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
     const formattedDate = this._formatDate(this._value);
     if (formattedDate) {
       this._adapter.setInputValue(formattedDate, suppressValueChanges ? false : this._notifyInputValueChanges);
-    } else {
-      if (!this._allowInvalidDate) {
-        this._adapter.setInputValue('', suppressValueChanges ? false : this._notifyInputValueChanges);
-      }
+    } else if (!this._value || !this._allowInvalidDate) {
+      this._adapter.setInputValue('', suppressValueChanges ? false : this._notifyInputValueChanges);
     }
   }
 

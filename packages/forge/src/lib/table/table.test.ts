@@ -23,9 +23,9 @@ import type { ITooltipComponent } from '../tooltip/index.js';
 import './table.js';
 
 const columns: IColumnConfiguration[] = [
-  { header: 'Name', property: 'Name' },
-  { header: 'Age', property: 'Age' },
-  { header: 'Position', property: 'Position' }
+  { header: 'Name', property: 'Name', footer: 'Totals' },
+  { header: 'Age', property: 'Age', footer: '' },
+  { header: 'Position', property: 'Position', footer: '$21,000' }
 ];
 
 const resizableColumns: IColumnConfiguration[] = [
@@ -79,6 +79,7 @@ describe('TableComponent', () => {
       expect(harness.component.resizable).toBe(true);
       expect(harness.component.minResizeWidth).toBe(10);
       expect(harness.component.allowRowClick).toBe(true);
+      expect(harness.component.includeFooter).toBe(true);
 
       expect(harness.component.getAttribute(TABLE_CONSTANTS.attributes.SELECT)).toBe('true');
       expect(harness.component.getAttribute(TABLE_CONSTANTS.attributes.MULTISELECT)).toBe('true');
@@ -171,6 +172,7 @@ describe('TableComponent', () => {
     it('should have proper default DOM state', async () => {
       const harness = await createFixture();
       expect(harness.tableElement.tHead).toBeNull();
+      expect(harness.tableElement.tFoot).toBeNull();
       expect(harness.tableElement.tBodies.length).toBe(0);
       expect(harness.tableElement.classList.contains(TABLE_CONSTANTS.classes.TABLE)).toBe(true);
     });
@@ -1664,6 +1666,51 @@ describe('TableComponent', () => {
       expect(filterCallback).toHaveBeenCalledOnce();
     });
 
+    it('should remove old filter listeners on filter element creation or table re-render', async () => {
+      const harness = await createFixture();
+      const testColumns: IColumnConfiguration[] = deepCopy(columns);
+      testColumns[0].filter = true;
+      testColumns[0].filterDelegate = new TextFieldComponentDelegate();
+      const filterDebounceTime = testColumns[0].filterDebounceTime || TABLE_CONSTANTS.numbers.DEFAULT_FILTER_DEBOUNCE_TIME;
+
+      harness.component.data = data;
+      harness.component.columnConfigurations = testColumns;
+      harness.component.filter = true;
+
+      const lastTableRow = getLastTableHeaderRow(harness.tableElement);
+      const firstFilterCellIndex = harness.component.select && harness.component.multiselect ? 1 : 0;
+      const filterInputElement = lastTableRow.cells.item(firstFilterCellIndex)!.querySelector('input[type=text]') as HTMLInputElement;
+
+      const filterCallback = vi.fn((evt: CustomEvent) => {
+        const evtData = evt.detail as ITableFilterEventData;
+        expect(evtData.value).toBe('a');
+        expect(evtData.columnIndex).toBe(0);
+      });
+      harness.component.addEventListener(TABLE_CONSTANTS.events.FILTER, filterCallback as any);
+
+      filterInputElement.value = 'a';
+      filterInputElement.dispatchEvent(new Event('input'));
+
+      await task(filterDebounceTime);
+
+      expect(filterCallback).toHaveBeenCalledTimes(1);
+
+      harness.component.filter = false;
+      harness.component.filter = true;
+      filterInputElement.dispatchEvent(new Event('input'));
+
+      await task(filterDebounceTime);
+
+      expect(filterCallback).toHaveBeenCalledTimes(2);
+
+      harness.component.render();
+      filterInputElement.dispatchEvent(new Event('input'));
+
+      await task(filterDebounceTime);
+
+      expect(filterCallback).toHaveBeenCalledTimes(3);
+    });
+
     it('should remove resize handle when resizable is turned off', async () => {
       const harness = await createFixture();
       harness.component.resizable = true;
@@ -1914,6 +1961,30 @@ describe('TableComponent', () => {
 
       expect(selectAllCheckbox.indeterminate).toBe(false);
       expect(selectAllCheckbox.checked).toBe(true);
+    });
+
+    it('should preserve indeterminate state when data changes (pagination)', async () => {
+      const harness = await createFixture();
+      const page1Data = data.slice(0, 3);
+      const page2Data = data.slice(3, 6);
+
+      harness.component.columnConfigurations = columns;
+      harness.component.select = true;
+      harness.component.multiselect = true;
+      harness.component.selectKey = 'Id';
+      harness.component.data = page1Data;
+
+      harness.component.selectRowsByIndex(0);
+
+      const headerRow = harness.getTableHeaderRow();
+      const selectAllCheckbox = headerRow.cells.item(0)!.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLInputElement;
+
+      expect(selectAllCheckbox.indeterminate).toBe(true);
+
+      harness.component.data = page2Data;
+
+      expect(selectAllCheckbox.indeterminate).toBe(true);
+      expect(selectAllCheckbox.checked).toBe(false);
     });
 
     it('should contain custom header template', async () => {
@@ -2236,12 +2307,118 @@ describe('TableComponent', () => {
         });
       });
     });
+
+    describe('footer', () => {
+      it('should render footer row with the correct number of cells when data is set', async () => {
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.columnConfigurations = columns;
+        harness.component.data = data;
+
+        expect(harness.tableElement.tFoot).not.toBeNull();
+        expect(harness.tableElement.tFoot!.rows.length).toBe(1);
+        expect(harness.tableElement.tFoot!.rows.item(0)!.cells.length).toBe(columns.length);
+      });
+
+      it('should render footer string property as cell text content', async () => {
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.columnConfigurations = columns;
+        harness.component.data = data;
+
+        const footerRow = harness.getTableFooterRow();
+        const firstCellText = footerRow.cells.item(0)!.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_FOOT_CELL_TEXT}`)!.textContent;
+        const thirdCellText = footerRow.cells.item(2)!.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_FOOT_CELL_TEXT}`)!.textContent;
+
+        expect(firstCellText).toBe('Totals');
+        expect(thirdCellText).toBe('$21,000');
+      });
+
+      it('should render footer cell via footerTemplate callback', async () => {
+        const footerTemplate = vi.fn(() => Promise.resolve('<span class="custom-footer">Custom</span>'));
+        const testColumns: IColumnConfiguration[] = deepCopy(columns);
+        testColumns[0].footerTemplate = footerTemplate;
+
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.data = data;
+        harness.component.columnConfigurations = testColumns;
+
+        await task();
+
+        const footerRow = harness.getTableFooterRow();
+        const firstCell = footerRow.cells.item(0)!;
+        const customContent = firstCell.querySelector('.custom-footer');
+
+        expect(footerTemplate).toHaveBeenCalledOnce();
+        expect(customContent).not.toBeNull();
+        expect(customContent!.textContent).toBe('Custom');
+      });
+
+      it('should add a cell to the footer row when select column is enabled', async () => {
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.select = true;
+        harness.component.columnConfigurations = columns;
+        harness.component.data = data;
+
+        expect(harness.tableElement.tFoot!.rows.item(0)!.cells.length).toBe(columns.length + 1);
+      });
+
+      it('should remove the select cell from the footer row when select column is disabled', async () => {
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.select = true;
+        harness.component.columnConfigurations = columns;
+        harness.component.data = data;
+
+        harness.component.select = false;
+
+        expect(harness.tableElement.tFoot!.rows.item(0)!.cells.length).toBe(columns.length);
+      });
+
+      it('should apply column alignment class to footer cell container', async () => {
+        const testColumns: IColumnConfiguration[] = deepCopy(columns);
+        testColumns[2].align = CellAlign.Right;
+
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.columnConfigurations = testColumns;
+        harness.component.data = data;
+
+        const footerRow = harness.getTableFooterRow();
+        const thirdCellContainer = footerRow.cells.item(2)!.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_FOOT_CELL_CONTAINER}`)!;
+
+        expect(thirdCellContainer.classList.contains(TABLE_CONSTANTS.classes.TABLE_CELL_RIGHT)).toBe(true);
+      });
+
+      it('should emit before-footer-rendered and footer-rendered events when data is set', async () => {
+        const harness = await createFixture();
+        harness.component.includeFooter = true;
+        harness.component.columnConfigurations = columns;
+        harness.component.data = data;
+
+        const beforeSpy = vi.fn();
+        const afterSpy = vi.fn();
+        harness.component.addEventListener(TABLE_CONSTANTS.events.BEFORE_FOOTER_RENDERED, beforeSpy);
+        harness.component.addEventListener(TABLE_CONSTANTS.events.FOOTER_RENDERED, afterSpy);
+
+        harness.component.data = data;
+
+        expect(beforeSpy).toHaveBeenCalledOnce();
+        expect(afterSpy).toHaveBeenCalledOnce();
+      });
+    });
   });
 });
 
 // Helper functions
 function getTableHeaderRow(tableElement: HTMLTableElement): HTMLTableRowElement {
   return (tableElement.tHead as HTMLTableSectionElement).rows.item(0) as HTMLTableRowElement;
+}
+
+function getTableFooterRow(tableElement: HTMLTableElement): HTMLTableRowElement {
+  return (tableElement.tFoot as HTMLTableSectionElement).rows.item(0) as HTMLTableRowElement;
 }
 
 function getTableResizeHandle(tableElement: HTMLTableElement): HTMLElement {
@@ -2326,6 +2503,10 @@ class TableHarness {
     return getTableHeaderRow(this.tableElement);
   }
 
+  public getTableFooterRow(): HTMLTableRowElement {
+    return getTableFooterRow(this.tableElement);
+  }
+
   public getTableBodyRows(): HTMLTableRowElement[] {
     return getTableBodyRows(this.tableElement);
   }
@@ -2360,7 +2541,8 @@ async function createFixture(config: ITableFixtureConfig = {}): Promise<TableHar
           wrap-content="true"
           resizable="true"
           min-resize-width="10"
-          allow-row-click="true">
+          allow-row-click="true"
+          include-footer="true">
           <span></span>
           <span></span>
         </forge-table>
@@ -2380,7 +2562,8 @@ async function createFixture(config: ITableFixtureConfig = {}): Promise<TableHar
           wrap-content="true"
           resizable="true"
           min-resize-width="10"
-          allow-row-click="true">
+          allow-row-click="true"
+          include-footer="true">
         </forge-table>
       `);
     }

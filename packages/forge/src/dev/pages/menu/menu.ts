@@ -30,7 +30,7 @@ const complexOptions: IMenuOption[] = [
   { value: 'back', label: 'Back', leadingIcon: 'arrow_back', leadingIconType: 'component' },
   { value: 'forward', label: 'Forward', leadingIcon: 'arrow_forward', leadingIconType: 'component', disabled: true },
   { value: 'reload', label: 'Reload', leadingIcon: 'loop', leadingIconType: 'component' },
-  { label: null, value: null, divider: true },
+  { label: '', value: '', divider: true },
   {
     value: { action: 'settings' },
     label: 'Settings',
@@ -48,7 +48,7 @@ const complexOptions: IMenuOption[] = [
           { value: 'seven', label: 'Seven' }
         ]
       },
-      { label: null, value: null, divider: true },
+      { label: '', value: '', divider: true },
       { value: 'four', label: 'Four' }
     ]
   },
@@ -109,16 +109,20 @@ allowPersistentSelectionToggle.addEventListener('forge-switch-change', ({ detail
   setSelectedButton.disabled = !selected;
 });
 
-setSelectedButton.addEventListener('click', evt => {
+setSelectedButton.addEventListener('click', () => {
   complexOptions.forEach(option => (option.selected = false));
   simpleOptions.forEach(option => (option.selected = false));
   complexOptions[selectedComplexOptionIndex].selected = true;
 
-  const firstParent = complexOptions.find(x => x.options?.length > 0);
-  (firstParent.options[selectedComplexChildOptionIndex] as IMenuOption).selected = true;
+  const firstParent = complexOptions.find(x => (x.options?.length ?? 0) > 0);
+  if (firstParent?.options) {
+    (firstParent.options[selectedComplexChildOptionIndex] as IMenuOption).selected = true;
+  }
 
-  const firstSubParent = firstParent.options.find(x => x.options?.length > 0);
-  (firstSubParent.options[selectedComplexGrandchildOptionIndex] as IMenuOption).selected = true;
+  const firstSubParent = firstParent?.options?.find(x => (x.options?.length ?? 0) > 0);
+  if (firstSubParent?.options) {
+    (firstSubParent.options[selectedComplexGrandchildOptionIndex] as IMenuOption).selected = true;
+  }
 
   simpleOptions[selectedSimpleOptionIndex].selected = true;
   setOptions(complexToggle.selected);

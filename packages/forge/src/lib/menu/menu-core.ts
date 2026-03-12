@@ -197,6 +197,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
         break;
       case 'Space':
         evt.preventDefault();
+        evt.stopPropagation();
 
         if (this._open) {
           this._closeDropdown();
@@ -215,7 +216,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
         evt.preventDefault();
 
         if (!this._open) {
-          evt.preventDefault();
+          evt.stopPropagation();
           this._openDropdown({ fromKeyboard: true });
           return;
         }

@@ -32,7 +32,9 @@ const filterCache = new Map();
 const valueContainer = document.querySelector('#autocomplete-value');
 autocomplete.addEventListener('forge-autocomplete-change', ({ detail }) => {
   console.log('[forge-autocomplete-change]', detail);
-  valueContainer.textContent = detail ? JSON.stringify(detail, null, '  ') : 'No value selected';
+  if (valueContainer) {
+    valueContainer.textContent = detail ? JSON.stringify(detail, null, '  ') : 'No value selected';
+  }
 });
 
 autocomplete.addEventListener('forge-autocomplete-select', ({ detail }) => {
@@ -93,7 +95,7 @@ allowUnmatchedToggle.addEventListener('forge-switch-change', ({ detail: selected
 
 const selectedTextBuilderToggle = document.querySelector('#autocomplete-selected-text-builder') as HTMLInputElement;
 selectedTextBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  autocomplete.selectedTextBuilder = selected ? selectedTextBuilder : undefined;
+  autocomplete.selectedTextBuilder = (selected ? selectedTextBuilder : undefined) as typeof autocomplete.selectedTextBuilder;
 });
 
 const scrollObserverToggle = document.querySelector('#autocomplete-scroll-observer') as HTMLInputElement;
@@ -108,12 +110,12 @@ syncPopupWidthToggle.addEventListener('forge-switch-change', ({ detail: selected
 
 const headerBuilderToggle = document.querySelector('#autocomplete-header-builder') as HTMLInputElement;
 headerBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  autocomplete.popupHeaderBuilder = selected ? headerBuilderCallback : undefined;
+  autocomplete.popupHeaderBuilder = (selected ? headerBuilderCallback : undefined) as typeof autocomplete.popupHeaderBuilder;
 });
 
 const footerBuilderToggle = document.querySelector('#autocomplete-footer-builder') as HTMLInputElement;
 footerBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  autocomplete.popupFooterBuilder = selected ? footerBuilderCallback : undefined;
+  autocomplete.popupFooterBuilder = (selected ? footerBuilderCallback : undefined) as typeof autocomplete.popupFooterBuilder;
 });
 
 const simulateAsyncToggle = document.querySelector('#autocomplete-simulate-async') as HTMLInputElement;
@@ -128,6 +130,11 @@ groupHeaderBuilderToggle.addEventListener('forge-switch-change', ({ detail: sele
 const secondaryLabelToggle = document.querySelector('#autocomplete-secondary-label') as HTMLInputElement;
 secondaryLabelToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   states = selected ? data.map(state => ({ ...state, secondaryLabel: state.value })) : data;
+});
+
+const emptyMessageToggle = document.querySelector('#autocomplete-empty-message') as HTMLInputElement;
+emptyMessageToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  autocomplete.emptyMessage = selected ? 'Forced custom empty message!' : undefined;
 });
 
 function itemBuilder(option: IListDropdownOption, filterText: string, _listItem: IListItemComponent): HTMLElement {
@@ -179,9 +186,11 @@ function filterOptions(filter: string, value: string): Promise<IOption[] | IList
 }
 
 function executeFilter(filter: string): IOption[] {
-  const filteredData = states.filter(item => {
-    return item.label.toLowerCase().includes(filter.toLowerCase());
-  });
+  if (emptyMessageToggle.checked) {
+    return [];
+  }
+
+  const filteredData = states.filter(item => item.label.toLowerCase().includes(filter.toLowerCase()));
 
   if (asyncFilter) {
     if (filterCache.size > 10) {
@@ -199,10 +208,10 @@ function executeFilter(filter: string): IOption[] {
 }
 
 function groupOptions(options: IOption[]): IOptionGroup[] {
-  return options.reduce((prev, curr) => {
+  return options.reduce<IOptionGroup[]>((prev, curr) => {
     const firstChar = curr.label[0].toUpperCase();
     const existingGroup = prev.find(group => group.text === firstChar);
-    if (existingGroup) {
+    if (existingGroup?.options) {
       existingGroup.options.push(curr);
     } else {
       const optionGroup: IListDropdownOptionGroup = { text: firstChar, options: [curr] };
@@ -218,7 +227,7 @@ function groupOptions(options: IOption[]): IOptionGroup[] {
 function groupHeaderBuilder(group: IOptionGroup): HTMLElement {
   const div = document.createElement('div');
   const avatar = document.createElement('forge-avatar');
-  avatar.text = group.text;
+  avatar.text = group.text ?? '';
   avatar.style.fontSize = '12px';
   avatar.style.setProperty('--forge-avatar-font-size', '12px');
   div.appendChild(avatar);

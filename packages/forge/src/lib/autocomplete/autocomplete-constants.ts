@@ -22,6 +22,7 @@ const attributes = {
   OPEN: 'open',
   MATCH_KEY: 'match-key',
   FILTER_TEXT: 'filter-text',
+  EMPTY_MESSAGE: 'empty-message',
   DROPDOWN_ICON_OPEN: 'data-forge-dropdown-icon-open'
 };
 
@@ -36,6 +37,10 @@ const numbers = {
   NUM_SKELETON_ITEMS: 3
 };
 
+const strings = {
+  DEFAULT_EMPTY_MESSAGE: 'No results found'
+};
+
 const events = {
   CHANGE: `${elementName}-change`,
   SELECT: `${elementName}-select`,
@@ -47,6 +52,7 @@ export const AUTOCOMPLETE_CONSTANTS = {
   attributes,
   selectors,
   numbers,
+  strings,
   events
 };
 
@@ -57,6 +63,7 @@ export type AutocompleteFilterCallback<T = any> = (
   value: T | null
 ) => IAutocompleteOption<T>[] | IAutocompleteOptionGroup<T>[] | Promise<IAutocompleteOption<T>[] | IAutocompleteOptionGroup<T>[]>;
 export type AutocompleteSelectedTextBuilder<T = any> = (selectedOptions: Array<IAutocompleteOption<T>>) => string;
+export type AutocompleteEmptyStateBuilder = (filterText: string) => HTMLElement | string;
 
 export enum AutocompleteMode {
   Default = 'default',

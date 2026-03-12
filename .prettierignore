@@ -12,7 +12,8 @@ patches/
 **/node_modules/
 **/pnpm-lock.yaml
 packages/forge/src/stories/**/*.mdx
-packages/forge/src/dev/
+packages/forge/src/dev/**/*.html
+packages/forge/src/dev/**/*.ejs
 packages/forge/templates/
 CONTRIBUTING.md
 CHANGELOG.md

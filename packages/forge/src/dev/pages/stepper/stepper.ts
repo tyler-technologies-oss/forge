@@ -8,9 +8,9 @@ import { ISwitchComponent } from '@tylertech/forge/switch';
 const stepper = document.querySelector('#demo-stepper') as IStepperComponent;
 stepper.selectedIndex = 2;
 
-stepper.addEventListener('forge-step-selected', ({ detail }) => {
-  stepper.selectedIndex = detail;
-  console.log('[forge-step-selected]: ', detail);
+stepper.addEventListener('forge-step-selected', (evt: CustomEvent<number>) => {
+  stepper.selectedIndex = evt.detail;
+  console.log('[forge-step-selected]: ', evt.detail);
 });
 
 const steps: IStepConfiguration[] = [
@@ -28,7 +28,7 @@ stepperByConfig.steps = steps;
 const slotContent = document.createElement('div');
 slotContent.setAttribute('slot', 'expansion-content');
 slotContent.innerHTML = '<div style="padding: 24px;">Slotted content</div>';
-document.querySelector('#vertical-stepper-content').appendChild(slotContent);
+document.querySelector('#vertical-stepper-content')?.appendChild(slotContent);
 
 const layoutModeSelect = document.querySelector('#opt-layout-mode') as ISelectComponent;
 layoutModeSelect.addEventListener('change', () => {
