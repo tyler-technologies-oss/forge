@@ -16,7 +16,7 @@
   }
 
   &--closing {
-    @include base.animating;
+    @include base.animating-content;
   }
 
   &--closed {
