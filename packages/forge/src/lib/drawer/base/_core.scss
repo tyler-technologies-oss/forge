@@ -4,7 +4,7 @@
 
 @forward './token-utils';
 
-@mixin core-styles() {
+@mixin core-styles {
   .forge-drawer {
     @include tokens;
   }
@@ -38,26 +38,26 @@
 
     &.animating {
       .content {
-        @include animating-content();
+        @include animating-content;
       }
     }
   }
 
   :host(:not(:state(open))) {
     .forge-drawer {
-      @include closed();
+      @include closed;
     }
   }
 }
 
-@mixin host() {
+@mixin host {
   display: grid;
   box-sizing: border-box;
   height: 100%;
   overflow: hidden !important; // Using important to ensure that it overrides the scaffold overflow style
 }
 
-@mixin base() {
+@mixin base {
   width: #{token(width)};
   height: 100%;
   box-sizing: border-box;
@@ -80,11 +80,11 @@
   }
 }
 
-@mixin header() {
+@mixin header {
   grid-row: 1;
 }
 
-@mixin content() {
+@mixin content {
   @include scrollbar.base;
 
   -webkit-overflow-scrolling: 'touch';
@@ -95,26 +95,26 @@
   grid-row: 2;
 }
 
-@mixin footer() {
+@mixin footer {
   grid-row: 3;
 }
 
-@mixin left() {
+@mixin left {
   border-right-width: #{token(border-width)};
   border-right-style: solid;
 }
 
-@mixin right() {
+@mixin right {
   border-left-width: #{token(border-width)};
   border-left-style: solid;
 }
 
-@mixin closed() {
+@mixin closed {
   display: none;
   width: 0;
   transition-duration: #{token(transition-duration-close)};
 }
 
-@mixin animating-content() {
+@mixin animating-content {
   width: #{token(width)};
 }
