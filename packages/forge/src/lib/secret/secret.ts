@@ -2,9 +2,9 @@ import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query, queryAssignedNodes } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { BaseLitElement } from '../core/base/base-lit-element';
-import { setDefaultAria } from '../core/utils/a11y-utils';
-import { toggleState } from '../core/utils/utils';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { setDefaultAria } from '../core/utils/a11y-utils.js';
+import { toggleState } from '../core/utils/utils.js';
 
 import styles from './secret.scss';
 
