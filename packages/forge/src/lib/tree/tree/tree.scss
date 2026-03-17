@@ -1,0 +1,39 @@
+@use './core';
+@use '../tree-item/token-utils' as tree-item-token-utils;
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+//
+// Base
+//
+
+.forge-tree {
+  @include core.tokens;
+  @include tree-item-token-utils.tokens(
+    $includes: (
+      gap
+    )
+  );
+}
+
+.forge-tree {
+  @include core.base;
+
+  &.indent-lines {
+    @include core.with-indent-lines;
+  }
+
+  &.multiple {
+    @include core.multiple;
+  }
+
+  .icons {
+    display: none;
+  }
+}

@@ -1,0 +1,95 @@
+@use './core' as *;
+
+//
+// Host
+//
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.forge-expansion-panel {
+  @include tokens;
+}
+
+.header {
+  @include header;
+}
+
+.content {
+  @include content;
+
+  .inner {
+    @include inner;
+
+    &.animating {
+      @include inner-animating;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content {
+    transition: none;
+  }
+}
+
+//
+// Open
+//
+
+:host(:not(:state(open))) {
+  .inner {
+    overflow: hidden;
+  }
+}
+
+:host(:state(open)) {
+  .content {
+    @include open-base;
+  }
+}
+
+:host(:state(open):not(:state(horizontal))) {
+  .content {
+    @include open-vertical;
+  }
+}
+
+:host(:state(open):state(horizontal)) {
+  .content {
+    @include open-horizontal;
+  }
+}
+
+//
+// Orientation
+//
+
+:host(:state(horizontal)) {
+  .forge-expansion-panel {
+    @include orientation-horizontal-base;
+  }
+
+  .content {
+    @include content-orientation-horizontal;
+  }
+}
+
+//
+// Animation type
+//
+
+:host {
+  .content.no-animation {
+    transition: none;
+  }
+}

@@ -1,0 +1,194 @@
+@use './core' as *;
+@use '../../circular-progress';
+@use '../../focus-indicator';
+@use '../../state-layer';
+
+//
+// Host
+//
+
+:host {
+  @include host;
+}
+
+//
+// Base
+//
+
+.forge-tree-item {
+  @include tokens;
+}
+
+.forge-tree-item {
+  @include base;
+
+  .header {
+    @include header;
+  }
+
+  .leaf-spacer {
+    @include leaf-spacer;
+  }
+
+  .content {
+    @include content;
+  }
+
+  .expand-icon {
+    @include expand-icon;
+
+    &.has-custom-collapse-icon {
+      slot[name='expand-icon'] {
+        display: none;
+      }
+
+      slot[name='collapse-icon'] {
+        display: contents;
+      }
+    }
+  }
+
+  .checkbox {
+    @include checkbox;
+  }
+
+  .children {
+    @include children;
+
+    &::after {
+      @include indent-line;
+    }
+  }
+
+  .children-header,
+  .children-footer {
+    @include children-header-footer;
+  }
+
+  &.interactive {
+    .header {
+      @include interactive-header;
+    }
+  }
+
+  &.indeterminate {
+    @include indeterminate;
+  }
+
+  &.disabled {
+    .checkbox,
+    .start,
+    .content,
+    .end {
+      @include disabled-header-content;
+    }
+
+    &:not(.open-disabled) {
+      .expand-icon {
+        @include enabled-expand-icon;
+      }
+    }
+  }
+
+  &.open-disabled {
+    .expand-icon {
+      @include disabled-expand-icon;
+    }
+  }
+}
+
+//
+// Leaf
+//
+:host(:state(leaf)) {
+  .children {
+    display: none;
+  }
+}
+
+//
+// Collapsed
+//
+
+:host(:not(:state(open))) {
+  .expand-icon {
+    slot[name='expand-icon'] {
+      display: contents;
+    }
+
+    slot[name='collapse-icon'] {
+      display: none;
+    }
+  }
+
+  .children {
+    display: none;
+  }
+}
+
+//
+// Selected
+//
+
+:host(:state(selected)) {
+  .header {
+    @include selected;
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme(
+      (
+        color: var(--forge-theme-primary)
+      )
+    );
+  }
+}
+
+//
+// Indeterminate
+//
+
+:host(:state(indeterminate)) {
+  .header {
+    @include indeterminate;
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme(
+      (
+        color: var(--forge-theme-primary)
+      )
+    );
+  }
+}
+
+//
+// Focus indicator
+//
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme(
+    (
+      shape: #{token(shape)}
+    )
+  );
+
+  // Ensure the focus indicator appears above sibling items
+  z-index: 1;
+}
+
+//
+// Circular progress
+//
+
+.expand-icon {
+  forge-circular-progress {
+    @include circular-progress.provide-theme(
+      (
+        indicator-color: currentColor,
+        size: 16px,
+        track-width: 16
+      )
+    );
+  }
+}

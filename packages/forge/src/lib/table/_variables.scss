@@ -1,0 +1,47 @@
+@use '../core/styles/theme';
+@use '../core/styles/spacing';
+@use '../core/styles/typography';
+
+// The default row height within the table body.
+$tbody-row-height: 48px !default;
+
+// The default row height within the table head.
+$thead-row-height: 48px !default;
+
+// The default row height within the table head.
+$thead-dense-row-height: 36px !default;
+
+// The roomy row height within the table head.
+$thead-roomy-row-height: 56px !default;
+
+// The height of the table head cells when the filter row is applied
+$thead-filter-row-height: 32px !default;
+
+// The default row height within the table foot.
+$tfoot-row-height: 48px !default;
+
+// The default row height within the table foot.
+$tfoot-dense-row-height: 36px !default;
+
+// The roomy row height within the table foot.
+$tfoot-roomy-row-height: 56px !default;
+
+// The padding for each table row.
+$row-padding: 0 #{spacing.variable(large)} !default;
+
+// The border style for the table cells.
+$border: 1px solid #{theme.variable(outline)} !default;
+
+// The width of the table filter inputs.
+$filter-input-width: 80px !default;
+
+// The default font size for the table cell data.
+$cell-font-size: #{typography.font-size-relative('0875')} !default;
+
+// Theme values
+$tfoot-background: #{theme.variable(surface-dim)} !default;
+$row-hover-background: #{theme.variable(surface-container-low)} !default;
+$row-active-background: #{theme.variable(surface-container)} !default;
+$row-selected-background: #{theme.variable(primary-container-low)} !default;
+$row-selected-hover-background: #{theme.variable(primary-container)} !default;
+$row-selected-active-background: #{theme.variable(primary-container-high)} !default;

@@ -1,0 +1,7 @@
+.limit-container {
+  width: 256px;
+}
+
+table :where(forge-skeleton, .forge-skeleton) {
+  --forge-skeleton-margin: 4px;
+}

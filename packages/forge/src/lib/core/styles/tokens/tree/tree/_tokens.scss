@@ -1,0 +1,19 @@
+@use 'sass:map';
+@use '../../../animation';
+@use '../../../shape';
+@use '../../../spacing';
+@use '../../../theme';
+@use '../../../utils';
+
+$tokens: (
+  background: utils.module-val(tree, background, theme.variable(primary-container)),
+  color: utils.module-val(tree, color, theme.variable(on-primary-container)),
+  transition-duration: utils.module-val(tree, transition-duration, animation.variable(duration-short4)),
+  transition-timing: utils.module-val(tree, transition-timing, animation.variable(easing-standard)),
+  shape: utils.module-val(tree, shape, shape.variable(medium)),
+  padding: utils.module-val(tree, padding, spacing.variable(medium))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

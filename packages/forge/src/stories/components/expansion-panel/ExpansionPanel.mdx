@@ -1,0 +1,135 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
+import * as ExpansionPanelStories from './ExpansionPanel.stories';
+
+<Meta of={ExpansionPanelStories} />
+
+<Title />
+
+Expansion panels provide progressive disclosure of content. Use them to group and hide content that is not immediately relevant to the user.
+They are useful for organizing information and reducing clutter on the screen.
+
+<Canvas of={ExpansionPanelStories.Demo} />
+
+> Content within an expansion panel remains findable by the browser. When a user's find-in-page search matches text in a closed expansion panel, the panel will open to reveal the text.
+
+## With Card
+
+It's common to compose an expansion panel with a card component to provide a more visually appealing layout.
+
+<Canvas of={ExpansionPanelStories.WithCard} />
+
+> **Tip:** You can provide a `<forge-open-icon>` to show the open state of the expansion panel, and the icon will be rotated when the panel is opened/closed.
+
+## Trigger Button
+
+A button in the `header` slot of the expansion panel will automatically control toggling the `open` state of the panel.
+Setting the `trigger` attribute/property of the expansion panel to the button's `id` will also manage its `aria-expanded` and `aria-controls` attributes.
+You can also set `trigger` to the `id` of a button elsewhere in the document to add the toggling and ARIA attribute functionality to it.
+
+> **Tip:** Make sure the intended trigger element is present in the DOM at the same time the expansion panel initializes or has `trigger` set. Alternatively, use the `triggerElement` property to directly pass in the trigger element reference, which is less prone to errors related to incremental rendering.
+
+<Canvas of={ExpansionPanelStories.WithUnslottedButton} />
+
+## Open Icon
+
+A `<forge-open-icon>` that's in the `header` slot of the expansion panel, or that's a child of the expansion panel's trigger button, has its `open` state automatically synced to the `open` state of the expansion panel.
+You can also set `openIcon` to the `id` of a `<forge-open-icon>` elsewhere in the document.
+
+> **Tip:** The same guidance about trigger button timing applies here. An `openIconElement` property exists to pass the open icon by reference as well.
+
+## Using the `forge-ignore` Attribute
+
+It is common to place interactive elements within an expansion panel "header" slot. However, you may want to prevent the expansion panel from automatically
+expanding/collapsing when the interactive element is clicked. To do this you can use the `forge-ignore` attribute for convenience. This attribute will
+instruct the expansion panel to ignore pointer and keyboard events on that element, allowing it to remain interactive without affecting the expansion panel's state.
+
+The only thing to keep in mind is that ARIA attributes such as `aria-expanded` and `aria-controls` will not be automatically managed for elements with the `forge-ignore` attribute,
+and you will need to control the open state of the expansion panel manually.
+
+```html
+<forge-expansion-panel>
+  <div slot="header" style="display: flex; justify-content: space-between;">
+    <button type="button">Toggle Panel</button>
+
+    <!--
+      Using the forge-ignore attribute allows this element to be placed within the
+      expansion panel header without causing the panel to expand/collapse when clicked.
+    -->
+    <forge-icon-button forge-ignore>
+      <forge-icon name="forge_logo"></forge-icon>
+    </forge-icon-button>
+  </div>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+</forge-expansion-panel>
+```
+
+## Named Groups
+
+Expansion panels with the same `name` attribute will form a named group, where only one panel can be open at a time. When a panel in the group is opened, any other open panel in the group will automatically close.
+
+<Canvas of={ExpansionPanelStories.NamedGroup} />
+
+> **Tip:** Named groups can be used to create accordion behavior without using a `<forge-accordion>` component. 
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- If the user is able to click the expansion panel to toggle its state, ensure that a `<button>` element is present and clearly labeled to serve as an accessible point of interaction.
+  - Do not place complex or interactive elements within a button. If your design requires such content in the expansion panel header, place a button in the header alongside that content instead of enclosing it.
+- Ensure that the user can focus on the element which activates and deactivates the expansion panel.
+- Ensure `aria-expanded` is set on the button to reflect the state of the component. Update it when the panel opens or closes.
+- Ensure `aria-controls` is set on the button to reference the id of the expandable content.
+- Enclose the expandable content in an element with `role="group"` or another non-generic role.
+- Ensure that the expansion panel can be activated by keyboard.
+- Here is an example of a properly marked up expansion panel:
+
+> **Tip:** A button associated with the expansion panel via `trigger` will automatically have its `aria-expanded` and `aria-controls` values managed.
+
+```html
+<forge-expansion-panel trigger="button-id">
+  <button slot="header" id="button-id">Toggle panel</button>
+  <div id="expandable-content" role="group">Expandable content</div>
+</forge-expansion-panel>
+```
+
+The button can also be placed elsewhere in the document, outside the expansion panel:
+
+```html
+<button id="button-id">Toggle panel</button>
+
+<forge-expansion-panel trigger="button-id">
+  <div role="group">Expandable content</div>
+</forge-expansion-panel>
+```
+
+## CSS-Only
+
+The expansion-panel component is also available as a CSS-only component, but it does require a small amount of JavaScript to toggle the expanded state.
+
+<Canvas of={ExpansionPanelStories.CSSOnly} />
+
+Below is an example JavaScript snippet that toggles the expanded state of the CSS-only expansion panel:
+
+```js
+// Get the button element
+const button = expansionPanel.querySelector('#my-button');
+
+// Get the expansion panel element
+const expansionPanel = document.querySelector('#my-button + .forge-expansion-panel');
+
+// Toggle the expanded state when the button is clicked
+button.addEventListener('click', () => {
+  const expanded = button.getAttribute('aria-expanded') === 'true';
+  button.setAttribute('aria-expanded', !expanded);
+  expansionPanel.classList.toggle('forge-expansion-panel--open', !expanded);
+});
+```
+
+> **Note:** This is a simple example. You may need to adjust the JavaScript to fit your specific use case, or to fit framework-specific usage.
+
+<CssOnlyInformation />

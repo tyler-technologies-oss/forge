@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./src/partials/head.ejs', { title: page.title }) %>
+    
+    <!-- Used for testing global configuration -->
+    <!--
+    <script>
+      window.TylerForgeGlobalConfiguration = {
+        'forge-field': {
+          'labelPosition': 'block-start'
+        }
+      };
+    </script>
+    -->
+  </head>
+  <body>
+    <forge-scaffold>
+      <!-- Header -->
+      <%- include('./src/partials/header.ejs', { title: page.title }); %>
+      
+      <!-- Content -->
+      <main slot="body" class="content">
+        <forge-card class="card<%= !page.options?.length ? ' card--centered' : undefined %>">
+          <!-- Card header-->
+          <forge-toolbar>
+            <h2 slot="start" id="content-title" class="forge-typography--heading4"><%= page.contentTitle ?? page.title %></h2>
+          </forge-toolbar>
+
+          <!-- Card content -->
+          <div class="container" id="demo-content">
+            <!-- Dynamic page include -->
+            <%- include(page.includePath, page.includeData); %>
+          </div>
+        </forge-card>
+      </main>
+
+      <!-- Options drawer -->
+      <% if (page.options?.length) { %>
+        <%- include('./src/partials/options-drawer.ejs', { controls: page.options }); %>
+      <% } %>
+    </forge-scaffold>
+  </body>
+</html>

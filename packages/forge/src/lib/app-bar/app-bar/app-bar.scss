@@ -1,0 +1,206 @@
+@use 'sass:map';
+@use './core' as *;
+@use '../../focus-indicator';
+@use '../../state-layer';
+@use '../../tabs/tab-bar';
+@use '../../tabs/tab';
+@use '../../core/styles/theme';
+@use '../../core/styles/tokens/theme/color-emphasis';
+
+//
+// Host
+//
+
+$host-tokens: (background, foreground);
+
+:host {
+  @include tokens($includes: $host-tokens);
+}
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Default theme
+//
+
+.forge-app-bar:not(.white):not(.scoped) {
+  @include theme.provide(
+    (
+      primary: #{token(foreground)},
+      on-primary: rgba(black, color-emphasis.value(highest)),
+      text-high: rgba(white, color-emphasis.value(highest)),
+      text-medium: rgba(white, color-emphasis.value(medium)),
+      text-low: rgba(white, color-emphasis.value(medium-low)),
+      outline-high: rgba(white, color-emphasis.value(highest)),
+      outline-medium: rgba(white, color-emphasis.value(medium)),
+      outline-low: rgba(white, color-emphasis.value(medium-low))
+    )
+  );
+}
+
+.forge-app-bar.scoped {
+  color: inherit;
+
+  .logo-title-container {
+    color: #{token(foreground)};
+  }
+}
+
+.forge-app-bar {
+  @include provide-theme(
+    (
+      theme-foreground: #{token(foreground)},
+      theme-foreground-muted: rgba(white, color-emphasis.value(medium))
+    )
+  );
+}
+
+//
+// Base
+//
+
+.forge-app-bar {
+  @include tokens($excludes: $host-tokens);
+}
+
+.forge-app-bar {
+  @include base;
+
+  .row {
+    @include row;
+  }
+
+  &.no-center {
+    .row {
+      @include row-no-center;
+    }
+  }
+
+  .section {
+    @include section;
+
+    &:not(:last-child):not(:first-child) {
+      @include section-center;
+    }
+
+    &:last-child {
+      @include section-end;
+    }
+  }
+
+  h1 {
+    @include title;
+  }
+
+  a {
+    @include anchor-base;
+
+    forge-state-layer {
+      @include state-layer.provide-theme(
+        (
+          color: #{token(foreground)}
+        )
+      );
+    }
+
+    forge-focus-indicator {
+      @include focus-indicator.provide-theme(
+        (
+          color: #{token(foreground)},
+          shape: 4px,
+          offset-block: 4px
+        )
+      );
+    }
+  }
+
+  .logo-title-container {
+    @include logo-title-container;
+  }
+}
+
+//
+// Elevation
+//
+
+.forge-app-bar.raised {
+  @include elevation-raised;
+}
+
+//
+// Slotted (scoped theme mode)
+//
+// Attempt to auto-theme any specific slotted elements directly
+//
+
+.forge-app-bar.scoped {
+  ::slotted(:where(forge-tab-bar, forge-icon-button, forge-button)) {
+    color: #{token(theme-foreground)};
+
+    @include tab.provide-theme(
+      (
+        active-color: #{token(theme-foreground)},
+        inactive-color: #{token(theme-foreground-muted)}
+      )
+    );
+  }
+}
+
+//
+// Slotted - Tab bar
+//
+
+::slotted(forge-tab-bar) {
+  @include tab-bar.provide-theme(
+    (
+      divider-thickness: 0
+    )
+  );
+}
+
+//
+// Slotted - Logo
+//
+
+::slotted([slot='logo']) {
+  @include logo;
+}
+
+//
+// Slotted - Search
+//
+
+::slotted(forge-app-bar-search[slot='center']) {
+  width: 100%;
+}
+
+//
+// White theme
+//
+
+.forge-app-bar.white {
+  @include override(background, white, value);
+  @include override(foreground, black, value);
+
+  @include provide-theme(
+    (
+      theme-foreground-muted: rgba(black, color-emphasis.value(medium))
+    )
+  );
+}
+
+.forge-app-bar.white:not(.scoped) {
+  @include theme.provide(
+    (
+      primary: black,
+      on-primary: rgba(white, color-emphasis.value(highest)),
+      text-medium: rgba(black, color-emphasis.value(medium))
+    )
+  );
+}

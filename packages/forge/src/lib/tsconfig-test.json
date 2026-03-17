@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "moduleResolution": "NodeNext",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false
+  },
+  "include": ["./**/*.ts"]
+}

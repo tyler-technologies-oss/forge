@@ -1,0 +1,67 @@
+import { attachShadowTemplate, customElement } from '@tylertech/forge-core';
+import { tylIconInsertInvitation } from '@tylertech/tyler-icons';
+import { CalendarComponent } from '../calendar/index.js';
+import { IconComponent, IconRegistry } from '../icon/index.js';
+import { IconButtonComponent } from '../icon-button/index.js';
+import { PopoverComponent } from '../popover/index.js';
+import { BaseDatePickerComponent, IBaseDatePickerComponent } from './base/base-date-picker.js';
+import { BASE_DATE_PICKER_CONSTANTS } from './base/base-date-picker-constants.js';
+import { DatePickerAdapter } from './date-picker-adapter.js';
+import { DATE_PICKER_CONSTANTS } from './date-picker-constants.js';
+import { DatePickerCore } from './date-picker-core.js';
+
+import template from './date-picker.html';
+import styles from './date-picker.scss';
+
+export interface IDatePickerComponent extends IBaseDatePickerComponent<Date | string | null> {}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-date-picker': IDatePickerComponent;
+  }
+
+  interface HTMLElementEventMap {
+    'forge-date-picker-change': CustomEvent<Date | string | null>;
+    'forge-date-picker-open': CustomEvent<void>;
+    'forge-date-picker-close': CustomEvent<void>;
+    'forge-date-picker-input': CustomEvent<string>;
+  }
+}
+
+/**
+ * @summary A date input component with an integrated calendar popup for selecting single dates.
+ *
+ * @tag forge-date-picker
+ *
+ * @attribute {string} [value] - The value of the date picker.
+ *
+ * @event {CustomEvent<Date | string | null>} forge-date-picker-change - Emits when the value of the date picker changes.
+ * @event {CustomEvent<void>} forge-date-picker-open - Emits when the date picker opens.
+ * @event {CustomEvent<void>} forge-date-picker-close - Emits when the date picker closes.
+ * @event {CustomEvent<string>} forge-date-picker-input - Emits when the user inputs a value into the date picker.
+ */
+@customElement({
+  name: DATE_PICKER_CONSTANTS.elementName,
+  dependencies: [PopoverComponent, CalendarComponent, IconButtonComponent, IconComponent]
+})
+export class DatePickerComponent extends BaseDatePickerComponent<Date | string | undefined, Date, DatePickerCore> implements IDatePickerComponent {
+  public static get observedAttributes(): string[] {
+    return [...Object.values(BASE_DATE_PICKER_CONSTANTS.observedAttributes), DATE_PICKER_CONSTANTS.observedAttributes.VALUE];
+  }
+
+  constructor() {
+    super();
+    IconRegistry.define(tylIconInsertInvitation);
+    attachShadowTemplate(this, template, styles);
+    this._core = new DatePickerCore(new DatePickerAdapter(this));
+  }
+
+  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    switch (name) {
+      case DATE_PICKER_CONSTANTS.observedAttributes.VALUE:
+        this.value = newValue;
+        return;
+    }
+    super.attributeChangedCallback(name, oldValue, newValue);
+  }
+}

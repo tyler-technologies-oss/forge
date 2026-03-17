@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@tylertech/forge/*": ["../lib/*"],
+      "$src/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "pages"]
+}

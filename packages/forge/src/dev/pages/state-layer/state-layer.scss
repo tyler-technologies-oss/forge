@@ -1,0 +1,40 @@
+@use '../../../lib/state-layer';
+
+.demo-container {
+  background-color: transparent;
+  outline: none;
+  height: 200px;
+  width: 200px;
+  border: 1px solid var(--forge-theme-outline);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  color: var(--forge-theme-text-primary);
+}
+
+.state-layer-demo {
+  @include state-layer.states-target;
+
+  &.circular {
+    --forge-focus-indicator-shape: 50%;
+    border-radius: 50%;
+  }
+
+  &.selected {
+    --forge-state-layer-color: var(--forge-theme-primary);
+    color: var(--forge-theme-primary);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+
+      // Simulating selection styles
+      background-color: var(--forge-theme-primary);
+      opacity: 0.08;
+    }
+  }
+}

@@ -1,0 +1,77 @@
+@use './core' as *;
+@use '../state-layer';
+@use '../focus-indicator';
+@use '../utils/mixins' as utils;
+
+//
+// Host
+//
+
+:host {
+  @include host;
+
+  .forge-button-area {
+    @include enabled;
+  }
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host(:state(disabled)) {
+  .forge-button-area {
+    @include disabled;
+  }
+}
+
+:host(:where(:state(pressed), :state(current))) {
+  .forge-button-area {
+    @include selected;
+  }
+}
+
+//
+// Base
+//
+
+.forge-button-area {
+  @include tokens;
+}
+
+.forge-button-area {
+  @include base;
+
+  .button {
+    @include button;
+
+    ::slotted(:is(button)) {
+      @include slotted-button;
+    }
+
+    ::slotted(:is(a[href])) {
+      @include slotted-anchor;
+    }
+  }
+}
+
+forge-focus-indicator {
+  z-index: 1; // Fixes an animation artifact in Safari
+
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(focus-indicator-color)},
+      outward-offset: #{token(focus-indicator-offset)},
+      shape: #{token(shape)}
+    )
+  );
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme(
+    (
+      color: #{token(primary-color)}
+    )
+  );
+  border-radius: inherit;
+}
