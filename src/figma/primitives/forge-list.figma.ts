@@ -225,7 +225,7 @@ figma.connect('<FIGMA_LIST_LIST_ITEM>', {
 
 // TODO: deprecate this nav-list-item in favor of just using the list-item component
 // Navlist
-figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
+figma.connect('<FIGMA_LIST_NAV_LIST_ITEM>', {
   props: {
     ...sharedProps,
     ...navListProps
@@ -236,7 +236,7 @@ figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
     </forge-list-item>`
 });
 
-figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
+figma.connect('<FIGMA_LIST_NAV_LIST_ITEM>', {
   variant: { 'Start slot': true, 'End slot': false },
   props: {
     ...sharedProps,
@@ -249,7 +249,7 @@ figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
     </forge-list-item>`
 });
 
-figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
+figma.connect('<FIGMA_LIST_NAV_LIST_ITEM>', {
   variant: { 'Start slot': false, 'End slot': true },
   props: {
     ...sharedProps,
@@ -262,7 +262,7 @@ figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
     </forge-list-item>`
 });
 
-figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
+figma.connect('<FIGMA_LIST_NAV_LIST_ITEM>', {
   variant: { 'Start slot': true, 'End slot': true },
   props: {
     ...sharedProps,
@@ -276,7 +276,7 @@ figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
     </forge-list-item>`
 });
 
-figma.connect('<FIGMA_DRAWER_NAV_LIST_ITEM>', {
+figma.connect('<FIGMA_LIST_NAV_LIST_ITEM>', {
   variant: { 'Start slot': true, 'Show text': false },
   props: {
     ...sharedProps,

@@ -29,20 +29,24 @@ figma.connect('<FIGMA_DRAWER_DRAWER>', {
 figma.connect('<FIGMA_DRAWER_DRAWER>', {
   variant: { Type: 'Toolbars' },
   props: {
+    slotHeader: figma.slot('header'),
+    slotBody: figma.slot('Slot'),
+    slotFooter: figma.slot('footer')
+    /* slots are in beta, retaining until general availability
     headerSlot: figma.boolean('Header slot', {
       true: figma.instance('Header instance'),
       false: undefined
     }),
-    bodyInstance: figma.instance('Body instance'),
     footerSlot: figma.boolean('Footer slot', {
       true: figma.instance('Footer instance'),
       false: undefined
     })
+*/
   },
   example: (props: any) =>
     html` <forge-drawer slot="body-left">
-      ${props.headerSlot}
-      <aside>${props.bodyInstance}</aside>
-      ${props.footerSlot}
+      ${props.slotHeader}
+      <aside>${props.slotBody}</aside>
+      ${props.slotFooter}
     </forge-drawer>`
 });

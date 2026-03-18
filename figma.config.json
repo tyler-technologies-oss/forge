@@ -43,10 +43,10 @@
       "<FIGMA_TAB_TAB_BAR>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=3326-1451",
       "<FIGMA_SPLIT_BUTTON_SPLIT_BUTTON>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2025-1180",
       "<FIGMA_LIST_LIST_ITEM>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2398-1480",
-      "<FIGMA_LIST_LIST>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=4587-4184",
-      "<FIGMA_DRAWER_DRAWER>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2491-279",
-      "<FIGMA_DRAWER_NAV_LIST_ITEM>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2439-2983",
-      "<FIGMA_POPOVER_POPOVER>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2439-2372",
+      "<FIGMA_LIST_LIST>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=6735-282",
+      "<FIGMA_DRAWER_DRAWER>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=6737-326",
+      "<FIGMA_LIST_NAV_LIST_ITEM>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2439-2983",
+      "<FIGMA_POPOVER_POPOVER>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=6734-122",
       "<FIGMA_LABEL_VALUE_LABEL_VALUE>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=4504-97",
       "<FIGMA_FIELD_FIELD>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=3180-4540",
       "<FIGMA_FIELD_TYPE>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=3180-8209",
@@ -61,8 +61,7 @@
       "<FIGMA_APP_BAR_LOGO_TITLE_CONTAINER>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2648-3229",
       "<FIGMA_APP_BAR_SEARCH>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2642-967",
       "<FIGMA_APP_BAR_END_SLOT_CONTENT>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=2649-3786",
-      "<FIGMA_DIALOG_DIALOG>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=6203-302",
-      "<FIGMA_DIALOG_BODY_TEXT>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=6201-3"
+      "<FIGMA_DIALOG_DIALOG>": "https://www.figma.com/design/hFu1PYD4Rdihc2E4givJ3j/Forge-3.x-Components?node-id=6741-484"
     }
   }
 }

@@ -113,6 +113,26 @@ button: figma.children('forge-button');
 // Usage: ${props.button}
 ```
 
+### Multiple Instances with Same Name
+
+When a component has multiple instances with the same name (e.g., two `forge-toolbar` layers):
+
+```typescript
+// Get all instances as an array
+toolbars: figma.children('forge-toolbar');
+
+// Access by index (order = top to bottom in Figma)
+example: (props: any) => html`
+  ${props.toolbars?.[0]}
+  <!-- First toolbar (header) -->
+  <div slot="body">${props.bodySlot}</div>
+  ${props.toolbars?.[1]}
+  <!-- Second toolbar (footer) -->
+`;
+```
+
+**Important:** Cannot use layer names like `forge-toolbar [slot=header]` - validation will fail with "layer does not exist". Use array indexing instead.
+
 ### Instance Swap Properties
 
 ```typescript
