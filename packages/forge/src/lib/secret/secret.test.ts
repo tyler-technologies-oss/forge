@@ -642,33 +642,33 @@ describe('Secret', () => {
       expect(labelSlot).toBeTruthy();
     });
 
-    it('should render custom hidden icon from slot', async () => {
+    it('should render custom open icon from slot', async () => {
       const screen = render(html`
         <forge-secret>
-          <span slot="hidden-icon">🔒</span>
+          <span slot="open-icon">🔒</span>
           Secret content
         </forge-secret>
       `);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
 
-      const slot = el.shadowRoot?.querySelector('slot[name="hidden-icon"]');
+      const slot = el.shadowRoot?.querySelector('slot[name="open-icon"]');
       const slottedContent = (slot as HTMLSlotElement)?.assignedNodes()[0] as HTMLElement;
 
       expect(slottedContent?.textContent).toBe('🔒');
     });
 
-    it('should render custom visible icon from slot', async () => {
+    it('should render custom close icon from slot', async () => {
       const screen = render(html`
         <forge-secret open>
-          <span slot="visible-icon">🔓</span>
+          <span slot="close-icon">🔓</span>
           Secret content
         </forge-secret>
       `);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
 
-      const slot = el.shadowRoot?.querySelector('slot[name="visible-icon"]');
+      const slot = el.shadowRoot?.querySelector('slot[name="close-icon"]');
       const slottedContent = (slot as HTMLSlotElement)?.assignedNodes()[0] as HTMLElement;
 
       expect(slottedContent?.textContent).toBe('🔓');
