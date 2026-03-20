@@ -214,7 +214,7 @@ export class SecretComponent extends BaseLitElement {
         class="text-button"
         exportparts="text-button"
         dense
-        aria-pressed="${this.open}"
+        aria-expanded="${this.open}"
         .ariaControlsElements=${[this]}
         @keydown="${this.#handleKeyDown}">
         ${this.#renderIcon()}
