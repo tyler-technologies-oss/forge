@@ -3,32 +3,25 @@ import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
-import type { IFocusIndicatorComponent } from '../focus-indicator/index.js';
-import type { IStateLayerComponent } from '../state-layer/index.js';
-import type { ITooltipComponent } from '../tooltip/index.js';
 import type { SecretComponent } from './secret.js';
 
 import './secret.js';
 
 class SecretHarness {
-  public rootElement: HTMLElement;
-  public button: HTMLButtonElement;
+  public button: HTMLElement;
   public contentElement: HTMLElement;
-  public liveRegion: HTMLElement;
-  public stateLayer: IStateLayerComponent;
-  public focusIndicator: IFocusIndicatorComponent;
 
   constructor(public element: SecretComponent) {
-    this.rootElement = getShadowElement(this.element, '.forge-secret');
-    this.button = getShadowElement(this.element, 'button') as HTMLButtonElement;
+    this.button = getShadowElement(this.element, ':is(forge-button, forge-icon-button)');
     this.contentElement = getShadowElement(this.element, '.content');
-    this.liveRegion = getShadowElement(this.element, '[aria-live="polite"]');
-    this.stateLayer = getShadowElement(this.element, 'forge-state-layer') as IStateLayerComponent;
-    this.focusIndicator = getShadowElement(this.element, 'forge-focus-indicator') as IFocusIndicatorComponent;
   }
 
   public async clickButton(): Promise<void> {
     this.button.click();
+  }
+
+  public async clickContent(): Promise<void> {
+    this.contentElement.click();
   }
 
   public async pressEnter(): Promise<void> {
@@ -42,22 +35,25 @@ class SecretHarness {
   }
 
   public async pressEscape(): Promise<void> {
+    this.button.focus();
     await userEvent.keyboard('{Escape}');
   }
 
-  public getTooltip(): ITooltipComponent | null {
-    return this.element.shadowRoot?.querySelector('forge-tooltip') as ITooltipComponent | null;
+  public getButtonType(): 'icon' | 'text' {
+    return this.button.tagName.toLowerCase() === 'forge-icon-button' ? 'icon' : 'text';
   }
 
   public getIcon(): HTMLElement | null {
     return this.element.shadowRoot?.querySelector('forge-icon') || null;
   }
 
-  public getSlot(name?: string): HTMLSlotElement | null {
-    if (name) {
-      return this.element.shadowRoot?.querySelector(`slot[name="${name}"]`) as HTMLSlotElement | null;
-    }
-    return this.element.shadowRoot?.querySelector('slot:not([name])') as HTMLSlotElement | null;
+  public getTooltip(): HTMLElement | null {
+    return this.element.shadowRoot?.querySelector('forge-tooltip') || null;
+  }
+
+  public hasClass(className: string): boolean {
+    const root = getShadowElement(this.element, '.forge-secret');
+    return root.classList.contains(className);
   }
 }
 
@@ -79,46 +75,15 @@ describe('Secret', () => {
       const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
 
-      expect(el.visible).toBe(false);
+      expect(el.open).toBe(false);
       expect(el.variant).toBe('blur');
       expect(el.showOnHover).toBe(false);
-      expect(el.noLabel).toBe(false);
+      expect(el.block).toBe(false);
+      expect(el.buttonPosition).toBe('end');
       expect(el.name).toBe('');
-    });
-
-    it('should not contain forge-state-layer for blur variant when hidden', async () => {
-      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
-      const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      const stateLayer = el.shadowRoot?.querySelector('forge-state-layer');
-
-      expect(stateLayer).toBeNull();
-    });
-
-    it('should contain forge-state-layer for dots variant', async () => {
-      const screen = render(html`<forge-secret variant="dots">Secret content</forge-secret>`);
-      const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await el.updateComplete;
-      const stateLayer = el.shadowRoot?.querySelector('forge-state-layer');
-
-      expect(stateLayer).toBeTruthy();
-    });
-
-    it('should contain forge-state-layer when visible', async () => {
-      const screen = render(html`<forge-secret visible>Secret content</forge-secret>`);
-      const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await el.updateComplete;
-      const stateLayer = el.shadowRoot?.querySelector('forge-state-layer');
-
-      expect(stateLayer).toBeTruthy();
-    });
-
-    it('should contain forge-focus-indicator', async () => {
-      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
-      const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await el.updateComplete;
-      const ctx = new SecretHarness(el);
-
-      expect(ctx.focusIndicator).toBeTruthy();
+      expect(el.mask).toBe('');
+      expect(el.maskCharacter).toBe('●');
+      expect(el.allow).toBe('');
     });
 
     it('should have role group and default aria-label', async () => {
@@ -130,77 +95,90 @@ describe('Secret', () => {
       expect(el.getAttribute('aria-label')).toBe('secret');
     });
 
-    it('should allow setting aria-label programmatically', async () => {
+    it('should set role to group', async () => {
       const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
 
-      expect(el.getAttribute('aria-label')).toBe('secret');
+      expect(el.getAttribute('role')).toBe('group');
+    });
 
-      el.setAttribute('aria-label', 'Custom label');
+    it('should render icon button by default when inline', async () => {
+      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
+      const ctx = new SecretHarness(el);
 
-      expect(el.getAttribute('aria-label')).toBe('Custom label');
+      expect(ctx.getButtonType()).toBe('icon');
+    });
+
+    it('should render text button when block is true', async () => {
+      const screen = render(html`<forge-secret block>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.getButtonType()).toBe('text');
     });
   });
 
-  describe('visibility toggle', () => {
-    it('should toggle visible state on click', async () => {
+  describe('open property', () => {
+    it('should toggle open state on button click', async () => {
       const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      expect(el.visible).toBe(false);
+      expect(el.open).toBe(false);
 
       await ctx.clickButton();
 
-      expect(el.visible).toBe(true);
+      expect(el.open).toBe(true);
 
       await ctx.clickButton();
 
-      expect(el.visible).toBe(false);
+      expect(el.open).toBe(false);
     });
 
-    it('should toggle visible state on Enter key', async () => {
+    it('should toggle open state on Enter key', async () => {
       const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      expect(el.visible).toBe(false);
+      expect(el.open).toBe(false);
 
       await ctx.pressEnter();
 
-      expect(el.visible).toBe(true);
+      expect(el.open).toBe(true);
     });
 
-    it('should toggle visible state on Space key', async () => {
+    it('should toggle open state on Space key', async () => {
       const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      expect(el.visible).toBe(false);
+      expect(el.open).toBe(false);
 
       await ctx.pressSpace();
 
-      expect(el.visible).toBe(true);
+      expect(el.open).toBe(true);
     });
 
-    it('should update custom state when visible changes', async () => {
+    it('should update :state(open) custom state when open changes', async () => {
       const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
 
-      expect(el.matches(':state(visible)')).toBe(false);
+      expect(el.matches(':state(open)')).toBe(false);
 
-      el.visible = true;
+      el.open = true;
       await el.updateComplete;
 
-      expect(el.matches(':state(visible)')).toBe(true);
+      expect(el.matches(':state(open)')).toBe(true);
     });
 
-    it('should update aria-expanded when visible changes', async () => {
+    it('should update aria-expanded when open changes', async () => {
       const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
@@ -208,7 +186,7 @@ describe('Secret', () => {
 
       expect(ctx.button.getAttribute('aria-expanded')).toBe('false');
 
-      el.visible = true;
+      el.open = true;
       await el.updateComplete;
 
       expect(ctx.button.getAttribute('aria-expanded')).toBe('true');
@@ -222,88 +200,131 @@ describe('Secret', () => {
 
       expect(ctx.contentElement.inert).toBe(true);
 
-      el.visible = true;
+      el.open = true;
       await el.updateComplete;
 
       expect(ctx.contentElement.inert).toBe(false);
     });
 
-    it('should dispatch forge-secret-change event on toggle', async () => {
-      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
+    it('should ignore clicks on content when open', async () => {
+      const screen = render(html`<forge-secret open>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
-      const changeSpy = vi.fn();
 
-      el.addEventListener('forge-secret-change', changeSpy);
+      expect(el.open).toBe(true);
 
-      await ctx.clickButton();
+      await ctx.clickContent();
 
-      expect(changeSpy).toHaveBeenCalledOnce();
-      expect(changeSpy.mock.calls[0][0].detail).toEqual({ visible: true });
+      expect(el.open).toBe(true);
     });
 
-    it('should maintain focus on button after toggle', async () => {
+    it('should toggle on clicks on content when closed', async () => {
       const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      ctx.button.focus();
+      expect(el.open).toBe(false);
+
+      await ctx.clickContent();
+
+      expect(el.open).toBe(true);
+    });
+  });
+
+  describe('toggle event', () => {
+    it('should dispatch toggle event on button click', async () => {
+      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+      const toggleSpy = vi.fn();
+
+      el.addEventListener('toggle', toggleSpy);
+
       await ctx.clickButton();
 
-      expect(document.activeElement).toBe(el);
+      expect(toggleSpy).toHaveBeenCalledOnce();
+      expect(toggleSpy.mock.calls[0][0]).toBeInstanceOf(ToggleEvent);
+    });
+
+    it('should have correct oldState in toggle event', async () => {
+      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+      const toggleSpy = vi.fn();
+
+      el.addEventListener('toggle', toggleSpy);
+
+      await ctx.clickButton();
+
+      const event = toggleSpy.mock.calls[0][0] as ToggleEvent;
+      expect(event.oldState).toBe('false');
+      expect(el.open).toBe(true);
+    });
+
+    it('should bubble and compose toggle event', async () => {
+      const screen = render(html`<div><forge-secret>Secret content</forge-secret></div>`);
+      const container = screen.container.querySelector('div')!;
+      const el = container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+      const toggleSpy = vi.fn();
+
+      container.addEventListener('toggle', toggleSpy);
+
+      await ctx.clickButton();
+
+      expect(toggleSpy).toHaveBeenCalledOnce();
     });
   });
 
   describe('Escape key handling', () => {
-    it('should hide visible content when Escape is pressed on button', async () => {
-      const screen = render(html`<forge-secret visible>Secret content</forge-secret>`);
+    it('should close when Escape is pressed and open', async () => {
+      const screen = render(html`<forge-secret open>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      expect(el.visible).toBe(true);
+      expect(el.open).toBe(true);
 
-      ctx.button.focus();
       await ctx.pressEscape();
 
-      expect(el.visible).toBe(false);
+      expect(el.open).toBe(false);
     });
 
-    it('should not affect already hidden content when Escape is pressed', async () => {
+    it('should not affect closed state when Escape is pressed', async () => {
       const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      expect(el.visible).toBe(false);
+      expect(el.open).toBe(false);
 
-      ctx.button.focus();
       await ctx.pressEscape();
 
-      expect(el.visible).toBe(false);
+      expect(el.open).toBe(false);
     });
 
-    it('should dispatch forge-secret-change event when hiding via Escape', async () => {
-      const screen = render(html`<forge-secret visible>Secret content</forge-secret>`);
+    it('should dispatch toggle event when closing via Escape', async () => {
+      const screen = render(html`<forge-secret open>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
-      const changeSpy = vi.fn();
+      const toggleSpy = vi.fn();
 
-      el.addEventListener('forge-secret-change', changeSpy);
+      el.addEventListener('toggle', toggleSpy);
 
-      ctx.button.focus();
       await ctx.pressEscape();
 
-      expect(changeSpy).toHaveBeenCalledOnce();
-      expect(changeSpy.mock.calls[0][0].detail).toEqual({ visible: false });
+      expect(toggleSpy).toHaveBeenCalledOnce();
     });
   });
 
-  describe('variant', () => {
-    it('should show blur variant by default', async () => {
+  describe('variant property', () => {
+    it('should have blur variant by default', async () => {
       const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
 
@@ -329,7 +350,37 @@ describe('Secret', () => {
       expect(el.variant).toBe('dots');
     });
 
-    it('should render icon for dots variant when hidden', async () => {
+    it('should apply blur class when variant is blur and closed', async () => {
+      const screen = render(html`<forge-secret variant="blur">Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.contentElement.classList.contains('blur')).toBe(true);
+      expect(ctx.contentElement.classList.contains('dots')).toBe(false);
+    });
+
+    it('should apply dots class when variant is dots and closed', async () => {
+      const screen = render(html`<forge-secret variant="dots">Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.contentElement.classList.contains('dots')).toBe(true);
+      expect(ctx.contentElement.classList.contains('blur')).toBe(false);
+    });
+
+    it('should not apply variant classes when open', async () => {
+      const screen = render(html`<forge-secret variant="blur" open>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.contentElement.classList.contains('blur')).toBe(false);
+      expect(ctx.contentElement.classList.contains('dots')).toBe(false);
+    });
+
+    it('should render eye_outline icon for dots variant when closed', async () => {
       const screen = render(html`<forge-secret variant="dots">Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
@@ -337,32 +388,108 @@ describe('Secret', () => {
 
       const icon = ctx.getIcon();
       expect(icon).toBeTruthy();
-      expect(icon?.getAttribute('name')).toBe('eye');
+      expect(icon?.getAttribute('name')).toBe('eye_outline');
     });
 
-    it('should render icon for dots variant when visible', async () => {
-      const screen = render(html`<forge-secret variant="dots" visible>Secret content</forge-secret>`);
+    it('should render eye_closed icon when open', async () => {
+      const screen = render(html`<forge-secret open>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
       const icon = ctx.getIcon();
       expect(icon).toBeTruthy();
-      expect(icon?.getAttribute('name')).toBe('eye_off');
+      expect(icon?.getAttribute('name')).toBe('eye_closed');
     });
+  });
 
-    it('should not render icon for blur variant', async () => {
-      const screen = render(html`<forge-secret variant="blur">Secret content</forge-secret>`);
+  describe('block property', () => {
+    it('should render icon button when block is false', async () => {
+      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      const icon = ctx.getIcon();
-      expect(icon).toBeNull();
+      expect(ctx.getButtonType()).toBe('icon');
+    });
+
+    it('should render text button when block is true', async () => {
+      const screen = render(html`<forge-secret block>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.getButtonType()).toBe('text');
+    });
+
+    it('should update :state(block) custom state', async () => {
+      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+
+      expect(el.matches(':state(block)')).toBe(false);
+
+      el.block = true;
+      await el.updateComplete;
+
+      expect(el.matches(':state(block)')).toBe(true);
+    });
+
+    it('should render tooltip when block is false', async () => {
+      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.getTooltip()).toBeTruthy();
+    });
+
+    it('should not render tooltip when block is true', async () => {
+      const screen = render(html`<forge-secret block>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.getTooltip()).toBeNull();
+    });
+
+    it('should apply blur when block and closed', async () => {
+      const screen = render(html`<forge-secret block>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.contentElement.classList.contains('blur')).toBe(true);
     });
   });
 
-  describe('showOnHover', () => {
+  describe('buttonPosition property', () => {
+    it('should have end position by default', async () => {
+      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+
+      expect(el.buttonPosition).toBe('end');
+    });
+
+    it('should apply reverse class when buttonPosition is start', async () => {
+      const screen = render(html`<forge-secret button-position="start">Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.hasClass('reverse')).toBe(true);
+    });
+
+    it('should not apply reverse class when buttonPosition is end', async () => {
+      const screen = render(html`<forge-secret button-position="end">Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.hasClass('reverse')).toBe(false);
+    });
+  });
+
+  describe('showOnHover property', () => {
     it('should set showOnHover property', async () => {
       const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
@@ -375,13 +502,13 @@ describe('Secret', () => {
       expect(el.showOnHover).toBe(true);
     });
 
-    it('should add show-on-hover class to root when showOnHover is true', async () => {
+    it('should add show-on-hover class when showOnHover is true', async () => {
       const screen = render(html`<forge-secret show-on-hover>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      expect(ctx.rootElement.classList.contains('show-on-hover')).toBe(true);
+      expect(ctx.hasClass('show-on-hover')).toBe(true);
     });
 
     it('should not add show-on-hover class when showOnHover is false', async () => {
@@ -390,95 +517,101 @@ describe('Secret', () => {
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      expect(ctx.rootElement.classList.contains('show-on-hover')).toBe(false);
+      expect(ctx.hasClass('show-on-hover')).toBe(false);
     });
   });
 
-  describe('noLabel', () => {
-    it('should set noLabel property', async () => {
+  describe('mask properties', () => {
+    it('should have default mask properties', async () => {
       const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
 
-      expect(el.noLabel).toBe(false);
-
-      el.noLabel = true;
-      await el.updateComplete;
-
-      expect(el.noLabel).toBe(true);
+      expect(el.mask).toBe('');
+      expect(el.maskCharacter).toBe('●');
+      expect(el.allow).toBe('');
     });
 
-    it('should add label--hidden class when noLabel is true', async () => {
-      const screen = render(html`<forge-secret no-label>Secret content</forge-secret>`);
+    it('should apply mask to content in dots variant', async () => {
+      const screen = render(html`<forge-secret variant="dots">test123</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
-      const labelElement = el.shadowRoot?.querySelector('.label') as HTMLElement;
+      // Wait for slotted content to be processed
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
 
-      expect(labelElement.classList.contains('label--hidden')).toBe(true);
+      const maskAttr = ctx.contentElement.getAttribute('data-mask');
+      expect(maskAttr).toBe('●●●●●●●');
     });
 
-    it('should be accessible when noLabel is true', async () => {
-      const screen = render(html`<forge-secret no-label>Secret content</forge-secret>`);
+    it('should use custom mask character', async () => {
+      const screen = render(html`<forge-secret variant="dots" mask-character="*">test</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await expect(el).toBeAccessible();
-    });
-  });
+      await el.updateComplete;
+      // Wait for slotted content to be processed
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
 
-  describe('tooltip', () => {
-    it('should not render tooltip for blur variant when hidden and not showOnHover and not noLabel', async () => {
-      const screen = render(html`<forge-secret variant="blur">Secret content</forge-secret>`);
+      const maskAttr = ctx.contentElement.getAttribute('data-mask');
+      expect(maskAttr).toBe('****');
+    });
+
+    it('should use custom mask pattern', async () => {
+      const screen = render(html`<forge-secret variant="dots" mask="xxxx-xxxx">1234-5678</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      // Wait for mask to be computed
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      const maskAttr = ctx.contentElement.getAttribute('data-mask');
+      expect(maskAttr).toBe('●●●●●●●●●');
+    });
+
+    it('should preserve allowed characters', async () => {
+      const screen = render(html`<forge-secret variant="dots" allow="-">test-123</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      // Wait for slotted content to be processed
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      const maskAttr = ctx.contentElement.getAttribute('data-mask');
+      expect(maskAttr).toBe('●●●●-●●●');
+    });
+
+    it('should not apply mask in blur variant', async () => {
+      const screen = render(html`<forge-secret variant="blur">test123</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      const tooltip = ctx.getTooltip();
-      expect(tooltip).toBeNull();
+      expect(ctx.contentElement.hasAttribute('data-mask')).toBe(false);
     });
 
-    it('should render tooltip for dots variant when hidden', async () => {
-      const screen = render(html`<forge-secret variant="dots">Secret content</forge-secret>`);
+    it('should not apply mask when block is true', async () => {
+      const screen = render(html`<forge-secret variant="dots" block>test123</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      const tooltip = ctx.getTooltip();
-      expect(tooltip).toBeTruthy();
-      expect(tooltip?.textContent?.trim()).toBe('Show');
-    });
-
-    it('should render tooltip with "Hide" text when visible', async () => {
-      const screen = render(html`<forge-secret visible>Secret content</forge-secret>`);
-      const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await el.updateComplete;
-      const ctx = new SecretHarness(el);
-
-      const tooltip = ctx.getTooltip();
-      expect(tooltip).toBeTruthy();
-      expect(tooltip?.textContent?.trim()).toBe('Hide');
-    });
-
-    it('should render tooltip when showOnHover is true', async () => {
-      const screen = render(html`<forge-secret show-on-hover>Secret content</forge-secret>`);
-      const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await el.updateComplete;
-      const ctx = new SecretHarness(el);
-
-      const tooltip = ctx.getTooltip();
-      expect(tooltip).toBeTruthy();
-    });
-
-    it('should render tooltip when noLabel is true', async () => {
-      const screen = render(html`<forge-secret no-label>Secret content</forge-secret>`);
-      const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await el.updateComplete;
-      const ctx = new SecretHarness(el);
-
-      const tooltip = ctx.getTooltip();
-      expect(tooltip).toBeTruthy();
+      expect(ctx.contentElement.hasAttribute('data-mask')).toBe(false);
     });
   });
 
   describe('slots', () => {
-    it('should render label slot in button', async () => {
+    it('should render default slot content', async () => {
+      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+
+      expect(el.textContent).toBe('Secret content');
+    });
+
+    it('should render label slot in tooltip when inline', async () => {
       const screen = render(html`
         <forge-secret>
           <span slot="label">Custom Label</span>
@@ -489,56 +622,61 @@ describe('Secret', () => {
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      const labelSlot = ctx.getSlot('label');
-      const defaultSlot = ctx.getSlot();
-
+      const tooltip = ctx.getTooltip();
+      const labelSlot = tooltip?.querySelector('slot[name="label"]');
       expect(labelSlot).toBeTruthy();
-      expect(defaultSlot).toBeTruthy();
+    });
 
-      const buttonLabelSlot = ctx.button.querySelector('slot[name="label"]');
-      expect(buttonLabelSlot).toBe(labelSlot);
+    it('should render label slot in button when block', async () => {
+      const screen = render(html`
+        <forge-secret block>
+          <span slot="label">Custom Label</span>
+          Secret content
+        </forge-secret>
+      `);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
 
-      const contentDefaultSlot = ctx.contentElement.querySelector('slot:not([name])');
-      expect(contentDefaultSlot).toBe(defaultSlot);
+      const labelSlot = ctx.button.querySelector('slot[name="label"]');
+      expect(labelSlot).toBeTruthy();
     });
 
     it('should render custom hidden icon from slot', async () => {
       const screen = render(html`
-        <forge-secret variant="dots">
+        <forge-secret>
           <span slot="hidden-icon">🔒</span>
           Secret content
         </forge-secret>
       `);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
-      const ctx = new SecretHarness(el);
 
-      const slot = ctx.getSlot('hidden-icon');
-      const slottedContent = slot?.assignedNodes()[0] as HTMLElement;
+      const slot = el.shadowRoot?.querySelector('slot[name="hidden-icon"]');
+      const slottedContent = (slot as HTMLSlotElement)?.assignedNodes()[0] as HTMLElement;
 
       expect(slottedContent?.textContent).toBe('🔒');
     });
 
     it('should render custom visible icon from slot', async () => {
       const screen = render(html`
-        <forge-secret variant="dots" visible>
+        <forge-secret open>
           <span slot="visible-icon">🔓</span>
           Secret content
         </forge-secret>
       `);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
-      const ctx = new SecretHarness(el);
 
-      const slot = ctx.getSlot('visible-icon');
-      const slottedContent = slot?.assignedNodes()[0] as HTMLElement;
+      const slot = el.shadowRoot?.querySelector('slot[name="visible-icon"]');
+      const slottedContent = (slot as HTMLSlotElement)?.assignedNodes()[0] as HTMLElement;
 
       expect(slottedContent?.textContent).toBe('🔓');
     });
   });
 
-  describe('radio group behavior', () => {
-    it('should hide other secrets with same name when revealed', async () => {
+  describe('radio group behavior (name property)', () => {
+    it('should close other secrets with same name when opened', async () => {
       const screen = render(html`
         <div>
           <forge-secret name="group1">Secret 1</forge-secret>
@@ -551,29 +689,29 @@ describe('Secret', () => {
       const secret2 = screen.container.querySelector('forge-secret:nth-child(2)') as SecretComponent;
       const secret3 = screen.container.querySelector('forge-secret:nth-child(3)') as SecretComponent;
 
-      secret1.visible = true;
+      secret1.open = true;
       await secret1.updateComplete;
 
-      expect(secret1.visible).toBe(true);
-      expect(secret2.visible).toBe(false);
-      expect(secret3.visible).toBe(false);
+      expect(secret1.open).toBe(true);
+      expect(secret2.open).toBe(false);
+      expect(secret3.open).toBe(false);
 
-      secret2.visible = true;
+      secret2.open = true;
       await secret2.updateComplete;
 
-      expect(secret1.visible).toBe(false);
-      expect(secret2.visible).toBe(true);
-      expect(secret3.visible).toBe(false);
+      expect(secret1.open).toBe(false);
+      expect(secret2.open).toBe(true);
+      expect(secret3.open).toBe(false);
 
-      secret3.visible = true;
+      secret3.open = true;
       await secret3.updateComplete;
 
-      expect(secret1.visible).toBe(false);
-      expect(secret2.visible).toBe(true);
-      expect(secret3.visible).toBe(true);
+      expect(secret1.open).toBe(false);
+      expect(secret2.open).toBe(true);
+      expect(secret3.open).toBe(true);
     });
 
-    it('should not affect other secrets without same name', async () => {
+    it('should not affect secrets without same name', async () => {
       const screen = render(html`
         <div>
           <forge-secret name="group1">Secret 1</forge-secret>
@@ -584,17 +722,17 @@ describe('Secret', () => {
       const secret1 = screen.container.querySelector('forge-secret:nth-child(1)') as SecretComponent;
       const secret2 = screen.container.querySelector('forge-secret:nth-child(2)') as SecretComponent;
 
-      secret1.visible = true;
+      secret1.open = true;
       await secret1.updateComplete;
 
-      secret2.visible = true;
+      secret2.open = true;
       await secret2.updateComplete;
 
-      expect(secret1.visible).toBe(true);
-      expect(secret2.visible).toBe(true);
+      expect(secret1.open).toBe(true);
+      expect(secret2.open).toBe(true);
     });
 
-    it('should handle multiple secrets in the same group', async () => {
+    it('should handle multiple secrets in same group', async () => {
       const screen = render(html`
         <div>
           <forge-secret name="group1">Secret 1</forge-secret>
@@ -609,24 +747,24 @@ describe('Secret', () => {
       const secret3 = screen.container.querySelector('forge-secret:nth-child(3)') as SecretComponent;
       const secret4 = screen.container.querySelector('forge-secret:nth-child(4)') as SecretComponent;
 
-      secret2.visible = true;
+      secret2.open = true;
       await secret2.updateComplete;
 
-      expect(secret1.visible).toBe(false);
-      expect(secret2.visible).toBe(true);
-      expect(secret3.visible).toBe(false);
-      expect(secret4.visible).toBe(false);
+      expect(secret1.open).toBe(false);
+      expect(secret2.open).toBe(true);
+      expect(secret3.open).toBe(false);
+      expect(secret4.open).toBe(false);
 
-      secret4.visible = true;
+      secret4.open = true;
       await secret4.updateComplete;
 
-      expect(secret1.visible).toBe(false);
-      expect(secret2.visible).toBe(false);
-      expect(secret3.visible).toBe(false);
-      expect(secret4.visible).toBe(true);
+      expect(secret1.open).toBe(false);
+      expect(secret2.open).toBe(false);
+      expect(secret3.open).toBe(false);
+      expect(secret4.open).toBe(true);
     });
 
-    it('should allow multiple secrets without names to be visible simultaneously', async () => {
+    it('should allow multiple secrets without names to be open simultaneously', async () => {
       const screen = render(html`
         <div>
           <forge-secret>Secret 1</forge-secret>
@@ -639,84 +777,41 @@ describe('Secret', () => {
       const secret2 = screen.container.querySelector('forge-secret:nth-child(2)') as SecretComponent;
       const secret3 = screen.container.querySelector('forge-secret:nth-child(3)') as SecretComponent;
 
-      secret1.visible = true;
+      secret1.open = true;
       await secret1.updateComplete;
-      secret2.visible = true;
+      secret2.open = true;
       await secret2.updateComplete;
-      secret3.visible = true;
+      secret3.open = true;
       await secret3.updateComplete;
 
-      expect(secret1.visible).toBe(true);
-      expect(secret2.visible).toBe(true);
-      expect(secret3.visible).toBe(true);
-    });
-  });
-
-  describe('aria-live announcements', () => {
-    it('should have aria-live region for announcements', async () => {
-      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
-      const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await el.updateComplete;
-      const ctx = new SecretHarness(el);
-
-      expect(ctx.liveRegion).toBeTruthy();
-      expect(ctx.liveRegion.getAttribute('aria-live')).toBe('polite');
+      expect(secret1.open).toBe(true);
+      expect(secret2.open).toBe(true);
+      expect(secret3.open).toBe(true);
     });
 
-    it('should have aria-atomic on live region', async () => {
-      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
-      const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await el.updateComplete;
-      const ctx = new SecretHarness(el);
-
-      expect(ctx.liveRegion.getAttribute('aria-atomic')).toBe('true');
-    });
-
-    it('should announce content when revealed', async () => {
-      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
-      const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await el.updateComplete;
-      const ctx = new SecretHarness(el);
-
-      expect(ctx.liveRegion.textContent).toBe('');
-
-      el.visible = true;
-      await el.updateComplete;
-
-      expect(ctx.liveRegion.textContent).toBe('Secret content');
-    });
-
-    it('should clear live region when hidden', async () => {
-      const screen = render(html`<forge-secret visible>Secret content</forge-secret>`);
-      const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await el.updateComplete;
-      const ctx = new SecretHarness(el);
-
-      expect(ctx.liveRegion.textContent).toBe('Secret content');
-
-      el.visible = false;
-      await el.updateComplete;
-
-      expect(ctx.liveRegion.textContent).toBe('');
-    });
-
-    it('should announce complex content', async () => {
+    it('should dispatch toggle events when closing grouped secrets', async () => {
       const screen = render(html`
-        <forge-secret>
-          <span>Username: </span>
-          <strong>admin</strong>
-        </forge-secret>
+        <div>
+          <forge-secret name="group1" open>Secret 1</forge-secret>
+          <forge-secret name="group1">Secret 2</forge-secret>
+        </div>
       `);
-      const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await el.updateComplete;
-      const ctx = new SecretHarness(el);
 
-      el.visible = true;
-      await el.updateComplete;
+      const secret1 = screen.container.querySelector('forge-secret:nth-child(1)') as SecretComponent;
+      const secret2 = screen.container.querySelector('forge-secret:nth-child(2)') as SecretComponent;
 
-      const liveText = ctx.liveRegion.textContent || '';
-      expect(liveText).toContain('Username');
-      expect(liveText).toContain('admin');
+      // Wait for both secrets to be fully initialized
+      await secret1.updateComplete;
+      await secret2.updateComplete;
+
+      const toggleSpy = vi.fn();
+      secret1.addEventListener('toggle', toggleSpy);
+
+      secret2.open = true;
+      await secret2.updateComplete;
+
+      expect(secret1.open).toBe(false);
+      expect(toggleSpy).toHaveBeenCalledOnce();
     });
   });
 
@@ -733,8 +828,8 @@ describe('Secret', () => {
       await expect(el).toBeAccessible();
     });
 
-    it('should be accessible when visible', async () => {
-      const screen = render(html`<forge-secret visible>Secret content</forge-secret>`);
+    it('should be accessible when open', async () => {
+      const screen = render(html`<forge-secret open>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await expect(el).toBeAccessible();
     });
@@ -742,7 +837,7 @@ describe('Secret', () => {
     it('should be accessible with label slot', async () => {
       const screen = render(html`
         <forge-secret>
-          <span slot="label">Password: </span>
+          <span slot="label">Password</span>
           secret123
         </forge-secret>
       `);
@@ -750,31 +845,10 @@ describe('Secret', () => {
       await expect(el).toBeAccessible();
     });
 
-    it('should be accessible with custom aria-label', async () => {
-      const screen = render(html`<forge-secret>abc123xyz</forge-secret>`);
+    it('should be accessible when block', async () => {
+      const screen = render(html`<forge-secret block>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await el.updateComplete;
-
-      // Set custom aria-label after component initialization
-      el.setAttribute('aria-label', 'API Key');
-      await el.updateComplete;
-
-      // Verify custom aria-label is applied
-      expect(el.getAttribute('aria-label')).toBe('API Key');
-      expect(el.getAttribute('role')).toBe('group');
-    });
-
-    it('should be accessible in all variants and states', async () => {
-      const variants: Array<'blur' | 'dots'> = ['blur', 'dots'];
-      const states = [false, true];
-
-      for (const variant of variants) {
-        for (const visible of states) {
-          const screen = render(html`<forge-secret variant=${variant} ?visible=${visible}>Secret content</forge-secret>`);
-          const el = screen.container.querySelector('forge-secret') as SecretComponent;
-          await expect(el).toBeAccessible();
-        }
-      }
+      await expect(el).toBeAccessible();
     });
   });
 
@@ -787,8 +861,7 @@ describe('Secret', () => {
 
       await ctx.clickButton();
 
-      expect(el.visible).toBe(true);
-      expect(ctx.liveRegion.textContent).toBe('');
+      expect(el.open).toBe(true);
     });
 
     it('should handle content with only whitespace', async () => {
@@ -799,7 +872,7 @@ describe('Secret', () => {
 
       await ctx.clickButton();
 
-      expect(el.visible).toBe(true);
+      expect(el.open).toBe(true);
     });
 
     it('should handle multiple rapid toggles', async () => {
@@ -809,77 +882,54 @@ describe('Secret', () => {
       const ctx = new SecretHarness(el);
 
       await ctx.clickButton();
-      expect(el.visible).toBe(true);
+      expect(el.open).toBe(true);
 
       await ctx.clickButton();
-      expect(el.visible).toBe(false);
+      expect(el.open).toBe(false);
 
       await ctx.clickButton();
-      expect(el.visible).toBe(true);
+      expect(el.open).toBe(true);
 
       await ctx.clickButton();
-      expect(el.visible).toBe(false);
+      expect(el.open).toBe(false);
     });
 
-    it('should handle programmatic visibility changes', async () => {
+    it('should handle programmatic open changes', async () => {
       const screen = render(html`<forge-secret>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      el.visible = true;
+      el.open = true;
       await el.updateComplete;
 
       expect(ctx.button.getAttribute('aria-expanded')).toBe('true');
       expect(ctx.contentElement.inert).toBe(false);
-      expect(ctx.liveRegion.textContent).toBe('Secret content');
 
-      el.visible = false;
+      el.open = false;
       await el.updateComplete;
 
       expect(ctx.button.getAttribute('aria-expanded')).toBe('false');
       expect(ctx.contentElement.inert).toBe(true);
-      expect(ctx.liveRegion.textContent).toBe('');
     });
 
-    it('should handle mixed text and element content', async () => {
-      const screen = render(html`
-        <forge-secret>
-          Text before
-          <span>Element content</span>
-          Text after
-        </forge-secret>
-      `);
-      const el = screen.container.querySelector('forge-secret') as SecretComponent;
-      await el.updateComplete;
-      const ctx = new SecretHarness(el);
-
-      el.visible = true;
-      await el.updateComplete;
-
-      const liveText = ctx.liveRegion.textContent || '';
-      expect(liveText).toContain('Text before');
-      expect(liveText).toContain('Element content');
-      expect(liveText).toContain('Text after');
-    });
-
-    it('should maintain state when variant changes', async () => {
-      const screen = render(html`<forge-secret visible>Secret content</forge-secret>`);
+    it('should maintain open state when variant changes', async () => {
+      const screen = render(html`<forge-secret open>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
 
-      expect(el.visible).toBe(true);
+      expect(el.open).toBe(true);
 
       el.variant = 'dots';
       await el.updateComplete;
 
-      expect(el.visible).toBe(true);
+      expect(el.open).toBe(true);
       expect(el.variant).toBe('dots');
     });
 
     it('should handle name changes in radio groups', async () => {
       const screen = render(html`
         <div>
-          <forge-secret name="group1" visible>Secret 1</forge-secret>
+          <forge-secret name="group1" open>Secret 1</forge-secret>
           <forge-secret name="group1">Secret 2</forge-secret>
         </div>
       `);
@@ -887,17 +937,48 @@ describe('Secret', () => {
       const secret1 = screen.container.querySelector('forge-secret:nth-child(1)') as SecretComponent;
       const secret2 = screen.container.querySelector('forge-secret:nth-child(2)') as SecretComponent;
 
-      expect(secret1.visible).toBe(true);
-      expect(secret2.visible).toBe(false);
+      expect(secret1.open).toBe(true);
+      expect(secret2.open).toBe(false);
 
       secret1.name = 'group2';
       await secret1.updateComplete;
 
-      secret2.visible = true;
+      secret2.open = true;
       await secret2.updateComplete;
 
-      expect(secret1.visible).toBe(true);
-      expect(secret2.visible).toBe(true);
+      expect(secret1.open).toBe(true);
+      expect(secret2.open).toBe(true);
+    });
+
+    it('should handle switching from inline to block', async () => {
+      const screen = render(html`<forge-secret>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      let ctx = new SecretHarness(el);
+
+      expect(ctx.getButtonType()).toBe('icon');
+
+      el.block = true;
+      await el.updateComplete;
+      ctx = new SecretHarness(el);
+
+      expect(ctx.getButtonType()).toBe('text');
+    });
+
+    it('should escape special regex characters in allow property', async () => {
+      const screen = render(html`<forge-secret variant="dots" allow=".-[]">test-[123]</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      // Wait for slotted content to be processed
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      const maskAttr = ctx.contentElement.getAttribute('data-mask');
+      expect(maskAttr).not.toBeNull();
+      expect(maskAttr!).toContain('-');
+      expect(maskAttr!).toContain('[');
+      expect(maskAttr!).toContain(']');
     });
   });
 });
