@@ -44,8 +44,8 @@ export const SECRET_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-secret';
  * @cssproperty --forge-secret-transition-easing - The timing function of transitions.
  *
  * @slot - Default slot for the secret content
- * @slot visible-icon - An icon that is shown when the secret is visible
- * @slot hidden-icon - An icon that is shown when the secret is hidden
+ * @slot close-icon - An icon that is shown when the secret is open, indicating it can be closed
+ * @slot open-icon - An icon that is shown when the secret is closed, indicating it can be opened
  * @slot label - Text content that appears in the tooltip attached to the button or as the button text when set to block
  *
  * @state open - Indicates that the content is visible
@@ -247,7 +247,7 @@ export class SecretComponent extends BaseLitElement {
 
   #renderIcon(): TemplateResult {
     return html`
-      <slot name="${this.open ? 'visible-icon' : 'hidden-icon'}">
+      <slot name="${this.open ? 'close-icon' : 'open-icon'}">
         <forge-icon class="icon" .name=${this.open ? 'eye_closed' : 'eye_outline'}></forge-icon>
       </slot>
     `;
