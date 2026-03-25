@@ -561,7 +561,7 @@ export class CalendarCore implements ICalendarCore {
       return;
     }
     const firstDay = new Date(this._year, this._month, 1);
-    this._setFocusedDate(this._getNextEnabledDate(firstDay, 1, false, true, true), setFocus);
+    this._setFocusedDate(this._getNextEnabledDate(firstDay, 1, false, true, true) ?? firstDay, setFocus);
   }
 
   /** Attempts to move the tabindex to the most recently focused date, returning whether the date was found in view */
@@ -607,13 +607,13 @@ export class CalendarCore implements ICalendarCore {
   /** Moves the tabindex to the first date of the month */
   private _moveFocusToFirstOfMonth(setFocus: boolean): void {
     const firstOfMonth = new Date(this._year, this._month, 1);
-    this._setFocusedDate(this._getNextEnabledDate(firstOfMonth, 1, false, true), setFocus);
+    this._setFocusedDate(this._getNextEnabledDate(firstOfMonth, 1, false, true, true) ?? firstOfMonth, setFocus);
   }
 
   /** Moves the tabindex to the last date of the month */
   private _moveFocusToLastOfMonth(setFocus: boolean): void {
     const lastOfMonth = new Date(this._year, this._month + 1, 0);
-    this._setFocusedDate(this._getPreviousEnabledDate(lastOfMonth, 1, false, true), setFocus);
+    this._setFocusedDate(this._getPreviousEnabledDate(lastOfMonth, 1, false, true, true) ?? lastOfMonth, setFocus);
   }
 
   /** Moves the tabindex to the same day and week of the next month */
