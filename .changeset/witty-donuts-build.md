@@ -2,4 +2,4 @@
 '@tylertech/forge': patch
 ---
 
-Prevents calendar infinite loop on navigation
+fix(calendar): prevents calendar infinite loop on navigation
