@@ -780,6 +780,44 @@ describe('Calendar', () => {
       expect(harness.monthButton.innerText).toBe('January');
     });
   });
+
+  describe('year selection constraint', () => {
+    it('should navigate to the max month when a year at the max boundary is selected and the current month exceeds the max month', async () => {
+      const harness = await createFixture();
+      harness.calendarElement.month = 11;
+      harness.calendarElement.year = 2023;
+      harness.calendarElement.max = new Date('3/31/2024');
+
+      harness.yearButton.click();
+      await task();
+
+      const menu = harness.menu.shadowRoot as ShadowRoot;
+      const yearOption = menu.querySelector(`[${CALENDAR_MENU_CONSTANTS.attributes.DATA_VALUE}="2024"]`) as HTMLElement;
+      yearOption?.click();
+      await task();
+
+      expect(harness.calendarElement.year).toBe(2024);
+      expect(harness.calendarElement.month).toBe(2);
+    });
+
+    it('should navigate to the min month when a year at the min boundary is selected and the current month is before the min month', async () => {
+      const harness = await createFixture();
+      harness.calendarElement.month = 0;
+      harness.calendarElement.year = 2025;
+      harness.calendarElement.min = new Date('3/1/2024');
+
+      harness.yearButton.click();
+      await task();
+
+      const menu = harness.menu.shadowRoot as ShadowRoot;
+      const yearOption = menu.querySelector(`[${CALENDAR_MENU_CONSTANTS.attributes.DATA_VALUE}="2024"]`) as HTMLElement;
+      yearOption?.click();
+      await task();
+
+      expect(harness.calendarElement.year).toBe(2024);
+      expect(harness.calendarElement.month).toBe(2);
+    });
+  });
 });
 
 class CalendarHarness {
