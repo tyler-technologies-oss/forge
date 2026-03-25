@@ -514,6 +514,13 @@ export class CalendarCore implements ICalendarCore {
 
   private _onYearSelected(year: number): void {
     this._year = year;
+    if (this._max && year === this._max.getFullYear() && this._month > this._max.getMonth()) {
+      this._month = this._max.getMonth();
+      this._setMonth();
+    } else if (this._min && year === this._min.getFullYear() && this._month < this._min.getMonth()) {
+      this._month = this._min.getMonth();
+      this._setMonth();
+    }
     this._setYear(true);
     this._trySetValueMonthAndYear(this._month, this._year, 'year');
     this._closeMenu(true);
