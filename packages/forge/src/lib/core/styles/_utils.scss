@@ -26,9 +26,7 @@
 /// ```
 ///
 @function module-ref($module, $token, $value, $type: ref, $prefix: config.$prefix) {
-  $fallback: if(
-    sass($type == ref): module-var($module, $value) ; else: $value
-  );
+  $fallback: if($type == ref, module-var($module, $value), $value);
   @return create-var($module, $token, $fallback, $prefix);
 }
 
@@ -134,8 +132,9 @@
   // that points to the provided value. This keeps the global cascading of internal tokens intact
   // instead of just overriding the token to a specific unchangeable value.
   $value: if(
-    sass($type == 'token' and map.has-key($module-tokens, $token-or-value)): module-var($module, $token-or-value) ;
-      else: create-var($module, $token, $token-or-value)
+    $type == 'token' and map.has-key($module-tokens, $token-or-value),
+    module-var($module, $token-or-value),
+    create-var($module, $token, $token-or-value)
   );
   #{create-module-var($module, $token)}: #{$value};
 }
