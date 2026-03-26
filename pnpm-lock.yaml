@@ -97,7 +97,7 @@ catalogs:
       specifier: ^6.1.1
       version: 6.1.1
 
-pnpmfileChecksum: sha256-UHFjjpxkBHZ6nQZ3rA6lLKiKcrirEq7SvMVmvTwoXis=
+pnpmfileChecksum: sha256-uUEEHfOyb+QuJr33najRoTHewCySL45tZQb7rdT6/8g=
 
 patchedDependencies:
   '@changesets/assemble-release-plan@6.0.9':
@@ -154,8 +154,8 @@ importers:
         specifier: 'catalog:'
         version: 1.1.6
       '@tylertech/forge-core':
-        specifier: 3.3.0-dev.0
-        version: 3.3.0-dev.0
+        specifier: 'workspace:'
+        version: link:../forge-core
       '@tylertech/tyler-icons':
         specifier: 'catalog:'
         version: 2.0.4
@@ -1339,9 +1339,6 @@ packages:
     peerDependenciesMeta:
       typescript-eslint:
         optional: true
-
-  '@tylertech/forge-core@3.3.0-dev.0':
-    resolution: {integrity: sha512-XzcvG0BHqdB4YV90lhHCU1CDdl8Jae7WDwSTJX72Im4FEcVCvOdEQ+oUlE1J0Ff/Ei04QAAlX4Cn/kMZUtLM8A==}
 
   '@tylertech/stylelint-rules@5.1.2':
     resolution: {integrity: sha512-UiptzTxnH6fFxkWb90U9aGgccXy46VQ8DChbS22t03Nt6Zy3awqFwUFmKu8O0j0jFLlHQuRwh6wvjnlKfnrNng==}
@@ -4944,10 +4941,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
       - typescript
-
-  '@tylertech/forge-core@3.3.0-dev.0':
-    dependencies:
-      tslib: 2.8.1
 
   '@tylertech/stylelint-rules@5.1.2(postcss@8.5.6)(stylelint@16.26.1(typescript@5.9.3))':
     dependencies:
