@@ -97,7 +97,7 @@ catalogs:
       specifier: ^6.1.1
       version: 6.1.1
 
-pnpmfileChecksum: sha256-blLIGyxY4V6KNtt5oeV7HhwJ1eRsWPfepHdZdCoCrz0=
+pnpmfileChecksum: sha256-uUEEHfOyb+QuJr33najRoTHewCySL45tZQb7rdT6/8g=
 
 patchedDependencies:
   '@changesets/assemble-release-plan@6.0.9':
