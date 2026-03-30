@@ -401,6 +401,99 @@ describe('Secret', () => {
       expect(icon).toBeTruthy();
       expect(icon?.getAttribute('name')).toBe('eye_closed');
     });
+
+    it('should apply noise variant when set', async () => {
+      const screen = render(html`<forge-secret variant="noise">Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+
+      expect(el.variant).toBe('noise');
+    });
+
+    it('should apply noise class when variant is noise and closed', async () => {
+      const screen = render(html`<forge-secret variant="noise">Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.contentElement.classList.contains('noise')).toBe(true);
+      expect(ctx.contentElement.classList.contains('blur')).toBe(false);
+      expect(ctx.contentElement.classList.contains('dots')).toBe(false);
+    });
+
+    it('should not apply noise class when open', async () => {
+      const screen = render(html`<forge-secret variant="noise" open>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.contentElement.classList.contains('noise')).toBe(false);
+      expect(ctx.contentElement.classList.contains('blur')).toBe(false);
+      expect(ctx.contentElement.classList.contains('dots')).toBe(false);
+    });
+
+    it('should render eye_outline icon for noise variant when closed', async () => {
+      const screen = render(html`<forge-secret variant="noise">Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      const icon = ctx.getIcon();
+      expect(icon).toBeTruthy();
+      expect(icon?.getAttribute('name')).toBe('eye_outline');
+    });
+
+    it('should change from blur to noise variant dynamically', async () => {
+      const screen = render(html`<forge-secret variant="blur">Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(el.variant).toBe('blur');
+      expect(ctx.contentElement.classList.contains('blur')).toBe(true);
+
+      el.variant = 'noise';
+      await el.updateComplete;
+
+      expect(el.variant).toBe('noise');
+      expect(ctx.contentElement.classList.contains('noise')).toBe(true);
+      expect(ctx.contentElement.classList.contains('blur')).toBe(false);
+    });
+
+    it('should change from dots to noise variant dynamically', async () => {
+      const screen = render(html`<forge-secret variant="dots">Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(el.variant).toBe('dots');
+      expect(ctx.contentElement.classList.contains('dots')).toBe(true);
+
+      el.variant = 'noise';
+      await el.updateComplete;
+
+      expect(el.variant).toBe('noise');
+      expect(ctx.contentElement.classList.contains('noise')).toBe(true);
+      expect(ctx.contentElement.classList.contains('dots')).toBe(false);
+    });
+
+    it('should not apply mask in noise variant', async () => {
+      const screen = render(html`<forge-secret variant="noise">test123</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.contentElement.hasAttribute('data-mask')).toBe(false);
+    });
+
+    it('should apply noise when block and closed with noise variant', async () => {
+      const screen = render(html`<forge-secret variant="noise" block>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await el.updateComplete;
+      const ctx = new SecretHarness(el);
+
+      expect(ctx.contentElement.classList.contains('noise')).toBe(true);
+      expect(ctx.contentElement.classList.contains('blur')).toBe(false);
+    });
   });
 
   describe('block property', () => {
@@ -828,6 +921,12 @@ describe('Secret', () => {
       await expect(el).toBeAccessible();
     });
 
+    it('should be accessible in noise variant', async () => {
+      const screen = render(html`<forge-secret variant="noise">Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+      await expect(el).toBeAccessible();
+    });
+
     it('should be accessible when open', async () => {
       const screen = render(html`<forge-secret open>Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
@@ -924,6 +1023,19 @@ describe('Secret', () => {
 
       expect(el.open).toBe(true);
       expect(el.variant).toBe('dots');
+    });
+
+    it('should maintain open state when changing to noise variant', async () => {
+      const screen = render(html`<forge-secret open>Secret content</forge-secret>`);
+      const el = screen.container.querySelector('forge-secret') as SecretComponent;
+
+      expect(el.open).toBe(true);
+
+      el.variant = 'noise';
+      await el.updateComplete;
+
+      expect(el.open).toBe(true);
+      expect(el.variant).toBe('noise');
     });
 
     it('should handle name changes in radio groups', async () => {

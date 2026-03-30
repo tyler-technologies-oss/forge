@@ -28,7 +28,7 @@ const meta = {
       tagName: component,
       exclude: ['name'],
       controls: {
-        variant: { control: 'select', options: ['blur', 'dots'] },
+        variant: { control: 'select', options: ['blur', 'dots', 'noise'] },
         buttonPosition: { control: 'select', options: ['start', 'end'] }
       }
     }),

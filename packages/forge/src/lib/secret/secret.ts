@@ -14,7 +14,7 @@ import { ButtonComponent } from '../button/index.js';
 
 import styles from './secret.scss';
 
-export type SecretVariant = 'blur' | 'dots';
+export type SecretVariant = 'blur' | 'dots' | 'noise';
 export type SecretButtonPosition = 'start' | 'end';
 
 export const SECRET_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-secret';
@@ -81,7 +81,7 @@ export class SecretComponent extends BaseLitElement {
   public open = false;
 
   /**
-   * The style applied to hidden content when the secret is set to inline. Possible values are blur and dots.
+   * The style applied to hidden content when the secret is set to inline. Possible values are blur, dots, and noise.
    * @attribute
    * @default 'blur'
    */
@@ -195,8 +195,9 @@ export class SecretComponent extends BaseLitElement {
         <span
           class=${classMap({
             content: true,
-            blur: !this.open && (this.block || this.variant === 'blur'),
-            dots: !this.open && !this.block && this.variant === 'dots'
+            blur: !this.open && (this.variant === 'blur' || (this.block && this.variant === 'dots')),
+            dots: !this.open && !this.block && this.variant === 'dots',
+            noise: !this.open && this.variant === 'noise'
           })}
           part="content"
           ?inert=${!this.open}
