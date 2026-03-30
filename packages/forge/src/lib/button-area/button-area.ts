@@ -169,8 +169,6 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
       return;
     }
 
-    // Stop propagation from the host - the click will be redispatched from the associated element if needed
-
     // Prevent the click if disabled
     if (this.disabled) {
       event.stopPropagation();
@@ -185,11 +183,11 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
     }
 
     // If the click occured outside an external associated element, trigger a click on it
+    // The event doesn't bubble so the host won't receive duplicate clicks
     const associatedElement = this.#associatedElement;
     if (!associatedElement) {
       return;
     }
-
     const clickOccurredInAssociatedElement = event.composedPath().includes(associatedElement);
     if (!clickOccurredInAssociatedElement) {
       associatedElement.dispatchEvent(
