@@ -18,7 +18,7 @@ const meta = {
     const style = styleMap({ ...cssVarArgs, width: args.ellipsis ? '100px' : null });
     return html`
       <forge-label-value .empty=${args.empty} .ellipsis=${args.ellipsis} .inline=${args.inline} style=${style}>
-        <label slot="label">Label</label>
+        <span slot="label">Label</span>
         ${args.empty ? html`<span slot="value">n/a</span>` : html`<span slot="value">A simple value</span>`}
       </forge-label-value>
     `;
@@ -53,7 +53,7 @@ export const Icon: Story = {
     return html`
       <forge-label-value>
         <forge-icon name="person" slot="icon"></forge-icon>
-        <label slot="label">Name</label>
+        <span slot="label">Name</span>
         <span slot="value">John Doe</span>
       </forge-label-value>
     `;

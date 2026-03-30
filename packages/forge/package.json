@@ -29,6 +29,13 @@
       "types": "./esm/*/index.d.ts",
       "default": "./esm/*/index.js"
     },
+    "./esm/*": {
+      "types": "./esm/*/index.d.ts",
+      "default": "./esm/*/index.js"
+    },
+    "./dist/*": {
+      "default": "./dist/*"
+    },
     "./custom-elements.json": {
       "default": "./custom-elements.json"
     },
