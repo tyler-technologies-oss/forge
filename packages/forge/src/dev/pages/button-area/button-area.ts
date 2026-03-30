@@ -11,8 +11,7 @@ import './button-area.scss';
 IconRegistry.define([tylIconChevronRight, tylIconFavorite, tylIconFavoriteBorder, tylIconInfo, tylIconOpenInNew]);
 
 const buttonArea = document.getElementById('button-area') as ButtonAreaComponent;
-const buttonAreaButton = buttonArea?.querySelector('button');
-buttonAreaButton?.addEventListener('click', () => alert('Click'));
+buttonArea?.addEventListener('click', () => alert('Click'));
 
 const expansionPanel = document.getElementById('expansion-panel') as IExpansionPanelComponent;
 const expansionPanelButtonArea = document.getElementById('expansion-panel-button-area') as ButtonAreaComponent;
