@@ -34,10 +34,10 @@ export const SECRET_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-secret';
  * sharing a name act as a radio group where only one can be revealed at a time.
  *
  * @cssproperty --forge-secret-blur - The radius of the blur effect.
- * @cssproperty --forge-secret-gap - The space between the button and content.
  * @cssproperty --forge-secret-button-background - The background color of the button.
  * @cssproperty --forge-secret-button-color - The text and icon color of the button.
  * @cssproperty --forge-secret-button-shape - The button's border radius.
+ * @cssproperty --forge-secret-button-padding - The inline padding around the button or inline and block padding around the text button.
  * @cssproperty --forge-secret-icon-size - The icon's size.
  * @cssproperty --forge-secret-text-button-shape - The text button's border radius.
  * @cssproperty --forge-secret-text-decoration-line - The decoration line applied to open inline content.
