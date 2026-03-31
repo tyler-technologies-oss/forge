@@ -49,6 +49,27 @@ describe('Button Area', () => {
     expect(clickSpy).toHaveBeenCalledOnce();
   });
 
+  it('should trigger non-bubbling click on button when clicking button area outside button', async () => {
+    const { el, button } = await createFixture({});
+    const heading = getHeadingEl(el);
+
+    let buttonClickEvent: Event | undefined;
+    const buttonClickSpy = vi.fn((e: Event) => {
+      buttonClickEvent = e;
+    });
+
+    button.addEventListener('click', buttonClickSpy);
+
+    // Click on the content area (outside the button)
+    heading.click();
+
+    // Button should receive the synthetic click
+    expect(buttonClickSpy).toHaveBeenCalledOnce();
+    // Verify the synthetic click event does not bubble
+    expect(buttonClickEvent).toBeDefined();
+    expect(buttonClickEvent!.bubbles).toBe(false);
+  });
+
   it('should handle keydown', async () => {
     const { el, button } = await createFixture({});
     const keydownSpy = vi.fn();
