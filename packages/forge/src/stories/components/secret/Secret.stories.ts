@@ -59,7 +59,7 @@ export const NamedGroup: Story = {
     <div style="display: flex; flex-direction: column; gap: 16px;">
       <forge-secret name="secrets">Lorem ipsum</forge-secret>
       <forge-secret name="secrets">Dolor sit amet</forge-secret>
-      <forge-secret name="secrets">consectetur adipiscing elit</forge-secret>
+      <forge-secret name="secrets">Consectetur adipiscing elit</forge-secret>
     </div>
   `
 };
