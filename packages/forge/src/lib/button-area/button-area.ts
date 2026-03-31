@@ -163,9 +163,16 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
   }
 
   #handleClick = (event: Event): void => {
+    // Ignore the click if it originates from an ignored element
+    if (this.#shouldIgnoreEvent(event)) {
+      event.stopPropagation();
+      return;
+    }
+
     // Prevent the click if disabled
     if (this.disabled) {
       event.stopPropagation();
+      return;
     }
 
     // Prevent the click if a selection was made
@@ -175,15 +182,21 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
       return;
     }
 
-    // Prevent the click if it originates from an ignored element
-    if (this.#shouldIgnoreEvent(event)) {
-      event.stopPropagation();
+    // If the click occured outside an external associated element, trigger a click on it
+    // The event doesn't bubble so the host won't receive duplicate clicks
+    const associatedElement = this.#associatedElement;
+    if (!associatedElement) {
       return;
     }
-
-    // If the click occured outside an external associated element, trigger a click on it
-    if (this.targetElement && !event.composedPath().includes(this.targetElement)) {
-      this.targetElement.click();
+    const clickOccurredInAssociatedElement = event.composedPath().includes(associatedElement);
+    if (!clickOccurredInAssociatedElement) {
+      associatedElement.dispatchEvent(
+        new PointerEvent('click', {
+          bubbles: false,
+          cancelable: true,
+          composed: true
+        })
+      );
     }
   };
 
