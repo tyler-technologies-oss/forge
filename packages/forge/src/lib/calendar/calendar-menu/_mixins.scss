@@ -293,7 +293,7 @@
 
 @mixin view-animation-in($from-left: true) {
   animation-duration: variables.$animation-duration;
-  animation-name: slide-in-#{if(sass($from-left): 'from-left' ; else: 'from-right')};
+  animation-name: slide-in-#{if($from-left, 'from-left', 'from-right')};
 
   @media (prefers-reduced-motion) {
     animation-name: fade-in;
@@ -302,7 +302,7 @@
 
 @mixin view-animation-out($to-right: true) {
   animation-duration: variables.$animation-duration;
-  animation-name: slide-out-#{if(sass($to-right): 'to-right' ; else: 'to-left')};
+  animation-name: slide-out-#{if($to-right, 'to-right', 'to-left')};
 
   @media (prefers-reduced-motion) {
     animation-name: fade-out;
