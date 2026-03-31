@@ -9,6 +9,7 @@ const component = 'forge-secret';
 
 const meta = {
   title: 'Components/Secret',
+  tags: ['new'],
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
