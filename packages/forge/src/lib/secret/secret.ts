@@ -12,6 +12,10 @@ import { IconComponent, IconRegistry } from '../icon/index.js';
 import { TooltipComponent } from '../tooltip/index.js';
 import { ButtonComponent } from '../button/index.js';
 
+import '../button/button.js';
+import '../icon-button/icon-button.js';
+import '../tooltip/tooltip.js';
+
 import styles from './secret.scss';
 
 export type SecretVariant = 'blur' | 'dots' | 'noise';
@@ -305,7 +309,7 @@ export class SecretComponent extends BaseLitElement {
   }
 
   #tryUpdateInternalMask(changedProperties: PropertyValues<this>): void {
-    if (this.block || this.variant === 'blur') {
+    if (this.block || this.variant !== 'dots') {
       return;
     }
 
