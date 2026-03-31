@@ -218,7 +218,6 @@ export class SecretComponent extends BaseLitElement {
       <forge-button
         class="text-button"
         exportparts="text-button"
-        dense
         aria-expanded="${this.open}"
         .ariaControlsElements=${[this]}
         @keydown="${this.#handleKeyDown}">
