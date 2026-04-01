@@ -47,20 +47,31 @@ export const SECRET_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-secret';
  * @cssproperty --forge-secret-transition-duration - The duration of transitions.
  * @cssproperty --forge-secret-transition-easing - The timing function of transitions.
  *
- * @slot - Default slot for the secret content
- * @slot close-icon - An icon that is shown when the secret is open, indicating it can be closed
- * @slot open-icon - An icon that is shown when the secret is closed, indicating it can be opened
- * @slot label - Text content that appears in the tooltip attached to the button or as the button text when set to block
+ * @slot - Default slot for the secret content.
+ * @slot close-icon - An icon that is shown when the secret is open, indicating it can be closed.
+ * @slot open-icon - An icon that is shown when the secret is closed, indicating it can be opened.
+ * @slot label - Text content that appears in the tooltip attached to the button or as the button text when set to block.
  *
- * @state open - Indicates that the content is visible
- * @state block - Indicates that the secret is displayed as a block element instead of inline
+ * @state open - Indicates that the content is visible.
+ * @state block - Indicates that the secret is displayed as a block element instead of inline.
  *
- * @csspart root - The root container
- * @csspart content - The content container
- * @csspart button - The toggle button element
- * @csspart text-button - The toggle button element when the secret is set to block
+ * @csspart root - The root container.
+ * @csspart content - The content container.
+ * @csspart button - The toggle button element.
+ * @csspart text-button - The toggle button element when the secret is set to block.
  *
- * @fires {ToggleEvent} toggle - Dispatched when the secret opens or closes
+ * @cssclass forge-secret - The secret component container (required).
+ * @cssclass forge-secret--blur - Applies a blur effect to conceal content when the button has `aria-expanded="false"`.
+ * @cssclass forge-secret--dots - Applies a dot mask to conceal content when the button has `aria-expanded="false"`. Not applicable when the secret is set to block. In that case the blur variant is used instead.
+ * @cssclass forge-secret--noise - Applies a noise effect to conceal content when the button has `aria-expanded="false"`.
+ * @cssclass forge-secret--block - Displays the secret as a block element.
+ * @cssclass forge-secret--show-on-hover - Reveals the secret content when hovering over the component or focusing the button.
+ * @cssclass forge-secret__content - The content to be concealed or revealed.
+ * @cssclass forge-secret__button - The icon button used to toggle an inline secret.
+ * @cssclass forge-secret__text-button - The text button used to toggle a block secret.
+ * @cssclass forge-secret__dots - The element replacing concealed content when the dots variant is used. The `data-mask` attribute on this element sets its content.
+ *
+ * @fires {ToggleEvent} toggle - Dispatched when the secret opens or closes.
  */
 @customElement(SECRET_TAG_NAME)
 export class SecretComponent extends BaseLitElement {
