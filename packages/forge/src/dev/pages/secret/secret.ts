@@ -26,24 +26,24 @@ if (variantSelect) {
     secrets.forEach(secret => {
       secret.variant = variantSelect.value as SecretVariant;
     });
-    const variantClasses = ['forge-secret--blur', 'forge-secret--dots', 'forge-secret--noise'];
+    const variantClasses = ['forge-secret--blur', 'forge-secret--masked', 'forge-secret--noise'];
     [cssOnlySecret, cssOnlyBlockSecret].forEach(secret => {
       if (secret) {
         secret.classList.remove(...variantClasses);
         secret.classList.add(`forge-secret--${variantSelect.value}`);
       }
-      if (variantSelect.value === 'dots') {
-        const dots = document.createElement('span');
-        dots.classList.add('forge-secret__dots');
-        secret?.prepend(dots);
+      if (variantSelect.value === 'masked') {
+        const masked = document.createElement('span');
+        masked.classList.add('forge-secret__masked');
+        secret?.prepend(masked);
       } else {
-        const dots = secret?.querySelector('.forge-secret__dots');
-        if (dots) {
-          secret?.removeChild(dots);
+        const masked = secret?.querySelector('.forge-secret__masked');
+        if (masked) {
+          secret?.removeChild(masked);
         }
       }
     });
-    if (variantSelect.value === 'dots') {
+    if (variantSelect.value === 'masked') {
       setCssSecretMasks();
     }
   });
@@ -152,9 +152,9 @@ function setCssSecretMasks(): void {
   const value = mask.replace(regex, maskCharacter);
 
   [cssOnlySecret, cssOnlyBlockSecret].forEach(secret => {
-    const dots = secret?.querySelector('.forge-secret__dots');
-    if (dots) {
-      dots.setAttribute('data-mask', value);
+    const masked = secret?.querySelector('.forge-secret__masked');
+    if (masked) {
+      masked.setAttribute('data-mask', value);
     }
   });
 }

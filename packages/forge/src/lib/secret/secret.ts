@@ -18,7 +18,7 @@ import '../tooltip/tooltip.js';
 
 import styles from './secret.scss';
 
-export type SecretVariant = 'blur' | 'dots' | 'noise';
+export type SecretVariant = 'blur' | 'masked' | 'noise';
 export type SecretButtonPosition = 'start' | 'end';
 
 export const SECRET_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-secret';
@@ -62,14 +62,14 @@ export const SECRET_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-secret';
  *
  * @cssclass forge-secret - The secret component container (required).
  * @cssclass forge-secret--blur - Applies a blur effect to conceal content when the button has `aria-expanded="false"`.
- * @cssclass forge-secret--dots - Applies a dot mask to conceal content when the button has `aria-expanded="false"`. Not applicable when the secret is set to block. In that case the blur variant is used instead.
+ * @cssclass forge-secret--masked - Applies a dot mask to conceal content when the button has `aria-expanded="false"`. Not applicable when the secret is set to block. In that case the blur variant is used instead.
  * @cssclass forge-secret--noise - Applies a noise effect to conceal content when the button has `aria-expanded="false"`.
  * @cssclass forge-secret--block - Displays the secret as a block element.
  * @cssclass forge-secret--show-on-hover - Reveals the secret content when hovering over the component or focusing the button.
  * @cssclass forge-secret__content - The content to be concealed or revealed.
  * @cssclass forge-secret__button - The icon button used to toggle an inline secret.
  * @cssclass forge-secret__text-button - The text button used to toggle a block secret.
- * @cssclass forge-secret__dots - The element replacing concealed content when the dots variant is used. The `data-mask` attribute on this element sets its content.
+ * @cssclass forge-secret__masked - The element replacing concealed content when the masked variant is used. The `data-mask` attribute on this element sets its content.
  *
  * @fires {ToggleEvent} toggle - Dispatched when the secret opens or closes.
  */
@@ -96,7 +96,7 @@ export class SecretComponent extends BaseLitElement {
   public open = false;
 
   /**
-   * The style applied to hidden content when the secret is set to inline. Possible values are blur, dots, and noise.
+   * The style applied to hidden content when the secret is set to inline. Possible values are blur, masked, and noise.
    * @attribute
    * @default 'blur'
    */
@@ -104,7 +104,7 @@ export class SecretComponent extends BaseLitElement {
   public variant: SecretVariant = 'blur';
 
   /**
-   * The mask pattern to use with the dots variant. When empty the slotted text content is used as the mask.
+   * The mask pattern to use with the masked variant. When empty the slotted text content is used as the mask.
    * @attribute
    * @default ''
    */
@@ -112,7 +112,7 @@ export class SecretComponent extends BaseLitElement {
   public mask = '';
 
   /**
-   * The character to replace characters with in the dots variant.
+   * The character to replace characters with in the masked variant.
    * @attribute mask-character
    * @default '●'
    */
@@ -120,7 +120,7 @@ export class SecretComponent extends BaseLitElement {
   public maskCharacter = '●';
 
   /**
-   * Characters that will not be replaced by the mask character in the dots variant.
+   * Characters that will not be replaced by the mask character in the masked variant.
    * @attribute
    * @default ''
    */
@@ -210,8 +210,8 @@ export class SecretComponent extends BaseLitElement {
         <span
           class=${classMap({
             content: true,
-            blur: !this.open && (this.variant === 'blur' || (this.block && this.variant === 'dots')),
-            dots: !this.open && !this.block && this.variant === 'dots',
+            blur: !this.open && (this.variant === 'blur' || (this.block && this.variant === 'masked')),
+            masked: !this.open && !this.block && this.variant === 'masked',
             noise: !this.open && this.variant === 'noise'
           })}
           part="content"
@@ -319,7 +319,7 @@ export class SecretComponent extends BaseLitElement {
   }
 
   #tryUpdateInternalMask(changedProperties: PropertyValues<this>): void {
-    if (this.block || this.variant !== 'dots') {
+    if (this.block || this.variant !== 'masked') {
       return;
     }
 

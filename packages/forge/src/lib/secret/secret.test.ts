@@ -331,11 +331,11 @@ describe('Secret', () => {
       expect(el.variant).toBe('blur');
     });
 
-    it('should apply dots variant when set', async () => {
-      const screen = render(html`<forge-secret variant="dots">Secret content</forge-secret>`);
+    it('should apply masked variant when set', async () => {
+      const screen = render(html`<forge-secret variant="masked">Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
 
-      expect(el.variant).toBe('dots');
+      expect(el.variant).toBe('masked');
     });
 
     it('should change variant dynamically', async () => {
@@ -344,10 +344,10 @@ describe('Secret', () => {
 
       expect(el.variant).toBe('blur');
 
-      el.variant = 'dots';
+      el.variant = 'masked';
       await el.updateComplete;
 
-      expect(el.variant).toBe('dots');
+      expect(el.variant).toBe('masked');
     });
 
     it('should apply blur class when variant is blur and closed', async () => {
@@ -357,16 +357,16 @@ describe('Secret', () => {
       const ctx = new SecretHarness(el);
 
       expect(ctx.contentElement.classList.contains('blur')).toBe(true);
-      expect(ctx.contentElement.classList.contains('dots')).toBe(false);
+      expect(ctx.contentElement.classList.contains('masked')).toBe(false);
     });
 
-    it('should apply dots class when variant is dots and closed', async () => {
-      const screen = render(html`<forge-secret variant="dots">Secret content</forge-secret>`);
+    it('should apply masked class when variant is masked and closed', async () => {
+      const screen = render(html`<forge-secret variant="masked">Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      expect(ctx.contentElement.classList.contains('dots')).toBe(true);
+      expect(ctx.contentElement.classList.contains('masked')).toBe(true);
       expect(ctx.contentElement.classList.contains('blur')).toBe(false);
     });
 
@@ -377,11 +377,11 @@ describe('Secret', () => {
       const ctx = new SecretHarness(el);
 
       expect(ctx.contentElement.classList.contains('blur')).toBe(false);
-      expect(ctx.contentElement.classList.contains('dots')).toBe(false);
+      expect(ctx.contentElement.classList.contains('masked')).toBe(false);
     });
 
-    it('should render eye_outline icon for dots variant when closed', async () => {
-      const screen = render(html`<forge-secret variant="dots">Secret content</forge-secret>`);
+    it('should render eye_outline icon for masked variant when closed', async () => {
+      const screen = render(html`<forge-secret variant="masked">Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
@@ -417,7 +417,7 @@ describe('Secret', () => {
 
       expect(ctx.contentElement.classList.contains('noise')).toBe(true);
       expect(ctx.contentElement.classList.contains('blur')).toBe(false);
-      expect(ctx.contentElement.classList.contains('dots')).toBe(false);
+      expect(ctx.contentElement.classList.contains('masked')).toBe(false);
     });
 
     it('should not apply noise class when open', async () => {
@@ -428,7 +428,7 @@ describe('Secret', () => {
 
       expect(ctx.contentElement.classList.contains('noise')).toBe(false);
       expect(ctx.contentElement.classList.contains('blur')).toBe(false);
-      expect(ctx.contentElement.classList.contains('dots')).toBe(false);
+      expect(ctx.contentElement.classList.contains('masked')).toBe(false);
     });
 
     it('should render eye_outline icon for noise variant when closed', async () => {
@@ -459,21 +459,21 @@ describe('Secret', () => {
       expect(ctx.contentElement.classList.contains('blur')).toBe(false);
     });
 
-    it('should change from dots to noise variant dynamically', async () => {
-      const screen = render(html`<forge-secret variant="dots">Secret content</forge-secret>`);
+    it('should change from masked to noise variant dynamically', async () => {
+      const screen = render(html`<forge-secret variant="masked">Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
 
-      expect(el.variant).toBe('dots');
-      expect(ctx.contentElement.classList.contains('dots')).toBe(true);
+      expect(el.variant).toBe('masked');
+      expect(ctx.contentElement.classList.contains('masked')).toBe(true);
 
       el.variant = 'noise';
       await el.updateComplete;
 
       expect(el.variant).toBe('noise');
       expect(ctx.contentElement.classList.contains('noise')).toBe(true);
-      expect(ctx.contentElement.classList.contains('dots')).toBe(false);
+      expect(ctx.contentElement.classList.contains('masked')).toBe(false);
     });
 
     it('should not apply mask in noise variant', async () => {
@@ -624,8 +624,8 @@ describe('Secret', () => {
       expect(el.allow).toBe('');
     });
 
-    it('should apply mask to content in dots variant', async () => {
-      const screen = render(html`<forge-secret variant="dots">test123</forge-secret>`);
+    it('should apply mask to content in masked variant', async () => {
+      const screen = render(html`<forge-secret variant="masked">test123</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       // Wait for slotted content to be processed
@@ -638,7 +638,7 @@ describe('Secret', () => {
     });
 
     it('should use custom mask character', async () => {
-      const screen = render(html`<forge-secret variant="dots" mask-character="*">test</forge-secret>`);
+      const screen = render(html`<forge-secret variant="masked" mask-character="*">test</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       // Wait for slotted content to be processed
@@ -651,7 +651,7 @@ describe('Secret', () => {
     });
 
     it('should use custom mask pattern', async () => {
-      const screen = render(html`<forge-secret variant="dots" mask="xxxx-xxxx">1234-5678</forge-secret>`);
+      const screen = render(html`<forge-secret variant="masked" mask="xxxx-xxxx">1234-5678</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       // Wait for mask to be computed
@@ -664,7 +664,7 @@ describe('Secret', () => {
     });
 
     it('should preserve allowed characters', async () => {
-      const screen = render(html`<forge-secret variant="dots" allow="-">test-123</forge-secret>`);
+      const screen = render(html`<forge-secret variant="masked" allow="-">test-123</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       // Wait for slotted content to be processed
@@ -686,7 +686,7 @@ describe('Secret', () => {
     });
 
     it('should not apply mask when block is true', async () => {
-      const screen = render(html`<forge-secret variant="dots" block>test123</forge-secret>`);
+      const screen = render(html`<forge-secret variant="masked" block>test123</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       const ctx = new SecretHarness(el);
@@ -915,8 +915,8 @@ describe('Secret', () => {
       await expect(el).toBeAccessible();
     });
 
-    it('should be accessible in dots variant', async () => {
-      const screen = render(html`<forge-secret variant="dots">Secret content</forge-secret>`);
+    it('should be accessible in masked variant', async () => {
+      const screen = render(html`<forge-secret variant="masked">Secret content</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await expect(el).toBeAccessible();
     });
@@ -1018,11 +1018,11 @@ describe('Secret', () => {
 
       expect(el.open).toBe(true);
 
-      el.variant = 'dots';
+      el.variant = 'masked';
       await el.updateComplete;
 
       expect(el.open).toBe(true);
-      expect(el.variant).toBe('dots');
+      expect(el.variant).toBe('masked');
     });
 
     it('should maintain open state when changing to noise variant', async () => {
@@ -1078,7 +1078,7 @@ describe('Secret', () => {
     });
 
     it('should escape special regex characters in allow property', async () => {
-      const screen = render(html`<forge-secret variant="dots" allow=".-[]">test-[123]</forge-secret>`);
+      const screen = render(html`<forge-secret variant="masked" allow=".-[]">test-[123]</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       // Wait for slotted content to be processed
