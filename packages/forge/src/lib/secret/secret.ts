@@ -121,11 +121,11 @@ export class SecretComponent extends BaseLitElement {
 
   /**
    * Characters that will not be replaced by the mask character in the masked variant.
-   * @attribute
+   * @attribute unmasked-characters
    * @default ''
    */
-  @property()
-  public allow = '';
+  @property({ attribute: 'unmasked-characters' })
+  public unmaskedCharacters = '';
 
   /**
    * Whether the secret content should be displayed as a block element instead of inline with text.
@@ -323,13 +323,13 @@ export class SecretComponent extends BaseLitElement {
       return;
     }
 
-    const maskRelatedProperties: (keyof SecretComponent)[] = ['allow', 'block', 'mask', 'maskCharacter', 'variant'];
+    const maskRelatedProperties: (keyof SecretComponent)[] = ['unmaskedCharacters', 'block', 'mask', 'maskCharacter', 'variant'];
     if (!maskRelatedProperties.some(prop => changedProperties.has(prop))) {
       return;
     }
 
     const content = this.mask || this.#getTextContent();
-    const regex = new RegExp(`[^${this.allow.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}]`, 'g');
+    const regex = new RegExp(`[^${this.unmaskedCharacters.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}]`, 'g');
     this._mask = content.replace(regex, this.maskCharacter);
   }
 }

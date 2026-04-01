@@ -16,7 +16,7 @@ const cssOnlyBlockSecretButton = cssOnlyBlockSecret?.querySelector('forge-button
 const variantSelect = document.getElementById('opt-variant') as SelectComponent;
 const maskInput = document.getElementById('opt-mask') as HTMLInputElement;
 const maskCharacterInput = document.getElementById('opt-mask-character') as HTMLInputElement;
-const allowInput = document.getElementById('opt-allow') as HTMLInputElement;
+const unmaskedCharactersInput = document.getElementById('opt-unmasked-characters') as HTMLInputElement;
 const buttonPositionSelect = document.getElementById('opt-button-position') as SelectComponent;
 const showOnHoverSwitch = document.getElementById('opt-show-on-hover') as SwitchComponent;
 
@@ -69,11 +69,11 @@ if (maskCharacterInput) {
   });
 }
 
-// Allow input
-if (allowInput) {
-  allowInput.addEventListener('input', () => {
+// Unmasked characters input
+if (unmaskedCharactersInput) {
+  unmaskedCharactersInput.addEventListener('input', () => {
     secrets.forEach(secret => {
-      secret.allow = allowInput.value;
+      secret.unmaskedCharacters = unmaskedCharactersInput.value;
     });
     setCssSecretMasks();
   });
@@ -147,8 +147,8 @@ if (cssOnlyBlockSecret && cssOnlyBlockSecretButton) {
 function setCssSecretMasks(): void {
   const mask = maskInput?.value || 'xxxxx';
   const maskCharacter = maskCharacterInput?.value || '';
-  const allow = allowInput?.value || '';
-  const regex = new RegExp(`[^${allow.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}]`, 'g');
+  const unmaskedCharacters = unmaskedCharactersInput?.value || '';
+  const regex = new RegExp(`[^${unmaskedCharacters.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}]`, 'g');
   const value = mask.replace(regex, maskCharacter);
 
   [cssOnlySecret, cssOnlyBlockSecret].forEach(secret => {

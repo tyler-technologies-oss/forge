@@ -83,7 +83,7 @@ describe('Secret', () => {
       expect(el.name).toBe('');
       expect(el.mask).toBe('');
       expect(el.maskCharacter).toBe('●');
-      expect(el.allow).toBe('');
+      expect(el.unmaskedCharacters).toBe('');
     });
 
     it('should have role group and default aria-label', async () => {
@@ -621,7 +621,7 @@ describe('Secret', () => {
 
       expect(el.mask).toBe('');
       expect(el.maskCharacter).toBe('●');
-      expect(el.allow).toBe('');
+      expect(el.unmaskedCharacters).toBe('');
     });
 
     it('should apply mask to content in masked variant', async () => {
@@ -664,7 +664,7 @@ describe('Secret', () => {
     });
 
     it('should preserve allowed characters', async () => {
-      const screen = render(html`<forge-secret variant="masked" allow="-">test-123</forge-secret>`);
+      const screen = render(html`<forge-secret variant="masked" unmasked-characters="-">test-123</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       // Wait for slotted content to be processed
@@ -1077,8 +1077,8 @@ describe('Secret', () => {
       expect(ctx.getButtonType()).toBe('text');
     });
 
-    it('should escape special regex characters in allow property', async () => {
-      const screen = render(html`<forge-secret variant="masked" allow=".-[]">test-[123]</forge-secret>`);
+    it('should escape special regex characters in unmasked-characters property', async () => {
+      const screen = render(html`<forge-secret variant="masked" unmasked-characters=".-[]">test-[123]</forge-secret>`);
       const el = screen.container.querySelector('forge-secret') as SecretComponent;
       await el.updateComplete;
       // Wait for slotted content to be processed

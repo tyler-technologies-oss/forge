@@ -46,7 +46,7 @@ const meta = {
     variant: 'blur',
     mask: '',
     maskCharacter: '●',
-    allow: '',
+    unmaskedCharacters: '',
     block: false,
     buttonPosition: 'end',
     showOnHover: false
