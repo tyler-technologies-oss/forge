@@ -1,1 +1,0 @@
-import{D as t,f as e,u as r}from"./constants-HtjJ9Nou.js";function o(a){class s extends a{connectedCallback(){super.connectedCallback?.(),this.hasAttribute(t)&&this[e]&&this[e][r](this),this.removeAttribute(t),delete this[e]}}return s}export{o as W};
