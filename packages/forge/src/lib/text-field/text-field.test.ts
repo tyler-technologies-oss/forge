@@ -5,7 +5,8 @@ import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
 import { frame } from '../core/utils/utils.js';
 import { TestHarness } from '../core/testing/test-harness.js';
-import type { ITextFieldComponent } from './text-field.js';
+import { TextFieldComponent, type ITextFieldComponent } from './text-field.js';
+import { TextFieldComponentDelegate } from './text-field-component-delegate.js';
 import { TEXT_FIELD_CONSTANTS } from './text-field-constants.js';
 import type { IFieldComponent } from '../field/index.js';
 import { FIELD_CONSTANTS } from '../field/field-constants.js';
@@ -286,6 +287,24 @@ describe('Text field', () => {
       await frame();
       expect(focusSpy).toHaveBeenCalled();
     });
+
+    it('should connect label to input when connected asynchronously', async () => {
+      const textField = document.createElement('forge-text-field') as ITextFieldComponent;
+      const label = document.createElement('label');
+      const input = document.createElement('input');
+      label.slot = 'label';
+      input.id = 'input';
+      textField.append(input);
+      textField.append(label);
+
+      await frame();
+      render(html`${textField}`);
+      const harness = new TextFieldHarness(textField);
+
+      await frame();
+      expect(label.htmlFor).toBe(input.id);
+      await expect(harness.element).toBeAccessible();
+    });
   });
 
   describe('floating label', () => {
@@ -334,6 +353,22 @@ describe('Text field', () => {
       harness.element.floatLabel = false;
       harness.inputElement.value = 'test';
       expect(harness.fieldElement.floatLabel).toBe(true);
+    });
+  });
+
+  describe('TextFieldComponentDelegate', async () => {
+    it('should create accessible text field', async () => {
+      const delegate = new TextFieldComponentDelegate({ options: { label: 'Label' } });
+      const textField = delegate.element;
+
+      await frame();
+      render(html`${textField}`);
+      const harness = new TextFieldHarness(textField);
+
+      await frame();
+      expect(harness.element.querySelector('label')?.innerText).toBe('Label');
+      expect(harness.element).toBeInstanceOf(TextFieldComponent);
+      await expect(harness.element).toBeAccessible();
     });
   });
 });

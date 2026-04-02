@@ -36,25 +36,25 @@ const chipsDisabledToggle = document.querySelector('#opt-disabled') as ISwitchCo
 
 // Action example
 const actionExample = document.querySelector('#chips-action');
-const actionChipSet = actionExample.querySelector('forge-chip-set');
-actionChipSet.addEventListener('forge-chip-select', ({ detail: { value } }) => {
+const actionChipSet = actionExample?.querySelector('forge-chip-set');
+actionChipSet?.addEventListener('forge-chip-select', ({ detail: { value } }) => {
   console.log('[forge-chip-select]', value);
   showToast(`Action Chip Selected: ${value}`);
 });
 
 // Input example
-let deletedChips = [];
+let deletedChips: IChipComponent[] = [];
 const inputExample = document.querySelector('#chips-input');
-const inputChipSet = inputExample.querySelector('forge-chip-set[type=input]');
-inputChipSet.addEventListener('forge-chip-delete', ({ target }) => {
+const inputChipSet = inputExample?.querySelector('forge-chip-set[type=input]');
+inputChipSet?.addEventListener('forge-chip-delete', ({ target }) => {
   console.log('[forge-chip-delete]', target);
-  deletedChips.push(target);
+  deletedChips.push(target as IChipComponent);
   (target as IChipComponent).remove();
 });
-const refreshButton = inputExample.querySelector('#refresh-button');
-refreshButton.addEventListener('click', () => {
+const refreshButton = inputExample?.querySelector('#refresh-button');
+refreshButton?.addEventListener('click', () => {
   deletedChips.forEach(chip => {
-    inputChipSet.appendChild(chip);
+    inputChipSet?.appendChild(chip);
   });
   deletedChips = [];
 });

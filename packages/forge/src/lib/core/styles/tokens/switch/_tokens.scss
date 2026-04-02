@@ -19,7 +19,7 @@ $tokens: (
   state-layer-dense-size: utils.module-val(switch, state-layer-dense-size, 28px),
   // Handle
   handle-on-color: utils.module-val(switch, handle-on-color, theme.variable(tertiary)),
-  handle-off-color: utils.module-val(switch, handle-off-color, theme.variable(surface-container-high)),
+  handle-off-color: utils.module-val(switch, handle-off-color, theme.variable(outline-medium)),
   handle-width: utils.module-ref(switch, handle-width, handle-size),
   handle-height: utils.module-ref(switch, handle-height, handle-size),
   handle-on-scale: utils.module-ref(switch, handle-on-scale, handle-scale),

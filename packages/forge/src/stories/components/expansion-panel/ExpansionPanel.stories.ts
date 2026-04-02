@@ -1,7 +1,7 @@
 import { html, nothing } from 'lit';
 import { action } from 'storybook/actions';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { classMap } from 'lit/directives/class-map.js';
@@ -106,6 +106,32 @@ export const WithUnslottedButton: Story = {
           <p>Content text</p>
         </forge-expansion-panel>
       </forge-card>`
+};
+
+export const NamedGroup: Story = {
+  render: ({ animationType, orientation }) => html`
+    <forge-expansion-panel name="panel-group" .animationType=${animationType} .orientation=${orientation}>
+      <button slot="header">Panel 1</button>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem nulla
+        quod corporis similique consequuntur facere laborum veniam error eius.
+      </p>
+    </forge-expansion-panel>
+    <forge-expansion-panel name="panel-group" .animationType=${animationType} .orientation=${orientation}>
+      <button slot="header">Panel 2</button>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem nulla
+        quod corporis similique consequuntur facere laborum veniam error eius.
+      </p>
+    </forge-expansion-panel>
+    <forge-expansion-panel name="panel-group" .animationType=${animationType} .orientation=${orientation}>
+      <button slot="header">Panel 3</button>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem nulla
+        quod corporis similique consequuntur facere laborum veniam error eius.
+      </p>
+    </forge-expansion-panel>
+  `
 };
 
 export const CSSOnly: Story = {

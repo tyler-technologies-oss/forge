@@ -43,6 +43,7 @@ export interface IMenuAdapter extends IBaseAdapter {
 
 export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAdapter {
   private _targetElement: HTMLElement | null;
+  private _accessibilityTarget: HTMLElement | null;
   private _listDropdown: IListDropdown | undefined;
   private _childMenus = new Map<number, IMenuComponent>();
 
@@ -63,9 +64,14 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
   }
 
   public initializeTarget(): void {
+    const firstChild = this._component.firstElementChild;
+    if (this._component.mode === 'cascade' && firstChild?.matches('forge-list-item')) {
+      this._targetElement = firstChild as HTMLElement;
+      return;
+    }
     this._targetElement = this._component.querySelector(MENU_CONSTANTS.selectors.TOGGLE);
     if (!this._targetElement) {
-      this._targetElement = this._component.firstElementChild as HTMLElement;
+      this._targetElement = firstChild as HTMLElement;
     }
   }
 
@@ -74,13 +80,22 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
       return;
     }
 
-    this._targetElement.setAttribute('aria-atomic', 'true');
-    this._targetElement.setAttribute('aria-live', 'assertive');
-    this._targetElement.setAttribute('aria-haspopup', 'true');
-    this._targetElement.setAttribute('aria-expanded', 'false');
+    this._accessibilityTarget = this._targetElement;
+    if (this._targetElement.matches('forge-list-item')) {
+      this._accessibilityTarget = this._targetElement.querySelector('button');
+    }
 
-    if (!this._targetElement.hasAttribute('aria-label')) {
-      this._targetElement.setAttribute('aria-label', this._targetElement.textContent || '');
+    if (!this._accessibilityTarget) {
+      return;
+    }
+
+    this._accessibilityTarget.setAttribute('aria-atomic', 'true');
+    this._accessibilityTarget.setAttribute('aria-live', 'assertive');
+    this._accessibilityTarget.setAttribute('aria-haspopup', 'true');
+    this._accessibilityTarget.setAttribute('aria-expanded', 'false');
+
+    if (!this._accessibilityTarget.hasAttribute('aria-label')) {
+      this._accessibilityTarget.setAttribute('aria-label', this._accessibilityTarget.textContent || '');
     }
   }
 
@@ -98,8 +113,8 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
     }
     this._listDropdown = new ListDropdown(config.referenceElement, config);
     this._listDropdown.open();
-    this._targetElement.setAttribute('aria-expanded', 'true');
-    this._targetElement.setAttribute('aria-controls', `list-dropdown-popup-${config.id}`);
+    this._accessibilityTarget?.setAttribute('aria-expanded', 'true');
+    this._accessibilityTarget?.setAttribute('aria-controls', `list-dropdown-popup-${config.id}`);
   }
 
   public setOptions(options: Array<IMenuOption | IMenuOptionGroup>): void {
@@ -112,9 +127,9 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
   }
 
   public async detachMenu(): Promise<void> {
-    this._targetElement?.removeAttribute('aria-activedescendant');
-    this._targetElement?.removeAttribute('aria-expanded');
-    this._targetElement?.removeAttribute('aria-controls');
+    this._accessibilityTarget?.removeAttribute('aria-activedescendant');
+    this._accessibilityTarget?.removeAttribute('aria-expanded');
+    this._accessibilityTarget?.removeAttribute('aria-controls');
 
     await this._listDropdown?.close();
     this._listDropdown?.destroy();
@@ -151,13 +166,13 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
   }
 
   public updateActiveDescendant(id: string): void {
-    if (!this._targetElement) {
+    if (!this._accessibilityTarget) {
       return;
     }
     if (id) {
-      this._targetElement.setAttribute('aria-activedescendant', id);
+      this._accessibilityTarget.setAttribute('aria-activedescendant', id);
     } else {
-      this._targetElement.removeAttribute('aria-activedescendant');
+      this._accessibilityTarget.removeAttribute('aria-activedescendant');
     }
   }
 

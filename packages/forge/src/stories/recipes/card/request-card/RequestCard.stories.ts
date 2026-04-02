@@ -1,8 +1,8 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
 import { tylIconOpenInNew } from '@tylertech/tyler-icons';
-import { storyStyles } from '../../../decorators';
-import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
+import { storyStyles } from '../../../decorators.js';
+import { IconRegistry } from '@tylertech/forge/icon';
 
 import '@tylertech/forge/card';
 import '@tylertech/forge/button';

@@ -3,6 +3,7 @@ import { IconRegistry } from '@tylertech/forge/icon';
 import { ISwitchComponent } from '@tylertech/forge/switch';
 import '@tylertech/forge/tree/tree';
 import '@tylertech/forge/tree/tree-item';
+import type { TreeMode } from '@tylertech/forge/tree/tree';
 import { tylIconBird, tylIconTree, tylIconWater, tylIconAddBox, tylIconGrass, tylIconIndeterminateCheckBox } from '@tylertech/tyler-icons';
 import './tree.scss';
 
@@ -27,7 +28,7 @@ window.addEventListener('forge-tree-item-close', console.log);
 
 modeSelect.addEventListener('change', () => {
   trees.forEach(tree => {
-    tree.mode = modeSelect.value as any;
+    tree.mode = modeSelect.value as TreeMode;
   });
 });
 

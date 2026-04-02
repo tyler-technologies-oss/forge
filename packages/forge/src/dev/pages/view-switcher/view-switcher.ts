@@ -13,6 +13,6 @@ tabBar.addEventListener('forge-tab-bar-change', ({ detail }) => {
   viewSwitcher.index = detail.index;
 });
 
-typeRadioGroup.addEventListener('change', evt => {
+typeRadioGroup?.addEventListener('change', evt => {
   viewSwitcher.animationType = (evt.target as HTMLInputElement).value as ViewSwitcherAnimationType;
 });

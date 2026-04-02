@@ -92,12 +92,12 @@ optRounded.addEventListener('forge-switch-change', ({ detail: selected }) => {
 
 const optOptionBuilder = document.querySelector('#opt-option-builder') as ISwitchComponent;
 optOptionBuilder.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  select.optionBuilder = selected ? optionBuilder : undefined;
+  select.optionBuilder = (selected ? optionBuilder : undefined) as typeof select.optionBuilder;
 });
 
 const optSelectedTextBuilder = document.querySelector('#opt-selected-text-builder') as ISwitchComponent;
 optSelectedTextBuilder.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  select.selectedTextBuilder = selected ? selectedTextBuilder : undefined;
+  select.selectedTextBuilder = (selected ? selectedTextBuilder : undefined) as typeof select.selectedTextBuilder;
 });
 
 const optShowSelectAll = document.querySelector('#opt-show-select-all') as ISwitchComponent;

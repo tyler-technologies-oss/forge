@@ -1,5 +1,5 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
+import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconSettings } from '@tylertech/tyler-icons';
 import { html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
@@ -7,7 +7,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/label';
-import { storyStyles } from '../../decorators';
+import { storyStyles } from '../../decorators.js';
 
 const component = 'forge-label';
 

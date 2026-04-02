@@ -1,18 +1,15 @@
-import { attachShadowTemplate, coerceBoolean, customElement } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { toggleState } from '../core/index.js';
 import { DIVIDER_CONSTANTS } from './divider-constants.js';
 
-import template from './divider.html';
 import styles from './divider.scss';
 
-export interface IDividerComponent extends IBaseComponent {
+/** @deprecated - This will be removed in the future. Please switch to using DividerComponent. */
+export interface IDividerComponent extends BaseLitElement {
   vertical: boolean;
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-divider': IDividerComponent;
-  }
 }
 
 /**
@@ -20,9 +17,7 @@ declare global {
  *
  * @summary Dividers are used to separate elements with a thin line, either vertically or horizontally.
  *
- * @property {boolean} [vertical=false] - Controls if the divider is displayed vertically or horizontally.
- *
- * @attribute {boolean} [vertical=false] - Controls if the divider is displayed vertically or horizontally.
+ * @state vertical - Applied when the divider is vertical.
  *
  * @cssproperty --forge-divider-color - The color of the divider.
  * @cssproperty --forge-divider-width - The width of the divider.
@@ -33,32 +28,41 @@ declare global {
  *
  * @cssclass forge-divider - The divider class.
  */
-@customElement({
-  name: DIVIDER_CONSTANTS.elementName
-})
-export class DividerComponent extends BaseComponent implements IDividerComponent {
-  public static get observedAttributes(): string[] {
-    return [DIVIDER_CONSTANTS.attributes.VERTICAL];
-  }
+@customElement(DIVIDER_CONSTANTS.elementName)
+export class DividerComponent extends BaseLitElement implements IDividerComponent {
+  public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = DIVIDER_CONSTANTS.elementName;
+
+  #internals: ElementInternals;
+
+  /**
+   * Controls if the divider is displayed vertically or horizontally.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public vertical = false;
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, styles);
+    this.#internals = this.attachInternals();
   }
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case DIVIDER_CONSTANTS.attributes.VERTICAL:
-        this.vertical = coerceBoolean(newValue);
-        break;
+  public willUpdate(changedProperties: PropertyValues): void {
+    if (changedProperties.has('vertical')) {
+      toggleState(this.#internals, 'vertical', this.vertical);
     }
   }
 
-  public get vertical(): boolean {
-    return this.hasAttribute(DIVIDER_CONSTANTS.attributes.VERTICAL);
+  public render(): TemplateResult {
+    return html`<div class="forge-divider" part="root"></div>`;
   }
+}
 
-  public set vertical(value: boolean) {
-    this.toggleAttribute(DIVIDER_CONSTANTS.attributes.VERTICAL, value);
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-divider': IDividerComponent;
   }
 }

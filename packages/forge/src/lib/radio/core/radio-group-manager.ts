@@ -41,7 +41,7 @@ export class RadioGroupManager {
     // If there's no associated form element search the root node
     if (!el.form && !form) {
       const root = rootNode ?? (el.getRootNode() as ShadowRoot | Document);
-      const namedRadios = root.querySelectorAll<IRadioComponent>(`${RADIO_CONSTANTS.elementName}[name=${el.name}]`);
+      const namedRadios = root.querySelectorAll<IRadioComponent>(`${RADIO_CONSTANTS.elementName}[name="${CSS.escape(el.name)}"]`);
       return Array.from(namedRadios).filter(radio => !radio.form);
     }
 

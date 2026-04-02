@@ -76,10 +76,7 @@ export class CheckboxCore implements ICheckboxCore {
     }
 
     this.checked = newValue;
-
-    // Toggle indeterminate off after a user action
-    this._indeterminate = false;
-    this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.INDETERMINATE, this._indeterminate);
+    this.indeterminate = false;
   }
 
   public get checked(): boolean {
@@ -88,7 +85,7 @@ export class CheckboxCore implements ICheckboxCore {
   public set checked(value: boolean) {
     if (this._checked !== value) {
       this._checked = value;
-      this._adapter.setChecked(this._checked);
+      this._adapter.setChecked(this._checked, this._indeterminate);
       this._adapter.syncValue(this._submittedValue, this._formState);
       this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.CHECKED, this._checked);
     }
@@ -110,6 +107,7 @@ export class CheckboxCore implements ICheckboxCore {
   public set indeterminate(value: boolean) {
     if (this._indeterminate !== value) {
       this._indeterminate = value;
+      this._adapter.setChecked(this._checked, this._indeterminate);
       this._adapter.syncValue(this._submittedValue, this._formState);
       this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.INDETERMINATE, this._indeterminate);
     }

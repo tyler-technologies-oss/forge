@@ -13,15 +13,16 @@ This repository is a monorepo that contains the following packages:
 | Package | Description |
 |---------|-------------|
 | [@tylertech/forge](./packages/forge) | Web components library |
+| [@tylertech/forge-core](./packages/forge-core) | Core utilities and base classes for building web components |
 
 ## Development
 
-If you want to contribute or develop locally, fork this repository, and then run the following commands from the root of the project to view the dev site:
+**Important:** This repository uses [pnpm](https://pnpm.io/) as the package manager.
+
+Install dependencies:
 
 ```bash
 pnpm install
-pnpm run dev:forge
-pnpm run storybook:forge
 ```
 
 ## Links
@@ -29,3 +30,4 @@ pnpm run storybook:forge
 - [Documentation](https://forge.tylerdev.io/)
 - [Contributing](./CONTRIBUTING.md)
 - [Changelog](./CHANGELOG.md)
+- [License](./LICENSE)

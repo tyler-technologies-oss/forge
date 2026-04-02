@@ -9,7 +9,7 @@ import { POPOVER_CONSTANTS } from '../popover/index.js';
 import { IPopoverComponent } from '../popover/popover.js';
 import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field/index.js';
 import { IAutocompleteComponent } from './autocomplete.js';
-import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants.js';
+import { AutocompleteEmptyStateBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants.js';
 
 export interface IAutocompleteAdapter extends IBaseAdapter {
   readonly inputElement: HTMLInputElement;
@@ -22,7 +22,12 @@ export interface IAutocompleteAdapter extends IBaseAdapter {
   show(config: IListDropdownConfig, popupTarget: string): void;
   hide(listener: () => void, options: { destroy?: boolean }): Promise<void>;
   focus(): void;
-  setOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
+  setOptions(
+    options: IAutocompleteOption[] | IAutocompleteOptionGroup[],
+    filterText?: string,
+    emptyMessage?: string | null,
+    emptyStateBuilder?: AutocompleteEmptyStateBuilder | null
+  ): void;
   appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   setSelectedText(value: string): void;
   getInputValue(): string;
@@ -152,8 +157,13 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     window.requestAnimationFrame(() => this._inputElement.focus());
   }
 
-  public setOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void {
-    this._listDropdown?.setOptions(options);
+  public setOptions(
+    options: IAutocompleteOption[] | IAutocompleteOptionGroup[],
+    filterText?: string,
+    emptyMessage?: string | null,
+    emptyStateBuilder?: AutocompleteEmptyStateBuilder | null
+  ): void {
+    this._listDropdown?.setOptions(options, filterText, emptyMessage ?? undefined, emptyStateBuilder ?? undefined);
   }
 
   public appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void {

@@ -1,6 +1,6 @@
 import { ArgTypes, Args, type StoryObj } from '@storybook/web-components-vite';
 import { type ControlType } from '@storybook/addon-docs/blocks';
-import cem from '../../custom-elements.json';
+import cem from '../../custom-elements.json' with { type: 'json' };
 
 /** Global theme options for components that support a `theme` attribute. */
 export const GLOBAL_THEME_OPTIONS = ['primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'];
@@ -50,7 +50,7 @@ export const removeSourceStyleTagParams: StoryObj = {
  */
 export function transformCssPropsToControls(tagName: string): object {
   const declaration = cem.modules.flatMap((module: any) => module.declarations).find((dec: any) => dec.tagName === tagName);
-  return declaration.cssProperties.reduce((acc: object, prop: any) => {
+  return declaration.cssProperties.reduce((acc: Record<string, { control: string }>, prop: any) => {
     acc[prop.name] = { control: 'text' };
     return acc;
   }, {});
@@ -77,16 +77,15 @@ export function customElementStoryRenderer<T extends keyof HTMLElementTagNameMap
  * @param props {Partial<HTMLElement>} - The props to apply
  */
 export function applyArgs(element: HTMLElement, props: Partial<HTMLElement>): void {
+  const propsRecord = props as Record<string, unknown>;
+  const elementRecord = element as unknown as Record<string, unknown>;
   Object.keys(props).forEach(key => {
     if (key.startsWith('--')) {
-      // Set CSS custom properties via inline style
-      element.style.setProperty(key, props[key]);
+      element.style.setProperty(key, propsRecord[key] as string);
     } else if (key.includes('-')) {
-      // Args with dashes in the name are considered HTML attributes
-      element.setAttribute(key, props[key]);
+      element.setAttribute(key, propsRecord[key] as string);
     } else if (key in element) {
-      // Everything else is considered a JavaScript property if it exists on the element
-      element[key] = props[key];
+      elementRecord[key] = propsRecord[key];
     }
   });
 }
@@ -95,7 +94,7 @@ export function applyArgs(element: HTMLElement, props: Partial<HTMLElement>): vo
  * Get the CSS custom properties args from a full set of args (any arg that is prefixed with "--" is considered a CSS variable).
  */
 export function getCssVariableArgs(args: Args): Args | null {
-  const cssVarArgs = Object.entries(args).reduce((acc, [key, value]) => {
+  const cssVarArgs = Object.entries(args).reduce((acc: Args, [key, value]) => {
     if (key.startsWith('--') && value !== '') {
       acc[key] = value;
     }
@@ -169,8 +168,8 @@ export function generateCustomElementArgTypes({
   return argTypes;
 }
 
-function generateArgTypesFrom(items: TagItem[], category: string, controlType?: ControlType): object {
-  return items.reduce((acc: object, property: any) => {
+function generateArgTypesFrom(items: TagItem[], category: string, controlType?: ControlType): Record<string, unknown> {
+  return items.reduce((acc: Record<string, unknown>, property: any) => {
     acc[property.name] = {
       control: controlType ?? getControlFromType(property.type.text),
       defaultValue: property.default,
@@ -191,8 +190,8 @@ export function getCustomElementsTagDeclaration(tagName: string): Declaration {
 }
 
 /** Attempts to retrieve the Forge type information for the provided type string. */
-export function getCustomElementType(type: string): unknown {
-  return cem.forgeTypes[type];
+export function getCustomElementType(type: string): { path: string; lineNumber: number } | undefined {
+  return (cem.forgeTypes as Record<string, { path: string; lineNumber: number }>)[type];
 }
 
 /** Gets the branch name that the custom elements manifest was generated with. */

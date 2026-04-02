@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { action } from 'storybook/actions';
-import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
-import { SortDirection, type IColumnConfiguration, type ITableComponent, type ITableSortEventData } from '@tylertech/forge/table';
+import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils.js';
+import { SortDirection, type IColumnConfiguration, type ITableComponent, type ITableSortEventData, type ITableFilterEventData } from '@tylertech/forge/table';
 import { TextFieldComponentDelegate } from '@tylertech/forge/text-field';
 
 import '@tylertech/forge/table';
@@ -31,6 +31,7 @@ const COLUMNS: IColumnConfiguration[] = [
   {
     header: 'First Name',
     property: 'firstName',
+    footer: 'Summary',
     sortable: true,
     initialSort: true,
     filter: true,
@@ -39,6 +40,7 @@ const COLUMNS: IColumnConfiguration[] = [
   {
     header: 'Last Name',
     property: 'lastName',
+    footer: `${DATA.length} rows`,
     sortable: true,
     filter: true,
     filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter last name...' }, props: { showClear: true } })
@@ -46,13 +48,14 @@ const COLUMNS: IColumnConfiguration[] = [
   {
     header: 'Age',
     property: 'age',
+    footer: `Avg: ${Math.round(DATA.reduce((sum, row) => sum + row.age, 0) / DATA.length)}`,
     sortable: true,
     filter: true,
     filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter age...' }, props: { showClear: true } })
   }
 ];
 
-const TABLE_FILTER_VALUES = { firstName: '', lastName: '', age: '' };
+const TABLE_FILTER_VALUES: Record<string, string> = { firstName: '', lastName: '', age: '' };
 
 const meta = {
   title: 'Components/Table',
@@ -67,7 +70,7 @@ const meta = {
     tableEl.addEventListener('forge-table-initialized', initializedAction);
     tableEl.addEventListener('forge-table-column-resize', columnResizeAction);
 
-    tableEl.addEventListener('forge-table-filter', evt => {
+    tableEl.addEventListener('forge-table-filter', (evt: CustomEvent<ITableFilterEventData>) => {
       filterAction(evt);
 
       const filter = evt.detail.value;
@@ -80,7 +83,7 @@ const meta = {
           if (TABLE_FILTER_VALUES[key] === '') {
             return true;
           }
-          return row[key].toString().toLowerCase().includes(TABLE_FILTER_VALUES[key].toLowerCase());
+          return (row as Record<string, unknown>)[key]?.toString().toLowerCase().includes(TABLE_FILTER_VALUES[key].toLowerCase());
         })
       );
     });
@@ -90,16 +93,17 @@ const meta = {
 
       const direction = evt.detail.direction;
       const columnIndex = evt.detail.columnIndex;
+      const property = COLUMNS[columnIndex].property as string;
 
       tableEl.data = DATA.sort((a, b) => {
-        const aVal = a[COLUMNS[columnIndex].property as string];
-        const bVal = b[COLUMNS[columnIndex].property as string];
+        const aVal = (a as Record<string, unknown>)[property];
+        const bVal = (b as Record<string, unknown>)[property];
 
         if (typeof aVal === 'number' && typeof bVal === 'number') {
           return direction === SortDirection.Ascending ? aVal - bVal : bVal - aVal;
         }
 
-        return direction === SortDirection.Ascending ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+        return direction === SortDirection.Ascending ? String(aVal).localeCompare(String(bVal)) : String(bVal).localeCompare(String(aVal));
       });
     });
 
@@ -134,7 +138,8 @@ const meta = {
     minResizeWidth: 100,
     allowRowClick: false,
     multiColumnSort: false,
-    selectCheckboxAlignment: 'center'
+    selectCheckboxAlignment: 'center',
+    includeFooter: false
   }
 } satisfies Meta<ITableComponent>;
 

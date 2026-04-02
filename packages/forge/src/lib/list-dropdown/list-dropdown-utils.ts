@@ -514,6 +514,24 @@ export function createBusyElement(): ILinearProgressComponent {
   return linearProgress;
 }
 
+export function createEmptyStateElement(content: HTMLElement | string): HTMLElement {
+  const container = document.createElement('div');
+  container.style.textAlign = 'center';
+  container.style.paddingInline = '16px';
+  container.style.color = 'var(--forge-theme-text-medium)';
+  container.style.fontSize = '0.875rem';
+  container.setAttribute(LIST_DROPDOWN_CONSTANTS.attributes.DATA_EMPTY_STATE, '');
+  container.setAttribute(LIST_DROPDOWN_CONSTANTS.attributes.DATA_ALLOW_FOCUS, '');
+
+  if (typeof content === 'string') {
+    container.textContent = content;
+  } else {
+    container.appendChild(content);
+  }
+
+  return container;
+}
+
 function getOptionsByGroup(options: Array<IListDropdownOption | IListDropdownOptionGroup>): IListDropdownOptionGroup[] {
   return isListDropdownOptionType(options, ListDropdownOptionType.Group)
     ? (options as IListDropdownOptionGroup[])

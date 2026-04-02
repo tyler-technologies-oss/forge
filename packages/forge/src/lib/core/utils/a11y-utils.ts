@@ -268,7 +268,7 @@ export interface ARIAMixinStrict extends ARIAMixin {
   ariaAtomic: 'true' | 'false' | null;
   ariaAutoComplete: 'none' | 'inline' | 'list' | 'both' | null;
   ariaBusy: 'true' | 'false' | null;
-  ariaChecked: 'true' | 'false' | null;
+  ariaChecked: 'true' | 'false' | 'mixed' | null;
   ariaColCount: `${number}` | null;
   ariaColIndex: `${number}` | null;
   ariaColSpan: `${number}` | null;

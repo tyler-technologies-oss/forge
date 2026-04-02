@@ -1,7 +1,7 @@
 import { html, nothing } from 'lit-html';
 import { styleMap } from 'lit/directives/style-map.js';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
 
 import '@tylertech/forge/state-layer';
 import '@tylertech/forge/focus-indicator';

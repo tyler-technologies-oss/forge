@@ -69,7 +69,7 @@ startSwitch.addEventListener('forge-switch-change', () => {
   } else {
     fields.forEach(field => {
       const icon = field.querySelector('forge-icon[slot=start]');
-      icon.remove();
+      icon?.remove();
     });
   }
 });
@@ -85,7 +85,7 @@ endSwitch.addEventListener('forge-switch-change', () => {
   } else {
     fields.forEach(field => {
       const icon = field.querySelector('forge-icon[slot=end]');
-      icon.remove();
+      icon?.remove();
     });
   }
 });
@@ -107,7 +107,7 @@ accessorySwitch.addEventListener('forge-switch-change', () => {
   } else {
     fields.forEach(field => {
       const icon = field.querySelector('forge-icon-button[slot=accessory]');
-      icon.remove();
+      icon?.remove();
     });
   }
 });
@@ -123,7 +123,7 @@ supportTextSwitch.addEventListener('forge-switch-change', () => {
   } else {
     fields.forEach(field => {
       const text = field.querySelector('span[slot=support-text]');
-      text.remove();
+      text?.remove();
     });
   }
 });
@@ -139,7 +139,7 @@ supportTextEndSwitch.addEventListener('forge-switch-change', () => {
   } else {
     fields.forEach(field => {
       const text = field.querySelector('span[slot=support-text-end]');
-      text.remove();
+      text?.remove();
     });
   }
 });
@@ -190,7 +190,7 @@ insetFields.forEach(field => {
 });
 
 insetMultilineField.addEventListener('input', (event: InputEvent) => (insetMultilineField.floatLabel = !!(event.target as HTMLTextAreaElement).value));
-insetMultilineField.floatLabel = !!insetMultilineField.querySelector('textarea').value;
+insetMultilineField.floatLabel = !!(insetMultilineField.querySelector('textarea') as HTMLTextAreaElement | null)?.value;
 
 fields.forEach(field => {
   field.addEventListener('forge-field-popover-icon-click', () => console.log('popover icon clicked'));
@@ -199,7 +199,7 @@ fields.forEach(field => {
 // CSS only examples
 
 const cssOnlyInsetInput = document.getElementById('my-css-only-input-inset') as HTMLInputElement;
-cssOnlyInsetInput.addEventListener('input', (event: InputEvent) => {
+cssOnlyInsetInput.addEventListener('input', () => {
   const field = cssOnlyInsetInput.parentElement;
-  field.classList.toggle('forge-field--float-label', !!cssOnlyInsetInput.value);
+  field?.classList.toggle('forge-field--float-label', !!cssOnlyInsetInput.value);
 });

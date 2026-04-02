@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
-import { storyStyles } from '../../decorators';
-import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
+import { storyStyles } from '../../decorators.js';
+import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils.js';
 
 import '@tylertech/forge/accordion';
 import '@tylertech/forge/divider';

@@ -1,9 +1,9 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { storyStyles } from 'src/stories/decorators';
+import { storyStyles } from '../../decorators.js';
 
 import '@tylertech/forge/scaffold';
 import styles from './Scaffold.scss?inline';

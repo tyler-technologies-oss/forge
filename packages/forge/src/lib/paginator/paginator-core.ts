@@ -41,6 +41,7 @@ export class PaginatorCore {
   private _disabled = false;
   private _alternative = false;
   private _rangeLabelCallback: PaginatorRangeLabelBuilder;
+  private _initialized = false;
 
   private _firstPageListener: EventListener = this._onFirstPage.bind(this);
   private _previousPageListener: EventListener = this._onPreviousPage.bind(this);
@@ -58,6 +59,7 @@ export class PaginatorCore {
     this._attachListeners();
     this._toggleFirstLastButtons();
     this._syncInteractionState();
+    this._initialized = true;
   }
 
   public focus(options?: FocusOptions): void {
@@ -191,6 +193,10 @@ export class PaginatorCore {
     }
 
     this._adapter.setRangeLabel(rangeLabel);
+
+    if (this._initialized) {
+      this._adapter.announceChange(rangeLabel);
+    }
   }
 
   private _syncInteractionState(): void {

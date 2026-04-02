@@ -6,7 +6,7 @@ import { ICheckboxComponent } from './checkbox.js';
 import { CheckboxLabelPosition, CheckboxState, CHECKBOX_CONSTANTS } from './checkbox-constants.js';
 
 export interface ICheckboxAdapter extends IBaseAdapter {
-  setChecked(value: boolean): void;
+  setChecked(checked: boolean, indeterminate: boolean): void;
   setDisabled(value: boolean): void;
   setRequired(value: boolean): void;
   setReadonly(value: boolean): void;
@@ -27,9 +27,10 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
     this._stateLayerElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.STATE_LAYER) as StateLayerComponent;
   }
 
-  public setChecked(value: boolean): void {
+  public setChecked(checked: boolean, indeterminate: boolean): void {
     this._component[setValidity]();
-    this._component[setDefaultAria]({ ariaChecked: value ? 'true' : 'false' });
+    const ariaChecked = indeterminate ? 'mixed' : checked ? 'true' : 'false';
+    this._component[setDefaultAria]({ ariaChecked });
   }
 
   public setDisabled(value: boolean): void {

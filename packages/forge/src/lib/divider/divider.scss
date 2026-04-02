@@ -22,7 +22,7 @@ $host-tokens: [margin];
   @include base;
 }
 
-:host([vertical]) {
+:host(:state(vertical)) {
   @include vertical-host;
 
   .forge-divider {

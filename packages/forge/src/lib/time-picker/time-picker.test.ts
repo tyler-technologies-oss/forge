@@ -821,6 +821,18 @@ describe('TimePickerComponent', () => {
       expect(harness.element.step).toBe(expectedMinutes);
     });
 
+    it('should default step to 60 when set to zero', async () => {
+      harness = await createFixture();
+      harness.element.step = 0;
+      expect(harness.element.step).toBe(TIME_PICKER_CONSTANTS.numbers.DEFAULT_MINUTE_STEP);
+    });
+
+    it('should default step to 60 when set to negative value', async () => {
+      harness = await createFixture();
+      harness.element.step = -15;
+      expect(harness.element.step).toBe(TIME_PICKER_CONSTANTS.numbers.DEFAULT_MINUTE_STEP);
+    });
+
     it('should set allowInput via attribute', async () => {
       harness = await createFixture();
       harness.element.setAttribute(TIME_PICKER_CONSTANTS.attributes.ALLOW_INPUT, 'false');

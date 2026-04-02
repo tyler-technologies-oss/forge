@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { action } from 'storybook/actions';
-import { customElementStoryRenderer, generateCustomElementArgTypes, removeInlineStyleTag, standaloneStoryParams } from '../../utils';
-import { storyStyles } from '../../decorators';
+import { customElementStoryRenderer, generateCustomElementArgTypes, removeInlineStyleTag, standaloneStoryParams } from '../../utils.js';
+import { storyStyles } from '../../decorators.js';
 
 import '@tylertech/forge/slider';
 import styles from './Slider.scss?inline';

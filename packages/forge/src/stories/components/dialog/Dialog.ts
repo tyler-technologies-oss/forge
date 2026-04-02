@@ -3,8 +3,8 @@ import { ArgTypes } from '@storybook/web-components-vite';
 import { action } from 'storybook/actions';
 import { DialogPreset } from '@tylertech/forge/dialog';
 import { tylIconClose } from '@tylertech/tyler-icons';
-import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
-import { customElementStoryRenderer } from '../../utils';
+import { IconRegistry } from '@tylertech/forge/icon';
+import { customElementStoryRenderer } from '../../utils.js';
 
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/button';
@@ -36,7 +36,7 @@ export const Dialog = (args: ArgTypes): HTMLDivElement => {
   const dialog = customElementStoryRenderer('forge-dialog', args);
   dialog.label = 'My dialog title';
   dialog.description = 'My dialog description';
-  dialog.addEventListener('forge-dialog-close', evt => {
+  dialog.addEventListener('forge-dialog-close', (evt: Event) => {
     closeEventAction(evt);
     dialog.open = false;
   });

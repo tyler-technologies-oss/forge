@@ -2,7 +2,7 @@ import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { action } from 'storybook/actions';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils.js';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconChevronRight, tylIconFavorite } from '@tylertech/tyler-icons';
 
@@ -13,7 +13,7 @@ import '@tylertech/forge/icon';
 import '@tylertech/forge/tooltip';
 
 import styles from './ButtonArea.scss?inline';
-import { storyStyles } from 'src/stories/decorators';
+import { storyStyles } from '../../decorators.js';
 
 const component = 'forge-button-area';
 

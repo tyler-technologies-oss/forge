@@ -1,9 +1,9 @@
 import { html, nothing } from 'lit';
 import { action } from 'storybook/actions';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { storyStyles } from '../../decorators';
+import { storyStyles } from '../../decorators.js';
 
 import '@tylertech/forge/select';
 

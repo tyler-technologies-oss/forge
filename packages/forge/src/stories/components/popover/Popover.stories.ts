@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { html, nothing } from 'lit';
 import { action } from 'storybook/actions';
-import { OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
+import { OVERLAY_PLACEMENT_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
 import { IPopoverComponent, IPopoverToggleEventData, type IPopoverProperties } from '@tylertech/forge/popover';
 import { styleMap } from 'lit/directives/style-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { ToastComponent } from '@tylertech/forge/toast';
 import { type IButtonComponent } from '@tylertech/forge/button';
-import { storyStyles } from '../../decorators';
+import { storyStyles } from '../../decorators.js';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge/popover';

@@ -24,7 +24,15 @@ import {
   LIST_DROPDOWN_CONSTANTS,
   ListDropdownType
 } from './list-dropdown-constants.js';
-import { createAsyncElement, createBusyElement, createCheckboxElement, createDropdown, createList, createListItems } from './list-dropdown-utils.js';
+import {
+  createAsyncElement,
+  createBusyElement,
+  createCheckboxElement,
+  createDropdown,
+  createEmptyStateElement,
+  createList,
+  createListItems
+} from './list-dropdown-utils.js';
 
 export interface IListDropdownAdapter {
   dropdownElement: HTMLElement | undefined;
@@ -56,6 +64,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
   private _announcerElement: HTMLElement | undefined;
   private _scrollObserver: ScrollAxisObserver | undefined;
   private _asyncElement: HTMLElement | undefined;
+  private _emptyStateElement: HTMLElement | undefined;
   private _busyElement: ILinearProgressComponent;
   private _headerElement: HTMLElement;
   private _footerElement: HTMLElement;
@@ -128,6 +137,8 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
       if (this._footerElement) {
         this._dropdownElement.appendChild(this._footerElement);
       }
+    } else if (config.emptyStateBuilder || config.emptyMessage) {
+      this._renderEmptyState(config);
     } else if (config.allowBusy) {
       this._asyncElement = createAsyncElement(config.asyncStyle);
       this._dropdownElement.appendChild(this._asyncElement);
@@ -161,6 +172,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     this._dropdownElement = undefined;
     this._listElement = undefined;
     this._announcerElement = undefined;
+    this._emptyStateElement = undefined;
   }
 
   public setScrollBottomListener(listener: () => void, scrollThreshold: number): void {
@@ -291,22 +303,35 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     if (this._asyncElement && this._asyncElement.isConnected) {
       removeElement(this._asyncElement);
     }
+    if (this._emptyStateElement && this._emptyStateElement.isConnected) {
+      removeElement(this._emptyStateElement);
+      this._emptyStateElement = undefined;
+    }
     if (this._busyElement) {
       this._busyElement.style.display = 'none';
     }
-    if (!this._listElement.isConnected) {
-      this._dropdownElement.appendChild(this._listElement);
+
+    if (config.options.length) {
+      if (!this._listElement.isConnected) {
+        this._dropdownElement.appendChild(this._listElement);
+      }
+
+      removeAllChildren(this._listElement);
+      createListItems(config, this._listElement);
+
+      if (this._headerElement && !this._headerElement.isConnected) {
+        this._dropdownElement.insertAdjacentElement('afterbegin', this._headerElement);
+      }
+      if (this._footerElement && !this._footerElement.isConnected) {
+        this._dropdownElement.insertAdjacentElement('beforeend', this._footerElement);
+      }
+    } else if (config.emptyStateBuilder || config.emptyMessage) {
+      if (this._listElement.isConnected) {
+        removeElement(this._listElement);
+      }
+      this._renderEmptyState(config);
     }
 
-    removeAllChildren(this._listElement);
-    createListItems(config, this._listElement);
-
-    if (this._headerElement && !this._headerElement.isConnected) {
-      this._dropdownElement.insertAdjacentElement('afterbegin', this._headerElement);
-    }
-    if (this._footerElement && !this._footerElement.isConnected) {
-      this._dropdownElement.insertAdjacentElement('beforeend', this._footerElement);
-    }
     if ('position' in this._dropdownElement && typeof this._dropdownElement.position === 'function') {
       this._dropdownElement.position();
     }
@@ -394,5 +419,12 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
   private _getSelectedListItem(): IListItemComponent | undefined {
     const listItems = this._getListItemElements();
     return listItems.find(li => li.selected);
+  }
+
+  private _renderEmptyState(config: IListDropdownOpenConfig): void {
+    const filterText = config.filterText ?? '';
+    const content = config.emptyStateBuilder ? config.emptyStateBuilder(filterText) : (config.emptyMessage as string);
+    this._emptyStateElement = createEmptyStateElement(content);
+    (this._dropdownElement as HTMLElement).appendChild(this._emptyStateElement);
   }
 }

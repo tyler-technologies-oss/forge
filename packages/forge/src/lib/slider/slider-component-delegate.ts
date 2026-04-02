@@ -86,28 +86,28 @@ export class SliderComponentDelegate extends FormFieldComponentDelegate<ISliderC
     this._element.labelBuilder = value;
   }
 
-  public onInput(listener: (value: ISliderChangeEventData) => void): void {
-    this._element.addEventListener('forge-slider-input', ({ detail }: CustomEvent<ISliderChangeEventData>) => listener(detail));
+  public onInput(listener: (value: ISliderChangeEventData) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener('forge-slider-input', ({ detail }: CustomEvent<ISliderChangeEventData>) => listener(detail), options);
   }
 
-  public onChange(listener: (value: ISliderChangeEventData) => void): void {
-    this._element.addEventListener('forge-slider-change', ({ detail }: CustomEvent<ISliderChangeEventData>) => listener(detail));
+  public onChange(listener: (value: ISliderChangeEventData) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener('forge-slider-change', ({ detail }: CustomEvent<ISliderChangeEventData>) => listener(detail), options);
   }
 
-  public onRangeInput(listener: (value: ISliderRangeChangeEventData) => void): void {
-    this._element.addEventListener('forge-slider-range-input', ({ detail }: CustomEvent<ISliderRangeChangeEventData>) => listener(detail));
+  public onRangeInput(listener: (value: ISliderRangeChangeEventData) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener('forge-slider-range-input', ({ detail }: CustomEvent<ISliderRangeChangeEventData>) => listener(detail), options);
   }
 
-  public onRangeChange(listener: (value: ISliderRangeChangeEventData) => void): void {
-    this._element.addEventListener('forge-slider-range-change', ({ detail }: CustomEvent<ISliderRangeChangeEventData>) => listener(detail));
+  public onRangeChange(listener: (value: ISliderRangeChangeEventData) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener('forge-slider-range-change', ({ detail }: CustomEvent<ISliderRangeChangeEventData>) => listener(detail), options);
   }
 
-  public onFocus(listener: (evt: Event) => void): void {
-    this._element.addEventListener('focus', evt => listener(evt));
+  public onFocus(listener: (evt: Event) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener('focus', evt => listener(evt), options);
   }
 
-  public onBlur(listener: (evt: Event) => void): void {
-    this._element.addEventListener('blur', evt => listener(evt));
+  public onBlur(listener: (evt: Event) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener('blur', evt => listener(evt), options);
   }
 
   protected _build(): ISliderComponent {

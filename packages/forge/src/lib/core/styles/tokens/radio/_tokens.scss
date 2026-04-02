@@ -8,7 +8,7 @@
 $tokens: (
   // Shared
   primary-color: utils.module-val(radio, primary-color, theme.variable(tertiary)),
-  inactive-color: utils.module-val(radio, inactive-color, theme.variable(surface-container-high)),
+  inactive-color: utils.module-val(radio, inactive-color, theme.variable(outline-medium)),
   size: utils.module-val(radio, size, 20px),
   mark-size: utils.module-val(radio, mark-size, 75%),
   state-layer-size: utils.module-val(radio, state-layer-size, 40px),

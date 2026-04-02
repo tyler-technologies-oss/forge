@@ -47,16 +47,16 @@ export class SelectComponentDelegate extends FormFieldComponentDelegate<ISelectC
     this._element.invalid = value;
   }
 
-  public onChange(listener: (value: string) => void): void {
-    this._element.addEventListener('change', (evt: CustomEvent<string>) => listener(evt.detail));
+  public onChange(listener: (value: string) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener('change', (evt: CustomEvent<string>) => listener(evt.detail), options);
   }
 
-  public onFocus(listener: (evt: Event) => void): void {
-    this._element.addEventListener('focus', evt => listener(evt));
+  public onFocus(listener: (evt: Event) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener('focus', evt => listener(evt), options);
   }
 
-  public onBlur(listener: (evt: Event) => void): void {
-    this._element.addEventListener('blur', evt => listener(evt));
+  public onBlur(listener: (evt: Event) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener('blur', evt => listener(evt), options);
   }
 
   public setHelperText(text: string | null): void {

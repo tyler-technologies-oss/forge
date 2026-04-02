@@ -11,6 +11,7 @@ export interface ITableAdapter extends IBaseAdapter {
   getTableElement: () => HTMLTableElement;
   createTable: (configuration: ITableConfiguration) => void;
   recreateTableBody: (configuration: ITableConfiguration) => void;
+  recreateTableFoot: (configuration: ITableConfiguration) => void;
   setSelectedRows: (tableElement: HTMLTableElement, key: string[], data: any[], selectedRows: any[], preserveExisting?: boolean) => void;
   clearSelectedRows: (tableElement: HTMLTableElement) => void;
   updateSelectedState: (rowElement: HTMLTableRowElement, isSelected: boolean) => void;
@@ -69,6 +70,7 @@ export interface ITableAdapter extends IBaseAdapter {
  */
 export class TableAdapter extends BaseAdapter<ITableComponent> implements ITableAdapter {
   private _tableElement: HTMLTableElement;
+  private _filterListenerController = new AbortController();
 
   constructor(component: ITableComponent) {
     super(component);
@@ -95,11 +97,16 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
   }
 
   public createTable(configuration: ITableConfiguration): void {
-    return TableUtils.createTable(configuration);
+    this._resetFilterListeners();
+    return TableUtils.createTable(configuration, this._filterListenerController.signal);
   }
 
   public recreateTableBody(configuration: ITableConfiguration): void {
     TableUtils.recreateTableBody(configuration);
+  }
+
+  public recreateTableFoot(configuration: ITableConfiguration): void {
+    TableUtils.recreateTableFoot(configuration);
   }
 
   public setSelectedRows(tableElement: HTMLTableElement, key: string[], data: any[], selectedRows: any[], preserveExisting: boolean = false): void {
@@ -181,7 +188,8 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
   }
 
   public setFilterRow(configuration: ITableConfiguration): void {
-    TableUtils.setFilterRow(configuration);
+    this._resetFilterListeners();
+    TableUtils.setFilterRow(configuration, this._filterListenerController.signal);
   }
 
   public expandRow(configuration: ITableConfiguration, rowIndex: number, template: TableViewTemplate): Promise<void> {
@@ -243,5 +251,10 @@ export class TableAdapter extends BaseAdapter<ITableComponent> implements ITable
 
   public setRowClickAttributes(tableElement: HTMLTableElement, allowClick: boolean): void {
     TableUtils.setRowClickAttributes(tableElement, allowClick);
+  }
+
+  private _resetFilterListeners(): void {
+    this._filterListenerController.abort();
+    this._filterListenerController = new AbortController();
   }
 }

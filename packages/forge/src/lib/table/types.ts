@@ -17,7 +17,12 @@ export declare type TableTemplateBuilder<T = any> = (
 export declare type TableHeaderTemplateBuilder = (
   rowIndex: number,
   div: HTMLElement,
-  columConfig: IColumnConfiguration
+  columnConfig: IColumnConfiguration
+) => HTMLElement | string | Promise<HTMLElement | string>;
+export declare type TableFooterTemplateBuilder = (
+  rowIndex: number,
+  div: HTMLElement,
+  columnConfig: IColumnConfiguration
 ) => HTMLElement | string | Promise<HTMLElement | string>;
 export declare type TableHeaderSelectAllTemplate = () => HTMLElement | string | Promise<HTMLElement | string>;
 export declare type TableRowCreatedCallback = (rowElement: HTMLTableRowElement, rowIndex: number, rowData: any) => void;
@@ -40,6 +45,7 @@ export interface ITableConfiguration {
   filter: boolean;
   wrapContent: boolean;
   resizable: boolean;
+  includeFooter: boolean;
   fixedHeaders: boolean;
   layoutType: TableLayoutType;
   selectCheckboxAlignment: CellAlign;
@@ -63,6 +69,8 @@ export interface IColumnConfiguration {
   template?: TableTemplateBuilder;
   headerTemplate?: TableHeaderTemplateBuilder;
   header?: string;
+  footerTemplate?: TableFooterTemplateBuilder;
+  footer?: string;
   hidden?: boolean;
   sortable?: boolean;
   preventUnsort?: boolean;
@@ -76,6 +84,7 @@ export interface IColumnConfiguration {
   filterDebounceTime?: number;
   cellStyle?: Partial<CSSStyleDeclaration>;
   headerCellStyle?: Partial<CSSStyleDeclaration>;
+  footerCellStyle?: Partial<CSSStyleDeclaration>;
   resizable?: boolean;
   columnSpan?: 'all' | number;
   stopCellTemplateClickPropagation?: boolean;

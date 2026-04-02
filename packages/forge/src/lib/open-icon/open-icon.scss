@@ -38,7 +38,7 @@ forge-icon {
 // Open
 //
 
-:host([open]) {
+:host(:state(open)) {
   .forge-open-icon {
     @include open;
   }
@@ -48,30 +48,24 @@ forge-icon {
 // Orientation
 //
 
-:host([orientation='horizontal']) {
-  .forge-open-icon {
-    @include override(initial-rotation, -90deg, value);
-    @include override(open-rotation, 90deg, value);
-  }
+.forge-open-icon.horizontal {
+  @include override(initial-rotation, -90deg, value);
+  @include override(open-rotation, 90deg, value);
 }
 
 //
 // Rotation
 //
 
-:host([rotation='half']) {
-  .forge-open-icon {
-    @include override(open-rotation, -90deg, value);
-    @include override(animation-duration, half-animation-duration);
-  }
+.forge-open-icon.half-rotation {
+  @include override(open-rotation, -90deg, value);
+  @include override(animation-duration, half-animation-duration);
 }
 
-:host([orientation='horizontal'][rotation='half']) {
-  .forge-open-icon {
-    @include override(initial-rotation, -90deg, value);
-    @include override(open-rotation, 0, value);
-    @include override(animation-duration, half-animation-duration);
-  }
+.forge-open-icon.horizontal.half-rotation {
+  @include override(initial-rotation, -90deg, value);
+  @include override(open-rotation, 0, value);
+  @include override(animation-duration, half-animation-duration);
 }
 
 //

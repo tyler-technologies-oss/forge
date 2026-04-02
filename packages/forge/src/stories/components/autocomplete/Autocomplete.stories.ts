@@ -1,11 +1,12 @@
 import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { action } from 'storybook/actions';
-import { generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+import { generateCustomElementArgTypes, standaloneStoryParams } from '../../utils.js';
 import { AutocompleteFilterCallback, AutocompleteOptionBuilder, IAutocompleteComponent } from '@tylertech/forge/autocomplete';
 import { IOption } from '@tylertech/forge/select';
 import { createRef, ref } from 'lit/directives/ref.js';
-import { storyStyles } from '../../decorators';
+import { storyStyles } from '../../decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 import '@tylertech/forge/autocomplete';
 import '@tylertech/forge/avatar';
@@ -102,6 +103,7 @@ const meta = {
         .constrainPopupWidth=${args.constrainPopupWidth}
         .wrapOptionText=${args.wrapOptionText}
         .selectFirstOptionOnBlur=${args.selectFirstOptionOnBlur}
+        empty-message=${ifDefined(args.emptyMessage)}
         @forge-autocomplete-change=${changeAction}
         @forge-autocomplete-select=${selectAction}
         @forge-autocomplete-scrolled-bottom=${scrolledBottomAction}>
@@ -129,7 +131,8 @@ const meta = {
         'popupHeaderBuilder',
         'popupFooterBuilder',
         'matchKey',
-        'open'
+        'open',
+        'emptyStateBuilder'
       ],
       controls: {
         mode: {

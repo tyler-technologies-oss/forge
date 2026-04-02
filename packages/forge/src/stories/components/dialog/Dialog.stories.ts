@@ -4,9 +4,9 @@ import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconClose } from '@tylertech/tyler-icons';
 import { html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
-import { storyStyles } from '../../decorators';
-import { generateCustomElementArgTypes } from '../../utils';
-import { Dialog } from './Dialog';
+import { storyStyles } from '../../decorators.js';
+import { generateCustomElementArgTypes } from '../../utils.js';
+import { Dialog } from './Dialog.js';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge/dialog';

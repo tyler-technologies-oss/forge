@@ -53,28 +53,24 @@ export class DatePickerComponentDelegate extends FormFieldComponentDelegate<IDat
     this._textFieldDelegate.invalid = value;
   }
 
-  public onChange(listener: (value: string) => void): void {
+  public onChange(listener: (value: string) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, (evt: CustomEvent) => listener(evt.detail), options);
+  }
+
+  public onInput(listener: (value: string) => void, options?: AddEventListenerOptions): void {
     if (this._element.masked) {
-      this._element.addEventListener(DATE_PICKER_CONSTANTS.events.INPUT, evt => listener((evt.target as HTMLInputElement).value));
+      this._element.addEventListener(DATE_PICKER_CONSTANTS.events.INPUT, (evt: CustomEvent) => listener(evt.detail), options);
     } else {
-      this.getInputElement().addEventListener('input', evt => listener((evt.target as HTMLInputElement).value));
+      this._textFieldDelegate.inputElement.addEventListener('input', evt => listener((evt.target as HTMLInputElement).value), options);
     }
   }
 
-  public onInput(listener: (value: string) => void): void {
-    if (this._element.masked) {
-      this._element.addEventListener(DATE_PICKER_CONSTANTS.events.INPUT, (evt: CustomEvent) => listener(evt.detail));
-    } else {
-      this._textFieldDelegate.inputElement.addEventListener('input', evt => listener((evt.target as HTMLInputElement).value));
-    }
+  public onFocus(listener: (evt: FocusEvent) => void, options?: AddEventListenerOptions): void {
+    this._textFieldDelegate.inputElement.addEventListener('focus', (evt: FocusEvent) => listener(evt), options);
   }
 
-  public onFocus(listener: (evt: FocusEvent) => void): void {
-    this._textFieldDelegate.inputElement.addEventListener('focus', (evt: FocusEvent) => listener(evt));
-  }
-
-  public onBlur(listener: (evt: FocusEvent) => void): void {
-    this._textFieldDelegate.inputElement.addEventListener('blur', (evt: FocusEvent) => listener(evt));
+  public onBlur(listener: (evt: FocusEvent) => void, options?: AddEventListenerOptions): void {
+    this._textFieldDelegate.inputElement.addEventListener('blur', (evt: FocusEvent) => listener(evt), options);
   }
 
   private _attachTextField(datePicker: IDatePickerComponent): void {

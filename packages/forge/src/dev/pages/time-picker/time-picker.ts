@@ -50,10 +50,14 @@ const inputValueElement = document.querySelector('#time-picker-input-value');
 
 timePicker.addEventListener('forge-time-picker-change', ({ detail }) => {
   console.log('[TimePicker] change', detail);
-  modelValueElement.textContent = detail || 'null';
+  if (modelValueElement) {
+    modelValueElement.textContent = detail || 'null';
+  }
 });
 timePicker.addEventListener('forge-time-picker-input', () => {
-  inputValueElement.textContent = timePickerInput.value || '""';
+  if (inputValueElement) {
+    inputValueElement.textContent = timePickerInput.value || '""';
+  }
 });
 
 opt24HourToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
@@ -78,9 +82,9 @@ optUseCustomOptionsToggle.addEventListener('forge-switch-change', ({ detail: sel
   timePicker.customOptions = selected ? CUSTOM_OPTIONS : [];
 });
 optUseCustomCallbacksToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  timePicker.validationCallback = selected ? validationCallback : null;
-  timePicker.parseCallback = selected ? parseCallback : null;
-  timePicker.formatCallback = selected ? formatCallback : null;
+  timePicker.validationCallback = (selected ? validationCallback : undefined) as typeof timePicker.validationCallback;
+  timePicker.parseCallback = (selected ? parseCallback : undefined) as typeof timePicker.parseCallback;
+  timePicker.formatCallback = (selected ? formatCallback : undefined) as typeof timePicker.formatCallback;
 });
 optAllowDropdownToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.allowDropdown = selected;
@@ -95,14 +99,16 @@ optUseRestrictedTimesToggle.addEventListener('forge-switch-change', ({ detail: s
   timePicker.restrictedTimes = selected ? RESTRICTED_TIMES : [];
 });
 optUseCoercionCallbackToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  timePicker.coercionCallback = selected ? coercionCallback : undefined;
+  timePicker.coercionCallback = (selected ? coercionCallback : undefined) as typeof timePicker.coercionCallback;
 });
 optDisabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   timePicker.disabled = selected;
 });
 optValueTimePicker.addEventListener('forge-time-picker-change', ({ detail }) => {
   timePicker.value = detail;
-  modelValueElement.textContent = timePicker.value;
+  if (modelValueElement) {
+    modelValueElement.textContent = timePicker.value ?? '';
+  }
 });
 optMinTimePicker.addEventListener('forge-time-picker-change', ({ detail }) => {
   timePicker.min = detail;
@@ -114,23 +120,23 @@ optStartTimePicker.addEventListener('forge-time-picker-change', ({ detail }) => 
   timePicker.startTime = detail;
 });
 
-function validationCallback(value): boolean {
+function validationCallback(value: string): boolean {
   return /[1-9]/.test(value);
 }
 
-function parseCallback(value): number {
+function parseCallback(value: string): number | null {
   if (!value || !value.length) {
     return null;
   }
   return +value[0] * 60 * 60 * 1000;
 }
 
-function formatCallback(value): string {
+function formatCallback(value: number): string {
   const hours = value / (1000 * 60 * 60);
   return String(hours)[0] + ' hours';
 }
 
-function coercionCallback(rawValue, coercedValue, allowSeconds): string {
+function coercionCallback(rawValue: string, coercedValue: string, allowSeconds: boolean): string {
   // Capturing a special case that we'd like to coerce values to
   if (rawValue === '120' || rawValue === '12:0') {
     let result = '01:20';

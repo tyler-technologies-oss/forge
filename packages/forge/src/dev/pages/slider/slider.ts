@@ -47,5 +47,5 @@ labelsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (
 
 const labelBuilderToggle = document.querySelector('#slider-label-builder') as ISwitchComponent;
 labelBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  slider.labelBuilder = selected ? (value: number) => `Value: ${value}` : undefined;
+  slider.labelBuilder = (selected ? (value: number) => `Value: ${value}` : undefined) as typeof slider.labelBuilder;
 });

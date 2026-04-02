@@ -13,7 +13,9 @@ const dateRangePickerToInputValueElement = document.querySelector('#date-range-p
 const dateRangePickerFromInput = dateRangePicker.querySelectorAll('input')[0];
 const dateRangePickerToInput = dateRangePicker.querySelectorAll('input')[1];
 
-datePickerChangeStatusElement.textContent = 'null';
+if (datePickerChangeStatusElement) {
+  datePickerChangeStatusElement.textContent = 'null';
+}
 
 dateRangePicker.addEventListener('forge-date-picker-open', () => {
   console.log('forge-date-picker-open');
@@ -29,15 +31,21 @@ dateRangePicker.addEventListener('forge-calendar-month-change', evt => {
 
 dateRangePicker.addEventListener('forge-date-range-picker-change', evt => {
   console.log('[forge-date-range-picker-change]', evt);
-  datePickerChangeStatusElement.textContent = ((evt.detail && evt.detail.from) || 'null') + ' - ' + ((evt.detail && evt.detail.to) || 'null');
+  if (datePickerChangeStatusElement) {
+    datePickerChangeStatusElement.textContent = ((evt.detail && evt.detail.from) || 'null') + ' - ' + ((evt.detail && evt.detail.to) || 'null');
+  }
 });
 
 dateRangePickerFromInput.addEventListener('input', () => {
-  dateRangePickerFromInputValueElement.textContent = dateRangePickerFromInput.value;
+  if (dateRangePickerFromInputValueElement) {
+    dateRangePickerFromInputValueElement.textContent = dateRangePickerFromInput.value;
+  }
 });
 
 dateRangePickerToInput.addEventListener('input', () => {
-  dateRangePickerToInputValueElement.textContent = dateRangePickerToInput.value;
+  if (dateRangePickerToInputValueElement) {
+    dateRangePickerToInputValueElement.textContent = dateRangePickerToInput.value;
+  }
 });
 
 const valueModeSelect = document.getElementById('opt-value-mode') as ISelectComponent;
@@ -102,7 +110,7 @@ disableDayCallbackToggle.addEventListener('forge-switch-change', ({ detail: sele
   if (selected) {
     dateRangePicker.disableDayCallback = date => date.toLocaleDateString() === new Date().toLocaleDateString();
   } else {
-    dateRangePicker.disableDayCallback = null;
+    dateRangePicker.disableDayCallback = undefined as unknown as typeof dateRangePicker.disableDayCallback;
   }
 });
 

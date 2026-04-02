@@ -20,7 +20,7 @@ optDismissibleToggle.addEventListener('change', () => {
 
 const optDurationInput = document.querySelector('#opt-toast-duration') as HTMLInputElement;
 optDurationInput.addEventListener('input', () => {
-  inlineToast.duration = optDurationInput.value ? +optDurationInput.value : undefined;
+  inlineToast.duration = optDurationInput.value ? +optDurationInput.value : 0;
 });
 
 const optPlacementSelect = document.querySelector('#opt-toast-placement') as ISelectComponent;

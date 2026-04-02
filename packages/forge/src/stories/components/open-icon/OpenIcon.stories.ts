@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils.js';
 
 import '@tylertech/forge/open-icon';
 import '@tylertech/forge/expansion-panel';

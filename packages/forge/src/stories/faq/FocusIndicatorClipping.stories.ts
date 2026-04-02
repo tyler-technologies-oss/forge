@@ -5,7 +5,7 @@ import '@tylertech/forge/card';
 import '@tylertech/forge/scaffold';
 import '@tylertech/forge/button';
 import '@tylertech/forge/text-field';
-import { storyStyles } from '../decorators';
+import { storyStyles } from '../decorators.js';
 
 const meta = {
   title: 'FAQ/Focus Indicator Clipping',

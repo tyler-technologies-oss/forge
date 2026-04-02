@@ -60,17 +60,19 @@ const columnConfigurations: IColumnConfiguration[] = [
     initialSort: { direction: SortDirection.Descending, sortOrder: 1 } as ISortedColumn,
     headerTemplate: () => Promise.resolve('<span>Player names</span>'),
     filter: true,
-    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter name...' } })
+    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter name...' } }),
+    footer: 'Calculated'
   },
   {
     header: 'Age',
     property: 'age',
-    align: CellAlign.Right,
+    align: CellAlign.Center,
     sortable: true,
     initialSort: true,
     sortDirection: SortDirection.Descending,
     filter: true,
-    filterDelegate: new TextFieldComponentDelegate({ options: { placeholder: 'Filter age...' } })
+    filterDelegate: new TextFieldComponentDelegate({ options: { placeholder: 'Filter age...' } }),
+    footerTemplate: () => Promise.resolve(`Average: ${parseFloat((displayData.reduce((sum, { age }) => sum + age, 0) / displayData.length).toFixed(2))}`)
   },
   {
     header: 'Position',
@@ -95,7 +97,7 @@ const columnConfigurations: IColumnConfiguration[] = [
 
 let sortDirection = 'DESC';
 let sortPropertyName = 'age';
-const tableFilter = { name: '', age: null, position: '' } as Pick<IData, 'name' | 'age' | 'position'>;
+const tableFilter: { name: string; age: number | null; position: string } = { name: '', age: null, position: '' };
 
 table.selectKey = 'id';
 table.select = true;
@@ -121,12 +123,17 @@ multiselectToggle.addEventListener('forge-switch-change', ({ detail: selected })
 
 const tooltipSelectAllToggle = document.querySelector('#opt-tooltip-select-all') as ISwitchComponent;
 tooltipSelectAllToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  table.tooltipSelectAll = selected ? 'Select all' : undefined;
+  table.tooltipSelectAll = selected ? 'Select all' : '';
+});
+
+const includeFooterToggle = document.querySelector('#opt-include-footer') as ISwitchComponent;
+includeFooterToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  table.includeFooter = selected;
 });
 
 const tooltipSelectToggle = document.querySelector('#opt-tooltip-select') as ISwitchComponent;
 tooltipSelectToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  table.tooltipSelect = selected ? 'Select' : undefined;
+  table.tooltipSelect = selected ? 'Select' : '';
 });
 
 const denseToggle = document.querySelector('#opt-dense') as ISwitchComponent;
@@ -183,7 +190,7 @@ customSelectAllToggle.addEventListener('forge-switch-change', ({ detail: selecte
     table.selectAllTemplate = getSelectAllTemplate;
     selectAlignmentSelect.style.display = '';
   } else {
-    table.selectAllTemplate = null;
+    table.selectAllTemplate = undefined as unknown as typeof table.selectAllTemplate;
     selectAlignmentSelect.style.display = 'none';
   }
 });
@@ -207,7 +214,7 @@ table.addEventListener('forge-table-sort', ({ detail }) => {
   }
 
   sortDirection = detail.direction;
-  sortPropertyName = columnConfigurations[detail.columnIndex].property;
+  sortPropertyName = columnConfigurations[detail.columnIndex].property ?? '';
   table.data = sortData();
 });
 table.addEventListener('forge-table-column-resize', ({ detail }) => {
@@ -247,7 +254,7 @@ table.addEventListener('forge-table-filter', ({ detail }) => {
       if (detail.value.length === 0) {
         tableFilter.age = null;
       } else {
-        tableFilter.age = detail.value;
+        tableFilter.age = Number(detail.value);
       }
       break;
     case 2:
@@ -276,7 +283,7 @@ table.addEventListener('forge-table-filter', ({ detail }) => {
       return true;
     });
   } else {
-    displayData = [].concat(data);
+    displayData = [...data];
   }
 
   table.data = sortData();
@@ -342,10 +349,11 @@ function buildRowTemplate(rowIndex: number): HTMLElement {
 function sortData(): IData[] {
   if (sortPropertyName.length) {
     return [...displayData].sort((a, b) => {
+      const propName = sortPropertyName as keyof IData;
       if (sortDirection === 'DESC') {
-        return b[sortPropertyName].toString().localeCompare(a[sortPropertyName]);
+        return String(b[propName]).localeCompare(String(a[propName]));
       } else if (sortDirection === 'ASC') {
-        return a[sortPropertyName].toString().localeCompare(b[sortPropertyName]);
+        return String(a[propName]).localeCompare(String(b[propName]));
       } else {
         return 0;
       }
@@ -360,12 +368,13 @@ function sortMultiColumnData(columns: ITableSortMultipleEventData): IData[] {
     return [...displayData].sort((a, b) => {
       let i = 0;
       let result = 0;
-      columns = columns.sort((columnA, columnB) => columnA.sortOrder - columnB.sortOrder);
+      columns = columns.sort((columnA, columnB) => (columnA.sortOrder ?? 0) - (columnB.sortOrder ?? 0));
       while (i < columns.length && result === 0) {
         const { direction, propertyName } = columns[i];
+        const propName = propertyName as keyof IData;
         const sortDir = direction === 'ASC' ? -1 : 1;
-        const propertyCompare = a[propertyName].toString() < b[propertyName].toString();
-        result = sortDir * (propertyCompare ? -1 : a[propertyName].toString() > b[propertyName].toString() ? 1 : 0);
+        const propertyCompare = String(a[propName]) < String(b[propName]);
+        result = sortDir * (propertyCompare ? -1 : String(a[propName]) > String(b[propName]) ? 1 : 0);
         i++;
       }
       return result;

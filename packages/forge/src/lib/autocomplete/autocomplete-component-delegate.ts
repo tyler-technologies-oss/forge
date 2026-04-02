@@ -52,16 +52,16 @@ export class AutocompleteComponentDelegate extends FormFieldComponentDelegate<IA
     this._textFieldDelegate.invalid = value;
   }
 
-  public onChange(listener: (value: string) => void): void {
-    this._element.addEventListener(AUTOCOMPLETE_CONSTANTS.events.CHANGE, (evt: CustomEvent) => listener(evt.detail));
+  public onChange(listener: (value: string) => void, options?: AddEventListenerOptions): void {
+    this._element.addEventListener(AUTOCOMPLETE_CONSTANTS.events.CHANGE, (evt: CustomEvent) => listener(evt.detail), options);
   }
 
-  public onFocus(listener: (evt: FocusEvent) => void): void {
-    this._textFieldDelegate.inputElement.addEventListener('focus', (evt: FocusEvent) => listener(evt));
+  public onFocus(listener: (evt: FocusEvent) => void, options?: AddEventListenerOptions): void {
+    this._textFieldDelegate.inputElement.addEventListener('focus', (evt: FocusEvent) => listener(evt), options);
   }
 
-  public onBlur(listener: (evt: FocusEvent) => void): void {
-    this._textFieldDelegate.inputElement.addEventListener('blur', (evt: FocusEvent) => listener(evt));
+  public onBlur(listener: (evt: FocusEvent) => void, options?: AddEventListenerOptions): void {
+    this._textFieldDelegate.inputElement.addEventListener('blur', (evt: FocusEvent) => listener(evt), options);
   }
 
   private _attachTextField(autocomplete: IAutocompleteComponent): void {

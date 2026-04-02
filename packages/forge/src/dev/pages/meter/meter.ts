@@ -1,6 +1,7 @@
 import '$src/shared';
 import { IconRegistry } from '@tylertech/forge/icon';
 import '@tylertech/forge/meter';
+import type { MeterDensity, MeterDirection, MeterInnerShape, MeterShape, MeterTheme, MeterValueMode } from '@tylertech/forge/meter';
 import { ISelectComponent } from '@tylertech/forge/select';
 import { ISwitchComponent } from '@tylertech/forge/switch';
 import { tylIconLens } from '@tylertech/tyler-icons';
@@ -8,7 +9,22 @@ import './meter.scss';
 
 IconRegistry.define([tylIconLens]);
 
-const meter = document.querySelector('forge-meter');
+const meter = document.querySelector('forge-meter') as HTMLElement & {
+  value: number;
+  min: number;
+  max: number;
+  low?: number;
+  high?: number;
+  optimum?: number;
+  tickmarks: boolean;
+  valueMode: string;
+  direction: string;
+  shape: string;
+  innerShape: string;
+  density: string;
+  theme: string;
+  muted: boolean;
+};
 const valueInput = document.getElementById('opt-value') as HTMLInputElement;
 const minInput = document.getElementById('opt-min') as HTMLInputElement;
 const maxInput = document.getElementById('opt-max') as HTMLInputElement;
@@ -32,7 +48,9 @@ tickmarksInput.min = '0';
 
 valueInput.addEventListener('input', () => {
   meter.value = parseFloat(valueInput.value);
-  valueSpan.textContent = valueInput.value + '%';
+  if (valueSpan) {
+    valueSpan.textContent = valueInput.value + '%';
+  }
 });
 
 minInput.addEventListener('input', () => {
@@ -47,7 +65,7 @@ maxInput.addEventListener('input', () => {
 
 lowInput.addEventListener('input', () => {
   if (!lowInput.value) {
-    meter.low = null;
+    meter.low = undefined;
     return;
   }
   meter.low = parseFloat(lowInput.value);
@@ -55,7 +73,7 @@ lowInput.addEventListener('input', () => {
 
 highInput.addEventListener('input', () => {
   if (!highInput.value) {
-    meter.high = null;
+    meter.high = undefined;
     return;
   }
   meter.high = parseFloat(highInput.value);
@@ -63,7 +81,7 @@ highInput.addEventListener('input', () => {
 
 optimumInput.addEventListener('input', () => {
   if (!optimumInput.value) {
-    meter.optimum = null;
+    meter.optimum = undefined;
     return;
   }
   meter.optimum = parseFloat(optimumInput.value);
@@ -76,27 +94,27 @@ tickmarksInput.addEventListener('input', () => {
 });
 
 valueModeSelect.addEventListener('change', () => {
-  meter.valueMode = valueModeSelect.value as any;
+  meter.valueMode = valueModeSelect.value as MeterValueMode;
 });
 
 directionSelect.addEventListener('change', () => {
-  meter.direction = directionSelect.value as any;
+  meter.direction = directionSelect.value as MeterDirection;
 });
 
 shapeSelect.addEventListener('change', () => {
-  meter.shape = shapeSelect.value as any;
+  meter.shape = shapeSelect.value as MeterShape;
 });
 
 innerShapeSelect.addEventListener('change', () => {
-  meter.innerShape = innerShapeSelect.value as any;
+  meter.innerShape = innerShapeSelect.value as MeterInnerShape;
 });
 
 densitySelect.addEventListener('change', () => {
-  meter.density = densitySelect.value as any;
+  meter.density = densitySelect.value as MeterDensity;
 });
 
 themeSelect.addEventListener('change', () => {
-  meter.theme = themeSelect.value as any;
+  meter.theme = themeSelect.value as MeterTheme;
 });
 
 mutedSwitch.addEventListener('change', () => {

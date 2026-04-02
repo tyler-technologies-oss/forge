@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { action } from 'storybook/actions';
 import { html } from 'lit';
-import { generateCustomElementArgTypes, standaloneStoryParams } from '../../../utils';
+import { generateCustomElementArgTypes, standaloneStoryParams } from '../../../utils.js';
 import { IconRegistry } from '@tylertech/forge';
 import { tylIconAssignment, tylIconSettings, tylIconWarning, tylIconWorkOutline } from '@tylertech/tyler-icons';
 
