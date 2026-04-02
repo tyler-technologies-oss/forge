@@ -41,7 +41,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm run --filter @tylertech/${{ inputs.package }} build:storybook
+      - run: pnpm turbo run build:storybook --filter=@tylertech/${{ inputs.package }}
 
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
