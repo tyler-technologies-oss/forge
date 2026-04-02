@@ -47,28 +47,23 @@ If you're using a framework, you should jump to the framework-specific guide:
 - [Svelte](?path=/docs/frameworks-svelte--docs)
 - [Blazor](?path=/docs/frameworks-blazor--docs)
 
-### Define Components
+### Import Components
 
-You will then need to import and define the components you are using within your application in the browser's custom element registry.
+You will then need to import the components you are using within your application to register them in the browser's custom element registry.
 
 ```javascript
-import { defineButtonComponent, defineTextFieldComponent } from '@tylertech/forge';
-
-// These functions should be called as early as possible when your application is bootstrapping
-defineButtonComponent();
-defineTextFieldComponent();
+import '@tylertech/forge/button';
+import '@tylertech/forge/text-field';
 ```
 
 If you're prototyping, it can be handy to pull in all components:
 
 ```javascript
-import { defineComponents } from '@tylertech/forge';
-
-defineComponents();
+import '@tylertech/forge';
 ```
 
-> Note: make sure to call the definition functions as early as possible in your application bootstrapping process to ensure they are
-> defined with the browser before your application is rendered to avoid FOUC (Flash of Unstyled Content).
+> Note: make sure to import the components as early as possible in your application bootstrapping process to ensure they are
+> registered with the browser before your application is rendered to avoid FOUC (Flash of Unstyled Content).
 
 ## CDN
 

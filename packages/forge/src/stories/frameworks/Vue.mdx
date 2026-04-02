@@ -65,12 +65,9 @@ To use Forge components in your Vue application, import the components you need 
 </template>
 
 <script setup>
-  import { defineScaffoldComponent, defineButtonComponent, defineCardComponent } from '@tylertech/forge';
-
-  // Only import the components you need
-  defineScaffoldComponent();
-  defineButtonComponent();
-  defineCardComponent();
+  import '@tylertech/forge/scaffold';
+  import '@tylertech/forge/button';
+  import '@tylertech/forge/card';
 </script>
 ```
 
