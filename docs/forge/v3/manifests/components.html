@@ -746,28 +746,23 @@ If you&#39;re using a framework, you should jump to the framework-specific guide
 - [Svelte](?path=/docs/frameworks-svelte--docs)
 - [Blazor](?path=/docs/frameworks-blazor--docs)
 
-### Define Components
+### Import Components
 
-You will then need to import and define the components you are using within your application in the browser&#39;s custom element registry.
+You will then need to import the components you are using within your application to register them in the browser&#39;s custom element registry.
 
 ```javascript
-import { defineButtonComponent, defineTextFieldComponent } from &#39;@tylertech/forge&#39;;
-
-// These functions should be called as early as possible when your application is bootstrapping
-defineButtonComponent();
-defineTextFieldComponent();
+import &#39;@tylertech/forge/button&#39;;
+import &#39;@tylertech/forge/text-field&#39;;
 ```
 
 If you&#39;re prototyping, it can be handy to pull in all components:
 
 ```javascript
-import { defineComponents } from &#39;@tylertech/forge&#39;;
-
-defineComponents();
+import &#39;@tylertech/forge&#39;;
 ```
 
-&gt; Note: make sure to call the definition functions as early as possible in your application bootstrapping process to ensure they are
-&gt; defined with the browser before your application is rendered to avoid FOUC (Flash of Unstyled Content).
+&gt; Note: make sure to import the components as early as possible in your application bootstrapping process to ensure they are
+&gt; registered with the browser before your application is rendered to avoid FOUC (Flash of Unstyled Content).
 
 ## CDN
 
@@ -3285,10 +3280,9 @@ as well as the definition functions from `@tylertech/forge`.
 
 ```jsx
 import { ForgeButton, ForgeCard } from &#39;@tylertech/forge-react&#39;;
-import { defineButtonComponent, defineCardComponent } from &#39;@tylertech/forge&#39;;
 
-defineButtonComponent();
-defineCardComponent();
+import &#39;@tylertech/forge/button&#39;;
+import &#39;@tylertech/forge/card&#39;;
 
 function App() {
   return (
@@ -3405,12 +3399,9 @@ To use Forge components in your Vue application, import the components you need 
 &lt;/template&gt;
 
 &lt;script setup&gt;
-  import { defineScaffoldComponent, defineButtonComponent, defineCardComponent } from &#39;@tylertech/forge&#39;;
-
-  // Only import the components you need
-  defineScaffoldComponent();
-  defineButtonComponent();
-  defineCardComponent();
+  import &#39;@tylertech/forge/scaffold&#39;;
+  import &#39;@tylertech/forge/button&#39;;
+  import &#39;@tylertech/forge/card&#39;;
 &lt;/script&gt;
 ```
 
@@ -3496,10 +3487,8 @@ To use Forge components in your Svelte application, import the components you ne
 
 ```svelte
 &lt;script&gt;
-  import { defineButtonComponent, defineCardComponent } from &#39;@tylertech/forge&#39;;
-
-  defineButtonComponent();
-  defineCardComponent();
+  import &#39;@tylertech/forge/button&#39;;
+  import &#39;@tylertech/forge/card&#39;;
 &lt;/script&gt;
 
 &lt;div&gt;
