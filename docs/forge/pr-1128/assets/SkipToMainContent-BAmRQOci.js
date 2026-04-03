@@ -1,0 +1,17 @@
+import{j as t,M as r,C as s}from"./blocks-BW6tMW00.js";import{useMDXComponents as n}from"./index-CdZgOk8d.js";import{S as p,D as m}from"./SkipToMainContent.stories-DitDph1m.js";import"./preload-helper-PPVm8Dsz.js";import"./_commonjsHelpers-CqkleIqs.js";import"./iframe-1amZ02A4.js";import"./tyler-icons-CzoCbVaa.js";import"./base-component-JqFhTqNN.js";import"./service-adapter-CoGDs2_3.js";import"./feature-detection-C7YyUy0w.js";import"./base-adapter-BuRgNRgk.js";import"./index-DTwfV0k0.js";import"./decorators-IKJY96DA.js";import"./scaffold-DS4rOy-Y.js";import"./app-bar-profile-button-CYKmH8Qe.js";import"./utils-DU-9AqTO.js";import"./state-layer-DFBFTfpT.js";import"./focus-indicator-C5TEsO7E.js";import"./property-B9voTIv9.js";import"./base-lit-element-Ck1SVZB_.js";import"./icon-button-DIbOVWXo.js";import"./base-button-core-Gs8VA1ot.js";import"./with-label-aware-BNPNo6Ms.js";import"./with-default-aria-CktUg9lz.js";import"./a11y-utils-Cisf0Kqm.js";import"./tooltip-CZ9l9EMe.js";import"./overlay-xfWlPvUl.js";import"./with-longpress-listener-CFiRtWHZ.js";import"./dismissible-stack-xq-0Rg1q.js";import"./badge-BtIVeCB_.js";import"./menu-Ba834p8F.js";import"./list-7b1y5hwO.js";import"./event-utils-zQ4FLDwK.js";import"./list-dropdown-aware-core-B2bzrxmE.js";import"./list-dropdown-BmfbIFca.js";import"./event-utils-C1SDeUaq.js";import"./linear-progress-DSeJSqzy.js";import"./popover-uUF2Q5pH.js";import"./skeleton-CfBVzZbg.js";import"./a11y-BxM9_46k.js";import"./base-component-delegate-BKeIe0jC.js";import"./avatar-CFsh7WCn.js";import"./state-BZCxJ6Za.js";import"./style-map-DhE_eh_-.js";import"./directive-jorct-Oe.js";import"./class-map-UonRD9uw.js";import"./avatar-constants-B6cph6ix.js";import"./button-YbSFJWqY.js";import"./toolbar-C3hZOw9r.js";import"./card-BvgwV_S5.js";function i(o){const e={a:"a",blockquote:"blockquote",code:"code",h1:"h1",li:"li",p:"p",ul:"ul",...n(),...o.components};return t.jsxs(t.Fragment,{children:[t.jsx(r,{of:p}),`
+`,t.jsx(e.h1,{id:"recipe-skip-to-main-content",children:"Recipe: Skip To Main Content"}),`
+`,t.jsxs(e.p,{children:['Use a "skip to main content" element to meet ',t.jsx(e.a,{href:"https://www.w3.org/WAI/WCAG21/Understanding/bypass-blocks.html",rel:"nofollow",children:"WCAG 2 Criteria 2.4.1: Bypass Blocks"}),`.
+This allows users to skip repeated content blocks in order to get more direct access to the primary content of a web page.`]}),`
+`,t.jsxs(e.blockquote,{children:[`
+`,t.jsx(e.p,{children:"Recommended for public facing (community) applications."}),`
+`]}),`
+`,t.jsx(e.p,{children:"Meets needs for:"}),`
+`,t.jsxs(e.ul,{children:[`
+`,t.jsx(e.li,{children:"Sighted keyboard users"}),`
+`,t.jsx(e.li,{children:"Users with visual impairments"}),`
+`]}),`
+`,t.jsx(s,{of:m}),`
+`,t.jsx(e.p,{children:`The important aspect of this recipe is to ensure that the skip link is visible when focused, and that it is the first focusable element on the page.
+This allows users to quickly navigate to the main content of the page without having to tab through all of the other interactive elements.`}),`
+`,t.jsxs(e.p,{children:["You should always use an ",t.jsx(e.code,{children:"<a>"}),` element, and ensure that you prevent the default action when the link is clicked to avoid reloading the page. Use a
+hash link to the `,t.jsx(e.code,{children:"id"})," of the main content element to ensure that the user is taken directly to the main content."]})]})}function rt(o={}){const{wrapper:e}={...n(),...o.components};return e?t.jsx(e,{...o,children:t.jsx(i,{...o})}):i(o)}export{rt as default};
