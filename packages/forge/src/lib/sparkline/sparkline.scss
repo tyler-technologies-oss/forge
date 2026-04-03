@@ -1,0 +1,99 @@
+@use '../core/styles/theme';
+@use './core' as *;
+
+//
+// Host
+//
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.sparkline {
+  @include tokens;
+}
+
+.sparkline {
+  @include base;
+}
+
+//
+// SVG
+//
+
+.svg {
+  @include svg;
+}
+
+.path {
+  @include path;
+}
+
+.fill {
+  @include fill;
+}
+
+.fill-mask {
+  @include fill-mask;
+}
+
+.gradient-start {
+  @include gradient-start;
+}
+
+.gradient-stop {
+  @include gradient-stop;
+}
+
+//
+// Themes
+//
+
+@each $theme in (primary, secondary, tertiary, success, error, warning, info) {
+  .theme--#{$theme} {
+    @include theme($theme);
+  }
+}
+
+//
+// Density
+//
+
+@each $density in (xxsmall, xsmall, small, medium, medium-large, large, xlarge, xxlarge) {
+  .density--#{$density} {
+    @include density($density);
+  }
+}
+
+//
+// Media queries
+//
+
+@media (prefers-reduced-motion: reduce) {
+  .sparkline {
+    @include override(transition-duration, 0ms, value);
+  }
+}
+
+@media (forced-colors: active) {
+  .sparkline {
+    border: 1px solid CanvasText !important;
+  }
+
+  .path {
+    stroke: CanvasText !important;
+  }
+
+  .fill,
+  .fill-mask {
+    display: hidden;
+  }
+}

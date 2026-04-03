@@ -1,0 +1,108 @@
+@use 'sass:map';
+@use '../core/styles/theme';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+  box-sizing: border-box;
+}
+
+@mixin base {
+  box-sizing: border-box;
+  width: 100%;
+  height: #{token(height)};
+  padding: #{token(stroke-width)};
+  overflow: #{token(overflow)};
+}
+
+@mixin svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+@mixin path-stroke {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: #{token(stroke-width)};
+  vector-effect: non-scaling-stroke;
+}
+
+@mixin path-animation {
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-easing)};
+  transition-property: d;
+}
+
+@mixin path {
+  @include path-stroke;
+  @include path-animation;
+
+  fill: transparent;
+}
+
+@mixin fill {
+  @include path-stroke;
+  @include path-animation;
+
+  visibility: #{token(fill-visibility)};
+  opacity: #{token(fill-opacity)};
+}
+
+@mixin fill-mask {
+  @include path-animation;
+
+  visibility: #{token(fill-visibility)};
+}
+
+@mixin gradient-start {
+  stop-color: #{token(primary-color)};
+}
+
+@mixin gradient-stop {
+  stop-color: #{token(secondary-color)};
+}
+
+@mixin theme($theme-name) {
+  @include override(primary-color, theme.variable($theme-name + '-container-high'), value);
+  @include override(secondary-color, theme.variable($theme-name), value);
+}
+
+$densities: (
+  xxsmall: (
+    height: 8px,
+    stroke-width: 2px
+  ),
+  xsmall: (
+    height: 24px,
+    stroke-width: 2px
+  ),
+  small: (
+    height: 40px,
+    stroke-width: 4px
+  ),
+  medium: (
+    height: 56px,
+    stroke-width: 6px
+  ),
+  large: (
+    height: 72px,
+    stroke-width: 6px
+  ),
+  xlarge: (
+    height: 88px,
+    stroke-width: 8px
+  ),
+  xxlarge: (
+    height: 104px,
+    stroke-width: 8px
+  )
+);
+
+@mixin density($density) {
+  @include override(height, map.get($densities, $density, height), value);
+  @include override(stroke-width, map.get($densities, $density, stroke-width), value);
+}
