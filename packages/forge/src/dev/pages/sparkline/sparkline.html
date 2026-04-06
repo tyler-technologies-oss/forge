@@ -43,13 +43,11 @@ include('./src/partials/page.ejs', {
         defaultValue: 'default',
         options: [
           { label: 'Default', value: 'default' },
-          { label: 'XXSmall', value: 'xxsmall' },
-          { label: 'XSmall', value: 'xsmall' },
+          { label: 'Auto', value: 'auto' },
           { label: 'Small', value: 'small' },
           { label: 'Medium', value: 'medium' },
           { label: 'Large', value: 'large' },
-          { label: 'XLarge', value: 'xlarge' },
-          { label: 'XXLarge', value: 'xxlarge' }
+          { label: 'XLarge', value: 'xlarge' }
         ]
       },
       {
@@ -75,7 +73,7 @@ include('./src/partials/page.ejs', {
         inputType: 'number',
         min: 0,
         step: 0.2,
-        defaultValue: '6'
+        defaultValue: '2.83'
       },
       {
         type: 'text-field',

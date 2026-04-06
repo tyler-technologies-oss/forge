@@ -1,7 +1,12 @@
 .sparkline-demo {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  > * {
+    min-block-size: 0;
+  }
 }
 
 h3 {

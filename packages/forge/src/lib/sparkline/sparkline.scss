@@ -67,7 +67,7 @@
 // Density
 //
 
-@each $density in (xxsmall, xsmall, small, medium, medium-large, large, xlarge, xxlarge) {
+@each $density in (auto, small, medium, large, xlarge) {
   .density--#{$density} {
     @include density($density);
   }

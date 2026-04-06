@@ -11,7 +11,7 @@ import styles from './sparkline.scss';
 export const SPARKLINE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-sparkline';
 
 export type SparklineTheme = Theme | 'default';
-export type SparklineDensity = Density | 'xxsmall' | 'xsmall' | 'xlarge' | 'xxlarge' | 'default';
+export type SparklineDensity = Density | 'default' | 'auto' | 'xlarge';
 
 /**
  * @tag forge-sparkline
@@ -84,7 +84,7 @@ export class SparklineComponent extends BaseLitElement {
    * @default 'default'
    * @attribute
    */
-  @property({ type: String })
+  @property()
   public theme: SparklineTheme = 'default';
 
   /**
@@ -92,7 +92,7 @@ export class SparklineComponent extends BaseLitElement {
    * @default 'default'
    * @attribute
    */
-  @property({ type: String })
+  @property()
   public density: SparklineDensity = 'default';
 
   /**
