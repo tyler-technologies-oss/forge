@@ -67,6 +67,7 @@ import { defineSelectDropdownComponent } from './select/select-dropdown/index.js
 import { defineSkeletonComponent } from './skeleton/index.js';
 import { defineSkipLinkComponent } from './skip-link/index.js';
 import { defineSliderComponent } from './slider/index.js';
+import { defineSparklineComponent } from './sparkline/index.js';
 import { defineSplitViewComponent } from './split-view/index.js';
 import { defineStackComponent } from './stack/index.js';
 import { defineStateLayerComponent } from './state-layer/index.js';
@@ -141,6 +142,7 @@ export * from './select/index.js';
 export * from './skeleton/index.js';
 export * from './skip-link/index.js';
 export * from './slider/index.js';
+export * from './sparkline/index.js';
 export * from './split-button/index.js';
 export * from './split-view/index.js';
 export * from './stack/index.js';
@@ -236,6 +238,7 @@ export function defineComponents(): void {
   defineSkeletonComponent();
   defineSkipLinkComponent();
   defineSliderComponent();
+  defineSparklineComponent();
   defineSplitViewComponent();
   defineStackComponent();
   defineStateLayerComponent();
