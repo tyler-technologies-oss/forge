@@ -175,7 +175,9 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
       this.#tryToggleOpenIcon();
     }
     if (changedProperties.has('openIcon')) {
-      this.openIconElement = this.#getOpenIconElementById(this.openIcon);
+      if (this.openIcon) {
+        this.openIconElement = this.#getOpenIconElementById(this.openIcon);
+      }
     }
     if (changedProperties.has('orientation')) {
       toggleState(this.#internals, 'horizontal', this.orientation === 'horizontal');
