@@ -342,6 +342,11 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
   public setMonth(month: number, locale?: string): void {
     const monthButton = this._container.querySelector(CALENDAR_CONSTANTS.selectors.MONTH_BUTTON);
     if (monthButton) {
+      const span = monthButton.querySelector('span');
+      if (span) {
+        span.textContent = getLocalizedMonth(month, 'long', locale);
+        return;
+      }
       const content = getMonthButtonContent(month, locale);
       monthButton.replaceChildren(content[0], content[1]);
       return;
@@ -356,6 +361,11 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
   public setYear(year: number, locale?: string): void {
     const yearButton = this._container.querySelector(CALENDAR_CONSTANTS.selectors.YEAR_BUTTON);
     if (yearButton) {
+      const span = yearButton.querySelector('span');
+      if (span) {
+        span.textContent = getLocalizedYear(year, 'numeric', locale);
+        return;
+      }
       const content = getYearButtonContent(year, locale);
       yearButton.replaceChildren(content[0], content[1]);
       return;
