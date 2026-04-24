@@ -41,7 +41,7 @@ For colors, typography, and component styling, prefer using Forge components and
 <!-- Recommended: Tailwind for layout, Forge for styling -->
 <div class="flex gap-4 p-6">
   <forge-card>
-    <p class="forge-typography--body2">Content styled by Forge</p>
+    <p class="text-body2">Content styled by Forge</p>
   </forge-card>
 </div>
 ```
@@ -261,31 +261,68 @@ Use `border-*` utilities for outline and semantic border colors.
 
 Apply complete Forge typography styles with single utility classes.
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBlock: '24px', padding: '24px', backgroundColor: 'var(--forge-theme-surface-container-low)', borderRadius: '8px' }}>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-    <span className="forge-typography--heading4" style={{ color: 'var(--forge-theme-text-high)' }}>Heading 4 Style</span>
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>text-heading4</code>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-    <span className="forge-typography--heading6" style={{ color: 'var(--forge-theme-text-high)' }}>Heading 6 Style</span>
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>text-heading6</code>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-    <span className="forge-typography--subheading2" style={{ color: 'var(--forge-theme-text-high)' }}>Subheading 2 Style</span>
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>text-subheading2</code>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-    <span className="forge-typography--body2" style={{ color: 'var(--forge-theme-text-high)' }}>Body 2 — The quick brown fox jumps over the lazy dog.</span>
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>text-body2</code>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-    <span className="forge-typography--label1" style={{ color: 'var(--forge-theme-text-high)' }}>Label 1 Style</span>
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>text-label1</code>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-    <span className="forge-typography--overline" style={{ color: 'var(--forge-theme-text-high)' }}>Overline Style</span>
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>text-overline</code>
-  </div>
+### Display Scale
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBlock: '16px' }}>
+  <span className="text-display1">text-display1</span>
+  <span className="text-display2">text-display2</span>
+  <span className="text-display3">text-display3</span>
+  <span className="text-display4">text-display4</span>
+  <span className="text-display5">text-display5</span>
+  <span className="text-display6">text-display6</span>
+  <span className="text-display7">text-display7</span>
+  <span className="text-display8">text-display8</span>
+</div>
+
+### Heading Scale
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBlock: '16px' }}>
+  <span className="text-heading1">text-heading1</span>
+  <span className="text-heading2">text-heading2</span>
+  <span className="text-heading3">text-heading3</span>
+  <span className="text-heading4">text-heading4</span>
+  <span className="text-heading5">text-heading5</span>
+  <span className="text-heading6">text-heading6</span>
+  <span className="text-heading7">text-heading7</span>
+  <span className="text-heading8">text-heading8</span>
+</div>
+
+### Subheading Scale
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBlock: '16px' }}>
+  <span className="text-subheading1">text-subheading1</span>
+  <span className="text-subheading2">text-subheading2</span>
+  <span className="text-subheading3">text-subheading3</span>
+  <span className="text-subheading4">text-subheading4</span>
+  <span className="text-subheading5">text-subheading5</span>
+  <span className="text-subheading6">text-subheading6</span>
+  <span className="text-subheading7">text-subheading7</span>
+  <span className="text-subheading8">text-subheading8</span>
+</div>
+
+### Body Scale
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBlock: '16px' }}>
+  <span className="text-body1">text-body1</span>
+  <span className="text-body2">text-body2</span>
+  <span className="text-body3">text-body3</span>
+  <span className="text-body4">text-body4</span>
+</div>
+
+### Label Scale
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBlock: '16px' }}>
+  <span className="text-label1">text-label1</span>
+  <span className="text-label2">text-label2</span>
+  <span className="text-label3">text-label3</span>
+</div>
+
+### Other Styles
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBlock: '16px' }}>
+  <span className="text-button">text-button</span>
+  <span className="text-overline">text-overline</span>
+  <span className="text-link">text-link</span>
 </div>
 
 ```html
@@ -293,8 +330,6 @@ Apply complete Forge typography styles with single utility classes.
 <p class="text-body2">Body content</p>
 <span class="text-label1">Small label</span>
 ```
-
-Available styles: `text-display1` through `text-display8`, `text-heading1` through `text-heading8`, `text-subheading1` through `text-subheading8`, `text-body1` through `text-body4`, `text-label1` through `text-label3`, `text-button`, `text-overline`, `text-link`.
 
 ---
 
