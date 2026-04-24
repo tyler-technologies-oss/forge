@@ -1,0 +1,1156 @@
+/*
+ * Forge Tailwind Theme
+ *
+ * A Tailwind v4 theme that maps to Tyler Forge design tokens.
+ * This file contains only @theme and @utility definitions.
+ * Forge CSS imports are handled in style.scss for proper load order.
+ */
+/* prettier-ignore */
+@theme {
+  /* ==========================================================================
+     SPACING
+     Maps Forge spacing tokens to Tailwind's spacing scale.
+     Usage: p-4, p-medium, gap-large, m-xlarge, etc.
+     ========================================================================== */
+  /* Numeric scale (Tailwind-familiar) */
+  --spacing-0: 0px;
+  --spacing-0_5: var(--forge-spacing-xxxsmall, 2px);
+  --spacing-1: var(--forge-spacing-xxsmall, 4px);
+  --spacing-2: var(--forge-spacing-xsmall, 8px);
+  --spacing-3: var(--forge-spacing-small, 12px);
+  --spacing-4: var(--forge-spacing-medium, 16px);
+  --spacing-5: var(--forge-spacing-medium-large, 20px);
+  --spacing-6: var(--forge-spacing-large, 24px);
+  --spacing-8: var(--forge-spacing-xlarge, 32px);
+  --spacing-12: var(--forge-spacing-xxlarge, 48px);
+  --spacing-14: var(--forge-spacing-xxxlarge, 56px);
+  /* Semantic scale (Forge-familiar) */
+  --spacing-zero: 0px;
+  --spacing-xxxsmall: var(--forge-spacing-xxxsmall, 2px);
+  --spacing-xxsmall: var(--forge-spacing-xxsmall, 4px);
+  --spacing-xsmall: var(--forge-spacing-xsmall, 8px);
+  --spacing-small: var(--forge-spacing-small, 12px);
+  --spacing-medium: var(--forge-spacing-medium, 16px);
+  --spacing-medium-large: var(--forge-spacing-medium-large, 20px);
+  --spacing-large: var(--forge-spacing-large, 24px);
+  --spacing-xlarge: var(--forge-spacing-xlarge, 32px);
+  --spacing-xxlarge: var(--forge-spacing-xxlarge, 48px);
+  --spacing-xxxlarge: var(--forge-spacing-xxxlarge, 56px);
+  /* ==========================================================================
+     BORDER RADIUS (SHAPE)
+     Maps Forge shape tokens to Tailwind's border-radius scale.
+     Usage: rounded-sm, rounded-lg, rounded-full, etc.
+     ========================================================================== */
+  --radius-xs: var(--forge-shape-extra-small, 1px);
+  --radius-sm: var(--forge-shape-small, 2px);
+  --radius-md: var(--forge-shape-medium, 4px);
+  --radius-lg: var(--forge-shape-large, 8px);
+  --radius-xl: var(--forge-shape-extra-large, 16px);
+  --radius-full: var(--forge-shape-full, 9999px);
+  --radius-round: var(--forge-shape-round, 50%);
+  /* ==========================================================================
+     BOX SHADOW (ELEVATION)
+     Maps Forge elevation tokens to Tailwind's shadow scale.
+     Usage: shadow-sm, shadow-lg, shadow-4, shadow-24, etc.
+     ========================================================================== */
+  /* Tailwind-familiar aliases */
+  --shadow-none: var(
+    --forge-elevation-0,
+    0px 0px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 0px rgba(0, 0, 0, 0.14),
+    0px 0px 0px 0px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-sm: var(
+    --forge-elevation-1,
+    0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 3px 0px rgba(0, 0, 0, 0.12)
+  );
+  --shadow: var(
+    --forge-elevation-2,
+    0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-md: var(
+    --forge-elevation-4,
+    0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 10px 0px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-lg: var(
+    --forge-elevation-8,
+    0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0px 3px 14px 2px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-xl: var(
+    --forge-elevation-16,
+    0px 8px 10px -5px rgba(0, 0, 0, 0.2),
+    0px 16px 24px 2px rgba(0, 0, 0, 0.14),
+    0px 6px 30px 5px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-2xl: var(
+    --forge-elevation-24,
+    0px 11px 15px -7px rgba(0, 0, 0, 0.2),
+    0px 24px 38px 3px rgba(0, 0, 0, 0.14),
+    0px 9px 46px 8px rgba(0, 0, 0, 0.12)
+  );
+  /* Numeric Forge elevations (0-24) */
+  --shadow-0: var(
+    --forge-elevation-0,
+    0px 0px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 0px rgba(0, 0, 0, 0.14),
+    0px 0px 0px 0px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-1: var(
+    --forge-elevation-1,
+    0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 3px 0px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-2: var(
+    --forge-elevation-2,
+    0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-3: var(
+    --forge-elevation-3,
+    0px 3px 3px -2px rgba(0, 0, 0, 0.2),
+    0px 3px 4px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 8px 0px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-4: var(
+    --forge-elevation-4,
+    0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 10px 0px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-5: var(
+    --forge-elevation-5,
+    0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 5px 8px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 14px 0px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-6: var(
+    --forge-elevation-6,
+    0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 6px 10px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 18px 0px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-7: var(
+    --forge-elevation-7,
+    0px 4px 5px -2px rgba(0, 0, 0, 0.2),
+    0px 7px 10px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 16px 1px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-8: var(
+    --forge-elevation-8,
+    0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0px 3px 14px 2px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-9: var(
+    --forge-elevation-9,
+    0px 5px 6px -3px rgba(0, 0, 0, 0.2),
+    0px 9px 12px 1px rgba(0, 0, 0, 0.14),
+    0px 3px 16px 2px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-10: var(
+    --forge-elevation-10,
+    0px 6px 6px -3px rgba(0, 0, 0, 0.2),
+    0px 10px 14px 1px rgba(0, 0, 0, 0.14),
+    0px 4px 18px 3px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-11: var(
+    --forge-elevation-11,
+    0px 6px 7px -4px rgba(0, 0, 0, 0.2),
+    0px 11px 15px 1px rgba(0, 0, 0, 0.14),
+    0px 4px 20px 3px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-12: var(
+    --forge-elevation-12,
+    0px 7px 8px -4px rgba(0, 0, 0, 0.2),
+    0px 12px 17px 2px rgba(0, 0, 0, 0.14),
+    0px 5px 22px 4px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-13: var(
+    --forge-elevation-13,
+    0px 7px 8px -4px rgba(0, 0, 0, 0.2),
+    0px 13px 19px 2px rgba(0, 0, 0, 0.14),
+    0px 5px 24px 4px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-14: var(
+    --forge-elevation-14,
+    0px 7px 9px -4px rgba(0, 0, 0, 0.2),
+    0px 14px 21px 2px rgba(0, 0, 0, 0.14),
+    0px 5px 26px 4px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-15: var(
+    --forge-elevation-15,
+    0px 8px 9px -5px rgba(0, 0, 0, 0.2),
+    0px 15px 22px 2px rgba(0, 0, 0, 0.14),
+    0px 6px 28px 5px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-16: var(
+    --forge-elevation-16,
+    0px 8px 10px -5px rgba(0, 0, 0, 0.2),
+    0px 16px 24px 2px rgba(0, 0, 0, 0.14),
+    0px 6px 30px 5px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-17: var(
+    --forge-elevation-17,
+    0px 8px 11px -5px rgba(0, 0, 0, 0.2),
+    0px 17px 26px 2px rgba(0, 0, 0, 0.14),
+    0px 6px 32px 5px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-18: var(
+    --forge-elevation-18,
+    0px 9px 11px -5px rgba(0, 0, 0, 0.2),
+    0px 18px 28px 2px rgba(0, 0, 0, 0.14),
+    0px 7px 34px 6px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-19: var(
+    --forge-elevation-19,
+    0px 9px 12px -6px rgba(0, 0, 0, 0.2),
+    0px 19px 29px 2px rgba(0, 0, 0, 0.14),
+    0px 7px 36px 6px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-20: var(
+    --forge-elevation-20,
+    0px 10px 13px -6px rgba(0, 0, 0, 0.2),
+    0px 20px 31px 3px rgba(0, 0, 0, 0.14),
+    0px 8px 38px 7px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-21: var(
+    --forge-elevation-21,
+    0px 10px 13px -6px rgba(0, 0, 0, 0.2),
+    0px 21px 33px 3px rgba(0, 0, 0, 0.14),
+    0px 8px 40px 7px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-22: var(
+    --forge-elevation-22,
+    0px 10px 14px -6px rgba(0, 0, 0, 0.2),
+    0px 22px 35px 3px rgba(0, 0, 0, 0.14),
+    0px 8px 42px 7px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-23: var(
+    --forge-elevation-23,
+    0px 11px 14px -7px rgba(0, 0, 0, 0.2),
+    0px 23px 36px 3px rgba(0, 0, 0, 0.14),
+    0px 9px 44px 8px rgba(0, 0, 0, 0.12)
+  );
+  --shadow-24: var(
+    --forge-elevation-24,
+    0px 11px 15px -7px rgba(0, 0, 0, 0.2),
+    0px 24px 38px 3px rgba(0, 0, 0, 0.14),
+    0px 9px 46px 8px rgba(0, 0, 0, 0.12)
+  );
+  /* ==========================================================================
+     Z-INDEX (LAYERING)
+     Semantic z-index values for proper layering with Forge components.
+     Usage: z-surface, z-header, z-dialog, z-tooltip, etc.
+     ========================================================================== */
+  --z-surface: var(--forge-z-index-surface, 1);
+  --z-header: var(--forge-z-index-header, 4);
+  --z-backdrop: var(--forge-z-index-backdrop, 7);
+  --z-dialog: var(--forge-z-index-dialog, 8);
+  --z-notification: var(--forge-z-index-notification, 9);
+  --z-popup: var(--forge-z-index-popup, 10);
+  --z-tooltip: var(--forge-z-index-tooltip, 11);
+  /* ==========================================================================
+     BORDER WIDTH
+     Maps Forge border tokens to Tailwind's border-width scale.
+     Usage: border-thin, border-medium, border-thick, border, border-2, border-4
+     ========================================================================== */
+  --border-width-0: 0px;
+  --border-width-thin: var(--forge-border-thin, 1px);
+  --border-width-medium: var(--forge-border-medium, 2px);
+  --border-width-thick: var(--forge-border-thick, 4px);
+  --border-width-1: var(--forge-border-thin, 1px);
+  --border-width-2: var(--forge-border-medium, 2px);
+  --border-width-4: var(--forge-border-thick, 4px);
+  /* ==========================================================================
+     ANIMATION DURATION
+     Maps Forge animation duration tokens.
+     Usage: duration-short-1, duration-medium-2, duration-long-4, etc.
+     ========================================================================== */
+  --duration-short-1: var(--forge-animation-duration-short1, 50ms);
+  --duration-short-2: var(--forge-animation-duration-short2, 100ms);
+  --duration-short-3: var(--forge-animation-duration-short3, 150ms);
+  --duration-short-4: var(--forge-animation-duration-short4, 200ms);
+  --duration-medium-1: var(--forge-animation-duration-medium1, 250ms);
+  --duration-medium-2: var(--forge-animation-duration-medium2, 300ms);
+  --duration-medium-3: var(--forge-animation-duration-medium3, 350ms);
+  --duration-medium-4: var(--forge-animation-duration-medium4, 400ms);
+  --duration-long-1: var(--forge-animation-duration-long1, 450ms);
+  --duration-long-2: var(--forge-animation-duration-long2, 500ms);
+  --duration-long-3: var(--forge-animation-duration-long3, 550ms);
+  --duration-long-4: var(--forge-animation-duration-long4, 600ms);
+  --duration-extra-long-1: var(--forge-animation-duration-extra-long1, 700ms);
+  --duration-extra-long-2: var(--forge-animation-duration-extra-long2, 800ms);
+  --duration-extra-long-3: var(--forge-animation-duration-extra-long3, 900ms);
+  --duration-extra-long-4: var(--forge-animation-duration-extra-long4, 1000ms);
+  /* ==========================================================================
+     ANIMATION EASING
+     Maps Forge animation easing tokens.
+     Usage: ease-linear, ease-standard, ease-emphasized, etc.
+     ========================================================================== */
+  --ease-linear: var(--forge-animation-easing-linear, cubic-bezier(0, 0, 1, 1));
+  --ease-standard: var(
+    --forge-animation-easing-standard,
+    cubic-bezier(0.2, 0, 0, 1)
+  );
+  --ease-accelerate: var(
+    --forge-animation-easing-accelerate,
+    cubic-bezier(0.3, 0, 1, 1)
+  );
+  --ease-decelerate: var(
+    --forge-animation-easing-decelerate,
+    cubic-bezier(0, 0, 0, 1)
+  );
+  --ease-emphasized: var(
+    --forge-animation-easing-emphasized,
+    cubic-bezier(0.2, 0, 0, 1)
+  );
+  --ease-emphasized-accelerate: var(
+    --forge-animation-easing-emphasized-accelerate,
+    cubic-bezier(0.3, 0, 0.8, 0.15)
+  );
+  --ease-emphasized-decelerate: var(
+    --forge-animation-easing-emphasized-decelerate,
+    cubic-bezier(0.05, 0.7, 0.1, 1)
+  );
+}
+/* ==========================================================================
+   BACKGROUND COLORS
+   Usage: bg-surface, bg-primary, bg-error-container-high, etc.
+   ========================================================================== */
+/* Surface colors */
+@utility bg-surface {
+  background-color: var(--forge-theme-surface);
+}
+@utility bg-surface-dim {
+  background-color: var(--forge-theme-surface-dim);
+}
+@utility bg-surface-bright {
+  background-color: var(--forge-theme-surface-bright);
+}
+@utility bg-surface-inverse {
+  background-color: var(--forge-theme-surface-inverse);
+}
+@utility bg-surface-container {
+  background-color: var(--forge-theme-surface-container);
+}
+@utility bg-surface-container-minimum {
+  background-color: var(--forge-theme-surface-container-minimum);
+}
+@utility bg-surface-container-low {
+  background-color: var(--forge-theme-surface-container-low);
+}
+@utility bg-surface-container-medium {
+  background-color: var(--forge-theme-surface-container-medium);
+}
+@utility bg-surface-container-high {
+  background-color: var(--forge-theme-surface-container-high);
+}
+/* Brand */
+@utility bg-brand {
+  background-color: var(--forge-theme-brand);
+}
+/* Primary colors */
+@utility bg-primary {
+  background-color: var(--forge-theme-primary);
+}
+@utility bg-primary-container-minimum {
+  background-color: var(--forge-theme-primary-container-minimum);
+}
+@utility bg-primary-container-low {
+  background-color: var(--forge-theme-primary-container-low);
+}
+@utility bg-primary-container {
+  background-color: var(--forge-theme-primary-container);
+}
+@utility bg-primary-container-high {
+  background-color: var(--forge-theme-primary-container-high);
+}
+/* Secondary colors */
+@utility bg-secondary {
+  background-color: var(--forge-theme-secondary);
+}
+@utility bg-secondary-container-minimum {
+  background-color: var(--forge-theme-secondary-container-minimum);
+}
+@utility bg-secondary-container-low {
+  background-color: var(--forge-theme-secondary-container-low);
+}
+@utility bg-secondary-container {
+  background-color: var(--forge-theme-secondary-container);
+}
+@utility bg-secondary-container-high {
+  background-color: var(--forge-theme-secondary-container-high);
+}
+/* Tertiary colors */
+@utility bg-tertiary {
+  background-color: var(--forge-theme-tertiary);
+}
+@utility bg-tertiary-container-minimum {
+  background-color: var(--forge-theme-tertiary-container-minimum);
+}
+@utility bg-tertiary-container-low {
+  background-color: var(--forge-theme-tertiary-container-low);
+}
+@utility bg-tertiary-container {
+  background-color: var(--forge-theme-tertiary-container);
+}
+@utility bg-tertiary-container-high {
+  background-color: var(--forge-theme-tertiary-container-high);
+}
+/* Success colors */
+@utility bg-success {
+  background-color: var(--forge-theme-success);
+}
+@utility bg-success-container-minimum {
+  background-color: var(--forge-theme-success-container-minimum);
+}
+@utility bg-success-container-low {
+  background-color: var(--forge-theme-success-container-low);
+}
+@utility bg-success-container {
+  background-color: var(--forge-theme-success-container);
+}
+@utility bg-success-container-high {
+  background-color: var(--forge-theme-success-container-high);
+}
+/* Error colors */
+@utility bg-error {
+  background-color: var(--forge-theme-error);
+}
+@utility bg-error-container-minimum {
+  background-color: var(--forge-theme-error-container-minimum);
+}
+@utility bg-error-container-low {
+  background-color: var(--forge-theme-error-container-low);
+}
+@utility bg-error-container {
+  background-color: var(--forge-theme-error-container);
+}
+@utility bg-error-container-high {
+  background-color: var(--forge-theme-error-container-high);
+}
+/* Warning colors */
+@utility bg-warning {
+  background-color: var(--forge-theme-warning);
+}
+@utility bg-warning-container-minimum {
+  background-color: var(--forge-theme-warning-container-minimum);
+}
+@utility bg-warning-container-low {
+  background-color: var(--forge-theme-warning-container-low);
+}
+@utility bg-warning-container {
+  background-color: var(--forge-theme-warning-container);
+}
+@utility bg-warning-container-high {
+  background-color: var(--forge-theme-warning-container-high);
+}
+/* Info colors */
+@utility bg-info {
+  background-color: var(--forge-theme-info);
+}
+@utility bg-info-container-minimum {
+  background-color: var(--forge-theme-info-container-minimum);
+}
+@utility bg-info-container-low {
+  background-color: var(--forge-theme-info-container-low);
+}
+@utility bg-info-container {
+  background-color: var(--forge-theme-info-container);
+}
+@utility bg-info-container-high {
+  background-color: var(--forge-theme-info-container-high);
+}
+/* ==========================================================================
+   TEXT COLORS
+   Usage: text-high, text-primary, text-error, etc.
+   ========================================================================== */
+/* Text emphasis levels */
+@utility text-high {
+  color: var(--forge-theme-text-high);
+}
+@utility text-high-inverse {
+  color: var(--forge-theme-text-high-inverse);
+}
+@utility text-medium {
+  color: var(--forge-theme-text-medium);
+}
+@utility text-medium-inverse {
+  color: var(--forge-theme-text-medium-inverse);
+}
+@utility text-low {
+  color: var(--forge-theme-text-low);
+}
+@utility text-low-inverse {
+  color: var(--forge-theme-text-low-inverse);
+}
+@utility text-lowest {
+  color: var(--forge-theme-text-lowest);
+}
+@utility text-lowest-inverse {
+  color: var(--forge-theme-text-lowest-inverse);
+}
+/* Semantic text colors */
+@utility text-brand {
+  color: var(--forge-theme-brand);
+}
+@utility text-primary {
+  color: var(--forge-theme-primary);
+}
+@utility text-secondary {
+  color: var(--forge-theme-secondary);
+}
+@utility text-tertiary {
+  color: var(--forge-theme-tertiary);
+}
+@utility text-success {
+  color: var(--forge-theme-success);
+}
+@utility text-error {
+  color: var(--forge-theme-error);
+}
+@utility text-warning {
+  color: var(--forge-theme-warning);
+}
+@utility text-info {
+  color: var(--forge-theme-info);
+}
+/* ==========================================================================
+   BORDER COLORS
+   Usage: border-outline, border-primary, border-error, etc.
+   ========================================================================== */
+/* Outline colors */
+@utility border-outline {
+  border-color: var(--forge-theme-outline);
+}
+@utility border-outline-low {
+  border-color: var(--forge-theme-outline-low);
+}
+@utility border-outline-medium {
+  border-color: var(--forge-theme-outline-medium);
+}
+@utility border-outline-high {
+  border-color: var(--forge-theme-outline-high);
+}
+/* Semantic border colors */
+@utility border-brand {
+  border-color: var(--forge-theme-brand);
+}
+@utility border-primary {
+  border-color: var(--forge-theme-primary);
+}
+@utility border-secondary {
+  border-color: var(--forge-theme-secondary);
+}
+@utility border-tertiary {
+  border-color: var(--forge-theme-tertiary);
+}
+@utility border-success {
+  border-color: var(--forge-theme-success);
+}
+@utility border-error {
+  border-color: var(--forge-theme-error);
+}
+@utility border-warning {
+  border-color: var(--forge-theme-warning);
+}
+@utility border-info {
+  border-color: var(--forge-theme-info);
+}
+/* ==========================================================================
+   RING COLORS (for focus rings)
+   Usage: ring-primary, ring-error, etc.
+   ========================================================================== */
+@utility ring-outline {
+  --tw-ring-color: var(--forge-theme-outline);
+}
+@utility ring-outline-high {
+  --tw-ring-color: var(--forge-theme-outline-high);
+}
+@utility ring-primary {
+  --tw-ring-color: var(--forge-theme-primary);
+}
+@utility ring-secondary {
+  --tw-ring-color: var(--forge-theme-secondary);
+}
+@utility ring-error {
+  --tw-ring-color: var(--forge-theme-error);
+}
+@utility ring-success {
+  --tw-ring-color: var(--forge-theme-success);
+}
+/* ==========================================================================
+   TYPOGRAPHY - SHORTER ALIASES FOR FORGE CLASSES
+   Usage: text-heading4 (alias for forge-typography--heading4), etc.
+   These use Forge's typography SCSS mixins for exact parity.
+   ========================================================================== */
+/* Display styles */
+@utility text-display1 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-display1-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-display1-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display1-font-size-scale, 1.5)));
+  font-weight: var(--forge-typography-display1-font-weight, 300);
+  line-height: var(
+    --forge-typography-display1-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display1-line-height-scale, 2.25))
+  );
+  letter-spacing: var(--forge-typography-display1-letter-spacing, normal);
+  text-transform: var(--forge-typography-display1-text-transform, inherit);
+  text-decoration: var(--forge-typography-display1-text-decoration, inherit);
+}
+@utility text-display2 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-display2-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-display2-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display2-font-size-scale, 1.75)));
+  font-weight: var(--forge-typography-display2-font-weight, 300);
+  line-height: var(
+    --forge-typography-display2-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display2-line-height-scale, 2.25))
+  );
+  letter-spacing: var(--forge-typography-display2-letter-spacing, normal);
+  text-transform: var(--forge-typography-display2-text-transform, inherit);
+  text-decoration: var(--forge-typography-display2-text-decoration, inherit);
+}
+@utility text-display3 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-display3-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-display3-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display3-font-size-scale, 2)));
+  font-weight: var(--forge-typography-display3-font-weight, 300);
+  line-height: var(
+    --forge-typography-display3-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display3-line-height-scale, 2.5))
+  );
+  letter-spacing: var(--forge-typography-display3-letter-spacing, normal);
+  text-transform: var(--forge-typography-display3-text-transform, inherit);
+  text-decoration: var(--forge-typography-display3-text-decoration, inherit);
+}
+@utility text-display4 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-display4-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-display4-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display4-font-size-scale, 2.25)));
+  font-weight: var(--forge-typography-display4-font-weight, 300);
+  line-height: var(
+    --forge-typography-display4-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display4-line-height-scale, 2.75))
+  );
+  letter-spacing: var(--forge-typography-display4-letter-spacing, -0.0069444444em);
+  text-transform: var(--forge-typography-display4-text-transform, inherit);
+  text-decoration: var(--forge-typography-display4-text-decoration, inherit);
+}
+@utility text-display5 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-display5-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-display5-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display5-font-size-scale, 2.5)));
+  font-weight: var(--forge-typography-display5-font-weight, 300);
+  line-height: var(
+    --forge-typography-display5-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display5-line-height-scale, 3))
+  );
+  letter-spacing: var(--forge-typography-display5-letter-spacing, -0.0125em);
+  text-transform: var(--forge-typography-display5-text-transform, inherit);
+  text-decoration: var(--forge-typography-display5-text-decoration, inherit);
+}
+@utility text-display6 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-display6-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-display6-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display6-font-size-scale, 3)));
+  font-weight: var(--forge-typography-display6-font-weight, 300);
+  line-height: var(
+    --forge-typography-display6-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display6-line-height-scale, 4))
+  );
+  letter-spacing: var(--forge-typography-display6-letter-spacing, -0.0208333333em);
+  text-transform: var(--forge-typography-display6-text-transform, inherit);
+  text-decoration: var(--forge-typography-display6-text-decoration, inherit);
+}
+@utility text-display7 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-display7-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-display7-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display7-font-size-scale, 3.5)));
+  font-weight: var(--forge-typography-display7-font-weight, 300);
+  line-height: var(
+    --forge-typography-display7-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display7-line-height-scale, 4.5))
+  );
+  letter-spacing: var(--forge-typography-display7-letter-spacing, -0.0267857143em);
+  text-transform: var(--forge-typography-display7-text-transform, inherit);
+  text-decoration: var(--forge-typography-display7-text-decoration, inherit);
+}
+@utility text-display8 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-display8-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-display8-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display8-font-size-scale, 4)));
+  font-weight: var(--forge-typography-display8-font-weight, 300);
+  line-height: var(
+    --forge-typography-display8-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-display8-line-height-scale, 4.75))
+  );
+  letter-spacing: var(--forge-typography-display8-letter-spacing, -0.03125em);
+  text-transform: var(--forge-typography-display8-text-transform, inherit);
+  text-decoration: var(--forge-typography-display8-text-decoration, inherit);
+}
+/* Heading styles */
+@utility text-heading1 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-heading1-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(
+    --forge-typography-heading1-font-size,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading1-font-size-scale, 0.875))
+  );
+  font-weight: var(--forge-typography-heading1-font-weight, 500);
+  line-height: var(
+    --forge-typography-heading1-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading1-line-height-scale, 1.125))
+  );
+  letter-spacing: var(--forge-typography-heading1-letter-spacing, 0.0178571429em);
+  text-transform: var(--forge-typography-heading1-text-transform, inherit);
+  text-decoration: var(--forge-typography-heading1-text-decoration, inherit);
+}
+@utility text-heading2 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-heading2-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-heading2-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading2-font-size-scale, 1)));
+  font-weight: var(--forge-typography-heading2-font-weight, 500);
+  line-height: var(
+    --forge-typography-heading2-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading2-line-height-scale, 1.25))
+  );
+  letter-spacing: var(--forge-typography-heading2-letter-spacing, 0.0125em);
+  text-transform: var(--forge-typography-heading2-text-transform, inherit);
+  text-decoration: var(--forge-typography-heading2-text-decoration, inherit);
+}
+@utility text-heading3 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-heading3-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(
+    --forge-typography-heading3-font-size,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading3-font-size-scale, 1.125))
+  );
+  font-weight: var(--forge-typography-heading3-font-weight, 500);
+  line-height: var(
+    --forge-typography-heading3-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading3-line-height-scale, 1.375))
+  );
+  letter-spacing: var(--forge-typography-heading3-letter-spacing, 0.0083333333em);
+  text-transform: var(--forge-typography-heading3-text-transform, inherit);
+  text-decoration: var(--forge-typography-heading3-text-decoration, inherit);
+}
+@utility text-heading4 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-heading4-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-heading4-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading4-font-size-scale, 1.25)));
+  font-weight: var(--forge-typography-heading4-font-weight, 500);
+  line-height: var(
+    --forge-typography-heading4-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading4-line-height-scale, 1.5))
+  );
+  letter-spacing: var(--forge-typography-heading4-letter-spacing, 0.005em);
+  text-transform: var(--forge-typography-heading4-text-transform, inherit);
+  text-decoration: var(--forge-typography-heading4-text-decoration, inherit);
+}
+@utility text-heading5 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-heading5-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-heading5-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading5-font-size-scale, 1.5)));
+  font-weight: var(--forge-typography-heading5-font-weight, 500);
+  line-height: var(
+    --forge-typography-heading5-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading5-line-height-scale, 1.75))
+  );
+  letter-spacing: var(--forge-typography-heading5-letter-spacing, 0em);
+  text-transform: var(--forge-typography-heading5-text-transform, inherit);
+  text-decoration: var(--forge-typography-heading5-text-decoration, inherit);
+}
+@utility text-heading6 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-heading6-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-heading6-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading6-font-size-scale, 1.75)));
+  font-weight: var(--forge-typography-heading6-font-weight, 500);
+  line-height: var(
+    --forge-typography-heading6-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading6-line-height-scale, 2.125))
+  );
+  letter-spacing: var(--forge-typography-heading6-letter-spacing, 0em);
+  text-transform: var(--forge-typography-heading6-text-transform, inherit);
+  text-decoration: var(--forge-typography-heading6-text-decoration, inherit);
+}
+@utility text-heading7 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-heading7-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-heading7-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading7-font-size-scale, 2)));
+  font-weight: var(--forge-typography-heading7-font-weight, 500);
+  line-height: var(
+    --forge-typography-heading7-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading7-line-height-scale, 2.5))
+  );
+  letter-spacing: var(--forge-typography-heading7-letter-spacing, -0.0015625em);
+  text-transform: var(--forge-typography-heading7-text-transform, inherit);
+  text-decoration: var(--forge-typography-heading7-text-decoration, inherit);
+}
+@utility text-heading8 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-heading8-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-heading8-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading8-font-size-scale, 2.25)));
+  font-weight: var(--forge-typography-heading8-font-weight, 500);
+  line-height: var(
+    --forge-typography-heading8-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-heading8-line-height-scale, 2.625))
+  );
+  letter-spacing: var(--forge-typography-heading8-letter-spacing, -0.0027777778em);
+  text-transform: var(--forge-typography-heading8-text-transform, inherit);
+  text-decoration: var(--forge-typography-heading8-text-decoration, inherit);
+}
+/* Subheading styles */
+@utility text-subheading1 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-subheading1-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(
+    --forge-typography-subheading1-font-size,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading1-font-size-scale, 0.875))
+  );
+  font-weight: var(--forge-typography-subheading1-font-weight, 400);
+  line-height: var(
+    --forge-typography-subheading1-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading1-line-height-scale, 1.125))
+  );
+  letter-spacing: var(--forge-typography-subheading1-letter-spacing, normal);
+  text-transform: var(--forge-typography-subheading1-text-transform, inherit);
+  text-decoration: var(--forge-typography-subheading1-text-decoration, inherit);
+}
+@utility text-subheading2 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-subheading2-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(
+    --forge-typography-subheading2-font-size,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading2-font-size-scale, 1))
+  );
+  font-weight: var(--forge-typography-subheading2-font-weight, 400);
+  line-height: var(
+    --forge-typography-subheading2-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading2-line-height-scale, 1.25))
+  );
+  letter-spacing: var(--forge-typography-subheading2-letter-spacing, normal);
+  text-transform: var(--forge-typography-subheading2-text-transform, inherit);
+  text-decoration: var(--forge-typography-subheading2-text-decoration, inherit);
+}
+@utility text-subheading3 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-subheading3-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(
+    --forge-typography-subheading3-font-size,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading3-font-size-scale, 1.125))
+  );
+  font-weight: var(--forge-typography-subheading3-font-weight, 400);
+  line-height: var(
+    --forge-typography-subheading3-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading3-line-height-scale, 1.375))
+  );
+  letter-spacing: var(--forge-typography-subheading3-letter-spacing, normal);
+  text-transform: var(--forge-typography-subheading3-text-transform, inherit);
+  text-decoration: var(--forge-typography-subheading3-text-decoration, inherit);
+}
+@utility text-subheading4 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-subheading4-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(
+    --forge-typography-subheading4-font-size,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading4-font-size-scale, 1.25))
+  );
+  font-weight: var(--forge-typography-subheading4-font-weight, 400);
+  line-height: var(
+    --forge-typography-subheading4-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading4-line-height-scale, 1.5))
+  );
+  letter-spacing: var(--forge-typography-subheading4-letter-spacing, normal);
+  text-transform: var(--forge-typography-subheading4-text-transform, inherit);
+  text-decoration: var(--forge-typography-subheading4-text-decoration, inherit);
+}
+@utility text-subheading5 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-subheading5-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(
+    --forge-typography-subheading5-font-size,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading5-font-size-scale, 1.5))
+  );
+  font-weight: var(--forge-typography-subheading5-font-weight, 400);
+  line-height: var(
+    --forge-typography-subheading5-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading5-line-height-scale, 1.75))
+  );
+  letter-spacing: var(--forge-typography-subheading5-letter-spacing, 0em);
+  text-transform: var(--forge-typography-subheading5-text-transform, inherit);
+  text-decoration: var(--forge-typography-subheading5-text-decoration, inherit);
+}
+@utility text-subheading6 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-subheading6-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(
+    --forge-typography-subheading6-font-size,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading6-font-size-scale, 1.75))
+  );
+  font-weight: var(--forge-typography-subheading6-font-weight, 400);
+  line-height: var(
+    --forge-typography-subheading6-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading6-line-height-scale, 2.125))
+  );
+  letter-spacing: var(--forge-typography-subheading6-letter-spacing, 0em);
+  text-transform: var(--forge-typography-subheading6-text-transform, inherit);
+  text-decoration: var(--forge-typography-subheading6-text-decoration, inherit);
+}
+@utility text-subheading7 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-subheading7-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(
+    --forge-typography-subheading7-font-size,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading7-font-size-scale, 2))
+  );
+  font-weight: var(--forge-typography-subheading7-font-weight, 400);
+  line-height: var(
+    --forge-typography-subheading7-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading7-line-height-scale, 2.5))
+  );
+  letter-spacing: var(--forge-typography-subheading7-letter-spacing, -0.0015625em);
+  text-transform: var(--forge-typography-subheading7-text-transform, inherit);
+  text-decoration: var(--forge-typography-subheading7-text-decoration, inherit);
+}
+@utility text-subheading8 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-subheading8-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(
+    --forge-typography-subheading8-font-size,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading8-font-size-scale, 2.25))
+  );
+  font-weight: var(--forge-typography-subheading8-font-weight, 400);
+  line-height: var(
+    --forge-typography-subheading8-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-subheading8-line-height-scale, 2.625))
+  );
+  letter-spacing: var(--forge-typography-subheading8-letter-spacing, -0.0027777778em);
+  text-transform: var(--forge-typography-subheading8-text-transform, inherit);
+  text-decoration: var(--forge-typography-subheading8-text-decoration, inherit);
+}
+/* Body styles */
+@utility text-body1 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-body1-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-body1-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-font-size-scale, 0.875)));
+  font-weight: var(--forge-typography-body1-font-weight, 400);
+  line-height: var(--forge-typography-body1-line-height, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-line-height-scale, 1.125)));
+  letter-spacing: var(--forge-typography-body1-letter-spacing, 0.0357142857em);
+  text-transform: var(--forge-typography-body1-text-transform, inherit);
+  text-decoration: var(--forge-typography-body1-text-decoration, inherit);
+}
+@utility text-body2 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-body2-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-body2-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-font-size-scale, 1)));
+  font-weight: var(--forge-typography-body2-font-weight, 400);
+  line-height: var(--forge-typography-body2-line-height, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-line-height-scale, 1.375)));
+  letter-spacing: var(--forge-typography-body2-letter-spacing, 0.015625em);
+  text-transform: var(--forge-typography-body2-text-transform, inherit);
+  text-decoration: var(--forge-typography-body2-text-decoration, inherit);
+}
+@utility text-body3 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-body3-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-body3-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-font-size-scale, 1.125)));
+  font-weight: var(--forge-typography-body3-font-weight, 400);
+  line-height: var(--forge-typography-body3-line-height, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-line-height-scale, 1.5)));
+  letter-spacing: var(--forge-typography-body3-letter-spacing, 0.0083333333em);
+  text-transform: var(--forge-typography-body3-text-transform, inherit);
+  text-decoration: var(--forge-typography-body3-text-decoration, inherit);
+}
+@utility text-body4 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-body4-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-body4-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-font-size-scale, 1.25)));
+  font-weight: var(--forge-typography-body4-font-weight, 400);
+  line-height: var(--forge-typography-body4-line-height, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-line-height-scale, 1.75)));
+  letter-spacing: var(--forge-typography-body4-letter-spacing, 0.005em);
+  text-transform: var(--forge-typography-body4-text-transform, inherit);
+  text-decoration: var(--forge-typography-body4-text-decoration, inherit);
+}
+/* Label styles */
+@utility text-label1 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-label1-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-label1-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-label-font-size-scale, 0.75)));
+  font-weight: var(--forge-typography-label1-font-weight, 400);
+  line-height: var(
+    --forge-typography-label1-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-label-line-height-scale, 1.25))
+  );
+  letter-spacing: var(--forge-typography-label1-letter-spacing, 0.0357142857em);
+  text-transform: var(--forge-typography-label1-text-transform, inherit);
+  text-decoration: var(--forge-typography-label1-text-decoration, inherit);
+}
+@utility text-label2 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-label2-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-label2-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-label-font-size-scale, 0.8125)));
+  font-weight: var(--forge-typography-label2-font-weight, 400);
+  line-height: var(
+    --forge-typography-label2-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-label-line-height-scale, 1.25))
+  );
+  letter-spacing: var(--forge-typography-label2-letter-spacing, 0.0096153846em);
+  text-transform: var(--forge-typography-label2-text-transform, inherit);
+  text-decoration: var(--forge-typography-label2-text-decoration, inherit);
+}
+@utility text-label3 {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-label3-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-label3-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-label-font-size-scale, 0.875)));
+  font-weight: var(--forge-typography-label3-font-weight, 400);
+  line-height: var(
+    --forge-typography-label3-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-label-line-height-scale, 1.25))
+  );
+  letter-spacing: var(--forge-typography-label3-letter-spacing, 0.0089285714em);
+  text-transform: var(--forge-typography-label3-text-transform, inherit);
+  text-decoration: var(--forge-typography-label3-text-decoration, inherit);
+}
+/* Button text */
+@utility text-button {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-button-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-button-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-button-font-size-scale, 0.875)));
+  font-weight: var(--forge-typography-button-font-weight, 500);
+  line-height: var(--forge-typography-button-line-height, normal);
+  letter-spacing: var(--forge-typography-button-letter-spacing, 0.0714285714em);
+  text-transform: var(--forge-typography-button-text-transform, inherit);
+  text-decoration: var(--forge-typography-button-text-decoration, inherit);
+}
+/* Link text */
+@utility text-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+/* Overline text */
+@utility text-overline {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--forge-typography-overline-font-family, var(--forge-typography-font-family, 'Roboto', sans-serif));
+  font-size: var(--forge-typography-overline-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-overline-font-size-scale, 0.75)));
+  font-weight: var(--forge-typography-overline-font-weight, 500);
+  line-height: var(
+    --forge-typography-overline-line-height,
+    calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-overline-line-height-scale, 2))
+  );
+  letter-spacing: var(--forge-typography-overline-letter-spacing, 0.1666666667em);
+  text-transform: var(--forge-typography-overline-text-transform, uppercase);
+  text-decoration: var(--forge-typography-overline-text-decoration, inherit);
+}
+/* ==========================================================================
+   BORDER RADIUS - LOGICAL DIRECTIONAL VARIANTS
+   Usage: rounded-bs-lg (block-start), rounded-ie-md (inline-end), etc.
+   ========================================================================== */
+/* Extra Small directional */
+@utility rounded-bs-xs {
+  border-radius: var(--forge-shape-extra-small-block-start, 1px 1px 0 0);
+}
+@utility rounded-be-xs {
+  border-radius: var(--forge-shape-extra-small-block-end, 0 0 1px 1px);
+}
+@utility rounded-is-xs {
+  border-radius: var(--forge-shape-extra-small-inline-start, 1px 0 0 1px);
+}
+@utility rounded-ie-xs {
+  border-radius: var(--forge-shape-extra-small-inline-end, 0 1px 1px 0);
+}
+/* Small directional */
+@utility rounded-bs-sm {
+  border-radius: var(--forge-shape-small-block-start, 2px 2px 0 0);
+}
+@utility rounded-be-sm {
+  border-radius: var(--forge-shape-small-block-end, 0 0 2px 2px);
+}
+@utility rounded-is-sm {
+  border-radius: var(--forge-shape-small-inline-start, 2px 0 0 2px);
+}
+@utility rounded-ie-sm {
+  border-radius: var(--forge-shape-small-inline-end, 0 2px 2px 0);
+}
+/* Medium directional */
+@utility rounded-bs-md {
+  border-radius: var(--forge-shape-medium-block-start, 4px 4px 0 0);
+}
+@utility rounded-be-md {
+  border-radius: var(--forge-shape-medium-block-end, 0 0 4px 4px);
+}
+@utility rounded-is-md {
+  border-radius: var(--forge-shape-medium-inline-start, 4px 0 0 4px);
+}
+@utility rounded-ie-md {
+  border-radius: var(--forge-shape-medium-inline-end, 0 4px 4px 0);
+}
+/* Large directional */
+@utility rounded-bs-lg {
+  border-radius: var(--forge-shape-large-block-start, 8px 8px 0 0);
+}
+@utility rounded-be-lg {
+  border-radius: var(--forge-shape-large-block-end, 0 0 8px 8px);
+}
+@utility rounded-is-lg {
+  border-radius: var(--forge-shape-large-inline-start, 8px 0 0 8px);
+}
+@utility rounded-ie-lg {
+  border-radius: var(--forge-shape-large-inline-end, 0 8px 8px 0);
+}
+/* Extra Large directional */
+@utility rounded-bs-xl {
+  border-radius: var(--forge-shape-extra-large-block-start, 16px 16px 0 0);
+}
+@utility rounded-be-xl {
+  border-radius: var(--forge-shape-extra-large-block-end, 0 0 16px 16px);
+}
+@utility rounded-is-xl {
+  border-radius: var(--forge-shape-extra-large-inline-start, 16px 0 0 16px);
+}
+@utility rounded-ie-xl {
+  border-radius: var(--forge-shape-extra-large-inline-end, 0 16px 16px 0);
+}
+
+/*# sourceMappingURL=forge-theme-compiled.css.map */
