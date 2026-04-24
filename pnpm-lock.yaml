@@ -365,9 +365,16 @@ importers:
 
   packages/forge-tailwind:
     dependencies:
+      '@tylertech/forge':
+        specifier: 'workspace:'
+        version: link:../forge
       tailwindcss:
         specifier: '>=4.0.0'
         version: 4.2.4
+    devDependencies:
+      sass:
+        specifier: 'catalog:'
+        version: 1.92.1
 
 packages:
 

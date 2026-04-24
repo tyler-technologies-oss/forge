@@ -11,12 +11,21 @@
   },
   "type": "module",
   "exports": {
-    ".": "./css/forge-theme.css",
+    ".": "./dist/forge-theme.css",
     "./package.json": "./package.json"
   },
   "files": [
-    "css"
+    "dist"
   ],
+  "scripts": {
+    "build": "sass css/forge-theme.scss dist/forge-theme.css --load-path=node_modules"
+  },
+  "dependencies": {
+    "@tylertech/forge": "workspace:"
+  },
+  "devDependencies": {
+    "sass": "catalog:"
+  },
   "peerDependencies": {
     "tailwindcss": ">=4.0.0"
   },
