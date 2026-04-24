@@ -10,10 +10,10 @@ $tokens: (
   thumb-min-width: utils.module-val(scrollbar, thumb-min-width, 32px),
   border-radius: utils.module-val(scrollbar, border-radius, shape.variable(full)),
   border-width: utils.module-val(scrollbar, border-width, 3px),
-  track-container: utils.module-val(scrollbar, track-container, theme.variable(surface-container-low)),
-  track-container-hover: utils.module-val(scrollbar, track-container-hover, theme.variable(surface-container-low)),
-  thumb-container: utils.module-val(scrollbar, thumb-container, theme.variable(surface-container-medium)),
-  thumb-container-hover: utils.module-val(scrollbar, thumb-container-hover, theme.variable(surface-container-high))
+  track-container: utils.module-val(scrollbar, track-container, transparent),
+  track-container-hover: utils.module-val(scrollbar, track-container-hover, transparent),
+  thumb-container: utils.module-val(scrollbar, thumb-container, theme.variable(surface-container-highest)),
+  thumb-container-hover: utils.module-val(scrollbar, thumb-container-hover, theme.variable(surface-container-maximum))
 ) !default;
 
 @function get($key) {

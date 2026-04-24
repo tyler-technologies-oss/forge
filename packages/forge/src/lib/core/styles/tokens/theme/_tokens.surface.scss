@@ -1,45 +1,55 @@
 @use 'sass:map';
 @use '../../elevation';
-@use '../color-palette';
+@use '../color-palette/radix-color-palette' as color-palette;
+@use '../color-palette/radix-color-palette-dark' as color-palette-dark;
+@use './tokens.text' as text;
 
 // Light
 $tokens: (
-  surface: color-palette.$neutral-50,
-  surface-inverse: #333333,
-  surface-container: color-palette.$grey-300,
-  surface-container-minimum: color-palette.$grey-100,
-  surface-container-low: #ebebeb,
-  surface-container-medium: #c2c2c2,
-  surface-container-high: color-palette.$grey-500,
-  surface-dim: color-palette.$grey-50,
-  surface-bright: color-palette.$neutral-50,
+  surface: color-palette.$white,
+  surface-bright: color-palette.$white,
+  surface-dim: color-palette.$slate-2,
+  surface-inverse: color-palette.$slate-12,
+  surface-container-minimum: color-palette.$slate-2,
+  surface-container-low: color-palette.$slate-3,
+  surface-container: color-palette.$slate-4,
+  surface-container-medium: color-palette.$slate-5,
+  surface-container-high: color-palette.$slate-6,
+  surface-container-highest: color-palette.$slate-7,
+  surface-container-maximum: color-palette.$slate-8,
   surface-bright-shadow: elevation.value(2),
-  on-surface: color-palette.$black,
-  on-surface-inverse: color-palette.$white,
-  on-surface-container: color-palette.$black,
-  on-surface-container-minimum: color-palette.$black,
-  on-surface-container-low: color-palette.$black,
-  on-surface-container-medium: color-palette.$black,
-  on-surface-container-high: color-palette.$black
+  on-surface: map.get(text.$tokens, text-high),
+  on-surface-inverse: map.get(text.$tokens, text-high-inverse),
+  on-surface-container-minimum: map.get(text.$tokens, text-high),
+  on-surface-container-low: map.get(text.$tokens, text-high),
+  on-surface-container: map.get(text.$tokens, text-high),
+  on-surface-container-medium: map.get(text.$tokens, text-high),
+  on-surface-container-high: map.get(text.$tokens, text-high),
+  on-surface-container-highest: map.get(text.$tokens, text-high),
+  on-surface-container-maximum: map.get(text.$tokens, text-high)
 );
 
 // Dark
 $tokens-dark: (
-  surface: color-palette.$neutral-900,
-  surface-inverse: #d5d5d5,
-  surface-container: #454545,
-  surface-container-minimum: #343434,
-  surface-container-low: #3d3d3d,
-  surface-container-medium: #7c7c7c,
-  surface-container-high: color-palette.$grey-500,
-  surface-dim: color-palette.$grey-900,
-  surface-bright: #343434,
+  surface: color-palette-dark.$slate-1,
+  surface-bright: color-palette-dark.$slate-5,
+  surface-dim: color-palette-dark.$slate-2,
+  surface-inverse: color-palette-dark.$slate-12,
+  surface-container-minimum: color-palette-dark.$slate-1,
+  surface-container-low: color-palette-dark.$slate-2,
+  surface-container: color-palette-dark.$slate-3,
+  surface-container-medium: color-palette-dark.$slate-4,
+  surface-container-high: color-palette-dark.$slate-5,
+  surface-container-highest: color-palette-dark.$slate-6,
+  surface-container-maximum: color-palette-dark.$slate-7,
   surface-bright-shadow: elevation.value(16),
-  on-surface: color-palette.$white,
-  on-surface-inverse: color-palette.$black,
-  on-surface-container: color-palette.$white,
-  on-surface-container-minimum: color-palette.$white,
-  on-surface-container-low: color-palette.$white,
-  on-surface-container-medium: color-palette.$white,
-  on-surface-container-high: color-palette.$black
+  on-surface: map.get(text.$tokens-dark, text-high),
+  on-surface-inverse: map.get(text.$tokens-dark, text-high-inverse),
+  on-surface-container-minimum: map.get(text.$tokens-dark, text-high),
+  on-surface-container-low: map.get(text.$tokens-dark, text-high),
+  on-surface-container: map.get(text.$tokens-dark, text-high),
+  on-surface-container-medium: map.get(text.$tokens-dark, text-high),
+  on-surface-container-high: map.get(text.$tokens-dark, text-high),
+  on-surface-container-highest: map.get(text.$tokens-dark, text-high),
+  on-surface-container-maximum: map.get(text.$tokens-dark, text-high)
 );
