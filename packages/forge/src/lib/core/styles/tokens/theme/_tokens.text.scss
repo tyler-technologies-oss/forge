@@ -1,27 +1,29 @@
-@use 'sass:map';
-@use './color-emphasis';
-@use './tokens.surface' as surface;
+/* stylelint-disable lightness-notation */
+/* stylelint-disable hue-degree-notation */
+@use 'sass:color';
+@use '../color-palette/radix-color-palette' as color-palette;
+@use '../color-palette/radix-color-palette-dark' as color-palette-dark;
 
 // Light
 $tokens: (
-  text-high: rgba(#000, color-emphasis.value(highest)),
-  text-high-inverse: rgba(#fff, color-emphasis.value(highest)),
-  text-medium: rgba(#000, color-emphasis.value(medium-high)),
-  text-medium-inverse: rgba(#fff, color-emphasis.value(medium-high)),
-  text-low: rgba(#000, color-emphasis.value(medium-low)),
-  text-low-inverse: rgba(#fff, color-emphasis.value(medium-low)),
-  text-lowest: rgba(#000, color-emphasis.value(lower)),
-  text-lowest-inverse: rgba(#fff, color-emphasis.value(lower))
+  text-high: color-palette.$gray-a12,
+  text-high-inverse: color-palette-dark.$gray-a12,
+  text-medium: color-palette.$gray-a11,
+  text-medium-inverse: color-palette-dark.$gray-a11,
+  text-low: color-palette.$gray-a9,
+  text-low-inverse: color-palette-dark.$gray-a9,
+  text-lowest: color-palette.$gray-a5,
+  text-lowest-inverse: color-palette-dark.$gray-a5
 );
 
 // Dark
 $tokens-dark: (
-  text-high: rgba(#fff, color-emphasis.value(highest)),
-  text-high-inverse: rgba(#000, color-emphasis.value(highest)),
-  text-medium: rgba(#fff, color-emphasis.value(medium-high)),
-  text-medium-inverse: rgba(#000, color-emphasis.value(medium-high)),
-  text-low: rgba(#fff, color-emphasis.value(medium-low)),
-  text-low-inverse: rgba(#000, color-emphasis.value(medium-low)),
-  text-lowest: rgba(#fff, color-emphasis.value(lower)),
-  text-lowest-inverse: rgba(#000, color-emphasis.value(lower))
+  text-high: color-palette-dark.$gray-a12,
+  text-high-inverse: color-palette.$gray-a12,
+  text-medium: color-palette-dark.$gray-a11,
+  text-medium-inverse: color-palette.$gray-a11,
+  text-low: color-palette-dark.$gray-a9,
+  text-low-inverse: color-palette.$gray-a9,
+  text-lowest: color-palette-dark.$gray-a5,
+  text-lowest-inverse: color-palette.$gray-a5
 );

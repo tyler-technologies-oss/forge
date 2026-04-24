@@ -1,6 +1,8 @@
 @use '../core/styles/theme';
 @use '../core/styles/border';
+@use '../core/styles/tokens/color-palette/radix-color-palette-dark' as color-palette-dark;
 
+@use '../button';
 @use '../popover';
 @use '../tooltip';
 @use '../chips/chip';
@@ -12,6 +14,18 @@
 @mixin theme-properties {
   // Global Forge theme properties
   @include theme.properties-dark;
+
+  // Button
+  @include button.provide-theme(
+    (
+      tonal-background: color-palette-dark.$indigo-3,
+      tonal-color: color-palette-dark.$indigo-a11,
+      filled-background: color-palette-dark.$indigo-9,
+      filled-color: color-palette-dark.$indigo-contrast,
+      raised-background: color-palette-dark.$indigo-9,
+      raised-color: color-palette-dark.$indigo-contrast
+    )
+  );
 
   // Popover
   @include popover.provide-theme(
