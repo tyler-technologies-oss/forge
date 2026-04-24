@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import './tailwind-demo.css';
 
 <Meta title="Getting Started/Tailwind CSS" />
 
@@ -74,111 +75,93 @@ Use `bg-*` utilities for Forge surface and semantic background colors.
 
 ### Surface
 
-<table style={{ width: '100%', borderCollapse: 'collapse', marginBlock: '16px' }}>
-  <tbody>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle', width: '48px' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-surface)', border: '1px solid var(--forge-theme-outline-low)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-surface</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-surface-dim)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-surface-dim</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-surface-bright)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-surface-bright</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-surface-inverse)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-surface-inverse</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-surface-container-minimum)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-surface-container-minimum</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-surface-container-low)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-surface-container-low</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-surface-container)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-surface-container</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-surface-container-medium)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-surface-container-medium</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-surface-container-high)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-surface-container-high</code></td></tr>
-  </tbody>
-</table>
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-surface border border-outline-low" /> | `bg-surface` | Default surface background |
+| <div className="w-6 h-6 rounded-sm bg-surface-dim border border-outline-low" /> | `bg-surface-dim` | Dimmed surface |
+| <div className="w-6 h-6 rounded-sm bg-surface-bright border border-outline-low" /> | `bg-surface-bright` | Bright surface |
+| <div className="w-6 h-6 rounded-sm bg-surface-inverse border border-outline-low" /> | `bg-surface-inverse` | Inverse surface |
+| <div className="w-6 h-6 rounded-sm bg-surface-container-minimum border border-outline-low" /> | `bg-surface-container-minimum` | Minimum container |
+| <div className="w-6 h-6 rounded-sm bg-surface-container-low border border-outline-low" /> | `bg-surface-container-low` | Low container |
+| <div className="w-6 h-6 rounded-sm bg-surface-container border border-outline-low" /> | `bg-surface-container` | Default container |
+| <div className="w-6 h-6 rounded-sm bg-surface-container-medium border border-outline-low" /> | `bg-surface-container-medium` | Medium container |
+| <div className="w-6 h-6 rounded-sm bg-surface-container-high border border-outline-low" /> | `bg-surface-container-high` | High container |
 
 ### Brand
 
-<table style={{ width: '100%', borderCollapse: 'collapse', marginBlock: '16px' }}>
-  <tbody>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle', width: '48px' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-brand)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-brand</code></td></tr>
-  </tbody>
-</table>
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-brand" /> | `bg-brand` | Brand color |
 
 ### Primary
 
-<table style={{ width: '100%', borderCollapse: 'collapse', marginBlock: '16px' }}>
-  <tbody>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle', width: '48px' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-primary)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-primary</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-primary-container-minimum)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-primary-container-minimum</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-primary-container-low)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-primary-container-low</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-primary-container)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-primary-container</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-primary-container-high)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-primary-container-high</code></td></tr>
-  </tbody>
-</table>
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-primary" /> | `bg-primary` | Primary color |
+| <div className="w-6 h-6 rounded-sm bg-primary-container-minimum border border-outline-low" /> | `bg-primary-container-minimum` | Minimum primary container |
+| <div className="w-6 h-6 rounded-sm bg-primary-container-low border border-outline-low" /> | `bg-primary-container-low` | Low primary container |
+| <div className="w-6 h-6 rounded-sm bg-primary-container border border-outline-low" /> | `bg-primary-container` | Default primary container |
+| <div className="w-6 h-6 rounded-sm bg-primary-container-high border border-outline-low" /> | `bg-primary-container-high` | High primary container |
 
 ### Secondary
 
-<table style={{ width: '100%', borderCollapse: 'collapse', marginBlock: '16px' }}>
-  <tbody>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle', width: '48px' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-secondary)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-secondary</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-secondary-container-minimum)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-secondary-container-minimum</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-secondary-container-low)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-secondary-container-low</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-secondary-container)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-secondary-container</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-secondary-container-high)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-secondary-container-high</code></td></tr>
-  </tbody>
-</table>
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-secondary" /> | `bg-secondary` | Secondary color |
+| <div className="w-6 h-6 rounded-sm bg-secondary-container-minimum border border-outline-low" /> | `bg-secondary-container-minimum` | Minimum secondary container |
+| <div className="w-6 h-6 rounded-sm bg-secondary-container-low border border-outline-low" /> | `bg-secondary-container-low` | Low secondary container |
+| <div className="w-6 h-6 rounded-sm bg-secondary-container border border-outline-low" /> | `bg-secondary-container` | Default secondary container |
+| <div className="w-6 h-6 rounded-sm bg-secondary-container-high border border-outline-low" /> | `bg-secondary-container-high` | High secondary container |
 
 ### Tertiary
 
-<table style={{ width: '100%', borderCollapse: 'collapse', marginBlock: '16px' }}>
-  <tbody>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle', width: '48px' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-tertiary)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-tertiary</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-tertiary-container-minimum)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-tertiary-container-minimum</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-tertiary-container-low)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-tertiary-container-low</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-tertiary-container)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-tertiary-container</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-tertiary-container-high)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-tertiary-container-high</code></td></tr>
-  </tbody>
-</table>
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-tertiary" /> | `bg-tertiary` | Tertiary color |
+| <div className="w-6 h-6 rounded-sm bg-tertiary-container-minimum border border-outline-low" /> | `bg-tertiary-container-minimum` | Minimum tertiary container |
+| <div className="w-6 h-6 rounded-sm bg-tertiary-container-low border border-outline-low" /> | `bg-tertiary-container-low` | Low tertiary container |
+| <div className="w-6 h-6 rounded-sm bg-tertiary-container border border-outline-low" /> | `bg-tertiary-container` | Default tertiary container |
+| <div className="w-6 h-6 rounded-sm bg-tertiary-container-high border border-outline-low" /> | `bg-tertiary-container-high` | High tertiary container |
 
 ### Success
 
-<table style={{ width: '100%', borderCollapse: 'collapse', marginBlock: '16px' }}>
-  <tbody>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle', width: '48px' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-success)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-success</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-success-container-minimum)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-success-container-minimum</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-success-container-low)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-success-container-low</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-success-container)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-success-container</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-success-container-high)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-success-container-high</code></td></tr>
-  </tbody>
-</table>
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-success" /> | `bg-success` | Success color |
+| <div className="w-6 h-6 rounded-sm bg-success-container-minimum border border-outline-low" /> | `bg-success-container-minimum` | Minimum success container |
+| <div className="w-6 h-6 rounded-sm bg-success-container-low border border-outline-low" /> | `bg-success-container-low` | Low success container |
+| <div className="w-6 h-6 rounded-sm bg-success-container border border-outline-low" /> | `bg-success-container` | Default success container |
+| <div className="w-6 h-6 rounded-sm bg-success-container-high border border-outline-low" /> | `bg-success-container-high` | High success container |
 
 ### Error
 
-<table style={{ width: '100%', borderCollapse: 'collapse', marginBlock: '16px' }}>
-  <tbody>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle', width: '48px' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-error)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-error</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-error-container-minimum)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-error-container-minimum</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-error-container-low)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-error-container-low</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-error-container)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-error-container</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-error-container-high)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-error-container-high</code></td></tr>
-  </tbody>
-</table>
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-error" /> | `bg-error` | Error color |
+| <div className="w-6 h-6 rounded-sm bg-error-container-minimum border border-outline-low" /> | `bg-error-container-minimum` | Minimum error container |
+| <div className="w-6 h-6 rounded-sm bg-error-container-low border border-outline-low" /> | `bg-error-container-low` | Low error container |
+| <div className="w-6 h-6 rounded-sm bg-error-container border border-outline-low" /> | `bg-error-container` | Default error container |
+| <div className="w-6 h-6 rounded-sm bg-error-container-high border border-outline-low" /> | `bg-error-container-high` | High error container |
 
 ### Warning
 
-<table style={{ width: '100%', borderCollapse: 'collapse', marginBlock: '16px' }}>
-  <tbody>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle', width: '48px' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-warning)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-warning</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-warning-container-minimum)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-warning-container-minimum</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-warning-container-low)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-warning-container-low</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-warning-container)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-warning-container</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-warning-container-high)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-warning-container-high</code></td></tr>
-  </tbody>
-</table>
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-warning" /> | `bg-warning` | Warning color |
+| <div className="w-6 h-6 rounded-sm bg-warning-container-minimum border border-outline-low" /> | `bg-warning-container-minimum` | Minimum warning container |
+| <div className="w-6 h-6 rounded-sm bg-warning-container-low border border-outline-low" /> | `bg-warning-container-low` | Low warning container |
+| <div className="w-6 h-6 rounded-sm bg-warning-container border border-outline-low" /> | `bg-warning-container` | Default warning container |
+| <div className="w-6 h-6 rounded-sm bg-warning-container-high border border-outline-low" /> | `bg-warning-container-high` | High warning container |
 
 ### Info
 
-<table style={{ width: '100%', borderCollapse: 'collapse', marginBlock: '16px' }}>
-  <tbody>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle', width: '48px' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-info)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-info</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-info-container-minimum)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-info-container-minimum</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-info-container-low)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-info-container-low</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-info-container)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-info-container</code></td></tr>
-    <tr><td style={{ padding: '6px 12px', verticalAlign: 'middle' }}><div style={{ width: '24px', height: '24px', borderRadius: '4px', backgroundColor: 'var(--forge-theme-info-container-high)' }} /></td><td style={{ padding: '6px 12px' }}><code>bg-info-container-high</code></td></tr>
-  </tbody>
-</table>
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-info" /> | `bg-info` | Info color |
+| <div className="w-6 h-6 rounded-sm bg-info-container-minimum border border-outline-low" /> | `bg-info-container-minimum` | Minimum info container |
+| <div className="w-6 h-6 rounded-sm bg-info-container-low border border-outline-low" /> | `bg-info-container-low` | Low info container |
+| <div className="w-6 h-6 rounded-sm bg-info-container border border-outline-low" /> | `bg-info-container` | Default info container |
+| <div className="w-6 h-6 rounded-sm bg-info-container-high border border-outline-low" /> | `bg-info-container-high` | High info container |
 
 ---
 
@@ -186,33 +169,33 @@ Use `bg-*` utilities for Forge surface and semantic background colors.
 
 Use `text-*` utilities for text emphasis levels and semantic colors.
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBlock: '24px', padding: '24px', backgroundColor: 'var(--forge-theme-surface-container-low)', borderRadius: '8px' }}>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-    <span style={{ color: 'var(--forge-theme-text-high)', fontSize: '16px', fontWeight: 500, minWidth: '200px' }}>High emphasis text</span>
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>text-high</code>
+<div className="sb-unstyled flex flex-col gap-3 my-6 p-6 bg-surface-dim rounded-lg">
+  <div className="flex items-center gap-6">
+    <span className="text-high text-heading2 min-w-48">High emphasis text</span>
+    <code className="text-label1 text-medium">text-high</code>
   </div>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-    <span style={{ color: 'var(--forge-theme-text-medium)', fontSize: '16px', minWidth: '200px' }}>Medium emphasis text</span>
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>text-medium</code>
+  <div className="flex items-center gap-6">
+    <span className="text-medium text-heading2 min-w-48">Medium emphasis text</span>
+    <code className="text-label1 text-medium">text-medium</code>
   </div>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-    <span style={{ color: 'var(--forge-theme-text-low)', fontSize: '16px', minWidth: '200px' }}>Low emphasis text</span>
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>text-low</code>
+  <div className="flex items-center gap-6">
+    <span className="text-low text-heading2 min-w-48">Low emphasis text</span>
+    <code className="text-label1 text-medium">text-low</code>
   </div>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-    <span style={{ color: 'var(--forge-theme-text-lowest)', fontSize: '16px', minWidth: '200px' }}>Lowest emphasis text</span>
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>text-lowest</code>
+  <div className="flex items-center gap-6">
+    <span className="text-lowest text-heading2 min-w-48">Lowest emphasis text</span>
+    <code className="text-label1 text-medium">text-lowest</code>
   </div>
 </div>
 
-<div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', marginBlock: '24px' }}>
-  <span style={{ color: 'var(--forge-theme-primary)', fontSize: '16px', fontWeight: 500 }}>text-primary</span>
-  <span style={{ color: 'var(--forge-theme-secondary)', fontSize: '16px', fontWeight: 500 }}>text-secondary</span>
-  <span style={{ color: 'var(--forge-theme-tertiary)', fontSize: '16px', fontWeight: 500 }}>text-tertiary</span>
-  <span style={{ color: 'var(--forge-theme-error)', fontSize: '16px', fontWeight: 500 }}>text-error</span>
-  <span style={{ color: 'var(--forge-theme-success)', fontSize: '16px', fontWeight: 500 }}>text-success</span>
-  <span style={{ color: 'var(--forge-theme-warning)', fontSize: '16px', fontWeight: 500 }}>text-warning</span>
-  <span style={{ color: 'var(--forge-theme-info)', fontSize: '16px', fontWeight: 500 }}>text-info</span>
+<div className="sb-unstyled flex gap-6 flex-wrap my-6">
+  <span className="text-primary text-heading2">text-primary</span>
+  <span className="text-secondary text-heading2">text-secondary</span>
+  <span className="text-tertiary text-heading2">text-tertiary</span>
+  <span className="text-error text-heading2">text-error</span>
+  <span className="text-success text-heading2">text-success</span>
+  <span className="text-warning text-heading2">text-warning</span>
+  <span className="text-info text-heading2">text-info</span>
 </div>
 
 ```html
@@ -227,26 +210,26 @@ Use `text-*` utilities for text emphasis levels and semantic colors.
 
 Use `border-*` utilities for outline and semantic border colors.
 
-<div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBlock: '24px' }}>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-    <div style={{ width: '80px', height: '80px', borderRadius: '8px', backgroundColor: 'var(--forge-theme-surface)', border: '2px solid var(--forge-theme-outline)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>border-outline</code>
+<div className="sb-unstyled flex gap-4 flex-wrap my-6">
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 rounded-lg bg-surface border-2 border-outline" />
+    <code className="text-label1 text-medium">border-outline</code>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-    <div style={{ width: '80px', height: '80px', borderRadius: '8px', backgroundColor: 'var(--forge-theme-surface)', border: '2px solid var(--forge-theme-outline-high)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>border-outline-high</code>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 rounded-lg bg-surface border-2 border-outline-high" />
+    <code className="text-label1 text-medium">border-outline-high</code>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-    <div style={{ width: '80px', height: '80px', borderRadius: '8px', backgroundColor: 'var(--forge-theme-surface)', border: '2px solid var(--forge-theme-primary)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>border-primary</code>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 rounded-lg bg-surface border-2 border-primary" />
+    <code className="text-label1 text-medium">border-primary</code>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-    <div style={{ width: '80px', height: '80px', borderRadius: '8px', backgroundColor: 'var(--forge-theme-surface)', border: '2px solid var(--forge-theme-error)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>border-error</code>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 rounded-lg bg-surface border-2 border-error" />
+    <code className="text-label1 text-medium">border-error</code>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-    <div style={{ width: '80px', height: '80px', borderRadius: '8px', backgroundColor: 'var(--forge-theme-surface)', border: '2px solid var(--forge-theme-success)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>border-success</code>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 rounded-lg bg-surface border-2 border-success" />
+    <code className="text-label1 text-medium">border-success</code>
   </div>
 </div>
 
@@ -261,69 +244,69 @@ Use `border-*` utilities for outline and semantic border colors.
 
 Apply complete Forge typography styles with single utility classes.
 
-### Display Scale
+### Display
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBlock: '16px' }}>
-  <span className="text-display1">text-display1</span>
-  <span className="text-display2">text-display2</span>
-  <span className="text-display3">text-display3</span>
-  <span className="text-display4">text-display4</span>
-  <span className="text-display5">text-display5</span>
-  <span className="text-display6">text-display6</span>
-  <span className="text-display7">text-display7</span>
-  <span className="text-display8">text-display8</span>
-</div>
+| Class | Description |
+|-------|-------------|
+| `text-display1` | Display 1 (largest) |
+| `text-display2` | Display 2 |
+| `text-display3` | Display 3 |
+| `text-display4` | Display 4 |
+| `text-display5` | Display 5 |
+| `text-display6` | Display 6 |
+| `text-display7` | Display 7 |
+| `text-display8` | Display 8 (smallest display) |
 
-### Heading Scale
+### Heading
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBlock: '16px' }}>
-  <span className="text-heading1">text-heading1</span>
-  <span className="text-heading2">text-heading2</span>
-  <span className="text-heading3">text-heading3</span>
-  <span className="text-heading4">text-heading4</span>
-  <span className="text-heading5">text-heading5</span>
-  <span className="text-heading6">text-heading6</span>
-  <span className="text-heading7">text-heading7</span>
-  <span className="text-heading8">text-heading8</span>
-</div>
+| Class | Description |
+|-------|-------------|
+| `text-heading1` | Heading 1 (largest) |
+| `text-heading2` | Heading 2 |
+| `text-heading3` | Heading 3 |
+| `text-heading4` | Heading 4 |
+| `text-heading5` | Heading 5 |
+| `text-heading6` | Heading 6 |
+| `text-heading7` | Heading 7 |
+| `text-heading8` | Heading 8 (smallest heading) |
 
-### Subheading Scale
+### Subheading
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBlock: '16px' }}>
-  <span className="text-subheading1">text-subheading1</span>
-  <span className="text-subheading2">text-subheading2</span>
-  <span className="text-subheading3">text-subheading3</span>
-  <span className="text-subheading4">text-subheading4</span>
-  <span className="text-subheading5">text-subheading5</span>
-  <span className="text-subheading6">text-subheading6</span>
-  <span className="text-subheading7">text-subheading7</span>
-  <span className="text-subheading8">text-subheading8</span>
-</div>
+| Class | Description |
+|-------|-------------|
+| `text-subheading1` | Subheading 1 (largest) |
+| `text-subheading2` | Subheading 2 |
+| `text-subheading3` | Subheading 3 |
+| `text-subheading4` | Subheading 4 |
+| `text-subheading5` | Subheading 5 |
+| `text-subheading6` | Subheading 6 |
+| `text-subheading7` | Subheading 7 |
+| `text-subheading8` | Subheading 8 (smallest subheading) |
 
-### Body Scale
+### Body
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBlock: '16px' }}>
-  <span className="text-body1">text-body1</span>
-  <span className="text-body2">text-body2</span>
-  <span className="text-body3">text-body3</span>
-  <span className="text-body4">text-body4</span>
-</div>
+| Class | Description |
+|-------|-------------|
+| `text-body1` | Body 1 (largest) |
+| `text-body2` | Body 2 |
+| `text-body3` | Body 3 |
+| `text-body4` | Body 4 (smallest body) |
 
-### Label Scale
+### Label
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBlock: '16px' }}>
-  <span className="text-label1">text-label1</span>
-  <span className="text-label2">text-label2</span>
-  <span className="text-label3">text-label3</span>
-</div>
+| Class | Description |
+|-------|-------------|
+| `text-label1` | Label 1 (largest) |
+| `text-label2` | Label 2 |
+| `text-label3` | Label 3 (smallest label) |
 
-### Other Styles
+### Other
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBlock: '16px' }}>
-  <span className="text-button">text-button</span>
-  <span className="text-overline">text-overline</span>
-  <span className="text-link">text-link</span>
-</div>
+| Class | Description |
+|-------|-------------|
+| `text-button` | Button text |
+| `text-overline` | Overline text |
+| `text-link` | Link text |
 
 ```html
 <h1 class="text-heading4">Page Title</h1>
@@ -337,26 +320,26 @@ Apply complete Forge typography styles with single utility classes.
 
 Use Tailwind aliases or Forge's numeric elevation scale (0-24).
 
-<div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', marginBlock: '24px', padding: '24px' }}>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-    <div style={{ width: '100px', height: '100px', borderRadius: '8px', backgroundColor: 'var(--forge-theme-surface)', boxShadow: 'var(--forge-elevation-1)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>shadow-sm</code>
+<div className="sb-unstyled flex gap-6 flex-wrap my-6 p-6">
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-24 h-24 rounded-lg bg-surface shadow-sm" />
+    <code className="text-label1 text-medium">shadow-sm</code>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-    <div style={{ width: '100px', height: '100px', borderRadius: '8px', backgroundColor: 'var(--forge-theme-surface)', boxShadow: 'var(--forge-elevation-4)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>shadow-md</code>
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-24 h-24 rounded-lg bg-surface shadow-md" />
+    <code className="text-label1 text-medium">shadow-md</code>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-    <div style={{ width: '100px', height: '100px', borderRadius: '8px', backgroundColor: 'var(--forge-theme-surface)', boxShadow: 'var(--forge-elevation-8)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>shadow-lg</code>
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-24 h-24 rounded-lg bg-surface shadow-lg" />
+    <code className="text-label1 text-medium">shadow-lg</code>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-    <div style={{ width: '100px', height: '100px', borderRadius: '8px', backgroundColor: 'var(--forge-theme-surface)', boxShadow: 'var(--forge-elevation-16)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>shadow-xl</code>
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-24 h-24 rounded-lg bg-surface shadow-xl" />
+    <code className="text-label1 text-medium">shadow-xl</code>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-    <div style={{ width: '100px', height: '100px', borderRadius: '8px', backgroundColor: 'var(--forge-theme-surface)', boxShadow: 'var(--forge-elevation-24)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>shadow-2xl</code>
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-24 h-24 rounded-lg bg-surface shadow-2xl" />
+    <code className="text-label1 text-medium">shadow-2xl</code>
   </div>
 </div>
 
@@ -376,30 +359,30 @@ Use Tailwind aliases or Forge's numeric elevation scale (0-24).
 
 Use `rounded-*` utilities mapped to Forge shape tokens.
 
-<div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginBlock: '24px' }}>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-    <div style={{ width: '80px', height: '80px', backgroundColor: 'var(--forge-theme-primary)', borderRadius: 'var(--forge-shape-extra-small)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>rounded-xs</code>
+<div className="sb-unstyled flex gap-5 flex-wrap my-6">
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium">rounded-xs</code>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-    <div style={{ width: '80px', height: '80px', backgroundColor: 'var(--forge-theme-primary)', borderRadius: 'var(--forge-shape-small)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>rounded-sm</code>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 bg-primary rounded-sm" />
+    <code className="text-label1 text-medium">rounded-sm</code>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-    <div style={{ width: '80px', height: '80px', backgroundColor: 'var(--forge-theme-primary)', borderRadius: 'var(--forge-shape-medium)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>rounded-md</code>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 bg-primary rounded-md" />
+    <code className="text-label1 text-medium">rounded-md</code>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-    <div style={{ width: '80px', height: '80px', backgroundColor: 'var(--forge-theme-primary)', borderRadius: 'var(--forge-shape-large)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>rounded-lg</code>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 bg-primary rounded-lg" />
+    <code className="text-label1 text-medium">rounded-lg</code>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-    <div style={{ width: '80px', height: '80px', backgroundColor: 'var(--forge-theme-primary)', borderRadius: 'var(--forge-shape-extra-large)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>rounded-xl</code>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 bg-primary rounded-xl" />
+    <code className="text-label1 text-medium">rounded-xl</code>
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-    <div style={{ width: '80px', height: '80px', backgroundColor: 'var(--forge-theme-primary)', borderRadius: 'var(--forge-shape-full)' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)' }}>rounded-full</code>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 bg-primary rounded-full" />
+    <code className="text-label1 text-medium">rounded-full</code>
   </div>
 </div>
 
@@ -409,41 +392,41 @@ Use `rounded-*` utilities mapped to Forge shape tokens.
 
 Both numeric (Tailwind-familiar) and semantic (Forge-familiar) scales are available.
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBlock: '24px' }}>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-    <div style={{ width: 'var(--forge-spacing-xxsmall)', height: '24px', backgroundColor: 'var(--forge-theme-primary)', borderRadius: '2px' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)', minWidth: '60px' }}>p-1</code>
-    <span style={{ fontSize: '12px', color: 'var(--forge-theme-text-low)' }}>4px — xxsmall</span>
+<div className="sb-unstyled flex flex-col gap-3 my-6">
+  <div className="flex items-center gap-4">
+    <div className="w-1 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-1</code>
+    <span className="text-label1 text-low">4px — xxsmall</span>
   </div>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-    <div style={{ width: 'var(--forge-spacing-xsmall)', height: '24px', backgroundColor: 'var(--forge-theme-primary)', borderRadius: '2px' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)', minWidth: '60px' }}>p-2</code>
-    <span style={{ fontSize: '12px', color: 'var(--forge-theme-text-low)' }}>8px — xsmall</span>
+  <div className="flex items-center gap-4">
+    <div className="w-2 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-2</code>
+    <span className="text-label1 text-low">8px — xsmall</span>
   </div>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-    <div style={{ width: 'var(--forge-spacing-small)', height: '24px', backgroundColor: 'var(--forge-theme-primary)', borderRadius: '2px' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)', minWidth: '60px' }}>p-3</code>
-    <span style={{ fontSize: '12px', color: 'var(--forge-theme-text-low)' }}>12px — small</span>
+  <div className="flex items-center gap-4">
+    <div className="w-3 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-3</code>
+    <span className="text-label1 text-low">12px — small</span>
   </div>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-    <div style={{ width: 'var(--forge-spacing-medium)', height: '24px', backgroundColor: 'var(--forge-theme-primary)', borderRadius: '2px' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)', minWidth: '60px' }}>p-4</code>
-    <span style={{ fontSize: '12px', color: 'var(--forge-theme-text-low)' }}>16px — medium</span>
+  <div className="flex items-center gap-4">
+    <div className="w-4 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-4</code>
+    <span className="text-label1 text-low">16px — medium</span>
   </div>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-    <div style={{ width: 'var(--forge-spacing-large)', height: '24px', backgroundColor: 'var(--forge-theme-primary)', borderRadius: '2px' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)', minWidth: '60px' }}>p-6</code>
-    <span style={{ fontSize: '12px', color: 'var(--forge-theme-text-low)' }}>24px — large</span>
+  <div className="flex items-center gap-4">
+    <div className="w-6 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-6</code>
+    <span className="text-label1 text-low">24px — large</span>
   </div>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-    <div style={{ width: 'var(--forge-spacing-xlarge)', height: '24px', backgroundColor: 'var(--forge-theme-primary)', borderRadius: '2px' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)', minWidth: '60px' }}>p-8</code>
-    <span style={{ fontSize: '12px', color: 'var(--forge-theme-text-low)' }}>32px — xlarge</span>
+  <div className="flex items-center gap-4">
+    <div className="w-8 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-8</code>
+    <span className="text-label1 text-low">32px — xlarge</span>
   </div>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-    <div style={{ width: 'var(--forge-spacing-xxlarge)', height: '24px', backgroundColor: 'var(--forge-theme-primary)', borderRadius: '2px' }} />
-    <code style={{ fontSize: '12px', color: 'var(--forge-theme-text-medium)', minWidth: '60px' }}>p-12</code>
-    <span style={{ fontSize: '12px', color: 'var(--forge-theme-text-low)' }}>48px — xxlarge</span>
+  <div className="flex items-center gap-4">
+    <div className="w-12 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-12</code>
+    <span className="text-label1 text-low">48px — xxlarge</span>
   </div>
 </div>
 
