@@ -25,6 +25,31 @@ Import the Forge theme after Tailwind in your main CSS file:
 
 > **Important:** Forge CSS must be loaded in your application for the design tokens to be available. The Tailwind theme references Forge's CSS custom properties.
 
+## Recommended Usage
+
+**We highly recommend using Tailwind primarily for layout purposes.** Tailwind excels at:
+
+- **Layout** — `flex`, `grid`, `block`, `inline-flex`
+- **Spacing** — `p-*`, `m-*`, `gap-*`
+- **Sizing** — `w-*`, `h-*`, `max-w-*`, `min-h-*`
+- **Positioning** — `absolute`, `relative`, `fixed`, `top-*`, `left-*`
+- **Responsive design** — `sm:`, `md:`, `lg:` breakpoint prefixes
+
+For colors, typography, and component styling, prefer using Forge components and CSS custom properties directly. This ensures visual consistency with the design system and makes theming seamless.
+
+```html
+<!-- Recommended: Tailwind for layout, Forge for styling -->
+<div class="flex gap-4 p-6">
+  <forge-card>
+    <p class="forge-typography--body2">Content styled by Forge</p>
+  </forge-card>
+</div>
+```
+
+The color and typography utilities in this package are available for edge cases, but layout utilities should be your primary use of Tailwind with Forge.
+
+---
+
 ## What's Included
 
 ### Theme Variables
