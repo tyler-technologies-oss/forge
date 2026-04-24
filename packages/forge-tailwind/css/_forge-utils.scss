@@ -1,0 +1,11 @@
+/*
+ * Forge Tailwind Theme - Utilities
+ * Pre-built utility classes for common Forge design patterns.
+ */
+
+@layer components {
+  /* Responsive grid — fills rows with as many columns that will fit, targeting ~320px per column but shrinking to fit small containers */
+  .grid-min-320 {
+    @apply grid grid-cols-[repeat(auto-fill,minmax(min(320px,100%),1fr))] gap-medium;
+  }
+}
