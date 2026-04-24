@@ -1,0 +1,17 @@
+/*
+ * Forge Tailwind Theme
+ *
+ * A Tailwind v4 theme that maps to Tyler Forge design tokens.
+ * This file contains only @theme and @utility definitions.
+ * Forge CSS imports are handled in style.scss for proper load order.
+ */
+
+@use 'spacing';
+@use 'shape';
+@use 'elevation';
+@use 'z-index';
+@use 'border';
+@use 'animation';
+@use 'colors';
+@use 'typography';
+@use 'forge-utils';

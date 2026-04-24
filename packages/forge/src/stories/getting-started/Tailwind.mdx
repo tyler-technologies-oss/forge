@@ -1,0 +1,452 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import './tailwind-demo.css';
+
+<Meta title="Getting Started/Tailwind CSS" tags={['experimental']} />
+
+# Tailwind CSS (Optional)
+
+Forge provides an optional Tailwind CSS v4 theme package that maps Tailwind utilities to Forge design tokens. This allows you to use familiar Tailwind syntax while maintaining consistency with Forge's design system.
+
+> This package is entirely optional. Forge components work without Tailwind, and you can use Forge's design tokens directly via CSS custom properties if you prefer.
+
+## Installation
+
+```bash
+npm install @tylertech/forge-tailwind
+```
+
+## Setup
+
+Import the Forge theme after Tailwind in your main CSS file:
+
+```css
+@import "tailwindcss";
+@import "@tylertech/forge-tailwind";
+```
+
+> **Important:** Forge CSS must be loaded in your application for the design tokens to be available. The Tailwind theme references Forge's CSS custom properties.
+
+## Recommended Usage
+
+**We highly recommend using Tailwind primarily for layout purposes.** Tailwind excels at:
+
+- **Layout** — `flex`, `grid`, `block`, `inline-flex`
+- **Spacing** — `p-*`, `m-*`, `gap-*`
+- **Sizing** — `w-*`, `h-*`, `max-w-*`, `min-h-*`
+- **Positioning** — `absolute`, `relative`, `fixed`, `top-*`, `left-*`
+- **Responsive design** — `sm:`, `md:`, `lg:` breakpoint prefixes
+
+For colors, typography, and component styling, prefer using Forge components and CSS custom properties directly. This ensures visual consistency with the design system and makes theming seamless.
+
+```html
+<!-- Recommended: Tailwind for layout, Forge for styling -->
+<div class="flex gap-4 p-6">
+  <forge-card>
+    <p class="text-body2">Content styled by Forge</p>
+  </forge-card>
+</div>
+```
+
+The color and typography utilities in this package are available for edge cases, but layout utilities should be your primary use of Tailwind with Forge.
+
+---
+
+## What's Included
+
+### Theme Variables
+
+The package extends Tailwind's theme with Forge design tokens:
+
+| Category | Tailwind Utilities | Example |
+|----------|-------------------|---------|
+| Spacing | `p-*`, `m-*`, `gap-*` | `p-4`, `p-medium`, `gap-large` |
+| Border Radius | `rounded-*` | `rounded-sm`, `rounded-lg`, `rounded-full` |
+| Box Shadow | `shadow-*` | `shadow-sm`, `shadow-lg`, `shadow-8` |
+| Z-Index | `z-*` | `z-surface`, `z-dialog`, `z-tooltip` |
+| Border Width | `border-*` | `border-thin`, `border-medium` |
+| Duration | `duration-*` | `duration-short-1`, `duration-medium-2` |
+| Easing | `ease-*` | `ease-standard`, `ease-emphasized` |
+
+---
+
+## Background Colors
+
+Use `bg-*` utilities for Forge surface and semantic background colors.
+
+### Surface
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-surface border border-outline-low" /> | `bg-surface` | Default surface background |
+| <div className="w-6 h-6 rounded-sm bg-surface-dim border border-outline-low" /> | `bg-surface-dim` | Dimmed surface |
+| <div className="w-6 h-6 rounded-sm bg-surface-bright border border-outline-low" /> | `bg-surface-bright` | Bright surface |
+| <div className="w-6 h-6 rounded-sm bg-surface-inverse border border-outline-low" /> | `bg-surface-inverse` | Inverse surface |
+| <div className="w-6 h-6 rounded-sm bg-surface-container-minimum border border-outline-low" /> | `bg-surface-container-minimum` | Minimum container |
+| <div className="w-6 h-6 rounded-sm bg-surface-container-low border border-outline-low" /> | `bg-surface-container-low` | Low container |
+| <div className="w-6 h-6 rounded-sm bg-surface-container border border-outline-low" /> | `bg-surface-container` | Default container |
+| <div className="w-6 h-6 rounded-sm bg-surface-container-medium border border-outline-low" /> | `bg-surface-container-medium` | Medium container |
+| <div className="w-6 h-6 rounded-sm bg-surface-container-high border border-outline-low" /> | `bg-surface-container-high` | High container |
+
+### Brand
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-brand" /> | `bg-brand` | Brand color |
+
+### Primary
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-primary" /> | `bg-primary` | Primary color |
+| <div className="w-6 h-6 rounded-sm bg-primary-container-minimum border border-outline-low" /> | `bg-primary-container-minimum` | Minimum primary container |
+| <div className="w-6 h-6 rounded-sm bg-primary-container-low border border-outline-low" /> | `bg-primary-container-low` | Low primary container |
+| <div className="w-6 h-6 rounded-sm bg-primary-container border border-outline-low" /> | `bg-primary-container` | Default primary container |
+| <div className="w-6 h-6 rounded-sm bg-primary-container-high border border-outline-low" /> | `bg-primary-container-high` | High primary container |
+
+### Secondary
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-secondary" /> | `bg-secondary` | Secondary color |
+| <div className="w-6 h-6 rounded-sm bg-secondary-container-minimum border border-outline-low" /> | `bg-secondary-container-minimum` | Minimum secondary container |
+| <div className="w-6 h-6 rounded-sm bg-secondary-container-low border border-outline-low" /> | `bg-secondary-container-low` | Low secondary container |
+| <div className="w-6 h-6 rounded-sm bg-secondary-container border border-outline-low" /> | `bg-secondary-container` | Default secondary container |
+| <div className="w-6 h-6 rounded-sm bg-secondary-container-high border border-outline-low" /> | `bg-secondary-container-high` | High secondary container |
+
+### Tertiary
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-tertiary" /> | `bg-tertiary` | Tertiary color |
+| <div className="w-6 h-6 rounded-sm bg-tertiary-container-minimum border border-outline-low" /> | `bg-tertiary-container-minimum` | Minimum tertiary container |
+| <div className="w-6 h-6 rounded-sm bg-tertiary-container-low border border-outline-low" /> | `bg-tertiary-container-low` | Low tertiary container |
+| <div className="w-6 h-6 rounded-sm bg-tertiary-container border border-outline-low" /> | `bg-tertiary-container` | Default tertiary container |
+| <div className="w-6 h-6 rounded-sm bg-tertiary-container-high border border-outline-low" /> | `bg-tertiary-container-high` | High tertiary container |
+
+### Success
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-success" /> | `bg-success` | Success color |
+| <div className="w-6 h-6 rounded-sm bg-success-container-minimum border border-outline-low" /> | `bg-success-container-minimum` | Minimum success container |
+| <div className="w-6 h-6 rounded-sm bg-success-container-low border border-outline-low" /> | `bg-success-container-low` | Low success container |
+| <div className="w-6 h-6 rounded-sm bg-success-container border border-outline-low" /> | `bg-success-container` | Default success container |
+| <div className="w-6 h-6 rounded-sm bg-success-container-high border border-outline-low" /> | `bg-success-container-high` | High success container |
+
+### Error
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-error" /> | `bg-error` | Error color |
+| <div className="w-6 h-6 rounded-sm bg-error-container-minimum border border-outline-low" /> | `bg-error-container-minimum` | Minimum error container |
+| <div className="w-6 h-6 rounded-sm bg-error-container-low border border-outline-low" /> | `bg-error-container-low` | Low error container |
+| <div className="w-6 h-6 rounded-sm bg-error-container border border-outline-low" /> | `bg-error-container` | Default error container |
+| <div className="w-6 h-6 rounded-sm bg-error-container-high border border-outline-low" /> | `bg-error-container-high` | High error container |
+
+### Warning
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-warning" /> | `bg-warning` | Warning color |
+| <div className="w-6 h-6 rounded-sm bg-warning-container-minimum border border-outline-low" /> | `bg-warning-container-minimum` | Minimum warning container |
+| <div className="w-6 h-6 rounded-sm bg-warning-container-low border border-outline-low" /> | `bg-warning-container-low` | Low warning container |
+| <div className="w-6 h-6 rounded-sm bg-warning-container border border-outline-low" /> | `bg-warning-container` | Default warning container |
+| <div className="w-6 h-6 rounded-sm bg-warning-container-high border border-outline-low" /> | `bg-warning-container-high` | High warning container |
+
+### Info
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| <div className="w-6 h-6 rounded-sm bg-info" /> | `bg-info` | Info color |
+| <div className="w-6 h-6 rounded-sm bg-info-container-minimum border border-outline-low" /> | `bg-info-container-minimum` | Minimum info container |
+| <div className="w-6 h-6 rounded-sm bg-info-container-low border border-outline-low" /> | `bg-info-container-low` | Low info container |
+| <div className="w-6 h-6 rounded-sm bg-info-container border border-outline-low" /> | `bg-info-container` | Default info container |
+| <div className="w-6 h-6 rounded-sm bg-info-container-high border border-outline-low" /> | `bg-info-container-high` | High info container |
+
+---
+
+## Text Colors
+
+Use `text-*` utilities for text emphasis levels and semantic colors.
+
+### Emphasis Levels
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| <span className="text-high text-heading3">Aa</span> | `text-high` | High emphasis text |
+| <span className="text-high-inverse bg-surface-inverse px-1 rounded-sm text-heading3">Aa</span> | `text-high-inverse` | High emphasis inverse |
+| <span className="text-medium text-heading3">Aa</span> | `text-medium` | Medium emphasis text |
+| <span className="text-medium-inverse bg-surface-inverse px-1 rounded-sm text-heading3">Aa</span> | `text-medium-inverse` | Medium emphasis inverse |
+| <span className="text-low text-heading3">Aa</span> | `text-low` | Low emphasis text |
+| <span className="text-low-inverse bg-surface-inverse px-1 rounded-sm text-heading3">Aa</span> | `text-low-inverse` | Low emphasis inverse |
+| <span className="text-lowest text-heading3">Aa</span> | `text-lowest` | Lowest emphasis text |
+| <span className="text-lowest-inverse bg-surface-inverse px-1 rounded-sm text-heading3">Aa</span> | `text-lowest-inverse` | Lowest emphasis inverse |
+
+### Semantic
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| <span className="text-brand text-heading3">Aa</span> | `text-brand` | Brand color |
+| <span className="text-primary text-heading3">Aa</span> | `text-primary` | Primary color |
+| <span className="text-secondary text-heading3">Aa</span> | `text-secondary` | Secondary color |
+| <span className="text-tertiary text-heading3">Aa</span> | `text-tertiary` | Tertiary color |
+| <span className="text-success text-heading3">Aa</span> | `text-success` | Success color |
+| <span className="text-error text-heading3">Aa</span> | `text-error` | Error color |
+| <span className="text-warning text-heading3">Aa</span> | `text-warning` | Warning color |
+| <span className="text-info text-heading3">Aa</span> | `text-info` | Info color |
+
+```html
+<p class="text-high">High emphasis text</p>
+<p class="text-medium">Medium emphasis text</p>
+<p class="text-primary">Primary colored text</p>
+```
+
+---
+
+## Border Colors
+
+Use `border-*` utilities for outline and semantic border colors.
+
+<div className="sb-unstyled flex gap-4 flex-wrap my-6">
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 rounded-lg bg-surface border-2 border-outline" />
+    <code className="text-label1 text-medium">border-outline</code>
+  </div>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 rounded-lg bg-surface border-2 border-outline-high" />
+    <code className="text-label1 text-medium">border-outline-high</code>
+  </div>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 rounded-lg bg-surface border-2 border-primary" />
+    <code className="text-label1 text-medium">border-primary</code>
+  </div>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 rounded-lg bg-surface border-2 border-error" />
+    <code className="text-label1 text-medium">border-error</code>
+  </div>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 rounded-lg bg-surface border-2 border-success" />
+    <code className="text-label1 text-medium">border-success</code>
+  </div>
+</div>
+
+```html
+<div class="border border-outline">...</div>
+<div class="border border-primary">...</div>
+```
+
+---
+
+## Typography
+
+Apply complete Forge typography styles with single utility classes.
+
+### Display
+
+| Class | Description |
+|-------|-------------|
+| <div className="sb-unstyled text-display1">text-display1</div> | Display 1 (largest) |
+| <div className="sb-unstyled text-display2">text-display2</div> | Display 2 |
+| <div className="sb-unstyled text-display3">text-display3</div> | Display 3 |
+| <div className="sb-unstyled text-display4">text-display4</div> | Display 4 |
+| <div className="sb-unstyled text-display5">text-display5</div> | Display 5 |
+| <div className="sb-unstyled text-display6">text-display6</div> | Display 6 |
+| <div className="sb-unstyled text-display7">text-display7</div> | Display 7 |
+| <div className="sb-unstyled text-display8">text-display8</div> | Display 8 (smallest display) |
+
+### Heading
+
+| Class | Description |
+|-------|-------------|
+| <div className="sb-unstyled text-heading1">text-heading1</div> | Heading 1 (largest) |
+| <div className="sb-unstyled text-heading2">text-heading2</div> | Heading 2 |
+| <div className="sb-unstyled text-heading3">text-heading3</div> | Heading 3 |
+| <div className="sb-unstyled text-heading4">text-heading4</div> | Heading 4 |
+| <div className="sb-unstyled text-heading5">text-heading5</div> | Heading 5 |
+| <div className="sb-unstyled text-heading6">text-heading6</div> | Heading 6 |
+| <div className="sb-unstyled text-heading7">text-heading7</div> | Heading 7 |
+| <div className="sb-unstyled text-heading8">text-heading8</div> | Heading 8 (smallest heading) |
+
+### Subheading
+
+| Class | Description |
+|-------|-------------|
+| <div className="sb-unstyled text-subheading1">text-subheading1</div> | Subheading 1 (largest) |
+| <div className="sb-unstyled text-subheading2">text-subheading2</div> | Subheading 2 |
+| <div className="sb-unstyled text-subheading3">text-subheading3</div> | Subheading 3 |
+| <div className="sb-unstyled text-subheading4">text-subheading4</div> | Subheading 4 |
+| <div className="sb-unstyled text-subheading5">text-subheading5</div> | Subheading 5 |
+| <div className="sb-unstyled text-subheading6">text-subheading6</div> | Subheading 6 |
+| <div className="sb-unstyled text-subheading7">text-subheading7</div> | Subheading 7 |
+| <div className="sb-unstyled text-subheading8">text-subheading8</div> | Subheading 8 (smallest subheading) |
+
+### Body
+
+| Class | Description |
+|-------|-------------|
+| <div className="sb-unstyled text-body1">text-body1</div> | Body 1 (largest) |
+| <div className="sb-unstyled text-body2">text-body2</div> | Body 2 |
+| <div className="sb-unstyled text-body3">text-body3</div> | Body 3 |
+| <div className="sb-unstyled text-body4">text-body4</div> | Body 4 (smallest body) |
+
+### Label
+
+| Class | Description |
+|-------|-------------|
+| <div className="sb-unstyled text-label1">text-label1</div> | Label 1 (largest) |
+| <div className="sb-unstyled text-label2">text-label2</div> | Label 2 |
+| <div className="sb-unstyled text-label3">text-label3</div> | Label 3 (smallest label) |
+
+### Other
+
+| Class | Description |
+|-------|-------------|
+| <div className="sb-unstyled text-button">text-button</div> | Button text |
+| <div className="sb-unstyled text-overline">text-overline</div> | Overline text |
+| <div className="sb-unstyled text-link">text-link</div> | Link text |
+
+```html
+<h1 class="text-heading4">Page Title</h1>
+<p class="text-body2">Body content</p>
+<span class="text-label1">Small label</span>
+```
+
+---
+
+## Elevation (Box Shadow)
+
+Use Tailwind aliases or Forge's numeric elevation scale (0-24).
+
+<div className="sb-unstyled flex gap-6 flex-wrap my-6 p-6">
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-24 h-24 rounded-lg bg-surface shadow-sm" />
+    <code className="text-label1 text-medium">shadow-sm</code>
+  </div>
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-24 h-24 rounded-lg bg-surface shadow-md" />
+    <code className="text-label1 text-medium">shadow-md</code>
+  </div>
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-24 h-24 rounded-lg bg-surface shadow-lg" />
+    <code className="text-label1 text-medium">shadow-lg</code>
+  </div>
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-24 h-24 rounded-lg bg-surface shadow-xl" />
+    <code className="text-label1 text-medium">shadow-xl</code>
+  </div>
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-24 h-24 rounded-lg bg-surface shadow-2xl" />
+    <code className="text-label1 text-medium">shadow-2xl</code>
+  </div>
+</div>
+
+```html
+<!-- Tailwind aliases -->
+<div class="shadow-sm">...</div>
+<div class="shadow-lg">...</div>
+
+<!-- Forge elevation numbers -->
+<div class="shadow-4">...</div>
+<div class="shadow-16">...</div>
+```
+
+---
+
+## Border Radius
+
+Use `rounded-*` utilities mapped to Forge shape tokens.
+
+<div className="sb-unstyled flex gap-5 flex-wrap my-6">
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium">rounded-xs</code>
+  </div>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 bg-primary rounded-sm" />
+    <code className="text-label1 text-medium">rounded-sm</code>
+  </div>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 bg-primary rounded-md" />
+    <code className="text-label1 text-medium">rounded-md</code>
+  </div>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 bg-primary rounded-lg" />
+    <code className="text-label1 text-medium">rounded-lg</code>
+  </div>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 bg-primary rounded-xl" />
+    <code className="text-label1 text-medium">rounded-xl</code>
+  </div>
+  <div className="flex flex-col items-center gap-2">
+    <div className="w-20 h-20 bg-primary rounded-full" />
+    <code className="text-label1 text-medium">rounded-full</code>
+  </div>
+</div>
+
+---
+
+## Spacing
+
+Both numeric (Tailwind-familiar) and semantic (Forge-familiar) scales are available.
+
+<div className="sb-unstyled flex flex-col gap-3 my-6">
+  <div className="flex items-center gap-4">
+    <div className="w-1 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-1</code>
+    <span className="text-label1 text-low">4px — xxsmall</span>
+  </div>
+  <div className="flex items-center gap-4">
+    <div className="w-2 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-2</code>
+    <span className="text-label1 text-low">8px — xsmall</span>
+  </div>
+  <div className="flex items-center gap-4">
+    <div className="w-3 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-3</code>
+    <span className="text-label1 text-low">12px — small</span>
+  </div>
+  <div className="flex items-center gap-4">
+    <div className="w-4 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-4</code>
+    <span className="text-label1 text-low">16px — medium</span>
+  </div>
+  <div className="flex items-center gap-4">
+    <div className="w-6 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-6</code>
+    <span className="text-label1 text-low">24px — large</span>
+  </div>
+  <div className="flex items-center gap-4">
+    <div className="w-8 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-8</code>
+    <span className="text-label1 text-low">32px — xlarge</span>
+  </div>
+  <div className="flex items-center gap-4">
+    <div className="w-12 h-6 bg-primary rounded-xs" />
+    <code className="text-label1 text-medium min-w-16">p-12</code>
+    <span className="text-label1 text-low">48px — xxlarge</span>
+  </div>
+</div>
+
+```html
+<!-- Numeric scale -->
+<div class="p-4 m-8">...</div>
+
+<!-- Semantic scale -->
+<div class="p-medium m-xlarge">...</div>
+```
+
+---
+
+## When to Use
+
+Consider using `@tylertech/forge-tailwind` when:
+
+- Your team is already familiar with Tailwind CSS
+- You want utility-first styling with Forge's design tokens
+- You're building custom layouts alongside Forge components
+
+Consider using Forge's CSS custom properties directly when:
+
+- You prefer minimal dependencies
+- You're only using Forge components without custom styling
+- You want maximum control over your CSS architecture
