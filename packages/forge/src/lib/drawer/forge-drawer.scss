@@ -9,26 +9,18 @@
   @include base.base;
   @include base.left;
 
-  &--closing {
-    @include base.closing(left);
-  }
-
-  &--closed {
-    @include base.closed(left);
-  }
-
   &--right {
     @include base.right;
 
     border-right: none;
+  }
 
-    &.forge-drawer--closing {
-      @include base.closing(right);
-    }
+  &--closing {
+    @include base.animating-content;
+  }
 
-    &.forge-drawer--closed {
-      @include base.closed(right);
-    }
+  &--closed {
+    @include base.closed;
   }
 
   &--mini {
