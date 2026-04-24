@@ -6,7 +6,7 @@
  * Forge CSS imports are handled in style.scss for proper load order.
  */
 
-@use '@tylertech/forge/src/lib/core/styles/typography';
+@use '@tylertech/forge/sass/core/styles/typography';
 
 /* prettier-ignore */
 @theme {

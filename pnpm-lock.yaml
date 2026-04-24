@@ -366,8 +366,8 @@ importers:
   packages/forge-tailwind:
     dependencies:
       '@tylertech/forge':
-        specifier: 'workspace:'
-        version: link:../forge
+        specifier: ^3.0.0
+        version: 3.14.1
       tailwindcss:
         specifier: '>=4.0.0'
         version: 4.2.4
@@ -1510,6 +1510,12 @@ packages:
     peerDependenciesMeta:
       typescript-eslint:
         optional: true
+
+  '@tylertech/forge-core@3.3.0':
+    resolution: {integrity: sha512-TfbiuSVt2NFXtFO7qBQbleM15m/BP/Aty3ZYEQ7s0MqMONHm3Xct/X9Mi8W6oK971IsuXkQKJnDwNBHa+qwJfg==}
+
+  '@tylertech/forge@3.14.1':
+    resolution: {integrity: sha512-OfdZyhHTYIVlLJYgKjn4WhsuY5ktc5/hymO+whLdJ/uuQui4vyrXyLItGij8eJ9otD2YF+pPH6pY5v0tFkT63Q==}
 
   '@tylertech/stylelint-rules@5.1.2':
     resolution: {integrity: sha512-UiptzTxnH6fFxkWb90U9aGgccXy46VQ8DChbS22t03Nt6Zy3awqFwUFmKu8O0j0jFLlHQuRwh6wvjnlKfnrNng==}
@@ -5267,6 +5273,20 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
       - typescript
+
+  '@tylertech/forge-core@3.3.0':
+    dependencies:
+      tslib: 2.8.1
+
+  '@tylertech/forge@3.14.1':
+    dependencies:
+      '@floating-ui/dom': 1.7.6
+      '@lit/context': 1.1.6
+      '@tylertech/forge-core': 3.3.0
+      '@tylertech/tyler-icons': 2.1.0
+      imask: 7.6.1
+      lit: 3.3.2
+      tslib: 2.8.1
 
   '@tylertech/stylelint-rules@5.1.2(postcss@8.5.6)(stylelint@16.26.1(typescript@5.9.3))':
     dependencies:
