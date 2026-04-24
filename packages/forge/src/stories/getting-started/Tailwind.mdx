@@ -1,0 +1,145 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Getting Started/Tailwind CSS" />
+
+# Tailwind CSS (Optional)
+
+Forge provides an optional Tailwind CSS v4 theme package that maps Tailwind utilities to Forge design tokens. This allows you to use familiar Tailwind syntax while maintaining consistency with Forge's design system.
+
+> This package is entirely optional. Forge components work without Tailwind, and you can use Forge's design tokens directly via CSS custom properties if you prefer.
+
+## Installation
+
+```bash
+npm install @tylertech/forge-tailwind
+```
+
+## Setup
+
+Import the Forge theme after Tailwind in your main CSS file:
+
+```css
+@import "tailwindcss";
+@import "@tylertech/forge-tailwind";
+```
+
+> **Important:** Forge CSS must be loaded in your application for the design tokens to be available. The Tailwind theme references Forge's CSS custom properties.
+
+## What's Included
+
+### Theme Variables
+
+The package extends Tailwind's theme with Forge design tokens:
+
+| Category | Tailwind Utilities | Example |
+|----------|-------------------|---------|
+| Spacing | `p-*`, `m-*`, `gap-*` | `p-4`, `p-medium`, `gap-large` |
+| Border Radius | `rounded-*` | `rounded-sm`, `rounded-lg`, `rounded-full` |
+| Box Shadow | `shadow-*` | `shadow-sm`, `shadow-lg`, `shadow-8` |
+| Z-Index | `z-*` | `z-surface`, `z-dialog`, `z-tooltip` |
+| Border Width | `border-*` | `border-thin`, `border-medium` |
+| Duration | `duration-*` | `duration-short-1`, `duration-medium-2` |
+| Easing | `ease-*` | `ease-standard`, `ease-emphasized` |
+
+### Spacing Scale
+
+Both numeric (Tailwind-familiar) and semantic (Forge-familiar) scales are available:
+
+```html
+<!-- Numeric scale -->
+<div class="p-4 m-8">...</div>
+
+<!-- Semantic scale -->
+<div class="p-medium m-xlarge">...</div>
+```
+
+| Numeric | Semantic | Value |
+|---------|----------|-------|
+| `0.5` | `xxxsmall` | 2px |
+| `1` | `xxsmall` | 4px |
+| `2` | `xsmall` | 8px |
+| `3` | `small` | 12px |
+| `4` | `medium` | 16px |
+| `5` | `medium-large` | 20px |
+| `6` | `large` | 24px |
+| `8` | `xlarge` | 32px |
+| `12` | `xxlarge` | 48px |
+| `14` | `xxxlarge` | 56px |
+
+### Color Utilities
+
+Custom utility classes for Forge's semantic colors:
+
+**Backgrounds:**
+```html
+<div class="bg-surface">...</div>
+<div class="bg-primary">...</div>
+<div class="bg-error-container-high">...</div>
+```
+
+**Text:**
+```html
+<p class="text-high">High emphasis text</p>
+<p class="text-medium">Medium emphasis text</p>
+<p class="text-primary">Primary colored text</p>
+```
+
+**Borders:**
+```html
+<div class="border border-outline">...</div>
+<div class="border border-primary">...</div>
+```
+
+### Typography Utilities
+
+Apply Forge typography styles with single classes:
+
+```html
+<h1 class="text-heading4">Page Title</h1>
+<p class="text-body2">Body content</p>
+<span class="text-label1">Small label</span>
+```
+
+Available styles: `text-display1` through `text-display8`, `text-heading1` through `text-heading8`, `text-subheading1` through `text-subheading8`, `text-body1` through `text-body4`, `text-label1` through `text-label3`, `text-button`, `text-overline`, `text-link`.
+
+### Elevation (Box Shadow)
+
+Use Tailwind aliases or Forge's numeric elevation scale (0-24):
+
+```html
+<!-- Tailwind aliases -->
+<div class="shadow-sm">...</div>
+<div class="shadow-lg">...</div>
+
+<!-- Forge elevation numbers -->
+<div class="shadow-4">...</div>
+<div class="shadow-16">...</div>
+```
+
+## Example Usage
+
+```html
+<div class="bg-surface-container rounded-lg shadow-4 p-6">
+  <h2 class="text-heading4 text-high mb-4">Card Title</h2>
+  <p class="text-body2 text-medium mb-6">
+    Card content with medium emphasis text.
+  </p>
+  <button class="bg-primary text-high-inverse px-4 py-2 rounded-md">
+    Action
+  </button>
+</div>
+```
+
+## When to Use
+
+Consider using `@tylertech/forge-tailwind` when:
+
+- Your team is already familiar with Tailwind CSS
+- You want utility-first styling with Forge's design tokens
+- You're building custom layouts alongside Forge components
+
+Consider using Forge's CSS custom properties directly when:
+
+- You prefer minimal dependencies
+- You're only using Forge components without custom styling
+- You want maximum control over your CSS architecture
