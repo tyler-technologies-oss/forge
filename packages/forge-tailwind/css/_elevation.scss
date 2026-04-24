@@ -1,0 +1,43 @@
+/*
+ * Forge Tailwind Theme - Elevation (Box Shadow)
+ * Maps Forge elevation tokens to Tailwind's shadow scale.
+ * Usage: shadow-sm, shadow-lg, shadow-4, shadow-24, etc.
+ */
+
+/* prettier-ignore */
+@theme {
+  /* Tailwind-familiar aliases */
+  --shadow-none: var(--forge-elevation-0);
+  --shadow-sm: var(--forge-elevation-1);
+  --shadow: var(--forge-elevation-2);
+  --shadow-md: var(--forge-elevation-4);
+  --shadow-lg: var(--forge-elevation-8);
+  --shadow-xl: var(--forge-elevation-16);
+  --shadow-2xl: var(--forge-elevation-24);
+  /* Numeric Forge elevations (0-24) */
+  --shadow-0: var(--forge-elevation-0);
+  --shadow-1: var(--forge-elevation-1);
+  --shadow-2: var(--forge-elevation-2);
+  --shadow-3: var(--forge-elevation-3);
+  --shadow-4: var(--forge-elevation-4);
+  --shadow-5: var(--forge-elevation-5);
+  --shadow-6: var(--forge-elevation-6);
+  --shadow-7: var(--forge-elevation-7);
+  --shadow-8: var(--forge-elevation-8);
+  --shadow-9: var(--forge-elevation-9);
+  --shadow-10: var(--forge-elevation-10);
+  --shadow-11: var(--forge-elevation-11);
+  --shadow-12: var(--forge-elevation-12);
+  --shadow-13: var(--forge-elevation-13);
+  --shadow-14: var(--forge-elevation-14);
+  --shadow-15: var(--forge-elevation-15);
+  --shadow-16: var(--forge-elevation-16);
+  --shadow-17: var(--forge-elevation-17);
+  --shadow-18: var(--forge-elevation-18);
+  --shadow-19: var(--forge-elevation-19);
+  --shadow-20: var(--forge-elevation-20);
+  --shadow-21: var(--forge-elevation-21);
+  --shadow-22: var(--forge-elevation-22);
+  --shadow-23: var(--forge-elevation-23);
+  --shadow-24: var(--forge-elevation-24);
+}
