@@ -1,0 +1,12 @@
+import{b as e}from"./iframe-KAvO3ccT.js";import{s as a,g as n,c as p}from"./utils-QQyHyWEl.js";import"./service-adapter-8tADcN_b.js";import"./app-bar-profile-button-Dvo_RRHh.js";import"./tyler-icons-BC4d5Cu4.js";import"./menu-VKmXUI1w.js";import"./linear-progress-BUmXHJif.js";import"./list-XqqqC6OJ.js";import"./popover-yu54Tcdl.js";import"./overlay-CsFRuuOm.js";import"./key-action-CxixFCpG.js";import"./index-5CPwzmQS.js";import"./skeleton-CHpTOPKR.js";import"./avatar-D_Y8ZKFb.js";import"./icon-button-Cwrtmqh7.js";import"./focus-indicator-DE6BE6Uv.js";import"./state-layer-Cext-Euv.js";const o="forge-app-bar-notification-button",i={title:"Components/App Bar/Notifications",render:r=>p(o,r),component:o,parameters:{actions:{disable:!0}},argTypes:{...n({tagName:o})},args:{}},t={...a,render:()=>e`
+    <forge-app-bar title-text="Menu Button">
+      <forge-app-bar-notification-button slot="end" show-badge dot> </forge-app-bar-notification-button>
+    </forge-app-bar>
+  `};t.parameters={...t.parameters,docs:{...t.parameters?.docs,source:{originalSource:`{
+  ...standaloneStoryParams,
+  render: () => html\`
+    <forge-app-bar title-text="Menu Button">
+      <forge-app-bar-notification-button slot="end" show-badge dot> </forge-app-bar-notification-button>
+    </forge-app-bar>
+  \`
+}`,...t.parameters?.docs?.source}}};const s=["Demo"],M=Object.freeze(Object.defineProperty({__proto__:null,Demo:t,__namedExportsOrder:s,default:i},Symbol.toStringTag,{value:"Module"}));export{t as D,M as N};
