@@ -246,7 +246,11 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
     // TabIndex management: -1 when disabled or not selected, 0 when selected
     // TODO: This may not be necessary with the tab bar's focus group managing tab indices
     if (changedProperties.has('disabled') || changedProperties.has('selected')) {
-      this.tabIndex = this.disabled ? -1 : this.selected ? 0 : -1;
+      this.tabIndex = this.disabled
+        ? TAB_CONSTANTS.numbers.TAB_INDEX_INACTIVE
+        : this.selected
+          ? TAB_CONSTANTS.numbers.TAB_INDEX_ACTIVE
+          : TAB_CONSTANTS.numbers.TAB_INDEX_INACTIVE;
     }
 
     if (changedProperties.has('name')) {
@@ -292,7 +296,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
    * Removes the tab.
    */
   public remove(): void {
-    const event = new Event('forge-tab-request-remove', { composed: true, bubbles: true });
+    const event = new Event(TAB_CONSTANTS.events.REQUEST_REMOVE, { composed: true, bubbles: true });
     this.dispatchEvent(event);
   }
 

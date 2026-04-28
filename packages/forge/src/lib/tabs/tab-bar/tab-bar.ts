@@ -229,11 +229,15 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     this.#internals = this.attachInternals();
     new KeyActionController(this, {
       actions: [
-        { key: ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'], handler: this.#handleNavigationKey.bind(this), allowRepeat: true },
+        {
+          key: ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'],
+          handler: this.#handleNavigationKey.bind(this),
+          allowRepeat: true
+        },
         { key: ['Home', 'End'], handler: this.#handleNavigationKey.bind(this) },
         { key: ['Enter', ' '], handler: this.#handleSelectKey.bind(this) },
-        { key: ['Backspace'], handler: this.#handleRemoveKey.bind(this) },
-        { key: ['Shift+F10'], handler: this.#handleMenuKey.bind(this) }
+        { key: ['Backspace', 'Delete'], handler: this.#handleRemoveKey.bind(this) },
+        { key: { key: 'F10', modifier: 'shift' }, handler: this.#handleMenuKey.bind(this) }
       ]
     });
   }
@@ -385,9 +389,10 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     }
 
     const scrollAmount = this.vertical ? this._scrollContainer.offsetHeight : this._scrollContainer.offsetWidth;
+    const multiplier = direction === 'forward' ? TAB_BAR_CONSTANTS.numbers.SCROLL_DIRECTION_FORWARD : TAB_BAR_CONSTANTS.numbers.SCROLL_DIRECTION_BACKWARD;
     this._scrollContainer.scrollBy({
       behavior: 'smooth',
-      [this.vertical ? 'top' : 'left']: scrollAmount * (direction === 'forward' ? 1 : -1)
+      [this.vertical ? 'top' : 'left']: scrollAmount * multiplier
     });
   }
 
@@ -471,7 +476,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       if (reduceMotion) {
         return;
       }
-      toIndicator.animate([{ opacity: '0' }, { opacity: '1' }], {
+      toIndicator.animate([{ opacity: String(TAB_BAR_CONSTANTS.numbers.OPACITY_HIDDEN) }, { opacity: String(TAB_BAR_CONSTANTS.numbers.OPACITY_VISIBLE) }], {
         duration: TAB_CONSTANTS.numbers.ANIMATION_DURATION,
         easing: TAB_CONSTANTS.strings.EASING
       });
@@ -481,7 +486,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     const fromIndicator = from.shadowRoot?.querySelector(TAB_CONSTANTS.selectors.INDICATOR) as HTMLElement;
     if (!fromIndicator) {
       if (!reduceMotion) {
-        toIndicator.animate([{ opacity: '0' }, { opacity: '1' }], {
+        toIndicator.animate([{ opacity: String(TAB_BAR_CONSTANTS.numbers.OPACITY_HIDDEN) }, { opacity: String(TAB_BAR_CONSTANTS.numbers.OPACITY_VISIBLE) }], {
           duration: TAB_CONSTANTS.numbers.ANIMATION_DURATION,
           easing: TAB_CONSTANTS.strings.EASING
         });
@@ -512,8 +517,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
         transform: 'none'
       });
     } else {
-      keyframes.push({ opacity: '0' });
-      keyframes.push({ opacity: '1' });
+      keyframes.push({ opacity: String(TAB_BAR_CONSTANTS.numbers.OPACITY_HIDDEN) });
+      keyframes.push({ opacity: String(TAB_BAR_CONSTANTS.numbers.OPACITY_VISIBLE) });
     }
 
     toIndicator.animate(keyframes, {
@@ -567,7 +572,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    * @returns True if the event was not canceled, false if it was canceled.
    */
   #dispatchRemoveEvent(tab: TabComponent): boolean {
-    const event = new Event('forge-tab-remove', {
+    const event = new Event(TAB_BAR_CONSTANTS.events.TAB_REMOVE, {
       bubbles: true,
       cancelable: true,
       composed: true
@@ -656,11 +661,11 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     };
     const icon = this.vertical
       ? direction === 'backward'
-        ? 'keyboard_arrow_up'
-        : 'keyboard_arrow_down'
+        ? TAB_BAR_CONSTANTS.strings.ICON_ARROW_UP
+        : TAB_BAR_CONSTANTS.strings.ICON_ARROW_DOWN
       : direction === 'backward'
-        ? 'keyboard_arrow_left'
-        : 'keyboard_arrow_right';
+        ? TAB_BAR_CONSTANTS.strings.ICON_ARROW_LEFT
+        : TAB_BAR_CONSTANTS.strings.ICON_ARROW_RIGHT;
 
     return html`
       <forge-icon-button
@@ -721,7 +726,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     const clientWidth = this._scrollContainer.clientWidth;
 
     this._scrolledToStart = scrollLeft === 0;
-    this._scrolledToEnd = scrollLeft + clientWidth >= scrollWidth - 1;
+    this._scrolledToEnd = scrollLeft + clientWidth >= scrollWidth - TAB_BAR_CONSTANTS.numbers.SCROLL_TOLERANCE;
 
     if (this.shadowRoot?.activeElement === this._previousButton && this._scrolledToStart) {
       await this.updateComplete;
@@ -772,7 +777,11 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     const containerEnd = this.vertical ? containerRect.bottom : containerRect.right;
     const containerSize = this.vertical ? containerRect.height : containerRect.width;
 
-    if (tabStart < containerStart || tabEnd > containerEnd || tabSize + 2 * TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN > containerSize) {
+    if (
+      tabStart < containerStart ||
+      tabEnd > containerEnd ||
+      tabSize + TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN_MULTIPLIER * TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN > containerSize
+    ) {
       const to = this._scrollContainer[this.vertical ? 'scrollTop' : 'scrollLeft'] + tabStart - containerStart - TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN;
       this._scrollContainer[this.vertical ? 'scrollTop' : 'scrollLeft'] = to;
     }

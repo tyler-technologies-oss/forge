@@ -29,11 +29,25 @@ const classes = {
 };
 
 const events = {
-  CHANGE: `${elementName}-change`
+  CHANGE: `${elementName}-change`,
+  TAB_REMOVE: 'forge-tab-remove'
+};
+
+const strings = {
+  ICON_ARROW_LEFT: 'keyboard_arrow_left',
+  ICON_ARROW_RIGHT: 'keyboard_arrow_right',
+  ICON_ARROW_UP: 'keyboard_arrow_up',
+  ICON_ARROW_DOWN: 'keyboard_arrow_down'
 };
 
 const numbers = {
-  SCROLL_MARGIN: 48
+  SCROLL_MARGIN: 48,
+  SCROLL_MARGIN_MULTIPLIER: 2,
+  SCROLL_TOLERANCE: 1,
+  SCROLL_DIRECTION_FORWARD: 1,
+  SCROLL_DIRECTION_BACKWARD: -1,
+  OPACITY_HIDDEN: 0,
+  OPACITY_VISIBLE: 1
 };
 
 /** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
@@ -44,6 +58,7 @@ export const TAB_BAR_CONSTANTS = {
   events,
   selectors,
   classes,
+  strings,
   numbers
 };
 

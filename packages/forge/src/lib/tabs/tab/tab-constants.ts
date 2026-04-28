@@ -22,7 +22,8 @@ const selectors = {
 const classes = {};
 
 const events = {
-  SELECT: `${elementName}-select`
+  SELECT: `${elementName}-select`,
+  REQUEST_REMOVE: 'forge-tab-request-remove'
 };
 
 const strings = {
@@ -30,7 +31,9 @@ const strings = {
 };
 
 const numbers = {
-  ANIMATION_DURATION: 250
+  ANIMATION_DURATION: 250,
+  TAB_INDEX_ACTIVE: 0,
+  TAB_INDEX_INACTIVE: -1
 };
 
 /** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
