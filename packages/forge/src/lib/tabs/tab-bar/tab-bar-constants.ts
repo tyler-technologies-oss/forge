@@ -36,6 +36,7 @@ const numbers = {
   SCROLL_MARGIN: 48
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const TAB_BAR_CONSTANTS = {
   elementName,
   observedAttributes,
@@ -55,3 +56,5 @@ export const NAVIGATION_KEYS = new Map([
 export interface ITabBarChangeEventData {
   index: number;
 }
+
+export type TabBarTheme = 'default' | 'app-bar';

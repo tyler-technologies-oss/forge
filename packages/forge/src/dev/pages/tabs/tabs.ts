@@ -56,6 +56,11 @@ autoActivateToggle.addEventListener('forge-switch-change', ({ detail: selected }
   tabBar.autoActivate = selected;
 });
 
+const removableToggle = document.getElementById('opt-removable') as ISwitchComponent;
+removableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  tabBar.removable = selected;
+});
+
 const scrollButtonsToggle = document.getElementById('opt-scroll-buttons') as ISwitchComponent;
 scrollButtonsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   tabBar.scrollButtons = selected;

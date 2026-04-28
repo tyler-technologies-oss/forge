@@ -33,6 +33,7 @@ const numbers = {
   ANIMATION_DURATION: 250
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const TAB_CONSTANTS = {
   elementName,
   observedAttributes,

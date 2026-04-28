@@ -3,6 +3,7 @@ export * from './deferred.js';
 export * from './dismissible-stack.js';
 export * from './event-utils.js';
 export * from './feature-detection.js';
+export * from './focus-group.js';
 export * from './form-utils.js';
 export * from './key-action.js';
 export * from './reflect-utils.js';

@@ -60,32 +60,32 @@ export interface IKeyActionControllerConfig {
  *
  * @example
  * class ExampleComponent extends LitElement {
- *   private _keyActionController = new KeyActionController(this, {
+ *   #keyActionController = new KeyActionController(this, {
  *     actions: [
  *       {
  *         key: ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'],
- *         handler: this._handleArrowKey.bind(this),
+ *         handler: this.#handleArrowKey.bind(this),
  *         allowRepeat: true
  *       },
- *       { key: 'Enter', handler: this._handleEnterKey.bind(this) },
- *       { key: { key: 'a', modifier: 'shift' }, handler: this._handleAKey.bind(this) }
+ *       { key: 'Enter', handler: this.#handleEnterKey.bind(this) },
+ *       { key: { key: 'a', modifier: 'shift' }, handler: this.#handleAKey.bind(this) }
  *     ],
- *     searchHandler: this.handleSearch.bind(this)
+ *     searchHandler: this.#handleSearch.bind(this)
  *   });
  *
- *   private _handleArrowKey(evt: KeyboardEvent): void {
+ *   #handleArrowKey(evt: KeyboardEvent): void {
  *     console.log(evt.key);
  *   }
  *
- *   private _handleEnterKey(evt: KeyboardEvent): void {
+ *   #handleEnterKey(evt: KeyboardEvent): void {
  *     console.log(evt.key);
  *   }
  *
- *   private _handleAKey(evt: KeyboardEvent): void {
+ *   #handleAKey(evt: KeyboardEvent): void {
  *     console.log(evt.key);
  *   }
  *
- *   private _handleSearch(searchString: string): void {
+ *   #handleSearch(searchString: string): void {
  *     console.log(searchString);
  *   }
  */
@@ -96,9 +96,9 @@ export class KeyActionController implements ReactiveController {
   public actions: IKeyAction[];
   public searchHandler?: SearchFn;
 
-  private _searchString = '';
-  private _searchTimeout?: number;
-  private _keyDownListener: EventListener = (event: KeyboardEvent) => this._handleKeyDown(event);
+  #searchString = '';
+  #searchTimeout?: number;
+  #keyDownListener = (event: KeyboardEvent): void => this.#handleKeyDown(event);
 
   constructor(host: ReactiveControllerHost, config?: IKeyActionControllerConfig) {
     this.host = host;
@@ -108,19 +108,19 @@ export class KeyActionController implements ReactiveController {
   }
 
   public hostConnected(): void {
-    (this.host as ReactiveElement).addEventListener('keydown', this._keyDownListener);
+    (this.host as ReactiveElement).addEventListener('keydown', this.#keyDownListener);
   }
 
   public hostDisconnected(): void {
-    (this.host as ReactiveElement).removeEventListener('keydown', this._keyDownListener);
+    (this.host as ReactiveElement).removeEventListener('keydown', this.#keyDownListener);
   }
 
-  private _handleKeyDown(evt: KeyboardEvent): void {
+  #handleKeyDown(evt: KeyboardEvent): void {
     // Attempt to match the event to each action sequentially.
     for (const action of this.actions) {
       // Check if the event matches any of the action's keys. If not continue to the next action.
       const keys = Array.isArray(action.key) ? action.key : [action.key];
-      if (!keys.some(key => this._eventMatchesKey(evt, key))) {
+      if (!keys.some(key => this.#eventMatchesKey(evt, key))) {
         continue;
       }
 
@@ -138,11 +138,11 @@ export class KeyActionController implements ReactiveController {
 
     // If no keys matched or fallthrough was allowed, attempt to handle the event as a search.
     if (this.searchHandler) {
-      this._handleSearch(evt);
+      this.#handleSearch(evt);
     }
   }
 
-  private _handleSearch(evt: KeyboardEvent): void {
+  #handleSearch(evt: KeyboardEvent): void {
     // Ignore the event if it includes a modifier key.
     if (evt.altKey || evt.ctrlKey || evt.metaKey || evt.shiftKey) {
       return;
@@ -154,15 +154,15 @@ export class KeyActionController implements ReactiveController {
     evt.preventDefault();
 
     // Clear the previous timeout and start a new one that resets the search string after a delay.
-    clearTimeout(this._searchTimeout);
-    this._searchTimeout = window.setTimeout(() => (this._searchString = ''), KeyActionController._searchTimeout);
+    clearTimeout(this.#searchTimeout);
+    this.#searchTimeout = window.setTimeout(() => (this.#searchString = ''), KeyActionController._searchTimeout);
 
     // Append the pressed key to the search string and run the handler.
-    this._searchString += evt.key;
-    this.searchHandler?.(this._searchString, evt);
+    this.#searchString += evt.key;
+    this.searchHandler?.(this.#searchString, evt);
   }
 
-  private _eventMatchesKey(evt: KeyboardEvent, key: string | KeyCombination): boolean {
+  #eventMatchesKey(evt: KeyboardEvent, key: string | KeyCombination): boolean {
     const keyName = typeof key === 'string' ? key : key.key;
     if (evt.key !== keyName) {
       return false;
