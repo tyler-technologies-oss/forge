@@ -84,7 +84,7 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
   public targetElement: TargetElement | null | undefined = undefined;
 
   @queryAssignedElements({ slot: 'button', selector: 'button, a' })
-  private _slottedButtonElements: (HTMLButtonElement | HTMLAnchorElement)[] = [];
+  private _slottedButtonElements?: (HTMLButtonElement | HTMLAnchorElement)[];
 
   #buttonObserver?: MutationObserver;
   #root: Ref<HTMLDivElement> = createRef();
@@ -92,7 +92,7 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
   #focusIndicator: Ref<IFocusIndicatorComponent> = createRef();
 
   get #slottedButtonElement(): HTMLButtonElement | HTMLAnchorElement | undefined {
-    return this._slottedButtonElements[0];
+    return this._slottedButtonElements?.[0];
   }
 
   get #associatedElement(): TargetElement | null | undefined {
