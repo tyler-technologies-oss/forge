@@ -1010,7 +1010,6 @@ describe('Button Area', () => {
     stateLayer: IStateLayerComponent;
     button: HTMLButtonElement;
   }> {
-    console.log('creating the fixture');
     const screen = render(html`
       <forge-button-area ?disabled=${disabled}>
         ${hasButton ? html`<button slot="button" type="button">Go to detail</button>` : null}
