@@ -1,0 +1,16 @@
+/*
+ * Forge Tailwind Theme - Border Width
+ * Maps Forge border tokens to Tailwind's border-width scale.
+ * Usage: border-thin, border-medium, border-thick, border, border-2, border-4
+ */
+
+/* prettier-ignore */
+@theme {
+  --border-width-0: 0px;
+  --border-width-thin: var(--forge-border-thin);
+  --border-width-medium: var(--forge-border-medium);
+  --border-width-thick: var(--forge-border-thick);
+  --border-width-1: var(--forge-border-thin);
+  --border-width-2: var(--forge-border-medium);
+  --border-width-4: var(--forge-border-thick);
+}

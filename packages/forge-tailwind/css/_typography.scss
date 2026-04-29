@@ -1,0 +1,120 @@
+/*
+ * Forge Tailwind Theme - Typography
+ * Shorter aliases for Forge typography classes.
+ * Usage: text-heading4 (alias for forge-typography--heading4), etc.
+ * These use Forge's typography SCSS mixins for exact parity.
+ */
+
+@use '@tylertech/forge/sass/core/styles/typography';
+
+/* Display styles */
+@utility text-display1 {
+  @include typography.style(display1);
+}
+@utility text-display2 {
+  @include typography.style(display2);
+}
+@utility text-display3 {
+  @include typography.style(display3);
+}
+@utility text-display4 {
+  @include typography.style(display4);
+}
+@utility text-display5 {
+  @include typography.style(display5);
+}
+@utility text-display6 {
+  @include typography.style(display6);
+}
+@utility text-display7 {
+  @include typography.style(display7);
+}
+@utility text-display8 {
+  @include typography.style(display8);
+}
+/* Heading styles */
+@utility text-heading1 {
+  @include typography.style(heading1);
+}
+@utility text-heading2 {
+  @include typography.style(heading2);
+}
+@utility text-heading3 {
+  @include typography.style(heading3);
+}
+@utility text-heading4 {
+  @include typography.style(heading4);
+}
+@utility text-heading5 {
+  @include typography.style(heading5);
+}
+@utility text-heading6 {
+  @include typography.style(heading6);
+}
+@utility text-heading7 {
+  @include typography.style(heading7);
+}
+@utility text-heading8 {
+  @include typography.style(heading8);
+}
+/* Subheading styles */
+@utility text-subheading1 {
+  @include typography.style(subheading1);
+}
+@utility text-subheading2 {
+  @include typography.style(subheading2);
+}
+@utility text-subheading3 {
+  @include typography.style(subheading3);
+}
+@utility text-subheading4 {
+  @include typography.style(subheading4);
+}
+@utility text-subheading5 {
+  @include typography.style(subheading5);
+}
+@utility text-subheading6 {
+  @include typography.style(subheading6);
+}
+@utility text-subheading7 {
+  @include typography.style(subheading7);
+}
+@utility text-subheading8 {
+  @include typography.style(subheading8);
+}
+/* Body styles */
+@utility text-body1 {
+  @include typography.style(body1);
+}
+@utility text-body2 {
+  @include typography.style(body2);
+}
+@utility text-body3 {
+  @include typography.style(body3);
+}
+@utility text-body4 {
+  @include typography.style(body4);
+}
+/* Label styles */
+@utility text-label1 {
+  @include typography.style(label1);
+}
+@utility text-label2 {
+  @include typography.style(label2);
+}
+@utility text-label3 {
+  @include typography.style(label3);
+}
+/* Button text */
+@utility text-button {
+  @include typography.style(button);
+}
+/* Link text */
+@utility text-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+/* Overline text */
+@utility text-overline {
+  @include typography.style(overline);
+}
