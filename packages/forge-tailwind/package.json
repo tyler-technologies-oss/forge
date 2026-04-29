@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge-tailwind",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Tailwind CSS theme using Forge design tokens",
   "license": "Apache-2.0",
   "author": "Tyler Technologies, Inc.",
