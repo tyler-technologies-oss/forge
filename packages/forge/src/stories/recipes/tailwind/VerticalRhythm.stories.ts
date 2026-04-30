@@ -8,8 +8,7 @@ const meta = {
   parameters: {
     controls: { disable: true },
     actions: { disable: true }
-  },
-  tags: ['autodocs'] // Enables the automatic Docs tab
+  }
 } satisfies Meta;
 
 export default meta;
