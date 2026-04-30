@@ -10,7 +10,9 @@ const meta = {
     actions: { disable: true },
     layout: 'padded',
     docs: {
-      height: '100vh'
+      canvas: {
+        sourceState: 'shown' // This ensures code is expanded by default
+      }
     }
   }
 } satisfies Meta;
