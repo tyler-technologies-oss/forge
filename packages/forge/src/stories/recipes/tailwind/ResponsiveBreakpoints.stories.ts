@@ -26,7 +26,7 @@ export const Demo: Story = {
     <div class="flex gap-medium">
       <div class="striped-box flex-1"></div>
       <div class="striped-box flex-1"></div>
-      <div class="striped-box-primary flex-1 hidden md:block"></div>
+      <div class="striped-box-primary flex-1 hidden sm:block"></div>
     </div>
   `
 };
