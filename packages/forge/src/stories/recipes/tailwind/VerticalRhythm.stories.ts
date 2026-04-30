@@ -7,7 +7,11 @@ const meta = {
   title: 'Recipes/Tailwind Layouts/Vertical Rhythm',
   parameters: {
     controls: { disable: true },
-    actions: { disable: true }
+    actions: { disable: true },
+    layout: 'padded',
+    docs: {
+      height: '100vh'
+    }
   }
 } satisfies Meta;
 
