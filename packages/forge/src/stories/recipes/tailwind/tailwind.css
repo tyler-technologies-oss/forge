@@ -9,6 +9,10 @@
   .striped-box-primary {
     @apply rounded-lg p-4 border-blue-400 border text-blue-100 bg-[size:var(--forge-spacing-small)_var(--forge-spacing-small)] bg-top-left bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,transparent_0,transparent_50%)];
   }
+
+  .grid-min-120 {
+    @apply grid grid-cols-[repeat(auto-fill,minmax(min(120px,100%),1fr))] gap-medium;
+  }
 }
 
 .sbdocs.sbdocs-wrapper {

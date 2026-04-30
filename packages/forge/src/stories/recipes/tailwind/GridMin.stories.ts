@@ -4,7 +4,7 @@ import { html } from 'lit';
 import './tailwind.css';
 
 const meta = {
-  title: 'Recipes/Tailwind Layouts/Responsive Breakpoints',
+  title: 'Recipes/Tailwind Layouts/Grid Min',
   parameters: {
     controls: { disable: true },
     actions: { disable: true },
@@ -23,10 +23,11 @@ type Story = StoryObj;
 
 export const Demo: Story = {
   render: () => html`
-    <div class="@container flex gap-medium">
-      <div class="striped-box flex-1"></div>
-      <div class="striped-box flex-1"></div>
-      <div class="striped-box-primary flex-1 hidden @min-[500px]:block"></div>
+    <div class="grid grid-min-120 gap-medium">
+      <div class="striped-box"></div>
+      <div class="striped-box"></div>
+      <div class="striped-box"></div>
+      <div class="striped-box"></div>
     </div>
   `
 };
