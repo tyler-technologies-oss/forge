@@ -5,6 +5,10 @@
   .striped-box {
     @apply rounded-lg p-4 border text-lowest bg-[size:var(--forge-spacing-small)_var(--forge-spacing-small)] bg-top-left bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,transparent_0,transparent_50%)];
   }
+
+  .striped-box-primary {
+    @apply rounded-lg p-4 border-blue-400 border text-blue-100 bg-[size:var(--forge-spacing-small)_var(--forge-spacing-small)] bg-top-left bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,transparent_0,transparent_50%)];
+  }
 }
 
 .sbdocs.sbdocs-wrapper {
