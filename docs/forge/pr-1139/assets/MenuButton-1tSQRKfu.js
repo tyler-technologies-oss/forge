@@ -1,0 +1,17 @@
+import{u as r,j as t,M as n,T as p,C as s}from"./blocks-BsMblH_x.js";import{C as m}from"./CustomArgTypes-DeK6Go89.js";import{M as c,D as a}from"./MenuButton.stories-DTVPKgxk.js";import"./preload-helper-PPVm8Dsz.js";import"./_commonjsHelpers-CqkleIqs.js";import"./iframe-BK3r3gy1.js";import"./utils-ZPyYhNMY.js";import"./service-adapter-8tADcN_b.js";import"./app-bar-profile-button-Bc88X_6L.js";import"./class-map-DK01xFt-.js";import"./directive-jorct-Oe.js";import"./base-lit-element-CpSLQPQa.js";import"./a11y-utils-zbntmbh3.js";import"./dom-utils-_i8W1Ps4.js";import"./utils-BfMeZ1UR.js";import"./feature-detection-3Hxzrcpn.js";import"./constants-CPXBix-M.js";import"./base-component-DuGK7lj-.js";import"./base-adapter-BUzokRGk.js";import"./tyler-icons-uU9Yd7lf.js";import"./focus-indicator-BBtCjyD8.js";import"./utils-DU-9AqTO.js";import"./icon-CXw8uXM_.js";import"./icon-button-Mxsm8Q6s.js";import"./base-button-core-yIcCgPXn.js";import"./with-label-aware-DlKNrMSu.js";import"./with-default-aria-DsVOZgoU.js";import"./state-layer-Kw6pmYRH.js";import"./tooltip-CePIGaWS.js";import"./overlay-B3G4TIM3.js";import"./key-action-CgbRjzwr.js";import"./index-5CPwzmQS.js";import"./with-longpress-listener-dBAnuCiK.js";import"./dismissible-stack-xq-0Rg1q.js";import"./badge-QMYMXgwr.js";import"./menu-oM4UPGdx.js";import"./list-CRxpAe8T.js";import"./event-utils-zQ4FLDwK.js";import"./list-dropdown-aware-core-DrP3vGXx.js";import"./list-dropdown-DR9JShTz.js";import"./event-utils-C1SDeUaq.js";import"./linear-progress-D8EbdkBB.js";import"./popover-HtFB3a_u.js";import"./skeleton-CAo0Ux7j.js";import"./a11y-BxM9_46k.js";import"./base-component-delegate-Cvjk9ypU.js";import"./avatar-B9BCroA5.js";import"./state-UeYDLwyW.js";import"./style-map-B-zzhRls.js";import"./avatar-constants-nODg10Jk.js";import"./button-558tNDpa.js";import"./toolbar-BB4q_Mxo.js";import"./expansion-panel-Hh-RCnGo.js";import"./query-assigned-elements-43hYArgI.js";import"./base-DVmwUFg0.js";import"./open-icon-CFmphaM2.js";import"./divider-BG1pHrzo.js";function e(i){const o={blockquote:"blockquote",code:"code",h2:"h2",li:"li",p:"p",ul:"ul",...r(),...i.components};return t.jsxs(t.Fragment,{children:[t.jsx(n,{of:c}),`
+`,t.jsx(p,{}),`
+`,t.jsxs(o.p,{children:["For convenience Forge provides the ",t.jsx(o.code,{children:"<forge-app-bar-menu-button>"})," component. This component uses an icon-button with a predefined icon. The power of this component is that it will ensure a consistent experience for users across all applications that consume it."]}),`
+`,t.jsxs(o.blockquote,{children:[`
+`,t.jsxs(o.p,{children:["It is expected that you place this component in the ",t.jsx(o.code,{children:"start"})," slot of the app-bar."]}),`
+`]}),`
+`,t.jsx(o.h2,{id:"default",children:"Default"}),`
+`,t.jsx(s,{of:a}),`
+`,t.jsxs(o.blockquote,{children:[`
+`,t.jsxs(o.p,{children:["You will listen for click events on the ",t.jsx(o.code,{children:"<forge-app-bar-menu-button>"})," element as if it were a native ",t.jsx(o.code,{children:"<button>"}),". You can then react to that event to toggle the navigation drawer visibility."]}),`
+`]}),`
+`,t.jsx(o.h2,{id:"api",children:"API"}),`
+`,t.jsx(m,{}),`
+`,t.jsx(o.h2,{id:"accessibility",children:"Accessibility"}),`
+`,t.jsxs(o.ul,{children:[`
+`,t.jsx(o.li,{children:"The component will handle adding necessary ARIA attributes for you, as well as ensure the proper color contrast ratio is used."}),`
+`]})]})}function dt(i={}){const{wrapper:o}={...r(),...i.components};return o?t.jsx(o,{...i,children:t.jsx(e,{...i})}):e(i)}export{dt as default};
