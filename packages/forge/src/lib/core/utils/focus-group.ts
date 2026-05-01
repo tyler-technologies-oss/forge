@@ -2,6 +2,7 @@ import { noChange, ReactiveController, ReactiveControllerHost, ReactiveElement }
 import { AsyncDirective } from 'lit/async-directive.js';
 import { directive, ElementPart } from 'lit/directive.js';
 import { ExperimentalFocusOptions } from '../../constants.js';
+import { composedPathFrom } from './event-utils.js';
 
 export type FocusGroupOrientation = 'horizontal' | 'vertical' | 'both';
 export type FocusGroupFocusChangeCallback = (element: HTMLElement) => void;
@@ -49,17 +50,12 @@ export class BaseFocusGroup {
   public orientation: FocusGroupOrientation = 'horizontal';
   public wrap = false;
 
-  public get selector(): string {
-    return this.#selector;
-  }
-
   public set selector(value: string) {
     this.#selector = value;
-    this.updateTabIndices();
+    this.#updateTabIndices();
   }
-
-  public get currentElement(): HTMLElement | null {
-    return this.#lastFocusedElement;
+  public get selector(): string {
+    return this.#selector;
   }
 
   public set currentElement(element: HTMLElement | null) {
@@ -67,10 +63,19 @@ export class BaseFocusGroup {
       return;
     }
 
-    const elements = this.#getElements();
+    const elements = this.#elements;
     if (elements.includes(element)) {
       this.#lastFocusedElement = element;
+
+      if (this.#hasFocus(elements)) {
+        element.focus();
+      }
     }
+
+    this.#updateTabIndices(elements);
+  }
+  public get currentElement(): HTMLElement | null {
+    return this.#lastFocusedElement;
   }
 
   #rootElement?: HTMLElement;
@@ -115,7 +120,7 @@ export class BaseFocusGroup {
     }
 
     this.#rootElement.tabIndex = 0;
-    this.updateTabIndices();
+    this.#updateTabIndices();
 
     this.#rootElement.addEventListener('focusin', this.#focusInListener);
     this.#rootElement.addEventListener('focusout', this.#focusOutListener);
@@ -172,17 +177,19 @@ export class BaseFocusGroup {
   }
 
   public focusFirst(options?: ExperimentalFocusOptions): void {
-    const elements = this.#getElements();
+    const elements = this.#elements;
     if (elements.length > 0) {
-      this.#focusAtIndex(0, options);
+      return this.#focusAtIndex(0, options, elements);
     }
+    this.focusRoot(options);
   }
 
   public focusLast(options?: ExperimentalFocusOptions): void {
-    const elements = this.#getElements();
+    const elements = this.#elements;
     if (elements.length > 0) {
-      this.#focusAtIndex(elements.length - 1, options);
+      return this.#focusAtIndex(elements.length - 1, options, elements);
     }
+    this.focusRoot(options);
   }
 
   public focusAt(index: number, options?: ExperimentalFocusOptions): void {
@@ -190,17 +197,12 @@ export class BaseFocusGroup {
   }
 
   public focus(element: HTMLElement, options?: ExperimentalFocusOptions): void {
-    const elements = this.#getElements();
+    const elements = this.#elements;
     const index = elements.indexOf(element);
     if (index !== -1) {
-      this.#focusAtIndex(index, options);
+      return this.#focusAtIndex(index, options, elements);
     }
-  }
-
-  public updateTabIndices(): void {
-    this.#elements.forEach(element => {
-      element.tabIndex = element.ownerDocument.activeElement === element ? 0 : -1;
-    });
+    this.focusRoot(options);
   }
 
   /**
@@ -208,9 +210,14 @@ export class BaseFocusGroup {
    * @returns True if any element in the focus group has focus, false otherwise.
    */
   public hasFocus(): boolean {
-    return this.#elements.some(element => element.ownerDocument.activeElement === element);
+    return this.#hasFocus();
   }
 
+  /**
+   * Focuses the root element that contains the focus group. If there are valid focusable elements
+   * in the group, focus will advance to the current element in the group.
+   * @param options
+   */
   public focusRoot(options?: ExperimentalFocusOptions): void {
     this.#rootElement?.focus(options);
   }
@@ -226,7 +233,7 @@ export class BaseFocusGroup {
       return this.#entryElement?.focus();
     }
 
-    const elements = this.#getElements();
+    const elements = this.#elements;
     if (elements.includes(target)) {
       if (this.#lastFocusedElement) {
         this.#lastFocusedElement.tabIndex = -1;
@@ -249,6 +256,17 @@ export class BaseFocusGroup {
 
     if (!relatedTarget || !this.#rootElement.contains(relatedTarget)) {
       this.#rootElement.tabIndex = 0;
+    }
+
+    // Ensure that the blur event passed through the last focused element
+    const blurredElement = composedPathFrom(this.#rootElement, evt).find(el => el === this.#lastFocusedElement);
+
+    // Detect whether focus was lost due to the focused element becoming disabled
+    if (blurredElement?.matches(':is(:disabled, :state(disabled))')) {
+      blurredElement.tabIndex = -1;
+      this.#lastFocusedElement = null;
+      this.#rootElement.tabIndex = 0;
+      this.focusRoot();
     }
   }
 
@@ -282,11 +300,11 @@ export class BaseFocusGroup {
     return Array.from(new Set(allElements));
   }
 
-  #focusAtIndex(index: number, options?: ExperimentalFocusOptions): void {
-    const elements = this.#getElements();
+  #focusAtIndex(index: number, options?: ExperimentalFocusOptions, elements?: HTMLElement[]): void {
+    elements = elements || this.#elements;
     if (index < 0 || index >= elements.length) {
       console.error(`Index ${index} is out of bounds for focusable elements.`);
-      return;
+      return this.focusRoot(options);
     }
     const element = elements[index];
     element.focus(options);
@@ -309,13 +327,13 @@ export class BaseFocusGroup {
   }
 
   #shiftFocus(amount: -1 | 1, options?: ExperimentalFocusOptions): void {
-    const elements = this.#getElements();
+    const elements = this.#elements;
     if (elements.length === 0) {
-      return;
+      return this.focusRoot(options);
     }
 
     if (!this.#lastFocusedElement) {
-      return this.#focusAtIndex(0, options);
+      return this.#focusAtIndex(0, options, elements);
     }
 
     const currentIndex = elements.indexOf(this.#lastFocusedElement);
@@ -331,7 +349,17 @@ export class BaseFocusGroup {
       return;
     }
 
-    this.#focusAtIndex(newIndex, options);
+    this.#focusAtIndex(newIndex, options, elements);
+  }
+
+  #hasFocus(elements?: HTMLElement[]): boolean {
+    return (elements || this.#elements).some(element => element.matches(':focus'));
+  }
+
+  #updateTabIndices(elements?: HTMLElement[]): void {
+    (elements || this.#elements).forEach(element => {
+      element.tabIndex = element.matches(':focus-within') ? 0 : -1;
+    });
   }
 }
 

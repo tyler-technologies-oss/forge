@@ -1,11 +1,12 @@
 import { consume } from '@lit/context';
 import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
-import { setDefaultAria } from '@tylertech/forge/core/utils/a11y-utils.js';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { classMap } from 'lit-html/directives/class-map.js';
 import { customElement, property, query } from 'lit/decorators.js';
-import { ExperimentalFocusOptions } from '../../constants.js';
+import { ExperimentalFocusOptions, playStateLayerAnimation } from '../../constants.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { toggleState } from '../../core/index.js';
+import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
 import { StateLayerComponent } from '../../state-layer/state-layer.js';
 import { TAB_BAR_CONSTANTS } from '../tab-bar/tab-bar-constants.js';
@@ -13,7 +14,6 @@ import { TAB_BAR_DISABLED, TAB_BAR_INVERTED, TAB_BAR_REMOVABLE, TAB_BAR_SECONDAR
 import { TAB_CONSTANTS } from './tab-constants.js';
 
 import styles from './tab.scss';
-import { classMap } from 'lit-html/directives/class-map.js';
 
 /** @deprecated - This will be removed in the future. Please switch to using TabComponent. */
 export interface ITabComponent extends BaseLitElement {
@@ -37,56 +37,58 @@ export interface ITabComponent extends BaseLitElement {
  * @dependency forge-state-layer
  *
  * @event {CustomEvent<void>} forge-tab-select - Dispatched when the tab is selected. This event bubbles and it can be useful to capture it on the `<forge-tab-bar>` element.
- * @event {Event} forge-tab-remove - Dispatched when the tab is removed.
+ * @event {Event} forge-tab-remove - Dispatched when the tab is removed by the user.
+ * @event {Event} forge-tab-menu - Dispatched when the tab's menu is invoked (by pressing Shift+F10).
  *
- * @cssproperty --forge-tab-active-color - The primary color of the contents when active.
- * @cssproperty --forge-tab-inactive-color - The primary color of the contents when inactive.
- * @cssproperty --forge-tab-height - The height of the tab.
- * @cssproperty --forge-tab-stacked-height - The height of the tab when stacked.
- * @cssproperty --forge-tab-padding-block - The block space between the tab contents and the bounds of the tab.
- * @cssproperty --forge-tab-padding-inline - The inline space between the tab contents and the bounds of the tab.
- * @cssproperty --forge-tab-disabled-opacity - The opacity of the tab when disabled.
- * @cssproperty --forge-tab-indicator-color - The color of the active tab indicator.
- * @cssproperty --forge-tab-indicator-height - The height of the active tab indicator.
- * @cssproperty --forge-tab-indicator-shape - The shape of the active tab indicator.
- * @cssproperty --forge-tab-vertical-indicator-shape - The shape of the active tab indicator when vertical.
- * @cssproperty --forge-tab-inverted-indicator-shape - The shape of the active tab indicator when inverted.
- * @cssproperty --forge-tab-vertical-inverted-indicator-shape - The shape of the active tab indicator when vertical and inverted.
+ * @cssproperty --forge-tab-active-color - The primary color of the tab when active.
+ * @cssproperty --forge-tab-active-focus-icon-color - The color of the icon when the tab is active and focused.
+ * @cssproperty --forge-tab-active-focus-label-text-color - The color of the label text when the tab is active and focused.
+ * @cssproperty --forge-tab-active-hover-icon-color - The color of the icon when the tab is active and hovered.
+ * @cssproperty --forge-tab-active-hover-label-text-color - The color of the label text when the tab is active and hovered.
+ * @cssproperty --forge-tab-active-icon-color - The color of the icon when the tab is active.
+ * @cssproperty --forge-tab-active-label-text-color - The color of the label text when the tab is active.
+ * @cssproperty --forge-tab-active-pressed-icon-color - The color of the icon when the tab is active and pressed.
+ * @cssproperty --forge-tab-active-pressed-label-text-color - The color of the label text when the tab is active and pressed.
  * @cssproperty --forge-tab-container-color - The color of the tab container.
  * @cssproperty --forge-tab-container-height - The height of the tab container.
  * @cssproperty --forge-tab-container-shape - The shape of the tab container.
  * @cssproperty --forge-tab-content-height - The height of the tab content.
- * @cssproperty --forge-tab-content-spacing - The spacing between tab contents.
  * @cssproperty --forge-tab-content-padding - The padding value for both block and inline of the tab content.
  * @cssproperty --forge-tab-content-padding-block - The block padding of the tab content.
  * @cssproperty --forge-tab-content-padding-inline - The inline padding of the tab content.
- * @cssproperty --forge-tab-active-focus-icon-color - The color of the icon when the tab is active and focused.
- * @cssproperty --forge-tab-active-hover-icon-color - The color of the icon when the tab is active and hovered.
- * @cssproperty --forge-tab-active-icon-color - The color of the icon when the tab is active.
- * @cssproperty --forge-tab-active-pressed-icon-color - The color of the icon when the tab is active and pressed.
- * @cssproperty --forge-tab-icon-size - The size of the icon.
+ * @cssproperty --forge-tab-content-spacing - The spacing between tab content elements.
+ * @cssproperty --forge-tab-disabled-opacity - The opacity of the tab when disabled.
  * @cssproperty --forge-tab-focus-icon-color - The color of the icon when the tab is focused.
- * @cssproperty --forge-tab-hover-icon-color - The color of the icon when the tab is hovered.
- * @cssproperty --forge-tab-icon-color - The color of the icon.
- * @cssproperty --forge-tab-pressed-icon-color - The color of the icon when the tab is pressed.
- * @cssproperty --forge-tab-active-focus-label-text-color - The color of the label text when the tab is active and focused.
- * @cssproperty --forge-tab-active-hover-label-text-color - The color of the label text when the tab is active and hovered.
- * @cssproperty --forge-tab-active-label-text-color - The color of the label text when the tab is active.
- * @cssproperty --forge-tab-active-pressed-label-text-color - The color of the label text when the tab is active and pressed.
  * @cssproperty --forge-tab-focus-label-text-color - The color of the label text when the tab is focused.
+ * @cssproperty --forge-tab-height - The height of the tab.
+ * @cssproperty --forge-tab-hover-icon-color - The color of the icon when the tab is hovered.
  * @cssproperty --forge-tab-hover-label-text-color - The color of the label text when the tab is hovered.
+ * @cssproperty --forge-tab-icon-color - The color of the icon.
+ * @cssproperty --forge-tab-icon-size - The size of the icon.
+ * @cssproperty --forge-tab-inactive-color - The primary color of the tab when inactive.
+ * @cssproperty --forge-tab-indicator-color - The color of the active tab indicator.
+ * @cssproperty --forge-tab-indicator-height - The height of the active tab indicator.
+ * @cssproperty --forge-tab-indicator-shape - The shape of the active tab indicator.
+ * @cssproperty --forge-tab-inverted-indicator-shape - The shape of the active tab indicator when inverted.
  * @cssproperty --forge-tab-label-text-color - The color of the label text.
+ * @cssproperty --forge-tab-padding-block - The block padding of the tab.
+ * @cssproperty --forge-tab-padding-inline - The inline padding of the tab.
+ * @cssproperty --forge-tab-pressed-icon-color - The color of the icon when the tab is pressed.
  * @cssproperty --forge-tab-pressed-label-text-color - The color of the label text when the tab is pressed.
+ * @cssproperty --forge-tab-stacked-height - The height of the tab when stacked.
+ * @cssproperty --forge-tab-vertical-indicator-shape - The shape of the active tab indicator when vertical.
+ * @cssproperty --forge-tab-vertical-inverted-indicator-shape - The shape of the active tab indicator when vertical and inverted.
  *
  * @csspart container - The tab container.
  * @csspart content - The tab content container.
  * @csspart label - The tab label container.
  * @csspart indicator - The tab active indicator.
+ * @csspart state-layer - The state layer surface.
+ * @csspart focus-indicator - The focus indicator.
  *
  * @state selected - Applied when the tab is selected.
  * @state disabled - Applied when the tab is disabled.
  * @state vertical - Applied when the tab is vertical.
- * @state inverted - Applied when the indicator is inverted.
  *
  * @slot - The tab label.
  * @slot start - Content before the label.
@@ -230,6 +232,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
       setDefaultAria(this, this.#internals, {
         ariaSelected: this.selected ? 'true' : 'false'
       });
+      this.#dispatchSelectedChangeEvent();
     }
 
     if (changedProperties.has('disabled')) {
@@ -237,6 +240,11 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
       setDefaultAria(this, this.#internals, {
         ariaDisabled: this.disabled ? 'true' : 'false'
       });
+
+      // Blur the tab if it becomes disabled while focused
+      if (this.disabled && this.matches(':focus-within')) {
+        this.blur();
+      }
     }
 
     if (changedProperties.has('vertical')) {
@@ -246,11 +254,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
     // TabIndex management: -1 when disabled or not selected, 0 when selected
     // TODO: This may not be necessary with the tab bar's focus group managing tab indices
     if (changedProperties.has('disabled') || changedProperties.has('selected')) {
-      this.tabIndex = this.disabled
-        ? TAB_CONSTANTS.numbers.TAB_INDEX_INACTIVE
-        : this.selected
-          ? TAB_CONSTANTS.numbers.TAB_INDEX_ACTIVE
-          : TAB_CONSTANTS.numbers.TAB_INDEX_INACTIVE;
+      this.tabIndex = this.disabled ? -1 : this.selected ? 0 : -1;
     }
 
     if (changedProperties.has('name')) {
@@ -292,18 +296,14 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
     }
   }
 
-  /**
-   * Removes the tab.
-   */
-  public remove(): void {
-    const event = new Event(TAB_CONSTANTS.events.REQUEST_REMOVE, { composed: true, bubbles: true });
-    this.dispatchEvent(event);
+  public select(value = true): void {
+    this.selected = value;
   }
 
   /**
    * Plays the state layer animation.
    */
-  public playStateLayerAnimation(): void {
+  public [playStateLayerAnimation](): void {
     this._stateLayer?.playAnimation();
   }
 
@@ -327,6 +327,15 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
       console.warn(`Duplicate tab name "${this.name}" found. Tab names should be unique to ensure proper functionality.`);
     }
   }
+
+  #dispatchSelectedChangeEvent(): void {
+    this.dispatchEvent(
+      new Event(TAB_CONSTANTS.events.SELECT_CHANGE, {
+        bubbles: true,
+        composed: true
+      })
+    );
+  }
 }
 
 declare global {
@@ -336,5 +345,17 @@ declare global {
 
   interface HTMLElementEventMap {
     'forge-tab-select': CustomEvent<void>;
+  }
+
+  interface HTMLElementEventMap {
+    'forge-tab-remove': Event;
+  }
+
+  interface HTMLElementEventMap {
+    'forge-tab-menu': Event;
+  }
+
+  interface HTMLElementEventMap {
+    'forge-tab-selected-change': Event;
   }
 }
