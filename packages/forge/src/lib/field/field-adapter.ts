@@ -69,7 +69,6 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     } else {
       this._rootElement.prepend(this._labelElement);
     }
-    this.setHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION, value);
   }
 
   /**

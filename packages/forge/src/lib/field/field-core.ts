@@ -67,8 +67,14 @@ export class FieldCore implements IFieldCore {
     this._adapter.initializeSlots();
 
     // Setting the label position and variant here for global config decorator compatibility
+    // Skipping if there are already host attributes set to avoid overwriting values that may have been set externally
     this._adapter.setLabelPosition(this._labelPosition);
-    this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.VARIANT, this._variant);
+    if (!this._adapter.getHostAttribute(FIELD_CONSTANTS.attributes.VARIANT)) {
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION, this._labelPosition);
+    }
+    if (!this._adapter.getHostAttribute(FIELD_CONSTANTS.attributes.VARIANT)) {
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.VARIANT, this._variant);
+    }
 
     if (this._popoverIcon) {
       this._adapter.addPopoverIconListener('click', this._popoverIconClickListener);
@@ -112,6 +118,8 @@ export class FieldCore implements IFieldCore {
       }
 
       this._adapter.setLabelPosition(this._labelPosition);
+      // Moved this out of the adapter method
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION, this._labelPosition);
     }
   }
 
