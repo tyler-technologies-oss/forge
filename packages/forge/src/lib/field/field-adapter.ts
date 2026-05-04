@@ -2,8 +2,8 @@ import { addClass, getShadowElement, removeClass, toggleClass } from '@tylertech
 import { BaseAdapter, IBaseAdapter } from '../core/base/index.js';
 import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../focus-indicator/index.js';
 import { FieldLabelPosition } from './base/base-field-constants.js';
-import { IFieldComponent } from './field.js';
 import { FIELD_CONSTANTS } from './field-constants.js';
+import { IFieldComponent } from './field.js';
 
 export interface IFieldAdapter extends IBaseAdapter<IFieldComponent> {
   readonly focusIndicator: IFocusIndicatorComponent;
@@ -69,6 +69,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     } else {
       this._rootElement.prepend(this._labelElement);
     }
+    this.setHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION, value);
   }
 
   /**
@@ -77,7 +78,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   public setFloatingLabel(value: boolean): void {
     const className = value ? FIELD_CONSTANTS.classes.FLOATING_IN : FIELD_CONSTANTS.classes.FLOATING_OUT;
     const animationName = value ? FIELD_CONSTANTS.animations.FLOAT_IN_LABEL : FIELD_CONSTANTS.animations.FLOAT_OUT_LABEL;
-    const animationEndListener: EventListener = (evt: AnimationEvent) => {
+    const animationEndListener = (evt: AnimationEvent): void => {
       if (evt.animationName === animationName) {
         removeClass(className, this._rootElement);
         this._rootElement.removeEventListener('animationend', animationEndListener);
