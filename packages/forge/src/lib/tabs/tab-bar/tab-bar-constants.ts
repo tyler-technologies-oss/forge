@@ -1,3 +1,4 @@
+import { createContext } from '@lit/context';
 import { COMPONENT_NAME_PREFIX } from '../../constants.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tab-bar`;
@@ -62,3 +63,10 @@ export interface ITabBarChangeEventData {
 }
 
 export type TabBarTheme = 'default' | 'app-bar';
+
+export const TAB_BAR_DISABLED = createContext<boolean>('tab-bar-disabled');
+export const TAB_BAR_VERTICAL = createContext<boolean>('tab-bar-vertical');
+export const TAB_BAR_STACKED = createContext<boolean>('tab-bar-stacked');
+export const TAB_BAR_SECONDARY = createContext<boolean>('tab-bar-secondary');
+export const TAB_BAR_INVERTED = createContext<boolean>('tab-bar-inverted');
+export const TAB_BAR_REMOVABLE = createContext<boolean>('tab-bar-removable');

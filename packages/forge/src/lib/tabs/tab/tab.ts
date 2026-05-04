@@ -9,8 +9,15 @@ import { toggleState } from '../../core/index.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
 import { StateLayerComponent } from '../../state-layer/state-layer.js';
-import { TAB_BAR_CONSTANTS } from '../tab-bar/tab-bar-constants.js';
-import { TAB_BAR_DISABLED, TAB_BAR_INVERTED, TAB_BAR_REMOVABLE, TAB_BAR_SECONDARY, TAB_BAR_STACKED, TAB_BAR_VERTICAL } from '../tab-bar/tab-bar.js';
+import {
+  TAB_BAR_CONSTANTS,
+  TAB_BAR_DISABLED,
+  TAB_BAR_INVERTED,
+  TAB_BAR_REMOVABLE,
+  TAB_BAR_SECONDARY,
+  TAB_BAR_STACKED,
+  TAB_BAR_VERTICAL
+} from '../tab-bar/tab-bar-constants.js';
 import { TAB_CONSTANTS } from './tab-constants.js';
 
 import styles from './tab.scss';

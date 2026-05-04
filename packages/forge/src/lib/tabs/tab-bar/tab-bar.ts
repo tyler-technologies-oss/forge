@@ -1,5 +1,5 @@
-import { createContext, provide } from '@lit/context';
-import { CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver, isDefined } from '@tylertech/forge-core';
+import { provide } from '@lit/context';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver, isDefined } from '@tylertech/forge-core';
 import { tylIconKeyboardArrowDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, eventOptions, property, query, queryAssignedElements, state } from 'lit/decorators.js';
@@ -14,15 +14,29 @@ import { KeyActionController } from '../../core/utils/key-action.js';
 import { toggleState } from '../../core/utils/utils.js';
 import { IconButtonComponent } from '../../icon-button/icon-button.js';
 import { IconRegistry } from '../../icon/icon-registry.js';
+import { IconComponent } from '../../icon/icon.js';
 import { TAB_CONSTANTS } from '../tab/tab-constants.js';
 import { TabComponent } from '../tab/tab.js';
-import { ITabBarChangeEventData, TAB_BAR_CONSTANTS, TabBarTheme } from './tab-bar-constants.js';
+import {
+  ITabBarChangeEventData,
+  TAB_BAR_CONSTANTS,
+  TAB_BAR_DISABLED,
+  TAB_BAR_INVERTED,
+  TAB_BAR_REMOVABLE,
+  TAB_BAR_SECONDARY,
+  TAB_BAR_STACKED,
+  TAB_BAR_VERTICAL,
+  TabBarTheme
+} from './tab-bar-constants.js';
 
 import styles from './tab-bar.scss';
 
 /** @deprecated - This will be removed in the future. Please switch to using TabBarComponent. */
 export interface ITabBarComponent extends BaseLitElement {
   disabled: boolean;
+  selectedTabElement: TabComponent | null | undefined;
+  selectedTab: string;
+  selectedIndex: number | null | undefined;
   activeTab: number | null | undefined;
   vertical: boolean;
   clustered: boolean;
@@ -33,14 +47,8 @@ export interface ITabBarComponent extends BaseLitElement {
   removable: boolean;
   autoActivate: boolean;
   scrollButtons: boolean;
+  theme: TabBarTheme;
 }
-
-export const TAB_BAR_DISABLED = createContext<boolean>('tab-bar-disabled');
-export const TAB_BAR_VERTICAL = createContext<boolean>('tab-bar-vertical');
-export const TAB_BAR_STACKED = createContext<boolean>('tab-bar-stacked');
-export const TAB_BAR_SECONDARY = createContext<boolean>('tab-bar-secondary');
-export const TAB_BAR_INVERTED = createContext<boolean>('tab-bar-inverted');
-export const TAB_BAR_REMOVABLE = createContext<boolean>('tab-bar-removable');
 
 type TabBarScrollDirection = 'backward' | 'forward';
 
@@ -83,7 +91,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = TAB_BAR_CONSTANTS.elementName;
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  // public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [TabComponent, IconButtonComponent, IconComponent];
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [TabComponent, IconButtonComponent, IconComponent];
 
   static {
     IconRegistry.define([tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown]);
@@ -223,6 +231,9 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   @property({ type: Boolean, reflect: true, attribute: 'scroll-buttons' })
   public scrollButtons = false;
 
+  /**
+   * The tab bar's theme.
+   */
   @property()
   public theme: TabBarTheme = 'default';
 
@@ -321,9 +332,10 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       inverted: this.inverted,
       'app-bar': this.theme === 'app-bar'
     };
+    const showingScrollButtons = this.scrollButtons && this._scrollable;
     return html`
       <div class=${classMap(classes)} part="container" @click=${this.#handleClick}>
-        ${this._scrollable ? this.#scrollButton('backward') : nothing}
+        ${showingScrollButtons ? this.#scrollButton('backward') : nothing}
         <div
           class="scroll-container"
           part="scroll-container"
@@ -332,7 +344,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
           ${focusGroup(this.#focusGroupRef)}>
           <slot @slotchange=${this.#handleSlotChange}></slot>
         </div>
-        ${this._scrollable ? this.#scrollButton('forward') : nothing}
+        ${showingScrollButtons ? this.#scrollButton('forward') : nothing}
       </div>
     `;
   }
@@ -516,6 +528,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     const event = new CustomEvent(TAB_BAR_CONSTANTS.events.CHANGE, {
       detail: { index },
       bubbles: true,
+      cancelable: true,
       composed: true
     });
     this.dispatchEvent(event);
@@ -578,15 +591,31 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     });
   }
 
-  #setSelectedTabFromElement(element?: TabComponent): void {
-    element?.select();
+  async #setSelectedTabFromElement(element?: TabComponent): Promise<void> {
+    if (!this.hasUpdated) {
+      await this.updateComplete;
+    }
+
+    if (element) {
+      element.selected = true;
+    } else {
+      this._tabs.forEach(tab => (tab.selected = false));
+    }
   }
 
-  #setSelectedTabFromName(name: string): void {
+  async #setSelectedTabFromName(name: string): Promise<void> {
+    if (!this.hasUpdated) {
+      await this.updateComplete;
+    }
+
     this._tabs.find(tab => tab.name === name)?.select();
   }
 
-  #setSelectedTabFromIndex(index: number): void {
+  async #setSelectedTabFromIndex(index: number): Promise<void> {
+    if (!this.hasUpdated) {
+      await this.updateComplete;
+    }
+
     const tabs = this._tabs;
     if (index >= 0 && index < tabs.length) {
       return tabs[index].select();
