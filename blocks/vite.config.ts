@@ -9,6 +9,23 @@ import { parseBlockMetadata, type Block } from './src/scripts/block-metadata.js'
 
 const CATEGORIES = ['forms', 'tables', 'pages', 'patterns', 'full-app-layouts'] as const;
 const LAYOUT_PATH = path.resolve(process.cwd(), 'src/includes/base.html');
+const PARTIALS_PATH = path.resolve(process.cwd(), 'src/partials');
+
+function registerPartials(): void {
+  if (!fs.existsSync(PARTIALS_PATH)) {
+    return;
+  }
+
+  const partialFiles = fs.readdirSync(PARTIALS_PATH).filter(file => file.endsWith('.hbs'));
+
+  for (const file of partialFiles) {
+    const name = path.basename(file, '.hbs');
+    const content = fs.readFileSync(path.join(PARTIALS_PATH, file), 'utf-8');
+    Handlebars.registerPartial(name, content);
+  }
+}
+
+registerPartials();
 
 async function getBlocks(): Promise<Block[]> {
   const blocks: Block[] = [];
@@ -43,22 +60,33 @@ interface BlockTemplate {
 const BLOCK_TITLE_REGEX = /@block\s+(.+?)(?=\s*@|\s*-->)/;
 const BODY_REGEX = /<body([^>]*)>([\s\S]*)<\/body>/;
 const CLASS_REGEX = /class="([^"]*)"/;
+const METADATA_REGEX = /<!--[\s\S]*?-->/;
 
 function parseBlockTemplate(content: string, filePath: string): BlockTemplate | null {
   const titleMatch = content.match(BLOCK_TITLE_REGEX);
-  const bodyMatch = content.match(BODY_REGEX);
-
-  if (!titleMatch || !bodyMatch) {
+  if (!titleMatch) {
     return null;
   }
 
-  const bodyAttrs = bodyMatch[1] || '';
-  const classMatch = bodyAttrs.match(CLASS_REGEX);
+  const bodyMatch = content.match(BODY_REGEX);
+
+  if (bodyMatch) {
+    const bodyAttrs = bodyMatch[1] || '';
+    const classMatch = bodyAttrs.match(CLASS_REGEX);
+    return {
+      title: titleMatch[1].trim(),
+      bodyClass: classMatch ? classMatch[1] : '',
+      body: bodyMatch[2].trim()
+    };
+  }
+
+  const metadataMatch = content.match(METADATA_REGEX);
+  const bodyContent = metadataMatch ? content.slice(metadataMatch.index! + metadataMatch[0].length).trim() : content;
 
   return {
     title: titleMatch[1].trim(),
-    bodyClass: classMatch ? classMatch[1] : '',
-    body: bodyMatch[2].trim()
+    bodyClass: '',
+    body: bodyContent
   };
 }
 
@@ -68,13 +96,18 @@ function compileBlockWithLayout(content: string, filePath: string): string {
     return content;
   }
 
+  registerPartials();
+
+  const bodyTemplate = Handlebars.compile(blockTemplate.body);
+  const compiledBody = bodyTemplate({});
+
   const layoutContent = fs.readFileSync(LAYOUT_PATH, 'utf-8');
   const template = Handlebars.compile(layoutContent);
 
   const metadataMatch = content.match(/<!--[\s\S]*?-->/);
   const metadata = metadataMatch ? metadataMatch[0] + '\n' : '';
 
-  return metadata + template(blockTemplate);
+  return metadata + template({ ...blockTemplate, body: compiledBody });
 }
 
 function generateIndexHtml(blocks: Block[]): string {
@@ -161,6 +194,13 @@ function blocksPlugin(): Plugin {
   return {
     name: 'forge-blocks',
     configureServer(server: ViteDevServer) {
+      server.watcher.add(PARTIALS_PATH);
+      server.watcher.on('change', filePath => {
+        if (filePath.includes('partials') && filePath.endsWith('.hbs')) {
+          server.ws.send({ type: 'full-reload' });
+        }
+      });
+
       server.middlewares.use(async (req: IncomingMessage, res: ServerResponse, next: () => void) => {
         if (req.url === '/' || req.url === '/index.html') {
           const blocks = await getBlocks();
