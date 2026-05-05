@@ -60,17 +60,47 @@ These components wrap native elements for enhanced functionality:
 
 ```html
 <!-- ✅ CORRECT - forge-text-field requires <input> or <textarea> -->
-<forge-text-field>
+<forge-text-field label-position="block-start">
   <label for="email">Email</label>
   <input type="email" id="email" />
 </forge-text-field>
 
 <!-- ✅ CORRECT - forge-select requires <forge-option> elements -->
-<forge-select>
+<forge-select label-position="block-start">
   <label>Choose option</label>
   <forge-option value="1">Option 1</forge-option>
   <forge-option value="2">Option 2</forge-option>
 </forge-select>
+```
+
+### Required Component Defaults
+
+Always use these default attributes on the following components:
+
+**Text input components** - Always use `label-position="block-start"`:
+
+```html
+<!-- ✅ CORRECT -->
+<forge-text-field label-position="block-start">...</forge-text-field>
+<forge-autocomplete label-position="block-start">...</forge-autocomplete>
+<forge-select label-position="block-start">...</forge-select>
+
+<!-- ❌ WRONG - Missing label-position -->
+<forge-text-field>...</forge-text-field>
+```
+
+**Icon buttons** - Always use `density="medium"`:
+
+```html
+<!-- ✅ CORRECT -->
+<forge-icon-button density="medium">
+  <forge-icon name="settings"></forge-icon>
+</forge-icon-button>
+
+<!-- ❌ WRONG - Missing density -->
+<forge-icon-button>
+  <forge-icon name="settings"></forge-icon>
+</forge-icon-button>
 ```
 
 ### Self-Closing Tags
