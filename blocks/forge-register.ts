@@ -1,5 +1,7 @@
 import { defineComponents, IconRegistry } from '@tylertech/forge';
-import { defineAppLayoutComponent, defineUserProfileComponent } from '@tylertech/forge-extended';
+import '@tylertech/forge-extended/app-layout';
+import '@tylertech/forge-extended/user-profile';
+
 import {
   tylIconHome,
   tylIconNotifications,
@@ -14,10 +16,6 @@ import {
 
 // Register all Forge components
 defineComponents();
-
-// Register extended components
-defineAppLayoutComponent();
-defineUserProfileComponent();
 
 // Register icons
 IconRegistry.define([
