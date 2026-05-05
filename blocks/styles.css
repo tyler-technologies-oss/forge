@@ -7,7 +7,7 @@
 /* Block specific utilities */
 @layer components {
   .striped-box {
-    @apply rounded-lg p-4 border text-lowest dark:text-medium-inverse bg-[size:8px_8px] bg-top-left bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,transparent_0,transparent_50%)];
+    @apply rounded-lg p-4 border text-lowest bg-[size:8px_8px] bg-top-left bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,transparent_0,transparent_50%)];
   }
 
   .gradient-bg {
