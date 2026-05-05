@@ -5,12 +5,13 @@
     "moduleResolution": "bundler",
     "skipLibCheck": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["node"],
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["*.ts", "scripts/*.ts"],
+  "include": ["*.ts", "src/scripts/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

@@ -1,39 +1,9 @@
 import { glob } from 'glob';
 import fs from 'fs';
-import path from 'path';
-
-const METADATA_REGEX = /<!--\s*(@block\s+.+?)\s*(@description\s+.+?)?\s*(@tags\s+.+?)?\s*-->/s;
-
-interface BlockMetadata {
-  name: string;
-  description: string;
-  tags: string[];
-}
-
-interface Block extends BlockMetadata {
-  id: string;
-  file: string;
-}
+import { parseBlockMetadata, type Block } from './block-metadata.js';
 
 interface Manifest {
   blocks: Block[];
-}
-
-function parseBlockMetadata(content: string, filePath: string): BlockMetadata | null {
-  const match = content.match(METADATA_REGEX);
-  if (!match) {
-    return null;
-  }
-
-  const blockMatch = match[1]?.match(/@block\s+(.+)/);
-  const descMatch = match[2]?.match(/@description\s+(.+)/);
-  const tagsMatch = match[3]?.match(/@tags\s+(.+)/);
-
-  const name = blockMatch?.[1]?.trim() || path.basename(filePath, '.html');
-  const description = descMatch?.[1]?.trim() || '';
-  const tags = tagsMatch?.[1]?.split(',').map(t => t.trim()).filter(Boolean) || [];
-
-  return { name, description, tags };
 }
 
 async function generateManifest(): Promise<void> {

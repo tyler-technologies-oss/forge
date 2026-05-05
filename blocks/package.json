@@ -17,6 +17,7 @@
     "@tailwindcss/vite": "catalog:",
     "@types/node": "catalog:",
     "glob": "catalog:",
+    "handlebars": "^4.7.8",
     "tailwindcss": "catalog:",
     "tsx": "^4.19.0",
     "typescript": "~5.8.0",

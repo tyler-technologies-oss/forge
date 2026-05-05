@@ -4,44 +4,16 @@ import { glob } from 'glob';
 import fs from 'fs';
 import path from 'path';
 import type { IncomingMessage, ServerResponse } from 'http';
+import Handlebars from 'handlebars';
+import { parseBlockMetadata, type Block } from './src/scripts/block-metadata.js';
 
-const CATEGORIES = ['layouts', 'forms', 'tables', 'pages', 'patterns', 'full-app-layouts'] as const;
-
-const METADATA_REGEX = /<!--\s*(@block\s+.+?)\s*(@description\s+.+?)?\s*(@tags\s+.+?)?\s*-->/s;
-
-interface BlockMetadata {
-  name: string;
-  description: string;
-  tags: string[];
-}
-
-interface Block extends BlockMetadata {
-  id: string;
-  file: string;
-}
-
-function parseBlockMetadata(content: string, filePath: string): BlockMetadata | null {
-  const match = content.match(METADATA_REGEX);
-  if (!match) {
-    return null;
-  }
-
-  const blockMatch = match[1]?.match(/@block\s+(.+)/);
-  const descMatch = match[2]?.match(/@description\s+(.+)/);
-  const tagsMatch = match[3]?.match(/@tags\s+(.+)/);
-
-  const name = blockMatch?.[1]?.trim() || path.basename(filePath, '.html');
-  const description = descMatch?.[1]?.trim() || '';
-  const tags = tagsMatch?.[1]?.split(',').map(t => t.trim()).filter(Boolean) || [];
-
-  return { name, description, tags };
-}
+const CATEGORIES = ['forms', 'tables', 'pages', 'patterns', 'full-app-layouts'] as const;
+const LAYOUT_PATH = path.resolve(process.cwd(), 'src/includes/base.html');
 
 async function getBlocks(): Promise<Block[]> {
   const blocks: Block[] = [];
-  const htmlFiles = await glob('**/*.html', {
-    cwd: process.cwd(),
-    ignore: ['node_modules/**', 'dist/**', 'index.html']
+  const htmlFiles = await glob('src/blocks/**/*.html', {
+    cwd: process.cwd()
   });
 
   for (const file of htmlFiles) {
@@ -62,10 +34,53 @@ async function getBlocks(): Promise<Block[]> {
   return blocks;
 }
 
+interface BlockTemplate {
+  title: string;
+  bodyClass: string;
+  body: string;
+}
+
+const BLOCK_TITLE_REGEX = /@block\s+(.+?)(?=\s*@|\s*-->)/;
+const BODY_REGEX = /<body([^>]*)>([\s\S]*)<\/body>/;
+const CLASS_REGEX = /class="([^"]*)"/;
+
+function parseBlockTemplate(content: string, filePath: string): BlockTemplate | null {
+  const titleMatch = content.match(BLOCK_TITLE_REGEX);
+  const bodyMatch = content.match(BODY_REGEX);
+
+  if (!titleMatch || !bodyMatch) {
+    return null;
+  }
+
+  const bodyAttrs = bodyMatch[1] || '';
+  const classMatch = bodyAttrs.match(CLASS_REGEX);
+
+  return {
+    title: titleMatch[1].trim(),
+    bodyClass: classMatch ? classMatch[1] : '',
+    body: bodyMatch[2].trim()
+  };
+}
+
+function compileBlockWithLayout(content: string, filePath: string): string {
+  const blockTemplate = parseBlockTemplate(content, filePath);
+  if (!blockTemplate) {
+    return content;
+  }
+
+  const layoutContent = fs.readFileSync(LAYOUT_PATH, 'utf-8');
+  const template = Handlebars.compile(layoutContent);
+
+  const metadataMatch = content.match(/<!--[\s\S]*?-->/);
+  const metadata = metadataMatch ? metadataMatch[0] + '\n' : '';
+
+  return metadata + template(blockTemplate);
+}
+
 function generateIndexHtml(blocks: Block[]): string {
   const blocksByCategory: Record<string, Block[]> = {};
   for (const category of CATEGORIES) {
-    blocksByCategory[category] = blocks.filter(b => b.file.startsWith(category + '/'));
+    blocksByCategory[category] = blocks.filter(b => b.file.startsWith(`src/blocks/${category}/`));
   }
 
   const categoryHtml = CATEGORIES.map(category => {
@@ -157,6 +172,15 @@ function blocksPlugin(): Plugin {
         next();
       });
     },
+    transformIndexHtml: {
+      order: 'pre',
+      handler(html, ctx) {
+        if (ctx.filename.includes('/src/includes/')) {
+          return html;
+        }
+        return compileBlockWithLayout(html, ctx.filename);
+      }
+    },
     async writeBundle() {
       const blocks = await getBlocks();
 
@@ -180,9 +204,10 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       input: Object.fromEntries(
-        glob.sync('**/*.html', {
-          ignore: ['node_modules/**', 'dist/**', 'index.html']
-        }).map(file => [file.replace('.html', ''), path.resolve(process.cwd(), file)])
+        glob.sync('src/blocks/**/*.html').map(file => [
+          file.replace('.html', ''),
+          path.resolve(process.cwd(), file)
+        ])
       )
     }
   }

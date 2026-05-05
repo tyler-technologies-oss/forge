@@ -172,6 +172,9 @@ importers:
       glob:
         specifier: 'catalog:'
         version: 13.0.6
+      handlebars:
+        specifier: ^4.7.8
+        version: 4.7.8
       tailwindcss:
         specifier: 'catalog:'
         version: 4.2.4

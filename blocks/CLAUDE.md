@@ -2,9 +2,30 @@
 
 This directory contains reusable HTML blocks showcasing Tyler Forge components. Blocks are standalone HTML files that demonstrate common UI patterns.
 
+## Folder Structure
+
+```
+blocks/
+├── src/
+│   ├── blocks/           # All block categories
+│   │   ├── forms/
+│   │   ├── tables/
+│   │   ├── pages/
+│   │   ├── patterns/
+│   │   └── full-app-layouts/
+│   ├── includes/         # Shared templates (not blocks)
+│   │   └── base.html
+│   └── scripts/          # Build scripts
+├── styles.css            # Shared styles
+├── forge-register.ts     # Component registration
+└── vite.config.ts
+```
+
 ## Block File Structure
 
-Every block file MUST include metadata comments at the top:
+Block files use a simplified format with just the metadata comment and `<body>` element. The base template in `src/includes/base.html` automatically wraps each block with the HTML document structure, typography fonts, stylesheets, and scripts.
+
+Every block file MUST include metadata comments at the top followed by a `<body>` element:
 
 ```html
 <!--
@@ -12,29 +33,32 @@ Every block file MUST include metadata comments at the top:
   @description Brief description of what this block demonstrates
   @tags comma, separated, searchable, tags
 -->
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Block Name</title>
-    <link rel="stylesheet" href="/styles.css" />
-    <script type="module" src="/forge-register.ts"></script>
-  </head>
-  <body class="bg-surface p-8">
-    <!-- Block content here -->
-  </body>
-</html>
+<body class="bg-surface p-8">
+  <!-- Block content here -->
+</body>
 ```
 
-## Categories
+The `@block` value becomes the page `<title>`. The `class` attribute on `<body>` is extracted and applied to the rendered body element.
 
-- `forms/` - Form patterns (login, registration, settings, etc.)
-- `layouts/` - Layout patterns and page structures
-- `full-app-layouts/` - Complete application shell layouts
-- `pages/` - Full page examples
-- `patterns/` - Reusable UI patterns
-- `tables/` - Data table patterns
+### Base Layout Template
+
+The base layout (`src/includes/base.html`) includes:
+- Tyler font CSS from CDN (Roboto)
+- Forge core styles
+- Tailwind CSS
+- Forge component registration script
+
+You should NOT include `<!doctype>`, `<html>`, `<head>`, or stylesheet/script tags in block files - these are provided by the layout.
+
+## Block Categories
+
+All blocks live in `src/blocks/` organized by category:
+
+- `src/blocks/forms/` - Form patterns (login, registration, settings, etc.)
+- `src/blocks/tables/` - Data table patterns
+- `src/blocks/pages/` - Full page examples
+- `src/blocks/patterns/` - Reusable UI patterns
+- `src/blocks/full-app-layouts/` - Complete application shell layouts
 
 ## Forge Component Rules
 
