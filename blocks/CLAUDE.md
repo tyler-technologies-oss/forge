@@ -194,6 +194,44 @@ DO NOT use self-closing tags for Forge components in HTML:
 <forge-divider />
 ```
 
+### Icon Registration (REQUIRED)
+
+**IMPORTANT:** When adding `<forge-icon>` elements to a block, you MUST also update `forge-register.ts` to import and register the icons used.
+
+Icons are imported from `@tylertech/tyler-icons` (NOT `@tylertech/tyler-icons/standard`).
+
+**Icon naming convention:**
+- HTML: `name="settings"` → Import: `tylIconSettings`
+- HTML: `name="account_circle"` → Import: `tylIconAccountCircle`
+- Pattern: `tylIcon` + PascalCase version of the icon name
+
+**Example - Adding icons to a block:**
+
+1. Use icons in your block HTML:
+```html
+<forge-icon name="settings"></forge-icon>
+<forge-icon name="account_circle"></forge-icon>
+```
+
+2. Update `forge-register.ts` to import and register the icons:
+```typescript
+import {
+  tylIconSettings,
+  tylIconAccountCircle
+} from '@tylertech/tyler-icons';
+
+// Register icons
+IconRegistry.define([
+  tylIconSettings,
+  tylIconAccountCircle
+]);
+```
+
+**After creating or modifying any block that uses icons:**
+1. Identify all `<forge-icon name="...">` elements in the block
+2. Add the corresponding imports to `forge-register.ts`
+3. Add the icons to the `IconRegistry.define()` array
+
 ## Design Rules
 
 ### Always Use Tokens

@@ -156,6 +156,9 @@ importers:
       '@tylertech/forge':
         specifier: workspace:*
         version: link:../packages/forge
+      '@tylertech/forge-extended':
+        specifier: ^1.6.2
+        version: 1.6.2(@tylertech/forge@packages+forge)
       '@tylertech/forge-tailwind':
         specifier: workspace:*
         version: link:../packages/forge-tailwind
@@ -908,6 +911,9 @@ packages:
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
 
+  '@lit-labs/observers@2.1.0':
+    resolution: {integrity: sha512-oeQ2tvi/ygq7S+VgnXIInMKHHFPFqvIV9j2zBzpCwl33cWviT2ltuxNpbd11etwtUVsM8woKQzfVnrc80PKhKA==}
+
   '@lit-labs/ssr-dom-shim@1.5.1':
     resolution: {integrity: sha512-Aou5UdlSpr5whQe8AA/bZG0jMj96CoJIWbGfZ91qieWu5AWUMKw8VR/pAkQkJYvBNhmCcWnZlyyk5oze8JIqYA==}
 
@@ -1548,8 +1554,16 @@ packages:
       typescript-eslint:
         optional: true
 
+  '@tylertech/forge-core@3.2.1':
+    resolution: {integrity: sha512-GoBrbIo1GeBlCv6hvpB46dGt52hztJh5KqNmMuztVDDR983eRT1SqhYbStnqSUlZ77pomn/RkPtdVPcoqL+VYQ==}
+
   '@tylertech/forge-core@3.3.0':
     resolution: {integrity: sha512-TfbiuSVt2NFXtFO7qBQbleM15m/BP/Aty3ZYEQ7s0MqMONHm3Xct/X9Mi8W6oK971IsuXkQKJnDwNBHa+qwJfg==}
+
+  '@tylertech/forge-extended@1.6.2':
+    resolution: {integrity: sha512-V9ky1yoAMG2eltllpZqbHiqMnEIvjgFgmn3aAk59xrekjckhYp3XFpMP+CA/AWStJBlV1OBuaBH8MbuQvSD1TA==}
+    peerDependencies:
+      '@tylertech/forge': ^3.0.0
 
   '@tylertech/forge@3.14.1':
     resolution: {integrity: sha512-OfdZyhHTYIVlLJYgKjn4WhsuY5ktc5/hymO+whLdJ/uuQui4vyrXyLItGij8eJ9otD2YF+pPH6pY5v0tFkT63Q==}
@@ -1559,6 +1573,9 @@ packages:
     engines: {node: '>=18'}
     peerDependencies:
       stylelint: ^16.19.1
+
+  '@tylertech/tyler-icons@2.0.4':
+    resolution: {integrity: sha512-CyYcR9I62m4jJqDocJwgSuil/VkugdGGWubTZEJvbx1bXSbEZOST5W33H2GFqkTPmNOUB4na+zptj3puz1NxRA==}
 
   '@tylertech/tyler-icons@2.1.0':
     resolution: {integrity: sha512-rjRT7mlbqOlzwXP8Q7rMCrpg95SraiqlCQXisPRQWOfNZuW56PlWqfC33SC16GC8Uipim2w1LvYDoHJNihacRA==}
@@ -3032,6 +3049,9 @@ packages:
 
   lit-html@3.3.2:
     resolution: {integrity: sha512-Qy9hU88zcmaxBXcc10ZpdK7cOLXvXpRoBxERdtqV9QOrfpMZZ6pSYP91LhpPtap3sFMUiL7Tw2RImbe0Al2/kw==}
+
+  lit@3.3.0:
+    resolution: {integrity: sha512-DGVsqsOIHBww2DqnuZzW7QsuCdahp50ojuDaBPC7jUDRpYoH0z7kHBBYZewRzer75FwtrkmkKk7iOAwSaWdBmw==}
 
   lit@3.3.2:
     resolution: {integrity: sha512-NF9zbsP79l4ao2SNrH3NkfmFgN/hBYSQo90saIVI1o5GpjAdCPVstVzO1MrLOakHoEhYkrtRjPK6Ob521aoYWQ==}
@@ -4816,6 +4836,10 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
+  '@lit-labs/observers@2.1.0':
+    dependencies:
+      '@lit/reactive-element': 2.1.2
+
   '@lit-labs/ssr-dom-shim@1.5.1': {}
 
   '@lit/context@1.1.6':
@@ -5322,9 +5346,21 @@ snapshots:
       - supports-color
       - typescript
 
+  '@tylertech/forge-core@3.2.1':
+    dependencies:
+      tslib: 2.8.1
+
   '@tylertech/forge-core@3.3.0':
     dependencies:
       tslib: 2.8.1
+
+  '@tylertech/forge-extended@1.6.2(@tylertech/forge@packages+forge)':
+    dependencies:
+      '@lit-labs/observers': 2.1.0
+      '@tylertech/forge': link:packages/forge
+      '@tylertech/forge-core': 3.2.1
+      '@tylertech/tyler-icons': 2.0.4
+      lit: 3.3.0
 
   '@tylertech/forge@3.14.1':
     dependencies:
@@ -5344,6 +5380,8 @@ snapshots:
       stylelint-scss: 6.14.0(stylelint@16.26.1(typescript@5.9.3))
     transitivePeerDependencies:
       - postcss
+
+  '@tylertech/tyler-icons@2.0.4': {}
 
   '@tylertech/tyler-icons@2.1.0': {}
 
@@ -6912,6 +6950,12 @@ snapshots:
   lit-html@3.3.2:
     dependencies:
       '@types/trusted-types': 2.0.7
+
+  lit@3.3.0:
+    dependencies:
+      '@lit/reactive-element': 2.1.2
+      lit-element: 4.2.2
+      lit-html: 3.3.2
 
   lit@3.3.2:
     dependencies:

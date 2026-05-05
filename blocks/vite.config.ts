@@ -17,6 +17,9 @@ export default defineConfig({
   resolve: {
     conditions: ['import', 'module', 'browser', 'default']
   },
+  optimizeDeps: {
+    exclude: ['@tylertech/forge-extended']
+  },
   build: {
     outDir: 'dist',
     rollupOptions: {

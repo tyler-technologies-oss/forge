@@ -1,0 +1,88 @@
+<!--
+  @block Basic Application Layout
+  @description Basic layout for an application with header, content, and footer sections
+  @tags layout, application, shell
+-->
+
+<forge-app-layout app-title="My Application" app-title-href="/">
+  <!-- App bar logo -->
+  <forge-icon slot="app-bar-logo" name="home"></forge-icon>
+
+  <!-- App bar end actions -->
+  <div slot="app-bar-end" class="flex items-center gap-xsmall">
+    <forge-icon-button density="medium" aria-label="Notifications" class="text-high-inverse">
+      <forge-icon name="notifications"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button density="medium" aria-label="Settings" class="text-high-inverse">
+      <forge-icon name="settings"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button density="medium" aria-label="Account" class="text-high-inverse">
+      <forge-icon name="account_circle"></forge-icon>
+    </forge-icon-button>
+
+    <forge-user-profile
+      email="tyler.tech@tylertech.com"
+      button-label="Open the incredibly awesome profile menu"
+      theme-toggle
+      image-url
+      full-name="Tyler tech"
+      slot="app-bar-end">
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="settings"></forge-icon>
+        <a href="http://www.google.com" target="_blank">Settings</a>
+      </forge-profile-link>
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="account"></forge-icon>
+        <a href="http://www.google.com" target="_blank">Profile</a>
+      </forge-profile-link>
+      <span slot="sign-in-button-text">Sign in</span>
+      <span slot="sign-out-button-text">Sign Out</span>
+    </forge-user-profile>
+  </div>
+
+  <!-- Navigation drawer content -->
+  <forge-list slot="navigation" navlist>
+    <forge-list-item selected>
+      <forge-icon slot="start" name="dashboard"></forge-icon>
+      <span>Dashboard</span>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="folder"></forge-icon>
+      <span>Projects</span>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="people"></forge-icon>
+      <span>Team</span>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="calendar_today"></forge-icon>
+      <span>Calendar</span>
+    </forge-list-item>
+    <forge-divider></forge-divider>
+    <forge-list-item>
+      <forge-icon slot="start" name="settings"></forge-icon>
+      <span>Settings</span>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="help"></forge-icon>
+      <span>Help</span>
+    </forge-list-item>
+  </forge-list>
+
+  <!-- Main content -->
+  <main class="p-medium grid grid-min-320 gap-medium" slot="body">
+    <div class="striped-box"></div>
+    <div class="striped-box"></div>
+    <div class="striped-box"></div>
+    <div class="striped-box"></div>
+    <div class="striped-box"></div>
+    <div class="striped-box"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer slot="body-footer">
+    <forge-toolbar inverted>
+      <div slot="center" class="text-body1">© 2026 My Application. All rights reserved.</div>
+    </forge-toolbar>
+  </footer>
+</forge-app-layout>

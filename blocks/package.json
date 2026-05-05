@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tylertech/forge": "workspace:*",
+    "@tylertech/forge-extended": "^1.6.2",
     "@tylertech/forge-tailwind": "workspace:*",
     "@tylertech/tyler-icons": "catalog:"
   },

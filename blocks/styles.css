@@ -7,7 +7,7 @@
 /* Block specific utilities */
 @layer components {
   .striped-box {
-    @apply rounded-lg p-4 border text-lowest dark:text-medium-inverse bg-size-[8px_8px] bg-top-left bg-[repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,transparent_0,transparent_50%)];
+    @apply rounded-lg p-4 border text-lowest dark:text-medium-inverse bg-[size:8px_8px] bg-top-left bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,transparent_0,transparent_50%)];
   }
 
   .gradient-bg {
@@ -25,68 +25,4 @@
   forge-card.p-6 {
     --forge-card-padding: var(--forge-spacing-large);
   }
-}
-
-/* Background animations */
-@keyframes float {
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(10px, -15px) rotate(2deg);
-  }
-  50% {
-    transform: translate(-5px, -25px) rotate(-1deg);
-  }
-  75% {
-    transform: translate(-15px, -10px) rotate(1deg);
-  }
-}
-
-@keyframes pulse-slow {
-  0%,
-  100% {
-    opacity: 0.15;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.2;
-    transform: scale(1.05);
-  }
-}
-
-@keyframes rotate-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-float {
-  animation: float 20s ease-in-out infinite;
-}
-
-.animate-float-reverse {
-  animation: float 25s ease-in-out infinite reverse;
-}
-
-.animate-float-delayed {
-  animation: float 15s ease-in-out infinite;
-  animation-delay: -5s;
-}
-
-.animate-float-reverse-delayed {
-  animation: float 18s ease-in-out infinite reverse;
-  animation-delay: -8s;
-}
-
-.animate-pulse-slow {
-  animation: pulse-slow 8s ease-in-out infinite;
-}
-
-.animate-rotate-slow {
-  animation: rotate-slow 60s linear infinite;
 }
