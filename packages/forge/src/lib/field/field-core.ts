@@ -37,16 +37,17 @@ export interface IFieldCore {
 }
 
 export class FieldCore implements IFieldCore {
-  @globalConfig(FIELD_CONSTANTS.defaults.DEFAULT_LABEL_POSITION)
-  private _labelPosition!: FieldLabelPosition;
+  @globalConfig()
+  private _labelPosition: FieldLabelPosition = FIELD_CONSTANTS.defaults.DEFAULT_LABEL_POSITION;
+  @globalConfig()
+  private _variant: FieldVariant = FIELD_CONSTANTS.defaults.DEFAULT_VARIANT;
+
   private _labelAlignment: FieldLabelAlignment = FIELD_CONSTANTS.defaults.DEFAULT_LABEL_ALIGNMENT;
   private _floatLabel = false;
   private _invalid = false;
   private _required = false;
   private _optional = false;
   private _disabled = false;
-  @globalConfig(FIELD_CONSTANTS.defaults.DEFAULT_VARIANT)
-  private _variant!: FieldVariant;
   private _theme: FieldTheme = FIELD_CONSTANTS.defaults.DEFAULT_THEME;
   private _shape: FieldShape = FIELD_CONSTANTS.defaults.DEFAULT_SHAPE;
   private _density: FieldDensity = FIELD_CONSTANTS.defaults.DEFAULT_DENSITY;
@@ -69,10 +70,10 @@ export class FieldCore implements IFieldCore {
     // Setting the label position and variant here for global config decorator compatibility
     // Skipping if there are already host attributes set to avoid overwriting values that may have been set externally
     this._adapter.setLabelPosition(this._labelPosition);
-    if (!this._adapter.getHostAttribute(FIELD_CONSTANTS.attributes.VARIANT)) {
+    if (this._labelPosition !== FIELD_CONSTANTS.defaults.DEFAULT_LABEL_POSITION && !this._adapter.getHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION)) {
       this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION, this._labelPosition);
     }
-    if (!this._adapter.getHostAttribute(FIELD_CONSTANTS.attributes.VARIANT)) {
+    if (this._variant !== FIELD_CONSTANTS.defaults.DEFAULT_VARIANT && !this._adapter.getHostAttribute(FIELD_CONSTANTS.attributes.VARIANT)) {
       this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.VARIANT, this._variant);
     }
 
