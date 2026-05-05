@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "forge": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@tylertech/forge-mcp@latest"],
+      "env": {}
+    }
+  }
+}
