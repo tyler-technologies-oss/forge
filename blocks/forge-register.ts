@@ -39,7 +39,9 @@ import {
   tylIconAttachMoney,
   tylIconShoppingCart,
   tylIconFilterList,
-  tylIconDownload
+  tylIconDownload,
+  tylIconCode,
+  tylIconSearch
 } from '@tylertech/tyler-icons';
 
 // Register all Forge components
@@ -81,5 +83,7 @@ IconRegistry.define([
   tylIconAttachMoney,
   tylIconShoppingCart,
   tylIconFilterList,
-  tylIconDownload
+  tylIconDownload,
+  tylIconCode,
+  tylIconSearch
 ]);

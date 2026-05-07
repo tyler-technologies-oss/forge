@@ -11,7 +11,8 @@ export default defineConfig({
     blocksPlugin({
       blocksPath: path.resolve(process.cwd(), 'src/blocks'),
       layoutPath: path.resolve(process.cwd(), 'src/includes/base.html'),
-      partialsPath: path.resolve(process.cwd(), 'src/partials')
+      partialsPath: path.resolve(process.cwd(), 'src/partials'),
+      indexPath: path.resolve(process.cwd(), 'src/index.html')
     })
   ],
   resolve: {

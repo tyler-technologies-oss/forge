@@ -41,33 +41,7 @@
   </div>
 
   <!-- Navigation drawer content -->
-  <forge-list slot="navigation" navlist>
-    <forge-list-item selected>
-      <forge-icon slot="start" name="dashboard" external></forge-icon>
-      <span>Dashboard</span>
-    </forge-list-item>
-    <forge-list-item>
-      <forge-icon slot="start" name="folder" external></forge-icon>
-      <span>Projects</span>
-    </forge-list-item>
-    <forge-list-item>
-      <forge-icon slot="start" name="people" external></forge-icon>
-      <span>Team</span>
-    </forge-list-item>
-    <forge-list-item>
-      <forge-icon slot="start" name="calendar_today" external></forge-icon>
-      <span>Calendar</span>
-    </forge-list-item>
-    <forge-divider></forge-divider>
-    <forge-list-item>
-      <forge-icon slot="start" name="settings" external></forge-icon>
-      <span>Settings</span>
-    </forge-list-item>
-    <forge-list-item>
-      <forge-icon slot="start" name="help" external></forge-icon>
-      <span>Help</span>
-    </forge-list-item>
-  </forge-list>
+  {{> app-nav}}
 
   <!-- Main content -->
   <main class="p-medium grid grid-min-320 gap-medium" slot="body">

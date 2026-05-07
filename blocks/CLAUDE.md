@@ -58,6 +58,7 @@ Optionally, wrap content in a `<body>` element to apply classes to the rendered 
 ### Base Layout Template
 
 The base layout (`src/includes/base.html`) includes:
+
 - Tyler font CSS from CDN (Roboto)
 - Forge core styles
 - Tailwind CSS
@@ -83,8 +84,14 @@ Create a file in `src/partials/` with a `.hbs` extension containing static HTML:
     </tr>
   </thead>
   <tbody>
-    <tr><td>Item 1</td><td>Active</td></tr>
-    <tr><td>Item 2</td><td>Pending</td></tr>
+    <tr>
+      <td>Item 1</td>
+      <td>Active</td>
+    </tr>
+    <tr>
+      <td>Item 2</td>
+      <td>Pending</td>
+    </tr>
   </tbody>
 </forge-table>
 ```
@@ -143,8 +150,7 @@ These components wrap native elements for enhanced functionality:
 </forge-text-field>
 
 <!-- ✅ CORRECT - forge-select requires <forge-option> elements -->
-<forge-select label-position="block-start">
-  <label>Choose option</label>
+<forge-select label-position="block-start" label="Label here">
   <forge-option value="1">Option 1</forge-option>
   <forge-option value="2">Option 2</forge-option>
 </forge-select>
@@ -180,6 +186,33 @@ Always use these default attributes on the following components:
 </forge-icon-button>
 ```
 
+### Navigation Lists
+
+When using `forge-list` as a sidenav or navigation menu, add the `navlist` attribute and use anchor (`<a>`) elements inside `forge-list-item`:
+
+```html
+<!-- ✅ CORRECT - Navigation list with navlist attribute -->
+<forge-list navlist>
+  <forge-list-item selected>
+    <forge-icon slot="start" name="dashboard"></forge-icon>
+    <a href="/dashboard">Dashboard</a>
+  </forge-list-item>
+  <forge-list-item>
+    <forge-icon slot="start" name="settings"></forge-icon>
+    <a href="/settings">Settings</a>
+  </forge-list-item>
+</forge-list>
+
+<!-- ❌ WRONG - Missing navlist attribute for navigation -->
+<forge-list>
+  <forge-list-item>
+    <a href="/dashboard">Dashboard</a>
+  </forge-list-item>
+</forge-list>
+```
+
+The `navlist` attribute enables proper keyboard navigation and accessibility semantics for navigation menus.
+
 ### Self-Closing Tags
 
 DO NOT use self-closing tags for Forge components in HTML:
@@ -201,6 +234,7 @@ DO NOT use self-closing tags for Forge components in HTML:
 Icons are imported from `@tylertech/tyler-icons` (NOT `@tylertech/tyler-icons/standard`).
 
 **Icon naming convention:**
+
 - HTML: `name="settings"` → Import: `tylIconSettings`
 - HTML: `name="account_circle"` → Import: `tylIconAccountCircle`
 - Pattern: `tylIcon` + PascalCase version of the icon name
@@ -208,26 +242,22 @@ Icons are imported from `@tylertech/tyler-icons` (NOT `@tylertech/tyler-icons/st
 **Example - Adding icons to a block:**
 
 1. Use icons in your block HTML:
+
 ```html
-<forge-icon name="settings"></forge-icon>
-<forge-icon name="account_circle"></forge-icon>
+<forge-icon name="settings"></forge-icon> <forge-icon name="account_circle"></forge-icon>
 ```
 
 2. Update `forge-register.ts` to import and register the icons:
+
 ```typescript
-import {
-  tylIconSettings,
-  tylIconAccountCircle
-} from '@tylertech/tyler-icons';
+import { tylIconSettings, tylIconAccountCircle } from '@tylertech/tyler-icons';
 
 // Register icons
-IconRegistry.define([
-  tylIconSettings,
-  tylIconAccountCircle
-]);
+IconRegistry.define([tylIconSettings, tylIconAccountCircle]);
 ```
 
 **After creating or modifying any block that uses icons:**
+
 1. Identify all `<forge-icon name="...">` elements in the block
 2. Add the corresponding imports to `forge-register.ts`
 3. Add the icons to the `IconRegistry.define()` array
@@ -241,10 +271,11 @@ NEVER use arbitrary values for spacing or typography. Always use Tailwind utilit
 ```html
 <!-- ✅ CORRECT - Token-based spacing -->
 <div class="p-medium gap-medium">
-
-<!-- ❌ WRONG - Arbitrary values -->
-<div style="padding: 16px; gap: 16px;">
-<div class="p-[16px] gap-[16px]">
+  <!-- ❌ WRONG - Arbitrary values -->
+  <div style="padding: 16px; gap: 16px;">
+    <div class="p-[16px] gap-[16px]"></div>
+  </div>
+</div>
 ```
 
 ### Default Spacing
@@ -254,7 +285,8 @@ NEVER use arbitrary values for spacing or typography. Always use Tailwind utilit
 ```html
 <!-- Standard spacing between form fields, cards, list items, etc. -->
 <div class="flex flex-col gap-medium">
-<div class="flex gap-medium">
+  <div class="flex gap-medium"></div>
+</div>
 ```
 
 ### Responsive Grids
@@ -270,7 +302,7 @@ Always prefer dynamic responsiveness over fixed breakpoints. Use the `grid-min-3
 </div>
 
 <!-- ⚠️ AVOID - Fixed breakpoint grids when dynamic works -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-medium">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-medium"></div>
 ```
 
 The `grid-min-320` class uses CSS `auto-fit` and `minmax()` to automatically adjust the number of columns based on available space.
@@ -284,10 +316,11 @@ Blocks use Tailwind CSS for layout and spacing. Use utility classes instead of c
 ```html
 <!-- ✅ CORRECT -->
 <div class="flex flex-col gap-medium p-6">
-<h1 class="text-heading4 mb-2">
-
-<!-- ❌ WRONG - No custom CSS -->
-<div style="display: flex; gap: 16px;">
+  <h1 class="text-heading4 mb-2">
+    <!-- ❌ WRONG - No custom CSS -->
+    <div style="display: flex; gap: 16px;"></div>
+  </h1>
+</div>
 ```
 
 ### Forge Typography Classes
@@ -305,12 +338,13 @@ Prefer semantic spacing classes from `@tylertech/forge-tailwind` over numeric Ta
 ```html
 <!-- ✅ PREFERRED - Semantic spacing from forge-tailwind -->
 <div class="p-medium gap-large mb-small">
-
-<!-- ⚠️ ACCEPTABLE - But prefer semantic names when available -->
-<div class="p-4 gap-6 mb-2">
+  <!-- ⚠️ ACCEPTABLE - But prefer semantic names when available -->
+  <div class="p-4 gap-6 mb-2"></div>
+</div>
 ```
 
 Available semantic spacing classes:
+
 - `xxsmall`, `xsmall`, `small`, `medium`, `large`, `xlarge`, `xxlarge`
 - Use with any spacing utility: `p-medium`, `m-large`, `gap-small`, `space-x-medium`, etc.
 

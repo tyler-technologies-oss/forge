@@ -2,8 +2,8 @@
   "mcpServers": {
     "forge": {
       "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@tylertech/forge-mcp@latest"],
+      "command": "node",
+      "args": ["/Users/nick.andrews@tylertech.com/Desktop/dev/forge-MCP/dist/index.js"],
       "env": {}
     }
   }
