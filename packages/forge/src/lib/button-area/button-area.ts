@@ -84,7 +84,7 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
   public targetElement: TargetElement | null | undefined = undefined;
 
   @queryAssignedElements({ slot: 'button', selector: 'button, a' })
-  private _slottedButtonElements: (HTMLButtonElement | HTMLAnchorElement)[];
+  private _slottedButtonElements?: (HTMLButtonElement | HTMLAnchorElement)[];
 
   #buttonObserver?: MutationObserver;
   #root: Ref<HTMLDivElement> = createRef();
@@ -92,7 +92,7 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
   #focusIndicator: Ref<IFocusIndicatorComponent> = createRef();
 
   get #slottedButtonElement(): HTMLButtonElement | HTMLAnchorElement | undefined {
-    return this._slottedButtonElements[0];
+    return this._slottedButtonElements?.[0];
   }
 
   get #associatedElement(): TargetElement | null | undefined {
@@ -147,12 +147,12 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
         @click=${this.#handleClick}
         @keydown=${this.#handleKeydown}
         @pointerdown=${this.#handlePointerdown}>
-        <div id="button" class="button" part="button" .hidden=${!!this.targetElement} @slotchange=${this.#handleSlotChange}>
-          <slot name="button"></slot>
-        </div>
         <slot @click=${this.#handleIgnoreStateLayer} @pointerdown=${this.#handleIgnoreStateLayer} @pointerup=${this.#handleIgnoreStateLayer}></slot>
         <forge-state-layer exportparts="surface:state-layer" ${ref(this.#stateLayer)}></forge-state-layer>
         <forge-focus-indicator target="button" part="focus-indicator" inward ${ref(this.#focusIndicator)}></forge-focus-indicator>
+        <div id="button" class="button" part="button" .hidden=${!!this.targetElement} @slotchange=${this.#handleSlotChange}>
+          <slot name="button"></slot>
+        </div>
       </div>
     `;
   }

@@ -1,0 +1,34 @@
+/*
+ * Forge Tailwind Theme - Animation
+ * Maps Forge animation duration and easing tokens.
+ * Usage: duration-short-1, duration-medium-2, ease-standard, etc.
+ */
+
+/* prettier-ignore */
+@theme {
+  /* Duration */
+  --duration-short-1: var(--forge-animation-duration-short1);
+  --duration-short-2: var(--forge-animation-duration-short2);
+  --duration-short-3: var(--forge-animation-duration-short3);
+  --duration-short-4: var(--forge-animation-duration-short4);
+  --duration-medium-1: var(--forge-animation-duration-medium1);
+  --duration-medium-2: var(--forge-animation-duration-medium2);
+  --duration-medium-3: var(--forge-animation-duration-medium3);
+  --duration-medium-4: var(--forge-animation-duration-medium4);
+  --duration-long-1: var(--forge-animation-duration-long1);
+  --duration-long-2: var(--forge-animation-duration-long2);
+  --duration-long-3: var(--forge-animation-duration-long3);
+  --duration-long-4: var(--forge-animation-duration-long4);
+  --duration-extra-long-1: var(--forge-animation-duration-extra-long1);
+  --duration-extra-long-2: var(--forge-animation-duration-extra-long2);
+  --duration-extra-long-3: var(--forge-animation-duration-extra-long3);
+  --duration-extra-long-4: var(--forge-animation-duration-extra-long4);
+  /* Easing */
+  --ease-linear: var(--forge-animation-easing-linear);
+  --ease-standard: var(--forge-animation-easing-standard);
+  --ease-accelerate: var(--forge-animation-easing-accelerate);
+  --ease-decelerate: var(--forge-animation-easing-decelerate);
+  --ease-emphasized: var(--forge-animation-easing-emphasized);
+  --ease-emphasized-accelerate: var(--forge-animation-easing-emphasized-accelerate);
+  --ease-emphasized-decelerate: var(--forge-animation-easing-emphasized-decelerate);
+}

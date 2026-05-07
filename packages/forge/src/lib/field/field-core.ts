@@ -1,3 +1,4 @@
+import { globalConfig } from '../core/index.js';
 import { FocusIndicatorFocusMode } from '../focus-indicator/index.js';
 import {
   FieldDensity,
@@ -36,14 +37,17 @@ export interface IFieldCore {
 }
 
 export class FieldCore implements IFieldCore {
+  @globalConfig()
   private _labelPosition: FieldLabelPosition = FIELD_CONSTANTS.defaults.DEFAULT_LABEL_POSITION;
+  @globalConfig()
+  private _variant: FieldVariant = FIELD_CONSTANTS.defaults.DEFAULT_VARIANT;
+
   private _labelAlignment: FieldLabelAlignment = FIELD_CONSTANTS.defaults.DEFAULT_LABEL_ALIGNMENT;
   private _floatLabel = false;
   private _invalid = false;
   private _required = false;
   private _optional = false;
   private _disabled = false;
-  private _variant: FieldVariant = FIELD_CONSTANTS.defaults.DEFAULT_VARIANT;
   private _theme: FieldTheme = FIELD_CONSTANTS.defaults.DEFAULT_THEME;
   private _shape: FieldShape = FIELD_CONSTANTS.defaults.DEFAULT_SHAPE;
   private _density: FieldDensity = FIELD_CONSTANTS.defaults.DEFAULT_DENSITY;
@@ -62,8 +66,16 @@ export class FieldCore implements IFieldCore {
   public initialize(): void {
     this._adapter.addRootListener('slotchange', this._slotChangeListener);
     this._adapter.initializeSlots();
-    this._adapter.tryApplyGlobalConfiguration(['labelPosition', 'variant']);
+
+    // Setting the label position and variant here for global config decorator compatibility
+    // Skipping if there are already host attributes set to avoid overwriting values that may have been set externally
     this._adapter.setLabelPosition(this._labelPosition);
+    if (this._labelPosition !== FIELD_CONSTANTS.defaults.DEFAULT_LABEL_POSITION && !this._adapter.getHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION)) {
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION, this._labelPosition);
+    }
+    if (this._variant !== FIELD_CONSTANTS.defaults.DEFAULT_VARIANT && !this._adapter.getHostAttribute(FIELD_CONSTANTS.attributes.VARIANT)) {
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.VARIANT, this._variant);
+    }
 
     if (this._popoverIcon) {
       this._adapter.addPopoverIconListener('click', this._popoverIconClickListener);
@@ -107,6 +119,8 @@ export class FieldCore implements IFieldCore {
       }
 
       this._adapter.setLabelPosition(this._labelPosition);
+      // Moved this out of the adapter method
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION, this._labelPosition);
     }
   }
 

@@ -1,0 +1,86 @@
+/*
+ * Forge Tailwind Theme - Shape (Border Radius)
+ * Maps Forge shape tokens to Tailwind's border-radius scale.
+ * Usage: rounded-sm, rounded-lg, rounded-full, etc.
+ */
+
+/* prettier-ignore */
+@theme {
+  --radius-xs: var(--forge-shape-extra-small);
+  --radius-sm: var(--forge-shape-small);
+  --radius-md: var(--forge-shape-medium);
+  --radius-lg: var(--forge-shape-large);
+  --radius-xl: var(--forge-shape-extra-large);
+  --radius-full: var(--forge-shape-full);
+  --radius-round: var(--forge-shape-round);
+}
+
+/* ==========================================================================
+   BORDER RADIUS - LOGICAL DIRECTIONAL VARIANTS
+   Usage: rounded-bs-lg (block-start), rounded-ie-md (inline-end), etc.
+   ========================================================================== */
+/* Extra Small directional */
+@utility rounded-bs-xs {
+  border-radius: var(--forge-shape-extra-small-block-start);
+}
+@utility rounded-be-xs {
+  border-radius: var(--forge-shape-extra-small-block-end);
+}
+@utility rounded-is-xs {
+  border-radius: var(--forge-shape-extra-small-inline-start);
+}
+@utility rounded-ie-xs {
+  border-radius: var(--forge-shape-extra-small-inline-end);
+}
+/* Small directional */
+@utility rounded-bs-sm {
+  border-radius: var(--forge-shape-small-block-start);
+}
+@utility rounded-be-sm {
+  border-radius: var(--forge-shape-small-block-end);
+}
+@utility rounded-is-sm {
+  border-radius: var(--forge-shape-small-inline-start);
+}
+@utility rounded-ie-sm {
+  border-radius: var(--forge-shape-small-inline-end);
+}
+/* Medium directional */
+@utility rounded-bs-md {
+  border-radius: var(--forge-shape-medium-block-start);
+}
+@utility rounded-be-md {
+  border-radius: var(--forge-shape-medium-block-end);
+}
+@utility rounded-is-md {
+  border-radius: var(--forge-shape-medium-inline-start);
+}
+@utility rounded-ie-md {
+  border-radius: var(--forge-shape-medium-inline-end);
+}
+/* Large directional */
+@utility rounded-bs-lg {
+  border-radius: var(--forge-shape-large-block-start);
+}
+@utility rounded-be-lg {
+  border-radius: var(--forge-shape-large-block-end);
+}
+@utility rounded-is-lg {
+  border-radius: var(--forge-shape-large-inline-start);
+}
+@utility rounded-ie-lg {
+  border-radius: var(--forge-shape-large-inline-end);
+}
+/* Extra Large directional */
+@utility rounded-bs-xl {
+  border-radius: var(--forge-shape-extra-large-block-start);
+}
+@utility rounded-be-xl {
+  border-radius: var(--forge-shape-extra-large-block-end);
+}
+@utility rounded-is-xl {
+  border-radius: var(--forge-shape-extra-large-inline-start);
+}
+@utility rounded-ie-xl {
+  border-radius: var(--forge-shape-extra-large-inline-end);
+}

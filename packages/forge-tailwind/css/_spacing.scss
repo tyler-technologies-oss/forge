@@ -1,0 +1,33 @@
+/*
+ * Forge Tailwind Theme - Spacing
+ * Maps Forge spacing tokens to Tailwind's spacing scale.
+ * Usage: p-4, p-medium, gap-large, m-xlarge, etc.
+ */
+
+/* prettier-ignore */
+@theme {
+  /* Numeric scale (Tailwind-familiar) */
+  --spacing-0: 0px;
+  --spacing-0_5: var(--forge-spacing-xxxsmall);
+  --spacing-1: var(--forge-spacing-xxsmall);
+  --spacing-2: var(--forge-spacing-xsmall);
+  --spacing-3: var(--forge-spacing-small);
+  --spacing-4: var(--forge-spacing-medium);
+  --spacing-5: var(--forge-spacing-medium-large);
+  --spacing-6: var(--forge-spacing-large);
+  --spacing-8: var(--forge-spacing-xlarge);
+  --spacing-12: var(--forge-spacing-xxlarge);
+  --spacing-14: var(--forge-spacing-xxxlarge);
+  /* Semantic scale (Forge-familiar) */
+  --spacing-zero: 0px;
+  --spacing-xxxsmall: var(--forge-spacing-xxxsmall);
+  --spacing-xxsmall: var(--forge-spacing-xxsmall);
+  --spacing-xsmall: var(--forge-spacing-xsmall);
+  --spacing-small: var(--forge-spacing-small);
+  --spacing-medium: var(--forge-spacing-medium);
+  --spacing-medium-large: var(--forge-spacing-medium-large);
+  --spacing-large: var(--forge-spacing-large);
+  --spacing-xlarge: var(--forge-spacing-xlarge);
+  --spacing-xxlarge: var(--forge-spacing-xxlarge);
+  --spacing-xxxlarge: var(--forge-spacing-xxxlarge);
+}

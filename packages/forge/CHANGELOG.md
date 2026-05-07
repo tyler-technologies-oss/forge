@@ -1,5 +1,13 @@
 # @tylertech/forge
 
+## 3.14.1
+
+### Patch Changes
+
+- 04335f5: fix(secret): prevent unexpected icon button size when line-height is set to normal
+- 1285d1a: fix(calendar): fixed menu animation state sync issue causing blank month & year menus
+- 8dc52f3: fix(expansion-panel): fix open-icon sync with expansion-panel
+
 ## 3.14.0
 
 ### Minor Changes

@@ -1,0 +1,32 @@
+@import 'tailwindcss';
+@import '@tylertech/forge-tailwind';
+
+@layer components {
+  .striped-box {
+    @apply rounded-lg p-4 border text-lowest bg-[size:var(--forge-spacing-small)_var(--forge-spacing-small)] bg-top-left bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,transparent_0,transparent_50%)];
+  }
+
+  .striped-box-primary {
+    @apply rounded-lg p-4 border-blue-400 border text-blue-100 bg-[size:var(--forge-spacing-small)_var(--forge-spacing-small)] bg-top-left bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,transparent_0,transparent_50%)];
+  }
+
+  .grid-min-120 {
+    @apply grid grid-cols-[repeat(auto-fill,minmax(min(120px,100%),1fr))] gap-medium;
+  }
+}
+
+.sbdocs.sbdocs-wrapper {
+  min-height: fit-content;
+}
+
+.sbdocs.sbdocs-content {
+  padding: 0;
+}
+
+.sbdocs .sbdocs-preview {
+  margin: 0;
+}
+
+.sbdocs.sbdocs-preview-actions {
+  margin: 0;
+}

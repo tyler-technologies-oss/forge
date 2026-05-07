@@ -1,0 +1,271 @@
+/*
+ * Forge Tailwind Theme - Colors
+ * Background, text, border, and ring color utilities.
+ */
+
+/* ==========================================================================
+   BACKGROUND COLORS
+   Usage: bg-surface, bg-primary, bg-error-container-high, etc.
+   ========================================================================== */
+/* Surface colors */
+@utility bg-surface {
+  background-color: var(--forge-theme-surface);
+}
+@utility bg-surface-dim {
+  background-color: var(--forge-theme-surface-dim);
+}
+@utility bg-surface-bright {
+  background-color: var(--forge-theme-surface-bright);
+}
+@utility bg-surface-inverse {
+  background-color: var(--forge-theme-surface-inverse);
+}
+@utility bg-surface-container {
+  background-color: var(--forge-theme-surface-container);
+}
+@utility bg-surface-container-minimum {
+  background-color: var(--forge-theme-surface-container-minimum);
+}
+@utility bg-surface-container-low {
+  background-color: var(--forge-theme-surface-container-low);
+}
+@utility bg-surface-container-medium {
+  background-color: var(--forge-theme-surface-container-medium);
+}
+@utility bg-surface-container-high {
+  background-color: var(--forge-theme-surface-container-high);
+}
+/* Brand */
+@utility bg-brand {
+  background-color: var(--forge-theme-brand);
+}
+/* Primary colors */
+@utility bg-primary {
+  background-color: var(--forge-theme-primary);
+}
+@utility bg-primary-container-minimum {
+  background-color: var(--forge-theme-primary-container-minimum);
+}
+@utility bg-primary-container-low {
+  background-color: var(--forge-theme-primary-container-low);
+}
+@utility bg-primary-container {
+  background-color: var(--forge-theme-primary-container);
+}
+@utility bg-primary-container-high {
+  background-color: var(--forge-theme-primary-container-high);
+}
+/* Secondary colors */
+@utility bg-secondary {
+  background-color: var(--forge-theme-secondary);
+}
+@utility bg-secondary-container-minimum {
+  background-color: var(--forge-theme-secondary-container-minimum);
+}
+@utility bg-secondary-container-low {
+  background-color: var(--forge-theme-secondary-container-low);
+}
+@utility bg-secondary-container {
+  background-color: var(--forge-theme-secondary-container);
+}
+@utility bg-secondary-container-high {
+  background-color: var(--forge-theme-secondary-container-high);
+}
+/* Tertiary colors */
+@utility bg-tertiary {
+  background-color: var(--forge-theme-tertiary);
+}
+@utility bg-tertiary-container-minimum {
+  background-color: var(--forge-theme-tertiary-container-minimum);
+}
+@utility bg-tertiary-container-low {
+  background-color: var(--forge-theme-tertiary-container-low);
+}
+@utility bg-tertiary-container {
+  background-color: var(--forge-theme-tertiary-container);
+}
+@utility bg-tertiary-container-high {
+  background-color: var(--forge-theme-tertiary-container-high);
+}
+/* Success colors */
+@utility bg-success {
+  background-color: var(--forge-theme-success);
+}
+@utility bg-success-container-minimum {
+  background-color: var(--forge-theme-success-container-minimum);
+}
+@utility bg-success-container-low {
+  background-color: var(--forge-theme-success-container-low);
+}
+@utility bg-success-container {
+  background-color: var(--forge-theme-success-container);
+}
+@utility bg-success-container-high {
+  background-color: var(--forge-theme-success-container-high);
+}
+/* Error colors */
+@utility bg-error {
+  background-color: var(--forge-theme-error);
+}
+@utility bg-error-container-minimum {
+  background-color: var(--forge-theme-error-container-minimum);
+}
+@utility bg-error-container-low {
+  background-color: var(--forge-theme-error-container-low);
+}
+@utility bg-error-container {
+  background-color: var(--forge-theme-error-container);
+}
+@utility bg-error-container-high {
+  background-color: var(--forge-theme-error-container-high);
+}
+/* Warning colors */
+@utility bg-warning {
+  background-color: var(--forge-theme-warning);
+}
+@utility bg-warning-container-minimum {
+  background-color: var(--forge-theme-warning-container-minimum);
+}
+@utility bg-warning-container-low {
+  background-color: var(--forge-theme-warning-container-low);
+}
+@utility bg-warning-container {
+  background-color: var(--forge-theme-warning-container);
+}
+@utility bg-warning-container-high {
+  background-color: var(--forge-theme-warning-container-high);
+}
+/* Info colors */
+@utility bg-info {
+  background-color: var(--forge-theme-info);
+}
+@utility bg-info-container-minimum {
+  background-color: var(--forge-theme-info-container-minimum);
+}
+@utility bg-info-container-low {
+  background-color: var(--forge-theme-info-container-low);
+}
+@utility bg-info-container {
+  background-color: var(--forge-theme-info-container);
+}
+@utility bg-info-container-high {
+  background-color: var(--forge-theme-info-container-high);
+}
+/* ==========================================================================
+   TEXT COLORS
+   Usage: text-high, text-primary, text-error, etc.
+   ========================================================================== */
+/* Text emphasis levels */
+@utility text-high {
+  color: var(--forge-theme-text-high);
+}
+@utility text-high-inverse {
+  color: var(--forge-theme-text-high-inverse);
+}
+@utility text-medium {
+  color: var(--forge-theme-text-medium);
+}
+@utility text-medium-inverse {
+  color: var(--forge-theme-text-medium-inverse);
+}
+@utility text-low {
+  color: var(--forge-theme-text-low);
+}
+@utility text-low-inverse {
+  color: var(--forge-theme-text-low-inverse);
+}
+@utility text-lowest {
+  color: var(--forge-theme-text-lowest);
+}
+@utility text-lowest-inverse {
+  color: var(--forge-theme-text-lowest-inverse);
+}
+/* Semantic text colors */
+@utility text-brand {
+  color: var(--forge-theme-brand);
+}
+@utility text-primary {
+  color: var(--forge-theme-primary);
+}
+@utility text-secondary {
+  color: var(--forge-theme-secondary);
+}
+@utility text-tertiary {
+  color: var(--forge-theme-tertiary);
+}
+@utility text-success {
+  color: var(--forge-theme-success);
+}
+@utility text-error {
+  color: var(--forge-theme-error);
+}
+@utility text-warning {
+  color: var(--forge-theme-warning);
+}
+@utility text-info {
+  color: var(--forge-theme-info);
+}
+/* ==========================================================================
+   BORDER COLORS
+   Usage: border-outline, border-primary, border-error, etc.
+   ========================================================================== */
+/* Outline colors */
+@utility border-outline {
+  border-color: var(--forge-theme-outline);
+}
+@utility border-outline-low {
+  border-color: var(--forge-theme-outline-low);
+}
+@utility border-outline-medium {
+  border-color: var(--forge-theme-outline-medium);
+}
+@utility border-outline-high {
+  border-color: var(--forge-theme-outline-high);
+}
+/* Semantic border colors */
+@utility border-brand {
+  border-color: var(--forge-theme-brand);
+}
+@utility border-primary {
+  border-color: var(--forge-theme-primary);
+}
+@utility border-secondary {
+  border-color: var(--forge-theme-secondary);
+}
+@utility border-tertiary {
+  border-color: var(--forge-theme-tertiary);
+}
+@utility border-success {
+  border-color: var(--forge-theme-success);
+}
+@utility border-error {
+  border-color: var(--forge-theme-error);
+}
+@utility border-warning {
+  border-color: var(--forge-theme-warning);
+}
+@utility border-info {
+  border-color: var(--forge-theme-info);
+}
+/* ==========================================================================
+   RING COLORS (for focus rings)
+   Usage: ring-primary, ring-error, etc.
+   ========================================================================== */
+@utility ring-outline {
+  --tw-ring-color: var(--forge-theme-outline);
+}
+@utility ring-outline-high {
+  --tw-ring-color: var(--forge-theme-outline-high);
+}
+@utility ring-primary {
+  --tw-ring-color: var(--forge-theme-primary);
+}
+@utility ring-secondary {
+  --tw-ring-color: var(--forge-theme-secondary);
+}
+@utility ring-error {
+  --tw-ring-color: var(--forge-theme-error);
+}
+@utility ring-success {
+  --tw-ring-color: var(--forge-theme-success);
+}

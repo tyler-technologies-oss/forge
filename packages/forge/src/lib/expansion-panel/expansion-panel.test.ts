@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { userEvent } from 'vitest/browser';
 import { task } from '../core/utils/utils.js';
-import type { IOpenIconComponent } from '../open-icon/open-icon.js';
+import type { IOpenIconComponent, OpenIconComponent } from '../open-icon/open-icon.js';
 import { EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from './expansion-panel-constants.js';
 import type { ExpansionPanelComponent } from './expansion-panel.js';
 
@@ -719,6 +719,59 @@ describe('Expansion Panel', () => {
       expect(openIcon.open).toBe(false);
       await userEvent.click(trigger);
       expect(openIcon.open).toBe(true);
+    });
+
+    it('should sync open icon when openIconElement is set before connecting to DOM', async () => {
+      const screen = render(html`<div></div>`);
+      const container = screen.container.querySelector('div') as HTMLElement;
+
+      const fragment = document.createElement('div');
+      fragment.innerHTML = `
+        <forge-open-icon></forge-open-icon>
+        <forge-expansion-panel>
+          <button slot="header"></button>
+          <div></div>
+        </forge-expansion-panel>
+      `;
+      const openIcon = fragment.querySelector('forge-open-icon')!;
+      const panel = fragment.querySelector('forge-expansion-panel')!;
+      const button = fragment.querySelector('button')!;
+
+      panel.openIconElement = openIcon;
+
+      container.append(openIcon, panel);
+      await task();
+
+      expect(openIcon.open).toBe(false);
+      await userEvent.click(button);
+      expect(openIcon.open).toBe(true);
+    });
+
+    it('should immediately sync open icon to panel open state', async () => {
+      const screen = render(html`
+        <div>
+          <forge-open-icon id="open-icon-1"></forge-open-icon>
+          <forge-open-icon id="open-icon-2"></forge-open-icon>
+          <forge-expansion-panel open>
+            <div>Content</div>
+          </forge-expansion-panel>
+        </div>
+      `);
+      const container = screen.container.querySelector('div')!;
+      const openIcon1 = container.querySelector('#open-icon-1') as OpenIconComponent;
+      const openIcon2 = container.querySelector('#open-icon-2') as OpenIconComponent;
+      const expansionPanel = container.querySelector('forge-expansion-panel')!;
+      await task();
+
+      //By ref
+      expansionPanel.openIconElement = openIcon1;
+      await task();
+      expect(openIcon1.open).toBe(true);
+
+      //By id
+      expansionPanel.openIcon = 'open-icon-2';
+      await task();
+      expect(openIcon2.open).toBe(true);
     });
   });
 

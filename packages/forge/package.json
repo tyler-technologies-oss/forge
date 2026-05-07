@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge",
-  "version": "3.14.0",
+  "version": "3.14.1",
   "description": "Tyler Forge™ Web Components library",
   "license": "Apache-2.0",
   "author": "Tyler Technologies, Inc.",
@@ -115,6 +115,9 @@
     "storybook": "catalog:",
     "storybook-addon-tag-badges": "catalog:",
     "stylelint": "catalog:",
+    "tailwindcss": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "@tylertech/forge-tailwind": "workspace:",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.58.0",
     "vite": "catalog:",

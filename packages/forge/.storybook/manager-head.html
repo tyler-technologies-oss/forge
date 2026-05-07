@@ -40,28 +40,4 @@
     margin: 0;
     text-align: center;
   }
-
-  div[id='root'] {
-    position: fixed;
-    inset: 0;
-    inset-block-start: 32px;
-  }
-
-  div[id='root'] > div {
-    height: calc(100dvh - 32px);
-  }
-
-  @media (max-width: 630px) {
-    div[id='root'] {
-      inset-block-start: 56px;
-    }
-
-    div[id='root'] > div {
-      height: calc(100dvh - 56px);
-    }
-
-    .forge-docs-banner {
-      height: 56px;
-    }
-  }
 </style>
