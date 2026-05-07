@@ -1,6 +1,8 @@
 import { defineComponents, IconRegistry } from '@tylertech/forge';
 import '@tylertech/forge-extended/app-layout';
 import '@tylertech/forge-extended/user-profile';
+import '@tylertech/forge-extended/structured-card';
+import '@tylertech/forge-extended/count-card';
 
 import {
   tylIconHome,
@@ -11,7 +13,33 @@ import {
   tylIconFolder,
   tylIconPeople,
   tylIconCalendarToday,
-  tylIconHelp
+  tylIconHelp,
+  tylIconSupport,
+  tylIconInbox,
+  tylIconAddCircle,
+  tylIconSend,
+  tylIconDrafts,
+  tylIconHistory,
+  tylIconStar,
+  tylIconTicket,
+  tylIconAttachFile,
+  tylIconVisibility,
+  tylIconComment,
+  tylIconForward,
+  tylIconAdminPanelSettings,
+  tylIconGroup,
+  tylIconSecurity,
+  tylIconPersonAdd,
+  tylIconEmail,
+  tylIconPhone,
+  tylIconMoreVert,
+  tylIconDelete,
+  tylIconSave,
+  tylIconBarChart,
+  tylIconAttachMoney,
+  tylIconShoppingCart,
+  tylIconFilterList,
+  tylIconDownload
 } from '@tylertech/tyler-icons';
 
 // Register all Forge components
@@ -27,5 +55,31 @@ IconRegistry.define([
   tylIconFolder,
   tylIconPeople,
   tylIconCalendarToday,
-  tylIconHelp
+  tylIconHelp,
+  tylIconSupport,
+  tylIconInbox,
+  tylIconAddCircle,
+  tylIconSend,
+  tylIconDrafts,
+  tylIconHistory,
+  tylIconStar,
+  tylIconTicket,
+  tylIconAttachFile,
+  tylIconVisibility,
+  tylIconComment,
+  tylIconForward,
+  tylIconAdminPanelSettings,
+  tylIconGroup,
+  tylIconSecurity,
+  tylIconPersonAdd,
+  tylIconEmail,
+  tylIconPhone,
+  tylIconMoreVert,
+  tylIconDelete,
+  tylIconSave,
+  tylIconBarChart,
+  tylIconAttachMoney,
+  tylIconShoppingCart,
+  tylIconFilterList,
+  tylIconDownload
 ]);

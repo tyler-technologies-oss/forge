@@ -1,0 +1,172 @@
+<!--
+  @block Dashboard Metrics
+  @description Dashboard layout with count cards and activity content
+  @tags dashboard, metrics, count-card, statistics, kpi, analytics
+-->
+
+<forge-app-layout app-title="Analytics Dashboard" app-title-href="/">
+  <!-- App bar logo -->
+  <forge-icon slot="app-bar-logo" name="dashboard"></forge-icon>
+
+  <!-- App bar end actions -->
+  <div slot="app-bar-end" class="flex items-center gap-xsmall">
+    <forge-icon-button density="medium" aria-label="Notifications" theme="app-bar">
+      <forge-icon name="notifications"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button density="medium" aria-label="Settings" theme="app-bar">
+      <forge-icon name="settings"></forge-icon>
+    </forge-icon-button>
+
+    <forge-user-profile email="admin@example.com" button-label="Open profile menu" theme-toggle full-name="Admin User" slot="app-bar-end">
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="settings"></forge-icon>
+        <a href="#">Settings</a>
+      </forge-profile-link>
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="account_circle"></forge-icon>
+        <a href="#">Profile</a>
+      </forge-profile-link>
+      <span slot="sign-out-button-text">Sign Out</span>
+    </forge-user-profile>
+  </div>
+
+  <!-- Navigation drawer content -->
+  <forge-list slot="navigation" navlist>
+    <forge-list-item selected>
+      <forge-icon slot="start" name="dashboard"></forge-icon>
+      <span>Dashboard</span>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="bar_chart"></forge-icon>
+      <span>Analytics</span>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="people"></forge-icon>
+      <span>Users</span>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="folder"></forge-icon>
+      <span>Projects</span>
+    </forge-list-item>
+    <forge-divider></forge-divider>
+    <forge-list-item>
+      <forge-icon slot="start" name="settings"></forge-icon>
+      <span>Settings</span>
+    </forge-list-item>
+  </forge-list>
+
+  <!-- Main content -->
+  <main class="p-medium" slot="body">
+    <h2 class="text-heading4 mb-medium">Overview</h2>
+
+    <!-- KPI Cards -->
+    <div class="grid grid-min-320 gap-medium mb-large">
+      <forge-count-card theme="primary">
+        <forge-icon slot="icon" name="people"></forge-icon>
+        <span slot="label">Total Users</span>
+        <span slot="count">12,847</span>
+        <span slot="count-end" class="text-body2 text-success">+14%</span>
+        <span slot="body" class="text-body2 text-medium">Active this month</span>
+      </forge-count-card>
+
+      <forge-count-card theme="success">
+        <forge-icon slot="icon" name="attach_money"></forge-icon>
+        <span slot="label">Revenue</span>
+        <span slot="count">$284,320</span>
+        <span slot="count-end" class="text-body2 text-success">+8.2%</span>
+        <span slot="body" class="text-body2 text-medium">Monthly recurring</span>
+      </forge-count-card>
+
+      <forge-count-card theme="info">
+        <forge-icon slot="icon" name="shopping_cart"></forge-icon>
+        <span slot="label">Orders</span>
+        <span slot="count">1,429</span>
+        <span slot="count-end" class="text-body2 text-error">-3%</span>
+        <span slot="body" class="text-body2 text-medium">Last 30 days</span>
+      </forge-count-card>
+    </div>
+
+    <!-- Two column layout for table and activity -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-medium">
+      <!-- Recent Orders Table -->
+      <forge-card class="lg:col-span-2">
+        <div class="flex items-center justify-between mb-medium">
+          <h3 class="text-heading5">Recent Orders</h3>
+          <forge-button>View All</forge-button>
+        </div>
+        <forge-table id="orders-table"></forge-table>
+        <script type="module">
+          const table = document.getElementById('orders-table');
+
+          table.columnConfigurations = [
+            { property: 'orderId', header: 'Order ID' },
+            { property: 'customer', header: 'Customer' },
+            { property: 'amount', header: 'Amount' },
+            {
+              property: 'status',
+              header: 'Status',
+              template: (rowIndex, cellElement, data) => {
+                const badge = document.createElement('forge-badge');
+                const themeMap = {
+                  Completed: 'success',
+                  Pending: 'warning',
+                  Processing: 'info'
+                };
+                badge.theme = themeMap[data.status] || 'default';
+                badge.textContent = data.status;
+                return badge;
+              }
+            }
+          ];
+
+          table.data = [
+            { orderId: '#ORD-7821', customer: 'Sarah Johnson', amount: '$142.00', status: 'Completed' },
+            { orderId: '#ORD-7820', customer: 'Michael Chen', amount: '$89.50', status: 'Pending' },
+            { orderId: '#ORD-7819', customer: 'Emily Davis', amount: '$234.00', status: 'Completed' },
+            { orderId: '#ORD-7818', customer: 'James Wilson', amount: '$67.25', status: 'Processing' },
+            { orderId: '#ORD-7817', customer: 'Lisa Anderson', amount: '$312.00', status: 'Completed' }
+          ];
+        </script>
+      </forge-card>
+
+      <!-- Recent Activity -->
+      <forge-card>
+        <h3 class="text-heading5 mb-medium">Recent Activity</h3>
+        <forge-list>
+          <forge-list-item two-line>
+            <forge-avatar slot="start" text="SJ"></forge-avatar>
+            <span>Sarah Johnson placed an order</span>
+            <span slot="secondary">2 minutes ago</span>
+          </forge-list-item>
+          <forge-list-item two-line>
+            <forge-avatar slot="start" text="MC"></forge-avatar>
+            <span>Michael Chen updated profile</span>
+            <span slot="secondary">15 minutes ago</span>
+          </forge-list-item>
+          <forge-list-item two-line>
+            <forge-avatar slot="start" text="ED"></forge-avatar>
+            <span>Emily Davis left a review</span>
+            <span slot="secondary">1 hour ago</span>
+          </forge-list-item>
+          <forge-list-item two-line>
+            <forge-avatar slot="start" text="JW"></forge-avatar>
+            <span>James Wilson signed up</span>
+            <span slot="secondary">3 hours ago</span>
+          </forge-list-item>
+          <forge-list-item two-line>
+            <forge-avatar slot="start" text="LA"></forge-avatar>
+            <span>Lisa Anderson requested refund</span>
+            <span slot="secondary">5 hours ago</span>
+          </forge-list-item>
+        </forge-list>
+      </forge-card>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer slot="body-footer">
+    <forge-toolbar inverted>
+      <div slot="center" class="text-body2">Last updated: May 6, 2026 at 2:30 PM</div>
+    </forge-toolbar>
+  </footer>
+</forge-app-layout>

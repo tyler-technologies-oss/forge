@@ -17,6 +17,13 @@ export default defineConfig({
   resolve: {
     conditions: ['import', 'module', 'browser', 'default']
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        loadPaths: ['node_modules']
+      }
+    }
+  },
   optimizeDeps: {
     exclude: ['@tylertech/forge-extended']
   },

@@ -1,0 +1,135 @@
+<!--
+  @block Mini Nav Application Layout
+  @description Application layout with collapsible mini drawer navigation and a support request form
+  @tags layout, application, shell, mini-nav, drawer, form, support
+-->
+
+<forge-app-layout app-title="Support Center" app-title-href="/" use-mini-drawer mini-hover>
+  <!-- App bar logo -->
+  <forge-icon slot="app-bar-logo" name="support"></forge-icon>
+
+  <!-- App bar end actions -->
+  <div slot="app-bar-end" class="flex items-center gap-xsmall">
+    <forge-icon-button density="medium" aria-label="Notifications" theme="app-bar">
+      <forge-icon name="notifications"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button density="medium" aria-label="Help" theme="app-bar">
+      <forge-icon name="help"></forge-icon>
+    </forge-icon-button>
+
+    <forge-user-profile email="john.doe@example.com" button-label="Open profile menu" theme-toggle full-name="John Doe" slot="app-bar-end">
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="settings"></forge-icon>
+        <a href="#">Settings</a>
+      </forge-profile-link>
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="account_circle"></forge-icon>
+        <a href="#">Profile</a>
+      </forge-profile-link>
+      <span slot="sign-out-button-text">Sign Out</span>
+    </forge-user-profile>
+  </div>
+
+  <!-- Navigation drawer content (mini drawer) -->
+  <forge-list slot="navigation" navlist>
+    <forge-list-item>
+      <forge-icon slot="start" name="inbox"></forge-icon>
+      <span>Inbox</span>
+    </forge-list-item>
+    <forge-list-item selected>
+      <forge-icon slot="start" name="add_circle"></forge-icon>
+      <span>New Request</span>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="send"></forge-icon>
+      <span>Sent</span>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="drafts"></forge-icon>
+      <span>Drafts</span>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="history"></forge-icon>
+      <span>History</span>
+    </forge-list-item>
+    <forge-divider></forge-divider>
+    <forge-list-item>
+      <forge-icon slot="start" name="star"></forge-icon>
+      <span>Starred</span>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="settings"></forge-icon>
+      <span>Settings</span>
+    </forge-list-item>
+  </forge-list>
+
+  <!-- Main content -->
+  <main class="p-medium" slot="body">
+    <forge-card class="max-w-2xl p-0">
+      <div class="p-medium">
+        <div class="flex items-center gap-small mb-medium">
+          <forge-icon name="ticket" class="text-primary"></forge-icon>
+          <h2 class="text-heading3">New Support Request</h2>
+        </div>
+        <p class="text-body2 text-medium mb-large">Submit a new support ticket and our team will respond within 24 hours.</p>
+
+        <form class="flex flex-col gap-medium">
+          <forge-text-field label-position="block-start">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" />
+          </forge-text-field>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-medium">
+            <forge-select label="Category" label-position="block-start">
+              <forge-option value="">Select a category</forge-option>
+              <forge-option value="technical">Technical Issue</forge-option>
+              <forge-option value="billing">Billing Question</forge-option>
+              <forge-option value="account">Account Access</forge-option>
+              <forge-option value="feature">Feature Request</forge-option>
+              <forge-option value="other">Other</forge-option>
+            </forge-select>
+
+            <forge-select label="Priority" label-position="block-start">
+              <forge-option value="low">Low</forge-option>
+              <forge-option value="medium" selected>Medium</forge-option>
+              <forge-option value="high">High</forge-option>
+              <forge-option value="urgent">Urgent</forge-option>
+            </forge-select>
+          </div>
+
+          <forge-text-field label-position="block-start">
+            <label for="description">Description</label>
+            <textarea id="description" rows="5"></textarea>
+          </forge-text-field>
+
+          <div>
+            <label class="text-label1 block mb-xsmall">Attachment (optional)</label>
+            <forge-file-picker>
+              <forge-button variant="outlined">
+                <forge-icon slot="start" name="attach_file"></forge-icon>
+                Select file
+              </forge-button>
+            </forge-file-picker>
+          </div>
+
+          <forge-checkbox>Send me email updates about this request</forge-checkbox>
+
+          <div class="flex gap-small justify-end mt-medium">
+            <forge-button type="button">Cancel</forge-button>
+            <forge-button variant="filled" type="submit">
+              <forge-icon slot="start" name="send"></forge-icon>
+              Submit Request
+            </forge-button>
+          </div>
+        </form>
+      </div>
+    </forge-card>
+  </main>
+
+  <!-- Footer -->
+  <footer slot="body-footer">
+    <forge-toolbar inverted>
+      <div slot="center" class="text-body2">© 2026 Support Center. Need help? Contact us at support@example.com</div>
+    </forge-toolbar>
+  </footer>
+</forge-app-layout>

@@ -64,3 +64,14 @@ DO NOT add comments unless code is complex. Defer to configs.
 ## Packages
 
 - `packages/forge` - Web components library (see its CLAUDE.md)
+
+## Blocks
+
+- ALL Forge apps typically start with the `forge-app-layout` component. It scaffolds an entire app structure—header, sidenav, content area, and footer—with built-in responsiveness. The blocks in `blocks/src/blocks/application-layout/` should be used as primary references for app structure.
+- When creating new blocks with AI, ALWAYS review existing blocks first for references, code patterns, and conventions. This ensures consistency across all blocks.
+- NEVER use placeholder attributes on form fields unless specifically asked to do so.
+- Use `forge-file-picker` component for file uploads, not `<input type="file">`.
+- When using `forge-app-layout` or `forge-app-bar`, the page title is the h1, so content headings should start at h2.
+- `forge-select` uses a `label` attribute for its label, not a slotted `<label>` element (unlike `forge-text-field`).
+- When creating forms, reference `blocks/src/blocks/application-layout/mini-nav.html` and `blocks/src/blocks/forms/add-illustration.html` for typography, spacing, and layout patterns.
+- When creating cards that require a header, body, and footer, use `forge-structured-card` from `@tylertech/forge-extended` as it provides the necessary layout structure with dedicated slots.

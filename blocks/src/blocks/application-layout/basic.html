@@ -10,14 +10,14 @@
 
   <!-- App bar end actions -->
   <div slot="app-bar-end" class="flex items-center gap-xsmall">
-    <forge-icon-button density="medium" aria-label="Notifications" class="text-high-inverse">
-      <forge-icon name="notifications"></forge-icon>
+    <forge-icon-button density="medium" aria-label="Notifications" theme="app-bar">
+      <forge-icon name="notifications" external></forge-icon>
     </forge-icon-button>
-    <forge-icon-button density="medium" aria-label="Settings" class="text-high-inverse">
-      <forge-icon name="settings"></forge-icon>
+    <forge-icon-button density="medium" aria-label="Settings" theme="app-bar">
+      <forge-icon name="settings" external></forge-icon>
     </forge-icon-button>
-    <forge-icon-button density="medium" aria-label="Account" class="text-high-inverse">
-      <forge-icon name="account_circle"></forge-icon>
+    <forge-icon-button density="medium" aria-label="Account" theme="app-bar">
+      <forge-icon name="account_circle" external></forge-icon>
     </forge-icon-button>
 
     <forge-user-profile
@@ -28,11 +28,11 @@
       full-name="Tyler tech"
       slot="app-bar-end">
       <forge-profile-link slot="link">
-        <forge-icon slot="icon" name="settings"></forge-icon>
+        <forge-icon slot="icon" name="settings" external></forge-icon>
         <a href="http://www.google.com" target="_blank">Settings</a>
       </forge-profile-link>
       <forge-profile-link slot="link">
-        <forge-icon slot="icon" name="account"></forge-icon>
+        <forge-icon slot="icon" name="account" external></forge-icon>
         <a href="http://www.google.com" target="_blank">Profile</a>
       </forge-profile-link>
       <span slot="sign-in-button-text">Sign in</span>
@@ -43,28 +43,28 @@
   <!-- Navigation drawer content -->
   <forge-list slot="navigation" navlist>
     <forge-list-item selected>
-      <forge-icon slot="start" name="dashboard"></forge-icon>
+      <forge-icon slot="start" name="dashboard" external></forge-icon>
       <span>Dashboard</span>
     </forge-list-item>
     <forge-list-item>
-      <forge-icon slot="start" name="folder"></forge-icon>
+      <forge-icon slot="start" name="folder" external></forge-icon>
       <span>Projects</span>
     </forge-list-item>
     <forge-list-item>
-      <forge-icon slot="start" name="people"></forge-icon>
+      <forge-icon slot="start" name="people" external></forge-icon>
       <span>Team</span>
     </forge-list-item>
     <forge-list-item>
-      <forge-icon slot="start" name="calendar_today"></forge-icon>
+      <forge-icon slot="start" name="calendar_today" external></forge-icon>
       <span>Calendar</span>
     </forge-list-item>
     <forge-divider></forge-divider>
     <forge-list-item>
-      <forge-icon slot="start" name="settings"></forge-icon>
+      <forge-icon slot="start" name="settings" external></forge-icon>
       <span>Settings</span>
     </forge-list-item>
     <forge-list-item>
-      <forge-icon slot="start" name="help"></forge-icon>
+      <forge-icon slot="start" name="help" external></forge-icon>
       <span>Help</span>
     </forge-list-item>
   </forge-list>
