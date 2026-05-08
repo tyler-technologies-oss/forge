@@ -60,11 +60,12 @@ describe('Tabs', () => {
     const ctx = await createFixture();
 
     await ctx.clickTab(0);
+    await ctx.updatesComplete(2);
 
     expect(ctx.tabs[0].matches(':focus')).toBe(true);
   });
 
-  it.skip('should handle activeTab set to undefined (currently logs warning but does not deselect)', async () => {
+  it('should handle activeTab set to undefined', async () => {
     const ctx = await createFixture({ activeTab: 0 });
 
     expect(ctx.element.activeTab).toBe(0);
@@ -75,13 +76,11 @@ describe('Tabs', () => {
     await ctx.element.updateComplete;
     await frame();
 
-    // Currently this logs a warning but does not deselect
-    // TODO: Fix component to properly handle undefined/null activeTab
     expect(ctx.element.activeTab).toBeNull();
     expect(ctx.selectedTabCount).toBe(0);
   });
 
-  it.skip('should handle activeTab set to null (currently logs warning but does not deselect)', async () => {
+  it('should handle activeTab set to null', async () => {
     const ctx = await createFixture({ activeTab: 0 });
 
     expect(ctx.element.activeTab).toBe(0);
@@ -92,8 +91,6 @@ describe('Tabs', () => {
     await ctx.element.updateComplete;
     await frame();
 
-    // Currently this logs a warning but does not deselect
-    // TODO: Fix component to properly handle undefined/null activeTab
     expect(ctx.element.activeTab).toBeNull();
     expect(ctx.selectedTabCount).toBe(0);
   });
@@ -374,8 +371,7 @@ describe('Tabs', () => {
     ctx.element.addEventListener(TAB_BAR_CONSTANTS.events.CHANGE, changeSpy);
 
     await ctx.clickTab(1);
-    await ctx.element.updateComplete;
-    await ctx.element.updateComplete;
+    await ctx.updatesComplete(2);
 
     expect(ctx.tabs[0].selected).toBe(true);
     expect(ctx.tabs[1].selected).toBe(false);
@@ -403,7 +399,8 @@ describe('Tabs', () => {
       const ctx = await createFixture({ activeTab: 0 });
 
       ctx.element.selectedIndex = 1;
-      await frame();
+      await ctx.element.updateComplete;
+      await ctx.element.updateComplete;
 
       expect(ctx.element.selectedIndex).toBe(1);
       expect(ctx.tabs[1].selected).toBe(true);
@@ -418,6 +415,8 @@ describe('Tabs', () => {
 
     it('should return index when first tab auto-selected', async () => {
       const ctx = await createFixture();
+      await ctx.element.updateComplete;
+      await ctx.element.updateComplete;
 
       expect(ctx.element.selectedIndex).toBe(0);
     });
@@ -450,9 +449,12 @@ describe('Tabs', () => {
   describe('selectedTab', () => {
     it('should set selected tab by name', async () => {
       const ctx = await createFixture({ tabNames: ['first', 'second', 'third'] });
+      await ctx.element.updateComplete;
+      await ctx.element.updateComplete;
 
       ctx.element.selectedTab = 'second';
-      await frame();
+      await ctx.element.updateComplete;
+      await ctx.element.updateComplete;
 
       expect(ctx.element.selectedTab).toBe('second');
       expect(ctx.tabs[1].selected).toBe(true);
@@ -467,6 +469,8 @@ describe('Tabs', () => {
 
     it('should return first tab name when auto-selected', async () => {
       const ctx = await createFixture({ tabNames: ['first', 'second', 'third'] });
+      await ctx.element.updateComplete;
+      await ctx.element.updateComplete;
 
       expect(ctx.element.selectedTab).toBe('first');
     });
@@ -475,9 +479,10 @@ describe('Tabs', () => {
   describe('selectedTabElement', () => {
     it('should set selected tab by element', async () => {
       const ctx = await createFixture();
+      await ctx.updatesComplete(2);
 
       ctx.element.selectedTabElement = ctx.tabs[2];
-      await frame();
+      await ctx.updatesComplete(2);
 
       expect(ctx.element.selectedTabElement).toBe(ctx.tabs[2]);
       expect(ctx.tabs[2].selected).toBe(true);
@@ -492,6 +497,7 @@ describe('Tabs', () => {
 
     it('should return first tab element when auto-selected', async () => {
       const ctx = await createFixture();
+      await ctx.updatesComplete(2);
 
       expect(ctx.element.selectedTabElement).toBe(ctx.tabs[0]);
     });
@@ -783,6 +789,10 @@ describe('Tabs', () => {
 
       ctx.element.style.width = '1px';
       ctx.element.scrollButtons = true;
+      await ctx.updatesComplete(3);
+
+      // Trigger resize observation by forcing a reflow and waiting for the observer
+      await frame();
       await frame();
 
       expect(ctx.element.scrollButtons).toBe(true);
@@ -816,23 +826,36 @@ describe('Tabs', () => {
       await ctx.element.updateComplete;
       await ctx.element.updateComplete;
 
+      // Wait for ResizeObserver to detect overflow after tab is added
+      await frame();
+      await frame();
+
       expect(ctx.hasScrollButtons).toBe(true);
     });
 
     it('should hide scroll buttons when scrollable tabs are removed causing no overflow', async () => {
       const ctx = await createFixture({ scrollButtons: true, clustered: true, width: '215px' });
 
+      // Wait for initial ResizeObserver to detect overflow
+      await frame();
+      await frame();
+
       expect(ctx.hasScrollButtons).toBe(true);
 
       ctx.tabs[0].remove();
       ctx.tabs[0].remove();
       await frame();
+      await frame();
 
       expect(ctx.hasScrollButtons).toBe(false);
     });
 
-    it.skip('should scroll forward when forward scroll button is clicked', async () => {
+    it('should scroll forward when forward scroll button is clicked', async () => {
       const ctx = await createFixture({ scrollButtons: true, width: '150px' });
+
+      // Wait for ResizeObserver to detect overflow and show buttons
+      await frame();
+      await frame();
 
       const scrollBySpy = vi.spyOn(ctx.scrollContainer, 'scrollBy');
 
@@ -845,9 +868,10 @@ describe('Tabs', () => {
       expect(ctx.scrollContainer.scrollLeft).toBeGreaterThan(0);
     });
 
-    it.skip('should scroll back when backward scroll button is clicked', async () => {
+    it('should scroll back when backward scroll button is clicked', async () => {
       const ctx = await createFixture({ activeTab: 2, scrollButtons: true, width: '150px' });
 
+      // Wait for ResizeObserver to detect overflow and show buttons
       await frame();
       await frame();
 
@@ -912,6 +936,12 @@ class TabsHarness extends TestHarness<TabBarComponent> {
   public get forwardScrollButtonIcon(): IIconComponent {
     return this.containerElement.querySelector(`.${TAB_BAR_CONSTANTS.classes.SCROLL_BUTTON}:last-child forge-icon`) as IIconComponent;
   }
+
+  public async updatesComplete(count: number): Promise<void> {
+    for (let i = 0; i < count; i++) {
+      await this.element.updateComplete;
+    }
+  }
 }
 
 interface TabsFixtureConfig {
@@ -959,9 +989,9 @@ async function createFixture({
       .removable=${!!removable}
       .theme=${theme ?? 'default'}
       style="width: ${width ?? 'auto'}; height: ${height ?? 'auto'}">
-      <forge-tab ?disabled=${tabDisabled?.[0]} .name=${tabNames?.[0] ?? ''}>${tabNames?.[0] ?? 'First'}</forge-tab>
-      <forge-tab ?disabled=${tabDisabled?.[1]} .name=${tabNames?.[1] ?? ''}>${tabNames?.[1] ?? 'Second'}</forge-tab>
-      <forge-tab ?disabled=${tabDisabled?.[2]} .name=${tabNames?.[2] ?? ''}>${tabNames?.[2] ?? 'Third'}</forge-tab>
+      <forge-tab ?disabled=${tabDisabled?.[0]} .name=${tabNames?.[0] ?? 'one'}>${tabNames?.[0] ?? 'First'}</forge-tab>
+      <forge-tab ?disabled=${tabDisabled?.[1]} .name=${tabNames?.[1] ?? 'two'}>${tabNames?.[1] ?? 'Second'}</forge-tab>
+      <forge-tab ?disabled=${tabDisabled?.[2]} .name=${tabNames?.[2] ?? 'three'}>${tabNames?.[2] ?? 'Third'}</forge-tab>
     </forge-tab-bar>
   `);
   const el = screen.container.querySelector('forge-tab-bar') as TabBarComponent;
@@ -969,14 +999,14 @@ async function createFixture({
   // Wait for tab bar to render and connect
   await el.updateComplete;
   // Wait for tabs to connect and context to propagate
-  await frame();
-  await frame();
+  await el.updateComplete;
+  await el.updateComplete;
 
   // Set active tab after initial render when tabs exist
   if (activeTab !== undefined) {
     el.activeTab = activeTab;
     await el.updateComplete;
-    await frame();
+    await el.updateComplete;
   }
 
   return new TabsHarness(el);

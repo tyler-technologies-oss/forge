@@ -138,8 +138,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    */
   @property({ type: Number, attribute: 'selected-index' })
   public set selectedIndex(value: number | null | undefined) {
-    // Passing -1 to indicate no selection
-    this.#setSelectedTabFromIndex(value ?? -1);
+    this.#setSelectedTabFromIndex(value ?? undefined);
   }
   public get selectedIndex(): number | null | undefined {
     const tabs = this._tabs;
@@ -314,6 +313,10 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     }
   }
 
+  public firstUpdated(): void {
+    this.#tryInitialTabSelection();
+  }
+
   public disconnectedCallback(): void {
     this.#disconnectResizeObserver();
   }
@@ -475,7 +478,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       oldSelectedTab?.select(false);
       this.#newSelectedTab = undefined;
     } else if (!this.selectedTabElement?.selected) {
-      this.selectedTabElement = undefined;
+      this.selectedTabElement = null;
       this.#focusGroupRef.currentElement = null;
     }
 
@@ -605,9 +608,14 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     this._tabs.find(tab => tab.name === name)?.select();
   }
 
-  async #setSelectedTabFromIndex(index: number): Promise<void> {
+  async #setSelectedTabFromIndex(index?: number): Promise<void> {
     if (!this.hasUpdated) {
       await this.updateComplete;
+    }
+
+    if (index === undefined) {
+      this.selectedTabElement?.select(false);
+      return;
     }
 
     const tabs = this._tabs;
@@ -615,6 +623,17 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       return tabs[index].select();
     }
     console.warn('Out of bounds index provided for selected-index, no tab selected.');
+  }
+
+  async #tryInitialTabSelection(): Promise<void> {
+    // Wait two update cycles for tab state to stabilize
+    await this.updateComplete;
+    await this.updateComplete;
+
+    // If no tab is selected, select the first enabled tab
+    if (!this.selectedTabElement) {
+      this._enabledTabs[0]?.select();
+    }
   }
 
   // *****

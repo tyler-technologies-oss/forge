@@ -247,7 +247,11 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
       setDefaultAria(this, this.#internals, {
         ariaSelected: this.selected ? 'true' : 'false'
       });
-      this.#dispatchSelectedChangeEvent();
+
+      // Only signal a selected change if the tab is selected on initialization or has already initialized
+      if (this.hasUpdated || this.selected) {
+        this.#dispatchSelectedChangeEvent();
+      }
     }
 
     if (changedProperties.has('disabled')) {
