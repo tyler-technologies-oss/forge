@@ -13,9 +13,11 @@ import {
   tylIconFolder,
   tylIconPeople,
   tylIconCalendarToday,
+  tylIconChecklist,
   tylIconHelp,
   tylIconSupport,
   tylIconInbox,
+  tylIconAdd,
   tylIconAddCircle,
   tylIconSend,
   tylIconDrafts,
@@ -34,6 +36,7 @@ import {
   tylIconPhone,
   tylIconMoreVert,
   tylIconDelete,
+  tylIconEdit,
   tylIconSave,
   tylIconBarChart,
   tylIconAttachMoney,
@@ -41,7 +44,8 @@ import {
   tylIconFilterList,
   tylIconDownload,
   tylIconCode,
-  tylIconSearch
+  tylIconSearch,
+  tylIconClose
 } from '@tylertech/tyler-icons';
 
 // Register all Forge components
@@ -57,9 +61,11 @@ IconRegistry.define([
   tylIconFolder,
   tylIconPeople,
   tylIconCalendarToday,
+  tylIconChecklist,
   tylIconHelp,
   tylIconSupport,
   tylIconInbox,
+  tylIconAdd,
   tylIconAddCircle,
   tylIconSend,
   tylIconDrafts,
@@ -78,6 +84,7 @@ IconRegistry.define([
   tylIconPhone,
   tylIconMoreVert,
   tylIconDelete,
+  tylIconEdit,
   tylIconSave,
   tylIconBarChart,
   tylIconAttachMoney,
@@ -85,5 +92,6 @@ IconRegistry.define([
   tylIconFilterList,
   tylIconDownload,
   tylIconCode,
-  tylIconSearch
+  tylIconSearch,
+  tylIconClose
 ]);
