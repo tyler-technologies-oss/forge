@@ -871,9 +871,16 @@ describe('Tabs', () => {
     it('should scroll back when backward scroll button is clicked', async () => {
       const ctx = await createFixture({ activeTab: 2, scrollButtons: true, width: '150px' });
 
-      // Wait for ResizeObserver to detect overflow and show buttons
+      // Wait for ResizeObserver to detect overflow, set scrollable state, and scroll the active tab into view
       await frame();
       await frame();
+
+      // Ensure scroll has settled after active tab scrolls into view
+      let attempts = 0;
+      while (ctx.scrollContainer.scrollLeft === 0 && attempts < 10) {
+        await task(50);
+        attempts++;
+      }
 
       const startScrollLeft = ctx.scrollContainer.scrollLeft;
       const scrollBySpy = vi.spyOn(ctx.scrollContainer, 'scrollBy');
