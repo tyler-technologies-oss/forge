@@ -22,7 +22,12 @@
     --forge-card-padding: 0;
   }
 
-  forge-card.p-6 {
+  forge-card.p-small {
+    --forge-card-padding: var(--forge-spacing-small);
+  }
+
+  forge-card.p-6,
+  forge-card.p-large {
     --forge-card-padding: var(--forge-spacing-large);
   }
 
