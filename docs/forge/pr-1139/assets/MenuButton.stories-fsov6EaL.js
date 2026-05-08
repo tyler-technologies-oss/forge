@@ -1,0 +1,12 @@
+import{b as r}from"./iframe-ve2i9uKK.js";import{s as a,g as n,c as p}from"./utils-CTbCKdhX.js";import"./service-adapter-8tADcN_b.js";import"./app-bar-profile-button-B3izL8ny.js";import"./tyler-icons-CAJjByD0.js";import"./menu-Bc-7R61m.js";import"./linear-progress-CKPFd0xY.js";import"./list-CdB30bm4.js";import"./popover-Ci879-pj.js";import"./overlay-CRMIZSm6.js";import"./key-action-CgbRjzwr.js";import"./index-5CPwzmQS.js";import"./skeleton-g_Ea1Wjh.js";import"./avatar-Cmoy_e7t.js";import"./icon-button-Cv-NgQH9.js";import"./focus-indicator-qgqoWYPn.js";import"./state-layer-Cnbc18vB.js";import"./expansion-panel-i3J9Kq3y.js";import"./open-icon-DRojL4M0.js";import"./divider-DMJ_mLcG.js";const o="forge-app-bar-menu-button",m=[{label:"Menu",value:"help"}],s={title:"Components/App Bar/Menu Button",render:e=>p(o,e),component:o,parameters:{actions:{disable:!0}},argTypes:{...n({tagName:o,exclude:["options","icon"]})},args:{}},t={...a,render:()=>r`
+    <forge-app-bar title-text="Menu Button">
+      <forge-app-bar-menu-button slot="start" .options=${m}> </forge-app-bar-menu-button>
+    </forge-app-bar>
+  `};t.parameters={...t.parameters,docs:{...t.parameters?.docs,source:{originalSource:`{
+  ...standaloneStoryParams,
+  render: () => html\`
+    <forge-app-bar title-text="Menu Button">
+      <forge-app-bar-menu-button slot="start" .options=\${options}> </forge-app-bar-menu-button>
+    </forge-app-bar>
+  \`
+}`,...t.parameters?.docs?.source}}};const i=["Demo"],v=Object.freeze(Object.defineProperty({__proto__:null,Demo:t,__namedExportsOrder:i,default:s},Symbol.toStringTag,{value:"Module"}));export{t as D,v as M};
