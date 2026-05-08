@@ -1,9 +1,9 @@
 <div class="tabs-demo-container">
-  <forge-tab-bar id="tabs-demo" active-tab="0">
-    <forge-tab id="tab-1" aria-controls="panel-1">Tab one</forge-tab>
-    <forge-tab id="tab-2" aria-controls="panel-2">Tab two</forge-tab>
-    <forge-tab id="tab-3" aria-controls="panel-3">Tab three</forge-tab>
-    <forge-tab id="tab-4" aria-controls="panel-4">Tab four</forge-tab>
+  <forge-tab-bar id="tabs-demo" selected-tab="two">
+    <forge-tab name="one" id="tab-1" aria-controls="panel-1">Tab one</forge-tab>
+    <forge-tab name="two" id="tab-2" aria-controls="panel-2">Tab two</forge-tab>
+    <forge-tab name="three" id="tab-3" aria-controls="panel-3">Tab three</forge-tab>
+    <forge-tab name="four" id="tab-4" aria-controls="panel-4">Tab four</forge-tab>
   </forge-tab-bar>
   <forge-view-switcher id="tab-panel" index="0" animation-type="slide">
     <forge-view>
@@ -23,42 +23,42 @@
 
 <div class="tabs-demo">
   <h2 class="forge-typography--heading2">Scrollable tabs</h2>
-  <forge-tab-bar id="demo-scrollable-tabs" active-tab="9" scroll-buttons>
-    <forge-tab>Tab one</forge-tab>
-    <forge-tab>Tab two</forge-tab>
-    <forge-tab>Tab three</forge-tab>
-    <forge-tab>Tab four</forge-tab>
-    <forge-tab>Tab five</forge-tab>
-    <forge-tab>Tab six</forge-tab>
-    <forge-tab>Tab seven</forge-tab>
-    <forge-tab>Tab eight</forge-tab>
-    <forge-tab>Tab nine</forge-tab>
-    <forge-tab>Tab ten</forge-tab>
-    <forge-tab>Tab eleven</forge-tab>
-    <forge-tab>Tab twelve</forge-tab>
-    <forge-tab>Tab thirteen</forge-tab>
-    <forge-tab>Tab fourteen</forge-tab>
-    <forge-tab>Tab fifteen</forge-tab>
-    <forge-tab>Tab sixteen</forge-tab>
-    <forge-tab>Tab seventeen</forge-tab>
-    <forge-tab>Tab eighteen</forge-tab>
-    <forge-tab>Tab nineteen</forge-tab>
-    <forge-tab>Tab twenty</forge-tab>
+  <forge-tab-bar id="demo-scrollable-tabs" selected-tab="ten" scroll-buttons>
+    <forge-tab name="one">Tab one</forge-tab>
+    <forge-tab name="two">Tab two</forge-tab>
+    <forge-tab name="three">Tab three</forge-tab>
+    <forge-tab name="four">Tab four</forge-tab>
+    <forge-tab name="five">Tab five</forge-tab>
+    <forge-tab name="six">Tab six</forge-tab>
+    <forge-tab name="seven">Tab seven</forge-tab>
+    <forge-tab name="eight">Tab eight</forge-tab>
+    <forge-tab name="nine">Tab nine</forge-tab>
+    <forge-tab name="ten">Tab ten</forge-tab>
+    <forge-tab name="eleven">Tab eleven</forge-tab>
+    <forge-tab name="twelve">Tab twelve</forge-tab>
+    <forge-tab name="thirteen">Tab thirteen</forge-tab>
+    <forge-tab name="fourteen">Tab fourteen</forge-tab>
+    <forge-tab name="fifteen">Tab fifteen</forge-tab>
+    <forge-tab name="sixteen">Tab sixteen</forge-tab>
+    <forge-tab name="seventeen">Tab seventeen</forge-tab>
+    <forge-tab name="eighteen">Tab eighteen</forge-tab>
+    <forge-tab name="nineteen">Tab nineteen</forge-tab>
+    <forge-tab name="twenty">Tab twenty</forge-tab>
   </forge-tab-bar>
 </div>
 
 <div class="tabs-demo">
   <h2 class="forge-typography--heading2">Stacked Tabs w/icons</h2>
-  <forge-tab-bar stacked active-tab="0" style="max-width: 512px;">
-    <forge-tab>
+  <forge-tab-bar stacked selected-tab="video" style="max-width: 512px;">
+    <forge-tab name="video">
       <forge-icon slot="leading" name="videocam"></forge-icon>
       Video
     </forge-tab>
-    <forge-tab>
+    <forge-tab name="photos">
       <forge-icon slot="leading" name="insert_photo"></forge-icon>
       Photos
     </forge-tab>
-    <forge-tab>
+    <forge-tab name="audio">
       <forge-icon slot="leading" name="audiotrack"></forge-icon>
       Audio
     </forge-tab>

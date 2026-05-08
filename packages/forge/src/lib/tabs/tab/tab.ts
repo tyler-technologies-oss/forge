@@ -1,4 +1,4 @@
-import { consume } from '@lit/context';
+import { consume, ContextRoot } from '@lit/context';
 import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { classMap } from 'lit-html/directives/class-map.js';
@@ -104,6 +104,7 @@ export interface ITabComponent extends BaseLitElement {
 @customElement(TAB_CONSTANTS.elementName)
 export class TabComponent extends BaseLitElement implements ITabComponent {
   public static styles = unsafeCSS(styles);
+  public static contextRoot = new ContextRoot();
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = TAB_CONSTANTS.elementName;
@@ -227,6 +228,13 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   }
 
   public override connectedCallback(): void {
+    // Set the parent tab bar's context root to ensurre context is provided even if the tab is upgraded before the tab bar
+    // This must happen before super.connectedCallback() for the root to catch any context updates that occur during the initial update cycle
+    const tabBar = this.closest(TAB_BAR_CONSTANTS.elementName);
+    if (tabBar) {
+      TabComponent.contextRoot.attach(tabBar);
+    }
+
     super.connectedCallback();
     setDefaultAria(this, this.#internals, {
       role: 'tab'

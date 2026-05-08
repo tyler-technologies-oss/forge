@@ -1,5 +1,5 @@
 import { provide } from '@lit/context';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver, isDefined } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver } from '@tylertech/forge-core';
 import { tylIconKeyboardArrowDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, eventOptions, property, query, queryAssignedElements, state } from 'lit/decorators.js';
@@ -300,8 +300,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
 
   public updated(changedProperties: PropertyValues<this>): void {
     // Scroll active tab into view after render
-    if (changedProperties.has('activeTab')) {
-      this.#tryScrollActiveTabIntoView();
+    if (changedProperties.has('selectedTabElement')) {
+      this.#tryScrollSelectedTabIntoView();
     }
 
     // Enable/disable scroll controller
@@ -311,12 +311,6 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       } else {
         this.#disconnectResizeObserver();
       }
-    }
-  }
-
-  public firstUpdated(_changedProperties: PropertyValues): void {
-    if (!this.selectedTabElement) {
-      this._enabledTabs[0]?.select();
     }
   }
 
@@ -409,7 +403,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     if (this.scrollButtons) {
       this._scrollable = this.#isScrollable();
     }
-    this.#tryScrollActiveTabIntoView();
+    this.#tryScrollSelectedTabIntoView();
   }
 
   #handleResize(): void {
@@ -788,13 +782,9 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   /**
    * Attempts to scroll the currently active tab into view if one is set.
    */
-  #tryScrollActiveTabIntoView(): void {
-    if (isDefined(this.activeTab)) {
-      const tabs = this._tabs;
-      const activeTabElement = tabs[this.activeTab];
-      if (activeTabElement) {
-        this.#scrollTabIntoView(activeTabElement);
-      }
+  #tryScrollSelectedTabIntoView(): void {
+    if (this.selectedTabElement) {
+      this.#scrollTabIntoView(this.selectedTabElement);
     }
   }
 
