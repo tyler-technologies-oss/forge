@@ -38,6 +38,13 @@ export interface IKeyAction {
    * Indicates whether the handler should be called repeatedly while the key is held down.
    */
   allowRepeat?: boolean;
+
+  /**
+   * Indicates whether the default behavior of the key event should be allowed. By default, this
+   * is `false`, meaning that `event.preventDefault()` will be called for matching key events.
+   * Set this to `true` to allow the default behavior to occur in addition to calling the handler.
+   */
+  allowDefault?: boolean;
 }
 
 /**
@@ -130,7 +137,9 @@ export class KeyActionController implements ReactiveController {
       }
 
       // Prevent default behavior, call the handler function, and return if the handler does not allow fallthrough.
-      evt.preventDefault();
+      if (!action.allowDefault) {
+        evt.preventDefault();
+      }
       if (!action.handler(evt)) {
         return;
       }

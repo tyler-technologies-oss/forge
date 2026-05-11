@@ -32,7 +32,7 @@ const classes = {
 const events = {
   CHANGE: `${elementName}-change`,
   TAB_MENU: 'forge-tab-menu',
-  TAB_REMOVE: 'forge-tab-remove'
+  TAB_CLOSE: 'forge-tab-close'
 };
 
 const numbers = {
@@ -69,4 +69,4 @@ export const TAB_BAR_VERTICAL = createContext<boolean>('tab-bar-vertical');
 export const TAB_BAR_STACKED = createContext<boolean>('tab-bar-stacked');
 export const TAB_BAR_SECONDARY = createContext<boolean>('tab-bar-secondary');
 export const TAB_BAR_INVERTED = createContext<boolean>('tab-bar-inverted');
-export const TAB_BAR_REMOVABLE = createContext<boolean>('tab-bar-removable');
+export const TAB_BAR_CLOSABLE = createContext<boolean>('tab-bar-closable');

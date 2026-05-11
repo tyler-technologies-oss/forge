@@ -4,7 +4,7 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tab`;
 
 const observedAttributes = {
   DISABLED: 'disabled',
-  SELECTED: 'selected',
+  ACTIVE: 'active',
   VERTICAL: 'vertical',
   STACKED: 'stacked',
   SECONDARY: 'secondary',
@@ -23,7 +23,7 @@ const classes = {};
 
 const events = {
   SELECT: `${elementName}-select`,
-  SELECT_CHANGE: `${elementName}-selected-change`
+  REQUEST_SYNC: `${elementName}-request-sync`
 };
 
 const strings = {

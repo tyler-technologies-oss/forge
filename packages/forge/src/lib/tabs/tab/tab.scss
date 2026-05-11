@@ -91,10 +91,10 @@ forge-state-layer {
 }
 
 //
-// Selected
+// Active
 //
 
-:host(:state(selected)) {
+:host(:state(active)) {
   .forge-tab {
     color: #{token(active-label-text-color)};
 
@@ -132,7 +132,7 @@ forge-state-layer {
   }
 }
 
-:host(:state(selected):not(:state(vertical))) {
+:host(:state(active):not(:state(vertical))) {
   .forge-tab:not(.vertical) {
     forge-focus-indicator {
       @include focus-indicator.provide-theme(
@@ -144,15 +144,15 @@ forge-state-layer {
   }
 }
 
-:host(:state(selected):focus) {
+:host(:state(active):focus) {
   .forge-tab {
-    @include selected-focus;
+    @include active-focus;
   }
 }
 
-:host(:state(selected):active) {
+:host(:state(active):active) {
   .forge-tab {
-    @include selected-pressed;
+    @include active-pressed;
   }
 }
 

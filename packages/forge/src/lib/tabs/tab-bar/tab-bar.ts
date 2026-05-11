@@ -4,6 +4,7 @@ import { tylIconKeyboardArrowDown, tylIconKeyboardArrowLeft, tylIconKeyboardArro
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, eventOptions, property, query, queryAssignedElements, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { live } from 'lit/directives/live.js';
 import { playStateLayerAnimation } from '../../constants.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
@@ -19,10 +20,10 @@ import { TAB_CONSTANTS } from '../tab/tab-constants.js';
 import { TabComponent } from '../tab/tab.js';
 import {
   ITabBarChangeEventData,
+  TAB_BAR_CLOSABLE,
   TAB_BAR_CONSTANTS,
   TAB_BAR_DISABLED,
   TAB_BAR_INVERTED,
-  TAB_BAR_REMOVABLE,
   TAB_BAR_SECONDARY,
   TAB_BAR_STACKED,
   TAB_BAR_VERTICAL,
@@ -34,9 +35,6 @@ import styles from './tab-bar.scss';
 /** @deprecated - This will be removed in the future. Please switch to using TabBarComponent. */
 export interface ITabBarComponent extends BaseLitElement {
   disabled: boolean;
-  selectedTabElement: TabComponent | null | undefined;
-  selectedTab: string;
-  selectedIndex: number | null | undefined;
   activeTab: number | null | undefined;
   vertical: boolean;
   clustered: boolean;
@@ -44,7 +42,7 @@ export interface ITabBarComponent extends BaseLitElement {
   /** @deprecated This will be removed in a future version */
   secondary: boolean;
   inverted: boolean;
-  removable: boolean;
+  closable: boolean;
   autoActivate: boolean;
   scrollButtons: boolean;
   theme: TabBarTheme;
@@ -55,7 +53,7 @@ type TabBarScrollDirection = 'backward' | 'forward';
 /**
  * @tag forge-tab-bar
  *
- * @summary Tab bars organize a set of tabs, holding selection state and enabling navigation between different views or sections of content.
+ * @summary Tab bars organize a set of tabs, holding active state and enabling navigation between different views or sections of content.
  *
  * @description
  * Use tabs to group content into helpful categories. Tabs are typically placed
@@ -112,53 +110,12 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   public disabled = false;
 
   /**
-   * The selected tab element.
-   * @default undefined
-   */
-  @property({ type: Object, attribute: false })
-  public selectedTabElement: TabComponent | null | undefined;
-
-  /**
-   * The name of the selected tab element.
-   * @default ''
-   * @attribute selected-tab
-   */
-  @property({ attribute: 'selected-tab' })
-  public set selectedTab(value: string) {
-    this.#setSelectedTabFromName(value);
-  }
-  public get selectedTab(): string {
-    return this.selectedTabElement?.name ?? '';
-  }
-
-  /**
-   * The index of the selected tab.
-   * @default null
-   * @attribute selected-index
-   */
-  @property({ type: Number, attribute: 'selected-index' })
-  public set selectedIndex(value: number | null | undefined) {
-    this.#setSelectedTabFromIndex(value ?? undefined);
-  }
-  public get selectedIndex(): number | null | undefined {
-    const tabs = this._tabs;
-    const index = tabs.findIndex(tab => tab.selected);
-    return index === -1 ? null : index;
-  }
-
-  /**
-   * The index of the selected tab.
-   * @deprecated Use selectedIndex, selectedTab, or selectedTabElement instead
+   * The index of the active tab.
    * @default undefined
    * @attribute active-tab
    */
   @property({ type: Number, reflect: true, attribute: 'active-tab' })
-  public set activeTab(value: typeof this.selectedIndex) {
-    this.selectedIndex = value;
-  }
-  public get activeTab(): typeof this.selectedIndex {
-    return this.selectedIndex;
-  }
+  public activeTab: number | null | undefined;
 
   /**
    * Controls whether the tab bar is vertical or horizontal.
@@ -206,13 +163,13 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   public inverted = false;
 
   /**
-   * Controls whether the tabs can be removed with the delete key.
+   * Controls whether the tabs can be closed with the delete key.
    * @default false
    * @attribute
    */
-  @provide({ context: TAB_BAR_REMOVABLE })
+  @provide({ context: TAB_BAR_CLOSABLE })
   @property({ type: Boolean })
-  public removable = false;
+  public closable = false;
 
   /**
    * Controls whether the tabs are automatically activated when receiving focus.
@@ -248,6 +205,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   @queryAssignedElements({ selector: `${TAB_CONSTANTS.elementName}` }) private _tabs!: TabComponent[];
   @queryAssignedElements({ selector: `${TAB_CONSTANTS.elementName}:not(:state(disabled))` }) private _enabledTabs!: TabComponent[];
 
+  #activeTabElement: TabComponent | null = null;
+
   #focusGroupRef = createFocusGroupRef({
     selector: 'forge-tab:not(:state(disabled))',
     orientation: this.vertical ? 'vertical' : 'horizontal',
@@ -266,8 +225,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
           allowRepeat: true
         },
         { key: ['Home', 'End'], handler: this.#handleNavigationKey.bind(this) },
-        { key: ['Enter', ' '], handler: this.#handleSelectKey.bind(this) },
-        { key: ['Backspace', 'Delete'], handler: this.#handleRemoveKey.bind(this) },
+        { key: ['Enter', ' '], handler: this.#handleActivateKey.bind(this), allowDefault: true },
+        { key: ['Backspace', 'Delete'], handler: this.#handleCloseKey.bind(this), allowDefault: true },
         { key: { key: 'F10', modifier: 'shift' }, handler: this.#handleMenuKey.bind(this) }
       ]
     });
@@ -282,8 +241,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
-    if (changedProperties.has('selectedTabElement')) {
-      this.#setSelectedTabFromElement(this.selectedTabElement ?? undefined);
+    if (changedProperties.has('activeTab')) {
+      this.#setActiveTabFromIndex(this.activeTab ?? undefined);
     }
 
     if (changedProperties.has('disabled')) {
@@ -299,8 +258,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
 
   public updated(changedProperties: PropertyValues<this>): void {
     // Scroll active tab into view after render
-    if (changedProperties.has('selectedTabElement')) {
-      this.#tryScrollSelectedTabIntoView();
+    if (changedProperties.has('activeTab')) {
+      this.#tryScrollActiveTabIntoView();
     }
 
     // Enable/disable scroll controller
@@ -333,7 +292,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
           class="scroll-container"
           part="scroll-container"
           @scroll=${this.#handleScroll}
-          @forge-tab-selected-change=${this._handleSelectedChange}
+          @forge-tab-request-sync=${this._handleRequestSync}
           ${focusGroup(this.#focusGroupRef)}>
           <slot @slotchange=${this.#handleSlotChange}></slot>
         </div>
@@ -351,18 +310,18 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     if (!tab) {
       return;
     }
-    this.#userSelectTab(tab);
+    this.#userActivateTab(tab);
     tab.focus();
   }
 
-  #handleSelectKey(evt: KeyboardEvent): void {
+  #handleActivateKey(evt: KeyboardEvent): void {
     const tab = this.#getTabFromEvent(evt);
     if (!tab) {
       return;
     }
     evt.preventDefault();
     tab[playStateLayerAnimation]();
-    this.#userSelectTab(tab);
+    this.#userActivateTab(tab);
   }
 
   #handleNavigationKey(evt: KeyboardEvent): void {
@@ -371,14 +330,14 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     }
   }
 
-  #handleRemoveKey(evt: KeyboardEvent): void {
+  #handleCloseKey(evt: KeyboardEvent): void {
     const tab = this.#getTabFromEvent(evt);
-    if (!tab || !tab.removable) {
+    if (!tab || !tab.closable) {
       return;
     }
     evt.preventDefault();
-    if (this.#dispatchRemoveEvent(tab)) {
-      this.#removeTab(tab);
+    if (this.#dispatchCloseEvent(tab)) {
+      this.#closeTab(tab);
     }
   }
 
@@ -387,22 +346,28 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     if (!tab) {
       return;
     }
-    evt.preventDefault();
     this.#dispatchMenuEvent(tab);
   }
 
   #handleTabFocus(element: HTMLElement): void {
     this.#scrollTabIntoView(element as TabComponent);
     if (this.autoActivate) {
-      (element as TabComponent).selected = true;
+      (element as TabComponent).active = true;
     }
   }
 
   #handleSlotChange(): void {
+    // Handle the active tab being removed from the DOM
+    if (this.#activeTabElement && !this._tabs.includes(this.#activeTabElement)) {
+      this.#activeTabElement = null;
+      this.#focusGroupRef.currentElement = null;
+    }
+
+    // Check if scroll buttons need to be enabled or disabled due to content changes
     if (this.scrollButtons) {
       this._scrollable = this.#isScrollable();
     }
-    this.#tryScrollSelectedTabIntoView();
+    this.#tryScrollActiveTabIntoView();
   }
 
   #handleResize(): void {
@@ -424,95 +389,95 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   }
 
   @eventOptions({ capture: true })
-  private _handleSelectedChange(evt: Event): void {
+  private _handleRequestSync(evt: Event): void {
     evt.stopPropagation();
     const tab = this.#getTabFromEvent(evt);
     if (tab) {
-      this.#queueSelectSync(tab);
+      this.#queueActiveSync(tab);
     }
   }
 
   // *****
-  // Tab Selection
+  // Tab Activation
   // *****
 
-  #awaitingSelectSync = false;
-  #newSelectedTab?: TabComponent;
+  #awaitingActiveSync = false;
+  #newActiveTab?: TabComponent;
   /**
-   * Queues a syncronization of the selected tab state to be executed after the current update cycle.
+   * Queues a syncronization of the active tab state to be executed after the current update cycle.
    * @param tab The tab to synchronize.
    */
-  async #queueSelectSync(tab: TabComponent): Promise<void> {
-    if (tab.selected) {
-      this.#newSelectedTab = tab;
+  async #queueActiveSync(tab: TabComponent): Promise<void> {
+    if (tab.active) {
+      this.#newActiveTab = tab;
     }
 
-    if (this.#awaitingSelectSync) {
+    if (this.#awaitingActiveSync) {
       return;
     }
 
-    this.#awaitingSelectSync = true;
+    this.#awaitingActiveSync = true;
     await this.updateComplete;
 
-    this.#executeSelectSync();
-    this.#awaitingSelectSync = false;
+    this.#executeActiveSync();
+    this.#awaitingActiveSync = false;
   }
 
   /**
-   * Synchronizes the selected tab state, focus, and active indicator animation after any tabs have been selected or deselected.
-   * @param newSelectedTab The selected tab if it has changed.
+   * Synchronizes the active tab state, focus, and active indicator animation after any tabs have been activated or deactivated.
+   * @param newActiveTab The active tab if it has changed.
    */
-  #executeSelectSync(): void {
+  #executeActiveSync(): void {
     const tabs = this._tabs;
-    if (this.#newSelectedTab) {
-      const oldSelectedTab = tabs.find(t => t.selected && t !== this.#newSelectedTab);
+    if (this.#newActiveTab) {
+      const oldActiveTab = tabs.find(t => t.active && t !== this.#newActiveTab);
 
-      this.selectedTabElement = this.#newSelectedTab;
-      this.#focusGroupRef.currentElement = this.#newSelectedTab;
-      this.#scrollTabIntoView(this.#newSelectedTab);
-      this.#animateIndicator(oldSelectedTab, this.#newSelectedTab);
-      oldSelectedTab?.select(false);
-      this.#newSelectedTab = undefined;
-    } else if (!this.selectedTabElement?.selected) {
-      this.selectedTabElement = null;
+      this.#activeTabElement = this.#newActiveTab;
+      this.#focusGroupRef.currentElement = this.#newActiveTab;
+      this.#scrollTabIntoView(this.#newActiveTab);
+      this.#animateIndicator(oldActiveTab, this.#newActiveTab);
+      oldActiveTab?.activate(false);
+      this.#newActiveTab = undefined;
+    } else if (!this.#activeTabElement?.active) {
+      this.#activeTabElement = null;
       this.#focusGroupRef.currentElement = null;
     }
 
-    // Ensure only one tab is selected
+    // Ensure only one tab is active
     tabs.forEach(tab => {
-      if (tab !== this.selectedTabElement) {
-        tab.selected = false;
+      if (tab !== this.#activeTabElement) {
+        tab.active = false;
       }
     });
   }
 
   /**
-   * Selects a tab after emitting the select and change events, handling focus and animation.
-   * @param tab The tab to select.
+   * Activates a tab after emitting the activate and change events, handling focus and animation.
+   * @param tab The tab to activate.
    */
-  #userSelectTab(tab: TabComponent): void {
-    // Do nothing if the tab is not selectable (i.e. already selected or disabled)
-    if (tab.selected || this.disabled || tab.disabled) {
+  #userActivateTab(tab: TabComponent): void {
+    // Do nothing if the tab is not activatable (i.e. already active or disabled)
+    if (tab.active || this.disabled || tab.disabled) {
       return;
     }
 
-    // Dispatching the select event for backwards compatibility even though it doesn't reflect the state of the component and is not cancelable
-    this.#dispatchSelectEvent(tab);
+    // Dispatching the activate event for backwards compatibility even though it doesn't reflect the state of the component and is not cancelable
+    this.#dispatchActivateEvent(tab);
 
     const eventAllowed = this.#dispatchChangeEvent(tab);
     if (!eventAllowed) {
       return;
     }
 
-    tab.selected = true;
+    tab.active = true;
   }
 
-  #dispatchSelectEvent(tab: TabComponent): void {
-    const selectEvent = new CustomEvent(TAB_CONSTANTS.events.SELECT, {
+  #dispatchActivateEvent(tab: TabComponent): void {
+    const activateEvent = new CustomEvent(TAB_CONSTANTS.events.SELECT, {
       bubbles: true,
       composed: true
     });
-    tab.dispatchEvent(selectEvent);
+    tab.dispatchEvent(activateEvent);
   }
 
   #dispatchChangeEvent(tab: TabComponent): boolean {
@@ -584,56 +549,36 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     });
   }
 
-  async #setSelectedTabFromElement(element?: TabComponent): Promise<void> {
-    if (!this.hasUpdated) {
-      await this.updateComplete;
-    }
-
-    if (element) {
-      element.selected = true;
-    } else {
-      this._tabs.forEach(tab => (tab.selected = false));
-    }
-  }
-
-  async #setSelectedTabFromName(name: string): Promise<void> {
-    if (!this.hasUpdated) {
-      await this.updateComplete;
-    }
-
-    this._tabs.find(tab => tab.name === name)?.select();
-  }
-
-  async #setSelectedTabFromIndex(index?: number): Promise<void> {
+  async #setActiveTabFromIndex(index?: number): Promise<void> {
     if (!this.hasUpdated) {
       await this.updateComplete;
     }
 
     if (index === undefined) {
-      this.selectedTabElement?.select(false);
+      this.#activeTabElement?.activate(false);
       return;
     }
 
     const tabs = this._tabs;
     if (index >= 0 && index < tabs.length) {
-      return tabs[index].select();
+      return tabs[index].activate();
     }
-    console.warn('Out of bounds index provided for selected-index, no tab selected.');
+    console.warn('Out of bounds index provided for active tab, no tab made active.');
   }
 
   // *****
-  // Tab Removal
+  // Tab Closure
   // *****
 
   /**
-   * Removes a tab from the DOM and moves focus and active status to another tab if necessary.
-   * @param tab The tab to remove.
+   * Closes a tab and moves focus and active status to another tab if necessary.
+   * @param tab The tab to close.
    */
-  async #removeTab(tab: TabComponent): Promise<void> {
+  async #closeTab(tab: TabComponent): Promise<void> {
     const tabs = this._enabledTabs;
     const index = tabs.indexOf(tab);
     const wasFocused = tab.ownerDocument.activeElement === tab;
-    const wasSelected = tab.selected;
+    const wasActive = tab.active;
 
     tab.remove();
 
@@ -654,19 +599,19 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       }
     }
 
-    // If the removed tab was active, set a new active tab as if the user selected it
-    if (wasSelected && newTab) {
-      this.#userSelectTab(newTab);
+    // If the closed tab was active, set a new active tab as if the user activated it
+    if (wasActive && newTab) {
+      this.#userActivateTab(newTab);
     }
   }
 
   /**
-   * Dispatches the remove event for the given tab.
-   * @param tab The tab to remove.
+   * Dispatches the close event for the given tab.
+   * @param tab The tab to close.
    * @returns True if the event was not canceled, false if it was canceled.
    */
-  #dispatchRemoveEvent(tab: TabComponent): boolean {
-    const event = new Event(TAB_BAR_CONSTANTS.events.TAB_REMOVE, {
+  #dispatchCloseEvent(tab: TabComponent): boolean {
+    const event = new Event(TAB_BAR_CONSTANTS.events.TAB_CLOSE, {
       bubbles: true,
       cancelable: true,
       composed: true
@@ -728,6 +673,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
         class=${classMap(classes)}
         type="button"
         shape="squared"
+        tabindex=${live(-1)}
         aria-hidden="true"
         .disabled=${disabled}
         @click=${() => this.#handleScrollButton(direction)}>
@@ -786,9 +732,9 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   /**
    * Attempts to scroll the currently active tab into view if one is set.
    */
-  #tryScrollSelectedTabIntoView(): void {
-    if (this.selectedTabElement) {
-      this.#scrollTabIntoView(this.selectedTabElement);
+  #tryScrollActiveTabIntoView(): void {
+    if (this.#activeTabElement) {
+      this.#scrollTabIntoView(this.#activeTabElement);
     }
   }
 

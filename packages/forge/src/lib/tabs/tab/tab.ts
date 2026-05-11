@@ -13,7 +13,7 @@ import {
   TAB_BAR_CONSTANTS,
   TAB_BAR_DISABLED,
   TAB_BAR_INVERTED,
-  TAB_BAR_REMOVABLE,
+  TAB_BAR_CLOSABLE,
   TAB_BAR_SECONDARY,
   TAB_BAR_STACKED,
   TAB_BAR_VERTICAL
@@ -25,13 +25,15 @@ import styles from './tab.scss';
 /** @deprecated - This will be removed in the future. Please switch to using TabComponent. */
 export interface ITabComponent extends BaseLitElement {
   disabled: boolean;
+  active: boolean;
+  /** @deprecated Use `active` instead */
   selected: boolean;
   vertical: boolean;
   stacked: boolean;
   /** @deprecated This will be removed in a future version */
   secondary: boolean;
   inverted: boolean;
-  removable: boolean;
+  closable: boolean;
   focus(options?: ExperimentalFocusOptions): void;
 }
 
@@ -43,8 +45,8 @@ export interface ITabComponent extends BaseLitElement {
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
  *
- * @event {CustomEvent<void>} forge-tab-select - Dispatched when the tab is selected. This event bubbles and it can be useful to capture it on the `<forge-tab-bar>` element.
- * @event {Event} forge-tab-remove - Dispatched when the tab is removed by the user.
+ * @event {CustomEvent<void>} forge-tab-select - Dispatched when the tab is activated. This event bubbles and it can be useful to capture it on the `<forge-tab-bar>` element.
+ * @event {Event} forge-tab-close - Dispatched when the tab is closed by the user.
  * @event {Event} forge-tab-menu - Dispatched when the tab's menu is invoked (by pressing Shift+F10).
  *
  * @cssproperty --forge-tab-active-color - The primary color of the tab when active.
@@ -93,7 +95,7 @@ export interface ITabComponent extends BaseLitElement {
  * @csspart state-layer - The state layer surface.
  * @csspart focus-indicator - The focus indicator.
  *
- * @state selected - Applied when the tab is selected.
+ * @state active - Applied when the tab is active.
  * @state disabled - Applied when the tab is disabled.
  * @state vertical - Applied when the tab is vertical.
  *
@@ -114,15 +116,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
 
   #internals: ElementInternals;
 
-  // TODO: Remove attribute reflection except for `name`
-
-  /**
-   * The name of the tab.
-   * @default ''
-   * @attribute
-   */
-  @property({ reflect: true })
-  public name = '';
+  // TODO: Remove attribute reflection
 
   /**
    * The disabled state of the tab. Should not be set if using the disabled property on `forge-tab-bar`.
@@ -132,13 +126,22 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   @property({ type: Boolean, reflect: true })
   public disabled = false;
 
+  @property({ type: Boolean })
+  public active = false;
+
   /**
    * The selected state of the tab.
+   * @deprecated Use `active` instead
    * @default false
    * @attribute
    */
-  @property({ type: Boolean, reflect: true })
-  public selected = false;
+  @property({ type: Boolean, reflect: true, attribute: 'selected' })
+  public set selected(value: typeof this.active) {
+    this.active = value;
+  }
+  public get selected(): typeof this.active {
+    return this.active;
+  }
 
   /**
    * Controls whether the tab is vertical or horizontal.
@@ -174,12 +177,12 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   public inverted = false;
 
   /**
-   * Controls whether the tab can be removed with the delete key.
+   * Controls whether the tab can be closed with the delete key.
    * @default false
    * @attribute
    */
   @property({ type: Boolean })
-  public removable = false;
+  public closable = false;
 
   // *****
   // Context setters
@@ -212,9 +215,9 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
     this.inverted = value;
   }
 
-  @consume({ context: TAB_BAR_REMOVABLE, subscribe: true })
-  private set _removable(value: boolean) {
-    this.removable = value;
+  @consume({ context: TAB_BAR_CLOSABLE, subscribe: true })
+  private set _closable(value: boolean) {
+    this.closable = value;
   }
 
   @query('.indicator', true) private _indicator?: HTMLElement;
@@ -242,15 +245,15 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
-    if (changedProperties.has('selected')) {
-      toggleState(this.#internals, 'selected', this.selected);
+    if (changedProperties.has('active')) {
+      toggleState(this.#internals, 'active', this.active);
       setDefaultAria(this, this.#internals, {
-        ariaSelected: this.selected ? 'true' : 'false'
+        ariaSelected: this.active ? 'true' : 'false'
       });
 
-      // Only signal a selected change if the tab is selected on initialization or has already initialized
-      if (this.hasUpdated || this.selected) {
-        this.#dispatchSelectedChangeEvent();
+      // Only request sync if the tab is active on initialization or has already initialized
+      if (this.hasUpdated || this.active) {
+        this.#requestSync();
       }
     }
 
@@ -270,14 +273,10 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
       toggleState(this.#internals, 'vertical', this.vertical);
     }
 
-    // TabIndex management: -1 when disabled or not selected, 0 when selected
+    // TabIndex management: -1 when disabled or not active, 0 when active
     // TODO: This may not be necessary with the tab bar's focus group managing tab indices
-    if (changedProperties.has('disabled') || changedProperties.has('selected')) {
-      this.tabIndex = this.disabled ? -1 : this.selected ? 0 : -1;
-    }
-
-    if (changedProperties.has('name')) {
-      this.#verifyName();
+    if (changedProperties.has('disabled') || changedProperties.has('active')) {
+      this.tabIndex = this.disabled ? -1 : this.active ? 0 : -1;
     }
   }
 
@@ -315,8 +314,8 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
     }
   }
 
-  public select(value = true): void {
-    this.selected = value;
+  public activate(value = true): void {
+    this.active = value;
   }
 
   /**
@@ -326,30 +325,9 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
     this._stateLayer?.playAnimation();
   }
 
-  /**
-   * Logs a warning if the name is not unique within the parent tab bar.
-   */
-  #verifyName(): void {
-    if (!this.name) {
-      // TODO: In the future we may want to require a name. For now we'll ignore it for backwards compatibility.
-      return;
-    }
-
-    const tabBar = this.closest(TAB_BAR_CONSTANTS.elementName);
-    if (!tabBar) {
-      // Tabs are nonfunctonal outside of a tab bar
-      return;
-    }
-
-    const duplicateTab = tabBar.querySelector(`${TAB_CONSTANTS.elementName}[name="${this.name}"]`);
-    if (duplicateTab && duplicateTab !== this) {
-      console.warn(`Duplicate tab name "${this.name}" found. Tab names should be unique to ensure proper functionality.`);
-    }
-  }
-
-  #dispatchSelectedChangeEvent(): void {
+  #requestSync(): void {
     this.dispatchEvent(
-      new Event(TAB_CONSTANTS.events.SELECT_CHANGE, {
+      new CustomEvent(TAB_CONSTANTS.events.REQUEST_SYNC, {
         bubbles: true,
         composed: true
       })
@@ -363,18 +341,9 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-tab-select': CustomEvent<void>;
-  }
-
-  interface HTMLElementEventMap {
-    'forge-tab-remove': Event;
-  }
-
-  interface HTMLElementEventMap {
+    'forge-tab-close': Event;
     'forge-tab-menu': Event;
-  }
-
-  interface HTMLElementEventMap {
-    'forge-tab-selected-change': Event;
+    'forge-tab-request-sync': Event;
+    'forge-tab-select': CustomEvent<void>;
   }
 }

@@ -29,7 +29,7 @@
   align-self: stretch;
 }
 
-@mixin slotted-selected {
+@mixin slotted-active {
   z-index: 1;
 }
 
@@ -75,7 +75,7 @@
   border-top: #{token(divider-thickness)} solid #{token(divider-color)};
 }
 
-@mixin active-scroll-button($direction) {
+@mixin enabled-scroll-button($direction) {
   box-sizing: border-box;
   border-width: var(--forge-border-thin);
   border-color: var(--forge-theme-outline);

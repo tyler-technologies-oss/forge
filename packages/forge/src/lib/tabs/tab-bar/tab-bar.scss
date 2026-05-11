@@ -36,8 +36,8 @@
   @include slotted-base;
 }
 
-::slotted(:state(selected)) {
-  @include slotted-selected;
+::slotted(:state(active)) {
+  @include slotted-active;
 }
 
 forge-icon-button {
@@ -112,20 +112,20 @@ forge-icon-button {
 .forge-tab-bar {
   .scroll-button {
     &-previous:not([disabled]) {
-      @include active-scroll-button(inline-end);
+      @include enabled-scroll-button(inline-end);
     }
     &-next:not([disabled]) {
-      @include active-scroll-button(inline-start);
+      @include enabled-scroll-button(inline-start);
     }
   }
 
   &.vertical {
     .scroll-button {
       &-previous:not([disabled]) {
-        @include active-scroll-button(block-end);
+        @include enabled-scroll-button(block-end);
       }
       &-next:not([disabled]) {
-        @include active-scroll-button(block-start);
+        @include enabled-scroll-button(block-start);
       }
     }
   }

@@ -31,8 +31,8 @@ describe('Tabs', () => {
     const ctx = await createFixture({ activeTab: 1 });
 
     expect(ctx.element.activeTab).toBe(1);
-    expect(ctx.tabs[1].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[1].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
   });
 
   it('should update active tab', async () => {
@@ -42,8 +42,8 @@ describe('Tabs', () => {
     await frame();
 
     expect(ctx.element.activeTab).toBe(1);
-    expect(ctx.tabs[1].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[1].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
   });
 
   it('should not set focus on tab when active tab is set', async () => {
@@ -69,30 +69,30 @@ describe('Tabs', () => {
     const ctx = await createFixture({ activeTab: 0 });
 
     expect(ctx.element.activeTab).toBe(0);
-    expect(ctx.tabs[0].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[0].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
 
     ctx.element.activeTab = undefined;
     await ctx.element.updateComplete;
     await frame();
 
     expect(ctx.element.activeTab).toBeNull();
-    expect(ctx.selectedTabCount).toBe(0);
+    expect(ctx.activeTabCount).toBe(0);
   });
 
   it('should handle activeTab set to null', async () => {
     const ctx = await createFixture({ activeTab: 0 });
 
     expect(ctx.element.activeTab).toBe(0);
-    expect(ctx.tabs[0].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[0].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
 
     ctx.element.activeTab = null;
     await ctx.element.updateComplete;
     await frame();
 
     expect(ctx.element.activeTab).toBeNull();
-    expect(ctx.selectedTabCount).toBe(0);
+    expect(ctx.activeTabCount).toBe(0);
   });
 
   it('should set disabled', async () => {
@@ -151,11 +151,11 @@ describe('Tabs', () => {
     expect(ctx.element.hasAttribute(TAB_BAR_CONSTANTS.attributes.AUTO_ACTIVATE)).toBe(true);
   });
 
-  it('should auto-select first tab on mount when no active tab set', async () => {
+  it('should auto-activate first tab on mount when no active tab set', async () => {
     const ctx = await createFixture();
 
-    expect(ctx.tabs[0].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[0].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
   });
 
   it('should select tab when clicked', async () => {
@@ -166,21 +166,21 @@ describe('Tabs', () => {
 
     await ctx.clickTab(1);
 
-    expect(ctx.tabs[1].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[1].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
     expect(changeSpy).toHaveBeenCalledOnce();
     expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1 });
   });
 
-  it('should not select tab if disabled tab clicked', async () => {
+  it('should not activate tab if disabled tab clicked', async () => {
     const ctx = await createFixture({ disabled: true });
 
     await ctx.forceClickTab(1);
 
-    expect(ctx.tabs[1].selected).toBe(false);
+    expect(ctx.tabs[1].active).toBe(false);
   });
 
-  it('should select tab with enter key', async () => {
+  it('should activate tab with enter key', async () => {
     const ctx = await createFixture({ activeTab: 0 });
 
     const changeSpy = vi.fn();
@@ -190,13 +190,13 @@ describe('Tabs', () => {
     await userEvent.keyboard('{ArrowRight}');
     await userEvent.keyboard('{Enter}');
 
-    expect(ctx.tabs[1].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[1].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
     expect(changeSpy).toHaveBeenCalledOnce();
     expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1 });
   });
 
-  it('should select tab with space key', async () => {
+  it('should activate tab with space key', async () => {
     const ctx = await createFixture({ activeTab: 0 });
 
     const changeSpy = vi.fn();
@@ -206,8 +206,8 @@ describe('Tabs', () => {
     await userEvent.keyboard('{ArrowRight}');
     await userEvent.keyboard(' ');
 
-    expect(ctx.tabs[1].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[1].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
     expect(changeSpy).toHaveBeenCalledOnce();
     expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1 });
   });
@@ -240,30 +240,30 @@ describe('Tabs', () => {
     expect(ctx.tabs[1].matches(':focus')).toBe(true);
   });
 
-  it('should not select tab when navigating via keyboard', async () => {
+  it('should not activate tab when navigating via keyboard', async () => {
     const ctx = await createFixture({ activeTab: 0 });
 
     await ctx.clickTab(0);
     await userEvent.keyboard('{ArrowRight}');
 
     expect(ctx.tabs[1].matches(':focus')).toBe(true);
-    expect(ctx.tabs[0].selected).toBe(true);
-    expect(ctx.tabs[1].selected).toBe(false);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[0].active).toBe(true);
+    expect(ctx.tabs[1].active).toBe(false);
+    expect(ctx.activeTabCount).toBe(1);
   });
 
-  it('should select tab when navigating via keyboard and auto activate is enabled', async () => {
+  it('should activate tab when navigating via keyboard and auto activate is enabled', async () => {
     const ctx = await createFixture({ activeTab: 0, autoActivate: true });
 
-    expect(ctx.tabs[0].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[0].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
 
     await ctx.clickTab(0);
     await userEvent.keyboard('{ArrowRight}');
 
     expect(ctx.tabs[1].matches(':focus')).toBe(true);
-    expect(ctx.tabs[1].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[1].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
   });
 
   it('should navigate to last tab when end is pressed', async () => {
@@ -273,8 +273,8 @@ describe('Tabs', () => {
     await userEvent.keyboard('{End}');
 
     expect(ctx.tabs[2].matches(':focus')).toBe(true);
-    expect(ctx.tabs[0].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[0].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
   });
 
   it('should navigate to first tab when home is pressed', async () => {
@@ -284,8 +284,8 @@ describe('Tabs', () => {
     await userEvent.keyboard('{Home}');
 
     expect(ctx.tabs[0].matches(':focus')).toBe(true);
-    expect(ctx.tabs[2].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[2].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
   });
 
   it('should skip disabled tabs when navigating via keyboard', async () => {
@@ -329,38 +329,38 @@ describe('Tabs', () => {
     expect(ctx.tabs[0].matches(':focus')).toBe(false);
   });
 
-  it('should not dispatch selected or change event when tab is clicked while selected', async () => {
+  it('should not dispatch activate or change event when tab is clicked while active', async () => {
     const ctx = await createFixture({ activeTab: 0 });
 
-    const selectSpy = vi.fn();
-    ctx.tabs[0].addEventListener(TAB_CONSTANTS.events.SELECT, selectSpy);
+    const activateSpy = vi.fn();
+    ctx.tabs[0].addEventListener(TAB_CONSTANTS.events.SELECT, activateSpy);
 
     const changeSpy = vi.fn();
     ctx.element.addEventListener(TAB_BAR_CONSTANTS.events.CHANGE, changeSpy);
 
     await ctx.clickTab(0);
 
-    expect(ctx.tabs[0].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
-    expect(selectSpy).not.toHaveBeenCalled();
+    expect(ctx.tabs[0].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
+    expect(activateSpy).not.toHaveBeenCalled();
     expect(changeSpy).not.toHaveBeenCalled();
   });
 
-  it('should not dispatch selected or change event when tab is clicked while disabled', async () => {
+  it('should not dispatch activate or change event when tab is clicked while disabled', async () => {
     const ctx = await createFixture({ activeTab: 0, disabled: true });
 
-    const selectSpy = vi.fn();
-    ctx.tabs[0].addEventListener(TAB_CONSTANTS.events.SELECT, selectSpy);
+    const activateSpy = vi.fn();
+    ctx.tabs[0].addEventListener(TAB_CONSTANTS.events.SELECT, activateSpy);
 
     const changeSpy = vi.fn();
     ctx.element.addEventListener(TAB_BAR_CONSTANTS.events.CHANGE, changeSpy);
 
     await ctx.forceClickTab(0);
 
-    expect(ctx.tabs[0].selected).toBe(true);
+    expect(ctx.tabs[0].active).toBe(true);
     expect(ctx.tabs[0].disabled).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
-    expect(selectSpy).not.toHaveBeenCalled();
+    expect(ctx.activeTabCount).toBe(1);
+    expect(activateSpy).not.toHaveBeenCalled();
     expect(changeSpy).not.toHaveBeenCalled();
   });
 
@@ -373,9 +373,9 @@ describe('Tabs', () => {
     await ctx.clickTab(1);
     await ctx.updatesComplete(2);
 
-    expect(ctx.tabs[0].selected).toBe(true);
-    expect(ctx.tabs[1].selected).toBe(false);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[0].active).toBe(true);
+    expect(ctx.tabs[1].active).toBe(false);
+    expect(ctx.activeTabCount).toBe(1);
     expect(changeSpy).toHaveBeenCalledOnce();
   });
 
@@ -388,9 +388,9 @@ describe('Tabs', () => {
     ctx.element.activeTab = 1;
     await frame();
 
-    expect(ctx.tabs[0].selected).toBe(false);
-    expect(ctx.tabs[1].selected).toBe(true);
-    expect(ctx.selectedTabCount).toBe(1);
+    expect(ctx.tabs[0].active).toBe(false);
+    expect(ctx.tabs[1].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
     expect(changeSpy).not.toHaveBeenCalled();
   });
 
@@ -398,19 +398,19 @@ describe('Tabs', () => {
     it('should set selected tab by index', async () => {
       const ctx = await createFixture({ activeTab: 0 });
 
-      ctx.element.selectedIndex = 1;
+      ctx.element.activeIndex = 1;
       await ctx.element.updateComplete;
       await ctx.element.updateComplete;
 
-      expect(ctx.element.selectedIndex).toBe(1);
-      expect(ctx.tabs[1].selected).toBe(true);
-      expect(ctx.selectedTabCount).toBe(1);
+      expect(ctx.element.activeIndex).toBe(1);
+      expect(ctx.tabs[1].active).toBe(true);
+      expect(ctx.activeTabCount).toBe(1);
     });
 
     it('should get selected tab index', async () => {
       const ctx = await createFixture({ activeTab: 2 });
 
-      expect(ctx.element.selectedIndex).toBe(2);
+      expect(ctx.element.activeIndex).toBe(2);
     });
 
     it('should return index when first tab auto-selected', async () => {
@@ -418,31 +418,31 @@ describe('Tabs', () => {
       await ctx.element.updateComplete;
       await ctx.element.updateComplete;
 
-      expect(ctx.element.selectedIndex).toBe(0);
+      expect(ctx.element.activeIndex).toBe(0);
     });
 
     it('should warn when setting out of bounds index', async () => {
       const ctx = await createFixture({ activeTab: 1 });
       const consoleWarnSpy = vi.spyOn(console, 'warn');
 
-      ctx.element.selectedIndex = -1;
+      ctx.element.activeIndex = -1;
       await ctx.element.updateComplete;
 
       expect(consoleWarnSpy).toHaveBeenCalledWith('Out of bounds index provided for selected-index, no tab selected.');
       // Tab remains selected when invalid index provided
-      expect(ctx.element.selectedIndex).toBe(1);
-      expect(ctx.selectedTabCount).toBe(1);
+      expect(ctx.element.activeIndex).toBe(1);
+      expect(ctx.activeTabCount).toBe(1);
     });
 
     it('should deselect when using selectedTabElement = null', async () => {
       const ctx = await createFixture({ activeTab: 1 });
 
-      ctx.element.selectedTabElement = null;
+      ctx.element.activeTabElement = null;
       await ctx.element.updateComplete;
       await ctx.element.updateComplete;
 
-      expect(ctx.element.selectedIndex).toBeNull();
-      expect(ctx.selectedTabCount).toBe(0);
+      expect(ctx.element.activeIndex).toBeNull();
+      expect(ctx.activeTabCount).toBe(0);
     });
   });
 
@@ -452,19 +452,19 @@ describe('Tabs', () => {
       await ctx.element.updateComplete;
       await ctx.element.updateComplete;
 
-      ctx.element.selectedTab = 'second';
+      ctx.element.activeTab = 'second';
       await ctx.element.updateComplete;
       await ctx.element.updateComplete;
 
-      expect(ctx.element.selectedTab).toBe('second');
-      expect(ctx.tabs[1].selected).toBe(true);
-      expect(ctx.selectedTabCount).toBe(1);
+      expect(ctx.element.activeTab).toBe('second');
+      expect(ctx.tabs[1].active).toBe(true);
+      expect(ctx.activeTabCount).toBe(1);
     });
 
     it('should get selected tab name', async () => {
       const ctx = await createFixture({ activeTab: 1, tabNames: ['first', 'second', 'third'] });
 
-      expect(ctx.element.selectedTab).toBe('second');
+      expect(ctx.element.activeTab).toBe('second');
     });
 
     it('should return first tab name when auto-selected', async () => {
@@ -472,7 +472,7 @@ describe('Tabs', () => {
       await ctx.element.updateComplete;
       await ctx.element.updateComplete;
 
-      expect(ctx.element.selectedTab).toBe('first');
+      expect(ctx.element.activeTab).toBe('first');
     });
   });
 
@@ -481,36 +481,36 @@ describe('Tabs', () => {
       const ctx = await createFixture();
       await ctx.updatesComplete(2);
 
-      ctx.element.selectedTabElement = ctx.tabs[2];
+      ctx.element.activeTabElement = ctx.tabs[2];
       await ctx.updatesComplete(2);
 
-      expect(ctx.element.selectedTabElement).toBe(ctx.tabs[2]);
-      expect(ctx.tabs[2].selected).toBe(true);
-      expect(ctx.selectedTabCount).toBe(1);
+      expect(ctx.element.activeTabElement).toBe(ctx.tabs[2]);
+      expect(ctx.tabs[2].active).toBe(true);
+      expect(ctx.activeTabCount).toBe(1);
     });
 
     it('should get selected tab element', async () => {
       const ctx = await createFixture({ activeTab: 1 });
 
-      expect(ctx.element.selectedTabElement).toBe(ctx.tabs[1]);
+      expect(ctx.element.activeTabElement).toBe(ctx.tabs[1]);
     });
 
     it('should return first tab element when auto-selected', async () => {
       const ctx = await createFixture();
       await ctx.updatesComplete(2);
 
-      expect(ctx.element.selectedTabElement).toBe(ctx.tabs[0]);
+      expect(ctx.element.activeTabElement).toBe(ctx.tabs[0]);
     });
 
     it('should deselect when set to null', async () => {
       const ctx = await createFixture({ activeTab: 1 });
 
-      ctx.element.selectedTabElement = null;
+      ctx.element.activeTabElement = null;
       await ctx.element.updateComplete;
       await ctx.element.updateComplete;
 
-      expect(ctx.element.selectedTabElement).toBeNull();
-      expect(ctx.selectedTabCount).toBe(0);
+      expect(ctx.element.activeTabElement).toBeNull();
+      expect(ctx.activeTabCount).toBe(0);
     });
   });
 
@@ -611,7 +611,7 @@ describe('Tabs', () => {
       expect(previousTab.matches(':focus')).toBe(true);
     });
 
-    it('should select next tab when removing selected tab', async () => {
+    it('should activate next tab when removing active tab', async () => {
       const ctx = await createFixture({ removable: true, activeTab: 1 });
 
       const changeSpy = vi.fn();
@@ -622,8 +622,8 @@ describe('Tabs', () => {
       await userEvent.keyboard('{Delete}');
       await frame();
 
-      expect(nextTab.selected).toBe(true);
-      expect(ctx.selectedTabCount).toBe(1);
+      expect(nextTab.active).toBe(true);
+      expect(ctx.activeTabCount).toBe(1);
       expect(changeSpy).toHaveBeenCalledOnce();
     });
   });
@@ -724,7 +724,7 @@ describe('Tabs', () => {
       expect(ctx.tabs[1].matches(':focus')).toBe(true);
     });
 
-    it('should select tab when clicked', async () => {
+    it('should activate tab when clicked', async () => {
       const ctx = await createFixture({ vertical: true, activeTab: 0 });
 
       const changeSpy = vi.fn();
@@ -732,8 +732,8 @@ describe('Tabs', () => {
 
       await ctx.clickTab(1);
 
-      expect(ctx.tabs[1].selected).toBe(true);
-      expect(ctx.selectedTabCount).toBe(1);
+      expect(ctx.tabs[1].active).toBe(true);
+      expect(ctx.activeTabCount).toBe(1);
       expect(changeSpy).toHaveBeenCalledOnce();
       expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1 });
     });
@@ -912,8 +912,8 @@ class TabsHarness extends TestHarness<TabBarComponent> {
     return Array.from(this.element.querySelectorAll<TabComponent>(TAB_CONSTANTS.elementName));
   }
 
-  public get selectedTabCount(): number {
-    return this.tabs.reduce((count, tab) => (count += tab.selected ? 1 : 0), 0);
+  public get activeTabCount(): number {
+    return this.tabs.reduce((count, tab) => (count += tab.active ? 1 : 0), 0);
   }
 
   public async clickTab(index: number): Promise<void> {
