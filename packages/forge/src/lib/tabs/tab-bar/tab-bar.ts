@@ -313,10 +313,6 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     }
   }
 
-  public firstUpdated(): void {
-    this.#tryInitialTabSelection();
-  }
-
   public disconnectedCallback(): void {
     this.#disconnectResizeObserver();
   }
@@ -623,17 +619,6 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       return tabs[index].select();
     }
     console.warn('Out of bounds index provided for selected-index, no tab selected.');
-  }
-
-  async #tryInitialTabSelection(): Promise<void> {
-    // Wait two update cycles for tab state to stabilize
-    await this.updateComplete;
-    await this.updateComplete;
-
-    // If no tab is selected, select the first enabled tab
-    if (!this.selectedTabElement) {
-      this._enabledTabs[0]?.select();
-    }
   }
 
   // *****
