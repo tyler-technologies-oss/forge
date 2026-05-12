@@ -64,3 +64,27 @@ DO NOT add comments unless code is complex. Defer to configs.
 ## Packages
 
 - `packages/forge` - Web components library (see its CLAUDE.md)
+
+## Blocks
+
+Blocks are pre-built HTML templates demonstrating Forge component patterns. Use the Forge MCP server to discover and retrieve blocks.
+
+### Finding Blocks
+
+- Use the `mcp__forge__get_forge_blocks` tool to work with blocks:
+  - Call with no parameters to list all available blocks organized by category
+  - Use the `query` parameter to search blocks by name, description, or tags
+  - Use the `category` parameter to filter blocks by category
+  - Use the `blockId` parameter to retrieve a specific block's HTML content (e.g., `blockId: "src/blocks/forms/login"`)
+- ALWAYS use this MCP tool to find and reference blocks instead of browsing the local file system
+
+### Block Guidelines
+
+- ALL Forge apps typically start with the `forge-app-layout` component. It scaffolds an entire app structure—header, sidenav, content area, and footer—with built-in responsiveness. Use the "application-layout" category blocks as primary references for app structure.
+- When creating new blocks with AI, ALWAYS review existing blocks first (via MCP tools) for references, code patterns, and conventions. This ensures consistency across all blocks.
+- NEVER use placeholder attributes on form fields unless specifically asked to do so.
+- Use `forge-file-picker` component for file uploads, not `<input type="file">`.
+- When using `forge-app-layout` or `forge-app-bar`, the page title is the h1, so content headings should start at h2.
+- `forge-select` uses a `label` attribute for its label, not a slotted `<label>` element (unlike `forge-text-field`).
+- When creating forms, reference blocks from the "forms" and "application-layout" categories for typography, spacing, and layout patterns.
+- When creating cards that require a header, body, and footer, use `forge-structured-card` from `@tylertech/forge-extended` as it provides the necessary layout structure with dedicated slots.

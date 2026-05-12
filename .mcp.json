@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "forge": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/Users/nick.andrews@tylertech.com/Desktop/dev/forge-MCP/dist/index.js"],
+      "env": {}
+    }
+  }
+}

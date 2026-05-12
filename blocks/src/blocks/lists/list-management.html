@@ -1,0 +1,161 @@
+<!--
+  @block List Management
+  @description Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion
+  @tags list, management, interactive, card
+-->
+<forge-card class="max-w-3xl p-0 m-medium">
+  <div class="p-medium flex flex-col gap-medium">
+    <h1 class="text-heading4 m-0">List Management</h1>
+
+    <!-- Add Item Form -->
+    <form id="add-item-form" class="flex gap-3 items-end">
+      <forge-text-field label-position="block-start" class="flex-1 [--forge-field-height:36px]">
+        <label for="new-item">New Item</label>
+        <input type="text" id="new-item" autocomplete="off" class="ps-xsmall" />
+      </forge-text-field>
+      <forge-button id="add-btn" variant="filled" type="submit" disabled>
+        <forge-icon name="add" slot="start" external></forge-icon>
+        Add
+      </forge-button>
+    </form>
+
+    <!-- List Container -->
+    <div id="list-container">
+      <!-- List Items in Card. Should only be visible when items have been added -->
+      <forge-card id="list-card" class="hidden no-padding [--forge-card-outline-width:0] [--forge-card-background:var(--forge-theme-surface-dim)]">
+        <forge-list id="items-list">
+          <!-- Items will be added here dynamically -->
+        </forge-list>
+      </forge-card>
+
+      <!-- Empty State -->
+      <div class="flex flex-col items-center gap-2 p-medium" id="empty-state">
+        <forge-icon name="checklist" class="text-[64px] [--forge-icon-color:var(--forge-theme-text-medium)]" external></forge-icon>
+        <div class="text-body1 text-center text-medium">No items yet. Add one above!</div>
+      </div>
+    </div>
+  </div>
+</forge-card>
+
+<!-- List Item Template -->
+<template id="list-item-template">
+  <forge-list-item>
+    <span data-item-text></span>
+    <div slot="trailing" class="flex items-center">
+      <forge-icon-button data-edit-btn aria-label="Edit item">
+        <forge-icon name="edit" external></forge-icon>
+      </forge-icon-button>
+      <forge-popover data-popover placement="bottom">
+        <div class="flex flex-col gap-small p-medium min-w-[320px]">
+          <forge-text-field label-position="block-start">
+            <label data-edit-label>Edit item</label>
+            <input type="text" data-edit-input class="ps-xsmall" />
+          </forge-text-field>
+          <div class="flex justify-end gap-small">
+            <forge-button data-cancel-btn variant="tonal">Cancel</forge-button>
+            <forge-button data-save-btn variant="filled">Save</forge-button>
+          </div>
+        </div>
+      </forge-popover>
+      <forge-icon-button data-delete-btn aria-label="Delete item">
+        <forge-icon name="delete" external></forge-icon>
+      </forge-icon-button>
+    </div>
+  </forge-list-item>
+</template>
+
+<script type="module">
+  const form = document.getElementById('add-item-form');
+  const input = document.getElementById('new-item');
+  const addBtn = document.getElementById('add-btn');
+  const listCard = document.getElementById('list-card');
+  const list = document.getElementById('items-list');
+  const emptyState = document.getElementById('empty-state');
+  const template = document.getElementById('list-item-template');
+
+  input.addEventListener('input', () => {
+    addBtn.disabled = !input.value.trim();
+  });
+
+  function updateListVisibility() {
+    const hasItems = list.children.length > 0;
+    listCard.classList.toggle('hidden', !hasItems);
+    emptyState.classList.toggle('hidden', hasItems);
+  }
+
+  let itemCounter = 0;
+
+  function addItem(text) {
+    if (!text.trim()) return;
+
+    const itemId = `item-${itemCounter++}`;
+    const clone = template.content.cloneNode(true);
+
+    // Get references to elements
+    const listItem = clone.querySelector('forge-list-item');
+    const itemText = clone.querySelector('[data-item-text]');
+    const editBtn = clone.querySelector('[data-edit-btn]');
+    const popover = clone.querySelector('[data-popover]');
+    const editLabel = clone.querySelector('[data-edit-label]');
+    const editInput = clone.querySelector('[data-edit-input]');
+    const cancelBtn = clone.querySelector('[data-cancel-btn]');
+    const saveBtn = clone.querySelector('[data-save-btn]');
+    const deleteBtn = clone.querySelector('[data-delete-btn]');
+
+    // Set up unique IDs for anchor relationship
+    editBtn.id = `edit-btn-${itemId}`;
+    popover.setAttribute('anchor', `edit-btn-${itemId}`);
+    editInput.id = `edit-input-${itemId}`;
+    editLabel.setAttribute('for', `edit-input-${itemId}`);
+
+    // Set initial text
+    itemText.textContent = text;
+
+    // Event handlers
+    cancelBtn.addEventListener('click', () => {
+      popover.open = false;
+    });
+
+    saveBtn.addEventListener('click', () => {
+      const newText = editInput.value.trim();
+      if (newText) {
+        itemText.textContent = newText;
+      }
+      popover.open = false;
+    });
+
+    editInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        saveBtn.click();
+      } else if (e.key === 'Escape') {
+        popover.open = false;
+      }
+    });
+
+    popover.addEventListener('forge-popover-toggle', e => {
+      if (e.detail.newState === 'open') {
+        editInput.value = itemText.textContent;
+        setTimeout(() => editInput.select(), 0);
+      }
+    });
+
+    deleteBtn.addEventListener('click', () => {
+      listItem.remove();
+      updateListVisibility();
+    });
+
+    list.appendChild(clone);
+    input.value = '';
+    addBtn.disabled = true;
+    input.focus();
+    updateListVisibility();
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    addItem(input.value);
+  });
+
+  updateListVisibility();
+</script>

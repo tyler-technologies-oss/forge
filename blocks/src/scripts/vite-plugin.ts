@@ -1,0 +1,91 @@
+import fs from 'fs';
+import type { Plugin, ViteDevServer } from 'vite';
+import type { IncomingMessage, ServerResponse } from 'http';
+
+import { compileBlock } from './block-compiler.js';
+import { createPartialRegistry, type PartialRegistry } from './partial-registry.js';
+import { discoverCategories } from './category-discovery.js';
+import { discoverBlocks, generateManifest } from './generate-manifest.js';
+
+export interface BlocksPluginOptions {
+  blocksPath: string;
+  layoutPath: string;
+  partialsPath: string;
+  indexPath: string;
+}
+
+function injectBlocksData(html: string, blocksData: object): string {
+  const script = `<script>window.__FORGE_BLOCKS_DATA__ = ${JSON.stringify(blocksData)};</script>`;
+  return html.replace('</head>', `${script}\n  </head>`);
+}
+
+export function blocksPlugin(options: BlocksPluginOptions): Plugin {
+  const { blocksPath, layoutPath, partialsPath, indexPath } = options;
+
+  const partialRegistry: PartialRegistry = createPartialRegistry({ partialsPath });
+  partialRegistry.load();
+
+  return {
+    name: 'forge-blocks',
+    configureServer(server: ViteDevServer) {
+      server.watcher.add(partialsPath);
+      server.watcher.add(indexPath);
+      server.watcher.on('change', filePath => {
+        if (filePath.includes('partials') && filePath.endsWith('.hbs')) {
+          partialRegistry.load();
+          server.ws.send({ type: 'full-reload' });
+        }
+        if (filePath === indexPath) {
+          server.ws.send({ type: 'full-reload' });
+        }
+      });
+
+      server.middlewares.use(async (req: IncomingMessage, res: ServerResponse, next: () => void) => {
+        if (req.url === '/' || req.url === '/index.html') {
+          const blocks = await discoverBlocks(blocksPath);
+          const categories = discoverCategories(blocksPath);
+          let html = fs.readFileSync(indexPath, 'utf-8');
+          html = injectBlocksData(html, { blocks, categories });
+          const transformed = await server.transformIndexHtml(req.url, html);
+          res.setHeader('Content-Type', 'text/html');
+          res.end(transformed);
+          return;
+        }
+        next();
+      });
+    },
+    transformIndexHtml: {
+      order: 'pre',
+      handler(html, ctx) {
+        if (ctx.filename.includes('/src/includes/')) {
+          return html;
+        }
+
+        partialRegistry.load();
+
+        const result = compileBlock(html, {
+          layoutPath,
+          partialRegistry
+        });
+
+        if (!result.success && result.error) {
+          console.warn(`Block compilation warning: ${result.error}`);
+        }
+
+        return result.html;
+      }
+    },
+    async writeBundle() {
+      const manifest = await generateManifest({
+        blocksPath,
+        outputPath: 'dist/manifest.json',
+        silent: true
+      });
+
+      const categories = discoverCategories(blocksPath);
+      let indexHtml = fs.readFileSync(indexPath, 'utf-8');
+      indexHtml = injectBlocksData(indexHtml, { blocks: manifest.blocks, categories });
+      fs.writeFileSync('dist/index.html', indexHtml);
+    }
+  };
+}
