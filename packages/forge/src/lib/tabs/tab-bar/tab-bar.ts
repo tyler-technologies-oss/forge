@@ -222,12 +222,13 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
         {
           key: ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'],
           handler: this.#handleNavigationKey.bind(this),
-          allowRepeat: true
+          allowRepeat: true,
+          allowDefault: true
         },
-        { key: ['Home', 'End'], handler: this.#handleNavigationKey.bind(this) },
+        { key: ['Home', 'End'], handler: this.#handleNavigationKey.bind(this), allowDefault: true },
         { key: ['Enter', ' '], handler: this.#handleActivateKey.bind(this), allowDefault: true },
         { key: ['Backspace', 'Delete'], handler: this.#handleCloseKey.bind(this), allowDefault: true },
-        { key: { key: 'F10', modifier: 'shift' }, handler: this.#handleMenuKey.bind(this) }
+        { key: { key: 'F10', modifier: 'shift' }, handler: this.#handleMenuKey.bind(this), allowDefault: true }
       ]
     });
   }
@@ -238,6 +239,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       role: 'tablist',
       ariaOrientation: this.vertical ? 'vertical' : null
     });
+    this.#connectResizeObserver();
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
@@ -256,19 +258,15 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     }
   }
 
-  public updated(changedProperties: PropertyValues<this>): void {
+  public async updated(changedProperties: PropertyValues<this>): Promise<void> {
     // Scroll active tab into view after render
     if (changedProperties.has('activeTab')) {
       this.#tryScrollActiveTabIntoView();
     }
 
-    // Enable/disable scroll controller
     if (changedProperties.has('scrollButtons')) {
-      if (this.scrollButtons) {
-        this.#connectResizeObserver();
-      } else {
-        this.#disconnectResizeObserver();
-      }
+      await this.updateComplete;
+      this.#setScrolledToStartOrEnd();
     }
   }
 
@@ -346,6 +344,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     if (!tab) {
       return;
     }
+    evt.preventDefault();
     this.#dispatchMenuEvent(tab);
   }
 
@@ -377,7 +376,9 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
 
   #handleResize(): void {
     this._scrollable = this.#isScrollable();
-    this.#setScrolledToStartOrEnd();
+    if (this.scrollButtons) {
+      this.#setScrolledToStartOrEnd();
+    }
   }
 
   #handleScrollButton(direction: TabBarScrollDirection): void {
@@ -704,14 +705,14 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    * Connects a ResizeObserver to monitor when the tab bar container size changes.
    */
   #connectResizeObserver(): void {
-    ForgeResizeObserver.observe(this._rootElement, this.#handleResize.bind(this));
+    ForgeResizeObserver.observe(this, this.#handleResize.bind(this));
   }
 
   /**
    * Disconnects the ResizeObserver from the tab bar container.
    */
   #disconnectResizeObserver(): void {
-    ForgeResizeObserver.unobserve(this._rootElement);
+    ForgeResizeObserver.unobserve(this);
   }
 
   /**
@@ -735,6 +736,11 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
 
     this._scrolledToStart = scrollStart === 0;
     this._scrolledToEnd = scrollStart + clientInlineSize >= scrollInlineSize - 1;
+
+    // Only attempt to manage focus if the scroll buttons are present
+    if (!this.scrollButtons) {
+      return;
+    }
 
     const activeElement = this.shadowRoot?.activeElement;
 

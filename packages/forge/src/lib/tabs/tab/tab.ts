@@ -10,10 +10,10 @@ import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
 import { StateLayerComponent } from '../../state-layer/state-layer.js';
 import {
+  TAB_BAR_CLOSABLE,
   TAB_BAR_CONSTANTS,
   TAB_BAR_DISABLED,
   TAB_BAR_INVERTED,
-  TAB_BAR_CLOSABLE,
   TAB_BAR_SECONDARY,
   TAB_BAR_STACKED,
   TAB_BAR_VERTICAL
@@ -106,6 +106,8 @@ export interface ITabComponent extends BaseLitElement {
 @customElement(TAB_CONSTANTS.elementName)
 export class TabComponent extends BaseLitElement implements ITabComponent {
   public static styles = unsafeCSS(styles);
+
+  /** @internal */
   public static contextRoot = new ContextRoot();
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
@@ -307,6 +309,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
     `;
   }
 
+  /** @ignore */
   public override focus(options?: ExperimentalFocusOptions): void {
     super.focus(options);
     if (options?.focusVisible && this._focusIndicator) {
@@ -314,7 +317,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
     }
   }
 
-  public activate(value = true): void {
+  public activate(value: boolean = true): void {
     this.active = value;
   }
 
