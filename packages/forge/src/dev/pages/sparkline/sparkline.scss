@@ -1,0 +1,34 @@
+.sparkline-demo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  > * {
+    min-block-size: 0;
+  }
+}
+
+h3 {
+  margin-block: 16px;
+}
+
+.sparkline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
+  gap: 16px;
+}
+
+.sparkline-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.resizing-sparkline {
+  resize: inline;
+  overflow: hidden;
+  min-inline-size: 64px;
+  max-inline-size: 100%;
+  padding: 8px;
+}
