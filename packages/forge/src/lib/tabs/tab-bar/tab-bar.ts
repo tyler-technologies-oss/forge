@@ -210,8 +210,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   #focusGroupRef = createFocusGroupRef({
     selector: 'forge-tab:not(:state(disabled))',
     orientation: this.vertical ? 'vertical' : 'horizontal',
-    wrap: false,
-    onFocusChange: element => this.#handleTabFocus(element)
+    wrap: true,
+    onFocusChange: (_, element) => this.#handleTabFocus(element)
   });
 
   constructor() {
@@ -242,7 +242,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('activeTab')) {
-      this.#setActiveTabFromIndex(this.activeTab ?? undefined);
+      this.#activateTabByIndex(this.activeTab ?? undefined);
     }
 
     if (changedProperties.has('disabled')) {
@@ -351,7 +351,12 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
 
   #handleTabFocus(element: HTMLElement): void {
     this.#scrollTabIntoView(element as TabComponent);
-    if (this.autoActivate) {
+    if (!this.autoActivate) {
+      return;
+    }
+    if (element.matches(':focus-visible')) {
+      this.#userActivateTab(element as TabComponent);
+    } else {
       (element as TabComponent).active = true;
     }
   }
@@ -402,14 +407,14 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   // *****
 
   #awaitingActiveSync = false;
-  #newActiveTab?: TabComponent;
+  #newActiveTabElement?: TabComponent;
   /**
    * Queues a syncronization of the active tab state to be executed after the current update cycle.
    * @param tab The tab to synchronize.
    */
   async #queueActiveSync(tab: TabComponent): Promise<void> {
     if (tab.active) {
-      this.#newActiveTab = tab;
+      this.#newActiveTabElement = tab;
     }
 
     if (this.#awaitingActiveSync) {
@@ -429,15 +434,15 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    */
   #executeActiveSync(): void {
     const tabs = this._tabs;
-    if (this.#newActiveTab) {
-      const oldActiveTab = tabs.find(t => t.active && t !== this.#newActiveTab);
+    if (this.#newActiveTabElement) {
+      const oldActiveTab = tabs.find(t => t.active && t !== this.#newActiveTabElement);
 
-      this.#activeTabElement = this.#newActiveTab;
-      this.#focusGroupRef.currentElement = this.#newActiveTab;
-      this.#scrollTabIntoView(this.#newActiveTab);
-      this.#animateIndicator(oldActiveTab, this.#newActiveTab);
+      this.#activeTabElement = this.#newActiveTabElement;
+      this.#focusGroupRef.currentElement = this.#newActiveTabElement;
+      this.#scrollTabIntoView(this.#newActiveTabElement);
+      this.#animateIndicator(oldActiveTab, this.#newActiveTabElement);
       oldActiveTab?.activate(false);
-      this.#newActiveTab = undefined;
+      this.#newActiveTabElement = undefined;
     } else if (!this.#activeTabElement?.active) {
       this.#activeTabElement = null;
       this.#focusGroupRef.currentElement = null;
@@ -461,8 +466,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       return;
     }
 
-    // Dispatching the activate event for backwards compatibility even though it doesn't reflect the state of the component and is not cancelable
-    this.#dispatchActivateEvent(tab);
+    // Dispatching the select event for backwards compatibility even though it doesn't reflect the state of the component and is not cancelable
+    this.#dispatchSelectEvent(tab);
 
     const eventAllowed = this.#dispatchChangeEvent(tab);
     if (!eventAllowed) {
@@ -472,14 +477,23 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     tab.active = true;
   }
 
-  #dispatchActivateEvent(tab: TabComponent): void {
-    const activateEvent = new CustomEvent(TAB_CONSTANTS.events.SELECT, {
+  /**
+   * Dispatches the select event on the given tab.
+   * @param tab The activated tab.
+   */
+  #dispatchSelectEvent(tab: TabComponent): void {
+    const selectEvent = new CustomEvent(TAB_CONSTANTS.events.SELECT, {
       bubbles: true,
       composed: true
     });
-    tab.dispatchEvent(activateEvent);
+    tab.dispatchEvent(selectEvent);
   }
 
+  /**
+   * Dispatches the change event on the given tab.
+   * @param tab The active tab.
+   * @returns `true` if the event was not canceled, `false` otherwise.
+   */
   #dispatchChangeEvent(tab: TabComponent): boolean {
     const tabs = this._tabs;
     const index = tabs.indexOf(tab);
@@ -549,7 +563,11 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     });
   }
 
-  async #setActiveTabFromIndex(index?: number): Promise<void> {
+  /**
+   * Activates a tab by its index, or deactivates all tabs if no index is provided.
+   * @param index The index of the tab to set active or undefined if no tab should be active.
+   */
+  async #activateTabByIndex(index?: number): Promise<void> {
     if (!this.hasUpdated) {
       await this.updateComplete;
     }

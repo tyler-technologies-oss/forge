@@ -5,7 +5,7 @@ import { ExperimentalFocusOptions } from '../../constants.js';
 import { composedPathFrom } from './event-utils.js';
 
 export type FocusGroupOrientation = 'horizontal' | 'vertical' | 'both';
-export type FocusGroupFocusChangeCallback = (element: HTMLElement) => void;
+export type FocusGroupFocusChangeCallback = (evt: FocusEvent, element: HTMLElement) => void;
 export type FocusGroupGetFirstChildCallback = () => HTMLElement | null;
 
 export interface IFocusGroupConfig {
@@ -243,7 +243,7 @@ export class BaseFocusGroup {
 
       this.#rootElement.tabIndex = -1;
 
-      this.#onFocusChange?.(target);
+      this.#onFocusChange?.(evt, target);
     }
   }
 
