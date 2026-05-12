@@ -25,6 +25,7 @@ const events = {
   AFTER_CLOSE: `forge-drawer-after-close`
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const BASE_DRAWER_CONSTANTS = {
   observedAttributes,
   attributes,
