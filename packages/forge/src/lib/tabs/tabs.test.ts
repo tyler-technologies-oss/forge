@@ -611,15 +611,11 @@ describe('Tabs', () => {
     });
 
     it('should scroll back when backward scroll button is clicked', async () => {
-      const ctx = await createFixture({ activeTab: 2, scrollButtons: true, width: '150px' });
+      const ctx = await createFixture({ scrollButtons: true, width: '150px' });
 
-      // Wait for the scroll container to scroll to the active tab
-      await frame();
-      await frame();
-
-      // Ensure we're scrolled to the right by scrolling the active tab into view
-      ctx.tabs[2].scrollIntoView();
-      await frame();
+      // First scroll forward to ensure we have space to scroll back
+      await userEvent.click(ctx.forwardScrollButton);
+      await task(500);
 
       const startScrollLeft = ctx.scrollContainer.scrollLeft;
       const scrollBySpy = vi.spyOn(ctx.scrollContainer, 'scrollBy');
