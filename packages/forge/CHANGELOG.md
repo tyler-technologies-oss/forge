@@ -1,5 +1,11 @@
 # @tylertech/forge
 
+## 3.14.3
+
+### Patch Changes
+
+- aef050e: fix(autocomplete): always send value when executing filter callback during initialization
+
 ## 3.14.2
 
 ### Patch Changes

@@ -1173,6 +1173,25 @@ describe('AutocompleteComponent', () => {
       expect(filterSpy).toHaveBeenCalledWith('', null);
     });
 
+    it('should pass value to filter callback during initialization when value set before connecting', async () => {
+      const filterSpy = vi.fn(() => DEFAULT_FILTER_OPTIONS);
+
+      const component = document.createElement('forge-autocomplete') as AutocompleteComponentInternal;
+      const input = document.createElement('input');
+      input.type = 'text';
+      component.appendChild(input);
+
+      component.filter = filterSpy;
+      component.value = DEFAULT_FILTER_OPTIONS[1].value;
+
+      render(html`<div>${component}</div>`);
+      await frame();
+
+      expect(filterSpy).toHaveBeenCalledWith('', DEFAULT_FILTER_OPTIONS[1].value);
+      expect(input.value).toBe(DEFAULT_FILTER_OPTIONS[1].label);
+      expect(component.value).toBe(DEFAULT_FILTER_OPTIONS[1].value);
+    });
+
     it('should close dropdown if filter completes without the input having focus anymore', async () => {
       const harness = await createFixture({
         filter: () =>
