@@ -69,6 +69,8 @@
   "dependencies": {
     "@floating-ui/dom": "catalog:",
     "@lit/context": "catalog:",
+    "@tanstack/lit-table": "^8.21.3",
+    "@tanstack/lit-virtual": "^3.13.25",
     "@tylertech/forge-core": "workspace:",
     "@tylertech/tyler-icons": "catalog:",
     "imask": "^7.6.1",

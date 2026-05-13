@@ -1,0 +1,297 @@
+@use '../table/core';
+@use '../theme';
+@use '../core/styles/shape';
+@use '../core/styles/spacing';
+@use '../core/styles/border';
+@use '../core/styles/animation';
+@use '../core/styles/scrollbar';
+
+:host {
+  > * {
+    @include scrollbar.base;
+  }
+}
+
+table {
+  @include core.forge-table;
+
+  .cell-container,
+  .cell-content {
+    display: flex;
+    align-items: center;
+  }
+
+  tfoot {
+    tr {
+      background-color: transparent;
+    }
+
+    th {
+      @include core.cell;
+      @include core.head-cell;
+
+      border: none;
+
+      &.empty-footer {
+        padding-inline: 0;
+        padding-block: 0;
+      }
+    }
+  }
+
+  tbody tr {
+    &:hover {
+      background-color: inherit;
+    }
+
+    td {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  th {
+    position: relative;
+
+    [draggable='true'] {
+      cursor: grab;
+    }
+
+    &.drag-over {
+      outline: 1px dashed #{theme.variable(primary)};
+    }
+
+    .reorder-handle,
+    .sort-icon {
+      height: 1rem;
+      width: 1rem;
+      fill: #{theme.variable(on-surface)};
+    }
+
+    .sort-icon {
+      margin-inline-start: #{shape.variable(small)};
+      transition: transform #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
+    }
+
+    .reorder-handle {
+      height: 1.5rem;
+      width: 1.5rem;
+      margin-inline-end: #{spacing.variable(xsmall)};
+    }
+
+    &.sort-asc .sort-icon {
+      transform: rotate(180deg);
+    }
+
+    &:hover {
+      .sort-icon {
+        opacity: #{theme.emphasis(medium)};
+      }
+    }
+  }
+
+  .resizer {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: #{shape.variable(medium)};
+    background-color: #{theme.variable(surface-container)};
+    cursor: col-resize;
+    user-select: none;
+    touch-action: none;
+
+    &.ltr {
+      right: 0;
+    }
+
+    &.rtl {
+      left: 0;
+    }
+
+    &.resizing {
+      background: #{theme.variable(primary)};
+      opacity: 1;
+    }
+  }
+
+  @media (hover: hover) {
+    .resizer {
+      opacity: 0;
+      transition: opacity #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
+    }
+
+    *:hover > .resizer {
+      opacity: 1;
+    }
+  }
+}
+
+//
+// Resizable
+//
+
+:host(:state(resizable)) {
+  table {
+    table-layout: fixed;
+    width: fit-content;
+  }
+}
+
+//
+// Filterable
+//
+
+:host(:state(filterable)) {
+  .filter-container {
+    padding-block: #{spacing.variable(xsmall)};
+  }
+
+  .range-filter-container {
+    display: flex;
+    gap: #{spacing.variable(xsmall)};
+  }
+}
+
+//
+// Row selection
+//
+
+:host(:state(row-selection)) {
+  th.select-column {
+    vertical-align: bottom;
+  }
+
+  :where(th, td).select-column {
+    width: 40px;
+    padding-inline: 0;
+
+    .cell-container,
+    .cell-content {
+      justify-content: center;
+    }
+  }
+
+  :where(th, td).select-column + :where(th, td) {
+    padding-inline-start: #{spacing.variable(small)};
+  }
+
+  tbody tr.selected {
+    background-color: #{theme.variable(primary-container-low)};
+    color: #{theme.variable(on-primary-container-low)};
+  }
+}
+
+//
+// Hover
+//
+
+:host(:state(hover)) {
+  tbody tr:hover {
+    background-color: #{theme.variable(surface-container-minimum)};
+  }
+
+  tbody tr.selected:hover {
+    background-color: #{theme.variable(primary-container-minimum)};
+  }
+}
+
+//
+// Striped
+//
+
+:host(:state(striped)) {
+  tbody tr:nth-child(odd) {
+    background-color: #{theme.variable(surface-container-minimum)};
+  }
+}
+
+//
+// Bordered
+//
+
+:host(:state(bordered)) {
+  table {
+    td,
+    th {
+      border: 1px solid #{theme.variable(outline)};
+    }
+  }
+}
+
+//
+// Compact
+//
+
+:host(:state(compact)) {
+  table {
+    tr {
+      height: 32px;
+    }
+
+    th,
+    td {
+      padding-left: #{spacing.variable(xsmall)};
+      padding-right: #{spacing.variable(xsmall)};
+    }
+  }
+}
+
+//
+// Allow Row Click
+//
+
+:host(:state(allow-row-click)) {
+  tbody tr {
+    cursor: pointer;
+  }
+}
+
+//
+// Fixed Headers
+//
+
+:host(:state(fixed-headers)) {
+  .table-container {
+    position: relative;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    background-color: #{theme.variable(surface)};
+    z-index: 1;
+  }
+}
+
+//
+// Virtualized
+//
+
+:host(:state(virtualized)) {
+  .table-container {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: auto;
+  }
+
+  .virtualized-tbody {
+    position: relative;
+    width: 100%;
+  }
+
+  .virtualized-tr {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+
+    // Make the virtualized table cells grow to fill the row width properly
+    td {
+      display: flex;
+      flex: 1 0 auto;
+      align-items: center;
+      box-sizing: border-box;
+    }
+  }
+}

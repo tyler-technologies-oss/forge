@@ -159,6 +159,12 @@ importers:
       '@lit/context':
         specifier: 'catalog:'
         version: 1.1.6
+      '@tanstack/lit-table':
+        specifier: ^8.21.3
+        version: 8.21.3(lit@3.3.2)
+      '@tanstack/lit-virtual':
+        specifier: ^3.13.25
+        version: 3.13.25(lit@3.3.2)
       '@tylertech/forge-core':
         specifier: 'workspace:'
         version: link:../forge-core
@@ -1454,6 +1460,24 @@ packages:
     resolution: {integrity: sha512-pCvohwOCspk3ZFn6eJzrrX3g4n2JY73H6MmYC87XfGPyTty4YsCjYTMArRZm/zOI8dIt3+EcrLHAFPe5A4bgtw==}
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7 || ^8
+
+  '@tanstack/lit-table@8.21.3':
+    resolution: {integrity: sha512-NXe/No6HRGN+OZMJ1pKmoejiFS1QfjirWYOiahBWMojSsLIB5SqYb45L/jlswpKhEAaMWCdps8c93z8HfMG9Kg==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      lit: ^3.1.3
+
+  '@tanstack/lit-virtual@3.13.25':
+    resolution: {integrity: sha512-/WSo8RzWSMxhncpcfo8CCClZxpdHubk3Lh3JfTAwhrCOgH9LEOOEW+B/YNHgTSN3Mhkvke7UEZXFO5Vr6ySzUg==}
+    peerDependencies:
+      lit: ^3.1.0
+
+  '@tanstack/table-core@8.21.3':
+    resolution: {integrity: sha512-ldZXEhOBb8Is7xLs01fR3YEc3DERiz5silj8tnGkFZytt1abEvl/GhUmCE0PMLaMPTa3Jk4HbKmRlHmu+gCftg==}
+    engines: {node: '>=12'}
+
+  '@tanstack/virtual-core@3.14.0':
+    resolution: {integrity: sha512-JLANqGy/D6k4Ujmh8Tr25lGimuOXNiaVyXaCAZS0W+1390sADdGnyUdSWNIfd49gebtIxGMij4IktRVzrdr12Q==}
 
   '@testing-library/dom@10.4.1':
     resolution: {integrity: sha512-o4PXJQidqJl82ckFaXUeoAW+XysPLauYI43Abki5hABd853iMhitooc6znOnczgbTYmEP6U6/y1ZyKAIsvMKGg==}
@@ -5213,6 +5237,20 @@ snapshots:
       '@tailwindcss/oxide': 4.2.4
       tailwindcss: 4.2.4
       vite: 7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.92.1)(terser@5.46.0)(yaml@2.8.2)
+
+  '@tanstack/lit-table@8.21.3(lit@3.3.2)':
+    dependencies:
+      '@tanstack/table-core': 8.21.3
+      lit: 3.3.2
+
+  '@tanstack/lit-virtual@3.13.25(lit@3.3.2)':
+    dependencies:
+      '@tanstack/virtual-core': 3.14.0
+      lit: 3.3.2
+
+  '@tanstack/table-core@8.21.3': {}
+
+  '@tanstack/virtual-core@3.14.0': {}
 
   '@testing-library/dom@10.4.1':
     dependencies:

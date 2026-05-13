@@ -16,6 +16,7 @@
   { "label": "Chips", "path": "/pages/chips/chips.html", "tags": ["form"] },
   { "label": "Circular progress", "path": "/pages/circular-progress/circular-progress.html" },
   { "label": "Color picker", "path": "/pages/color-picker/color-picker.html", "tags": ["form"] },
+  { "label": "Data table", "path": "/pages/data-table/data-table.html", "tags": ["data", "table", "grid"] },
   { "label": "Date picker", "path": "/pages/date-picker/date-picker.html", "tags": ["form", "field"] },
   { "label": "Date range picker", "path": "/pages/date-range-picker/date-range-picker.html", "tags": ["form", "field"] },
   { "label": "Dialog", "path": "/pages/dialog/dialog.html" },

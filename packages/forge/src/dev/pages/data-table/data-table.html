@@ -1,0 +1,35 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Data table',
+    includePath: './pages/data-table/data-table.ejs',
+    options: [
+      { type: 'switch', label: 'Resizable', id: 'resizable' },
+      { type: 'switch', label: 'Reorderable', id: 'reorderable' },
+      { type: 'switch', label: 'Striped', id: 'striped' },
+      { type: 'switch', label: 'Hover', id: 'hover' },
+      { type: 'switch', label: 'Compact', id: 'compact' },
+      { type: 'switch', label: 'Bordered', id: 'bordered' },
+      { type: 'switch', label: 'Allow row click', id: 'allow-row-click' },
+      { type: 'switch', label: 'Expandable rows', id: 'expandable' },
+      { type: 'switch', label: 'Custom cell template', id: 'custom-cell-template' },
+      {
+        type: 'select',
+        label: 'Row selection',
+        id: 'row-select',
+        defaultValue: 'off',
+        options: [
+          { label: 'Off', value: 'off' },
+          { label: 'Single', value: 'single' },
+          { label: 'Multiple', value: 'multiple' }
+        ]
+      },
+      { type: 'switch', label: 'Sortable', id: 'sortable' },
+      { type: 'switch', label: 'Manual sort', id: 'manual-sort' },
+      { type: 'switch', label: 'Filterable', id: 'filterable' },
+      { type: 'switch', label: 'Manual filter', id: 'manual-filter' },
+      { type: 'select', label: 'Hidden columns', id: 'hidden-columns', multiple: true, options: [] }
+    ]
+  }
+})
+%>

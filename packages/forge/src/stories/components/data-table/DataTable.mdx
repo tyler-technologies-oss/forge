@@ -1,0 +1,81 @@
+import { Meta, Title, Controls, Canvas, Story } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as DataTableStories from './DataTable.stories';
+
+<Meta of={DataTableStories} />
+
+<Title />
+
+The Data Table component provides a powerful and flexible way to display and interact with tabular data.
+It supports features such as sorting, filtering, column resizing and reordering, row selection, and more.
+
+## Features
+
+- **Sorting**: Click on column headers to sort data
+- **Filtering**: Apply filters to columns to narrow down displayed data
+- **Resizing**: Adjust column widths by dragging column dividers
+- **Reordering**: Drag and drop columns to rearrange them
+- **Row Selection**: Select single or multiple rows
+- **Row Clicking**: Respond to row click events
+- **Column Visibility**: Right-click headers to open a column menu or control visibility programmatically
+- **Styling Options**: Apply various styling options like striped rows, hover effects, and more
+- **Virtualization**: Efficiently handle large datasets with row virtualization for improved performance
+- **Fixed Headers**: Keep column headers visible while scrolling through large datasets
+
+## Basic Usage
+
+<Canvas of={DataTableStories.Basic} />
+
+## Interactive Table
+
+This example showcases a fully interactive table with sorting, filtering, resizing, and row selection enabled:
+
+<Canvas of={DataTableStories.Interactive} />
+
+## Sortable Table
+
+Enable sorting by clicking on column headers:
+
+<Canvas of={DataTableStories.Sortable} />
+
+## Row Selection
+
+Enable row selection with checkbox column:
+
+<Canvas of={DataTableStories.RowSelection} />
+
+## Column Visibility
+
+Right-click any column header to open the column visibility menu. This example hides a column by default and prevents another column from being hidden:
+
+<Canvas of={DataTableStories.ColumnVisibility} />
+
+## Compact and Bordered Table
+
+Apply compact and bordered styling for a denser, more defined table:
+
+<Canvas of={DataTableStories.CompactAndBordered} />
+
+## Expandable Rows
+
+Enable expandable rows to show additional details:
+
+Use the exported `createExpanderColumn()` helper to add the toggle column, then set `expandable` to `true` and provide slotted row content.
+
+<Canvas of={DataTableStories.ExpandableRows} />
+
+## Virtualized Table
+
+Enable row virtualization for efficiently handling large datasets with improved performance:
+
+<Canvas of={DataTableStories.Virtualization} />
+
+## Fixed Headers Table
+
+Enable fixed headers to keep column headers visible while scrolling through large datasets:
+
+<Canvas of={DataTableStories.FixedHeaders} />
+
+## API
+
+<CustomArgTypes />
