@@ -20,9 +20,13 @@ describe('Tabs', () => {
     expect(ctx.element.shadowRoot).not.toBeNull();
   });
 
-  it.skip('should be accessible', async () => {
+  it('should be accessible', async () => {
     const ctx = await createFixture();
-    await expect(ctx.element).toBeAccessible();
+    await expect(ctx.element).toBeAccessible({
+      rules: {
+        'aria-required-children': { enabled: false }
+      }
+    });
   });
 
   it('should set default active tab', async () => {
@@ -410,9 +414,13 @@ describe('Tabs', () => {
   });
 
   describe('when vertical', () => {
-    it.skip('should be accessible', async () => {
+    it('should be accessible', async () => {
       const ctx = await createFixture({ vertical: true });
-      await expect(ctx.element).toBeAccessible();
+      await expect(ctx.element).toBeAccessible({
+        rules: {
+          'aria-required-children': { enabled: false }
+        }
+      });
     });
 
     it('should set vertical attribute', async () => {
