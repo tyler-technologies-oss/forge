@@ -30,7 +30,9 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
       { text: 'Surface container (minimum)', background: 'surface-container-minimum', foreground: 'on-surface' },
       { text: 'Surface container (low)', background: 'surface-container-low', foreground: 'on-surface' },
       { text: 'Surface container (medium)', background: 'surface-container-medium', foreground: 'on-surface' },
-      { text: 'Surface container (high)', background: 'surface-container-high', foreground: 'on-surface-container-high' }
+      { text: 'Surface container (high)', background: 'surface-container-high', foreground: 'on-surface-container-high' },
+      { text: 'Surface container (highest)', background: 'surface-container-highest', foreground: 'on-surface-container-highest' },
+      { text: 'Surface container (maximum)', background: 'surface-container-maximum', foreground: 'on-surface-container-maximum' }
     ]
   },
   {
@@ -44,7 +46,9 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
       { text: 'Primary container (minimum)', background: 'primary-container-minimum', foreground: 'on-primary-container-minimum' },
       { text: 'Primary container (low)', background: 'primary-container-low', foreground: 'on-primary-container-low' },
       { text: 'Primary container', background: 'primary-container', foreground: 'on-primary-container' },
-      { text: 'Primary container (high)', background: 'primary-container-high', foreground: 'on-primary-container-high' }
+      { text: 'Primary container (high)', background: 'primary-container-high', foreground: 'on-primary-container-high' },
+      { text: 'Primary container (highest)', background: 'primary-container-highest', foreground: 'on-primary-container-highest' },
+      { text: 'Primary container (maximum)', background: 'primary-container-maximum', foreground: 'on-primary-container-maximum' }
     ]
   },
   {
@@ -53,7 +57,9 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
       { text: 'Secondary container (minimum)', background: 'secondary-container-minimum', foreground: 'on-secondary-container-minimum' },
       { text: 'Secondary container (low)', background: 'secondary-container-low', foreground: 'on-secondary-container-low' },
       { text: 'Secondary container', background: 'secondary-container', foreground: 'on-secondary-container' },
-      { text: 'Secondary container (high)', background: 'secondary-container-high', foreground: 'on-secondary-container-high' }
+      { text: 'Secondary container (high)', background: 'secondary-container-high', foreground: 'on-secondary-container-high' },
+      { text: 'Secondary container (highest)', background: 'secondary-container-highest', foreground: 'on-secondary-container-highest' },
+      { text: 'Secondary container (maximum)', background: 'secondary-container-maximum', foreground: 'on-secondary-container-maximum' }
     ]
   },
   {
@@ -62,7 +68,9 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
       { text: 'Tertiary container (minimum)', background: 'tertiary-container-minimum', foreground: 'on-tertiary-container-minimum' },
       { text: 'Tertiary container (low)', background: 'tertiary-container-low', foreground: 'on-tertiary-container-low' },
       { text: 'Tertiary container', background: 'tertiary-container', foreground: 'on-tertiary-container' },
-      { text: 'Tertiary container (high)', background: 'tertiary-container-high', foreground: 'on-tertiary-container-high' }
+      { text: 'Tertiary container (high)', background: 'tertiary-container-high', foreground: 'on-tertiary-container-high' },
+      { text: 'Tertiary container (highest)', background: 'tertiary-container-highest', foreground: 'on-tertiary-container-highest' },
+      { text: 'Tertiary container (maximum)', background: 'tertiary-container-maximum', foreground: 'on-tertiary-container-maximum' }
     ]
   },
   {
@@ -72,7 +80,9 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
       { text: 'Success container (minimum)', background: 'success-container-minimum', foreground: 'on-success-container-minimum' },
       { text: 'Success container (low)', background: 'success-container-low', foreground: 'on-success-container-low' },
       { text: 'Success container', background: 'success-container', foreground: 'on-success-container' },
-      { text: 'Success container (high)', background: 'success-container-high', foreground: 'on-success-container-high' }
+      { text: 'Success container (high)', background: 'success-container-high', foreground: 'on-success-container-high' },
+      { text: 'Success container (highest)', background: 'success-container-highest', foreground: 'on-success-container-highest' },
+      { text: 'Success container (maximum)', background: 'success-container-maximum', foreground: 'on-success-container-maximum' }
     ]
   },
   {
@@ -81,7 +91,9 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
       { text: 'Error container (minimum)', background: 'error-container-minimum', foreground: 'on-error-container-minimum' },
       { text: 'Error container (low)', background: 'error-container-low', foreground: 'on-error-container-low' },
       { text: 'Error container', background: 'error-container', foreground: 'on-error-container' },
-      { text: 'Error container (high)', background: 'error-container-high', foreground: 'on-error-container-high' }
+      { text: 'Error container (high)', background: 'error-container-high', foreground: 'on-error-container-high' },
+      { text: 'Error container (highest)', background: 'error-container-highest', foreground: 'on-error-container-highest' },
+      { text: 'Error container (maximum)', background: 'error-container-maximum', foreground: 'on-error-container-maximum' }
     ]
   },
   {
@@ -90,7 +102,9 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
       { text: 'Warning container (minimum)', background: 'warning-container-minimum', foreground: 'on-warning-container-minimum' },
       { text: 'Warning container (low)', background: 'warning-container-low', foreground: 'on-warning-container-low' },
       { text: 'Warning container', background: 'warning-container', foreground: 'on-warning-container' },
-      { text: 'Warning container (high)', background: 'warning-container-high', foreground: 'on-warning-container-high' }
+      { text: 'Warning container (high)', background: 'warning-container-high', foreground: 'on-warning-container-high' },
+      { text: 'Warning container (highest)', background: 'warning-container-highest', foreground: 'on-warning-container-highest' },
+      { text: 'Warning container (maximum)', background: 'warning-container-maximum', foreground: 'on-warning-container-maximum' }
     ]
   },
   {
@@ -99,16 +113,18 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
       { text: 'Info container (minimum)', background: 'info-container-minimum', foreground: 'on-info-container-minimum' },
       { text: 'Info container (low)', background: 'info-container-low', foreground: 'on-info-container-low' },
       { text: 'Info container', background: 'info-container', foreground: 'on-info-container' },
-      { text: 'Info container (high)', background: 'info-container-high', foreground: 'on-info-container-high' }
+      { text: 'Info container (high)', background: 'info-container-high', foreground: 'on-info-container-high' },
+      { text: 'Info container (highest)', background: 'info-container-highest', foreground: 'on-info-container-highest' },
+      { text: 'Info container (maximum)', background: 'info-container-maximum', foreground: 'on-info-container-maximum' }
     ]
   },
   {
     header: 'Text',
     swatches: [
-      { text: 'High (87%)', foreground: 'text-high', noBorder: true },
-      { text: 'Medium (60%)', foreground: 'text-medium', noBorder: true },
-      { text: 'Low (38%)', foreground: 'text-low', noBorder: true },
-      { text: 'Lowest (12%)', foreground: 'text-lowest', noBorder: true }
+      { text: 'High', foreground: 'text-high', noBorder: true },
+      { text: 'Medium', foreground: 'text-medium', noBorder: true },
+      { text: 'Low', foreground: 'text-low', noBorder: true },
+      { text: 'Lowest', foreground: 'text-lowest', noBorder: true }
     ]
   },
   {
