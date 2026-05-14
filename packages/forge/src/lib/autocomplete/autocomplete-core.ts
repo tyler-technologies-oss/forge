@@ -118,7 +118,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
     if (this._values.length) {
       if (!this._selectedOptions.length) {
         try {
-          await this._executeFilter();
+          await this._executeFilter(false, true);
         } catch (e) {
           console.error(e);
         }
@@ -1103,7 +1103,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
     this._selectedTextBuilder = fn;
 
     // If there are selected options, set the selected text again
-    if (this._selectedOptions.length) {
+    if (this._selectedOptions.length && this._isInitialized) {
       this._adapter.setSelectedText(this._getSelectedText());
     }
   }

@@ -56,6 +56,12 @@ export class MyComponent {
 }
 ```
 
+## Usage with Dialogs
+
+By default, a dismissible toast presented while a `<forge-dialog>` is open will not be interactive, as the underlying `<dialog>` makes outside elements [inert](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog).
+
+To handle this, pass `topLayer: true` to `ToastComponent.present()` or the Angular adapter's `ToastService.show()`, which appends the toast to the topmost open dialog and keeps it interactive.
+
 ## API
 
 <CustomArgTypes />

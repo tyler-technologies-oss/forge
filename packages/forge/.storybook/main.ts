@@ -2,6 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import type { StorybookConfig } from '@storybook/web-components-vite';
 import remarkGfm from 'remark-gfm';
+import tailwindcss from '@tailwindcss/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import ViteInlineForgeHtml from '../plugins/vite/vite-inline-forge-html.ts';
 import ViteTransformForgeInlineStyleImports from '../plugins/vite/vite-inline-forge-style-import.ts';
@@ -37,7 +38,7 @@ const config: StorybookConfig = {
   async viteFinal(configuration) {
     const { mergeConfig } = await import('vite');
     return mergeConfig(configuration, {
-      plugins: [tsconfigPaths(), ViteInlineForgeHtml, ViteTransformForgeInlineStyleImports]
+      plugins: [tailwindcss(), tsconfigPaths(), ViteInlineForgeHtml, ViteTransformForgeInlineStyleImports]
     });
   }
 };

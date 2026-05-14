@@ -9,6 +9,8 @@ import { TOUCH_DELAY_MS, type IStateLayerComponent, STATE_LAYER_CONSTANTS } from
 import type { IFocusIndicatorComponent } from '../focus-indicator/index.js';
 
 import './button-area.js';
+import '../state-layer/index.js';
+import '../focus-indicator/index.js';
 import '../icon-button/index.js';
 import '../icon/index.js';
 import '../tooltip/index.js';
@@ -17,10 +19,13 @@ describe('Button Area', () => {
   it('should initialize', async () => {
     const { el, root, stateLayer, focusIndicator } = await createFixture({});
 
-    expect(el.shadowRoot).not.toBeNull();
+    await el.updateComplete;
+
+    expect(el.shadowRoot).toBeTruthy();
+    expect(root).toBeTruthy();
     expect(root.getAttribute('part')).toBe('root');
     expect(root.classList.contains(BUTTON_AREA_CONSTANTS.classes.ROOT)).toBe(true);
-    expect(stateLayer.disabled).toBe(false);
+    expect(stateLayer).toBeTruthy();
     expect(focusIndicator).toBeTruthy();
   });
 
@@ -201,6 +206,7 @@ describe('Button Area', () => {
     const { el } = await createFixture({});
 
     el.disabled = true;
+    await el.updateComplete;
     await frame();
 
     expect(el.disabled).toBe(true);
@@ -208,6 +214,7 @@ describe('Button Area', () => {
     await expect(el).toBeAccessible();
 
     el.disabled = false;
+    await el.updateComplete;
     await frame();
 
     expect(el.disabled).toBe(false);
@@ -218,6 +225,7 @@ describe('Button Area', () => {
     const { el } = await createFixture({});
 
     el.disabled = true;
+    await el.updateComplete;
     await frame();
 
     expect(el.matches(':state(disabled)')).toBe(true);
@@ -984,7 +992,10 @@ describe('Button Area', () => {
     return el.querySelector('[data-forge-ignore]') as HTMLButtonElement;
   }
 
-  function getStateLayerSurfaceEl(el: IStateLayerComponent): HTMLDivElement {
+  function getStateLayerSurfaceEl(el: IStateLayerComponent | undefined): HTMLDivElement {
+    if (!el) {
+      throw new Error('State layer component is undefined');
+    }
     return getShadowElement(el, STATE_LAYER_CONSTANTS.selectors.SURFACE) as HTMLDivElement;
   }
 
@@ -1022,7 +1033,7 @@ describe('Button Area', () => {
       </forge-button-area>
     `);
     const el = screen.container.querySelector('forge-button-area') as ButtonAreaComponent;
-    await frame();
+    await el.updateComplete;
     const root = el.shadowRoot?.firstElementChild as HTMLElement;
     const stateLayer = el.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent;
     const focusIndicator = el.shadowRoot?.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;

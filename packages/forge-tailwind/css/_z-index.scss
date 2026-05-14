@@ -1,0 +1,16 @@
+/*
+ * Forge Tailwind Theme - Z-Index (Layering)
+ * Semantic z-index values for proper layering with Forge components.
+ * Usage: z-surface, z-header, z-dialog, z-tooltip, etc.
+ */
+
+/* prettier-ignore */
+@theme {
+  --z-surface: var(--forge-z-index-surface);
+  --z-header: var(--forge-z-index-header);
+  --z-backdrop: var(--forge-z-index-backdrop);
+  --z-dialog: var(--forge-z-index-dialog);
+  --z-notification: var(--forge-z-index-notification);
+  --z-popup: var(--forge-z-index-popup);
+  --z-tooltip: var(--forge-z-index-tooltip);
+}
