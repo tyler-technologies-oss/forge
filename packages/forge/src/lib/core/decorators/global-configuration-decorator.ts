@@ -1,5 +1,6 @@
 import { GlobalConfiguration } from '../configuration/global-configuration.js';
 import { IBaseAdapter } from '../base/base-adapter.js';
+import { isHTMLElement } from '../utils/feature-detection.js';
 
 interface CoreWithAdapter {
   _adapter?: IBaseAdapter;
@@ -47,7 +48,7 @@ export function globalConfig(): PropertyDecorator {
           // Get tag name based on whether this is an HTMLElement or a Core class
           let tagName: string | undefined;
 
-          if (this instanceof HTMLElement) {
+          if (isHTMLElement(this)) {
             // Direct HTMLElement access (Lit components)
             tagName = this.localName || this.tagName?.toLowerCase();
           } else if ('_adapter' in this && this._adapter?.hostElement) {
