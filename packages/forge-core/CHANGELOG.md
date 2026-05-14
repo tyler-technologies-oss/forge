@@ -1,5 +1,11 @@
 # @tylertech/forge-core
 
+## 3.3.1
+
+### Patch Changes
+
+- 122e8b4: feat(utils): add `isHTMLElement` helper
+
 ## 3.3.0
 
 ### Minor Changes
