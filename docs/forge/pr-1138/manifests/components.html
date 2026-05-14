@@ -576,7 +576,7 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><a class="filter-pill ok" data-k="docs" href="#filter-docs">33 docs ok</a></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><a class="filter-pill ok" data-k="docs" href="#filter-docs">34 docs ok</a></div>
   </div>
 </header>
 <main>
@@ -2616,10 +2616,492 @@ where the API docs are generated from.
   aria-label="Docs">
   <div class="head">
     <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Getting Started/Tailwind CSS</h2>
+      <div class="badges">
+        
+        <label for="doc-14-getting-started-tailwind-css-docs-content" class="badge ok as-toggle">view content</label>
+      </div>
+    </div>
+    <div class="meta" title="./src/stories/getting-started/Tailwind.mdx">getting-started-tailwind-css--docs · ./src/stories/getting-started/Tailwind.mdx</div>
+    
+  </div>
+
+  <!-- Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="doc-14-getting-started-tailwind-css-docs-content" class="tg tg-content" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-content">
+          <div class="mdx-content">
+            <pre><code>import { Meta } from &#39;@storybook/addon-docs/blocks&#39;;
+import &#39;./tailwind-demo.css&#39;;
+
+&lt;Meta title=&quot;Getting Started/Tailwind CSS&quot; tags={[&#39;experimental&#39;]} /&gt;
+
+# Tailwind CSS (Optional)
+
+Forge provides an optional Tailwind CSS v4 theme package that maps Tailwind utilities to Forge design tokens. This allows you to use familiar Tailwind syntax while maintaining consistency with Forge&#39;s design system.
+
+&gt; This package is entirely optional. Forge components work without Tailwind, and you can use Forge&#39;s design tokens directly via CSS custom properties if you prefer.
+
+## Installation
+
+```bash
+npm install @tylertech/forge-tailwind
+```
+
+## Setup
+
+Import the Forge theme after Tailwind in your main CSS file:
+
+```css
+@import &quot;tailwindcss&quot;;
+@import &quot;@tylertech/forge-tailwind&quot;;
+```
+
+&gt; **Important:** Forge CSS must be loaded in your application for the design tokens to be available. The Tailwind theme references Forge&#39;s CSS custom properties.
+
+## Recommended Usage
+
+**We highly recommend using Tailwind primarily for layout purposes.** Tailwind excels at:
+
+- **Layout** — `flex`, `grid`, `block`, `inline-flex`
+- **Spacing** — `p-*`, `m-*`, `gap-*`
+- **Sizing** — `w-*`, `h-*`, `max-w-*`, `min-h-*`
+- **Positioning** — `absolute`, `relative`, `fixed`, `top-*`, `left-*`
+- **Responsive design** — `sm:`, `md:`, `lg:` breakpoint prefixes
+
+For colors, typography, and component styling, prefer using Forge components and CSS custom properties directly. This ensures visual consistency with the design system and makes theming seamless.
+
+```html
+&lt;!-- Recommended: Tailwind for layout, Forge for styling --&gt;
+&lt;div class=&quot;flex gap-4 p-6&quot;&gt;
+  &lt;forge-card&gt;
+    &lt;p class=&quot;text-body2&quot;&gt;Content styled by Forge&lt;/p&gt;
+  &lt;/forge-card&gt;
+&lt;/div&gt;
+```
+
+The color and typography utilities in this package are available for edge cases, but layout utilities should be your primary use of Tailwind with Forge.
+
+---
+
+## What&#39;s Included
+
+### Theme Variables
+
+The package extends Tailwind&#39;s theme with Forge design tokens:
+
+| Category | Tailwind Utilities | Example |
+|----------|-------------------|---------|
+| Spacing | `p-*`, `m-*`, `gap-*` | `p-4`, `p-medium`, `gap-large` |
+| Border Radius | `rounded-*` | `rounded-sm`, `rounded-lg`, `rounded-full` |
+| Box Shadow | `shadow-*` | `shadow-sm`, `shadow-lg`, `shadow-8` |
+| Z-Index | `z-*` | `z-surface`, `z-dialog`, `z-tooltip` |
+| Border Width | `border-*` | `border-thin`, `border-medium` |
+| Duration | `duration-*` | `duration-short-1`, `duration-medium-2` |
+| Easing | `ease-*` | `ease-standard`, `ease-emphasized` |
+
+---
+
+## Background Colors
+
+Use `bg-*` utilities for Forge surface and semantic background colors.
+
+### Surface
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-surface border border-outline-low&quot; /&gt; | `bg-surface` | Default surface background |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-surface-dim border border-outline-low&quot; /&gt; | `bg-surface-dim` | Dimmed surface |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-surface-bright border border-outline-low&quot; /&gt; | `bg-surface-bright` | Bright surface |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-surface-inverse border border-outline-low&quot; /&gt; | `bg-surface-inverse` | Inverse surface |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-surface-container-minimum border border-outline-low&quot; /&gt; | `bg-surface-container-minimum` | Minimum container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-surface-container-low border border-outline-low&quot; /&gt; | `bg-surface-container-low` | Low container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-surface-container border border-outline-low&quot; /&gt; | `bg-surface-container` | Default container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-surface-container-medium border border-outline-low&quot; /&gt; | `bg-surface-container-medium` | Medium container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-surface-container-high border border-outline-low&quot; /&gt; | `bg-surface-container-high` | High container |
+
+### Brand
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-brand&quot; /&gt; | `bg-brand` | Brand color |
+
+### Primary
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-primary&quot; /&gt; | `bg-primary` | Primary color |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-primary-container-minimum border border-outline-low&quot; /&gt; | `bg-primary-container-minimum` | Minimum primary container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-primary-container-low border border-outline-low&quot; /&gt; | `bg-primary-container-low` | Low primary container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-primary-container border border-outline-low&quot; /&gt; | `bg-primary-container` | Default primary container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-primary-container-high border border-outline-low&quot; /&gt; | `bg-primary-container-high` | High primary container |
+
+### Secondary
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-secondary&quot; /&gt; | `bg-secondary` | Secondary color |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-secondary-container-minimum border border-outline-low&quot; /&gt; | `bg-secondary-container-minimum` | Minimum secondary container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-secondary-container-low border border-outline-low&quot; /&gt; | `bg-secondary-container-low` | Low secondary container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-secondary-container border border-outline-low&quot; /&gt; | `bg-secondary-container` | Default secondary container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-secondary-container-high border border-outline-low&quot; /&gt; | `bg-secondary-container-high` | High secondary container |
+
+### Tertiary
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-tertiary&quot; /&gt; | `bg-tertiary` | Tertiary color |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-tertiary-container-minimum border border-outline-low&quot; /&gt; | `bg-tertiary-container-minimum` | Minimum tertiary container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-tertiary-container-low border border-outline-low&quot; /&gt; | `bg-tertiary-container-low` | Low tertiary container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-tertiary-container border border-outline-low&quot; /&gt; | `bg-tertiary-container` | Default tertiary container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-tertiary-container-high border border-outline-low&quot; /&gt; | `bg-tertiary-container-high` | High tertiary container |
+
+### Success
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-success&quot; /&gt; | `bg-success` | Success color |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-success-container-minimum border border-outline-low&quot; /&gt; | `bg-success-container-minimum` | Minimum success container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-success-container-low border border-outline-low&quot; /&gt; | `bg-success-container-low` | Low success container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-success-container border border-outline-low&quot; /&gt; | `bg-success-container` | Default success container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-success-container-high border border-outline-low&quot; /&gt; | `bg-success-container-high` | High success container |
+
+### Error
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-error&quot; /&gt; | `bg-error` | Error color |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-error-container-minimum border border-outline-low&quot; /&gt; | `bg-error-container-minimum` | Minimum error container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-error-container-low border border-outline-low&quot; /&gt; | `bg-error-container-low` | Low error container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-error-container border border-outline-low&quot; /&gt; | `bg-error-container` | Default error container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-error-container-high border border-outline-low&quot; /&gt; | `bg-error-container-high` | High error container |
+
+### Warning
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-warning&quot; /&gt; | `bg-warning` | Warning color |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-warning-container-minimum border border-outline-low&quot; /&gt; | `bg-warning-container-minimum` | Minimum warning container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-warning-container-low border border-outline-low&quot; /&gt; | `bg-warning-container-low` | Low warning container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-warning-container border border-outline-low&quot; /&gt; | `bg-warning-container` | Default warning container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-warning-container-high border border-outline-low&quot; /&gt; | `bg-warning-container-high` | High warning container |
+
+### Info
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-info&quot; /&gt; | `bg-info` | Info color |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-info-container-minimum border border-outline-low&quot; /&gt; | `bg-info-container-minimum` | Minimum info container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-info-container-low border border-outline-low&quot; /&gt; | `bg-info-container-low` | Low info container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-info-container border border-outline-low&quot; /&gt; | `bg-info-container` | Default info container |
+| &lt;div className=&quot;w-6 h-6 rounded-sm bg-info-container-high border border-outline-low&quot; /&gt; | `bg-info-container-high` | High info container |
+
+---
+
+## Text Colors
+
+Use `text-*` utilities for text emphasis levels and semantic colors.
+
+### Emphasis Levels
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| &lt;span className=&quot;text-high text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-high` | High emphasis text |
+| &lt;span className=&quot;text-high-inverse bg-surface-inverse px-1 rounded-sm text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-high-inverse` | High emphasis inverse |
+| &lt;span className=&quot;text-medium text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-medium` | Medium emphasis text |
+| &lt;span className=&quot;text-medium-inverse bg-surface-inverse px-1 rounded-sm text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-medium-inverse` | Medium emphasis inverse |
+| &lt;span className=&quot;text-low text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-low` | Low emphasis text |
+| &lt;span className=&quot;text-low-inverse bg-surface-inverse px-1 rounded-sm text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-low-inverse` | Low emphasis inverse |
+| &lt;span className=&quot;text-lowest text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-lowest` | Lowest emphasis text |
+| &lt;span className=&quot;text-lowest-inverse bg-surface-inverse px-1 rounded-sm text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-lowest-inverse` | Lowest emphasis inverse |
+
+### Semantic
+
+| Color | Class | Description |
+|-------|-------|-------------|
+| &lt;span className=&quot;text-brand text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-brand` | Brand color |
+| &lt;span className=&quot;text-primary text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-primary` | Primary color |
+| &lt;span className=&quot;text-secondary text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-secondary` | Secondary color |
+| &lt;span className=&quot;text-tertiary text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-tertiary` | Tertiary color |
+| &lt;span className=&quot;text-success text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-success` | Success color |
+| &lt;span className=&quot;text-error text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-error` | Error color |
+| &lt;span className=&quot;text-warning text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-warning` | Warning color |
+| &lt;span className=&quot;text-info text-heading3&quot;&gt;Aa&lt;/span&gt; | `text-info` | Info color |
+
+```html
+&lt;p class=&quot;text-high&quot;&gt;High emphasis text&lt;/p&gt;
+&lt;p class=&quot;text-medium&quot;&gt;Medium emphasis text&lt;/p&gt;
+&lt;p class=&quot;text-primary&quot;&gt;Primary colored text&lt;/p&gt;
+```
+
+---
+
+## Border Colors
+
+Use `border-*` utilities for outline and semantic border colors.
+
+&lt;div className=&quot;sb-unstyled flex gap-4 flex-wrap my-6&quot;&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-2&quot;&gt;
+    &lt;div className=&quot;w-20 h-20 rounded-lg bg-surface border-2 border-outline&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;border-outline&lt;/code&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-2&quot;&gt;
+    &lt;div className=&quot;w-20 h-20 rounded-lg bg-surface border-2 border-outline-high&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;border-outline-high&lt;/code&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-2&quot;&gt;
+    &lt;div className=&quot;w-20 h-20 rounded-lg bg-surface border-2 border-primary&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;border-primary&lt;/code&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-2&quot;&gt;
+    &lt;div className=&quot;w-20 h-20 rounded-lg bg-surface border-2 border-error&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;border-error&lt;/code&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-2&quot;&gt;
+    &lt;div className=&quot;w-20 h-20 rounded-lg bg-surface border-2 border-success&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;border-success&lt;/code&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+```html
+&lt;div class=&quot;border border-outline&quot;&gt;...&lt;/div&gt;
+&lt;div class=&quot;border border-primary&quot;&gt;...&lt;/div&gt;
+```
+
+---
+
+## Typography
+
+Apply complete Forge typography styles with single utility classes.
+
+### Display
+
+| Class | Description |
+|-------|-------------|
+| &lt;div className=&quot;sb-unstyled text-display1&quot;&gt;text-display1&lt;/div&gt; | Display 1 (largest) |
+| &lt;div className=&quot;sb-unstyled text-display2&quot;&gt;text-display2&lt;/div&gt; | Display 2 |
+| &lt;div className=&quot;sb-unstyled text-display3&quot;&gt;text-display3&lt;/div&gt; | Display 3 |
+| &lt;div className=&quot;sb-unstyled text-display4&quot;&gt;text-display4&lt;/div&gt; | Display 4 |
+| &lt;div className=&quot;sb-unstyled text-display5&quot;&gt;text-display5&lt;/div&gt; | Display 5 |
+| &lt;div className=&quot;sb-unstyled text-display6&quot;&gt;text-display6&lt;/div&gt; | Display 6 |
+| &lt;div className=&quot;sb-unstyled text-display7&quot;&gt;text-display7&lt;/div&gt; | Display 7 |
+| &lt;div className=&quot;sb-unstyled text-display8&quot;&gt;text-display8&lt;/div&gt; | Display 8 (smallest display) |
+
+### Heading
+
+| Class | Description |
+|-------|-------------|
+| &lt;div className=&quot;sb-unstyled text-heading1&quot;&gt;text-heading1&lt;/div&gt; | Heading 1 (largest) |
+| &lt;div className=&quot;sb-unstyled text-heading2&quot;&gt;text-heading2&lt;/div&gt; | Heading 2 |
+| &lt;div className=&quot;sb-unstyled text-heading3&quot;&gt;text-heading3&lt;/div&gt; | Heading 3 |
+| &lt;div className=&quot;sb-unstyled text-heading4&quot;&gt;text-heading4&lt;/div&gt; | Heading 4 |
+| &lt;div className=&quot;sb-unstyled text-heading5&quot;&gt;text-heading5&lt;/div&gt; | Heading 5 |
+| &lt;div className=&quot;sb-unstyled text-heading6&quot;&gt;text-heading6&lt;/div&gt; | Heading 6 |
+| &lt;div className=&quot;sb-unstyled text-heading7&quot;&gt;text-heading7&lt;/div&gt; | Heading 7 |
+| &lt;div className=&quot;sb-unstyled text-heading8&quot;&gt;text-heading8&lt;/div&gt; | Heading 8 (smallest heading) |
+
+### Subheading
+
+| Class | Description |
+|-------|-------------|
+| &lt;div className=&quot;sb-unstyled text-subheading1&quot;&gt;text-subheading1&lt;/div&gt; | Subheading 1 (largest) |
+| &lt;div className=&quot;sb-unstyled text-subheading2&quot;&gt;text-subheading2&lt;/div&gt; | Subheading 2 |
+| &lt;div className=&quot;sb-unstyled text-subheading3&quot;&gt;text-subheading3&lt;/div&gt; | Subheading 3 |
+| &lt;div className=&quot;sb-unstyled text-subheading4&quot;&gt;text-subheading4&lt;/div&gt; | Subheading 4 |
+| &lt;div className=&quot;sb-unstyled text-subheading5&quot;&gt;text-subheading5&lt;/div&gt; | Subheading 5 |
+| &lt;div className=&quot;sb-unstyled text-subheading6&quot;&gt;text-subheading6&lt;/div&gt; | Subheading 6 |
+| &lt;div className=&quot;sb-unstyled text-subheading7&quot;&gt;text-subheading7&lt;/div&gt; | Subheading 7 |
+| &lt;div className=&quot;sb-unstyled text-subheading8&quot;&gt;text-subheading8&lt;/div&gt; | Subheading 8 (smallest subheading) |
+
+### Body
+
+| Class | Description |
+|-------|-------------|
+| &lt;div className=&quot;sb-unstyled text-body1&quot;&gt;text-body1&lt;/div&gt; | Body 1 (largest) |
+| &lt;div className=&quot;sb-unstyled text-body2&quot;&gt;text-body2&lt;/div&gt; | Body 2 |
+| &lt;div className=&quot;sb-unstyled text-body3&quot;&gt;text-body3&lt;/div&gt; | Body 3 |
+| &lt;div className=&quot;sb-unstyled text-body4&quot;&gt;text-body4&lt;/div&gt; | Body 4 (smallest body) |
+
+### Label
+
+| Class | Description |
+|-------|-------------|
+| &lt;div className=&quot;sb-unstyled text-label1&quot;&gt;text-label1&lt;/div&gt; | Label 1 (largest) |
+| &lt;div className=&quot;sb-unstyled text-label2&quot;&gt;text-label2&lt;/div&gt; | Label 2 |
+| &lt;div className=&quot;sb-unstyled text-label3&quot;&gt;text-label3&lt;/div&gt; | Label 3 (smallest label) |
+
+### Other
+
+| Class | Description |
+|-------|-------------|
+| &lt;div className=&quot;sb-unstyled text-button&quot;&gt;text-button&lt;/div&gt; | Button text |
+| &lt;div className=&quot;sb-unstyled text-overline&quot;&gt;text-overline&lt;/div&gt; | Overline text |
+| &lt;div className=&quot;sb-unstyled text-link&quot;&gt;text-link&lt;/div&gt; | Link text |
+
+```html
+&lt;h1 class=&quot;text-heading4&quot;&gt;Page Title&lt;/h1&gt;
+&lt;p class=&quot;text-body2&quot;&gt;Body content&lt;/p&gt;
+&lt;span class=&quot;text-label1&quot;&gt;Small label&lt;/span&gt;
+```
+
+---
+
+## Elevation (Box Shadow)
+
+Use Tailwind aliases or Forge&#39;s numeric elevation scale (0-24).
+
+&lt;div className=&quot;sb-unstyled flex gap-6 flex-wrap my-6 p-6&quot;&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-3&quot;&gt;
+    &lt;div className=&quot;w-24 h-24 rounded-lg bg-surface shadow-sm&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;shadow-sm&lt;/code&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-3&quot;&gt;
+    &lt;div className=&quot;w-24 h-24 rounded-lg bg-surface shadow-md&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;shadow-md&lt;/code&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-3&quot;&gt;
+    &lt;div className=&quot;w-24 h-24 rounded-lg bg-surface shadow-lg&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;shadow-lg&lt;/code&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-3&quot;&gt;
+    &lt;div className=&quot;w-24 h-24 rounded-lg bg-surface shadow-xl&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;shadow-xl&lt;/code&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-3&quot;&gt;
+    &lt;div className=&quot;w-24 h-24 rounded-lg bg-surface shadow-2xl&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;shadow-2xl&lt;/code&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+```html
+&lt;!-- Tailwind aliases --&gt;
+&lt;div class=&quot;shadow-sm&quot;&gt;...&lt;/div&gt;
+&lt;div class=&quot;shadow-lg&quot;&gt;...&lt;/div&gt;
+
+&lt;!-- Forge elevation numbers --&gt;
+&lt;div class=&quot;shadow-4&quot;&gt;...&lt;/div&gt;
+&lt;div class=&quot;shadow-16&quot;&gt;...&lt;/div&gt;
+```
+
+---
+
+## Border Radius
+
+Use `rounded-*` utilities mapped to Forge shape tokens.
+
+&lt;div className=&quot;sb-unstyled flex gap-5 flex-wrap my-6&quot;&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-2&quot;&gt;
+    &lt;div className=&quot;w-20 h-20 bg-primary rounded-xs&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;rounded-xs&lt;/code&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-2&quot;&gt;
+    &lt;div className=&quot;w-20 h-20 bg-primary rounded-sm&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;rounded-sm&lt;/code&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-2&quot;&gt;
+    &lt;div className=&quot;w-20 h-20 bg-primary rounded-md&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;rounded-md&lt;/code&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-2&quot;&gt;
+    &lt;div className=&quot;w-20 h-20 bg-primary rounded-lg&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;rounded-lg&lt;/code&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-2&quot;&gt;
+    &lt;div className=&quot;w-20 h-20 bg-primary rounded-xl&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;rounded-xl&lt;/code&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex flex-col items-center gap-2&quot;&gt;
+    &lt;div className=&quot;w-20 h-20 bg-primary rounded-full&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium&quot;&gt;rounded-full&lt;/code&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+---
+
+## Spacing
+
+Both numeric (Tailwind-familiar) and semantic (Forge-familiar) scales are available.
+
+&lt;div className=&quot;sb-unstyled flex flex-col gap-3 my-6&quot;&gt;
+  &lt;div className=&quot;flex items-center gap-4&quot;&gt;
+    &lt;div className=&quot;w-1 h-6 bg-primary rounded-xs&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium min-w-16&quot;&gt;p-1&lt;/code&gt;
+    &lt;span className=&quot;text-label1 text-low&quot;&gt;4px — xxsmall&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex items-center gap-4&quot;&gt;
+    &lt;div className=&quot;w-2 h-6 bg-primary rounded-xs&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium min-w-16&quot;&gt;p-2&lt;/code&gt;
+    &lt;span className=&quot;text-label1 text-low&quot;&gt;8px — xsmall&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex items-center gap-4&quot;&gt;
+    &lt;div className=&quot;w-3 h-6 bg-primary rounded-xs&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium min-w-16&quot;&gt;p-3&lt;/code&gt;
+    &lt;span className=&quot;text-label1 text-low&quot;&gt;12px — small&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex items-center gap-4&quot;&gt;
+    &lt;div className=&quot;w-4 h-6 bg-primary rounded-xs&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium min-w-16&quot;&gt;p-4&lt;/code&gt;
+    &lt;span className=&quot;text-label1 text-low&quot;&gt;16px — medium&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex items-center gap-4&quot;&gt;
+    &lt;div className=&quot;w-6 h-6 bg-primary rounded-xs&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium min-w-16&quot;&gt;p-6&lt;/code&gt;
+    &lt;span className=&quot;text-label1 text-low&quot;&gt;24px — large&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex items-center gap-4&quot;&gt;
+    &lt;div className=&quot;w-8 h-6 bg-primary rounded-xs&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium min-w-16&quot;&gt;p-8&lt;/code&gt;
+    &lt;span className=&quot;text-label1 text-low&quot;&gt;32px — xlarge&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;flex items-center gap-4&quot;&gt;
+    &lt;div className=&quot;w-12 h-6 bg-primary rounded-xs&quot; /&gt;
+    &lt;code className=&quot;text-label1 text-medium min-w-16&quot;&gt;p-12&lt;/code&gt;
+    &lt;span className=&quot;text-label1 text-low&quot;&gt;48px — xxlarge&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+```html
+&lt;!-- Numeric scale --&gt;
+&lt;div class=&quot;p-4 m-8&quot;&gt;...&lt;/div&gt;
+
+&lt;!-- Semantic scale --&gt;
+&lt;div class=&quot;p-medium m-xlarge&quot;&gt;...&lt;/div&gt;
+```
+
+---
+
+## When to Use
+
+Consider using `@tylertech/forge-tailwind` when:
+
+- Your team is already familiar with Tailwind CSS
+- You want utility-first styling with Forge&#39;s design tokens
+- You&#39;re building custom layouts alongside Forge components
+
+Consider using Forge&#39;s CSS custom properties directly when:
+
+- You prefer minimal dependencies
+- You&#39;re only using Forge components without custom styling
+- You want maximum control over your CSS architecture
+</code></pre>
+          </div>
+        </div>
+  </div>
+</article>
+<article
+  class="card is-doc no-doc-error"
+  role="listitem"
+  aria-label="Docs">
+  <div class="head">
+    <div class="title">
       <h2><span class="status-dot dot-ok"></span> FAQ/Dropdown Options</h2>
       <div class="badges">
         
-        <label for="doc-14-faq-dropdown-options-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-15-faq-dropdown-options-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/faq/Dropdown Options.mdx">faq-dropdown-options--docs · ./src/stories/faq/Dropdown Options.mdx</div>
@@ -2628,7 +3110,7 @@ where the API docs are generated from.
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-14-faq-dropdown-options-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-15-faq-dropdown-options-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -2786,7 +3268,7 @@ We expect to begin work on implementing this change in the second half of 2025, 
       <h2><span class="status-dot dot-ok"></span> FAQ/Focus Indicator Clipping</h2>
       <div class="badges">
         
-        <label for="doc-15-faq-focus-indicator-clipping-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-16-faq-focus-indicator-clipping-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/faq/FocusIndicatorClipping.mdx">faq-focus-indicator-clipping--docs · ./src/stories/faq/FocusIndicatorClipping.mdx</div>
@@ -2795,7 +3277,7 @@ We expect to begin work on implementing this change in the second half of 2025, 
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-15-faq-focus-indicator-clipping-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-16-faq-focus-indicator-clipping-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -2893,7 +3375,7 @@ for assistance and we&#39;ll be glad to help!
       <h2><span class="status-dot dot-ok"></span> Frameworks/Angular</h2>
       <div class="badges">
         
-        <label for="doc-16-frameworks-angular-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-17-frameworks-angular-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/frameworks/Angular.mdx">frameworks-angular--docs · ./src/stories/frameworks/Angular.mdx</div>
@@ -2902,7 +3384,7 @@ for assistance and we&#39;ll be glad to help!
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-16-frameworks-angular-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-17-frameworks-angular-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3204,7 +3686,7 @@ type safety and integration benefits that the adapter provides.
       <h2><span class="status-dot dot-ok"></span> Frameworks/React</h2>
       <div class="badges">
         
-        <label for="doc-17-frameworks-react-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-18-frameworks-react-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/frameworks/React.mdx">frameworks-react--docs · ./src/stories/frameworks/React.mdx</div>
@@ -3213,7 +3695,7 @@ type safety and integration benefits that the adapter provides.
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-17-frameworks-react-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-18-frameworks-react-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3316,7 +3798,7 @@ import &#39;@tylertech/forge/dist/forge.css&#39;;
       <h2><span class="status-dot dot-ok"></span> Frameworks/Vue</h2>
       <div class="badges">
         
-        <label for="doc-18-frameworks-vue-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-19-frameworks-vue-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/frameworks/Vue.mdx">frameworks-vue--docs · ./src/stories/frameworks/Vue.mdx</div>
@@ -3325,7 +3807,7 @@ import &#39;@tylertech/forge/dist/forge.css&#39;;
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-18-frameworks-vue-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-19-frameworks-vue-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3439,7 +3921,7 @@ If you want to use the dark theme, import the `forge-dark.css` file:
       <h2><span class="status-dot dot-ok"></span> Frameworks/Svelte</h2>
       <div class="badges">
         
-        <label for="doc-19-frameworks-svelte-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-20-frameworks-svelte-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/frameworks/Svelte.mdx">frameworks-svelte--docs · ./src/stories/frameworks/Svelte.mdx</div>
@@ -3448,7 +3930,7 @@ If you want to use the dark theme, import the `forge-dark.css` file:
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-19-frameworks-svelte-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-20-frameworks-svelte-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3521,7 +4003,7 @@ To use the default Forge styles in your Svelte application, import the `forge.cs
       <h2><span class="status-dot dot-ok"></span> Frameworks/Blazor</h2>
       <div class="badges">
         
-        <label for="doc-20-frameworks-blazor-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-21-frameworks-blazor-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/frameworks/Blazor.mdx">frameworks-blazor--docs · ./src/stories/frameworks/Blazor.mdx</div>
@@ -3530,7 +4012,7 @@ To use the default Forge styles in your Svelte application, import the `forge.cs
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-20-frameworks-blazor-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-21-frameworks-blazor-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3558,7 +4040,7 @@ We are currently working on the Blazor adapter for Forge, stay tuned for updates
       <h2><span class="status-dot dot-ok"></span> Design Tokens/Introduction</h2>
       <div class="badges">
         
-        <label for="doc-21-design-tokens-introduction-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-22-design-tokens-introduction-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/design-tokens/Introduction.mdx">design-tokens-introduction--docs · ./src/stories/design-tokens/Introduction.mdx</div>
@@ -3567,7 +4049,7 @@ We are currently working on the Blazor adapter for Forge, stay tuned for updates
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-21-design-tokens-introduction-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-22-design-tokens-introduction-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3643,7 +4125,7 @@ To learn more about theming see the [Theming documentation](?path=/docs/getting-
       <h2><span class="status-dot dot-ok"></span> Design Tokens/Animation</h2>
       <div class="badges">
         
-        <label for="doc-22-design-tokens-animation-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-23-design-tokens-animation-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/design-tokens/Animation.mdx">design-tokens-animation--docs · ./src/stories/design-tokens/Animation.mdx</div>
@@ -3652,7 +4134,7 @@ To learn more about theming see the [Theming documentation](?path=/docs/getting-
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-22-design-tokens-animation-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-23-design-tokens-animation-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3706,7 +4188,7 @@ Animation tokens define the duration and easing of animations used throughout th
       <h2><span class="status-dot dot-ok"></span> Design Tokens/Border</h2>
       <div class="badges">
         
-        <label for="doc-23-design-tokens-border-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-24-design-tokens-border-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/design-tokens/Border.mdx">design-tokens-border--docs · ./src/stories/design-tokens/Border.mdx</div>
@@ -3715,7 +4197,7 @@ Animation tokens define the duration and easing of animations used throughout th
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-23-design-tokens-border-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-24-design-tokens-border-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3749,7 +4231,7 @@ Border tokens width of borders and outlines used throughout the design system.
       <h2><span class="status-dot dot-ok"></span> Design Tokens/Color</h2>
       <div class="badges">
         
-        <label for="doc-24-design-tokens-color-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-25-design-tokens-color-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/design-tokens/Color.mdx">design-tokens-color--docs · ./src/stories/design-tokens/Color.mdx</div>
@@ -3758,7 +4240,7 @@ Border tokens width of borders and outlines used throughout the design system.
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-24-design-tokens-color-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-25-design-tokens-color-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3986,7 +4468,7 @@ The outline colors are used to define the colors of outline or border of element
       <h2><span class="status-dot dot-ok"></span> Design Tokens/Elevation</h2>
       <div class="badges">
         
-        <label for="doc-25-design-tokens-elevation-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-26-design-tokens-elevation-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/design-tokens/Elevation.mdx">design-tokens-elevation--docs · ./src/stories/design-tokens/Elevation.mdx</div>
@@ -3995,7 +4477,7 @@ The outline colors are used to define the colors of outline or border of element
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-25-design-tokens-elevation-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-26-design-tokens-elevation-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4054,7 +4536,7 @@ Each token corresponds to a specific elevation level at a specific height on the
       <h2><span class="status-dot dot-ok"></span> Design Tokens/Layering</h2>
       <div class="badges">
         
-        <label for="doc-26-design-tokens-layering-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-27-design-tokens-layering-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/design-tokens/Layering.mdx">design-tokens-layering--docs · ./src/stories/design-tokens/Layering.mdx</div>
@@ -4063,7 +4545,7 @@ Each token corresponds to a specific elevation level at a specific height on the
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-26-design-tokens-layering-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-27-design-tokens-layering-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4107,7 +4589,7 @@ Forge will automatically adjust to use the new values across all components.
       <h2><span class="status-dot dot-ok"></span> Design Tokens/Shape</h2>
       <div class="badges">
         
-        <label for="doc-27-design-tokens-shape-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-28-design-tokens-shape-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/design-tokens/Shape.mdx">design-tokens-shape--docs · ./src/stories/design-tokens/Shape.mdx</div>
@@ -4116,7 +4598,7 @@ Forge will automatically adjust to use the new values across all components.
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-27-design-tokens-shape-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-28-design-tokens-shape-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4176,7 +4658,7 @@ Shape tokens define the border radius used throughout the design system.
       <h2><span class="status-dot dot-ok"></span> Design Tokens/Spacing</h2>
       <div class="badges">
         
-        <label for="doc-28-design-tokens-spacing-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-29-design-tokens-spacing-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/design-tokens/Spacing.mdx">design-tokens-spacing--docs · ./src/stories/design-tokens/Spacing.mdx</div>
@@ -4185,7 +4667,7 @@ Shape tokens define the border radius used throughout the design system.
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-28-design-tokens-spacing-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-29-design-tokens-spacing-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4226,7 +4708,7 @@ Spacing tokens define the spacing used between content.
       <h2><span class="status-dot dot-ok"></span> Design Tokens/Typography</h2>
       <div class="badges">
         
-        <label for="doc-29-design-tokens-typography-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-30-design-tokens-typography-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/design-tokens/Typography.mdx">design-tokens-typography--docs · ./src/stories/design-tokens/Typography.mdx</div>
@@ -4235,7 +4717,7 @@ Spacing tokens define the spacing used between content.
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-29-design-tokens-typography-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-30-design-tokens-typography-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4324,7 +4806,7 @@ recommended to use the browser default root font size for your page because it a
       <h2><span class="status-dot dot-ok"></span> About/Changelog</h2>
       <div class="badges">
         
-        <label for="doc-30-about-changelog-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-31-about-changelog-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/about/Changelog.mdx">about-changelog--docs · ./src/stories/about/Changelog.mdx</div>
@@ -4333,7 +4815,7 @@ recommended to use the browser default root font size for your page because it a
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-30-about-changelog-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-31-about-changelog-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4375,7 +4857,7 @@ import CHANGELOG from &#39;../../../CHANGELOG.md?raw&#39;;
       <h2><span class="status-dot dot-ok"></span> About/Roadmap</h2>
       <div class="badges">
         
-        <label for="doc-31-about-roadmap-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-32-about-roadmap-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/about/Roadmap.mdx">about-roadmap--docs · ./src/stories/about/Roadmap.mdx</div>
@@ -4384,7 +4866,7 @@ import CHANGELOG from &#39;../../../CHANGELOG.md?raw&#39;;
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-31-about-roadmap-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-32-about-roadmap-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4468,7 +4950,7 @@ td:nth-child(2) {
       <h2><span class="status-dot dot-ok"></span> components/view-all/ViewAll</h2>
       <div class="badges">
         
-        <label for="doc-32-components-view-all-viewall-docs-content" class="badge ok as-toggle">view content</label>
+        <label for="doc-33-components-view-all-viewall-docs-content" class="badge ok as-toggle">view content</label>
       </div>
     </div>
     <div class="meta" title="./src/stories/components/view-all/ViewAll.mdx">components-view-all-viewall--docs · ./src/stories/components/view-all/ViewAll.mdx</div>
@@ -4477,7 +4959,7 @@ td:nth-child(2) {
 
   <!-- Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="doc-32-components-view-all-viewall-docs-content" class="tg tg-content" type="checkbox" hidden />
+  <input id="doc-33-components-view-all-viewall-docs-content" class="tg tg-content" type="checkbox" hidden />
 
   <div class="panels">
     
