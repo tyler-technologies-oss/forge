@@ -37,30 +37,3 @@ export function supportsHover(): boolean {
 export function prefersReducedMotion(): boolean {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
-
-/**
- * Safely checks if an object is an HTMLElement instance.
- * Works in both browser environments and environments where HTMLElement might not be
- * a proper constructor (e.g. Node-based testing environments).
- * @param {any} obj - The object to check.
- * @returns {boolean}
- */
-export function isHTMLElement(obj: any): obj is HTMLElement {
-  // First check if HTMLElement is a function (constructor) before using instanceof
-  if (typeof HTMLElement === 'function') {
-    try {
-      return obj instanceof HTMLElement;
-    } catch {
-      // instanceof can throw if rights-hand side is not available in the environment, fall through to duck-typing
-    }
-  }
-
-  // Duck-typing fallback: check for properties commonly found on HTMLElements
-  return (
-    typeof obj === 'object' &&
-    obj !== null &&
-    typeof obj.nodeType === 'number' &&
-    typeof obj.nodeName === 'string' &&
-    (typeof obj.localName === 'string' || typeof obj.tagName === 'string')
-  );
-}

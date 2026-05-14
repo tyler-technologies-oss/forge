@@ -1,6 +1,6 @@
 import { GlobalConfiguration } from '../configuration/global-configuration.js';
 import { IBaseAdapter } from '../base/base-adapter.js';
-import { isHTMLElement } from '../utils/feature-detection.js';
+import { isHTMLElement } from '@tylertech/forge-core';
 
 interface CoreWithAdapter {
   _adapter?: IBaseAdapter;
