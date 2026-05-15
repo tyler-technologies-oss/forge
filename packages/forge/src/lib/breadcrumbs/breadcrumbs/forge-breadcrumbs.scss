@@ -1,0 +1,23 @@
+@use './core';
+
+.forge-breadcrumbs {
+  @include core.tokens;
+  @include core.host;
+  @include core.base;
+
+  &__separator {
+    @include core.separator;
+  }
+
+  &__home-button {
+    @include core.home-button;
+  }
+
+  &__collapsed-trigger {
+    @include core.collapsed-trigger;
+  }
+
+  &__crumb-item {
+    @include core.crumb-item;
+  }
+}

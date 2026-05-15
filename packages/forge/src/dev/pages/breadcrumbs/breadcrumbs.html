@@ -1,0 +1,27 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Breadcrumbs',
+    includePath: './pages/breadcrumbs/breadcrumbs.ejs',
+    options: [
+      { type: 'switch', label: 'Show home', id: 'opt-show-home' },
+      { type: 'switch', label: 'Show icons', id: 'opt-icons' },
+      { type: 'switch', label: 'Show secondary text', id: 'opt-secondary' },
+      { type: 'switch', label: 'Show sibling routes', id: 'opt-siblings' },
+      {
+        type: 'select',
+        label: 'Separator icon name',
+        id: 'opt-separator',
+        defaultValue: 'slash_forward',
+        options: [
+          { label: 'Slash forward', value: 'slash_forward' },
+          { label: 'Chevron right', value: 'chevron_right' },
+          { label: 'Arrow right', value: 'arrow_right' }
+        ]
+      },
+      { type: 'button', id: 'btn-add-crumb', label: 'Add crumb' },
+      { type: 'button', id: 'btn-remove-crumb', label: 'Remove crumb' }
+    ]
+  }
+})
+%>

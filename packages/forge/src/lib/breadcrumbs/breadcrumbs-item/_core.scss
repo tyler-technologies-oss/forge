@@ -1,0 +1,72 @@
+@use './token-utils' as *;
+@use '../breadcrumbs/token-utils' as breadcrumb-tokens;
+@use '../../icon' as icon;
+@use '../../icon-button' as icon-button;
+@use '../../core/styles/typography';
+
+@forward './token-utils';
+
+@mixin host {
+  display: flex;
+  align-items: flex-start;
+  white-space: nowrap;
+}
+
+@mixin base {
+  display: flex;
+  align-items: flex-start;
+}
+
+@mixin link {
+  color: #{token(text-color)};
+  cursor: pointer;
+  padding: var(--forge-spacing-xxsmall) var(--forge-spacing-xsmall);
+  border-radius: var(--forge-spacing-xxsmall);
+  font: inherit;
+  border: none;
+  background: none;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(2, auto);
+  align-items: flex-start;
+  outline: none;
+}
+
+@mixin label-text {
+  @include typography.style(body2);
+  white-space: nowrap;
+  grid-column-start: 2;
+  grid-row-start: 1;
+  align-self: center;
+}
+
+@mixin secondary-text {
+  @include typography.style(label1);
+  color: #{token(secondary-text-color)};
+  grid-column-start: 2;
+  grid-row-start: 2;
+  text-align: left;
+}
+
+@mixin crumb-icon {
+  color: #{token(icon-color)};
+  margin-right: var(--forge-spacing-xsmall);
+}
+
+@mixin sibling-trigger {
+  @include icon-button.provide-theme(
+    (
+      size: var(--forge-spacing-xlarge)
+    )
+  );
+}
+
+@mixin active {
+  padding: var(--forge-spacing-xxsmall) var(--forge-spacing-xsmall);
+}
+
+@mixin separator {
+  color: #{breadcrumb-tokens.token(separator-color)};
+  padding-top: var(--forge-spacing-xxsmall);
+}

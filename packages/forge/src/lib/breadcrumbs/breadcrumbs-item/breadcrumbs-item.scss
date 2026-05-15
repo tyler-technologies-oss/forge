@@ -1,0 +1,67 @@
+@use './core' as *;
+@use '../../state-layer';
+@use '../../focus-indicator';
+@use '../../core/styles/shape';
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-breadcrumbs-item {
+  @include tokens;
+  @include base;
+}
+
+.link {
+  @include link;
+
+  forge-state-layer {
+    @include state-layer.provide-theme(
+      (
+        color: #{token(text-color)}
+      )
+    );
+  }
+}
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(text-color)},
+      shape: #{shape.variable(medium)},
+      outward-offset: 0px
+    )
+  );
+}
+
+.label-text {
+  @include label-text;
+}
+
+.secondary-text {
+  @include secondary-text;
+}
+
+.icon {
+  @include crumb-icon;
+}
+
+.sibling-trigger {
+  @include sibling-trigger;
+}
+
+.active {
+  @include active;
+}
+
+.separator {
+  @include separator;
+}
+
+[hidden] {
+  display: none;
+}

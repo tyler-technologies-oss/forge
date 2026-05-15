@@ -1,0 +1,31 @@
+@use './core';
+
+.forge-breadcrumbs-item {
+  @include core.tokens;
+  @include core.host;
+  @include core.base;
+
+  &__link {
+    @include core.link;
+  }
+
+  &__label-text {
+    @include core.label-text;
+  }
+
+  &__secondary-text {
+    @include core.secondary-text;
+  }
+
+  &__icon {
+    @include core.crumb-icon;
+  }
+
+  &__sibling-trigger {
+    @include core.sibling-trigger;
+  }
+
+  &__active {
+    @include core.active;
+  }
+}

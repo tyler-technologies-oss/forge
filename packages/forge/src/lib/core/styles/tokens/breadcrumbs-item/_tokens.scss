@@ -1,0 +1,15 @@
+@use 'sass:map';
+@use '../../spacing';
+@use '../../theme';
+@use '../../typography';
+@use '../../utils';
+
+$tokens: (
+  text-color: utils.module-val(crumb, text-color, theme.variable(primary)),
+  icon-color: utils.module-val(crumb, icon-color, theme.variable(text-low)),
+  secondary-text-color: utils.module-val(crumb, secondary-text-color, theme.variable(text-low))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

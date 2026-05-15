@@ -1,0 +1,36 @@
+<section>
+  <h3 class="forge-typography--heading2">Default</h3>
+  <div>
+    <forge-breadcrumbs id="demo-breadcrumbs"></forge-breadcrumbs>
+  </div>
+</section>
+
+<section>
+  <h3 class="forge-typography--heading2">Constrained width (auto-collapse)</h3>
+  <div style="width: 300px; border: 1px dashed var(--forge-theme-outline); padding: 8px; resize: horizontal; overflow: hidden;">
+    <forge-breadcrumbs id="demo-breadcrumbs-constrained"></forge-breadcrumbs>
+  </div>
+</section>
+
+<section>
+  <h3 class="forge-typography--heading2">Breadcrumb Items (slotted)</h3>
+  <div>
+    <forge-breadcrumbs id="demo-breadcrumbs-slot">
+      <forge-breadcrumbs-item id="slot-item-0"></forge-breadcrumbs-item>
+      <forge-breadcrumbs-item id="slot-item-1"></forge-breadcrumbs-item>
+      <forge-breadcrumbs-item id="slot-item-2"></forge-breadcrumbs-item>
+      <forge-breadcrumbs-item id="slot-item-3"></forge-breadcrumbs-item>
+    </forge-breadcrumbs>
+  </div>
+</section>
+
+<section>
+  <h3 class="forge-typography--heading2">Custom separator icon (slotted)</h3>
+  <div>
+    <forge-breadcrumbs id="demo-breadcrumbs-custom-sep">
+      <forge-icon slot="separator-icon" name="chevron_right"></forge-icon>
+    </forge-breadcrumbs>
+  </div>
+</section>
+
+<script type="module" src="breadcrumbs.ts"></script>

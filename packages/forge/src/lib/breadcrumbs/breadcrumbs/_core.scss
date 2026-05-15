@@ -1,0 +1,49 @@
+@use './token-utils' as *;
+@use '../../icon' as icon;
+@use '../../icon-button' as icon-button;
+@use '../../core/styles/theme';
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+}
+
+@mixin base {
+  display: flex;
+  align-items: flex-start;
+  gap: #{token(gap)};
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: nowrap;
+}
+
+@mixin separator {
+  color: #{token(separator-color)};
+  padding-top: var(--forge-spacing-xxsmall);
+}
+
+@mixin home-button {
+  @include icon-button.provide-theme(
+    (
+      icon-color: theme.variable(primary),
+      size: var(--forge-spacing-xlarge)
+    )
+  );
+}
+
+@mixin collapsed-trigger {
+  @include icon-button.provide-theme(
+    (
+      icon-color: theme.variable(primary),
+      size: var(--forge-spacing-xlarge)
+    )
+  );
+}
+
+@mixin crumb-item {
+  display: flex;
+  align-items: flex-start;
+  white-space: nowrap;
+}
