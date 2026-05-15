@@ -4,7 +4,7 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tab`;
 
 const observedAttributes = {
   DISABLED: 'disabled',
-  SELECTED: 'selected',
+  ACTIVE: 'active',
   VERTICAL: 'vertical',
   STACKED: 'stacked',
   SECONDARY: 'secondary',
@@ -22,7 +22,8 @@ const selectors = {
 const classes = {};
 
 const events = {
-  SELECT: `${elementName}-select`
+  SELECT: `${elementName}-select`,
+  REQUEST_SYNC: `${elementName}-request-sync`
 };
 
 const strings = {
@@ -33,6 +34,7 @@ const numbers = {
   ANIMATION_DURATION: 250
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const TAB_CONSTANTS = {
   elementName,
   observedAttributes,

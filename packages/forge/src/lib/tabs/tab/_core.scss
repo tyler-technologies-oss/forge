@@ -81,7 +81,7 @@
   }
 }
 
-@mixin selected-focus {
+@mixin active-focus {
   color: #{token(active-focus-label-text-color)};
 
   ::slotted([slot='leading']),
@@ -100,7 +100,7 @@
   }
 }
 
-@mixin selected-pressed {
+@mixin active-pressed {
   color: #{token(active-pressed-label-text-color)};
 
   ::slotted([slot='leading']),
