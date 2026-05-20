@@ -49,14 +49,14 @@
   );
 
   // Tooltip
-  @include tooltip.provide-theme(
-    (
-      background: theme.variable(surface-bright),
-      // Tooltips use bright surface color in dark theme to increase contrast
-      color: theme.variable(text-high),
-      border-width: border.variable(thin) // Tooltips use thin borders in dark theme to increase contrast
-    )
-  );
+  // @include tooltip.provide-theme(
+  //   (
+  //     background: theme.variable(surface-bright),
+  //     // Tooltips use bright surface color in dark theme to increase contrast
+  //     color: theme.variable(text-high),
+  //     border-width: border.variable(thin) // Tooltips use thin borders in dark theme to increase contrast
+  //   )
+  // );
 
   // Chips
   @include chip.provide-theme(

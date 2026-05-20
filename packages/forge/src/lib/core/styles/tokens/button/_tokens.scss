@@ -50,9 +50,9 @@ $tokens: (
   outlined-border-style: utils.module-val(button, outlined-border-style, solid),
   outlined-border-color: utils.module-ref(button, outlined-border-color, primary-color),
   // Tonal
-  tonal-background: utils.module-val(button, tonal-background, theme.variable(primary-container)),
+  tonal-background: utils.module-val(button, tonal-background, theme.variable(secondary-container)),
   tonal-disabled-background: utils.module-ref(button, tonal-disabled-background, disabled-color),
-  tonal-color: utils.module-val(button, tonal-color, theme.variable(on-primary-container)),
+  tonal-color: utils.module-val(button, tonal-color, theme.variable(on-secondary-container)),
   tonal-disabled-color: utils.module-ref(button, tonal-disabled-color, disabled-text-color),
   // Filled
   filled-background: utils.module-ref(button, filled-background, primary-color),

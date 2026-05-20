@@ -22,7 +22,8 @@ $can-animate: '[visible]:not([animation-type=none])';
 
     @include theme.provide(
       (
-        surface: theme.variable(surface-bright)
+        surface: theme.variable(surface-bright),
+        surface-elevated-translucent: theme.variable(surface-bright)
       )
     );
   }

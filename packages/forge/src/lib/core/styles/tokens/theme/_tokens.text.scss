@@ -6,12 +6,19 @@ $tokens: (
   text-high: color-palette.$text-5,
   text-medium: color-palette.$text-4,
   text-low: color-palette.$text-3,
-  text-lowest: color-palette.$text-1,
+  text-lowest: color-palette.$text-2,
+  text-minimum: color-palette.$text-1,
+
+  text-success: color-palette.$green-a11,
+  text-informational: color-palette.$blue-a11,
+  text-warning: color-palette.$amber-a11,
+  text-critical: color-palette.$red-a11,
 
   text-high-inverse: color-palette-dark.$text-5,
   text-medium-inverse: color-palette-dark.$text-4,
   text-low-inverse: color-palette-dark.$text-3,
-  text-lowest-inverse: color-palette-dark.$text-1
+  text-lowest-inverse: color-palette-dark.$text-2,
+  text-minimum-inverse: color-palette-dark.$text-1
 );
 
 // Dark
@@ -19,10 +26,17 @@ $tokens-dark: (
   text-high: color-palette-dark.$text-5,
   text-medium: color-palette-dark.$text-4,
   text-low: color-palette-dark.$text-3,
-  text-lowest: color-palette-dark.$text-1,
+  text-lowest: color-palette-dark.$text-2,
+  text-minimum: color-palette-dark.$text-1,
+
+  text-success: color-palette.$green-a11,
+  text-informational: color-palette.$blue-a11,
+  text-warning: color-palette.$amber-a11,
+  text-critical: color-palette.$red-a11,
 
   text-high-inverse: color-palette.$text-5,
   text-medium-inverse: color-palette.$text-4,
   text-low-inverse: color-palette.$text-3,
-  text-lowest-inverse: color-palette.$text-1
+  text-lowest-inverse: color-palette.$text-2,
+  text-minimum-inverse: color-palette.$text-1
 );

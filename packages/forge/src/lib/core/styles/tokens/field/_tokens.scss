@@ -9,10 +9,10 @@
 @use '../../utils';
 
 $tokens: (
-  background: utils.module-val(field, background, transparent),
+  background: utils.module-val(field, background, theme.variable(control-bg)),
   tonal-background: utils.module-val(field, tonal-background, theme.variable(surface-container-low)),
   tonal-background-hover: utils.module-val(field, tonal-background-hover, theme.variable(surface-container-minimum)),
-  filled-background: utils.module-val(field, filled-background, theme.variable(surface-bright)),
+  filled-background: utils.module-val(field, filled-background, theme.variable(control-bg-filled)),
   outline-style: utils.module-val(field, outline-style, solid),
   outline-width: utils.module-val(field, outline-width, border.variable(thin)),
   shape: utils.module-val(field, shape, shape.variable(medium)),

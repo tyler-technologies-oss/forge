@@ -132,8 +132,8 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
     swatches: [
       { text: 'Outline (high)', border: 'outline-high' },
       { text: 'Outline (medium)', border: 'outline-medium' },
-      { text: 'Outline (low)', border: 'outline-low' },
-      { text: 'Outline', border: 'outline' }
+      { text: 'Outline', border: 'outline' },
+      { text: 'Outline (low)', border: 'outline-low' }
     ]
   }
 ];
