@@ -100,6 +100,31 @@ export function isObject(obj: any): boolean {
 }
 
 /**
+ * Safely checks if an object is an HTMLElement instance.
+ * Works in both browser environments and environments where HTMLElement might not be
+ * a proper constructor (e.g. Node-based testing environments).
+ * @param {any} obj - The object to check.
+ * @returns {boolean}
+ */
+export function isHTMLElement(obj: any): obj is HTMLElement {
+  if (typeof HTMLElement === 'function') {
+    try {
+      return obj instanceof HTMLElement;
+    } catch {
+      // instanceof can throw if rights-hand side is not available in the environment, fall through to duck-typing
+    }
+  }
+
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    typeof obj.nodeType === 'number' &&
+    typeof obj.nodeName === 'string' &&
+    (typeof obj.localName === 'string' || typeof obj.tagName === 'string')
+  );
+}
+
+/**
  * Coerces a string to a boolean.
  * @param {string} value The value to convert.
  * @returns {boolean}

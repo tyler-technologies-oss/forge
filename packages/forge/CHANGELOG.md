@@ -1,5 +1,13 @@
 # @tylertech/forge
 
+## 3.14.4
+
+### Patch Changes
+
+- 122e8b4: fix(globalconfig): add duck-type fallback for instanceof check
+- Updated dependencies [122e8b4]
+  - @tylertech/forge-core@3.3.1
+
 ## 3.14.3
 
 ### Patch Changes
