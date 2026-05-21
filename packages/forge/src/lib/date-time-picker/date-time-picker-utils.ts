@@ -107,13 +107,26 @@ function timeToReferenceDate(time: IParsedTime): Date {
   return new Date(SLOT_REFERENCE_YEAR, SLOT_REFERENCE_MONTH, SLOT_REFERENCE_DAY, time.hours, time.minutes, time.seconds);
 }
 
-/** Formats a canonical time string for display, honoring locale + 12/24h + seconds. */
-export function formatSlotLabel(value: string, locale: string | undefined, use24HourTime: boolean, allowSeconds: boolean): string {
+/**
+ * Formats a canonical time string for display, honoring locale + 12/24h + seconds.
+ * Pass a pre-built `formatter` to avoid the per-call `Intl.DateTimeFormat` allocation
+ * when rendering many slots.
+ */
+export function formatSlotLabel(
+  value: string,
+  locale: string | undefined,
+  use24HourTime: boolean,
+  allowSeconds: boolean,
+  formatter?: Intl.DateTimeFormat
+): string {
   const parsed = parseTimeString(value);
   if (!parsed) {
     return value;
   }
   const ref = timeToReferenceDate(parsed);
+  if (formatter) {
+    return formatter.format(ref);
+  }
   const options: Intl.DateTimeFormatOptions = {
     hour: '2-digit',
     minute: '2-digit',
