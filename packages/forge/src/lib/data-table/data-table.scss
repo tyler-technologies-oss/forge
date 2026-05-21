@@ -118,7 +118,9 @@ table {
     top: 30%;
     height: 40%;
     width: #{border.variable(medium)};
+    padding-inline: #{spacing.variable(xxsmall)};
     background-color: #{theme.variable(outline)};
+    background-clip: content-box;
     border-radius: #{shape.variable(medium)};
     cursor: col-resize;
     user-select: none;
@@ -141,6 +143,22 @@ table {
     &.resizing {
       background-color: #{theme.variable(primary)};
       opacity: 1;
+    }
+  }
+}
+
+:host(:state(bordered)) {
+  table .resizer {
+    top: 0;
+    height: 100%;
+    border-radius: 0;
+
+    &.ltr {
+      right: -6px;
+    }
+
+    &.rtl {
+      left: -6px;
     }
   }
 }
