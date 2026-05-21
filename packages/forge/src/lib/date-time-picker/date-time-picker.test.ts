@@ -1,0 +1,368 @@
+import { describe, it, expect } from 'vitest';
+import { render } from 'vitest-browser-lit';
+import { html } from 'lit';
+import './index.js';
+import { buildSlotsFromRange, coerceValue, formatSlotLabel, mergeDateAndTime, parseTimeString, timeFromDate } from './date-time-picker-utils.js';
+import type { IDateTimePickerComponent } from './date-time-picker.js';
+import type { IDateTimePickerChangeEventData, IDateTimePickerRange, ITimeSlot } from './date-time-picker-constants.js';
+
+function getEl(container: ParentNode): IDateTimePickerComponent {
+  return container.querySelector('forge-date-time-picker') as IDateTimePickerComponent;
+}
+
+async function ready(el: IDateTimePickerComponent): Promise<void> {
+  await el.updateComplete;
+  // One more tick so child custom elements upgrade.
+  await new Promise(resolve => setTimeout(resolve, 0));
+}
+
+function captureChanges(el: IDateTimePickerComponent): IDateTimePickerChangeEventData[] {
+  const events: IDateTimePickerChangeEventData[] = [];
+  el.addEventListener('forge-date-time-picker-change', e => events.push((e as CustomEvent<IDateTimePickerChangeEventData>).detail));
+  return events;
+}
+
+describe('DateTimePicker / utils', () => {
+  it('parseTimeString accepts 24h, 12h, and rejects garbage', () => {
+    expect(parseTimeString('09:00')).toEqual({ hours: 9, minutes: 0, seconds: 0 });
+    expect(parseTimeString('17:45:30')).toEqual({ hours: 17, minutes: 45, seconds: 30 });
+    expect(parseTimeString('12:00 AM')).toEqual({ hours: 0, minutes: 0, seconds: 0 });
+    expect(parseTimeString('12:00 PM')).toEqual({ hours: 12, minutes: 0, seconds: 0 });
+    expect(parseTimeString('1:30 PM')).toEqual({ hours: 13, minutes: 30, seconds: 0 });
+    expect(parseTimeString('not-a-time')).toBeNull();
+    expect(parseTimeString('25:00')).toBeNull();
+    expect(parseTimeString(null)).toBeNull();
+  });
+
+  it('buildSlotsFromRange generates inclusive 15-min steps from 09:00 to 10:00', () => {
+    const slots = buildSlotsFromRange('09:00', '10:00', 15, false);
+    expect(slots.map(s => s.value)).toEqual(['09:00', '09:15', '09:30', '09:45', '10:00']);
+  });
+
+  it('buildSlotsFromRange returns [] for an inverted range', () => {
+    expect(buildSlotsFromRange('10:00', '09:00', 15, false)).toEqual([]);
+  });
+
+  it('formatSlotLabel formats 24h and 12h labels', () => {
+    expect(formatSlotLabel('14:30', 'en-US', true, false)).toMatch(/14:30/);
+    expect(formatSlotLabel('14:30', 'en-US', false, false)).toMatch(/02:30\s*PM/i);
+  });
+
+  it('mergeDateAndTime returns a Date with merged H:M:S', () => {
+    const date = new Date(2025, 5, 12);
+    const merged = mergeDateAndTime(date, '10:30');
+    expect(merged?.getHours()).toBe(10);
+    expect(merged?.getMinutes()).toBe(30);
+  });
+
+  it('timeFromDate extracts canonical strings', () => {
+    expect(timeFromDate(new Date(2025, 0, 1, 7, 5), false)).toBe('07:05');
+    expect(timeFromDate(new Date(2025, 0, 1, 7, 5, 9), true)).toBe('07:05:09');
+  });
+
+  it('coerceValue accepts ISO strings in single mode', () => {
+    const result = coerceValue('2025-06-12T10:30:00', 'single', false);
+    expect(result).toBeInstanceOf(Date);
+    expect((result as Date).getFullYear()).toBe(2025);
+  });
+
+  it('coerceValue accepts {from,to} in range mode', () => {
+    const result = coerceValue({ from: new Date(2025, 5, 12, 10, 30), to: new Date(2025, 5, 12, 12, 30) } as IDateTimePickerRange, 'range', false);
+    expect(result).not.toBeNull();
+    expect((result as IDateTimePickerRange).to.getHours()).toBe(12);
+  });
+});
+
+describe('DateTimePicker / rendering', () => {
+  it('instantiates with shadow DOM', async () => {
+    const screen = render(html`<forge-date-time-picker></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    expect(el.shadowRoot).not.toBeNull();
+    expect(el.shadowRoot!.querySelector('forge-calendar')).not.toBeNull();
+  });
+
+  it('renders one forge-time-picker in single mode', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="single"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    expect(el.shadowRoot!.querySelectorAll('forge-time-picker').length).toBe(1);
+    expect(el.shadowRoot!.querySelector('[part~="slot-list"]')).toBeNull();
+  });
+
+  it('renders two forge-time-pickers and a separator in range mode', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="range"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    expect(el.shadowRoot!.querySelectorAll('forge-time-picker').length).toBe(2);
+    expect(el.shadowRoot!.querySelector('[part="separator"]')).not.toBeNull();
+  });
+
+  it('renders a listbox of slot buttons in slots mode', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="slots" min-time="09:00" max-time="10:00" step="15"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const listbox = el.shadowRoot!.querySelector('[role="listbox"]');
+    expect(listbox).not.toBeNull();
+    const options = listbox!.querySelectorAll('[role="option"]');
+    expect(options.length).toBe(5);
+  });
+
+  it('auto orientation resolves to horizontal for slots and vertical for range', async () => {
+    const screen = render(
+      html`<forge-date-time-picker time-mode="slots"></forge-date-time-picker> <forge-date-time-picker time-mode="range"></forge-date-time-picker>`
+    );
+    const slotEl = screen.container.querySelectorAll('forge-date-time-picker')[0] as IDateTimePickerComponent;
+    const rangeEl = screen.container.querySelectorAll('forge-date-time-picker')[1] as IDateTimePickerComponent;
+    await ready(slotEl);
+    await ready(rangeEl);
+    const slotBody = slotEl.shadowRoot!.querySelector('[part="body"]') as HTMLElement;
+    const rangeBody = rangeEl.shadowRoot!.querySelector('[part="body"]') as HTMLElement;
+    expect(slotBody.dataset.orientation).toBe('horizontal');
+    expect(rangeBody.dataset.orientation).toBe('vertical');
+  });
+
+  it('explicit orientation overrides auto', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="slots" orientation="vertical"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const body = el.shadowRoot!.querySelector('[part="body"]') as HTMLElement;
+    expect(body.dataset.orientation).toBe('vertical');
+  });
+
+  it('exposes a non-empty footer slot wrapper when footer content is provided', async () => {
+    const screen = render(
+      html`<forge-date-time-picker>
+        <div slot="footer">My footer</div>
+      </forge-date-time-picker>`
+    );
+    const el = getEl(screen.container);
+    await ready(el);
+    const footer = el.shadowRoot!.querySelector('[part="footer"]') as HTMLElement;
+    expect(footer.dataset.empty).toBe('false');
+  });
+});
+
+describe('DateTimePicker / selection + events', () => {
+  it('slots mode: clicking a slot fires complete=true when date is preset', async () => {
+    const initial = new Date(2025, 5, 12);
+    const screen = render(
+      html`<forge-date-time-picker time-mode="slots" min-time="09:00" max-time="10:00" step="15" .value=${initial as any}></forge-date-time-picker>`
+    );
+    const el = getEl(screen.container);
+    await ready(el);
+    const events = captureChanges(el);
+
+    const slot = el.shadowRoot!.querySelector('[role="option"][data-value="09:30"]') as HTMLButtonElement;
+    slot.click();
+    await ready(el);
+
+    expect(events.length).toBeGreaterThan(0);
+    const last = events[events.length - 1];
+    expect(last.source).toBe('slot');
+    expect(last.complete).toBe(true);
+    expect((last.value as Date).getHours()).toBe(9);
+    expect((last.value as Date).getMinutes()).toBe(30);
+  });
+
+  it('consumer-provided slots prop overrides generation', async () => {
+    const customSlots: ITimeSlot[] = [
+      { value: '11:00', label: 'Eleven' },
+      { value: '13:00', label: 'One PM', disabled: true }
+    ];
+    const screen = render(html`<forge-date-time-picker time-mode="slots"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    el.slots = customSlots;
+    await ready(el);
+    const buttons = el.shadowRoot!.querySelectorAll('[role="option"]');
+    expect(buttons.length).toBe(2);
+    expect(buttons[1].getAttribute('aria-disabled')).toBe('true');
+  });
+
+  it('disabled slot cannot be selected via click', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="slots"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    el.slots = [{ value: '09:00' }, { value: '09:30', disabled: true }];
+    el.value = new Date(2025, 5, 12);
+    await ready(el);
+    const events = captureChanges(el);
+    const disabledBtn = el.shadowRoot!.querySelector('[data-value="09:30"]') as HTMLButtonElement;
+    disabledBtn.click();
+    await ready(el);
+    const slotEvents = events.filter(e => e.source === 'slot');
+    expect(slotEvents.length).toBe(0);
+  });
+
+  it('switching time-mode clears the value and emits mode-change', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="single"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    el.value = new Date(2025, 5, 12, 10, 30);
+    await ready(el);
+    const events = captureChanges(el);
+
+    el.timeMode = 'range';
+    await ready(el);
+    await new Promise(r => queueMicrotask(r as any));
+
+    const modeChange = events.find(e => e.source === 'mode-change');
+    expect(modeChange).toBeDefined();
+    expect(modeChange?.value).toBeNull();
+    expect(el.value).toBeNull();
+  });
+});
+
+describe('DateTimePicker / slot list keyboard nav', () => {
+  it('ArrowDown moves focus to the next slot', async () => {
+    const screen = render(
+      html`<forge-date-time-picker
+        time-mode="slots"
+        min-time="09:00"
+        max-time="09:45"
+        step="15"
+        .value=${new Date(2025, 5, 12) as any}></forge-date-time-picker>`
+    );
+    const el = getEl(screen.container);
+    await ready(el);
+    const listbox = el.shadowRoot!.querySelector('[role="listbox"]') as HTMLElement;
+    const first = el.shadowRoot!.querySelector('[role="option"]') as HTMLButtonElement;
+    first.focus();
+    listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    await ready(el);
+    const buttons = Array.from(el.shadowRoot!.querySelectorAll('[role="option"]')) as HTMLButtonElement[];
+    expect(document.activeElement === el).toBe(true);
+    // Inside the shadow root, the focused descendant should be the second slot.
+    expect(el.shadowRoot!.activeElement).toBe(buttons[1]);
+  });
+
+  it('Enter selects the focused slot', async () => {
+    const screen = render(
+      html`<forge-date-time-picker
+        time-mode="slots"
+        min-time="09:00"
+        max-time="09:30"
+        step="15"
+        .value=${new Date(2025, 5, 12) as any}></forge-date-time-picker>`
+    );
+    const el = getEl(screen.container);
+    await ready(el);
+    const events = captureChanges(el);
+    const second = el.shadowRoot!.querySelectorAll('[role="option"]')[1] as HTMLButtonElement;
+    second.focus();
+    second.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await ready(el);
+    expect(events.some(e => e.source === 'slot')).toBe(true);
+  });
+});
+
+describe('DateTimePicker / form association', () => {
+  it('contributes ISO string to FormData in single mode', async () => {
+    const screen = render(
+      html`<form>
+        <forge-date-time-picker name="meeting"></forge-date-time-picker>
+      </form>`
+    );
+    const form = screen.container.querySelector('form') as HTMLFormElement;
+    const el = form.querySelector('forge-date-time-picker') as IDateTimePickerComponent;
+    el.value = new Date(2025, 5, 12, 10, 30);
+    await ready(el);
+    const fd = new FormData(form);
+    const value = fd.get('meeting');
+    expect(typeof value).toBe('string');
+    expect(value as string).toContain('2025');
+  });
+
+  it('contributes name.from and name.to in range mode', async () => {
+    const screen = render(
+      html`<form>
+        <forge-date-time-picker name="window" time-mode="range"></forge-date-time-picker>
+      </form>`
+    );
+    const form = screen.container.querySelector('form') as HTMLFormElement;
+    const el = form.querySelector('forge-date-time-picker') as IDateTimePickerComponent;
+    el.value = {
+      from: new Date(2025, 5, 12, 10, 30),
+      to: new Date(2025, 5, 12, 12, 30)
+    } as IDateTimePickerRange;
+    await ready(el);
+    const fd = new FormData(form);
+    expect(typeof fd.get('window.from')).toBe('string');
+    expect(typeof fd.get('window.to')).toBe('string');
+  });
+
+  it('required + empty fails validity; with value it passes', async () => {
+    const screen = render(
+      html`<form>
+        <forge-date-time-picker name="meeting" required></forge-date-time-picker>
+      </form>`
+    );
+    const el = screen.container.querySelector('forge-date-time-picker') as IDateTimePickerComponent;
+    await ready(el);
+    expect(el.checkValidity()).toBe(false);
+    expect(el.validity.valueMissing).toBe(true);
+
+    el.value = new Date(2025, 5, 12, 10, 30);
+    await ready(el);
+    expect(el.checkValidity()).toBe(true);
+  });
+
+  it('range with from > to is invalid (customError)', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="range" required></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    el.value = {
+      from: new Date(2025, 5, 12, 12, 30),
+      to: new Date(2025, 5, 12, 10, 30)
+    } as IDateTimePickerRange;
+    await ready(el);
+    expect(el.validity.customError).toBe(true);
+  });
+
+  it('formResetCallback clears value', async () => {
+    const screen = render(
+      html`<form>
+        <forge-date-time-picker name="meeting"></forge-date-time-picker>
+        <button type="reset">Reset</button>
+      </form>`
+    );
+    const form = screen.container.querySelector('form') as HTMLFormElement;
+    const el = form.querySelector('forge-date-time-picker') as IDateTimePickerComponent;
+    el.value = new Date(2025, 5, 12, 10, 30);
+    await ready(el);
+    form.reset();
+    await ready(el);
+    expect(el.value).toBeNull();
+  });
+});
+
+describe('DateTimePicker / accessibility', () => {
+  it('default render is accessible', async () => {
+    const screen = render(html`<forge-date-time-picker></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    await expect(el).toBeAccessible();
+  });
+
+  it('slots mode listbox renders with role and aria-orientation', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="slots" min-time="09:00" max-time="10:00" step="15"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const listbox = el.shadowRoot!.querySelector('[role="listbox"]') as HTMLElement;
+    expect(listbox.getAttribute('aria-orientation')).toBe('vertical');
+  });
+
+  it('live region exists and is offscreen', async () => {
+    const screen = render(html`<forge-date-time-picker></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const live = el.shadowRoot!.querySelector('[part="live-region"]') as HTMLElement;
+    expect(live.getAttribute('aria-live')).toBe('polite');
+    expect(live.getAttribute('role')).toBe('status');
+  });
+
+  it('disabled attribute is reflected', async () => {
+    const screen = render(html`<forge-date-time-picker disabled></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    expect(el.disabled).toBe(true);
+    expect(el.hasAttribute('disabled')).toBe(true);
+  });
+});
