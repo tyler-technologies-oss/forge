@@ -21,10 +21,16 @@
 table {
   @include core.forge-table;
 
-  .cell-container,
+  .cell-container {
+    display: flex;
+    align-items: center;
+  }
+
   .cell-content {
     display: flex;
     align-items: center;
+    flex: 1;
+    min-width: 0;
   }
 
   tfoot {
@@ -53,6 +59,13 @@ table {
     td {
       padding-top: 0;
       padding-bottom: 0;
+
+      .cell-content {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   }
 
@@ -60,6 +73,7 @@ table {
     position: relative;
 
     .cell-content {
+      display: block;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
