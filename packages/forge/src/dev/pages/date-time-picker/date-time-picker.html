@@ -1,0 +1,79 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Date time picker',
+    includePath: './pages/date-time-picker/date-time-picker.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Variant',
+        id: 'opt-variant',
+        defaultValue: 'static',
+        options: [
+          { label: 'Static (inline card)', value: 'static' },
+          { label: 'Inline (input + popover)', value: 'inline' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Time mode',
+        id: 'opt-time-mode',
+        defaultValue: 'slots',
+        options: [
+          { label: 'Slots (booking style)', value: 'slots' },
+          { label: 'Range (start - end)', value: 'range' },
+          { label: 'Single', value: 'single' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Orientation',
+        id: 'opt-orientation',
+        defaultValue: 'auto',
+        options: [
+          { label: 'Auto', value: 'auto' },
+          { label: 'Horizontal', value: 'horizontal' },
+          { label: 'Vertical', value: 'vertical' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Locale',
+        id: 'opt-locale',
+        defaultValue: 'en-US',
+        options: [
+          { label: 'English (US)', value: 'en-US' },
+          { label: 'English (UK)', value: 'en-GB' },
+          { label: 'French', value: 'fr-FR' },
+          { label: 'German', value: 'de-DE' },
+          { label: 'Spanish', value: 'es-ES' },
+          { label: 'Japanese', value: 'ja-JP' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Step (minutes)',
+        id: 'opt-step',
+        defaultValue: '15',
+        options: [
+          { label: '5', value: '5' },
+          { label: '10', value: '10' },
+          { label: '15', value: '15' },
+          { label: '30', value: '30' },
+          { label: '60', value: '60' }
+        ]
+      },
+      { type: 'switch', label: '24-hour time', id: 'opt-24h' },
+      { type: 'switch', label: 'Allow seconds', id: 'opt-seconds' },
+      { type: 'switch', label: 'Summary panel', id: 'opt-summary' },
+      { type: 'switch', label: 'Show header slot', id: 'opt-header' },
+      { type: 'switch', label: 'Show footer slot', id: 'opt-footer' },
+      { type: 'switch', label: 'Show time label', id: 'opt-time-label' },
+      { type: 'switch', label: 'Required', id: 'opt-required' },
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
+      { type: 'switch', label: 'Clear button', id: 'opt-clear-button' },
+      { type: 'switch', label: 'Today button', id: 'opt-today-button' }
+    ]
+  }
+})
+%>
