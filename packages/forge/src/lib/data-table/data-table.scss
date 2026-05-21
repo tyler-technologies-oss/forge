@@ -115,13 +115,15 @@ table {
 
   .resizer {
     position: absolute;
-    top: 0;
-    height: 100%;
-    width: #{shape.variable(medium)};
-    background-color: #{theme.variable(surface-container)};
+    top: 30%;
+    height: 40%;
+    width: #{border.variable(medium)};
+    background-color: #{theme.variable(outline)};
+    border-radius: #{shape.variable(medium)};
     cursor: col-resize;
     user-select: none;
     touch-action: none;
+    transition: background-color #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
 
     &.ltr {
       right: 0;
@@ -131,19 +133,13 @@ table {
       left: 0;
     }
 
+    &:hover {
+      background-color: #{theme.variable(primary)};
+      opacity: 0.6;
+    }
+
     &.resizing {
-      background: #{theme.variable(primary)};
-      opacity: 1;
-    }
-  }
-
-  @media (hover: hover) {
-    .resizer {
-      opacity: 0;
-      transition: opacity #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
-    }
-
-    *:hover > .resizer {
+      background-color: #{theme.variable(primary)};
       opacity: 1;
     }
   }
