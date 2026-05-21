@@ -130,16 +130,24 @@ describe('DateTimePicker / rendering', () => {
     expect(body.dataset.orientation).toBe('vertical');
   });
 
-  it('exposes a non-empty footer slot wrapper when footer content is provided', async () => {
+  it('exposes the footer wrapper when show-footer is set and content fills a sub-slot', async () => {
     const screen = render(
-      html`<forge-date-time-picker>
-        <div slot="footer">My footer</div>
+      html`<forge-date-time-picker show-footer>
+        <div slot="footer-end">My footer end</div>
       </forge-date-time-picker>`
     );
     const el = getEl(screen.container);
     await ready(el);
     const footer = el.shadowRoot!.querySelector('[part="footer"]') as HTMLElement;
+    expect(footer).not.toBeNull();
     expect(footer.dataset.empty).toBe('false');
+  });
+
+  it('omits the footer wrapper entirely when show-footer is not set', async () => {
+    const screen = render(html`<forge-date-time-picker></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    expect(el.shadowRoot!.querySelector('[part="footer"]')).toBeNull();
   });
 });
 
