@@ -22,7 +22,8 @@ const observedAttributes = {
   FIRST_DAY_OF_WEEK: 'first-day-of-week',
   CLEAR_BUTTON: 'clear-button',
   TODAY_BUTTON: 'today-button',
-  SHOW_HEADER: 'show-header'
+  SHOW_HEADER: 'show-header',
+  SUMMARY: 'summary'
 } as const;
 
 const attributes = {
@@ -31,7 +32,9 @@ const attributes = {
 
 const slots = {
   HEADER: 'header',
-  FOOTER: 'footer',
+  FOOTER_START: 'footer-start',
+  FOOTER_CENTER: 'footer-center',
+  FOOTER_END: 'footer-end',
   TIME_LABEL: 'time-label',
   PREVIOUS_MONTH_BUTTON_TEXT: 'previous-month-button-text',
   NEXT_MONTH_BUTTON_TEXT: 'next-month-button-text',
@@ -41,6 +44,7 @@ const slots = {
 
 const parts = {
   ROOT: 'root',
+  SUMMARY: 'summary',
   HEADER: 'header',
   BODY: 'body',
   CALENDAR_SECTION: 'calendar-section',
@@ -51,8 +55,10 @@ const parts = {
   TIME_INPUT: 'time-input',
   SLOT_LIST: 'slot-list',
   SLOT: 'slot',
-  SEPARATOR: 'separator',
   FOOTER: 'footer',
+  FOOTER_START: 'footer-start',
+  FOOTER_CENTER: 'footer-center',
+  FOOTER_END: 'footer-end',
   LIVE_REGION: 'live-region'
 } as const;
 
