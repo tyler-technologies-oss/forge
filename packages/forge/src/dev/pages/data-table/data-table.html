@@ -4,8 +4,9 @@ include('./src/partials/page.ejs', {
     title: 'Data table',
     includePath: './pages/data-table/data-table.ejs',
     options: [
+      { type: 'switch', label: 'Grouped columns', id: 'grouped-columns' },
       { type: 'switch', label: 'Resizable', id: 'resizable' },
-      { type: 'switch', label: 'Reorderable', id: 'reorderable' },
+      { type: 'switch', label: 'Reorderable', id: 'reorderable', defaultValue: true },
       { type: 'switch', label: 'Striped', id: 'striped' },
       { type: 'switch', label: 'Hover', id: 'hover' },
       { type: 'switch', label: 'Compact', id: 'compact' },
@@ -28,6 +29,7 @@ include('./src/partials/page.ejs', {
       { type: 'switch', label: 'Manual sort', id: 'manual-sort' },
       { type: 'switch', label: 'Filterable', id: 'filterable' },
       { type: 'switch', label: 'Manual filter', id: 'manual-filter' },
+      { type: 'switch', label: 'Show footer', id: 'show-footer' },
       { type: 'select', label: 'Hidden columns', id: 'hidden-columns', multiple: true, options: [] }
     ]
   }

@@ -5,11 +5,17 @@
 @use '../core/styles/border';
 @use '../core/styles/animation';
 @use '../core/styles/scrollbar';
+@use '../core/styles/elevation';
 
 :host {
   > * {
     @include scrollbar.base;
   }
+}
+
+.table-container {
+  position: relative;
+  overflow-x: auto;
 }
 
 table {
@@ -53,30 +59,33 @@ table {
   th {
     position: relative;
 
-    [draggable='true'] {
-      cursor: grab;
+    .cell-content {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    &.drag-over {
-      outline: 1px dashed #{theme.variable(primary)};
+    .cell-container[draggable='true'] {
+      &:active {
+        cursor: grabbing;
+      }
     }
 
-    .reorder-handle,
+    &.column-dragging {
+      opacity: #{theme.emphasis(medium)};
+      transition: opacity #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
+
+      .cell-container[draggable='true'] {
+        cursor: grabbing;
+      }
+    }
+
     .sort-icon {
       height: 1rem;
       width: 1rem;
       fill: #{theme.variable(on-surface)};
-    }
-
-    .sort-icon {
       margin-inline-start: #{shape.variable(small)};
       transition: transform #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
-    }
-
-    .reorder-handle {
-      height: 1.5rem;
-      width: 1.5rem;
-      margin-inline-end: #{spacing.variable(xsmall)};
     }
 
     &.sort-asc .sort-icon {
@@ -124,6 +133,15 @@ table {
       opacity: 1;
     }
   }
+}
+
+.forge-data-table-drop-indicator {
+  width: 3px;
+  background-color: #{theme.variable(primary)};
+  box-shadow: #{elevation.value(4)};
+  transition:
+    left #{animation.variable(duration-short4)} #{animation.variable(easing-standard)},
+    top #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
 }
 
 //

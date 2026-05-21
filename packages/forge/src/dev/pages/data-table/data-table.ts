@@ -6,33 +6,158 @@ import '@tylertech/forge/data-table/data-table.js';
 
 interface RowData {
   id: number;
-  name: string;
-  age: number;
-  birthday: Date;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  department: string;
+  position: string;
+  salary: number;
+  city: string;
+  state: string;
 }
 
-const dataTable = document.querySelector('forge-data-table') as DataTableElement<RowData>;
-dataTable.columns = [
+const flatColumns: ColumnDef<RowData>[] = [
   { header: 'Id', property: 'id', filterType: 'number' },
-  { header: 'Name', property: 'name' },
+  { header: 'First Name', property: 'firstName' },
+  { header: 'Last Name', property: 'lastName' },
+  { header: 'Email', property: 'email' },
+  { header: 'Phone', property: 'phone' },
+  { header: 'Department', property: 'department' },
+  { header: 'Position', property: 'position' },
+  { header: 'Salary', property: 'salary', filterType: 'number', transform: row => `$${row.salary.toLocaleString()}` },
+  { header: 'City', property: 'city' },
+  { header: 'State', property: 'state' }
+];
+
+const groupedColumns: ColumnDef<RowData>[] = [
+  { header: 'Id', property: 'id', filterType: 'number' },
   {
-    header: 'Age',
-    property: 'age',
-    filterType: 'range',
-    footer: ({ data }) => `Total age: ${data.reduce((acc, row) => acc + row.age, 0)}`
+    header: 'Personal Info',
+    columns: [
+      { header: 'First Name', property: 'firstName' },
+      { header: 'Last Name', property: 'lastName' },
+      { header: 'Email', property: 'email' },
+      { header: 'Phone', property: 'phone' }
+    ]
   },
   {
-    header: 'Birthday',
-    property: 'birthday',
-    transform: row => row.birthday.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    header: 'Employment',
+    columns: [
+      { header: 'Department', property: 'department' },
+      { header: 'Position', property: 'position' },
+      { header: 'Salary', property: 'salary', filterType: 'number', transform: row => `$${row.salary.toLocaleString()}` }
+    ]
+  },
+  {
+    header: 'Location',
+    columns: [
+      { header: 'City', property: 'city' },
+      { header: 'State', property: 'state' }
+    ]
   }
 ];
+
+const dataTable = document.querySelector('forge-data-table') as DataTableElement<RowData>;
+dataTable.columns = flatColumns;
+dataTable.reorderable = true;
 dataTable.data = [
-  { id: 1, name: 'Alice', age: 25, birthday: new Date(1996, 1, 14) },
-  { id: 2, name: 'Bob', age: 30, birthday: new Date(1991, 5, 7) },
-  { id: 3, name: 'Charlie', age: 35, birthday: new Date(1986, 2, 1) },
-  { id: 4, name: 'David', age: 40, birthday: new Date(1981, 9, 4) },
-  { id: 5, name: 'Eve', age: 45, birthday: new Date(1976, 11, 17) }
+  {
+    id: 1,
+    firstName: 'Alice',
+    lastName: 'Smith',
+    email: 'alice.smith@company.com',
+    phone: '(555) 123-4567',
+    department: 'Engineering',
+    position: 'Senior Developer',
+    salary: 125000,
+    city: 'San Francisco',
+    state: 'CA'
+  },
+  {
+    id: 2,
+    firstName: 'Bob',
+    lastName: 'Johnson',
+    email: 'bob.johnson@company.com',
+    phone: '(555) 234-5678',
+    department: 'Marketing',
+    position: 'Marketing Manager',
+    salary: 95000,
+    city: 'New York',
+    state: 'NY'
+  },
+  {
+    id: 3,
+    firstName: 'Charlie',
+    lastName: 'Brown',
+    email: 'charlie.brown@company.com',
+    phone: '(555) 345-6789',
+    department: 'Engineering',
+    position: 'Tech Lead',
+    salary: 145000,
+    city: 'Austin',
+    state: 'TX'
+  },
+  {
+    id: 4,
+    firstName: 'David',
+    lastName: 'Williams',
+    email: 'david.williams@company.com',
+    phone: '(555) 456-7890',
+    department: 'Sales',
+    position: 'Sales Representative',
+    salary: 85000,
+    city: 'Chicago',
+    state: 'IL'
+  },
+  {
+    id: 5,
+    firstName: 'Eve',
+    lastName: 'Davis',
+    email: 'eve.davis@company.com',
+    phone: '(555) 567-8901',
+    department: 'Engineering',
+    position: 'Junior Developer',
+    salary: 75000,
+    city: 'Seattle',
+    state: 'WA'
+  },
+  {
+    id: 6,
+    firstName: 'Frank',
+    lastName: 'Miller',
+    email: 'frank.miller@company.com',
+    phone: '(555) 678-9012',
+    department: 'HR',
+    position: 'HR Manager',
+    salary: 90000,
+    city: 'Boston',
+    state: 'MA'
+  },
+  {
+    id: 7,
+    firstName: 'Grace',
+    lastName: 'Wilson',
+    email: 'grace.wilson@company.com',
+    phone: '(555) 789-0123',
+    department: 'Engineering',
+    position: 'Senior Developer',
+    salary: 130000,
+    city: 'Denver',
+    state: 'CO'
+  },
+  {
+    id: 8,
+    firstName: 'Henry',
+    lastName: 'Moore',
+    email: 'henry.moore@company.com',
+    phone: '(555) 890-1234',
+    department: 'Finance',
+    position: 'Financial Analyst',
+    salary: 80000,
+    city: 'Atlanta',
+    state: 'GA'
+  }
 ];
 
 dataTable.addEventListener('forge-data-table-sort', console.log);
@@ -40,6 +165,11 @@ dataTable.addEventListener('forge-data-table-filter', console.log);
 dataTable.addEventListener('forge-data-table-column-order', console.log);
 dataTable.addEventListener('forge-data-table-row-click', console.log);
 dataTable.addEventListener('forge-data-table-column-visibility', console.log);
+
+const groupedColumnsCheckbox = document.getElementById('grouped-columns') as HTMLInputElement;
+groupedColumnsCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  dataTable.columns = selected ? groupedColumns : flatColumns;
+});
 
 const resizableCheckbox = document.getElementById('resizable') as HTMLInputElement;
 resizableCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.resizable = selected));
@@ -64,21 +194,40 @@ allowRowClickCheckbox.addEventListener('forge-switch-change', ({ detail: selecte
 
 const customCellTemplateCheckbox = document.getElementById('custom-cell-template') as HTMLInputElement;
 customCellTemplateCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  const birthdayColumn = dataTable.columns.find(column => column.property === 'birthday') as ColumnDef;
+  const findColumn = (columns: ColumnDef<RowData>[]): ColumnDef<RowData> | undefined => {
+    for (const column of columns) {
+      if (column.property === 'email') {
+        return column;
+      }
+      if (column.columns) {
+        const found = findColumn(column.columns as ColumnDef<RowData>[]);
+        if (found) {
+          return found;
+        }
+      }
+    }
+    return undefined;
+  };
+
+  const emailColumn = findColumn(dataTable.columns);
+  if (!emailColumn) {
+    return;
+  }
+
   if (selected) {
-    birthdayColumn.template = ({ cell }) => {
+    emailColumn.template = ({ cell }) => {
       const div = document.createElement('div');
       div.setAttribute('part', 'cell');
       div.textContent = `Custom: ${cell.getValue()}`;
       div.style.color = 'red';
       return div;
     };
-    birthdayColumn.useTemplateSlot = true;
-    birthdayColumn.stopRowClickPropagation = true;
+    emailColumn.useTemplateSlot = true;
+    emailColumn.stopRowClickPropagation = true;
   } else {
-    delete birthdayColumn.template;
-    delete birthdayColumn.useTemplateSlot;
-    delete birthdayColumn.stopRowClickPropagation;
+    delete emailColumn.template;
+    delete emailColumn.useTemplateSlot;
+    delete emailColumn.stopRowClickPropagation;
   }
   dataTable.columns = [...dataTable.columns];
 });
@@ -100,6 +249,36 @@ filterableCheckbox.addEventListener('forge-switch-change', ({ detail: selected }
 
 const manualFilterCheckbox = document.getElementById('manual-filter') as HTMLInputElement;
 manualFilterCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.manualFilter = selected));
+
+const showFooterCheckbox = document.getElementById('show-footer') as HTMLInputElement;
+showFooterCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  const updateColumnFooters = (columns: ColumnDef<RowData>[]): void => {
+    columns.forEach(column => {
+      if (column.columns) {
+        updateColumnFooters(column.columns);
+      } else if (column.property === 'id') {
+        if (selected) {
+          column.footer = ({ data }) => `Count: ${data.length}`;
+        } else {
+          delete column.footer;
+        }
+      } else if (column.property === 'salary') {
+        if (selected) {
+          column.footer = ({ data }) => {
+            const total = data.reduce((acc, row) => acc + row.salary, 0);
+            const avg = total / data.length;
+            return `Avg: $${Math.round(avg).toLocaleString()} | Total: $${total.toLocaleString()}`;
+          };
+        } else {
+          delete column.footer;
+        }
+      }
+    });
+  };
+
+  updateColumnFooters(dataTable.columns);
+  dataTable.columns = [...dataTable.columns];
+});
 
 const hiddenColumnsSelect = document.getElementById('hidden-columns') as HTMLSelectElement;
 hiddenColumnsSelect.innerHTML = dataTable.columns

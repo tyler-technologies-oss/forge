@@ -66,6 +66,7 @@ interface ColumnDefMeta {
   filterVariant?: FilterType;
   cellSlot?: boolean;
   stopRowClickPropagation?: boolean;
+  reorderable?: boolean;
 }
 
 export type Row = unknown | object | unknown[];
@@ -82,12 +83,14 @@ export interface ColumnDef<TData extends Row = unknown> {
   hidden?: boolean;
   hideable?: boolean;
   resizable?: boolean;
+  reorderable?: boolean;
   width?: number;
   transform?: (row: TData, index: number) => unknown;
   template?: string | (<TValue>(props: { row: Row; column: Column<TData>; cell: Cell<TData, TValue> }) => string | HTMLElement);
   useTemplateSlot?: boolean;
   filterType?: FilterType;
   stopRowClickPropagation?: boolean;
+  columns?: ColumnDef<TData>[];
 }
 
 const SELECT_COLUMN_ID = 'SELECT_COLUMN_ID';
@@ -235,6 +238,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
   @state() private _virtualizerController: VirtualizerController<HTMLElement, HTMLElement> | null = null;
   @state() private _columnMenuAnchorId: string | null = null;
   @state() private _columnMenuOpen = false;
+  private _isDragging = false;
 
   constructor() {
     super();
@@ -280,9 +284,9 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
 
       // Check to see if any columns are using slotted cell rendering and remove any light DOM content
       // that was previously rendered for those columns if a column is no longer using slotted cells.
-      this.columns.forEach((column, index) => {
+      this._getAllLeafColumns(this.columns, []).forEach(({ column, indexPath }) => {
         if (!column.useTemplateSlot) {
-          const columnId = this._resolveColumnId(column, index);
+          const columnId = this._resolveColumnId(column, indexPath);
           this.querySelectorAll(`[slot^="col-${columnId}:"]`).forEach(el => el.remove());
         }
       });
@@ -312,8 +316,8 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
       this._tableController = new TableController<TData>(this);
     }
 
-    // We need to update the column order when the reorderable or rowSelection properties change
-    if (changedProperties.has('reorderable') || changedProperties.has('rowSelection')) {
+    // We need to update the column order when the reorderable, rowSelection, or columns properties change
+    if (changedProperties.has('reorderable') || changedProperties.has('rowSelection') || changedProperties.has('columns')) {
       this._setReorderable();
     }
 
@@ -389,8 +393,10 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
       headerGroup => html`
         <tr part="head-tr tr">
           ${headerGroup.headers.map(header => {
-            const canReorder =
-              this.reorderable && header.column.columnDef.id !== SELECT_COLUMN_ID && !header.column.columns.length && !!header.column.columnDef.header?.length;
+            const hasHeader = !!header.column.columnDef.header?.length;
+            const isParent = (header.column.columns?.length ?? 0) > 0;
+            const canAcceptDrop = this.reorderable && header.column.columnDef.id !== SELECT_COLUMN_ID && ((isParent && !header.isPlaceholder) || hasHeader);
+            const canBeDragged = canAcceptDrop && hasHeader && !header.isPlaceholder && this._canColumnBeReordered(header.column);
             const headerId = this._getColumnHeaderId(header.column.id);
             const canShowColumnMenu =
               header.column.columnDef.id !== SELECT_COLUMN_ID && header.column.getCanHide() && !header.isPlaceholder && !header.column.columns.length;
@@ -403,36 +409,30 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
                 class=${classMap({
                   'sort-asc': header.column.getIsSorted() === 'asc',
                   'sort-desc': header.column.getIsSorted() === 'desc',
-                  'select-column': this.rowSelection && header.column.columnDef.id === SELECT_COLUMN_ID,
-                  'drag-over':
-                    canReorder &&
-                    this._columnReorderController?.targetColumn === header.column.id &&
-                    this._columnReorderController?.movingColumn !== this._columnReorderController?.targetColumn
+                  'select-column': this.rowSelection && header.column.columnDef.id === SELECT_COLUMN_ID
                 })}
                 data-column-id=${header.column.id}
-                @dragover=${canReorder ? (evt: DragEvent) => this._columnReorderController?.onDragOver(evt, header.column) : nothing}
-                @drop=${canReorder ? (evt: DragEvent) => this._columnReorderController?.onDrop(evt, header.column) : nothing}
+                @dragover=${canAcceptDrop ? (evt: DragEvent) => this._columnReorderController?.onDragOver(evt, header.column) : nothing}
+                @drop=${canAcceptDrop ? (evt: DragEvent) => this._columnReorderController?.onDrop(evt, header.column) : nothing}
                 @contextmenu=${canShowColumnMenu ? (evt: MouseEvent) => this._onHeaderContextMenu(evt, header.column) : nothing}>
-                <div class="cell-container" part="head-cell-container">
-                  ${canReorder
-                    ? html`<div
-                        draggable=${canReorder ? 'true' : (nothing as any)}
-                        @dragstart=${canReorder ? (evt: DragEvent) => this._columnReorderController?.onDragStart(evt, header.column) : nothing}
-                        @dragend=${canReorder ? (evt: DragEvent) => this._columnReorderController?.onDragEnd(evt) : nothing}
-                        class="reorder-handle">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                          <path fill="none" d="M0 0h24v24H0z" />
-                          <path d="M20 9H4v2h16V9zM4 15h16v-2H4v2z" />
-                        </svg>
-                      </div>`
-                    : nothing}
+                <div
+                  class="cell-container"
+                  part="head-cell-container"
+                  draggable=${canBeDragged ? 'true' : 'false'}
+                  @dragstart=${canBeDragged ? (evt: DragEvent) => this._onHeaderDragStart(evt, header.column) : nothing}
+                  @dragend=${canBeDragged ? (evt: DragEvent) => this._onHeaderDragEnd(evt) : nothing}
+                  style=${styleMap({
+                    cursor: this.sortable && header.column.getCanSort() ? 'default' : canBeDragged ? 'grab' : 'default',
+                    userSelect: canBeDragged ? 'none' : null
+                  })}>
                   <div
                     part="head-cell-content cell-content"
                     class="cell-content"
-                    style=${styleMap({
-                      cursor: this.sortable ? (header.column.getCanSort() ? 'pointer' : 'default') : null
-                    })}
-                    @click=${this.sortable ? header.column.getToggleSortingHandler() : null}>
+                    @click=${this.sortable && !canBeDragged
+                      ? header.column.getToggleSortingHandler()
+                      : canBeDragged
+                        ? (evt: MouseEvent) => this._onHeaderClick(evt, header.column)
+                        : null}>
                     ${header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     ${this.sortable && header.column.getIsSorted()
                       ? svg`<svg class="sort-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>`
@@ -440,7 +440,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
                   </div>
                 </div>
                 ${this.filterable && header.column.getCanFilter() ? html`<div class="filter-container">${this._getFilterField(header.column)}</div>` : nothing}
-                ${this.resizable && header.column.getCanResize()
+                ${this.resizable && header.column.getCanResize() && !header.isPlaceholder
                   ? html`<div
                 @doubleclick=${() => header.column.resetSize()}
                 @mousedown=${header.getResizeHandler()}
@@ -571,37 +571,109 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
   }
 
   private _mapColumnState(): void {
-    this._columns = this.columns.map((column, index) => {
-      const columnId = this._resolveColumnId(column, index);
-      const mappedColumn: TanstackColumnDef<TData> = {
+    this._columns = this._mapColumnsRecursive(this.columns, []);
+  }
+
+  #hasChildColumns(column: ColumnDef<TData>): boolean {
+    return Array.isArray(column.columns) && column.columns.length > 0;
+  }
+
+  private _mapColumnsRecursive(columns: ColumnDef<TData>[], parentIndices: number[]): TanstackColumnDef<TData>[] {
+    return columns.map((column, index) => {
+      const indexPath = [...parentIndices, index];
+      const columnId = this._resolveColumnId(column, indexPath);
+      const isParent = this.#hasChildColumns(column);
+
+      const baseColumn = {
         id: columnId,
         header: column.header,
         footer:
           typeof column.footer === 'function'
-            ? context => {
+            ? (context: { column: Column<TData>; table: Table<TData> }) => {
                 const propertyId = (column.property ?? context.column.id) as string;
                 const filteredData = context.table.getFilteredRowModel().rows.map(r => r.original);
                 return (column.footer as FooterCallback<TData>)({ property: propertyId, data: filteredData });
               }
             : column.footer,
-        accessorKey: column.property,
-        accessorFn: column.transform,
         enableHiding: column.hideable ?? true,
-        enableResizing: column.resizable ?? true,
         size: column.width ?? DEFAULT_COLUMN_WIDTH,
         meta: {
           cellSlot: column.useTemplateSlot,
           filterVariant: column.filterType,
-          stopRowClickPropagation: column.stopRowClickPropagation
+          stopRowClickPropagation: column.stopRowClickPropagation,
+          reorderable: column.reorderable
         }
       };
 
-      if (typeof column.template === 'function') {
-        mappedColumn.cell = column.template;
-      }
+      if (isParent && column.columns) {
+        const hasHeader = typeof column.header === 'string' && column.header.length > 0;
+        return {
+          ...baseColumn,
+          columns: this._mapColumnsRecursive(column.columns, indexPath),
+          enableResizing: hasHeader ? (column.resizable ?? true) : false,
+          enableSorting: false,
+          enableColumnFilter: false
+        } as TanstackColumnDef<TData>;
+      } else {
+        const leafColumn = {
+          ...baseColumn,
+          accessorKey: column.property,
+          accessorFn: column.transform,
+          enableResizing: column.resizable ?? true,
+          ...(typeof column.template === 'function' && { cell: column.template })
+        };
 
-      return mappedColumn;
+        return leafColumn as TanstackColumnDef<TData>;
+      }
     });
+  }
+
+  private _getAllLeafColumns(columns: ColumnDef<TData>[], parentIndices: number[]): Array<{ column: ColumnDef<TData>; indexPath: number[] }> {
+    return columns.flatMap((column, index) => {
+      const indexPath = [...parentIndices, index];
+      if (this.#hasChildColumns(column) && column.columns) {
+        return this._getAllLeafColumns(column.columns, indexPath);
+      }
+      return [{ column, indexPath }];
+    });
+  }
+
+  private _getAllColumnIds(columns: ColumnDef<TData>[], parentIndices: number[]): string[] {
+    return columns.flatMap((column, index) => {
+      const indexPath = [...parentIndices, index];
+      const columnId = this._resolveColumnId(column, indexPath);
+      const isParent = this.#hasChildColumns(column);
+
+      if (isParent && column.columns) {
+        const hasHeader = typeof column.header === 'string' && column.header.length > 0;
+        if (hasHeader) {
+          return [columnId, ...this._getAllColumnIds(column.columns, indexPath)];
+        } else {
+          return this._getAllColumnIds(column.columns, indexPath);
+        }
+      }
+      return [columnId];
+    });
+  }
+
+  private _onHeaderDragStart(evt: DragEvent, column: Column<TData>): void {
+    this._isDragging = true;
+    this._columnReorderController?.onDragStart(evt, column);
+  }
+
+  private _onHeaderDragEnd(evt: DragEvent): void {
+    this._isDragging = false;
+    this._columnReorderController?.onDragEnd(evt);
+  }
+
+  private _onHeaderClick(evt: MouseEvent, column: Column<TData>): void {
+    if (this._isDragging) {
+      this._isDragging = false;
+      return;
+    }
+    if (this.sortable && column.getCanSort()) {
+      column.getToggleSortingHandler()?.(evt);
+    }
   }
 
   private async _onHeaderContextMenu(evt: MouseEvent, column: Column<TData, unknown>): Promise<void> {
@@ -731,15 +803,13 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     if (this.reorderable) {
       this._columnReorderController = new ColumnReorderController(this, {
         selectColumnId: SELECT_COLUMN_ID,
-        onColumnOrderChange: updaterOrValue => this.onColumnOrderChange(updaterOrValue)
+        onColumnOrderChange: updaterOrValue => this.onColumnOrderChange(updaterOrValue),
+        resolveColumnId: (column, indexPath) => this._resolveColumnId(column, indexPath)
       });
       this.addController(this._columnReorderController);
 
-      const columns = this.columns.map((column, index) => this._resolveColumnId(column, index));
-
-      if (!this.columnOrder.length) {
-        this.columnOrder = columns;
-      }
+      const columns = this._getAllColumnIds(this.columns, []);
+      this.columnOrder = columns;
 
       if (this.rowSelection !== 'off') {
         const orderToUpdate = [...this.columnOrder];
@@ -1018,7 +1088,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     this._columnVisibilityController.toggleColumnVisibility(columnId);
   }
 
-  private _resolveColumnId(column: ColumnDef<TData>, index: number): string {
+  private _resolveColumnId(column: ColumnDef<TData>, indexPath: number | number[]): string {
     if (column.id) {
       return column.id;
     }
@@ -1031,6 +1101,14 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
       return column.header.toLowerCase().replace(/\s+/g, '-');
     }
 
-    return `column-${index}`;
+    const pathStr = Array.isArray(indexPath) ? indexPath.join('-') : indexPath;
+    return `column-${pathStr}`;
+  }
+
+  private _canColumnBeReordered(column: Column<TData>): boolean {
+    if (column.columnDef.id === SELECT_COLUMN_ID) {
+      return false;
+    }
+    return column.columnDef.meta?.reorderable ?? true;
   }
 }

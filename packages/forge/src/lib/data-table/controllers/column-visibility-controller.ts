@@ -1,19 +1,23 @@
 import type { VisibilityState } from '@tanstack/lit-table';
 import type { ReactiveController } from 'lit';
 import type { ColumnDef, DataTableElement } from '../data-table.js';
+import { ColumnHierarchyHelper } from './column-hierarchy-helper.js';
 
 export interface ColumnVisibilityControllerOptions<TData> {
   selectColumnId: string;
-  resolveColumnId(column: ColumnDef<TData>, index: number): string;
+  resolveColumnId(column: ColumnDef<TData>, indexPath: number | number[]): string;
   onVisibilityChange(nextState: VisibilityState): void;
 }
 
 export class ColumnVisibilityController<TData> implements ReactiveController {
+  private _hierarchyHelper: ColumnHierarchyHelper<TData>;
+
   constructor(
     private _host: DataTableElement<TData>,
     private _options: ColumnVisibilityControllerOptions<TData>
   ) {
     this._host.addController(this);
+    this._hierarchyHelper = new ColumnHierarchyHelper(() => this._host.columns, this._options.resolveColumnId);
   }
 
   public hostConnected(): void {}
@@ -33,6 +37,13 @@ export class ColumnVisibilityController<TData> implements ReactiveController {
       ...this._host.columnVisibility,
       [columnId]: false
     };
+
+    const column = this._hierarchyHelper.findColumn(columnId);
+    if (column && this._hierarchyHelper.hasChildren(column) && column.columns) {
+      this._hierarchyHelper.collectAllDescendantIds(column.columns, [], childId => {
+        nextState[childId] = false;
+      });
+    }
 
     this.setVisibilityState(nextState);
   }
@@ -78,20 +89,9 @@ export class ColumnVisibilityController<TData> implements ReactiveController {
     const validIds = new Set<string>();
     let hasChanges = false;
 
-    this._host.columns.forEach((column, index) => {
-      const columnId = this._options.resolveColumnId(column, index);
-      validIds.add(columnId);
-
-      if (column.hideable === false) {
-        if (visibility[columnId] !== true) {
-          visibility[columnId] = true;
-          hasChanges = true;
-        }
-        return;
-      }
-
-      if (column.hidden === true && visibility[columnId] !== false) {
-        visibility[columnId] = false;
+    this._collectColumnIds(this._host.columns, [], validIds, visibility, (id, shouldShow) => {
+      if (visibility[id] !== shouldShow) {
+        visibility[id] = shouldShow;
         hasChanges = true;
       }
     });
@@ -104,6 +104,30 @@ export class ColumnVisibilityController<TData> implements ReactiveController {
     });
 
     return hasChanges ? visibility : null;
+  }
+
+  private _collectColumnIds(
+    columns: ColumnDef<TData>[],
+    parentIndices: number[],
+    validIds: Set<string>,
+    visibility: VisibilityState,
+    callback: (id: string, shouldShow: boolean) => void
+  ): void {
+    columns.forEach((column, index) => {
+      const indexPath = [...parentIndices, index];
+      const columnId = this._options.resolveColumnId(column, indexPath);
+      validIds.add(columnId);
+
+      if (column.hideable === false) {
+        callback(columnId, true);
+      } else if (column.hidden === true) {
+        callback(columnId, false);
+      }
+
+      if (this._hierarchyHelper.hasChildren(column) && column.columns) {
+        this._collectColumnIds(column.columns, indexPath, validIds, visibility, callback);
+      }
+    });
   }
 
   public setVisibilityState(nextState: VisibilityState, options?: { notifyHost?: boolean }): void {
@@ -125,12 +149,8 @@ export class ColumnVisibilityController<TData> implements ReactiveController {
       return false;
     }
 
-    const column = this._findColumn(columnId);
+    const column = this._hierarchyHelper.findColumn(columnId);
     return column?.hideable ?? true;
-  }
-
-  private _findColumn(columnId: string): ColumnDef<TData> | undefined {
-    return this._host.columns.find((column, index) => this._options.resolveColumnId(column, index) === columnId);
   }
 
   private _areVisibilityStatesEqual(a: VisibilityState, b: VisibilityState): boolean {
