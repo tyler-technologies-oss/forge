@@ -1,0 +1,120 @@
+@use './core' as *;
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-date-time-picker {
+  @include tokens;
+  @include base;
+}
+
+.body {
+  @include body;
+}
+
+.body[data-orientation='horizontal'] {
+  @include body-horizontal;
+}
+
+.body[data-orientation='vertical'] {
+  @include body-vertical;
+}
+
+@container (max-width: 600px) {
+  .body[data-orientation='horizontal'] {
+    @include body-vertical;
+  }
+}
+
+.header,
+.footer,
+.time-label {
+  display: contents;
+}
+
+.header[data-empty='true'],
+.footer[data-empty='true'],
+.time-label[data-empty='true'] {
+  display: none;
+}
+
+.footer {
+  border-top: solid #{token(outline-width)} #{token(divider-color)};
+  padding-top: #{token(gap)};
+  margin-top: #{token(gap)};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: #{token(gap)};
+}
+
+.footer[data-empty='true'] {
+  display: none;
+}
+
+.calendar-section,
+.time-section {
+  @include section;
+}
+
+.time-section[data-mode='single'],
+.time-section[data-mode='range'] {
+  align-self: start;
+}
+
+.time-section[data-mode='slots'] {
+  align-self: stretch;
+  min-height: 0;
+}
+
+.time-label-text {
+  @include time-label;
+}
+
+.range-inputs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: #{token(separator-gap)};
+}
+
+.range-separator {
+  @include separator;
+}
+
+.slot-list {
+  @include slot-list;
+}
+
+.slot-list-inner {
+  @include slot-list-inner;
+}
+
+.slot {
+  @include slot;
+}
+
+.slot[aria-selected='true'] {
+  @include slot-selected;
+}
+
+.slot[aria-disabled='true'] {
+  @include slot-disabled;
+}
+
+:host([disabled]) {
+  pointer-events: none;
+}
+
+:host([disabled]) .forge-date-time-picker {
+  opacity: 0.55;
+}
+
+.live-region {
+  @include live-region;
+}
