@@ -13,6 +13,52 @@
   @include base;
 }
 
+.inline-trigger {
+  display: inline-block;
+  min-width: 240px;
+}
+
+.inline-trigger forge-text-field {
+  width: 100%;
+}
+
+:host([variant='inline']) {
+  width: auto;
+  max-width: 100%;
+}
+
+:host([variant='inline']) .forge-date-time-picker {
+  width: max-content;
+  max-width: none;
+}
+
+:host([summary]) .forge-date-time-picker {
+  @include base-with-summary;
+  grid-template-columns: auto auto;
+  align-items: stretch;
+  gap: 0;
+}
+
+.summary {
+  @include summary;
+}
+
+.summary-year {
+  @include summary-year;
+}
+
+.summary-day {
+  @include summary-day;
+}
+
+.summary-empty {
+  @include summary-empty;
+}
+
+.content {
+  @include content;
+}
+
 .body {
   @include body;
 }
@@ -23,12 +69,23 @@
 
 .body[data-orientation='vertical'] {
   @include body-vertical;
+  gap: 0;
 }
 
-@container (max-width: 600px) {
-  .body[data-orientation='horizontal'] {
-    @include body-vertical;
-  }
+.body[data-orientation='vertical'] .time-section {
+  width: 100%;
+  padding-top: #{token(body-gap)};
+  margin-top: #{token(body-gap)};
+  border-top: solid #{token(outline-width)} #{token(divider-color)};
+}
+
+.calendar-section {
+  width: #{token(calendar-max-width)};
+  max-width: 100%;
+}
+
+forge-calendar {
+  width: 100%;
 }
 
 .header,
@@ -47,14 +104,42 @@
   border-top: solid #{token(outline-width)} #{token(divider-color)};
   padding-top: #{token(gap)};
   margin-top: #{token(gap)};
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: #{token(gap)};
 }
 
 .footer[data-empty='true'] {
   display: none;
+}
+
+.footer-start,
+.footer-center,
+.footer-end {
+  display: flex;
+  align-items: center;
+  gap: #{token(separator-gap)};
+  min-width: 0;
+}
+
+.footer-start {
+  justify-content: flex-start;
+}
+
+.footer-center {
+  justify-content: center;
+}
+
+.footer-end {
+  justify-content: flex-end;
+}
+
+.footer-start[data-empty='true'],
+.footer-center[data-empty='true'],
+.footer-end[data-empty='true'] {
+  visibility: hidden;
+  min-width: 0;
 }
 
 .calendar-section,
@@ -76,19 +161,47 @@
   @include time-label;
 }
 
-.range-inputs {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
-  gap: #{token(separator-gap)};
+.time-inputs {
+  display: flex;
+  width: #{token(calendar-max-width)};
+  max-width: 100%;
 }
 
-.range-separator {
-  @include separator;
+.time-inputs forge-time-picker,
+.range-inputs forge-time-picker {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.time-inputs forge-time-picker forge-text-field,
+.range-inputs forge-time-picker forge-text-field {
+  width: 100%;
+  --forge-field-height: #{token(time-field-height)};
+}
+
+.range-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: #{token(section-gap)};
+  width: #{token(calendar-max-width)};
+  max-width: 100%;
+}
+
+.meridiem-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #{token(time-label-color)};
+  padding-inline: #{token(slot-padding-inline)};
 }
 
 .slot-list {
   @include slot-list;
+  align-self: stretch;
+  height: 100%;
 }
 
 .slot-list-inner {
