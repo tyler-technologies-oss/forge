@@ -1,0 +1,49 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../border';
+@use '../../spacing';
+@use '../../shape';
+@use '../../elevation';
+@use '../../utils';
+
+$tokens: (
+  background: utils.module-val(date-time-picker, background, theme.variable(surface)),
+  color: utils.module-val(date-time-picker, color, theme.variable(on-surface)),
+  outline-color: utils.module-val(date-time-picker, outline-color, theme.variable(outline)),
+  outline-width: utils.module-val(date-time-picker, outline-width, border.variable(thin)),
+  outline-style: utils.module-val(date-time-picker, outline-style, solid),
+  elevation: utils.module-val(date-time-picker, elevation, none),
+  shape: utils.module-val(date-time-picker, shape, shape.variable(large)),
+  padding: utils.module-val(date-time-picker, padding, spacing.variable(large)),
+  gap: utils.module-val(date-time-picker, gap, spacing.variable(medium)),
+  body-gap: utils.module-val(date-time-picker, body-gap, spacing.variable(large)),
+  divider-color: utils.module-val(date-time-picker, divider-color, theme.variable(outline)),
+  // Slot list
+  slot-list-max-height: utils.module-val(date-time-picker, slot-list-max-height, 320px),
+  slot-list-min-width: utils.module-val(date-time-picker, slot-list-min-width, 144px),
+  slot-list-gap: utils.module-val(date-time-picker, slot-list-gap, spacing.variable(small)),
+  slot-padding-block: utils.module-val(date-time-picker, slot-padding-block, spacing.variable(small)),
+  slot-padding-inline: utils.module-val(date-time-picker, slot-padding-inline, spacing.variable(medium)),
+  slot-shape: utils.module-val(date-time-picker, slot-shape, 9999px),
+  slot-background: utils.module-val(date-time-picker, slot-background, transparent),
+  slot-color: utils.module-val(date-time-picker, slot-color, theme.variable(on-surface)),
+  slot-outline-color: utils.module-val(date-time-picker, slot-outline-color, theme.variable(outline)),
+  slot-outline-width: utils.module-val(date-time-picker, slot-outline-width, border.variable(thin)),
+  slot-hover-background: utils.module-val(date-time-picker, slot-hover-background, theme.variable(surface-container-low)),
+  slot-selected-background: utils.module-val(date-time-picker, slot-selected-background, theme.variable(primary)),
+  slot-selected-color: utils.module-val(date-time-picker, slot-selected-color, theme.variable(on-primary)),
+  slot-selected-outline-color: utils.module-val(date-time-picker, slot-selected-outline-color, theme.variable(primary)),
+  slot-disabled-background: utils.module-val(date-time-picker, slot-disabled-background, transparent),
+  slot-disabled-color: utils.module-val(date-time-picker, slot-disabled-color, theme.variable(text-low)),
+  slot-disabled-outline-color: utils.module-val(date-time-picker, slot-disabled-outline-color, theme.variable(outline)),
+  // Range time controls
+  separator-color: utils.module-val(date-time-picker, separator-color, theme.variable(on-surface)),
+  separator-gap: utils.module-val(date-time-picker, separator-gap, spacing.variable(small)),
+  // Sections
+  section-gap: utils.module-val(date-time-picker, section-gap, spacing.variable(small)),
+  time-label-color: utils.module-val(date-time-picker, time-label-color, theme.variable(text-medium))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

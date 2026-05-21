@@ -1,0 +1,144 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+  contain: layout style;
+  container-type: inline-size;
+  color: #{token(color)};
+  font-family: inherit;
+}
+
+@mixin base {
+  display: grid;
+  gap: #{token(gap)};
+
+  background: #{token(background)};
+  color: #{token(color)};
+
+  border-color: #{token(outline-color)};
+  border-width: #{token(outline-width)};
+  border-style: #{token(outline-style)};
+  border-radius: #{token(shape)};
+
+  box-shadow: #{token(elevation)};
+  box-sizing: border-box;
+  padding: #{token(padding)};
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@mixin body {
+  display: grid;
+  gap: #{token(body-gap)};
+  align-items: start;
+}
+
+@mixin body-horizontal {
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+}
+
+@mixin body-vertical {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@mixin section {
+  display: grid;
+  gap: #{token(section-gap)};
+  min-width: 0;
+}
+
+@mixin time-label {
+  color: #{token(time-label-color)};
+  font-weight: 500;
+}
+
+@mixin slot-list {
+  @include section;
+
+  min-width: #{token(slot-list-min-width)};
+  max-height: #{token(slot-list-max-height)};
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  // Custom scrollbar styling — defer to system defaults but reserve space so the
+  // layout doesn't shift between scrollable and non-scrollable.
+  scrollbar-gutter: stable;
+}
+
+@mixin slot-list-inner {
+  display: grid;
+  gap: #{token(slot-list-gap)};
+}
+
+@mixin slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  appearance: none;
+  background: #{token(slot-background)};
+  color: #{token(slot-color)};
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  padding-block: #{token(slot-padding-block)};
+  padding-inline: #{token(slot-padding-inline)};
+  border-radius: #{token(slot-shape)};
+  border: solid #{token(slot-outline-width)} #{token(slot-outline-color)};
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    border-color 120ms ease;
+
+  &:hover:not([aria-disabled='true']) {
+    background: #{token(slot-hover-background)};
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--forge-focus-indicator-color, currentColor);
+    outline-offset: 2px;
+  }
+}
+
+@mixin slot-selected {
+  background: #{token(slot-selected-background)};
+  color: #{token(slot-selected-color)};
+  border-color: #{token(slot-selected-outline-color)};
+
+  &:hover {
+    background: #{token(slot-selected-background)};
+  }
+}
+
+@mixin slot-disabled {
+  background: #{token(slot-disabled-background)};
+  color: #{token(slot-disabled-color)};
+  border-color: #{token(slot-disabled-outline-color)};
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+@mixin separator {
+  align-self: center;
+  justify-self: center;
+  color: #{token(separator-color)};
+  padding-inline: #{token(separator-gap)};
+  font-weight: 500;
+}
+
+@mixin live-region {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
