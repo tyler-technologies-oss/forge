@@ -1,0 +1,36 @@
+<div class="vert">
+  <forge-date-time-picker id="demo-date-time-picker" time-mode="slots">
+    <!-- Header slot (toggled via option) -->
+    <span slot="header" id="demo-header" hidden>
+      <h2 style="margin: 0; font-size: 1.1rem; font-weight: 600;">Pick a meeting time</h2>
+    </span>
+
+    <!-- Time label slot (toggled via option) -->
+    <span slot="time-label" id="demo-time-label" hidden>Available times</span>
+
+    <!-- Footer slots (toggled via option) -->
+    <span slot="footer-start" id="demo-footer-start">
+      <span id="demo-footer-summary"></span>
+    </span>
+    <span slot="footer-end" id="demo-footer-end">
+      <forge-button variant="raised" id="demo-continue">Continue</forge-button>
+    </span>
+  </forge-date-time-picker>
+
+  <forge-label-value>
+    <span slot="label">Last change event source</span>
+    <span slot="value" id="demo-source">—</span>
+  </forge-label-value>
+
+  <forge-label-value>
+    <span slot="label">Complete</span>
+    <span slot="value" id="demo-complete">false</span>
+  </forge-label-value>
+
+  <forge-label-value>
+    <span slot="label">Value (JSON)</span>
+    <pre slot="value" id="demo-value" style="margin: 0; font-family: monospace;">null</pre>
+  </forge-label-value>
+</div>
+
+<script type="module" src="date-time-picker.ts"></script>
