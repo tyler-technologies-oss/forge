@@ -3,9 +3,10 @@
 @forward './token-utils';
 
 @mixin host {
-  display: block;
-  contain: layout style;
-  container-type: inline-size;
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  justify-self: start;
   color: #{token(color)};
   font-family: inherit;
 }
@@ -29,18 +30,63 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-@mixin body {
+@mixin base-with-summary {
+  padding: 0;
+}
+
+@mixin summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: #{token(section-gap)};
+  background: #{token(summary-background)};
+  color: #{token(summary-color)};
+  min-width: #{token(summary-min-width)};
+  padding: #{token(summary-padding)};
+  box-sizing: border-box;
+}
+
+@mixin summary-year {
+  font-size: #{token(summary-year-font-size)};
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+@mixin summary-day {
+  font-size: #{token(summary-day-font-size)};
+  line-height: #{token(summary-day-line-height)};
+  font-weight: 400;
+  word-break: keep-all;
+}
+
+@mixin summary-empty {
+  @include summary-year;
+  font-weight: 400;
+}
+
+@mixin content {
   display: grid;
+  gap: #{token(gap)};
+  padding: #{token(padding)};
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+@mixin body {
+  display: flex;
   gap: #{token(body-gap)};
-  align-items: start;
 }
 
 @mixin body-horizontal {
-  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 @mixin body-vertical {
-  grid-template-columns: minmax(0, 1fr);
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 @mixin section {
@@ -57,7 +103,8 @@
 @mixin slot-list {
   @include section;
 
-  min-width: #{token(slot-list-min-width)};
+  width: #{token(slot-list-width)};
+  max-width: 100%;
   max-height: #{token(slot-list-max-height)};
   overflow-y: auto;
   padding: 0;
@@ -76,6 +123,7 @@
 
 @mixin slot {
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -121,14 +169,6 @@
   border-color: #{token(slot-disabled-outline-color)};
   cursor: not-allowed;
   text-decoration: line-through;
-}
-
-@mixin separator {
-  align-self: center;
-  justify-self: center;
-  color: #{token(separator-color)};
-  padding-inline: #{token(separator-gap)};
-  font-weight: 500;
 }
 
 @mixin live-region {

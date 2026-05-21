@@ -14,16 +14,28 @@ $tokens: (
   outline-style: utils.module-val(date-time-picker, outline-style, solid),
   elevation: utils.module-val(date-time-picker, elevation, none),
   shape: utils.module-val(date-time-picker, shape, shape.variable(large)),
-  padding: utils.module-val(date-time-picker, padding, spacing.variable(large)),
+  padding: utils.module-val(date-time-picker, padding, spacing.variable(medium)),
   gap: utils.module-val(date-time-picker, gap, spacing.variable(medium)),
-  body-gap: utils.module-val(date-time-picker, body-gap, spacing.variable(large)),
+  body-gap: utils.module-val(date-time-picker, body-gap, spacing.variable(small)),
   divider-color: utils.module-val(date-time-picker, divider-color, theme.variable(outline)),
-  // Slot list
+  // Summary panel
+  summary-background: utils.module-val(date-time-picker, summary-background, theme.variable(primary)),
+  summary-color: utils.module-val(date-time-picker, summary-color, theme.variable(on-primary)),
+  summary-min-width: utils.module-val(date-time-picker, summary-min-width, 116px),
+  summary-padding: utils.module-val(date-time-picker, summary-padding, spacing.variable(large)),
+  summary-year-font-size: utils.module-val(date-time-picker, summary-year-font-size, 0.875rem),
+  summary-day-font-size: utils.module-val(date-time-picker, summary-day-font-size, 2.5rem),
+  summary-day-line-height: utils.module-val(date-time-picker, summary-day-line-height, 1.05),
+  // Calendar
+  calendar-max-width: utils.module-val(date-time-picker, calendar-max-width, 320px),
+  // Single / range time field
+  time-field-height: utils.module-val(date-time-picker, time-field-height, 36px),
+  // Slot list (defaults to the same width as the calendar so booking pills line up under/beside it)
   slot-list-max-height: utils.module-val(date-time-picker, slot-list-max-height, 320px),
-  slot-list-min-width: utils.module-val(date-time-picker, slot-list-min-width, 144px),
-  slot-list-gap: utils.module-val(date-time-picker, slot-list-gap, spacing.variable(small)),
-  slot-padding-block: utils.module-val(date-time-picker, slot-padding-block, spacing.variable(small)),
-  slot-padding-inline: utils.module-val(date-time-picker, slot-padding-inline, spacing.variable(medium)),
+  slot-list-width: utils.module-val(date-time-picker, slot-list-width, 320px),
+  slot-list-gap: utils.module-val(date-time-picker, slot-list-gap, spacing.variable(xxsmall)),
+  slot-padding-block: utils.module-val(date-time-picker, slot-padding-block, spacing.variable(xsmall)),
+  slot-padding-inline: utils.module-val(date-time-picker, slot-padding-inline, spacing.variable(small)),
   slot-shape: utils.module-val(date-time-picker, slot-shape, 9999px),
   slot-background: utils.module-val(date-time-picker, slot-background, transparent),
   slot-color: utils.module-val(date-time-picker, slot-color, theme.variable(on-surface)),
@@ -37,7 +49,6 @@ $tokens: (
   slot-disabled-color: utils.module-val(date-time-picker, slot-disabled-color, theme.variable(text-low)),
   slot-disabled-outline-color: utils.module-val(date-time-picker, slot-disabled-outline-color, theme.variable(outline)),
   // Range time controls
-  separator-color: utils.module-val(date-time-picker, separator-color, theme.variable(on-surface)),
   separator-gap: utils.module-val(date-time-picker, separator-gap, spacing.variable(small)),
   // Sections
   section-gap: utils.module-val(date-time-picker, section-gap, spacing.variable(small)),
