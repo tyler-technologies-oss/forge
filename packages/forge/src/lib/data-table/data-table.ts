@@ -158,6 +158,30 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
   public sortable = false;
 
   /**
+   * Enable multi-column sorting. When enabled, users can hold Shift while clicking column headers to sort by multiple columns.
+   */
+  @property({ type: Boolean, attribute: 'multi-sort' })
+  public multiSort = true;
+
+  /**
+   * Maximum number of columns that can be sorted simultaneously. Set to undefined for no limit.
+   */
+  @property({ type: Number, attribute: 'max-multi-sort-col-count' })
+  public maxMultiSortColCount: number | undefined = undefined;
+
+  /**
+   * Allow removing columns from multi-sort by clicking through the sort cycle.
+   */
+  @property({ type: Boolean, attribute: 'multi-sort-remove' })
+  public multiSortRemove = true;
+
+  /**
+   * Modifier key required to trigger multi-column sorting.
+   */
+  @property({ attribute: 'multi-sort-key' })
+  public multiSortKey: 'shift' | 'ctrl' | 'meta' | 'alt' = 'shift';
+
+  /**
    * Whether the columns in the table can be filtered.
    */
   @property({ type: Boolean })
@@ -305,6 +329,10 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
       changedProperties.has('columns') ||
       changedProperties.has('sortable') ||
       changedProperties.has('manualSort') ||
+      changedProperties.has('multiSort') ||
+      changedProperties.has('maxMultiSortColCount') ||
+      changedProperties.has('multiSortRemove') ||
+      changedProperties.has('multiSortKey') ||
       changedProperties.has('filterable') ||
       changedProperties.has('manualFilter') ||
       changedProperties.has('rowSelection') ||
@@ -361,6 +389,24 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
       data: this.data,
       columnResizeMode: 'onChange',
       enableSorting: this.sortable,
+      enableMultiSort: this.sortable && this.multiSort,
+      maxMultiSortColCount: this.maxMultiSortColCount,
+      enableMultiRemove: this.multiSortRemove,
+      isMultiSortEvent: (e: unknown) => {
+        const evt = e as MouseEvent | KeyboardEvent;
+        switch (this.multiSortKey) {
+          case 'shift':
+            return evt.shiftKey;
+          case 'ctrl':
+            return evt.ctrlKey;
+          case 'meta':
+            return evt.metaKey;
+          case 'alt':
+            return evt.altKey;
+          default:
+            return false;
+        }
+      },
       manualSorting: this.manualSort,
       onSortingChange: updaterOrValue => this.#onSort(updaterOrValue),
       enableColumnFilters: this.filterable,
@@ -450,7 +496,10 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
                         : null}>
                     <span class="cell-text">${header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</span>
                     ${this.sortable && header.column.getIsSorted()
-                      ? svg`<svg class="sort-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>`
+                      ? html`
+                          ${this._sorting.length > 1 ? html`<span class="sort-index" part="sort-index">${header.column.getSortIndex() + 1}</span>` : nothing}
+                          ${svg`<svg class="sort-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>`}
+                        `
                       : null}
                   </div>
                 </div>

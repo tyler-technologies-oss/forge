@@ -27,6 +27,31 @@ include('./src/partials/page.ejs', {
       },
       { type: 'switch', label: 'Sortable', id: 'sortable' },
       { type: 'switch', label: 'Manual sort', id: 'manual-sort' },
+      { type: 'switch', label: 'Multi-column sort', id: 'multi-sort' },
+      {
+        type: 'select',
+        label: 'Multi-sort key',
+        id: 'multi-sort-key',
+        defaultValue: 'shift',
+        options: [
+          { label: 'Shift', value: 'shift' },
+          { label: 'Ctrl', value: 'ctrl' },
+          { label: 'Meta', value: 'meta' },
+          { label: 'Alt', value: 'alt' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Max multi-sort columns',
+        id: 'max-multi-sort-col-count',
+        defaultValue: 'unlimited',
+        options: [
+          { label: 'Unlimited', value: 'unlimited' },
+          { label: '2', value: '2' },
+          { label: '3', value: '3' },
+          { label: '4', value: '4' }
+        ]
+      },
       { type: 'switch', label: 'Filterable', id: 'filterable' },
       { type: 'switch', label: 'Manual filter', id: 'manual-filter' },
       { type: 'switch', label: 'Show footer', id: 'show-footer' },

@@ -61,6 +61,7 @@ const groupedColumns: ColumnDef<RowData>[] = [
 const dataTable = document.querySelector('forge-data-table') as DataTableElement<RowData>;
 dataTable.columns = flatColumns;
 dataTable.reorderable = true;
+dataTable.multiSort = false;
 dataTable.data = [
   {
     id: 1,
@@ -76,9 +77,9 @@ dataTable.data = [
   },
   {
     id: 2,
-    firstName: 'Bob',
+    firstName: 'Alice',
     lastName: 'Johnson',
-    email: 'bob.johnson@company.com',
+    email: 'alice.johnson@company.com',
     phone: '(555) 234-5678',
     department: 'Marketing',
     position: 'Marketing Manager',
@@ -88,9 +89,9 @@ dataTable.data = [
   },
   {
     id: 3,
-    firstName: 'Charlie',
+    firstName: 'Bob',
     lastName: 'Brown',
-    email: 'charlie.brown@company.com',
+    email: 'bob.brown@company.com',
     phone: '(555) 345-6789',
     department: 'Engineering',
     position: 'Tech Lead',
@@ -100,9 +101,9 @@ dataTable.data = [
   },
   {
     id: 4,
-    firstName: 'David',
+    firstName: 'Bob',
     lastName: 'Williams',
-    email: 'david.williams@company.com',
+    email: 'bob.williams@company.com',
     phone: '(555) 456-7890',
     department: 'Sales',
     position: 'Sales Representative',
@@ -112,9 +113,9 @@ dataTable.data = [
   },
   {
     id: 5,
-    firstName: 'Eve',
+    firstName: 'Charlie',
     lastName: 'Davis',
-    email: 'eve.davis@company.com',
+    email: 'charlie.davis@company.com',
     phone: '(555) 567-8901',
     department: 'Engineering',
     position: 'Junior Developer',
@@ -124,9 +125,9 @@ dataTable.data = [
   },
   {
     id: 6,
-    firstName: 'Frank',
+    firstName: 'Charlie',
     lastName: 'Miller',
-    email: 'frank.miller@company.com',
+    email: 'charlie.miller@company.com',
     phone: '(555) 678-9012',
     department: 'HR',
     position: 'HR Manager',
@@ -136,9 +137,9 @@ dataTable.data = [
   },
   {
     id: 7,
-    firstName: 'Grace',
+    firstName: 'David',
     lastName: 'Wilson',
-    email: 'grace.wilson@company.com',
+    email: 'david.wilson@company.com',
     phone: '(555) 789-0123',
     department: 'Engineering',
     position: 'Senior Developer',
@@ -148,9 +149,9 @@ dataTable.data = [
   },
   {
     id: 8,
-    firstName: 'Henry',
+    firstName: 'David',
     lastName: 'Moore',
-    email: 'henry.moore@company.com',
+    email: 'david.moore@company.com',
     phone: '(555) 890-1234',
     department: 'Finance',
     position: 'Financial Analyst',
@@ -243,6 +244,17 @@ sortableCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) 
 
 const manualSortCheckbox = document.getElementById('manual-sort') as HTMLInputElement;
 manualSortCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.manualSort = selected));
+
+const multiSortCheckbox = document.getElementById('multi-sort') as HTMLInputElement;
+multiSortCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.multiSort = selected));
+
+const multiSortKeySelect = document.getElementById('multi-sort-key') as HTMLSelectElement;
+multiSortKeySelect.addEventListener('change', () => (dataTable.multiSortKey = multiSortKeySelect.value as 'shift' | 'ctrl' | 'meta' | 'alt'));
+
+const maxMultiSortColCountSelect = document.getElementById('max-multi-sort-col-count') as HTMLSelectElement;
+maxMultiSortColCountSelect.addEventListener('change', () => {
+  dataTable.maxMultiSortColCount = maxMultiSortColCountSelect.value === 'unlimited' ? undefined : parseInt(maxMultiSortColCountSelect.value, 10);
+});
 
 const filterableCheckbox = document.getElementById('filterable') as HTMLInputElement;
 filterableCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.filterable = selected));
