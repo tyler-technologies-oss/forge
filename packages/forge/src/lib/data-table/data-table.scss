@@ -33,6 +33,11 @@ table {
     min-width: 0;
   }
 
+  thead th {
+    background-color: #{theme.variable(surface-container-minimum)};
+    color: #{theme.variable(on-surface-container-minimum)};
+  }
+
   tfoot {
     tr {
       background-color: transparent;
@@ -43,6 +48,8 @@ table {
       @include core.head-cell;
 
       border: none;
+      background-color: #{theme.variable(surface-container-minimum)};
+      color: #{theme.variable(on-surface-container-minimum)};
 
       &.empty-footer {
         padding-inline: 0;
