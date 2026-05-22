@@ -236,7 +236,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
   public fixedHeaders = false;
 
   @state() private _columns: TanstackColumnDef<TData>[] = [];
-  @state() private _renderColumns: TanstackColumnDef<TData>[] = [];
+  @state() private _tableColumns: TanstackColumnDef<TData>[] = [];
   @state() private _sorting: SortingState = [];
   @state() private _columnFilters: ColumnFiltersState = [];
   @state() private _rowSelection: Record<string, boolean> = {};
@@ -321,9 +321,9 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
   }
 
   #updateRenderColumns(): void {
-    this._renderColumns = [...this._columns];
+    this._tableColumns = [...this._columns];
     if (this.rowSelection !== 'off') {
-      this.#prependSelectColumn(this._renderColumns);
+      this.#prependSelectColumn(this._tableColumns);
     }
   }
 
@@ -357,7 +357,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
       defaultColumn: {
         size: DEFAULT_COLUMN_WIDTH
       },
-      columns: this._renderColumns,
+      columns: this._tableColumns,
       data: this.data,
       columnResizeMode: 'onChange',
       enableSorting: this.sortable,
@@ -471,6 +471,25 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     )}`;
   }
 
+  #renderCell(cell: Cell<TData, unknown>, rowId: string): TemplateResult {
+    return html`
+      <td
+        part="body-cell cell"
+        style=${styleMap({ width: this.#getColumnWidthStyle(cell.column) })}
+        class=${classMap({
+          'select-column': this.rowSelection && cell.column.columnDef.id === SELECT_COLUMN_ID
+        })}
+        id=${cell.column.id}
+        ?data-forge-stop-row-click-propagation=${cell.column.columnDef.meta?.stopRowClickPropagation || cell.column.columnDef.id === SELECT_COLUMN_ID}>
+        <div class="cell-content" part="body-cell-content cell-content">
+          ${cell.column.columnDef.meta?.cellSlot
+            ? guard([cell.column], () => html`<slot ${lightDomRender(this, cell)} name=${`col-${cell.column.id}:row-${rowId}`}></slot>`)
+            : flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </div>
+      </td>
+    `;
+  }
+
   #renderTableBody(table: Table<TData>): TemplateResult {
     return html`<tbody class="standard-tbody">
       ${repeat(
@@ -481,25 +500,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
             class=${classMap({ selected: row.getIsSelected() })}
             part="body-tr tr"
             @click=${this.allowRowClick ? (evt: MouseEvent) => this.#onRowClick(evt, row.index, row.original) : nothing}>
-            ${row.getVisibleCells().map(
-              cell => html`
-                <td
-                  part="body-cell cell"
-                  style=${styleMap({ width: this.#getColumnWidthStyle(cell.column) })}
-                  class=${classMap({
-                    'select-column': this.rowSelection && cell.column.columnDef.id === SELECT_COLUMN_ID
-                  })}
-                  id=${cell.column.id}
-                  ?data-forge-stop-row-click-propagation=${cell.column.columnDef.meta?.stopRowClickPropagation ||
-                  cell.column.columnDef.id === SELECT_COLUMN_ID}>
-                  <div class="cell-content" part="body-cell-content cell-content">
-                    ${cell.column.columnDef.meta?.cellSlot
-                      ? guard([cell.column], () => html`<slot ${lightDomRender(this, cell)} name=${`col-${cell.column.id}:row-${row.id}`}></slot>`)
-                      : flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </div>
-                </td>
-              `
-            )}
+            ${row.getVisibleCells().map(cell => this.#renderCell(cell, row.id))}
           </tr>
           ${row.getIsExpanded()
             ? html`
@@ -710,9 +711,13 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
 
   #onColumnMenuToggle(evt: CustomEvent<IPopoverToggleEventData>): void {
     const { newState } = evt.detail;
+
     if (newState === 'closed') {
       this.#closeColumnMenu();
-    } else if (newState === 'open') {
+      return;
+    }
+
+    if (newState === 'open') {
       this._columnMenuOpen = true;
     }
   }
@@ -1025,23 +1030,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
               ${repeat(
                 row.getVisibleCells(),
                 cell => cell.id,
-                cell => html`
-                  <td
-                    part="body-cell cell"
-                    style=${styleMap({ width: this.#getColumnWidthStyle(cell.column) })}
-                    class=${classMap({
-                      'select-column': this.rowSelection && cell.column.columnDef.id === SELECT_COLUMN_ID
-                    })}
-                    id=${cell.column.id}
-                    ?data-forge-stop-row-click-propagation=${cell.column.columnDef.meta?.stopRowClickPropagation ||
-                    cell.column.columnDef.id === SELECT_COLUMN_ID}>
-                    <div class="cell-content" part="body-cell-content cell-content">
-                      ${cell.column.columnDef.meta?.cellSlot
-                        ? guard([cell.column], () => html`<slot ${lightDomRender(this, cell)} name=${`col-${cell.column.id}:row-${row.id}`}></slot>`)
-                        : flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </div>
-                  </td>
-                `
+                cell => this.#renderCell(cell, row.id)
               )}
             </tr>
             ${
