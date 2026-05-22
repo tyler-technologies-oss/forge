@@ -80,10 +80,16 @@ table {
     position: relative;
 
     .cell-content {
-      display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      min-width: 0;
+
+      .cell-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+      }
     }
 
     .cell-container[draggable='true'] {
@@ -104,6 +110,7 @@ table {
     .sort-icon {
       height: 1rem;
       width: 1rem;
+      flex-shrink: 0;
       fill: #{theme.variable(on-surface)};
       margin-inline-start: #{shape.variable(small)};
       transition: transform #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
