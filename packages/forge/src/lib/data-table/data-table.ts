@@ -22,6 +22,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { guard } from 'lit/directives/guard.js';
 import { styleMap } from 'lit/directives/style-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { svg } from 'lit/static-html.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import type { IPopoverToggleEventData, PopoverComponent } from '../popover/index.js';
@@ -96,6 +97,9 @@ export interface ColumnDef<TData extends Row = unknown> {
 const SELECT_COLUMN_ID = 'SELECT_COLUMN_ID';
 
 const DEFAULT_COLUMN_WIDTH = 172;
+const COMPACT_ROW_HEIGHT = 32;
+const DEFAULT_ROW_HEIGHT = 48;
+const VIRTUALIZER_OVERSCAN = 5;
 
 /**
  * @tag forge-data-table
@@ -245,8 +249,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     this.#internals = this.attachInternals();
   }
 
-  // eslint-disable-next-line @tylertech-eslint/require-private-modifier
-  protected willUpdate(changedProperties: PropertyValues<this>): void {
+  #updateCustomStates(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('resizable')) {
       toggleState(this.#internals, 'resizable', this.resizable);
     }
@@ -277,31 +280,28 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     if (changedProperties.has('virtualized')) {
       toggleState(this.#internals, 'virtualized', this.virtualized);
     }
+  }
 
-    // We need to map the columns to the table-core format when the columns property changes
-    if (changedProperties.has('columns')) {
-      this.#mapColumnState();
+  #handleColumnsChange(): void {
+    this.#buildTanstackColumns();
 
-      // Check to see if any columns are using slotted cell rendering and remove any light DOM content
-      // that was previously rendered for those columns if a column is no longer using slotted cells.
-      this.#getAllLeafColumns(this.columns, []).forEach(({ column, indexPath }) => {
-        if (!column.useTemplateSlot) {
-          const columnId = this.#resolveColumnId(column, indexPath);
-          this.querySelectorAll(`[slot^="col-${columnId}:"]`).forEach(el => el.remove());
-        }
-      });
-
-      const derivedVisibility = this.#columnVisibilityController.deriveVisibilityState();
-      if (derivedVisibility) {
-        this.#columnVisibilityController.setVisibilityState(derivedVisibility, { notifyHost: false });
+    this.#getAllLeafColumns(this.columns, []).forEach(({ column, indexPath }) => {
+      if (!column.useTemplateSlot) {
+        const columnId = this.#resolveColumnId(column, indexPath);
+        this.querySelectorAll(`[slot^="col-${columnId}:"]`).forEach(el => el.remove());
       }
+    });
 
-      this.#closeColumnMenu();
+    const derivedVisibility = this.#columnVisibilityController.deriveVisibilityState();
+    if (derivedVisibility) {
+      this.#columnVisibilityController.setVisibilityState(derivedVisibility, { notifyHost: false });
     }
 
-    // We need to recreate the table controller when certain properties change to ensure the
-    // internal TanStack table state reflects the new component state.
-    if (
+    this.#closeColumnMenu();
+  }
+
+  #checkRecreateTableController(changedProperties: PropertyValues<this>): boolean {
+    const needsRecreation =
       changedProperties.has('columns') ||
       changedProperties.has('sortable') ||
       changedProperties.has('manualSort') ||
@@ -310,26 +310,41 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
       changedProperties.has('rowSelection') ||
       changedProperties.has('expandable') ||
       changedProperties.has('fixedHeaders') ||
-      changedProperties.has('virtualized')
-    ) {
+      changedProperties.has('virtualized');
+
+    if (needsRecreation) {
       this.removeController(this.#tableController);
       this.#tableController = new TableController<TData>(this);
     }
 
-    // We need to update the column order when the reorderable, rowSelection, or columns properties change
+    return needsRecreation;
+  }
+
+  #updateRenderColumns(): void {
+    this._renderColumns = [...this._columns];
+    if (this.rowSelection !== 'off') {
+      this.#prependSelectColumn(this._renderColumns);
+    }
+  }
+
+  // eslint-disable-next-line @tylertech-eslint/require-private-modifier
+  protected willUpdate(changedProperties: PropertyValues<this>): void {
+    this.#updateCustomStates(changedProperties);
+
+    if (changedProperties.has('columns')) {
+      this.#handleColumnsChange();
+    }
+
+    this.#checkRecreateTableController(changedProperties);
+
     if (changedProperties.has('reorderable') || changedProperties.has('rowSelection') || changedProperties.has('columns')) {
       this.#setReorderable();
     }
 
-    // Derive render columns when columns or row selection changes
     if (changedProperties.has('columns') || changedProperties.has('rowSelection')) {
-      this._renderColumns = [...this._columns];
-      if (this.rowSelection !== 'off') {
-        this.#appendSelectColumn(this._renderColumns);
-      }
+      this.#updateRenderColumns();
     }
 
-    // Handle virtualization changes
     if (changedProperties.has('virtualized') || changedProperties.has('data')) {
       this.#setVirtualized();
     }
@@ -355,7 +370,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
       enableMultiRowSelection: this.rowSelection === 'multiple',
       onRowSelectionChange: updaterOrValue => this.#onRowSelect(updaterOrValue),
       onColumnVisibilityChange: updaterOrValue => this.#onColumnVisibilityChange(updaterOrValue),
-      onColumnOrderChange: updaterOrValue => this.onColumnOrderChange(updaterOrValue),
+      onColumnOrderChange: updaterOrValue => this.#onColumnOrderChange(updaterOrValue),
       getRowCanExpand: () => this.expandable,
       state: {
         sorting: this._sorting,
@@ -404,7 +419,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
               <th
                 id=${headerId}
                 part="head-cell cell"
-                colspan=${header.colSpan > 1 ? String(header.colSpan) : (nothing as any)}
+                colspan=${ifDefined(header.colSpan > 1 ? header.colSpan : undefined)}
                 style=${styleMap({ width: this.#getColumnWidthStyle(header.column) })}
                 class=${classMap({
                   'sort-asc': header.column.getIsSorted() === 'asc',
@@ -520,7 +535,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
               header => html`
                 <th
                   part="tfoot-cell cell"
-                  colspan=${header.colSpan > 1 ? header.colSpan : (nothing as any)}
+                  colspan=${ifDefined(header.colSpan > 1 ? header.colSpan : undefined)}
                   style=${styleMap({ width: this.#getColumnWidthStyle(header.column) })}
                   class=${classMap({ 'empty-footer': header.column.columnDef.footer === undefined })}>
                   <div class="cell-content" part="footer-cell-content cell-content">${flexRender(header.column.columnDef.footer, header.getContext())}</div>
@@ -540,7 +555,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     return html`
       <forge-popover
         id="column-visibility-popover"
-        anchor=${anchorId ? anchorId : (nothing as any)}
+        anchor=${ifDefined(anchorId)}
         placement="bottom-start"
         position-strategy="fixed"
         trigger-type="manual"
@@ -570,7 +585,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     `;
   }
 
-  #mapColumnState(): void {
+  #buildTanstackColumns(): void {
     this._columns = this.#mapColumnsRecursive(this.columns, []);
   }
 
@@ -768,7 +783,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     }
   }
 
-  #appendSelectColumn(columns: TanstackColumnDef<TData>[]): void {
+  #prependSelectColumn(columns: TanstackColumnDef<TData>[]): void {
     if (columns.some(column => column.id === SELECT_COLUMN_ID)) {
       return;
     }
@@ -800,27 +815,31 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
   }
 
   #setReorderable(): void {
-    if (this.reorderable) {
+    if (!this.reorderable) {
+      if (this.#columnReorderController) {
+        this.removeController(this.#columnReorderController);
+        this.#columnReorderController = null;
+      }
+      this.columnOrder = [];
+      return;
+    }
+
+    if (!this.#columnReorderController) {
       this.#columnReorderController = new ColumnReorderController(this, {
         selectColumnId: SELECT_COLUMN_ID,
-        onColumnOrderChange: updaterOrValue => this.onColumnOrderChange(updaterOrValue),
+        onColumnOrderChange: updaterOrValue => this.#onColumnOrderChange(updaterOrValue),
         resolveColumnId: (column, indexPath) => this.#resolveColumnId(column, indexPath)
       });
       this.addController(this.#columnReorderController);
+    }
 
-      const columns = this.#getAllColumnIds(this.columns, []);
-      this.columnOrder = columns;
+    const columns = this.#getAllColumnIds(this.columns, []);
+    this.columnOrder = columns;
 
-      if (this.rowSelection !== 'off') {
-        const orderToUpdate = [...this.columnOrder];
-        this.#columnReorderController.ensureSelectColumnOrder(orderToUpdate);
-        this.columnOrder = orderToUpdate;
-      }
-    } else {
-      if (this.#columnReorderController) {
-        this.removeController(this.#columnReorderController);
-      }
-      this.columnOrder = [];
+    if (this.rowSelection !== 'off') {
+      const orderToUpdate = [...this.columnOrder];
+      this.#columnReorderController.ensureSelectColumnOrder(orderToUpdate);
+      this.columnOrder = orderToUpdate;
     }
   }
 
@@ -836,9 +855,8 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     if (!this._virtualizerController) {
       this._virtualizerController = new VirtualizerController(this, {
         getScrollElement: () => this.#tableContainerRef.value as HTMLElement,
-        // TODO: use getComputedStyle?
-        estimateSize: () => (this.compact ? 32 : 48),
-        overscan: 5,
+        estimateSize: () => (this.compact ? COMPACT_ROW_HEIGHT : DEFAULT_ROW_HEIGHT),
+        overscan: VIRTUALIZER_OVERSCAN,
         count: this.data.length
       });
       this.addController(this._virtualizerController);
@@ -880,7 +898,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     this.dispatchEvent(new CustomEvent('forge-data-table-column-visibility', { detail: nextState, bubbles: true, composed: true }));
   }
 
-  public onColumnOrderChange(updaterOrValue: Updater<ColumnOrderState>): void {
+  #onColumnOrderChange(updaterOrValue: Updater<ColumnOrderState>): void {
     this.columnOrder = typeof updaterOrValue === 'function' ? updaterOrValue(this.columnOrder) : updaterOrValue;
     this.dispatchEvent(new CustomEvent('forge-data-table-column-order', { detail: this.columnOrder, bubbles: true, composed: true }));
   }
@@ -1076,14 +1094,26 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     return `--forge-data-table-column-${hasValidChar ? sanitizedId : 'column'}-size`;
   }
 
+  /**
+   * Hides a column by ID.
+   * @param {string} columnId - The ID of the column to hide.
+   */
   public hideColumn(columnId: string): void {
     this.#columnVisibilityController.hideColumn(columnId);
   }
 
+  /**
+   * Shows a previously hidden column by ID.
+   * @param {string} columnId - The ID of the column to show.
+   */
   public showColumn(columnId: string): void {
     this.#columnVisibilityController.showColumn(columnId);
   }
 
+  /**
+   * Toggles the visibility of a column by ID.
+   * @param {string} columnId - The ID of the column to toggle.
+   */
   public toggleColumnVisibility(columnId: string): void {
     this.#columnVisibilityController.toggleColumnVisibility(columnId);
   }
