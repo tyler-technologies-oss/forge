@@ -1,0 +1,129 @@
+<!--
+  @block Table with Filter Sidesheet
+  @description Full application layout with header, left navigation drawer, paginated data table in the body, and a filter sidesheet in the right drawer. Demonstrates a common pattern for data-heavy applications with filtering capabilities.
+  @tags layout, application, table, filter, sidesheet, drawer, navigation, paginator, data
+-->
+
+<forge-app-layout app-title="Orders Management" app-title-href="/">
+  <!-- App bar logo -->
+  <forge-icon slot="app-bar-logo" name="inventory_2"></forge-icon>
+
+  <!-- App bar end actions -->
+  <div slot="app-bar-end" class="flex items-center gap-xsmall">
+    <forge-icon-button density="medium" aria-label="Notifications" theme="app-bar">
+      <forge-icon name="notifications"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button density="medium" aria-label="Account" theme="app-bar">
+      <forge-icon name="account_circle"></forge-icon>
+    </forge-icon-button>
+  </div>
+
+  <!-- Left navigation drawer -->
+  {{> app-nav}}
+
+  <!-- Body header toolbar -->
+  <div slot="body-header">
+    <forge-toolbar>
+      <h2 slot="start" class="text-heading3">Orders</h2>
+      <div slot="end" class="flex items-center gap-small">
+        <forge-button variant="filled">
+          <forge-icon slot="start" name="add"></forge-icon>
+          New Order
+        </forge-button>
+      </div>
+    </forge-toolbar>
+  </div>
+
+  <!-- Main body content with table -->
+  <main slot="body" class="p-medium">
+    <forge-structured-card heading-level="2" body-spacing="none">
+      <div slot="title">All Orders</div>
+      <forge-icon-button aria-label="Filter" slot="after-header-actions">
+        <forge-icon name="filter_list"></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button aria-label="Export" slot="after-header-actions">
+        <forge-icon name="download"></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button aria-label="More options" slot="after-header-actions">
+        <forge-icon name="more_vert"></forge-icon>
+      </forge-icon-button>
+
+      <forge-table slot="body" id="orders-table"></forge-table>
+
+      <forge-paginator slot="footer-primary-action" id="orders-paginator" page-size="5" total="12" page-index="0" first-last> </forge-paginator>
+    </forge-structured-card>
+  </main>
+
+  <!-- Right drawer with filter sidesheet -->
+  <div slot="body-right">
+    <forge-drawer direction="right">
+      <forge-scaffold>
+        <forge-toolbar slot="header">
+          <h2 slot="start" class="text-heading3">Filters</h2>
+        </forge-toolbar>
+
+        <div slot="body" class="p-medium flex flex-col gap-medium">
+          <!-- Status filter (multi-select) -->
+          {{> filter-facet-checkbox}}
+
+          <forge-divider></forge-divider>
+
+          <!-- Date range filter (single-select) -->
+          {{> filter-facet-radio}}
+        </div>
+
+        <forge-toolbar slot="footer" inverted>
+          <div slot="end" class="flex gap-small w-full">
+            <forge-button type="button" class="flex-1">Clear All</forge-button>
+            <forge-button variant="filled" type="button" class="flex-1">Apply</forge-button>
+          </div>
+        </forge-toolbar>
+      </forge-scaffold>
+    </forge-drawer>
+  </div>
+
+  <!-- Footer -->
+  <footer slot="body-footer">
+    <forge-toolbar inverted>
+      <div slot="center" class="text-body2">© 2026 Orders Management System</div>
+    </forge-toolbar>
+  </footer>
+</forge-app-layout>
+
+<script type="module">
+  const table = document.getElementById('orders-table');
+  const paginator = document.getElementById('orders-paginator');
+
+  const allData = [
+    { orderId: 'ORD-001', customer: 'Sir Galahad', item: 'Longsword', quantity: 2, status: 'Completed', total: 90 },
+    { orderId: 'ORD-002', customer: 'Lady Morgana', item: 'Dagger Set', quantity: 6, status: 'In Progress', total: 72 },
+    { orderId: 'ORD-003', customer: 'King Arthur', item: 'Excalibur Replica', quantity: 1, status: 'Pending', total: 500 },
+    { orderId: 'ORD-004', customer: 'Merlin', item: 'Staff Ferrule', quantity: 3, status: 'Completed', total: 45 },
+    { orderId: 'ORD-005', customer: 'Lancelot', item: 'Chain Mail', quantity: 1, status: 'In Progress', total: 150 },
+    { orderId: 'ORD-006', customer: 'Guinevere', item: 'Decorative Brooch', quantity: 4, status: 'Completed', total: 120 },
+    { orderId: 'ORD-007', customer: 'Percival', item: 'Shield', quantity: 1, status: 'Pending', total: 40 },
+    { orderId: 'ORD-008', customer: 'Blacksmith Guild', item: 'Anvil', quantity: 2, status: 'Completed', total: 1000 },
+    { orderId: 'ORD-009', customer: 'Village Stable', item: 'Horseshoes', quantity: 24, status: 'In Progress', total: 48 },
+    { orderId: 'ORD-010', customer: 'Castle Armory', item: 'Helmets', quantity: 10, status: 'Pending', total: 550 },
+    { orderId: 'ORD-011', customer: 'Tristan', item: 'Battle Axe', quantity: 1, status: 'Completed', total: 35 },
+    { orderId: 'ORD-012', customer: 'Bedivere', item: 'Gauntlets', quantity: 2, status: 'In Progress', total: 80 }
+  ];
+
+  table.columnConfigurations = [
+    { property: 'orderId', header: 'Order ID' },
+    { property: 'customer', header: 'Customer' },
+    { property: 'item', header: 'Item' },
+    { property: 'quantity', header: 'Qty' },
+    { property: 'status', header: 'Status' },
+    { property: 'total', header: 'Total (gold)' }
+  ];
+
+  function updateTable() {
+    const start = paginator.pageIndex * paginator.pageSize;
+    const end = start + paginator.pageSize;
+    table.data = allData.slice(start, end);
+  }
+
+  paginator.addEventListener('forge-paginator-change', updateTable);
+  updateTable();
+</script>
