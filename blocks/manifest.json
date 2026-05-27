@@ -118,6 +118,19 @@
       "file": "blocks/forms/add-user/add-user.html"
     },
     {
+      "id": "blocks/cards/user-profile/user-profile",
+      "name": "User Profile Card",
+      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
+      "tags": [
+        "card",
+        "profile",
+        "user",
+        "avatar",
+        "contact"
+      ],
+      "file": "blocks/cards/user-profile/user-profile.html"
+    },
+    {
       "id": "blocks/dialogs/simple/simple",
       "name": "Simple Dialog",
       "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
@@ -145,19 +158,6 @@
       "file": "blocks/cards/responsive-cards/responsive-cards.html"
     },
     {
-      "id": "blocks/cards/user-profile/user-profile",
-      "name": "User Profile Card",
-      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
-      "tags": [
-        "card",
-        "profile",
-        "user",
-        "avatar",
-        "contact"
-      ],
-      "file": "blocks/cards/user-profile/user-profile.html"
-    },
-    {
       "id": "blocks/forms/add-illustration/add-illustration",
       "name": "Add Illustration Form",
       "description": "Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files",
@@ -171,22 +171,6 @@
         "create"
       ],
       "file": "blocks/forms/add-illustration/add-illustration.html"
-    },
-    {
-      "id": "blocks/application-layout/three-panel/three-panel",
-      "name": "Three Panel Layout",
-      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
-      "tags": [
-        "layout",
-        "application",
-        "three-panel",
-        "left-drawer",
-        "right-drawer",
-        "navigation",
-        "body",
-        "panels"
-      ],
-      "file": "blocks/application-layout/three-panel/three-panel.html"
     },
     {
       "id": "blocks/application-layout/table-with-filters/table-with-filters",
@@ -204,6 +188,22 @@
         "data"
       ],
       "file": "blocks/application-layout/table-with-filters/table-with-filters.html"
+    },
+    {
+      "id": "blocks/application-layout/three-panel/three-panel",
+      "name": "Three Panel Layout",
+      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
+      "tags": [
+        "layout",
+        "application",
+        "three-panel",
+        "left-drawer",
+        "right-drawer",
+        "navigation",
+        "body",
+        "panels"
+      ],
+      "file": "blocks/application-layout/three-panel/three-panel.html"
     },
     {
       "id": "blocks/application-layout/mini-nav/mini-nav",
@@ -262,5 +262,5 @@
     "tables",
     "toolbar"
   ],
-  "generatedAt": "2026-05-27T15:14:09.280Z"
+  "generatedAt": "2026-05-27T19:04:23.319Z"
 }

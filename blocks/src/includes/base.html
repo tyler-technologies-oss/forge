@@ -20,10 +20,6 @@
   </head>
   <body class="{{bodyClass}}">
     {{{body}}}
-    <script type="module">
-      customElements.whenDefined('forge-scaffold').then(() => {
-        document.body.classList.add('ready');
-      });
-    </script>
+    <script type="module" src="/src/ready-transition.ts"></script>
   </body>
 </html>

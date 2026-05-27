@@ -99,7 +99,6 @@ export async function generateScreenshots(options: GenerateScreenshotsOptions): 
   console.log('Starting Vite dev server...');
 
   const server: ViteDevServer = await createServer({
-    root: process.cwd(),
     server: { port: 0 }
   });
 
@@ -137,6 +136,9 @@ export async function generateScreenshots(options: GenerateScreenshotsOptions): 
       try {
         await page.goto(blockUrl, { waitUntil: 'networkidle' });
         await waitForForgeComponents(page);
+
+        // Wait for dynamic content (tables, etc.) to fully render
+        await page.waitForTimeout(2500);
 
         await page.screenshot({
           path: screenshotPath,
