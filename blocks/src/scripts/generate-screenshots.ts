@@ -27,29 +27,25 @@ export interface GenerateScreenshotsOptions {
 
 /**
  * Waits for Forge web components to fully render.
- * Ensures shadow DOMs are attached and fonts are loaded.
+ * Since all Forge components are registered together via defineComponents(),
+ * checking a single component is sufficient to know Forge is loaded.
  */
 async function waitForForgeComponents(page: Page): Promise<void> {
-  // Wait for all forge- custom elements to have shadow roots
+  // forge-scaffold is included in the base template (src/includes/base.html)
   await page.waitForFunction(() => {
-    const forgeElements = document.querySelectorAll('forge-button, forge-card, forge-text-field, forge-checkbox, forge-divider, forge-table, forge-app-layout, forge-app-bar, forge-scaffold, forge-toolbar, forge-icon, forge-select, forge-switch, forge-radio, forge-dialog, forge-drawer, forge-tab-bar, forge-tab, forge-list, forge-list-item, forge-menu, forge-badge, forge-avatar, forge-chip, forge-expansion-panel, forge-stepper, forge-file-picker');
-    if (forgeElements.length === 0) {
-      return true;
-    }
-    return Array.from(forgeElements).every(el => el.shadowRoot !== null);
+    const scaffold = document.querySelector('forge-scaffold');
+    return !scaffold || scaffold.shadowRoot !== null;
   }, { timeout: 15000 }).catch(() => {
     // Continue even if timeout
   });
 
   await page.evaluate(() => document.fonts.ready);
 
-  // Ensure body is visible (template hides body until forge-scaffold loads)
   await page.evaluate(() => {
     document.body.classList.add('ready');
     document.body.style.opacity = '1';
   });
 
-  // Additional wait for rendering and animations to settle
   await page.waitForTimeout(500);
 }
 
