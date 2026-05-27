@@ -1,14 +1,17 @@
-import { glob } from 'glob';
-import fs from 'fs';
-import path from 'path';
-import { parseBlockMetadata, type Block } from './block-metadata.js';
-import { validateBlockContent, formatValidationIssues } from './block-validator.js';
+/**
+ * Block manifest generator.
+ * Discovers all block HTML files and generates a JSON manifest with metadata.
+ * Run via: pnpm generate-manifest
+ */
 
-export interface Manifest {
-  blocks: Block[];
-  categories: string[];
-  generatedAt: string;
-}
+import fs from 'node:fs';
+import path from 'node:path';
+import { glob } from 'glob';
+import { parseBlockMetadata } from './block-metadata.js';
+import { validateBlockContent, formatValidationIssues } from './block-validator.js';
+import type { Block, Manifest } from './types.js';
+
+export type { Block, Manifest } from './types.js';
 
 export interface GenerateManifestOptions {
   blocksPath: string;
@@ -17,6 +20,9 @@ export interface GenerateManifestOptions {
   silent?: boolean;
 }
 
+/**
+ * Discovers all block HTML files and extracts their metadata.
+ */
 export async function discoverBlocks(blocksPath: string): Promise<Block[]> {
   const blocks: Block[] = [];
   const htmlFiles = await glob('**/*.html', {
@@ -26,7 +32,7 @@ export async function discoverBlocks(blocksPath: string): Promise<Block[]> {
   for (const file of htmlFiles) {
     const fullPath = path.join(blocksPath, file);
     const content = fs.readFileSync(fullPath, 'utf-8');
-    const relativePath = path.join('src/blocks', file);
+    const relativePath = path.join('blocks', file);
     const metadata = parseBlockMetadata(content, relativePath);
 
     if (metadata) {
@@ -44,6 +50,9 @@ export async function discoverBlocks(blocksPath: string): Promise<Block[]> {
   return blocks;
 }
 
+/**
+ * Generates the blocks manifest JSON file.
+ */
 export async function generateManifest(options: GenerateManifestOptions): Promise<Manifest> {
   const { blocksPath, outputPath, validate = true, silent = false } = options;
 
@@ -65,7 +74,7 @@ export async function generateManifest(options: GenerateManifestOptions): Promis
 
   const categories = [...new Set(blocks.map(b => {
     const parts = b.file.split('/');
-    return parts.length > 2 ? parts[2] : '';
+    return parts.length > 1 ? parts[1] : '';
   }).filter(Boolean))].sort();
 
   const manifest: Manifest = {
@@ -89,5 +98,8 @@ if (isMainModule) {
   generateManifest({
     blocksPath: path.resolve(process.cwd(), 'src/blocks'),
     outputPath: 'manifest.json'
-  }).catch(console.error);
+  }).catch((error: unknown) => {
+    console.error(error);
+    process.exit(1);
+  });
 }

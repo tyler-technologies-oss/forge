@@ -1,4 +1,10 @@
-import fs from 'fs';
+/**
+ * Block HTML compiler.
+ * Processes block HTML files by injecting them into the base layout template
+ * and expanding Handlebars partials.
+ */
+
+import fs from 'node:fs';
 import Handlebars from 'handlebars';
 import type { PartialRegistry } from './partial-registry.js';
 
@@ -24,6 +30,9 @@ const BODY_REGEX = /<body([^>]*)>([\s\S]*)<\/body>/;
 const CLASS_REGEX = /class="([^"]*)"/;
 const METADATA_COMMENT_REGEX = /<!--[\s\S]*?-->/;
 
+/**
+ * Parses block HTML content to extract template components.
+ */
 export function parseBlockTemplate(content: string): BlockTemplate | null {
   const titleMatch = content.match(BLOCK_TITLE_REGEX);
   if (!titleMatch) {
@@ -54,6 +63,9 @@ export function parseBlockTemplate(content: string): BlockTemplate | null {
   };
 }
 
+/**
+ * Compiles a block by processing partials and injecting into the layout.
+ */
 export function compileBlock(content: string, options: CompileOptions): CompileResult {
   const blockTemplate = parseBlockTemplate(content);
 

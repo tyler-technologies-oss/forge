@@ -1,11 +1,16 @@
-import fs from 'fs';
-import type { Plugin, ViteDevServer } from 'vite';
-import type { IncomingMessage, ServerResponse } from 'http';
+/**
+ * Vite plugin for the Forge Blocks development server.
+ * Handles block compilation, partial injection, and manifest generation during builds.
+ */
 
+import fs from 'node:fs';
 import { compileBlock } from './block-compiler.js';
-import { createPartialRegistry, type PartialRegistry } from './partial-registry.js';
-import { discoverCategories } from './category-discovery.js';
+import { createPartialRegistry } from './partial-registry.js';
+import { discoverCategories } from './utils.js';
 import { discoverBlocks, generateManifest } from './generate-manifest.js';
+import type { Plugin, ViteDevServer } from 'vite';
+import type { IncomingMessage, ServerResponse } from 'node:http';
+import type { PartialRegistry } from './partial-registry.js';
 
 export interface BlocksPluginOptions {
   blocksPath: string;
@@ -19,6 +24,9 @@ function injectBlocksData(html: string, blocksData: object): string {
   return html.replace('</head>', `${script}\n  </head>`);
 }
 
+/**
+ * Creates the Vite plugin for serving and building Forge blocks.
+ */
 export function blocksPlugin(options: BlocksPluginOptions): Plugin {
   const { blocksPath, layoutPath, partialsPath, indexPath } = options;
 

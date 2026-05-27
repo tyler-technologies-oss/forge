@@ -1,19 +1,17 @@
+/**
+ * Block content validation utilities.
+ * Validates that block HTML files contain required metadata annotations.
+ */
+
 import { METADATA_REGEX } from './block-metadata.js';
+import type { ValidationIssue, ValidationResult } from './types.js';
 
-export type ValidationSeverity = 'error' | 'warning';
+export type { ValidationIssue, ValidationResult, ValidationSeverity } from './types.js';
 
-export interface ValidationIssue {
-  severity: ValidationSeverity;
-  message: string;
-  file?: string;
-  line?: number;
-}
-
-export interface ValidationResult {
-  valid: boolean;
-  issues: ValidationIssue[];
-}
-
+/**
+ * Validates block HTML content for required metadata.
+ * Checks for @block name, @description, and @tags annotations.
+ */
 export function validateBlockContent(content: string, filePath?: string): ValidationResult {
   const issues: ValidationIssue[] = [];
 
@@ -58,6 +56,9 @@ export function validateBlockContent(content: string, filePath?: string): Valida
   return { valid: !hasErrors, issues };
 }
 
+/**
+ * Formats validation issues into a human-readable string.
+ */
 export function formatValidationIssues(issues: ValidationIssue[]): string {
   return issues
     .map(issue => {

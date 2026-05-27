@@ -1,18 +1,20 @@
-import path from 'path';
+/**
+ * Block metadata parsing utilities.
+ * Extracts @block, @description, and @tags annotations from HTML comment headers.
+ */
 
+import path from 'node:path';
+import type { BlockMetadata } from './types.js';
+
+export type { Block, BlockMetadata } from './types.js';
+
+/** Regex pattern for matching block metadata comments */
 export const METADATA_REGEX = /<!--\s*(@block\s+.+?)\s*(@description\s+.+?)?\s*(@tags\s+.+?)?\s*-->/s;
 
-export interface BlockMetadata {
-  name: string;
-  description: string;
-  tags: string[];
-}
-
-export interface Block extends BlockMetadata {
-  id: string;
-  file: string;
-}
-
+/**
+ * Parses block metadata from HTML content.
+ * Extracts name, description, and tags from the metadata comment.
+ */
 export function parseBlockMetadata(content: string, filePath: string): BlockMetadata | null {
   const match = content.match(METADATA_REGEX);
   if (!match) {

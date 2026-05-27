@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "generate-manifest": "tsx scripts/generate-manifest.ts"
+    "build": "vite build && pnpm generate-manifest && pnpm generate-screenshots",
+    "generate-manifest": "tsx src/scripts/generate-manifest.ts",
+    "generate-screenshots": "tsx src/scripts/generate-screenshots.ts"
   },
   "dependencies": {
     "@tylertech/forge": "workspace:*",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "catalog:",
+    "playwright": "catalog:",
     "@types/node": "catalog:",
     "glob": "catalog:",
     "handlebars": "^4.7.8",

@@ -178,6 +178,9 @@ importers:
       handlebars:
         specifier: ^4.7.8
         version: 4.7.8
+      playwright:
+        specifier: 'catalog:'
+        version: 1.59.0
       sass:
         specifier: 'catalog:'
         version: 1.92.1

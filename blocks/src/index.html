@@ -80,13 +80,14 @@
         const listItem = item.querySelector('.block-item');
 
         const link = item.querySelector('.block-link');
-        link.href = '/' + block.file;
+        // block.file is "blocks/..." for deployed URLs, prepend "src/" for dev server
+        link.href = '/src/' + block.file;
         link.textContent = block.name;
 
         listItem.dataset.name = block.name.toLowerCase();
         listItem.dataset.description = (block.description || '').toLowerCase();
         listItem.dataset.tags = (block.tags || []).join(' ').toLowerCase();
-        listItem.dataset.category = block.file.split('/')[2];
+        listItem.dataset.category = block.file.split('/')[1];
 
         return item;
       }
@@ -115,7 +116,7 @@
 
         const blocksByCategory = {};
         categories.forEach(cat => {
-          blocksByCategory[cat.name] = blocks.filter(b => b.file.startsWith(`src/blocks/${cat.name}/`));
+          blocksByCategory[cat.name] = blocks.filter(b => b.file.startsWith(`blocks/${cat.name}/`));
         });
 
         categories

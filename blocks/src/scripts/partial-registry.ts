@@ -1,5 +1,10 @@
-import fs from 'fs';
-import path from 'path';
+/**
+ * Handlebars partial registry.
+ * Manages loading and access to reusable HTML snippets from the partials directory.
+ */
+
+import fs from 'node:fs';
+import path from 'node:path';
 
 export interface PartialRegistry {
   partials: Map<string, string>;
@@ -14,6 +19,9 @@ export interface PartialRegistryOptions {
   extension?: string;
 }
 
+/**
+ * Creates a registry for managing Handlebars partials.
+ */
 export function createPartialRegistry(options: PartialRegistryOptions): PartialRegistry {
   const { partialsPath, extension = '.hbs' } = options;
   const partials = new Map<string, string>();

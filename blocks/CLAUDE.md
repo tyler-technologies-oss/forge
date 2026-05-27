@@ -9,10 +9,16 @@ blocks/
 ├── src/
 │   ├── blocks/           # All block categories
 │   │   ├── forms/
+│   │   │   ├── login/
+│   │   │   │   ├── login.html
+│   │   │   │   └── login.png
+│   │   │   └── add-user/
+│   │   │       ├── add-user.html
+│   │   │       └── add-user.png
 │   │   ├── tables/
-│   │   ├── pages/
+│   │   ├── cards/
 │   │   ├── patterns/
-│   │   └── full-app-layouts/
+│   │   └── application-layout/
 │   ├── includes/         # Shared templates (not blocks)
 │   │   └── base.html
 │   ├── partials/         # Reusable HTML snippets
@@ -22,6 +28,8 @@ blocks/
 ├── forge-register.ts     # Component registration
 └── vite.config.ts
 ```
+
+Each block lives in its own folder within a category, containing both the HTML file and its screenshot (PNG).
 
 ## Block File Structure
 
