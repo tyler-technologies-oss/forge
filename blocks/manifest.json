@@ -9,19 +9,8 @@
         "header",
         "actions"
       ],
-      "file": "blocks/toolbar/simple/simple.html"
-    },
-    {
-      "id": "blocks/tables/simple/simple",
-      "name": "Simple Table",
-      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
-      "tags": [
-        "table",
-        "data",
-        "card",
-        "toolbar"
-      ],
-      "file": "blocks/tables/simple/simple.html"
+      "file": "blocks/toolbar/simple/simple.html",
+      "screenshot": "blocks/toolbar/simple/simple.webp"
     },
     {
       "id": "blocks/tables/paginated/paginated",
@@ -35,7 +24,21 @@
         "structured-card",
         "actions"
       ],
-      "file": "blocks/tables/paginated/paginated.html"
+      "file": "blocks/tables/paginated/paginated.html",
+      "screenshot": "blocks/tables/paginated/paginated.webp"
+    },
+    {
+      "id": "blocks/tables/simple/simple",
+      "name": "Simple Table",
+      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
+      "tags": [
+        "table",
+        "data",
+        "card",
+        "toolbar"
+      ],
+      "file": "blocks/tables/simple/simple.html",
+      "screenshot": "blocks/tables/simple/simple.webp"
     },
     {
       "id": "blocks/patterns/filter-facets/filter-facets",
@@ -56,7 +59,8 @@
         "partials",
         "data-table"
       ],
-      "file": "blocks/patterns/filter-facets/filter-facets.html"
+      "file": "blocks/patterns/filter-facets/filter-facets.html",
+      "screenshot": "blocks/patterns/filter-facets/filter-facets.webp"
     },
     {
       "id": "blocks/lists/list-management/list-management",
@@ -68,7 +72,8 @@
         "interactive",
         "card"
       ],
-      "file": "blocks/lists/list-management/list-management.html"
+      "file": "blocks/lists/list-management/list-management.html",
+      "screenshot": "blocks/lists/list-management/list-management.webp"
     },
     {
       "id": "blocks/forms/multi-column/multi-column",
@@ -86,20 +91,8 @@
         "radio",
         "switch"
       ],
-      "file": "blocks/forms/multi-column/multi-column.html"
-    },
-    {
-      "id": "blocks/forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
-      "tags": [
-        "authentication",
-        "login",
-        "form",
-        "card",
-        "centered"
-      ],
-      "file": "blocks/forms/login/login.html"
+      "file": "blocks/forms/multi-column/multi-column.html",
+      "screenshot": "blocks/forms/multi-column/multi-column.webp"
     },
     {
       "id": "blocks/forms/add-user/add-user",
@@ -115,47 +108,22 @@
         "checkbox",
         "icons"
       ],
-      "file": "blocks/forms/add-user/add-user.html"
+      "file": "blocks/forms/add-user/add-user.html",
+      "screenshot": "blocks/forms/add-user/add-user.webp"
     },
     {
-      "id": "blocks/dialogs/simple/simple",
-      "name": "Simple Dialog",
-      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
+      "id": "blocks/forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
       "tags": [
-        "dialog",
-        "modal",
-        "scaffold",
-        "toolbar",
-        "actions"
-      ],
-      "file": "blocks/dialogs/simple/simple.html"
-    },
-    {
-      "id": "blocks/cards/user-profile/user-profile",
-      "name": "User Profile Card",
-      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
-      "tags": [
+        "authentication",
+        "login",
+        "form",
         "card",
-        "profile",
-        "user",
-        "avatar",
-        "contact"
+        "centered"
       ],
-      "file": "blocks/cards/user-profile/user-profile.html"
-    },
-    {
-      "id": "blocks/cards/responsive-cards/responsive-cards",
-      "name": "Responsive Cards",
-      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
-      "tags": [
-        "cards",
-        "responsive",
-        "grid",
-        "badge",
-        "image",
-        "metrics"
-      ],
-      "file": "blocks/cards/responsive-cards/responsive-cards.html"
+      "file": "blocks/forms/login/login.html",
+      "screenshot": "blocks/forms/login/login.webp"
     },
     {
       "id": "blocks/forms/add-illustration/add-illustration",
@@ -170,7 +138,51 @@
         "file-picker",
         "create"
       ],
-      "file": "blocks/forms/add-illustration/add-illustration.html"
+      "file": "blocks/forms/add-illustration/add-illustration.html",
+      "screenshot": "blocks/forms/add-illustration/add-illustration.webp"
+    },
+    {
+      "id": "blocks/dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
+      "tags": [
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
+      ],
+      "file": "blocks/dialogs/simple/simple.html",
+      "screenshot": "blocks/dialogs/simple/simple.webp"
+    },
+    {
+      "id": "blocks/cards/user-profile/user-profile",
+      "name": "User Profile Card",
+      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
+      "tags": [
+        "card",
+        "profile",
+        "user",
+        "avatar",
+        "contact"
+      ],
+      "file": "blocks/cards/user-profile/user-profile.html",
+      "screenshot": "blocks/cards/user-profile/user-profile.webp"
+    },
+    {
+      "id": "blocks/cards/responsive-cards/responsive-cards",
+      "name": "Responsive Cards",
+      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
+      "tags": [
+        "cards",
+        "responsive",
+        "grid",
+        "badge",
+        "image",
+        "metrics"
+      ],
+      "file": "blocks/cards/responsive-cards/responsive-cards.html",
+      "screenshot": "blocks/cards/responsive-cards/responsive-cards.webp"
     },
     {
       "id": "blocks/application-layout/three-panel/three-panel",
@@ -186,7 +198,8 @@
         "body",
         "panels"
       ],
-      "file": "blocks/application-layout/three-panel/three-panel.html"
+      "file": "blocks/application-layout/three-panel/three-panel.html",
+      "screenshot": "blocks/application-layout/three-panel/three-panel.webp"
     },
     {
       "id": "blocks/application-layout/table-with-filters/table-with-filters",
@@ -203,7 +216,8 @@
         "paginator",
         "data"
       ],
-      "file": "blocks/application-layout/table-with-filters/table-with-filters.html"
+      "file": "blocks/application-layout/table-with-filters/table-with-filters.html",
+      "screenshot": "blocks/application-layout/table-with-filters/table-with-filters.webp"
     },
     {
       "id": "blocks/application-layout/mini-nav/mini-nav",
@@ -218,7 +232,8 @@
         "user-profile",
         "hover"
       ],
-      "file": "blocks/application-layout/mini-nav/mini-nav.html"
+      "file": "blocks/application-layout/mini-nav/mini-nav.html",
+      "screenshot": "blocks/application-layout/mini-nav/mini-nav.webp"
     },
     {
       "id": "blocks/application-layout/dual-scroll/dual-scroll",
@@ -232,7 +247,8 @@
         "dual-panel",
         "right-drawer"
       ],
-      "file": "blocks/application-layout/dual-scroll/dual-scroll.html"
+      "file": "blocks/application-layout/dual-scroll/dual-scroll.html",
+      "screenshot": "blocks/application-layout/dual-scroll/dual-scroll.webp"
     },
     {
       "id": "blocks/application-layout/basic/basic",
@@ -249,7 +265,8 @@
         "footer",
         "responsive-grid"
       ],
-      "file": "blocks/application-layout/basic/basic.html"
+      "file": "blocks/application-layout/basic/basic.html",
+      "screenshot": "blocks/application-layout/basic/basic.webp"
     }
   ],
   "categories": [
@@ -278,5 +295,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-05-28T19:55:36.664Z"
+  "generatedAt": "2026-05-28T20:23:41.587Z"
 }

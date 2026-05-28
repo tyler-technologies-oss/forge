@@ -14,6 +14,7 @@ export interface BlockMetadata {
 export interface Block extends BlockMetadata {
   id: string;
   file: string;
+  screenshot?: string;
 }
 
 /** Category folder information */

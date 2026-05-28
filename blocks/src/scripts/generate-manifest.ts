@@ -37,13 +37,23 @@ export async function discoverBlocks(blocksPath: string): Promise<Block[]> {
 
     if (metadata) {
       const id = relativePath.replace('.html', '');
-      blocks.push({
+      const block: Block = {
         id,
         name: metadata.name,
         description: metadata.description,
         tags: metadata.tags,
         file: relativePath
-      });
+      };
+
+      // Check for screenshot file (.webp or .png)
+      const basePath = fullPath.replace('.html', '');
+      if (fs.existsSync(`${basePath}.webp`)) {
+        block.screenshot = relativePath.replace('.html', '.webp');
+      } else if (fs.existsSync(`${basePath}.png`)) {
+        block.screenshot = relativePath.replace('.html', '.png');
+      }
+
+      blocks.push(block);
     }
   }
 
