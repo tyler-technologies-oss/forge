@@ -1,14 +1,16 @@
 /**
  * Block screenshot generator.
  * Uses Playwright to capture screenshots of rendered block HTML files.
+ * Captures at full width (1280px) then resizes to thumbnail width (500px) for smaller file sizes.
  * Only regenerates screenshots for blocks that have changed (unless --force is used).
- * Run via: pnpm generate-screenshots [--filter <name>] [--force] [--width <px>] [--height <px>]
+ * Run via: pnpm generate-screenshots [--filter <name>] [--force] [--width <px>] [--thumbnail-width <px>]
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
 import { createServer } from 'vite';
+import sharp from 'sharp';
 import { discoverBlocks } from './generate-manifest.js';
 import { needsScreenshot, getArgValue, getArgNumber, hasArg } from './utils.js';
 import type { Browser, Page } from 'playwright';
@@ -20,6 +22,7 @@ export interface GenerateScreenshotsOptions {
   outputDir?: string;
   width?: number;
   height?: number;
+  thumbnailWidth?: number;
   fullPage?: boolean;
   filter?: string;
   force?: boolean;
@@ -58,6 +61,7 @@ export async function generateScreenshots(options: GenerateScreenshotsOptions): 
     outputDir,
     width = 1280,
     height = 800,
+    thumbnailWidth = 500,
     fullPage = true,
     filter,
     force = false
@@ -80,10 +84,10 @@ export async function generateScreenshots(options: GenerateScreenshotsOptions): 
     : blocks.filter((block: Block): boolean => {
         const srcPath: string = block.file.replace(/^blocks\//, 'src/blocks/');
         const htmlPath: string = srcPath;
-        const pngPath: string = outputDir
-          ? path.join(outputDir, `${block.id.replace('blocks/', '')}.png`)
-          : srcPath.replace('.html', '.png');
-        return needsScreenshot(htmlPath, pngPath);
+        const jpgPath: string = outputDir
+          ? path.join(outputDir, `${block.id.replace('blocks/', '')}.webp`)
+          : srcPath.replace('.html', '.webp');
+        return needsScreenshot(htmlPath, jpgPath);
       });
 
   if (blocksToCapture.length === 0) {
@@ -119,8 +123,8 @@ export async function generateScreenshots(options: GenerateScreenshotsOptions): 
       const srcPath = block.file.replace(/^blocks\//, 'src/blocks/');
       const blockUrl = `${serverUrl}/${srcPath}`;
       const screenshotPath = outputDir
-        ? path.join(outputDir, `${block.id.replace('blocks/', '')}.png`)
-        : srcPath.replace('.html', '.png');
+        ? path.join(outputDir, `${block.id.replace('blocks/', '')}.webp`)
+        : srcPath.replace('.html', '.webp');
 
       const screenshotDir = path.dirname(screenshotPath);
       if (!fs.existsSync(screenshotDir)) {
@@ -136,10 +140,14 @@ export async function generateScreenshots(options: GenerateScreenshotsOptions): 
         // Wait for dynamic content (tables, etc.) to fully render
         await page.waitForTimeout(2500);
 
-        await page.screenshot({
-          path: screenshotPath,
-          fullPage
-        });
+        // Capture at full size as PNG buffer
+        const buffer = await page.screenshot({ fullPage, type: 'png' });
+
+        // Resize to thumbnail width and save as WebP
+        await sharp(buffer)
+          .resize({ width: thumbnailWidth })
+          .webp({ quality: 80 })
+          .toFile(screenshotPath);
 
         console.log(`  → ${screenshotPath}`);
       } catch (error: unknown) {
@@ -164,6 +172,7 @@ if (isMainModule) {
     filter: getArgValue(args, '--filter'),
     width: getArgNumber(args, '--width'),
     height: getArgNumber(args, '--height'),
+    thumbnailWidth: getArgNumber(args, '--thumbnail-width'),
     outputDir: getArgValue(args, '--output'),
     fullPage: !hasArg(args, '--no-full-page'),
     force: hasArg(args, '--force')
