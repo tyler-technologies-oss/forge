@@ -1,0 +1,105 @@
+<!--
+  @block Responsive Cards
+  @description Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts
+  @tags cards, responsive, grid, badge, image, metrics
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Cards</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/ready-transition-B-Vr-fHR.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/ready-transition-BLkCfebn.css">
+  </head>
+  <body class="">
+    <div class="min-h-screen flex items-center justify-center p-large">
+  <div class="grid grid-min-320 gap-medium max-w-6xl w-full">
+    <forge-card class="overflow-hidden" no-padding>
+      <img class="w-full h-48 object-cover" src="https://dummyimage.com/720x400" alt="Blog post image" />
+      <div class="p-medium">
+        <forge-badge class="mb-xsmall" theme="info-secondary">Category</forge-badge>
+        <h2 class="text-heading5 mb-small">The Catalyzer</h2>
+        <p class="text-body2 text-medium mb-medium">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
+        <div class="flex items-center flex-wrap gap-small">
+          <a href="#" class="forge-hyperlink inline-flex items-center gap-xxsmall">
+            Learn More
+            <forge-icon name="forward"></forge-icon>
+          </a>
+          <div class="flex items-center gap-small ml-auto">
+            <span class="text-medium text-label2 inline-flex items-center gap-xxsmall pr-small border-r border-outline">
+              <forge-icon name="visibility"></forge-icon>
+              1.2K
+            </span>
+            <span class="text-medium text-label2 inline-flex items-center gap-xxsmall">
+              <forge-icon name="comment"></forge-icon>
+              6
+            </span>
+          </div>
+        </div>
+      </div>
+    </forge-card>
+
+    <forge-card class="overflow-hidden" no-padding>
+      <img class="w-full h-48 object-cover" src="https://dummyimage.com/721x401" alt="Blog post image" />
+      <div class="p-medium">
+        <forge-badge class="mb-xsmall" theme="info">Category</forge-badge>
+        <h2 class="text-heading5 mb-small">The 400 Blows</h2>
+        <p class="text-body2 text-medium mb-medium">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
+        <div class="flex items-center flex-wrap gap-small">
+          <a href="#" class="forge-hyperlink inline-flex items-center gap-xxsmall">
+            Learn More
+            <forge-icon name="forward"></forge-icon>
+          </a>
+          <div class="flex items-center gap-small ml-auto">
+            <span class="text-medium text-label2 inline-flex items-center gap-xxsmall pr-small border-r border-outline">
+              <forge-icon name="visibility"></forge-icon>
+              1.2K
+            </span>
+            <span class="text-medium text-label2 inline-flex items-center gap-xxsmall">
+              <forge-icon name="comment"></forge-icon>
+              6
+            </span>
+          </div>
+        </div>
+      </div>
+    </forge-card>
+
+    <forge-card class="overflow-hidden" no-padding>
+      <img class="w-full h-48 object-cover" src="https://dummyimage.com/722x402" alt="Blog post image" />
+      <div class="p-medium">
+        <forge-badge class="mb-xsmall" theme="warning">Category</forge-badge>
+        <h2 class="text-heading5 mb-small">Shooting Stars</h2>
+        <p class="text-body2 text-medium mb-medium">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
+        <div class="flex items-center flex-wrap gap-small">
+          <a href="#" class="forge-hyperlink inline-flex items-center gap-xxsmall">
+            Learn More
+            <forge-icon name="forward"></forge-icon>
+          </a>
+          <div class="flex items-center gap-small ml-auto">
+            <span class="text-medium text-label2 inline-flex items-center gap-xxsmall pr-small border-r border-outline">
+              <forge-icon name="visibility"></forge-icon>
+              1.2K
+            </span>
+            <span class="text-medium text-label2 inline-flex items-center gap-xxsmall">
+              <forge-icon name="comment"></forge-icon>
+              6
+            </span>
+          </div>
+        </div>
+      </div>
+    </forge-card>
+  </div>
+</div>
+  </body>
+</html>
