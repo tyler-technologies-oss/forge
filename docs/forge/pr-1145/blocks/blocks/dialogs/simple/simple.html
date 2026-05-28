@@ -1,0 +1,77 @@
+<!--
+  @block Simple Dialog
+  @description Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons
+  @tags dialog, modal, scaffold, toolbar, actions
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Dialog</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" crossorigin src="../../../../assets/forge-register-EL4SVgZm.js"></script>
+    <script type="module" crossorigin src="../../../../assets/ready-transition-CtUJQYD5.js"></script>
+    <link rel="stylesheet" crossorigin href="../../../../assets/forge-register-BLkCfebn.css">
+  </head>
+  <body class="">
+    <div class="flex justify-center items-center min-h-screen">
+  <forge-button id="open-dialog-btn">Open Dialog</forge-button>
+</div>
+
+<forge-dialog id="simple-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+  <forge-scaffold>
+    <forge-toolbar slot="header">
+      <h2 id="dialog-title" slot="start" class="text-heading3">Dialog Title</h2>
+      <forge-icon-button slot="end" density="medium" aria-label="Close dialog" id="close-dialog-btn">
+        <forge-icon name="close"></forge-icon>
+      </forge-icon-button>
+    </forge-toolbar>
+
+    <div slot="body" class="p-medium">
+      <div class="striped-box w-125 min-h-75"></div>
+    </div>
+
+    <forge-toolbar slot="footer" inverted>
+      <div class="flex items-center gap-medium" slot="end">
+        <forge-button id="cancel-btn" variant="tonal">Cancel</forge-button>
+        <forge-button id="confirm-btn" variant="filled">Confirm</forge-button>
+      </div>
+    </forge-toolbar>
+  </forge-scaffold>
+</forge-dialog>
+
+<script>
+  const dialog = document.getElementById('simple-dialog');
+  const openBtn = document.getElementById('open-dialog-btn');
+  const closeBtn = document.getElementById('close-dialog-btn');
+  const cancelBtn = document.getElementById('cancel-btn');
+  const confirmBtn = document.getElementById('confirm-btn');
+
+  openBtn.addEventListener('click', () => {
+    dialog.open = true;
+  });
+
+  closeBtn.addEventListener('click', () => {
+    dialog.open = false;
+  });
+
+  cancelBtn.addEventListener('click', () => {
+    dialog.open = false;
+  });
+
+  confirmBtn.addEventListener('click', () => {
+    dialog.open = false;
+  });
+</script>
+  </body>
+</html>

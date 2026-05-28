@@ -1,0 +1,104 @@
+<!--
+  @block Three Panel Layout
+  @description Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.
+  @tags layout, application, three-panel, left-drawer, right-drawer, navigation, body, panels
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three Panel Layout</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" crossorigin src="../../../../assets/forge-register-EL4SVgZm.js"></script>
+    <script type="module" crossorigin src="../../../../assets/ready-transition-CtUJQYD5.js"></script>
+    <link rel="stylesheet" crossorigin href="../../../../assets/forge-register-BLkCfebn.css">
+  </head>
+  <body class="">
+    <forge-app-layout app-title="Three Panel Layout" app-title-href="/">
+  <!-- App bar logo -->
+  <forge-icon slot="app-bar-logo" name="dashboard"></forge-icon>
+
+  <!-- App bar end actions -->
+  <div slot="app-bar-end" class="flex items-center gap-xsmall">
+    <forge-icon-button density="medium" aria-label="Search" theme="app-bar">
+      <forge-icon name="search"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button density="medium" aria-label="Notifications" theme="app-bar">
+      <forge-icon name="notifications"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button density="medium" aria-label="Account" theme="app-bar">
+      <forge-icon name="account_circle"></forge-icon>
+    </forge-icon-button>
+  </div>
+
+  <!-- Left navigation drawer -->
+  <nav slot="navigation">
+    <div class="p-medium space-y-medium">
+      <div class="striped-box"></div>
+      <div class="striped-box"></div>
+      <div class="striped-box"></div>
+      <div class="striped-box"></div>
+      <div class="striped-box"></div>
+      <div class="striped-box"></div>
+    </div>
+  </nav>
+
+  <!-- Body header toolbar -->
+  <div slot="body-header">
+    <forge-toolbar>
+      <div slot="start" class="striped-box h-8 w-48"></div>
+      <div slot="end" class="flex items-center gap-small">
+        <div class="striped-box w-28"></div>
+        <div class="striped-box w-32"></div>
+      </div>
+    </forge-toolbar>
+  </div>
+
+  <!-- Main body content -->
+  <main slot="body" class="p-medium">
+    <forge-card class="p-medium">
+      <div class="space-y-medium">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-medium">
+          <div class="striped-box"></div>
+          <div class="striped-box"></div>
+          <div class="striped-box lg:col-span-2"></div>
+          <div class="striped-box"></div>
+          <div class="striped-box"></div>
+        </div>
+      </div>
+    </forge-card>
+  </main>
+
+  <!-- Right drawer panel -->
+  <div slot="body-right">
+    <forge-drawer direction="right">
+      <div class="p-medium space-y-medium">
+        <div class="striped-box"></div>
+        <div class="striped-box"></div>
+        <div class="striped-box"></div>
+        <div class="striped-box"></div>
+        <div class="striped-box"></div>
+        <div class="striped-box"></div>
+      </div>
+    </forge-drawer>
+  </div>
+
+  <!-- Footer -->
+  <footer slot="body-footer">
+    <forge-toolbar inverted>
+      <div slot="center" class="text-body2">© 2026 My Application</div>
+    </forge-toolbar>
+  </footer>
+</forge-app-layout>
+  </body>
+</html>
