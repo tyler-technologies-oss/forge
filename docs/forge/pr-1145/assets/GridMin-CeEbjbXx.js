@@ -1,0 +1,2 @@
+import{u as s,j as t,M as e,C as a}from"./blocks-Bpy7IxR4.js";import{S as m,D as i}from"./GridMin.stories-DK_icuk1.js";import"./preload-helper-PPVm8Dsz.js";import"./_commonjsHelpers-CqkleIqs.js";import"./iframe-QGP1N9qY.js";/* empty css                 */function r(o){return t.jsxs(t.Fragment,{children:[t.jsx(e,{of:m}),`
+`,t.jsx(a,{of:i})]})}function M(o={}){const{wrapper:n}={...s(),...o.components};return n?t.jsx(n,{...o,children:t.jsx(r,{...o})}):r()}export{M as default};

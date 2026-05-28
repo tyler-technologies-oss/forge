@@ -253,14 +253,30 @@
     }
   ],
   "categories": [
-    "application-layout",
-    "cards",
-    "dialogs",
-    "forms",
-    "lists",
-    "patterns",
-    "tables",
-    "toolbar"
+    {
+      "name": "application-layout"
+    },
+    {
+      "name": "cards"
+    },
+    {
+      "name": "dialogs"
+    },
+    {
+      "name": "forms"
+    },
+    {
+      "name": "lists"
+    },
+    {
+      "name": "patterns"
+    },
+    {
+      "name": "tables"
+    },
+    {
+      "name": "toolbar"
+    }
   ],
-  "generatedAt": "2026-05-28T13:50:03.030Z"
+  "generatedAt": "2026-05-28T14:03:48.854Z"
 }
