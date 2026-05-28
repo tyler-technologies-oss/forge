@@ -89,9 +89,13 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
         silent: true
       });
 
-      // Copy index.html to dist root (Vite outputs it to dist/src/index.html)
+      // Copy index.html to dist root and fix asset paths
+      // Vite outputs to dist/src/index.html with ../assets/ paths
+      // When moved to dist/index.html, paths need to be ./assets/
       if (fs.existsSync('dist/src/index.html')) {
-        fs.copyFileSync('dist/src/index.html', 'dist/index.html');
+        let html = fs.readFileSync('dist/src/index.html', 'utf-8');
+        html = html.replace(/\.\.\/assets\//g, './assets/');
+        fs.writeFileSync('dist/index.html', html);
       }
     }
   };

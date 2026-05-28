@@ -118,17 +118,17 @@
       "file": "blocks/forms/add-user/add-user.html"
     },
     {
-      "id": "blocks/dialogs/simple/simple",
-      "name": "Simple Dialog",
-      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
+      "id": "blocks/cards/user-profile/user-profile",
+      "name": "User Profile Card",
+      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
       "tags": [
-        "dialog",
-        "modal",
-        "scaffold",
-        "toolbar",
-        "actions"
+        "card",
+        "profile",
+        "user",
+        "avatar",
+        "contact"
       ],
-      "file": "blocks/dialogs/simple/simple.html"
+      "file": "blocks/cards/user-profile/user-profile.html"
     },
     {
       "id": "blocks/cards/responsive-cards/responsive-cards",
@@ -145,17 +145,17 @@
       "file": "blocks/cards/responsive-cards/responsive-cards.html"
     },
     {
-      "id": "blocks/cards/user-profile/user-profile",
-      "name": "User Profile Card",
-      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
+      "id": "blocks/dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
       "tags": [
-        "card",
-        "profile",
-        "user",
-        "avatar",
-        "contact"
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
       ],
-      "file": "blocks/cards/user-profile/user-profile.html"
+      "file": "blocks/dialogs/simple/simple.html"
     },
     {
       "id": "blocks/forms/add-illustration/add-illustration",
@@ -220,21 +220,6 @@
       "file": "blocks/application-layout/dual-scroll/dual-scroll.html"
     },
     {
-      "id": "blocks/application-layout/mini-nav/mini-nav",
-      "name": "Mini Nav Application Layout",
-      "description": "Application shell with a collapsible mini navigation drawer that expands on hover, an app bar with notification icons and a user profile dropdown with theme toggle",
-      "tags": [
-        "layout",
-        "application",
-        "shell",
-        "mini-drawer",
-        "app-bar",
-        "user-profile",
-        "hover"
-      ],
-      "file": "blocks/application-layout/mini-nav/mini-nav.html"
-    },
-    {
       "id": "blocks/application-layout/basic/basic",
       "name": "Basic Application Layout",
       "description": "Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
@@ -250,6 +235,21 @@
         "responsive-grid"
       ],
       "file": "blocks/application-layout/basic/basic.html"
+    },
+    {
+      "id": "blocks/application-layout/mini-nav/mini-nav",
+      "name": "Mini Nav Application Layout",
+      "description": "Application shell with a collapsible mini navigation drawer that expands on hover, an app bar with notification icons and a user profile dropdown with theme toggle",
+      "tags": [
+        "layout",
+        "application",
+        "shell",
+        "mini-drawer",
+        "app-bar",
+        "user-profile",
+        "hover"
+      ],
+      "file": "blocks/application-layout/mini-nav/mini-nav.html"
     }
   ],
   "categories": [
@@ -278,5 +278,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-05-28T14:02:27.218Z"
+  "generatedAt": "2026-05-28T14:10:57.588Z"
 }
