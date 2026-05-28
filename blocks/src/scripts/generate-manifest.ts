@@ -72,10 +72,12 @@ export async function generateManifest(options: GenerateManifestOptions): Promis
     }
   }
 
-  const categories = [...new Set(blocks.map(b => {
+  const categoryNames = [...new Set(blocks.map(b => {
     const parts = b.file.split('/');
     return parts.length > 1 ? parts[1] : '';
   }).filter(Boolean))].sort();
+
+  const categories = categoryNames.map(name => ({ name }));
 
   const manifest: Manifest = {
     blocks,

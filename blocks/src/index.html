@@ -164,8 +164,9 @@
       }
 
       // Initialize
-      blocksData = window.__FORGE_BLOCKS_DATA__;
-      if (blocksData) {
+      async function init() {
+        const res = await fetch('./manifest.json');
+        blocksData = await res.json();
         renderBlocks();
 
         const filterInput = document.getElementById('filter-input');
@@ -173,6 +174,8 @@
           filterBlocks(e.target.value);
         });
       }
+
+      init();
 
       customElements.whenDefined('forge-scaffold').then(() => {
         document.body.classList.add('ready');

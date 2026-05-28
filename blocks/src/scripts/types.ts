@@ -25,7 +25,7 @@ export interface Category {
 /** Generated manifest structure */
 export interface Manifest {
   blocks: Block[];
-  categories: string[];
+  categories: { name: string }[];
   generatedAt: string;
 }
 

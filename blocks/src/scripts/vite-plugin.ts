@@ -6,8 +6,8 @@
 import fs from 'node:fs';
 import { compileBlock } from './block-compiler.js';
 import { createPartialRegistry } from './partial-registry.js';
-import { discoverCategories } from './utils.js';
 import { discoverBlocks, generateManifest } from './generate-manifest.js';
+import { discoverCategories } from './utils.js';
 import type { Plugin, ViteDevServer } from 'vite';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { PartialRegistry } from './partial-registry.js';
@@ -17,11 +17,6 @@ export interface BlocksPluginOptions {
   layoutPath: string;
   partialsPath: string;
   indexPath: string;
-}
-
-function injectBlocksData(html: string, blocksData: object): string {
-  const script = `<script>window.__FORGE_BLOCKS_DATA__ = ${JSON.stringify(blocksData)};</script>`;
-  return html.replace('</head>', `${script}\n  </head>`);
 }
 
 /**
@@ -49,11 +44,15 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
       });
 
       server.middlewares.use(async (req: IncomingMessage, res: ServerResponse, next: () => void) => {
-        if (req.url === '/' || req.url === '/index.html') {
+        if (req.url === '/manifest.json') {
           const blocks = await discoverBlocks(blocksPath);
           const categories = discoverCategories(blocksPath);
-          let html = fs.readFileSync(indexPath, 'utf-8');
-          html = injectBlocksData(html, { blocks, categories });
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ blocks, categories }));
+          return;
+        }
+        if (req.url === '/' || req.url === '/index.html') {
+          const html = fs.readFileSync(indexPath, 'utf-8');
           const transformed = await server.transformIndexHtml(req.url, html);
           res.setHeader('Content-Type', 'text/html');
           res.end(transformed);
@@ -84,19 +83,11 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
       }
     },
     async writeBundle() {
-      const manifest = await generateManifest({
+      await generateManifest({
         blocksPath,
         outputPath: 'dist/manifest.json',
         silent: true
       });
-
-      const categories = discoverCategories(blocksPath);
-      const distIndexPath = 'dist/index.html';
-      if (fs.existsSync(distIndexPath)) {
-        let indexHtml = fs.readFileSync(distIndexPath, 'utf-8');
-        indexHtml = injectBlocksData(indexHtml, { blocks: manifest.blocks, categories });
-        fs.writeFileSync(distIndexPath, indexHtml);
-      }
     }
   };
 }
