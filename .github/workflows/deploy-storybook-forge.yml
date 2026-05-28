@@ -32,7 +32,7 @@ jobs:
       - run: pnpm turbo run build:storybook --filter=@tylertech/forge
 
       - name: Build blocks
-        run: pnpm --filter blocks build
+        run: pnpm --filter blocks run build:ci
 
       - name: Copy blocks to Storybook output
         run: cp -r blocks/dist packages/forge/storybook-static/blocks

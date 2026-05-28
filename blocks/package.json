@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && pnpm generate-manifest && pnpm generate-screenshots",
+    "build:ci": "vite build && pnpm generate-manifest",
     "generate-manifest": "tsx src/scripts/generate-manifest.ts",
     "generate-screenshots": "tsx src/scripts/generate-screenshots.ts"
   },
