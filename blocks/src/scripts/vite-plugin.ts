@@ -88,6 +88,11 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
         outputPath: 'dist/manifest.json',
         silent: true
       });
+
+      // Copy index.html to dist root (Vite outputs it to dist/src/index.html)
+      if (fs.existsSync('dist/src/index.html')) {
+        fs.copyFileSync('dist/src/index.html', 'dist/index.html');
+      }
     }
   };
 }
