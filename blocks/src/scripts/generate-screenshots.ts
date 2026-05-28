@@ -1,7 +1,12 @@
 /**
  * Block screenshot generator.
- * Uses Playwright to capture screenshots of rendered block HTML files.
- * Captures at full width (1280px) then resizes to thumbnail width (500px) for smaller file sizes.
+ * Uses Playwright to capture screenshots of rendered block HTML files, then uses sharp to
+ * resize and optimize them as WebP thumbnails for smaller file sizes.
+ *
+ * - Captures at 1280x800 viewport for proper UI rendering
+ * - Resizes to 500px width (maintaining aspect ratio) using sharp
+ * - Saves as WebP at quality 80 for optimal size/quality balance
+ *
  * Only regenerates screenshots for blocks that have changed (unless --force is used).
  * Run via: pnpm generate-screenshots [--filter <name>] [--force] [--width <px>] [--thumbnail-width <px>]
  */
@@ -84,10 +89,10 @@ export async function generateScreenshots(options: GenerateScreenshotsOptions): 
     : blocks.filter((block: Block): boolean => {
         const srcPath: string = block.file.replace(/^blocks\//, 'src/blocks/');
         const htmlPath: string = srcPath;
-        const jpgPath: string = outputDir
+        const webpPath: string = outputDir
           ? path.join(outputDir, `${block.id.replace('blocks/', '')}.webp`)
           : srcPath.replace('.html', '.webp');
-        return needsScreenshot(htmlPath, jpgPath);
+        return needsScreenshot(htmlPath, webpPath);
       });
 
   if (blocksToCapture.length === 0) {
