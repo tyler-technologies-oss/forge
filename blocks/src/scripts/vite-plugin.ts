@@ -106,13 +106,17 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
           fs.writeFileSync('dist/index.html', html);
         }
 
-        // Copy all block HTML files to dist/blocks/
+        // Copy all block HTML files to dist/blocks/ and fix asset paths
         const blockHtmlFiles = await glob('dist/src/blocks/**/*.html', { nodir: true });
         for (const file of blockHtmlFiles) {
           const destPath = file.replace('dist/src/', 'dist/');
           const destDir = path.dirname(destPath);
           fs.mkdirSync(destDir, { recursive: true });
-          fs.copyFileSync(file, destPath);
+          // Fix paths: remove one ../ since files move up one level (from dist/src/blocks to dist/blocks)
+          let html = fs.readFileSync(file, 'utf-8');
+          html = html.replace(/\.\.\/\.\.\/\.\.\/\.\.\/\.\.\/assets\//g, '../../../../assets/');
+          html = html.replace(/\.\.\/\.\.\/\.\.\/\.\.\/assets\//g, '../../../assets/');
+          fs.writeFileSync(destPath, html);
         }
 
         // Remove the dist/src directory
