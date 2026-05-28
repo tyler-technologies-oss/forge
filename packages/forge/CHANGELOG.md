@@ -1,5 +1,27 @@
 # @tylertech/forge
 
+## 3.14.4
+
+### Patch Changes
+
+- 122e8b4: fix(globalconfig): add duck-type fallback for instanceof check
+- Updated dependencies [122e8b4]
+  - @tylertech/forge-core@3.3.1
+
+## 3.14.3
+
+### Patch Changes
+
+- aef050e: fix(autocomplete): always send value when executing filter callback during initialization
+
+## 3.14.2
+
+### Patch Changes
+
+- cea015c: fix(button-area): fix internal button being directly clickable
+- e13e6b3: feat: create global configuration decorator
+- e13e6b3: fix(field): fix global configuration overriding externally set property values
+
 ## 3.14.1
 
 ### Patch Changes
