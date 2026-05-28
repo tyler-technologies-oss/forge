@@ -30,6 +30,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - run: pnpm turbo run build --filter=@tylertech/forge
+
       - run: pnpm turbo run build:storybook --filter=@tylertech/forge
 
       - name: Build blocks
