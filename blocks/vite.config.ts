@@ -6,6 +6,7 @@ import path from 'path';
 import { blocksPlugin } from './src/scripts/vite-plugin.js';
 
 export default defineConfig({
+  base: './',
   plugins: [
     tailwindcss(),
     blocksPlugin({
@@ -31,12 +32,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     rollupOptions: {
-      input: Object.fromEntries(
-        glob.sync('src/blocks/**/*.html').map(file => [
-          file.replace('.html', ''),
-          path.resolve(process.cwd(), file)
-        ])
-      )
+      input: {
+        index: path.resolve(process.cwd(), 'src/index.html'),
+        ...Object.fromEntries(
+          glob.sync('src/blocks/**/*.html').map(file => [
+            file.replace('.html', ''),
+            path.resolve(process.cwd(), file)
+          ])
+        )
+      }
     }
   }
 });

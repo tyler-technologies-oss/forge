@@ -80,8 +80,8 @@
         const listItem = item.querySelector('.block-item');
 
         const link = item.querySelector('.block-link');
-        // block.file is "blocks/..." for deployed URLs, prepend "src/" for dev server
-        link.href = '/src/' + block.file;
+        // block.file is "blocks/..." - prepend "./src/" for relative path
+        link.href = './src/' + block.file;
         link.textContent = block.name;
 
         listItem.dataset.name = block.name.toLowerCase();

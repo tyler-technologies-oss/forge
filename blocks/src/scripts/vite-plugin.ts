@@ -91,9 +91,12 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
       });
 
       const categories = discoverCategories(blocksPath);
-      let indexHtml = fs.readFileSync(indexPath, 'utf-8');
-      indexHtml = injectBlocksData(indexHtml, { blocks: manifest.blocks, categories });
-      fs.writeFileSync('dist/index.html', indexHtml);
+      const distIndexPath = 'dist/index.html';
+      if (fs.existsSync(distIndexPath)) {
+        let indexHtml = fs.readFileSync(distIndexPath, 'utf-8');
+        indexHtml = injectBlocksData(indexHtml, { blocks: manifest.blocks, categories });
+        fs.writeFileSync(distIndexPath, indexHtml);
+      }
     }
   };
 }
