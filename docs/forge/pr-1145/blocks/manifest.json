@@ -76,6 +76,20 @@
       "screenshot": "blocks/lists/list-management/list-management.webp"
     },
     {
+      "id": "blocks/dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
+      "tags": [
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
+      ],
+      "file": "blocks/dialogs/simple/simple.html",
+      "screenshot": "blocks/dialogs/simple/simple.webp"
+    },
+    {
       "id": "blocks/forms/multi-column/multi-column",
       "name": "Multi-Column Form",
       "description": "Responsive form using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
@@ -140,20 +154,6 @@
       ],
       "file": "blocks/forms/add-illustration/add-illustration.html",
       "screenshot": "blocks/forms/add-illustration/add-illustration.webp"
-    },
-    {
-      "id": "blocks/dialogs/simple/simple",
-      "name": "Simple Dialog",
-      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
-      "tags": [
-        "dialog",
-        "modal",
-        "scaffold",
-        "toolbar",
-        "actions"
-      ],
-      "file": "blocks/dialogs/simple/simple.html",
-      "screenshot": "blocks/dialogs/simple/simple.webp"
     },
     {
       "id": "blocks/cards/user-profile/user-profile",
@@ -295,5 +295,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-05-28T20:43:23.435Z"
+  "generatedAt": "2026-05-28T20:52:09.687Z"
 }
