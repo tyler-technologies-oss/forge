@@ -12,6 +12,18 @@
       "file": "blocks/toolbar/simple/simple.html"
     },
     {
+      "id": "blocks/tables/simple/simple",
+      "name": "Simple Table",
+      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
+      "tags": [
+        "table",
+        "data",
+        "card",
+        "toolbar"
+      ],
+      "file": "blocks/tables/simple/simple.html"
+    },
+    {
       "id": "blocks/tables/paginated/paginated",
       "name": "Paginated Table",
       "description": "Data table with client-side pagination inside a structured card, featuring header action buttons for filtering, exporting, and additional options, along with a paginator control for navigating through large datasets by page",
@@ -24,18 +36,6 @@
         "actions"
       ],
       "file": "blocks/tables/paginated/paginated.html"
-    },
-    {
-      "id": "blocks/tables/simple/simple",
-      "name": "Simple Table",
-      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
-      "tags": [
-        "table",
-        "data",
-        "card",
-        "toolbar"
-      ],
-      "file": "blocks/tables/simple/simple.html"
     },
     {
       "id": "blocks/patterns/filter-facets/filter-facets",
@@ -262,5 +262,5 @@
     "tables",
     "toolbar"
   ],
-  "generatedAt": "2026-05-28T13:44:15.567Z"
+  "generatedAt": "2026-05-28T13:50:03.030Z"
 }
