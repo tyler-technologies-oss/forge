@@ -4,6 +4,8 @@
  */
 
 import fs from 'node:fs';
+import path from 'node:path';
+import { glob } from 'glob';
 import { compileBlock } from './block-compiler.js';
 import { createPartialRegistry } from './partial-registry.js';
 import { discoverBlocks, generateManifest } from './generate-manifest.js';
@@ -96,6 +98,17 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
         let html = fs.readFileSync('dist/src/index.html', 'utf-8');
         html = html.replace(/\.\.\/assets\//g, './assets/');
         fs.writeFileSync('dist/index.html', html);
+      }
+
+      // Copy screenshots to dist alongside their HTML files
+      const screenshots = await glob(`${blocksPath}/**/*.{webp,png}`, { nodir: true });
+      for (const screenshot of screenshots) {
+        // Normalize to ensure we get a relative path
+        const relativePath = path.relative('.', screenshot);
+        const destPath = path.join('dist', relativePath);
+        const destDir = path.dirname(destPath);
+        fs.mkdirSync(destDir, { recursive: true });
+        fs.copyFileSync(screenshot, destPath);
       }
     }
   };
