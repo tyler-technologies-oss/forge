@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && pnpm generate-manifest && if [ -z \"$CI\" ]; then pnpm generate-screenshots; fi",
+    "build": "vite build && pnpm generate-manifest",
+    "screenshots": "pnpm generate-screenshots",
     "generate-manifest": "tsx src/scripts/generate-manifest.ts",
     "generate-screenshots": "tsx src/scripts/generate-screenshots.ts"
   },
