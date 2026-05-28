@@ -131,7 +131,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
    * The columns to display in the table.
    */
   @property({ type: Array })
-  public columns: ColumnDef<TData>[] = [];
+  public columns: ColumnDef<any>[] = [];
 
   /**
    * The current visibility state of the columns.
@@ -343,6 +343,16 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     if (needsRecreation) {
       this.removeController(this.#tableController);
       this.#tableController = new TableController<TData>(this);
+
+      if (changedProperties.has('rowSelection')) {
+        const oldValue = changedProperties.get('rowSelection');
+        if (oldValue === 'multiple' && this.rowSelection === 'single') {
+          const selectedKeys = Object.keys(this._rowSelection).filter(key => this._rowSelection[key]);
+          if (selectedKeys.length > 1) {
+            this._rowSelection = { [selectedKeys[0]]: true };
+          }
+        }
+      }
     }
 
     return needsRecreation;
@@ -392,6 +402,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
       enableMultiSort: this.sortable && this.multiSort,
       maxMultiSortColCount: this.maxMultiSortColCount,
       enableMultiRemove: this.multiSortRemove,
+      enableSortingRemoval: this.multiSortRemove,
       isMultiSortEvent: (e: unknown) => {
         const evt = e as MouseEvent | KeyboardEvent;
         switch (this.multiSortKey) {
@@ -609,6 +620,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
         placement="bottom-start"
         position-strategy="fixed"
         trigger-type="manual"
+        anchor-accessibility="none"
         .open=${this._columnMenuOpen}
         @forge-popover-toggle=${(evt: CustomEvent<IPopoverToggleEventData>) => this.#onColumnMenuToggle(evt)}>
         <forge-list role="menu">
@@ -806,6 +818,8 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     } else {
       this.showColumn(columnId);
     }
+
+    this.#closeColumnMenu();
   }
 
   #getColumnMenuLabel(column: Column<TData, unknown>): string {
@@ -832,9 +846,6 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
   #closeColumnMenu(): void {
     this._columnMenuOpen = false;
     this._columnMenuAnchorId = null;
-    if (this._columnVisibilityPopover) {
-      this._columnVisibilityPopover.open = false;
-    }
   }
 
   #prependSelectColumn(columns: TanstackColumnDef<TData>[]): void {
@@ -1036,7 +1047,10 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
         name="filter-${column.id}"
         .type=${column.columnDef.meta?.filterVariant ?? 'text'}
         .value=${(column.getFilterValue() as string) ?? ''}
-        @input=${(evt: InputEvent) => column.setFilterValue((evt.target as HTMLInputElement).value)} />
+        @input=${(evt: InputEvent) => {
+          const value = (evt.target as HTMLInputElement).value;
+          column.setFilterValue(value || undefined);
+        }} />
     </forge-text-field>`;
   }
 
