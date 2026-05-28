@@ -13,6 +13,19 @@
       "screenshot": "blocks/toolbar/simple/simple.webp"
     },
     {
+      "id": "blocks/tables/simple/simple",
+      "name": "Simple Table",
+      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
+      "tags": [
+        "table",
+        "data",
+        "card",
+        "toolbar"
+      ],
+      "file": "blocks/tables/simple/simple.html",
+      "screenshot": "blocks/tables/simple/simple.webp"
+    },
+    {
       "id": "blocks/tables/paginated/paginated",
       "name": "Paginated Table",
       "description": "Data table with client-side pagination inside a structured card, featuring header action buttons for filtering, exporting, and additional options, along with a paginator control for navigating through large datasets by page",
@@ -26,19 +39,6 @@
       ],
       "file": "blocks/tables/paginated/paginated.html",
       "screenshot": "blocks/tables/paginated/paginated.webp"
-    },
-    {
-      "id": "blocks/tables/simple/simple",
-      "name": "Simple Table",
-      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
-      "tags": [
-        "table",
-        "data",
-        "card",
-        "toolbar"
-      ],
-      "file": "blocks/tables/simple/simple.html",
-      "screenshot": "blocks/tables/simple/simple.webp"
     },
     {
       "id": "blocks/patterns/filter-facets/filter-facets",
@@ -95,6 +95,20 @@
       "screenshot": "blocks/forms/multi-column/multi-column.webp"
     },
     {
+      "id": "blocks/forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "tags": [
+        "authentication",
+        "login",
+        "form",
+        "card",
+        "centered"
+      ],
+      "file": "blocks/forms/login/login.html",
+      "screenshot": "blocks/forms/login/login.webp"
+    },
+    {
       "id": "blocks/forms/add-user/add-user",
       "name": "Add User Form",
       "description": "Form card with two-column grid layout for text inputs, leading icons, support text, dropdown selects, grouped checkboxes, and action buttons",
@@ -112,18 +126,47 @@
       "screenshot": "blocks/forms/add-user/add-user.webp"
     },
     {
-      "id": "blocks/forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "id": "blocks/dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
       "tags": [
-        "authentication",
-        "login",
-        "form",
-        "card",
-        "centered"
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
       ],
-      "file": "blocks/forms/login/login.html",
-      "screenshot": "blocks/forms/login/login.webp"
+      "file": "blocks/dialogs/simple/simple.html",
+      "screenshot": "blocks/dialogs/simple/simple.webp"
+    },
+    {
+      "id": "blocks/cards/responsive-cards/responsive-cards",
+      "name": "Responsive Cards",
+      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
+      "tags": [
+        "cards",
+        "responsive",
+        "grid",
+        "badge",
+        "image",
+        "metrics"
+      ],
+      "file": "blocks/cards/responsive-cards/responsive-cards.html",
+      "screenshot": "blocks/cards/responsive-cards/responsive-cards.webp"
+    },
+    {
+      "id": "blocks/cards/user-profile/user-profile",
+      "name": "User Profile Card",
+      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
+      "tags": [
+        "card",
+        "profile",
+        "user",
+        "avatar",
+        "contact"
+      ],
+      "file": "blocks/cards/user-profile/user-profile.html",
+      "screenshot": "blocks/cards/user-profile/user-profile.webp"
     },
     {
       "id": "blocks/forms/add-illustration/add-illustration",
@@ -142,64 +185,20 @@
       "screenshot": "blocks/forms/add-illustration/add-illustration.webp"
     },
     {
-      "id": "blocks/dialogs/simple/simple",
-      "name": "Simple Dialog",
-      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
-      "tags": [
-        "dialog",
-        "modal",
-        "scaffold",
-        "toolbar",
-        "actions"
-      ],
-      "file": "blocks/dialogs/simple/simple.html",
-      "screenshot": "blocks/dialogs/simple/simple.webp"
-    },
-    {
-      "id": "blocks/cards/user-profile/user-profile",
-      "name": "User Profile Card",
-      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
-      "tags": [
-        "card",
-        "profile",
-        "user",
-        "avatar",
-        "contact"
-      ],
-      "file": "blocks/cards/user-profile/user-profile.html",
-      "screenshot": "blocks/cards/user-profile/user-profile.webp"
-    },
-    {
-      "id": "blocks/cards/responsive-cards/responsive-cards",
-      "name": "Responsive Cards",
-      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
-      "tags": [
-        "cards",
-        "responsive",
-        "grid",
-        "badge",
-        "image",
-        "metrics"
-      ],
-      "file": "blocks/cards/responsive-cards/responsive-cards.html",
-      "screenshot": "blocks/cards/responsive-cards/responsive-cards.webp"
-    },
-    {
-      "id": "blocks/application-layout/three-panel/three-panel",
-      "name": "Three Panel Layout",
-      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
+      "id": "blocks/application-layout/mini-nav/mini-nav",
+      "name": "Mini Nav Application Layout",
+      "description": "Application shell with a collapsible mini navigation drawer that expands on hover, an app bar with notification icons and a user profile dropdown with theme toggle",
       "tags": [
         "layout",
         "application",
-        "three-panel",
-        "left-drawer",
-        "right-drawer",
-        "navigation",
-        "body",
-        "panels"
+        "shell",
+        "mini-drawer",
+        "app-bar",
+        "user-profile",
+        "hover"
       ],
-      "file": "blocks/application-layout/three-panel/three-panel.html",
-      "screenshot": "blocks/application-layout/three-panel/three-panel.webp"
+      "file": "blocks/application-layout/mini-nav/mini-nav.html",
+      "screenshot": "blocks/application-layout/mini-nav/mini-nav.webp"
     },
     {
       "id": "blocks/application-layout/table-with-filters/table-with-filters",
@@ -220,20 +219,21 @@
       "screenshot": "blocks/application-layout/table-with-filters/table-with-filters.webp"
     },
     {
-      "id": "blocks/application-layout/mini-nav/mini-nav",
-      "name": "Mini Nav Application Layout",
-      "description": "Application shell with a collapsible mini navigation drawer that expands on hover, an app bar with notification icons and a user profile dropdown with theme toggle",
+      "id": "blocks/application-layout/three-panel/three-panel",
+      "name": "Three Panel Layout",
+      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
       "tags": [
         "layout",
         "application",
-        "shell",
-        "mini-drawer",
-        "app-bar",
-        "user-profile",
-        "hover"
+        "three-panel",
+        "left-drawer",
+        "right-drawer",
+        "navigation",
+        "body",
+        "panels"
       ],
-      "file": "blocks/application-layout/mini-nav/mini-nav.html",
-      "screenshot": "blocks/application-layout/mini-nav/mini-nav.webp"
+      "file": "blocks/application-layout/three-panel/three-panel.html",
+      "screenshot": "blocks/application-layout/three-panel/three-panel.webp"
     },
     {
       "id": "blocks/application-layout/dual-scroll/dual-scroll",
@@ -295,5 +295,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-05-28T20:23:41.587Z"
+  "generatedAt": "2026-05-28T20:35:21.233Z"
 }

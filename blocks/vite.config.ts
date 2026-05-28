@@ -36,7 +36,8 @@ export default defineConfig({
         index: path.resolve(process.cwd(), 'src/index.html'),
         ...Object.fromEntries(
           glob.sync('src/blocks/**/*.html').map(file => [
-            file.replace('.html', ''),
+            // Strip 'src/' prefix so output is dist/blocks/ not dist/src/blocks/
+            file.replace('src/', '').replace('.html', ''),
             path.resolve(process.cwd(), file)
           ])
         )

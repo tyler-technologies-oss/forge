@@ -60,6 +60,10 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
           res.end(transformed);
           return;
         }
+        // Rewrite /blocks/ to /src/blocks/ for dev server
+        if (req.url?.startsWith('/blocks/')) {
+          req.url = '/src' + req.url;
+        }
         next();
       });
     },
@@ -91,20 +95,32 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
         silent: true
       });
 
-      // Copy index.html to dist root and fix asset paths
-      // Vite outputs to dist/src/index.html with ../assets/ paths
-      // When moved to dist/index.html, paths need to be ./assets/
-      if (fs.existsSync('dist/src/index.html')) {
-        let html = fs.readFileSync('dist/src/index.html', 'utf-8');
-        html = html.replace(/\.\.\/assets\//g, './assets/');
-        fs.writeFileSync('dist/index.html', html);
+      // Move files from dist/src/ to dist/
+      // Vite preserves source directory structure, so we need to relocate
+      if (fs.existsSync('dist/src')) {
+        // Move index.html to dist root
+        if (fs.existsSync('dist/src/index.html')) {
+          fs.copyFileSync('dist/src/index.html', 'dist/index.html');
+        }
+
+        // Copy all block HTML files to dist/blocks/
+        const blockHtmlFiles = await glob('dist/src/blocks/**/*.html', { nodir: true });
+        for (const file of blockHtmlFiles) {
+          const destPath = file.replace('dist/src/', 'dist/');
+          const destDir = path.dirname(destPath);
+          fs.mkdirSync(destDir, { recursive: true });
+          fs.copyFileSync(file, destPath);
+        }
+
+        // Remove the dist/src directory
+        fs.rmSync('dist/src', { recursive: true, force: true });
       }
 
-      // Copy screenshots to dist alongside their HTML files
+      // Copy screenshots to dist/blocks/ alongside their HTML files
       const screenshots = await glob(`${blocksPath}/**/*.{webp,png}`, { nodir: true });
       for (const screenshot of screenshots) {
-        // Normalize to ensure we get a relative path
-        const relativePath = path.relative('.', screenshot);
+        // Strip src/ prefix so screenshots go to dist/blocks/ not dist/src/blocks/
+        const relativePath = path.relative('.', screenshot).replace(/^src\//, '');
         const destPath = path.join('dist', relativePath);
         const destDir = path.dirname(destPath);
         fs.mkdirSync(destDir, { recursive: true });
