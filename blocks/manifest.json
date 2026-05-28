@@ -95,20 +95,6 @@
       "screenshot": "blocks/forms/multi-column/multi-column.webp"
     },
     {
-      "id": "blocks/forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
-      "tags": [
-        "authentication",
-        "login",
-        "form",
-        "card",
-        "centered"
-      ],
-      "file": "blocks/forms/login/login.html",
-      "screenshot": "blocks/forms/login/login.webp"
-    },
-    {
       "id": "blocks/forms/add-user/add-user",
       "name": "Add User Form",
       "description": "Form card with two-column grid layout for text inputs, leading icons, support text, dropdown selects, grouped checkboxes, and action buttons",
@@ -124,6 +110,20 @@
       ],
       "file": "blocks/forms/add-user/add-user.html",
       "screenshot": "blocks/forms/add-user/add-user.webp"
+    },
+    {
+      "id": "blocks/forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "tags": [
+        "authentication",
+        "login",
+        "form",
+        "card",
+        "centered"
+      ],
+      "file": "blocks/forms/login/login.html",
+      "screenshot": "blocks/forms/login/login.webp"
     },
     {
       "id": "blocks/dialogs/simple/simple",
@@ -185,20 +185,21 @@
       "screenshot": "blocks/forms/add-illustration/add-illustration.webp"
     },
     {
-      "id": "blocks/application-layout/mini-nav/mini-nav",
-      "name": "Mini Nav Application Layout",
-      "description": "Application shell with a collapsible mini navigation drawer that expands on hover, an app bar with notification icons and a user profile dropdown with theme toggle",
+      "id": "blocks/application-layout/three-panel/three-panel",
+      "name": "Three Panel Layout",
+      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
       "tags": [
         "layout",
         "application",
-        "shell",
-        "mini-drawer",
-        "app-bar",
-        "user-profile",
-        "hover"
+        "three-panel",
+        "left-drawer",
+        "right-drawer",
+        "navigation",
+        "body",
+        "panels"
       ],
-      "file": "blocks/application-layout/mini-nav/mini-nav.html",
-      "screenshot": "blocks/application-layout/mini-nav/mini-nav.webp"
+      "file": "blocks/application-layout/three-panel/three-panel.html",
+      "screenshot": "blocks/application-layout/three-panel/three-panel.webp"
     },
     {
       "id": "blocks/application-layout/table-with-filters/table-with-filters",
@@ -219,21 +220,20 @@
       "screenshot": "blocks/application-layout/table-with-filters/table-with-filters.webp"
     },
     {
-      "id": "blocks/application-layout/three-panel/three-panel",
-      "name": "Three Panel Layout",
-      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
+      "id": "blocks/application-layout/mini-nav/mini-nav",
+      "name": "Mini Nav Application Layout",
+      "description": "Application shell with a collapsible mini navigation drawer that expands on hover, an app bar with notification icons and a user profile dropdown with theme toggle",
       "tags": [
         "layout",
         "application",
-        "three-panel",
-        "left-drawer",
-        "right-drawer",
-        "navigation",
-        "body",
-        "panels"
+        "shell",
+        "mini-drawer",
+        "app-bar",
+        "user-profile",
+        "hover"
       ],
-      "file": "blocks/application-layout/three-panel/three-panel.html",
-      "screenshot": "blocks/application-layout/three-panel/three-panel.webp"
+      "file": "blocks/application-layout/mini-nav/mini-nav.html",
+      "screenshot": "blocks/application-layout/mini-nav/mini-nav.webp"
     },
     {
       "id": "blocks/application-layout/dual-scroll/dual-scroll",
@@ -295,5 +295,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-05-28T20:35:21.233Z"
+  "generatedAt": "2026-05-28T20:41:32.329Z"
 }

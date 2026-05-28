@@ -98,9 +98,12 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
       // Move files from dist/src/ to dist/
       // Vite preserves source directory structure, so we need to relocate
       if (fs.existsSync('dist/src')) {
-        // Move index.html to dist root
+        // Move index.html to dist root and fix asset paths
         if (fs.existsSync('dist/src/index.html')) {
-          fs.copyFileSync('dist/src/index.html', 'dist/index.html');
+          let html = fs.readFileSync('dist/src/index.html', 'utf-8');
+          // Fix paths: ../assets/ -> ./assets/ since index.html moves up one level
+          html = html.replace(/\.\.\/assets\//g, './assets/');
+          fs.writeFileSync('dist/index.html', html);
         }
 
         // Copy all block HTML files to dist/blocks/
