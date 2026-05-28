@@ -5,6 +5,7 @@ on:
     types: [labeled, synchronize]
     paths:
       - 'packages/forge/**'
+      - 'blocks/**'
 
 concurrency:
   group: storybook-preview-forge-${{ github.event.pull_request.number }}
@@ -40,6 +41,12 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - run: pnpm turbo run build:storybook --filter=@tylertech/forge
+
+      - name: Build blocks
+        run: pnpm --filter blocks build
+
+      - name: Copy blocks to Storybook output
+        run: cp -r blocks/dist packages/forge/storybook-static/blocks
 
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
