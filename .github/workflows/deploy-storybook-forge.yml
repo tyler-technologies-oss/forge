@@ -8,6 +8,7 @@ on:
 env:
   CI: true
   TURBO_TELEMETRY_DISABLED: 1
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
 jobs:
   deploy:
