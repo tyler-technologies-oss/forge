@@ -10,6 +10,7 @@
         "actions"
       ],
       "file": "blocks/toolbar/simple/simple.html",
+      "category": "Toolbar",
       "screenshot": "blocks/toolbar/simple/simple.webp"
     },
     {
@@ -23,6 +24,7 @@
         "toolbar"
       ],
       "file": "blocks/tables/simple/simple.html",
+      "category": "Tables",
       "screenshot": "blocks/tables/simple/simple.webp"
     },
     {
@@ -38,6 +40,7 @@
         "actions"
       ],
       "file": "blocks/tables/paginated/paginated.html",
+      "category": "Tables",
       "screenshot": "blocks/tables/paginated/paginated.webp"
     },
     {
@@ -60,6 +63,7 @@
         "data-table"
       ],
       "file": "blocks/patterns/filter-facets/filter-facets.html",
+      "category": "Patterns",
       "screenshot": "blocks/patterns/filter-facets/filter-facets.webp"
     },
     {
@@ -73,21 +77,8 @@
         "card"
       ],
       "file": "blocks/lists/list-management/list-management.html",
+      "category": "Lists",
       "screenshot": "blocks/lists/list-management/list-management.webp"
-    },
-    {
-      "id": "blocks/dialogs/simple/simple",
-      "name": "Simple Dialog",
-      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
-      "tags": [
-        "dialog",
-        "modal",
-        "scaffold",
-        "toolbar",
-        "actions"
-      ],
-      "file": "blocks/dialogs/simple/simple.html",
-      "screenshot": "blocks/dialogs/simple/simple.webp"
     },
     {
       "id": "blocks/forms/multi-column/multi-column",
@@ -106,6 +97,7 @@
         "switch"
       ],
       "file": "blocks/forms/multi-column/multi-column.html",
+      "category": "Forms",
       "screenshot": "blocks/forms/multi-column/multi-column.webp"
     },
     {
@@ -120,6 +112,7 @@
         "centered"
       ],
       "file": "blocks/forms/login/login.html",
+      "category": "Forms",
       "screenshot": "blocks/forms/login/login.webp"
     },
     {
@@ -137,6 +130,7 @@
         "icons"
       ],
       "file": "blocks/forms/add-user/add-user.html",
+      "category": "Forms",
       "screenshot": "blocks/forms/add-user/add-user.webp"
     },
     {
@@ -153,7 +147,23 @@
         "create"
       ],
       "file": "blocks/forms/add-illustration/add-illustration.html",
+      "category": "Forms",
       "screenshot": "blocks/forms/add-illustration/add-illustration.webp"
+    },
+    {
+      "id": "blocks/dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
+      "tags": [
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
+      ],
+      "file": "blocks/dialogs/simple/simple.html",
+      "category": "Dialogs",
+      "screenshot": "blocks/dialogs/simple/simple.webp"
     },
     {
       "id": "blocks/cards/user-profile/user-profile",
@@ -167,6 +177,7 @@
         "contact"
       ],
       "file": "blocks/cards/user-profile/user-profile.html",
+      "category": "Cards",
       "screenshot": "blocks/cards/user-profile/user-profile.webp"
     },
     {
@@ -182,6 +193,7 @@
         "metrics"
       ],
       "file": "blocks/cards/responsive-cards/responsive-cards.html",
+      "category": "Cards",
       "screenshot": "blocks/cards/responsive-cards/responsive-cards.webp"
     },
     {
@@ -199,6 +211,7 @@
         "panels"
       ],
       "file": "blocks/application-layout/three-panel/three-panel.html",
+      "category": "Application Layout",
       "screenshot": "blocks/application-layout/three-panel/three-panel.webp"
     },
     {
@@ -217,6 +230,7 @@
         "data"
       ],
       "file": "blocks/application-layout/table-with-filters/table-with-filters.html",
+      "category": "Application Layout",
       "screenshot": "blocks/application-layout/table-with-filters/table-with-filters.webp"
     },
     {
@@ -233,6 +247,7 @@
         "hover"
       ],
       "file": "blocks/application-layout/mini-nav/mini-nav.html",
+      "category": "Application Layout",
       "screenshot": "blocks/application-layout/mini-nav/mini-nav.webp"
     },
     {
@@ -248,6 +263,7 @@
         "right-drawer"
       ],
       "file": "blocks/application-layout/dual-scroll/dual-scroll.html",
+      "category": "Application Layout",
       "screenshot": "blocks/application-layout/dual-scroll/dual-scroll.webp"
     },
     {
@@ -266,6 +282,7 @@
         "responsive-grid"
       ],
       "file": "blocks/application-layout/basic/basic.html",
+      "category": "Application Layout",
       "screenshot": "blocks/application-layout/basic/basic.webp"
     }
   ],
@@ -295,5 +312,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-05-28T20:52:09.687Z"
+  "generatedAt": "2026-05-29T13:08:49.439Z"
 }
