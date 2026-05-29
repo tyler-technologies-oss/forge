@@ -76,6 +76,9 @@ export async function discoverBlocks(blocksPath: string): Promise<Block[]> {
         block.screenshot = relativePath.replace('.html', '.png');
       }
 
+      // Check for associated script file (.ts or .js)
+      block.hasScript = fs.existsSync(`${basePath}.ts`) || fs.existsSync(`${basePath}.js`);
+
       blocks.push(block);
     }
   }

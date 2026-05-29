@@ -17,6 +17,8 @@ export interface Block extends BlockMetadata {
   screenshot?: string;
   /** Display name for the block's category (e.g., "Application Layout") */
   category: string;
+  /** Whether this block has associated JavaScript/TypeScript for interactivity */
+  hasScript: boolean;
 }
 
 /** Category folder information */
