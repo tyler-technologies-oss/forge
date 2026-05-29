@@ -134,21 +134,19 @@
       "screenshot": "blocks/forms/add-user/add-user.webp"
     },
     {
-      "id": "blocks/forms/add-illustration/add-illustration",
-      "name": "Add Illustration Form",
-      "description": "Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files",
+      "id": "blocks/dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
       "tags": [
-        "form",
-        "card",
-        "centered",
-        "decorative-background",
-        "chip-field",
-        "file-picker",
-        "create"
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
       ],
-      "file": "blocks/forms/add-illustration/add-illustration.html",
-      "category": "Forms",
-      "screenshot": "blocks/forms/add-illustration/add-illustration.webp"
+      "file": "blocks/dialogs/simple/simple.html",
+      "category": "Dialogs",
+      "screenshot": "blocks/dialogs/simple/simple.webp"
     },
     {
       "id": "blocks/cards/user-profile/user-profile",
@@ -166,19 +164,21 @@
       "screenshot": "blocks/cards/user-profile/user-profile.webp"
     },
     {
-      "id": "blocks/dialogs/simple/simple",
-      "name": "Simple Dialog",
-      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
+      "id": "blocks/forms/add-illustration/add-illustration",
+      "name": "Add Illustration Form",
+      "description": "Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files",
       "tags": [
-        "dialog",
-        "modal",
-        "scaffold",
-        "toolbar",
-        "actions"
+        "form",
+        "card",
+        "centered",
+        "decorative-background",
+        "chip-field",
+        "file-picker",
+        "create"
       ],
-      "file": "blocks/dialogs/simple/simple.html",
-      "category": "Dialogs",
-      "screenshot": "blocks/dialogs/simple/simple.webp"
+      "file": "blocks/forms/add-illustration/add-illustration.html",
+      "category": "Forms",
+      "screenshot": "blocks/forms/add-illustration/add-illustration.webp"
     },
     {
       "id": "blocks/cards/responsive-cards/responsive-cards",
@@ -251,6 +251,22 @@
       "screenshot": "blocks/application-layout/mini-nav/mini-nav.webp"
     },
     {
+      "id": "blocks/application-layout/dual-scroll/dual-scroll",
+      "name": "Dual Scrolling Containers",
+      "description": "Application layout demonstrating dual independent scrolling regions where the main content area and a fixed right-side drawer panel each scroll independently, useful for master-detail views or side-by-side content comparison layouts",
+      "tags": [
+        "layout",
+        "application",
+        "scroll",
+        "drawer",
+        "dual-panel",
+        "right-drawer"
+      ],
+      "file": "blocks/application-layout/dual-scroll/dual-scroll.html",
+      "category": "Application Layout",
+      "screenshot": "blocks/application-layout/dual-scroll/dual-scroll.webp"
+    },
+    {
       "id": "blocks/application-layout/basic/basic",
       "name": "Basic Application Layout",
       "description": "Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
@@ -268,22 +284,6 @@
       "file": "blocks/application-layout/basic/basic.html",
       "category": "Application Layout",
       "screenshot": "blocks/application-layout/basic/basic.webp"
-    },
-    {
-      "id": "blocks/application-layout/dual-scroll/dual-scroll",
-      "name": "Dual Scrolling Containers",
-      "description": "Application layout demonstrating dual independent scrolling regions where the main content area and a fixed right-side drawer panel each scroll independently, useful for master-detail views or side-by-side content comparison layouts",
-      "tags": [
-        "layout",
-        "application",
-        "scroll",
-        "drawer",
-        "dual-panel",
-        "right-drawer"
-      ],
-      "file": "blocks/application-layout/dual-scroll/dual-scroll.html",
-      "category": "Application Layout",
-      "screenshot": "blocks/application-layout/dual-scroll/dual-scroll.webp"
     }
   ],
   "categories": [
@@ -312,5 +312,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-05-29T13:06:59.580Z"
+  "generatedAt": "2026-05-29T13:50:45.140Z"
 }
