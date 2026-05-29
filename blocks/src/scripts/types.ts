@@ -15,6 +15,8 @@ export interface Block extends BlockMetadata {
   id: string;
   file: string;
   screenshot?: string;
+  /** Display name for the block's category (e.g., "Application Layout") */
+  category: string;
 }
 
 /** Category folder information */

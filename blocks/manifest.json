@@ -1,6 +1,19 @@
 {
   "blocks": [
     {
+      "id": "blocks/toolbar/simple/simple",
+      "name": "Simple Toolbar",
+      "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
+      "tags": [
+        "toolbar",
+        "header",
+        "actions"
+      ],
+      "file": "blocks/toolbar/simple/simple.html",
+      "category": "Toolbar",
+      "screenshot": "blocks/toolbar/simple/simple.webp"
+    },
+    {
       "id": "blocks/tables/simple/simple",
       "name": "Simple Table",
       "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
@@ -11,6 +24,7 @@
         "toolbar"
       ],
       "file": "blocks/tables/simple/simple.html",
+      "category": "Tables",
       "screenshot": "blocks/tables/simple/simple.webp"
     },
     {
@@ -26,19 +40,8 @@
         "actions"
       ],
       "file": "blocks/tables/paginated/paginated.html",
+      "category": "Tables",
       "screenshot": "blocks/tables/paginated/paginated.webp"
-    },
-    {
-      "id": "blocks/toolbar/simple/simple",
-      "name": "Simple Toolbar",
-      "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
-      "tags": [
-        "toolbar",
-        "header",
-        "actions"
-      ],
-      "file": "blocks/toolbar/simple/simple.html",
-      "screenshot": "blocks/toolbar/simple/simple.webp"
     },
     {
       "id": "blocks/patterns/filter-facets/filter-facets",
@@ -60,6 +63,7 @@
         "data-table"
       ],
       "file": "blocks/patterns/filter-facets/filter-facets.html",
+      "category": "Patterns",
       "screenshot": "blocks/patterns/filter-facets/filter-facets.webp"
     },
     {
@@ -73,6 +77,7 @@
         "card"
       ],
       "file": "blocks/lists/list-management/list-management.html",
+      "category": "Lists",
       "screenshot": "blocks/lists/list-management/list-management.webp"
     },
     {
@@ -92,6 +97,7 @@
         "switch"
       ],
       "file": "blocks/forms/multi-column/multi-column.html",
+      "category": "Forms",
       "screenshot": "blocks/forms/multi-column/multi-column.webp"
     },
     {
@@ -106,6 +112,7 @@
         "centered"
       ],
       "file": "blocks/forms/login/login.html",
+      "category": "Forms",
       "screenshot": "blocks/forms/login/login.webp"
     },
     {
@@ -123,50 +130,8 @@
         "icons"
       ],
       "file": "blocks/forms/add-user/add-user.html",
+      "category": "Forms",
       "screenshot": "blocks/forms/add-user/add-user.webp"
-    },
-    {
-      "id": "blocks/dialogs/simple/simple",
-      "name": "Simple Dialog",
-      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
-      "tags": [
-        "dialog",
-        "modal",
-        "scaffold",
-        "toolbar",
-        "actions"
-      ],
-      "file": "blocks/dialogs/simple/simple.html",
-      "screenshot": "blocks/dialogs/simple/simple.webp"
-    },
-    {
-      "id": "blocks/cards/user-profile/user-profile",
-      "name": "User Profile Card",
-      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
-      "tags": [
-        "card",
-        "profile",
-        "user",
-        "avatar",
-        "contact"
-      ],
-      "file": "blocks/cards/user-profile/user-profile.html",
-      "screenshot": "blocks/cards/user-profile/user-profile.webp"
-    },
-    {
-      "id": "blocks/cards/responsive-cards/responsive-cards",
-      "name": "Responsive Cards",
-      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
-      "tags": [
-        "cards",
-        "responsive",
-        "grid",
-        "badge",
-        "image",
-        "metrics"
-      ],
-      "file": "blocks/cards/responsive-cards/responsive-cards.html",
-      "screenshot": "blocks/cards/responsive-cards/responsive-cards.webp"
     },
     {
       "id": "blocks/forms/add-illustration/add-illustration",
@@ -182,7 +147,72 @@
         "create"
       ],
       "file": "blocks/forms/add-illustration/add-illustration.html",
+      "category": "Forms",
       "screenshot": "blocks/forms/add-illustration/add-illustration.webp"
+    },
+    {
+      "id": "blocks/cards/user-profile/user-profile",
+      "name": "User Profile Card",
+      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
+      "tags": [
+        "card",
+        "profile",
+        "user",
+        "avatar",
+        "contact"
+      ],
+      "file": "blocks/cards/user-profile/user-profile.html",
+      "category": "Cards",
+      "screenshot": "blocks/cards/user-profile/user-profile.webp"
+    },
+    {
+      "id": "blocks/dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
+      "tags": [
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
+      ],
+      "file": "blocks/dialogs/simple/simple.html",
+      "category": "Dialogs",
+      "screenshot": "blocks/dialogs/simple/simple.webp"
+    },
+    {
+      "id": "blocks/cards/responsive-cards/responsive-cards",
+      "name": "Responsive Cards",
+      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
+      "tags": [
+        "cards",
+        "responsive",
+        "grid",
+        "badge",
+        "image",
+        "metrics"
+      ],
+      "file": "blocks/cards/responsive-cards/responsive-cards.html",
+      "category": "Cards",
+      "screenshot": "blocks/cards/responsive-cards/responsive-cards.webp"
+    },
+    {
+      "id": "blocks/application-layout/three-panel/three-panel",
+      "name": "Three Panel Layout",
+      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
+      "tags": [
+        "layout",
+        "application",
+        "three-panel",
+        "left-drawer",
+        "right-drawer",
+        "navigation",
+        "body",
+        "panels"
+      ],
+      "file": "blocks/application-layout/three-panel/three-panel.html",
+      "category": "Application Layout",
+      "screenshot": "blocks/application-layout/three-panel/three-panel.webp"
     },
     {
       "id": "blocks/application-layout/table-with-filters/table-with-filters",
@@ -200,6 +230,7 @@
         "data"
       ],
       "file": "blocks/application-layout/table-with-filters/table-with-filters.html",
+      "category": "Application Layout",
       "screenshot": "blocks/application-layout/table-with-filters/table-with-filters.webp"
     },
     {
@@ -216,39 +247,8 @@
         "hover"
       ],
       "file": "blocks/application-layout/mini-nav/mini-nav.html",
+      "category": "Application Layout",
       "screenshot": "blocks/application-layout/mini-nav/mini-nav.webp"
-    },
-    {
-      "id": "blocks/application-layout/three-panel/three-panel",
-      "name": "Three Panel Layout",
-      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
-      "tags": [
-        "layout",
-        "application",
-        "three-panel",
-        "left-drawer",
-        "right-drawer",
-        "navigation",
-        "body",
-        "panels"
-      ],
-      "file": "blocks/application-layout/three-panel/three-panel.html",
-      "screenshot": "blocks/application-layout/three-panel/three-panel.webp"
-    },
-    {
-      "id": "blocks/application-layout/dual-scroll/dual-scroll",
-      "name": "Dual Scrolling Containers",
-      "description": "Application layout demonstrating dual independent scrolling regions where the main content area and a fixed right-side drawer panel each scroll independently, useful for master-detail views or side-by-side content comparison layouts",
-      "tags": [
-        "layout",
-        "application",
-        "scroll",
-        "drawer",
-        "dual-panel",
-        "right-drawer"
-      ],
-      "file": "blocks/application-layout/dual-scroll/dual-scroll.html",
-      "screenshot": "blocks/application-layout/dual-scroll/dual-scroll.webp"
     },
     {
       "id": "blocks/application-layout/basic/basic",
@@ -266,7 +266,24 @@
         "responsive-grid"
       ],
       "file": "blocks/application-layout/basic/basic.html",
+      "category": "Application Layout",
       "screenshot": "blocks/application-layout/basic/basic.webp"
+    },
+    {
+      "id": "blocks/application-layout/dual-scroll/dual-scroll",
+      "name": "Dual Scrolling Containers",
+      "description": "Application layout demonstrating dual independent scrolling regions where the main content area and a fixed right-side drawer panel each scroll independently, useful for master-detail views or side-by-side content comparison layouts",
+      "tags": [
+        "layout",
+        "application",
+        "scroll",
+        "drawer",
+        "dual-panel",
+        "right-drawer"
+      ],
+      "file": "blocks/application-layout/dual-scroll/dual-scroll.html",
+      "category": "Application Layout",
+      "screenshot": "blocks/application-layout/dual-scroll/dual-scroll.webp"
     }
   ],
   "categories": [
@@ -295,5 +312,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-05-28T20:47:01.090Z"
+  "generatedAt": "2026-05-29T13:06:59.580Z"
 }

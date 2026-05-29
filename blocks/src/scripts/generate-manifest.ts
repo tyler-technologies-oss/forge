@@ -21,6 +21,27 @@ export interface GenerateManifestOptions {
 }
 
 /**
+ * Formats a kebab-case category folder name into a display name.
+ * Example: "application-layout" -> "Application Layout"
+ */
+function formatCategoryName(folderName: string): string {
+  return folderName
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+/**
+ * Extracts the category folder name from a block's file path.
+ * Example: "blocks/application-layout/basic/basic.html" -> "application-layout"
+ */
+function extractCategoryFolder(filePath: string): string {
+  const parts = filePath.split('/');
+  // Path structure: blocks/[category]/[name]/[name].html
+  return parts.length > 1 ? parts[1] : '';
+}
+
+/**
  * Discovers all block HTML files and extracts their metadata.
  */
 export async function discoverBlocks(blocksPath: string): Promise<Block[]> {
@@ -37,12 +58,14 @@ export async function discoverBlocks(blocksPath: string): Promise<Block[]> {
 
     if (metadata) {
       const id = relativePath.replace('.html', '');
+      const categoryFolder = extractCategoryFolder(relativePath);
       const block: Block = {
         id,
         name: metadata.name,
         description: metadata.description,
         tags: metadata.tags,
-        file: relativePath
+        file: relativePath,
+        category: formatCategoryName(categoryFolder)
       };
 
       // Check for screenshot file (.webp or .png)
