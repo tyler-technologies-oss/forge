@@ -11,7 +11,8 @@
       ],
       "file": "blocks/toolbar/simple/simple.html",
       "category": "Toolbar",
-      "screenshot": "blocks/toolbar/simple/simple.webp"
+      "screenshot": "blocks/toolbar/simple/simple.webp",
+      "hasScript": false
     },
     {
       "id": "blocks/tables/simple/simple",
@@ -25,7 +26,8 @@
       ],
       "file": "blocks/tables/simple/simple.html",
       "category": "Tables",
-      "screenshot": "blocks/tables/simple/simple.webp"
+      "screenshot": "blocks/tables/simple/simple.webp",
+      "hasScript": true
     },
     {
       "id": "blocks/tables/paginated/paginated",
@@ -41,7 +43,8 @@
       ],
       "file": "blocks/tables/paginated/paginated.html",
       "category": "Tables",
-      "screenshot": "blocks/tables/paginated/paginated.webp"
+      "screenshot": "blocks/tables/paginated/paginated.webp",
+      "hasScript": true
     },
     {
       "id": "blocks/patterns/filter-facets/filter-facets",
@@ -64,7 +67,8 @@
       ],
       "file": "blocks/patterns/filter-facets/filter-facets.html",
       "category": "Patterns",
-      "screenshot": "blocks/patterns/filter-facets/filter-facets.webp"
+      "screenshot": "blocks/patterns/filter-facets/filter-facets.webp",
+      "hasScript": false
     },
     {
       "id": "blocks/lists/list-management/list-management",
@@ -78,7 +82,8 @@
       ],
       "file": "blocks/lists/list-management/list-management.html",
       "category": "Lists",
-      "screenshot": "blocks/lists/list-management/list-management.webp"
+      "screenshot": "blocks/lists/list-management/list-management.webp",
+      "hasScript": true
     },
     {
       "id": "blocks/forms/multi-column/multi-column",
@@ -98,7 +103,8 @@
       ],
       "file": "blocks/forms/multi-column/multi-column.html",
       "category": "Forms",
-      "screenshot": "blocks/forms/multi-column/multi-column.webp"
+      "screenshot": "blocks/forms/multi-column/multi-column.webp",
+      "hasScript": false
     },
     {
       "id": "blocks/forms/login/login",
@@ -113,7 +119,8 @@
       ],
       "file": "blocks/forms/login/login.html",
       "category": "Forms",
-      "screenshot": "blocks/forms/login/login.webp"
+      "screenshot": "blocks/forms/login/login.webp",
+      "hasScript": false
     },
     {
       "id": "blocks/forms/add-user/add-user",
@@ -131,7 +138,8 @@
       ],
       "file": "blocks/forms/add-user/add-user.html",
       "category": "Forms",
-      "screenshot": "blocks/forms/add-user/add-user.webp"
+      "screenshot": "blocks/forms/add-user/add-user.webp",
+      "hasScript": false
     },
     {
       "id": "blocks/forms/add-illustration/add-illustration",
@@ -148,7 +156,8 @@
       ],
       "file": "blocks/forms/add-illustration/add-illustration.html",
       "category": "Forms",
-      "screenshot": "blocks/forms/add-illustration/add-illustration.webp"
+      "screenshot": "blocks/forms/add-illustration/add-illustration.webp",
+      "hasScript": false
     },
     {
       "id": "blocks/dialogs/simple/simple",
@@ -163,7 +172,8 @@
       ],
       "file": "blocks/dialogs/simple/simple.html",
       "category": "Dialogs",
-      "screenshot": "blocks/dialogs/simple/simple.webp"
+      "screenshot": "blocks/dialogs/simple/simple.webp",
+      "hasScript": false
     },
     {
       "id": "blocks/cards/user-profile/user-profile",
@@ -178,7 +188,8 @@
       ],
       "file": "blocks/cards/user-profile/user-profile.html",
       "category": "Cards",
-      "screenshot": "blocks/cards/user-profile/user-profile.webp"
+      "screenshot": "blocks/cards/user-profile/user-profile.webp",
+      "hasScript": false
     },
     {
       "id": "blocks/cards/responsive-cards/responsive-cards",
@@ -194,7 +205,8 @@
       ],
       "file": "blocks/cards/responsive-cards/responsive-cards.html",
       "category": "Cards",
-      "screenshot": "blocks/cards/responsive-cards/responsive-cards.webp"
+      "screenshot": "blocks/cards/responsive-cards/responsive-cards.webp",
+      "hasScript": false
     },
     {
       "id": "blocks/application-layout/three-panel/three-panel",
@@ -212,7 +224,8 @@
       ],
       "file": "blocks/application-layout/three-panel/three-panel.html",
       "category": "Application Layout",
-      "screenshot": "blocks/application-layout/three-panel/three-panel.webp"
+      "screenshot": "blocks/application-layout/three-panel/three-panel.webp",
+      "hasScript": false
     },
     {
       "id": "blocks/application-layout/table-with-filters/table-with-filters",
@@ -231,7 +244,8 @@
       ],
       "file": "blocks/application-layout/table-with-filters/table-with-filters.html",
       "category": "Application Layout",
-      "screenshot": "blocks/application-layout/table-with-filters/table-with-filters.webp"
+      "screenshot": "blocks/application-layout/table-with-filters/table-with-filters.webp",
+      "hasScript": true
     },
     {
       "id": "blocks/application-layout/mini-nav/mini-nav",
@@ -248,7 +262,8 @@
       ],
       "file": "blocks/application-layout/mini-nav/mini-nav.html",
       "category": "Application Layout",
-      "screenshot": "blocks/application-layout/mini-nav/mini-nav.webp"
+      "screenshot": "blocks/application-layout/mini-nav/mini-nav.webp",
+      "hasScript": false
     },
     {
       "id": "blocks/application-layout/dual-scroll/dual-scroll",
@@ -264,7 +279,8 @@
       ],
       "file": "blocks/application-layout/dual-scroll/dual-scroll.html",
       "category": "Application Layout",
-      "screenshot": "blocks/application-layout/dual-scroll/dual-scroll.webp"
+      "screenshot": "blocks/application-layout/dual-scroll/dual-scroll.webp",
+      "hasScript": false
     },
     {
       "id": "blocks/application-layout/basic/basic",
@@ -283,7 +299,8 @@
       ],
       "file": "blocks/application-layout/basic/basic.html",
       "category": "Application Layout",
-      "screenshot": "blocks/application-layout/basic/basic.webp"
+      "screenshot": "blocks/application-layout/basic/basic.webp",
+      "hasScript": false
     }
   ],
   "categories": [
@@ -312,5 +329,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-05-29T13:55:04.781Z"
+  "generatedAt": "2026-05-29T16:38:47.955Z"
 }
