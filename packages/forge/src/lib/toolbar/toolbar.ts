@@ -59,7 +59,7 @@ export const TOOLBAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-toolbar';
  * @slot after-end - The content to place after the end slot.
  *
  * @cssclass forge-toolbar - Apply to the root element _(required)_.
- * @cssclass inverted - Inverts the toolbar so the divider is at the top.
+ * @cssclass forge-toolbar--inverted - Inverts the toolbar so the divider is at the top.
  */
 @customElement(TOOLBAR_TAG_NAME)
 export class ToolbarComponent extends BaseLitElement {
