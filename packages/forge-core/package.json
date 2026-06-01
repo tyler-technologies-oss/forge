@@ -40,7 +40,7 @@
   "devDependencies": {
     "@tylertech-eslint/eslint-plugin": "^4.0.0",
     "@types/node": "^25.5.0",
-    "@vitest/browser": "^4.1.2",
+    "@vitest/browser": "^4.1.6",
     "@vitest/browser-playwright": "^4.1.2",
     "@vitest/coverage-v8": "^4.1.2",
     "playwright": "catalog:",
