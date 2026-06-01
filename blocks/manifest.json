@@ -228,6 +228,26 @@
       "hasScript": false
     },
     {
+      "id": "blocks/application-layout/table-with-filters/table-with-filters",
+      "name": "Table with Filter Sidesheet",
+      "description": "Full application layout with header, left navigation drawer, paginated data table in the body, and a filter sidesheet in the right drawer. Demonstrates a common pattern for data-heavy applications with filtering capabilities.",
+      "tags": [
+        "layout",
+        "application",
+        "table",
+        "filter",
+        "sidesheet",
+        "drawer",
+        "navigation",
+        "paginator",
+        "data"
+      ],
+      "file": "blocks/application-layout/table-with-filters/table-with-filters.html",
+      "category": "Application Layout",
+      "screenshot": "blocks/application-layout/table-with-filters/table-with-filters.webp",
+      "hasScript": true
+    },
+    {
       "id": "blocks/application-layout/mini-nav/mini-nav",
       "name": "Mini Nav Application Layout",
       "description": "Application shell with a collapsible mini navigation drawer that expands on hover, an app bar with notification icons and a user profile dropdown with theme toggle",
@@ -261,26 +281,6 @@
       "category": "Application Layout",
       "screenshot": "blocks/application-layout/dual-scroll/dual-scroll.webp",
       "hasScript": false
-    },
-    {
-      "id": "blocks/application-layout/table-with-filters/table-with-filters",
-      "name": "Table with Filter Sidesheet",
-      "description": "Full application layout with header, left navigation drawer, paginated data table in the body, and a filter sidesheet in the right drawer. Demonstrates a common pattern for data-heavy applications with filtering capabilities.",
-      "tags": [
-        "layout",
-        "application",
-        "table",
-        "filter",
-        "sidesheet",
-        "drawer",
-        "navigation",
-        "paginator",
-        "data"
-      ],
-      "file": "blocks/application-layout/table-with-filters/table-with-filters.html",
-      "category": "Application Layout",
-      "screenshot": "blocks/application-layout/table-with-filters/table-with-filters.webp",
-      "hasScript": true
     },
     {
       "id": "blocks/application-layout/basic/basic",
@@ -329,5 +329,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-05-29T16:36:44.599Z"
+  "generatedAt": "2026-06-01T19:49:54.930Z"
 }
