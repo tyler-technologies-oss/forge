@@ -1,25 +1,24 @@
-import { customElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { TemplateResult, html, unsafeCSS } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { IBaseComponent } from '../core/base/base-component.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
 
-import { TOOLBAR_CONSTANTS } from './toolbar-constants.js';
-
-import template from './toolbar.html';
 import styles from './toolbar.scss';
 
+/** @deprecated - This will be removed in the future. Please switch to using ToolbarComponent. */
 export interface IToolbarComponent extends IBaseComponent {
   inverted: boolean;
 }
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-toolbar': IToolbarComponent;
-  }
-}
+export const TOOLBAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-toolbar';
 
 /**
  * @tag forge-toolbar
  *
- * @summary Toolbars allow you to place titles and actions within a container and align them to the start, center, or end of the toolbar. This component is useful as headers and footers within pages, dialogs, sections... etc. to ensure consistent layout and alignment.
+ * @summary Toolbars allow you to place titles and actions within a container and align them to the start, center, or end of the toolbar.
+ * This component is useful as headers and footers within pages, dialogs, sections... etc. to ensure consistent layout and alignment.
  *
  * @property {boolean} [inverted=false] - Controls whether a bottom divider (default) or top divider (true) is used.
  *
@@ -61,42 +60,49 @@ declare global {
  *
  * @cssclass forge-toolbar - Apply to the root element _(required)_.
  * @cssclass forge-toolbar--inverted - Inverts the toolbar so the divider is at the top.
- * @cssclass forge-toolbar--no-divider - Hides the internal divider.
- * @cssclass forge-toolbar--auto-height - Forces the internal container to use `height: auto` for dynamic content that doesn't fit the static/default height.
- * @cssclass forge-toolbar__start - Renders content in the start area within the toolbar.
- * @cssclass forge-toolbar__center - Renders content in the center area within the toolbar.
- * @cssclass forge-toolbar__end - Renders content in the end area within the toolbar.
  */
-@customElement({
-  name: TOOLBAR_CONSTANTS.elementName
-})
-export class ToolbarComponent extends BaseComponent implements IToolbarComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(TOOLBAR_CONSTANTS.observedAttributes);
-  }
+@customElement(TOOLBAR_TAG_NAME)
+export class ToolbarComponent extends BaseLitElement {
+  public static styles = unsafeCSS(styles);
 
-  private _inverted = false;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = TOOLBAR_TAG_NAME;
 
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-  }
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [];
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case TOOLBAR_CONSTANTS.observedAttributes.INVERTED:
-        this.inverted = coerceBoolean(newValue);
-        break;
-    }
-  }
+  @property({ type: Boolean, reflect: true }) public inverted = false;
 
-  public get inverted(): boolean {
-    return this._inverted;
+  public render(): TemplateResult {
+    const classes = {
+      'forge-toolbar': true,
+      inverted: this.inverted
+    };
+    return html`<div class=${classMap(classes)} part="root">
+      <div class="section" part="before-section-start">
+        <slot name="before-start"></slot>
+      </div>
+      <div class="inner center" part="inner">
+        <div class="section" part="section-start">
+          <slot name="start"></slot>
+          <slot></slot>
+        </div>
+        <div class="section center" part="section-center">
+          <slot name="center"></slot>
+        </div>
+        <div class="section end" part="section-end">
+          <slot name="end"></slot>
+        </div>
+      </div>
+      <div class="section end" part="after-section-end">
+        <slot name="after-end"></slot>
+      </div>
+    </div>`;
   }
-  public set inverted(value: boolean) {
-    if (this._inverted !== value) {
-      this._inverted = value;
-      this.toggleAttribute(TOOLBAR_CONSTANTS.attributes.INVERTED, this._inverted);
-    }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-toolbar': ToolbarComponent;
   }
 }
