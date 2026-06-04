@@ -309,15 +309,45 @@ describe('Tabs', () => {
     expect(ctx.activeTabCount).toBe(0);
   });
 
-  it('should skip disabled tabs when navigating via keyboard', async () => {
+  it('should not skip disabled tabs when navigating via keyboard', async () => {
     const ctx = await createFixture();
 
     ctx.tabs[1].disabled = true;
     ctx.tabs[0].focus();
     await userEvent.keyboard('{ArrowRight}');
 
-    expect(ctx.tabs[1].matches(':focus')).toBe(false);
-    expect(ctx.tabs[2].matches(':focus')).toBe(true);
+    expect(ctx.tabs[1].matches(':focus')).toBe(true);
+    expect(ctx.tabs[2].matches(':focus')).toBe(false);
+  });
+
+  it('should not activate disabled tab when focused and auto activate is enabled', async () => {
+    const ctx = await createFixture({ autoActivate: true });
+
+    const changeSpy = vi.fn();
+    ctx.element.addEventListener('forge-tab-bar-change', changeSpy);
+
+    ctx.tabs[1].disabled = true;
+    ctx.tabs[1].focus();
+    await ctx.updatesComplete(2);
+
+    expect(ctx.tabs[1].matches(':focus')).toBe(true);
+    expect(ctx.tabs[1].active).toBe(false);
+    expect(ctx.activeTabCount).toBe(0);
+    expect(changeSpy).not.toHaveBeenCalled();
+  });
+
+  it('should not activate disabled tab when clicked', async () => {
+    const ctx = await createFixture();
+
+    const changeSpy = vi.fn();
+    ctx.element.addEventListener('forge-tab-bar-change', changeSpy);
+
+    ctx.tabs[1].disabled = true;
+    await ctx.forceClickTab(1);
+
+    expect(ctx.tabs[1].active).toBe(false);
+    expect(ctx.activeTabCount).toBe(0);
+    expect(changeSpy).not.toHaveBeenCalled();
   });
 
   it('should focus first tab when navigating via keyboard from last tab', async () => {
@@ -416,11 +446,7 @@ describe('Tabs', () => {
   describe('when vertical', () => {
     it('should be accessible', async () => {
       const ctx = await createFixture({ vertical: true });
-      await expect(ctx.element).toBeAccessible({
-        rules: {
-          'aria-required-children': { enabled: false }
-        }
-      });
+      await expect(ctx.element).toBeAccessible();
     });
 
     it('should set vertical attribute', async () => {

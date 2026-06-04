@@ -121,7 +121,8 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   // TODO: Remove attribute reflection
 
   /**
-   * The disabled state of the tab. Should not be set if using the disabled property on `forge-tab-bar`.
+   * The disabled state of the tab. Disabled tabs remain focusable but are not interactive. Should
+   * not be set if using the disabled property on `forge-tab-bar`.
    * @default false
    * @attribute
    */
@@ -244,6 +245,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
     setDefaultAria(this, this.#internals, {
       role: 'tab'
     });
+    this.tabIndex = -1;
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
@@ -264,21 +266,10 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
       setDefaultAria(this, this.#internals, {
         ariaDisabled: this.disabled ? 'true' : 'false'
       });
-
-      // Blur the tab if it becomes disabled while focused
-      if (this.disabled && this.matches(':focus-within')) {
-        this.blur();
-      }
     }
 
     if (changedProperties.has('vertical')) {
       toggleState(this.#internals, 'vertical', this.vertical);
-    }
-
-    // TabIndex management: -1 when disabled or not active, 0 when active
-    // TODO: This may not be necessary with the tab bar's focus group managing tab indices
-    if (changedProperties.has('disabled') || changedProperties.has('active')) {
-      this.tabIndex = this.disabled ? -1 : this.active ? 0 : -1;
     }
   }
 

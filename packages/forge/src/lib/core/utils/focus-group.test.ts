@@ -93,16 +93,16 @@ describe('BaseFocusGroup', () => {
   });
 
   describe('connect', () => {
-    it('should set root tabIndex to 0', () => {
-      expect(container.tabIndex).toBe(0);
+    it('should not set tabIndex on root element', () => {
+      expect(container.tabIndex).toBe(-1);
     });
 
-    it('should set tab indices on child elements', () => {
+    it('should set tabIndex to 0 on first element and -1 on others', () => {
       const buttons = container.querySelectorAll('button');
 
-      buttons.forEach(btn => {
-        expect(btn.tabIndex).toBe(-1);
-      });
+      expect(buttons[0].tabIndex).toBe(0);
+      expect(buttons[1].tabIndex).toBe(-1);
+      expect(buttons[2].tabIndex).toBe(-1);
     });
   });
 
@@ -386,40 +386,47 @@ describe('BaseFocusGroup', () => {
       expect(document.activeElement).toBe(btn2);
     });
 
-    it('should focus root when focusing invalid element', () => {
+    it('should do nothing when focusing invalid element', () => {
       const div = document.createElement('div');
+      const btn1 = container.querySelector('#btn1') as HTMLButtonElement;
       container.appendChild(div);
+
+      btn1.focus();
+      const previousFocus = document.activeElement;
 
       focusGroupInstance.focus(div);
 
-      // When invalid element is passed, it focuses root which then advances to first button
-      expect(document.activeElement).toBe(container.querySelector('#btn1'));
+      // Focus should not change when invalid element is passed
+      expect(document.activeElement).toBe(previousFocus);
     });
 
-    it('should focus root and then first element when focusing invalid index', () => {
+    it('should do nothing when focusing invalid index', () => {
+      const btn1 = container.querySelector('#btn1') as HTMLButtonElement;
+      btn1.focus();
+      const previousFocus = document.activeElement;
+
       focusGroupInstance.focusAt(99);
 
-      // focusAt with invalid index calls focusRoot, which advances to first element
-      expect(document.activeElement).toBe(container.querySelector('#btn1'));
+      // Focus should not change when invalid index is passed
+      expect(document.activeElement).toBe(previousFocus);
     });
   });
 
   describe('focusRoot', () => {
-    it('should trigger focus on root which advances to first element', () => {
+    it('should focus the entry element (first element by default)', () => {
       const btn1 = container.querySelector('#btn1') as HTMLButtonElement;
 
       focusGroupInstance.focusRoot();
 
-      // Focusing root triggers focusin handler which focuses first element
       expect(document.activeElement).toBe(btn1);
     });
 
-    it('should restore focus to last focused element when root gains focus', () => {
+    it('should focus the last focused element when available', () => {
       const btn2 = container.querySelector('#btn2') as HTMLButtonElement;
 
       btn2.focus();
       document.body.focus();
-      container.focus();
+      focusGroupInstance.focusRoot();
 
       expect(document.activeElement).toBe(btn2);
     });
@@ -456,21 +463,21 @@ describe('BaseFocusGroup', () => {
     });
   });
 
-  describe('getFirstChild callback', () => {
-    it('should use custom getFirstChild callback', () => {
+  describe('getEntryElement callback', () => {
+    it('should use custom getEntryElement callback', () => {
       const btn3 = container.querySelector('#btn3') as HTMLButtonElement;
-      const getFirstChild = vi.fn(() => btn3);
+      const getEntryElement = vi.fn(() => btn3);
 
       focusGroupInstance.disconnect();
       focusGroupInstance = new BaseFocusGroup(container, {
         selector: 'button',
-        getFirstChild
+        getEntryElement
       });
       focusGroupInstance.connect();
 
-      container.focus();
+      focusGroupInstance.focusRoot();
 
-      expect(getFirstChild).toHaveBeenCalled();
+      expect(getEntryElement).toHaveBeenCalled();
       expect(document.activeElement).toBe(btn3);
     });
   });
@@ -507,42 +514,49 @@ describe('BaseFocusGroup', () => {
   });
 
   describe('disabled element handling', () => {
-    it('should restore root tabIndex when focused element becomes disabled', () => {
+    it('should focus entry element when focused element becomes disabled', () => {
       const btn1 = container.querySelector('#btn1') as HTMLButtonElement;
+      const btn2 = container.querySelector('#btn2') as HTMLButtonElement;
 
-      btn1.focus();
+      btn2.focus();
 
-      btn1.disabled = true;
-      btn1.dispatchEvent(new FocusEvent('focusout', { relatedTarget: null, bubbles: true }));
+      btn2.disabled = true;
+      btn2.dispatchEvent(new FocusEvent('focusout', { relatedTarget: null, bubbles: true }));
 
-      expect(container.tabIndex).toBe(0);
+      // Should focus the entry element (first element by default)
+      expect(document.activeElement).toBe(btn1);
+      expect(btn1.tabIndex).toBe(0);
     });
   });
 
   describe('tab index management', () => {
-    it('should set tabIndex to 0 for root when focus leaves group', () => {
+    it('should maintain tabIndex on focused element when focus leaves group', () => {
       const btn1 = container.querySelector('#btn1') as HTMLButtonElement;
       const externalButton = document.createElement('button');
       document.body.appendChild(externalButton);
 
       btn1.focus();
+      expect(btn1.tabIndex).toBe(0);
 
       externalButton.focus();
       container.dispatchEvent(new FocusEvent('focusout', { relatedTarget: externalButton, bubbles: true }));
 
-      expect(container.tabIndex).toBe(0);
+      // btn1 should still have tabIndex 0 since it's the entry element
+      expect(btn1.tabIndex).toBe(0);
 
       document.body.removeChild(externalButton);
     });
 
-    it('should maintain tabIndex -1 on root when focus moves within group', () => {
+    it('should update tabIndex when focus moves within group', () => {
       const btn1 = container.querySelector('#btn1') as HTMLButtonElement;
       const btn2 = container.querySelector('#btn2') as HTMLButtonElement;
 
       btn1.focus();
-      btn2.focus();
+      expect(btn1.tabIndex).toBe(0);
 
-      expect(container.tabIndex).toBe(-1);
+      btn2.focus();
+      expect(btn1.tabIndex).toBe(-1);
+      expect(btn2.tabIndex).toBe(0);
     });
   });
 });
@@ -576,10 +590,14 @@ describe('FocusGroupController', () => {
     expect(element.focusGroup.host).toBe(element);
   });
 
-  it('should connect when host is connected', () => {
+  it('should connect when host is connected', async () => {
     const element = setupTest();
+    await element.updateComplete;
 
-    expect(element.tabIndex).toBe(0);
+    const btn1 = element.shadowRoot?.querySelector('#btn1') as HTMLButtonElement;
+
+    // First button should have tabIndex 0 as entry element
+    expect(btn1.tabIndex).toBe(0);
   });
 
   it('should disconnect when host is disconnected', () => {
@@ -669,9 +687,11 @@ describe('edge cases', () => {
     });
     instance.connect();
 
-    // Focusing next with no elements focuses root
+    const previousFocus = document.activeElement;
+
+    // Focusing next with no elements should do nothing
     instance.focusNext();
-    expect(document.activeElement).toBe(container);
+    expect(document.activeElement).toBe(previousFocus);
 
     instance.disconnect();
     document.body.removeChild(container);

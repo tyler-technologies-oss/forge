@@ -100,8 +100,10 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   // TODO: Remove attribute reflection
 
   /**
-   * Sets the disabled state of all child tabs. If true, any new tabs added to the DOM will be disabled by default.
-   * This can be used instead of setting individual tab disabled properties, mixing the two methods of disabling is not supported.
+   * Sets the disabled state of all child tabs. If true, any new tabs added to the DOM will be
+   * disabled by default. This can be used instead of setting individual tab disabled properties,
+   * mixing the two methods of disabling is not supported. Disabled tabs remain focusable but are
+   * not interactive.
    * @default false
    * @attribute
    */
@@ -127,7 +129,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   public vertical = false;
 
   /**
-   * Controls whether the tabs stretch the full width of their container or cluster together at their minimum width.
+   * Controls whether the tabs stretch the full width of their container or cluster together at
+   * their minimum width.
    * @default false
    * @attribute
    */
@@ -203,12 +206,11 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   @query('.scroll-button-next') private _nextButton?: IconButtonComponent;
 
   @queryAssignedElements({ selector: `${TAB_CONSTANTS.elementName}` }) private _tabs!: TabComponent[];
-  @queryAssignedElements({ selector: `${TAB_CONSTANTS.elementName}:not(:state(disabled))` }) private _enabledTabs!: TabComponent[];
 
   #activeTabElement: TabComponent | null = null;
 
   #focusGroupRef = createFocusGroupRef({
-    selector: 'forge-tab:not(:state(disabled))',
+    selector: 'forge-tab',
     orientation: this.vertical ? 'vertical' : 'horizontal',
     wrap: true,
     onFocusChange: (_, element) => this.#handleTabFocus(element)
@@ -361,6 +363,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   }
 
   #handleSlotChange(): void {
+    this.#focusGroupRef.update();
     // Handle the active tab being removed from the DOM
     if (this.#activeTabElement && !this._tabs.includes(this.#activeTabElement)) {
       this.#activeTabElement = null;
@@ -594,7 +597,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    * @param tab The tab to close.
    */
   async #closeTab(tab: TabComponent): Promise<void> {
-    const tabs = this._enabledTabs;
+    const tabs = this._tabs.filter(t => !t.disabled);
     const index = tabs.indexOf(tab);
     const wasFocused = tab.ownerDocument.activeElement === tab;
     const wasActive = tab.active;
@@ -606,13 +609,13 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     }
 
     await this.updateComplete;
-    const updatedTabs = this._enabledTabs;
+    const updatedTabs = this._tabs.filter(t => !t.disabled);
     const newTab = updatedTabs[index] || updatedTabs[index - 1];
 
-    // Maintain focus at the same index or set it to the scroll container
+    // Maintain focus at the same index or set it to the first tab
     if (wasFocused) {
       if (!newTab) {
-        this.#focusGroupRef.focusRoot();
+        this.#focusGroupRef.focusFirst();
       } else {
         newTab.focus();
       }
