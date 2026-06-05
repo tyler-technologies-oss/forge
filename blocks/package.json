@@ -5,10 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "pnpm clean && pnpm build:blocks && pnpm build:assets && pnpm build:index",
+    "build": "pnpm clean && pnpm build:blocks && pnpm build:assets",
     "build:blocks": "tsx src/scripts/build-blocks.ts",
     "build:assets": "vite build --config vite-assets.config.ts",
-    "build:index": "vite build",
     "clean": "rimraf dist",
     "screenshots": "pnpm generate-screenshots",
     "generate-manifest": "tsx src/scripts/generate-manifest.ts",
