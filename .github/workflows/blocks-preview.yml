@@ -1,13 +1,13 @@
-name: Storybook Preview (Forge)
+name: Blocks Preview
 
 on:
   pull_request:
     types: [labeled, synchronize]
     paths:
-      - 'packages/forge/**'
+      - 'blocks/**'
 
 concurrency:
-  group: storybook-preview-forge-${{ github.event.pull_request.number }}
+  group: blocks-preview-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 env:
@@ -18,10 +18,10 @@ jobs:
   deploy-preview:
     if: contains(github.event.pull_request.labels.*.name, 'deploy-preview') && !github.event.pull_request.head.repo.fork
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     environment:
-      name: pr-preview-${{ github.event.pull_request.number }}
-      url: https://forge.tylerdev.io/forge/pr-${{ github.event.pull_request.number }}/
+      name: pr-preview-blocks-${{ github.event.pull_request.number }}
+      url: https://forge.tylerdev.io/blocks/pr-${{ github.event.pull_request.number }}/
     permissions:
       contents: write
 
@@ -39,13 +39,14 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm turbo run build --filter=@tylertech/forge
-
-      - run: pnpm turbo run build:storybook --filter=@tylertech/forge
+      - name: Build blocks
+        run: pnpm --filter blocks build
+        env:
+          BASE_HREF: /blocks/pr-${{ github.event.pull_request.number }}/
 
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: packages/forge/storybook-static
-          target-folder: docs/forge/pr-${{ github.event.pull_request.number }}
+          folder: blocks/dist
+          target-folder: docs/blocks/pr-${{ github.event.pull_request.number }}
           clean: true
