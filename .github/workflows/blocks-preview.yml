@@ -40,7 +40,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Build blocks
-        run: pnpm --filter blocks build
+        run: pnpm turbo run build --filter=blocks
         env:
           BASE_HREF: /blocks/pr-${{ github.event.pull_request.number }}/
 
