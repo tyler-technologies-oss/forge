@@ -1,0 +1,42 @@
+name: Deploy Blocks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'blocks/**'
+  workflow_dispatch:
+
+env:
+  CI: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build blocks
+        run: pnpm --filter blocks build
+        env:
+          BASE_HREF: /blocks/
+
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: blocks/dist
+          target-folder: docs/blocks
+          clean: true

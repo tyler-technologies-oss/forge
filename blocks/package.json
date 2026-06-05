@@ -5,7 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && pnpm generate-manifest",
+    "build": "pnpm clean && pnpm build:blocks && pnpm build:assets && pnpm build:index",
+    "build:blocks": "tsx src/scripts/build-blocks.ts",
+    "build:assets": "vite build --config vite-assets.config.ts",
+    "build:index": "vite build",
+    "clean": "rimraf dist",
     "screenshots": "pnpm generate-screenshots",
     "generate-manifest": "tsx src/scripts/generate-manifest.ts",
     "generate-screenshots": "tsx src/scripts/generate-screenshots.ts"
@@ -22,6 +26,7 @@
     "glob": "catalog:",
     "handlebars": "^4.7.8",
     "playwright": "catalog:",
+    "rimraf": "catalog:",
     "sass": "catalog:",
     "sharp": "^0.34.5",
     "tailwindcss": "catalog:",

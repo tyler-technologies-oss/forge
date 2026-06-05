@@ -4,6 +4,11 @@ on:
   workflow_dispatch:
   release:
     types: [published]
+  push:
+    branches: [main]
+    paths:
+      - 'packages/forge/**'
+      - '.github/workflows/deploy-storybook-forge.yml'
 
 env:
   CI: true
@@ -33,12 +38,6 @@ jobs:
       - run: pnpm turbo run build --filter=@tylertech/forge
 
       - run: pnpm turbo run build:storybook --filter=@tylertech/forge
-
-      - name: Build blocks
-        run: pnpm --filter blocks build
-
-      - name: Copy blocks to Storybook output
-        run: cp -r blocks/dist packages/forge/storybook-static/blocks
 
       - uses: JamesIves/github-pages-deploy-action@v4
         with:

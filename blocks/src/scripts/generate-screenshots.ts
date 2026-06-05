@@ -87,10 +87,10 @@ export async function generateScreenshots(options: GenerateScreenshotsOptions): 
   const blocksToCapture: Block[] = force
     ? blocks
     : blocks.filter((block: Block): boolean => {
-        const srcPath: string = block.file.replace(/^blocks\//, 'src/blocks/');
+        const srcPath: string = 'src/blocks/' + block.file;
         const htmlPath: string = srcPath;
         const webpPath: string = outputDir
-          ? path.join(outputDir, `${block.id.replace('blocks/', '')}.webp`)
+          ? path.join(outputDir, `${block.id}.webp`)
           : srcPath.replace('.html', '.webp');
         return needsScreenshot(htmlPath, webpPath);
       });
@@ -124,11 +124,11 @@ export async function generateScreenshots(options: GenerateScreenshotsOptions): 
     const page = await context.newPage();
 
     for (const block of blocksToCapture) {
-      // block.file is "blocks/..." for deployed URLs, but vite serves from "src/blocks/..."
-      const srcPath = block.file.replace(/^blocks\//, 'src/blocks/');
+      // block.file is "category/name/name.html", vite serves from "src/blocks/category/name/name.html"
+      const srcPath = 'src/blocks/' + block.file;
       const blockUrl = `${serverUrl}/${srcPath}`;
       const screenshotPath = outputDir
-        ? path.join(outputDir, `${block.id.replace('blocks/', '')}.webp`)
+        ? path.join(outputDir, `${block.id}.webp`)
         : srcPath.replace('.html', '.webp');
 
       const screenshotDir = path.dirname(screenshotPath);

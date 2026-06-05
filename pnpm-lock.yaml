@@ -181,6 +181,9 @@ importers:
       playwright:
         specifier: 'catalog:'
         version: 1.59.0
+      rimraf:
+        specifier: 'catalog:'
+        version: 6.1.3
       sass:
         specifier: 'catalog:'
         version: 1.92.1

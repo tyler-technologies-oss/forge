@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
-import { glob } from 'glob';
 import path from 'path';
+import fs from 'node:fs';
 
 import { blocksPlugin } from './src/scripts/vite-plugin.js';
 
@@ -14,7 +14,18 @@ export default defineConfig({
       layoutPath: path.resolve(process.cwd(), 'src/includes/base.html'),
       partialsPath: path.resolve(process.cwd(), 'src/partials'),
       indexPath: path.resolve(process.cwd(), 'src/index.html')
-    })
+    }),
+    {
+      name: 'move-index',
+      closeBundle() {
+        const srcIndex = 'dist/src/index.html';
+        const destIndex = 'dist/index.html';
+        if (fs.existsSync(srcIndex)) {
+          fs.renameSync(srcIndex, destIndex);
+          fs.rmSync('dist/src', { recursive: true, force: true });
+        }
+      }
+    }
   ],
   resolve: {
     conditions: ['import', 'module', 'browser', 'default']
@@ -31,17 +42,9 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    emptyOutDir: false,
     rollupOptions: {
-      input: {
-        index: path.resolve(process.cwd(), 'src/index.html'),
-        ...Object.fromEntries(
-          glob.sync('src/blocks/**/*.html').map(file => [
-            // Strip 'src/' prefix so output is dist/blocks/ not dist/src/blocks/
-            file.replace('src/', '').replace('.html', ''),
-            path.resolve(process.cwd(), file)
-          ])
-        )
-      }
+      input: path.resolve(process.cwd(), 'src/index.html')
     }
   }
 });
