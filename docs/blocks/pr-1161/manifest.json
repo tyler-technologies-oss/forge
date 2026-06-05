@@ -47,21 +47,6 @@
       "hasScript": true
     },
     {
-      "id": "lists/list-management/list-management",
-      "name": "List Management",
-      "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
-      "tags": [
-        "list",
-        "management",
-        "interactive",
-        "card"
-      ],
-      "file": "lists/list-management/list-management.html",
-      "category": "Lists",
-      "screenshot": "lists/list-management/list-management.webp",
-      "hasScript": true
-    },
-    {
       "id": "patterns/filter-facets/filter-facets",
       "name": "Filter Facets",
       "description": "Filter facets rendered inside a drawer with scaffold layout, demonstrating checkboxes for multi-select and radio buttons for single-select filtering. Uses partials for reusable facet patterns. Use as a reference for building filter sidesheets, filter panels within cards, data table filters, and other page filtering UI.",
@@ -84,6 +69,21 @@
       "category": "Patterns",
       "screenshot": "patterns/filter-facets/filter-facets.webp",
       "hasScript": false
+    },
+    {
+      "id": "lists/list-management/list-management",
+      "name": "List Management",
+      "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
+      "tags": [
+        "list",
+        "management",
+        "interactive",
+        "card"
+      ],
+      "file": "lists/list-management/list-management.html",
+      "category": "Lists",
+      "screenshot": "lists/list-management/list-management.webp",
+      "hasScript": true
     },
     {
       "id": "forms/multi-column/multi-column",
@@ -329,5 +329,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-05T19:41:20.725Z"
+  "generatedAt": "2026-06-05T20:47:18.620Z"
 }
