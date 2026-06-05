@@ -33,11 +33,11 @@ jobs:
       - name: Build blocks
         run: pnpm turbo run build --filter=blocks
         env:
-          BASE_HREF: /blocks/
+          BASE_HREF: /blocks/v1/
 
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: blocks/dist
-          target-folder: docs/blocks
+          target-folder: docs/blocks/v1
           clean: true
