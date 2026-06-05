@@ -1,0 +1,102 @@
+<!--
+  @block Basic Application Layout
+  @description Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text
+  @tags layout, application, shell, app-bar, navigation, drawer, user-profile, footer, responsive-grid
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <title>Basic Application Layout</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="forge-register.js"></script>
+  </head>
+  <body class="">
+    <forge-app-layout app-title="My Application" app-title-href="/">
+  <!-- App bar logo -->
+  <forge-icon slot="app-bar-logo" name="home"></forge-icon>
+
+  <!-- App bar end actions -->
+  <div slot="app-bar-end" class="flex items-center gap-xsmall">
+    <forge-icon-button density="medium" aria-label="Notifications" theme="app-bar">
+      <forge-icon name="notifications" external></forge-icon>
+    </forge-icon-button>
+
+    <forge-user-profile
+      email="tyler.tech@tylertech.com"
+      button-label="Open the incredibly awesome profile menu"
+      theme-toggle
+      image-url
+      full-name="Tyler tech"
+      slot="app-bar-end">
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="settings" external></forge-icon>
+        <a href="http://www.google.com" target="_blank">Settings</a>
+      </forge-profile-link>
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="account" external></forge-icon>
+        <a href="http://www.google.com" target="_blank">Profile</a>
+      </forge-profile-link>
+      <span slot="sign-in-button-text">Sign in</span>
+      <span slot="sign-out-button-text">Sign Out</span>
+    </forge-user-profile>
+  </div>
+
+  <!-- Navigation drawer content -->
+  <forge-list slot="navigation" navlist>
+    <forge-list-item selected>
+      <forge-icon slot="start" name="dashboard"></forge-icon>
+      <a href="#">Dashboard</a>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="bar_chart"></forge-icon>
+      <a href="#">Analytics</a>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="people"></forge-icon>
+      <a href="#">Users</a>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="folder"></forge-icon>
+      <a href="#">Projects</a>
+    </forge-list-item>
+    <forge-divider></forge-divider>
+    <forge-list-item>
+      <forge-icon slot="start" name="settings"></forge-icon>
+      <a href="#">Settings</a>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="help"></forge-icon>
+      <a href="#">Help</a>
+    </forge-list-item>
+  </forge-list>
+
+  <!-- Main content -->
+  <main class="p-medium grid" slot="body">
+    <div class="striped-box"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer slot="body-footer">
+    <forge-toolbar inverted>
+      <div slot="center" class="text-body1">© 2026 My Application. All rights reserved.</div>
+    </forge-toolbar>
+  </footer>
+</forge-app-layout>
+    <script type="module" src="ready-transition.js"></script>
+    <script type="module" src="theme-listener.js"></script>
+  </body>
+</html>

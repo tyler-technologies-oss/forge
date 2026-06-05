@@ -1,0 +1,96 @@
+<!--
+  @block Dual Scrolling Containers
+  @description Application layout demonstrating dual independent scrolling regions where the main content area and a fixed right-side drawer panel each scroll independently, useful for master-detail views or side-by-side content comparison layouts
+  @tags layout, application, scroll, drawer, dual-panel, right-drawer
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <title>Dual Scrolling Containers</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="forge-register.js"></script>
+  </head>
+  <body class="">
+    <forge-app-layout app-title="Dual Scroll Demo" breakpoint="960">
+  <!-- Navigation drawer content -->
+  <forge-list navlist slot="navigation" data-forge-app-layout-close>
+    <forge-list-item selected>
+      <forge-icon slot="start" name="home"></forge-icon>
+      <a href="javascript: void(0);">Home</a>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="inbox"></forge-icon>
+      <a href="javascript: void(0);">Inbox</a>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="star"></forge-icon>
+      <a href="javascript: void(0);">Starred</a>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="settings"></forge-icon>
+      <a href="javascript: void(0);">Settings</a>
+    </forge-list-item>
+  </forge-list>
+
+  <!-- Body header toolbar -->
+  <div slot="body-header">
+    <forge-toolbar>
+      <h2 slot="start" class="text-heading3">Dual Scroll Demo</h2>
+      <div slot="end" class="flex gap-xsmall">
+        <forge-icon-button density="medium" aria-label="Notifications">
+          <forge-icon name="notifications"></forge-icon>
+        </forge-icon-button>
+        <forge-icon-button density="medium" aria-label="Settings">
+          <forge-icon name="settings"></forge-icon>
+        </forge-icon-button>
+        <forge-icon-button density="medium" aria-label="More options">
+          <forge-icon name="more_vert"></forge-icon>
+        </forge-icon-button>
+      </div>
+    </forge-toolbar>  </div>
+
+  <!-- Main scrollable content area -->
+  <div slot="body" class="p-medium">
+    <forge-card>
+      <div class="p-medium space-y-medium">
+        <div class="striped-box h-48"></div>
+        <div class="striped-box h-64"></div>
+        <div class="striped-box h-48"></div>
+        <div class="striped-box h-64"></div>
+        <div class="striped-box h-48"></div>
+      </div>
+    </forge-card>
+  </div>
+
+  <!-- Right drawer with independent scroll -->
+  <div slot="body-right">
+    <forge-drawer direction="right">
+      <div class="p-medium space-y-medium">
+        <div class="striped-box h-64"></div>
+        <div class="striped-box h-48"></div>
+        <div class="striped-box h-64"></div>
+        <div class="striped-box h-48"></div>
+        <div class="striped-box h-64"></div>
+        <div class="striped-box h-48"></div>
+      </div>
+    </forge-drawer>
+  </div>
+</forge-app-layout>
+    <script type="module" src="ready-transition.js"></script>
+    <script type="module" src="theme-listener.js"></script>
+  </body>
+</html>
