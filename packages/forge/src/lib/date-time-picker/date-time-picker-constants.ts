@@ -1,3 +1,4 @@
+import type { Temporal } from 'temporal-polyfill';
 import { COMPONENT_NAME_PREFIX } from '../constants.js';
 import type { CalendarDisabledDateBuilder, DayOfWeek } from '../calendar/calendar-constants.js';
 
@@ -5,7 +6,7 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}date-t
 
 const observedAttributes = {
   TIME_MODE: 'time-mode',
-  VALUE: 'value',
+  VALUE_MODE: 'value-mode',
   NAME: 'name',
   DISABLED: 'disabled',
   READONLY: 'readonly',
@@ -23,7 +24,11 @@ const observedAttributes = {
   CLEAR_BUTTON: 'clear-button',
   TODAY_BUTTON: 'today-button',
   SHOW_HEADER: 'show-header',
-  SUMMARY: 'summary'
+  SHOW_FOOTER: 'show-footer',
+  SUMMARY: 'summary',
+  SINGLE_LABEL: 'single-label',
+  FROM_LABEL: 'from-label',
+  TO_LABEL: 'to-label'
 } as const;
 
 const attributes = {
@@ -68,6 +73,7 @@ const events = {
 
 const defaultValues = {
   TIME_MODE: 'single',
+  VALUE_MODE: 'temporal',
   ORIENTATION: 'auto',
   MIN_TIME: '09:00',
   MAX_TIME: '17:00',
@@ -88,6 +94,9 @@ export const DATE_TIME_PICKER_CONSTANTS = {
   events,
   defaultValues
 };
+
+/** Shape of the public `value` (and change-event `value`): a `Temporal.PlainDateTime`, a local ISO `datetime-local` string, or a `Date`. */
+export type DateTimePickerValueMode = 'temporal' | 'iso' | 'date';
 
 export type TimeMode = 'single' | 'range' | 'slots';
 
@@ -113,10 +122,21 @@ export interface IDateTimePickerRange {
 
 export type DateTimePickerValue = Date | IDateTimePickerRange | null;
 
+/** A single public value, shaped by `valueMode`. */
+export type DateTimePickerPublicSingle = Temporal.PlainDateTime | Date | string;
+
+export interface IDateTimePickerPublicRange {
+  from: DateTimePickerPublicSingle;
+  to: DateTimePickerPublicSingle;
+}
+
+/** The public `value`: shaped by `valueMode` and `timeMode`. */
+export type DateTimePickerPublicValue = DateTimePickerPublicSingle | IDateTimePickerPublicRange | null;
+
 export type DisableSlotCallback = (date: Date, slot: ITimeSlot) => boolean;
 
 export interface IDateTimePickerChangeEventData {
-  value: DateTimePickerValue;
+  value: DateTimePickerPublicValue;
   date: Date | null;
   time: string | null;
   from: string | null;
