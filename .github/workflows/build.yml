@@ -19,7 +19,7 @@ jobs:
     name: Build
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.44.0-jammy
+    container: mcr.microsoft.com/playwright:v1.59.0-jammy
 
     steps:
       - name: Checkout Repository
