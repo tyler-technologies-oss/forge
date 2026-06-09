@@ -19,6 +19,7 @@ jobs:
     name: Build
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.44.0-jammy
 
     steps:
       - name: Checkout Repository
@@ -46,9 +47,6 @@ jobs:
         run: pnpm run build
 
       - name: Setup Playwright
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: 0
-          DEBUG: pw:install
         run: pnpm run setup:playwright
 
       - name: Test
