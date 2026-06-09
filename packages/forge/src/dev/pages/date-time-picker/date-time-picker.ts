@@ -65,11 +65,6 @@ document.getElementById('demo-continue')?.addEventListener('click', () => {
 
 // === Option wiring ===
 
-const variantSelect = document.getElementById('opt-variant') as ISelectComponent;
-variantSelect.addEventListener('change', () => {
-  picker.variant = variantSelect.value as 'static' | 'inline';
-});
-
 const timeModeSelect = document.getElementById('opt-time-mode') as ISelectComponent;
 timeModeSelect.addEventListener('change', () => {
   picker.timeMode = timeModeSelect.value as 'slots' | 'range' | 'single';
