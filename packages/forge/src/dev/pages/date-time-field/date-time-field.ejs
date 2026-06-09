@@ -1,0 +1,19 @@
+<div class="vert">
+  <forge-date-time-field id="demo-date-time-field" name="appointment" label="Appointment" placeholder="Select date and time">
+    <span slot="support-text">Pick when your appointment should start.</span>
+  </forge-date-time-field>
+
+  <forge-label-value>
+    <span slot="label">Complete</span>
+    <span slot="value" id="demo-complete">false</span>
+  </forge-label-value>
+
+  <forge-label-value>
+    <span slot="label">Value</span>
+    <pre slot="value" id="demo-value" style="margin: 0; font-family: monospace;">null</pre>
+  </forge-label-value>
+
+  <forge-button variant="raised" id="demo-validate">Report validity</forge-button>
+</div>
+
+<script type="module" src="date-time-field.ts"></script>
