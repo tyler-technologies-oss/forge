@@ -25,6 +25,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v6
 
+      - name: Fix Git Ownership
+        run: git config --global --add safe.directory '*'
+
       - name: Install pnpm
         uses: pnpm/action-setup@v4
 
