@@ -86,22 +86,6 @@
       "hasScript": true
     },
     {
-      "id": "dialogs/simple/simple",
-      "name": "Simple Dialog",
-      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
-      "tags": [
-        "dialog",
-        "modal",
-        "scaffold",
-        "toolbar",
-        "actions"
-      ],
-      "file": "dialogs/simple/simple.html",
-      "category": "Dialogs",
-      "screenshot": "dialogs/simple/simple.webp",
-      "hasScript": false
-    },
-    {
       "id": "forms/multi-column/multi-column",
       "name": "Multi-Column Form",
       "description": "Responsive form using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
@@ -176,6 +160,22 @@
       "hasScript": false
     },
     {
+      "id": "dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
+      "tags": [
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
+      ],
+      "file": "dialogs/simple/simple.html",
+      "category": "Dialogs",
+      "screenshot": "dialogs/simple/simple.webp",
+      "hasScript": false
+    },
+    {
       "id": "cards/user-profile/user-profile",
       "name": "User Profile Card",
       "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
@@ -209,25 +209,6 @@
       "hasScript": false
     },
     {
-      "id": "application-layout/three-panel/three-panel",
-      "name": "Three Panel Layout",
-      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
-      "tags": [
-        "layout",
-        "application",
-        "three-panel",
-        "left-drawer",
-        "right-drawer",
-        "navigation",
-        "body",
-        "panels"
-      ],
-      "file": "application-layout/three-panel/three-panel.html",
-      "category": "Application Layout",
-      "screenshot": "application-layout/three-panel/three-panel.webp",
-      "hasScript": false
-    },
-    {
       "id": "application-layout/table-with-filters/table-with-filters",
       "name": "Table with Filter Sidesheet",
       "description": "Full application layout with header, left navigation drawer, paginated data table in the body, and a filter sidesheet in the right drawer. Demonstrates a common pattern for data-heavy applications with filtering capabilities.",
@@ -246,6 +227,25 @@
       "category": "Application Layout",
       "screenshot": "application-layout/table-with-filters/table-with-filters.webp",
       "hasScript": true
+    },
+    {
+      "id": "application-layout/three-panel/three-panel",
+      "name": "Three Panel Layout",
+      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
+      "tags": [
+        "layout",
+        "application",
+        "three-panel",
+        "left-drawer",
+        "right-drawer",
+        "navigation",
+        "body",
+        "panels"
+      ],
+      "file": "application-layout/three-panel/three-panel.html",
+      "category": "Application Layout",
+      "screenshot": "application-layout/three-panel/three-panel.webp",
+      "hasScript": false
     },
     {
       "id": "application-layout/mini-nav/mini-nav",
@@ -329,5 +329,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-09T17:09:01.771Z"
+  "generatedAt": "2026-06-09T18:30:41.681Z"
 }
