@@ -86,6 +86,22 @@
       "hasScript": true
     },
     {
+      "id": "forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "tags": [
+        "authentication",
+        "login",
+        "form",
+        "card",
+        "centered"
+      ],
+      "file": "forms/login/login.html",
+      "category": "Forms",
+      "screenshot": "forms/login/login.webp",
+      "hasScript": false
+    },
+    {
       "id": "forms/multi-column/multi-column",
       "name": "Multi-Column Form",
       "description": "Responsive form using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
@@ -104,22 +120,6 @@
       "file": "forms/multi-column/multi-column.html",
       "category": "Forms",
       "screenshot": "forms/multi-column/multi-column.webp",
-      "hasScript": false
-    },
-    {
-      "id": "forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
-      "tags": [
-        "authentication",
-        "login",
-        "form",
-        "card",
-        "centered"
-      ],
-      "file": "forms/login/login.html",
-      "category": "Forms",
-      "screenshot": "forms/login/login.webp",
       "hasScript": false
     },
     {
@@ -329,5 +329,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-09T16:22:43.723Z"
+  "generatedAt": "2026-06-09T16:26:33.829Z"
 }
