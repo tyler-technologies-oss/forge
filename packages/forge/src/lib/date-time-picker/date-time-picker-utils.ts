@@ -1,4 +1,13 @@
-import type { DateTimePickerValue, IDateTimePickerRange, ITimeSlot, TimeMode } from './date-time-picker-constants.js';
+import type {
+  DateTimePickerPublicSingle,
+  DateTimePickerPublicValue,
+  DateTimePickerValue,
+  DateTimePickerValueMode,
+  IDateTimePickerRange,
+  ITimeSlot,
+  TimeMode
+} from './date-time-picker-constants.js';
+import { getTemporal } from './temporal-loader.js';
 
 const SLOT_REFERENCE_YEAR = 2000;
 const SLOT_REFERENCE_MONTH = 0;
@@ -188,6 +197,16 @@ export function isRange(value: unknown): value is IDateTimePickerRange {
   );
 }
 
+/** Strips sub-minute (or sub-second) precision so equality checks don't churn on stray ms. */
+function normalizePrecision(date: Date, allowSeconds: boolean): Date {
+  if (allowSeconds) {
+    date.setMilliseconds(0);
+  } else {
+    date.setSeconds(0, 0);
+  }
+  return date;
+}
+
 /**
  * Coerces any accepted `value` input into the normalized internal shape.
  * Accepts `Date`, ISO strings, `{ from, to }` ranges, or `null`.
@@ -204,7 +223,7 @@ export function coerceValue(input: unknown, timeMode: TimeMode, allowSeconds: bo
         const from = parseMaybeDate(parts[0]);
         const to = parseMaybeDate(parts[1]);
         if (from && to) {
-          return { from, to };
+          return { from: normalizePrecision(from, allowSeconds), to: normalizePrecision(to, allowSeconds) };
         }
       }
       return null;
@@ -214,7 +233,7 @@ export function coerceValue(input: unknown, timeMode: TimeMode, allowSeconds: bo
       const from = parseMaybeDate(candidate.from);
       const to = parseMaybeDate(candidate.to);
       if (from && to) {
-        return { from, to };
+        return { from: normalizePrecision(from, allowSeconds), to: normalizePrecision(to, allowSeconds) };
       }
     }
     return null;
@@ -222,12 +241,7 @@ export function coerceValue(input: unknown, timeMode: TimeMode, allowSeconds: bo
 
   const date = parseMaybeDate(input);
   if (date) {
-    if (!allowSeconds) {
-      date.setSeconds(0, 0);
-    } else {
-      date.setMilliseconds(0);
-    }
-    return date;
+    return normalizePrecision(date, allowSeconds);
   }
   return null;
 }
@@ -248,7 +262,25 @@ function parseMaybeDate(input: unknown): Date | null {
     const date = new Date(input);
     return Number.isNaN(date.getTime()) ? null : date;
   }
-  return null;
+  return temporalToDate(input);
+}
+
+/**
+ * Converts a `Temporal.PlainDateTime` / `PlainDate` (duck-typed by its calendar fields) into a
+ * local `Date`. Temporal months are 1-based; missing time fields default to 0.
+ */
+function temporalToDate(input: unknown): Date | null {
+  if (!input || typeof input !== 'object') {
+    return null;
+  }
+  const candidate = input as { year?: unknown; month?: unknown; day?: unknown; hour?: unknown; minute?: unknown; second?: unknown };
+  if (typeof candidate.year !== 'number' || typeof candidate.month !== 'number' || typeof candidate.day !== 'number') {
+    return null;
+  }
+  const hour = typeof candidate.hour === 'number' ? candidate.hour : 0;
+  const minute = typeof candidate.minute === 'number' ? candidate.minute : 0;
+  const second = typeof candidate.second === 'number' ? candidate.second : 0;
+  return new Date(candidate.year, candidate.month - 1, candidate.day, hour, minute, second);
 }
 
 /** Builds the formatted announcement string for the live region. */
@@ -280,4 +312,64 @@ export function buildAnnouncement(value: DateTimePickerValue, locale: string | u
   const dateLabel = new Intl.DateTimeFormat(locale, dateOptions).format(value);
   const timeLabel = new Intl.DateTimeFormat(locale, timeOptions).format(value);
   return `Selected ${dateLabel} at ${timeLabel}.`;
+}
+
+const pad = (n: number): string => String(n).padStart(2, '0');
+
+/** Formats a `Date` as a local (timezone-free) `datetime-local` string: `YYYY-MM-DDTHH:mm[:ss]`. */
+export function toLocalIsoString(date: Date, allowSeconds: boolean): string {
+  const base = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  return allowSeconds ? `${base}:${pad(date.getSeconds())}` : base;
+}
+
+/** Converts a single internal `Date` into the public shape requested by `valueMode`. */
+function dateToPublic(date: Date, valueMode: DateTimePickerValueMode, allowSeconds: boolean): DateTimePickerPublicSingle {
+  if (valueMode === 'date') {
+    return new Date(date);
+  }
+  const iso = toLocalIsoString(date, allowSeconds);
+  if (valueMode === 'iso') {
+    return iso;
+  }
+  // 'temporal' — build a PlainDateTime when the namespace is available; otherwise fall back to the
+  // ISO string (a valid datetime-local) until the lazily-loaded polyfill is ready.
+  const temporal = getTemporal();
+  return temporal ? temporal.PlainDateTime.from(allowSeconds ? iso : `${iso}:00`) : iso;
+}
+
+/** Formats an internal value for display in a field input (locale-aware date + time / range). Returns `''` for `null`. */
+export function formatDisplayValue(value: DateTimePickerValue, locale: string | undefined, use24HourTime: boolean, allowSeconds: boolean): string {
+  if (value == null) {
+    return '';
+  }
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: !use24HourTime,
+    hourCycle: use24HourTime ? 'h23' : 'h12'
+  };
+  if (allowSeconds) {
+    timeOptions.second = '2-digit';
+  }
+  const dateOptions: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  if (isRange(value)) {
+    const dateFmt = new Intl.DateTimeFormat(locale, dateOptions);
+    const timeFmt = new Intl.DateTimeFormat(locale, timeOptions);
+    return `${dateFmt.format(value.from)} ${timeFmt.formatRange(value.from, value.to)}`;
+  }
+  return new Intl.DateTimeFormat(locale, { ...dateOptions, ...timeOptions }).format(value);
+}
+
+/** Converts the internal `Date`/range value into the public shape per `valueMode`. */
+export function toPublicValue(value: DateTimePickerValue, valueMode: DateTimePickerValueMode, allowSeconds: boolean): DateTimePickerPublicValue {
+  if (value == null) {
+    return null;
+  }
+  if (isRange(value)) {
+    return {
+      from: dateToPublic(value.from, valueMode, allowSeconds),
+      to: dateToPublic(value.to, valueMode, allowSeconds)
+    };
+  }
+  return dateToPublic(value, valueMode, allowSeconds);
 }
