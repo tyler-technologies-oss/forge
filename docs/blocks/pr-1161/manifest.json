@@ -209,6 +209,25 @@
       "hasScript": false
     },
     {
+      "id": "application-layout/three-panel/three-panel",
+      "name": "Three Panel Layout",
+      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
+      "tags": [
+        "layout",
+        "application",
+        "three-panel",
+        "left-drawer",
+        "right-drawer",
+        "navigation",
+        "body",
+        "panels"
+      ],
+      "file": "application-layout/three-panel/three-panel.html",
+      "category": "Application Layout",
+      "screenshot": "application-layout/three-panel/three-panel.webp",
+      "hasScript": false
+    },
+    {
       "id": "application-layout/table-with-filters/table-with-filters",
       "name": "Table with Filter Sidesheet",
       "description": "Full application layout with header, left navigation drawer, paginated data table in the body, and a filter sidesheet in the right drawer. Demonstrates a common pattern for data-heavy applications with filtering capabilities.",
@@ -227,25 +246,6 @@
       "category": "Application Layout",
       "screenshot": "application-layout/table-with-filters/table-with-filters.webp",
       "hasScript": true
-    },
-    {
-      "id": "application-layout/three-panel/three-panel",
-      "name": "Three Panel Layout",
-      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
-      "tags": [
-        "layout",
-        "application",
-        "three-panel",
-        "left-drawer",
-        "right-drawer",
-        "navigation",
-        "body",
-        "panels"
-      ],
-      "file": "application-layout/three-panel/three-panel.html",
-      "category": "Application Layout",
-      "screenshot": "application-layout/three-panel/three-panel.webp",
-      "hasScript": false
     },
     {
       "id": "application-layout/mini-nav/mini-nav",
@@ -329,5 +329,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-09T18:30:41.681Z"
+  "generatedAt": "2026-06-09T18:38:27.543Z"
 }
