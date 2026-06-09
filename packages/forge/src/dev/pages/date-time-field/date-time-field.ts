@@ -1,0 +1,86 @@
+import '$src/shared';
+import '@tylertech/forge/date-time-field';
+import '@tylertech/forge/button';
+import '@tylertech/forge/label-value';
+import type { IDateTimeFieldChangeEventData, IDateTimeFieldComponent } from '@tylertech/forge/date-time-field';
+import type { ISelectComponent } from '@tylertech/forge/select';
+import type { ISwitchComponent } from '@tylertech/forge/switch';
+
+const field = document.getElementById('demo-date-time-field') as IDateTimeFieldComponent;
+const completeEl = document.getElementById('demo-complete') as HTMLElement;
+const valueEl = document.getElementById('demo-value') as HTMLElement;
+
+function formatValueDebug(value: unknown): string {
+  if (value == null) {
+    return 'null';
+  }
+  if (value instanceof Date) {
+    return value.toISOString();
+  }
+  if (typeof value === 'object' && value !== null && 'from' in value && 'to' in value) {
+    const r = value as { from: unknown; to: unknown };
+    return JSON.stringify({ from: String(r.from), to: String(r.to) }, null, 2);
+  }
+  return String(value);
+}
+
+field.addEventListener('forge-date-time-field-change', evt => {
+  const detail = (evt as CustomEvent<IDateTimeFieldChangeEventData>).detail;
+  console.log('[forge-date-time-field-change]', detail);
+  completeEl.textContent = String(detail.complete);
+  valueEl.textContent = formatValueDebug(detail.value);
+});
+
+document.getElementById('demo-validate')?.addEventListener('click', () => {
+  console.log('valid:', field.reportValidity());
+});
+
+const timeModeSelect = document.getElementById('opt-time-mode') as ISelectComponent;
+timeModeSelect.addEventListener('change', () => {
+  field.timeMode = timeModeSelect.value as 'single' | 'range' | 'slots';
+});
+
+const valueModeSelect = document.getElementById('opt-value-mode') as ISelectComponent;
+valueModeSelect.addEventListener('change', () => {
+  field.valueMode = valueModeSelect.value as 'temporal' | 'iso' | 'date';
+});
+
+const localeSelect = document.getElementById('opt-locale') as ISelectComponent;
+localeSelect.addEventListener('change', () => {
+  field.locale = localeSelect.value as string;
+});
+
+const use24hSwitch = document.getElementById('opt-24h') as ISwitchComponent;
+use24hSwitch.addEventListener('forge-switch-change', ({ detail }) => {
+  field.use24HourTime = detail;
+});
+
+const secondsSwitch = document.getElementById('opt-seconds') as ISwitchComponent;
+secondsSwitch.addEventListener('forge-switch-change', ({ detail }) => {
+  field.allowSeconds = detail;
+});
+
+const requiredSwitch = document.getElementById('opt-required') as ISwitchComponent;
+requiredSwitch.addEventListener('forge-switch-change', ({ detail }) => {
+  field.required = detail;
+});
+
+const requiredPartsSelect = document.getElementById('opt-required-parts') as ISelectComponent;
+requiredPartsSelect.addEventListener('change', () => {
+  field.requiredParts = requiredPartsSelect.value as 'both' | 'date' | 'time';
+});
+
+const disabledSwitch = document.getElementById('opt-disabled') as ISwitchComponent;
+disabledSwitch.addEventListener('forge-switch-change', ({ detail }) => {
+  field.disabled = detail;
+});
+
+const readonlySwitch = document.getElementById('opt-readonly') as ISwitchComponent;
+readonlySwitch.addEventListener('forge-switch-change', ({ detail }) => {
+  field.readonly = detail;
+});
+
+const persistentSwitch = document.getElementById('opt-persistent') as ISwitchComponent;
+persistentSwitch.addEventListener('forge-switch-change', ({ detail }) => {
+  field.persistent = detail;
+});

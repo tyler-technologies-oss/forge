@@ -1,0 +1,61 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Date time field',
+    includePath: './pages/date-time-field/date-time-field.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Time mode',
+        id: 'opt-time-mode',
+        defaultValue: 'single',
+        options: [
+          { label: 'Single', value: 'single' },
+          { label: 'Range (start - end)', value: 'range' },
+          { label: 'Slots (booking style)', value: 'slots' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Value mode',
+        id: 'opt-value-mode',
+        defaultValue: 'temporal',
+        options: [
+          { label: 'Temporal', value: 'temporal' },
+          { label: 'ISO string', value: 'iso' },
+          { label: 'Date', value: 'date' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Locale',
+        id: 'opt-locale',
+        defaultValue: 'en-US',
+        options: [
+          { label: 'English (US)', value: 'en-US' },
+          { label: 'English (UK)', value: 'en-GB' },
+          { label: 'French', value: 'fr-FR' },
+          { label: 'German', value: 'de-DE' }
+        ]
+      },
+      { type: 'switch', label: '24-hour time', id: 'opt-24h' },
+      { type: 'switch', label: 'Allow seconds', id: 'opt-seconds' },
+      { type: 'switch', label: 'Required', id: 'opt-required' },
+      {
+        type: 'select',
+        label: 'Required parts',
+        id: 'opt-required-parts',
+        defaultValue: 'both',
+        options: [
+          { label: 'Both', value: 'both' },
+          { label: 'Date only', value: 'date' },
+          { label: 'Time only', value: 'time' }
+        ]
+      },
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
+      { type: 'switch', label: 'Readonly', id: 'opt-readonly' },
+      { type: 'switch', label: 'Persistent (no outside-click close)', id: 'opt-persistent' }
+    ]
+  }
+})
+%>

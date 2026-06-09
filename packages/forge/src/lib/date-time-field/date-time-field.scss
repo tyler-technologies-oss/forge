@@ -1,0 +1,61 @@
+:host {
+  display: inline-block;
+  // Single mode shows two masked segments (date + time) plus the toggle, so it needs more room.
+  width: 22rem;
+  max-width: 100%;
+}
+
+:host([time-mode='slots']) {
+  width: 20rem;
+}
+
+// Range mode shows date + from-time + to-time + toggle.
+:host([time-mode='range']) {
+  width: 27rem;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+forge-text-field {
+  width: 100%;
+}
+
+[part='date-input'] {
+  min-width: 6.5em;
+}
+
+.time-segment {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-inline-start: 0.5rem;
+}
+
+.range-separator {
+  color: var(--forge-theme-text-medium, currentColor);
+}
+
+[part='time-input'],
+[part='from-input'],
+[part='to-input'],
+[part='slot-display'] {
+  font: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  width: 6.5em;
+  text-align: end;
+}
+
+[part='slot-display'] {
+  cursor: pointer;
+}
+
+:host([readonly]) [part='slot-display'],
+:host([disabled]) [part='slot-display'] {
+  cursor: default;
+}
