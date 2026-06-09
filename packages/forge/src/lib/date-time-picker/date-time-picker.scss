@@ -13,25 +13,6 @@
   @include base;
 }
 
-.inline-trigger {
-  display: inline-block;
-  min-width: 240px;
-}
-
-.inline-trigger forge-text-field {
-  width: 100%;
-}
-
-:host([variant='inline']) {
-  width: auto;
-  max-width: 100%;
-}
-
-:host([variant='inline']) .forge-date-time-picker {
-  width: max-content;
-  max-width: none;
-}
-
 :host([summary]) .forge-date-time-picker {
   @include base-with-summary;
   grid-template-columns: auto auto;
@@ -155,10 +136,6 @@ forge-calendar {
 .time-section[data-mode='slots'] {
   align-self: stretch;
   min-height: 0;
-}
-
-.time-label-text {
-  @include time-label;
 }
 
 .time-inputs {
