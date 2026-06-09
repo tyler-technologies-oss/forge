@@ -19,10 +19,14 @@ jobs:
     name: Build
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.59.0-jammy
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
+
+      - name: Fix Git Ownership
+        run: git config --global --add safe.directory '*'
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -35,22 +39,6 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Get Playwright Version
-        id: playwright-version
-        run: echo "version=$(pnpm list playwright --depth=0 --json | jq -r '.[0].devDependencies.playwright.version')" >> $GITHUB_OUTPUT
-
-      - name: Cache Playwright Browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
-
-      - name: Install Playwright Browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install chromium --with-deps
-        timeout-minutes: 5
 
       - name: Format
         run: pnpm run format:check
