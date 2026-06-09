@@ -176,6 +176,23 @@
       "hasScript": false
     },
     {
+      "id": "cards/responsive-cards/responsive-cards",
+      "name": "Responsive Cards",
+      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
+      "tags": [
+        "cards",
+        "responsive",
+        "grid",
+        "badge",
+        "image",
+        "metrics"
+      ],
+      "file": "cards/responsive-cards/responsive-cards.html",
+      "category": "Cards",
+      "screenshot": "cards/responsive-cards/responsive-cards.webp",
+      "hasScript": false
+    },
+    {
       "id": "cards/user-profile/user-profile",
       "name": "User Profile Card",
       "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
@@ -192,20 +209,22 @@
       "hasScript": false
     },
     {
-      "id": "cards/responsive-cards/responsive-cards",
-      "name": "Responsive Cards",
-      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
+      "id": "application-layout/three-panel/three-panel",
+      "name": "Three Panel Layout",
+      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
       "tags": [
-        "cards",
-        "responsive",
-        "grid",
-        "badge",
-        "image",
-        "metrics"
+        "layout",
+        "application",
+        "three-panel",
+        "left-drawer",
+        "right-drawer",
+        "navigation",
+        "body",
+        "panels"
       ],
-      "file": "cards/responsive-cards/responsive-cards.html",
-      "category": "Cards",
-      "screenshot": "cards/responsive-cards/responsive-cards.webp",
+      "file": "application-layout/three-panel/three-panel.html",
+      "category": "Application Layout",
+      "screenshot": "application-layout/three-panel/three-panel.webp",
       "hasScript": false
     },
     {
@@ -229,22 +248,21 @@
       "hasScript": true
     },
     {
-      "id": "application-layout/three-panel/three-panel",
-      "name": "Three Panel Layout",
-      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
+      "id": "application-layout/mini-nav/mini-nav",
+      "name": "Mini Nav Application Layout",
+      "description": "Application shell with a collapsible mini navigation drawer that expands on hover, an app bar with notification icons and a user profile dropdown with theme toggle",
       "tags": [
         "layout",
         "application",
-        "three-panel",
-        "left-drawer",
-        "right-drawer",
-        "navigation",
-        "body",
-        "panels"
+        "shell",
+        "mini-drawer",
+        "app-bar",
+        "user-profile",
+        "hover"
       ],
-      "file": "application-layout/three-panel/three-panel.html",
+      "file": "application-layout/mini-nav/mini-nav.html",
       "category": "Application Layout",
-      "screenshot": "application-layout/three-panel/three-panel.webp",
+      "screenshot": "application-layout/mini-nav/mini-nav.webp",
       "hasScript": false
     },
     {
@@ -262,24 +280,6 @@
       "file": "application-layout/dual-scroll/dual-scroll.html",
       "category": "Application Layout",
       "screenshot": "application-layout/dual-scroll/dual-scroll.webp",
-      "hasScript": false
-    },
-    {
-      "id": "application-layout/mini-nav/mini-nav",
-      "name": "Mini Nav Application Layout",
-      "description": "Application shell with a collapsible mini navigation drawer that expands on hover, an app bar with notification icons and a user profile dropdown with theme toggle",
-      "tags": [
-        "layout",
-        "application",
-        "shell",
-        "mini-drawer",
-        "app-bar",
-        "user-profile",
-        "hover"
-      ],
-      "file": "application-layout/mini-nav/mini-nav.html",
-      "category": "Application Layout",
-      "screenshot": "application-layout/mini-nav/mini-nav.webp",
       "hasScript": false
     },
     {
@@ -329,5 +329,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-09T16:09:07.753Z"
+  "generatedAt": "2026-06-09T16:15:23.945Z"
 }
