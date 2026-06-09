@@ -176,6 +176,22 @@
       "hasScript": false
     },
     {
+      "id": "cards/user-profile/user-profile",
+      "name": "User Profile Card",
+      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
+      "tags": [
+        "card",
+        "profile",
+        "user",
+        "avatar",
+        "contact"
+      ],
+      "file": "cards/user-profile/user-profile.html",
+      "category": "Cards",
+      "screenshot": "cards/user-profile/user-profile.webp",
+      "hasScript": false
+    },
+    {
       "id": "cards/responsive-cards/responsive-cards",
       "name": "Responsive Cards",
       "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
@@ -190,22 +206,6 @@
       "file": "cards/responsive-cards/responsive-cards.html",
       "category": "Cards",
       "screenshot": "cards/responsive-cards/responsive-cards.webp",
-      "hasScript": false
-    },
-    {
-      "id": "cards/user-profile/user-profile",
-      "name": "User Profile Card",
-      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
-      "tags": [
-        "card",
-        "profile",
-        "user",
-        "avatar",
-        "contact"
-      ],
-      "file": "cards/user-profile/user-profile.html",
-      "category": "Cards",
-      "screenshot": "cards/user-profile/user-profile.webp",
       "hasScript": false
     },
     {
@@ -329,5 +329,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-09T16:15:23.945Z"
+  "generatedAt": "2026-06-09T16:22:43.723Z"
 }
