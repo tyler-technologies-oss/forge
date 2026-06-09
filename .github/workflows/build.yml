@@ -20,6 +20,8 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.59.0-jammy
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
 
     steps:
       - name: Checkout Repository
