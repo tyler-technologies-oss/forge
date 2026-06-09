@@ -46,6 +46,8 @@ jobs:
         run: pnpm run build
 
       - name: Setup Playwright
+        env:
+          DEBUG: pw:install
         run: pnpm run setup:playwright
 
       - name: Test
