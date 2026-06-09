@@ -1,8 +1,18 @@
 import { describe, it, expect } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
+import 'temporal-polyfill/global';
+import { Temporal } from 'temporal-polyfill';
 import './index.js';
-import { buildSlotsFromRange, coerceValue, formatSlotLabel, mergeDateAndTime, parseTimeString, timeFromDate } from './date-time-picker-utils.js';
+import {
+  buildSlotsFromRange,
+  coerceValue,
+  formatSlotLabel,
+  mergeDateAndTime,
+  parseTimeString,
+  timeFromDate,
+  toLocalIsoString
+} from './date-time-picker-utils.js';
 import type { IDateTimePickerComponent } from './date-time-picker.js';
 import type { IDateTimePickerChangeEventData, IDateTimePickerRange, ITimeSlot } from './date-time-picker-constants.js';
 
@@ -71,6 +81,31 @@ describe('DateTimePicker / utils', () => {
     expect(result).not.toBeNull();
     expect((result as IDateTimePickerRange).to.getHours()).toBe(12);
   });
+
+  it('coerceValue strips seconds/ms on a range when allowSeconds is false', () => {
+    const result = coerceValue(
+      { from: new Date(2025, 5, 12, 10, 30, 45, 123), to: new Date(2025, 5, 12, 12, 30, 59, 999) } as IDateTimePickerRange,
+      'range',
+      false
+    );
+    const range = result as IDateTimePickerRange;
+    expect(range.from.getSeconds()).toBe(0);
+    expect(range.from.getMilliseconds()).toBe(0);
+    expect(range.to.getSeconds()).toBe(0);
+    expect(range.to.getMilliseconds()).toBe(0);
+  });
+
+  it('toLocalIsoString formats a local datetime-local string', () => {
+    expect(toLocalIsoString(new Date(2025, 5, 12, 9, 5), false)).toBe('2025-06-12T09:05');
+    expect(toLocalIsoString(new Date(2025, 5, 12, 9, 5, 7), true)).toBe('2025-06-12T09:05:07');
+  });
+
+  it('coerceValue accepts a Temporal.PlainDateTime in single mode', () => {
+    const result = coerceValue(Temporal.PlainDateTime.from('2025-06-12T10:30'), 'single', false);
+    expect(result).toBeInstanceOf(Date);
+    expect((result as Date).getHours()).toBe(10);
+    expect((result as Date).getMinutes()).toBe(30);
+  });
 });
 
 describe('DateTimePicker / rendering', () => {
@@ -90,12 +125,12 @@ describe('DateTimePicker / rendering', () => {
     expect(el.shadowRoot!.querySelector('[part~="slot-list"]')).toBeNull();
   });
 
-  it('renders two forge-time-pickers and a separator in range mode', async () => {
+  it('renders two forge-time-pickers in a range input wrapper in range mode', async () => {
     const screen = render(html`<forge-date-time-picker time-mode="range"></forge-date-time-picker>`);
     const el = getEl(screen.container);
     await ready(el);
     expect(el.shadowRoot!.querySelectorAll('forge-time-picker').length).toBe(2);
-    expect(el.shadowRoot!.querySelector('[part="separator"]')).not.toBeNull();
+    expect(el.shadowRoot!.querySelector('[part="time-inputs"]')).not.toBeNull();
   });
 
   it('renders a listbox of slot buttons in slots mode', async () => {
@@ -219,6 +254,43 @@ describe('DateTimePicker / selection + events', () => {
   });
 });
 
+describe('DateTimePicker / min-max enforcement', () => {
+  it('disables slots earlier than min on the min calendar day', async () => {
+    const min = new Date(2025, 5, 12, 9, 30);
+    const screen = render(
+      html`<forge-date-time-picker
+        time-mode="slots"
+        min-time="09:00"
+        max-time="10:00"
+        step="15"
+        .value=${new Date(2025, 5, 12) as any}
+        .min=${min as any}></forge-date-time-picker>`
+    );
+    const el = getEl(screen.container);
+    await ready(el);
+    const slot0900 = el.shadowRoot!.querySelector('[data-value="09:00"]') as HTMLElement;
+    const slot0930 = el.shadowRoot!.querySelector('[data-value="09:30"]') as HTMLElement;
+    expect(slot0900.getAttribute('aria-disabled')).toBe('true');
+    expect(slot0930.getAttribute('aria-disabled')).toBe('false');
+  });
+
+  it('clamps the single time-picker min to the min time-of-day on the boundary day', async () => {
+    const min = new Date(2025, 5, 12, 14, 0);
+    const screen = render(
+      html`<forge-date-time-picker
+        time-mode="single"
+        min-time="09:00"
+        max-time="20:00"
+        .value=${new Date(2025, 5, 12) as any}
+        .min=${min as any}></forge-date-time-picker>`
+    );
+    const el = getEl(screen.container);
+    await ready(el);
+    const timePicker = el.shadowRoot!.querySelector('forge-time-picker') as HTMLElement;
+    expect(timePicker.getAttribute('min')).toBe('14:00');
+  });
+});
+
 describe('DateTimePicker / slot list keyboard nav', () => {
   it('ArrowDown moves focus to the next slot', async () => {
     const screen = render(
@@ -338,6 +410,52 @@ describe('DateTimePicker / form association', () => {
     form.reset();
     await ready(el);
     expect(el.value).toBeNull();
+  });
+});
+
+describe('DateTimePicker / value modes', () => {
+  it('date mode exposes value as a Date', async () => {
+    const screen = render(html`<forge-date-time-picker value-mode="date" time-mode="single"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    el.value = new Date(2025, 5, 12, 10, 30);
+    await ready(el);
+    expect(el.value).toBeInstanceOf(Date);
+    expect((el.value as Date).getHours()).toBe(10);
+  });
+
+  it('iso mode round-trips a local datetime-local string', async () => {
+    const screen = render(html`<forge-date-time-picker value-mode="iso" time-mode="single"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    el.value = '2025-06-12T10:30';
+    await ready(el);
+    expect(el.value).toBe('2025-06-12T10:30');
+  });
+
+  it('temporal mode exposes value as a Temporal.PlainDateTime', async () => {
+    const screen = render(html`<forge-date-time-picker value-mode="temporal" time-mode="single"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    el.value = new Date(2025, 5, 12, 10, 30);
+    await ready(el);
+    const value = el.value as unknown as Temporal.PlainDateTime;
+    expect(value.year).toBe(2025);
+    expect(value.month).toBe(6);
+    expect(value.day).toBe(12);
+    expect(value.hour).toBe(10);
+    expect(value.minute).toBe(30);
+  });
+
+  it('temporal mode accepts a Temporal.PlainDateTime as input', async () => {
+    const screen = render(html`<forge-date-time-picker value-mode="temporal" time-mode="single"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    el.value = Temporal.PlainDateTime.from('2025-06-12T14:45');
+    await ready(el);
+    const value = el.value as unknown as Temporal.PlainDateTime;
+    expect(value.hour).toBe(14);
+    expect(value.minute).toBe(45);
   });
 });
 
