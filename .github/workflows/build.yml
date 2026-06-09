@@ -47,6 +47,7 @@ jobs:
 
       - name: Setup Playwright
         env:
+          PLAYWRIGHT_BROWSERS_PATH: 0
           DEBUG: pw:install
         run: pnpm run setup:playwright
 
