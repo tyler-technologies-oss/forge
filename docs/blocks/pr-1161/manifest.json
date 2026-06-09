@@ -86,19 +86,19 @@
       "hasScript": true
     },
     {
-      "id": "forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "id": "dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
       "tags": [
-        "authentication",
-        "login",
-        "form",
-        "card",
-        "centered"
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
       ],
-      "file": "forms/login/login.html",
-      "category": "Forms",
-      "screenshot": "forms/login/login.webp",
+      "file": "dialogs/simple/simple.html",
+      "category": "Dialogs",
+      "screenshot": "dialogs/simple/simple.webp",
       "hasScript": false
     },
     {
@@ -120,6 +120,22 @@
       "file": "forms/multi-column/multi-column.html",
       "category": "Forms",
       "screenshot": "forms/multi-column/multi-column.webp",
+      "hasScript": false
+    },
+    {
+      "id": "forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "tags": [
+        "authentication",
+        "login",
+        "form",
+        "card",
+        "centered"
+      ],
+      "file": "forms/login/login.html",
+      "category": "Forms",
+      "screenshot": "forms/login/login.webp",
       "hasScript": false
     },
     {
@@ -157,22 +173,6 @@
       "file": "forms/add-illustration/add-illustration.html",
       "category": "Forms",
       "screenshot": "forms/add-illustration/add-illustration.webp",
-      "hasScript": false
-    },
-    {
-      "id": "dialogs/simple/simple",
-      "name": "Simple Dialog",
-      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
-      "tags": [
-        "dialog",
-        "modal",
-        "scaffold",
-        "toolbar",
-        "actions"
-      ],
-      "file": "dialogs/simple/simple.html",
-      "category": "Dialogs",
-      "screenshot": "dialogs/simple/simple.webp",
       "hasScript": false
     },
     {
@@ -329,5 +329,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-09T16:26:33.829Z"
+  "generatedAt": "2026-06-09T17:09:01.771Z"
 }
