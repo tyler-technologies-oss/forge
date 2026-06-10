@@ -239,6 +239,36 @@ describe('DateTimeField / quick keys', () => {
     expect(getDateInput(el).value).toContain(String(now.getFullYear()));
   });
 
+  it('"t" sets the time segment to the current time without filling the date', async () => {
+    const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const timeInput = getTimeInput(el);
+    timeInput.focus();
+    timeInput.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
+    await ready(el);
+    expect(getTimeInput(el).value).toMatch(/\d/);
+    expect(getDateInput(el).value).not.toMatch(/\d/);
+    expect(el.value).toBeNull();
+  });
+
+  it('"n" does not overwrite a date that was already entered', async () => {
+    const screen = render(html`<forge-date-time-field value-mode="date"></forge-date-time-field>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    el.value = new Date(2020, 2, 15, 10, 0);
+    await ready(el);
+    const timeInput = getTimeInput(el);
+    timeInput.focus();
+    timeInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'n', bubbles: true }));
+    await ready(el);
+    const value = el.value as Date;
+    expect(value).toBeInstanceOf(Date);
+    expect(value.getFullYear()).toBe(2020);
+    expect(value.getMonth()).toBe(2);
+    expect(value.getDate()).toBe(15);
+  });
+
   it('does not trigger quick keys when readonly', async () => {
     const screen = render(html`<forge-date-time-field readonly></forge-date-time-field>`);
     const el = getEl(screen.container);
