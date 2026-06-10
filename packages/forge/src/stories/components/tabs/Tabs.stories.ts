@@ -11,7 +11,7 @@ import '@tylertech/forge/tabs/tab-bar';
 const component = 'forge-tab-bar';
 
 const changeAction = action('forge-tab-bar-change');
-const selectAction = action('forge-tab-select');
+const activateAction = action('forge-tab-activate');
 
 IconRegistry.define([tylIconFavorite, tylIconForgeLogo]);
 
@@ -49,7 +49,7 @@ const meta = {
         .scrollButtons=${args.scrollButtons}
         style=${style}
         @forge-tab-bar-change=${changeAction}
-        @forge-tab-select=${selectAction}>
+        @forge-tab-activate=${activateAction}>
         ${tabs}
       </forge-tab-bar>
     `;
