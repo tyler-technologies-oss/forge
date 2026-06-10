@@ -101,6 +101,208 @@ describe('Tabs', () => {
     expect(ctx.element.hasAttribute(TAB_BAR_CONSTANTS.attributes.ACTIVE_TAB)).toBe(false);
   });
 
+  it('should set active tab by name', async () => {
+    const ctx = await createFixture({ tabNames: ['first', 'second', 'third'] });
+
+    ctx.element.activeTabName = 'second';
+    await ctx.updatesComplete(2);
+
+    expect(ctx.element.activeTabName).toBe('second');
+    expect(ctx.element.activeTab).toBe(1);
+    expect(ctx.tabs[1].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
+  });
+
+  it('should set active tab by name via fixture config', async () => {
+    const ctx = await createFixture({ activeTabName: 'third', tabNames: ['first', 'second', 'third'] });
+    await ctx.updatesComplete();
+
+    expect(ctx.element.activeTabName).toBe('third');
+    expect(ctx.element.activeTab).toBe(2);
+    expect(ctx.tabs[2].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
+  });
+
+  it('should prioritize activeTabName over activeTab when both change', async () => {
+    const ctx = await createFixture({ tabNames: ['first', 'second', 'third'] });
+
+    // Simulate both properties changing at once
+    ctx.element.activeTab = 0;
+    ctx.element.activeTabName = 'third';
+    await ctx.updatesComplete(2);
+
+    // activeTabName should win
+    expect(ctx.element.activeTabName).toBe('third');
+    expect(ctx.element.activeTab).toBe(2);
+    expect(ctx.tabs[2].active).toBe(true);
+    expect(ctx.activeTabCount).toBe(1);
+  });
+
+  it('should update active tab name when tab is activated by index', async () => {
+    const ctx = await createFixture({ tabNames: ['first', 'second', 'third'] });
+
+    await ctx.clickTab(1);
+    await ctx.updatesComplete();
+
+    expect(ctx.element.activeTabName).toBe('second');
+    expect(ctx.element.activeTab).toBe(1);
+  });
+
+  it('should update active tab name when activeTab property is set', async () => {
+    const ctx = await createFixture({ tabNames: ['first', 'second', 'third'] });
+
+    ctx.element.activeTab = 2;
+    await ctx.updatesComplete(2);
+
+    expect(ctx.element.activeTabName).toBe('third');
+    expect(ctx.element.activeTab).toBe(2);
+  });
+
+  it('should clear active tab name when active tab set to undefined', async () => {
+    const ctx = await createFixture({ activeTabName: 'first', tabNames: ['first', 'second', 'third'] });
+    await ctx.updatesComplete();
+
+    ctx.element.activeTab = undefined;
+    await ctx.updatesComplete();
+
+    expect(ctx.element.activeTabName).toBe('');
+    expect(ctx.activeTabCount).toBe(0);
+  });
+
+  it('should warn when activeTabName does not match any tab', async () => {
+    const ctx = await createFixture({ tabNames: ['first', 'second', 'third'] });
+
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    ctx.element.activeTabName = 'nonexistent';
+    await ctx.updatesComplete(2);
+
+    expect(warnSpy).toHaveBeenCalledWith('No tab found with name "nonexistent", no tab made active.');
+    expect(ctx.activeTabCount).toBe(0);
+
+    warnSpy.mockRestore();
+  });
+
+  it('should handle switching between tabs by name', async () => {
+    const ctx = await createFixture({ activeTabName: 'first', tabNames: ['first', 'second', 'third'] });
+    await ctx.updatesComplete();
+
+    expect(ctx.tabs[0].active).toBe(true);
+
+    ctx.element.activeTabName = 'second';
+    await ctx.updatesComplete(2);
+
+    expect(ctx.tabs[0].active).toBe(false);
+    expect(ctx.tabs[1].active).toBe(true);
+
+    ctx.element.activeTabName = 'third';
+    await ctx.updatesComplete(2);
+
+    expect(ctx.tabs[1].active).toBe(false);
+    expect(ctx.tabs[2].active).toBe(true);
+  });
+
+  it('should handle empty activeTabName', async () => {
+    const ctx = await createFixture({ activeTab: 1, tabNames: ['first', 'second', 'third'] });
+    await ctx.updatesComplete();
+
+    expect(ctx.tabs[1].active).toBe(true);
+
+    ctx.element.activeTabName = '';
+    await ctx.updatesComplete(2);
+
+    expect(ctx.activeTabCount).toBe(0);
+  });
+
+  it('should reflect activeTabName to attribute', async () => {
+    const ctx = await createFixture({ tabNames: ['first', 'second', 'third'] });
+
+    ctx.element.activeTabName = 'second';
+    await ctx.updatesComplete(2);
+
+    expect(ctx.element.getAttribute('active-tab-name')).toBe('second');
+  });
+
+  it('should update activeTabName from attribute', async () => {
+    const ctx = await createFixture({ tabNames: ['first', 'second', 'third'] });
+
+    ctx.element.setAttribute('active-tab-name', 'third');
+    await ctx.updatesComplete(2);
+
+    expect(ctx.element.activeTabName).toBe('third');
+    expect(ctx.tabs[2].active).toBe(true);
+  });
+
+  it('should preserve activeTabName when a non-active tab is removed', async () => {
+    const ctx = await createFixture({ activeTabName: 'second', tabNames: ['first', 'second', 'third'] });
+    await ctx.updatesComplete();
+
+    expect(ctx.element.activeTabName).toBe('second');
+
+    ctx.tabs[2].remove();
+    await ctx.updatesComplete();
+
+    expect(ctx.element.activeTabName).toBe('second');
+    expect(ctx.tabs[1].active).toBe(true);
+  });
+
+  it('should warn when multiple tabs have the same name', async () => {
+    const ctx = await createFixture();
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    ctx.tabs[0].name = 'duplicate';
+    ctx.tabs[1].name = 'duplicate';
+    await ctx.updatesComplete();
+
+    expect(warnSpy).toHaveBeenCalledWith('Multiple tabs with the name "duplicate" found. Each tab should have a unique name.');
+
+    warnSpy.mockRestore();
+  });
+
+  it('should warn when a tab name is changed to match an existing tab name', async () => {
+    const ctx = await createFixture();
+    ctx.tabs[0].name = 'first';
+    ctx.tabs[1].name = 'second';
+    await ctx.updatesComplete();
+
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    ctx.tabs[2].name = 'first';
+    await ctx.updatesComplete();
+
+    expect(warnSpy).toHaveBeenCalledWith('Multiple tabs with the name "first" found. Each tab should have a unique name.');
+
+    warnSpy.mockRestore();
+  });
+
+  it('should not warn when tabs have unique names', async () => {
+    const ctx = await createFixture();
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    ctx.tabs[0].name = 'first';
+    ctx.tabs[1].name = 'second';
+    ctx.tabs[2].name = 'third';
+    await ctx.updatesComplete();
+
+    expect(warnSpy).not.toHaveBeenCalled();
+
+    warnSpy.mockRestore();
+  });
+
+  it('should not warn when tab name is empty', async () => {
+    const ctx = await createFixture();
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    ctx.tabs[0].name = '';
+    ctx.tabs[1].name = '';
+    ctx.tabs[2].name = '';
+    await ctx.updatesComplete();
+
+    expect(warnSpy).not.toHaveBeenCalled();
+
+    warnSpy.mockRestore();
+  });
+
   it('should set disabled', async () => {
     const ctx = await createFixture({ disabled: true });
     await ctx.updatesComplete();
@@ -1014,6 +1216,7 @@ class TabsHarness extends TestHarness<ITabBarComponent> {
 
 interface TabsFixtureConfig {
   activeTab?: number | null;
+  activeTabName?: string;
   disabled?: boolean;
   clustered?: boolean;
   vertical?: boolean;
@@ -1025,10 +1228,12 @@ interface TabsFixtureConfig {
   width?: string;
   height?: string;
   tabDisabled?: [boolean, boolean, boolean];
+  tabNames?: [string?, string?, string?];
 }
 
 async function createFixture({
   activeTab,
+  activeTabName,
   disabled,
   clustered,
   vertical,
@@ -1039,11 +1244,13 @@ async function createFixture({
   autoActivate,
   width,
   height,
-  tabDisabled
+  tabDisabled,
+  tabNames
 }: TabsFixtureConfig = {}): Promise<TabsHarness> {
   const screen = render(html`
     <forge-tab-bar
       .activeTab=${activeTab}
+      .activeTabName=${activeTabName ?? ''}
       ?disabled=${disabled}
       .vertical=${!!vertical}
       .clustered=${!!clustered}
@@ -1053,9 +1260,9 @@ async function createFixture({
       .autoActivate=${!!autoActivate}
       .scrollButtons=${!!scrollButtons}
       style="width: ${width ?? 'auto'}; height: ${height ?? 'auto'}">
-      <forge-tab ?disabled=${tabDisabled?.[0]}>First</forge-tab>
-      <forge-tab ?disabled=${tabDisabled?.[1]}>Second</forge-tab>
-      <forge-tab ?disabled=${tabDisabled?.[2]}>Third</forge-tab>
+      <forge-tab ?disabled=${tabDisabled?.[0]} .name=${tabNames?.[0] ?? ''}>First</forge-tab>
+      <forge-tab ?disabled=${tabDisabled?.[1]} .name=${tabNames?.[1] ?? ''}>Second</forge-tab>
+      <forge-tab ?disabled=${tabDisabled?.[2]} .name=${tabNames?.[2] ?? ''}>Third</forge-tab>
     </forge-tab-bar>
   `);
   const el = screen.container.querySelector('forge-tab-bar') as ITabBarComponent;

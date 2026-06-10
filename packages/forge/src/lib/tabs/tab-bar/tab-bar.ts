@@ -36,6 +36,7 @@ import styles from './tab-bar.scss';
 export interface ITabBarComponent extends BaseLitElement {
   disabled: boolean;
   activeTab: number | null | undefined;
+  activeTabName: string;
   vertical: boolean;
   clustered: boolean;
   stacked: boolean;
@@ -117,7 +118,25 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    * @attribute active-tab
    */
   @property({ type: Number, reflect: true, attribute: 'active-tab' })
-  public activeTab: number | null | undefined;
+  public set activeTab(value: number | null | undefined) {
+    this.#activateTabByIndex(value ?? undefined);
+  }
+  public get activeTab(): number | null | undefined {
+    return this._tabs.findIndex(t => t === this.#activeTabElement);
+  }
+
+  /**
+   * The name of the active tab.
+   * @default ''
+   * @attribute active-tab-name
+   */
+  @property({ attribute: 'active-tab-name' })
+  public set activeTabName(value: string) {
+    this.#activateTabByName(value);
+  }
+  public get activeTabName(): string {
+    return this.#activeTabElement?.name ?? '';
+  }
 
   /**
    * Controls whether the tab bar is vertical or horizontal.
@@ -245,10 +264,6 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
-    if (changedProperties.has('activeTab')) {
-      this.#activateTabByIndex(this.activeTab ?? undefined);
-    }
-
     if (changedProperties.has('disabled')) {
       toggleState(this.#internals, 'disabled', this.disabled);
     }
@@ -508,7 +523,14 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       composed: true
     });
     this.dispatchEvent(event);
-    return !event.defaultPrevented;
+    const allowed = !event.defaultPrevented;
+
+    if (allowed) {
+      this.activeTab = index;
+      this.activeTabName = tab.name;
+    }
+
+    return allowed;
   }
 
   /**
@@ -586,6 +608,33 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       return tabs[index].activate();
     }
     console.warn('Out of bounds index provided for active tab, no tab made active.');
+  }
+
+  /**
+   * Activates a tab by its name, or deactivates all tabs if no name is provided.
+   * @param name The name of the tab to set active or empty string if no tab should be active.
+   */
+  async #activateTabByName(name: string): Promise<void> {
+    if (!this.hasUpdated) {
+      await this.updateComplete;
+    }
+
+    if (name === this.#activeTabElement?.name) {
+      // The tab is already selected
+      return;
+    }
+
+    if (!name) {
+      this.#activeTabElement?.activate(false);
+      return;
+    }
+
+    const tabs = this._tabs;
+    const tab = tabs.find(t => t.name === name);
+    if (tab) {
+      return tab.activate();
+    }
+    console.warn(`No tab found with name "${name}", no tab made active.`);
   }
 
   // *****
