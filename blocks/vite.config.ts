@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
-import { glob } from 'glob';
 import path from 'path';
 
 import { blocksPlugin } from './src/scripts/vite-plugin.js';
@@ -31,17 +30,6 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    rollupOptions: {
-      input: {
-        index: path.resolve(process.cwd(), 'src/index.html'),
-        ...Object.fromEntries(
-          glob.sync('src/blocks/**/*.html').map(file => [
-            // Strip 'src/' prefix so output is dist/blocks/ not dist/src/blocks/
-            file.replace('src/', '').replace('.html', ''),
-            path.resolve(process.cwd(), file)
-          ])
-        )
-      }
-    }
+    emptyOutDir: false
   }
 });

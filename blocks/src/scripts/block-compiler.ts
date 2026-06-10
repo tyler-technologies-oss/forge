@@ -17,6 +17,7 @@ export interface BlockTemplate {
 export interface CompileOptions {
   layoutPath: string;
   partialRegistry: PartialRegistry;
+  baseHref: string;
 }
 
 export interface CompileResult {
@@ -106,7 +107,8 @@ export function compileBlock(content: string, options: CompileOptions): CompileR
 
     const compiledHtml = metadata + layoutTemplate({
       ...blockTemplate,
-      body: compiledBody
+      body: compiledBody,
+      baseHref: options.baseHref
     });
 
     return {

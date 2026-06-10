@@ -33,12 +33,12 @@ function formatCategoryName(folderName: string): string {
 
 /**
  * Extracts the category folder name from a block's file path.
- * Example: "blocks/application-layout/basic/basic.html" -> "application-layout"
+ * Example: "application-layout/basic/basic.html" -> "application-layout"
  */
 function extractCategoryFolder(filePath: string): string {
   const parts = filePath.split('/');
-  // Path structure: blocks/[category]/[name]/[name].html
-  return parts.length > 1 ? parts[1] : '';
+  // Path structure: [category]/[name]/[name].html
+  return parts.length > 0 ? parts[0] : '';
 }
 
 /**
@@ -53,7 +53,7 @@ export async function discoverBlocks(blocksPath: string): Promise<Block[]> {
   for (const file of htmlFiles) {
     const fullPath = path.join(blocksPath, file);
     const content = fs.readFileSync(fullPath, 'utf-8');
-    const relativePath = path.join('blocks', file);
+    const relativePath = file;
     const metadata = parseBlockMetadata(content, relativePath);
 
     if (metadata) {
@@ -110,7 +110,7 @@ export async function generateManifest(options: GenerateManifestOptions): Promis
 
   const categoryNames = [...new Set(blocks.map(b => {
     const parts = b.file.split('/');
-    return parts.length > 1 ? parts[1] : '';
+    return parts.length > 0 ? parts[0] : '';
   }).filter(Boolean))].sort();
 
   const categories = categoryNames.map(name => ({ name }));

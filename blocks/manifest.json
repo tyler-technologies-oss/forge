@@ -15,21 +15,6 @@
       "hasScript": false
     },
     {
-      "id": "blocks/tables/simple/simple",
-      "name": "Simple Table",
-      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
-      "tags": [
-        "table",
-        "data",
-        "card",
-        "toolbar"
-      ],
-      "file": "blocks/tables/simple/simple.html",
-      "category": "Tables",
-      "screenshot": "blocks/tables/simple/simple.webp",
-      "hasScript": true
-    },
-    {
       "id": "blocks/tables/paginated/paginated",
       "name": "Paginated Table",
       "description": "Data table with client-side pagination inside a structured card, featuring header action buttons for filtering, exporting, and additional options, along with a paginator control for navigating through large datasets by page",
@@ -44,6 +29,21 @@
       "file": "blocks/tables/paginated/paginated.html",
       "category": "Tables",
       "screenshot": "blocks/tables/paginated/paginated.webp",
+      "hasScript": true
+    },
+    {
+      "id": "blocks/tables/simple/simple",
+      "name": "Simple Table",
+      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
+      "tags": [
+        "table",
+        "data",
+        "card",
+        "toolbar"
+      ],
+      "file": "blocks/tables/simple/simple.html",
+      "category": "Tables",
+      "screenshot": "blocks/tables/simple/simple.webp",
       "hasScript": true
     },
     {
@@ -107,22 +107,6 @@
       "hasScript": false
     },
     {
-      "id": "blocks/forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
-      "tags": [
-        "authentication",
-        "login",
-        "form",
-        "card",
-        "centered"
-      ],
-      "file": "blocks/forms/login/login.html",
-      "category": "Forms",
-      "screenshot": "blocks/forms/login/login.webp",
-      "hasScript": false
-    },
-    {
       "id": "blocks/forms/add-user/add-user",
       "name": "Add User Form",
       "description": "Form card with two-column grid layout for text inputs, leading icons, support text, dropdown selects, grouped checkboxes, and action buttons",
@@ -139,6 +123,40 @@
       "file": "blocks/forms/add-user/add-user.html",
       "category": "Forms",
       "screenshot": "blocks/forms/add-user/add-user.webp",
+      "hasScript": false
+    },
+    {
+      "id": "blocks/forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "tags": [
+        "authentication",
+        "login",
+        "form",
+        "card",
+        "centered"
+      ],
+      "file": "blocks/forms/login/login.html",
+      "category": "Forms",
+      "screenshot": "blocks/forms/login/login.webp",
+      "hasScript": false
+    },
+    {
+      "id": "blocks/forms/add-illustration/add-illustration",
+      "name": "Add Illustration Form",
+      "description": "Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files",
+      "tags": [
+        "form",
+        "card",
+        "centered",
+        "decorative-background",
+        "chip-field",
+        "file-picker",
+        "create"
+      ],
+      "file": "blocks/forms/add-illustration/add-illustration.html",
+      "category": "Forms",
+      "screenshot": "blocks/forms/add-illustration/add-illustration.webp",
       "hasScript": false
     },
     {
@@ -191,24 +209,6 @@
       "hasScript": false
     },
     {
-      "id": "blocks/forms/add-illustration/add-illustration",
-      "name": "Add Illustration Form",
-      "description": "Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files",
-      "tags": [
-        "form",
-        "card",
-        "centered",
-        "decorative-background",
-        "chip-field",
-        "file-picker",
-        "create"
-      ],
-      "file": "blocks/forms/add-illustration/add-illustration.html",
-      "category": "Forms",
-      "screenshot": "blocks/forms/add-illustration/add-illustration.webp",
-      "hasScript": false
-    },
-    {
       "id": "blocks/application-layout/three-panel/three-panel",
       "name": "Three Panel Layout",
       "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
@@ -248,6 +248,26 @@
       "hasScript": true
     },
     {
+      "id": "blocks/application-layout/basic/basic",
+      "name": "Basic Application Layout",
+      "description": "Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
+      "tags": [
+        "layout",
+        "application",
+        "shell",
+        "app-bar",
+        "navigation",
+        "drawer",
+        "user-profile",
+        "footer",
+        "responsive-grid"
+      ],
+      "file": "blocks/application-layout/basic/basic.html",
+      "category": "Application Layout",
+      "screenshot": "blocks/application-layout/basic/basic.webp",
+      "hasScript": false
+    },
+    {
       "id": "blocks/application-layout/mini-nav/mini-nav",
       "name": "Mini Nav Application Layout",
       "description": "Application shell with a collapsible mini navigation drawer that expands on hover, an app bar with notification icons and a user profile dropdown with theme toggle",
@@ -281,26 +301,6 @@
       "category": "Application Layout",
       "screenshot": "blocks/application-layout/dual-scroll/dual-scroll.webp",
       "hasScript": false
-    },
-    {
-      "id": "blocks/application-layout/basic/basic",
-      "name": "Basic Application Layout",
-      "description": "Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
-      "tags": [
-        "layout",
-        "application",
-        "shell",
-        "app-bar",
-        "navigation",
-        "drawer",
-        "user-profile",
-        "footer",
-        "responsive-grid"
-      ],
-      "file": "blocks/application-layout/basic/basic.html",
-      "category": "Application Layout",
-      "screenshot": "blocks/application-layout/basic/basic.webp",
-      "hasScript": false
     }
   ],
   "categories": [
@@ -329,5 +329,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-01T19:49:54.930Z"
+  "generatedAt": "2026-06-04T15:48:35.130Z"
 }
