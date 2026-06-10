@@ -71,21 +71,6 @@
       "hasScript": false
     },
     {
-      "id": "lists/list-management/list-management",
-      "name": "List Management",
-      "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
-      "tags": [
-        "list",
-        "management",
-        "interactive",
-        "card"
-      ],
-      "file": "lists/list-management/list-management.html",
-      "category": "Lists",
-      "screenshot": "lists/list-management/list-management.webp",
-      "hasScript": true
-    },
-    {
       "id": "forms/multi-column/multi-column",
       "name": "Multi-Column Form",
       "description": "Responsive form using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
@@ -158,6 +143,21 @@
       "category": "Forms",
       "screenshot": "forms/add-illustration/add-illustration.webp",
       "hasScript": false
+    },
+    {
+      "id": "lists/list-management/list-management",
+      "name": "List Management",
+      "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
+      "tags": [
+        "list",
+        "management",
+        "interactive",
+        "card"
+      ],
+      "file": "lists/list-management/list-management.html",
+      "category": "Lists",
+      "screenshot": "lists/list-management/list-management.webp",
+      "hasScript": true
     },
     {
       "id": "dialogs/simple/simple",
@@ -329,5 +329,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-10T14:56:40.506Z"
+  "generatedAt": "2026-06-10T17:21:42.039Z"
 }
