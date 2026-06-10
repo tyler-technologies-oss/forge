@@ -48,6 +48,11 @@ export const updateTarget = Symbol('updateTarget');
  */
 export const forgeLabelRef = Symbol('forgeLabelRef');
 
+/**
+ * A symbol that plays a component's state layer animation.
+ */
+export const playStateLayerAnimation = Symbol('playStateLayerAnimation');
+
 export type Theme = 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'error' | 'info';
 export type Density = 'small' | 'medium' | 'large';
 
