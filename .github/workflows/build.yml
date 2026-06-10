@@ -40,6 +40,14 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Debug Browser Location
+        run: |
+          echo "Contents of /ms-playwright:"
+          ls -la /ms-playwright/ || echo "Directory not found"
+          echo "Searching for chrome executables:"
+          find /ms-playwright -name "chrome*" -type f 2>/dev/null || echo "No chrome executables found"
+          echo "PLAYWRIGHT_BROWSERS_PATH: $PLAYWRIGHT_BROWSERS_PATH"
+
       - name: Format
         run: pnpm run format:check
 

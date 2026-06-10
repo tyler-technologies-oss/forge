@@ -5,11 +5,7 @@ export default defineConfig({
   test: {
     browser: {
       enabled: true,
-      provider: playwright({
-        launchOptions: {
-          executablePath: process.env.CI ? '/ms-playwright/chromium-1217/chrome-linux/chrome' : undefined
-        }
-      }),
+      provider: playwright(),
       instances: [{ browser: 'chromium' }],
       screenshotFailures: false
     },
