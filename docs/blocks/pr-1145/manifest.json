@@ -1,0 +1,333 @@
+{
+  "blocks": [
+    {
+      "id": "toolbar/simple/simple",
+      "name": "Simple Toolbar",
+      "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
+      "tags": [
+        "toolbar",
+        "header",
+        "actions"
+      ],
+      "file": "toolbar/simple/simple.html",
+      "category": "Toolbar",
+      "screenshot": "toolbar/simple/simple.webp",
+      "hasScript": false
+    },
+    {
+      "id": "tables/simple/simple",
+      "name": "Simple Table",
+      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
+      "tags": [
+        "table",
+        "data",
+        "card",
+        "toolbar"
+      ],
+      "file": "tables/simple/simple.html",
+      "category": "Tables",
+      "screenshot": "tables/simple/simple.webp",
+      "hasScript": true
+    },
+    {
+      "id": "tables/paginated/paginated",
+      "name": "Paginated Table",
+      "description": "Data table with client-side pagination inside a structured card, featuring header action buttons for filtering, exporting, and additional options, along with a paginator control for navigating through large datasets by page",
+      "tags": [
+        "table",
+        "data",
+        "paginator",
+        "pagination",
+        "structured-card",
+        "actions"
+      ],
+      "file": "tables/paginated/paginated.html",
+      "category": "Tables",
+      "screenshot": "tables/paginated/paginated.webp",
+      "hasScript": true
+    },
+    {
+      "id": "patterns/filter-facets/filter-facets",
+      "name": "Filter Facets",
+      "description": "Filter facets rendered inside a drawer with scaffold layout, demonstrating checkboxes for multi-select and radio buttons for single-select filtering. Uses partials for reusable facet patterns. Use as a reference for building filter sidesheets, filter panels within cards, data table filters, and other page filtering UI.",
+      "tags": [
+        "filter",
+        "facets",
+        "checkbox",
+        "radio",
+        "sidebar",
+        "sidesheet",
+        "drawer",
+        "scaffold",
+        "search",
+        "refinement",
+        "list",
+        "partials",
+        "data-table"
+      ],
+      "file": "patterns/filter-facets/filter-facets.html",
+      "category": "Patterns",
+      "screenshot": "patterns/filter-facets/filter-facets.webp",
+      "hasScript": false
+    },
+    {
+      "id": "lists/list-management/list-management",
+      "name": "List Management",
+      "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
+      "tags": [
+        "list",
+        "management",
+        "interactive",
+        "card"
+      ],
+      "file": "lists/list-management/list-management.html",
+      "category": "Lists",
+      "screenshot": "lists/list-management/list-management.webp",
+      "hasScript": true
+    },
+    {
+      "id": "forms/multi-column/multi-column",
+      "name": "Multi-Column Form",
+      "description": "Responsive form using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
+      "tags": [
+        "form",
+        "grid",
+        "multi-column",
+        "responsive",
+        "text-field",
+        "select",
+        "date-picker",
+        "checkbox",
+        "radio",
+        "switch"
+      ],
+      "file": "forms/multi-column/multi-column.html",
+      "category": "Forms",
+      "screenshot": "forms/multi-column/multi-column.webp",
+      "hasScript": false
+    },
+    {
+      "id": "forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "tags": [
+        "authentication",
+        "login",
+        "form",
+        "card",
+        "centered"
+      ],
+      "file": "forms/login/login.html",
+      "category": "Forms",
+      "screenshot": "forms/login/login.webp",
+      "hasScript": false
+    },
+    {
+      "id": "forms/add-user/add-user",
+      "name": "Add User Form",
+      "description": "Form card with two-column grid layout for text inputs, leading icons, support text, dropdown selects, grouped checkboxes, and action buttons",
+      "tags": [
+        "form",
+        "card",
+        "two-column",
+        "grid",
+        "text-field",
+        "select",
+        "checkbox",
+        "icons"
+      ],
+      "file": "forms/add-user/add-user.html",
+      "category": "Forms",
+      "screenshot": "forms/add-user/add-user.webp",
+      "hasScript": false
+    },
+    {
+      "id": "forms/add-illustration/add-illustration",
+      "name": "Add Illustration Form",
+      "description": "Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files",
+      "tags": [
+        "form",
+        "card",
+        "centered",
+        "decorative-background",
+        "chip-field",
+        "file-picker",
+        "create"
+      ],
+      "file": "forms/add-illustration/add-illustration.html",
+      "category": "Forms",
+      "screenshot": "forms/add-illustration/add-illustration.webp",
+      "hasScript": false
+    },
+    {
+      "id": "dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
+      "tags": [
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
+      ],
+      "file": "dialogs/simple/simple.html",
+      "category": "Dialogs",
+      "screenshot": "dialogs/simple/simple.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/user-profile/user-profile",
+      "name": "User Profile Card",
+      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
+      "tags": [
+        "card",
+        "profile",
+        "user",
+        "avatar",
+        "contact"
+      ],
+      "file": "cards/user-profile/user-profile.html",
+      "category": "Cards",
+      "screenshot": "cards/user-profile/user-profile.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/responsive-cards/responsive-cards",
+      "name": "Responsive Cards",
+      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
+      "tags": [
+        "cards",
+        "responsive",
+        "grid",
+        "badge",
+        "image",
+        "metrics"
+      ],
+      "file": "cards/responsive-cards/responsive-cards.html",
+      "category": "Cards",
+      "screenshot": "cards/responsive-cards/responsive-cards.webp",
+      "hasScript": false
+    },
+    {
+      "id": "application-layout/three-panel/three-panel",
+      "name": "Three Panel Layout",
+      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
+      "tags": [
+        "layout",
+        "application",
+        "three-panel",
+        "left-drawer",
+        "right-drawer",
+        "navigation",
+        "body",
+        "panels"
+      ],
+      "file": "application-layout/three-panel/three-panel.html",
+      "category": "Application Layout",
+      "screenshot": "application-layout/three-panel/three-panel.webp",
+      "hasScript": false
+    },
+    {
+      "id": "application-layout/table-with-filters/table-with-filters",
+      "name": "Table with Filter Sidesheet",
+      "description": "Full application layout with header, left navigation drawer, paginated data table in the body, and a filter sidesheet in the right drawer. Demonstrates a common pattern for data-heavy applications with filtering capabilities.",
+      "tags": [
+        "layout",
+        "application",
+        "table",
+        "filter",
+        "sidesheet",
+        "drawer",
+        "navigation",
+        "paginator",
+        "data"
+      ],
+      "file": "application-layout/table-with-filters/table-with-filters.html",
+      "category": "Application Layout",
+      "screenshot": "application-layout/table-with-filters/table-with-filters.webp",
+      "hasScript": true
+    },
+    {
+      "id": "application-layout/mini-nav/mini-nav",
+      "name": "Mini Nav Application Layout",
+      "description": "Application shell with a collapsible mini navigation drawer that expands on hover, an app bar with notification icons and a user profile dropdown with theme toggle",
+      "tags": [
+        "layout",
+        "application",
+        "shell",
+        "mini-drawer",
+        "app-bar",
+        "user-profile",
+        "hover"
+      ],
+      "file": "application-layout/mini-nav/mini-nav.html",
+      "category": "Application Layout",
+      "screenshot": "application-layout/mini-nav/mini-nav.webp",
+      "hasScript": false
+    },
+    {
+      "id": "application-layout/dual-scroll/dual-scroll",
+      "name": "Dual Scrolling Containers",
+      "description": "Application layout demonstrating dual independent scrolling regions where the main content area and a fixed right-side drawer panel each scroll independently, useful for master-detail views or side-by-side content comparison layouts",
+      "tags": [
+        "layout",
+        "application",
+        "scroll",
+        "drawer",
+        "dual-panel",
+        "right-drawer"
+      ],
+      "file": "application-layout/dual-scroll/dual-scroll.html",
+      "category": "Application Layout",
+      "screenshot": "application-layout/dual-scroll/dual-scroll.webp",
+      "hasScript": false
+    },
+    {
+      "id": "application-layout/basic/basic",
+      "name": "Basic Application Layout",
+      "description": "Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
+      "tags": [
+        "layout",
+        "application",
+        "shell",
+        "app-bar",
+        "navigation",
+        "drawer",
+        "user-profile",
+        "footer",
+        "responsive-grid"
+      ],
+      "file": "application-layout/basic/basic.html",
+      "category": "Application Layout",
+      "screenshot": "application-layout/basic/basic.webp",
+      "hasScript": false
+    }
+  ],
+  "categories": [
+    {
+      "name": "application-layout"
+    },
+    {
+      "name": "cards"
+    },
+    {
+      "name": "dialogs"
+    },
+    {
+      "name": "forms"
+    },
+    {
+      "name": "lists"
+    },
+    {
+      "name": "patterns"
+    },
+    {
+      "name": "tables"
+    },
+    {
+      "name": "toolbar"
+    }
+  ],
+  "generatedAt": "2026-06-10T17:48:53.317Z"
+}

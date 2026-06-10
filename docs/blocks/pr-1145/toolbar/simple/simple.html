@@ -1,0 +1,45 @@
+<!--
+  @block Simple Toolbar
+  @description Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions
+  @tags toolbar, header, actions
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Simple Toolbar</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="forge-register.js"></script>
+  </head>
+  <body class="">
+    <forge-toolbar>
+  <h2 slot="start" class="text-heading3">Page Title</h2>
+  <div slot="end" class="flex gap-xsmall">
+    <forge-icon-button density="medium" aria-label="Notifications">
+      <forge-icon name="notifications"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button density="medium" aria-label="Settings">
+      <forge-icon name="settings"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button density="medium" aria-label="More options">
+      <forge-icon name="more_vert"></forge-icon>
+    </forge-icon-button>
+  </div>
+</forge-toolbar>
+    <script type="module" src="ready-transition.js"></script>
+    <script type="module" src="theme-listener.js"></script>
+  </body>
+</html>

@@ -1,0 +1,93 @@
+<!--
+  @block List Management
+  @description Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion
+  @tags list, management, interactive, card
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>List Management</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="forge-register.js"></script>
+  </head>
+  <body class="">
+    <forge-card class="max-w-3xl p-0 m-medium">
+  <div class="p-medium flex flex-col gap-medium">
+    <h1 class="text-heading4 m-0">List Management</h1>
+
+    <!-- Add Item Form -->
+    <form id="add-item-form" class="flex gap-3 items-end">
+      <forge-text-field label-position="block-start" class="flex-1 [--forge-field-height:36px]">
+        <label for="new-item">New Item</label>
+        <input type="text" id="new-item" autocomplete="off" class="ps-xsmall" />
+      </forge-text-field>
+      <forge-button id="add-btn" variant="filled" type="submit" disabled>
+        <forge-icon name="add" slot="start" external></forge-icon>
+        Add
+      </forge-button>
+    </form>
+
+    <!-- List Container -->
+    <div id="list-container">
+      <!-- List Items in Card. Should only be visible when items have been added -->
+      <forge-card id="list-card" class="hidden no-padding [--forge-card-outline-width:0] [--forge-card-background:var(--forge-theme-surface-dim)]">
+        <forge-list id="items-list">
+          <!-- Items will be added here dynamically -->
+        </forge-list>
+      </forge-card>
+
+      <!-- Empty State -->
+      <div class="flex flex-col items-center gap-2 p-medium" id="empty-state">
+        <forge-icon name="checklist" class="text-[64px] [--forge-icon-color:var(--forge-theme-text-medium)]" external></forge-icon>
+        <div class="text-body1 text-center text-medium">No items yet. Add one above!</div>
+      </div>
+    </div>
+  </div>
+</forge-card>
+
+<!-- List Item Template -->
+<template id="list-item-template">
+  <forge-list-item>
+    <span data-item-text></span>
+    <div slot="trailing" class="flex items-center">
+      <forge-icon-button data-edit-btn aria-label="Edit item">
+        <forge-icon name="edit" external></forge-icon>
+      </forge-icon-button>
+      <forge-popover data-popover placement="bottom">
+        <div class="flex flex-col gap-small p-medium min-w-[320px]">
+          <forge-text-field label-position="block-start">
+            <label data-edit-label>Edit item</label>
+            <input type="text" data-edit-input class="ps-xsmall" />
+          </forge-text-field>
+          <div class="flex justify-end gap-small">
+            <forge-button data-cancel-btn variant="tonal">Cancel</forge-button>
+            <forge-button data-save-btn variant="filled">Save</forge-button>
+          </div>
+        </div>
+      </forge-popover>
+      <forge-icon-button data-delete-btn aria-label="Delete item">
+        <forge-icon name="delete" external></forge-icon>
+      </forge-icon-button>
+    </div>
+  </forge-list-item>
+</template>
+
+<script type="module" src="/src/blocks/lists/list-management/list-management.ts"></script>
+    <script type="module" src="ready-transition.js"></script>
+    <script type="module" src="theme-listener.js"></script>
+  </body>
+</html>
