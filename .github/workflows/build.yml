@@ -18,10 +18,14 @@ jobs:
     name: Build
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.59.0-jammy
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
+
+      - name: Fix Git Ownership
+        run: git config --global --add safe.directory '*'
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -43,9 +47,6 @@ jobs:
 
       - name: Build
         run: pnpm run build
-
-      - name: Setup Playwright
-        run: pnpm run setup:playwright
 
       - name: Test
         run: pnpm run test
