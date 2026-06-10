@@ -71,8 +71,8 @@ export const DATE_TIME_FIELD_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_F
  * `forge-date-time-picker` in a popover for picking. Owns the public `value`, validation, and
  * form participation; the embedded picker is the picking surface.
  *
- * Quick keys (single mode, while a segment input is focused): `n` sets the current date + time,
- * `d` sets the date segment to today.
+ * Quick keys (while a segment input is focused): `n` fills now (sets the time and fills the date if
+ * empty), `d` sets the date segment to today, `t` sets the time segment to the current time.
  *
  * @fires {CustomEvent<IDateTimeFieldChangeEventData>} forge-date-time-field-change - Fires when the value changes.
  *
@@ -447,12 +447,14 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
 
   #onTypedKeydown = (event: KeyboardEvent): void => {
     const key = event.key.toLowerCase();
-    if (this.#quickKeysEnabled() && (key === 'n' || key === 'd') && !event.ctrlKey && !event.metaKey && !event.altKey) {
+    if (this.#quickKeysEnabled() && (key === 'n' || key === 'd' || key === 't') && !event.ctrlKey && !event.metaKey && !event.altKey) {
       event.preventDefault();
       if (key === 'n') {
         this.#applyNow();
-      } else {
+      } else if (key === 'd') {
         this.#applyToday();
+      } else {
+        this.#applyTime();
       }
       return;
     }
@@ -475,10 +477,12 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
   }
 
-  /** Quick key `n`: set the date (and, in single mode, the time) to now. */
+  /** Quick key `n`: fill now — set the time (single mode) and fill the date only if it is empty. */
   #applyNow(): void {
     const now = new Date();
-    this.#setMaskValue(this._dateInput, formatDateInput(now));
+    if (parseDateInput(this.#maskValue(this._dateInput)) == null) {
+      this.#setMaskValue(this._dateInput, formatDateInput(now));
+    }
     if (this.timeMode === 'single') {
       this.#setMaskValue(this._timeInput, formatTimeInput(now, this.use24HourTime, this.allowSeconds));
     }
@@ -488,6 +492,18 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   /** Quick key `d`: set the date segment to today, leaving any typed time in place. */
   #applyToday(): void {
     this.#setMaskValue(this._dateInput, formatDateInput(new Date()));
+    this.#onTypedInput();
+  }
+
+  /** Quick key `t`: set the time segment to the current time, leaving the date untouched. */
+  #applyTime(): void {
+    const time = formatTimeInput(new Date(), this.use24HourTime, this.allowSeconds);
+    if (this.timeMode === 'range') {
+      const target = this.shadowRoot?.activeElement === this._toInput ? this._toInput : this._fromInput;
+      this.#setMaskValue(target, time);
+    } else {
+      this.#setMaskValue(this._timeInput, time);
+    }
     this.#onTypedInput();
   }
 
