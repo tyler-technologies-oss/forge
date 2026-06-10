@@ -15,38 +15,6 @@
       "hasScript": false
     },
     {
-      "id": "tables/simple/simple",
-      "name": "Simple Table",
-      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
-      "tags": [
-        "table",
-        "data",
-        "card",
-        "toolbar"
-      ],
-      "file": "tables/simple/simple.html",
-      "category": "Tables",
-      "screenshot": "tables/simple/simple.webp",
-      "hasScript": true
-    },
-    {
-      "id": "tables/paginated/paginated",
-      "name": "Paginated Table",
-      "description": "Data table with client-side pagination inside a structured card, featuring header action buttons for filtering, exporting, and additional options, along with a paginator control for navigating through large datasets by page",
-      "tags": [
-        "table",
-        "data",
-        "paginator",
-        "pagination",
-        "structured-card",
-        "actions"
-      ],
-      "file": "tables/paginated/paginated.html",
-      "category": "Tables",
-      "screenshot": "tables/paginated/paginated.webp",
-      "hasScript": true
-    },
-    {
       "id": "patterns/filter-facets/filter-facets",
       "name": "Filter Facets",
       "description": "Filter facets rendered inside a drawer with scaffold layout, demonstrating checkboxes for multi-select and radio buttons for single-select filtering. Uses partials for reusable facet patterns. Use as a reference for building filter sidesheets, filter panels within cards, data table filters, and other page filtering UI.",
@@ -83,6 +51,38 @@
       "file": "lists/list-management/list-management.html",
       "category": "Lists",
       "screenshot": "lists/list-management/list-management.webp",
+      "hasScript": true
+    },
+    {
+      "id": "tables/simple/simple",
+      "name": "Simple Table",
+      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
+      "tags": [
+        "table",
+        "data",
+        "card",
+        "toolbar"
+      ],
+      "file": "tables/simple/simple.html",
+      "category": "Tables",
+      "screenshot": "tables/simple/simple.webp",
+      "hasScript": true
+    },
+    {
+      "id": "tables/paginated/paginated",
+      "name": "Paginated Table",
+      "description": "Data table with client-side pagination inside a structured card, featuring header action buttons for filtering, exporting, and additional options, along with a paginator control for navigating through large datasets by page",
+      "tags": [
+        "table",
+        "data",
+        "paginator",
+        "pagination",
+        "structured-card",
+        "actions"
+      ],
+      "file": "tables/paginated/paginated.html",
+      "category": "Tables",
+      "screenshot": "tables/paginated/paginated.webp",
       "hasScript": true
     },
     {
@@ -329,5 +329,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-09T18:38:27.543Z"
+  "generatedAt": "2026-06-10T14:52:40.553Z"
 }
