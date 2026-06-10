@@ -11,6 +11,7 @@ concurrency:
 env:
   CI: true
   TURBO_TELEMETRY_DISABLED: 1
+  PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
 
 jobs:
   build:
