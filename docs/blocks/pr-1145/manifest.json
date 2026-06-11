@@ -121,6 +121,22 @@
       "hasScript": true
     },
     {
+      "id": "forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "tags": [
+        "authentication",
+        "login",
+        "form",
+        "card",
+        "centered"
+      ],
+      "file": "forms/login/login.html",
+      "category": "Forms",
+      "screenshot": "forms/login/login.webp",
+      "hasScript": false
+    },
+    {
       "id": "forms/multi-column/multi-column",
       "name": "Multi-Column Form",
       "description": "Responsive form using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
@@ -139,22 +155,6 @@
       "file": "forms/multi-column/multi-column.html",
       "category": "Forms",
       "screenshot": "forms/multi-column/multi-column.webp",
-      "hasScript": false
-    },
-    {
-      "id": "forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
-      "tags": [
-        "authentication",
-        "login",
-        "form",
-        "card",
-        "centered"
-      ],
-      "file": "forms/login/login.html",
-      "category": "Forms",
-      "screenshot": "forms/login/login.webp",
       "hasScript": false
     },
     {
@@ -211,21 +211,6 @@
       "hasScript": false
     },
     {
-      "id": "cards/tabbed-card/tabbed-card",
-      "name": "Tabbed Card",
-      "description": "Card with tab navigation that switches between different content views using forge-tab-bar and forge-view-switcher",
-      "tags": [
-        "card",
-        "tabs",
-        "navigation",
-        "view-switcher",
-        "tabbed"
-      ],
-      "file": "cards/tabbed-card/tabbed-card.html",
-      "category": "Cards",
-      "hasScript": false
-    },
-    {
       "id": "cards/user-profile/user-profile",
       "name": "User Profile Card",
       "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
@@ -239,6 +224,21 @@
       "file": "cards/user-profile/user-profile.html",
       "category": "Cards",
       "screenshot": "cards/user-profile/user-profile.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/tabbed-card/tabbed-card",
+      "name": "Tabbed Card",
+      "description": "Card with tab navigation that switches between different content views using forge-tab-bar and forge-view-switcher",
+      "tags": [
+        "card",
+        "tabs",
+        "navigation",
+        "view-switcher",
+        "tabbed"
+      ],
+      "file": "cards/tabbed-card/tabbed-card.html",
+      "category": "Cards",
       "hasScript": false
     },
     {
@@ -382,5 +382,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-11T13:29:53.429Z"
+  "generatedAt": "2026-06-11T15:15:33.562Z"
 }
