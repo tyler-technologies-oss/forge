@@ -6,8 +6,8 @@
     <base href="{{baseHref}}" />
     <title>{{title}}</title>
     <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
-    <link rel="stylesheet" href="theme.css" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="{{baseHref}}theme.css" />
+    <link rel="stylesheet" href="{{baseHref}}styles.css" />
     <style>
       body {
         opacity: 0;
@@ -17,11 +17,11 @@
         opacity: 1;
       }
     </style>
-    <script type="module" src="forge-register.js"></script>
+    <script type="module" src="{{baseHref}}forge-register.js"></script>
   </head>
   <body class="{{bodyClass}}">
     {{{body}}}
-    <script type="module" src="ready-transition.js"></script>
-    <script type="module" src="theme-listener.js"></script>
+    <script type="module" src="{{baseHref}}ready-transition.js"></script>
+    <script type="module" src="{{baseHref}}theme-listener.js"></script>
   </body>
 </html>

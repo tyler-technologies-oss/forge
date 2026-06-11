@@ -30,6 +30,19 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    emptyOutDir: false
+    emptyOutDir: false,
+    rollupOptions: {
+      input: {
+        'forge-register': path.resolve(process.cwd(), 'forge-register.ts'),
+        'ready-transition': path.resolve(process.cwd(), 'ready-transition.ts'),
+        'theme-listener': path.resolve(process.cwd(), 'theme-listener.ts'),
+        'theme': path.resolve(process.cwd(), 'theme.css'),
+        'styles': path.resolve(process.cwd(), 'styles.css')
+      },
+      output: {
+        entryFileNames: '[name].js',
+        assetFileNames: '[name].[ext]'
+      }
+    }
   }
 });
