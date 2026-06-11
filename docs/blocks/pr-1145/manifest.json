@@ -47,6 +47,24 @@
       "hasScript": true
     },
     {
+      "id": "scaffold-examples/sidesheet-card/sidesheet-card",
+      "name": "Sidesheet Scaffold Card",
+      "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
+      "tags": [
+        "card",
+        "scaffold",
+        "layout",
+        "toolbar",
+        "drawer",
+        "sidesheet",
+        "body-left"
+      ],
+      "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
+      "category": "Scaffold Examples",
+      "screenshot": "scaffold-examples/sidesheet-card/sidesheet-card.webp",
+      "hasScript": false
+    },
+    {
       "id": "scaffold-examples/simple-card/simple-card",
       "name": "Simple Scaffold Card",
       "description": "Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons",
@@ -62,23 +80,7 @@
       ],
       "file": "scaffold-examples/simple-card/simple-card.html",
       "category": "Scaffold Examples",
-      "hasScript": false
-    },
-    {
-      "id": "scaffold-examples/sidesheet-card/sidesheet-card",
-      "name": "Sidesheet Scaffold Card",
-      "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
-      "tags": [
-        "card",
-        "scaffold",
-        "layout",
-        "toolbar",
-        "drawer",
-        "sidesheet",
-        "body-left"
-      ],
-      "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
-      "category": "Scaffold Examples",
+      "screenshot": "scaffold-examples/simple-card/simple-card.webp",
       "hasScript": false
     },
     {
@@ -195,22 +197,6 @@
       "hasScript": false
     },
     {
-      "id": "dialogs/simple/simple",
-      "name": "Simple Dialog",
-      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
-      "tags": [
-        "dialog",
-        "modal",
-        "scaffold",
-        "toolbar",
-        "actions"
-      ],
-      "file": "dialogs/simple/simple.html",
-      "category": "Dialogs",
-      "screenshot": "dialogs/simple/simple.webp",
-      "hasScript": false
-    },
-    {
       "id": "cards/user-profile/user-profile",
       "name": "User Profile Card",
       "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
@@ -239,6 +225,7 @@
       ],
       "file": "cards/tabbed-card/tabbed-card.html",
       "category": "Cards",
+      "screenshot": "cards/tabbed-card/tabbed-card.webp",
       "hasScript": false
     },
     {
@@ -351,6 +338,22 @@
       "category": "Application Layout",
       "screenshot": "application-layout/basic/basic.webp",
       "hasScript": false
+    },
+    {
+      "id": "dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
+      "tags": [
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
+      ],
+      "file": "dialogs/simple/simple.html",
+      "category": "Dialogs",
+      "screenshot": "dialogs/simple/simple.webp",
+      "hasScript": false
     }
   ],
   "categories": [
@@ -382,5 +385,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-11T15:15:33.562Z"
+  "generatedAt": "2026-06-11T17:51:30.758Z"
 }
