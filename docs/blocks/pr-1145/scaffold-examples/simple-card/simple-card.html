@@ -1,0 +1,57 @@
+<!--
+  @block Simple Scaffold Card
+  @description Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons
+  @tags card, scaffold, layout, toolbar, header, body, footer, structure
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Simple Scaffold Card</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="forge-register.js"></script>
+  </head>
+  <body class="">
+    <div class="min-h-screen flex items-center justify-center p-large">
+  <forge-card class="w-full max-w-md p-0">
+    <forge-scaffold>
+      <forge-toolbar slot="header">
+        <h2 slot="start" class="text-heading4">Title</h2>
+        <forge-icon-button slot="end" density="medium" aria-label="Search">
+          <forge-icon name="search"></forge-icon>
+        </forge-icon-button>
+        <forge-icon-button slot="end" density="medium" aria-label="More options">
+          <forge-icon name="more_vert"></forge-icon>
+        </forge-icon-button>
+      </forge-toolbar>
+
+      <div slot="body" class="p-medium">
+        <div class="striped-box min-h-50"></div>
+      </div>
+
+      <forge-toolbar slot="footer" inverted>
+        <div slot="end" class="flex items-center gap-small">
+          <forge-button variant="outlined">Cancel</forge-button>
+          <forge-button variant="raised">Save</forge-button>
+        </div>
+      </forge-toolbar>
+    </forge-scaffold>
+  </forge-card>
+</div>
+    <script type="module" src="ready-transition.js"></script>
+    <script type="module" src="theme-listener.js"></script>
+  </body>
+</html>

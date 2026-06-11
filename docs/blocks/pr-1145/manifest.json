@@ -47,6 +47,41 @@
       "hasScript": true
     },
     {
+      "id": "scaffold-examples/simple-card/simple-card",
+      "name": "Simple Scaffold Card",
+      "description": "Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons",
+      "tags": [
+        "card",
+        "scaffold",
+        "layout",
+        "toolbar",
+        "header",
+        "body",
+        "footer",
+        "structure"
+      ],
+      "file": "scaffold-examples/simple-card/simple-card.html",
+      "category": "Scaffold Examples",
+      "hasScript": false
+    },
+    {
+      "id": "scaffold-examples/sidesheet-card/sidesheet-card",
+      "name": "Sidesheet Scaffold Card",
+      "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
+      "tags": [
+        "card",
+        "scaffold",
+        "layout",
+        "toolbar",
+        "drawer",
+        "sidesheet",
+        "body-left"
+      ],
+      "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
+      "category": "Scaffold Examples",
+      "hasScript": false
+    },
+    {
       "id": "patterns/filter-facets/filter-facets",
       "name": "Filter Facets",
       "description": "Filter facets rendered inside a drawer with scaffold layout, demonstrating checkboxes for multi-select and radio buttons for single-select filtering. Uses partials for reusable facet patterns. Use as a reference for building filter sidesheets, filter panels within cards, data table filters, and other page filtering UI.",
@@ -173,6 +208,21 @@
       "file": "dialogs/simple/simple.html",
       "category": "Dialogs",
       "screenshot": "dialogs/simple/simple.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/tabbed-card/tabbed-card",
+      "name": "Tabbed Card",
+      "description": "Card with tab navigation that switches between different content views using forge-tab-bar and forge-view-switcher",
+      "tags": [
+        "card",
+        "tabs",
+        "navigation",
+        "view-switcher",
+        "tabbed"
+      ],
+      "file": "cards/tabbed-card/tabbed-card.html",
+      "category": "Cards",
       "hasScript": false
     },
     {
@@ -323,11 +373,14 @@
       "name": "patterns"
     },
     {
+      "name": "scaffold-examples"
+    },
+    {
       "name": "tables"
     },
     {
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-10T17:48:53.317Z"
+  "generatedAt": "2026-06-11T13:29:53.429Z"
 }
