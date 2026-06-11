@@ -1,0 +1,27 @@
+<!--
+  @block Sidesheet Scaffold Card
+  @description Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel
+  @tags card, scaffold, layout, toolbar, drawer, sidesheet, body-left
+-->
+<div class="min-h-screen flex items-center justify-center p-large">
+  <forge-card class="w-full max-w-3xl p-0">
+    <forge-scaffold>
+      {{> scaffold-header-toolbar}}
+
+      <forge-drawer slot="body-left" open>
+        <div class="p-medium space-y-medium">
+          <div class="striped-box"></div>
+          <div class="striped-box"></div>
+          <div class="striped-box"></div>
+          <div class="striped-box"></div>
+        </div>
+      </forge-drawer>
+
+      <div slot="body" class="p-medium">
+        <div class="striped-box min-h-96"></div>
+      </div>
+
+      {{> scaffold-footer-toolbar}}
+    </forge-scaffold>
+  </forge-card>
+</div>

@@ -30,6 +30,7 @@
     "sharp": "^0.34.5",
     "tailwindcss": "catalog:",
     "tsx": "^4.19.0",
+    "tw-to-css": "^0.0.12",
     "typescript": "~5.8.0",
     "vite": "catalog:"
   }

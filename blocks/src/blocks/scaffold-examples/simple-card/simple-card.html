@@ -1,0 +1,18 @@
+<!--
+  @block Simple Scaffold Card
+  @description Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons
+  @tags card, scaffold, layout, toolbar, header, body, footer, structure
+-->
+<div class="min-h-screen flex items-center justify-center p-large">
+  <forge-card class="w-full max-w-md p-0">
+    <forge-scaffold>
+      {{> scaffold-header-toolbar}}
+
+      <div slot="body" class="p-medium">
+        <div class="striped-box min-h-50"></div>
+      </div>
+
+      {{> scaffold-footer-toolbar}}
+    </forge-scaffold>
+  </forge-card>
+</div>
