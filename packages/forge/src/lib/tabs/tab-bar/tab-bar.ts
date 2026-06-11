@@ -122,7 +122,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     this.#activateTabByIndex(value ?? undefined);
   }
   public get activeTab(): number | null | undefined {
-    return this._tabs.findIndex(t => t === this.#activeTabElement);
+    const index = this._tabs.findIndex(t => t === this.#activeTabElement);
+    return index >= 0 ? index : undefined;
   }
 
   /**
