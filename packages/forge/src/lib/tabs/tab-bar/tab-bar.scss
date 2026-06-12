@@ -36,8 +36,8 @@
   @include slotted-base;
 }
 
-::slotted([selected]) {
-  @include slotted-selected;
+::slotted(:state(active)) {
+  @include slotted-active;
 }
 
 forge-icon-button {
@@ -52,10 +52,8 @@ forge-icon-button {
 // Vertical
 //
 
-:host([vertical]) {
-  .forge-tab-bar {
-    @include container-vertical;
-  }
+.forge-tab-bar.vertical {
+  @include container-vertical;
 
   .scroll-container {
     @include vertical;
@@ -70,14 +68,11 @@ forge-icon-button {
 // Inverted
 //
 
-:host([inverted]:not([vertical])) {
-  .forge-tab-bar {
+.forge-tab-bar.inverted {
+  &:not(.vertical) {
     @include inverted;
   }
-}
-
-:host([inverted][vertical]) {
-  .forge-tab-bar {
+  &.vertical {
     @include vertical-inverted;
   }
 }
@@ -86,12 +81,12 @@ forge-icon-button {
 // Clustered
 //
 
-:host([clustered]) {
-  .forge-tab-bar {
-    @include override(justify, flex-start, value);
-    @include override(stretch, 0, value);
-  }
+.forge-tab-bar.clustered {
+  @include override(justify, flex-start, value);
+  @include override(stretch, 0, value);
 }
+
+// TODO: `clustered is a boolean attribute/property -- is anyone actually setting a value to it? If not, remove these. If so, change the property.
 
 :host([clustered='start']) {
   .forge-tab-bar {
@@ -112,10 +107,35 @@ forge-icon-button {
 }
 
 //
-// App Bar Theme
+// Scroll Buttons
+//
+.forge-tab-bar {
+  .scroll-button {
+    &-previous:not([disabled]) {
+      @include enabled-scroll-button(inline-end);
+    }
+    &-next:not([disabled]) {
+      @include enabled-scroll-button(inline-start);
+    }
+  }
+
+  &.vertical {
+    .scroll-button {
+      &-previous:not([disabled]) {
+        @include enabled-scroll-button(block-end);
+      }
+      &-next:not([disabled]) {
+        @include enabled-scroll-button(block-start);
+      }
+    }
+  }
+}
+
+//
+// App Bar Theme`
 //
 
-:host([theme='app-bar']) {
+.forge-tab-bar.app-bar {
   @include tab.provide-theme(
     (
       active-color: #{app-bar.token(theme-foreground)},
