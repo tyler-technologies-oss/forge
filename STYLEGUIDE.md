@@ -68,9 +68,9 @@ of Google. The advice here is specifically useful for people authoring code they
 intend to import into Google, but otherwise may not apply in your external
 environment.
 
-## Introduction (https://google.github.io/styleguide/tsguide.html#introduction)
+## Introduction
 
-### Terminology notes (https://google.github.io/styleguide/tsguide.html#terminology-notes)
+### Terminology notes
 
 This Style Guide uses [RFC 2119](https://tools.ietf.org/html/rfc2119)
 terminology when using the phrases _must_, _must not_, _should_, _should not_,
@@ -78,34 +78,34 @@ and _may_. The terms _prefer_ and _avoid_ correspond to _should_ and _should_
 _not_, respectively. Imperative and declarative statements are prescriptive and
 correspond to _must_.
 
-### Guide notes (https://google.github.io/styleguide/tsguide.html#guide-notes)
+### Guide notes
 
 All examples given are **non-normative** and serve only to illustrate the
 normative language of the style guide. That is, while the examples are in Google
 Style, they may not illustrate the _only_ stylish way to represent the code.
 Optional formatting choices made in examples must not be enforced as rules.
 
-## Source file basics (https://google.github.io/styleguide/tsguide.html#source-file-basics)
+## Source file basics
 
-### File encoding: UTF-8 (https://google.github.io/styleguide/tsguide.html#file-encoding-utf-8)
+### File encoding: UTF-8
 
 Source files are encoded in **UTF-8**.
 
-#### Whitespace characters (https://google.github.io/styleguide/tsguide.html#whitespace-characters)
+#### Whitespace characters
 
 Aside from the line terminator sequence, the ASCII horizontal space character
 (0x20) is the only whitespace character that appears anywhere in a source file.
 This implies that all other whitespace characters in string literals are
 escaped.
 
-#### Special escape sequences (https://google.github.io/styleguide/tsguide.html#special-escape-sequences)
+#### Special escape sequences
 
 For any character that has a special escape sequence (`\'`, `\"`, `\\`, `\b`,
 `\f`, `\n`, `\r`, `\t`, `\v`), that sequence is used rather than the
 corresponding numeric escape (e.g `\x0a`, `\u000a`, or `\u{a}`). Legacy octal
 escapes are never used.
 
-#### Non-ASCII characters (https://google.github.io/styleguide/tsguide.html#non-ascii-characters)
+#### Non-ASCII characters
 
 For the remaining non-ASCII characters, use the actual Unicode character (e.g.
 `∞`). For non-printable characters, the equivalent hex or Unicode escapes (e.g.
@@ -127,7 +127,7 @@ const units = '\u03bcs'; // Greek letter mu, 's'
 const output = '\ufeff' + content;
 ```
 
-## Source file structure (https://google.github.io/styleguide/tsguide.html#source-file-structure)
+## Source file structure
 
 Files consist of the following, **in order**:
 
@@ -138,12 +138,12 @@ Files consist of the following, **in order**:
 
 **Exactly one blank line** separates each section that is present.
 
-### Copyright information (https://google.github.io/styleguide/tsguide.html#file-copyright)
+### Copyright information
 
 If license or copyright information is necessary in a file, add it in a JSDoc at
 the top of the file.
 
-### `@fileoverview` JSDoc (https://google.github.io/styleguide/tsguide.html#fileoverview)
+### `@fileoverview` JSDoc
 
 A file may have a top-level `@fileoverview` JSDoc. If present, it may provide a
 description of the file's content, its uses, or information about its
@@ -158,7 +158,7 @@ Example:
  */
 ```
 
-### Imports (https://google.github.io/styleguide/tsguide.html#imports)
+### Imports
 
 There are four variants of import statements in ES6 and TypeScript:
 
@@ -182,7 +182,7 @@ import 'jasmine';
 import '@polymer/paper-button';
 ```
 
-#### Import paths (https://google.github.io/styleguide/tsguide.html#import-paths)
+#### Import paths
 
 TypeScript code _must_ use paths to import other TypeScript code. Paths _may_ be
 relative, i.e. starting with `.` or `..`,
@@ -202,7 +202,7 @@ import { Symbol2 } from '../parent/file';
 import { Symbol3 } from './sibling';
 ```
 
-#### Namespace versus named imports (https://google.github.io/styleguide/tsguide.html#namespace-versus-named-imports)
+#### Namespace versus named imports
 
 Both namespace and named imports can be used.
 
@@ -274,7 +274,7 @@ import {Foo, Bar} from './foo.proto';
 function copyFooBar(foo: Foo, bar: Bar) {...}
 ```
 
-#### Renaming imports (https://google.github.io/styleguide/tsguide.html#renaming-imports)
+#### Renaming imports
 
 Code _should_ fix name collisions by using a namespace import or renaming the
 exports themselves. Code _may_ rename imports (`import {SomeThing as
@@ -288,7 +288,7 @@ Three examples where renaming can be helpful:
    improve code clarity. For example, when using RxJS the `from` function might
    be more readable when renamed to `observableFrom`.
 
-### Exports (https://google.github.io/styleguide/tsguide.html#exports)
+### Exports
 
 Use named exports in all code:
 
@@ -364,13 +364,13 @@ export class Foo {
 }
 ```
 
-#### Export visibility (https://google.github.io/styleguide/tsguide.html#export-visibility)
+#### Export visibility
 
 TypeScript does not support restricting the visibility for exported symbols.
 Only export symbols that are used outside of the module. Generally minimize the
 exported API surface of modules.
 
-#### Mutable exports (https://google.github.io/styleguide/tsguide.html#mutable-exports)
+#### Mutable exports
 
 Regardless of technical support, mutable exports can create hard to understand
 and debug code, in particular with re-exports across multiple modules. One way
@@ -411,7 +411,7 @@ function pickApi() {
 export const SomeApi = pickApi();
 ```
 
-#### Container classes (https://google.github.io/styleguide/tsguide.html#container-classes)
+#### Container classes
 
 Do not create container classes with static methods or properties for the sake
 of namespacing.
@@ -434,9 +434,9 @@ export function bar() {
 }
 ```
 
-### Import and export type (https://google.github.io/styleguide/tsguide.html#import-export-type)
+### Import and export type
 
-#### Import type (https://google.github.io/styleguide/tsguide.html#import-type)
+#### Import type
 
 You may use `import type {...}` when you use the imported symbol only as a type.
 Use regular imports for values:
@@ -464,7 +464,7 @@ The TypeScript compiler can run in 2 modes:
 Note: If you need to force a runtime load for side effects, use `import '...';`.
 See
 
-#### Export type (https://google.github.io/styleguide/tsguide.html#export-type)
+#### Export type
 
 Use `export type` when re-exporting a type, e.g.:
 
@@ -485,7 +485,7 @@ vs value usages of an API is to actually split the symbols into e.g.
 `UserService` and `AjaxUserService`. This is less error prone and also better
 communicates intent.
 
-#### Use modules not namespaces (https://google.github.io/styleguide/tsguide.html#use-modules-not-namespaces)
+#### Use modules not namespaces
 
 TypeScript supports two methods to organize code: _namespaces_ and _modules_,
 but namespaces are disallowed. That
@@ -516,7 +516,7 @@ import x = require('mydep');
 > the `module` keyword in the form `module Foo { ... }`. Don't use that either.
 > Always use ES6 imports.
 
-## Language features (https://google.github.io/styleguide/tsguide.html#language-features)
+## Language features
 
 This section delineates which features may or may not be used, and any
 additional constraints on their use.
@@ -524,9 +524,9 @@ additional constraints on their use.
 Language features which are not discussed in this style guide _may_ be used with
 no recommendations of their usage.
 
-### Local variable declarations (https://google.github.io/styleguide/tsguide.html#local-variable-declarations)
+### Local variable declarations
 
-#### Use const and let (https://google.github.io/styleguide/tsguide.html#use-const-and-let)
+#### Use const and let
 
 Always use `const` or `let` to declare variables. Use `const` by default, unless
 a variable needs to be reassigned. Never use `var`.
@@ -546,14 +546,14 @@ var foo = someValue; // Don't use - var scoping is complex and causes bugs.
 
 Variables _must not_ be used before their declaration.
 
-#### One variable per declaration (https://google.github.io/styleguide/tsguide.html#one-variable-per-declaration)
+#### One variable per declaration
 
 Every local variable declaration declares only one variable: declarations such
 as `let a = 1, b = 2;` are not used.
 
-### Array literals (https://google.github.io/styleguide/tsguide.html#array-literals)
+### Array literals
 
-#### Do not use the `Array` constructor (https://google.github.io/styleguide/tsguide.html#array-constructor)
+#### Do not use the `Array` constructor
 
 _Do not_ use the `Array()` constructor, with or without `new`. It has confusing
 and contradictory usage:
@@ -578,12 +578,12 @@ c.length = 2;
 Array.from<number>({ length: 5 }).fill(0);
 ```
 
-#### Do not define properties on arrays (https://google.github.io/styleguide/tsguide.html#do-not-define-properties-on-arrays)
+#### Do not define properties on arrays
 
 Do not define or use non-numeric properties on an array (other than `length`).
 Use a `Map` (or `Object`) instead.
 
-#### Using spread syntax (https://google.github.io/styleguide/tsguide.html#array-spread-syntax)
+#### Using spread syntax
 
 Using spread syntax `[...foo];` is a convenient shorthand for shallow-copying or
 concatenating iterables.
@@ -628,7 +628,7 @@ const fooStrings = ['a', 'b', 'c'];
 const ids = [...fooStrings, 'd', 'e'];
 ```
 
-#### Array destructuring (https://google.github.io/styleguide/tsguide.html#array-destructuring)
+#### Array destructuring
 
 Array literals may be used on the left-hand side of an assignment to perform
 destructuring (such as when unpacking multiple values from a single array or
@@ -658,14 +658,14 @@ Tip: For (un)packing multiple values into a function’s parameter or return,
 prefer object destructuring to array destructuring when possible, as it allows
 naming the individual elements and specifying a different type for each.
 
-### Object literals (https://google.github.io/styleguide/tsguide.html#object-literals)
+### Object literals
 
-#### Do not use the `Object` constructor (https://google.github.io/styleguide/tsguide.html#object-constructor)
+#### Do not use the `Object` constructor
 
 The `Object` constructor is disallowed. Use an object literal (`{}` or `{a: 0,
 b: 1, c: 2}`) instead.
 
-#### Iterating objects (https://google.github.io/styleguide/tsguide.html#iterating-objects)
+#### Iterating objects
 
 Iterating objects with `for (... in ...)` is error prone. It will include
 enumerable properties from the prototype chain.
@@ -696,7 +696,7 @@ for (const [key, value] of Object.entries(someObj)) {
 }
 ```
 
-#### Using spread syntax (https://google.github.io/styleguide/tsguide.html#object-spread-syntax)
+#### Using spread syntax
 
 Using spread syntax `{...bar}` is a convenient shorthand for creating a shallow
 copy of an object. When using spread syntax in object initialization, later
@@ -742,7 +742,7 @@ const foo = shouldUseFoo ? { num: 7 } : {};
 const bar = { num: 5, ...foo };
 ```
 
-#### Computed property names (https://google.github.io/styleguide/tsguide.html#computed-property-names)
+#### Computed property names
 
 Computed property names (e.g. `{['key' + foo()]: 42}`) are allowed, and are
 considered dict-style (quoted) keys (i.e., must not be mixed with non-quoted
@@ -750,7 +750,7 @@ keys) unless the computed property is a
 [symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol)
 (e.g. `[Symbol.iterator]`).
 
-#### Object destructuring (https://google.github.io/styleguide/tsguide.html#object-destructuring)
+#### Object destructuring
 
 Object destructuring patterns may be used on the left-hand side of an assignment
 to perform destructuring and unpack multiple values from a single object.
@@ -784,9 +784,9 @@ function nestedTooDeeply({ x: { num, str } }: { x: Options }) {}
 function nontrivialDefault({ num, str }: Options = { num: 42, str: 'default' }) {}
 ```
 
-### Classes (https://google.github.io/styleguide/tsguide.html#classes)
+### Classes
 
-#### Class declarations (https://google.github.io/styleguide/tsguide.html#class-declarations)
+#### Class declarations
 
 Class declarations _must not_ be terminated with semicolons:
 
@@ -836,7 +836,7 @@ class Foo {
 }
 ```
 
-#### Class method declarations (https://google.github.io/styleguide/tsguide.html#class-method-declarations)
+#### Class method declarations
 
 Class method declarations _must not_ use a semicolon to separate individual
 method declarations:
@@ -891,7 +891,7 @@ visible side effects.
 Tip: Beware, in particular, of calling other methods from toString, since
 exceptional conditions could lead to infinite loops.
 
-#### Static methods (https://google.github.io/styleguide/tsguide.html#static-methods)
+#### Static methods
 
 ##### Avoid private static methods
 
@@ -965,7 +965,7 @@ they can be overridden - this feature is not commonly used.
 This code also encourages an anti-pattern of having substantial static state,
 which causes problems with testability.
 
-#### Constructors (https://google.github.io/styleguide/tsguide.html#constructors)
+#### Constructors
 
 Constructor calls _must_ use parentheses, even when no arguments are passed:
 
@@ -1046,7 +1046,7 @@ class Foo {
 }
 ```
 
-#### Class members (https://google.github.io/styleguide/tsguide.html#class-members)
+#### Class members
 
 ##### No \#private fields
 
@@ -1239,7 +1239,7 @@ Tip: be careful of using any other built-in symbols (e.g.
 `Symbol.isConcatSpreadable`) as they are not polyfilled by the compiler and will
 therefore not work in older browsers.
 
-#### Visibility (https://google.github.io/styleguide/tsguide.html#visibility)
+#### Visibility
 
 Restricting visibility of properties, methods, and entire types helps with
 keeping code decoupled.
@@ -1270,7 +1270,7 @@ class Foo {
 
 See also [export visibility](https://google.github.io/styleguide/tsguide.html#export-visibility).
 
-#### Disallowed class patterns (https://google.github.io/styleguide/tsguide.html#disallowed-class-patterns)
+#### Disallowed class patterns
 
 ##### Do not manipulate `prototype`s directly
 
@@ -1282,9 +1282,9 @@ objects are explicitly forbidden.
 **Exception**: Framework code (such as Polymer, or Angular) may need to use `prototype`s, and should not resort
 to even-worse workarounds to avoid doing so.
 
-### Functions (https://google.github.io/styleguide/tsguide.html#functions)
+### Functions
 
-#### Terminology (https://google.github.io/styleguide/tsguide.html#terminology)
+#### Terminology
 
 There are many different types of functions, with subtle distinctions between
 them. This guide uses the following terminology, which aligns with
@@ -1300,7 +1300,7 @@ them. This guide uses the following terminology, which aligns with
 
 Methods and classes/constructors are not covered in this section.
 
-#### Prefer function declarations for named functions (https://google.github.io/styleguide/tsguide.html#function-declarations)
+#### Prefer function declarations for named functions
 
 Prefer function declarations over arrow functions or function expressions when
 defining named functions.
@@ -1326,13 +1326,13 @@ interface SearchFunction {
 const fooSearch: SearchFunction = (source, subString) => { ... };
 ```
 
-#### Nested functions (https://google.github.io/styleguide/tsguide.html#nested-functions)
+#### Nested functions
 
 Functions nested within other methods or functions _may_ use function
 declarations or arrow functions, as appropriate. In method bodies in particular,
 arrow functions are preferred because they have access to the outer `this`.
 
-#### Do not use function expressions (https://google.github.io/styleguide/tsguide.html#function-expressions)
+#### Do not use function expressions
 
 Do not use function expressions. Use arrow functions instead.
 
@@ -1350,7 +1350,7 @@ bar(function() { ... })
 dynamically rebind `this` (but this is [discouraged](https://google.github.io/styleguide/tsguide.html#rebinding-this)), or for
 generator functions (which do not have an arrow syntax).
 
-#### Arrow function bodies (https://google.github.io/styleguide/tsguide.html#arrow-function-bodies)
+#### Arrow function bodies
 
 Use arrow functions with concise bodies (i.e. expressions) or block bodies as
 appropriate.
@@ -1407,7 +1407,7 @@ myPromise.then(v => void console.log(v));
 Tip: The `void` operator can be used to ensure an arrow function with an
 expression body returns `undefined` when the result is unused.
 
-#### Rebinding `this` (https://google.github.io/styleguide/tsguide.html#rebinding-this)
+#### Rebinding `this`
 
 Function expressions and function declarations _must not_ use `this` unless they
 specifically exist to rebind the `this` pointer. Rebinding `this` can in most
@@ -1437,7 +1437,7 @@ document.body.onclick = setTextFn.bind(null, document.body);
 Prefer arrow functions over other approaches to binding `this`, such as
 `f.bind(this)`, `goog.bind(f, this)`, or `const self = this`.
 
-#### Prefer passing arrow functions as callbacks (https://google.github.io/styleguide/tsguide.html#functions-as-callbacks)
+#### Prefer passing arrow functions as callbacks
 
 Callbacks can be invoked with unexpected arguments that can pass a type check
 but still result in logical errors.
@@ -1469,7 +1469,7 @@ function dayFilter(element: string | null | undefined) {
 const days = ['tuesday', undefined, 'juice', 'wednesday'].filter(dayFilter);
 ```
 
-#### Arrow functions as properties (https://google.github.io/styleguide/tsguide.html#arrow-functions-as-properties)
+#### Arrow functions as properties
 
 Classes usually _should not_ contain properties initialized to arrow functions.
 Arrow function properties require the calling function to understand that the
@@ -1526,7 +1526,7 @@ class DelayHandler {
 }
 ```
 
-#### Event handlers (https://google.github.io/styleguide/tsguide.html#event-handlers)
+#### Event handlers
 
 Event handlers _may_ use arrow functions when there is no need to uninstall the
 handler (for example, if the event is emitted by the class itself). If the
@@ -1577,7 +1577,7 @@ class Component {
 }
 ```
 
-#### Parameter initializers (https://google.github.io/styleguide/tsguide.html#parameter-initializers)
+#### Parameter initializers
 
 Optional function parameters _may_ be given a default initializer to use when
 the argument is omitted. Initializers _must not_ have any observable side
@@ -1606,7 +1606,7 @@ Use default parameters sparingly. Prefer
 there are more than a small handful of optional parameters that do not have a
 natural order.
 
-#### Prefer rest and spread when appropriate (https://google.github.io/styleguide/tsguide.html#rest-and-spread)
+#### Prefer rest and spread when appropriate
 
 Use a _rest_ parameter instead of accessing `arguments`. Never name a local
 variable or parameter `arguments`, which confusingly shadows the built-in name.
@@ -1617,7 +1617,7 @@ function variadic(array: string[], ...numbers: number[]) {}
 
 Use function spread syntax instead of `Function.prototype.apply`.
 
-#### Formatting functions (https://google.github.io/styleguide/tsguide.html#formatting-functions)
+#### Formatting functions
 
 Blank lines at the start or end of the function body are not allowed.
 
@@ -1638,7 +1638,7 @@ function myFunction(...elements: number[]) {}
 myFunction(...array, ...iterable, ...generator());
 ```
 
-### this (https://google.github.io/styleguide/tsguide.html#features-this)
+### this
 
 Only use `this` in class constructors and methods, functions that have an
 explicit `this` type declared (e.g. `function func(this: ThisType, ...)`), or in
@@ -1651,11 +1651,11 @@ target of an event, or unnecessarily `call()`ed or `apply()`ed functions.
 this.alert('Hello');
 ```
 
-### Interfaces (https://google.github.io/styleguide/tsguide.html#interfaces)
+### Interfaces
 
-### Primitive literals (https://google.github.io/styleguide/tsguide.html#primitive-literals)
+### Primitive literals
 
-#### String literals (https://google.github.io/styleguide/tsguide.html#string-literals)
+#### String literals
 
 ##### Use single quotes
 
@@ -1711,14 +1711,14 @@ ${a} / ${b} = ${a / b}`;
 }
 ```
 
-#### Number literals (https://google.github.io/styleguide/tsguide.html#number-literals)
+#### Number literals
 
 Numbers may be specified in decimal, hex, octal, or binary. Use exactly `0x`,
 `0o`, and `0b` prefixes, with lowercase letters, for hex, octal, and binary,
 respectively. Never include a leading zero unless it is immediately followed by
 `x`, `o`, or `b`.
 
-#### Type coercion (https://google.github.io/styleguide/tsguide.html#type-coercion)
+#### Type coercion
 
 TypeScript code _may_ use the `String()` and `Boolean()` (note: no `new`!)
 functions, string template literals, or `!!` to coerce types.
@@ -1889,9 +1889,9 @@ if (arr.length > 0) {...}
 if (arr.length) {...}
 ```
 
-### Control structures (https://google.github.io/styleguide/tsguide.html#control-structures)
+### Control structures
 
-#### Control flow statements and blocks (https://google.github.io/styleguide/tsguide.html#control-flow-statements-blocks)
+#### Control flow statements and blocks
 
 Control flow statements (`if`, `else`, `for`, `do`, `while`, etc) always use
 braced blocks for the containing code, even if the body contains only a single
@@ -1999,7 +1999,7 @@ for (const [key, value] of Object.entries(obj)) {
 }
 ```
 
-#### Grouping parentheses (https://google.github.io/styleguide/tsguide.html#grouping-parentheses)
+#### Grouping parentheses
 
 Optional grouping parentheses are omitted only when the author and reviewer
 agree that there is no reasonable chance that the code will be misinterpreted
@@ -2010,7 +2010,7 @@ memorized.
 Do not use unnecessary parentheses around the entire expression following
 `delete`, `typeof`, `void`, `return`, `throw`, `case`, `in`, `of`, or `yield`.
 
-#### Exception handling (https://google.github.io/styleguide/tsguide.html#exception-handling)
+#### Exception handling
 
 Exceptions are an important part of the language and should be used whenever
 exceptional cases occur.
@@ -2138,7 +2138,7 @@ try {
 Tip: Unlike in some other languages, patterns like the above simply don’t work
 since this will catch the error thrown by `fail`. Use `assertThrows()` instead.
 
-#### Switch statements (https://google.github.io/styleguide/tsguide.html#switch-statements)
+#### Switch statements
 
 All `switch` statements _must_ contain a `default` statement group, even if it
 contains no code. The `default` statement group must be last.
@@ -2179,7 +2179,7 @@ switch (x) {
 }
 ```
 
-#### Equality checks (https://google.github.io/styleguide/tsguide.html#equality-checks)
+#### Equality checks
 
 Always use triple equals (`===`) and not equals (`!==`). The double equality
 operators cause error prone type coercions that are hard to understand and
@@ -2207,7 +2207,7 @@ if (foo == null) {
 }
 ```
 
-#### Type and non-nullability assertions (https://google.github.io/styleguide/tsguide.html#type-and-non-nullability-assertions)
+#### Type and non-nullability assertions
 
 Type assertions (`x as SomeType`) and non-nullability assertions (`y!`) are
 unsafe. Both only silence the TypeScript compiler, but do not insert any runtime
@@ -2334,7 +2334,7 @@ function func(): Foo {
 }
 ```
 
-#### Keep try blocks focused (https://google.github.io/styleguide/tsguide.html#keep-try-blocks-focused)
+#### Keep try blocks focused
 
 Limit the amount of code inside a try block, if this can be done without hurting
 readability.
@@ -2366,7 +2366,7 @@ temporary variable.
 **Exception:** There may be performance issues if try blocks are inside a loop.
 Widening try blocks to cover a whole loop is ok.
 
-### Decorators (https://google.github.io/styleguide/tsguide.html#decorators)
+### Decorators
 
 Decorators are syntax with an `@` prefix, like `@MyDecorator`.
 
@@ -2396,9 +2396,9 @@ class MyComp {
 }
 ```
 
-### Disallowed features (https://google.github.io/styleguide/tsguide.html#disallowed-features)
+### Disallowed features
 
-#### Wrapper objects for primitive types (https://google.github.io/styleguide/tsguide.html#primitive-types-wrapper-classes)
+#### Wrapper objects for primitive types
 
 TypeScript code _must not_ instantiate the wrapper classes for the primitive
 types `String`, `Boolean`, and `Number`. Wrapper classes have surprising
@@ -2414,14 +2414,14 @@ The wrappers may be called as functions for coercing (which is preferred over
 using `+` or concatenating the empty string) or creating symbols. See
 [type coercion](https://google.github.io/styleguide/tsguide.html#type-coercion) for more information.
 
-#### Automatic Semicolon Insertion (https://google.github.io/styleguide/tsguide.html#automatic-semicolon-insertion)
+#### Automatic Semicolon Insertion
 
 Do not rely on Automatic Semicolon Insertion (ASI). Explicitly end all
 statements using a semicolon. This prevents bugs due to incorrect semicolon
 insertions and ensures compatibility with tools with limited ASI support (e.g.
 clang-format).
 
-#### Const enums (https://google.github.io/styleguide/tsguide.html#enums)
+#### Const enums
 
 Code _must not_ use `const enum`; use plain `enum` instead.
 
@@ -2431,7 +2431,7 @@ TypeScript enums already cannot be mutated; `const enum` is a separate language
 feature related to optimization that makes the enum invisible to
 JavaScript users of the module.
 
-#### Debugger statements (https://google.github.io/styleguide/tsguide.html#debugger-statements)
+#### Debugger statements
 
 Debugger statements _must not_ be included in production code.
 
@@ -2441,19 +2441,19 @@ function debugMe() {
 }
 ```
 
-#### `with` (https://google.github.io/styleguide/tsguide.html#diallowed-features-with)
+#### `with`
 
 Do not use the `with` keyword. It makes your code harder to understand and
 [has been banned in strict mode since ES5](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with).
 
-#### Dynamic code evaluation (https://google.github.io/styleguide/tsguide.html#dynamic-code-evaluation)
+#### Dynamic code evaluation
 
 Do not use `eval` or the `Function(...string)` constructor (except for code
 loaders). These features are potentially dangerous and simply do not work in
 environments using strict
 [Content Security Policies](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP).
 
-#### Non-standard features (https://google.github.io/styleguide/tsguide.html#non-standard-features)
+#### Non-standard features
 
 Do not use non-standard ECMAScript or Web Platform features.
 
@@ -2479,7 +2479,7 @@ when considering an API surface that is proprietary and only implemented in some
 browsers; consider whether there is a common library that can abstract this API
 surface away for you.
 
-#### Modifying builtin objects (https://google.github.io/styleguide/tsguide.html#modifying-builtin-objects)
+#### Modifying builtin objects
 
 Never modify builtin types, either by adding methods to their constructors or to
 their prototypes. Avoid depending on libraries that do
@@ -2488,14 +2488,14 @@ this.
 Do not add symbols to the global object unless absolutely necessary (e.g.
 required by a third-party API).
 
-## Naming (https://google.github.io/styleguide/tsguide.html#naming)
+## Naming
 
-### Identifiers (https://google.github.io/styleguide/tsguide.html#identifiers)
+### Identifiers
 
 Identifiers _must_ use only ASCII letters, digits, underscores (for constants
 and structured test method names), and (rarely) the '$' sign.
 
-#### Naming style (https://google.github.io/styleguide/tsguide.html#naming-style)
+#### Naming style
 
 TypeScript expresses information in types, so names _should not_ be decorated
 with information that is included in the type. (See also
@@ -2523,7 +2523,7 @@ TodoItemStorage` if the interface expresses the format used for
   Judgement on whether this is a useful convention is left up to individual
   teams, but _should_ be consistent within projects.
 
-#### Descriptive names (https://google.github.io/styleguide/tsguide.html#descriptive-names)
+#### Descriptive names
 
 Names _must_ be descriptive and clear to a new reader. Do not use abbreviations
 that are ambiguous or unfamiliar to readers outside your project, and do not
@@ -2553,19 +2553,19 @@ kSecondsPerDay; // Do not use Hungarian notation.
 customerID; // Incorrect camelcase of "ID".
 ```
 
-#### Camel case (https://google.github.io/styleguide/tsguide.html#camel-case)
+#### Camel case
 
 Treat abbreviations like acronyms in names as whole words, i.e. use
 `loadHttpUrl`, not ~~`loadHTTPURL`~~, unless required by a platform name (e.g.
 `XMLHttpRequest`).
 
-#### Dollar sign (https://google.github.io/styleguide/tsguide.html#identifiers-dollar-sign)
+#### Dollar sign
 
 Identifiers _should not_ generally use `$`, except when required by naming
 conventions for third party frameworks. [See above](https://google.github.io/styleguide/tsguide.html#naming-style) for more on
 using `$` with `Observable` values.
 
-### Rules by identifier type (https://google.github.io/styleguide/tsguide.html#naming-rules-by-identifier-type)
+### Rules by identifier type
 
 Most identifier names should follow the casing in the table below, based on the
 identifier's type.
@@ -2577,17 +2577,17 @@ identifier's type.
 | `CONSTANT_CASE`  | global constant values, including enum values. See<br>[Constants](https://google.github.io/styleguide/tsguide.html#identifiers-constants) below. |
 | `#ident`         | private identifiers are never used.                                                                                                              |
 
-#### Type parameters (https://google.github.io/styleguide/tsguide.html#identifiers-type-parameters)
+#### Type parameters
 
 Type parameters, like in `Array<T>`, _may_ use a single upper case character
 (`T`) or `UpperCamelCase`.
 
-#### Test names (https://google.github.io/styleguide/tsguide.html#identifiers-test-names)
+#### Test names
 
 Test method names inxUnit-style test frameworks _may_ be structured with `_` separators, e.g.
 `testX_whenY_doesZ()`.
 
-#### `_` prefix/suffix (https://google.github.io/styleguide/tsguide.html#identifiers-underscore-prefix-suffix)
+#### `_` prefix/suffix
 
 Identifiers must not use `_` as a prefix or suffix.
 
@@ -2602,7 +2602,7 @@ indicate a parameter is unused).
 > const [a, , b] = [1, 5, 10]; // a <- 1, b <- 10
 > ```
 
-#### Imports (https://google.github.io/styleguide/tsguide.html#identifiers-imports)
+#### Imports
 
 Module namespace imports are `lowerCamelCase` while files are `snake_case`,
 which means that imports correctly will not match in casing style, such as
@@ -2619,7 +2619,7 @@ are:
 - [jquery](https://jquery.com/), using the `$` prefix
 - [threejs](https://threejs.org/), using the `THREE` prefix
 
-#### Constants (https://google.github.io/styleguide/tsguide.html#identifiers-constants)
+#### Constants
 
 **Immutable**: `CONSTANT_CASE` indicates that a value is _intended_ to not be
 changed, and _may_ be used for values that can technically be modified (i.e.
@@ -2656,7 +2656,7 @@ in a function) then it _must_ use `lowerCamelCase`.
 If a value is an arrow function that implements an interface, then it _may_ be
 declared `lowerCamelCase`.
 
-#### Aliases (https://google.github.io/styleguide/tsguide.html#aliases)
+#### Aliases
 
 When creating a local-scope alias of an existing symbol, use the format of the
 existing identifier. The local alias _must_ match the existing naming and format
@@ -2677,9 +2677,9 @@ class Teapot {
 }
 ```
 
-## Type system (https://google.github.io/styleguide/tsguide.html#type-system)
+## Type system
 
-### Type inference (https://google.github.io/styleguide/tsguide.html#type-inference)
+### Type inference
 
 Code _may_ rely on type inference as implemented by the TypeScript compiler for
 all type expressions (variables, fields, return types, etc).
@@ -2724,7 +2724,7 @@ const value: string[] = await rpc.getSomeValue().transform();
 
 Whether an annotation is required is decided by the code reviewer.
 
-#### Return types (https://google.github.io/styleguide/tsguide.html#return-types)
+#### Return types
 
 Whether to include return type annotations for functions and methods is up to
 the code author. Reviewers _may_ ask for annotations to clarify complex return
@@ -2738,7 +2738,7 @@ functions and methods:
 - Surface potential type errors faster in the future if there are code changes
   that change the return type of the function.
 
-### Undefined and null (https://google.github.io/styleguide/tsguide.html#undefined-and-null)
+### Undefined and null
 
 TypeScript supports `undefined` and `null` types. Nullable types can be
 constructed as a union type (`string|null`); similarly with `undefined`. There
@@ -2750,7 +2750,7 @@ JavaScript APIs use `undefined` (e.g. `Map.get`), while many DOM and Google APIs
 use `null` (e.g. `Element.getAttribute`), so the appropriate absent value
 depends on the context.
 
-#### Nullable/undefined type aliases (https://google.github.io/styleguide/tsguide.html#nullableundefined-type-aliases)
+#### Nullable/undefined type aliases
 
 Type aliases _must not_ include `|null` or `|undefined` in a union type.
 Nullable aliases typically indicate that null values are being passed around
@@ -2780,7 +2780,7 @@ class CoffeeService {
 }
 ```
 
-#### Prefer optional over `|undefined` (https://google.github.io/styleguide/tsguide.html#prefer-optional-over-undefined)
+#### Prefer optional over `|undefined`
 
 In addition, TypeScript supports a special construct for optional parameters and
 fields, using `?`:
@@ -2811,7 +2811,7 @@ class MyClass {
 }
 ```
 
-### Use structural types (https://google.github.io/styleguide/tsguide.html#use-structural-types)
+### Use structural types
 
 TypeScript's type system is structural, not nominal. That is, a value matches a
 type if it has at least all the properties the type requires and the properties'
@@ -2909,7 +2909,7 @@ makeSound(dog);
 makeSound(horse);
 ```
 
-### Prefer interfaces over type literal aliases (https://google.github.io/styleguide/tsguide.html#prefer-interfaces)
+### Prefer interfaces over type literal aliases
 
 TypeScript supports
 [type aliases](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-aliases)
@@ -2943,7 +2943,7 @@ That page quotes the TypeScript team lead: Honestly, my take is that it should
 really just be interfaces for anything that they can model. There is no benefit
 to type aliases when there are so many issues around display/perf.
 
-### `Array<T>` Type (https://google.github.io/styleguide/tsguide.html#arrayt-type)
+### `Array<T>` Type
 
 For simple types (containing just alphanumeric characters and dot), use the
 syntax sugar for arrays, `T[]` or `readonly T[]`, rather than the longer form
@@ -2983,7 +2983,7 @@ let i: readonly string[][];
 let j: (readonly string[])[];
 ```
 
-### Indexable types / index signatures (`{[key: string]: T}`) (https://google.github.io/styleguide/tsguide.html#indexable-key-string-type)
+### Indexable types / index signatures (`{[key: string]: T}`)
 
 In JavaScript, it's common to use an object as an associative array (aka map,
 hash, or dict). Such objects can be typed using an
@@ -3017,7 +3017,7 @@ with a defined set of keys. This is distinct from associative arrays in that the
 keys are statically known. See advice on that
 [below](https://google.github.io/styleguide/tsguide.html#mapped-conditional-types).
 
-### Mapped and conditional types (https://google.github.io/styleguide/tsguide.html#mapped-conditional-types)
+### Mapped and conditional types
 
 TypeScript's
 [mapped types](https://www.typescriptlang.org/docs/handbook/2/mapped-types.html)
@@ -3097,7 +3097,7 @@ Using interfaces here makes the grouping of properties explicit, improves IDE
 support, allows better optimization, and arguably makes the code easier to
 understand.
 
-### `any` Type (https://google.github.io/styleguide/tsguide.html#any)
+### `any` Type
 
 TypeScript's `any` type is a super and subtype of all other types, and allows
 dereferencing all properties. As such, `any` is dangerous - it can mask severe
@@ -3111,7 +3111,7 @@ consider one of:
 - [Use `unknown`](https://google.github.io/styleguide/tsguide.html#any-unknown)
 - [Suppress the lint warning and document why](https://google.github.io/styleguide/tsguide.html#any-suppress)
 
-#### Providing a more specific type (https://google.github.io/styleguide/tsguide.html#any-specific)
+#### Providing a more specific type
 
 Use interfaces , an
 inline object type, or a type alias:
@@ -3141,7 +3141,7 @@ function nicestElement<T>(items: T[]): T {
 }
 ```
 
-#### Using `unknown` over `any` (https://google.github.io/styleguide/tsguide.html#any-unknown)
+#### Using `unknown` over `any`
 
 The `any` type allows assignment into any other type and dereferencing any
 property off it. Often this behaviour is not necessary or desirable, and code
@@ -3163,7 +3163,7 @@ danger.whoops(); // This access is completely unchecked!
 To safely use `unknown` values, narrow the type using a
 [type guard](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types)
 
-#### Suppressing `any` lint warnings (https://google.github.io/styleguide/tsguide.html#any-suppress)
+#### Suppressing `any` lint warnings
 
 Sometimes using `any` is legitimate, for example in tests to construct a mock
 object. In such cases, add a comment that suppresses the lint warning, and
@@ -3184,7 +3184,7 @@ const mockBookService = {
 const component = new MyComponent(mockBookService, /* unused ShoppingCart */ null as any);
 ```
 
-### `{}` Type (https://google.github.io/styleguide/tsguide.html#empty-interface-type)
+### `{}` Type
 
 The `{}` type, also known as an _empty interface_ type, represents a interface
 with no properties. An empty interface type has no specified properties and
@@ -3220,7 +3220,7 @@ the following more-descriptive types:
   objects, but without any other assumptions about what properties may be
   available.
 
-### Tuple types (https://google.github.io/styleguide/tsguide.html#tuple-types)
+### Tuple types
 
 If you are tempted to create a Pair type, instead use a tuple type:
 
@@ -3263,7 +3263,7 @@ use(address.port);
 const {host, port} = splitHostPort(userAddress);
 ```
 
-### Wrapper types (https://google.github.io/styleguide/tsguide.html#wrapper-types)
+### Wrapper types
 
 There are a few types related to JavaScript primitives that _should not_ ever be
 used:
@@ -3278,22 +3278,22 @@ used:
 
 Further, never invoke the wrapper types as constructors (with `new`).
 
-### Return type only generics (https://google.github.io/styleguide/tsguide.html#return-type-only-generics)
+### Return type only generics
 
 Avoid creating APIs that have return type only generics. When working with
 existing APIs that have return type only generics always explicitly specify the
 generics.
 
-## Toolchain requirements (https://google.github.io/styleguide/tsguide.html#toolchain-requirements)
+## Toolchain requirements
 
 Google style requires using a number of tools in specific ways, outlined here.
 
-### TypeScript compiler (https://google.github.io/styleguide/tsguide.html#typescript-compiler)
+### TypeScript compiler
 
 All TypeScript files must pass type checking using the standard
 tool chain.
 
-#### @ts-ignore (https://google.github.io/styleguide/tsguide.html#ts-ignore)
+#### @ts-ignore
 
 Do not use `@ts-ignore` nor the variants `@ts-expect-error` or `@ts-nocheck`.
 
@@ -3317,7 +3317,7 @@ and suppress more serious errors. Consider one of:
 - Suppress the lint warning and document why, similar to
   [suppressing `any` lint warnings](https://google.github.io/styleguide/tsguide.html#any-suppress).
 
-### Conformance (https://google.github.io/styleguide/tsguide.html#conformance)
+### Conformance
 
 Google TypeScript includes several _conformance frameworks_,
 
@@ -3331,9 +3331,9 @@ globals, which could break the codebase) and security patterns (such as using
 Google-style TypeScript must abide by any applicable global or framework-local
 conformance rules.
 
-## Comments and documentation (https://google.github.io/styleguide/tsguide.html#comments-documentation)
+## Comments and documentation
 
-#### JSDoc versus comments (https://google.github.io/styleguide/tsguide.html#jsdoc-vs-comments)
+#### JSDoc versus comments
 
 There are two types of comments, JSDoc (`/** ... */`) and non-JSDoc ordinary
 comments (`// ...` or `/* ... */`).
@@ -3346,7 +3346,7 @@ comments (`// ...` or `/* ... */`).
 JSDoc comments are understood by tools (such as editors and documentation
 generators), while ordinary comments are only for other humans.
 
-#### Multi-line comments (https://google.github.io/styleguide/tsguide.html#multi-line-comments)
+#### Multi-line comments
 
 Multi-line comments are indented at the same level as the surrounding code. They
 _must_ use multiple single-line comments (`//`-style), not block comment style
@@ -3369,7 +3369,7 @@ _must_ use multiple single-line comments (`//`-style), not block comment style
 
 Comments are not enclosed in boxes drawn with asterisks or other characters.
 
-### JSDoc general form (https://google.github.io/styleguide/tsguide.html#jsdoc-general-form)
+### JSDoc general form
 
 The basic formatting of JSDoc comments is as seen in this example:
 
@@ -3395,7 +3395,7 @@ multi-line style with `/**` and `*/` on their own lines.
 Many tools extract metadata from JSDoc comments to perform code validation and
 optimization. As such, these comments _must_ be well-formed.
 
-### Markdown (https://google.github.io/styleguide/tsguide.html#jsdoc-markdown)
+### Markdown
 
 JSDoc is written in Markdown, though it _may_ include HTML when necessary.
 
@@ -3429,7 +3429,7 @@ Instead, write a Markdown list:
  */
 ```
 
-### JSDoc tags (https://google.github.io/styleguide/tsguide.html#jsdoc-tags)
+### JSDoc tags
 
 Google style allows a subset of JSDoc tags. Most tags must occupy their own line, with the tag at the beginning
 of the line.
@@ -3451,7 +3451,7 @@ function add(left: number, right: number) { ... }
 function add(left: number, right: number) { ... }
 ```
 
-### Line wrapping (https://google.github.io/styleguide/tsguide.html#jsdoc-line-wrapping)
+### Line wrapping
 
 Line-wrapped block tags are indented four spaces. Wrapped description text _may_
 be lined up with the description on previous lines, but this horizontal
@@ -3472,7 +3472,7 @@ exports.method = function (foo) {
 
 Do not indent when wrapping a `@desc` or `@fileoverview` description.
 
-### Document all top-level exports of modules (https://google.github.io/styleguide/tsguide.html#document-all-top-level-exports-of-modules)
+### Document all top-level exports of modules
 
 Use `/** JSDoc */` comments to communicate information to the users of your
 code. Avoid merely restating the property or parameter name. You _should_ also
@@ -3482,14 +3482,14 @@ not immediately obvious from their name, as judged by your reviewer.
 **Exception:** Symbols that are only exported to be consumed by tooling, such as
 @NgModule classes, do not require comments.
 
-### Class comments (https://google.github.io/styleguide/tsguide.html#jsdoc-class-comments)
+### Class comments
 
 JSDoc comments for classes should provide the reader with enough information to
 know how and when to use the class, as well as any additional considerations
 necessary to correctly use the class. Textual descriptions may be omitted on the
 constructor.
 
-### Method and function comments (https://google.github.io/styleguide/tsguide.html#method-and-function-comments)
+### Method and function comments
 
 Method, parameter, and return descriptions may be omitted if they are obvious
 from the rest of the method’s JSDoc or from the method name and type signature.
@@ -3498,7 +3498,7 @@ Method descriptions begin with a verb phrase that describes what the method
 does. This phrase is not an imperative sentence, but instead is written in the
 third person, as if there is an implied This method ... before it.
 
-### Parameter property comments (https://google.github.io/styleguide/tsguide.html#parameter-property-comments)
+### Parameter property comments
 
 A
 [parameter property](https://www.typescriptlang.org/docs/handbook/2/classes.html#parameter-properties)
@@ -3539,14 +3539,14 @@ class OrdinaryClass {
 }
 ```
 
-### JSDoc type annotations (https://google.github.io/styleguide/tsguide.html#jsdoc-type-annotations)
+### JSDoc type annotations
 
 JSDoc type annotations are redundant in TypeScript source code. Do not declare
 types in `@param` or `@return` blocks, do not write `@implements`, `@enum`,
 `@private`, `@override` etc. on code that uses the `implements`, `enum`,
 `private`, `override` etc. keywords.
 
-### Make comments that actually add information (https://google.github.io/styleguide/tsguide.html#redundant-comments)
+### Make comments that actually add information
 
 For non-exported symbols, sometimes the name and type of the function or
 parameter is enough. Code will _usually_ benefit from more documentation than
@@ -3571,7 +3571,7 @@ brew(amountLitres: number, logger: Logger) {
 }
 ```
 
-#### Comments when calling a function (https://google.github.io/styleguide/tsguide.html#comments-when-calling-a-function)
+#### Comments when calling a function
 
 “Parameter name” comments should be used whenever the method name and parameter
 value do not sufficiently convey the meaning of the parameter.
@@ -3595,7 +3595,7 @@ style within the file for consistency is acceptable.
 someFunction(obviousParam, true /* shouldRender */, 'hello' /* name */);
 ```
 
-### Place documentation prior to decorators (https://google.github.io/styleguide/tsguide.html#place-documentation-prior-to-decorators)
+### Place documentation prior to decorators
 
 When a class, method, or property have both decorators like `@Component` and
 JsDoc, please make sure to write the JsDoc before the decorator.
@@ -3622,9 +3622,9 @@ export class FooComponent {}
 export class FooComponent {}
 ```
 
-## Policies (https://google.github.io/styleguide/tsguide.html#policies)
+## Policies
 
-### Consistency (https://google.github.io/styleguide/tsguide.html#consistency)
+### Consistency
 
 For any style question that isn't settled definitively by this specification, do
 what the other code in the same file is already doing (be consistent). If that
@@ -3638,7 +3638,7 @@ the advice [below](https://google.github.io/styleguide/tsguide.html#reformatting
 done, then new code _should_ be as consistent as possible with existing code in
 the same file, but _must not_ violate the style guide.
 
-#### Reformatting existing code (https://google.github.io/styleguide/tsguide.html#reformatting-existing-code)
+#### Reformatting existing code
 
 You will occasionally encounter files in the codebase that are not in proper
 Google Style. These may have come from an acquisition, or may have been written
@@ -3657,13 +3657,13 @@ When updating the style of existing code, follow these guidelines.
    CL. If you find yourself making a lot of style changes that aren’t critical
    to the central focus of a CL, promote those changes to a separate CL.
 
-### Deprecation (https://google.github.io/styleguide/tsguide.html#deprecation)
+### Deprecation
 
 Mark deprecated methods, classes or interfaces with an `@deprecated` JSDoc
 annotation. A deprecation comment must include simple, clear directions for
 people to fix their call sites.
 
-### Generated code: mostly exempt (https://google.github.io/styleguide/tsguide.html#generated-code)
+### Generated code: mostly exempt
 
 Source code generated by the build process is not required to be in Google
 Style. However, any generated identifiers that will be referenced from
@@ -3671,7 +3671,7 @@ hand-written source code must follow the naming requirements. As a special
 exception, such identifiers are allowed to contain underscores, which may help
 to avoid conflicts with hand-written identifiers.
 
-#### Style guide goals (https://google.github.io/styleguide/tsguide.html#style-guide-goals)
+#### Style guide goals
 
 In general, engineers usually know best about what's needed in their code, so if
 there are multiple options and the choice is situation dependent, we should let
