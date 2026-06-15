@@ -2,64 +2,64 @@
 
 ## Table of Contents
 
-- [Introduction](https://google.github.io/styleguide/tsguide.html#introduction)
-- [Terminology notes](https://google.github.io/styleguide/tsguide.html#terminology-notes)
-- [Guide notes](https://google.github.io/styleguide/tsguide.html#guide-notes)
-- [Source file basics](https://google.github.io/styleguide/tsguide.html#source-file-basics)
-- [File encoding: UTF-8](https://google.github.io/styleguide/tsguide.html#file-encoding-utf-8)
-- [Source file structure](https://google.github.io/styleguide/tsguide.html#source-file-structure)
-- [Copyright information](https://google.github.io/styleguide/tsguide.html#file-copyright)
-- [@fileoverview JSDoc](https://google.github.io/styleguide/tsguide.html#fileoverview)
-- [Imports](https://google.github.io/styleguide/tsguide.html#imports)
-- [Exports](https://google.github.io/styleguide/tsguide.html#exports)
-- [Import and export type](https://google.github.io/styleguide/tsguide.html#import-export-type)
-- [Language features](https://google.github.io/styleguide/tsguide.html#language-features)
-- [Local variable declarations](https://google.github.io/styleguide/tsguide.html#local-variable-declarations)
-- [Array literals](https://google.github.io/styleguide/tsguide.html#array-literals)
-- [Object literals](https://google.github.io/styleguide/tsguide.html#object-literals)
-- [Classes](https://google.github.io/styleguide/tsguide.html#classes)
-- [Functions](https://google.github.io/styleguide/tsguide.html#functions)
-- [this](https://google.github.io/styleguide/tsguide.html#features-this)
-- [Interfaces](https://google.github.io/styleguide/tsguide.html#interfaces)
-- [Primitive literals](https://google.github.io/styleguide/tsguide.html#primitive-literals)
-- [Control structures](https://google.github.io/styleguide/tsguide.html#control-structures)
-- [Decorators](https://google.github.io/styleguide/tsguide.html#decorators)
-- [Disallowed features](https://google.github.io/styleguide/tsguide.html#disallowed-features)
-- [Naming](https://google.github.io/styleguide/tsguide.html#naming)
-- [Identifiers](https://google.github.io/styleguide/tsguide.html#identifiers)
-- [Rules by identifier type](https://google.github.io/styleguide/tsguide.html#naming-rules-by-identifier-type)
-- [Type system](https://google.github.io/styleguide/tsguide.html#type-system)
-- [Type inference](https://google.github.io/styleguide/tsguide.html#type-inference)
-- [Undefined and null](https://google.github.io/styleguide/tsguide.html#undefined-and-null)
-- [Use structural types](https://google.github.io/styleguide/tsguide.html#use-structural-types)
-- [Prefer interfaces over type literal aliases](https://google.github.io/styleguide/tsguide.html#prefer-interfaces)
-- [Array<T> Type](https://google.github.io/styleguide/tsguide.html#arrayt-type)
-- [Indexable types / index signatures ({\[key: string\]: T})](https://google.github.io/styleguide/tsguide.html#indexable-key-string-type)
-- [Mapped and conditional types](https://google.github.io/styleguide/tsguide.html#mapped-conditional-types)
-- [any Type](https://google.github.io/styleguide/tsguide.html#any)
-- [{} Type](https://google.github.io/styleguide/tsguide.html#empty-interface-type)
-- [Tuple types](https://google.github.io/styleguide/tsguide.html#tuple-types)
-- [Wrapper types](https://google.github.io/styleguide/tsguide.html#wrapper-types)
-- [Return type only generics](https://google.github.io/styleguide/tsguide.html#return-type-only-generics)
-- [Toolchain requirements](https://google.github.io/styleguide/tsguide.html#toolchain-requirements)
-- [TypeScript compiler](https://google.github.io/styleguide/tsguide.html#typescript-compiler)
-- [Conformance](https://google.github.io/styleguide/tsguide.html#conformance)
-- [Comments and documentation](https://google.github.io/styleguide/tsguide.html#comments-documentation)
-- [JSDoc general form](https://google.github.io/styleguide/tsguide.html#jsdoc-general-form)
-- [Markdown](https://google.github.io/styleguide/tsguide.html#jsdoc-markdown)
-- [JSDoc tags](https://google.github.io/styleguide/tsguide.html#jsdoc-tags)
-- [Line wrapping](https://google.github.io/styleguide/tsguide.html#jsdoc-line-wrapping)
-- [Document all top-level exports of modules](https://google.github.io/styleguide/tsguide.html#document-all-top-level-exports-of-modules)
-- [Class comments](https://google.github.io/styleguide/tsguide.html#jsdoc-class-comments)
-- [Method and function comments](https://google.github.io/styleguide/tsguide.html#method-and-function-comments)
-- [Parameter property comments](https://google.github.io/styleguide/tsguide.html#parameter-property-comments)
-- [JSDoc type annotations](https://google.github.io/styleguide/tsguide.html#jsdoc-type-annotations)
-- [Make comments that actually add information](https://google.github.io/styleguide/tsguide.html#redundant-comments)
-- [Place documentation prior to decorators](https://google.github.io/styleguide/tsguide.html#place-documentation-prior-to-decorators)
-- [Policies](https://google.github.io/styleguide/tsguide.html#policies)
-- [Consistency](https://google.github.io/styleguide/tsguide.html#consistency)
-- [Deprecation](https://google.github.io/styleguide/tsguide.html#deprecation)
-- [Generated code: mostly exempt](https://google.github.io/styleguide/tsguide.html#generated-code)
+- [Introduction](#introduction)
+- [Terminology notes](#terminology-notes)
+- [Guide notes](#guide-notes)
+- [Source file basics](#source-file-basics)
+- [File encoding: UTF-8](#file-encoding-utf-8)
+- [Source file structure](#source-file-structure)
+- [Copyright information](#copyright-information)
+- [@fileoverview JSDoc](#fileoverview-jsdoc)
+- [Imports](#imports)
+- [Exports](#exports)
+- [Import and export type](#import-and-export-type)
+- [Language features](#language-features)
+- [Local variable declarations](#local-variable-declarations)
+- [Array literals](#array-literals)
+- [Object literals](#object-literals)
+- [Classes](#classes)
+- [Functions](#functions)
+- [this](#this)
+- [Interfaces](#interfaces)
+- [Primitive literals](#primitive-literals)
+- [Control structures](#control-structures)
+- [Decorators](#decorators)
+- [Disallowed features](#disallowed-features)
+- [Naming](#naming)
+- [Identifiers](#identifiers)
+- [Rules by identifier type](#rules-by-identifier-type)
+- [Type system](#type-system)
+- [Type inference](#type-inference)
+- [Undefined and null](#undefined-and-null)
+- [Use structural types](#use-structural-types)
+- [Prefer interfaces over type literal aliases](#prefer-interfaces-over-type-literal-aliases)
+- [Array<T> Type](#arrayt-type)
+- [Indexable types / index signatures ({\[key: string\]: T})](#indexable-types--index-signatures-key-string-t)
+- [Mapped and conditional types](#mapped-and-conditional-types)
+- [any Type](#any-type)
+- [{} Type](#-type)
+- [Tuple types](#tuple-types)
+- [Wrapper types](#wrapper-types)
+- [Return type only generics](#return-type-only-generics)
+- [Toolchain requirements](#toolchain-requirements)
+- [TypeScript compiler](#typescript-compiler)
+- [Conformance](#conformance)
+- [Comments and documentation](#comments-and-documentation)
+- [JSDoc general form](#jsdoc-general-form)
+- [Markdown](#markdown)
+- [JSDoc tags](#jsdoc-tags)
+- [Line wrapping](#line-wrapping)
+- [Document all top-level exports of modules](#document-all-top-level-exports-of-modules)
+- [Class comments](#class-comments)
+- [Method and function comments](#method-and-function-comments)
+- [Parameter property comments](#parameter-property-comments)
+- [JSDoc type annotations](#jsdoc-type-annotations)
+- [Make comments that actually add information](#make-comments-that-actually-add-information)
+- [Place documentation prior to decorators](#place-documentation-prior-to-decorators)
+- [Policies](#policies)
+- [Consistency](#consistency)
+- [Deprecation](#deprecation)
+- [Generated code: mostly exempt](#generated-code-mostly-exempt)
 
 This guide is based on the internal Google TypeScript style guide, but it has
 been slightly adjusted to remove Google-internal sections. Google's internal
@@ -1048,31 +1048,51 @@ class Foo {
 
 #### Class members
 
-##### No \#private fields
+##### Prefer \#private fields
 
-Do not use private fields (also known as private identifiers):
+Use native JavaScript private fields (private identifiers with `#` prefix) for private class members:
 
 ```ts
 class Clazz {
   #ident = 1;
-}
-```
-
-Instead, use TypeScript's visibility annotations:
-
-```ts
-class Clazz {
-  private ident = 1;
+  
+  getIdent() {
+    return this.#ident;
+  }
 }
 ```
 
 Why?
 
-Private identifiers cause substantial emit size and
-performance regressions when down-leveled by TypeScript, and are unsupported
-before ES2015. They can only be downleveled to ES2015, not lower. At the same
-time, they do not offer substantial benefits when static type checking is used
-to enforce visibility.
+Native private fields provide true runtime privacy and prevent accidental access from outside the class. They are part of the JavaScript standard and offer better encapsulation than TypeScript's `private` modifier, which is only enforced at compile time.
+
+**Exceptions requiring `_` prefix:**
+
+1. **Decorated class fields** (e.g., with `@property`, `@state`, `@query`) must use TypeScript's `private` access modifier with a `_` prefix, because decorators need to access the field at runtime and native private fields (`#`) cannot be accessed by decorators.
+
+2. **Protected fields** must use TypeScript's `protected` access modifier with a `_` prefix, because native private fields (`#`) cannot be accessed by subclasses and JavaScript has no native `protected` syntax.
+
+```ts
+class MyComponent {
+  @property({ type: String })
+  private _decoratedField = 'value';
+  
+  // Protected fields use _ prefix
+  protected _protectedState = 'initial';
+  
+  // Regular private field uses #
+  #internalState = 0;
+}
+
+class ExtendedComponent extends MyComponent {
+  updateState() {
+    // Can access protected field with _ prefix
+    this._protectedState = 'updated';
+    
+    // Cannot access #internalState - it's truly private
+  }
+}
+```
 
 ##### Use readonly
 
@@ -1087,10 +1107,10 @@ TypeScript
 
 ```ts
 class Foo {
-  private readonly barService: BarService;
+  #barService: BarService;
 
   constructor(barService: BarService) {
-    this.barService = barService;
+    this.#barService = barService;
   }
 }
 ```
@@ -1101,8 +1121,10 @@ class Foo {
 }
 ```
 
+Note: Parameter properties must use TypeScript's `private` modifier since native private fields (`#`) cannot be declared as parameter properties. For regular class fields that are not parameters, prefer native private fields (`#`).
+
 If the parameter property needs documentation,
-[use an `@param` JSDoc tag](https://google.github.io/styleguide/tsguide.html#parameter-property-comments).
+[use an `@param` JSDoc tag](#parameter-property-comments).
 
 ##### Field initializers
 
@@ -1111,17 +1133,17 @@ sometimes lets you drop the constructor entirely.
 
 ```ts
 class Foo {
-  private readonly userList: string[];
+  #userList: string[];
 
   constructor() {
-    this.userList = [];
+    this.#userList = [];
   }
 }
 ```
 
 ```ts
 class Foo {
-  private readonly userList: string[] = [];
+  #userList: string[] = [];
 }
 ```
 
@@ -1154,7 +1176,7 @@ manages to bypass the visibility restriction.
 
 Though it might appear that `obj['foo']` can bypass visibility in the TypeScript
 compiler, this pattern can be broken by rearranging the build rules, and also
-violates [optimization compatibility](https://google.github.io/styleguide/tsguide.html#optimization-compatibility).
+violates [optimization compatibility](#optimization-compatibility).
 
 ##### Getters and setters
 
@@ -1188,37 +1210,36 @@ class Foo {
 }
 ```
 
-If an accessor is used to hide a class property, the hidden property _may_ be
-prefixed or suffixed with any whole word, like `internal` or `wrapped`. When
-using these private properties, access the value through the accessor whenever
-possible. At least one accessor for a property _must_ be non-trivial: do not
-define pass-through accessors only for the purpose of hiding a property.
-Instead, make the property public (or consider making it `readonly` rather than
-just defining a getter with no setter).
+If an accessor is used to hide a class property, the hidden property _should_ use
+a native private field with `#` prefix. When using these private properties, access 
+the value through the accessor whenever possible. At least one accessor for a property 
+_must_ be non-trivial: do not define pass-through accessors only for the purpose of 
+hiding a property. Instead, make the property public (or consider making it `readonly` 
+rather than just defining a getter with no setter).
 
 ```ts
 class Foo {
-  private wrappedBar = '';
+  #wrappedBar = '';
   get bar() {
-    return this.wrappedBar || 'bar';
+    return this.#wrappedBar || 'bar';
   }
 
   set bar(wrapped: string) {
-    this.wrappedBar = wrapped.trim();
+    this.#wrappedBar = wrapped.trim();
   }
 }
 ```
 
 ```ts
 class Bar {
-  private barInternal = '';
+  #barInternal = '';
   // Neither of these accessors have logic, so just make bar public.
   get bar() {
-    return this.barInternal;
+    return this.#barInternal;
   }
 
   set bar(value: string) {
-    this.barInternal = value;
+    this.#barInternal = value;
   }
 }
 ```
@@ -1231,7 +1252,7 @@ this interferes with property renaming.
 Computed properties may only be used in classes when the property is a symbol.
 Dict-style properties (that is, quoted or computed non-symbol keys) are not
 allowed (see
-[rationale for not mixing key types](https://google.github.io/styleguide/tsguide.html#features-objects-mixing-keys). A
+[rationale for not mixing key types]#L(features-objects-mixing-keys). A
 `[Symbol.iterator]` method should be defined for any classes that are logically
 iterable. Beyond this, `Symbol` should be used sparingly.
 
@@ -1245,6 +1266,12 @@ Restricting visibility of properties, methods, and entire types helps with
 keeping code decoupled.
 
 - Limit symbol visibility as much as possible.
+- Use native private fields (`#prefix`) for private class members to ensure true runtime privacy.
+- Use TypeScript's `private` modifier with `_` prefix only for:
+  - Parameter properties (since `#` syntax is not supported for parameters)
+  - Decorated fields that need to be accessed by decorators
+- Use TypeScript's `protected` modifier with `_` prefix for fields that need to be
+  accessible to subclasses (native private fields `#` cannot be accessed by subclasses).
 - Consider converting private methods to non-exported functions within the
   same file but outside of any class, and moving private properties into a
   separate, non-exported class.
@@ -1268,7 +1295,7 @@ class Foo {
 }
 ```
 
-See also [export visibility](https://google.github.io/styleguide/tsguide.html#export-visibility).
+See also [export visibility]#L(export-visibility).
 
 #### Disallowed class patterns
 
@@ -1347,7 +1374,7 @@ bar(function() { ... })
 ```
 
 **Exception:** Function expressions _may_ be used _only if_ code has to
-dynamically rebind `this` (but this is [discouraged](https://google.github.io/styleguide/tsguide.html#rebinding-this)), or for
+dynamically rebind `this` (but this is [discouraged]#L(rebinding-this)), or for
 generator functions (which do not have an arrow syntax).
 
 #### Arrow function bodies
@@ -1483,7 +1510,7 @@ methods ( ~~`const handler = this.listener; handler(x);`~~).
 > Note: in some specific situations, e.g. when binding functions in a template,
 > arrow functions as properties are useful and create much more readable code.
 > Use judgement with this rule. Also, see the
-> [`Event Handlers`](https://google.github.io/styleguide/tsguide.html#event-handlers) section below.
+> [`Event Handlers`]#L(event-handlers) section below.
 
 ```ts
 class DelayHandler {
@@ -1602,7 +1629,7 @@ class Foo {
 ```
 
 Use default parameters sparingly. Prefer
-[destructuring](https://google.github.io/styleguide/tsguide.html#features-objects-destructuring) to create readable APIs when
+[destructuring]#L(features-objects-destructuring) to create readable APIs when
 there are more than a small handful of optional parameters that do not have a
 natural order.
 
@@ -1847,7 +1874,7 @@ if (foo) {...}
 while (foo) {...}
 ```
 
-[As with explicit conversions](https://google.github.io/styleguide/tsguide.html#type-coercion), values of enum types (including
+[As with explicit conversions]#L(type-coercion), values of enum types (including
 unions of enum types and other types) _must not_ be implicitly coerced to
 booleans, and must instead be compared explicitly with comparison operators.
 
@@ -1969,7 +1996,7 @@ for (const [i, x] of someArr.entries()) {
 ```
 
 `for`-`in` loops may only be used on dict-style objects (see
-[below](https://google.github.io/styleguide/tsguide.html#optimization-compatibility-for-property-access) for more info). Do not
+[below]#L(optimization-compatibility-for-property-access) for more info). Do not
 use `for (... in ...)` to iterate over arrays as it will counterintuitively give
 the array's indices (as strings!), not values:
 
@@ -2412,7 +2439,7 @@ const n = new Number(5);
 
 The wrappers may be called as functions for coercing (which is preferred over
 using `+` or concatenating the empty string) or creating symbols. See
-[type coercion](https://google.github.io/styleguide/tsguide.html#type-coercion) for more information.
+[type coercion]#L(type-coercion) for more information.
 
 #### Automatic Semicolon Insertion
 
@@ -2506,9 +2533,12 @@ not to include.)
 Some concrete examples of this rule:
 
 - Do not use trailing or leading underscores for private properties or
-  methods.
+  methods, except for:
+  - Private decorated class fields which _must_ use a leading `_` prefix
+  - Protected fields which _must_ use a leading `_` prefix
+  - See [_prefix/suffix](#_-prefixsuffix) for details.
 - Do not use the `opt_` prefix for optional parameters.
-  - For accessors, see [accessor rules](https://google.github.io/styleguide/tsguide.html#getters-and-setters-accessors)
+  - For accessors, see [accessor rules](#getters-and-setters)
     below.
 
 - Do not mark interfaces specially ( ~~`IMyInterface`~~ or
@@ -2562,7 +2592,7 @@ Treat abbreviations like acronyms in names as whole words, i.e. use
 #### Dollar sign
 
 Identifiers _should not_ generally use `$`, except when required by naming
-conventions for third party frameworks. [See above](https://google.github.io/styleguide/tsguide.html#naming-style) for more on
+conventions for third party frameworks. [See above](#naming-style) for more on
 using `$` with `Observable` values.
 
 ### Rules by identifier type
@@ -2574,8 +2604,9 @@ identifier's type.
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `UpperCamelCase` | class / interface / type / enum / decorator / type<br>parameters / component functions in TSX / JSXElement type<br>parameter                     |
 | `lowerCamelCase` | variable / parameter / function / method / property /<br>module alias                                                                            |
-| `CONSTANT_CASE`  | global constant values, including enum values. See<br>[Constants](https://google.github.io/styleguide/tsguide.html#identifiers-constants) below. |
-| `#ident`         | private identifiers are never used.                                                                                                              |
+| `CONSTANT_CASE`  | global constant values, including enum values. See<br>[Constants](#constants) below. |
+| `#ident`         | private class fields (use native JavaScript private fields)                                                                                                              |
+| `_ident`         | private decorated class fields (decorators cannot access `#` fields)<br>and protected fields (no native `protected` syntax, subclasses need<br>access)                                                                                                              |
 
 #### Type parameters
 
@@ -2591,8 +2622,34 @@ Test method names inxUnit-style test frameworks _may_ be structured with `_` sep
 
 Identifiers must not use `_` as a prefix or suffix.
 
-This also means that `_` _must not_ be used as an identifier by itself (e.g. to
-indicate a parameter is unused).
+**Exceptions:** The following cases _must_ use a `_` prefix:
+
+1. **Private decorated class fields** (e.g., fields with `@property`, `@state`, `@query` decorators) must use `private` with a `_` prefix, since decorators cannot access native private fields (`#`).
+
+2. **Protected fields** must use `protected` with a `_` prefix, since JavaScript has no native `protected` syntax and native private fields (`#`) cannot be accessed by subclasses.
+
+```ts
+class MyComponent {
+  // Good: decorated private field with _ prefix
+  @property({ type: String })
+  private _decoratedField = 'value';
+  
+  // Good: protected field with _ prefix
+  protected _protectedState = 'initial';
+  
+  // Good: non-decorated private field with # prefix
+  #privateState = 0;
+  
+  // Bad: decorated field with # prefix (decorators can't access it)
+  @property({ type: String })
+  #decoratedField = 'value';
+  
+  // Bad: protected field with # prefix (subclasses can't access it)
+  #protectedState = 'value';
+}
+```
+
+The `_` identifier _must not_ be used as an identifier by itself (e.g. to indicate a parameter is unused).
 
 > Tip: If you only need some of the elements from an array (or TypeScript
 > tuple), you can insert extra commas in a destructuring statement to ignore
@@ -2665,7 +2722,7 @@ fields use the `readonly` attribute.
 
 > Note: If you're creating an alias just to expose it to a template in your
 > framework of choice, remember to also apply the proper
-> [access modifiers](https://google.github.io/styleguide/tsguide.html#properties-used-outside-of-class-lexical-scope).
+> [access modifiers]#L(properties-used-outside-of-class-lexical-scope).
 
 ```ts
 const { BrewStateEnum } = SomeType;
@@ -3015,7 +3072,7 @@ const users: {[userName: string]: number} = ...;
 TypeScript's builtin `Record<Keys, ValueType>` type allows constructing types
 with a defined set of keys. This is distinct from associative arrays in that the
 keys are statically known. See advice on that
-[below](https://google.github.io/styleguide/tsguide.html#mapped-conditional-types).
+[below]#L(mapped-conditional-types).
 
 ### Mapped and conditional types
 
@@ -3107,9 +3164,9 @@ the first place.
 **Consider _not_ to use `any`.** In circumstances where you want to use `any`,
 consider one of:
 
-- [Provide a more specific type](https://google.github.io/styleguide/tsguide.html#any-specific)
-- [Use `unknown`](https://google.github.io/styleguide/tsguide.html#any-unknown)
-- [Suppress the lint warning and document why](https://google.github.io/styleguide/tsguide.html#any-suppress)
+- [Provide a more specific type]#L(any-specific)
+- [Use `unknown`]#L(any-unknown)
+- [Suppress the lint warning and document why]#L(any-suppress)
 
 #### Providing a more specific type
 
@@ -3305,7 +3362,7 @@ be fixed more directly.
 
 For example, if you are using `@ts-ignore` to suppress a type error, then it's
 hard to predict what types the surrounding code will end up seeing. For many
-type errors, the advice in [how to best use `any`](https://google.github.io/styleguide/tsguide.html#any) is useful.
+type errors, the advice in [how to best use `any`]#L(any) is useful.
 
 You may use `@ts-expect-error` in unit tests, though you generally _should not_.
 `@ts-expect-error` suppresses all errors. It's easy to accidentally over-match
@@ -3315,7 +3372,7 @@ and suppress more serious errors. Consider one of:
   casts to the expected type or to `any` and add an explanatory comment. This
   limits error suppression to a single expression.
 - Suppress the lint warning and document why, similar to
-  [suppressing `any` lint warnings](https://google.github.io/styleguide/tsguide.html#any-suppress).
+  [suppressing `any` lint warnings]#L(any-suppress).
 
 ### Conformance
 
@@ -3634,7 +3691,7 @@ directory.
 Brand new files _must_ use Google Style, regardless of the style choices of
 other files in the same package. When adding new code to a file that is not in
 Google Style, reformatting the existing code first is recommended, subject to
-the advice [below](https://google.github.io/styleguide/tsguide.html#reformatting-existing-code). If this reformatting is not
+the advice [below]#L(reformatting-existing-code). If this reformatting is not
 done, then new code _should_ be as consistent as possible with existing code in
 the same file, but _must not_ violate the style guide.
 
@@ -3728,8 +3785,8 @@ probably worth leaving out.
 
 ---
 
-1. Namespace imports are often called 'module imports' [↩](https://google.github.io/styleguide/tsguide.html#fnref1)
+1. Namespace imports are often called 'module imports' [↩]#L(fnref1)
 
 2. named imports are sometimes called 'destructuring
    imports' because they use similar syntax to
-   destructuring assignments. [↩](https://google.github.io/styleguide/tsguide.html#fnref2)
+   destructuring assignments. [↩]#L(fnref2)
