@@ -1,5 +1,5 @@
 import { provide } from '@lit/context';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver, isDefined } from '@tylertech/forge-core';
 import { tylIconKeyboardArrowDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, eventOptions, property, query, queryAssignedElements, state } from 'lit/decorators.js';
@@ -119,10 +119,15 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    */
   @property({ type: Number, reflect: true, attribute: 'active-tab' })
   public set activeTab(value: number | null | undefined) {
-    this.#activateTabByIndex(value ?? undefined);
+    // Don't handle an undefined value on the first update to avoid accidentally overriding an
+    // active tab set on the tab element
+    if (this.hasUpdated || isDefined(value)) {
+      this.#activateTabByIndex(value ?? undefined);
+    }
   }
   public get activeTab(): number | null | undefined {
-    return this._tabs.findIndex(t => t === this.#activeTabElement);
+    const index = this._tabs.findIndex(t => t === this._activeTabElement);
+    return index >= 0 ? index : undefined;
   }
 
   /**
@@ -132,10 +137,14 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    */
   @property({ attribute: 'active-tab-name' })
   public set activeTabName(value: string) {
-    this.#activateTabByName(value);
+    // Don't handle an empty name on the first update to avoid accidentally overriding an active tab
+    // set by index
+    if (this.hasUpdated || value) {
+      this.#activateTabByName(value);
+    }
   }
   public get activeTabName(): string {
-    return this.#activeTabElement?.name ?? '';
+    return this._activeTabElement?.name ?? '';
   }
 
   /**
@@ -215,18 +224,16 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   @property()
   public theme: TabBarTheme = 'default';
 
+  @state() private _activeTabElement: TabComponent | null = null;
   @state() private _scrollable = false;
   @state() private _scrolledToStart = false;
   @state() private _scrolledToEnd = false;
 
-  @query('.forge-tab-bar', true) private _rootElement!: HTMLElement;
   @query('.scroll-container', true) private _scrollContainer!: HTMLElement;
   @query('.scroll-button-previous') private _previousButton?: IconButtonComponent;
   @query('.scroll-button-next') private _nextButton?: IconButtonComponent;
 
   @queryAssignedElements({ selector: `${TAB_CONSTANTS.elementName}` }) private _tabs!: TabComponent[];
-
-  #activeTabElement: TabComponent | null = null;
 
   #focusGroupRef = createFocusGroupRef({
     selector: 'forge-tab',
@@ -275,9 +282,15 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     }
   }
 
+  public firstUpdated(): void {
+    if (!this._activeTabElement) {
+      this.#trySetActiveTabFromElements();
+    }
+  }
+
   public async updated(changedProperties: PropertyValues<this>): Promise<void> {
     // Scroll active tab into view after render
-    if (changedProperties.has('activeTab')) {
+    if (changedProperties.has('_activeTabElement' as keyof TabBarComponent)) {
       this.#tryScrollActiveTabIntoView();
     }
 
@@ -380,8 +393,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   #handleSlotChange(): void {
     this.#focusGroupRef.update();
     // Handle the active tab being removed from the DOM
-    if (this.#activeTabElement && !this._tabs.includes(this.#activeTabElement)) {
-      this.#activeTabElement = null;
+    if (this._activeTabElement && !this._tabs.includes(this._activeTabElement)) {
+      this._activeTabElement = null;
       this.#focusGroupRef.currentElement = null;
     }
 
@@ -416,8 +429,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   private _handleRequestSync(evt: Event): void {
     evt.stopPropagation();
     const tab = this.#getTabFromEvent(evt);
-    if (tab) {
-      this.#queueActiveSync(tab);
+    if (tab && this.#isDesynced(tab)) {
+      this.#syncActiveTab();
     }
   }
 
@@ -425,54 +438,20 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   // Tab Activation
   // *****
 
-  #awaitingActiveSync = false;
-  #newActiveTabElement?: TabComponent;
-  /**
-   * Queues a syncronization of the active tab state to be executed after the current update cycle.
-   * @param tab The tab to synchronize.
-   */
-  async #queueActiveSync(tab: TabComponent): Promise<void> {
-    if (tab.active) {
-      this.#newActiveTabElement = tab;
-    }
-
-    if (this.#awaitingActiveSync) {
-      return;
-    }
-
-    this.#awaitingActiveSync = true;
-    await this.updateComplete;
-
-    this.#executeActiveSync();
-    this.#awaitingActiveSync = false;
-  }
-
-  /**
-   * Synchronizes the active tab state, focus, and active indicator animation after any tabs have been activated or deactivated.
-   * @param newActiveTab The active tab if it has changed.
-   */
-  #executeActiveSync(): void {
+  #syncActiveTab(): void {
     const tabs = this._tabs;
-    if (this.#newActiveTabElement) {
-      const oldActiveTab = tabs.find(t => t.active && t !== this.#newActiveTabElement);
-
-      this.#activeTabElement = this.#newActiveTabElement;
-      this.#focusGroupRef.currentElement = this.#newActiveTabElement;
-      this.#scrollTabIntoView(this.#newActiveTabElement);
-      this.#animateIndicator(oldActiveTab, this.#newActiveTabElement);
-      oldActiveTab?.activate(false);
-      this.#newActiveTabElement = undefined;
-    } else if (!this.#activeTabElement?.active) {
-      this.#activeTabElement = null;
-      this.#focusGroupRef.currentElement = null;
-    }
-
-    // Ensure only one tab is active
+    let oldActiveTab: TabComponent | undefined;
     tabs.forEach(tab => {
-      if (tab !== this.#activeTabElement) {
-        tab.active = false;
+      if (tab.active && tab !== this._activeTabElement) {
+        oldActiveTab = tab;
       }
+      tab.active = tab === this._activeTabElement;
     });
+    if (this._activeTabElement) {
+      this.#scrollTabIntoView(this._activeTabElement);
+      this.#animateIndicator(oldActiveTab, this._activeTabElement);
+    }
+    this.#focusGroupRef.currentElement = this._activeTabElement;
   }
 
   /**
@@ -493,7 +472,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       return;
     }
 
-    tab.active = true;
+    this._activeTabElement = tab;
+    this.#syncActiveTab();
   }
 
   /**
@@ -525,11 +505,6 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     this.dispatchEvent(event);
     const allowed = !event.defaultPrevented;
 
-    if (allowed) {
-      this.activeTab = index;
-      this.activeTabName = tab.name;
-    }
-
     return allowed;
   }
 
@@ -540,10 +515,14 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    */
   #animateIndicator(from: TabComponent | undefined, to: TabComponent): void {
     const fromIndicator = from?.shadowRoot?.querySelector(TAB_CONSTANTS.selectors.INDICATOR) as HTMLElement | undefined;
-    const toIndicator = to.shadowRoot?.querySelector(TAB_CONSTANTS.selectors.INDICATOR) as HTMLElement;
+    const toIndicator = to.shadowRoot?.querySelector(TAB_CONSTANTS.selectors.INDICATOR) as HTMLElement | undefined;
+
+    if (!toIndicator) {
+      return;
+    }
 
     fromIndicator?.getAnimations().forEach(animation => animation.cancel());
-    toIndicator?.getAnimations().forEach(animation => animation.cancel());
+    toIndicator.getAnimations().forEach(animation => animation.cancel());
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -599,13 +578,14 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     }
 
     if (index === undefined) {
-      this.#activeTabElement?.activate(false);
-      return;
+      this._activeTabElement = null;
+      return this.#syncActiveTab();
     }
 
     const tabs = this._tabs;
     if (index >= 0 && index < tabs.length) {
-      return tabs[index].activate();
+      this._activeTabElement = tabs[index];
+      return this.#syncActiveTab();
     }
     console.warn('Out of bounds index provided for active tab, no tab made active.');
   }
@@ -619,22 +599,45 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       await this.updateComplete;
     }
 
-    if (name === this.#activeTabElement?.name) {
+    if (name && name === this._activeTabElement?.name) {
       // The tab is already selected
       return;
     }
 
     if (!name) {
-      this.#activeTabElement?.activate(false);
-      return;
+      this._activeTabElement = null;
+      return this.#syncActiveTab();
     }
 
     const tabs = this._tabs;
     const tab = tabs.find(t => t.name === name);
     if (tab) {
-      return tab.activate();
+      this._activeTabElement = tab;
+      return this.#syncActiveTab();
     }
     console.warn(`No tab found with name "${name}", no tab made active.`);
+  }
+
+  /**
+   * Attempts to set the active tab based on the active state of the child tab elements. This is
+   * used to synchronize the active tab on first update when it hasn't been set on the tab bar.
+   */
+  #trySetActiveTabFromElements(): void {
+    const tabs = this._tabs;
+    const activeTab = tabs.find(t => t.active);
+    if (activeTab) {
+      this._activeTabElement = activeTab;
+      this.#syncActiveTab();
+    }
+  }
+
+  /**
+   * Determines if a tab's active state is out of sync with the tab bar's active tab.
+   * @param tab The tab to check.
+   * @returns True if the tab's active state is out of sync, false otherwise.
+   */
+  #isDesynced(tab: TabComponent): boolean {
+    return tab.active !== (tab === this._activeTabElement);
   }
 
   // *****
@@ -809,8 +812,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    * Attempts to scroll the currently active tab into view if one is set.
    */
   #tryScrollActiveTabIntoView(): void {
-    if (this.#activeTabElement) {
-      this.#scrollTabIntoView(this.#activeTabElement);
+    if (this._activeTabElement) {
+      this.#scrollTabIntoView(this._activeTabElement);
     }
   }
 

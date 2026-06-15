@@ -126,7 +126,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
    * @default ''
    * @attribute
    */
-  @property()
+  @property({ reflect: true })
   public name = '';
 
   /**
@@ -138,6 +138,9 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   @property({ type: Boolean, reflect: true })
   public disabled = false;
 
+  /**
+   * Whether the tab is the current active tab within its parent tab bar.
+   */
   @property({ type: Boolean })
   public active = false;
 
