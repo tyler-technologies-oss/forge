@@ -14,6 +14,8 @@ import styles from './tab-panel.scss';
 
 export const TAB_PANEL_TAG_NAME: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tab-panel`;
 
+export type TabPanelFocusMode = 'auto' | 'off';
+
 /**
  * @tag forge-tab-panel
  *
@@ -61,10 +63,13 @@ export class TabPanelComponent extends BaseLitElement {
   public open = false;
 
   /**
-   * When true, prevents the tab panel from automatically receiving focus when it is opened.
+   * Controls how focus is managed when the tab panel is opened. When set to 'auto' focus is set to
+   * the panel when it opens. Set to 'off' to disable this behavior.
+   * @default 'auto'
+   * @attribute focus-mode
    */
-  @property({ type: Boolean, attribute: 'no-focus' })
-  public noFocus = false;
+  @property({ attribute: 'focus-mode' })
+  public focusMode: TabPanelFocusMode = 'auto';
 
   #tab: TabComponent | null = null;
 
@@ -143,6 +148,7 @@ export class TabPanelComponent extends BaseLitElement {
     this.#abortController = new AbortController();
     const signal = this.#abortController.signal;
 
+    // TODO: Listen for the request-sync event on the tab instead of the change event on the tab bar
     const tabBar = tab.closest(TAB_BAR_CONSTANTS.elementName);
     tabBar?.addEventListener(TAB_BAR_CONSTANTS.events.CHANGE, this.#handleTabBarChange, { signal });
   }
@@ -220,13 +226,9 @@ export class TabPanelComponent extends BaseLitElement {
 
   #handleTabBarChange: EventListener = async () => {
     if (this.#tab && this.#tab.isConnected) {
-      // TODO: This is a significant timing issue - refactor the tab to stabilize its state within one
-      // update cycle
-      await this.#tab.updateComplete;
-      await this.#tab.updateComplete;
       await this.#tab.updateComplete;
       this.open = this.#tab.active;
-      if (this.open && !this.noFocus) {
+      if (this.open && this.focusMode === 'auto') {
         await this.updateComplete;
         this.focus();
       }
