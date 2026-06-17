@@ -263,7 +263,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
     // Dispatch registration event for tab panels waiting to connect
     window.dispatchEvent(
       new CustomEvent('forge-tab-registered', {
-        detail: { name: this.name },
+        detail: this,
         bubbles: false,
         composed: false
       })
