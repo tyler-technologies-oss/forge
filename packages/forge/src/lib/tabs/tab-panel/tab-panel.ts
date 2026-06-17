@@ -5,7 +5,6 @@ import { COMPONENT_NAME_PREFIX } from '../../constants.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
-import { TAB_BAR_CONSTANTS } from '../tab-bar/tab-bar-constants.js';
 import { TAB_CONSTANTS } from '../tab/tab-constants.js';
 import type { TabComponent } from '../tab/tab.js';
 import { FocusIndicatorComponent } from '../../focus-indicator/index.js';
@@ -141,16 +140,12 @@ export class TabPanelComponent extends BaseLitElement {
     this.#setupAriaRelationships();
 
     await this.#tab.updateComplete;
-
-    this.open = tab.active;
+    this.open = this.#tab.active;
     toggleState(this.#internals, 'open', this.open);
 
     this.#abortController = new AbortController();
     const signal = this.#abortController.signal;
-
-    // TODO: Listen for the request-sync event on the tab instead of the change event on the tab bar
-    const tabBar = tab.closest(TAB_BAR_CONSTANTS.elementName);
-    tabBar?.addEventListener(TAB_BAR_CONSTANTS.events.CHANGE, this.#handleTabBarChange, { signal });
+    this.#tab.addEventListener('forge-tab-request-sync', this.#handleTabChange, { signal });
   }
 
   #disconnectFromTab(): void {
@@ -224,15 +219,18 @@ export class TabPanelComponent extends BaseLitElement {
     }
   }
 
-  #handleTabBarChange: EventListener = async () => {
-    if (this.#tab && this.#tab.isConnected) {
-      await this.#tab.updateComplete;
+  #handleTabChange: EventListener = evt => {
+    if (!this.#tab || evt.target !== this.#tab) {
+      return;
+    }
+
+    if (this.#tab.isConnected) {
       this.open = this.#tab.active;
-      if (this.open && this.focusMode === 'auto') {
-        await this.updateComplete;
-        this.focus();
+      // Set focus if the tab was focused at the time the panel opened
+      if (this.open && this.focusMode === 'auto' && this.#tab.matches(':focus')) {
+        this.#tab.updateComplete.then(() => this.focus());
       }
-    } else if (this.#tab && !this.#tab.isConnected) {
+    } else {
       this.#disconnectFromTab();
       this.open = false;
     }
