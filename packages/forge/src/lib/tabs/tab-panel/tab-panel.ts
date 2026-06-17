@@ -147,7 +147,7 @@ export class TabPanelComponent extends BaseLitElement {
   async #connectToTab(tab: TabComponent | null): Promise<void> {
     if (!tab) {
       this.open = false;
-      this.#setupEventBasedDiscovery();
+      this.#watchForTabConnected();
       return;
     }
 
@@ -157,6 +157,7 @@ export class TabPanelComponent extends BaseLitElement {
     this.open = tab.active;
     toggleState(this.#internals, 'open', this.open);
 
+    this.#abortController?.abort();
     this.#abortController = new AbortController();
     const signal = this.#abortController.signal;
     tab.addEventListener('forge-tab-request-sync', this.#handleSync, { signal });
@@ -209,10 +210,10 @@ export class TabPanelComponent extends BaseLitElement {
     this.#stopTabObserver();
     this.#disconnectFromTab(tab);
     this.open = false;
-    this.#setupEventBasedDiscovery();
+    this.#watchForTabConnected();
   }
 
-  #setupEventBasedDiscovery(): void {
+  #watchForTabConnected(): void {
     if (this.#abortController) {
       return;
     }
@@ -220,7 +221,7 @@ export class TabPanelComponent extends BaseLitElement {
     this.#abortController = new AbortController();
     const signal = this.#abortController.signal;
 
-    window.addEventListener('forge-tab-registered', this.#handleTabRegistration, { signal });
+    window.addEventListener('forge-tab-connected', this.#handleTabConnected, { signal });
   }
 
   #setupAriaRelationships(tab: TabComponent | null): void {
@@ -302,7 +303,7 @@ export class TabPanelComponent extends BaseLitElement {
     }
   };
 
-  #handleTabRegistration: EventListener = event => {
+  #handleTabConnected: EventListener = event => {
     const customEvent = event as CustomEvent<TabComponent>;
     const element = customEvent.detail;
     const id = customEvent.detail?.id;

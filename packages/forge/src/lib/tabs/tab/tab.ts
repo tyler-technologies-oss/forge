@@ -262,7 +262,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
 
     // Dispatch registration event for tab panels waiting to connect
     window.dispatchEvent(
-      new CustomEvent('forge-tab-registered', {
+      new CustomEvent('forge-tab-connected', {
         detail: this,
         bubbles: false,
         composed: false
@@ -375,6 +375,7 @@ declare global {
 
   interface HTMLElementEventMap {
     'forge-tab-close': Event;
+    'forge-tab-connected': CustomEvent<TabComponent>;
     'forge-tab-menu': Event;
     'forge-tab-request-sync': Event;
     'forge-tab-select': CustomEvent<void>;
