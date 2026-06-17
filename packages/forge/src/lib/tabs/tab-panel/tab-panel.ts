@@ -54,7 +54,8 @@ export class TabPanelComponent extends BaseLitElement {
   public for = '';
 
   /**
-   * A reference to the associated tab element. This is typically set automatically based on the `for` property, but can also be set directly for more dynamic use cases.
+   * A reference to the associated tab element. This is typically set automatically based on the
+   * `for` property, but can also be set directly for more dynamic use cases.
    * @default null
    */
   @property({ attribute: false })
@@ -159,8 +160,7 @@ export class TabPanelComponent extends BaseLitElement {
 
     this.#abortController?.abort();
     this.#abortController = new AbortController();
-    const signal = this.#abortController.signal;
-    tab.addEventListener('forge-tab-request-sync', this.#handleSync, { signal });
+    tab.addEventListener('forge-tab-request-sync', this.#handleSync, { signal: this.#abortController.signal });
 
     this.#startTabObserver(tab);
   }
@@ -219,9 +219,7 @@ export class TabPanelComponent extends BaseLitElement {
     }
 
     this.#abortController = new AbortController();
-    const signal = this.#abortController.signal;
-
-    window.addEventListener('forge-tab-connected', this.#handleTabConnected, { signal });
+    window.addEventListener('forge-tab-connected', this.#handleTabConnected, { signal: this.#abortController.signal });
   }
 
   #setupAriaRelationships(tab: TabComponent | null): void {
@@ -229,23 +227,17 @@ export class TabPanelComponent extends BaseLitElement {
       return;
     }
 
-    // Set aria-controls on the tab
     if (Object.prototype.hasOwnProperty.call(tab, 'ariaControlsElements')) {
       tab.ariaControlsElements = [this];
     } else {
-      if (!this.id) {
-        this.id = `forge-tab-panel-${randomChars()}`;
-      }
+      this.id ||= `forge-tab-panel-${randomChars()}`;
       tab.setAttribute('aria-controls', this.id);
     }
 
-    // Set aria-labelledby on the tab panel
     if (Object.prototype.hasOwnProperty.call(this.#internals, 'ariaLabelledByElements')) {
       this.#internals.ariaLabelledByElements = [tab];
     } else {
-      if (!tab.id) {
-        tab.id = `forge-tab-${randomChars()}`;
-      }
+      tab.id ||= `forge-tab-${randomChars()}`;
       this.setAttribute('aria-labelledby', tab.id);
     }
   }
@@ -255,22 +247,16 @@ export class TabPanelComponent extends BaseLitElement {
       return;
     }
 
-    // Clear aria-controls on the tab
     if (Object.prototype.hasOwnProperty.call(tab, 'ariaControlsElements')) {
       tab.ariaControlsElements = null;
-    } else {
-      if (tab.getAttribute('aria-controls') === this.id) {
-        tab.removeAttribute('aria-controls');
-      }
+    } else if (tab.getAttribute('aria-controls') === this.id) {
+      tab.removeAttribute('aria-controls');
     }
 
-    // Clear aria-labelledby on the tab panel
     if (Object.prototype.hasOwnProperty.call(this.#internals, 'ariaLabelledByElements')) {
       this.#internals.ariaLabelledByElements = null;
-    } else {
-      if (this.getAttribute('aria-labelledby') === tab.id) {
-        this.removeAttribute('aria-labelledby');
-      }
+    } else if (this.getAttribute('aria-labelledby') === tab.id) {
+      this.removeAttribute('aria-labelledby');
     }
   }
 
@@ -281,23 +267,19 @@ export class TabPanelComponent extends BaseLitElement {
 
     const shouldOpen = this.forElement.active;
     if (shouldOpen === this.open) {
-      // No change
       return;
     }
 
-    // Dispatch a beforetoggle event that can be canceled to prevent the tab panel from opening or closing
-    const beforeToggleEvent = this.#dispatchBeforeToggleEvent(!this.forElement.active);
+    const beforeToggleEvent = this.#dispatchBeforeToggleEvent(shouldOpen);
     if (beforeToggleEvent.defaultPrevented) {
       evt.preventDefault();
       this.forElement.active = !shouldOpen;
       return;
     }
 
-    // Sync the open state with the tab's active state
-    this.open = this.forElement.active;
-    this.#dispatchToggleEvent(this.open);
+    this.open = shouldOpen;
+    this.#dispatchToggleEvent(shouldOpen);
 
-    // Set focus if the tab was focused at the time the panel opened
     if (this.open && this.focusMode === 'auto' && this.forElement.matches(':focus')) {
       this.forElement.updateComplete.then(() => this.focus());
     }
@@ -316,17 +298,26 @@ export class TabPanelComponent extends BaseLitElement {
   };
 
   #dispatchBeforeToggleEvent(willOpen: boolean): ToggleEvent {
-    const oldState = this.open ? 'open' : 'closed';
-    const newState = willOpen ? 'open' : 'closed';
-    const event = new ToggleEvent('beforetoggle', { oldState, newState, bubbles: true, cancelable: true, composed: true });
+    const event = new ToggleEvent('beforetoggle', {
+      oldState: this.open ? 'open' : 'closed',
+      newState: willOpen ? 'open' : 'closed',
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    });
     this.dispatchEvent(event);
     return event;
   }
 
-  #dispatchToggleEvent(wasOpen: boolean): void {
-    const oldState = wasOpen ? 'open' : 'closed';
-    const newState = this.open ? 'open' : 'closed';
-    this.dispatchEvent(new ToggleEvent('toggle', { oldState, newState, bubbles: true, composed: true }));
+  #dispatchToggleEvent(didOpen: boolean): void {
+    this.dispatchEvent(
+      new ToggleEvent('toggle', {
+        oldState: didOpen ? 'closed' : 'open',
+        newState: this.open ? 'open' : 'closed',
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 }
 
