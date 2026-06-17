@@ -1,7 +1,7 @@
 import { consume, ContextRoot } from '@lit/context';
 import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { classMap } from 'lit-html/directives/class-map.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { customElement, property, query } from 'lit/decorators.js';
 import { ExperimentalFocusOptions, playStateLayerAnimation } from '../../constants.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
