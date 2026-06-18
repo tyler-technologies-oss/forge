@@ -7,6 +7,7 @@ import { tylIconFavorite, tylIconForgeLogo } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon';
 
 import '@tylertech/forge/tabs/tab-bar';
+import '@tylertech/forge/tabs/tab-panel';
 
 const component = 'forge-tab-bar';
 
@@ -56,7 +57,8 @@ const meta = {
   },
   component,
   subcomponents: {
-    Tab: 'forge-tab'
+    Tab: 'forge-tab',
+    TabPanel: 'forge-tab-panel'
   },
   argTypes: {
     ...generateCustomElementArgTypes({
@@ -159,4 +161,40 @@ export const NamedTabs: Story = {
       </forge-tab-bar>
     `;
   }
+};
+
+export const WithPanels: Story = {
+  ...standaloneStoryParams,
+  args: {
+    activeTab: 0
+  },
+  render: args => html`
+    <forge-tab-bar
+      aria-label="Tabs with panels"
+      .activeTab=${args.activeTab}
+      .disabled=${args.disabled}
+      .vertical=${args.vertical}
+      .clustered=${args.clustered}
+      .stacked=${args.stacked}
+      .inverted=${args.inverted}
+      .autoActivate=${args.autoActivate}
+      @forge-tab-bar-change=${changeAction}
+      @forge-tab-activate=${activateAction}>
+      <forge-tab id="tab-home">Home</forge-tab>
+      <forge-tab id="tab-profile">Profile</forge-tab>
+      <forge-tab id="tab-settings">Settings</forge-tab>
+    </forge-tab-bar>
+
+    <forge-tab-panel for="tab-home">
+      <p>Home panel</p>
+    </forge-tab-panel>
+
+    <forge-tab-panel for="tab-profile">
+      <p>Profile panel</p>
+    </forge-tab-panel>
+
+    <forge-tab-panel for="tab-settings">
+      <p>Settings panel</p>
+    </forge-tab-panel>
+  `
 };

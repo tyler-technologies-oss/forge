@@ -49,6 +49,7 @@ export class TabPanelComponent extends BaseLitElement {
   /**
    * The ID of the tab that controls this tab panel.
    * @default ''
+   * @attribute
    */
   @property()
   public for = '';
@@ -65,6 +66,7 @@ export class TabPanelComponent extends BaseLitElement {
    * Whether the tab panel is open (visible). This is typically controlled by the associated tab,
    * but can also be set directly.
    * @default false
+   * @attribute
    */
   @property({ type: Boolean })
   public open = false;
