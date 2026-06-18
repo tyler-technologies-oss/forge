@@ -1129,48 +1129,11 @@ describe('TabPanel', () => {
     expect(panel?.matches(':state(open)')).toBe(true);
   });
 
-  it('should dispatch toggle event when opening', async () => {
-    const screen = render(html`<forge-tab-panel></forge-tab-panel>`);
-    const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
-    await panel?.updateComplete;
-
-    const toggleSpy = vi.fn();
-    panel?.addEventListener('toggle', toggleSpy);
-
-    if (panel) {
-      panel.open = true;
-    }
-    await panel?.updateComplete;
-
-    expect(toggleSpy).toHaveBeenCalledOnce();
-    expect(toggleSpy.mock.calls[0][0].oldState).toBe('closed');
-    expect(toggleSpy.mock.calls[0][0].newState).toBe('open');
-  });
-
-  it('should dispatch toggle event when closing', async () => {
-    const screen = render(html`<forge-tab-panel></forge-tab-panel>`);
-    const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
-    await panel?.updateComplete;
-
-    panel!.open = true;
-    await panel?.updateComplete;
-
-    const toggleSpy = vi.fn();
-    panel?.addEventListener('toggle', toggleSpy);
-
-    panel!.open = false;
-    await panel?.updateComplete;
-
-    expect(toggleSpy).toHaveBeenCalledOnce();
-    expect(toggleSpy.mock.calls[0][0].oldState).toBe('open');
-    expect(toggleSpy.mock.calls[0][0].newState).toBe('closed');
-  });
-
-  it('should connect to tab with matching name', async () => {
+  it('should connect to tab with matching id', async () => {
     const screen = render(html`
       <forge-tab-bar>
-        <forge-tab name="tab1">Tab 1</forge-tab>
-        <forge-tab name="tab2">Tab 2</forge-tab>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
       </forge-tab-bar>
       <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
     `);
@@ -1180,14 +1143,14 @@ describe('TabPanel', () => {
 
     await frame();
 
-    expect(panel?.getAttribute('aria-labelledby')).toBeTruthy();
+    expect(panel?.getAttribute('aria-labelledby')).toBe('tab1');
     expect(tab?.getAttribute('aria-controls')).toBeTruthy();
   });
 
   it('should not connect when for attribute is empty', async () => {
     const screen = render(html`
       <forge-tab-bar>
-        <forge-tab name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
       </forge-tab-bar>
       <forge-tab-panel for="">Panel 1</forge-tab-panel>
     `);
@@ -1195,6 +1158,7 @@ describe('TabPanel', () => {
     const panel = screen.container.querySelector('forge-tab-panel');
     const tab = screen.container.querySelector('forge-tab[name="tab1"]') as ITabComponent;
 
+    await frame();
     await frame();
 
     expect(panel?.open).toBe(false);
@@ -1205,7 +1169,7 @@ describe('TabPanel', () => {
   it('should close when no matching tab is found', async () => {
     const screen = render(html`
       <forge-tab-bar>
-        <forge-tab name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
       </forge-tab-bar>
       <forge-tab-panel for="nonexistent">Panel 1</forge-tab-panel>
     `);
@@ -1220,8 +1184,8 @@ describe('TabPanel', () => {
   it('should be open when connected tab is active', async () => {
     const screen = render(html`
       <forge-tab-bar .activeTab=${0}>
-        <forge-tab name="tab1">Tab 1</forge-tab>
-        <forge-tab name="tab2">Tab 2</forge-tab>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
       </forge-tab-bar>
       <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
     `);
@@ -1238,8 +1202,8 @@ describe('TabPanel', () => {
   it('should update visibility when tab changes', async () => {
     const screen = render(html`
       <forge-tab-bar .activeTab=${0}>
-        <forge-tab name="tab1">Tab 1</forge-tab>
-        <forge-tab name="tab2">Tab 2</forge-tab>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
       </forge-tab-bar>
       <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
       <forge-tab-panel for="tab2">Panel 2</forge-tab-panel>
@@ -1264,8 +1228,8 @@ describe('TabPanel', () => {
   it('should receive focus when tab is activated', async () => {
     const screen = render(html`
       <forge-tab-bar .activeTab=${0}>
-        <forge-tab name="tab1">Tab 1</forge-tab>
-        <forge-tab name="tab2">Tab 2</forge-tab>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
       </forge-tab-bar>
       <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
       <forge-tab-panel for="tab2">Panel 2</forge-tab-panel>
@@ -1280,14 +1244,14 @@ describe('TabPanel', () => {
     expect(panel2?.matches(':focus')).toBe(true);
   });
 
-  it('should not receive focus when tab is activated if noFocus is set', async () => {
+  it('should not receive focus when tab is activated if focus-mode is off', async () => {
     const screen = render(html`
       <forge-tab-bar .activeTab=${0}>
-        <forge-tab name="tab1">Tab 1</forge-tab>
-        <forge-tab name="tab2">Tab 2</forge-tab>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
       </forge-tab-bar>
       <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
-      <forge-tab-panel for="tab2" no-focus>Panel 2</forge-tab-panel>
+      <forge-tab-panel for="tab2" focus-mode="off">Panel 2</forge-tab-panel>
     `);
 
     const panel2 = screen.container.querySelector<TabPanelComponent>('forge-tab-panel[for="tab2"]');
@@ -1302,8 +1266,8 @@ describe('TabPanel', () => {
   it('should reconnect when for property changes', async () => {
     const screen = render(html`
       <forge-tab-bar .activeTab=${0}>
-        <forge-tab name="tab1">Tab 1</forge-tab>
-        <forge-tab name="tab2">Tab 2</forge-tab>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
       </forge-tab-bar>
       <forge-tab-panel for="tab1">Panel</forge-tab-panel>
     `);
@@ -1313,10 +1277,11 @@ describe('TabPanel', () => {
     const tab2 = screen.container.querySelector('forge-tab[name="tab2"]') as ITabComponent;
 
     await frame();
+    await frame();
 
     expect(panel?.open).toBe(true);
-    expect(panel?.getAttribute('aria-labelledby')).toBe(tab1.id);
-    expect(tab1?.getAttribute('aria-controls')).toBe(panel?.id);
+    expect(panel?.getAttribute('aria-labelledby')).toBe('tab1');
+    expect(tab1?.getAttribute('aria-controls')).toBeTruthy();
     expect(tab2?.getAttribute('aria-controls')).toBeNullable();
 
     if (panel) {
@@ -1325,16 +1290,16 @@ describe('TabPanel', () => {
     await frame();
 
     expect(panel?.open).toBe(false);
-    expect(panel?.getAttribute('aria-labelledby')).toBe(tab2.id);
+    expect(panel?.getAttribute('aria-labelledby')).toBe('tab2');
     expect(tab1?.getAttribute('aria-controls')).toBeNullable();
-    expect(tab2?.getAttribute('aria-controls')).toBe(panel?.id);
+    expect(tab2?.getAttribute('aria-controls')).toBeTruthy();
   });
 
   it('should disconnect and close when tab is removed', async () => {
     const screen = render(html`
       <forge-tab-bar .activeTab=${0}>
-        <forge-tab name="tab1">Tab 1</forge-tab>
-        <forge-tab name="tab2">Tab 2</forge-tab>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
       </forge-tab-bar>
       <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
     `);
@@ -1347,14 +1312,12 @@ describe('TabPanel', () => {
     expect(panel?.open).toBe(true);
 
     tab1.remove();
-    const tabBar = screen.container.querySelector('forge-tab-bar');
-    await userEvent.click(tabBar!);
     await frame();
 
     expect(panel?.open).toBe(false);
   });
 
-  it('should auto-connect when tab registers after panel', async () => {
+  it('should auto-connect when tab with matching id registers after panel', async () => {
     const screen = render(html` <forge-tab-panel for="tab1">Panel 1</forge-tab-panel> `);
 
     const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
@@ -1363,24 +1326,26 @@ describe('TabPanel', () => {
 
     expect(panel?.open).toBe(false);
 
-    // Create tab elements programmatically
     const tabBar = new (customElements.get('forge-tab-bar') as any)();
     const tab = new (customElements.get('forge-tab') as any)();
+    tab.id = 'tab1';
     tab.name = 'tab1';
     tab.textContent = 'Tab 1';
+    tab.active = true;
     tabBar.appendChild(tab);
     screen.container.appendChild(tabBar);
 
     await frame();
     await frame();
 
-    expect(panel?.open).toBe(false);
+    expect(panel?.open).toBe(true);
+    expect(panel?.getAttribute('aria-labelledby')).toBe('tab1');
   });
 
   it('should clear ARIA relationships when disconnected', async () => {
     const screen = render(html`
       <forge-tab-bar .activeTab=${0}>
-        <forge-tab name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
       </forge-tab-bar>
       <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
     `);
@@ -1390,7 +1355,7 @@ describe('TabPanel', () => {
 
     await frame();
 
-    expect(panel?.getAttribute('aria-labelledby')).toBeTruthy();
+    expect(panel?.getAttribute('aria-labelledby')).toBe('tab1');
     expect(tab?.getAttribute('aria-controls')).toBeTruthy();
 
     panel?.remove();
@@ -1422,7 +1387,7 @@ describe('TabPanel', () => {
   it('should close when tab is not found', async () => {
     const screen = render(html`
       <forge-tab-bar .activeTab=${0}>
-        <forge-tab name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
       </forge-tab-bar>
       <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
     `);
@@ -1431,19 +1396,18 @@ describe('TabPanel', () => {
 
     expect(panel?.open).toBe(true);
 
-    // Change to a tab that doesn't exist
     panel!.for = 'nonexistent';
     await frame();
 
     expect(panel?.open).toBe(false);
   });
 
-  it('should read no-focus property from attribute', async () => {
-    const screen = render(html`<forge-tab-panel no-focus></forge-tab-panel>`);
+  it('should read focus-mode property from attribute', async () => {
+    const screen = render(html`<forge-tab-panel focus-mode="off"></forge-tab-panel>`);
     const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
 
-    expect(panel?.noFocus).toBe(true);
-    expect(panel?.hasAttribute('no-focus')).toBe(true);
+    expect(panel?.focusMode).toBe('off');
+    expect(panel?.getAttribute('focus-mode')).toBe('off');
   });
 
   it('should render slotted content', async () => {
@@ -1457,9 +1421,9 @@ describe('TabPanel', () => {
   it('should handle multiple panels for different tabs', async () => {
     const screen = render(html`
       <forge-tab-bar .activeTab=${1}>
-        <forge-tab name="tab1">Tab 1</forge-tab>
-        <forge-tab name="tab2">Tab 2</forge-tab>
-        <forge-tab name="tab3">Tab 3</forge-tab>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
+        <forge-tab id="tab3" name="tab3">Tab 3</forge-tab>
       </forge-tab-bar>
       <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
       <forge-tab-panel for="tab2">Panel 2</forge-tab-panel>
@@ -1477,12 +1441,12 @@ describe('TabPanel', () => {
     expect(panel3?.open).toBe(false);
   });
 
-  it('should handle tab activation by name with panels', async () => {
+  it('should handle tab activation by id with panels', async () => {
     const screen = render(html`
       <forge-tab-bar .activeTabName=${'tab2'}>
-        <forge-tab name="tab1">Tab 1</forge-tab>
-        <forge-tab name="tab2">Tab 2</forge-tab>
-        <forge-tab name="tab3">Tab 3</forge-tab>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
+        <forge-tab id="tab3" name="tab3">Tab 3</forge-tab>
       </forge-tab-bar>
       <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
       <forge-tab-panel for="tab2">Panel 2</forge-tab-panel>

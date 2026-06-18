@@ -71,7 +71,7 @@ export class TabPanelComponent extends BaseLitElement {
 
   /**
    * Controls how focus is managed when the tab panel is opened. When set to 'auto' focus is set to
-   * the panel when it opens. Set to 'off' to disable this behavior.
+   * the panel. Set to 'off' to keep focus on the tab.
    * @default 'auto'
    * @attribute focus-mode
    */
@@ -249,14 +249,20 @@ export class TabPanelComponent extends BaseLitElement {
 
     if (Object.prototype.hasOwnProperty.call(tab, 'ariaControlsElements')) {
       tab.ariaControlsElements = null;
-    } else if (tab.getAttribute('aria-controls') === this.id) {
-      tab.removeAttribute('aria-controls');
+    } else {
+      const ariaControls = tab.getAttribute('aria-controls');
+      if (ariaControls && ariaControls === this.id) {
+        tab.removeAttribute('aria-controls');
+      }
     }
 
     if (Object.prototype.hasOwnProperty.call(this.#internals, 'ariaLabelledByElements')) {
       this.#internals.ariaLabelledByElements = null;
-    } else if (this.getAttribute('aria-labelledby') === tab.id) {
-      this.removeAttribute('aria-labelledby');
+    } else {
+      const ariaLabelledBy = this.getAttribute('aria-labelledby');
+      if (ariaLabelledBy && ariaLabelledBy === tab.id) {
+        this.removeAttribute('aria-labelledby');
+      }
     }
   }
 
@@ -286,13 +292,18 @@ export class TabPanelComponent extends BaseLitElement {
   };
 
   #handleTabConnected: EventListener = event => {
+    // Ignore events if this panel is no longer connected to the DOM
+    if (!this.isConnected) {
+      return;
+    }
+
     const customEvent = event as CustomEvent<TabComponent>;
     const element = customEvent.detail;
     const id = customEvent.detail?.id;
 
     if (this.forElement && this.forElement === element) {
       this.#connectToTab(element);
-    } else if (!this.forElement && id === this.for) {
+    } else if (!this.forElement && this.for && id === this.for) {
       this.forElement = element;
     }
   };
