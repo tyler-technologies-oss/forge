@@ -25,6 +25,8 @@ export type TabPanelFocusMode = 'auto' | 'off';
  * toggling its visibility based on the active state of the associated tab and manages ARIA
  * relationships for accessibility.
  *
+ * @dependency forge-focus-indicator
+ *
  * @slot - Default slot for the tab panel content.
  *
  * @csspart focus-indicator - The focus indicator element.
