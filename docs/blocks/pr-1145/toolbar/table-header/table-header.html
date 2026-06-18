@@ -1,0 +1,46 @@
+<!--
+  @block Table Header
+  @description Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot
+  @tags toolbar, table, header, actions
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Table Header</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+  </head>
+  <body class="">
+    <forge-toolbar>
+  <h2 slot="start" class="text-heading3">Table Title</h2>
+  <div slot="end" class="flex gap-xsmall">
+    <forge-icon-button density="medium" aria-label="Filter">
+      <forge-icon name="filter_list"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button density="medium" aria-label="Export">
+      <forge-icon name="download"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button density="medium" aria-label="More options">
+      <forge-icon name="more_vert"></forge-icon>
+    </forge-icon-button>
+  </div>
+</forge-toolbar>
+
+    <script type="module" src="/blocks/pr-1145/ready-transition.js"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js"></script>
+  </body>
+</html>

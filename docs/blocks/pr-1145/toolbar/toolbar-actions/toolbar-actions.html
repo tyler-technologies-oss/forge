@@ -1,0 +1,40 @@
+<!--
+  @block Toolbar with Button Actions
+  @description Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions
+  @tags toolbar, buttons, actions, form
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Toolbar with Button Actions</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+  </head>
+  <body class="">
+    <forge-toolbar>
+  <h2 slot="start" class="text-heading3">Title</h2>
+  <div slot="end" class="flex gap-small">
+    <forge-button>Cancel</forge-button>
+    <forge-button variant="tonal">Save Draft</forge-button>
+    <forge-button variant="raised">Submit</forge-button>
+  </div>
+</forge-toolbar>
+
+    <script type="module" src="/blocks/pr-1145/ready-transition.js"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js"></script>
+  </body>
+</html>

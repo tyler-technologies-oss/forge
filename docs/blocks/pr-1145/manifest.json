@@ -1,6 +1,36 @@
 {
   "blocks": [
     {
+      "id": "toolbar/toolbar-actions/toolbar-actions",
+      "name": "Toolbar with Button Actions",
+      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
+      "tags": [
+        "toolbar",
+        "buttons",
+        "actions",
+        "form"
+      ],
+      "file": "toolbar/toolbar-actions/toolbar-actions.html",
+      "category": "Toolbar",
+      "screenshot": "toolbar/toolbar-actions/toolbar-actions.webp",
+      "hasScript": false
+    },
+    {
+      "id": "toolbar/table-header/table-header",
+      "name": "Table Header",
+      "description": "Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot",
+      "tags": [
+        "toolbar",
+        "table",
+        "header",
+        "actions"
+      ],
+      "file": "toolbar/table-header/table-header.html",
+      "category": "Toolbar",
+      "screenshot": "toolbar/table-header/table-header.webp",
+      "hasScript": false
+    },
+    {
       "id": "toolbar/simple/simple",
       "name": "Simple Toolbar",
       "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
@@ -13,6 +43,40 @@
       "category": "Toolbar",
       "screenshot": "toolbar/simple/simple.webp",
       "hasScript": false
+    },
+    {
+      "id": "tables/table-with-icon-actions/table-with-icon-actions",
+      "name": "Table with Icon Actions",
+      "description": "Data table inside a card with a toolbar header featuring icon buttons for filtering, exporting, and additional options",
+      "tags": [
+        "table",
+        "data",
+        "card",
+        "toolbar",
+        "icons",
+        "actions"
+      ],
+      "file": "tables/table-with-icon-actions/table-with-icon-actions.html",
+      "category": "Tables",
+      "screenshot": "tables/table-with-icon-actions/table-with-icon-actions.webp",
+      "hasScript": true
+    },
+    {
+      "id": "tables/table-with-actions/table-with-actions",
+      "name": "Table with Actions",
+      "description": "Data table inside a card with a toolbar header featuring action buttons for cancel, save draft, and submit operations",
+      "tags": [
+        "table",
+        "data",
+        "card",
+        "toolbar",
+        "buttons",
+        "actions"
+      ],
+      "file": "tables/table-with-actions/table-with-actions.html",
+      "category": "Tables",
+      "screenshot": "tables/table-with-actions/table-with-actions.webp",
+      "hasScript": true
     },
     {
       "id": "tables/simple/simple",
@@ -47,24 +111,6 @@
       "hasScript": true
     },
     {
-      "id": "scaffold-examples/sidesheet-card/sidesheet-card",
-      "name": "Sidesheet Scaffold Card",
-      "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
-      "tags": [
-        "card",
-        "scaffold",
-        "layout",
-        "toolbar",
-        "drawer",
-        "sidesheet",
-        "body-left"
-      ],
-      "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
-      "category": "Scaffold Examples",
-      "screenshot": "scaffold-examples/sidesheet-card/sidesheet-card.webp",
-      "hasScript": false
-    },
-    {
       "id": "scaffold-examples/simple-card/simple-card",
       "name": "Simple Scaffold Card",
       "description": "Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons",
@@ -81,6 +127,24 @@
       "file": "scaffold-examples/simple-card/simple-card.html",
       "category": "Scaffold Examples",
       "screenshot": "scaffold-examples/simple-card/simple-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "scaffold-examples/sidesheet-card/sidesheet-card",
+      "name": "Sidesheet Scaffold Card",
+      "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
+      "tags": [
+        "card",
+        "scaffold",
+        "layout",
+        "toolbar",
+        "drawer",
+        "sidesheet",
+        "body-left"
+      ],
+      "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
+      "category": "Scaffold Examples",
+      "screenshot": "scaffold-examples/sidesheet-card/sidesheet-card.webp",
       "hasScript": false
     },
     {
@@ -123,22 +187,6 @@
       "hasScript": true
     },
     {
-      "id": "forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
-      "tags": [
-        "authentication",
-        "login",
-        "form",
-        "card",
-        "centered"
-      ],
-      "file": "forms/login/login.html",
-      "category": "Forms",
-      "screenshot": "forms/login/login.webp",
-      "hasScript": false
-    },
-    {
       "id": "forms/multi-column/multi-column",
       "name": "Multi-Column Form",
       "description": "Responsive form using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
@@ -157,6 +205,22 @@
       "file": "forms/multi-column/multi-column.html",
       "category": "Forms",
       "screenshot": "forms/multi-column/multi-column.webp",
+      "hasScript": false
+    },
+    {
+      "id": "forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "tags": [
+        "authentication",
+        "login",
+        "form",
+        "card",
+        "centered"
+      ],
+      "file": "forms/login/login.html",
+      "category": "Forms",
+      "screenshot": "forms/login/login.webp",
       "hasScript": false
     },
     {
@@ -194,6 +258,22 @@
       "file": "forms/add-illustration/add-illustration.html",
       "category": "Forms",
       "screenshot": "forms/add-illustration/add-illustration.webp",
+      "hasScript": false
+    },
+    {
+      "id": "dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
+      "tags": [
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
+      ],
+      "file": "dialogs/simple/simple.html",
+      "category": "Dialogs",
+      "screenshot": "dialogs/simple/simple.webp",
       "hasScript": false
     },
     {
@@ -338,22 +418,6 @@
       "category": "Application Layout",
       "screenshot": "application-layout/basic/basic.webp",
       "hasScript": false
-    },
-    {
-      "id": "dialogs/simple/simple",
-      "name": "Simple Dialog",
-      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
-      "tags": [
-        "dialog",
-        "modal",
-        "scaffold",
-        "toolbar",
-        "actions"
-      ],
-      "file": "dialogs/simple/simple.html",
-      "category": "Dialogs",
-      "screenshot": "dialogs/simple/simple.webp",
-      "hasScript": false
     }
   ],
   "categories": [
@@ -385,5 +449,5 @@
       "name": "toolbar"
     }
   ],
-  "generatedAt": "2026-06-11T17:51:30.758Z"
+  "generatedAt": "2026-06-18T19:15:57.540Z"
 }

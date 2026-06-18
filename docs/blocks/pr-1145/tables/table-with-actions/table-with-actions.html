@@ -1,0 +1,46 @@
+<!--
+  @block Table with Actions
+  @description Data table inside a card with a toolbar header featuring action buttons for cancel, save draft, and submit operations
+  @tags table, data, card, toolbar, buttons, actions
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Table with Actions</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+  </head>
+  <body class="">
+    <div class="p-medium">
+  <forge-card class="p-0">
+    <forge-toolbar>
+      <h2 slot="start" class="text-heading3">Employee Directory</h2>
+      <div slot="end" class="flex gap-small">
+        <forge-button>Cancel</forge-button>
+        <forge-button variant="tonal">Save Draft</forge-button>
+        <forge-button variant="raised">Save</forge-button>
+      </div>
+    </forge-toolbar>
+    <forge-table id="employee-table"></forge-table>
+  </forge-card>
+</div>
+
+<script type="module" src="/src/blocks/tables/table-with-actions/table-with-actions.ts"></script>
+    <script type="module" src="/blocks/pr-1145/ready-transition.js"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js"></script>
+  </body>
+</html>
