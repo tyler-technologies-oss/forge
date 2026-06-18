@@ -1,0 +1,13 @@
+<!--
+  @block Table with Actions
+  @description Data table inside a card with a toolbar header featuring action buttons for cancel, save draft, and submit operations
+  @tags table, data, card, toolbar, buttons, actions
+-->
+<div class="p-medium">
+  <forge-card class="p-0">
+    {{> toolbar-actions title="Employee Directory" textButton="Cancel" tonalButton="Save Draft" primaryButton="Save"}}
+    <forge-table id="employee-table"></forge-table>
+  </forge-card>
+</div>
+
+<script type="module" src="/src/blocks/tables/table-with-actions/table-with-actions.ts"></script>
