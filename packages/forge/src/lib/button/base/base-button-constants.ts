@@ -12,16 +12,17 @@ const attributes = {
 
 const classes = {
   ROOT: 'forge-button',
-  POPOVER_ICON: 'forge-button__popover-icon',
+  POPOVER_ICON: 'popover-icon',
   WITH_ANCHOR: 'with-anchor'
 } as const;
 
 const selectors = {
-  ROOT: '[part=root]',
+  ROOT: '#root',
   DEFAULT_SLOT: 'slot:not([name])',
   END_SLOT: 'slot[name=end]'
 } as const;
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const BASE_BUTTON_CONSTANTS = {
   observedAttributes,
   attributes,
