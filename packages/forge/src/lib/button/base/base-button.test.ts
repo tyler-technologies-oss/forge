@@ -1,5 +1,5 @@
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
-import { html, unsafeCSS } from 'lit';
+import { html, TemplateResult, unsafeCSS } from 'lit';
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { userEvent } from 'vitest/browser';
@@ -36,6 +36,15 @@ const styles = `
 
 class TestBaseButton extends BaseButton {
   public static style = unsafeCSS(styles);
+
+  public render(): TemplateResult {
+    return html`
+      <div class="forge-test-base-button" part="root">
+        <slot name="start"></slot>
+        ${this._renderDefaultSlot()} ${this._renderEndSlotWithOptionalPopoverIcon()} ${this._renderInteractionLayer()}
+      </div>
+    `;
+  }
 }
 
 window.customElements.define('forge-test-base-button', TestBaseButton);
