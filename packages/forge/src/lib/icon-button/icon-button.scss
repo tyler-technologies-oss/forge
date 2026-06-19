@@ -39,6 +39,43 @@ $host-tokens: [display disabled-cursor];
   ::slotted(:is([slot='start'], [slot='end'])) {
     @include slotted-start-end;
   }
+
+  &.with-popover-icon {
+    @include override(padding, popover-icon-padding);
+  }
+
+  &.outlined {
+    @include outlined;
+  }
+
+  &.tonal {
+    @include tonal;
+  }
+
+  &.filled {
+    @include filled;
+  }
+
+  &.raised {
+    @include filled;
+    @include raised;
+  }
+
+  &.small {
+    @include density-small;
+
+    :slotted(*) {
+      @include density-small-slotted;
+    }
+  }
+
+  &.medium {
+    @include density-medium;
+  }
+
+  &.squared {
+    @include override(shape, shape-squared);
+  }
 }
 
 //
@@ -65,12 +102,14 @@ forge-focus-indicator {
   );
 }
 
-:host(:is([variant='icon'], :not([variant]))) {
-  @include focus-indicator.provide-theme(
-    (
-      outward-offset: 0px // Requires unit
-    )
-  );
+.forge-icon-button {
+  &.icon {
+    @include focus-indicator.provide-theme(
+      (
+        outward-offset: 0px // Requires unit
+      )
+    );
+  }
 }
 
 //
@@ -86,92 +125,48 @@ forge-state-layer {
 }
 
 //
-// Popover icon
-//
-
-:host([popover-icon]) {
-  .forge-icon-button {
-    @include override(padding, popover-icon-padding);
-  }
-}
-
-//
-// Variants
-//
-
-:host([variant='outlined']) {
-  .forge-icon-button {
-    @include outlined;
-  }
-}
-
-:host([variant='tonal']) {
-  .forge-icon-button {
-    @include tonal;
-  }
-}
-
-:host(:is([variant='filled'], [variant='raised'])) {
-  .forge-icon-button {
-    @include filled;
-  }
-}
-
-:host([variant='raised']) {
-  .forge-icon-button {
-    @include raised;
-  }
-}
-
-//
 // Toggle
 //
 
-:host(:is(:not([toggle]), [toggle]:not([pressed]))) {
+:host(:is(:not(:state(toggle)), :state(toggle):not(:state(pressed)))) {
   slot[name='on'] {
     display: none;
   }
 }
 
-:host([toggle][pressed]) {
-  slot:not([name]) {
-    display: none;
+:host(:state(toggle):state(pressed)) {
+  .forge-icon-button {
+    &.icon {
+      @include toggle-on-icon;
+    }
+
+    &.tonal {
+      @include toggle-on-tonal;
+    }
+
+    &.outlined {
+      @include toggle-on-outlined;
+    }
+
+    &:is(.filled, .raised) {
+      @include toggle-on-filled;
+    }
+
+    slot:not([name]) {
+      display: none;
+    }
   }
 }
 
-:host([toggle][pressed]:is(:not([variant]), [variant='icon'])) {
+:host(:state(toggle):not(:state(pressed))) {
   .forge-icon-button {
-    @include toggle-on-icon;
-  }
-}
+    &.tonal {
+      @include toggle-tonal;
+    }
 
-:host([toggle][pressed][variant='outlined']) {
-  .forge-icon-button {
-    @include toggle-on-outlined;
-  }
-}
-
-:host([toggle]:not([pressed])[variant='tonal']) {
-  .forge-icon-button {
-    @include toggle-tonal;
-  }
-}
-
-:host([toggle][pressed][variant='tonal']) {
-  .forge-icon-button {
-    @include toggle-on-tonal;
-  }
-}
-
-:host([toggle]:not([pressed]):is([variant='filled'], [variant='raised'])) {
-  .forge-icon-button {
-    @include toggle-filled;
-  }
-}
-
-:host([toggle][pressed]:is([variant='filled'], [variant='raised'])) {
-  .forge-icon-button {
-    @include toggle-on-filled;
+    &:is(.filled, .raised) {
+      @include toggle-filled;
+    }
   }
 }
 
@@ -191,30 +186,32 @@ forge-state-layer {
   top: 8px;
 }
 
-:host(:is([dense], [density='small'], [density='medium'])) {
-  ::slotted(forge-badge[slot='badge']:not([dot])) {
-    top: -25%;
+.forge-icon-button {
+  &:is(.small, .medium) {
+    ::slotted(forge-badge[slot='badge']:not([dot])) {
+      top: -25%;
+    }
+
+    ::slotted(forge-badge[slot='badge'][dot]) {
+      top: 0;
+    }
   }
 
-  ::slotted(forge-badge[slot='badge'][dot]) {
-    top: 0;
-  }
-}
-
-:host(:is([dense], [density='small'])) {
-  // We reduce the size of the badge when the density is small
-  ::slotted(forge-badge[slot='badge']) {
-    @include typography.provide(
-      label1,
-      (
-        line-height: normal
-      )
-    );
-    @include badge.provide-theme(
-      (
-        height: auto
-      )
-    );
+  .small {
+    // We reduce the size of the badge when the density is small
+    ::slotted(forge-badge[slot='badge']) {
+      @include typography.provide(
+        label1,
+        (
+          line-height: normal
+        )
+      );
+      @include badge.provide-theme(
+        (
+          height: auto
+        )
+      );
+    }
   }
 }
 
@@ -233,50 +230,18 @@ forge-state-layer {
 }
 
 //
-// Density
-//
-
-:host(:is([dense], [density='small'])) {
-  .forge-icon-button {
-    @include density-small;
-  }
-
-  ::slotted(*) {
-    @include density-small-slotted;
-  }
-}
-
-:host([density='medium']) {
-  .forge-icon-button {
-    @include density-medium;
-  }
-}
-
-//
-// Shape
-//
-
-:host([shape='squared']) {
-  .forge-icon-button {
-    @include override(shape, shape-squared);
-  }
-}
-
-//
 // Disabled
 //
 
-:host([disabled]) {
+:host(:state(disabled)) {
   @include host-disabled;
 
   .forge-icon-button {
     @include disabled;
-  }
-}
 
-:host([disabled][variant='raised']) {
-  .forge-icon-button {
-    @include raised-disabled;
+    &.raised {
+      @include raised-disabled;
+    }
   }
 }
 
@@ -285,82 +250,72 @@ forge-state-layer {
 //
 
 @mixin theme($theme) {
-  // Non-toggle + icon (default) & outlined variants
-  :host(:not([toggle])[theme='#{$theme}']:is(:not([variant]), [variant='icon'], [variant='outlined'])) {
-    .forge-icon-button {
-      @include override(icon-color, theme.variable($theme), value);
-    }
-  }
-
-  // Toggle + icon (default)
-  :host([toggle][theme='#{$theme}']:is(:not([variant]), [variant='icon'])) {
-    .forge-icon-button {
-      @include override(toggle-on-icon-color, theme.variable($theme), value);
-    }
-  }
-
-  // Toggle + outlined
-  :host([toggle][theme='#{$theme}'][variant='outlined']) {
-    .forge-icon-button {
-      @include override(icon-color, theme.variable($theme), value);
-      @include override(outlined-toggle-on-background-color, theme.variable(#{$theme}-container), value);
-      @include override(outlined-toggle-on-icon-color, theme.variable($theme), value);
-    }
-  }
-
-  // Primary theme is the default for filled and tonal variants
-  @if $theme != 'primary' {
-    // Non-toggle + tonal variant
-    :host(:not([toggle])[theme='#{$theme}'][variant='tonal']) {
-      .forge-icon-button {
-        @include override(icon-color, theme.variable(on-#{$theme}-container), value);
-        @include override(background-color, theme.variable(#{$theme}-container), value);
-      }
-    }
-
-    // Toggle + tonal variant
-    :host([toggle]:not([pressed])[theme='#{$theme}'][variant='tonal']) {
-      .forge-icon-button {
-        @include override(background-color, theme.variable(#{$theme}-container), value);
-      }
-    }
-
-    // Toggle (on) + tonal variant
-    :host([toggle][theme='#{$theme}'][variant='tonal']) {
-      .forge-icon-button {
-        @include override(tonal-toggle-on-background-color, theme.variable(#{$theme}-container), value);
-        @include override(tonal-toggle-on-icon-color, theme.variable(on-#{$theme}-container), value);
-      }
-    }
-
-    // Non-toggle + filled & raised variants
-    :host(:not([toggle])[theme='#{$theme}']:is([variant='filled'], [variant='raised'])) {
-      .forge-icon-button {
-        @include override(icon-color, theme.variable(on-#{$theme}), value);
-        @include override(background-color, theme.variable($theme), value);
-      }
-    }
-
-    // Toggle + filled & raised variants
-    :host([toggle]:not([pressed])[theme='#{$theme}']:is([variant='filled'], [variant='raised'])) {
-      .forge-icon-button {
+  // Non-toggle
+  :host(:not(:state(toggle))) {
+    .forge-icon-button.#{$theme} {
+      &:is(.icon, .outlined) {
         @include override(icon-color, theme.variable($theme), value);
-        @include override(background-color, theme.variable(#{$theme}-container), value);
       }
-    }
 
-    // Toggle (on) + filled & raised variants
-    :host([toggle][theme='#{$theme}']:is([variant='filled'], [variant='raised'])) {
-      .forge-icon-button {
-        @include override(filled-toggle-on-background-color, theme.variable($theme), value);
-        @include override(filled-toggle-on-icon-color, theme.variable(on-#{$theme}), value);
+      @if $theme != 'primary' {
+        &.tonal {
+          @include override(icon-color, theme.variable(on-#{$theme}-container), value);
+          @include override(background-color, theme.variable(#{$theme}-container), value);
+        }
+
+        &:is(.filled, .raised) {
+          @include override(icon-color, theme.variable(on-#{$theme}), value);
+          @include override(background-color, theme.variable($theme), value);
+        }
       }
     }
   }
 
-  // Focus indicator
-  :host([theme='#{$theme}']) {
-    .forge-icon-button {
+  // Toggle (off)
+  :host(:state(toggle):not(:state(pressed))) {
+    .forge-icon-button.#{$theme} {
+      @if $theme != 'primary' {
+        &.tonal {
+          @include override(background-color, theme.variable(#{$theme}-container), value);
+        }
+
+        &:is(.filled, .raised) {
+          @include override(icon-color, theme.variable($theme), value);
+          @include override(background-color, theme.variable(#{$theme}-container), value);
+        }
+      }
+    }
+  }
+
+  // Toggle (on)
+  :host(:state(toggle):state(pressed)) {
+    .forge-icon-button.#{$theme} {
+      &:is(.icon, .outlined) {
+        @include override(toggle-on-icon-color, theme.variable($theme), value);
+      }
+
+      &.outlined {
+        @include override(icon-color, theme.variable($theme), value);
+        @include override(outlined-toggle-on-background-color, theme.variable(#{$theme}-container), value);
+        @include override(outlined-toggle-on-icon-color, theme.variable($theme), value);
+      }
+
+      @if $theme != 'primary' {
+        &.tonal {
+          @include override(tonal-toggle-on-background-color, theme.variable(#{$theme}-container), value);
+          @include override(tonal-toggle-on-icon-color, theme.variable(on-#{$theme}-container), value);
+        }
+
+        &:is(.filled, .raised) {
+          @include override(filled-toggle-on-background-color, theme.variable($theme), value);
+          @include override(filled-toggle-on-icon-color, theme.variable(on-#{$theme}), value);
+        }
+      }
+    }
+  }
+
+  .forge-icon-button {
+    &.#{$theme} {
       @include override(focus-indicator-color, theme.variable($theme), value);
     }
   }
@@ -378,7 +333,7 @@ forge-state-layer {
 // App Bar Theme
 //
 
-:host([theme='app-bar']) {
+.forge-icon-button.app-bar {
   @include provide-theme(
     (
       icon-color: #{app-bar.token(theme-foreground)},

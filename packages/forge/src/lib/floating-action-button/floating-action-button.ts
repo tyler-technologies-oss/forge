@@ -1,27 +1,28 @@
-import { attachShadowTemplate, customElement, coreProperty } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { html, TemplateResult, unsafeCSS } from 'lit';
+import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { BaseButton } from '../button/base/base-button.js';
 import { ButtonTheme } from '../button/index.js';
-import { BaseButton, IBaseButton } from '../button/base/base-button.js';
-import { BASE_BUTTON_CONSTANTS } from '../button/base/base-button-constants.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { FocusIndicatorComponent } from '../focus-indicator/index.js';
 import { IconComponent } from '../icon/icon.js';
 import { StateLayerComponent } from '../state-layer/index.js';
-import { FloatingActionButtonAdapter } from './floating-action-button-adapter.js';
-import { FloatingActionButtonDensity, FloatingActionButtonElevation, FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants.js';
-import { FloatingActionButtonCore } from './floating-action-button-core.js';
+import { FLOATING_ACTION_BUTTON_CONSTANTS, FloatingActionButtonDensity, FloatingActionButtonElevation } from './floating-action-button-constants.js';
 
-import template from './floating-action-button.html';
 import styles from './floating-action-button.scss';
 
-export interface IFloatingActionButtonComponent extends IBaseButton {
+/** @deprecated - This will be removed in the future. Please switch to using FloatingActionButtonComponent. */
+export interface IFloatingActionButtonComponent extends BaseLitElement {
   theme: ButtonTheme;
   density: FloatingActionButtonDensity;
   elevation: FloatingActionButtonElevation;
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-fab': IFloatingActionButtonComponent;
-  }
+  type: string;
+  disabled: boolean;
+  popoverIcon: boolean;
+  name: string;
+  value: string;
+  dense: boolean;
 }
 
 /**
@@ -32,14 +33,6 @@ declare global {
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
  * @dependency forge-icon
- *
- * @property {ButtonTheme} [theme="secondary"] - Sets the theme of the button.
- * @property {FloatingActionButtonDensity} [density="medium"] - Sets the density of the button.
- * @property {FloatingActionButtonElevation} [elevation="raised"] - Sets the elevation of the button.
- *
- * @attribute {string} [theme="secondary"] - Sets the theme of the button.
- * @attribute {string} [density="medium"] - Sets the density of the button.
- * @attribute {string} [elevation="raised"] - Sets the elevation of the button.
  *
  * @fires {PointerEvent} click - Fires when the button is clicked.
  *
@@ -87,44 +80,74 @@ declare global {
  * @slot label - Reserved specifically for label text. This forces the button into extended mode.
  * @slot end - An element to logically render at the end of the button content.
  */
-@customElement({
-  name: FLOATING_ACTION_BUTTON_CONSTANTS.elementName,
-  dependencies: [FocusIndicatorComponent, StateLayerComponent, IconComponent]
-})
-export class FloatingActionButtonComponent extends BaseButton<FloatingActionButtonCore> implements IFloatingActionButtonComponent {
-  public static get observedAttributes(): string[] {
-    return [...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes), ...Object.values(FLOATING_ACTION_BUTTON_CONSTANTS.observedAttributes)];
+@customElement(FLOATING_ACTION_BUTTON_CONSTANTS.elementName)
+export class FloatingActionButtonComponent extends BaseButton implements IFloatingActionButtonComponent {
+  public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = FLOATING_ACTION_BUTTON_CONSTANTS.elementName;
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [FocusIndicatorComponent, StateLayerComponent, IconComponent];
+
+  /**
+   * Gets/sets the theme of the button.
+   * @default 'secondary'
+   * @attribute
+   */
+  @property({
+    reflect: true
+  })
+  public theme: ButtonTheme = FLOATING_ACTION_BUTTON_CONSTANTS.defaults.DEFAULT_THEME;
+
+  /**
+   * Gets/sets the density of the button.
+   * @default 'medium'
+   * @attribute
+   */
+  @property({ reflect: true })
+  public density: FloatingActionButtonDensity = FLOATING_ACTION_BUTTON_CONSTANTS.defaults.DEFAULT_DENSITY;
+
+  /**
+   * Gets/sets the elevation of the button.
+   * @default 'raised'
+   * @attribute
+   */
+  @property({ reflect: true })
+  public elevation: FloatingActionButtonElevation = FLOATING_ACTION_BUTTON_CONSTANTS.defaults.DEFAULT_ELEVATION;
+
+  @state()
+  private _extended = false;
+
+  @queryAssignedNodes({ slot: 'label', flatten: true }) private _labelSlotAssignedNodes!: Node[];
+
+  public render(): TemplateResult {
+    const classes = {
+      'forge-fab': true,
+      extended: this._extended,
+      small: this.dense,
+      [this.density]: !this.dense,
+      [this.elevation]: true,
+      [this.theme]: true
+    };
+
+    return html`
+      <div class=${classMap(classes)} part="root" id="root">
+        <slot name="start"></slot>
+        ${this._renderDefaultSlot()}
+        <slot name="label" @slotchange=${this.#handleLabelSlotChange}></slot>
+        ${this._renderEndSlotWithOptionalPopoverIcon()} ${this._renderInteractionLayer()}
+      </div>
+    `;
   }
 
-  protected readonly _core: FloatingActionButtonCore;
-
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new FloatingActionButtonCore(new FloatingActionButtonAdapter(this));
+  #handleLabelSlotChange(): void {
+    this._extended = this.popoverIcon || !!this._labelSlotAssignedNodes.length;
   }
+}
 
-  public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case FLOATING_ACTION_BUTTON_CONSTANTS.attributes.THEME:
-        this.theme = newValue as ButtonTheme;
-        return;
-      case FLOATING_ACTION_BUTTON_CONSTANTS.attributes.DENSITY:
-        this.density = newValue as FloatingActionButtonDensity;
-        return;
-      case FLOATING_ACTION_BUTTON_CONSTANTS.attributes.ELEVATION:
-        this.elevation = newValue as FloatingActionButtonElevation;
-        return;
-    }
-    super.attributeChangedCallback(name, oldValue, newValue);
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-fab': FloatingActionButtonComponent;
   }
-
-  @coreProperty()
-  declare public theme: ButtonTheme;
-
-  @coreProperty()
-  declare public density: FloatingActionButtonDensity;
-
-  @coreProperty()
-  declare public elevation: FloatingActionButtonElevation;
 }

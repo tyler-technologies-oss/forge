@@ -110,6 +110,7 @@ export interface IIconButtonComponent extends IBaseButton {
  * @slot end - Elements to logically render after the icon.
  * @slot badge - Absolutely positions the element in the top-end corner of the button (typically reserved for badge-like content).
  *
+ * @state toggle - Applied when the button is in toggle mode.
  * @state pressed - Applied when the button is toggled on in toggle mode.
  */
 @customElement(ICON_BUTTON_CONSTANTS.elementName)
@@ -187,6 +188,10 @@ export class IconButtonComponent extends BaseButton {
   public override updated(changedProperties: PropertyValues<this>): void {
     super.updated(changedProperties);
 
+    if (changedProperties.has('toggle')) {
+      toggleState(this._internals, 'toggle', this.toggle);
+    }
+
     if (changedProperties.has('pressed')) {
       setDefaultAria(this, this._internals, { ariaPressed: this.pressed ? 'true' : 'false' });
       toggleState(this._internals, 'pressed', this.pressed);
@@ -196,13 +201,12 @@ export class IconButtonComponent extends BaseButton {
   public render(): TemplateResult {
     const classes = {
       'forge-icon-button': true,
-      'forge-icon-button--outlined': this.variant === 'outlined',
-      'forge-icon-button--tonal': this.variant === 'tonal',
-      'forge-icon-button--filled': this.variant === 'filled',
-      'forge-icon-button--raised': this.variant === 'raised',
-      'forge-icon-button--small': this.density === 'small',
-      'forge-icon-button--medium': this.density === 'medium',
-      'forge-icon-button--squared': this.shape === 'squared'
+      'with-popover-icon': this.popoverIcon,
+      small: this.dense,
+      [this.density]: !this.dense,
+      [this.shape]: true,
+      [this.variant]: true,
+      [this.theme]: true
     };
 
     return html`

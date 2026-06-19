@@ -6,9 +6,10 @@ import { IconComponent } from '../icon/index.js';
 import { StateLayerComponent } from '../state-layer/index.js';
 import { BaseButton, IBaseButton } from './base/base-button.js';
 import { BUTTON_CONSTANTS, ButtonTheme, ButtonVariant } from './button-constants.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { toggleState } from '../core/utils/utils.js';
 
 import styles from './button.scss';
-import { classMap } from 'lit/directives/class-map.js';
 
 /** @deprecated - This will be removed in the future. Please switch to using ButtonComponent. */
 export interface IButtonComponent extends IBaseButton {
@@ -176,18 +177,22 @@ export class ButtonComponent extends BaseButton {
     }
   }
 
+  public override updated(changedProperties: PropertyValues<this>): void {
+    super.updated(changedProperties);
+
+    if (changedProperties.has('fullWidth')) {
+      toggleState(this._internals, 'full-width', this.fullWidth);
+    }
+  }
+
   public render(): TemplateResult {
     const classes = {
       'forge-button': true,
-      'forge-button--text': this.variant === 'text',
-      'forge-button--outlined': this.variant === 'outlined',
-      'forge-button--tonal': this.variant === 'tonal',
-      'forge-button--filled': this.variant === 'filled',
-      'forge-button--raised': this.variant === 'raised',
-      'forge-button--link': this.variant === 'link',
-      'forge-button--dense': this.dense,
-      'forge-button--pill': this.pill,
-      'forge-button--full-width': this.fullWidth
+      'with-popover-icon': this.popoverIcon,
+      dense: this.dense,
+      pill: this.pill,
+      [this.variant]: true,
+      [this.theme]: true
     };
     return html`
       <div class=${classMap(classes)} part="root" id="root">
