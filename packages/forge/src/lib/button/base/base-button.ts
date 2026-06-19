@@ -1,8 +1,7 @@
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult } from 'lit';
-import { property, query, queryAssignedElements } from 'lit/decorators.js';
-import { ClassInfo } from 'lit/directives/class-map.js';
+import { property, query, queryAssignedElements, state } from 'lit/decorators.js';
 import { DEFERRED_LABEL_TARGET, ExperimentalFocusOptions, forgeLabelRef, internals, updateTarget } from '../../constants.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
@@ -121,9 +120,9 @@ export abstract class BaseButton extends BaseLitElement {
 
   // Internal state
   protected _internals: ElementInternals;
-  protected _hasStartSlot = false;
-  protected _hasEndSlot = false;
-  protected _rootClasses: ClassInfo = {};
+
+  @state()
+  protected _stateLayerDisabled = false;
 
   #clickListener = this._onClick.bind(this);
   #keydownListener = this.#onKeydown.bind(this);
@@ -195,7 +194,7 @@ export abstract class BaseButton extends BaseLitElement {
         ? nothing
         : html`
             <forge-focus-indicator target=":host" part="focus-indicator"></forge-focus-indicator>
-            <forge-state-layer target=":host" exportpart="surface:state-layer"></forge-state-layer>
+            <forge-state-layer target=":host" exportpart="surface:state-layer" .disabled=${this._stateLayerDisabled}></forge-state-layer>
           `}
     `;
   }

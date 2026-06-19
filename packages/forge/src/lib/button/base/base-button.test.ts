@@ -272,6 +272,7 @@ describe('BaseButton', () => {
   it('should not disable dynamically when href is specified', async () => {
     const screen = render(html`<forge-test-base-button><a href="javascript: void(0);">Button</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
 
     el.disabled = true;
     await el.updateComplete;
@@ -586,20 +587,19 @@ describe('BaseButton', () => {
   });
 
   it('should not disable <a>', async () => {
-    window.forgeAnchorTest = () => {};
-    const href = `javascript: forgeAnchorTest()`;
-    const screen = render(html`<forge-test-base-button disabled><a href="${href}">Test</a></forge-test-base-button>`);
+    const screen = render(html`<forge-test-base-button disabled><a href="javascript: void(0);">Test</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
     await el.updateComplete;
 
     const clickSpy = vi.fn();
     el.addEventListener('click', clickSpy);
 
-    el.click();
+    const anchorEl = el.querySelector('a') as HTMLAnchorElement;
+    anchorEl.click();
     await el.updateComplete;
-    delete window.forgeAnchorTest;
 
     expect(clickSpy).toHaveBeenCalled();
+    expect(el.disabled).toBe(false);
   });
 
   it('should enable button when anchor is set while disabled', async () => {

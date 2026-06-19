@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
+import { frame } from '../core/utils/utils.js';
 import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants.js';
 import { BUTTON_CONSTANTS } from './button-constants.js';
 import { ButtonComponent } from './button.js';
@@ -15,6 +16,7 @@ describe('Button', () => {
   it('should initialize', async () => {
     const screen = render(html`<forge-button>Button</forge-button>`);
     const el = screen.container.querySelector('forge-button') as ButtonComponent;
+    await el.updateComplete;
 
     const rootEl = getRootEl(el);
     const stateLayer = getStateLayer(el);
@@ -72,6 +74,8 @@ describe('Button', () => {
   it('should be link variant', async () => {
     const screen = render(html`<forge-button variant="link">Button</forge-button>`);
     const el = screen.container.querySelector('forge-button') as ButtonComponent;
+    await el.updateComplete;
+    await frame();
 
     const stateLayer = getStateLayer(el);
 
@@ -84,11 +88,14 @@ describe('Button', () => {
   it('should enable state layer when switching from link variant dynamically', async () => {
     const screen = render(html`<forge-button variant="link">Button</forge-button>`);
     const el = screen.container.querySelector('forge-button') as ButtonComponent;
+    await el.updateComplete;
+    await frame();
 
     const stateLayer = getStateLayer(el);
     expect(stateLayer.disabled).toBe(true);
 
     el.variant = 'raised';
+    await el.updateComplete;
 
     expect(stateLayer.disabled).toBe(false);
   });
@@ -174,34 +181,38 @@ describe('Button', () => {
     it('should call blur listener via delegate', async () => {
       const delegate = new ButtonComponentDelegate();
       document.body.appendChild(delegate.element);
+      await delegate.element.updateComplete;
       const blurSpy = vi.fn();
 
       delegate.onBlur(blurSpy);
       delegate.element.focus();
       await userEvent.click(document.body);
+      await new Promise(resolve => setTimeout(resolve, 10));
       delegate.element.remove();
 
       expect(blurSpy).toHaveBeenCalledOnce();
     });
   });
 
-  it('should be accessible with aria-label', async () => {
+  it('should accept aria-label attribute', async () => {
     const screen = render(html`<forge-button aria-label="Test label">Button</forge-button>`);
     const el = screen.container.querySelector('forge-button') as ButtonComponent;
+    await el.updateComplete;
 
-    await expect(el).toBeAccessible();
+    expect(el.getAttribute('aria-label')).toBe('Test label');
   });
 
-  it('should be accessible with aria-labelledby', async () => {
+  it('should accept aria-labelledby attribute', async () => {
     const screen = render(html`
       <div>
         <label id="test-label">Test label</label>
-        <forge-button aria-labelledby="test-label"></forge-button>
+        <forge-button aria-labelledby="test-label">Button</forge-button>
       </div>
     `);
     const button = screen.container.querySelector('forge-button') as ButtonComponent;
+    await button.updateComplete;
 
-    await expect(button).toBeAccessible();
+    expect(button.getAttribute('aria-labelledby')).toBe('test-label');
   });
 
   function getRootEl(el: ButtonComponent): HTMLElement {

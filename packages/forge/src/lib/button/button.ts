@@ -162,23 +162,12 @@ export class ButtonComponent extends BaseButton {
   @property({ type: Boolean, reflect: true, attribute: 'full-width' })
   public fullWidth = false;
 
-  public override willUpdate(changedProperties: PropertyValues<this>): void {
-    super.willUpdate(changedProperties);
-
-    // State layer toggling for link variant
-    if (changedProperties.has('variant')) {
-      if (this._stateLayerElement) {
-        if (this.variant === 'link') {
-          this._stateLayerElement.disabled = true;
-        } else {
-          this._stateLayerElement.disabled = false;
-        }
-      }
-    }
-  }
-
   public override updated(changedProperties: PropertyValues<this>): void {
     super.updated(changedProperties);
+
+    if (changedProperties.has('variant')) {
+      this._stateLayerDisabled = this.variant === 'link';
+    }
 
     if (changedProperties.has('fullWidth')) {
       toggleState(this._internals, 'full-width', this.fullWidth);
