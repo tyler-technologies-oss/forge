@@ -81,7 +81,7 @@ export interface IFloatingActionButtonComponent extends BaseLitElement {
  * @slot end - An element to logically render at the end of the button content.
  */
 @customElement(FLOATING_ACTION_BUTTON_CONSTANTS.elementName)
-export class FloatingActionButtonComponent extends BaseButton implements IFloatingActionButtonComponent {
+export class FloatingActionButtonComponent extends BaseButton {
   public static styles = unsafeCSS(styles);
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
