@@ -1,5 +1,20 @@
 # @tylertech/forge
 
+## 3.15.0
+
+### Minor Changes
+
+- 35922fc: feat(tabs): enable tab removal via keyboard
+- 35922fc: feat(tabs): migrate to lit
+
+### Patch Changes
+
+- 19d2237: feature(toolbar): convert to Lit
+- df76d15: fix(button-area): prevent slotted content disappearing when button receives focus
+- 53d8510: fix(select): keyboard navigation from selected option after mouse click open
+- Updated dependencies [35922fc]
+  - @tylertech/forge-core@3.3.2
+
 ## 3.14.4
 
 ### Patch Changes

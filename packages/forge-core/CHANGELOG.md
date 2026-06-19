@@ -1,5 +1,11 @@
 # @tylertech/forge-core
 
+## 3.3.2
+
+### Patch Changes
+
+- 35922fc: feat: add type narrowing to isDefined function
+
 ## 3.3.1
 
 ### Patch Changes
