@@ -5,13 +5,13 @@ import { property, query, queryAssignedElements, state } from 'lit/decorators.js
 import { DEFERRED_LABEL_TARGET, ExperimentalFocusOptions, forgeLabelRef, internals, updateTarget } from '../../constants.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
-import { supportsPopover } from '../../core/utils/feature-detection.js';
+import { supportsInvokerCommands, supportsPopover, CommandEvent as FallbackCommandEvent } from '../../core/utils/feature-detection.js';
 import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflect-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
 import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator/index.js';
 import { IconRegistry } from '../../icon/icon-registry.js';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer/index.js';
-import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants.js';
+import { BASE_BUTTON_CONSTANTS, ButtonType, CommandType } from './base-button-constants.js';
 
 /** @deprecated - This will be removed in the future. Please switch to using BaseButton. */
 export interface IBaseButton {
@@ -111,6 +111,35 @@ export abstract class BaseButton extends BaseLitElement {
    */
   @property({ type: Boolean, reflect: true })
   public dense = false;
+
+  /**
+   * Indicates to the targeted element which action to take.
+   * @default ''
+   * @attribute
+   */
+  @property()
+  public command: CommandType = '';
+
+  /**
+   * Targets another element to be invoked.
+   * @default ''
+   * @attribute command-for
+   */
+  @property()
+  public commandFor = '';
+
+  /**
+   * Targets another element to be invoked.
+   * @default undefined
+   */
+  @property({ attribute: false })
+  public set commandForElement(value: HTMLElement | undefined) {
+    this.#commandForElement = value;
+  }
+  public get commandForElement(): HTMLElement | undefined {
+    return this.#commandForElement ?? this.ownerDocument.getElementById(this.commandFor) ?? undefined;
+  }
+  #commandForElement: typeof this.commandForElement;
 
   // PopoverInvokerElement
   /** @ignore */
@@ -252,8 +281,10 @@ export abstract class BaseButton extends BaseLitElement {
     }
 
     if (isFormType) {
-      this.#clickFormButton(this.type);
+      return this.#clickFormButton(this.type);
     }
+
+    this.#invokeCommand();
   }
 
   async #onKeydown(evt: KeyboardEvent): Promise<void> {
@@ -430,5 +461,22 @@ export abstract class BaseButton extends BaseLitElement {
       return;
     }
     this._stateLayerElement?.playAnimation();
+  }
+
+  #invokeCommand(): void {
+    if (!this.command) {
+      return;
+    }
+
+    const targetElement = this.commandForElement;
+    if (!targetElement) {
+      return;
+    }
+
+    if (supportsInvokerCommands()) {
+      targetElement.dispatchEvent(new CommandEvent('command', { source: this, command: this.command, cancelable: true }));
+    } else {
+      targetElement.dispatchEvent(new FallbackCommandEvent('command', { source: this, command: this.command, cancelable: true }));
+    }
   }
 }
