@@ -39,7 +39,7 @@ class TestBaseButton extends BaseButton {
 
   public render(): TemplateResult {
     return html`
-      <div class="forge-test-base-button" part="root">
+      <div id="root" class="forge-test-base-button" part="root">
         <slot name="start"></slot>
         ${this._renderDefaultSlot()} ${this._renderEndSlotWithOptionalPopoverIcon()} ${this._renderInteractionLayer()}
       </div>
@@ -53,7 +53,7 @@ describe('BaseButton', () => {
   it('should allow for alternate role', async () => {
     const screen = render(html`<forge-test-base-button role="presentation">Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
-    await frame();
+    await el.updateComplete;
 
     expect(el.role).toBe('presentation');
   });
@@ -61,7 +61,7 @@ describe('BaseButton', () => {
   it('should allow for alternate role dynamically', async () => {
     const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
-
+    await el.updateComplete;
     el.role = 'presentation';
     expect(el.role).toBe('presentation');
   });
@@ -69,6 +69,7 @@ describe('BaseButton', () => {
   it('should show focus indicator when focused', async () => {
     const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
 
     const focusIndicator = getFocusIndicator(el);
     expect(focusIndicator.active).toBe(false);
@@ -82,6 +83,7 @@ describe('BaseButton', () => {
   it('should not show focus indicator programmatically', async () => {
     const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
 
     const focusIndicator = getFocusIndicator(el);
     expect(focusIndicator.active).toBe(false);
@@ -95,6 +97,7 @@ describe('BaseButton', () => {
   it('should show focus indicator programmatically when focusVisible is true', async () => {
     const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
 
     const focusIndicator = getFocusIndicator(el);
     expect(focusIndicator.active).toBe(false);
@@ -108,7 +111,7 @@ describe('BaseButton', () => {
   it('should not set popover icon by default', async () => {
     const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
-
+    await el.updateComplete;
     const popoverIcon = getPopoverIcon(el);
 
     expect(el.popoverIcon).toBe(false);
@@ -119,7 +122,7 @@ describe('BaseButton', () => {
   it('should set default popover icon', async () => {
     const screen = render(html`<forge-test-base-button popover-icon>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
-    await frame();
+    await el.updateComplete;
 
     const popoverIcon = getPopoverIcon(el);
     expect(el.popoverIcon).toBe(true);
@@ -134,8 +137,8 @@ describe('BaseButton', () => {
     const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
 
-    await frame();
     el.popoverIcon = true;
+    await el.updateComplete;
 
     const popoverIcon = getPopoverIcon(el);
     expect(el.popoverIcon).toBe(true);
@@ -147,11 +150,13 @@ describe('BaseButton', () => {
   it('should remove popover icon dynamically', async () => {
     const screen = render(html`<forge-test-base-button popover-icon>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
 
     let popoverIcon = getPopoverIcon(el);
     expect(popoverIcon).toBeTruthy();
 
     el.popoverIcon = false;
+    await el.updateComplete;
 
     popoverIcon = getPopoverIcon(el);
     expect(el.popoverIcon).toBe(false);
@@ -162,7 +167,7 @@ describe('BaseButton', () => {
   it('should set dense', async () => {
     const screen = render(html`<forge-test-base-button dense>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
-    await frame();
+    await el.updateComplete;
 
     expect(el.dense).toBe(true);
     expect(el.hasAttribute('dense')).toBe(true);
@@ -173,7 +178,7 @@ describe('BaseButton', () => {
   it('should set type to button by default', async () => {
     const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
-    await frame();
+    await el.updateComplete;
 
     expect(el.type).toBe('button');
 
@@ -183,7 +188,7 @@ describe('BaseButton', () => {
   it('should set type to submit', async () => {
     const screen = render(html`<forge-test-base-button type="submit">Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
-    await frame();
+    await el.updateComplete;
 
     expect(el.type).toBe('submit');
     expect(el.getAttribute('type')).toBe('submit');
@@ -194,7 +199,7 @@ describe('BaseButton', () => {
   it('should set type to reset', async () => {
     const screen = render(html`<forge-test-base-button type="reset">Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
-    await frame();
+    await el.updateComplete;
 
     expect(el.type).toBe('reset');
     expect(el.getAttribute('type')).toBe('reset');
@@ -205,7 +210,7 @@ describe('BaseButton', () => {
   it('should be disabled', async () => {
     const screen = render(html`<forge-test-base-button disabled>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
-    await frame();
+    await el.updateComplete;
 
     expect(el.disabled).toBe(true);
     expect(el.hasAttribute('disabled')).toBe(true);
@@ -219,6 +224,7 @@ describe('BaseButton', () => {
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
 
     el.disabled = true;
+    await el.updateComplete;
 
     let stateLayer = getStateLayer(el);
     let focusIndicator = getFocusIndicator(el);
@@ -233,6 +239,7 @@ describe('BaseButton', () => {
     await expect(el).toBeAccessible();
 
     el.disabled = false;
+    await frame();
 
     stateLayer = getStateLayer(el);
     focusIndicator = getFocusIndicator(el);
@@ -267,7 +274,7 @@ describe('BaseButton', () => {
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
 
     el.disabled = true;
-    await frame();
+    await el.updateComplete;
 
     const stateLayer = getStateLayer(el);
     const focusIndicator = getFocusIndicator(el);
@@ -284,6 +291,7 @@ describe('BaseButton', () => {
   it('should focus element when focus() is called', async () => {
     const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
 
     el.focus();
 
@@ -333,12 +341,14 @@ describe('BaseButton', () => {
   it('should dispatch click event when enter key is pressed', async () => {
     const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
+
     const clickSpy = vi.fn();
     el.addEventListener('click', clickSpy);
 
     el.focus();
     await userEvent.keyboard('{Enter}');
-    await frame();
+    await el.updateComplete;
 
     expect(clickSpy).toHaveBeenCalledOnce();
   });
@@ -346,12 +356,14 @@ describe('BaseButton', () => {
   it('should dispatch click event when space key is pressed', async () => {
     const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
+
     const clickSpy = vi.fn();
     el.addEventListener('click', clickSpy);
 
     el.focus();
     await userEvent.keyboard(' ');
-    await frame();
+    await el.updateComplete;
 
     expect(clickSpy).toHaveBeenCalledOnce();
   });
@@ -365,7 +377,7 @@ describe('BaseButton', () => {
     el.focus();
     await userEvent.keyboard('{Enter}');
     await userEvent.keyboard(' ');
-    await frame();
+    await el.updateComplete;
 
     expect(clickSpy).not.toHaveBeenCalled();
   });
@@ -379,7 +391,7 @@ describe('BaseButton', () => {
     el.focus();
     await userEvent.keyboard('{Enter}');
     await userEvent.keyboard(' ');
-    await frame();
+    await el.updateComplete;
 
     expect(clickSpy).not.toHaveBeenCalled();
   });
@@ -414,7 +426,7 @@ describe('BaseButton', () => {
 
     el.focus();
     await userEvent.keyboard('{Enter}');
-    await frame();
+    await el.updateComplete;
 
     expect(clickSpy).not.toHaveBeenCalled();
   });
@@ -427,7 +439,7 @@ describe('BaseButton', () => {
 
     el.focus();
     await userEvent.keyboard(' ');
-    await frame();
+    await el.updateComplete;
 
     expect(clickSpy).not.toHaveBeenCalled();
   });
@@ -435,7 +447,7 @@ describe('BaseButton', () => {
   it('should detect when <a> is slotted', async () => {
     const screen = render(html`<forge-test-base-button><a href="javascript: console.log('test');">Test</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
-    await frame();
+    await el.updateComplete;
 
     const rootEl = getRootEl(el);
     expect(rootEl.classList.contains(BASE_BUTTON_CONSTANTS.classes.WITH_ANCHOR)).toBe(true);
@@ -453,7 +465,7 @@ describe('BaseButton', () => {
     anchor.href = 'javascript: console.log("test");';
     anchor.textContent = 'Test';
     el.appendChild(anchor);
-    await frame();
+    await el.updateComplete;
 
     const rootEl = getRootEl(el);
     expect(rootEl.classList.contains(BASE_BUTTON_CONSTANTS.classes.WITH_ANCHOR)).toBe(true);
@@ -466,6 +478,8 @@ describe('BaseButton', () => {
   it('should detect when <a> is removed dynamically', async () => {
     const screen = render(html`<forge-test-base-button><a href="javascript: console.log('test');">Test</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
+
     const anchor = el.querySelector('a') as HTMLAnchorElement;
     const rootEl = getRootEl(el);
 
@@ -475,7 +489,7 @@ describe('BaseButton', () => {
 
     el.removeChild(anchor);
     el.textContent = 'Button';
-    await frame();
+    await el.updateComplete;
 
     expect(rootEl.classList.contains(BASE_BUTTON_CONSTANTS.classes.WITH_ANCHOR)).toBe(false);
     expect(el.tabIndex).toBe(0);
@@ -493,7 +507,7 @@ describe('BaseButton', () => {
     el.addEventListener('click', clickSpy);
 
     el.click();
-    await frame();
+    await el.updateComplete;
     delete window.forgeAnchorTest;
 
     expect(clickSpy).toHaveBeenCalledOnce();
@@ -504,11 +518,14 @@ describe('BaseButton', () => {
     const href = `javascript: forgeAnchorTest()`;
     const screen = render(html`<forge-test-base-button><a href="${href}">Test</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
+
     const testSpy = vi.spyOn(window as any, 'forgeAnchorTest');
     const clickSpy = vi.fn();
     el.addEventListener('click', clickSpy);
 
-    await userEvent.click(el);
+    const anchorEl = el.querySelector('a') as HTMLAnchorElement;
+    await userEvent.click(anchorEl);
     delete window.forgeAnchorTest;
 
     expect(clickSpy).toHaveBeenCalledOnce();
@@ -524,7 +541,7 @@ describe('BaseButton', () => {
     el.addEventListener('click', evt => evt.preventDefault());
 
     el.click();
-    await frame();
+    await el.updateComplete;
     delete window.forgeAnchorTest;
 
     expect(testSpy).not.toHaveBeenCalled();
@@ -535,6 +552,8 @@ describe('BaseButton', () => {
     const href = `javascript: forgeAnchorTest()`;
     const screen = render(html`<forge-test-base-button><a href="${href}">Test</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
+
     const testSpy = vi.spyOn(window as any, 'forgeAnchorTest');
     const clickSpy = vi.fn();
     el.addEventListener('click', clickSpy);
@@ -542,7 +561,7 @@ describe('BaseButton', () => {
     const anchorEl = el.querySelector('a') as HTMLAnchorElement;
     anchorEl.focus();
     await userEvent.keyboard('{Enter}');
-    await frame();
+    await el.updateComplete;
     delete window.forgeAnchorTest;
 
     expect(clickSpy).toHaveBeenCalledOnce();
@@ -560,7 +579,7 @@ describe('BaseButton', () => {
     const anchorEl = el.querySelector('a') as HTMLAnchorElement;
     anchorEl.focus();
     await userEvent.keyboard('{Enter}');
-    await frame();
+    await el.updateComplete;
     delete window.forgeAnchorTest;
 
     expect(testSpy).not.toHaveBeenCalled();
@@ -571,11 +590,13 @@ describe('BaseButton', () => {
     const href = `javascript: forgeAnchorTest()`;
     const screen = render(html`<forge-test-base-button disabled><a href="${href}">Test</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
+
     const clickSpy = vi.fn();
     el.addEventListener('click', clickSpy);
 
     el.click();
-    await frame();
+    await el.updateComplete;
     delete window.forgeAnchorTest;
 
     expect(clickSpy).toHaveBeenCalled();
@@ -589,7 +610,7 @@ describe('BaseButton', () => {
     anchor.href = 'javascript: void(0);';
     el.appendChild(anchor);
 
-    await frame();
+    await el.updateComplete;
 
     expect(el.disabled).toBe(false);
   });
@@ -604,10 +625,12 @@ describe('BaseButton', () => {
 
     const buttonEl = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
     const popoverEl = screen.container.querySelector('[popover]') as HTMLElement;
+    await buttonEl.updateComplete;
+
     const toggleSpy = vi.spyOn(popoverEl as any, 'togglePopover');
 
     buttonEl.click();
-    await frame();
+    await buttonEl.updateComplete;
 
     expect(toggleSpy).toHaveBeenCalledOnce();
   });
@@ -640,11 +663,13 @@ describe('BaseButton', () => {
 
     const buttonEl = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
     const popoverEl = screen.container.querySelector('[popover]') as HTMLElement;
+    await buttonEl.updateComplete;
+
     const toggleSpy = vi.spyOn(popoverEl as any, 'togglePopover');
 
     buttonEl.focus();
     await userEvent.keyboard('{Enter}');
-    await frame();
+    await buttonEl.updateComplete;
 
     expect(toggleSpy).toHaveBeenCalledOnce();
   });
@@ -692,15 +717,16 @@ describe('BaseButton', () => {
 
     const buttonEl = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
     const popoverEl = screen.container.querySelector('[popover]') as HTMLElement;
+    await buttonEl.updateComplete;
 
     expect(popoverEl.matches(':popover-open')).toBe(false);
 
     buttonEl.click();
-    await frame();
+    await buttonEl.updateComplete;
     expect(popoverEl.matches(':popover-open')).toBe(true);
 
     buttonEl.click();
-    await frame();
+    await buttonEl.updateComplete;
     expect(popoverEl.matches(':popover-open')).toBe(false);
   });
 
@@ -714,15 +740,16 @@ describe('BaseButton', () => {
 
     const buttonEl = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
     const popoverEl = screen.container.querySelector('[popover]') as HTMLElement;
+    await buttonEl.updateComplete;
 
     buttonEl.focus();
     await userEvent.keyboard('{Enter}');
-    await frame();
+    await buttonEl.updateComplete;
     expect(popoverEl.matches(':popover-open')).toBe(true);
 
     buttonEl.focus();
     await userEvent.keyboard('{Enter}');
-    await frame();
+    await buttonEl.updateComplete;
     expect(popoverEl.matches(':popover-open')).toBe(false);
   });
 
@@ -804,6 +831,7 @@ describe('BaseButton', () => {
     expect(popoverEl.matches(':popover-open')).toBe(true);
 
     await userEvent.click(buttonEl);
+    await buttonEl.updateComplete;
 
     expect(popoverEl.matches(':popover-open')).toBe(false);
   });
@@ -884,6 +912,8 @@ describe('BaseButton', () => {
 
     const formEl = screen.container.querySelector('form') as HTMLFormElement;
     const buttonEl = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await frame();
+
     const submitSpy = vi.fn();
     formEl.addEventListener('submit', submitSpy);
 
@@ -926,9 +956,10 @@ describe('BaseButton', () => {
 
     const clickSpy = vi.fn(evt => evt.preventDefault());
     buttonEl.addEventListener('click', clickSpy);
+    await buttonEl.updateComplete;
 
     await userEvent.click(buttonEl);
-    await frame();
+    await buttonEl.updateComplete;
 
     expect(clickSpy).toHaveBeenCalled();
     expect(submitSpy).not.toHaveBeenCalled();
@@ -947,7 +978,7 @@ describe('BaseButton', () => {
       expect(evt.submitter).toBe(buttonEl);
     });
     formEl.addEventListener('submit', submitSpy);
-    await frame();
+    await buttonEl.updateComplete;
 
     await userEvent.click(buttonEl);
 
@@ -965,6 +996,7 @@ describe('BaseButton', () => {
 
     el.name = 'updated-name';
     el.value = 'updated-value';
+    await el.updateComplete;
 
     expect(el.name).toBe('updated-name');
     expect(el.getAttribute('name')).toBe('updated-name');
@@ -990,7 +1022,7 @@ describe('BaseButton', () => {
       expect(formData.get('test')).toBe(buttonEl.value);
     });
     formEl.addEventListener('submit', submitSpy);
-    await frame();
+    await buttonEl.updateComplete;
 
     await userEvent.click(buttonEl);
 
@@ -1010,7 +1042,7 @@ describe('BaseButton', () => {
     dialogEl.showModal();
 
     const buttonEl = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
-    await frame();
+    await buttonEl.updateComplete;
 
     expect(dialogEl.open).toBe(true);
 
@@ -1028,7 +1060,7 @@ describe('BaseButton', () => {
     `);
 
     const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
-    await frame();
+    await button.updateComplete;
 
     expect(button.getAttribute('aria-label')).toBe('Test label');
 
@@ -1044,7 +1076,7 @@ describe('BaseButton', () => {
     `);
 
     const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
-    await frame();
+    await button.updateComplete;
 
     expect(button.getAttribute('aria-label')).toBe('Button');
 
