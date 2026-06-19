@@ -5,7 +5,7 @@ import { property, query, queryAssignedElements } from 'lit/decorators.js';
 import { ClassInfo } from 'lit/directives/class-map.js';
 import { DEFERRED_LABEL_TARGET, ExperimentalFocusOptions, forgeLabelRef, internals, updateTarget } from '../../constants.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
-import { setDefaultAria as setDefaultAriaUtil } from '../../core/utils/a11y-utils.js';
+import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { supportsPopover } from '../../core/utils/feature-detection.js';
 import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflect-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
@@ -125,7 +125,7 @@ export abstract class BaseButton extends BaseLitElement {
   protected _hasEndSlot = false;
   protected _rootClasses: ClassInfo = {};
 
-  #clickListener = this.#onClick.bind(this);
+  #clickListener = this._onClick.bind(this);
   #keydownListener = this.#onKeydown.bind(this);
   #slotChangeListener = (): void => this.#detectSlottedAnchor();
 
@@ -206,7 +206,11 @@ export abstract class BaseButton extends BaseLitElement {
   }
 
   public override click(): void {
-    this.#handleClick({ animateStateLayer: true });
+    if (this.disabled) {
+      return;
+    }
+    HTMLElement.prototype.click.call(this);
+    this.#animateStateLayer();
   }
 
   public override focus(options?: ExperimentalFocusOptions): void {
@@ -219,11 +223,11 @@ export abstract class BaseButton extends BaseLitElement {
 
   // Label awareness callbacks
   public labelClickedCallback(): void {
-    this.#handleClick({ animateStateLayer: true });
+    this.click();
   }
 
   public labelChangedCallback(value: string | null): void {
-    setDefaultAriaUtil(this, this._internals, { ariaLabel: value }, { setAttribute: !this.hasAttribute('aria-label') });
+    setDefaultAria(this, this._internals, { ariaLabel: value }, { setAttribute: !this.hasAttribute('aria-label') });
   }
 
   // Symbol accessors for compatibility
@@ -232,17 +236,7 @@ export abstract class BaseButton extends BaseLitElement {
   }
 
   // Private implementation methods
-  #handleClick({ animateStateLayer = false }: { animateStateLayer?: boolean } = {}): void {
-    if (this.disabled) {
-      return;
-    }
-    HTMLElement.prototype.click.call(this);
-    if (animateStateLayer) {
-      this.#animateStateLayer();
-    }
-  }
-
-  async #onClick(evt: MouseEvent): Promise<void> {
+  protected async _onClick(evt: PointerEvent): Promise<void> {
     const isFormType = this.type === 'submit' || this.type === 'reset';
 
     if (!isFormType && this.#hasPopoverTarget()) {
@@ -296,7 +290,7 @@ export abstract class BaseButton extends BaseLitElement {
   #updateDefaultAria(): void {
     const slottedAnchor = this._anchorElements.at(0);
 
-    setDefaultAriaUtil(this, this._internals, { role: slottedAnchor ? null : 'button' }, { setAttribute: !this.hasAttribute('role') || !!slottedAnchor });
+    setDefaultAria(this, this._internals, { role: slottedAnchor ? null : 'button' }, { setAttribute: !this.hasAttribute('role') || !!slottedAnchor });
 
     this._rootElement?.classList.toggle(BASE_BUTTON_CONSTANTS.classes.WITH_ANCHOR, !!slottedAnchor);
 
@@ -317,14 +311,14 @@ export abstract class BaseButton extends BaseLitElement {
   #handleDisabledChange(): void {
     if (this._anchorElements.length) {
       this.removeAttribute('tabindex');
-      setDefaultAriaUtil(this, this._internals, { ariaDisabled: null }, { setAttribute: true });
+      setDefaultAria(this, this._internals, { ariaDisabled: null }, { setAttribute: true });
     } else {
       if (this.disabled) {
         this.removeAttribute('tabindex');
       } else if (!this.hasAttribute('tabindex')) {
         this.setAttribute('tabindex', '0');
       }
-      setDefaultAriaUtil(this, this._internals, { ariaDisabled: this.disabled ? 'true' : null }, { setAttribute: true });
+      setDefaultAria(this, this._internals, { ariaDisabled: this.disabled ? 'true' : null }, { setAttribute: true });
     }
   }
 
