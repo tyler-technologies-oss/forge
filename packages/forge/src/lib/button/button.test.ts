@@ -4,7 +4,7 @@ import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
 import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants.js';
 import { BUTTON_CONSTANTS } from './button-constants.js';
-import { ButtonComponent, IButtonComponent } from './button.js';
+import { ButtonComponent } from './button.js';
 import type { IStateLayerComponent } from '../state-layer/index.js';
 import type { IFocusIndicatorComponent } from '../focus-indicator/index.js';
 import { ButtonComponentDelegate } from './button-component-delegate.js';
@@ -14,7 +14,7 @@ import './button.js';
 describe('Button', () => {
   it('should initialize', async () => {
     const screen = render(html`<forge-button>Button</forge-button>`);
-    const el = screen.container.querySelector('forge-button') as IButtonComponent;
+    const el = screen.container.querySelector('forge-button') as ButtonComponent;
 
     const rootEl = getRootEl(el);
     const stateLayer = getStateLayer(el);
@@ -30,21 +30,21 @@ describe('Button', () => {
 
   it('should be accessible', async () => {
     const screen = render(html`<forge-button>Button</forge-button>`);
-    const el = screen.container.querySelector('forge-button') as IButtonComponent;
+    const el = screen.container.querySelector('forge-button') as ButtonComponent;
 
     await expect(el).toBeAccessible();
   });
 
   it('should be text variant by default', async () => {
     const screen = render(html`<forge-button>Button</forge-button>`);
-    const el = screen.container.querySelector('forge-button') as IButtonComponent;
+    const el = screen.container.querySelector('forge-button') as ButtonComponent;
 
     expect(el.variant).toBe('text');
   });
 
   it('should be raised variant', async () => {
     const screen = render(html`<forge-button variant="raised">Button</forge-button>`);
-    const el = screen.container.querySelector('forge-button') as IButtonComponent;
+    const el = screen.container.querySelector('forge-button') as ButtonComponent;
 
     expect(el.variant).toBe('raised');
 
@@ -53,7 +53,7 @@ describe('Button', () => {
 
   it('should be outlined variant', async () => {
     const screen = render(html`<forge-button variant="outlined">Button</forge-button>`);
-    const el = screen.container.querySelector('forge-button') as IButtonComponent;
+    const el = screen.container.querySelector('forge-button') as ButtonComponent;
 
     expect(el.variant).toBe('outlined');
 
@@ -62,7 +62,7 @@ describe('Button', () => {
 
   it('should be flat variant', async () => {
     const screen = render(html`<forge-button variant="flat">Button</forge-button>`);
-    const el = screen.container.querySelector('forge-button') as IButtonComponent;
+    const el = screen.container.querySelector('forge-button') as ButtonComponent;
 
     expect(el.variant).toBe('flat');
 
@@ -71,7 +71,7 @@ describe('Button', () => {
 
   it('should be link variant', async () => {
     const screen = render(html`<forge-button variant="link">Button</forge-button>`);
-    const el = screen.container.querySelector('forge-button') as IButtonComponent;
+    const el = screen.container.querySelector('forge-button') as ButtonComponent;
 
     const stateLayer = getStateLayer(el);
 
@@ -83,7 +83,7 @@ describe('Button', () => {
 
   it('should enable state layer when switching from link variant dynamically', async () => {
     const screen = render(html`<forge-button variant="link">Button</forge-button>`);
-    const el = screen.container.querySelector('forge-button') as IButtonComponent;
+    const el = screen.container.querySelector('forge-button') as ButtonComponent;
 
     const stateLayer = getStateLayer(el);
     expect(stateLayer.disabled).toBe(true);
@@ -95,7 +95,7 @@ describe('Button', () => {
 
   it('should set pill', async () => {
     const screen = render(html`<forge-button pill>Button</forge-button>`);
-    const el = screen.container.querySelector('forge-button') as IButtonComponent;
+    const el = screen.container.querySelector('forge-button') as ButtonComponent;
 
     expect(el.pill).toBe(true);
     expect(el.hasAttribute('pill')).toBe(true);
@@ -105,7 +105,7 @@ describe('Button', () => {
 
   it('should set theme', async () => {
     const screen = render(html`<forge-button theme="success">Button</forge-button>`);
-    const el = screen.container.querySelector('forge-button') as IButtonComponent;
+    const el = screen.container.querySelector('forge-button') as ButtonComponent;
 
     expect(el.theme).toBe('success');
     expect(el.getAttribute('theme')).toBe('success');
@@ -115,12 +115,13 @@ describe('Button', () => {
 
   it('should set full width', async () => {
     const screen = render(html`<forge-button full-width>Button</forge-button>`);
-    const el = screen.container.querySelector('forge-button') as IButtonComponent;
+    const el = screen.container.querySelector('forge-button') as ButtonComponent;
 
     expect(el.fullWidth).toBe(true);
     expect(el.hasAttribute(BUTTON_CONSTANTS.attributes.FULL_WIDTH)).toBe(true);
 
     el.fullWidth = false;
+    await el.updateComplete;
 
     expect(el.fullWidth).toBe(false);
     expect(el.hasAttribute(BUTTON_CONSTANTS.attributes.FULL_WIDTH)).toBe(false);
@@ -186,7 +187,7 @@ describe('Button', () => {
 
   it('should be accessible with aria-label', async () => {
     const screen = render(html`<forge-button aria-label="Test label">Button</forge-button>`);
-    const el = screen.container.querySelector('forge-button') as IButtonComponent;
+    const el = screen.container.querySelector('forge-button') as ButtonComponent;
 
     await expect(el).toBeAccessible();
   });
@@ -198,20 +199,20 @@ describe('Button', () => {
         <forge-button aria-labelledby="test-label"></forge-button>
       </div>
     `);
-    const button = screen.container.querySelector('forge-button') as IButtonComponent;
+    const button = screen.container.querySelector('forge-button') as ButtonComponent;
 
     await expect(button).toBeAccessible();
   });
 
-  function getRootEl(el: IButtonComponent): HTMLElement {
+  function getRootEl(el: ButtonComponent): HTMLElement {
     return el.shadowRoot?.firstElementChild as HTMLElement;
   }
 
-  function getStateLayer(btn: IButtonComponent): IStateLayerComponent {
+  function getStateLayer(btn: ButtonComponent): IStateLayerComponent {
     return btn.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent;
   }
 
-  function getFocusIndicator(btn: IButtonComponent): IFocusIndicatorComponent {
+  function getFocusIndicator(btn: ButtonComponent): IFocusIndicatorComponent {
     return btn.shadowRoot?.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
   }
 });
