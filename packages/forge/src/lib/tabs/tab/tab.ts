@@ -34,6 +34,7 @@ export interface ITabComponent extends BaseLitElement {
   secondary: boolean;
   inverted: boolean;
   closable: boolean;
+  name: string;
   focus(options?: ExperimentalFocusOptions): void;
 }
 
@@ -118,7 +119,15 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
 
   #internals: ElementInternals;
 
-  // TODO: Remove attribute reflection
+  // TODO: Remove attribute reflection except for `name`
+
+  /**
+   * The name of the tab used for indexing and identication.
+   * @default ''
+   * @attribute
+   */
+  @property({ reflect: true })
+  public name = '';
 
   /**
    * The disabled state of the tab. Disabled tabs remain focusable but are not interactive. Should
@@ -129,6 +138,9 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   @property({ type: Boolean, reflect: true })
   public disabled = false;
 
+  /**
+   * Whether the tab is the current active tab within its parent tab bar.
+   */
   @property({ type: Boolean })
   public active = false;
 
@@ -208,6 +220,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   private set _stacked(value: boolean) {
     this.stacked = value;
   }
+
   @consume({ context: TAB_BAR_SECONDARY, subscribe: true })
   private set _secondary(value: boolean) {
     this.secondary = value;
@@ -273,6 +286,12 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
     }
   }
 
+  public updated(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('name')) {
+      this.#verifyName();
+    }
+  }
+
   public render(): TemplateResult {
     const classes = {
       'forge-tab': true,
@@ -326,6 +345,17 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
         composed: true
       })
     );
+  }
+
+  #verifyName(): void {
+    if (!this.name) {
+      return;
+    }
+    const tabBar = this.closest(TAB_BAR_CONSTANTS.elementName);
+    const tabs = tabBar?.querySelectorAll(`${TAB_CONSTANTS.elementName}[name="${this.name}"]`);
+    if (tabs && tabs.length > 1) {
+      console.warn(`Multiple tabs with the name "${this.name}" found. Each tab should have a unique name.`);
+    }
   }
 }
 
