@@ -1,13 +1,14 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
+import { describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-lit';
 import { userEvent } from 'vitest/browser';
-import { CHIP_SET_CONSTANTS, type IChipSetComponent } from './chip-set/index.js';
-import type { IChipComponent } from './chip/chip.js';
-import { CHIP_CONSTANTS, type IChipSelectEventData } from './chip/chip-constants.js';
-import type { IconButtonComponent } from '../icon-button/index.js';
+import { frame } from '../core/utils/utils.js';
 import type { IFocusIndicatorComponent } from '../focus-indicator/index.js';
+import type { IconButtonComponent } from '../icon-button/index.js';
 import type { IStateLayerComponent } from '../state-layer/index.js';
+import { CHIP_SET_CONSTANTS, type IChipSetComponent } from './chip-set/index.js';
+import { CHIP_CONSTANTS, type IChipSelectEventData } from './chip/chip-constants.js';
+import type { IChipComponent } from './chip/chip.js';
 
 import './chip-set/index.js';
 
@@ -46,6 +47,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await frame();
       await expect(el).toBeAccessible();
     });
 
