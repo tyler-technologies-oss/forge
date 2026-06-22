@@ -26,6 +26,7 @@ describe('App Bar Profile Button', () => {
   it('should be accessible', async () => {
     const screen = render(html`<forge-app-bar-profile-button></forge-app-bar-profile-button>`);
     const el = screen.container.querySelector('forge-app-bar-profile-button') as IAppBarProfileButtonComponent;
+    await frame();
 
     await expect(el).toBeAccessible();
   });
