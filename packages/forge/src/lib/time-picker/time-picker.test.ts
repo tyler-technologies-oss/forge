@@ -4,7 +4,7 @@ import { html } from 'lit';
 import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/index.js';
 import { IPopoverComponent } from '../popover/index.js';
 import { frame, task } from '../core/utils/utils.js';
-import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../icon-button/index.js';
+import { ICON_BUTTON_CONSTANTS, type IconButtonComponent } from '../icon-button/index.js';
 import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field/index.js';
 import { TestHarness } from '../core/testing/test-harness.js';
 import {
@@ -1695,7 +1695,7 @@ describe('TimePickerComponent', () => {
       document.body.appendChild(harness.element);
       await frame();
 
-      const iconButton = harness.element.querySelector(ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
+      const iconButton = harness.element.querySelector(ICON_BUTTON_CONSTANTS.elementName) as IconButtonComponent;
       expect(iconButton).not.toBeNull();
     });
 

@@ -1,6 +1,6 @@
 import { customElement, attachLightTemplate, toggleAttribute, getLightElement } from '@tylertech/forge-core';
 import { APP_BAR_MENU_BUTTON_CONSTANTS } from './app-bar-menu-button-constants.js';
-import { IconButtonComponent, ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button/index.js';
+import { IconButtonComponent, ICON_BUTTON_CONSTANTS } from '../../icon-button/index.js';
 import { TooltipComponent } from '../../tooltip/index.js';
 import { IconRegistry, ICON_CONSTANTS, IIconComponent } from '../../icon/index.js';
 import { tylIconMenu } from '@tylertech/tyler-icons';
@@ -39,7 +39,7 @@ export class AppBarMenuButtonComponent extends BaseComponent implements IAppBarM
     return Object.values(APP_BAR_MENU_BUTTON_CONSTANTS.observedAttributes);
   }
 
-  private _iconButtonElement: IIconButtonComponent;
+  private _iconButtonElement: IconButtonComponent;
   private _iconElement: IIconComponent;
   private _forwardObserver?: MutationObserver;
   private _iconName: string = tylIconMenu.name;
@@ -54,7 +54,7 @@ export class AppBarMenuButtonComponent extends BaseComponent implements IAppBarM
   }
 
   public connectedCallback(): void {
-    this._iconButtonElement = getLightElement(this, ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
+    this._iconButtonElement = getLightElement(this, ICON_BUTTON_CONSTANTS.elementName) as IconButtonComponent;
     this._iconElement = this._iconButtonElement.querySelector(ICON_CONSTANTS.elementName) as IIconComponent;
 
     if (this._iconElement.name !== this._iconName) {
