@@ -5,13 +5,13 @@ import { property, query, queryAssignedElements, state } from 'lit/decorators.js
 import { DEFERRED_LABEL_TARGET, ExperimentalFocusOptions, forgeLabelRef, internals, updateTarget } from '../../constants.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
-import { supportsPopover } from '../../core/utils/feature-detection.js';
+import { supportsInvokerCommands, supportsPopover, CommandEvent as FallbackCommandEvent } from '../../core/utils/feature-detection.js';
 import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflect-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
 import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator/index.js';
 import { IconRegistry } from '../../icon/icon-registry.js';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer/index.js';
-import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants.js';
+import { BASE_BUTTON_CONSTANTS, ButtonType, CommandType } from './base-button-constants.js';
 
 /** @deprecated - This will be removed in the future. Please switch to using BaseButton. */
 export interface IBaseButton {
@@ -45,11 +45,12 @@ export abstract class BaseButton extends BaseLitElement {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY]: string;
 
+  public static readonly formAssociated = true;
+
   // Label awareness (for compatibility)
   public [forgeLabelRef]?: { [updateTarget](target: HTMLElement): boolean };
 
-  public static readonly formAssociated = true;
-
+  // Public properties - Button behavior
   /**
    * Gets/sets the type of button.
    * @default "button"
@@ -81,6 +82,15 @@ export abstract class BaseButton extends BaseLitElement {
   #disabled = false;
 
   /**
+   * Gets/sets whether the button is dense.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public dense = false;
+
+  // Public properties - Popover
+  /**
    * Gets/sets whether to show a popover icon.
    * @default false
    * @attribute popover-icon
@@ -88,6 +98,13 @@ export abstract class BaseButton extends BaseLitElement {
   @property({ type: Boolean, reflect: true, attribute: 'popover-icon' })
   public popoverIcon = false;
 
+  /** @ignore */
+  public popoverTargetElement: HTMLElement | null = null;
+
+  /** @ignore */
+  public popoverTargetAction: 'click' | 'hover' = 'click';
+
+  // Public properties - Form association
   /**
    * Gets/sets the button name for form association.
    * @default ''
@@ -104,19 +121,35 @@ export abstract class BaseButton extends BaseLitElement {
   @property({ reflect: true })
   public value = '';
 
+  // Public properties - Invoker commands
   /**
-   * Gets/sets whether the button is dense.
-   * @default false
+   * Indicates to the targeted element which action to take.
+   * @default ''
    * @attribute
    */
-  @property({ type: Boolean, reflect: true })
-  public dense = false;
+  @property()
+  public command: CommandType = '';
 
-  // PopoverInvokerElement
-  /** @ignore */
-  public popoverTargetElement: HTMLElement | null = null;
-  /** @ignore */
-  public popoverTargetAction: 'click' | 'hover' = 'click';
+  /**
+   * Targets another element to be invoked.
+   * @default ''
+   * @attribute command-for
+   */
+  @property()
+  public commandFor = '';
+
+  /**
+   * Targets another element to be invoked.
+   * @default undefined
+   */
+  @property({ attribute: false })
+  public set commandForElement(value: HTMLElement | undefined) {
+    this.#commandForElement = value;
+  }
+  public get commandForElement(): HTMLElement | undefined {
+    return this.#commandForElement ?? this.ownerDocument.getElementById(this.commandFor) ?? undefined;
+  }
+  #commandForElement: typeof this.commandForElement;
 
   // Internal state
   protected _internals: ElementInternals;
@@ -124,6 +157,7 @@ export abstract class BaseButton extends BaseLitElement {
   @state()
   protected _stateLayerDisabled = false;
 
+  // Event listeners
   #clickListener = this._onClick.bind(this);
   #keydownListener = this.#onKeydown.bind(this);
   #slotChangeListener = (): void => this.#detectSlottedAnchor();
@@ -145,6 +179,7 @@ export abstract class BaseButton extends BaseLitElement {
     this._internals = this.attachInternals();
   }
 
+  // Lifecycle methods
   public override connectedCallback(): void {
     super.connectedCallback();
 
@@ -178,6 +213,7 @@ export abstract class BaseButton extends BaseLitElement {
     }
   }
 
+  // Render methods
   protected _renderDefaultSlot(): TemplateResult {
     return html` <slot @slotchange=${this.#slotChangeListener}></slot>`;
   }
@@ -199,11 +235,12 @@ export abstract class BaseButton extends BaseLitElement {
     `;
   }
 
-  // Public API
+  // Public API - Form association
   public get form(): HTMLFormElement | null {
     return this._internals.form;
   }
 
+  // Public API - User interaction
   public override click(): void {
     if (this.disabled) {
       return;
@@ -220,7 +257,7 @@ export abstract class BaseButton extends BaseLitElement {
     }
   }
 
-  // Label awareness callbacks
+  // Public API - Label awareness callbacks
   public labelClickedCallback(): void {
     this.click();
   }
@@ -229,12 +266,12 @@ export abstract class BaseButton extends BaseLitElement {
     setDefaultAria(this, this._internals, { ariaLabel: value }, { setAttribute: !this.hasAttribute('aria-label') });
   }
 
-  // Symbol accessors for compatibility
+  // Public API - Symbol accessors for compatibility
   public get [internals](): ElementInternals {
     return this._internals;
   }
 
-  // Private implementation methods
+  // Event handlers
   protected async _onClick(evt: PointerEvent): Promise<void> {
     const isFormType = this.type === 'submit' || this.type === 'reset';
 
@@ -252,8 +289,10 @@ export abstract class BaseButton extends BaseLitElement {
     }
 
     if (isFormType) {
-      this.#clickFormButton(this.type);
+      return this.#clickFormButton(this.type);
     }
+
+    this.#invokeCommand();
   }
 
   async #onKeydown(evt: KeyboardEvent): Promise<void> {
@@ -274,6 +313,7 @@ export abstract class BaseButton extends BaseLitElement {
     }
   }
 
+  // Private methods - Accessibility and anchor detection
   #detectSlottedAnchor(): void {
     if (this._anchorElements.length) {
       this.disabled = false;
@@ -321,6 +361,14 @@ export abstract class BaseButton extends BaseLitElement {
     }
   }
 
+  #animateStateLayer(): void {
+    if (this._stateLayerElement?.disabled || !this._stateLayerElement?.isConnected) {
+      return;
+    }
+    this._stateLayerElement?.playAnimation();
+  }
+
+  // Private methods - Form association
   #clickFormButton(type: string): void {
     if (!this._internals.form) {
       return;
@@ -353,6 +401,7 @@ export abstract class BaseButton extends BaseLitElement {
     }
   }
 
+  // Private methods - Popover management
   #hasPopoverTarget(): boolean {
     return this.hasAttribute('popovertarget') || !!this.popoverTargetElement;
   }
@@ -425,10 +474,21 @@ export abstract class BaseButton extends BaseLitElement {
     return popoverElement as HTMLElement | null;
   }
 
-  #animateStateLayer(): void {
-    if (this._stateLayerElement?.disabled || !this._stateLayerElement?.isConnected) {
+  // Private methods - Invoker commands
+  #invokeCommand(): void {
+    if (!this.command) {
       return;
     }
-    this._stateLayerElement?.playAnimation();
+
+    const targetElement = this.commandForElement;
+    if (!targetElement) {
+      return;
+    }
+
+    if (supportsInvokerCommands()) {
+      targetElement.dispatchEvent(new CommandEvent('command', { source: this, command: this.command, cancelable: true }));
+    } else {
+      targetElement.dispatchEvent(new FallbackCommandEvent('command', { source: this, command: this.command, cancelable: true }));
+    }
   }
 }

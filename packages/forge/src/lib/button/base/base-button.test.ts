@@ -1101,6 +1101,285 @@ describe('BaseButton', () => {
     expect(clickSpy).toHaveBeenCalledOnce();
   });
 
+  describe('invoker commands', () => {
+    it('should set command property', async () => {
+      const screen = render(html`<forge-test-base-button command="show-modal">Button</forge-test-base-button>`);
+      const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      await el.updateComplete;
+
+      expect(el.command).toBe('show-modal');
+      expect(el.getAttribute('command')).toBe('show-modal');
+    });
+
+    it('should set command property dynamically', async () => {
+      const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
+      const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+
+      el.command = 'close';
+      await el.updateComplete;
+
+      expect(el.command).toBe('close');
+      expect(el.getAttribute('command')).toBe('close');
+    });
+
+    it('should set commandFor property', async () => {
+      const screen = render(html`<forge-test-base-button command-for="target-element">Button</forge-test-base-button>`);
+      const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      await el.updateComplete;
+
+      expect(el.commandFor).toBe('target-element');
+      expect(el.getAttribute('command-for')).toBe('target-element');
+    });
+
+    it('should set commandFor property dynamically', async () => {
+      const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
+      const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+
+      el.commandFor = 'target-element';
+      await el.updateComplete;
+
+      expect(el.commandFor).toBe('target-element');
+      expect(el.getAttribute('command-for')).toBe('target-element');
+    });
+
+    it('should resolve commandForElement by ID', async () => {
+      const screen = render(html`
+        <div>
+          <forge-test-base-button command="show-modal" command-for="target">Button</forge-test-base-button>
+          <div id="target">Target</div>
+        </div>
+      `);
+      const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      const target = screen.container.querySelector('#target') as HTMLElement;
+      await button.updateComplete;
+
+      expect(button.commandForElement).toBe(target);
+    });
+
+    it('should set commandForElement directly', async () => {
+      const screen = render(html`
+        <div>
+          <forge-test-base-button command="show-modal">Button</forge-test-base-button>
+          <div id="target">Target</div>
+        </div>
+      `);
+      const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      const target = screen.container.querySelector('#target') as HTMLElement;
+
+      button.commandForElement = target;
+      await button.updateComplete;
+
+      expect(button.commandForElement).toBe(target);
+    });
+
+    it('should dispatch command event when clicked', async () => {
+      const screen = render(html`
+        <div>
+          <forge-test-base-button command="show-modal" command-for="target">Button</forge-test-base-button>
+          <div id="target">Target</div>
+        </div>
+      `);
+      const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      const target = screen.container.querySelector('#target') as HTMLElement;
+      const commandSpy = vi.fn();
+      target.addEventListener('command', commandSpy);
+
+      await userEvent.click(button);
+      await frame();
+
+      expect(commandSpy).toHaveBeenCalledOnce();
+      const event = commandSpy.mock.calls[0][0];
+      expect(event.type).toBe('command');
+      expect(event.cancelable).toBe(true);
+    });
+
+    it('should dispatch command event with correct command value', async () => {
+      const screen = render(html`
+        <div>
+          <forge-test-base-button command="close" command-for="target">Button</forge-test-base-button>
+          <div id="target">Target</div>
+        </div>
+      `);
+      const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      const target = screen.container.querySelector('#target') as HTMLElement;
+      const commandSpy = vi.fn();
+      target.addEventListener('command', commandSpy);
+
+      await userEvent.click(button);
+      await frame();
+
+      expect(commandSpy).toHaveBeenCalledOnce();
+      const event = commandSpy.mock.calls[0][0];
+      if ('command' in event) {
+        expect(event.command).toBe('close');
+      } else {
+        expect(event.detail.command).toBe('close');
+      }
+    });
+
+    it('should dispatch command event with correct source', async () => {
+      const screen = render(html`
+        <div>
+          <forge-test-base-button command="show-modal" command-for="target">Button</forge-test-base-button>
+          <div id="target">Target</div>
+        </div>
+      `);
+      const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      const target = screen.container.querySelector('#target') as HTMLElement;
+      const commandSpy = vi.fn();
+      target.addEventListener('command', commandSpy);
+
+      await userEvent.click(button);
+      await frame();
+
+      expect(commandSpy).toHaveBeenCalledOnce();
+      const event = commandSpy.mock.calls[0][0];
+      if ('source' in event) {
+        expect(event.source).toBe(button);
+      } else {
+        expect(event.detail.source).toBe(button);
+      }
+    });
+
+    it('should not dispatch command event when command is empty', async () => {
+      const screen = render(html`
+        <div>
+          <forge-test-base-button command-for="target">Button</forge-test-base-button>
+          <div id="target">Target</div>
+        </div>
+      `);
+      const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      const target = screen.container.querySelector('#target') as HTMLElement;
+      const commandSpy = vi.fn();
+      target.addEventListener('command', commandSpy);
+
+      await userEvent.click(button);
+      await frame();
+
+      expect(commandSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not dispatch command event when target element not found', async () => {
+      const screen = render(html`<forge-test-base-button command="show-modal" command-for="nonexistent">Button</forge-test-base-button>`);
+      const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      const commandSpy = vi.fn();
+      document.addEventListener('command', commandSpy);
+
+      await userEvent.click(button);
+      await frame();
+
+      expect(commandSpy).not.toHaveBeenCalled();
+      document.removeEventListener('command', commandSpy);
+    });
+
+    it('should dispatch command event when enter key is pressed', async () => {
+      const screen = render(html`
+        <div>
+          <forge-test-base-button command="show-modal" command-for="target">Button</forge-test-base-button>
+          <div id="target">Target</div>
+        </div>
+      `);
+      const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      const target = screen.container.querySelector('#target') as HTMLElement;
+      const commandSpy = vi.fn();
+      target.addEventListener('command', commandSpy);
+
+      button.focus();
+      await userEvent.keyboard('{Enter}');
+      await frame();
+
+      expect(commandSpy).toHaveBeenCalledOnce();
+    });
+
+    it('should dispatch command event when space key is pressed', async () => {
+      const screen = render(html`
+        <div>
+          <forge-test-base-button command="show-modal" command-for="target">Button</forge-test-base-button>
+          <div id="target">Target</div>
+        </div>
+      `);
+      const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      const target = screen.container.querySelector('#target') as HTMLElement;
+      const commandSpy = vi.fn();
+      target.addEventListener('command', commandSpy);
+
+      button.focus();
+      await userEvent.keyboard(' ');
+      await frame();
+
+      expect(commandSpy).toHaveBeenCalledOnce();
+    });
+
+    it('should support custom command values', async () => {
+      const screen = render(html`
+        <div>
+          <forge-test-base-button command="--my-custom-command" command-for="target">Button</forge-test-base-button>
+          <div id="target">Target</div>
+        </div>
+      `);
+      const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      const target = screen.container.querySelector('#target') as HTMLElement;
+      const commandSpy = vi.fn();
+      target.addEventListener('command', commandSpy);
+
+      await userEvent.click(button);
+      await frame();
+
+      expect(commandSpy).toHaveBeenCalledOnce();
+      const event = commandSpy.mock.calls[0][0];
+      if ('command' in event) {
+        expect(event.command).toBe('--my-custom-command');
+      } else {
+        expect(event.detail.command).toBe('--my-custom-command');
+      }
+    });
+
+    it('should not dispatch command event when disabled', async () => {
+      const screen = render(html`
+        <div>
+          <forge-test-base-button disabled command="show-modal" command-for="target">Button</forge-test-base-button>
+          <div id="target">Target</div>
+        </div>
+      `);
+      const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      const target = screen.container.querySelector('#target') as HTMLElement;
+      const commandSpy = vi.fn();
+      target.addEventListener('command', commandSpy);
+
+      await userEvent.click(button, { force: true });
+      await frame();
+
+      expect(commandSpy).not.toHaveBeenCalled();
+    });
+
+    it('should prefer commandForElement over commandFor attribute', async () => {
+      const screen = render(html`
+        <div>
+          <forge-test-base-button command="show-modal" command-for="target-1">Button</forge-test-base-button>
+          <div id="target-1">Target 1</div>
+          <div id="target-2">Target 2</div>
+        </div>
+      `);
+      const button = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+      const target1 = screen.container.querySelector('#target-1') as HTMLElement;
+      const target2 = screen.container.querySelector('#target-2') as HTMLElement;
+
+      const commandSpy1 = vi.fn();
+      const commandSpy2 = vi.fn();
+      target1.addEventListener('command', commandSpy1);
+      target2.addEventListener('command', commandSpy2);
+
+      button.commandForElement = target2;
+      await button.updateComplete;
+
+      await userEvent.click(button);
+      await frame();
+
+      expect(commandSpy1).not.toHaveBeenCalled();
+      expect(commandSpy2).toHaveBeenCalledOnce();
+    });
+  });
+
   function getRootEl(btn: ButtonComponent): HTMLElement {
     return btn.shadowRoot?.querySelector('#root') as HTMLElement;
   }
