@@ -9,7 +9,7 @@ import template from './deprecated-icon-button.html';
 import styles from './deprecated-icon-button.scss';
 
 /**
- * @deprecated Use `IIconButtonComponent` component instead.
+ * @deprecated Use `IconButtonComponent` component instead.
  */
 export interface IDeprecatedIconButtonComponent extends IBaseComponent {
   disabled: boolean;

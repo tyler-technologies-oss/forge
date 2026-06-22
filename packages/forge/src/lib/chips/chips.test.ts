@@ -5,7 +5,7 @@ import { userEvent } from 'vitest/browser';
 import { CHIP_SET_CONSTANTS, type IChipSetComponent } from './chip-set/index.js';
 import type { IChipComponent } from './chip/chip.js';
 import { CHIP_CONSTANTS, type IChipSelectEventData } from './chip/chip-constants.js';
-import type { IIconButtonComponent } from '../icon-button/index.js';
+import type { IconButtonComponent } from '../icon-button/index.js';
 import type { IFocusIndicatorComponent } from '../focus-indicator/index.js';
 import type { IStateLayerComponent } from '../state-layer/index.js';
 
@@ -1124,8 +1124,8 @@ describe('Chips', () => {
     return el.shadowRoot?.querySelector(CHIP_CONSTANTS.selectors.TRIGGER) as HTMLElement;
   }
 
-  function getRemoveButtonElement(el: IChipComponent): IIconButtonComponent {
-    return el.shadowRoot?.querySelector('#remove-button') as IIconButtonComponent;
+  function getRemoveButtonElement(el: IChipComponent): IconButtonComponent {
+    return el.shadowRoot?.querySelector('#remove-button') as IconButtonComponent;
   }
 
   function getFocusIndicator(el: IChipComponent): IFocusIndicatorComponent {

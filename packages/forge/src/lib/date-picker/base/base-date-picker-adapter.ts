@@ -3,7 +3,7 @@ import { CALENDAR_CONSTANTS, DateRange, DayOfWeek, ICalendarComponent } from '..
 import { ICalendarDropdown, ICalendarDropdownPopupConfig } from '../../calendar/calendar-dropdown/index.js';
 import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions } from '../../core/index.js';
 import { BaseComponent } from '../../core/base/base-component.js';
-import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button/index.js';
+import { ICON_BUTTON_CONSTANTS, type IconButtonComponent } from '../../icon-button/index.js';
 import { TEXT_FIELD_CONSTANTS } from '../../text-field/index.js';
 import { BASE_DATE_PICKER_CONSTANTS, IDatePickerCalendarDropdownText } from './base-date-picker-constants.js';
 import { createToggleElement } from './base-date-picker-utils.js';
@@ -277,7 +277,7 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
     if (textField) {
       const existingIconButton = textField.querySelector(`${ICON_BUTTON_CONSTANTS.elementName}[slot=end]`);
       if (existingIconButton || toggleElement) {
-        this._toggleElement = (existingIconButton || toggleElement) as IIconButtonComponent;
+        this._toggleElement = (existingIconButton || toggleElement) as IconButtonComponent;
         return;
       }
 
@@ -295,7 +295,7 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
     }
   }
 
-  protected _createToggleElement(): IIconButtonComponent {
+  protected _createToggleElement(): IconButtonComponent {
     return createToggleElement('insert_invitation');
   }
 
