@@ -1,1 +1,0 @@
-import{n as o}from"./base-lit-element-DjoVktVs.js";function u(t){return o({...t,state:!0,attribute:!1})}const f=(t,r,e)=>(e.configurable=!0,e.enumerable=!0,Reflect.decorate&&typeof r!="object"&&Object.defineProperty(t,r,e),e);export{f as e,u as r};
