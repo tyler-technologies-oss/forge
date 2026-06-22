@@ -96,6 +96,7 @@ describe('Button', () => {
 
     el.variant = 'raised';
     await el.updateComplete;
+    await frame();
 
     expect(stateLayer.disabled).toBe(false);
   });
