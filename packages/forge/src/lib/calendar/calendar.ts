@@ -7,7 +7,7 @@ import {
   attachShadowTemplate
 } from '@tylertech/forge-core';
 import { customElement, property } from 'lit/decorators.js';
-import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { tylIconAdd, tylIconArrowDropDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconLens } from '@tylertech/tyler-icons';
 
 import { BaseLitElement } from '../core/base/base-lit-element.js';
