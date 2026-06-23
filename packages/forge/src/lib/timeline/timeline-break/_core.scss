@@ -1,0 +1,29 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+}
+
+@mixin base {
+  --_forge-timeline-break-radius: calc(#{token(height)} * sqrt(#{token(smoothing)} * #{token(smoothing)} + 1) + #{token(weight)}/ 2);
+  --_forge-timeline-break-gradient: #0000 calc(99% - #{token(weight)}), #000 calc(101% - #{token(weight)}) 99%, #0000 101%;
+
+  background: #{token(color)};
+  block-size: calc(2 * var(--_forge-timeline-break-radius));
+  inline-size: 100%;
+  margin-block: #{token(margin)};
+  mask:
+    radial-gradient(
+        var(--_forge-timeline-break-radius) at left 50% bottom calc(-1 * #{token(smoothing)} * #{token(height)}),
+        var(--_forge-timeline-break-gradient)
+      )
+      calc(50% - 2 * #{token(height)}) calc(50% - #{token(height)} / 2 - #{token(weight)} / 2) / calc(4 * #{token(height)})
+      calc(#{token(height)} + #{token(weight)}) repeat-x,
+    radial-gradient(
+        var(--_forge-timeline-break-radius) at left 50% top calc(-1 * #{token(smoothing)} * #{token(height)}),
+        var(--_forge-timeline-break-gradient)
+      )
+      50% calc(50% + #{token(height)} / 2 + #{token(weight)} / 2) / calc(4 * #{token(height)}) calc(#{token(height)} + #{token(weight)}) repeat-x;
+}
