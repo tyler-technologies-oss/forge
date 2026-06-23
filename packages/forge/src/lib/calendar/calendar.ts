@@ -1,6 +1,17 @@
-import { customElement, attachShadowTemplate, coreProperty, coerceNumber, coerceBoolean, elementParents } from '@tylertech/forge-core';
+import {
+  CUSTOM_ELEMENT_NAME_PROPERTY,
+  CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY,
+  coerceNumber,
+  coerceBoolean,
+  elementParents,
+  attachShadowTemplate
+} from '@tylertech/forge-core';
+import { customElement, property } from 'lit/decorators.js';
+import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { tylIconAdd, tylIconArrowDropDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconLens } from '@tylertech/tyler-icons';
 
+import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { toggleState } from '../core/utils/utils.js';
 import { CalendarAdapter } from './calendar-adapter.js';
 import { CalendarCore } from './calendar-core.js';
 import {
@@ -16,7 +27,8 @@ import {
   ICalendarFocusChangeEventData,
   ICalendarMonthChangeEventData,
   CalendarTooltipBuilder,
-  CalendarView
+  CalendarView,
+  CalendarDisabledDateBuilder
 } from './calendar-constants.js';
 import { DateRange } from './core/date-range.js';
 import { ButtonComponent } from '../button/index.js';
@@ -27,12 +39,12 @@ import { ICalendarBase } from './core/calendar-base.js';
 import { CalendarMenuAnimationType, CalendarMenuComponent } from './calendar-menu/index.js';
 import { StateLayerComponent } from '../state-layer/index.js';
 import { FocusIndicatorComponent } from '../focus-indicator/index.js';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 
 import template from './calendar.html';
 import styles from './calendar.scss';
 
-export interface ICalendarComponent extends ICalendarBase, IBaseComponent {
+/** @deprecated - This will be removed in the future. Please switch to using CalendarComponent. */
+export interface ICalendarComponent extends BaseLitElement, ICalendarBase {
   mode: CalendarMode;
   view: CalendarView;
   preventFocus: boolean;
@@ -73,137 +85,541 @@ declare global {
  *
  * @tag forge-calendar
  *
- * @property {Date} activeDate - The currently active date in the calendar.
- * @property {boolean} [allowSingleDateRange=true] - Whether to allow a single date range to be selected.
- * @property {boolean} [clearButton=false] - Whether to show a button to clear the selected date(s).
- * @property {() => void | undefined} clearCallback - Callback function to call when the clear button is clicked.
- * @property {boolean} [constrainToEnabled=true] - Whether to constrain the selected date(s) to the enabled dates.
- * @property {CalendarDateBuilder | undefined} dateBuilder - Function to build the date content.
- * @property {CalendarDateSelectCallback | undefined} dateSelectCallback - Callback function to call when a date is selected.
- * @property {CalendarDayBuilder | undefined} dayBuilder - Function to build the day content.
- * @property {(date: Date) => boolean | undefined} disabledDateBuilder - Function to determine if a date is disabled.
- * @property {Date | Date[] | null | undefined} [disabledDates=[]] - Dates that are disabled from being selected.
- * @property {DayOfWeek | DayOfWeek[] | null | undefined} [disabledDaysOfWeek=[]] - Days of the week that are disabled from being selected.
- * @property {CalendarEventBuilder | undefined} eventBuilder - Function to build the event content.
- * @property {ICalendarEvent[] | null | undefined} [events=[]] - Events to display on the calendar.
- * @property {DayOfWeek | undefined} firstDayOfWeek - The first day of the week.
- * @property {boolean} [fixedHeight=false] - Whether to fix the height of the calendar.
- * @property {boolean} [listYears=true] - Whether to list the years in the year view.
- * @property {string | undefined} locale - The locale to use for formatting dates.
- * @property {Date | string | null | undefined} max - The maximum date that can be selected.
- * @property {CalendarMenuAnimationType} [menuAnimation="scale"] - The animation to use for the menu.
- * @property {Date | string | null | undefined} min - The minimum date that can be selected.
- * @property {CalendarMode} [mode="single"] - The mode of the calendar.
- * @property {number} [month=<current month>] - The month to display.
- * @property {boolean} [preventFocus=false] - Whether to prevent the calendar from taking focus.
- * @property {boolean} [readonly=false] - Whether the calendar is readonly.
- * @property {boolean} [selectionFollowsMonth=false] - Whether the selection follows the month.
- * @property {boolean} [showHeader=true] - Whether to show the header.
- * @property {boolean} [showOtherMonths=false] - Whether to show days from other months.
- * @property {boolean} [showToday=true] - Whether to show the today button.
- * @property {boolean} [todayButton=false] - Whether to show a button to select today.
- * @property {() => void | undefined} todayCallback - Callback function to call when the today button is clicked.
- * @property {CalendarTooltipBuilder | undefined} tooltipBuilder - Function to build the tooltip content.
- * @property {Date | Date[] | DateRange | null | undefined} [value=[]] - The selected date(s).
- * @property {CalendarView} [view="date"] - The view of the calendar.
- * @property {DayOfWeek[] | null | undefined} weekendDays - The days of the week that are considered weekends.
- * @property {number} [year=<current year>] - The year to display.
- * @property {string} [yearRange="-50:+50"] - The range of years to display.
+ * @cssproperty --forge-calendar-background - Background color of the calendar
+ * @cssproperty --forge-calendar-date-color - Text color of date cells
  *
- * @attribute {boolean} [allow-single-date-range=true] - Whether to allow a single date range to be selected.
- * @attribute {boolean} [clear-button=false] - Whether to show a button to clear the selected date(s).
- * @attribute {boolean} [constrain-to-enabled=true] - Whether to constrain the selected date(s) to the enabled dates.
- * @attribute {DayOfWeek} first-day-of-week - The first day of the week.
- * @attribute {boolean} [fixed-height=false] - Whether to fix the height of the calendar.
- * @attribute {boolean} [list-years=true] - Whether to list the years in the year view.
- * @attribute {string} locale - The locale to use for formatting dates.
- * @attribute {Date | string | null} max - The maximum date that can be selected.
- * @attribute {CalendarMenuAnimationType} [menu-animation="scale"] - The animation to use for the menu.
- * @attribute {Date | string | null} min - The minimum date that can be selected.
- * @attribute {CalendarMode} [mode="single"] - The mode of the calendar.
- * @attribute {number} [month=<current month>] - The month to display.
- * @attribute {boolean} [prevent-focus=false] - Whether to prevent the calendar from taking focus.
- * @attribute {boolean} [readonly=false] - Whether the calendar is readonly.
- * @attribute {boolean} [selection-follows-month=false] - Whether the selection follows the month.
- * @attribute {boolean} [show-header=true] - Whether to show the header.
- * @attribute {boolean} [show-other-months=false] - Whether to show days from other months.
- * @attribute {boolean} [show-today=true] - Whether to show the today button.
- * @attribute {boolean} [today-button=fakse] - Whether to show a button to select today.
- * @attribute {CalendarView} [view="date"] - The view of the calendar.
- * @attribute {number} [year=<current year>] - The year to display.
- * @attribute {string} [year-range="-50:+50"] - The range of years to display.
+ * @csspart root - The root container element
+ * @csspart view - The view container
+ * @csspart date-view - The date grid view container
+ * @csspart date-grid-container - The date grid wrapper
+ * @csspart date-grid-row - A row in the date grid
+ * @csspart calendar-menu - The month/year menu
+ * @csspart header - The header section
+ * @csspart footer - The footer section
  *
- * @fires {CustomEvent<ICalendarDateSelectEventData>} forge-calendar-date-select - Event fired when a date is selected.
- * @fires {CustomEvent<ICalendarFocusChangeEventData>} forge-calendar-focus-change - Event fired when the focus changes.
- * @fires {CustomEvent<ICalendarMonthChangeEventData>} forge-calendar-month-change - Event fired when the month changes.
- * @fires {CustomEvent<CalendarView>} forge-calendar-view-change - Event fired when the view changes.
+ * @slot today-button-text - Text to display in the today button
+ * @slot clear-button-text - Text to display in the clear button
+ * @slot next-month-button-text - Text to display in the next month button's tooltip
+ * @slot previous-month-button-text - Text to display in the previous month button's tooltip
+ * @slot next-year-button-text - Text to display in the next year button's tooltip
+ * @slot previous-year-button-text - Text to display in the previous year button's tooltip
+ * @slot next-years-button-text - Text to display in the next years button's tooltip
+ * @slot previous-years-button-text - Text to display in the previous years button's tooltip
  *
- * @slot today-button-text - Text to display in the today button.
- * @slot clear-button-text - Text to display in the clear button.
- * @slot next-month-button-text - Text to display in the next month button's tooltip.
- * @slot previous-month-button-text - Text to display in the previous month button's tooltip.
- * @slot next-year-button-text - Text to display in the next year button's tooltip.
- * @slot previous-year-button-text - Text to display in the previous year button's tooltip.
- * @slot next-years-button-text - Text to display in the next years button's tooltip.
- * @slot previous-years-button-text - Text to display in the previous years button's tooltip.
+ * @fires {CustomEvent<ICalendarDateSelectEventData>} forge-calendar-date-select - Event fired when a date is selected
+ * @fires {CustomEvent<ICalendarFocusChangeEventData>} forge-calendar-focus-change - Event fired when the focus changes
+ * @fires {CustomEvent<ICalendarMonthChangeEventData>} forge-calendar-month-change - Event fired when the month changes
+ * @fires {CustomEvent<CalendarView>} forge-calendar-view-change - Event fired when the view changes
+ *
+ * @state view-date - Applied when the view is "date"
+ * @state view-month - Applied when the view is "month"
+ * @state view-year - Applied when the view is "year"
+ * @state readonly - Applied when the calendar is readonly
+ * @state fixed-height - Applied when fixed height is enabled
+ * @state prevent-focus - Applied when focus prevention is enabled
  */
-@customElement({
-  name: CALENDAR_CONSTANTS.elementName,
-  dependencies: [ButtonComponent, CalendarMenuComponent, IconButtonComponent, IconComponent, TooltipComponent, StateLayerComponent, FocusIndicatorComponent]
-})
-export class CalendarComponent extends BaseComponent implements ICalendarComponent {
-  public static get observedAttributes(): string[] {
-    return [
-      CALENDAR_CONSTANTS.attributes.ALLOW_SINGLE_DATE_RANGE,
-      CALENDAR_CONSTANTS.attributes.CLEAR_BUTTON,
-      CALENDAR_CONSTANTS.attributes.CONSTRAIN_TO_ENABLED,
-      CALENDAR_CONSTANTS.attributes.FIRST_DAY_OF_WEEK,
-      CALENDAR_CONSTANTS.attributes.FIXED_HEIGHT,
-      CALENDAR_CONSTANTS.attributes.LIST_YEARS,
-      CALENDAR_CONSTANTS.attributes.LOCALE,
-      CALENDAR_CONSTANTS.attributes.MAX,
-      CALENDAR_CONSTANTS.attributes.MENU_ANIMATION,
-      CALENDAR_CONSTANTS.attributes.MIN,
-      CALENDAR_CONSTANTS.attributes.MODE,
-      CALENDAR_CONSTANTS.attributes.MONTH,
-      CALENDAR_CONSTANTS.attributes.PREVENT_FOCUS,
-      CALENDAR_CONSTANTS.attributes.READONLY,
-      CALENDAR_CONSTANTS.attributes.SELECTION_FOLLOWS_MONTH,
-      CALENDAR_CONSTANTS.attributes.SHOW_HEADER,
-      CALENDAR_CONSTANTS.attributes.SHOW_OTHER_MONTHS,
-      CALENDAR_CONSTANTS.attributes.SHOW_TODAY,
-      CALENDAR_CONSTANTS.attributes.TODAY_BUTTON,
-      CALENDAR_CONSTANTS.attributes.VIEW,
-      CALENDAR_CONSTANTS.attributes.YEAR,
-      CALENDAR_CONSTANTS.attributes.YEAR_RANGE
-    ];
+@customElement(CALENDAR_CONSTANTS.elementName)
+export class CalendarComponent extends BaseLitElement implements ICalendarComponent {
+  static {
+    IconRegistry.define([tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconArrowDropDown, tylIconLens, tylIconAdd]);
   }
 
+  public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = CALENDAR_CONSTANTS.elementName;
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [
+    ButtonComponent,
+    CalendarMenuComponent,
+    IconButtonComponent,
+    IconComponent,
+    TooltipComponent,
+    StateLayerComponent,
+    FocusIndicatorComponent
+  ];
+
+  // TODO Phase 2: Remove _core and _adapter, replace with controllers
   private _core: CalendarCore;
+
+  #internals: ElementInternals;
+
+  /**
+   * Gets the currently active date in the calendar.
+   * @readonly
+   */
+  public get activeDate(): Date {
+    return this._core.activeDate;
+  }
+
+  /**
+   * Gets/sets whether to allow a single date range to be selected.
+   * @default true
+   * @attribute allow-single-date-range
+   */
+  @property({ type: Boolean, attribute: 'allow-single-date-range', reflect: true })
+  public get allowSingleDateRange(): boolean {
+    return this._core.allowSingleDateRange;
+  }
+  public set allowSingleDateRange(value: boolean) {
+    this._core.allowSingleDateRange = value;
+  }
+
+  /**
+   * Gets/sets whether to show a button to clear the selected date(s).
+   * @default false
+   * @attribute clear-button
+   */
+  @property({ type: Boolean, attribute: 'clear-button', reflect: true })
+  public get clearButton(): boolean {
+    return this._core.clearButton;
+  }
+  public set clearButton(value: boolean) {
+    this._core.clearButton = value;
+  }
+
+  /**
+   * Callback function to call when the clear button is clicked.
+   */
+  @property({ attribute: false })
+  public get clearCallback(): (() => void) | undefined {
+    return this._core.clearCallback;
+  }
+  public set clearCallback(value: (() => void) | undefined) {
+    this._core.clearCallback = value;
+  }
+
+  /**
+   * Gets/sets whether to constrain the selected date(s) to the enabled dates.
+   * @default true
+   * @attribute constrain-to-enabled
+   */
+  @property({ type: Boolean, attribute: 'constrain-to-enabled', reflect: true })
+  public get constrainToEnabled(): boolean {
+    return this._core.constrainToEnabled;
+  }
+  public set constrainToEnabled(value: boolean) {
+    this._core.constrainToEnabled = value;
+  }
+
+  /**
+   * Function to build the date content.
+   */
+  @property({ attribute: false })
+  public get dateBuilder(): CalendarDateBuilder | undefined {
+    return this._core.dateBuilder;
+  }
+  public set dateBuilder(value: CalendarDateBuilder | undefined) {
+    this._core.dateBuilder = value;
+  }
+
+  /**
+   * Callback function to call when a date is selected.
+   */
+  @property({ attribute: false })
+  public get dateSelectCallback(): CalendarDateSelectCallback | undefined {
+    return this._core.dateSelectCallback;
+  }
+  public set dateSelectCallback(value: CalendarDateSelectCallback | undefined) {
+    this._core.dateSelectCallback = value;
+  }
+
+  /**
+   * Function to build the day content.
+   */
+  @property({ attribute: false })
+  public get dayBuilder(): CalendarDayBuilder | undefined {
+    return this._core.dayBuilder;
+  }
+  public set dayBuilder(value: CalendarDayBuilder | undefined) {
+    this._core.dayBuilder = value;
+  }
+
+  /**
+   * Function to determine if a date is disabled.
+   */
+  @property({ attribute: false })
+  public get disabledDateBuilder(): CalendarDisabledDateBuilder | undefined {
+    return this._core.disabledDateBuilder;
+  }
+  public set disabledDateBuilder(value: CalendarDisabledDateBuilder | undefined) {
+    this._core.disabledDateBuilder = value;
+  }
+
+  /**
+   * Dates that are disabled from being selected.
+   */
+  @property({ attribute: false })
+  public get disabledDates(): Date | Date[] | null | undefined {
+    return this._core.disabledDates;
+  }
+  public set disabledDates(value: Date | Date[] | null | undefined) {
+    this._core.disabledDates = value;
+  }
+
+  /**
+   * Days of the week that are disabled from being selected.
+   */
+  @property({ attribute: false })
+  public get disabledDaysOfWeek(): DayOfWeek | DayOfWeek[] | null | undefined {
+    return this._core.disabledDaysOfWeek;
+  }
+  public set disabledDaysOfWeek(value: DayOfWeek | DayOfWeek[] | null | undefined) {
+    this._core.disabledDaysOfWeek = value;
+  }
+
+  /**
+   * Function to build the event content.
+   */
+  @property({ attribute: false })
+  public get eventBuilder(): CalendarEventBuilder | undefined {
+    return this._core.eventBuilder;
+  }
+  public set eventBuilder(value: CalendarEventBuilder | undefined) {
+    this._core.eventBuilder = value;
+  }
+
+  /**
+   * Events to display on the calendar.
+   */
+  @property({ attribute: false })
+  public get events(): ICalendarEvent[] | null | undefined {
+    return this._core.events;
+  }
+  public set events(value: ICalendarEvent[] | null | undefined) {
+    this._core.events = value;
+  }
+
+  /**
+   * Gets/sets the first day of the week.
+   * @attribute first-day-of-week
+   */
+  @property({ type: Number, attribute: 'first-day-of-week', reflect: true })
+  public get firstDayOfWeek(): DayOfWeek | undefined {
+    return this._core.firstDayOfWeek;
+  }
+  public set firstDayOfWeek(value: DayOfWeek | undefined) {
+    this._core.firstDayOfWeek = value;
+  }
+
+  /**
+   * Gets/sets whether to fix the height of the calendar.
+   * @default false
+   * @attribute fixed-height
+   */
+  @property({ type: Boolean, attribute: 'fixed-height', reflect: true })
+  public get fixedHeight(): boolean {
+    return this._core.fixedHeight;
+  }
+  public set fixedHeight(value: boolean) {
+    this._core.fixedHeight = value;
+    toggleState(this.#internals, 'fixed-height', value);
+  }
+
+  /**
+   * Gets/sets whether to list the years in the year view.
+   * @default true
+   * @attribute list-years
+   */
+  @property({ type: Boolean, attribute: 'list-years', reflect: true })
+  public get listYears(): boolean {
+    return this._core.listYears;
+  }
+  public set listYears(value: boolean) {
+    this._core.listYears = value;
+  }
+
+  /**
+   * Gets/sets the locale to use for formatting dates.
+   * @attribute locale
+   */
+  @property({ reflect: true })
+  public get locale(): string | undefined {
+    return this._core.locale;
+  }
+  public set locale(value: string | undefined) {
+    this._core.locale = value;
+  }
+
+  /**
+   * Gets/sets the maximum date that can be selected.
+   * @attribute max
+   */
+  @property({ reflect: true })
+  public get max(): Date | string | null | undefined {
+    return this._core.max;
+  }
+  public set max(value: Date | string | null | undefined) {
+    this._core.max = value;
+  }
+
+  /**
+   * Gets/sets the animation to use for the menu.
+   * @default "scale"
+   * @attribute menu-animation
+   */
+  @property({ attribute: 'menu-animation', reflect: true })
+  public get menuAnimation(): CalendarMenuAnimationType {
+    return this._core.menuAnimation;
+  }
+  public set menuAnimation(value: CalendarMenuAnimationType) {
+    this._core.menuAnimation = value;
+  }
+
+  /**
+   * Gets/sets the minimum date that can be selected.
+   * @attribute min
+   */
+  @property({ reflect: true })
+  public get min(): Date | string | null | undefined {
+    return this._core.min;
+  }
+  public set min(value: Date | string | null | undefined) {
+    this._core.min = value;
+  }
+
+  /**
+   * Gets/sets the mode of the calendar.
+   * @default "single"
+   * @attribute mode
+   */
+  @property({ reflect: true })
+  public get mode(): CalendarMode {
+    return this._core.mode;
+  }
+  public set mode(value: CalendarMode) {
+    this._core.mode = value;
+  }
+
+  /**
+   * Gets/sets the month to display.
+   * @default <current month>
+   * @attribute month
+   */
+  @property({ type: Number, reflect: true })
+  public get month(): number {
+    return this._core.month;
+  }
+  public set month(value: number) {
+    this._core.month = value;
+  }
+
+  /**
+   * Gets/sets whether to prevent the calendar from taking focus.
+   * @default false
+   * @attribute prevent-focus
+   */
+  @property({ type: Boolean, attribute: 'prevent-focus', reflect: true })
+  public get preventFocus(): boolean {
+    return this._core.preventFocus;
+  }
+  public set preventFocus(value: boolean) {
+    this._core.preventFocus = value;
+    toggleState(this.#internals, 'prevent-focus', value);
+  }
+
+  /**
+   * Gets/sets whether the calendar is readonly.
+   * @default false
+   * @attribute readonly
+   */
+  @property({ type: Boolean, reflect: true })
+  public get readonly(): boolean {
+    return this._core.readonly;
+  }
+  public set readonly(value: boolean) {
+    this._core.readonly = value;
+    toggleState(this.#internals, 'readonly', value);
+  }
+
+  /**
+   * Gets/sets whether the selection follows the month.
+   * @default false
+   * @attribute selection-follows-month
+   */
+  @property({ type: Boolean, attribute: 'selection-follows-month', reflect: true })
+  public get selectionFollowsMonth(): boolean {
+    return this._core.selectionFollowsMonth;
+  }
+  public set selectionFollowsMonth(value: boolean) {
+    this._core.selectionFollowsMonth = value;
+  }
+
+  /**
+   * Gets/sets whether to show the header.
+   * @default true
+   * @attribute show-header
+   */
+  @property({ type: Boolean, attribute: 'show-header', reflect: true })
+  public get showHeader(): boolean {
+    return this._core.showHeader;
+  }
+  public set showHeader(value: boolean) {
+    this._core.showHeader = value;
+  }
+
+  /**
+   * Gets/sets whether to show days from other months.
+   * @default false
+   * @attribute show-other-months
+   */
+  @property({ type: Boolean, attribute: 'show-other-months', reflect: true })
+  public get showOtherMonths(): boolean {
+    return this._core.showOtherMonths;
+  }
+  public set showOtherMonths(value: boolean) {
+    this._core.showOtherMonths = value;
+  }
+
+  /**
+   * Gets/sets whether to show the today indicator.
+   * @default true
+   * @attribute show-today
+   */
+  @property({ type: Boolean, attribute: 'show-today', reflect: true })
+  public get showToday(): boolean {
+    return this._core.showToday;
+  }
+  public set showToday(value: boolean) {
+    this._core.showToday = value;
+  }
+
+  /**
+   * Gets/sets whether to show a button to select today.
+   * @default false
+   * @attribute today-button
+   */
+  @property({ type: Boolean, attribute: 'today-button', reflect: true })
+  public get todayButton(): boolean {
+    return this._core.todayButton;
+  }
+  public set todayButton(value: boolean) {
+    this._core.todayButton = value;
+  }
+
+  /**
+   * Callback function to call when the today button is clicked.
+   */
+  @property({ attribute: false })
+  public get todayCallback(): (() => void) | undefined {
+    return this._core.todayCallback;
+  }
+  public set todayCallback(value: (() => void) | undefined) {
+    this._core.todayCallback = value;
+  }
+
+  /**
+   * Function to build the tooltip content.
+   */
+  @property({ attribute: false })
+  public get tooltipBuilder(): CalendarTooltipBuilder | undefined {
+    return this._core.tooltipBuilder;
+  }
+  public set tooltipBuilder(value: CalendarTooltipBuilder | undefined) {
+    this._core.tooltipBuilder = value;
+  }
+
+  /**
+   * Gets/sets the selected date(s).
+   */
+  @property({ attribute: false })
+  public get value(): Date | Date[] | DateRange | null | undefined {
+    return this._core.value;
+  }
+  public set value(value: Date | Date[] | DateRange | null | undefined) {
+    this._core.value = value;
+  }
+
+  /**
+   * Gets/sets the view of the calendar.
+   * @default "date"
+   * @attribute view
+   */
+  @property({ reflect: true })
+  public get view(): CalendarView {
+    return this._core.view;
+  }
+  public set view(value: CalendarView) {
+    this._core.view = value;
+  }
+
+  /**
+   * Gets/sets the days of the week that are considered weekends.
+   */
+  @property({ attribute: false })
+  public get weekendDays(): DayOfWeek[] | null | undefined {
+    return this._core.weekendDays;
+  }
+  public set weekendDays(value: DayOfWeek[] | null | undefined) {
+    this._core.weekendDays = value;
+  }
+
+  /**
+   * Gets/sets the year to display.
+   * @default <current year>
+   * @attribute year
+   */
+  @property({ type: Number, reflect: true })
+  public get year(): number {
+    return this._core.year;
+  }
+  public set year(value: number) {
+    this._core.year = value;
+  }
+
+  /**
+   * Gets/sets the range of years to display.
+   * @default "-50:+50"
+   * @attribute year-range
+   */
+  @property({ attribute: 'year-range', reflect: true })
+  public get yearRange(): string {
+    return this._core.yearRange;
+  }
+  public set yearRange(value: string) {
+    this._core.yearRange = value;
+  }
 
   constructor() {
     super();
-    IconRegistry.define([tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconArrowDropDown, tylIconLens, tylIconAdd]);
+    this.#internals = this.attachInternals();
+
+    // TODO Phase 2: Remove attachShadowTemplate, use Lit render() instead
     attachShadowTemplate(this, template, styles);
+
+    // TODO Phase 2: Remove this, initialize controllers instead
     this._core = new CalendarCore(new CalendarAdapter(this));
   }
 
-  public connectedCallback(): void {
-    // To simulate the :host-context() selector for Firefox until they implement it, we need to determine if the
-    // calendar is within a popup for auto-styling the calendar when included within a popup. Check to see if
-    // any of the parents of this element are a popup.
+  public override connectedCallback(): void {
+    super.connectedCallback();
+
+    // Check for popover context (Firefox compatibility)
     if (!this.hasAttribute(CALENDAR_CONSTANTS.attributes.POPOVER_CONTEXT) && elementParents(this).some(el => el.tagName.toLowerCase() === 'forge-popover')) {
       this.setAttribute(CALENDAR_CONSTANTS.attributes.POPOVER_CONTEXT, 'true');
     }
 
+    // TODO Phase 2: Remove this, use willUpdate instead
     this._core.initialize();
   }
 
-  public disconnectedCallback(): void {
+  public override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    // TODO Phase 2: Remove this, cleanup controllers instead
     this._core.destroy();
   }
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+  public override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    // Let Lit handle the attribute change first
+    super.attributeChangedCallback(name, oldValue, newValue);
+
+    // Handle attribute changes and coerce to proper types
+    // This ensures attributes work correctly with Lit decorators
+    if (newValue === null) {
+      return;
+    }
+
     switch (name) {
       case CALENDAR_CONSTANTS.attributes.ALLOW_SINGLE_DATE_RANGE:
         this.allowSingleDateRange = coerceBoolean(newValue);
@@ -274,114 +690,26 @@ export class CalendarComponent extends BaseComponent implements ICalendarCompone
     }
   }
 
-  /** @readonly */
-  @coreProperty({ set: false })
-  declare public activeDate: Date;
+  public override willUpdate(changedProperties: PropertyValues<this>): void {
+    // Update custom states based on view changes
+    if (changedProperties.has('view')) {
+      const oldView = changedProperties.get('view') as CalendarView | undefined;
+      if (oldView) {
+        toggleState(this.#internals, `view-${oldView}`, false);
+      }
+      toggleState(this.#internals, `view-${this.view}`, true);
+    }
 
-  @coreProperty()
-  declare public allowSingleDateRange: boolean;
+    // Additional state updates are handled by setters above
+    // TODO Phase 2: Move all property change logic here instead of setters
+  }
 
-  @coreProperty()
-  declare public clearButton: boolean;
-
-  @coreProperty()
-  declare public clearCallback: (() => void) | undefined;
-
-  @coreProperty()
-  declare public constrainToEnabled: boolean;
-
-  @coreProperty()
-  declare public dateBuilder: CalendarDateBuilder | undefined;
-
-  @coreProperty()
-  declare public dateSelectCallback: CalendarDateSelectCallback | undefined;
-
-  @coreProperty()
-  declare public dayBuilder: CalendarDayBuilder | undefined;
-
-  @coreProperty()
-  declare public disabledDateBuilder: ((date: Date) => boolean) | undefined;
-
-  @coreProperty()
-  declare public disabledDates: Date | Date[] | null | undefined;
-
-  @coreProperty()
-  declare public disabledDaysOfWeek: DayOfWeek | DayOfWeek[] | null | undefined;
-
-  @coreProperty()
-  declare public eventBuilder: CalendarEventBuilder | undefined;
-
-  @coreProperty()
-  declare public events: ICalendarEvent[] | null | undefined;
-
-  @coreProperty()
-  declare public firstDayOfWeek: DayOfWeek | undefined;
-
-  @coreProperty()
-  declare public fixedHeight: boolean;
-
-  @coreProperty()
-  declare public listYears: boolean;
-
-  @coreProperty()
-  declare public locale: string | undefined;
-
-  @coreProperty()
-  declare public max: Date | string | null | undefined;
-
-  @coreProperty()
-  declare public menuAnimation: CalendarMenuAnimationType;
-
-  @coreProperty()
-  declare public min: Date | string | null | undefined;
-
-  @coreProperty()
-  declare public mode: CalendarMode;
-
-  @coreProperty()
-  declare public month: number;
-
-  @coreProperty()
-  declare public preventFocus: boolean;
-
-  @coreProperty()
-  declare public readonly: boolean;
-
-  @coreProperty()
-  declare public selectionFollowsMonth: boolean;
-
-  @coreProperty()
-  declare public showHeader: boolean;
-
-  @coreProperty()
-  declare public showOtherMonths: boolean;
-
-  @coreProperty()
-  declare public showToday: boolean;
-
-  @coreProperty()
-  declare public todayButton: boolean;
-
-  @coreProperty()
-  declare public todayCallback: (() => void) | undefined;
-
-  @coreProperty()
-  declare public tooltipBuilder: CalendarTooltipBuilder | undefined;
-
-  @coreProperty()
-  declare public value: Date | Date[] | DateRange | null | undefined;
-
-  @coreProperty()
-  declare public view: CalendarView;
-
-  @coreProperty()
-  declare public weekendDays: DayOfWeek[] | null | undefined;
-
-  @coreProperty()
-  declare public year: number;
-
-  @coreProperty()
-  declare public yearRange: string;
+  // TODO Phase 2: Replace with Lit template
+  public override render(): TemplateResult {
+    // For Phase 1, we'll render nothing as the template is still attached via shadow DOM in constructor
+    // The legacy adapter will still manipulate the DOM
+    return html``;
+  }
 
   /**
    * Clears the selected date(s).
@@ -421,8 +749,8 @@ export class CalendarComponent extends BaseComponent implements ICalendarCompone
   /**
    * Selects a date.
    */
-  public selectDate(date: Date): void {
-    this._core.selectDate(new Date(date));
+  public selectDate(date: Date, setFocus?: boolean): void {
+    this._core.selectDate(new Date(date), setFocus);
   }
 
   /**

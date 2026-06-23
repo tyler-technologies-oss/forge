@@ -14,6 +14,7 @@ export * from './calendar-utils.js';
 export * from './calendar.js';
 export * from './core/index.js';
 
+/** @deprecated Definition functions are deprecated and replaced with side effect imports (`import '@tylertech/forge/calendar'`). */
 export function defineCalendarComponent(): void {
   defineCustomElement(CalendarComponent);
 }

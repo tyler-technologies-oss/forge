@@ -142,6 +142,11 @@ export interface IComponentNameComponent extends BaseLitElement {
  */
 @customElement(COMPONENT_CONSTANTS.elementName)
 export class ComponentNameComponent extends BaseLitElement implements IComponentNameComponent {
+  static {
+    // Icon registration in static initialization block (runs once when class is defined)
+    IconRegistry.define([tylIconExample, tylIconAnother]);
+  }
+
   public static styles = unsafeCSS(styles);
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
@@ -188,6 +193,7 @@ declare global {
 - `@customElement` takes a simple string, not an object
 - No `observedAttributes` — Lit handles this automatically
 - No core/adapter instantiation
+- **Static initialization block** for icon registration (runs once when class is defined, before any instances are created)
 - Add static `styles` property
 - Add deprecated static properties for backward compatibility
 - Extends `BaseLitElement` instead of `BaseComponent`
@@ -197,7 +203,75 @@ declare global {
 - `#internals` is always present — needed for custom states
 - `@state` JSDoc tags in the class comment document custom CSS states
 
-#### 3. Convert Properties
+#### 3. Icon Registration Pattern
+
+**IMPORTANT:** Always register icons in a **static initialization block** at the top of the class, not in the constructor.
+
+**Why?** The static block runs once when the class is defined (before any instances are created), ensuring icons are registered before the component is used. This is more efficient than registering in the constructor, which would run for every instance.
+
+**Before (Legacy - in constructor):**
+
+```typescript
+constructor() {
+  super();
+  IconRegistry.define([tylIconExample, tylIconAnother]);
+  attachShadowTemplate(this, template, styles);
+  this._core = new ComponentCore(new ComponentAdapter(this));
+}
+```
+
+**After (Lit - static initialization block):**
+
+```typescript
+@customElement(COMPONENT_CONSTANTS.elementName)
+export class ComponentNameComponent extends BaseLitElement {
+  static {
+    // Runs once when class is defined, before any instances
+    IconRegistry.define([tylIconExample, tylIconAnother]);
+  }
+
+  public static styles = unsafeCSS(styles);
+  
+  // ... rest of class
+}
+```
+
+**Pattern for components using icons:**
+
+1. Import the icon definitions at the top of the file:
+   ```typescript
+   import { tylIconExample, tylIconAnother } from '@tylertech/tyler-icons';
+   ```
+
+2. Add a static initialization block as the **first thing** inside the class:
+   ```typescript
+   @customElement(COMPONENT_CONSTANTS.elementName)
+   export class ComponentNameComponent extends BaseLitElement {
+     static {
+       IconRegistry.define([tylIconExample, tylIconAnother]);
+     }
+     
+     public static styles = unsafeCSS(styles);
+     // ... rest of class
+   }
+   ```
+
+3. The constructor (if needed) should NOT contain icon registration:
+   ```typescript
+   constructor() {
+     super();
+     this.#internals = this.attachInternals();
+     // NO icon registration here!
+   }
+   ```
+
+**Benefits:**
+- ✅ Icons registered once per class, not once per instance
+- ✅ Registration happens before any component instances are created
+- ✅ Cleaner constructor
+- ✅ Better performance with many component instances
+
+#### 4. Convert Properties
 
 **Legacy pattern** (`component.ts` + `component-core.ts`):
 
@@ -1285,17 +1359,18 @@ Study these completed migrations for patterns:
 
 **CRITICAL - Follow these conventions:**
 
-1. **JSDoc placement**: Property JSDoc MUST precede the property. Class JSDoc must NOT contain `@property` or `@attribute` tags — only `@tag`, `@summary`, `@cssproperty`, `@csspart`, `@cssclass`, `@state`, `@slot`, `@fires`, `@dependency`, etc.
-2. **Interface**: The legacy `IComponentNameComponent` interface must be marked `@deprecated` and must extend `BaseLitElement` (not `IBaseComponent`). Keep it exported for backward compatibility.
-3. **`declare global`**: Always placed at the **bottom** of the file, after the class declaration.
-4. **Private fields**: Use `#field` notation (JavaScript private)
-5. **Exception**: Decorated state uses `@state() private _field` (TypeScript + underscore)
-6. **Reflection**: Only reflect when original component reflected to attributes
-7. **Attribute names**: Set `attribute` field when names differ (typically kebab-case)
-8. **Property validation**: Use custom setters for validation/transformation
-9. **Change handling**: Prefer `willUpdate()` over `updated()` for property reactions
-10. **String type**: Omit `type: String` - it's the default in Lit
-11. **Custom states**: Use `toggleState()` and `:state(...)` in SCSS when styles target the host element or the state has external styling value. Use internal classes for purely internal styling.
-12. **Goal**: Simplify code, reduce boilerplate, leverage Lit features
-13. **Controllers**: Extract verbose code into controllers/directives for clarity
-14. **Behavior**: No changes to consumer-facing behavior or appearance
+1. **Icon registration**: ALWAYS use a static initialization block at the top of the class for `IconRegistry.define()`, NEVER in the constructor. The static block runs once when the class is defined, before any instances are created.
+2. **JSDoc placement**: Property JSDoc MUST precede the property. Class JSDoc must NOT contain `@property` or `@attribute` tags — only `@tag`, `@summary`, `@cssproperty`, `@csspart`, `@cssclass`, `@state`, `@slot`, `@fires`, `@dependency`, etc.
+3. **Interface**: The legacy `IComponentNameComponent` interface must be marked `@deprecated` and must extend `BaseLitElement` (not `IBaseComponent`). Keep it exported for backward compatibility.
+4. **`declare global`**: Always placed at the **bottom** of the file, after the class declaration.
+5. **Private fields**: Use `#field` notation (JavaScript private)
+6. **Exception**: Decorated state uses `@state() private _field` (TypeScript + underscore)
+7. **Reflection**: Only reflect when original component reflected to attributes
+8. **Attribute names**: Set `attribute` field when names differ (typically kebab-case)
+9. **Property validation**: Use custom setters for validation/transformation
+10. **Change handling**: Prefer `willUpdate()` over `updated()` for property reactions
+11. **String type**: Omit `type: String` - it's the default in Lit
+12. **Custom states**: Use `toggleState()` and `:state(...)` in SCSS when styles target the host element or the state has external styling value. Use internal classes for purely internal styling.
+13. **Goal**: Simplify code, reduce boilerplate, leverage Lit features
+14. **Controllers**: Extract verbose code into controllers/directives for clarity
+15. **Behavior**: No changes to consumer-facing behavior or appearance
