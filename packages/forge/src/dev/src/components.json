@@ -61,6 +61,7 @@
   { "label": "Text field", "path": "/pages/text-field/text-field.html", "tags": ["form"] },
   { "label": "Theme", "path": "/pages/theme/theme.html", "tags": ["color"] },
   { "label": "Time picker", "path": "/pages/time-picker/time-picker.html", "tags": ["field"] },
+  { "label": "Timeline", "path": "/pages/timeline/timeline.html", "tags": ["chronology", "events", "history"] },
   { "label": "Toast", "path": "/pages/toast/toast.html" },
   { "label": "Toolbar", "path": "/pages/toolbar/toolbar.html" },
   { "label": "Tooltip", "path": "/pages/tooltip/tooltip.html" },
