@@ -34,7 +34,7 @@ $filled-backgrounds: (
   info: theme.variable(info-container-minimum)
 );
 $outline-colors: (
-  default: theme.variable(outline-low),
+  default: theme.variable(outline),
   primary: theme.variable(primary),
   secondary: theme.variable(on-secondary-container),
   tertiary: theme.variable(tertiary),
@@ -44,7 +44,7 @@ $outline-colors: (
   info: theme.variable(info)
 );
 $outline-colors-hover: (
-  default: theme.variable(outline-high),
+  default: theme.variable(outline-medium),
   primary: theme.variable(on-primary-container),
   secondary: theme.variable(on-secondary-container),
   tertiary: theme.variable(on-tertiary-container),

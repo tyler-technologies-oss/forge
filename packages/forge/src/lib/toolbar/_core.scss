@@ -29,6 +29,7 @@
   border-end-end-radius: #{token(end-end-shape)};
 
   background: #{token(background)};
+  backdrop-filter: blur(20px);
 }
 
 @mixin inner {

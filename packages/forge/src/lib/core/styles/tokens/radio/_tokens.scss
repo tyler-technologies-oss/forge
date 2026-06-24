@@ -17,7 +17,7 @@ $tokens: (
   width: utils.module-ref(radio, width, size),
   height: utils.module-ref(radio, height, size),
   border-width: utils.module-val(radio, border-width, border.variable(medium)),
-  unchecked-border-color: utils.module-ref(radio, unchecked-border-color, inactive-color),
+  unchecked-border-color: utils.module-val(radio, unchecked-border-color, theme.variable(outline-medium)),
   checked-border-color: utils.module-ref(radio, checked-border-color, primary-color),
   background: utils.module-val(radio, background, transparent),
   shape: utils.module-val(radio, shape, shape.variable(round)),
