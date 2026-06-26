@@ -28,7 +28,11 @@ const observedAttributes = {
   SUMMARY: 'summary',
   SINGLE_LABEL: 'single-label',
   FROM_LABEL: 'from-label',
-  TO_LABEL: 'to-label'
+  TO_LABEL: 'to-label',
+  ANCHOR: 'anchor',
+  OPEN: 'open',
+  PLACEMENT: 'placement',
+  PERSISTENT: 'persistent'
 } as const;
 
 const attributes = {
@@ -68,7 +72,9 @@ const parts = {
 } as const;
 
 const events = {
-  CHANGE: `${elementName}-change`
+  CHANGE: `${elementName}-change`,
+  OPEN: `${elementName}-open`,
+  CLOSE: `${elementName}-close`
 } as const;
 
 const defaultValues = {
