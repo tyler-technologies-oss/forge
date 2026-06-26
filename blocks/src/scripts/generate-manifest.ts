@@ -9,6 +9,8 @@ import path from 'node:path';
 import { glob } from 'glob';
 import { parseBlockMetadata } from './block-metadata.js';
 import { validateBlockContent, formatValidationIssues } from './block-validator.js';
+import { createPartialRegistry } from './partial-registry.js';
+import { detectComponents } from './component-detector.js';
 import type { Block, Manifest } from './types.js';
 
 export type { Block, Manifest } from './types.js';
@@ -50,6 +52,10 @@ export async function discoverBlocks(blocksPath: string): Promise<Block[]> {
     cwd: blocksPath
   });
 
+  const partialsPath = path.resolve(blocksPath, '../partials');
+  const partialRegistry = createPartialRegistry({ partialsPath });
+  partialRegistry.load();
+
   for (const file of htmlFiles) {
     const fullPath = path.join(blocksPath, file);
     const content = fs.readFileSync(fullPath, 'utf-8');
@@ -59,13 +65,16 @@ export async function discoverBlocks(blocksPath: string): Promise<Block[]> {
     if (metadata) {
       const id = relativePath.replace('.html', '');
       const categoryFolder = extractCategoryFolder(relativePath);
+      const componentsUsed = detectComponents({ content, partialRegistry });
+
       const block: Block = {
         id,
         name: metadata.name,
         description: metadata.description,
         tags: metadata.tags,
         file: relativePath,
-        category: formatCategoryName(categoryFolder)
+        category: formatCategoryName(categoryFolder),
+        componentsUsed
       };
 
       // Check for screenshot file (.webp or .png)

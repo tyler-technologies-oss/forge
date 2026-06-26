@@ -19,6 +19,8 @@ export interface Block extends BlockMetadata {
   category: string;
   /** Whether this block has associated JavaScript/TypeScript for interactivity */
   hasScript: boolean;
+  /** Forge components used in this block (auto-detected from HTML content) */
+  componentsUsed: string[];
 }
 
 /** Category folder information */
