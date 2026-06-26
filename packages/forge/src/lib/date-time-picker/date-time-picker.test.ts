@@ -492,3 +492,91 @@ describe('DateTimePicker / accessibility', () => {
     expect(el.hasAttribute('disabled')).toBe(true);
   });
 });
+
+describe('DateTimePicker / overlay mode', () => {
+  it('should render inline card when anchorElement is not set', async () => {
+    const screen = render(html`<forge-date-time-picker></forge-date-time-picker>`);
+    const el = screen.container.querySelector('forge-date-time-picker')!;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('forge-overlay')).toBeNull();
+    expect(el.shadowRoot!.querySelector('[part="root"]')).not.toBeNull();
+  });
+
+  it('should render card inside forge-overlay when anchorElement is set', async () => {
+    const screen = render(html`
+      <div>
+        <button id="anchor">Open</button>
+        <forge-date-time-picker></forge-date-time-picker>
+      </div>
+    `);
+    const btn = screen.container.querySelector('button')!;
+    const el = screen.container.querySelector('forge-date-time-picker')!;
+    await el.updateComplete;
+    el.anchorElement = btn;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('forge-overlay')).not.toBeNull();
+  });
+
+  it('should open and close the overlay via the open property', async () => {
+    const screen = render(html`
+      <div>
+        <button id="anchor">Open</button>
+        <forge-date-time-picker></forge-date-time-picker>
+      </div>
+    `);
+    const btn = screen.container.querySelector('button')!;
+    const el = screen.container.querySelector('forge-date-time-picker')!;
+    await el.updateComplete;
+    el.anchorElement = btn;
+    await el.updateComplete;
+    el.open = true;
+    await el.updateComplete;
+    const overlay = el.shadowRoot!.querySelector('forge-overlay') as HTMLElement & { open: boolean };
+    expect(overlay.open).toBe(true);
+    el.open = false;
+    await el.updateComplete;
+    expect(overlay.open).toBe(false);
+  });
+
+  it('should emit forge-date-time-picker-open when opened', async () => {
+    const screen = render(html`
+      <div>
+        <button id="anchor">Open</button>
+        <forge-date-time-picker></forge-date-time-picker>
+      </div>
+    `);
+    const btn = screen.container.querySelector('button')!;
+    const el = screen.container.querySelector('forge-date-time-picker')!;
+    await el.updateComplete;
+    el.anchorElement = btn;
+    await el.updateComplete;
+    const events: string[] = [];
+    el.addEventListener('forge-date-time-picker-open', () => events.push('open'));
+    el.open = true;
+    await el.updateComplete;
+    expect(events).toContain('open');
+  });
+
+  it('should emit forge-date-time-picker-close and set open=false on light dismiss', async () => {
+    const screen = render(html`
+      <div>
+        <button id="anchor">Open</button>
+        <forge-date-time-picker></forge-date-time-picker>
+      </div>
+    `);
+    const btn = screen.container.querySelector('button')!;
+    const el = screen.container.querySelector('forge-date-time-picker')!;
+    await el.updateComplete;
+    el.anchorElement = btn;
+    await el.updateComplete;
+    el.open = true;
+    await el.updateComplete;
+    const events: string[] = [];
+    el.addEventListener('forge-date-time-picker-close', () => events.push('close'));
+    const overlay = el.shadowRoot!.querySelector('forge-overlay')!;
+    overlay.dispatchEvent(new CustomEvent('forge-overlay-light-dismiss', { bubbles: true, composed: true }));
+    await el.updateComplete;
+    expect(el.open).toBe(false);
+    expect(events).toEqual(['close']);
+  });
+});
