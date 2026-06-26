@@ -221,6 +221,23 @@ describe('DateTimeField / linked pair (IDREF)', () => {
     expect(el.shadowRoot!.querySelector('[part="toggle"]')).not.toBeNull();
   });
 
+  it('should sync an already-set field value to the picker when linked via pickerElement', async () => {
+    const screen = render(html`
+      <div>
+        <forge-date-time-field value-mode="date"></forge-date-time-field>
+        <forge-date-time-picker value-mode="date"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getField(screen.container);
+    const picker = getPicker(screen.container);
+    await ready(el);
+    el.value = new Date(2025, 5, 12, 10, 30);
+    await ready(el);
+    el.pickerElement = picker;
+    await ready(el);
+    expect((picker.value as Date).getHours()).toBe(10);
+  });
+
   it('should warn when field time-mode and picker time-mode disagree', async () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const screen = render(html`
