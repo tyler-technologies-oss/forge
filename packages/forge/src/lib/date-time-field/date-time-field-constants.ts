@@ -20,10 +20,8 @@ const observedAttributes = {
   ALLOW_SECONDS: 'allow-seconds',
   MIN: 'min',
   MAX: 'max',
-  MIN_TIME: 'min-time',
-  MAX_TIME: 'max-time',
-  STEP: 'step',
-  POPOVER_PLACEMENT: 'popover-placement'
+  POPOVER_PLACEMENT: 'popover-placement',
+  PICKER: 'picker'
 } as const;
 
 const attributes = {
@@ -39,9 +37,7 @@ const slots = {
 const parts = {
   FIELD: 'field',
   INPUT: 'input',
-  TOGGLE: 'toggle',
-  POPOVER: 'popover',
-  PICKER: 'picker'
+  TOGGLE: 'toggle'
 } as const;
 
 const events = {
@@ -67,7 +63,6 @@ export const DATE_TIME_FIELD_CONSTANTS = {
   defaultValues
 };
 
-/** Which segment(s) must be filled for the field to be valid when `required` is set. */
 export type DateTimeFieldRequiredParts = 'both' | 'date' | 'time';
 
 export interface IDateTimeFieldChangeEventData {
