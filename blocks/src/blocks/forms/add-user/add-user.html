@@ -1,0 +1,74 @@
+<!--
+  @block Add User Form
+  @description Form card with two-column grid layout for text inputs, leading icons, support text, dropdown selects, grouped checkboxes, and action buttons
+  @tags form, card, two-column, grid, text-field, select, checkbox, icons, scaffold, toolbar
+-->
+
+<forge-card class="max-w-2xl p-0">
+  <forge-scaffold>
+    {{> simple-toolbar slot="header" title="Add New User"}}
+
+    <div slot="body" class="p-medium">
+      <form id="add-user-form" class="flex flex-col gap-medium">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-medium">
+          <forge-text-field label-position="block-start">
+            <label for="first-name">First Name</label>
+            <input type="text" id="first-name" autocomplete="given-name" />
+          </forge-text-field>
+
+          <forge-text-field label-position="block-start">
+            <label for="last-name">Last Name</label>
+            <input type="text" id="last-name" autocomplete="family-name" />
+          </forge-text-field>
+        </div>
+
+        <forge-text-field label-position="block-start">
+          <label for="email">Email Address</label>
+          <forge-icon slot="leading" name="email"></forge-icon>
+          <input type="email" id="email" autocomplete="email" />
+        </forge-text-field>
+
+        <forge-text-field label-position="block-start">
+          <label for="phone">Phone Number</label>
+          <forge-icon slot="leading" name="phone"></forge-icon>
+          <input type="tel" id="phone" autocomplete="tel" />
+          <span slot="support-text">Optional</span>
+        </forge-text-field>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-medium">
+          <forge-select label="Department" label-position="block-start">
+            <forge-option value="">Select a department</forge-option>
+            <forge-option value="engineering">Engineering</forge-option>
+            <forge-option value="product">Product</forge-option>
+            <forge-option value="design">Design</forge-option>
+            <forge-option value="marketing">Marketing</forge-option>
+          </forge-select>
+
+          <forge-select label="Role" label-position="block-start">
+            <forge-option value="">Select a role</forge-option>
+            <forge-option value="user">User</forge-option>
+            <forge-option value="editor">Editor</forge-option>
+            <forge-option value="admin">Administrator</forge-option>
+          </forge-select>
+        </div>
+
+        <div class="flex flex-col gap-small">
+          <span class="text-label1">Options</span>
+          <forge-checkbox>Send welcome email</forge-checkbox>
+          <forge-checkbox>Require password change on first login</forge-checkbox>
+          <forge-checkbox>Enable two-factor authentication</forge-checkbox>
+        </div>
+      </form>
+    </div>
+
+    <forge-toolbar slot="footer" inverted>
+      <div slot="end" class="flex items-center gap-small">
+        <forge-button type="button">Cancel</forge-button>
+        <forge-button variant="raised" type="submit" form="add-user-form">
+          <forge-icon slot="start" name="person_add"></forge-icon>
+          Create User
+        </forge-button>
+      </div>
+    </forge-toolbar>
+  </forge-scaffold>
+</forge-card>

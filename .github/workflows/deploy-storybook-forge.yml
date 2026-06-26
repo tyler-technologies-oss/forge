@@ -4,10 +4,16 @@ on:
   workflow_dispatch:
   release:
     types: [published]
+  push:
+    branches: [main]
+    paths:
+      - 'packages/forge/**'
+      - '.github/workflows/deploy-storybook-forge.yml'
 
 env:
   CI: true
   TURBO_TELEMETRY_DISABLED: 1
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
 jobs:
   deploy:
@@ -28,6 +34,8 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+
+      - run: pnpm turbo run build --filter=@tylertech/forge
 
       - run: pnpm turbo run build:storybook --filter=@tylertech/forge
 

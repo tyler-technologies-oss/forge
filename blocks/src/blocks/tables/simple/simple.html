@@ -1,0 +1,14 @@
+<!--
+  @block Simple Table
+  @description Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows
+  @tags table, data, card, toolbar
+-->
+
+<div class="p-medium">
+  <forge-card class="p-0">
+    {{> simple-toolbar title="Blacksmith Inventory"}}
+    {{> simple-table id="blacksmith-table"}}
+  </forge-card>
+</div>
+
+<script type="module" src="/src/blocks/tables/simple/simple.ts"></script>

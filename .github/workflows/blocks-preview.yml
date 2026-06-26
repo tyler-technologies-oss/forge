@@ -1,0 +1,52 @@
+name: Blocks Preview
+
+on:
+  pull_request:
+    types: [labeled, synchronize]
+    paths:
+      - 'blocks/**'
+
+concurrency:
+  group: blocks-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  CI: true
+  TURBO_TELEMETRY_DISABLED: 1
+
+jobs:
+  deploy-preview:
+    if: contains(github.event.pull_request.labels.*.name, 'deploy-preview') && !github.event.pull_request.head.repo.fork
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: pr-preview-blocks-${{ github.event.pull_request.number }}
+      url: https://forge.tylerdev.io/blocks/pr-${{ github.event.pull_request.number }}/
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build blocks
+        run: pnpm turbo run build --filter=blocks
+        env:
+          BASE_HREF: /blocks/pr-${{ github.event.pull_request.number }}/
+
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: blocks/dist
+          target-folder: docs/blocks/pr-${{ github.event.pull_request.number }}
+          clean: true

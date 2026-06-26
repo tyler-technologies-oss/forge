@@ -1,0 +1,59 @@
+<!--
+  @block Dual Scrolling Containers
+  @description Application layout demonstrating dual independent scrolling regions where the main content area and a fixed right-side drawer panel each scroll independently, useful for master-detail views or side-by-side content comparison layouts
+  @tags layout, application, scroll, drawer, dual-panel, right-drawer
+-->
+
+<forge-app-layout app-title="Dual Scroll Demo" breakpoint="960">
+  <!-- Navigation drawer content -->
+  <forge-list navlist slot="navigation" data-forge-app-layout-close>
+    <forge-list-item selected>
+      <forge-icon slot="start" name="home"></forge-icon>
+      <a href="javascript: void(0);">Home</a>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="inbox"></forge-icon>
+      <a href="javascript: void(0);">Inbox</a>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="star"></forge-icon>
+      <a href="javascript: void(0);">Starred</a>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="settings"></forge-icon>
+      <a href="javascript: void(0);">Settings</a>
+    </forge-list-item>
+  </forge-list>
+
+  <!-- Body header toolbar -->
+  <div slot="body-header">
+    {{> simple-toolbar title="Dual Scroll Demo"}}
+  </div>
+
+  <!-- Main scrollable content area -->
+  <div slot="body" class="p-medium">
+    <forge-card>
+      <div class="p-medium space-y-medium">
+        <div class="striped-box h-48"></div>
+        <div class="striped-box h-64"></div>
+        <div class="striped-box h-48"></div>
+        <div class="striped-box h-64"></div>
+        <div class="striped-box h-48"></div>
+      </div>
+    </forge-card>
+  </div>
+
+  <!-- Right drawer with independent scroll -->
+  <div slot="body-right">
+    <forge-drawer direction="right">
+      <div class="p-medium space-y-medium">
+        <div class="striped-box h-64"></div>
+        <div class="striped-box h-48"></div>
+        <div class="striped-box h-64"></div>
+        <div class="striped-box h-48"></div>
+        <div class="striped-box h-64"></div>
+        <div class="striped-box h-48"></div>
+      </div>
+    </forge-drawer>
+  </div>
+</forge-app-layout>

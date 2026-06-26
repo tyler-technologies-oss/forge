@@ -1,0 +1,24 @@
+<!--
+  @block Basic Card
+  @description Structured card with header, header actions, body content area, and footer with action buttons
+  @tags card, structured-card, header, footer, actions
+-->
+
+<div class="min-h-screen flex items-center justify-center p-large">
+  <forge-structured-card class="w-full max-w-md">
+    <div slot="title">Card Title</div>
+    <forge-icon-button aria-label="Edit" slot="after-header-actions">
+      <forge-icon name="edit"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button aria-label="More options" slot="after-header-actions">
+      <forge-icon name="more_vert"></forge-icon>
+    </forge-icon-button>
+
+    <div slot="body" class="striped-box min-h-50"></div>
+
+    <div slot="footer-secondary-action" class="flex gap-medium">
+      <forge-button variant="tonal">Cancel</forge-button>
+      <forge-button variant="filled">Confirm</forge-button>
+    </div>
+  </forge-structured-card>
+</div>
