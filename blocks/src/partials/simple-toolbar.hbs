@@ -1,5 +1,6 @@
-<forge-toolbar>
+<forge-toolbar{{#if slot}} slot="{{slot}}"{{/if}}>
   <h2 slot="start" class="text-heading3">{{#if title}}{{title}}{{else}}Page Title{{/if}}</h2>
+  {{#if showEndActions}}
   <div slot="end" class="flex gap-xsmall">
     <forge-icon-button density="medium" aria-label="Notifications">
       <forge-icon name="notifications"></forge-icon>
@@ -11,4 +12,5 @@
       <forge-icon name="more_vert"></forge-icon>
     </forge-icon-button>
   </div>
+  {{/if}}
 </forge-toolbar>

@@ -1,246 +1,251 @@
 <!--
   @block Multi-Column Form
   @description Responsive form using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens
-  @tags form, grid, multi-column, responsive, text-field, select, date-picker, checkbox, radio, switch
+  @tags form, grid, multi-column, responsive, text-field, select, date-picker, checkbox, radio, switch, scaffold, toolbar
 -->
 
 <forge-card class="max-w-3xl p-0 mx-auto my-medium">
-  <div class="p-medium">
-    <form class="flex flex-col gap-xlarge">
-      <!-- Section: Project Details -->
-      <div>
-        <h2 class="text-heading2">Project Details</h2>
-        <p class="mt-xxxsmall text-body1 text-medium">Basic information about the project.</p>
+  <forge-scaffold>
+    {{> simple-toolbar slot="header" title="New Project"}}
 
-        <div class="mt-medium grid grid-cols-1 gap-x-medium gap-y-large sm:grid-cols-6">
-          <div class="sm:col-span-4">
-            <forge-text-field label-position="block-start">
-              <label for="project-name">Project Name</label>
-              <input type="text" id="project-name" />
-            </forge-text-field>
-          </div>
+    <div slot="body" class="p-medium">
+      <form id="multi-column-form" class="flex flex-col gap-xlarge">
+        <!-- Section: Project Details -->
+        <div>
+          <h2 class="text-heading2">Project Details</h2>
+          <p class="mt-xxxsmall text-body1 text-medium">Basic information about the project.</p>
 
-          <div class="sm:col-span-3">
-            <forge-select label="Category" label-position="block-start">
-              <forge-option value="">Select a category</forge-option>
-              <forge-option value="development">Development</forge-option>
-              <forge-option value="design">Design</forge-option>
-              <forge-option value="marketing">Marketing</forge-option>
-              <forge-option value="research">Research</forge-option>
-            </forge-select>
-          </div>
-
-          <div class="sm:col-span-3">
-            <forge-select label="Priority" label-position="block-start">
-              <forge-option value="">Select priority</forge-option>
-              <forge-option value="low">Low</forge-option>
-              <forge-option value="medium">Medium</forge-option>
-              <forge-option value="high">High</forge-option>
-              <forge-option value="critical">Critical</forge-option>
-            </forge-select>
-          </div>
-
-          <div class="col-span-full">
-            <forge-text-field label-position="block-start">
-              <label for="description">Description</label>
-              <textarea id="description" rows="3"></textarea>
-              <span slot="support-text">Provide a brief overview of the project scope and objectives.</span>
-            </forge-text-field>
-          </div>
-
-          <div class="col-span-full">
-            <div class="flex flex-col gap-xsmall">
-              <span class="text-label2 text-high">Project Files</span>
-              <forge-file-picker accept=".pdf,.doc,.docx,.xls,.xlsx" multiple>
-                <span slot="primary">Drag files here or</span>
-                <span slot="secondary">PDF, Word, or Excel files up to 10MB each</span>
-                <forge-button variant="outlined">
-                  <forge-icon name="upload" slot="start"></forge-icon>
-                  Select Files
-                </forge-button>
-              </forge-file-picker>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <forge-divider></forge-divider>
-
-      <!-- Section: Timeline -->
-      <div>
-        <h2 class="text-heading2">Timeline</h2>
-        <p class="mt-xxxsmall text-body1 text-medium">Set the project schedule and budget.</p>
-
-        <div class="mt-medium grid grid-cols-1 gap-x-medium gap-y-large sm:grid-cols-6">
-          <div class="sm:col-span-2">
-            <forge-date-picker>
+          <div class="mt-medium grid grid-cols-1 gap-x-medium gap-y-large sm:grid-cols-6">
+            <div class="sm:col-span-4">
               <forge-text-field label-position="block-start">
-                <label for="start-date">Start Date</label>
-                <input type="text" id="start-date" />
+                <label for="project-name">Project Name</label>
+                <input type="text" id="project-name" />
               </forge-text-field>
-            </forge-date-picker>
-          </div>
+            </div>
 
-          <div class="sm:col-span-2">
-            <forge-date-picker>
+            <div class="sm:col-span-3">
+              <forge-select label="Category" label-position="block-start">
+                <forge-option value="">Select a category</forge-option>
+                <forge-option value="development">Development</forge-option>
+                <forge-option value="design">Design</forge-option>
+                <forge-option value="marketing">Marketing</forge-option>
+                <forge-option value="research">Research</forge-option>
+              </forge-select>
+            </div>
+
+            <div class="sm:col-span-3">
+              <forge-select label="Priority" label-position="block-start">
+                <forge-option value="">Select priority</forge-option>
+                <forge-option value="low">Low</forge-option>
+                <forge-option value="medium">Medium</forge-option>
+                <forge-option value="high">High</forge-option>
+                <forge-option value="critical">Critical</forge-option>
+              </forge-select>
+            </div>
+
+            <div class="col-span-full">
               <forge-text-field label-position="block-start">
-                <label for="end-date">End Date</label>
-                <input type="text" id="end-date" />
+                <label for="description">Description</label>
+                <textarea id="description" rows="3"></textarea>
+                <span slot="support-text">Provide a brief overview of the project scope and objectives.</span>
               </forge-text-field>
-            </forge-date-picker>
-          </div>
-
-          <div class="sm:col-span-2">
-            <forge-text-field label-position="block-start">
-              <label for="budget">Budget</label>
-              <span slot="leading">$</span>
-              <input type="number" id="budget" min="0" step="100" />
-            </forge-text-field>
-          </div>
-        </div>
-      </div>
-
-      <forge-divider></forge-divider>
-
-      <!-- Section: Team & Contact -->
-      <div>
-        <h2 class="text-heading2">Team & Contact</h2>
-        <p class="mt-xxxsmall text-body1 text-medium">Assign team members and contact information.</p>
-
-        <div class="mt-medium grid grid-cols-1 gap-x-medium gap-y-large sm:grid-cols-6">
-          <div class="sm:col-span-3">
-            <forge-text-field label-position="block-start">
-              <label for="project-lead">Project Lead</label>
-              <forge-icon slot="leading" name="person"></forge-icon>
-              <input type="text" id="project-lead" />
-            </forge-text-field>
-          </div>
-
-          <div class="sm:col-span-3">
-            <forge-text-field label-position="block-start">
-              <label for="contact-email">Contact Email</label>
-              <forge-icon slot="leading" name="email"></forge-icon>
-              <input type="email" id="contact-email" autocomplete="email" />
-            </forge-text-field>
-          </div>
-
-          <div class="col-span-full">
-            <forge-text-field label-position="block-start">
-              <label for="phone">Phone Number</label>
-              <forge-icon slot="leading" name="phone"></forge-icon>
-              <input type="tel" id="phone" autocomplete="tel" />
-              <span slot="support-text">Optional</span>
-            </forge-text-field>
-          </div>
-        </div>
-      </div>
-
-      <forge-divider></forge-divider>
-
-      <!-- Section: Location -->
-      <div>
-        <h2 class="text-heading2">Project Location</h2>
-        <p class="mt-xxxsmall text-body1 text-medium">Where the project will be based.</p>
-
-        <div class="mt-medium grid grid-cols-1 gap-x-medium gap-y-large sm:grid-cols-6">
-          <div class="col-span-full">
-            <forge-text-field label-position="block-start">
-              <label for="street-address">Street Address</label>
-              <input type="text" id="street-address" autocomplete="street-address" />
-            </forge-text-field>
-          </div>
-
-          <div class="sm:col-span-2 sm:col-start-1">
-            <forge-text-field label-position="block-start">
-              <label for="city">City</label>
-              <input type="text" id="city" autocomplete="address-level2" />
-            </forge-text-field>
-          </div>
-
-          <div class="sm:col-span-2">
-            <forge-select label="State" label-position="block-start">
-              <forge-option value="">Select state</forge-option>
-              <forge-option value="AL">Alabama</forge-option>
-              <forge-option value="AK">Alaska</forge-option>
-              <forge-option value="AZ">Arizona</forge-option>
-              <forge-option value="CA">California</forge-option>
-              <forge-option value="CO">Colorado</forge-option>
-              <forge-option value="TX">Texas</forge-option>
-            </forge-select>
-          </div>
-
-          <div class="sm:col-span-2">
-            <forge-text-field label-position="block-start">
-              <label for="zip">ZIP Code</label>
-              <input type="text" id="zip" autocomplete="postal-code" maxlength="10" />
-            </forge-text-field>
-          </div>
-        </div>
-      </div>
-
-      <forge-divider></forge-divider>
-
-      <!-- Section: Project Settings -->
-      <div>
-        <h2 class="text-heading2">Project Settings</h2>
-        <p class="mt-xxxsmall text-body1 text-medium">Configure visibility and status options.</p>
-
-        <div class="mt-medium flex flex-col">
-          <forge-card class="tonal-card p-small [--forge-card-shape: 12px]">
-            <div class="flex items-center justify-between gap-medium">
-              <div>
-                <p class="text-label1">Public Project</p>
-                <p class="text-body2 text-medium">Allow anyone in the organization to view this project</p>
-              </div>
-              <forge-switch aria-label="Public project"></forge-switch>
             </div>
-          </forge-card>
-          <forge-card class="tonal-card p-small [--forge-card-shape: 12px]">
-            <div class="flex items-center justify-between gap-medium">
-              <div>
-                <p class="text-label1">Active Project</p>
-                <p class="text-body2 text-medium">Mark this project as actively being worked on</p>
+
+            <div class="col-span-full">
+              <div class="flex flex-col gap-xsmall">
+                <span class="text-label2 text-high">Project Files</span>
+                <forge-file-picker accept=".pdf,.doc,.docx,.xls,.xlsx" multiple>
+                  <span slot="primary">Drag files here or</span>
+                  <span slot="secondary">PDF, Word, or Excel files up to 10MB each</span>
+                  <forge-button variant="outlined">
+                    <forge-icon name="upload" slot="start"></forge-icon>
+                    Select Files
+                  </forge-button>
+                </forge-file-picker>
               </div>
-              <forge-switch checked aria-label="Active project"></forge-switch>
             </div>
-          </forge-card>
+          </div>
         </div>
-      </div>
 
-      <forge-divider></forge-divider>
+        <forge-divider></forge-divider>
 
-      <!-- Section: Notifications -->
-      <div>
-        <h2 class="text-heading2">Notifications</h2>
-        <p class="mt-xxxsmall text-body1 text-medium">Configure how you want to receive project updates.</p>
+        <!-- Section: Timeline -->
+        <div>
+          <h2 class="text-heading2">Timeline</h2>
+          <p class="mt-xxxsmall text-body1 text-medium">Set the project schedule and budget.</p>
 
-        <div class="mt-medium flex flex-col">
-          <forge-card class="tonal-card p-small [--forge-card-shape: 12px]">
-            <fieldset class="flex flex-col">
-              <legend class="text-label1">Email Notifications</legend>
-              <forge-checkbox>Project status updates</forge-checkbox>
-              <forge-checkbox>Weekly summary reports</forge-checkbox>
-              <forge-checkbox>Budget alerts</forge-checkbox>
-            </fieldset>
-          </forge-card>
-          <forge-card class="tonal-card p-small [--forge-card-shape: 12px]">
-            <fieldset class="flex flex-col">
-              <legend class="text-label1">Update Frequency</legend>
-              <forge-radio-group name="frequency">
-                <forge-radio value="realtime">Real-time</forge-radio>
-                <forge-radio value="daily">Daily digest</forge-radio>
-                <forge-radio value="weekly">Weekly digest</forge-radio>
-              </forge-radio-group>
-            </fieldset>
-          </forge-card>
+          <div class="mt-medium grid grid-cols-1 gap-x-medium gap-y-large sm:grid-cols-6">
+            <div class="sm:col-span-2">
+              <forge-date-picker>
+                <forge-text-field label-position="block-start">
+                  <label for="start-date">Start Date</label>
+                  <input type="text" id="start-date" />
+                </forge-text-field>
+              </forge-date-picker>
+            </div>
+
+            <div class="sm:col-span-2">
+              <forge-date-picker>
+                <forge-text-field label-position="block-start">
+                  <label for="end-date">End Date</label>
+                  <input type="text" id="end-date" />
+                </forge-text-field>
+              </forge-date-picker>
+            </div>
+
+            <div class="sm:col-span-2">
+              <forge-text-field label-position="block-start">
+                <label for="budget">Budget</label>
+                <span slot="leading">$</span>
+                <input type="number" id="budget" min="0" step="100" />
+              </forge-text-field>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <!-- Actions -->
-      <div class="flex items-center justify-end gap-medium">
+        <forge-divider></forge-divider>
+
+        <!-- Section: Team & Contact -->
+        <div>
+          <h2 class="text-heading2">Team & Contact</h2>
+          <p class="mt-xxxsmall text-body1 text-medium">Assign team members and contact information.</p>
+
+          <div class="mt-medium grid grid-cols-1 gap-x-medium gap-y-large sm:grid-cols-6">
+            <div class="sm:col-span-3">
+              <forge-text-field label-position="block-start">
+                <label for="project-lead">Project Lead</label>
+                <forge-icon slot="leading" name="person"></forge-icon>
+                <input type="text" id="project-lead" />
+              </forge-text-field>
+            </div>
+
+            <div class="sm:col-span-3">
+              <forge-text-field label-position="block-start">
+                <label for="contact-email">Contact Email</label>
+                <forge-icon slot="leading" name="email"></forge-icon>
+                <input type="email" id="contact-email" autocomplete="email" />
+              </forge-text-field>
+            </div>
+
+            <div class="col-span-full">
+              <forge-text-field label-position="block-start">
+                <label for="phone">Phone Number</label>
+                <forge-icon slot="leading" name="phone"></forge-icon>
+                <input type="tel" id="phone" autocomplete="tel" />
+                <span slot="support-text">Optional</span>
+              </forge-text-field>
+            </div>
+          </div>
+        </div>
+
+        <forge-divider></forge-divider>
+
+        <!-- Section: Location -->
+        <div>
+          <h2 class="text-heading2">Project Location</h2>
+          <p class="mt-xxxsmall text-body1 text-medium">Where the project will be based.</p>
+
+          <div class="mt-medium grid grid-cols-1 gap-x-medium gap-y-large sm:grid-cols-6">
+            <div class="col-span-full">
+              <forge-text-field label-position="block-start">
+                <label for="street-address">Street Address</label>
+                <input type="text" id="street-address" autocomplete="street-address" />
+              </forge-text-field>
+            </div>
+
+            <div class="sm:col-span-2 sm:col-start-1">
+              <forge-text-field label-position="block-start">
+                <label for="city">City</label>
+                <input type="text" id="city" autocomplete="address-level2" />
+              </forge-text-field>
+            </div>
+
+            <div class="sm:col-span-2">
+              <forge-select label="State" label-position="block-start">
+                <forge-option value="">Select state</forge-option>
+                <forge-option value="AL">Alabama</forge-option>
+                <forge-option value="AK">Alaska</forge-option>
+                <forge-option value="AZ">Arizona</forge-option>
+                <forge-option value="CA">California</forge-option>
+                <forge-option value="CO">Colorado</forge-option>
+                <forge-option value="TX">Texas</forge-option>
+              </forge-select>
+            </div>
+
+            <div class="sm:col-span-2">
+              <forge-text-field label-position="block-start">
+                <label for="zip">ZIP Code</label>
+                <input type="text" id="zip" autocomplete="postal-code" maxlength="10" />
+              </forge-text-field>
+            </div>
+          </div>
+        </div>
+
+        <forge-divider></forge-divider>
+
+        <!-- Section: Project Settings -->
+        <div>
+          <h2 class="text-heading2">Project Settings</h2>
+          <p class="mt-xxxsmall text-body1 text-medium">Configure visibility and status options.</p>
+
+          <div class="mt-medium flex flex-col">
+            <forge-card class="tonal-card p-small [--forge-card-shape: 12px]">
+              <div class="flex items-center justify-between gap-medium">
+                <div>
+                  <p class="text-label1">Public Project</p>
+                  <p class="text-body2 text-medium">Allow anyone in the organization to view this project</p>
+                </div>
+                <forge-switch aria-label="Public project"></forge-switch>
+              </div>
+            </forge-card>
+            <forge-card class="tonal-card p-small [--forge-card-shape: 12px]">
+              <div class="flex items-center justify-between gap-medium">
+                <div>
+                  <p class="text-label1">Active Project</p>
+                  <p class="text-body2 text-medium">Mark this project as actively being worked on</p>
+                </div>
+                <forge-switch checked aria-label="Active project"></forge-switch>
+              </div>
+            </forge-card>
+          </div>
+        </div>
+
+        <forge-divider></forge-divider>
+
+        <!-- Section: Notifications -->
+        <div>
+          <h2 class="text-heading2">Notifications</h2>
+          <p class="mt-xxxsmall text-body1 text-medium">Configure how you want to receive project updates.</p>
+
+          <div class="mt-medium flex flex-col">
+            <forge-card class="tonal-card p-small [--forge-card-shape: 12px]">
+              <fieldset class="flex flex-col">
+                <legend class="text-label1">Email Notifications</legend>
+                <forge-checkbox>Project status updates</forge-checkbox>
+                <forge-checkbox>Weekly summary reports</forge-checkbox>
+                <forge-checkbox>Budget alerts</forge-checkbox>
+              </fieldset>
+            </forge-card>
+            <forge-card class="tonal-card p-small [--forge-card-shape: 12px]">
+              <fieldset class="flex flex-col">
+                <legend class="text-label1">Update Frequency</legend>
+                <forge-radio-group name="frequency">
+                  <forge-radio value="realtime">Real-time</forge-radio>
+                  <forge-radio value="daily">Daily digest</forge-radio>
+                  <forge-radio value="weekly">Weekly digest</forge-radio>
+                </forge-radio-group>
+              </fieldset>
+            </forge-card>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <forge-toolbar slot="footer" inverted>
+      <div slot="end" class="flex items-center gap-small">
         <forge-button type="button">Cancel</forge-button>
-        <forge-button variant="filled" type="submit">Save Project</forge-button>
+        <forge-button variant="raised" type="submit" form="multi-column-form">Save Project</forge-button>
       </div>
-    </form>
-  </div>
+    </forge-toolbar>
+  </forge-scaffold>
 </forge-card>
