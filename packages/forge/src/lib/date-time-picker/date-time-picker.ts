@@ -3,7 +3,9 @@ import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query, queryAll, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { createRef, ref } from 'lit/directives/ref.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
+import type { IOverlayComponent } from '../overlay/overlay.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
 import type { ICalendarDateSelectEventData } from '../calendar/calendar-constants.js';
 import type { ICalendarComponent } from '../calendar/calendar.js';
@@ -67,6 +69,11 @@ export interface IDateTimePickerComponent extends BaseLitElement {
   singleLabel: string;
   fromLabel: string;
   toLabel: string;
+  anchorElement: HTMLElement | null;
+  anchor: string;
+  open: boolean;
+  persistent: boolean;
+  placement: string;
   slots: ITimeSlot[] | undefined;
   disabledDates: Date[];
   disabledDaysOfWeek: DayOfWeek[];
@@ -240,6 +247,20 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   @property({ attribute: false }) public disableDayCallback: CalendarDisabledDateBuilder | undefined;
   @property({ attribute: false }) public disableSlotCallback: DisableSlotCallback | undefined;
 
+  @property({ attribute: false })
+  public get anchorElement(): HTMLElement | null {
+    return this.#anchorElement;
+  }
+  public set anchorElement(el: HTMLElement | null) {
+    this.#anchorElement = el;
+    this.requestUpdate();
+  }
+
+  @property({ reflect: true }) public anchor = '';
+  @property({ type: Boolean, reflect: true }) public open = false;
+  @property({ type: Boolean, reflect: true }) public persistent = false;
+  @property({ attribute: 'placement', reflect: true }) public placement = 'bottom-start';
+
   @state() private _headerEmpty = true;
   @state() private _footerStartEmpty = true;
   @state() private _footerCenterEmpty = true;
@@ -251,6 +272,8 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   @queryAll('[part="slot"]') private _slotButtons!: NodeListOf<HTMLButtonElement>;
 
   #internals: ElementInternals;
+  #anchorElement: HTMLElement | null = null;
+  private readonly _overlayRef = createRef<IOverlayComponent>();
   #value: DateTimePickerValue = null;
   #activeDate: Date | null = null;
   #activeTime: string | null = null;
@@ -340,6 +363,10 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   public override willUpdate(changed: PropertyValues<this>): void {
+    if (changed.has('open') && changed.get('open') !== undefined) {
+      const eventName = this.open ? DATE_TIME_PICKER_CONSTANTS.events.OPEN : DATE_TIME_PICKER_CONSTANTS.events.CLOSE;
+      this.dispatchEvent(new CustomEvent(eventName, { bubbles: true, composed: true }));
+    }
     if (changed.has('timeMode') && changed.get('timeMode') !== undefined) {
       const previousMode = changed.get('timeMode') as TimeMode | undefined;
       if (previousMode && previousMode !== this.timeMode) {
@@ -389,8 +416,26 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   public override render(): TemplateResult {
+    if (this.#anchorElement ?? this.anchor) {
+      return html`
+        <forge-overlay
+          placement=${this.placement}
+          ?open=${this.open}
+          ?persistent=${this.persistent}
+          .anchorElement=${this.#anchorElement}
+          anchor=${ifDefined(this.anchor || undefined)}
+          @forge-overlay-light-dismiss=${this.#onLightDismiss}
+          ${ref(this._overlayRef)}>
+          ${this.#renderCard()}
+        </forge-overlay>
+      `;
+    }
     return this.#renderCard();
   }
+
+  #onLightDismiss = (): void => {
+    this.open = false;
+  };
 
   #renderCard(): TemplateResult {
     const resolvedOrientation = this.#resolveOrientation();
