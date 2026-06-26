@@ -1,7 +1,7 @@
 <!--
   @block Add Illustration Form
   @description Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files
-  @tags form, card, centered, decorative-background, chip-field, file-picker, create
+  @tags form, card, centered, decorative-background, chip-field, file-picker, create, scaffold, toolbar
 -->
 <!doctype html>
 <html lang="en">
@@ -117,72 +117,63 @@
     </svg>
   </div>
 
-  <forge-card class="relative z-10 w-full max-w-140 p-6">
-    <div class="flex flex-col gap-medium">
-      <!-- Header -->
-      <div class="pb-2">
-        <div class="flex items-center gap-3">
-          <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary-container-low text-2xl text-primary">
-            <forge-icon name="image" external></forge-icon>
+  <forge-card class="relative z-10 w-full max-w-140 p-0">
+    <forge-scaffold>
+      <forge-toolbar slot="header">
+        <h2 slot="start" class="text-heading3">Add Illustration</h2>
+      </forge-toolbar>
+
+      <div slot="body" class="p-medium">
+        <p class="text-body1 text-medium mb-medium">Add a new illustration to the library</p>
+
+        <form id="add-illustration-form" class="flex flex-col gap-medium">
+          <!-- Name Field -->
+          <forge-text-field label-position="block-start">
+            <label for="illustration-name">Name</label>
+            <input type="text" id="illustration-name" />
+          </forge-text-field>
+
+          <!-- Description Field -->
+          <forge-text-field label-position="block-start">
+            <label for="illustration-description">Description</label>
+            <textarea id="illustration-description" rows="3"></textarea>
+          </forge-text-field>
+
+          <!-- Keywords Field -->
+          <forge-chip-field label-position="block-start" add-on-blur>
+            <label slot="label" for="illustration-keywords">Keywords</label>
+            <forge-chip slot="member" type="input" value="nature" dense>nature</forge-chip>
+            <forge-chip slot="member" type="input" value="landscape" dense>landscape</forge-chip>
+            <input type="text" id="illustration-keywords" autocomplete="off" />
+            <span slot="support-text">Add keywords to help others find this illustration</span>
+          </forge-chip-field>
+
+          <!-- File Upload -->
+          <div class="flex flex-col gap-2">
+            <span class="text-label2 text-high">Illustration File</span>
+            <forge-file-picker accept=".svg,.png,.jpg,.jpeg,.webp">
+              <span slot="primary">Drag your illustration here or</span>
+              <span slot="secondary">SVG, PNG, JPG, or WebP up to 10MB</span>
+              <forge-button variant="outlined">
+                <forge-icon name="upload" slot="start" external></forge-icon>
+                Select File
+              </forge-button>
+              <span slot="helper-text">Recommended: SVG format for best quality</span>
+            </forge-file-picker>
           </div>
-          <div class="flex flex-col gap-1">
-            <h1 class="text-heading4 m-0">Add Illustration</h1>
-            <p class="text-body1 m-0 text-medium">Add a new illustration to the library</p>
-          </div>
-        </div>
+        </form>
       </div>
 
-      <forge-divider></forge-divider>
-
-      <!-- Form Fields -->
-      <form class="flex flex-col gap-medium">
-        <!-- Name Field -->
-        <forge-text-field label-position="block-start">
-          <label for="illustration-name">Name</label>
-          <input type="text" id="illustration-name" />
-        </forge-text-field>
-
-        <!-- Description Field -->
-        <forge-text-field label-position="block-start">
-          <label for="illustration-description">Description</label>
-          <textarea id="illustration-description" rows="3"></textarea>
-        </forge-text-field>
-
-        <!-- Keywords Field -->
-        <forge-chip-field label-position="block-start" add-on-blur>
-          <label slot="label" for="illustration-keywords">Keywords</label>
-          <forge-chip slot="member" type="input" value="nature" dense>nature</forge-chip>
-          <forge-chip slot="member" type="input" value="landscape" dense>landscape</forge-chip>
-          <input type="text" id="illustration-keywords" autocomplete="off" />
-          <span slot="support-text">Add keywords to help others find this illustration</span>
-        </forge-chip-field>
-
-        <!-- File Upload -->
-        <div class="flex flex-col gap-2">
-          <span class="text-label2 text-high">Illustration File</span>
-          <forge-file-picker accept=".svg,.png,.jpg,.jpeg,.webp">
-            <span slot="primary">Drag your illustration here or</span>
-            <span slot="secondary">SVG, PNG, JPG, or WebP up to 10MB</span>
-            <forge-button variant="outlined">
-              <forge-icon name="upload" slot="start" external></forge-icon>
-              Select File
-            </forge-button>
-            <span slot="helper-text">Recommended: SVG format for best quality</span>
-          </forge-file-picker>
+      <forge-toolbar slot="footer" inverted>
+        <div slot="end" class="flex items-center gap-small">
+          <forge-button variant="outlined">Cancel</forge-button>
+          <forge-button variant="raised" type="submit" form="add-illustration-form">
+            <forge-icon name="check" slot="start" external></forge-icon>
+            Add to Library
+          </forge-button>
         </div>
-      </form>
-
-      <forge-divider></forge-divider>
-
-      <!-- Actions -->
-      <div class="flex justify-end gap-3">
-        <forge-button variant="outlined">Cancel</forge-button>
-        <forge-button variant="filled">
-          <forge-icon name="check" slot="start" external></forge-icon>
-          Add to Library
-        </forge-button>
-      </div>
-    </div>
+      </forge-toolbar>
+    </forge-scaffold>
   </forge-card>
     <script type="module" src="/blocks/pr-1145/ready-transition.js"></script>
     <script type="module" src="/blocks/pr-1145/theme-listener.js"></script>

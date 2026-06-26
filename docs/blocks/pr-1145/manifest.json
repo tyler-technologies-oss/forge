@@ -1,25 +1,6 @@
 {
   "blocks": [
     {
-      "id": "toolbars/toolbar-actions/toolbar-actions",
-      "name": "Toolbar with Button Actions",
-      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
-      "tags": [
-        "toolbar",
-        "buttons",
-        "actions",
-        "form"
-      ],
-      "file": "toolbars/toolbar-actions/toolbar-actions.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
-      "hasScript": false
-    },
-    {
       "id": "toolbars/table-header/table-header",
       "name": "Table Header",
       "description": "Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot",
@@ -37,6 +18,25 @@
         "forge-toolbar"
       ],
       "screenshot": "toolbars/table-header/table-header.webp",
+      "hasScript": false
+    },
+    {
+      "id": "toolbars/toolbar-actions/toolbar-actions",
+      "name": "Toolbar with Button Actions",
+      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
+      "tags": [
+        "toolbar",
+        "buttons",
+        "actions",
+        "form"
+      ],
+      "file": "toolbars/toolbar-actions/toolbar-actions.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
       "hasScript": false
     },
     {
@@ -286,31 +286,6 @@
       "hasScript": false
     },
     {
-      "id": "lists/list-management/list-management",
-      "name": "List Management",
-      "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
-      "tags": [
-        "list",
-        "management",
-        "interactive",
-        "card"
-      ],
-      "file": "lists/list-management/list-management.html",
-      "category": "Lists",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-list",
-        "forge-list-item",
-        "forge-popover",
-        "forge-text-field"
-      ],
-      "screenshot": "lists/list-management/list-management.webp",
-      "hasScript": true
-    },
-    {
       "id": "forms/multi-column/multi-column",
       "name": "Multi-Column Form",
       "description": "Responsive form using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
@@ -324,7 +299,9 @@
         "date-picker",
         "checkbox",
         "radio",
-        "switch"
+        "switch",
+        "scaffold",
+        "toolbar"
       ],
       "file": "forms/multi-column/multi-column.html",
       "category": "Forms",
@@ -336,12 +313,15 @@
         "forge-divider",
         "forge-file-picker",
         "forge-icon",
+        "forge-icon-button",
         "forge-option",
         "forge-radio",
         "forge-radio-group",
+        "forge-scaffold",
         "forge-select",
         "forge-switch",
-        "forge-text-field"
+        "forge-text-field",
+        "forge-toolbar"
       ],
       "screenshot": "forms/multi-column/multi-column.webp",
       "hasScript": false
@@ -355,7 +335,9 @@
         "login",
         "form",
         "card",
-        "centered"
+        "centered",
+        "scaffold",
+        "toolbar"
       ],
       "file": "forms/login/login.html",
       "category": "Forms",
@@ -364,7 +346,11 @@
         "forge-card",
         "forge-checkbox",
         "forge-divider",
-        "forge-text-field"
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
       ],
       "screenshot": "forms/login/login.webp",
       "hasScript": false
@@ -381,7 +367,9 @@
         "text-field",
         "select",
         "checkbox",
-        "icons"
+        "icons",
+        "scaffold",
+        "toolbar"
       ],
       "file": "forms/add-user/add-user.html",
       "category": "Forms",
@@ -390,9 +378,12 @@
         "forge-card",
         "forge-checkbox",
         "forge-icon",
+        "forge-icon-button",
         "forge-option",
+        "forge-scaffold",
         "forge-select",
-        "forge-text-field"
+        "forge-text-field",
+        "forge-toolbar"
       ],
       "screenshot": "forms/add-user/add-user.webp",
       "hasScript": false
@@ -408,7 +399,9 @@
         "decorative-background",
         "chip-field",
         "file-picker",
-        "create"
+        "create",
+        "scaffold",
+        "toolbar"
       ],
       "file": "forms/add-illustration/add-illustration.html",
       "category": "Forms",
@@ -417,10 +410,12 @@
         "forge-card",
         "forge-chip",
         "forge-chip-field",
-        "forge-divider",
         "forge-file-picker",
         "forge-icon",
-        "forge-text-field"
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
       ],
       "screenshot": "forms/add-illustration/add-illustration.webp",
       "hasScript": false
@@ -448,6 +443,31 @@
       ],
       "screenshot": "dialogs/simple/simple.webp",
       "hasScript": false
+    },
+    {
+      "id": "lists/list-management/list-management",
+      "name": "List Management",
+      "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
+      "tags": [
+        "list",
+        "management",
+        "interactive",
+        "card"
+      ],
+      "file": "lists/list-management/list-management.html",
+      "category": "Lists",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-popover",
+        "forge-text-field"
+      ],
+      "screenshot": "lists/list-management/list-management.webp",
+      "hasScript": true
     },
     {
       "id": "cards/user-profile/user-profile",
@@ -723,5 +743,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-06-26T14:58:21.648Z"
+  "generatedAt": "2026-06-26T16:35:23.922Z"
 }
