@@ -162,7 +162,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.#shouldClear = !present;
     this._invalid = false;
     if (this.#pickerEl) {
-      this.#pickerEl.value = input ?? null;
+      this.#pickerEl.value = this.value ?? null;
     }
     this.requestUpdate();
   }
@@ -277,6 +277,14 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     if (changed.has('open') && this.open !== this._open) {
       this.#setPickerOpen(this.open);
     }
+    if (this.#pickerEl) {
+      if (changed.has('persistent')) {
+        this.#pickerEl.persistent = this.persistent;
+      }
+      if (changed.has('popoverPlacement')) {
+        this.#pickerEl.placement = this.popoverPlacement;
+      }
+    }
   }
 
   public override updated(changed: PropertyValues<this>): void {
@@ -348,6 +356,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
         this.#pickerEl.anchorElement = this._toggleRef.value;
         this.#pickerEl.placement = this.popoverPlacement;
         this.#pickerEl.persistent = this.persistent;
+        this.#pickerEl.value = this.value ?? null;
       }
       this.#warnMismatch();
     });
@@ -532,7 +541,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.#updateFormValueAndValidity();
     if (changed) {
       if (this.#pickerEl) {
-        this.#pickerEl.value = next;
+        this.#pickerEl.value = this.value ?? null;
       }
       this.#emitChange();
       this.requestUpdate();
