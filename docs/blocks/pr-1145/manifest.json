@@ -1,6 +1,25 @@
 {
   "blocks": [
     {
+      "id": "toolbars/toolbar-actions/toolbar-actions",
+      "name": "Toolbar with Button Actions",
+      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
+      "tags": [
+        "toolbar",
+        "buttons",
+        "actions",
+        "form"
+      ],
+      "file": "toolbars/toolbar-actions/toolbar-actions.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
+      "hasScript": false
+    },
+    {
       "id": "toolbars/table-header/table-header",
       "name": "Table Header",
       "description": "Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot",
@@ -18,25 +37,6 @@
         "forge-toolbar"
       ],
       "screenshot": "toolbars/table-header/table-header.webp",
-      "hasScript": false
-    },
-    {
-      "id": "toolbars/toolbar-actions/toolbar-actions",
-      "name": "Toolbar with Button Actions",
-      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
-      "tags": [
-        "toolbar",
-        "buttons",
-        "actions",
-        "form"
-      ],
-      "file": "toolbars/toolbar-actions/toolbar-actions.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
       "hasScript": false
     },
     {
@@ -286,6 +286,35 @@
       "hasScript": false
     },
     {
+      "id": "lists/list-management/list-management",
+      "name": "List Management",
+      "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
+      "tags": [
+        "list",
+        "management",
+        "interactive",
+        "card",
+        "scaffold",
+        "toolbar"
+      ],
+      "file": "lists/list-management/list-management.html",
+      "category": "Lists",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-popover",
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
+      ],
+      "screenshot": "lists/list-management/list-management.webp",
+      "hasScript": true
+    },
+    {
       "id": "forms/multi-column/multi-column",
       "name": "Multi-Column Form",
       "description": "Responsive form using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
@@ -443,31 +472,6 @@
       ],
       "screenshot": "dialogs/simple/simple.webp",
       "hasScript": false
-    },
-    {
-      "id": "lists/list-management/list-management",
-      "name": "List Management",
-      "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
-      "tags": [
-        "list",
-        "management",
-        "interactive",
-        "card"
-      ],
-      "file": "lists/list-management/list-management.html",
-      "category": "Lists",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-list",
-        "forge-list-item",
-        "forge-popover",
-        "forge-text-field"
-      ],
-      "screenshot": "lists/list-management/list-management.webp",
-      "hasScript": true
     },
     {
       "id": "cards/user-profile/user-profile",
@@ -743,5 +747,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-06-26T16:35:23.922Z"
+  "generatedAt": "2026-06-26T17:29:09.048Z"
 }
