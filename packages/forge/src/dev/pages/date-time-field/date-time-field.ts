@@ -1,12 +1,15 @@
 import '$src/shared';
 import '@tylertech/forge/date-time-field';
+import '@tylertech/forge/date-time-picker';
 import '@tylertech/forge/button';
 import '@tylertech/forge/label-value';
 import type { IDateTimeFieldChangeEventData, IDateTimeFieldComponent } from '@tylertech/forge/date-time-field';
+import type { IDateTimePickerComponent } from '@tylertech/forge/date-time-picker';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
 
 const field = document.getElementById('demo-date-time-field') as IDateTimeFieldComponent;
+const picker = document.getElementById('demo-date-time-picker') as IDateTimePickerComponent;
 const completeEl = document.getElementById('demo-complete') as HTMLElement;
 const valueEl = document.getElementById('demo-value') as HTMLElement;
 
@@ -35,29 +38,38 @@ document.getElementById('demo-validate')?.addEventListener('click', () => {
   console.log('valid:', field.reportValidity());
 });
 
+// The field and picker are independent — shared config must be set on both
+// (the field warns on mismatch rather than forwarding config across the link).
 const timeModeSelect = document.getElementById('opt-time-mode') as ISelectComponent;
 timeModeSelect.addEventListener('change', () => {
-  field.timeMode = timeModeSelect.value as 'single' | 'range' | 'slots';
+  const mode = timeModeSelect.value as 'single' | 'range' | 'slots';
+  field.timeMode = mode;
+  picker.timeMode = mode;
 });
 
 const valueModeSelect = document.getElementById('opt-value-mode') as ISelectComponent;
 valueModeSelect.addEventListener('change', () => {
-  field.valueMode = valueModeSelect.value as 'temporal' | 'iso' | 'date';
+  const mode = valueModeSelect.value as 'temporal' | 'iso' | 'date';
+  field.valueMode = mode;
+  picker.valueMode = mode;
 });
 
 const localeSelect = document.getElementById('opt-locale') as ISelectComponent;
 localeSelect.addEventListener('change', () => {
   field.locale = localeSelect.value as string;
+  picker.locale = localeSelect.value as string;
 });
 
 const use24hSwitch = document.getElementById('opt-24h') as ISwitchComponent;
 use24hSwitch.addEventListener('forge-switch-change', ({ detail }) => {
   field.use24HourTime = detail;
+  picker.use24HourTime = detail;
 });
 
 const secondsSwitch = document.getElementById('opt-seconds') as ISwitchComponent;
 secondsSwitch.addEventListener('forge-switch-change', ({ detail }) => {
   field.allowSeconds = detail;
+  picker.allowSeconds = detail;
 });
 
 const requiredSwitch = document.getElementById('opt-required') as ISwitchComponent;
@@ -83,4 +95,5 @@ readonlySwitch.addEventListener('forge-switch-change', ({ detail }) => {
 const persistentSwitch = document.getElementById('opt-persistent') as ISwitchComponent;
 persistentSwitch.addEventListener('forge-switch-change', ({ detail }) => {
   field.persistent = detail;
+  picker.persistent = detail;
 });
