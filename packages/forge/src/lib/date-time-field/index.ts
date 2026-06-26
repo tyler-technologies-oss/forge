@@ -3,7 +3,6 @@ import { tylIconInsertInvitation } from '@tylertech/tyler-icons';
 import { defineDateTimePickerComponent } from '../date-time-picker/index.js';
 import { IconRegistry, defineIconComponent } from '../icon/index.js';
 import { defineIconButtonComponent } from '../icon-button/index.js';
-import { definePopoverComponent } from '../popover/index.js';
 import { defineTextFieldComponent } from '../text-field/index.js';
 import { DateTimeFieldComponent } from './date-time-field.js';
 
@@ -15,7 +14,6 @@ export function defineDateTimeFieldComponent(): void {
   defineTextFieldComponent();
   defineIconComponent();
   defineIconButtonComponent();
-  definePopoverComponent();
   defineDateTimePickerComponent();
   IconRegistry.define(tylIconInsertInvitation);
   defineCustomElement(DateTimeFieldComponent);
