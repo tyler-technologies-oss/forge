@@ -1,7 +1,7 @@
 {
   "blocks": [
     {
-      "id": "toolbar/toolbar-actions/toolbar-actions",
+      "id": "toolbars/toolbar-actions/toolbar-actions",
       "name": "Toolbar with Button Actions",
       "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
       "tags": [
@@ -10,13 +10,17 @@
         "actions",
         "form"
       ],
-      "file": "toolbar/toolbar-actions/toolbar-actions.html",
-      "category": "Toolbar",
-      "screenshot": "toolbar/toolbar-actions/toolbar-actions.webp",
+      "file": "toolbars/toolbar-actions/toolbar-actions.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
       "hasScript": false
     },
     {
-      "id": "toolbar/table-header/table-header",
+      "id": "toolbars/table-header/table-header",
       "name": "Table Header",
       "description": "Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot",
       "tags": [
@@ -25,13 +29,18 @@
         "header",
         "actions"
       ],
-      "file": "toolbar/table-header/table-header.html",
-      "category": "Toolbar",
-      "screenshot": "toolbar/table-header/table-header.webp",
+      "file": "toolbars/table-header/table-header.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/table-header/table-header.webp",
       "hasScript": false
     },
     {
-      "id": "toolbar/simple/simple",
+      "id": "toolbars/simple/simple",
       "name": "Simple Toolbar",
       "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
       "tags": [
@@ -39,9 +48,58 @@
         "header",
         "actions"
       ],
-      "file": "toolbar/simple/simple.html",
-      "category": "Toolbar",
-      "screenshot": "toolbar/simple/simple.webp",
+      "file": "toolbars/simple/simple.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/simple/simple.webp",
+      "hasScript": false
+    },
+    {
+      "id": "toolbars/page-title-with-back-arrow/page-title-with-back-arrow",
+      "name": "Page Title with Back Arrow",
+      "description": "Toolbar with back navigation button, page title heading, and action icon buttons for notifications, settings, and more options",
+      "tags": [
+        "toolbar",
+        "page-title",
+        "heading",
+        "actions",
+        "icon-buttons",
+        "back",
+        "navigation"
+      ],
+      "file": "toolbars/page-title-with-back-arrow/page-title-with-back-arrow.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/page-title-with-back-arrow/page-title-with-back-arrow.webp",
+      "hasScript": false
+    },
+    {
+      "id": "toolbars/page-title/page-title",
+      "name": "Page Title",
+      "description": "Toolbar with page title heading and action icon buttons for notifications, settings, and more options",
+      "tags": [
+        "toolbar",
+        "page-title",
+        "heading",
+        "actions",
+        "icon-buttons"
+      ],
+      "file": "toolbars/page-title/page-title.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/page-title/page-title.webp",
       "hasScript": false
     },
     {
@@ -58,6 +116,13 @@
       ],
       "file": "tables/table-with-icon-actions/table-with-icon-actions.html",
       "category": "Tables",
+      "componentsUsed": [
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-table",
+        "forge-toolbar"
+      ],
       "screenshot": "tables/table-with-icon-actions/table-with-icon-actions.webp",
       "hasScript": true
     },
@@ -75,6 +140,12 @@
       ],
       "file": "tables/table-with-actions/table-with-actions.html",
       "category": "Tables",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-table",
+        "forge-toolbar"
+      ],
       "screenshot": "tables/table-with-actions/table-with-actions.webp",
       "hasScript": true
     },
@@ -90,6 +161,13 @@
       ],
       "file": "tables/simple/simple.html",
       "category": "Tables",
+      "componentsUsed": [
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-table",
+        "forge-toolbar"
+      ],
       "screenshot": "tables/simple/simple.webp",
       "hasScript": true
     },
@@ -107,6 +185,13 @@
       ],
       "file": "tables/paginated/paginated.html",
       "category": "Tables",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-paginator",
+        "forge-structured-card",
+        "forge-table"
+      ],
       "screenshot": "tables/paginated/paginated.webp",
       "hasScript": true
     },
@@ -126,6 +211,14 @@
       ],
       "file": "scaffold-examples/simple-card/simple-card.html",
       "category": "Scaffold Examples",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
       "screenshot": "scaffold-examples/simple-card/simple-card.webp",
       "hasScript": false
     },
@@ -144,6 +237,15 @@
       ],
       "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
       "category": "Scaffold Examples",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-drawer",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
       "screenshot": "scaffold-examples/sidesheet-card/sidesheet-card.webp",
       "hasScript": false
     },
@@ -168,6 +270,18 @@
       ],
       "file": "patterns/filter-facets/filter-facets.html",
       "category": "Patterns",
+      "componentsUsed": [
+        "forge-button",
+        "forge-checkbox",
+        "forge-divider",
+        "forge-drawer",
+        "forge-list",
+        "forge-list-item",
+        "forge-radio",
+        "forge-radio-group",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
       "screenshot": "patterns/filter-facets/filter-facets.webp",
       "hasScript": false
     },
@@ -183,6 +297,16 @@
       ],
       "file": "lists/list-management/list-management.html",
       "category": "Lists",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-popover",
+        "forge-text-field"
+      ],
       "screenshot": "lists/list-management/list-management.webp",
       "hasScript": true
     },
@@ -204,6 +328,21 @@
       ],
       "file": "forms/multi-column/multi-column.html",
       "category": "Forms",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-checkbox",
+        "forge-date-picker",
+        "forge-divider",
+        "forge-file-picker",
+        "forge-icon",
+        "forge-option",
+        "forge-radio",
+        "forge-radio-group",
+        "forge-select",
+        "forge-switch",
+        "forge-text-field"
+      ],
       "screenshot": "forms/multi-column/multi-column.webp",
       "hasScript": false
     },
@@ -220,6 +359,13 @@
       ],
       "file": "forms/login/login.html",
       "category": "Forms",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-checkbox",
+        "forge-divider",
+        "forge-text-field"
+      ],
       "screenshot": "forms/login/login.webp",
       "hasScript": false
     },
@@ -239,6 +385,15 @@
       ],
       "file": "forms/add-user/add-user.html",
       "category": "Forms",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-checkbox",
+        "forge-icon",
+        "forge-option",
+        "forge-select",
+        "forge-text-field"
+      ],
       "screenshot": "forms/add-user/add-user.webp",
       "hasScript": false
     },
@@ -257,6 +412,16 @@
       ],
       "file": "forms/add-illustration/add-illustration.html",
       "category": "Forms",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-chip",
+        "forge-chip-field",
+        "forge-divider",
+        "forge-file-picker",
+        "forge-icon",
+        "forge-text-field"
+      ],
       "screenshot": "forms/add-illustration/add-illustration.webp",
       "hasScript": false
     },
@@ -273,6 +438,14 @@
       ],
       "file": "dialogs/simple/simple.html",
       "category": "Dialogs",
+      "componentsUsed": [
+        "forge-button",
+        "forge-dialog",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
       "screenshot": "dialogs/simple/simple.webp",
       "hasScript": false
     },
@@ -289,6 +462,11 @@
       ],
       "file": "cards/user-profile/user-profile.html",
       "category": "Cards",
+      "componentsUsed": [
+        "forge-avatar",
+        "forge-card",
+        "forge-icon"
+      ],
       "screenshot": "cards/user-profile/user-profile.webp",
       "hasScript": false
     },
@@ -305,6 +483,17 @@
       ],
       "file": "cards/tabbed-card/tabbed-card.html",
       "category": "Cards",
+      "componentsUsed": [
+        "forge-card",
+        "forge-chip",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-label-value",
+        "forge-tab",
+        "forge-tab-bar",
+        "forge-view",
+        "forge-view-switcher"
+      ],
       "screenshot": "cards/tabbed-card/tabbed-card.webp",
       "hasScript": false
     },
@@ -322,7 +511,34 @@
       ],
       "file": "cards/responsive-cards/responsive-cards.html",
       "category": "Cards",
+      "componentsUsed": [
+        "forge-badge",
+        "forge-card",
+        "forge-icon"
+      ],
       "screenshot": "cards/responsive-cards/responsive-cards.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/basic-card/basic-card",
+      "name": "Basic Card",
+      "description": "Structured card with header, header actions, body content area, and footer with action buttons",
+      "tags": [
+        "card",
+        "structured-card",
+        "header",
+        "footer",
+        "actions"
+      ],
+      "file": "cards/basic-card/basic-card.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-button",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-structured-card"
+      ],
+      "screenshot": "cards/basic-card/basic-card.webp",
       "hasScript": false
     },
     {
@@ -341,6 +557,14 @@
       ],
       "file": "application-layout/three-panel/three-panel.html",
       "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-card",
+        "forge-drawer",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
       "screenshot": "application-layout/three-panel/three-panel.webp",
       "hasScript": false
     },
@@ -361,6 +585,24 @@
       ],
       "file": "application-layout/table-with-filters/table-with-filters.html",
       "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-button",
+        "forge-checkbox",
+        "forge-divider",
+        "forge-drawer",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-paginator",
+        "forge-radio",
+        "forge-radio-group",
+        "forge-scaffold",
+        "forge-structured-card",
+        "forge-table",
+        "forge-toolbar"
+      ],
       "screenshot": "application-layout/table-with-filters/table-with-filters.webp",
       "hasScript": true
     },
@@ -379,6 +621,17 @@
       ],
       "file": "application-layout/mini-nav/mini-nav.html",
       "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-profile-link",
+        "forge-toolbar",
+        "forge-user-profile"
+      ],
       "screenshot": "application-layout/mini-nav/mini-nav.webp",
       "hasScript": false
     },
@@ -396,6 +649,16 @@
       ],
       "file": "application-layout/dual-scroll/dual-scroll.html",
       "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-card",
+        "forge-drawer",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-toolbar"
+      ],
       "screenshot": "application-layout/dual-scroll/dual-scroll.webp",
       "hasScript": false
     },
@@ -416,6 +679,17 @@
       ],
       "file": "application-layout/basic/basic.html",
       "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-profile-link",
+        "forge-toolbar",
+        "forge-user-profile"
+      ],
       "screenshot": "application-layout/basic/basic.webp",
       "hasScript": false
     }
@@ -446,8 +720,8 @@
       "name": "tables"
     },
     {
-      "name": "toolbar"
+      "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-06-18T19:15:57.540Z"
+  "generatedAt": "2026-06-26T14:58:21.648Z"
 }
