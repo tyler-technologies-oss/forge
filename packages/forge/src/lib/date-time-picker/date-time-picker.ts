@@ -9,6 +9,7 @@ import type { IOverlayComponent } from '../overlay/overlay.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
 import type { ICalendarDateSelectEventData } from '../calendar/calendar-constants.js';
 import type { ICalendarComponent } from '../calendar/calendar.js';
+import { DateRange } from '../calendar/core/date-range.js';
 import {
   DATE_TIME_PICKER_CONSTANTS,
   type CalendarDisabledDateBuilder,
@@ -543,12 +544,16 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #renderCalendarSection(): TemplateResult {
-    const calendarValue = this.#activeFromDate ?? undefined;
+    const isDateRange = this.dateMode === 'range' && this.timeMode !== 'slots';
+    const calendarValue = isDateRange
+      ? new DateRange({ from: this.#activeFromDate ?? undefined, to: this.#activeToDate ?? undefined })
+      : (this.#activeFromDate ?? undefined);
     return html`
       <div part="calendar-section" class="calendar-section">
         <forge-calendar
           part="calendar"
-          mode="single"
+          mode=${isDateRange ? 'range' : 'single'}
+          ?allow-single-date-range=${isDateRange}
           prevent-focus
           ?disabled=${this.disabled}
           ?readonly=${this.readonly}
@@ -787,10 +792,23 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #onCalendarSelect = (event: Event): void => {
-    const { date, selected } = (event as CustomEvent<ICalendarDateSelectEventData>).detail;
-    // `selected` reflects state BEFORE the click: true = toggle-off, false = newly select.
-    this.#activeFromDate = !date || selected ? null : dateOnly(date);
-    // Out-of-range slot disabling depends on the active date, so the cache must be rebuilt.
+    const detail = (event as CustomEvent<ICalendarDateSelectEventData>).detail;
+    if (this.dateMode === 'range' && this.timeMode !== 'slots') {
+      const { range, rangeSelectionState } = detail;
+      if (range?.from && (rangeSelectionState === 'from' || !range.to)) {
+        this.#activeFromDate = dateOnly(range.from);
+        this.#activeToDate = null;
+      } else if (range?.from && range.to && rangeSelectionState === 'to') {
+        this.#activeFromDate = dateOnly(range.from);
+        this.#activeToDate = dateOnly(range.to);
+      } else {
+        this.#activeFromDate = null;
+        this.#activeToDate = null;
+      }
+    } else {
+      const { date, selected } = detail;
+      this.#activeFromDate = !date || selected ? null : dateOnly(date);
+    }
     this.#disabledSlotCache = null;
     this.#recomputeValue();
     this.#emitChange('date');
