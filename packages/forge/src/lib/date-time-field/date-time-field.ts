@@ -343,7 +343,9 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     const showDuration = this.#isRangeValue() && isRange(v) && !this._open && v.from.getTime() <= v.to.getTime();
     return html`
       <span slot="support-text-end">
-        ${showDuration ? html`<span part="duration" class="duration">${formatDuration(v.from, v.to, this.locale)}</span>` : nothing}
+        ${showDuration
+          ? html`<span part="duration" class="duration" role="status" aria-live="polite">${formatDuration(v.from, v.to, this.locale)}</span>`
+          : nothing}
         <slot name="support-text-end"></slot>
       </span>
     `;
