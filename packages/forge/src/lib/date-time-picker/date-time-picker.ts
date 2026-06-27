@@ -13,6 +13,7 @@ import {
   DATE_TIME_PICKER_CONSTANTS,
   type CalendarDisabledDateBuilder,
   type ChangeSource,
+  type DateMode,
   type DateTimePickerPublicValue,
   type DateTimePickerValue,
   type DateTimePickerValueMode,
@@ -45,6 +46,8 @@ import styles from './date-time-picker.scss';
 
 export interface IDateTimePickerComponent extends BaseLitElement {
   timeMode: TimeMode;
+  dateMode: DateMode;
+  autoCommit: boolean;
   valueMode: DateTimePickerValueMode;
   value: DateTimePickerPublicValue;
   name: string;
@@ -193,6 +196,12 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   @property({ attribute: 'time-mode', reflect: true })
   public timeMode: TimeMode = 'single';
 
+  @property({ attribute: 'date-mode', reflect: true })
+  public dateMode: DateMode = 'single';
+
+  @property({ type: Boolean, attribute: 'auto-commit', reflect: true })
+  public autoCommit = false;
+
   @property({ attribute: 'value-mode', reflect: true })
   public valueMode: DateTimePickerValueMode = 'temporal';
 
@@ -201,7 +210,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     return toPublicValue(this.#value, this.valueMode, this.allowSeconds);
   }
   public set value(input: DateTimePickerPublicValue | string | undefined) {
-    const next = coerceValue(input, this.timeMode, this.allowSeconds);
+    const next = coerceValue(input, this.#isRangeValue() ? 'range' : 'single', this.allowSeconds);
     if (this.#valuesEqual(next, this.#value)) {
       return;
     }
@@ -937,8 +946,12 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     this.#activeTime = timeFromDate(value, this.allowSeconds);
   }
 
+  #isRangeValue(): boolean {
+    return this.dateMode === 'range' || this.timeMode === 'range';
+  }
+
   #recomputeValue(): void {
-    if (this.timeMode === 'range') {
+    if (this.#isRangeValue()) {
       if (this.#activeDate && this.#activeFrom && this.#activeTo) {
         const from = mergeDateAndTime(this.#activeDate, this.#activeFrom);
         const to = mergeDateAndTime(this.#activeDate, this.#activeTo);
@@ -965,7 +978,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #isComplete(): boolean {
-    if (this.timeMode === 'range') {
+    if (this.#isRangeValue()) {
       return isRange(this.#value);
     }
     return this.#value instanceof Date;
@@ -1040,7 +1053,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       flags.rangeOverflow = true;
       message ||= 'Selected time is after the latest allowed.';
     }
-    if (this.timeMode === 'range' && isRange(this.#value)) {
+    if (this.#isRangeValue() && isRange(this.#value)) {
       if (this.#value.from.getTime() > this.#value.to.getTime()) {
         flags.customError = true;
         message ||= 'Start time must be before end time.';
@@ -1104,9 +1117,9 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     const detail: IDateTimePickerChangeEventData = {
       value: toPublicValue(this.#value, this.valueMode, this.allowSeconds),
       date: this.#activeDate,
-      time: this.timeMode === 'range' ? null : this.#activeTime,
-      from: this.timeMode === 'range' ? this.#activeFrom : null,
-      to: this.timeMode === 'range' ? this.#activeTo : null,
+      time: this.#isRangeValue() ? null : this.#activeTime,
+      from: this.#isRangeValue() ? this.#activeFrom : null,
+      to: this.#isRangeValue() ? this.#activeTo : null,
       source,
       complete: this.#isComplete()
     };
