@@ -284,7 +284,8 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   #anchorElement: HTMLElement | null = null;
   private readonly _overlayRef = createRef<IOverlayComponent>();
   #value: DateTimePickerValue = null;
-  #activeDate: Date | null = null;
+  #activeFromDate: Date | null = null;
+  #activeToDate: Date | null = null;
   #activeTime: string | null = null;
   #activeFrom: string | null = null;
   #activeTo: string | null = null;
@@ -380,7 +381,8 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       const previousMode = changed.get('timeMode') as TimeMode | undefined;
       if (previousMode && previousMode !== this.timeMode) {
         this.#value = null;
-        this.#activeDate = null;
+        this.#activeFromDate = null;
+        this.#activeToDate = null;
         this.#activeTime = null;
         this.#activeFrom = null;
         this.#activeTo = null;
@@ -490,7 +492,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #renderSummary(): TemplateResult {
-    const date = this.#activeDate;
+    const date = this.#activeFromDate;
     if (!date) {
       return html`
         <aside part="summary" class="summary" aria-hidden="true">
@@ -541,7 +543,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #renderCalendarSection(): TemplateResult {
-    const calendarValue = this.#activeDate ?? undefined;
+    const calendarValue = this.#activeFromDate ?? undefined;
     return html`
       <div part="calendar-section" class="calendar-section">
         <forge-calendar
@@ -726,16 +728,16 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     if (!this.disableSlotCallback) {
       return false;
     }
-    const date = this.#activeDate ?? new Date();
+    const date = this.#activeFromDate ?? new Date();
     return this.disableSlotCallback(date, slot);
   }
 
   /** True when the slot's time on the active date falls outside the `min`/`max` datetime bounds. */
   #isSlotOutOfRange(slot: ITimeSlot): boolean {
-    if (!this.#activeDate) {
+    if (!this.#activeFromDate) {
       return false;
     }
-    const dt = mergeDateAndTime(this.#activeDate, slot.value);
+    const dt = mergeDateAndTime(this.#activeFromDate, slot.value);
     return !!dt && (this.#beforeMin(dt, this.min) || this.#afterMax(dt, this.max));
   }
 
@@ -746,7 +748,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   /** `minTime`, raised to `min`'s time-of-day when the active date is `min`'s calendar day. */
   #effectiveMinTime(): string {
     const min = this.#asDate(this.min);
-    if (!min || !this.#activeDate || !this.#sameDay(min, this.#activeDate)) {
+    if (!min || !this.#activeFromDate || !this.#sameDay(min, this.#activeFromDate)) {
       return this.minTime;
     }
     const bound = parseTimeString(timeFromDate(min, this.allowSeconds));
@@ -760,7 +762,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   /** `maxTime`, lowered to `max`'s time-of-day when the active date is `max`'s calendar day. */
   #effectiveMaxTime(): string {
     const max = this.#asDate(this.max);
-    if (!max || !this.#activeDate || !this.#sameDay(max, this.#activeDate)) {
+    if (!max || !this.#activeFromDate || !this.#sameDay(max, this.#activeFromDate)) {
       return this.maxTime;
     }
     const bound = parseTimeString(timeFromDate(max, this.allowSeconds));
@@ -787,7 +789,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   #onCalendarSelect = (event: Event): void => {
     const { date, selected } = (event as CustomEvent<ICalendarDateSelectEventData>).detail;
     // `selected` reflects state BEFORE the click: true = toggle-off, false = newly select.
-    this.#activeDate = !date || selected ? null : dateOnly(date);
+    this.#activeFromDate = !date || selected ? null : dateOnly(date);
     // Out-of-range slot disabling depends on the active date, so the cache must be rebuilt.
     this.#disabledSlotCache = null;
     this.#recomputeValue();
@@ -930,19 +932,25 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
 
   #syncFromValue(value: DateTimePickerValue): void {
     if (value == null) {
-      this.#activeDate = null;
+      this.#activeFromDate = null;
+      this.#activeToDate = null;
       this.#activeTime = null;
       this.#activeFrom = null;
       this.#activeTo = null;
       return;
     }
     if (isRange(value)) {
-      this.#activeDate = dateOnly(value.from);
-      this.#activeFrom = timeFromDate(value.from, this.allowSeconds);
-      this.#activeTo = timeFromDate(value.to, this.allowSeconds);
+      this.#activeFromDate = dateOnly(value.from);
+      this.#activeToDate = dateOnly(value.to);
+      if (this.timeMode === 'range') {
+        this.#activeFrom = timeFromDate(value.from, this.allowSeconds);
+        this.#activeTo = timeFromDate(value.to, this.allowSeconds);
+      } else {
+        this.#activeTime = timeFromDate(value.from, this.allowSeconds);
+      }
       return;
     }
-    this.#activeDate = dateOnly(value);
+    this.#activeFromDate = dateOnly(value);
     this.#activeTime = timeFromDate(value, this.allowSeconds);
   }
 
@@ -952,18 +960,15 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
 
   #recomputeValue(): void {
     if (this.#isRangeValue()) {
-      if (this.#activeDate && this.#activeFrom && this.#activeTo) {
-        const from = mergeDateAndTime(this.#activeDate, this.#activeFrom);
-        const to = mergeDateAndTime(this.#activeDate, this.#activeTo);
-        if (from && to) {
-          this.#value = { from, to };
-          return;
-        }
-      }
-      this.#value = null;
+      const toDate = this.dateMode === 'range' ? this.#activeToDate : this.#activeFromDate;
+      const fromTime = this.timeMode === 'range' ? this.#activeFrom : this.#activeTime;
+      const toTime = this.timeMode === 'range' ? this.#activeTo : this.#activeTime;
+      const from = mergeDateAndTime(this.#activeFromDate, fromTime);
+      const to = mergeDateAndTime(toDate, toTime);
+      this.#value = from && to ? { from, to } : null;
       return;
     }
-    const merged = mergeDateAndTime(this.#activeDate, this.#activeTime);
+    const merged = mergeDateAndTime(this.#activeFromDate, this.#activeTime);
     this.#value = merged;
   }
 
@@ -1116,7 +1121,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   #emitChange(source: ChangeSource): void {
     const detail: IDateTimePickerChangeEventData = {
       value: toPublicValue(this.#value, this.valueMode, this.allowSeconds),
-      date: this.#activeDate,
+      date: this.#activeFromDate,
       time: this.#isRangeValue() ? null : this.#activeTime,
       from: this.#isRangeValue() ? this.#activeFrom : null,
       to: this.#isRangeValue() ? this.#activeTo : null,
