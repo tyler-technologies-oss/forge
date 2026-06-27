@@ -22,11 +22,17 @@ import { ensureTemporal } from '../date-time-picker/temporal-loader.js';
 import { DateInputMask } from '../core/mask/date-input-mask.js';
 import { TimeInputMask } from '../core/mask/time-input-mask.js';
 import { formatDateInput, formatTimeInput, parseDateInput, parseTypedValue } from './date-time-field-utils.js';
-import { DATE_TIME_FIELD_CONSTANTS, type DateTimeFieldRequiredParts, type IDateTimeFieldChangeEventData } from './date-time-field-constants.js';
+import {
+  DATE_TIME_FIELD_CONSTANTS,
+  type DateTimeFieldDateMode,
+  type DateTimeFieldRequiredParts,
+  type IDateTimeFieldChangeEventData
+} from './date-time-field-constants.js';
 
 import styles from './date-time-field.scss';
 
 export interface IDateTimeFieldComponent extends BaseLitElement {
+  dateMode: DateTimeFieldDateMode;
   timeMode: TimeMode;
   valueMode: DateTimePickerValueMode;
   value: DateTimePickerPublicValue;
@@ -107,6 +113,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   /** @deprecated */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = DATE_TIME_FIELD_TAG_NAME;
 
+  @property({ attribute: 'date-mode', reflect: true }) public dateMode: DateTimeFieldDateMode = 'single';
   @property({ attribute: 'time-mode', reflect: true }) public timeMode: TimeMode = 'single';
   @property({ attribute: 'value-mode', reflect: true }) public valueMode: DateTimePickerValueMode = 'temporal';
   @property({ reflect: true }) public name = '';
@@ -152,7 +159,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     return toPublicValue(this.#value, this.valueMode, this.allowSeconds);
   }
   public set value(input: DateTimePickerPublicValue | string | undefined) {
-    const next = coerceValue(input, this.timeMode, this.allowSeconds);
+    const next = coerceValue(input, this.#isRangeValue() ? 'range' : 'single', this.allowSeconds);
     if (this.#valuesEqual(next, this.#value)) {
       return;
     }
@@ -189,6 +196,10 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #masks = new Map<HTMLInputElement, { mask: DateInputMask | TimeInputMask; kind: 'date' | 'time'; opts: string }>();
   #shouldClear = false;
   #masksInitialized = false;
+
+  #isRangeValue(): boolean {
+    return this.dateMode === 'range' || this.timeMode === 'range';
+  }
 
   constructor() {
     super();
@@ -395,9 +406,9 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       return;
     }
     const detail = (event as CustomEvent<IDateTimePickerChangeEventData>).detail;
-    this.#value = coerceValue(detail.value, this.timeMode, this.allowSeconds);
+    this.#value = coerceValue(detail.value, this.#isRangeValue() ? 'range' : 'single', this.allowSeconds);
     this.#hasDate = detail.date != null;
-    if (this.timeMode === 'range') {
+    if (this.#isRangeValue()) {
       this.#hasFrom = detail.from != null;
       this.#hasTo = detail.to != null;
     } else {
@@ -517,7 +528,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.#hasDate = parseDateInput(dateStr) != null;
     let next: DateTimePickerValue;
 
-    if (this.timeMode === 'range') {
+    if (this.#isRangeValue()) {
       const fromStr = this.#maskValue(this._fromInput);
       const toStr = this.#maskValue(this._toInput);
       this.#hasFrom = parseTimeString(fromStr) != null;
@@ -757,11 +768,11 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     let anchor: HTMLInputElement | undefined;
     if (this.required) {
       const missingDate = this.requiredParts !== 'time' && !this.#hasDate;
-      const missingTime = this.requiredParts !== 'date' && (this.timeMode === 'range' ? !this.#hasFrom || !this.#hasTo : !this.#hasTime);
+      const missingTime = this.requiredParts !== 'date' && (this.#isRangeValue() ? !this.#hasFrom || !this.#hasTo : !this.#hasTime);
       if (missingDate || missingTime) {
         flags.valueMissing = true;
         message = missingDate && missingTime ? 'Please select a date and time.' : missingDate ? 'Date is required.' : 'Time is required.';
-        anchor = missingDate ? this._dateInput : this.timeMode === 'range' ? (!this.#hasFrom ? this._fromInput : this._toInput) : this._timeInput;
+        anchor = missingDate ? this._dateInput : this.#isRangeValue() ? (!this.#hasFrom ? this._fromInput : this._toInput) : this._timeInput;
       }
     }
     if (!flags.valueMissing && this.#value != null) {
