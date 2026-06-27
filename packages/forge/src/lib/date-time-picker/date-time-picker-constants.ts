@@ -6,6 +6,8 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}date-t
 
 const observedAttributes = {
   TIME_MODE: 'time-mode',
+  DATE_MODE: 'date-mode',
+  AUTO_COMMIT: 'auto-commit',
   VALUE_MODE: 'value-mode',
   NAME: 'name',
   DISABLED: 'disabled',
@@ -79,6 +81,7 @@ const events = {
 
 const defaultValues = {
   TIME_MODE: 'single',
+  DATE_MODE: 'single',
   VALUE_MODE: 'temporal',
   ORIENTATION: 'auto',
   MIN_TIME: '09:00',
@@ -106,11 +109,13 @@ export type DateTimePickerValueMode = 'temporal' | 'iso' | 'date';
 
 export type TimeMode = 'single' | 'range' | 'slots';
 
+export type DateMode = 'single' | 'range';
+
 export type Orientation = 'auto' | 'horizontal' | 'vertical';
 
 export type ResolvedOrientation = 'horizontal' | 'vertical';
 
-export type ChangeSource = 'date' | 'time' | 'time-from' | 'time-to' | 'slot' | 'clear' | 'mode-change' | 'initial';
+export type ChangeSource = 'date' | 'time' | 'time-from' | 'time-to' | 'slot' | 'clear' | 'mode-change' | 'initial' | 'apply' | 'cancel' | 'preset';
 
 export interface ITimeSlot {
   /** Time of day as 'HH:mm' or 'HH:mm:ss' (24-hour). */
