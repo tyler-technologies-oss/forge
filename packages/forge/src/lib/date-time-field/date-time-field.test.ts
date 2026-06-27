@@ -600,3 +600,53 @@ describe('DateTimeField / date-mode range', () => {
     expect(el.shadowRoot!.querySelector('[part="to-date-input"]')).toBeNull();
   });
 });
+
+// ─── End-after-start validation ───────────────────────────────────────────────
+
+describe('DateTimeField / end-after-start validation', () => {
+  it('should flag customError with message "End must be after start." when end is before start', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range" value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = { from: new Date('2024-06-12T17:00:00'), to: new Date('2024-06-09T09:00:00') };
+    await ready(el);
+    expect(el.validity.customError).toBe(true);
+    expect(el.validationMessage).toBe('End must be after start.');
+    expect(el.checkValidity()).toBe(false);
+  });
+
+  it('should be valid when end is after start or equal', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range" value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = { from: new Date('2024-06-09T09:00:00'), to: new Date('2024-06-12T17:00:00') };
+    await ready(el);
+    expect(el.validity.customError).toBe(false);
+    expect(el.checkValidity()).toBe(true);
+    el.value = { from: new Date('2024-06-12T09:00:00'), to: new Date('2024-06-12T09:00:00') };
+    await ready(el);
+    expect(el.validity.customError).toBe(false);
+    expect(el.checkValidity()).toBe(true);
+  });
+
+  it('should report valueMissing (not customError) when one range end date is empty and required', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range" required value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const dateInput = el.shadowRoot!.querySelector('[part="date-input"]') as HTMLInputElement;
+    dateInput.focus();
+    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'd', bubbles: true }));
+    await ready(el);
+    expect(el.validity.valueMissing).toBe(true);
+    expect(el.validity.customError).toBe(false);
+    expect(el.checkValidity()).toBe(false);
+  });
+
+  it('should keep single-mode validity unchanged when required and empty (regression)', async () => {
+    const screen = render(html`<forge-date-time-field required value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    expect(el.validity.valueMissing).toBe(true);
+    expect(el.validity.customError).toBe(false);
+  });
+});

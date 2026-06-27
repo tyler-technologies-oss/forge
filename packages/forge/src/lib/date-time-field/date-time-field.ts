@@ -804,12 +804,20 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     let message = '';
     let anchor: HTMLInputElement | undefined;
     if (this.required) {
-      const missingDate = this.requiredParts !== 'time' && !this.#hasDate;
+      const missingDate = this.requiredParts !== 'time' && (this.dateMode === 'range' ? !this.#hasFromDate || !this.#hasToDate : !this.#hasDate);
       const missingTime = this.requiredParts !== 'date' && (this.#isRangeValue() ? !this.#hasFrom || !this.#hasTo : !this.#hasTime);
       if (missingDate || missingTime) {
         flags.valueMissing = true;
         message = missingDate && missingTime ? 'Please select a date and time.' : missingDate ? 'Date is required.' : 'Time is required.';
-        anchor = missingDate ? this._dateInput : this.#isRangeValue() ? (!this.#hasFrom ? this._fromInput : this._toInput) : this._timeInput;
+        anchor = missingDate
+          ? !this.#hasFromDate
+            ? this._dateInput
+            : this._toDateInput
+          : this.#isRangeValue()
+            ? !this.#hasFrom
+              ? this._fromInput
+              : this._toInput
+            : this._timeInput;
       }
     }
     if (!flags.valueMissing && this.#value != null) {
@@ -820,6 +828,11 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
         flags.rangeOverflow = true;
         message = 'Selected date and time is after the latest allowed.';
       }
+    }
+    if (!flags.valueMissing && this.#isRangeValue() && isRange(this.#value) && this.#value.from.getTime() > this.#value.to.getTime()) {
+      flags.customError = true;
+      message ||= DATE_TIME_FIELD_CONSTANTS.MESSAGES.END_BEFORE_START;
+      anchor ??= this._toDateInput ?? this._toInput ?? this.#anchorInput();
     }
     if (Object.keys(flags).length === 0) {
       this.#internals.setValidity({});
