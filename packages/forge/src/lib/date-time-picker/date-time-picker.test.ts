@@ -654,6 +654,77 @@ describe('DateTimePicker / axis-aware value model', () => {
   });
 });
 
+describe('DateTimePicker / per-endpoint time clamping', () => {
+  it('should clamp the from-time but not the to-time against min time-of-day when the range spans multiple days', async () => {
+    const min = new Date(2026, 5, 9, 9, 0);
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="range" value-mode="date" .min=${min as any}></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    el.value = {
+      from: new Date(2026, 5, 9, 9, 0),
+      to: new Date(2026, 5, 12, 8, 0)
+    } as IDateTimePickerRange;
+    await ready(el);
+
+    expect(el.checkValidity()).toBe(true);
+
+    el.value = {
+      from: new Date(2026, 5, 9, 8, 0),
+      to: new Date(2026, 5, 12, 8, 0)
+    } as IDateTimePickerRange;
+    await ready(el);
+
+    expect(el.validity.rangeUnderflow).toBe(true);
+  });
+
+  it('should not raise the to-time min beyond the base minTime when to-date is after the min date', async () => {
+    const min = new Date(2026, 5, 9, 14, 0);
+    const screen = render(
+      html`<forge-date-time-picker
+        date-mode="range"
+        time-mode="range"
+        value-mode="date"
+        min-time="06:00"
+        max-time="22:00"
+        .min=${min as any}></forge-date-time-picker>`
+    );
+    const el = getEl(screen.container);
+    await ready(el);
+
+    el.value = {
+      from: new Date(2026, 5, 9, 14, 0),
+      to: new Date(2026, 5, 12, 8, 0)
+    } as IDateTimePickerRange;
+    await ready(el);
+
+    const timePickers = el.shadowRoot!.querySelectorAll('forge-time-picker');
+    expect(timePickers.length).toBe(2);
+    const fromTimePicker = timePickers[0] as HTMLElement;
+    const toTimePicker = timePickers[1] as HTMLElement;
+    expect(fromTimePicker.getAttribute('min')).toBe('14:00');
+    expect(toTimePicker.getAttribute('min')).toBe('06:00');
+  });
+
+  it('should clamp the from-time field min to min time-of-day when from-date equals the min date', async () => {
+    const min = new Date(2026, 5, 9, 9, 0);
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="range" value-mode="date" .min=${min as any}></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    el.value = {
+      from: new Date(2026, 5, 9, 9, 0),
+      to: new Date(2026, 5, 12, 17, 0)
+    } as IDateTimePickerRange;
+    await ready(el);
+
+    const timePickers = el.shadowRoot!.querySelectorAll('forge-time-picker');
+    expect(timePickers.length).toBe(2);
+    const fromTimePicker = timePickers[0] as HTMLElement;
+    expect(fromTimePicker.getAttribute('min')).toBe('09:00');
+  });
+});
+
 describe('DateTimePicker / range-select calendar', () => {
   function dispatchCalendarSelect(el: IDateTimePickerComponent, detail: Partial<ICalendarDateSelectEventData>): void {
     const calendar = el.shadowRoot!.querySelector('forge-calendar')!;
