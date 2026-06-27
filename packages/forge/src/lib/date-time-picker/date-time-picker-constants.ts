@@ -34,7 +34,8 @@ const observedAttributes = {
   ANCHOR: 'anchor',
   OPEN: 'open',
   PLACEMENT: 'placement',
-  PERSISTENT: 'persistent'
+  PERSISTENT: 'persistent',
+  PRESETS: 'presets'
 } as const;
 
 const attributes = {
@@ -70,7 +71,10 @@ const parts = {
   FOOTER_START: 'footer-start',
   FOOTER_CENTER: 'footer-center',
   FOOTER_END: 'footer-end',
-  LIVE_REGION: 'live-region'
+  LIVE_REGION: 'live-region',
+  PRESETS: 'presets',
+  PRESET: 'preset',
+  DURATION: 'duration'
 } as const;
 
 const events = {
@@ -103,6 +107,8 @@ export const DATE_TIME_PICKER_CONSTANTS = {
   events,
   defaultValues
 };
+
+export type DateRangePresetId = 'today' | 'this-week' | 'next-7-days' | 'this-month';
 
 /** Shape of the public `value` (and change-event `value`): a `Temporal.PlainDateTime`, a local ISO `datetime-local` string, or a `Date`. */
 export type DateTimePickerValueMode = 'temporal' | 'iso' | 'date';
