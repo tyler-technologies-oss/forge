@@ -604,18 +604,22 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #renderSingleTime(): TemplateResult {
-    return html` <div part="time-inputs" class="time-inputs">${this.#renderTimePickerField(this.#activeTime, 'single', this.singleLabel)}</div> `;
+    return html`
+      <div part="time-inputs" class="time-inputs">${this.#renderTimePickerField(this.#activeTime, 'single', this.singleLabel, this.#activeFromDate)}</div>
+    `;
   }
 
   #renderRangeTime(): TemplateResult {
+    const toDate = this.dateMode === 'range' ? this.#activeToDate : this.#activeFromDate;
     return html`
       <div part="time-inputs" class="range-inputs">
-        ${this.#renderTimePickerField(this.#activeFrom, 'from', this.fromLabel)} ${this.#renderTimePickerField(this.#activeTo, 'to', this.toLabel)}
+        ${this.#renderTimePickerField(this.#activeFrom, 'from', this.fromLabel, this.#activeFromDate)}
+        ${this.#renderTimePickerField(this.#activeTo, 'to', this.toLabel, toDate)}
       </div>
     `;
   }
 
-  #renderTimePickerField(value: string | null, which: 'single' | 'from' | 'to', label: string): TemplateResult {
+  #renderTimePickerField(value: string | null, which: 'single' | 'from' | 'to', label: string, endpointDate: Date | null): TemplateResult {
     const meridiem = this.#meridiemFor(value);
     return html`
       <forge-time-picker
@@ -626,8 +630,8 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
         ?use-24-hour-time=${this.use24HourTime}
         ?allow-seconds=${this.allowSeconds}
         step=${this.step}
-        min=${ifDefined(this.#effectiveMinTime() || undefined)}
-        max=${ifDefined(this.#effectiveMaxTime() || undefined)}
+        min=${ifDefined(this.#effectiveMinTime(endpointDate) || undefined)}
+        max=${ifDefined(this.#effectiveMaxTime(endpointDate) || undefined)}
         .value=${value ?? ''}
         @forge-time-picker-change=${(e: Event) => this.#onTimePickerChange(e, which)}>
         <forge-text-field>
@@ -750,10 +754,10 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
   }
 
-  /** `minTime`, raised to `min`'s time-of-day when the active date is `min`'s calendar day. */
-  #effectiveMinTime(): string {
+  /** `minTime`, raised to `min`'s time-of-day when the endpoint date is `min`'s calendar day. */
+  #effectiveMinTime(endpointDate: Date | null): string {
     const min = this.#asDate(this.min);
-    if (!min || !this.#activeFromDate || !this.#sameDay(min, this.#activeFromDate)) {
+    if (!min || !endpointDate || !this.#sameDay(min, endpointDate)) {
       return this.minTime;
     }
     const bound = parseTimeString(timeFromDate(min, this.allowSeconds));
@@ -764,10 +768,10 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     return this.minTime;
   }
 
-  /** `maxTime`, lowered to `max`'s time-of-day when the active date is `max`'s calendar day. */
-  #effectiveMaxTime(): string {
+  /** `maxTime`, lowered to `max`'s time-of-day when the endpoint date is `max`'s calendar day. */
+  #effectiveMaxTime(endpointDate: Date | null): string {
     const max = this.#asDate(this.max);
-    if (!max || !this.#activeFromDate || !this.#sameDay(max, this.#activeFromDate)) {
+    if (!max || !endpointDate || !this.#sameDay(max, endpointDate)) {
       return this.maxTime;
     }
     const bound = parseTimeString(timeFromDate(max, this.allowSeconds));
