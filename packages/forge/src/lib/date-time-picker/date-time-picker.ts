@@ -464,6 +464,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     this.#updateFormValueAndValidity();
     this.#emitChange('apply');
     this.open = false;
+    this.requestUpdate();
   };
 
   #onCancel = (): void => {
