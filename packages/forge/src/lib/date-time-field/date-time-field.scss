@@ -75,3 +75,8 @@ forge-text-field {
 :host([disabled]) [part='slot-display'] {
   cursor: default;
 }
+
+[part='duration'] {
+  color: var(--forge-theme-text-medium, currentColor);
+  font-size: 0.75em;
+}
