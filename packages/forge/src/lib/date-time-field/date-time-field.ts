@@ -16,7 +16,7 @@ import type {
   TimeMode
 } from '../date-time-picker/date-time-picker-constants.js';
 import type { IDateTimePickerComponent } from '../date-time-picker/date-time-picker.js';
-import { coerceValue, isRange, parseTimeString, timeFromDate, toPublicValue } from '../date-time-picker/date-time-picker-utils.js';
+import { coerceValue, formatDuration, isRange, parseTimeString, timeFromDate, toPublicValue } from '../date-time-picker/date-time-picker-utils.js';
 import { ensureTemporal } from '../date-time-picker/temporal-loader.js';
 import { DateInputMask } from '../core/mask/date-input-mask.js';
 import { TimeInputMask } from '../core/mask/time-input-mask.js';
@@ -332,8 +332,19 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
         ${this._invalid
           ? html`<span slot="support-text" part="error-text">${this.#internals.validationMessage}</span>`
           : html`<slot name="support-text" slot="support-text"></slot>`}
-        <slot name="support-text-end" slot="support-text-end"></slot>
+        ${this.#renderSupportTextEnd()}
       </forge-text-field>
+    `;
+  }
+
+  #renderSupportTextEnd(): TemplateResult {
+    const v = this.#value;
+    const showDuration = this.#isRangeValue() && isRange(v) && !this._open && v.from.getTime() <= v.to.getTime();
+    return html`
+      <span slot="support-text-end">
+        ${showDuration ? html`<span part="duration" class="duration">${formatDuration(v.from, v.to, this.locale)}</span>` : nothing}
+        <slot name="support-text-end"></slot>
+      </span>
     `;
   }
 
