@@ -15,6 +15,7 @@ import {
   type CalendarDisabledDateBuilder,
   type ChangeSource,
   type DateMode,
+  type DateRangePresetId,
   type DateTimePickerPublicValue,
   type DateTimePickerValue,
   type DateTimePickerValueMode,
@@ -32,8 +33,10 @@ import {
   buildSlotsFromRange,
   coerceValue,
   compareTimes,
+  computePreset,
   dateOnly,
   formatCanonicalTime,
+  formatDuration,
   formatSlotLabel,
   isRange,
   mergeDateAndTime,
@@ -78,6 +81,7 @@ export interface IDateTimePickerComponent extends BaseLitElement {
   open: boolean;
   persistent: boolean;
   placement: string;
+  presets: boolean;
   slots: ITimeSlot[] | undefined;
   disabledDates: Date[];
   disabledDaysOfWeek: DayOfWeek[];
@@ -270,6 +274,8 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   @property({ type: Boolean, reflect: true }) public open = false;
   @property({ type: Boolean, reflect: true }) public persistent = false;
   @property({ attribute: 'placement', reflect: true }) public placement = 'bottom-start';
+
+  @property({ type: Boolean, reflect: true }) public presets = true;
 
   @state() private _headerEmpty = true;
   @state() private _footerStartEmpty = true;
@@ -545,12 +551,13 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #renderFooter(): TemplateResult | typeof nothing {
-    if (!this.showFooter && !this.#deferred) {
+    const showDuration = this.#isRangeValue() && isRange(this.#deferred ? this.#draftValue : this.#value);
+    if (!this.showFooter && !this.#deferred && !showDuration) {
       return nothing;
     }
     const allEmpty = this._footerStartEmpty && this._footerCenterEmpty && this._footerEndEmpty;
     return html`
-      <div part="footer" class="footer" data-empty=${String(!this.#deferred && allEmpty)}>
+      <div part="footer" class="footer" data-empty=${String(!this.#deferred && !showDuration && allEmpty)}>
         <div part="footer-start" class="footer-start" data-empty=${String(this._footerStartEmpty)}>
           <slot name="footer-start" @slotchange=${(e: Event) => this.#onSlotChange(e, '_footerStartEmpty')}></slot>
         </div>
@@ -560,7 +567,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
         <div part="footer-end" class="footer-end" data-empty=${String(this._footerEndEmpty)}>
           <slot name="footer-end" @slotchange=${(e: Event) => this.#onSlotChange(e, '_footerEndEmpty')}></slot>
         </div>
-        ${this.#deferred ? this.#renderCommitActions() : nothing}
+        ${this.#deferred ? this.#renderCommitActions() : nothing} ${showDuration && !this.#deferred ? this.#renderDuration() : nothing}
       </div>
     `;
   }
@@ -568,14 +575,64 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   #renderCommitActions(): TemplateResult {
     return html`
       <div class="commit-actions">
+        ${this.#renderDuration()}
         <forge-button part="commit-cancel" @click=${this.#onCancel}>Cancel</forge-button>
         <forge-button part="commit-apply" variant="raised" ?disabled=${!this.#canApply()} @click=${this.#onApply}>Apply</forge-button>
       </div>
     `;
   }
 
+  #renderDuration(): TemplateResult | typeof nothing {
+    const activeValue = this.#deferred ? this.#draftValue : this.#value;
+    if (!isRange(activeValue)) {
+      return nothing;
+    }
+    const text = formatDuration(activeValue.from, activeValue.to, this.locale);
+    if (!text) {
+      return nothing;
+    }
+    return html`<span part="duration" class="duration">${text}</span>`;
+  }
+
   #renderBody(orientation: ResolvedOrientation): TemplateResult {
-    return html` <div part="body" class="body" data-orientation=${orientation}>${this.#renderCalendarSection()} ${this.#renderTimeSection()}</div> `;
+    return html`
+      <div part="body" class="body" data-orientation=${orientation}>
+        ${this.#renderPresetsSection()} ${this.#renderCalendarSection()} ${this.#renderTimeSection()}
+      </div>
+    `;
+  }
+
+  #renderPresetsSection(): TemplateResult | typeof nothing {
+    if (!this.presets || this.dateMode !== 'range' || this.timeMode === 'slots') {
+      return nothing;
+    }
+    return this.#renderPresets();
+  }
+
+  #renderPresets(): TemplateResult {
+    const presetDefs: Array<{ id: DateRangePresetId; label: string }> = [
+      { id: 'today', label: 'Today' },
+      { id: 'this-week', label: 'This week' },
+      { id: 'next-7-days', label: 'Next 7 days' },
+      { id: 'this-month', label: 'This month' }
+    ];
+    return html`
+      <div part="presets" class="presets">
+        ${presetDefs.map(p => html`<button type="button" part="preset" data-preset-id=${p.id} @click=${() => this.#onPresetSelect(p.id)}>${p.label}</button>`)}
+      </div>
+    `;
+  }
+
+  #onPresetSelect(id: DateRangePresetId): void {
+    const { from, to } = computePreset(id, new Date(), this.firstDayOfWeek ?? 0);
+    this.#activeFromDate = dateOnly(from);
+    this.#activeToDate = dateOnly(to);
+    this.#recomputeValue();
+    if (this.#deferred) {
+      this.requestUpdate();
+    } else {
+      this.#emitChange('preset');
+    }
   }
 
   #renderCalendarSection(): TemplateResult {
