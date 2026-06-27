@@ -58,6 +58,7 @@ export interface IDateTimeFieldComponent extends BaseLitElement {
   readonly validationMessage: string;
   checkValidity(): boolean;
   reportValidity(): boolean;
+  formStateRestoreCallback(restoredState: FormData | string | null): void;
 }
 
 declare global {
