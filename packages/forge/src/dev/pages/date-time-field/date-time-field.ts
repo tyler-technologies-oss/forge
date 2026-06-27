@@ -40,6 +40,13 @@ document.getElementById('demo-validate')?.addEventListener('click', () => {
 
 // The field and picker are independent — shared config must be set on both
 // (the field warns on mismatch rather than forwarding config across the link).
+const dateModeSelect = document.getElementById('opt-date-mode') as ISelectComponent;
+dateModeSelect.addEventListener('change', () => {
+  const mode = dateModeSelect.value as 'single' | 'range';
+  field.dateMode = mode;
+  picker.dateMode = mode;
+});
+
 const timeModeSelect = document.getElementById('opt-time-mode') as ISelectComponent;
 timeModeSelect.addEventListener('change', () => {
   const mode = timeModeSelect.value as 'single' | 'range' | 'slots';
