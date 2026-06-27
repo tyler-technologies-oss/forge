@@ -650,3 +650,114 @@ describe('DateTimeField / end-after-start validation', () => {
     expect(el.validity.customError).toBe(false);
   });
 });
+
+// ─── T-F4: Link contract under deferred commit ────────────────────────────────
+
+describe('DateTimeField / link contract (T-F4)', () => {
+  it('should update field value and reflect both date masks and time masks when picker fires a complete two-date range change', async () => {
+    const screen = render(html`
+      <div>
+        <forge-date-time-field picker="p1" date-mode="range" time-mode="range" value-mode="date"></forge-date-time-field>
+        <forge-date-time-picker id="p1" date-mode="range" time-mode="range"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getField(screen.container);
+    const picker = getPicker(screen.container);
+    await ready(el);
+    const from = new Date(2026, 5, 9, 9, 0);
+    const to = new Date(2026, 5, 12, 17, 0);
+    firePickerChange(picker, { value: { from, to }, source: 'apply', complete: true });
+    await ready(el);
+    const v = el.value as { from: Date; to: Date };
+    expect(v.from.getDate()).toBe(9);
+    expect(v.to.getDate()).toBe(12);
+    const dateInput = el.shadowRoot!.querySelector('[part="date-input"]') as HTMLInputElement;
+    const toDateInput = el.shadowRoot!.querySelector('[part="to-date-input"]') as HTMLInputElement;
+    expect(dateInput.value).toContain('06/09/2026');
+    expect(toDateInput.value).toContain('06/12/2026');
+    const fromInput = el.shadowRoot!.querySelector('[part="from-input"]') as HTMLInputElement;
+    const toInput = el.shadowRoot!.querySelector('[part="to-input"]') as HTMLInputElement;
+    expect(fromInput.value).toMatch(/\d/);
+    expect(toInput.value).toMatch(/\d/);
+  });
+
+  it('should close the linked picker when an Apply (complete) change arrives', async () => {
+    const screen = render(html`
+      <div>
+        <forge-date-time-field picker="p1" date-mode="range" time-mode="range" value-mode="date"></forge-date-time-field>
+        <forge-date-time-picker id="p1" date-mode="range" time-mode="range"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getField(screen.container);
+    const picker = getPicker(screen.container);
+    await ready(el);
+    (el.shadowRoot!.querySelector('[part="toggle"]') as HTMLElement).click();
+    await ready(el);
+    expect(picker.open).toBe(true);
+    firePickerChange(picker, {
+      value: { from: new Date(2026, 5, 9, 9, 0), to: new Date(2026, 5, 12, 17, 0) },
+      source: 'apply',
+      complete: true
+    });
+    await ready(el);
+    expect(picker.open).toBe(false);
+    expect(el.open).toBe(false);
+  });
+
+  it('should not push field value into the picker while the picker is open', async () => {
+    const screen = render(html`
+      <div>
+        <forge-date-time-field picker="p1" value-mode="date"></forge-date-time-field>
+        <forge-date-time-picker id="p1" value-mode="date"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getField(screen.container);
+    const picker = getPicker(screen.container);
+    await ready(el);
+    const initial = new Date(2026, 5, 1, 10, 0);
+    picker.value = initial;
+    await ready(el);
+    (el.shadowRoot!.querySelector('[part="toggle"]') as HTMLElement).click();
+    await ready(el);
+    expect(el.open).toBe(true);
+    const dateInput = el.shadowRoot!.querySelector('[part="date-input"]') as HTMLInputElement;
+    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'd', bubbles: true }));
+    await ready(el);
+    expect((picker.value as Date)?.getTime()).toBe(initial.getTime());
+  });
+
+  it('should warn when field date-mode and picker date-mode disagree', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const screen = render(html`
+      <div>
+        <forge-date-time-field picker="p1" date-mode="range"></forge-date-time-field>
+        <forge-date-time-picker id="p1" date-mode="single"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getField(screen.container);
+    await ready(el);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('date-mode'));
+    warnSpy.mockRestore();
+  });
+
+  it('should fire exactly one field change per picker change', async () => {
+    const screen = render(html`
+      <div>
+        <forge-date-time-field picker="p1" date-mode="range" time-mode="range" value-mode="date"></forge-date-time-field>
+        <forge-date-time-picker id="p1" date-mode="range" time-mode="range"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getField(screen.container);
+    const picker = getPicker(screen.container);
+    await ready(el);
+    const events: IDateTimeFieldChangeEventData[] = [];
+    el.addEventListener('forge-date-time-field-change', e => events.push((e as CustomEvent<IDateTimeFieldChangeEventData>).detail));
+    firePickerChange(picker, {
+      value: { from: new Date(2026, 5, 9, 9, 0), to: new Date(2026, 5, 12, 17, 0) },
+      source: 'apply',
+      complete: true
+    });
+    await ready(el);
+    expect(events.length).toBe(1);
+  });
+});
