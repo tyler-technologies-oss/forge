@@ -8,7 +8,6 @@ import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { IconRegistry } from '../icon/index.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
 import type {
-  ChangeSource,
   DateTimePickerPublicValue,
   DateTimePickerValue,
   DateTimePickerValueMode,
@@ -391,6 +390,9 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     if (!this.#pickerEl || !customElements.get(this.#pickerEl.localName)) {
       return;
     }
+    if ('dateMode' in this.#pickerEl && this.dateMode !== this.#pickerEl.dateMode) {
+      console.warn(`forge-date-time-field: date-mode mismatch — field="${this.dateMode}", picker="${this.#pickerEl.dateMode}"`);
+    }
     if (this.timeMode !== this.#pickerEl.timeMode) {
       console.warn(`forge-date-time-field: time-mode mismatch — field="${this.timeMode}", picker="${this.#pickerEl.timeMode}"`);
     }
@@ -410,21 +412,22 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
     const detail = (event as CustomEvent<IDateTimePickerChangeEventData>).detail;
     this.#value = coerceValue(detail.value, this.#isRangeValue() ? 'range' : 'single', this.allowSeconds);
-    this.#hasDate = detail.date != null;
-    this.#hasFromDate = this.#hasDate;
-    this.#hasToDate = this.dateMode === 'range' ? isRange(this.#value) && this.#value != null : this.#hasDate;
-    if (this.#isRangeValue()) {
+    if (this.#value != null) {
+      this.#setSegmentPresence(true);
+    } else {
+      this.#hasDate = detail.date != null;
+      this.#hasFromDate = this.#hasDate;
+      this.#hasToDate = this.dateMode === 'range' ? detail.to != null : this.#hasDate;
+      this.#hasTime = detail.time != null;
       this.#hasFrom = detail.from != null;
       this.#hasTo = detail.to != null;
-    } else {
-      this.#hasTime = detail.time != null;
     }
-    this.#setMaskValue(this._dateInput, detail.date ? formatDateInput(detail.date) : '');
+    this.#syncMaskDisplay();
     this._invalid = false;
     this.#updateFormValueAndValidity();
     this.#emitChange();
     this.requestUpdate();
-    if (detail.complete && this.#closesOnSource(detail.source)) {
+    if (detail.complete && detail.source !== 'initial') {
       this.#setPickerOpen(false);
     }
   };
@@ -437,10 +440,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.open = false;
     this.dispatchEvent(new CustomEvent(DATE_TIME_FIELD_CONSTANTS.events.CLOSE, { bubbles: true, composed: true }));
   };
-
-  #closesOnSource(source: ChangeSource): boolean {
-    return source === 'time' || source === 'time-to' || source === 'slot';
-  }
 
   // ─── Toggle / open ───────────────────────────────────────────────────────
 
@@ -569,7 +568,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this._invalid = false;
     this.#updateFormValueAndValidity();
     if (changed) {
-      if (this.#pickerEl) {
+      if (this.#pickerEl && !this._open) {
         this.#pickerEl.value = this.value ?? null;
       }
       this.#emitChange();
