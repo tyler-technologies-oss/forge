@@ -179,6 +179,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   @state() private _pickerLinked = false;
 
   @query('[part="date-input"]') private _dateInput?: HTMLInputElement;
+  @query('[part="to-date-input"]') private _toDateInput?: HTMLInputElement;
   @query('[part="time-input"]') private _timeInput?: HTMLInputElement;
   @query('[part="from-input"]') private _fromInput?: HTMLInputElement;
   @query('[part="to-input"]') private _toInput?: HTMLInputElement;
@@ -190,6 +191,8 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #pickerIdRef = '';
   #pickerEl: IDateTimePickerComponent | null = null;
   #hasDate = false;
+  #hasFromDate = false;
+  #hasToDate = false;
   #hasTime = false;
   #hasFrom = false;
   #hasTo = false;
@@ -300,7 +303,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
 
   public override updated(changed: PropertyValues<this>): void {
     this.#updateFormValueAndValidity();
-    if (!this.#masksInitialized || changed.has('timeMode') || changed.has('use24HourTime') || changed.has('allowSeconds')) {
+    if (!this.#masksInitialized || changed.has('dateMode') || changed.has('timeMode') || changed.has('use24HourTime') || changed.has('allowSeconds')) {
       this.#masksInitialized = true;
       this.#syncMasks();
     } else {
@@ -408,6 +411,8 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     const detail = (event as CustomEvent<IDateTimePickerChangeEventData>).detail;
     this.#value = coerceValue(detail.value, this.#isRangeValue() ? 'range' : 'single', this.allowSeconds);
     this.#hasDate = detail.date != null;
+    this.#hasFromDate = this.#hasDate;
+    this.#hasToDate = this.dateMode === 'range' ? isRange(this.#value) && this.#value != null : this.#hasDate;
     if (this.#isRangeValue()) {
       this.#hasFrom = detail.from != null;
       this.#hasTo = detail.to != null;
@@ -466,12 +471,12 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     if (this.#quickKeysEnabled() && !event.ctrlKey && !event.metaKey && !event.altKey) {
       if (key === 'n') {
         event.preventDefault();
-        this.#applyNow();
+        this.#applyNow(event.target as HTMLInputElement);
         return;
       }
       if (key === 'd') {
         event.preventDefault();
-        this.#applyToday();
+        this.#applyToday(event.target as HTMLInputElement);
         return;
       }
       if (key === 't') {
@@ -492,10 +497,11 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     return !this.disabled && !this.readonly;
   }
 
-  #applyNow(): void {
+  #applyNow(target: HTMLInputElement): void {
     const now = new Date();
-    if (parseDateInput(this.#maskValue(this._dateInput)) == null) {
-      this.#setMaskValue(this._dateInput, formatDateInput(now));
+    const focusedDateInput = this.dateMode === 'range' && target === this._toDateInput ? this._toDateInput : this._dateInput;
+    if (parseDateInput(this.#maskValue(focusedDateInput)) == null) {
+      this.#setMaskValue(focusedDateInput, formatDateInput(now));
     }
     if (this.timeMode === 'single') {
       this.#setMaskValue(this._timeInput, formatTimeInput(now, this.use24HourTime, this.allowSeconds));
@@ -503,8 +509,9 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.#onTypedInput();
   }
 
-  #applyToday(): void {
-    this.#setMaskValue(this._dateInput, formatDateInput(new Date()));
+  #applyToday(target: HTMLInputElement): void {
+    const focusedDateInput = this.dateMode === 'range' && target === this._toDateInput ? this._toDateInput : this._dateInput;
+    this.#setMaskValue(focusedDateInput, formatDateInput(new Date()));
     this.#onTypedInput();
   }
 
@@ -524,26 +531,37 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   }
 
   #onTypedInput = (): void => {
-    const dateStr = this.#maskValue(this._dateInput);
-    this.#hasDate = parseDateInput(dateStr) != null;
+    const startDateStr = this.#maskValue(this._dateInput);
+    const endDateStr = this.dateMode === 'range' ? this.#maskValue(this._toDateInput) : startDateStr;
+    this.#hasFromDate = parseDateInput(startDateStr) != null;
+    this.#hasToDate = parseDateInput(endDateStr) != null;
+    this.#hasDate = this.#hasFromDate;
     let next: DateTimePickerValue;
 
     if (this.#isRangeValue()) {
-      const fromStr = this.#maskValue(this._fromInput);
-      const toStr = this.#maskValue(this._toInput);
-      this.#hasFrom = parseTimeString(fromStr) != null;
-      this.#hasTo = parseTimeString(toStr) != null;
-      const from = parseTypedValue(dateStr, fromStr, this.allowSeconds);
-      const to = parseTypedValue(dateStr, toStr, this.allowSeconds);
+      let startTimeStr: string;
+      let endTimeStr: string;
+      if (this.timeMode === 'range') {
+        startTimeStr = this.#maskValue(this._fromInput);
+        endTimeStr = this.#maskValue(this._toInput);
+        this.#hasFrom = parseTimeString(startTimeStr) != null;
+        this.#hasTo = parseTimeString(endTimeStr) != null;
+      } else {
+        startTimeStr = this.#maskValue(this._timeInput);
+        endTimeStr = startTimeStr;
+        this.#hasTime = parseTimeString(startTimeStr) != null;
+      }
+      const from = parseTypedValue(startDateStr, startTimeStr, this.allowSeconds);
+      const to = parseTypedValue(endDateStr, endTimeStr, this.allowSeconds);
       next = from && to ? { from, to } : null;
     } else if (this.timeMode === 'slots') {
       const existingTime = this.#value instanceof Date ? timeFromDate(this.#value, this.allowSeconds) : null;
       this.#hasTime = existingTime != null;
-      next = existingTime ? parseTypedValue(dateStr, existingTime, this.allowSeconds) : null;
+      next = existingTime ? parseTypedValue(startDateStr, existingTime, this.allowSeconds) : null;
     } else {
       const timeStr = this.#maskValue(this._timeInput);
       this.#hasTime = parseTimeString(timeStr) != null;
-      next = parseTypedValue(dateStr, timeStr, this.allowSeconds);
+      next = parseTypedValue(startDateStr, timeStr, this.allowSeconds);
     }
 
     const changed = !this.#valuesEqual(next, this.#value);
@@ -576,23 +594,34 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     return this.use24HourTime ? (this.allowSeconds ? 'hh:mm:ss' : 'hh:mm') : this.allowSeconds ? 'hh:mm:ss --' : 'hh:mm --';
   }
 
-  #renderDateInput(): TemplateResult {
+  #renderDateInput(part: 'date-input' | 'to-date-input', ariaLabel: string, hasSegment: boolean): TemplateResult {
     const dateRequired = this.required && this.requiredParts !== 'time';
     return html`
       <input
-        part="date-input"
+        part=${part}
         type="text"
         inputmode="numeric"
         autocomplete="off"
         placeholder="mm/dd/yyyy"
-        aria-label=${this.label || 'Date'}
+        aria-label=${ariaLabel}
         aria-required=${ifDefined(dateRequired ? 'true' : undefined)}
-        aria-invalid=${ifDefined(this._invalid && dateRequired && !this.#hasDate ? 'true' : undefined)}
+        aria-invalid=${ifDefined(this._invalid && dateRequired && !hasSegment ? 'true' : undefined)}
         ?disabled=${this.disabled}
         ?readonly=${this.readonly}
         @blur=${this.#onTypedInput}
         @keydown=${this.#onTypedKeydown} />
     `;
+  }
+
+  #renderDatePart(): TemplateResult {
+    if (this.dateMode === 'range') {
+      return html`
+        ${this.#renderDateInput('date-input', 'Start date', this.#hasFromDate)}
+        <span class="range-separator" aria-hidden="true">–</span>
+        ${this.#renderDateInput('to-date-input', 'End date', this.#hasToDate)}
+      `;
+    }
+    return this.#renderDateInput('date-input', this.label || 'Date', this.#hasDate);
   }
 
   #renderTimeInput(part: 'time-input' | 'from-input' | 'to-input', label: string, hasSegment: boolean): TemplateResult {
@@ -615,14 +644,14 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
 
   #renderSingleMasked(): TemplateResult {
     return html`
-      ${this.#renderDateInput()}
+      ${this.#renderDatePart()}
       <span slot="end" part="time-segment" class="time-segment"> ${this.#renderTimeInput('time-input', 'Time', this.#hasTime)} </span>
     `;
   }
 
   #renderRangeMasked(): TemplateResult {
     return html`
-      ${this.#renderDateInput()}
+      ${this.#renderDatePart()}
       <span slot="end" part="time-segment" class="time-segment">
         ${this.#renderTimeInput('from-input', 'Start time', this.#hasFrom)}
         <span class="range-separator" aria-hidden="true">–</span>
@@ -634,7 +663,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #renderSlotsMasked(): TemplateResult {
     const slotTime = this.#value instanceof Date ? formatTimeInput(this.#value, this.use24HourTime, this.allowSeconds) : '';
     return html`
-      ${this.#renderDateInput()}
+      ${this.#renderDatePart()}
       <span slot="end" part="time-segment" class="time-segment">
         <input
           part="slot-display"
@@ -665,6 +694,9 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     const specs: Array<{ el: HTMLInputElement; kind: 'date' | 'time' }> = [];
     if (this._dateInput) {
       specs.push({ el: this._dateInput, kind: 'date' });
+    }
+    if (this.dateMode === 'range' && this._toDateInput) {
+      specs.push({ el: this._toDateInput, kind: 'date' });
     }
     if (this.timeMode === 'single' && this._timeInput) {
       specs.push({ el: this._timeInput, kind: 'time' });
@@ -716,11 +748,16 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       return;
     }
     const v = this.#value;
-    if (this.timeMode === 'range') {
-      if (isRange(v)) {
-        set(this._dateInput, formatDateInput(v.from));
+    if (this.#isRangeValue() && isRange(v)) {
+      set(this._dateInput, formatDateInput(v.from));
+      if (this.dateMode === 'range') {
+        set(this._toDateInput, formatDateInput(v.to));
+      }
+      if (this.timeMode === 'range') {
         set(this._fromInput, formatTimeInput(v.from, this.use24HourTime, this.allowSeconds));
         set(this._toInput, formatTimeInput(v.to, this.use24HourTime, this.allowSeconds));
+      } else {
+        set(this._timeInput, formatTimeInput(v.from, this.use24HourTime, this.allowSeconds));
       }
       return;
     }
@@ -840,6 +877,13 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
 
   #setSegmentPresence(present: boolean): void {
     this.#hasDate = this.#hasTime = this.#hasFrom = this.#hasTo = present;
+    if (present) {
+      this.#hasFromDate = true;
+      this.#hasToDate = this.dateMode === 'range';
+    } else {
+      this.#hasFromDate = false;
+      this.#hasToDate = false;
+    }
   }
 
   #valuesEqual(a: DateTimePickerValue, b: DateTimePickerValue): boolean {
