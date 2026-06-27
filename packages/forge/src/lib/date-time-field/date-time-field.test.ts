@@ -809,3 +809,130 @@ describe('DateTimeField / link contract (T-F4)', () => {
     expect(events.length).toBe(1);
   });
 });
+
+// ─── Form value + restore round-trip ────────────────────────────────────────
+
+describe('DateTimeField / form value + restore round-trip', () => {
+  it('should contribute distinct .from and .to ISO datetimes to FormData for a multi-day range', async () => {
+    const screen = render(
+      html`<form>
+        <forge-date-time-field name="appt" date-mode="range" time-mode="range" value-mode="date"></forge-date-time-field>
+      </form>`
+    );
+    const form = screen.container.querySelector('form') as HTMLFormElement;
+    const el = form.querySelector('forge-date-time-field') as IDateTimeFieldComponent;
+    await ready(el);
+    el.value = { from: new Date(2025, 5, 9, 9, 0), to: new Date(2025, 5, 12, 17, 0) };
+    await ready(el);
+    const fd = new FormData(form);
+    const fromStr = fd.get('appt.from') as string;
+    const toStr = fd.get('appt.to') as string;
+    expect(typeof fromStr).toBe('string');
+    expect(typeof toStr).toBe('string');
+    expect(fromStr).toContain('2025');
+    expect(toStr).toContain('2025');
+    const fromDate = new Date(fromStr);
+    const toDate = new Date(toStr);
+    expect(fromDate.getDate()).not.toBe(toDate.getDate());
+    expect(fromDate.getDate()).toBe(9);
+    expect(toDate.getDate()).toBe(12);
+  });
+
+  it('should restore a two-date range from form state via formStateRestoreCallback', async () => {
+    const screen = render(
+      html`<form>
+        <forge-date-time-field name="appt" date-mode="range" time-mode="range" value-mode="date"></forge-date-time-field>
+      </form>`
+    );
+    const form = screen.container.querySelector('form') as HTMLFormElement;
+    const el = form.querySelector('forge-date-time-field') as IDateTimeFieldComponent;
+    await ready(el);
+    const state = new FormData();
+    state.append('appt.from', new Date(2025, 5, 9, 9, 0).toISOString());
+    state.append('appt.to', new Date(2025, 5, 12, 17, 0).toISOString());
+    el.formStateRestoreCallback(state);
+    await ready(el);
+    const v = el.value as { from: Date; to: Date };
+    expect(v).not.toBeNull();
+    expect(v.from).toBeInstanceOf(Date);
+    expect(v.to).toBeInstanceOf(Date);
+    expect(v.from.getDate()).toBe(9);
+    expect(v.to.getDate()).toBe(12);
+    expect(v.from.getDate()).not.toBe(v.to.getDate());
+  });
+});
+
+// ─── Orthogonal modes ────────────────────────────────────────────────────────
+
+describe('DateTimeField / orthogonal modes', () => {
+  it('should be a scalar Date when date-mode=single and time-mode=single', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="single" time-mode="single" value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = new Date(2025, 5, 12, 10, 30);
+    await ready(el);
+    expect(el.value).toBeInstanceOf(Date);
+    expect((el.value as Date).getFullYear()).toBe(2025);
+  });
+
+  it('should be a {from,to} with same day and two times when date-mode=single, time-mode=range', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="single" time-mode="range" value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2025, 5, 12, 9, 0), to: new Date(2025, 5, 12, 17, 0) };
+    await ready(el);
+    const v = el.value as { from: Date; to: Date };
+    expect(v.from).toBeInstanceOf(Date);
+    expect(v.to).toBeInstanceOf(Date);
+    expect(v.from.getDate()).toBe(v.to.getDate());
+    expect(v.from.getHours()).toBe(9);
+    expect(v.to.getHours()).toBe(17);
+  });
+
+  it('should be a {from,to} with two days and one shared time when date-mode=range, time-mode=single', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="single" value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2025, 5, 9, 9, 0), to: new Date(2025, 5, 12, 9, 0) };
+    await ready(el);
+    const v = el.value as { from: Date; to: Date };
+    expect(v.from).toBeInstanceOf(Date);
+    expect(v.to).toBeInstanceOf(Date);
+    expect(v.from.getDate()).not.toBe(v.to.getDate());
+    expect(v.from.getDate()).toBe(9);
+    expect(v.to.getDate()).toBe(12);
+    expect(v.from.getHours()).toBe(v.to.getHours());
+    expect(el.shadowRoot!.querySelector('[part="to-date-input"]')).not.toBeNull();
+    expect(el.shadowRoot!.querySelector('[part="time-input"]')).not.toBeNull();
+    expect(el.shadowRoot!.querySelector('[part="from-input"]')).toBeNull();
+  });
+
+  it('should be a {from,to} with two days and two times when date-mode=range, time-mode=range', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range" value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2025, 5, 9, 9, 0), to: new Date(2025, 5, 12, 17, 0) };
+    await ready(el);
+    const v = el.value as { from: Date; to: Date };
+    expect(v.from.getDate()).toBe(9);
+    expect(v.to.getDate()).toBe(12);
+    expect(v.from.getHours()).toBe(9);
+    expect(v.to.getHours()).toBe(17);
+    expect(el.shadowRoot!.querySelector('[part="to-date-input"]')).not.toBeNull();
+    expect(el.shadowRoot!.querySelector('[part="from-input"]')).not.toBeNull();
+    expect(el.shadowRoot!.querySelector('[part="to-input"]')).not.toBeNull();
+  });
+
+  it('should remain usable standalone (unlinked) in date-mode=range', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="single" value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    expect(el.shadowRoot!.querySelector('[part="toggle"]')).toBeNull();
+    el.value = { from: new Date(2025, 5, 9, 10, 0), to: new Date(2025, 5, 12, 10, 0) };
+    await ready(el);
+    expect(el.checkValidity()).toBe(true);
+    const v = el.value as { from: Date; to: Date };
+    expect(v.from.getDate()).toBe(9);
+    expect(v.to.getDate()).toBe(12);
+  });
+});
