@@ -15,6 +15,7 @@ import {
 } from './date-time-picker-utils.js';
 import type { IDateTimePickerComponent } from './date-time-picker.js';
 import type { IDateTimePickerChangeEventData, IDateTimePickerRange, ITimeSlot } from './date-time-picker-constants.js';
+import type { ICalendarDateSelectEventData } from '../calendar/calendar-constants.js';
 
 function getEl(container: ParentNode): IDateTimePickerComponent {
   return container.querySelector('forge-date-time-picker') as IDateTimePickerComponent;
@@ -650,5 +651,111 @@ describe('DateTimePicker / axis-aware value model', () => {
     expect(result.to.getDate()).toBe(12);
     expect(result.from.getHours()).toBe(9);
     expect(result.to.getHours()).toBe(9);
+  });
+});
+
+describe('DateTimePicker / range-select calendar', () => {
+  function dispatchCalendarSelect(el: IDateTimePickerComponent, detail: Partial<ICalendarDateSelectEventData>): void {
+    const calendar = el.shadowRoot!.querySelector('forge-calendar')!;
+    calendar.dispatchEvent(
+      new CustomEvent<Partial<ICalendarDateSelectEventData>>('forge-calendar-date-select', {
+        detail: { selected: false, type: 'date', ...detail } as ICalendarDateSelectEventData,
+        bubbles: true,
+        composed: true
+      })
+    );
+  }
+
+  it('should render the calendar in range mode when date-mode is range', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const calendar = el.shadowRoot!.querySelector('forge-calendar') as HTMLElement;
+    expect(calendar.getAttribute('mode')).toBe('range');
+    expect(calendar.hasAttribute('allow-single-date-range')).toBe(true);
+  });
+
+  it('should set only the from-date after the first range click when date-mode is range', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="single"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const events = captureChanges(el);
+
+    const fromDate = new Date(2026, 5, 9);
+    dispatchCalendarSelect(el, {
+      date: fromDate,
+      range: { from: fromDate },
+      rangeSelectionState: 'from',
+      selected: false
+    } as Partial<ICalendarDateSelectEventData>);
+    await ready(el);
+
+    expect(events.length).toBeGreaterThan(0);
+    const last = events[events.length - 1];
+    expect(last.source).toBe('date');
+    expect(last.value).toBeNull();
+    expect(last.complete).toBe(false);
+  });
+
+  it('should produce a {from,to} with distinct dates after the second range click when date-mode is range and time-mode is range', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="range" value-mode="date"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    const fromDate = new Date(2026, 5, 9);
+    const toDate = new Date(2026, 5, 12);
+
+    el.value = {
+      from: new Date(2026, 5, 9, 9, 0),
+      to: new Date(2026, 5, 12, 17, 0)
+    } as IDateTimePickerRange;
+    await ready(el);
+
+    const events = captureChanges(el);
+    dispatchCalendarSelect(el, {
+      date: fromDate,
+      range: { from: fromDate },
+      rangeSelectionState: 'from',
+      selected: false
+    } as Partial<ICalendarDateSelectEventData>);
+    await ready(el);
+
+    dispatchCalendarSelect(el, {
+      date: toDate,
+      range: { from: fromDate, to: toDate },
+      rangeSelectionState: 'to',
+      selected: false
+    } as Partial<ICalendarDateSelectEventData>);
+    await ready(el);
+
+    const last = events[events.length - 1];
+    expect(last.source).toBe('date');
+    const value = last.value as IDateTimePickerRange;
+    expect(value).not.toBeNull();
+    expect(value.from).toBeInstanceOf(Date);
+    expect(value.to).toBeInstanceOf(Date);
+    expect(value.from.getDate()).not.toBe(value.to.getDate());
+  });
+
+  it('should keep single-date selection working when date-mode is single', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="single" time-mode="single" value-mode="date"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const calendar = el.shadowRoot!.querySelector('forge-calendar') as HTMLElement;
+    expect(calendar.getAttribute('mode')).toBe('single');
+
+    const events = captureChanges(el);
+    const selectedDate = new Date(2026, 5, 9);
+    dispatchCalendarSelect(el, {
+      date: selectedDate,
+      selected: false
+    } as Partial<ICalendarDateSelectEventData>);
+    await ready(el);
+
+    expect(events.length).toBeGreaterThan(0);
+    const last = events[events.length - 1];
+    expect(last.source).toBe('date');
+    expect(last.date).not.toBeNull();
+    expect(last.date!.getDate()).toBe(9);
   });
 });
