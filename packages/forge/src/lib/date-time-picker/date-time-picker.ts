@@ -285,6 +285,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   #anchorElement: HTMLElement | null = null;
   private readonly _overlayRef = createRef<IOverlayComponent>();
   #value: DateTimePickerValue = null;
+  #draftValue: DateTimePickerValue = null;
   #activeFromDate: Date | null = null;
   #activeToDate: Date | null = null;
   #activeTime: string | null = null;
@@ -377,6 +378,10 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     if (changed.has('open') && changed.get('open') !== undefined) {
       const eventName = this.open ? DATE_TIME_PICKER_CONSTANTS.events.OPEN : DATE_TIME_PICKER_CONSTANTS.events.CLOSE;
       this.dispatchEvent(new CustomEvent(eventName, { bubbles: true, composed: true }));
+      if (this.open && this.#deferred) {
+        this.#syncFromValue(this.#value);
+        this.#draftValue = this.#value;
+      }
     }
     if (changed.has('timeMode') && changed.get('timeMode') !== undefined) {
       const previousMode = changed.get('timeMode') as TimeMode | undefined;
@@ -446,7 +451,26 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #onLightDismiss = (): void => {
+    if (this.#deferred) {
+      this.#syncFromValue(this.#value);
+      this.#draftValue = this.#value;
+      this.requestUpdate();
+    }
     this.open = false;
+  };
+
+  #onApply = (): void => {
+    this.#value = this.#draftValue;
+    this.#updateFormValueAndValidity();
+    this.#emitChange('apply');
+    this.open = false;
+  };
+
+  #onCancel = (): void => {
+    this.#syncFromValue(this.#value);
+    this.#draftValue = this.#value;
+    this.open = false;
+    this.requestUpdate();
   };
 
   #renderCard(): TemplateResult {
@@ -520,12 +544,12 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #renderFooter(): TemplateResult | typeof nothing {
-    if (!this.showFooter) {
+    if (!this.showFooter && !this.#deferred) {
       return nothing;
     }
     const allEmpty = this._footerStartEmpty && this._footerCenterEmpty && this._footerEndEmpty;
     return html`
-      <div part="footer" class="footer" data-empty=${String(allEmpty)}>
+      <div part="footer" class="footer" data-empty=${String(!this.#deferred && allEmpty)}>
         <div part="footer-start" class="footer-start" data-empty=${String(this._footerStartEmpty)}>
           <slot name="footer-start" @slotchange=${(e: Event) => this.#onSlotChange(e, '_footerStartEmpty')}></slot>
         </div>
@@ -535,6 +559,16 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
         <div part="footer-end" class="footer-end" data-empty=${String(this._footerEndEmpty)}>
           <slot name="footer-end" @slotchange=${(e: Event) => this.#onSlotChange(e, '_footerEndEmpty')}></slot>
         </div>
+        ${this.#deferred ? this.#renderCommitActions() : nothing}
+      </div>
+    `;
+  }
+
+  #renderCommitActions(): TemplateResult {
+    return html`
+      <div class="commit-actions">
+        <forge-button part="commit-cancel" @click=${this.#onCancel}>Cancel</forge-button>
+        <forge-button part="commit-apply" variant="raised" ?disabled=${!this.#canApply()} @click=${this.#onApply}>Apply</forge-button>
       </div>
     `;
   }
@@ -815,8 +849,12 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     }
     this.#disabledSlotCache = null;
     this.#recomputeValue();
-    this.#emitChange('date');
-    this.requestUpdate();
+    if (this.#deferred) {
+      this.requestUpdate();
+    } else {
+      this.#emitChange('date');
+      this.requestUpdate();
+    }
   };
 
   #onTimePickerChange = (event: Event, which: 'single' | 'from' | 'to'): void => {
@@ -825,15 +863,21 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     if (which === 'single') {
       this.#activeTime = next;
       this.#recomputeValue();
-      this.#emitChange('time');
+      if (!this.#deferred) {
+        this.#emitChange('time');
+      }
     } else if (which === 'from') {
       this.#activeFrom = next;
       this.#recomputeValue();
-      this.#emitChange('time-from');
+      if (!this.#deferred) {
+        this.#emitChange('time-from');
+      }
     } else {
       this.#activeTo = next;
       this.#recomputeValue();
-      this.#emitChange('time-to');
+      if (!this.#deferred) {
+        this.#emitChange('time-to');
+      }
     }
     this.requestUpdate();
   };
@@ -844,7 +888,9 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     }
     this.#activeTime = slot.value;
     this.#recomputeValue();
-    this.#emitChange('slot');
+    if (!this.#deferred) {
+      this.#emitChange('slot');
+    }
     this.requestUpdate();
   }
 
@@ -980,6 +1026,24 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     return this.dateMode === 'range' || this.timeMode === 'range';
   }
 
+  get #deferred(): boolean {
+    return !this.autoCommit && this.#isRangeValue();
+  }
+
+  #canApply(): boolean {
+    if (!isRange(this.#draftValue)) {
+      return false;
+    }
+    const { from, to } = this.#draftValue;
+    if (from.getTime() > to.getTime()) {
+      return false;
+    }
+    if (this.#beforeMin(from, this.min) || this.#afterMax(to, this.max)) {
+      return false;
+    }
+    return true;
+  }
+
   #recomputeValue(): void {
     if (this.#isRangeValue()) {
       const toDate = this.dateMode === 'range' ? this.#activeToDate : this.#activeFromDate;
@@ -987,7 +1051,12 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       const toTime = this.timeMode === 'range' ? this.#activeTo : this.#activeTime;
       const from = mergeDateAndTime(this.#activeFromDate, fromTime);
       const to = mergeDateAndTime(toDate, toTime);
-      this.#value = from && to ? { from, to } : null;
+      const computed = from && to ? { from, to } : null;
+      if (this.#deferred) {
+        this.#draftValue = computed;
+      } else {
+        this.#value = computed;
+      }
       return;
     }
     const merged = mergeDateAndTime(this.#activeFromDate, this.#activeTime);
