@@ -300,7 +300,7 @@ export function computePreset(id: DateRangePresetId, now: Date, firstDayOfWeek: 
 
   switch (id) {
     case 'today':
-      return { from: today, to: today };
+      return { from: today, to: new Date(today) };
     case 'this-week': {
       const dow = today.getDay();
       const diffToStart = (dow - firstDayOfWeek + 7) % 7;
@@ -353,7 +353,7 @@ export function formatDuration(from: Date, to: Date, locale?: string): string {
     if (hours > 0) {
       value['hours'] = hours;
     }
-    if (days === 0 && minutes > 0) {
+    if (minutes > 0 && !(days > 0 && hours > 0)) {
       value['minutes'] = minutes;
     }
     return fmt.format(value);
@@ -367,7 +367,7 @@ export function formatDuration(from: Date, to: Date, locale?: string): string {
   if (hours > 0) {
     parts.push(plural(hours, 'hour'));
   }
-  if (days === 0 && minutes > 0) {
+  if (minutes > 0 && !(days > 0 && hours > 0)) {
     parts.push(plural(minutes, 'minute'));
   }
   return parts.join(', ');
