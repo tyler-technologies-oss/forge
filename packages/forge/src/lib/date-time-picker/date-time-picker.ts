@@ -605,13 +605,20 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     if (!text) {
       return nothing;
     }
-    return html`<span part="duration" class="duration">${text}</span>`;
+    return html`<span part="duration" class="duration" role="status" aria-live="polite">${text}</span>`;
   }
 
   #renderBody(orientation: ResolvedOrientation): TemplateResult {
+    const showPresets = this.presets && this.dateMode === 'range' && this.timeMode !== 'slots';
+    const calendarAndTime = html`${this.#renderCalendarSection()} ${this.#renderTimeSection()}`;
     return html`
       <div part="body" class="body" data-orientation=${orientation}>
-        ${this.#renderPresetsSection()} ${this.#renderCalendarSection()} ${this.#renderTimeSection()}
+        ${showPresets
+          ? html`
+              ${this.#renderPresetsSection()}
+              <div class="body-main" data-orientation=${orientation}>${calendarAndTime}</div>
+            `
+          : calendarAndTime}
       </div>
     `;
   }
@@ -631,7 +638,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       { id: 'this-month', label: 'This month' }
     ];
     return html`
-      <div part="presets" class="presets">
+      <div part="presets" class="presets" role="group" aria-label="Quick date ranges">
         ${presetDefs.map(p => html`<button type="button" part="preset" data-preset-id=${p.id} @click=${() => this.#onPresetSelect(p.id)}>${p.label}</button>`)}
       </div>
     `;
@@ -641,6 +648,12 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     const { from, to } = computePreset(id, new Date(), this.firstDayOfWeek ?? 0);
     this.#activeFromDate = dateOnly(from);
     this.#activeToDate = dateOnly(to);
+    if (this.timeMode === 'range') {
+      this.#activeFrom ??= this.minTime || (this.allowSeconds ? '00:00:00' : '00:00');
+      this.#activeTo ??= this.maxTime || (this.allowSeconds ? '23:59:59' : '23:59');
+    } else if (this.timeMode === 'single') {
+      this.#activeTime ??= this.minTime || (this.allowSeconds ? '00:00:00' : '00:00');
+    }
     this.#recomputeValue();
     if (this.#deferred) {
       this.requestUpdate();
