@@ -7,6 +7,8 @@ import './index.js';
 import {
   buildSlotsFromRange,
   coerceValue,
+  computePreset,
+  formatDuration,
   formatSlotLabel,
   mergeDateAndTime,
   parseTimeString,
@@ -1010,5 +1012,139 @@ describe('DateTimePicker / deferred Apply/Cancel (T-P5)', () => {
     const cancelBtn = el.shadowRoot!.querySelector('[part~="commit-cancel"]');
     expect(applyBtn).toBeNull();
     expect(cancelBtn).toBeNull();
+  });
+});
+
+describe('DateTimePicker / presets utils (T-P6)', () => {
+  it("should return today's date at midnight when preset id is 'today'", () => {
+    const now = new Date(2026, 5, 15, 14, 30);
+    const { from, to } = computePreset('today', now, 0);
+    expect(from.getHours()).toBe(0);
+    expect(from.getMinutes()).toBe(0);
+    expect(from.getDate()).toBe(15);
+    expect(from.getMonth()).toBe(5);
+    expect(to.getDate()).toBe(15);
+    expect(to.getHours()).toBe(0);
+  });
+
+  it("should return start-of-week to end-of-week when preset id is 'this-week' (respecting firstDayOfWeek)", () => {
+    // June 15, 2026 is a Monday
+    const now = new Date(2026, 5, 15);
+    // firstDayOfWeek = 1 (Monday): week starts on Monday Jun 15, ends Sunday Jun 21
+    const { from, to } = computePreset('this-week', now, 1);
+    expect(from.getDate()).toBe(15);
+    expect(to.getDate()).toBe(21);
+    expect(from.getHours()).toBe(0);
+    expect(to.getHours()).toBe(0);
+    // firstDayOfWeek = 0 (Sunday): week starts on Sunday Jun 14, ends Saturday Jun 20
+    const { from: from0, to: to0 } = computePreset('this-week', now, 0);
+    expect(from0.getDate()).toBe(14);
+    expect(to0.getDate()).toBe(20);
+  });
+
+  it("should return today to today+6 when preset id is 'next-7-days'", () => {
+    const now = new Date(2026, 5, 15, 10, 0);
+    const { from, to } = computePreset('next-7-days', now, 0);
+    expect(from.getDate()).toBe(15);
+    expect(to.getDate()).toBe(21);
+    expect(from.getHours()).toBe(0);
+    expect(to.getHours()).toBe(0);
+  });
+
+  it("should return first-to-last day of month when preset id is 'this-month'", () => {
+    const now = new Date(2026, 5, 15);
+    const { from, to } = computePreset('this-month', now, 0);
+    expect(from.getDate()).toBe(1);
+    expect(from.getMonth()).toBe(5);
+    expect(to.getDate()).toBe(30);
+    expect(to.getMonth()).toBe(5);
+    expect(from.getHours()).toBe(0);
+    expect(to.getHours()).toBe(0);
+  });
+
+  it('should return empty string when to is before from in formatDuration', () => {
+    const from = new Date(2026, 5, 15, 12, 0);
+    const to = new Date(2026, 5, 15, 10, 0);
+    expect(formatDuration(from, to)).toBe('');
+  });
+
+  it('should return singular form for 1 day in formatDuration', () => {
+    const from = new Date(2026, 5, 15, 0, 0);
+    const to = new Date(2026, 5, 16, 0, 0);
+    const result = formatDuration(from, to);
+    expect(result).toMatch(/1\s*day/i);
+  });
+
+  it('should return days and hours in formatDuration for multi-day range', () => {
+    const from = new Date(2026, 5, 15, 0, 0);
+    const to = new Date(2026, 5, 18, 8, 0);
+    const result = formatDuration(from, to);
+    expect(result).toMatch(/3\s*days?/i);
+    expect(result).toMatch(/8\s*hours?/i);
+  });
+});
+
+describe('DateTimePicker / presets sidebar (T-P6)', () => {
+  it('should render the presets sidebar when date-mode is range', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" auto-commit></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const presetsDiv = el.shadowRoot!.querySelector('[part~="presets"]');
+    expect(presetsDiv).not.toBeNull();
+    const presetBtns = el.shadowRoot!.querySelectorAll('[part~="preset"]');
+    expect(presetBtns.length).toBe(4);
+  });
+
+  it('should not render the presets sidebar when presets attribute is false', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" .presets=${false}></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const presetsDiv = el.shadowRoot!.querySelector('[part~="presets"]');
+    expect(presetsDiv).toBeNull();
+  });
+
+  it('should fill both date endpoints when a preset is clicked', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="range" value-mode="date" auto-commit></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    el.value = {
+      from: new Date(2026, 5, 1, 9, 0),
+      to: new Date(2026, 5, 1, 17, 0)
+    } as IDateTimePickerRange;
+    await ready(el);
+
+    const todayBtn = el.shadowRoot!.querySelector('[data-preset-id="next-7-days"]') as HTMLButtonElement;
+    expect(todayBtn).not.toBeNull();
+
+    const events = captureChanges(el);
+    todayBtn.click();
+    await ready(el);
+
+    expect(events.length).toBeGreaterThan(0);
+    const last = events[events.length - 1];
+    expect(last.source).toBe('preset');
+    const value = last.value as IDateTimePickerRange;
+    expect(value).not.toBeNull();
+    expect(value.from).toBeInstanceOf(Date);
+    expect(value.to).toBeInstanceOf(Date);
+    const today = new Date();
+    expect(value.from.getDate()).toBe(today.getDate());
+  });
+
+  it('should render a duration summary when a complete range is staged', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="single" value-mode="date" auto-commit></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    el.value = {
+      from: new Date(2026, 5, 9, 9, 0),
+      to: new Date(2026, 5, 12, 9, 0)
+    } as IDateTimePickerRange;
+    await ready(el);
+
+    const durationEl = el.shadowRoot!.querySelector('[part~="duration"]') as HTMLElement;
+    expect(durationEl).not.toBeNull();
+    expect(durationEl.textContent).toMatch(/day/i);
   });
 });
