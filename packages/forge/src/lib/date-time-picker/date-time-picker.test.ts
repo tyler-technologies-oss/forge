@@ -580,3 +580,75 @@ describe('DateTimePicker / overlay mode', () => {
     expect(events).toEqual(['close']);
   });
 });
+
+describe('DateTimePicker / axis-aware value model', () => {
+  it('should round-trip a scalar Date when date-mode and time-mode are single', async () => {
+    const screen = render(html`<forge-date-time-picker value-mode="date" time-mode="single" date-mode="single"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const input = new Date(2026, 5, 9, 9, 0, 0);
+    el.value = input;
+    await ready(el);
+    const result = el.value;
+    expect(result).toBeInstanceOf(Date);
+    expect((result as Date).getFullYear()).toBe(2026);
+    expect((result as Date).getMonth()).toBe(5);
+    expect((result as Date).getDate()).toBe(9);
+    expect((result as Date).getHours()).toBe(9);
+    expect((result as Date).getMinutes()).toBe(0);
+  });
+
+  it('should round-trip a same-day {from,to} when time-mode=range, date-mode=single', async () => {
+    const screen = render(html`<forge-date-time-picker value-mode="date" time-mode="range" date-mode="single"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const from = new Date(2026, 5, 9, 9, 0, 0);
+    const to = new Date(2026, 5, 9, 17, 0, 0);
+    el.value = { from, to } as IDateTimePickerRange;
+    await ready(el);
+    const result = el.value as IDateTimePickerRange;
+    expect(result).not.toBeNull();
+    expect(result.from).toBeInstanceOf(Date);
+    expect(result.to).toBeInstanceOf(Date);
+    expect(result.from.getDate()).toBe(9);
+    expect(result.to.getDate()).toBe(9);
+    expect(result.from.getHours()).toBe(9);
+    expect(result.to.getHours()).toBe(17);
+  });
+
+  it('should round-trip a multi-day {from,to} when date-mode=range, time-mode=range', async () => {
+    const screen = render(html`<forge-date-time-picker value-mode="date" time-mode="range" date-mode="range"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const from = new Date(2026, 5, 9, 9, 0, 0);
+    const to = new Date(2026, 5, 12, 17, 0, 0);
+    el.value = { from, to } as IDateTimePickerRange;
+    await ready(el);
+    const result = el.value as IDateTimePickerRange;
+    expect(result).not.toBeNull();
+    expect(result.from).toBeInstanceOf(Date);
+    expect(result.to).toBeInstanceOf(Date);
+    expect(result.from.getDate()).toBe(9);
+    expect(result.to.getDate()).toBe(12);
+    expect(result.from.getHours()).toBe(9);
+    expect(result.to.getHours()).toBe(17);
+  });
+
+  it('should round-trip a date-range with a single shared time when date-mode=range, time-mode=single', async () => {
+    const screen = render(html`<forge-date-time-picker value-mode="date" time-mode="single" date-mode="range"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const from = new Date(2026, 5, 9, 9, 0, 0);
+    const to = new Date(2026, 5, 12, 9, 0, 0);
+    el.value = { from, to } as IDateTimePickerRange;
+    await ready(el);
+    const result = el.value as IDateTimePickerRange;
+    expect(result).not.toBeNull();
+    expect(result.from).toBeInstanceOf(Date);
+    expect(result.to).toBeInstanceOf(Date);
+    expect(result.from.getDate()).toBe(9);
+    expect(result.to.getDate()).toBe(12);
+    expect(result.from.getHours()).toBe(9);
+    expect(result.to.getHours()).toBe(9);
+  });
+});
