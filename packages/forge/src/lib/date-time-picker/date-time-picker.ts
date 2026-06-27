@@ -109,6 +109,8 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
  * @summary An inline composite that combines a calendar with a time-picking UI
  * (single time, time range, or preset time slots). Form-associated and WCAG 2.1 AA.
  *
+ * @fires {CustomEvent<void>} forge-date-time-picker-open - Fires when the overlay opens.
+ * @fires {CustomEvent<void>} forge-date-time-picker-close - Fires when the overlay closes.
  * @fires {CustomEvent<IDateTimePickerChangeEventData>} forge-date-time-picker-change
  *  Fires whenever any part of the selection changes. `complete: true` only when all
  *  required parts (date + time, or date + from/to in range mode) are set.
@@ -124,6 +126,13 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
  * @slot clear-button-text - Forwarded to the embedded calendar.
  *
  * @attribute {('single'|'range'|'slots')} [time-mode='single'] - Selection mode.
+ * @attribute {('single'|'range')} [date-mode='single'] - Calendar selection mode. Use `range` to enable
+ *  multi-day date-range picking alongside the time UI.
+ * @attribute {boolean} [auto-commit=false] - When `false` (default) and `date-mode` or `time-mode`
+ *  produces a range value, selection is staged as a draft until the user explicitly clicks Apply.
+ *  When `true`, every change commits immediately (matches the non-range behavior).
+ * @attribute {boolean} [presets=true] - When `true` and `date-mode="range"`, renders a quick-range
+ *  presets sidebar to the left of the calendar (Today, This week, Next 7 days, This month).
  * @attribute {('temporal'|'iso'|'date')} [value-mode='temporal'] - Shape of the public `value` and change-event `value`:
  *  a `Temporal.PlainDateTime` (lazily polyfilled), a local ISO `datetime-local` string, or a `Date`.
  * @attribute {('auto'|'horizontal'|'vertical')} [orientation='auto'] - Layout direction.
@@ -187,6 +196,11 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
  * @csspart footer-start - Inline-start zone of the footer.
  * @csspart footer-center - Center zone of the footer.
  * @csspart footer-end - Inline-end zone of the footer.
+ * @csspart presets - The quick-range presets sidebar (only present when `presets` and `date-mode="range"`).
+ * @csspart preset - Each individual preset button inside the presets sidebar.
+ * @csspart commit-cancel - The Cancel button in the deferred-commit footer row.
+ * @csspart commit-apply - The Apply button in the deferred-commit footer row.
+ * @csspart duration - The muted duration summary text shown in the footer when a complete range is selected.
  * @csspart live-region - Visually-hidden live region used for a11y announcements.
  */
 @customElement(DATE_TIME_PICKER_TAG_NAME)
