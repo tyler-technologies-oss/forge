@@ -197,6 +197,63 @@ forge-calendar {
   @include slot-disabled;
 }
 
+.presets {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+  padding-inline-end: #{token(body-gap)};
+  margin-inline-end: #{token(body-gap)};
+  border-inline-end: solid #{token(outline-width)} #{token(divider-color)};
+  align-self: stretch;
+}
+
+[part='preset'] {
+  display: block;
+  width: 100%;
+  appearance: none;
+  background: transparent;
+  color: #{token(color)};
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: start;
+  padding-block: #{token(slot-padding-block)};
+  padding-inline: #{token(slot-padding-inline)};
+  border: none;
+  border-radius: #{token(shape)};
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 120ms ease;
+
+  &:hover {
+    background: #{token(slot-hover-background)};
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--forge-focus-indicator-color, currentColor);
+    outline-offset: 2px;
+  }
+}
+
+.commit-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: #{token(separator-gap)};
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.duration {
+  flex: 1;
+  font-size: 0.8125rem;
+  color: #{token(time-label-color)};
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 :host([disabled]) {
   pointer-events: none;
 }
