@@ -57,6 +57,10 @@ const defaultValues = {
   POPOVER_PLACEMENT: 'bottom-start'
 } as const;
 
+const messages = {
+  END_BEFORE_START: 'End must be after start.'
+} as const;
+
 export const DATE_TIME_FIELD_CONSTANTS = {
   elementName,
   observedAttributes,
@@ -64,7 +68,8 @@ export const DATE_TIME_FIELD_CONSTANTS = {
   slots,
   parts,
   events,
-  defaultValues
+  defaultValues,
+  MESSAGES: messages
 };
 
 export type DateTimeFieldDateMode = 'single' | 'range';
