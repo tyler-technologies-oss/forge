@@ -1147,4 +1147,48 @@ describe('DateTimePicker / presets sidebar (T-P6)', () => {
     expect(durationEl).not.toBeNull();
     expect(durationEl.textContent).toMatch(/day/i);
   });
+
+  it('should enable Apply when a preset is clicked on a fresh picker with no prior time (deferred mode)', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="single"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    const presetBtn = el.shadowRoot!.querySelector('[data-preset-id="today"]') as HTMLButtonElement;
+    expect(presetBtn).not.toBeNull();
+
+    presetBtn.click();
+    await ready(el);
+
+    const applyBtn = el.shadowRoot!.querySelector('[part~="commit-apply"]') as HTMLButtonElement;
+    expect(applyBtn).not.toBeNull();
+    expect(applyBtn.disabled).toBe(false);
+  });
+
+  it('should expose the presets container as a labeled group', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" auto-commit></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    const presetsDiv = el.shadowRoot!.querySelector('[part~="presets"]') as HTMLElement;
+    expect(presetsDiv).not.toBeNull();
+    expect(presetsDiv.getAttribute('role')).toBe('group');
+    expect(presetsDiv.getAttribute('aria-label')).toBe('Quick date ranges');
+  });
+
+  it('should expose the duration element with role status for a11y announcements', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="single" value-mode="date" auto-commit></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    el.value = {
+      from: new Date(2026, 5, 9, 9, 0),
+      to: new Date(2026, 5, 12, 9, 0)
+    } as IDateTimePickerRange;
+    await ready(el);
+
+    const durationEl = el.shadowRoot!.querySelector('[part~="duration"]') as HTMLElement;
+    expect(durationEl).not.toBeNull();
+    expect(durationEl.getAttribute('role')).toBe('status');
+    expect(durationEl.getAttribute('aria-live')).toBe('polite');
+  });
 });
