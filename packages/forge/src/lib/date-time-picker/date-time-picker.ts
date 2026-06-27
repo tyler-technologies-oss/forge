@@ -1038,7 +1038,10 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     if (from.getTime() > to.getTime()) {
       return false;
     }
-    if (this.#beforeMin(from, this.min) || this.#afterMax(to, this.max)) {
+    if (this.#beforeMin(from, this.min) || this.#beforeMin(to, this.min)) {
+      return false;
+    }
+    if (this.#afterMax(from, this.max) || this.#afterMax(to, this.max)) {
       return false;
     }
     return true;
