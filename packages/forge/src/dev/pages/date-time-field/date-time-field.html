@@ -6,6 +6,16 @@ include('./src/partials/page.ejs', {
     options: [
       {
         type: 'select',
+        label: 'Date mode',
+        id: 'opt-date-mode',
+        defaultValue: 'single',
+        options: [
+          { label: 'Single', value: 'single' },
+          { label: 'Range (start – end date)', value: 'range' }
+        ]
+      },
+      {
+        type: 'select',
         label: 'Time mode',
         id: 'opt-time-mode',
         defaultValue: 'single',
