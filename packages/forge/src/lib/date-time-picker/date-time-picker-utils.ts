@@ -1,4 +1,5 @@
 import type {
+  DateRangePresetId,
   DateTimePickerPublicSingle,
   DateTimePickerPublicValue,
   DateTimePickerValue,
@@ -281,6 +282,95 @@ function temporalToDate(input: unknown): Date | null {
   const minute = typeof candidate.minute === 'number' ? candidate.minute : 0;
   const second = typeof candidate.second === 'number' ? candidate.second : 0;
   return new Date(candidate.year, candidate.month - 1, candidate.day, hour, minute, second);
+}
+
+/**
+ * Computes date endpoints for a named quick-range preset.
+ * All returned dates are at 00:00:00.000 local time (midnight).
+ * The caller is responsible for merging time-of-day values if desired.
+ *
+ * @param id - The preset identifier.
+ * @param now - The reference instant (do NOT use `Date.now()` — pass this arg).
+ * @param firstDayOfWeek - 0 = Sunday, 1 = Monday, etc.
+ */
+export function computePreset(id: DateRangePresetId, now: Date, firstDayOfWeek: number): { from: Date; to: Date } {
+  const midnight = (d: Date): Date => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const addDays = (d: Date, n: number): Date => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+  const today = midnight(now);
+
+  switch (id) {
+    case 'today':
+      return { from: today, to: today };
+    case 'this-week': {
+      const dow = today.getDay();
+      const diffToStart = (dow - firstDayOfWeek + 7) % 7;
+      const weekStart = addDays(today, -diffToStart);
+      const weekEnd = addDays(weekStart, 6);
+      return { from: weekStart, to: weekEnd };
+    }
+    case 'next-7-days':
+      return { from: today, to: addDays(today, 6) };
+    case 'this-month': {
+      const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+      const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      return { from: monthStart, to: monthEnd };
+    }
+  }
+}
+
+const MS_PER_MINUTE = 60_000;
+const MS_PER_HOUR = 3_600_000;
+const MS_PER_DAY = 86_400_000;
+
+/**
+ * Formats the duration between two dates as a human-readable string.
+ * Returns `''` when `to <= from`.
+ * Prefers `Intl.DurationFormat` when available; otherwise falls back to manual plural formatting.
+ *
+ * @param from - Start of the range.
+ * @param to - End of the range.
+ * @param locale - Optional BCP 47 locale tag.
+ */
+export function formatDuration(from: Date, to: Date, locale?: string): string {
+  const ms = to.getTime() - from.getTime();
+  if (ms <= 0) {
+    return '';
+  }
+
+  const totalMinutes = Math.floor(ms / MS_PER_MINUTE);
+  const days = Math.floor(ms / MS_PER_DAY);
+  const hours = Math.floor((ms % MS_PER_DAY) / MS_PER_HOUR);
+  const minutes = totalMinutes % 60;
+
+  if (typeof (Intl as { DurationFormat?: unknown }).DurationFormat === 'function') {
+    type DurationFormatType = new (locale: string | undefined, opts: { style: string }) => { format: (val: Record<string, number>) => string };
+    const DurationFormatCtor = (Intl as unknown as { DurationFormat: DurationFormatType }).DurationFormat;
+    const fmt = new DurationFormatCtor(locale, { style: 'long' });
+    const value: Record<string, number> = {};
+    if (days > 0) {
+      value['days'] = days;
+    }
+    if (hours > 0) {
+      value['hours'] = hours;
+    }
+    if (days === 0 && minutes > 0) {
+      value['minutes'] = minutes;
+    }
+    return fmt.format(value);
+  }
+
+  const plural = (n: number, unit: string): string => `${n} ${unit}${n !== 1 ? 's' : ''}`;
+  const parts: string[] = [];
+  if (days > 0) {
+    parts.push(plural(days, 'day'));
+  }
+  if (hours > 0) {
+    parts.push(plural(hours, 'hour'));
+  }
+  if (days === 0 && minutes > 0) {
+    parts.push(plural(minutes, 'minute'));
+  }
+  return parts.join(', ');
 }
 
 /** Builds the formatted announcement string for the live region. */
