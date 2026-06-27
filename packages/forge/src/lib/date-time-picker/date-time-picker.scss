@@ -60,6 +60,33 @@
   border-top: solid #{token(outline-width)} #{token(divider-color)};
 }
 
+.body:has(.presets) {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.body-main {
+  display: flex;
+  min-width: 0;
+}
+
+.body-main[data-orientation='horizontal'] {
+  @include body-horizontal;
+}
+
+.body-main[data-orientation='vertical'] {
+  @include body-vertical;
+  gap: 0;
+}
+
+.body-main[data-orientation='vertical'] .time-section {
+  width: 100%;
+  padding-top: #{token(body-gap)};
+  margin-top: #{token(body-gap)};
+  border-top: solid #{token(outline-width)} #{token(divider-color)};
+}
+
 .calendar-section {
   width: #{token(calendar-max-width)};
   max-width: 100%;
