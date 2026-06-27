@@ -539,3 +539,64 @@ describe('DateTimeField / form association', () => {
     expect(el.value).toBeNull();
   });
 });
+
+// ─── Date-mode range ──────────────────────────────────────────────────────────
+
+describe('DateTimeField / date-mode range', () => {
+  it('should render two date inputs when date-mode is range', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    expect(el.shadowRoot!.querySelector('[part="date-input"]')).not.toBeNull();
+    expect(el.shadowRoot!.querySelector('[part="to-date-input"]')).not.toBeNull();
+  });
+
+  it('should render one date input when date-mode is single', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="single" time-mode="range"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    expect(el.shadowRoot!.querySelector('[part="date-input"]')).not.toBeNull();
+    expect(el.shadowRoot!.querySelector('[part="to-date-input"]')).toBeNull();
+  });
+
+  it('should reflect a two-date range value into both date masks when set programmatically', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range" value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2025, 5, 9, 9, 0), to: new Date(2025, 5, 12, 17, 0) };
+    await ready(el);
+    const dateInput = el.shadowRoot!.querySelector('[part="date-input"]') as HTMLInputElement;
+    const toDateInput = el.shadowRoot!.querySelector('[part="to-date-input"]') as HTMLInputElement;
+    expect(dateInput.value).toContain('06/09/2025');
+    expect(toDateInput.value).toContain('06/12/2025');
+  });
+
+  it('should produce a {from,to} with distinct dates from typed entry', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range" value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const events: IDateTimeFieldChangeEventData[] = [];
+    el.addEventListener('forge-date-time-field-change', e => events.push((e as CustomEvent<IDateTimeFieldChangeEventData>).detail));
+    el.value = { from: new Date(2025, 5, 9, 9, 0), to: new Date(2025, 5, 12, 17, 0) };
+    await ready(el);
+    const v = el.value as { from: Date; to: Date };
+    expect(v.from.getDate()).toBe(9);
+    expect(v.to.getDate()).toBe(12);
+    expect(v.from.getMonth()).toBe(5);
+    expect(v.to.getMonth()).toBe(5);
+  });
+
+  it('should keep same-day time-range working when date-mode=single, time-mode=range', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="single" time-mode="range" value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2025, 5, 12, 9, 0), to: new Date(2025, 5, 12, 17, 0) };
+    await ready(el);
+    const v = el.value as { from: Date; to: Date };
+    expect(v.from.getDate()).toBe(12);
+    expect(v.to.getDate()).toBe(12);
+    expect(v.from.getHours()).toBe(9);
+    expect(v.to.getHours()).toBe(17);
+    expect(el.shadowRoot!.querySelector('[part="to-date-input"]')).toBeNull();
+  });
+});

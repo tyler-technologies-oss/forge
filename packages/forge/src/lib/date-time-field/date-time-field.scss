@@ -14,6 +14,15 @@
   width: 27rem;
 }
 
+// Date-range mode shows two date inputs + separator (+ time segment).
+:host([date-mode='range']) {
+  width: 25rem;
+}
+
+:host([date-mode='range'][time-mode='range']) {
+  width: 38rem;
+}
+
 :host([hidden]) {
   display: none;
 }
@@ -22,8 +31,15 @@ forge-text-field {
   width: 100%;
 }
 
-[part='date-input'] {
+[part='date-input'],
+[part='to-date-input'] {
   min-width: 6.5em;
+  font: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
 }
 
 .time-segment {
