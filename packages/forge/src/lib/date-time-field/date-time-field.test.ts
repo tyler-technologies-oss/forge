@@ -651,6 +651,54 @@ describe('DateTimeField / end-after-start validation', () => {
   });
 });
 
+// ─── T-F5: Duration chip ──────────────────────────────────────────────────────
+
+describe('DateTimeField / duration chip (T-F5)', () => {
+  it('should display a duration summary on the closed field when a multi-day range is committed', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range" value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2025, 5, 12, 9, 0), to: new Date(2025, 5, 15, 17, 0) };
+    await ready(el);
+    const chip = el.shadowRoot!.querySelector('[part="duration"]');
+    expect(chip).not.toBeNull();
+    expect(chip!.textContent).toMatch(/3\s*day/);
+    expect(chip!.textContent).toMatch(/8\s*hour/);
+  });
+
+  it('should NOT display a duration chip for a single (scalar) value', async () => {
+    const screen = render(html`<forge-date-time-field value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = new Date(2025, 5, 12, 9, 0);
+    await ready(el);
+    expect(el.shadowRoot!.querySelector('[part="duration"]')).toBeNull();
+  });
+
+  it('should update the duration text when the range value changes', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range" value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2025, 5, 12, 9, 0), to: new Date(2025, 5, 15, 17, 0) };
+    await ready(el);
+    const firstText = el.shadowRoot!.querySelector('[part="duration"]')!.textContent;
+    el.value = { from: new Date(2025, 5, 12, 9, 0), to: new Date(2025, 5, 13, 9, 0) };
+    await ready(el);
+    const secondText = el.shadowRoot!.querySelector('[part="duration"]')!.textContent;
+    expect(secondText).not.toBe(firstText);
+    expect(secondText).toMatch(/1\s*day/);
+  });
+
+  it('should not display the duration chip when end is before start (invalid range)', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range" value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2025, 5, 15, 17, 0), to: new Date(2025, 5, 12, 9, 0) };
+    await ready(el);
+    expect(el.shadowRoot!.querySelector('[part="duration"]')).toBeNull();
+  });
+});
+
 // ─── T-F4: Link contract under deferred commit ────────────────────────────────
 
 describe('DateTimeField / link contract (T-F4)', () => {
