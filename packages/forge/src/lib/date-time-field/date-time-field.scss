@@ -1,26 +1,27 @@
 :host {
   display: inline-block;
-  // Single mode shows two masked segments (date + time) plus the toggle.
-  width: 17.5rem;
+  // Single mode shows a date segment + time segment plus the toggle.
+  width: 16rem;
   max-width: 100%;
 }
 
 :host([time-mode='slots']) {
-  width: 20rem;
+  width: 17rem;
 }
 
-// Range mode shows date + from-time + to-time + toggle.
+// Time-range: date hh:mm aa – hh:mm aa + toggle.
 :host([time-mode='range']) {
-  width: 27rem;
+  width: 22rem;
 }
 
-// Date-range mode shows two date inputs + separator (+ time segment).
+// Date-range: date hh:mm aa – date + toggle.
 :host([date-mode='range']) {
-  width: 25rem;
+  width: 23rem;
 }
 
+// Full date+time range: date hh:mm aa – date hh:mm aa + toggle.
 :host([date-mode='range'][time-mode='range']) {
-  width: 38rem;
+  width: 30rem;
 }
 
 :host([hidden]) {
@@ -33,24 +34,35 @@ forge-text-field {
 
 [part='date-input'],
 [part='to-date-input'] {
-  min-width: 6.5em;
+  width: 6em;
   font: inherit;
   color: inherit;
   border: none;
   outline: none;
   background: transparent;
   padding: 0;
+  vertical-align: middle;
 }
 
+// Slots mode still groups its date/time display in wrapper spans.
+.date-segment,
 .time-segment {
   display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  margin-inline-start: 0.5rem;
+  align-items: baseline;
+  gap: 0.3rem;
 }
 
+// The value flows inline as [start date time] – [end date time]; the inputs are
+// top-level slot children, so grouping is done with margins, not wrappers.
+// Stretched as a flex item in the field's input row; center the glyph so it
+// lines up with the inputs' vertically-centered text instead of sitting on top.
 .range-separator {
+  display: inline-flex;
+  align-self: center;
+  align-items: center;
   color: var(--forge-theme-text-medium, currentColor);
+  margin-inline: 0.4em;
+  vertical-align: middle;
 }
 
 [part='time-input'],
@@ -63,8 +75,11 @@ forge-text-field {
   outline: none;
   background: transparent;
   padding: 0;
-  width: 6.5em;
-  text-align: end;
+  width: 5.25em;
+  text-align: start;
+  vertical-align: middle;
+  // Small gap from the preceding date input within an endpoint.
+  margin-inline-start: 0.3em;
 }
 
 [part='slot-display'] {
@@ -74,6 +89,12 @@ forge-text-field {
 :host([readonly]) [part='slot-display'],
 :host([disabled]) [part='slot-display'] {
   cursor: default;
+}
+
+// Circular filled calendar toggle, mirroring the design's affordance.
+[part='toggle'] {
+  border-radius: 50%;
+  background-color: var(--forge-theme-surface-container-low);
 }
 
 [part='duration'] {
