@@ -309,6 +309,17 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     } else {
       this.#syncMaskDisplay();
     }
+    this.#floatLabel();
+  }
+
+  // The masked inputs always show a format guide, so the label should always
+  // float above them rather than overlap. Force it past the text-field's own
+  // value/placeholder heuristic, which can't see the slotted masked inputs.
+  #floatLabel(): void {
+    const field = this.shadowRoot?.querySelector('forge-text-field') as (HTMLElement & { floatLabel: boolean }) | null;
+    if (field) {
+      field.floatLabel = true;
+    }
   }
 
   public override render(): TemplateResult {
@@ -593,18 +604,25 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   // ─── Masks ────────────────────────────────────────────────────────────────
 
   #renderInputs(): TemplateResult {
-    switch (this.timeMode) {
-      case 'range':
-        return this.#renderRangeMasked();
-      case 'slots':
-        return this.#renderSlotsMasked();
-      default:
-        return this.#renderSingleMasked();
+    if (this.timeMode === 'slots') {
+      return this.#renderSlotsMasked();
     }
+    const range = this.#isRangeValue();
+    const dateRange = this.dateMode === 'range';
+    const timeRange = this.timeMode === 'range';
+    // Inputs must be top-level default-slot children so forge-text-field detects
+    // them (assignedElements is not deep). Grouping is done with margins in SCSS.
+    return html`
+      ${this.#renderDateInput('date-input', range ? 'Start date' : this.label || 'Date', dateRange ? this.#hasFromDate : this.#hasDate)}
+      ${this.#renderTimeInput(timeRange ? 'from-input' : 'time-input', range ? 'Start time' : 'Time', timeRange ? this.#hasFrom : this.#hasTime)}
+      ${range ? html`<span class="range-separator" aria-hidden="true">–</span>` : nothing}
+      ${range && dateRange ? this.#renderDateInput('to-date-input', 'End date', this.#hasToDate) : nothing}
+      ${range && timeRange ? this.#renderTimeInput('to-input', 'End time', this.#hasTo) : nothing}
+    `;
   }
 
   #timePlaceholder(): string {
-    return this.use24HourTime ? (this.allowSeconds ? 'hh:mm:ss' : 'hh:mm') : this.allowSeconds ? 'hh:mm:ss --' : 'hh:mm --';
+    return this.use24HourTime ? (this.allowSeconds ? 'hh:mm:ss' : 'hh:mm') : this.allowSeconds ? 'hh:mm:ss aa' : 'hh:mm aa';
   }
 
   #renderDateInput(part: 'date-input' | 'to-date-input', ariaLabel: string, hasSegment: boolean): TemplateResult {
@@ -615,7 +633,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
         type="text"
         inputmode="numeric"
         autocomplete="off"
-        placeholder="mm/dd/yyyy"
+        placeholder="MM/DD/YYYY"
         aria-label=${ariaLabel}
         aria-required=${ifDefined(dateRequired ? 'true' : undefined)}
         aria-invalid=${ifDefined(this._invalid && dateRequired && !hasSegment ? 'true' : undefined)}
@@ -629,9 +647,11 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #renderDatePart(): TemplateResult {
     if (this.dateMode === 'range') {
       return html`
-        ${this.#renderDateInput('date-input', 'Start date', this.#hasFromDate)}
-        <span class="range-separator" aria-hidden="true">–</span>
-        ${this.#renderDateInput('to-date-input', 'End date', this.#hasToDate)}
+        <span part="date-segment" class="date-segment">
+          ${this.#renderDateInput('date-input', 'Start date', this.#hasFromDate)}
+          <span class="range-separator" aria-hidden="true">–</span>
+          ${this.#renderDateInput('to-date-input', 'End date', this.#hasToDate)}
+        </span>
       `;
     }
     return this.#renderDateInput('date-input', this.label || 'Date', this.#hasDate);
@@ -655,29 +675,11 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     `;
   }
 
-  #renderSingleMasked(): TemplateResult {
-    return html`
-      ${this.#renderDatePart()}
-      <span slot="end" part="time-segment" class="time-segment"> ${this.#renderTimeInput('time-input', 'Time', this.#hasTime)} </span>
-    `;
-  }
-
-  #renderRangeMasked(): TemplateResult {
-    return html`
-      ${this.#renderDatePart()}
-      <span slot="end" part="time-segment" class="time-segment">
-        ${this.#renderTimeInput('from-input', 'Start time', this.#hasFrom)}
-        <span class="range-separator" aria-hidden="true">–</span>
-        ${this.#renderTimeInput('to-input', 'End time', this.#hasTo)}
-      </span>
-    `;
-  }
-
   #renderSlotsMasked(): TemplateResult {
     const slotTime = this.#value instanceof Date ? formatTimeInput(this.#value, this.use24HourTime, this.allowSeconds) : '';
     return html`
       ${this.#renderDatePart()}
-      <span slot="end" part="time-segment" class="time-segment">
+      <span part="time-segment" class="time-segment">
         <input
           part="slot-display"
           type="text"
