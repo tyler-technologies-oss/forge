@@ -154,7 +154,10 @@ export type DisableSlotCallback = (date: Date, slot: ITimeSlot) => boolean;
 
 export interface IDateTimePickerChangeEventData {
   value: DateTimePickerPublicValue;
+  /** The start (or only) selected calendar date. */
   date: Date | null;
+  /** The end calendar date in `date-mode="range"`; `null` otherwise. */
+  dateTo: Date | null;
   time: string | null;
   from: string | null;
   to: string | null;

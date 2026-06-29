@@ -292,3 +292,107 @@ forge-calendar {
 .live-region {
   @include live-region;
 }
+
+// ─── Small screens: bottom sheet ─────────────────────────────────────────────
+// On phones the picker renders inside forge-bottom-sheet (see render()). The card
+// then fills the sheet and reflows to a single scrollable column: a horizontal
+// preset chip rail on top, one calendar, stacked time inputs, and a pinned footer.
+:host([data-sheet]) {
+  display: block;
+  width: 100%;
+}
+
+.forge-date-time-picker[data-presentation='sheet'] {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  // The sheet provides the surface, radius, and scrim.
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: hidden;
+
+  // Body fills the space between the (optional) presets rail and the footer and
+  // scrolls; the footer is the last flex child, so it stays pinned at the bottom.
+  .body {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .body:not(:has(.presets)) {
+    overflow-y: auto;
+  }
+
+  // Presets become a horizontally scrolling chip rail above the grid.
+  .body:has(.presets) {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .presets {
+    flex: 0 0 auto;
+    flex-direction: row;
+    align-self: stretch;
+    gap: #{token(separator-gap)};
+    min-width: 0;
+    overflow-x: auto;
+    border-inline-end: none;
+    border-block-end: solid #{token(outline-width)} #{token(divider-color)};
+    margin: 0 0 #{token(body-gap)};
+    padding: 0 0 #{token(body-gap)};
+  }
+
+  [part='preset'] {
+    flex: 0 0 auto;
+    width: auto;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    border-radius: 999px;
+    background: #{token(slot-hover-background)};
+  }
+
+  // Calendar + time stack and fill the scroll body.
+  .body-main {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .calendar-section {
+    width: 100%;
+  }
+
+  forge-calendar {
+    margin-inline: auto;
+  }
+
+  .time-inputs,
+  .range-inputs {
+    width: 100%;
+  }
+
+  // Comfortable touch targets for time fields and the commit actions.
+  .time-inputs forge-text-field,
+  .range-inputs forge-text-field {
+    --forge-field-height: 44px;
+  }
+
+  .footer {
+    flex: 0 0 auto;
+  }
+
+  [part='commit-apply'],
+  [part='commit-cancel'] {
+    --forge-button-height: 44px;
+    min-height: 44px;
+  }
+}
