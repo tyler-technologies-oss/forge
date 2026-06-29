@@ -16,7 +16,15 @@ import type {
   TimeMode
 } from '../date-time-picker/date-time-picker-constants.js';
 import type { IDateTimePickerComponent } from '../date-time-picker/date-time-picker.js';
-import { coerceValue, formatDuration, isRange, parseTimeString, timeFromDate, toPublicValue } from '../date-time-picker/date-time-picker-utils.js';
+import {
+  coerceValue,
+  formatDuration,
+  isRange,
+  parseMaybeDate,
+  parseTimeString,
+  timeFromDate,
+  toPublicValue
+} from '../date-time-picker/date-time-picker-utils.js';
 import { ensureTemporal } from '../date-time-picker/temporal-loader.js';
 import { DateInputMask } from '../core/mask/date-input-mask.js';
 import { TimeInputMask } from '../core/mask/time-input-mask.js';
@@ -177,6 +185,9 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   @state() private _open = false;
   @state() private _invalid = false;
   @state() private _pickerLinked = false;
+  // On phones the value can't fit a single line; show a tappable two-line display
+  // (start over end) that opens the picker's bottom sheet. Mirrors Forge's $phone.
+  @state() private _isPhone = false;
 
   @query('[part="date-input"]') private _dateInput?: HTMLInputElement;
   @query('[part="to-date-input"]') private _toDateInput?: HTMLInputElement;
@@ -199,6 +210,12 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #masks = new Map<HTMLInputElement, { mask: DateInputMask | TimeInputMask; kind: 'date' | 'time'; opts: string }>();
   #shouldClear = false;
   #masksInitialized = false;
+  #authorNamedGroup = false;
+  #presentationKey = '';
+  #phoneMql: MediaQueryList | null = null;
+  #onPhoneChange = (e: MediaQueryListEvent | MediaQueryList): void => {
+    this._isPhone = e.matches;
+  };
 
   #isRangeValue(): boolean {
     return this.dateMode === 'range' || this.timeMode === 'range';
@@ -266,7 +283,11 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
 
   public override connectedCallback(): void {
     super.connectedCallback();
+    // Capture whether the author named the group BEFORE we sprout our own default name, so a later
+    // label change can refresh our default without clobbering an author-provided aria-label.
+    this.#authorNamedGroup = this.hasAttribute('aria-label') || this.hasAttribute('aria-labelledby');
     setDefaultAria(this, this.#internals, { role: 'group' });
+    this.#updateGroupLabel();
     this.addEventListener('invalid', this.#onInvalid);
     this.#updateFormValueAndValidity();
     if (this.valueMode === 'temporal') {
@@ -275,12 +296,19 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     if (this.#pickerIdRef) {
       this.#resolvePickerLink();
     }
+    if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+      this.#phoneMql = window.matchMedia('(max-width: 599px)');
+      this.#phoneMql.addEventListener('change', this.#onPhoneChange);
+      this.#onPhoneChange(this.#phoneMql);
+    }
   }
 
   public override disconnectedCallback(): void {
     super.disconnectedCallback();
     this.#detachPickerLink();
     this.#destroyMasks();
+    this.#phoneMql?.removeEventListener('change', this.#onPhoneChange);
+    this.#phoneMql = null;
   }
 
   #onInvalid = (): void => {
@@ -298,18 +326,55 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       if (changed.has('popoverPlacement')) {
         this.#pickerEl.placement = this.popoverPlacement;
       }
+      if (changed.has('disabled')) {
+        this.#pickerEl.disabled = this.disabled;
+        // Force-close directly: #setPickerOpen would early-return now that the field is disabled.
+        if (this.disabled && this._open) {
+          this._open = false;
+          this.open = false;
+          this.#pickerEl.open = false;
+        }
+      }
+      if (changed.has('readonly')) {
+        this.#pickerEl.readonly = this.readonly;
+      }
     }
   }
 
   public override updated(changed: PropertyValues<this>): void {
     this.#updateFormValueAndValidity();
-    if (!this.#masksInitialized || changed.has('dateMode') || changed.has('timeMode') || changed.has('use24HourTime') || changed.has('allowSeconds')) {
+    if (changed.has('label')) {
+      this.#updateGroupLabel();
+    }
+    // The mobile display renders no masked inputs, so re-sync (create/destroy)
+    // when the presentation flips (phone vs desktop, linked vs not) as well as
+    // on mode changes.
+    const presentationKey = `${this._isPhone}:${this._pickerLinked}`;
+    const presentationChanged = presentationKey !== this.#presentationKey;
+    this.#presentationKey = presentationKey;
+    if (
+      !this.#masksInitialized ||
+      presentationChanged ||
+      changed.has('dateMode') ||
+      changed.has('timeMode') ||
+      changed.has('use24HourTime') ||
+      changed.has('allowSeconds')
+    ) {
       this.#masksInitialized = true;
       this.#syncMasks();
     } else {
       this.#syncMaskDisplay();
     }
     this.#floatLabel();
+  }
+
+  // Name the role=group host from the field's label so screen-reader users hear the composite
+  // control's purpose, not just the per-input labels. Skips when the author supplied their own name.
+  #updateGroupLabel(): void {
+    if (this.#authorNamedGroup) {
+      return;
+    }
+    setDefaultAria(this, this.#internals, { ariaLabel: this.label || 'Date and time' });
   }
 
   // The masked inputs always show a format guide, so the label should always
@@ -323,6 +388,12 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   }
 
   public override render(): TemplateResult {
+    // On phones, a linked field becomes a tappable two-line value display that
+    // opens the picker's bottom sheet; masked typing stays available on desktop
+    // and on unlinked fields (which have no sheet to open).
+    if (this._isPhone && this._pickerLinked) {
+      return this.#renderMobile();
+    }
     return html`
       <forge-text-field part="field" ?required=${this.required} ?invalid=${this._invalid}>
         ${this.label ? html`<label slot="label">${this.label}</label>` : nothing} ${this.#renderInputs()}
@@ -334,6 +405,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
                 type="button"
                 aria-label="Open date and time picker"
                 aria-haspopup="dialog"
+                aria-expanded=${this._open ? 'true' : 'false'}
                 ?disabled=${this.disabled}
                 @click=${this.#togglePicker}
                 ${ref(this._toggleRef)}>
@@ -362,6 +434,56 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     `;
   }
 
+  // ─── Mobile display ──────────────────────────────────────────────────────
+
+  #renderMobile(): TemplateResult {
+    const v = this.#value;
+    const lines = this.#displayLines();
+    const showDuration = this.#isRangeValue() && isRange(v) && v.from.getTime() <= v.to.getTime();
+    const valueLabel = lines.length ? lines.join(' to ') : 'no value selected';
+    return html`
+      <button
+        type="button"
+        part="mobile-display"
+        class="mobile-display"
+        aria-haspopup="dialog"
+        aria-expanded=${this._open ? 'true' : 'false'}
+        aria-label=${`${this.label || 'Date and time'}, ${valueLabel}`}
+        ?disabled=${this.disabled}
+        @click=${() => this.#setPickerOpen(true)}>
+        <span class="md-text">
+          ${this.label ? html`<span class="md-label">${this.label}</span>` : nothing}
+          ${lines.length
+            ? html`<span class="md-value">${lines.map(line => html`<span class="md-line">${line}</span>`)}</span>`
+            : html`<span class="md-placeholder">${this.placeholder || 'Select date and time'}</span>`}
+        </span>
+        <span class="md-toggle" part="toggle" aria-hidden="true">
+          <forge-icon name="insert_invitation"></forge-icon>
+        </span>
+      </button>
+      <div class="md-support">
+        <span class="md-support-start">
+          ${this._invalid ? html`<span part="error-text">${this.#internals.validationMessage}</span>` : html`<slot name="support-text"></slot>`}
+        </span>
+        <span class="md-support-end">
+          ${showDuration
+            ? html`<span part="duration" class="duration" role="status" aria-live="polite">${formatDuration(v.from, v.to, this.locale)}</span>`
+            : nothing}
+          <slot name="support-text-end"></slot>
+        </span>
+      </div>
+    `;
+  }
+
+  #displayLines(): string[] {
+    const v = this.#value;
+    if (v == null) {
+      return [];
+    }
+    const fmt = (d: Date): string => `${formatDateInput(d)} ${formatTimeInput(d, this.use24HourTime, this.allowSeconds)}`;
+    return isRange(v) ? [fmt(v.from), fmt(v.to)] : [fmt(v)];
+  }
+
   // ─── Link resolution ─────────────────────────────────────────────────────
 
   #resolvePickerLink(): void {
@@ -388,16 +510,43 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.#pickerEl.addEventListener('forge-date-time-picker-close', this.#onPickerClose);
     this._pickerLinked = true;
     // Set anchor so the picker activates its overlay mode, and compare config only once the picker
-    // element has upgraded (otherwise its reactive properties are still undefined).
-    this.updateComplete.then(() => {
-      if (this.#pickerEl && this._toggleRef.value) {
-        this.#pickerEl.anchorElement = this._toggleRef.value;
-        this.#pickerEl.placement = this.popoverPlacement;
-        this.#pickerEl.persistent = this.persistent;
+    // element has upgraded (otherwise its reactive properties are still undefined). Anchor to the
+    // field itself (not the trailing toggle) so the popover aligns to its leading edge — and so it
+    // still anchors in the mobile display, which renders no toggle button.
+    void this.updateComplete.then(async () => {
+      if (!this.#pickerEl) {
+        return;
+      }
+      this.#pickerEl.anchorElement = this;
+      this.#pickerEl.placement = this.popoverPlacement;
+      this.#pickerEl.persistent = this.persistent;
+      this.#warnMismatch();
+      // Keep value-shaping + interactive config in sync so a range value coerces correctly on the
+      // picker (rather than collapsing to null) and a disabled field disables the picker. A forwarded
+      // time-mode change resets the picker's value asynchronously, so push the field's value only
+      // after that settles.
+      this.#syncPickerConfig();
+      await this.#pickerEl.updateComplete;
+      if (this.#pickerEl) {
         this.#pickerEl.value = this.value ?? null;
       }
-      this.#warnMismatch();
     });
+  }
+
+  #syncPickerConfig(): void {
+    const picker = this.#pickerEl;
+    if (!picker || !customElements.get(picker.localName)) {
+      return;
+    }
+    if ('dateMode' in picker) {
+      picker.dateMode = this.dateMode;
+    }
+    picker.timeMode = this.timeMode;
+    picker.valueMode = this.valueMode;
+    picker.use24HourTime = this.use24HourTime;
+    picker.allowSeconds = this.allowSeconds;
+    picker.disabled = this.disabled;
+    picker.readonly = this.readonly;
   }
 
   #detachPickerLink(): void {
@@ -406,9 +555,14 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
     this.#pickerEl.removeEventListener('forge-date-time-picker-change', this.#onPickerChange);
     this.#pickerEl.removeEventListener('forge-date-time-picker-close', this.#onPickerClose);
+    // Dismiss the overlay before unlinking so a re-pointed or removed field never strands an open,
+    // unanchored picker on the page.
+    this.#pickerEl.open = false;
     this.#pickerEl.anchorElement = null;
     this.#pickerEl = null;
     this._pickerLinked = false;
+    this._open = false;
+    this.open = false;
   }
 
   #warnMismatch(): void {
@@ -436,13 +590,18 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       return;
     }
     const detail = (event as CustomEvent<IDateTimePickerChangeEventData>).detail;
+    // A mode-change is the picker resetting its own state after the field forwarded config — not a
+    // user selection — so it must not overwrite the field's value.
+    if (detail.source === 'mode-change') {
+      return;
+    }
     this.#value = coerceValue(detail.value, this.#isRangeValue() ? 'range' : 'single', this.allowSeconds);
     if (this.#value != null) {
       this.#setSegmentPresence(true);
     } else {
       this.#hasDate = detail.date != null;
       this.#hasFromDate = this.#hasDate;
-      this.#hasToDate = this.dateMode === 'range' ? detail.to != null : this.#hasDate;
+      this.#hasToDate = this.dateMode === 'range' ? detail.dateTo != null : this.#hasDate;
       this.#hasTime = detail.time != null;
       this.#hasFrom = detail.from != null;
       this.#hasTo = detail.to != null;
@@ -555,6 +714,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   }
 
   #onTypedInput = (): void => {
+    const prevPresence = this.#presenceSignature();
     const startDateStr = this.#maskValue(this._dateInput);
     const endDateStr = this.dateMode === 'range' ? this.#maskValue(this._toDateInput) : startDateStr;
     this.#hasFromDate = parseDateInput(startDateStr) != null;
@@ -597,9 +757,17 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
         this.#pickerEl.value = this.value ?? null;
       }
       this.#emitChange();
+    }
+    // Re-render when a segment fills/empties even if the overall value is still
+    // incomplete (null), so the muted-guide class reflects the typed content.
+    if (changed || prevPresence !== this.#presenceSignature()) {
       this.requestUpdate();
     }
   };
+
+  #presenceSignature(): string {
+    return `${this.#hasDate}${this.#hasFromDate}${this.#hasToDate}${this.#hasTime}${this.#hasFrom}${this.#hasTo}`;
+  }
 
   // ─── Masks ────────────────────────────────────────────────────────────────
 
@@ -615,7 +783,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     return html`
       ${this.#renderDateInput('date-input', range ? 'Start date' : this.label || 'Date', dateRange ? this.#hasFromDate : this.#hasDate)}
       ${this.#renderTimeInput(timeRange ? 'from-input' : 'time-input', range ? 'Start time' : 'Time', timeRange ? this.#hasFrom : this.#hasTime)}
-      ${range ? html`<span class="range-separator" aria-hidden="true">–</span>` : nothing}
+      ${range ? html`<span class="range-separator" data-forge-multi-input-separator aria-hidden="true">–</span>` : nothing}
       ${range && dateRange ? this.#renderDateInput('to-date-input', 'End date', this.#hasToDate) : nothing}
       ${range && timeRange ? this.#renderTimeInput('to-input', 'End time', this.#hasTo) : nothing}
     `;
@@ -630,6 +798,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     return html`
       <input
         part=${part}
+        class=${hasSegment ? '' : 'guide-muted'}
         type="text"
         inputmode="numeric"
         autocomplete="off"
@@ -649,7 +818,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       return html`
         <span part="date-segment" class="date-segment">
           ${this.#renderDateInput('date-input', 'Start date', this.#hasFromDate)}
-          <span class="range-separator" aria-hidden="true">–</span>
+          <span class="range-separator" data-forge-multi-input-separator aria-hidden="true">–</span>
           ${this.#renderDateInput('to-date-input', 'End date', this.#hasToDate)}
         </span>
       `;
@@ -662,6 +831,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     return html`
       <input
         part=${part}
+        class=${hasSegment ? '' : 'guide-muted'}
         type="text"
         autocomplete="off"
         placeholder=${this.#timePlaceholder()}
@@ -741,7 +911,13 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       if (this.#masks.has(el)) {
         continue;
       }
-      const mask = kind === 'date' ? new DateInputMask(el, {}) : new TimeInputMask(el, { use24HourTime: this.use24HourTime, showSeconds: this.allowSeconds });
+      // DateInputMask defaults to an always-on guide (lazy:false) and keeps its
+      // auto-slash typing helper; TimeInputMask defaults to lazy, so opt it into
+      // the always-on guide too for a consistent look across both segments.
+      const mask =
+        kind === 'date'
+          ? new DateInputMask(el, {})
+          : new TimeInputMask(el, { use24HourTime: this.use24HourTime, showSeconds: this.allowSeconds, showMaskFormat: true });
       this.#masks.set(el, { mask, kind, opts: kind === 'time' ? timeOpts : '' });
     }
     this.#syncMaskDisplay();
@@ -820,7 +996,10 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     let anchor: HTMLInputElement | undefined;
     if (this.required) {
       const missingDate = this.requiredParts !== 'time' && (this.dateMode === 'range' ? !this.#hasFromDate || !this.#hasToDate : !this.#hasDate);
-      const missingTime = this.requiredParts !== 'date' && (this.#isRangeValue() ? !this.#hasFrom || !this.#hasTo : !this.#hasTime);
+      // Time presence is governed by the TIME axis only: #hasFrom/#hasTo track the from/to time
+      // inputs that exist solely in time-mode=range. In date-mode=range + single time the lone time
+      // input feeds #hasTime, so gating on #isRangeValue() here would always read as missing.
+      const missingTime = this.requiredParts !== 'date' && (this.timeMode === 'range' ? !this.#hasFrom || !this.#hasTo : !this.#hasTime);
       if (missingDate || missingTime) {
         flags.valueMissing = true;
         message = missingDate && missingTime ? 'Please select a date and time.' : missingDate ? 'Date is required.' : 'Time is required.';
@@ -828,7 +1007,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
           ? !this.#hasFromDate
             ? this._dateInput
             : this._toDateInput
-          : this.#isRangeValue()
+          : this.timeMode === 'range'
             ? !this.#hasFrom
               ? this._fromInput
               : this._toInput
@@ -885,8 +1064,9 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       return Number.isNaN(input.getTime()) ? null : input;
     }
     if (typeof input === 'string' && input) {
-      const d = new Date(input);
-      return Number.isNaN(d.getTime()) ? null : d;
+      // Parse via the shared helper so a date-only `min`/`max` string is treated as local midnight,
+      // matching the local wall-clock values it's compared against.
+      return parseMaybeDate(input);
     }
     return null;
   }

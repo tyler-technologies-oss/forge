@@ -33,6 +33,7 @@ function firePickerChange(picker: IDateTimePickerComponent, detail: Partial<IDat
   const fullDetail: IDateTimePickerChangeEventData = {
     value: null,
     date: null,
+    dateTo: null,
     time: null,
     from: null,
     to: null,
@@ -934,5 +935,134 @@ describe('DateTimeField / orthogonal modes', () => {
     const v = el.value as { from: Date; to: Date };
     expect(v.from.getDate()).toBe(9);
     expect(v.to.getDate()).toBe(12);
+  });
+});
+
+// ─── Review fixes ────────────────────────────────────────────────────────────
+
+describe('DateTimeField / review fixes', () => {
+  it('should be valid when a complete date-range + single time is typed (date-mode=range, time-mode=single, required)', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="single" required value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const dateInput = el.shadowRoot!.querySelector('[part="date-input"]') as HTMLInputElement;
+    const toDateInput = el.shadowRoot!.querySelector('[part="to-date-input"]') as HTMLInputElement;
+    const timeInput = getTimeInput(el);
+    dateInput.focus();
+    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'd', bubbles: true }));
+    await ready(el);
+    toDateInput.focus();
+    toDateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'd', bubbles: true }));
+    await ready(el);
+    timeInput.focus();
+    timeInput.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
+    await ready(el);
+    expect(el.value).not.toBeNull();
+    expect(el.validity.valueMissing).toBe(false);
+    expect(el.checkValidity()).toBe(true);
+  });
+
+  it('should report "Time is required." (not a missing date) when a linked picker reports both range dates but no time', async () => {
+    const screen = render(
+      html`<div>
+        <forge-date-time-field picker="p1" date-mode="range" time-mode="single" required value-mode="date"></forge-date-time-field>
+        <forge-date-time-picker id="p1" date-mode="range" time-mode="single"></forge-date-time-picker>
+      </div>`
+    );
+    const el = getField(screen.container);
+    const picker = getPicker(screen.container);
+    await ready(el);
+    firePickerChange(picker, {
+      date: new Date(2026, 5, 9),
+      dateTo: new Date(2026, 5, 12),
+      time: null,
+      complete: false
+    });
+    await ready(el);
+    expect(el.validity.valueMissing).toBe(true);
+    expect(el.validationMessage).toBe('Time is required.');
+  });
+
+  it('should expose aria-expanded on the toggle reflecting the picker open state', async () => {
+    const screen = render(html`
+      <div>
+        <forge-date-time-field picker="p1"></forge-date-time-field>
+        <forge-date-time-picker id="p1"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getField(screen.container);
+    await ready(el);
+    const toggle = el.shadowRoot!.querySelector('[part="toggle"]') as HTMLElement;
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    toggle.click();
+    await ready(el);
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('should forward a range value to a mode-mismatched picker instead of coercing it to null', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const screen = render(html`
+      <div>
+        <forge-date-time-field picker="p1" date-mode="range" time-mode="single" value-mode="date"></forge-date-time-field>
+        <forge-date-time-picker id="p1"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getField(screen.container);
+    const picker = getPicker(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2026, 5, 9, 9, 0), to: new Date(2026, 5, 12, 9, 0) };
+    await ready(el);
+    const pickerValue = picker.value as { from: Date; to: Date } | null;
+    expect(pickerValue).not.toBeNull();
+    expect(pickerValue!.from.getDate()).toBe(9);
+    expect(pickerValue!.to.getDate()).toBe(12);
+    warnSpy.mockRestore();
+  });
+
+  it('should close a linked picker when it is unlinked while open', async () => {
+    const screen = render(html`
+      <div>
+        <forge-date-time-field picker="p1"></forge-date-time-field>
+        <forge-date-time-picker id="p1"></forge-date-time-picker>
+        <forge-date-time-picker id="p2"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getField(screen.container);
+    const p1 = screen.container.querySelector('#p1') as IDateTimePickerComponent;
+    const p2 = screen.container.querySelector('#p2') as IDateTimePickerComponent;
+    await ready(el);
+    (el.shadowRoot!.querySelector('[part="toggle"]') as HTMLElement).click();
+    await ready(el);
+    expect(p1.open).toBe(true);
+    el.pickerElement = p2;
+    await ready(el);
+    expect(p1.open).toBe(false);
+  });
+
+  it('should disable and close the linked picker when the field becomes disabled', async () => {
+    const screen = render(html`
+      <div>
+        <forge-date-time-field picker="p1"></forge-date-time-field>
+        <forge-date-time-picker id="p1"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getField(screen.container);
+    const picker = getPicker(screen.container);
+    await ready(el);
+    (el.shadowRoot!.querySelector('[part="toggle"]') as HTMLElement).click();
+    await ready(el);
+    expect(picker.open).toBe(true);
+    el.disabled = true;
+    await ready(el);
+    expect(picker.disabled).toBe(true);
+    expect(picker.open).toBe(false);
+  });
+
+  it('should give the role=group host an accessible name from the label', async () => {
+    const screen = render(html`<forge-date-time-field label="Appointment"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    expect(el.getAttribute('role')).toBe('group');
+    expect(el.getAttribute('aria-label')).toBe('Appointment');
   });
 });
