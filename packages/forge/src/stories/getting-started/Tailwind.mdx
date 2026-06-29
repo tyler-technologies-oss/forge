@@ -17,10 +17,17 @@ npm install @tylertech/forge-tailwind
 
 ## Setup
 
-Import the Forge theme after Tailwind in your main CSS file:
+Import Tailwind and the Forge theme in your main CSS file using CSS layers for proper cascade control:
 
 ```css
-@import "tailwindcss";
+/* Step 1: Define your Tailwind layers */
+@layer theme, base, components, utilities;
+
+/* Step 2: Import the theme (variables) and utilities, skipping preflight */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* Step 3: Import the Forge Tailwind theme */
 @import "@tylertech/forge-tailwind";
 ```
 
@@ -55,7 +62,14 @@ Create a `.postcssrc.json` file in the root of your Angular project:
 Add the imports to your global stylesheet (typically `src/styles.css` or `src/styles.scss`):
 
 ```css
-@import "tailwindcss";
+/* Step 1: Define your Tailwind layers */
+@layer theme, base, components, utilities;
+
+/* Step 2: Import the theme (variables) and utilities, skipping preflight */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* Step 3: Import the Forge Tailwind theme */
 @import "@tylertech/forge-tailwind";
 ```
 
