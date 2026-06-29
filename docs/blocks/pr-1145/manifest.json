@@ -103,96 +103,6 @@
       "hasScript": false
     },
     {
-      "id": "scaffold-examples/simple-card/simple-card",
-      "name": "Simple Scaffold Card",
-      "description": "Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons",
-      "tags": [
-        "card",
-        "scaffold",
-        "layout",
-        "toolbar",
-        "header",
-        "body",
-        "footer",
-        "structure"
-      ],
-      "file": "scaffold-examples/simple-card/simple-card.html",
-      "category": "Scaffold Examples",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "screenshot": "scaffold-examples/simple-card/simple-card.webp",
-      "hasScript": false
-    },
-    {
-      "id": "scaffold-examples/sidesheet-card/sidesheet-card",
-      "name": "Sidesheet Scaffold Card",
-      "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
-      "tags": [
-        "card",
-        "scaffold",
-        "layout",
-        "toolbar",
-        "drawer",
-        "sidesheet",
-        "body-left"
-      ],
-      "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
-      "category": "Scaffold Examples",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-drawer",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "screenshot": "scaffold-examples/sidesheet-card/sidesheet-card.webp",
-      "hasScript": false
-    },
-    {
-      "id": "patterns/filter-facets/filter-facets",
-      "name": "Filter Facets",
-      "description": "Filter facets rendered inside a drawer with scaffold layout, demonstrating checkboxes for multi-select and radio buttons for single-select filtering. Uses partials for reusable facet patterns. Use as a reference for building filter sidesheets, filter panels within cards, data table filters, and other page filtering UI.",
-      "tags": [
-        "filter",
-        "facets",
-        "checkbox",
-        "radio",
-        "sidebar",
-        "sidesheet",
-        "drawer",
-        "scaffold",
-        "search",
-        "refinement",
-        "list",
-        "partials",
-        "data-table"
-      ],
-      "file": "patterns/filter-facets/filter-facets.html",
-      "category": "Patterns",
-      "componentsUsed": [
-        "forge-button",
-        "forge-checkbox",
-        "forge-divider",
-        "forge-drawer",
-        "forge-list",
-        "forge-list-item",
-        "forge-radio",
-        "forge-radio-group",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "screenshot": "patterns/filter-facets/filter-facets.webp",
-      "hasScript": false
-    },
-    {
       "id": "tables/table-with-icon-actions/table-with-icon-actions",
       "name": "Table with Icon Actions",
       "description": "Data table inside a card with a toolbar header featuring icon buttons for filtering, exporting, and additional options",
@@ -284,6 +194,96 @@
       ],
       "screenshot": "tables/paginated/paginated.webp",
       "hasScript": true
+    },
+    {
+      "id": "scaffold-examples/simple-card/simple-card",
+      "name": "Simple Scaffold Card",
+      "description": "Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons",
+      "tags": [
+        "card",
+        "scaffold",
+        "layout",
+        "toolbar",
+        "header",
+        "body",
+        "footer",
+        "structure"
+      ],
+      "file": "scaffold-examples/simple-card/simple-card.html",
+      "category": "Scaffold Examples",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
+      "screenshot": "scaffold-examples/simple-card/simple-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "scaffold-examples/sidesheet-card/sidesheet-card",
+      "name": "Sidesheet Scaffold Card",
+      "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
+      "tags": [
+        "card",
+        "scaffold",
+        "layout",
+        "toolbar",
+        "drawer",
+        "sidesheet",
+        "body-left"
+      ],
+      "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
+      "category": "Scaffold Examples",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-drawer",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
+      "screenshot": "scaffold-examples/sidesheet-card/sidesheet-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "patterns/filter-facets/filter-facets",
+      "name": "Filter Facets",
+      "description": "Filter facets rendered inside a drawer with scaffold layout, demonstrating checkboxes for multi-select and radio buttons for single-select filtering. Uses partials for reusable facet patterns. Use as a reference for building filter sidesheets, filter panels within cards, data table filters, and other page filtering UI.",
+      "tags": [
+        "filter",
+        "facets",
+        "checkbox",
+        "radio",
+        "sidebar",
+        "sidesheet",
+        "drawer",
+        "scaffold",
+        "search",
+        "refinement",
+        "list",
+        "partials",
+        "data-table"
+      ],
+      "file": "patterns/filter-facets/filter-facets.html",
+      "category": "Patterns",
+      "componentsUsed": [
+        "forge-button",
+        "forge-checkbox",
+        "forge-divider",
+        "forge-drawer",
+        "forge-list",
+        "forge-list-item",
+        "forge-radio",
+        "forge-radio-group",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
+      "screenshot": "patterns/filter-facets/filter-facets.webp",
+      "hasScript": false
     },
     {
       "id": "lists/list-management/list-management",
@@ -385,38 +385,6 @@
       "hasScript": false
     },
     {
-      "id": "forms/add-illustration/add-illustration",
-      "name": "Add Illustration Form",
-      "description": "Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files",
-      "tags": [
-        "form",
-        "card",
-        "centered",
-        "decorative-background",
-        "chip-field",
-        "file-picker",
-        "create",
-        "scaffold",
-        "toolbar"
-      ],
-      "file": "forms/add-illustration/add-illustration.html",
-      "category": "Forms",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-chip",
-        "forge-chip-field",
-        "forge-file-picker",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-text-field",
-        "forge-toolbar"
-      ],
-      "screenshot": "forms/add-illustration/add-illustration.webp",
-      "hasScript": false
-    },
-    {
       "id": "forms/add-user/add-user",
       "name": "Add User Form",
       "description": "Form card with two-column grid layout for text inputs, leading icons, support text, dropdown selects, grouped checkboxes, and action buttons",
@@ -447,6 +415,38 @@
         "forge-toolbar"
       ],
       "screenshot": "forms/add-user/add-user.webp",
+      "hasScript": false
+    },
+    {
+      "id": "forms/add-illustration/add-illustration",
+      "name": "Add Illustration Form",
+      "description": "Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files",
+      "tags": [
+        "form",
+        "card",
+        "centered",
+        "decorative-background",
+        "chip-field",
+        "file-picker",
+        "create",
+        "scaffold",
+        "toolbar"
+      ],
+      "file": "forms/add-illustration/add-illustration.html",
+      "category": "Forms",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-chip",
+        "forge-chip-field",
+        "forge-file-picker",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
+      ],
+      "screenshot": "forms/add-illustration/add-illustration.webp",
       "hasScript": false
     },
     {
@@ -566,6 +566,33 @@
       "hasScript": false
     },
     {
+      "id": "application-layout/three-panel/three-panel",
+      "name": "Three Panel Layout",
+      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
+      "tags": [
+        "layout",
+        "application",
+        "three-panel",
+        "left-drawer",
+        "right-drawer",
+        "navigation",
+        "body",
+        "panels"
+      ],
+      "file": "application-layout/three-panel/three-panel.html",
+      "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-card",
+        "forge-drawer",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "application-layout/three-panel/three-panel.webp",
+      "hasScript": false
+    },
+    {
       "id": "application-layout/table-with-filters/table-with-filters",
       "name": "Table with Filter Sidesheet",
       "description": "Full application layout with header, left navigation drawer, paginated data table in the body, and a filter sidesheet in the right drawer. Demonstrates a common pattern for data-heavy applications with filtering capabilities.",
@@ -602,33 +629,6 @@
       ],
       "screenshot": "application-layout/table-with-filters/table-with-filters.webp",
       "hasScript": true
-    },
-    {
-      "id": "application-layout/three-panel/three-panel",
-      "name": "Three Panel Layout",
-      "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
-      "tags": [
-        "layout",
-        "application",
-        "three-panel",
-        "left-drawer",
-        "right-drawer",
-        "navigation",
-        "body",
-        "panels"
-      ],
-      "file": "application-layout/three-panel/three-panel.html",
-      "category": "Application Layout",
-      "componentsUsed": [
-        "forge-app-layout",
-        "forge-card",
-        "forge-drawer",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "application-layout/three-panel/three-panel.webp",
-      "hasScript": false
     },
     {
       "id": "application-layout/mini-nav/mini-nav",
@@ -684,6 +684,40 @@
         "forge-toolbar"
       ],
       "screenshot": "application-layout/dual-scroll/dual-scroll.webp",
+      "hasScript": false
+    },
+    {
+      "id": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs",
+      "name": "Basic Application Layout with Tabs",
+      "description": "Standard application shell with a borderless page toolbar and tab bar navigation below it, featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
+      "tags": [
+        "layout",
+        "application",
+        "shell",
+        "app-bar",
+        "navigation",
+        "drawer",
+        "user-profile",
+        "footer",
+        "responsive-grid",
+        "tabs"
+      ],
+      "file": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.html",
+      "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-profile-link",
+        "forge-tab",
+        "forge-tab-bar",
+        "forge-toolbar",
+        "forge-user-profile"
+      ],
+      "screenshot": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.webp",
       "hasScript": false
     },
     {
@@ -747,5 +781,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-06-29T13:09:21.890Z"
+  "generatedAt": "2026-06-29T13:18:47.236Z"
 }
