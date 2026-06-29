@@ -137,6 +137,10 @@ export function getDateSpacerElement(date: Date): HTMLElement {
   const element = document.createElement('span');
   element.classList.add(CALENDAR_CONSTANTS.classes.DATE_SPACER);
   element.id = getDateId(date);
+  // Empty leading/trailing cells must still be valid (empty) grid cells so the owning row satisfies
+  // the ARIA grid pattern; aria-hidden keeps them silent for assistive tech.
+  element.setAttribute('role', 'gridcell');
+  element.setAttribute('aria-hidden', 'true');
   return element;
 }
 
@@ -186,6 +190,8 @@ export function getHeader(): HTMLElement {
   previousButton.setAttribute('part', CALENDAR_CONSTANTS.parts.PREVIOUS_BUTTON);
   previousButton.id = CALENDAR_CONSTANTS.ids.PREVIOUS_BUTTON;
   previousButton.type = 'button';
+  // The visual tooltip is aria-hidden, so name the button explicitly for assistive tech.
+  previousButton.setAttribute('aria-label', 'Previous');
   previousIcon.setAttribute('name', 'keyboard_arrow_left');
   previousTooltip.id = CALENDAR_CONSTANTS.ids.PREVIOUS_BUTTON_TOOLTIP;
   previousTooltip.setAttribute('aria-hidden', 'true');
@@ -200,6 +206,8 @@ export function getHeader(): HTMLElement {
   nextButton.setAttribute('part', CALENDAR_CONSTANTS.parts.NEXT_BUTTON);
   nextButton.id = CALENDAR_CONSTANTS.ids.NEXT_BUTTON;
   nextButton.type = 'button';
+  // The visual tooltip is aria-hidden, so name the button explicitly for assistive tech.
+  nextButton.setAttribute('aria-label', 'Next');
   nextIcon.setAttribute('name', 'keyboard_arrow_right');
   nextTooltip.id = CALENDAR_CONSTANTS.ids.NEXT_BUTTON_TOOLTIP;
   nextTooltip.setAttribute('aria-hidden', 'true');
