@@ -190,12 +190,46 @@ export function isRange(value: unknown): value is IDateTimePickerRange {
   return (
     !!value &&
     typeof value === 'object' &&
-    value !== null &&
     'from' in value &&
     'to' in value &&
     (value as IDateTimePickerRange).from instanceof Date &&
     (value as IDateTimePickerRange).to instanceof Date
   );
+}
+
+/** Structural equality for a picker value: both null, both equal instants, or both equal ranges. */
+export function valuesEqual(a: DateTimePickerValue, b: DateTimePickerValue): boolean {
+  if (a == null && b == null) {
+    return true;
+  }
+  if (a == null || b == null) {
+    return false;
+  }
+  if (isRange(a) && isRange(b)) {
+    return a.from.getTime() === b.from.getTime() && a.to.getTime() === b.to.getTime();
+  }
+  if (a instanceof Date && b instanceof Date) {
+    return a.getTime() === b.getTime();
+  }
+  return false;
+}
+
+/** Publishes the picker value to form submission via `ElementInternals`, using `name.from`/`name.to` for ranges. */
+export function applyFormValue(internals: ElementInternals, name: string, value: DateTimePickerValue): void {
+  if (value == null) {
+    internals.setFormValue(null);
+    return;
+  }
+  if (isRange(value)) {
+    const fd = new FormData();
+    const base = name || '';
+    fd.append(`${base}.from`, value.from.toISOString());
+    fd.append(`${base}.to`, value.to.toISOString());
+    internals.setFormValue(fd, fd);
+    return;
+  }
+  const iso = value.toISOString();
+  internals.setFormValue(iso, iso);
 }
 
 /** Strips sub-minute (or sub-second) precision so equality checks don't churn on stray ms. */
