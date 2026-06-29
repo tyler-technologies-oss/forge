@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import 'temporal-polyfill/global';
@@ -109,6 +110,35 @@ describe('DateTimePicker / utils', () => {
     expect((result as Date).getHours()).toBe(10);
     expect((result as Date).getMinutes()).toBe(30);
   });
+
+  it('should parse a date-only ISO string as local midnight, not UTC midnight', () => {
+    const result = coerceValue('2026-06-29', 'single', false) as Date;
+    expect(result).toBeInstanceOf(Date);
+    expect(result.getTime()).toBe(new Date(2026, 5, 29).getTime());
+    expect(result.getFullYear()).toBe(2026);
+    expect(result.getMonth()).toBe(5);
+    expect(result.getDate()).toBe(29);
+    expect(result.getHours()).toBe(0);
+  });
+
+  it('should parse a timezone-less datetime-local string as local wall-clock time', () => {
+    const result = coerceValue('2026-06-29T08:30', 'single', false) as Date;
+    expect(result.getTime()).toBe(new Date(2026, 5, 29, 8, 30).getTime());
+  });
+
+  it('should keep the minutes component in formatDuration when days and hours are both present', () => {
+    const result = formatDuration(new Date(2026, 5, 15, 9, 0), new Date(2026, 5, 16, 11, 30));
+    expect(result).toMatch(/1\s*day/i);
+    expect(result).toMatch(/2\s*hour/i);
+    expect(result).toMatch(/30\s*minute/i);
+  });
+
+  it('should decompose a multi-day duration into days, hours, and minutes', () => {
+    const result = formatDuration(new Date(2026, 5, 15, 9, 0), new Date(2026, 5, 18, 11, 45));
+    expect(result).toMatch(/3\s*day/i);
+    expect(result).toMatch(/2\s*hour/i);
+    expect(result).toMatch(/45\s*minute/i);
+  });
 });
 
 describe('DateTimePicker / rendering', () => {
@@ -193,7 +223,13 @@ describe('DateTimePicker / selection + events', () => {
   it('slots mode: clicking a slot fires complete=true when date is preset', async () => {
     const initial = new Date(2025, 5, 12);
     const screen = render(
-      html`<forge-date-time-picker time-mode="slots" min-time="09:00" max-time="10:00" step="15" .value=${initial as any}></forge-date-time-picker>`
+      html`<forge-date-time-picker
+        time-mode="slots"
+        value-mode="date"
+        min-time="09:00"
+        max-time="10:00"
+        step="15"
+        .value=${initial as any}></forge-date-time-picker>`
     );
     const el = getEl(screen.container);
     await ready(el);
@@ -680,7 +716,7 @@ describe('DateTimePicker / per-endpoint time clamping', () => {
     expect(el.validity.rangeUnderflow).toBe(true);
   });
 
-  it('should not raise the to-time min beyond the base minTime when to-date is after the min date', async () => {
+  it('should clamp the from-time to the min time-of-day but leave the to-time unclamped when to-date is after the min date', async () => {
     const min = new Date(2026, 5, 9, 14, 0);
     const screen = render(
       html`<forge-date-time-picker
@@ -704,8 +740,9 @@ describe('DateTimePicker / per-endpoint time clamping', () => {
     expect(timePickers.length).toBe(2);
     const fromTimePicker = timePickers[0] as HTMLElement;
     const toTimePicker = timePickers[1] as HTMLElement;
+    // The time-picker clamp derives from the `min` datetime only; `min-time` governs slot generation.
     expect(fromTimePicker.getAttribute('min')).toBe('14:00');
-    expect(toTimePicker.getAttribute('min')).toBe('06:00');
+    expect(toTimePicker.getAttribute('min')).toBeNull();
   });
 
   it('should clamp the from-time field min to min time-of-day when from-date equals the min date', async () => {
@@ -1190,5 +1227,116 @@ describe('DateTimePicker / presets sidebar (T-P6)', () => {
     expect(durationEl).not.toBeNull();
     expect(durationEl.getAttribute('role')).toBe('status');
     expect(durationEl.getAttribute('aria-live')).toBe('polite');
+  });
+});
+
+describe('DateTimePicker / review fixes', () => {
+  function dispatchCalendarSelect(el: IDateTimePickerComponent, detail: Partial<ICalendarDateSelectEventData>): void {
+    const calendar = el.shadowRoot!.querySelector('forge-calendar')!;
+    calendar.dispatchEvent(
+      new CustomEvent<Partial<ICalendarDateSelectEventData>>('forge-calendar-date-select', {
+        detail: { selected: false, type: 'date', ...detail } as ICalendarDateSelectEventData,
+        bubbles: true,
+        composed: true
+      })
+    );
+  }
+
+  it('should not announce "cleared" when a calendar date is selected before a time', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="single" value-mode="date"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    dispatchCalendarSelect(el, { date: new Date(2026, 5, 12), selected: false } as Partial<ICalendarDateSelectEventData>);
+    await ready(el);
+    const live = el.shadowRoot!.querySelector('[part="live-region"]') as HTMLElement;
+    expect(live.textContent ?? '').not.toMatch(/cleared/i);
+  });
+
+  it('should not leave the embedded time-picker clamped to the slot-generation defaults', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="single"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const timePicker = el.shadowRoot!.querySelector('forge-time-picker') as HTMLElement;
+    expect(timePicker.getAttribute('min')).toBeNull();
+    expect(timePicker.getAttribute('max')).toBeNull();
+  });
+
+  it('should collapse an asymmetric range to a single shared time when date-mode=range and time-mode=single', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="single" value-mode="date"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2026, 5, 9, 9, 0), to: new Date(2026, 5, 12, 17, 0) } as IDateTimePickerRange;
+    await ready(el);
+    const v = el.value as IDateTimePickerRange;
+    expect(v.from.getDate()).toBe(9);
+    expect(v.to.getDate()).toBe(12);
+    expect(v.from.getHours()).toBe(9);
+    expect(v.to.getHours()).toBe(9);
+  });
+
+  it('should report a date-oriented message when a reversed date range is set in date-mode=range, time-mode=single', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="single" value-mode="date"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2026, 5, 12, 9, 0), to: new Date(2026, 5, 9, 9, 0) } as IDateTimePickerRange;
+    await ready(el);
+    expect(el.validity.customError).toBe(true);
+    expect(el.validationMessage).toMatch(/date/i);
+    expect(el.validationMessage).not.toMatch(/time/i);
+  });
+
+  it('should keep disabled slots focusable and perceivable via keyboard navigation', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="slots" value-mode="date"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    el.slots = [{ value: '09:00' }, { value: '09:30', disabled: true }, { value: '10:00' }];
+    el.value = new Date(2026, 5, 12);
+    await ready(el);
+    const listbox = el.shadowRoot!.querySelector('[role="listbox"]') as HTMLElement;
+    const first = el.shadowRoot!.querySelector('[role="option"]') as HTMLButtonElement;
+    first.focus();
+    listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    await ready(el);
+    const disabledSlot = el.shadowRoot!.querySelector('[data-value="09:30"]') as HTMLButtonElement;
+    expect(el.shadowRoot!.activeElement).toBe(disabledSlot);
+    expect(disabledSlot.getAttribute('aria-disabled')).toBe('true');
+    expect(disabledSlot.hasAttribute('disabled')).toBe(false);
+  });
+
+  it('should present the mobile bottom sheet as inline-modal (not native modal) so nested time dropdowns stay interactive', async () => {
+    await page.viewport(390, 800);
+    const screen = render(html`
+      <div>
+        <button id="anchor">Open</button>
+        <forge-date-time-picker></forge-date-time-picker>
+      </div>
+    `);
+    const el = screen.container.querySelector('forge-date-time-picker') as IDateTimePickerComponent;
+    const btn = screen.container.querySelector('button')!;
+    await el.updateComplete;
+    el.anchorElement = btn;
+    el.open = true;
+    await ready(el);
+    const sheet = el.shadowRoot!.querySelector('forge-bottom-sheet');
+    expect(sheet).not.toBeNull();
+    // A native `modal` dialog would make the time-picker's dropdown popover (rendered at body level)
+    // inert; `inline-modal` keeps the scrim while leaving the dropdown interactive.
+    expect(sheet!.getAttribute('mode')).toBe('inline-modal');
+  });
+
+  it('should expose dialog semantics on the picker card when used as an anchored overlay', async () => {
+    const screen = render(html`
+      <div>
+        <button id="anchor">Open</button>
+        <forge-date-time-picker></forge-date-time-picker>
+      </div>
+    `);
+    const btn = screen.container.querySelector('button')!;
+    const el = screen.container.querySelector('forge-date-time-picker')!;
+    await el.updateComplete;
+    el.anchorElement = btn;
+    await el.updateComplete;
+    const root = el.shadowRoot!.querySelector('[part="root"]') as HTMLElement;
+    expect(root.getAttribute('role')).toBe('dialog');
+    expect(root.getAttribute('aria-label')).toBeTruthy();
   });
 });
