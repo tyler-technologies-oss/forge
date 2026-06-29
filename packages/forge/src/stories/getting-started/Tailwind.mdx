@@ -26,6 +26,62 @@ Import the Forge theme after Tailwind in your main CSS file:
 
 > **Important:** Forge CSS must be loaded in your application for the design tokens to be available. The Tailwind theme references Forge's CSS custom properties.
 
+## Angular Setup
+
+If you're using Angular, follow these additional steps to configure Tailwind CSS in your project.
+
+### 1. Install Tailwind and PostCSS
+
+Install Tailwind CSS and the PostCSS plugin:
+
+```bash
+npm install tailwindcss @tailwindcss/postcss postcss --force
+```
+
+### 2. Configure PostCSS
+
+Create a `.postcssrc.json` file in the root of your Angular project:
+
+```json
+{
+  "plugins": {
+    "@tailwindcss/postcss": {}
+  }
+}
+```
+
+### 3. Import Tailwind and Forge Theme
+
+Add the imports to your global stylesheet (typically `src/styles.css` or `src/styles.scss`):
+
+```css
+@import "tailwindcss";
+@import "@tylertech/forge-tailwind";
+```
+
+### 4. Start Your Application
+
+Run your development server:
+
+```bash
+ng serve
+```
+
+### 5. Start Using Tailwind
+
+You can now use Tailwind utilities alongside Forge components in your templates:
+
+```html
+<div class="flex gap-4 p-6">
+  <forge-card>
+    <h2 class="text-heading4">Card Title</h2>
+    <p class="text-body2">Content styled with Tailwind and Forge</p>
+  </forge-card>
+</div>
+```
+
+> For more information on using Forge with Angular, see the [Angular Framework Guide](?path=/docs/frameworks-angular--docs).
+
 ## Recommended Usage
 
 **We highly recommend using Tailwind primarily for layout purposes.** Tailwind excels at:
