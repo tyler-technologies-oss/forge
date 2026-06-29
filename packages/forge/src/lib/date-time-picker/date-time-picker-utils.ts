@@ -247,7 +247,36 @@ export function coerceValue(input: unknown, timeMode: TimeMode, allowSeconds: bo
   return null;
 }
 
-function parseMaybeDate(input: unknown): Date | null {
+const LOCAL_DATE_ONLY = /^(\d{4})-(\d{2})-(\d{2})$/;
+const LOCAL_DATE_TIME = /^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}))?(?:\.\d+)?$/;
+
+/**
+ * Parses a timezone-less ISO date/datetime string as local wall-clock time. Returns `null` when the
+ * string carries a timezone designator (`Z`/offset) or isn't an ISO date — those fall back to the
+ * platform `Date` parser. This avoids the JS quirk where date-only strings parse as UTC midnight
+ * while every other path in this component treats values as local time.
+ */
+function parseLocalIsoString(trimmed: string): Date | null {
+  const dateOnlyMatch = trimmed.match(LOCAL_DATE_ONLY);
+  if (dateOnlyMatch) {
+    return new Date(Number(dateOnlyMatch[1]), Number(dateOnlyMatch[2]) - 1, Number(dateOnlyMatch[3]));
+  }
+  const dateTime = trimmed.match(LOCAL_DATE_TIME);
+  if (dateTime) {
+    return new Date(
+      Number(dateTime[1]),
+      Number(dateTime[2]) - 1,
+      Number(dateTime[3]),
+      Number(dateTime[4]),
+      Number(dateTime[5]),
+      dateTime[6] ? Number(dateTime[6]) : 0
+    );
+  }
+  return null;
+}
+
+/** Parses a `Date`/ISO-string/number/Temporal value into a local `Date`, treating timezone-less ISO strings as local wall-clock. Returns `null` if unparseable. */
+export function parseMaybeDate(input: unknown): Date | null {
   if (input instanceof Date) {
     return Number.isNaN(input.getTime()) ? null : new Date(input);
   }
@@ -255,6 +284,10 @@ function parseMaybeDate(input: unknown): Date | null {
     const trimmed = input.trim();
     if (!trimmed) {
       return null;
+    }
+    const local = parseLocalIsoString(trimmed);
+    if (local) {
+      return Number.isNaN(local.getTime()) ? null : local;
     }
     const date = new Date(trimmed);
     return Number.isNaN(date.getTime()) ? null : date;
@@ -337,10 +370,19 @@ export function formatDuration(from: Date, to: Date, locale?: string): string {
     return '';
   }
 
-  const totalMinutes = Math.floor(ms / MS_PER_MINUTE);
-  const days = Math.floor(ms / MS_PER_DAY);
-  const hours = Math.floor((ms % MS_PER_DAY) / MS_PER_HOUR);
-  const minutes = totalMinutes % 60;
+  // Decompose as whole calendar days plus the remaining wall-clock time-of-day so DST transitions
+  // (23h/25h days) don't skew the day count or silently drop an hour. Each midnight is computed in
+  // local time, so `days` counts calendar-day boundaries rather than fixed 24h chunks.
+  const fromMidnight = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+  const toMidnight = new Date(to.getFullYear(), to.getMonth(), to.getDate());
+  let days = Math.round((toMidnight.getTime() - fromMidnight.getTime()) / MS_PER_DAY);
+  let remainder = to.getTime() - toMidnight.getTime() - (from.getTime() - fromMidnight.getTime());
+  if (remainder < 0) {
+    days -= 1;
+    remainder += MS_PER_DAY;
+  }
+  const hours = Math.floor(remainder / MS_PER_HOUR);
+  const minutes = Math.floor((remainder % MS_PER_HOUR) / MS_PER_MINUTE);
 
   if (typeof (Intl as { DurationFormat?: unknown }).DurationFormat === 'function') {
     type DurationFormatType = new (locale: string | undefined, opts: { style: string }) => { format: (val: Record<string, number>) => string };
@@ -348,13 +390,13 @@ export function formatDuration(from: Date, to: Date, locale?: string): string {
     const fmt = new DurationFormatCtor(locale, { style: 'long' });
     const value: Record<string, number> = {};
     if (days > 0) {
-      value['days'] = days;
+      value.days = days;
     }
     if (hours > 0) {
-      value['hours'] = hours;
+      value.hours = hours;
     }
-    if (minutes > 0 && !(days > 0 && hours > 0)) {
-      value['minutes'] = minutes;
+    if (minutes > 0) {
+      value.minutes = minutes;
     }
     return fmt.format(value);
   }
@@ -367,7 +409,7 @@ export function formatDuration(from: Date, to: Date, locale?: string): string {
   if (hours > 0) {
     parts.push(plural(hours, 'hour'));
   }
-  if (minutes > 0 && !(days > 0 && hours > 0)) {
+  if (minutes > 0) {
     parts.push(plural(minutes, 'minute'));
   }
   return parts.join(', ');

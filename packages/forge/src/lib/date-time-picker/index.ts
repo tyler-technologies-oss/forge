@@ -1,4 +1,5 @@
 import { defineCustomElement } from '@tylertech/forge-core';
+import { defineBottomSheetComponent } from '../bottom-sheet/index.js';
 import { defineButtonComponent } from '../button/index.js';
 import { defineCalendarComponent } from '../calendar/index.js';
 import { defineOverlayComponent } from '../overlay/index.js';
@@ -12,6 +13,7 @@ export * from './date-time-picker-utils.js';
 export * from './temporal-loader.js';
 
 export function defineDateTimePickerComponent(): void {
+  defineBottomSheetComponent();
   defineButtonComponent();
   defineCalendarComponent();
   defineOverlayComponent();
