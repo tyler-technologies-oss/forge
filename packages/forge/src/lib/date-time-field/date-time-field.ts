@@ -3,7 +3,6 @@ import { tylIconInsertInvitation } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { createRef, ref } from 'lit/directives/ref.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { IconRegistry } from '../icon/index.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
@@ -17,13 +16,15 @@ import type {
 } from '../date-time-picker/date-time-picker-constants.js';
 import type { IDateTimePickerComponent } from '../date-time-picker/date-time-picker.js';
 import {
+  applyFormValue,
   coerceValue,
   formatDuration,
   isRange,
   parseMaybeDate,
   parseTimeString,
   timeFromDate,
-  toPublicValue
+  toPublicValue,
+  valuesEqual
 } from '../date-time-picker/date-time-picker-utils.js';
 import { ensureTemporal } from '../date-time-picker/temporal-loader.js';
 import { DateInputMask } from '../core/mask/date-input-mask.js';
@@ -168,7 +169,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   }
   public set value(input: DateTimePickerPublicValue | string | undefined) {
     const next = coerceValue(input, this.#isRangeValue() ? 'range' : 'single', this.allowSeconds);
-    if (this.#valuesEqual(next, this.#value)) {
+    if (valuesEqual(next, this.#value)) {
       return;
     }
     this.#value = next;
@@ -194,8 +195,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   @query('[part="time-input"]') private _timeInput?: HTMLInputElement;
   @query('[part="from-input"]') private _fromInput?: HTMLInputElement;
   @query('[part="to-input"]') private _toInput?: HTMLInputElement;
-
-  private readonly _toggleRef = createRef<HTMLElement>();
+  @query('forge-text-field') private _textField?: HTMLElement & { floatLabel: boolean };
 
   #internals: ElementInternals;
   #value: DateTimePickerValue = null;
@@ -381,9 +381,8 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   // float above them rather than overlap. Force it past the text-field's own
   // value/placeholder heuristic, which can't see the slotted masked inputs.
   #floatLabel(): void {
-    const field = this.shadowRoot?.querySelector('forge-text-field') as (HTMLElement & { floatLabel: boolean }) | null;
-    if (field) {
-      field.floatLabel = true;
+    if (this._textField) {
+      this._textField.floatLabel = true;
     }
   }
 
@@ -407,8 +406,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
                 aria-haspopup="dialog"
                 aria-expanded=${this._open ? 'true' : 'false'}
                 ?disabled=${this.disabled}
-                @click=${this.#togglePicker}
-                ${ref(this._toggleRef)}>
+                @click=${this.#togglePicker}>
                 <forge-icon name="insert_invitation"></forge-icon>
               </forge-icon-button>
             `
@@ -702,10 +700,8 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     const now = new Date();
     const timeStr = formatTimeInput(now, this.use24HourTime, this.allowSeconds);
     if (this.timeMode === 'range') {
-      if (target === this._fromInput) {
-        this.#setMaskValue(this._fromInput, timeStr);
-      } else if (target === this._toInput) {
-        this.#setMaskValue(this._toInput, timeStr);
+      if (target === this._fromInput || target === this._toInput) {
+        this.#setMaskValue(target, timeStr);
       }
     } else {
       this.#setMaskValue(this._timeInput, timeStr);
@@ -714,7 +710,12 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   }
 
   #onTypedInput = (): void => {
-    const prevPresence = this.#presenceSignature();
+    const prevDate = this.#hasDate;
+    const prevFromDate = this.#hasFromDate;
+    const prevToDate = this.#hasToDate;
+    const prevTime = this.#hasTime;
+    const prevFrom = this.#hasFrom;
+    const prevTo = this.#hasTo;
     const startDateStr = this.#maskValue(this._dateInput);
     const endDateStr = this.dateMode === 'range' ? this.#maskValue(this._toDateInput) : startDateStr;
     this.#hasFromDate = parseDateInput(startDateStr) != null;
@@ -748,7 +749,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       next = parseTypedValue(startDateStr, timeStr, this.allowSeconds);
     }
 
-    const changed = !this.#valuesEqual(next, this.#value);
+    const changed = !valuesEqual(next, this.#value);
     this.#value = next;
     this._invalid = false;
     this.#updateFormValueAndValidity();
@@ -760,14 +761,17 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
     // Re-render when a segment fills/empties even if the overall value is still
     // incomplete (null), so the muted-guide class reflects the typed content.
-    if (changed || prevPresence !== this.#presenceSignature()) {
+    const presenceChanged =
+      this.#hasDate !== prevDate ||
+      this.#hasFromDate !== prevFromDate ||
+      this.#hasToDate !== prevToDate ||
+      this.#hasTime !== prevTime ||
+      this.#hasFrom !== prevFrom ||
+      this.#hasTo !== prevTo;
+    if (changed || presenceChanged) {
       this.requestUpdate();
     }
   };
-
-  #presenceSignature(): string {
-    return `${this.#hasDate}${this.#hasFromDate}${this.#hasToDate}${this.#hasTime}${this.#hasFrom}${this.#hasTo}`;
-  }
 
   // ─── Masks ────────────────────────────────────────────────────────────────
 
@@ -968,26 +972,8 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   // ─── Form value + validity ────────────────────────────────────────────────
 
   #updateFormValueAndValidity(): void {
-    this.#updateFormValue();
+    applyFormValue(this.#internals, this.name, this.#value);
     this.#updateValidity();
-  }
-
-  #updateFormValue(): void {
-    const v = this.#value;
-    if (v == null) {
-      this.#internals.setFormValue(null);
-      return;
-    }
-    if (isRange(v)) {
-      const fd = new FormData();
-      const base = this.name || '';
-      fd.append(`${base}.from`, v.from.toISOString());
-      fd.append(`${base}.to`, v.to.toISOString());
-      this.#internals.setFormValue(fd, fd);
-      return;
-    }
-    const iso = v.toISOString();
-    this.#internals.setFormValue(iso, iso);
   }
 
   #updateValidity(): void {
@@ -1092,21 +1078,5 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       this.#hasFromDate = false;
       this.#hasToDate = false;
     }
-  }
-
-  #valuesEqual(a: DateTimePickerValue, b: DateTimePickerValue): boolean {
-    if (a == null && b == null) {
-      return true;
-    }
-    if (a == null || b == null) {
-      return false;
-    }
-    if (isRange(a) && isRange(b)) {
-      return a.from.getTime() === b.from.getTime() && a.to.getTime() === b.to.getTime();
-    }
-    if (a instanceof Date && b instanceof Date) {
-      return a.getTime() === b.getTime();
-    }
-    return false;
   }
 }
