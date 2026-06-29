@@ -7,6 +7,7 @@ import { createRef, ref } from 'lit/directives/ref.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import type { IOverlayComponent } from '../overlay/overlay.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
+import { isSameDate } from '../core/utils/date-utils.js';
 import type { ICalendarDateSelectEventData } from '../calendar/calendar-constants.js';
 import type { ICalendarComponent } from '../calendar/calendar.js';
 import { DateRange } from '../calendar/core/date-range.js';
@@ -29,6 +30,7 @@ import {
   type TimeMode
 } from './date-time-picker-constants.js';
 import {
+  applyFormValue,
   buildAnnouncement,
   buildSlotsFromRange,
   coerceValue,
@@ -41,11 +43,19 @@ import {
   parseMaybeDate,
   parseTimeString,
   timeFromDate,
-  toPublicValue
+  toPublicValue,
+  valuesEqual
 } from './date-time-picker-utils.js';
 import { ensureTemporal } from './temporal-loader.js';
 
 import styles from './date-time-picker.scss';
+
+const PRESET_DEFS: ReadonlyArray<{ id: DateRangePresetId; label: string }> = [
+  { id: 'today', label: 'Today' },
+  { id: 'this-week', label: 'This week' },
+  { id: 'next-7-days', label: 'Next 7 days' },
+  { id: 'this-month', label: 'This month' }
+];
 
 export interface IDateTimePickerComponent extends BaseLitElement {
   timeMode: TimeMode;
@@ -229,7 +239,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
   public set value(input: DateTimePickerPublicValue | string | undefined) {
     const next = this.#normalizeRangeTime(coerceValue(input, this.#isRangeValue() ? 'range' : 'single', this.allowSeconds));
-    if (this.#valuesEqual(next, this.#value)) {
+    if (valuesEqual(next, this.#value)) {
       return;
     }
     this.#value = next;
@@ -669,7 +679,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       <div part="body" class="body" data-orientation=${orientation}>
         ${showPresets
           ? html`
-              ${this.#renderPresetsSection()}
+              ${this.#renderPresets()}
               <div class="body-main" data-orientation=${orientation}>${calendarAndTime}</div>
             `
           : calendarAndTime}
@@ -677,26 +687,17 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     `;
   }
 
-  #renderPresetsSection(): TemplateResult | typeof nothing {
-    if (!this.presets || this.dateMode !== 'range' || this.timeMode === 'slots') {
-      return nothing;
-    }
-    return this.#renderPresets();
-  }
-
   #renderPresets(): TemplateResult {
-    const presetDefs: Array<{ id: DateRangePresetId; label: string }> = [
-      { id: 'today', label: 'Today' },
-      { id: 'this-week', label: 'This week' },
-      { id: 'next-7-days', label: 'Next 7 days' },
-      { id: 'this-month', label: 'This month' }
-    ];
     return html`
       <div part="presets" class="presets" role="group" aria-label="Quick date ranges">
-        ${presetDefs.map(p => html`<button type="button" part="preset" data-preset-id=${p.id} @click=${() => this.#onPresetSelect(p.id)}>${p.label}</button>`)}
+        ${PRESET_DEFS.map(p => html`<button type="button" part="preset" data-preset-id=${p.id} @click=${this.#onPresetClick}>${p.label}</button>`)}
       </div>
     `;
   }
+
+  #onPresetClick = (event: Event): void => {
+    this.#onPresetSelect((event.currentTarget as HTMLElement).dataset.presetId as DateRangePresetId);
+  };
 
   #onPresetSelect(id: DateRangePresetId): void {
     const { from, to } = computePreset(id, new Date(), this.firstDayOfWeek ?? 0);
@@ -926,10 +927,6 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     return !!dt && (this.#beforeMin(dt, this.min) || this.#afterMax(dt, this.max));
   }
 
-  #sameDay(a: Date, b: Date): boolean {
-    return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-  }
-
   /**
    * Clamp for the embedded time-picker's lower bound: the `min` datetime's time-of-day when the
    * endpoint falls on `min`'s calendar day, otherwise unclamped. `minTime`/`maxTime` govern slot
@@ -937,7 +934,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
    */
   #effectiveMinTime(endpointDate: Date | null): string | undefined {
     const min = this.#asDate(this.min);
-    if (!min || !endpointDate || !this.#sameDay(min, endpointDate)) {
+    if (!min || !endpointDate || !isSameDate(min, endpointDate)) {
       return undefined;
     }
     return timeFromDate(min, this.allowSeconds) ?? undefined;
@@ -946,7 +943,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   /** Clamp for the embedded time-picker's upper bound: the `max` datetime's time-of-day on `max`'s calendar day, otherwise unclamped. */
   #effectiveMaxTime(endpointDate: Date | null): string | undefined {
     const max = this.#asDate(this.max);
-    if (!max || !endpointDate || !this.#sameDay(max, endpointDate)) {
+    if (!max || !endpointDate || !isSameDate(max, endpointDate)) {
       return undefined;
     }
     return timeFromDate(max, this.allowSeconds) ?? undefined;
@@ -1213,10 +1210,6 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     return this.#value instanceof Date;
   }
 
-  #mergedSingleDate(): Date | null {
-    return this.#value instanceof Date ? this.#value : null;
-  }
-
   #beforeMin(d: Date, bound: Date | string | null): boolean {
     const min = this.#asDate(bound);
     return !!min && d.getTime() < min.getTime();
@@ -1240,26 +1233,8 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #updateFormValueAndValidity(): void {
-    this.#updateFormValue();
+    applyFormValue(this.#internals, this.name, this.#value);
     this.#updateValidity();
-  }
-
-  #updateFormValue(): void {
-    const v = this.#value;
-    if (v == null) {
-      this.#internals.setFormValue(null);
-      return;
-    }
-    if (isRange(v)) {
-      const fd = new FormData();
-      const baseName = this.name || '';
-      fd.append(`${baseName}.from`, v.from.toISOString());
-      fd.append(`${baseName}.to`, v.to.toISOString());
-      this.#internals.setFormValue(fd, fd);
-      return;
-    }
-    const iso = v.toISOString();
-    this.#internals.setFormValue(iso, iso);
   }
 
   #updateValidity(): void {
@@ -1274,7 +1249,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       flags.valueMissing = true;
       message = 'Please select a date and time.';
     }
-    const single = this.#mergedSingleDate();
+    const single = this.#value instanceof Date ? this.#value : null;
     if (single && this.#beforeMin(single, this.min)) {
       flags.rangeUnderflow = true;
       message ||= 'Selected time is before the earliest allowed.';
@@ -1383,21 +1358,5 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     }
     this.#announcedValue = true;
     this._liveRegion.textContent = buildAnnouncement(this.#value, this.locale, this.use24HourTime, this.allowSeconds);
-  }
-
-  #valuesEqual(a: DateTimePickerValue, b: DateTimePickerValue): boolean {
-    if (a == null && b == null) {
-      return true;
-    }
-    if (a == null || b == null) {
-      return false;
-    }
-    if (isRange(a) && isRange(b)) {
-      return a.from.getTime() === b.from.getTime() && a.to.getTime() === b.to.getTime();
-    }
-    if (a instanceof Date && b instanceof Date) {
-      return a.getTime() === b.getTime();
-    }
-    return false;
   }
 }
