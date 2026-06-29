@@ -10,12 +10,26 @@ interface IEmployee {
 
 const table = document.getElementById('employee-table') as ITableComponent;
 
+const statusThemeMap: Record<string, string> = {
+  Active: 'success',
+  'On Leave': 'warning'
+};
+
 const columnConfigurations: IColumnConfiguration[] = [
   { property: 'name', header: 'Name' },
   { property: 'department', header: 'Department' },
   { property: 'title', header: 'Title' },
   { property: 'email', header: 'Email' },
-  { property: 'status', header: 'Status' }
+  {
+    property: 'status',
+    header: 'Status',
+    template: (_rowIndex, _div, rowData: IEmployee) => {
+      const badge = document.createElement('forge-badge');
+      badge.textContent = rowData.status;
+      badge.setAttribute('theme', statusThemeMap[rowData.status] ?? 'default');
+      return badge;
+    }
+  }
 ];
 
 const data: IEmployee[] = [

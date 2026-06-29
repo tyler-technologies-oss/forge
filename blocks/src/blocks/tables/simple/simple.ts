@@ -11,13 +11,28 @@ interface IInventoryItem {
 
 const table = document.getElementById('blacksmith-table') as ITableComponent;
 
+const statusThemeMap: Record<string, string> = {
+  'In Stock': 'success',
+  'Low Stock': 'warning',
+  'Special Order': 'info'
+};
+
 const columnConfigurations: IColumnConfiguration[] = [
   { property: 'item', header: 'Item' },
   { property: 'material', header: 'Material' },
   { property: 'quantity', header: 'Quantity' },
   { property: 'weight', header: 'Weight (lbs)' },
   { property: 'price', header: 'Price (gold)' },
-  { property: 'status', header: 'Status' }
+  {
+    property: 'status',
+    header: 'Status',
+    template: (_rowIndex, _div, rowData: IInventoryItem) => {
+      const badge = document.createElement('forge-badge');
+      badge.textContent = rowData.status;
+      badge.setAttribute('theme', statusThemeMap[rowData.status] ?? 'default');
+      return badge;
+    }
+  }
 ];
 
 const data: IInventoryItem[] = [

@@ -10,12 +10,27 @@ interface ITask {
 
 const table = document.getElementById('tasks-table') as ITableComponent;
 
+const statusThemeMap: Record<string, string> = {
+  'In Progress': 'warning',
+  'Not Started': 'default',
+  'Completed': 'success'
+};
+
 const columnConfigurations: IColumnConfiguration[] = [
   { property: 'task', header: 'Task' },
   { property: 'assignee', header: 'Assignee' },
   { property: 'priority', header: 'Priority' },
   { property: 'dueDate', header: 'Due Date' },
-  { property: 'status', header: 'Status' }
+  {
+    property: 'status',
+    header: 'Status',
+    template: (_rowIndex, _div, rowData: ITask) => {
+      const badge = document.createElement('forge-badge');
+      badge.textContent = rowData.status;
+      badge.setAttribute('theme', statusThemeMap[rowData.status] ?? 'default');
+      return badge;
+    }
+  }
 ];
 
 const data: ITask[] = [

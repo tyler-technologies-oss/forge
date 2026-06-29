@@ -27,12 +27,27 @@ const allData: IOrderData[] = [
   { orderId: 'ORD-012', customer: 'Bedivere', item: 'Gauntlets', quantity: 2, status: 'In Progress', total: 80 }
 ];
 
+const statusThemeMap: Record<string, string> = {
+  Completed: 'success',
+  'In Progress': 'warning',
+  Pending: 'default'
+};
+
 const columnConfigurations: IColumnConfiguration[] = [
   { property: 'orderId', header: 'Order ID' },
   { property: 'customer', header: 'Customer' },
   { property: 'item', header: 'Item' },
   { property: 'quantity', header: 'Qty' },
-  { property: 'status', header: 'Status' },
+  {
+    property: 'status',
+    header: 'Status',
+    template: (_rowIndex, _div, rowData: IOrderData) => {
+      const badge = document.createElement('forge-badge');
+      badge.textContent = rowData.status;
+      badge.setAttribute('theme', statusThemeMap[rowData.status] ?? 'default');
+      return badge;
+    }
+  },
   { property: 'total', header: 'Total (gold)' }
 ];
 
