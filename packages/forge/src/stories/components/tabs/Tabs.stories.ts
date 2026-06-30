@@ -73,6 +73,7 @@ const meta = {
     endIcon: false,
     disabled: false,
     activeTab: 0,
+    activeTabName: '',
     vertical: false,
     clustered: false,
     stacked: false,
@@ -113,5 +114,49 @@ export const WithIcons: Story = {
   ...standaloneStoryParams,
   args: {
     startIcon: true
+  }
+};
+
+export const NamedTabs: Story = {
+  ...standaloneStoryParams,
+  args: {
+    activeTabName: 'tab-2'
+  },
+  render: args => {
+    const styles = { ...getCssVariableArgs(args) };
+
+    if (args.vertical) {
+      styles['max-width'] = '200px';
+    } else if (args.scrollButtons) {
+      styles['max-width'] = '500px';
+    }
+
+    const style = Object.entries(styles).length ? styleMap(styles) : nothing;
+
+    const tabs = Array.from({ length: args.scrollButtons ? 20 : 3 }).map(
+      (_, i) =>
+        html`<forge-tab name="tab-${i + 1}">
+          ${args.startIcon ? html`<forge-icon slot="start" name="favorite"></forge-icon>` : nothing} Tab ${i + 1}
+          ${args.endIcon ? html`<forge-icon slot="end" name="forge_logo"></forge-icon>` : nothing}
+        </forge-tab>`
+    );
+
+    return html`
+      <forge-tab-bar
+        data-aria-label="Demo tabs"
+        active-tab-name=${args.activeTabName}
+        .disabled=${args.disabled}
+        .vertical=${args.vertical}
+        .clustered=${args.clustered}
+        .stacked=${args.stacked}
+        .inverted=${args.inverted}
+        .autoActivate=${args.autoActivate}
+        .scrollButtons=${args.scrollButtons}
+        style=${style}
+        @forge-tab-bar-change=${changeAction}
+        @forge-tab-activate=${activateAction}>
+        ${tabs}
+      </forge-tab-bar>
+    `;
   }
 };

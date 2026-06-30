@@ -1,6 +1,7 @@
 import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as TabsStories from './Tabs.stories';
+import { Tabs } from 'storybook/internal/components';
 
 <Meta of={TabsStories} />
 
@@ -52,6 +53,31 @@ user clicks on the scroll buttons.
 When disabling tabs you should either choose to disable all tabs together through the `<forge-tab-bar>` element, or disable individual tabs for
 each `<forge-tab>` element. Do not mix the two approaches. This is recommended because if you attempt to use both at the same time, the two
 disabled states can conflict with each other leading to unexpected behavior.
+
+## Named Tabs
+
+The active tab can be set or retrieved by its name through the `activeTabName` property on the `<forge-tab-bar>` element.
+
+```html
+<!-- Tab two will be active -->
+<forge-tab-bar active-tab-name="two">
+  <forge-tab name="one">Tab one</forge-tab>
+  <forge-tab name="two">Tab two</forge-tab>
+  <forge-tab name="three">Tab three</forge-tab>
+  <forge-tab name="four">Tab four</forge-tab>
+</forge-tab-bar>
+```
+
+To get the name of the active tab when the active tab changes, listen for the `forge-tab-bar-change` event on the `<forge-tab-bar>` element and access
+the `activeTabName` property on the event's target.
+
+```ts
+const tabBar = document.querySelector('forge-tab-bar');
+tabBar?.addEventListener('forge-tab-bar-change', (event) => {
+  const activeTabName = (event.target as HTMLForgeTabBarElement).activeTabName;
+  console.log('Active tab name:', activeTabName);
+});
+```
 
 ## API
 
