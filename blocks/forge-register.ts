@@ -45,7 +45,13 @@ import {
   tylIconDownload,
   tylIconCode,
   tylIconSearch,
-  tylIconClose
+  tylIconClose,
+  tylIconNoteAdd,
+  tylIconCableData,
+  tylIconBook,
+  tylIconChartArc,
+  tylIconRateReview,
+  tylIconRobot
 } from '@tylertech/tyler-icons';
 
 // Register all Forge components
@@ -93,5 +99,11 @@ IconRegistry.define([
   tylIconDownload,
   tylIconCode,
   tylIconSearch,
-  tylIconClose
+  tylIconClose,
+  tylIconNoteAdd,
+  tylIconCableData,
+  tylIconBook,
+  tylIconChartArc,
+  tylIconRateReview,
+  tylIconRobot
 ]);
