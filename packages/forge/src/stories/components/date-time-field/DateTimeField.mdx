@@ -1,0 +1,62 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as DateTimeFieldStories from './DateTimeField.stories';
+
+<Meta of={DateTimeFieldStories} />
+
+<Title />
+
+The date time field is a form-associated masked input for entering a date and time. It owns the value, validation, and form
+participation, and optionally links to a [`forge-date-time-picker`](?path=/docs/components-date-time-picker--docs) for calendar-driven
+selection. Link the two with the `picker` attribute (an IDREF to a picker in the same root) or the `pickerElement` property.
+
+While a segment input is focused, quick keys speed up entry: `n` inserts _now_, `d` inserts _today_, and `t` inserts the _current
+time_.
+
+<Canvas of={DateTimeFieldStories.Demo} />
+
+## Date Range
+
+Set `date-mode="range"` to capture a start and end date in two masked inputs. The field validates that the end date is on or after the
+start date and reports an error otherwise.
+
+<Canvas of={DateTimeFieldStories.DateRange} />
+
+## Time Range
+
+Set `time-mode="range"` to capture a start and end time alongside the date, with an inline duration summary. The linked picker should
+use the matching `time-mode="range"`.
+
+<Canvas of={DateTimeFieldStories.TimeRange} />
+
+## Standalone (no picker)
+
+When no `picker` is linked, the field renders without a calendar toggle or popup — users type the date and time directly into the
+masked inputs. This is useful when you want masked, validated text entry without the overlay.
+
+<Canvas of={DateTimeFieldStories.Standalone} />
+
+## Value Mode
+
+The public `value` (and the change event's `value`) is shaped by `value-mode`:
+
+- `temporal` (default) — a `Temporal.PlainDateTime` (or a `{ from, to }` pair for ranges)
+- `iso` — a local ISO `datetime-local` string
+- `date` — a native `Date`
+
+## Required Parts
+
+Use `required-parts` together with `required` to control which segments must be filled for the field to be valid: `both` (default),
+`date` only, or `time` only.
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Provide a `label` (or slot a `label`) so the field is named for assistive technology.
+- The field is form-associated: set a `name` so the value is submitted with the form and validation messages are surfaced via
+  `reportValidity()`.
+- Validation errors are rendered in the support-text region and associated with the inputs.
+- The calendar toggle button (rendered only when a picker is linked) exposes its expanded/collapsed state.
