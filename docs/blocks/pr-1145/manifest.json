@@ -1,25 +1,6 @@
 {
   "blocks": [
     {
-      "id": "toolbars/toolbar-actions/toolbar-actions",
-      "name": "Toolbar with Button Actions",
-      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
-      "tags": [
-        "toolbar",
-        "buttons",
-        "actions",
-        "form"
-      ],
-      "file": "toolbars/toolbar-actions/toolbar-actions.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
-      "hasScript": false
-    },
-    {
       "id": "toolbars/table-header/table-header",
       "name": "Table Header",
       "description": "Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot",
@@ -37,6 +18,25 @@
         "forge-toolbar"
       ],
       "screenshot": "toolbars/table-header/table-header.webp",
+      "hasScript": false
+    },
+    {
+      "id": "toolbars/toolbar-actions/toolbar-actions",
+      "name": "Toolbar with Button Actions",
+      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
+      "tags": [
+        "toolbar",
+        "buttons",
+        "actions",
+        "form"
+      ],
+      "file": "toolbars/toolbar-actions/toolbar-actions.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
       "hasScript": false
     },
     {
@@ -127,6 +127,28 @@
       "hasScript": true
     },
     {
+      "id": "tables/simple/simple",
+      "name": "Simple Table",
+      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
+      "tags": [
+        "table",
+        "data",
+        "card",
+        "toolbar"
+      ],
+      "file": "tables/simple/simple.html",
+      "category": "Tables",
+      "componentsUsed": [
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-table",
+        "forge-toolbar"
+      ],
+      "screenshot": "tables/simple/simple.webp",
+      "hasScript": true
+    },
+    {
       "id": "tables/table-with-actions/table-with-actions",
       "name": "Table with Actions",
       "description": "Data table inside a card with a toolbar header featuring action buttons for cancel, save draft, and submit operations",
@@ -147,28 +169,6 @@
         "forge-toolbar"
       ],
       "screenshot": "tables/table-with-actions/table-with-actions.webp",
-      "hasScript": true
-    },
-    {
-      "id": "tables/simple/simple",
-      "name": "Simple Table",
-      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
-      "tags": [
-        "table",
-        "data",
-        "card",
-        "toolbar"
-      ],
-      "file": "tables/simple/simple.html",
-      "category": "Tables",
-      "componentsUsed": [
-        "forge-card",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-table",
-        "forge-toolbar"
-      ],
-      "screenshot": "tables/simple/simple.webp",
       "hasScript": true
     },
     {
@@ -196,33 +196,6 @@
       "hasScript": true
     },
     {
-      "id": "scaffold-examples/simple-card/simple-card",
-      "name": "Simple Scaffold Card",
-      "description": "Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons",
-      "tags": [
-        "card",
-        "scaffold",
-        "layout",
-        "toolbar",
-        "header",
-        "body",
-        "footer",
-        "structure"
-      ],
-      "file": "scaffold-examples/simple-card/simple-card.html",
-      "category": "Scaffold Examples",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "screenshot": "scaffold-examples/simple-card/simple-card.webp",
-      "hasScript": false
-    },
-    {
       "id": "scaffold-examples/sidesheet-card/sidesheet-card",
       "name": "Sidesheet Scaffold Card",
       "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
@@ -247,6 +220,33 @@
         "forge-toolbar"
       ],
       "screenshot": "scaffold-examples/sidesheet-card/sidesheet-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "scaffold-examples/simple-card/simple-card",
+      "name": "Simple Scaffold Card",
+      "description": "Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons",
+      "tags": [
+        "card",
+        "scaffold",
+        "layout",
+        "toolbar",
+        "header",
+        "body",
+        "footer",
+        "structure"
+      ],
+      "file": "scaffold-examples/simple-card/simple-card.html",
+      "category": "Scaffold Examples",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
+      "screenshot": "scaffold-examples/simple-card/simple-card.webp",
       "hasScript": false
     },
     {
@@ -380,35 +380,6 @@
       "hasScript": false
     },
     {
-      "id": "forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
-      "tags": [
-        "authentication",
-        "login",
-        "form",
-        "card",
-        "centered",
-        "scaffold",
-        "toolbar"
-      ],
-      "file": "forms/login/login.html",
-      "category": "Forms",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-checkbox",
-        "forge-divider",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-text-field",
-        "forge-toolbar"
-      ],
-      "screenshot": "forms/login/login.webp",
-      "hasScript": false
-    },
-    {
       "id": "forms/add-user/add-user",
       "name": "Add User Form",
       "description": "Form card with two-column grid layout for text inputs, leading icons, support text, dropdown selects, grouped checkboxes, and action buttons",
@@ -439,6 +410,35 @@
         "forge-toolbar"
       ],
       "screenshot": "forms/add-user/add-user.webp",
+      "hasScript": false
+    },
+    {
+      "id": "forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "tags": [
+        "authentication",
+        "login",
+        "form",
+        "card",
+        "centered",
+        "scaffold",
+        "toolbar"
+      ],
+      "file": "forms/login/login.html",
+      "category": "Forms",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-checkbox",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
+      ],
+      "screenshot": "forms/login/login.webp",
       "hasScript": false
     },
     {
@@ -508,13 +508,16 @@
       "file": "cards/tabbed-card/tabbed-card.html",
       "category": "Cards",
       "componentsUsed": [
+        "forge-button",
         "forge-card",
         "forge-chip",
         "forge-icon",
         "forge-icon-button",
         "forge-label-value",
+        "forge-scaffold",
         "forge-tab",
         "forge-tab-bar",
+        "forge-toolbar",
         "forge-view",
         "forge-view-switcher"
       ],
@@ -781,5 +784,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-06-29T18:27:04.786Z"
+  "generatedAt": "2026-06-30T13:01:10.480Z"
 }
