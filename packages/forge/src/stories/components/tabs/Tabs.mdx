@@ -68,8 +68,9 @@ The active tab can be set or retrieved by its name through the `activeTabName` p
 </forge-tab-bar>
 ```
 
-To get the name of the active tab when the active tab changes, listen for the `forge-tab-bar-change` event on the `<forge-tab-bar>` element and access
-the `activeTabName` property on the event's target.
+To get the name of the active tab when the active tab changes, listen for the `forge-tab-bar-change`
+event on the `<forge-tab-bar>` element and access the `activeTabName` property on the event's
+target.
 
 ```ts
 const tabBar = document.querySelector('forge-tab-bar');
@@ -78,6 +79,16 @@ tabBar?.addEventListener('forge-tab-bar-change', (event) => {
   console.log('Active tab name:', activeTabName);
 });
 ```
+
+## Tab Panels
+
+The `<forge-tab-panel>` element can be used to associate content with a specific tab. The `for`
+attribute on the `<forge-tab-panel>` element should match the `id` of the corresponding
+`<forge-tab>` element. When a tab is selected, the corresponding tab panel will be displayed and all
+other tab panels will be hidden. The `<forge-tab-panel>` element will also automatically manage ARIA
+relationships and focus to ensure that the tab pattern is fully accessible.
+
+<Canvas of={TabsStories.WithPanels} />
 
 ## API
 
@@ -89,7 +100,8 @@ tabBar?.addEventListener('forge-tab-bar-change', (event) => {
 - Ensure each control can be updated or activated by the keyboard.
 - Ensure that only the selected tab content is reachable by keyboard.
 
-It's expected that you will need to provide the `tablist` and `tabpanel` roles to your elements to indicate to assistive technologies
-which elements are responsible for the tabs and tab content respectively. Each tab should contain an `aria-controls` property identifying
-its corresponding tab content. In addition, each tab content element should be labelled by a tab. These elements need to be wrapped in an
-element containing a `tablist` role:
+It's expected that you will need to provide the `tablist` and `tabpanel` roles to your elements to
+indicate to assistive technologies which elements are responsible for the tabs and tab content
+respectively. Each tab should contain an `aria-controls` property identifying its corresponding tab
+content. In addition, each tab content element should be labelled by a tab. These elements need to
+be wrapped in an element containing a `tablist` role:

@@ -73,7 +73,7 @@ import { defineStateLayerComponent } from './state-layer/index.js';
 import { defineStepComponent, defineStepperComponent } from './stepper/index.js';
 import { defineSwitchComponent } from './switch/index.js';
 import { defineTableComponent } from './table/index.js';
-import { defineTabBarComponent, defineTabComponent } from './tabs/index.js';
+import { defineTabBarComponent, defineTabComponent, defineTabPanelComponent } from './tabs/index.js';
 import { defineTextFieldComponent } from './text-field/index.js';
 import { defineTimePickerComponent } from './time-picker/index.js';
 import { defineToastComponent } from './toast/index.js';
@@ -244,6 +244,7 @@ export function defineComponents(): void {
   defineSwitchComponent();
   defineTabBarComponent();
   defineTabComponent();
+  defineTabPanelComponent();
   defineTableComponent();
   defineTextFieldComponent();
   defineTimePickerComponent();

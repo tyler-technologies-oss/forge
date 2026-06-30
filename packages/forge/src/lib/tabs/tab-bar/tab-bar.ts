@@ -2,7 +2,7 @@ import { provide } from '@lit/context';
 import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver, isDefined } from '@tylertech/forge-core';
 import { tylIconKeyboardArrowDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, eventOptions, property, query, queryAssignedElements, state } from 'lit/decorators.js';
+import { customElement, property, query, queryAssignedElements, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { live } from 'lit/directives/live.js';
 import { playStateLayerAnimation } from '../../constants.js';
@@ -320,7 +320,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
           class="scroll-container"
           part="scroll-container"
           @scroll=${this.#handleScroll}
-          @forge-tab-request-sync=${this._handleRequestSync}
+          @forge-tab-request-sync=${this.#handleRequestSync}
           ${focusGroup(this.#focusGroupRef)}>
           <slot @slotchange=${this.#handleSlotChange}></slot>
         </div>
@@ -425,8 +425,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     this.#setScrolledToStartOrEnd();
   }
 
-  @eventOptions({ capture: true })
-  private _handleRequestSync(evt: Event): void {
+  #handleRequestSync(evt: Event): void {
     evt.stopPropagation();
     const tab = this.#getTabFromEvent(evt);
     if (tab && this.#isDesynced(tab)) {

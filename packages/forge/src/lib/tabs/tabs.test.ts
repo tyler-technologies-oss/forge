@@ -1,18 +1,20 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render } from 'vitest-browser-lit';
-import { html } from 'lit';
-import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
-import { frame, task } from '../core/utils/utils.js';
+import { html } from 'lit';
+import { describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-lit';
+import { userEvent } from 'vitest/browser';
 import { TestHarness } from '../core/testing/test-harness.js';
-import { TAB_CONSTANTS } from './tab/tab-constants.js';
-import { TAB_BAR_CONSTANTS } from './tab-bar/index.js';
-import type { ITabBarComponent } from './tab-bar/tab-bar.js';
-import { TabComponent, type ITabComponent } from './tab/tab.js';
+import { frame, task } from '../core/utils/utils.js';
 import type { IIconComponent } from '../icon/icon.js';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer/index.js';
+import { TAB_BAR_CONSTANTS } from './tab-bar/index.js';
+import type { ITabBarComponent } from './tab-bar/tab-bar.js';
+import { TAB_CONSTANTS } from './tab/tab-constants.js';
+import { TabComponent, type ITabComponent } from './tab/tab.js';
+import { TabPanelComponent } from './tab-panel/tab-panel.js';
 
 import './tab-bar/tab-bar.js';
+import './tab-panel/tab-panel.js';
 
 describe('Tabs', () => {
   it('should contain shadow root', async () => {
@@ -1062,3 +1064,403 @@ async function createFixture({
   harness.initElementRefs();
   return harness;
 }
+
+describe('TabPanel', () => {
+  it('should render with shadow root', async () => {
+    const screen = render(html`<forge-tab-panel></forge-tab-panel>`);
+    const panel = screen.container.querySelector('forge-tab-panel');
+    expect(panel?.shadowRoot).not.toBeNull();
+  });
+
+  it('should be accessible', async () => {
+    const screen = render(html`<forge-tab-panel>Content</forge-tab-panel>`);
+    const panel = screen.container.querySelector('forge-tab-panel');
+    await expect(panel).toBeAccessible();
+  });
+
+  it('should have role="tabpanel"', async () => {
+    const screen = render(html`<forge-tab-panel></forge-tab-panel>`);
+    const panel = screen.container.querySelector('forge-tab-panel');
+    expect(panel?.getAttribute('role')).toBe('tabpanel');
+  });
+
+  it('should have tabindex="-1"', async () => {
+    const screen = render(html`<forge-tab-panel></forge-tab-panel>`);
+    const panel = screen.container.querySelector('forge-tab-panel');
+    expect(panel?.tabIndex).toBe(-1);
+  });
+
+  it('should be closed by default', async () => {
+    const screen = render(html`<forge-tab-panel></forge-tab-panel>`);
+    const panel = screen.container.querySelector('forge-tab-panel');
+    expect(panel?.open).toBe(false);
+    const styles = panel && window.getComputedStyle(panel);
+    expect(styles?.display).toBe('none');
+  });
+
+  it('should apply open state when open is set', async () => {
+    const screen = render(html`<forge-tab-panel></forge-tab-panel>`);
+    const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
+    await panel?.updateComplete;
+
+    panel!.open = true;
+    await panel?.updateComplete;
+
+    expect(panel?.open).toBe(true);
+    expect(panel?.matches(':state(open)')).toBe(true);
+    const styles = panel && window.getComputedStyle(panel);
+    expect(styles?.display).toBe('block');
+  });
+
+  it('should update open state dynamically', async () => {
+    const screen = render(html`<forge-tab-panel></forge-tab-panel>`);
+    const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
+    await panel?.updateComplete;
+
+    expect(panel?.open).toBe(false);
+    expect(panel?.matches(':state(open)')).toBe(false);
+
+    if (panel) {
+      panel.open = true;
+    }
+    await panel?.updateComplete;
+
+    expect(panel?.open).toBe(true);
+    expect(panel?.matches(':state(open)')).toBe(true);
+  });
+
+  it('should connect to tab with matching id', async () => {
+    const screen = render(html`
+      <forge-tab-bar>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
+      </forge-tab-bar>
+      <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
+    `);
+
+    const panel = screen.container.querySelector('forge-tab-panel');
+    const tab = screen.container.querySelector('forge-tab[name="tab1"]') as ITabComponent;
+
+    await frame();
+
+    expect(panel?.getAttribute('aria-labelledby')).toBe('tab1');
+    expect(tab?.getAttribute('aria-controls')).toBeTruthy();
+  });
+
+  it('should not connect when for attribute is empty', async () => {
+    const screen = render(html`
+      <forge-tab-bar>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+      </forge-tab-bar>
+      <forge-tab-panel for="">Panel 1</forge-tab-panel>
+    `);
+
+    const panel = screen.container.querySelector('forge-tab-panel');
+    const tab = screen.container.querySelector('forge-tab[name="tab1"]') as ITabComponent;
+
+    await frame();
+    await frame();
+
+    expect(panel?.open).toBe(false);
+    expect(panel?.getAttribute('aria-labelledby')).toBeNullable();
+    expect(tab?.getAttribute('aria-controls')).toBeNullable();
+  });
+
+  it('should close when no matching tab is found', async () => {
+    const screen = render(html`
+      <forge-tab-bar>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+      </forge-tab-bar>
+      <forge-tab-panel for="nonexistent">Panel 1</forge-tab-panel>
+    `);
+
+    const panel = screen.container.querySelector('forge-tab-panel');
+
+    await frame();
+
+    expect(panel?.open).toBe(false);
+  });
+
+  it('should be open when connected tab is active', async () => {
+    const screen = render(html`
+      <forge-tab-bar .activeTab=${0}>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
+      </forge-tab-bar>
+      <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
+    `);
+
+    const panel = screen.container.querySelector('forge-tab-panel');
+
+    await frame();
+
+    expect(panel?.open).toBe(true);
+    const styles = panel && window.getComputedStyle(panel);
+    expect(styles?.display).toBe('block');
+  });
+
+  it('should update visibility when tab changes', async () => {
+    const screen = render(html`
+      <forge-tab-bar .activeTab=${0}>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
+      </forge-tab-bar>
+      <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
+      <forge-tab-panel for="tab2">Panel 2</forge-tab-panel>
+    `);
+
+    const panel1 = screen.container.querySelector<TabPanelComponent>('forge-tab-panel[for="tab1"]');
+    const panel2 = screen.container.querySelector<TabPanelComponent>('forge-tab-panel[for="tab2"]');
+    const tab2 = screen.container.querySelector('forge-tab[name="tab2"]') as ITabComponent;
+
+    await frame();
+
+    expect(panel1?.open).toBe(true);
+    expect(panel2?.open).toBe(false);
+
+    await userEvent.click(tab2);
+    await frame();
+
+    expect(panel1?.open).toBe(false);
+    expect(panel2?.open).toBe(true);
+  });
+
+  it('should receive focus when tab is activated', async () => {
+    const screen = render(html`
+      <forge-tab-bar .activeTab=${0}>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
+      </forge-tab-bar>
+      <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
+      <forge-tab-panel for="tab2">Panel 2</forge-tab-panel>
+    `);
+
+    const panel2 = screen.container.querySelector<TabPanelComponent>('forge-tab-panel[for="tab2"]');
+    const tab2 = screen.container.querySelector('forge-tab[name="tab2"]') as ITabComponent;
+
+    await userEvent.click(tab2);
+    await frame();
+
+    expect(panel2?.matches(':focus')).toBe(true);
+  });
+
+  it('should not receive focus when tab is activated if focus-mode is off', async () => {
+    const screen = render(html`
+      <forge-tab-bar .activeTab=${0}>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
+      </forge-tab-bar>
+      <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
+      <forge-tab-panel for="tab2" focus-mode="off">Panel 2</forge-tab-panel>
+    `);
+
+    const panel2 = screen.container.querySelector<TabPanelComponent>('forge-tab-panel[for="tab2"]');
+    const tab2 = screen.container.querySelector('forge-tab[name="tab2"]') as ITabComponent;
+
+    await userEvent.click(tab2);
+    await frame();
+
+    expect(panel2?.matches(':focus')).toBe(false);
+  });
+
+  it('should reconnect when for property changes', async () => {
+    const screen = render(html`
+      <forge-tab-bar .activeTab=${0}>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
+      </forge-tab-bar>
+      <forge-tab-panel for="tab1">Panel</forge-tab-panel>
+    `);
+
+    const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
+    const tab1 = screen.container.querySelector('forge-tab[name="tab1"]') as ITabComponent;
+    const tab2 = screen.container.querySelector('forge-tab[name="tab2"]') as ITabComponent;
+
+    await frame();
+    await frame();
+
+    expect(panel?.open).toBe(true);
+    expect(panel?.getAttribute('aria-labelledby')).toBe('tab1');
+    expect(tab1?.getAttribute('aria-controls')).toBeTruthy();
+    expect(tab2?.getAttribute('aria-controls')).toBeNullable();
+
+    if (panel) {
+      panel.for = 'tab2';
+    }
+    await frame();
+
+    expect(panel?.open).toBe(false);
+    expect(panel?.getAttribute('aria-labelledby')).toBe('tab2');
+    expect(tab1?.getAttribute('aria-controls')).toBeNullable();
+    expect(tab2?.getAttribute('aria-controls')).toBeTruthy();
+  });
+
+  it('should disconnect and close when tab is removed', async () => {
+    const screen = render(html`
+      <forge-tab-bar .activeTab=${0}>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
+      </forge-tab-bar>
+      <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
+    `);
+
+    const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
+    const tab1 = screen.container.querySelector('forge-tab[name="tab1"]') as ITabComponent;
+
+    await frame();
+
+    expect(panel?.open).toBe(true);
+
+    tab1.remove();
+    await frame();
+
+    expect(panel?.open).toBe(false);
+  });
+
+  it('should auto-connect when tab with matching id registers after panel', async () => {
+    const screen = render(html` <forge-tab-panel for="tab1">Panel 1</forge-tab-panel> `);
+
+    const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
+
+    await frame();
+
+    expect(panel?.open).toBe(false);
+
+    const tabBar = new (customElements.get('forge-tab-bar') as any)();
+    const tab = new (customElements.get('forge-tab') as any)();
+    tab.id = 'tab1';
+    tab.name = 'tab1';
+    tab.textContent = 'Tab 1';
+    tab.active = true;
+    tabBar.appendChild(tab);
+    screen.container.appendChild(tabBar);
+
+    await frame();
+    await frame();
+
+    expect(panel?.open).toBe(true);
+    expect(panel?.getAttribute('aria-labelledby')).toBe('tab1');
+  });
+
+  it('should clear ARIA relationships when disconnected', async () => {
+    const screen = render(html`
+      <forge-tab-bar .activeTab=${0}>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+      </forge-tab-bar>
+      <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
+    `);
+
+    const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
+    const tab = screen.container.querySelector('forge-tab[name="tab1"]') as ITabComponent;
+
+    await frame();
+
+    expect(panel?.getAttribute('aria-labelledby')).toBe('tab1');
+    expect(tab?.getAttribute('aria-controls')).toBeTruthy();
+
+    panel?.remove();
+    await frame();
+
+    expect(tab?.getAttribute('aria-controls')).toBeNullable();
+  });
+
+  it('should read for property from attribute', async () => {
+    const screen = render(html`<forge-tab-panel for="tab1"></forge-tab-panel>`);
+    const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
+
+    expect(panel?.for).toBe('tab1');
+    expect(panel?.getAttribute('for')).toBe('tab1');
+  });
+
+  it('should update for property and attribute', async () => {
+    const screen = render(html`<forge-tab-panel></forge-tab-panel>`);
+    const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
+
+    if (panel) {
+      panel.setAttribute('for', 'tab2');
+    }
+    await frame();
+
+    expect(panel?.for).toBe('tab2');
+  });
+
+  it('should close when tab is not found', async () => {
+    const screen = render(html`
+      <forge-tab-bar .activeTab=${0}>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+      </forge-tab-bar>
+      <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
+    `);
+    const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
+    await frame();
+
+    expect(panel?.open).toBe(true);
+
+    panel!.for = 'nonexistent';
+    await frame();
+
+    expect(panel?.open).toBe(false);
+  });
+
+  it('should read focus-mode property from attribute', async () => {
+    const screen = render(html`<forge-tab-panel focus-mode="off"></forge-tab-panel>`);
+    const panel = screen.container.querySelector<TabPanelComponent>('forge-tab-panel');
+
+    expect(panel?.focusMode).toBe('off');
+    expect(panel?.getAttribute('focus-mode')).toBe('off');
+  });
+
+  it('should render slotted content', async () => {
+    const screen = render(html`<forge-tab-panel><div id="test-content">Test Content</div></forge-tab-panel>`);
+    const panel = screen.container.querySelector('forge-tab-panel');
+    const content = panel?.querySelector('#test-content');
+
+    expect(content?.textContent).toBe('Test Content');
+  });
+
+  it('should handle multiple panels for different tabs', async () => {
+    const screen = render(html`
+      <forge-tab-bar .activeTab=${1}>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
+        <forge-tab id="tab3" name="tab3">Tab 3</forge-tab>
+      </forge-tab-bar>
+      <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
+      <forge-tab-panel for="tab2">Panel 2</forge-tab-panel>
+      <forge-tab-panel for="tab3">Panel 3</forge-tab-panel>
+    `);
+
+    const panel1 = screen.container.querySelector<TabPanelComponent>('forge-tab-panel[for="tab1"]');
+    const panel2 = screen.container.querySelector<TabPanelComponent>('forge-tab-panel[for="tab2"]');
+    const panel3 = screen.container.querySelector<TabPanelComponent>('forge-tab-panel[for="tab3"]');
+
+    await frame();
+
+    expect(panel1?.open).toBe(false);
+    expect(panel2?.open).toBe(true);
+    expect(panel3?.open).toBe(false);
+  });
+
+  it('should handle tab activation by id with panels', async () => {
+    const screen = render(html`
+      <forge-tab-bar .activeTabName=${'tab2'}>
+        <forge-tab id="tab1" name="tab1">Tab 1</forge-tab>
+        <forge-tab id="tab2" name="tab2">Tab 2</forge-tab>
+        <forge-tab id="tab3" name="tab3">Tab 3</forge-tab>
+      </forge-tab-bar>
+      <forge-tab-panel for="tab1">Panel 1</forge-tab-panel>
+      <forge-tab-panel for="tab2">Panel 2</forge-tab-panel>
+      <forge-tab-panel for="tab3">Panel 3</forge-tab-panel>
+    `);
+
+    const panel1 = screen.container.querySelector<TabPanelComponent>('forge-tab-panel[for="tab1"]');
+    const panel2 = screen.container.querySelector<TabPanelComponent>('forge-tab-panel[for="tab2"]');
+    const panel3 = screen.container.querySelector<TabPanelComponent>('forge-tab-panel[for="tab3"]');
+
+    await frame();
+
+    expect(panel1?.open).toBe(false);
+    expect(panel2?.open).toBe(true);
+    expect(panel3?.open).toBe(false);
+  });
+});
