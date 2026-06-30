@@ -1,0 +1,106 @@
+@use '../../core/styles/theme';
+@use '../../core/styles/typography';
+@use '../../badge';
+@use '../../icon';
+@use './token-utils' as *;
+@use '../timeline/token-utils' as timeline;
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+}
+
+@mixin base {
+  @include typography.style(body1);
+
+  box-sizing: border-box;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto #{timeline.token(gap)};
+  column-gap: #{token(gap)};
+  line-height: normal;
+}
+
+@mixin last {
+  grid-template-rows: auto 0;
+}
+
+@mixin theme($theme) {
+  @include override(marker-color, theme.variable($theme), value);
+  @include override(marker-background, theme.variable(#{$theme}-container-low), value);
+}
+
+@mixin content {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+}
+
+@mixin marker-wrapper {
+  display: grid;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  grid-template-rows: subgrid;
+  position: relative;
+}
+
+@mixin marker {
+  @include badge.provide-theme(
+    (
+      color: #{token(marker-color)},
+      background: #{token(marker-background)}
+    )
+  );
+  @include icon.provide-theme(
+    (
+      size: #{token(marker-size)},
+      color: #{token(marker-color)}
+    )
+  );
+
+  color: #{token(marker-color)};
+  display: flex;
+  align-self: start;
+  align-items: center;
+  justify-content: center;
+  block-size: calc(#{token(marker-size)} + #{token(marker-padding)} * 2);
+  min-inline-size: calc(#{token(marker-size)} + #{token(marker-padding)} * 2);
+  z-index: 0;
+}
+
+@mixin default-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: calc(#{token(marker-size)} + #{token(marker-padding)} * 2);
+  inline-size: calc(#{token(marker-size)} + #{token(marker-padding)} * 2);
+  border-radius: #{token(marker-shape)};
+  background: #{token(default-marker-background)};
+
+  &::before {
+    content: '';
+    block-size: #{token(default-marker-size)};
+    inline-size: #{token(default-marker-size)};
+    border-radius: #{token(default-marker-shape)};
+    background: #{token(marker-color)};
+  }
+}
+
+@mixin icon {
+  background: #{token(marker-background)};
+  padding: #{token(marker-padding)};
+  border-radius: #{token(marker-shape)};
+}
+
+@mixin line {
+  content: '';
+  inline-size: #{token(line-width)};
+  background: #{token(line-color)};
+  position: absolute;
+  top: calc(#{token(marker-size)} + #{token(marker-padding)} * 2 + #{token(line-gap)});
+  bottom: #{token(line-gap)};
+  left: calc(#{token(marker-size)} / 2 + #{token(marker-padding)} - #{token(line-width)} / 2);
+  z-index: -1;
+}

@@ -1,0 +1,11 @@
+@use 'sass:map';
+@use '../../../spacing';
+@use '../../../utils';
+
+$tokens: (
+  gap: utils.module-val(timeline, gap, spacing.variable(large))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

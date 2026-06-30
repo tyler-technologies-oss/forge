@@ -1,0 +1,69 @@
+@use './core';
+@use '../timeline/token-utils' as timeline;
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+//
+// Base
+//
+
+.forge-timeline-item {
+  @include core.tokens;
+  @include timeline.tokens;
+}
+
+.forge-timeline-item {
+  @include core.base;
+}
+
+.content {
+  @include core.content;
+}
+
+.marker-wrapper {
+  @include core.marker-wrapper;
+}
+
+.marker {
+  @include core.marker;
+
+  ::slotted(forge-icon) {
+    @include core.icon;
+  }
+}
+
+.default-marker {
+  @include core.default-marker;
+}
+
+//
+// Line
+//
+
+:host(:not(:last-child)) {
+  .marker::before {
+    @include core.line;
+  }
+}
+
+:host(:last-child) {
+  .forge-timeline-item {
+    @include core.last;
+  }
+}
+
+//
+// Theme
+//
+
+@each $theme in 'primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info' {
+  .#{$theme} {
+    @include core.theme($theme);
+  }
+}
