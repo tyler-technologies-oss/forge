@@ -277,8 +277,8 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
 
   @property({ attribute: 'min' }) public min: Date | string | null = null;
   @property({ attribute: 'max' }) public max: Date | string | null = null;
-  @property({ attribute: 'min-time' }) public minTime = DATE_TIME_PICKER_CONSTANTS.defaultValues.MIN_TIME;
-  @property({ attribute: 'max-time' }) public maxTime = DATE_TIME_PICKER_CONSTANTS.defaultValues.MAX_TIME;
+  @property({ attribute: 'min-time' }) public minTime: string = DATE_TIME_PICKER_CONSTANTS.defaultValues.MIN_TIME;
+  @property({ attribute: 'max-time' }) public maxTime: string = DATE_TIME_PICKER_CONSTANTS.defaultValues.MAX_TIME;
   @property({ type: Number }) public step: number = DATE_TIME_PICKER_CONSTANTS.defaultValues.STEP;
   @property({ type: Number, attribute: 'first-day-of-week' })
   public firstDayOfWeek: DayOfWeek | undefined;
