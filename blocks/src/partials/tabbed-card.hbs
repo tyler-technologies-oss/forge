@@ -1,68 +1,142 @@
-<forge-card no-padding class="tabbed-card">
-  <div class="flex justify-between items-start p-medium pb-0">
-    <div class="flex flex-col gap-xxxsmall">
-      <span class="text-overline">Server Details</span>
-      <div class="flex items-center gap-xsmall">
-        <h2 class="text-heading3">Atlassian MCP</h2>
-        <forge-icon name="verified" style="color: var(--forge-theme-primary);"></forge-icon>
+<forge-card no-padding class="tabbed-card" style="height: auto;">
+  <forge-scaffold>
+    <div slot="header">
+      <forge-toolbar no-border>
+        <div slot="start" class="flex flex-col gap-xxxsmall">
+          <div class="flex items-center gap-xsmall">
+            <h2 class="text-heading4">Atlassian MCP</h2>
+            <forge-icon name="verified" style="color: var(--forge-theme-primary);"></forge-icon>
+          </div>
+        </div>
+        <forge-icon-button slot="end" aria-label="More options" density="medium">
+          <forge-icon name="more_vert"></forge-icon>
+        </forge-icon-button>
+      </forge-toolbar>
+      <div class="bg-surface">
+        <forge-tab-bar active-tab="0" clustered>
+          <forge-tab>Overview</forge-tab>
+          <forge-tab>Resources</forge-tab>
+          <forge-tab>Tools</forge-tab>
+          <forge-tab>Prompts</forge-tab>
+        </forge-tab-bar>
       </div>
     </div>
-    <forge-icon-button aria-label="More options" density="medium">
-      <forge-icon name="more_vert"></forge-icon>
-    </forge-icon-button>
-  </div>
-  <forge-tab-bar active-tab="0" clustered class="px-medium">
-    <forge-tab>Overview</forge-tab>
-    <forge-tab>Resources</forge-tab>
-    <forge-tab>Tools</forge-tab>
-    <forge-tab>Prompts</forge-tab>
-  </forge-tab-bar>
-  <forge-view-switcher>
-    <forge-view>
-      <div class="p-medium">
-        <forge-card class="tonal-card">
-          <div class="flex flex-col gap-medium">
-            <forge-label-value>
-              <span slot="label">Description</span>
-              <span slot="value">Tyler Agency Intelligence MCP server providing user management, group management, and task administration tools for the Agency Intelligence platform.</span>
-            </forge-label-value>
-            <forge-label-value>
-              <span slot="label">Version</span>
-              <span slot="value">26.0.0</span>
-            </forge-label-value>
-            <forge-label-value>
-              <span slot="label">Forwarded Headers</span>
-              <div slot="value" class="flex flex-wrap gap-xsmall">
-                <forge-chip dense>x-correlation-id</forge-chip>
-                <forge-chip dense>x-session-id</forge-chip>
-                <forge-chip dense>x-user-email</forge-chip>
-                <forge-chip dense>x-user-email-sig</forge-chip>
-              </div>
-            </forge-label-value>
-            <forge-label-value>
-              <span slot="label">Authentication type</span>
-              <span slot="value" class="font-mono">API_KEY</span>
-            </forge-label-value>
-          </div>
-        </forge-card>
+
+    <forge-view-switcher slot="body">
+      <forge-view>
+        <div class="p-medium">
+          <forge-card class="tonal-card">
+            <div class="flex flex-col gap-medium">
+              <forge-label-value>
+                <span slot="label">Description</span>
+                <span slot="value">Tyler Agency Intelligence MCP server providing user management, group management, and task administration tools for the Agency Intelligence platform.</span>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Version</span>
+                <span slot="value">26.0.0</span>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Forwarded Headers</span>
+                <div slot="value" class="flex flex-wrap gap-xsmall">
+                  <forge-chip dense>x-correlation-id</forge-chip>
+                  <forge-chip dense>x-session-id</forge-chip>
+                  <forge-chip dense>x-user-email</forge-chip>
+                  <forge-chip dense>x-user-email-sig</forge-chip>
+                </div>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Authentication type</span>
+                <span slot="value" class="font-mono">API_KEY</span>
+              </forge-label-value>
+            </div>
+          </forge-card>
+        </div>
+      </forge-view>
+      <forge-view>
+        <div class="p-medium">
+          <forge-card class="tonal-card">
+            <div class="flex flex-col gap-medium">
+              <forge-label-value>
+                <span slot="label">Available Resources</span>
+                <div slot="value" class="flex flex-wrap gap-xsmall">
+                  <forge-chip dense>jira://issues</forge-chip>
+                  <forge-chip dense>confluence://pages</forge-chip>
+                  <forge-chip dense>bitbucket://repos</forge-chip>
+                </div>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Resource Templates</span>
+                <div slot="value" class="flex flex-wrap gap-xsmall">
+                  <forge-chip dense>jira://issues/{issueKey}</forge-chip>
+                  <forge-chip dense>confluence://pages/{pageId}</forge-chip>
+                </div>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Cache TTL</span>
+                <span slot="value" class="font-mono">300s</span>
+              </forge-label-value>
+            </div>
+          </forge-card>
+        </div>
+      </forge-view>
+      <forge-view>
+        <div class="p-medium">
+          <forge-card class="tonal-card">
+            <div class="flex flex-col gap-medium">
+              <forge-label-value>
+                <span slot="label">Available Tools</span>
+                <div slot="value" class="flex flex-wrap gap-xsmall">
+                  <forge-chip dense>create_issue</forge-chip>
+                  <forge-chip dense>search_issues</forge-chip>
+                  <forge-chip dense>update_issue</forge-chip>
+                  <forge-chip dense>add_comment</forge-chip>
+                </div>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Rate Limit</span>
+                <span slot="value" class="font-mono">100 req/min</span>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Timeout</span>
+                <span slot="value" class="font-mono">30s</span>
+              </forge-label-value>
+            </div>
+          </forge-card>
+        </div>
+      </forge-view>
+      <forge-view>
+        <div class="p-medium">
+          <forge-card class="tonal-card">
+            <div class="flex flex-col gap-medium">
+              <forge-label-value>
+                <span slot="label">Available Prompts</span>
+                <div slot="value" class="flex flex-wrap gap-xsmall">
+                  <forge-chip dense>summarize_issue</forge-chip>
+                  <forge-chip dense>draft_release_notes</forge-chip>
+                  <forge-chip dense>analyze_sprint</forge-chip>
+                </div>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Default Model</span>
+                <span slot="value" class="font-mono">claude-sonnet-4-20250514</span>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Max Tokens</span>
+                <span slot="value" class="font-mono">4096</span>
+              </forge-label-value>
+            </div>
+          </forge-card>
+        </div>
+      </forge-view>
+    </forge-view-switcher>
+
+    <forge-toolbar slot="footer" inverted>
+      <div slot="end" class="flex items-center gap-small">
+        <forge-button variant="outlined">Cancel</forge-button>
+        <forge-button variant="raised">Save</forge-button>
       </div>
-    </forge-view>
-    <forge-view>
-      <div class="p-medium">
-        <p class="text-body1">Resources content goes here.</p>
-      </div>
-    </forge-view>
-    <forge-view>
-      <div class="p-medium">
-        <p class="text-body1">Tools content goes here.</p>
-      </div>
-    </forge-view>
-    <forge-view>
-      <div class="p-medium">
-        <p class="text-body1">Prompts content goes here.</p>
-      </div>
-    </forge-view>
-  </forge-view-switcher>
+    </forge-toolbar>
+  </forge-scaffold>
 </forge-card>
 
 <script>
