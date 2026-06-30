@@ -394,7 +394,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       return this.#renderMobile();
     }
     return html`
-      <forge-text-field part="field" ?required=${this.required} ?invalid=${this._invalid}>
+      <forge-text-field part="field" ?required=${this.required} ?invalid=${this._invalid} @mousedown=${this.#onFieldPointerDown}>
         ${this.label ? html`<label slot="label">${this.label}</label>` : nothing} ${this.#renderInputs()}
         ${this._pickerLinked
           ? html`
@@ -677,6 +677,42 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #quickKeysEnabled(): boolean {
     return !this.disabled && !this.readonly;
   }
+
+  // The masked inputs are fixed-width and left-aligned, so the field can be wider than
+  // its input row (e.g. when the label or support text is longer). A native field has no
+  // such gap because its single input fills the box — mirror that by focusing the input
+  // nearest the click when the empty chrome on the input row is pressed.
+  #onFieldPointerDown = (event: MouseEvent): void => {
+    if (this.disabled || this.readonly) {
+      return;
+    }
+    const target = event.target as HTMLElement | null;
+    // Clicks on the inputs themselves and the toggle button are already handled natively.
+    if (!target || target instanceof HTMLInputElement || target.closest('[part="toggle"]')) {
+      return;
+    }
+    const inputs = Array.from(this.shadowRoot?.querySelectorAll<HTMLInputElement>('input[part]') ?? []).filter(input => !input.disabled);
+    if (!inputs.length) {
+      return;
+    }
+    const rects = inputs.map(input => input.getBoundingClientRect());
+    // Only hijack clicks on the input row — not the label above or support text below it.
+    const top = Math.min(...rects.map(r => r.top));
+    const bottom = Math.max(...rects.map(r => r.bottom));
+    if (event.clientY < top || event.clientY > bottom) {
+      return;
+    }
+    event.preventDefault();
+    const nearest = inputs.reduce(
+      (best, input, index) => {
+        const center = (rects[index].left + rects[index].right) / 2;
+        const distance = Math.abs(center - event.clientX);
+        return distance < best.distance ? { distance, input } : best;
+      },
+      { distance: Infinity, input: inputs[0] }
+    );
+    nearest.input.focus();
+  };
 
   #applyNow(target: HTMLInputElement): void {
     const now = new Date();
