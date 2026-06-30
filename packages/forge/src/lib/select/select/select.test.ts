@@ -333,6 +333,42 @@ describe('Select', () => {
       const listItems = harness.getListItems();
       expect(harness.element.getAttribute('aria-activedescendant')).toBe(listItems[1].querySelector('button')?.id);
     });
+
+    it('should navigate from selected option when opened via mouse click then arrow down pressed', async () => {
+      const harness = await createFixture();
+      harness.element.value = 'two';
+      await frame();
+
+      await harness.clickElement(harness.element);
+      await harness.popoverToggleAnimation;
+
+      expect(harness.element.open).toBe(true);
+
+      harness.element.focus();
+      await harness.pressKey('ArrowDown');
+      await frame();
+
+      const listItems = harness.getListItems();
+      expect(harness.element.getAttribute('aria-activedescendant')).toBe(listItems[2].querySelector('button')?.id);
+    });
+
+    it('should navigate from selected option when opened via mouse click then arrow up pressed', async () => {
+      const harness = await createFixture();
+      harness.element.value = 'two';
+      await frame();
+
+      await harness.clickElement(harness.element);
+      await harness.popoverToggleAnimation;
+
+      expect(harness.element.open).toBe(true);
+
+      harness.element.focus();
+      await harness.pressKey('ArrowUp');
+      await frame();
+
+      const listItems = harness.getListItems();
+      expect(harness.element.getAttribute('aria-activedescendant')).toBe(listItems[0].querySelector('button')?.id);
+    });
   });
 
   describe('selection state', () => {
