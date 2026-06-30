@@ -1,0 +1,46 @@
+<!--
+  @block Icon Card
+  @description Action card featuring an icon, title, and description for quick navigation or feature highlights
+  @tags card, icon, navigation, action
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Icon Card</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+  </head>
+  <body class="">
+    <div class="p-large">
+  <forge-card class="icon-card" style="max-width: 320px">
+    <div class="flex items-center gap-medium">
+      <forge-avatar
+        class="[--forge-avatar-background:var(--forge-theme-primary-container-low)] [--forge-avatar-color:var(--forge-theme-on-primary-container-low)] [--forge-avatar-shape:var(--forge-shape-medium)]"
+        size="large">
+        <forge-icon name="note_add"></forge-icon>
+      </forge-avatar>
+      <div class="flex flex-col gap-xxxsmall">
+        <span class="text-heading1">Create a Project</span>
+        <span class="text-body1 text-on-surface-secondary">The first step in building agents</span>
+      </div>
+    </div>
+  </forge-card>
+</div>
+    <script type="module" src="/blocks/pr-1145/ready-transition.js"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js"></script>
+  </body>
+</html>

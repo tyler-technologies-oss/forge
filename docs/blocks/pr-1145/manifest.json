@@ -1,6 +1,25 @@
 {
   "blocks": [
     {
+      "id": "toolbars/toolbar-actions/toolbar-actions",
+      "name": "Toolbar with Button Actions",
+      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
+      "tags": [
+        "toolbar",
+        "buttons",
+        "actions",
+        "form"
+      ],
+      "file": "toolbars/toolbar-actions/toolbar-actions.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
+      "hasScript": false
+    },
+    {
       "id": "toolbars/table-header/table-header",
       "name": "Table Header",
       "description": "Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot",
@@ -18,25 +37,6 @@
         "forge-toolbar"
       ],
       "screenshot": "toolbars/table-header/table-header.webp",
-      "hasScript": false
-    },
-    {
-      "id": "toolbars/toolbar-actions/toolbar-actions",
-      "name": "Toolbar with Button Actions",
-      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
-      "tags": [
-        "toolbar",
-        "buttons",
-        "actions",
-        "form"
-      ],
-      "file": "toolbars/toolbar-actions/toolbar-actions.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
       "hasScript": false
     },
     {
@@ -127,28 +127,6 @@
       "hasScript": true
     },
     {
-      "id": "tables/simple/simple",
-      "name": "Simple Table",
-      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
-      "tags": [
-        "table",
-        "data",
-        "card",
-        "toolbar"
-      ],
-      "file": "tables/simple/simple.html",
-      "category": "Tables",
-      "componentsUsed": [
-        "forge-card",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-table",
-        "forge-toolbar"
-      ],
-      "screenshot": "tables/simple/simple.webp",
-      "hasScript": true
-    },
-    {
       "id": "tables/table-with-actions/table-with-actions",
       "name": "Table with Actions",
       "description": "Data table inside a card with a toolbar header featuring action buttons for cancel, save draft, and submit operations",
@@ -169,6 +147,28 @@
         "forge-toolbar"
       ],
       "screenshot": "tables/table-with-actions/table-with-actions.webp",
+      "hasScript": true
+    },
+    {
+      "id": "tables/simple/simple",
+      "name": "Simple Table",
+      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
+      "tags": [
+        "table",
+        "data",
+        "card",
+        "toolbar"
+      ],
+      "file": "tables/simple/simple.html",
+      "category": "Tables",
+      "componentsUsed": [
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-table",
+        "forge-toolbar"
+      ],
+      "screenshot": "tables/simple/simple.webp",
       "hasScript": true
     },
     {
@@ -196,33 +196,6 @@
       "hasScript": true
     },
     {
-      "id": "scaffold-examples/sidesheet-card/sidesheet-card",
-      "name": "Sidesheet Scaffold Card",
-      "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
-      "tags": [
-        "card",
-        "scaffold",
-        "layout",
-        "toolbar",
-        "drawer",
-        "sidesheet",
-        "body-left"
-      ],
-      "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
-      "category": "Scaffold Examples",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-drawer",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "screenshot": "scaffold-examples/sidesheet-card/sidesheet-card.webp",
-      "hasScript": false
-    },
-    {
       "id": "scaffold-examples/simple-card/simple-card",
       "name": "Simple Scaffold Card",
       "description": "Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons",
@@ -247,6 +220,33 @@
         "forge-toolbar"
       ],
       "screenshot": "scaffold-examples/simple-card/simple-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "scaffold-examples/sidesheet-card/sidesheet-card",
+      "name": "Sidesheet Scaffold Card",
+      "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
+      "tags": [
+        "card",
+        "scaffold",
+        "layout",
+        "toolbar",
+        "drawer",
+        "sidesheet",
+        "body-left"
+      ],
+      "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
+      "category": "Scaffold Examples",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-drawer",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
+      "screenshot": "scaffold-examples/sidesheet-card/sidesheet-card.webp",
       "hasScript": false
     },
     {
@@ -315,30 +315,6 @@
       "hasScript": true
     },
     {
-      "id": "dialogs/simple/simple",
-      "name": "Simple Dialog",
-      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
-      "tags": [
-        "dialog",
-        "modal",
-        "scaffold",
-        "toolbar",
-        "actions"
-      ],
-      "file": "dialogs/simple/simple.html",
-      "category": "Dialogs",
-      "componentsUsed": [
-        "forge-button",
-        "forge-dialog",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "screenshot": "dialogs/simple/simple.webp",
-      "hasScript": false
-    },
-    {
       "id": "forms/multi-column/multi-column",
       "name": "Multi-Column Form",
       "description": "Responsive form using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
@@ -380,6 +356,35 @@
       "hasScript": false
     },
     {
+      "id": "forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "tags": [
+        "authentication",
+        "login",
+        "form",
+        "card",
+        "centered",
+        "scaffold",
+        "toolbar"
+      ],
+      "file": "forms/login/login.html",
+      "category": "Forms",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-checkbox",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
+      ],
+      "screenshot": "forms/login/login.webp",
+      "hasScript": false
+    },
+    {
       "id": "forms/add-user/add-user",
       "name": "Add User Form",
       "description": "Form card with two-column grid layout for text inputs, leading icons, support text, dropdown selects, grouped checkboxes, and action buttons",
@@ -413,35 +418,6 @@
       "hasScript": false
     },
     {
-      "id": "forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
-      "tags": [
-        "authentication",
-        "login",
-        "form",
-        "card",
-        "centered",
-        "scaffold",
-        "toolbar"
-      ],
-      "file": "forms/login/login.html",
-      "category": "Forms",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-checkbox",
-        "forge-divider",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-text-field",
-        "forge-toolbar"
-      ],
-      "screenshot": "forms/login/login.webp",
-      "hasScript": false
-    },
-    {
       "id": "forms/add-illustration/add-illustration",
       "name": "Add Illustration Form",
       "description": "Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files",
@@ -471,6 +447,30 @@
         "forge-toolbar"
       ],
       "screenshot": "forms/add-illustration/add-illustration.webp",
+      "hasScript": false
+    },
+    {
+      "id": "dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
+      "tags": [
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
+      ],
+      "file": "dialogs/simple/simple.html",
+      "category": "Dialogs",
+      "componentsUsed": [
+        "forge-button",
+        "forge-dialog",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
+      "screenshot": "dialogs/simple/simple.webp",
       "hasScript": false
     },
     {
@@ -544,6 +544,26 @@
         "forge-icon"
       ],
       "screenshot": "cards/responsive-cards/responsive-cards.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/icon-card/icon-card",
+      "name": "Icon Card",
+      "description": "Action card featuring an icon, title, and description for quick navigation or feature highlights",
+      "tags": [
+        "card",
+        "icon",
+        "navigation",
+        "action"
+      ],
+      "file": "cards/icon-card/icon-card.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-avatar",
+        "forge-card",
+        "forge-icon"
+      ],
+      "screenshot": "cards/icon-card/icon-card.webp",
       "hasScript": false
     },
     {
@@ -690,6 +710,37 @@
       "hasScript": false
     },
     {
+      "id": "application-layout/basic/basic",
+      "name": "Basic Application Layout",
+      "description": "Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
+      "tags": [
+        "layout",
+        "application",
+        "shell",
+        "app-bar",
+        "navigation",
+        "drawer",
+        "user-profile",
+        "footer",
+        "responsive-grid"
+      ],
+      "file": "application-layout/basic/basic.html",
+      "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-profile-link",
+        "forge-toolbar",
+        "forge-user-profile"
+      ],
+      "screenshot": "application-layout/basic/basic.webp",
+      "hasScript": false
+    },
+    {
       "id": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs",
       "name": "Basic Application Layout with Tabs",
       "description": "Standard application shell with a borderless page toolbar and tab bar navigation below it, featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
@@ -722,37 +773,6 @@
       ],
       "screenshot": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.webp",
       "hasScript": false
-    },
-    {
-      "id": "application-layout/basic/basic",
-      "name": "Basic Application Layout",
-      "description": "Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
-      "tags": [
-        "layout",
-        "application",
-        "shell",
-        "app-bar",
-        "navigation",
-        "drawer",
-        "user-profile",
-        "footer",
-        "responsive-grid"
-      ],
-      "file": "application-layout/basic/basic.html",
-      "category": "Application Layout",
-      "componentsUsed": [
-        "forge-app-layout",
-        "forge-divider",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-list",
-        "forge-list-item",
-        "forge-profile-link",
-        "forge-toolbar",
-        "forge-user-profile"
-      ],
-      "screenshot": "application-layout/basic/basic.webp",
-      "hasScript": false
     }
   ],
   "categories": [
@@ -784,5 +804,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-06-30T13:01:10.480Z"
+  "generatedAt": "2026-06-30T13:54:06.750Z"
 }
