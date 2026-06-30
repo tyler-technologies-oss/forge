@@ -1,0 +1,68 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as DateTimePickerStories from './DateTimePicker.stories';
+
+<Meta of={DateTimePickerStories} />
+
+<Title />
+
+The date time picker is an inline composite that combines a calendar with a time-picking UI so users can choose a date and a
+time together. It can pick a single date+time, a time range, a set of bookable time slots, or a full date range, and it emits a
+single value shaped by the `value-mode` attribute (a `Temporal.PlainDateTime`, an ISO string, or a `Date`).
+
+<Canvas of={DateTimePickerStories.Demo} />
+
+## Time Slots
+
+Set `time-mode="slots"` to render a list of bookable time pills generated from `min-time`, `max-time`, and `step`. This is the
+booking-style mode: the user picks a date, then taps an available slot. Pair it with the `time-label` and footer slots to build a
+"pick a meeting time" experience.
+
+<Canvas of={DateTimePickerStories.TimeSlots} />
+
+## Time Range
+
+Set `time-mode="range"` to capture a start and end time on a single date. Use `from-label` and `to-label` to caption the two time
+inputs. The picker validates that the end is after the start and surfaces the selected duration.
+
+<Canvas of={DateTimePickerStories.TimeRange} />
+
+## Date Range
+
+Set `date-mode="range"` to let users select a start and end date on the calendar. When `presets` is enabled (the default for range
+mode), a quick-range sidebar offers shortcuts such as Today, This Week, Next 7 Days, and This Month. Combine with `time-mode="range"`
+to capture a full date+time range.
+
+<Canvas of={DateTimePickerStories.DateRange} />
+
+## Summary Panel
+
+Enable the `summary` attribute to show a primary-colored side panel that echoes the current selection. It is useful for confirming
+the choice in a scheduling flow and can be themed with the `--forge-date-time-picker-summary-*` custom properties.
+
+<Canvas of={DateTimePickerStories.Summary} />
+
+## Orientation
+
+By default the layout adapts to the available space (`orientation="auto"`). Force a stacked layout with `orientation="vertical"` or a
+side-by-side calendar/time layout with `orientation="horizontal"`.
+
+<Canvas of={DateTimePickerStories.Vertical} />
+
+## Deferred Commit
+
+By default (`auto-commit="false"`), changes in `date-mode="range"` and `time-mode="range"` are staged and only committed when the
+user confirms via the footer Apply action, so the public `value` does not change mid-edit. Set `auto-commit` to emit changes as the
+user selects.
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- The embedded calendar and time inputs are fully keyboard navigable; ensure the surrounding flow announces the current selection.
+- In `slots` mode the time pills form a listbox — selection state is announced and the live region reports the chosen slot and
+  duration.
+- When using the `summary` panel, treat it as a visual aid; the authoritative value is still announced through the inputs.
+- Provide a `name` when participating in a form so the value is associated with a label and submitted correctly.
