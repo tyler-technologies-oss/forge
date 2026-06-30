@@ -105,6 +105,33 @@ describe('DateTimeField / rendering (standalone)', () => {
     expect(getDateInput(el).value).toContain('2025');
     expect(getTimeInput(el).value).toContain('10:30');
   });
+
+  it('should focus the nearest input when clicking empty field space to the right of the inputs', async () => {
+    const screen = render(html`<forge-date-time-field time-mode="single"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const timeInput = getTimeInput(el);
+    const field = el.shadowRoot!.querySelector('forge-text-field') as HTMLElement;
+    const rect = timeInput.getBoundingClientRect();
+    // Click in the trailing dead zone: to the right of the last input, on the input row.
+    field.dispatchEvent(
+      new MouseEvent('mousedown', { bubbles: true, composed: true, cancelable: true, clientX: rect.right + 80, clientY: (rect.top + rect.bottom) / 2 })
+    );
+    expect(el.shadowRoot!.activeElement).toBe(timeInput);
+  });
+
+  it('should focus the date input when clicking empty field space to the left of the inputs', async () => {
+    const screen = render(html`<forge-date-time-field time-mode="single"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const dateInput = getDateInput(el);
+    const field = el.shadowRoot!.querySelector('forge-text-field') as HTMLElement;
+    const rect = dateInput.getBoundingClientRect();
+    field.dispatchEvent(
+      new MouseEvent('mousedown', { bubbles: true, composed: true, cancelable: true, clientX: rect.left + 4, clientY: (rect.top + rect.bottom) / 2 })
+    );
+    expect(el.shadowRoot!.activeElement).toBe(dateInput);
+  });
 });
 
 // ─── Linked pair ─────────────────────────────────────────────────────────────
