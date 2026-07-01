@@ -20,25 +20,6 @@
       "hasScript": false
     },
     {
-      "id": "toolbars/simple/simple",
-      "name": "Simple Toolbar",
-      "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
-      "tags": [
-        "toolbar",
-        "header",
-        "actions"
-      ],
-      "file": "toolbars/simple/simple.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-icon",
-        "forge-icon-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "toolbars/simple/simple.webp",
-      "hasScript": false
-    },
-    {
       "id": "toolbars/table-header/table-header",
       "name": "Table Header",
       "description": "Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot",
@@ -56,6 +37,25 @@
         "forge-toolbar"
       ],
       "screenshot": "toolbars/table-header/table-header.webp",
+      "hasScript": false
+    },
+    {
+      "id": "toolbars/simple/simple",
+      "name": "Simple Toolbar",
+      "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
+      "tags": [
+        "toolbar",
+        "header",
+        "actions"
+      ],
+      "file": "toolbars/simple/simple.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/simple/simple.webp",
       "hasScript": false
     },
     {
@@ -548,6 +548,32 @@
       "hasScript": false
     },
     {
+      "id": "cards/cohort-status-card/cohort-status-card",
+      "name": "Cohort Status Card",
+      "description": "Responsive card with a summary section (title and subtitle) on the left and a multi-column status grid on the right showing progress through sequential phases or milestones with completion indicators and dates. Grid collapses to stacked layout on smaller screens. Useful for release rollouts, deployment phases, onboarding steps, approval workflows, or any multi-stage process tracker.",
+      "tags": [
+        "card",
+        "status",
+        "timeline",
+        "progress",
+        "phases",
+        "milestones",
+        "workflow",
+        "responsive",
+        "grid",
+        "rollout",
+        "deployment"
+      ],
+      "file": "cards/cohort-status-card/cohort-status-card.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-card",
+        "forge-icon"
+      ],
+      "screenshot": "cards/cohort-status-card/cohort-status-card.webp",
+      "hasScript": false
+    },
+    {
       "id": "cards/basic-card/basic-card",
       "name": "Basic Card",
       "description": "Structured card with header, header actions, body content area, and footer with action buttons",
@@ -785,5 +811,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-07-01T16:03:02.014Z"
+  "generatedAt": "2026-07-01T16:21:37.083Z"
 }

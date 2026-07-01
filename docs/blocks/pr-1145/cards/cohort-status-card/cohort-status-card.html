@@ -1,0 +1,65 @@
+<!--
+  @block Cohort Status Card
+  @description Responsive card with a summary section (title and subtitle) on the left and a multi-column status grid on the right showing progress through sequential phases or milestones with completion indicators and dates. Grid collapses to stacked layout on smaller screens. Useful for release rollouts, deployment phases, onboarding steps, approval workflows, or any multi-stage process tracker.
+  @tags card, status, timeline, progress, phases, milestones, workflow, responsive, grid, rollout, deployment
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Cohort Status Card</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+  </head>
+  <body class="">
+    <forge-card>
+  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-large">
+    <div class="shrink-0">
+      <h2 class="text-heading8 mb-xxsmall">2027.1</h2>
+      <p class="text-body2 text-medium">2 Features</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-medium lg:gap-large">
+      <div class="grid grid-cols-[auto_1fr] gap-x-xsmall gap-y-xxsmall text-success">
+        <forge-icon name="checkbox_marked_circle_outline" class="row-span-2 self-start text-base"></forge-icon>
+        <span class="text-button">Cohort 1 Activated</span>
+        <span class="text-label2 text-medium">Activated: 3/2/27</span>
+      </div>
+
+      <div class="grid grid-cols-[auto_1fr] gap-x-xsmall gap-y-xxsmall text-medium">
+        <forge-icon name="circle_outline" class="row-span-2 self-start text-base"></forge-icon>
+        <span class="text-body1">Activate Cohort 2</span>
+        <span class="text-label2">Planned: 3/9/27</span>
+      </div>
+
+      <div class="grid grid-cols-[auto_1fr] gap-x-xsmall gap-y-xxsmall text-medium">
+        <forge-icon name="circle_outline" class="row-span-2 self-start text-base"></forge-icon>
+        <span class="text-body1">Activate Cohort 3</span>
+        <span class="text-label2">Planned: 3/16/27</span>
+      </div>
+
+      <div class="grid grid-cols-[auto_1fr] gap-x-xsmall gap-y-xxsmall text-medium">
+        <forge-icon name="circle_outline" class="row-span-2 self-start text-base"></forge-icon>
+        <span class="text-body1">Activate Cohort 4</span>
+        <span class="text-label2">Planned: 3/23/27</span>
+      </div>
+    </div>
+  </div>
+</forge-card>
+    <script type="module" src="/blocks/pr-1145/ready-transition.js"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js"></script>
+  </body>
+</html>
