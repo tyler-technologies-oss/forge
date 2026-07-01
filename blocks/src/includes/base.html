@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="{{baseHref}}" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="{{baseHref}}theme.css" />
+    <link rel="stylesheet" href="{{baseHref}}styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="{{baseHref}}forge-register.js"></script>
+  </head>
+  <body class="{{bodyClass}}">
+    {{{body}}}
+    <script type="module" src="{{baseHref}}ready-transition.js"></script>
+    <script type="module" src="{{baseHref}}theme-listener.js"></script>
+  </body>
+</html>

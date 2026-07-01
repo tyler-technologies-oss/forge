@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forge Blocks</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="../theme.scss" />
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="../forge-register.ts"></script>
+  </head>
+  <body class="bg-surface">
+    <forge-scaffold>
+      <forge-app-bar slot="header" title-text="Forge Blocks">
+        <forge-icon slot="logo" name="home" external></forge-icon>
+        <div slot="end" class="flex items-center gap-xsmall">
+          <forge-icon-button density="medium" aria-label="GitHub repository" theme="app-bar">
+            <forge-icon name="code" external></forge-icon>
+          </forge-icon-button>
+        </div>
+      </forge-app-bar>
+
+      <main slot="body" class="p-large">
+        <forge-card class="max-w-4xl mx-auto">
+          <div class="space-y-medium">
+            <div>
+              <h1 class="text-heading4">Block Library</h1>
+              <p class="text-body1 text-medium mb-medium">A collection of reusable UI patterns built with Tyler Forge components.</p>
+            </div>
+            <forge-text-field>
+              <forge-icon slot="leading" name="search"></forge-icon>
+              <input type="text" id="filter-input" aria-label="Filter blocks" />
+              <label for="filter-input">Filter blocks</label>
+            </forge-text-field>
+
+            <forge-card class="tonal-card">
+              <div id="blocks-container"></div>
+            </forge-card>
+            <p id="no-results" class="text-body1 text-medium hidden">No blocks match your filter.</p>
+          </div>
+        </forge-card>
+      </main>
+    </forge-scaffold>
+
+    <template id="category-template">
+      <section class="mb-large category-section">
+        <h2 class="text-heading2 mb-small category-title"></h2>
+        <forge-list class="blocks-list"></forge-list>
+      </section>
+    </template>
+
+    <template id="block-item-template">
+      <forge-list-item class="block-item [--forge-list-item-padding: var(--forge-spacing-xxxsmall)]" dense>
+        <a class="block-link no-underline text-inherit block-name"></a>
+      </forge-list-item>
+    </template>
+
+    <script type="module">
+      let blocksData = null;
+
+      function formatCategoryName(name) {
+        return name
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      }
+
+      function createBlockItem(block) {
+        const template = document.getElementById('block-item-template');
+        const item = template.content.cloneNode(true);
+        const listItem = item.querySelector('.block-item');
+
+        const link = item.querySelector('.block-link');
+        // block.file is "category/name/name.html" - use relative path
+        link.href = './' + block.file;
+        link.textContent = block.name;
+
+        listItem.dataset.name = block.name.toLowerCase();
+        listItem.dataset.description = (block.description || '').toLowerCase();
+        listItem.dataset.tags = (block.tags || []).join(' ').toLowerCase();
+        listItem.dataset.category = block.file.split('/')[0];
+
+        return item;
+      }
+
+      function createCategorySection(categoryName, blocks) {
+        const template = document.getElementById('category-template');
+        const section = template.content.cloneNode(true);
+        const sectionEl = section.querySelector('.category-section');
+
+        sectionEl.dataset.category = categoryName;
+        section.querySelector('.category-title').textContent = formatCategoryName(categoryName);
+
+        const list = section.querySelector('.blocks-list');
+        blocks.forEach(block => {
+          list.appendChild(createBlockItem(block));
+        });
+
+        return section;
+      }
+
+      function renderBlocks() {
+        const container = document.getElementById('blocks-container');
+        container.innerHTML = '';
+
+        const { blocks, categories } = blocksData;
+
+        const blocksByCategory = {};
+        categories.forEach(cat => {
+          blocksByCategory[cat.name] = blocks.filter(b => b.file.startsWith(`${cat.name}/`));
+        });
+
+        categories
+          .filter(cat => blocksByCategory[cat.name]?.length > 0)
+          .forEach(category => {
+            container.appendChild(createCategorySection(category.name, blocksByCategory[category.name]));
+          });
+      }
+
+      function filterBlocks(query) {
+        const normalizedQuery = query.toLowerCase().trim();
+        const container = document.getElementById('blocks-container');
+        const noResults = document.getElementById('no-results');
+        const sections = container.querySelectorAll('.category-section');
+        let totalVisible = 0;
+
+        sections.forEach(section => {
+          const items = section.querySelectorAll('.block-item');
+          let visibleInSection = 0;
+
+          items.forEach(item => {
+            const name = item.dataset.name;
+            const description = item.dataset.description;
+            const tags = item.dataset.tags;
+            const category = item.dataset.category;
+
+            const matches =
+              !normalizedQuery ||
+              name.includes(normalizedQuery) ||
+              description.includes(normalizedQuery) ||
+              tags.includes(normalizedQuery) ||
+              category.includes(normalizedQuery);
+
+            item.style.display = matches ? '' : 'none';
+            if (matches) {
+              visibleInSection++;
+            }
+          });
+
+          section.style.display = visibleInSection > 0 ? '' : 'none';
+          totalVisible += visibleInSection;
+        });
+
+        noResults.classList.toggle('hidden', totalVisible > 0);
+      }
+
+      // Initialize
+      async function init() {
+        const res = await fetch('./manifest.json');
+        blocksData = await res.json();
+        renderBlocks();
+
+        const filterInput = document.getElementById('filter-input');
+        filterInput.addEventListener('input', e => {
+          filterBlocks(e.target.value);
+        });
+      }
+
+      init();
+
+      customElements.whenDefined('forge-scaffold').then(() => {
+        document.body.classList.add('ready');
+      });
+    </script>
+  </body>
+</html>

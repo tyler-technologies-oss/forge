@@ -1,0 +1,13 @@
+<!--
+  @block Table with Icon Actions
+  @description Data table inside a card with a toolbar header featuring icon buttons for filtering, exporting, and additional options
+  @tags table, data, card, toolbar, icons, actions
+-->
+<div class="p-medium">
+  <forge-card no-padding>
+    {{> table-header title="Project Tasks"}}
+    <forge-table id="tasks-table"></forge-table>
+  </forge-card>
+</div>
+
+<script type="module" src="/src/blocks/tables/table-with-icon-actions/table-with-icon-actions.ts"></script>
