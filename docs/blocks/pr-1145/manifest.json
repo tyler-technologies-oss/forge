@@ -20,6 +20,25 @@
       "hasScript": false
     },
     {
+      "id": "toolbars/simple/simple",
+      "name": "Simple Toolbar",
+      "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
+      "tags": [
+        "toolbar",
+        "header",
+        "actions"
+      ],
+      "file": "toolbars/simple/simple.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/simple/simple.webp",
+      "hasScript": false
+    },
+    {
       "id": "toolbars/table-header/table-header",
       "name": "Table Header",
       "description": "Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot",
@@ -37,25 +56,6 @@
         "forge-toolbar"
       ],
       "screenshot": "toolbars/table-header/table-header.webp",
-      "hasScript": false
-    },
-    {
-      "id": "toolbars/simple/simple",
-      "name": "Simple Toolbar",
-      "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
-      "tags": [
-        "toolbar",
-        "header",
-        "actions"
-      ],
-      "file": "toolbars/simple/simple.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-icon",
-        "forge-icon-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "toolbars/simple/simple.webp",
       "hasScript": false
     },
     {
@@ -474,27 +474,6 @@
       "hasScript": false
     },
     {
-      "id": "cards/user-profile/user-profile",
-      "name": "User Profile Card",
-      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
-      "tags": [
-        "card",
-        "profile",
-        "user",
-        "avatar",
-        "contact"
-      ],
-      "file": "cards/user-profile/user-profile.html",
-      "category": "Cards",
-      "componentsUsed": [
-        "forge-avatar",
-        "forge-card",
-        "forge-icon"
-      ],
-      "screenshot": "cards/user-profile/user-profile.webp",
-      "hasScript": false
-    },
-    {
       "id": "cards/tabbed-card/tabbed-card",
       "name": "Tabbed Card",
       "description": "Card with tab navigation that switches between different content views using forge-tab-bar and forge-view-switcher",
@@ -541,7 +520,9 @@
       "componentsUsed": [
         "forge-badge",
         "forge-card",
-        "forge-icon"
+        "forge-icon",
+        "forge-scaffold",
+        "forge-toolbar"
       ],
       "screenshot": "cards/responsive-cards/responsive-cards.webp",
       "hasScript": false
@@ -710,37 +691,6 @@
       "hasScript": false
     },
     {
-      "id": "application-layout/basic/basic",
-      "name": "Basic Application Layout",
-      "description": "Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
-      "tags": [
-        "layout",
-        "application",
-        "shell",
-        "app-bar",
-        "navigation",
-        "drawer",
-        "user-profile",
-        "footer",
-        "responsive-grid"
-      ],
-      "file": "application-layout/basic/basic.html",
-      "category": "Application Layout",
-      "componentsUsed": [
-        "forge-app-layout",
-        "forge-divider",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-list",
-        "forge-list-item",
-        "forge-profile-link",
-        "forge-toolbar",
-        "forge-user-profile"
-      ],
-      "screenshot": "application-layout/basic/basic.webp",
-      "hasScript": false
-    },
-    {
       "id": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs",
       "name": "Basic Application Layout with Tabs",
       "description": "Standard application shell with a borderless page toolbar and tab bar navigation below it, featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
@@ -773,6 +723,37 @@
       ],
       "screenshot": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.webp",
       "hasScript": false
+    },
+    {
+      "id": "application-layout/basic/basic",
+      "name": "Basic Application Layout",
+      "description": "Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
+      "tags": [
+        "layout",
+        "application",
+        "shell",
+        "app-bar",
+        "navigation",
+        "drawer",
+        "user-profile",
+        "footer",
+        "responsive-grid"
+      ],
+      "file": "application-layout/basic/basic.html",
+      "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-profile-link",
+        "forge-toolbar",
+        "forge-user-profile"
+      ],
+      "screenshot": "application-layout/basic/basic.webp",
+      "hasScript": false
     }
   ],
   "categories": [
@@ -804,5 +785,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-06-30T13:54:06.750Z"
+  "generatedAt": "2026-07-01T16:03:02.014Z"
 }
