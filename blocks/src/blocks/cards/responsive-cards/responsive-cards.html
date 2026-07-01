@@ -5,18 +5,20 @@
 -->
 <div class="min-h-screen flex items-center justify-center p-large">
   <div class="grid grid-min-320 gap-medium max-w-6xl w-full">
-    <forge-card class="overflow-hidden" no-padding>
-      <img class="w-full h-48 object-cover" src="https://dummyimage.com/720x400" alt="Blog post image" />
-      <div class="p-medium">
-        <forge-badge class="mb-xsmall" theme="info-secondary">Category</forge-badge>
-        <h2 class="text-heading5 mb-small">The Catalyzer</h2>
-        <p class="text-body2 text-medium mb-medium">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
-        <div class="flex items-center flex-wrap gap-small">
-          <a href="#" class="forge-hyperlink inline-flex items-center gap-xxsmall">
+    <forge-card no-padding>
+      <forge-scaffold>
+        <div slot="body" class="p-medium">
+          <forge-badge class="mb-xsmall" theme="info-secondary">Category</forge-badge>
+          <h2 class="text-heading3 mb-small">The Catalyzer</h2>
+          <p class="text-body2 text-medium">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
+        </div>
+
+        <forge-toolbar slot="footer" inverted no-border>
+          <a slot="start" href="#" class="forge-hyperlink inline-flex items-center gap-xxsmall">
             Learn More
             <forge-icon name="forward"></forge-icon>
           </a>
-          <div class="flex items-center gap-small ml-auto">
+          <div slot="end" class="flex items-center gap-small">
             <span class="text-medium text-label2 inline-flex items-center gap-xxsmall pr-small border-r border-outline">
               <forge-icon name="visibility"></forge-icon>
               1.2K
@@ -26,22 +28,24 @@
               6
             </span>
           </div>
-        </div>
-      </div>
+        </forge-toolbar>
+      </forge-scaffold>
     </forge-card>
 
-    <forge-card class="overflow-hidden" no-padding>
-      <img class="w-full h-48 object-cover" src="https://dummyimage.com/721x401" alt="Blog post image" />
-      <div class="p-medium">
-        <forge-badge class="mb-xsmall" theme="info">Category</forge-badge>
-        <h2 class="text-heading5 mb-small">The 400 Blows</h2>
-        <p class="text-body2 text-medium mb-medium">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
-        <div class="flex items-center flex-wrap gap-small">
-          <a href="#" class="forge-hyperlink inline-flex items-center gap-xxsmall">
+    <forge-card no-padding>
+      <forge-scaffold>
+        <div slot="body" class="p-medium">
+          <forge-badge class="mb-xsmall" theme="info">Category</forge-badge>
+          <h2 class="text-heading3 mb-small">The 400 Blows</h2>
+          <p class="text-body2 text-medium">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
+        </div>
+
+        <forge-toolbar slot="footer" inverted no-border>
+          <a slot="start" href="#" class="forge-hyperlink inline-flex items-center gap-xxsmall">
             Learn More
             <forge-icon name="forward"></forge-icon>
           </a>
-          <div class="flex items-center gap-small ml-auto">
+          <div slot="end" class="flex items-center gap-small">
             <span class="text-medium text-label2 inline-flex items-center gap-xxsmall pr-small border-r border-outline">
               <forge-icon name="visibility"></forge-icon>
               1.2K
@@ -51,22 +55,24 @@
               6
             </span>
           </div>
-        </div>
-      </div>
+        </forge-toolbar>
+      </forge-scaffold>
     </forge-card>
 
-    <forge-card class="overflow-hidden" no-padding>
-      <img class="w-full h-48 object-cover" src="https://dummyimage.com/722x402" alt="Blog post image" />
-      <div class="p-medium">
-        <forge-badge class="mb-xsmall" theme="warning">Category</forge-badge>
-        <h2 class="text-heading5 mb-small">Shooting Stars</h2>
-        <p class="text-body2 text-medium mb-medium">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
-        <div class="flex items-center flex-wrap gap-small">
-          <a href="#" class="forge-hyperlink inline-flex items-center gap-xxsmall">
+    <forge-card no-padding>
+      <forge-scaffold>
+        <div slot="body" class="p-medium">
+          <forge-badge class="mb-xsmall" theme="warning">Category</forge-badge>
+          <h2 class="text-heading3 mb-small">Shooting Stars</h2>
+          <p class="text-body2 text-medium">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled waistcoat.</p>
+        </div>
+
+        <forge-toolbar slot="footer" inverted no-border>
+          <a slot="start" href="#" class="forge-hyperlink inline-flex items-center gap-xxsmall">
             Learn More
             <forge-icon name="forward"></forge-icon>
           </a>
-          <div class="flex items-center gap-small ml-auto">
+          <div slot="end" class="flex items-center gap-small">
             <span class="text-medium text-label2 inline-flex items-center gap-xxsmall pr-small border-r border-outline">
               <forge-icon name="visibility"></forge-icon>
               1.2K
@@ -76,8 +82,8 @@
               6
             </span>
           </div>
-        </div>
-      </div>
+        </forge-toolbar>
+      </forge-scaffold>
     </forge-card>
   </div>
 </div>
