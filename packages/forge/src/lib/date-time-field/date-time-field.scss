@@ -1,0 +1,205 @@
+@use '../utils/mixins-media';
+
+:host {
+  display: inline-block;
+  // Size to the content (date/time segments + toggle) rather than a fixed per-mode width so the
+  // field is never wider than it needs to be; range modes grow naturally with their extra inputs.
+  width: max-content;
+  max-width: 100%;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+forge-text-field {
+  width: 100%;
+}
+
+// The inputs are slotted into forge-text-field; let the field own the leading/
+// trailing text inset (do NOT set padding here — it overrides the field's inset).
+[part='date-input'],
+[part='to-date-input'] {
+  // Fits `MM/DD/YYYY`.
+  width: 6em;
+  font: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+// Empty/incomplete masked segments render their guide (e.g. __/__/____) in a
+// muted color so they read like a placeholder rather than stark entered text.
+// `input.` keeps this winning over the [part] color rules regardless of order.
+input.guide-muted {
+  color: var(--forge-theme-text-low, GrayText);
+}
+
+// Slots mode still groups its date/time display in wrapper spans.
+.date-segment,
+.time-segment {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+// The value flows inline as [start date time] – [end date time]; the inputs are
+// top-level slot children, so grouping is done with margins, not wrappers.
+// Stretched as a flex item in the field's input row; center the glyph so it
+// lines up with the inputs' vertically-centered text instead of sitting on top.
+.range-separator {
+  display: inline-flex;
+  align-self: center;
+  align-items: center;
+  color: var(--forge-theme-text-medium, currentColor);
+  margin-inline: 0.4em;
+  vertical-align: middle;
+}
+
+[part='time-input'],
+[part='from-input'],
+[part='to-input'],
+[part='slot-display'] {
+  font: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+  background: transparent;
+  // Fits `hh:mm aa` (12h) / `hh:mm` (24h); widened below when seconds are shown.
+  width: 4.75em;
+  text-align: start;
+  // Small gap from the preceding date input within an endpoint.
+  margin-inline-start: 0.3em;
+}
+
+// Seconds add `:ss`, so reserve more room to keep `hh:mm:ss aa` from clipping.
+:host([allow-seconds]) {
+  [part='time-input'],
+  [part='from-input'],
+  [part='to-input'],
+  [part='slot-display'] {
+    width: 6em;
+  }
+}
+
+[part='slot-display'] {
+  cursor: pointer;
+}
+
+:host([readonly]) [part='slot-display'],
+:host([disabled]) [part='slot-display'] {
+  cursor: default;
+}
+
+// Plain calendar toggle: let forge-icon-button own its own resting/hover/focus
+// state. A static background read as "always highlighted".
+[part='toggle'] {
+  border-radius: 50%;
+}
+
+[part='duration'] {
+  color: var(--forge-theme-text-medium, currentColor);
+  font-size: 0.75em;
+}
+
+// ─── Small screens ──────────────────────────────────────────────────────────
+// Fill the available width on phones so the field is a comfortable tap target;
+// the picker opens as a full-height bottom sheet (handled in forge-date-time-picker).
+@include mixins-media.phone-only {
+  :host {
+    display: block;
+    width: 100%;
+  }
+
+  // Keep the calendar toggle a comfortable touch target.
+  [part='toggle'] {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+// Tappable two-line value display used on phones with a linked picker. A single
+// button opens the bottom sheet; the value flows start-over-end so a full range
+// reads in full instead of truncating on one line.
+.mobile-display {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.5rem 0.5rem 0.875rem;
+  appearance: none;
+  text-align: start;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  background: var(--forge-theme-surface, Field);
+  border: 1px solid var(--forge-theme-outline, ButtonBorder);
+  border-radius: var(--forge-shape-medium, 0.25rem);
+
+  &:focus-visible {
+    outline: 2px solid var(--forge-theme-primary, Highlight);
+    outline-offset: 1px;
+  }
+}
+
+:host([disabled]) .mobile-display {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.md-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.md-label {
+  font-size: 0.75rem;
+  line-height: 1;
+  color: var(--forge-theme-text-medium, currentColor);
+}
+
+.md-value {
+  display: flex;
+  flex-direction: column;
+  color: var(--forge-theme-text-high, currentColor);
+}
+
+.md-placeholder {
+  color: var(--forge-theme-text-low, GrayText);
+}
+
+.md-toggle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  color: var(--forge-theme-text-high, currentColor);
+  background: var(--forge-theme-surface-container-low, transparent);
+}
+
+.md-support {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding-inline: 0.125rem;
+  font-size: 0.75rem;
+  color: var(--forge-theme-text-medium, currentColor);
+}
+
+.md-support [part='error-text'] {
+  color: var(--forge-theme-error, currentColor);
+}
+
+.md-support-end {
+  flex: none;
+}

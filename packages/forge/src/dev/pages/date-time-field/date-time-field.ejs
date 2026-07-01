@@ -1,0 +1,42 @@
+<div class="vert">
+  <h3 style="margin: 0;">Linked to a picker</h3>
+  <forge-date-time-field id="demo-date-time-field" picker="demo-date-time-picker" name="appointment" label="Appointment" placeholder="Select date and time">
+    <span slot="support-text">Pick when your appointment should start.</span>
+  </forge-date-time-field>
+  <forge-date-time-picker id="demo-date-time-picker" time-mode="single"></forge-date-time-picker>
+
+  <forge-label-value>
+    <span slot="label">Complete</span>
+    <span slot="value" id="demo-complete">false</span>
+  </forge-label-value>
+
+  <forge-label-value>
+    <span slot="label">Value</span>
+    <pre slot="value" id="demo-value" style="margin: 0; font-family: monospace;">null</pre>
+  </forge-label-value>
+
+  <forge-button variant="raised" id="demo-validate">Report validity</forge-button>
+
+  <hr style="width: 100%; border: none; border-top: 1px solid var(--forge-theme-outline, #dadce0); margin: 8px 0;" />
+
+  <h3 style="margin: 0;">Standalone — no picker</h3>
+  <p style="margin: 0; max-width: 44ch; color: var(--forge-theme-text-medium, #5f6368);">
+    With no <code>picker</code> attribute the field has no calendar toggle or popup — users type the date and time
+    directly into the masked inputs.
+  </p>
+  <forge-date-time-field id="demo-standalone-field" name="standalone" label="Standalone (no picker)" placeholder="Type a date and time">
+    <span slot="support-text">No picker linked — type directly into the masked inputs.</span>
+  </forge-date-time-field>
+
+  <forge-label-value>
+    <span slot="label">Complete</span>
+    <span slot="value" id="demo-standalone-complete">false</span>
+  </forge-label-value>
+
+  <forge-label-value>
+    <span slot="label">Value</span>
+    <pre slot="value" id="demo-standalone-value" style="margin: 0; font-family: monospace;">null</pre>
+  </forge-label-value>
+</div>
+
+<script type="module" src="date-time-field.ts"></script>

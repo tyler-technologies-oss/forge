@@ -1,0 +1,398 @@
+@use './core' as *;
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-date-time-picker {
+  @include tokens;
+  @include base;
+}
+
+:host([summary]) .forge-date-time-picker {
+  @include base-with-summary;
+  grid-template-columns: auto auto;
+  align-items: stretch;
+  gap: 0;
+}
+
+.summary {
+  @include summary;
+}
+
+.summary-year {
+  @include summary-year;
+}
+
+.summary-day {
+  @include summary-day;
+}
+
+.summary-empty {
+  @include summary-empty;
+}
+
+.content {
+  @include content;
+}
+
+.body {
+  @include body;
+}
+
+.body[data-orientation='horizontal'] {
+  @include body-horizontal;
+}
+
+.body[data-orientation='vertical'] {
+  @include body-vertical;
+  gap: 0;
+}
+
+.body[data-orientation='vertical'] .time-section {
+  width: 100%;
+  padding-top: #{token(body-gap)};
+  margin-top: #{token(body-gap)};
+  border-top: solid #{token(outline-width)} #{token(divider-color)};
+}
+
+.body:has(.presets) {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.body-main {
+  display: flex;
+  min-width: 0;
+}
+
+.body-main[data-orientation='horizontal'] {
+  @include body-horizontal;
+}
+
+.body-main[data-orientation='vertical'] {
+  @include body-vertical;
+  gap: 0;
+}
+
+.body-main[data-orientation='vertical'] .time-section {
+  width: 100%;
+  padding-top: #{token(body-gap)};
+  margin-top: #{token(body-gap)};
+  border-top: solid #{token(outline-width)} #{token(divider-color)};
+}
+
+.calendar-section {
+  width: #{token(calendar-max-width)};
+  max-width: 100%;
+}
+
+forge-calendar {
+  width: 100%;
+}
+
+.header,
+.footer,
+.time-label {
+  display: contents;
+}
+
+.header[data-empty='true'],
+.footer[data-empty='true'],
+.time-label[data-empty='true'] {
+  display: none;
+}
+
+.footer {
+  border-top: solid #{token(outline-width)} #{token(divider-color)};
+  padding-top: #{token(gap)};
+  margin-top: #{token(gap)};
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: #{token(gap)};
+}
+
+.footer[data-empty='true'] {
+  display: none;
+}
+
+.footer-start,
+.footer-center,
+.footer-end {
+  display: flex;
+  align-items: center;
+  gap: #{token(separator-gap)};
+  min-width: 0;
+}
+
+.footer-start {
+  justify-content: flex-start;
+}
+
+.footer-center {
+  justify-content: center;
+}
+
+.footer-end {
+  justify-content: flex-end;
+}
+
+.footer-start[data-empty='true'],
+.footer-center[data-empty='true'],
+.footer-end[data-empty='true'] {
+  visibility: hidden;
+  min-width: 0;
+}
+
+.calendar-section,
+.time-section {
+  @include section;
+}
+
+.time-section[data-mode='single'],
+.time-section[data-mode='range'] {
+  align-self: start;
+}
+
+.time-section[data-mode='slots'] {
+  align-self: stretch;
+  min-height: 0;
+}
+
+.time-inputs {
+  display: flex;
+  width: #{token(calendar-max-width)};
+  max-width: 100%;
+}
+
+.time-inputs forge-time-picker,
+.range-inputs forge-time-picker {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.time-inputs forge-time-picker forge-text-field,
+.range-inputs forge-time-picker forge-text-field {
+  width: 100%;
+  --forge-field-height: #{token(time-field-height)};
+}
+
+.range-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: #{token(section-gap)};
+  width: #{token(calendar-max-width)};
+  max-width: 100%;
+}
+
+.meridiem-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #{token(time-label-color)};
+  padding-inline: #{token(slot-padding-inline)};
+}
+
+.slot-list {
+  @include slot-list;
+  align-self: stretch;
+  height: 100%;
+}
+
+.slot-list-inner {
+  @include slot-list-inner;
+}
+
+.slot {
+  @include slot;
+}
+
+.slot[aria-selected='true'] {
+  @include slot-selected;
+}
+
+.slot[aria-disabled='true'] {
+  @include slot-disabled;
+}
+
+.presets {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+  padding-inline-end: #{token(body-gap)};
+  margin-inline-end: #{token(body-gap)};
+  border-inline-end: solid #{token(outline-width)} #{token(divider-color)};
+  align-self: stretch;
+}
+
+[part='preset'] {
+  display: block;
+  width: 100%;
+  appearance: none;
+  background: transparent;
+  color: #{token(color)};
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: start;
+  padding-block: #{token(slot-padding-block)};
+  padding-inline: #{token(slot-padding-inline)};
+  border: none;
+  border-radius: #{token(shape)};
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 120ms ease;
+
+  &:hover {
+    background: #{token(slot-hover-background)};
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--forge-focus-indicator-color, currentColor);
+    outline-offset: 2px;
+  }
+}
+
+.commit-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: #{token(separator-gap)};
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.duration {
+  flex: 1;
+  font-size: 0.8125rem;
+  color: #{token(time-label-color)};
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:host([disabled]) {
+  pointer-events: none;
+}
+
+:host([disabled]) .forge-date-time-picker {
+  opacity: 0.55;
+}
+
+.live-region {
+  @include live-region;
+}
+
+// ─── Small screens: bottom sheet ─────────────────────────────────────────────
+// On phones the picker renders inside forge-bottom-sheet (see render()). The card
+// then fills the sheet and reflows to a single scrollable column: a horizontal
+// preset chip rail on top, one calendar, stacked time inputs, and a pinned footer.
+:host([data-sheet]) {
+  display: block;
+  width: 100%;
+}
+
+.forge-date-time-picker[data-presentation='sheet'] {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  // The sheet provides the surface, radius, and scrim.
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: hidden;
+
+  // Body fills the space between the (optional) presets rail and the footer and
+  // scrolls; the footer is the last flex child, so it stays pinned at the bottom.
+  .body {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .body:not(:has(.presets)) {
+    overflow-y: auto;
+  }
+
+  // Presets become a horizontally scrolling chip rail above the grid.
+  .body:has(.presets) {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .presets {
+    flex: 0 0 auto;
+    flex-direction: row;
+    align-self: stretch;
+    gap: #{token(separator-gap)};
+    min-width: 0;
+    overflow-x: auto;
+    border-inline-end: none;
+    border-block-end: solid #{token(outline-width)} #{token(divider-color)};
+    margin: 0 0 #{token(body-gap)};
+    padding: 0 0 #{token(body-gap)};
+  }
+
+  [part='preset'] {
+    flex: 0 0 auto;
+    width: auto;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    border-radius: 999px;
+    background: #{token(slot-hover-background)};
+  }
+
+  // Calendar + time stack and fill the scroll body.
+  .body-main {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .calendar-section {
+    width: 100%;
+  }
+
+  forge-calendar {
+    margin-inline: auto;
+  }
+
+  .time-inputs,
+  .range-inputs {
+    width: 100%;
+  }
+
+  // Comfortable touch targets for time fields and the commit actions.
+  .time-inputs forge-text-field,
+  .range-inputs forge-text-field {
+    --forge-field-height: 44px;
+  }
+
+  .footer {
+    flex: 0 0 auto;
+  }
+
+  [part='commit-apply'],
+  [part='commit-cancel'] {
+    --forge-button-height: 44px;
+    min-height: 44px;
+  }
+}
