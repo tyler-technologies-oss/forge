@@ -3,7 +3,8 @@
   @description Responsive card with a summary section (title and subtitle) on the left and a multi-column status grid on the right showing progress through sequential phases or milestones with completion indicators and dates. Grid collapses to stacked layout on smaller screens. Useful for release rollouts, deployment phases, onboarding steps, approval workflows, or any multi-stage process tracker.
   @tags card, status, timeline, progress, phases, milestones, workflow, responsive, grid, rollout, deployment
 -->
-<forge-card>
+<div class="min-h-screen flex items-center justify-center p-medium">
+  <forge-card class="w-full max-w-[1260px]">
   <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-large">
     <div class="shrink-0">
       <h2 class="text-heading8 mb-xxsmall">2027.1</h2>
@@ -36,4 +37,5 @@
       </div>
     </div>
   </div>
-</forge-card>
+  </forge-card>
+</div>
