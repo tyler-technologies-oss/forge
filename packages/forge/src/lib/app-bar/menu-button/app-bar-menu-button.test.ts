@@ -11,6 +11,7 @@ describe('App Bar Menu Button', () => {
   it('should be accessible', async () => {
     const screen = render(html`<forge-app-bar-menu-button></forge-app-bar-menu-button>`);
     const el = screen.container.querySelector('forge-app-bar-menu-button') as IAppBarMenuButtonComponent;
+    await frame();
 
     await expect(el).toBeAccessible();
   });

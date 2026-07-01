@@ -1,12 +1,12 @@
 import { addClass } from '@tylertech/forge-core';
 import { ICON_CLASS_NAME, Theme } from '../constants.js';
 import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate.js';
+import { ICON_CONSTANTS, IconExternalType } from '../icon/icon-constants.js';
 import { IIconComponent } from '../icon/icon.js';
-import { IconExternalType, ICON_CONSTANTS } from '../icon/icon-constants.js';
-import { IFloatingActionButtonComponent } from './floating-action-button.js';
-import { FloatingActionButtonDensity, FloatingActionButtonElevation, FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants.js';
+import { FLOATING_ACTION_BUTTON_CONSTANTS, FloatingActionButtonDensity, FloatingActionButtonElevation } from './floating-action-button-constants.js';
+import { FloatingActionButtonComponent } from './floating-action-button.js';
 
-export type FloatingActionButtonComponentDelegateProps = Partial<IFloatingActionButtonComponent>;
+export type FloatingActionButtonComponentDelegateProps = Partial<FloatingActionButtonComponent>;
 export interface IFloatingActionButtonComponentDelegateOptions extends IBaseComponentDelegateOptions {
   iconName?: string;
   iconExternal?: boolean;
@@ -19,21 +19,18 @@ export interface IFloatingActionButtonComponentDelegateOptions extends IBaseComp
   elevation?: FloatingActionButtonElevation;
 }
 export interface IFloatingActionButtonComponentDelegateConfig extends IBaseComponentDelegateConfig<
-  IFloatingActionButtonComponent,
+  FloatingActionButtonComponent,
   IFloatingActionButtonComponentDelegateOptions
 > {}
 
-export class FloatingActionButtonComponentDelegate extends BaseComponentDelegate<
-  IFloatingActionButtonComponent,
-  IFloatingActionButtonComponentDelegateOptions
-> {
+export class FloatingActionButtonComponentDelegate extends BaseComponentDelegate<FloatingActionButtonComponent, IFloatingActionButtonComponentDelegateOptions> {
   private _iconElement?: IIconComponent;
 
   constructor(config?: IFloatingActionButtonComponentDelegateConfig) {
     super(config);
   }
 
-  protected _build(): IFloatingActionButtonComponent {
+  protected _build(): FloatingActionButtonComponent {
     const component = document.createElement(FLOATING_ACTION_BUTTON_CONSTANTS.elementName);
 
     if (this._config.options?.theme) {

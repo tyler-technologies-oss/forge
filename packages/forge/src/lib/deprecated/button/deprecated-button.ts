@@ -8,7 +8,7 @@ import template from './deprecated-button.html';
 import styles from './deprecated-button.scss';
 
 /**
- * @deprecated Use `IButtonComponent` component instead.
+ * @deprecated Use `ButtonComponent` component instead.
  */
 export interface IDeprecatedButtonComponent extends IBaseComponent {
   type: string;
