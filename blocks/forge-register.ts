@@ -51,7 +51,9 @@ import {
   tylIconBook,
   tylIconChartArc,
   tylIconRateReview,
-  tylIconRobot
+  tylIconRobot,
+  tylIconCheckboxMarkedCircleOutline,
+  tylIconCircleOutline
 } from '@tylertech/tyler-icons';
 
 // Register all Forge components
@@ -105,5 +107,7 @@ IconRegistry.define([
   tylIconBook,
   tylIconChartArc,
   tylIconRateReview,
-  tylIconRobot
+  tylIconRobot,
+  tylIconCheckboxMarkedCircleOutline,
+  tylIconCircleOutline
 ]);
