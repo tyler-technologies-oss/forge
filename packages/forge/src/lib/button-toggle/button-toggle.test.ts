@@ -575,7 +575,7 @@ class ButtonToggleGroupHarness extends TestHarness<IButtonToggleGroupComponent> 
 
   public async selectToggleViaKeyboard(index: number, key: ' ' | 'Enter' = ' '): Promise<void> {
     this.buttonToggles[index].focus();
-    await userEvent.keyboard(key);
+    await userEvent.keyboard(key === 'Enter' ? '{Enter}' : key);
   }
 }
 
