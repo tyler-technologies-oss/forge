@@ -1,0 +1,65 @@
+<!--
+  @block Compact Context Switcher
+  @description Application layout with a compact context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a minimal select dropdown for quick context switching.
+  @tags layout, application, context-switcher, compact, minimal, scope, workspace, tenant, multi-tenant, organization, navigation, drawer, select, global-context
+-->
+<body class="">
+  <forge-app-layout app-title="Facility Manager" app-title-href="/">
+    <!-- App bar logo -->
+    <forge-icon slot="app-bar-logo" name="home_city"></forge-icon>
+
+    <!-- App bar end actions -->
+    <div slot="app-bar-end" class="flex items-center gap-xsmall">
+      <forge-icon-button density="medium" aria-label="Notifications" theme="app-bar">
+        <forge-icon name="notifications"></forge-icon>
+      </forge-icon-button>
+      <forge-avatar text="Maria Santos" style="--forge-avatar-size: 40px"></forge-avatar>
+    </div>
+
+    <!-- Navigation drawer content -->
+    <div slot="navigation" class="flex flex-col h-full">
+      <!-- Compact context switcher section -->
+      <div class="p-medium">
+        <forge-select label="Facility" label-position="block-start" value="main-library" style="width: 100%">
+          <forge-option value="main-library">Main Library - 425 Oak St</forge-option>
+          <forge-option value="north-branch">North Branch - 1200 Pine Ave</forge-option>
+          <forge-option value="south-branch">South Branch - 890 Elm Dr</forge-option>
+          <forge-option value="downtown">Downtown Center - 50 Main St</forge-option>
+        </forge-select>
+      </div>
+
+      <forge-divider></forge-divider>
+
+      <!-- Navigation list -->
+      <nav class="p-medium space-y-medium">
+        <div class="striped-box"></div>
+        <div class="striped-box"></div>
+        <div class="striped-box"></div>
+        <div class="striped-box"></div>
+        <div class="striped-box"></div>
+        <div class="striped-box"></div>
+      </nav>
+    </div>
+
+    <!-- Body header toolbar -->
+    <div slot="body-header">
+      <forge-toolbar>
+        <h2 slot="start" class="text-heading3">Page title</h2>
+      </forge-toolbar>
+    </div>
+
+    <!-- Main content -->
+    <main class="p-medium" slot="body">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-medium">
+        <div class="striped-box h-[200px]"></div>
+        <div class="striped-box h-[200px]"></div>
+        <div class="striped-box h-[200px]"></div>
+        <div class="striped-box h-[200px]"></div>
+        <div class="striped-box h-[200px]"></div>
+        <div class="striped-box h-[200px]"></div>
+        <div class="striped-box h-[200px]"></div>
+        <div class="striped-box h-[200px]"></div>
+      </div>
+    </main>
+  </forge-app-layout>
+</body>

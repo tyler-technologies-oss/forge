@@ -53,7 +53,19 @@ import {
   tylIconRateReview,
   tylIconRobot,
   tylIconCheckboxMarkedCircleOutline,
-  tylIconCircleOutline
+  tylIconCircleOutline,
+  tylIconHomeCity,
+  tylIconPayment,
+  tylIconReceiptLong,
+  tylIconFile,
+  tylIconLicense,
+  tylIconWater,
+  tylIconTrashCan,
+  tylIconMap,
+  tylIconAccount,
+  tylIconLocationCity,
+  tylIconDirections,
+  tylIconInfo
 } from '@tylertech/tyler-icons';
 
 // Register all Forge components
@@ -109,5 +121,17 @@ IconRegistry.define([
   tylIconRateReview,
   tylIconRobot,
   tylIconCheckboxMarkedCircleOutline,
-  tylIconCircleOutline
+  tylIconCircleOutline,
+  tylIconHomeCity,
+  tylIconPayment,
+  tylIconReceiptLong,
+  tylIconFile,
+  tylIconLicense,
+  tylIconWater,
+  tylIconTrashCan,
+  tylIconMap,
+  tylIconAccount,
+  tylIconLocationCity,
+  tylIconDirections,
+  tylIconInfo
 ]);
