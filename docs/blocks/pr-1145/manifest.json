@@ -717,41 +717,6 @@
       "hasScript": false
     },
     {
-      "id": "application-layout/compact-context-switcher/compact-context-switcher",
-      "name": "Compact Context Switcher",
-      "description": "Application layout with a compact context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a minimal select dropdown for quick context switching.",
-      "tags": [
-        "layout",
-        "application",
-        "context-switcher",
-        "compact",
-        "minimal",
-        "scope",
-        "workspace",
-        "tenant",
-        "multi-tenant",
-        "organization",
-        "navigation",
-        "drawer",
-        "select",
-        "global-context"
-      ],
-      "file": "application-layout/compact-context-switcher/compact-context-switcher.html",
-      "category": "Application Layout",
-      "componentsUsed": [
-        "forge-app-layout",
-        "forge-avatar",
-        "forge-divider",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-option",
-        "forge-select",
-        "forge-toolbar"
-      ],
-      "screenshot": "application-layout/compact-context-switcher/compact-context-switcher.webp",
-      "hasScript": false
-    },
-    {
       "id": "application-layout/detailed-context-switcher/detailed-context-switcher",
       "name": "Detailed Context Switcher",
       "description": "Application layout with a detailed context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a prominent current context display with name, address, quick actions, and a dropdown to switch contexts.",
@@ -788,37 +753,38 @@
       "hasScript": false
     },
     {
-      "id": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs",
-      "name": "Basic Application Layout with Tabs",
-      "description": "Standard application shell with a borderless page toolbar and tab bar navigation below it, featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
+      "id": "application-layout/compact-context-switcher/compact-context-switcher",
+      "name": "Compact Context Switcher",
+      "description": "Application layout with a compact context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a minimal select dropdown for quick context switching.",
       "tags": [
         "layout",
         "application",
-        "shell",
-        "app-bar",
+        "context-switcher",
+        "compact",
+        "minimal",
+        "scope",
+        "workspace",
+        "tenant",
+        "multi-tenant",
+        "organization",
         "navigation",
         "drawer",
-        "user-profile",
-        "footer",
-        "responsive-grid",
-        "tabs"
+        "select",
+        "global-context"
       ],
-      "file": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.html",
+      "file": "application-layout/compact-context-switcher/compact-context-switcher.html",
       "category": "Application Layout",
       "componentsUsed": [
         "forge-app-layout",
+        "forge-avatar",
         "forge-divider",
         "forge-icon",
         "forge-icon-button",
-        "forge-list",
-        "forge-list-item",
-        "forge-profile-link",
-        "forge-tab",
-        "forge-tab-bar",
-        "forge-toolbar",
-        "forge-user-profile"
+        "forge-option",
+        "forge-select",
+        "forge-toolbar"
       ],
-      "screenshot": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.webp",
+      "screenshot": "application-layout/compact-context-switcher/compact-context-switcher.webp",
       "hasScript": false
     },
     {
@@ -851,6 +817,40 @@
       ],
       "screenshot": "application-layout/basic/basic.webp",
       "hasScript": false
+    },
+    {
+      "id": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs",
+      "name": "Basic Application Layout with Tabs",
+      "description": "Standard application shell with a borderless page toolbar and tab bar navigation below it, featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
+      "tags": [
+        "layout",
+        "application",
+        "shell",
+        "app-bar",
+        "navigation",
+        "drawer",
+        "user-profile",
+        "footer",
+        "responsive-grid",
+        "tabs"
+      ],
+      "file": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.html",
+      "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-profile-link",
+        "forge-tab",
+        "forge-tab-bar",
+        "forge-toolbar",
+        "forge-user-profile"
+      ],
+      "screenshot": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.webp",
+      "hasScript": false
     }
   ],
   "categories": [
@@ -882,5 +882,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-07-02T17:25:55.678Z"
+  "generatedAt": "2026-07-07T13:50:44.167Z"
 }
