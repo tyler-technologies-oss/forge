@@ -48,173 +48,470 @@ describe('Timeline', () => {
       expect(slottedContent).toBeTruthy();
       expect(slottedContent?.textContent).toBe('Test content');
     });
+
+    it('should expose root part', async () => {
+      const screen = render(html`<forge-timeline></forge-timeline>`);
+      const el = screen.container.querySelector('forge-timeline') as TimelineComponent;
+      await el.updateComplete;
+      const root = el.shadowRoot?.querySelector('[part="root"]');
+
+      expect(root).toBeTruthy();
+    });
   });
 
   describe('timeline item', () => {
-    it('should instantiate', async () => {
-      const screen = render(html`
-        <forge-timeline>
-          <forge-timeline-item></forge-timeline-item>
-        </forge-timeline>
-      `);
-      const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
-
-      expect(el).toBeInstanceOf(TimelineItemComponent);
-      expect(el.shadowRoot).not.toBeNull();
-    });
-
-    it('should render with correct structure', async () => {
-      const screen = render(html`
-        <forge-timeline>
-          <forge-timeline-item></forge-timeline-item>
-        </forge-timeline>
-      `);
-      const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
-      await el.updateComplete;
-      const root = el.shadowRoot?.querySelector('.forge-timeline-item');
-      const marker = el.shadowRoot?.querySelector('.marker');
-      const content = el.shadowRoot?.querySelector('.content');
-
-      expect(root).toBeTruthy();
-      expect(marker).toBeTruthy();
-      expect(content).toBeTruthy();
-    });
-
-    it('should have listitem role', async () => {
-      const screen = render(html`
-        <forge-timeline>
-          <forge-timeline-item></forge-timeline-item>
-        </forge-timeline>
-      `);
-      const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
-
-      expect(el.getAttribute('role')).toBe('listitem');
-    });
-
-    it('should render default marker when no marker slot provided', async () => {
-      const screen = render(html`
-        <forge-timeline>
-          <forge-timeline-item></forge-timeline-item>
-        </forge-timeline>
-      `);
-      const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
-      await el.updateComplete;
-      const defaultMarker = el.shadowRoot?.querySelector('.default-marker');
-
-      expect(defaultMarker).toBeTruthy();
-    });
-
-    it('should render slotted content', async () => {
-      const screen = render(html`
-        <forge-timeline>
-          <forge-timeline-item>
-            <span id="test-content">Test content</span>
-          </forge-timeline-item>
-        </forge-timeline>
-      `);
-      const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
-      const slottedContent = el.querySelector('#test-content');
-
-      expect(slottedContent).toBeTruthy();
-      expect(slottedContent?.textContent).toBe('Test content');
-    });
-
-    it('should render slotted marker', async () => {
-      const screen = render(html`
-        <forge-timeline>
-          <forge-timeline-item>
-            <span slot="marker" id="custom-marker">✓</span>
-            <span>Content</span>
-          </forge-timeline-item>
-        </forge-timeline>
-      `);
-      const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
-      const customMarker = el.querySelector('#custom-marker');
-
-      expect(customMarker).toBeTruthy();
-      expect(customMarker?.textContent).toBe('✓');
-    });
-
-    it('should have default theme as empty string', async () => {
-      const screen = render(html`
-        <forge-timeline>
-          <forge-timeline-item></forge-timeline-item>
-        </forge-timeline>
-      `);
-      const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
-
-      expect(el.theme).toBe('');
-    });
-
-    it('should apply theme property', async () => {
-      const screen = render(html`
-        <forge-timeline>
-          <forge-timeline-item theme="primary"></forge-timeline-item>
-        </forge-timeline>
-      `);
-      const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
-
-      expect(el.theme).toBe('primary');
-    });
-
-    it('should apply theme class when theme is set', async () => {
-      const screen = render(html`
-        <forge-timeline>
-          <forge-timeline-item theme="success"></forge-timeline-item>
-        </forge-timeline>
-      `);
-      const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
-      await el.updateComplete;
-      const root = el.shadowRoot?.querySelector('.forge-timeline-item');
-
-      expect(root?.classList.contains('success')).toBe(true);
-    });
-
-    it('should not apply theme class when theme is empty', async () => {
-      const screen = render(html`
-        <forge-timeline>
-          <forge-timeline-item></forge-timeline-item>
-        </forge-timeline>
-      `);
-      const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
-      await el.updateComplete;
-      const root = el.shadowRoot?.querySelector('.forge-timeline-item');
-
-      expect(root?.classList.contains('primary')).toBe(false);
-      expect(root?.classList.contains('success')).toBe(false);
-    });
-
-    it('should update theme dynamically', async () => {
-      const screen = render(html`
-        <forge-timeline>
-          <forge-timeline-item></forge-timeline-item>
-        </forge-timeline>
-      `);
-      const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
-
-      el.theme = 'error';
-      await el.updateComplete;
-
-      const root = el.shadowRoot?.querySelector('.forge-timeline-item');
-      expect(root?.classList.contains('error')).toBe(true);
-    });
-
-    it('should support all theme variants', async () => {
-      const themes = ['primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'];
-
-      for (const theme of themes) {
+    describe('instantiation', () => {
+      it('should instantiate', async () => {
         const screen = render(html`
           <forge-timeline>
-            <forge-timeline-item theme=${theme}></forge-timeline-item>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+
+        expect(el).toBeInstanceOf(TimelineItemComponent);
+        expect(el.shadowRoot).not.toBeNull();
+      });
+
+      it('should render with correct structure', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        await el.updateComplete;
+        const root = el.shadowRoot?.querySelector('.forge-timeline-item');
+        const sidebar = el.shadowRoot?.querySelector('.sidebar');
+        const marker = el.shadowRoot?.querySelector('.marker');
+        const summary = el.shadowRoot?.querySelector('.summary');
+        const detail = el.shadowRoot?.querySelector('.detail');
+
+        expect(root).toBeTruthy();
+        expect(sidebar).toBeTruthy();
+        expect(marker).toBeTruthy();
+        expect(summary).toBeTruthy();
+        expect(detail).toBeTruthy();
+      });
+
+      it('should have listitem role', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+
+        expect(el.getAttribute('role')).toBe('listitem');
+      });
+    });
+
+    describe('marker slot', () => {
+      it('should render default marker when no marker slot provided', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        await el.updateComplete;
+        const defaultMarker = el.shadowRoot?.querySelector('.default-marker');
+
+        expect(defaultMarker).toBeTruthy();
+      });
+
+      it('should render slotted marker', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item>
+              <span slot="marker" id="custom-marker">✓</span>
+              <span>Content</span>
+            </forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        const customMarker = el.querySelector('#custom-marker');
+
+        expect(customMarker).toBeTruthy();
+        expect(customMarker?.textContent).toBe('✓');
+      });
+    });
+
+    describe('content slots', () => {
+      it('should render default slot content in center', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item>
+              <span id="test-content">Test content</span>
+            </forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        const slottedContent = el.querySelector('#test-content');
+
+        expect(slottedContent).toBeTruthy();
+        expect(slottedContent?.textContent).toBe('Test content');
+      });
+
+      it('should render start slot content', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item>
+              <span slot="start" id="start-content">Start</span>
+            </forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        const startContent = el.querySelector('#start-content');
+
+        expect(startContent).toBeTruthy();
+        expect(startContent?.textContent).toBe('Start');
+      });
+
+      it('should render end slot content', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item>
+              <span slot="end" id="end-content">End</span>
+            </forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        const endContent = el.querySelector('#end-content');
+
+        expect(endContent).toBeTruthy();
+        expect(endContent?.textContent).toBe('End');
+      });
+
+      it('should render detail slot content', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item>
+              <span>Summary</span>
+              <div slot="detail" id="detail-content">Detail content</div>
+            </forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        const detailContent = el.querySelector('#detail-content');
+
+        expect(detailContent).toBeTruthy();
+        expect(detailContent?.textContent).toBe('Detail content');
+      });
+
+      it('should render all slots together', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item>
+              <span slot="start">Start</span>
+              <span>Center</span>
+              <span slot="end">End</span>
+              <div slot="detail">Detail</div>
+            </forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+
+        expect(el.querySelector('[slot="start"]')?.textContent).toBe('Start');
+        expect(el.querySelector(':not([slot])')?.textContent).toBe('Center');
+        expect(el.querySelector('[slot="end"]')?.textContent).toBe('End');
+        expect(el.querySelector('[slot="detail"]')?.textContent).toBe('Detail');
+      });
+    });
+
+    describe('theme property', () => {
+      it('should have default theme as empty string', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+
+        expect(el.theme).toBe('');
+      });
+
+      it('should apply theme property', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item theme="primary"></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+
+        expect(el.theme).toBe('primary');
+      });
+
+      it('should apply theme class when theme is set', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item theme="success"></forge-timeline-item>
           </forge-timeline>
         `);
         const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
         await el.updateComplete;
         const root = el.shadowRoot?.querySelector('.forge-timeline-item');
 
-        expect(root?.classList.contains(theme)).toBe(true);
-        screen.unmount();
-      }
+        expect(root?.classList.contains('success')).toBe(true);
+      });
+
+      it('should not apply theme class when theme is empty', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        await el.updateComplete;
+        const root = el.shadowRoot?.querySelector('.forge-timeline-item');
+
+        expect(root?.classList.contains('primary')).toBe(false);
+        expect(root?.classList.contains('success')).toBe(false);
+      });
+
+      it('should update theme dynamically', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+
+        el.theme = 'error';
+        await el.updateComplete;
+
+        const root = el.shadowRoot?.querySelector('.forge-timeline-item');
+        expect(root?.classList.contains('error')).toBe(true);
+      });
+
+      it('should support all theme variants', async () => {
+        const themes = ['primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'];
+
+        for (const theme of themes) {
+          const screen = render(html`
+            <forge-timeline>
+              <forge-timeline-item theme=${theme}></forge-timeline-item>
+            </forge-timeline>
+          `);
+          const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+          await el.updateComplete;
+          const root = el.shadowRoot?.querySelector('.forge-timeline-item');
+
+          expect(root?.classList.contains(theme)).toBe(true);
+          screen.unmount();
+        }
+      });
+    });
+
+    describe('sidebar property', () => {
+      it('should have default sidebar value as auto', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+
+        expect(el.sidebar).toBe('auto');
+      });
+
+      it('should apply sidebar property', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item sidebar="start"></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+
+        expect(el.sidebar).toBe('start');
+      });
+
+      it('should apply sidebar class when sidebar is set', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item sidebar="both"></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        await el.updateComplete;
+        const marker = el.shadowRoot?.querySelector('.marker');
+
+        expect(marker?.classList.contains('sidebar-both')).toBe(true);
+      });
+
+      it('should update sidebar dynamically', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item sidebar="auto"></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+
+        el.sidebar = 'none';
+        await el.updateComplete;
+
+        const marker = el.shadowRoot?.querySelector('.marker');
+        expect(marker?.classList.contains('sidebar-none')).toBe(true);
+      });
+
+      it('should support all sidebar variants', async () => {
+        const variants = ['auto', 'start', 'end', 'both', 'none'];
+
+        for (const variant of variants) {
+          const screen = render(html`
+            <forge-timeline>
+              <forge-timeline-item sidebar=${variant}></forge-timeline-item>
+            </forge-timeline>
+          `);
+          const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+          await el.updateComplete;
+          const marker = el.shadowRoot?.querySelector('.marker');
+
+          expect(marker?.classList.contains(`sidebar-${variant}`)).toBe(true);
+          screen.unmount();
+        }
+      });
+    });
+
+    describe('detailVariant property', () => {
+      it('should have default detailVariant as default', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+
+        expect(el.detailVariant).toBe('default');
+      });
+
+      it('should apply detailVariant property', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item detail-variant="card"></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+
+        expect(el.detailVariant).toBe('card');
+      });
+
+      it('should apply card class when detailVariant is card', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item detail-variant="card">
+              <span>Summary</span>
+              <div slot="detail">Detail</div>
+            </forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        await el.updateComplete;
+        const detail = el.shadowRoot?.querySelector('.detail');
+
+        expect(detail?.classList.contains('card')).toBe(true);
+      });
+
+      it('should not apply card class when detailVariant is default', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item>
+              <span>Summary</span>
+              <div slot="detail">Detail</div>
+            </forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        await el.updateComplete;
+        const detail = el.shadowRoot?.querySelector('.detail');
+
+        expect(detail?.classList.contains('card')).toBe(false);
+      });
+
+      it('should update detailVariant dynamically', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item>
+              <span>Summary</span>
+              <div slot="detail">Detail</div>
+            </forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+
+        el.detailVariant = 'card';
+        await el.updateComplete;
+
+        const detail = el.shadowRoot?.querySelector('.detail');
+        expect(detail?.classList.contains('card')).toBe(true);
+      });
+    });
+
+    describe('CSS parts', () => {
+      it('should expose root part', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        await el.updateComplete;
+        const root = el.shadowRoot?.querySelector('[part="root"]');
+
+        expect(root).toBeTruthy();
+      });
+
+      it('should expose marker part', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        await el.updateComplete;
+        const marker = el.shadowRoot?.querySelector('[part="marker"]');
+
+        expect(marker).toBeTruthy();
+      });
+
+      it('should expose default-marker part', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        await el.updateComplete;
+        const defaultMarker = el.shadowRoot?.querySelector('[part="default-marker"]');
+
+        expect(defaultMarker).toBeTruthy();
+      });
+
+      it('should expose summary part', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        await el.updateComplete;
+        const summary = el.shadowRoot?.querySelector('[part="summary"]');
+
+        expect(summary).toBeTruthy();
+      });
+
+      it('should expose detail part', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item></forge-timeline-item>
+          </forge-timeline>
+        `);
+        const el = screen.container.querySelector('forge-timeline-item') as TimelineItemComponent;
+        await el.updateComplete;
+        const detail = el.shadowRoot?.querySelector('[part="detail"]');
+
+        expect(detail).toBeTruthy();
+      });
     });
   });
 
@@ -257,6 +554,15 @@ describe('Timeline', () => {
       const slots = el.shadowRoot?.querySelectorAll('slot');
 
       expect(slots?.length).toBe(0);
+    });
+
+    it('should expose root part', async () => {
+      const screen = render(html`<forge-timeline-break></forge-timeline-break>`);
+      const el = screen.container.querySelector('forge-timeline-break') as TimelineBreakComponent;
+      await el.updateComplete;
+      const root = el.shadowRoot?.querySelector('[part="root"]');
+
+      expect(root).toBeTruthy();
     });
   });
 
