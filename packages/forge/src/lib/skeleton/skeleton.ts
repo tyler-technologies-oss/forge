@@ -61,42 +61,56 @@ export class SkeletonComponent extends BaseLitElement implements ISkeletonCompon
 
   /**
    * Applies form field styles to the skeleton.
+   * @default false
+   * @attribute form-field
    */
   @property({ type: Boolean, reflect: true, attribute: 'form-field' })
   public formField = false;
 
   /**
    * Applies button styles to the skeleton.
+   * @default false
+   * @attribute
    */
   @property({ type: Boolean, reflect: true })
   public button = false;
 
   /**
    * Applies chip styles to the skeleton.
+   * @default false
+   * @attribute
    */
   @property({ type: Boolean, reflect: true })
   public chip = false;
 
   /**
    * Applies list item styles to the skeleton.
+   * @default false
+   * @attribute list-item
    */
   @property({ type: Boolean, reflect: true, attribute: 'list-item' })
   public listItem = false;
 
   /**
    * Applies text styles to the skeleton.
+   * @default false
+   * @attribute
    */
   @property({ type: Boolean, reflect: true })
   public text = false;
 
   /**
    * Applies avatar styles to the skeleton.
+   * @default false
+   * @attribute
    */
   @property({ type: Boolean, reflect: true })
   public avatar = false;
 
   /**
    * Applies stretch styles to the skeleton.
+   * @default false
+   * @attribute
    */
   @property({ type: Boolean, reflect: true })
   public stretch = false;
