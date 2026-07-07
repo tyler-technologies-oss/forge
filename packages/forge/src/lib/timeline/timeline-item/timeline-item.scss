@@ -36,10 +36,6 @@
 
 .detail {
   @include core.detail;
-
-  &.card {
-    @include core.detail-card;
-  }
 }
 
 .sidebar {

@@ -48,17 +48,15 @@
 }
 
 @mixin detail {
+  @include card.provide-theme(
+    (
+      background: theme.variable(surface-dim)
+    )
+  );
+
   grid-area: detail;
-  margin-block-start: #{token(detail-margin)};
-}
-
-@mixin detail-card {
-  @include card.tokens;
-  @include card.base;
-
   block-size: fit-content;
-  padding: #{token(detail-card-padding)};
-  background-color: var(--forge-theme-surface-bright);
+  margin-block-start: #{token(detail-margin)};
 }
 
 @mixin sidebar {
@@ -88,7 +86,7 @@
   position: relative;
   grid-area: marker;
   display: flex;
-  align-self: center;
+  align-self: start;
   align-items: center;
   justify-content: center;
   block-size: calc(#{token(marker-size)} + #{token(marker-padding)} * 2);

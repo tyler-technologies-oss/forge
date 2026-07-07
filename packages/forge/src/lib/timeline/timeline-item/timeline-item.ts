@@ -10,7 +10,6 @@ import { hideWhenEmpty } from '@tylertech/forge/core/utils/lit-utils.js';
 import styles from './timeline-item.scss';
 
 export type TimelineSidebarPosition = 'auto' | 'start' | 'end' | 'both' | 'none';
-export type TimelineDetailVariant = 'default' | 'card';
 
 export const TIMELINE_ITEM_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-timeline-item';
 
@@ -39,7 +38,6 @@ export const TIMELINE_ITEM_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-timeli
  * @cssproperty --forge-timeline-item-line-inset - The distance from the left edge of the timeline item to the line drawn between timeline items.
  * @cssproperty --forge-timeline-item-summary-gap - The spacing between the start, center, and end slots.
  * @cssproperty --forge-timeline-item-detail-margin - The spacing between the summary and detail sections.
- * @cssproperty --forge-timeline-item-detail-card-padding - The padding of the detail section when the detail-variant is set to "card".
  *
  * @csspart root - The root element.
  * @csspart marker - The marker element.
@@ -72,14 +70,6 @@ export class TimelineItemComponent extends BaseLitElement {
    */
   @property()
   public sidebar: TimelineSidebarPosition = 'auto';
-
-  /**
-   * Whether the detail section displays in a card or not.
-   * @default 'default'
-   * @attribute detail-variant
-   */
-  @property({ attribute: 'detail-variant' })
-  public detailVariant: TimelineDetailVariant = 'default';
 
   #internals: ElementInternals;
 
@@ -116,7 +106,7 @@ export class TimelineItemComponent extends BaseLitElement {
             <slot name="end"></slot>
           </div>
         </div>
-        <div part="detail" class=${classMap({ detail: true, card: this.detailVariant === 'card' })} ${hideWhenEmpty()}>
+        <div part="detail" class="detail" ${hideWhenEmpty()}>
           <slot name="detail"></slot>
         </div>
       </div>

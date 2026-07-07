@@ -24,8 +24,7 @@ $tokens: (
       )
     ),
   summary-gap: utils.module-val(timeline-item, summary-gap, spacing.variable(xsmall)),
-  detail-margin: utils.module-val(timeline-item, detail-margin, spacing.variable(small)),
-  detail-card-padding: utils.module-val(timeline-item, detail-card-padding, spacing.variable(small) spacing.variable(medium))
+  detail-margin: utils.module-val(timeline-item, detail-margin, spacing.variable(small))
 ) !default;
 
 @function get($key) {

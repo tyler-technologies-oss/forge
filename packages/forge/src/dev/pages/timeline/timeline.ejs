@@ -12,7 +12,18 @@
       <div><strong>Text message</strong> <span class="forge-color--text-medium">did not send due to a connection error</span> <time style="padding-left: 8px;">Nov 13, 2024 11:09 AM</time></div>
     </forge-timeline-item>
     <forge-timeline-item>
-      <div><strong>Debbie Johnson</strong> <span class="forge-color--text-medium">updated mobile number to</span> <strong>604-555-4987</strong> <time style="padding-left: 8px;">Oct 12, 2024 9:30 AM</time></div>
+      <div><strong>Debbie Johnson</strong> <span class="forge-color--text-medium">updated mobile number to</span> <a href="#" class="forge-hyperlink"><strong>604-555-4987</strong></a> <time style="padding-left: 8px;">Oct 12, 2024 9:30 AM</time></div>
+      <forge-card slot="detail" style="--forge-card-padding: 8px;">
+        <forge-stack inline alignment="center" gap="8">
+          <forge-icon-button id="open-button" shape="squared" dense>
+            <forge-open-icon></forge-open-icon>
+          </forge-icon-button>
+          <span>View details</span>
+        </forge-stack>
+        <forge-expansion-panel trigger="open-button">
+          <div style="margin: 4px;">Details</div>
+        </forge-expansion-panel>
+      </forge-card>
     </forge-timeline-item>
   </forge-timeline>
 
@@ -24,7 +35,7 @@
         <forge-badge theme="success" slot="start">Start slot</forge-badge>
         <span>Done</span>
         <forge-badge theme="warning" slot="end">End slot</forge-badge>
-        <span slot="detail">Detail content</span>
+        <forge-card slot="detail">Detail content</forge-card>
       </forge-timeline-item>
       <forge-timeline-item theme="info">
         <forge-icon slot="marker" name="schedule"></forge-icon>
