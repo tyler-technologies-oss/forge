@@ -24,7 +24,7 @@
     </style>
     <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
   </head>
-  <body class="">
+  <body class="" style="background-color: transparent">
     <forge-card class="max-w-3xl m-medium" no-padding>
   <forge-scaffold>
     <forge-toolbar slot="header">
@@ -91,6 +91,7 @@
 </template>
 
 <script type="module" src="/src/blocks/lists/list-management/list-management.ts"></script>
+    <!-- On the forge docs site, these two script tags get removed from the code snippet, but they are still present in this actual page. They are used to handle the ready transition and theme listener for the site. -->
     <script type="module" src="/blocks/pr-1145/ready-transition.js" id="ready-transition"></script>
     <script type="module" src="/blocks/pr-1145/theme-listener.js" id="theme-listener"></script>
   </body>

@@ -24,7 +24,7 @@
     </style>
     <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
   </head>
-  <body class="">
+  <body class="" style="background-color: transparent">
     <forge-app-layout app-title="Facility Manager" app-title-href="/">
     <!-- App bar logo -->
     <forge-icon slot="app-bar-logo" name="home_city"></forge-icon>
@@ -70,7 +70,7 @@
     </div>
 
     <!-- Main content -->
-    <main class="p-medium" slot="body">
+    <main class="p-medium bg-surface-dim" slot="body">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-medium">
         <div class="striped-box h-[200px]"></div>
         <div class="striped-box h-[200px]"></div>
@@ -83,6 +83,7 @@
       </div>
     </main>
   </forge-app-layout>
+    <!-- On the forge docs site, these two script tags get removed from the code snippet, but they are still present in this actual page. They are used to handle the ready transition and theme listener for the site. -->
     <script type="module" src="/blocks/pr-1145/ready-transition.js" id="ready-transition"></script>
     <script type="module" src="/blocks/pr-1145/theme-listener.js" id="theme-listener"></script>
   </body>
