@@ -12,11 +12,20 @@ $tokens: (
   marker-shape: utils.module-val(timeline-item, marker-shape, shape.variable(full)),
   default-marker-size: utils.module-val(timeline-item, default-marker-size, spacing.variable(xsmall)),
   default-marker-shape: utils.module-val(timeline-item, default-marker-shape, shape.variable(full)),
-  default-marker-background: utils.module-ref(timeline-item, default-marker-background, marker-background),
-  gap: utils.module-val(timeline-item, gap, spacing.variable(xsmall)),
-  line-gap: utils.module-val(timeline-item, line-gap, spacing.variable(xxsmall)),
+  sidebar-margin: utils.module-val(timeline-item, sidebar-margin, spacing.variable(xsmall)),
   line-color: utils.module-val(timeline-item, line-color, theme.variable(outline)),
-  line-width: utils.module-val(timeline-item, line-width, spacing.variable(xxxsmall))
+  line-width: utils.module-val(timeline-item, line-width, spacing.variable(xxxsmall)),
+  line-inset: utils.module-val(
+      timeline-item,
+      line-inset,
+      calc(
+        #{utils.module-var(timeline-item, marker-size)} / 2 + #{utils.module-var(timeline-item, marker-padding)} -
+          #{utils.module-var(timeline-item, line-width)} / 2
+      )
+    ),
+  summary-gap: utils.module-val(timeline-item, summary-gap, spacing.variable(xsmall)),
+  detail-margin: utils.module-val(timeline-item, detail-margin, spacing.variable(small)),
+  detail-card-padding: utils.module-val(timeline-item, detail-card-padding, spacing.variable(small) spacing.variable(medium))
 ) !default;
 
 @function get($key) {

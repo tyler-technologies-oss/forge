@@ -22,12 +22,28 @@
   @include core.base;
 }
 
-.content {
-  @include core.content;
+.summary {
+  @include core.summary;
 }
 
-.marker-wrapper {
-  @include core.marker-wrapper;
+.center {
+  @include core.center;
+}
+
+.end {
+  @include core.end;
+}
+
+.detail {
+  @include core.detail;
+
+  &.card {
+    @include core.detail-card;
+  }
+}
+
+.sidebar {
+  @include core.sidebar;
 }
 
 .marker {
@@ -46,9 +62,29 @@
 // Line
 //
 
+.sidebar-start,
+.sidebar-both {
+  &::before {
+    @include core.start-line;
+  }
+}
+
+.sidebar-end,
+.sidebar-both {
+  &::after {
+    @include core.end-line;
+  }
+}
+
+:host(:not(:first-child)) {
+  .sidebar-auto::before {
+    @include core.start-line;
+  }
+}
+
 :host(:not(:last-child)) {
-  .marker::before {
-    @include core.line;
+  .sidebar-auto::after {
+    @include core.end-line;
   }
 }
 

@@ -14,18 +14,17 @@
     <forge-timeline-item>
       <div><strong>Debbie Johnson</strong> <span class="forge-color--text-medium">updated mobile number to</span> <strong>604-555-4987</strong> <time style="padding-left: 8px;">Oct 12, 2024 9:30 AM</time></div>
     </forge-timeline-item>
-    <forge-timeline-item>
-      <strong>With a card</strong>
-      <forge-card style="margin-top: 8px;">Card content</forge-card>
-    </forge-timeline-item>
   </forge-timeline>
 
   <div>
     <h3 class="forge-typography--heading2">Icon Markers</h3>
     <forge-timeline>
-      <forge-timeline-item theme="success">
+      <forge-timeline-item theme="success" detail-variant="card">
         <forge-icon slot="marker" name="check_circle"></forge-icon>
+        <forge-badge theme="success" slot="start">Start slot</forge-badge>
         <span>Done</span>
+        <forge-badge theme="warning" slot="end">End slot</forge-badge>
+        <span slot="detail">Detail content</span>
       </forge-timeline-item>
       <forge-timeline-item theme="info">
         <forge-icon slot="marker" name="schedule"></forge-icon>
