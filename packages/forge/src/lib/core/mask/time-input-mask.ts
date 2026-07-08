@@ -19,6 +19,11 @@ export class TimeInputMask {
   private _mask: InputMask<FactoryArg>;
   private _maskOptions: FactoryArg;
   private _acceptListener: (evt: InputEvent) => void;
+  // True while a segment holds a single auto-padded digit that may still be extended (e.g. `2` -> `02` -> `21`);
+  // cleared once it holds two digits so a completed segment can't absorb the next segment's keystroke.
+  private _hoursAutoPadded = false;
+  private _minutesAutoPadded = false;
+  private _secondsAutoPadded = false;
 
   constructor(
     private _element: HTMLInputElement,
@@ -125,6 +130,19 @@ export class TimeInputMask {
     // If all of the text is selected, we can safely assume the whole value is being overwritten
     if (parser.isAllSelected) {
       parser.reset();
+      this._hoursAutoPadded = false;
+      this._minutesAutoPadded = false;
+      this._secondsAutoPadded = false;
+    }
+
+    if (parser.isInitialHoursEntry) {
+      this._hoursAutoPadded = false;
+    }
+    if (parser.isInitialMinutesEntry) {
+      this._minutesAutoPadded = false;
+    }
+    if (parser.isInitialSecondsEntry) {
+      this._secondsAutoPadded = false;
     }
 
     // Attempt to pad a leading zero to the hours segment on initial entry only
@@ -132,16 +150,18 @@ export class TimeInputMask {
       // Replace just the hours segment with the padded value and update cursor position
       const newValue = parser.patchSegmentValue('hours', parser.asPaddedChar);
       parser.applyValue(newValue, 'hours-end');
+      this._hoursAutoPadded = true;
       return ':';
     }
 
     // Attempt to overwrite the hours (w/leading zero)
-    if (parser.hasOnlyHoursSegment && parser.canOverwriteHoursChar) {
+    if (parser.hasOnlyHoursSegment && parser.canOverwriteHoursChar && this._hoursAutoPadded) {
       const numNewHour = +`${parser.hoursSegmentNum}${parser.numChar}`;
       if (numNewHour <= 12 || (this._options.use24HourTime && numNewHour <= 23)) {
         // Overwrite the hours segment with the entered char concatenated with the previous entry value
         const newValue = parser.patchSegmentValue('hours', String(numNewHour));
         parser.applyValue(newValue, 'minutes-start');
+        this._hoursAutoPadded = false;
         return ':';
       }
     }
@@ -156,16 +176,18 @@ export class TimeInputMask {
       // Replace just the minute segment with the padded value and update cursor position
       const newValue = parser.patchSegmentValue('minutes', parser.asPaddedChar);
       parser.applyValue(newValue, 'minutes-end');
+      this._minutesAutoPadded = true;
       return ':';
     }
 
     // Attempt to overwrite the minutes (w/leading zero)
-    if (parser.canOverwriteMinutesChar) {
+    if (parser.canOverwriteMinutesChar && this._minutesAutoPadded) {
       const numNewMins = +`${parser.minutesSegmentNum}${parser.numChar}`;
       if (numNewMins < 60) {
-        // Overwrite the hours segment with the entered char concatenated with the previous entry value
+        // Overwrite the minutes segment with the entered char concatenated with the previous entry value
         const newValue = parser.patchSegmentValue('minutes', String(numNewMins));
         parser.applyValue(newValue, 'minutes-end');
+        this._minutesAutoPadded = false;
         return ':';
       }
     }
@@ -176,16 +198,18 @@ export class TimeInputMask {
         // Replace just the seconds segment with the padded value and update cursor position
         const newValue = parser.patchSegmentValue('seconds', parser.asPaddedChar);
         parser.applyValue(newValue, 'seconds-end');
+        this._secondsAutoPadded = true;
         return ':';
       }
 
       // Attempt to overwrite the seconds (w/leading zero)
-      if (parser.canOverwriteSecondsChar) {
+      if (parser.canOverwriteSecondsChar && this._secondsAutoPadded) {
         const numNewSeconds = +`${parser.secondsSegmentNum}${parser.numChar}`;
         if (numNewSeconds < 60) {
           // Overwrite the seconds segment with the entered char concatenated with the previous entry value
           const newValue = parser.patchSegmentValue('seconds', String(numNewSeconds));
           parser.applyValue(newValue, 'seconds-end');
+          this._secondsAutoPadded = false;
           return ':';
         }
       }
