@@ -36,3 +36,7 @@
     --forge-card-background: var(--forge-theme-surface-dim);
   }
 }
+
+body {
+  overflow: hidden;
+}
