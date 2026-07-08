@@ -1,7 +1,7 @@
 {
   "blocks": [
     {
-      "id": "toolbar/toolbar-actions/toolbar-actions",
+      "id": "toolbars/toolbar-actions/toolbar-actions",
       "name": "Toolbar with Button Actions",
       "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
       "tags": [
@@ -10,17 +10,17 @@
         "actions",
         "form"
       ],
-      "file": "toolbar/toolbar-actions/toolbar-actions.html",
-      "category": "Toolbar",
+      "file": "toolbars/toolbar-actions/toolbar-actions.html",
+      "category": "Toolbars",
       "componentsUsed": [
         "forge-button",
         "forge-toolbar"
       ],
-      "screenshot": "toolbar/toolbar-actions/toolbar-actions.webp",
+      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
       "hasScript": false
     },
     {
-      "id": "toolbar/table-header/table-header",
+      "id": "toolbars/table-header/table-header",
       "name": "Table Header",
       "description": "Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot",
       "tags": [
@@ -29,18 +29,18 @@
         "header",
         "actions"
       ],
-      "file": "toolbar/table-header/table-header.html",
-      "category": "Toolbar",
+      "file": "toolbars/table-header/table-header.html",
+      "category": "Toolbars",
       "componentsUsed": [
         "forge-icon",
         "forge-icon-button",
         "forge-toolbar"
       ],
-      "screenshot": "toolbar/table-header/table-header.webp",
+      "screenshot": "toolbars/table-header/table-header.webp",
       "hasScript": false
     },
     {
-      "id": "toolbar/simple/simple",
+      "id": "toolbars/simple/simple",
       "name": "Simple Toolbar",
       "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
       "tags": [
@@ -48,14 +48,35 @@
         "header",
         "actions"
       ],
-      "file": "toolbar/simple/simple.html",
-      "category": "Toolbar",
+      "file": "toolbars/simple/simple.html",
+      "category": "Toolbars",
       "componentsUsed": [
         "forge-icon",
         "forge-icon-button",
         "forge-toolbar"
       ],
-      "screenshot": "toolbar/simple/simple.webp",
+      "screenshot": "toolbars/simple/simple.webp",
+      "hasScript": false
+    },
+    {
+      "id": "toolbars/page-title/page-title",
+      "name": "Page Title",
+      "description": "Toolbar with page title heading and action icon buttons for notifications, settings, and more options",
+      "tags": [
+        "toolbar",
+        "page-title",
+        "heading",
+        "actions",
+        "icon-buttons"
+      ],
+      "file": "toolbars/page-title/page-title.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/page-title/page-title.webp",
       "hasScript": false
     },
     {
@@ -83,27 +104,27 @@
       "hasScript": true
     },
     {
-      "id": "tables/table-with-actions/table-with-actions",
-      "name": "Table with Actions",
-      "description": "Data table inside a card with a toolbar header featuring action buttons for cancel, save draft, and submit operations",
+      "id": "toolbars/page-title-with-back-arrow/page-title-with-back-arrow",
+      "name": "Page Title with Back Arrow",
+      "description": "Toolbar with back navigation button, page title heading, and action icon buttons for notifications, settings, and more options",
       "tags": [
-        "table",
-        "data",
-        "card",
         "toolbar",
-        "buttons",
-        "actions"
+        "page-title",
+        "heading",
+        "actions",
+        "icon-buttons",
+        "back",
+        "navigation"
       ],
-      "file": "tables/table-with-actions/table-with-actions.html",
-      "category": "Tables",
+      "file": "toolbars/page-title-with-back-arrow/page-title-with-back-arrow.html",
+      "category": "Toolbars",
       "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-table",
+        "forge-icon",
+        "forge-icon-button",
         "forge-toolbar"
       ],
-      "screenshot": "tables/table-with-actions/table-with-actions.webp",
-      "hasScript": true
+      "screenshot": "toolbars/page-title-with-back-arrow/page-title-with-back-arrow.webp",
+      "hasScript": false
     },
     {
       "id": "tables/simple/simple",
@@ -125,6 +146,29 @@
         "forge-toolbar"
       ],
       "screenshot": "tables/simple/simple.webp",
+      "hasScript": true
+    },
+    {
+      "id": "tables/table-with-actions/table-with-actions",
+      "name": "Table with Actions",
+      "description": "Data table inside a card with a toolbar header featuring action buttons for cancel, save draft, and submit operations",
+      "tags": [
+        "table",
+        "data",
+        "card",
+        "toolbar",
+        "buttons",
+        "actions"
+      ],
+      "file": "tables/table-with-actions/table-with-actions.html",
+      "category": "Tables",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-table",
+        "forge-toolbar"
+      ],
+      "screenshot": "tables/table-with-actions/table-with-actions.webp",
       "hasScript": true
     },
     {
@@ -242,6 +286,78 @@
       "hasScript": false
     },
     {
+      "id": "forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "tags": [
+        "authentication",
+        "login",
+        "form",
+        "card",
+        "centered",
+        "scaffold",
+        "toolbar"
+      ],
+      "file": "forms/login/login.html",
+      "category": "Forms",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-checkbox",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
+      ],
+      "screenshot": "forms/login/login.webp",
+      "hasScript": false
+    },
+    {
+      "id": "forms/complex-form-with-grouped-sections/complex-form-with-grouped-sections",
+      "name": "Complex Form with Grouped Sections",
+      "description": "Responsive form divided into logically grouped sections (project details, timeline, team, location, settings, notifications) using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
+      "tags": [
+        "form",
+        "grid",
+        "grouped",
+        "sections",
+        "complex",
+        "responsive",
+        "text-field",
+        "select",
+        "date-picker",
+        "checkbox",
+        "radio",
+        "switch",
+        "scaffold",
+        "toolbar"
+      ],
+      "file": "forms/complex-form-with-grouped-sections/complex-form-with-grouped-sections.html",
+      "category": "Forms",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-checkbox",
+        "forge-date-picker",
+        "forge-divider",
+        "forge-file-picker",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-option",
+        "forge-radio",
+        "forge-radio-group",
+        "forge-scaffold",
+        "forge-select",
+        "forge-switch",
+        "forge-text-field",
+        "forge-toolbar"
+      ],
+      "screenshot": "forms/complex-form-with-grouped-sections/complex-form-with-grouped-sections.webp",
+      "hasScript": false
+    },
+    {
       "id": "lists/list-management/list-management",
       "name": "List Management",
       "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
@@ -249,7 +365,9 @@
         "list",
         "management",
         "interactive",
-        "card"
+        "card",
+        "scaffold",
+        "toolbar"
       ],
       "file": "lists/list-management/list-management.html",
       "category": "Lists",
@@ -261,96 +379,44 @@
         "forge-list",
         "forge-list-item",
         "forge-popover",
-        "forge-text-field"
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
       ],
       "screenshot": "lists/list-management/list-management.webp",
       "hasScript": true
     },
     {
-      "id": "forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "id": "forms/add-user/add-user",
+      "name": "Add User Form",
+      "description": "Form card with two-column grid layout for text inputs, leading icons, support text, dropdown selects, grouped checkboxes, and action buttons",
       "tags": [
-        "authentication",
-        "login",
         "form",
         "card",
-        "centered"
-      ],
-      "file": "forms/login/login.html",
-      "category": "Forms",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-checkbox",
-        "forge-divider",
-        "forge-text-field"
-      ],
-      "screenshot": "forms/login/login.webp",
-      "hasScript": false
-    },
-    {
-      "id": "forms/multi-column/multi-column",
-      "name": "Multi-Column Form",
-      "description": "Responsive form using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
-      "tags": [
-        "form",
+        "two-column",
         "grid",
-        "multi-column",
-        "responsive",
         "text-field",
         "select",
-        "date-picker",
         "checkbox",
-        "radio",
-        "switch"
+        "icons",
+        "scaffold",
+        "toolbar"
       ],
-      "file": "forms/multi-column/multi-column.html",
+      "file": "forms/add-user/add-user.html",
       "category": "Forms",
       "componentsUsed": [
         "forge-button",
         "forge-card",
         "forge-checkbox",
-        "forge-date-picker",
-        "forge-divider",
-        "forge-file-picker",
         "forge-icon",
+        "forge-icon-button",
         "forge-option",
-        "forge-radio",
-        "forge-radio-group",
+        "forge-scaffold",
         "forge-select",
-        "forge-switch",
-        "forge-text-field"
+        "forge-text-field",
+        "forge-toolbar"
       ],
-      "screenshot": "forms/multi-column/multi-column.webp",
-      "hasScript": false
-    },
-    {
-      "id": "forms/add-illustration/add-illustration",
-      "name": "Add Illustration Form",
-      "description": "Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files",
-      "tags": [
-        "form",
-        "card",
-        "centered",
-        "decorative-background",
-        "chip-field",
-        "file-picker",
-        "create"
-      ],
-      "file": "forms/add-illustration/add-illustration.html",
-      "category": "Forms",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-chip",
-        "forge-chip-field",
-        "forge-divider",
-        "forge-file-picker",
-        "forge-icon",
-        "forge-text-field"
-      ],
-      "screenshot": "forms/add-illustration/add-illustration.webp",
+      "screenshot": "forms/add-user/add-user.webp",
       "hasScript": false
     },
     {
@@ -378,52 +444,59 @@
       "hasScript": false
     },
     {
-      "id": "forms/add-user/add-user",
-      "name": "Add User Form",
-      "description": "Form card with two-column grid layout for text inputs, leading icons, support text, dropdown selects, grouped checkboxes, and action buttons",
+      "id": "forms/add-illustration/add-illustration",
+      "name": "Add Illustration Form",
+      "description": "Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files",
       "tags": [
         "form",
         "card",
-        "two-column",
-        "grid",
-        "text-field",
-        "select",
-        "checkbox",
-        "icons"
+        "centered",
+        "decorative-background",
+        "chip-field",
+        "file-picker",
+        "create",
+        "scaffold",
+        "toolbar"
       ],
-      "file": "forms/add-user/add-user.html",
+      "file": "forms/add-illustration/add-illustration.html",
       "category": "Forms",
       "componentsUsed": [
         "forge-button",
         "forge-card",
-        "forge-checkbox",
+        "forge-chip",
+        "forge-chip-field",
+        "forge-file-picker",
         "forge-icon",
-        "forge-option",
-        "forge-select",
-        "forge-text-field"
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
       ],
-      "screenshot": "forms/add-user/add-user.webp",
+      "screenshot": "forms/add-illustration/add-illustration.webp",
       "hasScript": false
     },
     {
-      "id": "cards/user-profile/user-profile",
-      "name": "User Profile Card",
-      "description": "Card displaying user profile information with avatar icon, name, email address, and phone number",
+      "id": "cards/responsive-cards/responsive-cards",
+      "name": "Responsive Cards",
+      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
       "tags": [
-        "card",
-        "profile",
-        "user",
-        "avatar",
-        "contact"
+        "cards",
+        "responsive",
+        "grid",
+        "badge",
+        "image",
+        "metrics"
       ],
-      "file": "cards/user-profile/user-profile.html",
+      "file": "cards/responsive-cards/responsive-cards.html",
       "category": "Cards",
       "componentsUsed": [
-        "forge-avatar",
+        "forge-badge",
         "forge-card",
-        "forge-icon"
+        "forge-icon",
+        "forge-scaffold",
+        "forge-toolbar"
       ],
-      "screenshot": "cards/user-profile/user-profile.webp",
+      "screenshot": "cards/responsive-cards/responsive-cards.webp",
       "hasScript": false
     },
     {
@@ -440,17 +513,88 @@
       "file": "cards/tabbed-card/tabbed-card.html",
       "category": "Cards",
       "componentsUsed": [
+        "forge-button",
         "forge-card",
         "forge-chip",
         "forge-icon",
         "forge-icon-button",
         "forge-label-value",
+        "forge-scaffold",
         "forge-tab",
         "forge-tab-bar",
+        "forge-toolbar",
         "forge-view",
         "forge-view-switcher"
       ],
       "screenshot": "cards/tabbed-card/tabbed-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/cohort-status-card/cohort-status-card",
+      "name": "Cohort Status Card",
+      "description": "Responsive card with a summary section (title and subtitle) on the left and a multi-column status grid on the right showing progress through sequential phases or milestones with completion indicators and dates. Grid collapses to stacked layout on smaller screens. Useful for release rollouts, deployment phases, onboarding steps, approval workflows, or any multi-stage process tracker.",
+      "tags": [
+        "card",
+        "status",
+        "timeline",
+        "progress",
+        "phases",
+        "milestones",
+        "workflow",
+        "responsive",
+        "grid",
+        "rollout",
+        "deployment"
+      ],
+      "file": "cards/cohort-status-card/cohort-status-card.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-card",
+        "forge-icon"
+      ],
+      "screenshot": "cards/cohort-status-card/cohort-status-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/icon-card/icon-card",
+      "name": "Icon Card",
+      "description": "Action card featuring an icon, title, and description for quick navigation or feature highlights",
+      "tags": [
+        "card",
+        "icon",
+        "navigation",
+        "action"
+      ],
+      "file": "cards/icon-card/icon-card.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-avatar",
+        "forge-card",
+        "forge-icon"
+      ],
+      "screenshot": "cards/icon-card/icon-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/basic-card/basic-card",
+      "name": "Basic Card",
+      "description": "Structured card with header, header actions, body content area, and footer with action buttons",
+      "tags": [
+        "card",
+        "structured-card",
+        "header",
+        "footer",
+        "actions"
+      ],
+      "file": "cards/basic-card/basic-card.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-button",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-structured-card"
+      ],
+      "screenshot": "cards/basic-card/basic-card.webp",
       "hasScript": false
     },
     {
@@ -481,25 +625,32 @@
       "hasScript": false
     },
     {
-      "id": "cards/responsive-cards/responsive-cards",
-      "name": "Responsive Cards",
-      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
+      "id": "application-layout/mini-nav/mini-nav",
+      "name": "Mini Nav Application Layout",
+      "description": "Application shell with a collapsible mini navigation drawer that expands on hover, an app bar with notification icons and a user profile dropdown with theme toggle",
       "tags": [
-        "cards",
-        "responsive",
-        "grid",
-        "badge",
-        "image",
-        "metrics"
+        "layout",
+        "application",
+        "shell",
+        "mini-drawer",
+        "app-bar",
+        "user-profile",
+        "hover"
       ],
-      "file": "cards/responsive-cards/responsive-cards.html",
-      "category": "Cards",
+      "file": "application-layout/mini-nav/mini-nav.html",
+      "category": "Application Layout",
       "componentsUsed": [
-        "forge-badge",
-        "forge-card",
-        "forge-icon"
+        "forge-app-layout",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-profile-link",
+        "forge-toolbar",
+        "forge-user-profile"
       ],
-      "screenshot": "cards/responsive-cards/responsive-cards.webp",
+      "screenshot": "application-layout/mini-nav/mini-nav.webp",
       "hasScript": false
     },
     {
@@ -568,19 +719,22 @@
       "hasScript": false
     },
     {
-      "id": "application-layout/mini-nav/mini-nav",
-      "name": "Mini Nav Application Layout",
-      "description": "Application shell with a collapsible mini navigation drawer that expands on hover, an app bar with notification icons and a user profile dropdown with theme toggle",
+      "id": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs",
+      "name": "Basic Application Layout with Tabs",
+      "description": "Standard application shell with a borderless page toolbar and tab bar navigation below it, featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
       "tags": [
         "layout",
         "application",
         "shell",
-        "mini-drawer",
         "app-bar",
+        "navigation",
+        "drawer",
         "user-profile",
-        "hover"
+        "footer",
+        "responsive-grid",
+        "tabs"
       ],
-      "file": "application-layout/mini-nav/mini-nav.html",
+      "file": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.html",
       "category": "Application Layout",
       "componentsUsed": [
         "forge-app-layout",
@@ -590,10 +744,83 @@
         "forge-list",
         "forge-list-item",
         "forge-profile-link",
+        "forge-tab",
+        "forge-tab-bar",
         "forge-toolbar",
         "forge-user-profile"
       ],
-      "screenshot": "application-layout/mini-nav/mini-nav.webp",
+      "screenshot": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.webp",
+      "hasScript": false
+    },
+    {
+      "id": "application-layout/compact-context-switcher/compact-context-switcher",
+      "name": "Compact Context Switcher",
+      "description": "Application layout with a compact context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a minimal select dropdown for quick context switching.",
+      "tags": [
+        "layout",
+        "application",
+        "context-switcher",
+        "compact",
+        "minimal",
+        "scope",
+        "workspace",
+        "tenant",
+        "multi-tenant",
+        "organization",
+        "navigation",
+        "drawer",
+        "select",
+        "global-context"
+      ],
+      "file": "application-layout/compact-context-switcher/compact-context-switcher.html",
+      "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-avatar",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-option",
+        "forge-select",
+        "forge-toolbar"
+      ],
+      "screenshot": "application-layout/compact-context-switcher/compact-context-switcher.webp",
+      "hasScript": false
+    },
+    {
+      "id": "application-layout/detailed-context-switcher/detailed-context-switcher",
+      "name": "Detailed Context Switcher",
+      "description": "Application layout with a detailed context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a prominent current context display with name, address, quick actions, and a dropdown to switch contexts.",
+      "tags": [
+        "layout",
+        "application",
+        "context-switcher",
+        "detailed",
+        "scope",
+        "workspace",
+        "tenant",
+        "multi-tenant",
+        "organization",
+        "navigation",
+        "drawer",
+        "select",
+        "global-context"
+      ],
+      "file": "application-layout/detailed-context-switcher/detailed-context-switcher.html",
+      "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-avatar",
+        "forge-card",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-option",
+        "forge-select",
+        "forge-toolbar",
+        "forge-tooltip"
+      ],
+      "screenshot": "application-layout/detailed-context-switcher/detailed-context-switcher.webp",
       "hasScript": false
     },
     {
@@ -654,8 +881,8 @@
       "name": "tables"
     },
     {
-      "name": "toolbar"
+      "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-06-25T13:19:54.696Z"
+  "generatedAt": "2026-07-08T18:57:34.116Z"
 }
