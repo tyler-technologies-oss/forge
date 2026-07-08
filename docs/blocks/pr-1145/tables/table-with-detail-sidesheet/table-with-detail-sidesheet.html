@@ -1,0 +1,142 @@
+<!--
+  @block Table with Detail Sidesheet
+  @description Application layout with a data table where the last column contains an icon button that opens a right-side drawer sidesheet to display row details alongside the table
+  @tags table, data, drawer, sidesheet, details, application-layout
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Table with Detail Sidesheet</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1145/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class="" style="background-color: transparent">
+    <forge-app-layout app-title="My Application" app-title-href="/" breakpoint="1730">
+  <!-- App bar logo -->
+  <forge-icon slot="app-bar-logo" name="home"></forge-icon>
+
+  <!-- App bar end actions -->
+  <div slot="app-bar-end" class="flex items-center gap-xsmall">
+    <forge-icon-button density="medium" aria-label="Notifications" theme="app-bar">
+      <forge-icon name="notifications" external></forge-icon>
+    </forge-icon-button>
+
+    <forge-user-profile
+      email="tyler.tech@tylertech.com"
+      button-label="Open the incredibly awesome profile menu"
+      theme-toggle
+      image-url
+      full-name="Tyler tech"
+      slot="app-bar-end">
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="settings" external></forge-icon>
+        <a href="http://www.google.com" target="_blank">Settings</a>
+      </forge-profile-link>
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="account" external></forge-icon>
+        <a href="http://www.google.com" target="_blank">Profile</a>
+      </forge-profile-link>
+      <span slot="sign-in-button-text">Sign in</span>
+      <span slot="sign-out-button-text">Sign Out</span>
+    </forge-user-profile>
+  </div>
+
+  <!-- Navigation drawer content (placeholder) -->
+  <nav slot="navigation">
+    <div class="p-medium space-y-medium">
+      <div class="striped-box"></div>
+      <div class="striped-box"></div>
+      <div class="striped-box"></div>
+      <div class="striped-box"></div>
+      <div class="striped-box"></div>
+      <div class="striped-box"></div>
+    </div>
+  </nav>
+
+  <!-- Body header with borderless toolbar and tab bar -->
+  <div slot="body-header">
+    <forge-toolbar no-border>
+      <h2 slot="start" class="text-heading3">Machine Accounts</h2>
+    </forge-toolbar>
+    <div class="bg-surface">
+      <forge-tab-bar active-tab="3" clustered>
+        <forge-tab>Users</forge-tab>
+        <forge-tab>Invited Users</forge-tab>
+        <forge-tab>Teams</forge-tab>
+        <forge-tab>Machine Accounts</forge-tab>
+      </forge-tab-bar>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <main class="p-medium bg-surface-dim" slot="body">
+    <forge-card no-padding>
+      <forge-table id="machine-accounts-table"></forge-table>
+    </forge-card>
+  </main>
+
+  <!-- Right drawer detail sidesheet -->
+  <div slot="body-right">
+    <forge-drawer id="detail-sidesheet" direction="right" aria-labelledby="detail-title" class="[--forge-drawer-width:768px] hidden">
+      <forge-scaffold>
+        <forge-toolbar slot="header">
+          <h2 id="detail-title" slot="start" class="text-heading3">Detail title</h2>
+          <forge-icon-button slot="end" density="medium" aria-label="Close details" id="close-detail-btn">
+            <forge-icon name="close"></forge-icon>
+          </forge-icon-button>
+        </forge-toolbar>
+
+        <div slot="body" class="block p-medium space-y-medium">
+          <div>
+            <forge-label-value>
+              <span slot="label">Description</span>
+              <span slot="value">Description of the tabe row items clicked</span>
+            </forge-label-value>
+          </div>
+
+          <forge-button variant="outlined">Create an API key</forge-button>
+
+          <div class="mt-large space-y-medium">
+            <div class="striped-box min-h-8"></div>
+            <div class="striped-box min-h-8"></div>
+            <div class="striped-box min-h-8"></div>
+            <div class="striped-box min-h-8"></div>
+          </div>
+        </div>
+
+        <forge-toolbar slot="footer" inverted>
+          <div class="flex items-center gap-medium" slot="end">
+            <forge-button id="detail-save-btn" variant="filled" theme="error">Delete machine account</forge-button>
+          </div>
+        </forge-toolbar>
+      </forge-scaffold>
+    </forge-drawer>
+  </div>
+
+  <!-- Footer -->
+  <footer slot="body-footer">
+    <forge-toolbar inverted>
+      <div slot="center" class="text-body1">© 2026 My Application. All rights reserved.</div>
+    </forge-toolbar>
+  </footer>
+</forge-app-layout>
+
+<script type="module" src="/src/blocks/tables/table-with-detail-sidesheet/table-with-detail-sidesheet.ts"></script>
+  </body>
+</html>

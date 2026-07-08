@@ -127,6 +127,39 @@
       "hasScript": true
     },
     {
+      "id": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet",
+      "name": "Table with Detail Sidesheet",
+      "description": "Application layout with a data table where the last column contains an icon button that opens a right-side drawer sidesheet to display row details alongside the table",
+      "tags": [
+        "table",
+        "data",
+        "drawer",
+        "sidesheet",
+        "details",
+        "application-layout"
+      ],
+      "file": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet.html",
+      "category": "Tables",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-button",
+        "forge-card",
+        "forge-drawer",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-label-value",
+        "forge-profile-link",
+        "forge-scaffold",
+        "forge-tab",
+        "forge-tab-bar",
+        "forge-table",
+        "forge-toolbar",
+        "forge-user-profile"
+      ],
+      "screenshot": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet.webp",
+      "hasScript": true
+    },
+    {
       "id": "tables/table-with-actions/table-with-actions",
       "name": "Table with Actions",
       "description": "Data table inside a card with a toolbar header featuring action buttons for cancel, save draft, and submit operations",
@@ -755,6 +788,40 @@
       "hasScript": false
     },
     {
+      "id": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs",
+      "name": "Basic Application Layout with Tabs",
+      "description": "Standard application shell with a borderless page toolbar and tab bar navigation below it, featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
+      "tags": [
+        "layout",
+        "application",
+        "shell",
+        "app-bar",
+        "navigation",
+        "drawer",
+        "user-profile",
+        "footer",
+        "responsive-grid",
+        "tabs"
+      ],
+      "file": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.html",
+      "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-profile-link",
+        "forge-tab",
+        "forge-tab-bar",
+        "forge-toolbar",
+        "forge-user-profile"
+      ],
+      "screenshot": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.webp",
+      "hasScript": false
+    },
+    {
       "id": "application-layout/compact-context-switcher/compact-context-switcher",
       "name": "Compact Context Switcher",
       "description": "Application layout with a compact context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a minimal select dropdown for quick context switching.",
@@ -819,40 +886,6 @@
       ],
       "screenshot": "application-layout/basic/basic.webp",
       "hasScript": false
-    },
-    {
-      "id": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs",
-      "name": "Basic Application Layout with Tabs",
-      "description": "Standard application shell with a borderless page toolbar and tab bar navigation below it, featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
-      "tags": [
-        "layout",
-        "application",
-        "shell",
-        "app-bar",
-        "navigation",
-        "drawer",
-        "user-profile",
-        "footer",
-        "responsive-grid",
-        "tabs"
-      ],
-      "file": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.html",
-      "category": "Application Layout",
-      "componentsUsed": [
-        "forge-app-layout",
-        "forge-divider",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-list",
-        "forge-list-item",
-        "forge-profile-link",
-        "forge-tab",
-        "forge-tab-bar",
-        "forge-toolbar",
-        "forge-user-profile"
-      ],
-      "screenshot": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.webp",
-      "hasScript": false
     }
   ],
   "categories": [
@@ -884,5 +917,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-07-08T18:58:59.090Z"
+  "generatedAt": "2026-07-08T21:54:02.169Z"
 }
