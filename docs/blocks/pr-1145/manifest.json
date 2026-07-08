@@ -127,28 +127,6 @@
       "hasScript": true
     },
     {
-      "id": "tables/simple/simple",
-      "name": "Simple Table",
-      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
-      "tags": [
-        "table",
-        "data",
-        "card",
-        "toolbar"
-      ],
-      "file": "tables/simple/simple.html",
-      "category": "Tables",
-      "componentsUsed": [
-        "forge-card",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-table",
-        "forge-toolbar"
-      ],
-      "screenshot": "tables/simple/simple.webp",
-      "hasScript": true
-    },
-    {
       "id": "tables/table-with-actions/table-with-actions",
       "name": "Table with Actions",
       "description": "Data table inside a card with a toolbar header featuring action buttons for cancel, save draft, and submit operations",
@@ -169,6 +147,28 @@
         "forge-toolbar"
       ],
       "screenshot": "tables/table-with-actions/table-with-actions.webp",
+      "hasScript": true
+    },
+    {
+      "id": "tables/simple/simple",
+      "name": "Simple Table",
+      "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
+      "tags": [
+        "table",
+        "data",
+        "card",
+        "toolbar"
+      ],
+      "file": "tables/simple/simple.html",
+      "category": "Tables",
+      "componentsUsed": [
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-table",
+        "forge-toolbar"
+      ],
+      "screenshot": "tables/simple/simple.webp",
       "hasScript": true
     },
     {
@@ -315,13 +315,44 @@
       "hasScript": true
     },
     {
-      "id": "forms/multi-column/multi-column",
-      "name": "Multi-Column Form",
-      "description": "Responsive form using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
+      "id": "forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "tags": [
+        "authentication",
+        "login",
+        "form",
+        "card",
+        "centered",
+        "scaffold",
+        "toolbar"
+      ],
+      "file": "forms/login/login.html",
+      "category": "Forms",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-checkbox",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
+      ],
+      "screenshot": "forms/login/login.webp",
+      "hasScript": false
+    },
+    {
+      "id": "forms/complex-form-with-grouped-sections/complex-form-with-grouped-sections",
+      "name": "Complex Form with Grouped Sections",
+      "description": "Responsive form divided into logically grouped sections (project details, timeline, team, location, settings, notifications) using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
       "tags": [
         "form",
         "grid",
-        "multi-column",
+        "grouped",
+        "sections",
+        "complex",
         "responsive",
         "text-field",
         "select",
@@ -332,7 +363,7 @@
         "scaffold",
         "toolbar"
       ],
-      "file": "forms/multi-column/multi-column.html",
+      "file": "forms/complex-form-with-grouped-sections/complex-form-with-grouped-sections.html",
       "category": "Forms",
       "componentsUsed": [
         "forge-button",
@@ -352,7 +383,7 @@
         "forge-text-field",
         "forge-toolbar"
       ],
-      "screenshot": "forms/multi-column/multi-column.webp",
+      "screenshot": "forms/complex-form-with-grouped-sections/complex-form-with-grouped-sections.webp",
       "hasScript": false
     },
     {
@@ -386,35 +417,6 @@
         "forge-toolbar"
       ],
       "screenshot": "forms/add-user/add-user.webp",
-      "hasScript": false
-    },
-    {
-      "id": "forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
-      "tags": [
-        "authentication",
-        "login",
-        "form",
-        "card",
-        "centered",
-        "scaffold",
-        "toolbar"
-      ],
-      "file": "forms/login/login.html",
-      "category": "Forms",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-checkbox",
-        "forge-divider",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-text-field",
-        "forge-toolbar"
-      ],
-      "screenshot": "forms/login/login.webp",
       "hasScript": false
     },
     {
@@ -788,6 +790,37 @@
       "hasScript": false
     },
     {
+      "id": "application-layout/basic/basic",
+      "name": "Basic Application Layout",
+      "description": "Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
+      "tags": [
+        "layout",
+        "application",
+        "shell",
+        "app-bar",
+        "navigation",
+        "drawer",
+        "user-profile",
+        "footer",
+        "responsive-grid"
+      ],
+      "file": "application-layout/basic/basic.html",
+      "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-profile-link",
+        "forge-toolbar",
+        "forge-user-profile"
+      ],
+      "screenshot": "application-layout/basic/basic.webp",
+      "hasScript": false
+    },
+    {
       "id": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs",
       "name": "Basic Application Layout with Tabs",
       "description": "Standard application shell with a borderless page toolbar and tab bar navigation below it, featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
@@ -820,37 +853,6 @@
       ],
       "screenshot": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.webp",
       "hasScript": false
-    },
-    {
-      "id": "application-layout/basic/basic",
-      "name": "Basic Application Layout",
-      "description": "Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
-      "tags": [
-        "layout",
-        "application",
-        "shell",
-        "app-bar",
-        "navigation",
-        "drawer",
-        "user-profile",
-        "footer",
-        "responsive-grid"
-      ],
-      "file": "application-layout/basic/basic.html",
-      "category": "Application Layout",
-      "componentsUsed": [
-        "forge-app-layout",
-        "forge-divider",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-list",
-        "forge-list-item",
-        "forge-profile-link",
-        "forge-toolbar",
-        "forge-user-profile"
-      ],
-      "screenshot": "application-layout/basic/basic.webp",
-      "hasScript": false
     }
   ],
   "categories": [
@@ -882,5 +884,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-07-07T13:58:14.967Z"
+  "generatedAt": "2026-07-08T18:58:59.090Z"
 }
