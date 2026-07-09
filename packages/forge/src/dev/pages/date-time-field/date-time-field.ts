@@ -13,6 +13,12 @@ const picker = document.getElementById('demo-date-time-picker') as IDateTimePick
 const completeEl = document.getElementById('demo-complete') as HTMLElement;
 const valueEl = document.getElementById('demo-value') as HTMLElement;
 
+// Demonstrates the format-hint fallback: show-mask off with no placeholder.
+const formatHintsField = document.getElementById('demo-format-hints') as IDateTimeFieldComponent | null;
+if (formatHintsField) {
+  formatHintsField.showMask = false;
+}
+
 // Standalone field — no `picker` attribute, so users type the date/time directly.
 const standaloneField = document.getElementById('demo-standalone-field') as IDateTimeFieldComponent;
 const standaloneCompleteEl = document.getElementById('demo-standalone-complete') as HTMLElement;
@@ -126,3 +132,46 @@ persistentSwitch.addEventListener('forge-switch-change', ({ detail }) => {
   field.persistent = detail;
   picker.persistent = detail;
 });
+
+const showMaskSwitch = document.getElementById('opt-show-mask') as ISwitchComponent;
+showMaskSwitch.addEventListener('forge-switch-change', ({ detail }) => {
+  field.showMask = detail;
+  standaloneField.showMask = detail;
+});
+
+const persistMaskSwitch = document.getElementById('opt-persist-mask') as ISwitchComponent;
+persistMaskSwitch.addEventListener('forge-switch-change', ({ detail }) => {
+  field.persistMask = detail;
+  standaloneField.persistMask = detail;
+});
+
+// Apply a text-field control's value to both demo fields as they type.
+function bindFieldText(id: string, apply: (field: IDateTimeFieldComponent, value: string) => void): void {
+  const input = document.getElementById(id) as HTMLInputElement;
+  input.addEventListener('input', () => {
+    apply(field, input.value);
+    apply(standaloneField, input.value);
+  });
+}
+
+// Apply a select control's value to both demo fields on change.
+function bindFieldSelect(id: string, apply: (field: IDateTimeFieldComponent, value: string) => void): void {
+  const select = document.getElementById(id) as ISelectComponent;
+  select.addEventListener('change', () => {
+    apply(field, select.value as string);
+    apply(standaloneField, select.value as string);
+  });
+}
+
+bindFieldText('opt-label', (f, v) => (f.label = v));
+bindFieldText('opt-placeholder', (f, v) => (f.placeholder = v));
+bindFieldText('opt-min', (f, v) => (f.min = v || null));
+bindFieldText('opt-max', (f, v) => (f.max = v || null));
+
+bindFieldSelect('opt-label-position', (f, v) => (f.labelPosition = v as typeof f.labelPosition));
+bindFieldSelect('opt-label-alignment', (f, v) => (f.labelAlignment = v as typeof f.labelAlignment));
+bindFieldSelect('opt-variant', (f, v) => (f.variant = v as typeof f.variant));
+bindFieldSelect('opt-density', (f, v) => (f.density = v as typeof f.density));
+bindFieldSelect('opt-shape', (f, v) => (f.shape = v as typeof f.shape));
+bindFieldSelect('opt-theme', (f, v) => (f.theme = v as typeof f.theme));
+bindFieldSelect('opt-popover-placement', (f, v) => (f.popoverPlacement = v));
