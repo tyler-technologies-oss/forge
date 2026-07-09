@@ -66,6 +66,32 @@
       </forge-timeline-item>
     </forge-timeline>
   </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">With Timestamps</h3>
+    <forge-timeline>
+      <forge-timestamp datetime="2026-07-07" format="'Yesterday •' MMM dd, YYYY"></forge-timestamp>
+      <forge-timeline-item sidebar="none">
+        <span><strong>Event with formatted date</strong></span>
+        <forge-timestamp datetime="2024-05-15" format="MM/dd/YYYY" separator="start"></forge-timestamp>
+      </forge-timeline-item>
+      <forge-timestamp datetime="2026-07-08" format="'Today •' MMM dd, YYYY"></forge-timestamp>
+      <forge-timeline-item theme="success">
+        <forge-icon slot="marker" name="check_circle"></forge-icon>
+        <span><strong>ISO format</strong> <span class="forge-color--text-medium">YYYY-MM-dd format</span></span>
+        <forge-timestamp datetime="2024-05-15" format="YYYY-MM-dd"></forge-timestamp>
+      </forge-timeline-item>
+      <forge-timeline-item>
+        <span><strong>European format</strong> <span class="forge-color--text-medium">dd.MM.YYYY format</span></span>
+        <forge-timestamp datetime="2024-05-15" format="dd.MM.YYYY"></forge-timestamp>
+      </forge-timeline-item>
+      <forge-timeline-item theme="info">
+        <forge-icon slot="marker" name="schedule"></forge-icon>
+        <span><strong>Month abbreviation</strong> <span class="forge-color--text-medium">dd/MMM/YYYY format</span></span>
+        <forge-timestamp datetime="2024-05-15" format="dd/MMM/YYYY"></forge-timestamp>
+      </forge-timeline-item>
+    </forge-timeline>
+  </div>
 </div>
 
 <script type="module" src="timeline.ts"></script>

@@ -1,4 +1,4 @@
-@use '../../core/styles/tokens/timeline/timeline-item/tokens' as timeline-item-tokens;
+@use '../../core/styles/typography';
 @use './token-utils' as *;
 
 @forward './token-utils';
@@ -11,6 +11,11 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  // gap: #{token(gap)};
   position: relative;
+}
+
+@mixin timestamp {
+  @include typography.style(overline);
+
+  margin-block: #{token(timestamp-margin)};
 }

@@ -16,6 +16,7 @@ export const TIMELINE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-timeline';
  * @slot - The default slot for timeline items.
  *
  * @cssproperty --forge-timeline-gap - The spacing between timeline items.
+ * @cssproperty --forge-timeline-timestamp-margin - The block margin around slotted timestamps.
  *
  * @csspart root - The root element.
  */

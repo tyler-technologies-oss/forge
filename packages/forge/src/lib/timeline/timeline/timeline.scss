@@ -19,3 +19,11 @@
 .forge-timeline {
   @include core.base;
 }
+
+//
+// Slotted
+//
+
+::slotted(forge-timestamp) {
+  @include core.timestamp;
+}

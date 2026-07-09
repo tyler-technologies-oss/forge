@@ -3,7 +3,8 @@
 @use '../../../utils';
 
 $tokens: (
-  gap: utils.module-val(timeline, gap, spacing.variable(large))
+  gap: utils.module-val(timeline, gap, spacing.variable(large)),
+  timestamp-margin: utils.module-val(timeline, timestamp-margin, spacing.variable(xsmall))
 ) !default;
 
 @function get($key) {

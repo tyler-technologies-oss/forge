@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import { UsageLink } from '../../blocks/Shared';
 import * as TimelineStories from './Timeline.stories';
 
 <Meta of={TimelineStories} />
@@ -24,12 +25,12 @@ be customized by providing content in the `marker` slot, such as icons or badges
 
 <Canvas of={TimelineStories.WithIcons} />
 
-### Content
+### Details
 
-The content area of a timeline item can contain any markup, including text, badges, cards, or other
-components.
+Use the detail slot of a timeline item to provide additional information or context for the event.
+Consider using card component to visually group and separate detail content from the item's summary.
 
-<Canvas of={TimelineStories.RichContent} />
+<Canvas of={TimelineStories.WithDetail} />
 
 ## Timeline Break
 
@@ -38,11 +39,33 @@ groups of timeline items.
 
 <Canvas of={TimelineStories.WithBreak} />
 
+## Sidebar Options
+
+By default side bar lines are drawn above and below a timeline item's marker unless the item is the
+first or last element in the timeline, in which case either the top or bottom line is omitted. Use
+the `sidebar` property to manually set which lines are drawn for an item. This can be used to imply
+the presence of items before or after what's rendered by continuing lines past the first or last
+marker.
+
+Possible values are `auto`, `start`, `end`, and `none`. The default value is `auto`.
+
+<Canvas of={TimelineStories.SidebarOptions} />
+
 ## Theming
 
 Set the theme of a timeline item to control the color of the marker.
 
 <Canvas of={TimelineStories.Themed} />
+
+## Timestamps
+
+The `<forge-timestamp>` component can be used to display a timestamp in a timeline. Timestamps
+placed as a direct child of a timeline display as a heading alongside the timeline items. Placing a
+timestamp within a timeline item renders it as body text.
+
+<UsageLink text="the timestamp component" href="?path=/docs/components-timestamp--docs" />
+
+<Canvas of={TimelineStories.WithTimestamps} />
 
 ## API
 
@@ -50,8 +73,8 @@ Set the theme of a timeline item to control the color of the marker.
 
 ## Accessibility
 
-Timelines are rendered as semantic lists with `role="list"` on the container and `role="listitem"`
-on each timeline item. This provides proper structure for assistive technology users.
+Timelines are rendered as semantic lists with `role="list"` on the timeline and `role="listitem"`
+on each timeline item.
 
 ### Best Practices
 

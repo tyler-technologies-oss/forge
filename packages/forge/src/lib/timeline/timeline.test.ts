@@ -8,6 +8,7 @@ import { TimelineBreakComponent } from './timeline-break/timeline-break.js';
 import './timeline/timeline.js';
 import './timeline-item/timeline-item.js';
 import './timeline-break/timeline-break.js';
+import '../timestamp/timestamp.js';
 
 describe('Timeline', () => {
   describe('timeline container', () => {
