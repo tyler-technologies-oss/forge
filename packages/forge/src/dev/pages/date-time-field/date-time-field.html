@@ -64,7 +64,107 @@ include('./src/partials/page.ejs', {
       },
       { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
       { type: 'switch', label: 'Readonly', id: 'opt-readonly' },
-      { type: 'switch', label: 'Persistent (no outside-click close)', id: 'opt-persistent' }
+      { type: 'switch', label: 'Persistent (no outside-click close)', id: 'opt-persistent' },
+      { type: 'switch', label: 'Show mask (guide always on)', id: 'opt-show-mask', defaultValue: true },
+      { type: 'switch', label: 'Persist mask (guide wins over placeholder)', id: 'opt-persist-mask' },
+      { type: 'text-field', label: 'Label', id: 'opt-label', defaultValue: 'Appointment' },
+      { type: 'text-field', label: 'Placeholder', id: 'opt-placeholder', defaultValue: 'Select date and time' },
+      {
+        type: 'select',
+        label: 'Label position',
+        id: 'opt-label-position',
+        defaultValue: 'inset',
+        options: [
+          { label: 'Inset', value: 'inset' },
+          { label: 'Block start', value: 'block-start' },
+          { label: 'Inline start', value: 'inline-start' },
+          { label: 'Inline end', value: 'inline-end' },
+          { label: 'None', value: 'none' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Label alignment',
+        id: 'opt-label-alignment',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Center', value: 'center' },
+          { label: 'Baseline', value: 'baseline' },
+          { label: 'Start', value: 'start' },
+          { label: 'End', value: 'end' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Variant',
+        id: 'opt-variant',
+        defaultValue: 'outlined',
+        options: [
+          { label: 'Outlined', value: 'outlined' },
+          { label: 'Plain', value: 'plain' },
+          { label: 'Tonal', value: 'tonal' },
+          { label: 'Filled', value: 'filled' },
+          { label: 'Raised', value: 'raised' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Density',
+        id: 'opt-density',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Extra small', value: 'extra-small' },
+          { label: 'Small', value: 'small' },
+          { label: 'Medium', value: 'medium' },
+          { label: 'Large', value: 'large' },
+          { label: 'Extra large', value: 'extra-large' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Shape',
+        id: 'opt-shape',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Rounded', value: 'rounded' },
+          { label: 'Squared', value: 'squared' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'opt-theme',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Error', value: 'error' },
+          { label: 'Info', value: 'info' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Popover placement',
+        id: 'opt-popover-placement',
+        defaultValue: 'bottom-start',
+        options: [
+          { label: 'Bottom start', value: 'bottom-start' },
+          { label: 'Bottom', value: 'bottom' },
+          { label: 'Bottom end', value: 'bottom-end' },
+          { label: 'Top start', value: 'top-start' },
+          { label: 'Top', value: 'top' },
+          { label: 'Top end', value: 'top-end' }
+        ]
+      },
+      { type: 'text-field', label: 'Min (YYYY-MM-DDTHH:mm)', id: 'opt-min' },
+      { type: 'text-field', label: 'Max (YYYY-MM-DDTHH:mm)', id: 'opt-max' }
     ]
   }
 })
