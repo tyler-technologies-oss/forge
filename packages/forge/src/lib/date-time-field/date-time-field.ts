@@ -136,25 +136,44 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   /** @deprecated */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = DATE_TIME_FIELD_TAG_NAME;
 
+  /** Whether the field captures a single date or a start/end date range. */
   @property({ attribute: 'date-mode', reflect: true }) public dateMode: DateTimeFieldDateMode = 'single';
+  /** Whether the field captures a single time, a same-day start/end time range, or a fixed time slot (booking-style). */
   @property({ attribute: 'time-mode', reflect: true }) public timeMode: TimeMode = 'single';
+  /** Shape of the public `value`: a `Temporal.PlainDateTime` (default), a local ISO `datetime-local` string, or a native `Date`. */
   @property({ attribute: 'value-mode', reflect: true }) public valueMode: DateTimePickerValueMode = 'temporal';
+  /** Form field name used when submitting the owning form. */
   @property({ reflect: true }) public name = '';
+  /** Field label text; also settable via the `label` slot. */
   @property() public label = '';
+  /** Placeholder shown only in the phone tappable display when no value is set. Desktop masked inputs always show their own format guide and ignore this. */
   @property() public placeholder = '';
+  /** Disables the field and its linked picker. */
   @property({ type: Boolean, reflect: true }) public disabled = false;
+  /** Prevents editing while still allowing focus and form submission. */
   @property({ type: Boolean, reflect: true }) public readonly = false;
+  /** Marks the required parts (see `requiredParts`) as required for form validation. */
   @property({ type: Boolean, reflect: true }) public required = false;
+  /** Which segments must be filled for the field to be valid when `required`. */
   @property({ attribute: 'required-parts', reflect: true }) public requiredParts: DateTimeFieldRequiredParts = 'both';
+  /** Reflects and controls whether the linked picker is open. */
   @property({ type: Boolean, reflect: true }) public open = false;
+  /** Forwarded to the linked picker; keeps it open until explicitly dismissed instead of closing on outside interaction. */
   @property({ type: Boolean, reflect: true }) public persistent = false;
+  /** BCP 47 locale used for formatting the duration summary; defaults to the runtime locale. */
   @property({ reflect: true }) public locale: string | undefined;
+  /** Displays and parses time in 24-hour format instead of 12-hour with AM/PM. */
   @property({ type: Boolean, attribute: 'use-24-hour-time', reflect: true }) public use24HourTime = false;
+  /** Adds a seconds segment to the time mask and value. */
   @property({ type: Boolean, attribute: 'allow-seconds', reflect: true }) public allowSeconds = false;
+  /** Minimum selectable date/time; forwarded to the linked picker and used for validation. */
   @property({ attribute: 'min' }) public min: Date | string | null = null;
+  /** Maximum selectable date/time; forwarded to the linked picker and used for validation. */
   @property({ attribute: 'max' }) public max: Date | string | null = null;
+  /** Placement of the linked picker's popover relative to the field. */
   @property({ attribute: 'popover-placement' }) public popoverPlacement: string = DATE_TIME_FIELD_CONSTANTS.defaultValues.POPOVER_PLACEMENT;
 
+  /** ID of the linked `forge-date-time-picker` in the same root. */
   @property({ reflect: true })
   public get picker(): string {
     return this.#pickerIdRef;
@@ -166,6 +185,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
   }
 
+  /** Direct element reference to the linked picker; an alternative to the `picker` IDREF attribute. */
   @property({ attribute: false })
   public get pickerElement(): IDateTimePickerComponent | null {
     return this.#pickerEl;
@@ -177,6 +197,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.requestUpdate();
   }
 
+  /** The current value, shaped by `valueMode`; `null` when empty. */
   @property({ attribute: false })
   public get value(): DateTimePickerPublicValue {
     return toPublicValue(this.#value, this.valueMode, this.allowSeconds);
@@ -241,15 +262,19 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.#internals = this.attachInternals();
   }
 
+  /** The form this field participates in (read-only). */
   public get form(): HTMLFormElement | null {
     return this.#internals.form;
   }
+  /** The labels associated with this field (read-only). */
   public get labels(): NodeList {
     return this.#internals.labels;
   }
+  /** The field's current validity state (read-only). */
   public get validity(): ValidityState {
     return this.#internals.validity;
   }
+  /** The current validation message, if any (read-only). */
   public get validationMessage(): string {
     return this.#internals.validationMessage;
   }
