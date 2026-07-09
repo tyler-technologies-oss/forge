@@ -2654,14 +2654,84 @@ npm install @tylertech/forge-tailwind
 
 ## Setup
 
-Import the Forge theme after Tailwind in your main CSS file:
+Import Tailwind and the Forge theme in your main CSS file using CSS layers for proper cascade control:
 
 ```css
-@import &quot;tailwindcss&quot;;
+/* Step 1: Define your Tailwind layers */
+@layer theme, base, components, utilities;
+
+/* Step 2: Import the theme (variables) and utilities, skipping preflight */
+@import &quot;tailwindcss/theme.css&quot; layer(theme);
+@import &quot;tailwindcss/utilities.css&quot; layer(utilities);
+
+/* Step 3: Import the Forge Tailwind theme */
 @import &quot;@tylertech/forge-tailwind&quot;;
 ```
 
 &gt; **Important:** Forge CSS must be loaded in your application for the design tokens to be available. The Tailwind theme references Forge&#39;s CSS custom properties.
+
+## Angular Setup
+
+If you&#39;re using Angular, follow these additional steps to configure Tailwind CSS in your project.
+
+### 1. Install Tailwind and PostCSS
+
+Install Tailwind CSS and the PostCSS plugin:
+
+```bash
+npm install tailwindcss @tailwindcss/postcss postcss --force
+```
+
+### 2. Configure PostCSS
+
+Create a `.postcssrc.json` file in the root of your Angular project:
+
+```json
+{
+  &quot;plugins&quot;: {
+    &quot;@tailwindcss/postcss&quot;: {}
+  }
+}
+```
+
+### 3. Import Tailwind and Forge Theme
+
+Add the imports to your global stylesheet (typically `src/styles.css` or `src/styles.scss`):
+
+```css
+/* Step 1: Define your Tailwind layers */
+@layer theme, base, components, utilities;
+
+/* Step 2: Import the theme (variables) and utilities, skipping preflight */
+@import &quot;tailwindcss/theme.css&quot; layer(theme);
+@import &quot;tailwindcss/utilities.css&quot; layer(utilities);
+
+/* Step 3: Import the Forge Tailwind theme */
+@import &quot;@tylertech/forge-tailwind&quot;;
+```
+
+### 4. Start Your Application
+
+Run your development server:
+
+```bash
+ng serve
+```
+
+### 5. Start Using Tailwind
+
+You can now use Tailwind utilities alongside Forge components in your templates:
+
+```html
+&lt;div class=&quot;flex gap-4 p-6&quot;&gt;
+  &lt;forge-card&gt;
+    &lt;h2 class=&quot;text-heading4&quot;&gt;Card Title&lt;/h2&gt;
+    &lt;p class=&quot;text-body2&quot;&gt;Content styled with Tailwind and Forge&lt;/p&gt;
+  &lt;/forge-card&gt;
+&lt;/div&gt;
+```
+
+&gt; For more information on using Forge with Angular, see the [Angular Framework Guide](?path=/docs/frameworks-angular--docs).
 
 ## Recommended Usage
 
