@@ -37,6 +37,51 @@
     <span slot="label">Value</span>
     <pre slot="value" id="demo-standalone-value" style="margin: 0; font-family: monospace;">null</pre>
   </forge-label-value>
+
+  <hr style="width: 100%; border: none; border-top: 1px solid var(--forge-theme-outline, #dadce0); margin: 8px 0;" />
+
+  <h3 style="margin: 0;">Responsive wrapping — resize the containers</h3>
+  <p style="margin: 0; max-width: 44ch; color: var(--forge-theme-text-medium, #5f6368);">
+    A date + time range sits on one line when it fits and wraps by endpoint (start over end) when the
+    container is too narrow. Each container below is resizable.
+  </p>
+
+  <div style="resize: horizontal; overflow: auto; padding: 12px; border: 1px dashed var(--forge-theme-outline, #dadce0); width: 640px; max-width: 100%;">
+    <forge-date-time-field date-mode="range" time-mode="range" label="Event window" persist-mask>
+      <span slot="support-text">Drag the container's corner to see it wrap.</span>
+    </forge-date-time-field>
+  </div>
+
+  <div style="resize: horizontal; overflow: auto; padding: 12px; border: 1px dashed var(--forge-theme-outline, #dadce0); width: 260px; max-width: 100%;">
+    <forge-date-time-field date-mode="range" time-mode="range" allow-seconds label="With seconds" persist-mask></forge-date-time-field>
+  </div>
+
+  <hr style="width: 100%; border: none; border-top: 1px solid var(--forge-theme-outline, #dadce0); margin: 8px 0;" />
+
+  <h3 style="margin: 0;">Label positions &amp; variants</h3>
+  <div style="display: flex; flex-direction: column; gap: 16px; max-width: 420px;">
+    <forge-date-time-field label="Inset (default)" label-position="inset"></forge-date-time-field>
+    <forge-date-time-field label="Block start" label-position="block-start"></forge-date-time-field>
+    <forge-date-time-field label="Inline start" label-position="inline-start"></forge-date-time-field>
+    <forge-date-time-field label="Tonal variant" variant="tonal"></forge-date-time-field>
+    <forge-date-time-field label="Filled variant" variant="filled"></forge-date-time-field>
+  </div>
+
+  <hr style="width: 100%; border: none; border-top: 1px solid var(--forge-theme-outline, #dadce0); margin: 8px 0;" />
+
+  <h3 style="margin: 0;">Placeholder &amp; show-mask</h3>
+  <p style="margin: 0; max-width: 46ch; color: var(--forge-theme-text-medium, #5f6368);">
+    At rest the label / placeholder shows; the format guide appears on focus (<code>show-mask</code>
+    on, the default) — <strong>click into each field</strong> to see it. An inset label rests inside
+    the field. <code>persist-mask</code> pins the guide on even at rest. With <code>show-mask</code>
+    off the guide never auto-shows.
+  </p>
+  <div style="display: flex; flex-direction: column; gap: 16px; max-width: 420px;">
+    <forge-date-time-field label="Inset label (rests, focus for guide)"></forge-date-time-field>
+    <forge-date-time-field label="Placeholder (non-inset)" label-position="block-start" placeholder="Select date and time"></forge-date-time-field>
+    <forge-date-time-field label="Persist mask (guide pinned)" label-position="block-start" persist-mask></forge-date-time-field>
+    <forge-date-time-field id="demo-format-hints" label="show-mask off (hints only)" label-position="block-start"></forge-date-time-field>
+  </div>
 </div>
 
 <script type="module" src="date-time-field.ts"></script>
