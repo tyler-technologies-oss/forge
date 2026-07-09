@@ -19,8 +19,6 @@ export class TimeInputMask {
   private _mask: InputMask<FactoryArg>;
   private _maskOptions: FactoryArg;
   private _acceptListener: (evt: InputEvent) => void;
-  // True while a segment holds a single auto-padded digit that may still be extended (e.g. `2` -> `02` -> `21`);
-  // cleared once it holds two digits so a completed segment can't absorb the next segment's keystroke.
   private _hoursAutoPadded = false;
   private _minutesAutoPadded = false;
   private _secondsAutoPadded = false;
