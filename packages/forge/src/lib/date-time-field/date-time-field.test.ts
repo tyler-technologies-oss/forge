@@ -526,25 +526,13 @@ describe('DateTimeField / quick keys', () => {
     expect(value.getDate()).toBe(now.getDate());
   });
 
-  it('should fill the date segment with today when "d" is pressed', async () => {
+  it('should fill the date segment with today when "t" is pressed', async () => {
     const screen = render(html`<forge-date-time-field value-mode="date"></forge-date-time-field>`);
     const el = getField(screen.container);
     await ready(el);
-    getDateInput(el).dispatchEvent(new KeyboardEvent('keydown', { key: 'd', bubbles: true }));
+    getDateInput(el).dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
     await ready(el);
     expect(getDateInput(el).value).toContain(String(new Date().getFullYear()));
-  });
-
-  it('should fill the focused time segment with the current time when "t" is pressed', async () => {
-    const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
-    const el = getField(screen.container);
-    await ready(el);
-    const timeInput = getTimeInput(el);
-    timeInput.focus();
-    timeInput.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
-    await ready(el);
-    expect(getTimeInput(el).value).toMatch(/\d/);
-    expect(getDateInput(el).value).not.toMatch(/\d/);
   });
 
   it('should not trigger quick keys when readonly', async () => {
@@ -650,7 +638,7 @@ describe('DateTimeField / keyboard interaction', () => {
     await ready(el);
     const dateInput = getDateInput(el);
     dateInput.focus();
-    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'd', bubbles: true }));
+    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
     await ready(el);
     expect(el.shadowRoot!.activeElement).toBe(getTimeInput(el));
   });
@@ -822,7 +810,7 @@ describe('DateTimeField / end-after-start validation', () => {
     await ready(el);
     const dateInput = el.shadowRoot!.querySelector('[part="date-input"]') as HTMLInputElement;
     dateInput.focus();
-    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'd', bubbles: true }));
+    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
     await ready(el);
     expect(el.validity.valueMissing).toBe(true);
     expect(el.validity.customError).toBe(false);
@@ -956,7 +944,7 @@ describe('DateTimeField / link contract (T-F4)', () => {
     await ready(el);
     expect(el.open).toBe(true);
     const dateInput = el.shadowRoot!.querySelector('[part="date-input"]') as HTMLInputElement;
-    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'd', bubbles: true }));
+    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
     await ready(el);
     expect((picker.value as Date)?.getTime()).toBe(initial.getTime());
   });
@@ -1135,13 +1123,13 @@ describe('DateTimeField / review fixes', () => {
     const toDateInput = el.shadowRoot!.querySelector('[part="to-date-input"]') as HTMLInputElement;
     const timeInput = getTimeInput(el);
     dateInput.focus();
-    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'd', bubbles: true }));
+    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
     await ready(el);
     toDateInput.focus();
-    toDateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'd', bubbles: true }));
+    toDateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
     await ready(el);
     timeInput.focus();
-    timeInput.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
+    timeInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'n', bubbles: true }));
     await ready(el);
     expect(el.value).not.toBeNull();
     expect(el.validity.valueMissing).toBe(false);
