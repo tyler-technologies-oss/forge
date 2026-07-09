@@ -1,5 +1,9 @@
 @use '../utils/mixins-media';
 
+// Single source for the rhythm between adjacent segments (date→time within an
+// endpoint, and around the range separator) so the gaps read consistently.
+$segment-gap: 0.3em;
+
 :host {
   display: inline-block;
   // Size to the content (date/time segments + toggle) rather than a fixed per-mode width so the
@@ -31,9 +35,15 @@ forge-text-field {
 
 // Empty/incomplete masked segments render their guide (e.g. __/__/____) in a
 // muted color so they read like a placeholder rather than stark entered text.
-// `input.` keeps this winning over the [part] color rules regardless of order.
+// Once the user starts typing, step up to a stronger (but still not "complete")
+// tone so in-progress entry reads as distinct from an untouched field.
+// `input.` keeps these winning over the [part] color rules regardless of order.
 input.guide-muted {
   color: var(--forge-theme-text-low, GrayText);
+}
+
+input.guide-partial {
+  color: var(--forge-theme-text-medium, currentColor);
 }
 
 // Slots mode still groups its date/time display in wrapper spans.
@@ -53,7 +63,7 @@ input.guide-muted {
   align-self: center;
   align-items: center;
   color: var(--forge-theme-text-medium, currentColor);
-  margin-inline: 0.4em;
+  margin-inline: $segment-gap;
   vertical-align: middle;
 }
 
@@ -70,7 +80,7 @@ input.guide-muted {
   width: 4.75em;
   text-align: start;
   // Small gap from the preceding date input within an endpoint.
-  margin-inline-start: 0.3em;
+  margin-inline-start: $segment-gap;
 }
 
 // Seconds add `:ss`, so reserve more room to keep `hh:mm:ss aa` from clipping.
