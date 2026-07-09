@@ -47,11 +47,11 @@ function firePickerChange(picker: IDateTimePickerComponent, detail: Partial<IDat
 // ─── Rendering (standalone field) ───────────────────────────────────────────
 
 describe('DateTimeField / rendering (standalone)', () => {
-  it('should render a text-field when no picker is linked', async () => {
+  it('should render a field when no picker is linked', async () => {
     const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
     const el = getField(screen.container);
     await ready(el);
-    expect(el.shadowRoot!.querySelector('forge-text-field')).not.toBeNull();
+    expect(el.shadowRoot!.querySelector('forge-field')).not.toBeNull();
   });
 
   it('should not render a toggle button when no picker is linked', async () => {
@@ -111,7 +111,7 @@ describe('DateTimeField / rendering (standalone)', () => {
     const el = getField(screen.container);
     await ready(el);
     const timeInput = getTimeInput(el);
-    const field = el.shadowRoot!.querySelector('forge-text-field') as HTMLElement;
+    const field = el.shadowRoot!.querySelector('forge-field') as HTMLElement;
     const rect = timeInput.getBoundingClientRect();
     // Click in the trailing dead zone: to the right of the last input, on the input row.
     field.dispatchEvent(
@@ -125,12 +125,72 @@ describe('DateTimeField / rendering (standalone)', () => {
     const el = getField(screen.container);
     await ready(el);
     const dateInput = getDateInput(el);
-    const field = el.shadowRoot!.querySelector('forge-text-field') as HTMLElement;
+    const field = el.shadowRoot!.querySelector('forge-field') as HTMLElement;
     const rect = dateInput.getBoundingClientRect();
     field.dispatchEvent(
       new MouseEvent('mousedown', { bubbles: true, composed: true, cancelable: true, clientX: rect.left + 4, clientY: (rect.top + rect.bottom) / 2 })
     );
     expect(el.shadowRoot!.activeElement).toBe(dateInput);
+  });
+});
+
+// ─── Mask guide & placeholder ────────────────────────────────────────────────
+
+describe('DateTimeField / mask guide and placeholder', () => {
+  it('should rest without a guide when empty and unfocused', async () => {
+    const screen = render(html`<forge-date-time-field label="When"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    expect(getDateInput(el).value).toBe('');
+  });
+
+  it('should reveal the format guide on focus', async () => {
+    const screen = render(html`<forge-date-time-field label="When"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    getDateInput(el).focus();
+    await ready(el);
+    expect(getDateInput(el).value).toContain('/');
+  });
+
+  it('should show the guide when a value is present', async () => {
+    const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
+    const el = getField(screen.container);
+    el.value = new Date(2025, 5, 12, 10, 30);
+    await ready(el);
+    expect(getDateInput(el).value).toContain('/');
+  });
+
+  it('should suppress the placeholder attribute for an inset label', async () => {
+    const screen = render(html`<forge-date-time-field label="When" placeholder="Pick a date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    expect(getDateInput(el).placeholder).toBe('');
+  });
+
+  it('should show the placeholder for a non-inset label at rest', async () => {
+    const screen = render(html`<forge-date-time-field label="When" label-position="block-start" placeholder="Pick a date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    expect(getDateInput(el).value).toBe('');
+    expect(getDateInput(el).placeholder).toBe('Pick a date');
+  });
+
+  it('should pin the guide on at rest when persist-mask is set', async () => {
+    const screen = render(
+      html`<forge-date-time-field label="When" label-position="block-start" placeholder="Pick a date" persist-mask></forge-date-time-field>`
+    );
+    const el = getField(screen.container);
+    await ready(el);
+    expect(getDateInput(el).value).toContain('/');
+  });
+
+  it('should fall back to per-segment format hints when no placeholder is set', async () => {
+    const screen = render(html`<forge-date-time-field label="When" label-position="block-start"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    expect(getDateInput(el).placeholder).toBe('MM/DD/YYYY');
+    expect(getTimeInput(el).placeholder).toContain('hh:mm');
   });
 });
 
@@ -556,7 +616,8 @@ describe('DateTimeField / keyboard interaction', () => {
   });
 
   it('should not move focus when ArrowLeft is pressed elsewhere in the time input', async () => {
-    const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
+    // show-mask keeps the guide text present so the caret can sit mid-segment (position 2).
+    const screen = render(html`<forge-date-time-field show-mask></forge-date-time-field>`);
     const el = getField(screen.container);
     await ready(el);
     const timeInput = getTimeInput(el);

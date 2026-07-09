@@ -185,6 +185,12 @@ export class DateInputMask {
     this._mask.updateValue();
   }
 
+  /** Toggles whether the unfilled format guide is shown (imask lazy mode) without recreating the mask. */
+  public setShowMaskFormat(show: boolean): void {
+    this._mask.updateOptions({ lazy: !show });
+    this._mask.updateControl();
+  }
+
   public get maskedValue(): string {
     return this._mask.value;
   }
