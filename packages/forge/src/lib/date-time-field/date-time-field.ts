@@ -6,6 +6,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { IconRegistry } from '../icon/index.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
+import type { FieldLabelAlignment, FieldLabelPosition, FieldVariant, FieldDensity, FieldShape, FieldTheme } from '../field/base/base-field-constants.js';
 import type {
   DateTimePickerPublicValue,
   DateTimePickerValue,
@@ -56,9 +57,17 @@ export interface IDateTimeFieldComponent extends BaseLitElement {
   locale: string | undefined;
   use24HourTime: boolean;
   allowSeconds: boolean;
+  showMask: boolean;
+  persistMask: boolean;
   min: Date | string | null;
   max: Date | string | null;
   popoverPlacement: string;
+  labelPosition: FieldLabelPosition;
+  labelAlignment: FieldLabelAlignment;
+  variant: FieldVariant;
+  density: FieldDensity;
+  shape: FieldShape;
+  theme: FieldTheme;
   picker: string;
   pickerElement: IDateTimePickerComponent | null;
   readonly form: HTMLFormElement | null;
@@ -101,7 +110,7 @@ export const DATE_TIME_FIELD_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_F
  * @attribute {('temporal'|'iso'|'date')} [value-mode='temporal'] - Shape of the public `value`: a `Temporal.PlainDateTime` (default), a local ISO `datetime-local` string, or a native `Date`.
  * @attribute {string} [name] - Form field name used when submitting the owning form.
  * @attribute {string} [label] - Field label text; also settable via the `label` slot.
- * @attribute {string} [placeholder] - Placeholder shown only in the phone tappable display when no value is set. Desktop masked inputs always show their own format guide and ignore this attribute.
+ * @attribute {string} [placeholder] - Text shown in the empty field when the label is not `inset` (an inset label rests as its own placeholder). The guide replaces it on focus. If unset, each segment shows its format hint instead.
  * @attribute {boolean} [disabled=false] - Disables the field and its linked picker.
  * @attribute {boolean} [readonly=false] - Prevents editing while still allowing focus and form submission.
  * @attribute {boolean} [required=false] - Marks the required parts (see `required-parts`) as required for form validation.
@@ -111,6 +120,8 @@ export const DATE_TIME_FIELD_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_F
  * @attribute {string} [locale] - BCP 47 locale used for formatting the duration summary; defaults to the runtime locale.
  * @attribute {boolean} [use-24-hour-time=false] - Displays and parses time in 24-hour format instead of 12-hour with AM/PM.
  * @attribute {boolean} [allow-seconds=false] - Adds a seconds segment to the time mask and value.
+ * @attribute {boolean} [show-mask=true] - Keeps the format guide visible at all times. A `placeholder` (with a non-inset label) overrides it, hiding the guide until the user types.
+ * @attribute {boolean} [persist-mask=false] - Forces the guide to always show when `show-mask` is on, even if a `placeholder` is set (the placeholder no longer overrides).
  * @attribute {Date|string} [min] - Minimum selectable date/time; forwarded to the linked picker and used for validation.
  * @attribute {Date|string} [max] - Maximum selectable date/time; forwarded to the linked picker and used for validation.
  * @attribute {string} [popover-placement] - Placement of the linked picker's popover relative to the field.
@@ -122,7 +133,7 @@ export const DATE_TIME_FIELD_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_F
  * @property {ValidityState} validity - The field's current validity state (read-only).
  * @property {string} validationMessage - The current validation message, if any (read-only).
  *
- * @csspart field - The embedded `forge-text-field`.
+ * @csspart field - The embedded `forge-field`.
  * @csspart date-input - The masked date input.
  * @csspart time-input - The masked time input (single mode).
  * @csspart time-segment - Wrapper for the time input in the end slot.
@@ -146,7 +157,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   @property({ reflect: true }) public name = '';
   /** Field label text; also settable via the `label` slot. */
   @property() public label = '';
-  /** Placeholder shown only in the phone tappable display when no value is set. Desktop masked inputs always show their own format guide and ignore this. */
+  /** Text shown in the empty field for a non-inset label (an inset label rests as its own placeholder); the guide replaces it on focus. Falls back to per-segment format hints when unset. */
   @property() public placeholder = '';
   /** Disables the field and its linked picker. */
   @property({ type: Boolean, reflect: true }) public disabled = false;
@@ -166,12 +177,36 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   @property({ type: Boolean, attribute: 'use-24-hour-time', reflect: true }) public use24HourTime = false;
   /** Adds a seconds segment to the time mask and value. */
   @property({ type: Boolean, attribute: 'allow-seconds', reflect: true }) public allowSeconds = false;
+  /**
+   * Keeps the format guide (e.g. `__/__/____`) visible at all times. On by default. Setting a
+   * `placeholder` (with a non-inset label) overrides it: the guide is then hidden while the field is
+   * empty — the placeholder shows instead — and only appears once the user types.
+   */
+  @property({ type: Boolean, attribute: 'show-mask', reflect: true }) public showMask = true;
+  /**
+   * Forces the guide to always show when `showMask` is on, even if a `placeholder` is set — the
+   * placeholder no longer overrides the guide. Has no effect when `showMask` is off.
+   */
+  @property({ type: Boolean, attribute: 'persist-mask', reflect: true }) public persistMask = false;
   /** Minimum selectable date/time; forwarded to the linked picker and used for validation. */
   @property({ attribute: 'min' }) public min: Date | string | null = null;
   /** Maximum selectable date/time; forwarded to the linked picker and used for validation. */
   @property({ attribute: 'max' }) public max: Date | string | null = null;
   /** Placement of the linked picker's popover relative to the field. */
   @property({ attribute: 'popover-placement' }) public popoverPlacement: string = DATE_TIME_FIELD_CONSTANTS.defaultValues.POPOVER_PLACEMENT;
+
+  /** Position of the label relative to the input area; forwarded to the embedded field. */
+  @property({ attribute: 'label-position', reflect: true }) public labelPosition: FieldLabelPosition = 'inset';
+  /** Alignment of the label within its area; forwarded to the embedded field. */
+  @property({ attribute: 'label-alignment', reflect: true }) public labelAlignment: FieldLabelAlignment = 'default';
+  /** Visual variant of the embedded field (outlined, tonal, filled, …). */
+  @property({ reflect: true }) public variant: FieldVariant = 'outlined';
+  /** Density of the embedded field. */
+  @property({ reflect: true }) public density: FieldDensity = 'default';
+  /** Corner shape of the embedded field. */
+  @property({ reflect: true }) public shape: FieldShape = 'default';
+  /** Theme of the embedded field. */
+  @property({ reflect: true }) public theme: FieldTheme = 'default';
 
   /** ID of the linked `forge-date-time-picker` in the same root. */
   @property({ reflect: true })
@@ -221,16 +256,16 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   @state() private _open = false;
   @state() private _invalid = false;
   @state() private _pickerLinked = false;
-  // On phones the value can't fit a single line; show a tappable two-line display
-  // (start over end) that opens the picker's bottom sheet. Mirrors Forge's $phone.
-  @state() private _isPhone = false;
+  // Drives the inset label float when show-mask is off: with no always-on guide the label rests as a
+  // placeholder until the field is focused or holds text, mirroring a plain forge-text-field.
+  @state() private _focused = false;
 
   @query('[part="date-input"]') private _dateInput?: HTMLInputElement;
   @query('[part="to-date-input"]') private _toDateInput?: HTMLInputElement;
   @query('[part="time-input"]') private _timeInput?: HTMLInputElement;
   @query('[part="from-input"]') private _fromInput?: HTMLInputElement;
   @query('[part="to-input"]') private _toInput?: HTMLInputElement;
-  @query('forge-text-field') private _textField?: HTMLElement & { floatLabel: boolean };
+  @query('forge-field') private _field?: HTMLElement & { floatLabel: boolean };
 
   #internals: ElementInternals;
   #value: DateTimePickerValue = null;
@@ -246,11 +281,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #shouldClear = false;
   #masksInitialized = false;
   #authorNamedGroup = false;
-  #presentationKey = '';
-  #phoneMql: MediaQueryList | null = null;
-  #onPhoneChange = (e: MediaQueryListEvent | MediaQueryList): void => {
-    this._isPhone = e.matches;
-  };
 
   #isRangeValue(): boolean {
     return this.dateMode === 'range' || this.timeMode === 'range';
@@ -328,6 +358,8 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     setDefaultAria(this, this.#internals, { role: 'group' });
     this.#updateGroupLabel();
     this.addEventListener('invalid', this.#onInvalid);
+    this.addEventListener('focusin', this.#onFocusIn);
+    this.addEventListener('focusout', this.#onFocusOut);
     this.#updateFormValueAndValidity();
     if (this.valueMode === 'temporal') {
       void ensureTemporal().then(() => this.requestUpdate());
@@ -335,23 +367,41 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     if (this.#pickerIdRef) {
       this.#resolvePickerLink();
     }
-    if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
-      this.#phoneMql = window.matchMedia('(max-width: 599px)');
-      this.#phoneMql.addEventListener('change', this.#onPhoneChange);
-      this.#onPhoneChange(this.#phoneMql);
-    }
   }
 
   public override disconnectedCallback(): void {
     super.disconnectedCallback();
+    this.removeEventListener('focusin', this.#onFocusIn);
+    this.removeEventListener('focusout', this.#onFocusOut);
     this.#detachPickerLink();
     this.#destroyMasks();
-    this.#phoneMql?.removeEventListener('change', this.#onPhoneChange);
-    this.#phoneMql = null;
   }
 
   #onInvalid = (): void => {
     this._invalid = true;
+  };
+
+  #onFocusIn = (): void => {
+    if (this._focused) {
+      return;
+    }
+    this._focused = true;
+    // Reveal the guide (and float the inset label) immediately, not on the next render, so the
+    // format guide is present the moment the field gains focus.
+    this.#applyMaskGuide();
+    this.#floatLabel();
+  };
+
+  // Focus moving between the field's own segments keeps it "focused"; only drop the flag once focus
+  // has actually left the component (checked next tick, after focus has settled on its new target).
+  #onFocusOut = (): void => {
+    requestAnimationFrame(() => {
+      if (!this.matches(':focus-within') && this._focused) {
+        this._focused = false;
+        this.#applyMaskGuide();
+        this.#floatLabel();
+      }
+    });
   };
 
   public override willUpdate(changed: PropertyValues<this>): void {
@@ -385,25 +435,15 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     if (changed.has('label')) {
       this.#updateGroupLabel();
     }
-    // The mobile display renders no masked inputs, so re-sync (create/destroy)
-    // when the presentation flips (phone vs desktop, linked vs not) as well as
-    // on mode changes.
-    const presentationKey = `${this._isPhone}:${this._pickerLinked}`;
-    const presentationChanged = presentationKey !== this.#presentationKey;
-    this.#presentationKey = presentationKey;
-    if (
-      !this.#masksInitialized ||
-      presentationChanged ||
-      changed.has('dateMode') ||
-      changed.has('timeMode') ||
-      changed.has('use24HourTime') ||
-      changed.has('allowSeconds')
-    ) {
+    if (!this.#masksInitialized || changed.has('dateMode') || changed.has('timeMode') || changed.has('use24HourTime') || changed.has('allowSeconds')) {
       this.#masksInitialized = true;
       this.#syncMasks();
     } else {
       this.#syncMaskDisplay();
     }
+    // Guide visibility and the inset-label float depend on focus/value/config, so re-evaluate both
+    // on every update (cheap — no mask rebuild).
+    this.#applyMaskGuide();
     this.#floatLabel();
   }
 
@@ -416,24 +456,68 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     setDefaultAria(this, this.#internals, { ariaLabel: this.label || 'Date and time' });
   }
 
-  // The masked inputs always show a format guide, so the label should always
-  // float above them rather than overlap. Force it past the text-field's own
-  // value/placeholder heuristic, which can't see the slotted masked inputs.
-  #floatLabel(): void {
-    if (this._textField) {
-      this._textField.floatLabel = true;
+  // A set placeholder shows only for a non-inset label (an inset label already rests as its own
+  // placeholder).
+  #placeholderActive(): boolean {
+    return !!this.placeholder && this.labelPosition !== 'inset';
+  }
+
+  // persist-mask keeps the guide pinned on even at rest (when show-mask is on), overriding how the
+  // inset label / placeholder would otherwise reclaim the input while empty and unfocused.
+  #guidePersists(): boolean {
+    return this.showMask && this.persistMask;
+  }
+
+  // The guide is visible when show-mask is on AND the field is engaged (focused or holding text), or
+  // whenever persist-mask pins it. At rest it hides so the inset label / placeholder shows through.
+  #guideVisible(): boolean {
+    return this.#guidePersists() || (this.showMask && (this._focused || this.#hasSegmentText()));
+  }
+
+  // Push each mask into (or out of) its always-on guide to match the current visibility, without
+  // recreating the mask so caret and value are preserved.
+  #applyMaskGuide(): void {
+    const visible = this.#guideVisible();
+    for (const { mask } of this.#masks.values()) {
+      mask.setShowMaskFormat(visible);
     }
   }
 
-  public override render(): TemplateResult {
-    // On phones, a linked field becomes a tappable two-line value display that
-    // opens the picker's bottom sheet; masked typing stays available on desktop
-    // and on unlinked fields (which have no sheet to open).
-    if (this._isPhone && this._pickerLinked) {
-      return this.#renderMobile();
+  // Only an inset label overlaps the input area, so only it needs to float. It rests (acting as the
+  // placeholder) until the field is focused, holds text, or the guide is pinned on — then it floats
+  // up to clear the input. Non-inset labels sit in their own area and never float.
+  #floatLabel(): void {
+    if (this._field) {
+      this._field.floatLabel = this.labelPosition === 'inset' && (this.#guidePersists() || this._focused || this.#hasSegmentText());
     }
+  }
+
+  // "Text" means a real value or user-typed characters — the always-on guide placeholder (only
+  // `_`, separators, and spaces) does not count, so a shown guide doesn't keep itself pinned on.
+  #hasSegmentText(): boolean {
+    if (this.#value != null) {
+      return true;
+    }
+    return this.#maskedInputSpecs().some(({ el }) => {
+      const value = el.value ?? '';
+      return value !== '' && !/^[_/:\s]*$/.test(value);
+    });
+  }
+
+  public override render(): TemplateResult {
     return html`
-      <forge-text-field part="field" ?required=${this.required} ?invalid=${this._invalid} @mousedown=${this.#onFieldPointerDown}>
+      <forge-field
+        part="field"
+        multiline
+        label-position=${this.labelPosition}
+        label-alignment=${this.labelAlignment}
+        variant=${this.variant}
+        density=${this.density}
+        shape=${this.shape}
+        theme=${this.theme}
+        ?required=${this.required}
+        ?invalid=${this._invalid}
+        @mousedown=${this.#onFieldPointerDown}>
         ${this.label ? html`<label slot="label">${this.label}</label>` : nothing} ${this.#renderInputs()}
         ${this._pickerLinked
           ? html`
@@ -456,7 +540,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
           ? html`<span slot="support-text" part="error-text">${this.#internals.validationMessage}</span>`
           : html`<slot name="support-text" slot="support-text"></slot>`}
         ${this.#renderSupportTextEnd()}
-      </forge-text-field>
+      </forge-field>
     `;
   }
 
@@ -471,56 +555,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
         <slot name="support-text-end"></slot>
       </span>
     `;
-  }
-
-  // ─── Mobile display ──────────────────────────────────────────────────────
-
-  #renderMobile(): TemplateResult {
-    const v = this.#value;
-    const lines = this.#displayLines();
-    const showDuration = this.#isRangeValue() && isRange(v) && v.from.getTime() <= v.to.getTime();
-    const valueLabel = lines.length ? lines.join(' to ') : 'no value selected';
-    return html`
-      <button
-        type="button"
-        part="mobile-display"
-        class="mobile-display"
-        aria-haspopup="dialog"
-        aria-expanded=${this._open ? 'true' : 'false'}
-        aria-label=${`${this.label || 'Date and time'}, ${valueLabel}`}
-        ?disabled=${this.disabled}
-        @click=${() => this.#setPickerOpen(true)}>
-        <span class="md-text">
-          ${this.label ? html`<span class="md-label">${this.label}</span>` : nothing}
-          ${lines.length
-            ? html`<span class="md-value">${lines.map(line => html`<span class="md-line">${line}</span>`)}</span>`
-            : html`<span class="md-placeholder">${this.placeholder || 'Select date and time'}</span>`}
-        </span>
-        <span class="md-toggle" part="toggle" aria-hidden="true">
-          <forge-icon name="insert_invitation"></forge-icon>
-        </span>
-      </button>
-      <div class="md-support">
-        <span class="md-support-start">
-          ${this._invalid ? html`<span part="error-text">${this.#internals.validationMessage}</span>` : html`<slot name="support-text"></slot>`}
-        </span>
-        <span class="md-support-end">
-          ${showDuration
-            ? html`<span part="duration" class="duration" role="status" aria-live="polite">${formatDuration(v.from, v.to, this.locale)}</span>`
-            : nothing}
-          <slot name="support-text-end"></slot>
-        </span>
-      </div>
-    `;
-  }
-
-  #displayLines(): string[] {
-    const v = this.#value;
-    if (v == null) {
-      return [];
-    }
-    const fmt = (d: Date): string => `${formatDateInput(d)} ${formatTimeInput(d, this.use24HourTime, this.allowSeconds)}`;
-    return isRange(v) ? [fmt(v.from), fmt(v.to)] : [fmt(v)];
   }
 
   // ─── Link resolution ─────────────────────────────────────────────────────
@@ -949,26 +983,66 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
 
   // ─── Masks ────────────────────────────────────────────────────────────────
 
+  // All segments sit inside a single `data-forge-field-input` wrapper. forge-field treats that
+  // wrapper as its input, so its inset and floating-label padding apply once — the wrapper owns the
+  // endpoint layout and wrapping internally, which keeps the vertical rhythm even when it wraps.
   #renderInputs(): TemplateResult {
+    return html`<div class="inputs" data-forge-field-input>${this.#renderSegments()}</div>`;
+  }
+
+  #renderSegments(): TemplateResult {
     if (this.timeMode === 'slots') {
       return this.#renderSlotsMasked();
     }
     const range = this.#isRangeValue();
     const dateRange = this.dateMode === 'range';
     const timeRange = this.timeMode === 'range';
-    // Inputs must be top-level default-slot children so forge-text-field detects
-    // them (assignedElements is not deep). Grouping is done with margins in SCSS.
+    // Each endpoint (its date + time inputs) is a `.endpoint` group so it stays glued as a single
+    // flex-wrap unit: on a narrow field the range wraps by endpoint (start over end) instead of
+    // splitting a date from its time.
+    const startEndpoint = html`
+      <span class="endpoint">
+        ${this.#renderDateInput('date-input', range ? 'Start date' : this.label || 'Date', dateRange ? this.#hasFromDate : this.#hasDate)}
+        ${this.#renderTimeInput(timeRange ? 'from-input' : 'time-input', range ? 'Start time' : 'Time', timeRange ? this.#hasFrom : this.#hasTime)}
+      </span>
+    `;
+    if (!range) {
+      return startEndpoint;
+    }
+    // The separator lives inside the end group so `– end` wraps as one unit: a narrow field then
+    // shows exactly two rows (start over end) rather than orphaning the separator on its own line.
     return html`
-      ${this.#renderDateInput('date-input', range ? 'Start date' : this.label || 'Date', dateRange ? this.#hasFromDate : this.#hasDate)}
-      ${this.#renderTimeInput(timeRange ? 'from-input' : 'time-input', range ? 'Start time' : 'Time', timeRange ? this.#hasFrom : this.#hasTime)}
-      ${range ? html`<span class="range-separator" data-forge-multi-input-separator aria-hidden="true">–</span>` : nothing}
-      ${range && dateRange ? this.#renderDateInput('to-date-input', 'End date', this.#hasToDate) : nothing}
-      ${range && timeRange ? this.#renderTimeInput('to-input', 'End time', this.#hasTo) : nothing}
+      ${startEndpoint}
+      <span class="endpoint">
+        <span class="range-separator" aria-hidden="true">–</span>
+        ${dateRange ? this.#renderDateInput('to-date-input', 'End date', this.#hasToDate) : nothing}
+        ${timeRange ? this.#renderTimeInput('to-input', 'End time', this.#hasTo) : nothing}
+      </span>
     `;
   }
 
   #timePlaceholder(): string {
     return this.use24HourTime ? (this.allowSeconds ? 'hh:mm:ss' : 'hh:mm') : this.allowSeconds ? 'hh:mm:ss aa' : 'hh:mm aa';
+  }
+
+  // The native input placeholder shows through only while the guide is hidden and the segment is
+  // empty (imask covers it otherwise). An inset label already rests as the placeholder, so suppress
+  // it there; otherwise show the field-level `placeholder` in the first (date) segment, falling back
+  // to per-segment format hints.
+  #segmentPlaceholder(kind: 'date' | 'time', isFirst: boolean): string {
+    if (this.labelPosition === 'inset') {
+      return '';
+    }
+    if (this.placeholder) {
+      return isFirst ? this.placeholder : '';
+    }
+    return kind === 'date' ? 'MM/DD/YYYY' : this.#timePlaceholder();
+  }
+
+  // True while the field-level placeholder is the visible hint (non-inset label, guide currently
+  // hidden, no text). The first input then grows to fit it so a long placeholder isn't clipped.
+  #showsFieldPlaceholder(): boolean {
+    return this.#placeholderActive() && !this.#guideVisible() && !this.#hasSegmentText();
   }
 
   // Empty (untouched guide), partial (typed but not yet valid), or complete — each gets its own tone.
@@ -987,14 +1061,16 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #renderDateInput(part: 'date-input' | 'to-date-input', ariaLabel: string, hasSegment: boolean): TemplateResult {
     const dateRequired = this.required && this.requiredParts !== 'time';
     const inputEl = part === 'date-input' ? this._dateInput : this._toDateInput;
+    const isFirst = part === 'date-input';
+    const classes = `${this.#segmentClass(hasSegment, inputEl)}${isFirst && this.#showsFieldPlaceholder() ? ' field-placeholder' : ''}`;
     return html`
       <input
         part=${part}
-        class=${this.#segmentClass(hasSegment, inputEl)}
+        class=${classes}
         type="text"
         inputmode="numeric"
         autocomplete="off"
-        placeholder="MM/DD/YYYY"
+        placeholder=${this.#segmentPlaceholder('date', isFirst)}
         aria-label=${ariaLabel}
         aria-required=${ifDefined(dateRequired ? 'true' : undefined)}
         aria-invalid=${ifDefined(this._invalid && dateRequired && !hasSegment ? 'true' : undefined)}
@@ -1029,7 +1105,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
         class=${this.#segmentClass(hasSegment, inputEl)}
         type="text"
         autocomplete="off"
-        placeholder=${this.#timePlaceholder()}
+        placeholder=${this.#segmentPlaceholder('time', false)}
         aria-label=${label}
         aria-required=${ifDefined(timeRequired ? 'true' : undefined)}
         aria-invalid=${ifDefined(this._invalid && timeRequired && !hasSegment ? 'true' : undefined)}
@@ -1098,31 +1174,32 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
 
   #syncMasks(): void {
     const wanted = this.#maskedInputSpecs();
+    // Only structural options (mode-driven) key the mask identity; guide visibility is toggled live
+    // via #applyMaskGuide (on focus/value/config change) rather than by rebuilding the mask.
     const timeOpts = `${this.use24HourTime}:${this.allowSeconds}`;
+    const optsFor = (kind: 'date' | 'time'): string => (kind === 'time' ? timeOpts : '');
     for (const [el, entry] of this.#masks) {
-      const keep = wanted.some(w => w.el === el && w.kind === entry.kind && (entry.kind === 'date' || entry.opts === timeOpts));
+      const keep = wanted.some(w => w.el === el && w.kind === entry.kind && entry.opts === optsFor(w.kind));
       if (!keep) {
         entry.mask.destroy();
         this.#masks.delete(el);
       }
     }
+    const guide = this.#guideVisible();
     for (const { el, kind } of wanted) {
       if (this.#masks.has(el)) {
         continue;
       }
-      // DateInputMask defaults to an always-on guide (lazy:false) and keeps its
-      // auto-slash typing helper; TimeInputMask defaults to lazy, so opt it into
-      // the always-on guide too for a consistent look across both segments.
       const mask =
         kind === 'date'
-          ? new DateInputMask(el, { onChange: () => this.#onDateMaskChange(el) })
+          ? new DateInputMask(el, { showMaskFormat: guide, onChange: () => this.#onDateMaskChange(el) })
           : new TimeInputMask(el, {
               use24HourTime: this.use24HourTime,
               showSeconds: this.allowSeconds,
-              showMaskFormat: true,
+              showMaskFormat: guide,
               onChange: () => this.#onTimeMaskChange(el)
             });
-      this.#masks.set(el, { mask, kind, opts: kind === 'time' ? timeOpts : '' });
+      this.#masks.set(el, { mask, kind, opts: optsFor(kind) });
     }
     this.#syncMaskDisplay();
   }
