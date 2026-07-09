@@ -94,7 +94,7 @@ export const DATE_TIME_FIELD_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_F
  * via the `picker` IDREF attribute or the `pickerElement` property. The field owns value, validation,
  * and form participation; the picker is a standalone value source.
  *
- * Quick keys (while a segment input is focused): `n` = now, `d` = today, `t` = current time.
+ * Quick keys (while a segment input is focused): `n` = now, `t` = today
  *
  * @fires {CustomEvent<IDateTimeFieldChangeEventData>} forge-date-time-field-change
  * @fires {CustomEvent} forge-date-time-field-open
@@ -730,14 +730,9 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
         this.#applyNow(event.target as HTMLInputElement);
         return;
       }
-      if (key === 'd') {
-        event.preventDefault();
-        this.#applyToday(event.target as HTMLInputElement);
-        return;
-      }
       if (key === 't') {
         event.preventDefault();
-        this.#applyCurrentTime(event.target as HTMLInputElement);
+        this.#applyToday(event.target as HTMLInputElement);
         return;
       }
     }
@@ -894,19 +889,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #applyToday(target: HTMLInputElement): void {
     const focusedDateInput = this.dateMode === 'range' && target === this._toDateInput ? this._toDateInput : this._dateInput;
     this.#setMaskValue(focusedDateInput, formatDateInput(new Date()));
-    this.#onTypedInput();
-  }
-
-  #applyCurrentTime(target: HTMLInputElement): void {
-    const now = new Date();
-    const timeStr = formatTimeInput(now, this.use24HourTime, this.allowSeconds);
-    if (this.timeMode === 'range') {
-      if (target === this._fromInput || target === this._toInput) {
-        this.#setMaskValue(target, timeStr);
-      }
-    } else {
-      this.#setMaskValue(this._timeInput, timeStr);
-    }
     this.#onTypedInput();
   }
 
