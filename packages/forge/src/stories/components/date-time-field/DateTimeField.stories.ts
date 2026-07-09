@@ -114,10 +114,16 @@ export const Demo: Story = {};
 export const DateRange: Story = {
   ...standaloneStoryParams,
   render: () => html`
-    <forge-date-time-field style="width: 360px" picker="dtf-date-range-picker" date-mode="range" label="Stay dates" placeholder="mm/dd/yyyy">
-      <span slot="support-text">Choose your check-in and check-out dates.</span>
+    <forge-date-time-field
+      style="width: 360px"
+      picker="dtf-date-range-picker"
+      date-mode="range"
+      time-mode="range"
+      label="Conference dates"
+      placeholder="mm/dd/yyyy">
+      <span slot="support-text">Choose the start and end date and time.</span>
     </forge-date-time-field>
-    <forge-date-time-picker id="dtf-date-range-picker" date-mode="range"></forge-date-time-picker>
+    <forge-date-time-picker id="dtf-date-range-picker" date-mode="range" time-mode="range"></forge-date-time-picker>
   `
 };
 

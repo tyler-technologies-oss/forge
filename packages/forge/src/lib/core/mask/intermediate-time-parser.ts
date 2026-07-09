@@ -97,8 +97,12 @@ export class IntermediateTimeParser {
     return Number(this._segmentParser.seconds);
   }
 
+  // `hours-end` (see SEGMENT_CURSOR_POSITION) is 2, not 3 — matches the [minutes-end, +1] /
+  // [seconds-end, +1] tolerance windows below; checking only 3 misses the cursor position the
+  // eager-pad actually lands on, so a second digit typed quickly (before it drifts to 3) fell
+  // through to the wrong branch instead of combining into the two-digit hour.
   public get canOverwriteHoursChar(): boolean {
-    return this._mask.cursorPos === 3 && !!this._segmentParser.hours.length && this.hoursSegmentNum < 3;
+    return [2, 3].includes(this._mask.cursorPos) && !!this._segmentParser.hours.length && this.hoursSegmentNum < 3;
   }
 
   public get canOverwriteMinutesChar(): boolean {

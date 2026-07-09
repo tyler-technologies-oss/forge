@@ -497,6 +497,104 @@ describe('DateTimeField / quick keys', () => {
   });
 });
 
+// ─── Keyboard interaction ───────────────────────────────────────────────────
+
+describe('DateTimeField / keyboard interaction', () => {
+  it('should never place the calendar toggle in the tab order', async () => {
+    const screen = render(html`
+      <div>
+        <forge-date-time-field picker="p1"></forge-date-time-field>
+        <forge-date-time-picker id="p1"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getField(screen.container);
+    await ready(el);
+    const toggle = el.shadowRoot!.querySelector('[part="toggle"]') as HTMLElement;
+    expect(toggle.getAttribute('tabindex')).toBe('-1');
+  });
+
+  it('should open the linked picker when ArrowDown is pressed in a masked input', async () => {
+    const screen = render(html`
+      <div>
+        <forge-date-time-field picker="p1"></forge-date-time-field>
+        <forge-date-time-picker id="p1"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getField(screen.container);
+    const picker = getPicker(screen.container);
+    await ready(el);
+    getDateInput(el).dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    await ready(el);
+    expect(picker.open).toBe(true);
+    expect(el.open).toBe(true);
+  });
+
+  it('should move focus back to the date input when Backspace is pressed at the start of the time input', async () => {
+    const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const dateInput = getDateInput(el);
+    const timeInput = getTimeInput(el);
+    timeInput.focus();
+    timeInput.setSelectionRange(0, 0);
+    timeInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', bubbles: true, cancelable: true }));
+    await ready(el);
+    expect(el.shadowRoot!.activeElement).toBe(dateInput);
+  });
+
+  it('should move focus back to the date input when ArrowLeft is pressed at the start of the time input', async () => {
+    const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const dateInput = getDateInput(el);
+    const timeInput = getTimeInput(el);
+    timeInput.focus();
+    timeInput.setSelectionRange(0, 0);
+    timeInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true, cancelable: true }));
+    await ready(el);
+    expect(el.shadowRoot!.activeElement).toBe(dateInput);
+  });
+
+  it('should not move focus when ArrowLeft is pressed elsewhere in the time input', async () => {
+    const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const timeInput = getTimeInput(el);
+    timeInput.focus();
+    timeInput.setSelectionRange(2, 2);
+    timeInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true, cancelable: true }));
+    await ready(el);
+    expect(el.shadowRoot!.activeElement).toBe(timeInput);
+  });
+
+  it('should move focus to the time input when ArrowRight is pressed at the end of a complete date input', async () => {
+    const screen = render(html`<forge-date-time-field value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = new Date(2025, 5, 12, 10, 30);
+    await ready(el);
+    const dateInput = getDateInput(el);
+    const timeInput = getTimeInput(el);
+    dateInput.focus();
+    const end = dateInput.value.length;
+    dateInput.setSelectionRange(end, end);
+    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true }));
+    await ready(el);
+    expect(el.shadowRoot!.activeElement).toBe(timeInput);
+  });
+
+  it('should advance focus to the time input once the date segment is completed while focused', async () => {
+    const screen = render(html`<forge-date-time-field value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const dateInput = getDateInput(el);
+    dateInput.focus();
+    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'd', bubbles: true }));
+    await ready(el);
+    expect(el.shadowRoot!.activeElement).toBe(getTimeInput(el));
+  });
+});
+
 // ─── Form association ─────────────────────────────────────────────────────────
 
 describe('DateTimeField / form association', () => {
