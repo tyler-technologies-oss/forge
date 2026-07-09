@@ -8,6 +8,7 @@ $segment-gap: 0.3em;
   display: inline-block;
   // Size to the content (date/time segments + toggle) rather than a fixed per-mode width so the
   // field is never wider than it needs to be; range modes grow naturally with their extra inputs.
+  // `max-width: 100%` clamps the field to its container, at which point the inputs wrap.
   width: max-content;
   max-width: 100%;
 }
@@ -16,8 +17,47 @@ $segment-gap: 0.3em;
   display: none;
 }
 
-forge-text-field {
+forge-field {
   width: 100%;
+  // The field is used in multiline mode purely to let it grow past the fixed single-line height
+  // when the range wraps to two rows — not as a resizable textarea, so disable the resize handle.
+  --forge-field-multiline-resize: none;
+}
+
+// Single wrapper around all segments (the field's one "input"). It owns the endpoint layout and
+// wraps by endpoint when narrow; keeping it as one slotted element means the field's floating-label
+// padding is applied once here rather than per endpoint, so wrapped rows don't gain extra top space.
+.inputs {
+  display: flex;
+  flex-wrap: wrap;
+  // Center the row(s) vertically in the field; a non-inset label has no floating padding to
+  // position the content, so without this the guide sinks to the bottom of the field.
+  align-items: center;
+  align-content: center;
+  row-gap: 0.15rem;
+  // Override the field's `::slotted(*)` full-width/full-height sizing so it hugs its content.
+  inline-size: max-content;
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+// Endpoint group: date + time inputs glued together as a single flex-wrap unit.
+.endpoint {
+  display: inline-flex;
+  align-items: baseline;
+  flex: 0 0 auto;
+}
+
+// While the first input is showing a long field-level placeholder, let it (and its endpoint) fill
+// the row so the placeholder text isn't clipped to the date input's fixed width.
+.endpoint:has(input.field-placeholder) {
+  flex: 1 1 auto;
+}
+
+input.field-placeholder {
+  flex: 1 1 auto;
+  inline-size: auto;
+  min-inline-size: 0;
 }
 
 // The inputs are slotted into forge-text-field; let the field own the leading/
@@ -54,10 +94,8 @@ input.guide-partial {
   gap: 0.3rem;
 }
 
-// The value flows inline as [start date time] – [end date time]; the inputs are
-// top-level slot children, so grouping is done with margins, not wrappers.
-// Stretched as a flex item in the field's input row; center the glyph so it
-// lines up with the inputs' vertically-centered text instead of sitting on top.
+// Sits between the two endpoint groups as [start] – [end]. As a flex item in the wrapping input
+// row it stays inline when the field fits one line, and leads the second row when the range wraps.
 .range-separator {
   display: inline-flex;
   align-self: center;
@@ -114,8 +152,9 @@ input.guide-partial {
 }
 
 // ─── Small screens ──────────────────────────────────────────────────────────
-// Fill the available width on phones so the field is a comfortable tap target;
-// the picker opens as a full-height bottom sheet (handled in forge-date-time-picker).
+// On phone-width viewports fill the container so the field is a comfortable tap target and its
+// inputs have room to wrap; the picker opens as a full-height bottom sheet (handled in
+// forge-date-time-picker).
 @include mixins-media.phone-only {
   :host {
     display: block;
@@ -127,89 +166,4 @@ input.guide-partial {
     min-width: 44px;
     min-height: 44px;
   }
-}
-
-// Tappable two-line value display used on phones with a linked picker. A single
-// button opens the bottom sheet; the value flows start-over-end so a full range
-// reads in full instead of truncating on one line.
-.mobile-display {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0.5rem 0.5rem 0.5rem 0.875rem;
-  appearance: none;
-  text-align: start;
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-  background: var(--forge-theme-surface, Field);
-  border: 1px solid var(--forge-theme-outline, ButtonBorder);
-  border-radius: var(--forge-shape-medium, 0.25rem);
-
-  &:focus-visible {
-    outline: 2px solid var(--forge-theme-primary, Highlight);
-    outline-offset: 1px;
-  }
-}
-
-:host([disabled]) .mobile-display {
-  cursor: default;
-  opacity: 0.55;
-}
-
-.md-text {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
-}
-
-.md-label {
-  font-size: 0.75rem;
-  line-height: 1;
-  color: var(--forge-theme-text-medium, currentColor);
-}
-
-.md-value {
-  display: flex;
-  flex-direction: column;
-  color: var(--forge-theme-text-high, currentColor);
-}
-
-.md-placeholder {
-  color: var(--forge-theme-text-low, GrayText);
-}
-
-.md-toggle {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  color: var(--forge-theme-text-high, currentColor);
-  background: var(--forge-theme-surface-container-low, transparent);
-}
-
-.md-support {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-  padding-inline: 0.125rem;
-  font-size: 0.75rem;
-  color: var(--forge-theme-text-medium, currentColor);
-}
-
-.md-support [part='error-text'] {
-  color: var(--forge-theme-error, currentColor);
-}
-
-.md-support-end {
-  flex: none;
 }
