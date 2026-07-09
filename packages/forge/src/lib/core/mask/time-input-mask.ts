@@ -48,6 +48,12 @@ export class TimeInputMask {
     this._mask.updateValue();
   }
 
+  /** Toggles whether the unfilled format guide is shown (imask lazy mode) without recreating the mask. */
+  public setShowMaskFormat(show: boolean): void {
+    this._mask.updateOptions({ lazy: !show });
+    this._mask.updateControl();
+  }
+
   private _onAccept(): void {
     if (typeof this._options.onChange === 'function') {
       this._options.onChange(this._mask.value);
