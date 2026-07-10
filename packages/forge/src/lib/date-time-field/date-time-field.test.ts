@@ -520,6 +520,59 @@ describe('DateTimeField / min-max validity', () => {
   });
 });
 
+// ─── Malformed / incomplete input (badInput) ────────────────────────────────
+
+describe('DateTimeField / badInput validity', () => {
+  it('should flag badInput when a date is typed but the time is left blank', async () => {
+    const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    await typeChars(getDateInput(el), '01022025', el);
+    expect(el.validity.badInput).toBe(true);
+    expect(el.checkValidity()).toBe(false);
+  });
+
+  it('should flag badInput for a half-typed segment (partial year)', async () => {
+    const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    await typeChars(getDateInput(el), '0102', el);
+    expect(el.validity.badInput).toBe(true);
+    expect(el.checkValidity()).toBe(false);
+  });
+
+  it('should be valid (no badInput) when the field is untouched and not required', async () => {
+    const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    expect(el.validity.badInput).toBe(false);
+    expect(el.checkValidity()).toBe(true);
+  });
+
+  it('should clear badInput once a complete value is entered', async () => {
+    const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const dateInput = getDateInput(el);
+    await typeChars(dateInput, '01022025', el);
+    expect(el.validity.badInput).toBe(true);
+    // "n" fills both date and time with now, producing a complete value.
+    dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'n', bubbles: true }));
+    await ready(el);
+    expect(el.validity.badInput).toBe(false);
+    expect(el.checkValidity()).toBe(true);
+  });
+
+  it('should report valueMissing (not badInput) when required and only one range endpoint is typed', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" required></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    await typeChars(getDateInput(el), '01022025', el);
+    expect(el.validity.valueMissing).toBe(true);
+    expect(el.checkValidity()).toBe(false);
+  });
+});
+
 // ─── Quick keys ───────────────────────────────────────────────────────────────
 
 describe('DateTimeField / quick keys', () => {
