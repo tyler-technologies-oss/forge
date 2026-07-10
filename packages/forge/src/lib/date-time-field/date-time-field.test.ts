@@ -29,6 +29,19 @@ function getTimeInput(el: IDateTimeFieldComponent): HTMLInputElement {
   return el.shadowRoot!.querySelector('[part="time-input"]') as HTMLInputElement;
 }
 
+// Feeds characters through the input mask one at a time, mirroring real keystrokes (bulk-setting
+// value defeats the mask). Callers pass the digits a user would press, not the formatted result.
+async function typeChars(input: HTMLInputElement, chars: string, el: Element): Promise<void> {
+  input.focus();
+  for (const ch of chars) {
+    const start = input.selectionStart ?? input.value.length;
+    input.value = input.value.slice(0, start) + ch + input.value.slice(input.selectionEnd ?? start);
+    input.setSelectionRange(start + 1, start + 1);
+    input.dispatchEvent(new InputEvent('input', { bubbles: true, data: ch, inputType: 'insertText' }));
+    await ready(el);
+  }
+}
+
 function firePickerChange(picker: IDateTimePickerComponent, detail: Partial<IDateTimePickerChangeEventData>): void {
   const fullDetail: IDateTimePickerChangeEventData = {
     value: null,
@@ -641,6 +654,97 @@ describe('DateTimeField / keyboard interaction', () => {
     dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
     await ready(el);
     expect(el.shadowRoot!.activeElement).toBe(getTimeInput(el));
+  });
+});
+
+// ─── Typed inference (coercion on commit) ─────────────────────────────────────
+
+describe('DateTimeField / typed inference', () => {
+  it('should complete a two-digit year to a full year on blur', async () => {
+    const screen = render(html`<forge-date-time-field value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const dateInput = getDateInput(el);
+    await typeChars(dateInput, '010225', el);
+    dateInput.dispatchEvent(new FocusEvent('blur', { bubbles: true }));
+    await ready(el);
+    expect(dateInput.value).toBe('01/02/2025');
+  });
+
+  it('should not coerce a partial value while still typing', async () => {
+    const screen = render(html`<forge-date-time-field value-mode="date"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const dateInput = getDateInput(el);
+    await typeChars(dateInput, '0102', el);
+    // Year untouched mid-edit — no premature padding to a full value.
+    expect(dateInput.value).not.toContain('20__');
+    expect(dateInput.value.startsWith('01/02/')).toBe(true);
+  });
+
+  it('should complete an hour-only time to a full time on blur', async () => {
+    const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const timeInput = getTimeInput(el);
+    await typeChars(timeInput, '5', el);
+    timeInput.dispatchEvent(new FocusEvent('blur', { bubbles: true }));
+    await ready(el);
+    expect(timeInput.value).toMatch(/^05:00/);
+  });
+});
+
+// ─── Range separator ──────────────────────────────────────────────────────────
+
+describe('DateTimeField / range separator', () => {
+  const sep = (el: IDateTimeFieldComponent): Element | null => el.shadowRoot!.querySelector('.range-separator');
+
+  it('should hide the separator at rest when an inset label rests as the placeholder', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range" label="Window"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    expect(sep(el)).toBeNull();
+  });
+
+  it('should hide the separator at rest when a placeholder shows for a non-inset label', async () => {
+    const screen = render(
+      html`<forge-date-time-field
+        date-mode="range"
+        time-mode="range"
+        label-position="block-start"
+        label="Window"
+        placeholder="Pick a range"></forge-date-time-field>`
+    );
+    const el = getField(screen.container);
+    await ready(el);
+    expect(sep(el)).toBeNull();
+  });
+
+  it('should show the separator once the field holds a value', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range" label="Window"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2025, 5, 12, 9, 0), to: new Date(2025, 5, 15, 17, 0) };
+    await ready(el);
+    expect(sep(el)).not.toBeNull();
+  });
+
+  it('should show the separator on focus while the guide is visible', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range" label="Window"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    getDateInput(el).focus();
+    await ready(el);
+    expect(sep(el)).not.toBeNull();
+  });
+
+  it('should keep the separator at rest when segments show their format hints (non-inset, no placeholder)', async () => {
+    const screen = render(
+      html`<forge-date-time-field date-mode="range" time-mode="range" label-position="block-start" label="Window"></forge-date-time-field>`
+    );
+    const el = getField(screen.container);
+    await ready(el);
+    expect(sep(el)).not.toBeNull();
   });
 });
 
