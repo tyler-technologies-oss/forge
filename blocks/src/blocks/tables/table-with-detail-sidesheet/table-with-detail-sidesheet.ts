@@ -1,4 +1,4 @@
-import type { IDrawerComponent, IMenuComponent, IMenuOption, IMenuSelectEventData, ITableComponent, IColumnConfiguration } from '@tylertech/forge';
+import type { IDrawerComponent, IMenuOption, IMenuSelectEventData, ITableComponent, IColumnConfiguration, MenuComponent } from '@tylertech/forge';
 
 interface IMachineAccount {
   name: string;
@@ -22,13 +22,18 @@ const ACTIVE_ROW_BG = 'var(--forge-theme-primary-container-minimum)';
 const rowElements = new Map<number, HTMLTableRowElement>();
 let activeRowIndex: number | null = null;
 
-const setActiveRow = (index: number): void => {
+const clearActiveRow = (): void => {
   if (activeRowIndex !== null) {
     const previous = rowElements.get(activeRowIndex);
     if (previous) {
       previous.style.backgroundColor = '';
     }
   }
+  activeRowIndex = null;
+};
+
+const setActiveRow = (index: number): void => {
+  clearActiveRow();
   activeRowIndex = index;
   const current = rowElements.get(index);
   if (current) {
@@ -49,6 +54,7 @@ const columnConfigurations: IColumnConfiguration[] = [
 
       const link = document.createElement('a');
       link.href = '#';
+      link.className = 'forge-hyperlink';
       link.textContent = rowData.name;
 
       wrapper.appendChild(icon);
@@ -77,9 +83,9 @@ const columnConfigurations: IColumnConfiguration[] = [
         { value: 'Viewer', label: 'Viewer' }
       ];
 
-      const menu = document.createElement('forge-menu') as IMenuComponent;
+      const menu = document.createElement('forge-menu') as MenuComponent;
       menu.options = roleOptions;
-      menu.selectedValue = rowData.role as any;
+      menu.selectedValue = rowData.role;
 
       const button = document.createElement('forge-button');
       button.setAttribute('variant', 'text');
@@ -139,6 +145,7 @@ table.data = data;
 
 const closeDrawer = (): void => {
   drawer.open = false;
+  clearActiveRow();
 };
 
 closeBtn?.addEventListener('click', closeDrawer);

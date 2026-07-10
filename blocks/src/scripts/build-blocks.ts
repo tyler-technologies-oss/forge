@@ -27,11 +27,16 @@ async function buildBlocks() {
 
   for (const blockFile of blockFiles) {
     const blockHtml = fs.readFileSync(blockFile, 'utf-8');
+    const scriptFile = blockFile.replace(/\.html$/, '.ts');
+    const blockScriptSrc = fs.existsSync(scriptFile)
+      ? `${BASE_HREF}${path.relative(BLOCKS_PATH, scriptFile).replace(/\\/g, '/').replace(/\.ts$/, '.js')}`
+      : undefined;
 
     const result = compileBlock(blockHtml, {
       layoutPath: LAYOUT_PATH,
       partialRegistry,
-      baseHref: BASE_HREF
+      baseHref: BASE_HREF,
+      blockScriptSrc
     });
 
     if (!result.success) {

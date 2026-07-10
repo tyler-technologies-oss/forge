@@ -11,6 +11,7 @@
  */
 
 import fs from 'node:fs';
+import path from 'node:path';
 import { compileBlock } from './block-compiler.js';
 import { createPartialRegistry } from './partial-registry.js';
 import { discoverBlocks } from './generate-manifest.js';
@@ -85,10 +86,16 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
 
         partialRegistry.load();
 
+        const scriptPath = ctx.filename.replace(/\.html$/, '.ts');
+        const blockScriptSrc = fs.existsSync(scriptPath)
+          ? '/' + path.relative(process.cwd(), scriptPath).replace(/\\/g, '/')
+          : undefined;
+
         const result = compileBlock(html, {
           layoutPath,
           partialRegistry,
-          baseHref: '/'
+          baseHref: '/',
+          blockScriptSrc
         });
 
         if (!result.success && result.error) {

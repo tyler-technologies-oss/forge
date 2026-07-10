@@ -18,6 +18,8 @@ export interface CompileOptions {
   layoutPath: string;
   partialRegistry: PartialRegistry;
   baseHref: string;
+  /** Optional URL for a per-block script tag injected at the end of the body */
+  blockScriptSrc?: string;
 }
 
 export interface CompileResult {
@@ -30,6 +32,7 @@ const BLOCK_TITLE_REGEX = /@block\s+(.+?)(?=\s*@|\s*-->)/;
 const BODY_REGEX = /<body([^>]*)>([\s\S]*)<\/body>/;
 const CLASS_REGEX = /class="([^"]*)"/;
 const METADATA_COMMENT_REGEX = /<!--[\s\S]*?-->/;
+const BLOCK_SCRIPT_TAG_REGEX = /\s*<script\b[^>]*\bsrc=(?:"|')\/src\/blocks\/[^"']+\.ts(?:"|')[^>]*><\/script>/gi;
 
 /**
  * Parses block HTML content to extract template components.
@@ -48,7 +51,7 @@ export function parseBlockTemplate(content: string): BlockTemplate | null {
     return {
       title: titleMatch[1].trim(),
       bodyClass: classMatch ? classMatch[1] : '',
-      body: bodyMatch[2].trim()
+      body: stripBlockScriptTags(bodyMatch[2]).trim()
     };
   }
 
@@ -60,8 +63,17 @@ export function parseBlockTemplate(content: string): BlockTemplate | null {
   return {
     title: titleMatch[1].trim(),
     bodyClass: '',
-    body: bodyContent
+    body: stripBlockScriptTags(bodyContent).trim()
   };
+}
+
+/**
+ * Strips hand-written `<script src="/src/blocks/.../*.ts">` tags from block source.
+ * These worked in the Vite dev server but never bundled in production. The compiler
+ * now injects the correct script tag based on discovered sibling .ts files.
+ */
+function stripBlockScriptTags(body: string): string {
+  return body.replace(BLOCK_SCRIPT_TAG_REGEX, '');
 }
 
 /**
@@ -89,7 +101,9 @@ export function compileBlock(content: string, options: CompileOptions): CompileR
     }
 
     const bodyTemplate = handlebars.compile(blockTemplate.body);
-    const compiledBody = bodyTemplate({});
+    const compiledBody = options.blockScriptSrc
+      ? `${bodyTemplate({})}\n<script type="module" src="${options.blockScriptSrc}"></script>`
+      : bodyTemplate({});
 
     if (!fs.existsSync(options.layoutPath)) {
       return {

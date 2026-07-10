@@ -5,7 +5,43 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { globSync } from 'glob';
 import type { Category } from './types.js';
+
+export interface BlockScript {
+  /** Block identifier relative to the blocks root, no extension (e.g., "tables/simple/simple") */
+  id: string;
+  htmlPath: string;
+  scriptPath: string;
+}
+
+/**
+ * Discovers block scripts co-located with block HTML files.
+ * Only returns scripts where a sibling <name>.html exists.
+ */
+export function discoverBlockScripts(blocksPath: string): BlockScript[] {
+  if (!fs.existsSync(blocksPath)) {
+    return [];
+  }
+
+  const scriptFiles = globSync('**/*.ts', { cwd: blocksPath, nodir: true });
+
+  const results: BlockScript[] = [];
+  for (const relative of scriptFiles) {
+    const scriptPath = path.join(blocksPath, relative);
+    const htmlPath = scriptPath.replace(/\.ts$/, '.html');
+    if (!fs.existsSync(htmlPath)) {
+      continue;
+    }
+    results.push({
+      id: relative.replace(/\.ts$/, '').replace(/\\/g, '/'),
+      htmlPath,
+      scriptPath
+    });
+  }
+
+  return results.sort((a, b) => a.id.localeCompare(b.id));
+}
 
 /**
  * Discovers block category directories within the blocks folder.
