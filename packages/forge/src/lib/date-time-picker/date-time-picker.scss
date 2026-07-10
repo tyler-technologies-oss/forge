@@ -383,7 +383,7 @@ forge-calendar {
   // Comfortable touch targets for time fields and the commit actions.
   .time-inputs forge-text-field,
   .range-inputs forge-text-field {
-    --forge-field-height: 44px;
+    --forge-field-height: #{token(time-field-height)};
   }
 
   .footer {
