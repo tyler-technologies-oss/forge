@@ -1302,6 +1302,15 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
             : this._timeInput;
       }
     }
+    // Content typed into the field that doesn't resolve to a complete value — a half-typed segment
+    // (partial year, unparseable time) or one part of the pair left blank — is malformed input, not
+    // an empty field. Mirror native <input type="datetime-local">: badInput regardless of `required`.
+    // Required-but-blank is reported as valueMissing above and takes precedence.
+    if (!flags.valueMissing && this.#value == null && this.#hasSegmentText()) {
+      flags.badInput = true;
+      message ||= 'Please enter a complete date and time.';
+      anchor ??= this.#anchorInput();
+    }
     if (!flags.valueMissing && this.#value != null) {
       if (this.#violatesMin()) {
         flags.rangeUnderflow = true;
