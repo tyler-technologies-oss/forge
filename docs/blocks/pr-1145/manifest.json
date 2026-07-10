@@ -103,6 +103,60 @@
       "hasScript": false
     },
     {
+      "id": "scaffold-examples/simple-card/simple-card",
+      "name": "Simple Scaffold Card",
+      "description": "Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons",
+      "tags": [
+        "card",
+        "scaffold",
+        "layout",
+        "toolbar",
+        "header",
+        "body",
+        "footer",
+        "structure"
+      ],
+      "file": "scaffold-examples/simple-card/simple-card.html",
+      "category": "Scaffold Examples",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
+      "screenshot": "scaffold-examples/simple-card/simple-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "scaffold-examples/sidesheet-card/sidesheet-card",
+      "name": "Sidesheet Scaffold Card",
+      "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
+      "tags": [
+        "card",
+        "scaffold",
+        "layout",
+        "toolbar",
+        "drawer",
+        "sidesheet",
+        "body-left"
+      ],
+      "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
+      "category": "Scaffold Examples",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-drawer",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
+      "screenshot": "scaffold-examples/sidesheet-card/sidesheet-card.webp",
+      "hasScript": false
+    },
+    {
       "id": "tables/table-with-icon-actions/table-with-icon-actions",
       "name": "Table with Icon Actions",
       "description": "Data table inside a card with a toolbar header featuring icon buttons for filtering, exporting, and additional options",
@@ -227,60 +281,6 @@
       ],
       "screenshot": "tables/paginated/paginated.webp",
       "hasScript": true
-    },
-    {
-      "id": "scaffold-examples/simple-card/simple-card",
-      "name": "Simple Scaffold Card",
-      "description": "Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons",
-      "tags": [
-        "card",
-        "scaffold",
-        "layout",
-        "toolbar",
-        "header",
-        "body",
-        "footer",
-        "structure"
-      ],
-      "file": "scaffold-examples/simple-card/simple-card.html",
-      "category": "Scaffold Examples",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "screenshot": "scaffold-examples/simple-card/simple-card.webp",
-      "hasScript": false
-    },
-    {
-      "id": "scaffold-examples/sidesheet-card/sidesheet-card",
-      "name": "Sidesheet Scaffold Card",
-      "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
-      "tags": [
-        "card",
-        "scaffold",
-        "layout",
-        "toolbar",
-        "drawer",
-        "sidesheet",
-        "body-left"
-      ],
-      "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
-      "category": "Scaffold Examples",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-drawer",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "screenshot": "scaffold-examples/sidesheet-card/sidesheet-card.webp",
-      "hasScript": false
     },
     {
       "id": "patterns/filter-facets/filter-facets",
@@ -583,28 +583,6 @@
       "hasScript": false
     },
     {
-      "id": "cards/basic-card/basic-card",
-      "name": "Basic Card",
-      "description": "Structured card with header, header actions, body content area, and footer with action buttons",
-      "tags": [
-        "card",
-        "structured-card",
-        "header",
-        "footer",
-        "actions"
-      ],
-      "file": "cards/basic-card/basic-card.html",
-      "category": "Cards",
-      "componentsUsed": [
-        "forge-button",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-structured-card"
-      ],
-      "screenshot": "cards/basic-card/basic-card.webp",
-      "hasScript": false
-    },
-    {
       "id": "cards/cohort-status-card/cohort-status-card",
       "name": "Cohort Status Card",
       "description": "Responsive card with a summary section (title and subtitle) on the left and a multi-column status grid on the right showing progress through sequential phases or milestones with completion indicators and dates. Grid collapses to stacked layout on smaller screens. Useful for release rollouts, deployment phases, onboarding steps, approval workflows, or any multi-stage process tracker.",
@@ -628,6 +606,28 @@
         "forge-icon"
       ],
       "screenshot": "cards/cohort-status-card/cohort-status-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/basic-card/basic-card",
+      "name": "Basic Card",
+      "description": "Structured card with header, header actions, body content area, and footer with action buttons",
+      "tags": [
+        "card",
+        "structured-card",
+        "header",
+        "footer",
+        "actions"
+      ],
+      "file": "cards/basic-card/basic-card.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-button",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-structured-card"
+      ],
+      "screenshot": "cards/basic-card/basic-card.webp",
       "hasScript": false
     },
     {
@@ -917,5 +917,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-07-10T13:17:26.099Z"
+  "generatedAt": "2026-07-10T13:21:08.249Z"
 }
