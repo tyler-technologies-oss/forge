@@ -225,6 +225,34 @@ describe('DateTimeField / linked pair (IDREF)', () => {
     expect(el.shadowRoot!.querySelector('[part="toggle"]')).not.toBeNull();
   });
 
+  it('should start closed and stay dismissible after the field is reconnected while open', async () => {
+    const screen = render(html`
+      <div>
+        <forge-date-time-field picker="p1"></forge-date-time-field>
+        <forge-date-time-picker id="p1"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getField(screen.container);
+    const picker = getPicker(screen.container);
+    await ready(el);
+    (el.shadowRoot!.querySelector('[part="toggle"]') as HTMLElement).click();
+    await ready(el);
+    expect(el.open).toBe(true);
+    // Reconnect the field (mirrors a framework re-rendering the subtree) — it must not come back
+    // stuck open with the picker overlay orphaned.
+    const parent = el.parentElement as HTMLElement;
+    parent.removeChild(el);
+    parent.insertBefore(el, parent.firstChild);
+    await new Promise(resolve => requestAnimationFrame(() => resolve(null)));
+    await ready(el);
+    expect(el.open).toBe(false);
+    expect(picker.open).toBe(false);
+    // Toggle still works after reconnection.
+    (el.shadowRoot!.querySelector('[part="toggle"]') as HTMLElement).click();
+    await ready(el);
+    expect(el.open).toBe(true);
+  });
+
   it('should link to a picker that connects after the field (out-of-order connection)', async () => {
     // The field connects before its referenced picker exists in the DOM — the reconnect ordering
     // that leaves the picker unanchored (rendering inline beside the field) if resolution is one-shot.
@@ -725,6 +753,32 @@ describe('DateTimeField / keyboard interaction', () => {
     dateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
     await ready(el);
     expect(el.shadowRoot!.activeElement).toBe(getTimeInput(el));
+  });
+
+  it('should step ArrowLeft from the end endpoint back into the start endpoint in a range field', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const fromInput = el.shadowRoot!.querySelector('[part="from-input"]') as HTMLInputElement;
+    const toDateInput = el.shadowRoot!.querySelector('[part="to-date-input"]') as HTMLInputElement;
+    toDateInput.focus();
+    toDateInput.setSelectionRange(0, 0);
+    toDateInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true, cancelable: true }));
+    await ready(el);
+    expect(el.shadowRoot!.activeElement).toBe(fromInput);
+  });
+
+  it('should step ArrowRight from the start endpoint into the end endpoint in a range field', async () => {
+    const screen = render(html`<forge-date-time-field date-mode="range" time-mode="range"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const fromInput = el.shadowRoot!.querySelector('[part="from-input"]') as HTMLInputElement;
+    const toDateInput = el.shadowRoot!.querySelector('[part="to-date-input"]') as HTMLInputElement;
+    fromInput.focus();
+    fromInput.setSelectionRange(fromInput.value.length, fromInput.value.length);
+    fromInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true }));
+    await ready(el);
+    expect(el.shadowRoot!.activeElement).toBe(toDateInput);
   });
 });
 
