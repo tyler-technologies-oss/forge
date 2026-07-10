@@ -321,7 +321,7 @@ describe('CldrDateUtils', () => {
 
       it('should format ISO8601 timezone with XXX', () => {
         const result = formatDate(testDate, 'XXX');
-        expect(result).toMatch(/^[Z+-]\d{2}:\d{2}$/);
+        expect(result).toMatch(/^(Z|[+-]\d{2}:\d{2})$/);
       });
 
       it('should format timezone offset with Z', () => {
