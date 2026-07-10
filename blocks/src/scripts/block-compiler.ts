@@ -71,9 +71,18 @@ export function parseBlockTemplate(content: string): BlockTemplate | null {
  * Strips hand-written `<script src="/src/blocks/.../*.ts">` tags from block source.
  * These worked in the Vite dev server but never bundled in production. The compiler
  * now injects the correct script tag based on discovered sibling .ts files.
+ *
+ * Loops until stable so overlapping tags (e.g. `<script<script ...></script>`) can't
+ * leave a partial `<script` behind — closes CodeQL's incomplete-sanitization warning.
  */
 function stripBlockScriptTags(body: string): string {
-  return body.replace(BLOCK_SCRIPT_TAG_REGEX, '');
+  let previous: string;
+  let current = body;
+  do {
+    previous = current;
+    current = current.replace(BLOCK_SCRIPT_TAG_REGEX, '');
+  } while (current !== previous);
+  return current;
 }
 
 /**
