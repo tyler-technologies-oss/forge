@@ -1,5 +1,3 @@
-@use '../utils/mixins-media';
-
 // Single source for the rhythm between adjacent segments (date→time within an
 // endpoint, and around the range separator) so the gaps read consistently.
 $segment-gap: 0.3em;
@@ -147,15 +145,4 @@ input.guide-partial {
 [part='duration'] {
   color: var(--forge-theme-text-medium, currentColor);
   font-size: 0.75em;
-}
-
-// ─── Small screens ──────────────────────────────────────────────────────────
-// The field already fills its container (see `:host`); on phone-width viewports just enlarge the
-// calendar toggle to a comfortable touch target. The picker opens as a full-height bottom sheet
-// (handled in forge-date-time-picker).
-@include mixins-media.phone-only {
-  [part='toggle'] {
-    min-width: 44px;
-    min-height: 44px;
-  }
 }
