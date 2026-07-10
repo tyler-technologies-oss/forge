@@ -30,7 +30,7 @@ import {
 import { ensureTemporal } from '../date-time-picker/temporal-loader.js';
 import { DateInputMask } from '../core/mask/date-input-mask.js';
 import { TimeInputMask } from '../core/mask/time-input-mask.js';
-import { formatDateInput, formatTimeInput, parseDateInput, parseTypedValue } from './date-time-field-utils.js';
+import { coerceDateInput, coerceTimeInput, formatDateInput, formatTimeInput, parseDateInput, parseTypedValue } from './date-time-field-utils.js';
 import {
   DATE_TIME_FIELD_CONSTANTS,
   type DateTimeFieldDateMode,
@@ -95,6 +95,11 @@ export const DATE_TIME_FIELD_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_F
  * and form participation; the picker is a standalone value source.
  *
  * Quick keys (while a segment input is focused): `n` = now, `t` = today
+ *
+ * On commit (blur / Enter / quick key) loosely-typed segments are coerced like the picker inputs:
+ * two-digit years gain a century (`1/2/25` → `01/02/2025`), an hour-only time completes
+ * (`5` → `05:00 AM`), and out-of-range parts are clamped (`02/30/2025` → `02/28/2025`). Coercion
+ * never runs mid-edit, so a partial value is left untouched while typing.
  *
  * @fires {CustomEvent<IDateTimeFieldChangeEventData>} forge-date-time-field-change
  * @fires {CustomEvent} forge-date-time-field-open
@@ -281,6 +286,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #shouldClear = false;
   #masksInitialized = false;
   #authorNamedGroup = false;
+  #coercingSegments = false;
 
   #isRangeValue(): boolean {
     return this.dateMode === 'range' || this.timeMode === 'range';
@@ -814,7 +820,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   // non-focused input via #syncMaskDisplay) — only react to changes on the focused input, i.e.
   // ones the user actually typed, so a picker-driven update doesn't re-derive/re-emit per segment.
   #onDateMaskChange(dateInput: HTMLInputElement): void {
-    if (this.shadowRoot?.activeElement !== dateInput) {
+    if (this.#coercingSegments || this.shadowRoot?.activeElement !== dateInput) {
       return;
     }
     this.#onTypedInput(false);
@@ -831,7 +837,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   }
 
   #onTimeMaskChange(timeInput: HTMLInputElement): void {
-    if (this.shadowRoot?.activeElement !== timeInput) {
+    if (this.#coercingSegments || this.shadowRoot?.activeElement !== timeInput) {
       return;
     }
     this.#onTypedInput(false);
@@ -897,7 +903,12 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   // backspacing one year digit shouldn't emit change(null) and clear the linked picker's
   // selection before the user finishes correcting it. blur/Enter/quick-keys still commit a
   // clear-out immediately, matching the pre-live-update behavior.
+  // Only the commit path (blur / Enter / quick keys) coerces — the live per-keystroke path leaves
+  // partial input alone so padding a year to a full value doesn't fight the user mid-edit.
   #onTypedInput = (commitEmpty = true): void => {
+    if (commitEmpty) {
+      this.#coerceTypedSegments();
+    }
     const prevDate = this.#hasDate;
     const prevFromDate = this.#hasFromDate;
     const prevToDate = this.#hasToDate;
@@ -963,6 +974,27 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
   };
 
+  // Normalizes each segment's loosely-typed text to its canonical display (e.g. `1/2/25` →
+  // `01/02/2025`, `130` → `01:30 AM`) before it's parsed, matching the picker inputs. Writing
+  // back to a mask fires its `accept` handler, so guard the re-entrant #onTypedInput(false).
+  #coerceTypedSegments(): void {
+    if (this.#coercingSegments) {
+      return;
+    }
+    this.#coercingSegments = true;
+    try {
+      for (const { el, kind } of this.#maskedInputSpecs()) {
+        const raw = this.#maskValue(el);
+        const coerced = kind === 'date' ? coerceDateInput(raw) : coerceTimeInput(raw, this.use24HourTime, this.allowSeconds);
+        if (coerced && coerced !== raw) {
+          this.#setMaskValue(el, coerced);
+        }
+      }
+    } finally {
+      this.#coercingSegments = false;
+    }
+  }
+
   // ─── Masks ────────────────────────────────────────────────────────────────
 
   // All segments sit inside a single `data-forge-field-input` wrapper. forge-field treats that
@@ -996,7 +1028,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     return html`
       ${startEndpoint}
       <span class="endpoint">
-        <span class="range-separator" aria-hidden="true">–</span>
+        ${this.#hidesRangeSeparator() ? nothing : html`<span class="range-separator" aria-hidden="true">–</span>`}
         ${dateRange ? this.#renderDateInput('to-date-input', 'End date', this.#hasToDate) : nothing}
         ${timeRange ? this.#renderTimeInput('to-input', 'End time', this.#hasTo) : nothing}
       </span>
@@ -1025,6 +1057,14 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   // hidden, no text). The first input then grows to fit it so a long placeholder isn't clipped.
   #showsFieldPlaceholder(): boolean {
     return this.#placeholderActive() && !this.#guideVisible() && !this.#hasSegmentText();
+  }
+
+  // The range "–" only makes sense between two visible segments. While the field rests showing a
+  // placeholder (non-inset label) or letting an inset label sit in the input, the segments are
+  // blank and the lone separator reads as clutter — hide it until a guide or typed text appears.
+  // (The plain format-hint state — no placeholder, non-inset label — keeps it: both hints show.)
+  #hidesRangeSeparator(): boolean {
+    return (this.labelPosition === 'inset' || !!this.placeholder) && !this.#guideVisible() && !this.#hasSegmentText();
   }
 
   // Empty (untouched guide), partial (typed but not yet valid), or complete — each gets its own tone.
@@ -1070,7 +1110,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       return html`
         <span part="date-segment" class="date-segment">
           ${this.#renderDateInput('date-input', 'Start date', this.#hasFromDate)}
-          <span class="range-separator" data-forge-multi-input-separator aria-hidden="true">–</span>
+          ${this.#hidesRangeSeparator() ? nothing : html`<span class="range-separator" data-forge-multi-input-separator aria-hidden="true">–</span>`}
           ${this.#renderDateInput('to-date-input', 'End date', this.#hasToDate)}
         </span>
       `;
