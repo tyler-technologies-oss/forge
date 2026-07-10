@@ -1,25 +1,6 @@
 {
   "blocks": [
     {
-      "id": "toolbars/toolbar-actions/toolbar-actions",
-      "name": "Toolbar with Button Actions",
-      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
-      "tags": [
-        "toolbar",
-        "buttons",
-        "actions",
-        "form"
-      ],
-      "file": "toolbars/toolbar-actions/toolbar-actions.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
-      "hasScript": false
-    },
-    {
       "id": "toolbars/table-header/table-header",
       "name": "Table Header",
       "description": "Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot",
@@ -37,6 +18,25 @@
         "forge-toolbar"
       ],
       "screenshot": "toolbars/table-header/table-header.webp",
+      "hasScript": false
+    },
+    {
+      "id": "toolbars/toolbar-actions/toolbar-actions",
+      "name": "Toolbar with Button Actions",
+      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
+      "tags": [
+        "toolbar",
+        "buttons",
+        "actions",
+        "form"
+      ],
+      "file": "toolbars/toolbar-actions/toolbar-actions.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
       "hasScript": false
     },
     {
@@ -100,60 +100,6 @@
         "forge-toolbar"
       ],
       "screenshot": "toolbars/page-title/page-title.webp",
-      "hasScript": false
-    },
-    {
-      "id": "scaffold-examples/simple-card/simple-card",
-      "name": "Simple Scaffold Card",
-      "description": "Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons",
-      "tags": [
-        "card",
-        "scaffold",
-        "layout",
-        "toolbar",
-        "header",
-        "body",
-        "footer",
-        "structure"
-      ],
-      "file": "scaffold-examples/simple-card/simple-card.html",
-      "category": "Scaffold Examples",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "screenshot": "scaffold-examples/simple-card/simple-card.webp",
-      "hasScript": false
-    },
-    {
-      "id": "scaffold-examples/sidesheet-card/sidesheet-card",
-      "name": "Sidesheet Scaffold Card",
-      "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
-      "tags": [
-        "card",
-        "scaffold",
-        "layout",
-        "toolbar",
-        "drawer",
-        "sidesheet",
-        "body-left"
-      ],
-      "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
-      "category": "Scaffold Examples",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-drawer",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "screenshot": "scaffold-examples/sidesheet-card/sidesheet-card.webp",
       "hasScript": false
     },
     {
@@ -281,6 +227,60 @@
       ],
       "screenshot": "tables/paginated/paginated.webp",
       "hasScript": true
+    },
+    {
+      "id": "scaffold-examples/simple-card/simple-card",
+      "name": "Simple Scaffold Card",
+      "description": "Card component using forge-scaffold for structured layout with toolbar header, scrollable body, and inverted toolbar footer with action buttons",
+      "tags": [
+        "card",
+        "scaffold",
+        "layout",
+        "toolbar",
+        "header",
+        "body",
+        "footer",
+        "structure"
+      ],
+      "file": "scaffold-examples/simple-card/simple-card.html",
+      "category": "Scaffold Examples",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
+      "screenshot": "scaffold-examples/simple-card/simple-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "scaffold-examples/sidesheet-card/sidesheet-card",
+      "name": "Sidesheet Scaffold Card",
+      "description": "Card component using forge-scaffold with a drawer in the body-left slot, demonstrating a card with an integrated side panel",
+      "tags": [
+        "card",
+        "scaffold",
+        "layout",
+        "toolbar",
+        "drawer",
+        "sidesheet",
+        "body-left"
+      ],
+      "file": "scaffold-examples/sidesheet-card/sidesheet-card.html",
+      "category": "Scaffold Examples",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-drawer",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
+      "screenshot": "scaffold-examples/sidesheet-card/sidesheet-card.webp",
+      "hasScript": false
     },
     {
       "id": "patterns/filter-facets/filter-facets",
@@ -917,5 +917,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-07-10T13:21:08.249Z"
+  "generatedAt": "2026-07-10T13:27:22.375Z"
 }
