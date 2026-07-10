@@ -18,10 +18,9 @@ export const TIMELINE_ITEM_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-timeli
  *
  * @summary Timeline items represent an event or milestone in a timeline.
  *
- * @slot - The default slot for the content.
+ * @slot - The default slot for content displayed in the summary.
  * @slot marker - The marker to display (typically an icon or badge).
  * @slot start - The content to display at the start of the summary.
- * @slot center - The content to display in the center of the summary.
  * @slot end - The content to display at the end of the summary.
  * @slot detail - The content to display under the summary.
  *
@@ -43,9 +42,9 @@ export const TIMELINE_ITEM_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-timeli
  * @csspart marker - The marker element.
  * @csspart default-marker - The default marker element.
  * @csspart summary - The element displayed inline with the marker.
- * @csspart start - The element displayed in the start slot.
- * @csspart center - The element displayed in the default slot.
- * @csspart end - The element displayed in the end slot.
+ * @csspart start - The element displayed at the start of the summary.
+ * @csspart center - The element displayed in the center of the summary.
+ * @csspart end - The element displayed at the end of the summary.
  * @csspart detail - The element displayed in the detail slot.
  */
 @customElement(TIMELINE_ITEM_TAG_NAME)
