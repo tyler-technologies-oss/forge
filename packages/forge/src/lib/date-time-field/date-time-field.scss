@@ -5,12 +5,10 @@
 $segment-gap: 0.3em;
 
 :host {
-  display: inline-block;
-  // Size to the content (date/time segments + toggle) rather than a fixed per-mode width so the
-  // field is never wider than it needs to be; range modes grow naturally with their extra inputs.
-  // `max-width: 100%` clamps the field to its container, at which point the inputs wrap.
-  width: max-content;
-  max-width: 100%;
+  // Fill the container like forge-text-field — the field is a form control, so its width is owned
+  // by the layout it sits in, not the mode. The segment row still hugs its content at the inline
+  // start (see `.inputs`) and wraps by endpoint when the container is narrower than that content.
+  display: block;
 }
 
 :host([hidden]) {
@@ -152,16 +150,10 @@ input.guide-partial {
 }
 
 // ─── Small screens ──────────────────────────────────────────────────────────
-// On phone-width viewports fill the container so the field is a comfortable tap target and its
-// inputs have room to wrap; the picker opens as a full-height bottom sheet (handled in
-// forge-date-time-picker).
+// The field already fills its container (see `:host`); on phone-width viewports just enlarge the
+// calendar toggle to a comfortable touch target. The picker opens as a full-height bottom sheet
+// (handled in forge-date-time-picker).
 @include mixins-media.phone-only {
-  :host {
-    display: block;
-    width: 100%;
-  }
-
-  // Keep the calendar toggle a comfortable touch target.
   [part='toggle'] {
     min-width: 44px;
     min-height: 44px;
