@@ -626,6 +626,13 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.#pickerEl.addEventListener('forge-date-time-picker-change', this.#onPickerChange);
     this.#pickerEl.addEventListener('forge-date-time-picker-close', this.#onPickerClose);
     this._pickerLinked = true;
+    // Start a freshly-linked pair closed. On reconnection (e.g. a framework re-rendering the
+    // subtree) the picker element can persist with a stale `open` overlay, or the field can carry a
+    // reflected `open` attribute — either leaves the popover open with the field's state out of sync,
+    // so the toggle can't dismiss it. Normalize both sides to closed here.
+    this._open = false;
+    this.open = false;
+    this.#pickerEl.open = false;
     // Set anchor so the picker activates its overlay mode, and compare config only once the picker
     // element has upgraded (otherwise its reactive properties are still undefined). Anchor to the
     // field itself (not the trailing toggle) so the popover aligns to its leading edge — and so it
@@ -789,27 +796,37 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       this.#setPickerOpen(true);
     } else if ((event.key === 'Backspace' || event.key === 'ArrowLeft') && !this.#hasNavModifier(event)) {
       const target = event.target as HTMLInputElement;
-      // Nothing left of the caret in a time segment — Backspace has nothing to delete and
-      // ArrowLeft has nowhere further to go, so both step back into the paired date input.
+      // Caret at the start of a segment — Backspace has nothing to delete and ArrowLeft nowhere
+      // further to go, so both step back to the end of the previous segment. Walking the segments
+      // in document order (not just time→date within an endpoint) lets a range field cross from the
+      // end endpoint back into the start endpoint.
       if (target.selectionStart === 0 && target.selectionEnd === 0) {
-        const dateInput = this.#pairedDateInput(target);
-        if (dateInput) {
+        const prev = this.#adjacentInput(target, -1);
+        if (prev) {
           event.preventDefault();
-          this.#focusAtEnd(dateInput);
+          this.#focusAtEnd(prev);
         }
       }
     } else if (event.key === 'ArrowRight' && !this.#hasNavModifier(event)) {
       const target = event.target as HTMLInputElement;
-      // At the end of a date segment with nowhere further to go — continue into its paired time.
+      // Caret at the end of a segment — continue into the start of the next segment in document order.
       if (target.selectionStart === target.value.length && target.selectionEnd === target.value.length) {
-        const timeInput = this.#pairedTimeInput(target);
-        if (timeInput) {
+        const next = this.#adjacentInput(target, 1);
+        if (next) {
           event.preventDefault();
-          this.#focusAtStart(timeInput);
+          this.#focusAtStart(next);
         }
       }
     }
   };
+
+  // The masked segment inputs in document order (start date, start time, end date, end time — as
+  // rendered), used for caret-boundary navigation across every segment and endpoint.
+  #adjacentInput(current: HTMLInputElement, direction: -1 | 1): HTMLInputElement | undefined {
+    const inputs = Array.from(this.shadowRoot?.querySelectorAll<HTMLInputElement>('input[part]') ?? []).filter(input => !input.disabled);
+    const index = inputs.indexOf(current);
+    return index === -1 ? undefined : inputs[index + direction];
+  }
 
   #quickKeysEnabled(): boolean {
     return !this.disabled && !this.readonly;
@@ -839,17 +856,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
     if (dateInput === this._toDateInput) {
       return this.timeMode === 'range' ? this._toInput : undefined;
-    }
-    return undefined;
-  }
-
-  // Which date input, if any, precedes this time input's endpoint.
-  #pairedDateInput(timeInput: HTMLInputElement): HTMLInputElement | undefined {
-    if (timeInput === this._timeInput || timeInput === this._fromInput) {
-      return this._dateInput;
-    }
-    if (timeInput === this._toInput) {
-      return this._toDateInput;
     }
     return undefined;
   }
