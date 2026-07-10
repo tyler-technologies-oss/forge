@@ -24,6 +24,12 @@
     With no <code>picker</code> attribute the field has no calendar toggle or popup — users type the date and time
     directly into the masked inputs.
   </p>
+  <p style="margin: 0; max-width: 44ch; color: var(--forge-theme-text-medium, #5f6368);">
+    Quick keys while a segment is focused: <kbd>n</kbd> = now, <kbd>t</kbd> = today. On blur / <kbd>Enter</kbd>
+    loosely-typed entries are coerced like the picker: a two-digit year gains a century
+    (<code>1/2/25</code> → <code>01/02/2025</code>), an hour-only time completes (<code>5</code> →
+    <code>05:00&nbsp;AM</code>), and out-of-range parts clamp (<code>02/30/2025</code> → <code>02/28/2025</code>).
+  </p>
   <forge-date-time-field id="demo-standalone-field" name="standalone" label="Standalone (no picker)" placeholder="Type a date and time">
     <span slot="support-text">No picker linked — type directly into the masked inputs.</span>
   </forge-date-time-field>
