@@ -533,6 +533,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
                 part="toggle"
                 type="button"
                 tabindex="-1"
+                density="medium"
                 aria-label="Open date and time picker"
                 aria-haspopup="dialog"
                 aria-expanded=${this._open ? 'true' : 'false'}
