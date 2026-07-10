@@ -1,132 +1,6 @@
 {
   "blocks": [
     {
-      "id": "toolbars/toolbar-actions/toolbar-actions",
-      "name": "Toolbar with Button Actions",
-      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
-      "tags": [
-        "toolbar",
-        "buttons",
-        "actions",
-        "form"
-      ],
-      "file": "toolbars/toolbar-actions/toolbar-actions.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
-      "hasScript": false
-    },
-    {
-      "id": "toolbars/table-header/table-header",
-      "name": "Table Header",
-      "description": "Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot",
-      "tags": [
-        "toolbar",
-        "table",
-        "header",
-        "actions"
-      ],
-      "file": "toolbars/table-header/table-header.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-icon",
-        "forge-icon-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "toolbars/table-header/table-header.webp",
-      "hasScript": false
-    },
-    {
-      "id": "toolbars/simple/simple",
-      "name": "Simple Toolbar",
-      "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
-      "tags": [
-        "toolbar",
-        "header",
-        "actions"
-      ],
-      "file": "toolbars/simple/simple.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-icon",
-        "forge-icon-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "toolbars/simple/simple.webp",
-      "hasScript": false
-    },
-    {
-      "id": "toolbars/page-title-with-back-arrow/page-title-with-back-arrow",
-      "name": "Page Title with Back Arrow",
-      "description": "Toolbar with back navigation button, page title heading, and action icon buttons for notifications, settings, and more options",
-      "tags": [
-        "toolbar",
-        "page-title",
-        "heading",
-        "actions",
-        "icon-buttons",
-        "back",
-        "navigation"
-      ],
-      "file": "toolbars/page-title-with-back-arrow/page-title-with-back-arrow.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-icon",
-        "forge-icon-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "toolbars/page-title-with-back-arrow/page-title-with-back-arrow.webp",
-      "hasScript": false
-    },
-    {
-      "id": "toolbars/page-title/page-title",
-      "name": "Page Title",
-      "description": "Toolbar with page title heading and action icon buttons for notifications, settings, and more options",
-      "tags": [
-        "toolbar",
-        "page-title",
-        "heading",
-        "actions",
-        "icon-buttons"
-      ],
-      "file": "toolbars/page-title/page-title.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-icon",
-        "forge-icon-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "toolbars/page-title/page-title.webp",
-      "hasScript": false
-    },
-    {
-      "id": "tables/table-with-icon-actions/table-with-icon-actions",
-      "name": "Table with Icon Actions",
-      "description": "Data table inside a card with a toolbar header featuring icon buttons for filtering, exporting, and additional options",
-      "tags": [
-        "table",
-        "data",
-        "card",
-        "toolbar",
-        "icons",
-        "actions"
-      ],
-      "file": "tables/table-with-icon-actions/table-with-icon-actions.html",
-      "category": "Tables",
-      "componentsUsed": [
-        "forge-card",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-table",
-        "forge-toolbar"
-      ],
-      "screenshot": "tables/table-with-icon-actions/table-with-icon-actions.webp",
-      "hasScript": true
-    },
-    {
       "id": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet",
       "name": "Table with Detail Sidesheet",
       "description": "Application layout with a data table where the last column contains an icon button that opens a right-side drawer sidesheet to display row details alongside the table",
@@ -157,6 +31,30 @@
         "forge-user-profile"
       ],
       "screenshot": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet.webp",
+      "hasScript": true
+    },
+    {
+      "id": "tables/table-with-icon-actions/table-with-icon-actions",
+      "name": "Table with Icon Actions",
+      "description": "Data table inside a card with a toolbar header featuring icon buttons for filtering, exporting, and additional options",
+      "tags": [
+        "table",
+        "data",
+        "card",
+        "toolbar",
+        "icons",
+        "actions"
+      ],
+      "file": "tables/table-with-icon-actions/table-with-icon-actions.html",
+      "category": "Tables",
+      "componentsUsed": [
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-table",
+        "forge-toolbar"
+      ],
+      "screenshot": "tables/table-with-icon-actions/table-with-icon-actions.webp",
       "hasScript": true
     },
     {
@@ -316,6 +214,108 @@
         "forge-toolbar"
       ],
       "screenshot": "patterns/filter-facets/filter-facets.webp",
+      "hasScript": false
+    },
+    {
+      "id": "toolbars/table-header/table-header",
+      "name": "Table Header",
+      "description": "Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot",
+      "tags": [
+        "toolbar",
+        "table",
+        "header",
+        "actions"
+      ],
+      "file": "toolbars/table-header/table-header.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/table-header/table-header.webp",
+      "hasScript": false
+    },
+    {
+      "id": "toolbars/toolbar-actions/toolbar-actions",
+      "name": "Toolbar with Button Actions",
+      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
+      "tags": [
+        "toolbar",
+        "buttons",
+        "actions",
+        "form"
+      ],
+      "file": "toolbars/toolbar-actions/toolbar-actions.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
+      "hasScript": false
+    },
+    {
+      "id": "toolbars/simple/simple",
+      "name": "Simple Toolbar",
+      "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
+      "tags": [
+        "toolbar",
+        "header",
+        "actions"
+      ],
+      "file": "toolbars/simple/simple.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/simple/simple.webp",
+      "hasScript": false
+    },
+    {
+      "id": "toolbars/page-title-with-back-arrow/page-title-with-back-arrow",
+      "name": "Page Title with Back Arrow",
+      "description": "Toolbar with back navigation button, page title heading, and action icon buttons for notifications, settings, and more options",
+      "tags": [
+        "toolbar",
+        "page-title",
+        "heading",
+        "actions",
+        "icon-buttons",
+        "back",
+        "navigation"
+      ],
+      "file": "toolbars/page-title-with-back-arrow/page-title-with-back-arrow.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/page-title-with-back-arrow/page-title-with-back-arrow.webp",
+      "hasScript": false
+    },
+    {
+      "id": "toolbars/page-title/page-title",
+      "name": "Page Title",
+      "description": "Toolbar with page title heading and action icon buttons for notifications, settings, and more options",
+      "tags": [
+        "toolbar",
+        "page-title",
+        "heading",
+        "actions",
+        "icon-buttons"
+      ],
+      "file": "toolbars/page-title/page-title.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/page-title/page-title.webp",
       "hasScript": false
     },
     {
@@ -509,128 +509,6 @@
       "hasScript": false
     },
     {
-      "id": "cards/tabbed-card/tabbed-card",
-      "name": "Tabbed Card",
-      "description": "Card with tab navigation that switches between different content views using forge-tab-bar and forge-view-switcher",
-      "tags": [
-        "card",
-        "tabs",
-        "navigation",
-        "view-switcher",
-        "tabbed"
-      ],
-      "file": "cards/tabbed-card/tabbed-card.html",
-      "category": "Cards",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-chip",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-label-value",
-        "forge-scaffold",
-        "forge-tab",
-        "forge-tab-bar",
-        "forge-toolbar",
-        "forge-view",
-        "forge-view-switcher"
-      ],
-      "screenshot": "cards/tabbed-card/tabbed-card.webp",
-      "hasScript": false
-    },
-    {
-      "id": "cards/responsive-cards/responsive-cards",
-      "name": "Responsive Cards",
-      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
-      "tags": [
-        "cards",
-        "responsive",
-        "grid",
-        "badge",
-        "image",
-        "metrics"
-      ],
-      "file": "cards/responsive-cards/responsive-cards.html",
-      "category": "Cards",
-      "componentsUsed": [
-        "forge-badge",
-        "forge-card",
-        "forge-icon",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "screenshot": "cards/responsive-cards/responsive-cards.webp",
-      "hasScript": false
-    },
-    {
-      "id": "cards/icon-card/icon-card",
-      "name": "Icon Card",
-      "description": "Action card featuring an icon, title, and description for quick navigation or feature highlights",
-      "tags": [
-        "card",
-        "icon",
-        "navigation",
-        "action"
-      ],
-      "file": "cards/icon-card/icon-card.html",
-      "category": "Cards",
-      "componentsUsed": [
-        "forge-avatar",
-        "forge-card",
-        "forge-icon"
-      ],
-      "screenshot": "cards/icon-card/icon-card.webp",
-      "hasScript": false
-    },
-    {
-      "id": "cards/cohort-status-card/cohort-status-card",
-      "name": "Cohort Status Card",
-      "description": "Responsive card with a summary section (title and subtitle) on the left and a multi-column status grid on the right showing progress through sequential phases or milestones with completion indicators and dates. Grid collapses to stacked layout on smaller screens. Useful for release rollouts, deployment phases, onboarding steps, approval workflows, or any multi-stage process tracker.",
-      "tags": [
-        "card",
-        "status",
-        "timeline",
-        "progress",
-        "phases",
-        "milestones",
-        "workflow",
-        "responsive",
-        "grid",
-        "rollout",
-        "deployment"
-      ],
-      "file": "cards/cohort-status-card/cohort-status-card.html",
-      "category": "Cards",
-      "componentsUsed": [
-        "forge-card",
-        "forge-icon"
-      ],
-      "screenshot": "cards/cohort-status-card/cohort-status-card.webp",
-      "hasScript": false
-    },
-    {
-      "id": "cards/basic-card/basic-card",
-      "name": "Basic Card",
-      "description": "Structured card with header, header actions, body content area, and footer with action buttons",
-      "tags": [
-        "card",
-        "structured-card",
-        "header",
-        "footer",
-        "actions"
-      ],
-      "file": "cards/basic-card/basic-card.html",
-      "category": "Cards",
-      "componentsUsed": [
-        "forge-button",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-structured-card"
-      ],
-      "screenshot": "cards/basic-card/basic-card.webp",
-      "hasScript": false
-    },
-    {
       "id": "application-layout/three-panel/three-panel",
       "name": "Three Panel Layout",
       "description": "Application layout demonstrating content in the left navigation drawer, main body area, and right drawer panel. Uses gray striped boxes as placeholder content. Reference this block for building layouts with sidebars, detail panels, or supplementary content areas.",
@@ -752,6 +630,41 @@
       "hasScript": false
     },
     {
+      "id": "application-layout/compact-context-switcher/compact-context-switcher",
+      "name": "Compact Context Switcher",
+      "description": "Application layout with a compact context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a minimal select dropdown for quick context switching.",
+      "tags": [
+        "layout",
+        "application",
+        "context-switcher",
+        "compact",
+        "minimal",
+        "scope",
+        "workspace",
+        "tenant",
+        "multi-tenant",
+        "organization",
+        "navigation",
+        "drawer",
+        "select",
+        "global-context"
+      ],
+      "file": "application-layout/compact-context-switcher/compact-context-switcher.html",
+      "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-avatar",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-option",
+        "forge-select",
+        "forge-toolbar"
+      ],
+      "screenshot": "application-layout/compact-context-switcher/compact-context-switcher.webp",
+      "hasScript": false
+    },
+    {
       "id": "application-layout/detailed-context-switcher/detailed-context-switcher",
       "name": "Detailed Context Switcher",
       "description": "Application layout with a detailed context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a prominent current context display with name, address, quick actions, and a dropdown to switch contexts.",
@@ -822,41 +735,6 @@
       "hasScript": false
     },
     {
-      "id": "application-layout/compact-context-switcher/compact-context-switcher",
-      "name": "Compact Context Switcher",
-      "description": "Application layout with a compact context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a minimal select dropdown for quick context switching.",
-      "tags": [
-        "layout",
-        "application",
-        "context-switcher",
-        "compact",
-        "minimal",
-        "scope",
-        "workspace",
-        "tenant",
-        "multi-tenant",
-        "organization",
-        "navigation",
-        "drawer",
-        "select",
-        "global-context"
-      ],
-      "file": "application-layout/compact-context-switcher/compact-context-switcher.html",
-      "category": "Application Layout",
-      "componentsUsed": [
-        "forge-app-layout",
-        "forge-avatar",
-        "forge-divider",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-option",
-        "forge-select",
-        "forge-toolbar"
-      ],
-      "screenshot": "application-layout/compact-context-switcher/compact-context-switcher.webp",
-      "hasScript": false
-    },
-    {
       "id": "application-layout/basic/basic",
       "name": "Basic Application Layout",
       "description": "Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
@@ -885,6 +763,128 @@
         "forge-user-profile"
       ],
       "screenshot": "application-layout/basic/basic.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/tabbed-card/tabbed-card",
+      "name": "Tabbed Card",
+      "description": "Card with tab navigation that switches between different content views using forge-tab-bar and forge-view-switcher",
+      "tags": [
+        "card",
+        "tabs",
+        "navigation",
+        "view-switcher",
+        "tabbed"
+      ],
+      "file": "cards/tabbed-card/tabbed-card.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-chip",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-label-value",
+        "forge-scaffold",
+        "forge-tab",
+        "forge-tab-bar",
+        "forge-toolbar",
+        "forge-view",
+        "forge-view-switcher"
+      ],
+      "screenshot": "cards/tabbed-card/tabbed-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/responsive-cards/responsive-cards",
+      "name": "Responsive Cards",
+      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
+      "tags": [
+        "cards",
+        "responsive",
+        "grid",
+        "badge",
+        "image",
+        "metrics"
+      ],
+      "file": "cards/responsive-cards/responsive-cards.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-badge",
+        "forge-card",
+        "forge-icon",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
+      "screenshot": "cards/responsive-cards/responsive-cards.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/icon-card/icon-card",
+      "name": "Icon Card",
+      "description": "Action card featuring an icon, title, and description for quick navigation or feature highlights",
+      "tags": [
+        "card",
+        "icon",
+        "navigation",
+        "action"
+      ],
+      "file": "cards/icon-card/icon-card.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-avatar",
+        "forge-card",
+        "forge-icon"
+      ],
+      "screenshot": "cards/icon-card/icon-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/cohort-status-card/cohort-status-card",
+      "name": "Cohort Status Card",
+      "description": "Responsive card with a summary section (title and subtitle) on the left and a multi-column status grid on the right showing progress through sequential phases or milestones with completion indicators and dates. Grid collapses to stacked layout on smaller screens. Useful for release rollouts, deployment phases, onboarding steps, approval workflows, or any multi-stage process tracker.",
+      "tags": [
+        "card",
+        "status",
+        "timeline",
+        "progress",
+        "phases",
+        "milestones",
+        "workflow",
+        "responsive",
+        "grid",
+        "rollout",
+        "deployment"
+      ],
+      "file": "cards/cohort-status-card/cohort-status-card.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-card",
+        "forge-icon"
+      ],
+      "screenshot": "cards/cohort-status-card/cohort-status-card.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/basic-card/basic-card",
+      "name": "Basic Card",
+      "description": "Structured card with header, header actions, body content area, and footer with action buttons",
+      "tags": [
+        "card",
+        "structured-card",
+        "header",
+        "footer",
+        "actions"
+      ],
+      "file": "cards/basic-card/basic-card.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-button",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-structured-card"
+      ],
+      "screenshot": "cards/basic-card/basic-card.webp",
       "hasScript": false
     }
   ],
@@ -917,5 +917,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-07-08T21:54:02.169Z"
+  "generatedAt": "2026-07-10T13:10:38.147Z"
 }
