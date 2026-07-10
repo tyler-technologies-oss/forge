@@ -276,6 +276,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #value: DateTimePickerValue = null;
   #pickerIdRef = '';
   #pickerEl: IDateTimePickerComponent | null = null;
+  #pickerLinkRetryPending = false;
   #hasDate = false;
   #hasFromDate = false;
   #hasToDate = false;
@@ -438,6 +439,12 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
 
   public override updated(changed: PropertyValues<this>): void {
     this.#updateFormValueAndValidity();
+    // A framework can swap the referenced picker out from under us (new element, same id) without
+    // this field disconnecting, stranding our reference on a detached node. Re-resolve when the
+    // link went stale so the fresh picker gets anchored.
+    if (this.#pickerIdRef && this.#pickerEl && !this.#pickerEl.isConnected) {
+      this.#resolvePickerLink();
+    }
     if (changed.has('label')) {
       this.#updateGroupLabel();
     }
@@ -571,15 +578,45 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     if (!this.#pickerIdRef) {
       return;
     }
-    const root = this.getRootNode() as Document | ShadowRoot;
-    const el = root.getElementById?.(this.#pickerIdRef) as IDateTimePickerComponent | null;
+    const el = this.#findPicker();
     if (!el) {
-      console.warn(`forge-date-time-field: picker "${this.#pickerIdRef}" not found in the same root`);
+      // The referenced picker may connect after this field — it's often a later sibling, and when a
+      // framework reconnects the subtree this field's connectedCallback can run before the picker is
+      // reinserted. Retry once the DOM settles rather than giving up (which would leave the picker
+      // unanchored, so it renders inline beside the field instead of as a popover).
+      this.#schedulePickerLinkRetry();
       return;
     }
     this.#pickerEl = el;
     this.#attachPickerLink();
     this.requestUpdate();
+  }
+
+  #findPicker(): IDateTimePickerComponent | null {
+    const root = this.getRootNode() as Document | ShadowRoot;
+    return (root.getElementById?.(this.#pickerIdRef) as IDateTimePickerComponent | null) ?? null;
+  }
+
+  #schedulePickerLinkRetry(): void {
+    if (this.#pickerLinkRetryPending) {
+      return;
+    }
+    this.#pickerLinkRetryPending = true;
+    requestAnimationFrame(() => {
+      this.#pickerLinkRetryPending = false;
+      // Only follow through if we're still connected and still waiting on the same unresolved link.
+      if (!this.isConnected || this.#pickerEl || !this.#pickerIdRef) {
+        return;
+      }
+      const el = this.#findPicker();
+      if (el) {
+        this.#pickerEl = el;
+        this.#attachPickerLink();
+        this.requestUpdate();
+      } else {
+        console.warn(`forge-date-time-field: picker "${this.#pickerIdRef}" not found in the same root`);
+      }
+    });
   }
 
   #attachPickerLink(): void {

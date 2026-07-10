@@ -225,6 +225,22 @@ describe('DateTimeField / linked pair (IDREF)', () => {
     expect(el.shadowRoot!.querySelector('[part="toggle"]')).not.toBeNull();
   });
 
+  it('should link to a picker that connects after the field (out-of-order connection)', async () => {
+    // The field connects before its referenced picker exists in the DOM — the reconnect ordering
+    // that leaves the picker unanchored (rendering inline beside the field) if resolution is one-shot.
+    const screen = render(html` <div><forge-date-time-field picker="late-picker"></forge-date-time-field></div> `);
+    const el = getField(screen.container);
+    expect(el.pickerElement).toBeNull();
+    const picker = document.createElement('forge-date-time-picker') as IDateTimePickerComponent;
+    picker.id = 'late-picker';
+    (screen.container.querySelector('div') as HTMLElement).appendChild(picker);
+    await new Promise(resolve => requestAnimationFrame(() => resolve(null)));
+    await ready(el);
+    expect(el.pickerElement).toBe(picker);
+    expect(picker.anchorElement).toBe(el);
+    expect(el.shadowRoot!.querySelector('[part="toggle"]')).not.toBeNull();
+  });
+
   it('should open the linked picker when the toggle button is clicked', async () => {
     const screen = render(html`
       <div>
@@ -357,6 +373,8 @@ describe('DateTimeField / linked pair (IDREF)', () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const screen = render(html`<forge-date-time-field picker="nonexistent"></forge-date-time-field>`);
     const el = getField(screen.container);
+    // Resolution retries once the DOM settles before giving up, so the warning lands after a frame.
+    await new Promise(resolve => requestAnimationFrame(() => resolve(null)));
     await ready(el);
     expect(el.shadowRoot!.querySelector('[part="toggle"]')).toBeNull();
     expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('nonexistent'));
