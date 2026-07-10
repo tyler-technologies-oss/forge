@@ -38,8 +38,7 @@ const meta = {
   component,
   subcomponents: {
     ['Timeline Item']: 'forge-timeline-item',
-    ['Timeline Break']: 'forge-timeline-break',
-    ['Timestamp']: 'forge-timestamp'
+    ['Timeline Break']: 'forge-timeline-break'
   },
   argTypes: {
     ...generateCustomElementArgTypes({
