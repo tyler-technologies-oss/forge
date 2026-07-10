@@ -15,15 +15,10 @@ const attributes = {
   ...observedAttributes
 };
 
-const selectors = {
-  ANCHOR: 'a'
-};
-
-export const SKIP_LINK_CONSTANTS = {
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */ export const SKIP_LINK_CONSTANTS = {
   elementName,
   observedAttributes,
-  attributes,
-  selectors
+  attributes
 };
 
 export type SkipLinkTheme = Theme | 'default';

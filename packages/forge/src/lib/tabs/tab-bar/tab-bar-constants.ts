@@ -1,3 +1,4 @@
+import { createContext } from '@lit/context';
 import { COMPONENT_NAME_PREFIX } from '../../constants.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tab-bar`;
@@ -29,13 +30,18 @@ const classes = {
 };
 
 const events = {
-  CHANGE: `${elementName}-change`
+  CHANGE: `${elementName}-change`,
+  TAB_MENU: 'forge-tab-menu',
+  TAB_CLOSE: 'forge-tab-close'
 };
 
 const numbers = {
-  SCROLL_MARGIN: 48
+  SCROLL_MARGIN: 48,
+  OPACITY_HIDDEN: 0,
+  OPACITY_VISIBLE: 1
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const TAB_BAR_CONSTANTS = {
   elementName,
   observedAttributes,
@@ -55,3 +61,12 @@ export const NAVIGATION_KEYS = new Map([
 export interface ITabBarChangeEventData {
   index: number;
 }
+
+export type TabBarTheme = 'default' | 'app-bar';
+
+export const TAB_BAR_DISABLED = createContext<boolean>('tab-bar-disabled');
+export const TAB_BAR_VERTICAL = createContext<boolean>('tab-bar-vertical');
+export const TAB_BAR_STACKED = createContext<boolean>('tab-bar-stacked');
+export const TAB_BAR_SECONDARY = createContext<boolean>('tab-bar-secondary');
+export const TAB_BAR_INVERTED = createContext<boolean>('tab-bar-inverted');
+export const TAB_BAR_CLOSABLE = createContext<boolean>('tab-bar-closable');
