@@ -38,6 +38,37 @@
 }
 
 //
+// Top Layer Mode
+//
+
+:host(:state(top-layer)) {
+  @include top-layer-host;
+
+  .focus-indicator {
+    @include base;
+    @include top-layer-indicator;
+
+    &:popover-open {
+      @include active;
+    }
+  }
+
+  .focus-indicator:not([inward]) {
+    @include outward;
+    @include top-layer-outward;
+  }
+
+  .focus-indicator[inward] {
+    @include inward;
+    @include top-layer-inward;
+  }
+
+  .focus-indicator[circular] {
+    @include circular;
+  }
+}
+
+//
 // Animations
 //
 

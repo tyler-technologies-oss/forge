@@ -64,6 +64,23 @@
     </div>
   </div>
 
+  <!-- Top layer example -->
+  <div>
+    <button type="button" class="example-target">
+      Top Layer example
+      <forge-focus-indicator top-layer></forge-focus-indicator>
+    </button>
+  </div>
+
+  <!-- Top layer inward example -->
+  <div>
+    <div class="example-target inward-example" tabindex="0" role="button">
+      <span>Top Layer inward example</span>
+      <forge-focus-indicator top-layer allow-focus inward></forge-focus-indicator>
+      <forge-state-layer></forge-state-layer>
+    </div>
+  </div>
+
   <!-- CSS-only example -->
   <button type="button" class="forge-focus-indicator forge-focus-indicator__target">Button CSS-only</button>
   <button type="button" class="forge-focus-indicator__target">

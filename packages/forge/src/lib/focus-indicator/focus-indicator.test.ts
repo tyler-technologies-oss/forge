@@ -182,6 +182,122 @@ describe('FocusIndicator', () => {
 
     newButton.remove();
   });
+
+  describe('top layer', () => {
+    it('should render child element when topLayer is true', async () => {
+      const { focusIndicator } = await createFixture({ topLayer: true });
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator');
+      expect(indicatorElement).not.toBeNull();
+      expect(indicatorElement?.getAttribute('popover')).toBe('manual');
+    });
+
+    it('should not render child element when topLayer is false', async () => {
+      const { focusIndicator } = await createFixture({ topLayer: false });
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator');
+      expect(indicatorElement).toBeNull();
+    });
+
+    it('should set top-layer state when topLayer is true', async () => {
+      const { focusIndicator } = await createFixture({ topLayer: true });
+      expect(focusIndicator.matches(':state(top-layer)')).toBe(true);
+    });
+
+    it('should show popover when active and topLayer are true', async () => {
+      const { detachedButton, focusIndicator } = await createFixture({ topLayer: true });
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+      expect(indicatorElement?.matches(':popover-open')).toBe(false);
+
+      await focusKeyboard(detachedButton);
+
+      expect(focusIndicator.active).toBe(true);
+      expect(indicatorElement?.matches(':popover-open')).toBe(true);
+    });
+
+    it('should hide popover when active becomes false', async () => {
+      const { detachedButton, button, focusIndicator } = await createFixture({ topLayer: true });
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+      await focusKeyboard(detachedButton);
+      expect(focusIndicator.active).toBe(true);
+      expect(indicatorElement?.matches(':popover-open')).toBe(true);
+
+      button.blur();
+      await new Promise(resolve => setTimeout(resolve, 10));
+      expect(focusIndicator.active).toBe(false);
+      expect(indicatorElement?.matches(':popover-open')).toBe(false);
+    });
+
+    it('should set CSS custom properties for positioning', async () => {
+      const { detachedButton, button, focusIndicator } = await createFixture({ topLayer: true });
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+      await focusKeyboard(detachedButton);
+      await new Promise(resolve => setTimeout(resolve, 50));
+
+      expect(focusIndicator.active).toBe(true);
+      expect(indicatorElement.matches(':popover-open')).toBe(true);
+
+      const targetRect = button.getBoundingClientRect();
+      const computedStyle = getComputedStyle(indicatorElement);
+
+      expect(computedStyle.position).toBe('fixed');
+      expect(indicatorElement.style.getPropertyValue('--_focus-indicator-top-layer-left')).toBe(`${targetRect.left}px`);
+      expect(indicatorElement.style.getPropertyValue('--_focus-indicator-top-layer-top')).toBe(`${targetRect.top}px`);
+      expect(indicatorElement.style.getPropertyValue('--_focus-indicator-top-layer-width')).toBe(`${targetRect.width}px`);
+      expect(indicatorElement.style.getPropertyValue('--_focus-indicator-top-layer-height')).toBe(`${targetRect.height}px`);
+    });
+
+    it('should cleanup positioning on disconnect', async () => {
+      const { detachedButton, focusIndicator } = await createFixture({ topLayer: true });
+
+      await focusKeyboard(detachedButton);
+      expect(focusIndicator.active).toBe(true);
+
+      focusIndicator.remove();
+
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+      expect(indicatorElement?.matches(':popover-open')).toBe(false);
+    });
+
+    it('should respect inward property in top layer mode', async () => {
+      const { detachedButton, focusIndicator } = await createFixture({ topLayer: true, inward: true });
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+      await focusKeyboard(detachedButton);
+
+      expect(focusIndicator.inward).toBe(true);
+      expect(indicatorElement?.hasAttribute('inward')).toBe(true);
+    });
+
+    it('should respect circular property in top layer mode', async () => {
+      const { detachedButton, focusIndicator } = await createFixture({ topLayer: true, circular: true });
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+      await focusKeyboard(detachedButton);
+
+      expect(focusIndicator.circular).toBe(true);
+      expect(indicatorElement?.hasAttribute('circular')).toBe(true);
+    });
+
+    it('should toggle popover when topLayer property changes', async () => {
+      const { detachedButton, focusIndicator } = await createFixture({ topLayer: true });
+
+      await focusKeyboard(detachedButton);
+      expect(focusIndicator.active).toBe(true);
+
+      let indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+      expect(indicatorElement?.matches(':popover-open')).toBe(true);
+      expect(focusIndicator.matches(':state(top-layer)')).toBe(true);
+
+      focusIndicator.topLayer = false;
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(focusIndicator.matches(':state(top-layer)')).toBe(false);
+      indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+      expect(indicatorElement).toBeNull();
+    });
+  });
 });
 
 interface FocusIndicatorFixtureConfig {
@@ -189,6 +305,7 @@ interface FocusIndicatorFixtureConfig {
   inward?: boolean;
   circular?: boolean;
   allowFocus?: boolean;
+  topLayer?: boolean;
 }
 
 interface FocusIndicatorFixtureResult {
@@ -197,13 +314,14 @@ interface FocusIndicatorFixtureResult {
   focusIndicator: IFocusIndicatorComponent;
 }
 
-async function createFixture({ target, inward, circular, allowFocus }: FocusIndicatorFixtureConfig = {}): Promise<FocusIndicatorFixtureResult> {
+async function createFixture({ target, inward, circular, allowFocus, topLayer }: FocusIndicatorFixtureConfig = {}): Promise<FocusIndicatorFixtureResult> {
   const screen = render(html`
     <div>
       <button id="detached" type="button">Simple button</button>
       <button id="attached" type="button">
         Button
-        <forge-focus-indicator target=${ifDefined(target)} ?inward=${inward} ?circular=${circular} ?allow-focus=${allowFocus}> </forge-focus-indicator>
+        <forge-focus-indicator target=${ifDefined(target)} ?inward=${inward} ?circular=${circular} ?allow-focus=${allowFocus} ?top-layer=${topLayer}>
+        </forge-focus-indicator>
       </button>
     </div>
   `);

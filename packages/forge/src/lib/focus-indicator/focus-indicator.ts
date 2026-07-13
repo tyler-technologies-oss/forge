@@ -1,8 +1,10 @@
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
-import { nothing, PropertyValues, unsafeCSS } from 'lit';
+import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { autoUpdate } from '@floating-ui/dom';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { supportsPopover } from '../core/utils/feature-detection.js';
 import { locateTargetHeuristic, toggleState } from '../core/utils/utils.js';
 import { FocusIndicatorFocusMode } from './focus-indicator-constants.js';
 
@@ -16,6 +18,7 @@ export interface IFocusIndicatorComponent extends IBaseComponent {
   circular: boolean;
   allowFocus: boolean;
   focusMode: FocusIndicatorFocusMode;
+  topLayer: boolean;
 }
 
 declare global {
@@ -125,8 +128,19 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
   @property({ attribute: 'focus-mode' })
   public focusMode: FocusIndicatorFocusMode = 'focusin';
 
+  /**
+   * Renders the focus indicator in the browser's top layer (above all other content).
+   * Requires browser support for the Popover API. Falls back to default behavior if unsupported.
+   * @default false
+   * @attribute top-layer
+   */
+  @property({ type: Boolean, attribute: 'top-layer' })
+  public topLayer = false;
+
   #targetElement: HTMLElement | undefined;
   #internals: ElementInternals;
+  #indicatorElement: HTMLDivElement | undefined;
+  #cleanupAutoUpdate: (() => void) | undefined;
 
   constructor() {
     super();
@@ -144,6 +158,14 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
   public disconnectedCallback(): void {
     super.disconnectedCallback();
     this.#detachTargetListeners();
+    this.#stopPositioning();
+    if (this.#indicatorElement) {
+      try {
+        this.#indicatorElement.hidePopover();
+      } catch {
+        // Popover already hidden
+      }
+    }
     this.#targetElement = undefined;
   }
 
@@ -157,9 +179,24 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
     if (changedProperties.has('active')) {
       this.#handleActiveChange();
     }
+
+    if (changedProperties.has('topLayer') || changedProperties.has('active')) {
+      this.#updateTopLayerState();
+    }
   }
 
-  public override render(): typeof nothing {
+  public override updated(changedProperties: PropertyValues<this>): void {
+    super.updated(changedProperties);
+
+    if (changedProperties.has('topLayer')) {
+      this.#indicatorElement = this.shadowRoot?.querySelector('.focus-indicator') as HTMLDivElement | undefined;
+    }
+  }
+
+  public override render(): TemplateResult | typeof nothing {
+    if (this.topLayer && supportsPopover()) {
+      return html`<div class="focus-indicator" part="indicator" popover="manual"></div>`;
+    }
     return nothing; // This component does not render any elements, it only applies encapsulated styles to the host element.
   }
 
@@ -206,5 +243,58 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
   #handleActiveChange(): void {
     this.toggleAttribute('active', this.active);
     toggleState(this.#internals, 'active', this.active);
+  }
+
+  #updateTopLayerState(): void {
+    if (this.topLayer && !supportsPopover()) {
+      return;
+    }
+
+    toggleState(this.#internals, 'top-layer', this.topLayer);
+
+    if (this.topLayer && this.active && this.#indicatorElement) {
+      try {
+        this.#indicatorElement.showPopover();
+        this.#startPositioning();
+      } catch {
+        // Popover already shown or error occurred
+      }
+    } else if (this.#indicatorElement) {
+      try {
+        this.#indicatorElement.hidePopover();
+      } catch {
+        // Popover already hidden
+      }
+      this.#stopPositioning();
+    }
+  }
+
+  #startPositioning(): void {
+    if (!this.#targetElement || !this.#indicatorElement) {
+      return;
+    }
+
+    this.#cleanupAutoUpdate = autoUpdate(this.#targetElement, this.#indicatorElement, () => this.#updatePosition());
+  }
+
+  #updatePosition(): void {
+    if (!this.#targetElement || !this.#indicatorElement) {
+      return;
+    }
+
+    const targetRect = this.#targetElement.getBoundingClientRect();
+
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-left', `${targetRect.left}px`);
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-top', `${targetRect.top}px`);
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-width', `${targetRect.width}px`);
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-height', `${targetRect.height}px`);
+
+    this.#indicatorElement.toggleAttribute('inward', this.inward);
+    this.#indicatorElement.toggleAttribute('circular', this.circular);
+  }
+
+  #stopPositioning(): void {
+    this.#cleanupAutoUpdate?.();
+    this.#cleanupAutoUpdate = undefined;
   }
 }
