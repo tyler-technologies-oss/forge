@@ -24,7 +24,6 @@ const meta = {
           .circular=${args.circular}
           .allowFocus=${args.allowFocus}
           .focusMode=${args.focusMode}
-          .topLayer=${args.topLayer}
           style=${style}>
         </forge-focus-indicator>
       </div>
@@ -48,8 +47,7 @@ const meta = {
     inward: false,
     circular: false,
     allowFocus: false,
-    focusMode: 'focusin',
-    topLayer: false
+    focusMode: 'focusin'
   }
 } satisfies Meta;
 
@@ -78,50 +76,9 @@ export const WithCard: Story = {
           .circular=${args.circular}
           .allowFocus=${args.allowFocus}
           .focusMode=${args.focusMode}
-          .topLayer=${args.topLayer}
           style=${style}>
         </forge-focus-indicator>
       </forge-card>
-    `;
-  }
-};
-
-export const TopLayer: Story = {
-  parameters: {
-    controls: { include: /^--|active|inward|topLayer/ }
-  },
-  args: {
-    topLayer: true
-  },
-  render: args => {
-    const containerStyle = {
-      position: 'relative',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100px',
-      width: '100px',
-      overflow: 'hidden',
-      outline: '1px dotted black'
-    };
-    const buttonStyle = {
-      height: '96px',
-      width: '96px',
-      outline: 'none'
-    };
-    return html`
-      <div style=${styleMap(containerStyle)}>
-        <button id="top-layer-btn" style=${styleMap(buttonStyle)}>Focus me</button>
-        <forge-focus-indicator
-          target="top-layer-btn"
-          .active=${args.active}
-          .inward=${args.inward}
-          .circular=${args.circular}
-          .allowFocus=${args.allowFocus}
-          .focusMode=${args.focusMode}
-          .topLayer=${args.topLayer}>
-        </forge-focus-indicator>
-      </div>
     `;
   }
 };

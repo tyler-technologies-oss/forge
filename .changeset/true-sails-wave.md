@@ -2,4 +2,4 @@
 '@tylertech/forge': minor
 ---
 
-feat(focus-indicator): optionally render in top layer
+feat(focus-indicator): render in top layer
