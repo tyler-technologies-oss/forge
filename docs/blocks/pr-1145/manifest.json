@@ -1,6 +1,25 @@
 {
   "blocks": [
     {
+      "id": "toolbars/toolbar-actions/toolbar-actions",
+      "name": "Toolbar with Button Actions",
+      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
+      "tags": [
+        "toolbar",
+        "buttons",
+        "actions",
+        "form"
+      ],
+      "file": "toolbars/toolbar-actions/toolbar-actions.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-button",
+        "forge-toolbar"
+      ],
+      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
+      "hasScript": false
+    },
+    {
       "id": "toolbars/table-header/table-header",
       "name": "Table Header",
       "description": "Toolbar component designed for table headers, featuring a title in the start slot and action icon buttons for filtering, exporting, and additional options in the end slot",
@@ -18,25 +37,6 @@
         "forge-toolbar"
       ],
       "screenshot": "toolbars/table-header/table-header.webp",
-      "hasScript": false
-    },
-    {
-      "id": "toolbars/toolbar-actions/toolbar-actions",
-      "name": "Toolbar with Button Actions",
-      "description": "Toolbar component with a title and action buttons in the end slot, featuring a text button, tonal button, and raised primary button for common form or dialog actions",
-      "tags": [
-        "toolbar",
-        "buttons",
-        "actions",
-        "form"
-      ],
-      "file": "toolbars/toolbar-actions/toolbar-actions.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-button",
-        "forge-toolbar"
-      ],
-      "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp",
       "hasScript": false
     },
     {
@@ -917,5 +917,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-07-10T13:27:22.375Z"
+  "generatedAt": "2026-07-15T18:42:56.174Z"
 }
