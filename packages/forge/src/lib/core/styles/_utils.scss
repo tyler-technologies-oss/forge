@@ -26,7 +26,10 @@
 /// ```
 ///
 @function module-ref($module, $token, $value, $type: ref, $prefix: config.$prefix) {
-  $fallback: if($type == ref, module-var($module, $value), $value);
+  $fallback: $value;
+  @if $type == ref {
+    $fallback: module-var($module, $value);
+  }
   @return create-var($module, $token, $fallback, $prefix);
 }
 
@@ -131,11 +134,10 @@
   // When the "value" type is specified, we output a global-level CSS custom property override
   // that points to the provided value. This keeps the global cascading of internal tokens intact
   // instead of just overriding the token to a specific unchangeable value.
-  $value: if(
-    $type == 'token' and map.has-key($module-tokens, $token-or-value),
-    module-var($module, $token-or-value),
-    create-var($module, $token, $token-or-value)
-  );
+  $value: create-var($module, $token, $token-or-value);
+  @if $type == 'token' and map.has-key($module-tokens, $token-or-value) {
+    $value: module-var($module, $token-or-value);
+  }
   #{create-module-var($module, $token)}: #{$value};
 }
 
