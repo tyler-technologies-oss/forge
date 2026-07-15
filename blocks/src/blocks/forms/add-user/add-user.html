@@ -11,21 +11,21 @@
     <div slot="body" class="p-medium">
       <form id="add-user-form" class="flex flex-col gap-medium">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-medium">
-          <forge-text-field label-position="block-start">
+          <forge-text-field label-position="block-start" required>
             <label for="first-name">First Name</label>
-            <input type="text" id="first-name" autocomplete="given-name" />
+            <input type="text" id="first-name" autocomplete="given-name" required />
           </forge-text-field>
 
-          <forge-text-field label-position="block-start">
+          <forge-text-field label-position="block-start" required>
             <label for="last-name">Last Name</label>
-            <input type="text" id="last-name" autocomplete="family-name" />
+            <input type="text" id="last-name" autocomplete="family-name" required />
           </forge-text-field>
         </div>
 
-        <forge-text-field label-position="block-start">
+        <forge-text-field label-position="block-start" required>
           <label for="email">Email Address</label>
           <forge-icon slot="leading" name="email"></forge-icon>
-          <input type="email" id="email" autocomplete="email" />
+          <input type="email" id="email" autocomplete="email" required />
         </forge-text-field>
 
         <forge-text-field label-position="block-start">
@@ -36,7 +36,7 @@
         </forge-text-field>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-medium">
-          <forge-select label="Department" label-position="block-start">
+          <forge-select label="Department" label-position="block-start" required>
             <forge-option value="">Select a department</forge-option>
             <forge-option value="engineering">Engineering</forge-option>
             <forge-option value="product">Product</forge-option>
