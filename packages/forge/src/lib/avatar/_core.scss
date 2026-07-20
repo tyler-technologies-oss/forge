@@ -1,3 +1,4 @@
+@use '../core/styles/theme';
 @use '../core/styles/typography';
 @use './token-utils' as *;
 
@@ -34,4 +35,11 @@
 
 @mixin base-with-image() {
   background-color: inherit;
+}
+
+@mixin empty-image() {
+  inline-size: 100%;
+  block-size: 100%;
+  background-color: theme.variable(surface-container-low);
+  fill: theme.variable(surface-container-high);
 }
