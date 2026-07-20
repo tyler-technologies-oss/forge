@@ -2,4 +2,4 @@
 '@tylertech/forge': patch
 ---
 
-fix(calendar-dropdown): remove unallowed aria-selected attribute
+fix(calendar-dropdown): remove disallowed aria-selected attribute
