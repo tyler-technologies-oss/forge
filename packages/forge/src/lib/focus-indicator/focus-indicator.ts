@@ -262,7 +262,7 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
       return;
     }
 
-    const targetRect = this.#targetElement.getBoundingClientRect();
+    const targetRect = this.parentElement?.getBoundingClientRect() ?? this.#targetElement.getBoundingClientRect();
 
     this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-left', `${targetRect.left}px`);
     this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-top', `${targetRect.top}px`);
