@@ -1,0 +1,16 @@
+@use 'sass:map';
+@use '../../../spacing';
+@use '../../../theme';
+@use '../../../utils';
+
+$tokens: (
+  color: utils.module-val(timeline-break, color, theme.variable(outline)),
+  height: utils.module-val(timeline-break, height, 8px),
+  weight: utils.module-val(timeline-break, weight, 2px),
+  margin: utils.module-val(timeline-break, margin, spacing.variable(medium)),
+  smoothing: utils.module-val(timeline-break, smoothing, 1)
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

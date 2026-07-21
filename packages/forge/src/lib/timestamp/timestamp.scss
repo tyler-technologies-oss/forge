@@ -1,0 +1,21 @@
+@use './core';
+
+:host {
+  @include core.host;
+}
+
+.forge-timestamp {
+  @include core.tokens;
+}
+
+.forge-timestamp {
+  @include core.base;
+}
+
+.separator-start::before {
+  @include core.separator-start;
+}
+
+.separator-end::after {
+  @include core.separator-end;
+}
