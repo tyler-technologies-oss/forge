@@ -129,12 +129,14 @@ describe('Avatar', () => {
     expect(el.imageUrl).toBe('');
   });
 
-  it('should have not have any content by default', async () => {
+  it('should render empty image by default', async () => {
     const screen = render(html`<forge-avatar></forge-avatar>`);
     const el = screen.container.querySelector('forge-avatar') as IAvatarComponent;
     await el.updateComplete;
 
-    expect(getDefaultSlotEl(el).textContent).toBe('');
+    const emptyImage = getShadowElement(el, '.empty-image');
+    expect(emptyImage).not.toBeNull();
+    expect(emptyImage?.querySelector('svg')).not.toBeNull();
   });
 
   it('should render slotted content in place of text content', async () => {
@@ -154,6 +156,80 @@ describe('Avatar', () => {
     const defaultSlot = getDefaultSlotEl(el);
 
     expect(defaultSlot.textContent).toBe('SLSWS');
+  });
+
+  it('should render empty image when no text or image url is provided', async () => {
+    const screen = render(html`<forge-avatar></forge-avatar>`);
+    const el = screen.container.querySelector('forge-avatar') as IAvatarComponent;
+    await el.updateComplete;
+
+    const emptyImage = getShadowElement(el, '.empty-image');
+
+    expect(emptyImage).not.toBeNull();
+    expect(emptyImage?.querySelector('svg')).not.toBeNull();
+  });
+
+  it('should not render empty image when text is provided', async () => {
+    const screen = render(html`<forge-avatar text="Tyler Forge"></forge-avatar>`);
+    const el = screen.container.querySelector('forge-avatar') as IAvatarComponent;
+    await el.updateComplete;
+
+    const emptyImage = getShadowElement(el, '.empty-image');
+
+    expect(emptyImage).toBeNull();
+    expect(getDefaultSlotEl(el).textContent).toBe('TF');
+  });
+
+  it('should not render empty image when image url is provided', async () => {
+    const screen = render(html`<forge-avatar image-url="https://cdn.forge.tylertech.com/v1/images/branding/tyler/talking-t-logo.svg"></forge-avatar>`);
+    const el = screen.container.querySelector('forge-avatar') as IAvatarComponent;
+    await el.updateComplete;
+    await task(1800);
+
+    const emptyImage = getShadowElement(el, '.empty-image');
+
+    expect(emptyImage).toBeNull();
+  });
+
+  it('should render empty image when image url fails to load', async () => {
+    const screen = render(html`<forge-avatar image-url="https://httpstat.us/404"></forge-avatar>`);
+    const el = screen.container.querySelector('forge-avatar') as IAvatarComponent;
+    await el.updateComplete;
+    await task(300);
+
+    const emptyImage = getShadowElement(el, '.empty-image');
+
+    expect(emptyImage).not.toBeNull();
+    expect(emptyImage?.querySelector('svg')).not.toBeNull();
+  });
+
+  it('should render text instead of empty image when text is added', async () => {
+    const screen = render(html`<forge-avatar></forge-avatar>`);
+    const el = screen.container.querySelector('forge-avatar') as IAvatarComponent;
+    await el.updateComplete;
+
+    expect(getShadowElement(el, '.empty-image')).not.toBeNull();
+
+    el.text = 'Tyler Forge';
+    await el.updateComplete;
+
+    expect(getShadowElement(el, '.empty-image')).toBeNull();
+    expect(getDefaultSlotEl(el).textContent).toBe('TF');
+  });
+
+  it('should render empty image when text is removed', async () => {
+    const screen = render(html`<forge-avatar text="Tyler Forge"></forge-avatar>`);
+    const el = screen.container.querySelector('forge-avatar') as IAvatarComponent;
+    await el.updateComplete;
+
+    expect(getShadowElement(el, '.empty-image')).toBeNull();
+
+    el.text = '';
+    await el.updateComplete;
+
+    const emptyImage = getShadowElement(el, '.empty-image');
+    expect(emptyImage).not.toBeNull();
+    expect(emptyImage?.querySelector('svg')).not.toBeNull();
   });
 
   function getRootEl(el: IAvatarComponent): HTMLElement {
