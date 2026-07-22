@@ -160,7 +160,7 @@ describe('Tabs', () => {
     expect(ctx.tabs[2].active).toBe(true);
   });
 
-  it.only('should handle empty activeTabName', async () => {
+  it('should handle empty activeTabName', async () => {
     const ctx = await createFixture({ activeTabName: 'second', tabNames: ['first', 'second', 'third'] });
     expect(ctx.tabs[1].active).toBe(true);
     ctx.element.activeTabName = '';
