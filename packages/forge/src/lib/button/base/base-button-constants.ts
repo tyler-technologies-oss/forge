@@ -35,3 +35,4 @@ export type ButtonTarget = '_blank' | '_self' | '_parent' | '_top';
 export interface ButtonClickOptions {
   animateStateLayer?: boolean;
 }
+export type CommandType = 'show-modal' | 'close' | 'request-close' | 'show-popover' | 'hide-popover' | 'toggle-popover' | `--${string}` | '';
