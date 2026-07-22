@@ -1,0 +1,87 @@
+<div class="vert">
+  <section>
+    <h3 class="forge-typography--heading2">Basic Single-Select</h3>
+    <div>
+      <forge-listbox id="basic-single">
+        <forge-option value="1">Option 1</forge-option>
+        <forge-option value="2">Option 2</forge-option>
+        <forge-option value="3">Option 3</forge-option>
+        <forge-option value="4" disabled>Option 4 (Disabled)</forge-option>
+      </forge-listbox>
+      <p>Selected: <span id="basic-single-value">None</span></p>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">Multi-Select</h3>
+    <div>
+      <forge-listbox id="multi-select" multiple>
+        <forge-option value="a">Option A</forge-option>
+        <forge-option value="b">Option B</forge-option>
+        <forge-option value="c">Option C</forge-option>
+        <forge-option value="d">Option D</forge-option>
+      </forge-listbox>
+      <p>Selected: <span id="multi-select-value">None</span></p>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">With Option Groups</h3>
+    <div>
+      <forge-listbox id="grouped">
+        <forge-option-group label="Fruits">
+          <forge-option value="apple">Apple</forge-option>
+          <forge-option value="banana">Banana</forge-option>
+          <forge-option value="orange">Orange</forge-option>
+        </forge-option-group>
+        <forge-option-group label="Vegetables">
+          <forge-option value="carrot">Carrot</forge-option>
+          <forge-option value="lettuce">Lettuce</forge-option>
+          <forge-option value="tomato">Tomato</forge-option>
+        </forge-option-group>
+      </forge-listbox>
+      <p>Selected: <span id="grouped-value">None</span></p>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">Horizontal Orientation</h3>
+    <div>
+      <forge-listbox id="horizontal" orientation="horizontal">
+        <forge-option value="left">Left</forge-option>
+        <forge-option value="center">Center</forge-option>
+        <forge-option value="right">Right</forge-option>
+      </forge-listbox>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">With Icons and Secondary Labels</h3>
+    <div>
+      <forge-listbox id="rich-options">
+        <forge-option value="home" leading-icon="home" secondary-label="Navigate to home">Home</forge-option>
+        <forge-option value="settings" leading-icon="settings" secondary-label="Configure app">Settings</forge-option>
+        <forge-option value="profile" leading-icon="person" secondary-label="View your profile">Profile</forge-option>
+      </forge-listbox>
+    </div>
+  </section>
+</div>
+
+<script type="module" src="listbox.ts"></script>
+<script>
+  // Basic single-select
+  document.getElementById('basic-single').addEventListener('forge-listbox-change', e => {
+    document.getElementById('basic-single-value').textContent = e.detail.value || 'None';
+  });
+
+  // Multi-select
+  document.getElementById('multi-select').addEventListener('forge-listbox-change', e => {
+    const values = e.detail.value || [];
+    document.getElementById('multi-select-value').textContent = values.length ? values.join(', ') : 'None';
+  });
+
+  // Grouped
+  document.getElementById('grouped').addEventListener('forge-listbox-change', e => {
+    document.getElementById('grouped-value').textContent = e.detail.value || 'None';
+  });
+</script>

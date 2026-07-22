@@ -1,0 +1,70 @@
+@use '../../core/styles/theme';
+@use './token-utils' as *;
+
+@mixin base {
+  display: block;
+  padding: token(padding);
+  gap: token(gap);
+  background: token(background);
+  outline: none;
+
+  ::slotted([role='option']) {
+    display: flex;
+    align-items: center;
+    height: token(option-height);
+    padding-inline: token(option-padding-inline);
+    padding-block: token(option-padding-block);
+    border-radius: token(option-shape);
+    cursor: token(option-cursor);
+    color: token(option-color);
+    font-size: token(option-font-size);
+    font-weight: token(option-font-weight);
+    line-height: token(option-line-height);
+
+    &:hover:not([aria-disabled='true']) {
+      background: token(option-background-hover);
+    }
+
+    // Active descendant styling (replaces :focus)
+    &[data-active-descendant='true'] {
+      outline: token(option-outline-width) solid token(option-outline-color);
+      outline-offset: token(option-outline-offset);
+      background: token(option-background-active);
+    }
+
+    &[aria-selected='true'],
+    &[aria-checked='true'] {
+      background: token(option-background-selected);
+      color: token(option-color-selected);
+    }
+
+    &[aria-disabled='true'] {
+      opacity: token(option-opacity-disabled);
+      cursor: not-allowed;
+    }
+  }
+
+  ::slotted([role='group']) {
+    &::before {
+      content: attr(aria-label);
+      display: block;
+      color: token(group-label-color);
+      font-size: token(group-label-font-size);
+      font-weight: token(group-label-font-weight);
+      padding-block-start: token(group-label-padding-block-start);
+      padding-inline: token(group-label-padding-inline);
+    }
+
+    margin-block-start: token(group-margin-block-start);
+  }
+
+  &.forge-listbox--horizontal {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &.forge-listbox--disabled {
+    opacity: token(option-opacity-disabled);
+    pointer-events: none;
+  }
+}

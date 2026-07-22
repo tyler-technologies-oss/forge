@@ -40,6 +40,15 @@ export interface IFocusGroupConfig {
    * defaults to the first element matching the selector.
    */
   getEntryElement?: FocusGroupGetEntryElementCallback;
+
+  /**
+   * Use aria-activedescendant pattern instead of roving tabindex.
+   * When enabled, focus remains on the root element and aria-activedescendant
+   * points to the active child element. Child elements receive a data-active-descendant
+   * attribute for styling instead of actual focus.
+   * @default false
+   */
+  useActiveDescendant?: boolean;
 }
 
 /**
@@ -67,7 +76,9 @@ export class BaseFocusGroup {
     if (elements.includes(element)) {
       this.#lastFocusedElement = element;
 
-      if (this.#hasFocus(elements)) {
+      if (this.#useActiveDescendant) {
+        this.#updateActiveDescendant(element, elements);
+      } else if (this.#hasFocus(elements)) {
         element.focus();
       }
     }
@@ -80,6 +91,7 @@ export class BaseFocusGroup {
 
   #rootElement?: HTMLElement;
   #selector = '';
+  #useActiveDescendant = false;
   #onFocusChange: FocusGroupFocusChangeCallback | undefined;
   #getEntryElement: FocusGroupGetEntryElementCallback = () => this.#elements[0] ?? null;
   #lastFocusedElement: HTMLElement | null = null;
@@ -109,9 +121,15 @@ export class BaseFocusGroup {
     this.#selector = config.selector;
     this.orientation = config.orientation ?? 'horizontal';
     this.wrap = config.wrap ?? false;
+    this.#useActiveDescendant = config.useActiveDescendant ?? false;
     this.#onFocusChange = config.onFocusChange;
     this.#getEntryElement = config.getEntryElement ?? (() => this.#elements[0] ?? null);
     this.#isInitialized = true;
+
+    // Set tabindex on root element if using active descendant
+    if (this.#useActiveDescendant && this.#rootElement.tabIndex === -1) {
+      this.#rootElement.tabIndex = 0;
+    }
   }
 
   public connect(): void {
@@ -230,6 +248,17 @@ export class BaseFocusGroup {
     }
 
     const target = evt.target as HTMLElement;
+
+    // In activeDescendant mode, focus stays on root
+    if (this.#useActiveDescendant) {
+      // If focus enters root and no active element, set first as active
+      if (target === this.#rootElement && !this.#lastFocusedElement) {
+        this.focusFirst();
+      }
+      return;
+    }
+
+    // Original roving tabindex logic
     const elements = this.#elements;
 
     if (elements.includes(target)) {
@@ -303,7 +332,15 @@ export class BaseFocusGroup {
       return;
     }
     const element = elements[index];
-    element.focus(options);
+    this.#lastFocusedElement = element;
+
+    if (this.#useActiveDescendant) {
+      this.#updateActiveDescendant(element, elements);
+      // Call focus change callback
+      this.#onFocusChange?.(new FocusEvent('focus'), element);
+    } else {
+      element.focus(options);
+    }
   }
 
   #shouldHandleKey(key: string): boolean {
@@ -353,12 +390,46 @@ export class BaseFocusGroup {
   }
 
   #updateTabIndices(elements?: HTMLElement[]): void {
+    if (this.#useActiveDescendant) {
+      // Don't set tabindex on child elements when using active descendant
+      return;
+    }
+
     elements = elements || this.#elements;
     const entryElement = this.#entryElement;
 
     elements.forEach(element => {
       element.tabIndex = element === entryElement ? 0 : -1;
     });
+  }
+
+  #updateActiveDescendant(element: HTMLElement, elements: HTMLElement[]): void {
+    if (!this.#rootElement) {
+      return;
+    }
+
+    // Ensure element has an ID
+    if (!element.id) {
+      const safeSelector = this.#selector.replace(/[^a-z0-9-]/gi, '-');
+      const index = elements.indexOf(element);
+      element.id = `${safeSelector}-${index}`;
+    }
+
+    // Update aria-activedescendant on root element
+    this.#rootElement.setAttribute('aria-activedescendant', element.id);
+
+    // Clear previous active descendant marker
+    this.#clearActiveDescendantAttributes(elements);
+
+    // Add data attribute for styling
+    element.setAttribute('data-active-descendant', 'true');
+
+    // Scroll into view
+    element.scrollIntoView({ block: 'nearest' });
+  }
+
+  #clearActiveDescendantAttributes(elements: HTMLElement[]): void {
+    elements.forEach(el => el.removeAttribute('data-active-descendant'));
   }
 }
 
