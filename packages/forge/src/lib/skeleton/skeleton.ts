@@ -1,30 +1,26 @@
-import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { customElement, property } from 'lit/decorators.js';
+import { html, TemplateResult, unsafeCSS } from 'lit';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { SKELETON_CONSTANTS } from './skeleton-constants.js';
 
-import template from './skeleton.html';
 import styles from './skeleton.scss';
 
-export interface ISkeletonComponent extends IBaseComponent {}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-skeleton': ISkeletonComponent;
-  }
+/** @deprecated - This will be removed in the future. Please switch to using SkeletonComponent. */
+export interface ISkeletonComponent extends BaseLitElement {
+  formField: boolean;
+  button: boolean;
+  chip: boolean;
+  listItem: boolean;
+  text: boolean;
+  avatar: boolean;
+  stretch: boolean;
 }
 
 /**
  * @tag forge-skeleton
  *
  * @summary Skeletons are used to provide a placeholder for content that is loading. They have various styles to represent different types of content.
- *
- * @attribute {string} form-field - Apply form field styles to the skeleton.
- * @attribute {string} button - Apply button styles to the skeleton.
- * @attribute {string} chip - Apply chip styles to the skeleton.
- * @attribute {string} list-item - Apply list item styles to the skeleton.
- * @attribute {string} text - Apply text styles to the skeleton.
- * @attribute {string} avatar - Apply avatar styles to the skeleton.
- * @attribute {string} stretch - Apply stretch styles to the skeleton.
  *
  * @cssproperty --forge-skeleton-animation-duration - The duration of the skeleton animation.
  * @cssproperty --forge-skeleton-width - The width of the skeleton.
@@ -56,12 +52,76 @@ declare global {
  * @cssclass forge-skeleton--button - The button skeleton element.
  * @cssclass forge-skeleton--form-field - The form field skeleton element.
  */
-@customElement({
-  name: SKELETON_CONSTANTS.elementName
-})
-export class SkeletonComponent extends BaseComponent implements ISkeletonComponent {
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
+@customElement(SKELETON_CONSTANTS.elementName)
+export class SkeletonComponent extends BaseLitElement implements ISkeletonComponent {
+  public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = SKELETON_CONSTANTS.elementName;
+
+  /**
+   * Applies form field styles to the skeleton.
+   * @default false
+   * @attribute form-field
+   */
+  @property({ type: Boolean, reflect: true, attribute: 'form-field' })
+  public formField = false;
+
+  /**
+   * Applies button styles to the skeleton.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public button = false;
+
+  /**
+   * Applies chip styles to the skeleton.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public chip = false;
+
+  /**
+   * Applies list item styles to the skeleton.
+   * @default false
+   * @attribute list-item
+   */
+  @property({ type: Boolean, reflect: true, attribute: 'list-item' })
+  public listItem = false;
+
+  /**
+   * Applies text styles to the skeleton.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public text = false;
+
+  /**
+   * Applies avatar styles to the skeleton.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public avatar = false;
+
+  /**
+   * Applies stretch styles to the skeleton.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public stretch = false;
+
+  public render(): TemplateResult {
+    return html`<div class="forge-skeleton" part="root"></div>`;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-skeleton': ISkeletonComponent;
   }
 }
