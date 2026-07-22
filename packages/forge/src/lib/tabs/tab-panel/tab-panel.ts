@@ -1,0 +1,346 @@
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, randomChars } from '@tylertech/forge-core';
+import { html, type PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { COMPONENT_NAME_PREFIX } from '../../constants.js';
+import { BaseLitElement } from '../../core/base/base-lit-element.js';
+import { setDefaultAria } from '../../core/utils/a11y-utils.js';
+import { toggleState } from '../../core/utils/utils.js';
+import { TAB_CONSTANTS } from '../tab/tab-constants.js';
+import type { TabComponent } from '../tab/tab.js';
+import { FocusIndicatorComponent } from '../../focus-indicator/index.js';
+
+import styles from './tab-panel.scss';
+
+export const TAB_PANEL_TAG_NAME: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tab-panel`;
+
+export type TabPanelFocusStrategy = 'auto' | 'off';
+
+/**
+ * @tag forge-tab-panel
+ *
+ * @summary A component that displays content associated with a specific tab.
+ *
+ * @description
+ * The tab panel component displays content that is associated with a specific tab. It handles
+ * toggling its visibility based on the active state of the associated tab and manages ARIA
+ * relationships for accessibility.
+ *
+ * @dependency forge-focus-indicator
+ *
+ * @slot - Default slot for the tab panel content.
+ *
+ * @csspart focus-indicator - The focus indicator element.
+ *
+ * @state open - Indicates that the tab panel is visible.
+ *
+ * @fires {BeforeToggleEvent} beforetoggle - Dispatched before the tab panel opens or closes. This event is cancelable.
+ * @fires {ToggleEvent} toggle - Dispatched when the tab panel opens or closes.
+ */
+@customElement(TAB_PANEL_TAG_NAME)
+export class TabPanelComponent extends BaseLitElement {
+  public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = TAB_PANEL_TAG_NAME;
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [FocusIndicatorComponent];
+
+  #internals: ElementInternals;
+
+  /**
+   * The ID of the tab that controls this tab panel.
+   * @default ''
+   * @attribute
+   */
+  @property()
+  public for = '';
+
+  /**
+   * A reference to the associated tab element. This is typically set automatically based on the
+   * `for` property, but can also be set directly for more dynamic use cases.
+   * @default null
+   */
+  @property({ attribute: false })
+  public forElement: TabComponent | null = null;
+
+  /**
+   * Whether the tab panel is open (visible). This is typically controlled by the associated tab,
+   * but can also be set directly.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean })
+  public open = false;
+
+  /**
+   * Controls how focus is managed when the tab panel is opened. When set to 'auto' focus is set to
+   * the panel. Set to 'off' to disable focus management.
+   * @default 'auto'
+   * @attribute focus-on-open
+   */
+  @property({ attribute: 'focus-on-open' })
+  public focusOnOpen: TabPanelFocusStrategy = 'auto';
+
+  #abortController: AbortController | null = null;
+  #tabObserver: MutationObserver | null = null;
+
+  constructor() {
+    super();
+    this.#internals = this.attachInternals();
+  }
+
+  public connectedCallback(): void {
+    super.connectedCallback();
+    setDefaultAria(this, this.#internals, {
+      role: 'tabpanel'
+    });
+    this.tabIndex = -1;
+    this.#connectToTab(this.forElement);
+  }
+
+  public disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.#disconnectFromTab(this.forElement);
+  }
+
+  public willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('for')) {
+      this.forElement = this.#getTabById(this.for);
+    }
+
+    if (changedProperties.has('forElement')) {
+      this.#disconnectFromTab(changedProperties.get('forElement') ?? null);
+      this.#connectToTab(this.forElement);
+    }
+  }
+
+  public updated(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('open')) {
+      toggleState(this.#internals, 'open', this.open);
+    }
+  }
+
+  public render(): TemplateResult {
+    return html`
+      <slot></slot>
+      <forge-focus-indicator target=":host" part="focus-indicator"></forge-focus-indicator>
+    `;
+  }
+
+  #getTabById(id: string): TabComponent | null {
+    if (!id || !this.isConnected) {
+      return null;
+    }
+
+    const rootNode = this.getRootNode() as Document | ShadowRoot;
+    const element = rootNode.getElementById(id);
+
+    if (!element) {
+      return null;
+    }
+
+    if (element instanceof HTMLElement && element.tagName.toLowerCase() === TAB_CONSTANTS.elementName) {
+      return element as TabComponent;
+    }
+
+    console.warn(`[forge-tab-panel] Element with id "${id}" is not a <forge-tab> and cannot be associated with the tab panel.`, { elementId: id, element });
+    return null;
+  }
+
+  async #connectToTab(tab: TabComponent | null): Promise<void> {
+    if (!tab) {
+      this.open = false;
+      this.#watchForTabConnected();
+      return;
+    }
+
+    this.#setupAriaRelationships(tab);
+
+    await tab.updateComplete;
+    this.open = tab.active;
+    toggleState(this.#internals, 'open', this.open);
+
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+    tab.addEventListener('forge-tab-request-sync', this.#handleSync, { signal: this.#abortController.signal });
+
+    this.#startTabObserver(tab);
+  }
+
+  #disconnectFromTab(tab: TabComponent | null): void {
+    this.#stopTabObserver();
+
+    if (this.#abortController) {
+      this.#abortController.abort();
+      this.#abortController = null;
+    }
+
+    this.#clearAriaRelationships(tab);
+    if (this.forElement === tab) {
+      this.forElement = null;
+    }
+  }
+
+  #startTabObserver(tab: TabComponent | null): void {
+    if (!tab) {
+      return;
+    }
+
+    this.#tabObserver = new MutationObserver(() => {
+      if (tab && !tab.isConnected) {
+        this.#handleTabDisconnected(tab);
+      }
+    });
+
+    const parent = tab.parentElement;
+    if (parent) {
+      this.#tabObserver.observe(parent, {
+        childList: true,
+        subtree: false
+      });
+    }
+  }
+
+  #stopTabObserver(): void {
+    if (this.#tabObserver) {
+      this.#tabObserver.disconnect();
+      this.#tabObserver = null;
+    }
+  }
+
+  #handleTabDisconnected(tab: TabComponent | null): void {
+    this.#stopTabObserver();
+    this.#disconnectFromTab(tab);
+    this.open = false;
+    this.#watchForTabConnected();
+  }
+
+  #watchForTabConnected(): void {
+    if (this.#abortController) {
+      return;
+    }
+
+    this.#abortController = new AbortController();
+    window.addEventListener('forge-tab-connected', this.#handleTabConnected, { signal: this.#abortController.signal });
+  }
+
+  #setupAriaRelationships(tab: TabComponent | null): void {
+    if (!tab) {
+      return;
+    }
+
+    if ('ariaControlsElements' in tab) {
+      tab.ariaControlsElements = [this];
+    } else {
+      this.id ||= `forge-tab-panel-${randomChars()}`;
+      (tab as HTMLElement).setAttribute('aria-controls', this.id);
+    }
+
+    if ('ariaLabelledByElements' in this.#internals) {
+      this.#internals.ariaLabelledByElements = [tab];
+    } else {
+      tab.id ||= `forge-tab-${randomChars()}`;
+      this.setAttribute('aria-labelledby', tab.id);
+    }
+  }
+
+  #clearAriaRelationships(tab: TabComponent | null): void {
+    if (!tab) {
+      return;
+    }
+
+    if ('ariaControlsElements' in tab) {
+      tab.ariaControlsElements = null;
+    } else {
+      const ariaControls = (tab as HTMLElement).getAttribute('aria-controls');
+      if (ariaControls && ariaControls === this.id) {
+        (tab as HTMLElement).removeAttribute('aria-controls');
+      }
+    }
+
+    if ('ariaLabelledByElements' in this.#internals) {
+      this.#internals.ariaLabelledByElements = null;
+    } else {
+      const ariaLabelledBy = this.getAttribute('aria-labelledby');
+      if (ariaLabelledBy && ariaLabelledBy === tab.id) {
+        this.removeAttribute('aria-labelledby');
+      }
+    }
+  }
+
+  #handleSync: EventListener = evt => {
+    if (!this.forElement || evt.target !== this.forElement) {
+      return;
+    }
+
+    const shouldOpen = this.forElement.active;
+    if (shouldOpen === this.open) {
+      return;
+    }
+
+    const beforeToggleEvent = this.#dispatchBeforeToggleEvent(shouldOpen);
+    if (beforeToggleEvent.defaultPrevented) {
+      evt.preventDefault();
+      this.forElement.active = !shouldOpen;
+      return;
+    }
+
+    this.open = shouldOpen;
+    this.#dispatchToggleEvent(shouldOpen);
+
+    if (this.open && this.focusOnOpen === 'auto' && this.forElement.matches(':focus')) {
+      this.forElement.updateComplete.then(() => this.focus());
+    }
+  };
+
+  #handleTabConnected: EventListener = event => {
+    // Ignore events if this panel is no longer connected to the DOM
+    if (!this.isConnected) {
+      return;
+    }
+
+    const customEvent = event as CustomEvent<TabComponent>;
+    const element = customEvent.detail;
+
+    if (!element || element.getRootNode() !== this.getRootNode()) {
+      return;
+    }
+    const id = element.id;
+
+    if (this.forElement && this.forElement === element) {
+      this.#connectToTab(element);
+    } else if (!this.forElement && this.for && id === this.for) {
+      this.forElement = element;
+    }
+  };
+
+  #dispatchBeforeToggleEvent(willOpen: boolean): ToggleEvent {
+    const event = new ToggleEvent('beforetoggle', {
+      oldState: this.open ? 'open' : 'closed',
+      newState: willOpen ? 'open' : 'closed',
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    });
+    this.dispatchEvent(event);
+    return event;
+  }
+
+  #dispatchToggleEvent(didOpen: boolean): void {
+    this.dispatchEvent(
+      new ToggleEvent('toggle', {
+        oldState: didOpen ? 'closed' : 'open',
+        newState: this.open ? 'open' : 'closed',
+        bubbles: true,
+        composed: true
+      })
+    );
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-tab-panel': TabPanelComponent;
+  }
+}

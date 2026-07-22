@@ -259,6 +259,15 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
       role: 'tab'
     });
     this.tabIndex = -1;
+
+    // Dispatch registration event for tab panels waiting to connect
+    window.dispatchEvent(
+      new CustomEvent('forge-tab-connected', {
+        detail: this,
+        bubbles: false,
+        composed: false
+      })
+    );
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
@@ -369,5 +378,9 @@ declare global {
     'forge-tab-menu': Event;
     'forge-tab-request-sync': Event;
     'forge-tab-select': CustomEvent<void>;
+  }
+
+  interface WindowEventMap {
+    'forge-tab-connected': CustomEvent<TabComponent>;
   }
 }
