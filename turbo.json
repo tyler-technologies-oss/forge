@@ -6,6 +6,7 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", "esm/**", "custom-elements.json"],
+      "env": ["BASE_HREF"],
       "cache": false
     },
     "lint": {

@@ -1,0 +1,54 @@
+<!--
+  @block Basic Application Layout
+  @description Standard application shell featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text
+  @tags layout, application, shell, app-bar, navigation, drawer, user-profile, footer, responsive-grid
+-->
+
+<forge-app-layout app-title="My Application" app-title-href="/">
+  <!-- App bar logo -->
+  <forge-icon slot="app-bar-logo" name="home"></forge-icon>
+
+  <!-- App bar end actions -->
+  <div slot="app-bar-end" class="flex items-center gap-xsmall">
+    <forge-icon-button density="medium" aria-label="Notifications" theme="app-bar">
+      <forge-icon name="notifications" external></forge-icon>
+    </forge-icon-button>
+
+    <forge-user-profile
+      email="tyler.tech@tylertech.com"
+      button-label="Open the incredibly awesome profile menu"
+      theme-toggle
+      image-url
+      full-name="Tyler tech"
+      slot="app-bar-end">
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="settings" external></forge-icon>
+        <a href="http://www.google.com" target="_blank">Settings</a>
+      </forge-profile-link>
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="account" external></forge-icon>
+        <a href="http://www.google.com" target="_blank">Profile</a>
+      </forge-profile-link>
+      <span slot="sign-in-button-text">Sign in</span>
+      <span slot="sign-out-button-text">Sign Out</span>
+    </forge-user-profile>
+  </div>
+
+  <!-- Navigation drawer content -->
+  {{> app-nav}}
+
+  <!-- Body header toolbar -->
+  <div slot="body-header">{{> page-title title="Page title"}}</div>
+
+  <!-- Main content -->
+  <main class="p-medium grid bg-surface-dim" slot="body">
+    <div class="striped-box"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer slot="body-footer">
+    <forge-toolbar inverted>
+      <div slot="center" class="text-body1">© 2026 My Application. All rights reserved.</div>
+    </forge-toolbar>
+  </footer>
+</forge-app-layout>

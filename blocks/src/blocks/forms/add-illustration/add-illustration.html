@@ -1,0 +1,150 @@
+<!--
+  @block Add Illustration Form
+  @description Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files
+  @tags form, card, centered, decorative-background, chip-field, file-picker, create, scaffold, toolbar
+-->
+<body class="relative flex min-h-screen items-center justify-center overflow-hidden bg-surface-dim p-8">
+  <!-- Abstract Background Illustrations -->
+  <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <!-- Gradient blob top-left -->
+    <svg class="absolute top-[-10%] left-[-5%] w-[45%] max-w-125" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color: var(--forge-theme-primary); stop-opacity: 0.15" />
+          <stop offset="100%" style="stop-color: var(--forge-theme-tertiary); stop-opacity: 0.05" />
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#grad1)"
+        d="M44.7,-76.4C58.8,-69.2,71.8,-58.1,79.6,-44.1C87.4,-30.1,90,-13.2,88.5,3.1C87,19.4,81.4,35,71.8,47.7C62.2,60.4,48.6,70.2,33.7,76.4C18.8,82.6,2.6,85.2,-13.7,83.4C-30,81.6,-46.4,75.4,-58.5,64.5C-70.6,53.6,-78.4,38,-82.7,21.4C-87,4.8,-87.8,-12.8,-82.4,-28.1C-77,-43.4,-65.4,-56.4,-51.3,-63.6C-37.2,-70.8,-20.6,-72.2,-2.7,-68.1C15.2,-64,30.6,-83.6,44.7,-76.4Z"
+        transform="translate(100 100)" />
+    </svg>
+
+    <!-- Geometric circles -->
+    <svg class="absolute bottom-[15%] left-[5%] w-[15%] max-w-45" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="45" fill="none" stroke="var(--forge-theme-primary)" stroke-width="0.5" opacity="0.2" />
+      <circle cx="50" cy="50" r="35" fill="none" stroke="var(--forge-theme-secondary)" stroke-width="0.5" opacity="0.15" />
+      <circle cx="50" cy="50" r="25" fill="none" stroke="var(--forge-theme-tertiary)" stroke-width="0.5" opacity="0.1" />
+    </svg>
+
+    <!-- Gradient blob bottom-right -->
+    <svg class="absolute right-[-10%] bottom-[-15%] w-[50%] max-w-137.5" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color: var(--forge-theme-secondary); stop-opacity: 0.1" />
+          <stop offset="100%" style="stop-color: var(--forge-theme-primary); stop-opacity: 0.05" />
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#grad2)"
+        d="M39.9,-65.1C52.4,-60.3,63.5,-50.4,71.2,-37.9C78.9,-25.4,83.2,-10.3,81.6,4C80,18.3,72.5,31.8,62.9,43.5C53.3,55.2,41.6,65.1,28,71.1C14.4,77.1,-1.1,79.2,-16.5,77.1C-31.9,75,-47.2,68.7,-58.4,58C-69.6,47.3,-76.7,32.2,-79.8,16.1C-82.9,0,-82,-17.1,-75.7,-31.2C-69.4,-45.3,-57.7,-56.4,-44.3,-60.8C-30.9,-65.2,-15.5,-62.9,-0.4,-62.2C14.7,-61.5,27.4,-69.9,39.9,-65.1Z"
+        transform="translate(100 100)" />
+    </svg>
+
+    <!-- Dotted grid pattern -->
+    <svg
+      class="absolute top-1/2 left-1/2 w-[60%] max-w-150 -translate-x-1/2 -translate-y-1/2 opacity-40"
+      viewBox="0 0 100 100"
+      xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dotPattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+          <circle cx="5" cy="5" r="1" fill="var(--forge-theme-primary)" opacity="0.1" />
+        </pattern>
+      </defs>
+      <rect width="100" height="100" fill="url(#dotPattern)" />
+    </svg>
+
+    <!-- Abstract lines -->
+    <svg class="absolute top-0 right-0 w-[30%] max-w-75 -rotate-10" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="0" x2="200" y2="200" stroke="var(--forge-theme-tertiary)" stroke-width="0.5" opacity="0.15" />
+      <line x1="20" y1="0" x2="200" y2="180" stroke="var(--forge-theme-primary)" stroke-width="0.5" opacity="0.1" />
+      <line x1="40" y1="0" x2="200" y2="160" stroke="var(--forge-theme-secondary)" stroke-width="0.5" opacity="0.08" />
+      <line x1="60" y1="0" x2="200" y2="140" stroke="var(--forge-theme-tertiary)" stroke-width="0.5" opacity="0.06" />
+    </svg>
+
+    <!-- Floating geometric shapes -->
+    <svg class="absolute top-[25%] left-[10%] w-[8%] max-w-20" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect
+        x="20"
+        y="20"
+        width="25"
+        height="25"
+        fill="none"
+        stroke="var(--forge-theme-primary)"
+        stroke-width="1"
+        opacity="0.12"
+        rx="4"
+        transform="rotate(15 32.5 32.5)" />
+    </svg>
+
+    <svg class="absolute right-[8%] bottom-[25%] w-[10%] max-w-25" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="50,15 90,85 10,85" fill="none" stroke="var(--forge-theme-secondary)" stroke-width="1" opacity="0.1" />
+    </svg>
+
+    <!-- Small accent blob -->
+    <svg class="absolute top-[10%] right-[15%] w-[20%] max-w-50" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="grad3" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" style="stop-color: var(--forge-theme-tertiary); stop-opacity: 0.12" />
+          <stop offset="100%" style="stop-color: var(--forge-theme-tertiary); stop-opacity: 0" />
+        </radialGradient>
+      </defs>
+      <circle cx="100" cy="100" r="80" fill="url(#grad3)" />
+    </svg>
+  </div>
+
+  <forge-card class="relative z-10 w-full max-w-140" no-padding>
+    <forge-scaffold>
+      {{> simple-toolbar slot="header" title="Add Illustration"}}
+
+      <div slot="body" class="p-medium">
+        <form id="add-illustration-form" class="flex flex-col gap-medium">
+          <!-- Name Field -->
+          <forge-text-field label-position="block-start">
+            <label for="illustration-name">Name</label>
+            <input type="text" id="illustration-name" />
+          </forge-text-field>
+
+          <!-- Description Field -->
+          <forge-text-field label-position="block-start">
+            <label for="illustration-description">Description</label>
+            <textarea id="illustration-description" rows="3"></textarea>
+          </forge-text-field>
+
+          <!-- Keywords Field -->
+          <forge-chip-field label-position="block-start" add-on-blur>
+            <label slot="label" for="illustration-keywords">Keywords</label>
+            <forge-chip slot="member" type="input" value="nature" dense>nature</forge-chip>
+            <forge-chip slot="member" type="input" value="landscape" dense>landscape</forge-chip>
+            <input type="text" id="illustration-keywords" autocomplete="off" />
+            <span slot="support-text">Add keywords to help others find this illustration</span>
+          </forge-chip-field>
+
+          <!-- File Upload -->
+          <div class="flex flex-col gap-2">
+            <span class="text-label2 text-high">Illustration File</span>
+            <forge-file-picker accept=".svg,.png,.jpg,.jpeg,.webp">
+              <span slot="primary">Drag your illustration here or</span>
+              <span slot="secondary">SVG, PNG, JPG, or WebP up to 10MB</span>
+              <forge-button variant="outlined">
+                <forge-icon name="upload" slot="start" external></forge-icon>
+                Select File
+              </forge-button>
+              <span slot="helper-text">Recommended: SVG format for best quality</span>
+            </forge-file-picker>
+          </div>
+        </form>
+      </div>
+
+      <forge-toolbar slot="footer" inverted>
+        <div slot="end" class="flex items-center gap-small">
+          <forge-button variant="outlined">Cancel</forge-button>
+          <forge-button variant="raised" type="submit" form="add-illustration-form">
+            <forge-icon name="check" slot="start" external></forge-icon>
+            Add to Library
+          </forge-button>
+        </div>
+      </forge-toolbar>
+    </forge-scaffold>
+  </forge-card>
+</body>
