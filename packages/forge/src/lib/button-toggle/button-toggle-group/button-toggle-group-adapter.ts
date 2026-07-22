@@ -43,7 +43,7 @@ export class ButtonToggleGroupAdapter extends BaseAdapter<IButtonToggleGroupComp
   }
 
   public removeSlotChangeListener(listener: EventListener): void {
-    this._defaultSlotElement.addEventListener('slotchange', listener);
+    this._defaultSlotElement.removeEventListener('slotchange', listener);
   }
 
   public deselect(selectedToggle: IButtonToggleComponent): void {

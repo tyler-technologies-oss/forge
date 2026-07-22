@@ -31,6 +31,10 @@ export class ChipFieldCore extends BaseFieldCore<IChipFieldAdapter> implements I
 
   public initialize(): void {
     this._adapter.initialize();
+
+    // Initialize has-members class for pre-slotted chips
+    this._adapter.toggleContainerClass(CHIP_FIELD_CONSTANTS.classes.HAS_MEMBERS, this._adapter.getSlottedMemberElements().length > 0);
+
     this._adapter.addRootListener('mousedown', this._mouseDownListener, { capture: true });
     this._adapter.addRootListener('click', this._clickListener);
     this._adapter.addRootListener('keydown', this._rootKeyDownListener);

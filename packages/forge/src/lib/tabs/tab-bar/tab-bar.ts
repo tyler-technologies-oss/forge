@@ -118,17 +118,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    * @attribute active-tab
    */
   @property({ type: Number, reflect: true, attribute: 'active-tab' })
-  public set activeTab(value: number | null | undefined) {
-    // Don't handle an undefined value on the first update to avoid accidentally overriding an
-    // active tab set on the tab element
-    if (this.hasUpdated || isDefined(value)) {
-      this.#activateTabByIndex(value ?? undefined);
-    }
-  }
-  public get activeTab(): number | null | undefined {
-    const index = this._tabs.findIndex(t => t === this._activeTabElement);
-    return index >= 0 ? index : undefined;
-  }
+  public activeTab: number | null | undefined = undefined;
 
   /**
    * The name of the active tab.
@@ -136,16 +126,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    * @attribute active-tab-name
    */
   @property({ attribute: 'active-tab-name' })
-  public set activeTabName(value: string) {
-    // Don't handle an empty name on the first update to avoid accidentally overriding an active tab
-    // set by index
-    if (this.hasUpdated || value) {
-      this.#activateTabByName(value);
-    }
-  }
-  public get activeTabName(): string {
-    return this._activeTabElement?.name ?? '';
-  }
+  public activeTabName = '';
 
   /**
    * Controls whether the tab bar is vertical or horizontal.
@@ -279,6 +260,16 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       toggleState(this.#internals, 'vertical', this.vertical);
       setDefaultAria(this, this.#internals, { ariaOrientation: this.vertical ? 'vertical' : null });
       this.#focusGroupRef.orientation = this.vertical ? 'vertical' : 'horizontal';
+    }
+
+    /*
+     * Set the active tab by either name or index (name takes precedence), ignoring empty initial
+     * values avoid overriding an active tab set by other means.
+     */
+    if (changedProperties.has('activeTabName') && (this.hasUpdated || this.activeTabName)) {
+      this.#activateTabByName(this.activeTabName);
+    } else if (changedProperties.has('activeTab') && (this.hasUpdated || isDefined(this.activeTab))) {
+      this.#activateTabByIndex(this.activeTab ?? undefined);
     }
   }
 
@@ -603,7 +594,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       return;
     }
 
-    if (!name) {
+    if (!name && this.hasUpdated) {
       this._activeTabElement = null;
       return this.#syncActiveTab();
     }
