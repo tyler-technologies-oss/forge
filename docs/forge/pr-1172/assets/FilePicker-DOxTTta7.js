@@ -1,0 +1,15 @@
+import{u as n,j as e,M as r,T as s,C as a}from"./blocks-v1VsG6Mf.js";import{C as l}from"./CustomArgTypes-BmlZfEWI.js";import{F as p,D as m}from"./FilePicker.stories-MaAGYXN9.js";import"./preload-helper-PPVm8Dsz.js";import"./_commonjsHelpers-CqkleIqs.js";import"./iframe-ZvzVysMB.js";import"./utils-D5x2rMta.js";import"./service-adapter-8tADcN_b.js";import"./file-picker-DY9QYq4S.js";import"./base-component-DdGiO9ZD.js";import"./utils-CjYv_z18.js";import"./dom-utils-D0uG6d5z.js";import"./base-adapter-CbRstNNQ.js";import"./button-B8ecmhvI.js";import"./base-lit-element-DBqzFQp-.js";import"./directive-CwRn8Fwj.js";import"./focus-indicator-D_djYoC-.js";import"./utils-DU-9AqTO.js";import"./tyler-icons-H8C0T-24.js";import"./constants-scFqwPpP.js";import"./feature-detection-CvbR5w2Z.js";import"./state-layer-BjPyszbg.js";import"./base-button-kNlZFYOj.js";import"./state-QDHUUBut.js";import"./base-DVmwUFg0.js";import"./query-assigned-elements-43hYArgI.js";import"./a11y-utils-BtLz16ul.js";import"./class-map-DS_zoLL-.js";import"./key-action-lsAysfb-.js";import"./index-5CPwzmQS.js";import"./style-map-BYFhBNXo.js";function i(o){const t={code:"code",h2:"h2",li:"li",p:"p",ul:"ul",...n(),...o.components};return e.jsxs(e.Fragment,{children:[e.jsx(r,{of:p}),`
+`,e.jsx(s,{}),`
+`,e.jsx(t.p,{children:`The file picker component allows for a user to upload files of their own to the system. The component provides a slot for a button, as well as drag-and-drop functionality to
+launch the system file chooser dialog. There are visual queues to let the user know when files they are dragging can be dropped, as well as events that are relayed to the
+developer to handle files that are legal and/or illegal based on the parameters set on the component.`}),`
+`,e.jsx(t.p,{children:"The expectation of this component is that it will be used as a familiar element on the page that will let users upload files, while providing that visual and functional consistency."}),`
+`,e.jsx(a,{of:m}),`
+`,e.jsx(t.h2,{id:"api",children:"API"}),`
+`,e.jsx(l,{}),`
+`,e.jsx(t.h2,{id:"accessibility",children:"Accessibility"}),`
+`,e.jsxs(t.ul,{children:[`
+`,e.jsx(t.li,{children:"The file-picker button should have text or a label that accurately describes the action of the button."}),`
+`,e.jsx(t.li,{children:"After the system file picker dialog closes, focus should remain on the element that triggered the action."}),`
+`,e.jsxs(t.li,{children:['Always use type="button" on the ',e.jsx(t.code,{children:"<button>"})," element to ensure that any parent forms are not submitted when clicking the button."]}),`
+`]})]})}function H(o={}){const{wrapper:t}={...n(),...o.components};return t?e.jsx(t,{...o,children:e.jsx(i,{...o})}):i(o)}export{H as default};
