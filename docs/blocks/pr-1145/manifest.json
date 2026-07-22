@@ -348,35 +348,6 @@
       "hasScript": true
     },
     {
-      "id": "forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
-      "tags": [
-        "authentication",
-        "login",
-        "form",
-        "card",
-        "centered",
-        "scaffold",
-        "toolbar"
-      ],
-      "file": "forms/login/login.html",
-      "category": "Forms",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-checkbox",
-        "forge-divider",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-text-field",
-        "forge-toolbar"
-      ],
-      "screenshot": "forms/login/login.webp",
-      "hasScript": false
-    },
-    {
       "id": "forms/complex-form-with-grouped-sections/complex-form-with-grouped-sections",
       "name": "Complex Form with Grouped Sections",
       "description": "Responsive form divided into logically grouped sections (project details, timeline, team, location, settings, notifications) using a 6-column grid system that adapts to mobile, featuring various column spans for flexible one, two, and three column field arrangements that stack on smaller screens",
@@ -417,6 +388,35 @@
         "forge-toolbar"
       ],
       "screenshot": "forms/complex-form-with-grouped-sections/complex-form-with-grouped-sections.webp",
+      "hasScript": false
+    },
+    {
+      "id": "forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
+      "tags": [
+        "authentication",
+        "login",
+        "form",
+        "card",
+        "centered",
+        "scaffold",
+        "toolbar"
+      ],
+      "file": "forms/login/login.html",
+      "category": "Forms",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-checkbox",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
+      ],
+      "screenshot": "forms/login/login.webp",
       "hasScript": false
     },
     {
@@ -506,6 +506,28 @@
         "forge-toolbar"
       ],
       "screenshot": "dialogs/simple/simple.webp",
+      "hasScript": false
+    },
+    {
+      "id": "data-display/horizontal-label-value-list/horizontal-label-value-list",
+      "name": "Horizontal Label Value List",
+      "description": "Read-only data display arranged as a two-column grid with labels on the left and values on the right. Labels use the forge-label-value label styling (label2 typography, medium color) while values use body1 typography. Rows wrap independently, so long labels and multi-line values keep their column alignment. Includes an example of an empty value rendered as an italic \"n/a\" placeholder. Useful for detail summaries, definition lists, entity metadata panels, and read-only field displays.",
+      "tags": [
+        "label-value",
+        "list",
+        "detail",
+        "definition-list",
+        "key-value",
+        "metadata",
+        "read-only",
+        "data-display",
+        "summary",
+        "grid"
+      ],
+      "file": "data-display/horizontal-label-value-list/horizontal-label-value-list.html",
+      "category": "Data Display",
+      "componentsUsed": [],
+      "screenshot": "data-display/horizontal-label-value-list/horizontal-label-value-list.webp",
       "hasScript": false
     },
     {
@@ -896,6 +918,9 @@
       "name": "cards"
     },
     {
+      "name": "data-display"
+    },
+    {
       "name": "dialogs"
     },
     {
@@ -917,5 +942,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-07-15T18:42:56.174Z"
+  "generatedAt": "2026-07-22T19:50:50.553Z"
 }
