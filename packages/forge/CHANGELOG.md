@@ -1,5 +1,33 @@
 # @tylertech/forge
 
+## 3.15.0
+
+### Minor Changes
+
+- d28a72e: feat(skip-link): migrate to lit
+- ea1082a: feat(timeline): add timeline component
+- ea1082a: feat(timeline): create timeline component
+- 35922fc: feat(tabs): enable tab removal via keyboard
+- 27787b4: feat(avatar): show default image when an image url or text is absent
+- 35922fc: feat(tabs): migrate to lit
+- ea1082a: feat(timestamp): add timestamp component
+
+### Patch Changes
+
+- c25ede1: fix(icon): synchronously render icons which don't require loading
+- 60ac10b: fix(button-toggle): select with enter key
+- 19d2237: feature(toolbar): convert to Lit
+- f6806ee: fix(calendar-dropdown): remove disallowed aria-selected attribute
+- efc46d0: fix(autocomplete): prevent stale dropdown popovers by destroying previous instances
+- 6788bf9: fix(chip-field): initialize has-members class for pre-slotted chips
+- df76d15: fix(button-area): prevent slotted content disappearing when button receives focus
+- 323ca11: feat(skeleton): migrated to lit
+- 6788bf9: fix(stepper, button-toggle): properly remove slot-change event listeners
+- 53d8510: fix(select): keyboard navigation from selected option after mouse click open
+- Updated dependencies [ea1082a]
+- Updated dependencies [35922fc]
+  - @tylertech/forge-core@3.4.0
+
 ## 3.14.4
 
 ### Patch Changes
