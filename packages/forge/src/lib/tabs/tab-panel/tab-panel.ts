@@ -13,7 +13,7 @@ import styles from './tab-panel.scss';
 
 export const TAB_PANEL_TAG_NAME: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tab-panel`;
 
-export type TabPanelFocusMode = 'auto' | 'off';
+export type TabPanelFocusStrategy = 'auto' | 'off';
 
 /**
  * @tag forge-tab-panel
@@ -75,12 +75,12 @@ export class TabPanelComponent extends BaseLitElement {
 
   /**
    * Controls how focus is managed when the tab panel is opened. When set to 'auto' focus is set to
-   * the panel. Set to 'off' to keep focus on the tab.
+   * the panel. Set to 'off' to disable focus management.
    * @default 'auto'
-   * @attribute focus-mode
+   * @attribute focus-on-open
    */
-  @property({ attribute: 'focus-mode' })
-  public focusMode: TabPanelFocusMode = 'auto';
+  @property({ attribute: 'focus-on-open' })
+  public focusOnOpen: TabPanelFocusStrategy = 'auto';
 
   #abortController: AbortController | null = null;
   #tabObserver: MutationObserver | null = null;
@@ -137,7 +137,6 @@ export class TabPanelComponent extends BaseLitElement {
     const element = rootNode.getElementById(id);
 
     if (!element) {
-      console.warn(`[forge-tab-panel] No element found with id "${id}" to associate with the tab panel.`, { elementId: id });
       return null;
     }
 
@@ -231,14 +230,14 @@ export class TabPanelComponent extends BaseLitElement {
       return;
     }
 
-    if (Object.prototype.hasOwnProperty.call(tab, 'ariaControlsElements')) {
+    if ('ariaControlsElements' in tab) {
       tab.ariaControlsElements = [this];
     } else {
       this.id ||= `forge-tab-panel-${randomChars()}`;
-      tab.setAttribute('aria-controls', this.id);
+      (tab as HTMLElement).setAttribute('aria-controls', this.id);
     }
 
-    if (Object.prototype.hasOwnProperty.call(this.#internals, 'ariaLabelledByElements')) {
+    if ('ariaLabelledByElements' in this.#internals) {
       this.#internals.ariaLabelledByElements = [tab];
     } else {
       tab.id ||= `forge-tab-${randomChars()}`;
@@ -251,16 +250,16 @@ export class TabPanelComponent extends BaseLitElement {
       return;
     }
 
-    if (Object.prototype.hasOwnProperty.call(tab, 'ariaControlsElements')) {
+    if ('ariaControlsElements' in tab) {
       tab.ariaControlsElements = null;
     } else {
-      const ariaControls = tab.getAttribute('aria-controls');
+      const ariaControls = (tab as HTMLElement).getAttribute('aria-controls');
       if (ariaControls && ariaControls === this.id) {
-        tab.removeAttribute('aria-controls');
+        (tab as HTMLElement).removeAttribute('aria-controls');
       }
     }
 
-    if (Object.prototype.hasOwnProperty.call(this.#internals, 'ariaLabelledByElements')) {
+    if ('ariaLabelledByElements' in this.#internals) {
       this.#internals.ariaLabelledByElements = null;
     } else {
       const ariaLabelledBy = this.getAttribute('aria-labelledby');
@@ -290,7 +289,7 @@ export class TabPanelComponent extends BaseLitElement {
     this.open = shouldOpen;
     this.#dispatchToggleEvent(shouldOpen);
 
-    if (this.open && this.focusMode === 'auto' && this.forElement.matches(':focus')) {
+    if (this.open && this.focusOnOpen === 'auto' && this.forElement.matches(':focus')) {
       this.forElement.updateComplete.then(() => this.focus());
     }
   };
@@ -303,7 +302,11 @@ export class TabPanelComponent extends BaseLitElement {
 
     const customEvent = event as CustomEvent<TabComponent>;
     const element = customEvent.detail;
-    const id = customEvent.detail?.id;
+
+    if (!element || element.getRootNode() !== this.getRootNode()) {
+      return;
+    }
+    const id = element.id;
 
     if (this.forElement && this.forElement === element) {
       this.#connectToTab(element);
