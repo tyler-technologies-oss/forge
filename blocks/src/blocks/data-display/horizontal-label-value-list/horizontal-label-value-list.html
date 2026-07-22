@@ -1,0 +1,25 @@
+<!--
+  @block Horizontal Label Value List
+  @description Read-only data display arranged as a two-column grid with labels on the left and values on the right. Labels use the forge-label-value label styling (label2 typography, medium color) while values use body1 typography. Rows wrap independently, so long labels and multi-line values keep their column alignment. Includes an example of an empty value rendered as an italic "n/a" placeholder. Useful for detail summaries, definition lists, entity metadata panels, and read-only field displays.
+  @tags label-value, list, detail, definition-list, key-value, metadata, read-only, data-display, summary, grid
+-->
+<div class="p-medium">
+  <dl class="grid grid-cols-[200px_1fr] gap-x-large gap-y-medium max-w-[900px]">
+    <dt class="text-label2 text-medium">Label</dt>
+    <dd class="text-body1">Value</dd>
+
+    <dt class="text-label2 text-medium">Very long label</dt>
+    <dd class="text-body1">Value</dd>
+
+    <dt class="text-label2 text-medium">Long value</dt>
+    <dd class="text-body1">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis consectetur nisl, quis euismod
+      aliquet. Nulla eu turpis eu magna faucibus eleifend eu quis nulla. Pellentesque odio ante, vulputate
+      sit amet euismod nec, viverra a sem. Nullam bibendum magna tortor, vel tincidunt ex gravida non.
+      Quisque sit amet finibus diam.
+    </dd>
+
+    <dt class="text-label2 text-medium">Empty</dt>
+    <dd class="text-body1 italic text-medium">n/a</dd>
+  </dl>
+</div>

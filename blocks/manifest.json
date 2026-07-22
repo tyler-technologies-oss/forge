@@ -127,6 +127,39 @@
       "hasScript": false
     },
     {
+      "id": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet",
+      "name": "Table with Detail Sidesheet",
+      "description": "Application layout with a data table where the last column contains an icon button that opens a right-side drawer sidesheet to display row details alongside the table",
+      "tags": [
+        "table",
+        "data",
+        "drawer",
+        "sidesheet",
+        "details",
+        "application-layout"
+      ],
+      "file": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet.html",
+      "category": "Tables",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-button",
+        "forge-card",
+        "forge-drawer",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-label-value",
+        "forge-profile-link",
+        "forge-scaffold",
+        "forge-tab",
+        "forge-tab-bar",
+        "forge-table",
+        "forge-toolbar",
+        "forge-user-profile"
+      ],
+      "screenshot": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet.webp",
+      "hasScript": true
+    },
+    {
       "id": "tables/simple/simple",
       "name": "Simple Table",
       "description": "Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows",
@@ -286,6 +319,35 @@
       "hasScript": false
     },
     {
+      "id": "lists/list-management/list-management",
+      "name": "List Management",
+      "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
+      "tags": [
+        "list",
+        "management",
+        "interactive",
+        "card",
+        "scaffold",
+        "toolbar"
+      ],
+      "file": "lists/list-management/list-management.html",
+      "category": "Lists",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-popover",
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
+      ],
+      "screenshot": "lists/list-management/list-management.webp",
+      "hasScript": true
+    },
+    {
       "id": "forms/login/login",
       "name": "Login Form",
       "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
@@ -358,35 +420,6 @@
       "hasScript": false
     },
     {
-      "id": "lists/list-management/list-management",
-      "name": "List Management",
-      "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
-      "tags": [
-        "list",
-        "management",
-        "interactive",
-        "card",
-        "scaffold",
-        "toolbar"
-      ],
-      "file": "lists/list-management/list-management.html",
-      "category": "Lists",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-list",
-        "forge-list-item",
-        "forge-popover",
-        "forge-scaffold",
-        "forge-text-field",
-        "forge-toolbar"
-      ],
-      "screenshot": "lists/list-management/list-management.webp",
-      "hasScript": true
-    },
-    {
       "id": "forms/add-user/add-user",
       "name": "Add User Form",
       "description": "Form card with two-column grid layout for text inputs, leading icons, support text, dropdown selects, grouped checkboxes, and action buttons",
@@ -417,30 +450,6 @@
         "forge-toolbar"
       ],
       "screenshot": "forms/add-user/add-user.webp",
-      "hasScript": false
-    },
-    {
-      "id": "dialogs/simple/simple",
-      "name": "Simple Dialog",
-      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
-      "tags": [
-        "dialog",
-        "modal",
-        "scaffold",
-        "toolbar",
-        "actions"
-      ],
-      "file": "dialogs/simple/simple.html",
-      "category": "Dialogs",
-      "componentsUsed": [
-        "forge-button",
-        "forge-dialog",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "screenshot": "dialogs/simple/simple.webp",
       "hasScript": false
     },
     {
@@ -476,6 +485,51 @@
       "hasScript": false
     },
     {
+      "id": "dialogs/simple/simple",
+      "name": "Simple Dialog",
+      "description": "Modal dialog with scaffold layout featuring a toolbar header with title and close button, scrollable body content area, and footer toolbar with secondary cancel and primary confirm action buttons",
+      "tags": [
+        "dialog",
+        "modal",
+        "scaffold",
+        "toolbar",
+        "actions"
+      ],
+      "file": "dialogs/simple/simple.html",
+      "category": "Dialogs",
+      "componentsUsed": [
+        "forge-button",
+        "forge-dialog",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
+      "screenshot": "dialogs/simple/simple.webp",
+      "hasScript": false
+    },
+    {
+      "id": "data-display/horizontal-label-value-list/horizontal-label-value-list",
+      "name": "Horizontal Label Value List",
+      "description": "Read-only data display arranged as a two-column grid with labels on the left and values on the right. Labels use the forge-label-value label styling (label2 typography, medium color) while values use body1 typography. Rows wrap independently, so long labels and multi-line values keep their column alignment. Includes an example of an empty value rendered as an italic \"n/a\" placeholder. Useful for detail summaries, definition lists, entity metadata panels, and read-only field displays.",
+      "tags": [
+        "label-value",
+        "list",
+        "detail",
+        "definition-list",
+        "key-value",
+        "metadata",
+        "read-only",
+        "data-display",
+        "summary",
+        "grid"
+      ],
+      "file": "data-display/horizontal-label-value-list/horizontal-label-value-list.html",
+      "category": "Data Display",
+      "componentsUsed": [],
+      "hasScript": false
+    },
+    {
       "id": "cards/responsive-cards/responsive-cards",
       "name": "Responsive Cards",
       "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
@@ -497,6 +551,26 @@
         "forge-toolbar"
       ],
       "screenshot": "cards/responsive-cards/responsive-cards.webp",
+      "hasScript": false
+    },
+    {
+      "id": "cards/icon-card/icon-card",
+      "name": "Icon Card",
+      "description": "Action card featuring an icon, title, and description for quick navigation or feature highlights",
+      "tags": [
+        "card",
+        "icon",
+        "navigation",
+        "action"
+      ],
+      "file": "cards/icon-card/icon-card.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-avatar",
+        "forge-card",
+        "forge-icon"
+      ],
+      "screenshot": "cards/icon-card/icon-card.webp",
       "hasScript": false
     },
     {
@@ -556,26 +630,6 @@
       "hasScript": false
     },
     {
-      "id": "cards/icon-card/icon-card",
-      "name": "Icon Card",
-      "description": "Action card featuring an icon, title, and description for quick navigation or feature highlights",
-      "tags": [
-        "card",
-        "icon",
-        "navigation",
-        "action"
-      ],
-      "file": "cards/icon-card/icon-card.html",
-      "category": "Cards",
-      "componentsUsed": [
-        "forge-avatar",
-        "forge-card",
-        "forge-icon"
-      ],
-      "screenshot": "cards/icon-card/icon-card.webp",
-      "hasScript": false
-    },
-    {
       "id": "cards/basic-card/basic-card",
       "name": "Basic Card",
       "description": "Structured card with header, header actions, body content area, and footer with action buttons",
@@ -596,6 +650,44 @@
       ],
       "screenshot": "cards/basic-card/basic-card.webp",
       "hasScript": false
+    },
+    {
+      "id": "application-layout/table-with-filters/table-with-filters",
+      "name": "Table with Filter Sidesheet",
+      "description": "Full application layout with header, left navigation drawer, paginated data table in the body, and a filter sidesheet in the right drawer. Demonstrates a common pattern for data-heavy applications with filtering capabilities.",
+      "tags": [
+        "layout",
+        "application",
+        "table",
+        "filter",
+        "sidesheet",
+        "drawer",
+        "navigation",
+        "paginator",
+        "data"
+      ],
+      "file": "application-layout/table-with-filters/table-with-filters.html",
+      "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-button",
+        "forge-checkbox",
+        "forge-divider",
+        "forge-drawer",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-paginator",
+        "forge-radio",
+        "forge-radio-group",
+        "forge-scaffold",
+        "forge-structured-card",
+        "forge-table",
+        "forge-toolbar"
+      ],
+      "screenshot": "application-layout/table-with-filters/table-with-filters.webp",
+      "hasScript": true
     },
     {
       "id": "application-layout/three-panel/three-panel",
@@ -654,42 +746,40 @@
       "hasScript": false
     },
     {
-      "id": "application-layout/table-with-filters/table-with-filters",
-      "name": "Table with Filter Sidesheet",
-      "description": "Full application layout with header, left navigation drawer, paginated data table in the body, and a filter sidesheet in the right drawer. Demonstrates a common pattern for data-heavy applications with filtering capabilities.",
+      "id": "application-layout/detailed-context-switcher/detailed-context-switcher",
+      "name": "Detailed Context Switcher",
+      "description": "Application layout with a detailed context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a prominent current context display with name, address, quick actions, and a dropdown to switch contexts.",
       "tags": [
         "layout",
         "application",
-        "table",
-        "filter",
-        "sidesheet",
-        "drawer",
+        "context-switcher",
+        "detailed",
+        "scope",
+        "workspace",
+        "tenant",
+        "multi-tenant",
+        "organization",
         "navigation",
-        "paginator",
-        "data"
+        "drawer",
+        "select",
+        "global-context"
       ],
-      "file": "application-layout/table-with-filters/table-with-filters.html",
+      "file": "application-layout/detailed-context-switcher/detailed-context-switcher.html",
       "category": "Application Layout",
       "componentsUsed": [
         "forge-app-layout",
-        "forge-button",
-        "forge-checkbox",
+        "forge-avatar",
+        "forge-card",
         "forge-divider",
-        "forge-drawer",
         "forge-icon",
         "forge-icon-button",
-        "forge-list",
-        "forge-list-item",
-        "forge-paginator",
-        "forge-radio",
-        "forge-radio-group",
-        "forge-scaffold",
-        "forge-structured-card",
-        "forge-table",
-        "forge-toolbar"
+        "forge-option",
+        "forge-select",
+        "forge-toolbar",
+        "forge-tooltip"
       ],
-      "screenshot": "application-layout/table-with-filters/table-with-filters.webp",
-      "hasScript": true
+      "screenshot": "application-layout/detailed-context-switcher/detailed-context-switcher.webp",
+      "hasScript": false
     },
     {
       "id": "application-layout/dual-scroll/dual-scroll",
@@ -716,40 +806,6 @@
         "forge-toolbar"
       ],
       "screenshot": "application-layout/dual-scroll/dual-scroll.webp",
-      "hasScript": false
-    },
-    {
-      "id": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs",
-      "name": "Basic Application Layout with Tabs",
-      "description": "Standard application shell with a borderless page toolbar and tab bar navigation below it, featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
-      "tags": [
-        "layout",
-        "application",
-        "shell",
-        "app-bar",
-        "navigation",
-        "drawer",
-        "user-profile",
-        "footer",
-        "responsive-grid",
-        "tabs"
-      ],
-      "file": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.html",
-      "category": "Application Layout",
-      "componentsUsed": [
-        "forge-app-layout",
-        "forge-divider",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-list",
-        "forge-list-item",
-        "forge-profile-link",
-        "forge-tab",
-        "forge-tab-bar",
-        "forge-toolbar",
-        "forge-user-profile"
-      ],
-      "screenshot": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.webp",
       "hasScript": false
     },
     {
@@ -788,39 +844,37 @@
       "hasScript": false
     },
     {
-      "id": "application-layout/detailed-context-switcher/detailed-context-switcher",
-      "name": "Detailed Context Switcher",
-      "description": "Application layout with a detailed context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a prominent current context display with name, address, quick actions, and a dropdown to switch contexts.",
+      "id": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs",
+      "name": "Basic Application Layout with Tabs",
+      "description": "Standard application shell with a borderless page toolbar and tab bar navigation below it, featuring a top app bar with logo, title, icon action buttons, and user profile menu with theme toggle; a left navigation drawer with icon list items; a responsive auto-fitting grid content area; and a footer toolbar with centered text",
       "tags": [
         "layout",
         "application",
-        "context-switcher",
-        "detailed",
-        "scope",
-        "workspace",
-        "tenant",
-        "multi-tenant",
-        "organization",
+        "shell",
+        "app-bar",
         "navigation",
         "drawer",
-        "select",
-        "global-context"
+        "user-profile",
+        "footer",
+        "responsive-grid",
+        "tabs"
       ],
-      "file": "application-layout/detailed-context-switcher/detailed-context-switcher.html",
+      "file": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.html",
       "category": "Application Layout",
       "componentsUsed": [
         "forge-app-layout",
-        "forge-avatar",
-        "forge-card",
         "forge-divider",
         "forge-icon",
         "forge-icon-button",
-        "forge-option",
-        "forge-select",
+        "forge-list",
+        "forge-list-item",
+        "forge-profile-link",
+        "forge-tab",
+        "forge-tab-bar",
         "forge-toolbar",
-        "forge-tooltip"
+        "forge-user-profile"
       ],
-      "screenshot": "application-layout/detailed-context-switcher/detailed-context-switcher.webp",
+      "screenshot": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs.webp",
       "hasScript": false
     },
     {
@@ -863,6 +917,9 @@
       "name": "cards"
     },
     {
+      "name": "data-display"
+    },
+    {
       "name": "dialogs"
     },
     {
@@ -884,5 +941,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-07-08T18:57:34.116Z"
+  "generatedAt": "2026-07-22T19:46:34.665Z"
 }
