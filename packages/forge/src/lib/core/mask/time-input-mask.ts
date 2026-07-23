@@ -50,8 +50,18 @@ export class TimeInputMask {
 
   /** Toggles whether the unfilled format guide is shown (imask lazy mode) without recreating the mask. */
   public setShowMaskFormat(show: boolean): void {
+    const root = this._element.getRootNode() as Document | ShadowRoot;
+    const activeElement = root.activeElement;
+    const isFocused = activeElement === this._element;
+    const selectionStart = isFocused ? this._element.selectionStart : null;
+    const selectionEnd = isFocused ? this._element.selectionEnd : null;
+
     this._mask.updateOptions({ lazy: !show });
     this._mask.updateControl();
+
+    if (isFocused && selectionStart != null && selectionEnd != null) {
+      this._element.setSelectionRange(selectionStart, selectionEnd);
+    }
   }
 
   private _onAccept(): void {
