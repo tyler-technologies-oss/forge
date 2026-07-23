@@ -18,6 +18,8 @@
   { "label": "Color picker", "path": "/pages/color-picker/color-picker.html", "tags": ["form"] },
   { "label": "Date picker", "path": "/pages/date-picker/date-picker.html", "tags": ["form", "field"] },
   { "label": "Date range picker", "path": "/pages/date-range-picker/date-range-picker.html", "tags": ["form", "field"] },
+  { "label": "Date time field", "path": "/pages/date-time-field/date-time-field.html", "tags": ["form", "field"] },
+  { "label": "Date time picker", "path": "/pages/date-time-picker/date-time-picker.html", "tags": ["form", "field"] },
   { "label": "Dialog", "path": "/pages/dialog/dialog.html" },
   { "label": "Divider", "path": "/pages/divider/divider.html" },
   { "label": "Drawer", "path": "/pages/drawer/drawer.html" },

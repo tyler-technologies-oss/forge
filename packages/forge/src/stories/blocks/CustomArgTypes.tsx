@@ -161,7 +161,7 @@ function methodParamsToString(params: any[]) {
 }
 
 function sortByName(items: TagItem[]): TagItem[] {
-  return items.sort((a, b) => a.name.localeCompare(b.name));
+  return items.filter(item => item?.name != null).sort((a, b) => a.name.localeCompare(b.name));
 }
 
 function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; headingLevel: 'h3' | 'h4' }) {
@@ -169,7 +169,7 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
   const properties = declaration.members?.filter(member => member.kind === 'field' && member.privacy === 'public');
   const attributes = declaration.attributes;
   const methods = declaration.members?.filter(member => member.kind === 'method' && member.privacy === 'public');
-  const events = declaration.events;
+  const events = declaration.events?.filter(event => !!event?.name);
   const dependencies = declaration.dependencies?.map(({ name }) => name);
   const globalConfigProperties = declaration.globalConfigProperties?.map(({ name }) => name);
   const slots =
