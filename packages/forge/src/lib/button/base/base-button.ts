@@ -486,6 +486,7 @@ export abstract class BaseButton extends BaseLitElement {
     }
 
     if (supportsInvokerCommands()) {
+      // @ts-expect-error CommandEvent is not widely supported yet, but this code is only reachable behind a feature detection check.
       targetElement.dispatchEvent(new CommandEvent('command', { source: this, command: this.command, cancelable: true }));
     } else {
       targetElement.dispatchEvent(new FallbackCommandEvent('command', { source: this, command: this.command, cancelable: true }));
