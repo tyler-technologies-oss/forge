@@ -298,7 +298,7 @@ describe('Tabs', () => {
     expect(ctx.tabs[1].selected).toBe(true);
     expect(ctx.activeTabCount).toBe(1);
     expect(changeSpy).toHaveBeenCalledOnce();
-    expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1 });
+    expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1, name: '' });
   });
 
   it('should not select tab if disabled tab clicked', async () => {
@@ -321,7 +321,7 @@ describe('Tabs', () => {
     expect(ctx.tabs[1].selected).toBe(true);
     expect(ctx.activeTabCount).toBe(1);
     expect(changeSpy).toHaveBeenCalledOnce();
-    expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1 });
+    expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1, name: '' });
   });
 
   it('should select tab with space key', async () => {
@@ -336,7 +336,7 @@ describe('Tabs', () => {
     expect(ctx.tabs[1].selected).toBe(true);
     expect(ctx.activeTabCount).toBe(1);
     expect(changeSpy).toHaveBeenCalledOnce();
-    expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1 });
+    expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1, name: '' });
   });
 
   it('should navigate to next tab when right arrow is pressed', async () => {
@@ -390,7 +390,7 @@ describe('Tabs', () => {
     expect(ctx.tabs[1].active).toBe(true);
     expect(ctx.activeTabCount).toBe(1);
     expect(changeSpy).toHaveBeenCalledOnce();
-    expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1 });
+    expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1, name: '' });
   });
 
   it('should navigate to last tab when end is pressed', async () => {
@@ -576,7 +576,7 @@ describe('Tabs', () => {
       expect(ctx.tabs[1].selected).toBe(true);
       expect(ctx.activeTabCount).toBe(1);
       expect(changeSpy).toHaveBeenCalledOnce();
-      expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1 });
+      expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1, name: '' });
     });
 
     it('should show scroll buttons when scrollable', async () => {

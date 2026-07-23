@@ -436,6 +436,11 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
         oldActiveTab = tab;
       }
       tab.active = tab === this._activeTabElement;
+      const didSyncEvent = new Event(TAB_CONSTANTS.events.DID_SYNC, {
+        bubbles: true,
+        composed: true
+      });
+      tab.dispatchEvent(didSyncEvent);
     });
     if (this._activeTabElement) {
       this.#scrollTabIntoView(this._activeTabElement);
@@ -454,7 +459,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       return;
     }
 
-    // Dispatching the select event for backwards compatibility even though it doesn't reflect the state of the component and is not cancelable
+    // Dispatching the select event for backwards compatibility even though it doesn't reflect the
+    // state of the component and is not cancelable
     this.#dispatchSelectEvent(tab);
 
     const eventAllowed = this.#dispatchChangeEvent(tab);

@@ -375,6 +375,7 @@ declare global {
 
   interface HTMLElementEventMap {
     'forge-tab-close': Event;
+    'forge-tab-did-sync': Event;
     'forge-tab-menu': Event;
     'forge-tab-request-sync': Event;
     'forge-tab-select': CustomEvent<void>;

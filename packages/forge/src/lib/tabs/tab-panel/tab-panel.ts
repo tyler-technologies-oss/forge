@@ -33,7 +33,6 @@ export type TabPanelFocusStrategy = 'auto' | 'off';
  *
  * @state open - Indicates that the tab panel is visible.
  *
- * @fires {BeforeToggleEvent} beforetoggle - Dispatched before the tab panel opens or closes. This event is cancelable.
  * @fires {ToggleEvent} toggle - Dispatched when the tab panel opens or closes.
  */
 @customElement(TAB_PANEL_TAG_NAME)
@@ -163,7 +162,7 @@ export class TabPanelComponent extends BaseLitElement {
 
     this.#abortController?.abort();
     this.#abortController = new AbortController();
-    tab.addEventListener('forge-tab-request-sync', this.#handleSync, { signal: this.#abortController.signal });
+    tab.addEventListener('forge-tab-did-sync', this.#handleDidSync, { signal: this.#abortController.signal });
 
     this.#startTabObserver(tab);
   }
@@ -269,20 +268,13 @@ export class TabPanelComponent extends BaseLitElement {
     }
   }
 
-  #handleSync: EventListener = evt => {
+  #handleDidSync: EventListener = evt => {
     if (!this.forElement || evt.target !== this.forElement) {
       return;
     }
 
     const shouldOpen = this.forElement.active;
     if (shouldOpen === this.open) {
-      return;
-    }
-
-    const beforeToggleEvent = this.#dispatchBeforeToggleEvent(shouldOpen);
-    if (beforeToggleEvent.defaultPrevented) {
-      evt.preventDefault();
-      this.forElement.active = !shouldOpen;
       return;
     }
 
@@ -314,18 +306,6 @@ export class TabPanelComponent extends BaseLitElement {
       this.forElement = element;
     }
   };
-
-  #dispatchBeforeToggleEvent(willOpen: boolean): ToggleEvent {
-    const event = new ToggleEvent('beforetoggle', {
-      oldState: this.open ? 'open' : 'closed',
-      newState: willOpen ? 'open' : 'closed',
-      bubbles: true,
-      cancelable: true,
-      composed: true
-    });
-    this.dispatchEvent(event);
-    return event;
-  }
 
   #dispatchToggleEvent(didOpen: boolean): void {
     this.dispatchEvent(
