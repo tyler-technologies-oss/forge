@@ -166,6 +166,17 @@ describe('DateTimeField / mask guide and placeholder', () => {
     expect(getDateInput(el).value).toContain('/');
   });
 
+  it('should keep the caret at the start when focusing an empty date input', async () => {
+    const screen = render(html`<forge-date-time-field label="When"></forge-date-time-field>`);
+    const el = getField(screen.container);
+    await ready(el);
+    const dateInput = getDateInput(el);
+    dateInput.focus();
+    await ready(el);
+    expect(dateInput.selectionStart).toBe(0);
+    expect(dateInput.selectionEnd).toBe(0);
+  });
+
   it('should show the guide when a value is present', async () => {
     const screen = render(html`<forge-date-time-field></forge-date-time-field>`);
     const el = getField(screen.container);
