@@ -1,9 +1,9 @@
 <div class="tabs-demo-container">
   <forge-tab-bar id="tabs-demo" active-tab="0">
-    <forge-tab id="tab-1" aria-controls="panel-1">Tab one</forge-tab>
-    <forge-tab id="tab-2" aria-controls="panel-2">Tab two</forge-tab>
-    <forge-tab id="tab-3" aria-controls="panel-3">Tab three</forge-tab>
-    <forge-tab id="tab-4" aria-controls="panel-4">Tab four</forge-tab>
+    <forge-tab id="tab-1" name="one" aria-controls="panel-1">Tab one</forge-tab>
+    <forge-tab id="tab-2" name="two" aria-controls="panel-2">Tab two</forge-tab>
+    <forge-tab id="tab-3" name="three" aria-controls="panel-3">Tab three</forge-tab>
+    <forge-tab id="tab-4" name="four" aria-controls="panel-4">Tab four</forge-tab>
   </forge-tab-bar>
   <forge-view-switcher id="tab-panel" index="0" animation-type="slide">
     <forge-view>
@@ -23,8 +23,8 @@
 
 <div class="tabs-demo">
   <h2 class="forge-typography--heading2">Scrollable tabs</h2>
-  <forge-tab-bar id="demo-scrollable-tabs" active-tab="9" scroll-buttons>
-    <forge-tab id="tab-1">Tab one</forge-tab>
+  <forge-tab-bar id="demo-scrollable-tabs" scroll-buttons active-tab="9">
+    <forge-tab id="tab-1" >Tab one</forge-tab>
     <forge-tab id="tab-2">Tab two</forge-tab>
     <forge-tab id="tab-3">Tab three</forge-tab>
     <forge-tab id="tab-4">Tab four</forge-tab>
@@ -63,6 +63,20 @@
       Audio
     </forge-tab>
   </forge-tab-bar>
+</div>
+
+<div class="tabs-demo">
+  <h2 class="forge-typography--heading2">Tab Panels</h2>
+  <forge-tab-bar id="demo-tab-panels" active-tab-name="first">
+    <forge-tab name="first" id="tab-for-panel-1">Tab one</forge-tab>
+    <forge-tab name="second" id="tab-for-panel-2">Tab two</forge-tab>
+    <forge-tab name="third" id="tab-for-panel-3">Tab three</forge-tab>
+    <forge-tab name="fourth" id="tab-for-panel-4">Tab four</forge-tab>
+  </forge-tab-bar>
+  <forge-tab-panel for="tab-for-panel-1">Content for tab one</forge-tab-panel>
+  <forge-tab-panel for="tab-for-panel-2">Content for tab two</forge-tab-panel>
+  <forge-tab-panel for="tab-for-panel-3">Content for tab three</forge-tab-panel>
+  <forge-tab-panel for="tab-for-panel-4">Content for tab four</forge-tab-panel>
 </div>
 
 <script type="module" src="tabs.ts"></script>

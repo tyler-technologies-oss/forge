@@ -23,7 +23,8 @@ const classes = {};
 
 const events = {
   SELECT: `${elementName}-select`,
-  REQUEST_SYNC: `${elementName}-request-sync`
+  REQUEST_SYNC: `${elementName}-request-sync`,
+  DID_SYNC: `${elementName}-did-sync`
 };
 
 const strings = {

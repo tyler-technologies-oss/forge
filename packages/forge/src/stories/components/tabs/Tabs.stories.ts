@@ -7,6 +7,7 @@ import { tylIconFavorite, tylIconForgeLogo } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon';
 
 import '@tylertech/forge/tabs/tab-bar';
+import '@tylertech/forge/tabs/tab-panel';
 
 const component = 'forge-tab-bar';
 
@@ -56,7 +57,8 @@ const meta = {
   },
   component,
   subcomponents: {
-    Tab: 'forge-tab'
+    Tab: 'forge-tab',
+    TabPanel: 'forge-tab-panel'
   },
   argTypes: {
     ...generateCustomElementArgTypes({
@@ -73,6 +75,7 @@ const meta = {
     endIcon: false,
     disabled: false,
     activeTab: 0,
+    activeTabName: '',
     vertical: false,
     clustered: false,
     stacked: false,
@@ -114,4 +117,84 @@ export const WithIcons: Story = {
   args: {
     startIcon: true
   }
+};
+
+export const NamedTabs: Story = {
+  ...standaloneStoryParams,
+  args: {
+    activeTabName: 'tab-2'
+  },
+  render: args => {
+    const styles = { ...getCssVariableArgs(args) };
+
+    if (args.vertical) {
+      styles['max-width'] = '200px';
+    } else if (args.scrollButtons) {
+      styles['max-width'] = '500px';
+    }
+
+    const style = Object.entries(styles).length ? styleMap(styles) : nothing;
+
+    const tabs = Array.from({ length: args.scrollButtons ? 20 : 3 }).map(
+      (_, i) =>
+        html`<forge-tab name="tab-${i + 1}">
+          ${args.startIcon ? html`<forge-icon slot="start" name="favorite"></forge-icon>` : nothing} Tab ${i + 1}
+          ${args.endIcon ? html`<forge-icon slot="end" name="forge_logo"></forge-icon>` : nothing}
+        </forge-tab>`
+    );
+
+    return html`
+      <forge-tab-bar
+        data-aria-label="Demo tabs"
+        active-tab-name=${args.activeTabName}
+        .disabled=${args.disabled}
+        .vertical=${args.vertical}
+        .clustered=${args.clustered}
+        .stacked=${args.stacked}
+        .inverted=${args.inverted}
+        .autoActivate=${args.autoActivate}
+        .scrollButtons=${args.scrollButtons}
+        style=${style}
+        @forge-tab-bar-change=${changeAction}
+        @forge-tab-activate=${activateAction}>
+        ${tabs}
+      </forge-tab-bar>
+    `;
+  }
+};
+
+export const WithPanels: Story = {
+  ...standaloneStoryParams,
+  args: {
+    activeTab: 0
+  },
+  render: args => html`
+    <forge-tab-bar
+      aria-label="Tabs with panels"
+      .activeTab=${args.activeTab}
+      .disabled=${args.disabled}
+      .vertical=${args.vertical}
+      .clustered=${args.clustered}
+      .stacked=${args.stacked}
+      .inverted=${args.inverted}
+      .autoActivate=${args.autoActivate}
+      @forge-tab-bar-change=${changeAction}
+      @forge-tab-activate=${activateAction}>
+      <forge-tab id="tab-home">Home</forge-tab>
+      <forge-tab id="tab-profile">Profile</forge-tab>
+      <forge-tab id="tab-settings">Settings</forge-tab>
+    </forge-tab-bar>
+
+    <forge-tab-panel for="tab-home">
+      <p>Home panel</p>
+    </forge-tab-panel>
+
+    <forge-tab-panel for="tab-profile">
+      <p>Profile panel</p>
+    </forge-tab-panel>
+
+    <forge-tab-panel for="tab-settings">
+      <p>Settings panel</p>
+    </forge-tab-panel>
+  `
 };

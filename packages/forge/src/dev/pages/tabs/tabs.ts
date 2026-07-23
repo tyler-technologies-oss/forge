@@ -111,3 +111,11 @@ function createIcon(name: string, slot: string): HTMLElement {
   icon.name = name;
   return icon;
 }
+
+document.addEventListener('beforetoggle', (evt: ToggleEvent) => {
+  console.log('beforetoggle', evt.target, evt);
+});
+
+document.addEventListener('toggle', (evt: ToggleEvent) => {
+  console.log('toggle', evt.target, evt);
+});
