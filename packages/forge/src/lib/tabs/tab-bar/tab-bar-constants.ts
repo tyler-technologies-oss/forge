@@ -61,6 +61,7 @@ export const NAVIGATION_KEYS = new Map([
 
 export interface ITabBarChangeEventData {
   index: number;
+  name: string;
 }
 
 export type TabBarTheme = 'default' | 'app-bar';

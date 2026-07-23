@@ -486,8 +486,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   #dispatchChangeEvent(tab: TabComponent): boolean {
     const tabs = this._tabs;
     const index = tabs.indexOf(tab);
-    const event = new CustomEvent(TAB_BAR_CONSTANTS.events.CHANGE, {
-      detail: { index },
+    const event = new CustomEvent<ITabBarChangeEventData>(TAB_BAR_CONSTANTS.events.CHANGE, {
+      detail: { index, name: tab.name },
       bubbles: true,
       cancelable: true,
       composed: true

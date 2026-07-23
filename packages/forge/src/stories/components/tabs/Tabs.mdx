@@ -69,13 +69,12 @@ The active tab can be set or retrieved by its name through the `activeTabName` p
 ```
 
 To get the name of the active tab when the active tab changes, listen for the `forge-tab-bar-change`
-event on the `<forge-tab-bar>` element and access the `activeTabName` property on the event's
-target.
+event on the `<forge-tab-bar>` element and access the `name` property on the event's detail.
 
 ```ts
 const tabBar = document.querySelector('forge-tab-bar');
 tabBar?.addEventListener('forge-tab-bar-change', (event) => {
-  const activeTabName = (event.target as HTMLForgeTabBarElement).activeTabName;
+  const activeTabName = event.detail.name;
   console.log('Active tab name:', activeTabName);
 });
 ```
