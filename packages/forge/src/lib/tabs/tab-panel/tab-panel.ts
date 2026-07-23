@@ -83,6 +83,7 @@ export class TabPanelComponent extends BaseLitElement {
 
   #abortController: AbortController | null = null;
   #tabObserver: MutationObserver | null = null;
+  #connectGeneration = 0;
 
   constructor() {
     super();
@@ -148,6 +149,8 @@ export class TabPanelComponent extends BaseLitElement {
   }
 
   async #connectToTab(tab: TabComponent | null): Promise<void> {
+    const generation = ++this.#connectGeneration;
+
     if (!tab) {
       this.open = false;
       this.#watchForTabConnected();
@@ -157,6 +160,12 @@ export class TabPanelComponent extends BaseLitElement {
     this.#setupAriaRelationships(tab);
 
     await tab.updateComplete;
+
+    // Check if superseded by a newer invocation during the await
+    if (generation !== this.#connectGeneration) {
+      return;
+    }
+
     this.open = tab.active;
     toggleState(this.#internals, 'open', this.open);
 
@@ -187,7 +196,7 @@ export class TabPanelComponent extends BaseLitElement {
     }
 
     this.#tabObserver = new MutationObserver(() => {
-      if (tab && !tab.isConnected) {
+      if (tab && !tab.parentElement) {
         this.#handleTabDisconnected(tab);
       }
     });
