@@ -1,16 +1,18 @@
-import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { IconComponent } from '../icon/index.js';
-import { BaseButton, IBaseButton } from '../button/base/base-button.js';
-import { BASE_BUTTON_CONSTANTS } from '../button/base/base-button-constants.js';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { toggleState } from '../core/utils/utils.js';
 import { FocusIndicatorComponent } from '../focus-indicator/index.js';
+import { IconComponent } from '../icon/index.js';
 import { StateLayerComponent } from '../state-layer/index.js';
+import { BaseButton, IBaseButton } from '../button/base/base-button.js';
 import { IconButtonDensity, IconButtonShape, IconButtonTheme, IconButtonVariant, ICON_BUTTON_CONSTANTS } from './icon-button-constants.js';
-import { IconButtonCore } from './icon-button-core.js';
-import { IconButtonAdapter } from './icon-button-adapter.js';
 
-import template from './icon-button.html';
 import styles from './icon-button.scss';
+import { setDefaultAria } from '../core/utils/a11y-utils.js';
 
+/** @deprecated - This will be removed in the future. Please switch to using IconButtonComponent. */
 export interface IIconButtonComponent extends IBaseButton {
   toggle: boolean;
   pressed: boolean;
@@ -22,20 +24,14 @@ export interface IIconButtonComponent extends IBaseButton {
   density: IconButtonDensity;
 }
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-icon-button': IIconButtonComponent;
-  }
-
-  interface HTMLElementEventMap {
-    'forge-icon-button-toggle': CustomEvent<boolean>;
-  }
-}
-
 /**
+ * @tag forge-icon-button
+ *
  * @summary Icon buttons are buttons that contain **only** an icon, and are used to represent actions or commands. Always provide an accessible label when using icon buttons.
  *
- * @tag forge-icon-button
+ * @dependency forge-icon
+ * @dependency forge-focus-indicator
+ * @dependency forge-state-layer
  *
  * @globalconfig variant
  * @globalconfig shape
@@ -113,96 +109,149 @@ declare global {
  * @slot start - Elements to logically render before the icon.
  * @slot end - Elements to logically render after the icon.
  * @slot badge - Absolutely positions the element in the top-end corner of the button (typically reserved for badge-like content).
+ *
+ * @state toggle - Applied when the button is in toggle mode.
+ * @state pressed - Applied when the button is toggled on in toggle mode.
  */
-@customElement({
-  name: ICON_BUTTON_CONSTANTS.elementName,
-  dependencies: [FocusIndicatorComponent, StateLayerComponent, IconComponent]
-})
-export class IconButtonComponent extends BaseButton<IconButtonCore> implements IIconButtonComponent {
-  public static get observedAttributes(): string[] {
-    return [...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes), ...Object.values(ICON_BUTTON_CONSTANTS.observedAttributes)];
-  }
+@customElement(ICON_BUTTON_CONSTANTS.elementName)
+export class IconButtonComponent extends BaseButton {
+  public static styles = unsafeCSS(styles);
 
-  protected readonly _core: IconButtonCore;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = ICON_BUTTON_CONSTANTS.elementName;
 
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new IconButtonCore(new IconButtonAdapter(this));
-  }
-
-  public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case ICON_BUTTON_CONSTANTS.attributes.TOGGLE:
-        this.toggle = coerceBoolean(newValue);
-        break;
-      case ICON_BUTTON_CONSTANTS.attributes.PRESSED:
-      case ICON_BUTTON_CONSTANTS.attributes.ON:
-        this.pressed = coerceBoolean(newValue);
-        break;
-      case ICON_BUTTON_CONSTANTS.attributes.VARIANT:
-        this.variant = newValue as IconButtonVariant;
-        break;
-      case ICON_BUTTON_CONSTANTS.attributes.THEME:
-        this.theme = newValue as IconButtonTheme;
-        break;
-      case ICON_BUTTON_CONSTANTS.attributes.SHAPE:
-        this.shape = newValue as IconButtonShape;
-        break;
-      case ICON_BUTTON_CONSTANTS.attributes.DENSITY:
-        this.density = newValue as IconButtonDensity;
-        break;
-    }
-    super.attributeChangedCallback(name, oldValue, newValue);
-  }
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [FocusIndicatorComponent, StateLayerComponent, IconComponent];
 
   /**
-   * Whether or not the icon button can be toggled.
+   * Gets/sets whether the icon button can be toggled.
    * @default false
+   * @attribute
    */
-  @coreProperty()
-  declare public toggle: boolean;
+  @property({ type: Boolean, reflect: true })
+  public toggle = false;
 
   /**
-   * Whether or not the toggle button is pressed. Only applies when `toggle` is `true`.
+   * Gets/sets whether the toggle button is pressed. Only applies when `toggle` is `true`.
    * @default false
+   * @attribute
    */
-  @coreProperty()
-  declare public pressed: boolean;
+  @property({ type: Boolean, reflect: true })
+  public pressed = false;
 
   /**
    * Alias for `pressed` _(deprecated)_. Whether or not the toggle button is pressed. Only applies when `toggle` is `true`.
    * @default false
    * @deprecated Use `pressed` instead.
+   * @attribute on
    */
-  @coreProperty({ name: 'pressed' })
-  declare public on: boolean;
+  @property({ type: Boolean, reflect: true, attribute: 'on' })
+  public set on(value: boolean) {
+    this.pressed = value;
+  }
+  public get on(): boolean {
+    return this.pressed;
+  }
 
   /**
-   * The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
-   * @default "default"
-   */
-  @coreProperty()
-  declare public theme: IconButtonTheme;
-
-  /**
-   * The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
+   * Gets/sets the variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
    * @default "icon"
+   * @attribute
    */
-  @coreProperty()
-  declare public variant: IconButtonVariant;
+  @property({ reflect: true })
+  public variant: IconButtonVariant = ICON_BUTTON_CONSTANTS.defaults.DEFAULT_VARIANT;
 
   /**
-   * The shape of the button. Valid values are `circular` and `squared`.
+   * Gets/sets the theme of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
+   * @default "default"
+   * @attribute
+   */
+  @property({ reflect: true })
+  public theme: IconButtonTheme = ICON_BUTTON_CONSTANTS.defaults.DEFAULT_THEME;
+
+  /**
+   * Gets/sets the shape of the button. Valid values are `circular` and `squared`.
    * @default "circular"
+   * @attribute
    */
-  @coreProperty()
-  declare public shape: IconButtonShape;
+  @property({ reflect: true })
+  public shape: IconButtonShape = ICON_BUTTON_CONSTANTS.defaults.DEFAULT_SHAPE;
 
   /**
-   * The density of the button. Valid values are `small`, `medium`, and `large`.
+   * Gets/sets the density of the button. Valid values are `small`, `medium`, and `large`.
    * @default "large"
+   * @attribute
    */
-  @coreProperty()
-  declare public density: IconButtonDensity;
+  @property({ reflect: true })
+  public density: IconButtonDensity = ICON_BUTTON_CONSTANTS.defaults.DEFAULT_DENSITY;
+
+  public override updated(changedProperties: PropertyValues<this>): void {
+    super.updated(changedProperties);
+
+    if (changedProperties.has('toggle')) {
+      toggleState(this._internals, 'toggle', this.toggle);
+    }
+
+    if (changedProperties.has('pressed')) {
+      setDefaultAria(this, this._internals, { ariaPressed: this.pressed ? 'true' : 'false' });
+      toggleState(this._internals, 'pressed', this.pressed);
+    }
+  }
+
+  public render(): TemplateResult {
+    const classes = {
+      'forge-icon-button': true,
+      'with-popover-icon': this.popoverIcon,
+      small: this.dense,
+      [this.density]: !this.dense,
+      [this.shape]: true,
+      [this.variant]: true,
+      [this.theme]: true
+    };
+
+    return html`
+      <div class=${classMap(classes)} part="root" id="root">
+        <slot name="start"></slot>
+        ${this._renderDefaultSlot()}
+        <slot name="on"></slot>
+        ${this._renderEndSlotWithOptionalPopoverIcon()}
+        <slot name="badge"></slot>
+        ${this._renderInteractionLayer()}
+      </div>
+    `;
+  }
+
+  protected override async _onClick(evt: PointerEvent): Promise<void> {
+    await super._onClick(evt);
+    if (this.toggle) {
+      this.#onToggle();
+    }
+  }
+
+  #onToggle(): void {
+    const originalPressed = this.pressed;
+    const newPressed = !originalPressed;
+    const toggleEvent = new CustomEvent<boolean>(ICON_BUTTON_CONSTANTS.events.TOGGLE, {
+      detail: newPressed,
+      bubbles: true,
+      cancelable: true
+    });
+    const cancelled = !this.dispatchEvent(toggleEvent);
+
+    if (cancelled) {
+      return;
+    }
+
+    this.pressed = newPressed;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-icon-button': IconButtonComponent;
+  }
+
+  interface HTMLElementEventMap {
+    'forge-icon-button-toggle': CustomEvent<boolean>;
+  }
 }
