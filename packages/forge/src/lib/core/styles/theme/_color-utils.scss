@@ -54,5 +54,5 @@
 // Determine whether to use dark or light text on top of given color to meet accessibility standards for contrast.
 // Returns 'dark' if the given color is light and 'light' if the given color is dark.
 @function contrast-tone($color) {
-  @return if(tone($color) == 'dark', 'light', 'dark');
+  @return if(sass(tone($color) == 'dark'): 'light' ; else: 'dark');
 }
