@@ -201,6 +201,16 @@ describe('TimePickerComponent', () => {
 
       expect((harness.element as any)._core._isInitialized).toBe(true);
     });
+
+    it('should display midnight value when set before the element is connected to the DOM', async () => {
+      harness = await createFixture({ detached: true });
+      harness.element.value = '00:00';
+      document.body.appendChild(harness.element);
+      await frame();
+
+      expect(harness.element.value).toBe('00:00');
+      expect(harness.inputElement.value).toBe('12:00 AM');
+    });
   });
 
   describe('Value Setting', () => {
