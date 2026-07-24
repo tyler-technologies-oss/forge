@@ -1,5 +1,11 @@
 # @tylertech/forge
 
+## 3.15.1
+
+### Patch Changes
+
+- 3be1f74: fix(tabs): fix error when upgrading tab element
+
 ## 3.15.0
 
 ### Minor Changes
