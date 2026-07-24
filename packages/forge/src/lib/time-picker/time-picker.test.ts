@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
+import { userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/index.js';
@@ -50,6 +51,15 @@ class TimePickerHarness extends TestHarness<ITimePickerComponent> {
     const value = this._setCharAtPos(this.inputElement.value, char, pos, clear);
     await this.setInputValue(value);
     await this.setCursorPos(pos);
+  }
+
+  // Types a sequence of characters into the input using real keyboard events, one keystroke at a time.
+  public async typeSequence(text: string): Promise<void> {
+    await userEvent.click(this.inputElement);
+    for (const char of text) {
+      await userEvent.keyboard(char);
+      await frame();
+    }
   }
 
   public async setInputValue(value: string): Promise<void> {
@@ -1659,6 +1669,89 @@ describe('TimePickerComponent', () => {
       await harness.writeValue('1', 2, true);
 
       expect(harness.element.value).toBe('03:01');
+    });
+
+    it('should respect a typed leading zero when entering 02xx in 24 hour time', async () => {
+      harness = await createFixture();
+      harness.element.use24HourTime = true;
+      harness.element.showMaskFormat = true;
+
+      await harness.typeSequence('0205');
+
+      expect(harness.element.value).toBe('02:05');
+    });
+
+    it('should respect a typed leading zero when entering 01xx in 24 hour time', async () => {
+      harness = await createFixture();
+      harness.element.use24HourTime = true;
+      harness.element.showMaskFormat = true;
+
+      await harness.typeSequence('0135');
+
+      expect(harness.element.value).toBe('01:35');
+    });
+
+    it('should respect a typed leading zero when entering 0230 in 24 hour time', async () => {
+      harness = await createFixture();
+      harness.element.use24HourTime = true;
+      harness.element.showMaskFormat = true;
+
+      await harness.typeSequence('0230');
+
+      expect(harness.element.value).toBe('02:30');
+    });
+
+    it('should still extend a single-digit hour into two digits in 24 hour time', async () => {
+      harness = await createFixture();
+      harness.element.use24HourTime = true;
+      harness.element.showMaskFormat = true;
+
+      await harness.typeSequence('201');
+
+      expect(harness.element.value).toBe('20:01');
+    });
+
+    it('should auto-pad a single-digit hour of 3 or higher and continue to minutes in 24 hour time', async () => {
+      harness = await createFixture();
+      harness.element.use24HourTime = true;
+      harness.element.showMaskFormat = true;
+
+      await harness.typeSequence('345');
+
+      expect(harness.element.value).toBe('03:45');
+    });
+
+    it('should respect a typed leading zero in the minutes segment when seconds are shown', async () => {
+      harness = await createFixture();
+      harness.element.use24HourTime = true;
+      harness.element.allowSeconds = true;
+      harness.element.showMaskFormat = true;
+
+      await harness.typeSequence('010203');
+
+      expect(harness.element.value).toBe('01:02:03');
+    });
+
+    it('should still extend a single-digit minute into two digits when seconds are shown', async () => {
+      harness = await createFixture();
+      harness.element.use24HourTime = true;
+      harness.element.allowSeconds = true;
+      harness.element.showMaskFormat = true;
+
+      await harness.typeSequence('013503');
+
+      expect(harness.element.value).toBe('01:35:03');
+    });
+
+    it('should respect a typed leading zero in the seconds segment when seconds are shown', async () => {
+      harness = await createFixture();
+      harness.element.use24HourTime = true;
+      harness.element.allowSeconds = true;
+      harness.element.showMaskFormat = true;
+
+      await harness.typeSequence('120102');
+
+      expect(harness.element.value).toBe('12:01:02');
     });
   });
 
