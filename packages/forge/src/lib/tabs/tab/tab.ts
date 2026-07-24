@@ -243,7 +243,6 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   constructor() {
     super();
     this.#internals = this.attachInternals();
-    this.style.scrollMargin = `${TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN}px`;
   }
 
   public override connectedCallback(): void {
@@ -259,6 +258,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
       role: 'tab'
     });
     this.tabIndex = -1;
+    this.style.scrollMargin = `${TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN}px`;
 
     // Dispatch registration event for tab panels waiting to connect
     window.dispatchEvent(
