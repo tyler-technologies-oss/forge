@@ -6,6 +6,7 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tab-ba
 const observedAttributes = {
   DISABLED: 'disabled',
   ACTIVE_TAB: 'active-tab',
+  ACTIVE_TAB_NAME: 'active-tab-name',
   VERTICAL: 'vertical',
   STACKED: 'stacked',
   CLUSTERED: 'clustered',
@@ -60,6 +61,7 @@ export const NAVIGATION_KEYS = new Map([
 
 export interface ITabBarChangeEventData {
   index: number;
+  name: string;
 }
 
 export type TabBarTheme = 'default' | 'app-bar';
