@@ -6,11 +6,10 @@
 
 - d28a72e: feat(skip-link): migrate to lit
 - ea1082a: feat(timeline): add timeline component
-- ea1082a: feat(timeline): create timeline component
 - a600f23: feat(tabs): support named tabs
 - 35922fc: feat(tabs): enable tab removal via keyboard
 - 27787b4: feat(avatar): show default image when an image url or text is absent
-- a600f23: feat(tabs): create tab panel component
+- a600f23: feat(tabs): add tab panel component
 - 35922fc: feat(tabs): migrate to lit
 - ea1082a: feat(timestamp): add timestamp component
 
