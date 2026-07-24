@@ -283,6 +283,35 @@
       "hasScript": false
     },
     {
+      "id": "lists/list-management/list-management",
+      "name": "List Management",
+      "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
+      "tags": [
+        "list",
+        "management",
+        "interactive",
+        "card",
+        "scaffold",
+        "toolbar"
+      ],
+      "file": "lists/list-management/list-management.html",
+      "category": "Lists",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-list",
+        "forge-list-item",
+        "forge-popover",
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
+      ],
+      "screenshot": "lists/list-management/list-management.webp",
+      "hasScript": true
+    },
+    {
       "id": "patterns/filter-facets/filter-facets",
       "name": "Filter Facets",
       "description": "Filter facets rendered inside a drawer with scaffold layout, demonstrating checkboxes for multi-select and radio buttons for single-select filtering. Uses partials for reusable facet patterns. Use as a reference for building filter sidesheets, filter panels within cards, data table filters, and other page filtering UI.",
@@ -319,33 +348,33 @@
       "hasScript": false
     },
     {
-      "id": "lists/list-management/list-management",
-      "name": "List Management",
-      "description": "Card with a text field and add button for managing a dynamic list of items, supporting keyboard entry and item deletion",
+      "id": "forms/login/login",
+      "name": "Login Form",
+      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
       "tags": [
-        "list",
-        "management",
-        "interactive",
+        "authentication",
+        "login",
+        "form",
         "card",
+        "centered",
         "scaffold",
         "toolbar"
       ],
-      "file": "lists/list-management/list-management.html",
-      "category": "Lists",
+      "file": "forms/login/login.html",
+      "category": "Forms",
       "componentsUsed": [
         "forge-button",
         "forge-card",
+        "forge-checkbox",
+        "forge-divider",
         "forge-icon",
         "forge-icon-button",
-        "forge-list",
-        "forge-list-item",
-        "forge-popover",
         "forge-scaffold",
         "forge-text-field",
         "forge-toolbar"
       ],
-      "screenshot": "lists/list-management/list-management.webp",
-      "hasScript": true
+      "screenshot": "forms/login/login.webp",
+      "hasScript": false
     },
     {
       "id": "forms/complex-form-with-grouped-sections/complex-form-with-grouped-sections",
@@ -388,35 +417,6 @@
         "forge-toolbar"
       ],
       "screenshot": "forms/complex-form-with-grouped-sections/complex-form-with-grouped-sections.webp",
-      "hasScript": false
-    },
-    {
-      "id": "forms/login/login",
-      "name": "Login Form",
-      "description": "Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link",
-      "tags": [
-        "authentication",
-        "login",
-        "form",
-        "card",
-        "centered",
-        "scaffold",
-        "toolbar"
-      ],
-      "file": "forms/login/login.html",
-      "category": "Forms",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-checkbox",
-        "forge-divider",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-text-field",
-        "forge-toolbar"
-      ],
-      "screenshot": "forms/login/login.webp",
       "hasScript": false
     },
     {
@@ -531,6 +531,30 @@
       "hasScript": false
     },
     {
+      "id": "cards/responsive-cards/responsive-cards",
+      "name": "Responsive Cards",
+      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
+      "tags": [
+        "cards",
+        "responsive",
+        "grid",
+        "badge",
+        "image",
+        "metrics"
+      ],
+      "file": "cards/responsive-cards/responsive-cards.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-badge",
+        "forge-card",
+        "forge-icon",
+        "forge-scaffold",
+        "forge-toolbar"
+      ],
+      "screenshot": "cards/responsive-cards/responsive-cards.webp",
+      "hasScript": false
+    },
+    {
       "id": "cards/tabbed-card/tabbed-card",
       "name": "Tabbed Card",
       "description": "Card with tab navigation that switches between different content views using forge-tab-bar and forge-view-switcher",
@@ -558,30 +582,6 @@
         "forge-view-switcher"
       ],
       "screenshot": "cards/tabbed-card/tabbed-card.webp",
-      "hasScript": false
-    },
-    {
-      "id": "cards/responsive-cards/responsive-cards",
-      "name": "Responsive Cards",
-      "description": "Auto-fitting responsive grid of content cards that adapts to available space, with each card featuring a header image, category badge, title, description text, an action link with icon, and engagement metrics displaying view and comment counts",
-      "tags": [
-        "cards",
-        "responsive",
-        "grid",
-        "badge",
-        "image",
-        "metrics"
-      ],
-      "file": "cards/responsive-cards/responsive-cards.html",
-      "category": "Cards",
-      "componentsUsed": [
-        "forge-badge",
-        "forge-card",
-        "forge-icon",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "screenshot": "cards/responsive-cards/responsive-cards.webp",
       "hasScript": false
     },
     {
@@ -942,5 +942,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-07-22T19:50:50.553Z"
+  "generatedAt": "2026-07-24T13:18:12.419Z"
 }
