@@ -1,0 +1,101 @@
+@use './core';
+@use '../timeline/token-utils' as timeline;
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+//
+// Base
+//
+
+.forge-timeline-item {
+  @include core.tokens;
+  @include timeline.tokens;
+}
+
+.forge-timeline-item {
+  @include core.base;
+}
+
+.summary {
+  @include core.summary;
+}
+
+.center {
+  @include core.center;
+}
+
+.end {
+  @include core.end;
+}
+
+.detail {
+  @include core.detail;
+}
+
+.sidebar {
+  @include core.sidebar;
+}
+
+.marker {
+  @include core.marker;
+
+  ::slotted(forge-icon) {
+    @include core.icon;
+  }
+}
+
+.default-marker {
+  @include core.default-marker;
+}
+
+//
+// Line
+//
+
+.sidebar-start,
+.sidebar-both {
+  &::before {
+    @include core.start-line;
+  }
+}
+
+.sidebar-end,
+.sidebar-both {
+  &::after {
+    @include core.end-line;
+  }
+}
+
+:host(:not(:first-child)) {
+  .sidebar-auto::before {
+    @include core.start-line;
+  }
+}
+
+:host(:not(:last-child)) {
+  .sidebar-auto::after {
+    @include core.end-line;
+  }
+}
+
+:host(:last-child) {
+  .forge-timeline-item {
+    @include core.last;
+  }
+}
+
+//
+// Theme
+//
+
+@each $theme in 'primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info' {
+  .#{$theme} {
+    @include core.theme($theme);
+  }
+}
