@@ -68,20 +68,3 @@
 </div>
 
 <script type="module" src="listbox.ts"></script>
-<script>
-  // Basic single-select
-  document.getElementById('basic-single').addEventListener('forge-listbox-change', e => {
-    document.getElementById('basic-single-value').textContent = e.detail.value || 'None';
-  });
-
-  // Multi-select
-  document.getElementById('multi-select').addEventListener('forge-listbox-change', e => {
-    const values = e.detail.value || [];
-    document.getElementById('multi-select-value').textContent = values.length ? values.join(', ') : 'None';
-  });
-
-  // Grouped
-  document.getElementById('grouped').addEventListener('forge-listbox-change', e => {
-    document.getElementById('grouped-value').textContent = e.detail.value || 'None';
-  });
-</script>

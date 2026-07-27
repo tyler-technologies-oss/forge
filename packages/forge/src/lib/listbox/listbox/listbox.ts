@@ -8,39 +8,39 @@ import { composedPathFrom } from '../../core/utils/event-utils.js';
 import { createFocusGroupRef, focusGroup } from '../../core/utils/focus-group.js';
 import { KeyActionController } from '../../core/utils/key-action.js';
 import { toggleState } from '../../core/utils/utils.js';
-import { IListboxActivateEventData, IListboxChangeEventData, LISTBOX_CONSTANTS, ListboxOptionData } from './listbox-constants.js';
 
 import styles from './listbox.scss';
+
+export const LISTBOX_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-listbox';
+
+export interface ListboxOptionData {
+  element: HTMLElement;
+  value: any;
+  label: string;
+  disabled: boolean;
+  index: number;
+}
 
 /**
  * @tag forge-listbox
  *
  * @summary Listboxes allow users to select one or more options from a list.
  *
- * @description
- * The listbox component follows the W3C ARIA APG listbox pattern, providing keyboard navigation
- * and screen reader support. It uses declarative `<forge-option>` and `<forge-option-group>` elements
- * for options and groups.
- *
  * @dependency forge-option
  * @dependency forge-option-group
  *
- * @event {CustomEvent<IListboxChangeEventData>} forge-listbox-change - Dispatches when the selection changes.
- * @event {CustomEvent<IListboxActivateEventData>} forge-listbox-activate - Dispatches when an option is activated.
+ * @event {Event} change - Dispatches when the selection changes.
  *
- * @cssproperty --forge-listbox-padding - The padding of the listbox container.
- * @cssproperty --forge-listbox-gap - The gap between list items.
- *
- * @csspart container - The container element.
+ * @csspart root - The root element.
  *
  * @slot - The listbox options and option groups.
  */
-@customElement(LISTBOX_CONSTANTS.elementName)
+@customElement(LISTBOX_TAG_NAME)
 export class ListboxComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = LISTBOX_CONSTANTS.elementName;
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = LISTBOX_TAG_NAME;
 
   #internals: ElementInternals;
   #optionObserver?: MutationObserver;
@@ -81,7 +81,7 @@ export class ListboxComponent extends BaseLitElement {
 
   // Focus group with aria-activedescendant
   #focusGroupRef = createFocusGroupRef({
-    selector: LISTBOX_CONSTANTS.selectors.OPTION_NOT_DISABLED,
+    selector: '[role="option"]:not([aria-disabled="true"])',
     orientation: 'vertical',
     wrap: true,
     useActiveDescendant: true,
@@ -93,8 +93,6 @@ export class ListboxComponent extends BaseLitElement {
   constructor() {
     super();
     this.#internals = this.attachInternals();
-
-    // Keyboard action controller
     new KeyActionController(this, {
       actions: [
         {
@@ -137,6 +135,7 @@ export class ListboxComponent extends BaseLitElement {
   public willUpdate(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('disabled')) {
       toggleState(this.#internals, 'disabled', this.disabled);
+      toggleState(this.#internals, 'disabled', this.disabled);
     }
 
     if (changedProperties.has('orientation')) {
@@ -146,18 +145,18 @@ export class ListboxComponent extends BaseLitElement {
 
     if (changedProperties.has('multiple')) {
       setDefaultAria(this, this.#internals, { ariaMultiSelectable: this.multiple ? 'true' : null });
+      toggleState(this.#internals, 'multiple', this.multiple);
     }
 
     if (changedProperties.has('value')) {
-      this.#updateOptionARIA();
+      this.#updateOptionAria();
     }
   }
 
   public render(): TemplateResult {
     const classes = {
       'forge-listbox': true,
-      'forge-listbox--horizontal': this.orientation === 'horizontal',
-      'forge-listbox--disabled': this.disabled
+      horizontal: this.orientation === 'horizontal'
     };
 
     return html`
@@ -211,11 +210,11 @@ export class ListboxComponent extends BaseLitElement {
       };
     });
 
-    this.#updateOptionARIA();
+    this.#updateOptionAria();
     this.#focusGroupRef.update();
   }
 
-  #updateOptionARIA(): void {
+  #updateOptionAria(): void {
     this._options.forEach(option => {
       // Set role
       if (!option.element.hasAttribute('role')) {
@@ -301,17 +300,11 @@ export class ListboxComponent extends BaseLitElement {
       return;
     }
 
-    const previousValue = this.value;
-    const changeEvent = new CustomEvent<IListboxChangeEventData>(LISTBOX_CONSTANTS.events.CHANGE, {
-      detail: { value, previousValue },
+    const changeEvent = new Event('change', {
       bubbles: true,
-      cancelable: true,
       composed: true
     });
-
-    if (!this.dispatchEvent(changeEvent)) {
-      return; // Prevented
-    }
+    this.dispatchEvent(changeEvent);
 
     if (this.multiple) {
       const currentValues = Array.isArray(this.value) ? [...this.value] : [];
@@ -325,18 +318,6 @@ export class ListboxComponent extends BaseLitElement {
     } else {
       this.value = value;
     }
-
-    this.#emitActivateEvent(value);
-  }
-
-  #emitActivateEvent(value: any): void {
-    this.dispatchEvent(
-      new CustomEvent<IListboxActivateEventData>(LISTBOX_CONSTANTS.events.ACTIVATE, {
-        detail: { value },
-        bubbles: true,
-        composed: true
-      })
-    );
   }
 
   // *****
@@ -396,8 +377,7 @@ export class ListboxComponent extends BaseLitElement {
       this.value = allValues;
     }
 
-    const changeEvent = new CustomEvent<IListboxChangeEventData>(LISTBOX_CONSTANTS.events.CHANGE, {
-      detail: { value: this.value, previousValue: this.value },
+    const changeEvent = new Event('change', {
       bubbles: true,
       composed: true
     });
@@ -415,10 +395,5 @@ export class ListboxComponent extends BaseLitElement {
 declare global {
   interface HTMLElementTagNameMap {
     'forge-listbox': ListboxComponent;
-  }
-
-  interface HTMLElementEventMap {
-    'forge-listbox-change': CustomEvent<IListboxChangeEventData>;
-    'forge-listbox-activate': CustomEvent<IListboxActivateEventData>;
   }
 }
