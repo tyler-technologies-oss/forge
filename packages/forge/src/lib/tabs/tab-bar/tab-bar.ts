@@ -2,7 +2,7 @@ import { provide } from '@lit/context';
 import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver, isDefined } from '@tylertech/forge-core';
 import { tylIconKeyboardArrowDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, query, queryAssignedElements, state } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { live } from 'lit/directives/live.js';
 import { playStateLayerAnimation } from '../../constants.js';
@@ -214,7 +214,9 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   @query('.scroll-button-previous') private _previousButton?: IconButtonComponent;
   @query('.scroll-button-next') private _nextButton?: IconButtonComponent;
 
-  @queryAssignedElements({ selector: `${TAB_CONSTANTS.elementName}` }) private _tabs!: TabComponent[];
+  get #tabs(): TabComponent[] {
+    return Array.from(this.querySelectorAll<TabComponent>(TAB_CONSTANTS.elementName));
+  }
 
   #focusGroupRef = createFocusGroupRef({
     selector: 'forge-tab',
@@ -384,7 +386,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   #handleSlotChange(): void {
     this.#focusGroupRef.update();
     // Handle the active tab being removed from the DOM
-    if (this._activeTabElement && !this._tabs.includes(this._activeTabElement)) {
+    if (this._activeTabElement && !this.#tabs.includes(this._activeTabElement)) {
       this._activeTabElement = null;
       this.#focusGroupRef.currentElement = null;
     }
@@ -429,7 +431,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   // *****
 
   #syncActiveTab(): void {
-    const tabs = this._tabs;
+    const tabs = this.#tabs;
     let oldActiveTab: TabComponent | undefined;
     tabs.forEach(tab => {
       if (tab.active && tab !== this._activeTabElement) {
@@ -490,7 +492,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    * @returns `true` if the event was not canceled, `false` otherwise.
    */
   #dispatchChangeEvent(tab: TabComponent): boolean {
-    const tabs = this._tabs;
+    const tabs = this.#tabs;
     const index = tabs.indexOf(tab);
     const event = new CustomEvent<ITabBarChangeEventData>(TAB_BAR_CONSTANTS.events.CHANGE, {
       detail: { index, name: tab.name },
@@ -578,7 +580,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       return this.#syncActiveTab();
     }
 
-    const tabs = this._tabs;
+    const tabs = this.#tabs;
     if (index >= 0 && index < tabs.length) {
       this._activeTabElement = tabs[index];
       return this.#syncActiveTab();
@@ -605,7 +607,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       return this.#syncActiveTab();
     }
 
-    const tabs = this._tabs;
+    const tabs = this.#tabs;
     const tab = tabs.find(t => t.name === name);
     if (tab) {
       this._activeTabElement = tab;
@@ -619,7 +621,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    * used to synchronize the active tab on first update when it hasn't been set on the tab bar.
    */
   #trySetActiveTabFromElements(): void {
-    const tabs = this._tabs;
+    const tabs = this.#tabs;
     const activeTab = tabs.find(t => t.active);
     if (activeTab) {
       this._activeTabElement = activeTab;
@@ -645,7 +647,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    * @param tab The tab to close.
    */
   async #closeTab(tab: TabComponent): Promise<void> {
-    const tabs = this._tabs.filter(t => !t.disabled);
+    const tabs = this.#tabs.filter(t => !t.disabled);
     const index = tabs.indexOf(tab);
     const wasFocused = tab.ownerDocument.activeElement === tab;
     const wasActive = tab.active;
@@ -657,7 +659,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     }
 
     await this.updateComplete;
-    const updatedTabs = this._tabs.filter(t => !t.disabled);
+    const updatedTabs = this.#tabs.filter(t => !t.disabled);
     const newTab = updatedTabs[index] || updatedTabs[index - 1];
 
     // Maintain focus at the same index or set it to the first tab
