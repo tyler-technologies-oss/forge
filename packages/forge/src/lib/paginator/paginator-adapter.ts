@@ -1,7 +1,7 @@
 import { getShadowElement, removeAllChildren, toggleElementPlaceholder } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
 import { LiveAnnouncer } from '@tylertech/forge-core';
-import { IIconButtonComponent } from '../icon-button/index.js';
+import { type IconButtonComponent } from '../icon-button/index.js';
 import { ISelectComponent, ISelectOption } from '../select/index.js';
 import { IPaginatorComponent } from './paginator.js';
 import { PAGINATOR_CONSTANTS } from './paginator-constants.js';
@@ -41,13 +41,13 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   private _pageSizeSelect: ISelectComponent;
   private _rangeLabel: HTMLSlotElement;
   private _rangeLabelAlternative: HTMLSlotElement;
-  private _firstPageButton: IIconButtonComponent;
+  private _firstPageButton: IconButtonComponent;
   private _firstPageContainer: HTMLElement;
-  private _previousPageButton: IIconButtonComponent;
+  private _previousPageButton: IconButtonComponent;
   private _previousPageContainer: HTMLElement;
-  private _nextPageButton: IIconButtonComponent;
+  private _nextPageButton: IconButtonComponent;
   private _nextPageContainer: HTMLElement;
-  private _lastPageButton: IIconButtonComponent;
+  private _lastPageButton: IconButtonComponent;
   private _lastPageContainer: HTMLElement;
   private _firstPagePlaceholder: Comment;
   private _lastPagePlaceholder: Comment;
@@ -58,13 +58,13 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
     this._pageSizeSelect = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.PAGE_SIZE_SELECT) as ISelectComponent;
     this._rangeLabel = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.RANGE_LABEL) as HTMLSlotElement;
     this._rangeLabelAlternative = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.RANGE_LABEL_ALTERNATIVE) as HTMLSlotElement;
-    this._firstPageButton = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.FIRST_PAGE_BUTTON) as IIconButtonComponent;
+    this._firstPageButton = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.FIRST_PAGE_BUTTON) as IconButtonComponent;
     this._firstPageContainer = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.FIRST_PAGE_CONTAINER) as HTMLElement;
-    this._previousPageButton = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.PREVIOUS_PAGE_BUTTON) as IIconButtonComponent;
+    this._previousPageButton = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.PREVIOUS_PAGE_BUTTON) as IconButtonComponent;
     this._previousPageContainer = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.PREVIOUS_PAGE_CONTAINER) as HTMLElement;
-    this._nextPageButton = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.NEXT_PAGE_BUTTON) as IIconButtonComponent;
+    this._nextPageButton = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.NEXT_PAGE_BUTTON) as IconButtonComponent;
     this._nextPageContainer = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.NEXT_PAGE_CONTAINER) as HTMLElement;
-    this._lastPageButton = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.LAST_PAGE_BUTTON) as IIconButtonComponent;
+    this._lastPageButton = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.LAST_PAGE_BUTTON) as IconButtonComponent;
     this._lastPageContainer = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.LAST_PAGE_CONTAINER) as HTMLElement;
   }
 
@@ -201,7 +201,7 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
     LiveAnnouncer.instance.announce(message, 'polite');
   }
 
-  private _tryFocus(elements: Array<IIconButtonComponent | ISelectComponent>, options?: FocusOptions): void {
+  private _tryFocus(elements: Array<IconButtonComponent | ISelectComponent>, options?: FocusOptions): void {
     const preventScroll = typeof options?.preventScroll === 'boolean' ? options.preventScroll : true;
     for (const el of elements) {
       if (el && el.isConnected && !el.disabled && el.style.display !== 'none') {

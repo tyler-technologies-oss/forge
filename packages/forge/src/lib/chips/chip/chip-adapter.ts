@@ -1,7 +1,7 @@
 import { elementFromHTML, getShadowElement, toggleAttribute, walkUpUntil } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
 import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator/index.js';
-import { IIconButtonComponent } from '../../icon-button/index.js';
+import { type IconButtonComponent } from '../../icon-button/index.js';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer/index.js';
 import { IChipSetComponent } from '../chip-set/chip-set.js';
 import { CHIP_SET_CONSTANTS } from '../chip-set/chip-set-constants.js';
@@ -12,7 +12,7 @@ import checkmarkTemplate from './chip-checkmark.html';
 import { replaceElement } from '../../core/utils/utils.js';
 
 export interface IChipAdapter extends IBaseAdapter {
-  readonly removeButtonElement: IIconButtonComponent | undefined;
+  readonly removeButtonElement: IconButtonComponent | undefined;
   readonly isAnchor: boolean;
   clickTrigger(): void;
   addRootListener(type: string, listener: EventListener): void;
@@ -36,7 +36,7 @@ export interface IChipAdapter extends IBaseAdapter {
 export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAdapter {
   private _rootElement: HTMLElement;
   private _triggerElement: HTMLButtonElement | HTMLAnchorElement;
-  private _removeButtonElement: IIconButtonComponent | undefined;
+  private _removeButtonElement: IconButtonComponent | undefined;
   private _removeTextElement: HTMLElement | undefined;
   private _startSlotElement: HTMLSlotElement;
   private _checkmarkElement: HTMLElement;
@@ -52,7 +52,7 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
     this._stateLayerElement = getShadowElement(this._component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
   }
 
-  public get removeButtonElement(): IIconButtonComponent | undefined {
+  public get removeButtonElement(): IconButtonComponent | undefined {
     return this._removeButtonElement;
   }
 
@@ -232,7 +232,7 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
     return 'remove-text trigger';
   }
 
-  private _createRemoveButton(): IIconButtonComponent {
+  private _createRemoveButton(): IconButtonComponent {
     const buttonEl = document.createElement('forge-icon-button');
     buttonEl.density = 'small';
     buttonEl.id = 'remove-button';

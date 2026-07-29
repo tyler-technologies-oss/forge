@@ -29,6 +29,7 @@ const defaults = {
   DEFAULT_DENSITY: 'large' as IconButtonDensity
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const ICON_BUTTON_CONSTANTS = {
   elementName,
   observedAttributes,
