@@ -91,8 +91,8 @@
 }
 
 @mixin theme($theme, $muted: false) {
-  $background: "#{$theme}-container-#{if($muted, 'minimum', 'low')}";
-  $color: "#{$theme}#{if($muted, '-container-high', '')}";
+  $background: "#{$theme}-container-#{if(sass($muted): 'minimum'; else: 'low')}";
+  $color: "#{$theme}#{if(sass($muted): '-container-high'; else: '')}";
 
   @include override(background, #{theme.variable($background)}, value);
   @include override(color, #{theme.variable($color)}, value);
@@ -103,12 +103,15 @@
 }
 
 @function tickmarks-background($count, $color, $secondary-color: null, $vertical: false) {
-  $transparent-start: if($secondary-color, 2px, 1px);
+  $transparent-start: if(
+    sass($secondary-color): 2px; else: 1px
+  );
   @return repeating-linear-gradient(
-    if($vertical, 0, 90deg),
+    if(sass($vertical): 0; else: 90deg),
     $color 0px,
     $color 1px,
-    if($secondary-color, #{$secondary-color} + ' 1px,', null) if($secondary-color, #{$secondary-color} + ' 2px,', null) transparent $transparent-start,
+    if(sass($secondary-color): #{$secondary-color} + ' 1px,' ; else: null) if(sass($secondary-color): #{$secondary-color} + ' 2px,' ; else: null) transparent
+      $transparent-start,
     transparent calc(100% / ($count + 1) + 0px)
   );
 }

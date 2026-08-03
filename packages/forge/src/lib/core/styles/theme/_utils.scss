@@ -44,7 +44,9 @@
 /// @return {Color} - The contrast color for the provided color.
 ///
 @function contrast($color, $alpha: null, $light: #ffffff, $dark: #000000) {
-  $contrast-color: if(color-utils.contrast-tone($color) == 'dark', $dark, $light);
+  $contrast-color: if(
+    sass(color-utils.contrast-tone($color) == 'dark'): $dark; else: $light
+  );
   @if $alpha != null {
     @return emphasized($contrast-color, $alpha);
   }
@@ -55,7 +57,7 @@
 /// Converts a color with an opacity value on top of a specific background color to an opaque hex color.
 ///
 @function hexify($color, $background, $alpha: 100%) {
-  @return if($alpha == 100%, color.mix($background, $color, $alpha), color.mix($background, $color, 100 - $alpha));
+  @return if(sass($alpha == 100%): color.mix($background, $color, $alpha) ; else: color.mix($background, $color, 100 - $alpha));
 }
 
 ///
