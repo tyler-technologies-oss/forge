@@ -1,5 +1,11 @@
 # @tylertech/forge
 
+## 3.15.2
+
+### Patch Changes
+
+- 7260080: fix(tabs): detect all descendent tabs of tab bar
+
 ## 3.15.1
 
 ### Patch Changes
