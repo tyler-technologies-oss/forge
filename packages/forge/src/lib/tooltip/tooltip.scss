@@ -57,6 +57,8 @@
 .forge-tooltip {
   #{declare(slidein-x)}: 0;
   #{declare(slidein-y)}: 0;
+  #{declare(slideout-x)}: 0;
+  #{declare(slideout-y)}: 0;
 }
 
 forge-overlay[open] {

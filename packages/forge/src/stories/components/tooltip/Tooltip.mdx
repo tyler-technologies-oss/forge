@@ -1,5 +1,6 @@
 import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
+import CssOnlyInformation from '../../blocks/CssOnlyInformation';
 import * as TooltipStories from './Tooltip.stories';
 
 <Meta of={TooltipStories} />
@@ -103,3 +104,60 @@ tooltip is rendered at the same time as the anchor element, and attached via a t
 - Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
 - The target element receives the proper ARIA attributes such as `aria-labelledby` or `aria-describedby` where necessary.
 - Should not contain interactive content.
+
+## CSS-Only
+
+The tooltip component is also available as a CSS-only component without the need for JavaScript. This is useful for simple
+tooltips where you don't need programmatic control, accessibility type associations, or advanced positioning.
+
+The CSS-only tooltip uses `::before` and `::after` pseudo-elements to render the tooltip content and arrow respectively.
+Tooltip text is provided via the `data-text` attribute, and the tooltip is shown on `:hover` and `:focus-visible`.
+
+<Canvas of={TooltipStories.CSSOnly} />
+
+<CssOnlyInformation />
+
+### Placement
+
+The CSS-only tooltip supports four placement directions via modifier classes. The default placement is `right`.
+
+### Offset
+
+The gap between the tooltip and its anchor element is the CSS-only equivalent of the `offset` property on `<forge-tooltip>`, and defaults to `4px` to match.
+
+```html
+<span class="forge-tooltip" data-text="Tooltip text" style="--_tooltip-offset: 12px" tabindex="0">Hover me</span>
+```
+
+| Class | Description |
+|---|---|
+| `.forge-tooltip` | Right placement (default) |
+| `.forge-tooltip--top` | Positions the tooltip above the element |
+| `.forge-tooltip--bottom` | Positions the tooltip below the element |
+| `.forge-tooltip--left` | Positions the tooltip to the left of the element |
+
+### Usage
+
+```html
+<!-- Default (right) placement -->
+<span class="forge-tooltip" data-text="Tooltip text" tabindex="0">
+  Hover me
+</span>
+
+<!-- Top placement -->
+<span class="forge-tooltip forge-tooltip--top" data-text="Tooltip text" tabindex="0">
+  Hover me
+</span>
+
+<!-- Bottom placement -->
+<span class="forge-tooltip forge-tooltip--bottom" data-text="Tooltip text" tabindex="0">
+  Hover me
+</span>
+
+<!-- Left placement -->
+<span class="forge-tooltip forge-tooltip--left" data-text="Tooltip text" tabindex="0">
+  Hover me
+</span>
+```
+
+> Add `tabindex="0"` to non-focusable elements (like `<span>` or `<div>`) to ensure the tooltip is accessible via keyboard navigation.
