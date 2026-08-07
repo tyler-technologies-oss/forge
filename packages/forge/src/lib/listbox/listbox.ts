@@ -7,7 +7,7 @@ import { SELECT_LIKE_DISABLED, SELECT_LIKE_MULTIPLE, toggleFocusIndicator } from
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
 import { composedPathFrom } from '../core/utils/event-utils.js';
-import { createFocusGroupRef, focusGroup } from '../core/utils/focus-group.js';
+import { FocusGroupController } from '../core/utils/focus-group.js';
 import { KeyActionController } from '../core/utils/key-action.js';
 import { toggleState } from '../core/utils/utils.js';
 import { OptionComponent } from '../option/option/option.js';
@@ -88,7 +88,7 @@ export class ListboxComponent extends BaseLitElement {
   }
 
   // Focus group with aria-activedescendant
-  #focusGroupRef = createFocusGroupRef<OptionComponent>({
+  #focusGroup = new FocusGroupController<OptionComponent>(this, {
     selector: 'forge-option',
     orientation: 'vertical',
     wrap: true,
@@ -107,11 +107,11 @@ export class ListboxComponent extends BaseLitElement {
       actions: [
         {
           key: ['ArrowUp', 'ArrowDown'],
-          handler: evt => this.#focusGroupRef.fromEvent(evt, { focusVisible: true }),
+          handler: evt => this.#focusGroup.fromEvent(evt, { focusVisible: true }),
           allowRepeat: true,
           allowDefault: true
         },
-        { key: ['Home', 'End'], handler: evt => this.#focusGroupRef.fromEvent(evt, { focusVisible: true }) },
+        { key: ['Home', 'End'], handler: evt => this.#focusGroup.fromEvent(evt, { focusVisible: true }) },
         { key: ' ', handler: this.#handleSpaceKey.bind(this) },
         { key: 'Enter', handler: this.#handleEnterKey.bind(this) },
         {
@@ -151,7 +151,7 @@ export class ListboxComponent extends BaseLitElement {
 
     if (changedProperties.has('orientation')) {
       setDefaultAria(this, this.#internals, { ariaOrientation: this.orientation === 'horizontal' ? 'horizontal' : null });
-      this.#focusGroupRef.orientation = this.orientation;
+      this.#focusGroup.orientation = this.orientation;
     }
 
     if (changedProperties.has('multiple')) {
@@ -171,7 +171,7 @@ export class ListboxComponent extends BaseLitElement {
     };
 
     return html`
-      <div class=${classMap(classes)} part="container" ${focusGroup(this.#focusGroupRef)} @click=${this.#handleClick}>
+      <div class=${classMap(classes)} part="root" @click=${this.#handleClick}>
         <slot></slot>
       </div>
     `;
@@ -231,14 +231,14 @@ export class ListboxComponent extends BaseLitElement {
   // *****
 
   #handleBlur(): void {
-    const activeOption = this.#focusGroupRef.currentElement;
+    const activeOption = this.#focusGroup.currentElement;
     if (activeOption) {
       (activeOption as OptionComponent)[toggleFocusIndicator](false);
     }
   }
 
   #handleFocus(): void {
-    const activeOption = this.#focusGroupRef.currentElement;
+    const activeOption = this.#focusGroup.currentElement;
     if (activeOption) {
       (activeOption as OptionComponent)[toggleFocusIndicator](true);
     }
@@ -251,14 +251,14 @@ export class ListboxComponent extends BaseLitElement {
     }
 
     // Update active descendant to clicked option
-    this.#focusGroupRef.focus(option, { focusVisible: false });
+    this.#focusGroup.focus(option, { focusVisible: false });
 
     // Select the option
     this.#selectOption(option.value);
   }
 
   #handleSpaceKey(evt: KeyboardEvent): void {
-    const activeOption = this.#focusGroupRef.currentElement;
+    const activeOption = this.#focusGroup.currentElement;
     if (activeOption) {
       evt.preventDefault();
       this.#selectOption(activeOption.value);
@@ -266,7 +266,7 @@ export class ListboxComponent extends BaseLitElement {
   }
 
   #handleEnterKey(evt: KeyboardEvent): void {
-    const activeOption = this.#focusGroupRef.currentElement;
+    const activeOption = this.#focusGroup.currentElement;
     if (activeOption) {
       evt.preventDefault();
       this.#selectOption(activeOption.value);
@@ -305,7 +305,7 @@ export class ListboxComponent extends BaseLitElement {
     const optionsWithLabels = enabledOptions.map(opt => ({ el: opt, label: opt.label || '' }));
     const match = optionsWithLabels.find(opt => opt.label.toLowerCase().startsWith(searchString.toLowerCase()));
     if (match) {
-      this.#focusGroupRef.focus(match.el, { focusVisible: true });
+      this.#focusGroup.focus(match.el, { focusVisible: true });
     }
   }
 }

@@ -1,11 +1,6 @@
 @use '../core/styles/theme';
 @use './token-utils' as *;
 
-@mixin base {
-  display: block;
-  outline: none;
-}
-
 @mixin horizontal {
   display: flex;
   flex-direction: row;

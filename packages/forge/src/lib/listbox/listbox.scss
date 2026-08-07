@@ -3,6 +3,7 @@
 
 :host {
   display: block;
+  outline: none;
 }
 
 :host([hidden]) {
@@ -11,10 +12,6 @@
 
 .forge-listbox {
   @include tokens;
-}
-
-.forge-listbox {
-  @include core.base;
 }
 
 .horizontal {

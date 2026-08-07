@@ -1,6 +1,6 @@
 import { consume } from '@lit/context';
 import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
-import { tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconDrag, tylIconDragHorizontal } from '@tylertech/tyler-icons';
+import { tylIconCheck, tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconDrag, tylIconDragHorizontal } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
@@ -39,7 +39,7 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [FocusIndicatorComponent, IconComponent, StateLayerComponent];
 
   static {
-    IconRegistry.define([tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconDrag, tylIconDragHorizontal]);
+    IconRegistry.define([tylIconCheck, tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconDrag, tylIconDragHorizontal]);
   }
 
   /**
@@ -121,6 +121,7 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
           <slot name="tertiary"></slot>
         </div>
         <slot name="end"></slot>
+        ${this.#tryRenderCheckmark()}
         <forge-focus-indicator part="focus-indicator" .active=${this._focusIndicatorActive} inward></forge-focus-indicator>
         ${this.disabled ? nothing : html`<forge-state-layer part="state-layer" target=":host"></forge-state-layer>`}
       </div>
@@ -132,6 +133,13 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
       return nothing;
     }
     return html`<forge-icon class="checkbox" name=${this.selected ? 'check_box' : 'check_box_outline_blank'}></forge-icon>`;
+  }
+
+  #tryRenderCheckmark(): TemplateResult | typeof nothing {
+    if (this._multiple) {
+      return nothing;
+    }
+    return this.selected ? html`<forge-icon class="checkmark" name="check"></forge-icon>` : nothing;
   }
 
   #tryRenderDragHandle(): TemplateResult | typeof nothing {
