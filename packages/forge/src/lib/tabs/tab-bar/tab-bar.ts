@@ -220,7 +220,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     selector: 'forge-tab',
     orientation: this.vertical ? 'vertical' : 'horizontal',
     wrap: true,
-    onFocusChange: (_, element) => this.#handleTabFocus(element)
+    onFocusChange: args => this.#handleTabFocus(args.newElement)
   });
 
   constructor() {

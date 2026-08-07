@@ -1,5 +1,9 @@
-forge-listbox {
-  max-width: 400px;
-  border: 1px solid var(--forge-theme-outline);
-  border-radius: 8px;
+.dual-listbox-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  forge-card.listbox-card {
+    --forge-card-padding: 0px;
+  }
 }

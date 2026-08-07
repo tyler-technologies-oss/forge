@@ -1,0 +1,22 @@
+@use './token-utils' as *;
+@use './core';
+
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-listbox {
+  @include tokens;
+}
+
+.forge-listbox {
+  @include core.base;
+}
+
+.horizontal {
+  @include core.horizontal;
+}

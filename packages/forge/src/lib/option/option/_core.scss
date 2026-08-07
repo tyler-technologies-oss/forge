@@ -1,0 +1,71 @@
+@use '../../core/styles/typography';
+@use './token-utils' as *;
+
+@mixin base {
+  position: relative;
+  box-sizing: border-box;
+
+  display: flex;
+  gap: #{token(gap)};
+  align-items: center;
+
+  outline: none;
+  border-radius: #{token(shape)};
+  background-color: #{token(background)};
+  height: #{token(height)};
+  min-height: #{token(height)};
+  padding: #{token(padding)};
+  margin: #{token(margin)};
+
+  text-decoration: none;
+
+  cursor: #{token(cursor)};
+}
+
+@mixin center {
+  @include typography.style(body2, $exclude: [font-size font-weight line-height]);
+  @include typography.ellipse;
+
+  box-sizing: border-box;
+  isolation: isolate;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  font-size: #{token(text-font-size)};
+  font-weight: #{token(text-font-weight)};
+  line-height: #{token(text-line-height)};
+
+  flex: 1;
+
+  contain: layout;
+}
+
+@mixin selected {
+  color: #{token(selected-color)};
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: #{token(selected-opacity)};
+    background-color: #{token(selected-background)};
+    pointer-events: none;
+  }
+}
+
+@mixin start-end-selected {
+  color: #{token(selected-color)};
+  isolation: isolate;
+}
+
+@mixin center-selected {
+  color: #{token(selected-color)};
+}
+
+@mixin disabled {
+  cursor: #{token(disabled-cursor)};
+  opacity: #{token(disabled-opacity)};
+}

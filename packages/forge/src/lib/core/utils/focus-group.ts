@@ -5,10 +5,16 @@ import { ExperimentalFocusOptions } from '../../constants.js';
 import { composedPathFrom } from './event-utils.js';
 
 export type FocusGroupOrientation = 'horizontal' | 'vertical' | 'both';
-export type FocusGroupFocusChangeCallback = (evt: FocusEvent, element: HTMLElement) => void;
-export type FocusGroupGetEntryElementCallback = () => HTMLElement | null;
+export type FocusGroupFocusChangeCallback<T extends HTMLElement = HTMLElement> = (args: FocusChangeCallbackArgs<T>) => void;
+export type FocusGroupGetEntryElementCallback<T extends HTMLElement = HTMLElement> = () => T | null;
 
-export interface IFocusGroupConfig {
+export interface FocusChangeCallbackArgs<T extends HTMLElement = HTMLElement> {
+  event: FocusEvent;
+  newElement: T;
+  oldElement?: T;
+  focusVisible: boolean;
+}
+export interface FocusGroupConfig<T extends HTMLElement = HTMLElement> {
   /**
    * CSS selector to query focusable elements within the host.
    */
@@ -33,13 +39,13 @@ export interface IFocusGroupConfig {
    * Callback invoked when the currently focused element changes within the group. Receives the
    * newly focused element and its index within the group.
    */
-  onFocusChange?: FocusGroupFocusChangeCallback;
+  onFocusChange?: FocusGroupFocusChangeCallback<T>;
 
   /**
    * Callback to get the first focusable child element within the focus group. If not provided,
    * defaults to the first element matching the selector.
    */
-  getEntryElement?: FocusGroupGetEntryElementCallback;
+  getEntryElement?: FocusGroupGetEntryElementCallback<T>;
 
   /**
    * Use aria-activedescendant pattern instead of roving tabindex.
@@ -55,7 +61,7 @@ export interface IFocusGroupConfig {
  * Core focus group management logic shared by both FocusGroupController and focusGroup directive.
  * Manages roving tabindex pattern for a group of focusable elements.
  */
-export class BaseFocusGroup {
+export class BaseFocusGroup<T extends HTMLElement = HTMLElement> {
   public orientation: FocusGroupOrientation = 'horizontal';
   public wrap = false;
 
@@ -67,7 +73,7 @@ export class BaseFocusGroup {
     return this.#selector;
   }
 
-  public set currentElement(element: HTMLElement | null) {
+  public set currentElement(element: T | null) {
     if (!element || !element.matches(this.#selector)) {
       return;
     }
@@ -85,38 +91,38 @@ export class BaseFocusGroup {
 
     this.#updateTabIndices(elements);
   }
-  public get currentElement(): HTMLElement | null {
+  public get currentElement(): T | null {
     return this.#lastFocusedElement;
   }
 
   #rootElement?: HTMLElement;
   #selector = '';
   #useActiveDescendant = false;
-  #onFocusChange: FocusGroupFocusChangeCallback | undefined;
-  #getEntryElement: FocusGroupGetEntryElementCallback = () => this.#elements[0] ?? null;
-  #lastFocusedElement: HTMLElement | null = null;
+  #onFocusChange: FocusGroupFocusChangeCallback<T> | undefined;
+  #getEntryElement: FocusGroupGetEntryElementCallback<T> = () => this.#elements[0] ?? null;
+  #lastFocusedElement: T | null = null;
   #focusInListener = (evt: FocusEvent): void => this.#handleFocusIn(evt);
   #focusOutListener = (evt: FocusEvent): void => this.#handleFocusOut(evt);
   #isInitialized = false;
 
-  get #elements(): HTMLElement[] {
+  get #elements(): T[] {
     return this.#getElements();
   }
 
-  get #entryElement(): HTMLElement | null {
+  get #entryElement(): T | null {
     if (this.#lastFocusedElement && this.#lastFocusedElement.matches(this.#selector)) {
       return this.#lastFocusedElement;
     }
     return this.#getEntryElement();
   }
 
-  constructor(rootElement?: HTMLElement, config?: IFocusGroupConfig) {
+  constructor(rootElement?: HTMLElement, config?: FocusGroupConfig<T>) {
     if (rootElement && config) {
       this._initialize(rootElement, config);
     }
   }
 
-  protected _initialize(rootElement: HTMLElement, config: IFocusGroupConfig): void {
+  protected _initialize(rootElement: HTMLElement, config: FocusGroupConfig<T>): void {
     this.#rootElement = rootElement;
     this.#selector = config.selector;
     this.orientation = config.orientation ?? 'horizontal';
@@ -211,7 +217,7 @@ export class BaseFocusGroup {
     this.#focusAtIndex(index, options);
   }
 
-  public focus(element: HTMLElement, options?: ExperimentalFocusOptions): void {
+  public focus(element: T, options?: ExperimentalFocusOptions): void {
     const elements = this.#elements;
     const index = elements.indexOf(element);
     if (index !== -1) {
@@ -248,12 +254,13 @@ export class BaseFocusGroup {
     }
 
     const target = evt.target as HTMLElement;
+    const focusVisible = target.matches(':focus-visible');
 
     // In activeDescendant mode, focus stays on root
     if (this.#useActiveDescendant) {
       // If focus enters root and no active element, set first as active
       if (target === this.#rootElement && !this.#lastFocusedElement) {
-        this.focusFirst();
+        this.focusFirst({ focusVisible });
       }
       return;
     }
@@ -261,14 +268,13 @@ export class BaseFocusGroup {
     // Original roving tabindex logic
     const elements = this.#elements;
 
-    if (elements.includes(target)) {
+    if (elements.includes(target as T)) {
       if (this.#lastFocusedElement && this.#lastFocusedElement !== target) {
         this.#lastFocusedElement.tabIndex = -1;
       }
       target.tabIndex = 0;
-      this.#lastFocusedElement = target;
-
-      this.#onFocusChange?.(evt, target);
+      this.#onFocusChange?.({ event: evt, newElement: target as T, oldElement: this.#lastFocusedElement ?? undefined, focusVisible });
+      this.#lastFocusedElement = target as T;
     }
   }
 
@@ -278,7 +284,7 @@ export class BaseFocusGroup {
     }
 
     // Ensure that the blur event passed through the last focused element
-    const blurredElement = composedPathFrom(this.#rootElement, evt).find(el => el === this.#lastFocusedElement);
+    const blurredElement = composedPathFrom(this.#rootElement, evt).find(el => el === this.#lastFocusedElement) as T | undefined;
 
     // Detect whether focus was lost due to the focused element becoming disabled
     if (blurredElement?.matches(':is(:disabled, :state(disabled))')) {
@@ -295,27 +301,27 @@ export class BaseFocusGroup {
     }
   }
 
-  #getElements(): HTMLElement[] {
+  #getElements(): T[] {
     if (!this.#rootElement || !this.#isInitialized) {
       return [];
     }
 
     // Query elements in shadow DOM
-    const shadowElements = Array.from(this.#rootElement.querySelectorAll<HTMLElement>(this.#selector));
+    const shadowElements = Array.from(this.#rootElement.querySelectorAll<T>(this.#selector));
 
     // Query slotted elements
     const slots = this.#rootElement.querySelectorAll('slot');
-    const slottedElements: HTMLElement[] = [];
+    const slottedElements: T[] = [];
 
     slots.forEach(slot => {
       const assigned = slot.assignedElements({ flatten: true });
       assigned.forEach(element => {
         // Check if the element itself matches
         if (element instanceof HTMLElement && element.matches(this.#selector)) {
-          slottedElements.push(element);
+          slottedElements.push(element as T);
         }
         // Also check descendants of slotted elements
-        const descendants = element.querySelectorAll<HTMLElement>(this.#selector);
+        const descendants = element.querySelectorAll<T>(this.#selector);
         slottedElements.push(...Array.from(descendants));
       });
     });
@@ -325,22 +331,27 @@ export class BaseFocusGroup {
     return Array.from(new Set(allElements));
   }
 
-  #focusAtIndex(index: number, options?: ExperimentalFocusOptions, elements?: HTMLElement[]): void {
+  #focusAtIndex(index: number, options?: ExperimentalFocusOptions, elements?: T[]): void {
     elements = elements || this.#elements;
     if (index < 0 || index >= elements.length) {
       console.error(`Index ${index} is out of bounds for focusable elements.`);
       return;
     }
     const element = elements[index];
-    this.#lastFocusedElement = element;
 
     if (this.#useActiveDescendant) {
       this.#updateActiveDescendant(element, elements);
-      // Call focus change callback
-      this.#onFocusChange?.(new FocusEvent('focus'), element);
+      this.#onFocusChange?.({
+        event: new FocusEvent('focus'),
+        newElement: element,
+        oldElement: this.#lastFocusedElement ?? undefined,
+        focusVisible: options?.focusVisible ?? false
+      });
     } else {
       element.focus(options);
     }
+
+    this.#lastFocusedElement = element;
   }
 
   #shouldHandleKey(key: string): boolean {
@@ -385,11 +396,11 @@ export class BaseFocusGroup {
     this.#focusAtIndex(newIndex, options, elements);
   }
 
-  #hasFocus(elements?: HTMLElement[]): boolean {
+  #hasFocus(elements?: T[]): boolean {
     return (elements || this.#elements).some(element => element.matches(':focus'));
   }
 
-  #updateTabIndices(elements?: HTMLElement[]): void {
+  #updateTabIndices(elements?: T[]): void {
     if (this.#useActiveDescendant) {
       // Don't set tabindex on child elements when using active descendant
       return;
@@ -403,7 +414,7 @@ export class BaseFocusGroup {
     });
   }
 
-  #updateActiveDescendant(element: HTMLElement, elements: HTMLElement[]): void {
+  #updateActiveDescendant(element: T, elements: T[]): void {
     if (!this.#rootElement) {
       return;
     }
@@ -428,7 +439,7 @@ export class BaseFocusGroup {
     element.scrollIntoView({ block: 'nearest' });
   }
 
-  #clearActiveDescendantAttributes(elements: HTMLElement[]): void {
+  #clearActiveDescendantAttributes(elements: T[]): void {
     elements.forEach(el => el.removeAttribute('data-active-descendant'));
   }
 }
@@ -437,10 +448,10 @@ export class BaseFocusGroup {
  * Reference object for accessing focus group functionality when using the focusGroup directive.
  * Provides the same API as FocusGroupController but works with directive-attached elements.
  */
-export class FocusGroupRef extends BaseFocusGroup {
-  #config: IFocusGroupConfig;
+export class FocusGroupRef<T extends HTMLElement = HTMLElement> extends BaseFocusGroup<T> {
+  #config: FocusGroupConfig<T>;
 
-  constructor(config: IFocusGroupConfig) {
+  constructor(config: FocusGroupConfig<T>) {
     super();
     this.#config = config;
   }
@@ -477,11 +488,11 @@ export class FocusGroupRef extends BaseFocusGroup {
  * // Access methods:
  * focusGroupRef.focusNext();
  */
-export const createFocusGroupRef = (config: IFocusGroupConfig): FocusGroupRef => new FocusGroupRef(config);
+export const createFocusGroupRef = <T extends HTMLElement = HTMLElement>(config: FocusGroupConfig<T>): FocusGroupRef<T> => new FocusGroupRef<T>(config);
 
-class FocusGroupDirective extends AsyncDirective {
+class FocusGroupDirective<T extends HTMLElement = HTMLElement> extends AsyncDirective {
   #isInitialized = false;
-  #ref?: FocusGroupRef;
+  #ref?: FocusGroupRef<T>;
 
   public update(part: ElementPart, [ref]: Parameters<this['render']>): void {
     this.#ref = ref;
@@ -497,7 +508,7 @@ class FocusGroupDirective extends AsyncDirective {
     this.#ref?.disconnect();
   }
 
-  public render(_ref: FocusGroupRef): typeof noChange {
+  public render(_ref: FocusGroupRef<T>): typeof noChange {
     return noChange;
   }
 }
@@ -532,7 +543,9 @@ class FocusGroupDirective extends AsyncDirective {
  *   }
  * }
  */
-export const focusGroup = directive(FocusGroupDirective);
+export const focusGroup = <T extends HTMLElement = HTMLElement>(
+  ref: FocusGroupRef<T>
+): ReturnType<ReturnType<typeof directive<typeof FocusGroupDirective<T>>>> => directive(FocusGroupDirective<T>)(ref);
 
 /**
  * A Lit controller for managing roving tabindex within a group of focusable elements.
@@ -550,10 +563,10 @@ export const focusGroup = directive(FocusGroupDirective);
  *   }
  * }
  */
-export class FocusGroupController extends BaseFocusGroup implements ReactiveController {
+export class FocusGroupController<T extends HTMLElement = HTMLElement> extends BaseFocusGroup<T> implements ReactiveController {
   public host: ReactiveControllerHost;
 
-  constructor(host: ReactiveControllerHost & HTMLElement, config: IFocusGroupConfig) {
+  constructor(host: ReactiveControllerHost & HTMLElement, config: FocusGroupConfig<T>) {
     super(host, config);
     this.host = host;
     host.addController(this);

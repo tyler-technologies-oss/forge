@@ -1,0 +1,8 @@
+@use 'sass:map';
+@use '../../../utils';
+
+$tokens: () !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

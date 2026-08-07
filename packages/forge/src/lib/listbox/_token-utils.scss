@@ -1,5 +1,5 @@
-@use '../../core/styles/tokens/listbox/tokens';
-@use '../../core/styles/tokens/token-utils';
+@use '../core/styles/tokens/listbox/tokens';
+@use '../core/styles/tokens/token-utils';
 
 $_module: listbox;
 $_tokens: tokens.$tokens;

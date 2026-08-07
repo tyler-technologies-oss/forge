@@ -1,69 +1,88 @@
 <div class="vert">
   <section>
-    <h3 class="forge-typography--heading2">Basic Single-Select</h3>
-    <div>
-      <forge-listbox id="basic-single">
-        <forge-option value="1">Option 1</forge-option>
-        <forge-option value="2">Option 2</forge-option>
-        <forge-option value="3">Option 3</forge-option>
-        <forge-option value="4" disabled>Option 4 (Disabled)</forge-option>
-      </forge-listbox>
-      <p>Selected: <span id="basic-single-value">None</span></p>
+    <h3 class="forge-typography--heading2">Dual Listbox</h3>
+    <div class="dual-listbox-container">
+      <forge-card class="listbox-card">
+        <forge-listbox>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2">Option 2</forge-option>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      </forge-card>
+      <forge-card class="listbox-card">
+        <forge-listbox>
+          <forge-option value="a">Option A</forge-option>
+          <forge-option value="b">Option B</forge-option>
+          <forge-option value="c">Option C</forge-option>
+        </forge-listbox>
+      </forge-card>
     </div>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">Basic Single-Select</h3>
+    <forge-listbox id="basic-single">
+      <forge-option value="1">Option 1</forge-option>
+      <forge-option value="2">Option 2</forge-option>
+      <forge-option value="3">Option 3</forge-option>
+      <forge-option value="4" disabled>Option 4 (Disabled)</forge-option>
+    </forge-listbox>
   </section>
 
   <section>
     <h3 class="forge-typography--heading2">Multi-Select</h3>
-    <div>
-      <forge-listbox id="multi-select" multiple>
-        <forge-option value="a">Option A</forge-option>
-        <forge-option value="b">Option B</forge-option>
-        <forge-option value="c">Option C</forge-option>
-        <forge-option value="d">Option D</forge-option>
-      </forge-listbox>
-      <p>Selected: <span id="multi-select-value">None</span></p>
-    </div>
+    <forge-listbox id="multi-select" multiple>
+      <forge-option value="a">Option A</forge-option>
+      <forge-option value="b">Option B</forge-option>
+      <forge-option value="c">Option C</forge-option>
+      <forge-option value="d">Option D</forge-option>
+    </forge-listbox>
   </section>
 
   <section>
     <h3 class="forge-typography--heading2">With Option Groups</h3>
-    <div>
-      <forge-listbox id="grouped">
-        <forge-option-group label="Fruits">
-          <forge-option value="apple">Apple</forge-option>
-          <forge-option value="banana">Banana</forge-option>
-          <forge-option value="orange">Orange</forge-option>
-        </forge-option-group>
-        <forge-option-group label="Vegetables">
-          <forge-option value="carrot">Carrot</forge-option>
-          <forge-option value="lettuce">Lettuce</forge-option>
-          <forge-option value="tomato">Tomato</forge-option>
-        </forge-option-group>
-      </forge-listbox>
-      <p>Selected: <span id="grouped-value">None</span></p>
-    </div>
+    <forge-listbox id="grouped">
+      <forge-option-group label="Fruits">
+        <forge-option value="apple">Apple</forge-option>
+        <forge-option value="banana">Banana</forge-option>
+        <forge-option value="orange">Orange</forge-option>
+      </forge-option-group>
+      <forge-option-group label="Vegetables">
+        <forge-option value="carrot">Carrot</forge-option>
+        <forge-option value="lettuce">Lettuce</forge-option>
+        <forge-option value="tomato">Tomato</forge-option>
+      </forge-option-group>
+    </forge-listbox>
   </section>
 
   <section>
     <h3 class="forge-typography--heading2">Horizontal Orientation</h3>
-    <div>
-      <forge-listbox id="horizontal" orientation="horizontal">
-        <forge-option value="left">Left</forge-option>
-        <forge-option value="center">Center</forge-option>
-        <forge-option value="right">Right</forge-option>
-      </forge-listbox>
-    </div>
+    <forge-listbox id="horizontal" orientation="horizontal">
+      <forge-option value="left">Left</forge-option>
+      <forge-option value="center">Center</forge-option>
+      <forge-option value="right">Right</forge-option>
+    </forge-listbox>
   </section>
 
   <section>
     <h3 class="forge-typography--heading2">With Icons and Secondary Labels</h3>
-    <div>
-      <forge-listbox id="rich-options">
-        <forge-option value="home" leading-icon="home" secondary-label="Navigate to home">Home</forge-option>
-        <forge-option value="settings" leading-icon="settings" secondary-label="Configure app">Settings</forge-option>
-        <forge-option value="profile" leading-icon="person" secondary-label="View your profile">Profile</forge-option>
-      </forge-listbox>
-    </div>
+    <forge-listbox id="rich-options">
+      <forge-option value="home">
+        <forge-icon name="home" external slot="start"></forge-icon>
+        <span>Home</span>
+        <span slot="secondary">Navigate to home</span>
+      </forge-option>
+      <forge-option value="settings">
+        <forge-icon name="settings" external slot="start"></forge-icon>
+        <span>Settings</span>
+        <span slot="secondary">Configure app</span>
+      </forge-option>
+      <forge-option value="profile">
+        <forge-icon name="person" external slot="start"></forge-icon>
+        <span>Profile</span>
+        <span slot="secondary">View your profile</span>
+      </forge-option>
+    </forge-listbox>
   </section>
 </div>
 
