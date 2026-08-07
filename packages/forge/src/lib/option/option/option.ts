@@ -36,7 +36,7 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = OPTION_CONSTANTS.elementName;
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [FocusIndicatorComponent, IconComponent];
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [FocusIndicatorComponent, IconComponent, StateLayerComponent];
 
   static {
     IconRegistry.define([tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconDrag, tylIconDragHorizontal]);
@@ -69,9 +69,7 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
 
   public override connectedCallback(): void {
     super.connectedCallback();
-    if (!this.id) {
-      this.id = `${OPTION_CONSTANTS.elementName}-${Math.random().toString(36).substring(2, 10)}`;
-    }
+    this.id ||= `${OPTION_CONSTANTS.elementName}-${Math.random().toString(36).substring(2, 10)}`;
   }
 
   public willUpdate(_changedProperties: PropertyValues<this>): void {

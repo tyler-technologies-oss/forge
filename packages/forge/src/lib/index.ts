@@ -136,6 +136,7 @@ export * from './list/index.js';
 export * from './menu/index.js';
 export * from './meter/index.js';
 export * from './open-icon/index.js';
+export * from './option/index.js';
 export * from './overlay/index.js';
 export * from './page-state/index.js';
 export * from './paginator/index.js';
