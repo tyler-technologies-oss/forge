@@ -38,3 +38,7 @@
     @include core.center-selected;
   }
 }
+
+.drag-handle {
+  @include core.drag-handle;
+}

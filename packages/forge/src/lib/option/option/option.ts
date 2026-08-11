@@ -1,5 +1,5 @@
 import { consume } from '@lit/context';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, randomChars } from '@tylertech/forge-core';
 import { tylIconCheck, tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconDrag, tylIconDragHorizontal } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
@@ -9,7 +9,7 @@ import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
 import { IconComponent, IconRegistry } from '../../icon/index.js';
-import { LISTBOX_TAG_NAME } from '../../listbox/listbox.js';
+import { LISTBOX_REORDERABLE, LISTBOX_TAG_NAME } from '../../listbox/listbox.js';
 import { StateLayerComponent } from '../../state-layer/state-layer.js';
 import type { IOptionConfigComponent } from './option-config.js';
 import { OptionConfigComponent } from './option-config.js';
@@ -53,6 +53,10 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   @state()
   private _multiple = false;
 
+  @consume({ context: LISTBOX_REORDERABLE })
+  @state()
+  private _reorderable = false;
+
   @state()
   private _focusIndicatorActive = false;
 
@@ -69,7 +73,7 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
 
   public override connectedCallback(): void {
     super.connectedCallback();
-    this.id ||= `${OPTION_CONSTANTS.elementName}-${Math.random().toString(36).substring(2, 10)}`;
+    this.id ||= `${OPTION_CONSTANTS.elementName}-${randomChars(8)}`;
   }
 
   public willUpdate(_changedProperties: PropertyValues<this>): void {
@@ -143,7 +147,10 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   }
 
   #tryRenderDragHandle(): TemplateResult | typeof nothing {
-    return nothing; // TODO: Implement drag handle rendering if needed in the future
+    if (this._reorderable) {
+      return html`<forge-icon class="drag-handle" name="drag_horizontal" draggable="true"></forge-icon>`;
+    }
+    return nothing;
   }
 
   public [playStateLayerAnimation](): void {

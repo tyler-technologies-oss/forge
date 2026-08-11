@@ -1,10 +1,12 @@
 import { createContext, provide } from '@lit/context';
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, randomChars } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { SELECT_LIKE_DISABLED, SELECT_LIKE_MULTIPLE, toggleFocusIndicator } from '../constants.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { DragController } from '../core/controllers/drag-controller.js';
+import { DropArgs, DropController } from '../core/controllers/drop-controller.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
 import { composedPathFrom } from '../core/utils/event-utils.js';
 import { FocusGroupController } from '../core/utils/focus-group.js';
@@ -15,7 +17,20 @@ import { OptionComponent } from '../option/option/option.js';
 import styles from './listbox.scss';
 
 export const LISTBOX_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-listbox';
+
 export const LISTBOX_DRAGGABLE = createContext('forge-listbox-draggable');
+export const LISTBOX_REORDERABLE = createContext('forge-listbox-reorderable');
+
+export interface IListboxDropData {
+  value: string;
+  index: number;
+  source: string;
+}
+
+interface IListboxDataTransfer {
+  value: string;
+  source: string;
+}
 
 /**
  * @tag forge-listbox
@@ -26,6 +41,8 @@ export const LISTBOX_DRAGGABLE = createContext('forge-listbox-draggable');
  * @dependency forge-option-group
  *
  * @event {Event} change - Dispatches when the selection changes.
+ * @event {CustomEvent<IListboxDropData>} forge-listbox-drop - Dispatches when an option is dropped
+ * into the listbox.
  *
  * @csspart root - The root element.
  *
@@ -39,7 +56,6 @@ export class ListboxComponent extends BaseLitElement {
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = LISTBOX_TAG_NAME;
 
   #internals: ElementInternals;
-  #optionObserver?: MutationObserver;
 
   /**
    * The selected value(s).
@@ -57,6 +73,15 @@ export class ListboxComponent extends BaseLitElement {
   @provide({ context: SELECT_LIKE_MULTIPLE })
   @property({ type: Boolean })
   public multiple = false;
+
+  /**
+   * Whether options can be reordered within the listbox via drag and drop.
+   * @default false
+   * @attribute
+   */
+  @provide({ context: LISTBOX_REORDERABLE })
+  @property({ type: Boolean })
+  public reorderable = false;
 
   /**
    * Whether the listbox is disabled.
@@ -87,7 +112,6 @@ export class ListboxComponent extends BaseLitElement {
     return Array.from(this.querySelectorAll<OptionComponent>('forge-option'));
   }
 
-  // Focus group with aria-activedescendant
   #focusGroup = new FocusGroupController<OptionComponent>(this, {
     selector: 'forge-option',
     orientation: 'vertical',
@@ -98,6 +122,28 @@ export class ListboxComponent extends BaseLitElement {
       args.oldElement?.[toggleFocusIndicator](false);
       args.newElement.scrollIntoView({ block: 'nearest' });
     }
+  });
+  #dragController = new DragController(this, {
+    onSetTransferData: ({ dataTransfer, dragItem }) => {
+      if (!(dragItem instanceof HTMLElement) || dragItem.tagName !== 'FORGE-OPTION') {
+        return;
+      }
+      const option = dragItem as OptionComponent;
+      const data = JSON.stringify({
+        value: option.value,
+        source: this.id
+      } satisfies IListboxDataTransfer);
+      dataTransfer.setData('text/plain', data);
+    }
+  });
+  #dropController = new DropController(this, {
+    childSelector: 'forge-option',
+    orientation: 'vertical',
+    onDragEnter: () => this.#insertPlaceholder(),
+    onDragOver: () => this.#updatePlaceholderPosition(),
+    onDragLeave: () => this.#removePlaceholder(),
+    onDrop: args => this.#handleDrop(args),
+    onCreatePlaceholder: () => this.#createPlaceholder()
   });
 
   constructor() {
@@ -136,11 +182,11 @@ export class ListboxComponent extends BaseLitElement {
       ariaOrientation: this.orientation === 'horizontal' ? 'horizontal' : null,
       ariaDisabled: this.disabled ? 'true' : null
     });
+    this.id ||= `${LISTBOX_TAG_NAME}-${randomChars(8)}`;
   }
 
   public override disconnectedCallback(): void {
     super.disconnectedCallback();
-    this.#optionObserver?.disconnect();
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
@@ -161,6 +207,11 @@ export class ListboxComponent extends BaseLitElement {
 
     if (changedProperties.has('value')) {
       this.#syncValue();
+    }
+
+    if (changedProperties.has('reorderable')) {
+      this.#dragController.setEnabled(this.reorderable);
+      this.#dropController.setEnabled(this.reorderable);
     }
   }
 
@@ -190,16 +241,10 @@ export class ListboxComponent extends BaseLitElement {
   // Selection Logic
   // *****
 
-  #selectOption(value: any): void {
+  #selectOption(value: string): void {
     if (this.disabled) {
       return;
     }
-
-    const changeEvent = new Event('change', {
-      bubbles: true,
-      composed: true
-    });
-    this.dispatchEvent(changeEvent);
 
     if (this.multiple) {
       const currentValues = Array.isArray(this.value) ? [...this.value] : [];
@@ -217,12 +262,22 @@ export class ListboxComponent extends BaseLitElement {
         this.value = value;
       }
     }
+
+    const changeEvent = new Event('change', {
+      bubbles: true,
+      composed: true
+    });
+    this.dispatchEvent(changeEvent);
   }
 
+  /**
+   * Synchronizes the selected state of options with the current value.
+   * Uses Set optimized performance instead of Array.includes.
+   */
   #syncValue(): void {
-    const value = Array.isArray(this.value) ? this.value : [this.value];
+    const valueSet = new Set(Array.isArray(this.value) ? this.value : [this.value]);
     this.#options.forEach(opt => {
-      opt.selected = value.includes(opt.value);
+      opt.selected = valueSet.has(opt.value);
     });
   }
 
@@ -250,10 +305,7 @@ export class ListboxComponent extends BaseLitElement {
       return;
     }
 
-    // Update active descendant to clicked option
     this.#focusGroup.focus(option, { focusVisible: false });
-
-    // Select the option
     this.#selectOption(option.value);
   }
 
@@ -282,12 +334,13 @@ export class ListboxComponent extends BaseLitElement {
 
     const allValues = this.#options.filter(opt => !opt.disabled).map(opt => opt.value);
 
-    // Check if all are selected
-    const allSelected = allValues.every(val => Array.isArray(this.value) && this.value.includes(val));
+    // Check if all are selected using Set for optimized performance
+    const valueSet = new Set(Array.isArray(this.value) ? this.value : []);
+    const allSelected = allValues.every(val => valueSet.has(val));
 
     if (allSelected) {
       // Deselect all
-      this.value = '';
+      this.value = [];
     } else {
       // Select all
       this.value = allValues;
@@ -308,10 +361,84 @@ export class ListboxComponent extends BaseLitElement {
       this.#focusGroup.focus(match.el, { focusVisible: true });
     }
   }
+
+  #handleDrop(args: DropArgs): void {
+    this.#removePlaceholder();
+
+    let data: IListboxDataTransfer;
+    try {
+      data = JSON.parse(args.dataTransfer.getData('text/plain'));
+    } catch {
+      console.warn('[forge-listbox] Invalid drop data: expected JSON format');
+      return;
+    }
+
+    const dropData: IListboxDropData = {
+      value: data.value,
+      index: args.insertionIndex,
+      source: data.source
+    };
+    this.dispatchEvent(new CustomEvent<IListboxDropData>('forge-listbox-drop', { detail: dropData, bubbles: true, composed: true }));
+  }
+
+  #createPlaceholder(): HTMLElement {
+    const placeholder = document.createElement('div');
+    placeholder.className = 'forge-listbox-placeholder';
+    placeholder.setAttribute('role', 'presentation');
+    placeholder.setAttribute('aria-hidden', 'true');
+    placeholder.style.height = '48px';
+    placeholder.style.border = 'var(--forge-border-thin) dashed var(--forge-theme-primary)';
+    placeholder.style.borderRadius = 'var(--forge-option-border-radius)';
+    placeholder.style.pointerEvents = 'none';
+    placeholder.style.boxSizing = 'border-box';
+    placeholder.style.backgroundColor = 'var(--forge-theme-primary-container-minimum)';
+
+    return placeholder;
+  }
+
+  /**
+   * Inserts the placeholder element into the DOM manually.
+   * This approach bypasses Lit's rendering cycle to avoid re-renders during drag operations,
+   * which improves performance and prevents flickering.
+   */
+  #insertPlaceholder(): void {
+    if (!this.#dropController.dragOver) {
+      return;
+    }
+
+    const placeholder = this.#dropController.placeholder;
+    const insertionIndex = this.#dropController.insertionIndex;
+
+    if (!placeholder || insertionIndex === null) {
+      return;
+    }
+
+    const options = this.#options;
+    if (insertionIndex === 0) {
+      this.insertBefore(placeholder, options[0] || null);
+    } else if (insertionIndex < options.length) {
+      this.insertBefore(placeholder, options[insertionIndex]);
+    } else {
+      this.appendChild(placeholder);
+    }
+  }
+
+  #updatePlaceholderPosition(): void {
+    this.#removePlaceholder();
+    this.#insertPlaceholder();
+  }
+
+  #removePlaceholder(): void {
+    const placeholders = Array.from(this.querySelectorAll('.forge-listbox-placeholder'));
+    placeholders.forEach(placeholder => placeholder.remove());
+  }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
     'forge-listbox': ListboxComponent;
+  }
+  interface HTMLElementEventMap {
+    'forge-listbox-drop': CustomEvent<IListboxDropData>;
   }
 }

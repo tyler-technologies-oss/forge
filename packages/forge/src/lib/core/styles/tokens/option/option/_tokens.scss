@@ -47,7 +47,9 @@ $tokens: (
   // end
   end-selected-color: utils.module-ref(option, end-selected-color, selected-color),
   // Wrap
-  wrap-padding: utils.module-val(option, wrap-padding, spacing.variable(xsmall) spacing.variable(medium))
+  wrap-padding: utils.module-val(option, wrap-padding, spacing.variable(xsmall) spacing.variable(medium)),
+  // Drag handle
+  drag-handle-color: utils.module-val(option, drag-handle-color, theme.variable(text-medium))
 ) !default;
 
 @function get($key) {

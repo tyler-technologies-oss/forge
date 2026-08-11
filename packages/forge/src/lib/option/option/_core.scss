@@ -69,3 +69,8 @@
   cursor: #{token(disabled-cursor)};
   opacity: #{token(disabled-opacity)};
 }
+
+@mixin drag-handle {
+  color: #{token(drag-handle-color)};
+  cursor: grab;
+}
