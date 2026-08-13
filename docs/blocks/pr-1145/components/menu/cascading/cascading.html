@@ -1,0 +1,35 @@
+<!--
+  @block Menu — Cascading
+  @type component
+  @description Cascading usage example for the forge-menu component.
+  @tags menu, cascading, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Menu — Cascading</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1145/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-menu mode="cascade">
+  <forge-button type="button" variant="raised" aria-atomic="true" aria-live="assertive" aria-haspopup="true" aria-label="Menu">Menu</forge-button>
+</forge-menu>
+  </body>
+</html>

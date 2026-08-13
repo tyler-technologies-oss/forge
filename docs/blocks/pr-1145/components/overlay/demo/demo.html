@@ -1,0 +1,44 @@
+<!--
+  @block Overlay — Demo
+  @type component
+  @description Demo usage example for the forge-overlay component.
+  @tags overlay, demo, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Overlay — Demo</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/components/overlay/demo/demo.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1145/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div id="clipping-container" class="clipping-container">
+  <div class="scroll-container">
+    <forge-button id="overlay-trigger" variant="raised">Toggle Overlay</forge-button>
+    <forge-overlay anchor="overlay-trigger" position-strategy shift="never" hide="anchor-hidden">
+      <div class="overlay-content">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui auctor, ultricies nunc nec, ultricies nunc. Nullam in dui auctor, ultricies
+        nunc nec, ultricies nunc.
+      </div>
+    </forge-overlay>
+  </div>
+</div>
+  </body>
+</html>

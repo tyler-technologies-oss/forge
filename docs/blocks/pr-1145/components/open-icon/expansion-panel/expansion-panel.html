@@ -1,0 +1,43 @@
+<!--
+  @block Open Icon — Expansion Panel
+  @type component
+  @description Expansion Panel usage example for the forge-open-icon component.
+  @tags open-icon, expansion-panel, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Open Icon — Expansion Panel</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1145/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-expansion-panel orientation="vertical" animation-type="default" trigger open-icon name>
+  <div role="button" tabindex="0" slot="header" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>Expansion panel</div>
+    <forge-open-icon orientation="vertical" rotation="full">
+    </forge-open-icon>
+  </div>
+  <div id="forge-expansion-panel-content-925g3">
+    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum error officia iure corporis veritatis ut quod quo libero ea repellendus, consequuntur
+    porro explicabo exercitationem minus pariatur debitis nihil at labore!
+  </div>
+</forge-expansion-panel>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+<!--
+  @block Label — Legend
+  @type component
+  @description Legend usage example for the forge-label component.
+  @tags label, legend, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Label — Legend</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/components/label/legend/legend.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1145/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-radio-group class="align" aria-label="Choose an option">
+  <forge-label legend non-interactive>Choose an option</forge-label>
+  <forge-radio name="default">Option 1</forge-radio>
+  <forge-radio name="default">Option 2</forge-radio>
+  <forge-radio name="default">Option 3</forge-radio>
+</forge-radio-group>
+  </body>
+</html>

@@ -1,0 +1,4 @@
+.popover-content {
+  width: 300px;
+  padding: var(--forge-spacing-medium);
+}

@@ -1,0 +1,41 @@
+<!--
+  @block Split View — Demo
+  @type component
+  @description Demo usage example for the forge-split-view component.
+  @tags split-view, demo, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Split View — Demo</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/components/split-view/demo/demo.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1145/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-split-view auto-close-threshold="120" orientation="horizontal">
+  <forge-split-view-panel resizable="off" min="0" size="200" accessible-label="Split view panel" open="true" style="--forge-split-view-panel-size: 200px;">
+    <div>Panel 1</div>
+  </forge-split-view-panel>
+  <forge-split-view-panel size="200" resizable="start" min="0" accessible-label="Split view panel" open="true" style="--forge-split-view-panel-size: 200px;">
+    <div>Panel 2</div>
+  </forge-split-view-panel>
+</forge-split-view>
+  </body>
+</html>

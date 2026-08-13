@@ -1,0 +1,55 @@
+<!--
+  @block Meter — Grouped
+  @type component
+  @description Grouped usage example for the forge-meter component.
+  @tags meter, grouped, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Meter — Grouped</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1145/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-meter-group id="meter-group">
+  <label slot="label" for="meter-group">Label</label>
+  <forge-meter id="meter-1" value="0.25" style="--forge-meter-color: #1E88E5; --_meter-z-index: 3; --_meter-inset: 0%;">
+  </forge-meter>
+  <forge-meter id="meter-2" value="0.15" style="--forge-meter-color: #FDD835; --_meter-z-index: 2; --_meter-inset: 25%;">
+  </forge-meter>
+  <forge-meter id="meter-3" value="0.35" style="--forge-meter-color: #43A047; --_meter-z-index: 1; --_meter-inset: 40%;">
+  </forge-meter>
+</forge-meter-group>
+<forge-key style="margin-block-start: 8px;">
+  <forge-key-item style="--forge-key-item-icon-color: #1E88E5;">
+    <label for="meter-1">First</label>
+    <span slot="value">25%</span>
+  </forge-key-item>
+  <forge-key-item style="--forge-key-item-icon-color: #FDD835;">
+    <label for="meter-2">Second</label>
+    <span slot="value">15%</span>
+  </forge-key-item>
+  <forge-key-item style="--forge-key-item-icon-color: #43A047;">
+    <label for="meter-3">Third</label>
+    <span slot="value">35%</span>
+  </forge-key-item>
+</forge-key>
+  </body>
+</html>

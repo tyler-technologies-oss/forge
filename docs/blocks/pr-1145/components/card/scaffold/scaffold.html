@@ -1,0 +1,51 @@
+<!--
+  @block Card — Scaffold
+  @type component
+  @description Scaffold usage example for the forge-card component.
+  @tags card, scaffold, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Card — Scaffold</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/components/card/scaffold/scaffold.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1145/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-card class="scaffold-card">
+  <forge-scaffold>
+    <forge-toolbar slot="header">
+      <h1 slot="start">Lorem ipsum</h1>
+    </forge-toolbar>
+    <p slot="body" tabindex="0" class="card-content">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas sed aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero
+      necessitatibus enim sint nesciunt provident excepturi dolorum pariatur illum? Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas
+      sed aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero necessitatibus enim sint nesciunt provident excepturi dolorum pariatur illum?
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas sed aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero
+      necessitatibus enim sint nesciunt provident excepturi dolorum pariatur illum?
+    </p>
+    <forge-toolbar slot="footer" inverted>
+      <forge-button type="outlined" slot="end"> Cancel </forge-button>
+      <forge-button type="unelevated" slot="end" style="margin-left: 8px;"> Ok </forge-button>
+    </forge-toolbar>
+  </forge-scaffold>
+</forge-card>
+  </body>
+</html>

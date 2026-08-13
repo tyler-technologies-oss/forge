@@ -1,0 +1,56 @@
+<!--
+  @block Stack — Simple Vertical Form
+  @type component
+  @description Simple Vertical Form usage example for the forge-stack component.
+  @tags stack, simple-vertical-form, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Stack — Simple Vertical Form</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1145/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <form>
+  <forge-stack gap="16">
+    <forge-text-field>
+      <label for="input-text-1" slot="label">Text field</label>
+      <input type="text" id="input-text-1">
+    </forge-text-field>
+    <forge-text-field>
+      <label for="input-text-2" slot="label">Text field</label>
+      <input type="text" id="input-text-2">
+    </forge-text-field>
+    <forge-text-field>
+      <label for="input-text-3" slot="label">Text field</label>
+      <input type="text" id="input-text-3">
+    </forge-text-field>
+    <forge-text-field>
+      <label for="input-text-4" slot="label">Text field</label>
+      <input type="text" id="input-text-4">
+    </forge-text-field>
+    <forge-text-field>
+      <label for="input-text-5" slot="label">Text field</label>
+      <input type="text" id="input-text-5">
+    </forge-text-field>
+  </forge-stack>
+</form>
+  </body>
+</html>

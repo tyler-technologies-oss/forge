@@ -1,0 +1,40 @@
+<!--
+  @block Button — Anchor
+  @type component
+  @description Anchor usage example for the forge-button component.
+  @tags button, anchor, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1145/" />
+    <title>Button — Anchor</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1145/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1145/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1145/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1145/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-button variant="raised">
+  <a href="javascript: void(0);">
+    Anchor button
+    <forge-icon slot="end" name="open_in_new">
+    </forge-icon>
+  </a>
+</forge-button>
+<script type="module" src="/blocks/pr-1145/components/button/anchor/anchor.js"></script>
+  </body>
+</html>
