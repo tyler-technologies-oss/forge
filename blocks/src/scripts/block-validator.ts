@@ -4,28 +4,33 @@
  */
 
 import { METADATA_REGEX } from './block-metadata.js';
+import { BLOCK_TYPES } from './types.js';
 import type { ValidationIssue, ValidationResult } from './types.js';
 
 export type { ValidationIssue, ValidationResult, ValidationSeverity } from './types.js';
 
+const ANNOTATION_VALUE = (name: string): RegExp => new RegExp(`@${name}\\s+([\\s\\S]+?)(?=\\s*@\\w|\\s*$)`);
+
 /**
  * Validates block HTML content for required metadata.
- * Checks for @block name, @description, and @tags annotations.
+ * Checks for @block name, @description, @tags, and (if present) a valid @type value.
  */
 export function validateBlockContent(content: string, filePath?: string): ValidationResult {
   const issues: ValidationIssue[] = [];
 
-  const metadataMatch = content.match(METADATA_REGEX);
-  if (!metadataMatch) {
+  const commentMatch = content.match(METADATA_REGEX);
+  if (!commentMatch) {
     issues.push({
       severity: 'error',
-      message: 'Missing block metadata comment. Expected: <!-- @block Name @description ... @tags ... -->',
+      message: 'Missing block metadata comment. Expected: <!-- @block Name @type ... @description ... @tags ... -->',
       file: filePath
     });
     return { valid: false, issues };
   }
 
-  const blockMatch = metadataMatch[1]?.match(/@block\s+(.+)/);
+  const body = commentMatch[1];
+
+  const blockMatch = body.match(ANNOTATION_VALUE('block'));
   if (!blockMatch || !blockMatch[1]?.trim()) {
     issues.push({
       severity: 'error',
@@ -34,7 +39,7 @@ export function validateBlockContent(content: string, filePath?: string): Valida
     });
   }
 
-  const descMatch = metadataMatch[2]?.match(/@description\s+(.+)/);
+  const descMatch = body.match(ANNOTATION_VALUE('description'));
   if (!descMatch || !descMatch[1]?.trim()) {
     issues.push({
       severity: 'warning',
@@ -43,11 +48,29 @@ export function validateBlockContent(content: string, filePath?: string): Valida
     });
   }
 
-  const tagsMatch = metadataMatch[3]?.match(/@tags\s+(.+)/);
+  const tagsMatch = body.match(ANNOTATION_VALUE('tags'));
   if (!tagsMatch || !tagsMatch[1]?.trim()) {
     issues.push({
       severity: 'warning',
       message: 'Missing @tags in metadata comment',
+      file: filePath
+    });
+  }
+
+  const typeMatch = body.match(ANNOTATION_VALUE('type'));
+  if (typeMatch) {
+    const value = typeMatch[1]?.trim().toLowerCase();
+    if (!value || !(BLOCK_TYPES as readonly string[]).includes(value)) {
+      issues.push({
+        severity: 'warning',
+        message: `Invalid @type value "${typeMatch[1]?.trim()}". Expected one of: ${BLOCK_TYPES.join(', ')}`,
+        file: filePath
+      });
+    }
+  } else {
+    issues.push({
+      severity: 'warning',
+      message: `Missing @type in metadata comment. Expected one of: ${BLOCK_TYPES.join(', ')}`,
       file: filePath
     });
   }

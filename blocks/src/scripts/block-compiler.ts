@@ -20,6 +20,8 @@ export interface CompileOptions {
   baseHref: string;
   /** Optional URL for a per-block script tag injected at the end of the body */
   blockScriptSrc?: string;
+  /** Optional URL for a per-block stylesheet linked from the document head */
+  blockStyleSrc?: string;
 }
 
 export interface CompileResult {
@@ -131,7 +133,8 @@ export function compileBlock(content: string, options: CompileOptions): CompileR
     const compiledHtml = metadata + layoutTemplate({
       ...blockTemplate,
       body: compiledBody,
-      baseHref: options.baseHref
+      baseHref: options.baseHref,
+      blockStyleSrc: options.blockStyleSrc
     });
 
     return {

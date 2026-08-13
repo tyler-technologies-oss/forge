@@ -67,7 +67,9 @@ import {
   tylIconDirections,
   tylIconInfo,
   tylIconChevronDown,
-  tylIconChevronRight
+  tylIconChevronRight,
+  tylIconLibrary,
+  tylIconGithub
 } from '@tylertech/tyler-icons';
 
 // Register all Forge components
@@ -137,5 +139,7 @@ IconRegistry.define([
   tylIconDirections,
   tylIconInfo,
   tylIconChevronDown,
-  tylIconChevronRight
+  tylIconChevronRight,
+  tylIconLibrary,
+  tylIconGithub
 ]);

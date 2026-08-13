@@ -1,0 +1,30 @@
+body {
+  background-color: var(--forge-theme-surface-dim, #fafafa);
+  height: 100dvh;
+  width: 100dvw;
+  margin: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+}
+
+body.ready {
+  opacity: 1;
+}
+
+.search-field {
+  width: min(360px, 30vw);
+}
+
+#filter-drawer {
+  --forge-drawer-width: 320px;
+}
+
+.block-name-cell {
+  color: var(--forge-theme-primary);
+  text-decoration: none;
+}
+
+.block-name-cell:hover {
+  text-decoration: underline;
+}
+

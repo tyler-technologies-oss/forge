@@ -66,11 +66,12 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
           res.end(transformed);
           return;
         }
-        // Dev server URL rewriting for block HTML files
-        // Pattern: /<category>/<name>/<name>.html -> /src/blocks/<category>/<name>/<name>.html
-        // This allows dev URLs to match production structure (no /blocks/ prefix)
+        // Dev server URL rewriting for block HTML files.
+        // Pattern: /<category>/.../<name>.html -> /src/blocks/<category>/.../<name>.html
+        // Any depth ≥ 3 segments is a block URL — the deepest component blocks nest
+        // 5 levels (e.g. components/app-bar/help-button/demo/demo.html).
         const url = req.url || '';
-        const isBlockHtml = /^\/[^/@]+\/[^/]+\/[^/]+\.html$/.test(url);
+        const isBlockHtml = /^\/[^/@]+(?:\/[^/]+){2,}\.html$/.test(url);
         if (isBlockHtml && !url.includes('/src/blocks/')) {
           req.url = '/src/blocks' + req.url;
         }
@@ -87,15 +88,20 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
         partialRegistry.load();
 
         const scriptPath = ctx.filename.replace(/\.html$/, '.ts');
+        const stylePath = ctx.filename.replace(/\.html$/, '.css');
         const blockScriptSrc = fs.existsSync(scriptPath)
           ? '/' + path.relative(process.cwd(), scriptPath).replace(/\\/g, '/')
+          : undefined;
+        const blockStyleSrc = fs.existsSync(stylePath)
+          ? '/' + path.relative(process.cwd(), stylePath).replace(/\\/g, '/')
           : undefined;
 
         const result = compileBlock(html, {
           layoutPath,
           partialRegistry,
           baseHref: '/',
-          blockScriptSrc
+          blockScriptSrc,
+          blockStyleSrc
         });
 
         if (!result.success && result.error) {

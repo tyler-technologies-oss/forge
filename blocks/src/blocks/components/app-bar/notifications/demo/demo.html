@@ -1,0 +1,17 @@
+<!--
+  @block Notifications — Demo
+  @type component
+  @description Demo usage example for the forge-notifications component.
+  @tags notifications, demo, storybook, component-example
+-->
+<forge-app-bar title-text="Menu Button" elevation="raised">
+  <forge-app-bar-notification-button slot="end" show-badge dot>
+    <forge-icon-button theme="app-bar" aria-labelledby="forge-tooltip-el39q">
+      <forge-icon name="notifications">
+      </forge-icon>
+      <forge-badge slot="badge" dot theme="default">
+      </forge-badge>
+    </forge-icon-button>
+    <forge-tooltip type="label" placement="bottom" aria-hidden="true" id="forge-tooltip-el39q">Notifications</forge-tooltip>
+  </forge-app-bar-notification-button>
+</forge-app-bar>

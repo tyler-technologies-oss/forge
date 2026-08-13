@@ -1,0 +1,17 @@
+<!--
+  @block Expansion Panel — With Unslotted Button
+  @type component
+  @description With Unslotted Button usage example for the forge-expansion-panel component.
+  @tags expansion-panel, with-unslotted-button, storybook, component-example
+-->
+<button id="button-id" aria-expanded="false" aria-controls="forge-expansion-panel-content-t63ev">Toggle</button>
+<forge-card>
+  <forge-expansion-panel trigger="button-id" orientation="vertical" animation-type="default" open-icon name>
+    <div slot="header" role="button" tabindex="0" style="display: flex; justify-content: space-between;">
+      <div>Header text</div>
+      <forge-open-icon orientation="vertical" rotation="full">
+      </forge-open-icon>
+    </div>
+    <p id="forge-expansion-panel-content-t63ev">Content text</p>
+  </forge-expansion-panel>
+</forge-card>

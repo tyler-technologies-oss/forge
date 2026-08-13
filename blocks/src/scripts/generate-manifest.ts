@@ -67,26 +67,26 @@ export async function discoverBlocks(blocksPath: string): Promise<Block[]> {
       const categoryFolder = extractCategoryFolder(relativePath);
       const componentsUsed = detectComponents({ content, partialRegistry });
 
+      const basePath = fullPath.replace('.html', '');
+      const hasScript = fs.existsSync(`${basePath}.ts`) || fs.existsSync(`${basePath}.js`);
+
       const block: Block = {
         id,
         name: metadata.name,
+        type: metadata.type,
         description: metadata.description,
         tags: metadata.tags,
         file: relativePath,
         category: formatCategoryName(categoryFolder),
-        componentsUsed
+        componentsUsed,
+        hasScript
       };
 
-      // Check for screenshot file (.webp or .png)
-      const basePath = fullPath.replace('.html', '');
       if (fs.existsSync(`${basePath}.webp`)) {
         block.screenshot = relativePath.replace('.html', '.webp');
       } else if (fs.existsSync(`${basePath}.png`)) {
         block.screenshot = relativePath.replace('.html', '.png');
       }
-
-      // Check for associated script file (.ts or .js)
-      block.hasScript = fs.existsSync(`${basePath}.ts`) || fs.existsSync(`${basePath}.js`);
 
       blocks.push(block);
     }

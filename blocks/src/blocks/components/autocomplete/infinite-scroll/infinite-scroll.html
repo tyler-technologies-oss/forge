@@ -1,0 +1,22 @@
+<!--
+  @block Autocomplete — Infinite Scroll
+  @type component
+  @description Infinite Scroll usage example for the forge-autocomplete component.
+  @tags autocomplete, infinite-scroll, storybook, component-example
+-->
+<forge-autocomplete observe-scroll>
+  <forge-text-field popover-icon>
+    <input
+      type="text"
+      id="state"
+      autocomplete="off"
+      role="combobox"
+      aria-live="polite"
+      aria-atomic="true"
+      aria-haspopup="true"
+      aria-expanded="false"
+      aria-autocomplete="list"
+      aria-controls="forge-aria-controls-placeholder" />
+    <label for="state" aria-label="choose state" slot="label">Choose state</label>
+  </forge-text-field>
+</forge-autocomplete>

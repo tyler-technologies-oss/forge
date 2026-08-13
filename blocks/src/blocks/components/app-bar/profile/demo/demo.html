@@ -1,0 +1,15 @@
+<!--
+  @block Profile — Demo
+  @type component
+  @description Demo usage example for the forge-profile component.
+  @tags profile, demo, storybook, component-example
+-->
+<forge-app-bar title-text="Profile" elevation="raised">
+  <forge-app-bar-profile-button slot="end" full-name="First Last" email="first.last@tylertech.com">
+    <forge-icon-button theme="app-bar" aria-labelledby="forge-tooltip-ur3yd">
+      <forge-avatar aria-hidden="true">
+      </forge-avatar>
+    </forge-icon-button>
+    <forge-tooltip type="label" placement="bottom-end" aria-hidden="true" id="forge-tooltip-ur3yd">View First Last's profile</forge-tooltip>
+  </forge-app-bar-profile-button>
+</forge-app-bar>

@@ -28,15 +28,20 @@ async function buildBlocks() {
   for (const blockFile of blockFiles) {
     const blockHtml = fs.readFileSync(blockFile, 'utf-8');
     const scriptFile = blockFile.replace(/\.html$/, '.ts');
+    const styleFile = blockFile.replace(/\.html$/, '.css');
     const blockScriptSrc = fs.existsSync(scriptFile)
       ? `${BASE_HREF}${path.relative(BLOCKS_PATH, scriptFile).replace(/\\/g, '/').replace(/\.ts$/, '.js')}`
+      : undefined;
+    const blockStyleSrc = fs.existsSync(styleFile)
+      ? `${BASE_HREF}${path.relative(BLOCKS_PATH, styleFile).replace(/\\/g, '/')}`
       : undefined;
 
     const result = compileBlock(blockHtml, {
       layoutPath: LAYOUT_PATH,
       partialRegistry,
       baseHref: BASE_HREF,
-      blockScriptSrc
+      blockScriptSrc,
+      blockStyleSrc
     });
 
     if (!result.success) {
@@ -53,13 +58,13 @@ async function buildBlocks() {
     console.log(`Built: ${relativePath}`);
   }
 
-  const screenshots = await glob(`${BLOCKS_PATH}/**/*.{webp,png}`, { nodir: true });
-  for (const screenshot of screenshots) {
-    const relativePath = path.relative(BLOCKS_PATH, screenshot);
+  const staticAssets = await glob(`${BLOCKS_PATH}/**/*.{webp,png,css}`, { nodir: true });
+  for (const asset of staticAssets) {
+    const relativePath = path.relative(BLOCKS_PATH, asset);
     const destPath = path.join(DIST_DIR, relativePath);
     const destDir = path.dirname(destPath);
     fs.mkdirSync(destDir, { recursive: true });
-    fs.copyFileSync(screenshot, destPath);
+    fs.copyFileSync(asset, destPath);
   }
 
   await generateManifest({

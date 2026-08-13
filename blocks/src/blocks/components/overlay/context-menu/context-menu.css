@@ -1,0 +1,6 @@
+.context-menu {
+  background-color: var(--forge-theme-surface-container);
+  border: var(--forge-border-thin) solid var(--forge-theme-outline);
+  border-radius: var(--forge-shape-medium);
+  padding: var(--forge-spacing-medium);
+}

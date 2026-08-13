@@ -3,11 +3,19 @@
  * Contains interfaces used across manifest generation, screenshots, and validation.
  */
 
+/** Categorizes the scope of a block. */
+export type BlockType = 'component' | 'pattern' | 'template';
+
+export const BLOCK_TYPES: readonly BlockType[] = ['component', 'pattern', 'template'];
+
+export const DEFAULT_BLOCK_TYPE: BlockType = 'pattern';
+
 /** Metadata extracted from block HTML comment annotations */
 export interface BlockMetadata {
   name: string;
   description: string;
   tags: string[];
+  type: BlockType;
 }
 
 /** Complete block representation including file path information */
