@@ -44,12 +44,15 @@ blocks/
 │   ├── blocks/              # Block categories
 │   │   ├── application-layout/
 │   │   ├── cards/
+│   │   ├── components/
+│   │   ├── data-display/
 │   │   ├── dialogs/
 │   │   ├── forms/
 │   │   ├── lists/
 │   │   ├── patterns/
+│   │   ├── scaffold-examples/
 │   │   ├── tables/
-│   │   └── toolbar/
+│   │   └── toolbars/
 │   ├── includes/            # Base HTML template
 │   │   └── base.html
 │   ├── partials/            # Reusable HTML snippets (.hbs)

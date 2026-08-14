@@ -117,10 +117,7 @@ export async function generateManifest(options: GenerateManifestOptions): Promis
     }
   }
 
-  const categoryNames = [...new Set(blocks.map(b => {
-    const parts = b.file.split('/');
-    return parts.length > 0 ? parts[0] : '';
-  }).filter(Boolean))].sort();
+  const categoryNames = [...new Set(blocks.map(b => extractCategoryFolder(b.file)).filter(Boolean))].sort();
 
   const categories = categoryNames.map(name => ({ name }));
 

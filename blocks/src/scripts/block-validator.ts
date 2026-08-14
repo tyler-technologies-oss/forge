@@ -3,13 +3,11 @@
  * Validates that block HTML files contain required metadata annotations.
  */
 
-import { METADATA_REGEX } from './block-metadata.js';
+import { ANNOTATION_REGEX, METADATA_REGEX } from './block-metadata.js';
 import { BLOCK_TYPES } from './types.js';
 import type { ValidationIssue, ValidationResult } from './types.js';
 
 export type { ValidationIssue, ValidationResult, ValidationSeverity } from './types.js';
-
-const ANNOTATION_VALUE = (name: string): RegExp => new RegExp(`@${name}\\s+([\\s\\S]+?)(?=\\s*@\\w|\\s*$)`);
 
 /**
  * Validates block HTML content for required metadata.
@@ -30,7 +28,7 @@ export function validateBlockContent(content: string, filePath?: string): Valida
 
   const body = commentMatch[1];
 
-  const blockMatch = body.match(ANNOTATION_VALUE('block'));
+  const blockMatch = body.match(ANNOTATION_REGEX('block'));
   if (!blockMatch || !blockMatch[1]?.trim()) {
     issues.push({
       severity: 'error',
@@ -39,7 +37,7 @@ export function validateBlockContent(content: string, filePath?: string): Valida
     });
   }
 
-  const descMatch = body.match(ANNOTATION_VALUE('description'));
+  const descMatch = body.match(ANNOTATION_REGEX('description'));
   if (!descMatch || !descMatch[1]?.trim()) {
     issues.push({
       severity: 'warning',
@@ -48,7 +46,7 @@ export function validateBlockContent(content: string, filePath?: string): Valida
     });
   }
 
-  const tagsMatch = body.match(ANNOTATION_VALUE('tags'));
+  const tagsMatch = body.match(ANNOTATION_REGEX('tags'));
   if (!tagsMatch || !tagsMatch[1]?.trim()) {
     issues.push({
       severity: 'warning',
@@ -57,7 +55,7 @@ export function validateBlockContent(content: string, filePath?: string): Valida
     });
   }
 
-  const typeMatch = body.match(ANNOTATION_VALUE('type'));
+  const typeMatch = body.match(ANNOTATION_REGEX('type'));
   if (typeMatch) {
     const value = typeMatch[1]?.trim().toLowerCase();
     if (!value || !(BLOCK_TYPES as readonly string[]).includes(value)) {

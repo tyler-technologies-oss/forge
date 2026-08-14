@@ -12,7 +12,7 @@ export type { Block, BlockMetadata, BlockType } from './types.js';
 export const METADATA_REGEX = /<!--([\s\S]*?)-->/;
 
 /** Matches a single annotation value up to the next `@` annotation or the end of the comment body. */
-const ANNOTATION_REGEX = (name: string): RegExp => new RegExp(`@${name}\\s+([\\s\\S]+?)(?=\\s*@\\w|\\s*$)`);
+export const ANNOTATION_REGEX = (name: string): RegExp => new RegExp(`@${name}\\s+([\\s\\S]+?)(?=\\s*@\\w|\\s*$)`);
 
 /**
  * Parses block metadata from HTML content.
