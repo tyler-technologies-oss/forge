@@ -1,5 +1,6 @@
 @use './token-utils' as *;
 @use './core';
+@use '../divider';
 
 :host {
   display: block;
@@ -12,6 +13,14 @@
 
 .forge-listbox {
   @include tokens;
+}
+
+.forge-listbox {
+  @include divider.provide-theme(
+    (
+      margin: #{token(divider-margin)}
+    )
+  );
 }
 
 .horizontal {
