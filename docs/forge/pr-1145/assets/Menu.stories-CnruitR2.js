@@ -1,0 +1,53 @@
+import{b as i,A as l}from"./iframe-BWAobhOu.js";import{s as m,g as u,b as c,O as d}from"./utils-BmZ1G202.js";import{o as b}from"./style-map-CyeIkLVB.js";import{n as f,e as v}from"./ref-D9GSnhK_.js";import"./service-adapter-8tADcN_b.js";import"./menu-Db5tVldy.js";import"./linear-progress-CsGp1g6o.js";import"./list-BVxyNe29.js";import"./popover-CMixvJRM.js";import"./overlay-B2Oq3AqY.js";import"./key-action-lsAysfb-.js";import"./index-5CPwzmQS.js";import"./skeleton-B7Gn8FGS.js";import"./tyler-icons-C2isZNDF.js";import"./button-BZXwUSWo.js";import"./focus-indicator-DsmueVAt.js";import"./state-layer-Wu0zWm6m.js";const s="forge-menu",g={title:"Components/Menu",render:e=>{const a=c(e),p=a?b(a):l,n=[{label:"Save",value:"save"},{label:"Edit",value:"edit"},{label:"Delete",value:"delete"}];return e.mode==="cascade"&&(n[1]={...n[1],options:[{label:"As New",value:"asNew"},{label:"Overwrite",value:"overwrite"},{label:"More",value:"more",options:[{label:"Option 1",value:"option1"},{label:"Option 2",value:"option2"},{label:"Option 3",value:"option3"}]}]}),i`
+      <forge-menu
+        .open=${e.open}
+        .placement=${e.placement}
+        .persistSelection=${e.persistSelection}
+        .mode=${e.mode}
+        .options=${n}
+        style=${p}>
+        <forge-button type="button" variant="raised">Menu</forge-button>
+      </forge-menu>
+    `},component:s,parameters:{actions:{disable:!0}},argTypes:{...u({tagName:s,include:["open","placement","persistSelection","mode"],controls:{placement:{control:"select",options:[...d]},persistSelection:{type:"boolean"},mode:{control:"select",options:["click","cascade"]}}})},args:{open:!1,placement:"bottom-start",persistSelection:!1,mode:"click"}},o={},t={args:{mode:"cascade"}},r={...m,render:()=>{const e=v();return window.requestAnimationFrame(()=>{e.value&&(e.value.options=[{text:"Group 1",options:[{label:"Option 1",value:"option1"},{label:"Option 2",value:"option2"}]},{text:"Group 2",options:[{label:"Option 3",value:"option3"},{label:"Option 4",value:"option4"}]}])}),i`
+      <forge-menu ${f(e)}>
+        <forge-button type="button" variant="raised">Menu</forge-button>
+      </forge-menu>
+    `}};o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:"{}",...o.parameters?.docs?.source}}};t.parameters={...t.parameters,docs:{...t.parameters?.docs,source:{originalSource:`{
+  args: {
+    mode: 'cascade'
+  }
+}`,...t.parameters?.docs?.source}}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  ...standaloneStoryParams,
+  render: () => {
+    const menuRef = createRef<IMenuComponent>();
+    window.requestAnimationFrame(() => {
+      if (!menuRef.value) {
+        return;
+      }
+      menuRef.value.options = [{
+        text: 'Group 1',
+        options: [{
+          label: 'Option 1',
+          value: 'option1'
+        }, {
+          label: 'Option 2',
+          value: 'option2'
+        }]
+      }, {
+        text: 'Group 2',
+        options: [{
+          label: 'Option 3',
+          value: 'option3'
+        }, {
+          label: 'Option 4',
+          value: 'option4'
+        }]
+      }] as IMenuOptionGroup[];
+    });
+    return html\`
+      <forge-menu \${ref(menuRef)}>
+        <forge-button type="button" variant="raised">Menu</forge-button>
+      </forge-menu>
+    \`;
+  }
+}`,...r.parameters?.docs?.source}}};const O=["Demo","Cascading","Grouped"],V=Object.freeze(Object.defineProperty({__proto__:null,Cascading:t,Demo:o,Grouped:r,__namedExportsOrder:O,default:g},Symbol.toStringTag,{value:"Module"}));export{t as C,o as D,r as G,V as M};
