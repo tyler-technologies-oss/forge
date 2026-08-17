@@ -1,48 +1,13 @@
 import { throttle } from '@tylertech/forge-core';
 import { ReactiveController, ReactiveControllerHost, ReactiveElement } from 'lit';
+import { DragDropManager } from '../utils/drag-drop-manager.js';
 
-export interface GetDropTargetArgs {
-  targetElement: HTMLElement;
+export interface DropEventArgs {
   event: DragEvent;
-}
-
-export interface DragEnterArgs {
-  event: DragEvent;
-  dataTransfer: DataTransfer;
-  dropTarget: HTMLElement;
-  insertionIndex: number;
-  clientX: number;
-  clientY: number;
-}
-
-export interface DragOverArgs {
-  event: DragEvent;
-  dataTransfer: DataTransfer;
-  dropTarget: HTMLElement;
-  insertionIndex: number;
-  clientX: number;
-  clientY: number;
-}
-
-export interface DragLeaveArgs {
-  event: DragEvent;
-  dataTransfer: DataTransfer;
-  dropTarget: HTMLElement;
-}
-
-export interface DropArgs {
-  event: DragEvent;
-  dataTransfer: DataTransfer;
-  dropTarget: HTMLElement;
-  insertionIndex: number;
-  clientX: number;
-  clientY: number;
-}
-
-export interface CreatePlaceholderArgs {
-  dataTransfer: DataTransfer;
-  dropTarget: HTMLElement;
-  insertionIndex: number;
+  item: HTMLElement | null;
+  target: HTMLElement | null;
+  source: HTMLElement | null;
+  index: number;
 }
 
 /**
@@ -61,64 +26,58 @@ export interface DropControllerConfig {
    * // In a listbox, use the listbox itself as the drop target
    * getDropTarget: ({ targetElement }) => targetElement.closest('forge-listbox')
    */
-  getDropTarget?: (args: GetDropTargetArgs) => HTMLElement | null;
+  getDropTarget?: (event: DragEvent) => HTMLElement | null;
+
+  /**
+   * Callback to calculate the insertion index based on the drag event.
+   * @param event - The drag event
+   * @returns The index at which the dragged item should be inserted.
+   */
+  getIndex?: (event: DragEvent) => number;
+
+  /**
+   * Callback invoked when a drag operation starts.
+   * @param args - Event details including dataTransfer, coordinates, and insertion index
+   * @returns Return true to allow the drag, false to cancel it, or undefined to use the default behavior
+   */
+  onDragStart?: (args: DropEventArgs) => boolean | undefined;
 
   /**
    * Callback invoked when a dragged item enters the drop zone.
    * @param args - Event details including dataTransfer, coordinates, and insertion index
    */
-  onDragEnter?: (args: DragEnterArgs) => void;
+  onDragEnter?: (args: DropEventArgs) => void;
 
   /**
    * Callback invoked while a dragged item is over the drop zone.
    * Called repeatedly as the mouse moves.
    * @param args - Event details including dataTransfer, coordinates, and insertion index
    */
-  onDragOver?: (args: DragOverArgs) => void;
+  onDragOver?: (args: DropEventArgs) => void;
 
   /**
    * Callback invoked when a dragged item leaves the drop zone.
    * @param args - Event details including dataTransfer
    */
-  onDragLeave?: (args: DragLeaveArgs) => void;
+  onDragLeave?: (args: DropEventArgs) => void;
+
+  /**
+   * Callback invoked when a drag operation ends, regardless of whether it was dropped or canceled.
+   * @param args - Event details including dataTransfer
+   */
+  onDragEnd?: (args: DropEventArgs) => void;
 
   /**
    * Callback invoked when an item is dropped on the drop zone.
    * @param args - Event details including dataTransfer, coordinates, and insertion index
    */
-  onDrop?: (args: DropArgs) => void;
-
-  /**
-   * Callback to create a custom placeholder element for previewing the drop.
-   * If not provided, a default placeholder is created.
-   * The placeholder is not automatically inserted into the DOM - the host component
-   * must retrieve it via `controller.placeholder` and insert it at the desired position.
-   *
-   * @param args - Context for creating the placeholder
-   * @returns A placeholder element or null to disable placeholder
-   *
-   * @example
-   * onCreatePlaceholder: ({ dataTransfer, dropTarget, insertionIndex }) => {
-   *   const placeholder = document.createElement('div');
-   *   placeholder.className = 'custom-placeholder';
-   *   placeholder.textContent = `Drop at position ${insertionIndex}`;
-   *   return placeholder;
-   * }
-   */
-  onCreatePlaceholder?: (args: CreatePlaceholderArgs) => HTMLElement | null;
+  onDrop?: (args: DropEventArgs) => void;
 
   /**
    * The drop effect to indicate what operation will occur.
    * @default 'move'
    */
   dropEffect?: DataTransfer['dropEffect'];
-
-  /**
-   * Whether to create a placeholder element when dragging over.
-   * The placeholder must be manually inserted by the host component.
-   * @default true
-   */
-  showPlaceholder?: boolean;
 
   /**
    * CSS selector for querying children of the drop target.
@@ -196,16 +155,16 @@ export class DropController implements ReactiveController {
 
   #config: DropControllerConfig;
   #enabled = true;
-  #dragOver = false;
   #dragDepth = 0;
-  #currentDropTarget: HTMLElement | null = null;
-  #placeholder: HTMLElement | null = null;
+  #preventDrop = false;
   #insertionIndex: number | null = null;
-  #throttledDragOverCallback: ((args: DragOverArgs) => void) | null = null;
+  #throttledDragOverCallback: ((args: DropEventArgs) => void) | null = null;
   #dragEnterListener = (event: DragEvent): void => this.#handleDragEnter(event);
   #dragOverListener = (event: DragEvent): void => this.#handleDragOver(event);
   #dragLeaveListener = (event: DragEvent): void => this.#handleDragLeave(event);
   #dropListener = (event: DragEvent): void => this.#handleDrop(event);
+  #manager = DragDropManager.instance;
+  #subscription: ReturnType<typeof DragDropManager.instance.subscribe> | null = null;
 
   constructor(host: ReactiveControllerHost & ReactiveElement, config: DropControllerConfig = {}) {
     this.host = host;
@@ -215,24 +174,31 @@ export class DropController implements ReactiveController {
   }
 
   public hostConnected(): void {
-    this.host.addEventListener('dragenter', this.#dragEnterListener);
-    this.host.addEventListener('dragover', this.#dragOverListener);
-    this.host.addEventListener('dragleave', this.#dragLeaveListener);
-    this.host.addEventListener('drop', this.#dropListener);
+    this.#attachListeners();
+
+    // Subscribe to drag start and end events from the DragDropManager
+    this.#subscription = this.#manager.subscribe({
+      start: event => {
+        if (event) {
+          this.#handleDragStart(event);
+        }
+      },
+      end: event => {
+        if (event) {
+          this.#handleDragEnd(event);
+        }
+      }
+    });
   }
 
   public hostDisconnected(): void {
-    this.host.removeEventListener('dragenter', this.#dragEnterListener);
-    this.host.removeEventListener('dragover', this.#dragOverListener);
-    this.host.removeEventListener('dragleave', this.#dragLeaveListener);
-    this.host.removeEventListener('drop', this.#dropListener);
+    this.#detachListeners();
 
     // Reset all state
-    this.#dragOver = false;
     this.#dragDepth = 0;
-    this.#currentDropTarget = null;
-    this.#placeholder = null;
     this.#insertionIndex = null;
+    this.#subscription?.();
+    this.#subscription = null;
   }
 
   /**
@@ -253,27 +219,19 @@ export class DropController implements ReactiveController {
   }
 
   /**
-   * Gets whether a dragged item is currently over the drop zone.
+   * Prevents the current drop operation from being accepted. Call this during the `onDragEnter`
+   * callback to prevent future events from being handled until the drag leaves the drop target or
+   * ends.
    */
-  public get dragOver(): boolean {
-    return this.#dragOver;
+  public preventDrop(): void {
+    this.#preventDrop = false;
   }
 
   /**
    * Gets the current drop target element.
    */
   public get dropTarget(): HTMLElement | null {
-    return this.#currentDropTarget;
-  }
-
-  /**
-   * Gets the placeholder element for visual feedback.
-   * The host component is responsible for inserting this element into its template
-   * at the position indicated by `insertionIndex`.
-   * Returns null when no drag operation is active.
-   */
-  public get placeholder(): HTMLElement | null {
-    return this.#placeholder;
+    return this.#manager.target;
   }
 
   /**
@@ -285,8 +243,38 @@ export class DropController implements ReactiveController {
     return this.#insertionIndex;
   }
 
-  #handleDragEnter(event: DragEvent): void {
+  #attachListeners(): void {
+    this.host.addEventListener('dragenter', this.#dragEnterListener);
+    this.host.addEventListener('dragover', this.#dragOverListener);
+    this.host.addEventListener('dragleave', this.#dragLeaveListener);
+    this.host.addEventListener('drop', this.#dropListener);
+  }
+
+  #detachListeners(): void {
+    this.host.removeEventListener('dragenter', this.#dragEnterListener);
+    this.host.removeEventListener('dragover', this.#dragOverListener);
+    this.host.removeEventListener('dragleave', this.#dragLeaveListener);
+    this.host.removeEventListener('drop', this.#dropListener);
+  }
+
+  #handleDragStart(event: DragEvent): void {
     if (!this.#enabled) {
+      return;
+    }
+
+    // Stop handling this operation if onDrag
+    const prevented = this.#config.onDragStart?.({
+      event,
+      item: this.#manager.item,
+      target: this.#manager.target,
+      source: this.#manager.source,
+      index: -1
+    });
+    this.#preventDrop = prevented === false;
+  }
+
+  #handleDragEnter(event: DragEvent): void {
+    if (!this.#enabled || this.#preventDrop) {
       return;
     }
 
@@ -302,81 +290,62 @@ export class DropController implements ReactiveController {
       return;
     }
 
-    const dropTarget = this.#getDropTarget(target, event);
+    const dropTarget = this.#getDropTarget(event);
     if (!dropTarget) {
       event.preventDefault();
       this.#dragDepth = 0;
       return;
     }
 
-    const dataTransfer = event.dataTransfer;
-    if (!dataTransfer) {
-      return;
-    }
-
-    this.#currentDropTarget = dropTarget;
-    this.#dragOver = true;
+    // Update manager state
+    this.#manager.setTarget(dropTarget);
 
     // Calculate insertion index
     this.#insertionIndex = this.#calculateInsertionIndex(event, dropTarget);
 
-    // Create placeholder if enabled
-    if (this.#config.showPlaceholder !== false) {
-      if (this.#config.onCreatePlaceholder) {
-        this.#placeholder = this.#config.onCreatePlaceholder({
-          dataTransfer,
-          dropTarget,
-          insertionIndex: this.#insertionIndex
-        });
-      }
+    // Set drop effect
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = this.#config.dropEffect ?? 'move';
     }
 
-    // Set drop effect
-    dataTransfer.dropEffect = this.#config.dropEffect ?? 'move';
-
-    // Invoke callback
+    // Invoke callback with manager data
     this.#config.onDragEnter?.({
       event,
-      dataTransfer,
-      dropTarget,
-      insertionIndex: this.#insertionIndex,
-      clientX: event.clientX,
-      clientY: event.clientY
+      item: this.#manager.item,
+      target: dropTarget,
+      source: this.#manager.source,
+      index: this.#insertionIndex
     });
   }
 
   #handleDragOver(event: DragEvent): void {
-    if (!this.#enabled || !this.#currentDropTarget) {
+    if (!this.#enabled || !this.#manager.target || this.#preventDrop) {
       return;
     }
 
     // Prevent default to allow drop (not throttled)
     event.preventDefault();
 
-    const dataTransfer = event.dataTransfer;
-    if (!dataTransfer) {
-      return;
-    }
-
     // Recalculate insertion index (not throttled for accurate positioning)
-    this.#insertionIndex = this.#calculateInsertionIndex(event, this.#currentDropTarget);
+    this.#insertionIndex = this.#calculateInsertionIndex(event, this.#manager.target);
 
     // Set drop effect (not throttled)
-    dataTransfer.dropEffect = this.#config.dropEffect ?? 'move';
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = this.#config.dropEffect ?? 'move';
+    }
 
-    // Invoke throttled callback
+    // Invoke throttled callback with manager data
     this.#throttledDragOverCallback?.({
       event,
-      dataTransfer,
-      dropTarget: this.#currentDropTarget,
-      insertionIndex: this.#insertionIndex,
-      clientX: event.clientX,
-      clientY: event.clientY
+      item: this.#manager.item,
+      target: this.#manager.target,
+      source: this.#manager.source,
+      index: this.#insertionIndex
     });
   }
 
   #handleDragLeave(event: DragEvent): void {
-    if (!this.#enabled) {
+    if (!this.#enabled || this.#preventDrop) {
       return;
     }
 
@@ -387,67 +356,71 @@ export class DropController implements ReactiveController {
       return;
     }
 
-    const dataTransfer = event.dataTransfer;
-    const dropTarget = this.#currentDropTarget;
-
-    this.#dragOver = false;
-    this.#placeholder = null;
     this.#insertionIndex = null;
 
-    if (dataTransfer && dropTarget) {
-      this.#config.onDragLeave?.({
-        event,
-        dataTransfer,
-        dropTarget
-      });
+    this.#config.onDragLeave?.({
+      event,
+      item: this.#manager.item,
+      source: this.#manager.source,
+      target: this.#manager.target,
+      index: -1
+    });
+
+    // Clear target when leaving
+    this.#manager.setTarget(null);
+  }
+
+  #handleDragEnd(event: DragEvent): void {
+    if (!this.#enabled) {
+      return;
     }
 
-    this.#currentDropTarget = null;
+    this.#config.onDragEnd?.({
+      event,
+      item: this.#manager.item,
+      source: this.#manager.source,
+      target: this.#manager.target,
+      index: -1
+    });
+
+    this.#dragDepth = 0;
+    this.#insertionIndex = null;
+    this.#preventDrop = false;
   }
 
   #handleDrop(event: DragEvent): void {
-    if (!this.#enabled || !this.#currentDropTarget) {
+    if (!this.#enabled || !this.#manager.target || this.#preventDrop) {
       return;
     }
 
     event.preventDefault();
 
-    const dataTransfer = event.dataTransfer;
-    if (!dataTransfer) {
-      return;
-    }
-
-    const dropTarget = this.#currentDropTarget;
-    const insertionIndex = this.#calculateInsertionIndex(event, dropTarget);
-
-    // Reset state
-    this.#dragDepth = 0;
-    this.#dragOver = false;
-    this.#placeholder = null;
-    this.#insertionIndex = null;
-    this.#currentDropTarget = null;
-
-    // Invoke callback
+    // Invoke callback with manager data
     this.#config.onDrop?.({
       event,
-      dataTransfer,
-      dropTarget,
-      insertionIndex,
-      clientX: event.clientX,
-      clientY: event.clientY
+      source: this.#manager.source,
+      target: this.#manager.target,
+      item: this.#manager.item,
+      index: this.#insertionIndex ?? -1
     });
+
+    this.#manager.endOperation(event);
   }
 
-  #getDropTarget(targetElement: HTMLElement, event: DragEvent): HTMLElement | null {
+  #getDropTarget(event: DragEvent): HTMLElement | null {
     if (this.#config.getDropTarget) {
-      return this.#config.getDropTarget({ targetElement, event });
+      return this.#config.getDropTarget(event);
     }
     return this.host as HTMLElement;
   }
 
-  #calculateInsertionIndex(event: DragEvent, dropTarget: HTMLElement): number {
+  #calculateInsertionIndex(event: DragEvent, target: HTMLElement): number {
+    if (this.#config.getIndex) {
+      return this.#config.getIndex(event);
+    }
+
     const selector = this.#config.childSelector || '*';
-    const children = Array.from(dropTarget.querySelectorAll<HTMLElement>(selector));
+    const children = Array.from(target.querySelectorAll<HTMLElement>(selector));
     const orientation = this.#config.orientation || 'vertical';
     const cursorPos = orientation === 'horizontal' ? event.clientX : event.clientY;
 

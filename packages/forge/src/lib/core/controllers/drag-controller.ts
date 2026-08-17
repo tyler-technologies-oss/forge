@@ -1,30 +1,21 @@
 import { ReactiveController, ReactiveControllerHost, ReactiveElement } from 'lit';
+import { DragDropManager } from '../utils/drag-drop-manager.js';
 
 export interface GetDragItemArgs {
+  event: DragEvent;
   draggableElement: HTMLElement;
-  event: DragEvent;
 }
 
-export interface SetTransferDataArgs {
+export interface DragEventArgs {
   event: DragEvent;
-  dataTransfer: DataTransfer;
-  dragItem: HTMLElement;
+  item: HTMLElement;
+  controller: DragController;
 }
 
-export interface SetDragImageArgs {
-  event: DragEvent;
-  dataTransfer: DataTransfer;
-  dragItem: HTMLElement;
-}
-
-export interface DragStartArgs {
-  event: DragEvent;
-  dragItem: HTMLElement;
-}
-
-export interface DragEndArgs {
-  event: DragEvent;
-  dragItem: HTMLElement;
+interface DragImageConfig {
+  image: Element;
+  x: number;
+  y: number;
 }
 
 /**
@@ -47,35 +38,43 @@ export interface DragControllerConfig {
   getDragItem?: (args: GetDragItemArgs) => HTMLElement | null;
 
   /**
-   * Callback when drag operation starts.
-   * This is called after the drag item has been determined but before transfer data and drag image are set.
+   * Callback to retrieve the source element (ancestor/container) of the drag item.
+   * This allows identifying which component/container the item is being dragged from.
+   *
+   * @param dragItem - The drag item element
    * @param event - The dragstart event
-   * @param dragItem - The drag item (from getDragItem callback or the draggable element itself)
+   * @returns The source container element, or null to use the host
+   *
+   * @example
+   * // In a listbox, return the listbox element itself
+   * getSourceElement: ({ dragItem }) => dragItem.closest('forge-listbox')
    */
-  onDragStart?: (args: DragStartArgs) => void;
+  getSourceElement?: (args: DragEventArgs) => HTMLElement | null;
 
   /**
-   * Callback to set custom drag transfer data.
+   * Callback when drag operation starts. This is called after the drag item has been determined but
+   * before transfer data and drag image are set.
    * @param event - The dragstart event
-   * @param dataTransfer - The DataTransfer object
    * @param dragItem - The drag item (from getDragItem callback or the draggable element itself)
    */
-  onSetTransferData?: (args: SetTransferDataArgs) => void;
+  onDragStart?: (args: DragEventArgs) => void;
 
   /**
    * Callback to set a custom drag image.
    * @param event - The dragstart event
    * @param dataTransfer - The DataTransfer object
    * @param dragItem - The drag item (from getDragItem callback or the draggable element itself)
+   * @returns An object containing the image element and its x/y offset or undefined to use the
+   * default image
    */
-  onSetDragImage?: (args: SetDragImageArgs) => void;
+  setDragImage?: (args: DragEventArgs) => DragImageConfig | undefined;
 
   /**
    * Callback when drag operation ends (success or cancel).
    * @param event - The dragend event
    * @param dragItem - The drag item (from getDragItem callback or the draggable element itself)
    */
-  onDragEnd?: (args: DragEndArgs) => void;
+  onDragEnd?: (args: DragEventArgs) => void;
 
   /**
    * The drag effect allowed for this drag operation.
@@ -88,33 +87,14 @@ export interface DragControllerConfig {
  * A Lit controller for handling HTML5 drag operations on descendant draggable elements.
  *
  * This controller listens for drag events that bubble from descendant draggable elements
- * without making the host element itself draggable. It supports customizing the drag item,
- * transfer data, and drag image through callbacks.
+ * without making the host element itself draggable. It supports customizing the drag item
+ * and drag image through callbacks.
  *
  * @example
  * class ListboxComponent extends LitElement {
  *   #dragController = new DragController(this, {
  *     // Traverse from drag handle to parent option element
  *     getDragItem: ({ draggableElement }) => draggableElement.closest('forge-option'),
- *
- *     // Set transfer data using the option element
- *     onSetTransferData: ({ event, dataTransfer, dragItem: option }) => {
- *       dataTransfer.setData('text/plain', option.textContent?.trim() || '');
- *       dataTransfer.setData('application/x-forge-option-id', option.id);
- *     },
- *
- *     // Use the option element for the drag image
- *     onSetDragImage: ({ event, dataTransfer, dragItem: option }) => {
- *       const clone = option.cloneNode(true) as HTMLElement;
- *       clone.style.position = 'absolute';
- *       clone.style.top = '-9999px';
- *       clone.style.opacity = '0.7';
- *       document.body.appendChild(clone);
- *       const rect = option.getBoundingClientRect();
- *       dataTransfer.setDragImage(clone, rect.width / 2, rect.height / 2);
- *       requestAnimationFrame(() => clone.remove());
- *     },
- *
  *     effectAllowed: 'move'
  *   });
  * }
@@ -126,7 +106,9 @@ export class DragController implements ReactiveController {
   #enabled = true;
   #dragStartListener = (event: DragEvent): void => this.#handleDragStart(event);
   #dragEndListener = (event: DragEvent): void => this.#handleDragEnd(event);
-  #currentDragItem: HTMLElement | null = null;
+  #manager = DragDropManager.instance;
+  #currentOperation: string | null = null;
+  #subscription: ReturnType<typeof DragDropManager.instance.subscribe> | null = null;
 
   constructor(host: ReactiveControllerHost & ReactiveElement, config: DragControllerConfig = {}) {
     this.host = host;
@@ -135,14 +117,18 @@ export class DragController implements ReactiveController {
   }
 
   public hostConnected(): void {
-    this.host.addEventListener('dragstart', this.#dragStartListener);
-    this.host.addEventListener('dragend', this.#dragEndListener);
+    this.#attachListeners();
+    this.#subscription = this.#manager.subscribe({
+      end: () => {
+        this.#currentOperation = null;
+      }
+    });
   }
 
   public hostDisconnected(): void {
-    this.host.removeEventListener('dragstart', this.#dragStartListener);
-    this.host.removeEventListener('dragend', this.#dragEndListener);
-    this.#currentDragItem = null;
+    this.#detachListeners();
+    this.#endCurrentOperation();
+    this.#unsubscribe();
   }
 
   /**
@@ -154,79 +140,123 @@ export class DragController implements ReactiveController {
   }
 
   /**
-   * Enables or disables the drag controller.
-   * @param enabled - Whether the controller should handle drag events
+   * Gets whether the drag controller is enabled.
+   * @default true
    */
-  public setEnabled(enabled: boolean): void {
-    this.#enabled = enabled;
+  public get enabled(): boolean {
+    return this.#enabled;
   }
 
-  #handleDragStart(event: DragEvent): void {
-    if (!this.#enabled) {
+  /**
+   * Sets whether the drag controller is enabled. When disabled, it will not listen for drag events.
+   * @param enabled - true to enable, false to disable
+   */
+  public setEnabled(enabled: boolean): void {
+    if (this.#enabled === enabled) {
       return;
     }
 
+    this.#enabled = enabled;
+    if (!enabled) {
+      this.#detachListeners();
+      this.#endCurrentOperation();
+    } else {
+      this.#attachListeners();
+    }
+  }
+
+  #attachListeners(): void {
+    this.host.addEventListener('dragstart', this.#dragStartListener);
+    this.host.addEventListener('dragend', this.#dragEndListener);
+  }
+
+  #detachListeners(): void {
+    this.host.removeEventListener('dragstart', this.#dragStartListener);
+    this.host.removeEventListener('dragend', this.#dragEndListener);
+  }
+
+  #handleDragStart(event: DragEvent): void {
+    if (this.#manager.currentOperation) {
+      // Another drag operation is already in progress, cancel this one
+      event.preventDefault();
+      console.warn('DragController: A drag operation is already in progress. Cancelling this drag.');
+      return;
+    }
+
+    // Ensure the event target is defined
     const target = event.target as HTMLElement | null;
     if (!target) {
       return;
     }
 
-    const dragItem = this.#getDragItem(target, event);
-    if (!dragItem) {
+    // Determine the drag item from the target element
+    const item = this.#getItem(target, event);
+    if (!item) {
       event.preventDefault();
       return;
     }
 
-    const dataTransfer = event.dataTransfer;
-    if (!dataTransfer) {
-      return;
+    // Update manager state
+    const sourceElement =
+      this.#config.getSourceElement?.({
+        event,
+        item,
+        controller: this
+      }) ?? (this.host as HTMLElement);
+    this.#startOperation(item, sourceElement, event);
+
+    // Set the drag image and effect allowed
+    if (event.dataTransfer) {
+      const dragImage = this.#config.setDragImage?.({ event, item, controller: this }) ?? this.#getDefaultDragImage(event, item);
+      event.dataTransfer.setDragImage(dragImage.image, dragImage.x, dragImage.y);
+      event.dataTransfer.effectAllowed = this.#config.effectAllowed ?? 'move';
     }
 
-    this.#currentDragItem = dragItem;
-    this.#config.onDragStart?.({ event, dragItem });
-    dataTransfer.effectAllowed = this.#config.effectAllowed ?? 'move';
-
-    if (this.#config.onSetTransferData) {
-      this.#config.onSetTransferData({ event, dataTransfer, dragItem });
-    } else {
-      this.#setDefaultTransferData(dataTransfer, dragItem);
-    }
-
-    if (this.#config.onSetDragImage) {
-      this.#config.onSetDragImage({ event, dataTransfer, dragItem });
-    } else {
-      this.#setDefaultDragImage(dataTransfer, dragItem);
-    }
+    // Call the onDragStart callback
+    this.#config.onDragStart?.({ event, item, controller: this });
   }
 
   #handleDragEnd(event: DragEvent): void {
-    if (!this.#enabled || !this.#currentDragItem) {
-      return;
+    if (this.#enabled && this.#validateOperation() && this.#manager.item) {
+      this.#config.onDragEnd?.({ event, item: this.#manager.item, controller: this });
     }
 
-    const dragItem = this.#currentDragItem;
-    this.#currentDragItem = null;
-    this.#config.onDragEnd?.({ event, dragItem });
+    this.#endCurrentOperation(event);
   }
 
-  #getDragItem(draggableElement: HTMLElement, event: DragEvent): HTMLElement | null {
-    if (this.#config.getDragItem) {
-      return this.#config.getDragItem({ draggableElement, event });
+  #getItem(draggableElement: HTMLElement, event: DragEvent): HTMLElement | null {
+    return this.#config.getDragItem?.({ draggableElement, event }) ?? draggableElement;
+  }
+
+  #getDefaultDragImage(event: DragEvent, dragItem: HTMLElement): DragImageConfig {
+    return {
+      image: dragItem,
+      x: event.offsetX,
+      y: event.offsetY
+    };
+  }
+
+  #startOperation(item: HTMLElement, source: HTMLElement, event: DragEvent): void {
+    this.#manager.setItem(item);
+    this.#manager.setSource(source);
+    this.#manager.startOperation(event);
+    this.#currentOperation = this.#manager.currentOperation;
+  }
+
+  #endCurrentOperation(event?: DragEvent): void {
+    if (this.#validateOperation()) {
+      this.#manager.endOperation(event);
     }
-    return draggableElement;
   }
 
-  #setDefaultTransferData(dataTransfer: DataTransfer, dragItem: HTMLElement): void {
-    const textData = dragItem.id || dragItem.textContent?.trim() || '';
-    dataTransfer.setData('text/plain', textData);
+  #validateOperation(): boolean {
+    return !!this.#currentOperation && this.#currentOperation === this.#manager.currentOperation;
+  }
 
-    if (dragItem.id) {
-      dataTransfer.setData('application/x-forge-element-id', dragItem.id);
+  #unsubscribe(): void {
+    if (this.#subscription) {
+      this.#subscription();
+      this.#subscription = null;
     }
-  }
-
-  #setDefaultDragImage(dataTransfer: DataTransfer, dragItem: HTMLElement): void {
-    const rect = dragItem.getBoundingClientRect();
-    dataTransfer.setDragImage(dragItem, 0, rect.height / 2);
   }
 }

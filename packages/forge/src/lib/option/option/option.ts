@@ -1,5 +1,5 @@
 import { consume } from '@lit/context';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, randomChars } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { tylIconCheck, tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconDrag, tylIconDragHorizontal } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
@@ -9,7 +9,7 @@ import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
 import { IconComponent, IconRegistry } from '../../icon/index.js';
-import { LISTBOX_REORDERABLE, LISTBOX_TAG_NAME } from '../../listbox/listbox.js';
+import { LISTBOX_ALLOW_DRAG_OUT, LISTBOX_REORDERABLE, LISTBOX_TAG_NAME } from '../../listbox/listbox.js';
 import { StateLayerComponent } from '../../state-layer/state-layer.js';
 import type { IOptionConfigComponent } from './option-config.js';
 import { OptionConfigComponent } from './option-config.js';
@@ -49,13 +49,17 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   @property({ type: Boolean })
   public selected = false;
 
-  @consume({ context: SELECT_LIKE_MULTIPLE })
+  @consume({ context: SELECT_LIKE_MULTIPLE, subscribe: true })
   @state()
   private _multiple = false;
 
-  @consume({ context: LISTBOX_REORDERABLE })
+  @consume({ context: LISTBOX_REORDERABLE, subscribe: true })
   @state()
   private _reorderable = false;
+
+  @consume({ context: LISTBOX_ALLOW_DRAG_OUT, subscribe: true })
+  @state()
+  private _allowDragOut = false;
 
   @state()
   private _focusIndicatorActive = false;
@@ -69,11 +73,6 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   constructor() {
     super();
     this.#internals = this.attachInternals();
-  }
-
-  public override connectedCallback(): void {
-    super.connectedCallback();
-    this.id ||= `${OPTION_CONSTANTS.elementName}-${randomChars(8)}`;
   }
 
   public willUpdate(_changedProperties: PropertyValues<this>): void {
@@ -147,8 +146,8 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   }
 
   #tryRenderDragHandle(): TemplateResult | typeof nothing {
-    if (this._reorderable) {
-      return html`<forge-icon class="drag-handle" name="drag_horizontal" draggable="true"></forge-icon>`;
+    if (this._reorderable || this._allowDragOut) {
+      return html`<forge-icon class="drag-handle" name=${this._allowDragOut ? 'drag' : 'drag_horizontal'} draggable="true"></forge-icon>`;
     }
     return nothing;
   }

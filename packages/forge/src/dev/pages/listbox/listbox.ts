@@ -3,14 +3,19 @@ import '@tylertech/forge/listbox';
 import '@tylertech/forge/select';
 import './listbox.scss';
 import { IListboxDropData, ListboxComponent } from '@tylertech/forge/listbox';
-import { OptionComponent } from '@tylertech/forge/option';
 
 document.addEventListener('forge-listbox-drop' as any, (event: CustomEvent<IListboxDropData>) => {
-  const targetListbox = event.target as ListboxComponent;
-  const sourceListbox = document.getElementById(event.detail.source) as ListboxComponent;
-  const elementAtIndex = targetListbox.children[event.detail.index];
-  const option = sourceListbox.querySelector(`forge-option[value="${event.detail.value}"]`) as OptionComponent;
+  console.log(event.detail);
 
-  sourceListbox.removeChild(option);
-  targetListbox.insertBefore(option, elementAtIndex);
+  const targetListbox = event.target as ListboxComponent;
+  const target = event.detail.group || targetListbox;
+  const elementAtIndex = target.children[event.detail.index];
+  const option = event.detail.option;
+
+  if (elementAtIndex === option) {
+    return;
+  }
+
+  option.parentElement?.removeChild(option);
+  target.insertBefore(option, elementAtIndex);
 });
