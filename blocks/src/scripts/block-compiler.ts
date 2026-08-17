@@ -63,7 +63,7 @@ export function parseBlockTemplate(content: string): BlockTemplate | null {
 
   const metadataMatch = content.match(METADATA_COMMENT_REGEX);
   const bodyContent = metadataMatch
-    ? content.slice(metadataMatch.index! + metadataMatch[0].length).trim()
+    ? content.slice((metadataMatch.index ?? 0) + metadataMatch[0].length).trim()
     : content;
 
   return {

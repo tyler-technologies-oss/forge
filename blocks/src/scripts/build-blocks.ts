@@ -17,7 +17,7 @@ const DIST_DIR = 'dist';
 /** Path prefix for emitted asset/script URLs, e.g. "/forge-blocks/" when deployed under a subpath. */
 const BASE_HREF = process.env.BASE_HREF || '/';
 
-async function buildBlocks() {
+async function buildBlocks(): Promise<void> {
   console.log('Building blocks...');
   console.log(`Base HREF: ${BASE_HREF}`);
 
