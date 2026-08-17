@@ -39,7 +39,7 @@
         </forge-toolbar>
       </div>
 
-      <main slot="body" class="p-medium">
+      <main slot="body" class="p-medium scrollbar-gutter-stable">
         <forge-structured-card heading-level="2" body-spacing="none">
           <div slot="title">
             <span id="visible-count">0</span>
@@ -47,7 +47,7 @@
           </div>
           <forge-chip-set slot="after-title" id="active-filter-chips" type="field"></forge-chip-set>
 
-          <forge-table slot="body" id="blocks-table" fixed-headers wrap-content></forge-table>
+          <forge-table slot="body" id="blocks-table" fixed-headers wrap-content layout-type="fixed"></forge-table>
 
           <forge-paginator slot="footer-primary-action" id="blocks-paginator" page-size="25" page-size-options="[10, 25, 50, 100]" first-last>
           </forge-paginator>

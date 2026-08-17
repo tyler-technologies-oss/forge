@@ -14,6 +14,7 @@ const BLOCKS_PATH = 'src/blocks';
 const LAYOUT_PATH = 'src/includes/base.html';
 const PARTIALS_PATH = 'src/partials';
 const DIST_DIR = 'dist';
+/** Path prefix for emitted asset/script URLs, e.g. "/forge-blocks/" when deployed under a subpath. */
 const BASE_HREF = process.env.BASE_HREF || '/';
 
 async function buildBlocks() {

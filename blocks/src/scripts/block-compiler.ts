@@ -30,10 +30,14 @@ export interface CompileResult {
   error?: string;
 }
 
+/** Extracts the @block annotation value up to the next annotation or end of comment. */
 const BLOCK_TITLE_REGEX = /@block\s+(.+?)(?=\s*@|\s*-->)/;
+/** Matches an explicit <body> wrapper, if a block opts into one for body-level classes. */
 const BODY_REGEX = /<body([^>]*)>([\s\S]*)<\/body>/;
 const CLASS_REGEX = /class="([^"]*)"/;
+/** Matches the leading metadata comment block, used both to strip it before templating and to re-attach it to the compiled output. */
 const METADATA_COMMENT_REGEX = /<!--[\s\S]*?-->/;
+/** Matches legacy hand-written script tags pointing at block .ts source files (see stripBlockScriptTags). */
 const BLOCK_SCRIPT_TAG_REGEX = /\s*<script\b[^>]*\bsrc=(?:"|')\/src\/blocks\/[^"']+\.ts(?:"|')[^>]*><\/script>/gi;
 
 /**
@@ -127,6 +131,8 @@ export function compileBlock(content: string, options: CompileOptions): CompileR
     const layoutContent = fs.readFileSync(options.layoutPath, 'utf-8');
     const layoutTemplate = handlebars.compile(layoutContent);
 
+    // Re-attach the original @block metadata comment so it stays discoverable
+    // (e.g. by generate-manifest) in the compiled/dist HTML output, not just the source.
     const metadataMatch = content.match(METADATA_COMMENT_REGEX);
     const metadata = metadataMatch ? metadataMatch[0] + '\n' : '';
 
