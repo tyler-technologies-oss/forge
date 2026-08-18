@@ -5,6 +5,7 @@ import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import type { IIconComponent } from '../../icon/index.js';
 import { ListDropdownIconType, ListDropdownTooltipConfig } from '../../list-dropdown/list-dropdown-constants.js';
 import { OPTION_CONSTANTS } from './option-constants.js';
+import type { OptionUpdateReason } from './option.js';
 
 export interface IOptionConfigComponent extends BaseLitElement {
   value: any;
@@ -41,12 +42,20 @@ export abstract class OptionConfigComponent extends BaseLitElement {
     if (oldValue !== value) {
       this.#value = value;
       this.dispatchEvent(new CustomEvent(OPTION_CONSTANTS.events.VALUE_CHANGE, { detail: value, bubbles: true, composed: true }));
+      this._dispatchUpdate('value-changed');
     }
   }
   public get value(): any {
     return this.#value;
   }
   #value: any;
+
+  /**
+   * Dispatches the unified option update event used by `forge-listbox` to reconcile its value.
+   */
+  protected _dispatchUpdate(reason: OptionUpdateReason): void {
+    this.dispatchEvent(new CustomEvent(OPTION_CONSTANTS.events.UPDATE, { bubbles: true, composed: true, detail: { reason } }));
+  }
 
   /**
    * Gets/sets the label of this option.
@@ -177,7 +186,7 @@ export abstract class OptionConfigComponent extends BaseLitElement {
   @property({ attribute: false })
   public tooltip?: ListDropdownTooltipConfig;
 
-  @consume({ context: SELECT_LIKE_DISABLED })
+  @consume({ context: SELECT_LIKE_DISABLED, subscribe: true })
   private set _contextDisabled(value: boolean) {
     this.disabled = value || this.disabled;
   }

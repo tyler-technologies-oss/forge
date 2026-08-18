@@ -19,7 +19,8 @@ const attributes = {
 };
 
 const events = {
-  VALUE_CHANGE: `${elementName}-value-change`
+  VALUE_CHANGE: `${elementName}-value-change`,
+  UPDATE: `${elementName}-update`
 };
 
 /** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */

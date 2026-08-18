@@ -21,12 +21,20 @@ import styles from './option.scss';
 export interface IOptionComponent extends IOptionConfigComponent {}
 
 /**
+ * The reason an option's `forge-option-update` event was dispatched.
+ */
+export type OptionUpdateReason = 'added' | 'selected' | 'deselected' | 'value-changed';
+
+/**
  * @tag forge-option
  *
  * @summary Options represent individual selectable items within a `<forge-select>`, `<forge-menu>`,
  * or `<forge-listbox>` component.
  *
  * @fires {CustomEvent<any>} forge-option-value-change - Emitted when the option value changes.
+ * @fires {CustomEvent<{ reason: OptionUpdateReason }>} forge-option-update - Emitted when the option is
+ * connected, selected, deselected, or its value changes. Used by `forge-listbox` to keep its `value` in
+ * sync with option selection state.
  */
 @customElement(OPTION_CONSTANTS.elementName)
 export class OptionComponent extends OptionConfigComponent implements IOptionComponent {
@@ -75,6 +83,11 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
     this.#internals = this.attachInternals();
   }
 
+  public override connectedCallback(): void {
+    super.connectedCallback();
+    this._dispatchUpdate('added');
+  }
+
   public willUpdate(_changedProperties: PropertyValues<this>): void {
     if (_changedProperties.has('disabled')) {
       setDefaultAria(this, this.#internals, { ariaDisabled: this.disabled ? 'true' : null });
@@ -87,6 +100,10 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
         ariaSelected: this.selected ? (this._multiple ? null : 'true') : null
       });
       toggleState(this.#internals, 'selected', this.selected);
+    }
+
+    if (_changedProperties.has('selected')) {
+      this._dispatchUpdate(this.selected ? 'selected' : 'deselected');
     }
   }
 
@@ -170,5 +187,9 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
 declare global {
   interface HTMLElementTagNameMap {
     'forge-option': IOptionComponent;
+  }
+  interface HTMLElementEventMap {
+    'forge-option-value-change': CustomEvent<any>;
+    'forge-option-update': CustomEvent<{ reason: OptionUpdateReason }>;
   }
 }
