@@ -48,7 +48,9 @@ export class OptionGroupComponent extends OptionGroupConfigComponent implements 
   }
 
   public firstUpdated(): void {
-    this.#internals.ariaLabelledByElements = [this._labelElement];
+    if (!this.#configOnly) {
+      this.#internals.ariaLabelledByElements = [this._labelElement];
+    }
   }
 
   public render(): TemplateResult {
