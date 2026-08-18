@@ -115,6 +115,7 @@ function matchesFilters(block: IBlockEntry): boolean {
   }
   if (filters.search) {
     const q = filters.search.toLowerCase();
+    // Include componentsUsed so searching e.g. "forge-table" surfaces every block that uses it, not just dedicated component demos.
     const haystack = [block.name, block.description, block.category, block.type, block.tags.join(' '), block.componentsUsed.join(' ')].join(' ').toLowerCase();
     if (!haystack.includes(q)) {
       return false;

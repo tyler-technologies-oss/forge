@@ -1,6 +1,11 @@
 /**
  * Detects Forge components used in block HTML content.
  * Resolves partials to include components from referenced partials.
+ *
+ * The resulting component list powers cross-block discovery (the "Components" column and
+ * search/filtering in the block browser, via `Block.componentsUsed`) — it is not meant for
+ * extracting a single component's usage out of a composite block. For that, use one of the
+ * dedicated single-component demo blocks under `src/blocks/components/`.
  */
 
 import type { PartialRegistry } from './partial-registry.js';
@@ -44,6 +49,7 @@ export interface DetectComponentsOptions {
 /**
  * Detects all Forge components used in HTML content, including those in referenced partials.
  * Handles nested partials with cycle detection.
+ * Used at manifest-generation time to populate `Block.componentsUsed` for discovery/filtering, not for pulling a single component's markup out of a block.
  */
 export function detectComponents(options: DetectComponentsOptions): string[] {
   const { content, partialRegistry } = options;
