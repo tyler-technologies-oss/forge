@@ -224,7 +224,7 @@ export class DropController implements ReactiveController {
    * ends.
    */
   public preventDrop(): void {
-    this.#preventDrop = false;
+    this.#preventDrop = true;
   }
 
   /**
@@ -345,7 +345,7 @@ export class DropController implements ReactiveController {
   }
 
   #handleDragLeave(event: DragEvent): void {
-    if (!this.#enabled || this.#preventDrop) {
+    if (!this.#enabled) {
       return;
     }
 
@@ -358,16 +358,19 @@ export class DropController implements ReactiveController {
 
     this.#insertionIndex = null;
 
-    this.#config.onDragLeave?.({
-      event,
-      item: this.#manager.item,
-      source: this.#manager.source,
-      target: this.#manager.target,
-      index: -1
-    });
+    if (!this.#preventDrop) {
+      this.#config.onDragLeave?.({
+        event,
+        item: this.#manager.item,
+        source: this.#manager.source,
+        target: this.#manager.target,
+        index: -1
+      });
+    }
 
-    // Clear target when leaving
+    // Clear target and reset prevention when leaving
     this.#manager.setTarget(null);
+    this.#preventDrop = false;
   }
 
   #handleDragEnd(event: DragEvent): void {
