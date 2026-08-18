@@ -1,5 +1,0 @@
-@import '@tylertech/forge/dist/list/forge-list.css';
-
-forge-list:not([multicolumn]) {
-  max-width: 500px;
-}
