@@ -29,7 +29,7 @@ export interface DragControllerConfig {
    *
    * @param draggableElement - The element with draggable="true" that triggered the drag
    * @param event - The dragstart event
-   * @returns The element to use for transfer data and drag image, or null to cancel the drag
+   * @returns The element to use for transfer data and drag image, or null to use the draggable element itself
    *
    * @example
    * // In a listbox, traverse from drag handle icon to parent option
