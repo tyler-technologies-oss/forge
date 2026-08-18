@@ -16,6 +16,7 @@ jobs:
           ref: gh-pages
 
       - name: Remove preview if exists
+        id: remove-preview
         run: |
           if [ -d "docs/blocks/pr-${{ github.event.pull_request.number }}" ]; then
             rm -rf docs/blocks/pr-${{ github.event.pull_request.number }}
@@ -24,9 +25,13 @@ jobs:
             git add -A
             git commit -m "chore: remove blocks PR #${{ github.event.pull_request.number }} preview"
             git push
+            echo "removed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "removed=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Generate GitHub App token
+        if: steps.remove-preview.outputs.removed == 'true'
         id: app-token
         uses: actions/create-github-app-token@v2
         with:
@@ -34,6 +39,7 @@ jobs:
           private-key: ${{ secrets.FORGE_AUTOBOT_SECRET }}
 
       - name: Delete GitHub Environment
+        if: steps.remove-preview.outputs.removed == 'true'
         uses: actions/github-script@v8
         with:
           github-token: ${{ steps.app-token.outputs.token }}

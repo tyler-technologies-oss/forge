@@ -41,7 +41,11 @@ function applyTheme(theme: Theme): void {
 }
 
 function handleMessage(event: MessageEvent): void {
-  // Only process messages that match our expected format
+  // Only accept messages from the same origin (the docs site iframing this block)
+  if (event.origin !== window.location.origin) {
+    return;
+  }
+
   if (isThemeChangeMessage(event.data)) {
     applyTheme(event.data.theme);
   }
