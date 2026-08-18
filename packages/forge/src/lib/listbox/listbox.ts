@@ -12,8 +12,9 @@ import { composedPathFrom } from '../core/utils/event-utils.js';
 import { FocusGroupController } from '../core/utils/focus-group.js';
 import { KeyActionController } from '../core/utils/key-action.js';
 import { toggleState } from '../core/utils/utils.js';
+import { FormRestoreReason, FormRestoreState } from '../core/utils/form-utils.js';
 import type { OptionGroupComponent } from '../option/option-group/index.js';
-import type { OptionComponent } from '../option/option/index.js';
+import type { OptionComponent, OptionUpdateReason } from '../option/option/index.js';
 
 import styles from './listbox.scss';
 
@@ -35,6 +36,10 @@ export interface IListboxDropData {
  *
  * @summary Listboxes allow users to select one or more options from a list.
  *
+ * @description
+ * Listboxes are form-associated and support native form submission via `name`, constraint
+ * validation via `required`, and read-only presentation via `readonly`.
+ *
  * @dependency forge-option
  * @dependency forge-option-group
  *
@@ -52,11 +57,16 @@ export interface IListboxDropData {
 @customElement(LISTBOX_TAG_NAME)
 export class ListboxComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
+  public static formAssociated = true;
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = LISTBOX_TAG_NAME;
 
   #internals: ElementInternals;
+  #validationHelper: HTMLSelectElement;
+  #defaultValue: string | string[] = '';
+  #isReconciling = false;
+  #optionsObserver: MutationObserver;
 
   /**
    * The selected value(s).
@@ -65,6 +75,31 @@ export class ListboxComponent extends BaseLitElement {
    */
   @property()
   public value: string | string[] = '';
+
+  /**
+   * The name of the listbox, submitted with form data.
+   * @default ''
+   * @attribute
+   */
+  @property({ reflect: true })
+  public name = '';
+
+  /**
+   * Whether a selection is required for the listbox to be considered valid.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean })
+  public required = false;
+
+  /**
+   * Whether the listbox is readonly. When readonly, the listbox can still be focused and its
+   * value is still submitted with a form, but the user cannot change the selection.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean })
+  public readonly = false;
 
   /**
    * Whether multiple options can be selected.
@@ -184,11 +219,14 @@ export class ListboxComponent extends BaseLitElement {
 
   // Drag & drop variables
   #placeholder: HTMLElement;
-  #dropGroup: OptionGroupComponent | null = null;
+  #dropGroup?: OptionGroupComponent;
 
   constructor() {
     super();
     this.#internals = this.attachInternals();
+    this.#validationHelper = document.createElement('select');
+    this.#validationHelper.appendChild(document.createElement('option'));
+    this.#optionsObserver = new MutationObserver(records => this.#handleOptionsMutation(records));
     new KeyActionController(this, {
       actions: [
         {
@@ -213,26 +251,35 @@ export class ListboxComponent extends BaseLitElement {
     this.#placeholder = this.#createPlaceholder();
     this.addEventListener('blur', this.#handleBlur.bind(this));
     this.addEventListener('focus', this.#handleFocus.bind(this));
+    this.addEventListener('forge-option-update', this.#handleOptionUpdate.bind(this));
   }
 
   public override connectedCallback(): void {
     super.connectedCallback();
+    queueMicrotask(() => this.#captureDefaultValue());
     setDefaultAria(this, this.#internals, {
       role: 'listbox',
       ariaMultiSelectable: this.multiple ? 'true' : null,
       ariaOrientation: this.orientation === 'horizontal' ? 'horizontal' : null,
-      ariaDisabled: this.disabled ? 'true' : null
+      ariaDisabled: this.disabled ? 'true' : null,
+      ariaReadOnly: this.readonly ? 'true' : null
     });
+    this.#optionsObserver.observe(this, { childList: true, subtree: true });
   }
 
   public override disconnectedCallback(): void {
     super.disconnectedCallback();
+    this.#optionsObserver.disconnect();
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('disabled')) {
       setDefaultAria(this, this.#internals, { ariaDisabled: this.disabled ? 'true' : null });
       toggleState(this.#internals, 'disabled', this.disabled);
+    }
+
+    if (changedProperties.has('readonly')) {
+      setDefaultAria(this, this.#internals, { ariaReadOnly: this.readonly ? 'true' : null });
     }
 
     if (changedProperties.has('orientation')) {
@@ -247,6 +294,10 @@ export class ListboxComponent extends BaseLitElement {
 
     if (changedProperties.has('value')) {
       this.#syncValue();
+    }
+
+    if (changedProperties.has('value') || changedProperties.has('required') || changedProperties.has('name')) {
+      this.#updateFormValue();
     }
 
     if (changedProperties.has('reorderable') || changedProperties.has('allowDragOut') || changedProperties.has('allowDropFromElements')) {
@@ -277,12 +328,21 @@ export class ListboxComponent extends BaseLitElement {
     return path.find(el => el.matches && el.matches('forge-option')) as OptionComponent | undefined;
   }
 
+  #getGroupFromDragEvent(evt: DragEvent): OptionGroupComponent | undefined {
+    const groups = Array.from(this.querySelectorAll<OptionGroupComponent>('forge-option-group'));
+    const targetGroup = groups.find(group => {
+      const rect = group.getBoundingClientRect();
+      return evt.clientX >= rect.left && evt.clientX <= rect.right && evt.clientY >= rect.top && evt.clientY <= rect.bottom;
+    });
+    return targetGroup;
+  }
+
   // *****
   // Selection Logic
   // *****
 
   #selectOption(value: string): void {
-    if (this.disabled) {
+    if (this.disabled || this.readonly) {
       return;
     }
 
@@ -319,6 +379,156 @@ export class ListboxComponent extends BaseLitElement {
     this.#options.forEach(opt => {
       opt.selected = valueSet.has(opt.value);
     });
+  }
+
+  /**
+   * Captures a snapshot of the listbox's default value, used to restore the value on
+   * `formResetCallback()`. Prefers the `value` attribute if present, otherwise derives the
+   * default from any options that are declaratively marked `selected`.
+   */
+  #captureDefaultValue(): void {
+    if (this.hasAttribute('value')) {
+      this.#defaultValue = this.multiple ? (Array.isArray(this.value) ? [...this.value] : [this.value].filter(Boolean)) : this.value;
+      return;
+    }
+
+    const selectedOptions = this.#options.filter(opt => opt.selected);
+    this.#defaultValue = this.multiple ? selectedOptions.map(opt => opt.value) : (selectedOptions.at(-1)?.value ?? '');
+  }
+
+  #handleOptionUpdate(evt: CustomEvent<{ reason: OptionUpdateReason }>): void {
+    if (this.#isReconciling) {
+      return;
+    }
+    if (!this.multiple && evt.detail.reason === 'selected' && evt.target instanceof HTMLElement && evt.target.matches('forge-option')) {
+      this.#reconcileValueFromOptions(evt.target as OptionComponent);
+      return;
+    }
+    this.#reconcileValueFromOptions();
+  }
+
+  #handleOptionsMutation(records: MutationRecord[]): void {
+    if (this.#isReconciling) {
+      return;
+    }
+    const hasOptionRemoval = records.some(record => Array.from(record.removedNodes).some(node => this.#containsOption(node)));
+    if (hasOptionRemoval) {
+      this.#reconcileValueFromOptions();
+    }
+  }
+
+  #containsOption(node: Node): boolean {
+    if (!(node instanceof Element)) {
+      return false;
+    }
+    return node.matches('forge-option') || !!node.querySelector('forge-option');
+  }
+
+  /**
+   * Recomputes `value` from the live selected state of all options. This keeps `value` in sync
+   * whether selection was changed via the listbox's own API, directly on an option, or by
+   * adding/removing option elements.
+   * @param justSelected In single-select mode, an option that was just marked `selected` directly
+   * takes precedence over any other options that may still be marked `selected` from before,
+   * matching native `<select>`/`<option selected>` last-wins semantics.
+   */
+  #reconcileValueFromOptions(justSelected?: OptionComponent): void {
+    const selectedOptions = this.#options.filter(opt => opt.selected);
+    this.#isReconciling = true;
+    try {
+      this.value = this.multiple ? selectedOptions.map(opt => opt.value) : (justSelected?.value ?? selectedOptions.at(-1)?.value ?? '');
+    } finally {
+      this.#isReconciling = false;
+    }
+  }
+
+  /**
+   * Updates the form value and validity whenever `value`, `required`, or `name` change.
+   */
+  #updateFormValue(): void {
+    const values = Array.isArray(this.value) ? this.value : this.value ? [this.value] : [];
+
+    const formValue = values.length ? new FormData() : null;
+    if (formValue) {
+      values.forEach(v => formValue.append(this.name, v));
+    }
+
+    const state = new FormData();
+    state.append('multiple', String(this.multiple));
+    values.forEach(v => state.append('value', v));
+
+    this.#internals.setFormValue(formValue, state);
+    this.#setValidity();
+  }
+
+  #setValidity(): void {
+    const hasValue = Array.isArray(this.value) ? this.value.length > 0 : !!this.value;
+    this.#internals.setValidity({ valueMissing: this.required && !hasValue }, this.#getValidationMessage());
+  }
+
+  #getValidationMessage(): string {
+    if (this.#internals.validity.customError) {
+      return this.#internals.validationMessage;
+    }
+
+    const hasValue = Array.isArray(this.value) ? this.value.length > 0 : !!this.value;
+    this.#validationHelper.required = this.required;
+    this.#validationHelper.selectedIndex = hasValue ? 0 : -1;
+
+    return this.#validationHelper.validationMessage;
+  }
+
+  // *****
+  // Form Association
+  // *****
+
+  public get form(): HTMLFormElement | null {
+    return this.#internals.form;
+  }
+
+  public get labels(): NodeList {
+    return this.#internals.labels;
+  }
+
+  public get validity(): ValidityState {
+    return this.#internals.validity;
+  }
+
+  public get validationMessage(): string {
+    return this.#internals.validationMessage;
+  }
+
+  public get willValidate(): boolean {
+    return this.#internals.willValidate;
+  }
+
+  public checkValidity(): boolean {
+    return this.#internals.checkValidity();
+  }
+
+  public reportValidity(): boolean {
+    return this.#internals.reportValidity();
+  }
+
+  public setCustomValidity(error: string): void {
+    this.#internals.setValidity({ customError: !!error }, error);
+  }
+
+  public formDisabledCallback(disabled: boolean): void {
+    this.disabled = disabled;
+  }
+
+  public formResetCallback(): void {
+    this.value = this.#defaultValue;
+  }
+
+  public formStateRestoreCallback(state: FormRestoreState | null, _reason: FormRestoreReason): void {
+    if (state instanceof FormData) {
+      const multiple = state.get('multiple') === 'true';
+      const values = state.getAll('value') as string[];
+      this.multiple = multiple;
+      this.value = multiple ? values : (values[0] ?? '');
+    }
   }
 
   // *****
@@ -366,7 +576,7 @@ export class ListboxComponent extends BaseLitElement {
   }
 
   #handleSelectAllKey(evt: KeyboardEvent): void {
-    if (!this.multiple) {
+    if (!this.multiple || this.disabled || this.readonly) {
       return;
     }
 
@@ -425,7 +635,7 @@ export class ListboxComponent extends BaseLitElement {
 
   #handleDragLeave(): void {
     this.#removePlaceholder();
-    this.#dropGroup = null;
+    this.#dropGroup = undefined;
   }
 
   #handleDrop(args: DropEventArgs): void {
@@ -498,8 +708,10 @@ export class ListboxComponent extends BaseLitElement {
   }
 
   #getInsertionIndex(event: DragEvent): number {
-    const parent = this.#getGroupFromCursorPosition(event) || this;
+    const parent = this.#getGroupFromDragEvent(event) || this;
     const children = Array.from(parent.querySelectorAll<OptionComponent>('forge-option'));
+
+    this.#dropGroup = parent === this ? undefined : (parent as OptionGroupComponent);
 
     for (let i = 0; i < children.length; i++) {
       const rect = children[i].getBoundingClientRect();
@@ -511,17 +723,6 @@ export class ListboxComponent extends BaseLitElement {
     }
 
     return children.length;
-  }
-
-  #getGroupFromCursorPosition(event: DragEvent): OptionGroupComponent | null {
-    const groups = Array.from(this.querySelectorAll<OptionGroupComponent>('forge-option-group'));
-    const targetGroup =
-      groups.find(group => {
-        const rect = group.getBoundingClientRect();
-        return event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
-      }) ?? null;
-    this.#dropGroup = targetGroup;
-    return targetGroup;
   }
 }
 
