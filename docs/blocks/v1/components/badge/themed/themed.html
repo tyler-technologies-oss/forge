@@ -1,0 +1,43 @@
+<!--
+  @block Badge — Themed
+  @type component
+  @description Themed usage example for the forge-badge component.
+  @tags badge, themed, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Badge — Themed</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div style="display: flex; gap: 8px;">
+  <forge-badge theme="default">Default</forge-badge>
+  <forge-badge theme="primary">Primary</forge-badge>
+  <forge-badge theme="secondary">Secondary</forge-badge>
+  <forge-badge theme="tertiary">Tertiary</forge-badge>
+  <forge-badge theme="success">Success</forge-badge>
+  <forge-badge theme="error">Error</forge-badge>
+  <forge-badge theme="warning">Warning</forge-badge>
+  <forge-badge theme="info">Info</forge-badge>
+  <forge-badge theme="info-secondary">Info (secondary)</forge-badge>
+</div>
+  </body>
+</html>

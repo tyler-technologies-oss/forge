@@ -1,0 +1,55 @@
+<!--
+  @block Card — Styled
+  @type component
+  @description Styled usage example for the forge-card component.
+  @tags card, styled, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Card — Styled</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <link rel="stylesheet" href="/blocks/v1/components/card/styled/styled.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="demo-card">
+  <forge-card>
+    <div class="forge-card-header-container">
+      <h3 class="forge-typography--heading4">This is the card title</h3>
+      <forge-icon-button aria-label="View more actions">
+        <forge-icon name="more_vert">
+        </forge-icon>
+      </forge-icon-button>
+    </div>
+    <div>
+      <p>
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias exercitationem doloremque dolorem ullam, nesciunt quia velit necessitatibus
+        numquam quasi voluptates impedit earum dolores repudiandae facilis totam non quo labore itaque?
+      </p>
+    </div>
+    <div class="forge-card-footer">
+      <forge-button variant="outlined">Cancel</forge-button>
+      <forge-button variant="raised">OK</forge-button>
+    </div>
+  </forge-card>
+</div>
+<script type="module" src="/blocks/v1/components/card/styled/styled.js"></script>
+  </body>
+</html>

@@ -1,0 +1,70 @@
+<!--
+  @block Mini Drawer — Hover
+  @type component
+  @description Hover usage example for the forge-mini-drawer component.
+  @tags mini-drawer, hover, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Mini Drawer — Hover</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-scaffold style="--forge-scaffold-height: 300px;">
+  <forge-app-bar slot="header" title-text="Drawer Demo" elevation="raised">
+    <forge-app-bar-menu-button slot="start">
+      <forge-icon-button theme="app-bar" aria-labelledby="forge-tooltip-i01uv">
+        <forge-icon name="menu">
+        </forge-icon>
+      </forge-icon-button>
+      <forge-tooltip type="label" placement="bottom" aria-hidden="true" id="forge-tooltip-i01uv">Menu</forge-tooltip>
+    </forge-app-bar-menu-button>
+  </forge-app-bar>
+  <forge-mini-drawer slot="body-left" hover open direction="left">
+    <aside>
+      <forge-list navlist>
+        <forge-list-item selected id="tooltip-host-1">
+          <forge-icon slot="start" name="inbox">
+          </forge-icon>
+          <a href="javascript: void(0)">Inbox</a>
+        </forge-list-item>
+        <forge-list-item id="tooltip-host-2">
+          <forge-icon slot="start" name="send">
+          </forge-icon>
+          <a href="javascript: void(0)">Sent</a>
+        </forge-list-item>
+        <forge-list-item id="tooltip-host-3">
+          <forge-icon slot="start" name="drafts">
+          </forge-icon>
+          <a href="javascript: void(0)">Drafts</a>
+        </forge-list-item>
+      </forge-list>
+    </aside>
+  </forge-mini-drawer>
+  <main slot="body" style="padding: 16px; background-color: var(--forge-theme-surface-dim);">
+    <forge-card>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </forge-card>
+  </main>
+</forge-scaffold>
+<script type="module" src="/blocks/v1/components/drawer/mini-drawer/hover/hover.js"></script>
+  </body>
+</html>

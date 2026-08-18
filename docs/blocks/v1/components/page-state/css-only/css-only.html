@@ -1,0 +1,44 @@
+<!--
+  @block Page State — CSS Only
+  @type component
+  @description CSS Only usage example for the forge-page-state component.
+  @tags page-state, css-only, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Page State — CSS Only</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <link rel="stylesheet" href="/blocks/v1/components/page-state/css-only/css-only.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="forge-page-state">
+  <img src="https://cdn.forge.tylertech.com/v1/images/spot-hero/404-error-spot-hero.svg" class="forge-page-state__graphic" alt>
+  <div class="forge-page-state__title">Nothing but tumbleweeds here...</div>
+  <div class="forge-page-state__message">
+    Even our best explorer couldn't find the page you're looking for. It might have been removed or you may have mistyped the URL.
+  </div>
+  <div class="forge-page-state__actions">
+    <button class="forge-button forge-button--raised">Go back</button>
+    <button class="forge-button forge-button--outlined">Refresh</button>
+  </div>
+</div>
+  </body>
+</html>

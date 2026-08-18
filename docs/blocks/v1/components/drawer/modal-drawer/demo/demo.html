@@ -1,0 +1,78 @@
+<!--
+  @block Modal Drawer — Demo
+  @type component
+  @description Demo usage example for the forge-modal-drawer component.
+  @tags modal-drawer, demo, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Modal Drawer — Demo</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-scaffold style="--forge-scaffold-height: 300px;">
+  <forge-app-bar slot="header" title-text="Modal Drawer Demo" elevation="raised">
+    <forge-app-bar-menu-button slot="start">
+      <forge-icon-button theme="app-bar" aria-labelledby="forge-tooltip-lsy97">
+        <forge-icon name="menu">
+        </forge-icon>
+      </forge-icon-button>
+      <forge-tooltip type="label" placement="bottom" aria-hidden="true" id="forge-tooltip-lsy97">Menu</forge-tooltip>
+    </forge-app-bar-menu-button>
+  </forge-app-bar>
+  <forge-modal-drawer slot="left" open direction="left">
+    <aside>
+      <forge-list navlist>
+        <forge-list-item selected>
+          <forge-icon slot="start" name="inbox">
+          </forge-icon>
+          <a href="javascript: void(0)">Inbox</a>
+        </forge-list-item>
+        <forge-list-item>
+          <forge-icon slot="start" name="send">
+          </forge-icon>
+          <a href="javascript: void(0)">Outgoing</a>
+        </forge-list-item>
+        <forge-list-item indented>
+          <a href="javascript: void(0)">Pending</a>
+        </forge-list-item>
+        <forge-list-item>
+          <forge-icon slot="start" name="drafts">
+          </forge-icon>
+          <a href="javascript: void(0)">Drafts</a>
+        </forge-list-item>
+        <forge-list-item>
+          <forge-icon slot="start" name="send">
+          </forge-icon>
+          <a href="javascript: void(0)">Sent</a>
+        </forge-list-item>
+      </forge-list>
+    </aside>
+  </forge-modal-drawer>
+  <main slot="body">
+    <forge-card>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </forge-card>
+  </main>
+</forge-scaffold>
+<script type="module" src="/blocks/v1/components/drawer/modal-drawer/demo/demo.js"></script>
+  </body>
+</html>

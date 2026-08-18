@@ -1,0 +1,41 @@
+<!--
+  @block Simple Table
+  @type pattern
+  @description Data table component wrapped in a card container with a toolbar header, demonstrating column configuration and data binding for displaying tabular information with multiple columns and rows
+  @tags table, data, card, toolbar
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Simple Table</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="p-medium">
+  <forge-card no-padding>
+    <forge-toolbar>
+      <h2 slot="start" class="text-heading3">Blacksmith Inventory</h2>
+    </forge-toolbar>
+    <forge-table id="blacksmith-table"></forge-table>
+  </forge-card>
+</div>
+<script type="module" src="/blocks/v1/tables/simple/simple.js"></script>
+  </body>
+</html>

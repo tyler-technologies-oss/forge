@@ -1,0 +1,72 @@
+<!--
+  @block App Bar — Full
+  @type component
+  @description Full usage example for the forge-app-bar component.
+  @tags app-bar, full, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>App Bar — Full</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-app-bar title-text="Tyler Forge™" theme-mode="scoped" elevation="raised">
+  <forge-app-bar-menu-button slot="start">
+    <forge-icon-button theme="app-bar" aria-labelledby="forge-tooltip-s0oou">
+      <forge-icon name="menu">
+      </forge-icon>
+    </forge-icon-button>
+    <forge-tooltip type="label" placement="bottom" aria-hidden="true" id="forge-tooltip-s0oou">Menu</forge-tooltip>
+  </forge-app-bar-menu-button>
+  <forge-icon slot="logo" name="forge_logo">
+  </forge-icon>
+  <forge-app-bar-search slot="center">
+    <input type="text" placeholder="Search">
+  </forge-app-bar-search>
+  <forge-app-bar-help-button slot="end">
+    <forge-menu placement="bottom-end">
+      <forge-icon-button theme="app-bar" aria-atomic="true" aria-live="assertive" aria-haspopup="true" aria-labelledby="forge-tooltip-abdht">
+        <forge-icon name="help">
+        </forge-icon>
+      </forge-icon-button>
+      <forge-tooltip type="label" placement="bottom" aria-hidden="true" id="forge-tooltip-abdht">Help</forge-tooltip>
+    </forge-menu>
+  </forge-app-bar-help-button>
+  <forge-app-bar-notification-button slot="end">
+    <forge-icon-button theme="app-bar" aria-labelledby="forge-tooltip-47nvi">
+      <forge-icon name="notifications">
+      </forge-icon>
+      <forge-badge slot="badge" theme="default" hide>0</forge-badge>
+    </forge-icon-button>
+    <forge-tooltip type="label" placement="bottom" aria-hidden="true" id="forge-tooltip-47nvi">Notifications</forge-tooltip>
+  </forge-app-bar-notification-button>
+  <forge-app-bar-app-launcher-button slot="end" allow-more="true">
+  </forge-app-bar-app-launcher-button>
+  <forge-app-bar-profile-button slot="end" avatar-text="First Last" full-name="First Last" email="first.last@tylertech.com">
+    <forge-icon-button theme="app-bar" aria-labelledby="forge-tooltip-swa5l">
+      <forge-avatar aria-hidden="true"></forge-avatar>
+    </forge-icon-button>
+    <forge-tooltip type="label" placement="bottom-end" aria-hidden="true" id="forge-tooltip-swa5l">View First Last's profile</forge-tooltip>
+  </forge-app-bar-profile-button>
+</forge-app-bar>
+<script type="module" src="/blocks/v1/components/app-bar/full/full.js"></script>
+  </body>
+</html>

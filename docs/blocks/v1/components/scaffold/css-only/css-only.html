@@ -1,0 +1,91 @@
+<!--
+  @block Scaffold — CSS Only
+  @type component
+  @description CSS Only usage example for the forge-scaffold component.
+  @tags scaffold, css-only, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Scaffold — CSS Only</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <link rel="stylesheet" href="/blocks/v1/components/scaffold/css-only/css-only.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="scaffold-example forge-scaffold">
+  <div class="forge-scaffold__left">left</div>
+  <div class="forge-scaffold__header">header</div>
+  <div class="forge-scaffold__body">
+    <div class="forge-scaffold">
+      <div class="forge-scaffold__left">
+        <div>Body Left</div>
+      </div>
+      <div class="forge-scaffold__right">
+        <div>Body Right</div>
+      </div>
+      <div class="forge-scaffold__header">
+        <div>Body Header</div>
+      </div>
+      <div class="forge-scaffold__body" tabindex="0">
+        <div>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+        </div>
+      </div>
+      <div class="forge-scaffold__footer">
+        <div>Body Footer</div>
+      </div>
+    </div>
+  </div>
+  <div class="forge-scaffold__footer">footer</div>
+  <div class="forge-scaffold__right">right</div>
+</div>
+  </body>
+</html>

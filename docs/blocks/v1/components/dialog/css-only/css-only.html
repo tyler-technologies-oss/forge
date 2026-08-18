@@ -1,0 +1,55 @@
+<!--
+  @block Dialog — CSS Only
+  @type component
+  @description CSS Only usage example for the forge-dialog component.
+  @tags dialog, css-only, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Dialog — CSS Only</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <link rel="stylesheet" href="/blocks/v1/components/dialog/css-only/css-only.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-button variant="raised">Open Dialog</forge-button>
+<dialog id="css-dialog" style="max-inline-size: 480px;" class="forge-dialog forge-dialog--modal forge-dialog--center forge-dialog--dialog forge-dialog--zoom">
+  <forge-scaffold>
+    <forge-toolbar slot="header" no-border>
+      <h2 class="forge-typography--heading4">Title</h2>
+      <forge-icon-button slot="end" aria-label="Close">
+        <forge-icon name="close">
+        </forge-icon>
+      </forge-icon-button>
+    </forge-toolbar>
+    <p slot="body" style="margin: 16px;">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+      laborum.
+    </p>
+    <forge-toolbar slot="footer" no-border>
+      <forge-button slot="end">Close</forge-button>
+    </forge-toolbar>
+  </forge-scaffold>
+</dialog>
+<script type="module" src="/blocks/v1/components/dialog/css-only/css-only.js"></script>
+  </body>
+</html>

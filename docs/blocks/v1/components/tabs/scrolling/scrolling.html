@@ -1,0 +1,94 @@
+<!--
+  @block Tabs — Scrolling
+  @type component
+  @description Scrolling usage example for the forge-tabs component.
+  @tags tabs, scrolling, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Tabs — Scrolling</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-tab-bar data-aria-label="Demo tabs" active-tab="0" scroll-buttons="true" style="max-width:500px;">
+  <forge-tab selected>
+    Tab 1
+  </forge-tab>
+  <forge-tab>
+    Tab 2
+  </forge-tab>
+  <forge-tab>
+    Tab 3
+  </forge-tab>
+  <forge-tab>
+    Tab 4
+  </forge-tab>
+  <forge-tab>
+    Tab 5
+  </forge-tab>
+  <forge-tab>
+    Tab 6
+  </forge-tab>
+  <forge-tab>
+    Tab 7
+  </forge-tab>
+  <forge-tab>
+    Tab 8
+  </forge-tab>
+  <forge-tab>
+    Tab 9
+  </forge-tab>
+  <forge-tab>
+    Tab 10
+  </forge-tab>
+  <forge-tab>
+    Tab 11
+  </forge-tab>
+  <forge-tab>
+    Tab 12
+  </forge-tab>
+  <forge-tab>
+    Tab 13
+  </forge-tab>
+  <forge-tab>
+    Tab 14
+  </forge-tab>
+  <forge-tab>
+    Tab 15
+  </forge-tab>
+  <forge-tab>
+    Tab 16
+  </forge-tab>
+  <forge-tab>
+    Tab 17
+  </forge-tab>
+  <forge-tab>
+    Tab 18
+  </forge-tab>
+  <forge-tab>
+    Tab 19
+  </forge-tab>
+  <forge-tab>
+    Tab 20
+  </forge-tab>
+</forge-tab-bar>
+  </body>
+</html>

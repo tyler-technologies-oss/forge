@@ -1,0 +1,53 @@
+<!--
+  @block Button Area — Demo
+  @type component
+  @description Demo usage example for the forge-button-area component.
+  @tags button-area, demo, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Button Area — Demo</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <link rel="stylesheet" href="/blocks/v1/components/button-area/demo/demo.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-card>
+  <forge-button-area>
+    <button slot="button" aria-labelledby="button-heading">
+    </button>
+    <div class="content">
+      <div>
+        <div id="button-heading">Heading</div>
+        <div>Content</div>
+      </div>
+      <forge-icon-button forge-ignore>
+        <forge-icon name="favorite" aria-label="A heart graphic">
+        </forge-icon>
+      </forge-icon-button>
+      <forge-tooltip aria-hidden="true">Favorite</forge-tooltip>
+      <forge-icon name="chevron_right">
+      </forge-icon>
+    </div>
+  </forge-button-area>
+</forge-card>
+<script type="module" src="/blocks/v1/components/button-area/demo/demo.js"></script>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<!--
+  @block Tabs — With Icons
+  @type component
+  @description With Icons usage example for the forge-tabs component.
+  @tags tabs, with-icons, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Tabs — With Icons</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-tab-bar data-aria-label="Demo tabs" active-tab="0">
+  <forge-tab selected>
+    <forge-icon slot="start" name="favorite">
+    </forge-icon> Tab 1
+  </forge-tab>
+  <forge-tab>
+    <forge-icon slot="start" name="favorite">
+    </forge-icon> Tab 2
+  </forge-tab>
+  <forge-tab>
+    <forge-icon slot="start" name="favorite">
+    </forge-icon> Tab 3
+  </forge-tab>
+</forge-tab-bar>
+<script type="module" src="/blocks/v1/components/tabs/with-icons/with-icons.js"></script>
+  </body>
+</html>
