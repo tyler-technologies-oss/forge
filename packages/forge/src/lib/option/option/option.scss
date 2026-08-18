@@ -1,0 +1,45 @@
+@use './token-utils' as *;
+@use './core';
+
+:host {
+  display: block;
+  isolation: isolate;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-option {
+  @include tokens;
+}
+
+.forge-option {
+  @include core.base;
+}
+
+.center {
+  @include core.center;
+}
+
+.disabled {
+  @include core.disabled;
+}
+
+.selected {
+  @include core.selected;
+
+  .checkbox,
+  ::slotted([slot='start']),
+  ::slotted([slot='end']) {
+    @include core.start-end-selected;
+  }
+
+  .center {
+    @include core.center-selected;
+  }
+}
+
+.drag-handle {
+  @include core.drag-handle;
+}

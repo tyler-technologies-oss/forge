@@ -1,3 +1,4 @@
+import { createContext } from '@lit/context';
 import type { IBaseComponent } from './core/base/base-component.js';
 import { supportsHover } from './core/utils/feature-detection.js';
 
@@ -53,6 +54,11 @@ export const forgeLabelRef = Symbol('forgeLabelRef');
  */
 export const playStateLayerAnimation = Symbol('playStateLayerAnimation');
 
+/**
+ * A symbol that toggles a component's focus indicator active or inactive.
+ */
+export const toggleFocusIndicator = Symbol('toggleFocusIndicator');
+
 export type Theme = 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'error' | 'info';
 export type Density = 'small' | 'medium' | 'large';
 
@@ -65,3 +71,6 @@ export type MixinBase<TBase = IBaseComponent> = AbstractConstructor<TBase>;
  * We will use this to allow for setting focus to elements programmatically and showing the focus indicator.
  */
 export type ExperimentalFocusOptions = FocusOptions & { focusVisible?: boolean };
+
+export const SELECT_LIKE_DISABLED = createContext<boolean>('select-like-disabled');
+export const SELECT_LIKE_MULTIPLE = createContext<boolean>('select-like-multiple');

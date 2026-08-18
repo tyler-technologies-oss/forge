@@ -1,0 +1,7 @@
+@use '../core/styles/theme';
+@use './token-utils' as *;
+
+@mixin horizontal {
+  display: flex;
+  flex-direction: row;
+}
