@@ -42,6 +42,9 @@ export default {
         state: {
           mappedName: 'states',
           isArray: true
+        },
+        meta: {
+          isArray: true
         }
       }
     })

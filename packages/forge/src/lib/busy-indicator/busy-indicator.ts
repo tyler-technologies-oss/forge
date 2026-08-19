@@ -2,15 +2,20 @@ import { PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedNodes } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { when } from 'lit/directives/when.js';
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { composeSlottedTextContent } from '../core/utils/lit-utils.js';
 import { HeadingLevel } from '../core/utils/utils.js';
-import { defineButtonComponent } from '../button/index.js';
-import { defineCircularProgressComponent } from '../circular-progress/index.js';
-import { defineDialogComponent } from '../dialog/index.js';
-import { defineLinearProgressComponent } from '../linear-progress/index.js';
+import { ButtonComponent } from '../button/index.js';
+import { CircularProgressComponent } from '../circular-progress/index.js';
+import { DialogComponent } from '../dialog/index.js';
+import { LinearProgressComponent } from '../linear-progress/index.js';
 import { BusyIndicatorMode, BusyIndicatorVariant } from './busy-indicator-constants.js';
+
+import '../button/button.js';
+import '../circular-progress/circular-progress.js';
+import '../dialog/dialog.js';
+import '../linear-progress/linear-progress.js';
 
 import styles from './busy-indicator.scss';
 
@@ -47,6 +52,8 @@ export const BUSY_INDICATOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-busy-
  *
  * @summary Busy indicators communicate to the user that an operation is in progress and blocks interaction with the page or a specific region of it.
  *
+ * @meta extended
+ *
  * @slot title - The title text to display.
  * @slot message - The message to display.
  * @slot cancel-text - The text for the cancel button.
@@ -55,15 +62,11 @@ export const BUSY_INDICATOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-busy-
  */
 @customElement(BUSY_INDICATOR_TAG_NAME)
 export class BusyIndicatorComponent extends BaseLitElement implements IBusyIndicatorComponent {
-  static {
-    defineDialogComponent();
-    defineCircularProgressComponent();
-    defineLinearProgressComponent();
-    defineButtonComponent();
-  }
-
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BUSY_INDICATOR_TAG_NAME;
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [ButtonComponent, CircularProgressComponent, DialogComponent, LinearProgressComponent];
 
   public static styles = unsafeCSS(styles);
 
