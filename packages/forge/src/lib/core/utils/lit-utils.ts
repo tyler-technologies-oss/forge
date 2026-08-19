@@ -3,6 +3,17 @@ import { AsyncDirective } from 'lit/async-directive.js';
 import { directive, ElementPart } from 'lit/directive.js';
 
 /**
+ * Composes the text content of all provided nodes into a single string.
+ * @param nodes The nodes to compose the text content of.
+ */
+export function composeSlottedTextContent(nodes: Node[]): string {
+  return nodes
+    .map(node => node.textContent)
+    .join(' ')
+    .trim();
+}
+
+/**
  * Readopts styles for the given element in the context of its new window.
  * @param element The element to readopt styles for.
  */
