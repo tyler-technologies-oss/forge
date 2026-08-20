@@ -36,6 +36,16 @@ const filters = {
   category: new Set<string>()
 };
 
+const DEFAULT_PAGE_SIZE = 25;
+
+const STATE_PARAMS = {
+  SEARCH: 'q',
+  TYPE: 'type',
+  CATEGORY: 'category',
+  PAGE: 'page',
+  SIZE: 'size'
+} as const;
+
 let allBlocks: IBlockEntry[] = [];
 let filteredBlocks: IBlockEntry[] = [];
 
@@ -142,6 +152,50 @@ function updateTable(): void {
 
   renderActiveFilterChips();
   updateFacetCounts();
+  writeStateToUrl();
+}
+
+// Keeps the current search/filter/pagination state in the URL (via replaceState, so it doesn't
+// add history entries) so that navigating back from a block page restores it exactly.
+function writeStateToUrl(): void {
+  const params = new URLSearchParams();
+
+  if (filters.search) {
+    params.set(STATE_PARAMS.SEARCH, filters.search);
+  }
+  filters.type.forEach(type => params.append(STATE_PARAMS.TYPE, type));
+  filters.category.forEach(category => params.append(STATE_PARAMS.CATEGORY, category));
+  if (paginator.pageIndex > 0) {
+    params.set(STATE_PARAMS.PAGE, String(paginator.pageIndex + 1));
+  }
+  if (paginator.pageSize !== DEFAULT_PAGE_SIZE) {
+    params.set(STATE_PARAMS.SIZE, String(paginator.pageSize));
+  }
+
+  const query = params.toString();
+  const url = query ? `${location.pathname}?${query}` : location.pathname;
+  history.replaceState(null, '', url);
+}
+
+function readStateFromUrl(): void {
+  const params = new URLSearchParams(location.search);
+
+  filters.search = params.get(STATE_PARAMS.SEARCH) ?? '';
+  searchInput.value = filters.search;
+
+  params.getAll(STATE_PARAMS.TYPE).forEach(type => filters.type.add(type));
+  params.getAll(STATE_PARAMS.CATEGORY).forEach(category => filters.category.add(category));
+  filters.type.forEach(type => syncFacetCheckbox('type', type, true));
+  filters.category.forEach(category => syncFacetCheckbox('category', category, true));
+
+  const page = params.get(STATE_PARAMS.PAGE);
+  if (page) {
+    paginator.pageIndex = Math.max(0, parseInt(page, 10) - 1);
+  }
+  const size = params.get(STATE_PARAMS.SIZE);
+  if (size) {
+    paginator.pageSize = parseInt(size, 10);
+  }
 }
 
 function renderActiveFilterChips(): void {
@@ -262,6 +316,7 @@ async function init(): Promise<void> {
 
   populateCategoryFacet();
   wireFilterCheckboxes();
+  readStateFromUrl();
   updateTable();
 
   paginator.addEventListener('forge-paginator-change', updateTable);
