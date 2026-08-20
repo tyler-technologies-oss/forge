@@ -4,46 +4,36 @@
   @description Demo usage example for the forge-modal-drawer component.
   @tags modal-drawer, demo, storybook, component-example
 -->
-<forge-scaffold style="--forge-scaffold-height: 300px;">
+<forge-scaffold>
   <forge-app-bar slot="header" title-text="Modal Drawer Demo" elevation="raised">
-    <forge-app-bar-menu-button slot="start">
-      <forge-icon-button theme="app-bar" aria-labelledby="forge-tooltip-lsy97">
-        <forge-icon name="menu">
-        </forge-icon>
-      </forge-icon-button>
-      <forge-tooltip type="label" placement="bottom" aria-hidden="true" id="forge-tooltip-lsy97">Menu</forge-tooltip>
-    </forge-app-bar-menu-button>
+    <forge-app-bar-menu-button slot="start" id="menu-button"></forge-app-bar-menu-button>
   </forge-app-bar>
-  <forge-modal-drawer slot="left" open direction="left">
+  <forge-modal-drawer id="modal-drawer" slot="left" direction="left">
     <aside>
       <forge-list navlist>
         <forge-list-item selected>
-          <forge-icon slot="start" name="inbox">
-          </forge-icon>
+          <forge-icon slot="start" name="inbox"> </forge-icon>
           <a href="javascript: void(0)">Inbox</a>
         </forge-list-item>
         <forge-list-item>
-          <forge-icon slot="start" name="send">
-          </forge-icon>
+          <forge-icon slot="start" name="send"> </forge-icon>
           <a href="javascript: void(0)">Outgoing</a>
         </forge-list-item>
         <forge-list-item indented>
           <a href="javascript: void(0)">Pending</a>
         </forge-list-item>
         <forge-list-item>
-          <forge-icon slot="start" name="drafts">
-          </forge-icon>
+          <forge-icon slot="start" name="drafts"> </forge-icon>
           <a href="javascript: void(0)">Drafts</a>
         </forge-list-item>
         <forge-list-item>
-          <forge-icon slot="start" name="send">
-          </forge-icon>
+          <forge-icon slot="start" name="send"> </forge-icon>
           <a href="javascript: void(0)">Sent</a>
         </forge-list-item>
       </forge-list>
     </aside>
   </forge-modal-drawer>
-  <main slot="body">
+  <main slot="body" class="p-medium">
     <forge-card>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
     </forge-card>

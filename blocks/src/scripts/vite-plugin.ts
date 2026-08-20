@@ -52,16 +52,21 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
       });
 
       server.middlewares.use(async (req: IncomingMessage, res: ServerResponse, next: () => void): Promise<void> => {
-        if (req.url === '/manifest.json') {
+        // Compare against the pathname only — the index page carries the active search/filter
+        // state as a query string (e.g. `/?q=menu&type=component`) so that browser back/forward
+        // restores it, and req.url includes that query string.
+        const [pathname, search = ''] = (req.url || '').split('?');
+
+        if (pathname === '/manifest.json') {
           const blocks = await discoverBlocks(blocksPath);
           const categories = discoverCategories(blocksPath);
           res.setHeader('Content-Type', 'application/json');
           res.end(JSON.stringify({ blocks, categories }));
           return;
         }
-        if (req.url === '/' || req.url === '/index.html') {
+        if (pathname === '/' || pathname === '/index.html') {
           const html = fs.readFileSync(indexPath, 'utf-8');
-          const transformed = await server.transformIndexHtml(req.url, html);
+          const transformed = await server.transformIndexHtml(req.url!, html);
           res.setHeader('Content-Type', 'text/html');
           res.end(transformed);
           return;
@@ -70,10 +75,9 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
         // Pattern: /<category>/.../<name>.html -> /src/blocks/<category>/.../<name>.html
         // Any depth ≥ 3 segments is a block URL — the deepest component blocks nest
         // 5 levels (e.g. components/app-bar/help-button/demo/demo.html).
-        const url = req.url || '';
-        const isBlockHtml = /^\/[^/@]+(?:\/[^/]+){2,}\.html$/.test(url);
-        if (isBlockHtml && !url.includes('/src/blocks/')) {
-          req.url = '/src/blocks' + req.url;
+        const isBlockHtml = /^\/[^/@]+(?:\/[^/]+){2,}\.html$/.test(pathname);
+        if (isBlockHtml && !pathname.includes('/src/blocks/')) {
+          req.url = '/src/blocks' + pathname + (search ? `?${search}` : '');
         }
         next();
       });
