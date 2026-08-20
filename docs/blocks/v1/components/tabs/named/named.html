@@ -1,8 +1,8 @@
 <!--
-  @block Tabs — Clustered
+  @block Tabs — Named
   @type component
-  @description Clustered usage example for the forge-tabs component.
-  @tags tabs, clustered, storybook, component-example
+  @description Named usage example for the forge-tabs component, selecting the active tab by a stable name instead of index.
+  @tags tabs, named, storybook, component-example
 -->
 <!doctype html>
 <html lang="en">
@@ -10,7 +10,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/blocks/v1/" />
-    <title>Tabs — Clustered</title>
+    <title>Tabs — Named</title>
     <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
     <link rel="stylesheet" href="/blocks/v1/theme.css" />
     <link rel="stylesheet" href="/blocks/v1/styles.css" />
@@ -28,26 +28,26 @@
     <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
   </head>
   <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
-    <forge-tab-bar data-aria-label="Demo tabs" active-tab="0" clustered>
-  <forge-tab id="clustered-tab-1" selected>
-    Tab 1
+    <forge-tab-bar data-aria-label="Demo tabs" active-tab-name="notifications">
+  <forge-tab id="named-tab-general" name="general">
+    General
   </forge-tab>
-  <forge-tab id="clustered-tab-2">
-    Tab 2
+  <forge-tab id="named-tab-notifications" name="notifications">
+    Notifications
   </forge-tab>
-  <forge-tab id="clustered-tab-3">
-    Tab 3
+  <forge-tab id="named-tab-security" name="security">
+    Security
   </forge-tab>
 </forge-tab-bar>
 
-<forge-tab-panel for="clustered-tab-1">
-  <div class="p-medium">Tab 1 content</div>
+<forge-tab-panel for="named-tab-general">
+  <div class="p-medium">General content</div>
 </forge-tab-panel>
-<forge-tab-panel for="clustered-tab-2">
-  <div class="p-medium">Tab 2 content</div>
+<forge-tab-panel for="named-tab-notifications">
+  <div class="p-medium">Notifications content</div>
 </forge-tab-panel>
-<forge-tab-panel for="clustered-tab-3">
-  <div class="p-medium">Tab 3 content</div>
+<forge-tab-panel for="named-tab-security">
+  <div class="p-medium">Security content</div>
 </forge-tab-panel>
   </body>
 </html>

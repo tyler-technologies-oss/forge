@@ -29,7 +29,7 @@
   </head>
   <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
     <div class="p-large max-w-lg">
-  <forge-card no-padding class="tabbed-card" style="height: auto;">
+  <forge-card no-padding style="height: auto;">
     <forge-scaffold>
       <div slot="header">
         <forge-toolbar no-border>
@@ -45,16 +45,16 @@
         </forge-toolbar>
         <div class="bg-surface">
           <forge-tab-bar active-tab="0" clustered>
-            <forge-tab>Overview</forge-tab>
-            <forge-tab>Resources</forge-tab>
-            <forge-tab>Tools</forge-tab>
-            <forge-tab>Prompts</forge-tab>
+            <forge-tab id="tabbed-card-overview">Overview</forge-tab>
+            <forge-tab id="tabbed-card-resources">Resources</forge-tab>
+            <forge-tab id="tabbed-card-tools">Tools</forge-tab>
+            <forge-tab id="tabbed-card-prompts">Prompts</forge-tab>
           </forge-tab-bar>
         </div>
       </div>
   
-      <forge-view-switcher slot="body">
-        <forge-view>
+      <div slot="body">
+        <forge-tab-panel for="tabbed-card-overview">
           <div class="p-medium">
             <forge-card class="tonal-card">
               <div class="flex flex-col gap-medium">
@@ -82,8 +82,8 @@
               </div>
             </forge-card>
           </div>
-        </forge-view>
-        <forge-view>
+        </forge-tab-panel>
+        <forge-tab-panel for="tabbed-card-resources">
           <div class="p-medium">
             <forge-card class="tonal-card">
               <div class="flex flex-col gap-medium">
@@ -109,8 +109,8 @@
               </div>
             </forge-card>
           </div>
-        </forge-view>
-        <forge-view>
+        </forge-tab-panel>
+        <forge-tab-panel for="tabbed-card-tools">
           <div class="p-medium">
             <forge-card class="tonal-card">
               <div class="flex flex-col gap-medium">
@@ -134,8 +134,8 @@
               </div>
             </forge-card>
           </div>
-        </forge-view>
-        <forge-view>
+        </forge-tab-panel>
+        <forge-tab-panel for="tabbed-card-prompts">
           <div class="p-medium">
             <forge-card class="tonal-card">
               <div class="flex flex-col gap-medium">
@@ -158,8 +158,8 @@
               </div>
             </forge-card>
           </div>
-        </forge-view>
-      </forge-view-switcher>
+        </forge-tab-panel>
+      </div>
   
       <forge-toolbar slot="footer" inverted>
         <div slot="end" class="flex items-center gap-small">
@@ -169,22 +169,6 @@
       </forge-toolbar>
     </forge-scaffold>
   </forge-card>
-  
-  <script>
-    (function () {
-      document.querySelectorAll('.tabbed-card').forEach((card) => {
-        if (card.dataset.initialized) return;
-        card.dataset.initialized = 'true';
-  
-        const tabBar = card.querySelector('forge-tab-bar');
-        const viewSwitcher = card.querySelector('forge-view-switcher');
-  
-        tabBar.addEventListener('forge-tab-bar-change', (event) => {
-          viewSwitcher.index = event.detail.index;
-        });
-      });
-    })();
-  </script>
 </div>
   </body>
 </html>
