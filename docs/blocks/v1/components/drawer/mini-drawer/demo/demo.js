@@ -1,1 +1,1 @@
-import{l as a,aS as n,aP as o,J as s,aR as t}from"../../../../chunks/icon-BR3oZPKf.js";a.define([n,o,s,t]);
+import{l as e,aS as t,aP as o,J as a,aR as c}from"../../../../chunks/icon-cC43lcmz.js";e.define([t,o,a,c]);const d=document.getElementById("menu-button"),n=document.getElementById("mini-drawer");d?.addEventListener("click",()=>{n.open=!n.open});
