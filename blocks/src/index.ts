@@ -190,7 +190,10 @@ function readStateFromUrl(): void {
 
   const page = params.get(STATE_PARAMS.PAGE);
   if (page) {
-    paginator.pageIndex = Math.max(0, parseInt(page, 10) - 1);
+    const parsedPage = Number.parseInt(page, 10);
+    if (Number.isFinite(parsedPage) && parsedPage >= 1) {
+      paginator.pageIndex = parsedPage - 1;
+    }
   }
   const size = params.get(STATE_PARAMS.SIZE);
   if (size) {
