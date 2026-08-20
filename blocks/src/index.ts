@@ -197,7 +197,10 @@ function readStateFromUrl(): void {
   }
   const size = params.get(STATE_PARAMS.SIZE);
   if (size) {
-    paginator.pageSize = parseInt(size, 10);
+    const parsedSize = Number.parseInt(size, 10);
+    if (Number.isFinite(parsedSize) && parsedSize > 0) {
+      paginator.pageSize = parsedSize;
+    }
   }
 }
 
