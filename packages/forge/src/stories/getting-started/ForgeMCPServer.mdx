@@ -45,12 +45,6 @@ Update the plugin later with:
 claude plugin marketplace update tyler-forge
 ```
 
-For local development against an unpublished version of the plugin:
-
-```bash
-claude --plugin-dir /path/to/forge-mcp/plugin
-```
-
 #### Why the plugin over the MCP server alone
 
 The MCP server (`@tylertech/forge-mcp`) is fully standalone and works with any MCP client — it exposes tools like `get_forge_blocks`, `generate_ui_plan`, `validate_ui_plan`, and `validate_component_api` with no dependency on the skill or hooks. It's the grounding data source for Forge components, blocks, and design tokens.
