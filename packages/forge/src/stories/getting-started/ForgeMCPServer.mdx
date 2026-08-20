@@ -1,21 +1,17 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 
-<Meta title="Getting Started/Forge MCP Server" tags={['experimental']} />
+<Meta title="Getting Started/Forge MCP Server" />
 
 # Forge MCP Server
 
 <div class="banner banner--warn">
-
-🚧 **Experimental** 🚧
-
-The Tyler Forge™ MCP Server is experimental and currently in developer preview. Please use it and provide feedback to help us improve it.
 
 **Important**: Always validate AI-generated code and information for accuracy. LLMs can make assumptions and mistakes.
 
 </div>
 
 The Tyler Forge™ MCP Server provides AI clients with direct access to Forge component documentation, design tokens, and code generation capabilities.
-This experimental tool helps developers discover components, generate framework-specific examples, and follow best practices while building with Forge.
+It helps developers discover components, generate framework-specific examples, and follow best practices while building with Forge.
 
 > **Key Principle**: While the MCP server significantly enhances AI assistance, always verify generated code, validate component usage, and test
 > implementations thoroughly.
@@ -26,7 +22,51 @@ Get started with the Tyler Forge™ MCP server in your AI client:
 
 > The Tyler Forge™ MCP server is currently available as a stdio server only, and requires Node.js >=18 and npm to be installed on your system.
 
-### Claude Code
+### Claude Code Plugin (Recommended)
+
+For Claude Code, installing the **Forge plugin** is the recommended approach instead of adding the MCP server on its own. The plugin bundles the MCP server together with a `/forge-design` skill and enforcement hooks, so Forge UI is grounded in real component/block data end-to-end rather than relying on the model's memory.
+
+```bash
+/plugin marketplace add tyler-technologies-oss/forge-mcp
+/plugin install forge@tyler-forge
+```
+
+Verify it installed correctly:
+
+```bash
+/skills
+```
+
+> You may need to restart Claude Code or run `/reload-skills` if the skill doesn't appear.
+
+Update the plugin later with:
+
+```bash
+claude plugin marketplace update tyler-forge
+```
+
+For local development against an unpublished version of the plugin:
+
+```bash
+claude --plugin-dir /path/to/forge-mcp/plugin
+```
+
+#### Why the plugin over the MCP server alone
+
+The MCP server (`@tylertech/forge-mcp`) is fully standalone and works with any MCP client — it exposes tools like `get_forge_blocks`, `generate_ui_plan`, `validate_ui_plan`, and `validate_component_api` with no dependency on the skill or hooks. It's the grounding data source for Forge components, blocks, and design tokens.
+
+The Claude Code plugin adds two more pieces on top of that server:
+
+- **The `forge-design` skill** — a workflow/ruleset (not a standalone knowledge base) that tells the agent when to call `get_forge_blocks`, `generate_ui_plan`, `validate_ui_plan`, and `validate_component_api`, and enforces rules like "start from a block" and "never write Forge markup from memory."
+- **Enforcement hooks** — a `PreToolUse` hook blocks any `Edit`/`Write` containing `<forge-*>` markup unless a `get_forge_blocks` call (and, for larger compositions, a passing `validate_ui_plan` call) already happened earlier in the same turn. A `Stop` hook blocks the turn from ending if any Forge tag was written but never checked with `validate_component_api`.
+
+Because the hooks scan the transcript specifically for MCP tool-call names, they only work when the MCP server is present — installing the skill without the MCP server would make it actively harmful (it would deadlock every Forge markup write, since the required tool calls could never appear). The plugin installs all three pieces together so this can't happen, which is why it's the recommended path for Claude Code specifically.
+
+If you're using an AI client other than Claude Code, install the MCP server directly instead — see below.
+
+### Claude Code (MCP Server Only)
+
+Use this if you want just the grounding data source without the skill/hook workflow (for example, wiring the server into a custom agent or client):
 
 ```bash
 claude mcp add -t stdio -s [scope] forge -- npx -y @tylertech/forge-mcp@latest
@@ -102,6 +142,8 @@ This will open your file explorer to the directory where the `claude_desktop_con
 
 Once the Forge MCP server is set up in your AI client, you can start interacting with it using natural language prompts.
 
+> If you installed the Claude Code plugin, the `forge-design` skill auto-activates whenever you mention Forge components or ask to build UI with them — you don't need to manually select the `forge_mode` prompt below.
+
 ### Prompts
 
 Prompts are selected by the user and are sent as a message. They can be used to provide common instructions/rules to guide LLMs on how to properly use the MCP server.
@@ -119,11 +161,14 @@ Prompts are selected by the user and are sent as a message. They can be used to 
 
 The MCP server provides these key capabilities:
 
-- **Component Discovery**: `list_components`, `find_components`, `get_component_docs`
+- **Blocks**: `get_forge_blocks` — pre-built UI patterns showing components working together; call this before writing any Forge markup
+- **Component Discovery**: `list_components`, `find_components`, `get_component_docs`, `find_icons`
+- **UI Planning**: `generate_ui_plan`, `validate_ui_plan` — plan and validate larger compositions before generating markup
 - **Design System Access**: `get_design_tokens`, `setup_typography`, `setup_icons`
 - **Framework Integration**: `setup_framework` for Angular, React, Vue, etc.
 - **Migration Guidance**: `get_version_migration_guide`
 - **Validation**: `validate_component_api`
+- **Usage Guidance**: `get_usage_guide`
 
 ## Best Practices
 
@@ -172,3 +217,4 @@ where the API docs are generated from.
 - [VS Code MCP documentation](https://code.visualstudio.com/docs/copilot/customization/mcp-servers)
 - [Claude Code MCP documentation](https://docs.claude.com/en/docs/claude-code/mcp)
 - [Claude Desktop MCP documentation](https://support.claude.com/en/articles/10949351-getting-started-with-local-mcp-servers-on-claude-desktop)
+- [Claude Code plugins documentation](https://docs.claude.com/en/docs/claude-code/plugins)
