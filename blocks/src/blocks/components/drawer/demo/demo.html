@@ -4,7 +4,7 @@
   @description Demo usage example for the forge-drawer component.
   @tags drawer, demo, storybook, component-example
 -->
-<forge-scaffold style="--forge-scaffold-height: 300px">
+<forge-scaffold>
   <forge-app-bar slot="header" title-text="Drawer Demo" elevation="raised">
     <forge-app-bar-menu-button slot="start" id="menu-button"></forge-app-bar-menu-button>
   </forge-app-bar>
@@ -18,9 +18,6 @@
         <forge-list-item>
           <forge-icon slot="start" name="send"> </forge-icon>
           <a href="javascript: void(0)">Outgoing</a>
-        </forge-list-item>
-        <forge-list-item indented>
-          <a href="javascript: void(0)">Pending</a>
         </forge-list-item>
         <forge-list-item>
           <forge-icon slot="start" name="drafts"> </forge-icon>
