@@ -56,17 +56,28 @@
     </forge-toolbar>
     <div class="bg-surface">
       <forge-tab-bar active-tab="0" clustered>
-        <forge-tab>Overview</forge-tab>
-        <forge-tab>Details</forge-tab>
-        <forge-tab>Activity</forge-tab>
-        <forge-tab>Settings</forge-tab>
+        <forge-tab id="layout-tab-overview">Overview</forge-tab>
+        <forge-tab id="layout-tab-details">Details</forge-tab>
+        <forge-tab id="layout-tab-activity">Activity</forge-tab>
+        <forge-tab id="layout-tab-settings">Settings</forge-tab>
       </forge-tab-bar>
     </div>
   </div>
 
   <!-- Main content -->
-  <main class="p-medium grid bg-surface-dim" slot="body">
-    <div class="striped-box"></div>
+  <main class="p-medium bg-surface-dim" slot="body">
+    <forge-tab-panel for="layout-tab-overview">
+      <p class="text-body1">Overview content.</p>
+    </forge-tab-panel>
+    <forge-tab-panel for="layout-tab-details">
+      <p class="text-body1">Details content.</p>
+    </forge-tab-panel>
+    <forge-tab-panel for="layout-tab-activity">
+      <p class="text-body1">Activity content.</p>
+    </forge-tab-panel>
+    <forge-tab-panel for="layout-tab-settings">
+      <p class="text-body1">Settings content.</p>
+    </forge-tab-panel>
   </main>
 
   <!-- Footer -->
