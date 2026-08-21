@@ -1,1 +1,1 @@
-import{l as o,$ as e}from"../../../chunks/icon-cC43lcmz.js";o.define([e]);
+import{l as t,$ as o}from"../../../chunks/icon-cC43lcmz.js";t.define([o]);const n=document.getElementById("open-dialog-button"),e=document.getElementById("dialog"),l=document.getElementById("close-dialog-icon-button"),c=document.getElementById("close-dialog-button");n?.addEventListener("click",()=>e.open=!0);l?.addEventListener("click",()=>e.open=!1);c?.addEventListener("click",()=>e.open=!1);e?.addEventListener("forge-dialog-close",()=>e.open=!1);
