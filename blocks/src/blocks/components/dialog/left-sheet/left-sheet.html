@@ -5,12 +5,12 @@
   @tags dialog, left-sheet, storybook, component-example
 -->
 <div>
-  <forge-button variant="raised">Open dialog</forge-button>
-  <forge-dialog preset="left-sheet">
+  <forge-button id="open-dialog-button" variant="raised">Open dialog</forge-button>
+  <forge-dialog id="dialog" preset="left-sheet">
     <forge-scaffold>
       <forge-toolbar slot="header" no-divider>
         <h1 class="forge-typography--heading4" id="dialog-title" slot="start">Title text</h1>
-        <forge-icon-button slot="end" aria-label="Close dialog">
+        <forge-icon-button id="close-dialog-icon-button" slot="end" aria-label="Close dialog">
           <forge-icon name="close">
           </forge-icon>
         </forge-icon-button>
@@ -20,7 +20,7 @@
         Corrupti, ad hic velit praesentium voluptatum dolores?
       </p>
       <forge-toolbar slot="footer" no-divider>
-        <forge-button slot="end" variant="raised">Close</forge-button>
+        <forge-button id="close-dialog-button" slot="end" variant="raised">Close</forge-button>
       </forge-toolbar>
     </forge-scaffold>
   </forge-dialog>
