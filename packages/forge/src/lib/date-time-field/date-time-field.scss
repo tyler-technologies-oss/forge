@@ -1,0 +1,148 @@
+// Single source for the rhythm between adjacent segments (date→time within an
+// endpoint, and around the range separator) so the gaps read consistently.
+$segment-gap: 0.3em;
+
+:host {
+  // Fill the container like forge-text-field — the field is a form control, so its width is owned
+  // by the layout it sits in, not the mode. The segment row still hugs its content at the inline
+  // start (see `.inputs`) and wraps by endpoint when the container is narrower than that content.
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+forge-field {
+  width: 100%;
+  // The field is used in multiline mode purely to let it grow past the fixed single-line height
+  // when the range wraps to two rows — not as a resizable textarea, so disable the resize handle.
+  --forge-field-multiline-resize: none;
+}
+
+// Single wrapper around all segments (the field's one "input"). It owns the endpoint layout and
+// wraps by endpoint when narrow; keeping it as one slotted element means the field's floating-label
+// padding is applied once here rather than per endpoint, so wrapped rows don't gain extra top space.
+.inputs {
+  display: flex;
+  flex-wrap: wrap;
+  // Center the row(s) vertically in the field; a non-inset label has no floating padding to
+  // position the content, so without this the guide sinks to the bottom of the field.
+  align-items: center;
+  align-content: center;
+  row-gap: 0.15rem;
+  // Override the field's `::slotted(*)` full-width/full-height sizing so it hugs its content.
+  inline-size: max-content;
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+// Endpoint group: date + time inputs glued together as a single flex-wrap unit.
+.endpoint {
+  display: inline-flex;
+  align-items: baseline;
+  flex: 0 0 auto;
+}
+
+// While the first input is showing a long field-level placeholder, let it (and its endpoint) fill
+// the row so the placeholder text isn't clipped to the date input's fixed width.
+.endpoint:has(input.field-placeholder) {
+  flex: 1 1 auto;
+}
+
+input.field-placeholder {
+  flex: 1 1 auto;
+  inline-size: auto;
+  min-inline-size: 0;
+}
+
+// The inputs are slotted into forge-text-field; let the field own the leading/
+// trailing text inset (do NOT set padding here — it overrides the field's inset).
+[part='date-input'],
+[part='to-date-input'] {
+  // Fits `MM/DD/YYYY`.
+  width: 6em;
+  font: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+// Empty/incomplete masked segments render their guide (e.g. __/__/____) in a
+// muted color so they read like a placeholder rather than stark entered text.
+// Once the user starts typing, step up to a stronger (but still not "complete")
+// tone so in-progress entry reads as distinct from an untouched field.
+// `input.` keeps these winning over the [part] color rules regardless of order.
+input.guide-muted {
+  color: var(--forge-theme-text-low, GrayText);
+}
+
+input.guide-partial {
+  color: var(--forge-theme-text-medium, currentColor);
+}
+
+// Slots mode still groups its date/time display in wrapper spans.
+.date-segment,
+.time-segment {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+// Sits between the two endpoint groups as [start] – [end]. As a flex item in the wrapping input
+// row it stays inline when the field fits one line, and leads the second row when the range wraps.
+.range-separator {
+  display: inline-flex;
+  align-self: center;
+  align-items: center;
+  color: var(--forge-theme-text-medium, currentColor);
+  margin-inline: $segment-gap;
+  vertical-align: middle;
+}
+
+[part='time-input'],
+[part='from-input'],
+[part='to-input'],
+[part='slot-display'] {
+  font: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+  background: transparent;
+  // Fits `hh:mm aa` (12h) / `hh:mm` (24h); widened below when seconds are shown.
+  width: 4.75em;
+  text-align: start;
+  // Small gap from the preceding date input within an endpoint.
+  margin-inline-start: $segment-gap;
+}
+
+// Seconds add `:ss`, so reserve more room to keep `hh:mm:ss aa` from clipping.
+:host([allow-seconds]) {
+  [part='time-input'],
+  [part='from-input'],
+  [part='to-input'],
+  [part='slot-display'] {
+    width: 6em;
+  }
+}
+
+[part='slot-display'] {
+  cursor: pointer;
+}
+
+:host([readonly]) [part='slot-display'],
+:host([disabled]) [part='slot-display'] {
+  cursor: default;
+}
+
+// Plain calendar toggle: let forge-icon-button own its own resting/hover/focus
+// state. A static background read as "always highlighted".
+[part='toggle'] {
+  border-radius: 50%;
+}
+
+[part='duration'] {
+  color: var(--forge-theme-text-medium, currentColor);
+  font-size: 0.75em;
+}
