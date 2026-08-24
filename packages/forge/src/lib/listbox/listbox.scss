@@ -1,9 +1,9 @@
 @use './token-utils' as *;
+@use './core';
 @use '../divider';
 
 :host {
-  display: block;
-  outline: none;
+  @include core.host;
 }
 
 :host([hidden]) {
@@ -15,9 +15,5 @@
 }
 
 .forge-listbox {
-  @include divider.provide-theme(
-    (
-      margin: #{token(divider-margin)}
-    )
-  );
+  @include core.base;
 }
