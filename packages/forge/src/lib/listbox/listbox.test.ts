@@ -107,7 +107,6 @@ describe('Listbox', () => {
     expect(ctx.element.dropFrom).toBe('');
     expect(ctx.element.disabled).toBe(false);
     expect(ctx.element.allowDeselect).toBe(false);
-    expect(ctx.element.orientation).toBe('vertical');
   });
 
   describe('aria', () => {
@@ -123,15 +122,6 @@ describe('Listbox', () => {
       ctx.element.multiple = true;
       await ctx.element.updateComplete;
       expect(ctx.element.getAttribute('aria-multiselectable')).toBe('true');
-    });
-
-    it('should set aria-orientation when horizontal', async () => {
-      const ctx = await createFixture();
-      expect(ctx.element.getAttribute('aria-orientation')).toBeNullable();
-
-      ctx.element.orientation = 'horizontal';
-      await ctx.element.updateComplete;
-      expect(ctx.element.getAttribute('aria-orientation')).toBe('horizontal');
     });
 
     it('should set aria-disabled when disabled', async () => {

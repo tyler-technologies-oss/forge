@@ -12,7 +12,7 @@ Listboxes allow users to select one or more options from a list.
 ## Multiple Selection
 
 Set `multiple` to allow more than one option to be selected at a time. When `multiple` is set, the
-`value` property should be treated as an array of selected values.
+`value` property contains an array of selected values.
 
 <Canvas of={ListboxStories.Multiple} />
 
@@ -62,14 +62,25 @@ source listbox dispatches a `forge-listbox-drag-out` event.
 
 <CustomArgTypes />
 
-## Keyboard shortcuts
+## Keyboard Shortcuts
 
 | Name                | Description                                                       |
 | :------------------ | :----------------------------------------------------------------- |
 | `arrow up / arrow down` | Moves focus to the previous/next option, wrapping at the ends. |
-| `home / end`         | Moves focus to the first/last option.                              |
-| `space / enter`       | Selects the focused option.                                        |
-| `ctrl/cmd + a`        | Selects all options, when `multiple` is set.                       |
+| `home` | Moves focus to the first option. |
+| `end` | Moves focus to the last option. |
+| `space / enter` | Selects the focused option. |
+
+### Multiple Selection
+
+| Name                | Description                                                       |
+| :------------------ | :----------------------------------------------------------------- |
+| `ctrl/cmd + a` | Selects all options. |
+| `shift + arrow up` | Moves focus to and toggles selection of the previous option. |
+| `shift + arrow down` | Moves focus to and toggles selection of the next option. |
+| `shift + space` | Selects all options between the last selected option and the focused option. |
+| `ctrl/cmd + shift + home` | Selects all options between the focused option and the first option. Moves focus to the first option. |
+| `ctrl/cmd + shift + end` | Selects all options between the focused option and the last option. Moves focus to the last option. |
 
 ## Accessibility
 

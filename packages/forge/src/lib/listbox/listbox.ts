@@ -19,8 +19,9 @@ import styles from './listbox.scss';
 
 export const LISTBOX_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-listbox';
 
+const OPTION_SELECTOR = 'forge-option';
+
 export const LISTBOX_DENSE = createContext<boolean>('forge-listbox-dense');
-export const LISTBOX_DRAGGABLE = createContext<boolean>('forge-listbox-draggable');
 export const LISTBOX_DRAG_OUT = createContext<boolean>('forge-listbox-drag-out');
 export const LISTBOX_REORDERABLE = createContext<boolean>('forge-listbox-reorderable');
 
@@ -196,11 +197,11 @@ export class ListboxComponent extends BaseLitElement {
   public dense = false;
 
   get #options(): OptionComponent[] {
-    return Array.from(this.querySelectorAll<OptionComponent>('forge-option'));
+    return Array.from(this.querySelectorAll<OptionComponent>(OPTION_SELECTOR));
   }
 
   #focusGroup = new FocusGroupController<OptionComponent>(this, {
-    selector: 'forge-option',
+    selector: OPTION_SELECTOR,
     orientation: 'vertical',
     wrap: true,
     useActiveDescendant: true,
@@ -216,7 +217,7 @@ export class ListboxComponent extends BaseLitElement {
   });
 
   #dropController = new DropController(this, {
-    childSelector: 'forge-option',
+    childSelector: OPTION_SELECTOR,
     orientation: 'vertical',
     getIndex: event => this.#getInsertionIndex(event),
     onDragStart: args => this.#handleDragStart(args),
@@ -279,7 +280,6 @@ export class ListboxComponent extends BaseLitElement {
     });
     this.#placeholder = this.#createPlaceholder();
     this.addEventListener('blur', this.#handleBlur.bind(this));
-    this.addEventListener('focus', this.#handleFocus.bind(this));
     this.addEventListener('forge-option-update', this.#handleOptionUpdate.bind(this));
   }
 
@@ -348,7 +348,7 @@ export class ListboxComponent extends BaseLitElement {
 
   #getOptionFromEvent(evt: Event): OptionComponent | undefined {
     const path = composedPathFrom(this, evt);
-    return path.find(el => el.matches && el.matches('forge-option')) as OptionComponent | undefined;
+    return path.find(el => el.matches && el.matches(OPTION_SELECTOR)) as OptionComponent | undefined;
   }
 
   #getGroupFromDragEvent(evt: DragEvent): OptionGroupComponent | undefined {
@@ -478,7 +478,7 @@ export class ListboxComponent extends BaseLitElement {
     if (this.#isReconciling) {
       return;
     }
-    if (!this.multiple && evt.detail.reason === 'selected' && evt.target instanceof HTMLElement && evt.target.matches('forge-option')) {
+    if (!this.multiple && evt.detail.reason === 'selected' && evt.target instanceof HTMLElement && evt.target.matches(OPTION_SELECTOR)) {
       this.#reconcileValueFromOptions(evt.target as OptionComponent);
       return;
     }
@@ -499,7 +499,7 @@ export class ListboxComponent extends BaseLitElement {
     if (!(node instanceof Element)) {
       return false;
     }
-    return node.matches('forge-option') || !!node.querySelector('forge-option');
+    return node.matches(OPTION_SELECTOR) || !!node.querySelector(OPTION_SELECTOR);
   }
 
   /**
@@ -539,9 +539,12 @@ export class ListboxComponent extends BaseLitElement {
     this.#setValidity();
   }
 
+  get #hasValue(): boolean {
+    return Array.isArray(this.value) ? this.value.length > 0 : !!this.value;
+  }
+
   #setValidity(): void {
-    const hasValue = Array.isArray(this.value) ? this.value.length > 0 : !!this.value;
-    this.#internals.setValidity({ valueMissing: this.required && !hasValue }, this.#getValidationMessage());
+    this.#internals.setValidity({ valueMissing: this.required && !this.#hasValue }, this.#getValidationMessage());
   }
 
   #getValidationMessage(): string {
@@ -549,9 +552,8 @@ export class ListboxComponent extends BaseLitElement {
       return this.#internals.validationMessage;
     }
 
-    const hasValue = Array.isArray(this.value) ? this.value.length > 0 : !!this.value;
     this.#validationHelper.required = this.required;
-    this.#validationHelper.selectedIndex = hasValue ? 0 : -1;
+    this.#validationHelper.selectedIndex = this.#hasValue ? 0 : -1;
 
     return this.#validationHelper.validationMessage;
   }
@@ -617,13 +619,6 @@ export class ListboxComponent extends BaseLitElement {
     const activeOption = this.#focusGroup.currentElement;
     if (activeOption) {
       activeOption[toggleFocusIndicator](false);
-    }
-  }
-
-  #handleFocus(): void {
-    const activeOption = this.#focusGroup.currentElement;
-    if (activeOption) {
-      activeOption[toggleFocusIndicator](true);
     }
   }
 
@@ -712,11 +707,7 @@ export class ListboxComponent extends BaseLitElement {
       this.value = allValues;
     }
 
-    const changeEvent = new Event('change', {
-      bubbles: true,
-      composed: true
-    });
-    this.dispatchEvent(changeEvent);
+    this.#emitChangeEvent();
   }
 
   #handleTypeAhead(searchString: string): void {
@@ -739,7 +730,7 @@ export class ListboxComponent extends BaseLitElement {
   #handleDragStart(args: DropEventArgs): boolean {
     // Ensure the item being dragged is a forge-option and the source is a forge-listbox
     const { item, source } = args;
-    if (!item || item.tagName.toLowerCase() !== 'forge-option' || !source || source.tagName.toLowerCase() !== LISTBOX_TAG_NAME) {
+    if (!item || item.tagName.toLowerCase() !== OPTION_SELECTOR || !source || source.tagName.toLowerCase() !== LISTBOX_TAG_NAME) {
       return false;
     }
     // Allow drop if the source is this listbox and reordering is enabled, or if the source allows
@@ -781,7 +772,6 @@ export class ListboxComponent extends BaseLitElement {
     placeholder.className = 'forge-listbox-placeholder';
     placeholder.setAttribute('role', 'presentation');
     placeholder.setAttribute('aria-hidden', 'true');
-    placeholder.style.height = this.dense ? '32px' : '48px';
     placeholder.style.border = 'var(--forge-border-thin) dashed var(--forge-theme-primary)';
     placeholder.style.borderRadius = 'var(--forge-option-border-radius)';
     placeholder.style.pointerEvents = 'none';
