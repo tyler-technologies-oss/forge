@@ -1,0 +1,14 @@
+.grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  width: fit-content;
+  forge-label {
+        width: 100%;
+}
+    }
+
+.align {
+  display: flex;
+  align-items: center;
+}

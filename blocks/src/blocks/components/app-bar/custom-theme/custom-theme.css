@@ -1,0 +1,8 @@
+.custom-app-bar {
+  --forge-app-bar-background: salmon;
+  --forge-app-bar-foreground: black;
+}
+
+.custom-app-bar forge-button {
+  margin-inline-end: var(--forge-spacing-xsmall);
+}

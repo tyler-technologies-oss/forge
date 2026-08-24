@@ -8,3 +8,4 @@ dist/
 *.tgz
 *storybook.log
 storybook-static/
+blocks/manifest.json

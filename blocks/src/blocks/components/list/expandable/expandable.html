@@ -1,0 +1,51 @@
+<!--
+  @block List — Expandable
+  @type component
+  @description Expandable usage example for the forge-list component.
+  @tags list, expandable, storybook, component-example
+-->
+<forge-list>
+  <forge-list-item>
+    <forge-icon slot="start" name="code">
+    </forge-icon>
+    <button type="button" id="li-1" aria-expanded="false" aria-controls="forge-expansion-panel-content-r5qaz">List Item One</button>
+    <forge-open-icon slot="end" id="li-open-1" orientation="vertical" rotation="full"></forge-open-icon>
+    <forge-expansion-panel slot="additional-content" trigger="li-1" open-icon="li-open-1" orientation="vertical" animation-type="default" name>
+      <forge-list indented id="forge-expansion-panel-content-r5qaz">
+        <forge-list-item indented>
+          <button type="button">List Item One</button>
+        </forge-list-item>
+        <forge-list-item indented>
+          <button type="button">List Item Two</button>
+        </forge-list-item>
+        <forge-list-item indented>
+          <button type="button">List Item Three</button>
+        </forge-list-item>
+      </forge-list>
+    </forge-expansion-panel>
+  </forge-list-item>
+  <forge-list-item>
+    <forge-icon slot="start" name="face">
+    </forge-icon>
+    <button type="button" id="li-2" aria-expanded="false" aria-controls="forge-expansion-panel-content-ohr7t">List Item Two</button>
+    <forge-open-icon slot="end" id="li-open-2" orientation="vertical" rotation="full"></forge-open-icon>
+    <forge-expansion-panel slot="additional-content" trigger="li-2" open-icon="li-open-2" orientation="vertical" animation-type="default" name>
+      <forge-list indented id="forge-expansion-panel-content-ohr7t">
+        <forge-list-item indented>
+          <button type="button">List Item One</button>
+        </forge-list-item>
+        <forge-list-item indented>
+          <button type="button">List Item Two</button>
+        </forge-list-item>
+        <forge-list-item indented>
+          <button type="button">List Item Three</button>
+        </forge-list-item>
+      </forge-list>
+    </forge-expansion-panel>
+  </forge-list-item>
+  <forge-list-item>
+    <forge-icon slot="start" name="favorite">
+    </forge-icon>
+    <button type="button">List Item Three</button>
+  </forge-list-item>
+</forge-list>
