@@ -15,7 +15,19 @@ export interface IOptionGroupComponent extends IOptionGroupConfigComponent {}
 /**
  * @tag forge-option-group
  *
- * @summary Groups related options together with an optional label within select components.
+ * @summary Groups related options together with a label within select components.
+ *
+ * @slot - The default slot for options within the group.
+ * @slot label - The label for the option group.
+ *
+ * @cssproperty --forge-option-group-label-color - The text color of an option group's label.
+ * @cssproperty --forge-option-group-label-padding-inline - The inline padding of an option group's label.
+ * @cssproperty --forge-option-group-label-padding-block - The block padding of an option group's label.
+ * @cssproperty --forge-option-group-label-padding-block-start - The block-start padding of an option group's label.
+ * @cssproperty --forge-option-group-label-padding-block-end - The block-end padding of an option group's label.
+ *
+ * @csspart root - The root element of the option group.
+ * @csspart label - The label element of the option group.
  */
 @customElement(OPTION_GROUP_CONSTANTS.elementName)
 export class OptionGroupComponent extends OptionGroupConfigComponent implements IOptionGroupComponent {
@@ -64,7 +76,7 @@ export class OptionGroupComponent extends OptionGroupConfigComponent implements 
     };
 
     return html`
-      <div class=${classMap(classes)}>
+      <div class=${classMap(classes)} part="root">
         <div id="label" class="label" part="label" role="presentation">
           <slot name="label"></slot>
         </div>

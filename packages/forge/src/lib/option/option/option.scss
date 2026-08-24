@@ -18,12 +18,23 @@
   @include core.base;
 }
 
-.center {
-  @include core.center;
+.label {
+  @include core.label;
+}
+
+slot[name='secondary'],
+slot[name='tertiary'] {
+  &::slotted(*) {
+    @include core.secondary-text;
+  }
 }
 
 .disabled {
   @include core.disabled;
+}
+
+.readonly {
+  @include core.readonly;
 }
 
 .selected {
@@ -35,11 +46,42 @@
     @include core.start-end-selected;
   }
 
-  .center {
-    @include core.center-selected;
+  .label {
+    @include core.label-selected;
+  }
+
+  slot[name='secondary'],
+  slot[name='tertiary'] {
+    &::slotted(*) {
+      @include core.secondary-text-selected;
+    }
   }
 }
 
 .drag-handle {
   @include core.drag-handle;
+}
+
+.two-line {
+  @include core.two-line;
+}
+
+.three-line {
+  @include core.three-line;
+}
+
+.dense {
+  @include core.dense;
+
+  .label {
+    @include core.dense-label;
+  }
+
+  .two-line {
+    @include core.dense-two-line;
+  }
+
+  .three-line {
+    @include core.dense-three-line;
+  }
 }

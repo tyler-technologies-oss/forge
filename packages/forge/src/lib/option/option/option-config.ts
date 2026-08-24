@@ -33,7 +33,8 @@ export interface IOptionConfigComponent extends BaseLitElement {
  */
 export abstract class OptionConfigComponent extends BaseLitElement {
   /**
-   * Gets/sets the value of this option.
+   * The value of the option used for form submission.
+   * @default undefined
    * @attribute
    */
   @property()
@@ -58,21 +59,23 @@ export abstract class OptionConfigComponent extends BaseLitElement {
   }
 
   /**
-   * Gets/sets the label of this option.
+   * The label text of the option. __Applies only to config-based options.__
+   * @default undefined
    * @attribute
    */
   @property({ reflect: true })
   public label?: string;
 
   /**
-   * Gets/sets the secondary label of this option.
+   * The secondary label text of the option. __Applies only to config-based options.__
+   * @default undefined
    * @attribute secondary-label
    */
   @property({ attribute: 'secondary-label', reflect: true })
   public secondaryLabel?: string;
 
   /**
-   * Gets/sets the disabled status of this option.
+   * Whether the option is disabled.
    * @default false
    * @attribute
    */
@@ -80,7 +83,7 @@ export abstract class OptionConfigComponent extends BaseLitElement {
   public disabled = false;
 
   /**
-   * Gets/sets whether this option is a divider.
+   * Whether the option renders as a divider instead of a list item. __Applies only to config-based options.__
    * @default false
    * @attribute
    */
@@ -88,7 +91,8 @@ export abstract class OptionConfigComponent extends BaseLitElement {
   public divider = false;
 
   /**
-   * Gets/sets the classes of this option.
+   * Classes set on the option. __Applies only to config-based options.__
+   * @default []
    * @attribute option-class
    */
   @property({
@@ -113,21 +117,23 @@ export abstract class OptionConfigComponent extends BaseLitElement {
   public optionClass: string | string[] = [];
 
   /**
-   * Gets/sets the leading icon of this option.
+   * The name of the option's leading icon. __Applies only to config-based options.__
+   * @default undefined
    * @attribute leading-icon
    */
   @property({ attribute: 'leading-icon', reflect: true })
   public leadingIcon?: string;
 
   /**
-   * Gets/sets the leading icon class of this option.
+   * Classes set on the option's leading icon. __Applies only to config-based options.__
+   * @default undefined
    * @attribute leading-icon-class
    */
   @property({ attribute: 'leading-icon-class', reflect: true })
   public leadingIconClass?: string;
 
   /**
-   * Gets/sets the leading icon type of this option.
+   * The type of the option's leading icon, either "font" or "component". __Applies only to config-based options.__
    * @default "font"
    * @attribute leading-icon-type
    */
@@ -135,27 +141,30 @@ export abstract class OptionConfigComponent extends BaseLitElement {
   public leadingIconType?: ListDropdownIconType;
 
   /**
-   * Gets/sets properties on leading icon component.
+   * Properties set on the leading icon component. __Applies only to config-based options.__
+   * @default undefined
    */
   @property({ attribute: false })
   public leadingIconComponentProps?: Partial<IIconComponent>;
 
   /**
-   * Gets/sets the trailing icon of this option.
+   * The name of the option's trailing icon. __Applies only to config-based options.__
+   * @default undefined
    * @attribute trailing-icon
    */
   @property({ attribute: 'trailing-icon', reflect: true })
   public trailingIcon?: string;
 
   /**
-   * Gets/sets the trailing icon class of this option.
+   * Classes set on the option's trailing icon. __Applies only to config-based options.__
+   * @default undefined
    * @attribute trailing-icon-class
    */
   @property({ attribute: 'trailing-icon-class', reflect: true })
   public trailingIconClass?: string;
 
   /**
-   * Gets/sets the trailing icon type of this option.
+   * The type of the option's trailing icon, either "font" or "component". __Applies only to config-based options.__
    * @default "font"
    * @attribute trailing-icon-type
    */
@@ -163,31 +172,35 @@ export abstract class OptionConfigComponent extends BaseLitElement {
   public trailingIconType?: ListDropdownIconType;
 
   /**
-   * Gets/sets properties on trailing icon component.
+   * Properties set on the trailing icon component. __Applies only to config-based options.__
+   * @default undefined
    */
   @property({ attribute: false })
   public trailingIconComponentProps?: Partial<IIconComponent>;
 
   /**
-   * Gets/sets the leading builder of this option.
+   * A callback function that returns an element to render in the option's leading slot. __Applies only to config-based options.__
+   * @default undefined
    */
   @property({ attribute: false })
   public leadingBuilder?: () => HTMLElement;
 
   /**
-   * Gets/sets the trailing builder of this option.
+   * A callback function that returns an element to render in the option's trailing slot. __Applies only to config-based options.__
+   * @default undefined
    */
   @property({ attribute: false })
   public trailingBuilder?: () => HTMLElement;
 
   /**
-   * Gets/sets the tooltip configuration for this option.
+   * Configuration options for an attached tooltip. __Applies only to config-based options.__
+   * @default undefined
    */
   @property({ attribute: false })
   public tooltip?: ListDropdownTooltipConfig;
 
   @consume({ context: SELECT_LIKE_DISABLED, subscribe: true })
   private set _contextDisabled(value: boolean) {
-    this.disabled = value || this.disabled;
+    this.disabled = this.hasUpdated ? value : value || this.disabled;
   }
 }

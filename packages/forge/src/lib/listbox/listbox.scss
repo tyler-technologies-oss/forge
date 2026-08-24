@@ -1,5 +1,4 @@
 @use './token-utils' as *;
-@use './core';
 @use '../divider';
 
 :host {
@@ -21,8 +20,4 @@
       margin: #{token(divider-margin)}
     )
   );
-}
-
-.horizontal {
-  @include core.horizontal;
 }

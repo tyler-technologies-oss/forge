@@ -168,7 +168,7 @@ describe('Option', () => {
 
       it('should render a drag-out handle when the listbox allows drag out', async () => {
         const { option } = await createListboxFixture(html`
-          <forge-listbox allow-drag-out>
+          <forge-listbox drag-out>
             <forge-option value="1">Option 1</forge-option>
           </forge-listbox>
         `);

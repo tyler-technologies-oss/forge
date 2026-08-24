@@ -1,0 +1,50 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks'; import CustomArgTypes from
+'../../blocks/CustomArgTypes'; import * as OptionStories from './Option.stories';
+
+<Meta of={OptionStories} />
+
+<Title />
+
+Options represent individual selectable items within a
+[&lt;forge-listbox&gt;](?path=/docs/components-listbox--docs),
+[&lt;forge-select&gt;](?path=/docs/components-select--docs), or
+[&lt;forge-menu&gt;](?path=/docs/components-menu--docs) component.
+
+<Canvas of={OptionStories.Demo} />
+
+> **Note:** Depending on context the `<forge-option>` component may function as a declarative or
+> config-based component. When used within a `<forge-listbox>` an option renders to the DOM like any
+> other element and may be styled and manipulated directly. In any other context the option does not
+> render anything to the DOM and is instead used as a configuration object by the parent component.
+
+## Icons
+
+Icons can be added to an option by using the `start` or `end` slots.
+
+<Canvas of={OptionStories.WithIcons} />
+
+## Two Line & Three Line
+
+Options can display additional supporting text by using the `secondary` and `tertiary` slots along
+with the `two-line` or `three-line` attributes. This is useful when you need to provide additional
+context or details about an option. Keep additional text succinct so users of assistive technologies
+can easily understand it.
+
+<Canvas of={OptionStories.TwoLine} /> <Canvas of={OptionStories.ThreeLine} />
+
+## Option Groups
+
+Related options can be grouped together with a label by using the `<forge-option-group>` component.
+Provide the group's label via the `label` slot.
+
+<Canvas of={OptionStories.Groups} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Options automatically apply the appropriate `role`, `aria-selected`, or `aria-checked` attributes
+  based on their selection state and whether they are being used within a single or multiple
+  selection container.

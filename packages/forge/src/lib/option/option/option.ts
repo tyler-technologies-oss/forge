@@ -4,12 +4,12 @@ import { tylIconCheck, tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconDrag
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { playStateLayerAnimation, SELECT_LIKE_MULTIPLE, toggleFocusIndicator } from '../../constants.js';
+import { playStateLayerAnimation, SELECT_LIKE_MULTIPLE, SELECT_LIKE_READONLY, toggleFocusIndicator } from '../../constants.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
 import { IconComponent, IconRegistry } from '../../icon/index.js';
-import { LISTBOX_ALLOW_DRAG_OUT, LISTBOX_REORDERABLE, LISTBOX_TAG_NAME } from '../../listbox/listbox.js';
+import { LISTBOX_DRAG_OUT, LISTBOX_DENSE, LISTBOX_REORDERABLE, LISTBOX_TAG_NAME } from '../../listbox/listbox.js';
 import { StateLayerComponent } from '../../state-layer/state-layer.js';
 import type { IOptionConfigComponent } from './option-config.js';
 import { OptionConfigComponent } from './option-config.js';
@@ -31,10 +31,48 @@ export type OptionUpdateReason = 'added' | 'selected' | 'deselected' | 'value-ch
  * @summary Options represent individual selectable items within a `<forge-select>`, `<forge-menu>`,
  * or `<forge-listbox>` component.
  *
- * @fires {CustomEvent<any>} forge-option-value-change - Emitted when the option value changes.
- * @fires {CustomEvent<{ reason: OptionUpdateReason }>} forge-option-update - Emitted when the option is
- * connected, selected, deselected, or its value changes. Used by `forge-listbox` to keep its `value` in
- * sync with option selection state.
+ * @slot - The default slot for the option's label.
+ * @slot start - The slot for content to be placed at the start of the option.
+ * @slot secondary - The slot for content to be placed below the option's label.
+ * @slot tertiary - The slot for content to be placed below the option's secondary content.
+ * @slot end - The slot for content to be placed at the end of the option.
+ *
+ * @state disabled - Whether the option is disabled.
+ * @state readonly - Whether the option is read only.
+ * @state selected - Whether the option is selected.
+ *
+ * @cssproperty --forge-option-background - The background color of an option.
+ * @cssproperty --forge-option-shape - The shape (border-radius) of an option.
+ * @cssproperty --forge-option-padding - The padding of an option.
+ * @cssproperty --forge-option-margin - The margin of an option.
+ * @cssproperty --forge-option-height - The height of an option.
+ * @cssproperty --forge-option-dense-height - The height of an option when `dense`.
+ * @cssproperty --forge-option-cursor - The cursor of an option.
+ * @cssproperty --forge-option-gap - The gap between an option's content.
+ * @cssproperty --forge-option-text-color - The text color of an option's secondary/tertiary content.
+ * @cssproperty --forge-option-text-font-size - The font size of an option's label.
+ * @cssproperty --forge-option-text-font-weight - The font weight of an option's label.
+ * @cssproperty --forge-option-text-line-height - The line height of an option's label.
+ * @cssproperty --forge-option-selected-color - The text color of an option when selected.
+ * @cssproperty --forge-option-selected-opacity - The opacity of the selected background overlay of an option.
+ * @cssproperty --forge-option-selected-text-color - The color of an option's secondary/tertiary content when selected.
+ * @cssproperty --forge-option-disabled-opacity - The opacity of an option when disabled.
+ * @cssproperty --forge-option-disabled-cursor - The cursor of an option when disabled.
+ * @cssproperty --forge-option-two-line-height - The height of an option when `two-line`.
+ * @cssproperty --forge-option-three-line-height - The height of an option when `three-line`.
+ * @cssproperty --forge-option-dense-gap - The gap between an option's content when `dense`.
+ * @cssproperty --forge-option-dense-font-size - The font size of an option's label when `dense`.
+ * @cssproperty --forge-option-dense-two-line-height - The height of an option when `dense` and `two-line`.
+ * @cssproperty --forge-option-dense-three-line-height - The height of an option when `dense` and `three-line`.
+ * @cssproperty --forge-option-drag-handle-color - The color of an option's drag handle icon.
+ *
+ * @csspart root - The root element of the option.
+ * @csspart label - The label element of the option.
+ * @csspart checkbox - The checkbox icon of the option (only visible when `multiple` is true).
+ * @csspart checkmark - The checkmark icon of the option (only visible when `multiple` is false).
+ * @csspart drag-handle - The drag handle icon of the option.
+ * @csspart focus-indicator - The focus indicator of the option.
+ * @csspart state-layer - The state layer of the option.
  */
 @customElement(OPTION_CONSTANTS.elementName)
 export class OptionComponent extends OptionConfigComponent implements IOptionComponent {
@@ -51,11 +89,46 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   }
 
   /**
-   * Whether the option is selected.
+   * Whether the option is selected. __Applies only to declarative options.__
+   * @attribute
    * @default false
    */
   @property({ type: Boolean })
   public selected = false;
+
+  /**
+   * Sets the option's height to fit two lines of text. __Applies only to declarative options.__
+   * @attribute two-line
+   * @default false
+   */
+  @property({ type: Boolean, attribute: 'two-line' })
+  public twoLine = false;
+
+  /**
+   * Sets the option's height to fit three lines of text. __Applies only to declarative options.__
+   * @attribute three-line
+   * @default false
+   */
+  @property({ type: Boolean, attribute: 'three-line' })
+  public threeLine = false;
+
+  /**
+   * Whether the option uses a dense layout. __Applies only to declarative options.__
+   * @attribute
+   * @default false
+   */
+  @consume({ context: LISTBOX_DENSE, subscribe: true })
+  @property({ type: Boolean })
+  public dense = false;
+
+  /**
+   * Whether the option is read only. __Applies only to declarative options.__
+   * @attribute
+   * @default false
+   */
+  @consume({ context: SELECT_LIKE_READONLY, subscribe: true })
+  @property({ type: Boolean })
+  public readonly = false;
 
   @consume({ context: SELECT_LIKE_MULTIPLE, subscribe: true })
   @state()
@@ -65,9 +138,9 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   @state()
   private _reorderable = false;
 
-  @consume({ context: LISTBOX_ALLOW_DRAG_OUT, subscribe: true })
+  @consume({ context: LISTBOX_DRAG_OUT, subscribe: true })
   @state()
-  private _allowDragOut = false;
+  private _dragOut = false;
 
   @state()
   private _focusIndicatorActive = false;
@@ -92,6 +165,10 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
     if (_changedProperties.has('disabled')) {
       setDefaultAria(this, this.#internals, { ariaDisabled: this.disabled ? 'true' : null });
       toggleState(this.#internals, 'disabled', this.disabled);
+    }
+
+    if (_changedProperties.has('readonly')) {
+      toggleState(this.#internals, 'readonly', this.readonly);
     }
 
     if (_changedProperties.has('_multiple' as any) || _changedProperties.has('selected')) {
@@ -128,14 +205,18 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
     const classes = {
       'forge-option': true,
       disabled: this.disabled,
-      selected: this.selected
+      readonly: this.readonly,
+      selected: this.selected,
+      'two-line': this.twoLine && !this.threeLine,
+      'three-line': this.threeLine,
+      dense: this.dense
     };
 
     return html`
-      <div class=${classMap(classes)}>
+      <div class=${classMap(classes)} part="root">
         ${this.#tryRenderDragHandle()} ${this.#tryRenderCheckbox()}
         <slot name="start"></slot>
-        <div class="center" part="center">
+        <div class="label" part="label">
           <slot></slot>
           <slot name="secondary"></slot>
           <slot name="tertiary"></slot>
@@ -143,7 +224,7 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
         <slot name="end"></slot>
         ${this.#tryRenderCheckmark()}
         <forge-focus-indicator part="focus-indicator" .active=${this._focusIndicatorActive} inward></forge-focus-indicator>
-        ${this.disabled ? nothing : html`<forge-state-layer part="state-layer" target=":host"></forge-state-layer>`}
+        ${this.disabled || this.readonly ? nothing : html`<forge-state-layer exportparts="surface:state-layer" target=":host"></forge-state-layer>`}
       </div>
     `;
   }
@@ -152,19 +233,19 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
     if (!this._multiple) {
       return nothing;
     }
-    return html`<forge-icon class="checkbox" name=${this.selected ? 'check_box' : 'check_box_outline_blank'}></forge-icon>`;
+    return html`<forge-icon class="checkbox" part="checkbox" name=${this.selected ? 'check_box' : 'check_box_outline_blank'}></forge-icon>`;
   }
 
   #tryRenderCheckmark(): TemplateResult | typeof nothing {
     if (this._multiple) {
       return nothing;
     }
-    return this.selected ? html`<forge-icon class="checkmark" name="check"></forge-icon>` : nothing;
+    return this.selected ? html`<forge-icon class="checkmark" part="checkmark" name="check"></forge-icon>` : nothing;
   }
 
   #tryRenderDragHandle(): TemplateResult | typeof nothing {
-    if (this._reorderable || this._allowDragOut) {
-      return html`<forge-icon class="drag-handle" name=${this._allowDragOut ? 'drag' : 'drag_horizontal'} draggable="true"></forge-icon>`;
+    if (this._reorderable || this._dragOut) {
+      return html`<forge-icon class="drag-handle" part="drag-handle" name=${this._dragOut ? 'drag' : 'drag_horizontal'} draggable="true"></forge-icon>`;
     }
     return nothing;
   }

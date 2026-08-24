@@ -1,47 +1,10 @@
 <div class="vert">
   <section>
-    <h3 class="forge-typography--heading2">Dual Listbox</h3>
-    <div class="dual-listbox-container">
-      <forge-card class="listbox-card">
-        <forge-listbox id="dual-listbox-1" allow-drag-out>
-          <forge-option value="1">Option 1</forge-option>
-          <forge-option value="2">Option 2</forge-option>
-          <forge-option value="3">Option 3</forge-option>
-        </forge-listbox>
-      </forge-card>
-      <forge-card class="listbox-card">
-        <forge-listbox id="dual-listbox-2" reorderable allow-drop-from="dual-listbox-1">
-          <forge-option value="a">Option A</forge-option>
-          <forge-option value="b">Option B</forge-option>
-          <forge-option value="c">Option C</forge-option>
-          <forge-option-group>
-            <div slot="label">Group 1</div>
-            <forge-option value="x">Option D</forge-option>
-            <forge-option value="y">Option E</forge-option>
-          </forge-option-group>
-        </forge-listbox>
-      </forge-card>
-    </div>
-  </section>
-
-  <section>
-    <h3 class="forge-typography--heading2">Basic Single-Select</h3>
+    <h3 class="forge-typography--heading2">Basic</h3>
     <forge-listbox id="basic-single">
       <forge-option value="1">Option 1</forge-option>
       <forge-option value="2">Option 2</forge-option>
-      <forge-divider></forge-divider>
       <forge-option value="3">Option 3</forge-option>
-      <forge-option value="4" disabled>Option 4 (Disabled)</forge-option>
-    </forge-listbox>
-  </section>
-
-  <section>
-    <h3 class="forge-typography--heading2">Multi-Select</h3>
-    <forge-listbox id="multi-select" multiple>
-      <forge-option value="a">Option A</forge-option>
-      <forge-option value="b">Option B</forge-option>
-      <forge-option value="c">Option C</forge-option>
-      <forge-option value="d">Option D</forge-option>
     </forge-listbox>
   </section>
 
@@ -64,6 +27,24 @@
   </section>
 
   <section>
+    <h3 class="forge-typography--heading2">Leading Icons</h3>
+    <forge-listbox>
+      <forge-option value="home">
+        <forge-icon name="home" external slot="start"></forge-icon>
+        Home
+      </forge-option>
+      <forge-option value="settings">
+        <forge-icon name="settings" external slot="start"></forge-icon>
+        Settings
+      </forge-option>
+      <forge-option value="profile">
+        <forge-icon name="person" external slot="start"></forge-icon>
+        Profile
+      </forge-option>
+    </forge-listbox>
+  </section>
+
+  <section>
     <h3 class="forge-typography--heading2">Horizontal Orientation</h3>
     <forge-listbox id="horizontal" orientation="horizontal">
       <forge-option value="left">Left</forge-option>
@@ -73,54 +54,66 @@
   </section>
 
   <section>
-    <h3 class="forge-typography--heading2">Form Association</h3>
-    <form id="listbox-form">
-      <forge-stack>
-        <forge-listbox id="form-listbox-single" name="single-choice" required>
-          <forge-option value="1">Option 1</forge-option>
-          <forge-option value="2" selected>Option 2</forge-option>
-          <forge-option value="3">Option 3</forge-option>
-        </forge-listbox>
-        <forge-listbox id="form-listbox-multi" name="multi-choice" multiple>
-          <forge-option value="a" selected>Option A</forge-option>
-          <forge-option value="b">Option B</forge-option>
-          <forge-option value="c" selected>Option C</forge-option>
-        </forge-listbox>
-        <fieldset id="listbox-fieldset">
-          <forge-listbox name="fieldset-choice">
-            <forge-option value="x">Option X</forge-option>
-            <forge-option value="y">Option Y</forge-option>
-          </forge-listbox>
-        </fieldset>
-        <label><input type="checkbox" id="toggle-fieldset-disabled" /> Disable fieldset</label>
-        <forge-stack inline>
-          <forge-button variant="outlined" type="reset">Reset</forge-button>
-          <forge-button variant="outlined" type="submit">Submit</forge-button>
-        </forge-stack>
-      </forge-stack>
-    </form>
-    <pre id="listbox-form-output"></pre>
+    <h3 class="forge-typography--heading2">Two Line</h3>
+    <forge-listbox>
+      <forge-option value="1" two-line>
+        <span>Option 1</span>
+        <span slot="secondary">Secondary text for option 1</span>
+      </forge-option>
+      <forge-option value="2" two-line>
+        <span>Option 2</span>
+        <span slot="secondary">Secondary text for option 2</span>
+      </forge-option>
+      <forge-option value="3" two-line>
+        <span>Option 3</span>
+        <span slot="secondary">Secondary text for option 3</span>
+      </forge-option>
+    </forge-listbox>
   </section>
 
   <section>
-    <h3 class="forge-typography--heading2">With Icons and Secondary Labels</h3>
-    <forge-listbox id="rich-options">
-      <forge-option value="home">
-        <forge-icon name="home" external slot="start"></forge-icon>
-        <span>Home</span>
-        <span slot="secondary">Navigate to home</span>
+    <h3 class="forge-typography--heading2">Three Line</h3>
+    <forge-listbox>
+      <forge-option value="1" three-line>
+        <span>Option 1</span>
+        <span slot="secondary">Secondary text for option 1</span>
+        <span slot="tertiary">Tertiary text for option 1</span>
       </forge-option>
-      <forge-option value="settings">
-        <forge-icon name="settings" external slot="start"></forge-icon>
-        <span>Settings</span>
-        <span slot="secondary">Configure app</span>
+      <forge-option value="2" three-line>
+        <span>Option 2</span>
+        <span slot="secondary">Secondary text for option 2</span>
+        <span slot="tertiary">Tertiary text for option 2</span>
       </forge-option>
-      <forge-option value="profile">
-        <forge-icon name="person" external slot="start"></forge-icon>
-        <span>Profile</span>
-        <span slot="secondary">View your profile</span>
+      <forge-option value="3" three-line>
+        <span>Option 3</span>
+        <span slot="secondary">Secondary text for option 3</span>
+        <span slot="tertiary">Tertiary text for option 3</span>
       </forge-option>
-    </forge-listbox>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">Dual Listbox</h3>
+    <div class="dual-listbox-container">
+      <forge-card class="listbox-card">
+        <forge-listbox id="dual-listbox-1" drag-out>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2">Option 2</forge-option>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      </forge-card>
+      <forge-card class="listbox-card">
+        <forge-listbox id="dual-listbox-2" drop-from="dual-listbox-1">
+          <forge-option value="a">Option A</forge-option>
+          <forge-option value="b">Option B</forge-option>
+          <forge-option value="c">Option C</forge-option>
+          <forge-option-group>
+            <div slot="label">Group 1</div>
+            <forge-option value="x">Option D</forge-option>
+            <forge-option value="y">Option E</forge-option>
+          </forge-option-group>
+        </forge-listbox>
+      </forge-card>
+    </div>
   </section>
 </div>
 

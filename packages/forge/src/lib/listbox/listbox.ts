@@ -2,17 +2,16 @@ import { createContext, provide } from '@lit/context';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
-import { SELECT_LIKE_DISABLED, SELECT_LIKE_MULTIPLE, toggleFocusIndicator } from '../constants.js';
+import { SELECT_LIKE_DISABLED, SELECT_LIKE_MULTIPLE, SELECT_LIKE_READONLY, toggleFocusIndicator } from '../constants.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { DragController } from '../core/controllers/drag-controller.js';
 import { DropController, DropEventArgs } from '../core/controllers/drop-controller.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
 import { composedPathFrom } from '../core/utils/event-utils.js';
 import { FocusGroupController } from '../core/utils/focus-group.js';
+import { FormRestoreReason, FormRestoreState } from '../core/utils/form-utils.js';
 import { KeyActionController } from '../core/utils/key-action.js';
 import { toggleState } from '../core/utils/utils.js';
-import { FormRestoreReason, FormRestoreState } from '../core/utils/form-utils.js';
 import type { OptionGroupComponent } from '../option/option-group/index.js';
 import type { OptionComponent, OptionUpdateReason } from '../option/option/index.js';
 
@@ -20,9 +19,10 @@ import styles from './listbox.scss';
 
 export const LISTBOX_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-listbox';
 
-export const LISTBOX_ALLOW_DRAG_OUT = createContext('forge-listbox-allow-drag-out');
-export const LISTBOX_DRAGGABLE = createContext('forge-listbox-draggable');
-export const LISTBOX_REORDERABLE = createContext('forge-listbox-reorderable');
+export const LISTBOX_DENSE = createContext<boolean>('forge-listbox-dense');
+export const LISTBOX_DRAGGABLE = createContext<boolean>('forge-listbox-draggable');
+export const LISTBOX_DRAG_OUT = createContext<boolean>('forge-listbox-drag-out');
+export const LISTBOX_REORDERABLE = createContext<boolean>('forge-listbox-reorderable');
 
 export interface IListboxDropData {
   option: OptionComponent;
@@ -43,14 +43,21 @@ export interface IListboxDropData {
  * @dependency forge-option
  * @dependency forge-option-group
  *
+ * @event {Event} input - Dispatches when the selection changes.
  * @event {Event} change - Dispatches when the selection changes.
- * @event {CustomEvent<OtionComponent>} forge-listbox-drag-out - Dispatches when an option is dragged out of
+ * @event {CustomEvent<OptionComponent>} forge-listbox-drag-out - Dispatches when an option is dragged out of
  * the listbox. Contains the value of the dragged option.
  * @event {CustomEvent<IListboxDropData>} forge-listbox-drop - Dispatches when an option is dropped
  * into the listbox. Contains the value of the dropped option, the index where it was dropped, and
  * the source listbox id.
  *
+ * @cssproperty --forge-listbox-divider-margin - The margin around a slotted divider.
+ *
  * @csspart root - The root element.
+ *
+ * @state disabled - Applied when the listbox is disabled.
+ * @state multiple - Applied when the listbox allows multiple selection.
+ * @state readonly - Applied when the listbox is readonly.
  *
  * @slot - The listbox options and option groups.
  */
@@ -98,6 +105,7 @@ export class ListboxComponent extends BaseLitElement {
    * @default false
    * @attribute
    */
+  @provide({ context: SELECT_LIKE_READONLY })
   @property({ type: Boolean })
   public readonly = false;
 
@@ -122,36 +130,36 @@ export class ListboxComponent extends BaseLitElement {
   /**
    * Whether options in this listbox can be dragged to other listboxes.
    * @default false
-   * @attribute allow-drag-out
+   * @attribute drag-out
    */
-  @provide({ context: LISTBOX_ALLOW_DRAG_OUT })
-  @property({ type: Boolean, attribute: 'allow-drag-out' })
-  public allowDragOut = false;
+  @provide({ context: LISTBOX_DRAG_OUT })
+  @property({ type: Boolean, attribute: 'drag-out' })
+  public dragOut = false;
 
   /**
    * A space-separated list of the ids of listboxes that are allowed to drop into this listbox.
    * @default ''
-   * @attribute allow-drop-from
+   * @attribute drop-from
    */
-  @property({ attribute: 'allow-drop-from' })
-  public allowDropFrom = '';
+  @property({ attribute: 'drop-from' })
+  public dropFrom = '';
 
   /**
    * An array of listbox elements that are allowed to drop options into this listbox.
    * @default []
    */
   @property({ attribute: false })
-  public set allowDropFromElements(elements: ListboxComponent[]) {
-    this.#allowDropFromElements = [...elements];
+  public set dropFromElements(elements: ListboxComponent[]) {
+    this.#dropFromElements = [...elements];
   }
-  public get allowDropFromElements(): ListboxComponent[] {
-    if (this.#allowDropFromElements?.length) {
-      return [...this.#allowDropFromElements];
+  public get dropFromElements(): ListboxComponent[] {
+    if (this.#dropFromElements?.length) {
+      return [...this.#dropFromElements];
     }
-    if (!this.allowDropFrom) {
+    if (!this.dropFrom) {
       return [];
     }
-    const ids = this.allowDropFrom
+    const ids = this.dropFrom
       .split(/\s+/)
       .filter(Boolean)
       .map(id => `#${id}`)
@@ -159,7 +167,7 @@ export class ListboxComponent extends BaseLitElement {
     const selector = `:is(${ids})`;
     return Array.from(this.ownerDocument.querySelectorAll<ListboxComponent>(selector)) ?? undefined;
   }
-  #allowDropFromElements: typeof this.allowDropFromElements = [];
+  #dropFromElements: typeof this.dropFromElements = [];
 
   /**
    * Whether the listbox is disabled.
@@ -179,12 +187,13 @@ export class ListboxComponent extends BaseLitElement {
   public allowDeselect = false;
 
   /**
-   * The orientation of the listbox.
-   * @default 'vertical'
+   * Whether the listbox's options use a dense layout.
+   * @default false
    * @attribute
    */
-  @property()
-  public orientation: 'vertical' | 'horizontal' = 'vertical';
+  @provide({ context: LISTBOX_DENSE })
+  @property({ type: Boolean })
+  public dense = false;
 
   get #options(): OptionComponent[] {
     return Array.from(this.querySelectorAll<OptionComponent>('forge-option'));
@@ -221,6 +230,9 @@ export class ListboxComponent extends BaseLitElement {
   #placeholder: HTMLElement;
   #dropGroup?: OptionGroupComponent;
 
+  // The most recently selected option, used as the anchor for shift+space range selection
+  #selectionAnchor?: OptionComponent;
+
   constructor() {
     super();
     this.#internals = this.attachInternals();
@@ -230,14 +242,31 @@ export class ListboxComponent extends BaseLitElement {
     new KeyActionController(this, {
       actions: [
         {
+          key: [
+            { key: 'ArrowDown', modifier: 'shift' },
+            { key: 'ArrowUp', modifier: 'shift' }
+          ],
+          handler: this.#handleShiftArrowKey.bind(this),
+          allowRepeat: true
+        },
+        {
           key: ['ArrowUp', 'ArrowDown'],
           handler: evt => this.#focusGroup.fromEvent(evt, { focusVisible: true }),
           allowRepeat: true,
           allowDefault: true
         },
+        {
+          key: [
+            { key: 'Home', modifier: ['ctrl', 'shift'] },
+            { key: 'Home', modifier: ['meta', 'shift'] },
+            { key: 'End', modifier: ['ctrl', 'shift'] },
+            { key: 'End', modifier: ['meta', 'shift'] }
+          ],
+          handler: this.#handleShiftHomeEndKey.bind(this)
+        },
         { key: ['Home', 'End'], handler: evt => this.#focusGroup.fromEvent(evt, { focusVisible: true }) },
-        { key: ' ', handler: this.#handleSpaceKey.bind(this) },
-        { key: 'Enter', handler: this.#handleEnterKey.bind(this) },
+        { key: { key: ' ', modifier: 'shift' }, handler: this.#handleShiftSpaceKey.bind(this) },
+        { key: [' ', 'Enter'], handler: this.#handleSelectKey.bind(this) },
         {
           key: [
             { key: 'a', modifier: 'ctrl' },
@@ -260,7 +289,7 @@ export class ListboxComponent extends BaseLitElement {
     setDefaultAria(this, this.#internals, {
       role: 'listbox',
       ariaMultiSelectable: this.multiple ? 'true' : null,
-      ariaOrientation: this.orientation === 'horizontal' ? 'horizontal' : null,
+      ariaOrientation: 'horizontal',
       ariaDisabled: this.disabled ? 'true' : null,
       ariaReadOnly: this.readonly ? 'true' : null
     });
@@ -282,11 +311,6 @@ export class ListboxComponent extends BaseLitElement {
       setDefaultAria(this, this.#internals, { ariaReadOnly: this.readonly ? 'true' : null });
     }
 
-    if (changedProperties.has('orientation')) {
-      setDefaultAria(this, this.#internals, { ariaOrientation: this.orientation === 'horizontal' ? 'horizontal' : null });
-      this.#focusGroup.orientation = this.orientation;
-    }
-
     if (changedProperties.has('multiple')) {
       setDefaultAria(this, this.#internals, { ariaMultiSelectable: this.multiple ? 'true' : null });
       toggleState(this.#internals, 'multiple', this.multiple);
@@ -300,20 +324,19 @@ export class ListboxComponent extends BaseLitElement {
       this.#updateFormValue();
     }
 
-    if (changedProperties.has('reorderable') || changedProperties.has('allowDragOut') || changedProperties.has('allowDropFromElements')) {
-      this.#dragController.setEnabled(this.reorderable || this.allowDragOut);
-      this.#dropController.setEnabled(this.reorderable || !!this.#allowDropFromElements.length);
+    if (changedProperties.has('reorderable') || changedProperties.has('dragOut') || changedProperties.has('dropFromElements')) {
+      this.#dragController.setEnabled(this.reorderable || this.dragOut);
+      this.#dropController.setEnabled(this.reorderable || !!this.dropFromElements.length);
+    }
+
+    if (changedProperties.has('dense')) {
+      this.#setPlaceholderHeight();
     }
   }
 
   public render(): TemplateResult {
-    const classes = {
-      'forge-listbox': true,
-      horizontal: this.orientation === 'horizontal'
-    };
-
     return html`
-      <div class=${classMap(classes)} part="root" @click=${this.#handleClick}>
+      <div class="forge-listbox" part="root" @click=${this.#handleClick}>
         <slot></slot>
       </div>
     `;
@@ -341,10 +364,17 @@ export class ListboxComponent extends BaseLitElement {
   // Selection Logic
   // *****
 
-  #selectOption(value: string): void {
+  async #selectOption(option: OptionComponent): Promise<void> {
     if (this.disabled || this.readonly) {
       return;
     }
+
+    this.#emitInputEvent();
+    if (!this.#emitChangeEvent()) {
+      return;
+    }
+
+    const value = option.value;
 
     if (this.multiple) {
       const currentValues = Array.isArray(this.value) ? [...this.value] : [];
@@ -353,6 +383,7 @@ export class ListboxComponent extends BaseLitElement {
         currentValues.splice(index, 1);
       } else {
         currentValues.push(value);
+        this.#selectionAnchor = option;
       }
       this.value = currentValues;
     } else {
@@ -360,14 +391,61 @@ export class ListboxComponent extends BaseLitElement {
         this.value = '';
       } else {
         this.value = value;
+        this.#selectionAnchor = option;
       }
     }
+  }
 
+  /**
+   * Selects all selectable options between (and including) `fromOption` and `toOption`, in
+   * addition to any options that are already selected.
+   */
+  async #selectRange(fromOption: OptionComponent, toOption: OptionComponent): Promise<void> {
+    const options = this.#options;
+    const fromIndex = options.indexOf(fromOption);
+    const toIndex = options.indexOf(toOption);
+    if (fromIndex === -1 || toIndex === -1) {
+      return;
+    }
+
+    const [start, end] = fromIndex <= toIndex ? [fromIndex, toIndex] : [toIndex, fromIndex];
+    const rangeOptions = options.slice(start, end + 1).filter(opt => this.#optionIsSelectable(opt));
+    if (!rangeOptions.length) {
+      return;
+    }
+
+    this.#emitInputEvent();
+    if (!this.#emitChangeEvent()) {
+      return;
+    }
+
+    const valueSet = new Set(Array.isArray(this.value) ? this.value : []);
+    rangeOptions.forEach(opt => valueSet.add(opt.value));
+    this.value = options.filter(opt => valueSet.has(opt.value)).map(opt => opt.value);
+  }
+
+  #emitChangeEvent(): boolean {
     const changeEvent = new Event('change', {
       bubbles: true,
+      cancelable: true,
       composed: true
     });
     this.dispatchEvent(changeEvent);
+
+    if (changeEvent.defaultPrevented) {
+      changeEvent.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
+  #emitInputEvent(): void {
+    const inputEvent = new Event('input', {
+      bubbles: true,
+      cancelable: false,
+      composed: true
+    });
+    this.dispatchEvent(inputEvent);
   }
 
   /**
@@ -551,28 +629,66 @@ export class ListboxComponent extends BaseLitElement {
 
   #handleClick(evt: PointerEvent): void {
     const option = this.#getOptionFromEvent(evt);
-    if (!option || option.disabled) {
+    if (!option || !this.#optionIsSelectable(option)) {
       return;
     }
 
     this.#focusGroup.focus(option, { focusVisible: false });
-    this.#selectOption(option.value);
+    this.#selectOption(option);
   }
 
-  #handleSpaceKey(evt: KeyboardEvent): void {
+  #handleSelectKey(evt: KeyboardEvent): void {
     const activeOption = this.#focusGroup.currentElement;
-    if (activeOption) {
+    if (activeOption && this.#optionIsSelectable(activeOption)) {
       evt.preventDefault();
-      this.#selectOption(activeOption.value);
+      this.#selectOption(activeOption);
     }
   }
 
-  #handleEnterKey(evt: KeyboardEvent): void {
-    const activeOption = this.#focusGroup.currentElement;
-    if (activeOption) {
-      evt.preventDefault();
-      this.#selectOption(activeOption.value);
+  #handleShiftArrowKey(evt: KeyboardEvent): boolean | void {
+    if (!this.multiple || this.disabled || this.readonly) {
+      return true;
     }
+
+    if (evt.key === 'ArrowDown') {
+      this.#focusGroup.focusNext({ focusVisible: true });
+    } else {
+      this.#focusGroup.focusPrevious({ focusVisible: true });
+    }
+
+    const activeOption = this.#focusGroup.currentElement;
+    if (activeOption && this.#optionIsSelectable(activeOption)) {
+      this.#selectOption(activeOption);
+    }
+  }
+
+  #handleShiftSpaceKey(_evt: KeyboardEvent): boolean | void {
+    if (!this.multiple || this.disabled || this.readonly) {
+      return true;
+    }
+
+    const activeOption = this.#focusGroup.currentElement;
+    if (!activeOption || !this.#optionIsSelectable(activeOption)) {
+      return;
+    }
+
+    this.#selectRange(this.#selectionAnchor ?? activeOption, activeOption);
+  }
+
+  #handleShiftHomeEndKey(evt: KeyboardEvent): boolean | void {
+    if (!this.multiple || this.disabled || this.readonly) {
+      return true;
+    }
+
+    const activeOption = this.#focusGroup.currentElement;
+    const options = this.#options;
+    const targetOption = evt.key === 'Home' ? options[0] : options.at(-1);
+    if (!activeOption || !targetOption) {
+      return;
+    }
+
+    this.#selectRange(activeOption, targetOption);
+    this.#focusGroup.focus(targetOption, { focusVisible: true });
   }
 
   #handleSelectAllKey(evt: KeyboardEvent): void {
@@ -612,6 +728,10 @@ export class ListboxComponent extends BaseLitElement {
     }
   }
 
+  #optionIsSelectable(option: OptionComponent): boolean {
+    return !option.disabled && !this.disabled && !this.readonly;
+  }
+
   // *****
   // Drag & Drop Logic
   // *****
@@ -624,10 +744,7 @@ export class ListboxComponent extends BaseLitElement {
     }
     // Allow drop if the source is this listbox and reordering is enabled, or if the source allows
     // drag out is in the allowed drop sources
-    if (
-      (this.reorderable && source === this) ||
-      ((source as ListboxComponent).allowDragOut && this.allowDropFromElements.includes(source as ListboxComponent))
-    ) {
+    if ((this.reorderable && source === this) || ((source as ListboxComponent).dragOut && this.dropFromElements.includes(source as ListboxComponent))) {
       return true;
     }
     return false;
@@ -664,14 +781,20 @@ export class ListboxComponent extends BaseLitElement {
     placeholder.className = 'forge-listbox-placeholder';
     placeholder.setAttribute('role', 'presentation');
     placeholder.setAttribute('aria-hidden', 'true');
-    placeholder.style.height = '48px';
+    placeholder.style.height = this.dense ? '32px' : '48px';
     placeholder.style.border = 'var(--forge-border-thin) dashed var(--forge-theme-primary)';
     placeholder.style.borderRadius = 'var(--forge-option-border-radius)';
     placeholder.style.pointerEvents = 'none';
     placeholder.style.boxSizing = 'border-box';
     placeholder.style.backgroundColor = 'var(--forge-theme-primary-container-minimum)';
+    this.#setPlaceholderHeight(placeholder);
 
     return placeholder;
+  }
+
+  #setPlaceholderHeight(placeholder?: HTMLElement): void {
+    const target = placeholder || this.#placeholder;
+    target.style.height = this.dense ? '32px' : '48px';
   }
 
   /**
@@ -709,7 +832,7 @@ export class ListboxComponent extends BaseLitElement {
 
   #getInsertionIndex(event: DragEvent): number {
     const parent = this.#getGroupFromDragEvent(event) || this;
-    const children = Array.from(parent.querySelectorAll<OptionComponent>('forge-option'));
+    const children = Array.from(parent.querySelectorAll('*'));
 
     this.#dropGroup = parent === this ? undefined : (parent as OptionGroupComponent);
 

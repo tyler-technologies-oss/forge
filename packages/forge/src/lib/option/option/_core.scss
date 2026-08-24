@@ -22,8 +22,8 @@
   cursor: #{token(cursor)};
 }
 
-@mixin center {
-  @include typography.style(body2, $exclude: [font-size font-weight line-height]);
+@mixin label {
+  @include typography.style(body1, $exclude: [font-size font-weight line-height]);
   @include typography.ellipse;
 
   box-sizing: border-box;
@@ -40,6 +40,24 @@
   flex: 1;
 
   contain: layout;
+}
+
+@mixin secondary-text {
+  @include typography.style(body1);
+  @include typography.ellipse;
+
+  color: #{token(text-color)};
+  display: block;
+}
+
+@mixin two-line {
+  height: #{token(two-line-height)};
+  min-height: #{token(two-line-height)};
+}
+
+@mixin three-line {
+  height: #{token(three-line-height)};
+  min-height: #{token(three-line-height)};
 }
 
 @mixin selected {
@@ -61,8 +79,38 @@
   isolation: isolate;
 }
 
-@mixin center-selected {
+@mixin label-selected {
   color: #{token(selected-color)};
+}
+
+@mixin secondary-text-selected {
+  color: #{token(selected-text-color)};
+}
+
+@mixin drag-handle {
+  color: #{token(drag-handle-color)};
+  cursor: grab;
+}
+
+@mixin dense {
+  @include override(gap, dense-gap);
+
+  height: #{token(dense-one-line-height)};
+  min-height: #{token(dense-one-line-height)};
+}
+
+@mixin dense-label {
+  font-size: #{token(dense-font-size)};
+}
+
+@mixin dense-two-line {
+  height: #{token(dense-two-line-height)};
+  min-height: #{token(dense-two-line-height)};
+}
+
+@mixin dense-three-line {
+  height: #{token(dense-three-line-height)};
+  min-height: #{token(dense-three-line-height)};
 }
 
 @mixin disabled {
@@ -70,7 +118,7 @@
   opacity: #{token(disabled-opacity)};
 }
 
-@mixin drag-handle {
-  color: #{token(drag-handle-color)};
-  cursor: grab;
+@mixin readonly {
+  cursor: auto;
+  opacity: #{token(disabled-opacity)};
 }

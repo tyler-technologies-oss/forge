@@ -1,44 +1,7 @@
 @use '../../utils';
-@use '../../theme';
-@use '../../shape';
 @use '../../spacing';
-@use '../../typography';
 
 $tokens: (
-  // Container
-  padding: utils.module-val(listbox, padding, spacing.variable(medium)),
-  gap: utils.module-val(listbox, gap, spacing.variable(xsmall)),
-  background: utils.module-val(listbox, background, theme.variable(surface)),
-  // Option base
-  option-height: utils.module-val(listbox, option-height, 48px),
-  option-padding-inline: utils.module-val(listbox, option-padding-inline, spacing.variable(medium)),
-  option-padding-block: utils.module-val(listbox, option-padding-block, spacing.variable(small)),
-  option-shape: utils.module-val(listbox, option-shape, shape.variable(small)),
-  option-cursor: utils.module-val(listbox, option-cursor, pointer),
-  // Option text
-  option-color: utils.module-val(listbox, option-color, theme.variable(text-medium)),
-  option-font-size: utils.module-val(listbox, option-font-size, typography.variable(body2, font-size)),
-  option-font-weight: utils.module-val(listbox, option-font-weight, typography.variable(body2, font-weight)),
-  option-line-height: utils.module-val(listbox, option-line-height, typography.scale('1500')),
-  // Option states
-  option-background-hover: utils.module-val(listbox, option-background-hover, theme.variable(surface-dim)),
-  option-background-active: utils.module-val(listbox, option-background-active, theme.variable(surface-container-high)),
-  option-background-selected: utils.module-val(listbox, option-background-selected, theme.variable(primary-container)),
-  option-color-selected: utils.module-val(listbox, option-color-selected, theme.variable(on-primary-container)),
-  // Focus indicator
-  option-outline-color: utils.module-val(listbox, option-outline-color, theme.variable(primary)),
-  option-outline-width: utils.module-val(listbox, option-outline-width, 2px),
-  option-outline-offset: utils.module-val(listbox, option-outline-offset, -2px),
-  // Disabled state
-  option-opacity-disabled: utils.module-val(listbox, option-opacity-disabled, 0.38),
-  // Group
-  group-label-color: utils.module-val(listbox, group-label-color, theme.variable(text-low)),
-  group-label-font-size: utils.module-val(listbox, group-label-font-size, 14px),
-  group-label-font-weight: utils.module-val(listbox, group-label-font-weight, 500),
-  group-label-padding-block-start: utils.module-val(listbox, group-label-padding-block-start, spacing.variable(medium)),
-  group-label-padding-inline: utils.module-val(listbox, group-label-padding-inline, spacing.variable(medium)),
-  group-margin-block-start: utils.module-val(listbox, group-margin-block-start, spacing.variable(small)),
-  // Divider
   divider-margin: utils.module-val(listbox, divider-margin, spacing.variable(xsmall))
 );
 

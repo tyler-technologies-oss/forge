@@ -3,6 +3,57 @@ import '@tylertech/forge/listbox';
 import '@tylertech/forge/select';
 import './listbox.scss';
 import { IListboxDropData, ListboxComponent } from '@tylertech/forge/listbox';
+import type { SwitchComponent } from '@tylertech/forge/switch';
+
+const multipleSwitch = document.getElementById('opt-multiple') as SwitchComponent;
+const reorderableSwitch = document.getElementById('opt-reorderable') as SwitchComponent;
+const denseSwitch = document.getElementById('opt-dense') as SwitchComponent;
+const disabledSwitch = document.getElementById('opt-disabled') as SwitchComponent;
+const readonlySwitch = document.getElementById('opt-readonly') as SwitchComponent;
+const allowDeselectSwitch = document.getElementById('opt-allow-deselect') as SwitchComponent;
+const listboxes = document.querySelectorAll('forge-listbox');
+
+multipleSwitch.addEventListener('change', () => {
+  const isMultiple = multipleSwitch.checked;
+  listboxes.forEach(listbox => {
+    listbox.multiple = isMultiple;
+  });
+});
+
+reorderableSwitch.addEventListener('change', () => {
+  const isReorderable = reorderableSwitch.checked;
+  listboxes.forEach(listbox => {
+    listbox.reorderable = isReorderable;
+  });
+});
+
+denseSwitch.addEventListener('change', () => {
+  const isDense = denseSwitch.checked;
+  listboxes.forEach(listbox => {
+    listbox.dense = isDense;
+  });
+});
+
+disabledSwitch.addEventListener('change', () => {
+  const isDisabled = disabledSwitch.checked;
+  listboxes.forEach(listbox => {
+    listbox.disabled = isDisabled;
+  });
+});
+
+readonlySwitch.addEventListener('change', () => {
+  const isReadonly = readonlySwitch.checked;
+  listboxes.forEach(listbox => {
+    listbox.readonly = isReadonly;
+  });
+});
+
+allowDeselectSwitch.addEventListener('change', () => {
+  const isAllowDeselect = allowDeselectSwitch.checked;
+  listboxes.forEach(listbox => {
+    listbox.allowDeselect = isAllowDeselect;
+  });
+});
 
 document.addEventListener('forge-listbox-drop' as any, (event: CustomEvent<IListboxDropData>) => {
   console.log(event.detail);

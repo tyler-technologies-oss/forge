@@ -103,8 +103,8 @@ describe('Listbox', () => {
     expect(ctx.element.readonly).toBe(false);
     expect(ctx.element.multiple).toBe(false);
     expect(ctx.element.reorderable).toBe(false);
-    expect(ctx.element.allowDragOut).toBe(false);
-    expect(ctx.element.allowDropFrom).toBe('');
+    expect(ctx.element.dragOut).toBe(false);
+    expect(ctx.element.dropFrom).toBe('');
     expect(ctx.element.disabled).toBe(false);
     expect(ctx.element.allowDeselect).toBe(false);
     expect(ctx.element.orientation).toBe('vertical');
@@ -366,6 +366,76 @@ describe('Listbox', () => {
       await userEvent.keyboard('{ArrowDown}');
 
       expect(ctx.element.getAttribute('aria-activedescendant')).toBe(ctx.options[1].id);
+    });
+
+    it('should move focus to and toggle selection of the next option with Shift+ArrowDown', async () => {
+      const ctx = await createFixture();
+      ctx.element.multiple = true;
+      ctx.element.focus();
+
+      await userEvent.keyboard('{Shift>}{ArrowDown}{/Shift}');
+      expect(ctx.element.getAttribute('aria-activedescendant')).toBe(ctx.options[1].id);
+      expect(ctx.element.value).toEqual(['2']);
+
+      await userEvent.keyboard('{Shift>}{ArrowDown}{/Shift}');
+      expect(ctx.element.getAttribute('aria-activedescendant')).toBe(ctx.options[2].id);
+      expect(ctx.element.value).toEqual(['2', '3']);
+    });
+
+    it('should move focus to and toggle selection of the previous option with Shift+ArrowUp', async () => {
+      const ctx = await createFixture();
+      ctx.element.multiple = true;
+      ctx.element.focus();
+
+      await userEvent.keyboard('{End}');
+      await userEvent.keyboard('{Shift>}{ArrowUp}{/Shift}');
+      expect(ctx.element.getAttribute('aria-activedescendant')).toBe(ctx.options[1].id);
+      expect(ctx.element.value).toEqual(['2']);
+    });
+
+    it('should not toggle selection with Shift+ArrowDown/Up when not multiple', async () => {
+      const ctx = await createFixture();
+      ctx.element.focus();
+
+      await userEvent.keyboard('{Shift>}{ArrowDown}{/Shift}');
+
+      expect(ctx.element.value).toBe('');
+    });
+
+    it('should select contiguous items from the last selected item to the focused item with Shift+Space', async () => {
+      const ctx = await createFixture();
+      ctx.element.multiple = true;
+      ctx.element.focus();
+
+      await userEvent.keyboard(' ');
+      await userEvent.keyboard('{ArrowDown}');
+      await userEvent.keyboard('{ArrowDown}');
+      await userEvent.keyboard('{Shift>} {/Shift}');
+
+      expect(ctx.element.value).toEqual(['1', '2', '3']);
+    });
+
+    it('should select the focused option and all options up to the first with Ctrl+Shift+Home', async () => {
+      const ctx = await createFixture();
+      ctx.element.multiple = true;
+      ctx.element.focus();
+
+      await userEvent.keyboard('{End}');
+      await userEvent.keyboard('{Control>}{Shift>}{Home}{/Shift}{/Control}');
+
+      expect(ctx.element.getAttribute('aria-activedescendant')).toBe(ctx.options[0].id);
+      expect(ctx.element.value).toEqual(['1', '2', '3']);
+    });
+
+    it('should select the focused option and all options down to the last with Ctrl+Shift+End', async () => {
+      const ctx = await createFixture();
+      ctx.element.multiple = true;
+      ctx.element.focus();
+
+      await userEvent.keyboard('{Control>}{Shift>}{End}{/Shift}{/Control}');
+
+      expect(ctx.element.getAttribute('aria-activedescendant')).toBe(ctx.options[2].id);
+      expect(ctx.element.value).toEqual(['1', '2', '3']);
     });
 
     it('should focus a matching option via type-ahead search', async () => {
@@ -687,34 +757,34 @@ describe('Listbox', () => {
     });
   });
 
-  describe('allowDropFromElements', () => {
-    it('should compute allowed drop sources from the allow-drop-from attribute', async () => {
+  describe('dropFromElements', () => {
+    it('should compute allowed drop sources from the drop-from attribute', async () => {
       const screen = render(html`
         <div>
           <forge-listbox id="source-a"></forge-listbox>
-          <forge-listbox id="target" allow-drop-from="source-a"></forge-listbox>
+          <forge-listbox id="target" drop-from="source-a"></forge-listbox>
         </div>
       `);
       const source = screen.container.querySelector('#source-a') as ListboxComponent;
       const target = screen.container.querySelector('#target') as ListboxComponent;
 
-      expect(target.allowDropFromElements).toEqual([source]);
+      expect(target.dropFromElements).toEqual([source]);
     });
 
-    it('should prefer explicitly set allowDropFromElements over the attribute-derived list', async () => {
+    it('should prefer explicitly set dropFromElements over the attribute-derived list', async () => {
       const screen = render(html`
         <div>
           <forge-listbox id="source-a"></forge-listbox>
           <forge-listbox id="source-b"></forge-listbox>
-          <forge-listbox id="target" allow-drop-from="source-a"></forge-listbox>
+          <forge-listbox id="target" drop-from="source-a"></forge-listbox>
         </div>
       `);
       const sourceB = screen.container.querySelector('#source-b') as ListboxComponent;
       const target = screen.container.querySelector('#target') as ListboxComponent;
 
-      target.allowDropFromElements = [sourceB];
+      target.dropFromElements = [sourceB];
 
-      expect(target.allowDropFromElements).toEqual([sourceB]);
+      expect(target.dropFromElements).toEqual([sourceB]);
     });
   });
 
@@ -831,7 +901,7 @@ describe('Listbox', () => {
     it('should allow drag out to a listbox that permits drops from the source', async () => {
       const screen = render(html`
         <div>
-          <forge-listbox id="source" allow-drag-out>
+          <forge-listbox id="source" drag-out>
             <forge-option value="1">Option 1</forge-option>
           </forge-listbox>
           <forge-listbox id="target">
@@ -842,7 +912,7 @@ describe('Listbox', () => {
       const source = screen.container.querySelector('#source') as ListboxComponent;
       const target = screen.container.querySelector('#target') as ListboxComponent;
       await Promise.all([source.updateComplete, target.updateComplete]);
-      target.allowDropFromElements = [source];
+      target.dropFromElements = [source];
       await target.updateComplete;
 
       const dropSpy = vi.fn();
