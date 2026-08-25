@@ -53,6 +53,7 @@ export interface IListboxDropData {
  * the source listbox id.
  *
  * @cssproperty --forge-listbox-divider-margin - The margin around a slotted divider.
+ * @cssproperty --forge-listbox-group-margin - The spacing between slotted option groups.
  *
  * @csspart root - The root element.
  *
