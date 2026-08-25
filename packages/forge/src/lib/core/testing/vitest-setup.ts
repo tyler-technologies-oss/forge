@@ -33,6 +33,10 @@ afterEach(async () => {
 
   // Clear the body content to ensure a clean slate for the next test
   document.body.innerHTML = '';
+
+  // Move the pointer somewhere neutral so a leftover hover position from this test doesn't
+  // land on top of a newly rendered element in the next test and fire spurious mouse events
+  await userEvent.hover(document.body);
 });
 
 expect.extend({
