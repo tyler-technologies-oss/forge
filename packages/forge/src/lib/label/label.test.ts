@@ -7,6 +7,7 @@ import type { ILabelAware, ILabelComponent } from '../label/index.js';
 import { LABEL_CONSTANTS } from '../label/index.js';
 
 import './label.js';
+import '../button/button.js';
 
 class LabelHarness {
   public labelAwareElement: HTMLElement & ILabelAware;
