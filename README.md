@@ -14,6 +14,7 @@ This repository is a monorepo that contains the following packages:
 |---------|-------------|
 | [@tylertech/forge](./packages/forge) | Web components library |
 | [@tylertech/forge-core](./packages/forge-core) | Core utilities and base classes for building web components |
+| [@tylertech/forge-react](./packages/forge-react) | React adapter library |
 
 ## Development
 

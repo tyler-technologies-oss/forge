@@ -64,6 +64,7 @@ DO NOT add comments unless code is complex. Defer to configs.
 ## Packages
 
 - `packages/forge` - Web components library (see its CLAUDE.md)
+- `packages/forge-react` - React adapter library (see its CLAUDE.md)
 
 ## Blocks
 
