@@ -1,0 +1,18 @@
+:host {
+  display: block;
+}
+
+.seconds-container {
+  margin-top: var(--forge-spacing-medium);
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+section {
+  padding: 16px;
+
+  & span:last-child {
+    margin-left: 8px;
+  }
+}
