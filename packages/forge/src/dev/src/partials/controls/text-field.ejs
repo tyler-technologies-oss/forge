@@ -5,5 +5,9 @@
   <input
     type="<%= control.inputType ?? 'text' %>"
     id="<%= control.id %>"
+    min="<%= control.min %>"
+    max="<%= control.max %>"
+    step="<%= control.step %>"
+    autocomplete="off"
     value="<%= control.defaultValue ?? undefined %>" />
 </forge-text-field>
