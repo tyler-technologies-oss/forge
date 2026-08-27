@@ -430,8 +430,8 @@ importers:
         specifier: workspace:*
         version: link:../forge-core
       '@tylertech/forge-schematics':
-        specifier: ^2.0.0
-        version: 2.0.0(chokidar@4.0.3)
+        specifier: workspace:*
+        version: link:../forge-schematics
       '@tylertech/tyler-icons':
         specifier: 'catalog:'
         version: 2.1.0
@@ -582,6 +582,37 @@ importers:
         specifier: ^4.1.2
         version: 4.1.2(@types/node@25.5.0)(@vitest/browser-playwright@4.1.2)(jsdom@26.1.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(less@4.9.0)(lightningcss@1.32.0)(sass@1.92.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
 
+  packages/forge-schematics:
+    dependencies:
+      '@angular-devkit/schematics':
+        specifier: ^20.3.13
+        version: 20.3.35(chokidar@4.0.3)
+      custom-elements-manifest:
+        specifier: ^2.1.0
+        version: 2.1.0
+    devDependencies:
+      '@tylertech-eslint/eslint-plugin':
+        specifier: 'catalog:'
+        version: 4.0.0(eslint@9.39.4(jiti@2.6.1))(typescript-eslint@8.58.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(typescript@5.9.3)
+      '@types/node':
+        specifier: 'catalog:'
+        version: 25.5.0
+      glob:
+        specifier: 'catalog:'
+        version: 13.0.6
+      prettier:
+        specifier: 'catalog:'
+        version: 3.8.1
+      rimraf:
+        specifier: 'catalog:'
+        version: 6.1.3
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^4.1.2
+        version: 4.1.2(@types/node@25.5.0)(@vitest/browser-playwright@4.1.2)(jsdom@26.1.0)(vite@7.3.6(@types/node@25.5.0)(jiti@2.6.1)(less@4.9.0)(lightningcss@1.32.0)(sass@1.98.0)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
+
   packages/forge-tailwind:
     dependencies:
       '@tylertech/forge':
@@ -664,15 +695,6 @@ packages:
     resolution: {integrity: sha512-fuiccQamG0SBfuKRSA8uAoALI4VprZAWZbwwOGmpMaYrxoN9E4CgicR5hQUEEsp9IzMtuRvFpJPorudv2xzGMw==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
 
-  '@angular-devkit/core@19.2.27':
-    resolution: {integrity: sha512-3amNzoCVSKd7ah6l6lBQL4onwwJvqvam7FMoQBILrxtW5LB5ezh8gMSPuA4zJjKjoRzf9uoWdlzqv/84I52xZA==}
-    engines: {node: ^18.19.1 || ^20.11.1 || >=22.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
-    peerDependencies:
-      chokidar: ^4.0.0
-    peerDependenciesMeta:
-      chokidar:
-        optional: true
-
   '@angular-devkit/core@20.3.35':
     resolution: {integrity: sha512-RefMFJA7qRBxEDu3a6bVNK9o5vcHXxN8xKaCzENBrOIO6XamthoGMZIJrIT213KpHoEbLTcJjESqGFCpYmY6oA==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
@@ -681,10 +703,6 @@ packages:
     peerDependenciesMeta:
       chokidar:
         optional: true
-
-  '@angular-devkit/schematics@19.2.27':
-    resolution: {integrity: sha512-/PZmyAlb2NGWPikRRuiWLdfHQd8Wrx6lX4HqvTcaDhlU43M3T0ud4PH2T3QDp7BzHYY92xtD8iPxX2asg67G1A==}
-    engines: {node: ^18.19.1 || ^20.11.1 || >=22.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
 
   '@angular-devkit/schematics@20.3.35':
     resolution: {integrity: sha512-7lzrY5pYCTvL9dR/pi4fzAl1BS8PdiplTd+QNFEJv7/rZWTmqt+7rmDHm/8vEl1aYEFmBckzb3PMK+NBMuQkaw==}
@@ -2880,10 +2898,6 @@ packages:
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
 
-  '@schematics/angular@19.2.27':
-    resolution: {integrity: sha512-kJX5nyDjwo6iHQ+g/AJa+4SyHRSQyGgutpqXUIuYY2htGWVS1HUQlHfwAER5btjSNKe/iHgh4pzYGZfvJ2V6/A==}
-    engines: {node: ^18.19.1 || ^20.11.1 || >=22.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
-
   '@schematics/angular@20.3.35':
     resolution: {integrity: sha512-og7zaTVyUYAiXrVqax8+/Uh9K/FExRQqoMC/jQ5X+ZNgmR3MfM+a5aEKRGNZxkUPeJReXF48FCFkBxxt6aCSWQ==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
@@ -3166,9 +3180,6 @@ packages:
     resolution: {integrity: sha512-V9ky1yoAMG2eltllpZqbHiqMnEIvjgFgmn3aAk59xrekjckhYp3XFpMP+CA/AWStJBlV1OBuaBH8MbuQvSD1TA==}
     peerDependencies:
       '@tylertech/forge': ^3.0.0
-
-  '@tylertech/forge-schematics@2.0.0':
-    resolution: {integrity: sha512-DWi+KfvWu8Dwg+t6QJPbn9w7uggPFYI2U+k9k4NHj3cavIyDGP0kqE8LX1/FORA3tpNIB52bqKeST2ou7IsjRg==}
 
   '@tylertech/forge@3.14.1':
     resolution: {integrity: sha512-OfdZyhHTYIVlLJYgKjn4WhsuY5ktc5/hymO+whLdJ/uuQui4vyrXyLItGij8eJ9otD2YF+pPH6pY5v0tFkT63Q==}
@@ -4120,6 +4131,9 @@ packages:
 
   custom-elements-manifest@1.0.0:
     resolution: {integrity: sha512-j59k0ExGCKA8T6Mzaq+7axc+KVHwpEphEERU7VZ99260npu/p/9kd+Db+I3cGKxHkM5y6q5gnlXn00mzRQkX2A==}
+
+  custom-elements-manifest@2.1.0:
+    resolution: {integrity: sha512-4TU+YhBQpCGYWonsZVTOPx6aYJXenOiSRT7TNGvDB7ipa4SZSJKed1DYXG77XKL9JFZ86sDSDVkwgv1mqw3V3A==}
 
   data-urls@5.0.0:
     resolution: {integrity: sha512-ZYP5VBHshaDAiVZxjbRVcFJpc+4xGgT0bK3vzy1HLN8jTO975HEbuYzZJcHoQEY5K1a0z8YayJkyVETa08eNTg==}
@@ -6226,9 +6240,6 @@ packages:
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
-  rxjs@7.8.1:
-    resolution: {integrity: sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==}
-
   rxjs@7.8.2:
     resolution: {integrity: sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==}
 
@@ -6376,10 +6387,6 @@ packages:
   source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
-
-  source-map@0.7.4:
-    resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
-    engines: {node: '>= 8'}
 
   source-map@0.7.6:
     resolution: {integrity: sha512-i5uvt8C3ikiWeNZSVZNWcfZPItFQOsYTUAOkcUPGd8DqDy1uOUikjt5dG+uRlwyvR108Fb9DOd4GvXfT0N2/uQ==}
@@ -7251,17 +7258,6 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
-  '@angular-devkit/core@19.2.27(chokidar@4.0.3)':
-    dependencies:
-      ajv: 8.18.0
-      ajv-formats: 3.0.1(ajv@8.18.0)
-      jsonc-parser: 3.3.1
-      picomatch: 4.0.4
-      rxjs: 7.8.1
-      source-map: 0.7.4
-    optionalDependencies:
-      chokidar: 4.0.3
-
   '@angular-devkit/core@20.3.35(chokidar@4.0.3)':
     dependencies:
       ajv: 8.18.0
@@ -7272,16 +7268,6 @@ snapshots:
       source-map: 0.7.6
     optionalDependencies:
       chokidar: 4.0.3
-
-  '@angular-devkit/schematics@19.2.27(chokidar@4.0.3)':
-    dependencies:
-      '@angular-devkit/core': 19.2.27(chokidar@4.0.3)
-      jsonc-parser: 3.3.1
-      magic-string: 0.30.17
-      ora: 5.4.1
-      rxjs: 7.8.1
-    transitivePeerDependencies:
-      - chokidar
 
   '@angular-devkit/schematics@20.3.35(chokidar@4.0.3)':
     dependencies:
@@ -9162,14 +9148,6 @@ snapshots:
       '@napi-rs/lzma-linux-x64-gnu': 1.5.1
       fsevents: 2.3.3
 
-  '@schematics/angular@19.2.27(chokidar@4.0.3)':
-    dependencies:
-      '@angular-devkit/core': 19.2.27(chokidar@4.0.3)
-      '@angular-devkit/schematics': 19.2.27(chokidar@4.0.3)
-      jsonc-parser: 3.3.1
-    transitivePeerDependencies:
-      - chokidar
-
   '@schematics/angular@20.3.35(chokidar@4.0.3)':
     dependencies:
       '@angular-devkit/core': 20.3.35(chokidar@4.0.3)
@@ -9456,15 +9434,6 @@ snapshots:
       '@tylertech/forge-core': 3.2.1
       '@tylertech/tyler-icons': 2.0.4
       lit: 3.3.0
-
-  '@tylertech/forge-schematics@2.0.0(chokidar@4.0.3)':
-    dependencies:
-      '@angular-devkit/core': 19.2.27(chokidar@4.0.3)
-      '@angular-devkit/schematics': 19.2.27(chokidar@4.0.3)
-      '@schematics/angular': 19.2.27(chokidar@4.0.3)
-      typescript: 5.8.3
-    transitivePeerDependencies:
-      - chokidar
 
   '@tylertech/forge@3.14.1':
     dependencies:
@@ -10622,6 +10591,8 @@ snapshots:
       - prettier
 
   custom-elements-manifest@1.0.0: {}
+
+  custom-elements-manifest@2.1.0: {}
 
   data-urls@5.0.0:
     dependencies:
@@ -13154,10 +13125,6 @@ snapshots:
     dependencies:
       queue-microtask: 1.2.3
 
-  rxjs@7.8.1:
-    dependencies:
-      tslib: 2.8.1
-
   rxjs@7.8.2:
     dependencies:
       tslib: 2.8.1
@@ -13367,8 +13334,6 @@ snapshots:
       source-map: 0.6.1
 
   source-map@0.6.1: {}
-
-  source-map@0.7.4: {}
 
   source-map@0.7.6: {}
 

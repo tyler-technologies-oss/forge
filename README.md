@@ -16,6 +16,7 @@ This repository is a monorepo that contains the following packages:
 | [@tylertech/forge-core](./packages/forge-core) | Core utilities and base classes for building web components |
 | [@tylertech/forge-react](./packages/forge-react) | React adapter library |
 | [@tylertech/forge-angular](./packages/forge-angular) | Angular adapter library |
+| [@tylertech/forge-schematics](./packages/forge-schematics) | Angular Schematics for generating custom element proxies |
 
 ## Development
 

@@ -61,7 +61,7 @@
     "@tylertech-eslint/eslint-plugin": "catalog:",
     "@tylertech/forge": "workspace:*",
     "@tylertech/forge-core": "workspace:*",
-    "@tylertech/forge-schematics": "^2.0.0",
+    "@tylertech/forge-schematics": "workspace:*",
     "@tylertech/tyler-icons": "catalog:",
     "@types/node": "catalog:",
     "angular-eslint": "^20.4.0",
