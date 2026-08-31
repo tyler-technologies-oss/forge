@@ -11,7 +11,7 @@ export function randomChars(length = 5): string {
  * @param {object} obj The object to test.
  * @returns {boolean}
  */
-export function isDefined(obj: any): boolean {
+export function isDefined<T>(obj: T | null | undefined): obj is T {
   return typeof obj !== 'undefined' && obj !== null;
 }
 

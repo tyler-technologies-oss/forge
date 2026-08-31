@@ -1,25 +1,23 @@
-import { attachShadowTemplate, coerceBoolean, customElement, getShadowElement } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/index.js';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { classMap } from 'lit-html/directives/class-map.js';
+import { customElement, property } from 'lit/decorators.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { FocusIndicatorComponent } from '../focus-indicator/index.js';
 import { StateLayerComponent } from '../state-layer/index.js';
 import { SKIP_LINK_CONSTANTS, SkipLinkTheme } from './skip-link-constants.js';
+import { toggleState } from '../core/utils/utils.js';
 
-import template from './skip-link.html';
-import style from './skip-link.scss';
+import styles from './skip-link.scss';
 
-export interface ISkipLinkComponent extends IBaseComponent {
+/** @deprecated - This will be removed in the future. Please switch to using SkipLinkComponent. */
+export interface ISkipLinkComponent extends BaseLitElement {
   target: string;
   theme: SkipLinkTheme;
   muted: boolean;
   persistent: boolean;
   inline: boolean;
   skipUrlChange: boolean;
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-skip-link': ISkipLinkComponent;
-  }
 }
 
 /**
@@ -43,162 +41,118 @@ declare global {
  * @csspart focus-indicator - The focus indicator element.
  * @csspart state-layer - The state layer element.
  *
+ * @state inline - Applied when the skip link is set to render within its container.
+ * @state persistent - Applied when the skip link will remain visible when not focused.
+ *
  * @slot - The default/unnamed slot for link text.
  *
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
  */
-@customElement({
-  name: SKIP_LINK_CONSTANTS.elementName,
-  dependencies: [FocusIndicatorComponent, StateLayerComponent]
-})
-export class SkipLinkComponent extends BaseComponent implements ISkipLinkComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(SKIP_LINK_CONSTANTS.observedAttributes);
-  }
+@customElement(SKIP_LINK_CONSTANTS.elementName)
+export class SkipLinkComponent extends BaseLitElement {
+  public static styles = unsafeCSS(styles);
 
-  private _target = '';
-  private _theme: SkipLinkTheme = 'default';
-  private _muted = false;
-  private _persistent = false;
-  private _inline = false;
-  private _skipUrlChange = false;
-  private _anchorElement: HTMLAnchorElement;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = SKIP_LINK_CONSTANTS.elementName;
 
-  private _clickListener: EventListener = (evt: Event) => this._handleClick(evt);
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [FocusIndicatorComponent, StateLayerComponent];
 
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, style);
-    this._anchorElement = getShadowElement(this, SKIP_LINK_CONSTANTS.selectors.ANCHOR) as HTMLAnchorElement;
-  }
-
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case SKIP_LINK_CONSTANTS.observedAttributes.TARGET:
-        this.target = newValue;
-        break;
-      case SKIP_LINK_CONSTANTS.observedAttributes.THEME:
-        this.theme = newValue as SkipLinkTheme;
-        break;
-      case SKIP_LINK_CONSTANTS.observedAttributes.MUTED:
-        this.muted = coerceBoolean(newValue);
-        break;
-      case SKIP_LINK_CONSTANTS.observedAttributes.PERSISTENT:
-        this.persistent = coerceBoolean(newValue);
-        break;
-      case SKIP_LINK_CONSTANTS.observedAttributes.INLINE:
-        this.inline = coerceBoolean(newValue);
-        break;
-      case SKIP_LINK_CONSTANTS.observedAttributes.SKIP_URL_CHANGE:
-        this.skipUrlChange = coerceBoolean(newValue);
-        break;
-    }
-  }
+  #internals: ElementInternals;
 
   /**
    * The IDREF of the element to which the skip link should navigate.
    * @default ''
    * @attribute
    */
-  public get target(): string {
-    return this._target;
-  }
-  public set target(value: string) {
-    if (this._target !== value) {
-      this._target = value;
-      this.setAttribute(SKIP_LINK_CONSTANTS.attributes.TARGET, this._target);
-
-      this._anchorElement.href = `#${this._target}`;
-    }
-  }
+  @property({ reflect: true })
+  public target = '';
 
   /**
    * The theme applied to the skip link.
    * @default 'default'
    * @attribute
    */
-  public get theme(): SkipLinkTheme {
-    return this._theme;
-  }
-  public set theme(value: SkipLinkTheme) {
-    if (this._theme !== value) {
-      this._theme = value;
-      this.setAttribute(SKIP_LINK_CONSTANTS.attributes.THEME, this._theme);
-    }
-  }
+  @property({ reflect: true })
+  public theme: SkipLinkTheme = 'default';
 
   /**
    * Whether or not the skip link uses a muted color scheme.
    * @default false
    * @attribute
    */
-  public get muted(): boolean {
-    return this._muted;
-  }
-  public set muted(value: boolean) {
-    if (this._muted !== value) {
-      this._muted = value;
-      this.toggleAttribute(SKIP_LINK_CONSTANTS.attributes.MUTED, this._muted);
-    }
-  }
+  @property({ type: Boolean, reflect: true })
+  public muted = false;
 
   /**
    * Whether or not the skip link should remain visible when not focused.
    * @default false
    * @attribute
    */
-  public get persistent(): boolean {
-    return this._persistent;
-  }
-  public set persistent(value: boolean) {
-    if (this._persistent !== value) {
-      this._persistent = value;
-      this.toggleAttribute(SKIP_LINK_CONSTANTS.attributes.PERSISTENT, this._persistent);
-    }
-  }
+  @property({ type: Boolean, reflect: true })
+  public persistent = false;
 
   /**
-   * Whether or not the skip link renders within its container.
+   * Whether or not the skip link is positioned within its container.
    * @default false
    * @attribute
    */
-  public get inline(): boolean {
-    return this._inline;
-  }
-  public set inline(value: boolean) {
-    if (this._inline !== value) {
-      this._inline = value;
-      this.toggleAttribute(SKIP_LINK_CONSTANTS.attributes.INLINE, this._inline);
-    }
-  }
+  @property({ type: Boolean, reflect: true })
+  public inline = false;
 
   /**
    * Sets the skip link to skip browser navigation and scroll to the target element.
    * @default false
    * @attribute skip-url-change
    */
-  public get skipUrlChange(): boolean {
-    return this._skipUrlChange;
+  @property({ type: Boolean, reflect: true, attribute: 'skip-url-change' })
+  public skipUrlChange = false;
+
+  constructor() {
+    super();
+    this.#internals = this.attachInternals();
   }
-  public set skipUrlChange(value: boolean) {
-    if (this._skipUrlChange !== value) {
-      this._skipUrlChange = value;
-      this.toggleAttribute(SKIP_LINK_CONSTANTS.attributes.SKIP_URL_CHANGE, this._skipUrlChange);
 
-      if (this._skipUrlChange) {
-        this._anchorElement.addEventListener('click', this._clickListener);
-        return;
-      }
-
-      this._anchorElement.removeEventListener('click', this._clickListener);
+  public override updated(changedProperties: PropertyValues<this>): void {
+    super.updated(changedProperties);
+    if (changedProperties.has('inline')) {
+      toggleState(this.#internals, 'inline', this.inline);
+    }
+    if (changedProperties.has('persistent')) {
+      toggleState(this.#internals, 'persistent', this.persistent);
     }
   }
 
-  private _handleClick(evt: Event): void {
+  public render(): TemplateResult {
+    const classes = {
+      'forge-skip-link': true,
+      [this.theme]: true,
+      muted: this.muted
+    };
+    return html`
+      <a class=${classMap(classes)} part="anchor" href=${`#${this.target}`} @click=${this.#handleClick}>
+        <slot>Skip to main content</slot>
+        <forge-focus-indicator part="focus-indicator"></forge-focus-indicator>
+        <forge-state-layer exportparts="surface:state-layer"></forge-state-layer>
+      </a>
+    `;
+  }
+
+  #handleClick(evt: Event): void {
+    if (!this.skipUrlChange) {
+      return;
+    }
+
     evt.preventDefault();
-    const targetElement = document.getElementById(this._target);
+    const targetElement = document.getElementById(this.target);
     targetElement?.focus();
     targetElement?.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-skip-link': SkipLinkComponent;
   }
 }

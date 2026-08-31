@@ -1,0 +1,16 @@
+<!--
+  @block Time Picker — Demo
+  @type component
+  @description Demo usage example for the forge-time-picker component.
+  @tags time-picker, demo, storybook, component-example
+-->
+<forge-time-picker use-24-hour-time="false" allow-invalid-time="false">
+  <forge-text-field>
+    <input id="time-picker" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="combobox" aria-live="assertive" aria-atomic="true" aria-haspopup="true" aria-expanded="false" aria-controls="forge-aria-controls-placeholder" aria-disabled="false">
+    <label for="time-picker" slot="label">Time</label>
+    <forge-icon-button slot="trailing" density="medium" aria-label="Toggle time dropdown">
+      <forge-icon name="clock_outline">
+      </forge-icon>
+    </forge-icon-button>
+  </forge-text-field>
+</forge-time-picker>

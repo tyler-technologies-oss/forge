@@ -1,0 +1,29 @@
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+//
+// Base
+//
+
+.forge-timeline {
+  @include core.tokens;
+}
+
+.forge-timeline {
+  @include core.base;
+}
+
+//
+// Slotted
+//
+
+::slotted(forge-timestamp) {
+  @include core.timestamp;
+}

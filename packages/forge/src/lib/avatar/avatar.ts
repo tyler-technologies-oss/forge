@@ -44,8 +44,11 @@ export const AVATAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-avatar';
  * @cssproperty {number} --forge-avatar-size - The height and width of the avatar.
  * @cssproperty {number} --forge-avatar-transition-duration - The transition duration for animations.
  * @cssproperty {string} --forge-avatar-transition-timing - The transition timing function for animations.
+ * @cssproperty {color} --forge-theme-surface-container-low - The background color of the empty image.
+ * @cssproperty {color} --forge-theme-surface-container-high - The foreground color of the empty image.
  *
  * @csspart root - The root container element.
+ * @csspart empty-image - The empty image container element.
  *
  * @slot - The default slot for avatar content if not provided via text/imageUrl.
  *
@@ -83,7 +86,7 @@ export class AvatarComponent extends BaseLitElement implements IAvatarComponent 
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('imageUrl')) {
-      this._tryLoadImage();
+      this.#tryLoadImage();
     }
   }
 
@@ -92,14 +95,14 @@ export class AvatarComponent extends BaseLitElement implements IAvatarComponent 
       <div
         aria-hidden="true"
         part="root"
-        class=${classMap({ 'forge-avatar': true, 'forge-avatar--image': !!this._image })}
+        class=${classMap({ 'forge-avatar': true, image: !!this._image })}
         style=${this._image ? styleMap({ backgroundImage: `url(${this._image.src})` }) : nothing}>
-        <slot>${this._image ? nothing : charsByLetterCount(this.text, this.letterCount)}</slot>
+        <slot>${this.#renderContent()}</slot>
       </div>
     `;
   }
 
-  private async _tryLoadImage(): Promise<void> {
+  async #tryLoadImage(): Promise<void> {
     if (this.imageUrl) {
       const image = new Image();
       image.onload = () => (this._image = image);
@@ -108,5 +111,23 @@ export class AvatarComponent extends BaseLitElement implements IAvatarComponent 
     } else {
       this._image = undefined;
     }
+  }
+
+  #renderContent(): TemplateResult {
+    if (this._image) {
+      return html`${nothing}`;
+    }
+
+    if (this.text) {
+      return html`${charsByLetterCount(this.text, this.letterCount)}`;
+    }
+
+    return html`
+      <div class="empty-image" part="empty-image">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 24">
+          <path d="M12,6c2.5,0,4.5,2,4.5,4.5s-2,4.5-4.5,4.5-4.5-2-4.5-4.5,2-4.5,4.5-4.5M12,15.8c4.1,0,7.5,2.4,7.5,5.4v2.8H4.5v-2.8c0-3,3.4-5.4,7.5-5.4" />
+        </svg>
+      </div>
+    `;
   }
 }

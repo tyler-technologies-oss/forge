@@ -6,7 +6,9 @@ $tokens: (
   justify: utils.module-val(tab-bar, justify, space-between),
   stretch: utils.module-val(tab-bar, stretch, 1),
   divider-color: utils.module-val(tab-bar, divider-color, theme.variable(outline)),
-  divider-thickness: utils.module-val(tab-bar, divider-thickness, 1px)
+  divider-thickness: utils.module-val(tab-bar, divider-thickness, 1px),
+  overflow-divider-color: utils.module-val(tab-bar, overflow-divider-color, theme.variable(outline)),
+  overflow-divider-thickness: utils.module-val(tab-bar, overflow-divider-thickness, 1px)
 );
 
 @function get($name) {

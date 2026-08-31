@@ -75,6 +75,10 @@ export const WithIconButton: Story = {
   `
 };
 
+export const Empty: Story = {
+  render: () => html`<forge-avatar></forge-avatar>`
+};
+
 export const CSSOnly: Story = {
   ...standaloneStoryParams,
   render: () => html`<div class="forge-avatar">A</div>`

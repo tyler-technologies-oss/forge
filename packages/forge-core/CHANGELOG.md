@@ -1,5 +1,15 @@
 # @tylertech/forge-core
 
+## 3.4.0
+
+### Minor Changes
+
+- ea1082a: feat(date-utils): add utils to format and parse dates based on cldr syntax
+
+### Patch Changes
+
+- 35922fc: feat: add type narrowing to isDefined function
+
 ## 3.3.1
 
 ### Patch Changes

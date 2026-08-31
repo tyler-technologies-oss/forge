@@ -1,0 +1,5 @@
+@import '@tylertech/forge/dist/field/forge-field.css';
+
+.forge-field {
+  max-width: 320px;
+}

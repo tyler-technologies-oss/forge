@@ -129,7 +129,7 @@ export abstract class BaseButton<T extends BaseButtonCore<IBaseButtonAdapter<IBa
   }
 
   /** Focuses the button. */
-  public override focus(options: ExperimentalFocusOptions): void {
+  public override focus(options?: ExperimentalFocusOptions): void {
     this._core.focus(options);
   }
 }

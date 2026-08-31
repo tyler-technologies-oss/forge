@@ -1,0 +1,25 @@
+<!--
+  @block Button Area — Demo
+  @type component
+  @description Demo usage example for the forge-button-area component.
+  @tags button-area, demo, storybook, component-example
+-->
+<forge-card>
+  <forge-button-area>
+    <button slot="button" aria-labelledby="button-heading">
+    </button>
+    <div class="content">
+      <div>
+        <div id="button-heading">Heading</div>
+        <div>Content</div>
+      </div>
+      <forge-icon-button forge-ignore>
+        <forge-icon name="favorite" aria-label="A heart graphic">
+        </forge-icon>
+      </forge-icon-button>
+      <forge-tooltip aria-hidden="true">Favorite</forge-tooltip>
+      <forge-icon name="chevron_right">
+      </forge-icon>
+    </div>
+  </forge-button-area>
+</forge-card>

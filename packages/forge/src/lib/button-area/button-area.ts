@@ -148,11 +148,11 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
         @keydown=${this.#handleKeydown}
         @pointerdown=${this.#handlePointerdown}>
         <slot @click=${this.#handleIgnoreStateLayer} @pointerdown=${this.#handleIgnoreStateLayer} @pointerup=${this.#handleIgnoreStateLayer}></slot>
-        <forge-state-layer exportparts="surface:state-layer" ${ref(this.#stateLayer)}></forge-state-layer>
-        <forge-focus-indicator target="button" part="focus-indicator" inward ${ref(this.#focusIndicator)}></forge-focus-indicator>
         <div id="button" class="button" part="button" .hidden=${!!this.targetElement} @slotchange=${this.#handleSlotChange}>
           <slot name="button"></slot>
         </div>
+        <forge-state-layer exportparts="surface:state-layer" ${ref(this.#stateLayer)}></forge-state-layer>
+        <forge-focus-indicator target="button" part="focus-indicator" inward ${ref(this.#focusIndicator)}></forge-focus-indicator>
       </div>
     `;
   }

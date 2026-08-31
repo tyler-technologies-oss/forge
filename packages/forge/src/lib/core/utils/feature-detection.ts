@@ -37,3 +37,41 @@ export function supportsHover(): boolean {
 export function prefersReducedMotion(): boolean {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
+
+let cachedScrollIntoViewContainerSupport: boolean | undefined;
+
+/**
+ * Detects whether the browser supports Element.prototype.scrollIntoView()'s container option.
+ * Uses a Proxy to detect if the browser actually reads the container property.
+ * The result is cached after the first call for performance.
+ * @returns {boolean}
+ */
+export function supportsScrollIntoViewContainerOption(): boolean {
+  if (cachedScrollIntoViewContainerSupport !== undefined) {
+    return cachedScrollIntoViewContainerSupport;
+  }
+
+  let containerAccessed = false;
+
+  const options = new Proxy(
+    { behavior: 'auto', block: 'nearest', inline: 'nearest', container: 'nearest' },
+    {
+      get(target: any, prop: string) {
+        if (prop === 'container') {
+          containerAccessed = true;
+        }
+        return target[prop];
+      }
+    }
+  );
+
+  try {
+    const div = document.createElement('div');
+    div.scrollIntoView(options as any);
+  } catch {
+    // Ignore any errors
+  }
+
+  cachedScrollIntoViewContainerSupport = containerAccessed;
+  return containerAccessed;
+}

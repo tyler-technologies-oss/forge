@@ -81,7 +81,7 @@ export class ButtonToggleCore implements IButtonToggleCore {
   }
 
   private _onKeyDown(evt: KeyboardEvent): void {
-    if (evt.key === ' ') {
+    if (evt.key === ' ' || evt.key === 'Enter') {
       evt.preventDefault();
       this.click();
     }
