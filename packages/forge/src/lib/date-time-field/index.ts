@@ -1,7 +1,6 @@
 import { defineCustomElement } from '@tylertech/forge-core';
-import { tylIconInsertInvitation } from '@tylertech/tyler-icons';
 import { defineDateTimePickerComponent } from '../date-time-picker/index.js';
-import { IconRegistry, defineIconComponent } from '../icon/index.js';
+import { defineIconComponent } from '../icon/index.js';
 import { defineIconButtonComponent } from '../icon-button/index.js';
 import { defineFieldComponent } from '../field/index.js';
 import { DateTimeFieldComponent } from './date-time-field.js';
@@ -15,6 +14,5 @@ export function defineDateTimeFieldComponent(): void {
   defineIconComponent();
   defineIconButtonComponent();
   defineDateTimePickerComponent();
-  IconRegistry.define(tylIconInsertInvitation);
   defineCustomElement(DateTimeFieldComponent);
 }
