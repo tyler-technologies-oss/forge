@@ -1,8 +1,8 @@
-// Single source for the rhythm between adjacent segments (date→time within an
-// endpoint, and around the range separator) so the gaps read consistently.
-$segment-gap: 0.3em;
-
 :host {
+  // Single source for the rhythm between adjacent segments (date→time within an
+  // endpoint, and around the range separator) so the gaps read consistently.
+  --forge-date-time-field-segment-gap: 0.3em;
+
   // Fill the container like forge-text-field — the field is a form control, so its width is owned
   // by the layout it sits in, not the mode. The segment row still hugs its content at the inline
   // start (see `.inputs`) and wraps by endpoint when the container is narrower than that content.
@@ -97,7 +97,7 @@ input.guide-partial {
   align-self: center;
   align-items: center;
   color: var(--forge-theme-text-medium, currentColor);
-  margin-inline: $segment-gap;
+  margin-inline: var(--forge-date-time-field-segment-gap);
   vertical-align: middle;
 }
 
@@ -114,11 +114,11 @@ input.guide-partial {
   width: 4.75em;
   text-align: start;
   // Small gap from the preceding date input within an endpoint.
-  margin-inline-start: $segment-gap;
+  margin-inline-start: var(--forge-date-time-field-segment-gap);
 }
 
 // Seconds add `:ss`, so reserve more room to keep `hh:mm:ss aa` from clipping.
-:host([allow-seconds]) {
+.allow-seconds {
   [part='time-input'],
   [part='from-input'],
   [part='to-input'],
@@ -131,8 +131,8 @@ input.guide-partial {
   cursor: pointer;
 }
 
-:host([readonly]) [part='slot-display'],
-:host([disabled]) [part='slot-display'] {
+.readonly [part='slot-display'],
+.disabled [part='slot-display'] {
   cursor: default;
 }
 
