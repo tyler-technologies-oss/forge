@@ -1,27 +1,22 @@
-import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
-import { IconComponent } from '../icon/index.js';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import { FocusIndicatorComponent } from '../focus-indicator/index.js';
+import { IconComponent } from '../icon/index.js';
 import { StateLayerComponent } from '../state-layer/index.js';
 import { BaseButton, IBaseButton } from './base/base-button.js';
-import { ButtonAdapter } from './button-adapter.js';
-import { ButtonTheme, ButtonVariant, BUTTON_CONSTANTS } from './button-constants.js';
-import { ButtonCore } from './button-core.js';
-import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants.js';
+import { BUTTON_CONSTANTS, ButtonTheme, ButtonVariant } from './button-constants.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { toggleState } from '../core/utils/utils.js';
 
-import template from './button.html';
 import styles from './button.scss';
 
+/** @deprecated - This will be removed in the future. Please switch to using ButtonComponent. */
 export interface IButtonComponent extends IBaseButton {
   variant: ButtonVariant;
   pill: boolean;
   theme: ButtonTheme;
   fullWidth: boolean;
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-button': IButtonComponent;
-  }
 }
 
 /**
@@ -33,33 +28,8 @@ declare global {
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
  *
- * @property {string} [type="button"] - The type of button. Valid values are `button`, `submit`, and `reset`.
- * @property {ButtonVariant} [variant="text"] - The variant of the button.
- * @property {boolean} [fullWidth=false] - Whether or not the button is full-width.
- * @property {boolean} [disabled=false] - Whether or not the button is disabled.
- * @property {boolean} [popoverIcon=false] - Whether or not the button shows a built-in popover icon.
- * @property {string} name - The name of the button.
- * @property {string} value - The form value of the button.
- * @property {boolean} [dense=false] - Whether or not the button is dense.
- * @property {HTMLFormElement | null} form - The form reference of the button if within a `<form>` element.
- * @property {boolean} [pill=false] - Whether or not the button is pill-shaped.
- * @property {ButtonTheme} [theme="primary"] - The theme of the button. Defaults to `primary`.
- *
  * @globalconfig variant
  * @globalconfig dense
- *
- * @attribute {string} [type="button"] - The type of button. Valid values are `button`, `submit`, and `reset`.
- * @attribute {ButtonVariant} [variant="text"] - The variant of the button.
- * @attribute {boolean} [full-width=false] - Whether or not the button is full-width.
- * @attribute {boolean} [disabled=false] - Whether or not the button is disabled.
- * @attribute {boolean} [popover-icon=false] - Whether or not the button shows a built-in popover icon.
- * @attribute {string} name - The name of the button.
- * @attribute {string} value - The form value of the button.
- * @attribute {boolean} [dense=false] - Whether or not the button is dense.
- * @attribute {boolean} [pill=false] - Whether or not the button is pill-shaped.
- * @attribute {ButtonTheme} [theme="primary"] - The theme of the button. Defaults to `primary`.
- *
- * @event {PointerEvent} click - Fires when the button is clicked.
  *
  * @cssproperty --forge-button-primary-color - The primary color of the button.
  * @cssproperty --forge-button-text-color - The text color of the button. Inherits from primary color.
@@ -150,50 +120,80 @@ declare global {
  * @cssclass forge-button--dense - Dense height.
  * @cssclass forge-button--pill - Pill shape.
  */
-@customElement({
-  name: BUTTON_CONSTANTS.elementName,
-  dependencies: [FocusIndicatorComponent, StateLayerComponent, IconComponent]
-})
-export class ButtonComponent extends BaseButton<ButtonCore> implements IButtonComponent {
-  public static get observedAttributes(): string[] {
-    return [...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes), ...Object.values(BUTTON_CONSTANTS.observedAttributes)];
-  }
+@customElement(BUTTON_CONSTANTS.elementName)
+export class ButtonComponent extends BaseButton {
+  public static styles = unsafeCSS(styles);
 
-  protected readonly _core: ButtonCore;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BUTTON_CONSTANTS.elementName;
 
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new ButtonCore(new ButtonAdapter(this));
-  }
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [FocusIndicatorComponent, StateLayerComponent, IconComponent];
 
-  public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case BUTTON_CONSTANTS.observedAttributes.VARIANT:
-        this.variant = newValue as ButtonVariant;
-        return;
-      case BUTTON_CONSTANTS.observedAttributes.PILL:
-        this.pill = coerceBoolean(newValue);
-        return;
-      case BUTTON_CONSTANTS.observedAttributes.THEME:
-        this.theme = newValue as ButtonTheme;
-        return;
-      case BUTTON_CONSTANTS.observedAttributes.FULL_WIDTH:
-        this.fullWidth = coerceBoolean(newValue);
-        return;
+  /**
+   * Gets/sets the button variant.
+   * @default "text"
+   * @attribute
+   */
+  @property({ reflect: true })
+  public variant: ButtonVariant = 'text';
+
+  /**
+   * Gets/sets whether the button is pill-shaped.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public pill = false;
+
+  /**
+   * Gets/sets the button theme.
+   * @default "primary"
+   * @attribute
+   */
+  @property({ reflect: true })
+  public theme: ButtonTheme = 'primary';
+
+  /**
+   * Gets/sets whether the button is full-width.
+   * @default false
+   * @attribute full-width
+   */
+  @property({ type: Boolean, reflect: true, attribute: 'full-width' })
+  public fullWidth = false;
+
+  public override updated(changedProperties: PropertyValues<this>): void {
+    super.updated(changedProperties);
+
+    if (changedProperties.has('variant')) {
+      this._stateLayerDisabled = this.variant === 'link';
     }
-    super.attributeChangedCallback(name, oldValue, newValue);
+
+    if (changedProperties.has('fullWidth')) {
+      toggleState(this._internals, 'full-width', this.fullWidth);
+    }
   }
 
-  @coreProperty()
-  declare public variant: ButtonVariant;
+  public render(): TemplateResult {
+    const classes = {
+      'forge-button': true,
+      'with-popover-icon': this.popoverIcon,
+      dense: this.dense,
+      pill: this.pill,
+      [this.variant]: true,
+      [this.theme]: true
+    };
+    return html`
+      <div class=${classMap(classes)} part="root" id="root">
+        <slot name="start"></slot>
+        ${this._renderDefaultSlot()} ${this._renderEndSlotWithOptionalPopoverIcon()} ${this._renderInteractionLayer()}
+      </div>
+    `;
+  }
+}
 
-  @coreProperty()
-  declare public pill: boolean;
-
-  @coreProperty()
-  declare public theme: ButtonTheme;
-
-  @coreProperty()
-  declare public fullWidth: boolean;
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-button': ButtonComponent;
+  }
 }

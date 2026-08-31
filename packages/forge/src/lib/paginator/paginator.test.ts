@@ -6,7 +6,7 @@ import type { IPaginatorComponent } from './paginator.js';
 import type { IPaginatorChangeEventData } from './paginator-constants.js';
 import { PAGINATOR_CONSTANTS } from './paginator-constants.js';
 import type { ISelectComponent } from '../select/select/select.js';
-import type { IIconButtonComponent } from '../icon-button/index.js';
+import type { IconButtonComponent } from '../icon-button/index.js';
 import { LiveAnnouncer } from '@tylertech/forge-core';
 
 import './paginator.js';
@@ -876,20 +876,20 @@ class PaginatorHarness {
     return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.PAGE_SIZE_SELECT) as ISelectComponent;
   }
 
-  public get firstButton(): IIconButtonComponent | null {
-    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.FIRST_PAGE_BUTTON) as IIconButtonComponent;
+  public get firstButton(): IconButtonComponent | null {
+    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.FIRST_PAGE_BUTTON) as IconButtonComponent;
   }
 
-  public get previousButton(): IIconButtonComponent {
-    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.PREVIOUS_PAGE_BUTTON) as IIconButtonComponent;
+  public get previousButton(): IconButtonComponent {
+    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.PREVIOUS_PAGE_BUTTON) as IconButtonComponent;
   }
 
-  public get nextButton(): IIconButtonComponent {
-    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.NEXT_PAGE_BUTTON) as IIconButtonComponent;
+  public get nextButton(): IconButtonComponent {
+    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.NEXT_PAGE_BUTTON) as IconButtonComponent;
   }
 
-  public get lastButton(): IIconButtonComponent | null {
-    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.LAST_PAGE_BUTTON) as IIconButtonComponent;
+  public get lastButton(): IconButtonComponent | null {
+    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.LAST_PAGE_BUTTON) as IconButtonComponent;
   }
 }
 

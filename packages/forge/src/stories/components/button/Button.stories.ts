@@ -22,7 +22,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['form', 'name', 'value'],
+      exclude: ['name', 'value'],
       controls: {
         variant: { control: { type: 'select' }, options: ['text', 'outlined', 'tonal', 'filled', 'raised', 'link'] },
         theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS }

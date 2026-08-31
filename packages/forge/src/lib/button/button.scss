@@ -35,6 +35,22 @@ $host-tokens: [display disabled-cursor];
 .forge-button {
   @include base;
 
+  &.dense {
+    @include dense;
+  }
+
+  &.pill {
+    @include pill;
+
+    forge-focus-indicator {
+      @include focus-indicator.provide-theme(
+        (
+          shape: #{token(pill-shape)}
+        )
+      );
+    }
+  }
+
   ::slotted(:is([slot='start'], [slot='end'])) {
     @include slotted-start-end;
   }
@@ -56,13 +72,6 @@ $host-tokens: [display disabled-cursor];
       font-size: #{token(icon-size)}
     )
   );
-}
-
-:host([variant='link']) {
-  ::slotted(a) {
-    position: relative;
-    inset: auto;
-  }
 }
 
 //
@@ -95,28 +104,22 @@ forge-focus-indicator {
 //
 
 @mixin theme($theme) {
-  :host([theme='#{$theme}']) {
-    .forge-button {
+  .forge-button {
+    &.#{$theme} {
       @include override(primary-color, theme.variable($theme), value);
-    }
-  }
 
-  :host([theme='#{$theme}'][variant='filled']) {
-    .forge-button {
-      @include override(filled-color, theme.variable(on-#{$theme}), value);
-    }
-  }
+      &.filled {
+        @include override(filled-color, theme.variable(on-#{$theme}), value);
+      }
 
-  :host([theme='#{$theme}'][variant='raised']) {
-    .forge-button {
-      @include override(raised-color, theme.variable(on-#{$theme}), value);
-    }
-  }
+      &.raised {
+        @include override(raised-color, theme.variable(on-#{$theme}), value);
+      }
 
-  :host([theme='#{$theme}'][variant='tonal']) {
-    .forge-button {
-      @include override(tonal-background, theme.variable(#{$theme}-container), value);
-      @include override(tonal-color, theme.variable(on-#{$theme}-container), value);
+      &.tonal {
+        @include override(tonal-background, theme.variable(#{$theme}-container), value);
+        @include override(tonal-color, theme.variable(on-#{$theme}-container), value);
+      }
     }
   }
 }
@@ -133,14 +136,18 @@ forge-focus-indicator {
 //
 
 :host([theme='app-bar']) {
-  @include provide-theme(
-    (
-      text-color: #{app-bar.token(theme-foreground)},
-      outlined-color: #{app-bar.token(theme-foreground)},
-      outlined-border-color: #{app-bar.token(theme-foreground)},
-      link-color: #{app-bar.token(theme-foreground)}
-    )
-  );
+  .forge-button {
+    &.app-bar {
+      @include provide-theme(
+        (
+          text-color: #{app-bar.token(theme-foreground)},
+          outlined-color: #{app-bar.token(theme-foreground)},
+          outlined-border-color: #{app-bar.token(theme-foreground)},
+          link-color: #{app-bar.token(theme-foreground)}
+        )
+      );
+    }
+  }
 
   forge-focus-indicator {
     @include focus-indicator.provide-theme(
@@ -155,63 +162,58 @@ forge-focus-indicator {
 // Variants
 //
 
-:host(:where(:not([variant]), [variant='text'])) {
-  .forge-button {
+.forge-button {
+  &.text {
     @include text;
   }
-}
 
-:host([variant='filled']) {
-  .forge-button {
-    @include filled;
-  }
-
-  forge-state-layer {
-    @include state-layer.provide-theme(
-      (
-        color: #{token(filled-color)}
-      )
-    );
-  }
-}
-
-:host([variant='raised']) {
-  .forge-button {
-    @include raised;
-  }
-
-  forge-state-layer {
-    @include state-layer.provide-theme(
-      (
-        color: #{token(raised-color)}
-      )
-    );
-  }
-}
-
-:host([variant='tonal']) {
-  .forge-button {
-    @include tonal;
-  }
-
-  forge-state-layer {
-    @include state-layer.provide-theme(
-      (
-        color: #{token(tonal-color)}
-      )
-    );
-  }
-}
-
-:host([variant='outlined']) {
-  .forge-button {
+  &.outlined {
     @include outlined;
   }
-}
 
-:host([variant='link']) {
-  .forge-button {
+  &.tonal {
+    @include tonal;
+
+    forge-state-layer {
+      @include state-layer.provide-theme(
+        (
+          color: #{token(tonal-color)}
+        )
+      );
+    }
+  }
+
+  &.filled {
+    @include filled;
+
+    forge-state-layer {
+      @include state-layer.provide-theme(
+        (
+          color: #{token(filled-color)}
+        )
+      );
+    }
+  }
+
+  &.raised {
+    @include raised;
+
+    forge-state-layer {
+      @include state-layer.provide-theme(
+        (
+          color: #{token(raised-color)}
+        )
+      );
+    }
+  }
+
+  &.link {
     @include link;
+
+    ::slotted(a) {
+      position: relative;
+      inset: auto;
+    }
   }
 }
 
@@ -219,71 +221,35 @@ forge-focus-indicator {
 // Full width
 //
 
-:host([full-width]) {
+:host(:state(full-width)) {
   width: 100%;
-}
-
-//
-// Dense
-//
-
-:host([dense]) {
-  .forge-button {
-    @include dense;
-  }
-}
-
-//
-// Pill
-//
-
-:host([pill]) {
-  .forge-button {
-    @include pill;
-  }
-
-  forge-focus-indicator {
-    @include focus-indicator.provide-theme(
-      (
-        shape: #{token(pill-shape)}
-      )
-    );
-  }
 }
 
 //
 // Disabled
 //
 
-:host(:not([anchor])[disabled]) {
+:host(:state(disabled)) {
   @include host-disabled;
 
   .forge-button {
     @include disabled;
-  }
-}
 
-:host(:not([anchor])[variant='outlined'][disabled]) {
-  .forge-button {
-    @include outlined-disabled;
-  }
-}
+    &.outlined {
+      @include outlined-disabled;
+    }
 
-:host(:not([anchor])[variant='tonal'][disabled]) {
-  .forge-button {
-    @include tonal-disabled;
-  }
-}
+    &.tonal {
+      @include tonal-disabled;
+    }
 
-:host(:not([anchor])[variant='filled'][disabled]) {
-  .forge-button {
-    @include filled-disabled;
-  }
-}
+    &.filled {
+      @include filled-disabled;
+    }
 
-:host(:not([anchor])[variant='raised'][disabled]) {
-  .forge-button {
-    @include raised-disabled;
+    &.raised {
+      @include raised-disabled;
+    }
   }
 }
 
@@ -291,14 +257,12 @@ forge-focus-indicator {
 // Popover icon
 //
 
-:host([popover-icon]) {
-  .forge-button__popover-icon {
-    @include popover-icon;
-  }
+.with-popover-icon {
+  @include popover-icon;
 }
 
-:host([popover-icon][aria-expanded='true']) {
-  .forge-button__popover-icon {
+:host([aria-expanded='true']) {
+  .with-popover-icon {
     @include popover-icon-open;
   }
 }

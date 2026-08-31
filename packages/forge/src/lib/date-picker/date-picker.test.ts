@@ -10,7 +10,7 @@ import { CALENDAR_CONSTANTS, CALENDAR_MENU_CONSTANTS } from '../calendar/index.j
 import type { ICalendarComponent } from '../calendar/index.js';
 import { ICON_BUTTON_CONSTANTS } from '../icon-button/index.js';
 import { BASE_DATE_PICKER_CONSTANTS } from './base/base-date-picker-constants.js';
-import type { IButtonComponent } from '../button/index.js';
+import type { ButtonComponent } from '../button/index.js';
 import { FIELD_CONSTANTS, POPOVER_CONSTANTS } from '../index.js';
 import type { IDialogAdapter, IFieldComponent, IPopoverComponent } from '../index.js';
 
@@ -1709,16 +1709,16 @@ describe('DatePickerComponent', () => {
     activeCell.click();
   }
 
-  function getTodayButton(component: DatePickerComponentTest): IButtonComponent | null {
+  function getTodayButton(component: DatePickerComponentTest): ButtonComponent | null {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return (getShadowElement(calendar, '#today-button') as IButtonComponent) ?? null;
+    return (getShadowElement(calendar, '#today-button') as ButtonComponent) ?? null;
   }
 
-  function getClearButton(component: DatePickerComponentTest): IButtonComponent | null {
+  function getClearButton(component: DatePickerComponentTest): ButtonComponent | null {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return (getShadowElement(calendar, '#clear-button') as IButtonComponent) ?? null;
+    return (getShadowElement(calendar, '#clear-button') as ButtonComponent) ?? null;
   }
 
   function clickTodayButton(component: DatePickerComponentTest): void {
