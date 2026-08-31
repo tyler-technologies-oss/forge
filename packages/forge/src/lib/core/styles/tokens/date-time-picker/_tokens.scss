@@ -2,18 +2,12 @@
 @use '../../theme';
 @use '../../border';
 @use '../../spacing';
-@use '../../shape';
-@use '../../elevation';
 @use '../../utils';
 
 $tokens: (
   background: utils.module-val(date-time-picker, background, theme.variable(surface)),
   color: utils.module-val(date-time-picker, color, theme.variable(on-surface)),
-  outline-color: utils.module-val(date-time-picker, outline-color, theme.variable(outline)),
   outline-width: utils.module-val(date-time-picker, outline-width, border.variable(thin)),
-  outline-style: utils.module-val(date-time-picker, outline-style, solid),
-  elevation: utils.module-val(date-time-picker, elevation, none),
-  shape: utils.module-val(date-time-picker, shape, shape.variable(large)),
   padding: utils.module-val(date-time-picker, padding, spacing.variable(medium)),
   gap: utils.module-val(date-time-picker, gap, spacing.variable(medium)),
   body-gap: utils.module-val(date-time-picker, body-gap, spacing.variable(small)),
@@ -21,11 +15,8 @@ $tokens: (
   // Summary panel
   summary-background: utils.module-val(date-time-picker, summary-background, theme.variable(primary)),
   summary-color: utils.module-val(date-time-picker, summary-color, theme.variable(on-primary)),
-  summary-min-width: utils.module-val(date-time-picker, summary-min-width, 116px),
+  summary-width: utils.module-val(date-time-picker, summary-width, 116px),
   summary-padding: utils.module-val(date-time-picker, summary-padding, spacing.variable(large)),
-  summary-year-font-size: utils.module-val(date-time-picker, summary-year-font-size, 0.875rem),
-  summary-day-font-size: utils.module-val(date-time-picker, summary-day-font-size, 2.5rem),
-  summary-day-line-height: utils.module-val(date-time-picker, summary-day-line-height, 1.05),
   // Calendar
   calendar-max-width: utils.module-val(date-time-picker, calendar-max-width, 320px),
   // Single / range time field. 48px matches the field inset-height (the standard height for a
