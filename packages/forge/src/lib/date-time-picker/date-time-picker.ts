@@ -170,16 +170,13 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
  *
  * @cssproperty --forge-date-time-picker-summary-background - Summary panel background color.
  * @cssproperty --forge-date-time-picker-summary-color - Summary panel text color.
- * @cssproperty --forge-date-time-picker-summary-min-width - Summary panel min-width.
+ * @cssproperty --forge-date-time-picker-summary-width - Summary panel width.
  * @cssproperty --forge-date-time-picker-summary-padding - Summary panel padding.
- * @cssproperty --forge-date-time-picker-summary-day-font-size - Summary panel main day-text font size.
  *
  * @csspart summary - The optional left-side summary panel (only present when `summary` is set).
  *
- * @cssproperty --forge-date-time-picker-background - Card background color.
- * @cssproperty --forge-date-time-picker-shape - Card border-radius.
- * @cssproperty --forge-date-time-picker-elevation - Card box-shadow.
- * @cssproperty --forge-date-time-picker-padding - Card padding.
+ * @cssproperty --forge-date-time-picker-background - Background color.
+ * @cssproperty --forge-date-time-picker-padding - Content padding.
  * @cssproperty --forge-date-time-picker-gap - Gap between header/body/footer.
  * @cssproperty --forge-date-time-picker-body-gap - Gap between calendar and time area.
  * @cssproperty --forge-date-time-picker-slot-list-gap - Gap between slot pills.
@@ -190,7 +187,7 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
  * @cssproperty --forge-date-time-picker-slot-list-max-height - Slot list max height before scrolling.
  * @cssproperty --forge-date-time-picker-slot-list-width - Slot list width (defaults to match the calendar).
  *
- * @csspart root - The card container.
+ * @csspart root - The root container.
  * @csspart header - Header slot wrapper.
  * @csspart body - Calendar + time wrapper.
  * @csspart calendar-section - Calendar wrapper.
@@ -313,11 +310,9 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
 
   @property({ type: Boolean, reflect: true }) public presets = true;
 
-  @state() private _headerEmpty = true;
   @state() private _footerStartEmpty = true;
   @state() private _footerCenterEmpty = true;
   @state() private _footerEndEmpty = true;
-  @state() private _timeLabelEmpty = true;
   @state() private _focusedSlotIndex = -1;
   // True when the viewport is phone-sized; an anchored picker then opens as a
   // full-height bottom sheet instead of a popover. Mirrors Forge's $phone (599px).
@@ -622,11 +617,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #renderHeader(): TemplateResult {
-    return html`
-      <div part="header" class="header" data-empty=${String(this._headerEmpty)}>
-        <slot name="header" @slotchange=${(e: Event) => this.#onSlotChange(e, '_headerEmpty')}></slot>
-      </div>
-    `;
+    return html`<slot name="header" part="header"></slot>`;
   }
 
   #renderFooter(): TemplateResult | typeof nothing {
@@ -758,11 +749,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #renderTimeLabel(): TemplateResult {
-    return html`
-      <div part="time-label" class="time-label" data-empty=${String(this._timeLabelEmpty)}>
-        <slot name="time-label" @slotchange=${(e: Event) => this.#onSlotChange(e, '_timeLabelEmpty')}></slot>
-      </div>
-    `;
+    return html`<slot name="time-label" part="time-label"></slot>`;
   }
 
   #renderTimeBody(): TemplateResult {
@@ -1120,7 +1107,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     }
   }
 
-  #onSlotChange(event: Event, flagKey: '_headerEmpty' | '_footerStartEmpty' | '_footerCenterEmpty' | '_footerEndEmpty' | '_timeLabelEmpty'): void {
+  #onSlotChange(event: Event, flagKey: '_footerStartEmpty' | '_footerCenterEmpty' | '_footerEndEmpty'): void {
     const target = event.target as HTMLSlotElement;
     const empty = target.assignedNodes({ flatten: true }).length === 0;
     if (this[flagKey] !== empty) {
