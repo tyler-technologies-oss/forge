@@ -122,63 +122,31 @@
 }
 
 @mixin slot {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  appearance: none;
-  background: #{token(slot-background)};
-  color: #{token(slot-color)};
-  font: inherit;
   font-variant-numeric: tabular-nums;
-  padding-block: #{token(slot-padding-block)};
-  padding-inline: #{token(slot-padding-inline)};
-  border-radius: #{token(slot-shape)};
-  border: solid #{token(slot-outline-width)} #{token(slot-outline-color)};
-  cursor: pointer;
-  user-select: none;
-  transition:
-    background-color 120ms ease,
-    color 120ms ease,
-    border-color 120ms ease;
 
-  &:hover:not([aria-disabled='true']) {
-    background: #{token(slot-hover-background)};
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--forge-focus-indicator-color, currentColor);
-    outline-offset: 2px;
-  }
+  --forge-button-outlined-background: #{token(slot-background)};
+  --forge-button-outlined-color: #{token(slot-color)};
+  --forge-button-outlined-border-color: #{token(slot-outline-color)};
+  --forge-button-outlined-border-width: #{token(slot-outline-width)};
+  --forge-button-padding-block: #{token(slot-padding-block)};
+  --forge-button-padding-inline: #{token(slot-padding-inline)};
+  --forge-button-shape: #{token(slot-shape)};
+  --forge-button-hover-background: #{token(slot-hover-background)};
+  --forge-button-cursor: pointer;
 }
 
 @mixin slot-selected {
-  background: #{token(slot-selected-background)};
-  color: #{token(slot-selected-color)};
-  border-color: #{token(slot-selected-outline-color)};
-
-  &:hover {
-    background: #{token(slot-selected-background)};
-  }
+  --forge-button-outlined-background: #{token(slot-selected-background)};
+  --forge-button-outlined-color: #{token(slot-selected-color)};
+  --forge-button-outlined-border-color: #{token(slot-selected-outline-color)};
+  --forge-button-hover-background: #{token(slot-selected-background)};
 }
 
 @mixin slot-disabled {
-  background: #{token(slot-disabled-background)};
-  color: #{token(slot-disabled-color)};
-  border-color: #{token(slot-disabled-outline-color)};
-  cursor: not-allowed;
+  --forge-button-outlined-background: #{token(slot-disabled-background)};
+  --forge-button-outlined-color: #{token(slot-disabled-color)};
+  --forge-button-outlined-border-color: #{token(slot-disabled-outline-color)};
+  --forge-button-hover-background: #{token(slot-disabled-background)};
+  --forge-button-cursor: not-allowed;
   text-decoration: line-through;
-}
-
-@mixin live-region {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-  border: 0;
 }

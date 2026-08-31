@@ -1,9 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import 'temporal-polyfill/global';
 import { Temporal } from 'temporal-polyfill';
+import { LiveAnnouncer } from '@tylertech/forge-core';
 import './index.js';
 import {
   buildSlotsFromRange,
@@ -172,7 +173,7 @@ describe('DateTimePicker / rendering', () => {
     await ready(el);
     const listbox = el.shadowRoot!.querySelector('[role="listbox"]');
     expect(listbox).not.toBeNull();
-    const options = listbox!.querySelectorAll('[role="option"]');
+    const options = listbox!.querySelectorAll('forge-button[role="option"]');
     expect(options.length).toBe(5);
   });
 
@@ -217,6 +218,18 @@ describe('DateTimePicker / rendering', () => {
     await ready(el);
     expect(el.shadowRoot!.querySelector('[part="footer"]')).toBeNull();
   });
+
+  it('applies mode, orientation, and presentation classes to the root element', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="single" orientation="vertical"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const root = el.shadowRoot!.querySelector('[part="root"]') as HTMLElement;
+    expect(root.classList.contains('forge-date-time-picker')).toBe(true);
+    expect(root.classList.contains('single')).toBe(true);
+    expect(root.classList.contains('vertical')).toBe(true);
+    expect(root.classList.contains('popover')).toBe(true);
+    expect(root.classList.contains('sheet')).toBe(false);
+  });
 });
 
 describe('DateTimePicker / selection + events', () => {
@@ -235,7 +248,7 @@ describe('DateTimePicker / selection + events', () => {
     await ready(el);
     const events = captureChanges(el);
 
-    const slot = el.shadowRoot!.querySelector('[role="option"][data-value="09:30"]') as HTMLButtonElement;
+    const slot = el.shadowRoot!.querySelector('forge-button[role="option"][data-value="09:30"]') as HTMLElement;
     slot.click();
     await ready(el);
 
@@ -256,7 +269,7 @@ describe('DateTimePicker / selection + events', () => {
     const el = getEl(screen.container);
     el.slots = customSlots;
     await ready(el);
-    const buttons = el.shadowRoot!.querySelectorAll('[role="option"]');
+    const buttons = el.shadowRoot!.querySelectorAll('forge-button[role="option"]');
     expect(buttons.length).toBe(2);
     expect(buttons[1].getAttribute('aria-disabled')).toBe('true');
   });
@@ -268,7 +281,7 @@ describe('DateTimePicker / selection + events', () => {
     el.value = new Date(2025, 5, 12);
     await ready(el);
     const events = captureChanges(el);
-    const disabledBtn = el.shadowRoot!.querySelector('[data-value="09:30"]') as HTMLButtonElement;
+    const disabledBtn = el.shadowRoot!.querySelector('forge-button[data-value="09:30"]') as HTMLElement;
     disabledBtn.click();
     await ready(el);
     const slotEvents = events.filter(e => e.source === 'slot');
@@ -343,11 +356,11 @@ describe('DateTimePicker / slot list keyboard nav', () => {
     const el = getEl(screen.container);
     await ready(el);
     const listbox = el.shadowRoot!.querySelector('[role="listbox"]') as HTMLElement;
-    const first = el.shadowRoot!.querySelector('[role="option"]') as HTMLButtonElement;
+    const first = el.shadowRoot!.querySelector('forge-button[role="option"]') as HTMLElement;
     first.focus();
     listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
     await ready(el);
-    const buttons = Array.from(el.shadowRoot!.querySelectorAll('[role="option"]')) as HTMLButtonElement[];
+    const buttons = Array.from(el.shadowRoot!.querySelectorAll('forge-button[role="option"]')) as HTMLElement[];
     expect(document.activeElement === el).toBe(true);
     // Inside the shadow root, the focused descendant should be the second slot.
     expect(el.shadowRoot!.activeElement).toBe(buttons[1]);
@@ -365,7 +378,7 @@ describe('DateTimePicker / slot list keyboard nav', () => {
     const el = getEl(screen.container);
     await ready(el);
     const events = captureChanges(el);
-    const second = el.shadowRoot!.querySelectorAll('[role="option"]')[1] as HTMLButtonElement;
+    const second = el.shadowRoot!.querySelectorAll('forge-button[role="option"]')[1] as HTMLElement;
     second.focus();
     second.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     await ready(el);
@@ -514,13 +527,27 @@ describe('DateTimePicker / accessibility', () => {
     expect(listbox.getAttribute('aria-orientation')).toBe('vertical');
   });
 
-  it('live region exists and is offscreen', async () => {
-    const screen = render(html`<forge-date-time-picker></forge-date-time-picker>`);
+  it('announces complete value changes', async () => {
+    const announceSpy = vi.spyOn(LiveAnnouncer.instance, 'announce');
+    const screen = render(
+      html`<forge-date-time-picker
+        time-mode="slots"
+        value-mode="date"
+        min-time="09:00"
+        max-time="10:00"
+        step="15"
+        .value=${new Date(2026, 5, 12)}></forge-date-time-picker>`
+    );
     const el = getEl(screen.container);
     await ready(el);
-    const live = el.shadowRoot!.querySelector('[part="live-region"]') as HTMLElement;
-    expect(live.getAttribute('aria-live')).toBe('polite');
-    expect(live.getAttribute('role')).toBe('status');
+
+    announceSpy.mockClear();
+    const slot = el.shadowRoot!.querySelector('forge-button[role="option"][data-value="09:30"]') as HTMLElement;
+    slot.click();
+    await ready(el);
+
+    expect(announceSpy).toHaveBeenCalledWith(expect.stringMatching(/june.*12.*2026.*9:30.*am/i), 'polite');
+    announceSpy.mockRestore();
   });
 
   it('disabled attribute is reflected', async () => {
@@ -1212,7 +1239,7 @@ describe('DateTimePicker / presets sidebar (T-P6)', () => {
     expect(presetsDiv.getAttribute('aria-label')).toBe('Quick date ranges');
   });
 
-  it('should expose the duration element with role status for a11y announcements', async () => {
+  it('should display the duration for a complete range', async () => {
     const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="single" value-mode="date" auto-commit></forge-date-time-picker>`);
     const el = getEl(screen.container);
     await ready(el);
@@ -1225,8 +1252,7 @@ describe('DateTimePicker / presets sidebar (T-P6)', () => {
 
     const durationEl = el.shadowRoot!.querySelector('[part~="duration"]') as HTMLElement;
     expect(durationEl).not.toBeNull();
-    expect(durationEl.getAttribute('role')).toBe('status');
-    expect(durationEl.getAttribute('aria-live')).toBe('polite');
+    expect(durationEl.textContent).toMatch(/3\s*days?/i);
   });
 });
 
@@ -1243,13 +1269,17 @@ describe('DateTimePicker / review fixes', () => {
   }
 
   it('should not announce "cleared" when a calendar date is selected before a time', async () => {
+    const announceSpy = vi.spyOn(LiveAnnouncer.instance, 'announce');
     const screen = render(html`<forge-date-time-picker time-mode="single" value-mode="date"></forge-date-time-picker>`);
     const el = getEl(screen.container);
     await ready(el);
+
+    announceSpy.mockClear();
     dispatchCalendarSelect(el, { date: new Date(2026, 5, 12), selected: false } as Partial<ICalendarDateSelectEventData>);
     await ready(el);
-    const live = el.shadowRoot!.querySelector('[part="live-region"]') as HTMLElement;
-    expect(live.textContent ?? '').not.toMatch(/cleared/i);
+
+    expect(announceSpy).not.toHaveBeenCalled();
+    announceSpy.mockRestore();
   });
 
   it('should not leave the embedded time-picker clamped to the slot-generation defaults', async () => {
@@ -1292,11 +1322,11 @@ describe('DateTimePicker / review fixes', () => {
     el.value = new Date(2026, 5, 12);
     await ready(el);
     const listbox = el.shadowRoot!.querySelector('[role="listbox"]') as HTMLElement;
-    const first = el.shadowRoot!.querySelector('[role="option"]') as HTMLButtonElement;
+    const first = el.shadowRoot!.querySelector('forge-button[role="option"]') as HTMLElement;
     first.focus();
     listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
     await ready(el);
-    const disabledSlot = el.shadowRoot!.querySelector('[data-value="09:30"]') as HTMLButtonElement;
+    const disabledSlot = el.shadowRoot!.querySelector('forge-button[data-value="09:30"]') as HTMLElement;
     expect(el.shadowRoot!.activeElement).toBe(disabledSlot);
     expect(disabledSlot.getAttribute('aria-disabled')).toBe('true');
     expect(disabledSlot.hasAttribute('disabled')).toBe(false);
