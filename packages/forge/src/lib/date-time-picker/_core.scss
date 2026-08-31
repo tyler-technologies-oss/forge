@@ -111,6 +111,66 @@
   @include typography.style(label2);
 }
 
+@mixin body-main {
+  display: flex;
+  min-width: 0;
+}
+
+@mixin footer-start {
+  grid-column: 1;
+  justify-content: flex-start;
+}
+
+@mixin footer-center {
+  grid-column: 2;
+  justify-content: center;
+}
+
+@mixin footer-end {
+  grid-column: 3;
+  justify-content: flex-end;
+}
+
+@mixin calendar-section {
+  width: #{token(calendar-max-width)};
+  max-width: 100%;
+}
+
+@mixin time-inputs {
+  display: flex;
+  width: #{token(calendar-max-width)};
+  max-width: 100%;
+}
+
+@mixin range-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: #{token(section-gap)};
+  width: #{token(calendar-max-width)};
+  max-width: 100%;
+}
+
+@mixin presets-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+  padding-inline-end: #{token(body-gap)};
+  margin-inline-end: #{token(body-gap)};
+  border-inline-end: solid #{token(outline-width)} #{token(divider-color)};
+  align-self: stretch;
+}
+
+@mixin commit-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: #{token(separator-gap)};
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
 @mixin slot-list {
   @include section;
   @include scrollbar.base;
