@@ -1,6 +1,6 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, LiveAnnouncer } from '@tylertech/forge-core';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, query, queryAll, state } from 'lit/decorators.js';
+import { customElement, property, queryAll, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { createRef, ref } from 'lit/directives/ref.js';
@@ -210,7 +210,6 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
  * @csspart commit-cancel - The Cancel button in the deferred-commit footer row.
  * @csspart commit-apply - The Apply button in the deferred-commit footer row.
  * @csspart duration - The muted duration summary text shown in the footer when a complete range is selected.
- * @csspart live-region - Visually-hidden live region used for a11y announcements.
  */
 @customElement(DATE_TIME_PICKER_TAG_NAME)
 export class DateTimePickerComponent extends BaseLitElement implements IDateTimePickerComponent {
@@ -324,8 +323,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   // full-height bottom sheet instead of a popover. Mirrors Forge's $phone (599px).
   @state() private _isPhone = false;
 
-  @query('[part="live-region"]') private _liveRegion!: HTMLDivElement;
-  @queryAll('[part~="slot"]') private _slotButtons!: NodeListOf<HTMLButtonElement>;
+  @queryAll('[part~="slot"]') private _slotButtons!: NodeListOf<HTMLElement>;
 
   #internals: ElementInternals;
   #anchorElement: HTMLElement | null = null;
@@ -554,17 +552,20 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     const overlayMode = !!(this.#anchorElement ?? this.anchor);
     const sheet = this._isPhone && overlayMode;
     const content = html`${this.#renderHeader()} ${this.#renderBody(resolvedOrientation)} ${this.#renderFooter()}`;
+    const classes = {
+      'forge-date-time-picker': true,
+      [this.timeMode]: true,
+      [resolvedOrientation]: true,
+      sheet,
+      popover: !sheet
+    };
     return html`
       <div
         part="root"
-        class=${classMap({ 'forge-date-time-picker': true })}
+        class=${classMap(classes)}
         role=${ifDefined(overlayMode ? 'dialog' : undefined)}
-        aria-label=${ifDefined(overlayMode ? 'Date and time picker' : undefined)}
-        data-mode=${this.timeMode}
-        data-orientation=${resolvedOrientation}
-        data-presentation=${sheet ? 'sheet' : 'popover'}>
+        aria-label=${ifDefined(overlayMode ? 'Date and time picker' : undefined)}>
         ${this.summary ? this.#renderSummary() : nothing} ${this.summary ? html`<div class="content">${content}</div>` : content}
-        <div part="live-region" class="live-region" role="status" aria-live="polite" aria-atomic="true"></div>
       </div>
     `;
   }
@@ -669,7 +670,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     if (!text) {
       return nothing;
     }
-    return html`<span part="duration" class="duration" role="status" aria-live="polite">${text}</span>`;
+    return html`<span part="duration" class="duration">${text}</span>`;
   }
 
   #renderBody(orientation: ResolvedOrientation): TemplateResult {
@@ -846,8 +847,10 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     // states remove the buttons from the tab order entirely.
     const tabIndex = index === activeTabIndex ? 0 : -1;
     return html`
-      <button
+      <forge-button
         type="button"
+        variant="outlined"
+        full-width
         part=${`slot${selected ? ' slot--selected' : ''}${slotIsDisabled ? ' slot--disabled' : ''}`}
         class=${classMap({
           slot: true,
@@ -864,7 +867,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
         @click=${this.#onSlotClick}
         @focus=${this.#onSlotFocus}>
         ${slot.label ?? this.#formatSlotLabel(slot.value, labelFmt)}
-      </button>
+      </forge-button>
     `;
   }
 
@@ -1340,16 +1343,13 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #announce(): void {
-    if (!this._liveRegion) {
-      return;
-    }
     // An incomplete selection (e.g. a date picked before a time) resolves to a null value but is
     // NOT a clear, so it must stay silent. Only announce a genuine clear when a value was previously
     // announced; otherwise announce the complete selection.
     if (this.#value == null) {
       if (this.#announcedValue) {
         this.#announcedValue = false;
-        this._liveRegion.textContent = buildAnnouncement(null, this.locale, this.use24HourTime, this.allowSeconds);
+        LiveAnnouncer.instance.announce(buildAnnouncement(null, this.locale, this.use24HourTime, this.allowSeconds), 'polite');
       }
       return;
     }
@@ -1357,6 +1357,6 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       return;
     }
     this.#announcedValue = true;
-    this._liveRegion.textContent = buildAnnouncement(this.#value, this.locale, this.use24HourTime, this.allowSeconds);
+    LiveAnnouncer.instance.announce(buildAnnouncement(this.#value, this.locale, this.use24HourTime, this.allowSeconds), 'polite');
   }
 }

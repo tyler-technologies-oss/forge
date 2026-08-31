@@ -71,7 +71,6 @@ const parts = {
   FOOTER_START: 'footer-start',
   FOOTER_CENTER: 'footer-center',
   FOOTER_END: 'footer-end',
-  LIVE_REGION: 'live-region',
   PRESETS: 'presets',
   PRESET: 'preset',
   DURATION: 'duration'
