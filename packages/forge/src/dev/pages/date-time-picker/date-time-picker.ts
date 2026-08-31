@@ -65,9 +65,20 @@ document.getElementById('demo-continue')?.addEventListener('click', () => {
 
 // === Option wiring ===
 
+let footerEnabled = false;
+
+function isDeferredBehavior(): boolean {
+  return !picker.autoCommit && (picker.dateMode === 'range' || picker.timeMode === 'range');
+}
+
+function updateFooterVisibility(): void {
+  picker.showFooter = footerEnabled && !isDeferredBehavior();
+}
+
 const timeModeSelect = document.getElementById('opt-time-mode') as ISelectComponent;
 timeModeSelect.addEventListener('change', () => {
   picker.timeMode = timeModeSelect.value as 'slots' | 'range' | 'single';
+  updateFooterVisibility();
 });
 
 const orientationSelect = document.getElementById('opt-orientation') as ISelectComponent;
@@ -107,7 +118,8 @@ headerSwitch.addEventListener('forge-switch-change', ({ detail }) => {
 
 const footerSwitch = document.getElementById('opt-footer') as ISwitchComponent;
 footerSwitch.addEventListener('forge-switch-change', ({ detail }) => {
-  picker.showFooter = detail;
+  footerEnabled = detail;
+  updateFooterVisibility();
 });
 
 const timeLabelSwitch = document.getElementById('opt-time-label') as ISwitchComponent;

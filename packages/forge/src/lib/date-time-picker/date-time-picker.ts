@@ -1,13 +1,16 @@
 import { CUSTOM_ELEMENT_NAME_PROPERTY, LiveAnnouncer } from '@tylertech/forge-core';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, queryAll, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { toggleState } from '../core/utils/utils.js';
 import type { IOverlayComponent } from '../overlay/overlay.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
 import { isSameDate } from '../core/utils/date-utils.js';
+import { createFocusGroupRef, focusGroup } from '../core/utils/focus-group.js';
+import { hideWhenEmpty } from '../core/utils/lit-utils.js';
 import type { ICalendarDateSelectEventData } from '../calendar/calendar-constants.js';
 import type { ICalendarComponent } from '../calendar/calendar.js';
 import { DateRange } from '../calendar/core/date-range.js';
@@ -134,47 +137,10 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
  * @slot today-button-text - Forwarded to the embedded calendar.
  * @slot clear-button-text - Forwarded to the embedded calendar.
  *
- * @attribute {('single'|'range'|'slots')} [time-mode='single'] - Selection mode.
- * @attribute {('single'|'range')} [date-mode='single'] - Calendar selection mode. Use `range` to enable
- *  multi-day date-range picking alongside the time UI.
- * @attribute {boolean} [auto-commit=false] - When `false` (default) and `date-mode` or `time-mode`
- *  produces a range value, selection is staged as a draft until the user explicitly clicks Apply.
- *  When `true`, every change commits immediately (matches the non-range behavior).
- * @attribute {boolean} [presets=true] - When `true` and `date-mode="range"`, renders a quick-range
- *  presets sidebar to the left of the calendar (Today, This week, Next 7 days, This month).
- * @attribute {('temporal'|'iso'|'date')} [value-mode='temporal'] - Shape of the public `value` and change-event `value`:
- *  a `Temporal.PlainDateTime` (lazily polyfilled), a local ISO `datetime-local` string, or a `Date`.
- * @attribute {('auto'|'horizontal'|'vertical')} [orientation='auto'] - Layout direction.
- * @attribute {boolean} [disabled=false] - Disables all interactive children.
- * @attribute {boolean} [readonly=false] - Allows display without editing.
- * @attribute {boolean} [required=false] - Marks the field as required for form validation.
- * @attribute {string} [name] - Form field name.
- * @attribute {string} [locale] - BCP 47 locale tag for date/time formatting.
- * @attribute {boolean} [use-24-hour-time=false] - 24h vs 12h for time inputs and slot labels.
- * @attribute {boolean} [allow-seconds=false] - Whether to expose seconds.
- * @attribute {Date|string} [min] - Earliest selectable date+time.
- * @attribute {Date|string} [max] - Latest selectable date+time.
- * @attribute {string} [min-time='09:00'] - Start time for slot generation.
- * @attribute {string} [max-time='17:00'] - End time for slot generation.
- * @attribute {number} [step=15] - Step in minutes (slot generation + time-picker step).
- * @attribute {number} [first-day-of-week] - Forwarded to calendar.
- * @attribute {boolean} [clear-button=false] - Show calendar clear button.
- * @attribute {boolean} [today-button=false] - Show calendar today button.
- * @attribute {boolean} [show-header=true] - Forwarded to calendar.
- * @attribute {boolean} [summary=false] - When enabled, shows a primary-colored side panel
- *  displaying the selected date (year, weekday, day, month).
- * @attribute {boolean} [show-footer=false] - Renders the footer region and its three sub-slots.
- * @attribute {string} [single-label='Time'] - Label for the time input in `single` mode.
- * @attribute {string} [from-label='Start time'] - Label for the start-time input in `range` mode.
- * @attribute {string} [to-label='End time'] - Label for the end-time input in `range` mode.
- *
  * @cssproperty --forge-date-time-picker-summary-background - Summary panel background color.
  * @cssproperty --forge-date-time-picker-summary-color - Summary panel text color.
  * @cssproperty --forge-date-time-picker-summary-width - Summary panel width.
  * @cssproperty --forge-date-time-picker-summary-padding - Summary panel padding.
- *
- * @csspart summary - The optional left-side summary panel (only present when `summary` is set).
- *
  * @cssproperty --forge-date-time-picker-background - Background color.
  * @cssproperty --forge-date-time-picker-padding - Content padding.
  * @cssproperty --forge-date-time-picker-gap - Gap between header/body/footer.
@@ -207,6 +173,7 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
  * @csspart commit-cancel - The Cancel button in the deferred-commit footer row.
  * @csspart commit-apply - The Apply button in the deferred-commit footer row.
  * @csspart duration - The muted duration summary text shown in the footer when a complete range is selected.
+ * @csspart summary - The optional left-side summary panel (only present when `summary` is set).
  */
 @customElement(DATE_TIME_PICKER_TAG_NAME)
 export class DateTimePickerComponent extends BaseLitElement implements IDateTimePickerComponent {
@@ -217,16 +184,36 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = DATE_TIME_PICKER_TAG_NAME;
 
-  @property({ attribute: 'time-mode', reflect: true })
+  /**
+   * Selection mode.
+   * @attribute time-mode
+   * @default 'single'
+   */
+  @property({ attribute: 'time-mode' })
   public timeMode: TimeMode = 'single';
 
-  @property({ attribute: 'date-mode', reflect: true })
+  /**
+   * Calendar selection mode. Use `range` to enable multi-day date-range picking alongside the time UI.
+   * @attribute date-mode
+   * @default 'single'
+   */
+  @property({ attribute: 'date-mode' })
   public dateMode: DateMode = 'single';
 
-  @property({ type: Boolean, attribute: 'auto-commit', reflect: true })
+  /**
+   * Whether range changes commit immediately instead of waiting for Apply.
+   * @attribute auto-commit
+   * @default false
+   */
+  @property({ type: Boolean, attribute: 'auto-commit' })
   public autoCommit = false;
 
-  @property({ attribute: 'value-mode', reflect: true })
+  /**
+   * Shape of the public value and change-event value.
+   * @attribute value-mode
+   * @default 'temporal'
+   */
+  @property({ attribute: 'value-mode' })
   public valueMode: DateTimePickerValueMode = 'temporal';
 
   @property({ attribute: false })
@@ -257,35 +244,156 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     return value;
   }
 
-  @property({ reflect: true }) public name = '';
-  @property({ type: Boolean, reflect: true }) public disabled = false;
-  @property({ type: Boolean, reflect: true }) public readonly = false;
-  @property({ type: Boolean, reflect: true }) public required = false;
-  @property({ reflect: true }) public orientation: Orientation = 'auto';
+  /**
+   * Form field name.
+   * @attribute name
+   */
+  @property() public name = '';
 
-  @property({ reflect: true }) public locale: string | undefined;
+  /**
+   * Disables all interactive children.
+   * @attribute disabled
+   * @default false
+   */
+  @property({ type: Boolean }) public disabled = false;
 
-  @property({ type: Boolean, attribute: 'use-24-hour-time', reflect: true })
+  /**
+   * Allows display without editing.
+   * @attribute readonly
+   * @default false
+   */
+  @property({ type: Boolean }) public readonly = false;
+
+  /**
+   * Marks the field as required for form validation.
+   * @attribute required
+   * @default false
+   */
+  @property({ type: Boolean }) public required = false;
+
+  /**
+   * Layout direction.
+   * @attribute orientation
+   * @default 'auto'
+   */
+  @property() public orientation: Orientation = 'auto';
+
+  /**
+   * BCP 47 locale tag for date/time formatting.
+   * @attribute locale
+   */
+  @property() public locale: string | undefined;
+
+  /**
+   * 24h vs 12h for time inputs and slot labels.
+   * @attribute use-24-hour-time
+   * @default false
+   */
+  @property({ type: Boolean, attribute: 'use-24-hour-time' })
   public use24HourTime = false;
 
-  @property({ type: Boolean, attribute: 'allow-seconds', reflect: true })
+  /**
+   * Whether to expose seconds.
+   * @attribute allow-seconds
+   * @default false
+   */
+  @property({ type: Boolean, attribute: 'allow-seconds' })
   public allowSeconds = false;
 
+  /**
+   * Earliest selectable date+time.
+   * @attribute min
+   */
   @property({ attribute: 'min' }) public min: Date | string | null = null;
+
+  /**
+   * Latest selectable date+time.
+   * @attribute max
+   */
   @property({ attribute: 'max' }) public max: Date | string | null = null;
+
+  /**
+   * Start time for slot generation.
+   * @attribute min-time
+   * @default '09:00'
+   */
   @property({ attribute: 'min-time' }) public minTime: string = DATE_TIME_PICKER_CONSTANTS.defaultValues.MIN_TIME;
+
+  /**
+   * End time for slot generation.
+   * @attribute max-time
+   * @default '17:00'
+   */
   @property({ attribute: 'max-time' }) public maxTime: string = DATE_TIME_PICKER_CONSTANTS.defaultValues.MAX_TIME;
+
+  /**
+   * Step in minutes (slot generation + time-picker step).
+   * @attribute step
+   * @default 15
+   */
   @property({ type: Number }) public step: number = DATE_TIME_PICKER_CONSTANTS.defaultValues.STEP;
+
+  /**
+   * Forwarded to calendar.
+   * @attribute first-day-of-week
+   */
   @property({ type: Number, attribute: 'first-day-of-week' })
   public firstDayOfWeek: DayOfWeek | undefined;
 
+  /**
+   * Show calendar clear button.
+   * @attribute clear-button
+   * @default false
+   */
   @property({ type: Boolean, attribute: 'clear-button' }) public clearButton = false;
+
+  /**
+   * Show calendar today button.
+   * @attribute today-button
+   * @default false
+   */
   @property({ type: Boolean, attribute: 'today-button' }) public todayButton = false;
+
+  /**
+   * Forwarded to calendar.
+   * @attribute show-header
+   * @default true
+   */
   @property({ type: Boolean, attribute: 'show-header' }) public showHeader = true;
-  @property({ type: Boolean, attribute: 'show-footer', reflect: true }) public showFooter = false;
-  @property({ type: Boolean, reflect: true }) public summary = false;
+
+  /**
+   * Renders the footer region and its three sub-slots.
+   * @attribute show-footer
+   * @default false
+   */
+  @property({ type: Boolean, attribute: 'show-footer' }) public showFooter = false;
+
+  /**
+   * When enabled, shows a primary-colored side panel displaying the selected date (year, weekday, day, month).
+   * @attribute summary
+   * @default false
+   */
+  @property({ type: Boolean }) public summary = false;
+
+  /**
+   * Label for the time input in `single` mode.
+   * @attribute single-label
+   * @default 'Time'
+   */
   @property({ attribute: 'single-label' }) public singleLabel = 'Time';
+
+  /**
+   * Label for the start-time input in `range` mode.
+   * @attribute from-label
+   * @default 'Start time'
+   */
   @property({ attribute: 'from-label' }) public fromLabel = 'Start time';
+
+  /**
+   * Label for the end-time input in `range` mode.
+   * @attribute to-label
+   * @default 'End time'
+   */
   @property({ attribute: 'to-label' }) public toLabel = 'End time';
 
   @property({ attribute: false }) public slots: ITimeSlot[] | undefined;
@@ -303,22 +411,22 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     this.requestUpdate();
   }
 
-  @property({ reflect: true }) public anchor = '';
-  @property({ type: Boolean, reflect: true }) public open = false;
-  @property({ type: Boolean, reflect: true }) public persistent = false;
-  @property({ attribute: 'placement', reflect: true }) public placement = 'bottom-start';
+  @property() public anchor = '';
+  @property({ type: Boolean }) public open = false;
+  @property({ type: Boolean }) public persistent = false;
+  @property({ attribute: 'placement' }) public placement = 'bottom-start';
 
-  @property({ type: Boolean, reflect: true }) public presets = true;
+  /**
+   * When `true` and `date-mode="range"`, renders a quick-range presets sidebar to the left of the calendar
+   * (Today, This week, Next 7 days, This month).
+   * @attribute presets
+   * @default true
+   */
+  @property({ type: Boolean }) public presets = true;
 
-  @state() private _footerStartEmpty = true;
-  @state() private _footerCenterEmpty = true;
-  @state() private _footerEndEmpty = true;
-  @state() private _focusedSlotIndex = -1;
   // True when the viewport is phone-sized; an anchored picker then opens as a
   // full-height bottom sheet instead of a popover. Mirrors Forge's $phone (599px).
   @state() private _isPhone = false;
-
-  @queryAll('[part~="slot"]') private _slotButtons!: NodeListOf<HTMLElement>;
 
   #internals: ElementInternals;
   #anchorElement: HTMLElement | null = null;
@@ -338,6 +446,16 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   #intlSummaryFmt: Intl.DateTimeFormat | null = null;
   #announcedValue = false;
   #phoneMql: MediaQueryList | null = null;
+  #slotFocusGroup = createFocusGroupRef({
+    selector: '[part~="slot"]',
+    orientation: 'vertical',
+    wrap: true,
+    getEntryElement: () =>
+      this.shadowRoot?.querySelector<HTMLElement>('[part~="slot"].slot--selected') ??
+      this.shadowRoot?.querySelector<HTMLElement>('[part~="slot"]:not(.slot--disabled)') ??
+      this.shadowRoot?.querySelector<HTMLElement>('[part~="slot"]') ??
+      null
+  });
   #onPhoneChange = (e: MediaQueryListEvent | MediaQueryList): void => {
     this._isPhone = e.matches;
   };
@@ -424,6 +542,15 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   public override willUpdate(changed: PropertyValues<this>): void {
+    this.#handleOpenChange(changed);
+    this.#handleTimeModeChange(changed);
+    this.#handleLocaleOrFormatChange(changed);
+    this.#handleSlotConfigChange(changed);
+    this.#handleMinMaxChange(changed);
+    this.#handleValueModeChange(changed);
+  }
+
+  #handleOpenChange(changed: PropertyValues<this>): void {
     if (changed.has('open') && changed.get('open') !== undefined) {
       const eventName = this.open ? DATE_TIME_PICKER_CONSTANTS.events.OPEN : DATE_TIME_PICKER_CONSTANTS.events.CLOSE;
       this.dispatchEvent(new CustomEvent(eventName, { bubbles: true, composed: true }));
@@ -432,22 +559,31 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
         this.#draftValue = this.#value;
       }
     }
+  }
+
+  #handleTimeModeChange(changed: PropertyValues<this>): void {
     if (changed.has('timeMode') && changed.get('timeMode') !== undefined) {
       const previousMode = changed.get('timeMode') as TimeMode | undefined;
-      if (previousMode && previousMode !== this.timeMode) {
+      if (previousMode) {
         this.#value = null;
         this.#activeFromDate = null;
         this.#activeToDate = null;
         this.#activeTime = null;
         this.#activeFrom = null;
         this.#activeTo = null;
-        queueMicrotask(() => this.#emitChange('mode-change'));
+        void this.updateComplete.then(() => this.#emitChange('mode-change'));
       }
     }
+  }
+
+  #handleLocaleOrFormatChange(changed: PropertyValues<this>): void {
     if (changed.has('locale') || changed.has('use24HourTime') || changed.has('allowSeconds')) {
       this.#intlSlotLabelFmt = null;
       this.#intlSummaryFmt = null;
     }
+  }
+
+  #handleSlotConfigChange(changed: PropertyValues<this>): void {
     if (
       changed.has('timeMode') ||
       changed.has('slots') ||
@@ -460,10 +596,16 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       this.#slotListCache = null;
       this.#disabledSlotCache = null;
     }
+  }
+
+  #handleMinMaxChange(changed: PropertyValues<this>): void {
     if (changed.has('min') || changed.has('max')) {
       // Out-of-range slot disabling depends on min/max.
       this.#disabledSlotCache = null;
     }
+  }
+
+  #handleValueModeChange(changed: PropertyValues<this>): void {
     if (changed.has('valueMode')) {
       this.#warmTemporal();
     }
@@ -471,8 +613,11 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
 
   public override updated(_changed: PropertyValues<this>): void {
     this.#updateFormValueAndValidity();
-    // Mirror sheet presentation onto the host so :host can fill the sheet width.
-    this.toggleAttribute('data-sheet', this._isPhone && !!(this.#anchorElement ?? this.anchor));
+    this.#slotFocusGroup.update();
+    toggleState(this.#internals, 'sheet', this._isPhone && !!(this.#anchorElement ?? this.anchor));
+    toggleState(this.#internals, 'summary', this.summary);
+    toggleState(this.#internals, 'disabled', this.disabled);
+    toggleState(this.#internals, 'readonly', this.readonly);
   }
 
   public override disconnectedCallback(): void {
@@ -617,7 +762,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #renderHeader(): TemplateResult {
-    return html`<slot name="header" part="header"></slot>`;
+    return html`<slot name="header" part="header" ${hideWhenEmpty()}></slot>`;
   }
 
   #renderFooter(): TemplateResult | typeof nothing {
@@ -625,20 +770,21 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     if (!this.showFooter && !this.#deferred && !showDuration) {
       return nothing;
     }
-    const allEmpty = this._footerStartEmpty && this._footerCenterEmpty && this._footerEndEmpty;
+    const content = html`
+      ${this.showFooter ? this.#renderFooterSlots() : nothing} ${this.#deferred ? this.#renderCommitActions() : nothing}
+      ${showDuration && !this.#deferred ? this.#renderDuration() : nothing}
+    `;
+    if (this.#deferred || showDuration) {
+      return html`<div part="footer" class="footer">${content}</div>`;
+    }
+    return html`<div part="footer" class="footer" ${hideWhenEmpty()}>${content}</div>`;
+  }
+
+  #renderFooterSlots(): TemplateResult {
     return html`
-      <div part="footer" class="footer" data-empty=${String(!this.#deferred && !showDuration && allEmpty)}>
-        <div part="footer-start" class="footer-start" data-empty=${String(this._footerStartEmpty)}>
-          <slot name="footer-start" @slotchange=${(e: Event) => this.#onSlotChange(e, '_footerStartEmpty')}></slot>
-        </div>
-        <div part="footer-center" class="footer-center" data-empty=${String(this._footerCenterEmpty)}>
-          <slot name="footer-center" @slotchange=${(e: Event) => this.#onSlotChange(e, '_footerCenterEmpty')}></slot>
-        </div>
-        <div part="footer-end" class="footer-end" data-empty=${String(this._footerEndEmpty)}>
-          <slot name="footer-end" @slotchange=${(e: Event) => this.#onSlotChange(e, '_footerEndEmpty')}></slot>
-        </div>
-        ${this.#deferred ? this.#renderCommitActions() : nothing} ${showDuration && !this.#deferred ? this.#renderDuration() : nothing}
-      </div>
+      <slot name="footer-start" part="footer-start" class="footer-start" ${hideWhenEmpty()}></slot>
+      <slot name="footer-center" part="footer-center" class="footer-center" ${hideWhenEmpty()}></slot>
+      <slot name="footer-end" part="footer-end" class="footer-end" ${hideWhenEmpty()}></slot>
     `;
   }
 
@@ -681,14 +827,17 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
 
   #renderPresets(): TemplateResult {
     return html`
-      <div part="presets" class="presets" role="group" aria-label="Quick date ranges">
-        ${PRESET_DEFS.map(p => html`<button type="button" part="preset" data-preset-id=${p.id} @click=${this.#onPresetClick}>${p.label}</button>`)}
+      <div part="presets" class="presets" role="group" aria-label="Quick date ranges" @click=${this.#onPresetClick}>
+        ${PRESET_DEFS.map(p => html`<forge-button type="button" part="preset" data-preset-id=${p.id}>${p.label}</forge-button>`)}
       </div>
     `;
   }
 
   #onPresetClick = (event: Event): void => {
-    this.#onPresetSelect((event.currentTarget as HTMLElement).dataset.presetId as DateRangePresetId);
+    const presetId = (event.target as Element).closest<HTMLElement>('[data-preset-id]')?.dataset.presetId as DateRangePresetId | undefined;
+    if (presetId) {
+      this.#onPresetSelect(presetId);
+    }
   };
 
   #onPresetSelect(id: DateRangePresetId): void {
@@ -816,23 +965,26 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   #renderSlotList(): TemplateResult {
     const list = this.#computedSlots();
     const disabledMap = this.#computedDisabledSlots();
-    const tabIndex = this.#computeActiveTabSlotIndex(list, disabledMap);
     const labelFmt = this.#getSlotLabelFmt();
     return html`
-      <div part="slot-list" class="slot-list" role="listbox" aria-label="Available times" aria-orientation="vertical" @keydown=${this.#onSlotListKeydown}>
-        <div class="slot-list-inner" role="presentation">
-          ${list.map((slot, index) => this.#renderSlot(slot, index, disabledMap[index], tabIndex, labelFmt))}
-        </div>
+      <div
+        part="slot-list"
+        class="slot-list"
+        role="listbox"
+        aria-label="Available times"
+        aria-orientation="vertical"
+        @keydown=${this.#onSlotListKeydown}
+        ${focusGroup(this.#slotFocusGroup)}>
+        <div class="slot-list-inner" role="presentation">${list.map((slot, index) => this.#renderSlot(slot, index, disabledMap[index], labelFmt))}</div>
       </div>
     `;
   }
 
-  #renderSlot(slot: ITimeSlot, index: number, slotIsDisabled: boolean, activeTabIndex: number, labelFmt: Intl.DateTimeFormat): TemplateResult {
+  #renderSlot(slot: ITimeSlot, index: number, slotIsDisabled: boolean, labelFmt: Intl.DateTimeFormat): TemplateResult {
     const selected = this.#activeTime === slot.value;
     // Per the ARIA listbox pattern, an unavailable option stays perceivable and focusable
     // (aria-disabled), so it is NOT natively disabled — only the whole-component disabled/readonly
     // states remove the buttons from the tab order entirely.
-    const tabIndex = index === activeTabIndex ? 0 : -1;
     return html`
       <forge-button
         type="button"
@@ -847,12 +999,11 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
         role="option"
         aria-selected=${String(selected)}
         aria-disabled=${String(slotIsDisabled)}
-        tabindex=${tabIndex}
+        tabindex="-1"
         data-value=${slot.value}
         data-index=${index}
         ?disabled=${this.disabled || this.readonly}
-        @click=${this.#onSlotClick}
-        @focus=${this.#onSlotFocus}>
+        @click=${this.#onSlotClick}>
         ${slot.label ?? this.#formatSlotLabel(slot.value, labelFmt)}
       </forge-button>
     `;
@@ -865,10 +1016,6 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     if (slot) {
       this.#onSlotSelect(slot);
     }
-  };
-
-  #onSlotFocus = (event: Event): void => {
-    this._focusedSlotIndex = Number((event.currentTarget as HTMLElement).dataset.index);
   };
 
   #formatSlotLabel(value: string, fmt: Intl.DateTimeFormat): string {
@@ -937,22 +1084,6 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       return undefined;
     }
     return timeFromDate(max, this.allowSeconds) ?? undefined;
-  }
-
-  #computeActiveTabSlotIndex(list: ITimeSlot[], disabledMap: boolean[]): number {
-    // The roving tab stop follows the focused slot even when it is disabled, so arrow-key
-    // navigation can land on (and announce) unavailable options.
-    if (this._focusedSlotIndex >= 0 && this._focusedSlotIndex < list.length) {
-      return this._focusedSlotIndex;
-    }
-    if (this.#activeTime) {
-      const selectedIndex = list.findIndex(s => s.value === this.#activeTime);
-      if (selectedIndex >= 0) {
-        return selectedIndex;
-      }
-    }
-    const firstEnabled = disabledMap.findIndex(d => !d);
-    return firstEnabled >= 0 ? firstEnabled : 0;
   }
 
   #onCalendarSelect = (event: Event): void => {
@@ -1025,29 +1156,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     if (!list.length) {
       return;
     }
-    const last = list.length - 1;
-    // Navigate across every option, including disabled ones, so assistive tech can perceive
-    // unavailable slots. Activation (Enter/Space/click) is still guarded by #onSlotSelect.
-    const current = this.#currentSlotIndex();
-
-    if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      this.#focusSlotAt((current + 1) % list.length);
-      return;
-    }
-    if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      this.#focusSlotAt((current - 1 + list.length) % list.length);
-      return;
-    }
-    if (event.key === 'Home') {
-      event.preventDefault();
-      this.#focusSlotAt(0);
-      return;
-    }
-    if (event.key === 'End') {
-      event.preventDefault();
-      this.#focusSlotAt(last);
+    if (this.#slotFocusGroup.fromEvent(event)) {
       return;
     }
     if (event.key === 'Enter' || event.key === ' ') {
@@ -1071,27 +1180,6 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     }
   };
 
-  #currentSlotIndex(): number {
-    if (this._focusedSlotIndex >= 0) {
-      return this._focusedSlotIndex;
-    }
-    if (this.#activeTime) {
-      const selectedIndex = this.#computedSlots().findIndex(s => s.value === this.#activeTime);
-      if (selectedIndex >= 0) {
-        return selectedIndex;
-      }
-    }
-    return 0;
-  }
-
-  #focusSlotAt(index: number): void {
-    this._focusedSlotIndex = index;
-    this.updateComplete.then(() => {
-      const buttons = Array.from(this._slotButtons ?? []);
-      buttons[index]?.focus();
-    });
-  }
-
   #typeaheadAppend(char: string, list: ITimeSlot[]): void {
     this.#typeaheadBuffer += char;
     if (this.#typeaheadTimer) {
@@ -1103,15 +1191,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     const buffer = this.#typeaheadBuffer;
     const match = list.findIndex(slot => slot.value.replace(':', '').startsWith(buffer) || slot.value.startsWith(buffer));
     if (match >= 0) {
-      this.#focusSlotAt(match);
-    }
-  }
-
-  #onSlotChange(event: Event, flagKey: '_footerStartEmpty' | '_footerCenterEmpty' | '_footerEndEmpty'): void {
-    const target = event.target as HTMLSlotElement;
-    const empty = target.assignedNodes({ flatten: true }).length === 0;
-    if (this[flagKey] !== empty) {
-      (this as any)[flagKey] = empty;
+      this.#slotFocusGroup.focusAt(match);
     }
   }
 
@@ -1326,7 +1406,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
         composed: true
       })
     );
-    queueMicrotask(() => this.#announce());
+    void this.updateComplete.then(() => this.#announce());
   }
 
   #announce(): void {

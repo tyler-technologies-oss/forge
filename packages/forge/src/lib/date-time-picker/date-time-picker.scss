@@ -13,7 +13,7 @@
   @include base;
 }
 
-:host([summary]) .forge-date-time-picker {
+:host(:state(summary)) .forge-date-time-picker {
   @include base-summary;
 }
 
@@ -63,8 +63,7 @@
 }
 
 .body-main {
-  display: flex;
-  min-width: 0;
+  @include body-main;
 }
 
 .body-main[data-orientation='horizontal'] {
@@ -83,8 +82,7 @@
 }
 
 .calendar-section {
-  width: #{token(calendar-max-width)};
-  max-width: 100%;
+  @include calendar-section;
 }
 
 forge-calendar {
@@ -98,15 +96,10 @@ slot[name='time-label'] {
 .footer {
   border-top: solid #{token(outline-width)} #{token(divider-color)};
   padding-top: #{token(gap)};
-  margin-top: #{token(gap)};
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: #{token(gap)};
-}
-
-.footer[data-empty='true'] {
-  display: none;
 }
 
 .footer-start,
@@ -119,22 +112,15 @@ slot[name='time-label'] {
 }
 
 .footer-start {
-  justify-content: flex-start;
+  @include footer-start;
 }
 
 .footer-center {
-  justify-content: center;
+  @include footer-center;
 }
 
 .footer-end {
-  justify-content: flex-end;
-}
-
-.footer-start[data-empty='true'],
-.footer-center[data-empty='true'],
-.footer-end[data-empty='true'] {
-  visibility: hidden;
-  min-width: 0;
+  @include footer-end;
 }
 
 .calendar-section,
@@ -153,9 +139,7 @@ slot[name='time-label'] {
 }
 
 .time-inputs {
-  display: flex;
-  width: #{token(calendar-max-width)};
-  max-width: 100%;
+  @include time-inputs;
 }
 
 .time-inputs forge-time-picker,
@@ -171,12 +155,7 @@ slot[name='time-label'] {
 }
 
 .range-inputs {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: #{token(section-gap)};
-  width: #{token(calendar-max-width)};
-  max-width: 100%;
+  @include range-inputs;
 }
 
 .meridiem-badge {
@@ -202,23 +181,16 @@ slot[name='time-label'] {
   @include slot;
 }
 
-.slot[aria-selected='true'] {
+.slot--selected {
   @include slot-selected;
 }
 
-.slot[aria-disabled='true'] {
+.slot--disabled {
   @include slot-disabled;
 }
 
 .presets {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 140px;
-  padding-inline-end: #{token(body-gap)};
-  margin-inline-end: #{token(body-gap)};
-  border-inline-end: solid #{token(outline-width)} #{token(divider-color)};
-  align-self: stretch;
+  @include presets-container;
 }
 
 [part='preset'] {
@@ -226,35 +198,15 @@ slot[name='time-label'] {
 
   display: block;
   width: 100%;
-  appearance: none;
-  background: transparent;
-  color: #{token(color)};
   text-align: start;
-  padding-block: #{token(slot-padding-block)};
-  padding-inline: #{token(slot-padding-inline)};
-  border: none;
-  border-radius: #{token(slot-shape)};
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 120ms ease;
-
-  &:hover {
-    background: #{token(slot-hover-background)};
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--forge-focus-indicator-color, currentColor);
-    outline-offset: 2px;
-  }
+  --forge-button-color: #{token(color)};
+  --forge-button-padding-block: #{token(slot-padding-block)};
+  --forge-button-padding-inline: #{token(slot-padding-inline)};
+  --forge-button-shape: #{token(slot-shape)};
 }
 
 .commit-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: #{token(separator-gap)};
-  grid-column: 1 / -1;
-  width: 100%;
+  @include commit-actions;
 }
 
 .duration {
@@ -268,19 +220,19 @@ slot[name='time-label'] {
   white-space: nowrap;
 }
 
-:host([disabled]) {
+:host(:state(disabled)) {
   pointer-events: none;
 }
 
-:host([disabled]) .forge-date-time-picker {
-  opacity: 0.55;
+:host(:state(disabled)) .forge-date-time-picker {
+  opacity: #{token(disabled-opacity)};
 }
 
 // ─── Small screens: bottom sheet ─────────────────────────────────────────────
 // On phones the picker renders inside forge-bottom-sheet (see render()). The card
 // then fills the sheet and reflows to a single scrollable column: a horizontal
 // preset chip rail on top, one calendar, stacked time inputs, and a pinned footer.
-:host([data-sheet]) {
+:host(:state(sheet)) {
   display: block;
   width: 100%;
 }
@@ -337,8 +289,8 @@ slot[name='time-label'] {
     display: inline-flex;
     align-items: center;
     white-space: nowrap;
-    border-radius: 999px;
-    background: #{token(slot-hover-background)};
+    --forge-button-shape: 999px;
+    --forge-button-background: #{token(slot-hover-background)};
   }
 
   // Calendar + time stack and fill the scroll body.

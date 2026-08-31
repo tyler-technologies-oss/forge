@@ -91,8 +91,8 @@ class HideWhenEmptyDirective extends AsyncDirective {
   }
 
   #hasAssignedNodes(element: HTMLElement): boolean {
-    const slots = element.querySelectorAll('slot');
-    return Array.from(slots).some(slot => slot.assignedNodes().length > 0);
+    const slots = element.localName === 'slot' ? [element as HTMLSlotElement] : Array.from(element.querySelectorAll('slot'));
+    return slots.some(slot => slot.assignedNodes().length > 0);
   }
 
   #toggleHidden(element: HTMLElement): void {
