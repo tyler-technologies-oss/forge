@@ -22,21 +22,14 @@ import './dialog.js';
 // Animation duration + buffer for open/close transitions
 const ANIMATION_TIMEOUT = 500;
 
-// TODO: Consider refactoring tests to avoid accessing internal properties and methods of the dialog component.
-interface IDialogComponentInternal extends IDialogComponent {
-  _core: {
-    _moveController: unknown;
-  };
-}
-
-class DialogHarness extends TestHarness<IDialogComponentInternal> {
+class DialogHarness extends TestHarness<IDialogComponent> {
   public triggerElement: HTMLButtonElement;
   public altTriggerElement: HTMLButtonElement;
   public formCloseButton: HTMLButtonElement;
   public formSubmitButton: HTMLButtonElement;
 
   constructor(
-    el: IDialogComponentInternal,
+    el: IDialogComponent,
     triggerEl: HTMLButtonElement,
     altTriggerEl: HTMLButtonElement,
     formCloseBtn: HTMLButtonElement,
@@ -207,7 +200,7 @@ async function createFixture({
   `);
 
   const container = screen.container;
-  const dialogEl = container.querySelector('forge-dialog') as IDialogComponentInternal;
+  const dialogEl = container.querySelector('forge-dialog') as IDialogComponent;
   const triggerEl = container.querySelector('#test-trigger') as HTMLButtonElement;
   const altTriggerEl = container.querySelector('#alt-test-trigger') as HTMLButtonElement;
   const formCloseButton = container.querySelector('#form-close-button') as HTMLButtonElement;
@@ -1149,7 +1142,7 @@ describe('Dialog', () => {
 
       await harness.hideAsync();
 
-      expect(harness.element._core._moveController).toBeUndefined();
+      expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVED)).toBe(false);
     });
 
     it('should not move dialog if setting moveable=false while open', async () => {
