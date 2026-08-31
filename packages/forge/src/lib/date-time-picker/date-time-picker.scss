@@ -14,10 +14,7 @@
 }
 
 :host([summary]) .forge-date-time-picker {
-  @include base-with-summary;
-  grid-template-columns: auto auto;
-  align-items: stretch;
-  gap: 0;
+  @include base-summary;
 }
 
 .summary {
@@ -50,7 +47,6 @@
 
 .body[data-orientation='vertical'] {
   @include body-vertical;
-  gap: 0;
 }
 
 .body[data-orientation='vertical'] .time-section {
@@ -77,7 +73,6 @@
 
 .body-main[data-orientation='vertical'] {
   @include body-vertical;
-  gap: 0;
 }
 
 .body-main[data-orientation='vertical'] .time-section {
@@ -96,16 +91,8 @@ forge-calendar {
   width: 100%;
 }
 
-.header,
-.footer,
-.time-label {
-  display: contents;
-}
-
-.header[data-empty='true'],
-.footer[data-empty='true'],
-.time-label[data-empty='true'] {
-  display: none;
+slot[name='time-label'] {
+  @include time-label;
 }
 
 .footer {
@@ -193,11 +180,10 @@ forge-calendar {
 }
 
 .meridiem-badge {
+  @include meridiem-badge;
+
   display: inline-flex;
   align-items: center;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
   color: #{token(time-label-color)};
   padding-inline: #{token(slot-padding-inline)};
 }
@@ -236,18 +222,18 @@ forge-calendar {
 }
 
 [part='preset'] {
+  @include preset;
+
   display: block;
   width: 100%;
   appearance: none;
   background: transparent;
   color: #{token(color)};
-  font: inherit;
-  font-size: 0.875rem;
   text-align: start;
   padding-block: #{token(slot-padding-block)};
   padding-inline: #{token(slot-padding-inline)};
   border: none;
-  border-radius: #{token(shape)};
+  border-radius: #{token(slot-shape)};
   cursor: pointer;
   user-select: none;
   transition: background-color 120ms ease;
@@ -272,8 +258,9 @@ forge-calendar {
 }
 
 .duration {
+  @include duration;
+
   flex: 1;
-  font-size: 0.8125rem;
   color: #{token(time-label-color)};
   min-width: 0;
   overflow: hidden;

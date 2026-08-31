@@ -1268,6 +1268,22 @@ describe('DateTimePicker / review fixes', () => {
     );
   }
 
+  it('should keep the summary width static when a date is selected', async () => {
+    const screen = render(html`<forge-date-time-picker summary></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    const summary = el.shadowRoot!.querySelector('[part="summary"]') as HTMLElement;
+    const initialWidth = summary.getBoundingClientRect().width;
+
+    dispatchCalendarSelect(el, { date: new Date(2026, 8, 30) });
+    await ready(el);
+
+    expect(initialWidth).toBeGreaterThan(0);
+    const selectedSummary = el.shadowRoot!.querySelector('[part="summary"]') as HTMLElement;
+    expect(selectedSummary.getBoundingClientRect().width).toBe(initialWidth);
+  });
+
   it('should not announce "cleared" when a calendar date is selected before a time', async () => {
     const announceSpy = vi.spyOn(LiveAnnouncer.instance, 'announce');
     const screen = render(html`<forge-date-time-picker time-mode="single" value-mode="date"></forge-date-time-picker>`);
