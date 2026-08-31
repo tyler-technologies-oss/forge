@@ -199,6 +199,20 @@ describe('DateTimePicker / rendering', () => {
     expect(body.dataset.orientation).toBe('vertical');
   });
 
+  it('hides the header slot when empty and shows it when assigned content', async () => {
+    const screen = render(html`
+      <forge-date-time-picker></forge-date-time-picker>
+      <forge-date-time-picker><div slot="header">My header</div></forge-date-time-picker>
+    `);
+    const [emptyEl, populatedEl] = Array.from(screen.container.querySelectorAll('forge-date-time-picker')) as IDateTimePickerComponent[];
+    await Promise.all([ready(emptyEl), ready(populatedEl)]);
+
+    const emptyHeader = emptyEl.shadowRoot!.querySelector('slot[name="header"]') as HTMLSlotElement;
+    const populatedHeader = populatedEl.shadowRoot!.querySelector('slot[name="header"]') as HTMLSlotElement;
+    expect(emptyHeader.style.display).toBe('none');
+    expect(populatedHeader.style.display).toBe('');
+  });
+
   it('exposes the footer wrapper when show-footer is set and content fills a sub-slot', async () => {
     const screen = render(
       html`<forge-date-time-picker show-footer>
@@ -208,8 +222,19 @@ describe('DateTimePicker / rendering', () => {
     const el = getEl(screen.container);
     await ready(el);
     const footer = el.shadowRoot!.querySelector('[part="footer"]') as HTMLElement;
+    const footerEnd = footer.querySelector('[part="footer-end"]') as HTMLSlotElement;
     expect(footer).not.toBeNull();
-    expect(footer.dataset.empty).toBe('false');
+    expect(footer.style.display).toBe('');
+    expect(footerEnd.localName).toBe('slot');
+    expect(getComputedStyle(footerEnd).gridColumnStart).toBe('3');
+  });
+
+  it('hides the footer wrapper when show-footer is set without slotted content', async () => {
+    const screen = render(html`<forge-date-time-picker show-footer></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const footer = el.shadowRoot!.querySelector('[part="footer"]') as HTMLElement;
+    expect(footer.style.display).toBe('none');
   });
 
   it('omits the footer wrapper entirely when show-footer is not set', async () => {
@@ -1047,6 +1072,20 @@ describe('DateTimePicker / deferred Apply/Cancel (T-P5)', () => {
     expect(cancelBtn).not.toBeNull();
   });
 
+  it('should not render slotted footer actions in deferred mode when show-footer is false', async () => {
+    const screen = render(html`
+      <forge-date-time-picker date-mode="range" time-mode="range" value-mode="date">
+        <forge-button slot="footer-end">Continue</forge-button>
+      </forge-date-time-picker>
+    `);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    expect(el.shadowRoot!.querySelector('slot[name="footer-end"]')).toBeNull();
+    expect(el.shadowRoot!.querySelector('[part~="commit-cancel"]')).not.toBeNull();
+    expect(el.shadowRoot!.querySelector('[part~="commit-apply"]')).not.toBeNull();
+  });
+
   it('should disable the Apply button when the draft range is incomplete', async () => {
     const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="range" value-mode="date"></forge-date-time-picker>`);
     const el = getEl(screen.container);
@@ -1178,7 +1217,7 @@ describe('DateTimePicker / presets sidebar (T-P6)', () => {
     } as IDateTimePickerRange;
     await ready(el);
 
-    const todayBtn = el.shadowRoot!.querySelector('[data-preset-id="next-7-days"]') as HTMLButtonElement;
+    const todayBtn = el.shadowRoot!.querySelector('[data-preset-id="next-7-days"]') as HTMLElement;
     expect(todayBtn).not.toBeNull();
 
     const events = captureChanges(el);
@@ -1217,7 +1256,7 @@ describe('DateTimePicker / presets sidebar (T-P6)', () => {
     const el = getEl(screen.container);
     await ready(el);
 
-    const presetBtn = el.shadowRoot!.querySelector('[data-preset-id="today"]') as HTMLButtonElement;
+    const presetBtn = el.shadowRoot!.querySelector('[data-preset-id="today"]') as HTMLElement;
     expect(presetBtn).not.toBeNull();
 
     presetBtn.click();
@@ -1267,6 +1306,22 @@ describe('DateTimePicker / review fixes', () => {
       })
     );
   }
+
+  it('should expose boolean properties as custom states without reflecting attributes', async () => {
+    const screen = render(html`<forge-date-time-picker></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    el.summary = true;
+    el.disabled = true;
+    el.readonly = true;
+    await ready(el);
+
+    expect(el.matches(':state(summary)')).toBe(true);
+    expect(el.matches(':state(disabled)')).toBe(true);
+    expect(el.matches(':state(readonly)')).toBe(true);
+    expect(el.hasAttribute('summary')).toBe(false);
+    expect(el.hasAttribute('disabled')).toBe(false);
+    expect(el.hasAttribute('readonly')).toBe(false);
+  });
 
   it('should keep the summary width static when a date is selected', async () => {
     const screen = render(html`<forge-date-time-picker summary></forge-date-time-picker>`);
