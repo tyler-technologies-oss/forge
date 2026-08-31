@@ -40,6 +40,7 @@ $tokens: (
   slot-disabled-background: utils.module-val(date-time-picker, slot-disabled-background, transparent),
   slot-disabled-color: utils.module-val(date-time-picker, slot-disabled-color, theme.variable(text-low)),
   slot-disabled-outline-color: utils.module-val(date-time-picker, slot-disabled-outline-color, theme.variable(outline)),
+  disabled-opacity: utils.module-val(date-time-picker, disabled-opacity, theme.emphasis(medium-low)),
   // Range time controls
   separator-gap: utils.module-val(date-time-picker, separator-gap, spacing.variable(small)),
   // Sections
