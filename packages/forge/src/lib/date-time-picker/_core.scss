@@ -1,14 +1,17 @@
+@use '../core/styles/scrollbar';
+@use '../core/styles/typography';
 @use './token-utils' as *;
 
 @forward './token-utils';
 
 @mixin host {
+  @include typography.style(body2);
+
   display: inline-block;
   width: fit-content;
   max-width: 100%;
   justify-self: start;
   color: #{token(color)};
-  font-family: inherit;
 }
 
 @mixin base {
@@ -17,21 +20,14 @@
 
   background: #{token(background)};
   color: #{token(color)};
-
-  border-color: #{token(outline-color)};
-  border-width: #{token(outline-width)};
-  border-style: #{token(outline-style)};
-  border-radius: #{token(shape)};
-
-  box-shadow: #{token(elevation)};
-  box-sizing: border-box;
-  padding: #{token(padding)};
   overflow: hidden;
   -webkit-tap-highlight-color: transparent;
 }
 
-@mixin base-with-summary {
-  padding: 0;
+@mixin base-summary {
+  grid-template-columns: auto auto;
+  align-items: stretch;
+  gap: 0;
 }
 
 @mixin summary {
@@ -41,27 +37,28 @@
   gap: #{token(section-gap)};
   background: #{token(summary-background)};
   color: #{token(summary-color)};
-  min-width: #{token(summary-min-width)};
+  width: #{token(summary-width)};
+  max-width: 100%;
   padding: #{token(summary-padding)};
   box-sizing: border-box;
 }
 
 @mixin summary-year {
-  font-size: #{token(summary-year-font-size)};
-  font-weight: 500;
+  @include typography.style(heading1);
+
   opacity: 0.85;
 }
 
 @mixin summary-day {
-  font-size: #{token(summary-day-font-size)};
-  line-height: #{token(summary-day-line-height)};
-  font-weight: 400;
+  @include typography.style(display5);
+
   word-break: keep-all;
 }
 
 @mixin summary-empty {
-  @include summary-year;
-  font-weight: 400;
+  @include typography.style(subheading1);
+
+  opacity: 0.85;
 }
 
 @mixin content {
@@ -87,6 +84,7 @@
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
+  gap: 0;
 }
 
 @mixin section {
@@ -96,12 +94,26 @@
 }
 
 @mixin time-label {
+  @include typography.style(heading2);
+
   color: #{token(time-label-color)};
-  font-weight: 500;
+}
+
+@mixin meridiem-badge {
+  @include typography.style(overline);
+}
+
+@mixin preset {
+  @include typography.style(button);
+}
+
+@mixin duration {
+  @include typography.style(label2);
 }
 
 @mixin slot-list {
   @include section;
+  @include scrollbar.base;
 
   width: #{token(slot-list-width)};
   max-width: 100%;
@@ -111,8 +123,6 @@
   margin: 0;
   list-style: none;
 
-  // Custom scrollbar styling — defer to system defaults but reserve space so the
-  // layout doesn't shift between scrollable and non-scrollable.
   scrollbar-gutter: stable;
 }
 
@@ -131,22 +141,20 @@
   --forge-button-padding-block: #{token(slot-padding-block)};
   --forge-button-padding-inline: #{token(slot-padding-inline)};
   --forge-button-shape: #{token(slot-shape)};
-  --forge-button-hover-background: #{token(slot-hover-background)};
-  --forge-button-cursor: pointer;
 }
 
 @mixin slot-selected {
   --forge-button-outlined-background: #{token(slot-selected-background)};
   --forge-button-outlined-color: #{token(slot-selected-color)};
   --forge-button-outlined-border-color: #{token(slot-selected-outline-color)};
-  --forge-button-hover-background: #{token(slot-selected-background)};
 }
 
 @mixin slot-disabled {
   --forge-button-outlined-background: #{token(slot-disabled-background)};
   --forge-button-outlined-color: #{token(slot-disabled-color)};
   --forge-button-outlined-border-color: #{token(slot-disabled-outline-color)};
-  --forge-button-hover-background: #{token(slot-disabled-background)};
   --forge-button-cursor: not-allowed;
+  --forge-state-layer-hover-opacity: 0;
+  --forge-state-layer-pressed-opacity: 0;
   text-decoration: line-through;
 }
