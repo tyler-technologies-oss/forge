@@ -596,7 +596,7 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
     this._dialogElement.addEventListener('submit', this.#dialogFormSubmitListener);
     DismissibleStack.instance.add(this);
 
-    if (this.mode === 'modal' || this.mode === 'inline-modal') {
+    if (isModal) {
       document.addEventListener('keydown', this.#escapeDismissListener, { capture: true });
     }
 
