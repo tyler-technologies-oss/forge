@@ -1,23 +1,23 @@
 import {
-  CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY,
-  CUSTOM_ELEMENT_NAME_PROPERTY,
   coerceNumber,
   coerceNumberArray,
+  CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY,
+  CUSTOM_ELEMENT_NAME_PROPERTY,
   isArray,
   LiveAnnouncer
 } from '@tylertech/forge-core';
-import { tylIconFirstPage, tylIconLastPage, tylIconKeyboardArrowRight, tylIconKeyboardArrowLeft } from '@tylertech/tyler-icons';
+import { tylIconFirstPage, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconLastPage } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { removeEmptyAttribute } from '../core/utils/lit-utils.js';
 import { IconButtonComponent } from '../icon-button/icon-button.js';
 import type { IIconButtonComponent } from '../icon-button/index.js';
-import { SelectComponent } from '../select/select/index.js';
-import type { ISelectComponent, ISelectOption } from '../select/index.js';
 import { IconRegistry } from '../icon/icon-registry.js';
+import type { ISelectComponent, ISelectOption } from '../select/index.js';
+import { SelectComponent } from '../select/select/index.js';
 import { TooltipComponent } from '../tooltip/tooltip.js';
-import { PAGINATOR_CONSTANTS, IPaginatorChangeEventData, IPaginatorRangeState, PaginatorRangeLabelBuilder } from './paginator-constants.js';
+import { IPaginatorChangeEventData, IPaginatorRangeState, PAGINATOR_CONSTANTS, PaginatorRangeLabelBuilder } from './paginator-constants.js';
 
 import styles from './paginator.scss';
 
@@ -369,12 +369,13 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
             <forge-icon-button
               class="previous-page"
               part="previous-page-button"
+              aria-labelledby="previous-page-tooltip"
               ?disabled=${this.disabled || !this.canGoToPreviousPage()}
               @click=${this.#handlePreviousPage}>
               <forge-icon name="keyboard_arrow_left" part="previous-page-button-icon"></forge-icon>
             </forge-icon-button>
-            <forge-tooltip type="label" placement="top">
-              <slot name="previous-page-tooltip">Go to the previous page</slot>
+            <forge-tooltip placement="top">
+              <slot name="previous-page-tooltip" id="previous-page-tooltip">Go to the previous page</slot>
             </forge-tooltip>
           </div>
 
@@ -383,11 +384,16 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
           </div>
 
           <div id="next-page-container">
-            <forge-icon-button class="next-page" part="next-page-button" ?disabled=${this.disabled || !this.canGoToNextPage()} @click=${this.#handleNextPage}>
+            <forge-icon-button
+              class="next-page"
+              part="next-page-button"
+              aria-labelledby="next-page-tooltip"
+              ?disabled=${this.disabled || !this.canGoToNextPage()}
+              @click=${this.#handleNextPage}>
               <forge-icon name="keyboard_arrow_right" part="next-page-icon"></forge-icon>
             </forge-icon-button>
-            <forge-tooltip type="label" placement="top">
-              <slot name="next-page-tooltip">Go to the next page</slot>
+            <forge-tooltip placement="top">
+              <slot name="next-page-tooltip" id="next-page-tooltip">Go to the next page</slot>
             </forge-tooltip>
           </div>
 
@@ -400,11 +406,16 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
   #renderFirstPageButton(): TemplateResult {
     return html`
       <div id="first-page-container">
-        <forge-icon-button class="first-page" part="first-page-button" ?disabled=${this.disabled || !this.canGoToFirstPage()} @click=${this.#handleFirstPage}>
+        <forge-icon-button
+          class="first-page"
+          part="first-page-button"
+          aria-labelledby="first-page-tooltip"
+          ?disabled=${this.disabled || !this.canGoToFirstPage()}
+          @click=${this.#handleFirstPage}>
           <forge-icon name="first_page" part="first-page-icon"></forge-icon>
         </forge-icon-button>
-        <forge-tooltip type="label" placement="top">
-          <slot name="first-page-tooltip">Go to the first page</slot>
+        <forge-tooltip placement="top">
+          <slot name="first-page-tooltip" id="first-page-tooltip">Go to the first page</slot>
         </forge-tooltip>
       </div>
     `;
@@ -413,11 +424,16 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
   #renderLastPageButton(): TemplateResult {
     return html`
       <div id="last-page-container">
-        <forge-icon-button class="last-page" part="last-page-button" ?disabled=${this.disabled || !this.canGoToLastPage()} @click=${this.#handleLastPage}>
+        <forge-icon-button
+          class="last-page"
+          part="last-page-button"
+          aria-labelledby="last-page-tooltip"
+          ?disabled=${this.disabled || !this.canGoToLastPage()}
+          @click=${this.#handleLastPage}>
           <forge-icon name="last_page" part="last-page-icon"></forge-icon>
         </forge-icon-button>
-        <forge-tooltip type="label" placement="top">
-          <slot name="last-page-tooltip">Go to the last page</slot>
+        <forge-tooltip placement="top">
+          <slot name="last-page-tooltip" id="last-page-tooltip">Go to the last page</slot>
         </forge-tooltip>
       </div>
     `;
