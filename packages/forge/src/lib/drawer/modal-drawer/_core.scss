@@ -1,9 +1,13 @@
 @use '../../core/styles/elevation';
+@use './token-utils' as *;
+
+@forward './token-utils';
 
 @mixin base {
   position: absolute;
   top: 0;
   z-index: #{elevation.z-index-variable(dialog)};
+  background-color: #{token(background)};
 
   box-shadow: #{elevation.value(24)};
 

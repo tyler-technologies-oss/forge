@@ -15,7 +15,8 @@
 
     @include theme.provide(
       (
-        surface: theme.variable(surface-bright)
+        surface: theme.variable(surface-elevated),
+        surface-elevated-translucent: theme.variable(surface-elevated)
       )
     );
   }
