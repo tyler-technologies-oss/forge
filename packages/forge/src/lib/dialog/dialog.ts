@@ -694,7 +694,7 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
             if (autofocusElement) {
               autofocusElement.focus();
             } else {
-              const firstFocusableElement = getFirstFocusableElement(this._dialogElement);
+              const firstFocusableElement = getFirstFocusableElement(this._dialogElement) as HTMLElement | undefined;
               firstFocusableElement?.focus({ focusVisible: false });
             }
           }
