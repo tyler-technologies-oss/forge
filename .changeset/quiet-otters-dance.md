@@ -2,4 +2,4 @@
 '@tylertech/forge': patch
 ---
 
-fix(paginator): migrate to lit
+feat(paginator): migrate to lit
