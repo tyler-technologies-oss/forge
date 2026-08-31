@@ -2,6 +2,7 @@
   border: 1px solid var(--forge-theme-outline);
   background-color: var(--forge-theme-surface-dim);
   height: 370px;
+  contain: paint;
 }
 
 .drawer-demo-container {

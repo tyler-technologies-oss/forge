@@ -20,7 +20,7 @@
   );
 }
 
-:host([direction='right']) {
+:host(:state(right)) {
   @include host-right;
 
   .root {
@@ -28,22 +28,24 @@
   }
 }
 
-:host(:not([open])) {
+:host(:not(:state(open))) {
   display: none;
 }
 
-:host([hover]) {
-  .right {
-    position: absolute;
-    right: 0;
-  }
-
+:host(:state(hover)) {
   .forge-drawer:hover {
     @include hover;
 
     .content {
       overflow: auto;
     }
+  }
+}
+
+:host(:state(hover):state(right)) {
+  .forge-drawer {
+    position: absolute;
+    right: 0;
   }
 }
 
