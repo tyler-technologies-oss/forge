@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, playKeyframeAnimation } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, getFirstFocusableElement, playKeyframeAnimation } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { BACKDROP_CONSTANTS, BackdropComponent, IBackdropComponent } from '../backdrop/index.js';
@@ -690,7 +690,13 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
 
           if (this.open && this._dialogElement.isConnected) {
             const autofocusElement = this.querySelector<HTMLElement>(DIALOG_CONSTANTS.selectors.AUTOFOCUS);
-            autofocusElement?.focus();
+
+            if (autofocusElement) {
+              autofocusElement.focus();
+            } else {
+              const firstFocusableElement = getFirstFocusableElement(this._dialogElement);
+              firstFocusableElement?.focus({ focusVisible: false });
+            }
           }
         }
       });
