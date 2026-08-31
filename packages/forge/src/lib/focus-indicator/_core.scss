@@ -23,13 +23,15 @@
   @include override(shape, 50%, value);
 }
 
+$outward-inset-calc: calc(-1 * #{token(outward-offset)});
+
 @mixin outward {
   animation-name: forge-focus-indicator-outward-grow, forge-focus-indicator-outward-shrink;
   border-end-end-radius: calc(#{token(shape-end-end)} + #{token(outward-offset)});
   border-end-start-radius: calc(#{token(shape-end-start)} + #{token(outward-offset)});
   border-start-end-radius: calc(#{token(shape-start-end)} + #{token(outward-offset)});
   border-start-start-radius: calc(#{token(shape-start-start)} + #{token(outward-offset)});
-  inset: calc(-1 * #{token(outward-offset)});
+  inset: $outward-inset-calc;
   outline: #{token(width)} solid currentColor;
 }
 
@@ -41,6 +43,34 @@
   border-start-start-radius: calc(#{token(shape-start-start)} - #{token(inward-offset)});
   border: #{token(width)} solid currentColor;
   inset: #{token(inward-offset)};
+}
+
+@mixin top-layer-host {
+  display: contents;
+  pointer-events: none;
+}
+
+@mixin top-layer-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+}
+
+@mixin top-layer-outward {
+  top: calc(#{token(top-layer-top, value)} + $outward-inset-calc);
+  left: calc(#{token(top-layer-left, value)} + $outward-inset-calc);
+  width: calc(#{token(top-layer-width, value)} - 2 * $outward-inset-calc);
+  height: calc(#{token(top-layer-height, value)} - 2 * $outward-inset-calc);
+}
+
+@mixin top-layer-inward {
+  top: calc(#{token(top-layer-top, value)} + #{token(inward-offset)});
+  left: calc(#{token(top-layer-left, value)} + #{token(inward-offset)});
+  width: calc(#{token(top-layer-width, value)} - 2 * #{token(inward-offset)});
+  height: calc(#{token(top-layer-height, value)} - 2 * #{token(inward-offset)});
 }
 
 @mixin standalone($type: 'outward', $selector: '::after', $pseudo-class: ':focus-visible', $focus-target: null) {
