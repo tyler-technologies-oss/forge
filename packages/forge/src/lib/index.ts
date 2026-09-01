@@ -16,14 +16,12 @@ import {
   defineAppBarSearchComponent,
   defineProfileCardComponent
 } from './app-bar/index.js';
-import { defineAppLayoutComponent } from './app-layout/index.js';
 import { defineAutocompleteComponent } from './autocomplete/index.js';
 import { defineAvatarComponent } from './avatar/index.js';
 import { defineBackdropComponent } from './backdrop/index.js';
 import { defineBadgeComponent } from './badge/index.js';
 import { defineBannerComponent } from './banner/index.js';
 import { defineBottomSheetComponent } from './bottom-sheet/index.js';
-import { defineBusyIndicatorComponent } from './busy-indicator/index.js';
 import { defineButtonAreaComponent } from './button-area/index.js';
 import { defineButtonToggleComponent, defineButtonToggleGroupComponent } from './button-toggle/index.js';
 import { defineButtonComponent } from './button/index.js';
@@ -44,7 +42,6 @@ import { defineFieldComponent } from './field/index.js';
 import { defineFilePickerComponent } from './file-picker/index.js';
 import { defineFloatingActionButtonComponent } from './floating-action-button/index.js';
 import { defineFocusIndicatorComponent } from './focus-indicator/index.js';
-import { defineFooterComponent, defineFooterItemComponent } from './footer/index.js';
 import { defineIconButtonComponent } from './icon-button/index.js';
 import { defineIconComponent } from './icon/index.js';
 import { defineInlineMessageComponent } from './inline-message/index.js';
@@ -95,14 +92,12 @@ import { defineDeprecatedIconButtonComponent } from './deprecated/icon-button/in
 
 export * from './accordion/index.js';
 export * from './app-bar/index.js';
-export * from './app-layout/index.js';
 export * from './autocomplete/index.js';
 export * from './avatar/index.js';
 export * from './backdrop/index.js';
 export * from './badge/index.js';
 export * from './banner/index.js';
 export * from './bottom-sheet/index.js';
-export * from './busy-indicator/index.js';
 export * from './button-area/index.js';
 export * from './button-toggle/index.js';
 export * from './button/index.js';
@@ -125,7 +120,6 @@ export * from './field/index.js';
 export * from './file-picker/index.js';
 export * from './floating-action-button/index.js';
 export * from './focus-indicator/index.js';
-export * from './footer/index.js';
 export * from './icon-button/index.js';
 export * from './icon/index.js';
 export * from './inline-message/index.js';
@@ -185,14 +179,12 @@ export function defineComponents(): void {
   defineAppBarNotificationButtonComponent();
   defineAppBarProfileButtonComponent();
   defineAppBarSearchComponent();
-  defineAppLayoutComponent();
   defineAutocompleteComponent();
   defineAvatarComponent();
   defineBackdropComponent();
   defineBadgeComponent();
   defineBannerComponent();
   defineBottomSheetComponent();
-  defineBusyIndicatorComponent();
   defineButtonAreaComponent();
   defineButtonComponent();
   defineButtonToggleComponent();
@@ -215,8 +207,6 @@ export function defineComponents(): void {
   defineFilePickerComponent();
   defineFloatingActionButtonComponent();
   defineFocusIndicatorComponent();
-  defineFooterComponent();
-  defineFooterItemComponent();
   defineIconButtonComponent();
   defineIconComponent();
   defineInlineMessageComponent();

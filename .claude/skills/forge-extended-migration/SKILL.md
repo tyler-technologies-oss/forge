@@ -53,7 +53,7 @@ Extended components style with either raw hex/hardcoded px values or `@tylertech
 - `@use '../core/styles/typography';` → `@include typography.style(body1)` etc.
 - Drop any `@use` that ends up unreferenced (extended's SCSS often imports `theme`/`typography` and never uses them).
 
-**Stylelint gotcha**: this repo's effective `custom-property-pattern` rule (resolved from `stylelint-config-standard-scss`, *not* the `custom-property-pattern` override that appears to live in `@tylertech/stylelint-rules`'s own `.stylelintrc.json` — that file isn't part of the package's `exports` and never actually applies) rejects `--_private-name` custom properties outright. The established workaround, already used in `timeline/timeline-break/_core.scss`, is an explicit disable comment spanning every declaration *and* every `var(--_...)` usage of that name:
+**Stylelint gotcha**: this repo's effective `custom-property-pattern` rule (resolved from `stylelint-config-standard-scss`, _not_ the `custom-property-pattern` override that appears to live in `@tylertech/stylelint-rules`'s own `.stylelintrc.json` — that file isn't part of the package's `exports` and never actually applies) rejects `--_private-name` custom properties outright. The established workaround, already used in `timeline/timeline-break/_core.scss`, is an explicit disable comment spanning every declaration _and_ every `var(--_...)` usage of that name:
 
 ```scss
 /* stylelint-disable custom-property-pattern */
@@ -78,7 +78,7 @@ Extended tests use WTR + Mocha + Chai + `@open-wc/testing` + Sinon. Invoke the *
 - `sinon.stub(window, 'matchMedia').returns({...})` → `vi.spyOn(window, 'matchMedia').mockReturnValue({...} as unknown as MediaQueryList)`, restored with `vi.restoreAllMocks()` in `afterEach`.
 - Extended's harness classes (`class XHarness { constructor(public el) {} get fooElement() {...} }`) can usually collapse to plain helper functions using `getShadowElement` from `@tylertech/forge-core`, matching how sibling components in this repo structure their tests — but keep a `createFixture()` helper for any component with more than 2-3 fixture variants.
 - Don't "fix" a test assertion that looks inconsistent with the class's declared default without checking the actual fixture template first. A Lit property binding like `.appTitleHref=${appTitleHref}` explicitly sets the property to `undefined` when the local `appTitleHref` variable is undefined, overriding the class's `= ''` default — the original assertion (`to.be.undefined`) can be entirely correct even though it looks contradictory next to the field declaration.
-- Re-export check: if the component's `-constants.ts` file exports event-data types (`XChangeEventData`), the main `.ts` file typically does *not* re-export them (matches `busy-indicator-constants.ts`/`busy-indicator.ts`). Import those types directly from `./x-constants.js` in the test, not from `./x.js`.
+- Re-export check: if the component's `-constants.ts` file exports event-data types (`XChangeEventData`), the main `.ts` file typically does _not_ re-export them (matches `busy-indicator-constants.ts`/`busy-indicator.ts`). Import those types directly from `./x-constants.js` in the test, not from `./x.js`.
 
 ## Story & MDX conversion
 
@@ -90,15 +90,33 @@ Extended tests use WTR + Mocha + Chai + `@open-wc/testing` + Sinon. Invoke the *
 - If the extended component has multiple story files and the MDX only references one of them (check `<Canvas of={...}>` usages), **ask the user** whether to port just the MDX-referenced story or all of them — this is a real scope/cost decision (extra story files can be 10-20KB each of composed demo markup), not an implementation detail to decide unilaterally.
 - When porting extra story files not referenced by the original MDX, consider adding `<Canvas>` sections for them in the migrated MDX so they're not orphaned in the Storybook sidebar with no documentation context.
 
-## Wiring into `src/lib/index.ts`
+## Wiring into `src/lib/index.ts` — check for a tag-name collision first
 
-Three alphabetically-ordered edits, matching the existing surrounding entries exactly:
+Before touching `src/lib/index.ts`, check whether `forge-extended` still ships its own copy of the component being migrated (it usually does — migration doesn't delete the source repo):
+
+```bash
+find ~/Desktop/dev/forge-extended/packages/extended/src/lib -maxdepth 1 -iname "<name>"
+```
+
+If it still exists there, **do not** wire the migrated component into the root barrel at all. Reason: `packages/forge/package.json` declares no `"sideEffects": false`, and every Lit component registers itself eagerly via the `@customElement(...)` decorator at module-evaluation time — not lazily, not gated by `defineComponents()`. That means _any_ module reachable from `src/lib/index.ts`'s static import graph gets registered the instant something imports the bare `@tylertech/forge` package: guaranteed in local dev (the package's `"development"` export condition points straight at unbundled `src/lib/index.ts`, so there is no tree-shaking to strip it), and not reliably prevented in production either (no `sideEffects: false` to let bundlers drop the unused ones). A consumer who has `@tylertech/forge-extended` on the page for an unrelated component, plus the new `@tylertech/forge` for anything at all, would get a hard `customElements.define()` collision — a runtime crash — purely from the root barrel dragging in a component they never asked for.
+
+The fix already has precedent in this codebase (`footer`, `app-layout`, and — after this was caught once — `busy-indicator`): keep the component reachable **only** via its own subpath (`@tylertech/forge/<name>`), never through the root package:
+
+1. Do **not** add an import for `defineXComponent` to `src/lib/index.ts`.
+2. Do **not** add `export * from './x/index.js';` to the export block.
+3. Do **not** add `defineXComponent();` inside `defineComponents()`.
+4. In the component's own `<name>/index.ts`, mark the definition function itself deprecated in favor of the side-effect import, matching the existing convention (see `footer/index.ts`, `app-layout/index.ts`, `busy-indicator/index.ts`):
+   ```ts
+   /** @deprecated Definition functions are deprecated and replaced with side effect imports (`import '@tylertech/forge/<name>'`). */
+   export function defineXComponent(): void { ... }
+   ```
+5. If `blocks/` uses the component anywhere, add the explicit side-effect import to `blocks/forge-register.ts` (e.g. `import '@tylertech/forge/busy-indicator';`) — `defineComponents()` no longer reaches it, so the blocks gallery must opt in itself, same as any other consumer would.
+
+If `forge-extended` has already dropped the component (no remaining collision risk), the old three-edit pattern is fine — matching the existing surrounding entries exactly, alphabetical by folder name (not tag name; e.g. `app-layout` sorts between `app-bar` and `autocomplete`):
 
 1. Import block near the top: `import { defineXComponent } from './x/index.js';`
 2. `export * from './x/index.js';` in the export block.
 3. `defineXComponent();` inside `defineComponents()`.
-
-Alphabetical order is by folder name, not by tag name — e.g. `app-layout` sorts between `app-bar` and `autocomplete`.
 
 ## Verification (run all of these before reporting done)
 

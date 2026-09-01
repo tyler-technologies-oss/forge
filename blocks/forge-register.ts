@@ -1,4 +1,7 @@
 import { defineComponents, IconRegistry } from '@tylertech/forge';
+import '@tylertech/forge/app-layout';
+import '@tylertech/forge/busy-indicator';
+import '@tylertech/forge/footer';
 import '@tylertech/forge-extended/user-profile';
 import '@tylertech/forge-extended/structured-card';
 import '@tylertech/forge-extended/count-card';
