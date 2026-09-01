@@ -3,6 +3,16 @@ name: Post Release to Teams
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to replay (e.g. v1.2.3)"
+        required: true
+        type: string
+      webhook_url:
+        description: "Override Teams webhook URL for testing (leave blank to use the TEAMS_WEBHOOK_URL secret)"
+        required: false
+        type: string
 
 concurrency: 1
 
@@ -20,10 +30,27 @@ jobs:
 
       - name: Get release info
         id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          echo "name=${{ github.event.release.name }}" >> $GITHUB_OUTPUT
-          echo "url=${{ github.event.release.html_url }}" >> $GITHUB_OUTPUT
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            RELEASE_JSON=$(gh api "repos/${{ github.repository }}/releases/tags/${{ inputs.tag }}")
+            echo "tag=${{ inputs.tag }}" >> $GITHUB_OUTPUT
+            echo "name=$(echo "$RELEASE_JSON" | jq -r '.name')" >> $GITHUB_OUTPUT
+            echo "url=$(echo "$RELEASE_JSON" | jq -r '.html_url')" >> $GITHUB_OUTPUT
+            echo "author=$(echo "$RELEASE_JSON" | jq -r '.author.login')" >> $GITHUB_OUTPUT
+            echo "body<<EOF" >> $GITHUB_OUTPUT
+            echo "$RELEASE_JSON" | jq -r '.body' >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+            echo "name=${{ github.event.release.name }}" >> $GITHUB_OUTPUT
+            echo "url=${{ github.event.release.html_url }}" >> $GITHUB_OUTPUT
+            echo "author=${{ github.event.release.author.login }}" >> $GITHUB_OUTPUT
+            echo "body<<EOF" >> $GITHUB_OUTPUT
+            echo "${{ github.event.release.body }}" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
 
       - name: Get contributors for this release
         id: contributors
@@ -68,9 +95,11 @@ jobs:
 
       - name: Format release notes
         id: format
+        env:
+          RELEASE_BODY: ${{ steps.release.outputs.body }}
         run: |
           # Get release body and escape for JSON
-          BODY=$(echo '${{ github.event.release.body }}' | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+          BODY=$(echo "$RELEASE_BODY" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
           echo "body=$BODY" >> $GITHUB_OUTPUT
 
       - name: Build Teams message JSON
@@ -88,7 +117,7 @@ jobs:
                 },
                 {
                   "name": "Published by:",
-                  "value": "${{ github.event.release.author.login }}"
+                  "value": "${{ steps.release.outputs.author }}"
                 }
               ]
             },
@@ -118,6 +147,8 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Post to Microsoft Teams
+        env:
+          TEAMS_WEBHOOK_URL: ${{ inputs.webhook_url || secrets.TEAMS_WEBHOOK_URL }}
         run: |
           curl -H 'Content-Type: application/json' -d '{
             "@type": "MessageCard",
@@ -148,4 +179,4 @@ jobs:
                 ]
               }
             ]
-          }' ${{ secrets.TEAMS_WEBHOOK_URL }}
+          }' "$TEAMS_WEBHOOK_URL"
