@@ -13,6 +13,7 @@ Tyler Forge is a monorepo managed with [pnpm workspaces](https://pnpm.io/workspa
 |---------|-------------|
 | [@tylertech/forge](./packages/forge) | Web components library |
 | [@tylertech/forge-core](./packages/forge-core) | Core utilities and base classes |
+| [@tylertech/forge-react](./packages/forge-react) | React adapter library |
 
 ## Requirements
 
@@ -33,6 +34,7 @@ pnpm dev:forge
 | Command | Description |
 |---------|-------------|
 | `pnpm dev:forge` | Start dev server |
+| `pnpm dev:forge-react` | Start React adapter dev server |
 | `pnpm storybook:forge` | Start Storybook |
 | `pnpm build` | Build all packages |
 | `pnpm test` | Run tests |
@@ -44,6 +46,7 @@ pnpm dev:forge
 ```bash
 pnpm run --filter @tylertech/forge <command>
 pnpm run --filter @tylertech/forge-core <command>
+pnpm run --filter @tylertech/forge-react <command>
 ```
 
 **Running tests for a specific path (relative to the package root):**

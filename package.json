@@ -6,6 +6,7 @@
   "scripts": {
     "prepare": "husky",
     "dev:forge": "turbo run --filter @tylertech/forge dev",
+    "dev:forge-react": "turbo run --filter @tylertech/forge-react dev",
     "dev:blocks": "turbo run --filter blocks dev",
     "storybook:forge": "turbo run --filter @tylertech/forge storybook",
     "build": "turbo run build",
