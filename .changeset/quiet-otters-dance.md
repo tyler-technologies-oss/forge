@@ -1,5 +1,5 @@
 ---
-'@tylertech/forge': patch
+'@tylertech/forge': minor
 ---
 
-feat(paginator): migrate to lit
+feat(paginator): migrate to Lit
