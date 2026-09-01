@@ -693,7 +693,7 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
 
             if (autofocusElement) {
               autofocusElement.focus();
-            } else {
+            } else if (this.mode === 'modal') {
               const firstFocusableElement = getFirstFocusableElement(this._dialogElement) as HTMLElement | undefined;
               // @ts-expect-error - `focusVisible` is an experimental FocusOptions property not yet in the TS DOM lib
               firstFocusableElement?.focus({ focusVisible: false });
