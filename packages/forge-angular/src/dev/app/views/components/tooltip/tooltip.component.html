@@ -1,0 +1,23 @@
+<app-demo-card headerText="Tooltip">
+  <forge-button variant="raised" id="tooltip-demo-btn">Hover me</forge-button>
+  <forge-tooltip #tooltip anchor="tooltip-demo-btn" [placement]="placement" [delay]="delay">{{ text }}</forge-tooltip>
+
+  <div>
+    <forge-text-field>
+      <label for="tooltip-text">Text</label>
+      <input type="text" id="tooltip-text" [(ngModel)]="text" />
+    </forge-text-field>
+  </div>
+  <div>
+    <forge-text-field>
+      <label for="tooltip-delay">Delay (ms)</label>
+      <input type="number" id="tooltip-delay" [(ngModel)]="delay" />
+    </forge-text-field>
+  </div>
+  <forge-select id="tooltip-placement" label="Placement}" [(ngModel)]="placement">
+    <forge-option value="top">Top</forge-option>
+    <forge-option value="right">Right</forge-option>
+    <forge-option value="bottom">Bottom</forge-option>
+    <forge-option value="left">Left</forge-option>
+  </forge-select>
+</app-demo-card>

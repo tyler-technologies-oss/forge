@@ -1,0 +1,9 @@
+@use '@tylertech/forge/sass/theme/theme-dark';
+
+html[data-forge-theme='dark'] {
+  @include theme-dark.theme-properties;
+
+  [slot='app-bar-end'] forge-icon-button {
+    color: var(--forge-theme-text-high);
+  }
+}

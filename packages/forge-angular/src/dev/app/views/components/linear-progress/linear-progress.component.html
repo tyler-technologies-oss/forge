@@ -1,0 +1,20 @@
+<app-demo-card headerText="Linear Progress">
+  <div class="container">
+    <forge-linear-progress [determinate]="isDeterminate" [progress]="progress" [buffer]="buffer"></forge-linear-progress>
+
+    <div>
+      <forge-checkbox [(ngModel)]="isDeterminate" (change)="onDeterminateChanged()">Determinate</forge-checkbox>
+    </div>
+
+    @if (isDeterminate) {
+      <div class="with-label">
+        <span class="forge-typography--label1">Progress: {{ progress }}</span>
+        <forge-slider [value]="sliderProgressValue" (forge-slider-input)="progress = $event.detail.value / 100"></forge-slider>
+      </div>
+      <div class="with-label">
+        <span class="forge-typography--label1">Buffer: {{ buffer }}</span>
+        <forge-slider [value]="sliderBufferValue" (forge-slider-input)="buffer = $event.detail.value / 100"></forge-slider>
+      </div>
+    }
+  </div>
+</app-demo-card>

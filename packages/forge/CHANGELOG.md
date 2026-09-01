@@ -1,5 +1,27 @@
 # @tylertech/forge
 
+## 3.16.0
+
+### Minor Changes
+
+- b555bdd: fix(secret): reduce default icon button size
+- 4362fba: feat(dialog): migrate to Lit
+- 79c3d06: feat(paginator): migrate to Lit
+- b555bdd: feat(secret): add button size token
+
+### Patch Changes
+
+- 79c3d06: fix(paginator): ensure button labels are announced by accessibility tools
+- 691a79d: fix(dialog): set focus on first focusable descendent element when opened as modal
+- Updated dependencies [691a79d]
+  - @tylertech/forge-core@3.5.0
+
+## 3.15.2
+
+### Patch Changes
+
+- 7260080: fix(tabs): detect all descendent tabs of tab bar
+
 ## 3.15.1
 
 ### Patch Changes

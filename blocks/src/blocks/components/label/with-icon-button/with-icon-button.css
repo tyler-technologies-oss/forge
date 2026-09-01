@@ -1,0 +1,10 @@
+.with-label {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.align {
+  display: flex;
+  align-items: center;
+}

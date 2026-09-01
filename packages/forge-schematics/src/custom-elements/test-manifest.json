@@ -1,0 +1,205 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "accordion/accordion.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "The custom element class behind the `<forge-accordion>` web component.\n\nThis component is intended to wrap and orchestrate child expansion panels\nso that only one expansion panel is open at a time.",
+          "name": "AccordionComponent",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_foundation",
+              "type": {
+                "text": "AccordionFoundation"
+              },
+              "privacy": "private",
+              "default": "new AccordionFoundation(new AccordionAdapter(this))"
+            },
+            {
+              "kind": "method",
+              "name": "initializedCallback",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
+            },
+            {
+              "kind": "field",
+              "name": "panelSelector",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "description": "Gets/sets the selector to use for finding the child expansion panels. Defaults to searching the direct children for `<forge-expansion-panel>` elements."
+            }
+          ],
+          "superclass": {
+            "name": "BaseComponent",
+            "module": "/core/base/base-component"
+          },
+          "tagName": "forge-accordion",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AccordionComponent",
+          "declaration": {
+            "name": "AccordionComponent",
+            "module": "accordion/accordion.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "expansion-panel/expansion-panel.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A web component that encapsulates the functionality of expanding/collapsing content when clicked.",
+          "name": "ExpansionPanelComponent",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_foundation",
+              "type": {
+                "text": "ExpansionPanelFoundation"
+              },
+              "privacy": "private",
+              "default": "new ExpansionPanelFoundation(new ExpansionPanelAdapter(this))"
+            },
+            {
+              "kind": "method",
+              "name": "initializedCallback",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "public",
+              "description": "Controls the open state of the panel."
+            },
+            {
+              "kind": "field",
+              "name": "openCallback",
+              "type": {
+                "text": "() => void | Promise<void>"
+              },
+              "privacy": "public",
+              "description": "Sets the function to call when the panel wants to open.\nThe function must return a promise which can be resolved to\nopen the panel or rejected which cancels the panel open."
+            },
+            {
+              "kind": "field",
+              "name": "closeCallback",
+              "type": {
+                "text": "() => void | Promise<void>"
+              },
+              "privacy": "public",
+              "description": "Sets the function to call when the panel wants to close.\nThe function must return a promise which can be resolved to\nclose the panel or rejected which cancels the panel close."
+            },
+            {
+              "kind": "field",
+              "name": "orientation",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "description": "Sets the orientation of the panel expansion.\nValid values are 'vertical' (default) or 'horizontal'."
+            },
+            {
+              "kind": "field",
+              "name": "useAnimations",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "public",
+              "description": "Gets/sets if animations are used in the expand/collapse transition."
+            },
+            {
+              "kind": "field",
+              "name": "testNumber",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "public",
+              "description": "Gets/sets a numeric value."
+            },
+            {
+              "kind": "field",
+              "name": "testReadonlyProperty",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "public",
+              "readonly": true,
+              "description": "Gets without a setter"
+            },
+            {
+              "kind": "method",
+              "name": "toggle",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Toggles the collapsed state."
+            },
+            {
+              "kind": "method",
+              "name": "setOpenImmediate",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "open",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "description": "Forces the expansion panel to expand/collapse without transition animations."
+            }
+          ],
+          "superclass": {
+            "name": "BaseComponent",
+            "module": "/core/base/base-component"
+          },
+          "tagName": "forge-expansion-panel",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ExpansionPanelComponent",
+          "declaration": {
+            "name": "ExpansionPanelComponent",
+            "module": "expansion-panel/expansion-panel.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

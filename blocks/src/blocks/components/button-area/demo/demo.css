@@ -1,0 +1,16 @@
+forge-card {
+  --forge-card-padding: 0;
+  width: 320px;
+  max-width: 100%
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px
+}
+
+.content>:first-child {
+  margin-inline-end: auto
+}
