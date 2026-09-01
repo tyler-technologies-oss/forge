@@ -1,0 +1,60 @@
+@if (isSmallViewPort()) {
+  <forge-dialog aria-label="Navigation menu" preset="left-sheet" (forge-dialog-close)="closeDrawer()" [open]="open()">
+    <div class="dialog-sidenav">
+      <ng-container *ngTemplateOutlet="sidenavContent"></ng-container>
+    </div>
+  </forge-dialog>
+} @else {
+  <forge-drawer>
+    <aside>
+      <ng-container *ngTemplateOutlet="sidenavContent"></ng-container>
+    </aside>
+  </forge-drawer>
+}
+
+<ng-template #sidenavContent>
+  <forge-list navlist>
+    <forge-list-item [selected]="homeLink.isActive">
+      <forge-icon name="home" slot="start" />
+      <a routerLink="/" #homeLink="routerLinkActive" routerLinkActive [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Home</a>
+    </forge-list-item>
+    <forge-expansion-panel #componentExpansionPanel>
+      <forge-list-item slot="header">
+        <forge-icon name="settings_input_component" slot="start" />
+        <button>Components</button>
+        <forge-open-icon slot="end" />
+      </forge-list-item>
+      @for (item of componentMenuItems; track item) {
+        <forge-list-item indented [selected]="componentMenuLink.isActive">
+          <a
+            [routerLink]="[item.value]"
+            #componentMenuLink="routerLinkActive"
+            routerLinkActive
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+            >{{ item.label }}</a
+          >
+        </forge-list-item>
+      }
+    </forge-expansion-panel>
+    <forge-expansion-panel #exampleExpansionPanel>
+      <forge-list-item slot="header">
+        <forge-icon name="settings" slot="start" />
+        <button>Examples</button>
+        <forge-open-icon slot="end" />
+      </forge-list-item>
+      @for (item of exampleMenuItems; track item) {
+        <forge-list-item indented [selected]="exampleLink.isActive">
+          <a
+            [routerLink]="[item.value]"
+            #exampleLink="routerLinkActive"
+            routerLinkActive
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+            >{{ item.label }}</a
+          >
+        </forge-list-item>
+      }
+    </forge-expansion-panel>
+  </forge-list>
+</ng-template>

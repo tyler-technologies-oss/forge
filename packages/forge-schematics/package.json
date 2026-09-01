@@ -1,0 +1,43 @@
+{
+  "name": "@tylertech/forge-schematics",
+  "version": "2.0.0",
+  "description": "Contains Angular Schematics relevant to working with Forge web components.",
+  "author": "Tyler Technologies, Inc.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyler-technologies-oss/forge.git",
+    "directory": "packages/forge-schematics"
+  },
+  "schematics": "./dist/collection.json",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf ./dist && tsc -p tsconfig.build.json && node scripts/copy-assets.mjs",
+    "lint": "eslint",
+    "test": "pnpm run build && vitest run",
+    "vitest": "vitest",
+    "format": "prettier --write \"**/*.{ts,js,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,json}\""
+  },
+  "dependencies": {
+    "@angular-devkit/schematics": "^20.3.13",
+    "custom-elements-manifest": "^2.1.0"
+  },
+  "devDependencies": {
+    "@tylertech-eslint/eslint-plugin": "catalog:",
+    "@types/node": "catalog:",
+    "glob": "catalog:",
+    "prettier": "catalog:",
+    "rimraf": "catalog:",
+    "typescript": "~5.9.3",
+    "vitest": "^4.1.2"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

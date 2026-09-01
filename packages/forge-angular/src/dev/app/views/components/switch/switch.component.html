@@ -1,0 +1,15 @@
+<app-demo-card headerText="Switch">
+  <h4>With a label: {{ withLabel }}</h4>
+  <div>
+    <forge-switch id="forge-switch-01" (forge-switch-change)="onChange($event)" [(ngModel)]="withLabel">
+      <span>off/on</span>
+    </forge-switch>
+  </div>
+
+  <br />
+  <forge-button (click)="withLabel = !withLabel">Change value</forge-button>
+  <br />
+
+  <h4>Without a label</h4>
+  <forge-switch [(ngModel)]="withoutLabel" />
+</app-demo-card>

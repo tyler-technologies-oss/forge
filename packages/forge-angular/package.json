@@ -1,0 +1,85 @@
+{
+  "name": "@tylertech/forge-angular",
+  "version": "9.1.0",
+  "description": "The official Tyler Forge™ components adapter library for Angular.",
+  "author": "Tyler Technologies, Inc.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyler-technologies-oss/forge.git",
+    "directory": "packages/forge-angular"
+  },
+  "type": "module",
+  "typings": "./dist/index.d.ts",
+  "module": "./dist/fesm2022/tylertech-forge-angular.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/fesm2022/tylertech-forge-angular.mjs"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "ng-update": {
+    "migrations": "./dist/schematics/migrations/migration.json"
+  },
+  "scripts": {
+    "build": "rimraf ./dist && ng build forge-angular --configuration production && tsc -p schematics/tsconfig.json",
+    "dev": "ng serve forge-angular-demo",
+    "lint": "eslint",
+    "test": "ng test forge-angular",
+    "format": "prettier --write \"**/*.{ts,html,scss,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,html,scss,json}\"",
+    "generate-proxies": "ng generate @tylertech/forge-schematics:custom-elements --config generate-proxies.json --interactive=false"
+  },
+  "dependencies": {
+    "tslib": "catalog:"
+  },
+  "peerDependencies": {
+    "@angular/common": ">=20.0.0 < 23.0.0",
+    "@angular/core": ">=20.0.0 < 23.0.0",
+    "@tylertech/forge": "^3.15.2"
+  },
+  "devDependencies": {
+    "@angular-devkit/schematics": "^20.3.13",
+    "@angular/build": "^20.3.13",
+    "@angular/cli": "^20.3.13",
+    "@angular/common": "^20.3.15",
+    "@angular/compiler": "^20.3.15",
+    "@angular/compiler-cli": "^20.3.15",
+    "@angular/core": "^20.3.15",
+    "@angular/forms": "^20.3.15",
+    "@angular/platform-browser": "^20.3.15",
+    "@angular/platform-browser-dynamic": "^20.3.15",
+    "@angular/router": "^20.3.15",
+    "@schematics/angular": "^20.3.13",
+    "@tylertech-eslint/eslint-plugin": "catalog:",
+    "@tylertech/forge": "workspace:*",
+    "@tylertech/forge-core": "workspace:*",
+    "@tylertech/forge-schematics": "workspace:*",
+    "@tylertech/tyler-icons": "catalog:",
+    "@types/node": "catalog:",
+    "angular-eslint": "^20.4.0",
+    "@vitest/browser": "^3.2.4",
+    "ng-packagr": "^20.3.2",
+    "playwright": "catalog:",
+    "prettier": "catalog:",
+    "rimraf": "catalog:",
+    "rxjs": "^7.8.2",
+    "sass": "catalog:",
+    "typescript": "~5.9.3",
+    "vitest": "^3.2.4",
+    "zone.js": "~0.15.1"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
