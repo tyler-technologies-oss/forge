@@ -16,6 +16,7 @@ import {
   defineAppBarSearchComponent,
   defineProfileCardComponent
 } from './app-bar/index.js';
+import { defineAppLayoutComponent } from './app-layout/index.js';
 import { defineAutocompleteComponent } from './autocomplete/index.js';
 import { defineAvatarComponent } from './avatar/index.js';
 import { defineBackdropComponent } from './backdrop/index.js';
@@ -94,6 +95,7 @@ import { defineDeprecatedIconButtonComponent } from './deprecated/icon-button/in
 
 export * from './accordion/index.js';
 export * from './app-bar/index.js';
+export * from './app-layout/index.js';
 export * from './autocomplete/index.js';
 export * from './avatar/index.js';
 export * from './backdrop/index.js';
@@ -183,6 +185,7 @@ export function defineComponents(): void {
   defineAppBarNotificationButtonComponent();
   defineAppBarProfileButtonComponent();
   defineAppBarSearchComponent();
+  defineAppLayoutComponent();
   defineAutocompleteComponent();
   defineAvatarComponent();
   defineBackdropComponent();
