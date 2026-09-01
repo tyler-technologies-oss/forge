@@ -1,0 +1,33 @@
+<app-demo-card headerText="Icon Button">
+  <div class="container">
+    <forge-icon-button aria-label="Default icon button">
+      <forge-icon name="favorite"></forge-icon>
+    </forge-icon-button>
+
+    <forge-icon-button variant="outlined" aria-label="Outlined icon button">
+      <forge-icon name="favorite"></forge-icon>
+    </forge-icon-button>
+
+    <forge-icon-button variant="tonal" aria-label="Tonal icon button">
+      <forge-icon name="favorite"></forge-icon>
+    </forge-icon-button>
+
+    <forge-icon-button variant="filled" aria-label="Filled icon button">
+      <forge-icon name="favorite"></forge-icon>
+    </forge-icon-button>
+
+    <forge-icon-button variant="raised" aria-label="Raised icon button">
+      <forge-icon name="favorite"></forge-icon>
+    </forge-icon-button>
+  </div>
+
+  <h2>Icon Button Toggle</h2>
+  <div class="container">
+    <forge-icon-button variant="outlined" toggle [pressed]="isToggleOn" (forge-icon-button-toggle)="onToggleChanged($event)">
+      <forge-icon name="favorite_border"></forge-icon>
+      <forge-icon slot="on" name="favorite"></forge-icon>
+    </forge-icon-button>
+
+    <forge-button varian="outlined" (click)="isToggleOn = !isToggleOn">Toggle</forge-button>
+  </div>
+</app-demo-card>

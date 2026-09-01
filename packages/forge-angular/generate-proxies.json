@@ -1,0 +1,28 @@
+{
+  "manifest": "node_modules/@tylertech/forge/custom-elements.json",
+  "importPath": "@tylertech/forge",
+  "exclude": "",
+  "outDir": "src/lib",
+  "outDirExcludePrefix": "forge-",
+  "modulePrefix": "Forge",
+  "useDefineFunction": true,
+  "componentDependencies": {
+    "forge-accordion": ["forge-expansion-panel"],
+    "forge-button-toggle-group": ["forge-button-toggle"],
+    "forge-chip-field": ["forge-chip"],
+    "forge-chip-set": ["forge-chip"],
+    "forge-expansion-panel": ["forge-open-icon"],
+    "forge-icon-button": ["forge-icon"],
+    "forge-key": ["forge-key-item"],
+    "forge-list": ["forge-list-item"],
+    "forge-meter-group": ["forge-meter"],
+    "forge-radio-group": ["forge-radio"],
+    "forge-select": ["forge-option"],
+    "forge-split-view": ["forge-split-view-panel"],
+    "forge-stepper": ["forge-step"],
+    "forge-tab-bar": ["forge-tab"],
+    "forge-timeline": ["forge-timeline-item", "forge-timeline-break"],
+    "forge-tree": ["forge-tree-item"],
+    "forge-view-switcher": ["forge-view"]
+  }
+}

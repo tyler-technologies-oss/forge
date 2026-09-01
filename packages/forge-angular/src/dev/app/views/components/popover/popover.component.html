@@ -1,0 +1,33 @@
+<app-demo-card headerText="Popup">
+  <forge-button id="show-inline-popover" variant="raised">Show inline</forge-button>
+  <forge-popover anchor="show-inline-popover">
+    <div class="inline-popover">
+      <p>
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Itaque maiores quas at voluptas? Veniam, facere perferendis reiciendis deleniti iure, libero
+        nihil omnis inventore repellat quaerat eveniet eligendi eos officia cumque.
+      </p>
+    </div>
+  </forge-popover>
+
+  <forge-button variant="raised" #popup="forgePopover" [forgePopover]="popupTemplate" (click)="popupOpen(popup)" forgePopoverClass="test-class">
+    Show popup using directive
+  </forge-button>
+
+  <forge-button variant="raised" #anchorElement (click)="showPopupViaService(anchorElement.nativeElement)">Show popup using service</forge-button>
+
+  <ng-template #popupTemplate>
+    <!-- The root node of the template can be the forge-popover element for granular control -->
+    <forge-popover>
+      <div style="padding: 16px; display: flex; flex-direction: column">
+        <div>Popup Content</div>
+        <br />
+        <forge-text-field>
+          <label for="popup-text-field">Text Field</label>
+          <input type="text" id="popup-text-field" [(ngModel)]="popupTextValue" />
+        </forge-text-field>
+        <br />
+        <forge-button variant="filled" (click)="popup.close()">Close</forge-button>
+      </div>
+    </forge-popover>
+  </ng-template>
+</app-demo-card>

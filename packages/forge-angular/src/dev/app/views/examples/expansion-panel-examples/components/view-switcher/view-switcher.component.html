@@ -1,0 +1,41 @@
+<forge-scaffold>
+  <div slot="body-header">
+    <forge-tab-bar underline [activeTab]="currentIndex" (forge-tab-bar-change)="tabClicked($event.detail.index)" layout-mode="clustered">
+      @for (item of listItems; track item; let i = $index) {
+        <forge-tab>{{ item.label }}</forge-tab>
+      }
+    </forge-tab-bar>
+  </div>
+  <div slot="body" style="padding: 32px">
+    <forge-view-switcher [index]="currentIndex" animation-type="slide">
+      <forge-view>
+        <div style="display: flex; justify-content: flex-start">
+          <forge-label-value style="margin-right: 48px">
+            <span slot="label">Address</span>
+            <span slot="value">{{ user().address.suite }} {{ user().address.street }} <br /></span>
+            <span slot="value">{{ user().address.city }}, {{ user().address.state }} {{ user().address.zipcode }}</span>
+          </forge-label-value>
+
+          <forge-label-value style="margin-right: 48px">
+            <span slot="label">Company</span>
+            <span slot="value">{{ user().company.name }}</span>
+          </forge-label-value>
+
+          <forge-label-value>
+            <span slot="label">Email</span>
+            <span slot="value">{{ user().email }}</span>
+          </forge-label-value>
+        </div>
+      </forge-view>
+      <forge-view>
+        <forge-page-state>
+          <img
+            src="https://cdn.forge.tylertech.com/v1/images/spot/bill-pay-spot.svg"
+            alt="A document with a money sign marked with a checkmark"
+            slot="graphic" />
+          <div slot="title">No past bills!</div>
+        </forge-page-state>
+      </forge-view>
+    </forge-view-switcher>
+  </div>
+</forge-scaffold>
