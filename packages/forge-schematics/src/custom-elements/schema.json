@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "SchematicsCustomElements",
+  "title": "Custom Elements Schema",
+  "type": "object",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "config": {
+          "type": "string",
+          "description": "path to JSON file containing configuration options instead of individual arguments"
+        }
+      },
+      "required": ["config"]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "manifest": {
+          "type": "string",
+          "description": "path to custom-elements-manifest.json",
+          "x-prompt": "Where is the custom-elements-manifest.json file located?"
+        },
+        "importPath": {
+          "type": "string",
+          "description": "path to import custom element classes from the library",
+          "x-prompt": "What is the import path for the custom element library components?"
+        },
+        "outDir": {
+          "type": "string",
+          "description": "path to output proxy components",
+          "x-prompt": "Where should the proxy components be generated?"
+        },
+        "outDirExcludePrefix": {
+          "type": "string",
+          "description": "tag name prefix to exclude from generated directory names",
+          "x-prompt": "Is there a tag name prefix that should be excluded from created directory names?"
+        },
+        "exclude": {
+          "type": "string",
+          "description": "custom element tag names to exclude from generation",
+          "x-prompt": "Are there any custom elements that should be excluded? (comma-separated-list of tag names)"
+        },
+        "modulePrefix": {
+          "type": "string",
+          "description": "optional prefix for the NgModule name",
+          "x-prompt": "Is there a prefix that the exported NgModule should begin with?"
+        },
+        "useDefineFunction": {
+          "type": "boolean",
+          "description": "option to use custom define function provided by each component",
+          "x-prompt": "Do the components provide their own define function?"
+        },
+        "componentDependencies": {
+          "type": "object",
+          "description": "dictionary keyed by tag name, with values as an array of tag names with modules that should also be re-exported",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": ["manifest", "importPath"]
+    }
+  ]
+}

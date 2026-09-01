@@ -1,0 +1,12 @@
+<app-demo-card headerText="Tab Bar">
+  <forge-tab-bar [activeTab]="selectedTab" underline>
+    <forge-tab id="tab-one">Tab 1</forge-tab>
+    <forge-tab id="tab-two">Tab 2</forge-tab>
+    <forge-tab id="tab-three">Tab 3</forge-tab>
+  </forge-tab-bar>
+  <div style="padding: 16px">
+    <forge-tab-panel for="tab-one">Content for tab one</forge-tab-panel>
+    <forge-tab-panel for="tab-two">Content for tab two</forge-tab-panel>
+    <forge-tab-panel for="tab-three">Content for tab three</forge-tab-panel>
+  </div>
+</app-demo-card>
