@@ -1,5 +1,11 @@
 # v3.4.0 (Tue Jul 28 2026)
 
+## 3.4.1
+
+### Patch Changes
+
+- e471b77: chore: migrate to the Forge monorepo
+
 #### 🚀 Enhancement
 
 - feat: update to Forge 3.15.0 [#32](https://github.com/tyler-technologies-oss/forge-react/pull/32) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))

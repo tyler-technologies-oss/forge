@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge-angular",
-  "version": "9.1.0",
+  "version": "9.1.1",
   "description": "The official Tyler Forge™ components adapter library for Angular.",
   "author": "Tyler Technologies, Inc.",
   "license": "Apache-2.0",

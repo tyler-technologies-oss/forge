@@ -1,5 +1,11 @@
 # v2.0.0 (Thu Jun 05 2025)
 
+## 2.0.1
+
+### Patch Changes
+
+- a4b9bed: chore: migrate to the Forge monorepo
+
 :tada: This release contains work from new contributors! :tada:
 
 Thanks for all your work!

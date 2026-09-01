@@ -1,5 +1,11 @@
 # v9.1.0 (Tue Jul 28 2026)
 
+## 9.1.1
+
+### Patch Changes
+
+- a4b9bed: chore: migrate to the Forge monorepo
+
 #### 🚀 Enhancement
 
 - feat: update to Forge 3.15.2 [#124](https://github.com/tyler-technologies-oss/forge-angular/pull/124) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
