@@ -1,5 +1,11 @@
 # @tylertech/forge-core
 
+## 3.5.0
+
+### Minor Changes
+
+- 691a79d: feat: add getFirstFocusableElement function
+
 ## 3.4.0
 
 ### Minor Changes

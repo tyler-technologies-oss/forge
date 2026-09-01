@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge-schematics",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Contains Angular Schematics relevant to working with Forge web components.",
   "author": "Tyler Technologies, Inc.",
   "license": "Apache-2.0",
