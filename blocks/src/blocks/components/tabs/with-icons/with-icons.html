@@ -5,16 +5,26 @@
   @tags tabs, with-icons, storybook, component-example
 -->
 <forge-tab-bar data-aria-label="Demo tabs" active-tab="0">
-  <forge-tab selected>
+  <forge-tab id="with-icons-tab-1" selected>
     <forge-icon slot="start" name="favorite">
     </forge-icon> Tab 1
   </forge-tab>
-  <forge-tab>
+  <forge-tab id="with-icons-tab-2">
     <forge-icon slot="start" name="favorite">
     </forge-icon> Tab 2
   </forge-tab>
-  <forge-tab>
+  <forge-tab id="with-icons-tab-3">
     <forge-icon slot="start" name="favorite">
     </forge-icon> Tab 3
   </forge-tab>
 </forge-tab-bar>
+
+<forge-tab-panel for="with-icons-tab-1">
+  <div class="p-medium">Tab 1 content</div>
+</forge-tab-panel>
+<forge-tab-panel for="with-icons-tab-2">
+  <div class="p-medium">Tab 2 content</div>
+</forge-tab-panel>
+<forge-tab-panel for="with-icons-tab-3">
+  <div class="p-medium">Tab 3 content</div>
+</forge-tab-panel>

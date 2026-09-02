@@ -4,46 +4,33 @@
   @description Demo usage example for the forge-drawer component.
   @tags drawer, demo, storybook, component-example
 -->
-<forge-scaffold style="--forge-scaffold-height: 300px;">
+<forge-scaffold>
   <forge-app-bar slot="header" title-text="Drawer Demo" elevation="raised">
-    <forge-app-bar-menu-button slot="start">
-      <forge-icon-button theme="app-bar" aria-labelledby="forge-tooltip-yjmb4">
-        <forge-icon name="menu">
-        </forge-icon>
-      </forge-icon-button>
-      <forge-tooltip type="label" placement="bottom" aria-hidden="true" id="forge-tooltip-yjmb4">Menu</forge-tooltip>
-    </forge-app-bar-menu-button>
+    <forge-app-bar-menu-button slot="start" id="menu-button"></forge-app-bar-menu-button>
   </forge-app-bar>
-  <forge-drawer slot="body-left" open direction="left">
+  <forge-drawer id="drawer" slot="body-left" open direction="left">
     <aside>
       <forge-list navlist>
         <forge-list-item selected>
-          <forge-icon slot="start" name="inbox">
-          </forge-icon>
+          <forge-icon slot="start" name="inbox"> </forge-icon>
           <a href="javascript: void(0)">Inbox</a>
         </forge-list-item>
         <forge-list-item>
-          <forge-icon slot="start" name="send">
-          </forge-icon>
+          <forge-icon slot="start" name="send"> </forge-icon>
           <a href="javascript: void(0)">Outgoing</a>
         </forge-list-item>
-        <forge-list-item indented>
-          <a href="javascript: void(0)">Pending</a>
-        </forge-list-item>
         <forge-list-item>
-          <forge-icon slot="start" name="drafts">
-          </forge-icon>
+          <forge-icon slot="start" name="drafts"> </forge-icon>
           <a href="javascript: void(0)">Drafts</a>
         </forge-list-item>
         <forge-list-item>
-          <forge-icon slot="start" name="send">
-          </forge-icon>
+          <forge-icon slot="start" name="send"> </forge-icon>
           <a href="javascript: void(0)">Sent</a>
         </forge-list-item>
       </forge-list>
     </aside>
   </forge-drawer>
-  <main slot="body" style="padding: 16px; background-color: var(--forge-theme-surface-dim);">
+  <main slot="body" style="padding: 16px; background-color: var(--forge-theme-surface-dim)">
     <forge-card>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
     </forge-card>

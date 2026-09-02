@@ -1,0 +1,35 @@
+<app-demo-card headerText="Toast">
+  <forge-button variant="raised" (click)="onShowToast()">Show toast</forge-button>
+
+  <forge-text-field>
+    <label for="message">Message</label>
+    <input type="text" id="message" [(ngModel)]="message" />
+  </forge-text-field>
+
+  <forge-text-field>
+    <label for="action-text">Action Text</label>
+    <input type="text" id="action-text" [(ngModel)]="actionText" />
+  </forge-text-field>
+
+  <forge-text-field>
+    <label for="duration">Duration (ms)</label>
+    <input type="number" id="duration" [(ngModel)]="duration" />
+  </forge-text-field>
+
+  <forge-select id="placement" label="Placement" [(ngModel)]="placement">
+    <forge-option value="bottom">Bottom</forge-option>
+    <forge-option value="bottom-start">Bottom Start</forge-option>
+    <forge-option value="bottom-end">Bottom End</forge-option>
+    <forge-option value="top">Top</forge-option>
+    <forge-option value="top-start">Top Start</forge-option>
+    <forge-option value="top-end">Top End</forge-option>
+  </forge-select>
+
+  <div>
+    <forge-checkbox id="dismissible" [(ngModel)]="dismissible">Dismissible</forge-checkbox>
+  </div>
+
+  <div>
+    <forge-checkbox id="useCustom" [(ngModel)]="useCustom">Use custom component</forge-checkbox>
+  </div>
+</app-demo-card>

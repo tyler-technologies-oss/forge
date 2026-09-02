@@ -1,0 +1,47 @@
+<section>
+  <h4>Date range picker in reactive form</h4>
+  <form [formGroup]="demoForm" (ngSubmit)="onSubmit()">
+    <forge-date-range-picker formControlName="dateRange" [valueMode]="valueMode">
+      <forge-text-field [invalid]="dateRangeControl.invalid" required>
+        <input type="text" id="input-date-range-picker-01" autocomplete="off" placeholder="mm/dd/yyyy" />
+        <input type="text" id="input-date-range-picker-02" autocomplete="off" placeholder="mm/dd/yyyy" />
+        <label for="input-date-range-picker-01">Seven days</label>
+        @if (!dateRangeControl.invalid) {
+          <div slot="support-text">Select seven days.</div>
+        }
+        @if (dateRangeControl.invalid) {
+          <div slot="support-text">Date range must contain exactly 7 days.</div>
+        }
+      </forge-text-field>
+    </forge-date-range-picker>
+    <forge-button variant="raised" [disabled]="demoForm.invalid">Submit</forge-button>
+  </form>
+</section>
+
+<section>
+  <forge-label-value>
+    <span slot="label">From date</span>
+    <span slot="value">{{ dateRangeControl.value.from || 'n/a' }}</span>
+  </forge-label-value>
+  <forge-label-value>
+    <span slot="label">To date</span>
+    <span slot="value">{{ dateRangeControl.value.to || 'n/a' }}</span>
+  </forge-label-value>
+  <forge-label-value>
+    <forge-tooltip placement="top-start">note that the JSON conversion internally converts date object to iso-string format</forge-tooltip>
+    <span slot="label" class="form-value-label">
+      Form value
+      <forge-icon name="info_outline" class="info-icon"></forge-icon>
+    </span>
+    <span slot="value">{{ demoForm.value | json }}</span>
+  </forge-label-value>
+</section>
+
+<section>
+  <forge-select label="Value mode" [(ngModel)]="valueMode">
+    <forge-option value="object">Object</forge-option>
+    <forge-option value="string">string</forge-option>
+    <forge-option value="iso-string">ISO string</forge-option>
+  </forge-select>
+  <forge-checkbox (click)="disableForm($event)">Disabled</forge-checkbox>
+</section>

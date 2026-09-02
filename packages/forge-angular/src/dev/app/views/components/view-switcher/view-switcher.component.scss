@@ -1,0 +1,13 @@
+.view-container {
+  height: 250px;
+  background: #fefefe;
+  border: 1px dashed #444444;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  > forge-button {
+    margin-top: 16px;
+  }
+}

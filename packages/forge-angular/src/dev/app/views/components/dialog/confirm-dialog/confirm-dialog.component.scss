@@ -1,0 +1,7 @@
+.body {
+  padding-inline: var(--forge-spacing-medium);
+}
+
+forge-toolbar[slot='footer'] forge-button:last-child {
+  margin-inline-start: var(--forge-spacing-medium);
+}
