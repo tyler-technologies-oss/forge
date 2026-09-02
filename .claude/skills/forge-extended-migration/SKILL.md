@@ -111,6 +111,7 @@ The fix already has precedent in this codebase (`footer`, `app-layout`, and — 
    export function defineXComponent(): void { ... }
    ```
 5. If `blocks/` uses the component anywhere, add the explicit side-effect import to `blocks/forge-register.ts` (e.g. `import '@tylertech/forge/busy-indicator';`) — `defineComponents()` no longer reaches it, so the blocks gallery must opt in itself, same as any other consumer would.
+6. **Add the component's folder name to `SUBPATH_ONLY_ENTRIES` in `packages/forge/scripts/build-esm.js`.** `buildEsm` bundles from a single `src/lib/index.ts` Rollup entry with `preserveModules: true`, so it only emits `.js` for modules reachable from that barrel — anything not wired into `src/lib/index.ts` per steps 1-3 above gets **no `.js` output at all** in `esm/<name>/` (only `.d.ts`, from the separate glob-based `tsc` declaration pass), which makes the `@tylertech/forge/<name>` subpath export a dead reference that fails to resolve for any consumer (this exact bug broke `blocks/forge-register.ts`'s build after the `app-layout`/`busy-indicator`/`footer` migrations). `SUBPATH_ONLY_ENTRIES` is an explicit array — not a glob over every `index.ts` — specifically so internal, non-public barrels (`core/base`, `core/utils`, etc.) never get promoted into buildable/importable subpaths by accident; every component migrated via this subpath-only path must be added to it by name.
 
 If `forge-extended` has already dropped the component (no remaining collision risk), the old three-edit pattern is fine — matching the existing surrounding entries exactly, alphabetical by folder name (not tag name; e.g. `app-layout` sorts between `app-bar` and `autocomplete`):
 
@@ -131,5 +132,7 @@ pnpm run build                                          # full package build: CE
 ```
 
 After `pnpm run build`, spot-check `custom-elements.json` for the new tag's `dependencies` and `slots` arrays to confirm the JSDoc tags were picked up correctly (see the Python one-liner pattern used during the `app-layout` migration — load the JSON, filter `declarations` by `tagName`).
+
+If the component was wired in via the subpath-only path (tag-name collision still exists in `forge-extended`), also confirm `esm/<name>/index.js` actually exists (not just `index.d.ts`) — `ls packages/forge/esm/<name>/`. Its absence means `SUBPATH_ONLY_ENTRIES` in `build-esm.js` wasn't updated, and the `@tylertech/forge/<name>` subpath will fail to resolve for any downstream consumer (e.g. `blocks/`) even though the package build itself succeeds.
 
 Optionally run `npx storybook build --quiet` and check `storybook-static/assets/` for chunks matching the new story file names, then `rm -rf storybook-static` — build artifacts (`dist/`, `esm/`, `custom-elements.json`, `storybook-static/`) are gitignored; confirm with `git status --short` that nothing untracked leaked in.

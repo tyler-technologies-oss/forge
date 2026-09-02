@@ -2,7 +2,14 @@ import { rollup } from 'rollup';
 import typescript from '@rollup/plugin-typescript';
 import { readFileSync } from 'fs';
 import * as sass from 'sass';
-import { getComponentEntryPoints, getExternalDeps, LICENSE_HEADER } from './build-utils.js';
+import { getExternalDeps, LICENSE_HEADER } from './build-utils.js';
+
+/**
+ * Components that are intentionally excluded from the `src/lib/index.ts` barrel (to avoid
+ * duplicate custom-element registration with `@tylertech/forge-extended`) but must still be
+ * bundled so their `@tylertech/forge/<name>` subpath export resolves.
+ */
+const SUBPATH_ONLY_ENTRIES = ['app-layout', 'busy-indicator', 'footer'];
 
 const htmlPlugin = () => ({
   name: 'html',
@@ -39,7 +46,7 @@ export async function buildEsm({ outdir = 'esm' } = {}) {
   const external = getExternalDeps();
 
   const bundle = await rollup({
-    input: await getComponentEntryPoints(),
+    input: ['src/lib/index.ts', ...SUBPATH_ONLY_ENTRIES.map(name => `src/lib/${name}/index.ts`)],
     external: id => external.some(dep => id === dep || id.startsWith(dep + '/')),
     treeshake: false,
     onwarn(warning, warn) {
