@@ -1,4 +1,5 @@
 import { defineComponents, IconRegistry } from '@tylertech/forge';
+import '@tylertech/forge/app-launcher';
 import '@tylertech/forge/app-layout';
 import '@tylertech/forge/busy-indicator';
 import '@tylertech/forge/footer';

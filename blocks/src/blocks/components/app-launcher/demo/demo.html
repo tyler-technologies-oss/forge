@@ -1,0 +1,17 @@
+<!--
+  @block App Launcher — Demo
+  @type component
+  @description Demo usage example for the forge-app-launcher component.
+  @tags app-launcher, demo, storybook, component-example
+-->
+<forge-app-bar theme-mode="scoped" title-text="App Launcher">
+  <forge-app-launcher slot="end" search-placeholder="Search by product or app">
+    <span slot="app-launcher-links-title">Resources</span>
+    <forge-app-launcher-link slot="app-launcher-link">
+      <a href="https://www.tylertech.com" target="_blank">Documentation</a>
+    </forge-app-launcher-link>
+    <forge-app-launcher-link slot="app-launcher-link">
+      <a href="https://www.tylertech.com" target="_blank">Support Center</a>
+    </forge-app-launcher-link>
+  </forge-app-launcher>
+</forge-app-bar>
