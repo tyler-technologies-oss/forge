@@ -3,10 +3,10 @@ import '@tylertech/forge/app-launcher';
 import '@tylertech/forge/app-layout';
 import '@tylertech/forge/busy-indicator';
 import '@tylertech/forge/confirmation-dialog';
+import '@tylertech/forge/count-card';
 import '@tylertech/forge/footer';
 import '@tylertech/forge-extended/user-profile';
 import '@tylertech/forge-extended/structured-card';
-import '@tylertech/forge-extended/count-card';
 
 import {
   tylIconHome,
