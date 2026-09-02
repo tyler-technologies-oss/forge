@@ -1,0 +1,65 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as UserProfileStories from './UserProfile.stories';
+import * as ProfileLinkStory from './ProfileLink.stories';
+
+<Meta of={UserProfileStories} />
+
+<Title />
+
+The `<forge-user-profile>` component is a versatile solution adhering to the Forge design language for displaying user
+authentication state within an application. When a user is signed in (has a `full-name` value), it displays an avatar
+button that opens a popover containing the user's name, email, and sign out option. When no user is signed in, it displays
+a sign-in button instead. It also has support for optional features like a theme toggle and custom link slots.
+
+<Canvas of={UserProfileStories.Demo} />
+
+## Usage
+
+It's important to note that the `<forge-user-profile>` component is designed to be used within a `<forge-app-bar>`. This ensures that the user profile is
+integrated seamlessly into the application's navigation structure. The component can be placed in the `end` slot of the `<forge-app-bar>`, which is
+typically reserved for user-related actions.
+
+### App Bar Theme Mode
+
+Due to the `<forge-user-profile>` being comprised of multiple components, including the `<forge-popover>`, you need to set the `theme-mode="scoped"` attribute
+on the `<forge-app-bar>` to ensure that it inherits the correct design and the app bar's theme tokens do not cascade down into the user profile popover. If you
+do not set this attribute, the user profile popover may not display correctly.
+
+See the [Forge App Bar documentation](https://forge.tylerdev.io/main/?path=/docs/components-app-bar--docs#theme-mode) for more details on the `theme-mode` attribute.
+
+## Custom Links
+
+The `<forge-profile-link>` component is a utility component for rendering accessible, visually consistent links within the
+`<forge-user-profile>` popover. This component is configured to render in the `link` slot of the `<forge-user-profile>`. It
+supports an optional icon and ensures links are part of a fully accessible list structure.
+
+> The optional profile link should appear last in the user profile link list to maintain a consistent design and user experience across all apps
+
+<Canvas of={ProfileLinkStory.Demo} />
+
+## Theme Toggle
+
+You can also include a theme toggle within the user profile popover by specifying the `theme-toggle` attribute. This allows
+users to switch between light and dark themes directly from their profile menu.
+
+The theme toggle will set the `data-forge-theme` attribute on the `<html>` element, which you can use CSS to target for styling
+and the correct theme.
+
+#### Usage example
+
+```css
+@use '@tylertech/forge/sass/theme/theme-dark';
+
+html[data-forge-theme='dark'] {
+  @include theme-dark.theme-properties;
+}
+```
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Ensure you provide appropriate `button-label` text for the `aria-label` of the profile button if you need something other than the default.

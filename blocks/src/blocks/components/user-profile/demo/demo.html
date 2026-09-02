@@ -1,0 +1,18 @@
+<!--
+  @block User Profile — Demo
+  @type component
+  @description Demo usage example for the forge-user-profile component.
+  @tags user-profile, demo, storybook, component-example
+-->
+<forge-app-bar theme-mode="scoped" title-text="Forge Extended">
+  <forge-user-profile slot="end" theme-toggle full-name="First Last" email="first.last@tylertech.com">
+    <forge-profile-link slot="link">
+      <forge-icon slot="icon" name="settings"></forge-icon>
+      <a href="http://www.google.com" target="_blank">Settings</a>
+    </forge-profile-link>
+    <forge-profile-link slot="link">
+      <forge-icon slot="icon" name="account"></forge-icon>
+      <a href="http://www.google.com" target="_blank">Profile</a>
+    </forge-profile-link>
+  </forge-user-profile>
+</forge-app-bar>

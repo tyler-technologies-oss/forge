@@ -20,7 +20,9 @@ const SUBPATH_ONLY_ENTRIES = [
   'multi-select-header',
   'quantity-field',
   'responsive-toolbar',
-  'structured-card'
+  'structured-card',
+  'theme-toggle',
+  'user-profile'
 ];
 
 const htmlPlugin = () => ({

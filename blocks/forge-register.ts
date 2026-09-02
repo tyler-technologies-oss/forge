@@ -10,7 +10,8 @@ import '@tylertech/forge/multi-select-header';
 import '@tylertech/forge/quantity-field';
 import '@tylertech/forge/responsive-toolbar';
 import '@tylertech/forge/structured-card';
-import '@tylertech/forge-extended/user-profile';
+import '@tylertech/forge/theme-toggle';
+import '@tylertech/forge/user-profile';
 
 import {
   tylIconHome,
