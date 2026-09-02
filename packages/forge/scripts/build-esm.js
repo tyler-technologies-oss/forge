@@ -2,7 +2,7 @@ import { rollup } from 'rollup';
 import typescript from '@rollup/plugin-typescript';
 import { readFileSync } from 'fs';
 import * as sass from 'sass';
-import { getExternalDeps, LICENSE_HEADER } from './build-utils.js';
+import { getComponentEntryPoints, getExternalDeps, LICENSE_HEADER } from './build-utils.js';
 
 const htmlPlugin = () => ({
   name: 'html',
@@ -39,7 +39,7 @@ export async function buildEsm({ outdir = 'esm' } = {}) {
   const external = getExternalDeps();
 
   const bundle = await rollup({
-    input: 'src/lib/index.ts',
+    input: await getComponentEntryPoints(),
     external: id => external.some(dep => id === dep || id.startsWith(dep + '/')),
     treeshake: false,
     onwarn(warning, warn) {
