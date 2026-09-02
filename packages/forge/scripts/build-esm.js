@@ -14,11 +14,13 @@ const SUBPATH_ONLY_ENTRIES = [
   'app-layout',
   'busy-indicator',
   'confirmation-dialog',
+  'content-scaffold',
   'count-card',
   'footer',
   'multi-select-header',
   'quantity-field',
-  'responsive-toolbar'
+  'responsive-toolbar',
+  'structured-card'
 ];
 
 const htmlPlugin = () => ({
