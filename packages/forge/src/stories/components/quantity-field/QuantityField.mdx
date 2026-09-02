@@ -1,0 +1,25 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as QuantityFieldStories from './QuantityField.stories';
+
+<Meta of={QuantityFieldStories} />
+
+<Title />
+
+Quantity fields are used to input a numeric value for a field. They are often used in forms to allow users to increment or decrement a value.
+
+The quantity field is a "decorator" style component, meaning it wraps and enhances the provided `<input>` element with buttons to increment and
+decrement the value. You should communicate with the `<input>` as you normally would in terms of getting/setting the value or listening to events,
+otherwise the component handles the styling and orchestration of element as a whole.
+
+<Canvas of={QuantityFieldStories.Demo} />
+
+## Invalid and Required States
+
+The quantity field can be marked as invalid or required by setting the `invalid` or `required` props. The `invalid` prop will add a red border to the
+input field, while the `required` prop will add an asterisk to the label. You may be required to also set the `required` attribute on the input field
+itself depending on your form validation requirements.
+
+## API
+
+<CustomArgTypes />

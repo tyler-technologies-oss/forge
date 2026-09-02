@@ -9,7 +9,16 @@ import { getExternalDeps, LICENSE_HEADER } from './build-utils.js';
  * duplicate custom-element registration with `@tylertech/forge-extended`) but must still be
  * bundled so their `@tylertech/forge/<name>` subpath export resolves.
  */
-const SUBPATH_ONLY_ENTRIES = ['app-launcher', 'app-layout', 'busy-indicator', 'confirmation-dialog', 'count-card', 'footer', 'multi-select-header'];
+const SUBPATH_ONLY_ENTRIES = [
+  'app-launcher',
+  'app-layout',
+  'busy-indicator',
+  'confirmation-dialog',
+  'count-card',
+  'footer',
+  'multi-select-header',
+  'quantity-field'
+];
 
 const htmlPlugin = () => ({
   name: 'html',
