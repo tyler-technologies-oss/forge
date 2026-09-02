@@ -49,14 +49,14 @@ const meta = {
   component,
   render: () => html`
     <forge-structured-card id="storybook-demo">
-      <span slot="before-title">before-title</span>
-      <span slot="title">title</span>
-      <span slot="header-actions">header-actions</span>
-      <span slot="after-header-actions">after-header-actions</span>
-      <span slot="body" style="height: 300px;">body</span>
-      <span slot="footer-start">footer-start</span>
-      <span slot="footer-secondary-action">footer-secondary-action</span>
-      <span slot="footer-primary-action">footer-primary-action</span>
+      <span slot="before-title" class="forge-typography--label1">before-title</span>
+      <span slot="title" class="forge-typography--label1">title</span>
+      <span slot="header-actions" class="forge-typography--label1">header-actions</span>
+      <span slot="after-header-actions" class="forge-typography--label1">after-header-actions</span>
+      <span slot="body" class="forge-typography--label1" style="height: 300px;">body</span>
+      <span slot="footer-start" class="forge-typography--label1">footer-start</span>
+      <span slot="footer-secondary-action" class="forge-typography--label1">footer-secondary-action</span>
+      <span slot="footer-primary-action" class="forge-typography--label1">footer-primary-action</span>
     </forge-structured-card>
   `
 } satisfies Meta;
@@ -65,7 +65,41 @@ export default meta;
 
 type Story = StoryObj;
 
-export const Demo: Story = {};
+export const Demo: Story = {
+  decorators: [
+    storyStyles(`
+      forge-structured-card[id='storybook-demo'] [slot] {
+        display: block;
+        height: 100%;
+        padding: var(--forge-spacing-xxsmall);
+        border: 2px dashed;
+        border-radius: 4px;
+      }
+
+      forge-structured-card[id='storybook-demo'] [slot='header-actions'],
+      forge-structured-card[id='storybook-demo'] [slot='after-header-actions'],
+      forge-structured-card[id='storybook-demo'] [slot='before-title'],
+      forge-structured-card[id='storybook-demo'] [slot='title'] {
+        background: var(--forge-theme-primary-container-low);
+        border-color: var(--forge-theme-primary);
+      }
+
+      forge-structured-card[id='storybook-demo'] [slot='body'] {
+        display: grid;
+        place-content: center;
+        background: var(--forge-theme-success-container-low);
+        border-color: var(--forge-theme-success);
+      }
+
+      forge-structured-card[id='storybook-demo'] [slot='footer-start'],
+      forge-structured-card[id='storybook-demo'] [slot='footer-secondary-action'],
+      forge-structured-card[id='storybook-demo'] [slot='footer-primary-action'] {
+        background: var(--forge-theme-tertiary-container-low);
+        border-color: var(--forge-theme-tertiary);
+      }
+    `)
+  ]
+};
 
 export const WithForm: Story = {
   ...standaloneStoryParams,
