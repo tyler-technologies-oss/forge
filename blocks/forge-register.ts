@@ -5,6 +5,7 @@ import '@tylertech/forge/busy-indicator';
 import '@tylertech/forge/confirmation-dialog';
 import '@tylertech/forge/count-card';
 import '@tylertech/forge/footer';
+import '@tylertech/forge/multi-select-header';
 import '@tylertech/forge-extended/user-profile';
 import '@tylertech/forge-extended/structured-card';
 
