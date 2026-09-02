@@ -1,0 +1,44 @@
+@use './token-utils' as *;
+@use '../core/styles/spacing';
+@use '../core/styles/theme';
+@use '../core/styles/typography';
+
+@forward './token-utils';
+
+@mixin host {
+  display: inline;
+}
+
+@mixin base {
+  @include typography.style(body1);
+
+  display: inline-flex;
+  align-items: center;
+  gap: #{token(gap)};
+}
+
+@mixin key {
+  @include typography.kbd-base;
+
+  background: #{token(background)};
+  color: #{token(color)};
+  block-size: #{token(block-size)};
+  min-inline-size: #{token(block-size)};
+  padding-inline: #{token(padding-inline)};
+  border-radius: #{token(shape)};
+  border-width: #{token(border-width)};
+  border-style: #{token(border-style)};
+  border-color: #{token(border-color)};
+}
+
+@mixin dense {
+  block-size: 1.75em;
+  min-inline-size: 1.75em;
+  padding-inline: spacing.variable(xxxsmall);
+}
+
+@mixin theme($theme) {
+  @include override(background, theme.variable(#{$theme}-container-minimum), value);
+  @include override(color, theme.variable(on-#{$theme}-container-minimum), value);
+  @include override(border-color, theme.variable(#{$theme}-container-low), value);
+}

@@ -1,0 +1,21 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as KbdStories from './Kbd.stories';
+
+<Meta of={KbdStories} />
+
+<Title />
+
+Use the kbd component to visually display a keyboard key combination, such as a shortcut described in documentation or a hint within the UI.
+
+## Example
+
+<Canvas of={KbdStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- The kbd component renders native `<kbd>` elements, which are recognized by assistive technology as representing keyboard input.

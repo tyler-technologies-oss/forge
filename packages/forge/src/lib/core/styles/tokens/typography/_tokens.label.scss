@@ -54,9 +54,10 @@ $overline: utils.inherit-map(
 $kbd: utils.inherit-map(
   core.$base,
   (
-    font-size: type-utils.font-size-relative(label, font-size, '0875'),
-    line-height: type-utils.font-size-relative(label, line-height, '1000'),
-    letter-spacing: type-utils.calc-letter-spacing(0.5, scale.value('0875'))
+    font-size: type-utils.font-size-relative(label, font-size, '0750'),
+    font-weight: weight.value(medium),
+    line-height: type-utils.font-size-relative(label, line-height, '0875'),
+    letter-spacing: type-utils.calc-letter-spacing(0.5, scale.value('0750'))
   )
 ) !default;
 

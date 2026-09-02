@@ -153,17 +153,17 @@
 @mixin kbd-base {
   @include style(kbd);
 
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
-  padding-block: spacing.variable(xxsmall);
-  padding-inline: spacing.variable(xsmall);
-  margin: 0;
+  block-size: 2em;
+  min-inline-size: 2em;
+  padding-inline: spacing.variable(xxsmall);
   color: theme.variable(text-medium);
-  vertical-align: middle;
   background-color: theme.variable(surface-dim);
   border-radius: shape.variable(medium);
   border-width: border.variable(thin);
-  border-block-end-width: border.variable(medium);
   border-style: solid;
   border-color: theme.variable(outline);
 }
