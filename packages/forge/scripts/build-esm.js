@@ -17,7 +17,8 @@ const SUBPATH_ONLY_ENTRIES = [
   'count-card',
   'footer',
   'multi-select-header',
-  'quantity-field'
+  'quantity-field',
+  'responsive-toolbar'
 ];
 
 const htmlPlugin = () => ({

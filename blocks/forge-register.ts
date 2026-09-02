@@ -7,6 +7,7 @@ import '@tylertech/forge/count-card';
 import '@tylertech/forge/footer';
 import '@tylertech/forge/multi-select-header';
 import '@tylertech/forge/quantity-field';
+import '@tylertech/forge/responsive-toolbar';
 import '@tylertech/forge-extended/user-profile';
 import '@tylertech/forge-extended/structured-card';
 
