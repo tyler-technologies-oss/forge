@@ -1,0 +1,13 @@
+@use './core' as rte-core;
+
+@include rte-core.prosemirror-base();
+
+:host {
+  display: block;
+}
+
+.renderer-content {
+  padding: var(--forge-spacing-medium);
+
+  @include rte-core.content-styles();
+}
