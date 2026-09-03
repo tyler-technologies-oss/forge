@@ -1,0 +1,182 @@
+name: Post Release to Teams
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to replay (e.g. v1.2.3)"
+        required: true
+        type: string
+      webhook_url:
+        description: "Override Teams webhook URL for testing (leave blank to use the TEAMS_WEBHOOK_URL secret)"
+        required: false
+        type: string
+
+concurrency: 1
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get release info
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            RELEASE_JSON=$(gh api "repos/${{ github.repository }}/releases/tags/${{ inputs.tag }}")
+            echo "tag=${{ inputs.tag }}" >> $GITHUB_OUTPUT
+            echo "name=$(echo "$RELEASE_JSON" | jq -r '.name')" >> $GITHUB_OUTPUT
+            echo "url=$(echo "$RELEASE_JSON" | jq -r '.html_url')" >> $GITHUB_OUTPUT
+            echo "author=$(echo "$RELEASE_JSON" | jq -r '.author.login')" >> $GITHUB_OUTPUT
+            echo "body<<EOF" >> $GITHUB_OUTPUT
+            echo "$RELEASE_JSON" | jq -r '.body' >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+            echo "name=${{ github.event.release.name }}" >> $GITHUB_OUTPUT
+            echo "url=${{ github.event.release.html_url }}" >> $GITHUB_OUTPUT
+            echo "author=${{ github.event.release.author.login }}" >> $GITHUB_OUTPUT
+            echo "body<<EOF" >> $GITHUB_OUTPUT
+            echo "${{ github.event.release.body }}" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get contributors for this release
+        id: contributors
+        run: |
+          # Get the previous release tag
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 ${{ steps.release.outputs.tag }}^ 2>/dev/null || git rev-list --max-parents=0 HEAD)
+
+          # Get unique contributors between previous tag and current release
+          CONTRIBUTORS=$(git log $PREVIOUS_TAG..${{ steps.release.outputs.tag }} --format='%an' | sort -u | sed 's/^/- /' | tr '\n' '\\n')
+
+          # Get all contributors in this release
+          CURRENT_CONTRIBUTORS=$(git log $PREVIOUS_TAG..${{ steps.release.outputs.tag }} --format='%an' | sort -u)
+
+          # Get all historical contributors before this release
+          HISTORICAL_CONTRIBUTORS=$(git log ..$PREVIOUS_TAG --format='%an' | sort -u)
+
+          # Find first-time contributors (in current but not in historical)
+          FIRST_TIME=""
+          while IFS= read -r contributor; do
+            if ! echo "$HISTORICAL_CONTRIBUTORS" | grep -Fxq "$contributor"; then
+              FIRST_TIME="${FIRST_TIME}- ${contributor}\\n"
+            fi
+          done <<< "$CURRENT_CONTRIBUTORS"
+
+          # Save to output
+          echo "list<<EOF" >> $GITHUB_OUTPUT
+          echo "$CONTRIBUTORS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          echo "first_time<<EOF" >> $GITHUB_OUTPUT
+          if [ -n "$FIRST_TIME" ]; then
+            echo -e "$FIRST_TIME" >> $GITHUB_OUTPUT
+          fi
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          # Set a flag for whether we have first-time contributors
+          if [ -n "$FIRST_TIME" ]; then
+            echo "has_first_time=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_first_time=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Format release notes
+        id: format
+        env:
+          RELEASE_BODY: ${{ steps.release.outputs.body }}
+        run: |
+          # Get release body and escape for JSON
+          BODY=$(echo "$RELEASE_BODY" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+          echo "body=$BODY" >> $GITHUB_OUTPUT
+
+      - name: Build Teams message JSON
+        id: message
+        run: |
+          # Build base sections
+          SECTIONS='[
+            {
+              "activityTitle": "Tyler Forge",
+              "activitySubtitle": "Version ${{ steps.release.outputs.tag }}",
+              "facts": [
+                {
+                  "name": "Release:",
+                  "value": "${{ steps.release.outputs.tag }}"
+                },
+                {
+                  "name": "Published by:",
+                  "value": "${{ steps.release.outputs.author }}"
+                }
+              ]
+            },
+            {
+              "title": "📝 Release Notes",
+              "text": "${{ steps.format.outputs.body }}"
+            },
+            {
+              "title": "👥 Contributors",
+              "text": "${{ steps.contributors.outputs.list }}"
+            }'
+
+          # Add first-time contributors section if there are any
+          if [ "${{ steps.contributors.outputs.has_first_time }}" = "true" ]; then
+            SECTIONS="$SECTIONS"',
+            {
+              "title": "🎉 First-Time Contributors",
+              "text": "${{ steps.contributors.outputs.first_time }}"
+            }'
+          fi
+
+          SECTIONS="$SECTIONS"']'
+
+          # Save to output
+          echo "sections<<EOF" >> $GITHUB_OUTPUT
+          echo "$SECTIONS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Post to Microsoft Teams
+        env:
+          TEAMS_WEBHOOK_URL: ${{ inputs.webhook_url || secrets.TEAMS_WEBHOOK_URL }}
+        run: |
+          curl -H 'Content-Type: application/json' -d '{
+            "@type": "MessageCard",
+            "@context": "https://schema.org/extensions",
+            "summary": "New Release: ${{ steps.release.outputs.name }}",
+            "themeColor": "0078D7",
+            "title": "🚀 New Release: ${{ steps.release.outputs.name }}",
+            "sections": ${{ steps.message.outputs.sections }},
+            "potentialAction": [
+              {
+                "@type": "OpenUri",
+                "name": "View Release",
+                "targets": [
+                  {
+                    "os": "default",
+                    "uri": "${{ steps.release.outputs.url }}"
+                  }
+                ]
+              },
+              {
+                "@type": "OpenUri",
+                "name": "View Repository",
+                "targets": [
+                  {
+                    "os": "default",
+                    "uri": "${{ github.event.repository.html_url }}"
+                  }
+                ]
+              }
+            ]
+          }' "$TEAMS_WEBHOOK_URL"
