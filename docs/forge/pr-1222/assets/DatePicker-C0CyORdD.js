@@ -1,0 +1,122 @@
+import{u as o,j as e,M as a,T as s,C as r}from"./blocks-DftSGguC.js";import{C as c}from"./CustomArgTypes-BUp51ZN5.js";import{D as l,a as d,b as h,C as m}from"./DatePicker.stories-DiPNQvBS.js";import"./preload-helper-PPVm8Dsz.js";import"./_commonjsHelpers-CqkleIqs.js";import"./iframe-ZebJRd2k.js";import"./utils-DYC_LATD.js";import"./service-adapter-8tADcN_b.js";import"./date-picker-DcomIif4.js";import"./base-component-BcqNuJgA.js";import"./utils-BBsKBbSu.js";import"./tyler-icons-CvAFZSnF.js";import"./base-lit-element-H2XiDNvj.js";import"./directive-CwRn8Fwj.js";import"./constants-C8FIXqZ0.js";import"./feature-detection-CRito7YV.js";import"./platform-C5RrLkNt.js";import"./calendar-B_QUkRP1.js";import"./base-adapter-C389HZc_.js";import"./dom-utils-CRnY3o4F.js";import"./tooltip-v0Hw78HT.js";import"./utils-DU-9AqTO.js";import"./overlay-CZiEinF4.js";import"./key-action-lsAysfb-.js";import"./index-5CPwzmQS.js";import"./with-longpress-listener-D2FEOwr-.js";import"./dismissible-stack-xq-0Rg1q.js";import"./with-default-aria-C1zfJxsY.js";import"./a11y-utils-J2po7a_p.js";import"./focus-indicator-vAXHGgAC.js";import"./state-layer-mJUCxnSJ.js";import"./event-utils-C1SDeUaq.js";import"./button-BpytEDv8.js";import"./base-button-core-ChuPFGJm.js";import"./with-label-aware-BCtp5F9i.js";import"./button-constants-BYc3Vkj-.js";import"./icon-button-DCXr5XdP.js";import"./icon-button-constants-CuArO63Z.js";import"./popover-DJnfQE5v.js";import"./base-date-picker-core-D90UJ8eH.js";import"./a11y-BxM9_46k.js";import"./text-field-ucavXP17.js";import"./base-field-DsCdnF0Y.js";import"./label-f55TS_D7.js";import"./button-toggle-group-constants-DEr-8Y2E.js";import"./checkbox-constants-B-M7hLil.js";import"./switch-constants-B2dyMMoE.js";function i(n){const t={code:"code",h2:"h2",li:"li",p:"p",pre:"pre",ul:"ul",...o(),...n.components};return e.jsxs(e.Fragment,{children:[e.jsx(a,{of:l}),`
+`,e.jsx(s,{}),`
+`,e.jsx(t.p,{children:"Date pickers are used to allow users to select a date from a calendar."}),`
+`,e.jsx(r,{of:d}),`
+`,e.jsx(t.h2,{id:"alternative-date-formats",children:"Alternative Date Formats"}),`
+`,e.jsxs(t.p,{children:["The date picker component supports multiple built-in date formats, which can be set via the ",e.jsx(t.code,{children:"date-format"})," attribute. The default format is ",e.jsx(t.code,{children:"MM/DD/YYYY"}),`,
+but you can change it to any of the following formats:`]}),`
+`,e.jsxs(t.ul,{children:[`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"MM/DD/YYYY"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"MM/DD/YY"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"DD/MMM/YYYY"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"MM-DD-YYYY"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"MM-DD-YY"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"DD-MMM-YYYY"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"YYYY-MM-DD"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"YYYY-MMM-DD"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"DD.MM.YYYY"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"DD.MM.YY"})}),`
+`]}),`
+`,e.jsx(t.p,{children:"When changing the default format, the date picker will automatically update the input mask to match the new format as well as handle the parsing and formatting of the date value."}),`
+`,e.jsx(r,{of:h}),`
+`,e.jsx(t.h2,{id:"custom-date-format",children:"Custom Date Format"}),`
+`,e.jsxs(t.p,{children:["You can also customize the date format via the ",e.jsx(t.code,{children:"parseCallback"}),", ",e.jsx(t.code,{children:"formatCallback"}),", and ",e.jsx(t.code,{children:"maskFormat"})," properties. This gives you full control over how the date is parsed from the input string and how it is formatted back into a string for display."]}),`
+`,e.jsxs(t.p,{children:["The following mask segment blocks are supported for the ",e.jsx(t.code,{children:"mask-format"})," attribute:"]}),`
+`,e.jsxs(t.ul,{children:[`
+`,e.jsxs(t.li,{children:[e.jsx(t.code,{children:"Mmm"})," - Month abbreviation (e.g., Jan, Feb, Mar)"]}),`
+`,e.jsxs(t.li,{children:[e.jsx(t.code,{children:"MMM"})," - Month abbreviation uppercase (e.g., JAN, FEB, MAR)"]}),`
+`,e.jsxs(t.li,{children:[e.jsx(t.code,{children:"DD"})," - Day of the month with leading zero (01 to 31)"]}),`
+`,e.jsxs(t.li,{children:[e.jsx(t.code,{children:"YYYY"})," - Four-digit year (e.g., 2025)"]}),`
+`,e.jsxs(t.li,{children:[e.jsx(t.code,{children:"YY"})," - Two-digit year (e.g., 25)"]}),`
+`]}),`
+`,e.jsx(r,{of:m}),`
+`,e.jsxs(t.p,{children:["In the example above, the ",e.jsx(t.code,{children:"parseCallback"})," function is used to parse the date string into a ",e.jsx(t.code,{children:"Date"})," object, and the ",e.jsx(t.code,{children:"formatCallback"}),` function is used to format the date object into a string
+using the `,e.jsx(t.code,{children:"Mmm DD, YYYY"})," format. You will also need to set the ",e.jsx(t.code,{children:"mask-format"})," attribute to ",e.jsx(t.code,{children:"Mmm DD, YYYY"})," to enable input masking support."]}),`
+`,e.jsx(t.pre,{children:e.jsx(t.code,{className:"language-typescript",children:`function parseCallback(str: string): Date | null {
+  if (!str) {
+    return null;
+  }
+
+  // Regular expression to match "Mmm DD, YYYY" (e.g., "Jul 08, 2025")
+  const regex = /(\\w{3}) (\\d{2}), (\\d{4})/;
+  const match = str.match(regex);
+
+  if (!match || match.length !== 4) {
+    return null;
+  }
+
+  const monthStr = match[1];
+  const day = parseInt(match[2], 10);
+  const year = parseInt(match[3], 10);
+
+  // Map month abbreviations to month numbers (0-indexed)
+  const monthMap: { [key: string]: number } = {
+    Jan: 0,
+    Feb: 1,
+    Mar: 2,
+    Apr: 3,
+    May: 4,
+    Jun: 5,
+    Jul: 6,
+    Aug: 7,
+    Sep: 8,
+    Oct: 9,
+    Nov: 10,
+    Dec: 11
+  };
+  const month = monthMap[monthStr];
+
+  if (isNaN(day) || isNaN(month) || isNaN(year)) {
+    return null;
+  }
+
+  const date = new Date(year, month, day);
+
+  // Validate the date to prevent issues with invalid dates (e.g., Feb 30)
+  if (date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day) {
+    return null;
+  }
+
+  return date;
+}
+
+function formatCallback(date: Date | null): string {
+  if (!date) {
+    return '';
+  }
+
+  const options: Intl.DateTimeFormatOptions = { month: 'short', day: '2-digit', year: 'numeric' };
+  return new Intl.DateTimeFormat('en-US', options).format(date);
+}
+`})}),`
+`,e.jsx(t.h2,{id:"custom-shortcuts",children:"Custom Shortcuts"}),`
+`,e.jsxs(t.p,{children:["You can also customize the shortcuts available in the date picker by using the ",e.jsx(t.code,{children:"shortcuts"})," property. This allows you to define your own key shortcuts based on your application's needs."]}),`
+`,e.jsx(t.p,{children:"The date picker supports the following built-in shortcuts by default:"}),`
+`,e.jsxs(t.ul,{children:[`
+`,e.jsxs(t.li,{children:[e.jsx(t.code,{children:"t"}),": Today"]}),`
+`]}),`
+`,e.jsxs(t.p,{children:["If you need to turn off the built-in shortcuts, you can set the ",e.jsx(t.code,{children:"shortcuts"})," attribute to ",e.jsx(t.code,{children:'"off"'}),"."]}),`
+`,e.jsxs(t.p,{children:["If you want to add custom shortcuts, you can set the ",e.jsx(t.code,{children:"shortcuts"})," property to a JavaScript object that maps key names to a callback function that returns a ",e.jsx(t.code,{children:"Date"})," object. The callback function will receive the current date as an argument, which you can use to calculate the desired date."]}),`
+`,e.jsx(t.pre,{children:e.jsx(t.code,{className:"language-typescript",children:`const shortcuts = {
+  t: (currentDate: Date) => new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()),
+  y: (currentDate: Date) => new Date(currentDate.getFullYear(), 0, 1),
+  e: (currentDate: Date) => new Date(currentDate.getFullYear(), 11, 31)
+};
+`})}),`
+`,e.jsx(t.h2,{id:"api",children:"API"}),`
+`,e.jsx(c,{}),`
+`,e.jsx(t.h2,{id:"accessibility",children:"Accessibility"}),`
+`,e.jsxs(t.ul,{children:[`
+`,e.jsx(t.li,{children:"When using a screen reader, ensure keyboard navigation in the calendar is announced."}),`
+`,e.jsxs(t.li,{children:["Be sure that you add the proper aria-label to the ",e.jsx(t.code,{children:"<input>"})," element if necessary."]}),`
+`,e.jsxs(t.li,{children:["The date picker component will add the following ARIA attributes to the ",e.jsx(t.code,{children:"<input>"})," element for you:",`
+`,e.jsxs(t.ul,{children:[`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"aria-live"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"aria-atomic"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"aria-haspopup"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"aria-expanded"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"aria-owns"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"aria-disabled"})}),`
+`]}),`
+`]}),`
+`]})]})}function ae(n={}){const{wrapper:t}={...o(),...n.components};return t?e.jsx(t,{...n,children:e.jsx(i,{...n})}):i(n)}export{ae as default};
