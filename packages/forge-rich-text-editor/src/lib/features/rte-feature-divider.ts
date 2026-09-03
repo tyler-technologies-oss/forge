@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-export const RichTextFeatureDividerComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-feature-divider';
+export const RTE_FEATURE_DIVIDER_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-feature-divider';
 
 /**
  * @tag forge-rte-feature-divider
@@ -22,7 +22,7 @@ export const RichTextFeatureDividerComponentTagName: keyof HTMLElementTagNameMap
  * It renders a vertical line 24px tall. Use this component to organize the toolbar into logical
  * sections (e.g., separating text formatting from paragraph formatting).
  */
-@customElement(RichTextFeatureDividerComponentTagName)
+@customElement(RTE_FEATURE_DIVIDER_TAG_NAME)
 export class RichTextFeatureDividerComponent extends LitElement {
   static {
     defineDividerComponent();

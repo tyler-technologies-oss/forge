@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-export const RichTextFeatureHeadingComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-heading';
+export const RTE_HEADING_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-heading';
 
 /**
  * @tag forge-rte-heading
@@ -38,7 +38,7 @@ export const RichTextFeatureHeadingComponentTagName: keyof HTMLElementTagNameMap
  * @attribute {string} h2-label - The accessible label for the heading 2 button.
  * @attribute {string} h3-label - The accessible label for the heading 3 button.
  */
-@customElement(RichTextFeatureHeadingComponentTagName)
+@customElement(RTE_HEADING_TAG_NAME)
 export class RichTextFeatureHeadingComponent extends LitElement implements RichTextEditorFeature {
   static {
     IconRegistry.define([tylIconFormatHeader1, tylIconFormatHeader2, tylIconFormatHeader3]);

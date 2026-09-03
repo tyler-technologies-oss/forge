@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-export const RichTextFeatureCodeComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-code';
+export const RTE_CODE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-code';
 
 /**
  * @tag forge-rte-code
@@ -34,7 +34,7 @@ export const RichTextFeatureCodeComponentTagName: keyof HTMLElementTagNameMap = 
  *
  * @attribute {string} label - The accessible label for the code button.
  */
-@customElement(RichTextFeatureCodeComponentTagName)
+@customElement(RTE_CODE_TAG_NAME)
 export class RichTextFeatureCodeComponent extends LitElement implements RichTextEditorFeature {
   static {
     IconRegistry.define(tylIconCode);

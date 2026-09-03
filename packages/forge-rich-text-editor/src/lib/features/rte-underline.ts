@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-export const RteUnderlineComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-underline';
+export const RTE_UNDERLINE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-underline';
 
 /**
  * @tag forge-rte-underline
@@ -34,7 +34,7 @@ export const RteUnderlineComponentTagName: keyof HTMLElementTagNameMap = 'forge-
  *
  * @attribute {string} label - The accessible label for the underline button.
  */
-@customElement(RteUnderlineComponentTagName)
+@customElement(RTE_UNDERLINE_TAG_NAME)
 export class RteUnderlineComponent extends LitElement implements RichTextEditorFeature {
   static {
     IconRegistry.define(tylIconFormatUnderlined);

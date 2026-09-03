@@ -1,5 +1,5 @@
-import { RichTextEditorComponent, RichTextEditorComponentTagName } from './rich-text-editor.js';
-import { RichTextRendererComponent, RichTextRendererComponentTagName } from './rich-text-renderer.js';
+import { RichTextEditorComponent, RICH_TEXT_EDITOR_TAG_NAME } from './rich-text-editor.js';
+import { RichTextRendererComponent, RICH_TEXT_RENDERER_TAG_NAME } from './rich-text-renderer.js';
 import { tryDefine } from '@tylertech/forge-core';
 
 export * from './rich-text-editor.js';
@@ -7,9 +7,9 @@ export * from './rich-text-renderer.js';
 export * from './editor-context.js';
 
 export function defineRichTextEditorComponent(): void {
-  tryDefine(RichTextEditorComponentTagName, RichTextEditorComponent);
+  tryDefine(RICH_TEXT_EDITOR_TAG_NAME, RichTextEditorComponent);
 }
 
 export function defineRichTextRendererComponent(): void {
-  tryDefine(RichTextRendererComponentTagName, RichTextRendererComponent);
+  tryDefine(RICH_TEXT_RENDERER_TAG_NAME, RichTextRendererComponent);
 }

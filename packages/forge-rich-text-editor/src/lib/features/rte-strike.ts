@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-export const RichTextFeatureStrikeComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-strike';
+export const RTE_STRIKE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-strike';
 
 /**
  * @tag forge-rte-strike
@@ -34,7 +34,7 @@ export const RichTextFeatureStrikeComponentTagName: keyof HTMLElementTagNameMap 
  *
  * @attribute {string} label - The accessible label for the strikethrough button.
  */
-@customElement(RichTextFeatureStrikeComponentTagName)
+@customElement(RTE_STRIKE_TAG_NAME)
 export class RichTextFeatureStrikeComponent extends LitElement implements RichTextEditorFeature {
   static {
     IconRegistry.define(tylIconFormatStrikethrough);

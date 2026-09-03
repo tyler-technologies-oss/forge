@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-export const RteBulletListComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-bullet-list';
+export const RTE_BULLET_LIST_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-bullet-list';
 
 /**
  * @tag forge-rte-bullet-list
@@ -35,7 +35,7 @@ export const RteBulletListComponentTagName: keyof HTMLElementTagNameMap = 'forge
  *
  * @attribute {string} label - The accessible label for the bullet list button.
  */
-@customElement(RteBulletListComponentTagName)
+@customElement(RTE_BULLET_LIST_TAG_NAME)
 export class RteBulletListComponent extends LitElement implements RichTextEditorFeature {
   static {
     IconRegistry.define(tylIconFormatListBulleted);

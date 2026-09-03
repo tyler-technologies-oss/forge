@@ -15,7 +15,7 @@ declare global {
   }
 }
 
-export const RichTextFeatureUndoRedoComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-undo-redo';
+export const RTE_UNDO_REDO_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-undo-redo';
 
 /**
  * @tag forge-rte-undo-redo
@@ -35,7 +35,7 @@ export const RichTextFeatureUndoRedoComponentTagName: keyof HTMLElementTagNameMa
  * @attribute {string} undo-label - The accessible label for the undo button.
  * @attribute {string} redo-label - The accessible label for the redo button.
  */
-@customElement(RichTextFeatureUndoRedoComponentTagName)
+@customElement(RTE_UNDO_REDO_TAG_NAME)
 export class RichTextFeatureUndoRedoComponent extends LitElement implements RichTextEditorFeature {
   static {
     IconRegistry.define([tylIconUndo, tylIconRedo]);

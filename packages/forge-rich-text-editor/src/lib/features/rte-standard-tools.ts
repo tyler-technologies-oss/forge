@@ -19,7 +19,7 @@ declare global {
   }
 }
 
-export const RteStandardToolsComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-standard-tools';
+export const RTE_STANDARD_TOOLS_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-standard-tools';
 
 /**
  * @tag forge-rte-standard-tools
@@ -38,7 +38,7 @@ export const RteStandardToolsComponentTagName: keyof HTMLElementTagNameMap = 'fo
  * Each feature can be customized by passing properties to this component, which forwards them
  * to the individual feature components.
  */
-@customElement(RteStandardToolsComponentTagName)
+@customElement(RTE_STANDARD_TOOLS_TAG_NAME)
 export class RteStandardToolsComponent extends LitElement {
   public static override styles = featureHostStyles;
 
