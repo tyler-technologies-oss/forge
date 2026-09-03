@@ -12,7 +12,7 @@ import { featureHostStyles } from './core/feature-styles.js';
 import { DANGEROUS_PROTOCOLS } from '../extensions/sanitize-utils.js';
 import { VirtualElement } from '@tylertech/forge';
 
-import './core/rich-text-feature-button.js';
+import './core/rte-tool-button.js';
 
 declare global {
   interface HTMLElementTagNameMap {
