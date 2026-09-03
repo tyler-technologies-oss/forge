@@ -7,7 +7,7 @@ import { css, html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { editorContext, EditorContext } from '../editor-context.js';
-import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 import { DANGEROUS_PROTOCOLS } from '../extensions/sanitize-utils.js';
 import { VirtualElement } from '@tylertech/forge';
@@ -16,7 +16,7 @@ import './core/rich-text-feature-button.js';
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-rte-link': RichTextFeatureLinkComponent;
+    'forge-rte-link': RteLinkComponent;
   }
 }
 
@@ -44,7 +44,7 @@ export const RTE_LINK_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-link';
  * @note URL validation is always enabled for security and cannot be disabled.
  */
 @customElement(RTE_LINK_TAG_NAME)
-export class RichTextFeatureLinkComponent extends LitElement implements RichTextEditorFeature {
+export class RteLinkComponent extends LitElement implements IRichTextEditorFeature {
   static {
     IconRegistry.define(tylIconLink);
     defineButtonComponent();

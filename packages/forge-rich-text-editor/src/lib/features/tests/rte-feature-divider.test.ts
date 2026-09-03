@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
-import { RichTextFeatureDividerComponent } from '../rte-feature-divider.js';
+import { RteFeatureDividerComponent } from '../rte-feature-divider.js';
 
 import '../../rich-text-editor.js';
 import '../rte-feature-divider.js';
@@ -30,7 +30,7 @@ describe('RTE Feature Divider', () => {
 
   interface DividerHarness {
     editor: RichTextEditorComponent;
-    dividerFeature: RichTextFeatureDividerComponent;
+    dividerFeature: RteFeatureDividerComponent;
     divider(): HTMLElement;
   }
 
@@ -42,7 +42,7 @@ describe('RTE Feature Divider', () => {
     `);
     await editor.updateComplete;
 
-    const dividerFeature = editor.querySelector<RichTextFeatureDividerComponent>('forge-rte-feature-divider')!;
+    const dividerFeature = editor.querySelector<RteFeatureDividerComponent>('forge-rte-feature-divider')!;
     await dividerFeature.updateComplete;
 
     return {

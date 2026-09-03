@@ -5,7 +5,7 @@ import { tylIconFormatItalic } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { editorContext, EditorContext } from '../editor-context.js';
-import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 
 import './core/rich-text-feature-button.js';
@@ -35,7 +35,7 @@ export const RTE_ITALIC_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-itali
  * @attribute {string} label - The accessible label for the italic button.
  */
 @customElement(RTE_ITALIC_TAG_NAME)
-export class RteItalicComponent extends LitElement implements RichTextEditorFeature {
+export class RteItalicComponent extends LitElement implements IRichTextEditorFeature {
   static {
     IconRegistry.define(tylIconFormatItalic);
   }

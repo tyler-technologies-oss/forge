@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
-import { RichTextFeatureLinkComponent } from '../rte-link.js';
+import { RteLinkComponent } from '../rte-link.js';
 
 import '../../rich-text-editor.js';
 import '../rte-link.js';
@@ -248,7 +248,7 @@ interface LinkFixtureOptions {
 
 interface LinkFixture {
   el: RichTextEditorComponent;
-  linkFeature: RichTextFeatureLinkComponent;
+  linkFeature: RteLinkComponent;
   button: () => HTMLElement;
   popover: () => HTMLElement;
   getInput: () => HTMLInputElement;
@@ -268,7 +268,7 @@ async function createFixture(options: LinkFixtureOptions = {}): Promise<LinkFixt
     </forge-rich-text-editor>
   `);
 
-  const linkFeature = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+  const linkFeature = el.querySelector('forge-rte-link') as RteLinkComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
 
   // Wait for editor to initialize
@@ -330,7 +330,7 @@ describe('RTE Link - Keyboard navigation', () => {
 
 // Helper: type a URL into the URL input and blur it, mirroring how a real user triggers
 // validation (validation is gated on blur - see #handleLinkBlur in rte-link.ts).
-async function setLinkUrl(linkFeature: RichTextFeatureLinkComponent, url: string): Promise<void> {
+async function setLinkUrl(linkFeature: RteLinkComponent, url: string): Promise<void> {
   await linkFeature.updateComplete;
   const input = linkFeature.shadowRoot?.querySelector<HTMLInputElement>('#link-url');
   if (input) {

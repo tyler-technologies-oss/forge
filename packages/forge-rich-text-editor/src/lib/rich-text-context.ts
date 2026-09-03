@@ -18,7 +18,7 @@ import {
   RichTextEditorInitializationErrorEventDetail,
   RichTextEditorErrorEventDetail
 } from './editor-context.js';
-import { RichTextEditorFeature } from './features/rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './features/rich-text-editor-feature.js';
 import { PasteHandler } from './extensions/paste-handler.js';
 import { MarkdownSerializer } from './extensions/markdown-serializer.js';
 import { sanitizeHTML, sanitizeJSON } from './extensions/sanitize-utils.js';
@@ -149,7 +149,7 @@ export class RichTextContextComponent extends LitElement {
   @state()
   private _initializationError: string | null = null;
 
-  #featureInstances: Set<RichTextEditorFeature> = new Set();
+  #featureInstances: Set<IRichTextEditorFeature> = new Set();
   #initFrame: number | undefined;
   #editorElement: HTMLElement | undefined;
 
@@ -185,7 +185,7 @@ export class RichTextContextComponent extends LitElement {
    *
    * @param instance The feature instance to register.
    */
-  #registerFeature(instance: RichTextEditorFeature): void {
+  #registerFeature(instance: IRichTextEditorFeature): void {
     this.#featureInstances.add(instance);
 
     if (this.#initFrame) {

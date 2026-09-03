@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
-import { RichTextFeatureAlignComponent } from '../rte-align.js';
+import { RteAlignComponent } from '../rte-align.js';
 
 import '../../rich-text-editor.js';
 import '../rte-align.js';
@@ -337,7 +337,7 @@ interface AlignFixtureOptions {
 
 interface AlignFixture {
   el: RichTextEditorComponent;
-  alignFeature: RichTextFeatureAlignComponent;
+  alignFeature: RteAlignComponent;
   leftButton: () => HTMLElement;
   centerButton: () => HTMLElement;
   rightButton: () => HTMLElement;
@@ -361,7 +361,7 @@ async function createFixture(options: AlignFixtureOptions = {}): Promise<AlignFi
     </forge-rich-text-editor>
   `);
 
-  const alignFeature = el.querySelector('forge-rte-align') as RichTextFeatureAlignComponent;
+  const alignFeature = el.querySelector('forge-rte-align') as RteAlignComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
 
   // Wait for editor to initialize

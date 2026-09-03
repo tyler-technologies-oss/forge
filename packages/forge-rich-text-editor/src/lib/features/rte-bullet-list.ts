@@ -5,7 +5,7 @@ import { tylIconFormatListBulleted } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { editorContext, EditorContext } from '../editor-context.js';
-import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 
 import './core/rich-text-feature-button.js';
@@ -36,7 +36,7 @@ export const RTE_BULLET_LIST_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-
  * @attribute {string} label - The accessible label for the bullet list button.
  */
 @customElement(RTE_BULLET_LIST_TAG_NAME)
-export class RteBulletListComponent extends LitElement implements RichTextEditorFeature {
+export class RteBulletListComponent extends LitElement implements IRichTextEditorFeature {
   static {
     IconRegistry.define(tylIconFormatListBulleted);
   }

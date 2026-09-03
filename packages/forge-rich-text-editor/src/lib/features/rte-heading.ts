@@ -5,14 +5,14 @@ import { tylIconFormatHeader1, tylIconFormatHeader2, tylIconFormatHeader3 } from
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { editorContext, EditorContext } from '../editor-context.js';
-import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 
 import './core/rich-text-feature-button.js';
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-rte-heading': RichTextFeatureHeadingComponent;
+    'forge-rte-heading': RteHeadingComponent;
   }
 }
 
@@ -39,7 +39,7 @@ export const RTE_HEADING_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-head
  * @attribute {string} h3-label - The accessible label for the heading 3 button.
  */
 @customElement(RTE_HEADING_TAG_NAME)
-export class RichTextFeatureHeadingComponent extends LitElement implements RichTextEditorFeature {
+export class RteHeadingComponent extends LitElement implements IRichTextEditorFeature {
   static {
     IconRegistry.define([tylIconFormatHeader1, tylIconFormatHeader2, tylIconFormatHeader3]);
   }

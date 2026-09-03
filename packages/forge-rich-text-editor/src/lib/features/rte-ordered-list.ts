@@ -5,7 +5,7 @@ import { tylIconFormatListNumbered } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { editorContext, EditorContext } from '../editor-context.js';
-import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 
 import './core/rich-text-feature-button.js';
@@ -36,7 +36,7 @@ export const RTE_ORDERED_LIST_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte
  * @attribute {string} label - The accessible label for the ordered list button.
  */
 @customElement(RTE_ORDERED_LIST_TAG_NAME)
-export class RteOrderedListComponent extends LitElement implements RichTextEditorFeature {
+export class RteOrderedListComponent extends LitElement implements IRichTextEditorFeature {
   static {
     IconRegistry.define(tylIconFormatListNumbered);
   }
