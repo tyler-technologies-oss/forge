@@ -14,7 +14,7 @@ declare global {
   }
 }
 
-export const RichTextEditorComponentTagName: keyof HTMLElementTagNameMap = 'forge-rich-text-editor';
+export const RICH_TEXT_EDITOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rich-text-editor';
 
 /**
  * @tag forge-rich-text-editor
@@ -62,7 +62,7 @@ export const RichTextEditorComponentTagName: keyof HTMLElementTagNameMap = 'forg
  * @method isInitialized - Getter that returns whether the editor has been successfully initialized.
  * @method initializationError - Getter that returns the initialization error message, if any.
  */
-@customElement(RichTextEditorComponentTagName)
+@customElement(RICH_TEXT_EDITOR_TAG_NAME)
 export class RichTextEditorComponent extends LitElement {
   public static override styles = unsafeCSS(styles);
 

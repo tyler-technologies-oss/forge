@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-export const RteOrderedListComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-ordered-list';
+export const RTE_ORDERED_LIST_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-ordered-list';
 
 /**
  * @tag forge-rte-ordered-list
@@ -35,7 +35,7 @@ export const RteOrderedListComponentTagName: keyof HTMLElementTagNameMap = 'forg
  *
  * @attribute {string} label - The accessible label for the ordered list button.
  */
-@customElement(RteOrderedListComponentTagName)
+@customElement(RTE_ORDERED_LIST_TAG_NAME)
 export class RteOrderedListComponent extends LitElement implements RichTextEditorFeature {
   static {
     IconRegistry.define(tylIconFormatListNumbered);

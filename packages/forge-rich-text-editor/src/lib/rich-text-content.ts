@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-export const RichTextContentComponentTagName: keyof HTMLElementTagNameMap = 'forge-rich-text-content';
+export const RICH_TEXT_CONTENT_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rich-text-content';
 
 /**
  * @tag forge-rich-text-content
@@ -26,7 +26,7 @@ export const RichTextContentComponentTagName: keyof HTMLElementTagNameMap = 'for
  * a forge-rich-text-context component. Use this when you need to separate the toolbar from
  * the content area in your layout.
  */
-@customElement(RichTextContentComponentTagName)
+@customElement(RICH_TEXT_CONTENT_TAG_NAME)
 export class RichTextContentComponent extends LitElement {
   public static override styles = unsafeCSS(styles);
 

@@ -41,7 +41,7 @@ declare global {
   }
 }
 
-export const RichTextRendererComponentTagName: keyof HTMLElementTagNameMap = 'forge-rich-text-renderer';
+export const RICH_TEXT_RENDERER_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rich-text-renderer';
 
 // Default extensions for the renderer - matches all editor features
 const DEFAULT_EXTENSIONS: AnyExtension[] = [
@@ -95,7 +95,7 @@ const DEFAULT_EXTENSIONS: AnyExtension[] = [
  * @property {RichTextRendererContent} content - The content to render in ProseMirror JSON format.
  * Must be set as a property; it is not settable via attribute.
  */
-@customElement(RichTextRendererComponentTagName)
+@customElement(RICH_TEXT_RENDERER_TAG_NAME)
 export class RichTextRendererComponent extends LitElement {
   public static override styles = unsafeCSS(styles);
 

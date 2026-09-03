@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-export const RichTextFeatureBoldComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-bold';
+export const RTE_BOLD_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-bold';
 
 /**
  * @tag forge-rte-bold
@@ -34,7 +34,7 @@ export const RichTextFeatureBoldComponentTagName: keyof HTMLElementTagNameMap = 
  *
  * @attribute {string} label - The accessible label for the bold button.
  */
-@customElement(RichTextFeatureBoldComponentTagName)
+@customElement(RTE_BOLD_TAG_NAME)
 export class RichTextFeatureBoldComponent extends LitElement implements RichTextEditorFeature {
   static {
     IconRegistry.define(tylIconFormatBold);

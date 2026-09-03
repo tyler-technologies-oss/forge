@@ -17,7 +17,7 @@ declare global {
   }
 }
 
-export const RichTextFeatureAlignComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-align';
+export const RTE_ALIGN_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-align';
 
 /**
  * @tag forge-rte-align
@@ -41,7 +41,7 @@ export const RichTextFeatureAlignComponentTagName: keyof HTMLElementTagNameMap =
  * @attribute {string} right-label - The accessible label for the right align button.
  * @attribute {string} justify-label - The accessible label for the justify button.
  */
-@customElement(RichTextFeatureAlignComponentTagName)
+@customElement(RTE_ALIGN_TAG_NAME)
 export class RichTextFeatureAlignComponent extends LitElement implements RichTextEditorFeature {
   static {
     IconRegistry.define([tylIconFormatAlignLeft, tylIconFormatAlignCenter, tylIconFormatAlignRight, tylIconFormatAlignJustify]);

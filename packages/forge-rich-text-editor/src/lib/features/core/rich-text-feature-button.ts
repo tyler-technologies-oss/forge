@@ -13,7 +13,7 @@ declare global {
   }
 }
 
-export const RteToolButtonComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-tool-button';
+export const RTE_TOOL_BUTTON_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-tool-button';
 
 /**
  * @tag forge-rte-tool-button
@@ -42,7 +42,7 @@ export const RteToolButtonComponentTagName: keyof HTMLElementTagNameMap = 'forge
  *
  * @event {CustomEvent<boolean>} forge-rte-tool-toggle - Fired when the button is clicked or activated. The detail contains the toggle state.
  */
-@customElement(RteToolButtonComponentTagName)
+@customElement(RTE_TOOL_BUTTON_TAG_NAME)
 export class RteToolButtonComponent extends LitElement {
   static {
     defineIconButtonComponent();

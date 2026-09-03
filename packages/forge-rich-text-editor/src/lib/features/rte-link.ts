@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-export const RichTextFeatureLinkComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-link';
+export const RTE_LINK_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-link';
 
 /**
  * @tag forge-rte-link
@@ -43,7 +43,7 @@ export const RichTextFeatureLinkComponentTagName: keyof HTMLElementTagNameMap = 
  *
  * @note URL validation is always enabled for security and cannot be disabled.
  */
-@customElement(RichTextFeatureLinkComponentTagName)
+@customElement(RTE_LINK_TAG_NAME)
 export class RichTextFeatureLinkComponent extends LitElement implements RichTextEditorFeature {
   static {
     IconRegistry.define(tylIconLink);

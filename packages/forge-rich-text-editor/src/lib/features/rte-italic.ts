@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-export const RteItalicComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-italic';
+export const RTE_ITALIC_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-italic';
 
 /**
  * @tag forge-rte-italic
@@ -34,7 +34,7 @@ export const RteItalicComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte
  *
  * @attribute {string} label - The accessible label for the italic button.
  */
-@customElement(RteItalicComponentTagName)
+@customElement(RTE_ITALIC_TAG_NAME)
 export class RteItalicComponent extends LitElement implements RichTextEditorFeature {
   static {
     IconRegistry.define(tylIconFormatItalic);

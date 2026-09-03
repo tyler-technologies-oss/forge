@@ -29,7 +29,7 @@ declare global {
   }
 }
 
-export const RichTextContextComponentTagName: keyof HTMLElementTagNameMap = 'forge-rich-text-context';
+export const RICH_TEXT_CONTEXT_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rich-text-context';
 
 const DEFAULT_EXTENSIONS: AnyExtension[] = [Document, Text, Paragraph];
 
@@ -81,7 +81,7 @@ const DEFAULT_EXTENSIONS: AnyExtension[] = [Document, Text, Paragraph];
  * @method isInitialized - Getter that returns whether the editor has been successfully initialized.
  * @method initializationError - Getter that returns the initialization error message, if any.
  */
-@customElement(RichTextContextComponentTagName)
+@customElement(RICH_TEXT_CONTEXT_TAG_NAME)
 export class RichTextContextComponent extends LitElement {
   public static override styles = unsafeCSS(styles);
 
