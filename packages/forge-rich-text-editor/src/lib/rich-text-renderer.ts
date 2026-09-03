@@ -16,6 +16,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 
 import styles from './rich-text-renderer.scss';
 import { sanitizeJSON } from './extensions/sanitize-utils.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 /**
  * Type representing rich text content in TipTap's ProseMirror JSON format.
@@ -97,6 +98,9 @@ const DEFAULT_EXTENSIONS: AnyExtension[] = [
  */
 @customElement(RICH_TEXT_RENDERER_TAG_NAME)
 export class RichTextRendererComponent extends LitElement {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RICH_TEXT_RENDERER_TAG_NAME;
+
   public static override styles = unsafeCSS(styles);
 
   @property({ attribute: false })

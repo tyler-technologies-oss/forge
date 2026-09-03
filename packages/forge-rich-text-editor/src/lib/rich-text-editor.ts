@@ -7,6 +7,7 @@ import './rich-text-content.js';
 import type { RichTextContextComponent } from './rich-text-context.js';
 
 import styles from './rich-text-editor.scss';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -64,6 +65,9 @@ export const RICH_TEXT_EDITOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ric
  */
 @customElement(RICH_TEXT_EDITOR_TAG_NAME)
 export class RichTextEditorComponent extends LitElement {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RICH_TEXT_EDITOR_TAG_NAME;
+
   public static override styles = unsafeCSS(styles);
 
   /** The content of the editor. */

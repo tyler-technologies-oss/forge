@@ -2,6 +2,7 @@ import { defineIconButtonComponent } from '@tylertech/forge';
 import { html, LitElement, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { featureHostStyles } from './feature-styles.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -44,6 +45,9 @@ export const RTE_TOOL_BUTTON_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-
  */
 @customElement(RTE_TOOL_BUTTON_TAG_NAME)
 export class RteToolButtonComponent extends LitElement {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RTE_TOOL_BUTTON_TAG_NAME;
+
   static {
     defineIconButtonComponent();
   }

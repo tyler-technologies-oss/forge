@@ -1,5 +1,5 @@
 import { provide } from '@lit/context';
-import { LiveAnnouncer } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, LiveAnnouncer } from '@tylertech/forge-core';
 import { type AnyExtension, type Content, Editor as TipTapEditor } from '@tiptap/core';
 import { Document } from '@tiptap/extension-document';
 import { Text } from '@tiptap/extension-text';
@@ -83,6 +83,9 @@ const DEFAULT_EXTENSIONS: AnyExtension[] = [Document, Text, Paragraph];
  */
 @customElement(RICH_TEXT_CONTEXT_TAG_NAME)
 export class RichTextContextComponent extends LitElement {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RICH_TEXT_CONTEXT_TAG_NAME;
+
   public static override styles = unsafeCSS(styles);
 
   /** The ID of the element to instantiate the editor against. */

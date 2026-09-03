@@ -11,6 +11,7 @@ import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 import { DANGEROUS_PROTOCOLS } from '../extensions/sanitize-utils.js';
 import { VirtualElement } from '@tylertech/forge';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 import './core/rte-tool-button.js';
 
@@ -45,6 +46,9 @@ export const RTE_LINK_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-link';
  */
 @customElement(RTE_LINK_TAG_NAME)
 export class RteLinkComponent extends LitElement implements IRichTextEditorFeature {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RTE_LINK_TAG_NAME;
+
   static {
     IconRegistry.define(tylIconLink);
     defineButtonComponent();
