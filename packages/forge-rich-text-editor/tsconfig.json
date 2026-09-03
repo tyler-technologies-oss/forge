@@ -15,7 +15,6 @@
     "useDefineForClassFields": false,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "customConditions": ["development"],
     "baseUrl": ".",
     "paths": {
       "@tylertech/forge-rich-text-editor": ["src/lib"],
