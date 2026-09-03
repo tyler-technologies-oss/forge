@@ -2,6 +2,7 @@ import { defineDividerComponent } from '@tylertech/forge';
 import { css, html, LitElement, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { featureHostStyles } from './core/feature-styles.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -24,6 +25,9 @@ export const RTE_FEATURE_DIVIDER_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-
  */
 @customElement(RTE_FEATURE_DIVIDER_TAG_NAME)
 export class RteFeatureDividerComponent extends LitElement {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RTE_FEATURE_DIVIDER_TAG_NAME;
+
   static {
     defineDividerComponent();
   }

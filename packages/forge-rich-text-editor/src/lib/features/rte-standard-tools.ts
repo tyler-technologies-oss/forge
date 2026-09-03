@@ -1,5 +1,6 @@
 import { html, LitElement, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { featureHostStyles } from './core/feature-styles.js';
 
 import './rte-bold.js';
@@ -40,6 +41,9 @@ export const RTE_STANDARD_TOOLS_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-r
  */
 @customElement(RTE_STANDARD_TOOLS_TAG_NAME)
 export class RteStandardToolsComponent extends LitElement {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RTE_STANDARD_TOOLS_TAG_NAME;
+
   public static override styles = featureHostStyles;
 
   public override render(): TemplateResult {

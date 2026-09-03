@@ -8,6 +8,7 @@ import { editorContext, EditorContext } from '../editor-context.js';
 import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 import { createRef, ref } from 'lit/directives/ref.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -37,6 +38,9 @@ export const RTE_UNDO_REDO_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-un
  */
 @customElement(RTE_UNDO_REDO_TAG_NAME)
 export class RteUndoRedoComponent extends LitElement implements IRichTextEditorFeature {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RTE_UNDO_REDO_TAG_NAME;
+
   static {
     IconRegistry.define([tylIconUndo, tylIconRedo]);
     defineIconButtonComponent();

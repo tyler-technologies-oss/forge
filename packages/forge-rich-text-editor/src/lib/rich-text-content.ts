@@ -5,6 +5,7 @@ import { createRef, ref } from 'lit/directives/ref.js';
 import { editorContext, EditorContext } from './editor-context.js';
 
 import styles from './rich-text-content.scss';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -28,6 +29,9 @@ export const RICH_TEXT_CONTENT_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ri
  */
 @customElement(RICH_TEXT_CONTENT_TAG_NAME)
 export class RichTextContentComponent extends LitElement {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RICH_TEXT_CONTENT_TAG_NAME;
+
   public static override styles = unsafeCSS(styles);
 
   @state()
