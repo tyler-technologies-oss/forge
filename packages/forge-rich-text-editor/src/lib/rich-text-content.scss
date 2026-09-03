@@ -1,0 +1,61 @@
+@use './core' as rte-core;
+
+@include rte-core.prosemirror-base();
+
+:host {
+  display: contents;
+}
+
+.tiptap:focus-visible {
+  outline: none;
+}
+
+.editor-content-wrapper {
+  display: grid;
+  position: relative;
+  border-radius: 0 0 var(--forge-shape-medium);
+  height: 100%;
+  overflow: hidden;
+
+  forge-focus-indicator {
+    border-radius: inherit;
+  }
+}
+
+.editor-content {
+  overflow: hidden;
+
+  .tiptap {
+    height: 100%;
+    padding: var(--forge-spacing-medium);
+    overflow: auto;
+    box-sizing: border-box;
+
+    @include rte-core.content-styles();
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+:host([disabled]) {
+  .editor-content-wrapper {
+    opacity: var(--forge-theme-disabled-opacity);
+    pointer-events: none;
+  }
+}
+
+:host([readonly]) {
+  .tiptap {
+    cursor: default;
+  }
+}

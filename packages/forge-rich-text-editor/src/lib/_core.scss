@@ -1,0 +1,229 @@
+@use '@tylertech/forge/sass/typography' as forge-typography;
+
+// Inlined from prosemirror-view/style/prosemirror.css (transitive dep — not directly resolvable via Sass)
+@mixin prosemirror-base() {
+  .ProseMirror {
+    position: relative;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    white-space: break-spaces;
+    -webkit-font-variant-ligatures: none;
+    font-variant-ligatures: none;
+    font-feature-settings: 'liga' 0;
+
+    pre {
+      white-space: pre-wrap;
+    }
+
+    li {
+      position: relative;
+    }
+  }
+
+  .ProseMirror-hideselection {
+    caret-color: transparent;
+
+    *::selection {
+      background: transparent;
+    }
+
+    *::-moz-selection {
+      background: transparent;
+    }
+  }
+
+  .ProseMirror [draggable][contenteditable='false'] {
+    user-select: text;
+  }
+
+  .ProseMirror-selectednode {
+    outline: 2px solid #8cf;
+  }
+
+  li.ProseMirror-selectednode {
+    outline: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: -32px;
+      right: -2px;
+      top: -2px;
+      bottom: -2px;
+      border: 2px solid #8cf;
+      pointer-events: none;
+    }
+  }
+
+  img.ProseMirror-separator {
+    display: inline !important;
+    border: none !important;
+    margin: 0 !important;
+  }
+}
+
+@mixin content-styles() {
+  * {
+    box-sizing: border-box;
+  }
+
+  p {
+    margin-block-start: 0;
+    margin-block-end: var(--forge-spacing-medium);
+
+    &:last-child {
+      margin-block-end: 0;
+    }
+  }
+
+  h1 {
+    @include forge-typography.style(heading6);
+    margin-block-start: 0;
+    margin-block-end: var(--forge-spacing-medium);
+
+    &:not(:first-child) {
+      margin-block-start: var(--forge-spacing-large);
+    }
+  }
+
+  h2 {
+    @include forge-typography.style(heading5);
+    margin-block-start: 0;
+    margin-block-end: var(--forge-spacing-medium);
+
+    &:not(:first-child) {
+      margin-block-start: var(--forge-spacing-large);
+    }
+  }
+
+  h3 {
+    @include forge-typography.style(heading4);
+    margin-block-start: 0;
+    margin-block-end: var(--forge-spacing-small);
+
+    &:not(:first-child) {
+      margin-block-start: var(--forge-spacing-medium);
+    }
+  }
+
+  h4 {
+    @include forge-typography.style(heading3);
+    margin-block-start: 0;
+    margin-block-end: var(--forge-spacing-small);
+
+    &:not(:first-child) {
+      margin-block-start: var(--forge-spacing-medium);
+    }
+  }
+
+  h5 {
+    @include forge-typography.style(heading2);
+    margin-block-start: 0;
+    margin-block-end: var(--forge-spacing-small);
+
+    &:not(:first-child) {
+      margin-block-start: var(--forge-spacing-medium);
+    }
+  }
+
+  h6 {
+    @include forge-typography.style(heading1);
+    margin-block-start: 0;
+    margin-block-end: var(--forge-spacing-small);
+
+    &:not(:first-child) {
+      margin-block-start: var(--forge-spacing-medium);
+    }
+  }
+
+  ul,
+  ol {
+    margin-block-start: 0;
+    margin-block-end: var(--forge-spacing-medium);
+    padding-inline-start: var(--forge-spacing-large);
+
+    &:last-child {
+      margin-block-end: 0;
+    }
+  }
+
+  li {
+    margin-block-end: var(--forge-spacing-xsmall);
+
+    &:last-child {
+      margin-block-end: 0;
+    }
+  }
+
+  a {
+    color: var(--forge-theme-primary);
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--forge-theme-primary-hover);
+    }
+
+    &:focus-visible {
+      outline: var(--forge-border-medium) solid var(--forge-theme-primary);
+      outline-offset: 2px;
+      border-radius: var(--forge-shape-xsmall);
+    }
+  }
+
+  code {
+    background-color: var(--forge-theme-surface-container);
+    color: var(--forge-theme-on-surface);
+    padding: var(--forge-spacing-xxxsmall) var(--forge-spacing-xxsmall);
+    border-radius: var(--forge-shape-xsmall);
+    font-family: var(--forge-font-family-monospace);
+    font-size: 0.875em;
+  }
+
+  pre {
+    background-color: var(--forge-theme-surface-container);
+    color: var(--forge-theme-on-surface);
+    padding: var(--forge-spacing-small) var(--forge-spacing-medium);
+    border-radius: var(--forge-shape-small);
+    overflow-x: auto;
+    margin-block-start: 0;
+    margin-block-end: var(--forge-spacing-medium);
+
+    &:last-child {
+      margin-block-end: 0;
+    }
+
+    code {
+      background: none;
+      padding: 0;
+      font-size: inherit;
+    }
+  }
+
+  blockquote {
+    padding-inline-start: var(--forge-spacing-medium);
+    border-inline-start: var(--forge-border-thick) solid var(--forge-theme-outline);
+    margin-block-start: 0;
+    margin-block-end: var(--forge-spacing-medium);
+    color: var(--forge-theme-text-medium);
+
+    &:last-child {
+      margin-block-end: 0;
+    }
+  }
+
+  hr {
+    border: none;
+    border-block-start: var(--forge-border-thin) solid var(--forge-theme-outline);
+    margin-block-start: var(--forge-spacing-medium);
+    margin-block-end: var(--forge-spacing-medium);
+
+    &:first-child {
+      margin-block-start: 0;
+    }
+
+    &:last-child {
+      margin-block-end: 0;
+    }
+  }
+}
