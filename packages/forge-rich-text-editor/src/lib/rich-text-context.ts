@@ -274,9 +274,7 @@ export class RichTextContextComponent extends LitElement {
     return html`
       <div class="editor-initialization-error" role="alert" aria-live="assertive">
         <p class="editor-initialization-error__title">Editor Initialization Failed</p>
-        <p class="editor-initialization-error__message">
-          The rich text editor could not be initialized. Please refresh the page to try again.
-        </p>
+        <p class="editor-initialization-error__message">The rich text editor could not be initialized. Please refresh the page to try again.</p>
         <p class="editor-initialization-error__details">${this._initializationError}</p>
       </div>
     `;
@@ -285,28 +283,20 @@ export class RichTextContextComponent extends LitElement {
   #renderFooter(): TemplateResult {
     return html`
       <div class="editor-footer">
-        ${when(!this._isValid, () => this.#renderErrors())}
-        ${when(this.showCharacterCount || this.showWordCount, () => this.#renderCounts())}
+        ${when(!this._isValid, () => this.#renderErrors())} ${when(this.showCharacterCount || this.showWordCount, () => this.#renderCounts())}
       </div>
     `;
   }
 
   #renderErrors(): TemplateResult {
-    return html`
-      <div class="editor-error" role="alert" aria-live="polite">
-        ${this.errorMessage || this._validationErrors[0] || 'Validation error'}
-      </div>
-    `;
+    return html` <div class="editor-error" role="alert" aria-live="polite">${this.errorMessage || this._validationErrors[0] || 'Validation error'}</div> `;
   }
 
   #renderCounts(): TemplateResult {
     const counts: string[] = [];
 
     if (this.showCharacterCount) {
-      const charText =
-        this.maxLength > 0
-          ? `${this._characterCount} / ${this.maxLength} characters`
-          : `${this._characterCount} characters`;
+      const charText = this.maxLength > 0 ? `${this._characterCount} / ${this.maxLength} characters` : `${this._characterCount} characters`;
       counts.push(charText);
     }
 
@@ -432,12 +422,9 @@ export class RichTextContextComponent extends LitElement {
         allowPasteImages: this.allowPasteImages
       });
 
-      const extensions = [
-        ...DEFAULT_EXTENSIONS,
-        characterCountExtension,
-        pasteHandlerExtension,
-        ...featureExtensions
-      ].filter((ext, index, self) => self.findIndex(e => e.name === ext.name) === index);
+      const extensions = [...DEFAULT_EXTENSIONS, characterCountExtension, pasteHandlerExtension, ...featureExtensions].filter(
+        (ext, index, self) => self.findIndex(e => e.name === ext.name) === index
+      );
 
       if (!this.#editorElement) {
         // Content component hasn't called setEditorElement yet — it will re-trigger init when ready.

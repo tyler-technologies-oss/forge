@@ -294,10 +294,7 @@ async function createFixture(options: BulletListFixtureOptions = {}): Promise<Bu
   return {
     el,
     bulletListFeature,
-    button: () =>
-      bulletListFeature
-        .shadowRoot!.querySelector('forge-rte-tool-button')!
-        .shadowRoot!.querySelector('forge-icon-button')!,
+    button: () => bulletListFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
     async clickButton() {
       this.button().click();
       await this.waitForUpdate();

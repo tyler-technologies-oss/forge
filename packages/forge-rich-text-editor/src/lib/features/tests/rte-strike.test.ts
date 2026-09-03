@@ -204,8 +204,7 @@ async function createFixture(options: StrikeFixtureOptions = {}): Promise<Strike
   return {
     el,
     strikeFeature,
-    button: () =>
-      strikeFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
+    button: () => strikeFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
     async clickButton() {
       this.button().click();
       await this.waitForUpdate();

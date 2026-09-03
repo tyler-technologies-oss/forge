@@ -167,20 +167,11 @@ export class RichTextFeatureLinkComponent extends LitElement implements RichText
         icon=${tylIconLink.name}
         ?disabled=${!this._editorContext.isEditable()}
         ?active=${this._editorContext.isActive(Link.name)}></forge-rte-tool-button>
-      <forge-popover
-        .arrow=${true}
-        .open=${!!this._popoverAnchor}
-        .anchorElement=${this._popoverAnchor}
-        @forge-popover-toggle=${this.#handlePopoverToggle}>
+      <forge-popover .arrow=${true} .open=${!!this._popoverAnchor} .anchorElement=${this._popoverAnchor} @forge-popover-toggle=${this.#handlePopoverToggle}>
         <div class="link-popover">
           <forge-text-field density="small" label-position="block-start">
             <label for="link-text">Text to display</label>
-            <input
-              id="link-text"
-              type="text"
-              .value=${this._linkText}
-              @input=${this.#handleLinkTextInput}
-              @keydown=${this.#handleLinkKeydown} />
+            <input id="link-text" type="text" .value=${this._linkText} @input=${this.#handleLinkTextInput} @keydown=${this.#handleLinkKeydown} />
           </forge-text-field>
           <forge-text-field density="small" label-position="block-start" .invalid=${!!this._validationError}>
             <label for="link-url">URL</label>
@@ -197,9 +188,7 @@ export class RichTextFeatureLinkComponent extends LitElement implements RichText
             ${this._validationError
               ? html`<div id="link-error" slot="support-text">${this._validationError}</div>`
               : this._validationWarning
-                ? html`<div id="link-error" class="warning-message" slot="support-text">
-                    ${this._validationWarning}
-                  </div>`
+                ? html`<div id="link-error" class="warning-message" slot="support-text">${this._validationWarning}</div>`
                 : ''}
           </forge-text-field>
           <!-- Kept permanently mounted so screen readers reliably announce content changes -->
@@ -209,9 +198,7 @@ export class RichTextFeatureLinkComponent extends LitElement implements RichText
             <forge-button variant="tonal" @click=${this.#applyLink} ?disabled=${!!this._validationError}>
               ${isEditingExistingLink ? 'Update' : 'Apply'}
             </forge-button>
-            ${isEditingExistingLink
-              ? html`<forge-button variant="outlined" @click=${this.#removeLink}>Remove Link</forge-button>`
-              : ''}
+            ${isEditingExistingLink ? html`<forge-button variant="outlined" @click=${this.#removeLink}>Remove Link</forge-button>` : ''}
             <forge-button variant="text" @click=${this.#cancel}>Cancel</forge-button>
           </div>
         </div>
@@ -301,8 +288,7 @@ export class RichTextFeatureLinkComponent extends LitElement implements RichText
     const hasNonASCII = /[^\x00-\x7F]/.test(this._linkUrl);
     const hasPunycode = this._linkUrl.includes('xn--');
     if (hasNonASCII || hasPunycode) {
-      this._validationWarning =
-        'Warning: This URL contains international characters. Verify carefully to avoid phishing.';
+      this._validationWarning = 'Warning: This URL contains international characters. Verify carefully to avoid phishing.';
       // IDN/non-ASCII URLs skip the ASCII regex and go straight to the URL constructor check
     } else {
       this._validationWarning = '';
@@ -377,9 +363,7 @@ export class RichTextFeatureLinkComponent extends LitElement implements RichText
           const range = getMarkRange($head, linkType, { href: this.#originalHref });
           if (isLinkTextChanged && range) {
             const newText = this._linkText || normalizedUrl;
-            chain = chain
-              .insertContentAt(range, newText, { updateSelection: true })
-              .setTextSelection({ from: range.from, to: range.from + newText.length });
+            chain = chain.insertContentAt(range, newText, { updateSelection: true }).setTextSelection({ from: range.from, to: range.from + newText.length });
           }
         } else {
           // Creating a new link: update the selection text and apply the link

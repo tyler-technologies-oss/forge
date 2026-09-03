@@ -41,9 +41,7 @@ describe('RichTextEditor', () => {
     });
 
     it('should set aria-readonly when readonly is true', async () => {
-      const el = await fixture<RichTextEditorComponent>(
-        html`<forge-rich-text-editor readonly></forge-rich-text-editor>`
-      );
+      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor readonly></forge-rich-text-editor>`);
 
       // Wait for content component to render and update
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -67,9 +65,7 @@ describe('RichTextEditor', () => {
     });
 
     it('should set aria-disabled when disabled is true', async () => {
-      const el = await fixture<RichTextEditorComponent>(
-        html`<forge-rich-text-editor disabled></forge-rich-text-editor>`
-      );
+      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor disabled></forge-rich-text-editor>`);
 
       // Wait for content component to render and update
       await new Promise(resolve => setTimeout(resolve, 100));

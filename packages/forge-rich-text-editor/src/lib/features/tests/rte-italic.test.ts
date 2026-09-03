@@ -203,8 +203,7 @@ async function createFixture(options: ItalicFixtureOptions = {}): Promise<Italic
   return {
     el,
     italicFeature,
-    button: () =>
-      italicFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
+    button: () => italicFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
     async clickButton() {
       this.button().click();
       await this.waitForUpdate();

@@ -193,9 +193,7 @@ describe('RTE Link Feature', () => {
     const editor = await harness.getEditor();
 
     // Set content with multiple links
-    editor.commands.setContent(
-      '<p><a href="https://example.com">link1</a> and <a href="https://test.com">link2</a></p>'
-    );
+    editor.commands.setContent('<p><a href="https://example.com">link1</a> and <a href="https://test.com">link2</a></p>');
     await harness.waitForUpdate();
 
     const output = editor.getHTML();
@@ -208,9 +206,7 @@ describe('RTE Link Feature', () => {
     const editor = await harness.getEditor();
 
     // Set content with a link (including the attributes TipTap adds)
-    editor.commands.setContent(
-      '<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://example.com">test link</a></p>'
-    );
+    editor.commands.setContent('<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://example.com">test link</a></p>');
     // Select the entire link content
     editor.commands.setTextSelection({ from: 1, to: 10 });
     await harness.waitForUpdate();
@@ -281,8 +277,7 @@ async function createFixture(options: LinkFixtureOptions = {}): Promise<LinkFixt
   return {
     el,
     linkFeature,
-    button: () =>
-      linkFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
+    button: () => linkFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
     popover: () => linkFeature.shadowRoot!.querySelector('forge-popover')!,
     getInput: () => linkFeature.shadowRoot!.querySelector('#link-url')!,
     getApplyButton: () => {
@@ -674,9 +669,7 @@ describe('RTE Link - Editing link text within a paragraph', () => {
     const harness = await createFixture();
     const editor = await harness.getEditor();
 
-    editor.commands.setContent(
-      '<p>See <a href="https://a.com">alpha</a> and <a href="https://b.com">bravo</a> here</p>'
-    );
+    editor.commands.setContent('<p>See <a href="https://a.com">alpha</a> and <a href="https://b.com">bravo</a> here</p>');
     editor.commands.setTextSelection(findTextPosition(editor, 'alpha'));
     await harness.waitForUpdate();
 

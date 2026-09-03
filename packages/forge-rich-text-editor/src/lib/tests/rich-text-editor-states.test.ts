@@ -31,8 +31,7 @@ function getToolbarIconButtons(el: RichTextEditorComponent): IForgeIconButtonCom
 async function waitForEditor(el: RichTextEditorComponent): Promise<RichTextContextComponent> {
   await el.updateComplete;
 
-  const getContext = (): RichTextContextComponent =>
-    el.shadowRoot!.querySelector('forge-rich-text-context') as RichTextContextComponent;
+  const getContext = (): RichTextContextComponent => el.shadowRoot!.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
   if (!getContext()?.isInitialized) {
     await new Promise<void>(resolve => {
