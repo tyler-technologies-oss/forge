@@ -1,6 +1,6 @@
 import { createContext } from '@lit/context';
 import { Editor } from '@tiptap/core';
-import { RichTextEditorFeature } from './features/rich-text-editor-feature';
+import { RichTextEditorFeature } from './features/rich-text-editor-feature.js';
 
 /**
  * Detail object for the 'change' event.

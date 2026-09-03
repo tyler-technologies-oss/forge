@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
-import { RichTextEditorComponent } from '../../rich-text-editor';
-import { RichTextFeatureAlignComponent } from '../rte-align';
+import { RichTextEditorComponent } from '../../rich-text-editor.js';
+import { RichTextFeatureAlignComponent } from '../rte-align.js';
 
-import '../../rich-text-editor';
-import '../rte-align';
+import '../../rich-text-editor.js';
+import '../rte-align.js';
 
 describe('RTE Align Feature', () => {
   it('should contain shadow root', async () => {

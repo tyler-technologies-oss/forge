@@ -2,11 +2,11 @@ import { html, LitElement, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ContextRoot } from '@lit/context';
 
-import './rich-text-context';
-import './rich-text-content';
-import type { RichTextContextComponent } from './rich-text-context';
+import './rich-text-context.js';
+import './rich-text-content.js';
+import type { RichTextContextComponent } from './rich-text-context.js';
 
-import styles from './rich-text-editor.scss?inline';
+import styles from './rich-text-editor.scss';
 
 declare global {
   interface HTMLElementTagNameMap {

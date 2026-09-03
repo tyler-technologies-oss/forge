@@ -1,8 +1,8 @@
 import { expect, fixture, html } from '@open-wc/testing';
-import { RichTextEditorComponent } from '../rich-text-editor';
-import type { RichTextContextComponent } from '../rich-text-context';
-import '../rich-text-editor';
-import '../features/rte-bold';
+import { RichTextEditorComponent } from '../rich-text-editor.js';
+import type { RichTextContextComponent } from '../rich-text-context.js';
+import '../rich-text-editor.js';
+import '../features/rte-bold.js';
 
 async function waitForEditor(el: RichTextEditorComponent): Promise<void> {
   await new Promise(resolve => setTimeout(resolve, 200));

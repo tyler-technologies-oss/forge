@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
-import { RichTextEditorComponent } from '../../rich-text-editor';
-import { RteBulletListComponent } from '../rte-bullet-list';
+import { RichTextEditorComponent } from '../../rich-text-editor.js';
+import { RteBulletListComponent } from '../rte-bullet-list.js';
 
-import '../../rich-text-editor';
-import '../rte-bullet-list';
+import '../../rich-text-editor.js';
+import '../rte-bullet-list.js';
 
 describe('RTE Bullet List Feature', () => {
   it('should contain shadow root', async () => {

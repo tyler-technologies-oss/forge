@@ -1,13 +1,13 @@
 import { expect, fixture, html } from '@open-wc/testing';
 import sinon from 'sinon';
-import { RichTextContextComponent } from '../rich-text-context';
-import { RichTextRendererComponent } from '../rich-text-renderer';
-import type { RichTextFeatureLinkComponent } from '../features/rte-link';
+import { RichTextContextComponent } from '../rich-text-context.js';
+import { RichTextRendererComponent } from '../rich-text-renderer.js';
+import type { RichTextFeatureLinkComponent } from '../features/rte-link.js';
 
-import '../rich-text-context';
-import '../rich-text-content';
-import '../rich-text-renderer';
-import '../features/rte-link';
+import '../rich-text-context.js';
+import '../rich-text-content.js';
+import '../rich-text-renderer.js';
+import '../features/rte-link.js';
 
 describe('Security: XSS Prevention', () => {
   describe('Security Hardening - Insecure Properties Removed', () => {

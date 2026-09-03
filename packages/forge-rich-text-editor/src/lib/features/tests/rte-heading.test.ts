@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
-import { RichTextEditorComponent } from '../../rich-text-editor';
-import { RichTextFeatureHeadingComponent } from '../rte-heading';
+import { RichTextEditorComponent } from '../../rich-text-editor.js';
+import { RichTextFeatureHeadingComponent } from '../rte-heading.js';
 
-import '../../rich-text-editor';
-import '../rte-heading';
+import '../../rich-text-editor.js';
+import '../rte-heading.js';
 
 describe('RTE Heading Feature', () => {
   it('should contain shadow root', async () => {

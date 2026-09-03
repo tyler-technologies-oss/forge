@@ -1,17 +1,17 @@
 import { html, LitElement, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { featureHostStyles } from './core/feature-styles';
+import { featureHostStyles } from './core/feature-styles.js';
 
-import './rte-bold';
-import './rte-italic';
-import './rte-underline';
-import './rte-strike';
-import './rte-bullet-list';
-import './rte-ordered-list';
-import './rte-heading';
-import './rte-align';
-import './rte-undo-redo';
-import './rte-feature-divider';
+import './rte-bold.js';
+import './rte-italic.js';
+import './rte-underline.js';
+import './rte-strike.js';
+import './rte-bullet-list.js';
+import './rte-ordered-list.js';
+import './rte-heading.js';
+import './rte-align.js';
+import './rte-undo-redo.js';
+import './rte-feature-divider.js';
 
 declare global {
   interface HTMLElementTagNameMap {

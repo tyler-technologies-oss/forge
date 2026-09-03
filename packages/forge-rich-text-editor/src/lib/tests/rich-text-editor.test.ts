@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
-import { RichTextEditorComponent } from '../rich-text-editor';
+import { RichTextEditorComponent } from '../rich-text-editor.js';
 
-import '../rich-text-editor';
+import '../rich-text-editor.js';
 
 describe('RichTextEditor', () => {
   it('should contain shadow root', async () => {

@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
-import { RichTextEditorComponent } from '../../rich-text-editor';
-import { RteItalicComponent } from '../rte-italic';
+import { RichTextEditorComponent } from '../../rich-text-editor.js';
+import { RteItalicComponent } from '../rte-italic.js';
 
-import '../../rich-text-editor';
-import '../rte-italic';
+import '../../rich-text-editor.js';
+import '../rte-italic.js';
 
 describe('RTE Italic Feature', () => {
   it('should contain shadow root', async () => {

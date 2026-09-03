@@ -4,9 +4,9 @@ import { UndoRedo } from '@tiptap/extensions';
 import { tylIconRedo, tylIconUndo } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { editorContext, EditorContext } from '../editor-context';
-import { RichTextEditorFeature } from './rich-text-editor-feature';
-import { featureHostStyles } from './core/feature-styles';
+import { editorContext, EditorContext } from '../editor-context.js';
+import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { featureHostStyles } from './core/feature-styles.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 
 declare global {

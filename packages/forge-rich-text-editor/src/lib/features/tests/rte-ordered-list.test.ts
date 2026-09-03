@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
-import { RichTextEditorComponent } from '../../rich-text-editor';
-import { RteOrderedListComponent } from '../rte-ordered-list';
+import { RichTextEditorComponent } from '../../rich-text-editor.js';
+import { RteOrderedListComponent } from '../rte-ordered-list.js';
 
-import '../../rich-text-editor';
-import '../rte-ordered-list';
+import '../../rich-text-editor.js';
+import '../rte-ordered-list.js';
 
 describe('RTE Ordered List Feature', () => {
   it('should contain shadow root', async () => {

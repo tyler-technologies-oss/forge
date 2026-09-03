@@ -1,7 +1,7 @@
 import { Extension } from '@tiptap/core';
 import { Plugin, PluginKey } from '@tiptap/pm/state';
 import { Slice, Fragment, Node as ProseMirrorNode } from '@tiptap/pm/model';
-import { sanitizeHTML } from './sanitize-utils';
+import { sanitizeHTML } from './sanitize-utils.js';
 
 export interface PasteHandlerOptions {
   /**

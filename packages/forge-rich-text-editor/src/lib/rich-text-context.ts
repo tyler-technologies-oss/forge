@@ -8,7 +8,7 @@ import CharacterCount from '@tiptap/extension-character-count';
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
-import styles from './rich-text-context.scss?inline';
+import styles from './rich-text-context.scss';
 import { when } from 'lit/directives/when.js';
 import {
   editorContext,
@@ -17,11 +17,11 @@ import {
   RichTextEditorValidationEventDetail,
   RichTextEditorInitializationErrorEventDetail,
   RichTextEditorErrorEventDetail
-} from './editor-context';
-import { RichTextEditorFeature } from './features/rich-text-editor-feature';
-import { PasteHandler } from './extensions/paste-handler';
-import { MarkdownSerializer } from './extensions/markdown-serializer';
-import { sanitizeHTML, sanitizeJSON } from './extensions/sanitize-utils';
+} from './editor-context.js';
+import { RichTextEditorFeature } from './features/rich-text-editor-feature.js';
+import { PasteHandler } from './extensions/paste-handler.js';
+import { MarkdownSerializer } from './extensions/markdown-serializer.js';
+import { sanitizeHTML, sanitizeJSON } from './extensions/sanitize-utils.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -204,7 +204,6 @@ export class RichTextContextComponent extends LitElement {
     readOnly: false,
     content: '',
     isActive(identifier: string | Record<string, unknown>, attributes?: Record<string, unknown>) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return this.editor?.isActive(identifier as any, attributes as any) ?? false;
     },
     isEditable() {

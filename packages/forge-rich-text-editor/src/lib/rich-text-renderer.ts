@@ -14,8 +14,8 @@ import Heading from '@tiptap/extension-heading';
 import { html, LitElement, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
-import styles from './rich-text-renderer.scss?inline';
-import { sanitizeJSON } from './extensions/sanitize-utils';
+import styles from './rich-text-renderer.scss';
+import { sanitizeJSON } from './extensions/sanitize-utils.js';
 
 /**
  * Type representing rich text content in TipTap's ProseMirror JSON format.
@@ -28,10 +28,10 @@ import { sanitizeJSON } from './extensions/sanitize-utils';
  */
 export type RichTextRendererContent = DocumentType<
   // Document attributes (TipTap internal format - schema-dependent)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   Record<string, any> | undefined,
   // Node types array (TipTap internal format - extension-dependent)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   NodeType<string, undefined | Record<string, any>, any, (NodeType | TextType)[]>[]
 >;
 
@@ -138,7 +138,7 @@ export class RichTextRendererComponent extends LitElement {
           element: this._contentElement,
           extensions: DEFAULT_EXTENSIONS,
           editable: false,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
           content: initialContent as any
         });
       } catch (error) {
@@ -162,7 +162,7 @@ export class RichTextRendererComponent extends LitElement {
     try {
       if (this.content) {
         const sanitized = this.#sanitizeContent(this.content);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         this._editor.commands.setContent(sanitized as any);
       } else {
         this._editor.commands.clearContent();

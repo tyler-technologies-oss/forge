@@ -6,13 +6,13 @@ import { tylIconLink } from '@tylertech/tyler-icons';
 import { css, html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { editorContext, EditorContext } from '../editor-context';
-import { RichTextEditorFeature } from './rich-text-editor-feature';
-import { featureHostStyles } from './core/feature-styles';
-import { DANGEROUS_PROTOCOLS } from '../extensions/sanitize-utils';
-import { VirtualElement } from '@tylertech/forge/esm/core/utils/position-utils';
+import { editorContext, EditorContext } from '../editor-context.js';
+import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { featureHostStyles } from './core/feature-styles.js';
+import { DANGEROUS_PROTOCOLS } from '../extensions/sanitize-utils.js';
+import { VirtualElement } from '@tylertech/forge';
 
-import './core/rich-text-feature-button';
+import './core/rich-text-feature-button.js';
 
 declare global {
   interface HTMLElementTagNameMap {

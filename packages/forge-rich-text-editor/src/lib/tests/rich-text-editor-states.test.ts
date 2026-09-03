@@ -1,10 +1,10 @@
 import { expect, fixture, html } from '@open-wc/testing';
 import type { IForgeIconButtonComponent } from '@tylertech/forge';
 
-import '../rich-text-editor';
-import '../features/rte-standard-tools';
-import type { RichTextEditorComponent } from '../rich-text-editor';
-import type { RichTextContextComponent } from '../rich-text-context';
+import '../rich-text-editor.js';
+import '../features/rte-standard-tools.js';
+import type { RichTextEditorComponent } from '../rich-text-editor.js';
+import type { RichTextContextComponent } from '../rich-text-context.js';
 
 /**
  * Returns all forge-icon-button elements inside forge-rte-standard-tools by traversing

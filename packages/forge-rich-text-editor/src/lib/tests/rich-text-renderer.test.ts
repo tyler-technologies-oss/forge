@@ -1,6 +1,6 @@
 import { expect, fixture, html } from '@open-wc/testing';
-import type { RichTextRendererComponent } from '../rich-text-renderer';
-import '../rich-text-renderer';
+import type { RichTextRendererComponent } from '../rich-text-renderer.js';
+import '../rich-text-renderer.js';
 
 describe('RichTextRendererComponent', () => {
   describe('Component Structure', () => {
