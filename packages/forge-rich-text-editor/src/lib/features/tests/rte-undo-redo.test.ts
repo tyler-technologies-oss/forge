@@ -300,9 +300,7 @@ interface UndoRedoFixture {
 async function createFixture(options: UndoRedoFixtureOptions = {}): Promise<UndoRedoFixture> {
   const el = await fixture<RichTextEditorComponent>(html`
     <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
-      <forge-rte-undo-redo
-        undo-label=${options.undoLabel || 'Undo'}
-        redo-label=${options.redoLabel || 'Redo'}></forge-rte-undo-redo>
+      <forge-rte-undo-redo undo-label=${options.undoLabel || 'Undo'} redo-label=${options.redoLabel || 'Redo'}></forge-rte-undo-redo>
     </forge-rich-text-editor>
   `);
 

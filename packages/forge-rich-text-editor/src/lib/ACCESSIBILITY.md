@@ -178,11 +178,7 @@ The editor implements comprehensive ARIA semantics for assistive technology.
 ### Toolbar
 
 ```html
-<div
-  role="toolbar"
-  aria-label="Rich text formatting toolbar"
-  aria-orientation="horizontal"
-  aria-controls="forge-rte-content">
+<div role="toolbar" aria-label="Rich text formatting toolbar" aria-orientation="horizontal" aria-controls="forge-rte-content">
   <!-- Toolbar buttons -->
 </div>
 ```
@@ -212,14 +208,7 @@ The editor implements comprehensive ARIA semantics for assistive technology.
 ### Content Area
 
 ```html
-<div
-  id="forge-rte-content"
-  role="textbox"
-  aria-multiline="true"
-  aria-label="Editor content"
-  aria-readonly="false"
-  aria-disabled="false"
-  contenteditable="true">
+<div id="forge-rte-content" role="textbox" aria-multiline="true" aria-label="Editor content" aria-readonly="false" aria-disabled="false" contenteditable="true">
   <!-- Editor content -->
 </div>
 ```
@@ -514,8 +503,7 @@ Add instructions for complex editing tasks:
 
 ```html
 <div class="instructions" id="editor-instructions">
-  Use the toolbar to format your content. Press Tab to navigate through formatting options, or use keyboard shortcuts
-  for quick formatting.
+  Use the toolbar to format your content. Press Tab to navigate through formatting options, or use keyboard shortcuts for quick formatting.
 </div>
 <forge-rich-text-editor aria-describedby="editor-instructions">
   <forge-rte-standard-tools></forge-rte-standard-tools>

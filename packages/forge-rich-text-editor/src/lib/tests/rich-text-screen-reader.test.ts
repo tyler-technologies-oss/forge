@@ -36,8 +36,7 @@ function triggerIconButton(iconButton: Element | null | undefined): void {
 async function waitForEditor(el: RichTextEditorComponent): Promise<RichTextContextComponent> {
   await el.updateComplete;
 
-  const getContext = (): RichTextContextComponent =>
-    el.shadowRoot!.querySelector('forge-rich-text-context') as RichTextContextComponent;
+  const getContext = (): RichTextContextComponent => el.shadowRoot!.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
   if (!getContext()?.isInitialized) {
     await new Promise<void>(resolve => {
@@ -277,9 +276,7 @@ describe('RTE Screen Reader Support', () => {
 
       const headingFeature = getFeature(el, 'forge-rte-heading');
       const headingToolButton = headingFeature?.shadowRoot?.querySelectorAll('forge-rte-tool-button')?.[0];
-      headingToolButton?.dispatchEvent(
-        new CustomEvent('forge-rte-tool-toggle', { detail: false, bubbles: true, composed: true })
-      );
+      headingToolButton?.dispatchEvent(new CustomEvent('forge-rte-tool-toggle', { detail: false, bubbles: true, composed: true }));
 
       await waitForAnnouncement(el, 'Heading 1');
 
@@ -301,9 +298,7 @@ describe('RTE Screen Reader Support', () => {
 
       const headingFeature = getFeature(el, 'forge-rte-heading');
       const headingToolButton = headingFeature?.shadowRoot?.querySelectorAll('forge-rte-tool-button')?.[0];
-      headingToolButton?.dispatchEvent(
-        new CustomEvent('forge-rte-tool-toggle', { detail: false, bubbles: true, composed: true })
-      );
+      headingToolButton?.dispatchEvent(new CustomEvent('forge-rte-tool-toggle', { detail: false, bubbles: true, composed: true }));
 
       await waitForAnnouncement(el, 'Paragraph style');
 
@@ -392,9 +387,7 @@ describe('RTE Screen Reader Support', () => {
 
       const alignFeature = getFeature(el, 'forge-rte-align');
       const centerToolButton = alignFeature?.shadowRoot?.querySelectorAll('forge-rte-tool-button')?.[1];
-      centerToolButton?.dispatchEvent(
-        new CustomEvent('forge-rte-tool-toggle', { detail: false, bubbles: true, composed: true })
-      );
+      centerToolButton?.dispatchEvent(new CustomEvent('forge-rte-tool-toggle', { detail: false, bubbles: true, composed: true }));
 
       await waitForAnnouncement(el, 'Center aligned');
 
@@ -416,9 +409,7 @@ describe('RTE Screen Reader Support', () => {
 
       const alignFeature = getFeature(el, 'forge-rte-align');
       const rightToolButton = alignFeature?.shadowRoot?.querySelectorAll('forge-rte-tool-button')?.[2];
-      rightToolButton?.dispatchEvent(
-        new CustomEvent('forge-rte-tool-toggle', { detail: false, bubbles: true, composed: true })
-      );
+      rightToolButton?.dispatchEvent(new CustomEvent('forge-rte-tool-toggle', { detail: false, bubbles: true, composed: true }));
 
       await waitForAnnouncement(el, 'Right aligned');
 

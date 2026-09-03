@@ -64,9 +64,7 @@ describe('Security: XSS Prevention', () => {
       const spy = sinon.spy(console, 'warn');
 
       try {
-        const el = await fixture<RichTextContextComponent>(html`
-          <forge-rich-text-context suppress-errors="true"></forge-rich-text-context>
-        `);
+        const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context suppress-errors="true"></forge-rich-text-context> `);
 
         await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -532,9 +530,7 @@ describe('Security: XSS Prevention', () => {
 
   describe('Renderer Security', () => {
     it('should sanitize javascript: links in renderer', async () => {
-      const el = await fixture<RichTextRendererComponent>(html`
-        <forge-rich-text-renderer></forge-rich-text-renderer>
-      `);
+      const el = await fixture<RichTextRendererComponent>(html` <forge-rich-text-renderer></forge-rich-text-renderer> `);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -569,9 +565,7 @@ describe('Security: XSS Prevention', () => {
     });
 
     it('should sanitize data: URLs in renderer', async () => {
-      const el = await fixture<RichTextRendererComponent>(html`
-        <forge-rich-text-renderer></forge-rich-text-renderer>
-      `);
+      const el = await fixture<RichTextRendererComponent>(html` <forge-rich-text-renderer></forge-rich-text-renderer> `);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -606,9 +600,7 @@ describe('Security: XSS Prevention', () => {
     });
 
     it('should handle deeply nested content in renderer', async () => {
-      const el = await fixture<RichTextRendererComponent>(html`
-        <forge-rich-text-renderer></forge-rich-text-renderer>
-      `);
+      const el = await fixture<RichTextRendererComponent>(html` <forge-rich-text-renderer></forge-rich-text-renderer> `);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -630,9 +622,7 @@ describe('Security: XSS Prevention', () => {
     });
 
     it('should handle large content safely in renderer', async () => {
-      const el = await fixture<RichTextRendererComponent>(html`
-        <forge-rich-text-renderer></forge-rich-text-renderer>
-      `);
+      const el = await fixture<RichTextRendererComponent>(html` <forge-rich-text-renderer></forge-rich-text-renderer> `);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -675,9 +665,7 @@ describe('Security: XSS Prevention', () => {
     });
 
     it('should remove iframe elements from pasted HTML', async () => {
-      const el = await fixture<RichTextContextComponent>(html`
-        <forge-rich-text-context allow-paste-formatting></forge-rich-text-context>
-      `);
+      const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context allow-paste-formatting></forge-rich-text-context> `);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -689,9 +677,7 @@ describe('Security: XSS Prevention', () => {
     });
 
     it('should remove SVG elements with scripts', async () => {
-      const el = await fixture<RichTextContextComponent>(html`
-        <forge-rich-text-context allow-paste-formatting></forge-rich-text-context>
-      `);
+      const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context allow-paste-formatting></forge-rich-text-context> `);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -704,9 +690,7 @@ describe('Security: XSS Prevention', () => {
     });
 
     it('should remove style attributes', async () => {
-      const el = await fixture<RichTextContextComponent>(html`
-        <forge-rich-text-context allow-paste-formatting></forge-rich-text-context>
-      `);
+      const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context allow-paste-formatting></forge-rich-text-context> `);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -718,9 +702,7 @@ describe('Security: XSS Prevention', () => {
     });
 
     it('should remove data attributes', async () => {
-      const el = await fixture<RichTextContextComponent>(html`
-        <forge-rich-text-context allow-paste-formatting></forge-rich-text-context>
-      `);
+      const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context allow-paste-formatting></forge-rich-text-context> `);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -911,12 +893,7 @@ describe('Security: XSS Prevention', () => {
         const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context></forge-rich-text-context> `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const dangerousProtocols = [
-          'file:///etc/passwd',
-          'vbscript:msgbox(1)',
-          'about:blank',
-          'blob:https://example.com/uuid'
-        ];
+        const dangerousProtocols = ['file:///etc/passwd', 'vbscript:msgbox(1)', 'about:blank', 'blob:https://example.com/uuid'];
 
         for (const protocol of dangerousProtocols) {
           (el as any).content = {
@@ -1031,11 +1008,7 @@ describe('Security: XSS Prevention', () => {
         const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context></forge-rich-text-context> `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const encodedAttacks = [
-          'java%73cript:alert(1)',
-          '%6A%61%76%61%73%63%72%69%70%74:alert(1)',
-          'data%3Atext/html,<script>alert(1)</script>'
-        ];
+        const encodedAttacks = ['java%73cript:alert(1)', '%6A%61%76%61%73%63%72%69%70%74:alert(1)', 'data%3Atext/html,<script>alert(1)</script>'];
 
         for (const encoded of encodedAttacks) {
           (el as any).content = {
@@ -1064,9 +1037,7 @@ describe('Security: XSS Prevention', () => {
 
     describe('Renderer Security - Must Sanitize Untrusted Content', () => {
       it('should always sanitize content in renderer (same as editor)', async () => {
-        const renderer = await fixture<RichTextRendererComponent>(html`
-          <forge-rich-text-renderer></forge-rich-text-renderer>
-        `);
+        const renderer = await fixture<RichTextRendererComponent>(html` <forge-rich-text-renderer></forge-rich-text-renderer> `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
         const malicious = {
@@ -1096,9 +1067,7 @@ describe('Security: XSS Prevention', () => {
       });
 
       it('should enforce same depth limits in renderer', async () => {
-        const renderer = await fixture<RichTextRendererComponent>(html`
-          <forge-rich-text-renderer></forge-rich-text-renderer>
-        `);
+        const renderer = await fixture<RichTextRendererComponent>(html` <forge-rich-text-renderer></forge-rich-text-renderer> `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
         let deepContent: any = { type: 'text', text: 'Deep' };
@@ -1115,9 +1084,7 @@ describe('Security: XSS Prevention', () => {
       });
 
       it('should enforce same node count limits in renderer', async () => {
-        const renderer = await fixture<RichTextRendererComponent>(html`
-          <forge-rich-text-renderer></forge-rich-text-renderer>
-        `);
+        const renderer = await fixture<RichTextRendererComponent>(html` <forge-rich-text-renderer></forge-rich-text-renderer> `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
         const hugeContent = {
@@ -1138,9 +1105,7 @@ describe('Security: XSS Prevention', () => {
 
     describe('Paste Handler Security - Must Remove Dangerous Elements', () => {
       it('should always remove SVG elements (security hardening)', async () => {
-        const el = await fixture<RichTextContextComponent>(html`
-          <forge-rich-text-context allow-paste-formatting></forge-rich-text-context>
-        `);
+        const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context allow-paste-formatting></forge-rich-text-context> `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
         const svgAttacks = [
@@ -1162,9 +1127,7 @@ describe('Security: XSS Prevention', () => {
       });
 
       it('should always remove audio and video elements', async () => {
-        const el = await fixture<RichTextContextComponent>(html`
-          <forge-rich-text-context allow-paste-formatting></forge-rich-text-context>
-        `);
+        const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context allow-paste-formatting></forge-rich-text-context> `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
         const mediaAttacks = [
@@ -1184,9 +1147,7 @@ describe('Security: XSS Prevention', () => {
       });
 
       it('should always remove all event handler attributes', async () => {
-        const el = await fixture<RichTextContextComponent>(html`
-          <forge-rich-text-context allow-paste-formatting></forge-rich-text-context>
-        `);
+        const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context allow-paste-formatting></forge-rich-text-context> `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
         const eventHandlers = [
@@ -1213,9 +1174,7 @@ describe('Security: XSS Prevention', () => {
       });
 
       it('should always remove inline style attributes', async () => {
-        const el = await fixture<RichTextContextComponent>(html`
-          <forge-rich-text-context allow-paste-formatting></forge-rich-text-context>
-        `);
+        const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context allow-paste-formatting></forge-rich-text-context> `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
         el.content = '<p style="background:url(javascript:alert(1))">Text</p>';
@@ -1226,9 +1185,7 @@ describe('Security: XSS Prevention', () => {
       });
 
       it('should always remove data-* attributes', async () => {
-        const el = await fixture<RichTextContextComponent>(html`
-          <forge-rich-text-context allow-paste-formatting></forge-rich-text-context>
-        `);
+        const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context allow-paste-formatting></forge-rich-text-context> `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
         el.content = '<p data-payload="malicious" data-track="user">Text</p>';
@@ -1245,9 +1202,7 @@ describe('Security: XSS Prevention', () => {
         const warnSpy = sinon.spy(console, 'warn');
 
         try {
-          const el = await fixture<RichTextContextComponent>(html`
-            <forge-rich-text-context></forge-rich-text-context>
-          `);
+          const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context></forge-rich-text-context> `);
           await new Promise(resolve => setTimeout(resolve, 100));
 
           (el as any).content = {
@@ -1601,9 +1556,7 @@ describe('Security: XSS Prevention', () => {
           ]
         };
 
-        const el = await fixture<RichTextRendererComponent>(html`
-          <forge-rich-text-renderer .content=${malicious}></forge-rich-text-renderer>
-        `);
+        const el = await fixture<RichTextRendererComponent>(html` <forge-rich-text-renderer .content=${malicious}></forge-rich-text-renderer> `);
         await new Promise(resolve => setTimeout(resolve, 150));
 
         // Verify the link href was neutralized on initial render
@@ -1649,9 +1602,7 @@ describe('Security: XSS Prevention', () => {
       it('should not set img src attribute before element removal', async () => {
         const spy = sinon.spy(HTMLImageElement.prototype, 'setAttribute');
         try {
-          const el = await fixture<RichTextContextComponent>(html`
-            <forge-rich-text-context></forge-rich-text-context>
-          `);
+          const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context></forge-rich-text-context> `);
           await new Promise(resolve => setTimeout(resolve, 100));
 
           // Setting content with an img should NOT trigger setAttribute('src', ...) eagerly

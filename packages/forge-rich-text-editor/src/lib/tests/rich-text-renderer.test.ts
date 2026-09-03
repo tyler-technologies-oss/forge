@@ -21,9 +21,7 @@ describe('RichTextRendererComponent', () => {
     });
 
     it('should not override a consumer-provided role', async () => {
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer role="region"></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer role="region"></forge-rich-text-renderer>`);
       expect(el.getAttribute('role')).to.equal('region');
     });
 
@@ -36,9 +34,7 @@ describe('RichTextRendererComponent', () => {
     });
 
     it('should allow the host to be labelled by the consumer', async () => {
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer aria-label="Release notes"></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer aria-label="Release notes"></forge-rich-text-renderer>`);
       expect(el.getAttribute('aria-label')).to.equal('Release notes');
     });
   });
@@ -68,9 +64,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -92,9 +86,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -115,9 +107,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content1}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content1}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const content2 = {
@@ -158,9 +148,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -186,9 +174,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -214,9 +200,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -242,9 +226,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -270,9 +252,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -298,9 +278,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -325,9 +303,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -348,9 +324,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -371,9 +345,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -400,9 +372,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -445,9 +415,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -489,9 +457,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -530,9 +496,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -565,9 +529,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -599,9 +561,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -630,9 +590,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -657,9 +615,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -680,9 +636,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -703,9 +657,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -726,9 +678,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -795,9 +745,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
@@ -825,9 +773,7 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(
-        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`
-      );
+      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');

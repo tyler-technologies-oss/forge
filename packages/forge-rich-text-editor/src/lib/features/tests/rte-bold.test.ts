@@ -203,8 +203,7 @@ async function createFixture(options: BoldFixtureOptions = {}): Promise<BoldFixt
   return {
     el,
     boldFeature,
-    button: () =>
-      boldFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
+    button: () => boldFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
     async clickButton() {
       this.button().click();
       await this.waitForUpdate();

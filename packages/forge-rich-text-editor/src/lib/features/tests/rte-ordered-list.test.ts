@@ -294,10 +294,7 @@ async function createFixture(options: OrderedListFixtureOptions = {}): Promise<O
   return {
     el,
     orderedListFeature,
-    button: () =>
-      orderedListFeature
-        .shadowRoot!.querySelector('forge-rte-tool-button')!
-        .shadowRoot!.querySelector('forge-icon-button')!,
+    button: () => orderedListFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
     async clickButton() {
       this.button().click();
       await this.waitForUpdate();

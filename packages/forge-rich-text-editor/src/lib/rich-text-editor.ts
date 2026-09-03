@@ -121,12 +121,7 @@ export class RichTextEditorComponent extends LitElement {
         .allowPasteFormatting=${this.allowPasteFormatting}
         .allowPasteImages=${this.allowPasteImages}>
         <div class="forge-rich-text-editor">
-          <div
-            class="editor-toolbar"
-            role="toolbar"
-            aria-label="Rich text formatting toolbar"
-            aria-controls="forge-rte-content"
-            aria-orientation="horizontal">
+          <div class="editor-toolbar" role="toolbar" aria-label="Rich text formatting toolbar" aria-controls="forge-rte-content" aria-orientation="horizontal">
             <slot></slot>
           </div>
           <forge-rich-text-content></forge-rich-text-content>

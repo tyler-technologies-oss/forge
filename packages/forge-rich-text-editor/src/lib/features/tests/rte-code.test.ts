@@ -213,8 +213,7 @@ async function createFixture(options: CodeFixtureOptions = {}): Promise<CodeFixt
   return {
     el,
     codeFeature,
-    button: () =>
-      codeFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
+    button: () => codeFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
     async clickButton() {
       this.button().click();
       await this.waitForUpdate();

@@ -60,9 +60,7 @@ describe('RichTextEditor - Focus Management', () => {
     await new Promise(resolve => setTimeout(resolve, 100));
 
     // Click bold button
-    const button = boldFeature!
-      .shadowRoot!.querySelector('forge-rte-tool-button')!
-      .shadowRoot!.querySelector('forge-icon-button')!;
+    const button = boldFeature!.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!;
     button.click();
 
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -93,9 +91,7 @@ describe('RichTextEditor - Focus Management', () => {
     await new Promise(resolve => setTimeout(resolve, 100));
 
     // Click link button to open popover
-    const button = linkFeature!
-      .shadowRoot!.querySelector('forge-rte-tool-button')!
-      .shadowRoot!.querySelector('forge-icon-button')!;
+    const button = linkFeature!.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!;
     button.click();
 
     await new Promise(resolve => setTimeout(resolve, 150));
@@ -128,9 +124,7 @@ describe('RichTextEditor - Focus Management', () => {
     await new Promise(resolve => setTimeout(resolve, 100));
 
     // Click link button to open popover
-    const button = linkFeature!
-      .shadowRoot!.querySelector('forge-rte-tool-button')!
-      .shadowRoot!.querySelector('forge-icon-button')!;
+    const button = linkFeature!.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!;
     button.click();
 
     await new Promise(resolve => setTimeout(resolve, 150));
@@ -164,9 +158,7 @@ describe('RichTextEditor - Focus Management', () => {
 
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    const button = boldFeature!
-      .shadowRoot!.querySelector('forge-rte-tool-button')!
-      .shadowRoot!.querySelector('forge-icon-button')!;
+    const button = boldFeature!.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!;
 
     // Disabled buttons should still be focusable (for screen readers)
     // but forge-icon-button handles this via disabled attribute

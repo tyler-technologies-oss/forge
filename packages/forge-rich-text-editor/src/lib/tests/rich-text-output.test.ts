@@ -244,9 +244,7 @@ describe('RTE Output Formats', () => {
       const editor = await getEditor(el);
       const context = await getEditorContext(el);
 
-      editor?.commands.setContent(
-        '<h1>Title</h1><p>Paragraph with <strong>bold</strong> and <em>italic</em></p><ul><li><p>List item</p></li></ul>'
-      );
+      editor?.commands.setContent('<h1>Title</h1><p>Paragraph with <strong>bold</strong> and <em>italic</em></p><ul><li><p>List item</p></li></ul>');
       await new Promise(resolve => setTimeout(resolve, 100));
 
       const json = context.toJSON();
@@ -445,9 +443,7 @@ describe('RTE Output Formats', () => {
       const editor = await getEditor(el);
       const context = await getEditorContext(el);
 
-      editor?.commands.setContent(
-        '<h1>Title</h1><p>Paragraph with <strong>bold</strong> and <em>italic</em></p><ul><li><p>List item</p></li></ul>'
-      );
+      editor?.commands.setContent('<h1>Title</h1><p>Paragraph with <strong>bold</strong> and <em>italic</em></p><ul><li><p>List item</p></li></ul>');
       await new Promise(resolve => setTimeout(resolve, 100));
 
       const htmlOutput = context.toHTML();

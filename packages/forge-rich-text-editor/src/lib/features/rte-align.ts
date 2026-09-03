@@ -2,12 +2,7 @@ import { consume } from '@lit/context';
 import { Paragraph } from '@tiptap/extension-paragraph';
 import { TextAlign } from '@tiptap/extension-text-align';
 import { IconRegistry } from '@tylertech/forge';
-import {
-  tylIconFormatAlignCenter,
-  tylIconFormatAlignJustify,
-  tylIconFormatAlignLeft,
-  tylIconFormatAlignRight
-} from '@tylertech/tyler-icons';
+import { tylIconFormatAlignCenter, tylIconFormatAlignJustify, tylIconFormatAlignLeft, tylIconFormatAlignRight } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { editorContext, EditorContext } from '../editor-context';
@@ -49,12 +44,7 @@ export const RichTextFeatureAlignComponentTagName: keyof HTMLElementTagNameMap =
 @customElement(RichTextFeatureAlignComponentTagName)
 export class RichTextFeatureAlignComponent extends LitElement implements RichTextEditorFeature {
   static {
-    IconRegistry.define([
-      tylIconFormatAlignLeft,
-      tylIconFormatAlignCenter,
-      tylIconFormatAlignRight,
-      tylIconFormatAlignJustify
-    ]);
+    IconRegistry.define([tylIconFormatAlignLeft, tylIconFormatAlignCenter, tylIconFormatAlignRight, tylIconFormatAlignJustify]);
   }
 
   public static override styles = featureHostStyles;

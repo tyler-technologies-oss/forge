@@ -190,9 +190,7 @@ describe('RTE Performance', () => {
 
   describe('Character/Word Count Performance', () => {
     it('should efficiently calculate counts for large documents', async () => {
-      const el = await fixture<RichTextEditorComponent>(
-        html`<forge-rich-text-editor show-character-count show-word-count></forge-rich-text-editor>`
-      );
+      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor show-character-count show-word-count></forge-rich-text-editor>`);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -213,9 +211,7 @@ describe('RTE Performance', () => {
     });
 
     it('should handle count updates efficiently during typing', async () => {
-      const el = await fixture<RichTextEditorComponent>(
-        html`<forge-rich-text-editor show-character-count show-word-count></forge-rich-text-editor>`
-      );
+      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor show-character-count show-word-count></forge-rich-text-editor>`);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -240,9 +236,7 @@ describe('RTE Performance', () => {
 
   describe('Validation Performance', () => {
     it('should validate efficiently with maxLength set', async () => {
-      const el = await fixture<RichTextEditorComponent>(
-        html`<forge-rich-text-editor max-length="10000"></forge-rich-text-editor>`
-      );
+      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor max-length="10000"></forge-rich-text-editor>`);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -263,9 +257,7 @@ describe('RTE Performance', () => {
     });
 
     it('should handle validation state changes during content updates', async () => {
-      const el = await fixture<RichTextEditorComponent>(
-        html`<forge-rich-text-editor max-length="500" show-character-count></forge-rich-text-editor>`
-      );
+      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor max-length="500" show-character-count></forge-rich-text-editor>`);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -310,9 +302,7 @@ describe('RTE Performance', () => {
     });
 
     it('should handle state changes efficiently', async () => {
-      const el = await fixture<RichTextEditorComponent>(
-        html`<forge-rich-text-editor content="<p>Initial content</p>"></forge-rich-text-editor>`
-      );
+      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor content="<p>Initial content</p>"></forge-rich-text-editor>`);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -343,9 +333,7 @@ describe('RTE Performance', () => {
     it('should mount efficiently', async () => {
       const startTime = performance.now();
 
-      const el = await fixture<RichTextEditorComponent>(
-        html`<forge-rich-text-editor content="<p>Initial content</p>"></forge-rich-text-editor>`
-      );
+      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor content="<p>Initial content</p>"></forge-rich-text-editor>`);
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -409,9 +397,7 @@ describe('RTE Performance', () => {
   describe('Output Format Performance', () => {
     it('should generate JSON output efficiently for large documents', async () => {
       const el = await fixture<RichTextEditorComponent>(
-        html`<forge-rich-text-editor content="<p>Initial</p>"
-          ><forge-rte-bold></forge-rte-bold
-        ></forge-rich-text-editor>`
+        html`<forge-rich-text-editor content="<p>Initial</p>"><forge-rte-bold></forge-rte-bold></forge-rich-text-editor>`
       );
 
       await waitForEditor(el);
@@ -436,9 +422,7 @@ describe('RTE Performance', () => {
 
     it('should generate HTML output efficiently for large documents', async () => {
       const el = await fixture<RichTextEditorComponent>(
-        html`<forge-rich-text-editor content="<p>Initial</p>"
-          ><forge-rte-bold></forge-rte-bold
-        ></forge-rich-text-editor>`
+        html`<forge-rich-text-editor content="<p>Initial</p>"><forge-rte-bold></forge-rte-bold></forge-rich-text-editor>`
       );
 
       await waitForEditor(el);
