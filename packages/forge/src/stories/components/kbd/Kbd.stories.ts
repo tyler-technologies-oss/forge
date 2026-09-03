@@ -20,7 +20,7 @@ const meta = {
     theme: {
       control: { type: 'select' },
       defaultValue: '',
-      options: ['', 'primary', 'secondary', 'tertiary', 'surface', 'info', 'success', 'warning', 'error']
+      options: ['', 'primary', 'secondary', 'tertiary', 'info', 'success', 'warning', 'error']
     }
   },
   args: {

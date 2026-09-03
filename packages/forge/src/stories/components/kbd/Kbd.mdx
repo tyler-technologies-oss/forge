@@ -6,11 +6,44 @@ import * as KbdStories from './Kbd.stories';
 
 <Title />
 
-Use the kbd component to visually display a keyboard key combination, such as a shortcut described in documentation or a hint within the UI.
+Use the kbd component to visually display a keyboard key combination, such as a shortcut described
+in documentation or a hint within the UI.
 
 ## Example
 
 <Canvas of={KbdStories.Demo} />
+
+## Key strings
+
+The `keys` property accepts an array of strings representing each non-modifier key to display. The
+attribute equivalent accepts a space-separated string of keys. Some keys require special handling to
+show to correct name or glyph.
+
+| Key string          | Output                                 |
+|---------------------|----------------------------------------|
+| Enter               | `Enter` (`Return` on Apple platforms)  |
+| ArrowUp             | `↑`                                    |
+| ArrowDown           | `↓`                                    |
+| ArrowLeft           | `←`                                    |
+| ArrowRight          | `→`                                    |
+| Escape              | `Esc`                                  |
+| Pagedown            | `Page Down`                            |
+| Pageup              | `Page Up`                              |
+| Printscreen         | `Print Screen`                         |
+| Scrolllock          | `Scroll Lock`                          |
+
+All other keys are displayed as provided but transformed to title case.
+
+## Modifier keys
+
+Modifer keys are displayed using platform-appropriate glyphs.
+
+| Modifier key | Windows / Linux | Apple |
+|--------------|----------------|-------|
+| Control      | `Ctrl`         | `⌃`   |
+| Shift        | `⇧`            | `⇧`   |
+| Alt          | `Alt`          | `⌥`   |
+| Meta         | `Meta`         | `⌘`   |
 
 ## API
 
@@ -18,4 +51,5 @@ Use the kbd component to visually display a keyboard key combination, such as a 
 
 ## Accessibility
 
-- The kbd component renders native `<kbd>` elements, which are recognized by assistive technology as representing keyboard input.
+- The kbd component renders native `<kbd>` elements, which are recognized by assistive technology as
+  representing keyboard input.
