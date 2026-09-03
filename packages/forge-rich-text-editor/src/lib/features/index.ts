@@ -1,5 +1,5 @@
 export * from './rich-text-editor-feature.js';
-export * from './core/rich-text-feature-button.js';
+export * from './core/rte-tool-button.js';
 export * from './rte-bold.js';
 export * from './rte-italic.js';
 export * from './rte-underline.js';

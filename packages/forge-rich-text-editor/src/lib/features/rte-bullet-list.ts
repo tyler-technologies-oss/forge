@@ -8,7 +8,7 @@ import { editorContext, EditorContext } from '../editor-context.js';
 import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 
-import './core/rich-text-feature-button.js';
+import './core/rte-tool-button.js';
 
 declare global {
   interface HTMLElementTagNameMap {

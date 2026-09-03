@@ -9,7 +9,7 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-rich-text-feature-button': CustomEvent<boolean>;
+    'forge-rte-tool-toggle': CustomEvent<boolean>;
   }
 }
 
