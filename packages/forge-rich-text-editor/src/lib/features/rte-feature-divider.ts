@@ -5,7 +5,7 @@ import { featureHostStyles } from './core/feature-styles.js';
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-rte-feature-divider': RichTextFeatureDividerComponent;
+    'forge-rte-feature-divider': RteFeatureDividerComponent;
   }
 }
 
@@ -23,7 +23,7 @@ export const RTE_FEATURE_DIVIDER_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-
  * sections (e.g., separating text formatting from paragraph formatting).
  */
 @customElement(RTE_FEATURE_DIVIDER_TAG_NAME)
-export class RichTextFeatureDividerComponent extends LitElement {
+export class RteFeatureDividerComponent extends LitElement {
   static {
     defineDividerComponent();
   }

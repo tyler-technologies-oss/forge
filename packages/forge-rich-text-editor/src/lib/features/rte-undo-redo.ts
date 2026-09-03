@@ -5,13 +5,13 @@ import { tylIconRedo, tylIconUndo } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { editorContext, EditorContext } from '../editor-context.js';
-import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-rte-undo-redo': RichTextFeatureUndoRedoComponent;
+    'forge-rte-undo-redo': RteUndoRedoComponent;
   }
 }
 
@@ -36,7 +36,7 @@ export const RTE_UNDO_REDO_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-un
  * @attribute {string} redo-label - The accessible label for the redo button.
  */
 @customElement(RTE_UNDO_REDO_TAG_NAME)
-export class RichTextFeatureUndoRedoComponent extends LitElement implements RichTextEditorFeature {
+export class RteUndoRedoComponent extends LitElement implements IRichTextEditorFeature {
   static {
     IconRegistry.define([tylIconUndo, tylIconRedo]);
     defineIconButtonComponent();

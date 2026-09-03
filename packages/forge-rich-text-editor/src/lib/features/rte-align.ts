@@ -6,14 +6,14 @@ import { tylIconFormatAlignCenter, tylIconFormatAlignJustify, tylIconFormatAlign
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { editorContext, EditorContext } from '../editor-context.js';
-import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 
 import './core/rich-text-feature-button.js';
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-rte-align': RichTextFeatureAlignComponent;
+    'forge-rte-align': RteAlignComponent;
   }
 }
 
@@ -42,7 +42,7 @@ export const RTE_ALIGN_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-align'
  * @attribute {string} justify-label - The accessible label for the justify button.
  */
 @customElement(RTE_ALIGN_TAG_NAME)
-export class RichTextFeatureAlignComponent extends LitElement implements RichTextEditorFeature {
+export class RteAlignComponent extends LitElement implements IRichTextEditorFeature {
   static {
     IconRegistry.define([tylIconFormatAlignLeft, tylIconFormatAlignCenter, tylIconFormatAlignRight, tylIconFormatAlignJustify]);
   }

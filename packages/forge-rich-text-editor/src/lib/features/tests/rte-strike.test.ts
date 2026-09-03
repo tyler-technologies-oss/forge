@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
-import { RichTextFeatureStrikeComponent } from '../rte-strike.js';
+import { RteStrikeComponent } from '../rte-strike.js';
 
 import '../../rich-text-editor.js';
 import '../rte-strike.js';
@@ -181,7 +181,7 @@ interface StrikeFixtureOptions {
 
 interface StrikeFixture {
   el: RichTextEditorComponent;
-  strikeFeature: RichTextFeatureStrikeComponent;
+  strikeFeature: RteStrikeComponent;
   button: () => HTMLElement;
   clickButton: () => Promise<void>;
   getEditor: () => Promise<Editor>;
@@ -195,7 +195,7 @@ async function createFixture(options: StrikeFixtureOptions = {}): Promise<Strike
     </forge-rich-text-editor>
   `);
 
-  const strikeFeature = el.querySelector('forge-rte-strike') as RichTextFeatureStrikeComponent;
+  const strikeFeature = el.querySelector('forge-rte-strike') as RteStrikeComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
 
   // Wait for editor to initialize

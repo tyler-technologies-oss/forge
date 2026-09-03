@@ -5,14 +5,14 @@ import { tylIconFormatBold } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { editorContext, EditorContext } from '../editor-context.js';
-import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 
 import './core/rich-text-feature-button.js';
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-rte-bold': RichTextFeatureBoldComponent;
+    'forge-rte-bold': RteBoldComponent;
   }
 }
 
@@ -35,7 +35,7 @@ export const RTE_BOLD_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-bold';
  * @attribute {string} label - The accessible label for the bold button.
  */
 @customElement(RTE_BOLD_TAG_NAME)
-export class RichTextFeatureBoldComponent extends LitElement implements RichTextEditorFeature {
+export class RteBoldComponent extends LitElement implements IRichTextEditorFeature {
   static {
     IconRegistry.define(tylIconFormatBold);
   }

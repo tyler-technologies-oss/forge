@@ -5,14 +5,14 @@ import { tylIconFormatStrikethrough } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { editorContext, EditorContext } from '../editor-context.js';
-import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 
 import './core/rich-text-feature-button.js';
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-rte-strike': RichTextFeatureStrikeComponent;
+    'forge-rte-strike': RteStrikeComponent;
   }
 }
 
@@ -35,7 +35,7 @@ export const RTE_STRIKE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-strik
  * @attribute {string} label - The accessible label for the strikethrough button.
  */
 @customElement(RTE_STRIKE_TAG_NAME)
-export class RichTextFeatureStrikeComponent extends LitElement implements RichTextEditorFeature {
+export class RteStrikeComponent extends LitElement implements IRichTextEditorFeature {
   static {
     IconRegistry.define(tylIconFormatStrikethrough);
   }
