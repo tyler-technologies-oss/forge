@@ -85,7 +85,7 @@ describe('Kbd', () => {
     await el.updateComplete;
 
     const [, ...keyElements] = getKeyElements(el);
-    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['Ctrl', 'Shift', 'Alt', '⊞', 'K']);
+    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['Ctrl', '⇧', 'Alt', '⊞', 'K']);
   });
 
   it('should render Windows-style modifier glyphs when not on an Apple platform', async () => {
@@ -95,7 +95,7 @@ describe('Kbd', () => {
     await el.updateComplete;
 
     const [, ...keyElements] = getKeyElements(el);
-    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['Ctrl', 'Shift', 'Alt', '⊞', 'K']);
+    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['Ctrl', '⇧', 'Alt', '⊞', 'K']);
   });
 
   it('should render Apple-style modifier glyphs when on an Apple platform', async () => {
@@ -105,7 +105,7 @@ describe('Kbd', () => {
     await el.updateComplete;
 
     const [, ...keyElements] = getKeyElements(el);
-    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['⌃', 'Shift', '⌥', '⌘', 'K']);
+    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['⌃', '⇧', '⌥', '⌘', 'K']);
   });
 
   it('should render "Enter" using the platform-appropriate glyph', async () => {
