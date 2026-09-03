@@ -2,9 +2,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { defineTimelineComponent } from '@tylertech/forge';
-import { ForgeTimelineBreakModule } from '../timeline-break/timeline-break.module';
-import { ForgeTimelineItemModule } from '../timeline-item/timeline-item.module';
 
+import { ForgeTimelineItemModule } from '../timeline-item/timeline-item.module';
+import { ForgeTimelineBreakModule } from '../timeline-break/timeline-break.module';
 import { TimelineComponent } from './timeline.component';
 
 @NgModule({

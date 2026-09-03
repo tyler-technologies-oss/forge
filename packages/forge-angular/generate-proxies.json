@@ -8,10 +8,12 @@
   "useDefineFunction": true,
   "componentDependencies": {
     "forge-accordion": ["forge-expansion-panel"],
+    "forge-app-launcher": ["forge-app-launcher-link"],
     "forge-button-toggle-group": ["forge-button-toggle"],
     "forge-chip-field": ["forge-chip"],
     "forge-chip-set": ["forge-chip"],
     "forge-expansion-panel": ["forge-open-icon"],
+    "forge-footer": ["forge-footer-item"],
     "forge-icon-button": ["forge-icon"],
     "forge-key": ["forge-key-item"],
     "forge-list": ["forge-list-item"],
@@ -23,6 +25,25 @@
     "forge-tab-bar": ["forge-tab"],
     "forge-timeline": ["forge-timeline-item", "forge-timeline-break"],
     "forge-tree": ["forge-tree-item"],
+    "forge-user-profile": ["forge-profile-link"],
     "forge-view-switcher": ["forge-view"]
+  },
+  "importPathOverrides": {
+    "forge-app-launcher": "@tylertech/forge/app-launcher",
+    "forge-app-launcher-link": "@tylertech/forge/app-launcher/app-launcher-link",
+    "forge-app-layout": "@tylertech/forge/app-layout",
+    "forge-busy-indicator": "@tylertech/forge/busy-indicator",
+    "forge-confirmation-dialog": "@tylertech/forge/confirmation-dialog",
+    "forge-content-scaffold": "@tylertech/forge/content-scaffold",
+    "forge-count-card": "@tylertech/forge/count-card",
+    "forge-footer": "@tylertech/forge/footer",
+    "forge-footer-item": "@tylertech/forge/footer/footer-item",
+    "forge-multi-select-header": "@tylertech/forge/multi-select-header",
+    "forge-profile-link": "@tylertech/forge/user-profile/profile-link",
+    "forge-quantity-field": "@tylertech/forge/quantity-field",
+    "forge-responsive-toolbar": "@tylertech/forge/responsive-toolbar",
+    "forge-structured-card": "@tylertech/forge/structured-card",
+    "forge-theme-toggle": "@tylertech/forge/theme-toggle",
+    "forge-user-profile": "@tylertech/forge/user-profile"
   }
 }
