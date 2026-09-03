@@ -1,7 +1,7 @@
 import { defineDividerComponent } from '@tylertech/forge';
 import { css, html, LitElement, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { featureHostStyles } from './core/feature-styles';
+import { featureHostStyles } from './core/feature-styles.js';
 
 declare global {
   interface HTMLElementTagNameMap {

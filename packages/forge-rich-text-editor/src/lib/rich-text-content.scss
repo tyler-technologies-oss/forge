@@ -1,6 +1,6 @@
 @use './core' as rte-core;
 
-@include rte-core.prosemirror-base();
+@include rte-core.prosemirror-base;
 
 :host {
   display: contents;
@@ -31,7 +31,7 @@
     overflow: auto;
     box-sizing: border-box;
 
-    @include rte-core.content-styles();
+    @include rte-core.content-styles;
   }
 }
 

@@ -2,9 +2,9 @@ import { consume } from '@lit/context';
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { createRef, ref } from 'lit/directives/ref.js';
-import { editorContext, EditorContext } from './editor-context';
+import { editorContext, EditorContext } from './editor-context.js';
 
-import styles from './rich-text-content.scss?inline';
+import styles from './rich-text-content.scss';
 
 declare global {
   interface HTMLElementTagNameMap {

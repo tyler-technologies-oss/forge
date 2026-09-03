@@ -1,13 +1,13 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
-import type { RichTextEditorComponent } from '../rich-text-editor';
-import type { RichTextContextComponent } from '../rich-text-context';
+import type { RichTextEditorComponent } from '../rich-text-editor.js';
+import type { RichTextContextComponent } from '../rich-text-context.js';
 import sinon from 'sinon';
 
-import '../rich-text-editor';
-import '../rich-text-context';
-import '../rich-text-content';
-import '../features/rte-standard-tools';
+import '../rich-text-editor.js';
+import '../rich-text-context.js';
+import '../rich-text-content.js';
+import '../features/rte-standard-tools.js';
 
 describe('RichTextEditor - Error Handling', () => {
   describe('Initialization', () => {

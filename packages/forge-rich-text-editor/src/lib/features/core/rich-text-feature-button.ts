@@ -1,7 +1,7 @@
 import { defineIconButtonComponent } from '@tylertech/forge';
 import { html, LitElement, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { featureHostStyles } from './feature-styles';
+import { featureHostStyles } from './feature-styles.js';
 
 declare global {
   interface HTMLElementTagNameMap {

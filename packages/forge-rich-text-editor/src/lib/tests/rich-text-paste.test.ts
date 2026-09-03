@@ -1,10 +1,10 @@
 import { expect, fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
-import type { RichTextEditorComponent } from '../rich-text-editor';
+import type { RichTextEditorComponent } from '../rich-text-editor.js';
 
-import '../rich-text-editor';
-import '../features/rte-standard-tools';
-import '../features/rte-link';
+import '../rich-text-editor.js';
+import '../features/rte-standard-tools.js';
+import '../features/rte-link.js';
 
 describe('RTE Paste Handling', () => {
   it('should contain shadow root', async () => {

@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
-import { RichTextEditorComponent } from '../../rich-text-editor';
-import { RichTextFeatureDividerComponent } from '../rte-feature-divider';
+import { RichTextEditorComponent } from '../../rich-text-editor.js';
+import { RichTextFeatureDividerComponent } from '../rte-feature-divider.js';
 
-import '../../rich-text-editor';
-import '../rte-feature-divider';
+import '../../rich-text-editor.js';
+import '../rte-feature-divider.js';
 
 describe('RTE Feature Divider', () => {
   it('should contain shadow root', async () => {

@@ -1,12 +1,12 @@
 import { expect, fixture, html as testHtml } from '@open-wc/testing';
-import { RichTextEditorComponent } from '../rich-text-editor';
-import type { RichTextContextComponent } from '../rich-text-context';
-import { MarkdownSerializer } from '../extensions/markdown-serializer';
+import { RichTextEditorComponent } from '../rich-text-editor.js';
+import type { RichTextContextComponent } from '../rich-text-context.js';
+import { MarkdownSerializer } from '../extensions/markdown-serializer.js';
 import type { JSONContent } from '@tiptap/core';
 
-import '../index';
-import '../features/rte-standard-tools';
-import '../features/rte-link';
+import '../index.js';
+import '../features/rte-standard-tools.js';
+import '../features/rte-link.js';
 
 /**
  * Test suite for Markdown output functionality in the rich text editor.

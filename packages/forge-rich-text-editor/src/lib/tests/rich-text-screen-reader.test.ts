@@ -1,11 +1,11 @@
 import { html } from 'lit';
 import { fixture, expect } from '@open-wc/testing';
-import type { RichTextEditorComponent } from '../rich-text-editor';
-import type { RichTextContextComponent } from '../rich-text-context';
-import type { RichTextContentComponent } from '../rich-text-content';
-import '../rich-text-editor';
-import '../features/rte-standard-tools';
-import '../features/rte-code';
+import type { RichTextEditorComponent } from '../rich-text-editor.js';
+import type { RichTextContextComponent } from '../rich-text-context.js';
+import type { RichTextContentComponent } from '../rich-text-content.js';
+import '../rich-text-editor.js';
+import '../features/rte-standard-tools.js';
+import '../features/rte-code.js';
 
 /**
  * Find a feature element — first inside forge-rte-standard-tools shadow DOM,

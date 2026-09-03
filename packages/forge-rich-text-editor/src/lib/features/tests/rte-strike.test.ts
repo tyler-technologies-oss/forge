@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
-import { RichTextEditorComponent } from '../../rich-text-editor';
-import { RichTextFeatureStrikeComponent } from '../rte-strike';
+import { RichTextEditorComponent } from '../../rich-text-editor.js';
+import { RichTextFeatureStrikeComponent } from '../rte-strike.js';
 
-import '../../rich-text-editor';
-import '../rte-strike';
+import '../../rich-text-editor.js';
+import '../rte-strike.js';
 
 describe('RTE Strike Feature', () => {
   it('should contain shadow root', async () => {
