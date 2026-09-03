@@ -1,0 +1,32 @@
+<!--
+  @block Content Scaffold — In A Dialog
+  @type component
+  @description In A Dialog usage example for the forge-content-scaffold component.
+  @tags content-scaffold, in-a-dialog, storybook, component-example
+-->
+<div>
+  <forge-button variant="filled" id="open-dialog-button">Open Dialog</forge-button>
+  <forge-dialog id="content-scaffold-dialog">
+    <forge-content-scaffold>
+      <span slot="header-start">Edit Settings</span>
+      <forge-icon-button aria-label="Close dialog" slot="header-end" id="close-dialog-button">
+        <forge-icon name="close"></forge-icon>
+      </forge-icon-button>
+
+      <div slot="body">
+        <p class="m-0">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+          1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        </p>
+      </div>
+
+      <forge-stack inline alignment="center" slot="footer-end">
+        <forge-button variant="text" id="cancel-dialog-button">Cancel</forge-button>
+        <forge-button variant="filled">
+          <forge-icon slot="start" name="save"></forge-icon>
+          Save Changes
+        </forge-button>
+      </forge-stack>
+    </forge-content-scaffold>
+  </forge-dialog>
+</div>

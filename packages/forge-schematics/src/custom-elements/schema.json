@@ -61,6 +61,13 @@
               "type": "string"
             }
           }
+        },
+        "importPathOverrides": {
+          "type": "object",
+          "description": "dictionary keyed by tag name, overriding importPath for elements that aren't exported from it (e.g. subpath-only components)",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "required": ["manifest", "importPath"]

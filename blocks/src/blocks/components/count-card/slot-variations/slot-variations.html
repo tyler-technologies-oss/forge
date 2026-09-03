@@ -1,0 +1,47 @@
+<!--
+  @block Count Card — Slot Variations
+  @type component
+  @description Slot Variations usage example for the forge-count-card component.
+  @tags count-card, slot-variations, storybook, component-example
+-->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-medium">
+  <forge-count-card>
+    <forge-icon slot="icon" name="attach_money"></forge-icon>
+    <span slot="label">Revenue</span>
+    <forge-badge slot="header-end" theme="success">+12%</forge-badge>
+    <span slot="count">$12,450.00</span>
+  </forge-count-card>
+
+  <forge-count-card>
+    <span slot="label">Total Users</span>
+    <forge-menu slot="action">
+      <forge-icon-button aria-label="More options">
+        <forge-icon name="more_vert"></forge-icon>
+      </forge-icon-button>
+    </forge-menu>
+    <span slot="count">1,234</span>
+  </forge-count-card>
+
+  <forge-count-card>
+    <forge-icon slot="icon" name="shopping_cart"></forge-icon>
+    <span slot="label">Orders This Month</span>
+    <span slot="count">567</span>
+    <span slot="count-end" class="text-medium">/ 1,000</span>
+    <div slot="body">
+      <forge-meter value="0.567" min="0" max="1" theme="info"></forge-meter>
+    </div>
+  </forge-count-card>
+
+  <forge-count-card>
+    <forge-icon slot="icon" name="trending_up"></forge-icon>
+    <span slot="label">Year-over-Year Growth Rate for Q4 Performance Metrics</span>
+    <span slot="count">+23.5%</span>
+    <svg slot="full-width" viewBox="0 0 200 40" class="w-full block">
+      <polyline
+        fill="none"
+        stroke="var(--forge-theme-success)"
+        stroke-width="2"
+        points="0,35 20,30 40,32 60,25 80,28 100,20 120,22 140,15 160,18 180,10 200,5" />
+    </svg>
+  </forge-count-card>
+</div>

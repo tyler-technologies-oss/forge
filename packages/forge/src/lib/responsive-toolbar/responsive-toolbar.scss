@@ -1,0 +1,42 @@
+@use '../toolbar';
+@use '../core/styles/spacing';
+
+//
+// Host
+//
+
+:host {
+  display: block;
+  position: relative;
+}
+
+//
+// Base
+//
+
+forge-toolbar[auto-height] {
+  @include toolbar.provide-theme(
+    (
+      min-height: toolbar.token(height)
+    )
+  );
+}
+
+#end-small,
+#end-large {
+  margin-inline-start: #{spacing.variable(medium)};
+}
+
+[slot='start'] {
+  padding-block: #{spacing.variable(xxxsmall)};
+}
+
+//
+// State
+//
+
+:host(:state(small)) #end-large,
+:host(:state(large)) #end-small {
+  visibility: hidden;
+  position: absolute;
+}

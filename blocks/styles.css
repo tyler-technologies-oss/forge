@@ -1,7 +1,14 @@
 @import '@tylertech/forge/dist/forge-core.css';
 @import '@tylertech/forge/dist/forge.css';
 
-@import 'tailwindcss';
+/* Step 1: Define your Tailwind layers */
+@layer theme, base, components, utilities;
+
+/* Step 2: Import the theme (variables) and utilities, skipping preflight */
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* Step 3: Import the Forge Tailwind theme */
 @import '@tylertech/forge-tailwind';
 
 /* Block specific utilities */

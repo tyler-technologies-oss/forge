@@ -6,11 +6,14 @@ export const routes: Routes = [
     path: 'component',
     children: [
       { path: 'accordion', loadComponent: () => import('./views/components/accordion/accordion.component').then(m => m.AccordionComponent) },
+      { path: 'app-launcher', loadComponent: () => import('./views/components/app-launcher/app-launcher.component').then(m => m.AppLauncherComponent) },
+      { path: 'app-layout', loadComponent: () => import('./views/components/app-layout/app-layout.component').then(m => m.AppLayoutComponent) },
       { path: 'autocomplete', loadComponent: () => import('./views/components/autocomplete/autocomplete.component').then(m => m.AutocompleteComponent) },
       { path: 'avatar', loadComponent: () => import('./views/components/avatar/avatar.component').then(m => m.AvatarComponent) },
       { path: 'banner', loadComponent: () => import('./views/components/banner/banner.component').then(m => m.BannerComponent) },
       { path: 'bottom-sheet', loadComponent: () => import('./views/components/bottom-sheet/bottom-sheet.component').then(m => m.BottomSheetComponent) },
       { path: 'button', loadComponent: () => import('./views/components/button/button.component').then(m => m.ButtonComponent) },
+      { path: 'busy-indicator', loadComponent: () => import('./views/components/busy-indicator/busy-indicator.component').then(m => m.BusyIndicatorComponent) },
       { path: 'checkbox', loadComponent: () => import('./views/components/checkbox/checkbox.component').then(m => m.CheckboxComponent) },
       { path: 'chip-field', loadComponent: () => import('./views/components/chip-field/chip-field.component').then(m => m.ChipFieldComponent) },
       { path: 'chips', loadComponent: () => import('./views/components/chips/chips.component').then(m => m.ChipsComponent) },
@@ -18,6 +21,15 @@ export const routes: Routes = [
         path: 'circular-progress',
         loadComponent: () => import('./views/components/circular-progress/circular-progress.component').then(m => m.CircularProgressComponent)
       },
+      {
+        path: 'confirmation-dialog',
+        loadComponent: () => import('./views/components/confirmation-dialog/confirmation-dialog.component').then(m => m.ConfirmationDialogComponent)
+      },
+      {
+        path: 'content-scaffold',
+        loadComponent: () => import('./views/components/content-scaffold/content-scaffold.component').then(m => m.ContentScaffoldComponent)
+      },
+      { path: 'count-card', loadComponent: () => import('./views/components/count-card/count-card.component').then(m => m.CountCardComponent) },
       { path: 'date-picker', loadComponent: () => import('./views/components/date-picker/date-picker.component').then(m => m.DatePickerComponent) },
       {
         path: 'date-range-picker',
@@ -32,6 +44,7 @@ export const routes: Routes = [
         path: 'floating-action-button',
         loadComponent: () => import('./views/components/floating-action-button/floating-action-button.component').then(m => m.FloatingActionButtonComponent)
       },
+      { path: 'footer', loadComponent: () => import('./views/components/footer/footer.component').then(m => m.FooterComponent) },
       { path: 'icon', loadComponent: () => import('./views/components/icon/icon.component').then(m => m.IconComponent) },
       { path: 'icon-button', loadComponent: () => import('./views/components/icon-button/icon-button.component').then(m => m.IconButtonComponent) },
       { path: 'inline-message', loadComponent: () => import('./views/components/inline-message/inline-message.component').then(m => m.InlineMessageComponent) },
@@ -41,22 +54,40 @@ export const routes: Routes = [
       },
       { path: 'list', loadComponent: () => import('./views/components/list/list.component').then(m => m.ListComponent) },
       { path: 'menu', loadComponent: () => import('./views/components/menu/menu.component').then(m => m.MenuComponent) },
+      {
+        path: 'multi-select-header',
+        loadComponent: () => import('./views/components/multi-select-header/multi-select-header.component').then(m => m.MultiSelectHeaderComponent)
+      },
       { path: 'page-state', loadComponent: () => import('./views/components/page-state/page-state.component').then(m => m.PageStateComponent) },
       { path: 'paginator', loadComponent: () => import('./views/components/paginator/paginator.component').then(m => m.PaginatorComponent) },
       { path: 'popover', loadComponent: () => import('./views/components/popover/popover.component').then(m => m.PopoverComponent) },
+      {
+        path: 'quantity-field',
+        loadComponent: () => import('./views/components/quantity-field/quantity-field.component').then(m => m.QuantityFieldComponent)
+      },
       { path: 'radio', loadComponent: () => import('./views/components/radio/radio.component').then(m => m.RadioComponent) },
+      {
+        path: 'responsive-toolbar',
+        loadComponent: () => import('./views/components/responsive-toolbar/responsive-toolbar.component').then(m => m.ResponsiveToolbarComponent)
+      },
       { path: 'scaffold', loadComponent: () => import('./views/components/scaffold/scaffold.component').then(m => m.ScaffoldComponent) },
       { path: 'select', loadComponent: () => import('./views/components/select/select.component').then(m => m.SelectComponent) },
       { path: 'slider', loadComponent: () => import('./views/components/slider/slider.component').then(m => m.SliderComponent) },
       { path: 'split-view', loadComponent: () => import('./views/components/split-view/split-view.component').then(m => m.SplitViewComponent) },
       { path: 'stepper', loadComponent: () => import('./views/components/stepper/stepper.component').then(m => m.StepperComponent) },
+      {
+        path: 'structured-card',
+        loadComponent: () => import('./views/components/structured-card/structured-card.component').then(m => m.StructuredCardComponent)
+      },
       { path: 'switch', loadComponent: () => import('./views/components/switch/switch.component').then(m => m.SwitchComponent) },
       { path: 'tab-bar', loadComponent: () => import('./views/components/tab-bar/tab-bar.component').then(m => m.TabBarComponent) },
       { path: 'table', loadComponent: () => import('./views/components/table/table.component').then(m => m.TableComponent) },
       { path: 'text-field', loadComponent: () => import('./views/components/text-field/text-field.component').then(m => m.TextFieldComponent) },
+      { path: 'theme-toggle', loadComponent: () => import('./views/components/theme-toggle/theme-toggle.component').then(m => m.ThemeToggleComponent) },
       { path: 'time-picker', loadComponent: () => import('./views/components/time-picker/time-picker.component').then(m => m.TimePickerComponent) },
       { path: 'toast', loadComponent: () => import('./views/components/toast/toast.component').then(m => m.ToastComponent) },
       { path: 'tooltip', loadComponent: () => import('./views/components/tooltip/tooltip.component').then(m => m.TooltipComponent) },
+      { path: 'user-profile', loadComponent: () => import('./views/components/user-profile/user-profile.component').then(m => m.UserProfileComponent) },
       { path: 'view-switcher', loadComponent: () => import('./views/components/view-switcher/view-switcher.component').then(m => m.ViewSwitcherComponent) }
     ]
   },

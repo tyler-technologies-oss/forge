@@ -1,8 +1,17 @@
 import { defineComponents, IconRegistry } from '@tylertech/forge';
-import '@tylertech/forge-extended/app-layout';
-import '@tylertech/forge-extended/user-profile';
-import '@tylertech/forge-extended/structured-card';
-import '@tylertech/forge-extended/count-card';
+import '@tylertech/forge/app-launcher';
+import '@tylertech/forge/app-layout';
+import '@tylertech/forge/busy-indicator';
+import '@tylertech/forge/confirmation-dialog';
+import '@tylertech/forge/content-scaffold';
+import '@tylertech/forge/count-card';
+import '@tylertech/forge/footer';
+import '@tylertech/forge/multi-select-header';
+import '@tylertech/forge/quantity-field';
+import '@tylertech/forge/responsive-toolbar';
+import '@tylertech/forge/structured-card';
+import '@tylertech/forge/theme-toggle';
+import '@tylertech/forge/user-profile';
 
 import {
   tylIconHome,

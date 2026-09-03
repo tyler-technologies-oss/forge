@@ -1,0 +1,14 @@
+<app-demo-card headerText="Busy Indicator">
+  <forge-button variant="raised" (click)="open = true">Show</forge-button>
+  <div class="busy-indicator-container">
+    <forge-busy-indicator
+      [open]="open"
+      mode="inline"
+      variant="spinner"
+      titleText="Loading"
+      message="Please wait while we fetch your data..."
+      cancelable
+      (forge-busy-indicator-cancel)="open = false">
+    </forge-busy-indicator>
+  </div>
+</app-demo-card>
