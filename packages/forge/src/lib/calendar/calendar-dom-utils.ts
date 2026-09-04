@@ -137,6 +137,10 @@ export function getDateSpacerElement(date: Date): HTMLElement {
   const element = document.createElement('span');
   element.classList.add(CALENDAR_CONSTANTS.classes.DATE_SPACER);
   element.id = getDateId(date);
+  // Empty leading/trailing cells must still be valid (empty) grid cells so the owning row satisfies
+  // the ARIA grid pattern; aria-hidden keeps them silent for assistive tech.
+  element.setAttribute('role', 'gridcell');
+  element.setAttribute('aria-hidden', 'true');
   return element;
 }
 

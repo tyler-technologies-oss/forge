@@ -1,0 +1,220 @@
+@use '../core/styles/scrollbar';
+@use '../core/styles/typography';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  @include typography.style(body2);
+
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  justify-self: start;
+  color: #{token(color)};
+}
+
+@mixin base {
+  display: grid;
+  gap: #{token(gap)};
+
+  background: #{token(background)};
+  color: #{token(color)};
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@mixin base-summary {
+  grid-template-columns: auto auto;
+  align-items: stretch;
+  gap: 0;
+}
+
+@mixin summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: #{token(section-gap)};
+  background: #{token(summary-background)};
+  color: #{token(summary-color)};
+  width: #{token(summary-width)};
+  max-width: 100%;
+  padding: #{token(summary-padding)};
+  box-sizing: border-box;
+}
+
+@mixin summary-year {
+  @include typography.style(heading1);
+
+  opacity: 0.85;
+}
+
+@mixin summary-day {
+  @include typography.style(display5);
+
+  word-break: keep-all;
+}
+
+@mixin summary-empty {
+  @include typography.style(subheading1);
+
+  opacity: 0.85;
+}
+
+@mixin content {
+  display: grid;
+  gap: #{token(gap)};
+  padding: #{token(padding)};
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+@mixin body {
+  display: flex;
+  gap: #{token(body-gap)};
+}
+
+@mixin body-horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+@mixin body-vertical {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0;
+}
+
+@mixin section {
+  display: grid;
+  gap: #{token(section-gap)};
+  min-width: 0;
+}
+
+@mixin time-label {
+  @include typography.style(heading2);
+
+  color: #{token(time-label-color)};
+}
+
+@mixin meridiem-badge {
+  @include typography.style(overline);
+}
+
+@mixin preset {
+  @include typography.style(button);
+}
+
+@mixin duration {
+  @include typography.style(label2);
+}
+
+@mixin body-main {
+  display: flex;
+  min-width: 0;
+}
+
+@mixin footer-start {
+  grid-column: 1;
+  justify-content: flex-start;
+}
+
+@mixin footer-center {
+  grid-column: 2;
+  justify-content: center;
+}
+
+@mixin footer-end {
+  grid-column: 3;
+  justify-content: flex-end;
+}
+
+@mixin calendar-section {
+  width: #{token(calendar-max-width)};
+  max-width: 100%;
+}
+
+@mixin time-inputs {
+  display: flex;
+  width: #{token(calendar-max-width)};
+  max-width: 100%;
+}
+
+@mixin range-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: #{token(section-gap)};
+  width: #{token(calendar-max-width)};
+  max-width: 100%;
+}
+
+@mixin presets-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+  padding-inline-end: #{token(body-gap)};
+  margin-inline-end: #{token(body-gap)};
+  border-inline-end: solid #{token(outline-width)} #{token(divider-color)};
+  align-self: stretch;
+}
+
+@mixin commit-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: #{token(separator-gap)};
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+@mixin slot-list {
+  @include section;
+  @include scrollbar.base;
+
+  width: #{token(slot-list-width)};
+  max-width: 100%;
+  max-height: #{token(slot-list-max-height)};
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  scrollbar-gutter: stable;
+}
+
+@mixin slot-list-inner {
+  display: grid;
+  gap: #{token(slot-list-gap)};
+}
+
+@mixin slot {
+  font-variant-numeric: tabular-nums;
+
+  --forge-button-outlined-background: #{token(slot-background)};
+  --forge-button-outlined-color: #{token(slot-color)};
+  --forge-button-outlined-border-color: #{token(slot-outline-color)};
+  --forge-button-outlined-border-width: #{token(slot-outline-width)};
+  --forge-button-padding-block: #{token(slot-padding-block)};
+  --forge-button-padding-inline: #{token(slot-padding-inline)};
+  --forge-button-shape: #{token(slot-shape)};
+}
+
+@mixin slot-selected {
+  --forge-button-outlined-background: #{token(slot-selected-background)};
+  --forge-button-outlined-color: #{token(slot-selected-color)};
+  --forge-button-outlined-border-color: #{token(slot-selected-outline-color)};
+}
+
+@mixin slot-disabled {
+  --forge-button-outlined-background: #{token(slot-disabled-background)};
+  --forge-button-outlined-color: #{token(slot-disabled-color)};
+  --forge-button-outlined-border-color: #{token(slot-disabled-outline-color)};
+  --forge-button-cursor: not-allowed;
+  --forge-state-layer-hover-opacity: 0;
+  --forge-state-layer-pressed-opacity: 0;
+  text-decoration: line-through;
+}
