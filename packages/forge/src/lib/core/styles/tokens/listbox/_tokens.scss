@@ -1,0 +1,11 @@
+@use '../../utils';
+@use '../../spacing';
+
+$tokens: (
+  group-margin: utils.module-val(listbox, group-margin, spacing.variable(medium)),
+  divider-margin: utils.module-val(listbox, divider-margin, spacing.variable(xsmall))
+);
+
+@function get($token, $fallback: null) {
+  @return utils.get($tokens, $token, $fallback);
+}

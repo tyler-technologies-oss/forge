@@ -1,6 +1,7 @@
 export * from './date-utils.js';
 export * from './deferred.js';
 export * from './dismissible-stack.js';
+export * from './drag-drop-manager.js';
 export * from './event-utils.js';
 export * from './feature-detection.js';
 export * from './focus-group.js';

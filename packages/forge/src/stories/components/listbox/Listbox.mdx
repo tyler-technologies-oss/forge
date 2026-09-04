@@ -1,0 +1,95 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks'; import CustomArgTypes from
+'../../blocks/CustomArgTypes'; import * as ListboxStories from './Listbox.stories';
+
+<Meta of={ListboxStories} />
+
+<Title />
+
+Listboxes allow users to select one or more options from a list.
+
+<Canvas of={ListboxStories.Demo} />
+
+## Multiple Selection
+
+Set `multiple` to allow more than one option to be selected at a time. When `multiple` is set, the
+`value` property contains an array of selected values.
+
+<Canvas of={ListboxStories.Multiple} />
+
+## Dense
+
+Set `dense` for a compact listbox.
+
+<Canvas of={ListboxStories.Dense} />
+
+## Disabled
+
+Individual options can be disabled by setting `disabled` directly on a `<forge-option>` element.
+Disabled options cannot be selected, and are skipped when navigating with the keyboard.
+
+To disable the entire listbox, set `disabled` on the `<forge-listbox>` element instead.
+
+<Canvas of={ListboxStories.Disabled} />
+
+## Option Groups
+
+Related options can be grouped together with a label by using the
+[&lt;forge-option-group&gt;](?path=/docs/components-option--docs) component. Provide the group's
+label via the `label` slot.
+
+<Canvas of={ListboxStories.WithOptionGroups} />
+
+## Reordering
+
+Set `reorderable` to allow options to be reordered within the listbox via drag and drop. Dropped
+options are not automatically rearranged in the listbox. You'll need to use information provided in
+the `forge-listbox-drop` event to rearrange the DOM elements via your own script.
+
+<Canvas of={ListboxStories.Reorderable} />
+
+## Dragging Between Listboxes
+
+Options can be dragged from one listbox to another. Set `drag-out` on the source listbox and
+`drop-from` on the target listbox with a space-separated list of the source listbox `id`s that
+are allowed to drop into it.
+
+When an option is dropped, the target listbox dispatches a `forge-listbox-drop` event and the
+source listbox dispatches a `forge-listbox-drag-out` event.
+
+<Canvas of={ListboxStories.DragAndDrop} />
+
+## API
+
+<CustomArgTypes />
+
+## Keyboard Shortcuts
+
+| Name                | Description                                                       |
+| :------------------ | :----------------------------------------------------------------- |
+| `arrow up / arrow down` | Moves focus to the previous/next option, wrapping at the ends. |
+| `home` | Moves focus to the first option. |
+| `end` | Moves focus to the last option. |
+| `space / enter` | Selects the focused option. |
+
+### Multiple Selection
+
+| Name                | Description                                                       |
+| :------------------ | :----------------------------------------------------------------- |
+| `ctrl/cmd + a` | Selects all options. |
+| `shift + arrow up` | Moves focus to and toggles selection of the previous option. |
+| `shift + arrow down` | Moves focus to and toggles selection of the next option. |
+| `shift + space` | Selects all options between the last selected option and the focused option. |
+| `ctrl/cmd + shift + home` | Selects all options between the focused option and the first option. Moves focus to the first option. |
+| `ctrl/cmd + shift + end` | Selects all options between the focused option and the last option. Moves focus to the last option. |
+
+## Accessibility
+
+- The listbox automatically applies the `listbox` role, along with the appropriate
+  `aria-multiselectable`, `aria-disabled`, and `aria-readonly` attributes based on its current
+  state.
+- Ensure that the listbox is labelled with a visible label or an `aria-label` or `aria-labelledby`
+  attribute.
+- If a listbox allows options to be reordered or moved to another listbox, ensure that the
+  functionality is available without requiring users to drag and drop options. As an example, you
+  may provide clearly labeled buttons alongside the listbox to shift a selected option up or down,
+  or to move it to another listbox.

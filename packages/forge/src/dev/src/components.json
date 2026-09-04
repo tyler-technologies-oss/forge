@@ -35,6 +35,7 @@
   { "label": "Label value", "path": "/pages/label-value/label-value.html", "tags": ["readonly"] },
   { "label": "Linear progress", "path": "/pages/linear-progress/linear-progress.html" },
   { "label": "List", "path": "/pages/list/list.html" },
+  { "label": "Listbox", "path": "/pages/listbox/listbox.html", "tags": ["form", "select", "options"] },
   { "label": "Menu", "path": "/pages/menu/menu.html" },
   { "label": "Meter", "path": "/pages/meter/meter.html" },
   { "label": "Open Icon", "path": "/pages/open-icon/open-icon.html", "tags": ["accordion", "expansion", "panel", "list"] },

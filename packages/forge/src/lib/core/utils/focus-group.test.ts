@@ -459,7 +459,12 @@ describe('BaseFocusGroup', () => {
       const btn1 = container.querySelector('#btn1') as HTMLButtonElement;
       btn1.focus();
 
-      expect(onFocusChange).toHaveBeenCalledWith(expect.any(FocusEvent), btn1);
+      expect(onFocusChange).toHaveBeenCalledWith({
+        event: expect.any(FocusEvent),
+        newElement: btn1,
+        oldElement: undefined,
+        focusVisible: true
+      });
     });
   });
 
