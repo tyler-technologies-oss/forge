@@ -1,5 +1,15 @@
 # @tylertech/forge
 
+## 3.16.1
+
+### Patch Changes
+
+- dba81e7: fix(paginator): allow default page size that is not in page size options
+- dba81e7: fix(paginator): hide page size options select when page size options is a null value or empty array
+- 236a995: docs(paginator): fix storybook build error
+- Updated dependencies [dba81e7]
+  - @tylertech/forge-core@3.5.1
+
 ## 3.16.0
 
 ### Minor Changes
