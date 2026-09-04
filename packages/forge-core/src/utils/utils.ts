@@ -152,6 +152,7 @@ export function coerceNumberArray(strOrNumOrArray: string | Array<string | numbe
     return strOrNumOrArray
       .replace(/ |\[|]|"/g, '')
       .split(',')
+      .filter(Boolean)
       .map(n => Number(n));
   } else if (typeof strOrNumOrArray === 'number') {
     return [strOrNumOrArray];
