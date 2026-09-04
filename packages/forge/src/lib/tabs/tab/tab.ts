@@ -348,6 +348,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   }
 
   #requestSync(): void {
+    /** @ignore */
     this.dispatchEvent(
       new CustomEvent(TAB_CONSTANTS.events.REQUEST_SYNC, {
         bubbles: true,
