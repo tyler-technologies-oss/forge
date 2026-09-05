@@ -10,3 +10,6 @@ body {
 
 // Automatically apply styles to anchor elements
 @include typography.anchor;
+
+// Automatically apply styles to kbd elements
+@include typography.kbd;

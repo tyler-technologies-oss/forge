@@ -1,8 +1,11 @@
 @use 'sass:map';
 @use 'sass:list';
 @use '../core/config';
-@use '../utils';
+@use '../border';
+@use '../shape';
+@use '../spacing';
 @use '../theme';
+@use '../utils';
 @use '../tokens/typography/tokens';
 @use '../tokens/typography/scale';
 @use '../tokens/typography/tokens.core' as core;
@@ -135,6 +138,34 @@
   text-decoration: none;
   color: inherit;
   outline: none;
+}
+
+///
+/// Create a selector for default kbd styles
+///
+@mixin kbd {
+  .forge-kbd,
+  .forge-typography--kbd {
+    @include kbd-base;
+  }
+}
+
+@mixin kbd-base {
+  @include style(kbd);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  block-size: 2em;
+  min-inline-size: 2em;
+  padding-inline: spacing.variable(xxsmall);
+  color: theme.variable(text-medium);
+  background-color: theme.variable(surface-dim);
+  border-radius: shape.variable(medium);
+  border-width: border.variable(thin);
+  border-style: solid;
+  border-color: theme.variable(outline);
 }
 
 ///
