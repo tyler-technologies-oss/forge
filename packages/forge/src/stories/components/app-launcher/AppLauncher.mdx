@@ -1,0 +1,152 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AppLauncherStories from './AppLauncher.stories';
+
+<Meta of={AppLauncherStories} />
+
+<Title />
+
+The `<forge-app-launcher>` component is a navigation solution designed for the Tyler Cloud ecosystem, enabling users to easily switch between applications and contexts. It provides a unified interface for accessing both related and all available applications within the Tyler platform, enhancing user workflow and navigation efficiency.
+
+The component adapts responsively to screen size, presenting as a popover on desktop devices and a full-screen dialog on mobile devices to ensure optimal user experience across all platforms.
+
+<Canvas of={AppLauncherStories.Demo} />
+
+## Usage
+
+The `<forge-app-launcher>` component is designed to be used within a `<forge-app-bar>`, typically placed in the `end` slot alongside other user-related actions like the user profile component. This ensures consistent navigation structure throughout Tyler Cloud applications.
+
+When using the app launcher, you can provide two primary data sources:
+
+- `relatedApps`: An array of applications relevant to the current user's context, displayed in the default view.
+- `allApps`: An array of all available applications within the Tyler Cloud ecosystem, accessible via the "View all apps" button.
+
+To do so, this requires the use of JavaScript to set the properties on the component instance.
+
+```html
+<forge-app-bar theme-mode="scoped">
+  <forge-app-launcher slot="end" id="app-launcher"></forge-app-launcher>
+</forge-app-bar>
+
+<script>
+  const appLauncher = document.querySelector('#app-launcher');
+
+  const relatedApps = [
+    {
+      label: 'Project Management',
+      iconName: 'assignment',
+      uri: 'https://project-management.example.com',
+      target: '_blank'
+    },
+    {
+      label: 'Time Tracking',
+      iconName: 'access_time',
+      uri: 'https://time-tracking.example.com',
+      target: '_blank'
+    }
+  ];
+
+  const allApps = [
+    {
+      label: 'Payments Administration',
+      iconName: 'payment',
+      uri: 'https://payments-admin.example.com',
+      target: '_blank'
+    },
+    {
+      label: 'PEP Administration',
+      iconName: 'admin_panel_settings',
+      uri: 'https://pep-admin.example.com',
+      target: '_blank'
+    },
+    {
+      label: 'User Management',
+      iconName: 'people',
+      uri: 'https://user-management.example.com',
+      target: '_blank'
+    }
+  ];
+
+  appLauncher.relatedApps = relatedApps;
+  appLauncher.allApps = allApps;
+</script>
+```
+
+### App Bar Integration
+
+When using the app launcher within an app bar, you should set the `theme-mode="scoped"` attribute on the `<forge-app-bar>` to ensure proper theming inheritance and prevent the app bar's theme tokens from cascading into the launcher's popover content.
+
+```html
+<!-- Correct theming with theme-mode="scoped" -->
+<forge-app-bar theme-mode="scoped">
+  <forge-app-launcher slot="end" id="app-launcher">
+    <!-- Content slots -->
+  </forge-app-launcher>
+</forge-app-bar>
+```
+
+## Views
+
+The app launcher supports three primary views:
+
+### Related Apps View
+
+The default view showing a curated list of applications relevant to the current user's context. This view includes:
+
+- A list of related applications with icons and labels
+- A "View all apps" button to access the complete application catalog
+- Optional custom links section for additional resources
+
+### All Apps View
+
+A comprehensive view displaying all available applications with:
+
+- Search functionality to filter applications by name
+- Complete list of applications in the Tyler Cloud ecosystem
+- Back button to return to the related apps view (when available)
+
+### Loading View
+
+A skeleton loading state that displays automatically when no application data is available:
+
+- Shows when both `relatedApps` and `allApps` arrays are empty
+- Displays skeleton placeholders to provide visual feedback during data loading
+- Automatically transitions to the appropriate view when app data is provided
+
+## Custom Links
+
+The component supports custom links through the `<forge-app-launcher-link>` utility component, which provides accessible and visually consistent links within the launcher. Custom links appear in a separate section and are ideal for documentation, FAQ pages, or other supplementary resources.
+
+```html
+<forge-app-launcher>
+  <span slot="app-launcher-links-title">Resources</span>
+  <forge-app-launcher-link slot="app-launcher-link">
+    <a href="/documentation" target="_blank">Documentation</a>
+  </forge-app-launcher-link>
+  <forge-app-launcher-link slot="app-launcher-link">
+    <a href="/support" target="_blank">Support Center</a>
+  </forge-app-launcher-link>
+</forge-app-launcher>
+```
+
+## Responsive Behavior
+
+The component automatically adapts to screen size using an internal media query breakpoint at 768px:
+
+- **Desktop (>768px)**: Displays as a popover anchored to the launcher button
+- **Mobile (≤768px)**: Displays as a full-screen persistent dialog for optimal touch interaction
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- The app launcher button includes appropriate `aria-label` text ("Open app launcher") for screen readers.
+- All application links maintain proper focus management and keyboard navigation.
+- The component supports standard dialog accessibility patterns with `role="dialog"` and `aria-modal="true"` when in mobile mode.
+- Custom links should include descriptive link text and appropriate `target` attributes for external resources.
+- Search functionality includes proper labeling with `placeholder` text and `autocomplete="off"` for optimal screen reader experience.
+- `launcherAriaLabel`, `backAriaLabel`, and `closeAriaLabel` allow the trigger, back, and close button labels to be localized.
+- `searchPlaceholder` allows the search input's `placeholder` text to be localized, since it can't be provided via a slot.
+- The `header-title`, `empty-state-text`, and `loading-text` slots allow the header title, empty search results message, and loading message to be localized or replaced with custom markup.
