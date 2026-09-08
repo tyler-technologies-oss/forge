@@ -1,6 +1,8 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../../testing/fixture.js';
+import { html } from 'lit';
 import type { Editor } from '@tiptap/core';
+import type { IPopoverComponent } from '@tylertech/forge';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
 import { RteLinkComponent } from '../rte-link.js';
 
@@ -11,58 +13,58 @@ describe('RTE Link Feature', () => {
   it('should contain shadow root', async () => {
     const harness = await createFixture();
 
-    expect(harness.linkFeature.shadowRoot).to.be.ok;
+    expect(harness.linkFeature.shadowRoot).toBeTruthy();
   });
 
   it('should have expected default label', async () => {
     const harness = await createFixture();
 
-    expect(harness.linkFeature.label).to.equal('Link');
+    expect(harness.linkFeature.label).toBe('Link');
   });
 
   it('should set custom label', async () => {
     const harness = await createFixture({ label: 'Insert Link' });
 
-    expect(harness.linkFeature.label).to.equal('Insert Link');
-    expect(harness.button().getAttribute('aria-label')).to.equal('Insert Link');
+    expect(harness.linkFeature.label).toBe('Insert Link');
+    expect(harness.button().getAttribute('aria-label')).toBe('Insert Link');
   });
 
   it('should render link button', async () => {
     const harness = await createFixture();
 
-    expect(harness.button()).to.exist;
+    expect(harness.button()).toBeTruthy();
   });
 
   it('should configure link extension', async () => {
     const harness = await createFixture();
 
-    expect(harness.linkFeature.extensions).to.have.lengthOf(1);
-    expect(harness.linkFeature.extensions[0].name).to.equal('link');
+    expect(harness.linkFeature.extensions).toHaveLength(1);
+    expect(harness.linkFeature.extensions[0].name).toBe('link');
   });
 
   it('should render popover element', async () => {
     const harness = await createFixture();
 
-    expect(harness.popover()).to.exist;
+    expect(harness.popover()).toBeTruthy();
   });
 
   it('should render text field in popover', async () => {
     const harness = await createFixture();
 
     const textField = harness.linkFeature.shadowRoot!.querySelector('forge-text-field');
-    expect(textField).to.exist;
+    expect(textField).toBeTruthy();
   });
 
   it('should disable button when editor is disabled', async () => {
     const harness = await createFixture({ disabled: true });
 
-    expect(harness.button().hasAttribute('disabled')).to.be.true;
+    expect(harness.button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should disable button when editor is readonly', async () => {
     const harness = await createFixture({ readonly: true });
 
-    expect(harness.button().hasAttribute('disabled')).to.be.true;
+    expect(harness.button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should show active state when cursor is in link', async () => {
@@ -75,13 +77,13 @@ describe('RTE Link Feature', () => {
     editor.commands.setTextSelection(5);
     await harness.waitForUpdate();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
   });
 
   it('should not show active state when cursor is not in link', async () => {
     const harness = await createFixture();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.false;
+    expect(harness.button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should not show active state in plain text', async () => {
@@ -93,7 +95,7 @@ describe('RTE Link Feature', () => {
     editor.commands.setTextSelection(5);
     await harness.waitForUpdate();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.false;
+    expect(harness.button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should handle popover close event', async () => {
@@ -109,7 +111,7 @@ describe('RTE Link Feature', () => {
     await harness.waitForUpdate();
 
     // Verify popover anchor is cleared (popover should be closed)
-    expect(popover.open).to.be.false;
+    expect(popover.open).toBe(false);
   });
 
   it('should create link from selected text', async () => {
@@ -126,9 +128,9 @@ describe('RTE Link Feature', () => {
     await harness.waitForUpdate();
 
     const output = editor.getHTML();
-    expect(output).to.include('<a');
-    expect(output).to.include('href="https://example.com"');
-    expect(output).to.include('test text');
+    expect(output).toContain('<a');
+    expect(output).toContain('href="https://example.com"');
+    expect(output).toContain('test text');
   });
 
   it('should handle empty link href', async () => {
@@ -146,7 +148,7 @@ describe('RTE Link Feature', () => {
 
     const output = editor.getHTML();
     // Empty href creates a link with empty href attribute
-    expect(output).to.include('href=""');
+    expect(output).toContain('href=""');
   });
 
   it('should remove link when unset', async () => {
@@ -159,15 +161,15 @@ describe('RTE Link Feature', () => {
     await harness.waitForUpdate();
 
     // Verify link exists
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
 
     // Remove link
     editor.chain().focus().unsetLink().run();
     await harness.waitForUpdate();
 
     const output = editor.getHTML();
-    expect(output).not.to.include('<a');
-    expect(output).to.include('test link');
+    expect(output).not.toContain('<a');
+    expect(output).toContain('test link');
   });
 
   it('should preserve text when removing link', async () => {
@@ -184,8 +186,8 @@ describe('RTE Link Feature', () => {
     await harness.waitForUpdate();
 
     const output = editor.getHTML();
-    expect(output).to.include(linkText);
-    expect(output).not.to.include('<a');
+    expect(output).toContain(linkText);
+    expect(output).not.toContain('<a');
   });
 
   it('should handle multiple links in document', async () => {
@@ -197,8 +199,8 @@ describe('RTE Link Feature', () => {
     await harness.waitForUpdate();
 
     const output = editor.getHTML();
-    expect(output).to.include('href="https://example.com"');
-    expect(output).to.include('href="https://test.com"');
+    expect(output).toContain('href="https://example.com"');
+    expect(output).toContain('href="https://test.com"');
   });
 
   it('should update existing link href', async () => {
@@ -216,9 +218,9 @@ describe('RTE Link Feature', () => {
     await harness.waitForUpdate();
 
     const output = editor.getHTML();
-    expect(output).to.include('href="https://newurl.com"');
-    expect(output).not.to.include('href="https://example.com"');
-    expect(output).to.include('test link');
+    expect(output).toContain('href="https://newurl.com"');
+    expect(output).not.toContain('href="https://example.com"');
+    expect(output).toContain('test link');
   });
 
   it('should handle link with target attribute', async () => {
@@ -235,8 +237,8 @@ describe('RTE Link Feature', () => {
     await harness.waitForUpdate();
 
     const output = editor.getHTML();
-    expect(output).to.include('href="https://example.com"');
-    expect(output).to.include('target="_blank"');
+    expect(output).toContain('href="https://example.com"');
+    expect(output).toContain('target="_blank"');
   });
 });
 
@@ -250,7 +252,7 @@ interface LinkFixture {
   el: RichTextEditorComponent;
   linkFeature: RteLinkComponent;
   button: () => HTMLElement;
-  popover: () => HTMLElement;
+  popover: () => IPopoverComponent;
   getInput: () => HTMLInputElement;
   getApplyButton: () => HTMLElement | null;
   getRemoveButton: () => HTMLElement | null;
@@ -262,11 +264,14 @@ interface LinkFixture {
 }
 
 async function createFixture(options: LinkFixtureOptions = {}): Promise<LinkFixture> {
-  const el = await fixture<RichTextEditorComponent>(html`
-    <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
-      <forge-rte-link label=${options.label || 'Link'}></forge-rte-link>
-    </forge-rich-text-editor>
-  `);
+  const el = await renderFixture<RichTextEditorComponent>(
+    html`
+      <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
+        <forge-rte-link label=${options.label || 'Link'}></forge-rte-link>
+      </forge-rich-text-editor>
+    `,
+    'forge-rich-text-editor'
+  );
 
   const linkFeature = el.querySelector('forge-rte-link') as RteLinkComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
@@ -274,7 +279,7 @@ async function createFixture(options: LinkFixtureOptions = {}): Promise<LinkFixt
   // Wait for editor to initialize
   await new Promise(resolve => setTimeout(resolve, 100));
 
-  return {
+  const harness: LinkFixture = {
     el,
     linkFeature,
     button: () => linkFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
@@ -299,7 +304,7 @@ async function createFixture(options: LinkFixtureOptions = {}): Promise<LinkFixt
     },
     async getEditor(): Promise<Editor> {
       // Access the editor from the context component
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const context = (contextComponent as any).editorContext;
       return context.editor;
     },
@@ -312,6 +317,8 @@ async function createFixture(options: LinkFixtureOptions = {}): Promise<LinkFixt
       await new Promise(resolve => setTimeout(resolve, 100));
     }
   };
+
+  return harness;
 }
 
 describe('RTE Link - Keyboard navigation', () => {
@@ -345,7 +352,7 @@ describe('RTE Link - Validation', () => {
   it('should not expose validateUrls property (security hardening)', async () => {
     const harness = await createFixture();
 
-    expect(harness.linkFeature).to.not.have.property('validateUrls');
+    expect(harness.linkFeature).not.toHaveProperty('validateUrls');
   });
 
   it('should block javascript: protocol', async () => {
@@ -354,8 +361,8 @@ describe('RTE Link - Validation', () => {
     await setLinkUrl(harness.linkFeature, 'javascript:alert(1)');
 
     const error = harness.getErrorMessage();
-    expect(error).to.exist;
-    expect(error?.textContent).to.include('Invalid protocol');
+    expect(error).toBeTruthy();
+    expect(error?.textContent).toContain('Invalid protocol');
   });
 
   it('should block data: protocol', async () => {
@@ -364,8 +371,8 @@ describe('RTE Link - Validation', () => {
     await setLinkUrl(harness.linkFeature, 'data:text/html,<script>alert(1)</script>');
 
     const error = harness.getErrorMessage();
-    expect(error).to.exist;
-    expect(error?.textContent).to.include('Invalid protocol');
+    expect(error).toBeTruthy();
+    expect(error?.textContent).toContain('Invalid protocol');
   });
 
   it('should block URL-encoded javascript: protocol', async () => {
@@ -374,7 +381,7 @@ describe('RTE Link - Validation', () => {
     await setLinkUrl(harness.linkFeature, 'javascript%3Aalert(1)');
 
     const error = harness.getErrorMessage();
-    expect(error).to.exist;
+    expect(error).toBeTruthy();
   });
 
   it('should show error for invalid URL', async () => {
@@ -383,8 +390,8 @@ describe('RTE Link - Validation', () => {
     await setLinkUrl(harness.linkFeature, 'not a valid url');
 
     const error = harness.getErrorMessage();
-    expect(error).to.exist;
-    expect(error?.textContent).to.include('valid URL');
+    expect(error).toBeTruthy();
+    expect(error?.textContent).toContain('valid URL');
   });
 
   it('should accept valid URL with https protocol', async () => {
@@ -392,7 +399,7 @@ describe('RTE Link - Validation', () => {
 
     await setLinkUrl(harness.linkFeature, 'https://example.com');
 
-    expect(harness.getErrorMessage()).to.not.exist;
+    expect(harness.getErrorMessage()).toBeFalsy();
   });
 
   it('should accept valid URL with http protocol', async () => {
@@ -400,7 +407,7 @@ describe('RTE Link - Validation', () => {
 
     await setLinkUrl(harness.linkFeature, 'http://example.com');
 
-    expect(harness.getErrorMessage()).to.not.exist;
+    expect(harness.getErrorMessage()).toBeFalsy();
   });
 
   it('should accept URL without protocol', async () => {
@@ -408,7 +415,7 @@ describe('RTE Link - Validation', () => {
 
     await setLinkUrl(harness.linkFeature, 'example.com');
 
-    expect(harness.getErrorMessage()).to.not.exist;
+    expect(harness.getErrorMessage()).toBeFalsy();
   });
 
   it('should accept URL with path', async () => {
@@ -416,7 +423,7 @@ describe('RTE Link - Validation', () => {
 
     await setLinkUrl(harness.linkFeature, 'https://example.com/path/to/page');
 
-    expect(harness.getErrorMessage()).to.not.exist;
+    expect(harness.getErrorMessage()).toBeFalsy();
   });
 
   it('should accept URL with port', async () => {
@@ -424,7 +431,7 @@ describe('RTE Link - Validation', () => {
 
     await setLinkUrl(harness.linkFeature, 'https://example.com:8080/path');
 
-    expect(harness.getErrorMessage()).to.not.exist;
+    expect(harness.getErrorMessage()).toBeFalsy();
   });
 
   it('should accept empty URL (link removal)', async () => {
@@ -432,7 +439,7 @@ describe('RTE Link - Validation', () => {
 
     await setLinkUrl(harness.linkFeature, '');
 
-    expect(harness.getErrorMessage()).to.not.exist;
+    expect(harness.getErrorMessage()).toBeFalsy();
   });
 
   it('should set aria-invalid on input when validation error exists', async () => {
@@ -441,7 +448,7 @@ describe('RTE Link - Validation', () => {
     await setLinkUrl(harness.linkFeature, 'javascript:alert(1)');
 
     const input = harness.getInput();
-    expect(input.getAttribute('aria-invalid')).to.equal('true');
+    expect(input.getAttribute('aria-invalid')).toBe('true');
   });
 
   it('should set aria-describedby on input when validation error exists', async () => {
@@ -450,7 +457,7 @@ describe('RTE Link - Validation', () => {
     await setLinkUrl(harness.linkFeature, 'javascript:alert(1)');
 
     const input = harness.getInput();
-    expect(input.getAttribute('aria-describedby')).to.equal('link-error');
+    expect(input.getAttribute('aria-describedby')).toBe('link-error');
   });
 
   it('should disable apply button when validation error exists', async () => {
@@ -459,7 +466,7 @@ describe('RTE Link - Validation', () => {
     await setLinkUrl(harness.linkFeature, 'javascript:alert(1)');
 
     const applyButton = harness.getApplyButton();
-    expect(applyButton?.hasAttribute('disabled')).to.be.true;
+    expect(applyButton?.hasAttribute('disabled')).toBe(true);
   });
 
   it('should not apply link via Enter when validation error exists', async () => {
@@ -476,33 +483,33 @@ describe('RTE Link - Validation', () => {
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
     await harness.waitForUpdate();
 
-    expect(editor.getHTML()).not.to.include('href=');
+    expect(editor.getHTML()).not.toContain('href=');
   });
 
   it('should keep the sr-only error live region mounted at all times', async () => {
     const harness = await createFixture();
 
     const alertRegion = harness.linkFeature.shadowRoot!.querySelector('.sr-only[role="alert"]');
-    expect(alertRegion, 'live region should exist before any validation error occurs').to.exist;
+    expect(alertRegion, 'live region should exist before any validation error occurs').toBeTruthy();
 
     await setLinkUrl(harness.linkFeature, 'javascript:alert(1)');
 
     // Same element instance is still in the DOM - only its content changed - so screen readers
     // reliably pick up the mutation instead of missing a freshly-inserted alert node.
-    expect(harness.linkFeature.shadowRoot!.querySelector('.sr-only[role="alert"]')).to.equal(alertRegion);
-    expect(alertRegion!.textContent).to.include('Invalid protocol');
+    expect(harness.linkFeature.shadowRoot!.querySelector('.sr-only[role="alert"]')).toBe(alertRegion);
+    expect(alertRegion!.textContent).toContain('Invalid protocol');
   });
 
   it('should announce non-ASCII warnings through a permanently mounted status region', async () => {
     const harness = await createFixture();
 
     const statusRegion = harness.linkFeature.shadowRoot!.querySelector('.sr-only[role="status"]');
-    expect(statusRegion).to.exist;
+    expect(statusRegion).toBeTruthy();
 
     await setLinkUrl(harness.linkFeature, 'https://xn--exmple-cua.com');
 
-    expect(harness.linkFeature.shadowRoot!.querySelector('.sr-only[role="status"]')).to.equal(statusRegion);
-    expect(statusRegion!.textContent).to.include('international characters');
+    expect(harness.linkFeature.shadowRoot!.querySelector('.sr-only[role="status"]')).toBe(statusRegion);
+    expect(statusRegion!.textContent).toContain('international characters');
   });
 });
 
@@ -510,7 +517,7 @@ describe('RTE Link - Auto Protocol', () => {
   it('should auto-add https protocol by default', async () => {
     const harness = await createFixture();
 
-    expect(harness.linkFeature.autoProtocol).to.be.true;
+    expect(harness.linkFeature.autoProtocol).toBe(true);
   });
 
   it('should add https:// to URL without protocol when applied', async () => {
@@ -525,7 +532,7 @@ describe('RTE Link - Auto Protocol', () => {
     editor.chain().focus().setLink({ href: 'https://example.com' }).run();
     await harness.waitForUpdate();
 
-    expect(editor.getHTML()).to.include('href="https://example.com"');
+    expect(editor.getHTML()).toContain('href="https://example.com"');
   });
 
   it('should not modify URL that already has protocol', async () => {
@@ -540,8 +547,8 @@ describe('RTE Link - Auto Protocol', () => {
     await harness.waitForUpdate();
 
     const output = editor.getHTML();
-    expect(output).to.include('href="http://example.com"');
-    expect(output).not.to.include('https://http://');
+    expect(output).toContain('href="http://example.com"');
+    expect(output).not.toContain('https://http://');
   });
 });
 
@@ -567,13 +574,13 @@ describe('RTE Link - Security Attributes', () => {
   it('should configure link extension with security attributes', async () => {
     const harness = await createFixture();
 
-    expect(harness.linkFeature.extensions).to.have.lengthOf(1);
+    expect(harness.linkFeature.extensions).toHaveLength(1);
     const linkExt = harness.linkFeature.extensions[0];
-    expect(linkExt.name).to.equal('link');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect((linkExt.options as any).HTMLAttributes.target).to.equal('_blank');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect((linkExt.options as any).HTMLAttributes.rel).to.equal('noopener noreferrer nofollow');
+    expect(linkExt.name).toBe('link');
+
+    expect((linkExt.options as any).HTMLAttributes.target).toBe('_blank');
+
+    expect((linkExt.options as any).HTMLAttributes.rel).toBe('noopener noreferrer nofollow');
   });
 
   it('should apply target="_blank" to created links', async () => {
@@ -587,7 +594,7 @@ describe('RTE Link - Security Attributes', () => {
     editor.chain().focus().setLink({ href: 'https://example.com' }).run();
     await harness.waitForUpdate();
 
-    expect(editor.getHTML()).to.include('target="_blank"');
+    expect(editor.getHTML()).toContain('target="_blank"');
   });
 
   it('should apply rel="noopener noreferrer nofollow" to created links', async () => {
@@ -601,15 +608,15 @@ describe('RTE Link - Security Attributes', () => {
     editor.chain().focus().setLink({ href: 'https://example.com' }).run();
     await harness.waitForUpdate();
 
-    expect(editor.getHTML()).to.include('rel="noopener noreferrer nofollow"');
+    expect(editor.getHTML()).toContain('rel="noopener noreferrer nofollow"');
   });
 
   it('should configure openOnClick to false', async () => {
     const harness = await createFixture();
 
     const linkExt = harness.linkFeature.extensions[0];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect((linkExt.options as any).openOnClick).to.be.false;
+
+    expect((linkExt.options as any).openOnClick).toBe(false);
   });
 });
 
@@ -636,8 +643,7 @@ describe('RTE Link - Editing link text within a paragraph', () => {
     await harness.clickButton();
     await harness.waitForUpdate();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect((harness.linkFeature as any)._linkText).to.equal('here');
+    expect((harness.linkFeature as any)._linkText).toBe('here');
   });
 
   it('should replace only the linked run when its display text is changed', async () => {
@@ -651,7 +657,6 @@ describe('RTE Link - Editing link text within a paragraph', () => {
     await harness.clickButton();
     await harness.waitForUpdate();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (harness.linkFeature as any)._linkText = 'CHANGED';
     await harness.linkFeature.updateComplete;
 
@@ -659,10 +664,10 @@ describe('RTE Link - Editing link text within a paragraph', () => {
     await harness.waitForUpdate();
 
     const output = editor.getHTML();
-    expect(output).to.include('Click ');
-    expect(output).to.include('for more info');
-    expect(output).to.include('>CHANGED<');
-    expect(output).not.to.include('>here<');
+    expect(output).toContain('Click ');
+    expect(output).toContain('for more info');
+    expect(output).toContain('>CHANGED<');
+    expect(output).not.toContain('>here<');
   });
 
   it('should only update the targeted link when multiple links share a paragraph', async () => {
@@ -676,9 +681,8 @@ describe('RTE Link - Editing link text within a paragraph', () => {
     await harness.clickButton();
     await harness.waitForUpdate();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const linkFeature = harness.linkFeature as any;
-    expect(linkFeature._linkText).to.equal('alpha');
+    expect(linkFeature._linkText).toBe('alpha');
 
     linkFeature._linkText = 'ALPHA-CHANGED';
     await harness.linkFeature.updateComplete;
@@ -687,9 +691,9 @@ describe('RTE Link - Editing link text within a paragraph', () => {
     await harness.waitForUpdate();
 
     const output = editor.getHTML();
-    expect(output).to.include('href="https://a.com"');
-    expect(output).to.include('>ALPHA-CHANGED<');
-    expect(output).to.include('href="https://b.com"');
-    expect(output).to.include('>bravo<');
+    expect(output).toContain('href="https://a.com"');
+    expect(output).toContain('>ALPHA-CHANGED<');
+    expect(output).toContain('href="https://b.com"');
+    expect(output).toContain('>bravo<');
   });
 });

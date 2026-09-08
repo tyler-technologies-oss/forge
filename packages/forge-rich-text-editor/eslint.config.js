@@ -24,8 +24,5 @@ export default defineConfig([
       '@typescript-eslint/no-non-null-assertion': 'off'
     }
   },
-  // TODO(rte-vitest-migration): the lifted specs still target Web Test Runner + Chai, whose
-  // `expect(x).to.be.true` assertions trip no-unused-expressions. Remove this ignore once the
-  // specs are migrated to Vitest browser mode.
-  { ignores: ['esm/**/*', 'src/lib/**/tests/**/*.test.ts'] }
+  { ignores: ['esm/**/*'] }
 ]);

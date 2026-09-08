@@ -5,6 +5,7 @@ import { playwright } from '@vitest/browser-playwright';
 import { compileString } from 'sass';
 
 const SCSS_VIRTUAL_PREFIX = '\0virtual-css-string:';
+const HTML_VIRTUAL_PREFIX = '\0virtual-html-string:';
 
 function inlineScss(): Plugin {
   return {
@@ -28,11 +29,31 @@ function inlineScss(): Plugin {
   };
 }
 
+function inlineHtml(): Plugin {
+  return {
+    name: 'inline-html',
+    enforce: 'pre',
+    resolveId(source, importer) {
+      if (source.endsWith('.html') && importer) {
+        const resolved = isAbsolute(source) ? source : resolve(dirname(importer), source);
+        return HTML_VIRTUAL_PREFIX + resolved.replace(/\.html$/, '.js');
+      }
+    },
+    load(id) {
+      if (id.startsWith(HTML_VIRTUAL_PREFIX)) {
+        const realPath = id.slice(HTML_VIRTUAL_PREFIX.length).replace(/\.js$/, '.html');
+        return `export default ${JSON.stringify(readFileSync(realPath, 'utf-8'))};`;
+      }
+    }
+  };
+}
+
 export default defineConfig({
-  plugins: [inlineScss()],
+  plugins: [inlineScss(), inlineHtml()],
   resolve: {
     alias: {
-      '@tylertech/forge-rich-text-editor': resolve(__dirname, 'src/lib')
+      '@tylertech/forge-rich-text-editor': resolve(__dirname, 'src/lib'),
+      '@tylertech/forge': resolve(__dirname, '../forge/src/lib')
     }
   },
   test: {
@@ -43,10 +64,7 @@ export default defineConfig({
       screenshotFailures: false
     },
     include: ['src/lib/**/*.test.ts'],
-    // TODO(rte-vitest-migration): the lifted specs still target Web Test Runner and are excluded
-    // until they are migrated to Vitest browser mode. Drop both options once that lands.
-    exclude: ['src/lib/**/tests/**/*.test.ts'],
-    passWithNoTests: true,
+    setupFiles: ['vitest.setup.ts'],
     onConsoleLog(log) {
       if (log.includes('Lit is in dev mode')) {
         return false;

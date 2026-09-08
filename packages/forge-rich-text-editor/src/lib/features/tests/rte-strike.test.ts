@@ -1,5 +1,6 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../../testing/fixture.js';
+import { html } from 'lit';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
 import { RteStrikeComponent } from '../rte-strike.js';
@@ -11,33 +12,33 @@ describe('RTE Strike Feature', () => {
   it('should contain shadow root', async () => {
     const harness = await createFixture();
 
-    expect(harness.strikeFeature.shadowRoot).to.be.ok;
+    expect(harness.strikeFeature.shadowRoot).toBeTruthy();
   });
 
   it('should have expected default label', async () => {
     const harness = await createFixture();
 
-    expect(harness.strikeFeature.label).to.equal('Strikethrough');
+    expect(harness.strikeFeature.label).toBe('Strikethrough');
   });
 
   it('should set custom label', async () => {
     const harness = await createFixture({ label: 'Strike Through' });
 
-    expect(harness.strikeFeature.label).to.equal('Strike Through');
-    expect(harness.button().getAttribute('aria-label')).to.equal('Strike Through');
+    expect(harness.strikeFeature.label).toBe('Strike Through');
+    expect(harness.button().getAttribute('aria-label')).toBe('Strike Through');
   });
 
   it('should render strikethrough button', async () => {
     const harness = await createFixture();
 
-    expect(harness.button()).to.exist;
+    expect(harness.button()).toBeTruthy();
   });
 
   it('should configure strike extension', async () => {
     const harness = await createFixture();
 
-    expect(harness.strikeFeature.extensions).to.have.lengthOf(1);
-    expect(harness.strikeFeature.extensions[0].name).to.equal('strike');
+    expect(harness.strikeFeature.extensions).toHaveLength(1);
+    expect(harness.strikeFeature.extensions[0].name).toBe('strike');
   });
 
   it('should toggle strike when button is clicked', async () => {
@@ -54,19 +55,19 @@ describe('RTE Strike Feature', () => {
 
     // Verify strikethrough was applied
     const output = editor.getHTML();
-    expect(output).to.include('<s>test text</s>');
+    expect(output).toContain('<s>test text</s>');
   });
 
   it('should disable button when editor is disabled', async () => {
     const harness = await createFixture({ disabled: true });
 
-    expect(harness.button().hasAttribute('disabled')).to.be.true;
+    expect(harness.button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should disable button when editor is readonly', async () => {
     const harness = await createFixture({ readonly: true });
 
-    expect(harness.button().hasAttribute('disabled')).to.be.true;
+    expect(harness.button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should show active state when text has strikethrough', async () => {
@@ -82,13 +83,13 @@ describe('RTE Strike Feature', () => {
     editor.chain().focus().toggleStrike().run();
     await harness.waitForUpdate();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
   });
 
   it('should not show active state when text does not have strikethrough', async () => {
     const harness = await createFixture();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.false;
+    expect(harness.button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should toggle off strikethrough when clicking active button', async () => {
@@ -100,11 +101,11 @@ describe('RTE Strike Feature', () => {
     editor.commands.selectAll();
     editor.chain().focus().toggleStrike().run();
     await harness.waitForUpdate();
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
 
     // Click to toggle off
     await harness.clickButton();
-    expect(harness.button().hasAttribute('pressed')).to.be.false;
+    expect(harness.button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should apply strikethrough to selected text', async () => {
@@ -120,8 +121,8 @@ describe('RTE Strike Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('<s>');
-    expect(output).to.include('test text');
+    expect(output).toContain('<s>');
+    expect(output).toContain('test text');
   });
 
   it('should remove strikethrough from selected strikethrough text', async () => {
@@ -137,8 +138,8 @@ describe('RTE Strike Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).not.to.include('<s>');
-    expect(output).to.include('strikethrough text');
+    expect(output).not.toContain('<s>');
+    expect(output).toContain('strikethrough text');
   });
 
   it.skip('should work with keyboard shortcut Ctrl+Shift+S', async () => {
@@ -156,7 +157,7 @@ describe('RTE Strike Feature', () => {
     const contentElement = contextElement.shadowRoot!.querySelector('forge-rich-text-content')!;
     const editorElement = contentElement.shadowRoot!.querySelector('.ProseMirror') as HTMLElement;
 
-    expect(editorElement).to.exist;
+    expect(editorElement).toBeTruthy();
 
     // Simulate Ctrl+Shift+S
     const event = new KeyboardEvent('keydown', {
@@ -169,7 +170,7 @@ describe('RTE Strike Feature', () => {
     editorElement.dispatchEvent(event);
     await harness.waitForUpdate();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
   });
 });
 
@@ -189,11 +190,14 @@ interface StrikeFixture {
 }
 
 async function createFixture(options: StrikeFixtureOptions = {}): Promise<StrikeFixture> {
-  const el = await fixture<RichTextEditorComponent>(html`
-    <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
-      <forge-rte-strike label=${options.label || 'Strikethrough'}></forge-rte-strike>
-    </forge-rich-text-editor>
-  `);
+  const el = await renderFixture<RichTextEditorComponent>(
+    html`
+      <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
+        <forge-rte-strike label=${options.label || 'Strikethrough'}></forge-rte-strike>
+      </forge-rich-text-editor>
+    `,
+    'forge-rich-text-editor'
+  );
 
   const strikeFeature = el.querySelector('forge-rte-strike') as RteStrikeComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
@@ -201,7 +205,7 @@ async function createFixture(options: StrikeFixtureOptions = {}): Promise<Strike
   // Wait for editor to initialize
   await new Promise(resolve => setTimeout(resolve, 100));
 
-  return {
+  const harness: StrikeFixture = {
     el,
     strikeFeature,
     button: () => strikeFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
@@ -211,7 +215,7 @@ async function createFixture(options: StrikeFixtureOptions = {}): Promise<Strike
     },
     async getEditor(): Promise<Editor> {
       // Access the editor from the context component
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const context = (contextComponent as any).editorContext;
       return context.editor;
     },
@@ -224,4 +228,6 @@ async function createFixture(options: StrikeFixtureOptions = {}): Promise<Strike
       await new Promise(resolve => setTimeout(resolve, 100));
     }
   };
+
+  return harness;
 }
