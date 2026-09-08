@@ -4,7 +4,7 @@ import { RteAlignComponent } from './rte-align.js';
 import { RteBoldComponent } from './rte-bold.js';
 import { RteBulletListComponent } from './rte-bullet-list.js';
 import { RteCodeComponent } from './rte-code.js';
-import { RteFeatureDividerComponent } from './rte-feature-divider.js';
+import { RteDividerComponent } from './rte-divider.js';
 import { RteHeadingComponent } from './rte-heading.js';
 import { RteItalicComponent } from './rte-italic.js';
 import { RteLinkComponent } from './rte-link.js';
@@ -25,7 +25,7 @@ export * from './rte-code.js';
 export * from './rte-bullet-list.js';
 export * from './rte-ordered-list.js';
 export * from './rte-undo-redo.js';
-export * from './rte-feature-divider.js';
+export * from './rte-divider.js';
 export * from './rte-heading.js';
 export * from './rte-align.js';
 export * from './rte-standard-tools.js';
@@ -47,8 +47,8 @@ export function defineRteCodeComponent(): void {
   defineCustomElement(RteCodeComponent);
 }
 
-export function defineRteFeatureDividerComponent(): void {
-  defineCustomElement(RteFeatureDividerComponent);
+export function defineRteDividerComponent(): void {
+  defineCustomElement(RteDividerComponent);
 }
 
 export function defineRteHeadingComponent(): void {
@@ -95,7 +95,7 @@ export function defineRteFeatureComponents(): void {
   defineRteBoldComponent();
   defineRteBulletListComponent();
   defineRteCodeComponent();
-  defineRteFeatureDividerComponent();
+  defineRteDividerComponent();
   defineRteHeadingComponent();
   defineRteItalicComponent();
   defineRteLinkComponent();

@@ -12,7 +12,7 @@ import './rte-ordered-list.js';
 import './rte-heading.js';
 import './rte-align.js';
 import './rte-undo-redo.js';
-import './rte-feature-divider.js';
+import './rte-divider.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -49,17 +49,17 @@ export class RteStandardToolsComponent extends LitElement {
   public override render(): TemplateResult {
     return html`
       <forge-rte-heading></forge-rte-heading>
-      <forge-rte-feature-divider></forge-rte-feature-divider>
+      <forge-rte-divider></forge-rte-divider>
       <forge-rte-bold></forge-rte-bold>
       <forge-rte-italic></forge-rte-italic>
       <forge-rte-underline></forge-rte-underline>
       <forge-rte-strike></forge-rte-strike>
-      <forge-rte-feature-divider></forge-rte-feature-divider>
+      <forge-rte-divider></forge-rte-divider>
       <forge-rte-bullet-list></forge-rte-bullet-list>
       <forge-rte-ordered-list></forge-rte-ordered-list>
-      <forge-rte-feature-divider></forge-rte-feature-divider>
+      <forge-rte-divider></forge-rte-divider>
       <forge-rte-align></forge-rte-align>
-      <forge-rte-feature-divider></forge-rte-feature-divider>
+      <forge-rte-divider></forge-rte-divider>
       <forge-rte-undo-redo></forge-rte-undo-redo>
     `;
   }
