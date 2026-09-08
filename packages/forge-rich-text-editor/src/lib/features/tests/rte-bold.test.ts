@@ -1,5 +1,6 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../../testing/fixture.js';
+import { html } from 'lit';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
 import { RteBoldComponent } from '../rte-bold.js';
@@ -11,33 +12,33 @@ describe('RTE Bold Feature', () => {
   it('should contain shadow root', async () => {
     const harness = await createFixture();
 
-    expect(harness.boldFeature.shadowRoot).to.be.ok;
+    expect(harness.boldFeature.shadowRoot).toBeTruthy();
   });
 
   it('should have expected default label', async () => {
     const harness = await createFixture();
 
-    expect(harness.boldFeature.label).to.equal('Bold');
+    expect(harness.boldFeature.label).toBe('Bold');
   });
 
   it('should set custom label', async () => {
     const harness = await createFixture({ label: 'Make Bold' });
 
-    expect(harness.boldFeature.label).to.equal('Make Bold');
-    expect(harness.button().getAttribute('aria-label')).to.equal('Make Bold');
+    expect(harness.boldFeature.label).toBe('Make Bold');
+    expect(harness.button().getAttribute('aria-label')).toBe('Make Bold');
   });
 
   it('should render bold button', async () => {
     const harness = await createFixture();
 
-    expect(harness.button()).to.exist;
+    expect(harness.button()).toBeTruthy();
   });
 
   it('should configure bold extension', async () => {
     const harness = await createFixture();
 
-    expect(harness.boldFeature.extensions).to.have.lengthOf(1);
-    expect(harness.boldFeature.extensions[0].name).to.equal('bold');
+    expect(harness.boldFeature.extensions).toHaveLength(1);
+    expect(harness.boldFeature.extensions[0].name).toBe('bold');
   });
 
   it('should toggle bold when button is clicked', async () => {
@@ -54,19 +55,19 @@ describe('RTE Bold Feature', () => {
 
     // Verify bold was applied
     const output = editor.getHTML();
-    expect(output).to.include('<strong>test text</strong>');
+    expect(output).toContain('<strong>test text</strong>');
   });
 
   it('should disable button when editor is disabled', async () => {
     const harness = await createFixture({ disabled: true });
 
-    expect(harness.button().hasAttribute('disabled')).to.be.true;
+    expect(harness.button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should disable button when editor is readonly', async () => {
     const harness = await createFixture({ readonly: true });
 
-    expect(harness.button().hasAttribute('disabled')).to.be.true;
+    expect(harness.button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should show active state when text is bold', async () => {
@@ -82,13 +83,13 @@ describe('RTE Bold Feature', () => {
     editor.chain().focus().toggleBold().run();
     await harness.waitForUpdate();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
   });
 
   it('should not show active state when text is not bold', async () => {
     const harness = await createFixture();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.false;
+    expect(harness.button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should toggle off bold when clicking active button', async () => {
@@ -100,11 +101,11 @@ describe('RTE Bold Feature', () => {
     editor.commands.selectAll();
     editor.chain().focus().toggleBold().run();
     await harness.waitForUpdate();
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
 
     // Click to toggle off
     await harness.clickButton();
-    expect(harness.button().hasAttribute('pressed')).to.be.false;
+    expect(harness.button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should apply bold to selected text', async () => {
@@ -120,8 +121,8 @@ describe('RTE Bold Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('<strong>');
-    expect(output).to.include('test text');
+    expect(output).toContain('<strong>');
+    expect(output).toContain('test text');
   });
 
   it('should remove bold from selected bold text', async () => {
@@ -137,8 +138,8 @@ describe('RTE Bold Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).not.to.include('<strong>');
-    expect(output).to.include('bold text');
+    expect(output).not.toContain('<strong>');
+    expect(output).toContain('bold text');
   });
 
   it.skip('should work with keyboard shortcut Ctrl+B', async () => {
@@ -156,7 +157,7 @@ describe('RTE Bold Feature', () => {
     const contentElement = contextElement.shadowRoot!.querySelector('forge-rich-text-content')!;
     const editorElement = contentElement.shadowRoot!.querySelector('.ProseMirror') as HTMLElement;
 
-    expect(editorElement).to.exist;
+    expect(editorElement).toBeTruthy();
 
     // Simulate Ctrl+B
     const event = new KeyboardEvent('keydown', {
@@ -168,7 +169,7 @@ describe('RTE Bold Feature', () => {
     editorElement.dispatchEvent(event);
     await harness.waitForUpdate();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
   });
 });
 
@@ -188,11 +189,14 @@ interface BoldFixture {
 }
 
 async function createFixture(options: BoldFixtureOptions = {}): Promise<BoldFixture> {
-  const el = await fixture<RichTextEditorComponent>(html`
-    <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
-      <forge-rte-bold label=${options.label || 'Bold'}></forge-rte-bold>
-    </forge-rich-text-editor>
-  `);
+  const el = await renderFixture<RichTextEditorComponent>(
+    html`
+      <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
+        <forge-rte-bold label=${options.label || 'Bold'}></forge-rte-bold>
+      </forge-rich-text-editor>
+    `,
+    'forge-rich-text-editor'
+  );
 
   const boldFeature = el.querySelector('forge-rte-bold') as RteBoldComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
@@ -200,7 +204,7 @@ async function createFixture(options: BoldFixtureOptions = {}): Promise<BoldFixt
   // Wait for editor to initialize
   await new Promise(resolve => setTimeout(resolve, 100));
 
-  return {
+  const harness: BoldFixture = {
     el,
     boldFeature,
     button: () => boldFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
@@ -210,7 +214,7 @@ async function createFixture(options: BoldFixtureOptions = {}): Promise<BoldFixt
     },
     async getEditor(): Promise<Editor> {
       // Access the editor from the context component
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const context = (contextComponent as any).editorContext;
       return context.editor;
     },
@@ -223,6 +227,8 @@ async function createFixture(options: BoldFixtureOptions = {}): Promise<BoldFixt
       await new Promise(resolve => setTimeout(resolve, 100));
     }
   };
+
+  return harness;
 }
 
 describe('RTE Bold - ARIA attributes', () => {
@@ -230,28 +236,28 @@ describe('RTE Bold - ARIA attributes', () => {
     const harness = await createFixture();
     const button = harness.button();
 
-    expect(button.getAttribute('aria-label')).to.equal('Bold');
+    expect(button.getAttribute('aria-label')).toBe('Bold');
   });
 
   it('should have custom aria-label when label property is set', async () => {
     const harness = await createFixture({ label: 'Make text bold' });
     const button = harness.button();
 
-    expect(button.getAttribute('aria-label')).to.equal('Make text bold');
+    expect(button.getAttribute('aria-label')).toBe('Make text bold');
   });
 
   it('should have aria-keyshortcuts attribute', async () => {
     const harness = await createFixture();
     const button = harness.button();
 
-    expect(button.getAttribute('aria-keyshortcuts')).to.equal('Control+B');
+    expect(button.getAttribute('aria-keyshortcuts')).toBe('Control+B');
   });
 
   it('should have aria-controls pointing to content area', async () => {
     const harness = await createFixture();
     const button = harness.button();
 
-    expect(button.getAttribute('aria-controls')).to.equal('forge-rte-content');
+    expect(button.getAttribute('aria-controls')).toBe('forge-rte-content');
   });
 });
 
@@ -280,7 +286,7 @@ describe('RTE Bold - Keyboard navigation', () => {
     await harness.waitForUpdate();
 
     const output = editor.getHTML();
-    expect(output).to.include('<strong>');
+    expect(output).toContain('<strong>');
   });
 
   it.skip('should toggle bold when Enter key is pressed', async () => {
@@ -307,6 +313,6 @@ describe('RTE Bold - Keyboard navigation', () => {
     await harness.waitForUpdate();
 
     const output = editor.getHTML();
-    expect(output).to.include('<strong>');
+    expect(output).toContain('<strong>');
   });
 });

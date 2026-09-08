@@ -1,4 +1,6 @@
-import { expect, fixture, html } from '@open-wc/testing';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../testing/fixture.js';
+import { html } from 'lit';
 import { RichTextEditorComponent } from '../rich-text-editor.js';
 import type { RichTextContextComponent } from '../rich-text-context.js';
 import '../rich-text-editor.js';
@@ -19,14 +21,14 @@ async function waitForEditor(el: RichTextEditorComponent): Promise<void> {
 
 describe('RTE Performance', () => {
   it('should contain shadow root', async () => {
-    const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`);
+    const el = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
 
-    expect(el.shadowRoot).not.to.be.null;
+    expect(el.shadowRoot).not.toBeNull();
   });
 
   describe('Large Document Handling', () => {
     it('should handle 1000 words without performance degradation', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
 
       // Wait for editor initialization
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -44,11 +46,11 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // Should complete in under 500ms
-      expect(duration).to.be.lessThan(500);
+      expect(duration).toBeLessThan(500);
     });
 
     it('should handle 5000 words without performance degradation', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -65,11 +67,11 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // Should complete in under 1000ms for 5000 words
-      expect(duration).to.be.lessThan(1000);
+      expect(duration).toBeLessThan(1000);
     });
 
     it('should handle 10000 words without freezing', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -86,11 +88,11 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // Should complete in under 2000ms for 10000 words
-      expect(duration).to.be.lessThan(2000);
+      expect(duration).toBeLessThan(2000);
     });
 
     it('should handle document with many paragraphs', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -110,11 +112,11 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // Should complete in under 1000ms
-      expect(duration).to.be.lessThan(1000);
+      expect(duration).toBeLessThan(1000);
     });
 
     it('should handle document with complex formatting', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -143,13 +145,13 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // Should complete in under 1000ms
-      expect(duration).to.be.lessThan(1000);
+      expect(duration).toBeLessThan(1000);
     });
   });
 
   describe('Rapid Typing Performance', () => {
     it('should handle rapid content updates without lag', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -167,11 +169,11 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // 50 updates should complete in under 1500ms
-      expect(duration).to.be.lessThan(1500);
+      expect(duration).toBeLessThan(1500);
     });
 
     it('should not accumulate memory with repeated updates', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -184,13 +186,16 @@ describe('RTE Performance', () => {
       await new Promise(resolve => setTimeout(resolve, 200));
 
       // If we got here without errors or hanging, the test passes
-      expect(el.content).to.equal('<p>Content update 99</p>');
+      expect(el.content).toBe('<p>Content update 99</p>');
     });
   });
 
   describe('Character/Word Count Performance', () => {
     it('should efficiently calculate counts for large documents', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor show-character-count show-word-count></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor show-character-count show-word-count></forge-rich-text-editor>`,
+        'forge-rich-text-editor'
+      );
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -207,11 +212,14 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // Count calculation should not significantly impact performance
-      expect(duration).to.be.lessThan(1200);
+      expect(duration).toBeLessThan(1200);
     });
 
     it('should handle count updates efficiently during typing', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor show-character-count show-word-count></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor show-character-count show-word-count></forge-rich-text-editor>`,
+        'forge-rich-text-editor'
+      );
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -230,13 +238,16 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // Should handle incremental updates with counting efficiently
-      expect(duration).to.be.lessThan(2000);
+      expect(duration).toBeLessThan(2000);
     });
   });
 
   describe('Validation Performance', () => {
     it('should validate efficiently with maxLength set', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor max-length="10000"></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor max-length="10000"></forge-rich-text-editor>`,
+        'forge-rich-text-editor'
+      );
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -253,11 +264,14 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // Validation should not significantly impact performance
-      expect(duration).to.be.lessThan(1000);
+      expect(duration).toBeLessThan(1000);
     });
 
     it('should handle validation state changes during content updates', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor max-length="500" show-character-count></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor max-length="500" show-character-count></forge-rich-text-editor>`,
+        'forge-rich-text-editor'
+      );
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -274,22 +288,22 @@ describe('RTE Performance', () => {
 
       // Validation should work without impacting performance
       // This test passes if no errors are thrown and it completes
-      expect(el.content).to.include('word99');
+      expect(el.content).toContain('word99');
     });
   });
 
   describe('Re-render Performance', () => {
     it('should minimize re-renders during content updates', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
       // Track update counts
       let updateCount = 0;
       const originalRequestUpdate = el.requestUpdate.bind(el);
-      el.requestUpdate = function (...args: unknown[]): unknown {
+      el.requestUpdate = function (...args: Parameters<typeof originalRequestUpdate>): void {
         updateCount++;
-        return originalRequestUpdate(...args);
+        originalRequestUpdate(...args);
       };
 
       // Update content
@@ -298,11 +312,14 @@ describe('RTE Performance', () => {
       await new Promise(resolve => setTimeout(resolve, 200));
 
       // Should have minimal re-renders (typically 1-2 for the property change)
-      expect(updateCount).to.be.lessThan(5);
+      expect(updateCount).toBeLessThan(5);
     });
 
     it('should handle state changes efficiently', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor content="<p>Initial content</p>"></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor content="<p>Initial content</p>"></forge-rich-text-editor>`,
+        'forge-rich-text-editor'
+      );
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -325,7 +342,7 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // State changes should be instantaneous
-      expect(duration).to.be.lessThan(100);
+      expect(duration).toBeLessThan(100);
     });
   });
 
@@ -333,7 +350,10 @@ describe('RTE Performance', () => {
     it('should mount efficiently', async () => {
       const startTime = performance.now();
 
-      const el = await fixture<RichTextEditorComponent>(html`<forge-rich-text-editor content="<p>Initial content</p>"></forge-rich-text-editor>`);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor content="<p>Initial content</p>"></forge-rich-text-editor>`,
+        'forge-rich-text-editor'
+      );
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -341,8 +361,8 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // Should mount in under 300ms
-      expect(duration).to.be.lessThan(300);
-      expect(el.shadowRoot).not.to.be.null;
+      expect(duration).toBeLessThan(300);
+      expect(el.shadowRoot).not.toBeNull();
     });
 
     it('should handle repeated mount/unmount cycles without leaking memory', async () => {
@@ -363,7 +383,7 @@ describe('RTE Performance', () => {
         }
 
         // If we got here without errors, test passes
-        expect(true).to.be.true;
+        expect(true).toBe(true);
       } finally {
         document.body.removeChild(container);
       }
@@ -387,7 +407,7 @@ describe('RTE Performance', () => {
 
         // Verify disconnectedCallback was called (editor should be destroyed)
         // This is an indirect test - if memory leaks, the test suite will eventually fail
-        expect(true).to.be.true;
+        expect(true).toBe(true);
       } finally {
         document.body.removeChild(container);
       }
@@ -396,8 +416,9 @@ describe('RTE Performance', () => {
 
   describe('Output Format Performance', () => {
     it('should generate JSON output efficiently for large documents', async () => {
-      const el = await fixture<RichTextEditorComponent>(
-        html`<forge-rich-text-editor content="<p>Initial</p>"><forge-rte-bold></forge-rte-bold></forge-rich-text-editor>`
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor content="<p>Initial</p>"><forge-rte-bold></forge-rte-bold></forge-rich-text-editor>`,
+        'forge-rich-text-editor'
       );
 
       await waitForEditor(el);
@@ -415,14 +436,15 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // JSON generation should be very fast (increased threshold for reliability)
-      expect(duration).to.be.lessThan(100);
-      expect(json).to.not.be.undefined;
-      expect(el.isInitialized).to.be.true;
+      expect(duration).toBeLessThan(100);
+      expect(json).not.toBeUndefined();
+      expect(el.isInitialized).toBe(true);
     });
 
     it('should generate HTML output efficiently for large documents', async () => {
-      const el = await fixture<RichTextEditorComponent>(
-        html`<forge-rich-text-editor content="<p>Initial</p>"><forge-rte-bold></forge-rte-bold></forge-rich-text-editor>`
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor content="<p>Initial</p>"><forge-rte-bold></forge-rte-bold></forge-rich-text-editor>`,
+        'forge-rich-text-editor'
       );
 
       await waitForEditor(el);
@@ -440,22 +462,23 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // HTML generation should be very fast (increased threshold for reliability)
-      expect(duration).to.be.lessThan(100);
-      expect(htmlOutput).to.not.be.empty;
-      expect(el.isInitialized).to.be.true;
+      expect(duration).toBeLessThan(100);
+      expect(htmlOutput).not.toHaveLength(0);
+      expect(el.isInitialized).toBe(true);
     });
   });
 
   describe('Memory Usage', () => {
     it('should not leak memory with content changes', async () => {
-      const el = await fixture<RichTextEditorComponent>(
-        html`<forge-rich-text-editor content="<p>Start</p>"><forge-rte-bold></forge-rte-bold></forge-rich-text-editor>`
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor content="<p>Start</p>"><forge-rte-bold></forge-rte-bold></forge-rich-text-editor>`,
+        'forge-rich-text-editor'
       );
 
       await waitForEditor(el);
 
       // Verify initial state
-      expect(el.isInitialized).to.be.true;
+      expect(el.isInitialized).toBe(true);
 
       // Cycle through different content 50 times
       for (let i = 0; i < 50; i++) {
@@ -466,19 +489,22 @@ describe('RTE Performance', () => {
       }
 
       // Verify final state is still correct (no crashes or errors)
-      expect(el.isInitialized).to.be.true;
-      expect(el.content).to.include('word49_99');
+      expect(el.isInitialized).toBe(true);
+      expect(el.content).toContain('word49_99');
     });
 
     it('should handle feature registration efficiently', async () => {
       const startTime = performance.now();
 
       // Create editor with all standard tools (tests the registration system)
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools slot="toolbar"></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools slot="toolbar"></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       await new Promise(resolve => setTimeout(resolve, 150));
 
@@ -486,8 +512,8 @@ describe('RTE Performance', () => {
       const duration = endTime - startTime;
 
       // Feature registration and initialization should be fast
-      expect(duration).to.be.lessThan(400);
-      expect(el.shadowRoot).not.to.be.null;
+      expect(duration).toBeLessThan(400);
+      expect(el.shadowRoot).not.toBeNull();
     });
   });
 });

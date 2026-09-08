@@ -1,5 +1,6 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../../testing/fixture.js';
+import { html } from 'lit';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
 import { RteItalicComponent } from '../rte-italic.js';
@@ -11,33 +12,33 @@ describe('RTE Italic Feature', () => {
   it('should contain shadow root', async () => {
     const harness = await createFixture();
 
-    expect(harness.italicFeature.shadowRoot).to.be.ok;
+    expect(harness.italicFeature.shadowRoot).toBeTruthy();
   });
 
   it('should have expected default label', async () => {
     const harness = await createFixture();
 
-    expect(harness.italicFeature.label).to.equal('Italic');
+    expect(harness.italicFeature.label).toBe('Italic');
   });
 
   it('should set custom label', async () => {
     const harness = await createFixture({ label: 'Make Italic' });
 
-    expect(harness.italicFeature.label).to.equal('Make Italic');
-    expect(harness.button().getAttribute('aria-label')).to.equal('Make Italic');
+    expect(harness.italicFeature.label).toBe('Make Italic');
+    expect(harness.button().getAttribute('aria-label')).toBe('Make Italic');
   });
 
   it('should render italic button', async () => {
     const harness = await createFixture();
 
-    expect(harness.button()).to.exist;
+    expect(harness.button()).toBeTruthy();
   });
 
   it('should configure italic extension', async () => {
     const harness = await createFixture();
 
-    expect(harness.italicFeature.extensions).to.have.lengthOf(1);
-    expect(harness.italicFeature.extensions[0].name).to.equal('italic');
+    expect(harness.italicFeature.extensions).toHaveLength(1);
+    expect(harness.italicFeature.extensions[0].name).toBe('italic');
   });
 
   it('should toggle italic when button is clicked', async () => {
@@ -54,19 +55,19 @@ describe('RTE Italic Feature', () => {
 
     // Verify italic was applied
     const output = editor.getHTML();
-    expect(output).to.include('<em>test text</em>');
+    expect(output).toContain('<em>test text</em>');
   });
 
   it('should disable button when editor is disabled', async () => {
     const harness = await createFixture({ disabled: true });
 
-    expect(harness.button().hasAttribute('disabled')).to.be.true;
+    expect(harness.button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should disable button when editor is readonly', async () => {
     const harness = await createFixture({ readonly: true });
 
-    expect(harness.button().hasAttribute('disabled')).to.be.true;
+    expect(harness.button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should show active state when text is italic', async () => {
@@ -82,13 +83,13 @@ describe('RTE Italic Feature', () => {
     editor.chain().focus().toggleItalic().run();
     await harness.waitForUpdate();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
   });
 
   it('should not show active state when text is not italic', async () => {
     const harness = await createFixture();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.false;
+    expect(harness.button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should toggle off italic when clicking active button', async () => {
@@ -100,11 +101,11 @@ describe('RTE Italic Feature', () => {
     editor.commands.selectAll();
     editor.chain().focus().toggleItalic().run();
     await harness.waitForUpdate();
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
 
     // Click to toggle off
     await harness.clickButton();
-    expect(harness.button().hasAttribute('pressed')).to.be.false;
+    expect(harness.button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should apply italic to selected text', async () => {
@@ -120,8 +121,8 @@ describe('RTE Italic Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('<em>');
-    expect(output).to.include('test text');
+    expect(output).toContain('<em>');
+    expect(output).toContain('test text');
   });
 
   it('should remove italic from selected italic text', async () => {
@@ -137,8 +138,8 @@ describe('RTE Italic Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).not.to.include('<em>');
-    expect(output).to.include('italic text');
+    expect(output).not.toContain('<em>');
+    expect(output).toContain('italic text');
   });
 
   it.skip('should work with keyboard shortcut Ctrl+I', async () => {
@@ -156,7 +157,7 @@ describe('RTE Italic Feature', () => {
     const contentElement = contextElement.shadowRoot!.querySelector('forge-rich-text-content')!;
     const editorElement = contentElement.shadowRoot!.querySelector('.ProseMirror') as HTMLElement;
 
-    expect(editorElement).to.exist;
+    expect(editorElement).toBeTruthy();
 
     // Simulate Ctrl+I
     const event = new KeyboardEvent('keydown', {
@@ -168,7 +169,7 @@ describe('RTE Italic Feature', () => {
     editorElement.dispatchEvent(event);
     await harness.waitForUpdate();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
   });
 });
 
@@ -188,11 +189,14 @@ interface ItalicFixture {
 }
 
 async function createFixture(options: ItalicFixtureOptions = {}): Promise<ItalicFixture> {
-  const el = await fixture<RichTextEditorComponent>(html`
-    <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
-      <forge-rte-italic label=${options.label || 'Italic'}></forge-rte-italic>
-    </forge-rich-text-editor>
-  `);
+  const el = await renderFixture<RichTextEditorComponent>(
+    html`
+      <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
+        <forge-rte-italic label=${options.label || 'Italic'}></forge-rte-italic>
+      </forge-rich-text-editor>
+    `,
+    'forge-rich-text-editor'
+  );
 
   const italicFeature = el.querySelector('forge-rte-italic') as RteItalicComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
@@ -200,7 +204,7 @@ async function createFixture(options: ItalicFixtureOptions = {}): Promise<Italic
   // Wait for editor to initialize
   await new Promise(resolve => setTimeout(resolve, 100));
 
-  return {
+  const harness: ItalicFixture = {
     el,
     italicFeature,
     button: () => italicFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
@@ -210,7 +214,7 @@ async function createFixture(options: ItalicFixtureOptions = {}): Promise<Italic
     },
     async getEditor(): Promise<Editor> {
       // Access the editor from the context component
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const context = (contextComponent as any).editorContext;
       return context.editor;
     },
@@ -223,4 +227,6 @@ async function createFixture(options: ItalicFixtureOptions = {}): Promise<Italic
       await new Promise(resolve => setTimeout(resolve, 100));
     }
   };
+
+  return harness;
 }
