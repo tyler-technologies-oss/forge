@@ -124,7 +124,7 @@
     "vite-plugin-ejs": "^1.7.0",
     "vite-plugin-full-reload": "^1.2.0",
     "vite-tsconfig-paths": "catalog:",
-    "vitest": "^4.1.2",
+    "vitest": "^4.1.11",
     "vitest-browser-lit": "^1.0.1"
   },
   "lint-staged": {

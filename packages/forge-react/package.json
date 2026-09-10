@@ -65,7 +65,7 @@
     "typescript": "~5.9.3",
     "vite": "catalog:",
     "vite-tsconfig-paths": "catalog:",
-    "vitest": "^4.1.2"
+    "vitest": "^4.1.11"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
