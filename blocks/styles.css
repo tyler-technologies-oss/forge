@@ -2,7 +2,19 @@
 @import '@tylertech/forge/dist/forge.css';
 
 @import 'tailwindcss';
+
 @import '@tylertech/forge-tailwind';
+
+/*
+ * forge-core.css forces `body { height: 100dvh; width: 100dvw; }` for full-page app
+ * shells. Most blocks are small demos, not full-page layouts, so undo that default here.
+ * Blocks that need the viewport-filling behavior (e.g. forge-app-layout templates) opt
+ * back in with `min-h-dvh` (or similar) on their own <body> element.
+ */
+body {
+  height: auto;
+  width: auto;
+}
 
 /* Block specific utilities */
 @layer components {
