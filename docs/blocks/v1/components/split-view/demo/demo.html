@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
     <link rel="stylesheet" href="/blocks/v1/theme.css" />
     <link rel="stylesheet" href="/blocks/v1/styles.css" />
-    <link rel="stylesheet" href="/blocks/v1/components/split-view/demo/demo.css" />
     <style>
       body {
         opacity: 0;
@@ -30,12 +29,12 @@
     <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
   </head>
   <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
-    <forge-split-view auto-close-threshold="120" orientation="horizontal">
-  <forge-split-view-panel resizable="off" min="0" size="200" accessible-label="Split view panel" open="true" style="--forge-split-view-panel-size: 200px;">
-    <div>Panel 1</div>
+    <forge-split-view auto-close-threshold="120" orientation="horizontal" class="h-[300px]">
+  <forge-split-view-panel resizable="off" min="0" size="200" accessible-label="Split view panel" open="true" style="--forge-split-view-panel-size: 200px;" class="bg-[#e6e6fa]">
+    <div class="flex items-center justify-center h-full">Panel 1</div>
   </forge-split-view-panel>
-  <forge-split-view-panel size="200" resizable="start" min="0" accessible-label="Split view panel" open="true" style="--forge-split-view-panel-size: 200px;">
-    <div>Panel 2</div>
+  <forge-split-view-panel size="200" resizable="start" min="0" accessible-label="Split view panel" open="true" style="--forge-split-view-panel-size: 200px;" class="bg-[#fa8070]">
+    <div class="flex items-center justify-center h-full">Panel 2</div>
   </forge-split-view-panel>
 </forge-split-view>
   </body>

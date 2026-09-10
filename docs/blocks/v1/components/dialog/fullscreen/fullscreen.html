@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
     <link rel="stylesheet" href="/blocks/v1/theme.css" />
     <link rel="stylesheet" href="/blocks/v1/styles.css" />
-    <link rel="stylesheet" href="/blocks/v1/components/dialog/fullscreen/fullscreen.css" />
     <style>
       body {
         opacity: 0;
@@ -33,15 +32,15 @@
     <div>
   <forge-button id="open-dialog-button-fullscreen" variant="raised">Open dialog</forge-button>
   <forge-dialog id="dialog-fullscreen" fullscreen>
-    <forge-scaffold>
+    <forge-scaffold class="h-auto">
       <forge-toolbar slot="header" no-divider>
-        <h1 class="forge-typography--heading4" id="dialog-title-fullscreen" slot="start">Title text</h1>
+        <h1 class="forge-typography--heading4 m-0" id="dialog-title-fullscreen" slot="start">Title text</h1>
         <forge-icon-button id="close-dialog-icon-button-fullscreen" slot="end" aria-label="Close dialog">
           <forge-icon name="close">
           </forge-icon>
         </forge-icon-button>
       </forge-toolbar>
-      <p slot="body" id="dialog-message-fullscreen">
+      <p slot="body" id="dialog-message-fullscreen" class="p-medium">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit sed pariatur error repellendus eos! Quas, optio esse ad illum quis blanditiis rerum quia.
         Corrupti, ad hic velit praesentium voluptatum dolores?
       </p>

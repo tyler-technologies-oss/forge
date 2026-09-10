@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
     <link rel="stylesheet" href="/blocks/v1/theme.css" />
     <link rel="stylesheet" href="/blocks/v1/styles.css" />
-    <link rel="stylesheet" href="/blocks/v1/components/app-bar/custom-theme/custom-theme.css" />
     <style>
       body {
         opacity: 0;
@@ -30,10 +29,10 @@
     <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
   </head>
   <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
-    <forge-app-bar class="custom-app-bar" title-text="Tyler Forge™" theme-mode="scoped" elevation="raised">
+    <forge-app-bar class="[--forge-app-bar-background:salmon] [--forge-app-bar-foreground:black]" title-text="Tyler Forge™" theme-mode="scoped" elevation="raised">
   <forge-icon slot="logo" name="forge_logo">
   </forge-icon>
-  <forge-button slot="end" theme="app-bar">Sign In</forge-button>
+  <forge-button slot="end" theme="app-bar" class="me-xsmall">Sign In</forge-button>
 </forge-app-bar>
 <script type="module" src="/blocks/v1/components/app-bar/custom-theme/custom-theme.js"></script>
   </body>

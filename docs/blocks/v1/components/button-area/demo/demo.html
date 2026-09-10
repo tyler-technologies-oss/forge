@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
     <link rel="stylesheet" href="/blocks/v1/theme.css" />
     <link rel="stylesheet" href="/blocks/v1/styles.css" />
-    <link rel="stylesheet" href="/blocks/v1/components/button-area/demo/demo.css" />
     <style>
       body {
         opacity: 0;
@@ -30,12 +29,12 @@
     <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
   </head>
   <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
-    <forge-card>
+    <forge-card class="p-0 w-[320px] max-w-full">
   <forge-button-area>
     <button slot="button" aria-labelledby="button-heading">
     </button>
-    <div class="content">
-      <div>
+    <div class="flex items-center gap-xsmall p-medium">
+      <div class="me-auto">
         <div id="button-heading">Heading</div>
         <div>Content</div>
       </div>

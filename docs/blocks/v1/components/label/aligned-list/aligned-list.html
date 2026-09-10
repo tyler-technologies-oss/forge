@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
     <link rel="stylesheet" href="/blocks/v1/theme.css" />
     <link rel="stylesheet" href="/blocks/v1/styles.css" />
-    <link rel="stylesheet" href="/blocks/v1/components/label/aligned-list/aligned-list.css" />
     <style>
       body {
         opacity: 0;
@@ -30,20 +29,20 @@
     <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
   </head>
   <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
-    <div class="grid">
-  <forge-label for="one">Item One</forge-label>
+    <div class="grid grid-cols-[auto_auto] items-center w-fit">
+  <forge-label for="one" class="w-full">Item One</forge-label>
   <forge-checkbox id="one" aria-label="Item One" aria-required="false">
   </forge-checkbox>
-  <forge-label for="two">Item Two with a longer label</forge-label>
+  <forge-label for="two" class="w-full">Item Two with a longer label</forge-label>
   <forge-checkbox id="two" aria-label="Item Two with a longer label" aria-required="false">
   </forge-checkbox>
-  <forge-label for="three">Item Three</forge-label>
+  <forge-label for="three" class="w-full">Item Three</forge-label>
   <forge-checkbox id="three" aria-label="Item Three" aria-required="false">
   </forge-checkbox>
-  <forge-label for="four">Item Four</forge-label>
+  <forge-label for="four" class="w-full">Item Four</forge-label>
   <forge-checkbox id="four" aria-label="Item Four" aria-required="false">
   </forge-checkbox>
-  <forge-label for="five">Item 5</forge-label>
+  <forge-label for="five" class="w-full">Item 5</forge-label>
   <forge-checkbox id="five" aria-label="Item 5" aria-required="false">
   </forge-checkbox>
 </div>

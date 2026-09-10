@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
     <link rel="stylesheet" href="/blocks/v1/theme.css" />
     <link rel="stylesheet" href="/blocks/v1/styles.css" />
-    <link rel="stylesheet" href="/blocks/v1/components/overlay/demo/demo.css" />
     <style>
       body {
         opacity: 0;
@@ -30,11 +29,11 @@
     <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
   </head>
   <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
-    <div id="clipping-container" class="clipping-container">
-  <div class="scroll-container">
+    <div id="clipping-container" class="h-[500px] border border-outline overflow-auto">
+  <div class="h-[250%] w-[250%] flex items-center justify-center">
     <forge-button id="overlay-trigger" variant="raised">Toggle Overlay</forge-button>
     <forge-overlay anchor="overlay-trigger" position-strategy shift="never" hide="anchor-hidden">
-      <div class="overlay-content">
+      <div class="w-[300px] p-xsmall border border-dashed border-primary bg-surface">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui auctor, ultricies nunc nec, ultricies nunc. Nullam in dui auctor, ultricies
         nunc nec, ultricies nunc.
       </div>

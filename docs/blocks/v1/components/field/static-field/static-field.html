@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
     <link rel="stylesheet" href="/blocks/v1/theme.css" />
     <link rel="stylesheet" href="/blocks/v1/styles.css" />
-    <link rel="stylesheet" href="/blocks/v1/components/field/static-field/static-field.css" />
     <style>
       body {
         opacity: 0;
@@ -30,9 +29,9 @@
     <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
   </head>
   <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
-    <forge-field label-position="block-start">
+    <forge-field label-position="block-start" class="max-w-[320px]">
   <span slot="label">Static label</span>
-  <span data-forge-field-input>Static value text</span>
+  <span data-forge-field-input class="flex items-center">Static value text</span>
 </forge-field>
   </body>
 </html>
