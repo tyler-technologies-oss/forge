@@ -1,7 +1,8 @@
 @import '@tylertech/forge/dist/forge-core.css';
 @import '@tylertech/forge/dist/forge.css';
 
-@import 'tailwindcss';
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
 
 @import '@tylertech/forge-tailwind';
 
