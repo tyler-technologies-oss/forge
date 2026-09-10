@@ -1,0 +1,41 @@
+<!--
+  @block Select — Select Dropdown
+  @type component
+  @description Select Dropdown usage example for the forge-select component.
+  @tags select, select-dropdown, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Select — Select Dropdown</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-button variant="outlined" id="select-dropdown-target" aria-haspopup="listbox">
+  Choose an option
+</forge-button>
+<forge-select-dropdown target="#select-dropdown-target">
+  <forge-option value="1">One</forge-option>
+  <forge-option value="2">Two</forge-option>
+  <forge-option value="3">Three</forge-option>
+</forge-select-dropdown>
+  </body>
+</html>

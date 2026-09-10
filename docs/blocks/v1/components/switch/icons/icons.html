@@ -1,0 +1,39 @@
+<!--
+  @block Switch — Icons
+  @type component
+  @description Icons usage example for the forge-switch component.
+  @tags switch, icons, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Switch — Icons</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-switch icon="both">
+  <span>Off/On</span>
+  <forge-icon slot="icon-off" name="close"></forge-icon>
+  <forge-icon slot="icon-on" name="check"></forge-icon>
+</forge-switch>
+<script type="module" src="/blocks/v1/components/switch/icons/icons.js"></script>
+  </body>
+</html>

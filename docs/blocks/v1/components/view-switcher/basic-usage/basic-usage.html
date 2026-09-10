@@ -1,0 +1,43 @@
+<!--
+  @block View Switcher — Basic Usage
+  @type component
+  @description Basic Usage usage example for the forge-view-switcher component.
+  @tags view-switcher, basic-usage, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>View Switcher — Basic Usage</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-tab-bar active-tab="0" data-aria-label="Demo tabs">
+  <forge-tab selected>Tab 1</forge-tab>
+  <forge-tab>Tab 2</forge-tab>
+  <forge-tab>Tab 3</forge-tab>
+</forge-tab-bar>
+<forge-view-switcher index="0">
+  <forge-view name="view1">View 1 content</forge-view>
+  <forge-view name="view2">View 2 content</forge-view>
+  <forge-view name="view3">View 3 content</forge-view>
+</forge-view-switcher>
+  </body>
+</html>

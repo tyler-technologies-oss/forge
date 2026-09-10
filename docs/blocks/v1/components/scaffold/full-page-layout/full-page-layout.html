@@ -1,0 +1,43 @@
+<!--
+  @block Scaffold — Full Page Layout
+  @type component
+  @description Full Page Layout usage example for the forge-scaffold component.
+  @tags scaffold, full-page-layout, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Scaffold — Full Page Layout</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-scaffold class="h-72">
+  <forge-app-bar slot="header" title-text="App" elevation="raised"></forge-app-bar>
+  <forge-drawer slot="body-left" open>
+    <forge-list navlist>
+      <forge-list-item selected>Overview</forge-list-item>
+      <forge-list-item>Settings</forge-list-item>
+    </forge-list>
+  </forge-drawer>
+  <main slot="body" class="p-medium">Page content</main>
+</forge-scaffold>
+  </body>
+</html>

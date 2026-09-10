@@ -1,0 +1,43 @@
+<!--
+  @block Chips — Choice And Filter
+  @type component
+  @description Choice And Filter usage example for the forge-chips component.
+  @tags chips, choice-and-filter, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Chips — Choice And Filter</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-chip-set type="choice">
+  <forge-chip>Small</forge-chip>
+  <forge-chip selected>Medium</forge-chip>
+  <forge-chip>Large</forge-chip>
+</forge-chip-set>
+<forge-chip-set type="filter">
+  <forge-chip value="tops" selected>Tops</forge-chip>
+  <forge-chip value="bottoms" selected>Bottoms</forge-chip>
+  <forge-chip value="shoes">Shoes</forge-chip>
+</forge-chip-set>
+  </body>
+</html>
