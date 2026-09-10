@@ -1,1 +1,1 @@
-import{l as e,aS as t,aP as o,J as a,aR as c}from"../../../chunks/icon-cC43lcmz.js";e.define([t,o,a,c]);const d=document.getElementById("menu-button"),n=document.getElementById("drawer");d?.addEventListener("click",()=>{n.open=!n.open});
+import{l as e,aS as t,aP as o,J as a,aR as c}from"../../../chunks/icon-BgjL1NQ0.js";e.define([t,o,a,c]);const d=document.getElementById("menu-button"),n=document.getElementById("drawer");d?.addEventListener("click",()=>{n.open=!n.open});
