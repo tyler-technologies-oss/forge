@@ -8,12 +8,24 @@
 /*
  * forge-core.css forces `body { height: 100dvh; width: 100dvw; }` for full-page app
  * shells. Most blocks are small demos, not full-page layouts, so undo that default here.
- * Blocks that need the viewport-filling behavior (e.g. forge-app-layout templates) opt
- * back in with `min-h-dvh` (or similar) on their own <body> element.
+ * Blocks that need the viewport-filling behavior (e.g. forge-app-layout templates, whose
+ * host element uses `height: 100%`) opt back in with `h-dvh` on their own <body> element.
+ * `min-h-*` utilities alone don't work here: forge-app-layout's `height: 100%` only
+ * resolves against a containing block with a *definite* (non-auto) height, and min-height
+ * never changes body's specified height away from auto - it only clamps body's own box.
+ *
+ * `.h-dvh` is defined in Tailwind's `@layer utilities`, which always loses to this
+ * unlayered `body` rule regardless of specificity (unlayered rules beat layered rules for
+ * the same property, per the CSS cascade layers spec). So the opt-in below is also
+ * unlayered, with higher specificity than the bare `body` selector, to actually win.
  */
 body {
   height: auto;
   width: auto;
+}
+
+body.h-dvh {
+  height: 100dvh;
 }
 
 /* Block specific utilities */
