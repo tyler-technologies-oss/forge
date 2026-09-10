@@ -1,0 +1,20 @@
+<!--
+  @block Text Field — Helper Text And Validation
+  @type component
+  @description Helper Text And Validation usage example for the forge-text-field component.
+  @tags text-field, helper-text-and-validation, storybook, component-example
+-->
+<forge-text-field>
+  <label slot="label">Email</label>
+  <input type="email" />
+  <span slot="support-text">We'll only use this to send a receipt.</span>
+</forge-text-field>
+<forge-text-field required>
+  <label slot="label">Full name</label>
+  <input type="text" />
+</forge-text-field>
+<forge-text-field invalid>
+  <label slot="label">Email</label>
+  <input type="email" value="not-an-email" />
+  <span slot="support-text">Enter a valid email, like name@example.com.</span>
+</forge-text-field>
