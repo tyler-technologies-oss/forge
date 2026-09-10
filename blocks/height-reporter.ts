@@ -16,7 +16,10 @@ interface HeightChangeMessage {
 
 function reportHeight(height: number): void {
   const message: HeightChangeMessage = { type: 'forge-block-height-change', height };
-  window.parent.postMessage(message, window.location.origin);
+  // `window.location.origin` here would be this block's own origin, not the parent's - it
+  // only works if the parent happens to be same-origin. The docs site embedding a block may
+  // be on a different origin, so target '*' instead; the payload is just a height number.
+  window.parent.postMessage(message, '*');
 }
 
 if (window.self !== window.top) {
