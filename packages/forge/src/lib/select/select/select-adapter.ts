@@ -17,6 +17,7 @@ export interface ISelectAdapter extends IBaseSelectAdapter<ISelectComponent> {
   setPlaceholderText(value: string): void;
   setSelectedText(value: string): void;
   setDisabled(value: boolean): void;
+  setReadonly(value: boolean): void;
   setRequired(): void;
   syncValue(value: unknown | null): void;
 }
@@ -117,6 +118,10 @@ export class SelectAdapter extends BaseSelectAdapter<ISelectComponent> implement
   public setDisabled(value: boolean): void {
     this._component[isFocusable] = !value;
     toggleAttribute(this._component, value, 'aria-disabled', 'true');
+  }
+
+  public setReadonly(value: boolean): void {
+    toggleAttribute(this._component, value, 'aria-readonly', 'true');
   }
 
   public setRequired(): void {

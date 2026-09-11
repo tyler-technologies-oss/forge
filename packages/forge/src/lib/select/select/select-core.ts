@@ -6,6 +6,7 @@ export interface ISelectCore extends IBaseSelectCore {
   label: string;
   placeholder: string;
   readonly required: boolean;
+  readonly: boolean;
   syncFloatingLabelState(opts: { force?: boolean }): void;
   setDisabled(value: boolean): void;
 }
@@ -14,6 +15,7 @@ export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelec
   private _label = '';
   private _placeholder: string;
   private readonly _required = false;
+  private _readonly = false;
   private _permanentlyFloatLabel = false;
   private _mousedownListener: EventListener = this._onMouseDown.bind(this);
 
@@ -81,6 +83,9 @@ export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelec
   }
 
   protected override _openDropdown(): void {
+    if (this._readonly) {
+      return;
+    }
     super._openDropdown();
     if (this._open) {
       this._adapter.toggleHostAttribute(SELECT_CONSTANTS.attributes.OPEN, true);
@@ -108,6 +113,9 @@ export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelec
    * @param {number} optionIndex The index of the selected option.
    */
   protected async _onSelect(option: ISelectOption, optionIndex: number, closeDropdown = true): Promise<boolean> {
+    if (this._readonly) {
+      return false;
+    }
     const result = await super._onSelect(option, optionIndex, closeDropdown);
     if (result) {
       this._adapter.setSelectedText(this._getSelectedText());
@@ -192,6 +200,18 @@ export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelec
   public set required(value: boolean) {
     if (this._required !== value) {
       this._adapter.setRequired();
+    }
+  }
+
+  /** Gets/sets whether the select is readonly. */
+  public get readonly(): boolean {
+    return this._readonly;
+  }
+  public set readonly(value: boolean) {
+    if (this._readonly !== value) {
+      this._readonly = value;
+      this._adapter.setReadonly(this._readonly);
+      this._adapter.toggleHostAttribute(SELECT_CONSTANTS.attributes.READONLY, this._readonly);
     }
   }
 }

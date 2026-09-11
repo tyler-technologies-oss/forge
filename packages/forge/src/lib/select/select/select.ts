@@ -239,7 +239,8 @@ export class SelectComponent
     this[setDefaultAria]({
       role: 'combobox',
       ariaDisabled: this.disabled ? 'true' : 'false',
-      ariaRequired: this.required ? 'true' : 'false'
+      ariaRequired: this.required ? 'true' : 'false',
+      ariaReadOnly: this.readonly ? 'true' : 'false'
     });
   }
 
@@ -256,6 +257,9 @@ export class SelectComponent
         return;
       case SELECT_CONSTANTS.observedAttributes.SHOW_SELECT_ALL:
         this.showSelectAll = coerceBoolean(newValue);
+        return;
+      case SELECT_CONSTANTS.observedAttributes.READONLY:
+        this.readonly = coerceBoolean(newValue);
         return;
       case SELECT_CONSTANTS.observedAttributes.SELECT_ALL_LABEL:
         this.selectAllLabel = newValue;
@@ -306,6 +310,11 @@ export class SelectComponent
   @coreProperty()
   declare public placeholder: string;
 
+  /**
+   * Controls whether the select is readonly.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   declare public readonly: boolean;
 
