@@ -32,6 +32,14 @@ export default defineConfig([
     }
   },
   {
+    name: 'Test files',
+    files: ['test/**/*.ts'],
+    rules: {
+      '@typescript-eslint/dot-notation': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off'
+    }
+  },
+  {
     name: 'Dev harness files',
     files: ['src/dev/**/*.ts', 'src/dev/**/*.tsx'],
     rules: {
