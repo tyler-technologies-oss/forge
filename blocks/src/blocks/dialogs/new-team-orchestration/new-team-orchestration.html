@@ -202,15 +202,14 @@
     const detailEl = document.getElementById('pattern-detail');
     let selectedId = null;
 
-    const tagBadge = pattern =>
-      pattern.tag ? `<forge-badge theme="tertiary" class="align-middle ml-xsmall">${pattern.tag}</forge-badge>` : '';
+    const tagBadge = pattern => (pattern.tag ? `<forge-badge theme="tertiary">${pattern.tag}</forge-badge>` : '');
 
     const renderList = () => {
       listEl.innerHTML = PATTERNS.map(
         pattern => `
           <forge-list-item value="${pattern.id}" data-pattern-id="${pattern.id}" class="border-b border-outline">
             <forge-icon slot="start" name="${pattern.icon}"></forge-icon>
-            <button type="button">${pattern.name}${tagBadge(pattern)}</button>
+            <button type="button" class="flex items-center gap-xsmall">${pattern.name}${tagBadge(pattern)}</button>
             <span slot="secondary-text">${pattern.useWhen}</span>
             <forge-icon slot="end" name="check_circle" class="invisible" data-selected-icon></forge-icon>
           </forge-list-item>`
@@ -237,21 +236,21 @@
             ${tagBadge(pattern)}
           </div>
 
-          <p class="text-body1 mb-0">${pattern.description}</p>
+          <p class="text-body1 m-0">${pattern.description}</p>
 
           <div class="flex items-center justify-center p-medium bg-surface-dim rounded-md">
             ${pattern.diagram}
           </div>
 
-          <div>
-            <span class="text-label1">Use when</span>
-            <p class="text-body1 mt-xsmall mb-0">${pattern.useWhen}</p>
-          </div>
+          <forge-label-value>
+            <span slot="label">Use when</span>
+            <span slot="value">${pattern.useWhen}</span>
+          </forge-label-value>
 
-          <div>
-            <span class="text-label1">Example</span>
-            <p class="text-body1 mt-xsmall mb-0">${pattern.example}</p>
-          </div>
+          <forge-label-value>
+            <span slot="label">Example</span>
+            <span slot="value">${pattern.example}</span>
+          </forge-label-value>
         </div>`;
     };
 
