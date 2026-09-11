@@ -42,6 +42,7 @@ export default defineConfig({
         'forge-register': path.resolve(process.cwd(), 'forge-register.ts'),
         'ready-transition': path.resolve(process.cwd(), 'ready-transition.ts'),
         'theme-listener': path.resolve(process.cwd(), 'theme-listener.ts'),
+        'height-reporter': path.resolve(process.cwd(), 'height-reporter.ts'),
         'theme': path.resolve(process.cwd(), 'theme.css'),
         'styles': path.resolve(process.cwd(), 'styles.css'),
         ...blockScriptInputs
