@@ -24,5 +24,13 @@ export default defineConfig([
       '@typescript-eslint/no-non-null-assertion': 'off'
     }
   },
+  {
+    name: 'Dev harness files',
+    files: ['src/dev/**/*.ts', 'src/dev/**/*.tsx'],
+    rules: {
+      'no-console': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off'
+    }
+  },
   { ignores: ['esm/**/*'] }
 ]);

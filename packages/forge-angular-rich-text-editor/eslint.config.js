@@ -31,5 +31,13 @@ export default defineConfig([
       'no-console': 'off'
     }
   },
-  { ignores: ['dist/**/*', 'out-tsc/**/*', '.generated-config/**/*'] }
+  {
+    name: 'Dev harness files',
+    files: ['src/dev/**/*.ts', 'src/dev/**/*.tsx'],
+    rules: {
+      'no-console': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off'
+    }
+  },
+  { ignores: ['dist/**/*', 'dist-demo/**/*', 'out-tsc/**/*', '.generated-config/**/*'] }
 ]);
