@@ -1,0 +1,51 @@
+<forge-card>
+  <div class="forge-expansion-demo__container">
+    <!-- <forge-card style="margin-bottom: 16px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 16px;">
+      <forge-text-field style="flex: 1; margin-right: 16px;">
+        <forge-icon slot="leading" name=search></forge-icon>
+        <input type="text" id="input-leading-01" />
+        <label for="input-leading-01" slot="label">First Name</label>
+      </forge-text-field>
+      <forge-button type="raised">
+        <button type="button">Search</button>
+      </forge-button>
+    </div>
+  </forge-card> -->
+    @for (datum of data; track datum) {
+      <div [ngClass]="{ 'container-outline-demo ': showFlexboxOutlines }">
+        <div class="card-detail__container">
+          <div class="card-detail__container__left" [ngClass]="{ 'flex-item-demo ': showFlexboxOutlines }">
+            <forge-open-icon
+              #openIcon
+              style="margin-left: 16px"
+              id="open-icon"
+              (click)="openIcon.open = !openIcon.open; expansionPanel.open = !expansionPanel.open"></forge-open-icon>
+            <div class="forge-typography--heading2">{{ datum.name }}</div>
+            <div class="forge-typography--heading2" style="margin: 0 8px">|</div>
+            <div class="forge-typography--subheading2">Tax due: $19.18</div>
+          </div>
+          <div class="card-detail__container__right" [ngClass]="{ 'flex-item-demo ': showFlexboxOutlines }">
+            <forge-icon-button aria-label="Share this search result">
+              <forge-icon name="share"></forge-icon>
+            </forge-icon-button>
+            <forge-tooltip>Share</forge-tooltip>
+            <forge-icon-button aria-label="Download this search result">
+              <forge-icon name="get_app"></forge-icon>
+            </forge-icon-button>
+            <forge-tooltip>Download</forge-tooltip>
+            <forge-icon-button aria-label="Additional actions">
+              <forge-icon name="more_vert"></forge-icon>
+            </forge-icon-button>
+            <forge-tooltip>More</forge-tooltip>
+          </div>
+        </div>
+        <forge-expansion-panel #expansionPanel>
+          <div>
+            <ev-view-switcher [user]="datum"></ev-view-switcher>
+          </div>
+        </forge-expansion-panel>
+      </div>
+    }
+  </div>
+</forge-card>

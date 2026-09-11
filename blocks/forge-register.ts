@@ -3,6 +3,7 @@ import '@tylertech/forge-extended/app-layout';
 import '@tylertech/forge-extended/user-profile';
 import '@tylertech/forge-extended/structured-card';
 import '@tylertech/forge-extended/count-card';
+import '@tylertech/forge-extended/confirmation-dialog';
 
 import {
   tylIconHome,

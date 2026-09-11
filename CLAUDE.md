@@ -64,6 +64,9 @@ DO NOT add comments unless code is complex. Defer to configs.
 ## Packages
 
 - `packages/forge` - Web components library (see its CLAUDE.md)
+- `packages/forge-react` - React adapter library (see its CLAUDE.md)
+- `packages/forge-angular` - Angular adapter library (see its CLAUDE.md)
+- `packages/forge-schematics` - Angular Schematics for generating custom element proxies (see its CLAUDE.md)
 
 ## Blocks
 

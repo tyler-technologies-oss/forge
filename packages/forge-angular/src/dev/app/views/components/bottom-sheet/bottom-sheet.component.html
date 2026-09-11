@@ -1,0 +1,34 @@
+<app-demo-card headerText="Bottom Sheet" #container>
+  <forge-button variant="raised" (click)="showConfirmBottomSheet()">Show confirm bottom sheet</forge-button>
+
+  <div>
+    <forge-checkbox [(ngModel)]="nonmodal">Non-Modal</forge-checkbox>
+  </div>
+
+  <div>
+    <forge-checkbox id="persistent" [(ngModel)]="persistent">Persistent</forge-checkbox>
+  </div>
+
+  <div>
+    <forge-checkbox [(ngModel)]="fullscreen">Fullscreen</forge-checkbox>
+  </div>
+
+  <div>
+    <forge-checkbox [(ngModel)]="lazyload">Lazy-load bottom sheet component</forge-checkbox>
+  </div>
+
+  <div>
+    <forge-checkbox [(ngModel)]="preventClose">Prevent close</forge-checkbox>
+  </div>
+
+  <div>
+    <forge-checkbox [(ngModel)]="scrollable">Scrollable</forge-checkbox>
+  </div>
+
+  <div>
+    <forge-text-field>
+      <label for="add-class" slot="label">Custom bottom sheet class</label>
+      <input type="text" id="add-class" [(ngModel)]="bottomSheetClass" />
+    </forge-text-field>
+  </div>
+</app-demo-card>

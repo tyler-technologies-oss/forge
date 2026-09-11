@@ -1,0 +1,11 @@
+<h4>Chip field</h4>
+<forge-chip-field (forge-chip-field-member-added)="addMember($event)" (forge-chip-field-member-removed)="deleteMember($event)">
+  <label slot="label" for="simple-chip-field-input">I'm a label</label>
+  @for (member of members; track member) {
+    <forge-chip slot="member" type="field" dense (forge-chip-delete)="deleteMember($event)" [value]="member">
+      {{ member }}
+    </forge-chip>
+  }
+  <input type="text" id="simple-chip-field-input" />
+  <div slot="helper-text">I'm helpful text</div>
+</forge-chip-field>
