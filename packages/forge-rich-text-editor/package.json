@@ -80,7 +80,7 @@
     "tslib": "catalog:"
   },
   "peerDependencies": {
-    "@tylertech/forge": "^3.16.0"
+    "@tylertech/forge": "^3.19.0"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "catalog:",
