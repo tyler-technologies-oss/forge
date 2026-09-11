@@ -37,6 +37,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: false,
+    minify: false,
     rollupOptions: {
       input: {
         'forge-register': path.resolve(process.cwd(), 'forge-register.ts'),
