@@ -83,9 +83,6 @@ export class SelectCore extends BaseSelectCore<ISelectAdapter> implements ISelec
   }
 
   protected override _openDropdown(): void {
-    if (this._readonly) {
-      return;
-    }
     super._openDropdown();
     if (this._open) {
       this._adapter.toggleHostAttribute(SELECT_CONSTANTS.attributes.OPEN, true);

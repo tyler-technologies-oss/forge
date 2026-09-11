@@ -280,24 +280,23 @@ describe('Select', () => {
       expect(harness.fieldElement.popoverExpanded).toBe(false);
     });
 
-    it('should not open when clicking select while readonly', async () => {
+    it('should still open when clicking select while readonly', async () => {
       const harness = await createFixture({ readonly: true });
 
       await harness.clickElement(harness.element);
 
-      expect(harness.element.open).toBe(false);
-      expect(harness.popoverElement).toBeFalsy();
-      expect(harness.fieldElement.popoverExpanded).toBe(false);
+      expect(harness.element.open).toBe(true);
+      expect(harness.popoverElement).toBeTruthy();
+      expect(harness.fieldElement.popoverExpanded).toBe(true);
     });
 
-    it('should not open when pressing space while readonly', async () => {
+    it('should not select an option when clicked while readonly', async () => {
       const harness = await createFixture({ readonly: true });
 
-      harness.element.focus();
-      await harness.pressKey('Space');
-      await frame();
+      await harness.clickElement(harness.element);
+      await harness.clickElement(harness.getListItems()[0]);
 
-      expect(harness.element.open).toBe(false);
+      expect(harness.element.value).toBeFalsy();
     });
 
     it('should not select an option via typeahead while readonly and closed', async () => {
