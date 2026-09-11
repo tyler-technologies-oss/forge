@@ -54,7 +54,11 @@
 /// Gets the value of a typography scale token.
 ///
 @function scale($scale, $unit: rem) {
-  @return #{scale.value($scale)}#{if($unit, $unit, '')};
+  $unit-string: '';
+  @if $unit {
+    $unit-string: $unit;
+  }
+  @return #{scale.value($scale)}#{$unit-string};
 }
 
 @mixin ellipse {
