@@ -82,7 +82,8 @@ import {
   tylIconCheckCircle,
   tylIconArrowDown,
   tylIconArrowBottomLeft,
-  tylIconArrowBottomRight
+  tylIconArrowBottomRight,
+  tylIconRobotOutline
 } from '@tylertech/tyler-icons';
 
 // Register all Forge components
@@ -166,5 +167,6 @@ IconRegistry.define([
   tylIconCheckCircle,
   tylIconArrowDown,
   tylIconArrowBottomLeft,
-  tylIconArrowBottomRight
+  tylIconArrowBottomRight,
+  tylIconRobotOutline
 ]);
