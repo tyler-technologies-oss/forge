@@ -53,3 +53,16 @@ It then writes the per-directory `index.ts` barrels, `src/public-api.ts` and the
 `ForgeRteModule`, none of which the schematic emits. That gap is worth knowing about: the rich text
 editor proxies in `@tylertech/forge-extended-angular` are generated but have no barrels and are
 absent from its `public-api.ts`, so they are unreachable to consumers.
+
+### Dev harness
+
+```bash
+pnpm dev   # build, then serve a scratch page at localhost:3462
+```
+
+`src/dev` is a page for looking at the components in a real browser. It is never published, and it
+imports built output rather than source, so it exercises the same artifact a consumer gets.
+
+Note that `forge-rich-text-editor` takes `content` as an **HTML string**, while
+`forge-rich-text-renderer` takes **ProseMirror JSON** — the shape the editor's `change` event
+emits. They are deliberately different formats.

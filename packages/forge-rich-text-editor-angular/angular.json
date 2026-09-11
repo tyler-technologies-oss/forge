@@ -24,6 +24,57 @@
           "defaultConfiguration": "production"
         }
       }
+    },
+    "forge-rich-text-editor-angular-demo": {
+      "projectType": "application",
+      "root": ".",
+      "sourceRoot": "src/dev",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": {
+              "base": "dist-demo"
+            },
+            "index": "src/dev/index.html",
+            "browser": "src/dev/main.ts",
+            "tsConfig": "src/dev/tsconfig.json",
+            "polyfills": ["zone.js"],
+            "conditions": ["module", "production"]
+          },
+          "configurations": {
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false
+            },
+            "production": {
+              "outputHashing": "all"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "options": {
+            "port": 3462,
+            "prebundle": false
+          },
+          "configurations": {
+            "development": {
+              "buildTarget": "forge-rich-text-editor-angular-demo:build:development"
+            },
+            "production": {
+              "buildTarget": "forge-rich-text-editor-angular-demo:build:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
