@@ -20,7 +20,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "!dist/test-out"
   ],
   "scripts": {
     "build": "rimraf ./dist && pnpm run generate-proxies && ng build forge-rich-text-editor-angular --configuration production",
