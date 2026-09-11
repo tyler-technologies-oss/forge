@@ -27,7 +27,8 @@
     "generate-proxies": "node scripts/generate-proxies.mjs",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,js,mjs,json,md}\"",
-    "format:check": "prettier --check \"**/*.{ts,js,mjs,json,md}\""
+    "format:check": "prettier --check \"**/*.{ts,js,mjs,json,md}\"",
+    "dev": "ng serve forge-rich-text-editor-angular-demo"
   },
   "dependencies": {
     "tslib": "catalog:"

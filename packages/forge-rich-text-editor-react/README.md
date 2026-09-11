@@ -44,3 +44,16 @@ export, or if an attribute cannot be matched to a public property. The type chec
 with `skipLibCheck` off — with it on, TypeScript skips declaration files entirely and the check
 passes even when an import resolves to nothing. See that package's README for why both cases are
 worth guarding.
+
+### Dev harness
+
+```bash
+pnpm dev   # build, then serve a scratch page at localhost:3461
+```
+
+`src/dev` is a page for looking at the components in a real browser. It is never published, and it
+imports built output rather than source, so it exercises the same artifact a consumer gets.
+
+Note that `forge-rich-text-editor` takes `content` as an **HTML string**, while
+`forge-rich-text-renderer` takes **ProseMirror JSON** — the shape the editor's `change` event
+emits. They are deliberately different formats.
