@@ -51,7 +51,8 @@
             "browser": "src/dev/main.ts",
             "tsConfig": "src/dev/tsconfig.json",
             "polyfills": ["zone.js"],
-            "conditions": ["module", "production"]
+            "conditions": ["module", "production"],
+            "styles": ["node_modules/@tylertech/forge/dist/forge.css"]
           },
           "configurations": {
             "development": {
