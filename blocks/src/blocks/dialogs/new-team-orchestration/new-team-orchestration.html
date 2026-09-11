@@ -10,7 +10,7 @@
 </div>
 
 <forge-dialog id="new-team-dialog" aria-labelledby="new-team-dialog-title">
-  <forge-scaffold class="h-auto w-[900px] max-w-[95vw]">
+  <forge-scaffold class="h-auto w-[95vw] max-w-[1040px]">
     <forge-toolbar slot="header">
       <h2 id="new-team-dialog-title" slot="start" class="text-heading3">Create new team</h2>
       <forge-icon-button slot="end" density="medium" aria-label="Close dialog" id="close-dialog-btn">
@@ -35,15 +35,16 @@
       <div class="flex flex-col gap-small">
         <span class="text-label1">Orchestration pattern</span>
 
-        <div class="grid grid-cols-[280px_1fr] h-[400px] border border-outline rounded-md overflow-hidden">
+        <div class="grid grid-cols-2 border border-outline rounded-md overflow-hidden">
           <forge-list
             id="pattern-list"
             two-line
-            class="overflow-y-auto border-r border-outline"
+            wrap
+            class="border-r border-outline"
             style="--forge-list-spacing: 0;">
           </forge-list>
 
-          <div id="pattern-detail" class="overflow-y-auto p-medium"></div>
+          <div id="pattern-detail" class="p-medium"></div>
         </div>
       </div>
     </div>
@@ -207,7 +208,7 @@
     const renderList = () => {
       listEl.innerHTML = PATTERNS.map(
         pattern => `
-          <forge-list-item value="${pattern.id}" data-pattern-id="${pattern.id}">
+          <forge-list-item value="${pattern.id}" data-pattern-id="${pattern.id}" class="border-b border-outline">
             <forge-icon slot="start" name="${pattern.icon}"></forge-icon>
             <button type="button">${pattern.name}${tagBadge(pattern)}</button>
             <span slot="secondary-text">${pattern.useWhen}</span>
@@ -231,14 +232,12 @@
       detailEl.innerHTML = `
         <div class="flex flex-col gap-medium">
           <div class="flex items-center gap-small">
-            <h3 class="text-heading3 mb-0">${pattern.name}</h3>
+            <forge-icon name="${pattern.icon}" style="font-size: 24px;" class="text-primary"></forge-icon>
+            <h3 class="text-heading3">${pattern.name}</h3>
             ${tagBadge(pattern)}
           </div>
 
-          <div class="flex items-center gap-small">
-            <forge-icon name="${pattern.icon}" style="font-size: 24px;" class="text-primary"></forge-icon>
-            <p class="text-body1 mb-0">${pattern.description}</p>
-          </div>
+          <p class="text-body1 mb-0">${pattern.description}</p>
 
           <div class="flex items-center justify-center p-medium bg-surface-dim rounded-md">
             ${pattern.diagram}
