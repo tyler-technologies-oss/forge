@@ -122,6 +122,7 @@ export class SelectAdapter extends BaseSelectAdapter<ISelectComponent> implement
 
   public setReadonly(value: boolean): void {
     toggleAttribute(this._component, value, 'aria-readonly', 'true');
+    this._component[setValidity]();
   }
 
   public setRequired(): void {

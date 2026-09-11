@@ -1026,6 +1026,22 @@ describe('Select', () => {
       expect(el[internals].reportValidity()).toBe(true);
     });
 
+    it('should be exempt from required validation while readonly with no value', async () => {
+      const screen = render(html`<forge-select required readonly></forge-select>`);
+      const el = screen.container.querySelector('forge-select') as ISelectComponent;
+
+      expect(el.value).toBeFalsy();
+      expect(el[internals].validity.valid).toBe(true);
+      expect(el[internals].validationMessage).toBe('');
+      expect(el[internals].checkValidity()).toBe(true);
+      expect(el[internals].reportValidity()).toBe(true);
+
+      el.readonly = false;
+
+      expect(el[internals].validity.valid).toBe(false);
+      expect(el[internals].checkValidity()).toBe(false);
+    });
+
     it('should set custom validity', async () => {
       const screen = render(html`<forge-select required></forge-select>`);
       const el = screen.container.querySelector('forge-select') as ISelectComponent;

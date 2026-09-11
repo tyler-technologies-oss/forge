@@ -273,10 +273,13 @@ export class SelectComponent
   }
 
   public [setValidity](): void {
+    // A readonly select is barred from constraint validation, matching native <input readonly>
+    // behavior - the user has no way to satisfy a required constraint while readonly.
+    const required = this.required && !this.readonly;
     this[internals].setValidity(
-      { valueMissing: this.required && !this.value },
+      { valueMissing: required && !this.value },
       this[getValidationMessage]({
-        required: this.required,
+        required,
         value: this.value
       })
     );
