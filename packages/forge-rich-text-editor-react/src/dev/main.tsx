@@ -1,3 +1,4 @@
+import '@tylertech/forge/dist/forge.css';
 import React, { useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import {

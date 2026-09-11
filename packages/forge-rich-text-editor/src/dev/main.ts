@@ -1,3 +1,4 @@
+import '@tylertech/forge/dist/forge.css';
 import '@tylertech/forge-rich-text-editor';
 import '@tylertech/forge-rich-text-editor/features';
 import type { RichTextEditorComponent, RichTextRendererComponent, RichTextRendererContent } from '@tylertech/forge-rich-text-editor';
