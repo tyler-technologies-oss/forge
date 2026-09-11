@@ -89,7 +89,7 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   }
 
   /**
-   * Whether the option is selected. __Applies only to declarative options.__
+   * Whether the option is selected. __Applies only to rendered options.__
    * @attribute
    * @default false
    */
@@ -97,7 +97,7 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   public selected = false;
 
   /**
-   * Sets the option's height to fit two lines of text. __Applies only to declarative options.__
+   * Sets the option's height to fit two lines of text. __Applies only to rendered options.__
    * @attribute two-line
    * @default false
    */
@@ -105,7 +105,7 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   public twoLine = false;
 
   /**
-   * Sets the option's height to fit three lines of text. __Applies only to declarative options.__
+   * Sets the option's height to fit three lines of text. __Applies only to rendered options.__
    * @attribute three-line
    * @default false
    */
@@ -113,7 +113,7 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   public threeLine = false;
 
   /**
-   * Whether the option uses a dense layout. __Applies only to declarative options.__
+   * Whether the option uses a dense layout. __Applies only to rendered options.__
    * @attribute
    * @default false
    */
@@ -122,7 +122,7 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   public dense = false;
 
   /**
-   * Whether the option is read only. __Applies only to declarative options.__
+   * Whether the option is read only. __Applies only to rendered options.__
    * @attribute
    * @default false
    */

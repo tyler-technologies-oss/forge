@@ -196,6 +196,36 @@ describe('Option', () => {
         `);
         expect(option.disabled).toBe(true);
       });
+
+      it('should remain disabled locally after the parent listbox toggles from disabled back to enabled', async () => {
+        const { listbox, option } = await createListboxFixture(html`
+          <forge-listbox disabled>
+            <forge-option value="1" disabled>Option 1</forge-option>
+          </forge-listbox>
+        `);
+        expect(option.disabled).toBe(true);
+
+        listbox.disabled = false;
+        await listbox.updateComplete;
+        await option.updateComplete;
+
+        expect(option.disabled).toBe(true);
+      });
+
+      it('should become enabled when the parent listbox toggles from disabled back to enabled and the option has no local disabled state', async () => {
+        const { listbox, option } = await createListboxFixture(html`
+          <forge-listbox disabled>
+            <forge-option value="1">Option 1</forge-option>
+          </forge-listbox>
+        `);
+        expect(option.disabled).toBe(true);
+
+        listbox.disabled = false;
+        await listbox.updateComplete;
+        await option.updateComplete;
+
+        expect(option.disabled).toBe(false);
+      });
     });
   });
 
@@ -323,6 +353,11 @@ describe('Option', () => {
       expect(option.leadingBuilder).toBe(leadingBuilder);
       expect(option.trailingBuilder).toBe(trailingBuilder);
       expect(option.tooltip).toBe(tooltip);
+    });
+
+    it('should translate the tooltip attribute string into a tooltip config object', async () => {
+      const option = await createStandaloneFixture(html`<forge-option value="1" tooltip="Help"></forge-option>`);
+      expect(option.tooltip).toEqual({ text: 'Help' });
     });
   });
 });

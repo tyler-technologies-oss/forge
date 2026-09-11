@@ -1,5 +1,6 @@
-import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks'; import CustomArgTypes from
-'../../blocks/CustomArgTypes'; import * as OptionStories from './Option.stories';
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as OptionStories from './Option.stories';
 
 <Meta of={OptionStories} />
 
@@ -12,7 +13,7 @@ Options represent individual selectable items within a
 
 <Canvas of={OptionStories.Demo} />
 
-> **Note:** Depending on context the `<forge-option>` component may function as a declarative or
+> **Note:** Depending on context the `<forge-option>` component may function as a rendered or
 > config-based component. When used within a `<forge-listbox>` an option renders to the DOM like any
 > other element and may be styled and manipulated directly. In any other context the option does not
 > render anything to the DOM and is instead used as a configuration object by the parent component.

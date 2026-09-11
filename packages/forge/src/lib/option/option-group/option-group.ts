@@ -52,7 +52,9 @@ export class OptionGroupComponent extends OptionGroupConfigComponent implements 
     this.#configOnly = !this.closest(LISTBOX_TAG_NAME);
 
     if (this.#configOnly) {
-      return this; // Light DOM for config-only option group
+      // Render into a detached fragment so Lit's marker nodes don't pollute the light DOM,
+      // which would otherwise trigger consumers (eg. forge-select) watching for child mutations.
+      return document.createDocumentFragment();
     }
 
     this.#setupAria();

@@ -137,6 +137,11 @@ describe('Listbox', () => {
       await ctx.element.updateComplete;
       expect(ctx.element.getAttribute('aria-readonly')).toBe('true');
     });
+
+    it('should set aria-orientation to vertical to match actual keyboard navigation behavior', async () => {
+      const ctx = await createFixture();
+      expect(ctx.element.getAttribute('aria-orientation')).toBe('vertical');
+    });
   });
 
   describe('descendant options', () => {
@@ -243,6 +248,28 @@ describe('Listbox', () => {
       await userEvent.click(ctx.options[0], { force: true });
 
       expect(ctx.element.value).toBe('');
+    });
+
+    it('should expose the prospective value to change listeners before the selection is committed', async () => {
+      const ctx = await createFixture();
+      let valueDuringChange: string | string[] | undefined;
+      ctx.element.addEventListener('change', () => {
+        valueDuringChange = ctx.element.value;
+      });
+
+      await userEvent.click(ctx.options[0]);
+
+      expect(valueDuringChange).toBe('1');
+    });
+
+    it('should revert the selection when change is cancelled', async () => {
+      const ctx = await createFixture();
+      ctx.element.addEventListener('change', evt => evt.preventDefault());
+
+      await userEvent.click(ctx.options[0]);
+
+      expect(ctx.element.value).toBe('');
+      expect(ctx.options[0].selected).toBe(false);
     });
   });
 
@@ -403,6 +430,34 @@ describe('Listbox', () => {
       await userEvent.keyboard('{Shift>} {/Shift}');
 
       expect(ctx.element.value).toEqual(['1', '2', '3']);
+    });
+
+    it('should revert a range selection when change is cancelled', async () => {
+      const ctx = await createFixture();
+      ctx.element.multiple = true;
+      ctx.element.addEventListener('change', evt => evt.preventDefault());
+      ctx.element.focus();
+
+      await userEvent.keyboard(' ');
+      await userEvent.keyboard('{ArrowDown}');
+      await userEvent.keyboard('{ArrowDown}');
+      await userEvent.keyboard('{Shift>} {/Shift}');
+
+      expect(ctx.element.value).toBe('');
+    });
+
+    it('should dispatch input and revert selection when Ctrl+A change is cancelled', async () => {
+      const ctx = await createFixture();
+      ctx.element.multiple = true;
+      const inputSpy = vi.fn();
+      ctx.element.addEventListener('input', inputSpy);
+      ctx.element.addEventListener('change', evt => evt.preventDefault());
+      ctx.element.focus();
+
+      await userEvent.keyboard('{Control>}a{/Control}');
+
+      expect(inputSpy).toHaveBeenCalledOnce();
+      expect(ctx.element.value).toBe('');
     });
 
     it('should select the focused option and all options up to the first with Ctrl+Shift+Home', async () => {
@@ -583,6 +638,21 @@ describe('Listbox', () => {
       expect(ctx.element.checkValidity()).toBe(true);
     });
 
+    it('should retain a custom validity message across unrelated value/required/name updates', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox>
+          <forge-option value="1">Option 1</forge-option>
+        </forge-listbox>
+      `);
+      ctx.element.setCustomValidity('Custom error');
+
+      ctx.element.required = true;
+      await ctx.element.updateComplete;
+
+      expect(ctx.element.checkValidity()).toBe(false);
+      expect(ctx.element.validationMessage).toBe('Custom error');
+    });
+
     it('should submit selected value via FormData (single)', async () => {
       const screen = render(html`
         <form>
@@ -599,6 +669,22 @@ describe('Listbox', () => {
       await listbox.updateComplete;
       formData = new FormData(form);
       expect(formData.get('choice')).toBe('1');
+    });
+
+    it('should not submit an empty-name entry when the listbox has no name', async () => {
+      const screen = render(html`
+        <form>
+          <forge-listbox></forge-listbox>
+        </form>
+      `);
+      const form = screen.container.querySelector('form') as HTMLFormElement;
+      const listbox = screen.container.querySelector('forge-listbox') as ListboxComponent;
+
+      listbox.value = '1';
+      await listbox.updateComplete;
+      const formData = new FormData(form);
+
+      expect(Array.from(formData.keys())).not.toContain('');
     });
 
     it('should submit selected values via FormData (multi)', async () => {
@@ -776,6 +862,30 @@ describe('Listbox', () => {
 
       expect(target.dropFromElements).toEqual([sourceB]);
     });
+
+    it('should not throw and return an empty array for a whitespace-only drop-from value', async () => {
+      const ctx = await createFixture(html`<forge-listbox drop-from="   "></forge-listbox>`);
+
+      expect(() => ctx.element.dropFromElements).not.toThrow();
+      expect(ctx.element.dropFromElements).toEqual([]);
+    });
+
+    it('should reconfigure the drop controller when dropFrom is set after connection', async () => {
+      const screen = render(html`
+        <div>
+          <forge-listbox id="source-a"></forge-listbox>
+          <forge-listbox id="target"></forge-listbox>
+        </div>
+      `);
+      const source = screen.container.querySelector('#source-a') as ListboxComponent;
+      const target = screen.container.querySelector('#target') as ListboxComponent;
+      await target.updateComplete;
+
+      target.dropFrom = 'source-a';
+      await target.updateComplete;
+
+      expect(target.dropFromElements).toEqual([source]);
+    });
   });
 
   describe('drag and drop', () => {
@@ -821,6 +931,34 @@ describe('Listbox', () => {
       expect(ctx.element.querySelector('.forge-listbox-placeholder')).toBeNullable();
 
       dispatchDrag(ctx.options[0], 'dragend', { dataTransfer });
+    });
+
+    it('should compute the insertion index from direct children, not nested descendants', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox reorderable>
+          <forge-option value="1">
+            <forge-icon name="star" slot="start"></forge-icon>
+            <span slot="secondary-label">Secondary</span>
+            Option 1
+          </forge-option>
+          <forge-option value="2">Option 2</forge-option>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      `);
+      await ctx.element.updateComplete;
+
+      const dropSpy = vi.fn();
+      ctx.element.addEventListener('forge-listbox-drop', dropSpy);
+
+      const dataTransfer = createDataTransfer();
+      const targetY = clientYForIndex(ctx.element, 2);
+
+      dispatchDrag(ctx.options[2], 'dragstart', { dataTransfer });
+      dispatchDrag(ctx.element, 'dragenter', { dataTransfer, clientY: targetY });
+      dispatchDrag(ctx.element, 'drop', { dataTransfer, clientY: targetY });
+
+      const detail = dropSpy.mock.calls[0][0].detail as IListboxDropData;
+      expect(detail.index).toBe(2);
     });
 
     it('should include the target group when dropping over an option group', async () => {

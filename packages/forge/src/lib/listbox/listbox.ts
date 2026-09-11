@@ -166,8 +166,11 @@ export class ListboxComponent extends BaseLitElement {
       .filter(Boolean)
       .map(id => `#${id}`)
       .join(',');
+    if (!ids) {
+      return [];
+    }
     const selector = `:is(${ids})`;
-    return Array.from(this.ownerDocument.querySelectorAll<ListboxComponent>(selector)) ?? undefined;
+    return Array.from(this.ownerDocument.querySelectorAll<ListboxComponent>(selector));
   }
   #dropFromElements: typeof this.dropFromElements = [];
 
@@ -290,7 +293,7 @@ export class ListboxComponent extends BaseLitElement {
     setDefaultAria(this, this.#internals, {
       role: 'listbox',
       ariaMultiSelectable: this.multiple ? 'true' : null,
-      ariaOrientation: 'horizontal',
+      ariaOrientation: 'vertical',
       ariaDisabled: this.disabled ? 'true' : null,
       ariaReadOnly: this.readonly ? 'true' : null
     });
@@ -325,7 +328,12 @@ export class ListboxComponent extends BaseLitElement {
       this.#updateFormValue();
     }
 
-    if (changedProperties.has('reorderable') || changedProperties.has('dragOut') || changedProperties.has('dropFromElements')) {
+    if (
+      changedProperties.has('reorderable') ||
+      changedProperties.has('dragOut') ||
+      changedProperties.has('dropFromElements') ||
+      changedProperties.has('dropFrom')
+    ) {
       this.#dragController.setEnabled(this.reorderable || this.dragOut);
       this.#dropController.setEnabled(this.reorderable || !!this.dropFromElements.length);
     }
@@ -370,12 +378,9 @@ export class ListboxComponent extends BaseLitElement {
       return;
     }
 
-    this.#emitInputEvent();
-    if (!this.#emitChangeEvent()) {
-      return;
-    }
-
+    const previousValue = this.value;
     const value = option.value;
+    let nextAnchor = this.#selectionAnchor;
 
     if (this.multiple) {
       const currentValues = Array.isArray(this.value) ? [...this.value] : [];
@@ -384,17 +389,23 @@ export class ListboxComponent extends BaseLitElement {
         currentValues.splice(index, 1);
       } else {
         currentValues.push(value);
-        this.#selectionAnchor = option;
+        nextAnchor = option;
       }
       this.value = currentValues;
+    } else if (this.allowDeselect && this.value === value) {
+      this.value = '';
     } else {
-      if (this.allowDeselect && this.value === value) {
-        this.value = '';
-      } else {
-        this.value = value;
-        this.#selectionAnchor = option;
-      }
+      this.value = value;
+      nextAnchor = option;
     }
+
+    this.#emitInputEvent();
+    if (!this.#emitChangeEvent()) {
+      this.value = previousValue;
+      return;
+    }
+
+    this.#selectionAnchor = nextAnchor;
   }
 
   /**
@@ -415,14 +426,16 @@ export class ListboxComponent extends BaseLitElement {
       return;
     }
 
-    this.#emitInputEvent();
-    if (!this.#emitChangeEvent()) {
-      return;
-    }
-
+    const previousValue = this.value;
     const valueSet = new Set(Array.isArray(this.value) ? this.value : []);
     rangeOptions.forEach(opt => valueSet.add(opt.value));
     this.value = options.filter(opt => valueSet.has(opt.value)).map(opt => opt.value);
+
+    this.#emitInputEvent();
+    if (!this.#emitChangeEvent()) {
+      this.value = previousValue;
+      return;
+    }
   }
 
   #emitChangeEvent(): boolean {
@@ -527,7 +540,7 @@ export class ListboxComponent extends BaseLitElement {
   #updateFormValue(): void {
     const values = Array.isArray(this.value) ? this.value : this.value ? [this.value] : [];
 
-    const formValue = values.length ? new FormData() : null;
+    const formValue = values.length && this.name ? new FormData() : null;
     if (formValue) {
       values.forEach(v => formValue.append(this.name, v));
     }
@@ -545,7 +558,8 @@ export class ListboxComponent extends BaseLitElement {
   }
 
   #setValidity(): void {
-    this.#internals.setValidity({ valueMissing: this.required && !this.#hasValue }, this.#getValidationMessage());
+    const customError = this.#internals.validity.customError;
+    this.#internals.setValidity({ valueMissing: this.required && !this.#hasValue, customError }, this.#getValidationMessage());
   }
 
   #getValidationMessage(): string {
@@ -694,21 +708,20 @@ export class ListboxComponent extends BaseLitElement {
 
     evt.preventDefault();
 
+    const previousValue = this.value;
     const allValues = this.#options.filter(opt => !opt.disabled).map(opt => opt.value);
 
     // Check if all are selected using Set for optimized performance
     const valueSet = new Set(Array.isArray(this.value) ? this.value : []);
     const allSelected = allValues.every(val => valueSet.has(val));
 
-    if (allSelected) {
-      // Deselect all
-      this.value = [];
-    } else {
-      // Select all
-      this.value = allValues;
-    }
+    this.value = allSelected ? [] : allValues;
 
-    this.#emitChangeEvent();
+    this.#emitInputEvent();
+    if (!this.#emitChangeEvent()) {
+      this.value = previousValue;
+      return;
+    }
   }
 
   #handleTypeAhead(searchString: string): void {
@@ -774,7 +787,7 @@ export class ListboxComponent extends BaseLitElement {
     placeholder.setAttribute('role', 'presentation');
     placeholder.setAttribute('aria-hidden', 'true');
     placeholder.style.border = 'var(--forge-border-thin) dashed var(--forge-theme-primary)';
-    placeholder.style.borderRadius = 'var(--forge-option-border-radius)';
+    placeholder.style.borderRadius = 'var(--forge-option-shape)';
     placeholder.style.pointerEvents = 'none';
     placeholder.style.boxSizing = 'border-box';
     placeholder.style.backgroundColor = 'var(--forge-theme-primary-container-minimum)';
@@ -823,7 +836,7 @@ export class ListboxComponent extends BaseLitElement {
 
   #getInsertionIndex(event: DragEvent): number {
     const parent = this.#getGroupFromDragEvent(event) || this;
-    const children = Array.from(parent.querySelectorAll('*'));
+    const children = Array.from(parent.children);
 
     this.#dropGroup = parent === this ? undefined : (parent as OptionGroupComponent);
 

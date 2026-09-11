@@ -80,7 +80,20 @@ export abstract class OptionConfigComponent extends BaseLitElement {
    * @attribute
    */
   @property({ type: Boolean, reflect: true })
-  public disabled = false;
+  public set disabled(value: boolean) {
+    this.#localDisabled = value;
+    this.#syncDisabled();
+  }
+  public get disabled(): boolean {
+    return this.#combinedDisabled;
+  }
+  #localDisabled = false;
+  #inheritedDisabled = false;
+  #combinedDisabled = false;
+
+  #syncDisabled(): void {
+    this.#combinedDisabled = this.#localDisabled || this.#inheritedDisabled;
+  }
 
   /**
    * Whether the option renders as a divider instead of a list item. __Applies only to config-based options.__
@@ -193,14 +206,23 @@ export abstract class OptionConfigComponent extends BaseLitElement {
   public trailingBuilder?: () => HTMLElement;
 
   /**
-   * Configuration options for an attached tooltip. __Applies only to config-based options.__
+   * Configuration options for an attached tooltip. Accepts a plain string via the `tooltip`
+   * attribute (translated to `{ text: <value> }`), or an object via property assignment.
+   * __Applies only to config-based options.__
    * @default undefined
+   * @attribute
    */
-  @property({ attribute: false })
+  @property({
+    converter: {
+      fromAttribute: (value: string | null) => (value ? { text: value } : undefined),
+      toAttribute: () => null
+    }
+  })
   public tooltip?: ListDropdownTooltipConfig;
 
   @consume({ context: SELECT_LIKE_DISABLED, subscribe: true })
   private set _contextDisabled(value: boolean) {
-    this.disabled = this.hasUpdated ? value : value || this.disabled;
+    this.#inheritedDisabled = value;
+    this.#syncDisabled();
   }
 }

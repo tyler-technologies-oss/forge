@@ -57,6 +57,12 @@ describe('OptionGroup', () => {
       expect(group.label).toBe('Group');
     });
 
+    it('should not insert Lit marker/comment nodes into the light DOM', async () => {
+      const group = await createStandaloneFixture();
+      const hasCommentNode = Array.from(group.childNodes).some(node => node.nodeType === Node.COMMENT_NODE);
+      expect(hasCommentNode).toBe(false);
+    });
+
     it('should accept an options array, builder, and value programmatically', async () => {
       const group = await createStandaloneFixture();
       const options = [{ label: 'A', value: 'a' }];
