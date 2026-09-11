@@ -10,7 +10,7 @@
 </div>
 
 <forge-dialog id="new-team-dialog" aria-labelledby="new-team-dialog-title">
-  <forge-scaffold class="w-[820px] max-w-[95vw] h-[720px] max-h-[90vh]">
+  <forge-scaffold class="h-auto w-[900px] max-w-[95vw]">
     <forge-toolbar slot="header">
       <h2 id="new-team-dialog-title" slot="start" class="text-heading3">Create new team</h2>
       <forge-icon-button slot="end" density="medium" aria-label="Close dialog" id="close-dialog-btn">
@@ -18,7 +18,7 @@
       </forge-icon-button>
     </forge-toolbar>
 
-    <div slot="body" class="p-medium flex flex-col gap-medium h-full min-h-0">
+    <div slot="body" class="p-medium flex flex-col gap-medium">
       <forge-text-field label-position="block-start">
         <label for="team-name">Name</label>
         <input type="text" id="team-name" value="Support Triage Team" />
@@ -32,10 +32,10 @@
           value="Routes incoming customer requests to the right specialist agent" />
       </forge-text-field>
 
-      <div class="flex flex-col gap-small flex-1 min-h-0">
+      <div class="flex flex-col gap-small">
         <span class="text-label1">Orchestration pattern</span>
 
-        <div class="grid grid-cols-[280px_1fr] flex-1 min-h-0 border border-outline rounded-md overflow-hidden">
+        <div class="grid grid-cols-[280px_1fr] h-[400px] border border-outline rounded-md overflow-hidden">
           <forge-list
             id="pattern-list"
             two-line
@@ -50,7 +50,7 @@
 
     <forge-toolbar slot="footer" inverted>
       <div class="flex items-center gap-medium" slot="end">
-        <forge-button id="cancel-btn" variant="tonal">Cancel</forge-button>
+        <forge-button id="cancel-btn">Cancel</forge-button>
         <forge-button id="create-btn" variant="filled">Create team</forge-button>
       </div>
     </forge-toolbar>
@@ -69,16 +69,16 @@
         example: 'A support inbox sends billing questions to the billing agent and technical questions to the technical agent.',
         diagram: `
           <div class="flex flex-col items-center gap-small">
-            <forge-icon name="smart_toy" style="font-size: 28px;"></forge-icon>
+            <forge-icon name="robot" style="font-size: 28px;"></forge-icon>
             <forge-icon name="alt_route" class="text-medium"></forge-icon>
             <div class="flex items-center gap-large">
               <div class="flex flex-col items-center gap-xsmall">
-                <forge-icon name="south_west" class="text-medium"></forge-icon>
-                <forge-icon name="smart_toy" style="font-size: 28px;"></forge-icon>
+                <forge-icon name="arrow_bottom_left" class="text-medium"></forge-icon>
+                <forge-icon name="robot" style="font-size: 28px;"></forge-icon>
               </div>
               <div class="flex flex-col items-center gap-xsmall">
-                <forge-icon name="south_east" class="text-medium"></forge-icon>
-                <forge-icon name="smart_toy" style="font-size: 28px;"></forge-icon>
+                <forge-icon name="arrow_bottom_right" class="text-medium"></forge-icon>
+                <forge-icon name="robot" style="font-size: 28px;"></forge-icon>
               </div>
             </div>
           </div>`
@@ -86,20 +86,20 @@
       {
         id: 'hierarchical',
         name: 'Hierarchical',
-        icon: 'account_tree',
+        icon: 'sitemap',
         useWhen: 'A supervisor delegates pieces of work and composes the result.',
         description: 'A supervising agent breaks a request into subtasks, assigns them to member agents, and merges their outputs.',
         example: 'A research supervisor assigns fact-finding and drafting subtasks, then compiles the final report.',
         diagram: `
           <div class="flex flex-col items-center gap-small">
-            <forge-icon name="smart_toy" style="font-size: 28px;"></forge-icon>
+            <forge-icon name="robot" style="font-size: 28px;"></forge-icon>
             <div class="flex items-center gap-large">
-              <forge-icon name="south_west" class="text-medium"></forge-icon>
-              <forge-icon name="south_east" class="text-medium"></forge-icon>
+              <forge-icon name="arrow_bottom_left" class="text-medium"></forge-icon>
+              <forge-icon name="arrow_bottom_right" class="text-medium"></forge-icon>
             </div>
             <div class="flex items-center gap-large">
-              <forge-icon name="smart_toy" style="font-size: 28px;"></forge-icon>
-              <forge-icon name="smart_toy" style="font-size: 28px;"></forge-icon>
+              <forge-icon name="robot" style="font-size: 28px;"></forge-icon>
+              <forge-icon name="robot" style="font-size: 28px;"></forge-icon>
             </div>
           </div>`
       },
@@ -114,30 +114,30 @@
         diagram: `
           <div class="flex flex-col items-center gap-small">
             <div class="flex items-center gap-medium">
-              <forge-icon name="smart_toy" style="font-size: 26px;"></forge-icon>
+              <forge-icon name="robot" style="font-size: 26px;"></forge-icon>
               <forge-icon name="sync_alt" class="text-medium"></forge-icon>
-              <forge-icon name="smart_toy" style="font-size: 26px;"></forge-icon>
+              <forge-icon name="robot" style="font-size: 26px;"></forge-icon>
               <forge-icon name="sync_alt" class="text-medium"></forge-icon>
-              <forge-icon name="smart_toy" style="font-size: 26px;"></forge-icon>
+              <forge-icon name="robot" style="font-size: 26px;"></forge-icon>
             </div>
-            <forge-icon name="south" class="text-medium"></forge-icon>
-            <forge-icon name="smart_toy" style="font-size: 28px;"></forge-icon>
+            <forge-icon name="arrow_down" class="text-medium"></forge-icon>
+            <forge-icon name="robot" style="font-size: 28px;"></forge-icon>
           </div>`
       },
       {
         id: 'sequential',
         name: 'Sequential',
-        icon: 'format_list_numbered',
+        icon: 'list',
         useWhen: 'Members run in a fixed order, each building on the last.',
         description: 'Agents run one after another in a fixed pipeline, with each step building on the output of the previous one.',
         example: 'A drafting agent writes a first pass, an editing agent revises it, and a formatting agent prepares it for delivery.',
         diagram: `
           <div class="flex items-center gap-small">
-            <forge-icon name="smart_toy" style="font-size: 26px;"></forge-icon>
-            <forge-icon name="arrow_forward" class="text-medium"></forge-icon>
-            <forge-icon name="smart_toy" style="font-size: 26px;"></forge-icon>
-            <forge-icon name="arrow_forward" class="text-medium"></forge-icon>
-            <forge-icon name="smart_toy" style="font-size: 26px;"></forge-icon>
+            <forge-icon name="robot" style="font-size: 26px;"></forge-icon>
+            <forge-icon name="forward" class="text-medium"></forge-icon>
+            <forge-icon name="robot" style="font-size: 26px;"></forge-icon>
+            <forge-icon name="forward" class="text-medium"></forge-icon>
+            <forge-icon name="robot" style="font-size: 26px;"></forge-icon>
           </div>`
       },
       {
@@ -149,7 +149,7 @@
         example: 'A code-review agent repeatedly critiques and rewrites a function until it passes all checks or hits the iteration limit.',
         diagram: `
           <div class="flex items-center gap-medium">
-            <forge-icon name="smart_toy" style="font-size: 28px;"></forge-icon>
+            <forge-icon name="robot" style="font-size: 28px;"></forge-icon>
             <forge-icon name="sync" style="font-size: 36px;" class="text-primary"></forge-icon>
           </div>`
       },
@@ -163,12 +163,12 @@
         diagram: `
           <div class="flex flex-col items-center gap-small">
             <div class="flex items-center gap-large">
-              <forge-icon name="smart_toy" style="font-size: 26px;"></forge-icon>
-              <forge-icon name="smart_toy" style="font-size: 26px;"></forge-icon>
-              <forge-icon name="smart_toy" style="font-size: 26px;"></forge-icon>
+              <forge-icon name="robot" style="font-size: 26px;"></forge-icon>
+              <forge-icon name="robot" style="font-size: 26px;"></forge-icon>
+              <forge-icon name="robot" style="font-size: 26px;"></forge-icon>
             </div>
             <forge-icon name="call_merge" class="text-medium"></forge-icon>
-            <forge-icon name="smart_toy" style="font-size: 28px;"></forge-icon>
+            <forge-icon name="robot" style="font-size: 28px;"></forge-icon>
           </div>`
       },
       {
@@ -181,16 +181,16 @@
         example: 'An orchestrator spins up a search worker and a summarization worker for a single query, then merges their findings.',
         diagram: `
           <div class="flex flex-col items-center gap-small">
-            <forge-icon name="smart_toy" style="font-size: 28px;"></forge-icon>
+            <forge-icon name="robot" style="font-size: 28px;"></forge-icon>
             <div class="flex items-center gap-large">
               <span class="flex items-center justify-center rounded-full border border-dashed border-outline p-xsmall">
-                <forge-icon name="smart_toy" style="font-size: 22px;"></forge-icon>
+                <forge-icon name="robot" style="font-size: 22px;"></forge-icon>
               </span>
               <span class="flex items-center justify-center rounded-full border border-dashed border-outline p-xsmall">
-                <forge-icon name="smart_toy" style="font-size: 22px;"></forge-icon>
+                <forge-icon name="robot" style="font-size: 22px;"></forge-icon>
               </span>
               <span class="flex items-center justify-center rounded-full border border-dashed border-outline p-xsmall">
-                <forge-icon name="smart_toy" style="font-size: 22px;"></forge-icon>
+                <forge-icon name="robot" style="font-size: 22px;"></forge-icon>
               </span>
             </div>
           </div>`
@@ -209,7 +209,7 @@
         pattern => `
           <forge-list-item value="${pattern.id}" data-pattern-id="${pattern.id}">
             <forge-icon slot="start" name="${pattern.icon}"></forge-icon>
-            <span>${pattern.name}${tagBadge(pattern)}</span>
+            <button type="button">${pattern.name}${tagBadge(pattern)}</button>
             <span slot="secondary-text">${pattern.useWhen}</span>
             <forge-icon slot="end" name="check_circle" class="invisible" data-selected-icon></forge-icon>
           </forge-list-item>`
@@ -222,7 +222,7 @@
       if (!pattern) {
         detailEl.innerHTML = `
           <div class="flex flex-col items-center justify-center gap-small h-full text-medium text-center">
-            <forge-icon name="account_tree" style="font-size: 40px;"></forge-icon>
+            <forge-icon name="sitemap" style="font-size: 40px;"></forge-icon>
             <p class="text-body1 mb-0">Select a pattern to see its details</p>
           </div>`;
         return;
