@@ -22,6 +22,16 @@
             }
           },
           "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "runner": "vitest",
+            "buildTarget": "forge-rich-text-editor-angular-demo:build:development",
+            "browsers": ["chromiumHeadless"],
+            "include": ["../test/**/*.spec.ts"]
+          }
         }
       }
     },
