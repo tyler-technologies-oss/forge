@@ -6,6 +6,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { glob } from 'glob';
+import { transformWithEsbuild } from 'vite';
 import { compileBlock } from './block-compiler.js';
 import { createPartialRegistry } from './partial-registry.js';
 import { generateManifest } from './generate-manifest.js';
@@ -56,6 +57,14 @@ async function buildBlocks(): Promise<void> {
 
     fs.mkdirSync(outputDir, { recursive: true });
     fs.writeFileSync(outputPath, result.html);
+
+    if (blockScriptSrc) {
+      const tsSource = fs.readFileSync(scriptFile, 'utf-8');
+      const { code } = await transformWithEsbuild(tsSource, scriptFile, { minify: false });
+      const readableScriptPath = outputPath.replace(/\.html$/, '.source.js');
+      fs.writeFileSync(readableScriptPath, code);
+    }
+
     console.log(`Built: ${relativePath}`);
   }
 
