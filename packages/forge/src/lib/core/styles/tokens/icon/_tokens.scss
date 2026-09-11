@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use '../../animation';
 @use '../../typography';
 @use '../../utils';
 
@@ -7,7 +8,8 @@ $tokens: (
   size: utils.module-val(icon, size, 1em),
   width: utils.module-ref(icon, width, size),
   height: utils.module-ref(icon, height, size),
-  font-size: utils.module-val(icon, font-size, typography.font-size-relative('1500'))
+  font-size: utils.module-val(icon, font-size, typography.font-size-relative('1500')),
+  transition-duration: utils.module-val(icon, transition-duration, animation.variable(duration-extended1))
 ) !default;
 
 @function get($key) {

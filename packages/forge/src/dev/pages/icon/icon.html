@@ -2,7 +2,28 @@
 include('./src/partials/page.ejs', {
   page: {
     title: 'Icon',
-    includePath: './pages/icon/icon.ejs'
+    includePath: './pages/icon/icon.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Animation',
+        id: 'opt-animation',
+        defaultValue: 'none',
+        options: [
+          { label: 'None', value: 'none' },
+          { label: 'Spin', value: 'spin' },
+          { label: 'Pulse', value: 'pulse' },
+          { label: 'Ping', value: 'ping' },
+          { label: 'Bounce', value: 'bounce' },
+          { label: 'Shake', value: 'shake' }
+        ]
+      },
+      {
+        type: 'button',
+        label: 'Animate Once',
+        id: 'btn-animate-once'
+      }
+    ]
   }
 })
 %>

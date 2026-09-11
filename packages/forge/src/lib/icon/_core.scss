@@ -1,11 +1,12 @@
 @use './token-utils' as *;
+@use '../core/styles/animation';
 
 @forward './token-utils';
 
 @mixin host {
   display: inline-block;
   box-sizing: content-box;
-  contain: content;
+  // contain: content;
 
   font-size: #{token(font-size)};
 }
@@ -23,4 +24,79 @@
   fill: #{token(color)};
   stroke: #{token(color)};
   stroke-width: 0;
+}
+
+@mixin spin {
+  animation-name: spin;
+  animation-duration: #{token(transition-duration)};
+  animation-iteration-count: infinite;
+  animation-timing-function: #{animation.variable(easing-linear)};
+}
+
+@mixin pulse {
+  animation-name: pulse;
+  animation-duration: #{token(transition-duration)};
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@mixin ping {
+  animation-name: ping;
+  animation-duration: #{token(transition-duration)};
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+@mixin bounce {
+  animation-name: bounce;
+  animation-duration: calc(#{token(transition-duration)} / 2);
+  animation-iteration-count: infinite;
+}
+
+@mixin shake {
+  animation-name: shake;
+  animation-duration: calc(#{token(transition-duration)} / 16);
+  animation-iteration-count: infinite;
+  animation-timing-function: #{animation.variable(easing-linear)};
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    scale: 1.2;
+  }
+}
+
+@keyframes ping {
+  75%,
+  100% {
+    scale: 1.2;
+    opacity: 0;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+  50% {
+    transform: translateY(-12.5%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+}
+
+@keyframes shake {
+  25% {
+    transform: translateX(-5%);
+  }
+  75% {
+    transform: translateX(5%);
+  }
 }

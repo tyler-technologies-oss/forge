@@ -41,3 +41,4 @@ export const ICON_REGISTRY_KEY = 'forgeIcons' as const;
 export type IconUrlBuilder = (name: string, type: IconExternalType) => string;
 export type IconExternalType = '' | 'custom' | 'standard' | 'extended' | 'all';
 export type IconTheme = Theme | 'text-medium' | 'text-low';
+export type IconAnimation = 'none' | 'spin' | 'pulse' | 'ping' | 'bounce' | 'shake';

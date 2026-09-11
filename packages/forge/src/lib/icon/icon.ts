@@ -1,9 +1,9 @@
 import { CUSTOM_ELEMENT_NAME_PROPERTY, isDefined } from '@tylertech/forge-core';
 import { PropertyValues, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
-import { ICON_CONSTANTS, IconExternalType, IconTheme, IconUrlBuilder } from './icon-constants.js';
+import { ICON_CONSTANTS, IconAnimation, IconExternalType, IconTheme, IconUrlBuilder } from './icon-constants.js';
 import { IconRegistry, IIconDescriptor } from './icon-registry.js';
 import { awaitIconDefinition, createSanitizedSvg, fetchIconContent, getCachedIcon, removeIconListener, sanitizeExternalType } from './icon-utils.js';
 
@@ -19,6 +19,8 @@ export interface IIconProperties {
   externalUrlBuilder?: IconUrlBuilder;
   theme?: IconTheme;
   viewbox?: string;
+  animation?: string;
+  animateOnce(animation: IconAnimation): void;
 }
 
 /** @deprecated - This will be removed in the future. Please switch to using IconComponent. */
@@ -126,6 +128,17 @@ export class IconComponent extends BaseLitElement implements IIconComponent {
   @property({ reflect: true })
   public theme?: IconTheme;
 
+  /**
+   * An animation to apply to the icon. Options are "none" (default), "spin", and "pulse".
+   * @attribute
+   * @default "none"
+   */
+  @property()
+  public animation: IconAnimation = 'none';
+
+  @query('svg')
+  private _svgElement?: SVGSVGElement;
+
   #applyTimer?: number;
   #visibilityObserver?: IntersectionObserver;
   #registrationListener?: () => void;
@@ -148,6 +161,10 @@ export class IconComponent extends BaseLitElement implements IIconComponent {
 
     if (changedProperties.has('viewbox')) {
       this.#setViewBox(this.viewbox);
+    }
+
+    if (changedProperties.has('animation') && this._svgElement) {
+      this.#trySetAnimationClass(this._svgElement, this.animation);
     }
   }
 
@@ -295,6 +312,7 @@ export class IconComponent extends BaseLitElement implements IIconComponent {
     }
     clone.part = 'svg';
     clone.setAttribute('aria-hidden', 'true');
+    this.#trySetAnimationClass(clone, this.animation);
     shadowRoot.appendChild(clone);
   }
 
@@ -354,6 +372,62 @@ export class IconComponent extends BaseLitElement implements IIconComponent {
   #destroyVisibilityObserver(): void {
     this.#visibilityObserver?.disconnect();
     this.#visibilityObserver = undefined;
+  }
+
+  //
+  // Animation
+  //
+
+  public async animateOnce(animation: IconAnimation): Promise<void> {
+    console.log('Animate once');
+    if (animation === 'none') {
+      return;
+    }
+
+    const node = this._svgElement;
+    if (!node) {
+      return;
+    }
+
+    await this.#trySetAnimationClass(node, animation);
+    return this.#handleAnimationEnd(node, () => this.#toggleAnimationClasses(node, this.animation));
+  }
+
+  async #trySetAnimationClass(svgElement: SVGElement, animation: IconAnimation): Promise<void> {
+    return new Promise(resolve => {
+      if (!svgElement) {
+        return resolve();
+      }
+
+      const animations = svgElement.getAnimations();
+      if (animations.length) {
+        return this.#handleAnimationEnd(svgElement, () => this.#toggleAnimationClasses(svgElement, animation));
+      } else {
+        this.#toggleAnimationClasses(svgElement, animation);
+        resolve();
+      }
+    });
+  }
+
+  #toggleAnimationClasses(svgElement: SVGElement, animation: IconAnimation): void {
+    const animationClasses = ['spin', 'pulse', 'ping', 'bounce', 'shake'];
+    svgElement.classList.remove(...animationClasses);
+    if (animation !== 'none') {
+      svgElement.classList.add(animation);
+    }
+  }
+
+  async #handleAnimationEnd(node: SVGElement, callback: () => void): Promise<void> {
+    return new Promise(resolve => {
+      node.addEventListener(
+        'animationiteration',
+        () => {
+          callback();
+          resolve();
+        },
+        { once: true }
+      );
+    });
   }
 }
 

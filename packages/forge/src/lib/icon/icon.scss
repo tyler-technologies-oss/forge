@@ -34,3 +34,33 @@ svg {
     @include override(color, theme.variable($theme), value);
   }
 }
+
+//
+// Animation
+//
+
+.spin {
+  @include spin;
+}
+
+.pulse {
+  @include pulse;
+}
+
+.ping {
+  @include ping;
+}
+
+.bounce {
+  @include bounce;
+}
+
+.shake {
+  @include shake;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  svg {
+    @include override(transition-duration, 0, value);
+  }
+}
