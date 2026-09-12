@@ -35,9 +35,12 @@ pnpm build   # rollup ESM, custom elements manifest and types
 imports the built `esm/` output rather than source, so it exercises the same artifact a consumer
 gets.
 
-Note that `forge-rich-text-editor` takes `content` as an **HTML string**, while
-`forge-rich-text-renderer` takes **ProseMirror JSON** — the shape the editor's `change` event
-emits. They are deliberately different formats.
+`forge-rich-text-editor` takes `content` as an **HTML string or a ProseMirror document**, while
+`forge-rich-text-renderer` takes **only a document** — the shape the editor's `change` event emits.
+
+Document input is stricter than HTML input: ProseMirror rejects a mark it has no extension for and
+discards the whole document, whereas HTML parsing drops the unknown formatting and keeps the text.
+Slot the features providing the marks your content uses.
 
 ## License
 
