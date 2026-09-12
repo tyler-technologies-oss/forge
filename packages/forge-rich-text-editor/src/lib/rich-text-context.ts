@@ -1,6 +1,7 @@
 import { provide } from '@lit/context';
 import { CUSTOM_ELEMENT_NAME_PROPERTY, LiveAnnouncer } from '@tylertech/forge-core';
 import { type AnyExtension, type Content, Editor as TipTapEditor } from '@tiptap/core';
+import { Node as ProseMirrorNode } from '@tiptap/pm/model';
 import { Document } from '@tiptap/extension-document';
 import { Text } from '@tiptap/extension-text';
 import { Paragraph } from '@tiptap/extension-paragraph';
@@ -74,7 +75,7 @@ const DEFAULT_EXTENSIONS: AnyExtension[] = [Document, Text, Paragraph];
  * @event {CustomEvent<RichTextEditorValidationEventDetail>} validation - Fired when validation state changes. The detail contains validation status and error messages.
  * @event {CustomEvent<void>} initialized - Fired when the editor has been successfully initialized.
  * @event {CustomEvent<RichTextEditorInitializationErrorEventDetail>} initialization-error - Fired when editor initialization fails. The detail contains the error message.
- * @event {CustomEvent<RichTextEditorErrorEventDetail>} error - Fired when a non-fatal error occurs during editor operation. The detail contains context and error message.
+ * @event {CustomEvent<RichTextEditorErrorEventDetail>} error - Fired when a non-fatal error occurs during editor operation. The detail contains context and error message. A `context` of `Invalid document content` means a ProseMirror document was rejected by the schema and discarded.
  *
  * @method toJSON() - Returns the editor content as JSON in ProseMirror format. Returns undefined if the editor is not initialized.
  * @method toHTML() - Returns the editor content as an HTML string. Returns an empty string if the editor is not initialized.
@@ -233,6 +234,7 @@ export class RichTextContextComponent extends LitElement {
     if (this.hasUpdated && changedProperties.has('content')) {
       try {
         const sanitized = this.#sanitizeContent(this.content) as Content;
+        this.#reportUnparsableDocument(sanitized);
         this.editorContext.editor?.commands.setContent(sanitized);
       } catch (error) {
         this.#handleEditorError('Failed to set content', error);
@@ -479,6 +481,8 @@ export class RichTextContextComponent extends LitElement {
         }
       });
 
+      this.#reportUnparsableDocument(initialContent);
+
       this.editorContext = {
         ...this.editorContext,
         editor: this._editor
@@ -581,6 +585,31 @@ export class RichTextContextComponent extends LitElement {
    * Sanitizes content before passing to TipTap editor.
    * Handles both HTML strings and ProseMirror JSON objects.
    */
+  /**
+   * Reports a ProseMirror document the schema cannot parse, which TipTap otherwise only logs as a
+   * warning of its own.
+   *
+   * Document input is all-or-nothing: a mark or node the editor has no extension for makes
+   * ProseMirror reject the whole document, so the content is silently discarded. HTML input is
+   * lenient by comparison - it drops the unsupported formatting and keeps the text - which is why
+   * only documents are checked here. TipTap's `enableContentCheck` would cover both, but it reports
+   * the benign HTML case as an error too, and that noise would teach consumers to ignore the event.
+   *
+   * This only reports; the content is still handed to TipTap so the existing behavior is unchanged.
+   */
+  #reportUnparsableDocument(content: unknown): void {
+    const schema = this._editor?.schema;
+    if (!schema || !content || typeof content !== 'object') {
+      return;
+    }
+
+    try {
+      ProseMirrorNode.fromJSON(schema, content);
+    } catch (error) {
+      this.#handleEditorError('Invalid document content', error);
+    }
+  }
+
   #sanitizeContent(content: string | object): string | object | unknown {
     if (typeof content === 'string') {
       return sanitizeHTML(content, this.allowPasteImages);
