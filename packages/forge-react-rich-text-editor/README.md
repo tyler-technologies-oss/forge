@@ -27,25 +27,21 @@ export const Editor = () => (
 Importing a component registers its underlying custom element as a side effect, so there is no
 separate `define*()` call to make.
 
-### Known limitation: `content` accepts only HTML through the prop
+### Passing a ProseMirror document
 
-`forge-rich-text-editor`'s `content` accepts an HTML string or a ProseMirror document, but the
-generated wrapper forwards props to the custom element as attributes, so a document passed through
-the `content` prop is stringified to `"[object Object]"`.
-
-Assign it through a ref instead:
+`content` accepts an HTML string or a ProseMirror document. Documents are forwarded as a property
+rather than an attribute, so they are not stringified:
 
 ```tsx
-const editor = useRef<ForgeRichTextEditorElement>(null);
-useEffect(() => {
-  editor.current!.content = proseMirrorDocument;
-}, []);
-
-<ForgeRichTextEditor ref={editor} />;
+<ForgeRichTextEditor content={proseMirrorDocument}>
+  <ForgeRteStandardTools />
+</ForgeRichTextEditor>
 ```
 
-Strings work through the prop as normal. The Angular adapter is unaffected — its generated proxies
-assign the native property directly.
+Unlike HTML input, document input is strict about the schema: a mark the editor does not have an
+extension for discards the whole document. Slot the features that provide the marks your content
+uses — `ForgeRteStandardTools` covers bold, italic, underline, strike and lists, and
+`ForgeRteLink` covers links.
 
 ## Development
 
