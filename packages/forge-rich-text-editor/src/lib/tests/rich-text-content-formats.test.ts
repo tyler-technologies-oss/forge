@@ -139,6 +139,58 @@ describe('RichTextEditor content formats', () => {
     expect(bare.toHTML()).toContain('plain');
   });
 
+  describe('reporting rejected documents', () => {
+    const collectErrors = (el: RichTextEditorComponent): { context: string; error: string }[] => {
+      const errors: { context: string; error: string }[] = [];
+      el.addEventListener('error', event => errors.push((event as CustomEvent).detail));
+      return errors;
+    };
+
+    it('should dispatch an error naming the mark the schema does not define', async () => {
+      const bare = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
+      await new Promise(resolve => setTimeout(resolve, 100));
+      const errors = collectErrors(bare);
+
+      await setContent(bare, PARAGRAPH);
+
+      expect(errors).toHaveLength(1);
+      expect(errors[0].context).toBe('Invalid document content');
+      expect(errors[0].error).toContain('bold');
+    });
+
+    it('should not dispatch an error when every mark is in the schema', async () => {
+      const el = await createEditor();
+      const errors = collectErrors(el);
+
+      await setContent(el, PARAGRAPH);
+
+      expect(errors).toEqual([]);
+    });
+
+    it('should not dispatch an error for HTML carrying unsupported formatting', async () => {
+      // HTML input degrades gracefully - the formatting is dropped and the text kept - so treating
+      // it as an error would be a false alarm.
+      const bare = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
+      await new Promise(resolve => setTimeout(resolve, 100));
+      const errors = collectErrors(bare);
+
+      await setContent(bare, '<p>text <strong>with bold</strong></p>');
+
+      expect(errors).toEqual([]);
+      expect(bare.toHTML()).toContain('text');
+    });
+
+    it('should still discard the rejected document rather than throwing', async () => {
+      const bare = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      await setContent(bare, PARAGRAPH);
+
+      expect(bare.toHTML()).toBe('<p></p>');
+      expect(bare.isInitialized).toBe(true);
+    });
+  });
+
   it('should switch between the two formats without reinitializing', async () => {
     const el = await createEditor();
 
