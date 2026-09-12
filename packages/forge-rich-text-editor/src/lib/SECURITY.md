@@ -341,10 +341,12 @@ Referrer-Policy: strict-origin-when-cross-origin
 // Input is sanitized, but prefer trusted sources
 editor.content = userInput; // Sanitized automatically
 
-// For untrusted JSON, validate structure first
-if (isValidEditorJSON(untrustedJSON)) {
-  editor.content = untrustedJSON;
-}
+// A ProseMirror document may also be assigned; it is sanitized by sanitizeJSON
+editor.content = trustedDocument;
+
+// Untrusted content MUST be validated server-side before it reaches the editor.
+// Client-side sanitization is defense-in-depth, not a trust boundary: an attacker
+// controls their own browser and can bypass it entirely.
 ```
 
 **Protections:**

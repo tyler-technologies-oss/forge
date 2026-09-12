@@ -1,4 +1,5 @@
-import { type AnyExtension, DocumentType, Editor as TipTapEditor, NodeType, TextType } from '@tiptap/core';
+import { type AnyExtension, Editor as TipTapEditor } from '@tiptap/core';
+import type { RichTextDocument } from './editor-context.js';
 import { Document } from '@tiptap/extension-document';
 import { Paragraph } from '@tiptap/extension-paragraph';
 import { Text } from '@tiptap/extension-text';
@@ -27,14 +28,7 @@ import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
  * This format is produced by the editor's `toJSON()` method and can be consumed
  * by this renderer component for read-only display.
  */
-export type RichTextRendererContent = DocumentType<
-  // Document attributes (TipTap internal format - schema-dependent)
-
-  Record<string, any> | undefined,
-  // Node types array (TipTap internal format - extension-dependent)
-
-  NodeType<string, undefined | Record<string, any>, any, (NodeType | TextType)[]>[]
->;
+export type RichTextRendererContent = RichTextDocument;
 
 declare global {
   interface HTMLElementTagNameMap {

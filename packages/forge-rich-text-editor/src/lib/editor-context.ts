@@ -1,6 +1,27 @@
 import { createContext } from '@lit/context';
 import { Editor } from '@tiptap/core';
+import type { DocumentType, NodeType, TextType } from '@tiptap/core';
 import { IRichTextEditorFeature } from './features/rich-text-editor-feature.js';
+
+/**
+ * Rich text content in TipTap's ProseMirror JSON format - the same shape the editor's `change`
+ * event emits and `toJSON()` returns.
+ */
+export type RichTextDocument = DocumentType<
+  // Document attributes (TipTap internal format - schema-dependent)
+  Record<string, any> | undefined,
+  // Node types array (TipTap internal format - extension-dependent)
+  NodeType<string, undefined | Record<string, any>, any, (NodeType | TextType)[]>[]
+>;
+
+/**
+ * Content accepted by the editor: either an HTML string or a ProseMirror document.
+ *
+ * Both are sanitized before reaching TipTap - HTML through `sanitizeHTML`, documents through
+ * `sanitizeJSON`. Note that the matching `content` ATTRIBUTE is necessarily HTML-only, since an
+ * attribute cannot carry an object; pass a document through the property instead.
+ */
+export type RichTextEditorContent = string | RichTextDocument;
 
 /**
  * Detail object for the 'change' event.

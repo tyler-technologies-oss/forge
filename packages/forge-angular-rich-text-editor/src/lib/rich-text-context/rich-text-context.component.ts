@@ -27,7 +27,7 @@ export class RichTextContextComponent {
     return this.nativeElement.editorId;
   }
 
-  /** The HTML content of the editor. */
+  /** The content of the editor, as an HTML string or a ProseMirror document. Both are sanitized. */
   @Input()
   public set content(value: RichTextContextComponentCustomElement['content']) {
     this.zone.runOutsideAngular(() => {
