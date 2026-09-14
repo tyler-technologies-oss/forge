@@ -1,15 +1,83 @@
 <div class="vert">
-  <div>
-    <forge-button variant="raised">Shortcut target</forge-button>
-    <forge-keyboard-shortcut id="button-shortcut"></forge-keyboard-shortcut>
-  </div>
+  <h3>Basic shortcuts</h3>
+  <div style="display: flex; gap: 16px; align-items: center;">
+    <forge-button id="basic-btn" variant="raised">Button target</forge-button>
+    <forge-keyboard-shortcut id="button-shortcut" anchor="basic-btn"></forge-keyboard-shortcut>
 
-  <div>
     <forge-text-field>
-      <label for="keyboard-shortcut-text-field">Shortcut target</label>
+      <label for="keyboard-shortcut-text-field">Text field target</label>
       <input type="text" id="keyboard-shortcut-text-field" />
     </forge-text-field>
-    <forge-keyboard-shortcut id="text-field-shortcut"></forge-keyboard-shortcut>
+    <forge-keyboard-shortcut id="text-field-shortcut" anchor="keyboard-shortcut-text-field"></forge-keyboard-shortcut>
+  </div>
+
+  <h3>Scoped editors</h3>
+  <p>Both editors bind <kbd>Ctrl+B</kbd> / <kbd>Cmd+B</kbd>. Only the focused editor responds.</p>
+  <div style="display: flex; gap: 16px;">
+    <div id="scope-editor-1" forge-keyboard-shortcut-scope="editor-1" tabindex="-1" style="border: 1px solid #ccc; padding: 16px; flex: 1; position: relative;">
+      <forge-focus-indicator allow-focus></forge-focus-indicator>
+      <p>Editor 1</p>
+      <forge-button id="bold-1" variant="outlined">Bold</forge-button>
+      <forge-keyboard-shortcut id="scope-shortcut-1" key="mod+b" anchor="bold-1"></forge-keyboard-shortcut>
+    </div>
+    <div id="scope-editor-2" forge-keyboard-shortcut-scope="editor-2" tabindex="-1" style="border: 1px solid #ccc; padding: 16px; flex: 1; position: relative;">
+      <forge-focus-indicator allow-focus></forge-focus-indicator>
+      <p>Editor 2</p>
+      <forge-button id="bold-2" variant="outlined">Bold</forge-button>
+      <forge-keyboard-shortcut id="scope-shortcut-2" key="mod+b" anchor="bold-2"></forge-keyboard-shortcut>
+    </div>
+  </div>
+
+  <h3>Disabled anchor</h3>
+  <p>The shortcut still fires when the anchor is disabled. The handler decides what to do.</p>
+  <div forge-keyboard-shortcut-scope style="border: 1px solid #ccc; padding: 16px; position: relative;" tabindex="-1">
+    <forge-focus-indicator allow-focus></forge-focus-indicator>
+    <forge-button id="disabled-btn" variant="outlined" disabled>Disabled button</forge-button>
+    <forge-keyboard-shortcut id="disabled-shortcut" key="d" anchor="disabled-btn"></forge-keyboard-shortcut>
+    <span style="margin-left: 8px;">Press <kbd>D</kbd> — nothing fires, but the key is consumed.</span>
+  </div>
+
+  <h3>Key sequences</h3>
+  <p>Multi-step shortcuts using <code>&gt;</code>. Press the first chord, then the second within 1 second.</p>
+  <div forge-keyboard-shortcut-scope tabindex="-1" style="border: 1px solid #ccc; padding: 16px; position: relative;">
+    <forge-focus-indicator allow-focus></forge-focus-indicator>
+    <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+      <forge-button id="seq-comment" variant="outlined">Comment</forge-button>
+      <forge-keyboard-shortcut id="seq-comment-shortcut" key="Control+k>Control+c" anchor="seq-comment"></forge-keyboard-shortcut>
+      <span><kbd>Ctrl+K</kbd> then <kbd>Ctrl+C</kbd></span>
+
+      <forge-button id="seq-uncomment" variant="outlined">Uncomment</forge-button>
+      <forge-keyboard-shortcut id="seq-uncomment-shortcut" key="Control+k>Control+u" anchor="seq-uncomment"></forge-keyboard-shortcut>
+      <span><kbd>Ctrl+K</kbd> then <kbd>Ctrl+U</kbd></span>
+    </div>
+  </div>
+
+  <h3>Sequence with standalone conflict</h3>
+  <p>
+    <kbd>Ctrl+K</kbd> is both a standalone shortcut and the start of a sequence. The standalone is deferred
+    until the sequence resolves or times out.
+  </p>
+  <div forge-keyboard-shortcut-scope tabindex="-1" style="border: 1px solid #ccc; padding: 16px; position: relative;">
+    <forge-focus-indicator allow-focus></forge-focus-indicator>
+    <forge-button id="conflict-standalone" variant="outlined">Standalone Ctrl+K</forge-button>
+    <forge-keyboard-shortcut id="conflict-standalone-shortcut" key="Control+k" anchor="conflict-standalone"></forge-keyboard-shortcut>
+
+    <forge-button id="conflict-sequence" variant="outlined" style="margin-left: 16px;">Sequence Ctrl+K > Ctrl+C</forge-button>
+    <forge-keyboard-shortcut id="conflict-sequence-shortcut" key="Control+k>Control+c" anchor="conflict-sequence"></forge-keyboard-shortcut>
+  </div>
+
+  <h3>Fallthrough</h3>
+  <p>Inner scope has <code>fallthrough</code> enabled, so both inner and outer fire on the same key.</p>
+  <div id="outer-scope" forge-keyboard-shortcut-scope tabindex="-1" style="border: 1px solid #ccc; padding: 16px; position: relative;">
+    <forge-focus-indicator allow-focus></forge-focus-indicator>
+    <span id="outer-label">Outer scope</span>
+    <forge-keyboard-shortcut id="outer-shortcut" key="f" anchor="outer-label"></forge-keyboard-shortcut>
+    <div id="inner-scope" forge-keyboard-shortcut-scope tabindex="-1" style="border: 1px solid #999; padding: 16px; margin-top: 8px; position: relative;">
+      <forge-focus-indicator allow-focus></forge-focus-indicator>
+      <span id="inner-label">Inner scope (fallthrough)</span>
+      <forge-keyboard-shortcut id="inner-shortcut" key="f" anchor="inner-label" fallthrough></forge-keyboard-shortcut>
+      <span style="margin-left: 8px;">Press <kbd>F</kbd> here — both scopes fire.</span>
+    </div>
   </div>
 </div>
 
