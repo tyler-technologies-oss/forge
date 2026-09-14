@@ -12,7 +12,9 @@ import { FocusGroupController } from '../core/utils/focus-group.js';
 import { FormRestoreReason, FormRestoreState } from '../core/utils/form-utils.js';
 import { KeyActionController } from '../core/utils/key-action.js';
 import { toggleState } from '../core/utils/utils.js';
+import '../option/option-group/index.js';
 import type { OptionGroupComponent } from '../option/option-group/index.js';
+import '../option/option/index.js';
 import type { OptionComponent, OptionUpdateReason } from '../option/option/index.js';
 
 import styles from './listbox.scss';
