@@ -15,6 +15,7 @@
     "forge-icon-button": ["forge-icon"],
     "forge-key": ["forge-key-item"],
     "forge-list": ["forge-list-item"],
+    "forge-listbox": ["forge-option"],
     "forge-meter-group": ["forge-meter"],
     "forge-radio-group": ["forge-radio"],
     "forge-select": ["forge-option"],
