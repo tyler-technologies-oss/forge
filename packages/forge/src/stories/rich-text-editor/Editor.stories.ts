@@ -210,7 +210,7 @@ export const PrePopulatedContent: Story = {
     docs: {
       description: {
         story:
-          'The editor accepts pre-populated content through the `content` property, as either an HTML string or a ProseMirror document. Formatting that no slotted feature supports is dropped, and attributes held in `class` or `data-*` are stripped by the sanitizer.'
+          'The editor accepts pre-populated content through the `content` property, as either an HTML string or a ProseMirror document. Alignment arrives as a `text-align` style declaration, which the sanitizer keeps; formatting that no slotted feature supports is dropped, and attributes held in `class` or `data-*` are stripped.'
       }
     }
   }
