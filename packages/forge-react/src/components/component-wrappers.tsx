@@ -49,6 +49,7 @@ export const ForgeLabel = createElementProxy('forge-label');
 export const ForgeLabelValue = createElementProxy('forge-label-value');
 export const ForgeLinearProgress = createElementProxy('forge-linear-progress');
 export const ForgeList = createElementProxy('forge-list');
+export const ForgeListbox = createElementProxy('forge-listbox');
 export const ForgeListItem = createElementProxy('forge-list-item');
 export const ForgeMenu = createElementProxy('forge-menu');
 export const ForgeMeter = createElementProxy('forge-meter');
