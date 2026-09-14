@@ -1,0 +1,19 @@
+@use './token-utils' as *;
+@use '../divider';
+
+@mixin host {
+  display: block;
+  outline: none;
+}
+
+@mixin base {
+  @include divider.provide-theme(
+    (
+      margin: #{token(divider-margin)}
+    )
+  );
+
+  ::slotted(forge-option-group:not(:last-child)) {
+    margin-block-end: #{token(group-margin)};
+  }
+}

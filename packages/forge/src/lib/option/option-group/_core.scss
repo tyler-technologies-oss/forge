@@ -1,0 +1,15 @@
+@use '../../core/styles/typography';
+@use './token-utils' as *;
+
+@mixin base {
+  position: relative;
+}
+
+@mixin label {
+  @include typography.style(overline);
+
+  padding-inline: #{token(label-padding-inline)};
+  padding-block-start: #{token(label-padding-block-start)};
+  padding-block-end: #{token(label-padding-block-end)};
+  color: #{token(label-color)};
+}

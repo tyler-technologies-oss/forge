@@ -459,7 +459,12 @@ describe('BaseFocusGroup', () => {
       const btn1 = container.querySelector('#btn1') as HTMLButtonElement;
       btn1.focus();
 
-      expect(onFocusChange).toHaveBeenCalledWith(expect.any(FocusEvent), btn1);
+      expect(onFocusChange).toHaveBeenCalledWith({
+        event: expect.any(FocusEvent),
+        newElement: btn1,
+        oldElement: undefined,
+        focusVisible: true
+      });
     });
   });
 
@@ -557,6 +562,37 @@ describe('BaseFocusGroup', () => {
       btn2.focus();
       expect(btn1.tabIndex).toBe(-1);
       expect(btn2.tabIndex).toBe(0);
+    });
+  });
+
+  describe('active descendant mode', () => {
+    it('should generate unique ids across multiple focus group instances with the same selector', () => {
+      const containerA = document.createElement('div');
+      containerA.innerHTML = `<button>A1</button><button>A2</button>`;
+      document.body.appendChild(containerA);
+      const focusGroupA = new BaseFocusGroup(containerA, { selector: 'button', useActiveDescendant: true });
+      focusGroupA.connect();
+
+      const containerB = document.createElement('div');
+      containerB.innerHTML = `<button>B1</button><button>B2</button>`;
+      document.body.appendChild(containerB);
+      const focusGroupB = new BaseFocusGroup(containerB, { selector: 'button', useActiveDescendant: true });
+      focusGroupB.connect();
+
+      const aButtons = Array.from(containerA.querySelectorAll('button'));
+      const bButtons = Array.from(containerB.querySelectorAll('button'));
+
+      focusGroupA.currentElement = aButtons[0];
+      focusGroupB.currentElement = bButtons[0];
+
+      expect(aButtons[0].id).not.toBe('');
+      expect(bButtons[0].id).not.toBe('');
+      expect(aButtons[0].id).not.toBe(bButtons[0].id);
+
+      focusGroupA.disconnect();
+      focusGroupB.disconnect();
+      document.body.removeChild(containerA);
+      document.body.removeChild(containerB);
     });
   });
 });
