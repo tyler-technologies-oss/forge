@@ -1,0 +1,20 @@
+import{u as o,j as t,M as n,T as p,C as s}from"./blocks-BZgKBsRu.js";import{C as m}from"./CustomArgTypes-BDnjSdPK.js";import{S as a,D as c}from"./search.stories-C1-cHDyx.js";import"./preload-helper-PPVm8Dsz.js";import"./_commonjsHelpers-CqkleIqs.js";import"./iframe-DucEJqMh.js";import"./utils-DgK06r1C.js";import"./service-adapter-8tADcN_b.js";import"./app-bar-profile-button-fX9ZjDv7.js";import"./class-map-ZUHeUCXU.js";import"./directive-CwRn8Fwj.js";import"./base-lit-element-DBlSe9lS.js";import"./a11y-utils-BgIwxT0N.js";import"./dom-utils-QqrulHvL.js";import"./utils-C1mY2kke.js";import"./feature-detection-DY5_mT0R.js";import"./constants-B0fflZN8.js";import"./base-component-BoZ3BOE8.js";import"./base-adapter-CKKMXnbe.js";import"./tyler-icons-gd947w-D.js";import"./focus-indicator-DXw8Y8hB.js";import"./utils-DU-9AqTO.js";import"./icon-button-7uqnM-R4.js";import"./base-button-core-CDzrnVSk.js";import"./with-label-aware-DLI3ucZG.js";import"./with-default-aria-D2hTdL-5.js";import"./state-layer-e2HqliqN.js";import"./icon-button-constants-DoLISkFF.js";import"./tooltip-CFImliAj.js";import"./overlay-B2h4Qxq4.js";import"./key-action-lsAysfb-.js";import"./index-5CPwzmQS.js";import"./with-longpress-listener-CFdqYAal.js";import"./dismissible-stack-xq-0Rg1q.js";import"./badge-HX1u50aU.js";import"./menu-DvJrPMIi.js";import"./list-BpgKZh9Q.js";import"./event-utils-zQ4FLDwK.js";import"./list-dropdown-aware-core-DeopaRw8.js";import"./list-dropdown-B4qDBOji.js";import"./event-utils-C1SDeUaq.js";import"./linear-progress-LQTwNhb5.js";import"./popover-CSRiiy_0.js";import"./skeleton-BqxN4Nno.js";import"./a11y-BxM9_46k.js";import"./base-component-delegate-BBe8lQ4x.js";import"./avatar-_tf5MHLL.js";import"./state-B_b57VKB.js";import"./style-map-DQNfgzcs.js";import"./avatar-constants-CodebxnW.js";import"./button-DjdHdyPs.js";import"./button-constants-BSJHK5Y_.js";import"./toolbar-Jn4M9HQj.js";function e(r){const i={code:"code",h2:"h2",li:"li",p:"p",pre:"pre",ul:"ul",...o(),...r.components};return t.jsxs(t.Fragment,{children:[t.jsx(n,{of:a}),`
+`,t.jsx(p,{}),`
+`,t.jsxs(i.p,{children:["The app-bar search component is essentially just a strictly-styled ",t.jsx(i.code,{children:"<input>"})," element that fits in with the app-bar ecosystem. It provides some additional functionality through its public API, but at the very least it gives a common component to use for a familiar search experience for users."]}),`
+`,t.jsx(i.h2,{id:"default",children:"Default"}),`
+`,t.jsx(s,{of:c}),`
+`,t.jsx(i.h2,{id:"api",children:"API"}),`
+`,t.jsx(m,{}),`
+`,t.jsx(i.h2,{id:"accessibility",children:"Accessibility"}),`
+`,t.jsxs(i.ul,{children:[`
+`,t.jsxs(i.li,{children:["Ensure that you provide a placeholder attribute for the ",t.jsx(i.code,{children:"<input>"})," element to help give users an idea of what to enter."]}),`
+`,t.jsxs(i.li,{children:["Ensure that you add an aria-label or aria-labelledby attribute to the ",t.jsx(i.code,{children:"<input>"}),"."]}),`
+`,t.jsx(i.li,{children:"If using a custom theme, make sure proper color contrast ratios are met and adjust using CSS custom properties if not."}),`
+`]}),`
+`,t.jsx(i.h2,{id:"types",children:"Types"}),`
+`,t.jsx(i.pre,{children:t.jsx(i.code,{className:"language-typescript",children:`interface IAppBarSearchEventData {
+  value: string;
+  combined: boolean;
+  context: string;
+}
+`})})]})}function ct(r={}){const{wrapper:i}={...o(),...r.components};return i?t.jsx(i,{...r,children:t.jsx(e,{...r})}):e(r)}export{ct as default};
