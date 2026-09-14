@@ -15,6 +15,71 @@ export const DANGEROUS_PROTOCOLS = ['javascript:', 'data:', 'vbscript:', 'file:'
  */
 const MAX_HTML_SIZE = 1_000_000; // 1MB limit
 
+/**
+ * Color values accepted in an allow-listed declaration: hex, `rgb()`/`rgba()`, `hsl()`/`hsla()`,
+ * or a bare keyword such as `red`, `transparent` or `currentcolor`. Anything else - notably
+ * `url(...)` - fails to match and is dropped.
+ */
+const CSS_COLOR_VALUE = /^(#[0-9a-f]{3,8}|rgba?\([\d\s.,%/]+\)|hsla?\([\d\s.,%/a-z]+\)|[a-z]+)$/;
+
+/**
+ * CSS declarations preserved on incoming HTML, each with the value pattern it must match.
+ *
+ * Most of the editor's formatting rides on element names - `Bold` parses `<strong>`/`<b>` as well
+ * as `style`, so it survives a stripped `style` attribute. `TextAlign` declares NO tag selector:
+ * `element.style.textAlign` is its only carrier. Removing `style` wholesale therefore discarded
+ * alignment from every HTML source, including the editor's own `getHTML()` output fed back through
+ * `content` - a silent round trip data loss rather than a paste-only quirk.
+ *
+ * Values are pattern-matched rather than passed through, so `style` cannot carry `url()`,
+ * `expression()` or a dangerous protocol. Extensions whose attributes live in `style` need an
+ * entry here to survive: `color` and `background-color` are listed ahead of a text-color feature
+ * so it works on arrival, and `font-family`, `font-size` or `line-height` would each be one more
+ * line. Attributes kept in `class` or `data-*` (a code block's `language-*`, a task item's
+ * `data-checked`) are still stripped and will need the same treatment when those features land.
+ */
+const ALLOWED_STYLE_PROPERTIES: Record<string, RegExp> = {
+  'text-align': /^(left|right|center|justify)$/,
+  color: CSS_COLOR_VALUE,
+  'background-color': CSS_COLOR_VALUE
+};
+
+/**
+ * Rewrites an element's `style` attribute to only the allow-listed declarations whose values match
+ * their pattern, removing the attribute entirely when nothing survives.
+ */
+function filterStyleAttribute(el: Element): void {
+  const style = el.getAttribute('style');
+  if (!style) {
+    return;
+  }
+
+  const kept = style
+    .split(';')
+    .map(declaration => {
+      const separator = declaration.indexOf(':');
+      if (separator === -1) {
+        return undefined;
+      }
+
+      const property = declaration.slice(0, separator).trim().toLowerCase();
+      const value = declaration
+        .slice(separator + 1)
+        .trim()
+        .toLowerCase();
+      const pattern = ALLOWED_STYLE_PROPERTIES[property];
+
+      return pattern?.test(value) ? `${property}: ${value}` : undefined;
+    })
+    .filter((declaration): declaration is string => declaration !== undefined);
+
+  if (kept.length) {
+    el.setAttribute('style', kept.join('; '));
+  } else {
+    el.removeAttribute('style');
+  }
+}
+
 export function sanitizeHTML(html: string, allowImages = false): string {
   if (html.length > MAX_HTML_SIZE) {
     const sizeMB = (html.length / 1024 / 1024).toFixed(2);
@@ -58,7 +123,7 @@ export function sanitizeHTML(html: string, allowImages = false): string {
         el.removeAttribute(attr.name);
       }
     });
-    el.removeAttribute('style');
+    filterStyleAttribute(el);
     el.removeAttribute('class');
     el.removeAttribute('id');
     el.removeAttribute('contenteditable');
