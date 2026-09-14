@@ -85,3 +85,7 @@ slot[name='tertiary'] {
     @include core.dense-three-line;
   }
 }
+
+:host([data-dragging]) :is(forge-state-layer, forge-focus-indicator) {
+  display: none;
+}

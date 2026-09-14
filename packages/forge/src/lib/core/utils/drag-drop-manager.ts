@@ -79,6 +79,7 @@ export class DragDropManager {
    */
   public setItem(item: HTMLElement | null): void {
     this.#item = item;
+    this.#item?.setAttribute('data-dragging', '');
   }
 
   /**
@@ -113,6 +114,7 @@ export class DragDropManager {
    */
   public endOperation(event?: DragEvent): void {
     this.#notifySubscribers('end', event);
+    this.#item?.removeAttribute('data-dragging');
     this.#item = null;
     this.#source = null;
     this.#target = null;

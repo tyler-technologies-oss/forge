@@ -229,10 +229,11 @@ export class DragController implements ReactiveController {
   }
 
   #getDefaultDragImage(event: DragEvent, dragItem: HTMLElement): DragImageConfig {
+    const rect = dragItem.getBoundingClientRect();
     return {
       image: dragItem,
-      x: event.offsetX,
-      y: event.offsetY
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top
     };
   }
 
