@@ -80,14 +80,38 @@ describe('Rich Text Editor - State Visual Indicators', () => {
       );
 
       await el.updateComplete;
+      await new Promise(resolve => setTimeout(resolve, 100));
       const root = el.shadowRoot as ShadowRoot;
       const editorWrapper = root.querySelector('.forge-rich-text-editor') as HTMLElement;
+      const wrapperStyle = getComputedStyle(editorWrapper);
 
-      expect(el.hasAttribute('disabled')).toBe(true);
-      expect(editorWrapper).toBeTruthy();
-
-      // Verify the component has disabled attribute which triggers :host([disabled]) styles
       expect(el.disabled).toBe(true);
+      // Asserting the computed values rather than the attribute: these rules referenced
+      // `--forge-theme-disabled-opacity`, which forge does not define, so the declaration was
+      // invalid and the editor rendered at full opacity while still reporting itself disabled.
+      expect(Number(wrapperStyle.opacity)).toBeLessThan(1);
+      expect(wrapperStyle.pointerEvents).toBe('none');
+      expect(wrapperStyle.userSelect).toBe('none');
+    });
+
+    it('should dim the content area and mirror the state onto it', async () => {
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor disabled>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
+
+      await waitForEditor(el);
+      const content = el.shadowRoot!.querySelector('forge-rich-text-content')!;
+      const wrapper = content.shadowRoot!.querySelector('.editor-content-wrapper') as HTMLElement;
+
+      // The content element takes its state from the editor context, so it has to mirror it onto
+      // the host for its own `:host([disabled])` rule to match - without that the rule was dead.
+      expect(content.hasAttribute('disabled')).toBe(true);
+      expect(Number(getComputedStyle(wrapper).opacity)).toBeLessThan(1);
     });
 
     it('should disable all toolbar buttons when editor is disabled', async () => {
@@ -138,9 +162,35 @@ describe('Rich Text Editor - State Visual Indicators', () => {
 
       await el.updateComplete;
       await new Promise(resolve => setTimeout(resolve, 100));
+      const toolbar = el.shadowRoot!.querySelector('.editor-toolbar') as HTMLElement;
+      const editorWrapper = el.shadowRoot!.querySelector('.forge-rich-text-editor') as HTMLElement;
 
-      expect(el.hasAttribute('readonly')).toBe(true);
       expect(el.readOnly).toBe(true);
+      // Readonly dims the toolbar only. The content stays at full opacity and selectable, which is
+      // the one behavioural difference from disabled.
+      expect(Number(getComputedStyle(toolbar).opacity)).toBeLessThan(1);
+      expect(Number(getComputedStyle(editorWrapper).opacity)).toBe(1);
+      expect(getComputedStyle(editorWrapper).userSelect).not.toBe('none');
+    });
+
+    it('should leave the content selectable and mirror the state onto it', async () => {
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor readonly>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
+
+      await waitForEditor(el);
+      const content = el.shadowRoot!.querySelector('forge-rich-text-content')!;
+      const wrapper = content.shadowRoot!.querySelector('.editor-content-wrapper') as HTMLElement;
+      const prosemirror = content.shadowRoot!.querySelector('.tiptap') as HTMLElement;
+
+      expect(content.hasAttribute('readonly')).toBe(true);
+      expect(Number(getComputedStyle(wrapper).opacity)).toBe(1);
+      expect(getComputedStyle(prosemirror).cursor).toBe('default');
     });
 
     it('should disable all toolbar buttons when editor is readonly', async () => {
