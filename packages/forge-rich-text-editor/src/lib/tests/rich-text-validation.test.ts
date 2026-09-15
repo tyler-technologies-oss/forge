@@ -404,26 +404,55 @@ describe('RTE Content Validation', () => {
       expect(validationFired).toBe(false);
     });
 
-    it.skip('should fire validation event when content becomes valid again after overflow', async () => {
-      // Skipped because the overflow state is currently unreachable in tests.
-      // CharacterCount.configure({ limit }) blocks all transactions that would exceed the limit —
-      // including setContent — so there is no code path that can put the editor into an over-limit
-      // state. The validation event and error UI exist in the implementation but are unreachable
-      // until a deliberate decision is made about whether overflow should be possible (e.g. via
-      // a programmatic API for pre-loading out-of-bounds content, or a future read-only display
-      // of content that was created with a different limit).
+    it('should fire validation event when content becomes valid again after overflow', async () => {
+      // Overflow is reachable through the `content` property: the limit refuses transactions that
+      // grow the count past it, but content assigned over the limit loads and reports invalid
+      // rather than being silently trimmed.
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor .maxLength=${10} .content=${'<p>0123456789ABCDEFGHIJ</p>'}>
+          <forge-rte-bold></forge-rte-bold>
+        </forge-rich-text-editor>`,
+        'forge-rich-text-editor'
+      );
+      const context = await waitForEditor(el);
+
+      const states: boolean[] = [];
+      el.addEventListener('validation', evt => states.push((evt as CustomEvent).detail.isValid));
+
+      context.editorContext.editor?.commands.setContent('<p>short</p>');
+      await waitForEditor(el);
+
+      expect(states.at(-1)).toBe(true);
     });
   });
 
   describe('Error State Accessibility', () => {
-    it.skip('should have role="alert" on error message when content overflows', async () => {
-      // Skipped — same constraint as the validation event test above.
-      // The error UI renders conditionally on !_isValid, but that state is unreachable because
-      // CharacterCount.configure({ limit }) blocks all over-limit transactions at the TipTap layer.
+    it('should have role="alert" on error message when content overflows', async () => {
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor .maxLength=${10} .content=${'<p>0123456789ABCDEFGHIJ</p>'}>
+          <forge-rte-bold></forge-rte-bold>
+        </forge-rich-text-editor>`,
+        'forge-rich-text-editor'
+      );
+      const context = await waitForEditor(el);
+      const error = context.shadowRoot!.querySelector('.editor-error');
+
+      expect(error).toBeTruthy();
+      expect(error!.getAttribute('role')).toBe('alert');
     });
 
-    it.skip('should have aria-live on error message when content overflows', async () => {
-      // Skipped — same constraint as above.
+    it('should have aria-live on error message when content overflows', async () => {
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor .maxLength=${10} .content=${'<p>0123456789ABCDEFGHIJ</p>'}>
+          <forge-rte-bold></forge-rte-bold>
+        </forge-rich-text-editor>`,
+        'forge-rich-text-editor'
+      );
+      const context = await waitForEditor(el);
+      const error = context.shadowRoot!.querySelector('.editor-error');
+
+      expect(error).toBeTruthy();
+      expect(error!.getAttribute('aria-live')).toBe('polite');
     });
 
     it('should have aria-live on character count', async () => {
