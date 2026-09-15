@@ -136,6 +136,16 @@ export class RichTextRendererComponent extends LitElement {
           element: this._contentElement,
           extensions: DEFAULT_EXTENSIONS,
           editable: false,
+          // ProseMirror marks its element `role="textbox"` even when it is not editable, which left
+          // the renderer advertising an unnamed text input - axe reports it as
+          // aria-input-field-name. This is display surface, not a form field, and the host already
+          // carries `role="article"`, so the inner element should carry no role of its own. Its
+          // children keep their own semantics.
+          editorProps: {
+            attributes: {
+              role: 'presentation'
+            }
+          },
 
           content: initialContent as any
         });

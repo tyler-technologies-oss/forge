@@ -451,6 +451,15 @@ export class RichTextContextComponent extends LitElement {
         element: this.#editorElement,
         extensions,
         content: initialContent,
+        // TipTap builds its own contenteditable element inside the one it is handed, and that inner
+        // element is the real textbox - focusable, and what assistive technology lands on. Naming
+        // only the container left it unnamed, which axe reports as aria-input-field-name.
+        editorProps: {
+          attributes: {
+            'aria-label': 'Rich text editor content',
+            'aria-multiline': 'true'
+          }
+        },
         editable: !(this.editorContext.disabled || this.editorContext.readOnly),
         injectCSS: false,
         onTransaction: () => {

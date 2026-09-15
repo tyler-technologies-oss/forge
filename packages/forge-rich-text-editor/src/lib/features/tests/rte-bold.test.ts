@@ -253,11 +253,13 @@ describe('RTE Bold - ARIA attributes', () => {
     expect(button.getAttribute('aria-keyshortcuts')).toBe('Control+B');
   });
 
-  it('should have aria-controls pointing to content area', async () => {
+  it('should not reference the content area across a shadow boundary', async () => {
     const harness = await createFixture();
     const button = harness.button();
 
-    expect(button.getAttribute('aria-controls')).toBe('forge-rte-content');
+    // This asserted aria-controls="forge-rte-content". That id lives in another shadow root, and an
+    // IDREF cannot cross a shadow boundary, so the reference was invalid rather than helpful.
+    expect(button.hasAttribute('aria-controls')).toBe(false);
   });
 });
 
