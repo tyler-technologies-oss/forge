@@ -242,6 +242,13 @@ export class RichTextContextComponent extends LitElement {
       }
     }
 
+    // Enforcement reads maxLength through a resolver, so a change takes effect without recreating
+    // the editor. Validation still has to be re-run, or the error state lags a commit behind.
+    if (this.hasUpdated && changedProperties.has('maxLength')) {
+      this._characterCount = this._editor ? countCharacters(this._editor.state.doc) : 0;
+      this.#validateContent();
+    }
+
     if (changedProperties.has('disabled') || changedProperties.has('readOnly')) {
       try {
         this.editorContext.editor?.setEditable(!this.disabled && !this.readOnly);
@@ -421,7 +428,7 @@ export class RichTextContextComponent extends LitElement {
       // instead, because CharacterCount's own counter joins blocks with nothing and so never sees
       // a paragraph break - a document at the limit could still grow through Enter.
       const characterCountExtension = CharacterCount.configure({});
-      const characterLimitExtension = CharacterLimit.configure({ limit: this.maxLength });
+      const characterLimitExtension = CharacterLimit.configure({ getLimit: () => this.maxLength });
 
       // Add PasteHandler extension
       const pasteHandlerExtension = PasteHandler.configure({

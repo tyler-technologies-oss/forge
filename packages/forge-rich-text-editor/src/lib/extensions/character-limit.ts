@@ -17,8 +17,15 @@ export function countCharacters(doc: ProseMirrorNode): number {
 }
 
 export interface CharacterLimitOptions {
-  /** The maximum number of characters allowed. Values of 0 or less disable the limit. */
-  limit: number;
+  /**
+   * Resolves the maximum number of characters allowed. Values of 0 or less disable the limit.
+   *
+   * A resolver rather than a number because extensions are configured once, when the editor is
+   * created, while `maxLength` is a property that can change at any point afterwards. Capturing the
+   * value meant a limit raised or lowered later was never enforced - the counter and validation read
+   * the new value while the editor still filtered against the old one.
+   */
+  getLimit: () => number;
 }
 
 /**
@@ -31,16 +38,17 @@ export const CharacterLimit = Extension.create<CharacterLimitOptions>({
   name: 'rteCharacterLimit',
 
   addOptions() {
-    return { limit: 0 };
+    return { getLimit: () => 0 };
   },
 
   addProseMirrorPlugins() {
-    const { limit } = this.options;
+    const { getLimit } = this.options;
 
     return [
       new Plugin({
         key: new PluginKey('rteCharacterLimit'),
         filterTransaction: (transaction, state) => {
+          const limit = getLimit();
           if (!transaction.docChanged || limit <= 0) {
             return true;
           }
