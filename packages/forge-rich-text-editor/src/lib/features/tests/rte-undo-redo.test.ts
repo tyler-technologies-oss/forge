@@ -260,23 +260,33 @@ describe('RTE Undo Redo Feature', () => {
     expect(afterRedo).toBe(withContent);
   });
 
-  it('should not enable undo button when editor is disabled', async () => {
+  it('should disable both buttons when the editor is disabled', async () => {
     const harness = await createFixture({ disabled: true });
 
-    // When editor is disabled, buttons use disabled logic from isEditable()
-    // The component has: disabled = isEditable() && !can().undo()
-    // When disabled, isEditable() is false, so disabled attribute is false
-    // This may be a bug in the component, but testing actual behavior
-    expect(harness.undoButton().hasAttribute('disabled')).toBe(false);
-    expect(harness.redoButton().hasAttribute('disabled')).toBe(false);
+    expect(harness.undoButton().hasAttribute('disabled')).toBe(true);
+    expect(harness.redoButton().hasAttribute('disabled')).toBe(true);
   });
 
-  it('should not enable undo button when editor is readonly', async () => {
+  it('should disable both buttons when the editor is readonly', async () => {
     const harness = await createFixture({ readonly: true });
 
-    // When editor is readonly, same logic as disabled
+    expect(harness.undoButton().hasAttribute('disabled')).toBe(true);
+    expect(harness.redoButton().hasAttribute('disabled')).toBe(true);
+  });
+
+  it('should keep both buttons disabled on a disabled editor that has history', async () => {
+    const harness = await createFixture();
+    const editor = await harness.getEditor();
+
+    editor.commands.setContent('<p>new content</p>');
+    await harness.waitForUpdate();
     expect(harness.undoButton().hasAttribute('disabled')).toBe(false);
-    expect(harness.redoButton().hasAttribute('disabled')).toBe(false);
+
+    harness.el.disabled = true;
+    await harness.waitForUpdate();
+
+    expect(harness.undoButton().hasAttribute('disabled')).toBe(true);
+    expect(harness.redoButton().hasAttribute('disabled')).toBe(true);
   });
 });
 
