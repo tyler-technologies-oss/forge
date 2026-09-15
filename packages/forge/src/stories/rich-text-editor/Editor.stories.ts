@@ -144,13 +144,13 @@ export const ContentValidation: Story = {
     showCharacterCount: true,
     showWordCount: true,
     errorMessage: 'Content exceeds the maximum length of 500 characters',
-    content: '<p>Start typing to see character and word counts. Try exceeding 500 characters to see validation errors.</p>'
+    content: '<p>Start typing to watch the character and word counts update.</p>'
   },
   parameters: {
     docs: {
       description: {
         story:
-          'The editor supports content validation with character limits, character counts, and word counts. Custom error messages are displayed when validation fails, and the `validation` event is emitted whenever validation state changes.'
+          'The editor supports character limits, character counts and word counts. The limit is a hard input limit: once it is reached, typing, pasting and new paragraphs are all refused, so typing cannot push the editor into an invalid state. A block boundary counts as one character, the way a textarea with `maxlength` counts a newline. Content assigned through `content` is not filtered the same way - it loads intact even when it exceeds the limit and reports itself invalid, which is when `errorMessage` and the `validation` event come into play.'
       }
     }
   }
