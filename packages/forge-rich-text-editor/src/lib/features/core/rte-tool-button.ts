@@ -29,6 +29,9 @@ export const RTE_TOOL_BUTTON_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-
  * handling. This component is not intended to be used directly by consumers - instead use
  * the feature components like forge-rte-bold, forge-rte-italic, etc.
  *
+ * @dependency forge-icon-button
+ * @dependency forge-icon
+ *
  * @property {string} [label='Tool'] - The accessible label for the button.
  * @property {string} [icon] - The icon name from Tyler Icons to display.
  * @property {boolean} [disabled=false] - Whether the button is disabled.

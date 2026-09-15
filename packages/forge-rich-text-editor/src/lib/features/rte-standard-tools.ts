@@ -38,6 +38,17 @@ export const RTE_STANDARD_TOOLS_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-r
  *
  * Each feature can be customized by passing properties to this component, which forwards them
  * to the individual feature components.
+ *
+ * @dependency forge-rte-undo-redo
+ * @dependency forge-rte-heading
+ * @dependency forge-rte-bold
+ * @dependency forge-rte-italic
+ * @dependency forge-rte-underline
+ * @dependency forge-rte-strike
+ * @dependency forge-rte-align
+ * @dependency forge-rte-bullet-list
+ * @dependency forge-rte-ordered-list
+ * @dependency forge-rte-divider
  */
 @customElement(RTE_STANDARD_TOOLS_TAG_NAME)
 export class RteStandardToolsComponent extends LitElement {

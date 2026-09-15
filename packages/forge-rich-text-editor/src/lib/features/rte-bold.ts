@@ -31,6 +31,8 @@ export const RTE_BOLD_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-bold';
  * positioned within bold text. Keyboard shortcut Control+B is supported. The feature
  * announces state changes to screen readers for accessibility.
  *
+ * @dependency forge-rte-tool-button
+ *
  * @property {string} [label='Bold'] - The accessible label for the bold button.
  *
  * @attribute {string} label - The accessible label for the bold button.

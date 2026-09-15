@@ -36,6 +36,11 @@ export const RTE_LINK_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-link';
  * buttons based on context. Links open in new tabs with security attributes (noopener, noreferrer,
  * nofollow). The feature announces state changes to screen readers for accessibility.
  *
+ * @dependency forge-rte-tool-button
+ * @dependency forge-popover
+ * @dependency forge-text-field
+ * @dependency forge-button
+ *
  * @property {string} [label='Link'] - The accessible label for the link button.
  * @property {boolean} [autoProtocol=true] - Whether to automatically add https:// protocol if missing from the URL.
  *
