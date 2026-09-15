@@ -24,6 +24,18 @@ const createEditor = async (limit: number, content = ''): Promise<RichTextContex
   return el.shadowRoot!.querySelector('forge-rich-text-context') as RichTextContextComponent;
 };
 
+/** Keeps the host element too, for the cases that change `maxLength` after creation. */
+const createEditorWithHost = async (limit: number): Promise<{ host: RichTextEditorComponent; context: RichTextContextComponent }> => {
+  const host = await renderFixture<RichTextEditorComponent>(
+    html`<forge-rich-text-editor .maxLength=${limit}>
+      <forge-rte-standard-tools></forge-rte-standard-tools>
+    </forge-rich-text-editor>`,
+    'forge-rich-text-editor'
+  );
+  await new Promise(resolve => setTimeout(resolve, 180));
+  return { host, context: host.shadowRoot!.querySelector('forge-rich-text-context') as RichTextContextComponent };
+};
+
 describe('RichTextEditor character limit', () => {
   it('should refuse a new block once the limit is reached', async () => {
     const context = await createEditor(20);
@@ -88,6 +100,44 @@ describe('RichTextEditor character limit', () => {
     // which silently discarded a consumer's data. It now loads intact and fails validation.
     expect(countCharacters(context.editorContext.editor!.state.doc)).toBe(20);
     expect(context.shadowRoot!.querySelector('.editor-error')).toBeTruthy();
+  });
+
+  it('should enforce a limit set after the editor was created', async () => {
+    // Extensions are configured once, when the editor is created, but maxLength is a property that
+    // can change at any time afterwards - a storybook control and a reactive binding both do it.
+    // Capturing the value left the editor filtering against the limit it started with, so a limit
+    // introduced later went unenforced entirely: neither text nor new blocks were refused.
+    const { host, context } = await createEditorWithHost(0);
+    const editor = context.editorContext.editor!;
+
+    host.maxLength = 20;
+    await host.updateComplete;
+    await new Promise(resolve => setTimeout(resolve, 120));
+
+    editor.commands.setContent('<p>12345678901234567890</p>');
+    await new Promise(resolve => setTimeout(resolve, 60));
+    editor.commands.insertContent('overflow');
+    editor.commands.splitBlock();
+    await new Promise(resolve => setTimeout(resolve, 60));
+
+    expect(countCharacters(editor.state.doc)).toBe(20);
+    expect(editor.state.doc.content.childCount).toBe(1);
+  });
+
+  it('should stop enforcing once the limit is removed', async () => {
+    const { host, context } = await createEditorWithHost(20);
+    const editor = context.editorContext.editor!;
+    editor.commands.setContent('<p>12345678901234567890</p>');
+    await new Promise(resolve => setTimeout(resolve, 60));
+
+    host.maxLength = 0;
+    await host.updateComplete;
+    await new Promise(resolve => setTimeout(resolve, 120));
+
+    editor.commands.insertContent(' and more');
+    await new Promise(resolve => setTimeout(resolve, 60));
+
+    expect(countCharacters(editor.state.doc)).toBeGreaterThan(20);
   });
 
   it('should allow editing over-limit content back down', async () => {
