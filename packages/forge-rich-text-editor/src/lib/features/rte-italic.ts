@@ -31,6 +31,8 @@ export const RTE_ITALIC_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-itali
  * positioned within italic text. Keyboard shortcut Control+I is supported. The feature
  * announces state changes to screen readers for accessibility.
  *
+ * @dependency forge-rte-tool-button
+ *
  * @property {string} [label='Italic'] - The accessible label for the italic button.
  *
  * @attribute {string} label - The accessible label for the italic button.

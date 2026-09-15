@@ -31,6 +31,8 @@ export const RTE_CODE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-code';
  * positioned within code text. This creates monospaced inline code, not code blocks. The feature
  * announces state changes to screen readers for accessibility.
  *
+ * @dependency forge-rte-tool-button
+ *
  * @property {string} [label='Code'] - The accessible label for the code button.
  *
  * @attribute {string} label - The accessible label for the code button.

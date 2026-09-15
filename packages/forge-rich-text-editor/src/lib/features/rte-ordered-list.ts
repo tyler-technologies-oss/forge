@@ -32,6 +32,8 @@ export const RTE_ORDERED_LIST_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte
  * converting items back to paragraphs. The feature announces state changes to screen readers
  * for accessibility.
  *
+ * @dependency forge-rte-tool-button
+ *
  * @property {string} [label='Ordered List'] - The accessible label for the ordered list button.
  *
  * @attribute {string} label - The accessible label for the ordered list button.
