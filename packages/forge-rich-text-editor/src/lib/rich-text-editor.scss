@@ -1,4 +1,5 @@
 @use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
 
 :host {
   display: block;
@@ -49,14 +50,18 @@
 
 :host([disabled]) {
   .forge-rich-text-editor {
-    opacity: var(--forge-theme-disabled-opacity);
+    opacity: var(--forge-rich-text-editor-disabled-opacity, #{forge-theme.emphasis(medium-low)});
     pointer-events: none;
+
+    // `pointer-events: none` stops a selection starting inside the editor but does not prevent one
+    // dragged in from outside, so a disabled editor's text stayed selectable without this.
+    user-select: none;
   }
 }
 
 :host([readonly]) {
   .editor-toolbar {
-    opacity: var(--forge-theme-disabled-opacity);
+    opacity: var(--forge-rich-text-editor-disabled-opacity, #{forge-theme.emphasis(medium-low)});
     pointer-events: none;
   }
 }

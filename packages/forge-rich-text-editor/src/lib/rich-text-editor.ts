@@ -46,6 +46,9 @@ export const RICH_TEXT_EDITOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ric
  * @property {boolean} [allowPasteImages=false] - Whether to allow images to be pasted into the editor.
  *
  * @attribute {string} content - The HTML content of the editor. Pass a ProseMirror document through the property instead; an attribute cannot carry an object.
+ * @cssproperty --forge-rich-text-editor-disabled-opacity - The opacity of the editor when it is
+ * disabled, and of the toolbar when it is readonly.
+ *
  * @attribute {boolean} disabled - Whether the editor is disabled.
  * @attribute {boolean} readonly - Whether the editor is in readonly mode.
  * @attribute {number} max-length - Maximum character length allowed. 0 means no limit.
