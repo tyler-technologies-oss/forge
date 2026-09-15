@@ -89,8 +89,7 @@ export class RteToolButtonComponent extends LitElement {
         @keydown=${this.#handleKeydown}
         ?disabled=${this.disabled}
         aria-label=${this.label}
-        aria-keyshortcuts=${this.keyboardShortcut || ''}
-        aria-controls="forge-rte-content">
+        aria-keyshortcuts=${this.keyboardShortcut || ''}>
         <forge-icon .name=${this.icon}></forge-icon>
         <forge-icon slot="on" .name=${this.icon}></forge-icon>
       </forge-icon-button>

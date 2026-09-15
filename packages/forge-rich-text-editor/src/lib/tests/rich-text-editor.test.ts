@@ -20,7 +20,7 @@ describe('RichTextEditor', () => {
       expect(toolbar).toBeTruthy();
       expect(toolbar?.getAttribute('role')).toBe('toolbar');
       expect(toolbar?.getAttribute('aria-label')).toBe('Rich text formatting toolbar');
-      expect(toolbar?.getAttribute('aria-controls')).toBe('forge-rte-content');
+      expect(toolbar?.hasAttribute('aria-controls')).toBe(false);
       expect(toolbar?.getAttribute('aria-orientation')).toBe('horizontal');
     });
 
