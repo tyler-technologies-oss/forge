@@ -28,6 +28,9 @@ export const RICH_TEXT_CONTENT_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ri
  * the content area in your layout.
  *
  * @dependency forge-focus-indicator
+ *
+ * @cssproperty --forge-rich-text-content-disabled-opacity - The opacity of the content area when
+ * the surrounding editor is disabled.
  */
 @customElement(RICH_TEXT_CONTENT_TAG_NAME)
 export class RichTextContentComponent extends LitElement {
@@ -49,6 +52,17 @@ export class RichTextContentComponent extends LitElement {
       return;
     }
     this._editorContext.setEditorElement(element as HTMLElement);
+  }
+
+  /**
+   * Mirrors the context's disabled and readonly state onto the host as attributes so the
+   * `:host([disabled])` and `:host([readonly])` rules can match. Both are driven entirely by the
+   * surrounding context rather than being settable, so they are reflected here instead of being
+   * declared as properties - setting them directly would be overwritten on the next update.
+   */
+  public override willUpdate(): void {
+    this.toggleAttribute('disabled', this._editorContext?.disabled ?? false);
+    this.toggleAttribute('readonly', this._editorContext?.readOnly ?? false);
   }
 
   public override render(): TemplateResult {

@@ -1,4 +1,5 @@
 @use './core' as rte-core;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
 
 @include rte-core.prosemirror-base;
 
@@ -49,8 +50,9 @@
 
 :host([disabled]) {
   .editor-content-wrapper {
-    opacity: var(--forge-theme-disabled-opacity);
+    opacity: var(--forge-rich-text-content-disabled-opacity, #{forge-theme.emphasis(medium-low)});
     pointer-events: none;
+    user-select: none;
   }
 }
 
