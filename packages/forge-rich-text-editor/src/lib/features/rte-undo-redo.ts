@@ -88,7 +88,7 @@ export class RteUndoRedoComponent extends LitElement implements IRichTextEditorF
         density="medium"
         @click=${this.#undo}
         @keydown=${this.#handleKeydown}
-        ?disabled=${this._editorContext.isEditable() && !this.#canUndo()}
+        ?disabled=${!this._editorContext.isEditable() || !this.#canUndo()}
         aria-label=${this.undoLabel}>
         <forge-icon .name=${tylIconUndo.name}></forge-icon>
       </forge-icon-button>
@@ -98,7 +98,7 @@ export class RteUndoRedoComponent extends LitElement implements IRichTextEditorF
         density="medium"
         @click=${this.#redo}
         @keydown=${this.#handleKeydown}
-        ?disabled=${this._editorContext.isEditable() && !this.#canRedo()}
+        ?disabled=${!this._editorContext.isEditable() || !this.#canRedo()}
         aria-label=${this.redoLabel}>
         <forge-icon .name=${tylIconRedo.name}></forge-icon>
       </forge-icon-button>
