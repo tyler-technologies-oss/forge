@@ -32,6 +32,8 @@ export const RTE_ALIGN_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-align'
  * within text with that alignment. Alignment can be applied to paragraphs and headings. The
  * feature announces state changes to screen readers for accessibility.
  *
+ * @dependency forge-rte-tool-button
+ *
  * @property {string} [leftLabel='Align Left'] - The accessible label for the left align button.
  * @property {string} [centerLabel='Align Center'] - The accessible label for the center align button.
  * @property {string} [rightLabel='Align Right'] - The accessible label for the right align button.

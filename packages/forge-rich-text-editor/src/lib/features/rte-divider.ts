@@ -22,6 +22,8 @@ export const RTE_DIVIDER_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-divi
  * The divider component provides visual separation between groups of related toolbar buttons.
  * It renders a vertical line 24px tall. Use this component to organize the toolbar into logical
  * sections (e.g., separating text formatting from paragraph formatting).
+ *
+ * @dependency forge-divider
  */
 @customElement(RTE_DIVIDER_TAG_NAME)
 export class RteDividerComponent extends LitElement {

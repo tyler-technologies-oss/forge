@@ -30,6 +30,9 @@ export const RICH_TEXT_EDITOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ric
  * It includes a toolbar for formatting options and a content area for editing text. Features are
  * added as child components, allowing you to compose exactly the functionality your application needs.
  *
+ * @dependency forge-rich-text-context
+ * @dependency forge-rich-text-content
+ *
  * @slot - The default slot is reserved for feature components (toolbar buttons like forge-rte-standard-tools, forge-rte-code, forge-rte-link, etc.).
  *
  * @property {RichTextEditorContent} [content=''] - The content of the editor, as an HTML string or a ProseMirror document. Both are sanitized.

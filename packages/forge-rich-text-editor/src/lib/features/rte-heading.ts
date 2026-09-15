@@ -31,6 +31,8 @@ export const RTE_HEADING_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-head
  * within a heading of that level. Clicking an active heading button converts the text back
  * to a normal paragraph.
  *
+ * @dependency forge-rte-tool-button
+ *
  * @property {string} [h1Label='Heading 1'] - The accessible label for the heading 1 button.
  * @property {string} [h2Label='Heading 2'] - The accessible label for the heading 2 button.
  * @property {string} [h3Label='Heading 3'] - The accessible label for the heading 3 button.

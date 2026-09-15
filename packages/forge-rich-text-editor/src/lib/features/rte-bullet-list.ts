@@ -32,6 +32,8 @@ export const RTE_BULLET_LIST_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-
  * converting items back to paragraphs. The feature announces state changes to screen readers
  * for accessibility.
  *
+ * @dependency forge-rte-tool-button
+ *
  * @property {string} [label='Bullet List'] - The accessible label for the bullet list button.
  *
  * @attribute {string} label - The accessible label for the bullet list button.

@@ -30,6 +30,9 @@ export const RTE_UNDO_REDO_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-un
  * to undo or redo. The feature announces actions to screen readers for accessibility. Keyboard
  * shortcuts Control+Z (undo) and Control+Shift+Z (redo) are supported through TipTap.
  *
+ * @dependency forge-icon-button
+ * @dependency forge-icon
+ *
  * @property {string} [undoLabel='Undo'] - The accessible label for the undo button.
  * @property {string} [redoLabel='Redo'] - The accessible label for the redo button.
  *
