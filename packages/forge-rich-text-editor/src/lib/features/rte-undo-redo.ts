@@ -73,6 +73,19 @@ export class RteUndoRedoComponent extends LitElement implements IRichTextEditorF
   @consume({ context: editorContext, subscribe: true })
   private readonly _editorContext!: EditorContext;
 
+  public override updated(changedProperties: PropertyValues<this>): void {
+    super.updated(changedProperties);
+    // Undo and redo render forge-icon-button directly rather than through forge-rte-tool-button,
+    // so they carry the controls relationship themselves. See rte-tool-button for why this is an
+    // element reference rather than aria-controls.
+    const target = this._editorContext.controlsElement;
+    for (const button of [this.#undoButtonRef.value, this.#redoButtonRef.value]) {
+      if (button && 'ariaControlsElements' in button) {
+        (button as unknown as { ariaControlsElements: Element[] | null }).ariaControlsElements = target ? [target] : null;
+      }
+    }
+  }
+
   public firstUpdated(_changedProperties: PropertyValues<this>): void {
     this._editorContext?.registerFeature(this);
   }

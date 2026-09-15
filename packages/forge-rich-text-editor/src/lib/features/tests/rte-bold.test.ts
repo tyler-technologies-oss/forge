@@ -253,11 +253,20 @@ describe('RTE Bold - ARIA attributes', () => {
     expect(button.getAttribute('aria-keyshortcuts')).toBe('Control+B');
   });
 
-  it('should have aria-controls pointing to content area', async () => {
+  it('should not reference the content area across a shadow boundary', async () => {
     const harness = await createFixture();
     const button = harness.button();
 
-    expect(button.getAttribute('aria-controls')).toBe('forge-rte-content');
+    // This asserted aria-controls="forge-rte-content". That id lives in another shadow root, and an
+    // IDREF cannot cross a shadow boundary, so the reference was invalid rather than helpful. The
+    // relationship is now an element reference, which can cross a boundary - but only into the same
+    // tree or an ancestor tree, so it targets the editor rather than the editable element.
+    expect(button.getAttribute('aria-controls') ?? '').toBe('');
+    if ('ariaControlsElements' in button) {
+      const referenced = (button as unknown as { ariaControlsElements: Element[] | null }).ariaControlsElements ?? [];
+      expect(referenced).toHaveLength(1);
+      expect(referenced[0].tagName.toLowerCase()).toBe('forge-rich-text-editor');
+    }
   });
 });
 

@@ -217,8 +217,30 @@ export class RichTextContextComponent extends LitElement {
     },
     setEditorElement: this.#setEditorElement.bind(this),
     registerFeature: this.#registerFeature.bind(this),
-    announce: this.#announce.bind(this)
+    announce: this.#announce.bind(this),
+    controlsElement: null
   };
+
+  /**
+   * Resolves the element that represents this editor to the outside world: this element when it is
+   * authored directly, or its host when it is rendered inside another component's shadow root, as
+   * `forge-rich-text-editor` does. Walking to the outermost host is what puts the target in a tree
+   * the toolbar can actually refer to.
+   */
+  #resolveControlsElement(): HTMLElement {
+    let root = this.getRootNode();
+    if (!(root instanceof ShadowRoot)) {
+      return this;
+    }
+
+    let host = root.host as HTMLElement;
+    root = host.getRootNode();
+    while (root instanceof ShadowRoot) {
+      host = root.host as HTMLElement;
+      root = host.getRootNode();
+    }
+    return host;
+  }
 
   public override disconnectedCallback(): void {
     // Cancel any pending initialization frame
@@ -451,6 +473,15 @@ export class RichTextContextComponent extends LitElement {
         element: this.#editorElement,
         extensions,
         content: initialContent,
+        // TipTap builds its own contenteditable element inside the one it is handed, and that inner
+        // element is the real textbox - focusable, and what assistive technology lands on. Naming
+        // only the container left it unnamed, which axe reports as aria-input-field-name.
+        editorProps: {
+          attributes: {
+            'aria-label': 'Rich text editor content',
+            'aria-multiline': 'true'
+          }
+        },
         editable: !(this.editorContext.disabled || this.editorContext.readOnly),
         injectCSS: false,
         onTransaction: () => {
@@ -494,7 +525,8 @@ export class RichTextContextComponent extends LitElement {
 
       this.editorContext = {
         ...this.editorContext,
-        editor: this._editor
+        editor: this._editor,
+        controlsElement: this.#resolveControlsElement()
       };
 
       // Initialize counts

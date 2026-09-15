@@ -136,6 +136,20 @@ export class RichTextRendererComponent extends LitElement {
           element: this._contentElement,
           extensions: DEFAULT_EXTENSIONS,
           editable: false,
+          // ProseMirror marks its element `role="textbox"` even when it is not editable, which left
+          // the renderer advertising an unnamed text input - axe reports it as
+          // aria-input-field-name. Keeping the role and declaring it read-only is the more
+          // descriptive fix, but only works with a name: `role="textbox"` with `aria-readonly`
+          // and no accessible name still fails aria-input-field-name. Verified all three variants
+          // against axe - presentation clean, unnamed readonly textbox failing, named readonly
+          // textbox clean.
+          editorProps: {
+            attributes: {
+              role: 'textbox',
+              'aria-readonly': 'true',
+              'aria-label': 'Rich text content'
+            }
+          },
 
           content: initialContent as any
         });
