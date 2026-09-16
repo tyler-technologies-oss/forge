@@ -36,6 +36,10 @@
     "./dist/*": {
       "default": "./dist/*"
     },
+    "./sass/*": {
+      "sass": "./sass/*",
+      "default": "./sass/*"
+    },
     "./custom-elements.json": {
       "default": "./custom-elements.json"
     },
