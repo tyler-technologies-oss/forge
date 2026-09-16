@@ -46,7 +46,7 @@
 @mixin standalone($type: 'outward', $selector: '::after', $pseudo-class: ':focus-visible', $focus-target: null) {
   outline: none;
 
-  $conditional-selector: #{$pseudo-class};
+  $conditional-selector: $pseudo-class;
   @if $focus-target {
     $conditional-selector: ':has(#{$focus-target}#{$pseudo-class})';
   }

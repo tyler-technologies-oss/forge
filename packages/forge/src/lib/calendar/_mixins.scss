@@ -411,11 +411,10 @@
 }
 
 @mixin date-inner-gap($force: false) {
-  $important: '';
+  $important: null;
   @if $force {
     $important: '!important';
   }
-
   position: absolute;
   width: calc(100% - #{variables.$date-gap}) #{$important};
   height: calc(100% - #{variables.$date-gap}) #{$important};
