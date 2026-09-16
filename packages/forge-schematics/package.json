@@ -32,7 +32,7 @@
     "prettier": "catalog:",
     "rimraf": "catalog:",
     "typescript": "~5.9.3",
-    "vitest": "^4.1.2"
+    "vitest": "^4.1.11"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
