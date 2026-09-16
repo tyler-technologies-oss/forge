@@ -12,7 +12,8 @@ import { ICON_BUTTON_CONSTANTS } from '../icon-button/index.js';
 import { BASE_DATE_PICKER_CONSTANTS } from './base/base-date-picker-constants.js';
 import type { IButtonComponent } from '../button/index.js';
 import { FIELD_CONSTANTS, POPOVER_CONSTANTS } from '../index.js';
-import type { IDialogAdapter, IFieldComponent, IPopoverComponent } from '../index.js';
+import type { IFieldComponent, IPopoverComponent } from '../index.js';
+import type { IBaseAdapter } from '../core/base/base-adapter.js';
 
 // Popover animation duration (200ms) + buffer
 const POPOVER_ANIMATION_DURATION = 200;
@@ -22,7 +23,7 @@ type DatePickerComponentTest = IDatePickerComponent & {
     _onInputValueChanged: () => void;
     initialize: () => void;
     _isInitialized: boolean;
-    _adapter: IDialogAdapter & {
+    _adapter: IBaseAdapter & {
       setCalendarDisabledDaysOfWeek: () => void;
       _identifier: string;
     };

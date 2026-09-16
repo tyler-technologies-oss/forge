@@ -1,0 +1,15 @@
+<!--
+  @block Dialog — Confirmation Dialog
+  @type component
+  @description Confirmation Dialog usage example for the forge-dialog component.
+  @tags dialog, confirmation-dialog, storybook, component-example
+-->
+<div>
+  <forge-button id="open-confirmation-dialog-demo" variant="raised">Delete record</forge-button>
+  <forge-confirmation-dialog id="confirmation-dialog-demo" label="Delete record?">
+    <span slot="title">Delete record?</span>
+    <span slot="message">This action can't be undone.</span>
+    <span slot="secondary-button-text">Cancel</span>
+    <span slot="primary-button-text">Delete</span>
+  </forge-confirmation-dialog>
+</div>

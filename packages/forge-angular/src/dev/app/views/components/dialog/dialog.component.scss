@@ -1,0 +1,12 @@
+.trigger-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.inline-dialog {
+  --forge-scaffold-width: 600px;
+
+  .body {
+    padding-inline: 16px;
+  }
+}
