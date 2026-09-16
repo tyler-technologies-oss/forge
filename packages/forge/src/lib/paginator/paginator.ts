@@ -345,18 +345,7 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
           <div class="label" part="label" id="label">
             <slot name="label">${this.label}</slot>
           </div>
-
-          <forge-select
-            class="page-size-options"
-            aria-labelledby="label"
-            label-position="none"
-            density="extra-small"
-            part="page-size-options"
-            ?hidden=${!this.pageSizeOptions.length}
-            ?disabled=${this.disabled}
-            .value=${String(this.pageSize)}
-            @change=${this.#handlePageSizeChange}></forge-select>
-
+          ${this.#renderPageSizeSelect()}
           <div class="range-label" part="range-label">
             <slot name="range-label">${this.#rangeLabel}</slot>
           </div>
@@ -400,6 +389,23 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
           ${this.firstLast ? this.#renderLastPageButton() : nothing}
         </div>
       </div>
+    `;
+  }
+
+  #renderPageSizeSelect(): TemplateResult | typeof nothing {
+    if (!isArray(this.pageSizeOptions) || !this.pageSizeOptions.length) {
+      return nothing;
+    }
+    return html`
+      <forge-select
+        class="page-size-options"
+        aria-labelledby="label"
+        label-position="none"
+        density="extra-small"
+        part="page-size-options"
+        ?disabled=${this.disabled}
+        .value=${String(this.pageSize)}
+        @change=${this.#handlePageSizeChange}></forge-select>
     `;
   }
 
@@ -542,9 +548,6 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
       .map(o => ({ label: `${o}`, value: `${o}` }))
       .sort((a, b) => coerceNumber(a.value) - coerceNumber(b.value));
     this._pageSizeSelect.options = options;
-    if (!options.find(o => coerceNumber(o.value) === this.pageSize)) {
-      this.pageSize = coerceNumber(options[0].value);
-    }
   }
 
   #tryFocus(elements: Array<IIconButtonComponent | ISelectComponent | undefined>, options?: FocusOptions): void {

@@ -1,5 +1,23 @@
 # @tylertech/forge
 
+## 3.16.2
+
+### Patch Changes
+
+- 2388ce8: fix(autocomplete): document the second `value` parameter of the `filter`/`forceFilter` callback used for value-to-label resolution
+- 2388ce8: fix(page-state): correct `@slot` documentation from `actions` to `action` to match the actual template slot name
+- 2388ce8: fix(select): implement the `readonly` property so setting it no longer throws at runtime; the dropdown can still be opened to browse options, but the value can no longer be changed
+
+## 3.16.1
+
+### Patch Changes
+
+- dba81e7: fix(paginator): allow default page size that is not in page size options
+- dba81e7: fix(paginator): hide page size options select when page size options is a null value or empty array
+- 236a995: docs(paginator): fix storybook build error
+- Updated dependencies [dba81e7]
+  - @tylertech/forge-core@3.5.1
+
 ## 3.16.0
 
 ### Minor Changes

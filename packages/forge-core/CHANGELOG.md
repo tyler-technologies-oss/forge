@@ -1,5 +1,11 @@
 # @tylertech/forge-core
 
+## 3.5.1
+
+### Patch Changes
+
+- dba81e7: fix(utils): prevent coerceNumberArray returning [0] when an array should be empty
+
 ## 3.5.0
 
 ### Minor Changes
