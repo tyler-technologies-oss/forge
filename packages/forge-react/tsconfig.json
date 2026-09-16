@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "skipLibCheck": true,
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "outDir": "dist",
+    "declaration": true,
+    "noImplicitAny": false,
+    "sourceMap": false,
+    "strictNullChecks": true,
+    "importHelpers": true,
+    "noEmitHelpers": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "types": ["node"]
+  }
+}

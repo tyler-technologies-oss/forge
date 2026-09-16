@@ -1,0 +1,97 @@
+<div class="vert">
+  <h3 class="forge-typography--heading2">Default</h3>
+  <forge-timeline>
+    <forge-timeline-item>
+      <div><strong>Debbie Johnson</strong> <span class="forge-color--text-medium">added to a new pool</span> <time style="padding-left: 8px;">Oct 12, 2024 9:30 AM</time></div>
+    </forge-timeline-item>
+    <forge-timeline-item>
+      <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+    </forge-timeline-item>
+    <forge-timeline-item theme="error">
+      <forge-badge slot="marker">Send error</forge-badge>
+      <div><strong>Text message</strong> <span class="forge-color--text-medium">did not send due to a connection error</span> <time style="padding-left: 8px;">Nov 13, 2024 11:09 AM</time></div>
+    </forge-timeline-item>
+    <forge-timeline-item>
+      <div><strong>Debbie Johnson</strong> <span class="forge-color--text-medium">updated mobile number to</span> <a href="#" class="forge-hyperlink"><strong>604-555-4987</strong></a> <time style="padding-left: 8px;">Oct 12, 2024 9:30 AM</time></div>
+      <forge-card slot="detail" style="--forge-card-padding: 8px;">
+        <forge-stack inline alignment="center" gap="8">
+          <forge-icon-button id="open-button" shape="squared" dense>
+            <forge-open-icon></forge-open-icon>
+          </forge-icon-button>
+          <span>View details</span>
+        </forge-stack>
+        <forge-expansion-panel trigger="open-button">
+          <div style="margin: 4px;">Details</div>
+        </forge-expansion-panel>
+      </forge-card>
+    </forge-timeline-item>
+  </forge-timeline>
+
+  <div>
+    <h3 class="forge-typography--heading2">Icon Markers</h3>
+    <forge-timeline>
+      <forge-timeline-item theme="success" detail-variant="card">
+        <forge-icon slot="marker" name="check_circle"></forge-icon>
+        <forge-badge theme="success" slot="start">Start slot</forge-badge>
+        <span>Done</span>
+        <forge-badge theme="warning" slot="end">End slot</forge-badge>
+        <forge-card slot="detail">Detail content</forge-card>
+      </forge-timeline-item>
+      <forge-timeline-item theme="info">
+        <forge-icon slot="marker" name="schedule"></forge-icon>
+        <span>Scheduled</span>
+      </forge-timeline-item>
+      <forge-timeline-item theme="secondary">
+        <forge-icon slot="marker" name="star"></forge-icon>
+        <span>Notable</span>
+      </forge-timeline-item>
+    </forge-timeline>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">With Break</h3>
+    <forge-timeline>
+      <forge-timeline-item>
+        <div><strong>Recent event</strong> <span class="forge-color--text-medium">happened today</span> <time style="padding-left: 8px;">Today 9:30 AM</time></div>
+      </forge-timeline-item>
+      <forge-timeline-item>
+        <div><strong>Another event</strong> <span class="forge-color--text-medium">from earlier today</span> <time style="padding-left: 8px;">Today 8:00 AM</time></div>
+      </forge-timeline-item>
+      <forge-timeline-break></forge-timeline-break>
+      <forge-timeline-item>
+        <div><strong>Older event</strong> <span class="forge-color--text-medium">from last week</span> <time style="padding-left: 8px;">Last week</time></div>
+      </forge-timeline-item>
+      <forge-timeline-item>
+        <div><strong>Much older event</strong> <span class="forge-color--text-medium">from last month</span> <time style="padding-left: 8px;">Last month</time></div>
+      </forge-timeline-item>
+    </forge-timeline>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">With Timestamps</h3>
+    <forge-timeline>
+      <forge-timestamp datetime="2026-07-07" format="'Yesterday •' MMM dd, YYYY"></forge-timestamp>
+      <forge-timeline-item sidebar="none">
+        <span><strong>Event with formatted date</strong></span>
+        <forge-timestamp datetime="2024-05-15" format="MM/dd/YYYY" separator="start"></forge-timestamp>
+      </forge-timeline-item>
+      <forge-timestamp datetime="2026-07-08" format="'Today •' MMM dd, YYYY"></forge-timestamp>
+      <forge-timeline-item theme="success">
+        <forge-icon slot="marker" name="check_circle"></forge-icon>
+        <span><strong>ISO format</strong> <span class="forge-color--text-medium">YYYY-MM-dd format</span></span>
+        <forge-timestamp datetime="2024-05-15" format="YYYY-MM-dd"></forge-timestamp>
+      </forge-timeline-item>
+      <forge-timeline-item>
+        <span><strong>European format</strong> <span class="forge-color--text-medium">dd.MM.YYYY format</span></span>
+        <forge-timestamp datetime="2024-05-15" format="dd.MM.YYYY"></forge-timestamp>
+      </forge-timeline-item>
+      <forge-timeline-item theme="info">
+        <forge-icon slot="marker" name="schedule"></forge-icon>
+        <span><strong>Month abbreviation</strong> <span class="forge-color--text-medium">dd/MMM/YYYY format</span></span>
+        <forge-timestamp datetime="2024-05-15" format="dd/MMM/YYYY"></forge-timestamp>
+      </forge-timeline-item>
+    </forge-timeline>
+  </div>
+</div>
+
+<script type="module" src="timeline.ts"></script>

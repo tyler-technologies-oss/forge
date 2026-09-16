@@ -1,0 +1,10 @@
+<header class="forge-dialog__header" forge-dialog-move-target>
+  <h5 class="forge-dialog__title">{{ title }}</h5>
+</header>
+<section class="forge-dialog__body forge-bottom-sheet__body">
+  <p id="bottom-sheet-desc">{{ message }}<br />This content was lazy-loaded.</p>
+</section>
+<footer class="forge-dialog__footer">
+  <forge-button autofocus (click)="onCancel()">Cancel</forge-button>
+  <forge-button variant="raised" (click)="onConfirm()">Confirm</forge-button>
+</footer>

@@ -107,8 +107,7 @@ export class CalendarDropdown implements ICalendarDropdown {
       this.activeChangeCallback?.call(this, id);
       if (this._announcerElement) {
         this._announcerElement.id = id;
-        this._announcerElement.setAttribute('aria-selected', evt.detail.selected.toString());
-        this._announcerElement.textContent = evt.detail.text;
+        this._announcerElement.textContent = `${evt.detail.text} ${evt.detail.selected ? 'selected' : 'deselected'}`;
       }
     });
 

@@ -1,0 +1,14 @@
+forge-card {
+  --forge-card-padding: 0 !important;
+}
+
+.flex-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px;
+}
+
+.expansion-panel-content {
+  margin-inline: 16px;
+}

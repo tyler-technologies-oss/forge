@@ -1,0 +1,31 @@
+<app-demo-card headerText="Select">
+  <h4>Single Select</h4>
+  <forge-select label="Pick a Food Group" [(ngModel)]="selected">
+    <forge-option value="" />
+    <forge-option value="grains">Bread, Cereal, Rice, and Pasta</forge-option>
+    <forge-option value="vegetables">Vegetables</forge-option>
+    <forge-option value="fruit">Fruit</forge-option>
+  </forge-select>
+
+  <h4>Multiple Select</h4>
+  <forge-select label="Pick a Food Group" multiple="true" [(ngModel)]="selectedValues">
+    <forge-option value="grains">Bread, Cereal, Rice, and Pasta</forge-option>
+    <forge-option value="vegetables">Vegetables</forge-option>
+    <forge-option value="fruit">Fruit</forge-option>
+  </forge-select>
+
+  <h4>Single Select - Outlined</h4>
+  <forge-select label="Pick a Food Group" type="outlined" [(ngModel)]="selectedOutlined">
+    <forge-option value="" />
+    <forge-option value="grains">Bread, Cereal, Rice, and Pasta</forge-option>
+    <forge-option value="vegetables">Vegetables</forge-option>
+    <forge-option value="fruit">Fruit</forge-option>
+  </forge-select>
+
+  <h4>Multiple Select - Outlined</h4>
+  <forge-select label="Pick a Food Group" type="outlined" multiple="true" [(ngModel)]="selectedValuesOutlined">
+    <forge-option value="grains">Bread, Cereal, Rice, and Pasta</forge-option>
+    <forge-option value="vegetables">Vegetables</forge-option>
+    <forge-option value="fruit">Fruit</forge-option>
+  </forge-select>
+</app-demo-card>

@@ -110,6 +110,7 @@ describe('Paginator', () => {
       const harness = await createFixture();
 
       harness.paginatorElement.total = 100;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.total).toBe(100);
       expect(harness.paginatorElement.getAttribute(PAGINATOR_CONSTANTS.attributes.TOTAL)).toBe('100');
@@ -130,6 +131,7 @@ describe('Paginator', () => {
       expect(harness.rangeLabelText).toBe('1-25 of 100');
 
       harness.paginatorElement.total = 200;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.rangeLabelText).toBe('1-25 of 200');
     });
@@ -162,6 +164,7 @@ describe('Paginator', () => {
       const harness = await createFixture();
 
       harness.paginatorElement.pageIndex = 2;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.pageIndex).toBe(2);
       expect(harness.paginatorElement.getAttribute(PAGINATOR_CONSTANTS.attributes.PAGE_INDEX)).toBe('2');
@@ -182,6 +185,7 @@ describe('Paginator', () => {
       expect(harness.rangeLabelText).toBe('26-50 of 100');
 
       harness.paginatorElement.pageIndex = 2;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.rangeLabelText).toBe('51-75 of 100');
     });
@@ -224,6 +228,7 @@ describe('Paginator', () => {
       const harness = await createFixture();
 
       harness.paginatorElement.pageSize = 50;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.pageSize).toBe(50);
       expect(harness.paginatorElement.getAttribute(PAGINATOR_CONSTANTS.attributes.PAGE_SIZE)).toBe('50');
@@ -244,6 +249,7 @@ describe('Paginator', () => {
       expect(harness.rangeLabelText).toBe('1-50 of 100');
 
       harness.paginatorElement.pageSize = 25;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.rangeLabelText).toBe('1-25 of 100');
     });
@@ -263,6 +269,7 @@ describe('Paginator', () => {
       const harness = await createFixture({ total: 100 });
 
       harness.paginatorElement.pageSize = 0;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.rangeLabelText).toBe('1 of 100');
     });
@@ -297,6 +304,7 @@ describe('Paginator', () => {
       const harness = await createFixture({ total: 100 });
 
       harness.paginatorElement.offset = 50;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.pageIndex).toBe(2);
       expect(harness.rangeLabelText).toBe('51-75 of 100');
@@ -324,6 +332,7 @@ describe('Paginator', () => {
       const harness = await createFixture();
 
       harness.paginatorElement.pageSizeOptions = [10, 20, 30];
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.pageSizeSelect.options.length).toBe(3);
       expect(harness.pageSizeSelect.options[0].value).toBe('10');
@@ -335,22 +344,61 @@ describe('Paginator', () => {
       const harness = await createFixture({ total: 100 });
 
       harness.paginatorElement.pageSizeOptions = [10, 20, 30];
+      await harness.paginatorElement.updateComplete;
       harness.pageSizeSelect.value = '20';
       harness.pageSizeSelect.dispatchEvent(new CustomEvent('change', { detail: '20' }));
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.pageSize).toBe(20);
       expect(harness.paginatorElement.offset).toBe(0);
       expect(harness.rangeLabelText).toBe('1-20 of 100');
     });
 
-    it('should hide page size select if no options', async () => {
+    it('should remove page size select from DOM when set to an empty array', async () => {
       const harness = await createFixture();
 
       expect(harness.pageSizeSelect).toBeTruthy();
 
       harness.paginatorElement.pageSizeOptions = [];
+      await harness.paginatorElement.updateComplete;
 
-      expect(harness.pageSizeSelect.hidden).toBe(true);
+      expect(harness.pageSizeSelect).toBeNull();
+    });
+
+    it('should remove page size select from DOM when set to null', async () => {
+      const harness = await createFixture();
+
+      expect(harness.pageSizeSelect).toBeTruthy();
+
+      harness.paginatorElement.pageSizeOptions = null as unknown as number[];
+      await harness.paginatorElement.updateComplete;
+
+      expect(harness.pageSizeSelect).toBeNull();
+    });
+
+    it('should remove page size select from DOM when set to undefined', async () => {
+      const harness = await createFixture();
+
+      expect(harness.pageSizeSelect).toBeTruthy();
+
+      harness.paginatorElement.pageSizeOptions = undefined as unknown as number[];
+      await harness.paginatorElement.updateComplete;
+
+      expect(harness.pageSizeSelect).toBeNull();
+    });
+
+    it('should not render page size select on initialization when pageSizeOptions is an empty array', async () => {
+      const harness = await createFixture({ pageSizeOptions: [] });
+
+      expect(harness.pageSizeSelect).toBeNull();
+    });
+
+    it('should allow a pageSize that is not included in pageSizeOptions on initialization', async () => {
+      const harness = await createFixture({ pageSize: 40, pageSizeOptions: [10, 20, 30] });
+
+      expect(harness.paginatorElement.pageSize).toBe(40);
+      expect(harness.paginatorElement.pageSizeOptions).toEqual([10, 20, 30]);
+      expect(harness.pageSizeSelect.value).toBe('40');
     });
   });
 
@@ -366,6 +414,7 @@ describe('Paginator', () => {
       const harness = await createFixture();
 
       harness.paginatorElement.label = 'Test';
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.label).toBe('Test');
       expect(harness.paginatorElement.getAttribute(PAGINATOR_CONSTANTS.attributes.LABEL)).toBe('Test');
@@ -392,6 +441,7 @@ describe('Paginator', () => {
       expect(harness.paginatorElement.getAttribute(PAGINATOR_CONSTANTS.attributes.LABEL)).toBe('Test');
 
       harness.paginatorElement.label = '';
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.hasAttribute(PAGINATOR_CONSTANTS.attributes.LABEL)).toBe(false);
     });
@@ -409,6 +459,7 @@ describe('Paginator', () => {
       const harness = await createFixture();
 
       harness.paginatorElement.firstLast = true;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.firstLast).toBe(true);
       expect(harness.paginatorElement.hasAttribute(PAGINATOR_CONSTANTS.attributes.FIRST_LAST)).toBe(true);
@@ -436,6 +487,7 @@ describe('Paginator', () => {
       const harness = await createFixture();
 
       harness.paginatorElement.first = true;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.first).toBe(true);
       expect(harness.paginatorElement.hasAttribute(PAGINATOR_CONSTANTS.attributes.FIRST)).toBe(true);
@@ -480,6 +532,7 @@ describe('Paginator', () => {
       const harness = await createFixture({ firstLast: true });
 
       harness.paginatorElement.disabled = true;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.disabled).toBe(true);
       expect(harness.paginatorElement.hasAttribute(PAGINATOR_CONSTANTS.attributes.DISABLED)).toBe(true);
@@ -494,6 +547,7 @@ describe('Paginator', () => {
       const harness = await createFixture({ firstLast: true });
 
       harness.paginatorElement.setAttribute(PAGINATOR_CONSTANTS.attributes.DISABLED, '');
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.disabled).toBe(true);
       expect(harness.paginatorElement.hasAttribute(PAGINATOR_CONSTANTS.attributes.DISABLED)).toBe(true);
@@ -517,6 +571,7 @@ describe('Paginator', () => {
       const harness = await createFixture();
 
       harness.paginatorElement.alternative = true;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.alternative).toBe(true);
       expect(harness.paginatorElement.hasAttribute(PAGINATOR_CONSTANTS.attributes.ALTERNATIVE)).toBe(true);
@@ -537,6 +592,7 @@ describe('Paginator', () => {
       expect(harness.alternativeRangeLabelText).toBe('1-25 of 100');
 
       harness.paginatorElement.pageIndex = 1;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.alternativeRangeLabelText).toBe('26-50 of 100');
     });
@@ -548,6 +604,7 @@ describe('Paginator', () => {
 
       const cb = (): string => 'Test';
       harness.paginatorElement.rangeLabelCallback = cb;
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.rangeLabelCallback).toBe(cb);
       expect(harness.rangeLabelText).toBe('Test');
@@ -557,6 +614,7 @@ describe('Paginator', () => {
       const harness = await createFixture({ alternative: true });
 
       harness.paginatorElement.rangeLabelCallback = () => 'Test';
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.alternativeRangeLabelText).toBe('Test');
     });
@@ -588,6 +646,7 @@ describe('Paginator', () => {
       const harness = await createFixture({ total: 100, pageIndex: 1, firstLast: true });
 
       harness.firstButton?.click();
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.pageIndex).toBe(0);
       expect(harness.rangeLabelText).toBe('1-25 of 100');
@@ -597,6 +656,7 @@ describe('Paginator', () => {
       const harness = await createFixture({ total: 100, pageIndex: 1 });
 
       harness.previousButton.click();
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.pageIndex).toBe(0);
       expect(harness.rangeLabelText).toBe('1-25 of 100');
@@ -606,6 +666,7 @@ describe('Paginator', () => {
       const harness = await createFixture({ total: 100 });
 
       harness.nextButton.click();
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.pageIndex).toBe(1);
       expect(harness.rangeLabelText).toBe('26-50 of 100');
@@ -615,6 +676,7 @@ describe('Paginator', () => {
       const harness = await createFixture({ total: 100, pageIndex: 1, firstLast: true });
 
       harness.lastButton?.click();
+      await harness.paginatorElement.updateComplete;
 
       expect(harness.paginatorElement.pageIndex).toBe(3);
       expect(harness.rangeLabelText).toBe('76-100 of 100');
@@ -897,6 +959,7 @@ interface IPaginatorFixtureConfig {
   total?: number;
   pageIndex?: number;
   pageSize?: number;
+  pageSizeOptions?: number[];
   offset?: number;
   label?: string;
   firstLast?: boolean;
@@ -909,6 +972,7 @@ async function createFixture({
   total,
   pageIndex,
   pageSize,
+  pageSizeOptions,
   offset,
   label,
   firstLast,
@@ -921,6 +985,7 @@ async function createFixture({
       total=${total ?? nothing}
       page-index=${pageIndex ?? nothing}
       page-size=${pageSize ?? nothing}
+      .pageSizeOptions=${pageSizeOptions ?? nothing}
       offset=${offset ?? nothing}
       label=${label ?? nothing}
       ?first-last=${firstLast}

@@ -7,6 +7,7 @@ import forgePublicMemberPrivacyPlugin from './plugins/cem/public-member-privacy.
 import forgeTypePathsPlugin from './plugins/cem/type-paths.mjs';
 import forgeBranchNamePlugin from './plugins/cem/branch-name.mjs';
 import forgeFilterIgnored from './plugins/cem/filter-ignored.mjs';
+import forgeInferPropertyAccessTypePlugin from './plugins/cem/infer-property-access-type.mjs';
 
 export default {
   globs: ['src/lib/**/*.ts'],
@@ -17,6 +18,7 @@ export default {
     forgeFilterIgnored(),
     forgeMemberDenyListPlugin(),
     forgePublicMemberPrivacyPlugin(),
+    forgeInferPropertyAccessTypePlugin(),
     forgeTypePathsPlugin(),
     customElementVsCodePlugin({
       hideLogs: true,

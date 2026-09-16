@@ -1,0 +1,31 @@
+<!--
+  @block Tabs — Vertical
+  @type component
+  @description Vertical usage example for the forge-tabs component.
+  @tags tabs, vertical, storybook, component-example
+-->
+<div class="flex gap-medium">
+  <forge-tab-bar data-aria-label="Demo tabs" active-tab="0" vertical style="max-width:200px;" aria-orientation="vertical">
+    <forge-tab id="vertical-tab-1" selected vertical>
+      Tab 1
+    </forge-tab>
+    <forge-tab id="vertical-tab-2" vertical>
+      Tab 2
+    </forge-tab>
+    <forge-tab id="vertical-tab-3" vertical>
+      Tab 3
+    </forge-tab>
+  </forge-tab-bar>
+
+  <div class="flex-1">
+    <forge-tab-panel for="vertical-tab-1">
+      <div class="p-medium">Tab 1 content</div>
+    </forge-tab-panel>
+    <forge-tab-panel for="vertical-tab-2">
+      <div class="p-medium">Tab 2 content</div>
+    </forge-tab-panel>
+    <forge-tab-panel for="vertical-tab-3">
+      <div class="p-medium">Tab 3 content</div>
+    </forge-tab-panel>
+  </div>
+</div>

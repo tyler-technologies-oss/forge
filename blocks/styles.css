@@ -1,0 +1,63 @@
+@import '@tylertech/forge/dist/forge-core.css';
+@import '@tylertech/forge/dist/forge.css';
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@import '@tylertech/forge-tailwind';
+
+/*
+ * forge-core.css forces `body { height: 100dvh; width: 100dvw; }` for full-page app
+ * shells. Most blocks are small demos, not full-page layouts, so undo that default here.
+ * Blocks that need the viewport-filling behavior (e.g. forge-app-layout templates, whose
+ * host element uses `height: 100%`) opt back in with `h-dvh` on their own <body> element.
+ * `min-h-*` utilities alone don't work here: forge-app-layout's `height: 100%` only
+ * resolves against a containing block with a *definite* (non-auto) height, and min-height
+ * never changes body's specified height away from auto - it only clamps body's own box.
+ *
+ * `.h-dvh` is defined in Tailwind's `@layer utilities`, which always loses to this
+ * unlayered `body` rule regardless of specificity (unlayered rules beat layered rules for
+ * the same property, per the CSS cascade layers spec). So the opt-in below is also
+ * unlayered, with higher specificity than the bare `body` selector, to actually win.
+ */
+body {
+  height: auto;
+  width: auto;
+}
+
+body.h-dvh {
+  height: 100dvh;
+}
+
+/* Block specific utilities */
+@layer components {
+  .striped-box {
+    @apply rounded-lg p-4 border text-lowest bg-[size:8px_8px] bg-top-left bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,transparent_0,transparent_50%)];
+  }
+
+  .gradient-bg {
+    @apply bg-linear-to-b from-(--forge-theme-primary-container-minimum) to-(--forge-theme-primary-container);
+  }
+
+  .grid > * {
+    @apply min-h-0 min-w-0;
+  }
+
+  forge-card.p-0 {
+    --forge-card-padding: 0;
+  }
+
+  forge-card.p-small {
+    --forge-card-padding: var(--forge-spacing-small);
+  }
+
+  forge-card.p-6,
+  forge-card.p-large {
+    --forge-card-padding: var(--forge-spacing-large);
+  }
+
+  forge-card.tonal-card {
+    /* --forge-card-outline-width: 0; */
+    --forge-card-background: var(--forge-theme-surface-dim);
+  }
+}
