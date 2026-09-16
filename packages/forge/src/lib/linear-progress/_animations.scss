@@ -54,12 +54,12 @@
 // Generates keyframes for ltr and rtl.
 @mixin _directional-keyframes($dir) {
   $is-rtl: $dir == 'rtl';
-  $sign: if(
-    sass($is-rtl): -1; else: 1
-  );
-  $suffix: if(
-    sass($is-rtl): '-rtl' ; else: ''
-  );
+  $sign: 1;
+  $suffix: '';
+  @if $is-rtl {
+    $sign: -1;
+    $suffix: '-rtl';
+  }
 
   @keyframes buffering#{$suffix} {
     0% {
