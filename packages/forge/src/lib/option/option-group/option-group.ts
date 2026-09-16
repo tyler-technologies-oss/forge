@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { html, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
-import { LISTBOX_TAG_NAME } from '../../listbox/listbox.js';
+import { LISTBOX_TAG_NAME } from '../../listbox/listbox-constants.js';
 import { IOptionGroupConfigComponent, OptionGroupConfigComponent } from './option-group-config.js';
 import { OPTION_GROUP_CONSTANTS } from './option-group-constants.js';
 

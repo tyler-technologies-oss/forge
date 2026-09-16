@@ -15,16 +15,15 @@ export interface DropEventArgs {
  */
 export interface DropControllerConfig {
   /**
-   * Callback to retrieve the actual drop target from the event target.
+   * Callback to retrieve the actual drop target from the drag event.
    * This allows traversing from a descendant element to find the semantic drop zone.
    *
-   * @param targetElement - The element that triggered the drag event
    * @param event - The drag event
    * @returns The element to use as drop target, or null to reject the drop
    *
    * @example
    * // In a listbox, use the listbox itself as the drop target
-   * getDropTarget: ({ targetElement }) => targetElement.closest('forge-listbox')
+   * getDropTarget: event => (event.target as HTMLElement).closest('forge-listbox')
    */
   getDropTarget?: (event: DragEvent) => HTMLElement | null;
 
@@ -106,11 +105,7 @@ export interface DropControllerConfig {
  *
  * This controller listens for drag events on the host element and provides callbacks
  * for handling drop operations. It automatically calculates the insertion index based
- * on cursor position and creates a placeholder element for visual feedback.
- *
- * The placeholder element is exposed via `controller.placeholder` and must be manually
- * inserted into the host component's template at the position indicated by
- * `controller.insertionIndex`.
+ * on cursor position, exposed via `controller.insertionIndex`.
  *
  * @example
  * class ListboxComponent extends LitElement {
@@ -119,35 +114,19 @@ export interface DropControllerConfig {
  *     orientation: 'vertical',
  *
  *     onDragEnter: () => {
- *       this.requestUpdate(); // Trigger re-render to show placeholder
+ *       this.#insertPlaceholder();
  *     },
  *
  *     onDragOver: () => {
- *       this.requestUpdate(); // Update placeholder position
+ *       this.#updatePlaceholderPosition();
  *     },
  *
- *     onDrop: ({ dataTransfer, insertionIndex }) => {
- *       const value = dataTransfer.getData('text/plain');
- *       this.#insertOption(value, insertionIndex);
- *       this.requestUpdate();
+ *     onDrop: ({ item, index }) => {
+ *       this.#insertOption(item, index);
  *     },
  *
  *     dropEffect: 'move'
  *   });
- *
- *   public render(): TemplateResult {
- *     const options = this.#getOptions();
- *     const placeholder = this.#dropController.placeholder;
- *     const insertionIndex = this.#dropController.insertionIndex;
- *
- *     return html`
- *       ${options.map((opt, idx) => html`
- *         ${placeholder && insertionIndex === idx ? placeholder : nothing}
- *         ${opt}
- *       `)}
- *       ${placeholder && insertionIndex === options.length ? placeholder : nothing}
- *     `;
- *   }
  * }
  */
 export class DropController implements ReactiveController {
@@ -274,7 +253,7 @@ export class DropController implements ReactiveController {
   }
 
   #handleDragEnter(event: DragEvent): void {
-    if (!this.#enabled || this.#preventDrop) {
+    if (!this.#enabled) {
       return;
     }
 
@@ -285,6 +264,10 @@ export class DropController implements ReactiveController {
 
     this.#dragDepth++;
 
+    if (this.#preventDrop) {
+      return;
+    }
+
     // Only process on first enter
     if (this.#dragDepth !== 1) {
       return;
@@ -292,7 +275,6 @@ export class DropController implements ReactiveController {
 
     const dropTarget = this.#getDropTarget(event);
     if (!dropTarget) {
-      event.preventDefault();
       this.#dragDepth = 0;
       return;
     }

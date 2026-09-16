@@ -77,11 +77,11 @@ slot[name='tertiary'] {
     @include core.dense-label;
   }
 
-  .two-line {
+  &.two-line {
     @include core.dense-two-line;
   }
 
-  .three-line {
+  &.three-line {
     @include core.dense-three-line;
   }
 }

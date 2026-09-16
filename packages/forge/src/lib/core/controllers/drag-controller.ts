@@ -108,7 +108,8 @@ export class DragController implements ReactiveController {
   #dragEndListener = (event: DragEvent): void => this.#handleDragEnd(event);
   #manager = DragDropManager.instance;
   #currentOperation: string | null = null;
-  #subscription: ReturnType<typeof DragDropManager.instance.subscribe> | null = null;
+  #activeItem: HTMLElement | null = null;
+  #hasEndedCurrentOperation = true;
 
   constructor(host: ReactiveControllerHost & ReactiveElement, config: DragControllerConfig = {}) {
     this.host = host;
@@ -118,17 +119,11 @@ export class DragController implements ReactiveController {
 
   public hostConnected(): void {
     this.#attachListeners();
-    this.#subscription = this.#manager.subscribe({
-      end: () => {
-        this.#currentOperation = null;
-      }
-    });
   }
 
   public hostDisconnected(): void {
     this.#detachListeners();
     this.#endCurrentOperation();
-    this.#unsubscribe();
   }
 
   /**
@@ -203,6 +198,7 @@ export class DragController implements ReactiveController {
         item,
         controller: this
       }) ?? (this.host as HTMLElement);
+    this.#activeItem = item;
     this.#startOperation(item, sourceElement, event);
 
     // Set the drag image and effect allowed
@@ -217,8 +213,8 @@ export class DragController implements ReactiveController {
   }
 
   #handleDragEnd(event: DragEvent): void {
-    if (this.#enabled && this.#validateOperation() && this.#manager.item) {
-      this.#config.onDragEnd?.({ event, item: this.#manager.item, controller: this });
+    if (this.#enabled && !this.#hasEndedCurrentOperation && this.#activeItem) {
+      this.#config.onDragEnd?.({ event, item: this.#activeItem, controller: this });
     }
 
     this.#endCurrentOperation(event);
@@ -242,22 +238,22 @@ export class DragController implements ReactiveController {
     this.#manager.setSource(source);
     this.#manager.startOperation(event);
     this.#currentOperation = this.#manager.currentOperation;
+    this.#hasEndedCurrentOperation = false;
   }
 
+  /**
+   * Ends the operation this controller started, if it hasn't already been ended. Only ends the
+   * shared manager operation if it's still the one this controller started - a successful drop
+   * ends the manager operation first (before the source's own `dragend` fires), so by the time
+   * `dragend` reaches this controller there's nothing left for it to end in the manager.
+   */
   #endCurrentOperation(event?: DragEvent): void {
-    if (this.#validateOperation()) {
-      this.#manager.endOperation(event);
+    if (this.#hasEndedCurrentOperation) {
+      return;
     }
-  }
-
-  #validateOperation(): boolean {
-    return !!this.#currentOperation && this.#currentOperation === this.#manager.currentOperation;
-  }
-
-  #unsubscribe(): void {
-    if (this.#subscription) {
-      this.#subscription();
-      this.#subscription = null;
+    this.#hasEndedCurrentOperation = true;
+    if (this.#currentOperation && this.#currentOperation === this.#manager.currentOperation) {
+      this.#manager.endOperation(event);
     }
   }
 }

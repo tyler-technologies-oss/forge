@@ -144,6 +144,31 @@ describe('Listbox', () => {
     });
   });
 
+  describe('tabindex', () => {
+    it('should be focusable by default', async () => {
+      const ctx = await createFixture();
+      expect(ctx.element.tabIndex).toBe(0);
+    });
+
+    it('should not be focusable when disabled', async () => {
+      const ctx = await createFixture();
+      ctx.element.disabled = true;
+      await ctx.element.updateComplete;
+
+      expect(ctx.element.tabIndex).toBe(-1);
+    });
+
+    it('should be focusable again when re-enabled', async () => {
+      const ctx = await createFixture();
+      ctx.element.disabled = true;
+      await ctx.element.updateComplete;
+      ctx.element.disabled = false;
+      await ctx.element.updateComplete;
+
+      expect(ctx.element.tabIndex).toBe(0);
+    });
+  });
+
   describe('descendant options', () => {
     it('should disable descendant options when disabled', async () => {
       const ctx = await createFixture(html`
@@ -556,6 +581,23 @@ describe('Listbox', () => {
 
       expect(ctx.element.value).toBe('4');
     });
+
+    it('should not wipe a declared value attribute when no option is declaratively selected', async () => {
+      const screen = render(html`
+        <forge-listbox value="2">
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2">Option 2</forge-option>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      `);
+      const listbox = screen.container.querySelector('forge-listbox') as ListboxComponent;
+      await task();
+
+      expect(listbox.value).toBe('2');
+      const options = Array.from(listbox.querySelectorAll<OptionComponent>('forge-option'));
+      expect(options[1].selected).toBe(true);
+      expect(options[0].selected).toBe(false);
+    });
   });
 
   describe('form association', () => {
@@ -955,6 +997,33 @@ describe('Listbox', () => {
 
       dispatchDrag(ctx.options[2], 'dragstart', { dataTransfer });
       dispatchDrag(ctx.element, 'dragenter', { dataTransfer, clientY: targetY });
+      dispatchDrag(ctx.element, 'drop', { dataTransfer, clientY: targetY });
+
+      const detail = dropSpy.mock.calls[0][0].detail as IListboxDropData;
+      expect(detail.index).toBe(2);
+    });
+
+    it('should not count the placeholder itself when recalculating the insertion index on dragover', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox reorderable>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2">Option 2</forge-option>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      `);
+      await ctx.element.updateComplete;
+
+      const dropSpy = vi.fn();
+      ctx.element.addEventListener('forge-listbox-drop', dropSpy);
+
+      const dataTransfer = createDataTransfer();
+      const targetY = clientYForIndex(ctx.element, 2);
+
+      dispatchDrag(ctx.options[0], 'dragstart', { dataTransfer });
+      dispatchDrag(ctx.element, 'dragenter', { dataTransfer, clientY: targetY });
+      // The placeholder is now a direct child of the listbox; a subsequent dragover at the same
+      // position should still resolve to the same index, not be shifted by the placeholder itself.
+      dispatchDrag(ctx.element, 'dragover', { dataTransfer, clientY: targetY });
       dispatchDrag(ctx.element, 'drop', { dataTransfer, clientY: targetY });
 
       const detail = dropSpy.mock.calls[0][0].detail as IListboxDropData;

@@ -1,4 +1,4 @@
-import { consume } from '@lit/context';
+import { consume, ContextRoot } from '@lit/context';
 import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { tylIconCheck, tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconDrag, tylIconDragHorizontal } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
@@ -9,7 +9,7 @@ import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
 import { IconComponent, IconRegistry } from '../../icon/index.js';
-import { LISTBOX_DRAG_OUT, LISTBOX_DENSE, LISTBOX_REORDERABLE, LISTBOX_TAG_NAME } from '../../listbox/listbox.js';
+import { LISTBOX_DENSE, LISTBOX_DRAG_OUT, LISTBOX_REORDERABLE, LISTBOX_TAG_NAME } from '../../listbox/listbox-constants.js';
 import { StateLayerComponent } from '../../state-layer/state-layer.js';
 import type { IOptionConfigComponent } from './option-config.js';
 import { OptionConfigComponent } from './option-config.js';
@@ -84,6 +84,9 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [FocusIndicatorComponent, IconComponent, StateLayerComponent];
 
+  /** @internal */
+  public static contextRoot = new ContextRoot();
+
   static {
     IconRegistry.define([tylIconCheck, tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconDrag, tylIconDragHorizontal]);
   }
@@ -157,6 +160,13 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   }
 
   public override connectedCallback(): void {
+    // Set the parent component's context root to ensure context is provided even if the option is upgraded before the parent
+    // This must happen before super.connectedCallback() for the root to catch any context updates that occur during the initial update cycle
+    // Currently only the listbox is supported as a parent, add other components as they gain support for rendered options
+    const listbox = this.closest('forge-listbox');
+    if (listbox) {
+      OptionComponent.contextRoot.attach(listbox);
+    }
     super.connectedCallback();
     this._dispatchUpdate('added');
   }
@@ -269,7 +279,7 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-option': IOptionComponent;
+    'forge-option': OptionComponent;
   }
   interface HTMLElementEventMap {
     'forge-option-value-change': CustomEvent<any>;

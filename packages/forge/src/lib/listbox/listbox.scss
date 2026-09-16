@@ -17,3 +17,7 @@
 .forge-listbox {
   @include core.base;
 }
+
+::slotted(forge-option-group:not(:last-child)) {
+  margin-block-end: #{token(group-margin)};
+}

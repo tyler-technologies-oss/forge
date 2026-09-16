@@ -163,14 +163,16 @@ describe('DropController', () => {
       expect(evt.type).toBe('dragenter');
     });
 
-    it('should prevent default and reject the drop when getDropTarget returns null', async () => {
+    it('should reject the drop without calling preventDefault when getDropTarget returns null', async () => {
+      // Per the HTML5 drag-and-drop spec, calling preventDefault() on dragenter signals "accept" -
+      // rejecting a drop target must leave the default (not-a-valid-target) browser behavior in place.
       const onDragEnter = vi.fn();
       const { host } = await createFixture({ getDropTarget: () => null, onDragEnter });
       startManagerOperation();
 
       const evt = dispatchDrag(host, 'dragenter');
 
-      expect(evt.defaultPrevented).toBe(true);
+      expect(evt.defaultPrevented).toBe(false);
       expect(onDragEnter).not.toHaveBeenCalled();
       expect(controllerInsertionIndexIsNull());
 

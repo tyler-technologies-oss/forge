@@ -1,5 +1,5 @@
-import { createContext, provide } from '@lit/context';
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { provide } from '@lit/context';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { SELECT_LIKE_DISABLED, SELECT_LIKE_MULTIPLE, SELECT_LIKE_READONLY, toggleFocusIndicator } from '../constants.js';
@@ -12,21 +12,12 @@ import { FocusGroupController } from '../core/utils/focus-group.js';
 import { FormRestoreReason, FormRestoreState } from '../core/utils/form-utils.js';
 import { KeyActionController } from '../core/utils/key-action.js';
 import { toggleState } from '../core/utils/utils.js';
-import '../option/option-group/index.js';
-import type { OptionGroupComponent } from '../option/option-group/index.js';
-import '../option/option/index.js';
-import type { OptionComponent, OptionUpdateReason } from '../option/option/index.js';
+import { OptionGroupComponent } from '../option/option-group/option-group.js';
+import { OPTION_CONSTANTS } from '../option/option/option-constants.js';
+import { OptionComponent, OptionUpdateReason } from '../option/option/option.js';
+import { LISTBOX_DENSE, LISTBOX_DRAG_OUT, LISTBOX_REORDERABLE, LISTBOX_TAG_NAME } from './listbox-constants.js';
 
 import styles from './listbox.scss';
-
-export const LISTBOX_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-listbox';
-
-const OPTION_SELECTOR = 'forge-option';
-
-export const LISTBOX_DENSE = createContext<boolean>('forge-listbox-dense');
-export const LISTBOX_DRAG_OUT = createContext<boolean>('forge-listbox-drag-out');
-export const LISTBOX_REORDERABLE = createContext<boolean>('forge-listbox-reorderable');
-
 export interface IListboxDropData {
   option: OptionComponent;
   group?: OptionGroupComponent;
@@ -49,10 +40,10 @@ export interface IListboxDropData {
  * @event {Event} input - Dispatches when the selection changes.
  * @event {Event} change - Dispatches when the selection changes.
  * @event {CustomEvent<OptionComponent>} forge-listbox-drag-out - Dispatches when an option is dragged out of
- * the listbox. Contains the value of the dragged option.
+ * the listbox. Contains the dragged option element.
  * @event {CustomEvent<IListboxDropData>} forge-listbox-drop - Dispatches when an option is dropped
- * into the listbox. Contains the value of the dropped option, the index where it was dropped, and
- * the source listbox id.
+ * into the listbox. Contains the dropped option element, the index where it was dropped, and
+ * the source listbox element.
  *
  * @cssproperty --forge-listbox-divider-margin - The margin around a slotted divider.
  * @cssproperty --forge-listbox-group-margin - The spacing between slotted option groups.
@@ -72,6 +63,9 @@ export class ListboxComponent extends BaseLitElement {
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = LISTBOX_TAG_NAME;
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [OptionComponent, OptionGroupComponent];
 
   #internals: ElementInternals;
   #validationHelper: HTMLSelectElement;
@@ -203,11 +197,11 @@ export class ListboxComponent extends BaseLitElement {
   public dense = false;
 
   get #options(): OptionComponent[] {
-    return Array.from(this.querySelectorAll<OptionComponent>(OPTION_SELECTOR));
+    return Array.from(this.querySelectorAll<OptionComponent>(OPTION_CONSTANTS.elementName));
   }
 
   #focusGroup = new FocusGroupController<OptionComponent>(this, {
-    selector: OPTION_SELECTOR,
+    selector: OPTION_CONSTANTS.elementName,
     orientation: 'vertical',
     wrap: true,
     useActiveDescendant: true,
@@ -223,7 +217,7 @@ export class ListboxComponent extends BaseLitElement {
   });
 
   #dropController = new DropController(this, {
-    childSelector: OPTION_SELECTOR,
+    childSelector: OPTION_CONSTANTS.elementName,
     orientation: 'vertical',
     getIndex: event => this.#getInsertionIndex(event),
     onDragStart: args => this.#handleDragStart(args),
@@ -311,6 +305,7 @@ export class ListboxComponent extends BaseLitElement {
     if (changedProperties.has('disabled')) {
       setDefaultAria(this, this.#internals, { ariaDisabled: this.disabled ? 'true' : null });
       toggleState(this.#internals, 'disabled', this.disabled);
+      this.tabIndex = this.disabled ? -1 : 0;
     }
 
     if (changedProperties.has('readonly')) {
@@ -359,7 +354,7 @@ export class ListboxComponent extends BaseLitElement {
 
   #getOptionFromEvent(evt: Event): OptionComponent | undefined {
     const path = composedPathFrom(this, evt);
-    return path.find(el => el.matches && el.matches(OPTION_SELECTOR)) as OptionComponent | undefined;
+    return path.find(el => el.matches && el.matches(OPTION_CONSTANTS.elementName)) as OptionComponent | undefined;
   }
 
   #getGroupFromDragEvent(evt: DragEvent): OptionGroupComponent | undefined {
@@ -494,10 +489,37 @@ export class ListboxComponent extends BaseLitElement {
     if (this.#isReconciling) {
       return;
     }
-    if (!this.multiple && evt.detail.reason === 'selected' && evt.target instanceof HTMLElement && evt.target.matches(OPTION_SELECTOR)) {
-      this.#reconcileValueFromOptions(evt.target as OptionComponent);
+    if (!(evt.target instanceof HTMLElement) || !evt.target.matches(OPTION_CONSTANTS.elementName)) {
       return;
     }
+    const option = evt.target as OptionComponent;
+
+    if (evt.detail.reason === 'added') {
+      // A newly added option with no explicit selection of its own should reflect the listbox's
+      // existing value rather than reconciling the listbox's value from the (as yet incomplete) set
+      // of options.
+      if (!option.selected) {
+        const valueSet = new Set(Array.isArray(this.value) ? this.value : [this.value]);
+        option.selected = valueSet.has(option.value);
+        return;
+      }
+      this.#reconcileValueFromOptions(this.multiple ? undefined : option);
+      return;
+    }
+
+    if (!this.multiple && evt.detail.reason === 'selected') {
+      this.#reconcileValueFromOptions(option);
+      return;
+    }
+
+    // A value change on an option that isn't selected can't affect the listbox's tracked value -
+    // this also covers 'value-changed' firing during an option's initial attribute upgrade, which
+    // happens before its 'added' event and, left unguarded, would otherwise wipe the listbox's value
+    // before 'added' gets a chance to sync it.
+    if (evt.detail.reason === 'value-changed' && !option.selected) {
+      return;
+    }
+
     this.#reconcileValueFromOptions();
   }
 
@@ -515,7 +537,7 @@ export class ListboxComponent extends BaseLitElement {
     if (!(node instanceof Element)) {
       return false;
     }
-    return node.matches(OPTION_SELECTOR) || !!node.querySelector(OPTION_SELECTOR);
+    return node.matches(OPTION_CONSTANTS.elementName) || !!node.querySelector(OPTION_CONSTANTS.elementName);
   }
 
   /**
@@ -746,7 +768,7 @@ export class ListboxComponent extends BaseLitElement {
   #handleDragStart(args: DropEventArgs): boolean {
     // Ensure the item being dragged is a forge-option and the source is a forge-listbox
     const { item, source } = args;
-    if (!item || item.tagName.toLowerCase() !== OPTION_SELECTOR || !source || source.tagName.toLowerCase() !== LISTBOX_TAG_NAME) {
+    if (!item || item.tagName.toLowerCase() !== OPTION_CONSTANTS.elementName || !source || source.tagName.toLowerCase() !== LISTBOX_TAG_NAME) {
       return false;
     }
     // Allow drop if the source is this listbox and reordering is enabled, or if the source allows
@@ -794,7 +816,6 @@ export class ListboxComponent extends BaseLitElement {
     placeholder.style.boxSizing = 'border-box';
     placeholder.style.backgroundColor = 'var(--forge-theme-primary-container-minimum)';
     this.#setPlaceholderHeight(placeholder);
-
     return placeholder;
   }
 
@@ -838,7 +859,7 @@ export class ListboxComponent extends BaseLitElement {
 
   #getInsertionIndex(event: DragEvent): number {
     const parent = this.#getGroupFromDragEvent(event) || this;
-    const children = Array.from(parent.children);
+    const children = Array.from(parent.children).filter(el => el !== this.#placeholder);
 
     this.#dropGroup = parent === this ? undefined : (parent as OptionGroupComponent);
 

@@ -229,15 +229,18 @@ describe('DragController', () => {
       expect(onDragEnd).not.toHaveBeenCalled();
     });
 
-    it('should not call onDragEnd if the tracked operation was already ended externally', async () => {
+    it('should still call onDragEnd when the manager operation was already ended (e.g. by a successful drop) before dragend fires', async () => {
       const onDragEnd = vi.fn();
       const { item1 } = await createFixture({ onDragEnd });
       dispatchDragStart(item1);
+      // Simulates a DropController ending the shared manager operation on `drop`, which always
+      // fires before the source element's own `dragend`.
       DragDropManager.instance.endOperation();
 
       dispatchDragEnd(item1);
 
-      expect(onDragEnd).not.toHaveBeenCalled();
+      expect(onDragEnd).toHaveBeenCalledOnce();
+      expect(onDragEnd.mock.calls[0][0].item).toBe(item1);
     });
   });
 

@@ -594,6 +594,36 @@ describe('BaseFocusGroup', () => {
       document.body.removeChild(containerA);
       document.body.removeChild(containerB);
     });
+
+    it('should re-fire onFocusChange when focus returns to the root after leaving and coming back', () => {
+      const onFocusChange = vi.fn();
+      const activeDescendantContainer = document.createElement('div');
+      activeDescendantContainer.innerHTML = `<button>A1</button><button>A2</button>`;
+      document.body.appendChild(activeDescendantContainer);
+      const externalButton = document.createElement('button');
+      document.body.appendChild(externalButton);
+
+      const instance = new BaseFocusGroup(activeDescendantContainer, {
+        selector: 'button',
+        useActiveDescendant: true,
+        onFocusChange
+      });
+      instance.connect();
+
+      activeDescendantContainer.dispatchEvent(new FocusEvent('focusin', { bubbles: true, composed: true }));
+      expect(onFocusChange).toHaveBeenCalledTimes(1);
+
+      // Tab away, then tab back in - a plain blur doesn't clear the last focused element, so this
+      // second focusin should still re-fire onFocusChange (and re-activate the descendant).
+      activeDescendantContainer.dispatchEvent(new FocusEvent('focusout', { relatedTarget: externalButton, bubbles: true, composed: true }));
+      activeDescendantContainer.dispatchEvent(new FocusEvent('focusin', { bubbles: true, composed: true }));
+
+      expect(onFocusChange).toHaveBeenCalledTimes(2);
+
+      instance.disconnect();
+      document.body.removeChild(activeDescendantContainer);
+      document.body.removeChild(externalButton);
+    });
   });
 });
 
