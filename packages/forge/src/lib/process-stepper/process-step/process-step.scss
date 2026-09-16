@@ -1,0 +1,160 @@
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+:host([state='disabled']) {
+  @include core.disabled;
+}
+
+//
+// Base
+//
+
+.forge-process-step {
+  @include core.tokens;
+  @include core.base;
+}
+
+.forge-process-step.vertical {
+  @include core.vertical;
+}
+
+.forge-process-step.horizontal {
+  @include core.horizontal;
+}
+
+//
+// Progress line
+//
+
+.line {
+  @include core.line;
+}
+
+.line.active {
+  @include core.line-active;
+}
+
+.vertical .line {
+  @include core.line-vertical;
+}
+
+.vertical .line.active {
+  @include core.line-vertical-active;
+}
+
+.horizontal .line {
+  @include core.line-horizontal;
+}
+
+.horizontal .line.active {
+  @include core.line-horizontal-active;
+}
+
+//
+// Sidebar
+//
+
+.sidebar {
+  @include core.sidebar;
+}
+
+.vertical .sidebar {
+  @include core.sidebar-vertical;
+}
+
+.horizontal .sidebar {
+  @include core.sidebar-horizontal;
+}
+
+.label-row {
+  @include core.label-row;
+}
+
+.vertical .label-row {
+  @include core.label-row-vertical;
+}
+
+//
+// Marker
+//
+
+.marker {
+  @include core.marker;
+}
+
+.marker.dashed {
+  @include core.marker-dashed;
+}
+
+.marker.filled {
+  @include core.marker-filled;
+}
+
+.marker.partial {
+  @include core.marker-partial;
+}
+
+.marker.error {
+  @include core.marker-error;
+}
+
+.marker.custom {
+  @include core.marker-custom;
+}
+
+.marker forge-icon {
+  @include core.marker-icon;
+}
+
+//
+// Content
+//
+
+.content {
+  @include core.content;
+}
+
+.vertical .content {
+  @include core.content-vertical;
+}
+
+.label {
+  @include core.label;
+}
+
+.label-button {
+  @include core.label-button;
+}
+
+.label-button:disabled {
+  @include core.label-button-disabled;
+}
+
+.description {
+  @include core.description;
+}
+
+.meta {
+  @include core.meta;
+}
+
+.actions {
+  @include core.actions;
+}
+
+//
+// Slotted
+//
+
+::slotted(forge-checkbox),
+::slotted(forge-radio),
+::slotted(forge-switch) {
+  @include core.slotted-control;
+}

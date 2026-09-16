@@ -43,6 +43,7 @@
   { "label": "Paginator", "path": "/pages/paginator/paginator.html", "tags": ["table", "data"] },
   { "label": "Popover", "path": "/pages/popover/popover.html" },
   { "label": "Profile card", "path": "/pages/profile-card/profile-card.html" },
+  { "label": "Process stepper", "path": "/pages/process-stepper/process-stepper.html", "tags": ["progress", "steps", "workflow"] },
   { "label": "Radio", "path": "/pages/radio/radio.html", "tags": ["form"] },
   { "label": "Scaffold", "path": "/pages/scaffold/scaffold.html" },
   { "label": "Secret", "path": "/pages/secret/secret.html", "tags": ["password", "sensitive", "hide", "privacy", "credentials", "blur"] },

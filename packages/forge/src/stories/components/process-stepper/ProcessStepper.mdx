@@ -1,0 +1,144 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import { UsageLink } from '../../blocks/Shared';
+import * as ProcessStepperStories from './ProcessStepper.stories';
+
+<Meta of={ProcessStepperStories} />
+
+<Title />
+
+Process steppers show where a user is within a multi-step process, and allow actions to be completed
+directly from each step. Unlike the stepper component, a process step can contain arbitrary
+interactive content, so users can complete tasks, acknowledge information, or launch a workflow
+without leaving the page.
+
+<Canvas of={ProcessStepperStories.Demo} />
+
+<UsageLink text="the stepper component" href="?path=/docs/components-stepper--docs" />
+
+## Orientation
+
+Process steppers are vertical by default, which gives each step room for descriptions, meta
+content, and interactive content. Set `orientation` to `horizontal` for compact, progress-oriented
+processes where steps are distributed evenly across the available width.
+
+<Canvas of={ProcessStepperStories.Horizontal} />
+
+## Progress
+
+A continuous line runs alongside the steps and doubles as the progress indicator: a rail to the
+start of the markers when vertical, and a track above them when horizontal. The line is filled
+through every step in the `completed`, `current`, or `in-progress` state, and unfilled for the steps
+that follow, so it reads as a progress bar that fills as the process advances.
+
+The `progress` property returns the fraction of steps that are completed, between 0 and 1.
+
+## Step States
+
+Set the `state` property on each step to communicate its position in the process. The state controls
+the marker treatment:
+
+| State                | Marker                                 |
+| -------------------- | -------------------------------------- |
+| `not-started`        | Dashed outline                         |
+| `current`            | Partially filled                       |
+| `in-progress`        | Partially filled                       |
+| `completed`          | Filled with a check icon               |
+| `optional`           | Dashed outline                         |
+| `skipped`            | Dashed outline                         |
+| `disabled`           | Dashed outline, reduced opacity        |
+| `waiting`            | Dashed outline                         |
+| `blocked`            | Error outline with an exclamation icon |
+| `error`              | Error outline with an exclamation icon |
+| `requires-attention` | Error outline with an exclamation icon |
+
+Use the `description` property for supporting text under the label, such as `Optional` or the reason
+a step is invalid.
+
+<Canvas of={ProcessStepperStories.States} />
+
+To replace a generated marker entirely, provide your own content in the step's `marker` slot.
+
+## Step Numbers
+
+Markers are empty by default. Set `numbered` on the stepper to display each step's number inside its
+marker. Steps that render an icon marker, such as completed and error steps, continue to show the
+icon rather than a number.
+
+<Canvas of={ProcessStepperStories.Numbered} />
+
+## Titles
+
+Use the stepper's `title` slot to label the process. Provide a heading element at the appropriate
+level for the surrounding page.
+
+<Canvas of={ProcessStepperStories.WithTitle} />
+
+## Meta Content
+
+Use a step's `meta` slot for supporting information such as dates or the assigned user. The slot
+lays its content out in two columns, so pass a label and a value as separate children to keep values
+aligned down the step:
+
+```html
+<forge-process-step label="Verbal warning" state="completed">
+  <span slot="meta">Started:</span>
+  <span slot="meta">01/15/2026</span>
+  <span slot="meta">Completed:</span>
+  <span slot="meta">01/15/2026</span>
+</forge-process-step>
+```
+
+A single child per row, such as a lone date, occupies the first column.
+
+<Canvas of={ProcessStepperStories.WithMeta} />
+
+## Step Content and Actions
+
+Content placed in a step's default slot renders under its meta content, and content in the `actions`
+slot renders at the end of the step. Use these slots to let users complete a step in place with
+checkboxes, inline form fields, or buttons. Not every step needs content or actions.
+
+Slotted `<forge-checkbox>`, `<forge-radio>`, and `<forge-switch>` controls are pulled back by
+`--forge-process-step-control-inset` so their visible box lines up with the step's text column
+rather than the inset edge of their state layer. Set that property to `0` to opt out.
+
+<Canvas of={ProcessStepperStories.WithStepContent} />
+
+## Validation Messaging
+
+Use a step's `message` slot for validation or warning messaging.
+
+<Canvas of={ProcessStepperStories.WithMessage} />
+
+## Clickable Steps
+
+Set `clickable` on a step to render its label as a button. Activating a clickable step dispatches a
+`forge-process-step-select` event from the step, and a `forge-process-stepper-change` event from the
+stepper with the index of the step and the step element. Use this to let users revisit a previous
+step or view its details.
+
+Steps in the `disabled` state do not dispatch either event.
+
+<Canvas of={ProcessStepperStories.Clickable} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+Process steppers are rendered as semantic lists with `role="list"` on the stepper and
+`role="listitem"` on each step. The stepper sets `aria-posinset` and `aria-setsize` on each step, and
+`aria-current="step"` on the step in the `current` state. State markers are decorative and marked
+`aria-hidden="true"`.
+
+### Best Practices
+
+- Because the marker is decorative, never rely on it alone to communicate state. Give steps whose
+  state is not obvious from the label a `description`, or a message in the `message` slot
+- Clickable steps render a native button, so they are reachable in the tab order and activate with
+  both `Enter` and `Space`
+- Provide a heading in the `title` slot at the correct level for the surrounding page
+- Interactive content placed in the `actions` or default slots keeps its own semantics and focus
+  behavior, so label it as you would anywhere else

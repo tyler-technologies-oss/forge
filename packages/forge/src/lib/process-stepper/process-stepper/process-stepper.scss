@@ -1,0 +1,50 @@
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+//
+// Base
+//
+
+.forge-process-stepper {
+  @include core.tokens;
+  @include core.base;
+}
+
+//
+// Title
+//
+
+.title {
+  @include core.title;
+}
+
+//
+// Steps
+//
+
+.steps {
+  @include core.steps;
+}
+
+.horizontal .steps {
+  @include core.horizontal-steps;
+}
+
+slot {
+  display: contents;
+}
+
+//
+// Slotted
+//
+
+.horizontal ::slotted(forge-process-step) {
+  @include core.slotted-step-horizontal;
+}
