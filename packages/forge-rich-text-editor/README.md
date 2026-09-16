@@ -27,7 +27,7 @@ import '@tylertech/forge-rich-text-editor';
 
 ```bash
 pnpm dev     # serve a scratch page at localhost:3460
-pnpm test    # 529 tests in a real browser
+pnpm test    # run the suite in a real browser
 pnpm build   # rollup ESM, custom elements manifest and types
 ```
 
