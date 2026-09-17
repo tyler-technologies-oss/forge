@@ -133,6 +133,10 @@ step or view its details.
 
 Steps in the `disabled` state do not dispatch either event.
 
+Each clickable step is a native button, so steps are reachable with `Tab` and activate with both
+`Enter` and `Space`. A `<forge-focus-indicator>` draws the focus ring around the step's label only,
+so keyboard focus never outlines the progress line or the step's content.
+
 <Canvas of={ProcessStepperStories.Clickable} />
 
 ## API

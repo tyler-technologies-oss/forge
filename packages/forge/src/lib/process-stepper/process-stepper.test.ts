@@ -6,6 +6,7 @@ import { ProcessStepperComponent } from './process-stepper/process-stepper.js';
 
 import './process-step/process-step.js';
 import './process-stepper/process-stepper.js';
+import '../focus-indicator/focus-indicator.js';
 
 interface IHarness {
   stepper: ProcessStepperComponent;
@@ -406,6 +407,27 @@ describe('ProcessStep', () => {
       step.shadowRoot?.querySelector<HTMLButtonElement>('.label-button')?.click();
 
       expect(spy).toHaveBeenCalledOnce();
+    });
+
+    it('should render a focus indicator targeting the label button', async () => {
+      const step = await createStep(html`<forge-process-step label="One" clickable></forge-process-step>`);
+      const indicator = step.shadowRoot?.querySelector('forge-focus-indicator');
+
+      expect(indicator).toBeTruthy();
+      expect(indicator?.getAttribute('target')).toBe('label-button');
+    });
+
+    it('should not render a focus indicator when not clickable', async () => {
+      const step = await createStep(html`<forge-process-step label="One"></forge-process-step>`);
+
+      expect(step.shadowRoot?.querySelector('forge-focus-indicator')).toBeNull();
+    });
+
+    it('should nest the focus indicator inside the label button so the ring excludes the progress line', async () => {
+      const step = await createStep(html`<forge-process-step label="One" clickable></forge-process-step>`);
+      const indicator = step.shadowRoot?.querySelector('forge-focus-indicator');
+
+      expect(indicator?.parentElement?.id).toBe('label-button');
     });
 
     it('should disable the button when the step is disabled', async () => {

@@ -167,6 +167,8 @@
   @include typography.style(body2);
 }
 
+// Positioned so the focus indicator sizes to the label itself, keeping the ring clear of the
+// progress line and the step content.
 @mixin label-button {
   appearance: none;
   background: none;
@@ -175,6 +177,7 @@
   cursor: pointer;
   font: inherit;
   padding: 0;
+  position: relative;
   text-align: start;
 }
 

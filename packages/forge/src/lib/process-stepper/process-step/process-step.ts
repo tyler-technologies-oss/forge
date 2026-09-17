@@ -9,6 +9,7 @@ import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { hideWhenEmpty } from '../../core/utils/lit-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
 import { IconRegistry } from '../../icon/icon-registry.js';
+import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
 import { IconComponent } from '../../icon/icon.js';
 import type { ProcessStepperOrientation } from '../process-stepper/process-stepper-constants.js';
 import { ERROR_STATES, PARTIAL_STATES, PROCESS_STEP_CONSTANTS, PROGRESS_LINE_STATES, ProcessStepState } from './process-step-constants.js';
@@ -21,6 +22,7 @@ import styles from './process-step.scss';
  * @summary Process steps represent a single stage of a process, and may contain interactive content.
  *
  * @dependency forge-icon
+ * @dependency forge-focus-indicator
  *
  * @slot - The default slot for supporting content, such as inline form fields or actions.
  * @slot marker - Replaces the generated state marker.
@@ -63,6 +65,7 @@ import styles from './process-step.scss';
  * @csspart content - The element containing the description, meta, message, and slotted content.
  * @csspart label - The label element.
  * @csspart label-button - The button rendered for a clickable step.
+ * @csspart focus-indicator - The focus indicator shown when a clickable step has keyboard focus.
  * @csspart description - The description element.
  * @csspart meta - The element containing the slotted meta content.
  * @csspart message - The element containing the slotted message content.
@@ -76,7 +79,7 @@ export class ProcessStepComponent extends BaseLitElement {
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = PROCESS_STEP_CONSTANTS.elementName;
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [IconComponent];
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [IconComponent, FocusIndicatorComponent];
 
   static {
     IconRegistry.define([tylIconCheck, tylIconExclamation]);
@@ -211,8 +214,9 @@ export class ProcessStepComponent extends BaseLitElement {
     return when(
       this.clickable,
       () => html`
-        <button part="label-button" class="label-button" ?disabled=${this.state === 'disabled'} @click=${this.#handleClick}>
+        <button id="label-button" part="label-button" class="label-button" ?disabled=${this.state === 'disabled'} @click=${this.#handleClick}>
           <span part="label" class="label">${this.label}</span>
+          <forge-focus-indicator part="focus-indicator" target="label-button"></forge-focus-indicator>
         </button>
       `,
       () => html`<span part="label" class="label">${this.label}</span>`
