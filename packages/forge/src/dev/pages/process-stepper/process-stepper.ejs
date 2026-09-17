@@ -1,5 +1,22 @@
 <div class="vert">
   <div>
+    <h3 class="forge-typography--heading2">Compact (narrow container)</h3>
+    <div style="max-inline-size: 360px">
+      <forge-process-stepper orientation="horizontal" numbered>
+        <forge-process-step label="Cart" state="completed"></forge-process-step>
+        <forge-process-step label="Shipping" state="completed"></forge-process-step>
+        <forge-process-step label="Payment" state="current">
+          <span slot="meta" class="forge-color--text-medium">Started:</span>
+          <span slot="meta">02/03/2026</span>
+          <forge-checkbox><label>Save this card</label></forge-checkbox>
+          <forge-button slot="actions" variant="outlined">Advance to next stage</forge-button>
+        </forge-process-step>
+        <forge-process-step label="Review"></forge-process-step>
+      </forge-process-stepper>
+    </div>
+  </div>
+
+  <div>
     <h3 class="forge-typography--heading2">Horizontal</h3>
     <forge-process-stepper orientation="horizontal">
       <forge-process-step label="1. Cart" state="completed"></forge-process-step>

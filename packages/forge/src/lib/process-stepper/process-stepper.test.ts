@@ -6,6 +6,7 @@ import { ProcessStepperComponent } from './process-stepper/process-stepper.js';
 
 import './process-step/process-step.js';
 import './process-stepper/process-stepper.js';
+import '../linear-progress/linear-progress.js';
 
 interface IHarness {
   stepper: ProcessStepperComponent;
@@ -133,6 +134,88 @@ describe('ProcessStepper', () => {
 
       expect(steps[1].getAttribute('aria-posinset')).toBe('2');
       expect(steps[1].getAttribute('aria-setsize')).toBe('3');
+    });
+  });
+
+  describe('compact layout', () => {
+    /** Waits for the resize observer to report a width change and the stepper to settle. */
+    async function settle(stepper: ProcessStepperComponent, expected: boolean): Promise<void> {
+      for (let i = 0; i < 30 && stepper.compact !== expected; i++) {
+        await new Promise(resolve => requestAnimationFrame(resolve));
+      }
+      await stepper.updateComplete;
+    }
+
+    async function createSized(width: string, orientation = 'horizontal'): Promise<IHarness & { host: HTMLElement }> {
+      const screen = render(html`
+        <div style="width: ${width}">
+          <forge-process-stepper orientation=${orientation}>
+            <forge-process-step state="completed" label="One"></forge-process-step>
+            <forge-process-step state="current" label="Two"></forge-process-step>
+            <forge-process-step label="Three"></forge-process-step>
+            <forge-process-step label="Four"></forge-process-step>
+          </forge-process-stepper>
+        </div>
+      `);
+      const host = screen.container.querySelector('div') as HTMLElement;
+      const stepper = screen.container.querySelector('forge-process-stepper') as ProcessStepperComponent;
+      const steps = Array.from(screen.container.querySelectorAll('forge-process-step')) as ProcessStepComponent[];
+
+      await settle(stepper, orientation === 'horizontal' && width === '320px');
+      await Promise.all(steps.map(step => step.updateComplete));
+
+      return { host, stepper, steps };
+    }
+
+    it('should not be compact in a wide container', async () => {
+      const { stepper } = await createSized('900px');
+
+      expect(stepper.compact).toBe(false);
+      expect(stepper.shadowRoot?.querySelector('.forge-process-stepper.horizontal')).toBeTruthy();
+      expect(stepper.shadowRoot?.querySelector('forge-linear-progress')).toBeNull();
+    });
+
+    it('should collapse to the vertical layout in a narrow container', async () => {
+      const { stepper, steps } = await createSized('320px');
+
+      expect(stepper.compact).toBe(true);
+      expect(stepper.shadowRoot?.querySelector('.forge-process-stepper.vertical.compact')).toBeTruthy();
+      expect(steps.every(step => step.orientation === 'vertical')).toBe(true);
+    });
+
+    it('should render a determinate progress bar when compact', async () => {
+      const { stepper } = await createSized('320px');
+      const bar = stepper.shadowRoot?.querySelector('forge-linear-progress');
+
+      expect(bar).toBeTruthy();
+      expect(bar?.hasAttribute('determinate')).toBe(true);
+      expect((bar as HTMLElement & { progress: number }).progress).toBeCloseTo(0.25);
+    });
+
+    it('should keep the orientation attribute unchanged when compact', async () => {
+      const { stepper } = await createSized('320px');
+
+      expect(stepper.orientation).toBe('horizontal');
+    });
+
+    it('should return to the horizontal layout when the container widens', async () => {
+      const { host, stepper } = await createSized('320px');
+      expect(stepper.compact).toBe(true);
+
+      host.style.width = '900px';
+      await settle(stepper, false);
+
+      expect(stepper.compact).toBe(false);
+      expect(stepper.shadowRoot?.querySelector('.forge-process-stepper.horizontal')).toBeTruthy();
+      expect(stepper.shadowRoot?.querySelector('forge-linear-progress')).toBeNull();
+      expect(stepper.steps.every(step => step.orientation === 'horizontal')).toBe(true);
+    });
+
+    it('should not be compact when the stepper is vertical', async () => {
+      const { stepper } = await createSized('320px', 'vertical');
+
+      expect(stepper.compact).toBe(false);
+      expect(stepper.shadowRoot?.querySelector('forge-linear-progress')).toBeNull();
     });
   });
 

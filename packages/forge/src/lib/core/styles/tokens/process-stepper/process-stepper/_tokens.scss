@@ -3,7 +3,8 @@
 @use '../../../utils';
 
 $tokens: (
-  title-margin: utils.module-val(process-stepper, title-margin, spacing.variable(xsmall))
+  title-margin: utils.module-val(process-stepper, title-margin, spacing.variable(xsmall)),
+  progress-margin: utils.module-val(process-stepper, progress-margin, spacing.variable(small))
 ) !default;
 
 @function get($key) {

@@ -33,3 +33,7 @@
   flex: 1 1 0;
   min-inline-size: 0;
 }
+
+@mixin progress-bar {
+  margin-block-end: #{token(progress-margin)};
+}

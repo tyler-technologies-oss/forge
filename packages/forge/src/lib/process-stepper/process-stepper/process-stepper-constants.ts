@@ -27,3 +27,10 @@ export interface IProcessStepperChangeEventData {
   /** The step element that was activated. */
   step: ProcessStepComponent;
 }
+
+const numbers = {
+  /** The container width, in pixels, at or below which the stepper collapses to its compact layout. */
+  COMPACT_MAX_WIDTH: 599
+};
+
+export const PROCESS_STEPPER_NUMBERS = numbers;

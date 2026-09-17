@@ -172,3 +172,22 @@ export const Numbered: Story = {
     </forge-process-stepper>
   `
 };
+
+export const Compact: Story = {
+  ...standaloneStoryParams,
+  render: () => html`
+    <div style="max-inline-size: 360px">
+      <forge-process-stepper orientation="horizontal" numbered>
+        <forge-process-step label="Cart" state="completed"></forge-process-step>
+        <forge-process-step label="Shipping" state="completed"></forge-process-step>
+        <forge-process-step label="Payment" state="current">
+          <span slot="meta">Started:</span>
+          <span slot="meta">02/03/2026</span>
+          <forge-checkbox><label>Save this card</label></forge-checkbox>
+          <forge-button slot="actions" variant="outlined">Advance to next stage</forge-button>
+        </forge-process-step>
+        <forge-process-step label="Review"></forge-process-step>
+      </forge-process-stepper>
+    </div>
+  `
+};

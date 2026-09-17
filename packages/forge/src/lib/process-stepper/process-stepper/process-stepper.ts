@@ -1,13 +1,15 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver } from '@tylertech/forge-core';
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
+import { customElement, property, queryAssignedElements, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { when } from 'lit/directives/when.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { hideWhenEmpty } from '../../core/utils/lit-utils.js';
+import { LinearProgressComponent } from '../../linear-progress/linear-progress.js';
 import { PROCESS_STEP_CONSTANTS } from '../process-step/process-step-constants.js';
 import { ProcessStepComponent } from '../process-step/process-step.js';
-import { IProcessStepperChangeEventData, PROCESS_STEPPER_CONSTANTS, ProcessStepperOrientation } from './process-stepper-constants.js';
+import { IProcessStepperChangeEventData, PROCESS_STEPPER_CONSTANTS, PROCESS_STEPPER_NUMBERS, ProcessStepperOrientation } from './process-stepper-constants.js';
 
 import styles from './process-stepper.scss';
 
@@ -18,6 +20,7 @@ import styles from './process-stepper.scss';
  * completed from within each step.
  *
  * @dependency forge-process-step
+ * @dependency forge-linear-progress
  *
  * @slot - The default slot for `<forge-process-step>` elements.
  * @slot title - A heading displayed above the process.
@@ -25,10 +28,12 @@ import styles from './process-stepper.scss';
  * @fires {CustomEvent<IProcessStepperChangeEventData>} forge-process-stepper-change - Dispatches when a clickable step is activated.
  *
  * @cssproperty --forge-process-stepper-title-margin - The spacing between the title and the steps.
+ * @cssproperty --forge-process-stepper-progress-margin - The spacing between the compact layout progress bar and the steps.
  *
  * @csspart root - The root element.
  * @csspart title - The element containing the slotted title.
  * @csspart steps - The element containing the steps.
+ * @csspart progress-bar - The progress bar displayed in the compact layout.
  */
 @customElement(PROCESS_STEPPER_CONSTANTS.elementName)
 export class ProcessStepperComponent extends BaseLitElement {
@@ -38,7 +43,7 @@ export class ProcessStepperComponent extends BaseLitElement {
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = PROCESS_STEPPER_CONSTANTS.elementName;
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [ProcessStepComponent];
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [ProcessStepComponent, LinearProgressComponent];
 
   /**
    * The orientation of the process.
@@ -60,7 +65,13 @@ export class ProcessStepperComponent extends BaseLitElement {
   @queryAssignedElements({ selector: PROCESS_STEP_CONSTANTS.elementName })
   private readonly _steps!: ProcessStepComponent[];
 
+  @state()
+  private _narrow = false;
+
   readonly #internals: ElementInternals;
+
+  /** Keeps the progress bar in step with state changes made by consumers after the initial render. */
+  readonly #stateObserver = new MutationObserver(() => this.requestUpdate());
 
   constructor() {
     super();
@@ -71,11 +82,15 @@ export class ProcessStepperComponent extends BaseLitElement {
     super.connectedCallback();
     setDefaultAria(this, this.#internals, { role: 'list' });
     this.addEventListener(PROCESS_STEP_CONSTANTS.events.SELECT, this.#onStepSelect);
+    ForgeResizeObserver.observe(this, entry => this.#handleResize(entry));
+    this.#stateObserver.observe(this, { attributeFilter: [PROCESS_STEP_CONSTANTS.attributes.STATE], subtree: true });
   }
 
   public disconnectedCallback(): void {
     super.disconnectedCallback();
     this.removeEventListener(PROCESS_STEP_CONSTANTS.events.SELECT, this.#onStepSelect);
+    ForgeResizeObserver.unobserve(this);
+    this.#stateObserver.disconnect();
   }
 
   public updated(): void {
@@ -85,6 +100,15 @@ export class ProcessStepperComponent extends BaseLitElement {
   /** The steps within the process. */
   public get steps(): ProcessStepComponent[] {
     return [...this._steps];
+  }
+
+  /**
+   * Whether the stepper has collapsed to its compact layout. A horizontal stepper in a container
+   * narrower than 600px stacks its steps vertically and displays a progress bar, because there is
+   * not enough width for legible step labels side by side.
+   */
+  public get compact(): boolean {
+    return this._narrow && this.orientation === 'horizontal';
   }
 
   /** The number of completed steps as a fraction of the total number of steps, between 0 and 1. */
@@ -99,14 +123,34 @@ export class ProcessStepperComponent extends BaseLitElement {
 
   /* @internal */
   public render(): TemplateResult {
+    const compact = this.compact;
+
     return html`
-      <div part="root" class=${classMap({ 'forge-process-stepper': true, [this.orientation]: true })}>
+      <div part="root" class=${classMap({ 'forge-process-stepper': true, [this.#effectiveOrientation]: true, compact })}>
         <div part="title" class="title" ${hideWhenEmpty()}><slot name="title"></slot></div>
+        ${when(
+          compact,
+          () => html`
+            <forge-linear-progress part="progress-bar" class="progress-bar" determinate aria-hidden="true" .progress=${this.progress}></forge-linear-progress>
+          `
+        )}
         <div part="steps" class="steps">
           <slot @slotchange=${this.#handleSlotChange}></slot>
         </div>
       </div>
     `;
+  }
+
+  /** The orientation the steps are actually laid out in, which is vertical while compact. */
+  get #effectiveOrientation(): ProcessStepperOrientation {
+    return this.compact ? 'vertical' : this.orientation;
+  }
+
+  #handleResize(entry: ResizeObserverEntry): void {
+    const width = entry.contentRect.width;
+    if (width > 0) {
+      this._narrow = width <= PROCESS_STEPPER_NUMBERS.COMPACT_MAX_WIDTH;
+    }
   }
 
   #onStepSelect: EventListener = (evt: Event) => this.#handleStepSelect(evt);
@@ -122,7 +166,7 @@ export class ProcessStepperComponent extends BaseLitElement {
       step.count = steps.length;
       step.last = i === steps.length - 1;
       step.numbered = this.numbered;
-      step.orientation = this.orientation;
+      step.orientation = this.#effectiveOrientation;
     });
   }
 
