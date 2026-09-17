@@ -71,6 +71,17 @@ export class UserProfileComponent {
     return this.nativeElement.themeToggle;
   }
 
+  /** ARIA label for the theme toggle button group. */
+  @Input()
+  public set themeToggleAriaLabel(value: UserProfileComponentCustomElement['themeToggleAriaLabel']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.themeToggleAriaLabel = value;
+    });
+  }
+  public get themeToggleAriaLabel(): UserProfileComponentCustomElement['themeToggleAriaLabel'] {
+    return this.nativeElement.themeToggleAriaLabel;
+  }
+
   /** Controls whether the user profile popover is open. */
   @Input({ transform: booleanAttribute })
   public set open(value: UserProfileComponentCustomElement['open']) {
@@ -82,7 +93,7 @@ export class UserProfileComponent {
     return this.nativeElement.open;
   }
 
-  /** Sets the theme for the theme toggle. */
+  /** Sets the current theme. Applies immediately even if the theme toggle is not rendered. */
   public setTheme(...args: Parameters<UserProfileComponentCustomElement['setTheme']>): ReturnType<UserProfileComponentCustomElement['setTheme']> {
     return this.zone.runOutsideAngular(() => this.nativeElement.setTheme(...args));
   }

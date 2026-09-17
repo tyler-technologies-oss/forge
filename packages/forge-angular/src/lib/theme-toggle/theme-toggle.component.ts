@@ -16,6 +16,17 @@ export class ThemeToggleComponent {
   /** The forge-theme-toggle element. */
   public readonly nativeElement = this.elementRef.nativeElement;
 
+  /** ARIA label for the theme toggle button group. */
+  @Input()
+  public set groupAriaLabel(value: ThemeToggleComponentCustomElement['groupAriaLabel']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.groupAriaLabel = value;
+    });
+  }
+  public get groupAriaLabel(): ThemeToggleComponentCustomElement['groupAriaLabel'] {
+    return this.nativeElement.groupAriaLabel;
+  }
+
   /** Sets the current theme. */
   public setTheme(...args: Parameters<ThemeToggleComponentCustomElement['setTheme']>): ReturnType<ThemeToggleComponentCustomElement['setTheme']> {
     return this.zone.runOutsideAngular(() => this.nativeElement.setTheme(...args));

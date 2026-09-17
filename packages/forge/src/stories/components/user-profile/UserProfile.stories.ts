@@ -31,9 +31,8 @@ const meta = {
     const userProfileRef = createRef<IUserProfileComponent>();
 
     function handleThemeChange(evt: CustomEvent<ThemeToggleUpdateEventData>): void {
-      const mode = evt.detail.theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : evt.detail.theme;
       lastThemeToggleChange = evt.detail.theme;
-      channel.emit(UPDATE_DARK_MODE_EVENT_NAME, mode);
+      channel.emit(UPDATE_DARK_MODE_EVENT_NAME, evt.detail.resolvedTheme);
     }
 
     function handleStorybookThemeUpdate(isDark: boolean): void {
@@ -65,7 +64,8 @@ const meta = {
         ?theme-toggle=${args.showThemeToggle}
         image-url="${args.imageUrl}"
         full-name="${args.fullName}"
-        email="first.last@tylertech.com">
+        email="first.last@tylertech.com"
+        theme-toggle-aria-label="${args.themeToggleAriaLabel}">
         ${args.showSlottedLinks
           ? html`<forge-profile-link slot="link">
                 <forge-icon slot="icon" name="settings"></forge-icon>
@@ -78,6 +78,10 @@ const meta = {
           : nothing}
         ${args.signInButtonText.length ? html`<span slot="sign-in-button-text">${args.signInButtonText}</span>` : ''}
         ${args.signOutButtonText.length ? html`<span slot="sign-out-button-text">${args.signOutButtonText}</span>` : ''}
+        ${args.themeToggleTitle.length ? html`<span slot="theme-toggle-title">${args.themeToggleTitle}</span>` : ''}
+        ${args.themeToggleLightLabel.length ? html`<span slot="theme-toggle-light-label">${args.themeToggleLightLabel}</span>` : ''}
+        ${args.themeToggleDarkLabel.length ? html`<span slot="theme-toggle-dark-label">${args.themeToggleDarkLabel}</span>` : ''}
+        ${args.themeToggleSystemLabel.length ? html`<span slot="theme-toggle-system-label">${args.themeToggleSystemLabel}</span>` : ''}
       </forge-user-profile>
     </forge-app-bar>`;
   },
@@ -92,7 +96,12 @@ const meta = {
     buttonAriaLabel: { control: 'text' },
     imageUrl: { control: 'text' },
     showSlottedLinks: { control: 'boolean' },
-    showThemeToggle: { control: 'boolean' }
+    showThemeToggle: { control: 'boolean' },
+    themeToggleAriaLabel: { control: 'text' },
+    themeToggleTitle: { control: 'text' },
+    themeToggleLightLabel: { control: 'text' },
+    themeToggleDarkLabel: { control: 'text' },
+    themeToggleSystemLabel: { control: 'text' }
   },
   args: {
     fullName: 'First Last',
@@ -101,7 +110,12 @@ const meta = {
     buttonAriaLabel: 'Open the incredibly awesome profile menu',
     imageUrl: '',
     showSlottedLinks: true,
-    showThemeToggle: true
+    showThemeToggle: true,
+    themeToggleAriaLabel: 'Select a theme',
+    themeToggleTitle: 'Theme',
+    themeToggleLightLabel: 'Light',
+    themeToggleDarkLabel: 'Dark',
+    themeToggleSystemLabel: 'System'
   }
 } satisfies Meta;
 

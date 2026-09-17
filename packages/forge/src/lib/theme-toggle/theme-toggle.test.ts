@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
 import { TestHarness } from '../core/testing/test-harness.js';
@@ -20,6 +21,29 @@ function stubPrefersColorScheme(matches: boolean): void {
     removeListener: vi.fn(),
     dispatchEvent: vi.fn()
   } as unknown as MediaQueryList);
+}
+
+function stubMatchMediaWithChangeCallback(matches: boolean): {
+  ref: { current: ((evt: MediaQueryListEvent) => void) | null };
+  mediaQueryList: { matches: boolean };
+} {
+  const ref: { current: ((evt: MediaQueryListEvent) => void) | null } = { current: null };
+  const mediaQueryList = {
+    matches,
+    addEventListener: (eventName: string, callback: (evt: MediaQueryListEvent) => void) => {
+      if (eventName === 'change') {
+        ref.current = callback;
+      }
+    },
+    removeEventListener: vi.fn(),
+    media: '',
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    dispatchEvent: vi.fn()
+  } as unknown as MediaQueryList;
+  vi.spyOn(window, 'matchMedia').mockReturnValue(mediaQueryList);
+  return { ref, mediaQueryList };
 }
 
 describe('Theme Toggle', () => {
@@ -58,7 +82,8 @@ describe('Theme Toggle', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should dispatch update event when theme changes to system', async () => {
+  it('should dispatch update event with the resolved light/dark theme when theme changes to system', async () => {
+    stubPrefersColorScheme(true);
     localStorage.setItem('.forge-theme', 'light');
     const harness = await createFixture();
     const spy = vi.fn();
@@ -67,6 +92,9 @@ describe('Theme Toggle', () => {
     await userEvent.click(harness.systemButton);
 
     expect(spy).toHaveBeenCalled();
+    const event = spy.mock.calls[0][0] as CustomEvent;
+    expect(event.detail.theme).toBe('system');
+    expect(event.detail.resolvedTheme).toBe('dark');
   });
 
   it('should update the HTML element with the appropriate data attribute value when theme changes to light', async () => {
@@ -165,6 +193,79 @@ describe('Theme Toggle', () => {
     expect(harness.systemButton.hasAttribute('selected')).toBe(true);
     expect(harness.htmlElement.getAttribute('data-forge-theme')).toBe('light');
   });
+
+  it('should fall back to system when local storage contains an invalid theme value', async () => {
+    localStorage.setItem('.forge-theme', 'garbage');
+    stubPrefersColorScheme(true);
+
+    const harness = await createFixture();
+
+    expect(harness.systemButton.hasAttribute('selected')).toBe(true);
+    expect(harness.htmlElement.getAttribute('data-forge-theme')).toBe('dark');
+  });
+
+  it('should update the theme automatically when the OS color scheme preference changes while theme is system', async () => {
+    localStorage.setItem('.forge-theme', 'system');
+    const { ref, mediaQueryList } = stubMatchMediaWithChangeCallback(false);
+
+    const harness = await createFixture();
+
+    expect(harness.htmlElement.getAttribute('data-forge-theme')).toBe('light');
+
+    const spy = vi.fn();
+    harness.element.addEventListener('forge-theme-toggle-update', spy);
+
+    mediaQueryList.matches = true;
+    ref.current?.({ matches: true } as MediaQueryListEvent);
+    await harness.element.updateComplete;
+
+    expect(harness.htmlElement.getAttribute('data-forge-theme')).toBe('dark');
+    expect(harness.systemButton.hasAttribute('selected')).toBe(true);
+
+    expect(spy).toHaveBeenCalled();
+    const event = spy.mock.calls[0][0] as CustomEvent;
+    expect(event.detail.theme).toBe('system');
+    expect(event.detail.resolvedTheme).toBe('dark');
+  });
+
+  it('should not react to OS color scheme preference changes when a theme has been explicitly selected', async () => {
+    const { ref, mediaQueryList } = stubMatchMediaWithChangeCallback(false);
+
+    const harness = await createFixture();
+
+    await userEvent.click(harness.lightButton);
+
+    expect(harness.htmlElement.getAttribute('data-forge-theme')).toBe('light');
+
+    mediaQueryList.matches = true;
+    ref.current?.({ matches: true } as MediaQueryListEvent);
+    await harness.element.updateComplete;
+
+    expect(harness.htmlElement.getAttribute('data-forge-theme')).toBe('light');
+  });
+
+  it('should use default labels when no label content is slotted', async () => {
+    const harness = await createFixture();
+
+    expect(harness.groupEl.getAttribute('aria-label')).toBe('Select a theme');
+    expect(harness.lightButton.textContent?.trim()).toBe('Light');
+    expect(harness.darkButton.textContent?.trim()).toBe('Dark');
+    expect(harness.systemButton.textContent?.trim()).toBe('System');
+  });
+
+  it('should use a custom group aria label when the property is provided', async () => {
+    const harness = await createFixture({ groupAriaLabel: 'Choose a theme' });
+
+    expect(harness.groupEl.getAttribute('aria-label')).toBe('Choose a theme');
+  });
+
+  it('content should project into the light, dark, and system label slots', async () => {
+    const harness = await createFixture({ lightLabel: 'Bright', darkLabel: 'Night', systemLabel: 'Auto' });
+
+    expect(harness.lightLabelSlot.assignedNodes({ flatten: true })[0]?.textContent?.trim()).toBe('Bright');
+    expect(harness.darkLabelSlot.assignedNodes({ flatten: true })[0]?.textContent?.trim()).toBe('Night');
+    expect(harness.systemLabelSlot.assignedNodes({ flatten: true })[0]?.textContent?.trim()).toBe('Auto');
+  });
 });
 
 class ThemeToggleHarness extends TestHarness<IThemeToggleComponent> {
@@ -187,12 +288,37 @@ class ThemeToggleHarness extends TestHarness<IThemeToggleComponent> {
   public get systemButton(): IButtonToggleComponent {
     return getShadowElement(this.element, '#system-button') as IButtonToggleComponent;
   }
+
+  public get groupEl(): HTMLElement {
+    return getShadowElement(this.element, 'forge-button-toggle-group');
+  }
+
+  public get lightLabelSlot(): HTMLSlotElement {
+    return getShadowElement(this.element, 'slot[name="light-label"]') as HTMLSlotElement;
+  }
+
+  public get darkLabelSlot(): HTMLSlotElement {
+    return getShadowElement(this.element, 'slot[name="dark-label"]') as HTMLSlotElement;
+  }
+
+  public get systemLabelSlot(): HTMLSlotElement {
+    return getShadowElement(this.element, 'slot[name="system-label"]') as HTMLSlotElement;
+  }
 }
 
-async function createFixture(): Promise<ThemeToggleHarness> {
+interface ThemeToggleFixtureConfig {
+  groupAriaLabel?: string;
+  lightLabel?: string;
+  darkLabel?: string;
+  systemLabel?: string;
+}
+
+async function createFixture({ groupAriaLabel, lightLabel, darkLabel, systemLabel }: ThemeToggleFixtureConfig = {}): Promise<ThemeToggleHarness> {
   const screen = render(html`
-    <forge-theme-toggle>
+    <forge-theme-toggle group-aria-label=${ifDefined(groupAriaLabel)}>
       <span slot="title">Theme</span>
+      ${lightLabel ? html`<span slot="light-label">${lightLabel}</span>` : null} ${darkLabel ? html`<span slot="dark-label">${darkLabel}</span>` : null}
+      ${systemLabel ? html`<span slot="system-label">${systemLabel}</span>` : null}
     </forge-theme-toggle>
   `);
   const el = screen.container.querySelector('forge-theme-toggle') as IThemeToggleComponent;

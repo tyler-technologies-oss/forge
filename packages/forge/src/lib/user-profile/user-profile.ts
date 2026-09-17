@@ -15,6 +15,7 @@ import { ListComponent } from '../list/list/index.js';
 import { IPopoverToggleEventData, PopoverComponent } from '../popover/index.js';
 import { ToolbarComponent } from '../toolbar/index.js';
 import { ThemeToggleComponent, ThemeToggleTheme } from '../theme-toggle/index.js';
+import { applyTheme } from '../core/utils/theme-utils.js';
 
 import '../avatar/avatar.js';
 import '../button/button.js';
@@ -34,6 +35,7 @@ export interface IUserProfileComponent extends BaseLitElement {
   imageUrl: string;
   buttonLabel: string;
   themeToggle: boolean;
+  themeToggleAriaLabel: string;
   open: boolean;
   setTheme(value: ThemeToggleTheme): void;
 }
@@ -71,6 +73,10 @@ export const USER_PROFILE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-user-pr
  * @slot link - Slot for additional profile navigation links
  * @slot sign-in-button-text - Slot for the sign in button text
  * @slot sign-out-button-text - Slot for the sign out button text
+ * @slot theme-toggle-title - Slot for the theme toggle's title text
+ * @slot theme-toggle-light-label - Slot for the theme toggle's light theme option text
+ * @slot theme-toggle-dark-label - Slot for the theme toggle's dark theme option text
+ * @slot theme-toggle-system-label - Slot for the theme toggle's system theme option text
  *
  * @state open - Applied when the profile popover is open.
  *
@@ -121,6 +127,10 @@ export class UserProfileComponent extends BaseLitElement implements IUserProfile
   @property({ type: Boolean, attribute: 'theme-toggle' })
   public themeToggle = false;
 
+  /** ARIA label for the theme toggle button group. */
+  @property({ attribute: 'theme-toggle-aria-label' })
+  public themeToggleAriaLabel = 'Select a theme';
+
   /** Controls whether the user profile popover is open. */
   @property({ type: Boolean })
   public open = false;
@@ -135,6 +145,10 @@ export class UserProfileComponent extends BaseLitElement implements IUserProfile
   readonly #linkSlot = html`<slot name="link" id="link-slot"></slot>`;
   readonly #signInButtonSlot = html`<slot name="sign-in-button-text" id="sign-in-button-slot">Sign in</slot>`;
   readonly #signOutButtonSlot = html`<slot name="sign-out-button-text" id="sign-out-button-slot">Sign Out</slot>`;
+  readonly #themeToggleTitleSlot = html`<slot name="theme-toggle-title" slot="title">Theme</slot>`;
+  readonly #themeToggleLightLabelSlot = html`<slot name="theme-toggle-light-label" slot="light-label">Light</slot>`;
+  readonly #themeToggleDarkLabelSlot = html`<slot name="theme-toggle-dark-label" slot="dark-label">Dark</slot>`;
+  readonly #themeToggleSystemLabelSlot = html`<slot name="theme-toggle-system-label" slot="system-label">System</slot>`;
   readonly #themeToggleRef = createRef<ThemeToggleComponent>();
 
   constructor() {
@@ -168,7 +182,9 @@ export class UserProfileComponent extends BaseLitElement implements IUserProfile
       () => html`
         <forge-divider></forge-divider>
         <div class="theme-toggle-container">
-          <forge-theme-toggle ${ref(this.#themeToggleRef)}></forge-theme-toggle>
+          <forge-theme-toggle ${ref(this.#themeToggleRef)} .groupAriaLabel=${this.themeToggleAriaLabel}>
+            ${this.#themeToggleTitleSlot} ${this.#themeToggleLightLabelSlot} ${this.#themeToggleDarkLabelSlot} ${this.#themeToggleSystemLabelSlot}
+          </forge-theme-toggle>
         </div>
       `,
       () => nothing
@@ -233,10 +249,12 @@ export class UserProfileComponent extends BaseLitElement implements IUserProfile
     `;
   }
 
-  /** Sets the theme for the theme toggle. */
+  /** Sets the current theme. Applies immediately even if the theme toggle is not rendered. */
   public setTheme(value: ThemeToggleTheme): void {
     if (this.#themeToggleRef.value) {
       this.#themeToggleRef.value.setTheme(value);
+    } else {
+      applyTheme(value);
     }
   }
 
