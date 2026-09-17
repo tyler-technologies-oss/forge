@@ -8,6 +8,7 @@ import { html } from 'lit';
 import { applyArgs, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils.js';
 
 const changeAction = action('forge-process-stepper-change');
+const selectAction = action('forge-process-step-select');
 
 const component = 'forge-process-stepper';
 
@@ -152,7 +153,7 @@ export const WithMessage: Story = {
 export const Clickable: Story = {
   ...standaloneStoryParams,
   render: () => html`
-    <forge-process-stepper orientation="horizontal" @forge-process-stepper-change=${changeAction}>
+    <forge-process-stepper orientation="horizontal" @forge-process-stepper-change=${changeAction} @forge-process-step-select=${selectAction}>
       <forge-process-step label="Cart" state="completed" clickable></forge-process-step>
       <forge-process-step label="Shipping" state="current" clickable></forge-process-step>
       <forge-process-step label="Payment" clickable></forge-process-step>
