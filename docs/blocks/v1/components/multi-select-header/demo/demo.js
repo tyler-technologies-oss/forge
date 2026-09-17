@@ -1,0 +1,1 @@
+import{l as n,bq as l,bx as t,ck as c,cl as i,bp as a}from"../../../chunks/icon-CWOq2OoU.js";n.define([l,t,c,i,a]);const o=document.querySelector("forge-menu");if(o){const e=[{label:"Export as a PDF",value:"option-1",icon:"file_pdf",leadingIconType:"component"},{label:"Export to Excel",value:"option-2",icon:"file_excel",leadingIconType:"component"}];o.options=e}

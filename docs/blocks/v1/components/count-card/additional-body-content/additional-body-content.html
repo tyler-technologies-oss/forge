@@ -1,0 +1,52 @@
+<!--
+  @block Count Card — Additional Body Content
+  @type component
+  @description Additional Body Content usage example for the forge-count-card component.
+  @tags count-card, additional-body-content, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Count Card — Additional Body Content</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="w-[320px]">
+  <forge-count-card>
+    <span slot="label">Todays money</span>
+    <forge-badge slot="header-end" theme="success">
+      +8.2%
+      <forge-icon slot="end" name="trending_up"></forge-icon>
+    </forge-badge>
+    <span slot="count">$50,846.00</span>
+    <div slot="body" class="flex justify-between items-center text-medium">
+      <span class="text-body1">66% of monthly target</span>
+      <span class="text-body1">100k</span>
+    </div>
+    <div slot="body" class="flex flex-col gap-xsmall">
+      <forge-meter value="0.66" min="0" max="1" theme="success"></forge-meter>
+      <span class="text-label1 text-low">Last updated 12/12/2025</span>
+    </div>
+  </forge-count-card>
+</div>
+<script type="module" src="/blocks/v1/components/count-card/additional-body-content/additional-body-content.js"></script>
+  </body>
+</html>

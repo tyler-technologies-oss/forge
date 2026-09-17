@@ -1,0 +1,89 @@
+<!--
+  @block Count Card — Themes
+  @type component
+  @description Themes usage example for the forge-count-card component.
+  @tags count-card, themes, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Count Card — Themes</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-medium">
+  <forge-count-card theme="none">
+    <forge-icon slot="icon" name="dashboard"></forge-icon>
+    <span slot="label">None (Default)</span>
+    <span slot="count">100</span>
+  </forge-count-card>
+
+  <forge-count-card theme="primary">
+    <forge-icon slot="icon" name="star"></forge-icon>
+    <span slot="label">Primary</span>
+    <span slot="count">1,234</span>
+  </forge-count-card>
+
+  <forge-count-card theme="secondary">
+    <forge-icon slot="icon" name="people"></forge-icon>
+    <span slot="label">Secondary</span>
+    <span slot="count">5,678</span>
+  </forge-count-card>
+
+  <forge-count-card theme="tertiary">
+    <forge-icon slot="icon" name="shopping_cart"></forge-icon>
+    <span slot="label">Tertiary</span>
+    <span slot="count">910</span>
+  </forge-count-card>
+
+  <forge-count-card theme="success">
+    <forge-icon slot="icon" name="trending_up"></forge-icon>
+    <span slot="label">Success</span>
+    <span slot="count">+23.5%</span>
+  </forge-count-card>
+
+  <forge-count-card theme="error">
+    <forge-icon slot="icon" name="error"></forge-icon>
+    <span slot="label">Error</span>
+    <span slot="count">12</span>
+  </forge-count-card>
+
+  <forge-count-card theme="warning">
+    <forge-icon slot="icon" name="warning"></forge-icon>
+    <span slot="label">Warning</span>
+    <span slot="count">47</span>
+  </forge-count-card>
+
+  <forge-count-card theme="info">
+    <forge-icon slot="icon" name="info"></forge-icon>
+    <span slot="label">Info</span>
+    <span slot="count">99+</span>
+  </forge-count-card>
+
+  <forge-count-card theme="info-secondary">
+    <forge-icon slot="icon" name="attach_money"></forge-icon>
+    <span slot="label">Info Secondary</span>
+    <span slot="count">$12,450</span>
+  </forge-count-card>
+</div>
+<script type="module" src="/blocks/v1/components/count-card/themes/themes.js"></script>
+  </body>
+</html>

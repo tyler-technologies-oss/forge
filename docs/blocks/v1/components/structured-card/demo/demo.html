@@ -1,0 +1,43 @@
+<!--
+  @block Structured Card — Demo
+  @type component
+  @description Demo usage example for the forge-structured-card component.
+  @tags structured-card, demo, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Structured Card — Demo</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-structured-card class="w-[400px]">
+  <span slot="before-title">before-title</span>
+  <span slot="title">title</span>
+  <span slot="header-actions">header-actions</span>
+  <span slot="after-header-actions">after-header-actions</span>
+  <span slot="body" class="h-[200px]">body</span>
+  <span slot="footer-start">footer-start</span>
+  <span slot="footer-secondary-action">footer-secondary-action</span>
+  <span slot="footer-primary-action">footer-primary-action</span>
+</forge-structured-card>
+  </body>
+</html>

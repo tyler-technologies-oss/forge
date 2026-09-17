@@ -1,0 +1,57 @@
+<!--
+  @block Content Scaffold — Full Page
+  @type component
+  @description Full Page usage example for the forge-content-scaffold component.
+  @tags content-scaffold, full-page, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Content Scaffold — Full Page</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="h-[300px] border border-outline rounded-lg">
+  <forge-content-scaffold>
+    <forge-icon-button aria-label="Back" slot="before-header-start">
+      <forge-icon name="arrow_back"></forge-icon>
+    </forge-icon-button>
+    <h2 slot="header-start" class="text-heading4">Project Details</h2>
+    <forge-icon-button aria-label="More actions" slot="header-end">
+      <forge-icon name="more_vert"></forge-icon>
+    </forge-icon-button>
+    <div slot="body">
+      <forge-card>
+        <p class="m-0">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+          1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        </p>
+      </forge-card>
+    </div>
+    <forge-button variant="filled" slot="footer-end">
+      <forge-icon slot="start" name="save"></forge-icon>
+      Save
+    </forge-button>
+  </forge-content-scaffold>
+</div>
+<script type="module" src="/blocks/v1/components/content-scaffold/full-page/full-page.js"></script>
+  </body>
+</html>

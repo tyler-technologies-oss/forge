@@ -1,0 +1,60 @@
+<!--
+  @block Content Scaffold — In A Dialog
+  @type component
+  @description In A Dialog usage example for the forge-content-scaffold component.
+  @tags content-scaffold, in-a-dialog, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Content Scaffold — In A Dialog</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div>
+  <forge-button variant="filled" id="open-dialog-button">Open Dialog</forge-button>
+  <forge-dialog id="content-scaffold-dialog">
+    <forge-content-scaffold>
+      <span slot="header-start">Edit Settings</span>
+      <forge-icon-button aria-label="Close dialog" slot="header-end" id="close-dialog-button">
+        <forge-icon name="close"></forge-icon>
+      </forge-icon-button>
+
+      <div slot="body">
+        <p class="m-0">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+          1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        </p>
+      </div>
+
+      <forge-stack inline alignment="center" slot="footer-end">
+        <forge-button variant="text" id="cancel-dialog-button">Cancel</forge-button>
+        <forge-button variant="filled">
+          <forge-icon slot="start" name="save"></forge-icon>
+          Save Changes
+        </forge-button>
+      </forge-stack>
+    </forge-content-scaffold>
+  </forge-dialog>
+</div>
+<script type="module" src="/blocks/v1/components/content-scaffold/in-a-dialog/in-a-dialog.js"></script>
+  </body>
+</html>

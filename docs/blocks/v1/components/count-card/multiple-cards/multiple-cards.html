@@ -1,0 +1,59 @@
+<!--
+  @block Count Card — Multiple Cards
+  @type component
+  @description Multiple Cards usage example for the forge-count-card component.
+  @tags count-card, multiple-cards, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Count Card — Multiple Cards</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-medium">
+  <forge-count-card>
+    <forge-icon slot="icon" name="attach_money"></forge-icon>
+    <span slot="label">Revenue</span>
+    <span slot="count">$12,450.00</span>
+  </forge-count-card>
+
+  <forge-count-card>
+    <forge-icon slot="icon" name="people"></forge-icon>
+    <span slot="label">Total Users</span>
+    <span slot="count">1,234</span>
+  </forge-count-card>
+
+  <forge-count-card>
+    <forge-icon slot="icon" name="shopping_cart"></forge-icon>
+    <span slot="label">Orders</span>
+    <span slot="count">567</span>
+  </forge-count-card>
+
+  <forge-count-card>
+    <forge-icon slot="icon" name="trending_up"></forge-icon>
+    <span slot="label">Growth</span>
+    <span slot="count">+23.5%</span>
+  </forge-count-card>
+</div>
+<script type="module" src="/blocks/v1/components/count-card/multiple-cards/multiple-cards.js"></script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+<!--
+  @block Count Card — Demo
+  @type component
+  @description Demo usage example for the forge-count-card component.
+  @tags count-card, demo, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Count Card — Demo</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="w-[320px]">
+  <forge-count-card>
+    <forge-icon slot="icon" name="attach_money"></forge-icon>
+    <span slot="label">Tomorrows money</span>
+    <forge-badge slot="header-end">+12%</forge-badge>
+    <span slot="count">$303.33</span>
+  </forge-count-card>
+</div>
+<script type="module" src="/blocks/v1/components/count-card/demo/demo.js"></script>
+  </body>
+</html>

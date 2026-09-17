@@ -1,0 +1,55 @@
+<!--
+  @block Content Scaffold — With Card
+  @type component
+  @description With Card usage example for the forge-content-scaffold component.
+  @tags content-scaffold, with-card, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Content Scaffold — With Card</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="w-[600px] mx-auto p-medium">
+  <forge-card style="--forge-card-padding: 0">
+    <forge-content-scaffold>
+      <h2 slot="header-start" class="text-heading4">Project Details</h2>
+      <forge-icon-button aria-label="More actions" slot="header-end">
+        <forge-icon name="more_vert"></forge-icon>
+      </forge-icon-button>
+      <div slot="body">
+        <p class="m-0">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+          1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also
+          the leap into electronic typesetting, remaining essentially unchanged.
+        </p>
+      </div>
+      <forge-button variant="filled" slot="footer-end">
+        <forge-icon slot="start" name="edit"></forge-icon>
+        Edit Project
+      </forge-button>
+    </forge-content-scaffold>
+  </forge-card>
+</div>
+<script type="module" src="/blocks/v1/components/content-scaffold/with-card/with-card.js"></script>
+  </body>
+</html>

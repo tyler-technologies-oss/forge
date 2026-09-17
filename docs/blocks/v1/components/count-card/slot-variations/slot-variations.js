@@ -1,0 +1,1 @@
+import{l as o,bu as t,bp as a,bv as l,c8 as n}from"../../../chunks/icon-CWOq2OoU.js";o.define([t,a,l,n]);const e=document.querySelector("forge-menu");e&&(e.options=[{label:"View details",value:"details"},{label:"Export data",value:"export"},{label:"Remove card",value:"remove"}]);

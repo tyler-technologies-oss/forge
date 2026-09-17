@@ -1,0 +1,49 @@
+<!--
+  @block Structured Card — With Table And Start Buttons
+  @type component
+  @description With Table And Start Buttons usage example for the forge-structured-card component.
+  @tags structured-card, with-table-and-start-buttons, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Structured Card — With Table And Start Buttons</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-structured-card heading-level="2" body-spacing="none" class="w-[700px]">
+  <div slot="title">Asset Inventory</div>
+  <forge-icon-button aria-label="Refresh data" slot="after-header-actions">
+    <forge-icon name="refresh"></forge-icon>
+  </forge-icon-button>
+  <forge-icon-button aria-label="Download report" slot="after-header-actions">
+    <forge-icon name="download"></forge-icon>
+  </forge-icon-button>
+  <forge-table slot="body" id="asset-table"></forge-table>
+  <forge-stack slot="footer-start" inline alignment="center" wrap gap="8">
+    <forge-button variant="outlined">Update asset inventory</forge-button>
+    <forge-button variant="outlined">Asset inventory dataset</forge-button>
+  </forge-stack>
+  <forge-paginator slot="footer-primary-action" page-size="5" total="25" page-index="0"></forge-paginator>
+</forge-structured-card>
+<script type="module" src="/blocks/v1/components/structured-card/with-table-and-start-buttons/with-table-and-start-buttons.js"></script>
+  </body>
+</html>

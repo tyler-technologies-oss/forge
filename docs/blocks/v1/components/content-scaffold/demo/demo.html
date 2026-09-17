@@ -1,0 +1,43 @@
+<!--
+  @block Content Scaffold — Demo
+  @type component
+  @description Demo usage example for the forge-content-scaffold component.
+  @tags content-scaffold, demo, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Content Scaffold — Demo</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="h-[240px] border border-outline rounded-lg">
+  <forge-content-scaffold>
+    <div slot="before-header-start">before-header-start</div>
+    <div slot="header-start">header-start</div>
+    <div slot="header-end">header-end</div>
+    <div slot="body">body</div>
+    <div slot="footer-start">footer-start</div>
+    <div slot="footer-end">footer-end</div>
+  </forge-content-scaffold>
+</div>
+  </body>
+</html>

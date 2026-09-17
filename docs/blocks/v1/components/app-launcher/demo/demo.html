@@ -1,0 +1,45 @@
+<!--
+  @block App Launcher — Demo
+  @type component
+  @description Demo usage example for the forge-app-launcher component.
+  @tags app-launcher, demo, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>App Launcher — Demo</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-app-bar theme-mode="scoped" title-text="App Launcher">
+  <forge-app-launcher slot="end" search-placeholder="Search by product or app">
+    <span slot="app-launcher-links-title">Resources</span>
+    <forge-app-launcher-link slot="app-launcher-link">
+      <a href="https://www.tylertech.com" target="_blank">Documentation</a>
+    </forge-app-launcher-link>
+    <forge-app-launcher-link slot="app-launcher-link">
+      <a href="https://www.tylertech.com" target="_blank">Support Center</a>
+    </forge-app-launcher-link>
+  </forge-app-launcher>
+</forge-app-bar>
+<script type="module" src="/blocks/v1/components/app-launcher/demo/demo.js"></script>
+  </body>
+</html>
