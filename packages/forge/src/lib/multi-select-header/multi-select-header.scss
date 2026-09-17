@@ -1,0 +1,21 @@
+@use '../core/styles/spacing';
+@use '../core/styles/theme';
+@use '../core/styles/typography';
+
+:host {
+  display: block;
+
+  forge-toolbar {
+    --forge-toolbar-background: #{theme.variable(primary-container-low)};
+  }
+}
+
+.start-container {
+  display: flex;
+  align-items: center;
+  gap: #{spacing.variable(medium)};
+}
+
+.selected-text {
+  @include typography.style(body1);
+}

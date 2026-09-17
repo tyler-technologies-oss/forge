@@ -1,0 +1,78 @@
+@use '../core/styles/spacing';
+@use '../core/styles/theme';
+@use '../core/styles/typography';
+@use '../icon-button';
+
+//
+// Host
+//
+
+:host {
+  display: inline-block;
+}
+
+//
+// Base
+//
+
+.container,
+.inner {
+  display: flex;
+  gap: #{spacing.variable(xxsmall)};
+}
+
+.container {
+  flex-direction: column;
+}
+
+.inner {
+  align-items: center;
+}
+
+//
+// Slotted
+//
+
+::slotted(:is([slot='label'], [slot='support-text'])) {
+  @include typography.style(label1);
+}
+
+::slotted([slot='label']) {
+  color: #{theme.variable(text-high)};
+}
+
+::slotted([slot='support-text']) {
+  color: #{theme.variable(text-medium)};
+}
+
+//
+// Required
+//
+
+:host(:state(required)) {
+  ::slotted([slot='label'])::before {
+    content: '*';
+    color: #{theme.variable(error)};
+    margin-inline-end: #{spacing.variable(xxsmall)};
+  }
+}
+
+//
+// Invalid
+//
+
+:host(:state(invalid)) {
+  ::slotted(:where([slot='label'], [slot='support-text'])) {
+    color: #{theme.variable(error)};
+  }
+
+  forge-icon-button {
+    color: #{theme.variable(error)};
+
+    @include icon-button.provide-theme(
+      (
+        focus-indicator-color: theme.variable(error)
+      )
+    );
+  }
+}

@@ -1,0 +1,74 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as CountCardStories from './CountCard.stories';
+
+<Meta of={CountCardStories} />
+
+<Title />
+
+A card component for displaying counts, metrics, or key values with an accompanying icon and label. Ideal for dashboards and summary views where you need to highlight important numbers at a glance.
+
+<Canvas of={CountCardStories.Demo} />
+
+## Usage
+
+The Count Card uses a slot-based architecture with eight main areas:
+
+- **icon** - An icon displayed in a styled container at the start of the header
+- **label** - Descriptive text next to the icon explaining what the count represents
+- **header-end** - Optional content at the end of the header, ideal for badges or small accessories
+- **action** - Optional slot for a `forge-icon-button` (see note below)
+- **count** - The main value or metric displayed prominently
+- **count-end** - Optional content displayed after the count, ideal for units or secondary values
+- **body** - Optional content below the count for additional details or secondary information
+- **full-width** - Optional full-width content below the primary card content, ideal for sparklines, meters, or progress indicators
+
+> **Note:** Use the `action` slot instead of `header-end` when adding a `forge-icon-button`. Icon buttons have a 48x48px touch target that can disrupt the card's layout when placed in `header-end`. The `action` slot provides proper alignment for icon buttons.
+
+### Structural Consistency
+
+For best results, use the same slot structure across all count cards on a page and always include at least an icon and count. This ensures visual balance and alignment when cards are displayed in a grid.
+
+```html
+<forge-count-card>
+  <forge-icon slot="icon" name="attach_money"></forge-icon>
+  <span slot="label">Revenue</span>
+  <span slot="count">$12,450.00</span>
+</forge-count-card>
+```
+
+## Examples
+
+### Multiple Cards
+
+Count cards work well in grid layouts to create dashboard-style displays.
+
+<Canvas of={CountCardStories.MultipleCards} />
+
+### With Full Width Content
+
+Use the `full-width` slot to add full-width content below the primary card content. This is ideal for sparklines, progress bars, or any visualization that should span the entire width of the card.
+
+<Canvas of={CountCardStories.WithFullWidth} />
+
+### Additional Body Content
+
+Use the `body` slot to add supplementary content below the count. This is useful for displaying additional context, progress indicators, or secondary metrics.
+
+<Canvas of={CountCardStories.AdditionalBodyContent} />
+
+### With Menu
+
+Use the `action` slot to add an icon button for card-level actions like an options menu.
+
+<Canvas of={CountCardStories.WithMenu} />
+
+### Themes
+
+Use the `theme` property to apply semantic color styling to the card. Available themes include `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`, and `info-secondary`.
+
+<Canvas of={CountCardStories.Themes} />
+
+## API
+
+<CustomArgTypes />

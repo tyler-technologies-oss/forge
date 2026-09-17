@@ -27,6 +27,8 @@ This will generate a folder for each custom element matching the tag name in the
 - `--exclude` accepts a comma-delimited list of tag names and will not generate proxy components for the corresponding web components
 - `--modulePrefix` supplies an optional prefix for the NgModule name
 - `--useDefineFunction` will use a library-provided `define*Component()` function instead of `window.customElements.define()`
+- `--componentDependencies` (config file only) is a dictionary keyed by tag name, with values as an array of tag names whose modules should also be re-exported by the key's generated module (for components composed of sub-components)
+- `--importPathOverrides` (config file only) is a dictionary keyed by tag name, overriding `--importPath` for elements that aren't exported from it (e.g. subpath-only exports)
 
 ## Migration Notes
 

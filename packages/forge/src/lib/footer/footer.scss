@@ -1,0 +1,71 @@
+@use '../core/styles/theme';
+@use '../core/styles/spacing';
+
+/* stylelint-disable custom-property-pattern */
+
+:host {
+  display: block;
+  box-sizing: border-box;
+
+  --_footer-background: var(--forge-footer-background, #{theme.variable(surface-inverse)});
+  --_footer-on-background: var(--forge-footer-on-background, #{theme.variable(on-surface-inverse)});
+  --_footer-padding: var(--forge-footer-padding, #{spacing.variable(large)});
+  --_footer-padding-left: var(--forge-footer-padding-left, var(--_footer-padding));
+  --_footer-padding-right: var(--forge-footer-padding-right, var(--_footer-padding));
+  --_footer-gap: var(--forge-footer-gap, #{spacing.variable(xxlarge)});
+  --_footer-alternative-gap: var(--forge-footer-alternative-gap, #{spacing.variable(xlarge)});
+  --_footer-divider-margin: var(--forge-footer-divider-margin, #{spacing.variable(small)});
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.container {
+  background-color: var(--_footer-background);
+  padding: var(--_footer-padding);
+  padding-inline-start: var(--_footer-padding-left);
+  padding-inline-end: var(--_footer-padding-right);
+  gap: var(--_footer-gap);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+
+  ::slotted(forge-footer-item:not(:last-of-type))::after {
+    content: '|';
+    content: '|' / '';
+    font-size: 1rem;
+    margin-inline: var(--_footer-divider-margin);
+    color: var(--_footer-on-background);
+    line-height: 1.375rem;
+  }
+
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    @supports not (grid-area: auto) {
+      margin-right: var(--_footer-gap);
+    }
+  }
+}
+
+:host(:state(alternative)) .container {
+  gap: var(--_footer-alternative-gap);
+  grid-template-columns: 1fr;
+  grid-auto-flow: row;
+  justify-items: center;
+  text-align: center;
+
+  .list {
+    justify-content: center;
+
+    @supports not (grid-area: auto) {
+      margin-bottom: var(--_footer-alternative-gap);
+      margin-right: 0;
+    }
+  }
+}
+
+/* stylelint-enable custom-property-pattern */
