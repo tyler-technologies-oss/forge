@@ -1,5 +1,30 @@
 # @tylertech/forge
 
+## 3.17.0
+
+### Minor Changes
+
+- 2f37973: feat(app-launcher): migrate app launcher and app launcher link components from forge-extended
+- 2f37973: feat(app-layout): migrate app layout component from forge-extended
+- 2f37973: feat(busy-indicator): migrate busy indicator component from forge-extended
+- 2f37973: feat(confirmation-dialog): migrate confirmation dialog component from forge-extended
+- 2f37973: feat(content-scaffold): migrate content scaffold component from forge-extended
+- 2f37973: feat(count-card): migrate count card component from forge-extended
+- 2f37973: feat(footer): migrate footer and footer-item components from forge-extended
+- 2f37973: feat(multi-select-header): migrate multi select header component from forge-extended
+- 2f37973: feat(quantity-field): migrate quantity field component from forge-extended
+- 2f37973: feat(responsive-toolbar): migrate responsive toolbar component from forge-extended
+- 2f37973: feat(structured-card): migrate structured card component from forge-extended
+- 0ec03e3: Added i18n slots/labels to `forge-theme-toggle` and synced its state with OS `prefers-color-scheme` changes. Added a `groupAriaLabel` property on `forge-theme-toggle` and a `themeToggleAriaLabel` pass-through on `forge-user-profile`, along with `theme-toggle-title`/`theme-toggle-light-label`/`theme-toggle-dark-label`/`theme-toggle-system-label` slots for translating the embedded theme toggle. Regenerated the Angular wrappers to expose the new inputs.
+- 2f37973: feat(theme-toggle): migrate theme toggle component from forge-extended
+- 2f37973: feat(user-profile): migrate user profile and profile link components from forge-extended
+
+### Patch Changes
+
+- bbcc817: fix: add `./sass/*` subpath to package `exports` so Sass imports resolve
+- 6f06747: chore(deps): upgrade sass to 1.101.6
+- 5492215: fix: migrate usages of deprecated sass functions
+
 ## 3.16.2
 
 ### Patch Changes
