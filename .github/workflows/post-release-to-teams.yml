@@ -61,60 +61,21 @@ jobs:
           # Get unique contributors between previous tag and current release
           CONTRIBUTORS=$(git log $PREVIOUS_TAG..${{ steps.release.outputs.tag }} --format='%an' | sort -u | sed 's/^/- /')
 
-          # Get all contributors in this release
-          CURRENT_CONTRIBUTORS=$(git log $PREVIOUS_TAG..${{ steps.release.outputs.tag }} --format='%an' | sort -u)
-
-          # Get all historical contributors before this release
-          HISTORICAL_CONTRIBUTORS=$(git log ..$PREVIOUS_TAG --format='%an' | sort -u)
-
-          # Find first-time contributors (in current but not in historical)
-          FIRST_TIME=""
-          while IFS= read -r contributor; do
-            if ! echo "$HISTORICAL_CONTRIBUTORS" | grep -Fxq "$contributor"; then
-              FIRST_TIME="${FIRST_TIME}- ${contributor}"$'\n'
-            fi
-          done <<< "$CURRENT_CONTRIBUTORS"
-          FIRST_TIME="${FIRST_TIME%$'\n'}"
-
           # Save to output
           echo "list<<EOF" >> $GITHUB_OUTPUT
           echo "$CONTRIBUTORS" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-          echo "first_time<<EOF" >> $GITHUB_OUTPUT
-          echo "$FIRST_TIME" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-          # Set a flag for whether we have first-time contributors
-          if [ -n "$FIRST_TIME" ]; then
-            echo "has_first_time=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_first_time=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Build Teams message JSON
         id: message
         env:
-          RELEASE_TAG: ${{ steps.release.outputs.tag }}
-          RELEASE_AUTHOR: ${{ steps.release.outputs.author }}
           RELEASE_BODY: ${{ steps.release.outputs.body }}
           CONTRIBUTORS_LIST: ${{ steps.contributors.outputs.list }}
-          FIRST_TIME_CONTRIBUTORS: ${{ steps.contributors.outputs.first_time }}
         run: |
           SECTIONS=$(jq -n \
-            --arg tag "$RELEASE_TAG" \
-            --arg author "$RELEASE_AUTHOR" \
             --arg body "$RELEASE_BODY" \
             --arg contributors "$CONTRIBUTORS_LIST" \
             '[
-              {
-                activityTitle: "Tyler Forge",
-                activitySubtitle: "Version \($tag)",
-                facts: [
-                  { name: "Release:", value: $tag },
-                  { name: "Published by:", value: $author }
-                ]
-              },
               {
                 title: "📝 Release Notes",
                 text: $body
@@ -124,13 +85,6 @@ jobs:
                 text: $contributors
               }
             ]')
-
-          # Add first-time contributors section if there are any
-          if [ "${{ steps.contributors.outputs.has_first_time }}" = "true" ]; then
-            SECTIONS=$(echo "$SECTIONS" | jq \
-              --arg first_time "$FIRST_TIME_CONTRIBUTORS" \
-              '. + [{ title: "🎉 First-Time Contributors", text: $first_time }]')
-          fi
 
           # Save to output
           echo "sections<<EOF" >> $GITHUB_OUTPUT
