@@ -73,6 +73,11 @@
   @include core.sidebar-horizontal;
 }
 
+.horizontal .label-row,
+.horizontal .content {
+  @include core.text-cell-horizontal;
+}
+
 .label-row {
   @include core.label-row;
 }

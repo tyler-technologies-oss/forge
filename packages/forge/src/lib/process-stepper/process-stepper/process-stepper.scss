@@ -48,11 +48,3 @@ slot {
 .horizontal ::slotted(forge-process-step) {
   @include core.slotted-step-horizontal;
 }
-
-//
-// Compact layout
-//
-
-.progress-bar {
-  @include core.progress-bar;
-}

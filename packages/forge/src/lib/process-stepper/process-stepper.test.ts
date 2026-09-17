@@ -6,7 +6,6 @@ import { ProcessStepperComponent } from './process-stepper/process-stepper.js';
 
 import './process-step/process-step.js';
 import './process-stepper/process-stepper.js';
-import '../linear-progress/linear-progress.js';
 
 interface IHarness {
   stepper: ProcessStepperComponent;
@@ -172,7 +171,6 @@ describe('ProcessStepper', () => {
 
       expect(stepper.compact).toBe(false);
       expect(stepper.shadowRoot?.querySelector('.forge-process-stepper.horizontal')).toBeTruthy();
-      expect(stepper.shadowRoot?.querySelector('forge-linear-progress')).toBeNull();
     });
 
     it('should collapse to the vertical layout in a narrow container', async () => {
@@ -181,15 +179,6 @@ describe('ProcessStepper', () => {
       expect(stepper.compact).toBe(true);
       expect(stepper.shadowRoot?.querySelector('.forge-process-stepper.vertical.compact')).toBeTruthy();
       expect(steps.every(step => step.orientation === 'vertical')).toBe(true);
-    });
-
-    it('should render a determinate progress bar when compact', async () => {
-      const { stepper } = await createSized('320px');
-      const bar = stepper.shadowRoot?.querySelector('forge-linear-progress');
-
-      expect(bar).toBeTruthy();
-      expect(bar?.hasAttribute('determinate')).toBe(true);
-      expect((bar as HTMLElement & { progress: number }).progress).toBeCloseTo(0.25);
     });
 
     it('should keep the orientation attribute unchanged when compact', async () => {
@@ -207,7 +196,6 @@ describe('ProcessStepper', () => {
 
       expect(stepper.compact).toBe(false);
       expect(stepper.shadowRoot?.querySelector('.forge-process-stepper.horizontal')).toBeTruthy();
-      expect(stepper.shadowRoot?.querySelector('forge-linear-progress')).toBeNull();
       expect(stepper.steps.every(step => step.orientation === 'horizontal')).toBe(true);
     });
 
@@ -215,7 +203,6 @@ describe('ProcessStepper', () => {
       const { stepper } = await createSized('320px', 'vertical');
 
       expect(stepper.compact).toBe(false);
-      expect(stepper.shadowRoot?.querySelector('forge-linear-progress')).toBeNull();
     });
   });
 

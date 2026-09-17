@@ -26,7 +26,6 @@
 @mixin horizontal {
   grid-template-areas: 'line' 'marker' 'label' 'content';
   grid-template-columns: 1fr;
-  padding-inline-end: #{token(content-padding-inline-end)};
   row-gap: #{token(content-gap)};
 }
 
@@ -223,4 +222,10 @@
   border: none;
   min-block-size: 0;
   min-inline-size: 0;
+}
+
+// The horizontal step spacing sits on the text cells rather than the step itself, so the progress
+// line still spans the full width of the step and stays continuous between steps.
+@mixin text-cell-horizontal {
+  padding-inline-end: #{token(content-padding-inline-end)};
 }

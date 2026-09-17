@@ -28,9 +28,8 @@ processes where steps are distributed evenly across the available width.
 
 A horizontal stepper has no room for legible labels side by side on a phone — four steps in a 360px
 container leaves roughly 48px each. Below 600px of available width, a horizontal stepper therefore
-switches to a compact layout: the steps stack vertically and a `<forge-linear-progress>` bar is
-displayed above them, so progress stays glanceable while every label, description, and action stays
-usable.
+lays its steps out vertically, which gives every label, description, and action the width it needs.
+The progress line stays visible as the vertical rail, so progress is still communicated.
 
 The switch is driven by the stepper's own width rather than the viewport, so a stepper inside a
 narrow column adapts too. The `orientation` attribute is unchanged; the read-only `compact` property
