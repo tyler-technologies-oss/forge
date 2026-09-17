@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from 'vitest';
+import { afterEach, describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
 import { TestHarness } from '../core/testing/test-harness.js';
@@ -18,6 +19,11 @@ import './profile-link/index.js';
 const ANIMATION_TIMEOUT = 300;
 
 describe('User Profile', () => {
+  afterEach(() => {
+    localStorage.removeItem('.forge-theme');
+    document.documentElement.removeAttribute('data-forge-theme');
+  });
+
   it('should contain shadow root', async () => {
     const harness = await createFixture();
 
@@ -185,12 +191,43 @@ describe('User Profile', () => {
     expect(setThemeSpy).toHaveBeenCalledWith('light');
   });
 
-  it('should handle setTheme gracefully when theme toggle is not present', async () => {
+  it('should still apply the theme when the theme toggle is not rendered', async () => {
     const harness = await createFixture({ themeToggle: false });
 
+    expect(harness.themeToggleContainerEl).toBeFalsy();
+
     expect(() => harness.element.setTheme('light')).not.toThrow();
+    expect(harness.htmlElement.getAttribute('data-forge-theme')).toBe('light');
+
     expect(() => harness.element.setTheme('dark')).not.toThrow();
-    expect(() => harness.element.setTheme('system')).not.toThrow();
+    expect(harness.htmlElement.getAttribute('data-forge-theme')).toBe('dark');
+  });
+
+  it('should pass the default aria label through to the theme toggle and render default labels when nothing is slotted', async () => {
+    const harness = await createFixture({ themeToggle: true });
+
+    expect(harness.themeToggle?.groupAriaLabel).toBe('Select a theme');
+    expect(harness.themeToggleTitleSlot?.assignedNodes({ flatten: true })[0]?.textContent?.trim()).toBe('Theme');
+    expect(harness.themeToggleLightLabelSlot?.assignedNodes({ flatten: true })[0]?.textContent?.trim()).toBe('Light');
+    expect(harness.themeToggleDarkLabelSlot?.assignedNodes({ flatten: true })[0]?.textContent?.trim()).toBe('Dark');
+    expect(harness.themeToggleSystemLabelSlot?.assignedNodes({ flatten: true })[0]?.textContent?.trim()).toBe('System');
+  });
+
+  it('should pass a custom aria label through to the theme toggle and project custom label content', async () => {
+    const harness = await createFixture({
+      themeToggle: true,
+      themeToggleAriaLabel: 'Choose a theme',
+      themeToggleTitle: 'Appearance',
+      themeToggleLightLabel: 'Bright',
+      themeToggleDarkLabel: 'Night',
+      themeToggleSystemLabel: 'Auto'
+    });
+
+    expect(harness.themeToggle?.groupAriaLabel).toBe('Choose a theme');
+    expect(harness.themeToggleTitleSlot?.assignedNodes({ flatten: true })[0]?.textContent?.trim()).toBe('Appearance');
+    expect(harness.themeToggleLightLabelSlot?.assignedNodes({ flatten: true })[0]?.textContent?.trim()).toBe('Bright');
+    expect(harness.themeToggleDarkLabelSlot?.assignedNodes({ flatten: true })[0]?.textContent?.trim()).toBe('Night');
+    expect(harness.themeToggleSystemLabelSlot?.assignedNodes({ flatten: true })[0]?.textContent?.trim()).toBe('Auto');
   });
 
   it('should show sign in button when fullName is not provided (user not logged in)', async () => {
@@ -247,8 +284,28 @@ class UserProfileHarness extends TestHarness<IUserProfileComponent> {
     return getShadowElement(this.element, '.email');
   }
 
+  public get htmlElement(): HTMLElement {
+    return document.documentElement;
+  }
+
   public get themeToggleContainerEl(): HTMLElement | null {
     return getShadowElement(this.element, '.theme-toggle-container') as HTMLElement | null;
+  }
+
+  public get themeToggleTitleSlot(): HTMLSlotElement | undefined {
+    return this.themeToggle?.shadowRoot?.querySelector('slot[name="title"]') as HTMLSlotElement | undefined;
+  }
+
+  public get themeToggleLightLabelSlot(): HTMLSlotElement | undefined {
+    return this.themeToggle?.shadowRoot?.querySelector('slot[name="light-label"]') as HTMLSlotElement | undefined;
+  }
+
+  public get themeToggleDarkLabelSlot(): HTMLSlotElement | undefined {
+    return this.themeToggle?.shadowRoot?.querySelector('slot[name="dark-label"]') as HTMLSlotElement | undefined;
+  }
+
+  public get themeToggleSystemLabelSlot(): HTMLSlotElement | undefined {
+    return this.themeToggle?.shadowRoot?.querySelector('slot[name="system-label"]') as HTMLSlotElement | undefined;
   }
 
   public get signOutButtonSlot(): HTMLSlotElement {
@@ -277,6 +334,11 @@ interface UserProfileFixtureConfig {
   profileLinkIcon?: string;
   signOutButtonText?: string;
   open?: boolean;
+  themeToggleAriaLabel?: string;
+  themeToggleTitle?: string;
+  themeToggleLightLabel?: string;
+  themeToggleDarkLabel?: string;
+  themeToggleSystemLabel?: string;
 }
 
 async function createFixture({
@@ -287,10 +349,21 @@ async function createFixture({
   profileLinkTitle = 'Profile Link',
   profileLinkIcon = 'settings',
   signOutButtonText,
-  open = false
+  open = false,
+  themeToggleAriaLabel,
+  themeToggleTitle,
+  themeToggleLightLabel,
+  themeToggleDarkLabel,
+  themeToggleSystemLabel
 }: UserProfileFixtureConfig = {}): Promise<UserProfileHarness> {
   const screen = render(html`
-    <forge-user-profile .themeToggle=${themeToggle} .fullName=${fullName} .email=${email} .imageUrl=${imageUrl} .open=${open}>
+    <forge-user-profile
+      .themeToggle=${themeToggle}
+      .fullName=${fullName}
+      .email=${email}
+      .imageUrl=${imageUrl}
+      .open=${open}
+      theme-toggle-aria-label=${ifDefined(themeToggleAriaLabel)}>
       ${profileLinkTitle
         ? html`<forge-profile-link slot="link">
             <forge-icon slot="icon" name=${profileLinkIcon} external></forge-icon>
@@ -298,6 +371,10 @@ async function createFixture({
           </forge-profile-link>`
         : ''}
       ${signOutButtonText ? html`<span slot="sign-out-button-text">${signOutButtonText}</span>` : null}
+      ${themeToggleTitle ? html`<span slot="theme-toggle-title">${themeToggleTitle}</span>` : null}
+      ${themeToggleLightLabel ? html`<span slot="theme-toggle-light-label">${themeToggleLightLabel}</span>` : null}
+      ${themeToggleDarkLabel ? html`<span slot="theme-toggle-dark-label">${themeToggleDarkLabel}</span>` : null}
+      ${themeToggleSystemLabel ? html`<span slot="theme-toggle-system-label">${themeToggleSystemLabel}</span>` : null}
     </forge-user-profile>
   `);
   const el = screen.container.querySelector('forge-user-profile') as IUserProfileComponent;
