@@ -41,8 +41,10 @@ const meta = {
     ['Process Step']: 'forge-process-step'
   },
   argTypes: {
+    // steps, compact, and progress are read-only getters, so they get no control.
     ...generateCustomElementArgTypes({
-      tagName: component
+      tagName: component,
+      exclude: ['steps', 'compact', 'progress']
     })
   },
   args: {

@@ -177,7 +177,10 @@ export class ProcessStepComponent extends BaseLitElement {
     });
   }
 
-  /** Whether the progress line through this step is filled. */
+  /**
+   * Whether the progress line through this step is filled.
+   * @readonly
+   */
   public get lineActive(): boolean {
     return PROGRESS_LINE_STATES.includes(this.state);
   }
