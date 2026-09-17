@@ -1,4 +1,5 @@
 @use '../../core/styles/typography';
+@use '../../utils/mixins' as mixins;
 @use './token-utils' as *;
 
 @forward './token-utils';
@@ -32,4 +33,8 @@
 @mixin slotted-step-horizontal {
   flex: 1 1 0;
   min-inline-size: 0;
+}
+
+@mixin announcer {
+  @include mixins.visually-hidden;
 }

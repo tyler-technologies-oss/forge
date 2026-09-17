@@ -29,6 +29,7 @@ import styles from './process-stepper.scss';
  * @csspart root - The root element.
  * @csspart title - The element containing the slotted title.
  * @csspart steps - The element containing the steps.
+ * @csspart announcer - The visually hidden live region that announces progress changes.
  */
 @customElement(PROCESS_STEPPER_CONSTANTS.elementName)
 export class ProcessStepperComponent extends BaseLitElement {
@@ -63,7 +64,16 @@ export class ProcessStepperComponent extends BaseLitElement {
   @state()
   private _narrow = false;
 
+  @state()
+  private _announcement = '';
+
   readonly #internals: ElementInternals;
+
+  /** The index of the current step at the last announcement, so only changes are announced. */
+  #announcedIndex: number | null = null;
+
+  /** Watches for step state changes made by consumers, which is how a process advances. */
+  readonly #stateObserver = new MutationObserver(() => this.#announceCurrentStep());
 
   constructor() {
     super();
@@ -75,12 +85,14 @@ export class ProcessStepperComponent extends BaseLitElement {
     setDefaultAria(this, this.#internals, { role: 'list' });
     this.addEventListener(PROCESS_STEP_CONSTANTS.events.SELECT, this.#onStepSelect);
     ForgeResizeObserver.observe(this, entry => this.#handleResize(entry));
+    this.#stateObserver.observe(this, { attributeFilter: [PROCESS_STEP_CONSTANTS.attributes.STATE], subtree: true });
   }
 
   public disconnectedCallback(): void {
     super.disconnectedCallback();
     this.removeEventListener(PROCESS_STEP_CONSTANTS.events.SELECT, this.#onStepSelect);
     ForgeResizeObserver.unobserve(this);
+    this.#stateObserver.disconnect();
   }
 
   public updated(): void {
@@ -126,8 +138,32 @@ export class ProcessStepperComponent extends BaseLitElement {
         <div part="steps" class="steps">
           <slot @slotchange=${this.#handleSlotChange}></slot>
         </div>
+        <div part="announcer" class="announcer" role="status" aria-live="polite">${this._announcement}</div>
       </div>
     `;
+  }
+
+  /**
+   * Announces the step a process has moved to. The announcer starts empty and is only updated once
+   * the current step changes, so a screen reader is not interrupted on the initial render.
+   */
+  #announceCurrentStep(): void {
+    const steps = this._steps;
+    const index = steps.findIndex(candidate => candidate.state === 'current');
+
+    if (index === this.#announcedIndex) {
+      return;
+    }
+
+    this.#announcedIndex = index;
+
+    if (index === -1) {
+      return;
+    }
+
+    const step = steps[index];
+    const position = `Step ${index + 1} of ${steps.length}`;
+    this._announcement = step.label ? `${position}: ${step.label}` : position;
   }
 
   /** The orientation the steps are actually laid out in, which is vertical while compact. */
@@ -157,6 +193,9 @@ export class ProcessStepperComponent extends BaseLitElement {
       step.numbered = this.numbered;
       step.orientation = this.#effectiveOrientation;
     });
+
+    // Record where the process starts so that the first advance is treated as a change.
+    this.#announcedIndex ??= steps.findIndex(step => step.state === 'current');
   }
 
   #handleStepSelect(evt: Event): void {

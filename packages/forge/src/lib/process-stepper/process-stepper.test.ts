@@ -137,6 +137,59 @@ describe('ProcessStepper', () => {
     });
   });
 
+  describe('progress announcements', () => {
+    async function settleFrames(): Promise<void> {
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      await new Promise(resolve => requestAnimationFrame(resolve));
+    }
+
+    function announcer(stepper: ProcessStepperComponent): Element | null {
+      return stepper.shadowRoot?.querySelector('[part="announcer"]') ?? null;
+    }
+
+    it('should render a polite live region', async () => {
+      const { stepper } = await createFixture();
+      const region = announcer(stepper);
+
+      expect(region).toBeTruthy();
+      expect(region?.getAttribute('aria-live')).toBe('polite');
+      expect(region?.getAttribute('role')).toBe('status');
+    });
+
+    it('should not announce anything on the initial render', async () => {
+      const { stepper } = await createFixture();
+
+      expect(announcer(stepper)?.textContent?.trim()).toBe('');
+    });
+
+    it('should announce the step the process moves to', async () => {
+      const { stepper, steps } = await createFixture();
+
+      steps[1].state = 'completed';
+      steps[2].state = 'current';
+      await settleFrames();
+      await stepper.updateComplete;
+
+      expect(announcer(stepper)?.textContent?.trim()).toBe('Step 3 of 3: Three');
+    });
+
+    it('should announce the position when a step has no label', async () => {
+      const { stepper, steps } = await createFixture(html`
+        <forge-process-stepper>
+          <forge-process-step state="current"></forge-process-step>
+          <forge-process-step></forge-process-step>
+        </forge-process-stepper>
+      `);
+
+      steps[0].state = 'completed';
+      steps[1].state = 'current';
+      await settleFrames();
+      await stepper.updateComplete;
+
+      expect(announcer(stepper)?.textContent?.trim()).toBe('Step 2 of 2');
+    });
+  });
+
   describe('compact layout', () => {
     /** Waits for the resize observer to report a width change and the stepper to settle. */
     async function settle(stepper: ProcessStepperComponent, expected: boolean): Promise<void> {

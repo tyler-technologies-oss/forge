@@ -167,6 +167,18 @@ Process steppers are rendered as semantic lists with `role="list"` on the steppe
 `aria-current="step"` on the step in the `current` state. State markers are decorative and marked
 `aria-hidden="true"`.
 
+Each step is a single list item. A clickable step renders a native button inside that list item for
+the interactive area, and a step's description, meta content, messaging, and slotted content are
+siblings of that button rather than nested inside it, so interactive content keeps its own
+semantics.
+
+### Progress Announcements
+
+The stepper contains a polite live region that announces the step a process has moved to, for
+example "Step 3 of 5: Internal review". It announces whenever the step in the `current` state
+changes, including when a consumer advances the process programmatically, and stays silent on the
+initial render so a screen reader is not interrupted when the page loads.
+
 ### Best Practices
 
 - Because the marker is decorative, never rely on it alone to communicate state. Give steps whose
